@@ -1,0 +1,144 @@
+mkdir: %_DEST%\bin%_EXT%\remote
+mkdir: %_DEST%\inc%_EXT%\bootstrp
+mkdir: %_DEST%\inc%_EXT%\tools
+mkdir: %_DEST%\lib%_EXT%\remote
+
+..\%__SRC%\bin\remote\tl?????.dll %_DEST%\bin%_EXT%\remote\tl?????.dll
+..\%__SRC%\bin\remote\tl?????.sym %_DEST%\bin%_EXT%\remote\tl?????.sym
+..\%__SRC%\bin\soagent.dll %_DEST%\bin%_EXT%\soagent.dll
+..\%__SRC%\bin\symbol.exe %_DEST%\bin%_EXT%\symbol.exe
+..\%__SRC%\bin\tl?????.dll %_DEST%\bin%_EXT%\tl?????.dll
+..\%__SRC%\bin\tl?????.sym %_DEST%\bin%_EXT%\tl?????.sym
+..\%__SRC%\bin\wps?????.dll %_DEST%\bin%_EXT%\wps?????.dll
+..\%__SRC%\lib\atools.lib %_DEST%\lib%_EXT%\atools.lib
+..\%__SRC%\lib\bootstrp.lib %_DEST%\lib%_EXT%\bootstrp.lib
+..\%__SRC%\lib\bsvermap.lib %_DEST%\lib%_EXT%\bsvermap.lib
+..\%__SRC%\lib\itools.lib %_DEST%\lib%_EXT%\itools.lib
+..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
+..\%__SRC%\lib\lib*.sl %_DEST%\lib%_EXT%\lib*.sl
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
+..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
+..\%__SRC%\lib\remote\*.so %_DEST%\lib%_EXT%\remote\*.so
+..\%__SRC%\lib\remote\itools.lib %_DEST%\lib%_EXT%\remote\itools.lib
+..\%__SRC%\lib\stdstrm.lib %_DEST%\lib%_EXT%\stdstrm.lib
+..\%__SRC%\lib\tools.lib %_DEST%\lib%_EXT%\tools.lib
+..\%__SRC%\misc\tl?????.map %_DEST%\bin%_EXT%\tl?????.map
+..\%__SRC%\slb\btstrpsh.lib %_DEST%\lib%_EXT%\btstrpsh.lib
+
+hedabu: ..\win\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
+hedabu: ..\%GUIBASE%\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
+hedabu: ..\%__SRC%\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
+hedabu: ..\%__SRC%\inc\svconf.h %_DEST%\inc%_EXT%\tools\svconf.h
+hedabu: ..\%__SRC%\inc\toolerr.hxx %_DEST%\inc%_EXT%\tools\toolerr.hxx
+hedabu: ..\bootstrp\minormk.hxx %_DEST%\inc%_EXT%\bootstrp\minormk.hxx
+hedabu: ..\bootstrp\appdef.hxx %_DEST%\inc%_EXT%\bootstrp\appdef.hxx
+hedabu: ..\bootstrp\bsecode.hxx %_DEST%\inc%_EXT%\bootstrp\bsecode.hxx
+hedabu: ..\bootstrp\command.hxx %_DEST%\inc%_EXT%\bootstrp\command.hxx
+hedabu: ..\bootstrp\copyprj.hxx %_DEST%\inc%_EXT%\bootstrp\copyprj.hxx
+hedabu: ..\bootstrp\deliver.hxx %_DEST%\inc%_EXT%\bootstrp\deliver.hxx
+hedabu: ..\bootstrp\drvmap.hxx %_DEST%\inc%_EXT%\bootstrp\drvmap.hxx
+hedabu: ..\bootstrp\envset.hxx %_DEST%\inc%_EXT%\bootstrp\envset.hxx
+hedabu: ..\bootstrp\errhdl.hxx %_DEST%\inc%_EXT%\bootstrp\errhdl.hxx
+hedabu: ..\bootstrp\fattr.hxx %_DEST%\inc%_EXT%\bootstrp\fattr.hxx
+hedabu: ..\bootstrp\getopt.h %_DEST%\inc%_EXT%\bootstrp\getopt.h
+hedabu: ..\bootstrp\hedabu.hxx %_DEST%\inc%_EXT%\bootstrp\hedabu.hxx
+hedabu: ..\bootstrp\inimgr.hxx %_DEST%\inc%_EXT%\bootstrp\inimgr.hxx
+hedabu: ..\bootstrp\listmacr.hxx %_DEST%\inc%_EXT%\bootstrp\listmacr.hxx
+hedabu: ..\bootstrp\prj.hxx %_DEST%\inc%_EXT%\bootstrp\prj.hxx
+hedabu: ..\bootstrp\revision.hxx %_DEST%\inc%_EXT%\bootstrp\revision.hxx
+hedabu: ..\bootstrp\sstring.hxx %_DEST%\inc%_EXT%\bootstrp\sstring.hxx
+hedabu: ..\bootstrp\static.mk %_DEST%\inc%_EXT%\static.mk
+hedabu: ..\bootstrp\uierr.hxx %_DEST%\inc%_EXT%\bootstrp\uierr.hxx
+hedabu: ..\bootstrp\updmake.hxx %_DEST%\inc%_EXT%\bootstrp\updmake.hxx
+hedabu: ..\bootstrp\vermap.hxx %_DEST%\inc%_EXT%\bootstrp\vermap.hxx
+hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
+hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
+hedabu: ..\inc\agitem.hxx %_DEST%\inc%_EXT%\tools\agitem.hxx
+hedabu: ..\inc\bcst.hxx %_DEST%\inc%_EXT%\tools\bcst.hxx
+hedabu: ..\inc\bcstdefs.hxx %_DEST%\inc%_EXT%\tools\bcstdefs.hxx
+hedabu: ..\inc\bigint.hxx %_DEST%\inc%_EXT%\tools\bigint.hxx
+hedabu: ..\inc\cachestr.hxx %_DEST%\inc%_EXT%\tools\cachestr.hxx
+hedabu: ..\inc\chapi.hxx %_DEST%\inc%_EXT%\tools\chapi.hxx
+hedabu: ..\inc\color.hxx %_DEST%\inc%_EXT%\tools\color.hxx
+hedabu: ..\inc\contnr.hxx %_DEST%\inc%_EXT%\tools\contnr.hxx
+hedabu: ..\inc\date.hxx %_DEST%\inc%_EXT%\tools\date.hxx
+hedabu: ..\inc\datetime.hxx %_DEST%\inc%_EXT%\tools\datetime.hxx
+hedabu: ..\inc\timestamp.hxx %_DEST%\inc%_EXT%\tools\timestamp.hxx
+hedabu: ..\inc\debug.hxx %_DEST%\inc%_EXT%\tools\debug.hxx
+hedabu: ..\inc\defport.h %_DEST%\inc%_EXT%\tools\defport.h
+hedabu: ..\inc\download.hxx %_DEST%\inc%_EXT%\tools\download.hxx
+hedabu: ..\inc\dynary.hxx %_DEST%\inc%_EXT%\tools\dynary.hxx
+hedabu: ..\inc\errcode.hxx %_DEST%\inc%_EXT%\tools\errcode.hxx
+hedabu: ..\inc\errinf.hxx %_DEST%\inc%_EXT%\tools\errinf.hxx
+hedabu: ..\inc\fract.hxx %_DEST%\inc%_EXT%\tools\fract.hxx
+hedabu: ..\inc\fsys.hxx %_DEST%\inc%_EXT%\tools\fsys.hxx
+hedabu: ..\inc\eacopier.hxx %_DEST%\inc%_EXT%\tools\eacopier.hxx
+hedabu: ..\inc\gen.hxx %_DEST%\inc%_EXT%\tools\gen.hxx
+hedabu: ..\inc\globname.hxx %_DEST%\inc%_EXT%\tools\globname.hxx
+hedabu: ..\inc\inetdef.hxx %_DEST%\inc%_EXT%\tools\inetdef.hxx
+hedabu: ..\inc\inetmime.hxx %_DEST%\inc%_EXT%\tools\inetmime.hxx
+hedabu: ..\inc\inetmsg.hxx %_DEST%\inc%_EXT%\tools\inetmsg.hxx
+hedabu: ..\inc\inetstrm.hxx %_DEST%\inc%_EXT%\tools\inetstrm.hxx
+hedabu: ..\inc\intn.hxx %_DEST%\inc%_EXT%\tools\intn.hxx
+hedabu: ..\inc\isolang.hxx %_DEST%\inc%_EXT%\tools\isolang.hxx
+hedabu: ..\inc\lang.hxx %_DEST%\inc%_EXT%\tools\lang.hxx
+hedabu: ..\inc\link.hxx %_DEST%\inc%_EXT%\tools\link.hxx
+hedabu: ..\inc\list.hxx %_DEST%\inc%_EXT%\tools\list.hxx
+hedabu: ..\inc\mempool.hxx %_DEST%\inc%_EXT%\tools\mempool.hxx
+hedabu: ..\inc\multisel.hxx %_DEST%\inc%_EXT%\tools\multisel.hxx
+hedabu: ..\inc\new.hxx %_DEST%\inc%_EXT%\tools\new.hxx
+hedabu: ..\inc\ownlist.hxx %_DEST%\inc%_EXT%\tools\ownlist.hxx
+hedabu: ..\inc\postsys.h %_DEST%\inc%_EXT%\tools\postsys.h
+hedabu: ..\inc\presys.h %_DEST%\inc%_EXT%\tools\presys.h
+hedabu: ..\inc\pstm.hxx %_DEST%\inc%_EXT%\tools\pstm.hxx
+hedabu: ..\inc\queue.hxx %_DEST%\inc%_EXT%\tools\queue.hxx
+hedabu: ..\inc\rc.h %_DEST%\inc%_EXT%\tools\rc.h
+hedabu: ..\inc\rc.hxx %_DEST%\inc%_EXT%\tools\rc.hxx
+hedabu: ..\inc\rcid.h %_DEST%\inc%_EXT%\tools\rcid.h
+hedabu: ..\inc\ref.hxx %_DEST%\inc%_EXT%\tools\ref.hxx
+hedabu: ..\inc\resid.hxx %_DEST%\inc%_EXT%\tools\resid.hxx
+hedabu: ..\inc\resmgr.hxx %_DEST%\inc%_EXT%\tools\resmgr.hxx
+hedabu: ..\inc\vclrsc.hxx %_DEST%\inc%_EXT%\tools\vclrsc.hxx
+hedabu: ..\inc\rtti.hxx %_DEST%\inc%_EXT%\tools\rtti.hxx
+hedabu: ..\inc\shl.hxx %_DEST%\inc%_EXT%\tools\shl.hxx
+hedabu: ..\inc\simplecm.hxx %_DEST%\inc%_EXT%\tools\simplecm.hxx
+hedabu: ..\inc\simplerm.hxx %_DEST%\inc%_EXT%\tools\simplerm.hxx
+hedabu: ..\inc\solar.h %_DEST%\inc%_EXT%\tools\solar.h
+hedabu: ..\inc\solmath.hxx %_DEST%\inc%_EXT%\tools\solmath.hxx
+hedabu: ..\inc\solver.h %_DEST%\inc%_EXT%\tools\solver.h
+hedabu: ..\inc\stack.hxx %_DEST%\inc%_EXT%\tools\stack.hxx
+hedabu: ..\inc\stdstrm.hxx %_DEST%\inc%_EXT%\tools\stdstrm.hxx
+hedabu: ..\inc\stream.hxx %_DEST%\inc%_EXT%\tools\stream.hxx
+hedabu: ..\inc\string.hxx %_DEST%\inc%_EXT%\tools\string.hxx
+hedabu: ..\inc\svwin.h %_DEST%\inc%_EXT%\tools\svwin.h
+hedabu: ..\inc\table.hxx %_DEST%\inc%_EXT%\tools\table.hxx
+hedabu: ..\inc\time.hxx %_DEST%\inc%_EXT%\tools\time.hxx
+hedabu: ..\inc\tools.h %_DEST%\inc%_EXT%\tools\tools.h
+hedabu: ..\inc\unqid.hxx %_DEST%\inc%_EXT%\tools\unqid.hxx
+hedabu: ..\inc\unqidx.hxx %_DEST%\inc%_EXT%\tools\unqidx.hxx
+hedabu: ..\inc\urlkeys.hxx %_DEST%\inc%_EXT%\tools\urlkeys.hxx
+hedabu: ..\inc\urlobj.hxx %_DEST%\inc%_EXT%\tools\urlobj.hxx
+hedabu: ..\inc\vcompat.hxx %_DEST%\inc%_EXT%\tools\vcompat.hxx
+hedabu: ..\inc\wldcrd.hxx %_DEST%\inc%_EXT%\tools\wldcrd.hxx
+hedabu: ..\inc\zcodec.hxx %_DEST%\inc%_EXT%\tools\zcodec.hxx
+hedabu: ..\inc\tempfile.hxx %_DEST%\inc%_EXT%\tools\tempfile.hxx
+hedabu: ..\os2\inc\svpm.h %_DEST%\inc%_EXT%\tools\svpm.h
+hedabu: ..\win\inc\parser.hxx %_DEST%\inc%_EXT%\tools\parser.hxx
+hedabu: ..\win\inc\postwin.h %_DEST%\inc%_EXT%\tools\postwin.h
+hedabu: ..\win\inc\prewin.h %_DEST%\inc%_EXT%\tools\prewin.h
+hedabu: ..\win\inc\shutil.h %_DEST%\inc%_EXT%\tools\shutil.h
+hedabu: ..\win\inc\winshell.hxx %_DEST%\inc%_EXT%\tools\winshell.hxx
+hedabu: ..\inc\l2txtenc.hxx %_DEST%\inc%_EXT%\tools\l2txtenc.hxx
+hedabu: ..\inc\geninfo.hxx %_DEST%\inc%_EXT%\tools\geninfo.hxx
+hedabu: ..\inc\iparser.hxx %_DEST%\inc%_EXT%\tools\iparser.hxx
+hedabu: ..\inc\siclient.hxx %_DEST%\inc%_EXT%\tools\siclient.hxx
+hedabu: ..\inc\iiclient.hxx %_DEST%\inc%_EXT%\tools\iiclient.hxx
+hedabu: ..\inc\iclient.hxx %_DEST%\inc%_EXT%\tools\iclient.hxx
+hedabu: ..\inc\tcpcon.hxx %_DEST%\inc%_EXT%\tools\tcpcon.hxx
+hedabu: ..\inc\infocom.hxx %_DEST%\inc%_EXT%\tools\infocom.hxx
+hedabu: ..\inc\persbcst.hxx %_DEST%\inc%_EXT%\tools\persbcst.hxx
+hedabu: ..\inc\stcpcon.hxx %_DEST%\inc%_EXT%\tools\stcpcon.hxx
+hedabu: ..\inc\btcpcon.hxx %_DEST%\inc%_EXT%\tools\btcpcon.hxx
+hedabu: ..\inc\sasyncfn.hxx %_DEST%\inc%_EXT%\tools\sasyncfn.hxx
+hedabu: ..\inc\tcpdef.hxx %_DEST%\inc%_EXT%\tools\tcpdef.hxx

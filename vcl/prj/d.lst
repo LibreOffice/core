@@ -1,0 +1,186 @@
+mkdir: %_DEST%\bin%_EXT%\remote
+mkdir: %_DEST%\idl%_EXT%\stardiv\remote
+mkdir: %_DEST%\idl%_EXT%\stardiv\system
+mkdir: %_DEST%\inc%_EXT%\sv
+mkdir: %_DEST%\inc%_EXT%\tools
+mkdir: %_DEST%\inc%_EXT%\uno
+mkdir: %_DEST%\inc%_EXT%\uno\awt
+mkdir: %_DEST%\inc%_EXT%\vcl
+mkdir: %_DEST%\inc%_EXT%\vcl\unx
+mkdir: %_DEST%\ucr%_EXT%
+mkdir: %_DEST%\ucr%_EXT%\vcl
+
+..\%__SRC%\bin\remote\vcl%upd%??.dll %_DEST%\bin%_EXT%\remote\vcl?????.dll
+..\%__SRC%\bin\vcl%UPD%??.res %_DEST%\bin%_EXT%\vcl%upd%??.res
+..\%__SRC%\bin\vcl%upd%??.dll %_DEST%\bin%_EXT%\vcl?????.dll
+..\%__SRC%\bin\vcl%upd%??.sym %_DEST%\bin%_EXT%\vcl?????.sym
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\app16.lib %_DEST%\lib%_EXT%\app16.lib
+..\%__SRC%\lib\gdi16.lib %_DEST%\lib%_EXT%\gdi16.lib
+..\%__SRC%\lib\isv.lib %_DEST%\lib%_EXT%\isv.lib
+..\%__SRC%\lib\ivcl.lib %_DEST%\lib%_EXT%\ivcl.lib
+..\%__SRC%\lib\remote\*.so %_DEST%\bin%_EXT%\remote\*.so
+..\%__SRC%\lib\remote\*.so %_DEST%\lib%_EXT%\remote\*.so
+..\%__SRC%\lib\vcl.lib %_DEST%\lib%_EXT%\vcl.lib
+..\%__SRC%\misc\vcl%upd%??.map %_DEST%\bin%_EXT%\vcl?????.map
+..\%__SRC%\obj\main.obj %_DEST%\lib%_EXT%\xsvmain.obj
+..\%__SRC%\obj\salmain.obj %_DEST%\lib%_EXT%\salmain.obj
+..\%__SRC%\obj\svapp.obj %_DEST%\lib%_EXT%\xsvapp.obj
+..\%__SRC%\res\svsrc.res %_DEST%\res%_EXT%\svsrc.res
+..\%__SRC%\slb\sv.lib %_DEST%\lib%_EXT%\xsv.lib
+..\%__SRC%\slo\salmain.o %_DEST%\lib%_EXT%\salmain.o
+..\%__SRC%\slo\svdll.obj %_DEST%\lib%_EXT%\xsvdll.obj
+..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\vcl\*.ucr
+
+hedabu: ..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\vcl\*.h
+hedabu: ..\%__SRC%\inc\*.hxx %_DEST%\inc%_EXT%\vcl\*.hxx
+hedabu: ..\%__SRC%\inc\convert.hxx %_DEST%\inc%_EXT%\vcl\convert.hxx
+hedabu: ..\inc\accel.hxx %_DEST%\inc%_EXT%\vcl\accel.hxx
+hedabu: ..\inc\access.hxx %_DEST%\inc%_EXT%\vcl\access.hxx
+hedabu: ..\inc\accmgr.hxx %_DEST%\inc%_EXT%\vcl\accmgr.hxx
+hedabu: ..\inc\alpha.hxx %_DEST%\inc%_EXT%\vcl\alpha.hxx
+hedabu: ..\inc\animate.hxx %_DEST%\inc%_EXT%\vcl\animate.hxx
+hedabu: ..\inc\apptypes.hxx %_DEST%\inc%_EXT%\vcl\apptypes.hxx
+hedabu: ..\inc\bitmap.hxx %_DEST%\inc%_EXT%\vcl\bitmap.hxx
+hedabu: ..\inc\bitmap.inl %_DEST%\inc%_EXT%\vcl\bitmap.inl
+hedabu: ..\inc\bitmapex.hxx %_DEST%\inc%_EXT%\vcl\bitmapex.hxx
+hedabu: ..\inc\bmpacc.hxx %_DEST%\inc%_EXT%\vcl\bmpacc.hxx
+hedabu: ..\inc\btndlg.hxx %_DEST%\inc%_EXT%\vcl\btndlg.hxx
+hedabu: ..\inc\button.hxx %_DEST%\inc%_EXT%\vcl\button.hxx
+hedabu: ..\inc\button.hxx %_DEST%\inc%_EXT%\vcl\imagebtn.hxx
+hedabu: ..\inc\clip.hxx %_DEST%\inc%_EXT%\vcl\clip.hxx
+hedabu: ..\inc\cmdevt.h %_DEST%\inc%_EXT%\vcl\cmdevt.h
+hedabu: ..\inc\cmdevt.hxx %_DEST%\inc%_EXT%\vcl\cmdevt.hxx
+hedabu: ..\inc\color.hxx %_DEST%\inc%_EXT%\vcl\color.hxx
+hedabu: ..\inc\combobox.h %_DEST%\inc%_EXT%\vcl\combobox.h
+hedabu: ..\inc\combobox.hxx %_DEST%\inc%_EXT%\vcl\combobox.hxx
+hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\vcl\config.hxx
+hedabu: ..\inc\ctrl.hxx %_DEST%\inc%_EXT%\vcl\ctrl.hxx
+hedabu: ..\inc\cursor.hxx %_DEST%\inc%_EXT%\vcl\cursor.hxx
+hedabu: ..\inc\cvtgrf.hxx %_DEST%\inc%_EXT%\vcl\cvtgrf.hxx
+hedabu: ..\inc\cvtsvm.hxx %_DEST%\inc%_EXT%\vcl\cvtsvm.hxx
+hedabu: ..\inc\decoview.hxx %_DEST%\inc%_EXT%\vcl\decoview.hxx
+hedabu: ..\inc\dialog.hxx %_DEST%\inc%_EXT%\vcl\dialog.hxx
+hedabu: ..\inc\dockwin.hxx %_DEST%\inc%_EXT%\vcl\dockwin.hxx
+hedabu: ..\inc\drag.hxx %_DEST%\inc%_EXT%\vcl\drag.hxx
+hedabu: ..\inc\edit.hxx %_DEST%\inc%_EXT%\vcl\edit.hxx
+hedabu: ..\inc\event.hxx %_DEST%\inc%_EXT%\vcl\event.hxx
+hedabu: ..\inc\exchange.hxx %_DEST%\inc%_EXT%\vcl\exchange.hxx
+hedabu: ..\inc\field.hxx %_DEST%\inc%_EXT%\vcl\field.hxx
+hedabu: ..\inc\fildlg.hxx %_DEST%\inc%_EXT%\vcl\fildlg.hxx
+hedabu: ..\inc\filedlg.hxx %_DEST%\inc%_EXT%\vcl\filedlg.hxx
+hedabu: ..\inc\fixbrd.hxx %_DEST%\inc%_EXT%\vcl\fixbrd.hxx
+hedabu: ..\inc\fixed.hxx %_DEST%\inc%_EXT%\vcl\fixed.hxx
+hedabu: ..\inc\fldunit.hxx %_DEST%\inc%_EXT%\vcl\fldunit.hxx
+hedabu: ..\inc\floatwin.hxx %_DEST%\inc%_EXT%\vcl\floatwin.hxx
+hedabu: ..\inc\font.hxx %_DEST%\inc%_EXT%\vcl\font.hxx
+hedabu: ..\inc\fonttype.hxx %_DEST%\inc%_EXT%\vcl\fonttype.hxx
+hedabu: ..\inc\gdimtf.hxx %_DEST%\inc%_EXT%\vcl\gdimtf.hxx
+hedabu: ..\inc\gdiobj.hxx %_DEST%\inc%_EXT%\vcl\gdiobj.hxx
+hedabu: ..\inc\gen.hxx %_DEST%\inc%_EXT%\vcl\gen.hxx
+hedabu: ..\inc\gfxlink.hxx %_DEST%\inc%_EXT%\vcl\gfxlink.hxx
+hedabu: ..\inc\gradient.hxx %_DEST%\inc%_EXT%\vcl\gradient.hxx
+hedabu: ..\inc\graph.h %_DEST%\inc%_EXT%\vcl\graph.h
+hedabu: ..\inc\graph.hxx %_DEST%\inc%_EXT%\vcl\graph.hxx
+hedabu: ..\inc\group.hxx %_DEST%\inc%_EXT%\vcl\group.hxx
+hedabu: ..\inc\hatch.hxx %_DEST%\inc%_EXT%\vcl\hatch.hxx
+hedabu: ..\inc\hdltab.hxx %_DEST%\inc%_EXT%\vcl\hdltab.hxx
+hedabu: ..\inc\help.hxx %_DEST%\inc%_EXT%\vcl\help.hxx
+hedabu: ..\inc\image.hxx %_DEST%\inc%_EXT%\vcl\image.hxx
+hedabu: ..\inc\imagebtn.hxx %_DEST%\inc%_EXT%\vcl\imagebtn.hxx
+hedabu: ..\inc\imgcons.hxx %_DEST%\inc%_EXT%\vcl\imgcons.hxx
+hedabu: ..\inc\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
+hedabu: ..\inc\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
+hedabu: ..\inc\jobset.hxx %_DEST%\inc%_EXT%\vcl\jobset.hxx
+hedabu: ..\inc\keycod.hxx %_DEST%\inc%_EXT%\vcl\keycod.hxx
+hedabu: ..\inc\keycodes.hxx %_DEST%\inc%_EXT%\vcl\keycodes.hxx
+hedabu: ..\inc\line.hxx %_DEST%\inc%_EXT%\vcl\line.hxx
+hedabu: ..\inc\lineinfo.hxx %_DEST%\inc%_EXT%\vcl\lineinfo.hxx
+hedabu: ..\inc\longcurr.hxx %_DEST%\inc%_EXT%\vcl\longcurr.hxx
+hedabu: ..\inc\lstbox.h %_DEST%\inc%_EXT%\vcl\lstbox.h
+hedabu: ..\inc\lstbox.hxx %_DEST%\inc%_EXT%\vcl\lstbox.hxx
+hedabu: ..\inc\mapmod.hxx %_DEST%\inc%_EXT%\vcl\mapmod.hxx
+hedabu: ..\inc\mapunit.hxx %_DEST%\inc%_EXT%\vcl\mapunit.hxx
+hedabu: ..\inc\menu.hxx %_DEST%\inc%_EXT%\vcl\menu.hxx
+hedabu: ..\inc\menubtn.hxx %_DEST%\inc%_EXT%\vcl\menubtn.hxx
+hedabu: ..\inc\metaact.hxx %_DEST%\inc%_EXT%\vcl\metaact.hxx
+hedabu: ..\inc\metric.hxx %_DEST%\inc%_EXT%\vcl\metric.hxx
+hedabu: ..\inc\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
+hedabu: ..\inc\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
+hedabu: ..\inc\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
+hedabu: ..\inc\opengl.hxx %_DEST%\inc%_EXT%\vcl\opengl.hxx
+hedabu: ..\inc\outdev.hxx %_DEST%\inc%_EXT%\vcl\outdev.hxx
+hedabu: ..\inc\outdev3d.hxx %_DEST%\inc%_EXT%\vcl\outdev3d.hxx
+hedabu: ..\inc\pal.hxx %_DEST%\inc%_EXT%\vcl\pal.hxx
+hedabu: ..\inc\pointr.hxx %_DEST%\inc%_EXT%\vcl\pointr.hxx
+hedabu: ..\inc\poly.hxx %_DEST%\inc%_EXT%\vcl\poly.hxx
+hedabu: ..\inc\ppdparser.hxx %_DEST%\inc%_EXT%\vcl\ppdparser.hxx
+hedabu: ..\inc\print.hxx %_DEST%\inc%_EXT%\vcl\print.hxx
+hedabu: ..\inc\prndlg.hxx %_DEST%\inc%_EXT%\vcl\prndlg.hxx
+hedabu: ..\inc\prntypes.hxx %_DEST%\inc%_EXT%\vcl\prntypes.hxx
+hedabu: ..\inc\ptrstyle.hxx %_DEST%\inc%_EXT%\vcl\ptrstyle.hxx
+hedabu: ..\inc\rc.h %_DEST%\inc%_EXT%\vcl\rc.h
+hedabu: ..\inc\rc.hxx %_DEST%\inc%_EXT%\vcl\rc.hxx
+hedabu: ..\inc\rcid.h %_DEST%\inc%_EXT%\vcl\rcid.h
+hedabu: ..\inc\rcown.hxx %_DEST%\inc%_EXT%\vcl\rcown.hxx
+hedabu: ..\inc\regband.hxx %_DEST%\inc%_EXT%\vcl\regband.hxx
+hedabu: ..\inc\region.hxx %_DEST%\inc%_EXT%\vcl\region.hxx
+hedabu: ..\inc\resary.hxx %_DEST%\inc%_EXT%\vcl\resary.hxx
+hedabu: ..\inc\resid.hxx %_DEST%\inc%_EXT%\vcl\resid.hxx
+hedabu: ..\inc\resmgr.hxx %_DEST%\inc%_EXT%\vcl\resmgr.hxx
+hedabu: ..\inc\rversion.h %_DEST%\inc%_EXT%\vcl\rversion.h
+hedabu: ..\inc\salbtype.hxx %_DEST%\inc%_EXT%\vcl\salbtype.hxx
+hedabu: ..\inc\salctype.hxx %_DEST%\inc%_EXT%\vcl\salctype.hxx
+hedabu: ..\inc\salgtype.hxx %_DEST%\inc%_EXT%\vcl\salgtype.hxx
+hedabu: ..\inc\salotype.hxx %_DEST%\inc%_EXT%\vcl\salotype.hxx
+hedabu: ..\inc\salstype.hxx %_DEST%\inc%_EXT%\vcl\salstype.hxx
+hedabu: ..\inc\scrbar.hxx %_DEST%\inc%_EXT%\vcl\scrbar.hxx
+hedabu: ..\inc\seleng.hxx %_DEST%\inc%_EXT%\vcl\seleng.hxx
+hedabu: ..\inc\settings.hxx %_DEST%\inc%_EXT%\vcl\settings.hxx
+hedabu: ..\inc\slider.hxx %_DEST%\inc%_EXT%\vcl\slider.hxx
+hedabu: ..\inc\sndstyle.hxx %_DEST%\inc%_EXT%\vcl\sndstyle.hxx
+hedabu: ..\inc\sound.hxx %_DEST%\inc%_EXT%\vcl\sound.hxx
+hedabu: ..\inc\spin.h %_DEST%\inc%_EXT%\vcl\spin.h
+hedabu: ..\inc\spin.hxx %_DEST%\inc%_EXT%\vcl\spin.hxx
+hedabu: ..\inc\spinfld.hxx %_DEST%\inc%_EXT%\vcl\spinfld.hxx
+hedabu: ..\inc\split.hxx %_DEST%\inc%_EXT%\vcl\split.hxx
+hedabu: ..\inc\splitwin.hxx %_DEST%\inc%_EXT%\vcl\splitwin.hxx
+hedabu: ..\inc\status.hxx %_DEST%\inc%_EXT%\vcl\status.hxx
+hedabu: ..\inc\stdtext.hxx %_DEST%\inc%_EXT%\vcl\stdtext.hxx
+hedabu: ..\inc\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
+hedabu: ..\inc\sv.h %_DEST%\inc%_EXT%\vcl\sv.h
+hedabu: ..\inc\svapp.hxx %_DEST%\inc%_EXT%\vcl\svapp.hxx
+hedabu: ..\inc\svsys.h %_DEST%\inc%_EXT%\vcl\svsys.h
+hedabu: ..\inc\symbol.hxx %_DEST%\inc%_EXT%\vcl\symbol.hxx
+hedabu: ..\inc\syschild.hxx %_DEST%\inc%_EXT%\vcl\syschild.hxx
+hedabu: ..\inc\sysdata.hxx %_DEST%\inc%_EXT%\vcl\sysdata.hxx
+hedabu: ..\inc\sysdlg.hxx %_DEST%\inc%_EXT%\vcl\sysdlg.hxx
+hedabu: ..\inc\system.hxx %_DEST%\inc%_EXT%\vcl\system.hxx
+hedabu: ..\inc\syswin.hxx %_DEST%\inc%_EXT%\vcl\syswin.hxx
+hedabu: ..\inc\tab.hxx %_DEST%\inc%_EXT%\vcl\tab.hxx
+hedabu: ..\inc\tabctrl.hxx %_DEST%\inc%_EXT%\vcl\tabctrl.hxx
+hedabu: ..\inc\tabdlg.hxx %_DEST%\inc%_EXT%\vcl\tabdlg.hxx
+hedabu: ..\inc\tabpage.hxx %_DEST%\inc%_EXT%\vcl\tabpage.hxx
+hedabu: ..\inc\timer.hxx %_DEST%\inc%_EXT%\vcl\timer.hxx
+hedabu: ..\inc\toolbox.hxx %_DEST%\inc%_EXT%\vcl\toolbox.hxx
+hedabu: ..\inc\uniqid.hxx %_DEST%\inc%_EXT%\vcl\uniqid.hxx
+hedabu: ..\inc\unowrap.hxx %_DEST%\inc%_EXT%\vcl\unowrap.hxx
+hedabu: ..\inc\vclenum.hxx %_DEST%\inc%_EXT%\vcl\vclenum.hxx
+hedabu: ..\inc\vector2d.hxx %_DEST%\inc%_EXT%\vcl\vector2d.hxx
+hedabu: ..\inc\virdev.hxx %_DEST%\inc%_EXT%\vcl\virdev.hxx
+hedabu: ..\inc\waitobj.hxx %_DEST%\inc%_EXT%\vcl\waitobj.hxx
+hedabu: ..\inc\wall.hxx %_DEST%\inc%_EXT%\vcl\wall.hxx
+hedabu: ..\inc\winbit.hxx %_DEST%\inc%_EXT%\vcl\winbit.hxx
+hedabu: ..\inc\window.hxx %_DEST%\inc%_EXT%\vcl\window.hxx
+hedabu: ..\inc\wintypes.hxx %_DEST%\inc%_EXT%\vcl\wintypes.hxx
+hedabu: ..\inc\wrkwin.hxx %_DEST%\inc%_EXT%\vcl\wrkwin.hxx
+hedabu: ..\inc\atom.hxx %_DEST%\inc%_EXT%\vcl\atom.hxx
+hedabu: ..\inc\threadex.hxx %_DEST%\inc%_EXT%\vcl\threadex.hxx
+hedabu: ..\inc\evntpost.hxx %_DEST%\inc%_EXT%\vcl\evntpost.hxx
+hedabu: ..\inc\unohelp.hxx %_DEST%\inc%_EXT%\vcl\unohelp.hxx
+hedabu: ..\unx\inc\salconfig.hxx %_DEST%\inc%_EXT%\vcl\unx\salconfig.hxx
+

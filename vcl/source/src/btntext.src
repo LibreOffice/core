@@ -1,0 +1,290 @@
+/*************************************************************************
+ *
+ *  $RCSfile: btntext.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define _SV_BTNTEXT_SRC
+
+#ifndef _SV_SVIDS_HRC
+#include <svids.hrc>
+#endif
+
+String SV_BUTTONTEXT_OK
+{
+    Text = "OK";
+    Text [ English ] = "OK";
+    TEXT[ italian ] = "OK";
+    TEXT[ portuguese_brazilian ] = "OK";
+    TEXT[ portuguese ] = "OK";
+    TEXT[ danish ] = "OK";
+    TEXT[ french ] = "OK";
+    TEXT[ swedish ] = "OK";
+    TEXT[ dutch ] = "OK";
+    TEXT[ spanish ] = "Aceptar";
+    TEXT[ english_us ] = "OK";
+    TEXT[ russian ] = "OK";
+    TEXT[ polish ] = "OK";
+    TEXT[ japanese ] = "OK";
+    TEXT[ chinese_simplified ] = "È·¶¨";
+    TEXT[ chinese_traditional ] = "½T©w";
+    TEXT[ arabic ] = "ÍÓäÇð";
+    TEXT[ dutch ] = "OK";
+    TEXT[ chinese_simplified ] = "È·¶¨";
+    TEXT[ greek ] = "OK";
+    TEXT[ korean ] = "È®ÀÎ";
+    TEXT[ turkish ] = "Tamam";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_BUTTONTEXT_CANCEL
+{
+    Text = "Abbrechen" ;
+    Text [ English ] = "Cancel" ;
+    TEXT[ italian ] = "Annulla";
+    TEXT[ portuguese_brazilian ] = "Cancelar";
+    TEXT[ portuguese ] = "Cancelar";
+    TEXT[ danish ] = "Annuller";
+    TEXT[ french ] = "Annuler";
+    TEXT[ swedish ] = "Avbryt";
+    TEXT[ dutch ] = "Annuleren";
+    TEXT[ spanish ] = "Cancelar";
+    TEXT[ english_us ] = "Cancel";
+    TEXT[ russian ] = "Îòìåíà";
+    TEXT[ polish ] = "Anuluj";
+    TEXT[ japanese ] = "·¬Ý¾Ù";
+    TEXT[ chinese_simplified ] = "È¡Ïû";
+    TEXT[ chinese_traditional ] = "¨ú®ø";
+    TEXT[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
+    TEXT[ dutch ] = "Annuleren";
+    TEXT[ chinese_simplified ] = "È¡Ïû";
+    TEXT[ greek ] = "Áêýñùóç";
+    TEXT[ korean ] = "Ãë¼Ò";
+    TEXT[ turkish ] = "Ýptal";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_BUTTONTEXT_YES
+{
+    Text = "~Ja";
+    Text [ English ] = "~Yes";
+    TEXT[ italian ] = "Sì";
+    TEXT[ portuguese_brazilian ] = "~Sim";
+    TEXT[ portuguese ] = "~Sim";
+    TEXT[ danish ] = "~Ja";
+    TEXT[ french ] = "~Oui";
+    TEXT[ swedish ] = "~Ja";
+    TEXT[ dutch ] = "~Ja";
+    TEXT[ spanish ] = "~Sí";
+    TEXT[ english_us ] = "~Yes";
+    TEXT[ russian ] = "Äà";
+    TEXT[ polish ] = "~Tak";
+    TEXT[ japanese ] = "‚Í‚¢(~Y)";
+    TEXT[ chinese_simplified ] = "ÊÇ(~Y)";
+    TEXT[ chinese_traditional ] = "¬O(~Y)";
+    TEXT[ arabic ] = "äÚã";
+    TEXT[ dutch ] = "~Ja";
+    TEXT[ chinese_simplified ] = "ÊÇ(~Y)";
+    TEXT[ greek ] = "Íáé";
+    TEXT[ korean ] = "³×(~Y)";
+    TEXT[ turkish ] = "~Evet";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_BUTTONTEXT_NO
+{
+    Text = "~Nein";
+    Text [ English ] = "~No";
+    TEXT[ italian ] = "No";
+    TEXT[ portuguese_brazilian ] = "~Não";
+    TEXT[ portuguese ] = "~Não";
+    TEXT[ danish ] = "~Nej";
+    TEXT[ french ] = "~Non";
+    TEXT[ swedish ] = "~Nej";
+    TEXT[ dutch ] = "~Nee";
+    TEXT[ spanish ] = "~No";
+    TEXT[ english_us ] = "~No";
+    TEXT[ russian ] = "Íåò";
+    TEXT[ polish ] = "~Nie";
+    TEXT[ japanese ] = "‚¢‚¢‚¦(~N)";
+    TEXT[ chinese_simplified ] = "·ñ(~N)";
+    TEXT[ chinese_traditional ] = "§_(~N)";
+    TEXT[ arabic ] = "áÇ";
+    TEXT[ dutch ] = "~Nee";
+    TEXT[ chinese_simplified ] = "·ñ(~N)";
+    TEXT[ greek ] = "¼÷é";
+    TEXT[ korean ] = "¾Æ´Ï¿À(~N)";
+    TEXT[ turkish ] = "~Hayýr";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_BUTTONTEXT_RETRY
+{
+    Text = "~Wiederholen";
+    Text [ English ] = "~Retry";
+    TEXT[ italian ] = "Riprova";
+    TEXT[ portuguese_brazilian ] = "~Repetir";
+    TEXT[ portuguese ] = "~Repetir";
+    TEXT[ danish ] = "Prøv igen";
+    TEXT[ french ] = "~Réessayer";
+    TEXT[ swedish ] = "~Upprepa";
+    TEXT[ dutch ] = "H~erhalen";
+    TEXT[ spanish ] = "~Reintentar";
+    TEXT[ english_us ] = "~Retry";
+    TEXT[ russian ] = "Ïîâòîðèòü";
+    TEXT[ polish ] = "P~onów";
+    TEXT[ japanese ] = "‚â‚è’¼‚µ(~R)";
+    TEXT[ chinese_simplified ] = "ÖØÊÔ(~R)";
+    TEXT[ chinese_traditional ] = "­«¸Õ(~R)";
+    TEXT[ arabic ] = "ÅÚÇÏÉ ÇáãÍÇæáÉ";
+    TEXT[ dutch ] = "H~erhalen";
+    TEXT[ chinese_simplified ] = "ÖØÊÔ(~R)";
+    TEXT[ greek ] = "ÅðáíÜëçøç";
+    TEXT[ korean ] = "´Ù½Ã ½Ãµµ(~R)";
+    TEXT[ turkish ] = "Y~inele";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_BUTTONTEXT_HELP
+{
+    Text = "~Hilfe";
+    Text [ English ] = "~Help";
+    TEXT[ italian ] = "?";
+    TEXT[ portuguese_brazilian ] = "Aj~uda";
+    TEXT[ portuguese ] = "Aj~uda";
+    TEXT[ danish ] = "~Hjælp";
+    TEXT[ french ] = "Ai~de";
+    TEXT[ swedish ] = "~Hjälp";
+    TEXT[ dutch ] = "~Help";
+    TEXT[ spanish ] = "Ay~uda";
+    TEXT[ english_us ] = "~Help";
+    TEXT[ russian ] = "Ñï~ðàâêà";
+    TEXT[ polish ] = "~Pomoc";
+    TEXT[ japanese ] = "ÍÙÌß(~H)";
+    TEXT[ chinese_simplified ] = "ÇóÖú(~H)";
+    TEXT[ chinese_traditional ] = "»¡©ú(~H)";
+    TEXT[ arabic ] = "ãÓÇÚÏÉ";
+    TEXT[ dutch ] = "~Help";
+    TEXT[ chinese_simplified ] = "ÇóÖú(~H)";
+    TEXT[ greek ] = "ÂïÞèåéá";
+    TEXT[ korean ] = "µµ¿ò¸»(~H)";
+    TEXT[ turkish ] = "~Yardým";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_BUTTONTEXT_MORE
+{
+    Text = "~Zusätze";
+    Text [ English ] = "~More";
+    TEXT[ italian ] = "E~xtra";
+    TEXT[ portuguese_brazilian ] = "~Mais";
+    TEXT[ portuguese ] = "~Opções";
+    TEXT[ danish ] = "~Flere";
+    TEXT[ french ] = "O~ptions";
+    TEXT[ swedish ] = "~Fler";
+    TEXT[ dutch ] = "~Overige";
+    TEXT[ spanish ] = "~Opciones";
+    TEXT[ english_us ] = "~More";
+    TEXT[ russian ] = "Áîëüøå";
+    TEXT[ polish ] = "~Dodatki";
+    TEXT[ japanese ] = "’Ç‰Á(~M)";
+    TEXT[ chinese_simplified ] = "ÆäËû(~M)";
+    TEXT[ chinese_traditional ] = "¨ä¥L(~M)";
+    TEXT[ arabic ] = "ÅÖÇÝÇÊ";
+    TEXT[ dutch ] = "~Overige";
+    TEXT[ chinese_simplified ] = "ÆäËû(~M)";
+    TEXT[ greek ] = "Ðñüóèåôá";
+    TEXT[ korean ] = "ÀÚ¼¼È÷(~M)";
+    TEXT[ turkish ] = "A~yrýntýlar";
+    TEXT[ language_user1 ] = " ";
+};
+
+/* HelpTexte, die wir derzeit nicht mehr verwenden:
+SV_BUTTONHELPTEXT_OK
+{
+    Text = "Schließt dieses Dialogfeld und speichert alle vorgenommenen Änderungen." ;
+    Text [ English ] = "Closes this dialog box and save any changes you have made." ;
+};
+
+SV_BUTTONHELPTEXT_CANCEL
+{
+    Text = "Schließt dieses Dialogfeld, ohne Ihre Änderungen zu speichern." ;
+    Text [ English ] = "Closes this dialog box without saving any changes you have made." ;
+};
+
+SV_BUTTONHELPTEXT_HELP
+{
+    Text = "Zeigt Hilfe zu diesem Fenster an." ;
+    Text [ English ] = "Shows help for the current window." ;
+};
+
+SV_BUTTONHELPTEXT_MORE
+{
+    Text = "Zeigt weitere EinstellmÖglichkeiten an oder versteckt diese wieder." ;
+    Text [ English ] = "Shows more Options or hide these options again." ;
+};
+
+Finnische-Texte:
+OK          OK
+CANCEL      Peruuta
+HELP        ~Ohje
+MORE        ~Enemmän
+YES         ~Kyllä
+NO          ~Ei
+RETRY       ~Yritäuudelleen
+*/

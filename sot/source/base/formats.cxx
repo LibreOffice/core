@@ -1,0 +1,1835 @@
+/*************************************************************************
+ *
+ *  $RCSfile: formats.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
+
+#ifndef _DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
+#pragma hdrstop
+
+#include "exchange.hxx"
+#include "formats.hxx"
+#include "dtrans.hxx"
+#include "filelist.hxx"
+
+struct SotAction_Impl
+{
+    ULONG   nFormatId;          // Clipboard Id
+    USHORT  nAction;            // Action Id
+    BYTE    nContextCheckId;    // additional check of content in clipboard
+};
+
+
+// define a context check Id for every formatid
+#define FILEGRPDSC_ONLY_URL     1
+
+/*
+    Fuer jedes Ziel existiert in der Tabelle genau ein SotDestinationEntry_Impl.
+    Dieser Eintrag enthaelt u.a. fuer jedes vom Ziel auswertbare Format eine
+    Default-Action. Die Default-Aktionen verweisen fuer jedes Format auf
+    die auszuwertende Tabelle, d.h. sie enthalten nur EXCHG_IN_ACTION_MOVE,
+    EXCHG_IN_ACTION_COPY oder EXCHG_IN_ACTION_LINK. Entsprechend dieser Aktion
+    ist dann aMoveActions, aCopyActions oder aLinkActions auszuwerten.
+    Die Aktionen sind nach Prioritaet sortiert, d.h. je "wichtiger" das
+    Format ist, desto eher erscheint es in der Liste.
+*/
+
+struct SotDestinationEntry_Impl
+{
+    USHORT                  nDestination;
+    const SotAction_Impl*   aDefaultActions;
+    const SotAction_Impl*   aMoveActions;
+    const SotAction_Impl*   aCopyActions;
+    const SotAction_Impl*   aLinkActions;
+};
+
+
+
+/*
+    Ueber diese Tabelle erfolgt die Zuordnung von Destination, vorhandenen
+    Datenformaten sowie gewuenschter Aktion zu einer Aktion und dem in
+    ihr zu benutzenden Datenformat. Die Tabelle ist nach den Exchange-Zielen
+    (EXCHG_DEST_*) sortiert. Innerhalb des Zieleintrages befinden sich genau
+    vier Tabellen fuer Default-, Move-, Copy- und Linkaktionen. Ueber
+    die Default-Tabelle erfolgt das Mapping zwischen Default-Aktion
+     (DropEvent::IsDefaultAction()) und daraus resultierender wirklicher
+    Aktion. Diese Tabelle enthaelt deshalb nur die Aktionen
+     EXCHG_IN_ACTION_COPY, EXCHG_IN_ACTION_MOVE und EXCHG_IN_ACTION_LINK,
+    die auf die spezielle Tabelle verweisen. Die uebrigen Tabellen
+    koennen beliebige Aktionen enthalten. Jede Tabelle ist nach der
+    Format-Prioritaet sortiert. Eintrag Null hat die hoechste Prioritaet.
+*/
+
+#define EXCHG_EMPYT_ARRAY                                                 \
+static SotAction_Impl __READONLY_DATA aEmptyArr[] =                       \
+    {                                                                     \
+        { 0xffff }                                                        \
+    };
+
+/*  */
+#define EXCHG_DEST_FTP_BOX_ARRAY                                          \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FTP_BOX_Def[] =         \
+    {                                                                     \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },\
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FTP_BOX_Copy[] =        \
+    {                                                                     \
+        { SOT_FORMAT_FILE_LIST, EXCHG_OUT_ACTION_COPY_FILE, 0 },                \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_COPY_FILE, 0 },                     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_COPY_FILE, 0 },  \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_COPY_FILE, FILEGRPDSC_ONLY_URL },  \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_COPY_FILE, 0 },\
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FTP_BOX_Link[] =        \
+    {                                                                     \
+        { SOT_FORMAT_FILE_LIST, EXCHG_OUT_ACTION_COPY_FILE, 0 },                \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_COPY_FILE, 0 },                     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_COPY_FILE, 0 },  \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_COPY_FILE, FILEGRPDSC_ONLY_URL },  \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_COPY_FILE, 0 },\
+        { 0xffff }                                                        \
+    };
+
+/*  */
+#define EXCHG_DEST_FTP_FLD_ARRAY                                          \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FTP_FLD_Def[] =         \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_CNT_MSGATTACHFILE, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },     \
+        { 0xffff }                                                        \
+     };                                                                   \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FTP_FLD_Move[] =        \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_OUT_ACTION_MOVE_CHAOSOBJ, 0 },     \
+        { SOT_FORMAT_FILE_LIST, EXCHG_OUT_ACTION_MOVE_FILE, 0 },                \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_MOVE_FILE, 0 },                     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_MOVE_FILE, 0 },  \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_MOVE_FILE, FILEGRPDSC_ONLY_URL },  \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_MOVE_FILE, 0 },  \
+        { 0xffff }                                                        \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FTP_FLD_Copy[] =        \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_CNT_MSGATTACHFILE, EXCHG_OUT_ACTION_COPY_MSGATTACH, 0 },\
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_OUT_ACTION_COPY_CHAOSOBJ, 0 },     \
+        { SOT_FORMAT_FILE_LIST, EXCHG_OUT_ACTION_COPY_FILE, 0 },                \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_COPY_FILE, 0 },                     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_COPY_FILE, 0 },  \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_COPY_FILE, FILEGRPDSC_ONLY_URL },  \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_COPY_FILE, 0 },  \
+        { 0xffff }                                                        \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FTP_FLD_Link[] =        \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_COPY_FILE, 0 },  \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_COPY_FILE, FILEGRPDSC_ONLY_URL },  \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_COPY_FILE, 0 },  \
+        { 0xffff }                                                        \
+    };
+
+/*  */
+#define EXCHG_DEST_FSYS_FLD_ARRAY                                         \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FSYS_FLD_Def[] =        \
+    {                                                                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_MOVE, 0 },                        \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_LINK, 0 },     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },     \
+        { SOT_FORMATSTR_ID_CNT_MSGATTACHFILE, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_LINK, 0 },             \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_LINK, 0 },         \
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FSYS_FLD_Move[] =       \
+    {                                                                     \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_MOVE_FILE, 0 },                  \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_OUT_ACTION_MOVE_CHAOSOBJ, 0 },     \
+        { SOT_FORMATSTR_ID_CNT_MSGATTACHFILE, EXCHG_OUT_ACTION_COPY_MSGATTACH, 0 },\
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FSYS_FLD_Copy[] =       \
+    {                                                                     \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE, 0 },                \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_OUT_ACTION_COPY_CHAOSOBJ, 0 },     \
+        { SOT_FORMATSTR_ID_CNT_MSGATTACHFILE, EXCHG_OUT_ACTION_COPY_MSGATTACH, 0 },\
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 }, \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 }, \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, FILEGRPDSC_ONLY_URL }, \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 }, \
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_FSYS_FLD_Link[] =       \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 }, \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 }, \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, FILEGRPDSC_ONLY_URL }, \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 }, \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILELINK, 0 },            \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_LINK, 0 },             \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_LINK, 0 },         \
+        { 0xffff }                                                        \
+    };
+
+#define EXCHG_DEST_IMAP_FLD_ARRAY                                         \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_IMAP_FLD_Def[] =        \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },     \
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_IMAP_FLD_Move[] =       \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_MOVE, 0 },     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_MOVE, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_MOVE, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_MOVE, 0 },     \
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_IMAP_FLD_Copy[] =       \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },     \
+        { 0xffff }                                                        \
+    };                                                                    \
+ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_IMAP_FLD_Link[] =       \
+    {                                                                     \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },     \
+        { 0xffff }                                                        \
+    };
+
+/*  */
+#define EXCHG_DEST_SEARCH_BOX_ARRAY                                         \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SEARCH_BOX_Def[] =        \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_LINK , 0 },                   \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                           \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SEARCH_BOX_Link[] =       \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_LINK , 0 },                   \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                           \
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_SEARCH_LOC_ARRAY                                         \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SEARCH_LOC_Def[] =        \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_LINK , 0 },                   \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                           \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SEARCH_LOC_Link[] =       \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_LINK , 0 },                   \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                           \
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_TRASH_ARRAY                                              \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_TRASH_Def[] =             \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_MOVE , 0 },                   \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_MOVE, 0 },                          \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_TRASH_Move[] =            \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_MOVE , 0 },                   \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_MOVE, 0 },                          \
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_SEARCH_FLD_ARRAY                                         \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SEARCH_FLD_Def[] =        \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_LINK , 0 },                   \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                           \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SEARCH_FLD_Link[] =       \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_LINK , 0 },                   \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                           \
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_DOC_OLEOBJ_ARRAY                                         \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_OLEOBJ_Def[] =        \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_LINK, 0 },              \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_LINK, 0 },          \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_OLEOBJ_Move[] =       \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_OLEOBJ_Link[] =       \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },       \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },   \
+        { SOT_FORMAT_FILE_LIST, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },      \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },           \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },\
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP, 0 },        \
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_CHARTDOC_OLEOBJ_ARRAY                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_CHARTDOC_OLEOBJ_Def[] =   \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                          \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_LINK, 0 },              \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_LINK, 0 },          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_CHARTDOC_OLEOBJ_Move[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_CHARTDOC_OLEOBJ_Link[] =  \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },      \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },           \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },              \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },\
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP, 0 },        \
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_DOC_TEXTFRAME_ARRAY                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Def[] =     \
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },               \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_IN_ACTION_MOVE, 0 },                  \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_IN_ACTION_MOVE, 0 },             \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_IN_ACTION_MOVE, 0 },             \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_IN_ACTION_MOVE, 0 },         \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_IN_ACTION_MOVE, 0 },         \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Move[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_MOVE, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE, 0 },     \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE, 0 }, \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Copy[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },        \
+        { SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
+        { SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                   \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE, 0 },     \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE, 0 }, \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Link[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_LINK, 0 },                   \
+        { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_LINK, 0 },        \
+        { SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, EXCHG_IN_ACTION_LINK, 0 },   \
+        { SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, EXCHG_IN_ACTION_LINK, 0 },   \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { 0xffff }                                                          \
+    };
+
+#define EXCHG_DEST_DOC_TEXTFRAME_WEB_ARRAY                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def[] =     \
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },               \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_MOVE, 0 },                   \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },        \
+        { SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
+        { SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                   \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_LINK, 0 },                   \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_DOC_GRAPHOBJ_ARRAY                                       \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPHOBJ_Def[] =      \
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPHOBJ_Move[] =     \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_REPLACE_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPHOBJ_Copy[] =     \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPHOBJ_Link[] =     \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_DOC_LNKD_GRAPHOBJ_ARRAY                                  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Def[] = \
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Move[] =\
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_REPLACE_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Copy[] =\
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Link[] =\
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_DOC_GRAPH_W_IMAP_ARRAY                                   \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPH_W_IMAP_Def[] =  \
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPH_W_IMAP_Move[] = \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_REPLACE_BITMAP| EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPH_W_IMAP_Copy[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPH_W_IMAP_Link[] = \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },               \
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_ARRAY                              \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Def[] =\
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Move[] =\
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_REPLACE_BITMAP| EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Copy[] =\
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                           \
+    };                                                                       \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Link[] =\
+    {                                                                        \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },               \
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_DOC_IMAPREGION_ARRAY                                     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_IMAPREGION_Def[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_IMAPREGION_Copy[] =   \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_DOC_DRAWOBJ_ARRAY                                        \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_DRAWOBJ_Def[] =       \
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_DRAWOBJ_Copy[] =      \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_REPLACE_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_DRAWOBJ_Move[] =      \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_DRAWOBJ_Link[] =      \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_DOC_URLBUTTON_ARRAY                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLBUTTON_Def[] =     \
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLBUTTON_Move[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLBUTTON_Copy[] =    \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },      \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },            \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },    \
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_DOC_URLFIELD_ARRAY                                       \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLFIELD_Def[] =      \
+    {                                                                       \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLFIELD_Copy[] =     \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLFIELD_Link[] =     \
+    {                                                                       \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_HYPERLINK, 0 },        \
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_DOC_GROUPOBJ_ARRAY                                       \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GROUPOBJ_Def[] =      \
+    {                                                                       \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GROUPOBJ_Move[] =     \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_REPLACE_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GROUPOBJ_Copy[] =     \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GROUPOBJ_Link[] =     \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_DOC_MAILATTACHFRAME_ARRAY                                \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_MAILATTACHFRAME_Def[] =\
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_MAILATTACHFRAME_Copy[] =\
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_OUT_ACTION_INSERT_FILE, 0 },        \
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE, 0 },                  \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK, 0 },\
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_DOC_MAILADDRESSFIELD_ARRAY                               \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_MAILADDRESSFIELD_Def[] =\
+    {                                                                       \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_MAILADDRESSFIELD_Copy[] =\
+    {                                                                       \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING, 0 },              \
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_SWDOC_FREE_AREA_ARRAY                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =   \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY, 0 },                           \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_IN_ACTION_MOVE, 0 },                  \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_IN_ACTION_MOVE, 0 },             \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_IN_ACTION_MOVE, 0 },             \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_IN_ACTION_MOVE, 0 },         \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_IN_ACTION_MOVE, 0 },         \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Move[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_MOVE, 0 },                   \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                           \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING, 0 },              \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Copy[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },        \
+        { SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
+        { SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                   \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                           \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Link[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_LINK, 0 },                   \
+        { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_LINK, 0 },        \
+        { SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, EXCHG_IN_ACTION_LINK, 0 },   \
+        { SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, EXCHG_IN_ACTION_LINK, 0 },   \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { 0xffff }                                                          \
+    };
+
+#define EXCHG_DEST_SWDOC_FREE_AREA_WEB_ARRAY                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def[] =   \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY, 0 },                           \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Move[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_MOVE, 0 },                   \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                           \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING, 0 },              \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy[] =  \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                   \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                           \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_LINK, 0 },                   \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_SCDOC_FREE_AREA_ARRAY                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Def[] =   \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_IN_ACTION_MOVE, 0 },                  \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_IN_ACTION_MOVE, 0 },             \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_IN_ACTION_MOVE, 0 },             \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_IN_ACTION_MOVE, 0 },         \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_IN_ACTION_MOVE, 0 },         \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Move[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_BIFF_5, EXCHG_IN_ACTION_MOVE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
+        { SOT_FORMATSTR_ID_BIFF__5,EXCHG_IN_ACTION_MOVE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Copy[] =  \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_BIFF_5, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
+        { SOT_FORMATSTR_ID_BIFF__5,EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Link[] =  \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_SDDOC_FREE_AREA_ARRAY                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Def[] =   \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_IN_ACTION_COPY, 0 },                    \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
+        { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_IN_ACTION_MOVE, 0 },                  \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_IN_ACTION_MOVE, 0 },             \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_IN_ACTION_MOVE, 0 },             \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_IN_ACTION_MOVE, 0 },         \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_IN_ACTION_MOVE, 0 },         \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                    \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Move[] =  \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Copy[] =  \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
+        { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_SD_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_HTML, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
+        { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+          { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+          { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Link[] =  \
+    {                                                                       \
+        { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },        \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
+        { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },     \
+        { SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
+        { 0xffff }                                                          \
+    };
+
+
+/*  */
+#define EXCHG_DEST_SUBSCR_BOX_ARRAY                                         \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SUBSCR_BOX_Def[] =        \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },       \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },       \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SUBSCR_BOX_Move[] =       \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SUBSCR_BOX_Copy[] =       \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 },\
+        { 0xffff }                                                          \
+    };                                                                      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SUBSCR_BOX_Link[] =       \
+    {                                                                       \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 },\
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, FILEGRPDSC_ONLY_URL },\
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_OUT_ACTION_INSERT_BOOKMARK, 0 },\
+        { 0xffff }                                                          \
+    };
+
+/*  */
+#define EXCHG_DEST_GROUPVIEW_ARRAY                                         \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_GROUPVIEW_Def[] =        \
+    {                                                                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                        \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_LINK, 0 },                 \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_LINK, 0 },                   \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },     \
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_GROUPVIEW_Move[] =       \
+    {                                                                     \
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_GROUPVIEW_Copy[] =       \
+    {                                                                     \
+        { 0xffff }                                                        \
+    };                                                                    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_GROUPVIEW_Link[] =       \
+    {                                                                     \
+        { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                        \
+        { SOT_FORMATSTR_ID_CHAOS, EXCHG_IN_ACTION_LINK, 0 },                 \
+        { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_LINK, 0 },                   \
+        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_LINK, 0 },     \
+        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_LINK, FILEGRPDSC_ONLY_URL },     \
+        { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },     \
+        { 0xffff }                                                        \
+    };
+
+/*  */
+
+#define IMPL_DATA_ARRAY_1                                                     \
+EXCHG_EMPYT_ARRAY                                                         \
+EXCHG_DEST_FTP_BOX_ARRAY                                                  \
+EXCHG_DEST_FTP_FLD_ARRAY                                                  \
+EXCHG_DEST_FSYS_FLD_ARRAY                                                 \
+EXCHG_DEST_SEARCH_BOX_ARRAY                                               \
+EXCHG_DEST_SEARCH_LOC_ARRAY                                               \
+EXCHG_DEST_TRASH_ARRAY                                                    \
+EXCHG_DEST_SEARCH_FLD_ARRAY                                               \
+EXCHG_DEST_DOC_OLEOBJ_ARRAY                                               \
+EXCHG_DEST_CHARTDOC_OLEOBJ_ARRAY                                          \
+EXCHG_DEST_DOC_TEXTFRAME_ARRAY                                            \
+EXCHG_DEST_DOC_GRAPHOBJ_ARRAY                                             \
+EXCHG_DEST_DOC_LNKD_GRAPHOBJ_ARRAY                                        \
+EXCHG_DEST_IMAP_FLD_ARRAY                                                 \
+EXCHG_DEST_DOC_TEXTFRAME_WEB_ARRAY
+
+#define IMPL_DATA_ARRAY_2                                                 \
+EXCHG_DEST_DOC_GRAPH_W_IMAP_ARRAY                                         \
+EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_ARRAY                                    \
+EXCHG_DEST_DOC_IMAPREGION_ARRAY                                           \
+EXCHG_DEST_DOC_DRAWOBJ_ARRAY                                              \
+EXCHG_DEST_DOC_URLBUTTON_ARRAY                                            \
+EXCHG_DEST_DOC_URLFIELD_ARRAY                                             \
+EXCHG_DEST_DOC_GROUPOBJ_ARRAY                                             \
+EXCHG_DEST_DOC_MAILATTACHFRAME_ARRAY                                      \
+EXCHG_DEST_DOC_MAILADDRESSFIELD_ARRAY                                     \
+EXCHG_DEST_SWDOC_FREE_AREA_ARRAY                                          \
+EXCHG_DEST_SCDOC_FREE_AREA_ARRAY                                          \
+EXCHG_DEST_SDDOC_FREE_AREA_ARRAY                                          \
+EXCHG_DEST_SUBSCR_BOX_ARRAY                                               \
+EXCHG_DEST_SWDOC_FREE_AREA_WEB_ARRAY                                      \
+EXCHG_DEST_GROUPVIEW_ARRAY
+
+#define IMPL_DATA_ARRAY_3                                                 \
+static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
+{                                                                         \
+    { EXCHG_DEST_FTP_BOX,                                                 \
+        aEXCHG_DEST_FTP_BOX_Def,                                          \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_FTP_BOX_Copy,                                         \
+        aEXCHG_DEST_FTP_BOX_Link,                                         \
+    },                                                                    \
+    { EXCHG_DEST_FTP_FLD,                                                 \
+        aEXCHG_DEST_FTP_FLD_Def,                                          \
+        aEXCHG_DEST_FTP_FLD_Move,                                         \
+        aEXCHG_DEST_FTP_FLD_Copy,                                         \
+        aEXCHG_DEST_FTP_FLD_Link,                                         \
+    },                                                                    \
+    { EXCHG_DEST_FSYS_BOX,                                                \
+        aEmptyArr,                                                        \
+        aEmptyArr,                                                        \
+        aEmptyArr,                                                        \
+        aEmptyArr                                                         \
+    },                                                                    \
+    { EXCHG_DEST_FSYS_FLD,                                                \
+        aEXCHG_DEST_FSYS_FLD_Def,                                         \
+        aEXCHG_DEST_FSYS_FLD_Move,                                        \
+        aEXCHG_DEST_FSYS_FLD_Copy,                                        \
+        aEXCHG_DEST_FSYS_FLD_Link                                         \
+    },                                                                    \
+    { EXCHG_DEST_IMAP_FLD,                                                \
+        aEXCHG_DEST_IMAP_FLD_Def,                                         \
+        aEXCHG_DEST_IMAP_FLD_Move,                                        \
+        aEXCHG_DEST_IMAP_FLD_Copy,                                        \
+        aEXCHG_DEST_IMAP_FLD_Link,                                        \
+    },                                                                    \
+    { EXCHG_DEST_SEARCH_BOX,                                              \
+        aEXCHG_DEST_SEARCH_BOX_Def,                                       \
+        aEmptyArr,                                                        \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_SEARCH_BOX_Link                                       \
+    },                                                                    \
+    { EXCHG_DEST_SEARCH_LOCATIONS,                                        \
+        aEXCHG_DEST_SEARCH_LOC_Def,                                       \
+        aEmptyArr,                                                        \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_SEARCH_LOC_Link                                       \
+    },                                                                    \
+    { EXCHG_DEST_TRASH,                                                   \
+        aEXCHG_DEST_TRASH_Def,                                            \
+        aEXCHG_DEST_TRASH_Move,                                           \
+        aEmptyArr,                                                        \
+        aEmptyArr                                                         \
+    },                                                                    \
+    { EXCHG_DEST_SEARCH_FLD,                                              \
+        aEXCHG_DEST_SEARCH_FLD_Def,                                       \
+        aEmptyArr,                                                        \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_SEARCH_FLD_Link                                       \
+    },                                                                    \
+    { EXCHG_DEST_DOC_OLEOBJ,                                              \
+        aEXCHG_DEST_DOC_OLEOBJ_Def,                                       \
+        aEXCHG_DEST_DOC_OLEOBJ_Move,                                      \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_DOC_OLEOBJ_Link                                       \
+    },                                                                    \
+    { EXCHG_DEST_CHARTDOC_OLEOBJ,                                         \
+        aEXCHG_DEST_CHARTDOC_OLEOBJ_Def,                                  \
+        aEXCHG_DEST_CHARTDOC_OLEOBJ_Move,                                 \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_CHARTDOC_OLEOBJ_Link                                  \
+    },                                                                    \
+    { EXCHG_DEST_DOC_TEXTFRAME,                                           \
+        aEXCHG_DEST_DOC_TEXTFRAME_Def,                                    \
+        aEXCHG_DEST_DOC_TEXTFRAME_Move,                                   \
+        aEXCHG_DEST_DOC_TEXTFRAME_Copy,                                   \
+        aEXCHG_DEST_DOC_TEXTFRAME_Link                                    \
+    },                                                                    \
+    { EXCHG_DEST_DOC_GRAPHOBJ,                                            \
+        aEXCHG_DEST_DOC_GRAPHOBJ_Def,                                     \
+        aEXCHG_DEST_DOC_GRAPHOBJ_Move,                                    \
+        aEXCHG_DEST_DOC_GRAPHOBJ_Copy,                                    \
+        aEXCHG_DEST_DOC_GRAPHOBJ_Link                                     \
+    },                                                                    \
+    { EXCHG_DEST_DOC_LNKD_GRAPHOBJ,                                       \
+        aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Def,                                \
+        aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Move,                               \
+        aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Copy,                               \
+        aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Link                                \
+    },                                                                    \
+    { EXCHG_DEST_DOC_GRAPH_W_IMAP,                                        \
+        aEXCHG_DEST_DOC_GRAPH_W_IMAP_Def,                                 \
+        aEXCHG_DEST_DOC_GRAPH_W_IMAP_Move,                                \
+        aEXCHG_DEST_DOC_GRAPH_W_IMAP_Copy,                                \
+        aEXCHG_DEST_DOC_GRAPH_W_IMAP_Link                                 \
+    },                                                                    \
+    { EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP,                                   \
+        aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Def,                            \
+        aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Move,                           \
+        aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Copy,                           \
+        aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Link                            \
+    },                                                                    \
+    { EXCHG_DEST_DOC_IMAPREGION,                                          \
+        aEXCHG_DEST_DOC_IMAPREGION_Def,                                   \
+        aEXCHG_DEST_DOC_IMAPREGION_Copy,                                  \
+        aEmptyArr,                                                        \
+        aEmptyArr                                                         \
+    },                                                                    \
+    { EXCHG_DEST_DOC_DRAWOBJ,                                             \
+        aEXCHG_DEST_DOC_DRAWOBJ_Def,                                      \
+        aEXCHG_DEST_DOC_DRAWOBJ_Copy,                                     \
+        aEXCHG_DEST_DOC_DRAWOBJ_Move,                                     \
+        aEXCHG_DEST_DOC_DRAWOBJ_Link                                      \
+    },                                                                    \
+    { EXCHG_DEST_DOC_URLBUTTON,                                           \
+        aEXCHG_DEST_DOC_URLBUTTON_Def,                                    \
+        aEXCHG_DEST_DOC_URLBUTTON_Move,                                   \
+        aEXCHG_DEST_DOC_URLBUTTON_Copy,                                   \
+        aEmptyArr                                                         \
+    },                                                                    \
+    { EXCHG_DEST_DOC_URLFIELD,                                            \
+        aEXCHG_DEST_DOC_URLFIELD_Def,                                     \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_DOC_URLFIELD_Copy,                                    \
+        aEXCHG_DEST_DOC_URLFIELD_Link                                     \
+    },                                                                    \
+    { EXCHG_DEST_DOC_GROUPOBJ,                                            \
+        aEXCHG_DEST_DOC_GROUPOBJ_Def,                                     \
+        aEXCHG_DEST_DOC_GROUPOBJ_Move,                                    \
+        aEXCHG_DEST_DOC_GROUPOBJ_Copy,                                    \
+        aEXCHG_DEST_DOC_GROUPOBJ_Link                                     \
+    },                                                                    \
+    { EXCHG_DEST_DOC_MAILATTACHFRAME,                                     \
+        aEXCHG_DEST_DOC_MAILATTACHFRAME_Def,                              \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_DOC_MAILATTACHFRAME_Copy,                             \
+        aEmptyArr                                                         \
+    },                                                                    \
+    { EXCHG_DEST_DOC_MAILADDRESSFIELD,                                    \
+        aEXCHG_DEST_DOC_MAILADDRESSFIELD_Def,                             \
+        aEmptyArr,                                                        \
+        aEXCHG_DEST_DOC_MAILADDRESSFIELD_Copy,                            \
+        aEmptyArr                                                         \
+    },                                                                    \
+    { EXCHG_DEST_SWDOC_FREE_AREA,                                         \
+        aEXCHG_DEST_SWDOC_FREE_AREA_Def,                                  \
+        aEXCHG_DEST_SWDOC_FREE_AREA_Move,                                 \
+        aEXCHG_DEST_SWDOC_FREE_AREA_Copy,                                 \
+        aEXCHG_DEST_SWDOC_FREE_AREA_Link                                  \
+    },                                                                    \
+    { EXCHG_DEST_SCDOC_FREE_AREA,                                         \
+        aEXCHG_DEST_SCDOC_FREE_AREA_Def,                                  \
+        aEXCHG_DEST_SCDOC_FREE_AREA_Move,                                 \
+        aEXCHG_DEST_SCDOC_FREE_AREA_Copy,                                 \
+        aEXCHG_DEST_SCDOC_FREE_AREA_Link                                  \
+    },                                                                    \
+    { EXCHG_DEST_SDDOC_FREE_AREA,                                         \
+        aEXCHG_DEST_SDDOC_FREE_AREA_Def,                                  \
+        aEXCHG_DEST_SDDOC_FREE_AREA_Move,                                 \
+        aEXCHG_DEST_SDDOC_FREE_AREA_Copy,                                 \
+        aEXCHG_DEST_SDDOC_FREE_AREA_Link                                  \
+    },                                                                    \
+    { EXCHG_DEST_SUBSCR_BOX,                                              \
+        aEXCHG_DEST_SUBSCR_BOX_Def,                                       \
+        aEXCHG_DEST_SUBSCR_BOX_Move,                                      \
+        aEXCHG_DEST_SUBSCR_BOX_Copy,                                      \
+        aEXCHG_DEST_SUBSCR_BOX_Link                                       \
+    },                                                                    \
+    { EXCHG_DEST_DOC_TEXTFRAME_WEB,                                       \
+        aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def,                                \
+        aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move,                               \
+        aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy,                               \
+        aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link                                \
+    },                                                                    \
+    { EXCHG_DEST_SWDOC_FREE_AREA_WEB,                                     \
+        aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def,                              \
+        aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Move,                             \
+        aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy,                             \
+        aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link                              \
+    },                                                                    \
+    { EXCHG_DEST_SFX_GROUPVIEW,                                           \
+        aEXCHG_DEST_GROUPVIEW_Def,                                        \
+        aEXCHG_DEST_GROUPVIEW_Move,                                       \
+        aEXCHG_DEST_GROUPVIEW_Copy,                                       \
+        aEXCHG_DEST_GROUPVIEW_Link                                        \
+    },                                                                    \
+    {                                                                     \
+        0xffff                                                            \
+    }                                                                     \
+};
+
+static BOOL CheckContext_Impl( const SotDataObject& rData,
+                                const SotAction_Impl& rEntry )
+{
+    BOOL bRet = TRUE;
+    switch( rEntry.nFormatId )
+    {
+    case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
+#ifdef WNT
+        switch( rEntry.nContextCheckId )
+        {
+        case FILEGRPDSC_ONLY_URL:
+            {
+                bRet = FALSE;
+                SvData aData( rEntry.nFormatId, MEDIUM_ALL );
+                if( rData.GetTypeList().Get( SOT_FORMATSTR_ID_FILECONTENT ) &&
+                    ((SotDataObject&)rData).GetData( &aData ))
+                {
+                    // dann als FileGroupDescriptor bereitstellen
+                    void *pData;
+                    aData.GetData( &pData, TRANSFER_REFERENCE );
+                    FILEGROUPDESCRIPTOR* pFDesc = (FILEGROUPDESCRIPTOR*)pData;
+                    // read only URL-Files
+                    if( pFDesc->cItems )
+                    {
+                        ByteString sDesc( pFDesc->fgd[0].cFileName );
+                        bRet = 4 < sDesc.Len() && sDesc.Copy( sDesc.Len()-4 ).
+                            EqualsIgnoreCaseAscii( ".URL" );
+                    }
+                }
+            }
+            break;
+        }
+#endif
+        break;
+    }
+    return bRet;
+}
+
+static USHORT GetAction_Impl(const SotDataObject& rData,const SotAction_Impl* pArray,
+                            ULONG& rFormat )
+{
+    const SvDataTypeList& rTypeList = rData.GetTypeList();
+    const SotAction_Impl* pArrayStart = pArray;
+    ULONG nId = pArray->nFormatId;
+    while( nId != 0xffff )
+    {
+        rFormat = nId;
+        if( 0 != rTypeList.Get( SotExchange::RegisterSotFormatName( nId ) ) &&
+            ( !pArray->nContextCheckId ||
+                CheckContext_Impl( rData, *pArray ) ))
+        {
+            if( SOT_FORMAT_FILE_LIST == rFormat &&
+                0 != rTypeList.Get( SotExchange::RegisterSotFormatName(
+                    SOT_FORMAT_FILE ) ) )
+            {
+                SvData aData( SOT_FORMAT_FILE_LIST );
+                ((SotDataObject&)rData).GetData( &aData );
+                FileList aFileList;
+                FileList* pFileList = &aFileList;
+                aData.GetData( (SvDataCopyStream**)&pFileList, pFileList->Type() );
+                // FileList mit einem Eintrag matcht auf FORMAT_FILE!
+                if( aFileList.Count() == 1 )
+                {
+                    // Eintrag fuer FORMAT_FILE suchen
+                    const SotAction_Impl* pCur = pArrayStart;
+                    while( pCur->nFormatId != 0xffff )
+                    {
+                        if( pCur->nFormatId == SOT_FORMAT_FILE )
+                        {
+                            rFormat = SOT_FORMAT_FILE;
+                            return pCur->nAction;
+                        }
+                        pCur++;
+                    }
+                }
+            }
+            return pArray->nAction;
+        }
+        pArray++;
+        nId = pArray->nFormatId;
+    }
+    return EXCHG_INOUT_ACTION_NONE;
+}
+
+USHORT SotExchange::GetExchangeAction(
+    const SotDataObject& rData, USHORT nDestination, USHORT nSourceOptions,
+    USHORT nUserAction, ULONG& rFormat, USHORT& rDefaultAction )
+{
+    // hier wird jetzt die oben definierte Tabelle "implementiert"
+    IMPL_DATA_ARRAY_1;
+    IMPL_DATA_ARRAY_2;
+    IMPL_DATA_ARRAY_3;
+
+    rFormat = SOT_FORMAT_STRING;
+
+    //Todo: Binaere Suche einbauen
+    const SotDestinationEntry_Impl* pEntry = aDestinationArray;
+    while( 0xffff != pEntry->nDestination )
+    {
+        if( pEntry->nDestination == nDestination )
+            break;
+        ++pEntry;
+    }
+
+    if( 0xffff == pEntry->nDestination )
+    {
+        return EXCHG_INOUT_ACTION_NONE;
+    }
+
+    nUserAction &= EXCHG_ACTION_MASK;
+    rFormat = 0;
+
+    /* Behandlung der Default-Action nach folgender Vorgehensweise:
+
+       - Das Ziel wird nach der Default-Action gefragt
+       - Unterstuetzt die Quelle diese Aktion so wird sie uebernommen
+       - Anderenfalls wird aus den von der Quelle zur Verfuegung gestellten
+         Aktionen eine ausgewaehlt, die zu einer moeglichst nicht leeren
+          Ergebnisaktion fuehrt. Hierbei wird in dieser Reihenfolge
+          vorgegangen: Copy -> Link -> Move
+    */
+    if( nUserAction == EXCHG_IN_ACTION_DEFAULT )
+    {
+        nUserAction = GetAction_Impl(rData, pEntry->aDefaultActions,rFormat);
+        // Unterstuetzt die Quelle die Aktion?
+        if( !(nUserAction & nSourceOptions ))
+        {
+            // Nein -> Alle Aktionen der Quelle checken
+            rDefaultAction = (EXCHG_IN_ACTION_COPY & nSourceOptions);
+            if( rDefaultAction && (nUserAction=GetAction_Impl(rData,pEntry->aCopyActions,rFormat)))
+                return nUserAction;
+            rDefaultAction = (EXCHG_IN_ACTION_LINK & nSourceOptions);
+            if( rDefaultAction && (nUserAction=GetAction_Impl(rData,pEntry->aLinkActions,rFormat)))
+                return nUserAction;
+            rDefaultAction = (EXCHG_IN_ACTION_MOVE & nSourceOptions);
+            if( rDefaultAction && (nUserAction=GetAction_Impl(rData,pEntry->aMoveActions,rFormat)))
+                return nUserAction;
+            rDefaultAction = 0;
+            return 0;
+        }
+        rDefaultAction = nUserAction;
+    }
+      else
+        rDefaultAction = nUserAction;
+
+    switch( nUserAction )
+    {
+    case EXCHG_IN_ACTION_MOVE:
+        nUserAction = GetAction_Impl(rData, pEntry->aMoveActions, rFormat);
+        break;
+
+    case EXCHG_IN_ACTION_COPY:
+        nUserAction = GetAction_Impl(rData, pEntry->aCopyActions, rFormat);
+        break;
+
+    case EXCHG_IN_ACTION_LINK:
+        nUserAction = GetAction_Impl(rData, pEntry->aLinkActions, rFormat);
+        break;
+
+    default:
+        nUserAction = EXCHG_INOUT_ACTION_NONE;
+    }
+    return nUserAction;
+}
+
+
+
+#if SUPD <= 397
+
+USHORT SotExchange::GetExchangeAction(
+    const SotDataObject& rData, USHORT nDestination, USHORT nSourceOptions,
+    USHORT nUserAction, ULONG& rFormat, USHORT& rDefaultAction )
+{
+    USHORT nFmt = 0,
+        nRet = GetExchangeAction( rData, nDestination, nSourceOptions,
+                                nUserAction, nFmt , rDefaultAction );
+    rFormat = RegisterSotFormatName( nFmt );
+    return nRet;
+}
+
+#endif
+

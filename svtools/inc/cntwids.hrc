@@ -1,0 +1,549 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cntwids.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:58:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+//=========================================================================
+//
+// WID-definitions for CHAOS
+//
+// (C) 1997 StarDivision GmbH, Hamburg, Germany
+// $Author: hr $ $Date: 2000-09-18 16:58:50 $ $Revision: 1.1.1.1 $
+// $Logfile:   T:/svtools/inc/cntwids.hrv  $ $Workfile:   CNTWIDS.HRC  $
+//
+//=========================================================================
+
+#ifndef _CNTWIDS_HRC
+#define _CNTWIDS_HRC
+
+#ifndef OLD_CHAOS
+#define TF_NEW_TABPAGES
+#define CNT_COOL_ABO
+#endif
+
+//=========================================================================
+// ARGS, MSG, ALL, FOLDER, BOXALL, BOXEXT
+//=========================================================================
+
+#define WID_CHAOS_START 500
+
+//FUNC MSG
+#define WID_MARK_THREAD_MARKED              (499)
+#define WID_MARK_THREAD_UNMARKED            (498)
+
+// ARGS
+#define WID_DUMMY_ARG1                      (WID_CHAOS_START +  0)
+#define WID_FACTORY_NO                      (WID_CHAOS_START +  1)
+#define WID_FACTORY_NAME                    (WID_CHAOS_START +  2)
+#define WID_NEWS_XREF                       (WID_CHAOS_START +  3)
+#define WID_CREATION_FLAGS                  (WID_CHAOS_START +  4)
+#define WID_FACTORY_HELP_ID                 (WID_CHAOS_START +  5)
+
+//FUNC MSG
+#define WID_MSG_START                       (WID_CHAOS_START +  6)
+#define WID_MAIL_REPLY                      (WID_CHAOS_START +  6)
+#define WID_POST_REPLY                      (WID_CHAOS_START +  7)
+#define WID_FORWARD                         (WID_CHAOS_START +  8)
+#define WID_MARK_THREAD_READ                (WID_CHAOS_START +  9)
+#define WID_HIDE_THREAD                     (WID_CHAOS_START + 10)
+#define WID_HIDE_AUTHOR                     (WID_CHAOS_START + 11)
+#define WID_HIDE_SUBJECT                    (WID_CHAOS_START + 12)
+#define WID_RESEND_MSG                      (WID_CHAOS_START + 13)
+#define WID_MARK_THREAD_UNREAD              (WID_CHAOS_START + 14)
+
+//PROP MSG
+#define WID_PRIORITY                        (WID_CHAOS_START + 15)
+#define WID_RULE_APPLIED                    (WID_CHAOS_START + 16)
+#define WID_MSG_LOCK                        (WID_CHAOS_START + 17)
+#define WID_SEEN_STATUS                     (WID_CHAOS_START + 18)
+#define WID_REPLY_TO                        (WID_CHAOS_START + 19)
+#define WID_IN_REPLY_TO                     (WID_CHAOS_START + 20)
+
+#define WID_MESSAGE_ID                      (WID_CHAOS_START + 21)
+#define WID_BCC                             (WID_CHAOS_START + 22)
+#define WID_CC                              (WID_CHAOS_START + 23)
+#define WID_TO                              (WID_CHAOS_START + 24)
+#define WID_FROM                            (WID_CHAOS_START + 25)
+#define WID_TITLE                           (WID_CHAOS_START + 26)
+#define WID_SUBJECT WID_TITLE // only here to prevent panic, should be removed
+#define WID_MESSAGEBODY                     (WID_CHAOS_START + 27)
+
+#define WID_REFERENCES                      (WID_CHAOS_START + 28)
+#define WID_NEWSGROUPS                      (WID_CHAOS_START + 29)
+#define WID_NEWS_XREFLIST                   (WID_CHAOS_START + 30)
+
+#define WID_OUTMSGINTERNALSTATE             (WID_CHAOS_START + 31)
+#define WID_RECIPIENTLIST                   (WID_CHAOS_START + 32)
+#define WID_MSG_END                         (WID_CHAOS_START + 32)
+
+//FUNC ALL
+#define WID_ALL_START                       (WID_CHAOS_START + 33)
+#define WID_DEFAULT                         (WID_CHAOS_START + 33)
+#define WID_OPEN                            (WID_CHAOS_START + 34)
+#define WID_DELETE                          (WID_CHAOS_START + 35)
+#define WID_CUT                             (WID_CHAOS_START + 36)
+#define WID_COPY                            (WID_CHAOS_START + 37)
+#define WID_PASTE                           (WID_CHAOS_START + 38)
+#define WID_RENAME                          (WID_CHAOS_START + 39)
+
+#define WID_HAS_DATA                        (WID_CHAOS_START + 40)
+#define WID_GETDATA                         (WID_CHAOS_START + 41)
+#define WID_PUTDATA                         (WID_CHAOS_START + 42)
+
+//PROP ALL
+#define WID_INTERIM_URL                     (WID_CHAOS_START + 43)
+#define WID_CONTENT_TYPE                    (WID_CHAOS_START + 44)
+
+#define WID_OWN_URL                         (WID_CHAOS_START + 45)
+#define WID_REAL_URL                        (WID_CHAOS_START + 46)
+#define WID_OBSOLETE_TITLE                  (WID_CHAOS_START + 47)
+#define WID_FLAG_READONLY                   (WID_CHAOS_START + 48)
+
+#define WID_REFERED_URL                     (WID_CHAOS_START + 49)
+#define WID_REFERER_COUNT                   (WID_CHAOS_START + 50)
+#define WID_FLAG_IS_FOLDER                  (WID_CHAOS_START + 51)
+#define WID_FLAG_HAS_FOLDER                 (WID_CHAOS_START + 52)
+#define WID_FLAG_IS_MESSAGE                 (WID_CHAOS_START + 53)
+#define WID_FLAG_IS_DOCUMENT                (WID_FLAG_IS_MESSAGE)
+#define WID_FLAG_HAS_MESSAGES               (WID_CHAOS_START + 54)
+
+#define WID_DATE_CREATED                    (WID_CHAOS_START + 55)
+#define WID_DATE_MODIFIED                   (WID_CHAOS_START + 56)
+#define WID_VIEW_DESCRIPTION                (WID_CHAOS_START + 57)
+#define WID_IS_READ                         (WID_CHAOS_START + 58)
+#define WID_IS_MARKED                       (WID_CHAOS_START + 59)
+#define WID_ALL_END                         (WID_CHAOS_START + 59)
+
+//FUNC FOLDER
+#define WID_FOLDER_START                    (WID_CHAOS_START + 60)
+#define WID_SYNCHRONIZE                     (WID_CHAOS_START + 60)
+#define WID_CREATE_NEW                      (WID_CHAOS_START + 61)
+#define WID_INSERT                          (WID_CHAOS_START + 62)
+#define WID_UPDATE                          (WID_CHAOS_START + 63)
+#define WID_IMPORT                          (WID_CHAOS_START + 64)
+
+//PROP FOLDER VIEW
+#define WID_DUMMY_PROPFOLDERVIEW1           (WID_CHAOS_START + 65)
+#define WID_THREADING                       (WID_CHAOS_START + 66)
+#define WID_MSG_COLUMN_INFO  /* obsolete */ (WID_CHAOS_START + 67)
+#define WID_FLD_COLUMN_INFO  /* obsolete */ (WID_CHAOS_START + 68)
+#define WID_FOLDERVIEW_MODE                 (WID_CHAOS_START + 69)
+#define WID_MESSAGEVIEW_MODE                (WID_CHAOS_START + 70)
+#define WID_SENTMESSAGEVIEW_MODE            (WID_CHAOS_START + 71)
+#define WID_SORTING                         (WID_CHAOS_START + 72)
+#define WID_THREADED                        (WID_CHAOS_START + 73)
+#define WID_FILTERED                        (WID_CHAOS_START + 74)
+#define WID_RULES                           (WID_CHAOS_START + 75)
+#define WID_SUBSCRNEWSGROUPCOUNT            (WID_CHAOS_START + 76)
+#define WID_FLAG_SUBSCRIBED                 (WID_CHAOS_START + 77)
+#define WID_FLAG_SUPPORTMODE                (WID_CHAOS_START + 78)
+
+//PROP FOLDER DIR
+#define WID_DUMMY_FOLDERDIR1                (WID_CHAOS_START + 79)
+#define WID_TOTALCONTENTCOUNT               (WID_CHAOS_START + 80)
+#define WID_NEWSGROUPCOUNT  /* ??? */       (WID_CHAOS_START + 81)
+#define WID_ARTICLECOUNT    /* ??? */       (WID_CHAOS_START + 82)
+#define WID_KNOWN_RANGES                    (WID_CHAOS_START + 83)
+#define WID_IMAPFOLDERINFO                  (WID_CHAOS_START + 84)
+
+//PROP FOLDER USER
+#define WID_DUMMY_FOLDERUSER1               (WID_CHAOS_START + 85)
+#define WID_SEENCONTENTCOUNT                (WID_CHAOS_START + 86)
+#define WID_UNREAD_ARTICLECOUNT             (WID_SEENCONTENTCOUNT)
+#define WID_SENTCONTENTCOUNT                (WID_SEENCONTENTCOUNT)
+#define WID_READ_RANGES                     (WID_CHAOS_START + 87)
+#define WID_MARK_RANGES                     (WID_CHAOS_START + 88)
+#define WID_FOLDER_END                      (WID_CHAOS_START + 88)
+
+//PROP BOXALL
+#define WID_BOXALL_START                    (WID_CHAOS_START + 89)
+// Used for d&d of View Storages...
+#define WID_PREPARE_MOVE                    (WID_CHAOS_START + 89)
+#define WID_OUTTRAY_WANTED                  (WID_CHAOS_START + 90)
+#define WID_USERNAME                        (WID_CHAOS_START + 91)
+#define WID_PASSWORD                        (WID_CHAOS_START + 92)
+#define WID_SERVERNAME                      (WID_CHAOS_START + 93)
+#define WID_SERVERPORT                      (WID_CHAOS_START + 94)
+// obsolete
+#define WID_MAILSEND_USERNAME               (WID_CHAOS_START + 95)
+#define WID_MAILSEND_PASSWORD               (WID_CHAOS_START + 96)
+#define WID_MAILSEND_SERVERNAME             (WID_CHAOS_START + 97)
+#define WID_NEWSSEND_USERNAME               (WID_CHAOS_START + 98)
+#define WID_NEWSSEND_PASSWORD               (WID_CHAOS_START + 99)
+#define WID_NEWSSEND_SERVERNAME             (WID_CHAOS_START + 100)
+// end obsolete
+#define WID_SERVERBASE                      (WID_CHAOS_START + 101)
+// not used
+#define WID_SMTP_GATEWAY                    (WID_CHAOS_START + 102)
+
+// -> ..._DEFAULT
+// obsolete
+#define WID_FROM_DEFAULT                    (WID_CHAOS_START + 103)
+// obsolete
+#define WID_REPLY_TO_DEFAULT                (WID_CHAOS_START + 104)
+
+#define WID_AUTOUPDATE_INTERVAL             (WID_CHAOS_START + 105)
+#define WID_UPDATE_ENABLED                  (WID_CHAOS_START + 106)
+#define WID_BOXALL_END                      (WID_CHAOS_START + 106)
+
+//PROP BOX RNMGR
+#define WID_BOXEXT_START                    (WID_CHAOS_START + 107)
+#define WID_CONNECTION_MODE                 (WID_CHAOS_START + 107)
+#define WID_NEWS_GROUPLIST                  (WID_CHAOS_START + 108)
+#ifdef OLD_CHAOS
+#define WID_BOX_CONNECTION_PROP             (WID_CHAOS_START + 109)
+#else
+#define WID_MESSAGE_STOREMODE               (WID_CHAOS_START + 109)
+#endif
+#define WID_DELETE_ON_SERVER                (WID_CHAOS_START + 110)
+
+//PROP BOX USER
+
+//PROP BOX OUT DIR
+#define WID_OUTMSGEXTERNALSTATE             (WID_CHAOS_START + 111)
+
+//PROP RNM
+#define WID_RNM_UPDATETIMER_LIST            (WID_CHAOS_START + 112)
+#define WID_BOXEXT_END                      (WID_CHAOS_START + 112)
+
+//////////////////////////////////////////////////////////////////////////
+// MISC - Added after initial pool version
+//////////////////////////////////////////////////////////////////////////
+
+// PROP BOX
+#define WID_SERVER_RANGES                   (WID_CHAOS_START + 113)
+#define WID_LAST_UPDATE                     (WID_CHAOS_START + 114)
+#define WID_LAST_MSGID                      (WID_CHAOS_START + 115)
+#define WID_LAST_UID                        (WID_CHAOS_START + 116)
+
+// FUNC ALL
+#define WID_UNDELETE                        (WID_CHAOS_START + 117)
+#define WID_CLOSE                           (WID_CHAOS_START + 118)
+#define WID_REOPEN                          (WID_CHAOS_START + 119)
+
+// PROP RNM
+#define WID_RNM_FILECONVERSION_LIST         (WID_CHAOS_START + 120)
+
+// PROP FOLDER
+#define WID_SHOW_MSGS_HAS_TIMELIMIT         (WID_CHAOS_START + 121)
+#define WID_SHOW_MSGS_TIMELIMIT             (WID_CHAOS_START + 122)
+#define WID_STORE_MSGS_HAS_TIMELIMIT        (WID_CHAOS_START + 123)
+#define WID_STORE_MSGS_TIMELIMIT            (WID_CHAOS_START + 124)
+
+// PROP BOX
+#define WID_MSG_COLUMN_WIDTHS /* obsolete */(WID_CHAOS_START + 125)
+
+#ifdef OLD_CHAOS
+
+#define WID_CHAOS_END                       (WID_CHAOS_START + 125)
+
+#else
+
+//////////////////////////////////////////////////////////////////////////
+// WID's added after SO 4.0 release ( SUPD > 364 )
+//////////////////////////////////////////////////////////////////////////
+
+// PROP ALL
+#define WID_PROPERTYLIST                    (WID_CHAOS_START + 126)
+
+// PROP BOXALL
+#define WID_BOXALL_START2                   (WID_CHAOS_START + 127)
+#define WID_SEND_PUBLIC_PROT_ID             (WID_CHAOS_START + 127)
+#define WID_SEND_PRIVATE_PROT_ID            (WID_CHAOS_START + 128)
+#define WID_SEND_PUBLIC_OUTBOXPROPS         (WID_CHAOS_START + 129)
+#define WID_SEND_PRIVATE_OUTBOXPROPS        (WID_CHAOS_START + 130)
+#define WID_SEND_SERVERNAME                 (WID_CHAOS_START + 131)
+#define WID_SEND_USERNAME                   (WID_CHAOS_START + 132)
+#define WID_SEND_PASSWORD                   (WID_CHAOS_START + 133)
+#define WID_SEND_REPLY_TO_DEFAULT           (WID_CHAOS_START + 134)
+#define WID_SEND_FROM_DEFAULT               (WID_CHAOS_START + 135)
+#define WID_VIM_POPATH                      (WID_CHAOS_START + 136)
+#define WID_SEND_VIM_POPATH                 (WID_CHAOS_START + 137)
+#define WID_PURGE                           (WID_CHAOS_START + 138)
+#define WID_CLEAN_CACHE                     (WID_CHAOS_START + 139)
+#define WID_SEARCH                          (WID_CHAOS_START + 140)
+#define WID_JOURNAL                         (WID_CHAOS_START + 141)
+#define WID_LOCALBASE                       (WID_CHAOS_START + 142)
+#define WID_BOXALL_END2                     (WID_CHAOS_START + 142)
+
+// PROP DOCUMENT
+#define WID_DOCUMENT_HEADER                 (WID_CHAOS_START + 143)
+#define WID_DOCUMENT_BODY                   (WID_CHAOS_START + 144)
+#define WID_DOCUMENT_SIZE                   (WID_CHAOS_START + 145)
+
+// PROP ALL
+#define WID_SIZE                            WID_DOCUMENT_SIZE
+
+// PROP PROJECT
+#define WID_PRJ_MEDIUM                      (WID_CHAOS_START + 146)
+#define WID_PRJ_FILENAMECONVENTION          (WID_CHAOS_START + 147)
+
+// PROP FSYS
+#define WID_FSYS_DISKSPACE_LEFT             (WID_CHAOS_START + 148)
+#define WID_TRANSFER                        (WID_CHAOS_START + 149)
+
+// PROP ALL
+#define WID_KEYWORDS                        (WID_CHAOS_START + 150)
+#define WID_IS_PROTECTED                    (WID_CHAOS_START + 151)
+
+// PROP SEARCH
+#define WID_SEARCH_CRITERIA                 (WID_CHAOS_START + 152)
+#define WID_SEARCH_LOCATIONS                (WID_CHAOS_START + 153)
+#define WID_SEARCH_RECURSIVE                (WID_CHAOS_START + 154)
+#define WID_SEARCH_FOLDER_VIEW              (WID_CHAOS_START + 155)
+#define WID_SEARCH_DOCUMENT_VIEW            (WID_CHAOS_START + 156)
+
+// PROP Channel
+#define WID_SCHEDULE_RANGE                  (WID_CHAOS_START + 157)
+#define WID_ALLOWED_SCHEDULE_RANGE          (WID_CHAOS_START + 158)
+#define WID_TARGET_URL                      (WID_CHAOS_START + 159)
+#define WID_FREQUENCY                       (WID_CHAOS_START + 160)
+
+// PROP HTTP
+#define WID_HTTP_CONNECTION_LIMIT           (WID_CHAOS_START + 161)
+#define WID_HTTP_COOKIE_MANAGER             (WID_CHAOS_START + 162)
+
+// PROP Channel
+#define WID_COLUMN_NEXT_UPD                 (WID_CHAOS_START + 163)
+#define WID_CRAWL_STATUS                    (WID_CHAOS_START + 164)
+#define WID_CRAWL_LEVEL                     (WID_CHAOS_START + 165)
+#define WID_CRAWL_MODE                      (WID_CHAOS_START + 166)
+// WID_CRAWL_MAX_VOLUME shall be removed in the future!
+// --> WID_SIZE_LIMIT
+#define WID_CRAWL_MAX_VOLUME                (WID_CHAOS_START + 167)
+#define WID_CRAWL_IMAGE                     (WID_CHAOS_START + 168)
+#define WID_CRAWL_LINK_OUT                  (WID_CHAOS_START + 169)
+#define WID_NOTIFICATION_MODE               (WID_CHAOS_START + 170)
+#define WID_NOTIFICATION_ADDRESS            (WID_CHAOS_START + 171)
+
+// PROP BOXALL
+#define WID_ACCOUNT                         (WID_CHAOS_START + 172)
+
+// PROP FSYS
+#define WID_FSYS_KIND                       (WID_CHAOS_START + 173)
+#define WID_FSYS_FLAGS                      (WID_CHAOS_START + 174)
+
+// PROP FOLDER
+#define WID_VIEWDATA  /* obsolete */        (WID_CHAOS_START + 175)
+
+// PROP FSYS
+#define WID_WHO_IS_MASTER                   (WID_CHAOS_START + 176)
+
+// FUNC HTTP
+#define WID_HTTP_POST                       (WID_CHAOS_START + 177)
+
+// PROP ALL
+#define WID_SUPPORTED_FUNCS                 (WID_CHAOS_START + 178)
+#define WID_SIZE_LIMIT                      (WID_CHAOS_START + 179)
+
+// PROP FOLDER
+#define WID_MARKED_DOCUMENT_COUNT           (WID_CHAOS_START + 180)
+#define WID_FOLDER_COUNT                    (WID_CHAOS_START + 181)
+
+// PROP FSYS
+#define WID_FSYS_SHOW_HIDDEN                (WID_CHAOS_START + 182)
+
+// TRASHCAN
+#define WID_TRASHCAN_START                  (WID_CHAOS_START + 183)
+#define WID_TRASHCAN_EMPTY_TRASH            (WID_CHAOS_START + 183)
+#define WID_TRASHCAN_FLAG_AUTODELETE        (WID_CHAOS_START + 184)
+#define WID_TRASHCAN_FLAG_CONFIRMEMPTY      (WID_CHAOS_START + 185)
+#define WID_TRASHCAN_DUMMY1                 (WID_CHAOS_START + 186)
+#define WID_TRASHCAN_DUMMY2                 (WID_CHAOS_START + 187)
+#define WID_TRASHCAN_END                    (WID_CHAOS_START + 187)
+
+// TRASH
+#define WID_TRASH_START                     (WID_CHAOS_START + 188)
+#define WID_TRASH_RESTORE                   (WID_CHAOS_START + 188)
+#define WID_TRASH_ORIGIN                    (WID_CHAOS_START + 189)
+#define WID_TRASH_DUMMY2                    (WID_CHAOS_START + 190)
+#define WID_TRASH_END                       (WID_CHAOS_START + 190)
+
+// PROP ALL
+#define WID_TARGET_FRAMES                   (WID_CHAOS_START + 191)
+
+// FUNC FOLDER
+#define WID_EXPORT                          (WID_CHAOS_START + 192)
+
+// COMPONENT
+#define WID_COMPONENT_COMMAND               (WID_CHAOS_START + 193)
+#define WID_COMPONENT_MENU                  (WID_CHAOS_START + 194)
+
+// PROP Channel
+#define WID_HREF                            (WID_CHAOS_START + 195)
+
+// PROP FOLDER (VIEW)
+#define WID_VIEW_START                      (WID_CHAOS_START + 196)
+#define WID_VIEW_COLS_BEAMER                (WID_CHAOS_START + 196)
+#define WID_VIEW_COLS_FILEDLG               (WID_CHAOS_START + 197)
+#define WID_VIEW_COLS_FLDWIN                (WID_CHAOS_START + 198)
+#define WID_VIEW_MODE_FLDWIN                (WID_CHAOS_START + 199)
+#define WID_VIEW_LAYOUT_FLDWIN              (WID_CHAOS_START + 200)
+#define WID_VIEW_ICON_POS_FLDWIN            (WID_CHAOS_START + 201)
+#define WID_VIEW_SORT_BEAMER                (WID_CHAOS_START + 202)
+#define WID_VIEW_SORT_FILEDLG               (WID_CHAOS_START + 203)
+#define WID_VIEW_SORT_FLDWIN_DETAILS        (WID_CHAOS_START + 204)
+#define WID_VIEW_SORT_FLDWIN_ICON           (WID_CHAOS_START + 205)
+#define WID_VIEW_WINDOW_POS_FLDWIN          (WID_CHAOS_START + 206)
+#define WID_VIEW_END                        (WID_CHAOS_START + 206)
+
+// PROP ALL
+#define WID_IS_INVALID                      (WID_CHAOS_START + 207)
+
+// PROP Channel
+#define WID_VIEW_TIPHELP                    (WID_CHAOS_START + 208)
+#define WID_PUBLISHER_SCHEDULE              (WID_CHAOS_START + 209)
+#define WID_GETMODE                         (WID_CHAOS_START + 210)
+#define WID_READ_OFFLINE                    (WID_CHAOS_START + 211)
+
+// PROP ALL
+#define WID_ALL_START2                      (WID_CHAOS_START + 212)
+#define WID_REAL_NAME                       (WID_CHAOS_START + 212)
+#define WID_FLAG_UPDATE_ON_OPEN             (WID_CHAOS_START + 213)
+#define WID_ACTION_LIST                     (WID_CHAOS_START + 214)
+#define WID_EDIT_STRING                     (WID_CHAOS_START + 215)
+#define WID_SET_AS_DEFAULT                  (WID_CHAOS_START + 216)
+#define WID_ALL_END2                        (WID_CHAOS_START + 216)
+
+// PROP FOLDER (VIEW)
+#define WID_VIEW2_START                     (WID_CHAOS_START + 217)
+#define WID_VIEW2_FLD_PIC                   (WID_CHAOS_START + 217)
+#define WID_FLAG_EXPANDED                   (WID_CHAOS_START + 218)
+#define WID_CHILD_DEFAULTS                  (WID_CHAOS_START + 219)
+#define WID_VIEW2_END                       (WID_CHAOS_START + 219)
+
+// PROP HTTP
+#define WID_HTTP_KEEP_EXPIRED               (WID_CHAOS_START + 220)
+#define WID_HTTP_VERIFY_MODE                (WID_CHAOS_START + 221)
+#define WID_HTTP_NOCACHE_LIST               (WID_CHAOS_START + 222)
+#define WID_HTTP_REFERER                    (WID_CHAOS_START + 223)
+
+// PROP FSYS
+#define WID_FSYS_START                      (WID_CHAOS_START + 224)
+#define WID_FSYS_VALUE_FOLDER               (WID_CHAOS_START + 224)
+#define WID_FSYS_SHOW_EXTENSION             (WID_CHAOS_START + 225)
+#define WID_VALUE_ADDED_MODE                (WID_CHAOS_START + 226)
+#define WID_FSYS_DUMMY3                     (WID_CHAOS_START + 227)
+#define WID_FSYS_DUMMY4                     (WID_CHAOS_START + 228)
+#define WID_FSYS_END                        (WID_CHAOS_START + 228)
+
+// FUNC HTTP
+#define WID_HTTP_GET_COOKIE                 (WID_CHAOS_START + 229)
+#define WID_HTTP_SET_COOKIE                 (WID_CHAOS_START + 230)
+
+// PROP HTTP
+#define WID_HTTP_COOKIE                     (WID_CHAOS_START + 231)
+#define WID_HTTP_DUMMY_1                    (WID_CHAOS_START + 232)
+
+//////////////////////////////////////////////////////////////////////////
+// WID's added after SO 5.0 release ( SUPD > 505 )
+//////////////////////////////////////////////////////////////////////////
+
+// PROP FOLDER
+#define WID_FOLDER_START2                   (WID_CHAOS_START + 233)
+#define WID_USER_SORT_CRITERIUM             (WID_CHAOS_START + 233)
+#define WID_HEADER_CONFIG                   (WID_CHAOS_START + 234)
+#define WID_GROUPVIEW_CONFIG                (WID_CHAOS_START + 235)
+#define WID_FLD_WEBVIEW_TEMPLATE            (WID_CHAOS_START + 236)
+// eigene Iconpositionen fuer den Explorer, da er noch
+// keinen eigenen View-Storage hat
+#define WID_VIEW_ICON_POS_GRPWIN            (WID_CHAOS_START + 237)
+#define WID_FOLDER_END2                     (WID_CHAOS_START + 237)
+
+// PROP ALL
+#define WID_SHOW_IN_EXPLORER                (WID_CHAOS_START + 238)
+
+// PROP FOLDER (VIEW)
+#define WID_VIEW3_START                     (WID_CHAOS_START + 239)
+#define WID_FLD_FONT                        (WID_CHAOS_START + 239)
+#define WID_FLD_WEBVIEW_USE_GLOBAL          (WID_CHAOS_START + 240)
+#define WID_VIEW3_DUMMY2                    (WID_CHAOS_START + 241)
+#define WID_VIEW3_DUMMY3                    (WID_CHAOS_START + 242)
+#define WID_VIEW3_END                       (WID_CHAOS_START + 242)
+
+// PROP FTP
+#define WID_FTP_ACCOUNT                     (WID_CHAOS_START + 243)
+
+// PROP FOLDER
+#define WID_STORE_MARKED                    (WID_CHAOS_START + 244)
+
+// REPLICATION ( Currently only here to have file compatibility between
+//               SO51 Client and SO51 Server, for which the functionality
+//               first shall be implemented ).
+#define WID_REPLICATION_1                   (WID_CHAOS_START + 245)
+#define WID_REPLICATION_2                   (WID_CHAOS_START + 246)
+#define WID_REPLICATION_3                   (WID_CHAOS_START + 247)
+#define WID_REPLICATION_4                   (WID_CHAOS_START + 248)
+#define WID_REPLICATION_5                   (WID_CHAOS_START + 249)
+
+// PROP SEARCH
+#define WID_SEARCH_INDIRECTIONS             (WID_CHAOS_START + 250)
+
+// PROP ALL
+#define WID_SEND_FORMATS                    (WID_CHAOS_START + 251)
+#define WID_SEND_COPY_TARGET                (WID_CHAOS_START + 252)
+
+// FUNC ALL
+#define WID_TRANSFER_RESULT                 (WID_CHAOS_START + 253)
+
+// END
+#define WID_CHAOS_END                       (WID_CHAOS_START + 253)
+
+#endif /* OLD_CHAOS */
+
+#endif /* !_CNTWIDS_HRC */

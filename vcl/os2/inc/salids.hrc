@@ -1,0 +1,134 @@
+/*************************************************************************
+ *
+ *  $RCSfile: salids.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:05:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SV_SALIDS_HRC
+#define _SV_SALIDS_HRC
+
+// Pointer
+#define SAL_RESID_POINTER_NULL                      10000
+#define SAL_RESID_POINTER_HELP                      10001
+#define SAL_RESID_POINTER_CROSS                     10002
+#define SAL_RESID_POINTER_MOVE                      10003
+#define SAL_RESID_POINTER_HSPLIT                    10004
+#define SAL_RESID_POINTER_VSPLIT                    10005
+#define SAL_RESID_POINTER_HSIZEBAR                  10006
+#define SAL_RESID_POINTER_VSIZEBAR                  10007
+#define SAL_RESID_POINTER_HAND                      10008
+#define SAL_RESID_POINTER_REFHAND                   10009
+#define SAL_RESID_POINTER_PEN                       10010
+#define SAL_RESID_POINTER_MAGNIFY                   10011
+#define SAL_RESID_POINTER_FILL                      10012
+#define SAL_RESID_POINTER_ROTATE                    10013
+#define SAL_RESID_POINTER_HSHEAR                    10014
+#define SAL_RESID_POINTER_VSHEAR                    10015
+#define SAL_RESID_POINTER_MIRROR                    10016
+#define SAL_RESID_POINTER_CROOK                     10017
+#define SAL_RESID_POINTER_CROP                      10018
+#define SAL_RESID_POINTER_MOVEPOINT                 10019
+#define SAL_RESID_POINTER_MOVEBEZIERWEIGHT          10020
+#define SAL_RESID_POINTER_MOVEDATA                  10021
+#define SAL_RESID_POINTER_COPYDATA                  10022
+#define SAL_RESID_POINTER_LINKDATA                  10023
+#define SAL_RESID_POINTER_MOVEDATALINK              10024
+#define SAL_RESID_POINTER_COPYDATALINK              10025
+#define SAL_RESID_POINTER_MOVEFILE                  10026
+#define SAL_RESID_POINTER_COPYFILE                  10027
+#define SAL_RESID_POINTER_LINKFILE                  10028
+#define SAL_RESID_POINTER_MOVEFILELINK              10029
+#define SAL_RESID_POINTER_COPYFILELINK              10030
+#define SAL_RESID_POINTER_MOVEFILES                 10031
+#define SAL_RESID_POINTER_COPYFILES                 10032
+#define SAL_RESID_POINTER_DRAW_LINE                 10033
+#define SAL_RESID_POINTER_DRAW_RECT                 10034
+#define SAL_RESID_POINTER_DRAW_POLYGON              10035
+#define SAL_RESID_POINTER_DRAW_BEZIER               10036
+#define SAL_RESID_POINTER_DRAW_ARC                  10037
+#define SAL_RESID_POINTER_DRAW_PIE                  10038
+#define SAL_RESID_POINTER_DRAW_CIRCLECUT            10039
+#define SAL_RESID_POINTER_DRAW_ELLIPSE              10040
+#define SAL_RESID_POINTER_DRAW_FREEHAND             10041
+#define SAL_RESID_POINTER_DRAW_CONNECT              10042
+#define SAL_RESID_POINTER_DRAW_TEXT                 10043
+#define SAL_RESID_POINTER_DRAW_CAPTION              10044
+#define SAL_RESID_POINTER_CHART                     10045
+#define SAL_RESID_POINTER_DETECTIVE                 10046
+#define SAL_RESID_POINTER_PIVOT_COL                 10047
+#define SAL_RESID_POINTER_PIVOT_ROW                 10048
+#define SAL_RESID_POINTER_PIVOT_FIELD               10049
+#define SAL_RESID_POINTER_CHAIN                     10050
+#define SAL_RESID_POINTER_CHAIN_NOTALLOWED          10051
+#define SAL_RESID_POINTER_TIMEEVENT_MOVE            10052
+#define SAL_RESID_POINTER_TIMEEVENT_SIZE            10053
+#define SAL_RESID_POINTER_AUTOSCROLL_N              10054
+#define SAL_RESID_POINTER_AUTOSCROLL_S              10055
+#define SAL_RESID_POINTER_AUTOSCROLL_W              10056
+#define SAL_RESID_POINTER_AUTOSCROLL_E              10057
+#define SAL_RESID_POINTER_AUTOSCROLL_NW             10058
+#define SAL_RESID_POINTER_AUTOSCROLL_NE             10059
+#define SAL_RESID_POINTER_AUTOSCROLL_SW             10060
+#define SAL_RESID_POINTER_AUTOSCROLL_SE             10061
+#define SAL_RESID_POINTER_AUTOSCROLL_NS             10062
+#define SAL_RESID_POINTER_AUTOSCROLL_WE             10063
+#define SAL_RESID_POINTER_AUTOSCROLL_NSWE           10064
+
+#define SAL_RESID_ICON_SD                           12000
+
+#endif // _SV_SALIDS_HRC

@@ -1,0 +1,166 @@
+/*************************************************************************
+ *
+ *  $RCSfile: calendar.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "svtools.hrc"
+String STR_SVT_CALENDAR_DAY
+{
+    Text = "Tag" ;
+    Text [ ENGLISH ] = "Day" ;
+    Text [ english_us ] = "Day" ;
+    Text [ italian ] = "Giorno" ;
+    Text [ spanish ] = "DÌa" ;
+    Text [ french ] = "Jour" ;
+    Text [ dutch ] = "Dag" ;
+    Text [ swedish ] = "Dag" ;
+    Text [ danish ] = "Dag" ;
+    Text [ portuguese_brazilian ] = "Tag" ;
+    Text [ portuguese ] = "Dia" ;
+    Text[ chinese_simplified ] = "ÃÏ";
+    Text[ russian ] = "ƒÂÌ¸";
+    Text[ polish ] = "dzieÒ";
+    Text[ japanese ] = "ì˙";
+    Text[ chinese_traditional ] = "§—";
+    Text[ arabic ] = "ÌÊ„";
+    Text[ dutch ] = "Dag";
+    Text[ chinese_simplified ] = "ÃÏ";
+    Text[ greek ] = "«Ï›Ò·";
+    Text[ korean ] = "¿œ¿⁄";
+    Text[ turkish ] = "G¸n";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_CALENDAR_WEEK
+{
+    Text = "Woche" ;
+    Text [ ENGLISH ] = "Week" ;
+    Text [ dutch ] = "Week" ;
+    Text [ english_us ] = "Week" ;
+    Text [ italian ] = "Settim." ;
+    Text [ spanish ] = "Semana" ;
+    Text [ french ] = "Semaine" ;
+    Text [ swedish ] = "Vecka" ;
+    Text [ danish ] = "Uge" ;
+    Text [ portuguese ] = "Semana" ;
+    Text [ portuguese_brazilian ] = "Woche" ;
+    Text[ chinese_simplified ] = "÷‹";
+    Text[ russian ] = "ÕÂ‰ÂÎˇ";
+    Text[ polish ] = "tydzieÒ";
+    Text[ japanese ] = "èT";
+    Text[ chinese_traditional ] = "©P";
+    Text[ arabic ] = "√”»Ê⁄";
+    Text[ dutch ] = "Week";
+    Text[ chinese_simplified ] = "÷‹";
+    Text[ greek ] = "≈‚‰ÔÏ‹‰·";
+    Text[ korean ] = "¡÷";
+    Text[ turkish ] = "Hafta";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_CALENDAR_TODAY
+{
+    Text = "Heute" ;
+    Text [ ENGLISH ] = "Today" ;
+    Text [ portuguese ] = "Hoje" ;
+    Text [ english_us ] = "Today" ;
+    Text [ portuguese_brazilian ] = "Heute" ;
+    Text [ swedish ] = "Idag" ;
+    Text [ danish ] = "I dag" ;
+    Text [ italian ] = "Oggi" ;
+    Text [ spanish ] = "Hoy" ;
+    Text [ french ] = "Aujourd'hui" ;
+    Text [ dutch ] = "Vandaag" ;
+    Text[ chinese_simplified ] = "ΩÒÃÏ";
+    Text[ russian ] = "—Â„Ó‰Ìˇ";
+    Text[ polish ] = "dzisiaj";
+    Text[ japanese ] = "ç°ì˙";
+    Text[ chinese_traditional ] = "§µ§—";
+    Text[ arabic ] = "«·ÌÊ„";
+    Text[ dutch ] = "Vandaag";
+    Text[ chinese_simplified ] = "ΩÒÃÏ";
+    Text[ greek ] = "”ﬁÏÂÒ·";
+    Text[ korean ] = "ø¿¥√";
+    Text[ turkish ] = "Bug¸n";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_CALENDAR_NONE
+{
+    Text = "Keines" ;
+    Text [ ENGLISH ] = "None" ;
+    Text [ portuguese ] = "Nenhum" ;
+    Text [ english_us ] = "None" ;
+    Text [ portuguese_brazilian ] = "Keines" ;
+    Text [ swedish ] = "Ingen" ;
+    Text [ danish ] = "Ingen" ;
+    Text [ italian ] = "Senza" ;
+    Text [ spanish ] = "Ninguno" ;
+    Text [ french ] = "Aucun(e)" ;
+    Text [ dutch ] = "Geen" ;
+    Text[ chinese_simplified ] = "Œﬁ";
+    Text[ russian ] = "¡ÂÁ";
+    Text[ polish ] = "brak";
+    Text[ japanese ] = "Ç»Çµ";
+    Text[ chinese_traditional ] = "µL";
+    Text[ arabic ] = "»œÊ‰";
+    Text[ dutch ] = "Geen";
+    Text[ chinese_simplified ] = "Œﬁ";
+    Text[ greek ] = " ·Ì›Ì·";
+    Text[ korean ] = "æ¯¿Ω";
+    Text[ turkish ] = "Yok";
+    Text[ language_user1 ] = " ";
+};

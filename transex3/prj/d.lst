@@ -1,0 +1,2 @@
+..\%__SRC%\bin\xmlex.exe %_DEST%\bin%_EXT%\xmlex.exe
+..\%__SRC%\bin\xmlex %_DEST%\bin%_EXT%\xmlex

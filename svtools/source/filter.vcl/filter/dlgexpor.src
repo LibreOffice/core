@@ -1,0 +1,809 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgexpor.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "dlgexpor.hrc"
+
+ModalDialog DLG_EXPORT_PIX
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 178 , 144 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    GroupBox GRP_COLORS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 110 , 45 ) ;
+        Text = "Farbauflˆsung" ;
+        Text [ ENGLISH ] = "Color resolution" ;
+        Text [ english_us ] = "Color resolution" ;
+        Text [ portuguese ] = "ResoluÁ„o de cores" ;
+        Text [ portuguese_brazilian ] = "Farbauflˆsung" ;
+        Text [ swedish ] = "F‰rgupplˆsning" ;
+        Text [ danish ] = "Farveopl¯sning" ;
+        Text [ italian ] = "Profondit‡ cromatica" ;
+        Text [ spanish ] = "ResoluciÛn del color" ;
+        Text [ french ] = "RÈsolution couleur" ;
+        Text [ dutch ] = "Kleurdichtheid" ;
+        Text[ chinese_simplified ] = "—’…´∑÷±Ê¬ ";
+        Text[ russian ] = "÷‚ÂÚÓ‚ÓÂ ‡ÁÂ¯ÂÌËÂ";
+        Text[ polish ] = "RozdzielczoúÊ kolorÛw";
+        Text[ japanese ] = "êFÇÃâëúìx";
+        Text[ chinese_traditional ] = "√C¶‚∏—™R´◊";
+        Text[ arabic ] = "«” »«‰… «··Ê‰";
+        Text[ greek ] = "¡Ì‹ÎıÛÁ ˜Ò˘Ï‹Ù˘Ì";
+        Text[ korean ] = "ƒ√∑Ø «ÿªÛµµ";
+        Text[ turkish ] = "Renk Áˆz¸n¸rl¸¸";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_COLORS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 98 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+        StringList =
+        {
+            < "Original" ; Default ; > ;
+            < "1Bit - Schwellenwert" ; Default ; > ;
+            < "1Bit - Gedithert" ; Default ; > ;
+            < "4Bit - Graustufenpalette" ; Default ; > ;
+            < "4Bit - Farbpalette" ; Default ; > ;
+            < "8Bit - Graustufenpalette" ; Default ; > ;
+            < "8Bit - Farbpalette" ; Default ; > ;
+            < "24Bit - Echtfarben" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Original" ; Default ; > ;
+            < "1Bit - Schwellenwert" ; Default ; > ;
+            < "1Bit - Gedithert" ; Default ; > ;
+            < "4Bit - Graustufenpalette" ; Default ; > ;
+            < "4Bit - Farbpalette" ; Default ; > ;
+            < "8Bit - Graustufenpalette" ; Default ; > ;
+            < "8Bit - Farbpalette" ; Default ; > ;
+            < "24Bit - Echtfarben" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Original" ; Default ; > ;
+            < "1 Bit - Threshold Value" ; Default ; > ;
+            < "1 Bit - Dithering" ; Default ; > ;
+            < "4 Bit - Grayscale" ; Default ; > ;
+            < "4 Bit - Color Palette" ; Default ; > ;
+            < "8 Bit - Grayscales" ; Default ; > ;
+            < "8 Bit - Color Palette" ; Default ; > ;
+            < "24 Bit - True Colors" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Original" ; Default ; > ;
+            < "Valor limite - 1 bit" ; Default ; > ;
+            < "Sombreado - 1 bit" ; Default ; > ;
+            < "Paleta de tons cinzentos de 4 bits" ; Default ; > ;
+            < "Paleta de cores de 4 bits" ; Default ; > ;
+            < "Paleta de tons cinzentos de 8 bits" ; Default ; > ;
+            < "Paleta de cores de 8 bits" ; Default ; > ;
+            < "Cores reais de 24 bits" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Original" ; Default ; > ;
+            < "1Bit - Schwellenwert" ; Default ; > ;
+            < "1Bit - Gedithert" ; Default ; > ;
+            < "4Bit - Graustufenpalette" ; Default ; > ;
+            < "4Bit - Farbpalette" ; Default ; > ;
+            < "8Bit - Graustufenpalette" ; Default ; > ;
+            < "8Bit - Farbpalette" ; Default ; > ;
+            < "24Bit - Echtfarben" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Original" ; Default ; > ;
+            < "1bit-trˆskelv‰rde" ; Default ; > ;
+            < "1bit-ditrering" ; Default ; > ;
+            < "4bit-grÂskalepalett" ; Default ; > ;
+            < "4bit-f‰rgpalett" ; Default ; > ;
+            < "8Bit - grÂskalepalett" ; Default ; > ;
+            < "8Bit - f‰rgpalett" ; Default ; > ;
+            < "24bit - True Colors" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Original" ; Default ; > ;
+            < "1bit - tÊrskelvÊrdi" ; Default ; > ;
+            < "1bit - dithering" ; Default ; > ;
+            < "4bit - grÂtoneskala" ; Default ; > ;
+            < "4bit - farvepalet" ; Default ; > ;
+            < "8bit - grÂtoneskala" ; Default ; > ;
+            < "8bit - farvepalet" ; Default ; > ;
+            < "24bit - Êgte farver" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Originale" ; Default ; > ;
+            < "Valore soglia 1 bit" ; Default ; > ;
+            < "Dithering a 1 bit" ; Default ; > ;
+            < "Scala di grigio 4 bit" ; Default ; > ;
+            < "Tavola dei colori 4 bit" ; Default ; > ;
+            < "Scala di grigio 8 bit" ; Default ; > ;
+            < "Tavola dei colori a 8 bit" ; Default ; > ;
+            < "Colori reali - 24 bit" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Original" ; Default ; > ;
+            < "Valor umbral de 1 bit" ; Default ; > ;
+            < "1 bit - difusionado" ; Default ; > ;
+            < "Paleta de escala de grises 4 bits" ; Default ; > ;
+            < "Paleta de colores de 4 bits" ; Default ; > ;
+            < "Paleta de escala de grises 8 bits" ; Default ; > ;
+            < "Paleta de colores de 8 bits" ; Default ; > ;
+            < "Color real 24 bits" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Original" ; Default ; > ;
+            < "Valeur de seuil 1 bit" ; Default ; > ;
+            < "Dithering (diffusion) 1 bit" ; Default ; > ;
+            < "Niveaux de gris 4 bits" ; Default ; > ;
+            < "Palette de couleurs 4 bits" ; Default ; > ;
+            < "Niveaux de gris 8 bits" ; Default ; > ;
+            < "Palette de couleurs 8 bits" ; Default ; > ;
+            < "Couleurs 24 bit (Truecolor)" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Origineel" ; Default ; > ;
+            < "1Bit - grenswaarde" ; Default ; > ;
+            < "1Bit - geditherd" ; Default ; > ;
+            < "4Bit - grijswaardenpalet" ; Default ; > ;
+            < "4Bit - kleurenpalet" ; Default ; > ;
+            < "8Bit - grijswaardenpalet" ; Default ; > ;
+            < "8Bit - kleurenpalet" ; Default ; > ;
+            < "24Bit - echte kleuren" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+    < "‘≠º˛" ; Default ; > ;
+        < "1 Œª≥ı º÷µ" ; Default ; > ;
+        < "1 Œª∂∂∂Ø" ; Default ; > ;
+        < "4 Œªª“∂»µ˜…´∞Â" ; Default ; > ;
+        < "4 Œªµ˜…´∞Â" ; Default ; > ;
+        < "8 Œªª“∂»µ˜…´∞Â" ; Default ; > ;
+        < "8 Œªµ˜…´∞Â" ; Default ; > ;
+        < "24 Œª∑¬’Ê—’…´" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+    < "ŒË„ËÌ‡Î" ; Default ; > ;
+        < "1-‡Áˇ‰ÌÓÂ ÔÓÓ„Ó‚ÓÂ ÁÌ‡˜ÂÌËÂ" ; Default ; > ;
+        < "1-‡Áˇ‰ÌÓÂ ÔÒÂ‚‰ÓÔÓÎÛÚÓÌÓ‚ÓÂ ËÁÓ·‡ÊÂÌËÂ" ; Default ; > ;
+        < "4-‡Áˇ‰Ì‡ˇ „‡ÏÏ‡ ÓÚÚÂÌÍÓ‚ ÒÂÓ„Ó" ; Default ; > ;
+        < "4-‡Áˇ‰Ì‡ˇ ˆ‚ÂÚÓ‚‡ˇ Ô‡ÎËÚ‡" ; Default ; > ;
+        < "8-‡Áˇ‰Ì‡ˇ „‡ÏÏ‡ ÓÚÚÂÌÍÓ‚ ÒÂÓ„Ó" ; Default ; > ;
+        < "8-‡Áˇ‰Ì‡ˇ ˆ‚ÂÚÓ‚‡ˇ Ô‡ÎËÚ‡" ; Default ; > ;
+        < "24-‡Áˇ‰ÌÓÂ ÍÓ‰ËÓ‚‡ÌËÂ ˆ‚ÂÚ‡" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Orygina≥" ; Default ; > ;
+        < "WartoúÊ progowa - 1bit" ; Default ; > ;
+        < "Rozsiewanie - 1 bit" ; Default ; > ;
+        < "Paleta odcieni szaroúci - 4bity" ; Default ; > ;
+        < "Paleta kolorÛw - 4bity" ; Default ; > ;
+        < "Paleta odcieni szaroúci - 8bitÛw" ; Default ; > ;
+        < "Paleta kolorÛw - 8bitÛw" ; Default ; > ;
+        < "True Color - 24bity" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "µÿºﬁ≈Ÿ" ; Default ; > ;
+        < "1Bit ÇµÇ´Ç¢íl" ; Default ; > ;
+        < "1Bit √ﬁ®ªﬁñ@" ; Default ; > ;
+        < "4Bit-∏ﬁ⁄∞Ωπ∞Ÿ" ; Default ; > ;
+        < "4Bit-∂◊∞ ﬂ⁄Øƒ" ; Default ; > ;
+        < "8Bit-∏ﬁ⁄∞Ωπ∞Ÿ" ; Default ; > ;
+        < "8Bit-∂◊∞ ﬂ⁄Øƒ" ; Default ; > ;
+        < "24Bit-ëNç êF" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "≠Ï•Û" ; Default ; > ;
+        < "1 ¶Ï§∏™Ï©l≠»" ; Default ; > ;
+        < "1 ¶Ï§∏ß›∞ " ; Default ; > ;
+        < "4 ¶Ï§∏¶«´◊¶‚™O" ; Default ; > ;
+        < "4 ¶Ï§∏¶‚™O" ; Default ; > ;
+        < "8 ¶Ï§∏¶«´◊¶‚™O" ; Default ; > ;
+        < "8 ¶Ï§∏¶‚™O" ; Default ; > ;
+        < "24 ¶Ï§∏•˛±m" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "«·√’·" ; Default ; > ;
+        < "ﬁÌ„… «·»œ¡ 1 » " ; Default ; > ;
+        < "1 »  Dithering" ; Default ; > ;
+        < "·ÊÕ œ—Ã«  «·—„«œÌ 4 » " ; Default ; > ;
+        < "·ÊÕ √·Ê«‰ 4 » " ; Default ; > ;
+        < "·ÊÕ œ—Ã«  «·—„«œÌ 8 » " ; Default ; > ;
+        < "·ÊÕ √·Ê«‰ 8 » " ; Default ; > ;
+        < "√·Ê«‰ ÕﬁÌﬁÌ… 24 » " ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "¡Ò˜ÈÍ¸" ; Default ; > ;
+        < "‘ÈÏﬁ ÔÒﬂÔı 1 bit" ; Default ; > ;
+        < "¡¸‰ÔÛÁ ˜Ò˘Ï‹Ù˘Ì 1 bit" ; Default ; > ;
+        < "ƒÈ·‚‹ËÏÈÛÁ ÙÔı „ÍÒÈ: 4 bit" ; Default ; > ;
+        < "–·Î›Ù· ˜Ò˘Ï‹Ù˘Ì 4 bit" ; Default ; > ;
+        < "ƒÈ·‚‹ËÏÈÛÁ ÙÔı „ÍÒÈ: 8 bit" ; Default ; > ;
+        < "–·Î›Ù· ˜Ò˘Ï‹Ù˘Ì 8 bit" ; Default ; > ;
+        < "24 bit - ÷ıÛÈÍ‹ ˜Ò˛Ï·Ù·" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ø¯∫ª" ; Default ; > ;
+        < "1 ∫Ò∆Æ- ¿”∞Ë∞™" ; Default ; > ;
+        < "1∫Ò∆Æ - »ÁµÈ∏≤" ; Default ; > ;
+        < "4 ∫Ò∆Æ - »∏ªˆ¡∂" ; Default ; > ;
+        < "4 ∫Ò∆Æ - ªˆªÛ ∆ƒ∑π∆Æ" ; Default ; > ;
+        < "8 ∫Ò∆Æ - »∏ªˆ¡∂" ; Default ; > ;
+        < "8 ∫Ò∆Æ - ªˆªÛ ∆ƒ∑π∆Æ" ; Default ; > ;
+        < "24 ∫Ò∆Æ - ∆Æ∑Á ƒ√∑Ø" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "As˝l" ; Default ; > ;
+        < "1Bit - e˛ik deer" ; Default ; > ;
+        < "1Bit - titrek" ; Default ; > ;
+        < "4Bit - gri tonlama paleti" ; Default ; > ;
+        < "4Bit - renk paleti" ; Default ; > ;
+        < "8Bit - gri tonlama paleti" ; Default ; > ;
+        < "8Bit - renk paleti" ; Default ; > ;
+        < "24Bit - gerÁek renk" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    CheckBox CBX_RLE
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 98 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "RLE-Kodierung" ;
+        Text [ ENGLISH ] = "RLE-Coding" ;
+        Text [ english_us ] = "RLE coding" ;
+        Text [ portuguese_brazilian ] = "RLE-Kodierung" ;
+        Text [ swedish ] = "RLE-kodning" ;
+        Text [ danish ] = "RLE-kodning" ;
+        Text [ italian ] = "Codifica RLE" ;
+        Text [ spanish ] = "CodificaciÛn RLE" ;
+        Text [ french ] = "Code RLE" ;
+        Text [ dutch ] = "RLE-codering" ;
+        Text [ portuguese ] = "CodificaÁ„o RLE" ;
+        Text[ chinese_simplified ] = "RLE - ±‡¬Î";
+        Text[ russian ] = " Ó‰ËÓ‚Í‡ RLE";
+        Text[ polish ] = "Kodowanie RLE";
+        Text[ japanese ] = "RLE ∫∞√ﬁ®›∏ﬁ";
+        Text[ chinese_traditional ] = "RLE ΩsΩX";
+        Text[ arabic ] = " —„Ì“ RLE";
+        Text[ greek ] = " ˘‰ÈÍÔÔﬂÁÛÁ RLE";
+        Text[ korean ] = "RLE ƒ⁄µ˘";
+        Text[ turkish ] = "RLE kodlama";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_MODE_PIX
+    {
+        Pos = MAP_APPFONT ( 6 , 51 ) ;
+        Size = MAP_APPFONT ( 110 , 87 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text [ english_us ] = "Mode" ;
+        Text [ italian ] = "Modo" ;
+        Text [ spanish ] = "Modo" ;
+        Text [ french ] = "Mode" ;
+        Text [ dutch ] = "Modus" ;
+        Text [ swedish ] = "L‰ge" ;
+        Text [ danish ] = "Modus" ;
+        Text [ portuguese ] = "Modo" ;
+        Text [ portuguese_brazilian ] = "Modus" ;
+        Text[ chinese_simplified ] = "ƒ£ Ω";
+        Text[ russian ] = "–ÂÊËÏ";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "”∞ƒﬁ";
+        Text[ chinese_traditional ] = "º“¶°";
+        Text[ arabic ] = "«·Ê÷⁄";
+        Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "∏µÂ";
+        Text[ turkish ] = "Kip";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_ORIGINAL_PIX
+    {
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Text = "~Original" ;
+        Text [ ENGLISH ] = "~Original" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Origineel" ;
+        Text [ english_us ] = "~Original" ;
+        Text [ italian ] = "~Originale" ;
+        Text [ spanish ] = "~Original" ;
+        Text [ french ] = "~Original" ;
+        Text [ swedish ] = "~Original" ;
+        Text [ danish ] = "Original" ;
+        Text [ portuguese ] = "~Original" ;
+        Text [ portuguese_brazilian ] = "~Original" ;
+        Text[ chinese_simplified ] = "‘≠º˛(~O)";
+        Text[ russian ] = "ŒË„ËÌ‡Î";
+        Text[ polish ] = "Orygina≥";
+        Text[ japanese ] = "µÿºﬁ≈Ÿ(~O)";
+        Text[ chinese_traditional ] = "≠Ï•Û(~O)";
+        Text[ arabic ] = "«·√’·";
+        Text[ greek ] = "¡Ò˜ÈÍ¸";
+        Text[ korean ] = "ø¯∫ª(~O)";
+        Text[ turkish ] = "~As˝l";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_RES_PIX
+    {
+        Pos = MAP_APPFONT ( 12 , 75 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Text = "~Auflˆsung" ;
+        Text [ ENGLISH ] = "~Resolution" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Resolutie" ;
+        Text [ english_us ] = "~Resolution" ;
+        Text [ italian ] = "~Risoluzione" ;
+        Text [ spanish ] = "~ResoluciÛn" ;
+        Text [ french ] = "RÈsolution" ;
+        Text [ swedish ] = "~Upplˆsning" ;
+        Text [ danish ] = "Opl¯sning" ;
+        Text [ portuguese ] = "~ResoluÁ„o" ;
+        Text [ portuguese_brazilian ] = "~Auflˆsung" ;
+        Text[ chinese_simplified ] = "∑÷±Ê¬ (~R)";
+        Text[ russian ] = "–‡ÁÂ¯ÂÌËÂ";
+        Text[ polish ] = "RozdzielczoúÊ";
+        Text[ japanese ] = "âëúìx(~R)";
+        Text[ chinese_traditional ] = "∏—™R´◊(~R)";
+        Text[ arabic ] = "«·«” »«‰…";
+        Text[ greek ] = "¡Ì‹ÎıÛÁ";
+        Text[ korean ] = "«ÿªÛµµ(~R)";
+        Text[ turkish ] = "~«ˆz¸n¸rl¸k";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox CBB_RES_PIX
+    {
+        Pos = MAP_APPFONT ( 70 , 75 ) ;
+        Size = MAP_APPFONT ( 40 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            "75 DPI" ;
+            "150 DPI" ;
+            "300 DPI" ;
+            "600 DPI" ;
+        };
+    };
+    RadioButton RB_SIZE_PIX
+    {
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Text = "~Grˆﬂe" ;
+        Text [ ENGLISH ] = "~Size" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Grootte" ;
+        Text [ english_us ] = "~Size" ;
+        Text [ italian ] = "~Dimensione" ;
+        Text [ spanish ] = "~TamaÒo" ;
+        Text [ french ] = "Taille" ;
+        Text [ swedish ] = "~Storlek" ;
+        Text [ danish ] = "St¯rrelse" ;
+        Text [ portuguese ] = "~Tamanho" ;
+        Text [ portuguese_brazilian ] = "~Grˆﬂe" ;
+        Text[ chinese_simplified ] = "¥Û–°(~S)";
+        Text[ russian ] = "–‡ÁÏÂ";
+        Text[ polish ] = "Rozmiar";
+        Text[ japanese ] = "ª≤Ωﬁ(~S)";
+        Text[ chinese_traditional ] = "§j§p(~S)";
+        Text[ arabic ] = "«·ÕÃ„";
+        Text[ greek ] = "Ã›„ÂËÔÚ";
+        Text[ korean ] = "≈©±‚(~S)";
+        Text[ turkish ] = "~B¸y¸kl¸k";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTF_SIZEX_PIX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 105 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 100 ;
+        Maximum = 99999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 100 ;
+        Last = 99999 ;
+        SpinSize = 100 ;
+    };
+    MetricField MTF_SIZEY_PIX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 120 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 100 ;
+        Maximum = 99999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 100 ;
+        Last = 99999 ;
+        SpinSize = 100 ;
+    };
+    FixedText FT_SIZEX_PIX
+    {
+        Pos = MAP_APPFONT ( 18 , 106 ) ;
+        Size = MAP_APPFONT ( 41 , 10 ) ;
+        Text = "Breite" ;
+        Text [ ENGLISH ] = "Width" ;
+        Text [ english_us ] = "Width" ;
+        Text [ italian ] = "Larghezza" ;
+        Text [ spanish ] = "Ancho" ;
+        Text [ french ] = "Largeur" ;
+        Text [ dutch ] = "Breedte" ;
+        Text [ swedish ] = "Bredd" ;
+        Text [ danish ] = "Bredde" ;
+        Text [ portuguese_brazilian ] = "Breite" ;
+        Text [ portuguese ] = "Largura" ;
+        Text[ chinese_simplified ] = "øÌ∂»";
+        Text[ russian ] = "ÿËËÌ‡";
+        Text[ polish ] = "Szer.";
+        Text[ japanese ] = "ïù";
+        Text[ chinese_traditional ] = "ºe´◊";
+        Text[ arabic ] = "«·⁄—÷";
+        Text[ greek ] = "–Î‹ÙÔÚ";
+        Text[ korean ] = "≥ ∫Ò";
+        Text[ turkish ] = "Geni˛lik";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SIZEY_PIX
+    {
+        Pos = MAP_APPFONT ( 18 , 121 ) ;
+        Size = MAP_APPFONT ( 41 , 10 ) ;
+        Text = "Hˆhe" ;
+        Text [ ENGLISH ] = "Height" ;
+        Text [ english_us ] = "Height" ;
+        Text [ italian ] = "Altezza" ;
+        Text [ spanish ] = "Altura" ;
+        Text [ french ] = "Hauteur" ;
+        Text [ dutch ] = "Hoogte" ;
+        Text [ swedish ] = "Hˆjd" ;
+        Text [ danish ] = "H¯jde" ;
+        Text [ portuguese ] = "Altura" ;
+        Text [ portuguese_brazilian ] = "Hˆhe" ;
+        Text[ chinese_simplified ] = "∏ﬂ∂»";
+        Text[ russian ] = "¬˚ÒÓÚ‡";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "çÇÇ≥";
+        Text[ chinese_traditional ] = "∞™´◊";
+        Text[ arabic ] = "«·«— ›«⁄";
+        Text[ greek ] = "æ¯ÔÚ";
+        Text[ korean ] = "≥Ù¿Ã";
+        Text[ turkish ] = "Y¸kseklik";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK_PIX
+    {
+        Pos = MAP_APPFONT ( 122 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL_PIX
+    {
+        Pos = MAP_APPFONT ( 122 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP_PIX
+    {
+        Pos = MAP_APPFONT ( 122 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+ModalDialog DLG_EXPORT_VEC
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 178 , 98 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    MetricField MTF_SIZEX_VEC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 59 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 100 ;
+        Maximum = 99999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 100 ;
+        Last = 99999 ;
+        SpinSize = 100 ;
+    };
+    MetricField MTF_SIZEY_VEC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 100 ;
+        Maximum = 99999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 100 ;
+        Last = 99999 ;
+        SpinSize = 100 ;
+    };
+    GroupBox GRP_SIZE_VEC
+    {
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 110 , 44 ) ;
+        Text = "Grˆﬂe" ;
+        Text [ ENGLISH ] = "Size" ;
+        Text [ dutch ] = "Grootte" ;
+        Text [ english_us ] = "Size" ;
+        Text [ italian ] = "Dimensione" ;
+        Text [ spanish ] = "TamaÒo" ;
+        Text [ french ] = "Taille" ;
+        Text [ swedish ] = "Storlek" ;
+        Text [ danish ] = "St¯rrelse" ;
+        Text [ portuguese_brazilian ] = "Grˆﬂe" ;
+        Text [ portuguese ] = "Tamanho" ;
+        Text[ chinese_simplified ] = "¥Û–°";
+        Text[ russian ] = "–‡ÁÏÂ";
+        Text[ polish ] = "Rozmiar";
+        Text[ japanese ] = "ª≤Ωﬁ";
+        Text[ chinese_traditional ] = "§j§p";
+        Text[ arabic ] = "«·ÕÃ„";
+        Text[ greek ] = "Ã›„ÂËÔÚ";
+        Text[ korean ] = "≈©±‚";
+        Text[ turkish ] = "B¸y¸kl¸k";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SIZEX_VEC
+    {
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Breite" ;
+        Text [ ENGLISH ] = "Width" ;
+        Text [ dutch ] = "Breedte" ;
+        Text [ english_us ] = "Width" ;
+        Text [ italian ] = "Larghezza" ;
+        Text [ spanish ] = "Ancho" ;
+        Text [ french ] = "Largeur" ;
+        Text [ swedish ] = "Bredd" ;
+        Text [ danish ] = "Bredde" ;
+        Text [ portuguese ] = "Largura" ;
+        Text [ portuguese_brazilian ] = "Breite" ;
+        Text[ chinese_simplified ] = "øÌ∂»";
+        Text[ russian ] = "ÿËËÌ‡";
+        Text[ polish ] = "Szer.";
+        Text[ japanese ] = "ïù";
+        Text[ chinese_traditional ] = "ºe´◊";
+        Text[ arabic ] = "«·⁄—÷";
+        Text[ greek ] = "–Î‹ÙÔÚ";
+        Text[ korean ] = "≥ ∫Ò";
+        Text[ turkish ] = "Geni˛lik";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SIZEY_VEC
+    {
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Hˆhe" ;
+        Text [ ENGLISH ] = "Height" ;
+        Text [ english_us ] = "Height" ;
+        Text [ italian ] = "Altezza" ;
+        Text [ spanish ] = "Altura" ;
+        Text [ french ] = "Hauteur" ;
+        Text [ dutch ] = "Hoogte" ;
+        Text [ swedish ] = "Hˆjd" ;
+        Text [ danish ] = "H¯jde" ;
+        Text [ portuguese_brazilian ] = "Hˆhe" ;
+        Text [ portuguese ] = "Altura" ;
+        Text[ chinese_simplified ] = "∏ﬂ∂»";
+        Text[ russian ] = "¬˚ÒÓÚ‡";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "çÇÇ≥";
+        Text[ chinese_traditional ] = "∞™´◊";
+        Text[ arabic ] = "«·«— ›«⁄";
+        Text[ greek ] = "æ¯ÔÚ";
+        Text[ korean ] = "≥Ù¿Ã";
+        Text[ turkish ] = "Y¸kseklik";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK_VEC
+    {
+        Pos = MAP_APPFONT ( 122 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL_VEC
+    {
+        Pos = MAP_APPFONT ( 122 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP_VEC
+    {
+        Pos = MAP_APPFONT ( 122 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_ORIGINAL_VEC
+    {
+        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Text = "~Original" ;
+        Text [ ENGLISH ] = "~Original" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Origineel" ;
+        Text [ english_us ] = "~Original" ;
+        Text [ italian ] = "~Originale" ;
+        Text [ spanish ] = "~Original" ;
+        Text [ french ] = "~Original" ;
+        Text [ swedish ] = "~Original" ;
+        Text [ danish ] = "Original" ;
+        Text [ portuguese_brazilian ] = "~Original" ;
+        Text [ portuguese ] = "~Original" ;
+        Text[ chinese_simplified ] = "‘≠º˛(~O)";
+        Text[ russian ] = "ŒË„ËÌ‡Î";
+        Text[ polish ] = "Orygina≥";
+        Text[ japanese ] = "µÿºﬁ≈Ÿ(~O)";
+        Text[ chinese_traditional ] = "≠Ï•Û(~O)";
+        Text[ arabic ] = "«·√’·";
+        Text[ greek ] = "¡Ò˜ÈÍ¸";
+        Text[ korean ] = "ø¯∫ª(~O)";
+        Text[ turkish ] = "~As˝l";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_SIZE_VEC
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Text = "~Grˆﬂe" ;
+        Text [ ENGLISH ] = "~Size" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Grootte" ;
+        Text [ english_us ] = "~Size" ;
+        Text [ italian ] = "~Dimensione" ;
+        Text [ spanish ] = "~TamaÒo" ;
+        Text [ french ] = "Taille" ;
+        Text [ swedish ] = "~Storlek" ;
+        Text [ danish ] = "St¯rrelse" ;
+        Text [ portuguese_brazilian ] = "~Grˆﬂe" ;
+        Text [ portuguese ] = "~Tamanho" ;
+        Text[ chinese_simplified ] = "¥Û–°(~S)";
+        Text[ russian ] = "–‡ÁÏÂ";
+        Text[ polish ] = "Rozmiar";
+        Text[ japanese ] = "ª≤Ωﬁ(~S)";
+        Text[ chinese_traditional ] = "§j§p(~S)";
+        Text[ arabic ] = "«·ÕÃ„";
+        Text[ greek ] = "Ã›„ÂËÔÚ";
+        Text[ korean ] = "≈©±‚(~S)";
+        Text[ turkish ] = "~B¸y¸kl¸k";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_MODE_VEC
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text [ dutch ] = "Modus" ;
+        Text [ english_us ] = "Mode" ;
+        Text [ italian ] = "Modo" ;
+        Text [ spanish ] = "Modo" ;
+        Text [ french ] = "Mode" ;
+        Text [ swedish ] = "L‰ge" ;
+        Text [ danish ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese ] = "Modo" ;
+        Text[ chinese_simplified ] = "ƒ£ Ω";
+        Text[ russian ] = "–ÂÊËÏ";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "”∞ƒﬁ";
+        Text[ chinese_traditional ] = "º“¶°";
+        Text[ arabic ] = "«·Ê÷⁄";
+        Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "∏µÂ";
+        Text[ turkish ] = "Kip";
+        Text[ language_user1 ] = " ";
+    };
+};

@@ -1,0 +1,622 @@
+/*************************************************************************
+ *
+ *  $RCSfile: testtool.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "testtool.hrc"
+#include "solar.hrc"
+
+
+#define Control_Control 5
+#define Control_Border  7
+#define Button_Button   Control_Control
+#define ButtonWidth     40
+
+
+ToolBox DisplayHidToolBox {
+    SVLook = TRUE ;
+    Text = "DisplayHID";
+    Text[ english_us ] = "DisplayHID";
+    ItemList = {
+    ToolBoxItem  {
+            Type = TOOLBOXITEM_BUTTON;
+            _ToolBoxItemFlags = TIB_AUTOCHECK ;
+
+/*
+class FlagToolBoxState
+{
+    TIB_CHECKABLE, TIB_AUTOCHECK, TIB_RADIOCHECK, TIB_LEFT,
+    TIB_AUTOSIZE, TIB_DROPDOWN,
+};*/
+            Identifier = TT_SHOW;
+            Text = "IDs anzeigen";
+            Text[ english_us ] = "Display IDs";
+            ItemBitmap = Bitmap  {
+                File = "ttshow.bmp";
+            };
+            Text[ portuguese ] = "Mostrar IDs";
+            Text[ russian ] = "Ïîêàçàòü IDs";
+            Text[ greek ] = "ÅìöÜíéóç IDs";
+            Text[ dutch ] = "IDs weergeven";
+            Text[ french ] = "Afficher les IDs";
+            Text[ spanish ] = "Mostrar IDs";
+            Text[ italian ] = "Mostra ID";
+            Text[ danish ] = "Vis ID'er";
+            Text[ swedish ] = "Visa ID:n";
+            Text[ polish ] = "Poka¿ IDs";
+            Text[ portuguese_brazilian ] = "IDs anzeigen";
+            Text[ japanese ] = "IDs •\\¦";
+            Text[ korean ] = "ID Ç¥½Ã";
+            Text[ chinese_simplified ] = "ÏÔÊ¾ IDs";
+            Text[ chinese_traditional ] = "Åã¥Ü ID";
+            Text[ arabic ] = "ÅÙåÇÑ IDs";
+            Text[ turkish ] = "ID'leri görüntüle";
+        };
+    ToolBoxItem  {
+            Type = TOOLBOXITEM_SEPARATOR;
+        };
+    ToolBoxItem  {
+            _ToolBoxItemFlags = TIB_AUTOSIZE;
+            Identifier = TT_OUTPUT;
+            Text = "Das ist das Eingabefenster";
+            Text[ english_us ] = "This is the input window";
+            Text[ portuguese ] = "Esta é a janela de entrada";
+            Text[ russian ] = "İòî îêíî ââîäà";
+            Text[ greek ] = "Áõôü åßíáé ôï ğáñÜèõñï åéóáãùãŞò";
+            Text[ dutch ] = "Dit is het invoervenster";
+            Text[ french ] = "Ceci est la fenêtre de saisie";
+            Text[ spanish ] = "Esta es la ventana de entradas";
+            Text[ italian ] = "È una finestra di digitazione";
+            Text[ danish ] = "Dette er inputvinduet";
+            Text[ swedish ] = "Det är inmatningsfönstret";
+            Text[ polish ] = "To jest okno wprowadzania";
+            Text[ portuguese_brazilian ] = "Das ist das Eingabefenster";
+            Text[ japanese ] = "‚±‚ê‚Í²İÌß¯Ä¥³¨İÄŞ³‚Å‚·";
+            Text[ korean ] = "ÀÌ°ÍÀº ÀÔ·ÂÃ¢ÀÔ´Ï´Ù";
+            Text[ chinese_simplified ] = "ÕâÊÇÊäÈëÊÓ´°";
+            Text[ chinese_traditional ] = "³o¬O¤@­Ó¤å¦r¿é¤J¤è¶ô";
+            Text[ arabic ] = "åĞå åí äÇİĞÉ ÇáÅÏÎÇá";
+            Text[ turkish ] = "Giriş penceresi";
+        };
+    ToolBoxItem  {
+            Type = TOOLBOXITEM_SEPARATOR;
+        };
+    ToolBoxItem  {
+            Identifier = TT_SEND_DATA;
+            Text = "Zum TestTool Übertragen";
+            Text[ english_us ] = "Transfer to TestTool";
+            ItemBitmap = Bitmap  {
+                File = "ttremote.bmp";
+            };
+            Text[ portuguese ] = "Transferir para TestTool";
+            Text[ russian ] = "Ïåğåäàòü â TestTool";
+            Text[ greek ] = "ÌåôÜäïóç ğñïò ôï TestTool";
+            Text[ dutch ] = "Transfereren naar TestTool";
+            Text[ french ] = "Transmettre au TestTool";
+            Text[ spanish ] = "Transmitir al TestTool";
+            Text[ italian ] = "Trasferisci nel testtool";
+            Text[ danish ] = "Overfør til TestTool";
+            Text[ swedish ] = "Överför till TestTool";
+            Text[ polish ] = "Przenieœ do TestTool";
+            Text[ portuguese_brazilian ] = "Zum TestTool Übertragen";
+            Text[ japanese ] = "TestTool‚Ö“]‘—";
+            Text[ korean ] = "TestTool·Î ¿Å±â±â";
+            Text[ chinese_simplified ] = "´«ËÍÖÁ TestTool";
+            Text[ chinese_traditional ] = "¶Ç»¼µ¹ TestTool";
+            Text[ arabic ] = "äŞá Åáì TestTool";
+            Text[ turkish ] = "TestTool'a aktar";
+        };
+    ToolBoxItem  {
+            Type = TOOLBOXITEM_SEPARATOR;
+        };
+    ToolBoxItem  {
+            Identifier = TT_ALLWIN;
+            Text = "Alle Fenster anzeigen";
+            Text[ english_us ] = "Show all windows";
+            ItemBitmap = Bitmap  {
+                File = "ttall.bmp";
+            };
+            Text[ portuguese ] = "Mostrar janelas todas";
+            Text[ russian ] = "Ïîêàçàòü âñå îêíà";
+            Text[ greek ] = "ÅìöÜíéóç üëùí ôùí ğáñáèıñùí";
+            Text[ dutch ] = "Alle vensters weergeven";
+            Text[ french ] = "Afficher toutes les fenêtres";
+            Text[ spanish ] = "Mostrar todas las ventanas";
+            Text[ italian ] = "Mostra tutte le finestre";
+            Text[ danish ] = "Vis alle vinduer";
+            Text[ swedish ] = "Visa alla fönster";
+            Text[ polish ] = "Poka¿ wszystkie okna";
+            Text[ portuguese_brazilian ] = "Alle Fenster anzeigen";
+            Text[ japanese ] = "‚·‚×‚Ä‚Ì³¨İÄŞ³‚ğ•\\¦";
+            Text[ korean ] = "¸ğµç Ã¢ Ç¥½Ã";
+            Text[ chinese_simplified ] = "ÏÔÊ¾È«²¿ÊÓ´°";
+            Text[ chinese_traditional ] = "Åã¥Ü©Ò¦³ªºµøµ¡";
+            Text[ arabic ] = "ÅÙåÇÑ ßÇİÉ ÇáäæÇİĞ";
+            Text[ turkish ] = "Tüm pencereleri görüntüle";
+        };
+    ToolBoxItem  {
+            Identifier = TT_KURZNAME;
+            Text = "Kurzname Anzeigen(Falls Vorhanden)";
+            Text[ english_us ] = "Show short name (if one exists)";
+            ItemBitmap = Bitmap  {
+                File = "ttdef.bmp";
+            };
+            Text[ portuguese ] = "Mostrar nomes abreviados (se existentes)";
+            Text[ russian ] = "Ïîêàçàòü ñîêğàùåííîå èìÿ (åñëè åñòü)";
+            Text[ greek ] = "ÅìöÜíéóç óõíôïìïãñáößá (áí õğÜñ÷åé)";
+            Text[ dutch ] = "Afkorting weergeven (indien voorhanden)";
+            Text[ french ] = "Afficher le nom abrégé (short name) - s'il y a lieu";
+            Text[ spanish ] = "Mostrar nombres abreviados (si existen)";
+            Text[ italian ] = "Mostra nome abbreviato (se esistente)";
+            Text[ danish ] = "Vis kortnavn (hvis findes)";
+            Text[ swedish ] = "Visa kort namn(om det finns)";
+            Text[ polish ] = "Poka¿ skrót (o ile istnieje)";
+            Text[ portuguese_brazilian ] = "Kurzname Anzeigen(Falls Vorhanden)";
+            Text[ japanese ] = "’Z‚¢–¼‘O‚ğ•\\¦(Šù‘¶‚·‚éê‡)";
+            Text[ korean ] = "ÂªÀº ÀÌ¸§(ÀÖÀ» °æ¿ì) Ç¥½Ã";
+            Text[ chinese_simplified ] = "ÏÔÊ¾¶ÌÃû³Æ(Èô´æÔÚµÄ»°)";
+            Text[ chinese_traditional ] = "Åã¥Üµu¦WºÙ(¦pªG¦s¦b)";
+            Text[ arabic ] = "ÅÙåÇÑ ÇáÇÓã ÇáãÎÊÕÑ (ÅĞÇ ßÇä ãæÌæÏÇğ)";
+            Text[ turkish ] = "(Varsa) kısaltmayı görüntüle";
+        };
+    ToolBoxItem  {
+            Identifier = TT_LANGNAME;
+            Text = "Langname immer Anzeigen";
+            Text[ english_us ] = "Always show long name";
+            ItemBitmap = Bitmap  {
+                File = "tthid.bmp";
+            };
+            Text[ portuguese ] = "Mostrar sempre nome extenso";
+            Text[ russian ] = "Âñåãäà ïîêàçûâàòü ïîëíîå èìÿ";
+            Text[ greek ] = "Íá ãßíåôáé ğÜíôá åìöÜíéóç ôùí ïíïìÜôùí ìåãÜëïõ ìŞêïõò";
+            Text[ dutch ] = "Volledige naam altijd weergeven";
+            Text[ french ] = "Toujours afficher le nom long";
+            Text[ spanish ] = "Mostrar siempre los nombres largos";
+            Text[ italian ] = "Mostra nome intero";
+            Text[ danish ] = "Vis altid langt navn";
+            Text[ swedish ] = "Visa alltid långt namn";
+            Text[ polish ] = "Pokazuj zawsze pe³n¹ nazwê";
+            Text[ portuguese_brazilian ] = "Langname immer Anzeigen";
+            Text[ japanese ] = "í‚É’·‚¢–¼‘O‚ğ•\\¦";
+            Text[ korean ] = "±ä ÀÌ¸§ Ç×»ó Ç¥½Ã";
+            Text[ chinese_simplified ] = "×ÜÊÇÏÔÊ¾³¤Ãû³Æ(È«³Æ)";
+            Text[ chinese_traditional ] = "Á`¬OÅã¥Üªø¦WºÙ";
+            Text[ arabic ] = "ÅÙåÇÑ ÇáÇÓã ÇáØæíá ÏÇÆãÇğ";
+            Text[ turkish ] = "Tam adı daima görüntüle";
+        };
+    };
+    Text[ portuguese ] = "DisplayHID";
+    Text[ russian ] = "DisplayHID";
+    Text[ greek ] = "DisplayHID";
+    Text[ dutch ] = "DisplayHID";
+    Text[ french ] = "DisplayHID";
+    Text[ spanish ] = "DisplayHID";
+    Text[ italian ] = "DisplayHID";
+    Text[ danish ] = "DisplayHID";
+    Text[ swedish ] = "DisplayHID";
+    Text[ polish ] = "DisplayHID";
+    Text[ portuguese_brazilian ] = "DisplayHID";
+    Text[ japanese ] = "DisplayHID";
+    Text[ korean ] = "DisplayHID";
+    Text[ chinese_simplified ] = "DisplayHID";
+    Text[ chinese_traditional ] = "DisplayHID";
+    Text[ arabic ] = "DisplayHID";
+    Text[ turkish ] = "DisplayHID";
+};
+
+Bitmap TT_SHOW2 {
+    File = "ttshow2.bmp";
+};
+
+FloatingWindow TT_INLINE_TRANSLATION {
+    SVLook = TRUE;
+    Size = MAP_APPFONT( 2*Control_Border + 4*ButtonWidth + 3*Button_Button, 120 );
+    Text = "Inplace Translation";
+    Text[ ENGLISH ] = "Inplace Translation";
+    Text[ DANISH ] = "Ny oversættelse";
+    Text[ ENGLISH_US ] = "Inplace Translation";
+    Text[ SPANISH ] = "Nueva traducción";
+    Text[ FRENCH ] = "Relogement inline";
+    Text[ ITALIAN ] = "Nuova traduzione";
+    Text[ JAPANESE ] = "‚Í‚ß‚İ–|–ó";
+    Text[ DUTCH ] = "Vertaling";
+    Text[ POLISH ] = "W miejsce t³umaczenia";
+    Text[ PORTUGUESE_BRAZILIAN ] = "Inplace Translation";
+    Text[ RUSSIAN ] = "Íîâûé ïåğåâîä";
+    Text[ SWEDISH ] = "Översättning på plats";
+    Text[ CHINESE_SIMPLIFIED ] = "·­Òë¹¤¾ß";
+    Text[ PORTUGUESE ] = "Inplace Translation";
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Zoomable = TRUE;
+    GroupBox TT_GB_TRANSLATION {
+            Pos = MAP_APPFONT( 2, 3 );
+            Size = MAP_APPFONT( 173, 44 );
+            Text = "Translation";
+            Text[ ENGLISH_US ] = "Translation";
+            Text[ portuguese ] = "Tradução";
+            Text[ russian ] = "Ïåğåâîä";
+            Text[ dutch ] = "Vertaling";
+            Text[ french ] = "Relogement";
+            Text[ spanish ] = "Traducción";
+            Text[ italian ] = "Traduzione";
+            Text[ danish ] = "Oversættelse";
+            Text[ swedish ] = "Översättning";
+            Text[ polish ] = "T³umaczenie";
+            Text[ portuguese_brazilian ] = "Translation";
+            Text[ japanese ] = "–|–ó";
+            Text[ chinese_simplified ] = "·­Òë";
+            Text[ chinese_traditional ] = "Â½Ä¶";
+            Text[ arabic ] = "ÊÑÌãÉ";
+        Text[ greek ] = "ÌåôÜöñáóç";
+        Text[ korean ] = "¹ø¿ª";
+        Text[ turkish ] = "Çeviri";
+        Text[ language_user1 ] = " ";
+    };
+    Edit TT_E_NEW {
+            Disable = TRUE;
+            Border = TRUE;
+            Pos = MAP_APPFONT( 7, 16 );
+            Size = MAP_APPFONT( 162, 12 );
+            Text = "~Edit";
+            Text[ ENGLISH ] = "Edit";
+            Text[ DANISH ] = "Rediger";
+            Text[ ENGLISH_US ] = "~Edit";
+            Text[ SPANISH ] = "~Editar";
+            Text[ FRENCH ] = "~Edition";
+            Text[ ITALIAN ] = "Modifica";
+            Text[ JAPANESE ] = "•ÒW(~E)";
+            Text[ DUTCH ] = "~Editeren";
+            Text[ POLISH ] = "Edytuj";
+            Text[ PORTUGUESE_BRAZILIAN ] = "Edit";
+            Text[ RUSSIAN ] = "Ïğàâêà";
+            Text[ SWEDISH ] = "~Redigera";
+            Text[ CHINESE_SIMPLIFIED ] = "±à¼­(~E)";
+            Text[ PORTUGUESE ] = "~Editar";
+            TabStop = TRUE;
+            Text[ chinese_traditional ] = "½s¿è(~E)";
+            Text[ arabic ] = "ÊÍÑíÑ";
+        Text[ greek ] = "Åğåîåñãáóßá";
+        Text[ korean ] = "ÆíÁı(~E)";
+        Text[ turkish ] = "~Düzenle";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText TT_FT_OLD {
+            Pos = MAP_APPFONT( 7, 33 );
+            Size = MAP_APPFONT( 162, 10 );
+            Text = "Original Text";
+            Text[ ENGLISH ] = "Original Text";
+            Text[ DANISH ] = "Originaltekst";
+            Text[ ENGLISH_US ] = "Original Text";
+            Text[ SPANISH ] = "Texto original";
+            Text[ FRENCH ] = "Texte d'origine";
+            Text[ ITALIAN ] = "Testo originale";
+            Text[ JAPANESE ] = "µØ¼ŞÅÙ•¶‘";
+            Text[ DUTCH ] = "Originele tekst";
+            Text[ POLISH ] = "Tekst oryginalny";
+            Text[ PORTUGUESE_BRAZILIAN ] = "Original Text";
+            Text[ RUSSIAN ] = "Òåêñò îğèãèíàëà";
+            Text[ SWEDISH ] = "Original text";
+            Text[ CHINESE_SIMPLIFIED ] = "Ô­À´µÄÎÄ×Ö";
+            Text[ PORTUGUESE ] = "Texto original";
+            Text[ chinese_traditional ] = "­ì¨Óªº¤å¦r";
+            Text[ arabic ] = "ÇáäÕ ÇáÃÕáí";
+        Text[ greek ] = "Áñ÷éêü êåßìåíï";
+        Text[ korean ] = "¿ø·¡ ÅØ½ºÆ®";
+        Text[ turkish ] = "Asıl metin";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox TT_GB_COMMENT {
+            Pos = MAP_APPFONT( 2, 52 );
+            Size = MAP_APPFONT( 173, 32 );
+            Text = "Comment";
+            Text[ ENGLISH_US ] = "Comment";
+            Text[ portuguese ] = "Comentário";
+            Text[ russian ] = "Êîììåíòàğèé";
+            Text[ dutch ] = "Commentaar";
+            Text[ french ] = "Commentaire";
+            Text[ spanish ] = "Comentario";
+            Text[ italian ] = "Commento";
+            Text[ danish ] = "Kommentar";
+            Text[ swedish ] = "Kommentar";
+            Text[ polish ] = "Komentarz";
+            Text[ portuguese_brazilian ] = "Comment";
+            Text[ japanese ] = "ºÒİÄ";
+            Text[ chinese_simplified ] = "±¸×¢";
+            Text[ chinese_traditional ] = "³Æµù";
+            Text[ arabic ] = "ÊÚáíŞ";
+        Text[ greek ] = "Ó÷üëéï";
+        Text[ korean ] = "¸Ş¸ğ";
+        Text[ turkish ] = "Açıklama";
+        Text[ language_user1 ] = " ";
+    };
+    Edit TT_E_COMMENT {
+            Disable = TRUE;
+            Border = TRUE;
+            Pos = MAP_APPFONT( 7, 64 );
+            Size = MAP_APPFONT( 162, 12 );
+            Text = "~Comment";
+            Text[ ENGLISH_US ] = "~Comment";
+            TabStop = TRUE;
+            Text[ portuguese ] = "~Comentário";
+            Text[ russian ] = "Êîììåíòàğèé";
+            Text[ dutch ] = "~Commentaar";
+            Text[ french ] = "~Commentaire";
+            Text[ spanish ] = "~Comentario";
+            Text[ italian ] = "Commento";
+            Text[ danish ] = "Kommentar";
+            Text[ swedish ] = "~Kommentar";
+            Text[ polish ] = "Komentarz";
+            Text[ portuguese_brazilian ] = "Comment";
+            Text[ japanese ] = "ºÒİÄ(~C)";
+            Text[ chinese_simplified ] = "±¸×¢(~C)";
+            Text[ chinese_traditional ] = "³Æµù(~C)";
+            Text[ arabic ] = "ÊÚáíŞ";
+        Text[ greek ] = "Ó÷üëéï";
+        Text[ korean ] = "¸Ş¸ğ(~C)";
+        Text[ turkish ] = "~Açıklama";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton TT_PB_SELECT {
+            Pos = MAP_APPFONT( Control_Border, 89 );
+            Size = MAP_APPFONT( ButtonWidth, 12 );
+            TabStop = TRUE;
+            Text = "~Select";
+            Text[ ENGLISH ] = "Select";
+            Text[ DANISH ] = "Marker";
+            Text[ ENGLISH_US ] = "~Select";
+            Text[ SPANISH ] = "~Seleccionar";
+            Text[ FRENCH ] = "~Sélectionner";
+            Text[ ITALIAN ] = "Seleziona";
+            Text[ JAPANESE ] = "‘I‘ğ‚·‚é(~S)";
+            Text[ DUTCH ] = "~Selecteren";
+            Text[ POLISH ] = "Zaznacz";
+            Text[ PORTUGUESE_BRAZILIAN ] = "Select";
+            Text[ RUSSIAN ] = "Îòáîğ";
+            Text[ SWEDISH ] = "~Markera";
+            Text[ CHINESE_SIMPLIFIED ] = "Ñ¡Ôñ(~S)";
+            Text[ PORTUGUESE ] = "~Seleccionar";
+            Text[ chinese_traditional ] = "¿ï¾Ü(~S)";
+            Text[ arabic ] = "ÊÍÏíÏ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ korean ] = "¼±ÅÃ(~S)";
+        Text[ turkish ] = "~Seç";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton TT_PB_RESTORE {
+            Disable = TRUE;
+            Pos = MAP_APPFONT( Control_Border + ButtonWidth + Button_Button, 89 );
+            Size = MAP_APPFONT( ButtonWidth, 12 );
+            TabStop = TRUE;
+            Text = "~Restore";
+            Text[ ENGLISH ] = "~Restore";
+        Text[ english_us ] = "~Restore";
+        Text[ portuguese ] = "~Restaurar";
+        Text[ russian ] = "~Âîññòàíîâèòü";
+        Text[ greek ] = "Åğáíáöï~ñÜ";
+        Text[ dutch ] = "~Restore";
+        Text[ french ] = "~Restaurer";
+        Text[ spanish ] = "~Restore";
+        Text[ italian ] = "~Rispristina";
+        Text[ danish ] = "Gendan";
+        Text[ swedish ] = "Återställ";
+        Text[ polish ] = "Przywróæ";
+        Text[ portuguese_brazilian ] = "~Restore";
+        Text[ japanese ] = "Œ³‚Ìó‘Ô‚É–ß‚·(~R)";
+        Text[ korean ] = "º¹¿ø(~R)";
+        Text[ chinese_simplified ] = "ĞŞ¸´(~R)";
+        Text[ chinese_traditional ] = "«ì´_(~R)";
+        Text[ arabic ] = "ÇÓÊÚÇÏÉ";
+        Text[ turkish ] = "~Geri yükle";
+    };
+    PushButton TT_PB_ACCEPT {
+            Disable = TRUE;
+            Pos = MAP_APPFONT( Control_Border + 2*(ButtonWidth + Button_Button), 89 );
+            Size = MAP_APPFONT( ButtonWidth, 12 );
+            TabStop = TRUE;
+            Text = "~Accept";
+            Text[ ENGLISH ] = "Accept";
+            Text[ DANISH ] = "Accepter";
+            Text[ ENGLISH_US ] = "~Accept";
+            Text[ SPANISH ] = "~Aceptar";
+            Text[ FRENCH ] = "~Accepter";
+            Text[ ITALIAN ] = "Accetta";
+            Text[ JAPANESE ] = "³‘ø(~A)";
+            Text[ DUTCH ] = "~Accepteren";
+            Text[ POLISH ] = "Zaakceptuj";
+            Text[ PORTUGUESE_BRAZILIAN ] = "Accept";
+            Text[ RUSSIAN ] = "Ïğèíÿòü";
+            Text[ SWEDISH ] = "~Acceptera";
+            Text[ CHINESE_SIMPLIFIED ] = "½ÓÊÜ(~A)";
+            Text[ PORTUGUESE ] = "~Aceitar";
+            Text[ chinese_traditional ] = "±µ¨ü(~A)";
+            Text[ arabic ] = "ŞÈæá";
+        Text[ greek ] = "~Áğïäï÷Ş";
+        Text[ korean ] = "µ¿ÀÇ(~A)";
+        Text[ turkish ] = "~Kabul";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton TT_PB_NEXT {
+            Pos = MAP_APPFONT( Control_Border + 3*(ButtonWidth + Button_Button), 89 );
+            Size = MAP_APPFONT( ButtonWidth, 12 );
+            TabStop = TRUE;
+            Text = "~Next";
+            Text[ ENGLISH ] = "Next";
+            Text[ DANISH ] = "Næste";
+            Text[ ENGLISH_US ] = "~Next";
+            Text[ SPANISH ] = "~Siguiente";
+            Text[ FRENCH ] = "~Suivant";
+            Text[ ITALIAN ] = "Avanti";
+            Text[ JAPANESE ] = "Ÿ‚Ö(~N)";
+            Text[ DUTCH ] = "~Volgende";
+            Text[ POLISH ] = "Dalej";
+            Text[ PORTUGUESE_BRAZILIAN ] = "Next";
+            Text[ RUSSIAN ] = "Äàëåå";
+            Text[ SWEDISH ] = "~Nästa";
+            Text[ CHINESE_SIMPLIFIED ] = "¼ÌĞø(~N)";
+            Text[ PORTUGUESE ] = "~Seguinte";
+            Text[ chinese_traditional ] = "Ä~Äò(~N)";
+            Text[ arabic ] = "ÇáÊÇáí";
+        Text[ greek ] = "Åğüìåíï";
+        Text[ korean ] = "´ÙÀ½(~N)";
+        Text[ turkish ] = "~İleri";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_traditional ] = "Â½Ä¶¤u¨ã";
+    Text[ arabic ] = "ÊÑÌãÉ İí ÇáãæŞÚ";
+    Text[ greek ] = "Íİá ìåôÜöñáóç";
+    Text[ korean ] = "³»ºÎ ¹ø¿ª";
+    Text[ turkish ] = "Inplace Translation";
+    Text[ language_user1 ] = " ";
+};
+
+MessBox TT_DISCARD_CHANGED_DATA {
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_YES;
+    Message = "The Translation will be lost. Proceed?";
+    Message[ ENGLISH_US ] = "The Translation will be lost. Proceed anyway?";
+    Message[ portuguese ] = "A tradução será perdida. Continuar?";
+    Message[ russian ] = "Ïåğåâîä áóäåò ïîòåğÿí. Âñå ğàâíî ïğîäîëæèòü?";
+    Message[ dutch ] = "De vertaling gaat verloren. Toch doorgaan?";
+    Message[ french ] = "Le relogement sera perdu. Souhaitez-vous poursouivre ?";
+    Message[ spanish ] = "Se perderá la traducción. ¿Continuar?";
+    Message[ italian ] = "La traduzione andrà persa. Continuare?";
+    Message[ danish ] = "Oversættelsen vil gå tabt. Vil du fortsætte alligevel?";
+    Message[ swedish ] = "Översättningen kommer att gå förlorad. Fortsätta ändå?";
+    Message[ polish ] = "T³umaczenie zaginie. Kontynuowaæ?";
+    Message[ portuguese_brazilian ] = "The Translation will be lost. Proceed?";
+    Message[ japanese ] = "–|–ó‚ª¸‚í‚ê‚Ü‚µ‚½B‘±‚¯‚Ü‚·‚©?";
+    Message[ chinese_simplified ] = "·­ÒëÄÚÈİ½«»áÒÅÊ§¡£ÄúÒª¼ÌĞøÂğ£¿";
+    Message[ chinese_traditional ] = "Â½Ä¶¤º®e±N·|¬y¥¢¡C±z­nÄ~Äò¡H";
+    Message[ arabic ] = "åĞå ÇáÊÑÌãÉ Óæİ ÊÖíÚ. åá ÊÑíÏ ÇáãÊÇÈÚÉ Úáì ÇáÑÛã ãä Ğáß¿";
+    Message[ greek ] = "Ç ìåôÜöñáóç èá ÷áèåß. Óõíİ÷åéá;";
+    Message[ korean ] = "¹ø¿ªÀ» ÀÒ°Ô µË´Ï´Ù. °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Çevriri kaybolacak. Devam etmek istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox TT_NO_CONTROL {
+    Buttons = WB_OK;
+    DefButton = WB_DEF_OK;
+    Message = "The Control is no longer valid. The Translation cannot be saved.";
+    Message [ ENGLISH_US ] = "This Control is no longer valid. The Translation cannot be saved.";
+    Message[ portuguese ] = "Este Controlo já não é válido. Impossível guardar a tradução.";
+    Message[ russian ] = "Êîìàíäà áîëüøå íåäåéñòâèòåëüíà. Ïåğåâîä ñîõğàíèòü íåâîçìîæíî.";
+    Message[ dutch ] = "De controle is niet langer geldig. De vertaling kan niet worden opgeslagen";
+    Message[ french ] = "Le contrôle n'est plus valable. Impossible d'enregistrer le relogement.";
+    Message[ spanish ] = "La validez del control no durará mucho. No se puede guardar la traducción.";
+    Message[ italian ] = "Il controllo non è più valido. Non è stato possibile salvare la traduzione.";
+    Message[ danish ] = "Kontrollen er ikke mere tilgængelig. Oversættelsen kan ikke gemmes.";
+    Message[ swedish ] = "Kontrollen är inte längre giltig. Översättningen kan inte sparas.";
+    Message[ polish ] = "Polecenie nie jest wa¿ne. T³umaczenia nie mo¿na zapisaæ.";
+    Message[ portuguese_brazilian ] = "The Control is no longer valid. The Translation cannot be saved.";
+    Message[ japanese ] = "ºİÄÛ°Ù‚Í‚à‚¤—LŒø‚Å‚Í‚ ‚è‚Ü‚¹‚ñB–|–ó‚ğ•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
+    Message[ chinese_simplified ] = "Õâ¸ö¿Ø¼şÒÑ¾­ÎŞĞ§¡£ÎŞ·¨´æÅÌ·­ÒëÄÚÈİ¡£";
+    Message[ chinese_traditional ] = "³o­Ó±±¨î¶µ¤w¸gµL®Ä¡CµLªkÀx¦sÂ½Ä¶¤º®e¡C";
+    Message[ arabic ] = "ÚäÕÑ ÇáÊÍßã åĞÇ áã íÚÏ ÕÇáÍÇğ. áÇ íãßä ÍİÙ ÇáÊÑÌãÉ.";
+    Message[ greek ] = "Ôï óôïé÷åßï åëİã÷ïõ äåí åßíáé ğëİïí İãêõñï. Äåí åßíáé äõíáôüí íá áğïèçêåõôåß ç ìåôÜöñáóç.";
+    Message[ korean ] = "ÄÁÆ®·ÑÀÌ ´õ ÀÌ»ó À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù. º¯È¯ÇÑ °ÍÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Message[ turkish ] = "Denetim artık geçerli değil. Çeviri kaydedilemiyor.";
+    Message[ language_user1 ] = " ";
+};
+
+String TT_GPF
+{
+    Text = "GPF Aufgetreten";
+    Text[ english_us ] = "GPF occured";
+    Text[ portuguese ] = "Ocorreu um erro GPF";
+    Text[ russian ] = "Ïğîèçîøëà îøèáêà";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå ãåíéêü óöÜëìá ğñïóôáóßáò (GPF)";
+    Text[ dutch ] = "Algemene fout opgetreden";
+    Text[ french ] = "Erreur (GPF) survenue";
+    Text[ spanish ] = "Ha ocurrido un error";
+    Text[ italian ] = "Si è verificato un GPF";
+    Text[ danish ] = "Der opstod en fejl";
+    Text[ swedish ] = "Fel uppstod";
+    Text[ polish ] = "Wyst¹pi³ b³¹d";
+    Text[ portuguese_brazilian ] = "GPF Aufgetreten";
+    Text[ japanese ] = "GPF‚ª”­¶‚µ‚Ü‚µ‚½";
+    Text[ korean ] = "GPF ¹ß»ı";
+    Text[ chinese_simplified ] = "³öÏÖ´íÎó";
+    Text[ chinese_traditional ] = "µo¥X¿ù»~";
+    Text[ arabic ] = "ÍÏË ÎØÃ GPF";
+    Text[ turkish ] = "GKH oluştu";
+};
+
+String TT_ALTERNATE_CAPTION
+{
+    Text = "HelpID ungleich UniqueID: ";
+    Text[ english_us ] = "HelpID does not match UniqueID: ";
+    Text[ portuguese ] = "HelpID desigual a UniqueID ";
+    Text[ russian ] = "HelpID íå ğàâíî UniqueID: ";
+    Text[ greek ] = "HelpID äåí åßíáé ßóï ìå UniqueID:";
+    Text[ dutch ] = "HelpID niet gelijk aan UniqueID:  ";
+    Text[ french ] = "HelpID différent de l'UniqueID : ";
+    Text[ spanish ] = "HelpID difiere de UniqueID:";
+    Text[ italian ] = "HelpID diverso da UniqueID: ";
+    Text[ danish ] = "HelpID ikke lig med UniqueID: ";
+    Text[ swedish ] = "HelpID ej lika med UniqueID:  ";
+    Text[ polish ] = "HelpID nie jest równy UniquellID: ";
+    Text[ portuguese_brazilian ] = "GPF Aufgetreten";
+    Text[ japanese ] = "ÍÙÌßID ‚Æ ÕÆ°¸ID‚Æ‚Í“¯ˆê‚Å‚Í‚ ‚è‚Ü‚¹‚ñ: ";
+    Text[ korean ] = "µµ¿ò¸»ID¿Í °íÀ¯ID°¡ ÀÏÄ¡ÇÏÁö ¾ÊÀ½ ";
+    Text[ chinese_simplified ] = "HelpID does not match UniqueID: ";
+    Text[ chinese_traditional ] = "HelpID does not match UniqueID: ";
+    Text[ arabic ] = "HelpID ÛíÑ ãØÇÈŞ áÜ UniqueID: ";
+    Text[ turkish ] = "HelpID ile UniqueID eşit değil: ";
+};

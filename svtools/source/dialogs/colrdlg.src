@@ -1,0 +1,576 @@
+/*************************************************************************
+ *
+ *  $RCSfile: colrdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "colrdlg.hrc"
+#define DIFF 3
+ModalDialog DLG_COLOR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 165 + DIFF ) ;
+    Moveable = TRUE ;
+    Text = "Farbe" ;
+    Text [ ENGLISH ] = "Color" ;
+    Text [ english_us ] = "Color" ;
+    Text [ portuguese_brazilian ] = "Farbe" ;
+    Text [ swedish ] = "F‰rg" ;
+    Text [ danish ] = "Farve" ;
+    Text [ italian ] = "Colore" ;
+    Text [ spanish ] = "Color" ;
+    Text [ french ] = "Couleur" ;
+    Text [ dutch ] = "Kleur" ;
+    Text [ portuguese ] = "Cor" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 205 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 205 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 205 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Control CTL_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 100 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_RED
+    {
+        Pos = MAP_APPFONT ( 64 , 123 + DIFF ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Text = "~Rot" ;
+        Text [ ENGLISH ] = "~Red" ;
+        Text [ english_us ] = "~Red" ;
+        Text [ portuguese_brazilian ] = "~Rot" ;
+        Text [ swedish ] = "~Rˆtt" ;
+        Text [ danish ] = "R¯d" ;
+        Text [ italian ] = "~Rosso" ;
+        Text [ spanish ] = "~Rojo" ;
+        Text [ french ] = "~Rouge" ;
+        Text [ dutch ] = "~Rood" ;
+        Text [ portuguese ] = "~Vermelho" ;
+        Text[ chinese_simplified ] = "∫Ï…´(~R)";
+        Text[ russian ] = "~ ‡ÒÌ.";
+        Text[ polish ] = "Czerw.";
+        Text[ japanese ] = "ê‘(~R)";
+        Text[ chinese_traditional ] = "¨ı¶‚(~R)";
+        Text[ arabic ] = "√Õ„—";
+        Text[ dutch ] = "~Rood";
+        Text[ chinese_simplified ] = "∫Ï…´(~R)";
+        Text[ greek ] = " ¸ÍÍÈÌÔ";
+        Text[ korean ] = "ª°∞≠(~R)";
+        Text[ turkish ] = "~K˝rm˝z˝";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_GREEN
+    {
+        Pos = MAP_APPFONT ( 64 , 136 + DIFF ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Gr¸n : ~Gr≥n */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Gr¸n : ~Gr≥n */
+        Text = "~Gr¸n" ;
+        Text [ ENGLISH ] = "~Green" ;
+        Text [ english_us ] = "~Green" ;
+        Text [ portuguese_brazilian ] = "~Gr¸n" ;
+        Text [ swedish ] = "~Grˆnt" ;
+        Text [ danish ] = "Gr¯n" ;
+        Text [ italian ] = "~Verde" ;
+        Text [ spanish ] = "~Verde" ;
+        Text [ french ] = "~Vert" ;
+        Text [ dutch ] = "~Groen" ;
+        Text [ portuguese ] = "~Verde" ;
+        Text[ chinese_simplified ] = "¬Ã…´(~G)";
+        Text[ russian ] = "~«ÂÎÂÌ.";
+        Text[ polish ] = "Zielony";
+        Text[ japanese ] = "óŒ(~G)";
+        Text[ chinese_traditional ] = "∫Ò¶‚(~G)";
+        Text[ arabic ] = "√Œ÷—";
+        Text[ dutch ] = "~Groen";
+        Text[ chinese_simplified ] = "¬Ã…´(~G)";
+        Text[ greek ] = "–Ò‹ÛÈÌÔ";
+        Text[ korean ] = "√ ∑œ(~G)";
+        Text[ turkish ] = "~Ye˛il";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_BLUE
+    {
+        Pos = MAP_APPFONT ( 64 , 149 + DIFF ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Text = "~Blau" ;
+        Text [ ENGLISH ] = "~Blue" ;
+        Text [ english_us ] = "~Blue" ;
+        Text [ portuguese_brazilian ] = "~Blau" ;
+        Text [ swedish ] = "~BlÂtt" ;
+        Text [ danish ] = "BlÂ" ;
+        Text [ italian ] = "~Blu" ;
+        Text [ spanish ] = "~Azul" ;
+        Text [ french ] = "~Bleu" ;
+        Text [ dutch ] = "~Blauw" ;
+        Text [ portuguese ] = "~Azul" ;
+        Text[ chinese_simplified ] = "¿∂…´(~B)";
+        Text[ russian ] = "—ËÌËÈ";
+        Text[ polish ] = "Nieb.";
+        Text[ japanese ] = "ê¬(~B)";
+        Text[ chinese_traditional ] = "¬≈¶‚(~B)";
+        Text[ arabic ] = "√“—ﬁ";
+        Text[ dutch ] = "~Blauw";
+        Text[ chinese_simplified ] = "¿∂…´(~B)";
+        Text[ greek ] = "ÃÎÂ";
+        Text[ korean ] = "∆ƒ∂˚(~B)";
+        Text[ turkish ] = "~Mavi";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField NUM_RED
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 122 + DIFF ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 255 ;
+        Last = 255 ;
+    };
+    NumericField NUM_GREEN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 135 + DIFF ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 255 ;
+        Last = 255 ;
+    };
+    NumericField NUM_BLUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 148 + DIFF ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 255 ;
+        Last = 255 ;
+    };
+    FixedText FT_CYAN
+    {
+        Pos = MAP_APPFONT ( 6 , 110 + DIFF ) ;
+        Size = MAP_APPFONT ( 28 , 10 ) ;
+        Text = "~Cyan" ;
+        Text [ ENGLISH ] = "~Cyan" ;
+        Text [ english_us ] = "~Cyan" ;
+        Text [ portuguese_brazilian ] = "~Cyan" ;
+        Text [ swedish ] = "~CyanblÂtt" ;
+        Text [ danish ] = "Cyan" ;
+        Text [ italian ] = "~Ciano" ;
+        Text [ spanish ] = "~Cian" ;
+        Text [ french ] = "~Cyan" ;
+        Text [ dutch ] = "~Cyaan" ;
+        Text [ portuguese ] = "~Ciano" ;
+        Text[ chinese_simplified ] = "¿∂¬Ã…´(~C)";
+        Text[ russian ] = "√ÓÎÛ·ÓÈ";
+        Text[ polish ] = "Nieb.-ziel.";
+        Text[ japanese ] = "º±›(~C)";
+        Text[ chinese_traditional ] = "¬≈∫Ò¶‚(~C)";
+        Text[ arabic ] = "√“—ﬁ ”„«ÊÌ";
+        Text[ dutch ] = "~Cyaan";
+        Text[ chinese_simplified ] = "¿∂¬Ã…´(~C)";
+        Text[ greek ] = " ı·Ì¸";
+        Text[ korean ] = "√ª∑œ(~C)";
+        Text[ turkish ] = "~Camgˆbei";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_MAGENTA
+    {
+        Pos = MAP_APPFONT ( 6 , 123 + DIFF ) ;
+        Size = MAP_APPFONT ( 28 , 10 ) ;
+        Text = "~Magenta" ;
+        Text [ ENGLISH ] = "~Magenta" ;
+        Text [ english_us ] = "~Magenta" ;
+        Text [ portuguese_brazilian ] = "~Magenta" ;
+        Text [ swedish ] = "~Magenta" ;
+        Text [ danish ] = "Magenta" ;
+        Text [ italian ] = "~Magenta" ;
+        Text [ spanish ] = "~Magenta" ;
+        Text [ french ] = "~Magenta" ;
+        Text [ dutch ] = "~Magenta" ;
+        Text [ portuguese ] = "~Magenta" ;
+        Text[ chinese_simplified ] = "◊œ∫Ï…´(~M)";
+        Text[ russian ] = "~ÀËÎÓ‚˚È";
+        Text[ polish ] = "Purpurowy";
+        Text[ japanese ] = "œæﬁ›¿(~M)";
+        Text[ chinese_traditional ] = "µµ¨ı¶‚(~M)";
+        Text[ arabic ] = "√—ÃÊ«‰Ì";
+        Text[ dutch ] = "~Magenta";
+        Text[ chinese_simplified ] = "◊œ∫Ï…´(~M)";
+        Text[ greek ] = "Ã·ÙÊ›ÌÙ·";
+        Text[ korean ] = "∏∂¡®≈∏(~M)";
+        Text[ turkish ] = "M~or";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_YELLOW
+    {
+        Pos = MAP_APPFONT ( 6 , 136 + DIFF ) ;
+        Size = MAP_APPFONT ( 28 , 10 ) ;
+        Text = "~Yellow" ;
+        Text [ ENGLISH ] = "~Yellow" ;
+        Text [ english_us ] = "~Yellow" ;
+        Text [ portuguese_brazilian ] = "~Yellow" ;
+        Text [ swedish ] = "~Gult" ;
+        Text [ danish ] = "Gul" ;
+        Text [ italian ] = "~Giallo" ;
+        Text [ spanish ] = "~Amarillo" ;
+        Text [ french ] = "~Jaune" ;
+        Text [ dutch ] = "~Yellow" ;
+        Text [ portuguese ] = "~Amarelo" ;
+        Text[ chinese_simplified ] = "ª∆…´(~Y)";
+        Text[ russian ] = "~∆ÂÎÚ˚È";
+        Text[ polish ] = "ØÛ≥ty";
+        Text[ japanese ] = "â©(~Y)";
+        Text[ chinese_traditional ] = "∂¿¶‚(~Y)";
+        Text[ arabic ] = "√’›—";
+        Text[ dutch ] = "~Yellow";
+        Text[ chinese_simplified ] = "ª∆…´(~Y)";
+        Text[ greek ] = " ﬂÙÒÈÌÔ";
+        Text[ korean ] = "≥Î∂˚(~Y)";
+        Text[ turkish ] = "~Sar˝";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_KEY
+    {
+        Pos = MAP_APPFONT ( 6 , 149 + DIFF ) ;
+        Size = MAP_APPFONT ( 28 , 10 ) ;
+        Text = "~Key" ;
+        Text [ ENGLISH ] = "~Key" ;
+        Text [ english_us ] = "~Key" ;
+        Text [ portuguese_brazilian ] = "~Key" ;
+        Text [ swedish ] = "~Key" ;
+        Text [ danish ] = "N¯gle" ;
+        Text [ italian ] = "~Chiave" ;
+        Text [ spanish ] = "~Llave" ;
+        Text [ french ] = "~KhÙl" ;
+        Text [ dutch ] = "~Key" ;
+        Text [ portuguese ] = "~Chave" ;
+        Text[ chinese_simplified ] = "º¸¬Î(~K)";
+        Text[ russian ] = "~ Î˛˜";
+        Text[ polish ] = "Klucz";
+        Text[ japanese ] = "çï(~K)";
+        Text[ chinese_traditional ] = "¡‰ΩX(~K)";
+        Text[ arabic ] = "„› «Õ";
+        Text[ dutch ] = "~Key";
+        Text[ chinese_simplified ] = "º¸¬Î(~K)";
+        Text[ greek ] = "~ ÎÂÈ‰ﬂ";
+        Text[ korean ] = "≈∞(~K)";
+        Text[ turkish ] = "~Key";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField NUM_CYAN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 34 , 109 + DIFF ) ;
+        Size = MAP_APPFONT ( 27 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    MetricField NUM_MAGENTA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 34 , 122 + DIFF ) ;
+        Size = MAP_APPFONT ( 27 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    MetricField NUM_YELLOW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 34 , 135 + DIFF ) ;
+        Size = MAP_APPFONT ( 27 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    MetricField NUM_KEY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 34 , 148 + DIFF ) ;
+        Size = MAP_APPFONT ( 27 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    Control CTL_PREVIEW_OLD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 184 , 109 ) ;
+        Size = MAP_APPFONT ( 35 , 51 + DIFF ) ;
+        TabStop = TRUE ;
+    };
+    Control CTL_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 219 , 109 ) ;
+        Size = MAP_APPFONT ( 35 , 51 + DIFF ) ;
+        TabStop = TRUE ;
+    };
+    Control VAL_SET_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 91 , 100 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_HUE
+    {
+        Pos = MAP_APPFONT ( 117 , 123 + DIFF ) ;
+        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Text = "~Farbe" ;
+        Text [ ENGLISH ] = "H~ue" ;
+        Text [ english_us ] = "H~ue" ;
+        Text [ portuguese_brazilian ] = "~Farbe" ;
+        Text [ swedish ] = "~F‰rg" ;
+        Text [ danish ] = "Farve" ;
+        Text [ italian ] = "~Colore" ;
+        Text [ spanish ] = "~Color" ;
+        Text [ french ] = "~Teinte" ;
+        Text [ dutch ] = "~Kleur" ;
+        Text [ portuguese ] = "~Tons" ;
+        Text[ chinese_simplified ] = "—’…´(~U)";
+        Text[ russian ] = "÷‚ÂÚ";
+        Text[ polish ] = "Kolor";
+        Text[ japanese ] = "êFçáÇ¢(~U)";
+        Text[ chinese_traditional ] = "√C¶‚(~U)";
+        Text[ arabic ] = "«··Ê‰";
+        Text[ dutch ] = "~Kleur";
+        Text[ chinese_simplified ] = "—’…´(~U)";
+        Text[ greek ] = "◊Ò˛Ï·";
+        Text[ korean ] = "ªˆ¡∂(~U)";
+        Text[ turkish ] = "~Renk";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField NUM_HUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 153 , 122 + DIFF ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 359 ;
+        Last = 359 ;
+    };
+    FixedText FT_SATURATION
+    {
+        Pos = MAP_APPFONT ( 117 , 136 + DIFF ) ;
+        Size = MAP_APPFONT ( 35 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~S‰ttigung : ~Sıttigung */
+        /* ### ACHTUNG: Neuer Text in Resource? ~S‰ttigung : ~Sıttigung */
+        Text = "~S‰ttigung" ;
+        Text [ ENGLISH ] = "~Saturation" ;
+        Text [ english_us ] = "~Saturation" ;
+        Text [ portuguese_brazilian ] = "~S‰ttigung" ;
+        Text [ swedish ] = "M‰~ttnad" ;
+        Text [ danish ] = "MÊtning" ;
+        Text [ italian ] = "~Saturazione" ;
+        Text [ spanish ] = "~SaturaciÛn" ;
+        Text [ french ] = "S~aturation" ;
+        Text [ dutch ] = "~Verzadiging" ;
+        Text [ portuguese ] = "~SaturaÁ„o" ;
+        Text[ chinese_simplified ] = "±•∫Õ∂»(~S)";
+        Text[ russian ] = "~Õ‡Ò˚˘ÂÌ.";
+        Text[ polish ] = "Nasycenie";
+        Text[ japanese ] = "ç ìx(~S)";
+        Text[ chinese_traditional ] = "π°©M´◊(~S)";
+        Text[ arabic ] = "«·≈‘»«⁄";
+        Text[ dutch ] = "~Verzadiging";
+        Text[ chinese_simplified ] = "±•∫Õ∂»(~S)";
+        Text[ greek ] = " ÔÒÂ~ÛÏ¸Ú";
+        Text[ korean ] = "√§µµ(~S)";
+        Text[ turkish ] = "~Doygunluk";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField NUM_SATURATION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 153 , 135 + DIFF ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+    };
+    FixedText FT_LUMINANCE
+    {
+        Pos = MAP_APPFONT ( 117 , 149 + DIFF ) ;
+        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Text = "He~lligkeit" ;
+        Text [ ENGLISH ] = "~Luminance" ;
+        Text [ english_us ] = "Bright~ness" ;
+        Text [ portuguese_brazilian ] = "He~lligkeit" ;
+        Text [ swedish ] = "~Ljusstyrka" ;
+        Text [ danish ] = "Lysstyrke" ;
+        Text [ italian ] = "~Luminosit‡" ;
+        Text [ spanish ] = "~Brillo" ;
+        Text [ french ] = "~LuminositÈ" ;
+        Text [ dutch ] = "Hel~derheid" ;
+        Text [ portuguese ] = "~Brilho" ;
+        Text[ chinese_simplified ] = "¡¡∂»(~L)";
+        Text[ russian ] = "ﬂÍÓÒÚ¸";
+        Text[ polish ] = "JasnoúÊ";
+        Text[ japanese ] = "ñæìx(~L)";
+        Text[ chinese_traditional ] = "´G´◊(~L)";
+        Text[ arabic ] = "«·≈÷«¡…";
+        Text[ dutch ] = "Hel~derheid";
+        Text[ chinese_simplified ] = "¡¡∂»(~L)";
+        Text[ greek ] = "÷˘ÙÂÈÌ¸ÙÁÙ·";
+        Text[ korean ] = "π‡±‚(~N)";
+        Text[ turkish ] = "Par~lakl˝k";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField NUM_LUMINANCE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 153 , 148 + DIFF ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+    };
+    /*
+    FixedText FT_RGB {
+            Pos = MAP_APPFONT( 6, 110 );
+            Size = MAP_APPFONT( 43, 10 );
+        };
+*/
+    PushButton BTN_1
+    {
+        Pos = MAP_APPFONT ( 80 , 109 ) ;
+        Size = MAP_APPFONT ( 17 , 12 ) ;
+        Text = "~<--" ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_2
+    {
+        Pos = MAP_APPFONT ( 100 , 109 ) ;
+        Size = MAP_APPFONT ( 17 , 12 ) ;
+        Text = "--~>" ;
+        TabStop = TRUE ;
+    };
+    /*
+    PushButton BTN_3 {
+            Pos = MAP_APPFONT( 6, 137 );
+            Size = MAP_APPFONT( 12, 12 );
+            Text = "~3";
+            TabStop = TRUE;
+        };
+    PushButton BTN_4 {
+            Pos = MAP_APPFONT( 21, 137 );
+            Size = MAP_APPFONT( 12, 12 );
+            Text = "~4";
+            TabStop = TRUE;
+        };
+*/
+    Text[ chinese_simplified ] = "—’…´";
+    Text[ russian ] = "÷‚ÂÚ";
+    Text[ polish ] = "Kolor";
+    Text[ japanese ] = "êF";
+    Text[ chinese_traditional ] = "√C¶‚";
+    Text[ arabic ] = "«··Ê‰";
+    Text[ dutch ] = "Kleur";
+    Text[ chinese_simplified ] = "—’…´";
+    Text[ greek ] = "◊Ò˛Ï·";
+    Text[ korean ] = "ªˆªÛ";
+    Text[ turkish ] = "Renk";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,367 @@
+/*************************************************************************
+ *
+ *  $RCSfile: helptext.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define _SV_HELPTEXT_SRC
+
+#ifndef _SV_SVIDS_HRC
+#include <svids.hrc>
+#endif
+
+String SV_HELPTEXT_CLOSE
+{
+    Text = "Schließen" ;
+    Text [ English ] = "Close" ;
+    TEXT[ italian ] = "Chiudi";
+    TEXT[ portuguese_brazilian ] = "Schließen";
+    TEXT[ portuguese ] = "Fechar";
+    TEXT[ danish ] = "Luk";
+    TEXT[ french ] = "Fermer";
+    TEXT[ swedish ] = "Stäng";
+    TEXT[ dutch ] = "Sluiten";
+    TEXT[ spanish ] = "Cerrar";
+    TEXT[ english_us ] = "Close";
+    TEXT[ russian ] = "Çàêğûòü";
+    TEXT[ polish ] = "Zamknij";
+    TEXT[ japanese ] = "I—¹";
+    TEXT[ chinese_simplified ] = "¹Ø±Õ";
+    TEXT[ chinese_traditional ] = "Ãö³¬";
+    TEXT[ greek ] = "Êëåßóéìï";
+    TEXT[ korean ] = "´İ±â";
+    TEXT[ arabic ] = "ÅÛáÇŞ";
+    TEXT[ turkish ] = "Kapat";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_MINIMIZE
+{
+    Text = "Minimieren" ;
+    Text [ English ] = "Minimize" ;
+    TEXT[ italian ] = "Riduci";
+    TEXT[ portuguese_brazilian ] = "Minimieren";
+    TEXT[ portuguese ] = "Minimizar";
+    TEXT[ danish ] = "Minimer";
+    TEXT[ french ] = "Réduire";
+    TEXT[ swedish ] = "Minimera";
+    TEXT[ dutch ] = "Minimaliseren";
+    TEXT[ spanish ] = "Minimizar";
+    TEXT[ english_us ] = "Minimize";
+    TEXT[ russian ] = "Ñâåğíóòü";
+    TEXT[ polish ] = "Minimalizuj";
+    TEXT[ japanese ] = "Å¬‰»";
+    TEXT[ chinese_simplified ] = "×îĞ¡»¯";
+    TEXT[ chinese_traditional ] = "³Ì¤p¤Æ";
+    TEXT[ greek ] = "Åëá÷éóôïğïßçóç";
+    TEXT[ korean ] = "ÃÖ¼ÒÈ­";
+    TEXT[ arabic ] = "ÇáÍÏ ÇáÃÏäì";
+    TEXT[ turkish ] = "Simge durumuna küçült";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_MAXIMIZE
+{
+    Text = "Maximieren" ;
+    Text [ English ] = "Maximize" ;
+    TEXT[ italian ] = "Ingrandire";
+    TEXT[ portuguese_brazilian ] = "Maximieren";
+    TEXT[ portuguese ] = "Maximizar";
+    TEXT[ danish ] = "Maksimer";
+    TEXT[ french ] = "Agrandir";
+    TEXT[ swedish ] = "Maximera";
+    TEXT[ dutch ] = "Maximeren";
+    TEXT[ spanish ] = "Maximizar";
+    TEXT[ english_us ] = "Maximize";
+    TEXT[ russian ] = "Ğàçâåğíóòü";
+    TEXT[ polish ] = "Maksymalizuj";
+    TEXT[ japanese ] = "Å‘å‰»";
+    TEXT[ chinese_simplified ] = "×î´ó»¯";
+    TEXT[ chinese_traditional ] = "³Ì¤j¤Æ";
+    TEXT[ greek ] = "Ìåãéóôïğïßçóç";
+    TEXT[ korean ] = "ÃÖ´ëÈ­";
+    TEXT[ arabic ] = "ÇáÍÏ ÇáÃŞÕì";
+    TEXT[ turkish ] = "Ekranı kapla";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_RESTORE
+{
+    Text = "Wiederherstellen" ;
+    Text [ English ] = "Restore" ;
+    TEXT[ italian ] = "Ripristina";
+    TEXT[ portuguese_brazilian ] = "Wiederherstellen";
+    TEXT[ portuguese ] = "Restaurar";
+    TEXT[ danish ] = "Gendan";
+    TEXT[ french ] = "Restaurer";
+    TEXT[ swedish ] = "Återställ";
+    TEXT[ dutch ] = "Herstellen";
+    TEXT[ spanish ] = "Restaurar";
+    TEXT[ english_us ] = "Restore";
+    TEXT[ russian ] = "Âîññòàíîâèòü";
+    TEXT[ polish ] = "Przywróæ";
+    TEXT[ japanese ] = "Œ³‚Ìó‘Ô‚É–ß‚·";
+    TEXT[ chinese_simplified ] = "»Ö¸´";
+    TEXT[ chinese_traditional ] = "«ì´_";
+    TEXT[ greek ] = "ÅğáíáöïñÜ";
+    TEXT[ korean ] = "º¹±¸";
+    TEXT[ arabic ] = "ÇÓÊÚÇÏÉ";
+    TEXT[ turkish ] = "Başa al";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_ROLLDOWN
+{
+    Text = "Aufklappen" ;
+    Text [ English ] = "Roll Down" ;
+    TEXT[ italian ] = "Mostra";
+    TEXT[ portuguese_brazilian ] = "Aufklappen";
+    TEXT[ portuguese ] = "Abrir";
+    TEXT[ danish ] = "Klap ud";
+    TEXT[ french ] = "Agrandir";
+    TEXT[ swedish ] = "Visa";
+    TEXT[ dutch ] = "Openslaan";
+    TEXT[ spanish ] = "Mostrar";
+    TEXT[ english_us ] = "Drop down";
+    TEXT[ russian ] = "Ğàñêğûòü";
+    TEXT[ polish ] = "Otwórz";
+    TEXT[ japanese ] = "ŠJ‚¯‚é";
+    TEXT[ chinese_simplified ] = "ÏÔÊ¾";
+    TEXT[ chinese_traditional ] = "Åã¥Ü";
+    TEXT[ greek ] = "¢íïéãìá";
+    TEXT[ korean ] = "º¸ÀÌ±â";
+    TEXT[ arabic ] = "İÊÍ";
+    TEXT[ turkish ] = "Aç";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_ROLLUP
+{
+    Text = "Zuklappen" ;
+    Text [ English ] = "Roll Up" ;
+    TEXT[ italian ] = "Nascondi";
+    TEXT[ portuguese_brazilian ] = "Zuklappen";
+    TEXT[ portuguese ] = "Fechar";
+    TEXT[ danish ] = "Minimer";
+    TEXT[ french ] = "Réduire";
+    TEXT[ swedish ] = "Dölj";
+    TEXT[ dutch ] = "Dichtslaan";
+    TEXT[ spanish ] = "Ocultar";
+    TEXT[ english_us ] = "Roll up";
+    TEXT[ language_user1 ] = " ";
+    TEXT[ russian ] = "Çàêğûòü";
+    TEXT[ polish ] = "Ukryj";
+    TEXT[ japanese ] = "•Â‚¶‚é";
+    TEXT[ chinese_simplified ] = "ÒşÈë";
+    TEXT[ chinese_traditional ] = "Áô¤J";
+    TEXT[ greek ] = "Áğüêñõøç";
+    TEXT[ korean ] = "¼û±â±â";
+    TEXT[ arabic ] = "Øí";
+    TEXT[ turkish ] = "Kapat";
+};
+
+String SV_HELPTEXT_HELP
+{
+    Text = "Hilfe" ;
+    Text [ English ] = "Help" ;
+    TEXT[ italian ] = "Guida";
+    TEXT[ portuguese_brazilian ] = "Hilfe";
+    TEXT[ portuguese ] = "Ajuda";
+    TEXT[ danish ] = "Hjælp";
+    TEXT[ french ] = "Aide";
+    TEXT[ swedish ] = "Hjälp";
+    TEXT[ dutch ] = "Help";
+    TEXT[ spanish ] = "Ayuda";
+    TEXT[ english_us ] = "Help";
+    TEXT[ russian ] = "Ñïğàâêà";
+    TEXT[ polish ] = "Pomoc";
+    TEXT[ japanese ] = "ƒwƒ‹ƒv";
+    TEXT[ chinese_simplified ] = "ÇóÖú";
+    TEXT[ chinese_traditional ] = "»¡©ú";
+    TEXT[ greek ] = "ÂïŞèåéá";
+    TEXT[ korean ] = "µµ¿ò¸»";
+    TEXT[ arabic ] = "ãÓÇÚÏÉ";
+    TEXT[ turkish ] = "Yardım";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_ALWAYSVISIBLE
+{
+    Text = "Immer sichtbar" ;
+    Text [ English ] = "Always Visible" ;
+    TEXT[ italian ] = "Sempre visibile";
+    TEXT[ portuguese_brazilian ] = "Immer sichtbar";
+    TEXT[ portuguese ] = "Sempre visível";
+    TEXT[ danish ] = "Altid synlig";
+    TEXT[ french ] = "Toujours visible";
+    TEXT[ swedish ] = "Alltid synlig";
+    TEXT[ dutch ] = "Steeds zichtbaar";
+    TEXT[ spanish ] = "Siempre visible";
+    TEXT[ english_us ] = "Always visible";
+    TEXT[ russian ] = "Ïîêàçûâàòü âñåãäà";
+    TEXT[ polish ] = "Zawsze widoczny";
+    TEXT[ japanese ] = "‚¢‚Â‚àŒ©‚¦‚é";
+    TEXT[ chinese_simplified ] = "×ÜÊÇÏÔÊ¾";
+    TEXT[ chinese_traditional ] = "Á`¬OÅã¥Ü";
+    TEXT[ greek ] = "ĞÜíôá ïñáôÜ";
+    TEXT[ korean ] = "Ç×»ó º¸ÀÓ";
+    TEXT[ arabic ] = "ãÑÆí ÏÇÆãÇğ";
+    TEXT[ turkish ] = "Daima görünür";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_FADEIN
+{
+    Text = "Einblenden" ;
+    Text [ English ] = "Fade In" ;
+    TEXT[ italian ] = "Mostra";
+    TEXT[ portuguese_brazilian ] = "Einblenden";
+    TEXT[ portuguese ] = "Mostrar";
+    TEXT[ danish ] = "Vis";
+    TEXT[ french ] = "Afficher";
+    TEXT[ swedish ] = "Visa";
+    TEXT[ dutch ] = "Weergeven";
+    TEXT[ spanish ] = "Mostrar";
+    TEXT[ english_us ] = "Show";
+    TEXT[ russian ] = "Ïîêàçàòü";
+    TEXT[ polish ] = "Poka¿";
+    TEXT[ japanese ] = "•\\¦";
+    TEXT[ chinese_simplified ] = "ÏÔÊ¾";
+    TEXT[ chinese_traditional ] = "Åã¥Ü";
+    TEXT[ greek ] = "ÅìöÜíéóç";
+    TEXT[ korean ] = "º¸ÀÌ±â";
+    TEXT[ arabic ] = "ÅÙåÇÑ";
+    TEXT[ turkish ] = "Göster";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_FADEOUT
+{
+    Text = "Ausblenden" ;
+    Text [ English ] = "Fade Out" ;
+    TEXT[ italian ] = "Nascondi";
+    TEXT[ portuguese_brazilian ] = "Ausblenden";
+    TEXT[ portuguese ] = "Ocultar";
+    TEXT[ danish ] = "Skjul";
+    TEXT[ french ] = "Masquer";
+    TEXT[ swedish ] = "Dölj";
+    TEXT[ dutch ] = "Verbergen";
+    TEXT[ spanish ] = "Ocultar";
+    TEXT[ english_us ] = "Hide";
+    TEXT[ russian ] = "Ñêğûòü";
+    TEXT[ polish ] = "Ukryj";
+    TEXT[ japanese ] = "”ñ•\\¦";
+    TEXT[ chinese_simplified ] = "ÒşÈë";
+    TEXT[ chinese_traditional ] = "Áô¤J";
+    TEXT[ greek ] = "Áğüêñõøç";
+    TEXT[ korean ] = "¼û±â±â";
+    TEXT[ arabic ] = "ÅÎİÇÁ";
+    TEXT[ turkish ] = "Gizle";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_SPLITFLOATING
+{
+    Text = "Schwebend" ;
+    Text [ English ] = "Floating" ;
+    TEXT[ italian ] = "Fluttuante";
+    TEXT[ portuguese_brazilian ] = "Schwebend";
+    TEXT[ portuguese ] = "Flutuante";
+    TEXT[ danish ] = "Flydende";
+    TEXT[ french ] = "Flottante";
+    TEXT[ swedish ] = "Svävande";
+    TEXT[ dutch ] = "Zwevend";
+    TEXT[ spanish ] = "Flotando";
+    TEXT[ english_us ] = "Floating";
+    TEXT[ russian ] = "Çàâèñøèé";
+    TEXT[ polish ] = "P³ywaj¹cy";
+    TEXT[ japanese ] = "•‚“®";
+    TEXT[ chinese_simplified ] = "¸¡¶¯";
+    TEXT[ chinese_traditional ] = "¯B°Ê";
+    TEXT[ greek ] = "Êéíçôü";
+    TEXT[ korean ] = "°íÁ¤µÇÁö ¾ÊÀº";
+    TEXT[ arabic ] = "ÚÇÆã";
+    TEXT[ turkish ] = "Serbest";
+    TEXT[ language_user1 ] = " ";
+};
+
+String SV_HELPTEXT_SPLITFIXED
+{
+    Text = "Fixieren" ;
+    Text [ English ] = "Fixed" ;
+    TEXT[ italian ] = "Fissa";
+    TEXT[ portuguese_brazilian ] = "Fixieren";
+    TEXT[ portuguese ] = "Fixar";
+    TEXT[ danish ] = "Frys";
+    TEXT[ french ] = "Ancrée";
+    TEXT[ swedish ] = "Fixera";
+    TEXT[ dutch ] = "Fixeren";
+    TEXT[ spanish ] = "Fijar";
+    TEXT[ english_us ] = "Stick";
+    TEXT[ russian ] = "Ôèêñèğîâàòü";
+    TEXT[ polish ] = "Przytwierdzony";
+    TEXT[ japanese ] = "ŒÅ’è";
+    TEXT[ chinese_simplified ] = "¹Ì¶¨";
+    TEXT[ chinese_traditional ] = "©T©w";
+    TEXT[ greek ] = "Ğáãßùóç";
+    TEXT[ korean ] = "°íÁ¤";
+    TEXT[ arabic ] = "ÊËÈíÊ";
+    TEXT[ turkish ] = "Sabitle";
+    TEXT[ language_user1 ] = " ";
+};
+

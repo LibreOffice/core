@@ -1,0 +1,425 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ctrltool.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "svtools.hrc"
+
+String STR_SVT_STYLE_LIGHT
+{
+    Text = "Light" ;
+    Text [ ENGLISH ] = "Light" ;
+    Text [ english_us ] = "Light" ;
+    Text [ italian ] = "Light" ;
+    Text [ spanish ] = "Light" ;
+    Text [ french ] = "Estompé" ;
+    Text [ dutch ] = "Light" ;
+    Text [ swedish ] = "Ljus" ;
+    Text [ danish ] = "Light" ;
+    Text [ portuguese_brazilian ] = "Light" ;
+    Text [ portuguese ] = "Claro" ;
+    Text[ russian ] = "Òîíêèé";
+    Text[ polish ] = "Light";
+    Text[ japanese ] = "×š";
+    Text[ chinese_simplified ] = "Ï¸";
+    Text[ chinese_traditional ] = "²Ó";
+    Text[ arabic ] = "İÇÊÍ";
+    Text[ greek ] = "Áğáëü";
+    Text[ korean ] = "Light";
+    Text[ turkish ] = "İnce";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_SVT_STYLE_LIGHT_ITALIC
+{
+    Text = "Light Kursiv" ;
+    Text [ ENGLISH ] = "Light Italic" ;
+    Text [ english_us ] = "Light Italic" ;
+    Text [ italian ] = "Corsivo Light" ;
+    Text [ spanish ] = "Cursiva light" ;
+    Text [ french ] = "Italique estompé" ;
+    Text [ dutch ] = "Light Cursief" ;
+    Text [ swedish ] = "Ljus kursiv" ;
+    Text [ danish ] = "Light kursiv" ;
+    Text [ portuguese_brazilian ] = "Light Italic" ;
+    Text [ portuguese ] = "Itálico claro" ;
+    Text[ russian ] = "Òîíêèé êóğñèâ";
+    Text[ polish ] = "Kursywa light";
+    Text[ japanese ] = "×š Î‘Ì";
+    Text[ chinese_simplified ] = "Ï¸Ğ±Ìå";
+    Text[ chinese_traditional ] = "²Ó±×Åé";
+    Text[ arabic ] = "İÇÊÍ ãÇÆá";
+    Text[ greek ] = "ĞëÜãéá ÁğáëÜ";
+    Text[ korean ] = "°¡º­¿î ÀÌÅÅ¸¯Ã¼";
+    Text[ turkish ] = "İnce italik";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_SVT_STYLE_NORMAL
+{
+    Text = "Standard" ;
+    Text [ ENGLISH ] = "Regular" ;
+    Text [ english_us ] = "Regular" ;
+    Text [ italian ] = "Standard" ;
+    Text [ spanish ] = "Predeterminado" ;
+    Text [ french ] = "Normal" ;
+    Text [ dutch ] = "Normaal" ;
+    Text [ swedish ] = "Normal" ;
+    Text [ danish ] = "Normal" ;
+    Text [ portuguese_brazilian ] = "Normal" ;
+    Text [ portuguese ] = "Padrão" ;
+    Text[ russian ] = "Ñòàíäàğò";
+    Text[ polish ] = "Standard";
+    Text[ japanese ] = "•W€";
+    Text[ chinese_simplified ] = "±ê×¼";
+    Text[ chinese_traditional ] = "¼Ğ·Ç";
+    Text[ arabic ] = "ŞíÇÓí";
+    Text[ greek ] = "ĞñïåğéëïãŞ";
+    Text[ korean ] = "º¸Åë";
+    Text[ turkish ] = "Normal";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_SVT_STYLE_NORMAL_ITALIC
+{
+    Text = "Kursiv" ;
+    Text [ ENGLISH ] = "Italic" ;
+    Text [ english_us ] = "Italic" ;
+    Text [ italian ] = "Corsivo" ;
+    Text [ spanish ] = "Cursiva" ;
+    Text [ french ] = "Italique" ;
+    Text [ dutch ] = "Cursief" ;
+    Text [ swedish ] = "Kursiv" ;
+    Text [ danish ] = "Kursiv" ;
+    Text [ portuguese_brazilian ] = "Italic" ;
+    Text [ portuguese ] = "Itálico" ;
+    Text[ russian ] = "Êóğñèâ";
+    Text[ polish ] = "Kursywa";
+    Text[ japanese ] = "Î‘Ì";
+    Text[ chinese_simplified ] = "Ğ±Ìå";
+    Text[ chinese_traditional ] = "±×Åé";
+    Text[ arabic ] = "ãÇÆá";
+    Text[ greek ] = "ĞëÜãéá";
+    Text[ korean ] = "±â¿ïÀÓ²Ã";
+    Text[ turkish ] = "İtalik";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_SVT_STYLE_BOLD
+{
+    Text = "Fett" ;
+    Text [ ENGLISH ] = "Bold" ;
+    Text [ english_us ] = "Bold" ;
+    Text [ italian ] = "Grassetto" ;
+    Text [ spanish ] = "Negrita" ;
+    Text [ french ] = "Gras" ;
+    Text [ dutch ] = "Vet" ;
+    Text [ swedish ] = "Fet" ;
+    Text [ danish ] = "Fed" ;
+    Text [ portuguese_brazilian ] = "Bold" ;
+    Text [ portuguese ] = "Negrito" ;
+    Text[ russian ] = "Æèğíûé";
+    Text[ polish ] = "Pogrubienie";
+    Text[ japanese ] = "‘¾š";
+    Text[ chinese_simplified ] = "´ÖÌå";
+    Text[ chinese_traditional ] = "²ÊÅé";
+    Text[ arabic ] = "ÚÑíÖ";
+    Text[ greek ] = "¸íôïíï";
+    Text[ korean ] = "±½°Ô";
+    Text[ turkish ] = "Kalın";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_SVT_STYLE_BOLD_ITALIC
+{
+    Text = "Fett Kursiv" ;
+    Text [ ENGLISH ] = "Bold Italic" ;
+    Text [ english_us ] = "Bold Italic" ;
+    Text [ italian ] = "Corsivo Grassetto" ;
+    Text [ spanish ] = "Cursiva negrita" ;
+    Text [ french ] = "Italique gras" ;
+    Text [ dutch ] = "Vet Cursief" ;
+    Text [ swedish ] = "Fet kursiv" ;
+    Text [ danish ] = "Fed kursiv" ;
+    Text [ portuguese_brazilian ] = "Bold Italic" ;
+    Text [ portuguese ] = "Negrito itálico" ;
+    Text[ russian ] = "Æèğíûé êóğñèâ";
+    Text[ polish ] = "Pogrubiona kursywa";
+    Text[ japanese ] = "‘¾š‚ÌÎ‘Ì";
+    Text[ chinese_simplified ] = "´ÖĞ±Ìå";
+    Text[ chinese_traditional ] = "²Ê±×Åé";
+    Text[ arabic ] = "ÚÑíÖ ãÇÆá";
+    Text[ greek ] = "ĞëÜãéá ¸íôïíá";
+    Text[ korean ] = "±½Àº ÀÌÅÅ¸¯Ã¼";
+    Text[ turkish ] = "Kalın italik";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_SVT_STYLE_BLACK
+{
+    Text = "Black" ;
+    Text [ ENGLISH ] = "Black" ;
+    Text [ english_us ] = "Black" ;
+    Text [ italian ] = "Black" ;
+    Text [ spanish ] = "Black" ;
+    Text [ french ] = "Extra gras" ;
+    Text [ dutch ] = "Black" ;
+    Text [ swedish ] = "Svart" ;
+    Text [ danish ] = "Black" ;
+    Text [ portuguese_brazilian ] = "Black" ;
+    Text [ portuguese ] = "Preto" ;
+    Text[ russian ] = "×åğíûé";
+    Text[ polish ] = "Czarny";
+    Text[ japanese ] = "•";
+    Text[ chinese_simplified ] = "ºÚÌå";
+    Text[ language_user1 ] = " ";
+    Text[ chinese_traditional ] = "¶ÂÅé";
+    Text[ arabic ] = "ÃÓæÏ";
+    Text[ greek ] = "Ìáıñï";
+    Text[ korean ] = "°Ë°Ô";
+    Text[ turkish ] = "Siyah";
+};
+
+String STR_SVT_STYLE_BLACK_ITALIC
+{
+    Text = "Black Kursiv" ;
+    Text [ ENGLISH ] = "Black Italic" ;
+    Text [ english_us ] = "Black Italic" ;
+    Text [ italian ] = "Corsivo Black" ;
+    Text [ spanish ] = "Cursiva black" ;
+    Text [ french ] = "Italique extra gras" ;
+    Text [ dutch ] = "Black Cursief" ;
+    Text [ swedish ] = "Svart kursiv" ;
+    Text [ danish ] = "Black kursiv" ;
+    Text [ portuguese_brazilian ] = "Black Italic" ;
+    Text [ portuguese ] = "Preto itálico" ;
+    Text[ russian ] = "×åğíûé êóğñèâ";
+    Text[ polish ] = "Czarna kursywa";
+    Text[ japanese ] = "•‚ÌÎ‘Ì";
+    Text[ chinese_simplified ] = "ºÚĞ±Ìå";
+    Text[ language_user1 ] = " ";
+    Text[ chinese_traditional ] = "¶Â±×Åé";
+    Text[ arabic ] = "ÃÓæÏ ãÇÆá";
+    Text[ greek ] = "ĞëÜãéá Ìáıñï";
+    Text[ korean ] = "°ËÁ¤ ÀÌÅÅ¸¯Ã¼";
+    Text[ turkish ] = "Siyah italik";
+};
+
+/*
+Finnische Texte:
+    "Light",
+    "Light Kursivoitu",
+    "Normaali",
+    "Kursivoitu",
+    "Lihavoitu",
+    "Lihavoitu Kursivoitu",
+    "Black",
+    "Black Kursivoitu"
+*/
+
+String STR_SVT_FONTMAP_BOTH
+{
+    TEXT = "Für Ausdruck und Anzeige am Bildschirm wird die gleiche Schriftart verwendet." ;
+    TEXT [ English ] = "The same font will be used on both your printer and your screen." ;
+    TEXT [ norwegian ] = "The same font will be used on both your printer and your screen." ;
+    TEXT [ italian ] = "Questo tipo di carattere verrà utilizzato sia per lo schermo che per la stampante." ;
+    TEXT [ portuguese_brazilian ] = "Esta mesma fonte ser  utilizada na impressora e na tela." ;
+    TEXT [ portuguese ] = "O tipo de letra utilizado para a impressora e para o ecrã é o mesmo." ;
+    TEXT [ finnish ] = "Tätä fonttia voidaan käyttää kirjoittimessa ja näytössä." ;
+    TEXT [ danish ] = "Denne skrifttype vil blive brugt både på skærmen og på printeren." ;
+    TEXT [ french ] = "La même police est utilisée pour l'impression et l'affichage à l'écran." ;
+    TEXT [ swedish ] = "Samma teckensnitt används för både skrivare och bildskärm." ;
+    TEXT [ dutch ] = "Dit lettertype wordt voor zowel de printer als het scherm gebruikt." ;
+    TEXT [ spanish ] = "Se usará la misma fuente en la impresora y en pantalla" ;
+    TEXT [ english_us ] = "The same font will be used on both your printer and your screen." ;
+    TEXT[ chinese_simplified ] = "ÆÁÄ»ÏÔÊ¾ºÍ´òÓ¡Ê¹ÓÃÍ¬Ò»ÖÖ×ÖÌå¡£";
+    TEXT[ russian ] = "Äëÿ ïå÷àòè è âûâîäà íà ıêğàí èñïîëüçóåòñÿ îäèí è òîò æå øğèôò";
+    TEXT[ polish ] = "U¿yj tej samej czcionki dla wydruku i ekranu";
+    TEXT[ japanese ] = "ˆóü‚Æ‰æ–Ê•\\¦‚É‚Í“¯‚¶Ì«İÄ‚Ìí—Ş‚ªg—p‚³‚ê‚Ä‚¢‚Ü‚·B";
+    TEXT[ chinese_traditional ] = "¿Ã¹õÅã¥Ü©M¦C¦L¨Ï¥Î²Î¤@ªº¦r«¬";
+    TEXT[ arabic ] = "Óæİ íÊã ÇÓÊÎÏÇã äİÓ ÇáÎØ ááØÇÈÚÉ æÇáÔÇÔÉ.";
+    TEXT[ greek ] = "Ç ãñáììáôïóåéñÜ áõôŞ èá ÷ñçóéìïğïéçèåß ãéá ôçí ïèüíç êáé ãéá ôïí åêôõğùôŞ.";
+    TEXT[ korean ] = "´ç½ÅÀÇ ½Ã½ºÅÛ°ú È­¸é¿¡´Â °°Àº ±Û²ÃÀÌ »ç¿ëµÉ °Í ÀÔ´Ï´Ù.";
+    TEXT[ turkish ] = "Yazdırma ve ekranda görüntüleme için aynı yazıtipi kullanılacak.";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_SVT_FONTMAP_PRINTERONLY
+{
+    TEXT = "Druckerschrift. Die Bildschirmanzeige kann etwas abweichen." ;
+    TEXT [ English ] = "This is a printer font. The screen image may not exactly match." ;
+    TEXT [ norwegian ] = "This is a printer font. The screen image may not exactly match." ;
+    TEXT [ italian ] = "Il tipo di carattere visualizzato differisce da quello stampato." ;
+    TEXT [ portuguese_brazilian ] = "Esta é uma fonte de impressora. A imagem na tela pode não corresponder exatamente." ;
+    TEXT [ portuguese ] = "Letra de impressora. A letra vista no ecrã pode apresentar um pequeno desvio." ;
+    TEXT [ finnish ] = "Tämä on kirjoitinfontti. Näytön sisältö ei ehkä ole aivan samanlainen." ;
+    TEXT [ danish ] = "Dette er en printerskrifttype. Skærmbilledet svarer muligvis ikke helt til printerskrifttypen." ;
+    TEXT [ french ] = "Police d'imprimante. L'affichage et l'impression ne seront pas toujours identiques." ;
+    TEXT [ swedish ] = "Detta är ett skrivarteckensnitt. Visningen på skärmbilden kan avvika något." ;
+    TEXT [ dutch ] = "Dit is een printerlettertype. De weergave op het scherm kan iets afwijken." ;
+    TEXT [ spanish ] = "Fuente de impresora. La imagen en pantalla podría ser diferente." ;
+    TEXT [ english_us ] = "This is a printer font. The screen image may differ." ;
+    TEXT[ chinese_simplified ] = "ÕâÊÇ´òÓ¡×ÖÌå¡£ÆÁÄ»ÏÔÊ¾µÄ×ÖÌåÓëÆä¿ÉÄÜ»áÓĞĞ©Æ«²î¡£";
+    TEXT[ russian ] = "Øğèôò ïå÷àòè. Íà ıêğàíå ìîæåò íåìíîãî îòëè÷àòüñÿ.";
+    TEXT[ polish ] = "Czcionka drukarkowa. Obraz czcionek na ekranie mo¿e siê trochê ró¿niæ.";
+    TEXT[ japanese ] = "ÌßØİÀ—p‚ÌÌ«İÄ‚Å‚·B‰æ–Ê•\\¦‚Æ‚Í­‚µˆÙ‚È‚è‚Ü‚·B";
+    TEXT[ chinese_traditional ] = "¦C¦L¦r«¬¡C¿Ã¹õÅã¥Ü¦r«¬¥i¯à²¤·L¦³¨Ç°¾®t¡C";
+    TEXT[ arabic ] = "åĞÇ ÎØ ÇáØÇÈÚÉ. ŞÏ íÎÊáİ ÇáãÙåÑ Úáì ÇáÔÇÔÉ ÈÚÖ ÇáÔÆ.";
+    TEXT[ greek ] = "ÃñáììáôïóåéñÜ åêôõğùôŞ. Ç åìöÜíéóç ôçò óôçí ïèüíç åßíáé äõíáôüí íá äéáöİñåé.";
+    TEXT[ korean ] = "ÀÌ°ÍÀº ÀÎ¼â ±Û²ÃÀÔ´Ï´Ù. È­¸éÀÇ ÀÌ¹ÌÁö¿Í´Â ´Ù¸¦°Í ÀÔ´Ï´Ù.";
+    TEXT[ turkish ] = "Yazıcı yazıtipi. Ekrandaki görüntü biraz farklı olabilir.";
+};
+
+String STR_SVT_FONTMAP_SCREENONLY
+{
+    TEXT = "Bildschirmschrift. Der Ausdruck kann etwas abweichen." ;
+    TEXT [ English ] = "This is a screen font. The printer image may not exactly match." ;
+    TEXT [ norwegian ] = "This is a screen font. The printer image may not exactly match." ;
+    TEXT [ italian ] = "Questo è un carattere per lo schermo. La stampa può essere leggermente diversa." ;
+    TEXT [ portuguese_brazilian ] = "Esta é uma fonte de tela. A imagem impressa pode não corresponder exatamente." ;
+    TEXT [ portuguese ] = "Letra de ecrã. A letra impressa pode apresentar um pequeno desvio." ;
+    TEXT [ finnish ] = "Tämä on näyttöfontti. Tulosteen sisältö ei ehkä ole aivan samanlainen." ;
+    TEXT [ danish ] = "Dette er en skærmskrifttype. Udskriften kan muligvis afvige lidt." ;
+    TEXT [ french ] = "Police d'écran. L'impression et l'affichage ne seront pas toujours identiques." ;
+    TEXT [ swedish ] = "Detta är ett skärmteckensnitt. Utskriften kan vara lätt avvikande." ;
+    TEXT [ dutch ] = "Dit is een schermlettertype. De afdruk kan iets afwijken." ;
+    TEXT [ spanish ] = "Fuente de pantalla. La imagen en la impresora podría ser diferente." ;
+    TEXT [ english_us ] = "This is a screen font. The printer image may differ." ;
+    TEXT[ chinese_simplified ] = "ÕâÊÇÆÁÄ»×ÖÌå¡£´òÓ¡³öÀ´µÄ×ÖÌåÓëÆä¿ÉÄÜ»áÓĞÒ»Ğ©Æ«²î¡£";
+    TEXT[ russian ] = "Øğèôò ıêğàíà. Â ïå÷àòè ìîãóò áûòü îòêëîíåíèÿ.";
+    TEXT[ polish ] = "To jest czcionka ekranowa. Wydruk bêdzie siê trochê ró¿ni³.";
+    TEXT[ japanese ] = "‰æ–Ê—p‚ÌÌ«İÄ‚Å‚·Bˆóü²Ò°¼Ş‚Æ‚Í­‚µˆÙ‚È‚è‚Ü‚·B";
+    TEXT[ chinese_traditional ] = "¿Ã¹õ¦r«¬¡C¦C¦L¥X¥i¯à·|¦³¤@¨Ç°¾®t¡C";
+    TEXT[ arabic ] = "åĞÇ ÎØ ÔÇÔÉ. ŞÏ íÎÊáİ ÇáãÙåÑ Úáì ÇáæÑŞ ÇáãØÈæÚ ÈÚÖ ÇáÔÆ.";
+    TEXT[ greek ] = "ÃñáììáôïóåéñÜ ïèüíçò. Ç åìöÜíéóç ôçò óôçí åêôığùóç åßíáé äõíáôüí íá äéáöİñåé.";
+    TEXT[ korean ] = "ÀÌ°ÍÀº È­¸é ÆùÆ® ÀÔ´Ï´Ù. ÀÎ¼â ÀÌ¹ÌÁö¿Í´Â ´Ù¸¦ °Í ÀÔ´Ï´Ù.";
+    TEXT[ turkish ] = "Ekran yazıtipi. Yazdırma biraz farklı olabilir.";
+};
+
+String STR_SVT_FONTMAP_SIZENOTAVAILABLE
+{
+    TEXT = "Diese Schriftgröße ist nicht installiert. Die am besten passende vorhandene Größe wird benutzt." ;
+    TEXT [ English ] = "This font size is not installed. The closest available size will be used." ;
+    TEXT[ english_us ] = "This font size has not been installed. The closest available size will be used.";
+    TEXT[ portuguese ] = "Este tamanho de letra não está instalado. Será utilizado o tamanho disponível mais adequado.";
+    TEXT[ russian ] = "Òàêîé ğàçìåğ øğèôòà íå èíñòàëëèğîâàí. Ïîıòîìó áóäåò èñïîëüçîâàí íàèáîëåå ïîäõîäÿùèé ğàçìåğ.";
+    TEXT[ greek ] = "Ôï ìİãåèïò ôçò ãñáììáôïóåéñÜò äåí İ÷åé åãêáôáóôáèåß. ×ñçóéìïğïéåßôáé ôï ğëçóéİóôåñï ìİãåèïò.";
+    TEXT[ dutch ] = "Deze schriftgrootte is niet geïnstalleerd. De meest passende voorhanden zijnde grootte wordt toegepast.";
+    TEXT[ french ] = "Cette taille de police n'a pas été installée. La taille disponible la plus appropriée va être utilisée.";
+    TEXT[ spanish ] = "Este tamaño de fuente no está instalado. Se usará el tamaño disponible más adecuado.";
+    TEXT[ italian ] = "Il font delle dimensioni indicate non è installato. Il programma utilizzerà le dimensioni disponibili.";
+    TEXT[ danish ] = "Denne skriftstørrelse er ikke installeret. Den tilgængelige størrelse, som passer bedst, vil blive brugt i stedet.";
+    TEXT[ swedish ] = "Den här teckenstorleken är inte installerad. Den tillgängliga storlek som passar bäst används.";
+    TEXT[ polish ] = "Dany rozmiar czcionki nie jest zaistalowany. U¿yty zostanie najbardziej pasuj¹cy, ju¿ istniej¹ca rozmiar.";
+    TEXT[ portuguese_brazilian ] = "This font size is not installed. The closest available size will be used.";
+    TEXT[ japanese ] = "‚±‚ÌÌ«İÄ»²½Ş‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÅ‚à“KØ‚È»²½Ş‚ª‘I‚Î‚ê‚Ü‚·B";
+    TEXT[ korean ] = "ÀÌ ±Û²ÃÀÇ Å©±â´Â ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. À¯È¿ÇÑ °¡Àå À¯»çÇÑ Å©±â°¡ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
+    TEXT[ chinese_simplified ] = "Ã»ÓĞ°²×°ÕâÖÖ×ÖÌå´óĞ¡¡£Ê¹ÓÃµÄÊÇÏÖÓĞµÄ×î½Ó½üµÄ×ÖÌå´óĞ¡¡£";
+    TEXT[ chinese_traditional ] = "¨S¦³¦w¸Ë³o­Ó¦r«¬¡C±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
+    TEXT[ arabic ] = "ÍÌã ÇáÎØ åĞÇ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÃÍÌÇã ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
+    TEXT[ turkish ] = "Bu yazıtipi boyu yüklenmedi. Mevcut boylardan en uygun olanı kullanılacak.";
+};
+
+String STR_SVT_FONTMAP_STYLENOTAVAILABLE
+{
+    TEXT = "Dieser Schriftstil wird nachgebildet oder der am besten passende Stil wird verwendet." ;
+    TEXT [ English ] = "This font style will be generated or the closest matching style will be used." ;
+    TEXT[ english_us ] = "This font style will be simulated or the closest matching style will be used.";
+    TEXT[ portuguese ] = "Este estilo de letra será simulado ou será utilizado o estilo disponível mais adequado.";
+    TEXT[ russian ] = "Áóäåò ñîçäàí ëèáî òàêîé ñòèëü øğèôòà, ëèáî áóäåò èñïîëüçîâàí íàèáîëåå ïîõîæèé.";
+    TEXT[ greek ] = "Ôï óôõë áõôü ãñáììáôïóåéñÜò èá áíôéãñáöåß Ş èá ÷ñçóéìïğïéçèåß ôï ğëçóéİóôåñï óôõë..";
+    TEXT[ dutch ] = "Dit lettertype wordt nagebootst of het meest overeenkomende voorhanden zijnde type wordt gebruikt.";
+    TEXT[ french ] = "Ce style de police sera imité ou le style le plus approprié sera utilisé.";
+    TEXT[ spanish ] = "Se imitará este estilo de fuente o se usará el más adecuado.";
+    TEXT[ italian ] = "Verrà riprodotto lo stile di questo font oppure verrà utilizzato quello che gli è più simile.";
+    TEXT[ danish ] = "Denne skrifttype bliver reproduceret eller den type, som passer bedst, vil blive brugt istedet.";
+    TEXT[ swedish ] = "Det här teckensnittet efterbildas eller närmast motsvarande teckensnitt används.";
+    TEXT[ polish ] = "Dany styl czcionki zostanie skopiowany lub zostanie u¿yty najlepiej pasuj¹cy styl.";
+    TEXT[ portuguese_brazilian ] = "This font style will be generated or the closest matching style will be used.";
+    TEXT[ japanese ] = "‚±‚ÌÌ«İÄ½À²Ù‚ÍC³‚³‚ê‚é‚©A‚Ü‚½‚ÍÅ‚à“KØ‚È½À²Ù‚ªg—p‚³‚ê‚Ü‚·B";
+    TEXT[ korean ] = "ÀÌ ±Û²ÃÃ¼¿¡ °¡Àå À¯»çÇÑ ±Û²ÃÃ¼°¡ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
+    TEXT[ chinese_simplified ] = "Éú³ÉÕâÖÖ×ÖÌå»òÊ¹ÓÃ×î½Ó½üµÄ×ÖÌå¡£";
+    TEXT[ chinese_traditional ] = "¼Ò¥é³o­Ó¦r«¬©Î±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
+    TEXT[ arabic ] = "Óæİ íÊã ÊŞáíÏ äãØ ÇáÎØ åĞÇ¡ Ãæ Óæİ íÊã ÇÓÊÎÏÇã ÃŞÑÈ äãØğ áå.";
+    TEXT[ turkish ] = "Bu yazıtipi taklit edilecek ya da en uygun olan biçim kullanılacak.";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_SVT_FONTMAP_NOTAVAILABLE
+{
+    TEXT = "Diese Schriftart ist nicht installiert. Die am besten passende vorhandene Schriftart wird benutzt." ;
+    TEXT [ English ] = "This font is not installed. The closest available font will be used." ;
+    TEXT[ english_us ] = "This font has not been installed. The closest available font will be used.";
+    TEXT[ portuguese ] = "Este tipo de letra não está instalado. Será utilizado o tipo de letra disponível mais adequado.";
+    TEXT[ russian ] = "İòîò òèï øğèôòà íå èíñòàëëèğîâàí. Ïîıòîìó áóäåò èñïîëüçîâàí îäèí èç íàèáîëåå ïîäõîäÿùèõ.";
+    TEXT[ greek ] = "Ç ãñáììáôïóåéñÜ äåí İ÷åé åãêáôáóôáèåß. ×ñçóéìïğïéåßôáé ç ğëçóéİóôåñç (áğü Üğïøç ÷áñáêôçñéóôéêşí) ãñáììáôïóåéñÜ.";
+    TEXT[ dutch ] = "Dit lettertype is niet geïnstalleerd. Het meest overeenkomende voorhanden zijnde type wordt gebruikt.";
+    TEXT[ french ] = "Ce type de police n'a pas été installé. Le type de police le plus approprié va être utilisé.";
+    TEXT[ spanish ] = "Esta fuente no está instalada. Se usará la fuente existente más adecuada.";
+    TEXT[ italian ] = "Questo font non è installato. Il programma utilizzerà il font che gli è più simile.";
+    TEXT[ danish ] = "Denne skrifttype er ikke installeret. Den tilgængelige skrifttype, som passer bedst, vil blive brugt i stedet.";
+    TEXT[ swedish ] = "Det här teckensnittet är inte installerat. Det tillgängliga teckensnitt som passar bäst används.";
+    TEXT[ polish ] = "Dana czcionka nie jest zainstalowana.U¿yta zostanie najbardziej pasuj¹ca, ju¿ istniej¹ca czcionka.";
+    TEXT[ portuguese_brazilian ] = "This font is not installed. The closest available font will be used.";
+    TEXT[ japanese ] = "‚±‚ÌÌ«İÄ‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÅ‚à“KØ‚ÈÌ«İÄ‚ª‘I‚Î‚ê‚Ü‚·B";
+    TEXT[ korean ] = "ÀÌ ±Û²ÃÀº ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. À¯È¿ÇÑ °¡Àå À¯»çÇÑ ±Û²ÃÀÌ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
+    TEXT[ chinese_simplified ] = "Ã»ÓĞ°²×°ÕâÖÖ×ÖÌå¡£Ê¹ÓÃµÄÊÇÏÖÓĞµÄ×î½Ó½üµÄ×ÖÌå¡£";
+    TEXT[ chinese_traditional ] = "¨S¦³¦w¸Ë³o­Ó¦r«¬¡C±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
+    TEXT[ arabic ] = "åĞÇ ÇáÎØ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÎØæØ ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
+    TEXT[ turkish ] = "Bu yazıtipi yüklenmedi. Mevcut yazıtiplerinden en uygun olanı kullanılacak.";
+};

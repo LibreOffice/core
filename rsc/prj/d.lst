@@ -1,0 +1,7 @@
+..\%__SRC%\bin\rsc.exe %_DEST%\bin%_EXT%\rsc.exe
+..\%__SRC%\bin\rsc2.exe %_DEST%\bin%_EXT%\rsc2.exe
+..\%__SRC%\bin\rsc %_DEST%\bin%_EXT%\rsc
+..\%__SRC%\bin\rsc2 %_DEST%\bin%_EXT%\rsc2
+
+mkdir: %_DEST%\inc%_EXT%\rsc
+hedabu: ..\inc\rscsfx.hxx %_DEST%\inc%_EXT%\rsc\rscsfx.hxx

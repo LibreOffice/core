@@ -1,0 +1,24 @@
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+..\%__SRC%\misc\*.sym %_DEST%\bin%_EXT%\*.sym
+
+mkdir: %_DEST%\inc%_EXT%\ucbhelper
+..\inc\ucbhelper\configureucb.hxx %_DEST%\inc%_EXT%\ucbhelper\configureucb.hxx
+..\inc\ucbhelper\content.hxx %_DEST%\inc%_EXT%\ucbhelper\content.hxx
+..\inc\ucbhelper\contentbroker.hxx %_DEST%\inc%_EXT%\ucbhelper\contentbroker.hxx
+..\inc\ucbhelper\commandenvironment.hxx %_DEST%\inc%_EXT%\ucbhelper\commandenvironment.hxx
+..\inc\ucbhelper\contentidentifier.hxx %_DEST%\inc%_EXT%\ucbhelper\contentidentifier.hxx
+..\inc\ucbhelper\contenthelper.hxx %_DEST%\inc%_EXT%\ucbhelper\contenthelper.hxx
+..\inc\ucbhelper\contentidentifier.hxx %_DEST%\inc%_EXT%\ucbhelper\contentidentifier.hxx
+..\inc\ucbhelper\contentinfo.hxx %_DEST%\inc%_EXT%\ucbhelper\contentinfo.hxx
+..\inc\ucbhelper\macros.hxx %_DEST%\inc%_EXT%\ucbhelper\macros.hxx
+..\inc\ucbhelper\propertyvalueset.hxx %_DEST%\inc%_EXT%\ucbhelper\propertyvalueset.hxx
+..\inc\ucbhelper\providerhelper.hxx %_DEST%\inc%_EXT%\ucbhelper\providerhelper.hxx
+..\inc\ucbhelper\registerucb.hxx %_DEST%\inc%_EXT%\ucbhelper\registerucb.hxx
+..\inc\ucbhelper\resultset.hxx %_DEST%\inc%_EXT%\ucbhelper\resultset.hxx
+..\inc\ucbhelper\resultsetmetadata.hxx %_DEST%\inc%_EXT%\ucbhelper\resultsetmetadata.hxx
+..\inc\ucbhelper\resultsethelper.hxx %_DEST%\inc%_EXT%\ucbhelper\resultsethelper.hxx
+..\version.mk %_DEST%\inc%_EXT%\ucbhelper\version.mk

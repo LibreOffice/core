@@ -1,0 +1,31 @@
+mkdir: %_DEST%\inc%_EXT%\sot
+hedabu: ..\inc\object.hxx %_DEST%\inc%_EXT%\sot\object.hxx
+hedabu: ..\inc\factory.hxx %_DEST%\inc%_EXT%\sot\factory.hxx
+hedabu: ..\inc\sotdata.hxx %_DEST%\inc%_EXT%\sot\sotdata.hxx
+hedabu: ..\inc\agg.hxx %_DEST%\inc%_EXT%\sot\agg.hxx
+hedabu: ..\inc\storage.hxx %_DEST%\inc%_EXT%\sot\storage.hxx
+hedabu: ..\inc\storinfo.hxx %_DEST%\inc%_EXT%\sot\storinfo.hxx
+hedabu: ..\inc\sotref.hxx %_DEST%\inc%_EXT%\sot\sotref.hxx
+hedabu: ..\inc\dtrans.hxx %_DEST%\inc%_EXT%\sot\dtrans.hxx
+hedabu: ..\inc\exchange.hxx %_DEST%\inc%_EXT%\sot\exchange.hxx
+hedabu: ..\inc\formats.hxx %_DEST%\inc%_EXT%\sot\formats.hxx
+hedabu: ..\inc\absdev.hxx %_DEST%\inc%_EXT%\sot\absdev.hxx
+hedabu: ..\inc\stg.hxx %_DEST%\inc%_EXT%\sot\stg.hxx
+hedabu: ..\inc\filelist.hxx %_DEST%\inc%_EXT%\sot\filelist.hxx
+hedabu: ..\source\sdstor\stgio.hxx %_DEST%\inc%_EXT%\sot\stgio.hxx
+hedabu: ..\source\sdstor\stgcache.hxx %_DEST%\inc%_EXT%\sot\stgcache.hxx
+hedabu: ..\source\sdstor\stgelem.hxx %_DEST%\inc%_EXT%\sot\stgelem.hxx
+hedabu: ..\source\sdstor\stgavl.hxx %_DEST%\inc%_EXT%\sot\stgavl.hxx
+hedabu: ..\source\sdstor\stgstrms.hxx %_DEST%\inc%_EXT%\sot\stgstrms.hxx
+hedabu: ..\source\sdstor\stgdir.hxx %_DEST%\inc%_EXT%\sot\stgdir.hxx
+
+..\%__SRC%\inc\sdintern.hxx %_DEST%\inc%_EXT%\sot\sdintern.hxx
+..\%__SRC%\lib\sot.lib %_DEST%\lib%_EXT%\sot.lib
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
+..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\slb\sot.lib %_DEST%\lib%_EXT%\xsot.lib
+..\%__SRC%\bin\sot?????.dll %_DEST%\bin%_EXT%\sot?????.dll
+..\%__SRC%\bin\sot?????.sym %_DEST%\bin%_EXT%\sot?????.sym
+..\%__SRC%\misc\sot?????.map %_DEST%\bin%_EXT%\sot?????.map

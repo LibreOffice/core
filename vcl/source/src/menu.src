@@ -1,0 +1,284 @@
+/*************************************************************************
+ *
+ *  $RCSfile: menu.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define _SV_MENU_SRC
+#ifndef _SV_SVIDS_HRC
+#include <svids.hrc>
+#endif
+
+String SV_RESID_STRING_NOSELECTIONPOSSIBLE
+{
+    Text ="<Keine Auswahl möglich>";
+    Text[English] ="<No selection possible>";
+    Text[ english_us ] = "<No selection possible>";
+    Text[ portuguese ] = "<Selecção impossível>";
+    Text[ russian ] = "<Âûáîğ íåâîçìîæåí>";
+    Text[ greek ] = "<Äåí åßíáé äõíáôüí íá ãßíåé åğéëïãŞ>";
+    Text[ dutch ] = "<Geen selectie mogelijk>";
+    Text[ french ] = "<Aucune sélection possible>";
+    Text[ spanish ] = "<Ninguna selección posible>";
+    Text[ italian ] = "<Impossibile selezionare>";
+    Text[ danish ] = "<Intet udvalg muligt>";
+    Text[ swedish ] = "<Inget urval möjligt>";
+    Text[ polish ] = "<Selekcja niemo¿liwa>";
+    Text[ portuguese_brazilian ] = "<No selection possible>";
+    Text[ japanese ] = "<‰½‚à‘I‘ğ‚Å‚«‚Ü‚¹‚ñ>";
+    Text[ korean ] = "<¼±ÅÃ ºÒ°¡´É>";
+    Text[ chinese_simplified ] = "<ÎŞ·¨Ñ¡Ôñ>";
+    Text[ chinese_traditional ] = "<µLªk¿ï¾Ü>";
+    Text[ arabic ] = "<áÇ íãßä ÇáÊÍÏíÏ>";
+    Text[ turkish ] = "<Seçim yapılamaz>";
+};
+
+Menu SV_RESID_MENU_EDIT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SV_MENU_EDIT_UNDO ;
+            Text = "~Rückgängig" ;
+            Text [ English ] = "~Undo" ;
+            Text [ portuguese ] = "~Anular" ;
+            Text [ english_us ] = "~Undo" ;
+            Text [ portuguese_brazilian ] = "~Rückgängig" ;
+            Text [ swedish ] = "~Ångra" ;
+            Text [ danish ] = "Fo~rtryd" ;
+            Text [ italian ] = "~Annulla" ;
+            Text [ spanish ] = "~Deshacer" ;
+            Text [ french ] = "~Annuler" ;
+            Text [ dutch ] = "~Ongedaan maken" ;
+            Text[ russian ] = "Îòìåíèòü";
+            Text[ polish ] = "Cofnij";
+            Text[ japanese ] = "Œ³‚É–ß‚·(~U)";
+            Text[ chinese_simplified ] = "³·ÏûÃüÁî(~U)";
+            Text[ chinese_traditional ] = "´_­ì(~U)";
+            Text[ greek ] = "Áíáß~ñåóç";
+            Text[ korean ] = "ÀÛ¾÷Ãë¼Ò(~U)";
+            Text[ arabic ] = "ÊÑÇÌÚ";
+            Text[ turkish ] = "Geri al";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem { Separator = TRUE ; };
+        MenuItem
+        {
+            Identifier = SV_MENU_EDIT_CUT ;
+            Text = "~Ausschneiden" ;
+            Text [ English ] = "Cu~t" ;
+            Text [ norwegian ] = "Klipp~ut" ;
+            Text [ italian ] = "~Taglia" ;
+            Text [ portuguese_brazilian ] = "Co~rtar" ;
+            Text [ portuguese ] = "Co~rtar" ;
+            Text [ finnish ] = "~Leikkaa" ;
+            Text [ danish ] = "~Klip" ;
+            Text [ french ] = "~Couper" ;
+            Text [ swedish ] = "~Klipp ut" ;
+            Text [ dutch ] = "K~nippen" ;
+            Text [ spanish ] = "C~ortar" ;
+            Text [ english_us ] = "Cu~t" ;
+            Text[ russian ] = "~Âûğåçàòü";
+            Text[ polish ] = "Wytnij";
+            Text[ japanese ] = "Ø‚èæ‚è(~T)";
+            Text[ chinese_simplified ] = "¼ô³ı(~T)";
+            Text[ chinese_traditional ] = "°Å¤U(~T)";
+            Text[ greek ] = "~ÁğïêïğŞ";
+            Text[ korean ] = "Àß¶ó³»±â(~T)";
+            Text[ arabic ] = "ŞÕ";
+            Text[ turkish ] = "~Kes";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SV_MENU_EDIT_COPY ;
+            Text = "~Kopieren" ;
+            Text [ English ] = "~Copy" ;
+            Text [ norwegian ] = "~Kopier" ;
+            Text [ italian ] = "~Copia" ;
+            Text [ portuguese_brazilian ] = "~Copiar" ;
+            Text [ portuguese ] = "~Copiar" ;
+            Text [ finnish ] = "~Kopioi" ;
+            Text [ danish ] = "K~opier" ;
+            Text [ french ] = "Co~pier" ;
+            Text [ swedish ] = "K~opiera" ;
+            Text [ dutch ] = "~Kopiëren" ;
+            Text [ spanish ] = "~Copiar" ;
+            Text [ english_us ] = "~Copy" ;
+            Text[ russian ] = "~Êîïèğîâàòü";
+            Text[ polish ] = "Kopiuj";
+            Text[ japanese ] = "ºËß°(~C)";
+            Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+            Text[ chinese_traditional ] = "½Æ»s(~C)";
+            Text[ greek ] = "Áíôé~ãñáöŞ";
+            Text[ korean ] = "º¹»ç(~C)";
+            Text[ arabic ] = "äÓÎ";
+            Text[ turkish ] = "K~opyala";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SV_MENU_EDIT_PASTE ;
+            Text = "~Einfügen" ;
+            Text [ English ] = "~Paste" ;
+            Text [ norwegian ] = "~Paste" ;
+            Text [ italian ] = "~Incolla" ;
+            Text [ portuguese_brazilian ] = "~Colar" ;
+            Text [ portuguese ] = "Co~lar" ;
+            Text [ finnish ] = "L~iitä" ;
+            Text [ danish ] = "~Indsæt" ;
+            Text [ french ] = "C~oller" ;
+            Text [ swedish ] = "K~listra in" ;
+            Text [ dutch ] = "~Plakken" ;
+            Text [ spanish ] = "~Pegar" ;
+            Text [ english_us ] = "~Paste" ;
+            Text[ russian ] = "Âñò~àâêà";
+            Text[ polish ] = "W~staw";
+            Text[ japanese ] = "“\\‚è•t‚¯(~P)";
+            Text[ chinese_simplified ] = "²åÈë(~P)";
+            Text[ chinese_traditional ] = "´¡¤J(~P)";
+            Text[ greek ] = "~Åğéêüëëçóç";
+            Text[ korean ] = "ºÙ¿©³Ö±â(~P)";
+            Text[ arabic ] = "áÕŞ";
+            Text[ turkish ] = "~Yapıştır";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SV_MENU_EDIT_DELETE ;
+            Text = "~Löschen" ;
+            Text [ English ] = "~Delete" ;
+            Text [ norwegian ] = "~Slett" ;
+            Text [ italian ] = "Cancella" ;
+            Text [ portuguese_brazilian ] = "~Apagar" ;
+            Text [ portuguese ] = "E~liminar" ;
+            Text [ finnish ] = "~Poista" ;
+            Text [ danish ] = "~Slet" ;
+            Text [ french ] = "~Supprimer" ;
+            Text [ swedish ] = "~Radera" ;
+            Text [ dutch ] = "~Wissen" ;
+            Text [ spanish ] = "~Eliminar" ;
+            Text [ english_us ] = "~Delete" ;
+            Text[ russian ] = "~Óäàëèòü";
+            Text[ polish ] = "Usuñ";
+            Text[ japanese ] = "íœ(~D)";
+            Text[ chinese_simplified ] = "É¾³ı(~D)";
+            Text[ chinese_traditional ] = "§R°£(~D)";
+            Text[ greek ] = "Äéáãñá~öŞ";
+            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ arabic ] = "ÍĞİ";
+            Text[ turkish ] = "~Sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem { Separator = TRUE ; };
+        MenuItem
+        {
+            Identifier = SV_MENU_EDIT_SELECTALL ;
+            Text = "Alles aus~wählen" ;
+            Text [ English ] = "Select ~All" ;
+            Text [ norwegian ] = "Select ~All" ;
+            Text [ italian ] = "Seleziona tutto" ;
+            Text [ portuguese_brazilian ] = "Selecionar ~Tudo" ;
+            Text [ portuguese ] = "Seleccionar ~tudo" ;
+            Text [ finnish ] = "Valitse ~kaikki" ;
+            Text [ danish ] = "~Marker alt" ;
+            Text [ french ] = "Sélectio~nner tout" ;
+            Text [ swedish ] = "Markera ~allt" ;
+            Text [ dutch ] = "~Alles selecteren" ;
+            Text [ spanish ] = "Seleccionar ~todo" ;
+            Text [ english_us ] = "Select ~All" ;
+            Text[ russian ] = "Âûäåëèòü âñå";
+            Text[ polish ] = "Zaznacz wszystko";
+            Text[ japanese ] = "‚·‚×‚Ä‘I‘ğ(~A)";
+            Text[ chinese_simplified ] = "È«²¿Ñ¡ÖĞ(~A)";
+            Text[ chinese_traditional ] = "¥ş³¡¿ï¨ú(~A)";
+            Text[ greek ] = "ÅğéëïãŞ üë~ùí";
+            Text[ korean ] = "ÀüÃ¼¼±ÅÃ(~A)";
+            Text[ arabic ] = "ÊÍÏíÏ Çáßá";
+            Text[ turkish ] = "Tümünü seç";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem { Separator = TRUE ; };
+        MenuItem
+        {
+            Identifier = SV_MENU_EDIT_INSERTSYMBOL;
+            Text = "~Sonderzeichen einfügen...";
+            Text [ English ] = "insert ~symbol...";
+                    TEXT[ italian ] = "Inserisci caratteri speciali...";
+            TEXT[ portuguese_brazilian ] = "~Sonderzeichen einfügen...";
+            TEXT[ portuguese ] = "~Inserir carácter especial...";
+            TEXT[ danish ] = "Indsæt ~specialtegn...";
+            TEXT[ french ] = "~Insérer des caractères spéciaux...";
+            TEXT[ swedish ] = "Infoga ~specialtecken...";
+            TEXT[ dutch ] = "~Speciaal teken invoegen...";
+            TEXT[ spanish ] = "Insertar ~símbolo...";
+            TEXT[ english_us ] = "~Special Character...";
+    TEXT[ russian ] = "~Âñòàâèòü ñïåöèàëüíûå ñèìâîëû...";
+            TEXT[ polish ] = "Wstaw znaki specjalne...";
+            TEXT[ japanese ] = "‹L†‚Æ“Áê•¶š‚Ì‘}“ü(~S)...";
+
+            TEXT[ chinese_simplified ] = "²åÈëÌØÊâ×Ö·û(~S)...";
+            TEXT[ chinese_traditional ] = "´¡¤J¯S®í¦r¤¸(~S)...";
+            TEXT[ greek ] = "Åé~óáãùãŞ åéäéêïı ÷áñáêôŞñá...";
+            TEXT[ korean ] = "Æ¯¼ö±âÈ£(~S)...";
+            TEXT[ arabic ] = "ÅÏÑÇÌ ÑãæÒ ÎÇÕÉ";
+            TEXT[ turkish ] = "Özel karakter ekle...";
+            TEXT[ language_user1 ] = " ";
+        };
+    };
+};

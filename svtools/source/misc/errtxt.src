@@ -1,0 +1,2778 @@
+/*************************************************************************
+ *
+ *  $RCSfile: errtxt.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define __RSC
+#include "svtools.hrc"
+#include "sfxecode.hxx"
+ // pragma ----------------------------------------------------------------
+Resource RID_ERRCTX
+{
+    String ERRCTX_ERROR
+    {
+        Text = "Fehler" ;
+        Text [ ENGLISH ] = "Error" ;
+        Text [ english_us ] = "Error" ;
+        Text [ italian ] = "Errore" ;
+        Text [ spanish ] = "Error" ;
+        Text [ french ] = "Erreur" ;
+        Text [ dutch ] = "Fout" ;
+        Text [ swedish ] = "Fel" ;
+        Text [ danish ] = "Fejl" ;
+        Text [ portuguese_brazilian ] = "Fehler" ;
+        Text [ portuguese ] = "Erro" ;
+        Text[ chinese_simplified ] = "´íÎó";
+        Text[ russian ] = "Îøèáêà";
+        Text[ polish ] = "B³¹d";
+        Text[ japanese ] = "´×°";
+        Text[ chinese_traditional ] = "¿ù»~";
+        Text[ arabic ] = "ÎØÃ";
+        Text[ dutch ] = "Fout";
+        Text[ chinese_simplified ] = "´íÎó";
+        Text[ greek ] = "ÓöÜëìá";
+        Text[ korean ] = "¿À·ù";
+        Text[ turkish ] = "Hata";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_WARNING
+    {
+        Text = "Warnung" ;
+        Text [ ENGLISH ] = "Warning" ;
+        Text [ dutch ] = "Waarschuwing" ;
+        Text [ english_us ] = "Warning" ;
+        Text [ italian ] = "Avvertenza" ;
+        Text [ spanish ] = "Advertencia" ;
+        Text [ french ] = "Message d'avertissement" ;
+        Text [ swedish ] = "Varning" ;
+        Text [ danish ] = "Advarsel" ;
+        Text [ portuguese ] = "Aviso" ;
+        Text [ portuguese_brazilian ] = "Warnung" ;
+        Text[ chinese_simplified ] = "¾¯¸æ";
+        Text[ russian ] = "Ïğåäóïğåæäåíèå";
+        Text[ polish ] = "Ostrze¿enie";
+        Text[ japanese ] = "Œx";
+        Text[ chinese_traditional ] = "Äµ§i";
+        Text[ arabic ] = "ÊÍĞíÑ";
+        Text[ dutch ] = "Waarschuwing";
+        Text[ chinese_simplified ] = "¾¯¸æ";
+        Text[ greek ] = "Ğñïåéäïğïßçóç";
+        Text[ korean ] = "°æ°í";
+        Text[ turkish ] = "Uyarı";
+    };
+    String ERRCTX_SFX_LOADTEMPLATE
+    {
+        Text = "$(ERR) beim Laden der Vorlage $(ARG1)" ;
+        Text [ ENGLISH ] = "$(ERR) while loading template $(ARG1)" ;
+        Text [ dutch ] = "$(ERR) bij laden van sjabloon $(ARG1)" ;
+        Text [ english_us ] = "$(ERR) loading the template $(ARG1)" ;
+        Text [ italian ] = "$(ERR) nel caricare il modello $(ARG1)" ;
+        Text [ spanish ] = "$(ERR) al cargar la plantilla $(ARG1)" ;
+        Text [ french ] = "$(ERR) lors du chargement du modèle $(ARG1)" ;
+        Text [ swedish ] = "$(ERR) vid laddning av formatmallen $(ARG1)" ;
+        Text [ danish ] = "$(ERR) under indlæsning af skabelonen $(ARG1)" ;
+        Text [ portuguese ] = "$(ERR) ao carregar o modelo $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Laden der Vorlage $(ARG1)" ;
+        Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚ×°ÔØÑùÊ½$(ARG1)Ê±";
+        Text[ russian ] = "$(ERR) ïğè çàãğóçêå øàáëîíà $(ARG1)";
+        Text[ polish ] = "$(ERR) przy ³adowaniu szablonu $(ARG1)";
+        Text[ japanese ] = "$(ERR)ÃİÌßÚ°Ä$(ARG1)‚Ì“Ç‚İ‚İ‚ÌÛ";
+        Text[ chinese_traditional ] = "¸Ë¸ü¼Ë¦¡ $(ARG1) ®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáŞÇáÈ $(ARG1)";
+        Text[ dutch ] = "$(ERR) bij laden van sjabloon $(ARG1)";
+        Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚ×°ÔØÑùÊ½$(ARG1)Ê±";
+        Text[ greek ] = "$(ERR) êáôÜ ôç öüñôùóç ôïõ ğñïôığïõ $(ARG1)";
+        Text[ korean ] = "¼­½ÄÆÄÀÏ $(ARG1)À» ·ÎµåÇÏ´øÁß $(ERR)";
+        Text[ turkish ] = "$(ARG1) şablonu yüklenirken $(ERR)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SFX_SAVEDOC
+    {
+        Text = "$(ERR) beim Speichern des Dokumentes $(ARG1)" ;
+        Text [ italian ] = "$(ERR) nel salvare il documento $(ARG1)";
+        Text [ portuguese_brazilian ] = "$(ERR) beim Speichern des Dokumentes $(ARG1)";
+        Text [ portuguese ] = "$(ERR) ao guardar o documento $(ARG1)";
+        Text [ danish ] = "$(ERR) under forsøg på at gemme dokumentet $(ARG1)";
+        Text [ french ] = "$(ERR) lors de l'enregistrement du document $(ARG1)";
+        Text [ swedish ] = "$(ERR) när dokumentet $(ARG1) sparades";
+        Text [ dutch ] = "$(ERR) bij opslaan van document $(ARG1)";
+        Text [ spanish ] = "$(ERR) al guardar el documento $(ARG1)";
+        Text [ english_us ] = "$(ERR) saving the document $(ARG1)";
+        Text[ chinese_simplified ] = "´æÅÌÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè ñîõğàíåíèè äîêóìåíòà $(ARG1)";
+        Text[ polish ] = "$(ERR) przy zapisywaniu dokumentu $(ARG1)";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚Ì•Û‘¶‚ÌÛ";
+        Text[ chinese_traditional ] = "Àx¦s¤å¥ó $(ARG1) ®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÍİÙ ÇáãÓÊäÏ $(ARG1)";
+        Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1)";
+        Text[ chinese_simplified ] = "´æÅÌÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí áğïèŞêåõóçôïõ åããñÜöïõ $(ARG1)";
+        Text[ korean ] = "¹®¼­$(ARG1)¸¦ ÀúÀåÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "$(ARG1) belgesi kaydedilirken $(ERR)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SFX_SAVEASDOC
+    {
+        Text = "$(ERR) beim Speichern des Dokumentes $(ARG1)";
+        Text [ italian ] = "$(ERR) nel salvare il documento $(ARG1)";
+        Text [ portuguese_brazilian ] = "$(ERR) beim Speichern des Dokumentes $(ARG1)";
+        Text [ portuguese ] = "$(ERR) ao guardar o documento $(ARG1)";
+        Text [ danish ] = "$(ERR) under forsøg på at gemme dokumentet $(ARG1)";
+        Text [ french ] = "$(ERR) lors de l'enregistrement du document $(ARG1)";
+        Text [ swedish ] = "$(ERR) när dokumentet $(ARG1) sparades";
+        Text [ dutch ] = "$(ERR) bij opslaan van document $(ARG1)";
+        Text [ spanish ] = "$(ERR) al guardar el documento $(ARG1)";
+        Text [ english_us ] = "$(ERR) saving the document $(ARG1)";
+        Text[ chinese_simplified ] = "´æÅÌÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè ñîõğàíåíèè äîêóìåíòà $(ARG1)";
+        Text[ polish ] = "$(ERR) przy zapisywaniu dokumentu $(ARG1)";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚Ì•Û‘¶‚ÌÛ";
+        Text[ chinese_traditional ] = "Àx¦s¤å¥ó $(ARG1) ®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÍİÙ ÇáãÓÊäÏ $(ARG1)";
+        Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1)";
+        Text[ chinese_simplified ] = "´æÅÌÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí áğïèŞêåõóçôïõ åããñÜöïõ $(ARG1)";
+        Text[ korean ] = "¹®¼­$(ARG1)¸¦ ÀúÀåÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "$(ARG1) belgesi kaydedilirken $(ERR)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SFX_DOCINFO
+    {
+        Text = "$(ERR) beim Anzeigen der Docinfo des Dokumentes $(ARG1)" ;
+        Text [ ENGLISH ] = "$(ERR) while showing docinfo for document $(ARG1)" ;
+        Text [ dutch ] = "$(ERR) bij weergeven van document info bij document $(ARG1)" ;
+        Text [ english_us ] = "$(ERR) displaying doc. information for document $(ARG1)" ;
+        Text [ italian ] = "$(ERR) nel visualizzare le informazioni riguardanti il documento $(ARG1)" ;
+        Text [ spanish ] = "$(ERR) al mostrar la información del documento $(ARG1)" ;
+        Text [ french ] = "$(ERR) lors de l'affichage des informations sur le document $(ARG1)" ;
+        Text [ swedish ] = "$(ERR) vid visning av dokumentinfo för $(ARG1)" ;
+        Text [ danish ] = "$(ERR) ved visning af dokumentinfo for dokumentet $(ARG1)" ;
+        Text [ portuguese ] = "$(ERR) ao mostrar informações sobre o documento $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Anzeigen der Docinfo des Dokumentes $(ARG1)" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾ÎÄµµ $(ARG1) ÎÄµµĞÅÏ¢Ê±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè ïîêàçå èíôîğìàöèè ê äîêóìåíòó $(ARG1)";
+        Text[ polish ] = "$(ERR) przy wyœwietlaniu informacji o dokumencie dla dokumentu $(ARG1)";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚ÌÄŞ·­ÒİÄî•ñ‚Ì•\\¦‚ÌÛ";
+        Text[ chinese_traditional ] = "Åã¥Ü¤å¥ó $(ARG1) ªº¤å¥ó¸ê°T®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÅÙåÇÑ ãÚáæãÇÊ ÇáãÓÊäÏ ÇáÎÇÕÉ ÈÇáãÓÊäÏ $(ARG1)";
+        Text[ dutch ] = "$(ERR) bij weergeven van document info bij document $(ARG1)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾ÎÄµµ $(ARG1) ÎÄµµĞÅÏ¢Ê±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí åìöÜíéóç ôçò ğëçñïöïñßáò ôïõ åããñÜöïõ $(ARG1)";
+        Text[ korean ] = "¹®¼­$(ARG1)ÀÇ ¹®¼­ Á¤º¸¸¦ Ç¥½ÃÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "$(ARG1) belgesinin, belge bilgileri görüntülenirken $(ERR)";
+    };
+    String ERRCTX_SFX_DOCTEMPLATE
+    {
+        Text = "$(ERR) beim Schreiben des Dokumentes $(ARG1) als Vorlage" ;
+        Text [ ENGLISH ] = "$(ERR) saving document $(ARG1) as template" ;
+        Text [ dutch ] = "$(ERR) bij opslaan van document $(ARG1) als sjabloon" ;
+        Text [ english_us ] = "$(ERR) writing document $(ARG1) as template" ;
+        Text [ italian ] = "$(ERR) nella scrittura del documento $(ARG1) come modello" ;
+        Text [ spanish ] = "$(ERR) al escribir el documento $(ARG1) como plantilla" ;
+        Text [ french ] = "$(ERR) lors de l'enregistrement du document $(ARG1) en tant que modèle" ;
+        Text [ swedish ] = "$(ERR) vid när dokumentet $(ARG1) skrevs som formatmall" ;
+        Text [ danish ] = "$(ERR) under skrivning af dokumentet $(ARG1) som skabelon" ;
+        Text [ portuguese ] = "$(ERR) ao escrever o documento $(ARG1) como modelo" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Schreiben des Dokumentes $(ARG1) als Vorlage" ;
+        Text[ chinese_simplified ] = "ÔÚ¸²Ğ´ÑùÊ½ÎÄµµ$(ARG1)Ê±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè çàïèñè äîêóìåíòà $(ARG1) êàê øàáëîíà";
+        Text[ polish ] = "$(ERR) przy zapisywaniu dokumentu $(ARG1) jako szablonu";
+        Text[ japanese ] = "$(ERR)ÃİÌßÚ°Ä‚Æ‚µ‚ÄÄŞ·­ÒİÄ$(ARG1)‚ğ‘‚«‚ŞÛ";
+        Text[ chinese_traditional ] = "¼g¤J¼Ë¦¡¤å¥ó $(ARG1) ®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ßÊÇÈÉ ÇáãÓÊäÏ $(ARG1) ßŞÇáÈ";
+        Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1) als sjabloon";
+        Text[ chinese_simplified ] = "ÔÚ¸²Ğ´ÑùÊ½ÎÄµµ$(ARG1)Ê±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí åããñáöŞ ôïõ åããñÜöïõ $(ARG1) ùò ğñüôõğï";
+        Text[ korean ] = "¹®¼­$(ARG1)¸¦ ¼­½ÄÆÄÀÏ·Î ±â·ÏÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "$(ARG1) belgesi şablon olarak yazılırken $(ERR)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SFX_MOVEORCOPYCONTENTS
+    {
+        Text = "$(ERR) beim Kopieren oder Verschieben von Dokumentinhalten" ;
+        Text [ ENGLISH ] = "$(ERR) beim Kopieren oder Verschieben von Dokumentinhalten" ;
+        Text [ portuguese ] = "$(ERR) ao copiar ou mover conteúdos do documento" ;
+        Text [ english_us ] = "$(ERR) copying or moving document contents" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Kopieren oder Verschieben von Dokumentinhalten" ;
+        Text [ swedish ] = "$(ERR) vid kopiering eller förflyttning av dokumentinnehåll" ;
+        Text [ danish ] = "$(ERR) under kopiering eller flytning af dokumentindhold" ;
+        Text [ italian ] = "$(ERR) nel copiare o spostare i contenuti dei documenti" ;
+        Text [ spanish ] = "$(ERR) al copiar o desplazar los contenidos del documento." ;
+        Text [ french ] = "$(ERR) lors de la copie ou du déplacement du contenu des documents " ;
+        Text [ dutch ] = "$(ERR) bij kopiëren of verplaatsen van documentinhoud" ;
+        Text[ chinese_simplified ] = "¸´ÖÆ»òÒÆ¶¯ÎÄµµÄÚÈİÊ±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè êîïèğîâàíèè èëè ïåğåìåùåíèè ñîäåğæèìîãî äîêóìåíòà";
+        Text[ polish ] = "$(ERR) przy kopiowaniu lub przenoszeniu zawartoœci wiadomoœci";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ‚Ì“à—e‚ğºËß°‚Ü‚½‚ÍˆÚ“®‚·‚éÛ";
+        Text[ chinese_traditional ] = "½Æ»s©M²¾°Ê¤å¥ó¤º®e®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ äÓÎ Ãæ ÅÒÇÍÉ ãÍÊæíÇÊ ÇáãÓÊäÏ";
+        Text[ dutch ] = "$(ERR) bij kopiëren of verplaatsen van documentinhoud";
+        Text[ chinese_simplified ] = "¸´ÖÆ»òÒÆ¶¯ÎÄµµÄÚÈİÊ±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí áíôéãñáöŞ Ş ìåôáêßíçóç ôùí ğåñéå÷ïìİíùí ôïõ åããñÜöïõ";
+        Text[ korean ] = "¹®¼­ ³»¿ëÀ» º¹»ç ¶Ç´Â ÀÌµ¿ÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "Belge içeriği kopyalanırken ya da taşınırken $(ERR)";
+    };
+    String ERRCTX_SFX_DOCMANAGER
+    {
+        Text = "$(ERR) beim Starten des Docmanagers" ;
+        Text [ ENGLISH ] = "$(ERR) starting the docmanager" ;
+        Text [ english_us ] = "$(ERR) starting the Document Manager" ;
+        Text [ italian ] = "$(ERR) nell'avvio del Docmanager" ;
+        Text [ spanish ] = "$(ERR) al inicializar el administrador de documentos" ;
+        Text [ french ] = "$(ERR) lors du démarrage du gestionnaire de documents" ;
+        Text [ dutch ] = "$(ERR) bij het starten van het documentbeheer" ;
+        Text [ swedish ] = "$(ERR) vid start av dokumentmanagern" ;
+        Text [ danish ] = "$(ERR) ved start af dokumentmanageren" ;
+        Text [ portuguese ] = "$(ERR) ao iniciar o Gestor de Documentos" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Starten des Docmanagers" ;
+        Text[ chinese_simplified ] = "Æô¶¯ÎÄµµ¹ÜÀí³ÌĞòÊ±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè çàïóñêå äèñïåò÷åğà äîêóìåíòà";
+        Text[ polish ] = "$(ERR) przy w³¹czaniu mened¿era dokumentów";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ ÏÈ°¼Ş¬‚ÌŠJn‚ÌÛ";
+        Text[ chinese_traditional ] = "±Ò°Ê¤å¥óÁ`ºŞ®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÈÏÁ ãÏíÑ ÇáãÓÊäÏ";
+        Text[ dutch ] = "$(ERR) bij het starten van het documentbeheer";
+        Text[ chinese_simplified ] = "Æô¶¯ÎÄµµ¹ÜÀí³ÌĞòÊ±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí åêêßíçóç ôïõ äéá÷åéñéóôŞ ôùí åããñÜöùí";
+        Text[ korean ] = "¹®¼­°ü¸®ÀÚ¸¦ ½ÃÀÛÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "Belge yöneticisi başlatılırken $(ERR)";
+    };
+    String ERRCTX_SFX_OPENDOC
+    {
+        Text = "$(ERR) beim Laden des Dokumentes $(ARG1)" ;
+        Text [ ENGLISH ] = "$(ERR) opening document $(ARG1)" ;
+        Text [ english_us ] = "$(ERR) loading document $(ARG1)" ;
+        Text [ italian ] = "$(ERR) nel caricare il documento $(ARG1)" ;
+        Text [ spanish ] = "$(ERR) al cargar el documento $(ARG1)" ;
+        Text [ french ] = "$(ERR) lors du chargement du document $(ARG1)" ;
+        Text [ dutch ] = "$(ERR) bij openen van document $(ARG1)" ;
+        Text [ swedish ] = "$(ERR) vid laddning av dokumentet $(ARG1)" ;
+        Text [ danish ] = "$(ERR) under indlæsning af dokumentet $(ARG1)" ;
+        Text [ portuguese ] = "$(ERR) ao carregar o documento $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Laden des Dokumentes $(ARG1)" ;
+        Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè çàãğóçêå äîêóìåíòà $(ARG1)";
+        Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu $(ARG1)";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚Ì“Ç‚İ‚İ‚ÌÛ";
+        Text[ chinese_traditional ] = "¸Ë¸ü¤å¥ó $(ARG1) ®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáãÓÊäÏ $(ARG1)";
+        Text[ dutch ] = "$(ERR) bij openen van document $(ARG1)";
+        Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôï öüñôùìá ôïõ åããñÜöïõ $(ARG1)";
+        Text[ korean ] = "¹®¼­$(ARG1)¸¦ ·ÎµåÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "$(ARG1) belgesi yüklenirken $(ERR)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SFX_NEWDOCDIRECT
+    {
+        Text = "$(ERR) beim Anlegen eines neuen Dokumentes" ;
+        Text [ ENGLISH ] = "$(ERR) creating a new document" ;
+        Text [ english_us ] = "$(ERR) creating a new document" ;
+        Text [ italian ] = "$(ERR) nella creazione di un nuovo documento" ;
+        Text [ spanish ] = "$(ERR) al crear un nuevo documento" ;
+        Text [ french ] = "$(ERR) lors de la création d'un nouveau document" ;
+        Text [ dutch ] = "$(ERR) bij maken van nieuw document" ;
+        Text [ swedish ] = "$(ERR) när ett nytt dokument skapades" ;
+        Text [ danish ] = "$(ERR) under oprettelsen af et nyt dokument" ;
+        Text [ portuguese ] = "$(ERR) ao criar o novo documento" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Anlegen eines neuen Dokumentes" ;
+        Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµÊ±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè ñîçäàíèè íîâîãî äîêóìåíòà";
+        Text[ polish ] = "$(ERR) przy tworzeniu nowego dokumentu";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ‚ÌV‹Kì¬‚ÌÛ";
+        Text[ chinese_traditional ] = "«Ø¥ß¤@­Ó·s¤å¥ó®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÅäÔÇÁ ãÓÊäÏ ÌÏíÏ";
+        Text[ dutch ] = "$(ERR) bij maken van nieuw document";
+        Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµÊ±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôç äçìéïõñãßá åíüò íİïõ åããñÜöïõ";
+        Text[ korean ] = "»õ ¹®¼­¸¦ ÀÛ¼ºÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "Yeni belge oluşturulurken $(ERR)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SFX_NEWDOC
+    {
+        Text = "$(ERR) beim Anlegen eines neuen Dokumentes" ;
+        Text [ ENGLISH ] = "$(ERR) creating a new document" ;
+        Text [ dutch ] = "$(ERR) bij maken van nieuw document" ;
+        Text [ english_us ] = "$(ERR) creating a new document" ;
+        Text [ italian ] = "$(ERR) nella creazione di un nuovo documento" ;
+        Text [ spanish ] = "$(ERR) al crear un nuevo documento" ;
+        Text [ french ] = "$(ERR) lors de la création d'un nouveau document" ;
+        Text [ swedish ] = "$(ERR) när ett nytt dokument skapades" ;
+        Text [ danish ] = "$(ERR) under oprettelsen af et nyt dokument" ;
+        Text [ portuguese ] = "$(ERR) ao criar o novo documento" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Anlegen eines neuen Dokumentes" ;
+        Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµÊ±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè ñîçäàíèè íîâîãî äîêóìåíòà";
+        Text[ polish ] = "$(ERR) przy tworzeniu nowego dokumentu";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ‚ÌV‹Kì¬‚ÌÛ";
+        Text[ chinese_traditional ] = "«Ø¥ß¤@­Ó·s¤å¥ó®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÅäÔÇÁ ãÓÊäÏ ÌÏíÏ";
+        Text[ dutch ] = "$(ERR) bij maken van nieuw document";
+        Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµÊ±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôç äçìéïõñãßá åíüò íİïõ åããñÜöïõ";
+        Text[ korean ] = "»õ ¹®¼­¸¦ ÀÛ¼ºÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "Yeni belge oluşturulurken $(ERR)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SFX_CREATEOBJSH
+    {
+        Text = "$(ERR) beim Aufklappen einer Rubrik" ;
+        Text [ ENGLISH ] = "$(ERR) expanding entry" ;
+        Text [ dutch ] = "$(ERR) bij openen van een rubriek" ;
+        Text [ english_us ] = "$(ERR) expanding entry" ;
+        Text [ italian ] = "$(ERR) nell'apertura di una voce" ;
+        Text [ spanish ] = "$(ERR) al abrir una rúbrica" ;
+        Text [ french ] = "$(ERR) lors de l'ouverture d'une rubrique" ;
+        Text [ swedish ] = "$(ERR) när en rubrik öppnades" ;
+        Text [ danish ] = "$(ERR) under åbning af en rubrik" ;
+        Text [ portuguese ] = "$(ERR) ao abrir rubrica" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Aufklappen einer Rubrik" ;
+        Text[ chinese_simplified ] = "´ò¿ª·ÖÀàÌõÄ¿Ê±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè ğàñêğûâàíèè ğóáğèêè";
+        Text[ polish ] = "$(ERR) przy otwieraniu rubryki";
+        Text[ japanese ] = "$(ERR)ÂØ°•\\¦‚ğŠJ‚­Û";
+        Text[ chinese_traditional ] = "ÂX®iÅã¥Ü¤@­Ó¤ÀÄæ®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ İÊÍ ÃÍÏ ÇáÃÚãÏÉ";
+        Text[ dutch ] = "$(ERR) bij openen van een rubriek";
+        Text[ chinese_simplified ] = "´ò¿ª·ÖÀàÌõÄ¿Ê±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôï Üíïéãìá ìéáò åããñáöŞò";
+        Text[ korean ] = "Ç×¸ñÀ» Àü°³ÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "Girişi açarken $(ERR)";
+    };
+    String ERRCTX_SFX_LOADBASIC
+    {
+        Text = "$(ERR) beim Laden des BASIC des Dokuments $(ARG1)" ;
+        Text [ ENGLISH ] = "$(ERR) while loading BASIC of document $(ARG1)" ;
+        Text [ dutch ] = "$(ERR) bij laden van BASIC van document $(ARG1)" ;
+        Text [ english_us ] = "$(ERR) loading BASIC of document $(ARG1)" ;
+        Text [ italian ] = "$(ERR) nel caricare il BASIC del documento $(ARG1)" ;
+        Text [ spanish ] = "$(ERR) al cargar el BASIC del documento $(ARG1)" ;
+        Text [ french ] = "$(ERR) lors du chargement du BASIC du document $(ARG1)" ;
+        Text [ swedish ] = "$(ERR) vid laddning av BASIC i dokumentet $(ARG1)" ;
+        Text [ danish ] = "$(ERR) under indlæsning af BASIC fra dokumentet $(ARG1)" ;
+        Text [ portuguese ] = "$(ERR) ao carregar o BASIC do documento $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Laden des BASIC des Dokuments $(ARG1)" ;
+        Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) BASIC Ê±·¢Éú $(ERR)";
+        Text[ russian ] = "$(ERR) ïğè çàãğóçêå BASIC äîêóìåíòà $(ARG1)";
+        Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu BASIC $(ARG1)";
+        Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚ÌBASIC‚Ì“Ç‚İ‚İ‚ÌÛ";
+        Text[ chinese_traditional ] = "¸Ë¸ü¤å¥ó $(ARG1)  BASIC ®Éµo¥Í $(ERR)";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá BASIC ÇáãÓÊäÏ $(ARG1)";
+        Text[ dutch ] = "$(ERR) bij laden van BASIC van document $(ARG1)";
+        Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) BASIC Ê±·¢Éú $(ERR)";
+        Text[ greek ] = "$(ERR) êáôÜ ôç öüñôùóç ôïõ BASIC ôïõ åããñÜöïõ $(ARG1)";
+        Text[ korean ] = "¹®¼­$(ARG1)ÀÇ BASICÀ» ·ÎµåÇÏ´ø Áß $(ERR)";
+        Text[ turkish ] = "$(ARG1) belgesi ile ilgili BASIC yüklenirken $(ERR)";
+    };
+    String ERRCTX_SFX_SEARCHADDRESS
+    {
+        Text = "$(ERR) bei der Adressensuche" ;
+        Text [ ENGLISH ] = "$(ERR) searching for an address" ;
+        Text[ english_us ] = "$(ERR) searching for an address";
+        Text[ portuguese ] = "$(ERR) ao procurar o endereço";
+        Text[ russian ] = "$(ERR) searching for an address";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí áíáæŞôçóç äéåıèõíóçò";
+        Text[ dutch ] = "$(ERR) bij zoeken naar een adres";
+        Text[ french ] = "$(ERR) lors de la recherche d'adresse";
+        Text[ spanish ] = "$(ERR) searching for an address";
+        Text[ italian ] = "$(ERR) searching for an address";
+        Text[ danish ] = "$(ERR) under adressesøgningen";
+        Text[ swedish ] = "$(ERR) vid adressökning";
+        Text[ polish ] = "$(ERR) searching for an address";
+        Text[ portuguese_brazilian ] = "$(ERR) searching for an address";
+        Text[ japanese ] = "$(ERR) ±ÄŞÚ½ŒŸõ’†‚É”­¶‚µ‚Ü‚µ‚½";
+        Text[ korean ] = "$(ERR) searching for an address";
+        Text[ chinese_simplified ] = "ÔÚËÑÑ°µØÖ·Ê±³öÏÖ$(ERR)";
+        Text[ chinese_traditional ] = "¦b·j´M¦a§}®É¥X²{ $(ERR)";
+        Text[ turkish ] = "$(ERR) searching for an address";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÇáÈÍË Úä ÇáÚäæÇä";
+    };
+};
+Resource RID_ERRHDL
+{
+    String ERRCODE_CLASS_ABORT
+    {
+        Text = "Abbruch" ;
+        Text = "Abort" ;
+    };
+    String ERRCODE_CLASS_NOTEXISTS
+    {
+        Text = "Nichtexistentes Objekt" ;
+        Text [ ENGLISH ] = "Nonexistant object" ;
+        Text [ dutch ] = "Object bestaat niet" ;
+        Text [ english_us ] = "Nonexistent object" ;
+        Text [ italian ] = "Oggetto inesistente" ;
+        Text [ spanish ] = "Objeto no existente" ;
+        Text [ french ] = "Cet objet n'existe pas" ;
+        Text [ swedish ] = "Icke-existerande objekt" ;
+        Text [ danish ] = "Ikke-eksisterende objekt" ;
+        Text [ portuguese ] = "Objecto inexistente" ;
+        Text [ portuguese_brazilian ] = "Nichtexistentes Objekt" ;
+        Text[ chinese_simplified ] = "²»´æÔÚµÄ¶ÔÏó";
+        Text[ russian ] = "Íåñóùåñòâóşùèé îáúåêò";
+        Text[ polish ] = "Nieistniej¹cy obiekt";
+        Text[ japanese ] = "‘¶İ‚µ‚È‚¢µÌŞ¼Şª¸Ä";
+        Text[ chinese_traditional ] = "¤£¦s¦bªºª«¥ó";
+        Text[ arabic ] = "ßÇÆä ÛíÑ ãæÌæÏ";
+        Text[ dutch ] = "Object bestaat niet";
+        Text[ chinese_simplified ] = "²»´æÔÚµÄ¶ÔÏó";
+        Text[ greek ] = "Ìç õğáñêôü áíôéêåßìåíï";
+        Text[ korean ] = "¾ø´Â °³Ã¼";
+        Text[ turkish ] = "Mevcut olmayan nesne";
+    };
+    String ERRCODE_CLASS_ALREADYEXISTS
+    {
+        Text = "Objekt existiert bereits" ;
+        Text [ ENGLISH ] = "Object already exists" ;
+        Text [ dutch ] = "Object bestaat reeds" ;
+        Text [ english_us ] = "Object already exists" ;
+        Text [ italian ] = "L'oggetto esiste già" ;
+        Text [ spanish ] = "El objeto ya existe" ;
+        Text [ french ] = "Cet objet existe déjà" ;
+        Text [ swedish ] = "Objekt existerar redan" ;
+        Text [ danish ] = "Objektet eksisterer allerede" ;
+        Text [ portuguese ] = "Objecto já existe" ;
+        Text [ portuguese_brazilian ] = "Objekt existiert bereits" ;
+        Text[ chinese_simplified ] = "¶ÔÏóÒÑ¾­´æÔÚ";
+        Text[ russian ] = "Îáúåêò óæå ñóùåñòâóåò";
+        Text[ polish ] = "Obiekt ju¿ istnieje";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Í‚·‚Å‚É‚ ‚è‚Ü‚·";
+        Text[ chinese_traditional ] = "ª«¥ó¤w¸g¦s¦b";
+        Text[ arabic ] = "ÇáßÇÆä ãæÌæÏ ãÓÈŞÇğ";
+        Text[ dutch ] = "Object bestaat reeds";
+        Text[ chinese_simplified ] = "¶ÔÏóÒÑ¾­´æÔÚ";
+        Text[ greek ] = "Ôï áíôéêåßìåíï õğÜñ÷åé Şäç";
+        Text[ korean ] = "°³Ã¼°¡ ÀÌ¹Ì ÀÖÀ½";
+        Text[ turkish ] = "Nesne mevcut";
+    };
+    String ERRCODE_CLASS_ACCESS
+    {
+        Text = "Kein Zugriff auf Objekt" ;
+        Text [ ENGLISH ] = "object could not be accessed" ;
+        Text [ dutch ] = "Geen toegang tot object" ;
+        Text [ english_us ] = "Object not accessible" ;
+        Text [ italian ] = "Accesso all'oggetto non possibile" ;
+        Text [ spanish ] = "No hay acceso al objeto" ;
+        Text [ french ] = "Impossible d'accéder à l'objet" ;
+        Text [ swedish ] = "Ingen åtkomst till objekt" ;
+        Text [ danish ] = "Ingen adgang til objekt" ;
+        Text [ portuguese ] = "Objecto inacessível" ;
+        Text [ portuguese_brazilian ] = "Kein Zugriff auf Objekt" ;
+        Text[ chinese_simplified ] = "²»ÄÜ¹»¶ÁÈ¡¶ÔÏó";
+        Text[ russian ] = "Îáúåêò íå äîñòóïåí";
+        Text[ polish ] = "Obiekt niedostêpny";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚É±¸¾½‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "¤£¯à°÷Åª¨úª«¥ó";
+        Text[ arabic ] = "áÇ íãßä ÇáæÕæá Åáì ÇáßÇÆä";
+        Text[ dutch ] = "Geen toegang tot object";
+        Text[ chinese_simplified ] = "²»ÄÜ¹»¶ÁÈ¡¶ÔÏó";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé ğñüóâáóç óôï áíôéêåßìåíï.";
+        Text[ korean ] = "°³Ã¼¿¡ ¾×¼¼½º ¸øÇÔ";
+        Text[ turkish ] = "Nesneye erişim sağlanamıyor";
+    };
+    String ERRCODE_CLASS_PATH
+    {
+        Text = "Unzulässiger Pfad" ;
+        Text [ ENGLISH ] = "Invalid path" ;
+        Text [ dutch ] = "Ongeoorloofd pad" ;
+        Text [ english_us ] = "Inadmissable path" ;
+        Text [ italian ] = "Percorso incorretto" ;
+        Text [ spanish ] = "Ruta no autorizada" ;
+        Text [ french ] = "Chemin incorrect" ;
+        Text [ swedish ] = "Otillåten sökväg" ;
+        Text [ danish ] = "Ugyldig sti" ;
+        Text [ portuguese ] = "Atalho não autorizado" ;
+        Text [ portuguese_brazilian ] = "Unzulässiger Pfad" ;
+        Text[ chinese_simplified ] = "Â·¾¶ÎŞĞ§";
+        Text[ russian ] = "Íåäîïóñòèìûé ïóòü";
+        Text[ polish ] = "Niedopuszczalna œcie¿ka";
+        Text[ japanese ] = "•s‹–‰Â‚ÌÊß½";
+        Text[ chinese_traditional ] = "¸ô®|µL®Ä";
+        Text[ arabic ] = "ãÓÇÑ ãÍÙæÑ";
+        Text[ dutch ] = "Ongeoorloofd pad";
+        Text[ chinese_simplified ] = "Â·¾¶ÎŞĞ§";
+        Text[ greek ] = "Ìç İãêõñç äéáäñïìŞ";
+        Text[ korean ] = "Çã¿ëµÇÁö ¾Ê´Â °æ·Î";
+        Text[ turkish ] = "Geçersiz veri yolu";
+    };
+    String ERRCODE_CLASS_LOCKING
+    {
+        Text = "Lockingproblem" ;
+        Text [ ENGLISH ] = "Sharing conflict" ;
+        Text [ dutch ] = "Locking-probleem" ;
+        Text [ english_us ] = "Locking problem" ;
+        Text [ italian ] = "Problema di locking" ;
+        Text [ spanish ] = "Problema de bloqueo" ;
+        Text [ french ] = "Problème de verrouillage" ;
+        Text [ swedish ] = "Låsproblem" ;
+        Text [ danish ] = "Låseproblem" ;
+        Text [ portuguese ] = "Problema de bloqueio" ;
+        Text [ portuguese_brazilian ] = "Lockingproblem" ;
+        Text[ chinese_simplified ] = "Ëø¶¨³åÍ»";
+        Text[ russian ] = "Ïğîáëåìà âõîäà â ñèñòåìó";
+        Text[ polish ] = "Problem blokady";
+        Text[ japanese ] = "‹¤—LÕ“Ë";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "ÀÉ®×Âê©w½Ä¬ğ";
+        Text[ arabic ] = "ãÔßáÉ İí ÇáÊÃãíä";
+        Text[ dutch ] = "Locking-probleem";
+        Text[ chinese_simplified ] = "Ëø¶¨³åÍ»";
+        Text[ greek ] = "Ğñüâëçìá êëåéäşìáôïò";
+        Text[ korean ] = "Àá±İ ¹®Á¦";
+        Text[ turkish ] = "Kenetlenme sorunu";
+    };
+    String ERRCODE_CLASS_PARAMETER
+    {
+        Text = "Falscher Parameter" ;
+        Text [ ENGLISH ] = "Wrong parameter" ;
+        Text [ english_us ] = "Wrong parameter" ;
+        Text [ italian ] = "Parametro errato" ;
+        Text [ spanish ] = "Parámetro falso" ;
+        Text [ french ] = "Erreur de paramètre" ;
+        Text [ dutch ] = "Verkeerde parameter" ;
+        Text [ swedish ] = "Felaktig parameter" ;
+        Text [ danish ] = "Forkert parameter" ;
+        Text [ portuguese ] = "Parâmetro incorrecto" ;
+        Text [ portuguese_brazilian ] = "Falscher Parameter" ;
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄ²ÎÊı";
+        Text[ russian ] = "Íåïğàâèëüíûé ïàğàìåòğ";
+        Text[ polish ] = "Nieprawid³owy parametr";
+        Text[ japanese ] = "³‚µ‚­‚È‚¢Êß×Ò°À";
+        Text[ chinese_traditional ] = "§UÅÜ¶qµL®Ä";
+        Text[ arabic ] = "ãÚáãÉ ÎÇØÆÉ";
+        Text[ dutch ] = "Verkeerde parameter";
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄ²ÎÊı";
+        Text[ greek ] = "ËÜèïò ğáñÜìåôñïò";
+        Text[ korean ] = "Æ²¸° ÆÄ¶ó¹ÌÅÍ";
+        Text[ turkish ] = "Yanlış parametre";
+    };
+    String ERRCODE_CLASS_SPACE
+    {
+        Text = "Resource erschöpft" ;
+        Text [ ENGLISH ] = "No space left" ;
+        Text [ dutch ] = "Resource uitgeput" ;
+        Text [ english_us ] = "Resource exhausted" ;
+        Text [ italian ] = "Risorse esaurite" ;
+        Text [ spanish ] = "No hay recursos diponibles" ;
+        Text [ french ] = "Ressource épuisée" ;
+        Text [ swedish ] = "Inga resurser kvar" ;
+        Text [ danish ] = "Ressource opbrugt" ;
+        Text [ portuguese ] = "Recursos esgotados" ;
+        Text [ portuguese_brazilian ] = "Resource erschöpft" ;
+        Text[ chinese_simplified ] = "×ÊÔ´ÒÑ¾­ÓÃÍê";
+        Text[ russian ] = "Ğåñóğñû èñ÷åğïàíû";
+        Text[ polish ] = "Wyczerpany zasób";
+        Text[ japanese ] = "Ø¿°½‚ªg‚¢s‚­‚³‚ê‚Ä‚¢‚Ü‚·";
+        Text[ chinese_traditional ] = "¸ê·½¤w¸g¥ÎºÉ";
+        Text[ arabic ] = "Êã ÇÓÊåáÇß ÇáãÕÏÑ ßáå";
+        Text[ dutch ] = "Resource uitgeput";
+        Text[ chinese_simplified ] = "×ÊÔ´ÒÑ¾­ÓÃÍê";
+        Text[ greek ] = "Ïé ğüñïé åîáíôëŞèçêáí";
+        Text[ korean ] = "¸®¼Ò½º °í°¥";
+        Text[ turkish ] = "Kaynak tükendi";
+    };
+    String ERRCODE_CLASS_NOTSUPPORTED
+    {
+        Text = "Aktion nicht unterstützt" ;
+        Text [ ENGLISH ] = "Action not supported" ;
+        Text [ dutch ] = "Activiteit wordt niet ondersteund" ;
+        Text [ english_us ] = "Action not supported" ;
+        Text [ italian ] = "Operazione non supportata" ;
+        Text [ spanish ] = "Acción no apoyada" ;
+        Text [ french ] = "Action non soutenue" ;
+        Text [ swedish ] = "Åtgärd inte understödd" ;
+        Text [ danish ] = "Handlingen understøttes ikke" ;
+        Text [ portuguese ] = "Acção sem suporte" ;
+        Text [ portuguese_brazilian ] = "Aktion nicht unterstützt" ;
+        Text[ chinese_simplified ] = "²Ù×÷²»ÊÜÖ§³Ö";
+        Text[ russian ] = "Äåéñòâèå íå ïîääåğæèâàåòñÿ";
+        Text[ polish ] = "Akcja nie jest obs³ugiwana";
+        Text[ japanese ] = "±¸¼®İ‚Íx‰‡‚³‚ê‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "¾Ş§@¤£¨ü¤ä´©";
+        Text[ arabic ] = "åĞÇ ÇáÅÌÑÇÁ áÇ íõÏÚã";
+        Text[ dutch ] = "Activiteit wordt niet ondersteund";
+        Text[ chinese_simplified ] = "²Ù×÷²»ÊÜÖ§³Ö";
+        Text[ greek ] = "Ç åíİñãåéá äåí õğïóôçñßæåôáé";
+        Text[ korean ] = "ÀÛ¾÷À» Áö¿øÇÏÁö ¾ÊÀ½";
+        Text[ turkish ] = "İşlem desteklenmiyor";
+    };
+    String ERRCODE_CLASS_READ
+    {
+        Text = "Leseproblem" ;
+        Text [ ENGLISH ] = "Read problem" ;
+        Text [ english_us ] = "Read Error" ;
+        Text [ italian ] = "Errore di lettura" ;
+        Text [ spanish ] = "Error de lectura" ;
+        Text [ french ] = "Erreur de lecture" ;
+        Text [ dutch ] = "Probleem bij lezen" ;
+        Text [ swedish ] = "Läsproblem" ;
+        Text [ danish ] = "Læsefejl" ;
+        Text [ portuguese ] = "Erro de leitura" ;
+        Text [ portuguese_brazilian ] = "Leseproblem" ;
+        Text[ chinese_simplified ] = "¶ÁÈ¡´íÎó";
+        Text[ russian ] = "Ïğîáëåìà ñ÷èòûâàíèÿ";
+        Text[ polish ] = "B³¹d odczytu";
+        Text[ japanese ] = "“Ç‚İæ‚è´×°";
+        Text[ chinese_traditional ] = "Åª¨ú¿ù»~";
+        Text[ arabic ] = "ÎØÃ İí ÇáŞÑÇÁÉ";
+        Text[ dutch ] = "Probleem bij lezen";
+        Text[ chinese_simplified ] = "¶ÁÈ¡´íÎó";
+        Text[ greek ] = "ÓöÜëìá áíÜãíùóçò";
+        Text[ korean ] = "ÀĞ±â ¿À·ù";
+        Text[ turkish ] = "Okuma hatası";
+    };
+    String ERRCODE_CLASS_WRITE
+    {
+        Text = "Schreibproblem" ;
+        Text [ ENGLISH ] = "Write problem" ;
+        Text [ dutch ] = "Probleem bij schrijven" ;
+        Text [ english_us ] = "Write Error" ;
+        Text [ italian ] = "Errore di scrittura" ;
+        Text [ spanish ] = "Error de escritura" ;
+        Text [ french ] = "Erreur d'écriture" ;
+        Text [ swedish ] = "Skrivproblem" ;
+        Text [ danish ] = "Skrivefejl" ;
+        Text [ portuguese ] = "Erro de escrita" ;
+        Text [ portuguese_brazilian ] = "Schreibproblem" ;
+        Text[ chinese_simplified ] = "¸²Ğ´´íÎó";
+        Text[ russian ] = "Ïğîáëåìà çàïèñè";
+        Text[ polish ] = "B³¹d zapisu";
+        Text[ japanese ] = "‘‚«‚İ´×°";
+        Text[ chinese_traditional ] = "ÂĞ¼g¿ù»~";
+        Text[ arabic ] = "ÎØÃ İí ÇáßÊÇÈÉ";
+        Text[ dutch ] = "Probleem bij schrijven";
+        Text[ chinese_simplified ] = "¸²Ğ´´íÎó";
+        Text[ greek ] = "ÓöÜëìá åããñáöŞò";
+        Text[ korean ] = "¾²±â ¿À·ù";
+        Text[ turkish ] = "Yazma hatası";
+    };
+    String ERRCODE_CLASS_UNKNOWN
+    {
+        Text = "Unbekannt" ;
+        Text [ ENGLISH ] = "Error class is unknown" ;
+        Text [ dutch ] = "Onbekend" ;
+        Text [ english_us ] = "unknown" ;
+        Text [ italian ] = "Sconosciuto" ;
+        Text [ spanish ] = "Desconocido" ;
+        Text [ french ] = "Inconnu" ;
+        Text [ swedish ] = "Obekant" ;
+        Text [ danish ] = "Ukendt" ;
+        Text [ portuguese ] = "Desconhecido" ;
+        Text [ portuguese_brazilian ] = "Unbekannt" ;
+        Text[ chinese_simplified ] = "²»Ã÷";
+        Text[ russian ] = "Íåèçâåñòíî";
+        Text[ polish ] = "Nieznany";
+        Text[ japanese ] = "•s–¾";
+        Text[ chinese_traditional ] = "¤£©ú";
+        Text[ arabic ] = "ÛíÑ ãÚÑæİ";
+        Text[ dutch ] = "Onbekend";
+        Text[ chinese_simplified ] = "²»Ã÷";
+        Text[ greek ] = "¢ãíùóôï";
+        Text[ korean ] = "¾Ë·ÁÁöÁö ¾ÊÀ½";
+        Text[ turkish ] = "Bilinmiyor";
+    };
+    String ERRCODE_CLASS_VERSION
+    {
+        Text = "Versionskonflikt" ;
+        Text [ ENGLISH ] = "Incompatible Version" ;
+        Text [ english_us ] = "Version Incompatibility" ;
+        Text [ italian ] = "Conflitto di versione" ;
+        Text [ spanish ] = "Versiones incompatibles" ;
+        Text [ french ] = "Incompatibilité entre versions" ;
+        Text [ dutch ] = "Incompatibele versie" ;
+        Text [ swedish ] = "Versionskonflikt" ;
+        Text [ danish ] = "Versionskonflikt" ;
+        Text [ portuguese ] = "Incompatibilidade entre versões" ;
+        Text [ portuguese_brazilian ] = "Versionskonflikt" ;
+        Text[ chinese_simplified ] = "°æ±¾³åÍ»";
+        Text[ russian ] = "Íåñîâìåñòèìîñòü âåğñèé";
+        Text[ polish ] = "Niezgodna wersja";
+        Text[ japanese ] = "ÊŞ°¼Ş®İˆá”½";
+        Text[ chinese_traditional ] = "ª©¥»½Ä¬ğ";
+        Text[ arabic ] = "ÅÕÏÇÑÇÊ ÛíÑ ãÊæÇİŞÉ";
+        Text[ dutch ] = "Incompatibele versie";
+        Text[ chinese_simplified ] = "°æ±¾³åÍ»";
+        Text[ greek ] = "Äéİíåîç İêäïóçò";
+        Text[ korean ] = "È£È¯µÇÁö ¾Ê´Â ¹öÀü";
+        Text[ turkish ] = "Sürüm uyumsuzluğu";
+    };
+    String ERRCODE_CLASS_GENERAL
+    {
+        Text = "Allgemeiner Fehler" ;
+        Text [ ENGLISH ] = "General Error" ;
+        Text [ dutch ] = "Algemene fout" ;
+        Text [ english_us ] = "General Error" ;
+        Text [ italian ] = "Errore generale" ;
+        Text [ spanish ] = "Error general" ;
+        Text [ french ] = "Erreur générale" ;
+        Text [ swedish ] = "Allmänt fel" ;
+        Text [ danish ] = "Generel fejl" ;
+        Text [ portuguese ] = "Erro geral" ;
+        Text [ portuguese_brazilian ] = "Allgemeiner Fehler" ;
+        Text[ chinese_simplified ] = "Ò»°ã´íÎó";
+        Text[ russian ] = "Îáùàÿ îøèáêà";
+        Text[ polish ] = "B³¹d ogólny";
+        Text[ japanese ] = "ˆê”Ê“I‚È´×°";
+        Text[ chinese_traditional ] = "¤@¯ë¿ù»~";
+        Text[ arabic ] = "ÎØÃ ÚÇã";
+        Text[ dutch ] = "Algemene fout";
+        Text[ chinese_simplified ] = "Ò»°ã´íÎó";
+        Text[ greek ] = "Ãåíéêü óöÜëìá";
+        Text[ korean ] = "ÀÏ¹İÀû ¿À·ù";
+        Text[ turkish ] = "Genel hata";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_CLASS_FORMAT
+    {
+        Text = "Falsches Format" ;
+        Text [ ENGLISH ] = "Wrong format" ;
+        Text [ dutch ] = "Foutief formaat" ;
+        Text [ english_us ] = "Incorrect format" ;
+        Text [ italian ] = "Formato errato" ;
+        Text [ spanish ] = "Formato incorrecto" ;
+        Text [ french ] = "Erreur de format" ;
+        Text [ swedish ] = "Felaktigt format" ;
+        Text [ danish ] = "Forkert format" ;
+        Text [ portuguese ] = "Formato incorrecto" ;
+        Text [ portuguese_brazilian ] = "Falsches Format" ;
+        Text[ chinese_simplified ] = "´íÎóµÄ¸ñÊ½";
+        Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò";
+        Text[ polish ] = "Nieprawid³owy format";
+        Text[ japanese ] = "³‚µ‚­‚È‚¢‘®";
+        Text[ chinese_traditional ] = "®æ¦¡µL®Ä";
+        Text[ arabic ] = "ÊäÓíŞ ÎÇØÆ";
+        Text[ dutch ] = "Foutief formaat";
+        Text[ chinese_simplified ] = "´íÎóµÄ¸ñÊ½";
+        Text[ greek ] = "Ìç áğïäåêôŞ ìïñöŞ";
+        Text[ korean ] = "Æ²¸° ¼­½Ä";
+        Text[ turkish ] = "Yanlış format";
+    };
+    String ERRCODE_CLASS_CREATE
+    {
+        Text = "Fehler beim Anlegen" ;
+        Text [ ENGLISH ] = "Create error" ;
+        Text [ dutch ] = "Fout bij maken van object" ;
+        Text [ english_us ] = "Error creating object" ;
+        Text [ italian ] = "Errore durante la creazione" ;
+        Text [ spanish ] = "Error al crear" ;
+        Text [ french ] = "Erreur lors de la création" ;
+        Text [ swedish ] = "Fel vid uppläggning" ;
+        Text [ danish ] = "Fejl under oprettelsen" ;
+        Text [ portuguese ] = "Erro ao criar" ;
+        Text [ portuguese_brazilian ] = "Fehler beim Anlegen" ;
+        Text[ chinese_simplified ] = "½¨Á¢¶ÔÏóÊ±·¢Éú´íÎó";
+        Text[ russian ] = "Îøèáêà ïğè ñîçäàíèè";
+        Text[ polish ] = "B³¹d przy tworzeniu obiektu";
+        Text[ japanese ] = "ì¬‚ÌÛ‚Ì´×°";
+        Text[ chinese_traditional ] = "µo¥Í¿ù»~¦b«Ø¥ß";
+        Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÅäÔÇÁ";
+        Text[ dutch ] = "Fout bij maken van object";
+        Text[ chinese_simplified ] = "½¨Á¢¶ÔÏóÊ±·¢Éú´íÎó";
+        Text[ greek ] = "ÓöÜëìá êáôÜ ôçí äçìéïõñãßá";
+        Text[ korean ] = "°³Ã¼ ÀÛ¼º½Ã ¿À·ù";
+        Text[ turkish ] = "Oluşturma hatası";
+    };
+    String ERRCODE_CLASS_SBX
+    {
+        Text = "Unzulässiger Wert oder Datentyp" ;
+        Text [ ENGLISH ] = "Invalid value or data type" ;
+        Text [ english_us ] = "Inadmissable value or data type" ;
+        Text [ italian ] = "Valore o tipo di dati non permesso" ;
+        Text [ spanish ] = "Valor o tipo de datos inadmisible" ;
+        Text [ french ] = "Valeur ou type de données incorrect(e)" ;
+        Text [ dutch ] = "Niet toegestane waarde of gegevenstype" ;
+        Text [ swedish ] = "Otillåtet värde eller datatyp" ;
+        Text [ danish ] = "Ikke-tilladt værdi eller datatype" ;
+        Text [ portuguese ] = "Valor ou tipo de dados não autorizados" ;
+        Text [ portuguese_brazilian ] = "Unzulässiger Wert oder Datentyp" ;
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄÊıÖµ»òÊı¾İÀàĞÍ";
+        Text[ russian ] = "Çíà÷åíèå èëè òèï äàííûõ íå äîïóñòèìû";
+        Text[ polish ] = "Niedopuszczalna wartoœæ lub typ pliku";
+        Text[ japanese ] = "•s‹–‰Â‚Ì’l‚Ü‚½‚ÍÃŞ°ÀÀ²Ìß";
+        Text[ chinese_traditional ] = "¼Æ­È©Î¸ê®ÆÃş«¬µL®Ä";
+        Text[ arabic ] = "ŞãíÉ ãÍÙæÑÉ¡ Ãæ äæÚ ÈíÇäÇÊ ãÍÙæÑ";
+        Text[ dutch ] = "Niet toegestane waarde of gegevenstype";
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄÊıÖµ»òÊı¾İÀàĞÍ";
+        Text[ greek ] = "Ìç áğïäåêôŞ ôéìŞ Ş ôığïò äåäïìİíùí";
+        Text[ korean ] = "Çã¿ëµÇÁö ¾Ê´Â °ª ¶Ç´Â µ¥ÀÌÅÍ À¯Çü";
+        Text[ turkish ] = "Geçersiz değer ya da veri tipi";
+    };
+    String ERRCODE_CLASS_RUNTIME
+    {
+        Text = "BASIC-Laufzeitfehler" ;
+        Text [ ENGLISH ] = "BASIC runtime error" ;
+        Text [ dutch ] = "BASIC runtime error" ;
+        Text [ english_us ] = "BASIC runtime error" ;
+        Text [ italian ] = "Errore di runtime basic" ;
+        Text [ spanish ] = "Error de ejecución de BASIC" ;
+        Text [ french ] = "Runtime error BASIC" ;
+        Text [ swedish ] = "BASIC-runtimefel" ;
+        Text [ danish ] = "BASIC-runtimefejl" ;
+        Text [ portuguese ] = "Erro de rotina BASIC" ;
+        Text [ portuguese_brazilian ] = "Basic-Laufzeitfehler" ;
+        Text[ chinese_simplified ] = "BASIC ÔËĞĞÊ±¼ä´íÎó";
+        Text[ russian ] = "Îøèáêà ïğè âûïîëíåíèè BASIC";
+        Text[ polish ] = "B³¹d czasu przebiegu BASIC";
+        Text[ japanese ] = "BASIC‚Ì×İÀ²Ñ ´×°";
+        Text[ chinese_traditional ] = "BASIC ¹B¦æ®É¶¡¿ù»~";
+        Text[ arabic ] = "ÎØÃ İí æŞÊ ÊÔÛíá BASIC";
+        Text[ dutch ] = "BASIC runtime error";
+        Text[ chinese_simplified ] = "BASIC ÔËĞĞÊ±¼ä´íÎó";
+        Text[ greek ] = "ÓöÜëìá ÷ñüíïõ åêôİëåóçò BASIC";
+        Text[ korean ] = "BASIC ½ÇÇà½Ã°£ ¿À·ù";
+        Text[ turkish ] = "BASIC yürütüm süresi hatası";
+    };
+    String ERRCODE_CLASS_COMPILER
+    {
+        Text = "BASIC-Syntaxfehler" ;
+        Text [ ENGLISH ] = "BASIC syntax error" ;
+        Text [ portuguese ] = "Erro de sintaxe BASIC" ;
+        Text [ english_us ] = "BASIC syntax error" ;
+        Text [ portuguese_brazilian ] = "Basic-Compilerfehler" ;
+        Text [ swedish ] = "BASIC-syntaxfel" ;
+        Text [ danish ] = "BASIC-syntaksfejl" ;
+        Text [ italian ] = "Errore di sintassi BASIC" ;
+        Text [ spanish ] = "Error de sintaxis de BASIC" ;
+        Text [ french ] = "Syntax error BASIC" ;
+        Text [ dutch ] = "BASIC syntax error" ;
+        Text[ chinese_simplified ] = "BASIC Óï·¨´íÎó";
+        Text[ russian ] = "Ñèíòàêñè÷åñêàÿ îøèáêà BASIC";
+        Text[ polish ] = "B³¹d sk³adni BASIC";
+        Text[ japanese ] = "BASIC‚Ì¼İÀ¯¸½´×°";
+        Text[ chinese_traditional ] = "BASIC »yªk¿ù»~";
+        Text[ arabic ] = "ÎØÃ İí ÈäÇÁ ÌãáÉ BASIC";
+        Text[ dutch ] = "BASIC syntax error";
+        Text[ chinese_simplified ] = "BASIC Óï·¨´íÎó";
+        Text[ greek ] = "ÓöÜëìá óıíôáîçò BASIC";
+        Text[ korean ] = "BASIC ¹®Àå ¿À·ù";
+        Text[ turkish ] = "BASIC söz dizimi hatası";
+    };
+    String 1
+    {
+        Text = "Allgemeiner Fehler" ;
+        Text [ ENGLISH ] = "General Error" ;
+        Text [ dutch ] = "Algemene fout" ;
+        Text [ english_us ] = "General Error" ;
+        Text [ italian ] = "Errore generale" ;
+        Text [ spanish ] = "Error general" ;
+        Text [ french ] = "Erreur générale" ;
+        Text [ swedish ] = "Allmänt fel" ;
+        Text [ danish ] = "Generel fejl" ;
+        Text [ portuguese ] = "Erro geral" ;
+        Text [ portuguese_brazilian ] = "Allgemeiner Fehler" ;
+        Text[ chinese_simplified ] = "Ò»°ã´íÎó";
+        Text[ russian ] = "Îáùàÿ îøèáêà";
+        Text[ polish ] = "B³¹d ogólny";
+        Text[ japanese ] = "ˆê”Ê“I‚È´×°";
+        Text[ chinese_traditional ] = "¤@¯ëªº¿ù»~";
+        Text[ arabic ] = "ÎØÃ ÚÇã";
+        Text[ dutch ] = "Algemene fout";
+        Text[ chinese_simplified ] = "Ò»°ã´íÎó";
+        Text[ greek ] = "Ãåíéêü óöÜëìá";
+        Text[ korean ] = "ÀÏ¹İÀû ¿À·ù";
+        Text[ turkish ] = "Genel hata";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_IO_GENERAL
+    {
+        Text = "Allgemeiner Ein-/Ausgabefehler" ;
+        Text [ ENGLISH ] = "General input/output error" ;
+        Text [ dutch ] = "Algemene input/output error" ;
+        Text [ english_us ] = "General input/output error" ;
+        Text [ italian ] = "Errore generale di I/O" ;
+        Text [ spanish ] = "Error general de entrada/salida" ;
+        Text [ french ] = "Erreur générale d'entrée/sortie" ;
+        Text [ swedish ] = "Allmänt input-/outputfel" ;
+        Text [ danish ] = "Generel input-/outputfejl" ;
+        Text [ portuguese ] = "Erro geral de entrada/saída." ;
+        Text [ portuguese_brazilian ] = "Allgemeiner Ein-/Ausgabefehler" ;
+        Text[ chinese_simplified ] = "Ò»°ãµÄÊäÈëÓëÊä³ö´íÎó";
+        Text[ russian ] = "Îáùàÿ îøèáêà ââîäà-âûâîäà";
+        Text[ polish ] = "Ogólny b³¹d wejœcia/wyjœcia";
+        Text[ japanese ] = "ˆê”Ê“I‚È I/O ´×°";
+        Text[ chinese_traditional ] = "¤@¯ëªº¿é¤J/¿é¥X¿ù»~";
+        Text[ arabic ] = "ÍÏË ÎØÃ ÅÏÎÇá/ÅÎÑÇÌ ÚÇã";
+        Text[ dutch ] = "Algemene input/output error";
+        Text[ chinese_simplified ] = "Ò»°ãµÄÊäÈëÓëÊä³ö´íÎó";
+        Text[ greek ] = "Ãåíéêü óöÜëìá åéóáãùãŞò/åîáãùãŞò";
+        Text[ korean ] = "ÀÏ¹İÀû ÀÔ·Â/Ãâ·Â ¿À·ù";
+        Text[ turkish ] = "Genel girdi/çıktı hatası";
+    };
+    String ERRCODE_IO_MISPLACEDCHAR
+    {
+        Text = "Der Name der Datei ist ungültig" ;
+        Text [ ENGLISH ] = "Invalid filename" ;
+        Text [ dutch ] = "Ongeldige bestandsnaam" ;
+        Text [ english_us ] = "Invalid file name" ;
+        Text [ italian ] = "Il nome del file non è valido" ;
+        Text [ spanish ] = "El nombre del archivo no es válido." ;
+        Text [ french ] = "Nom de fichier incorrect" ;
+        Text [ swedish ] = "Namnet på filen är ogiltigt" ;
+        Text [ danish ] = "Filnavnet er ugyldigt" ;
+        Text [ portuguese ] = "O nome do ficheiro não é válido." ;
+        Text [ portuguese_brazilian ] = "Der Name der Datei ist ungültig" ;
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄÎÄ¼şÃû";
+        Text[ russian ] = "Íåïğàâèëüíîå èìÿ ôàéëà";
+        Text[ polish ] = "Nazwa pliku jest nieprawid³owa";
+        Text[ japanese ] = "Ì§²Ù–¼‚Í–³Œø‚Å‚·";
+        Text[ chinese_traditional ] = "ÀÉ®×¦WµL®Ä";
+        Text[ arabic ] = "ÇÓã Çáãáİ ÛíÑ ÕÇáÍ";
+        Text[ dutch ] = "Ongeldige bestandsnaam";
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄÎÄ¼şÃû";
+        Text[ greek ] = "Ôï üíïìá ôïõ áñ÷åßïõ äåí åßíáé İãêõñï";
+        Text[ korean ] = "ÆÄÀÏ ÀÌ¸§ÀÌ À¯È¿ÇÏÁö ¾ÊÀ½";
+        Text[ turkish ] = "Dosyanın adı geçerli değil";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_IO_NOTEXISTS
+    {
+        Text = "Die Datei existiert nicht" ;
+        Text [ ENGLISH ] = "Nonexistant file" ;
+        Text [ dutch ] = "Bestand bestaat niet" ;
+        Text [ english_us ] = "Nonexistent file" ;
+        Text [ italian ] = "Il file non esiste" ;
+        Text [ spanish ] = "El archivo no existe" ;
+        Text [ french ] = "Fichier inexistant" ;
+        Text [ swedish ] = "Filen existerar inte" ;
+        Text [ danish ] = "Filen eksisterer ikke" ;
+        Text [ portuguese ] = "O ficheiro não existe." ;
+        Text [ portuguese_brazilian ] = "Die Datei existiert nicht" ;
+        Text[ chinese_simplified ] = "ÎÄ¼ş²»´æÔÚ";
+        Text[ russian ] = "İòîò ôàéë íå ñóùåñòâóåò";
+        Text[ polish ] = "Plik nie istnieje";
+        Text[ japanese ] = "Ì§²Ù‚Í‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "ÀÉ®×¤£¦s¦b";
+        Text[ arabic ] = "Çáãáİ ÛíÑ ãæÌæÏ";
+        Text[ dutch ] = "Bestand bestaat niet";
+        Text[ chinese_simplified ] = "ÎÄ¼ş²»´æÔÚ";
+        Text[ greek ] = "Ôï áñ÷åßï äåí õğÜñ÷åé";
+        Text[ korean ] = "ÆÄÀÏÀÌ ¾øÀ½";
+        Text[ turkish ] = "Dosya mevcut değil";
+    };
+    String ERRCODE_IO_ALREADYEXISTS
+    {
+        Text = "Die Datei existiert bereits" ;
+        Text [ ENGLISH ] = "Nonexistant file" ;
+        Text [ dutch ] = "Bestand bestaat reeds" ;
+        Text [ english_us ] = "File already exists" ;
+        Text [ italian ] = "Il file esiste già" ;
+        Text [ spanish ] = "El archivo ya existe" ;
+        Text [ french ] = "Un fichier de ce nom existe déjà." ;
+        Text [ swedish ] = "Filen existerar redan" ;
+        Text [ danish ] = "Filen eksisterer allerede" ;
+        Text [ portuguese ] = "O ficheiro já existe." ;
+        Text [ portuguese_brazilian ] = "Die Datei existiert bereits" ;
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÒÑ¾­´æÔÚ";
+        Text[ russian ] = "Òàêîé ôàéë óæå ñóùåñòâóåò";
+        Text[ polish ] = "Plik ju¿ istnieje";
+        Text[ japanese ] = "Ì§²Ù‚Í‚·‚Å‚É‚ ‚è‚Ü‚·";
+        Text[ chinese_traditional ] = "³o­ÓÀÉ®×¤w¸g¦s¦b";
+        Text[ arabic ] = "Çáãáİ ãæÌæÏ ãÓÈŞÇğ";
+        Text[ dutch ] = "Bestand bestaat reeds";
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÒÑ¾­´æÔÚ";
+        Text[ greek ] = "Ôï áñ÷åßï õğÜñ÷åé Şäç";
+        Text[ korean ] = "ÆÄÀÏÀÌ ÀÌ¹Ì ÀÖÀ½";
+        Text[ turkish ] = "Dosya mevcut";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_IO_NOTADIRECTORY
+    {
+        Text = "Bei dem Objekt handelt es sich nicht um ein Verzeichnis" ;
+        Text [ ENGLISH ] = "The object is not a directory" ;
+        Text [ english_us ] = "The object is not a directory" ;
+        Text [ italian ] = "L'oggetto non è una cartella" ;
+        Text [ spanish ] = "El objeto no es un directorio." ;
+        Text [ french ] = "L'objet indiqué n'est pas un répertoire" ;
+        Text [ dutch ] = "Object is geen directory" ;
+        Text [ swedish ] = "Objektet är ingen katalog" ;
+        Text [ danish ] = "Objektet er ikke et bibliotek" ;
+        Text [ portuguese ] = "O objecto não é um directório." ;
+        Text [ portuguese_brazilian ] = "Bei dem Objekt handelt es sich nicht um ein Verzeichnis" ;
+        Text[ chinese_simplified ] = "¶ÔÏó²»ÊÇÒ»¸öÄ¿Â¼";
+        Text[ russian ] = "İòîò îáúåêò íå ÿâëÿåòñÿ êàòàëîãîì";
+        Text[ polish ] = "Ten obiekt nie jest katalogiem";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚ÍÃŞ¨Ú¸ÄØ‚Å‚Í‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "ª«¥ó¤£¬O¤@­Ó¥Ø¿ı";
+        Text[ arabic ] = "åĞÇ ÇáßÇÆä áíÓ ÏáíáÇğ";
+        Text[ dutch ] = "Object is geen directory";
+        Text[ chinese_simplified ] = "¶ÔÏó²»ÊÇÒ»¸öÄ¿Â¼";
+        Text[ greek ] = "Ôï áíôéêåßìåíï äåí åßíáé êáôÜëïãïò";
+        Text[ korean ] = "°³Ã¼´Â µğ·ºÅä¸®°¡ ¾Æ´Ô";
+        Text[ turkish ] = "Nesne, dizin değil";
+    };
+    String ERRCODE_IO_NOTAFILE
+    {
+        Text = "Bei dem Objekt handelt es sich nicht um eine Datei" ;
+        Text [ ENGLISH ] = "The object is not a file" ;
+        Text [ english_us ] = "The object is not a file" ;
+        Text [ italian ] = "L'oggetto non è un file" ;
+        Text [ spanish ] = "El objeto no es ningún archivo." ;
+        Text [ french ] = "L'objet indiqué n'est pas un fichier" ;
+        Text [ dutch ] = "Object is geen bestand" ;
+        Text [ swedish ] = "Objektet är ingen fil" ;
+        Text [ danish ] = "Objektet er ikke en fil" ;
+        Text [ portuguese ] = "O objecto não é um ficheiro." ;
+        Text [ portuguese_brazilian ] = "Bei dem Objekt handelt es sich nicht um eine Datei" ;
+        Text[ chinese_simplified ] = "¶ÔÏó²»ÊÇÒ»¸öÎÄ¼ş";
+        Text[ russian ] = "İòîò îáúåêò íå ÿâëÿåòñÿ ôàéëîì";
+        Text[ polish ] = "Ten obiekt nie jest plikiem";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚ÍÌ§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "ª«¥ó¤£¬O¤@­ÓÀÉ®×";
+        Text[ arabic ] = "åĞÇ ÇáßÇÆä áíÓ ãáİÇğ";
+        Text[ dutch ] = "Object is geen bestand";
+        Text[ chinese_simplified ] = "¶ÔÏó²»ÊÇÒ»¸öÎÄ¼ş";
+        Text[ greek ] = "Ôï åğéëåãìİíï áíôéêåßìåíï äåí åßíáé áñ÷åßï";
+        Text[ korean ] = "°³Ã¼´Â ÆÄÀÏÀÌ ¾Æ´Ô";
+        Text[ turkish ] = "Nesne, dosya değil";
+    };
+    String ERRCODE_IO_INVALIDDEVICE
+    {
+        Text = "Das angegebene Gerät ist ungültig" ;
+        Text [ ENGLISH ] = "The device is invalid" ;
+        Text [ dutch ] = "Het aangegeven apparaat bestaat niet." ;
+        Text [ english_us ] = "The specified device is invalid" ;
+        Text [ italian ] = "L'apparecchiatura indicata non è valida" ;
+        Text [ spanish ] = "El dispositivo especificado no es válido." ;
+        Text [ french ] = "Le périphérique indiqué est incorrect" ;
+        Text [ swedish ] = "Den angivna apparaten är ogiltig" ;
+        Text [ danish ] = "Den angivne enhed er ugyldig" ;
+        Text [ portuguese ] = "O periférico indicado não é válido." ;
+        Text [ portuguese_brazilian ] = "Das angebene Gerät ist ungültig" ;
+        Text[ chinese_simplified ] = "Ö¸¶¨µÄÉè±¸ÎŞĞ§";
+        Text[ russian ] = "Çàäàííîå óñòğîéñòâî íå äîñòóïíî";
+        Text[ polish ] = "Podane urz¹dzenie jest nieprawid³owe";
+        Text[ japanese ] = "w’è‚µ‚½ÃŞ¨ÊŞ²½‚Í–³Œø‚Å‚·";
+        Text[ chinese_traditional ] = "«ü©wªº³]³ÆµL®Ä";
+        Text[ arabic ] = "ÇáÌåÇÒ ÇáãÚØì ÛíÑ ÕÇáÍ";
+        Text[ dutch ] = "Het aangegeven apparaat bestaat niet.";
+        Text[ chinese_simplified ] = "Ö¸¶¨µÄÉè±¸ÎŞĞ§";
+        Text[ greek ] = "Ç êáèïñéóìİíç óõóêåõŞ äåí åßíáé İãêõñç";
+        Text[ korean ] = "ÁöÁ¤µÈ ÀåÄ¡°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Belirtilen cihaz geçerli değil";
+    };
+    String ERRCODE_IO_ACCESSDENIED
+    {
+        Text = "Aufgrund fehlender Rechte kann auf das Objekt\nnicht zugegriffen werden" ;
+        Text [ ENGLISH ] = "The device cannot be accessed because\nof insufficient user rights" ;
+        Text [ dutch ] = "Er bestaat geen recht op toegang\n tot object." ;
+        Text [ english_us ] = "The object cannot be accessed\ndue to insufficient user rights" ;
+        Text [ italian ] = "A causa di diritti mancanti non è possibile\naccedere all'oggetto" ;
+        Text [ spanish ] = "No es posible acceder al objeto\npor falta de derechos." ;
+        Text [ french ] = "Impossible d'accéder à l'objet\ndroits d'accès insuffisants" ;
+        Text [ swedish ] = "Åtkomst till objektet kan inte medges\neftersom rättigheter saknas" ;
+        Text [ danish ] = "Det er ikke muligt at få adgang til objektet,\nfordi de krævede adgangsrettigheder mangler" ;
+        Text [ portuguese ] = "Impossível o acesso ao objecto\npor falta de direitos." ;
+        Text [ portuguese_brazilian ] = "Aufgrund fehlender Rechte kann auf das Objekt\nnicht zugegriffen werden" ;
+        Text[ chinese_simplified ] = "È±ÉÙ¶ÁÈ¡È¨Àû£¬\nÎŞ·¨¶ÁÈ¡Õâ¸ö¶ÔÏó";
+        Text[ russian ] = "Èç-çà îòñóòñòâóşùèõ ïğàâ äîñòóï ê îáúåêòó\níå ğàçğåøåí";
+        Text[ polish ] = "Brak dostêpu do obiektu \n z powodu brakuj¹cych praw dostêpu";
+        Text[ japanese ] = "Œ —˜‚ª‚È‚¢‚Ì‚Å\nµÌŞ¼Şª¸Ä‚É±¸¾½‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "¯Ê¤ÖÅª¨úÅv§Q¡M\nµLªkÅª¨ú³o­Óª«¥ó";
+        Text[ arabic ] = "áÇ íãßä ÇáæÕæá Åáì ÇáßÇÆä¡\náÚÏã ÊæİÑ ÇáÍŞæŞ ÇááÇÒãÉ";
+        Text[ dutch ] = "Er bestaat geen recht op toegang\n tot object.";
+        Text[ chinese_simplified ] = "È±ÉÙ¶ÁÈ¡È¨Àû£¬\nÎŞ·¨¶ÁÈ¡Õâ¸ö¶ÔÏó";
+        Text[ greek ] = "Ç ğñüóâáóç óôï áíôéêåßìåíï äåí åßíáé äõíáôŞ\nëüãù İëëåéøçò äéêáéùìÜôùí";
+        Text[ korean ] = "»ç¿ëÀÚ ±ÇÇÑÀÌ ¾ø¾î °³Ã¼¿¡\n¾×¼¼½ºÇÒ ¼ö ¾øÀ½";
+        Text[ turkish ] = "Gerekli erişim haklarının olmaması nedeniyle \nnesneye erişim sağlanamıyor";
+    };
+    String ERRCODE_IO_LOCKVIOLATION
+    {
+        Text = "Fehler beim gemeinsamen Zugriff auf das Objekt" ;
+        Text [ ENGLISH ] = "Sharing violation while accessing the object" ;
+        Text [ english_us ] = "Sharing violation while accessing the object" ;
+        Text [ italian ] = "Errore nell'accesso comune all'oggetto" ;
+        Text [ spanish ] = "Error al acceder conjuntamente al objeto." ;
+        Text [ french ] = "Erreur lors de la tentative d'accès partagé sur l'objet" ;
+        Text [ dutch ] = "Fout bij gelijktijdige toegang tot object" ;
+        Text [ swedish ] = "Fel vid gemensam åtkomst till objektet" ;
+        Text [ danish ] = "Fejl under fælles adgang til objektet" ;
+        Text [ portuguese ] = "Erro ao tentar acesso partilhado ao objecto." ;
+        Text [ portuguese_brazilian ] = "Fehler beim gemeinsamen Zugriff auf das Objekt" ;
+        Text[ chinese_simplified ] = "ÔÚÍ¬Ê±¶ÁÈ¡Õâ¸ö¶ÔÏóÊ±·¢Éú´íÎó";
+        Text[ russian ] = "Îøèáêà ïğè êîëëåêòèâíîì äîñòóïå ê îáúåêòó";
+        Text[ polish ] = "Nast¹pi³o naruszenie zasad wspó³u¿ytkowania podczas dostêpu do obiektu";
+        Text[ japanese ] = "µÌŞ¼Şª¸Äã‚Ì‹¤—L±¸¾½‚ÌÛ‚Ì´×°";
+        Text[ chinese_traditional ] = "¦b¦P®ÉÅª¨ú³o­Óª«¥ó®Éµo¥Í¿ù»~";
+        Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá ÇáãÔÊÑß Åáì ÇáßÇÆä";
+        Text[ dutch ] = "Fout bij gelijktijdige toegang tot object";
+        Text[ chinese_simplified ] = "ÔÚÍ¬Ê±¶ÁÈ¡Õâ¸ö¶ÔÏóÊ±·¢Éú´íÎó";
+        Text[ greek ] = "ÓöÜëìá êáôÜ ôçí êïéíŞ ğñüóâáóç óôï áíôéêåßìåíï";
+        Text[ korean ] = "°³Ã¼¿¡ °øÀ¯ ¾×¼¼½ºÇÒ ¶§ ¿À·ù";
+        Text[ turkish ] = "Nesneye erişimde bir paylaşım hatası oluştu";
+    };
+    String ERRCODE_IO_OUTOFSPACE
+    {
+        Text = "Auf dem Gerät ist kein Platz mehr verfügbar" ;
+        Text [ ENGLISH ] = "No more space on device" ;
+        Text [ dutch ] = "Onvoldoende opslagruimte" ;
+        Text [ english_us ] = "No more space on device" ;
+        Text [ italian ] = "Sul dispositivo non c'è più posto" ;
+        Text [ spanish ] = "No hay espacio disponible en el dispositivo." ;
+        Text [ french ] = "Les ressources du périphérique sont épuisées" ;
+        Text [ swedish ] = "Det finns ingen plats kvar på apparaten" ;
+        Text [ danish ] = "Der er ikke mere tilgængelig plads på enheden" ;
+        Text [ portuguese ] = "Não há mais espaço no periférico." ;
+        Text [ portuguese_brazilian ] = "Auf dem Gerät ist kein Platz mehr verfügbar" ;
+        Text[ chinese_simplified ] = "Éè±¸ÉÏµÄ¿ÉÓÃ¿Õ¼äÒÑ¾­ÓÃÍê";
+        Text[ russian ] = "Íà ıòîì óñòğîéñòâå ñâîáîäíîãî ìåñòà áîëüøå íåò";
+        Text[ polish ] = "Nie ma wiêcej miejsca na tym urz¹dzeniu";
+        Text[ japanese ] = "ÃŞ¨ÊŞ²½ã‚É‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "³]³Æªº¥i¥ÎªÅ¶¡¤w¸g¥ÎºÉ";
+        Text[ arabic ] = "áã íÚÏ åäÇß ãßÇä İí ÇáÌåÇÒ";
+        Text[ dutch ] = "Onvoldoende opslagruimte";
+        Text[ chinese_simplified ] = "Éè±¸ÉÏµÄ¿ÉÓÃ¿Õ¼äÒÑ¾­ÓÃÍê";
+        Text[ greek ] = "Äåí åßíáé äéáèİóéìïò ğåñéóóüôåñïò ÷şñïò óôç óõóêåõŞ";
+        Text[ korean ] = "ÀåÄ¡¿¡ ´õ ÀÌ»ó ÀÌ¿ë °ø°£ÀÌ ¾øÀ½";
+        Text[ turkish ] = "Cihazda yeterli alan kalmadı";
+    };
+    String ERRCODE_IO_ISWILDCARD
+    {
+        Text = "Die Operation kann nicht auf Dateien, welche\nWildcards enthalten, ausgeführt werden" ;
+        Text [ ENGLISH ] = "This operation is not permitted on filenames containing wildcards" ;
+        Text [ dutch ] = "Deze opdracht kan niet worden uitgevoerd bij bestanden \ndie wildcards bevatten" ;
+        Text [ english_us ] = "This operation cannot be run on\nfiles containing wildcards" ;
+        Text [ italian ] = "L'operazione non può essere effettuata su file che \ncontengono wildcards" ;
+        Text [ spanish ] = "La operación no se puede ejecutar en\narchivos que contengan Wildcards." ;
+        Text [ french ] = "Cette action ne peut pas être exécutée sur des fichiers\ncontenant des caractères génériques (Wildcards)" ;
+        Text [ swedish ] = "Operationen kan inte utföras på filer som\ninnehåller jokertecken" ;
+        Text [ danish ] = "Det er ikke muligt at udføre processen på filer,\nsom indeholder jokertegn" ;
+        Text [ portuguese ] = "A operação não pode ser executada em\nficheiros que contenham caracteres polivalentes (wildcards)" ;
+        Text [ portuguese_brazilian ] = "Die Operation kann nicht auf Dateien, welche\nWildcards enthalten, ausgeführt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ÔÚº¬ÓĞÍ¨Åä·ûµÄ\nÎÄ¼şÖĞÖ´ĞĞÕâ¸ö²Ù×÷";
+        Text[ russian ] = "Âûïîëíèòü îïåğàöèş ñ ôàéëàìè, \nñîäåğæàùèìè ïîäñòàíîâî÷íûå çíàêè, íåâîçìîæíî";
+        Text[ polish ] = "Operacja nie mo¿e byæ wykonana na plikach, które \nzawieraj¹ symbole wieloznaczne (Wildcarts)";
+        Text[ japanese ] = "Ü²ÙÄŞ¶°ÄŞ‚ğŠÜ‚ŞÌ§²Ù‚Å\n‘€ì‚ÍÀs‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "³o¨ÇÀÉ®×§t¦³³q°t²Å¡M\n¦ÓµLªk°õ¦æ¾Ş§@";
+        Text[ arabic ] = "áÇ íãßä ÊäİíĞ åĞå ÇáÚãáíÉ Úáì ãáİÇÊ\nÊÍÊæí Úáì ÃÍÑİ ÈÏá.";
+        Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd bij bestanden \ndie wildcards bevatten";
+        Text[ chinese_simplified ] = "ÎŞ·¨ÔÚº¬ÓĞÍ¨Åä·ûµÄ\nÎÄ¼şÖĞÖ´ĞĞÕâ¸ö²Ù×÷";
+        Text[ greek ] = "ÁõôŞ ç ëåéôïõñãßá äåí åßíáé äõíáôüí íá åöáñìïóôåß óå áñ÷åßá ôá ïğïßá \n ğåñéİ÷ïõí ÷áñáêôŞñåò ìğáëáíôİñ";
+        Text[ korean ] = "ÀÌ ÀÛµ¿Àº ¿ÍÀÏµå Ä«µå¸¦ Æ÷ÇÔÇÏ´Â ÆÄÀÏ \n ¿¡¼­ µ¿ÀÛµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "İşlem, genel arama karakterleri\n içeren dosyalar üzerinde gerçekleştirilemiyor";
+    };
+    String ERRCODE_IO_NOTSUPPORTED
+    {
+        Text = "Die Operation wird auf dem vorliegenden Betriebssystem nicht unterstützt" ;
+        Text [ ENGLISH ] = "This operation is not supported on this operating system" ;
+        Text [ english_us ] = "This operation is not supported on this operating system" ;
+        Text [ italian ] = "L'operazione non viene supportata sul sistema operativo presente" ;
+        Text [ spanish ] = "La operación no es apoyada por este sistema operativo." ;
+        Text [ french ] = "Cette opération n'est pas supportée sur ce système d'exploitation." ;
+        Text [ dutch ] = "Deze opdracht wordt niet ondersteund door het bestaande besturingssysteem" ;
+        Text [ swedish ] = "Operationen stöds inte av detta operativsystem" ;
+        Text [ danish ] = "Processen understøttes ikke af dette operativsystem" ;
+        Text [ portuguese ] = "A operação não tem suporte neste sistema operativo." ;
+        Text [ portuguese_brazilian ] = "Die Operation wird auf dem vorliegenden Betriebssystem nicht unterstützt" ;
+        Text[ chinese_simplified ] = "µ±Ç°µÄ²Ù×÷Æ½Ì¨²»Ö§³ÖÕâ¸ö²Ù×÷";
+        Text[ russian ] = "İòà îïåğàöèÿ íå ïîääåğæèâàåòñÿ äàííîé îïåğàöèîííîé ñèñòåìîé";
+        Text[ polish ] = "Ta operacja nie jest obs³ugiwana w tym systemie operacyjnym.";
+        Text[ japanese ] = "‚±‚Ì‘€ì‚Í‚±‚ÌµÍßÚ°¼®İ ¼½ÃÑ‚Å‚Íx‰‡‚³‚ê‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "·í«e¨Ï¥Îªº¾Ş§@¨t²Î¤£¤ä´©³o­Ó¾Ş§@";
+        Text[ arabic ] = "äÙÇã ÇáÊÔÛíá åĞÇ áÇ íÏÚã åĞå ÇáÚãáíÉ";
+        Text[ dutch ] = "Deze opdracht wordt niet ondersteund door het bestaande besturingssysteem";
+        Text[ chinese_simplified ] = "µ±Ç°µÄ²Ù×÷Æ½Ì¨²»Ö§³ÖÕâ¸ö²Ù×÷";
+        Text[ greek ] = "Ç ëåéôïõñãßá áõôŞ äåí õğïóôçñßæåôáé óå áõôü ôï ëåéôïõñãéêü óıóôçìá";
+        Text[ korean ] = "ÀÌ ÀÛµ¿Àº ÀÌ ¿ÀÆÛ·¹ÀÌÆÃ ½Ã½ºÅÛ»ó¿¡¼­ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Bu işlem, işletim sistemi tarafından desteklenmiyor";
+    };
+    String ERRCODE_IO_TOOMANYOPENFILES
+    {
+        Text = "Es sind bereits zu viele Dateien geöffnet" ;
+        Text [ ENGLISH ] = "The are too many open files" ;
+        Text [ dutch ] = "Te veel bestanden geopend" ;
+        Text [ english_us ] = "There are too many files open" ;
+        Text [ italian ] = "Ci sono già troppi file aperti" ;
+        Text [ spanish ] = "Hay demasiados archivos abiertos." ;
+        Text [ french ] = "Trop de fichiers ouverts !" ;
+        Text [ swedish ] = "För många filer är redan öppnade" ;
+        Text [ danish ] = "Der er for mange åbne filer allerede" ;
+        Text [ portuguese ] = "Demasiados ficheiros abertos." ;
+        Text [ portuguese_brazilian ] = "Es sind bereits zu viele Dateien geöffnet" ;
+        Text[ chinese_simplified ] = "ÒÑ¾­´ò¿ªµÄÎÄ¼şÌ«¶à";
+        Text[ russian ] = "Îòêğûòî ñëèøêîì ìíîãî ôàéëîâ";
+        Text[ polish ] = "Jest otworzonych za du¿o plików";
+        Text[ japanese ] = "‚·‚Å‚ÉÌ§²Ù‚ğ‚½‚­‚³‚ñŠJ‚«‚·‚¬‚Ä‚¢‚Ü‚·";
+        Text[ chinese_traditional ] = "¥´¶}¤F¤Ó¦hÀÉ®×";
+        Text[ arabic ] = "ÚÏÏ ÇáãÓÊäÏÇÊ ÇáãİÊæÍÉ ßÈíÑ ÌÏÇğ";
+        Text[ dutch ] = "Te veel bestanden geopend";
+        Text[ chinese_simplified ] = "ÒÑ¾­´ò¿ªµÄÎÄ¼şÌ«¶à";
+        Text[ greek ] = "Åßíáé Şäç ğïëëÜ áñ÷åßá áíïé÷ôÜ";
+        Text[ korean ] = "³Ê¹« ¸¹Àº ÆÄÀÏÀÌ ¿­·ÁÀÖ½À´Ï´Ù.";
+        Text[ turkish ] = "Çok fazla dosya açık";
+    };
+    String ERRCODE_IO_CANTREAD
+    {
+        Text = "Von der Datei konnte nicht gelesen werden" ;
+        Text [ ENGLISH ] = "The file could not be read" ;
+        Text [ dutch ] = "Bestand kon niet worden gelezen" ;
+        Text [ english_us ] = "Data could not be read from the file" ;
+        Text [ italian ] = "Non è stato possibile leggere dal file" ;
+        Text [ spanish ] = "No se pudo leer del archivo." ;
+        Text [ french ] = "Impossible de lire à partir de ce fichier" ;
+        Text [ swedish ] = "Det gick inte att läsa från filen" ;
+        Text [ danish ] = "Det var ikke muligt at læse filen" ;
+        Text [ portuguese ] = "Foi impossível ler o ficheiro." ;
+        Text [ portuguese_brazilian ] = "Von der Datei konnte nicht gelesen werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Õâ¸öÎÄ¼ş";
+        Text[ russian ] = "Ïğî÷èòàòü ôàéë íåâîçìîæíî";
+        Text[ polish ] = "Ten plik nie mog³ zostaæ odczytany";
+        Text[ japanese ] = "Ì§²Ù‚©‚ç“Ç‚İæ‚ê‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªkÅª¨ú³o­ÓÀÉ®×";
+        Text[ arabic ] = "ÊÚĞÑÊ ŞÑÇÁÉ Çáãáİ";
+        Text[ dutch ] = "Bestand kon niet worden gelezen";
+        Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Õâ¸öÎÄ¼ş";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé áíÜãíùóç ôïõ áñ÷åßïõ";
+        Text[ korean ] = "µ¥ÀÌÅÍ°¡ ÆÄÀÏ·Î ºÎÅÍ ÀĞÇô Áú¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Dosyadan veri okunamadı";
+    };
+    String ERRCODE_IO_CANTWRITE
+    {
+        Text = "Die Datei konnte nicht geschrieben werden" ;
+        Text [ ENGLISH ] = "The file could not be written" ;
+        Text [ english_us ] = "The file could not be written" ;
+        Text [ italian ] = "Non è stato possibile scrivere il file" ;
+        Text [ spanish ] = "No se pudo guardar el archivo" ;
+        Text [ french ] = "Impossible d'écrire le fichier" ;
+        Text [ dutch ] = "Bestand kon niet worden opgeslagen" ;
+        Text [ swedish ] = "Filen kunde inte skrivas" ;
+        Text [ danish ] = "Det var ikke muligt at skrive filen" ;
+        Text [ portuguese ] = "Foi impossível escrever o ficheiro." ;
+        Text [ portuguese_brazilian ] = "Auf die Datei konnte nicht gespeicherwerden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ğ´ÈëÕâ¸öÎÄ¼ş";
+        Text[ russian ] = "Çàïèñü ôàéëà íå óäàåòñÿ";
+        Text[ polish ] = "Pliku nie mo¿na by³o zapisaæ";
+        Text[ japanese ] = "Ì§²Ù‚ğ‘‚«‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk¼g¤J³o­ÓÀÉ®×";
+        Text[ arabic ] = "ÊÚĞÑÊ ßÊÇÈÉ Çáãáİ";
+        Text[ dutch ] = "Bestand kon niet worden opgeslagen";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ğ´ÈëÕâ¸öÎÄ¼ş";
+        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç åããñáöŞ ôïõ áñ÷åßïõ";
+        Text[ korean ] = "ÆÄÀÏÀÌ ¾µ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya yazılamadı";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_IO_OUTOFMEMORY
+    {
+        Text = "Die Operation konnte wegen Speichermangels nicht ausgeführt werden" ;
+        Text [ ENGLISH ] = "The operation could no be completed because there is no memory left" ;
+        Text [ english_us ] = "The operation could not be run due to insufficient memory." ;
+        Text [ italian ] = "A causa di insufficienza di memoria non è stato possibile completare l'operazione" ;
+        Text [ spanish ] = "La operación no se pudo ejecutar por falta de memoria." ;
+        Text [ french ] = "Impossible d'exécuter cette action, mémoire insuffisante !" ;
+        Text [ dutch ] = "De opdracht kon niet worden uitgevoerd bij gebrek aan vrij geheugen." ;
+        Text [ swedish ] = "Operationen kunde inte utföras på grund av för lite minne." ;
+        Text [ danish ] = "Det var ikke muligt at udføre operationen, fordi der ikke er tilstrækkelig hukommelse" ;
+        Text [ portuguese ] = "Foi impossível executar a operação por não existir memória suficiente." ;
+        Text [ portuguese_brazilian ] = "Die Operation konnte wegen Speichermangels nicht ausgeführt werden" ;
+        Text[ chinese_simplified ] = "ÒòÎªÄÚ´æ²»×ã¶øÎŞ·¨Ö´ĞĞÕâ¸ö²Ù×÷";
+        Text[ russian ] = "Èç-çà íåäîñòàòêà ïàìÿòè âûïîëíèòü îïåğàöèş íåâîçìîæíî";
+        Text[ polish ] = "Operacja nie mog³a zostaæ wykonana z powodu braku pamiêci";
+        Text[ japanese ] = "‚±‚Ì‘€ì‚ÍÒÓØ•s‘«‚Ì‚½‚ßÀs‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "¦]¬°°O¾ĞÅé¤£¨¬¦ÓµLªk°õ¦æ³o­Ó¾Ş§@";
+        Text[ arabic ] = "ÊÚĞÑ ÊäİíĞ ÇáÚãáíÉ¡ ÈÓÈÈ äŞÕ ÇáĞÇßÑÉ";
+        Text[ dutch ] = "De opdracht kon niet worden uitgevoerd bij gebrek aan vrij geheugen.";
+        Text[ chinese_simplified ] = "ÒòÎªÄÚ´æ²»×ã¶øÎŞ·¨Ö´ĞĞÕâ¸ö²Ù×÷";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá åêôåëåóôåß ç ëåéôïõñãßá ëüãù İëëåéøçò ìíŞìçò";
+        Text[ korean ] = "¸Ş¸ğ¸® ºÎÁ·À¸·Î ÀÎÇÏ¿© ÀÛµ¿ÀÌ ½ÇÇàµÉ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "İşlem, bellek yetersizliği nedeniyle yürütülemedi";
+    };
+    String ERRCODE_IO_CANTSEEK
+    {
+        Text = "Die Seekoperation konnte nicht ausgeführt werden" ;
+        Text [ ENGLISH ] = "The seek operation could not be completed" ;
+        Text [ dutch ] = "De zoekopdracht kon niet worden uitgevoerd" ;
+        Text [ english_us ] = "The seek operation could not be run" ;
+        Text [ italian ] = "Non è statopossibile eseguire l'operazione di seek" ;
+        Text [ spanish ] = "No se pudo ejecutar la operación Seek." ;
+        Text [ french ] = "Impossible d'exécuter l'opération Seek" ;
+        Text [ swedish ] = "Seekoperationen kunde inte utföras" ;
+        Text [ danish ] = "Det var ikke muligt at udføre seek-operationen" ;
+        Text [ portuguese ] = "Foi impossível executar a operação de localização." ;
+        Text [ portuguese_brazilian ] = "Die Seekoperation konnte nicht ausgeführt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞËÑÑ°²Ù×÷";
+        Text[ russian ] = "Âûïîëíèòü îïåğàöèş seek íå óäàåòñÿ";
+        Text[ polish ] = "Nie mo¿na by³o wykonaæ operacji pliku (Seek)";
+        Text[ japanese ] = "Seek‘€ì‚ªÀs‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "µLªk°õ¦æ·j´M©R¥O";
+        Text[ arabic ] = "ÊÚĞÑ ÊäİíĞ ÇáÚãáíÉ \"Seek\"";
+        Text[ dutch ] = "De zoekopdracht kon niet worden uitgevoerd";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞËÑÑ°²Ù×÷";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá åêôåëåóôåß ç ëåéôïõñãßá áíáæŞôçóçò";
+        Text[ korean ] = "Ã£±â ÀÛµ¿ÀÌ ½ÇÇàµÉ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Arama işlemi yürütülemedi";
+    };
+    String ERRCODE_IO_CANTTELL
+    {
+        Text = "Die Telloperation konnte nicht ausgeführt werden" ;
+        Text [ ENGLISH ] = "The tell operation could not be completed" ;
+        Text [ english_us ] = "The tell operation could not be run" ;
+        Text [ italian ] = "Non è stato possibile eseguire l'operazione tell" ;
+        Text [ spanish ] = "No se pudo ejecutar la operación Tell" ;
+        Text [ french ] = "Impossible d'exécuter l'opération Tell" ;
+        Text [ dutch ] = "De bestandsopdracht TELL kon niet worden uitgevoerd" ;
+        Text [ swedish ] = "Telloperationen kunde inte utföras" ;
+        Text [ danish ] = "Det var ikke muligt at udføre tell-operationen" ;
+        Text [ portuguese ] = "Foi impossível executar a operação Tell" ;
+        Text [ portuguese_brazilian ] = "Die Telloperation konnte nicht ausgeführt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ tell ÃüÁî";
+        Text[ russian ] = "Âûïîëíèòü îïåğàöèş tell íåâîçìîæíî";
+        Text[ polish ] = "Nie mo¿na by³o wykonaæ operacji pliku (Tell)";
+        Text[ japanese ] = "Tell‘€ì‚ªÀs‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "µLªk°õ¦æ Tell ©R¥O";
+        Text[ arabic ] = "ÊÚĞÑ ÊäİíĞ ÇáÚãáíÉ \"Tell\"";
+        Text[ dutch ] = "De bestandsopdracht TELL kon niet worden uitgevoerd";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ tell ÃüÁî";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá åêôåëåóôåß ç ëåéôïõñãßá \"Tell\"";
+        Text[ korean ] = "Tell ÀÛ¾÷À» ½ÇÇàÇÏÁö ¸øÇßÀ½";
+        Text[ turkish ] = "Tell işlemi yürütülemedi";
+    };
+    String ERRCODE_IO_WRONGVERSION
+    {
+        Text = "Die Datei liegt in einer falschen Version vor" ;
+        Text [ ENGLISH ] = "The file has a wrong version" ;
+        Text [ dutch ] = "Bestand heeft verkeerde versie" ;
+        Text [ english_us ] = "Incorrect file version" ;
+        Text [ italian ] = "Il file è presente in una versione errata" ;
+        Text [ spanish ] = "Versión incorrecta de archivo." ;
+        Text [ french ] = "Version de fichier incorrecte" ;
+        Text [ swedish ] = "Filen föreligger i en felaktig version" ;
+        Text [ danish ] = "Filen foreligger i en forkert version" ;
+        Text [ portuguese ] = "Versão incorrecta do ficheiro." ;
+        Text [ portuguese_brazilian ] = "Die Datei liegt in einer falschen Version vor" ;
+        Text[ chinese_simplified ] = "ÎÄ¼şµÄ°æ±¾ÎŞĞ§";
+        Text[ russian ] = "Ôàéë ïğåäñòàâëåí â íåïğàâèëüíîé âåğñèè";
+        Text[ polish ] = "Wersja pliku jest nieprawid³owa";
+        Text[ japanese ] = "Ì§²Ù‚ÌÊŞ°¼Ş®İ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "ÀÉ®×ª©¥»µL®Ä";
+        Text[ arabic ] = "ÅÕÏÇÑ Çáãáİ ÛíÑ ÕÍíÍ";
+        Text[ dutch ] = "Bestand heeft verkeerde versie";
+        Text[ chinese_simplified ] = "ÎÄ¼şµÄ°æ±¾ÎŞĞ§";
+        Text[ greek ] = "ËÜèïò İêäïóç ôïõ áñ÷åßïõ";
+        Text[ korean ] = "Àß¸øµÈ ÆÄÀÏ ¹öÁ¯";
+        Text[ turkish ] = "Yanlış dosya sürümü";
+    };
+    String ERRCODE_IO_WRONGFORMAT
+    {
+        Text = "Die Datei liegt in einem falschen Format vor" ;
+        Text [ ENGLISH ] = "The file has a wrong format" ;
+        Text [ dutch ] = "Bestand heeft verkeerd formaat" ;
+        Text [ english_us ] = "Incorrect file format" ;
+        Text [ italian ] = "Il file ha un formato errato" ;
+        Text [ spanish ] = "Formato de archivo incorrecto" ;
+        Text [ french ] = "Format de fichier incorrect" ;
+        Text [ swedish ] = "Filen föreligger i ett felaktigt format" ;
+        Text [ danish ] = "Filen foreligger i et forkert format" ;
+        Text [ portuguese ] = "Formato de ficheiro incorrecto." ;
+        Text [ portuguese_brazilian ] = "Die Datei liegt in einem falschen Format vor" ;
+        Text[ chinese_simplified ] = "ÎÄ¼şµÄ¸ñÊ½´íÎó";
+        Text[ russian ] = "Ôàéë ïğåäñòàâëåí â íåïğàâèëüíîì ôîğìàòå";
+        Text[ polish ] = "Format pliku jest nieprawid³owy";
+        Text[ japanese ] = "Ì§²Ù‘®‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡¿ù»~";
+        Text[ arabic ] = "ÊäÓíŞ Çáãáİ ÛíÑ ÕÍíÍ";
+        Text[ dutch ] = "Bestand heeft verkeerd formaat";
+        Text[ chinese_simplified ] = "ÎÄ¼şµÄ¸ñÊ½´íÎó";
+        Text[ greek ] = "Ìç İãêõñç ìïñöŞ áñ÷åßïõ";
+        Text[ korean ] = "Àß¸øµÈ ÆÄÀÏ ¼­½Ä";
+        Text[ turkish ] = "Yanlış dosya sürümü";
+    };
+    String ERRCODE_IO_INVALIDCHAR
+    {
+        Text = "Der Dateiname enthält unzulässige Zeichen" ;
+        Text [ ENGLISH ] = "The filename contains invalid characters" ;
+        Text [ dutch ] = "De bestandsnaam bevat ongeoorloofde tekens" ;
+        Text [ english_us ] = "The file name contains invalid characters" ;
+        Text [ italian ] = "Il nome del file contiene caratteri non permessi" ;
+        Text [ spanish ] = "El nombre del archivo contiene caracteres inadmisibles." ;
+        Text [ french ] = "Le nom du fichier contient des caractères incorrectes" ;
+        Text [ swedish ] = "Filnamnet innehåller otillåtna tecken" ;
+        Text [ danish ] = "Filnavnet indeholder ugyldige tegn" ;
+        Text [ portuguese ] = "O nome do ficheiro contém caracteres incorrectos." ;
+        Text [ portuguese_brazilian ] = "Der Dateiname enthält unzulässige Zeichen" ;
+        Text[ chinese_simplified ] = "ÎÄ¼şÃûÖĞº¬ÓĞÎŞĞ§µÄ×Ö·û";
+        Text[ russian ] = "Èìÿ ôàéëà ñîäåğæèò íåäîïóñòèìûå ñèìâîëû";
+        Text[ polish ] = "Nazwa pliku zawiera nieprawid³owe znaki";
+        Text[ japanese ] = "Ì§²Ù–¼‚É•s“KØ‚È•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·";
+        Text[ chinese_traditional ] = "ÀÉ®×¦W§t¦³µL®Äªº¦r¤¸";
+        Text[ arabic ] = "íÍÊæí ÇÓã Çáãáİ Úáì ÃÍÑİ ÛíÑ ãÓãæÍ ÈåÇ";
+        Text[ dutch ] = "De bestandsnaam bevat ongeoorloofde tekens";
+        Text[ chinese_simplified ] = "ÎÄ¼şÃûÖĞº¬ÓĞÎŞĞ§µÄ×Ö·û";
+        Text[ greek ] = "Ôï üíïìá ôïõ áñ÷åßïõ ğåñéİ÷åé ìç İãêõñïõò ÷áñáêôŞñåò";
+        Text[ korean ] = "ÆÄÀÏÀÌ¸§¿¡ À¯È¿ÇÏÁö ¾ÊÀº ¹®ÀÚ°¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya adı geçersiz karakterler içeriyor";
+    };
+    String ERRCODE_IO_UNKNOWN
+    {
+        Text = "Es trat ein unbekannter Ein-/Ausgabefehler auf" ;
+        Text [ ENGLISH ] = "The Operation failed due an unknown I/O Error" ;
+        Text [ english_us ] = "An unknown I/O error has occurred" ;
+        Text [ italian ] = "Si è verificato un errore di I/O sconosciuto" ;
+        Text [ spanish ] = "Ha ocurrido un error desconocido de entrada/salida." ;
+        Text [ french ] = "Erreur d'entrée/sortie inconnue" ;
+        Text [ dutch ] = "Onbekende I/O fout" ;
+        Text [ swedish ] = "Ett okänt input-/outputfel uppstod" ;
+        Text [ danish ] = "Der opstod en ukendt input-/outputfejl" ;
+        Text [ portuguese ] = "Surgiu um erro de entrada/saída desconhecido." ;
+        Text [ portuguese_brazilian ] = "Es trat ein unbekannter Ein-/Ausgabefehler auf" ;
+        Text[ chinese_simplified ] = "³öÏÖÒ»¸ö²»Ã÷µÄÊäÈë/Êä³ö´íÎó";
+        Text[ russian ] = "Ïğîèçîøëà íåèçâåñòíàÿ îøèáêà ââîäà-âûâîäà";
+        Text[ polish ] = "Wyst¹pi³ nieznany b³¹d wejœcia/wyjœcia";
+        Text[ japanese ] = "•s–¾‚ÈI/O ´×°‚ª”­¶";
+        Text[ chinese_traditional ] = "¥X²{¤@­Ó¤£©úªº¿é¤J/¿é¥X¿ù»~";
+        Text[ arabic ] = "ÍÏË ÎØÃ ÅÏÎÇá/ÅÎÑÇÌ ÛíÑ ãÚÑæİ";
+        Text[ dutch ] = "Onbekende I/O fout";
+        Text[ chinese_simplified ] = "³öÏÖÒ»¸ö²»Ã÷µÄÊäÈë/Êä³ö´íÎó";
+        Text[ greek ] = "ĞáñïõóéÜóôçêå Üãíùóôï óöÜëìá åéóáãùãŞò/åîáãùãŞò";
+        Text[ korean ] = "¾Ë¼ö¾ø´Â ÀÔ/Ãâ·Â ¿À·ù ¹ß»ı";
+        Text[ turkish ] = "Bilinmeyen bir girdi/çıktı hatası oluştu";
+    };
+    String ERRCODE_IO_INVALIDACCESS
+    {
+        Text = "Es wurde versucht, in ungültiger Weise auf die Datei zuzugreifen" ;
+        Text [ ENGLISH ] = "The file accessed invalidly" ;
+        Text [ dutch ] = "Ongeldige poging tot openen van bestand" ;
+        Text [ english_us ] = "An invalid attempt was made to access the file" ;
+        Text [ italian ] = "Si è tentato di accedere al file in modo non valido" ;
+        Text [ spanish ] = "Se ha tratado de acceder al archivo de manera no válida." ;
+        Text [ french ] = "La manière dont vous avez essayé d'accéder au fichier est incorrecte" ;
+        Text [ swedish ] = "Ogiltigt försök att få åtkomst till filen" ;
+        Text [ danish ] = "Ugyldigt forsøg på at få adgang til filen" ;
+        Text [ portuguese ] = "Tentativa incorrecta de acesso ao ficheiro." ;
+        Text [ portuguese_brazilian ] = "Es wurde versucht, in ungültiger Weise auf die Datei zuzugreifen" ;
+        Text[ chinese_simplified ] = "¶ÁÈ¡ÎÄ¼şµÄ·½Ê½ÎŞĞ§";
+        Text[ russian ] = "Áûëà ñîâåğøåíà ïîïûòêà íåçàêîííûì ïóòåì ïîëó÷èòü äîñòóï ê ôàéëó";
+        Text[ polish ] = "Nast¹pi³a próba uzyskania nieprawid³owego dostêpu do pliku";
+        Text[ japanese ] = "–³Œø‚È‚â‚è•û‚Å‚ÌÌ§²Ù‚Ö‚Ì±¸¾½‚ª‚İ‚ç‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "Åª¨úÀÉ®×ªº¤è¦¡µL®Ä";
+        Text[ arabic ] = "ÊãÊ ãÍÇæáÉ ÇáæÕæá Åáì Çáãáİ ÈÔßá ÛíÑ ÕÍíÍ";
+        Text[ dutch ] = "Ongeldige poging tot openen van bestand";
+        Text[ chinese_simplified ] = "¶ÁÈ¡ÎÄ¼şµÄ·½Ê½ÎŞĞ§";
+        Text[ greek ] = "¸ãéíå ìç İãêõñç ğñïóğÜèåéá ğñüóâáóçò óôï áñ÷åßï";
+        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆÄÀÏ Á¢±Ù ½Ãµµ°¡ ÀÖ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Dosyaya yetkisiz erişim denendi";
+    };
+    String ERRCODE_IO_CANTCREATE
+    {
+        Text = "Die Datei konnte nicht angelegt werden" ;
+        Text [ ENGLISH ] = "The file could not be created" ;
+        Text [ dutch ] = "Bestand kon niet worden gemaakt" ;
+        Text [ english_us ] = "The file could not be created" ;
+        Text [ italian ] = "Non è stato possibile creare il file" ;
+        Text [ spanish ] = "No se pudo crear el archivo." ;
+        Text [ french ] = "Impossible de créer le fichier" ;
+        Text [ swedish ] = "Filen kunde inte skapas" ;
+        Text [ danish ] = "Det var ikke muligt at oprette filen" ;
+        Text [ portuguese ] = "Foi impossível criar o ficheiro." ;
+        Text [ portuguese_brazilian ] = "Die Datei konnte nicht angelegt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Õâ¸öÎÄ¼ş";
+        Text[ russian ] = "Ñîçäàòü ôàéë íåâîçìîæíî";
+        Text[ polish ] = "Plik nie móg³ zostaæ utworzony";
+        Text[ japanese ] = "Ì§²Ù‚ÍŠi”[‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk«Ø¥ß³o­ÓÀÉ®×";
+        Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ Çáãáİ";
+        Text[ dutch ] = "Bestand kon niet worden gemaakt";
+        Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Õâ¸öÎÄ¼ş";
+        Text[ greek ] = "Ôï áñ÷åßï äåí Şôáí äõíáôüí íá äçìéïõñãçèåß";
+        Text[ korean ] = "ÆÄÀÏÀÌ ¸¸µé¾î Áú¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya oluşturulamadı";
+    };
+    String ERRCODE_IO_INVALIDPARAMETER
+    {
+        Text = "Die Operation wurde mit einem ungültigen Parameter gestartet" ;
+        Text [ ENGLISH ] = "An invalid parameter was passed" ;
+        Text [ english_us ] = "The operation was started under an invalid parameter" ;
+        Text [ italian ] = "L'operazione è stata avviata con un parametro non valido" ;
+        Text [ spanish ] = "La operación se inició con un parámetro no válido." ;
+        Text [ french ] = "L'action a été lancée à l'aide d'un paramètre incorrect" ;
+        Text [ dutch ] = "Activiteit uitgevoerd met ongeldige parameter." ;
+        Text [ swedish ] = "Operationen startades med en ogiltig parameter" ;
+        Text [ danish ] = "Processen blev startet med en ugyldig parameter" ;
+        Text [ portuguese ] = "A operação foi iniciada com um parâmetro incorrecto." ;
+        Text [ portuguese_brazilian ] = "Die Operation wurde mit einem ungültigen Parameter gestartet" ;
+        Text[ chinese_simplified ] = "Ê¹ÓÃÒ»¸öÎŞĞ§µÄ²ÎÊıÆô¶¯ÁËÕâ¸ö²Ù×÷";
+        Text[ russian ] = "Îïåğàöèÿ çàïóùåíà ïğè ïîìîùè íåïğàâèëüíîãî ïàğàìåòğà";
+        Text[ polish ] = "Przy rozpoczêciu operacji u¿yto nieprawid³owego parametru";
+        Text[ japanese ] = "‚±‚Ì‘€ì‚Í–³Œø‚ÈÊß×Ò°À‚ÅŠJn‚µ‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "¨Ï¥Î¤@­ÓµL®Äªº§UÅÜ¶q±Ò°Ê³o­Ó¾Ş§@";
+        Text[ arabic ] = "Êã ÈÏÁ ÇáÚãáíÉ ÈãÚáãÉ ÛíÑ ÕÇáÍÉ";
+        Text[ dutch ] = "Activiteit uitgevoerd met ongeldige parameter.";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÒ»¸öÎŞĞ§µÄ²ÎÊıÆô¶¯ÁËÕâ¸ö²Ù×÷";
+        Text[ greek ] = "Ç ëåéôïõñãßá åêêßíçóå ìå ìç İãêõñç ğáñÜìåôñï";
+        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆÄ¶ó¹ÌÅÍ ÇÏ¿¡¼­ ÀÛµ¿ÀÌ ½ÃÀÛµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "İşlem geçersiz bir parametre ile başlatıldı.";
+    };
+    String ERRCODE_IO_ABORT
+    {
+        Text = "Die Operation auf der Datei wurde abgebrochen" ;
+        Text [ ENGLISH ] = "The operation on the file was aborted" ;
+        Text [ dutch ] = "Activiteit werd gestopt" ;
+        Text [ english_us ] = "The operation on the file was aborted" ;
+        Text [ italian ] = "L'operazione sul file è stata interrotta" ;
+        Text [ spanish ] = "Se ha interrumpido la operación en el archivo." ;
+        Text [ french ] = "L'action tentée sur le fichier a été interrompue" ;
+        Text [ swedish ] = "Operationen på filen avbröts" ;
+        Text [ danish ] = "Processen på filen blev afbrudt" ;
+        Text [ portuguese ] = "Cancelada a operação no ficheiro." ;
+        Text [ portuguese_brazilian ] = "Die Operation auf der Datei wurde abgebrochen" ;
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şµÄ²Ù×÷ÒÑ¾­ÖĞ¶Ï";
+        Text[ russian ] = "Îïåğàöèÿ ñ ôàéëîì ïğåğâàíà";
+        Text[ polish ] = "Operacja na pliku zosta³a przerwana";
+        Text[ japanese ] = "Ì§²Ùã‚Ì‘€ì‚Í’†~‚³‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "³o­ÓÀÉ®×ªº¾Ş§@¤w¸g¤¤Â_";
+        Text[ arabic ] = "Êã ŞØÚ ÇáÚãáíÉ İí Çáãáİ";
+        Text[ dutch ] = "Activiteit werd gestopt";
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şµÄ²Ù×÷ÒÑ¾­ÖĞ¶Ï";
+        Text[ greek ] = "ÄéáêïğŞ ôçò ëåéôïõñãßáò ğÜíù óôï áñ÷åßï";
+        Text[ korean ] = "ÆÄÀÏ »ó¿¡¼­ ÀÛµ¿ÀÌ ÁßÁö µÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya ile ilgili işlem iptal edildi";
+    };
+    String ERRCODE_IO_NOTEXISTSPATH
+    {
+        Text = "Der Pfad zu der Datei existiert nicht" ;
+        Text [ ENGLISH ] = "Path to file not found" ;
+        Text [ english_us ] = "Path to the file does not exist" ;
+        Text [ italian ] = "Il percorso del file non esiste" ;
+        Text [ spanish ] = "No existe la ruta de acceso al archivo." ;
+        Text [ french ] = "Le chemin uindiqué pour le fichier n'existe pas" ;
+        Text [ dutch ] = "Pad naar bestand niet gevonden" ;
+        Text [ swedish ] = "Sökvägen till filen existerar inte" ;
+        Text [ danish ] = "Stien til filen eksisterer ikke" ;
+        Text [ portuguese ] = "O atalho para o ficheiro não existe." ;
+        Text [ portuguese_brazilian ] = "Der Pfad zu der Datei existiert nicht" ;
+        Text[ chinese_simplified ] = "Ö¸ÏòÎÄ¼şµÄÂ·¾¶²»´æÔÚ";
+        Text[ russian ] = "Ïóòü ê ôàéëó íå ñóùåñòâóåò";
+        Text[ polish ] = "Œcie¿ka do pliku nie istnieje";
+        Text[ japanese ] = "Ì§²Ù‚Ö‚ÌÊß½‚Í‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "«ü¦VÀÉ®×ªº¸ô®|¤£¦s¦b";
+        Text[ arabic ] = "ÇáãÓÇÑ ÇáãÄÏí Åáì Çáãáİ ÛíÑ ãæÌæÏ";
+        Text[ dutch ] = "Pad naar bestand niet gevonden";
+        Text[ chinese_simplified ] = "Ö¸ÏòÎÄ¼şµÄÂ·¾¶²»´æÔÚ";
+        Text[ greek ] = "Ç äéáäñïìŞ ğñïò ôï áñ÷åßï äåí õğÜñ÷åé";
+        Text[ korean ] = "ÆÄÀÏ¿¡´ëÇÑ °æ·Î°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya veri yolu mevcut değil";
+    };
+    String ERRCODE_IO_RECURSIVE
+    {
+        Text = "Ein Objekt kann nicht in sich selbst kopiert werden." ;
+        Text [ ENGLISH ] = "Cannot copy object into itself." ;
+        Text [ portuguese ] = "É impossível copiar um objecto em si próprio." ;
+        Text [ english_us ] = "An object cannot be copied into itself." ;
+        Text [ portuguese_brazilian ] = "Ein Objekt kann nicht in sich selbt kopiert werden." ;
+        Text [ swedish ] = "Ett objekt kan inte kopieras till sig självt." ;
+        Text [ danish ] = "Det er ikke muligt at kopiere et objekt over i sig selv." ;
+        Text [ italian ] = "Un oggetto non può essere copiato su se stesso." ;
+        Text [ spanish ] = "No es posible copiar un objeto en sí mismo." ;
+        Text [ french ] = "Copie impossible : la cible est identique à la source." ;
+        Text [ dutch ] = "Een object kan niet worden gekopieerd naar zichzelf." ;
+        Text[ chinese_simplified ] = "¶ÔÏóÎŞ·¨±»¸´ÖÆµ½×ÔÉíÄÚ¡£";
+        Text[ russian ] = "Ñêîïèğîâàòü îáúåêò ñàì â ñåáÿ íåâîçìîæíî.";
+        Text[ polish ] = "Obiekt nie mo¿e zostaæ skopiowany sam w sobie.";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Í‚»‚Ì‚à‚Ì©‘Ì‚ÉºËß°‚Å‚«‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "ª«¥óµLªk³Q½Æ»s¨ì¦Û¨­¡C";
+        Text[ arabic ] = "áÇ íãßä äÓÎ ßÇÆä Åáì äİÓå.";
+        Text[ dutch ] = "Een object kan niet worden gekopieerd naar zichzelf.";
+        Text[ chinese_simplified ] = "¶ÔÏóÎŞ·¨±»¸´ÖÆµ½×ÔÉíÄÚ¡£";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíôéãñáöåß İíá áíôéêåßìåíï óôïí åáõôü ôïõ.";
+        Text[ korean ] = "°³Ã¼¸¦ ±× ÀÚÃ¼¿¡ º¹»çÇÒ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Nesne kendi içine kopyalanamaz.";
+    };
+    String ERRCODE_SFX_NOSTDTEMPLATE
+    {
+        Text = "Die Standardvorlage konnte nicht geöffnet werden" ;
+        Text [ ENGLISH ] = "The standard template could not be found" ;
+        Text [ dutch ] = "Standaardsjabloon kon niet worden geopend" ;
+        Text [ english_us ] = "The default template could not be opened" ;
+        Text [ italian ] = "Non è stato possibile aprire il modello standard" ;
+        Text [ spanish ] = "No se pudo abrir la plantilla estándar." ;
+        Text [ french ] = "Impossible d'ouvrir le modèle par défaut" ;
+        Text [ swedish ] = "Standardmallen kunde inte öppnas" ;
+        Text [ danish ] = "Det var ikke muligt at åbne standardskabelonen" ;
+        Text [ portuguese ] = "Foi impossível abrir o modelo padrão." ;
+        Text [ portuguese_brazilian ] = "Die Standardvorlage konnte nicht geöffnet werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ª±ê×¼ÑùÊ½";
+        Text[ russian ] = "Íå óäàåòñÿ îòêğûòü ñòàíäàğòíûé øàáëîí";
+        Text[ polish ] = "Nie mo¿na otworzyæ standardowego szablonu";
+        Text[ japanese ] = "•W€½À²Ù‚ÍŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk¶}±Ò¼Ğ·Ç¼Ë¦¡";
+        Text[ arabic ] = "ÊÚĞÑ İÊÍ ÇáŞÇáÈ ÇáÇİÊÑÇÖí";
+        Text[ dutch ] = "Standaardsjabloon kon niet worden geopend";
+        Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ª±ê×¼ÑùÊ½";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷ôåß ôï ğñüôõğï ğñïåğéëïãŞò.";
+        Text[ korean ] = "±âº» ÅÛÇÃ¸®Æ®°¡ ¿­¸®Áö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Standart şablon açılamadı";
+    };
+    String ERRCODE_SFX_TEMPLATENOTFOUND
+    {
+        Text = "Die angegebene Vorlage wurde nicht gefunden" ;
+        Text [ ENGLISH ] = "The template cannot be found" ;
+        Text [ dutch ] = "Aangegeven sjabloon niet te vinden" ;
+        Text [ english_us ] = "The specified template could not be found" ;
+        Text [ italian ] = "Il modello dato non è stato trovato" ;
+        Text [ spanish ] = "No se encontró la plantilla especificada" ;
+        Text [ french ] = "Le modèle indiqué est introuvable." ;
+        Text [ swedish ] = "Den angivna mallen kunde inte hittas" ;
+        Text [ danish ] = "Den angivne skabelon blev ikke fundet" ;
+        Text [ portuguese ] = "Foi impossível encontrar o modelo indicado." ;
+        Text [ portuguese_brazilian ] = "Die angegebene Vorlage wurde nicht gefunden" ;
+        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Ö¸¶¨µÄÑùÊ½";
+        Text[ russian ] = "Çàäàííûé øàáëîí íå íàéäåí";
+        Text[ polish ] = "Podanego szablonu nie znaleziono";
+        Text[ japanese ] = "w’è‚µ‚½ÃİÌßÚ°Ä‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "¨S¦³§ä¨ì«ü©wªº¼Ë¦¡";
+        Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáŞÇáÈ ÇáãõÚØì";
+        Text[ dutch ] = "Aangegeven sjabloon niet te vinden";
+        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Ö¸¶¨µÄÑùÊ½";
+        Text[ greek ] = "Äåí âñİèçêå ôï åğéëåãìİíï ğñüôõğï";
+        Text[ korean ] = "ÁöÁ¤µÈ ÅÛÇÃ¸®Æ®°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Belirtilen şablon bulunamadı";
+    };
+    String ERRCODE_SFX_NOTATEMPLATE
+    {
+        Text = "Die Datei kann nicht als Vorlage verwendet werden" ;
+        Text [ ENGLISH ] = "The file cannot be used as template" ;
+        Text [ dutch ] = "Bestand kan niet worden gebruikt als sjabloon" ;
+        Text [ english_us ] = "The file cannot be used as template" ;
+        Text [ italian ] = "Il file non è utilizzabile come modello" ;
+        Text [ spanish ] = "No se puede usar el archivo como plantilla" ;
+        Text [ french ] = "Impossible d'utiliser ce fichier comme modèle" ;
+        Text [ swedish ] = "Filen kan inte användas som mall" ;
+        Text [ danish ] = "Det er ikke muligt at bruge filen som skabelon" ;
+        Text [ portuguese ] = "Impossível utilizar o ficheiro como modelo." ;
+        Text [ portuguese_brazilian ] = "Die Datei kann nicht als Vorlage verwendet werden" ;
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÎŞ·¨µ±×÷ÑùÊ½Ê¹ÓÃ";
+        Text[ russian ] = "Èñïîëüçîâàòü ôàéë â êà÷åñòâå øàáëîíà íåâîçìîæíî";
+        Text[ polish ] = "Pliku nie mo¿na u¿yæ jako szablonu";
+        Text[ japanese ] = "‚±‚ÌÌ§²Ù‚ÍÃİÌßÚ°Ä‚Æ‚µ‚Äg—p‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "³o­ÓÀÉ®×µLªk³Q·í§@¼Ë¦¡¨Ï¥Î";
+        Text[ arabic ] = "áÇ íãßä ÇÓÊÎÏÇã Çáãáİ ßŞÇáÈ";
+        Text[ dutch ] = "Bestand kan niet worden gebruikt als sjabloon";
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÎŞ·¨µ±×÷ÑùÊ½Ê¹ÓÃ";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá ÷ñçóéìïğïéçèåß ôï áñ÷åßï ùò ğñüôõğï";
+        Text[ korean ] = "ÆÄÀÏÀÌ ÅÛÇÃ¸®Æ®·Î »ç¿ëµÉ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya, şablon olarak kullanılamıyor";
+    };
+    String ERRCODE_SFX_CANTREADDOCINFO
+    {
+        Text = "Die Dokumentinformation konnte nicht aus der Datei\ngelesen werden, da das Dokumentinformationsformat\nunbekannt ist oder da keine Dokumentinformation vorhanden\nist" ;
+        Text [ ENGLISH ] = "The document info could not be read because\nthe document does not contain document info\nor because the document info ist not known" ;
+        Text [ dutch ] = "Lezen van documentinfo niet mogelijk.\nDocumentformaat onbekend of geen documentinfo\nvoorhanden" ;
+        Text [ english_us ] = "Document information could not be read from the file because\nthe document information format is unknown or because document information does not\nexist" ;
+        Text [ italian ] = "Non è stato possibile leggere l'informazione sul documento dal file\npoiché il formato del file è sconosciuto o perché non c'è un'informazione sul\ndocumento" ;
+        Text [ spanish ] = "La información del documento no se pudo leer del\narchivo ya que su formato es desconocido o no\nexiste ninguna información acerca del documento." ;
+        Text [ french ] = "Impossible de lire les informations sur le document à partir du fichier :\nsoit le format du fichier d'information est inconnu,\nsoit il n'existe pas d'informations de ce type\n" ;
+        Text [ swedish ] = "Dokumentinformationen kunde inte läsas från\nfilen eftersom dokumentinformationsformatet är\nobekant eller ingen dokumentinformation existerar" ;
+        Text [ danish ] = "Det var ikke muligt at læse dokumentinformationen\nfra filen, fordi dokumentinformationens format er ukendt\neller der ikke er nogen tilgængelig dokumentinformation." ;
+        Text [ portuguese ] = "Impossível ler as informações sobre o documento no ficheiro\n por terem um formato desconhecido ou \npor não existirem." ;
+        Text [ portuguese_brazilian ] = "Die Dokumentinformation konnte nicht aus der Datei\ngelesen werden, da das Dokumentinformationsformat\nunbekannt ist oder da keine Dokumentinformation vorhanden\nist" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öÕâ¸öÎÄ¼şµÄÎÄµµĞÅÏ¢£¬\nÒòÎªÕâ¸öÎÄµµĞÅÏ¢µÄ¸ñÊ½²»Ã÷»òÎÄµµĞÅÏ¢²»´æÔÚ\n";
+        Text[ russian ] = "Ïğî÷èòàòü èíôîğìàöèş äîêóìåíòà èç ôàéëà\níåâîçìîæíî, ò.ê. ôîğìàò äîêóìåíòà\níåèçâåñòåí èëè èíôîğìàöèè î äîêóìåíòå\níå èìååòñÿ";
+        Text[ polish ] = "Informacji o dokumencie nie mo¿na by³o odczytaæ z pliku\n, poniewa¿ format informacji o dokumencie \njest nieznany lub nie istniej¹ informacje o dokumencie\n.";
+        Text[ japanese ] = "ÄŞ·­ÒİÄî•ñ‚Ì‘®‚ª•s–¾‚©\nÄŞ·­ÒİÄî•ñ‚ª‚È‚¢‚©‚Å\nÌ§²Ù‚©‚çÄŞ·­ÒİÄî•ñ‚Í“Ç‚İæ‚ê‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªkÅª¥X³o­ÓÀÉ®×ªº¤å¥ó¸ê°T¡M\n¦]¬°³o­Ó¤å¥ó¸ê°T¤£©ú©Î¤å¥ó¸ê°T¤£¦s¦b\n";
+        Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ãÚáæãÇÊ ÇáãÓÊäÏ ãä Çáãáİ¡\náÃä ÊäÓíŞ ãÚáæãÇÊ ÇáãÓÊäÏ\nÛíÑ ãÚÑæİ¡ Ãæ áÃä ãÚáæãÇÊ ÇáãÓÊäÏ \nÛíÑ ãæÌæÏÉ";
+        Text[ dutch ] = "Lezen van documentinfo niet mogelijk.\nDocumentformaat onbekend of geen documentinfo\nvoorhanden";
+        Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öÕâ¸öÎÄ¼şµÄÎÄµµĞÅÏ¢£¬\nÒòÎªÕâ¸öÎÄµµĞÅÏ¢µÄ¸ñÊ½²»Ã÷»òÎÄµµĞÅÏ¢²»´æÔÚ\n";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé áíÜãíùóç ôùí ğëçñïöïñéşí ôïõ åããñÜöïõ áğü ôï áñ÷åßï\nåßôå åğåéäŞ åßíáé Üãíùóôç ç ìïñöŞ ôïõ åããñÜöïõ ğëçñïöïñéşí\n Ş åğåéäŞ äåí õğÜñ÷ïõí ğëçñïöïñßåò ãéá ôï İããñáöï.";
+        Text[ korean ] = "¾Ë¼ö ¾ø´Â ¹®¼­ ¼­½ÄÀÌ°Å³ª  \n¹®¼­ Á¤º¸°¡ Á¸ÀçÇÏÁö ¾Ê±â ¶§¹®¿¡ ÆÄÀÏ·Î ºÎÅÍ ¹®¼­ÀÇ Á¤º¸¸¦\nÀĞÀ»¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Belge bilgileri formatı, bilinmediği ya da belge\nbilgisi mevcut olmadığı için\ndosyadan okunamadı\n";
+    };
+    String ERRCODE_SFX_ALREADYOPEN
+    {
+        Text = "Das Dokument ist bereits zur Bearbeitung geöffnet" ;
+        Text [ English ] = "This document is already opened" ;
+        Text [ dutch ] = "Document reeds geopend" ;
+        Text [ english_us ] = "This document has already been opened for editing" ;
+        Text [ italian ] = "Il documento è già aperto per la modifica" ;
+        Text [ spanish ] = "El documento ya se ha abierto para editarlo." ;
+        Text [ french ] = "Le document est déjà ouvert pour l'édition" ;
+        Text [ swedish ] = "Dokumentet har redan öppnats för redigering" ;
+        Text [ danish ] = "Dokumentet er allerede åbnet til redigering" ;
+        Text [ portuguese ] = "O documento já se encontra aberto para edição." ;
+        Text [ portuguese_brazilian ] = "Das Dokument ist bereits zur Bearbeitung geöffnet" ;
+        Text[ chinese_simplified ] = "Õâ¸öÎÄµµÒÑ¾­´¦ÓÚ±à¼­×´Ì¬";
+        Text[ russian ] = "İòîò äîêóìåíò óæå îòêğûò äëÿ ğåäàêòèğîâàíèÿ";
+        Text[ polish ] = "Dokument jest otwarty do edycji";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‚Í‚·‚Å‚É•ÒW—p‚ÉŠJ‚©‚ê‚Ä‚¢‚Ü‚·";
+        Text[ chinese_traditional ] = "³o­Ó¤å¥ó¤w¸g³B¤_½s¿èª¬ºA";
+        Text[ arabic ] = "ÇáãÓÊäÏ ãİÊæÍ ÈÔßá ãÓÈŞ ááÊÍÑíÑ.";
+        Text[ dutch ] = "Document reeds geopend";
+        Text[ chinese_simplified ] = "Õâ¸öÎÄµµÒÑ¾­´¦ÓÚ±à¼­×´Ì¬";
+        Text[ greek ] = "Ôï İããñáöï åßíáé Şäç áíïé÷ôü ãéá åğåîåñãáóßá";
+        Text[ korean ] = "¹®¼­´Â ÀÌ¹Ì ¿­·ÁÀÖ½À´Ï´Ù.";
+        Text[ turkish ] = "Belge zaten düzenlenmek üzere açıldı";
+    };
+    String ERRCODE_SFX_WRONGPASSWORD
+    {
+        Text = "Es wurde ein falsches Passwort gesetzt" ;
+        Text [ English ] = "A wrong password was specified" ;
+        Text [ dutch ] = "Foutief wachtwoord" ;
+        Text [ english_us ] = "The wrong password has been entered" ;
+        Text [ italian ] = "È stata impostata una password errata" ;
+        Text [ spanish ] = "Se empleó una contraseña falsa" ;
+        Text [ french ] = "Le mot de passe spécifié est incorrect" ;
+        Text [ swedish ] = "Ett felaktigt lösenord har definierats" ;
+        Text [ danish ] = "Der blev angivet en forkert adgangskode" ;
+        Text [ portuguese ] = "A senha especificada está errada." ;
+        Text [ portuguese_brazilian ] = "Es wurde ein falsches Passwort gesetzt" ;
+        Text[ chinese_simplified ] = "ÊäÈëÁËÒ»¸ö´íÎóµÄ¿ÚÁî";
+        Text[ russian ] = "Ââåäåí íåïğàâèëüíûé ïàğîëü";
+        Text[ polish ] = "Zosta³o u¿yte nieprawid³owe has³o";
+        Text[ japanese ] = "³‚µ‚­‚È‚¢Êß½Ü°ÄŞ‚ª“ü—Í‚³‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "¿é¤J¤F¤@­Ó¿ù»~ªº±K½X";
+        Text[ arabic ] = "Êã ÊÚííä ßáãÉ ÓÑ ÛíÑ ÕÍíÍÉ";
+        Text[ dutch ] = "Foutief wachtwoord";
+        Text[ chinese_simplified ] = "ÊäÈëÁËÒ»¸ö´íÎóµÄ¿ÚÁî";
+        Text[ greek ] = "Ïñßóôçêå åóöáëìİíïò êùäéêüò ğñüóâáóçò";
+        Text[ korean ] = "Àß¸øµÈ ÆĞ½º¿öµå°¡ ÀÔ·ÂµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Girilen şifre yanlış";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SFX_DOCUMENTREADONLY
+    {
+        Text = "Das Dokument wurde zum Lesen geöffnet" ;
+        Text [ English ] = "The document was opened readonly" ;
+        Text [ dutch ] = "Document geopend als alleen lezen" ;
+        Text [ english_us ] = "The document was opened as read-only" ;
+        Text [ italian ] = "Il documento è stato aperto per la lettura" ;
+        Text [ spanish ] = "Se ha abierto el documento para lectura." ;
+        Text [ french ] = "Le document a été ouvert en mode de lecture seule" ;
+        Text [ swedish ] = "Dokumentet öppnades för läsning" ;
+        Text [ danish ] = "Dokumentet er blevet åbnet til læsning" ;
+        Text [ portuguese ] = "O documento foi aberto para leitura." ;
+        Text [ portuguese_brazilian ] = "Das Dokument wurde zum Lesen geöffnet" ;
+        Text[ chinese_simplified ] = "Õâ¸ö´ò¿ªµÄÎÄµµÊÇ·À¸²Ğ´µÄ";
+        Text[ russian ] = "Äîêóìåíò îòêğûò äëÿ ÷òåíèÿ";
+        Text[ polish ] = "Dokument zosta³ otwarty tylko do odczytu";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‚Í“Ç‚İæ‚è—p‚ÉŠJ‚©‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "¤w¸g¥´¶}Åª¨ú³o­Ó¤å¥ó";
+        Text[ arabic ] = "Êã İÊÍ Çáãáİ ááŞÑÇÁÉ İŞØ";
+        Text[ dutch ] = "Document geopend als alleen lezen";
+        Text[ chinese_simplified ] = "Õâ¸ö´ò¿ªµÄÎÄµµÊÇ·À¸²Ğ´µÄ";
+        Text[ greek ] = "Ôï İããñáöï áíïß÷èçêå ìüíï ãéá áíÜãíùóç";
+        Text[ korean ] = "¹®¼­´Â ÀĞ±â Àü¿ëÀ¸·Î ¿­·ÁÁ³½À´Ï´Ù.";
+        Text[ turkish ] = "Belge, salt okunur olarak açıldı";
+    };
+    String ERRCODE_SFX_OLEGENERAL
+    {
+        Text = "Allgemeiner OLE Fehler" ;
+        Text [ ENGLISH ] = "General OLE Error" ;
+        Text [ english_us ] = "General OLE Error" ;
+        Text [ italian ] = "Errore generale OLE" ;
+        Text [ spanish ] = "Error OLE general" ;
+        Text [ french ] = "Erreur OLE d'ordre général" ;
+        Text [ dutch ] = "Algemene OLE fout" ;
+        Text [ swedish ] = "Allmänt OLE-fel" ;
+        Text [ danish ] = "Generel OLE-fejl" ;
+        Text [ portuguese ] = "Erro OLE geral" ;
+        Text [ portuguese_brazilian ] = "Allgemeiner OLE Fehler" ;
+        Text[ chinese_simplified ] = "Ò»°ãµÄ OLE ´íÎó";
+        Text[ russian ] = "Îáùàÿ îøèáêà OLE";
+        Text[ polish ] = "B³¹d ogólny OLE";
+        Text[ japanese ] = "ˆê”Ê“I‚È OLE ´×°";
+        Text[ chinese_traditional ] = "¤@¯ë OLE ¿ù»~";
+        Text[ arabic ] = "ÎØÃ OLE ÚÇã";
+        Text[ dutch ] = "Algemene OLE fout";
+        Text[ chinese_simplified ] = "Ò»°ãµÄ OLE ´íÎó";
+        Text[ greek ] = "Ãåíéêü óöÜëìá ôïõ OLE";
+        Text[ korean ] = "ÀÏ¹İOLE ¿À·ù";
+        Text[ turkish ] = "Genel OLE hatası";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_INET_NAME_RESOLVE
+    {
+        Text = "Der Rechnername $(ARG1) konnte nicht aufgelöst werden" ;
+        Text [ ENGLISH ] = "Could not resolve hostname $(ARG1)" ;
+        Text [ dutch ] = "Computernaam $(ARG1) kon niet worden herleid" ;
+        Text [ english_us ] = "The host name $(ARG1) could not be resolved" ;
+        Text [ italian ] = "Non è stato possibile risolvere il nome dell'host $(ARG1)" ;
+        Text [ spanish ] = "No se pudo resolver el nombre del ordenador $(ARG1)" ;
+        Text [ french ] = "Impossible de résoudre le nom $(ARG1) de l'ordinateur" ;
+        Text [ swedish ] = "Datornamnet $(ARG1) kunde inte lösas upp" ;
+        Text [ danish ] = "Det var ikke muligt at fortolke computernavnet $(ARG1)" ;
+        Text [ portuguese ] = "Impossível resolver o nome do computador $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "Der Rechnername $(ARG1) konnte nicht aufgelöst werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½¼ÆËã»úµØÖ· $(ARG1)";
+        Text[ russian ] = "Íå óäàåòñÿ îïğåäåëèòü èìÿ óçëîâîãî êîìïüşòåğà $(ARG1)";
+        Text[ polish ] = "Nazwa komputera $(ARG1) nie mog³a zostaæ przetworzona";
+        Text[ japanese ] = "Î½Ä–¼$(ARG1)‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk§ä¨ì¹q¸£¦a§} $(ARG1)";
+        Text[ arabic ] = "ÊÚĞÑ Íá ÇÓã ÇáãÖíİ $(ARG1)";
+        Text[ dutch ] = "Computernaam $(ARG1) kon niet worden herleid";
+        Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½¼ÆËã»úµØÖ· $(ARG1)";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí ãßíåé áíÜëõóç ôïõ ïíüìáôïò ôïõ õğïëïãéóôŞ $(ARG1)";
+        Text[ korean ] = "È£½ºÆ® ÀÌ¸§ $(ARG1)ÀÌ È®ÀÎµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "$(ARG1) sunucu adı çözülemedi";
+    };
+    String ERRCODE_INET_CONNECT
+    {
+        Text = "Die Internetverbindung zu $(ARG1) konnte nicht hergestellt werden" ;
+        Text [ ENGLISH ] = "The Internetconnection to $(ARG1) could not be established" ;
+        Text [ dutch ] = "Er kon geen Internet-verbinding met $(ARG1) tot stand worden gebracht." ;
+        Text [ english_us ] = "Could not establish Internet connection to $(ARG1)" ;
+        Text [ italian ] = "Non è stato possibile stabilire la connessione a Internet a $(ARG1)" ;
+        Text [ spanish ] = "No se pudo establecer la conexión de Internet a $(ARG1)" ;
+        Text [ french ] = "Impossible d'établir la connexion Internet avec $(ARG1)" ;
+        Text [ swedish ] = "Internetförbindelsen till $(ARG1) kunde inte upprättas" ;
+        Text [ danish ] = "Det var ikke muligt at oprette en Internetforbindelse til $(ARG1)" ;
+        Text [ portuguese ] = "Foi impossível estabelecer a ligação à Internet com $(ARG1)." ;
+        Text [ portuguese_brazilian ] = "Die Internetverbindung zu $(ARG1) konnte nicht hergestellt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ºÍ $(ARG1) ½¨Á¢¹ú¼Ê»¥ÁªÍøÁ¬½Ó";
+        Text[ russian ] = "Íå óäàåòñÿ íàëàäèòü ñâÿçü Èíòåğíåòà ñ $(ARG1)";
+        Text[ polish ] = "Ustanowienie po³¹czenia internetowego z $(ARG1) by³o niemo¿liwe";
+        Text[ japanese ] = "$(ARG1)‚Ö‚Ì²İÀ°È¯ÄÚ‘±‚ª‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "µLªk³s½u¨ì $(ARG1)";
+        Text[ arabic ] = "ÊÚĞÑ Úãá ÇÊÕÇá ÅäÊÑäÊ ãÚ $(ARG1)";
+        Text[ dutch ] = "Er kon geen Internet-verbinding met $(ARG1) tot stand worden gebracht.";
+        Text[ chinese_simplified ] = "ÎŞ·¨ºÍ $(ARG1) ½¨Á¢¹ú¼Ê»¥ÁªÍøÁ¬½Ó";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ğñáãìáôïğïéçèåß ç óıíäåóç Internet ìå ôï $(ARG1).";
+        Text[ korean ] = "$(ARG1)¿¡ ÀÎÅÍ³İ ¿¬°áÀ» ÇÏÁö ¸øÇßÀ½";
+        Text[ turkish ] = "$(ARG1) Internet bağlantısı oluşturulamadı";
+    };
+    String ERRCODE_INET_READ
+    {
+        Text = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
+        Text [ ENGLISH ] = "Error reading from the internet\n.Server error message: $(ARG1)" ;
+        Text [ english_us ] = "Error reading data from the Internet\n.Server error message: $(ARG1)" ;
+        Text [ italian ] = "Non è stato possibile leggere i dati da Internet.\nMessaggio di errore del server: $(ARG1)" ;
+        Text [ spanish ] = "Los datos no se pudieron leer a través de Internet.\nMensaje de error del servidor: $(ARG1)" ;
+        Text [ french ] = "Erreur de lecture des données à partir de l'Internet.\nMessage d'erreur du serveur : $(ARG1)" ;
+        Text [ dutch ] = "Fout bij lezen van gegevens uit internet\n.Foutmelding van server: $(ARG1)" ;
+        Text [ swedish ] = "Data kunde inte läsas via Internet.\nServerfelmeddelande: $(ARG1)" ;
+        Text [ danish ] = "Det var ikke muligt at læses dataene over Internettet\nServerfejlmelding: $(ARG1)" ;
+        Text [ portuguese ] = "Foi impossível ler os dados via Internet.\nMensagem de erro do servidor: $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Í¨¹ı¹ú¼Ê»¥ÁªÍø¶ÁÈ¡Êı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
+        Text[ russian ] = "Ïğî÷èòàòü äàííûå ÷åğåç Èíòåğíåò íåâîçìîæíî.\nÑîîáùåíèå îøèáêè ñåğâåğà: $(ARG1)";
+        Text[ polish ] = "B³¹d odczytu plików z Internetu.\nKomunikat o b³êdzie serwera: $(ARG1)";
+        Text[ japanese ] = "ÃŞ°À‚Í²İÀ°È¯Ä‚Å“Ç‚İæ‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B\n»°ÊŞ° ´×° Ò¯¾°¼Ş: $(ARG1)";
+        Text[ chinese_traditional ] = "µLªk³z¹L Internet Åª¨ú¸ê®Æ¡C\n¦øªA¾¹³ø§i¡G$(ARG1)";
+        Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ÇáÈíÇäÇÊ ÚÈÑ ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
+        Text[ dutch ] = "Fout bij lezen van gegevens uit internet\n.Foutmelding van server: $(ARG1)";
+        Text[ chinese_simplified ] = "ÎŞ·¨Í¨¹ı¹ú¼Ê»¥ÁªÍø¶ÁÈ¡Êı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
+        Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç äåäïìİíùí áğü ôï Internet.\nÌŞíõìá óöÜëìáôïò ôïõ äéáêïìéóôŞ: $(ARG1)";
+        Text[ korean ] = "µ¥ÀÌÅÍ¸¦ ÀÎÅÍ³İ¿¡¼­ ÀĞÁö ¸øÇß½À´Ï´Ù.\n¼­¹ö ¿À·ù ¸Ş½ÃÁö: $(ARG1)";
+        Text[ turkish ] = "Internet üzerinden veri okunamadı.\nSunucu hata iletisi: $(ARG1)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_INET_WRITE
+    {
+        Text = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
+        Text [ ENGLISH ] = "Error writing to the internet.Server error message: $(ARG1)" ;
+        Text [ english_us ] = "Error transferring data to the Internet.\nServer error message: $(ARG1)" ;
+        Text [ italian ] = "Non è stato possibile trasferire i dati in Internet.\nMessaggio di errore del server: $(ARG1)" ;
+        Text [ spanish ] = "No se pudieron transferir los datos a Internet.\nMensaje de error del servidor: $(ARG1)" ;
+        Text [ french ] = "Erreur de transfert de données sur l'Internet.\nMessage d'erreur du serveur : $(ARG1)" ;
+        Text [ dutch ] = "Fout bij gegevenstransfer naar Internet.\nFoutmelding server: $(ARG1)" ;
+        Text [ swedish ] = "Data kunde inte överföras till Internet.\nServerfelmeddelande: $(ARG1)" ;
+        Text [ danish ] = "Det var ikke muligt at overføre dataene til Internettet.\nServerfejlmelding: $(ARG1)" ;
+        Text [ portuguese ] = "Foi impossível transferir dados para a Internet.\nMensagem de erro do servidor: $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ïò¹ú¼Ê»¥ÁªÍø´«µİÊı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
+        Text[ russian ] = "Ïåğåäàòü äàííûå â Èíòåğíåò íåâîçìîæíî.\nÑîîáùåíèå îøèáêè ñåğâåğà: $(ARG1)";
+        Text[ polish ] = "Danych nie mo¿na przenieœæ do sieci Internetu.\nKomunikat o b³êdzie z serwera: $(ARG1)";
+        Text[ japanese ] = "ÃŞ°À‚Í²İÀ°È¯Ä‚É“]‘—‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n»°ÊŞ° ´×° Ò¯¾°¼Ş: $(ARG1)";
+        Text[ chinese_traditional ] = "µLªk¦V Internet µo°e¸ê®Æ¡C\n¦øªA¾¹³ø§i¡G$(ARG1)";
+        Text[ arabic ] = "ÊÚĞÑ äŞá ÇáÈíÇäÇÊ ÚÈÑ ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
+        Text[ dutch ] = "Fout bij gegevenstransfer naar Internet.\nFoutmelding server: $(ARG1)";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ïò¹ú¼Ê»¥ÁªÍø´«µİÊı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
+        Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ìåôÜäïóç äåäïìİíùí ìİóù ôïõ Internet.\nÌŞíõìá óöÜëìáôïò ôïõ äéáêïìéóôŞ: $(ARG1)";
+        Text[ korean ] = "µ¥ÀÌÅÍ¸¦ ÀÎÅÍ³İÀ¸·Î º¸³»Áö ¸øÇß½À´Ï´Ù.\n¼­¹ö ¿À·ù ¸Ş½ÃÁö: $(ARG1)";
+        Text[ turkish ] = "Internet üzerinden veri aktarılamadı.\nSunucu hata iletisi: $(ARG1)";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_INET_GENERAL
+    {
+        Text = "Ein allgemeiner Fehler im Internetbereich trat auf" ;
+        Text [ ENGLISH ] = "Gereral Internet Error" ;
+        Text [ dutch ] = "Algemene Internet fout" ;
+        Text [ english_us ] = "Gereral Internet error has occurred" ;
+        Text [ italian ] = "Si è verificato un errore generale nell'area Internet" ;
+        Text [ spanish ] = "Error general en Internet" ;
+        Text [ french ] = "Erreur générale Internet" ;
+        Text [ swedish ] = "Ett allmänt Internet-fel uppstod" ;
+        Text [ danish ] = "Der opstod en generel Internetfejl" ;
+        Text [ portuguese ] = "Erro geral na Internet" ;
+        Text [ portuguese_brazilian ] = "Ein allgemeiner Fehler im Internetbereich trat auf" ;
+        Text[ chinese_simplified ] = "ÔÚ¹ú¼Ê»¥ÁªÍøÄÚ·¢ÉúÁËÒ»¸öÒ»°ã´íÎó";
+        Text[ russian ] = "Ïğîèçîøëà îáùàÿ îøèáêà â îáëàñòè Èíòåğíåòà";
+        Text[ polish ] = "Wyst¹pi³ ogólny b³¹d w Internecie";
+        Text[ japanese ] = "²İÀ°È¯Ä—Ìˆæ‚Éˆê”Ê“I‚È´×°‚ª”­¶";
+        Text[ chinese_traditional ] = "Internet ¤ºµo¥Í¤@­Ó¤@¯ë¿ù»~";
+        Text[ arabic ] = "ÍÏË ÎØÃ ÚÇã İí äØÇŞ ÇáÅäÊÑäÊ";
+        Text[ dutch ] = "Algemene Internet fout";
+        Text[ chinese_simplified ] = "ÔÚ¹ú¼Ê»¥ÁªÍøÄÚ·¢ÉúÁËÒ»¸öÒ»°ã´íÎó";
+        Text[ greek ] = "ĞáñïõóéÜóôçêå ãåíéêü óöÜëìá ôïõ Internet";
+        Text[ korean ] = "ÀÎÅÍ³İ ¿µ¿ª¿¡ ÀÏ¹İÀûÀÎ ¿À·ù ¹ß»ı";
+        Text[ turkish ] = "Genel Internet hatası";
+    };
+    String ERRCODE_INET_OFFLINE
+    {
+        Text = "Die angeforderten Internetdaten liegen nicht im Cache und können nicht übertragen werden, da der Onlinemodus nicht aktiv ist" ;
+        Text [ ENGLISH ] = "The requestet internet data is not available in the cache and cannot be transfered since the online mode is not active" ;
+        Text [ portuguese ] = "Os dados da Internet necessários não se encontram em Cache e não podem ser carregados porque o modo online não está activo." ;
+        Text [ english_us ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated" ;
+        Text [ portuguese_brazilian ] = "Die angeforderten Internetdaten liegen nicht im Cache und können nicht übertragen werden, da der Onlinemodus nicht aktiv ist" ;
+        Text [ swedish ] = "De begärda Internetdata ligger inte i cachen och kan därför inte överföras eftersom onlineläget inte är aktivt" ;
+        Text [ danish ] = "De anmodede Internetdata er ikke tilgængelige i cachen og kan ikke overføres, fordi onlinetilstanden ikke er aktiveret" ;
+        Text [ italian ] = "I dati di Internet richiesti non si trovano nella cache e non possono essere trasmessi poiché il modo online non è attivo" ;
+        Text [ spanish ] = "Los datos de Internet solicitados no se encuentran en el caché y no pueden ser transmitidos ya que el modo en línea no está activo." ;
+        Text [ french ] = "Impossible de transmettre les données provenant d'Internet : vous n'êtes pas en mode en ligne et les données ne se trouvent pas dans le cache." ;
+        Text [ dutch ] = "De opgevraagde Internetgegevens zijn niet voorhanden in het cachegeheugen en kunnen niet worden getransfereerd daar de Onlinemodus niet actief is" ;
+        Text[ chinese_simplified ] = "ÒòÎªÄúµÄ¼ÆËã»úºÍ»¹Ã»ÓĞºÍ¹ú¼Ê»¥ÁªÍøÁ¬½Ó£¬¶øÇÒ¼ÆËã»úµÄ»º³åÇøÒ²Ã»ÓĞÄúÇëÇóµÄ¹ú¼Ê»¥ÁªÍøµÄÊı¾İ£¬Òò´ËÎŞ·¨×°ÔØ´«µİÊı¾İ";
+        Text[ russian ] = "Çàòğåáîâàííûå äàííûå Èíòåğíåòà íå íàõîäÿòñÿ â êıø è ïåğåäàòü èõ íåâîçìîæíî, ò.ê. ğåæèì Online íå àêòèâèçèğîâàí.";
+        Text[ polish ] = "Wymaganych danych z sieci Internet nie ma w pamiêci podrêcznej i nie mo¿na ich za³adowaæ, poniewa¿ tryb online nie jest uaktywniony.";
+        Text[ japanese ] = "w’è‚µ‚½²İÀ°È¯Ä‚ÌÃŞ°À‚Í·¬¯¼­‚É‚È‚­‚ÄAµİ×²İ Ó°ÄŞ‚ª±¸Ã¨ÌŞ‚Å‚Í‚È‚¢‚½‚ß‚É“]‘—‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "ÁÙ¨S¦³³s½u¨ì Internet ¡M¦Ó¥B½w¨R°Ï¤]¨S¦³¼È¦s½Ğ¨Dªº Internet ¸ê®Æ¦ÓµLªk¶Ç»¼¸ê®Æ";
+        Text[ arabic ] = "ãÚáæãÇÊ ÇáÅäÊÑäÊ ÇáãØáæÈÉ ÛíÑ ãæÌæÏÉ İí æÍÏÉ ÇáÊÎÒíä ÇáãÄŞÊÉ¡ æáÇ íãßä äŞáåÇ¡ ÅĞ Ãä æÖÚ ÇáÇÊÕÇá ÛíÑ äÔØ";
+        Text[ dutch ] = "De opgevraagde Internetgegevens zijn niet voorhanden in het cachegeheugen en kunnen niet worden getransfereerd daar de Onlinemodus niet actief is";
+        Text[ chinese_simplified ] = "ÒòÎªÄúµÄ¼ÆËã»úºÍ»¹Ã»ÓĞºÍ¹ú¼Ê»¥ÁªÍøÁ¬½Ó£¬¶øÇÒ¼ÆËã»úµÄ»º³åÇøÒ²Ã»ÓĞÄúÇëÇóµÄ¹ú¼Ê»¥ÁªÍøµÄÊı¾İ£¬Òò´ËÎŞ·¨×°ÔØ´«µİÊı¾İ";
+        Text[ greek ] = "Ôá æçôïıìåíá äåäïìİíá ôïõ Internet äåí âñßóêïíôáé óôçí êñõöŞ ìíŞìç êáé äåí åßíáé äõíáôüí íá ìåôáäïèïıí, åğåéäŞ äåí åñãÜæåóôå óå êáôÜóôáóç áğ´ åõèåßáò óıíäåóçò";
+        Text[ korean ] = "¿äÃ»µÈ ÀÎÅÍ³İ µ¥ÀÌÅÍ°¡ Ä³½Ã¿¡ ¾øÀ¸¸ç ¿Â¶óÀÎ ¸ğµå°¡ È°¼ºÈ­µÇ¾î ÀÖÁö ¾Ê¾Æ µ¥ÀÌÅÍ¸¦ º¸³¾ ¼ö ¾øÀ½";
+        Text[ turkish ] = "İstenen Internet verileri önbellekte bulunmuyor ve çevrimiçi kipi etkin olmadığı için aktarılamıyor";
+    };
+    String ERRCODE_SFXMSG_STYLEREPLACE
+    {
+        Text = "Soll der Style $(ARG1) ersetzt werden?" ;
+        Text [ ENGLISH ] = "Should style $(ARG1) be overwritten?" ;
+        ExtraData = ERRCODE_MSG_ERROR | ERRCODE_BUTTON_OK_CANCEL ;
+        Text [ english_us ] = "Should the $(ARG1) Style be replaced?" ;
+        Text [ italian ] = "Sostituire lo stile $(ARG1) ?" ;
+        Text [ spanish ] = "¿Desea sustituir el estilo $(ARG1)?" ;
+        Text [ french ] = "Souhaitez-vous que le style $(ARG1) soit remplacé ?" ;
+        Text [ dutch ] = "Opmaakprofiel $(ARG1) vervangen?" ;
+        Text [ swedish ] = "Ska formatet $(ARG1) ersättas?" ;
+        Text [ danish ] = "Skal typografien $(ARG1) erstattes?" ;
+        Text [ portuguese ] = "Substituir o estilo $(ARG1)?" ;
+        Text [ portuguese_brazilian ] = "Soll der Style $(ARG1) ersetzt werden?" ;
+        Text[ chinese_simplified ] = "Òª¸üÌæÑùÊ½ $(ARG1) £¿";
+        Text[ russian ] = "Çàìåíèòü ñòèëü $(ARG1)?";
+        Text[ polish ] = "Zamieniæ styl $(ARG1)?";
+        Text[ japanese ] = "½À²Ù $(ARG1)‚ğ’uŠ·‚µ‚Ü‚·‚©?";
+        Text[ chinese_traditional ] = "­n§ó´À³o­Ó¼Ë¦¡ $(ARG1)¡H";
+        Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÈÏÇá ÇáäãØ $(ARG1)¿";
+        Text[ dutch ] = "Opmaakprofiel $(ARG1) vervangen?";
+        Text[ chinese_simplified ] = "Òª¸üÌæÑùÊ½ $(ARG1) £¿";
+        Text[ greek ] = "Íá áíôéêáôáóôáèåß ôï óôõë $(ARG1);";
+        Text[ korean ] = "À¯Çü$(ARG1)À» ´ëÃ¼ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "$(ARG1) biçimi değiştirilsin mi?";
+        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00 - - - -";
+    };
+    String ERRCODE_SFX_NOFILTER
+    {
+        Text = "Ein Filter wurde nicht gefunden" ;
+        Text [ ENGLISH ] = "Filter not ound " ;
+        Text [ english_us ] = "A filter has not been found" ;
+        Text [ italian ] = "Non è stato trovato un filtro" ;
+        Text [ spanish ] = "No se ha encontrado un filtro" ;
+        Text [ french ] = "Filtre introuvable" ;
+        Text [ dutch ] = "Geen filter gevonden" ;
+        Text [ swedish ] = "Inget filter kunde hittas" ;
+        Text [ danish ] = "Der blev ikke fundet et filter" ;
+        Text [ portuguese ] = "O filtro não foi encontrado." ;
+        Text [ portuguese_brazilian ] = "Ein Filter wurde nicht gefunden" ;
+        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½¹ıÂËÆ÷";
+        Text[ russian ] = "Ôèëüòğ íå íàéäåí";
+        Text[ polish ] = "Filtru nie znaleziono";
+        Text[ japanese ] = "Ì¨ÙÀ‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "¨S¦³§ä¨ì¹LÂo¾¹";
+        Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ";
+        Text[ dutch ] = "Geen filter gevonden";
+        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½¹ıÂËÆ÷";
+        Text[ greek ] = "Äåí âñİèçêå êÜğïéï ößëôñï";
+        Text[ korean ] = "ÇÊÅÍ°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Bir filtre bulunamadı";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SFX_NODOCRELOAD
+    {
+        Text = "Dokument kann nicht bearbeitet werden" ;
+    };
+    String ERRCODE_SFX_CANTFINDORIGINAL
+    {
+        Text = "Das Original konnte nicht bestimmt werden" ;
+        Text [ English ] = "The original could not be detected" ;
+        Text [ dutch ] = "Het origineel kon niet als zodanig worden herkend." ;
+        Text [ english_us ] = "The original could not be determined." ;
+        Text [ swedish ] = "Originalet kunde inte bestämmas." ;
+        Text [ danish ] = "Det var ikke muligt at bestemme originalen" ;
+        Text [ italian ] = "Impossibile determinare l'originale" ;
+        Text [ spanish ] = "No se pudo determinar el original." ;
+        Text [ french ] = "Impossible de déterminer l'original" ;
+        Text [ portuguese ] = "Foi impossível determinar o original." ;
+        Text [ portuguese_brazilian ] = "Das Original konnte nicht bestimmt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨È·¶¨Ô­¼ş";
+        Text[ russian ] = "Îïğåäåëèòü îğèãèíàë íåâîçìîæíî";
+        Text[ polish ] = "Orygina³u nie mo¿na by³o okreœliæ.";
+        Text[ japanese ] = "µØ¼ŞÅÙ‚ÍŒˆ’è‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk½T©w­ì¥ó";
+        Text[ arabic ] = "ÊÚĞÑ ÊÍÏíÏ ÇáÃÕá";
+        Text[ dutch ] = "Het origineel kon niet als zodanig worden herkend.";
+        Text[ chinese_simplified ] = "ÎŞ·¨È·¶¨Ô­¼ş";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ïñéóôåß ôï áñ÷éêü.";
+        Text[ korean ] = "¿øº»ÀÌ °áÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Asıl belirlenemedi";
+    };
+    String ERRCODE_SFX_CANTCREATECONTENT
+    {
+        Text = "Der Inhalt konnte nicht erzeugt werden" ;
+        Text [ English ] = "The content could not be created" ;
+        Text [ dutch ] = "Er kon geen inhoud worden gecreëerd." ;
+        Text [ english_us ] = "The contents could not be created." ;
+        Text [ swedish ] = "Innehållet kunde inte skapas" ;
+        Text [ danish ] = "Det var ikke muligt at oprette indholdet" ;
+        Text [ italian ] = "Impossibile creare il contenuto" ;
+        Text [ spanish ] = "No se pudo crear el contenido." ;
+        Text [ french ] = "Impossible de créer le contenu" ;
+        Text [ portuguese ] = "Foi impossível criar o conteúdo." ;
+        Text [ portuguese_brazilian ] = "Der Inhalt konnte nicht erzeugt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÄÚÈİ";
+        Text[ russian ] = "Ñîçäàòü ñîäåğæàíèå íåâîçìîæíî";
+        Text[ polish ] = "Zawartoœæ nie mog³a zostaæ utworzona";
+        Text[ japanese ] = "“à—e‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk¥Í¦¨¤º®e";
+        Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáãÍÊæì";
+        Text[ dutch ] = "Er kon geen inhoud worden gecreëerd.";
+        Text[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÄÚÈİ";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá äçìéïõñãçèåß ôï ğåñéå÷üìåíï.";
+        Text[ korean ] = "³»¿ëÀÌ ¸¸µé¾îÁöÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "İçerik oluşturulamadı";
+    };
+    String ERRCODE_SFX_CANTCREATELINK
+    {
+        Text = "Die Verknüpfung konnte nicht erzeugt werden" ;
+        Text [ English ] = "The link could not be created" ;
+        Text [ dutch ] = "Er kon geen link worden gecreëerd." ;
+        Text [ english_us ] = "The link could not be created." ;
+        Text [ swedish ] = "Länken kunde inte skapas" ;
+        Text [ danish ] = "Det var ikke muligt at oprette kæden" ;
+        Text [ italian ] = "Impossibile creare il collegamento" ;
+        Text [ spanish ] = "No se pudo crear el vínculo." ;
+        Text [ french ] = "Impossible de créer le lien" ;
+        Text [ portuguese ] = "Foi impossível criar a ligação." ;
+        Text [ portuguese_brazilian ] = "Die Verknüpfung konnte nicht erzeugt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÁ´½Ó";
+        Text[ russian ] = "Ñîçäàòü ññûëêó íåâîçìîæíî";
+        Text[ polish ] = "£¹cze nie mog³o zostaæ utworzone";
+        Text[ japanese ] = "Øİ¸‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk«Ø¥ß±¶®|";
+        Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáÇÑÊÈÇØ";
+        Text[ dutch ] = "Er kon geen link worden gecreëerd.";
+        Text[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÁ´½Ó";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá äçìéïõñãçèåß ç óıíäåóç";
+        Text[ korean ] = "¿¬°áÀÌ ¸¸µé¾îÁöÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Bağlantı oluşturulamadı";
+    };
+    String ERRCODE_SFX_WRONGBMKFORMAT
+    {
+        Text = "Das Format der Verknüpfung ist ungültig" ;
+        Text [ English ] = "The format of the link ist invalid" ;
+        Text [ dutch ] = "Ongeldig link-formaat" ;
+        Text [ english_us ] = "The link format is invalid." ;
+        Text [ swedish ] = "Länkens format är ogiltigt" ;
+        Text [ danish ] = "Kædeformatet er ugyldigt" ;
+        Text [ italian ] = "Formato del collegamento non valido" ;
+        Text [ spanish ] = "El formato del vínculo no es válido" ;
+        Text [ french ] = "Le format du lien est incorrect" ;
+        Text [ portuguese ] = "O formato da ligação não é válido." ;
+        Text [ portuguese_brazilian ] = "Das Format der Verknüpfung ist ungültig" ;
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄÁ´½Ó¸ñÊ½";
+        Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò ññûëêè";
+        Text[ polish ] = "Format ³¹cza jest nieprawid³owy";
+        Text[ japanese ] = "Øİ¸‚Ì‘®‚Í–³Œø‚Å‚·";
+        Text[ chinese_traditional ] = "±¶®|®æ¦¡µL®Ä";
+        Text[ arabic ] = "ÊäÓíŞ ÇáÇÑÊÈÇØ ÛíÑ ÕÇáÍ";
+        Text[ dutch ] = "Ongeldig link-formaat";
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄÁ´½Ó¸ñÊ½";
+        Text[ greek ] = "Ç ìïñöŞ ôçò óıíäåóçò äåí åßíáé İãêõñç.";
+        Text[ korean ] = "¿¬°áÀÇ ¼­½ÄÀÌÀ¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Bağlantının formatı geçerli değil";
+    };
+    String ERRCODE_SFX_WRONGICONFILE
+    {
+        Text = "Die Konfiguration der Symbolanzeige ist ungültig" ;
+        Text [ English ] = "The configuration of the symbolview is invalid" ;
+        Text [ dutch ] = "Ongeldige configuratie van pictogramweergave" ;
+        Text [ english_us ] = "The configuration of the icon display is invalid." ;
+        Text [ swedish ] = "Konfigurationen för symbolvisningen är ogiltig." ;
+        Text [ danish ] = "Ikonvisningens konfiguration er ugyldig" ;
+        Text [ italian ] = "Configurazione della visualizzazione dei simboli non valida" ;
+        Text [ spanish ] = "La configuración del panel de símbolos no es válida" ;
+        Text [ french ] = "La configuration de l'affichage des icônes est incorrecte" ;
+        Text [ portuguese ] = "A configuração do painel de ícones não é válida." ;
+        Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige ist ungültig" ;
+        Text[ chinese_simplified ] = "Í¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼şÎŞĞ§";
+        Text[ russian ] = "Íåïğàâèëüíàÿ êîíôèãóğàöèÿ ïîêàçà ñèìâîëîâ";
+        Text[ polish ] = "Konfiguracja wyœwietlania symboli jest nieprawid³owa.";
+        Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚ª–³Œø‚Å‚·";
+        Text[ chinese_traditional ] = "¥Î©ó¹Ï¼ĞÅã¥Üªº°t¸mÀÉ®×µL®Ä";
+        Text[ arabic ] = "Êßæíä ÚÑÖ ÇáÑãæÒ ÛíÑ ÕÇáÍ";
+        Text[ dutch ] = "Ongeldige configuratie van pictogramweergave";
+        Text[ chinese_simplified ] = "Í¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼şÎŞĞ§";
+        Text[ greek ] = "Ç äéáìüñöùóç ôçò åìöÜíéóçò ôùí óõìâüëùí äåí åßíáé İãêõñç";
+        Text[ korean ] = "¾ÆÀÌÄÜ º¸±â ±¸¼ºÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Simge görüntüleme konfigürasyonu geçerli değil";
+    };
+    String ERRCODE_SFX_CANTWRITEICONFILE
+    {
+        Text = "Die Konfiguration der Symbolanzeige kann nicht gespeichert werden" ;
+        Text [ English ] = "The configuration of the symbolview could not be written" ;
+        Text [ dutch ] = "Configuration van pictogram kan niet worden opgeslagen" ;
+        Text [ english_us ] = "The configuration of the icon display can not be saved." ;
+        Text [ swedish ] = "Konfigurationen för symbolvisningen kan inte sparas." ;
+        Text [ danish ] = "Det er ikke muligt at gemme ikonvisningens konfiguration" ;
+        Text [ italian ] = "Impossibile salvare la configurazione della rappresentazione dei simboli" ;
+        Text [ spanish ] = "No se puede guardar la configuración del panel de símbolos" ;
+        Text [ french ] = "Impossible d'enregistrer les paramètres d'affichage de l'icône" ;
+        Text [ portuguese ] = "É impossível guardar a configuração do painel de ícones." ;
+        Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige kann nicht gespeichert werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨´æÅÌÍ¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼ş";
+        Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ïîêàçà ñèìâîëà íåâîçìîæíî";
+        Text[ polish ] = "Konfiguracji wyœwietlania symboli nie mo¿na by³o zapisaæ.";
+        Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "µLªkÀx¦s¹Ï¼ĞÅã¥Üªº°t¸mÀÉ®×";
+        Text[ arabic ] = "ÊÚĞÑÍİÙ Êßæíä ÚÑÖ ÇáÑãæÒ";
+        Text[ dutch ] = "Configuration van pictogram kan niet worden opgeslagen";
+        Text[ chinese_simplified ] = "ÎŞ·¨´æÅÌÍ¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼ş";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá áğïèçêåõôåß ç äéáìüñöùóç ôçò åìöÜíéóçò ôùí óõìâüëùí";
+        Text[ korean ] = "¾ÆÀÌÄÜ º¸±â ±¸¼ºÀÌ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Simge görüntüleme konfigürasyonu kaydedilemiyor";
+    };
+    String ERRCODE_SFX_CANTDELICONFILE
+    {
+        Text = "Die Konfiguration der Symbolanzeige konnte nicht gelöscht werden" ;
+        Text [ English ] = "The configuration of the symbolview could not be removed" ;
+        Text [ dutch ] = "Configuratie van pictogram kon niet worden gewist." ;
+        Text [ english_us ] = "The configuration of the icon display could not be deleted." ;
+        Text [ swedish ] = "Konfigurationen för symbolvisningen kunde inte raderas." ;
+        Text [ danish ] = "Det var ikke muligt at slette ikonvisningens konfiguration" ;
+        Text [ italian ] = "Impossibile cancellare la configurazione della rappresentazione dei simbol" ;
+        Text [ spanish ] = "No se pudo eliminar la configuración del panel de símbolos." ;
+        Text [ french ] = "Impossible de supprimer les paramètres d'affichage de l'icône" ;
+        Text [ portuguese ] = "Foi impossível eliminar a configuração do painel de ícones." ;
+        Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige konnte nicht gelöscht werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨É¾³ıÍ¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼ş";
+        Text[ russian ] = "Óäàëèòü êîíôèãóğàöèş ïîêàçà ñèìâîëà íåâîçìîæíî";
+        Text[ polish ] = "Konfiguracja wyœwietlania symboli nie mo¿e zostaæ usuniêta.";
+        Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚Ííœ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk§R°£¹Ï¼ĞÅã¥Üªº°t¸mÀÉ®×";
+        Text[ arabic ] = "ÊÚĞÑ ÍĞİ Êßæíä ÚÑÖ ÇáÑãæÒ.";
+        Text[ dutch ] = "Configuratie van pictogram kon niet worden gewist.";
+        Text[ chinese_simplified ] = "ÎŞ·¨É¾³ıÍ¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼ş";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá äéáãñáöåß ç äéáìüñöùóç ôçò åìöÜíéóçò ôùí óõìâüëùí";
+        Text[ korean ] = "¾ÆÀÌÄÜ º¸±â ±¸¼ºÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Simge görüntüleme konfigürasyonu silinemedi.";
+    };
+    String ERRCODE_SFX_CANTRENAMECONTENT
+    {
+        Text = "Der Inhalt konnte nicht umbenannt werden" ;
+        Text [ English ] = "The content could not be renamed" ;
+        Text [ dutch ] = "De naam van de inhoud kon niet worden gewijzigd." ;
+        Text [ english_us ] = "Contents cannot be renamed" ;
+        Text [ swedish ] = "Innehållet kunde inte döpas om" ;
+        Text [ danish ] = "Det var ikke muligt at omdøbe indholdet" ;
+        Text [ italian ] = "Impossibile rinominare il contenuto" ;
+        Text [ spanish ] = "No se puede cambiar el nombre al contenido." ;
+        Text [ french ] = "Impossible de renommer le contenu" ;
+        Text [ portuguese ] = "Foi impossível mudar o nome do conteúdo." ;
+        Text [ portuguese_brazilian ] = "Der Inhalt konnte nicht umbenannt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ÖØÃüÃûÄÚÈİ";
+        Text[ russian ] = "Ïåğåèìåíîâàòü ñîäåğæèìîå íåâîçìîæíî";
+        Text[ polish ] = "Nazwa zawartoœci nie mog³a zostaæ zmieniona.";
+        Text[ japanese ] = "“à—e‚Ì–¼‘O‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk­«·s©R¦W¤º®e";
+        Text[ arabic ] = "ÊÚĞÑÊ ÚãáíÉ ÅÚÇÏÉ ÊÓãíÉ ÇáãÍÊæíÇÊ";
+        Text[ dutch ] = "De naam van de inhoud kon niet worden gewijzigd.";
+        Text[ chinese_simplified ] = "ÎŞ·¨ÖØÃüÃûÄÚÈİ";
+        Text[ greek ] = "Ôï ğåñéå÷üìåíï äåí Şôáí äõíáôüí íá ìåôïíïìáóôåß.";
+        Text[ korean ] = "³»¿ë ÀÌ¸§ ¹Ù²Ù±â°¡ ¾ÈµË´Ï´Ù.";
+        Text[ turkish ] = "İçerik yeniden adlandırılamadı";
+    };
+    String ERRCODE_SFX_INVALIDBMKPATH
+    {
+        Text = "Der Bookmarkordner ist ungültig" ;
+        Text [ English ] = "The bookmarkfolder is invalid" ;
+        Text [ dutch ] = "De bookmark-ordner is ongeldig" ;
+        Text [ english_us ] = "The bookmark folder is invalid." ;
+        Text [ swedish ] = "Bokmärkesmappen är ogiltig" ;
+        Text [ danish ] = "Bogmærkemappen er ugyldig" ;
+        Text [ italian ] = "Cartella bookmark non valida" ;
+        Text [ spanish ] = "Carpeta de marcadores no válida" ;
+        Text [ french ] = "Le dossier de Bookmarks indiqué est incorrect" ;
+        Text [ portuguese ] = "A pasta de bookmarks não é válida." ;
+        Text [ portuguese_brazilian ] = "Der Bookmarkordner ist ungültig" ;
+        Text[ chinese_simplified ] = "ÊéÇ©ÎÄ¼ş¼ĞÎŞĞ§";
+        Text[ russian ] = "Íåïğàâèëüíàÿ ïàïêà çàêëàäîê";
+        Text[ polish ] = "Folder z zak³adkami jest nieprawid³owy";
+        Text[ japanese ] = "ÌŞ¯¸Ï°¸ Ì«ÙÀŞ‚Í–³Œø‚Å‚·";
+        Text[ chinese_traditional ] = "®ÑÅÒ¸ê®Æ§¨µL®Ä";
+        Text[ arabic ] = "ãÌáÏ ÇáÅÔÇÑÇÊ ÇáãÑÌÚíÉ ÛíÑ ÕÇáÍ";
+        Text[ dutch ] = "De bookmark-ordner is ongeldig";
+        Text[ chinese_simplified ] = "ÊéÇ©ÎÄ¼ş¼ĞÎŞĞ§";
+        Text[ greek ] = "Ï öÜêåëïò óåëéäïäåéêôşí äåí åßíáé İãêõñïò";
+        Text[ korean ] = "Ã¥°¥ÇÇ Æú´õ°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Yer işareti klasörü geçersizdir";
+    };
+    String ERRCODE_SFX_CANTWRITEURLCFGFILE
+    {
+        Text = "Die Konfiguration der lokal zu speichernden URLs konnte nicht gespeichert werden" ;
+        Text [ English ] = "The configuration of the URLs to save local could not be saved" ;
+        Text [ dutch ] = "De configuratie van de URLs kon niet lokaal worden opgeslagen" ;
+        Text [ english_us ] = "The configuration of the URLs to be saved locally could not be saved" ;
+        Text [ swedish ] = "Konfigurationen för de URL som skall sparas lokalt kunde inte sparas" ;
+        Text [ danish ] = "Det var ikke muligt at gemme konfigurationen på de URLs, som skulle gemmes lokalt" ;
+        Text [ italian ] = "Non è stato possibile salvare la configurazione delle URL da salvare localmente" ;
+        Text [ spanish ] = "No se pudo guardar la configuración de las URLs a guardar localmente." ;
+        Text [ french ] = "Impossible d'enregistrer la configuration pour l'enregistrement local des URLs" ;
+        Text [ portuguese ] = "Foi impossível guardar a configuração dos URLs a serem guardados localmente." ;
+        Text [ portuguese_brazilian ] = "Die Konfiguration der lokal zu speichernden URLs konnte nicht gespeichert werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨´æÅÌÒª¾Ö²¿´¢´æ URL µØÖ·µÄÅäÖÃÎÄ¼ş";
+        Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ëîêàëüíî ñîõğàíÿåìîãî URL íåâîçìîæíî";
+        Text[ polish ] = "Nie mo¿na by³o zapisaæ konfiguracji adresu URL, który mia³ zostaæ lokalnie zapisany.";
+        Text[ japanese ] = "Û°¶Ù‚Å•Û‘¶‚·‚éURL‚Ìİ’è‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk«O¦s§½³¡Àx¦sªº URL °t¸mÀÉ®×";
+        Text[ arabic ] = "ÊÚĞÑ ÍİÙ Êßæíä ÇáÚäÇæíä (URLs) ÇáæÇÌÈ ÍİÙåÇ ãÍáíÇğ";
+        Text[ dutch ] = "De configuratie van de URLs kon niet lokaal worden opgeslagen";
+        Text[ chinese_simplified ] = "ÎŞ·¨´æÅÌÒª¾Ö²¿´¢´æ URL µØÖ·µÄÅäÖÃÎÄ¼ş";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá áğïèçêåõôåß ç äéáìüñöùóç ôùí URL ğïõ ğñüêåéôáé íá áğïèçêåõôïıí ôïğéêÜ";
+        Text[ korean ] = "·ÎÄÃ¿¡ ÀúÀåµÈ URLÀÇ ±¸¼ºÀÌ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Yerel olarak kaydedilecek URL'Lerin konfigürasyonu kaydedilemedi";
+    };
+    String ERRCODE_SFX_WRONGURLCFGFORMAT
+    {
+        Text = "Das Format der Konfiguration der lokal zu speichernden URLs ist ungültig" ;
+        Text [ English ] = "The format of the configuration of the URLs to save local is invalid" ;
+        Text [ dutch ] = "De configuratie van de URLs kon niet lokaal worden opgeslagen daar het formaat ongeldig is." ;
+        Text [ english_us ] = "The configuration format of the URLs to be saved locally is invalid" ;
+        Text [ swedish ] = "Formatet för konfigurationen för de URL som skall sparas lokalt är ogiltigt" ;
+        Text [ danish ] = "Konfigurationsformatet på de URLs, som skulle gemmes lokalt, er ugyldigt" ;
+        Text [ italian ] = "Il formato della configurazione delle URL da salvare localmente non è valido" ;
+        Text [ spanish ] = "No es válido el formato de la configuración de las URLs a guardar localmente." ;
+        Text [ french ] = "Le format configuré pour les URLs à enregistrer localement est incorrect" ;
+        Text [ portuguese ] = "O formato da configuração dos URLs a serem guardados localmente não é válido." ;
+        Text [ portuguese_brazilian ] = "Das Format der Konfiguration der lokal zu speichernden URLs ist ungültig" ;
+        Text[ chinese_simplified ] = "¾Ö²¿´¢´æ URL µØÖ·µÄÅäÖÃÎÄ¼ş¸ñÊ½ÎŞĞ§";
+        Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò êîíôèãóğàöèè ëîêàëüíî ñîõğàíÿåìîãî URL";
+        Text[ polish ] = "Format konfiguracji adresu URL, który ma zostaæ lokalnie zapisany, jest nieprawid³owy.";
+        Text[ japanese ] = "Û°¶Ù‚Å•Û‘¶‚·‚éURL‚ğİ’è‚·‚é‘®‚ª–³Œø‚Å‚·";
+        Text[ chinese_traditional ] = "§½³¡Àx¦s URL °t¸mÀÉ®×®æ¦¡µL®Ä";
+        Text[ arabic ] = "ÊäÓíŞ Êßæíä ÇáÚäÇæíä (URLs) ¡ÇáæÇÌÈ ÍİÙåÇ ãÍáíÇğ¡ ÛíÑ ÕÇáÍ";
+        Text[ dutch ] = "De configuratie van de URLs kon niet lokaal worden opgeslagen daar het formaat ongeldig is.";
+        Text[ chinese_simplified ] = "¾Ö²¿´¢´æ URL µØÖ·µÄÅäÖÃÎÄ¼ş¸ñÊ½ÎŞĞ§";
+        Text[ greek ] = "Ç ìïñöŞ ôùí ñõèìßóåùí ôïõ URL, ôï ïğïßï ğñüêåéôáé íá áğïèçêåõôåß ôïğéêÜ, äåí åßíáé İãêõñç.";
+        Text[ korean ] = "·ÎÄÃ¿¡ ÀúÀåµÈ URLÀÇ ±¸¼ºÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Yerel olarak kaydedilecek URL'lerin konfigürasyon formatı geçerli değil";
+    };
+    String ERRCODE_SFX_NODOCUMENT
+    {
+        Text = "Es existiert kein Dokument, auf das die Aktion angewendet werden kann" ;
+        Text [ English ] = "There exists no document to act on" ;
+        Text [ dutch ] = "Er bestaat geen document waarop deze activiteit kan worden toegepast." ;
+        Text [ english_us ] = "This action cannot be applied to a document that does not exist" ;
+        Text [ swedish ] = "Det finns inget dokument som åtgärden kan användas på." ;
+        Text [ danish ] = "Der findes intet dokument, som handlingen kan anvendes på" ;
+        Text [ italian ] = "Non esiste un documento sul quale eseguire tale operazione" ;
+        Text [ spanish ] = "No existe ningún documento al que se le pueda aplicar la acción" ;
+        Text [ french ] = "Il n'existe aucun document auquel l'action peut être appliquée" ;
+        Text [ portuguese ] = "Não existe nenhum documento ao qual possa ser aplicada a acção." ;
+        Text [ portuguese_brazilian ] = "Es existiert kein Dokument, auf das die Aktion angewendet werden kann" ;
+        Text[ chinese_simplified ] = "Ö´ĞĞ²Ù×÷ËùĞèµÄÎÄµµ²»´æÔÚ";
+        Text[ russian ] = "Äîêóìåíò, ê êîòîğîìó äîëæíî áûòü ïğèìåíåíî ıòî äåéñòâèå, íå ñóùåñòâóåò";
+        Text[ polish ] = "Nie istnieje ¿aden dokument, do którego mo¿na by zastosowaæ tê akcjê.";
+        Text[ japanese ] = "±¸¼®İ‚Ì“K—p‚Å‚«‚éÄŞ·­ÒİÄ‚Í‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "¥Î¨Ó°õ¦æ¾Ş§@ªº¤å¥ó¤£¦s¦b";
+        Text[ arabic ] = "áÇ íæÌÏ ãÓÊäÏ íãßä ÊØÈíŞ ÇáÅÌÑÇÁ Úáíå";
+        Text[ dutch ] = "Er bestaat geen document waarop deze activiteit kan worden toegepast.";
+        Text[ chinese_simplified ] = "Ö´ĞĞ²Ù×÷ËùĞèµÄÎÄµµ²»´æÔÚ";
+        Text[ greek ] = "Äåí õğÜñ÷åé İããñáöï óôï ïğïßï íá åöáñìïóôåß ç åíİñãåéá";
+        Text[ korean ] = "ÀÌ ÀÛ¾÷À» Àû¿ëÇÒ ¼ö ÀÖ´Â ¹®¼­°¡ ¾øÀ½";
+        Text[ turkish ] = "İşlemin uygulanabileceği bir belge mevcut değil";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SFX_INVALIDLINK
+    {
+        Text = "Die Verknüpfung verweist auf ein ungültiges Ziel" ;
+        Text [ English ] = "Invalid Link Target" ;
+        Text [ dutch ] = "De koppeling verwijst naar een ongeldig doel" ;
+        Text [ english_us ] = "The link refers to an invalid target" ;
+        Text [ swedish ] = "Länken refererar till ett ogiltigt mål" ;
+        Text [ danish ] = "Kæden referer til et ugyldigt mål" ;
+        Text [ italian ] = "Il collegamento si riferisce ad una destinazione non valida" ;
+        Text [ spanish ] = "El vínculo se refiere a un destino no válido" ;
+        Text [ french ] = "Le lien renvoit à une cible incorrecte" ;
+        Text [ portuguese ] = "A ligação remete a um destino não válido." ;
+        Text [ portuguese_brazilian ] = "Die Verknüpfung verweist auf ein ungültiges Ziel" ;
+        Text[ chinese_simplified ] = "Á´½ÓÖ¸ÏòÒ»¸öÎŞĞ§µÄÄ¿±ê";
+        Text[ russian ] = "Ññûëêà óêàçûâàåò íà íåïğàâèëüíóş öåëü";
+        Text[ polish ] = "£¹cze odnosi siê do nieprawid³owego celu.";
+        Text[ japanese ] = "Øİ¸‚Í–³Œø‚ÈÀ°¹Ş¯Ä‚ğQÆ‚µ‚Ä‚¢‚Ü‚·";
+        Text[ chinese_traditional ] = "±¶®|«ü¦V¤@­ÓµL®Äªº¥Ø¼Ğ";
+        Text[ arabic ] = "íÔíÑ ÇáÇÑÊÈÇØ Åáì åÏİ ÛíÑ ÕÇáÍ";
+        Text[ dutch ] = "De koppeling verwijst naar een ongeldig doel";
+        Text[ chinese_simplified ] = "Á´½ÓÖ¸ÏòÒ»¸öÎŞĞ§µÄÄ¿±ê";
+        Text[ greek ] = "Ç óıíäåóç áíáöİñåôáé óå İíáí ìç İãêõñï ğñïïñéóìü";
+        Text[ korean ] = "¿¬°áÀÌ À¯È¿ÇÏÁö ¾ÊÀº Å¸°ÙÀ» ÁöÁ¤ÇÏ°í ÀÖÀ½";
+        Text[ turkish ] = "Bağlantı geçersiz bir hedef gösteriyor";
+    };
+    String ERRCODE_SFX_INVALIDTRASHPATH
+    {
+        Text = "Der Pfad für den Papierkorb ist ungültig" ;
+        Text [ English ] = "The path of the trash is invalid" ;
+        Text [ portuguese ] = "O atalho para Reciclagem não é válido" ;
+        Text [ english_us ] = "The Recycle Bin path is invalid" ;
+        Text [ portuguese_brazilian ] = "Der Pfad für den Papierkorb ist ungültig" ;
+        Text [ swedish ] = "Sökvägen till papperskorgen är ogiltig" ;
+        Text [ danish ] = "Stien til papirkurven er ugyldig" ;
+        Text [ italian ] = "Il percorso per il cestino non è valido" ;
+        Text [ spanish ] = "La ruta para la papelera no es válida." ;
+        Text [ french ] = "Le chemin spécifié pour la corbeille est incorrect" ;
+        Text [ dutch ] = "Het pad naar de prullenbak is ongeldig" ;
+        Text[ chinese_simplified ] = "»ØÊÕÕ¾Â·¾¶ÎŞĞ§";
+        Text[ russian ] = "Íåïğàâèëüíûé ïóòü äëÿ êîğçèíû";
+        Text[ polish ] = "Œcie¿ka dla kosza jest nieprawid³owa.";
+        Text[ japanese ] = "‚²‚İ” ‚ÌÊß½‚ª–³Œø‚Å‚·";
+        Text[ chinese_traditional ] = "¸ê·½¦^¦¬µ©ªº¸ô®|µL®Ä";
+        Text[ arabic ] = "ãÓÇÑ ÓáÉ ÇáãÍĞæİÇÊ ÛíÑ ÕÇáÍ";
+        Text[ dutch ] = "Het pad naar de prullenbak is ongeldig";
+        Text[ chinese_simplified ] = "»ØÊÕÕ¾Â·¾¶ÎŞĞ§";
+        Text[ greek ] = "Ç äéáäñïìŞ ôïõ êÜäïõ áíáêıêëùóçò äåí åßíáé İãêõñç";
+        Text[ korean ] = "ÈŞÁöÅë °æ·Î°¡ À¯È¿ÇÏÁö ¾ÊÀ½";
+        Text[ turkish ] = "Çöp kutusu veri yolu geçerli değil";
+    };
+    String ERRCODE_SFX_NOTRESTORABLE
+    {
+        Text = "Der Eintrag konnte nicht wiederhergestellt werden" ;
+        Text [ English ] = "The entry could not be restored" ;
+        Text [ portuguese ] = "Foi impossível restaurar a entrada." ;
+        Text [ english_us ] = "The entry could not be restored" ;
+        Text [ portuguese_brazilian ] = "Der Eintrag konnte nicht wiederhergestellt werden" ;
+        Text [ swedish ] = "Posten kunde inte återställas" ;
+        Text [ danish ] = "Det var ikke muligt at gendanne elementet" ;
+        Text [ italian ] = "Non è stato possibile ripristinare la voce" ;
+        Text [ spanish ] = "No se pudo restaurar la entrada." ;
+        Text [ french ] = "Impossible de restaurer l'entrée" ;
+        Text [ dutch ] = "Het item kon niet worden hersteld" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ĞŞ¸´Õâ¸öÌõÄ¿";
+        Text[ russian ] = "Âîññòàíîâèòü çàïèñü íåâîçìîæíî";
+        Text[ polish ] = "Wpis nie móg³ zostaæ przywrócony";
+        Text[ japanese ] = "€–Ú‚Í•œŒ³‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk­×´_³o­Ó¶µ¥Ø";
+        Text[ arabic ] = "ÊÚĞÑÊ ÚãáíÉ ÇÓÊÚÇÏÉ ÇáÅÏÎÇá";
+        Text[ dutch ] = "Het item kon niet worden hersteld";
+        Text[ chinese_simplified ] = "ÎŞ·¨ĞŞ¸´Õâ¸öÌõÄ¿";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé åğáíáöïñÜ ôçò åããñáöŞò";
+        Text[ korean ] = "Ç×¸ñÀ» º¹±¸ÇÒ ¼ö ¾øÀ½";
+        Text[ turkish ] = "Giriş geri yüklenemedi";
+    };
+    String ERRCODE_IO_NAMETOOLONG
+    {
+        Text = "Der Dateiname ist für das Ziel-Dateisystem zu lang." ;
+        Text [ ENGLISH ] = "Filename too long for target filesystem." ;
+        Text [ portuguese ] = "O nome do ficheiro é demasiado extenso para o sistema de ficheiros pretendido." ;
+        Text [ english_us ] = "The file name is too long for the target file system." ;
+        Text [ portuguese_brazilian ] = "Der Dateiname ist für das Ziel-Dateisystem zu lang." ;
+        Text [ swedish ] = "Filnamnet är för långt för mål-filsystemet." ;
+        Text [ danish ] = "Filnavnet er for langt til mål-filsystemet." ;
+        Text [ italian ] = "Il nome del file è troppo lungo per il file system di destinazione." ;
+        Text [ spanish ] = "El nombre del archivo es demasiado largo para el sistema de archivos destino." ;
+        Text [ french ] = "Le nom de fichier est trop long pour le système de fichiers cible." ;
+        Text [ dutch ] = "Bestandsnaam te lang voor het doel-bestandssysteem." ;
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÃûµÄ³¤¶È²»ÊÊÓÚÄ¿±êÎÄ¼şÏµÍ³¡£";
+        Text[ russian ] = "Ñëèøêîì äëèííîå èìÿ ôàéëà äëÿ öåëåâîé ñèñòåìû ôàéëà.";
+        Text[ polish ] = "Nazwa pliku jest za d³uga dla docelowego systemu plików.";
+        Text[ japanese ] = "À°¹Ş¯Ä‚ÌÌ§²Ù ¼½ÃÑ‚ÌÌ§²Ù–¼‚ª’·‚·‚¬‚Ü‚·";
+        Text[ chinese_traditional ] = "³o­ÓÀÉ®×¦Wªºªø«×¤£¾A¥Î©ó¥Ø¼ĞÀÉ®×¨t²Î¡C";
+        Text[ arabic ] = "ÇÓã Çáãáİ Øæíá ÌÏÇğ ÈÇáäÓÈÉ áäÙÇã ÇáãáİÇÊ ÇáåÏİ.";
+        Text[ dutch ] = "Bestandsnaam te lang voor het doel-bestandssysteem.";
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÃûµÄ³¤¶È²»ÊÊÓÚÄ¿±êÎÄ¼şÏµÍ³¡£";
+        Text[ greek ] = "Ôï üíïìá åßíáé õğåñâïëéêÜ ìåãÜëï ãéá ôï óıóôçìá ğñïİëåõóçò áñ÷åßùí.";
+        Text[ korean ] = "ÆÄÀÏ¸íÀÌ ´ë»ó ÆÄÀÏ ½Ã½ºÅÛ¿¡ ³Ê¹« ±é´Ï´Ù.";
+        Text[ turkish ] = "Dosya adı, hedef dosya sistemi için fazla uzun.";
+    };
+    String ERRCODE_SFX_CONSULTUSER
+    {
+        Text = "Die Angaben zum Ausführen der Funktion sind unvollständig." ;
+        Text [ ENGLISH ] = "Can't execute function due to incomplete arguments." ;
+        Text [ english_us ] = "The details for running the function are incomplete." ;
+        Text [ portuguese ] = "Os dados para a execução da função estão incompletos." ;
+        Text [ portuguese_brazilian ] = "Zum Angaben zum Ausführen der Funktion sind unvollständig." ;
+        Text [ swedish ] = "Funktionen kan inte utföras på grund av ofullständiga uppgifter." ;
+        Text [ danish ] = "Angivelserne til udførelse af funktionen er ufuldstændige." ;
+        Text [ italian ] = "I dati sono insufficienti per l'esecuzione della funzione." ;
+        Text [ spanish ] = "La función no se puede ejecutar por falta de argumentos." ;
+        Text [ french ] = "Les données indiquées pour l'exécution de la fonction sont incomplètes." ;
+        Text [ dutch ] = "De gegevens voor het uitvoeren van de functie zijn niet compleet.." ;
+        Text[ chinese_simplified ] = "Ö´ĞĞ¹¦ÄÜµÄÃüÁî²»ÍêÕû¡£";
+        Text[ russian ] = "Äàííûå äëÿ âûïîëíåíèÿ ıòîé ôóíêöèè ÿâëÿşòñÿ íåïîëíûìè.";
+        Text[ polish ] = "Dane do wykonania funkcji s¹ nie kompletne.";
+        Text[ japanese ] = "‹@”\\‚ğÀs‚³‚¹‚é‚½‚ß‚Ìw¦‚ª–¢Š®—¹‚Å‚·B";
+        Text[ chinese_traditional ] = "«ü©w°õ¦æ¥\\¯àªº«ü¥O¤£§¹¾ã¡C";
+        Text[ arabic ] = "ÇáÈíÇäÇÊ ÇááÇÒãÉ áÊäİíĞ ÇáãåãÉ ÛíÑ ãßÊãáÉ.";
+        Text[ dutch ] = "De gegevens voor het uitvoeren van de functie zijn niet compleet..";
+        Text[ chinese_simplified ] = "Ö´ĞĞ¹¦ÄÜµÄÃüÁî²»ÍêÕû¡£";
+        Text[ greek ] = "Ôá äåäïìİíá ãéá ôçí åêôİëåóç ôçò ëåéôïõñãßáò äåí åßíáé ïëïêëçñùìİíá.";
+        Text[ korean ] = "±â´É ½ÇÇàÀ» À§ÇÑ ÁöÁ¤»çÇ×ÀÌ ºÒ¿ÏÀüÇÕ´Ï´Ù.";
+        Text[ turkish ] = "İşlemin yürütülmesi için gereken bilgiler tam değil.";
+    };
+    String ERRCODE_SFX_INVALIDSYNTAX
+    {
+        Text = "Die Syntax der Eingabe ist ungültig." ;
+        Text [ English ] = "The syntax of the input is invalid." ;
+        Text [ portuguese ] = "A sintaxe da entrada está incorrecta." ;
+        Text [ english_us ] = "The input syntax is invalid." ;
+        Text [ portuguese_brazilian ] = "Die Syntax der Eingabe ist ungültig." ;
+        Text [ swedish ] = "Inmatningens syntax är ogiltig." ;
+        Text [ danish ] = "Inputsyntaksen er ugyldig." ;
+        Text [ italian ] = "La sintassi della digitazione è errata." ;
+        Text [ spanish ] = "La sintaxis de la entrada no es válida" ;
+        Text [ french ] = "La syntaxe de la saisie est incorrecte." ;
+        Text [ dutch ] = "Onjuiste schrijfwijze." ;
+        Text[ chinese_simplified ] = "ÊäÈëµÄÓï·¨ÎŞĞ§¡£";
+        Text[ russian ] = "Íåïğàâèëüíûé ñèíòàêñèñ ââîäà";
+        Text[ polish ] = "Sk³adnia wpisu jest niepoprawna.";
+        Text[ japanese ] = "‚±‚Ì“ü—Í‚Ì¼İÀ¯¸½‚Í–³Œø‚Å‚·B";
+        Text[ chinese_traditional ] = "¿é¤J¤º®e»yªkµL®Ä¡C";
+        Text[ arabic ] = "ÈäÇÁ ÌãáÉ ÇáÅÏÎÇá ÛíÑ ÕÇáÍ.";
+        Text[ dutch ] = "Onjuiste schrijfwijze.";
+        Text[ chinese_simplified ] = "ÊäÈëµÄÓï·¨ÎŞĞ§¡£";
+        Text[ greek ] = "Ëáíèáóìİíç óıíôáîç åéóáãùãŞò.";
+        Text[ korean ] = "ÀÔ·Â ±¸¹®ÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Giriş söz dizimi geçerli değil.";
+    };
+    String ERRCODE_SFX_CANTCREATEFOLDER
+    {
+        Text = "Die Syntax der Eingabe ist falsch." ;
+        Text [ English ] = "The syntax of the input is invalid." ;
+        Text [ portuguese ] = "A sintaxe da entrada está incorrecta." ;
+        Text [ english_us ] = "The input syntax is invalid." ;
+        Text [ portuguese_brazilian ] = "Die Syntax der Eingabe ist falsch." ;
+        Text [ swedish ] = "Inmatningens syntax är felaktig." ;
+        Text [ danish ] = "Inputsyntaksen er forkert" ;
+        Text [ italian ] = "La sintassi della digitazione è errata." ;
+        Text [ spanish ] = "La sintaxis de la entrada es incorrecta." ;
+        Text [ french ] = "La syntaxe de la saisie est incorrecte." ;
+        Text [ dutch ] = "Onjuiste schrijfwijze." ;
+        Text[ chinese_simplified ] = "ÊäÈëµÄÓï·¨´íÎó¡£";
+        Text[ russian ] = "Íåïğàâèëüíûé ñèíòàêñèñ ââîäà.";
+        Text[ polish ] = "Sk³adnia wpisu jest niepoprawna.";
+        Text[ japanese ] = "€–Ú‚Ì¼İÀ¯¸½‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "¿é¤J¤º®e»yªk¿ù»~¡C";
+        Text[ arabic ] = "ÈäÇÁ ÌãáÉ ÇáÅÏÎÇá ÛíÑ ÕÍíÍ.";
+        Text[ dutch ] = "Onjuiste schrijfwijze.";
+        Text[ chinese_simplified ] = "ÊäÈëµÄÓï·¨´íÎó¡£";
+        Text[ greek ] = "Ëáíèáóìİíç óıíôáîç åéóáãùãŞò.";
+        Text[ korean ] = "ÀÔ·Â ±¸¹®ÀÌ Æ²¸³´Ï´Ù.";
+        Text[ turkish ] = "Giriş söz dizimi yanlış.";
+    };
+    String ERRCODE_SFX_CANTRENAMEFOLDER
+    {
+        Text = "Die Syntax der Eingabe ist falsch." ;
+        Text [ English ] = "The syntax of the input is invalid." ;
+        Text [ portuguese ] = "A sintaxe da entrada está incorrecta." ;
+        Text [ english_us ] = "The input syntax is invalid." ;
+        Text [ portuguese_brazilian ] = "Die Syntax der Eingabe ist falsch." ;
+        Text [ swedish ] = "Inmatningens syntax är felaktig." ;
+        Text [ danish ] = "Inputsyntaksen er forkert." ;
+        Text [ italian ] = "La sintassi della digitazione è errata." ;
+        Text [ spanish ] = "La sintaxis de entrada es incorrecta." ;
+        Text [ french ] = "La syntaxe de la saisie est incorrecte." ;
+        Text [ dutch ] = "Onjuiste schrijfwijze." ;
+        Text[ chinese_simplified ] = "ÊäÈëµÄÓï·¨´íÎó¡£";
+        Text[ russian ] = "Íåïğàâèëüíûé ñèíòàêñèñ ââîäà.";
+        Text[ polish ] = "Sk³adnia wpisu jest niepoprawna.";
+        Text[ japanese ] = "€–Ú‚Ì¼İÀ¯¸½‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "¿é¤Jªº»yªk¿ù»~¡C";
+        Text[ arabic ] = "ÈäÇÁ ÌãáÉ ÇáÅÏÎÇá ÛíÑ ÕÍíÍ.";
+        Text[ dutch ] = "Onjuiste schrijfwijze.";
+        Text[ chinese_simplified ] = "ÊäÈëµÄÓï·¨´íÎó¡£";
+        Text[ greek ] = "Ëáíèáóìİíç óıíôáîç åéóáãùãŞò.";
+        Text[ korean ] = "ÀÔ·Â ±¸¹®ÀÌ Æ²¸³´Ï´Ù.";
+        Text[ turkish ] = "Giriş söz dizimi yanlış.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SFX_WRONG_CDF_FORMAT
+    {
+        Text = "Das Channeldokument hat kein gültiges Format." ;
+        Text [ ENGLISH ] = "Das Channeldokument hat kein gültiges Format." ;
+        Text [ portuguese ] = "O formato do documento do canal não é válido." ;
+        Text [ english_us ] = "The channel document has an invalid format." ;
+        Text [ portuguese_brazilian ] = "Das Channeldokument hat kein gültiges Format." ;
+        Text [ swedish ] = "Channeldokumentet har inget giltigt format." ;
+        Text [ danish ] = "Channel-dokumentet har ikke et gyldigt format." ;
+        Text [ italian ] = "Il documento di canale non ha un formato valido." ;
+        Text [ spanish ] = "El formato del documento del canal no es válido." ;
+        Text [ french ] = "Le format du document Channel est incorrect." ;
+        Text [ dutch ] = "Het channel-document heeft een ongeldig formaat." ;
+        Text[ chinese_simplified ] = "ÆµµÀÎÄµµµÄ¸ñÊ½ÎŞĞ§¡£";
+        Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò äîêóìåíòà êàíàëà.";
+        Text[ polish ] = "Dokument kana³u nie posiada prawid³owego formatu.";
+        Text[ japanese ] = "Á¬İÈÙ ÄŞ·­ÒİÄ‚Ì‘®‚Í–³Œø‚Å‚·B";
+        Text[ chinese_traditional ] = "ÀW¹D¤å¥ó®æ¦¡µL®Ä";
+        Text[ arabic ] = "ÊäÓíŞ ãÓÊäÏ ÇáŞäÇÉ ÛíÑ ÕÇáÍ.";
+        Text[ dutch ] = "Het channel-document heeft een ongeldig formaat.";
+        Text[ chinese_simplified ] = "ÆµµÀÎÄµµµÄ¸ñÊ½ÎŞĞ§¡£";
+        Text[ greek ] = "Ç ìïñöŞ ôïõ åããñÜöïõ êáíáëéïı äåí åßíáé İãêõñç.";
+        Text[ korean ] = "Ã¤³Î ¹®¼­ÀÇ ¼­½ÄÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Kanal belgesinin formatı geçersiz.";
+    };
+    String ERRCODE_SFX_EMPTY_SERVER
+    {
+        Text = "Der Server darf nicht leer sein" ;
+        Text [ English ] = "The server may not be empty" ;
+        Text [ portuguese ] = "O servidor não pode estar vazio." ;
+        Text [ english_us ] = "The server must not be empty" ;
+        Text [ portuguese_brazilian ] = "Der Server darf nicht leer sein" ;
+        Text [ swedish ] = "Servern får ej vara tom" ;
+        Text [ danish ] = "Serveren må ikke være tom" ;
+        Text [ italian ] = "Il server non può essere vuoto" ;
+        Text [ spanish ] = "El servidor no debe estar vacío." ;
+        Text [ french ] = "Le serveur ne doit pas être vide" ;
+        Text [ dutch ] = "De server mag niet leeg zijn." ;
+        Text[ chinese_simplified ] = "·şÎñÆ÷²»¿ÉÒÔ¿ÕÈ±";
+        Text[ russian ] = "Ñåğâåğ íå äîëæåí áûòü ïóñòûì";
+        Text[ polish ] = "Serwer nie mo¿e byæ pusty";
+        Text[ japanese ] = "»°ÊŞ°‚Í‹ó”’‚Å‚Í‚¢‚¯‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "¦øªA¾¹¤£¥i¥HªÅ¯Ê";
+        Text[ arabic ] = "íÌÈ ÃáÇ íßæä ÇáãÒæøÏ İÇÑÛÇğ";
+        Text[ dutch ] = "De server mag niet leeg zijn.";
+        Text[ chinese_simplified ] = "·şÎñÆ÷²»¿ÉÒÔ¿ÕÈ±";
+        Text[ greek ] = "Ï äéáêïìéóôŞò äåí åğéôñİğåôáé íá åßíáé êåíüò";
+        Text[ korean ] = "¼­¹ö°¡ ºñ¾î¼­´Â ¾ÈµÊ";
+        Text[ turkish ] = "Sunucu boş olmamalıdır";
+    };
+    String ERRCODE_SFX_NO_ABOBOX
+    {
+        Text = "Sie benötigen einen Abonnements Ordner, wenn Sie einen Channel installieren wollen." ;
+        Text [ english_us ] = "A subscription folder is required to install a Channel." ;
+            Text [ italian ] = "È necessaria una cartella di sottoscrizione se volete installare un channel.";
+        Text [ portuguese_brazilian ] = "Sie benötigen einen Abonnements Ordner, wenn Sie einen Channel installieren wollen.";
+        Text [ portuguese ] = "Para poder instalar um Channel, necessita de uma pasta para subscrições.";
+        Text [ danish ] = "Du har brug for en abonnement-mappe, hvis du vil installere en channel.";
+        Text [ french ] = "Vous avez besoin d'un dossier d'abonnements pour installer un Channel.";
+        Text [ swedish ] = "Du behöver en prenumerationsmapp om Du vill installera en channel.";
+        Text [ dutch ] = "Om een channel te installeren heeft u een abonnementenmap nodig.";
+        Text [ spanish ] = "Para instalar un canal necesita una carpeta de suscripciones.";
+    Text[ chinese_simplified ] = "Èç¹ûÒª°²×°ÆµµÀ£¬Äú¾ÍĞèÒªÏÈ´´½¨Ò»¸ö¶©ÔÄÎÄ¼ş¼Ğ¡£";
+        Text[ russian ] = "Äëÿ èíñòàëëÿöèè Channel íåîáõîäèìà ïàïêà ïîäïèñêè.";
+        Text[ polish ] = "Instalacja kana³u wymaga utworzenia folderu subkrypcji.";
+        Text[ japanese ] = "Á¬İÈÙ‚ğ²İ½Ä°Ù‚·‚éê‡‚Íw“ÇÌ«ÙÀŞ‚ª•K—v‚Å‚·B";
+        Text[ chinese_traditional ] = "¦pªG­n¦w¸ËÀW¹D¡M±z´N»İ­n«Ø¥ß¤@­Ó­q¾\\¸ê®Æ§¨";
+        Text[ arabic ] = "áßí ÊÊãßä ãä ÊËÈíÊ ŞäÇÉ ÃäÊ ÈÍÇÌÉ Åáì ãÌáÏ ÇÔÊÑÇßÇÊ.";
+        Text[ dutch ] = "Om een channel te installeren heeft u een abonnementenmap nodig.";
+        Text[ chinese_simplified ] = "Èç¹ûÒª°²×°ÆµµÀ£¬Äú¾ÍĞèÒªÏÈ´´½¨Ò»¸ö¶©ÔÄÎÄ¼ş¼Ğ¡£";
+        Text[ greek ] = "Ãéá íá ãßíåé åãêáôÜóôáóç åíüò êáíáëéïı áğáéôåßôáé İíáò öÜêåëïò óõíäñïìşí.";
+        Text[ korean ] = "Ã¤³ÎÀ» ¼³Ä¡ÇÏ·Á¸é ¾Ë¸²½ÅÃ» Æú´õ°¡ ÇÊ¿äÇÕ´Ï´Ù.";
+        Text[ turkish ] = "Kanal kurmak için bir üyelik klasörünüz olmalı.";
+    };
+#ifdef ERRCODE_IO_INVALIDLENGTH
+    String ERRCODE_IO_INVALIDLENGTH
+    {
+        Text = "Ungültige Datenlänge." ;
+        Text [ english ] = "Invalid data length." ;
+        Text [ portuguese ] = "Extensão de dados incorrecta." ;
+        Text [ english_us ] = "Invalid data length." ;
+        Text [ portuguese_brazilian ] = "Ungültige Datenlänge." ;
+        Text [ swedish ] = "Ogiltig datalängd." ;
+        Text [ danish ] = "Ugyldig datalængde." ;
+        Text [ italian ] = "Lunghezza dati non valida." ;
+        Text [ spanish ] = "Longitud de datos no válida." ;
+        Text [ french ] = "Longueur des données incorrecte." ;
+        Text [ dutch ] = "Onjuiste gegevenslengte" ;
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄÊı¾İ³¤¶È¡£";
+        Text[ russian ] = "Íåïğàâèëüíàÿ äëèíà äàííûõ.";
+        Text[ polish ] = "Nieprawid³owa d³ugoœæ danych.";
+        Text[ japanese ] = "–³Œø‚ÈÃŞ°À‚Ì’·‚³B";
+        Text[ chinese_traditional ] = "¸ê®Æªø«×µL®Ä¡C";
+        Text[ arabic ] = "Øæá ÇáÈíÇäÇÊ ÛíÑ ÕÇáÍ.";
+        Text[ dutch ] = "Onjuiste gegevenslengte";
+        Text[ chinese_simplified ] = "ÎŞĞ§µÄÊı¾İ³¤¶È¡£";
+        Text[ greek ] = "Ìç İãêõñï ìŞêïò äåäïìİíùí.";
+        Text[ korean ] = "µ¥ÀÌÅÍ ±æÀÌ°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Geçersiz veri uzunluğu.";
+    };
+    String ERRCODE_IO_CURRENTDIR
+    {
+        Text = "Funktion unmöglich: Pfad enthält aktuelles Verzeichnis" ;
+        Text [ english ] = "Funcion impossible: path contains current directory." ;
+        Text [ portuguese ] = "Função impossível: o atalho contém o directório activo." ;
+        Text [ english_us ] = "Function not possible: path contains current directory." ;
+        Text [ portuguese_brazilian ] = "Funktion unmöglich: Pfad enthält aktuelles Verzeichnis" ;
+        Text [ swedish ] = "Funktion omöjlig: Sökväg innehåller aktuell katalog" ;
+        Text [ danish ] = "Funktion ikke mulig: stien indeholder aktuelt bibliotek" ;
+        Text [ italian ] = "Funzione impossibile: il percorso contiene la cartella corrente" ;
+        Text [ spanish ] = "Función imposible: La ruta contiene el directorio actual." ;
+        Text [ french ] = "Impossible d'exécuter la fonction : le chemin indiqué inclut le répertoire actif" ;
+        Text [ dutch ] = "Functie niet mogelijk. Pad bevat actuele directory" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£ºÂ·¾¶º¬ÓĞµ±Ç°µÄÄ¿Â¼";
+        Text[ russian ] = "Íåâîçìîæíàÿ ôóíêöèÿ: ïóòü ñîäåğæèò òåêóùèé êàòàëîã";
+        Text[ polish ] = "Funkcja niemo¿liwa:Œcie¿ka zawiera aktualny katalog";
+        Text[ japanese ] = "‹@”\\•s‰Â”\\FÊß½‚ªŒ»İ‚ÌÃŞ¨Ú¸ÄØ‚ğŠÜ‚ñ‚Å‚¢‚Ü‚·";
+        Text[ chinese_traditional ] = "µLªk°õ¦æ¥\\¯à¡G¸ô®|§t¦³·í«eªº¥Ø¿ı";
+        Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: íÍÊæí ÇáãÓÇÑ Úáì ÇáÏáíá ÇáÍÇáí.";
+        Text[ dutch ] = "Functie niet mogelijk. Pad bevat actuele directory";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£ºÂ·¾¶º¬ÓĞµ±Ç°µÄÄ¿Â¼";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôåß ç ëåéôïõñãßá: Ç äéáäñïìŞ ğåñéİ÷åé ôïí ôñİ÷ùí êáôÜëïãï";
+        Text[ korean ] = "±â´É ºÒ°¡´É: °æ·Î°¡ ÇöÀç µğ·ºÅä¸® Æ÷ÇÔ";
+        Text[ turkish ] = "İşlev olanaklı değil: Veri yolu yürürlükteki dizini içeriyor";
+    };
+    String ERRCODE_IO_NOTSAMEDEVICE
+    {
+        Text = "Funktion unmöglich: Nicht dasselbe Gerät (Laufwerk)." ;
+        Text [ english ] = "Function impossible: not same device (drive)." ;
+        Text [ portuguese ] = "Função impossível: periférico não é o mesmo (unidade)." ;
+        Text [ english_us ] = "Function not possible: device (drive) not identical." ;
+        Text [ portuguese_brazilian ] = "Funktion unmöglich: Nicht dasselbe Gerät (Laufwerk)." ;
+        Text [ swedish ] = "Funktion omöjlig: Inte samma apparat (enhet)." ;
+        Text [ danish ] = "Funktion ikke mulig: ikke samme enhed (drev)." ;
+        Text [ italian ] = "Funzione impossibile: apparecchio (drive) diverso." ;
+        Text [ spanish ] = "Función imposible: No es el mismo dispositivo (unidad)." ;
+        Text [ french ] = "Impossible d'exécuter la fonction : il ne s'agit pas du même volume." ;
+        Text [ dutch ] = "Functie niet mogelijk: niet hetzelfde apparaat (station)." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º²»ÊÇÍ¬Ò»¸öÉè±¸(Çı¶¯ÅÌ)¡£";
+        Text[ russian ] = "Íåâîçìîæíàÿ ôóíêöèÿ: äğóãîå óñòğîéñòâî (äèñê).";
+        Text[ polish ] = "Funkcja niemo¿liwa: nie to samo urz¹dzenie (napêd).";
+        Text[ japanese ] = "‹@”\\•s‰Â”\\F“¯‚¶ÃŞ¨ÊŞ²½(ÄŞ×²ÌŞ)‚Å‚Í‚ ‚è‚Ü‚¹‚ñ¡";
+        Text[ chinese_traditional ] = "µLªk°õ¦æ¥\\¯à¡G¤£¬O¦P¤@­Ó³]³Æ(ÅX°Ê½L)¡C";
+        Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: ÇáÌåÇÒ (ãÍÑß ÇáÃŞÑÇÕ( ÛíÑ ããÇËá.";
+        Text[ dutch ] = "Functie niet mogelijk: niet hetzelfde apparaat (station).";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º²»ÊÇÍ¬Ò»¸öÉè±¸(Çı¶¯ÅÌ)¡£";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôåß ç ëåéôïõñãßá: Ç óõóêåõŞ äåí åßíáé ç ßäéá (äßóêïò).";
+        Text[ korean ] = "±â´É ºÒ°¡´É: ÀåÄ¡(µå¶óÀÌºê)°¡ µ¿ÀÏÇÏÁö ¾ÊÀ½.";
+        Text[ turkish ] = "İşlev olanaklı değil: Chiza (sürücü) aynı değil.";
+    };
+    String ERRCODE_IO_DEVICENOTREADY
+    {
+        Text = "Gerät (Laufwerk) nicht bereit." ;
+        Text [ english ] = "Device (drive) not ready." ;
+        Text [ portuguese ] = "Periférico (unidade) não está pronto." ;
+        Text [ english_us ] = "Device (drive) not ready." ;
+        Text [ portuguese_brazilian ] = "Gerät (Laufwerk) nicht bereit." ;
+        Text [ swedish ] = "Apparat (enhet) ej redo." ;
+        Text [ danish ] = "Enheden (drevet) er ikke klar." ;
+        Text [ italian ] = "Apparecchio (drive) non pronto." ;
+        Text [ spanish ] = "Dispositivo (unidad) no listo." ;
+        Text [ french ] = "Le périphérique (lecteur) n'est pas prêt." ;
+        Text [ dutch ] = "Apparaat (station) niet gereed." ;
+        Text[ chinese_simplified ] = "Éè±¸(Çı¶¯ÅÌ)»¹Ã»ÓĞ×¼±¸¾ÍĞ÷¡£";
+        Text[ russian ] = "Óñòğîéñòâî (äèñê) íå ãîòîâî.";
+        Text[ polish ] = "Urz¹dzenie (napêd) nie gotowe.";
+        Text[ japanese ] = "ÃŞ¨ÊŞ²½(ÄŞ×²ÌŞ)‚Ì€”õ‚ª‚Å‚«‚Ä‚¢‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "³]³Æ(ÅX°Ê½L)ÁÙ¨S¦³·Ç³Æ´Nºü";
+        Text[ arabic ] = "ÇáÌåÇÒ (ãÍÑß ÇáÃŞÑÇÕ) ÛíÑ ÌÇåÒ.";
+        Text[ dutch ] = "Apparaat (station) niet gereed.";
+        Text[ chinese_simplified ] = "Éè±¸(Çı¶¯ÅÌ)»¹Ã»ÓĞ×¼±¸¾ÍĞ÷¡£";
+        Text[ greek ] = "Ç óõóêåõŞ (ìïíÜäá äßóêïõ) äåí åßíáé İôïéìç.";
+        Text[ korean ] = "ÀåÄ¡(µå¶óÀÌºê)°¡ ÁØºñµÇ¾î ÀÖÁö ¾ÊÀ½.";
+        Text[ turkish ] = "Cihaz (sürücü) hazır değil.";
+    };
+    String ERRCODE_IO_BADCRC
+    {
+        Text = "Falsche Prüfsumme." ;
+        Text [ english ] = "Bad checksum" ;
+        Text [ portuguese ] = "Soma de revisão errada." ;
+        Text [ english_us ] = "Wrong check amount." ;
+        Text [ portuguese_brazilian ] = "Falsche Prüfsumme." ;
+        Text [ swedish ] = "Fel kontrollsumma." ;
+        Text [ danish ] = "Forkert kontrolsum" ;
+        Text [ italian ] = "Somma da esaminare errata." ;
+        Text [ spanish ] = "Suma errónea de revisión." ;
+        Text [ french ] = "Somme de révision erronée." ;
+        Text [ dutch ] = "Controlegetal niet juist." ;
+        Text[ chinese_simplified ] = "´íÎóµÄ¼ì²éÊıÄ¿¡£";
+        Text[ russian ] = "Íåïğàâèëüíàÿ êîíòğîëüíàÿ ñóììà.";
+        Text[ polish ] = "Nieprawid³owa suma kontrolna.";
+        Text[ japanese ] = "³‚µ‚­‚È‚¢Áª¯¸»Ñ¡";
+        Text[ chinese_traditional ] = "ÀË¬d¼Æ¥Ø¦³»~";
+        Text[ arabic ] = "ãÌãæÚ ÇÎÊÈÇÑí ÎÇØÆ";
+        Text[ dutch ] = "Controlegetal niet juist.";
+        Text[ chinese_simplified ] = "´íÎóµÄ¼ì²éÊıÄ¿¡£";
+        Text[ greek ] = "ËÜèïò óıíïëï åëİã÷ïõ";
+        Text[ korean ] = "Ã¼Å© ÇÕ°è°¡ Æ²¸³´Ï´Ù.";
+        Text[ turkish ] = "Yanlış sağlama toplamı.";
+    };
+    String ERRCODE_IO_WRITEPROTECTED
+    {
+        Text = "Funktion unmöglich: Schreibgeschützt." ;
+        Text [ english ] = "Function impossible: write protected." ;
+        Text [ portuguese ] = "Função impossível: só de leitura." ;
+        Text [ english_us ] = "Function not possible: write protected." ;
+        Text [ portuguese_brazilian ] = "Funktion unmöglich: Schreibgeschützt." ;
+        Text [ swedish ] = "Funktion omöjlig: Skrivskyddad." ;
+        Text [ danish ] = "Funktion ikke mulig: skrivebeskyttet" ;
+        Text [ italian ] = "Funzione impossibile: solo lettura." ;
+        Text [ spanish ] = "Función imposible: Solo lectura." ;
+        Text [ french ] = "Impossible d'exécuter la fonction : en lecture-seule" ;
+        Text [ dutch ] = "Functie niet mogelijk: schrijfbeveiligd." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º·À¸²Ğ´¡£";
+        Text[ russian ] = "Íåâîçìîæíàÿ ôóíêöèÿ: óñòàíîâëåíà çàùèòà îò çàïèñè.";
+        Text[ polish ] = "Wykonanie funkcji niemo¿liwe: Tylko do odczytu.";
+        Text[ japanese ] = "‹@”\\•s‰Â”\\F‘‚«‚İ•ÛŒìB";
+        Text[ chinese_traditional ] = "µLªk°õ¦æ¥\\¯à¡G¨¾ÂĞ¼g";
+        Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: ãÍãí ÖÏ ÇáßÊÇÈÉ.";
+        Text[ dutch ] = "Functie niet mogelijk: schrijfbeveiligd.";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º·À¸²Ğ´¡£";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôåß ç ëåéôïõñãßá: Ìüíï ãéá áíÜãíùóç";
+        Text[ korean ] = "±â´É ºÒ°¡´É: ¾²±â º¸È£µÊ.";
+        Text[ turkish ] = "İşlev olanaklı değil: Yazma korumalı.";
+    };
+#endif
+};
+
+// eof ------------------------------------------------------------------------
+

@@ -1,0 +1,267 @@
+mkdir: %_DEST%\inc%_EXT%\svtools
+
+..\%__SRC%\srs\ehdl.srs %_DEST%\res%_EXT%\svtools.srs
+..\%__SRC%\lib\_notify.lib %_DEST%\lib%_EXT%\_notify.lib
+..\%__SRC%\lib\_libcall.lib %_DEST%\lib%_EXT%\_libcall.lib
+..\%__SRC%\lib\_ctrl.lib %_DEST%\lib%_EXT%\_ctrl.lib
+..\%__SRC%\lib\ctrl.lib %_DEST%\lib%_EXT%\ctrl.lib
+..\%__SRC%\lib\isvl.lib %_DEST%\lib%_EXT%\isvl.lib
+..\%__SRC%\lib\undo.lib %_DEST%\lib%_EXT%\undo.lib
+..\%__SRC%\lib\misc.lib %_DEST%\lib%_EXT%\misc.lib
+..\%__SRC%\lib\dialogs.lib %_DEST%\lib%_EXT%\dialogs.lib
+..\%__SRC%\lib\edit.lib %_DEST%\lib%_EXT%\edit.lib
+..\%__SRC%\lib\eaimp.lib %_DEST%\lib%_EXT%\eaimp.lib
+..\%__SRC%\lib\svcontnr.lib %_DEST%\lib%_EXT%\svcontnr.lib
+..\%__SRC%\lib\svmem.lib %_DEST%\lib%_EXT%\svmem.lib
+..\%__SRC%\lib\ssvmem.lib %_DEST%\lib%_EXT%\ssvmem.lib
+..\%__SRC%\lib\svdde.lib %_DEST%\lib%_EXT%\svdde.lib
+..\%__SRC%\lib\svtool.lib %_DEST%\lib%_EXT%\svtool.lib
+..\%__SRC%\slb\svt.lib %_DEST%\lib%_EXT%\xsvtool.lib
+..\%__SRC%\obj\wordsel2.obj %_DEST%\lib%_EXT%\xword2.obj
+..\%__SRC%\lib\filearch.lib %_DEST%\lib%_EXT%\filearch.lib
+..\%__SRC%\bin\dllver.exe %_DEST%\bin%_EXT%\dllver.exe
+..\%__SRC%\bin\dllver %_DEST%\bin%_EXT%\dllver
+..\%__SRC%\bin\svt%UPD%*.dll %_DEST%\bin%_EXT%\svt%UPD%*.dll
+..\%__SRC%\bin\svt%UPD%*.res %_DEST%\bin%_EXT%\svt%UPD%*.res
+..\%__SRC%\bin\svs%UPD%*.res %_DEST%\bin%_EXT%\svs%UPD%*.res
+..\%__SRC%\bin\bmp%UPD%*.res %_DEST%\bin%_EXT%\bmp%UPD%*.res
+..\%__SRC%\bin\san%UPD%*.res %_DEST%\bin%_EXT%\san%UPD%*.res
+..\%__SRC%\bin\svt%UPD%*.sym %_DEST%\bin%_EXT%\svt%UPD%*.sym
+..\%__SRC%\bin\svl%UPD%*.dll %_DEST%\bin%_EXT%\svl%UPD%*.dll
+..\%__SRC%\bin\bmp.* %_DEST%\bin%_EXT%\bmp.*
+..\%__SRC%\bin\bmp %_DEST%\bin%_EXT%\bmp
+..\%__SRC%\res\bmp.* %_DEST%\bin%_EXT%\bmp.*
+..\%__SRC%\misc\svt%UPD%*.map %_DEST%\bin%_EXT%\svt%UPD%*.map
+..\%__SRC%\lib\libsvt%UPD%* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libsvl%UPD%* %_DEST%\lib%_EXT%\*
+..\%__SRC%\misc\svtools.hid %_DEST%\bin%_EXT%\svtools.hid
+..\%__SRC%\inc\svtools\proped.hxx %_DEST%\inc%_EXT%\svtools\proped.hxx
+
+hedabu: ..\inc\testtool.hxx %_DEST%\inc%_EXT%\svtools\testtool.hxx
+hedabu: ..\inc\flbytes.hxx %_DEST%\inc%_EXT%\svtools\flbytes.hxx
+hedabu: ..\inc\args.hxx %_DEST%\inc%_EXT%\svtools\args.hxx
+hedabu: ..\inc\agprop.hxx %_DEST%\inc%_EXT%\svtools\agprop.hxx
+hedabu: ..\inc\aeitem.hxx %_DEST%\inc%_EXT%\svtools\aeitem.hxx
+hedabu: ..\inc\adrparse.hxx %_DEST%\inc%_EXT%\svtools\adrparse.hxx
+hedabu: ..\inc\brdcst.hxx %_DEST%\inc%_EXT%\svtools\brdcst.hxx
+hedabu: ..\inc\brooker.hxx %_DEST%\inc%_EXT%\svtools\brooker.hxx
+hedabu: ..\inc\brwbox.hxx %_DEST%\inc%_EXT%\svtools\brwbox.hxx
+hedabu: ..\inc\calendar.hxx %_DEST%\inc%_EXT%\svtools\calendar.hxx
+hedabu: ..\inc\cancel.hxx %_DEST%\inc%_EXT%\svtools\cancel.hxx
+hedabu: ..\inc\cntnrsrt.hxx %_DEST%\inc%_EXT%\svtools\cntnrsrt.hxx
+hedabu: ..\inc\colrdlg.hxx %_DEST%\inc%_EXT%\svtools\colrdlg.hxx
+hedabu: ..\inc\colctrl.hxx %_DEST%\inc%_EXT%\svtools\colctrl.hxx
+hedabu: ..\inc\compat.hxx %_DEST%\inc%_EXT%\svtools\compat.hxx
+hedabu: ..\inc\ctrlbox.hxx %_DEST%\inc%_EXT%\svtools\ctrlbox.hxx
+hedabu: ..\inc\ctrltool.hxx %_DEST%\inc%_EXT%\svtools\ctrltool.hxx
+hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\svtools\config.hxx
+hedabu: ..\inc\confitem.hxx %_DEST%\inc%_EXT%\svtools\confitem.hxx
+hedabu: ..\inc\cntwids.hrc %_DEST%\inc%_EXT%\svtools\cntwids.hrc
+hedabu: ..\inc\dateitem.hxx %_DEST%\inc%_EXT%\svtools\dateitem.hxx
+hedabu: ..\inc\dtritem.hxx %_DEST%\inc%_EXT%\svtools\dtritem.hxx
+hedabu: ..\inc\frqitem.hxx %_DEST%\inc%_EXT%\svtools\frqitem.hxx
+hedabu: ..\inc\cstitem.hxx %_DEST%\inc%_EXT%\svtools\cstitem.hxx
+hedabu: ..\inc\tfrmitem.hxx %_DEST%\inc%_EXT%\svtools\tfrmitem.hxx
+hedabu: ..\inc\cntcmpmn.hxx %_DEST%\inc%_EXT%\svtools\cntcmpmn.hxx
+hedabu: ..\inc\cntwall.hxx %_DEST%\inc%_EXT%\svtools\cntwall.hxx
+hedabu: ..\inc\itemdel.hxx %_DEST%\inc%_EXT%\svtools\itemdel.hxx
+hedabu: ..\inc\wallitem.hxx %_DEST%\inc%_EXT%\svtools\wallitem.hxx
+hedabu: ..\inc\sfontitm.hxx %_DEST%\inc%_EXT%\svtools\sfontitm.hxx
+hedabu: ..\inc\bintitem.hxx %_DEST%\inc%_EXT%\svtools\bintitem.hxx
+hedabu: ..\source\misc\demo.hxx %_DEST%\inc%_EXT%\svtools\demo.hxx
+hedabu: ..\inc\pver.hxx %_DEST%\inc%_EXT%\svtools\pver.hxx
+hedabu: ..\inc\eitem.hxx %_DEST%\inc%_EXT%\svtools\eitem.hxx
+hedabu: ..\inc\filedlg.hxx %_DEST%\inc%_EXT%\svtools\filedlg.hxx
+hedabu: ..\inc\filerec.hxx %_DEST%\inc%_EXT%\svtools\filerec.hxx
+hedabu: ..\inc\flagitem.hxx %_DEST%\inc%_EXT%\svtools\flagitem.hxx
+hedabu: ..\inc\fltcall.hxx %_DEST%\inc%_EXT%\svtools\fltcall.hxx
+hedabu: ..\inc\wmf.hxx %_DEST%\inc%_EXT%\svtools\wmf.hxx
+hedabu: ..\inc\fltdefs.hxx %_DEST%\inc%_EXT%\svtools\fltdefs.hxx
+hedabu: ..\inc\filter.hxx %_DEST%\inc%_EXT%\svtools\filter.hxx
+hedabu: ..\inc\fmtfield.hxx %_DEST%\inc%_EXT%\svtools\fmtfield.hxx
+hedabu: ..\inc\fontdlg.hxx %_DEST%\inc%_EXT%\svtools\fontdlg.hxx
+hedabu: ..\inc\hint.hxx %_DEST%\inc%_EXT%\svtools\hint.hxx
+hedabu: ..\inc\inetdef.hxx %_DEST%\inc%_EXT%\svtools\inetdef.hxx
+hedabu: ..\inc\inethist.hxx %_DEST%\inc%_EXT%\svtools\inethist.hxx
+hedabu: ..\inc\inetmsg.hxx %_DEST%\inc%_EXT%\svtools\inetmsg.hxx
+hedabu: ..\inc\inetstrm.hxx %_DEST%\inc%_EXT%\svtools\inetstrm.hxx
+hedabu: ..\inc\inidef.hxx %_DEST%\inc%_EXT%\svtools\inidef.hxx
+hedabu: ..\inc\iniman.hxx %_DEST%\inc%_EXT%\svtools\iniman.hxx
+hedabu: ..\inc\iniadrtk.hxx %_DEST%\inc%_EXT%\svtools\iniadrtk.hxx
+hedabu: ..\inc\iniprop.hxx %_DEST%\inc%_EXT%\svtools\iniprop.hxx
+hedabu: ..\inc\intitem.hxx %_DEST%\inc%_EXT%\svtools\intitem.hxx
+hedabu: ..\inc\isethint.hxx %_DEST%\inc%_EXT%\svtools\isethint.hxx
+hedabu: ..\inc\itemiter.hxx %_DEST%\inc%_EXT%\svtools\itemiter.hxx
+hedabu: ..\inc\itempool.hxx %_DEST%\inc%_EXT%\svtools\itempool.hxx
+hedabu: ..\inc\itemset.hxx %_DEST%\inc%_EXT%\svtools\itemset.hxx
+hedabu: ..\inc\lckbitem.hxx %_DEST%\inc%_EXT%\svtools\lckbitem.hxx
+hedabu: ..\inc\libcall.hxx %_DEST%\inc%_EXT%\svtools\libcall.hxx
+hedabu: ..\inc\lstner.hxx %_DEST%\inc%_EXT%\svtools\lstner.hxx
+hedabu: ..\inc\macitem.hxx %_DEST%\inc%_EXT%\svtools\macitem.hxx
+hedabu: ..\inc\memberid.hrc %_DEST%\inc%_EXT%\svtools\memberid.hrc
+hedabu: ..\inc\nranges.hxx %_DEST%\inc%_EXT%\svtools\nranges.hxx
+hedabu: ..\inc\ownlist.hxx %_DEST%\inc%_EXT%\svtools\ownlist.hxx
+hedabu: ..\inc\prgsbar.hxx %_DEST%\inc%_EXT%\svtools\prgsbar.hxx
+hedabu: ..\inc\prnsetup.hxx %_DEST%\inc%_EXT%\svtools\prnsetup.hxx
+hedabu: ..\inc\poolcach.hxx %_DEST%\inc%_EXT%\svtools\poolcach.hxx
+hedabu: ..\inc\poolitem.hxx %_DEST%\inc%_EXT%\svtools\poolitem.hxx
+hedabu: ..\inc\printer.hxx %_DEST%\inc%_EXT%\svtools\printer.hxx
+hedabu: ..\inc\printdlg.hxx %_DEST%\inc%_EXT%\svtools\printdlg.hxx
+hedabu: ..\inc\ptitem.hxx %_DEST%\inc%_EXT%\svtools\ptitem.hxx
+hedabu: ..\inc\szitem.hxx %_DEST%\inc%_EXT%\svtools\szitem.hxx
+hedabu: ..\inc\rectitem.hxx %_DEST%\inc%_EXT%\svtools\rectitem.hxx
+hedabu: ..\inc\rngitem.hxx %_DEST%\inc%_EXT%\svtools\rngitem.hxx
+hedabu: ..\inc\ruler.hxx %_DEST%\inc%_EXT%\svtools\ruler.hxx
+hedabu: ..\inc\scrwin.hxx %_DEST%\inc%_EXT%\svtools\scrwin.hxx
+hedabu: ..\inc\slstitm.hxx %_DEST%\inc%_EXT%\svtools\slstitm.hxx
+hedabu: ..\inc\smplhint.hxx %_DEST%\inc%_EXT%\svtools\smplhint.hxx
+hedabu: ..\inc\cnclhint.hxx %_DEST%\inc%_EXT%\svtools\cnclhint.hxx
+hedabu: ..\inc\inettype.hxx %_DEST%\inc%_EXT%\svtools\inettype.hxx
+hedabu: ..\inc\brwhead.hxx %_DEST%\inc%_EXT%\svtools\brwhead.hxx
+hedabu: ..\inc\solar.hrc %_DEST%\inc%_EXT%\svtools\solar.hrc
+hedabu: ..\inc\stdctrl.hxx %_DEST%\inc%_EXT%\svtools\stdctrl.hxx
+hedabu: ..\inc\stritem.hxx %_DEST%\inc%_EXT%\svtools\stritem.hxx
+hedabu: ..\inc\style.hrc %_DEST%\inc%_EXT%\svtools\style.hrc
+hedabu: ..\inc\style.hxx %_DEST%\inc%_EXT%\svtools\style.hxx
+hedabu: ..\inc\svarray.hxx %_DEST%\inc%_EXT%\svtools\svarray.hxx
+hedabu: ..\inc\svdde.hxx %_DEST%\inc%_EXT%\svtools\svdde.hxx
+hedabu: ..\inc\svtdata.hxx %_DEST%\inc%_EXT%\svtools\svtdata.hxx
+hedabu: ..\inc\tabbar.hxx %_DEST%\inc%_EXT%\svtools\tabbar.hxx
+hedabu: ..\inc\taskbar.hxx %_DEST%\inc%_EXT%\svtools\taskbar.hxx
+hedabu: ..\inc\undo.hxx %_DEST%\inc%_EXT%\svtools\undo.hxx
+hedabu: ..\inc\whiter.hxx %_DEST%\inc%_EXT%\svtools\whiter.hxx
+hedabu: ..\inc\valueset.hxx %_DEST%\inc%_EXT%\svtools\valueset.hxx
+hedabu: ..\inc\stdmenu.hxx %_DEST%\inc%_EXT%\svtools\stdmenu.hxx
+hedabu: ..\inc\headbar.hxx %_DEST%\inc%_EXT%\svtools\headbar.hxx
+hedabu: ..\inc\svicnvw.hxx %_DEST%\inc%_EXT%\svtools\svicnvw.hxx
+hedabu: ..\inc\svlbitm.hxx %_DEST%\inc%_EXT%\svtools\svlbitm.hxx
+hedabu: ..\inc\svlbox.hxx %_DEST%\inc%_EXT%\svtools\svlbox.hxx
+hedabu: ..\inc\svtabbx.hxx %_DEST%\inc%_EXT%\svtools\svtabbx.hxx
+hedabu: ..\inc\svtreebx.hxx %_DEST%\inc%_EXT%\svtools\svtreebx.hxx
+hedabu: ..\inc\treelist.hxx %_DEST%\inc%_EXT%\svtools\treelist.hxx
+hedabu: ..\inc\xtextedt.hxx %_DEST%\inc%_EXT%\svtools\xtextedt.hxx
+hedabu: ..\inc\texteng.hxx %_DEST%\inc%_EXT%\svtools\texteng.hxx
+hedabu: ..\inc\textview.hxx %_DEST%\inc%_EXT%\svtools\textview.hxx
+hedabu: ..\inc\textdata.hxx %_DEST%\inc%_EXT%\svtools\textdata.hxx
+hedabu: ..\inc\txtattr.hxx %_DEST%\inc%_EXT%\svtools\txtattr.hxx
+hedabu: ..\inc\sychconv.hxx %_DEST%\inc%_EXT%\svtools\sychconv.hxx
+hedabu: ..\inc\rcontrol.hxx %_DEST%\inc%_EXT%\svtools\rcontrol.hxx
+hedabu: ..\inc\communi.hxx %_DEST%\inc%_EXT%\svtools\communi.hxx
+hedabu: ..\inc\ttprops.hxx %_DEST%\inc%_EXT%\svtools\ttprops.hxx
+hedabu: ..\inc\ttglobal.hrc %_DEST%\inc%_EXT%\svtools\ttglobal.hrc
+hedabu: ..\inc\svtmsg.hrc %_DEST%\inc%_EXT%\svtools\svtmsg.hrc
+hedabu: ..\source\memtools\hashtab.hxx %_DEST%\inc%_EXT%\svtools\hashtab.hxx
+hedabu: ..\source\memtools\hashcont.hxx %_DEST%\inc%_EXT%\svtools\hashcont.hxx
+hedabu: ..\inc\sbx.hxx %_DEST%\inc%_EXT%\svtools\sbx.hxx
+hedabu: ..\source\sbx\sbxbase.hxx %_DEST%\inc%_EXT%\svtools\sbxbase.hxx
+hedabu: ..\inc\sbxcore.hxx %_DEST%\inc%_EXT%\svtools\sbxcore.hxx
+hedabu: ..\inc\sbxdef.hxx %_DEST%\inc%_EXT%\svtools\sbxdef.hxx
+hedabu: ..\source\sbx\sbxfac.hxx %_DEST%\inc%_EXT%\svtools\sbxfac.hxx
+hedabu: ..\inc\sbxform.hxx %_DEST%\inc%_EXT%\svtools\sbxform.hxx
+hedabu: ..\inc\sbxmeth.hxx %_DEST%\inc%_EXT%\svtools\sbxmeth.hxx
+hedabu: ..\source\sbx\sbxmstrm.hxx %_DEST%\inc%_EXT%\svtools\sbxmstrm.hxx
+hedabu: ..\inc\sbxobj.hxx %_DEST%\inc%_EXT%\svtools\sbxobj.hxx
+hedabu: ..\inc\sbxprop.hxx %_DEST%\inc%_EXT%\svtools\sbxprop.hxx
+hedabu: ..\inc\sbxvar.hxx %_DEST%\inc%_EXT%\svtools\sbxvar.hxx
+hedabu: ..\source\search\levdis.hxx %_DEST%\inc%_EXT%\svtools\levdis.hxx
+hedabu: ..\source\search\wordsel.hxx %_DEST%\inc%_EXT%\svtools\wordsel.hxx
+hedabu: ..\inc\txtcmp.hxx %_DEST%\inc%_EXT%\svtools\txtcmp.hxx
+hedabu: ..\inc\urlbmk.hxx %_DEST%\inc%_EXT%\svtools\urlbmk.hxx
+hedabu: ..\source\urlobj\inetimg.hxx %_DEST%\inc%_EXT%\svtools\inetimg.hxx
+hedabu: ..\inc\svmedit.hxx %_DEST%\inc%_EXT%\svtools\svmedit.hxx
+hedabu: ..\inc\svstdarr.hxx %_DEST%\inc%_EXT%\svtools\svstdarr.hxx
+hedabu: ..\inc\extattr.hxx %_DEST%\inc%_EXT%\svtools\extattr.hxx
+hedabu: ..\inc\metitem.hxx %_DEST%\inc%_EXT%\svtools\metitem.hxx
+hedabu: ..\inc\nfversi.hxx %_DEST%\inc%_EXT%\svtools\nfversi.hxx
+hedabu: ..\inc\wizdlg.hxx %_DEST%\inc%_EXT%\svtools\wizdlg.hxx
+hedabu: ..\inc\zforlist.hxx %_DEST%\inc%_EXT%\svtools\zforlist.hxx
+hedabu: ..\inc\zformat.hxx %_DEST%\inc%_EXT%\svtools\zformat.hxx
+hedabu: ..\inc\numuno.hxx %_DEST%\inc%_EXT%\svtools\numuno.hxx
+hedabu: ..\source\misc\filearch.hxx %_DEST%\inc%_EXT%\svtools\filearch.hxx
+hedabu: ..\inc\loginerr.hxx %_DEST%\inc%_EXT%\svtools\loginerr.hxx
+hedabu: ..\inc\httpcook.hxx %_DEST%\inc%_EXT%\svtools\httpcook.hxx
+hedabu: ..\source\misc\demo.hxx %_DEST%\inc%_EXT%\svtools\svtdemo.hxx
+hedabu: ..\source\uno\unoiface.hxx %_DEST%\inc%_EXT%\svtools\unoiface.hxx
+hedabu: ..\source\uno\imgprod.hxx %_DEST%\inc%_EXT%\svtools\imgprod.hxx
+hedabu: ..\inc\itemprop.hxx %_DEST%\inc%_EXT%\svtools\itemprop.hxx
+hedabu: ..\inc\itempro3.hxx %_DEST%\inc%_EXT%\svtools\itempro3.hxx
+hedabu: ..\inc\strcrypt.hxx %_DEST%\inc%_EXT%\svtools\strcrypt.hxx
+
+hedabu: ..\inc\imap.hxx %_DEST%\inc%_EXT%\svtools\imap.hxx
+hedabu: ..\inc\imapobj.hxx %_DEST%\inc%_EXT%\svtools\imapobj.hxx
+hedabu: ..\inc\imaprect.hxx %_DEST%\inc%_EXT%\svtools\imaprect.hxx
+hedabu: ..\inc\imapcirc.hxx %_DEST%\inc%_EXT%\svtools\imapcirc.hxx
+hedabu: ..\inc\imappoly.hxx %_DEST%\inc%_EXT%\svtools\imappoly.hxx
+hedabu: ..\inc\svtuiks.hxx %_DEST%\inc%_EXT%\svtools\svtuiks.hxx
+
+hedabu: ..\inc\parhtml.hxx %_DEST%\inc%_EXT%\svtools\parhtml.hxx
+hedabu: ..\inc\htmltokn.h %_DEST%\inc%_EXT%\svtools\htmltokn.h
+hedabu: ..\inc\htmlkywd.hxx %_DEST%\inc%_EXT%\svtools\htmlkywd.hxx
+hedabu: ..\inc\svparser.hxx %_DEST%\inc%_EXT%\svtools\svparser.hxx
+hedabu: ..\source\svhtml\htmlout.hxx %_DEST%\inc%_EXT%\svtools\htmlout.hxx
+hedabu: ..\source\svrtf\rtfout.hxx %_DEST%\inc%_EXT%\svtools\rtfout.hxx
+hedabu: ..\source\svrtf\parrtf.hxx %_DEST%\inc%_EXT%\svtools\parrtf.hxx
+hedabu: ..\source\svrtf\rtftoken.h %_DEST%\inc%_EXT%\svtools\rtftoken.h
+hedabu: ..\source\svrtf\rtfkeywd.hxx %_DEST%\inc%_EXT%\svtools\rtfkeywd.hxx
+
+hedabu: ..\source\svxml\xmlerror.h %_DEST%\inc%_EXT%\svtools\xmlerror.h
+hedabu: ..\source\svxml\xmlattr.hxx %_DEST%\inc%_EXT%\svtools\xmlattr.hxx
+hedabu: ..\source\svxml\domdoc.hxx %_DEST%\inc%_EXT%\svtools\domdoc.hxx
+
+hedabu: ..\inc\ctypeitm.hxx %_DEST%\inc%_EXT%\svtools\ctypeitm.hxx
+hedabu: ..\inc\groupset.hxx %_DEST%\inc%_EXT%\svtools\groupset.hxx
+
+hedabu: ..\inc\fmtfield.hxx %_DEST%\inc%_EXT%\svtools\fmtfield.hxx
+hedabu: ..\inc\svtoxstr.hxx %_DEST%\inc%_EXT%\svtools\svtoxstr.hxx
+hedabu: ..\inc\strmadpt.hxx %_DEST%\inc%_EXT%\svtools\strmadpt.hxx
+hedabu: ..\inc\instrm.hxx %_DEST%\inc%_EXT%\svtools\instrm.hxx
+hedabu: ..\inc\outstrm.hxx %_DEST%\inc%_EXT%\svtools\outstrm.hxx
+
+hedabu: ..\inc\section.hxx %_DEST%\inc%_EXT%\svtools\section.hxx
+hedabu: ..\inc\sectctr.hxx %_DEST%\inc%_EXT%\svtools\sectctr.hxx
+hedabu: ..\inc\privsplt.hxx %_DEST%\inc%_EXT%\svtools\privsplt.hxx
+hedabu: ..\inc\expander.hxx %_DEST%\inc%_EXT%\svtools\expander.hxx
+hedabu: ..\source\svsql\sdbsql.hxx %_DEST%\inc%_EXT%\svtools\sdbsql.hxx
+hedabu: ..\source\svsql\sdbyacc.hxx %_DEST%\inc%_EXT%\svtools\sdbyacc.hxx
+hedabu: ..\source\svsql\sdbparse.hxx %_DEST%\inc%_EXT%\svtools\sdbparse.hxx
+hedabu: ..\%__SRC%\inc\svtools\sdbbison.hxx %_DEST%\inc%_EXT%\svtools\sdbbison.hxx
+hedabu: ..\source\svsql\converter.hxx %_DEST%\inc%_EXT%\svtools\converter.hxx
+hedabu: ..\source\cmdparse\cmdparse.hxx %_DEST%\inc%_EXT%\svtools\cmdparse.hxx
+
+
+hedabu: ..\inc\filectrl.hxx %_DEST%\inc%_EXT%\svtools\filectrl.hxx
+hedabu: ..\inc\cenumitm.hxx %_DEST%\inc%_EXT%\svtools\cenumitm.hxx
+hedabu: ..\inc\cintitem.hxx %_DEST%\inc%_EXT%\svtools\cintitem.hxx
+hedabu: ..\inc\custritm.hxx %_DEST%\inc%_EXT%\svtools\custritm.hxx
+
+hedabu: ..\inc\sfxecode.hxx %_DEST%\inc%_EXT%\svtools\sfxecode.hxx
+hedabu: ..\inc\ehdl.hxx %_DEST%\inc%_EXT%\svtools\ehdl.hxx
+hedabu: ..\inc\svtools.hrc %_DEST%\inc%_EXT%\svtools\svtools.hrc
+
+hedabu: ..\source\xmlfilt\attrlist.hxx %_DEST%\inc%_EXT%\svtools\attrlist.hxx
+hedabu: ..\source\xmlfilt\i18nmap.hxx %_DEST%\inc%_EXT%\svtools\i18nmap.hxx
+hedabu: ..\inc\nmspmap.hxx %_DEST%\inc%_EXT%\svtools\nmspmap.hxx
+hedabu: ..\source\xmlfilt\xmltkmap.hxx %_DEST%\inc%_EXT%\svtools\xmltkmap.hxx
+hedabu: ..\source\xmlfilt\xmlkywd.hxx %_DEST%\inc%_EXT%\svtools\xmlkywd.hxx
+hedabu: ..\source\xmlfilt\xmlexp.hxx %_DEST%\inc%_EXT%\svtools\xmlexp.hxx
+hedabu: ..\source\xmlfilt\xmlehelp.hxx %_DEST%\inc%_EXT%\svtools\xmlehelp.hxx
+hedabu: ..\source\xmlfilt\xmlimp.hxx %_DEST%\inc%_EXT%\svtools\xmlimp.hxx
+hedabu: ..\source\xmlfilt\xmlictxt.hxx %_DEST%\inc%_EXT%\svtools\xmlictxt.hxx
+hedabu: ..\source\xmlfilt\xmlitem.hxx %_DEST%\inc%_EXT%\svtools\xmlitem.hxx
+hedabu: ..\source\xmlfilt\xmlstyle.hxx %_DEST%\inc%_EXT%\svtools\xmlstyle.hxx
+hedabu: ..\source\xmlfilt\xmlastpl.hxx %_DEST%\inc%_EXT%\svtools\xmlastpl.hxx
+hedabu: ..\source\xmlfilt\wstrhelp.hxx %_DEST%\inc%_EXT%\svtools\wstrhelp.hxx
+hedabu: ..\inc\xmluconv.hxx %_DEST%\inc%_EXT%\svtools\xmluconv.hxx
+hedabu: ..\source\xmlfilt\xmlitmpr.hxx %_DEST%\inc%_EXT%\svtools\xmlitmpr.hxx
+hedabu: ..\inc\xmlement.hxx %_DEST%\inc%_EXT%\svtools\xmlement.hxx
+hedabu: ..\source\xmlfilt\xmlnmspe.hxx %_DEST%\inc%_EXT%\svtools\xmlnmspe.hxx
+hedabu: ..\source\xmlfilt\xmlimpit.hxx %_DEST%\inc%_EXT%\svtools\xmlimpit.hxx
+hedabu: ..\source\xmlfilt\xmlexpit.hxx %_DEST%\inc%_EXT%\svtools\xmlexpit.hxx
+hedabu: ..\source\xmlfilt\xmlitmap.hxx %_DEST%\inc%_EXT%\svtools\xmlitmap.hxx
+hedabu: ..\source\xmlfilt\xmlnumfe.hxx %_DEST%\inc%_EXT%\svtools\xmlnumfe.hxx
+hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svtools\xmlcnitm.hxx
+hedabu: ..\inc\tresitem.hxx %_DEST%\inc%_EXT%\svtools\tresitem.hxx
+hedabu: ..\inc\urihelper.hxx %_DEST%\inc%_EXT%\svtools\urihelper.hxx
+hedabu: ..\inc\reginfo.hxx %_DEST%\inc%_EXT%\svtools\reginfo.hxx
+hedabu: ..\inc\pathoptions.hxx %_DEST%\inc%_EXT%\svtools\pathoptions.hxx
+hedabu: ..\inc\useroptions.hxx %_DEST%\inc%_EXT%\svtools\useroptions.hxx

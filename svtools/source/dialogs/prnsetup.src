@@ -1,0 +1,966 @@
+/*************************************************************************
+ *
+ *  $RCSfile: prnsetup.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "prnsetup.hrc"
+
+String STR_SVT_PRNDLG_READY
+{
+    Text = "Bereit" ;
+    Text [ ENGLISH ] = "Ready" ;
+    Text [ portuguese ] = "Pronto" ;
+    Text [ english_us ] = "Ready" ;
+    Text [ portuguese_brazilian ] = "Bereit" ;
+    Text [ swedish ] = "Redo" ;
+    Text [ danish ] = "Klar" ;
+    Text [ italian ] = "Pronto" ;
+    Text [ spanish ] = "Preparado" ;
+    Text [ french ] = "Disponible" ;
+    Text [ dutch ] = "Klaar" ;
+    Text[ chinese_simplified ] = "¾ÍĞ÷";
+    Text[ russian ] = "Ãîòîâ";
+    Text[ polish ] = "Gotowy";
+    Text[ japanese ] = "±²ÄŞØİ¸Ş’†";
+    Text[ chinese_traditional ] = "´Nºü";
+    Text[ arabic ] = "ÌÇåÒÉ";
+    Text[ greek ] = "Óå åôïéìüôçôá";
+    Text[ korean ] = "ÁØºñ";
+    Text[ turkish ] = "Hazır";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_PAUSED
+{
+    Text = "Angehalten" ;
+    Text [ ENGLISH ] = "Paused" ;
+    Text [ portuguese ] = "Cancelado" ;
+    Text [ english_us ] = "Paused" ;
+    Text [ portuguese_brazilian ] = "Angehalten" ;
+    Text [ swedish ] = "Stoppad" ;
+    Text [ danish ] = "Stoppet" ;
+    Text [ italian ] = "Pausa" ;
+    Text [ spanish ] = "Detenido" ;
+    Text [ french ] = "Arrêté" ;
+    Text [ dutch ] = "Gestopt" ;
+    Text[ chinese_simplified ] = "ÔİÍ£";
+    Text[ russian ] = "Îñòàíîâëåí";
+    Text[ polish ] = "Zatrzymane";
+    Text[ japanese ] = "’†’f";
+    Text[ chinese_traditional ] = "¼È°±";
+    Text[ arabic ] = "ãæŞæİÉ";
+    Text[ greek ] = "ÄéáêïğŞ";
+    Text[ korean ] = "ÀÏ½ÃÁ¤Áö";
+    Text[ turkish ] = "Durduruldu";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_PENDING
+{
+    Text = "Löschen anstehend" ;
+    Text [ ENGLISH ] = "Pending deletion" ;
+    Text [ portuguese ] = "Eliminar pendente" ;
+    Text [ english_us ] = "Pending deletion" ;
+    Text [ portuguese_brazilian ] = "Löschen anstehend" ;
+    Text [ swedish ] = "Radering i vänteläge" ;
+    Text [ danish ] = "Slet igangværende" ;
+    Text [ italian ] = "Cancellazione in attesa" ;
+    Text [ spanish ] = "Eliminación pendiente" ;
+    Text [ french ] = "Suppression imminente" ;
+    Text [ dutch ] = "Wissen verwacht" ;
+    Text[ chinese_simplified ] = "É¾³ıµÈºòµÄ";
+    Text[ russian ] = "Óäàëåíèå îòëîæåíî";
+    Text[ polish ] = "Oczekiwanie na usuniêcie";
+    Text[ japanese ] = "íœ‚ğ‘Ò‚Á‚Ä‚¢‚Ü‚·";
+    Text[ chinese_traditional ] = "§R°£µ¥­Ôªº";
+    Text[ arabic ] = "ÇáÍĞİ ãÚáŞ";
+    Text[ greek ] = "ÄéáãñáöŞ óôç óõíİ÷åéá";
+    Text[ korean ] = "´ë±âÁß ÀÛ¾÷ »èÁ¦";
+    Text[ turkish ] = "Silinmek üzere";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_BUSY
+{
+    Text = "Ausgelastet" ;
+    Text [ ENGLISH ] = "Busy" ;
+    Text [ portuguese ] = "Ocupado" ;
+    Text [ english_us ] = "Busy" ;
+    Text [ portuguese_brazilian ] = "Ausgelastet" ;
+    Text [ swedish ] = "Upptaget" ;
+    Text [ danish ] = "Optaget" ;
+    Text [ italian ] = "Sovraccarico" ;
+    Text [ spanish ] = "Ocupado" ;
+    Text [ french ] = "Système occupé" ;
+    Text [ dutch ] = "Bezig" ;
+    Text[ chinese_simplified ] = "Ã¦Âµ";
+    Text[ russian ] = "Â äåéñòâèè";
+    Text[ polish ] = "Zajêty";
+    Text[ japanese ] = "ËŞ¼Ş°ó‘Ô";
+    Text[ chinese_traditional ] = "¦£¸L";
+    Text[ arabic ] = "ãÔÛæáÉ";
+    Text[ greek ] = "Áğáó÷ïëçìİíïò";
+    Text[ korean ] = "»ç¿ëÁß";
+    Text[ turkish ] = "Meşgul";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_INITIALIZING
+{
+    Text = "Initialisieren" ;
+    Text [ ENGLISH ] = "Initialzing" ;
+    Text [ portuguese ] = "Inicializar" ;
+    Text [ english_us ] = "Initializing" ;
+    Text [ portuguese_brazilian ] = "Initialisieren" ;
+    Text [ swedish ] = "Initierar" ;
+    Text [ danish ] = "Initialiserer" ;
+    Text [ italian ] = "Inizializza" ;
+    Text [ spanish ] = "Inicializar" ;
+    Text [ french ] = "Initialisation" ;
+    Text [ dutch ] = "Initialiseren" ;
+    Text[ chinese_simplified ] = "³õÊ¼»¯";
+    Text[ russian ] = "Èíèöèàëèçèğîâàòü";
+    Text[ polish ] = "Inicjacja";
+    Text[ japanese ] = "‰Šú‰»";
+    Text[ chinese_traditional ] = "ªì©l¤Æ";
+    Text[ arabic ] = "ÊåíÆÉ";
+    Text[ greek ] = "Áñ÷éêïğïßçóç";
+    Text[ korean ] = "ÃÊ±âÈ­";
+    Text[ turkish ] = "Başlat";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_WAITING
+{
+    Text = "Wartend" ;
+    Text [ ENGLISH ] = "Waiting" ;
+    Text [ portuguese ] = "Esperando" ;
+    Text [ english_us ] = "Waiting" ;
+    Text [ portuguese_brazilian ] = "Wartend" ;
+    Text [ swedish ] = "Väntar" ;
+    Text [ danish ] = "Venter" ;
+    Text [ italian ] = "Attesa" ;
+    Text [ spanish ] = "En espera" ;
+    Text [ french ] = "En attente" ;
+    Text [ dutch ] = "Wachtend" ;
+    Text[ chinese_simplified ] = "µÈºò";
+    Text[ russian ] = "Â îæèäàíèè";
+    Text[ polish ] = "Oczekiwanie";
+    Text[ japanese ] = "‘Ò‹@’†";
+    Text[ chinese_traditional ] = "µ¥­Ô";
+    Text[ arabic ] = "ÇäÊÙÇÑ";
+    Text[ greek ] = "ÁíáìïíŞ";
+    Text[ korean ] = "´ë±âÁß";
+    Text[ turkish ] = "Beklemede";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_WARMING_UP
+{
+    Text = "Anlaufen" ;
+    Text [ ENGLISH ] = "Warming up" ;
+    Text [ portuguese ] = "Aquecimento" ;
+    Text [ english_us ] = "Warming up" ;
+    Text [ portuguese_brazilian ] = "Anlaufen" ;
+    Text [ swedish ] = "Startar" ;
+    Text [ danish ] = "Varmer op" ;
+    Text [ italian ] = "In avvio" ;
+    Text [ spanish ] = "Arranque" ;
+    Text [ french ] = "Préchauffage" ;
+    Text [ dutch ] = "Beginnen" ;
+    Text[ chinese_simplified ] = "Ô¤ÈÈ";
+    Text[ russian ] = "Çàïóñê";
+    Text[ polish ] = "Rozgrzewanie";
+    Text[ japanese ] = "€”õ’†";
+    Text[ chinese_traditional ] = "¹w¼ö";
+    Text[ arabic ] = "ÇÓÊÚÏÇÏ";
+    Text[ language_user1 ] = " ";
+    Text[ greek ] = "Ğñïåôïéìáóßá";
+    Text[ korean ] = "ÁØºñÁß";
+    Text[ turkish ] = "Isınıyor";
+};
+String STR_SVT_PRNDLG_PROCESSING
+{
+    Text = "Verarbeiten" ;
+    Text [ ENGLISH ] = "Processing" ;
+    Text [ portuguese ] = "Processamento" ;
+    Text [ english_us ] = "Processing" ;
+    Text [ portuguese_brazilian ] = "Verarbeiten" ;
+    Text [ swedish ] = "Bearbeta" ;
+    Text [ danish ] = "Behandler" ;
+    Text [ italian ] = "Modifica" ;
+    Text [ spanish ] = "Procesar" ;
+    Text [ french ] = "Modifier" ;
+    Text [ dutch ] = "Verwerken" ;
+    Text[ chinese_simplified ] = "´¦Àí";
+    Text[ russian ] = "Îáğàáîòêà";
+    Text[ polish ] = "Opracuj";
+    Text[ japanese ] = "ˆ—";
+    Text[ chinese_traditional ] = "³B²z";
+    Text[ arabic ] = "ãÚÇáÌÉ";
+    Text[ greek ] = "Åğåîåñãáóßá";
+    Text[ korean ] = "ÁøÇàÁß";
+    Text[ turkish ] = "İşleniyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_PRINTING
+{
+    Text = "Drucken" ;
+    Text [ ENGLISH ] = "Printing" ;
+    Text [ portuguese ] = "Imprimindo" ;
+    Text [ english_us ] = "Printing" ;
+    Text [ portuguese_brazilian ] = "Drucken" ;
+    Text [ swedish ] = "Skriv ut" ;
+    Text [ danish ] = "Udskriv" ;
+    Text [ italian ] = "Stampa" ;
+    Text [ spanish ] = "Imprimir" ;
+    Text [ french ] = "Imprimer" ;
+    Text [ dutch ] = "Printwn" ;
+    Text[ chinese_simplified ] = "´òÓ¡";
+    Text[ russian ] = "Ïå÷àòü";
+    Text[ polish ] = "Drukuj";
+    Text[ japanese ] = "ˆóü";
+    Text[ chinese_traditional ] = "¦C¦L";
+    Text[ arabic ] = "ØÈÇÚÉ";
+    Text[ greek ] = "Åêôığùóç";
+    Text[ korean ] = "ÀÎ¼âÁß";
+    Text[ turkish ] = "Yazdır";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_OFFLINE
+{
+    Text = "Offline" ;
+    Text [ ENGLISH ] = "Offline" ;
+    Text [ portuguese ] = "Offline" ;
+    Text [ english_us ] = "Offline" ;
+    Text [ portuguese_brazilian ] = "Offline" ;
+    Text [ swedish ] = "Offline" ;
+    Text [ danish ] = "Offline" ;
+    Text [ italian ] = "Offline" ;
+    Text [ spanish ] = "Desconectado" ;
+    Text [ french ] = "Hors ligne" ;
+    Text [ dutch ] = "Offline" ;
+    Text[ chinese_simplified ] = "ÍÑ»ú";
+    Text[ russian ] = "Offline";
+    Text[ polish ] = "Offline";
+    Text[ japanese ] = "µÌ×²İ";
+    Text[ chinese_traditional ] = "³s½u";
+    Text[ arabic ] = "ÛíÑ ãÊÕá";
+    Text[ greek ] = "×ùñßò óıíäåóç";
+    Text[ korean ] = "¿ÀÇÁ¶óÀÎ";
+    Text[ turkish ] = "Çevrimdışı";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_ERROR
+{
+    Text = "Fehler" ;
+    Text [ ENGLISH ] = "Error" ;
+    Text [ portuguese ] = "Erro" ;
+    Text [ english_us ] = "Error" ;
+    Text [ portuguese_brazilian ] = "Fehler" ;
+    Text [ swedish ] = "Fel" ;
+    Text [ danish ] = "Fejl" ;
+    Text [ italian ] = "Errore" ;
+    Text [ spanish ] = "Error" ;
+    Text [ french ] = "Erreur" ;
+    Text [ dutch ] = "Fout" ;
+    Text[ chinese_simplified ] = "´íÎó";
+    Text[ russian ] = "Îøèáêà";
+    Text[ polish ] = "B³¹d";
+    Text[ japanese ] = "´×°";
+    Text[ chinese_traditional ] = "¿ù»~";
+    Text[ arabic ] = "ÎØÃ";
+    Text[ greek ] = "ÓöÜëìá";
+    Text[ korean ] = "¿À·ù";
+    Text[ turkish ] = "Hata";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_SERVER_UNKNOWN
+{
+    Text = "Unbekannter Server" ;
+    Text [ ENGLISH ] = "Unknown Server" ;
+    Text [ portuguese ] = "Servidor desconhecido" ;
+    Text [ english_us ] = "Unknown Server" ;
+    Text [ portuguese_brazilian ] = "Unbekannter Server" ;
+    Text [ swedish ] = "Obekant server" ;
+    Text [ danish ] = "Ukendt server" ;
+    Text [ italian ] = "Server sconosciuto" ;
+    Text [ spanish ] = "Servidor desconocido" ;
+    Text [ french ] = "Serveur inconnu" ;
+    Text [ dutch ] = "Onbekende server" ;
+    Text[ chinese_simplified ] = "²»Ã÷µÄ·şÎñÆ÷";
+    Text[ russian ] = "Íåèçâåñòíûé ñåğâåğ";
+    Text[ polish ] = "Nieznany serwer";
+    Text[ japanese ] = "•s–¾‚Ì»°ÊŞ°";
+    Text[ chinese_traditional ] = "¤£©úªº¦øªA¾¹";
+    Text[ arabic ] = "ãÒæøÏ ÛíÑ ãÚÑæİ";
+    Text[ greek ] = "¢ãíùóôïò äéáêïìéóôŞò";
+    Text[ korean ] = "¾Ë¼ö¾ø´Â ¼­¹ö";
+    Text[ turkish ] = "Bilinmeyen sunucu";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_PAPER_JAM
+{
+    Text = "Papierstau" ;
+    Text [ ENGLISH ] = "Paper jam" ;
+    Text [ portuguese ] = "Engarrafamento de papel" ;
+    Text [ english_us ] = "Paper jam" ;
+    Text [ portuguese_brazilian ] = "Papierstau" ;
+    Text [ swedish ] = "Papperskö" ;
+    Text [ danish ] = "Papirstop" ;
+    Text [ italian ] = "Inceppamento" ;
+    Text [ spanish ] = "Bloqueo de papel" ;
+    Text [ french ] = "Bourrage" ;
+    Text [ dutch ] = "Papieropstopping" ;
+    Text[ chinese_simplified ] = "¿¨Ö½";
+    Text[ russian ] = "Çàåäàíèå áóìàãè";
+    Text[ polish ] = "Papier zablokowany";
+    Text[ japanese ] = "—p†‹l‚Ü‚è";
+    Text[ chinese_traditional ] = "¥d¯È";
+    Text[ arabic ] = "ÊßÏÓ ÇáæÑŞ";
+    Text[ greek ] = "ÌğëïêÜñéóìá ÷áñôéïı";
+    Text[ korean ] = "¿ëÁö °É¸²";
+    Text[ turkish ] = "Kağıt sıkışması";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_PAPER_OUT
+{
+    Text = "Papiermangel" ;
+    Text [ ENGLISH ] = "Paper out" ;
+    Text [ portuguese ] = "Falta de papel" ;
+    Text [ english_us ] = "Not enough paper" ;
+    Text [ portuguese_brazilian ] = "Papiermangel" ;
+    Text [ swedish ] = "Det saknas papper" ;
+    Text [ danish ] = "Ikke nok papir" ;
+    Text [ italian ] = "Carta esaurita" ;
+    Text [ spanish ] = "Falta de papel" ;
+    Text [ french ] = "Manque de papier" ;
+    Text [ dutch ] = "Geen papier" ;
+    Text[ chinese_simplified ] = "Ö½ÓÃÍê";
+    Text[ russian ] = "Íåõâàòêà áóìàãè";
+    Text[ polish ] = "Brak papieru";
+    Text[ japanese ] = "—p†•s‘«";
+    Text[ chinese_traditional ] = "¯È¥Î§¹";
+    Text[ arabic ] = "äŞÕ İí ÇáæÑŞ";
+    Text[ greek ] = "¸ëëåéøç ÷áñôéïı";
+    Text[ korean ] = "¿ëÁö°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+    Text[ turkish ] = "Yeterli miktarda kağıt yok";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_MANUAL_FEED
+{
+    Text = "Manuelle Papierzufuhr" ;
+    Text [ ENGLISH ] = "Manual feed" ;
+    Text [ portuguese ] = "Alimentação manual" ;
+    Text [ english_us ] = "Manual feed" ;
+    Text [ portuguese_brazilian ] = "Manuelle Papierzufuhr" ;
+    Text [ swedish ] = "Manuell pappersinmatning" ;
+    Text [ danish ] = "Manuel papirfødning" ;
+    Text [ italian ] = "Alimentazione carta manuale" ;
+    Text [ spanish ] = "Alimentación manual" ;
+    Text [ french ] = "Alimentation manuelle" ;
+    Text [ dutch ] = "Handmatige papiertoevoer" ;
+    Text[ chinese_simplified ] = "ÊÖ¹¤ËÍÖ½";
+    Text[ russian ] = "Ğó÷íàÿ ïîäà÷à áóìàãè";
+    Text[ polish ] = "Rêczne podawanie papieru";
+    Text[ japanese ] = "è“®‚Å—p†‹Ÿ‹‹";
+    Text[ chinese_traditional ] = "¤â¤u°e¯È";
+    Text[ arabic ] = "ÇáÅãÏÇÏ ÈÇáæÑŞ íÏæíÇğ";
+    Text[ greek ] = "×åéñïêßíçôïò åöïäéáóìüò ÷áñôéïı";
+    Text[ korean ] = "¼öµ¿ ±ŞÁö";
+    Text[ turkish ] = "El ile besleme";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_PAPER_PROBLEM
+{
+    Text = "Papierproblem" ;
+    Text [ ENGLISH ] = "Paper problem" ;
+    Text [ portuguese ] = "Problemas com papel" ;
+    Text [ english_us ] = "Paper problem" ;
+    Text [ portuguese_brazilian ] = "Papierproblem" ;
+    Text [ swedish ] = "Pappersproblem" ;
+    Text [ danish ] = "Papirproblem" ;
+    Text [ italian ] = "Errore carta" ;
+    Text [ spanish ] = "Problema de papel" ;
+    Text [ french ] = "Problème d'allimentation de papier" ;
+    Text [ dutch ] = "Papierprobleem" ;
+    Text[ chinese_simplified ] = "Ö½ÕÅÎÊÌâ";
+    Text[ russian ] = "Ïğîáëåìà ñ áóìàãîé";
+    Text[ polish ] = "Problem z papierem";
+    Text[ japanese ] = "—p†‚Ì–â‘è";
+    Text[ chinese_traditional ] = "¯È±i°İÃD";
+    Text[ arabic ] = "ãÔßáÉ İí ÇáæÑŞ";
+    Text[ greek ] = "Ğñüâëçìá ìå ôï ÷áñôß";
+    Text[ korean ] = "¿ëÁö ¹®Á¦";
+    Text[ turkish ] = "Kağıt sorunu";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_IO_ACTIVE
+{
+    Text = "E/A aktiv" ;
+    Text [ ENGLISH ] = "I/O active" ;
+    Text [ portuguese ] = "I/O activos" ;
+    Text [ english_us ] = "I/O active" ;
+    Text [ portuguese_brazilian ] = "E/A aktiv" ;
+    Text [ swedish ] = "I/O aktiv" ;
+    Text [ danish ] = "I/O aktiv" ;
+    Text [ italian ] = "I/O attivo" ;
+    Text [ spanish ] = "I/O activos" ;
+    Text [ french ] = "E/S active" ;
+    Text [ dutch ] = "I/O actief" ;
+    Text[ chinese_simplified ] = "¼¤»îÊäÈë/Êä³ö";
+    Text[ russian ] = "Àêòèâíûé Âõîä/Âûõîä";
+    Text[ polish ] = "We/Wy aktywne";
+    Text[ japanese ] = "I/O ±¸Ã¨ÌŞ";
+    Text[ chinese_traditional ] = "¿E¬¡¿é¤J/¿é¥X";
+    Text[ arabic ] = "ÇáÅÏÎÇá/ÇáÅÎÑÇÌ äÔØ";
+    Text[ greek ] = "Åéó/Åî åíåñãÜ";
+    Text[ korean ] = "I/O È°¼º";
+    Text[ turkish ] = "G/Ç aktif";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
+{
+    Text = "Ausgabefach ist voll" ;
+    Text [ ENGLISH ] = "Output bin full" ;
+    Text [ portuguese ] = "Cesto de saída está cheio" ;
+    Text [ english_us ] = "Output bin full" ;
+    Text [ portuguese_brazilian ] = "Ausgabefach ist voll" ;
+    Text [ swedish ] = "Utgångsfacket är fullt" ;
+    Text [ danish ] = "Output-bakken er fyldt" ;
+    Text [ italian ] = "Il vano di uscita è pieno" ;
+    Text [ spanish ] = "La papelera de salida está llena" ;
+    Text [ french ] = "Le bac de sortie est plein" ;
+    Text [ dutch ] = "Postvak UIT is vol" ;
+    Text[ chinese_simplified ] = "Êä³ö»º³åÇøÒçÂú";
+    Text[ russian ] = "Óñòğîéñòâî âûäà÷è çàïîëíåíî";
+    Text[ polish ] = "Zasobnik wyjœciowy zape³niony";
+    Text[ japanese ] = "ˆóü±³ÄÌß¯Ä—p‚Ì—eŠí‚ª‚¢‚Á‚Ï‚¢‚Å‚·B";
+    Text[ chinese_traditional ] = "¿é¥X½w¨R°Ï·¸º¡";
+    Text[ arabic ] = "ÏÑÌ ÇáÅÎÑÇÌ ããÊáÆ";
+    Text[ greek ] = "Ôï ôìŞìá åîáãùãŞò åßíáé ğëŞñåò";
+    Text[ korean ] = "Ãâ·ÂÇÔÀÌ °¡µæ Âü";
+    Text[ turkish ] = "Çıktı çekmecesi doldu";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_TONER_LOW
+{
+    Text = "Niedriger Tonerstand" ;
+    Text [ ENGLISH ] = "Towner low" ;
+    Text [ portuguese ] = "Pouco toner" ;
+    Text [ english_us ] = "Toner low" ;
+    Text [ portuguese_brazilian ] = "Niedriger Tonerstand" ;
+    Text [ swedish ] = "Lite toner" ;
+    Text [ danish ] = "Næsten ingen toner" ;
+    Text [ italian ] = "Livello del toner basso" ;
+    Text [ spanish ] = "Tóner bajo" ;
+    Text [ french ] = "Remplissez du toner" ;
+    Text [ dutch ] = "Lage tonerstand" ;
+    Text[ chinese_simplified ] = "Ä«·Û²»×ã";
+    Text[ russian ] = "Íèçêîå ñîñòîÿíèå òîíåğà";
+    Text[ polish ] = "Ma³o tonera";
+    Text[ japanese ] = "ÄÅ°‚Ìc—Ê‚ª­‚È‚­‚È‚Á‚Ä‚¢‚Ü‚·";
+    Text[ chinese_traditional ] = "¾¥¯»¤£¨¬";
+    Text[ arabic ] = "ÇäÎİÇÖ ãÓÍæŞ ÇáÍÈÑ";
+    Text[ greek ] = "×áìçëŞ óôÜèìç ôïõ Toner";
+    Text[ korean ] = "Åä³Ê°¡ Àû½À´Ï´Ù.";
+    Text[ turkish ] = "Toner azaldı";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_NO_TONER
+{
+    Text = "Kein Toner" ;
+    Text [ ENGLISH ] = "No toner" ;
+    Text [ portuguese ] = "Sem toner" ;
+    Text [ english_us ] = "No toner" ;
+    Text [ portuguese_brazilian ] = "Kein Toner" ;
+    Text [ swedish ] = "Toner slut" ;
+    Text [ danish ] = "Ingen toner" ;
+    Text [ italian ] = "Manca il toner" ;
+    Text [ spanish ] = "No hay tóner" ;
+    Text [ french ] = "Pas de toner" ;
+    Text [ dutch ] = "Geen toner" ;
+    Text[ chinese_simplified ] = "Ä«·ÛÓÃÍê";
+    Text[ russian ] = "Íåò òîíåğà";
+    Text[ polish ] = "Brak tonera";
+    Text[ japanese ] = "ÄÅ°‚ª‚ ‚è‚Ü‚¹‚ñB";
+    Text[ language_user1 ] = " ";
+    Text[ chinese_traditional ] = "¾¥¯»¥Î§¹";
+    Text[ arabic ] = "áÇ íæÌÏ ãÓÍæŞ ÇáÍÈÑ";
+    Text[ greek ] = "Äåí õğÜñ÷åé Ôoner";
+    Text[ korean ] = "Åä³Ê°¡ ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Toner bitti";
+};
+String STR_SVT_PRNDLG_PAGE_PUNT
+{
+    Text = "Seitenverwurf" ;
+    Text [ ENGLISH ] = "Page punt" ;
+    Text [ portuguese ] = "Eliminar página" ;
+    Text [ english_us ] = "Delete Page" ;
+    Text [ portuguese_brazilian ] = "Seitenverwurf" ;
+    Text [ swedish ] = "Kassera sida" ;
+    Text [ danish ] = "Kasser side" ;
+    Text [ italian ] = "Rigetta pagina" ;
+    Text [ spanish ] = "Eliminar página" ;
+    Text [ french ] = "Suppression de page" ;
+    Text [ dutch ] = "Pagina's uitzonderen" ;
+    Text[ chinese_simplified ] = "É¾³ıÒ³";
+    Text[ russian ] = "Óäàëåíèå ñòğàíèöû";
+    Text[ polish ] = "Usuñ stronê";
+    Text[ japanese ] = "Íß°¼Şíœ";
+    Text[ chinese_traditional ] = "§R°£­¶";
+    Text[ arabic ] = "ÍĞİ ÕİÍÉ";
+    Text[ greek ] = "ÄéáãñáöŞ óåëßäáò";
+    Text[ korean ] = "ÆäÀÌÁö »èÁ¦";
+    Text[ turkish ] = "Sayfayı sil";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_USER_INTERVENTION
+{
+    Text = "Benutzerzugriff notwendig" ;
+    Text [ ENGLISH ] = "User intervention necessary" ;
+    Text [ portuguese ] = "Necessária intervenção do utilizador" ;
+    Text [ english_us ] = "User intervention necessary" ;
+    Text [ portuguese_brazilian ] = "Benutzerzugriff notwendig" ;
+    Text [ swedish ] = "Åtkomst nödvändigt för användaren " ;
+    Text [ danish ] = "Brugerhandling krævet" ;
+    Text [ italian ] = "È necessario l'accesso utente" ;
+    Text [ spanish ] = "Intervención necesaria del usuario " ;
+    Text [ french ] = "Intervention de l'utilisateur requise" ;
+    Text [ dutch ] = "Ingrijpen door gebruiker noodzakelijk" ;
+    Text[ chinese_simplified ] = "ĞèÒªÊ¹ÓÃÕßÉè¶¨";
+    Text[ russian ] = "Íåîáõîäèìî âìåøàòåëüñòâî ïîëüçîâàòåëÿ";
+    Text[ polish ] = "Konieczna interwencja u¿ytkownika";
+    Text[ japanese ] = "Õ°»Ş°‚Ì±¸¾½‚ª•K—v";
+    Text[ chinese_traditional ] = "»İ­n¦Û­q";
+    Text[ arabic ] = "ãä ÇáÖÑæÑí Ãä íÊÏÎá ÇáãÓÊÎÏã";
+    Text[ greek ] = "Ğáñİìâáóç ôïõ ÷ñŞóôç áíáãêáßá";
+    Text[ korean ] = "»ç¿ëÀÚ °³ÀÔÀÌ ÇÊ¿äÇÔ";
+    Text[ turkish ] = "Kullanıcı müdahalesi gerekiyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_OUT_OF_MEMORY
+{
+    Text = "Nicht genügend Speicher" ;
+    Text [ ENGLISH ] = "Out of memory" ;
+    Text [ portuguese ] = "Memória insuficiente" ;
+    Text [ english_us ] = "Insufficient memory" ;
+    Text [ portuguese_brazilian ] = "Nicht genügend Speicher" ;
+    Text [ swedish ] = "Ej tillräckligt med minne" ;
+    Text [ danish ] = "Ikke nok hukommelse" ;
+    Text [ italian ] = "Non c'è abbastanza memoria" ;
+    Text [ spanish ] = "Memoria insuficiente" ;
+    Text [ french ] = "Mémoire insuffisante" ;
+    Text [ dutch ] = "Niet voldoende opslagruimte" ;
+    Text[ chinese_simplified ] = "ÄÚ´æ²»×ã";
+    Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè";
+    Text[ polish ] = "Nie wystarczy pamiêci";
+    Text[ japanese ] = "\\•ª‚ÈÒÓØ‚ª‚ ‚è‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬";
+    Text[ arabic ] = "ÇáĞÇßÑÉ ÛíÑ ßÇİíÉ";
+    Text[ greek ] = "Ç ìíŞìç äåí åğáñêåß";
+    Text[ korean ] = "¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+    Text[ turkish ] = "Bellek yeterli değil";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_DOOR_OPEN
+{
+    Text = "Abdeckung offen" ;
+    Text [ ENGLISH ] = "Door open" ;
+    Text [ portuguese ] = "Capa aberta" ;
+    Text [ english_us ] = "Cover open" ;
+    Text [ portuguese_brazilian ] = "Abdeckung offen" ;
+    Text [ swedish ] = "Luckan är öppen" ;
+    Text [ danish ] = "Låget er åben" ;
+    Text [ italian ] = "Apri copertura" ;
+    Text [ spanish ] = "Abrir cubierta" ;
+    Text [ french ] = "Boîtier ouvert" ;
+    Text [ dutch ] = "Afdekking  boven" ;
+    Text[ chinese_simplified ] = "»¤¸Ç³¨¿ª";
+    Text[ russian ] = "Êğûøêà îòêğûòà";
+    Text[ polish ] = "Pokrywa otwarta";
+    Text[ japanese ] = "ÌßØİÀ°‚ÌŠW‚ªŠJ‚¢‚Ä‚¢‚Ü‚·";
+    Text[ chinese_traditional ] = "Å@»\\´¯¶}";
+    Text[ arabic ] = "ÇáÛØÇÁ ãİÊæÍ";
+    Text[ greek ] = "ÊÜëõììá áíïé÷ôü";
+    Text[ korean ] = "µ¤°³¸¦ ¿ÀÇÂ»óÅÂ·Î";
+    Text[ turkish ] = "Kapak açık";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_POWER_SAVE
+{
+    Text = "Energiesparmodus" ;
+    Text [ ENGLISH ] = "Power save" ;
+    Text [ portuguese ] = "Modo poupança de energia" ;
+    Text [ english_us ] = "Power save mode" ;
+    Text [ portuguese_brazilian ] = "Energiesparmodus" ;
+    Text [ swedish ] = "Energiesparläge" ;
+    Text [ danish ] = "Energisparende modus" ;
+    Text [ italian ] = "Modo risparmio energetico" ;
+    Text [ spanish ] = "Modo de ahorro energético" ;
+    Text [ french ] = "Mode économie d'énergie" ;
+    Text [ dutch ] = "Energiespaarmodus" ;
+    Text[ chinese_simplified ] = "½ÚÔ¼µçÔ´Ä£Ê½";
+    Text[ russian ] = "Ğåæèì ıêîíîìèè ıëåêòğîıíåğãèè";
+    Text[ polish ] = "Tryb oszczêdzania energii";
+    Text[ japanese ] = "´ÈÙ·Ş°ßŒ¸Ó°ÄŞ";
+    Text[ chinese_traditional ] = "¸`¬ù¹q·½¼Ò¦¡";
+    Text[ arabic ] = "æÖÚ ÊæİíÑ ÇáØÇŞÉ";
+    Text[ greek ] = "ÊáôÜóôáóç åîïéêïíüìçóçò åíİñãåéáò";
+    Text[ korean ] = "Àü¿ø ÀúÀå ¸ğµå";
+    Text[ turkish ] = "Enerji tasarruf kipi";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_DEFPRINTER
+{
+    Text = "Standarddrucker" ;
+    Text [ ENGLISH ] = "Default printer" ;
+    Text [ portuguese ] = "Impressora-padrão" ;
+    Text [ english_us ] = "Default printer" ;
+    Text [ portuguese_brazilian ] = "Standarddrucker" ;
+    Text [ swedish ] = "Standardskrivare" ;
+    Text [ danish ] = "Standardprinter" ;
+    Text [ italian ] = "Stampante predefinta" ;
+    Text [ spanish ] = "Predeterminada" ;
+    Text [ french ] = "Imprimante par défaut" ;
+    Text [ dutch ] = "Standaardprinter" ;
+    Text[ chinese_simplified ] = "Ä¬ÈÏ´òÓ¡»ú";
+    Text[ russian ] = "Ñòàíäàğòíûé ïğèíòåğ";
+    Text[ polish ] = "Drukarka domyœlna";
+    Text[ japanese ] = "•W€ÌßØİÀ";
+    Text[ chinese_traditional ] = "Àq»{¦Lªí¾÷";
+    Text[ arabic ] = "ÇáØÇÈÚÉ ÇáÇİÊÑÇÖíÉ";
+    Text[ greek ] = "Ğñïåğéëåãìİíïò åêôõğùôŞò";
+    Text[ korean ] = "±âº» ÇÁ¸°ÅÍ";
+    Text[ turkish ] = "Standart yazıcı";
+    Text[ language_user1 ] = " ";
+};
+String STR_SVT_PRNDLG_JOBCOUNT
+{
+    Text = "%d Dokumente" ;
+    Text [ ENGLISH ] = "%d documents" ;
+    Text [ portuguese ] = "%d documentos" ;
+    Text [ english_us ] = "%d documents" ;
+    Text [ portuguese_brazilian ] = "%d Dokumente" ;
+    Text [ swedish ] = "%d dokument" ;
+    Text [ danish ] = "%d dokumenter" ;
+    Text [ italian ] = "%d documenti" ;
+    Text [ spanish ] = "%d documentos" ;
+    Text [ french ] = "%d documents" ;
+    Text [ dutch ] = "%d documenten" ;
+    Text[ chinese_simplified ] = "%d ÎÄµµ";
+    Text[ russian ] = "%d äîêóìåíòà(îâ)";
+    Text[ polish ] = "%d dokumenty";
+    Text[ japanese ] = "%d‚ÌÄŞ·­ÒİÄ";
+    Text[ chinese_traditional ] = "%d ¤å¥ó";
+    Text[ arabic ] = "ãÓÊäÏÇÊ%d ";
+    Text[ greek ] = "%d İããñáöá";
+    Text[ korean ] = "%d ¹®¼­";
+    Text[ turkish ] = "%d belge";
+    Text[ language_user1 ] = " ";
+};
+
+ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( 260 , 104 ) ;
+    Text = "Drucker einrichten" ;
+    Text [ ENGLISH ] = "Printer Setup" ;
+    Text [ english_us ] = "Printer Setup" ;
+    Text [ portuguese_brazilian ] = "Drucker einrichten" ;
+    Text [ swedish ] = "Installera skrivare" ;
+    Text [ danish ] = "Indstil printer" ;
+    Text [ italian ] = "Imposta stampante" ;
+    Text [ spanish ] = "Configurar impresora" ;
+    Text [ french ] = "Imprimante sélectionnée" ;
+    Text [ dutch ] = "Printer instellen" ;
+    Text [ portuguese ] = "Configurar impressora" ;
+    GroupBox GRP_PRINTER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 75 ) ;
+        Text = "Drucker" ;
+        Text [ ENGLISH ] = "Printer" ;
+        Text [ english_us ] = "Printer" ;
+        Text [ portuguese_brazilian ] = "Drucker" ;
+        Text [ swedish ] = "Skrivare" ;
+        Text [ danish ] = "Printer" ;
+        Text [ italian ] = "Stampante" ;
+        Text [ spanish ] = "Impresora" ;
+        Text [ french ] = "Imprimante" ;
+        Text [ dutch ] = "Printer" ;
+        Text [ portuguese ] = "Impressora" ;
+        Text[ chinese_simplified ] = "´òÓ¡»ú";
+        Text[ russian ] = "Ïğèíòåğ";
+        Text[ polish ] = "Drukarka";
+        Text[ japanese ] = "ÌßØİÀ";
+        Text[ chinese_traditional ] = "¦Lªí¾÷";
+        Text[ arabic ] = "ÇáØÇÈÚÉ";
+        Text[ greek ] = "ÅêôõğùôŞò";
+        Text[ korean ] = "ÇÁ¸°ÅÍ";
+        Text[ turkish ] = "Yazıcı";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Name" ;
+        Text [ ENGLISH ] = "~Name" ;
+        Text [ english_us ] = "~Name" ;
+        Text [ portuguese_brazilian ] = "~Name" ;
+        Text [ swedish ] = "~Namn" ;
+        Text [ danish ] = "Navn" ;
+        Text [ italian ] = "~Nome" ;
+        Text [ spanish ] = "~Nombre" ;
+        Text [ french ] = "~Nom" ;
+        Text [ dutch ] = "~Naam" ;
+        Text [ portuguese ] = "~Nome" ;
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ russian ] = "~Èìÿ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "–¼‘O(~N)";
+        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ greek ] = "¼íïìá";
+        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ turkish ] = "~Ad";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_NAMES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 12 ) ;
+        Size = MAP_APPFONT ( 125 , 80 ) ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    PushButton BTN_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( 188 , 12 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "~Eigenschaften..." ;
+        Text [ ENGLISH ] = "~Properties..." ;
+        Text [ portuguese ] = "~Propriedades..." ;
+        Text [ english_us ] = "Propert~ies..." ;
+        Text [ portuguese_brazilian ] = "~Eigenschaften..." ;
+        Text [ swedish ] = "~Egenskaper..." ;
+        Text [ danish ] = "Egenskaber..." ;
+        Text [ italian ] = "~Proprietà..." ;
+        Text [ spanish ] = "~Propiedades..." ;
+        Text [ french ] = "~Propriétés..." ;
+        Text [ dutch ] = "~Eigenschappen..." ;
+        Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
+        Text[ russian ] = "~Ñâîéñòâà...";
+        Text[ polish ] = "W³aœciwoœci...";
+        Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
+        Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
+        Text[ arabic ] = "ÎÕÇÆÕ...";
+        Text[ greek ] = "Éäéüôçôåò...";
+        Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
+        Text[ turkish ] = "~Özellikler...";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_STATUS
+    {
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Status" ;
+        Text [ ENGLISH ] = "Status" ;
+        Text [ english_us ] = "Status" ;
+        Text [ portuguese_brazilian ] = "Status" ;
+        Text [ swedish ] = "Status" ;
+        Text [ danish ] = "Status" ;
+        Text [ italian ] = "Stato" ;
+        Text [ spanish ] = "Estado" ;
+        Text [ french ] = "État" ;
+        Text [ dutch ] = "Status" ;
+        Text [ portuguese ] = "Estado" ;
+        Text[ chinese_simplified ] = "×´Ì¬";
+        Text[ russian ] = "Ñîñòîÿíèå";
+        Text[ polish ] = "Stan";
+        Text[ japanese ] = "½Ã°À½";
+        Text[ chinese_traditional ] = "ª¬ºA";
+        Text[ arabic ] = "ÇáÍÇáÉ";
+        Text[ greek ] = "ÊáôÜóôáóç";
+        Text[ korean ] = "»óÅÂ";
+        Text[ turkish ] = "Durum";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_STATUS
+    {
+        Pos = MAP_APPFONT ( 60 , 29 ) ;
+        Size = MAP_APPFONT ( 188 , 10 ) ;
+    };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Typ" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ english_us ] = "Type" ;
+        Text [ portuguese_brazilian ] = "Typ" ;
+        Text [ swedish ] = "Typ" ;
+        Text [ danish ] = "Type" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ spanish ] = "Tipo" ;
+        Text [ french ] = "Type" ;
+        Text [ dutch ] = "Type" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ russian ] = "Òèï";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "À²Ìß";
+        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ arabic ] = "ÇáäæÚ";
+        Text[ greek ] = "Ôığïò";
+        Text[ korean ] = "ÇüÅÂ";
+        Text[ turkish ] = "Tip";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_TYPE
+    {
+        Pos = MAP_APPFONT ( 60 , 40 ) ;
+        Size = MAP_APPFONT ( 188 , 10 ) ;
+    };
+    FixedText FT_LOCATION
+    {
+        Pos = MAP_APPFONT ( 12 , 51 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Ort" ;
+        Text [ ENGLISH ] = "Location" ;
+        Text [ english_us ] = "Location" ;
+        Text [ portuguese_brazilian ] = "Ort" ;
+        Text [ swedish ] = "Plats" ;
+        Text [ danish ] = "Placering" ;
+        Text [ italian ] = "Percorso" ;
+        Text [ spanish ] = "Ubicación" ;
+        Text [ french ] = "Emplacement" ;
+        Text [ dutch ] = "Plaats" ;
+        Text [ portuguese ] = "Lugar" ;
+        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ russian ] = "Ìåñòî";
+        Text[ polish ] = "Lokalizacja";
+        Text[ japanese ] = "êŠ";
+        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ arabic ] = "ÇáãæŞÚ";
+        Text[ greek ] = "Ôïğïèåóßá";
+        Text[ korean ] = "À§Ä¡";
+        Text[ turkish ] = "Yer";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_LOCATION
+    {
+        Pos = MAP_APPFONT ( 60 , 51 ) ;
+        Size = MAP_APPFONT ( 188 , 10 ) ;
+    };
+    FixedText FT_COMMENT
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Kommentar" ;
+        Text [ ENGLISH ] = "Comment" ;
+        Text [ english_us ] = "Comment" ;
+        Text [ portuguese_brazilian ] = "Kommentar" ;
+        Text [ swedish ] = "Kommentar" ;
+        Text [ danish ] = "Kommentar" ;
+        Text [ italian ] = "Commento" ;
+        Text [ spanish ] = "Comentario" ;
+        Text [ french ] = "Commentaire" ;
+        Text [ dutch ] = "Commentaar" ;
+        Text [ portuguese ] = "Comentário" ;
+        Text[ chinese_simplified ] = "×¢½â";
+        Text[ russian ] = "Êîììåíòàğèé";
+        Text[ polish ] = "Komentarz";
+        Text[ japanese ] = "ºÒİÄ";
+        Text[ chinese_traditional ] = "ª`¸Ñ";
+        Text[ arabic ] = "ÊÚáíŞ";
+        Text[ greek ] = "Ó÷üëéï";
+        Text[ korean ] = "¸Ş¸ğ";
+        Text[ turkish ] = "Açıklama";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_COMMENT
+    {
+        Pos = MAP_APPFONT ( 60 , 62 ) ;
+        Size = MAP_APPFONT ( 188 , 10 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 95 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 148 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 204 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    Text[ chinese_simplified ] = "Éè¶¨´òÓ¡»ú";
+    Text[ russian ] = "Óñòàíîâèòü ïğèíòåğ";
+    Text[ polish ] = "Ustaw drukarkê";
+    Text[ japanese ] = "ÌßØİÀİ’è";
+    Text[ chinese_traditional ] = "³]©w¦Lªí¾÷";
+    Text[ arabic ] = "ÅÚÏÇÏ ÇáØÇÈÚÉ";
+    Text[ language_user1 ] = " ";
+    Text[ greek ] = "ÅãêáôÜóôáóç åêôõğùôŞ";
+    Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤";
+    Text[ turkish ] = "Yazıcı ayarları";
+};

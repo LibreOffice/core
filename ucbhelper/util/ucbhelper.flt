@@ -1,0 +1,13 @@
+_Impl
+IMP
+Dbg
+DLL
+getCppuType
+cpp_queryInterface
+cpp_acquire
+cpp_release
+_aType
+unnamed
+?queryInterface@ContentIdentifier@ucb@@WBA@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?queryInterface@ContentIdentifier@ucb@@WM@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXTypeProvider@lang@456@PAVXContentIdentifier@ucb@456@@Z

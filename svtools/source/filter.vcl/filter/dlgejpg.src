@@ -1,0 +1,266 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgejpg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dlgejpg.hrc"
+ModalDialog DLG_EXPORT_JPG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 159 , 111 ) ;
+    Text = "JPEG Optionen" ;
+    Text [ ENGLISH ] = "JPEG Optionen" ;
+    Text [ english_us ] = "JPEG Options" ;
+    Text [ italian ] = "Opzioni JPEG" ;
+    Text [ spanish ] = "Opciones JPEG" ;
+    Text [ french ] = "Options JPEG" ;
+    Text [ dutch ] = "JPEG-opties" ;
+    Text [ swedish ] = "JPEG-alternativ" ;
+    Text [ danish ] = "JPEG-indstillinger" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 103 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 103 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 103 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_QUALITY
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 90 , 55 ) ;
+        Text = "Qualität" ;
+        Text [ ENGLISH ] = "Quality" ;
+        Text [ english_us ] = "Quality" ;
+        Text [ italian ] = "Qualità" ;
+        Text [ spanish ] = "Calidad" ;
+        Text [ french ] = "Qualité" ;
+        Text [ dutch ] = "Kwaliteit" ;
+        Text [ swedish ] = "Kvalitet" ;
+        Text [ danish ] = "Kvalitet" ;
+        Text [ portuguese_brazilian ] = "Qualität" ;
+        Text [ portuguese ] = "Qualidade" ;
+        Text[ chinese_simplified ] = "ÖÊÁ¿";
+        Text[ russian ] = "Êà÷åñòâî";
+        Text[ polish ] = "Jakoœæ";
+        Text[ japanese ] = "‰æ‘œ•i¿";
+        Text[ chinese_traditional ] = "½è¶q";
+        Text[ arabic ] = "ÇáÌæÏÉ";
+        Text[ dutch ] = "Kwaliteit";
+        Text[ chinese_simplified ] = "ÖÊÁ¿";
+        Text[ greek ] = "Ğïéüôçôá";
+        Text[ korean ] = "È­Áú";
+        Text[ turkish ] = "Kalite";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_DESCR
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 81 , 21 ) ;
+        Text = "0: min. Qualität\n100: max. Qualität" ;
+        Text [ ENGLISH ] = "0: min. quality\n100: max. quality" ;
+        Text [ english_us ] = "0: min. Quality\n100: max. Quality" ;
+        Text [ italian ] = "Q: min. qualità\n100: max. qualità" ;
+        Text [ spanish ] = "0: mín. calidad\n100: máx. calidad" ;
+        Text [ french ] = "0: qualité min.\n100: qualité max." ;
+        Text [ dutch ] = "0: min. kwaliteit\n100: max. kwaliteit" ;
+        Text [ swedish ] = "0: min. kvalitet\n100: max. kvalitet" ;
+        Text [ danish ] = "0: min. kvalitet\n100: maks. kvalitet" ;
+        Text [ portuguese_brazilian ] = "0: min. Qualidade\n100: max. Qualidade" ;
+        Text [ portuguese ] = "0: min. Qualidade\n100: max. Qualidade" ;
+        Text[ chinese_simplified ] = "0: ×î²î \n100: ×î¼Ñ¡¡";
+        Text[ russian ] = "0: íèçêîå êà÷åñòâî\n100: âûñîêîå êà÷åñòâî";
+        Text[ polish ] = "0: min. jakoœæ\n100: max. jakoœæ";
+        Text[ japanese ] = "0: Å’á\n100: Å‚";
+        Text[ chinese_traditional ] = "0: ³Ì®t \n100: ³Ì¨Î¡@";
+        Text[ arabic ] = "0: ÇáÍÏ ÇáÃÏäì ááÌæÏÉ\n100: ÇáÍÏ ÇáÃŞÕì ááÌæÏÉ";
+        Text[ dutch ] = "0: min. kwaliteit\n100: max. kwaliteit";
+        Text[ chinese_simplified ] = "0: ×î²î \n100: ×î¼Ñ¡¡";
+        Text[ greek ] = "0: åëÜ÷éóôç ğïéüôçôá\n100: ìİãéóôç ğïéüôçôá";
+        Text[ korean ] = "0: ÃÖ¼Ò ¼º´É\n100: ÃÖ´ë ¼º´É";
+        Text[ turkish ] = "0: asg. kalite\n100: azm. kalite";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField NUM_FLD_QUALITY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Last = 100 ;
+        Repeat = TRUE ;
+    };
+    GroupBox GRP_COLORS
+    {
+        Pos = MAP_APPFONT ( 6 , 61 ) ;
+        Size = MAP_APPFONT ( 90 , 44 ) ;
+        Text = "Farbauflösung" ;
+        Text [ ENGLISH ] = "Color resolution" ;
+        Text [ english_us ] = "Color resolution" ;
+        Text [ portuguese_brazilian ] = "Farbauflösung" ;
+        Text [ swedish ] = "Färgupplösning" ;
+        Text [ danish ] = "Farveopløsning" ;
+        Text [ italian ] = "Profondità cromatica" ;
+        Text [ spanish ] = "Resolución del color" ;
+        Text [ french ] = "Résolution couleur" ;
+        Text [ dutch ] = "Kleurdichtheid" ;
+        Text [ portuguese ] = "Resolução de cores" ;
+        Text[ chinese_simplified ] = "ÑÕÉ«·Ö±æÂÊ";
+        Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
+        Text[ polish ] = "Rozdzielczoœæ kolorów";
+        Text[ japanese ] = "F‚Ì‰ğ‘œ“x";
+        Text[ chinese_traditional ] = "ÃC¦â¸ÑªR«×";
+        Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
+        Text[ dutch ] = "Kleurdichtheid";
+        Text[ chinese_simplified ] = "ÑÕÉ«·Ö±æÂÊ";
+        Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
+        Text[ korean ] = "ÄÃ·¯ ÇØ»óµµ";
+        Text[ turkish ] = "Renk çözünürlüğü";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_GRAY
+    {
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 81 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "Graustufen" ;
+        Text [ ENGLISH ] = "Grayscales" ;
+        Text [ english_us ] = "Grayscale" ;
+        Text [ portuguese ] = "Tons de cinzento" ;
+        Text [ portuguese_brazilian ] = "Graustufen" ;
+        Text [ swedish ] = "Gråskalor" ;
+        Text [ danish ] = "Gråtoner" ;
+        Text [ italian ] = "Toni di grigio" ;
+        Text [ spanish ] = "Escala de grises" ;
+        Text [ french ] = "Niveaux de gris" ;
+        Text [ dutch ] = "Grijswaarden" ;
+        Text[ chinese_simplified ] = "»Ò¶È";
+        Text[ russian ] = "Îòòåíêè ñåğîãî";
+        Text[ polish ] = "Odcienie szaroœci";
+        Text[ japanese ] = "¸ŞÚ°½¹°Ù";
+        Text[ chinese_traditional ] = "¦Ç«×";
+        Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
+        Text[ dutch ] = "Grijswaarden";
+        Text[ chinese_simplified ] = "»Ò¶È";
+        Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
+        Text[ korean ] = "È¸»öÁ¶";
+        Text[ turkish ] = "Gri tonlama";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_RGB
+    {
+        Pos = MAP_APPFONT ( 12 , 87 ) ;
+        Size = MAP_APPFONT ( 81 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "Echtfarben" ;
+        Text [ ENGLISH ] = "TrueColors" ;
+        Text [ english_us ] = "True Colors" ;
+        Text [ portuguese ] = "Cores reais" ;
+        Text [ portuguese_brazilian ] = "Echtfarben" ;
+        Text [ swedish ] = "True Colors" ;
+        Text [ danish ] = "Ægte farver" ;
+        Text [ italian ] = "Colori reali" ;
+        Text [ spanish ] = "Colores reales" ;
+        Text [ french ] = "Vraies couleurs (Truecolor)" ;
+        Text [ dutch ] = "Echte kleuren" ;
+        Text[ chinese_simplified ] = "·ÂÕæÉ«";
+        Text[ russian ] = "Íàòóğàëüíûå öâåòà";
+        Text[ polish ] = "Trwa³e kolory";
+        Text[ japanese ] = "‘NÊF";
+        Text[ chinese_traditional ] = "¥ş±m";
+        Text[ arabic ] = "ÃáæÇä ÍŞíŞíÉ";
+        Text[ dutch ] = "Echte kleuren";
+        Text[ chinese_simplified ] = "·ÂÕæÉ«";
+        Text[ greek ] = "ÖõóéêÜ ÷ñşìáôá";
+        Text[ korean ] = "Æ®·ç ÄÃ·¯";
+        Text[ turkish ] = "Gerçek renkler";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ portuguese_brazilian ] = "JPEG Optionen" ;
+    Text [ portuguese ] = "Opções JPEG" ;
+    Text[ chinese_simplified ] = "JPEG Ñ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû JPEG";
+    Text[ polish ] = "Opcje JPEG";
+    Text[ japanese ] = "JPEG µÌß¼®İ";
+    Text[ chinese_traditional ] = "JPEG ¿ï¶µ";
+    Text[ arabic ] = "ÎíÇÑÇÊJPEG ";
+    Text[ dutch ] = "JPEG-opties";
+    Text[ chinese_simplified ] = "JPEG Ñ¡Ïî";
+    Text[ greek ] = "Åğéëïãİò JPEG";
+    Text[ korean ] = "JPEG ¿É¼Ç";
+    Text[ turkish ] = "JPEG seçenekleri";
+    Text[ language_user1 ] = " ";
+};

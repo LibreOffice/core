@@ -1,0 +1,422 @@
+/*************************************************************************
+ *
+ *  $RCSfile: filedlg2.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <filedlg2.hrc>
+String STR_FILEDLG_SELECT
+{
+    Text = "Verzeichnis auswählen" ;
+    Text [ ENGLISH ] = "Select" ;
+    Text [ portuguese ] = "Seleccionar directório" ;
+    Text [ english_us ] = "Select Directory" ;
+    Text [ portuguese_brazilian ] = "Verzeichnis auswählen" ;
+    Text [ swedish ] = "Välj mapp" ;
+    Text [ danish ] = "Vælg bibliotek" ;
+    Text [ italian ] = "Scelta cartella" ;
+    Text [ spanish ] = "Seleccionar directorio" ;
+    Text [ french ] = "Sélection du répertoire" ;
+    Text [ dutch ] = "Map selecteren" ;
+    Text[ chinese_simplified ] = "Ñ¡ÔñÄ¿Â¼";
+    Text[ russian ] = "Âûáîğ êàòàëîãà";
+    Text[ polish ] = "Wybierz katalog";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğ‘I‘ğ";
+    Text[ chinese_traditional ] = "¿ï¾Ü¥Ø¿ı";
+    Text[ arabic ] = "ÊÍÏíÏ ÇáÏáíá";
+    Text[ greek ] = "ÅğéëïãŞ êáôáëüãïõ";
+    Text[ korean ] = "µğ·ºÅä¸® ¼±ÅÃ";
+    Text[ turkish ] = "Dizin seç";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_CANTCHDIR
+{
+    Text = "Kann nicht in Verzeichnis wechseln" ;
+    Text [ ENGLISH ] = "Can't change directory" ;
+    Text [ english_us ] = "Cannot change to directory" ;
+    Text [ portuguese_brazilian ] = "Kann nicht in Verzeichnis wechseln" ;
+    Text [ swedish ] = "Kan inte byta mapp" ;
+    Text [ danish ] = "Kan ikke skifte til bibliotek" ;
+    Text [ italian ] = "Impossibile passare alla cartella" ;
+    Text [ spanish ] = "No es posible cambiar en directorio" ;
+    Text [ french ] = "Impossible de changer le répertoire" ;
+    Text [ dutch ] = "Kan niet in map komen" ;
+    Text [ portuguese ] = "Impossível mudar para directório" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨×ªµ½Ä¿Â¼";
+    Text[ russian ] = "Ñìåíèòü êàòàëîã íåâîçìîæíî";
+    Text[ polish ] = "Nie mo¿e zmieniæ katalogu";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğ•ÏX‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªkÂà¨ì¥Ø¿ı";
+    Text[ arabic ] = "áÇ íãßä ÊÛííÑ ÇáÏáíá";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé áëëáãŞ óôïí êáôÜëïãï";
+    Text[ korean ] = "µğ·ºÅä¸®¸¦ º¯°æÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Dizin değiştirilemiyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_OPEN
+{
+    Text = "Öffnen" ;
+    Text [ ENGLISH ] = "Open" ;
+    Text [ portuguese ] = "Abrir" ;
+    Text [ english_us ] = "Open" ;
+    Text [ portuguese_brazilian ] = "Öffnen" ;
+    Text [ swedish ] = "Öppna" ;
+    Text [ danish ] = "Åbn" ;
+    Text [ italian ] = "Apri" ;
+    Text [ spanish ] = "Abrir" ;
+    Text [ french ] = "Ouvrir" ;
+    Text [ dutch ] = "Openen" ;
+    Text[ chinese_simplified ] = "´ò¿ª";
+    Text[ russian ] = "Îòêğûòü";
+    Text[ polish ] = "Otwórz";
+    Text[ japanese ] = "ŠJ‚­";
+    Text[ chinese_traditional ] = "¶}±ÒÂÂÀÉ";
+    Text[ arabic ] = "İÊÍ";
+    Text[ greek ] = "¢íïéãìá";
+    Text[ korean ] = "¿­±â";
+    Text[ turkish ] = "Aç";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_FILE
+{
+    Text = "~Datei" ;
+    Text [ ENGLISH ] = "~File" ;
+    Text [ portuguese ] = "~Ficheiro" ;
+    Text [ english_us ] = "~File" ;
+    Text [ portuguese_brazilian ] = "Datei" ;
+    Text [ swedish ] = "F~il" ;
+    Text [ danish ] = "Fil" ;
+    Text [ italian ] = "File" ;
+    Text [ spanish ] = "~Archivo" ;
+    Text [ french ] = "~Fichier" ;
+    Text [ dutch ] = "~Bestand" ;
+    Text[ chinese_simplified ] = "ÎÄ¼ş(~F)";
+    Text[ russian ] = "~Ôàéë";
+    Text[ polish ] = "Plik";
+    Text[ japanese ] = "Ì§²Ù(~F)";
+    Text[ chinese_traditional ] = "ÀÉ®×(~F)";
+    Text[ arabic ] = "ãáİ";
+    Text[ greek ] = "Áñ÷åßï";
+    Text[ korean ] = "ÆÄÀÏ(~F)";
+    Text[ turkish ] = "~Dosya";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_DIR
+{
+    Text = "~Verzeichnis" ;
+    Text [ ENGLISH ] = "~Directory" ;
+    Text [ portuguese ] = "~Directório" ;
+    Text [ english_us ] = "~Directory" ;
+    Text [ portuguese_brazilian ] = "Verzeichnis" ;
+    Text [ swedish ] = "Mapp" ;
+    Text [ danish ] = "Bibliotek" ;
+    Text [ italian ] = "Cartella" ;
+    Text [ spanish ] = "~Directorio" ;
+    Text [ french ] = "~Répertoire" ;
+    Text [ dutch ] = "~Directory" ;
+    Text[ chinese_simplified ] = "Ä¿Â¼(~D)";
+    Text[ russian ] = "Êàòàëîã";
+    Text[ polish ] = "Katalog";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ(~D)";
+    Text[ chinese_traditional ] = "¥Ø¿ı(~D)";
+    Text[ arabic ] = "Ïáíá";
+    Text[ greek ] = "ÊáôÜëïãïò";
+    Text[ korean ] = "µğ·ºÅä¸®(~D)";
+    Text[ turkish ] = "~Dizin";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_TYPE
+{
+    Text = "Datei~typ" ;
+    Text [ ENGLISH ] = "File ~type" ;
+    Text [ portuguese ] = "~Tipo de ficheiro" ;
+    Text [ english_us ] = "File ~type" ;
+    Text [ portuguese_brazilian ] = "Dateityp" ;
+    Text [ swedish ] = "Fil~typ" ;
+    Text [ danish ] = "Filtype" ;
+    Text [ italian ] = "Tipo di file" ;
+    Text [ spanish ] = "Tipo de ar~chivo" ;
+    Text [ french ] = "~Type de fichier" ;
+    Text [ dutch ] = "Bestand~type" ;
+    Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ(~T)";
+    Text[ russian ] = "Òèï ôàéëà";
+    Text[ polish ] = "Typ pliku";
+    Text[ japanese ] = "Ì§²Ù‚Ìí—Ş(~T)";
+    Text[ chinese_traditional ] = "ÀÉ®×Ãş«¬(~T)";
+    Text[ arabic ] = "äæÚ Çáãáİ";
+    Text[ greek ] = "Ôığïò áñ÷åßïõ";
+    Text[ korean ] = "ÆÄÀÏ ÇüÅÂ(~T)";
+    Text[ turkish ] = "Dosya ~tipi";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_CANTOPENFILE
+{
+    Text = "Kann Datei nicht öffnen" ;
+    Text [ English ] = "Can't open file" ;
+    Text [ portuguese ] = "Impossível abrir ficheiro" ;
+    Text [ english_us ] = "Can't open file" ;
+    Text [ portuguese_brazilian ] = "Kann Datei nicht öffnen" ;
+    Text [ swedish ] = "Kan inte öppna fil" ;
+    Text [ danish ] = "Kan ikke åbne fil" ;
+    Text [ italian ] = "Impossibile aprire il file" ;
+    Text [ spanish ] = "No es posible abrir el archivo" ;
+    Text [ french ] = "Impossible d'ouvrir le fichier" ;
+    Text [ dutch ] = "Kan bestand niet openen" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş";
+    Text[ russian ] = "Îòêğûòü ôàéë íåâîçìîæíî";
+    Text[ polish ] = "Nie mo¿e otworzyæ pliku";
+    Text[ japanese ] = "Ì§²Ù‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªk¶}±ÒÀÉ®×";
+    Text[ arabic ] = "áÇ íãßä İÊÍ Çáãáİ";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï áñ÷åßï";
+    Text[ korean ] = "ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Dosya açılamıyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_CANTOPENDIR
+{
+    Text = "Kann Verzeichnis nicht öffnen" ;
+    Text [ English ] = "Can't open directory" ;
+    Text [ portuguese ] = "Impossível abrir directório" ;
+    Text [ english_us ] = "Can't open directory" ;
+    Text [ portuguese_brazilian ] = "Kann Verzeichnis nicht öffnen" ;
+    Text [ swedish ] = "Kan inte öppna mappen" ;
+    Text [ danish ] = "Kan ikke åbne bibliotek" ;
+    Text [ italian ] = "Imposibile aprire la cartella" ;
+    Text [ spanish ] = "No es posible abrir el directorio" ;
+    Text [ french ] = "Impossible d'ouvrir le répertoire" ;
+    Text [ dutch ] = "Kan map niet openen" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÄ¿Â¼";
+    Text[ russian ] = "Îòêğûòü êàòàëîã íåâîçìîæíî";
+    Text[ polish ] = "Nie mo¿e otworzyæ katalogu";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò¥Ø¿ı";
+    Text[ arabic ] = "áÇ íãßä İÊÍ ÇáÏáíá";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ï êáôÜëïãïò";
+    Text[ korean ] = "µğ·ºÅä¸®¸¦ ¿­ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Dizin açılamıyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_OVERWRITE
+{
+    Text = "Datei existiert. \nDatei überschreiben?" ;
+    Text [ English ] = "File exists. \nOverwrite file?" ;
+    Text [ portuguese ] = "O ficheiro já existe.\nSobregravar?" ;
+    Text [ english_us ] = "This file already exists. \nOverwrite ?" ;
+    Text [ portuguese_brazilian ] = "Datei existiert. \nDatei überschreiben?" ;
+    Text [ swedish ] = "Filen finns redan. \nSkriva över filen?" ;
+    Text [ danish ] = "Filen eksisterer allerede.\nSkal den overskrives?" ;
+    Text [ italian ] = "Il file esistet. \nSovrascriverlo?" ;
+    Text [ spanish ] = "El archivo ya existe.\n¿Desea sobrescribirlo?" ;
+    Text [ french ] = "Ce fichier existe déjà. \nVoulez-vous le remplacer ?" ;
+    Text [ dutch ] = "Het bestand bestaat reeds. \nOverschrijven?" ;
+    Text[ chinese_simplified ] = "ÎÄ¼ş´æÔÚ¡£ \nÄúÒª¸²Ğ´ÎÄ¼şÂğ£¿";
+    Text[ russian ] = "İòî ôàéë óæå ñóùåñòâóåò. \nÏåğåïèñàòü åãî?";
+    Text[ polish ] = "Plik ju¿ istnieje. \nSkasowaæ plik przez zapisanie?";
+    Text[ japanese ] = "Ì§²Ù‚Í‚ ‚è‚Ü‚·B \nã‘‚«‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "ÀÉ®×¦s¦b¡C \n±z­nÂĞ¼gÀÉ®×¡H";
+    Text[ arabic ] = "åĞÇ Çáãáİ ãæÌæÏ ãÓÈŞÇğ.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
+    Text[ greek ] = "Ôï áñ÷åßï áõôü õğÜñ÷åé Şäç. \nÍá áíôéêáôáóôáèåß;";
+    Text[ korean ] = "ÀÌ ÆÄÀÏÀº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. \n µ¤¾î ¾²½Ã°Ú½À´Ï±î ?";
+    Text[ turkish ] = "Dosya mevcut. \nÜzerine yazılsın mı?";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_GOUP
+{
+    Text = "Eine Ebene höher" ;
+    Text [ English ] = "Go up" ;
+    Text [ portuguese ] = "Um nível acima" ;
+    Text [ english_us ] = "Up One Level" ;
+    Text [ portuguese_brazilian ] = "Eine Ebene höher" ;
+    Text [ swedish ] = "En nivå högre" ;
+    Text [ danish ] = "Et niveau op" ;
+    Text [ italian ] = "Un livello più alto" ;
+    Text [ spanish ] = "Subir un nivel" ;
+    Text [ french ] = "Niveau supérieur" ;
+    Text [ dutch ] = "Een niveau hoger" ;
+    Text[ chinese_simplified ] = "ÏòÉÏÉıÒ»¼¶";
+    Text[ russian ] = "Íà îäèí óğîâåíü ââåğõ";
+    Text[ polish ] = "Jeden poziom wy¿ej";
+    Text[ japanese ] = "ˆê‚Âã‚ÌÌ«ÙÀŞ‚Ö";
+    Text[ chinese_traditional ] = "¦V¤Wª@¤@¯Å";
+    Text[ arabic ] = "ãÓÊæì æÇÍÏ ááÃÚáì";
+    Text[ greek ] = "¸íá åğßğåäï ğéï øçëÜ";
+    Text[ korean ] = "ÇÑ ¼öÁØ À§·Î";
+    Text[ turkish ] = "Bir seviye yukarı";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_SAVE
+{
+    Text = "Speichern" ;
+    Text [ English ] = "Save" ;
+    Text [ portuguese ] = "Guardar" ;
+    Text [ english_us ] = "Save" ;
+    Text [ portuguese_brazilian ] = "Speichern" ;
+    Text [ swedish ] = "Spara" ;
+    Text [ danish ] = "Gem" ;
+    Text [ italian ] = "Salva" ;
+    Text [ spanish ] = "Guardar" ;
+    Text [ french ] = "Enregistrer" ;
+    Text [ dutch ] = "Opslaan" ;
+    Text[ chinese_simplified ] = "´æÅÌ";
+    Text[ russian ] = "Ñîõğàíèòü";
+    Text[ polish ] = "Zapisz";
+    Text[ japanese ] = "•Û‘¶";
+    Text[ chinese_traditional ] = "Àx¦s";
+    Text[ arabic ] = "ÍİÙ";
+    Text[ greek ] = "ÁğïèŞêåõóç";
+    Text[ korean ] = "ÀúÀå";
+    Text[ turkish ] = "Kaydet";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_DRIVES
+{
+    Text = "~Laufwerke" ;
+    Text [ English ] = "D~rives" ;
+    Text [ portuguese ] = "~Unidades" ;
+    Text [ english_us ] = "D~rive" ;
+    Text [ portuguese_brazilian ] = "Unidades" ;
+    Text [ swedish ] = "~Enheter" ;
+    Text [ danish ] = "Drev" ;
+    Text [ italian ] = "Drive" ;
+    Text [ spanish ] = "~Unidades" ;
+    Text [ french ] = "~Lecteurs" ;
+    Text [ dutch ] = "~Stations" ;
+    Text[ chinese_simplified ] = "Çı¶¯ÅÌ(~R)";
+    Text[ russian ] = "Äèñêè";
+    Text[ polish ] = "Napêdy";
+    Text[ japanese ] = "ÄŞ×²ÌŞ(~R)";
+    Text[ chinese_traditional ] = "ÅX°Ê¾¹(~R)";
+    Text[ arabic ] = "ãÍÑßÇÊ ÇáÃŞÑÇÕ";
+    Text[ greek ] = "ÌïíÜäá äßóêïõ";
+    Text[ korean ] = "µå¶óÀÌºê(~R)";
+    Text[ turkish ] = "~Sürücü";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_HOME
+{
+    Text = "Benutzer Verzeichnis" ;
+    Text [ ENGLISH ] = "Home Directory" ;
+    Text [ portuguese ] = "Directório do utilizador" ;
+    Text [ english_us ] = "User Directory" ;
+    Text [ portuguese_brazilian ] = "Verzeichnis" ;
+    Text [ swedish ] = "Användarmapp" ;
+    Text [ danish ] = "Brugerbibliotek" ;
+    Text [ italian ] = "Cartella utente" ;
+    Text [ spanish ] = "Directorio de usuario" ;
+    Text [ french ] = "Répertoire d'utilisateur" ;
+    Text [ dutch ] = "Gebruikers-map" ;
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÄ¿Â¼";
+    Text[ russian ] = "Êàòàëîã ïîëüçîâàòåëÿ";
+    Text[ polish ] = "Katalog u¿ytkowników";
+    Text[ japanese ] = "Õ°»Ş°‚ÌÃŞ¨Ú¸ÄØ";
+    Text[ chinese_traditional ] = "¦Û­q¥Ø¿ı";
+    Text[ arabic ] = "Ïáíá ÇáãÓÊÎÏã";
+    Text[ greek ] = "ÊáôÜëïãïò ÷ñŞóôç";
+    Text[ korean ] = "»ç¿ëÀÚ µğ·ºÅä¸®";
+    Text[ turkish ] = "Kullanıcı dizini";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_NEWDIR
+{
+    Text = "Verzeichnis anlegen" ;
+    Text [ ENGLISH ] = "Create Directory" ;
+    Text [ portuguese ] = "Criar directório" ;
+    Text [ english_us ] = "Create Directory" ;
+    Text [ portuguese_brazilian ] = "Verzeichnis" ;
+    Text [ swedish ] = "Skapa mapp" ;
+    Text [ danish ] = "Opret bibliotek" ;
+    Text [ italian ] = "Crea cartella" ;
+    Text [ spanish ] = "Crear directorio" ;
+    Text [ french ] = "Créer un répertoire" ;
+    Text [ dutch ] = "Map maken" ;
+    Text[ chinese_simplified ] = "´´½¨Ä¿Â¼";
+    Text[ russian ] = "Ñîçäàòü êàòàëîã";
+    Text[ polish ] = "Utwórz katalog";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ‚ğì¬";
+    Text[ chinese_traditional ] = "«Ø¥ß¥Ø¿ı";
+    Text[ arabic ] = "ÅäÔÇÁ Ïáíá";
+    Text[ greek ] = "Äçìéïõñãßá êáôáëüãïõ";
+    Text[ korean ] = "µğ·ºÅä¸® ¸¸µé±â";
+    Text[ turkish ] = "Dizin oluştur";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILEDLG_ASKNEWDIR
+{
+    Text = "Soll das Verzeichnis %s angelegt werden ?" ;
+    Text [ English ] = "Do you want the directory %s to be created ?" ;
+    Text [ english_us ] = "Do you want the directory %s to be created ?" ;
+    Text [ portuguese_brazilian ] = "Soll das Verzeichnis %s angelegt werden ?" ;
+    Text [ swedish ] = "Skall mappen %s skapas ?" ;
+    Text [ danish ] = "Skal biblioteket %s oprettes?" ;
+    Text [ italian ] = "Si deve creare una cartella %s ?" ;
+    Text [ spanish ] = "¿Desea crear el directorio %s?" ;
+    Text [ french ] = "Souhaitez vous créer le répertoire %s ?" ;
+    Text [ dutch ] = "Wilt u dat map %s wordt aangelegd ?" ;
+    Text [ portuguese ] = "Deseja criar o directório %s ?" ;
+    Text[ chinese_simplified ] = "ÄúÒª½¨Á¢Õâ¸öÄ¿Â¼ %s £¿";
+    Text[ russian ] = "Ñîçäàòü êàòàëîã %s ?";
+    Text[ polish ] = "Czy utworzyæ katalog %s?";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ%s‚ğì¬‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "±z­n«Ø¥ß³o­Ó¥Ø¿ı %s ¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÅäÔÇÁ ÇáÏáíá %s¿";
+    Text[ greek ] = "Èİëåôå íá äçìéïõñãçèåß ï êáôÜëïãïò %s;";
+    Text[ korean ] = "µğ·ºÅä¸® %s ¸¦ ¸¸µå½Ã°Ú½À´Ï±î ?";
+    Text[ turkish ] = "%s oluşturulsun mu ?";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,223 @@
+/*************************************************************************
+ *
+ *  $RCSfile: unoifac2.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:59:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+
+#ifndef _SVT_UNO_UNOIFAC_HRC_
+#include <unoifac2.hrc>
+#endif
+
+
+Menu RID_CONTEXTMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = RID_OPEN_LINK ;
+            HelpId = HID_TEXTCPNT_OPEN_LINK ;
+            Text = "Öff~nen" ;
+            Text[ English ] = "~Open" ;
+            Text[ italian ] = "~Apri";
+            Text[ portuguese_brazilian ] = "Öff~nen";
+            Text[ portuguese ] = "~Abrir";
+            Text[ danish ] = "Å~bn";
+            Text[ french ] = "Ouvrir";
+            Text[ swedish ] = "~Öppna";
+            Text[ dutch ] = "Ope~nen";
+            Text[ spanish ] = "~Abrir";
+            Text[ english_us ] = "~Open";
+            Text[ chinese_simplified ] = "´ò¿ª(~O)";
+            Text[ russian ] = "Îòêğûòü";
+            Text[ polish ] = "Otwórz";
+            Text[ japanese ] = "ŠJ‚­(~O)";
+            Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~O)";
+            Text[ arabic ] = "İÊÍ";
+            Text[ dutch ] = "Ope~nen";
+            Text[ chinese_simplified ] = "´ò¿ª(~O)";
+            Text[ greek ] = "¢~íïéãìá";
+            Text[ korean ] = "¿­±â(~O)";
+            Text[ turkish ] = "Aç";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = RID_OPEN_LINK_NEW ;
+            HelpId = HID_TEXTCPNT_OPEN_LINK_NEW ;
+            Text = "Öffnen in neuem ~Fenster" ;
+            Text[ English ] = "Open in ~new window" ;
+            Text[ italian ] = "Apri nella ~finestra nuova";
+            Text[ portuguese_brazilian ] = "Öff~nen in neuem ~Fenster";
+            Text[ portuguese ] = "Abrir em ~nova janela";
+            Text[ danish ] = "Åbn i nyt vindue";
+            Text[ french ] = "Ouvrir dans une nouvelle ~fenêtre";
+            Text[ swedish ] = "~Öppna i ett nytt fönster";
+            Text[ dutch ] = "Openen in nieuw ~venster";
+            Text[ spanish ] = "Abrir en ~ventana nueva";
+            Text[ english_us ] = "Open in New ~Window";
+            Text[ chinese_simplified ] = "Ê¹ÓÃÒ»¸öĞÂÊÓ´°´ò¿ª(~W)";
+            Text[ russian ] = "Îòêğûòü â íîâîì îêíå";
+            Text[ polish ] = "Otwórz w nowym oknie";
+            Text[ japanese ] = "V‚µ‚¢³¨İÄŞ³‚ğŠJ‚­(~W)";
+            Text[ chinese_traditional ] = "¥Î¤@­Ó·sµøµ¡¶}±Ò(~W)";
+            Text[ arabic ] = "İÊÍ İí äÇİĞÉ ÌÏíÏÉ";
+            Text[ dutch ] = "Openen in nieuw ~venster";
+            Text[ chinese_simplified ] = "Ê¹ÓÃÒ»¸öĞÂÊÓ´°´ò¿ª(~W)";
+            Text[ greek ] = "¢íïéãìá óå íİï ~ğáñÜèõñï";
+            Text[ korean ] = "»õ Ã¢¿¡¼­ ¿­±â(~W)";
+            Text[ turkish ] = "Yeni bir pencerede aç";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = RID_DOWNLOAD ;
+            HelpId = HID_TEXTCPNT_DOWNLOAD ;
+            Text = "~Download..." ;
+            Text[ English ] = "~Download..." ;
+            Text[ italian ] = "~Download...";
+            Text[ portuguese_brazilian ] = "~Download...";
+            Text[ portuguese ] = "~Download...";
+            Text[ danish ] = "Overfør...";
+            Text[ french ] = "~Téléchargement...";
+            Text[ swedish ] = "~Ladda ned...";
+            Text[ dutch ] = "~Downloaden...";
+            Text[ spanish ] = "~Descargar...";
+            Text[ english_us ] = "~Download...";
+            Text[ chinese_simplified ] = "ÏÂÔØ(~D)...";
+            Text[ russian ] = "Çàãğóçêà...";
+            Text[ polish ] = "Pobieranie...";
+            Text[ japanese ] = "ÀŞ³İÛ°ÄŞ(~D)...";
+            Text[ chinese_traditional ] = "¤U¸ü(~D)...";
+            Text[ arabic ] = "ÊäÒíá...";
+            Text[ dutch ] = "~Downloaden...";
+            Text[ chinese_simplified ] = "ÏÂÔØ(~D)...";
+            Text[ greek ] = "~ËŞøç áñ÷åßùí...";
+            Text[ korean ] = "´Ù¿î·Îµå(~D)...";
+            Text[ turkish ] = "İndir...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = RID_ADD_BOOKMARK ;
+            HelpId = HID_TEXTCPNT_ADD_BOOKMARK ;
+            Text = "Verknüpfung ~hinzufügen" ;
+            Text[ English ] = "~Add bookmark" ;
+            Text[ italian ] = "~Aggiungi collegamento";
+            Text[ portuguese_brazilian ] = "Verknüpfung ~hinzufügen";
+            Text[ portuguese ] = "Adicionar ~ligação";
+            Text[ danish ] = "Tilføj kæde";
+            Text[ french ] = "~Ajouter un lien";
+            Text[ swedish ] = "Lägg till l~änk";
+            Text[ dutch ] = "Koppeling ~toevoegen";
+            Text[ spanish ] = "~Añadir vínculo";
+            Text[ english_us ] = "Add ~Link";
+            Text[ chinese_simplified ] = "ĞÂÔöÁ´½Ó(~L)";
+            Text[ russian ] = "Äîáàâèòü ññûëêó";
+            Text[ polish ] = "Dodaj ³¹cze";
+            Text[ japanese ] = "Øİ¸‚Ì’Ç‰Á(~L)";
+            Text[ chinese_traditional ] = "¥[¤J±¶®|(~L)";
+            Text[ arabic ] = "ÅÖÇİÉ ÇÑÊÈÇØ";
+            Text[ dutch ] = "Koppeling ~toevoegen";
+            Text[ chinese_simplified ] = "ĞÂÔöÁ´½Ó(~L)";
+            Text[ greek ] = "ĞñïóèŞê~ç óıíäåóçò";
+            Text[ korean ] = "¿¬°á  Ãß°¡(~L)";
+            Text[ turkish ] = "Bağlantıyı ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = RID_COPY_LINK ;
+            HelpId = HID_TEXTCPNT_COPY_LINK ;
+            Text = "~Link kopieren" ;
+            Text[ English ] = "~Copy Link" ;
+            Text[ english_us ] = "Cop~y Link" ;
+            Text[ portuguese ] = "~Copiar ligação" ;
+            Text[ portuguese_brazilian ] = "~Link kopieren" ;
+            Text[ swedish ] = "~Kopiera länk" ;
+            Text[ danish ] = "Kopier kæde" ;
+            Text[ italian ] = "Copia ~link" ;
+            Text[ spanish ] = "Copiar ~vínculo" ;
+            Text[ french ] = "Copier le ~lien" ;
+            Text[ dutch ] = "~Link kopiëren" ;
+            Text[ chinese_simplified ] = "¸´ÖÆÁ´½Ó(~Y)";
+            Text[ russian ] = "Êîïèğîâàòü ññûëêó";
+            Text[ polish ] = "Kopiuj ³¹cze";
+            Text[ japanese ] = "Øİ¸‚ÌºËß°(~Y)";
+            Text[ chinese_traditional ] = "Î`»s±¶®|(~Y)";
+            Text[ arabic ] = "äÓÎ ÇáÇÑÊÈÇØ";
+            Text[ dutch ] = "~Link kopiëren";
+            Text[ chinese_simplified ] = "¸´ÖÆÁ´½Ó(~Y)";
+            Text[ greek ] = "ÁíôéãñáöŞ ~óıíäåóçò";
+            Text[ korean ] = "¿¬°á º¹»ç(~Y)";
+            Text[ turkish ] = "Bağlantıyı kopyala";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+

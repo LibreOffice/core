@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ *  $RCSfile: stdtext.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define _SV_STDTEXT_SRC
+
+#ifndef _SV_SVIDS_HRC
+#include <svids.hrc>
+#endif
+
+String SV_STDTEXT_SERVICENOTAVAILABLE
+{
+    Text = "Eine Komponente (%s) konnte nicht geladen werden.\nBitte starten Sie das Setup und führen Sie eine Reparatur durch.";
+    Text [ English ] = "The component (%s) could not be loaded.\nPlease start setup in repair mode." ;
+    Text[ english_us ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option.";
+    Text[ portuguese ] = "Impossível carregar o componente (%s).\nReinicie o setup com a opção 'Reparação'.";
+    Text[ russian ] = "Çàãğóçèòü îäèí èç êîìïîíåíòîâ (%s) íå óäàåòñÿ.\nÇàïóñòèòå èíñòàëëÿöèş ñ âîññòàíîâëåíèåì.";
+    Text[ dutch ] = "Een component (%s) kon niet worden geladen.\nStart setup opnieuw met de optie Reparatie.";
+    Text[ french ] = "Impossible de charger l'un des composants (%s).\nVeuillez redémarrer le programme d'installation (Setup) et exécuter une réparation.";
+    Text[ spanish ] = "No se pudo cargar un componente (%s).\nInicie por favor el programa de instalación y ejecute una Reparación.";
+    Text[ italian ] = "Impossibile caricare il componente (%s).\nRiavviate il setup e eseguite la riparazione.";
+    Text[ danish ] = "Det var ikke muligt at indlæse en komponent (%s).\nStart venligst installationsprogrammet (Setup) og udfør en reparation.";
+    Text[ swedish ] = "Komponenten (%s) kunde inte laddas.\nVar vänlig och starta setupen och gör en reparation.";
+    Text[ polish ] = "Sk³adnika (%s) nie mo¿na za³adowaæ.\nProszê rozpocznij program instalacyjny i przeprowadŸ naprawê.";
+    Text[ portuguese_brazilian ] = "The component (%s) could not be loaded.\nPlease start setup with the option -repair.";
+    Text[ japanese ] = "ºİÎß°ÈİÄ(%s)‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯Ìß‚ğŠJn‚µ‚ÄC•œ‚ğÀs‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_simplified ] = "ÎŞ·¨×°ÔØ³ÌĞò²¿¼ş(%s)¡£\nÇëÄúÑ¡Ôñ°²×°³ÌĞòµÄÑ¡ÏîĞŞ²¹¡£";
+    Text[ chinese_traditional ] = "µLªk¸Ë¸üµ{¦¡³¡¥ó(%s)¡C\n½Ğ±z¿ï¾Ü¦w¸Ëµ{¦¡ªº­×½Æ¿ï¶µ¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÊÍãíá Çáãßæä (%s).\n ÇáÑÌÇÁ ÈÏÁ ÈÑäÇãÌ ÇáÅÚÏÇÏ¡ Ëã ÇáŞíÇã ÈÚãáíÉ ÇáÅÕáÇÍ ÇááÇÒãÉ.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá öïñôùèåß ôï óôïé÷åßï (%s)\nĞáñáêáëş åêêéíŞóôå îáíÜ ôï ğñüãñáììá åãêáôÜóôáóçò êáé åêôåëİóôå ôçí åğéóêåõŞ.";
+    Text[ korean ] = "ÄÄÆ÷³ÍÆ® (%s)°¡ ·Îµå µÇÁö ¾Ê¾Ò½À´Ï´Ù.\n¼³Á¤¿¡¼­ ¿É¼Ç°íÄ§À» ½ÃÀÛÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Bir bileşen (%s) yüklenemedi.\nSetup programını çalıştırıp onarınız.";
+    Text[ language_user1 ] = " ";
+};
