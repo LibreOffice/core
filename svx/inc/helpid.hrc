@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-30 08:23:57 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,6 +527,8 @@
 #define HID_SPLDLG_EDIT_NEWWORD                 (HID_SVX_EXT0_START + 26)
 #define HID_HANGULDLG_EDIT_NEWWORD              (HID_SVX_EXT0_START + 27)
 
+#define HID_OPTIONS_DICT_EDIT_ENTRIES_LIST      (HID_SVX_EXT0_START + 28)
+
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
@@ -540,7 +542,7 @@
 
 // overrun check 2
 
-#define ACT_SVX_HID_END2 HID_OPTIONS_CTL
+#define ACT_SVX_HID_END2        HID_OPTIONS_DICT_EDIT_ENTRIES_LIST
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
