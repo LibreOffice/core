@@ -10148,3 +10148,7 @@ _real@8@4003a000000000000000
 ?ConvertStarFonts@XMLTextImportHelper@@QBE?AVOUString@rtl@@ABV23@0AAEEAAVSvXMLImport@@@Z
 ??0XMLImpSpanContext_Impl@@QAE@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@AAVXMLHints_Impl@@AAEE@Z
 ?CreateChildContext@XMLImpSpanContext_Impl@@SAPAVSvXMLImportContext@@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@GAAVXMLHints_Impl@@AAEE@Z
+??1Logfile@rtl@@QAE@XZ
+?_CreateDataStylesImport@SvXMLImport@@IAEXXZ
+?_CreateNumberFormatsSupplier@SvXMLImport@@IAEXXZ
+?exportByte@XMLSettingsExportHelper@@ABEXCABVOUString@rtl@@@Z
