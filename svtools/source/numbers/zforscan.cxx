@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:23:11 $
+ *  last change: $Author: er $ $Date: 2001-07-04 17:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,9 +1538,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             sal_Unicode cSep = cHere;   // remember
                             if ( StringEqualsChar( sOldThousandSep, cSep ) )
                             {
-                                if (bConvertMode)
-                                    sStrArray[i] = pLoc->getNumThousandSep();
-
                                 // previous char with skip empty
                                 sal_Unicode cPre = PreviousChar(i);
                                 sal_Unicode cNext;
@@ -1563,7 +1560,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 {
                                     nPos += sStrArray[i].Len();
                                     if (!bThousand)                 // only once
-                                    {   // set hard, in case of Non-Breaking Space
+                                    {   // set hard, in case of Non-Breaking Space or ConvertMode
                                         sStrArray[i] = pLoc->getNumThousandSep();
                                         nTypeArray[i] = SYMBOLTYPE_THSEP;
                                         bThousand = TRUE;
@@ -1584,7 +1581,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     {   // strange, those French..
                                         BOOL bFirst = TRUE;
                                         String& rStr = sStrArray[i];
-                                        //  set a hard Non-Breaking Space
+                                        //  set a hard Non-Breaking Space or ConvertMode
                                         const String& rSepF = pLoc->getNumThousandSep();
                                         while ( i < nAnzStrings
                                             && sStrArray[i] == sOldThousandSep
@@ -1679,9 +1676,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             }
                             else if ( StringEqualsChar( sOldDecSep, cSep ) )
                             {
-                                if (bConvertMode)
-                                    sStrArray[i] = pLoc->getNumDecimalSep();
-
                                 if (bBlank || bFrac)    // . behind / or ' '
                                     return nPos;        // error
                                 else if (bExp)          // behind E
@@ -1709,12 +1703,14 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 }
                                 else
                                 {
+                                    nPos += sStrArray[i].Len();
                                     nTypeArray[i] = SYMBOLTYPE_DECSEP;
+                                    sStrArray[i] = pLoc->getNumDecimalSep();
                                     bDecSep = TRUE;
                                     nDecPos = i;
                                     nCntPre = nCounter;
                                     nCounter = 0;
-                                    nPos += sStrArray[i].Len();
+
                                     i++;
                                 }
                             }                           // of else = DecSep
