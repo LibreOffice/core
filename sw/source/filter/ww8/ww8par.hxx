@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-15 11:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,6 +1015,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_PicLoc(           USHORT nId, const BYTE* pData, short nLen );
     void Read_BoldUsw(          USHORT nId, const BYTE*, short nLen );
     void Read_SubSuper(         USHORT, const BYTE*, short nLen );
+    BOOL ConvertSubToGraphicPlacement();
     void Read_SubSuperProp(     USHORT, const BYTE*, short nLen );
     void Read_Underline(        USHORT, const BYTE*, short nLen );
     void Read_TxtColor(         USHORT, const BYTE*, short nLen );

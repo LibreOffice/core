@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-15 11:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,12 @@
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
+#endif
+#ifndef _FMTFSIZE_HXX
+#include <fmtfsize.hxx>
+#endif
+#ifndef _FMTORNT_HXX
+#include <fmtornt.hxx>
 #endif
 #ifndef _WW8STRUC_HXX
 #include <ww8struc.hxx>
@@ -280,8 +286,22 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
 
     WriteChar( (char)1 );   // Grafik-Sonderzeichen in Haupttext einfuegen
 
-    BYTE aArr[ 14 ];
+    BYTE aArr[ 18 ];
     BYTE* pArr = aArr;
+
+    RndStdIds eAn = pFlyFmt->GetAttrSet().GetAnchor( FALSE ).GetAnchorId();
+    if( eAn == FLY_IN_CNTNT )
+    {
+        SwVertOrient eVert = pFlyFmt->GetVertOrient().GetVertOrient();
+        if ((eVert == VERT_CHAR_CENTER) || (eVert == VERT_LINE_CENTER))
+        {
+            SwTwips nHeight = pFlyFmt->GetFrmSize().GetHeight();
+            nHeight/=20;    //nHeight was in twips, want it in half points, but
+                            //then half of total height.
+            Set_UInt16( pArr, 0x4845 );
+            Set_UInt16( pArr, -nHeight);
+        }
+    }
 
     // sprmCFSpec
     if( bWrtWW8 )
@@ -307,7 +327,6 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
     Set_UInt8( pArr, nAttrMagicIdx++ );
     pChpPlc->AppendFkpEntry( pStrm->Tell(), pArr - aArr, aArr );
 
-    RndStdIds eAn = pFlyFmt->GetAttrSet().GetAnchor( FALSE ).GetAnchorId();
     if( ( eAn == FLY_AT_CNTNT && (bWrtWW8 || !bIsInTable )) ||
         eAn == FLY_PAGE )
     {

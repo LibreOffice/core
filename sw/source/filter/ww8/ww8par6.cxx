@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-12 11:14:41 $
+ *  last change: $Author: cmc $ $Date: 2001-10-15 11:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,12 @@
 #endif
 #ifndef SW_FMTLINE_HXX
 #include <fmtline.hxx>
+#endif
+#ifndef _TXATBASE_HXX
+#include <txatbase.hxx>
+#endif
+#ifndef _FMTFLCNT_HXX
+#include <fmtflcnt.hxx>
 #endif
 #ifndef _WW8SCAN_HXX
 #include <ww8scan.hxx>
@@ -3285,10 +3291,72 @@ void SwWW8ImplReader::Read_SubSuper( USHORT, const BYTE* pData, short nLen )
     NewAttr( SvxEscapementItem( nEs, nProp ) );
 }
 
+BOOL SwWW8ImplReader::ConvertSubToGraphicPlacement()
+{
+    /*
+    #92489# & #92946#
+    For inline graphics and objects word has a hacked in feature to use
+    subscripting to force the graphic into a centered position on the line, so
+    we must check when applying sub/super to see if it the subscript range
+    contains only a single graphic, and if that graphic is anchored as
+    FLY_IN_CNTNT and then we can change its anchoring to centered in the line.
+    */
+    BOOL bIsGraphicPlacementHack=FALSE;
+    USHORT nPos;
+    if (pCtrlStck->GetFmtStackAttr(RES_CHRATR_ESCAPEMENT, &nPos))
+    {
+        SwFltStackEntry* pEntry = (*pCtrlStck)[nPos];
+        const SwNodeIndex* pNodeIndex = &pEntry->nMkNode;
+        if( pNodeIndex )
+        {
+            SwNodeIndex aBegin( *pNodeIndex, 1 );
+            SwNodeIndex aEnd(pPaM->GetPoint()->nNode );
+            xub_StrLen nBegin = pEntry->nMkCntnt;
+            xub_StrLen nEnd = pPaM->GetPoint()->nContent.GetIndex();
+
+            if ( (aBegin == aEnd) && (nBegin == nEnd-1) )
+            {
+                const SwpHints *pAttrs = ((SwTxtNode *)pPaM->GetNode())->
+                    GetpSwpHints();
+                if( pAttrs )
+                {
+                    register xub_StrLen i;
+                    for( i = 0; i < pAttrs->Count(); i++ )
+                    {
+                        const SwTxtAttr* pHt = (*pAttrs)[i];
+                        const xub_StrLen* pEnd = pHt->GetEnd();
+
+                        if( pEnd ? ( nBegin >= *pHt->GetStart() &&
+                            nBegin < *pEnd ) : nBegin == *pHt->GetStart() )
+                        {
+                            const SwFmtFlyCnt& rFly = (const SwFmtFlyCnt &)
+                                pHt->GetAttr();
+                            SwFrmFmt *pFlyFmt = rFly.GetFrmFmt();
+                            SwFmtAnchor aAnchor = pFlyFmt->GetAnchor();
+                            if (FLY_IN_CNTNT == aAnchor.GetAnchorId())
+                            {
+                                pCtrlStck->DeleteAndDestroy( nPos );
+                                bIsGraphicPlacementHack=TRUE;
+                                pFlyFmt->SetAttr(SwFmtVertOrient(0,
+                                    VERT_CHAR_CENTER,REL_CHAR));
+                            }
+                        }
+                        else if( nBegin < *pHt->GetStart() )
+                            break;
+                    }
+                }
+            }
+        }
+    }
+    return bIsGraphicPlacementHack;
+}
+
 void SwWW8ImplReader::Read_SubSuperProp( USHORT, const BYTE* pData, short nLen )
 {
-    if( nLen < 0 ){
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_ESCAPEMENT );
+    if( nLen < 0 )
+    {
+        if (!ConvertSubToGraphicPlacement())
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_ESCAPEMENT );
         return;
     }
 
