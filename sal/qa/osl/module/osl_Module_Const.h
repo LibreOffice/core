@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Module_Const.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-08 13:21:23 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,22 @@
 #endif
 
 #include <cppunit/simpleheader.hxx>
+
+#if ( defined UNX ) || ( defined OS2 )  //Unix
+#   include <unistd.h>
+#else                                   // Windows
+#   include <windows.h>
+#   include <io.h>
+#endif
+
+#   define FILE_PREFIX          "file:///"
+
+//Korea charactors
+::rtl::OUString aKname = ::rtl::OUString::createFromAscii( "/안녕하세요" );
+//chinese
+::rtl::OUString aCname = ::rtl::OUString::createFromAscii( "/你好" );
+//Japanese
+::rtl::OUString aJname = ::rtl::OUString::createFromAscii( "/こんにちは" );
 
 //------------------------------------------------------------------------
 // function pointer type.
