@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:57:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svtools/smplhint.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/multisel.hxx>
@@ -737,6 +738,23 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
 
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
+
+    if ( nRenderer == nTabStart )
+    {
+        // first page of a sheet: add outline item for the sheet name
+
+        vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+        if ( pPDFData )
+        {
+            // the sheet starts at the top of the page
+            Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
+            sal_Int32 nDestID = pPDFData->CreateDest( aArea );
+            String aTabName;
+            pDoc->GetName( nTab, aTabName );
+            sal_Int32 nParent = -1;     // top-level
+            pPDFData->CreateOutlineItem( nParent, aTabName, nDestID );
+        }
+    }
 
     long nPrinted = aFunc.DoPrint( aPage, nTabStart, nDisplayStart, TRUE, NULL, NULL );
 
