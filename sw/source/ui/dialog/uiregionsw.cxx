@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:00:31 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,12 @@
  *
  ************************************************************************/
 
-
-#pragma hdrstop
-
-#ifndef _HINTIDS_HXX
-#include <hintids.hxx>
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
 #endif
-#ifndef _UITOOL_HXX
-#include <uitool.hxx>
-#endif
+
+#include "hintids.hxx"
+#include "regionsw.hxx"
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -109,8 +106,13 @@
 //CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
 //CHINA001 #include <svx/backgrnd.hxx>
 //CHINA001 #endif
+#ifndef _SVX_HTMLCFG_HXX
 #include <svx/htmlcfg.hxx>
+#endif
 
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
 #ifndef _BOOKMRK_HXX //autogen
 #include <bookmrk.hxx>
 #endif
@@ -122,9 +124,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>                      // fuers SwSectionFmt-Array
-#endif
-#ifndef _REGIONSW_HXX
-#include <regionsw.hxx>
 #endif
 #ifndef _BASESH_HXX
 #include <basesh.hxx>
@@ -181,19 +180,30 @@
 #ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
 #endif
+#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc> //CHINA001
+#endif
+#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc> //CHINA001
+#endif
+#ifndef _SVX_DIALOG_HXX
 #include <svx/svxdlg.hxx> //CHINA001
+#endif
+#ifndef _SVX_FLAGSDEF_HXX
 #include <svx/flagsdef.hxx> //CHINA001
+#endif
 #ifndef _SFXINTITEM_HXX //CHINA001
 #include <svtools/intitem.hxx> //CHINA001
 #endif //CHINA001
+
+// sw/inc/docary.hxx
+SV_IMPL_PTRARR( SwSectionFmts, SwSectionFmtPtr )
 
 #define FILE_NAME_LENGTH 17
 
 SV_IMPL_OP_PTRARR_SORT( SectReprArr, SectReprPtr )
 
-void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox );
+static void   lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox );
 
 /* -----------------25.06.99 15:38-------------------
 
@@ -1415,7 +1425,7 @@ Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden, BOOL bHighContras
     Beschreibung:   Hilfsfunktion - Bereichsnamen aus dem Medium lesen
  --------------------------------------------------------------------*/
 
-void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
+static void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
 {
     rBox.Clear();
     SvStorage* pStg;
@@ -1430,7 +1440,7 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
         case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
             {
-                Sw3Reader* pRdr = (Sw3Reader*)ReadSw3;
+                Sw3Reader* pRdr = (Sw3Reader*)SwGetReaderSw3();
                 Sw3Io* pOldIo = pRdr->GetSw3Io();
                   pRdr->SetSw3Io( rSh.GetView().GetDocShell()->GetIoSystem() );
                 pRdr->GetSectionList( rMedium, (SvStrings&) aArr );
@@ -1441,7 +1451,7 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
         case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
         case SOT_FORMATSTR_ID_STARWRITER_8:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
-            ReadXML->GetSectionList( rMedium, (SvStrings&) aArr );
+            SwGetReaderXML()->GetSectionList( rMedium, (SvStrings&) aArr );
             break;
         }
         for( USHORT n = 0; n < aArr.Count(); ++n )
