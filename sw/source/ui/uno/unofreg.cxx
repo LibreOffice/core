@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:49:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,24 @@ extern uno::Sequence< OUString > SAL_CALL SwXMLImportSettings_getSupportedServic
 extern OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 
-// xml export
+// xml export (OOo)
+extern uno::Sequence< OUString > SAL_CALL SwXMLExportOOO_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
+extern uno::Sequence< OUString > SAL_CALL SwXMLExportContentOOO_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwXMLExportContentOOO_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportContentOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)    throw( uno::Exception );
+extern uno::Sequence< OUString > SAL_CALL SwXMLExportStylesOOO_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwXMLExportStylesOOO_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportStylesOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+extern uno::Sequence< OUString > SAL_CALL SwXMLExportMetaOOO_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwXMLExportMetaOOO_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportMetaOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
+extern uno::Sequence< OUString > SAL_CALL SwXMLExportSettingsOOO_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwXMLExportSettingsOOO_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)   throw( uno::Exception );
+
+// xml export (OASIS)
 extern uno::Sequence< OUString > SAL_CALL SwXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExport_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
@@ -195,6 +212,18 @@ sal_Bool SAL_CALL component_writeInfo(
                                SwXMLImportContent_getSupportedServiceNames() );
             lcl_uno_writeInfo( pKey, SwXMLImportMeta_getImplementationName(),
                                SwXMLImportMeta_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey, SwXMLImportSettings_getImplementationName(),
+                               SwXMLImportSettings_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey, SwXMLExportOOO_getImplementationName(),
+                               SwXMLExportOOO_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey, SwXMLExportStylesOOO_getImplementationName(),
+                               SwXMLExportStylesOOO_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey,SwXMLExportContentOOO_getImplementationName(),
+                               SwXMLExportContentOOO_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey, SwXMLExportMetaOOO_getImplementationName(),
+                               SwXMLExportMetaOOO_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey, SwXMLExportSettingsOOO_getImplementationName(),
+                               SwXMLExportSettingsOOO_getSupportedServiceNames() );
             lcl_uno_writeInfo( pKey, SwXMLExport_getImplementationName(),
                                SwXMLExport_getSupportedServiceNames() );
             lcl_uno_writeInfo( pKey, SwXMLExportStyles_getImplementationName(),
@@ -205,8 +234,6 @@ sal_Bool SAL_CALL component_writeInfo(
                                SwXMLExportMeta_getSupportedServiceNames() );
             lcl_uno_writeInfo( pKey, SwXMLExportSettings_getImplementationName(),
                                SwXMLExportSettings_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLImportSettings_getImplementationName(),
-                               SwXMLImportSettings_getSupportedServiceNames() );
             //API objects
             lcl_uno_writeInfo( pKey, SwXAutoTextContainer_getImplementationName(),
                                SwXAutoTextContainer_getSupportedServiceNames() );
@@ -283,6 +310,54 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName,
                 SwXMLImportMeta_createInstance,
                 SwXMLImportMeta_getSupportedServiceNames() );
         }
+        else if( SwXMLImportSettings_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXMLImportSettings_getImplementationName(),
+                SwXMLImportSettings_createInstance,
+                SwXMLImportSettings_getSupportedServiceNames() );
+        }
+        else if( SwXMLExportOOO_getImplementationName().equalsAsciiL( pImplName,
+                                                            nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXMLExportOOO_getImplementationName(),
+                SwXMLExportOOO_createInstance,
+                SwXMLExportOOO_getSupportedServiceNames() );
+        }
+        else if( SwXMLExportStylesOOO_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXMLExportStylesOOO_getImplementationName(),
+                SwXMLExportStylesOOO_createInstance,
+                SwXMLExportStylesOOO_getSupportedServiceNames() );
+        }
+        else if( SwXMLExportContentOOO_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXMLExportContentOOO_getImplementationName(),
+                SwXMLExportContentOOO_createInstance,
+                SwXMLExportContentOOO_getSupportedServiceNames() );
+        }
+        else if( SwXMLExportMetaOOO_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXMLExportMetaOOO_getImplementationName(),
+                SwXMLExportMetaOOO_createInstance,
+                SwXMLExportMetaOOO_getSupportedServiceNames() );
+        }
+        else if( SwXMLExportSettingsOOO_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXMLExportSettingsOOO_getImplementationName(),
+                SwXMLExportSettingsOOO_createInstance,
+                SwXMLExportSettingsOOO_getSupportedServiceNames() );
+        }
         else if( SwXMLExport_getImplementationName().equalsAsciiL( pImplName,
                                                             nImplNameLen ) )
         {
@@ -322,14 +397,6 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName,
                 SwXMLExportSettings_getImplementationName(),
                 SwXMLExportSettings_createInstance,
                 SwXMLExportSettings_getSupportedServiceNames() );
-        }
-        else if( SwXMLImportSettings_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SwXMLImportSettings_getImplementationName(),
-                SwXMLImportSettings_createInstance,
-                SwXMLImportSettings_getSupportedServiceNames() );
         }
         else if( SwXAutoTextContainer_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
