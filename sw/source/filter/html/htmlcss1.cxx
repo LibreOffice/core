@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-14 14:18:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
@@ -206,8 +209,8 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
     ASSERT( i<nPageDescs, "Seitenvorlage nicht gefunden" );
 }
 
-SwCSS1Parser::SwCSS1Parser( SwDoc *pD, ULONG aFHeights[7], BOOL bNewDoc ) :
-    SvxCSS1Parser( pD->GetAttrPool(), MM50/2,
+SwCSS1Parser::SwCSS1Parser( SwDoc *pD, ULONG aFHeights[7], const String& rBaseURL, BOOL bNewDoc ) :
+    SvxCSS1Parser( pD->GetAttrPool(), rBaseURL, MM50/2,
                    (USHORT*)&aItemIds, sizeof(aItemIds) / sizeof(USHORT) ),
     nDropCapCnt( 0 ), bIsNewDoc( bNewDoc ), pDoc( pD ),
     bBodyBGColorSet( FALSE ), bBodyBackgroundSet( FALSE ),
@@ -1845,7 +1848,6 @@ BOOL SwHTMLParser::FileDownload( const String& rURL,
 {
     // View wegschmeissen (wegen Reschedule)
     ViewShell *pOldVSh = CallEndAction();
-    SetSaveBaseURL();
 
     // Ein Medium anlegen
     SfxMedium aDLMedium( rURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
@@ -1871,7 +1873,6 @@ BOOL SwHTMLParser::FileDownload( const String& rURL,
                        GetSrcEncoding() );
     }
 
-    GetSaveAndSetOwnBaseURL();
 
     // wurde abgebrochen?
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
@@ -1923,9 +1924,7 @@ void SwHTMLParser::InsertLink()
                     sRel = pOption->GetString();
                     break;
                 case HTML_O_HREF:
-                    ASSERT( String(INetURLObject::GetBaseURL()) == sBaseURL,
-                            "<LINK>: Base URL ist zerschossen" );
-                    sHRef = INetURLObject::RelToAbs( pOption->GetString() );
+                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), pOption->GetString() );
                     break;
                 case HTML_O_TYPE:
                     sType = pOption->GetString();
