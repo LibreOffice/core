@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuicfgsupplier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:35:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,12 +184,12 @@ namespace framework
         private:
             typedef ::std::hash_map< rtl::OUString, com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager >, OUStringHashCode, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
 
-            void impl_initStorages();
+//TODO_AS            void impl_initStorages();
 
             // private methods
             ModuleToModuleCfgMgr                                                                m_aModuleToModuleUICfgMgrMap;
             bool                                                                                m_bDisposed;
-            bool                                                                                m_bInit;
+// TODO_AS            bool                                                                                m_bInit;
             rtl::OUString                                                                       m_aDefaultConfigURL;
             rtl::OUString                                                                       m_aUserConfigURL;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >                   m_xDefaultCfgRootStorage;
