@@ -1,8 +1,12 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\xml%_EXT%\uiconfig
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbapp
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbbrowser
 mkdir: %_DEST%\xml%_EXT%\uiconfig\dbquery
 mkdir: %_DEST%\xml%_EXT%\uiconfig\dbrelation
 mkdir: %_DEST%\xml%_EXT%\uiconfig\dbtable
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbapp\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\dbbrowser\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\dbquery\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\dbrelation\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\dbtable\menubar
@@ -19,6 +23,8 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\dbtable\menubar
 
 touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
 
+..\uiconfig\dbapp\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\dbapp\menubar\*.xml
+..\uiconfig\dbbrowser\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\dbbrowser\menubar\*.xml
 ..\uiconfig\dbquery\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\dbquery\menubar\*.xml
 ..\uiconfig\dbrelation\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\dbrelation\menubar\*.xml
 ..\uiconfig\dbtable\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\dbtable\menubar\*.xml
