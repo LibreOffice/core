@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-04-10 08:57:24 $
+ *  last change: $Author: os $ $Date: 2001-05-22 11:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,7 @@ sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
                 case  SVX_CASEMAP_TITEL       : nRet = 8;break;
             }
         }
+        break;
         case SID_ATTR_BRUSH : nRet = 9; break;
     }
     return nRet;
