@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-10-26 08:19:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,15 @@ SfxFilterListener::SfxFilterListener( const ::rtl::OUString&    sFactory   ,
             uno::Reference< util::XFlushable > xNotifier( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.FilterFactory") ), uno::UNO_QUERY );
             if( xNotifier.is() == sal_True )
             {
-                m_xCache = xNotifier;
-                m_xCache->addFlushListener( this );
+                m_xFilterCache = xNotifier;
+                m_xFilterCache->addFlushListener( this );
+            }
+
+            xNotifier = uno::Reference< util::XFlushable >( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.TypeDetection") ), uno::UNO_QUERY );
+            if( xNotifier.is() == sal_True )
+            {
+                m_xTypeCache = xNotifier;
+                m_xTypeCache->addFlushListener( this );
             }
         }
     }
@@ -178,13 +185,19 @@ SfxFilterListener::SfxFilterListener( const ::rtl::OUString&    sFactory   ,
 *//*-*************************************************************************************************************/
 SfxFilterListener::~SfxFilterListener()
 {
-    if( m_xCache.is() == sal_True )
+    if( m_xTypeCache.is() )
     {
-        m_xCache->removeFlushListener( this );
-        m_xCache     = uno::Reference< util::XFlushable >();
-        m_sFactory   = ::rtl::OUString();
-        m_pContainer = NULL;
+        m_xTypeCache->removeFlushListener( this );
+        m_xTypeCache = uno::Reference< util::XFlushable >();
     }
+    if( m_xFilterCache.is() )
+    {
+        m_xFilterCache->removeFlushListener( this );
+        m_xFilterCache = uno::Reference< util::XFlushable >();
+    }
+
+    m_sFactory   = ::rtl::OUString();
+    m_pContainer = NULL;
 }
 
 /*-************************************************************************************************************//**
@@ -213,11 +226,11 @@ void SAL_CALL SfxFilterListener::flushed( const lang::EventObject& aSource ) thr
 
     if( m_pContainer != NULL )
     {
-        uno::Reference< util::XFlushable > xFilterContainer( aSource.Source, uno::UNO_QUERY );
+        uno::Reference< util::XFlushable > xContainer( aSource.Source, uno::UNO_QUERY );
         if(
-            ( xFilterContainer.is()  == sal_True )   &&
-            ( xFilterContainer       == m_xCache )   &&
-            ( m_sFactory.getLength() >  0        )
+            (xContainer.is()                                       ) &&
+            (xContainer==m_xTypeCache || xContainer==m_xFilterCache) &&
+            (m_sFactory.getLength() > 0                            )
           )
         {
             m_pContainer->ReadExternalFilters( m_sFactory );
@@ -246,14 +259,18 @@ void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) t
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
     uno::Reference< util::XFlushable > xNotifier( aSource.Source, uno::UNO_QUERY );
-    if(
-        ( xNotifier.is() == sal_True )  &&
-        ( xNotifier      == m_xCache )
-      )
+    if (!xNotifier.is())
+        return;
+
+    if (xNotifier == m_xTypeCache)
     {
-        m_xCache->removeFlushListener( this );
-        m_xCache     = uno::Reference< util::XFlushable >();
-        m_sFactory   = ::rtl::OUString();
-        m_pContainer = NULL;
+        m_xTypeCache->removeFlushListener( this );
+        m_xTypeCache = uno::Reference< util::XFlushable >();
+    }
+    else
+    if (xNotifier == m_xFilterCache)
+    {
+        m_xFilterCache->removeFlushListener( this );
+        m_xFilterCache = uno::Reference< util::XFlushable >();
     }
 }
