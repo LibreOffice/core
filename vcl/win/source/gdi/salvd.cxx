@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:59:23 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,14 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
-#ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
+#ifndef _SV_SALVD_H
+#include <salvd.h>
 #endif
 
 // =======================================================================
@@ -98,42 +98,44 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
 
 // =======================================================================
 
-SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-                                                    long nDX, long nDY,
-                                                    USHORT nBitCount )
+SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
+                                                       long nDX, long nDY,
+                                                       USHORT nBitCount )
 {
-    HDC     hDC     = CreateCompatibleDC( pGraphics->maGraphicsData.mhDC );
-    HBITMAP hBmp    = ImplCreateVirDevBitmap( pGraphics->maGraphicsData.mhDC,
+    WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
+
+    HDC     hDC     = CreateCompatibleDC( pGraphics->mhDC );
+    HBITMAP hBmp    = ImplCreateVirDevBitmap( pGraphics->mhDC,
                                               nDX, nDY, nBitCount );
 
     if ( hDC && hBmp )
     {
-        SalVirtualDevice*   pVDev = new SalVirtualDevice;
-        SalData*            pSalData = GetSalData();
-        SalGraphics*        pVirGraphics = new SalGraphicsLayout;
+        WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice;
+        SalData*                pSalData = GetSalData();
+        WinSalGraphics*         pVirGraphics = new WinSalGraphics;
         pVirGraphics->SetLayout( 0 );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
-        pVirGraphics->maGraphicsData.mhDC      = hDC;
-        pVirGraphics->maGraphicsData.mhWnd     = 0;
-        pVirGraphics->maGraphicsData.mbPrinter = FALSE;
-        pVirGraphics->maGraphicsData.mbVirDev  = TRUE;
-        pVirGraphics->maGraphicsData.mbWindow  = FALSE;
-        pVirGraphics->maGraphicsData.mbScreen  = pGraphics->maGraphicsData.mbScreen;
-        if ( pSalData->mhDitherPal && pVirGraphics->maGraphicsData.mbScreen )
+        pVirGraphics->mhDC     = hDC;
+        pVirGraphics->mhWnd    = 0;
+        pVirGraphics->mbPrinter = FALSE;
+        pVirGraphics->mbVirDev  = TRUE;
+        pVirGraphics->mbWindow  = FALSE;
+        pVirGraphics->mbScreen  = pGraphics->mbScreen;
+        if ( pSalData->mhDitherPal && pVirGraphics->mbScreen )
         {
-            pVirGraphics->maGraphicsData.mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+            pVirGraphics->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
             RealizePalette( hDC );
         }
-        ImplSalInitGraphics( &(pVirGraphics->maGraphicsData) );
+        ImplSalInitGraphics( pVirGraphics );
 
-        pVDev->maVirDevData.mhDC        = hDC;
-        pVDev->maVirDevData.mhBmp       = hBmp;
-        pVDev->maVirDevData.mhDefBmp    = SelectBitmap( hDC, hBmp );
-        pVDev->maVirDevData.mpGraphics  = pVirGraphics;
-        pVDev->maVirDevData.mnBitCount  = nBitCount;
-        pVDev->maVirDevData.mbGraphics  = FALSE;
+        pVDev->mhDC     = hDC;
+        pVDev->mhBmp        = hBmp;
+        pVDev->mhDefBmp = SelectBitmap( hDC, hBmp );
+        pVDev->mpGraphics   = pVirGraphics;
+        pVDev->mnBitCount   = nBitCount;
+        pVDev->mbGraphics   = FALSE;
 
         // insert VirDev in VirDevList
-        pVDev->maVirDevData.mpNext = pSalData->mpFirstVD;
+        pVDev->mpNext = pSalData->mpFirstVD;
         pSalData->mpFirstVD = pVDev;
 
         return pVDev;
@@ -150,76 +152,76 @@ SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 
 // -----------------------------------------------------------------------
 
-void SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
+void WinSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 {
     delete pDevice;
 }
 
 // =======================================================================
 
-SalVirtualDevice::SalVirtualDevice()
+WinSalVirtualDevice::WinSalVirtualDevice()
 {
 }
 
 // -----------------------------------------------------------------------
 
-SalVirtualDevice::~SalVirtualDevice()
+WinSalVirtualDevice::~WinSalVirtualDevice()
 {
     SalData* pSalData = GetSalData();
 
     // destroy saved DC
-    if ( maVirDevData.mpGraphics->maGraphicsData.mhDefPal )
-        SelectPalette( maVirDevData.mpGraphics->maGraphicsData.mhDC, maVirDevData.mpGraphics->maGraphicsData.mhDefPal, TRUE );
-    ImplSalDeInitGraphics( &(maVirDevData.mpGraphics->maGraphicsData) );
-    SelectBitmap( maVirDevData.mpGraphics->maGraphicsData.mhDC, maVirDevData.mhDefBmp );
-    DeleteDC( maVirDevData.mpGraphics->maGraphicsData.mhDC );
-    DeleteBitmap( maVirDevData.mhBmp );
-    delete maVirDevData.mpGraphics;
+    if ( mpGraphics->mhDefPal )
+        SelectPalette( mpGraphics->mhDC, mpGraphics->mhDefPal, TRUE );
+    ImplSalDeInitGraphics( mpGraphics );
+    SelectBitmap( mpGraphics->mhDC, mhDefBmp );
+    DeleteDC( mpGraphics->mhDC );
+    DeleteBitmap( mhBmp );
+    delete mpGraphics;
 
     // remove VirDev from VirDevList
     if ( this == pSalData->mpFirstVD )
-        pSalData->mpFirstVD = maVirDevData.mpNext;
+        pSalData->mpFirstVD = mpNext;
     else
     {
-        SalVirtualDevice* pTempVD = pSalData->mpFirstVD;
-        while ( pTempVD->maVirDevData.mpNext != this )
-            pTempVD = pTempVD->maVirDevData.mpNext;
+        WinSalVirtualDevice* pTempVD = pSalData->mpFirstVD;
+        while ( pTempVD->mpNext != this )
+            pTempVD = pTempVD->mpNext;
 
-        pTempVD->maVirDevData.mpNext = maVirDevData.mpNext;
+        pTempVD->mpNext = mpNext;
     }
 }
 
 // -----------------------------------------------------------------------
 
-SalGraphics* SalVirtualDevice::GetGraphics()
+SalGraphics* WinSalVirtualDevice::GetGraphics()
 {
-    if ( maVirDevData.mbGraphics )
+    if ( mbGraphics )
         return NULL;
 
-    if ( maVirDevData.mpGraphics )
-        maVirDevData.mbGraphics = TRUE;
+    if ( mpGraphics )
+        mbGraphics = TRUE;
 
-    return maVirDevData.mpGraphics;
+    return mpGraphics;
 }
 
 // -----------------------------------------------------------------------
 
-void SalVirtualDevice::ReleaseGraphics( SalGraphics* )
+void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
-    maVirDevData.mbGraphics = FALSE;
+    mbGraphics = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
+BOOL WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
-    HBITMAP hNewBmp = ImplCreateVirDevBitmap( maVirDevData.mhDC, nDX, nDY,
-                                              maVirDevData.mnBitCount );
+    HBITMAP hNewBmp = ImplCreateVirDevBitmap( mhDC, nDX, nDY,
+                                              mnBitCount );
     if ( hNewBmp )
     {
-        SelectBitmap( maVirDevData.mhDC, hNewBmp );
-        DeleteBitmap( maVirDevData.mhBmp );
-        maVirDevData.mhBmp = hNewBmp;
+        SelectBitmap( mhDC, hNewBmp );
+        DeleteBitmap( mhBmp );
+        mhBmp = hNewBmp;
         return TRUE;
     }
     else
