@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 11:01:07 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 06:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,9 @@ void ODBCDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdbc.ODBCDriver");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.ODBCDriver");
+        // this name is referenced in the configuration and in the odbc.xml
+        // Please take care when changing it.
 }
 
 typedef Sequence< ::rtl::OUString > SS;

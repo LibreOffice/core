@@ -4,7 +4,7 @@
     <module-name>   odbc    </module-name>
     <component-description>
         <Author>Ocke Janssen</Author>
-        <Name>  com.sun.star.sdbc.ODBCDriver    </Name>
+        <Name>com.sun.star.comp.sdbc.ODBCDriver</Name>
         <Description>
             This is the implementation of the sdbc-odbc bridge.
         </Description>
