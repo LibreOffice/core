@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-16 09:36:09 $
+ *  last change: $Author: cl $ $Date: 2001-11-09 10:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -149,11 +152,13 @@
 #include "sdresid.hxx"
 #include "imapinfo.hxx"
 #include "sdxfer.hxx"
+#include "unomodel.hxx"
 
 // --------------
 // - Namespaces -
 // --------------
 
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
@@ -560,9 +565,13 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
             pDoc->SetStreamingSdrModel( TRUE );
             pDoc->RemoveNotPersistentObjects( TRUE );
             rxOStm->SetBufferSize( 16348 );
+
+            Reference< XComponent > xComponent( new SdXImpressDocument( pDoc, sal_True ) );
+            pDoc->setUnoModel( Reference< XInterface >::query( xComponent ) );
+
             {
                 com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
-                if( SvxDrawingLayerExport( pDoc, xDocOut ) )
+                if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent ) )
                     rxOStm->Commit();
             }
 
@@ -572,7 +581,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                 SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, TRUE );
                 aMedium.IsRemote();
                 com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
-                if( SvxDrawingLayerExport( pDoc, xDocOut ) )
+                if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent ) )
                     aMedium.Commit();
             }
 */

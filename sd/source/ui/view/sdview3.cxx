@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-07 09:13:53 $
+ *  last change: $Author: cl $ $Date: 2001-11-09 10:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,9 @@
  ************************************************************************/
 
 #pragma hdrstop
-
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
@@ -161,11 +163,13 @@
 #include "imapinfo.hxx"
 #include "slidvish.hxx"
 #include "strmname.h"
+#include "unomodel.hxx"
 
 // --------------
 // - Namespaces -
 // --------------
 
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
@@ -586,15 +590,19 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
         {
             BOOL bChanged = FALSE;
 
-            FmFormModel* pModel = new FmFormModel( SvtPathOptions().GetPalettePath(), NULL, pDocSh );
+            SdDrawDocument* pModel = new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, pDocSh );
             pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
-            pModel->GetItemPool().FreezeIdRanges();
+//          pModel->GetItemPool().FreezeIdRanges();
 
             pModel->SetStreamingSdrModel( TRUE );
 
+            Reference< XComponent > xComponent( new SdXImpressDocument( pModel, sal_True ) );
+            pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
+
             xStm->Seek( 0 );
+
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
-            bReturn = SvxDrawingLayerImport( pModel, xInputStream );
+            bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent );
 
             pModel->SetStreamingSdrModel( FALSE );
 
