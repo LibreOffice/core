@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:34:28 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #endif
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <unotools/servicehelper.hxx>
 
 #include <unomodel.hxx>
@@ -91,10 +91,11 @@ enum LayerAttribute { VISIBLE, PRINTABLE, LOCKED };
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SdLayer : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing::XLayer,
+class SdLayer : public ::cppu::WeakImplHelper5< ::com::sun::star::drawing::XLayer,
                                                 ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::container::XChild,
-                                                ::com::sun::star::lang::XUnoTunnel>
+                                                ::com::sun::star::lang::XUnoTunnel,
+                                                ::com::sun::star::lang::XComponent >
 {
 public:
     SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw();
@@ -129,6 +130,11 @@ public:
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XComponent
+    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
     /** Not implemented.  Allways throws an exception.
         @raises NoSupportException.
     */
@@ -155,10 +161,11 @@ private:
 
 //#include <cppuhelper/implbase4.hxx>
 
-class SdLayerManager : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing::XLayerManager,
+class SdLayerManager : public ::cppu::WeakImplHelper5< ::com::sun::star::drawing::XLayerManager,
                                                        ::com::sun::star::container::XNameAccess,
                                                        ::com::sun::star::lang::XServiceInfo,
-                                                       ::com::sun::star::lang::XUnoTunnel >
+                                                       ::com::sun::star::lang::XUnoTunnel,
+                                                       ::com::sun::star::lang::XComponent >
 {
     friend class SdLayer;
 
@@ -207,15 +214,17 @@ public:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> GetLayer (SdrLayer* pLayer);
 
+    // XComponent
+    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
 private:
-    SdXImpressDocument& rModel;
+    SdXImpressDocument* mpModel;
     SvUnoWeakContainer* mpLayers;
 
     ::sd::View* GetView() const throw();
-#ifndef SVX_LIGHT
-    ::sd::DrawDocShell* GetDocShell() const throw() { return rModel.pDocShell; }
-#endif
-
+    ::sd::DrawDocShell* GetDocShell() const throw() { return mpModel->pDocShell; }
     void UpdateLayerView( sal_Bool modify = sal_True ) const throw();
 };
 
