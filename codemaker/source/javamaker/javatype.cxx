@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jsc $ $Date: 2002-06-18 17:23:27 $
+ *  last change: $Author: jsc $ $Date: 2002-06-25 08:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,8 @@ using namespace rtl;
 JavaType::JavaType(TypeReader& typeReader,
                    const OString& typeName,
                    const TypeManager& typeMgr,
-                   const TypeDependency& typeDependencies,
-                   sal_Bool bJavadoc)
-    : m_bJavadoc(bJavadoc)
-    , m_indentLength(0)
+                   const TypeDependency& typeDependencies)
+    : m_indentLength(0)
     , m_typeName(typeName)
     , m_reader(typeReader)
     , m_typeMgr((TypeManager&)typeMgr)
@@ -167,21 +165,11 @@ void JavaType::dumpPackage(FileStream& o, sal_Bool bFullScope)
 
     if (bFullScope)
     {
-        dumpDocu(o);
         o << "package " << m_typeName.replace('/', '.') << ";\n\n";
     } else
     {
         if (m_typeName.lastIndexOf('/') > 0)
-        {
-            OString packageName(m_typeName.copy(0, m_typeName.lastIndexOf('/')));
-
-            if ( m_bJavadoc )
-            {
-                TypeReader pckTypeReader = m_typeMgr.getTypeReader(packageName);
-                dumpDocu(o, pckTypeReader.getDoku());
-            }
-            o << "package " << packageName.replace('/', '.') << ";\n\n";
-        }
+            o << "package " << m_typeName.copy(0, m_typeName.lastIndexOf('/')).replace('/', '.') << ";\n\n";
     }
 }
 
@@ -835,66 +823,14 @@ OString JavaType::indent(sal_uInt32 num)
     return tmp.makeStringAndClear();
 }
 
-void JavaType::dumpDocu(FileStream& o)
-{
-    dumpDocu(o,  m_reader.getDoku());
-}
-
-void JavaType::dumpDocu(FileStream& o, const OString& strDocu)
-{
-    if ( !m_bJavadoc)
-        return;
-
-    if ( !strDocu.getLength() )
-        return;
-
-    o << indent() << "/**\n" << indent() << " * ";
-
-    sal_Int32 nPos = 0;
-    sal_Bool bFirst = sal_True;
-    OString tmpDocu;
-    OString matchPattern("   ");
-    OString matchPattern2("\t");
-    OString matchPattern3("\t\t");
-    OString replacePattern(" *");
-    OString replacePattern2(" * ");
-    do
-    {
-        if ( nPos )
-            bFirst = sal_False;
-
-        tmpDocu = strDocu.getToken(0, '\n', nPos);
-        if ( tmpDocu.match(matchPattern, 0) )
-            tmpDocu = tmpDocu.replaceAt(0, matchPattern.getLength(), replacePattern);
-        else
-            if ( tmpDocu.match(matchPattern2, 0) )
-                if ( tmpDocu.match(matchPattern3, 0) )
-                    tmpDocu = tmpDocu.replaceAt(0, matchPattern3.getLength(), replacePattern2);
-                else
-                    tmpDocu = tmpDocu.replaceAt(0, matchPattern2.getLength(), replacePattern2);
-
-        if ( !tmpDocu.getLength() )
-            o << indent() << " *\n";
-        else
-        {
-            if ( !bFirst )
-                o << indent();
-            o << tmpDocu << "\n";
-        }
-    } while( nPos != -1 );
-
-    o << indent() << " */\n";
-}
-
 //*************************************************************************
 // InterfaceType
 //*************************************************************************
 InterfaceType::InterfaceType(TypeReader& typeReader,
                               const OString& typeName,
                              const TypeManager& typeMgr,
-                             const TypeDependency& typeDependencies,
-                             sal_Bool bJavadoc)
-    : JavaType(typeReader, typeName, typeMgr, typeDependencies, bJavadoc)
+                             const TypeDependency& typeDependencies)
+    : JavaType(typeReader, typeName, typeMgr, typeDependencies)
 {
 }
 
@@ -907,7 +843,6 @@ sal_Bool InterfaceType::dumpFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpPackage(o);
-    dumpDocu(o);
 
     o << "public interface " << m_name;
 
@@ -994,7 +929,6 @@ void InterfaceType::dumpAttributes(FileStream& o, UnoInfoList* pUnoInfos)
             o << indent() << "// Attributes\n";
         }
 
-        dumpDocu(o, m_reader.getFieldDoku(i));
         o << indent() << "public ";
         dumpType(o, fieldType);
 //      o << " get" << fieldName << "() throws com.sun.star.uno.RuntimeException;\n";
@@ -1074,7 +1008,6 @@ void InterfaceType::dumpMethods(FileStream& o, UnoInfoList* pUnoInfos)
             o << indent() << "// Methods\n";
         }
 
-        dumpDocu(o, m_reader.getMethodDoku(i));
         o << indent() << "public ";
         dumpType(o, returnType);
         o << " " << methodName << "( ";
@@ -1307,9 +1240,8 @@ void InterfaceType::dumpUnoInfo(FileStream& o, const UnoInfo& unoInfo, sal_Int32
 ModuleType::ModuleType(TypeReader& typeReader,
                         const OString& typeName,
                        const TypeManager& typeMgr,
-                       const TypeDependency& typeDependencies,
-                       sal_Bool bJavadoc)
-    : JavaType(typeReader, typeName, typeMgr, typeDependencies, bJavadoc)
+                       const TypeDependency& typeDependencies)
+    : JavaType(typeReader, typeName, typeMgr, typeDependencies)
 {
 }
 
@@ -1395,9 +1327,8 @@ sal_Bool ModuleType::hasConstants()
 ConstantsType::ConstantsType(TypeReader& typeReader,
                               const OString& typeName,
                              const TypeManager& typeMgr,
-                             const TypeDependency& typeDependencies,
-                             sal_Bool bJavadoc)
-    : JavaType(typeReader, typeName, typeMgr, typeDependencies, bJavadoc)
+                             const TypeDependency& typeDependencies)
+    : JavaType(typeReader, typeName, typeMgr, typeDependencies)
 {
 }
 
@@ -1410,7 +1341,6 @@ sal_Bool ConstantsType::dumpFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpPackage(o);
-    dumpDocu(o);
 
     o << "public interface " << m_name << "\n{\n";
     inc();
@@ -1433,7 +1363,6 @@ sal_Bool ConstantsType::dumpFile(FileStream& o)
             if (isUnsigned(fieldType))
                 aTypeInfos.insert(fieldName);
 
-            dumpDocu(o, m_reader.getFieldDoku(i));
             o << indent() << "public static final ";
             dumpType(o, fieldType);
             o << " " << fieldName << " = ";
@@ -1476,9 +1405,8 @@ sal_Bool ConstantsType::dumpFile(FileStream& o)
 StructureType::StructureType(TypeReader& typeReader,
                               const OString& typeName,
                              const TypeManager& typeMgr,
-                             const TypeDependency& typeDependencies,
-                             sal_Bool bJavadoc)
-    : JavaType(typeReader, typeName, typeMgr, typeDependencies, bJavadoc)
+                             const TypeDependency& typeDependencies)
+    : JavaType(typeReader, typeName, typeMgr, typeDependencies)
 {
 }
 
@@ -1491,7 +1419,6 @@ sal_Bool StructureType::dumpFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpPackage(o);
-    dumpDocu(o);
 
     o << "public class " << m_name;
 
@@ -1532,7 +1459,6 @@ sal_Bool StructureType::dumpFile(FileStream& o)
         aUnoTypeInfos.push_back(UnoInfo(fieldName, "", UNOTYPEINFO_MEMBER, i, flags));
 
         dumpSeqStaticMember(o, fieldType, fieldName);
-        dumpDocu(o, m_reader.getFieldDoku(i));
         o << indent() << "public ";
         dumpType(o, fieldType);
         o << " " << fieldName << ";\n";
@@ -1613,9 +1539,8 @@ sal_Bool StructureType::dumpFile(FileStream& o)
 ExceptionType::ExceptionType(TypeReader& typeReader,
                               const OString& typeName,
                              const TypeManager& typeMgr,
-                             const TypeDependency& typeDependencies,
-                             sal_Bool bJavadoc)
-    : JavaType(typeReader, typeName, typeMgr, typeDependencies, bJavadoc)
+                             const TypeDependency& typeDependencies)
+    : JavaType(typeReader, typeName, typeMgr, typeDependencies)
 {
 }
 
@@ -1628,7 +1553,6 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpPackage(o);
-    dumpDocu(o);
 
     o << "public class " << m_name;
 
@@ -1690,7 +1614,6 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
         aUnoTypeInfos.push_back(UnoInfo(fieldName, "", UNOTYPEINFO_MEMBER, i-nOffset, flags));
 
         dumpSeqStaticMember(o, fieldType, fieldName);
-        dumpDocu(o, m_reader.getFieldDoku(i));
         o << indent() << "public ";
         dumpType(o, fieldType);
         o << " " << fieldName << ";\n";
@@ -1831,9 +1754,8 @@ sal_Bool ExceptionType::dumpSimpleMemberConstructor(FileStream& o)
 EnumType::EnumType(TypeReader& typeReader,
                     const OString& typeName,
                    const TypeManager& typeMgr,
-                   const TypeDependency& typeDependencies,
-                   sal_Bool bJavadoc)
-    : JavaType(typeReader, typeName, typeMgr, typeDependencies, bJavadoc)
+                   const TypeDependency& typeDependencies)
+    : JavaType(typeReader, typeName, typeMgr, typeDependencies)
 {
 }
 
@@ -1846,7 +1768,6 @@ sal_Bool EnumType::dumpFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpPackage(o);
-    dumpDocu(o);
 
     o << "final public class " << m_name << " extends com.sun.star.uno.Enum\n{\n";
     inc();
@@ -1940,9 +1861,8 @@ sal_Bool EnumType::dumpFile(FileStream& o)
 TypeDefType::TypeDefType(TypeReader& typeReader,
                              const OString& typeName,
                             const TypeManager& typeMgr,
-                            const TypeDependency& typeDependencies,
-                         sal_Bool bJavadoc)
-    : JavaType(typeReader, typeName, typeMgr, typeDependencies, bJavadoc)
+                            const TypeDependency& typeDependencies)
+    : JavaType(typeReader, typeName, typeMgr, typeDependencies)
 {
 }
 
@@ -2009,12 +1929,11 @@ sal_Bool produceType(const OString& typeName,
 
     RTTypeClass typeClass = reader.getTypeClass();
     sal_Bool    ret = sal_False;
-    sal_Bool    bJavadoc = pOptions->isValid("-d");
     switch (typeClass)
     {
         case RT_TYPE_INTERFACE:
             {
-                InterfaceType iType(reader, typeName, typeMgr, typeDependencies, bJavadoc);
+                InterfaceType iType(reader, typeName, typeMgr, typeDependencies);
                 ret = iType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
                 if ( !pOptions->isValid("-nD") )
@@ -2023,7 +1942,7 @@ sal_Bool produceType(const OString& typeName,
             break;
         case RT_TYPE_MODULE:
             {
-                ModuleType mType(reader, typeName, typeMgr, typeDependencies, bJavadoc);
+                ModuleType mType(reader, typeName, typeMgr, typeDependencies);
                 if (mType.hasConstants())
                 {
                     ret = mType.dump(pOptions);
@@ -2034,7 +1953,7 @@ sal_Bool produceType(const OString& typeName,
             break;
         case RT_TYPE_STRUCT:
             {
-                StructureType sType(reader, typeName, typeMgr, typeDependencies, bJavadoc);
+                StructureType sType(reader, typeName, typeMgr, typeDependencies);
                 ret = sType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
                 if ( !pOptions->isValid("-nD") )
@@ -2043,7 +1962,7 @@ sal_Bool produceType(const OString& typeName,
             break;
         case RT_TYPE_ENUM:
             {
-                EnumType enType(reader, typeName, typeMgr, typeDependencies, bJavadoc);
+                EnumType enType(reader, typeName, typeMgr, typeDependencies);
                 ret = enType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
                 if ( !pOptions->isValid("-nD") )
@@ -2052,7 +1971,7 @@ sal_Bool produceType(const OString& typeName,
             break;
         case RT_TYPE_EXCEPTION:
             {
-                ExceptionType eType(reader, typeName, typeMgr, typeDependencies, bJavadoc);
+                ExceptionType eType(reader, typeName, typeMgr, typeDependencies);
                 ret = eType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
                 if ( !pOptions->isValid("-nD") )
@@ -2061,7 +1980,7 @@ sal_Bool produceType(const OString& typeName,
             break;
         case RT_TYPE_CONSTANTS:
             {
-                ConstantsType cType(reader, typeName, typeMgr, typeDependencies, bJavadoc);
+                ConstantsType cType(reader, typeName, typeMgr, typeDependencies);
                 ret = cType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
                 return ret;
@@ -2069,7 +1988,7 @@ sal_Bool produceType(const OString& typeName,
             break;
         case RT_TYPE_TYPEDEF:
             {
-                TypeDefType tdType(reader, typeName, typeMgr, typeDependencies, bJavadoc);
+                TypeDefType tdType(reader, typeName, typeMgr, typeDependencies);
                 ret = tdType.dump(pOptions);
                 if (ret) typeDependencies.setGenerated(typeName);
                 if ( !pOptions->isValid("-nD") )
