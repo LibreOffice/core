@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrivilegeObject.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 /** defines the list of objects for which a user may have accessrights or not.
         This list may grow in the future.
  */
-constants PrivilegeObject
+published constants PrivilegeObject
 {
 
     // DocMerge from idl: value com::sun::star::sdbcx::PrivilegeObject::TABLE
