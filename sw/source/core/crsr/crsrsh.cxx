@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-26 17:02:00 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 18:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,6 +1391,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             SwCrsrMoveState aTmpState( eMvState );
             aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
             aTmpState.bRealHeight = !pCurCrsr->HasMark();
+            aTmpState.bRealWidth = IsOverwriteCrsr();
             if( !pFrm->GetCharRect( aCharRect, *pCurCrsr->GetPoint(), &aTmpState ) )
             {
                 Point& rPt = pCurCrsr->GetPtPos();

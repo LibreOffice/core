@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-15 15:23:11 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 18:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,10 @@
 
 
 SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
-    : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing ), bInsText( TRUE )
+    : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing )
 {
+    bIsOverwriteCursor = FALSE;
+    bInsText = TRUE;
 }
 
 SwExtTextInput::~SwExtTextInput()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-21 08:49:57 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 18:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,8 +639,11 @@ void SwWrtShell::LeaveAddMode()
 void SwWrtShell::SetInsMode( BOOL bOn )
 {
     bIns = bOn;
+    SwCrsrShell::SetOverwriteCrsr( !bIns );
     const SfxBoolItem aTmp( SID_ATTR_INSERT, bIns );
     GetView().GetViewFrame()->GetBindings().SetState( aTmp );
+    StartAction();
+    EndAction();
 }
 
 /*
@@ -963,11 +966,14 @@ long SwWrtShell::MoveText(const Point *pPt,BOOL)
 
           Source Code Control System - Header
 
-          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.4 2000-11-21 08:49:57 os Exp $
+          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.5 2000-11-28 18:46:55 jp Exp $
 
           Source Code Control System - Update
 
           $Log: not supported by cvs2svn $
+          Revision 1.4  2000/11/21 08:49:57  os
+          #80521# prevent creation of illegal strings
+
           Revision 1.3  2000/11/20 09:25:03  jp
           must change: SearchText->TextSearch and use namespace
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-15 15:23:45 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 18:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,8 @@ class Font;
 class SwExtTextInput : public SwPaM
 {
     SvUShorts aAttrs;
-    BOOL bInsText;
+    BOOL bInsText : 1;
+    BOOL bIsOverwriteCursor : 1;
 public:
     SwExtTextInput( const SwPaM& rPam, Ring* pRing = 0 );
     virtual ~SwExtTextInput();
@@ -86,6 +87,8 @@ public:
     const SvUShorts& GetAttrs() const   { return aAttrs; }
     BOOL IsInsText() const              { return bInsText; }
     void SetInsText( BOOL bFlag )       { bInsText = bFlag; }
+    BOOL IsOverwriteCursor() const      { return bIsOverwriteCursor; }
+    void SetOverwriteCursor( BOOL bFlag ) { bIsOverwriteCursor = bFlag; }
 };
 
 #endif  //_EXTINPUT_HXX

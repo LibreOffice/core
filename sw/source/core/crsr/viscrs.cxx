@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-26 17:02:01 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 18:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,38 +510,20 @@ FASTBOOL SwVisCrsr::ChgTimerFlag( BOOL bFlag )
 void SwVisCrsr::_SetPosAndShow()
 {
     SwRect aRect( pCrsrShell->aCharRect.Pos(),
-                    Size( 1, pCrsrShell->aCrsrHeight.Y() ) );
+                    Size( pCrsrShell->aCharRect.Width(),
+                          pCrsrShell->aCrsrHeight.Y() ) );
     aRect.Pos().Y() += pCrsrShell->aCrsrHeight.X();
     if( aRect.Height() )
     {
         ::SwCalcPixStatics( pCrsrShell->GetOut() );
         ::SwAlignRect( aRect, (ViewShell*)pCrsrShell );
     }
-    long nWidth = 0;
-    if( pCrsrShell->IsOverwriteCrsr() )
-    {
-        // calculate the with of the current character
-        const SwPosition& rPos = *pCrsrShell->GetCrsr()->GetPoint();
-        const SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
-        SwCntntFrm *pFrm;
-        Point aPt( aRect.Pos() );
-        if( pTNd && rPos.nContent.GetIndex() < pTNd->GetTxt().Len() &&
-            0 != ( pFrm = pTNd->GetFrm( &aPt, &rPos )) )
-        {
-            SwPosition aPos( rPos );
-            aPos.nContent++;
-            SwRect aTmpRect;
-            SwCrsrMoveState aTmpState( MV_SETONLYTEXT/*MV_RIGHTMARGIN*/ );
-            pFrm->GetCharRect( aTmpRect, aPos, &aTmpState );
-            nWidth = aTmpRect.Pos().X() - aRect.Pos().X();
-            if( 0 >= nWidth )
-                nWidth = 0;
-        }
-    }
 
-    aRect.Width( nWidth );
-
+    if( !pCrsrShell->IsOverwriteCrsr() || bIsDragCrsr ||
+        pCrsrShell->IsSelection() )
+        aRect.Width( 0 );
     aTxtCrsr.SetSize( aRect.SSize() );
+
     aTxtCrsr.SetPos( aRect.Pos() );
     if ( !pCrsrShell->IsCrsrReadonly() )
     {
