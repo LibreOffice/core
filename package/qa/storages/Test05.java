@@ -125,7 +125,7 @@ public class Test05 implements StorageTest {
             // reopen created streams
             XStream xSubStream1 = m_aTestHelper.OpenStream( xSubSubStorage,
                                                             "SubStream1",
-                                                            ElementModes.ELEMENT_READWRITE | ElementModes.ELEMENT_NOCREATE );
+                                                            ElementModes.ELEMENT_WRITE | ElementModes.ELEMENT_NOCREATE );
             XStream xSubStream2 = m_aTestHelper.OpenStream( xSubSubStorage,
                                                             "SubStream2",
                                                             ElementModes.ELEMENT_READ | ElementModes.ELEMENT_NOCREATE );

@@ -99,7 +99,7 @@ public class Test08 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType4",
                                                             true,
-                                                            ElementModes.ELEMENT_READWRITE ) )
+                                                            ElementModes.ELEMENT_WRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
