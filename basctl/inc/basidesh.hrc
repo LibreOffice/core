@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:00:56 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 11:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,34 +69,56 @@
 #include <svx/svxids.hrc>
 #endif
 
-// #define SID_BASICIDE_START               ( SID_OBJ3_START )
 
 // Resource-ID's...
 #ifndef _SVX_NOIDERESIDS
 
 #define RID_BASICIDE_OBJECTBAR          ( RID_BASICIDE_START +  0 )
-
+#define RID_BASICMENU                   ( RID_BASICIDE_START +  1 )
+#define RID_BASICPLUGINMENU             ( RID_BASICIDE_START +  2 )
 #define RID_EDT_WATCHEDIT               ( RID_BASICIDE_START +  4 )
 #define RID_ICO_MDIWINDOW               ( RID_BASICIDE_START +  5 )
-#define RID_IMG_LOCKED_HC               ( RID_BASICIDE_START +  6 )
-#define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
-#define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
-#define RID_IMGBTN_GOTOCALL             ( RID_BASICIDE_START +  9 )
 #define RID_POPUP_BRKDLG                ( RID_BASICIDE_START + 10 )
 #define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
 #define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
-#define RID_IMGLST_OBJECTS_HC           ( RID_BASICIDE_START + 13 )
-#define RID_IMGLST_LAYOUT_HC            ( RID_BASICIDE_START + 14 )
-#define RID_IMG_REMOVEWATCH_HC          ( RID_BASICIDE_START + 15 )
 #define RID_TD_ORGANIZE                 ( RID_BASICIDE_START + 36 )
 #define RID_TP_MODULS                   ( RID_BASICIDE_START + 37 )
 #define RID_TP_LIBS                     ( RID_BASICIDE_START + 38 )
 #define RID_TP_DLGS                     ( RID_BASICIDE_START + 39 )
 #define RID_DLG_LIBS                    ( RID_BASICIDE_START + 40 )
-#define RID_IMG_LOCKED                  ( RID_BASICIDE_START + 41 )
 #define RID_DLG_NEWLIB                  ( RID_BASICIDE_START + 42 )
 #define RID_POPUP_DLGED                 ( RID_BASICIDE_START + 62 )
 
+#define RID_IMG_LOCKED_HC               ( RID_BASICIDE_START +  6 )
+#define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
+#define RID_IMGBTN_GOTOCALL             ( RID_BASICIDE_START +  9 )
+#define RID_IMGLST_LAYOUT_HC            ( RID_BASICIDE_START + 14 )
+#define RID_IMG_REMOVEWATCH_HC          ( RID_BASICIDE_START + 15 )
+#define RID_IMG_INSTALLATION            ( RID_BASICIDE_START + 20 )
+#define RID_IMG_INSTALLATION_HC         ( RID_BASICIDE_START + 21 )
+#define RID_IMG_DOCUMENT                ( RID_BASICIDE_START + 22 )
+#define RID_IMG_DOCUMENT_HC             ( RID_BASICIDE_START + 23 )
+#define RID_IMG_MODLIB                  ( RID_BASICIDE_START + 24 )
+#define RID_IMG_MODLIB_HC               ( RID_BASICIDE_START + 25 )
+#define RID_IMG_MODLIBNOTLOADED         ( RID_BASICIDE_START + 26 )
+#define RID_IMG_MODLIBNOTLOADED_HC      ( RID_BASICIDE_START + 27 )
+#define RID_IMG_MODULE                  ( RID_BASICIDE_START + 28 )
+#define RID_IMG_MODULE_HC               ( RID_BASICIDE_START + 29 )
+#define RID_IMG_MACRO                   ( RID_BASICIDE_START + 30 )
+#define RID_IMG_MACRO_HC                ( RID_BASICIDE_START + 31 )
+#define RID_IMG_DLGLIB                  ( RID_BASICIDE_START + 32 )
+#define RID_IMG_DLGLIB_HC               ( RID_BASICIDE_START + 33 )
+#define RID_IMG_DLGLIBNOTLOADED         ( RID_BASICIDE_START + 34 )
+#define RID_IMG_DLGLIBNOTLOADED_HC      ( RID_BASICIDE_START + 35 )
+#define RID_IMG_DIALOG                  ( RID_BASICIDE_START + 36 )
+#define RID_IMG_DIALOG_HC               ( RID_BASICIDE_START + 37 )
+#define RID_IMG_LOCKED                  ( RID_BASICIDE_START + 41 )
+#define RID_IMGLST_LAYOUT               ( RID_BASICIDE_START + 49 )
+
+#define RID_STR_SEARCHALLMODULES        ( RID_BASICIDE_START +  1 )
+#define RID_STR_SEARCHFROMSTART         ( RID_BASICIDE_START +  2 )
+#define RID_STR_NOMODULE                ( RID_BASICIDE_START +  3 )
+#define RID_STR_FILTER_ALLFILES         ( RID_BASICIDE_START +  4 )
 #define RID_STR_CANNOTCLOSE             ( RID_BASICIDE_START + 13 )
 #define RID_STR_IDENAME                 ( RID_BASICIDE_START + 14 )
 #define RID_STR_INITIDE                 ( RID_BASICIDE_START + 15 )
@@ -134,7 +156,6 @@
 #define RID_STR_STDJAVAMODULENAME       ( RID_BASICIDE_START + 56 )
 #define RID_STR_NEWLIB                  ( RID_BASICIDE_START + 57 )
 #define RID_STR_NEWMOD                  ( RID_BASICIDE_START + 58 )
-#define RID_STR_NEWMETH                 ( RID_BASICIDE_START + 118 )
 #define RID_STR_NEWDLG                  ( RID_BASICIDE_START + 59 )
 #define RID_STR_LIBNAMETOLONG           ( RID_BASICIDE_START + 60 )
 #define RID_STR_ERRORCHOOSEMACRO        ( RID_BASICIDE_START + 61 )
@@ -143,9 +164,14 @@
 #define RID_STR_IMPORTNOTPOSSIBLE       ( RID_BASICIDE_START + 67 )
 #define RID_STR_NOIMPORT                ( RID_BASICIDE_START + 68 )
 #define RID_STR_ENTERPASSWORD           ( RID_BASICIDE_START + 69 )
-
-#define RID_IMGLST_LAYOUT               ( RID_BASICIDE_START + 49 )
-
+#define RID_STR_NEWMETH                 ( RID_BASICIDE_START + 71 )
+#define RID_STR_USERMACROS              ( RID_BASICIDE_START + 72 )
+#define RID_STR_USERDIALOGS             ( RID_BASICIDE_START + 73 )
+#define RID_STR_USERMACROSDIALOGS       ( RID_BASICIDE_START + 74 )
+#define RID_STR_SHAREMACROS             ( RID_BASICIDE_START + 75 )
+#define RID_STR_SHAREDIALOGS            ( RID_BASICIDE_START + 76 )
+#define RID_STR_SHAREMACROSDIALOGS      ( RID_BASICIDE_START + 77 )
+// free
 #define RID_STR_FILENAME                ( RID_BASICIDE_START + 81 )
 #define RID_STR_APPENDLIBS              ( RID_BASICIDE_START + 82 )
 #define RID_STR_QUERYDELMACRO           ( RID_BASICIDE_START + 83 )
@@ -165,21 +191,7 @@
 #define RID_STR_LINE                    ( RID_BASICIDE_START + 97 )
 #define RID_STR_COLUMN                  ( RID_BASICIDE_START + 98 )
 #define RID_STR_SOURCETOBIG             ( RID_BASICIDE_START + 99 )
-#define RID_STR_QUERYREPLACEMACRO      ( RID_BASICIDE_START + 100 )
-
-#define RID_STR_SEARCHALLMODULES        ( RID_BASICIDE_START + 1 )
-#define RID_STR_SEARCHFROMSTART         ( RID_BASICIDE_START + 2 )
-#define RID_STR_NOMODULE                ( RID_BASICIDE_START + 3 )
-#define RID_STR_FILTER_ALLFILES         ( RID_BASICIDE_START + 4 )
-
-#define RID_BASICMENU                   ( RID_BASICIDE_START + 1 )
-#define RID_BASICPLUGINMENU             ( RID_BASICIDE_START + 2 )
-
-// MacroDlg:        ( RID_BASICIDE_START + 50 )
-// MacroOptionsDlg: ( RID_BASICIDE_START + 55 )
-// TbxControls:     ( RID_BASICIDE_START + 65 )
-// ObjectDlg:       ( RID_BASICIDE_START + 70 )
-// BreakPointDlg:   ( RID_BASICIDE_START + 80 )
+#define RID_STR_QUERYREPLACEMACRO       ( RID_BASICIDE_START + 100 )
 
 #endif  // _SVX_NOIDERESIDS
 
