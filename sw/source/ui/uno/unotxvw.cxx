@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:54:34 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1282,9 +1282,14 @@ void SwXTextViewCursor::gotoRange(
             throw IllegalArgumentException();
 
         ShellModes  eSelMode = pView->GetShellMode();
-        // ein interface aus der aktuellen Selektion erzeugen
         SwWrtShell& rSh = pView->GetWrtShell();
-        rSh.EnterStdMode();
+        // call EnterStdMode in non-text selections only
+        if(!bExpand ||
+           (eSelMode != SEL_TABLE_TEXT &&
+            eSelMode != SEL_LIST_TEXT &&
+            eSelMode != SEL_TABLE_LIST_TEXT &&
+            eSelMode != SEL_TEXT ))
+                rSh.EnterStdMode();
         SwPaM* pShellCrsr = rSh.GetCrsr();
         SwPaM aOwnPaM(*pShellCrsr->GetPoint());
         if(pShellCrsr->HasMark())
@@ -1295,6 +1300,7 @@ void SwXTextViewCursor::gotoRange(
 
         Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
         SwXTextRange* pRange = 0;
+        SwXParagraph* pPara = 0;
         OTextCursorHelper* pCursor = 0;
         if(xRangeTunnel.is())
         {
@@ -1302,6 +1308,8 @@ void SwXTextViewCursor::gotoRange(
                                     SwXTextRange::getUnoTunnelId());
             pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
                                     OTextCursorHelper::getUnoTunnelId());
+            pPara = (SwXParagraph*)xRangeTunnel->getSomething(
+                                    SwXParagraph::getUnoTunnelId());
         }
 
         const sal_uInt16 nFrmType = rSh.GetFrmType(0,sal_True);
@@ -1331,6 +1339,10 @@ void SwXTextViewCursor::gotoRange(
             SwBookmark* pBkm = pRange->GetBookmark();
             pSrcNode = &pBkm->GetPos().nNode.GetNode();
         }
+        else if (pPara && pPara->GetCrsr())
+        {
+            pSrcNode = pPara->GetCrsr()->GetNode();
+        }
         const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
         //SectionNodes ueberspringen
@@ -1346,9 +1358,10 @@ void SwXTextViewCursor::gotoRange(
         //mit Expand nur in der gleichen Umgebung
         if(bExpand &&
             (pOwnStartNode != pTmp ||
-            (eSelMode != SEL_LIST_TEXT &&
+            (eSelMode != SEL_TABLE_TEXT &&
+                eSelMode != SEL_LIST_TEXT &&
                 eSelMode != SEL_TABLE_LIST_TEXT &&
-                    eSelMode != SEL_TEXT)))
+                eSelMode != SEL_TEXT)))
             throw uno::RuntimeException();
 
         //jetzt muss die Selektion erweitert werden
@@ -1361,15 +1374,15 @@ void SwXTextViewCursor::gotoRange(
             SwPosition* pParamLeft = rDestPam.Start();
             SwPosition* pParamRight = rDestPam.End();
             // jetzt sind vier SwPositions da, zwei davon werden gebraucht, also welche?
-            if(aOwnRight < *pParamRight)
+            if(aOwnRight > *pParamRight)
                 *aOwnPaM.GetPoint() = aOwnRight;
             else
                 *aOwnPaM.GetPoint() = *pParamRight;
             aOwnPaM.SetMark();
             if(aOwnLeft < *pParamLeft)
-                *aOwnPaM.GetMark() = *pParamLeft;
-            else
                 *aOwnPaM.GetMark() = aOwnLeft;
+            else
+                *aOwnPaM.GetMark() = *pParamLeft;
         }
         else
         {
