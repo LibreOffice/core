@@ -86,9 +86,8 @@ Dim i as Integer
 	End With
 	If Not IsMissing(DataSourceName) Then
 		DlgFormDB.GetControl(&quot;lstDatabases&quot;).SelectItem(DataSourceName, True)
-		&apos; Todo: Hier muss auch noch der Contenttype untergebracht werden
+		Set oDBConnection = oConnection
 		If GetDBMetaData() Then
-			Set oDBConnection = oConnection
 			oDialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames()
 			DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItem(sContent, True)
 			FillUpFieldsListbox()
