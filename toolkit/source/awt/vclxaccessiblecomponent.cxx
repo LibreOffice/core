@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:23:02 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,16 +767,27 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
 {
     OExternalLockGuard aGuard( this );
 
-    uno::Reference< accessibility::XAccessible > xAcc;
-
-    if ( GetWindow() )
+    uno::Reference< accessibility::XAccessible > xChild;
+    for ( sal_uInt32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
     {
-        Window* pWindow = GetWindow()->FindWindow( VCLPoint( rPoint ) );
-        if ( pWindow && pWindow != GetWindow() )
-            xAcc = pWindow->GetAccessible();
-
+        uno::Reference< accessibility::XAccessible > xAcc = getAccessibleChild( i );
+        if ( xAcc.is() )
+        {
+            uno::Reference< accessibility::XAccessibleComponent > xComp( xAcc->getAccessibleContext(), uno::UNO_QUERY );
+            if ( xComp.is() )
+            {
+                Rectangle aRect = VCLRectangle( xComp->getBounds() );
+                Point aPos = VCLPoint( rPoint );
+                if ( aRect.IsInside( aPos ) )
+                {
+                    xChild = xAcc;
+                    break;
+                }
+            }
+        }
     }
-    return xAcc;
+
+    return xChild;
 }
 
 // accessibility::XAccessibleComponent
