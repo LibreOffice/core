@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:56:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ protected:
     BOOL       bStatic  : 1;        // TRUE: STATIC-Variable
     BOOL       bAs      : 1;        // TRUE: Datentyp per AS XXX definiert
     BOOL       bGlobal  : 1;        // TRUE: Global-Variable
+    BOOL       bParamArray : 1;     // TRUE: ParamArray parameter
     USHORT     nDefaultId;          // Symbol number of default value
 public:
     SbiSymDef( const String& );
@@ -196,6 +197,7 @@ public:
     short      GetDims() const  { return nDims;     }
     BOOL       IsDefined() const{ return bChained;  }
     void       SetOptional()    { bOpt = TRUE;      }
+    void       SetParamArray()  { bParamArray = TRUE;       }
     void       SetByVal()       { bByVal = TRUE;    }
     void       SetStatic()      { bStatic = TRUE;   }
     void       SetNew()         { bNew = TRUE;      }
@@ -204,6 +206,7 @@ public:
     void       SetDefaultId( USHORT n ) { nDefaultId = n; }
     USHORT     GetDefaultId( void ) { return nDefaultId; }
     BOOL       IsOptional() const{ return bOpt;     }
+    BOOL       IsParamArray() const{ return bParamArray; }
     BOOL       IsByVal() const  { return bByVal;    }
     BOOL       IsStatic() const { return bStatic;   }
     BOOL       IsNew() const    { return bNew;      }
