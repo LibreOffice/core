@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
+ *  last change: $Author: oj $ $Date: 2001-12-05 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,15 @@ namespace dbaccess
     // is used when the source supports keys
     class OKeySet : public OCacheSet
     {
-        OKeySetMatrix           m_aKeyMap;
-        OKeySetMatrix::iterator m_aKeyIter;
-        OColumnNamePos*         m_pKeyColumnNames;  // contains all key column names
-        OColumnNamePos*         m_pColumnNames;     // contains all column names
-        connectivity::ORowVector< connectivity::ORowSetValue > m_aParameterRow; // conazins the parameters from rowset
+        OKeySetMatrix                                           m_aKeyMap;
+        OKeySetMatrix::iterator                                 m_aKeyIter;
 
-        connectivity::OSQLTable m_xTable; // reference to our table
+        connectivity::ORowVector< connectivity::ORowSetValue >  m_aParameterRow; // contains the parameters from rowset
+        ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
+
+        OColumnNamePos*                                         m_pKeyColumnNames;  // contains all key column names
+        OColumnNamePos*                                         m_pColumnNames;     // contains all column names
+        connectivity::OSQLTable                                 m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
@@ -112,6 +114,29 @@ namespace dbaccess
 
         sal_Bool m_bRowCountFinal;
 
+        /**
+            getComposedTableName return the composed table name for the query
+            @param _sCatalog    the catalogname may be empty
+            @param _sSchema     the schemaname may be empty
+            @param _sTable      the tablename
+
+            @return the composed name
+        */
+        ::rtl::OUString getComposedTableName( const ::rtl::OUString& _sCatalog,
+                                              const ::rtl::OUString& _sSchema,
+                                              const ::rtl::OUString& _sTable);
+        /**
+            fetchValue fetches a single value out of the current row
+            @param _nPos    the current column position
+            @param _nType   the type of the current column
+            @param _xRow    the row where to fetch the data from
+
+            @param _rValue  out - value which was fetched
+        */
+        void fetchValue(sal_Int32 _nPos,
+                        sal_Int32 _nType,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow,
+                        ::connectivity::ORowSetValue& _rValue);
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
         void fillAllRows();
         sal_Bool fetchRow();
@@ -194,6 +219,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2001/10/30 14:22:10  oj
+    #93939# add late ctor
+
     Revision 1.11  2001/07/24 13:25:25  oj
     #89430# move ORowSetValue into dbtools
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
+ *  last change: $Author: oj $ $Date: 2001-12-05 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,23 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
 
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();
     Reference<XColumnsSupplier> xSup(m_xComposer,UNO_QUERY);
+    Reference<XNameAccess> xSourceColumns = m_xTable->getColumns();
+
     ::dbaccess::getColumnPositions(xSup->getColumns(),xKeyColumns,m_sUpdateTableName,(*m_pKeyColumnNames));
-    ::dbaccess::getColumnPositions(xSup->getColumns(),m_xTable->getColumns(),m_sUpdateTableName,(*m_pColumnNames));
+    ::dbaccess::getColumnPositions(xSup->getColumns(),xSourceColumns,m_sUpdateTableName,(*m_pColumnNames));
+
+    OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
+    for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter)
+    {
+        if(xSourceColumns->hasByName(aPosIter->first))
+        {
+            Reference<XPropertySet> xProp;
+            xSourceColumns->getByName(aPosIter->first) >>= xProp;
+            sal_Bool bAuto;
+            if( (xProp->getPropertyValue(PROPERTY_ISAUTOINCREMENT) >>= bAuto) && bAuto)
+                m_aAutoColumns.push_back(aPosIter->first);
+        }
+    }
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra varaible to be set
@@ -170,41 +185,19 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
     ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
 
-    ::rtl::OUString aFilter,aCatalog,aSchema,aTable,aComposedName;
+    ::rtl::OUString aFilter,aCatalog,aSchema,aTable;
 
     Reference<XPropertySet> xTableProp(m_xTable,UNO_QUERY);
     xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
     xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
     xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
 
-    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-
-    if(xMetaData->supportsTableCorrelationNames())
-    {
-        ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_False);
-        // first we have to check if the composed tablename is in the select clause or if an alias is used
-        Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
-        Reference<XNameAccess> xSelectTables = xTabSup->getTables();
-        OSL_ENSURE(xSelectTables.is(),"No Select tables!");
-        if(xSelectTables.is())
-        {
-            if(!xSelectTables->hasByName(aComposedName))
-            { // the composed name isn't used in the select clause so we have to find out which name is used instead
-                ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,aCatalog,aSchema,aTable);
-                ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
-            }
-            else
-                ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
-        }
-    }
-    else
-        ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
-
+    m_aComposedTableName = getComposedTableName(aCatalog,aSchema,aTable);
     // create the where clause
     OColumnNamePos::const_iterator aIter;
     for(aIter = (*m_pKeyColumnNames).begin();aIter != (*m_pKeyColumnNames).end();)
     {
-        aFilter += aComposedName;
+        aFilter += m_aComposedTableName;
         aFilter += ::rtl::OUString::createFromAscii(".");
         aFilter += ::dbtools::quoteName( aQuote,aIter->first);
         aFilter += ::rtl::OUString::createFromAscii(" = ?");
@@ -553,6 +546,49 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     if(m_bInserted)
     {
         // first check if all key column values were set
+        ::rtl::OUString sQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
+        ::rtl::OUString sMaxStmt;
+        ::std::vector< ::rtl::OUString >::iterator aAutoIter = m_aAutoColumns.begin();
+        for (;aAutoIter !=  m_aAutoColumns.end(); ++aAutoIter)
+        {
+            // we will only fetch values which are keycolumns
+            if(m_pKeyColumnNames->find(*aAutoIter) != m_pKeyColumnNames->end())
+            {
+                sMaxStmt += ::rtl::OUString::createFromAscii(" MAX(");
+                sMaxStmt += ::dbtools::quoteName( sQuote,*aAutoIter);
+                sMaxStmt += ::rtl::OUString::createFromAscii("),");
+            }
+        }
+        if(sMaxStmt.getLength())
+        {
+            sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1,::rtl::OUString::createFromAscii(" "));
+            ::rtl::OUString sStmt = ::rtl::OUString::createFromAscii("SELECT ");
+            sStmt += sMaxStmt;
+            sStmt += ::rtl::OUString::createFromAscii("FROM ");
+            sStmt += m_aComposedTableName;
+            try
+            {
+                // now fetch the autoincrement values
+                Reference<XStatement> xStatement = m_xConnection->createStatement();
+                Reference<XResultSet> xRes = xStatement->executeQuery(sStmt);
+                Reference<XRow> xRow(xRes,UNO_QUERY);
+                if(xRow.is() && xRes->next())
+                {
+                    aAutoIter = m_aAutoColumns.begin();
+                    for (;aAutoIter !=  m_aAutoColumns.end(); ++aAutoIter)
+                    {
+                        // we will only fetch values which are keycolumns
+                        OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
+                        if(aFind != m_pKeyColumnNames->end())
+                            fetchValue(aFind->second,(*_rInsertRow)[aFind->second].getTypeKind(),xRow,(*_rInsertRow)[aFind->second]);
+                    }
+                }
+                ::comphelper::disposeComponent(xStatement);
+            }
+            catch(SQLException&)
+            {
+            }
+        }
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
         connectivity::ORowVector< ORowSetValue >::iterator aIter = aKeyRow->begin();
         OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
@@ -859,6 +895,8 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     ::comphelper::disposeComponent(m_xRow);
     // we just areassign the base members
     Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
+    OSL_ENSURE(xParameter.is(),"No Parameter interface!");
+    xParameter->clearParameters();
     connectivity::ORowVector< ORowSetValue >::const_iterator aExternParamIter = m_aParameterRow.begin();
     sal_Int32 nPos=1;
     for(;aExternParamIter != m_aParameterRow.end();++aExternParamIter,++nPos)
@@ -1009,65 +1047,7 @@ sal_Bool OKeySet::fetchRow()
         OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
         for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter)
         {
-            sal_Int32 nType = m_xSetMetaData->getColumnType(aPosIter->second);
-
-            switch(nType)
-            {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                (*aIter) = m_xDriverRow->getString(aPosIter->second);
-                break;
-            case DataType::BIGINT:
-                (*aIter) = m_xDriverRow->getLong(aPosIter->second);
-                break;
-            case DataType::FLOAT:
-                (*aIter) = m_xDriverRow->getFloat(aPosIter->second);
-                break;
-            case DataType::DOUBLE:
-            case DataType::REAL:
-                (*aIter) = m_xDriverRow->getDouble(aPosIter->second);
-                break;
-            case DataType::DATE:
-                (*aIter) = m_xDriverRow->getDate(aPosIter->second);
-                break;
-            case DataType::TIME:
-                (*aIter) = m_xDriverRow->getTime(aPosIter->second);
-                break;
-            case DataType::TIMESTAMP:
-                (*aIter) = m_xDriverRow->getTimestamp(aPosIter->second);
-                break;
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-            case DataType::LONGVARBINARY:
-            case DataType::LONGVARCHAR:
-                (*aIter) = m_xDriverRow->getBytes(aPosIter->second);
-                break;
-            case DataType::BIT:
-                (*aIter) = m_xDriverRow->getBoolean(aPosIter->second);
-                break;
-            case DataType::TINYINT:
-                (*aIter) = (sal_Int32)m_xDriverRow->getByte(aPosIter->second);
-                break;
-            case DataType::SMALLINT:
-                (*aIter) = (sal_Int32)m_xDriverRow->getShort(aPosIter->second);
-                break;
-            case DataType::INTEGER:
-                (*aIter) = m_xDriverRow->getInt(aPosIter->second);
-                break;
-            case DataType::CLOB:
-                *aIter = makeAny(m_xDriverRow->getCharacterStream(aPosIter->second));
-                aIter->setTypeKind(DataType::CLOB);
-                break;
-            case DataType::BLOB:
-                *aIter = makeAny(m_xDriverRow->getBinaryStream(aPosIter->second));
-                aIter->setTypeKind(DataType::BLOB);
-                break;
-            }
-            if(m_xDriverRow->wasNull())
-                aIter->setNull();
-            aIter->setTypeKind(nType);
+            fetchValue(aPosIter->second,m_xSetMetaData->getColumnType(aPosIter->second),m_xDriverRow,*aIter);
         }
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.size(),OKeySetValue(aKeyRow,0))).first;
     }
@@ -1226,6 +1206,99 @@ void OKeySet::setExternParameters(const connectivity::ORowVector< ORowSetValue >
     m_aParameterRow = _rParameterRow;
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString OKeySet::getComposedTableName(const ::rtl::OUString& _sCatalog,
+                                              const ::rtl::OUString& _sSchema,
+                                              const ::rtl::OUString& _sTable)
+{
+    ::rtl::OUString aComposedName;
+    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
+
+    if(xMetaData->supportsTableCorrelationNames())
+    {
+        ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_False);
+        // first we have to check if the composed tablename is in the select clause or if an alias is used
+        Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
+        Reference<XNameAccess> xSelectTables = xTabSup->getTables();
+        OSL_ENSURE(xSelectTables.is(),"No Select tables!");
+        if(xSelectTables.is())
+        {
+            if(!xSelectTables->hasByName(aComposedName))
+            { // the composed name isn't used in the select clause so we have to find out which name is used instead
+                ::rtl::OUString sCatalog,sSchema,sTable;
+                ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable);
+                ::dbtools::composeTableName(xMetaData,sCatalog,sSchema,sTable,aComposedName,sal_True);
+            }
+            else
+                ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_True);
+        }
+    }
+    else
+        ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_True);
+
+    return aComposedName;
+}
+// -----------------------------------------------------------------------------
+void OKeySet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow>& _xRow,ORowSetValue& _rValue)
+{
+    switch(_nType)
+    {
+    case DataType::CHAR:
+    case DataType::VARCHAR:
+    case DataType::DECIMAL:
+    case DataType::NUMERIC:
+        _rValue = _xRow->getString(_nPos);
+        break;
+    case DataType::BIGINT:
+        _rValue = _xRow->getLong(_nPos);
+        break;
+    case DataType::FLOAT:
+        _rValue = _xRow->getFloat(_nPos);
+        break;
+    case DataType::DOUBLE:
+    case DataType::REAL:
+        _rValue = _xRow->getDouble(_nPos);
+        break;
+    case DataType::DATE:
+        _rValue = _xRow->getDate(_nPos);
+        break;
+    case DataType::TIME:
+        _rValue = _xRow->getTime(_nPos);
+        break;
+    case DataType::TIMESTAMP:
+        _rValue = _xRow->getTimestamp(_nPos);
+        break;
+    case DataType::BINARY:
+    case DataType::VARBINARY:
+    case DataType::LONGVARBINARY:
+    case DataType::LONGVARCHAR:
+        _rValue = _xRow->getBytes(_nPos);
+        break;
+    case DataType::BIT:
+        _rValue = _xRow->getBoolean(_nPos);
+        break;
+    case DataType::TINYINT:
+        _rValue = (sal_Int32)_xRow->getByte(_nPos);
+        break;
+    case DataType::SMALLINT:
+        _rValue = (sal_Int32)_xRow->getShort(_nPos);
+        break;
+    case DataType::INTEGER:
+        _rValue = _xRow->getInt(_nPos);
+        break;
+    case DataType::CLOB:
+        _rValue = makeAny(_xRow->getCharacterStream(_nPos));
+        _rValue.setTypeKind(DataType::CLOB);
+        break;
+    case DataType::BLOB:
+        _rValue = makeAny(_xRow->getBinaryStream(_nPos));
+        _rValue.setTypeKind(DataType::BLOB);
+        break;
+    }
+    if(_xRow->wasNull())
+        _rValue.setNull();
+    _rValue.setTypeKind(_nType);
+}
+// -----------------------------------------------------------------------------
 namespace dbaccess
 {
     void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
@@ -1272,6 +1345,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.28  2001/11/29 16:35:26  oj
+    #95225# changes for bookmarkable resultset
+
     Revision 1.27  2001/10/30 14:22:10  oj
     #93939# add late ctor
 
@@ -1296,70 +1372,6 @@ namespace dbaccess
     Revision 1.20  2001/07/05 11:58:54  oj
     #87744# check non casesensitive for table privs
 
-    Revision 1.19  2001/07/03 10:58:28  oj
-    #88888# only set values which are modified
-
-    Revision 1.18  2001/06/22 13:07:17  oj
-    #88012# change rowdeleted
-
-    Revision 1.17  2001/05/22 13:08:22  oj
-    #87199# check column names
-
-    Revision 1.16  2001/05/18 11:48:25  oj
-    #86528# size changes
-
-    Revision 1.15  2001/05/03 07:15:56  oj
-    #86526# fetch decimal and numeric as string
-
-    Revision 1.14  2001/04/10 08:05:08  oj
-    throw exception when no connection
-
-    Revision 1.13  2001/04/02 11:14:53  oj
-    changes for character stream
-
-    Revision 1.12  2001/02/06 12:51:13  rt
-    #65293# syntax
-
-    Revision 1.11  2001/02/01 14:23:57  oj
-    change for insert , delete and update rows
-
-    Revision 1.10  2001/01/31 12:35:35  oj
-    use of qouteName
-
-    Revision 1.9  2001/01/30 14:27:46  oj
-    new member which holds the column names
-
-    Revision 1.8  2001/01/24 09:50:49  oj
-    #82628# rowset modifications
-
-    Revision 1.7  2001/01/22 07:38:23  oj
-    #82632# change member
-
-    Revision 1.6  2000/11/15 15:57:40  oj
-    change for rowset
-
-    Revision 1.5  2000/10/30 09:24:02  oj
-    use tablecontainer if no tablesupplier is supported
-
-    Revision 1.4  2000/10/25 07:30:24  oj
-    make strings unique for lib's
-
-    Revision 1.3  2000/10/17 10:18:12  oj
-    some changes for the rowset
-
-    Revision 1.2  2000/10/11 11:18:10  fs
-    replace unotools with comphelper
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:46  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:19:46  oj
-    rowset addons
-
-    Revision 1.0 01.08.2000 09:09:34  oj
 ------------------------------------------------------------------------*/
 
 

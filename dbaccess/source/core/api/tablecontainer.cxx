@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2001-12-05 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,12 +616,15 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                     aSql += ::rtl::OUString::createFromAscii(" ");
 
                     nDataType = nPrecision = nScale = 0;
-                    xColProp->getPropertyValue(PROPERTY_TYPENAME)   >>= sTypeName;
-                    xColProp->getPropertyValue(PROPERTY_TYPE)       >>= nDataType;
-                    xColProp->getPropertyValue(PROPERTY_PRECISION)  >>= nPrecision;
-                    xColProp->getPropertyValue(PROPERTY_SCALE)      >>= nScale;
+                    sal_Bool bIsAutoIncrement = sal_False;
+                    xColProp->getPropertyValue(PROPERTY_TYPENAME)           >>= sTypeName;
+                    xColProp->getPropertyValue(PROPERTY_TYPE)               >>= nDataType;
+                    xColProp->getPropertyValue(PROPERTY_PRECISION)          >>= nPrecision;
+                    xColProp->getPropertyValue(PROPERTY_SCALE)              >>= nScale;
+                    xColProp->getPropertyValue(PROPERTY_ISAUTOINCREMENT)    >>= bIsAutoIncrement;
                     // look if we have to use precisions
                     sal_Bool bUseLiteral = sal_False;
+                    ::rtl::OUString sPreFix,sPostFix;
                     {
                         Reference<XResultSet> xRes = m_xMetaData->getTypeInfo();
                         if(xRes.is())
@@ -631,6 +634,8 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                             {
                                 ::rtl::OUString sTypeName2Cmp = xRow->getString(1);
                                 sal_Int32 nType = xRow->getShort(2);
+                                sPreFix = xRow->getString (4);
+                                sPostFix = xRow->getString (5);
                                 ::rtl::OUString sCreateParams = xRow->getString(6);
                                 if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && sCreateParams.getLength() && !xRow->wasNull())
                                 {
@@ -656,10 +661,13 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
 
                     ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(PROPERTY_DEFAULTVALUE));
                     if(aDefault.getLength())
-                        aSql += ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
+                        aSql += ::rtl::OUString::createFromAscii(" DEFAULT ") + sPreFix + aDefault + sPostFix;
 
                     if(::comphelper::getINT32(xColProp->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
                         aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
+
+                    if(bIsAutoIncrement)
+                        aSql += ::rtl::OUString::createFromAscii(" auto_increment");
 
                     aSql += ::rtl::OUString::createFromAscii(",");
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
+ *  last change: $Author: oj $ $Date: 2001-12-05 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,12 @@
 #endif
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #endif
 
 using namespace dbaccess;
@@ -237,16 +243,54 @@ OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
                     sal_Int32       nField7 = xRow->getInt(7)
                                 ,   nField9 = xRow->getInt(9)
                                 ,   nField11= xRow->getInt(11);
+                    ::rtl::OUString sField13 = xRow->getString(13);
+                    ::comphelper::disposeComponent(xRow);
+
+                    // we need some more information about the column
+                    static ::rtl::OUString STR_WHERE = ::rtl::OUString::createFromAscii(" WHERE ");
+                    const ::rtl::OUString sQuote     = m_xMetaData->getIdentifierQuoteString();
+
+                    ::rtl::OUString sSelect = ::rtl::OUString::createFromAscii("SELECT ");
+                    sSelect += ::dbtools::quoteName(sQuote,_rName);
+                    ::rtl::OUString sComposedName;
+                    ::dbtools::composeTableName(m_xMetaData,getString(aCatalog),aSchema,aTable,sComposedName,sal_True);
+
+                    sSelect += ::rtl::OUString::createFromAscii(" FROM ");
+                    sSelect += sComposedName;
+                    sSelect += STR_WHERE;
+                    sSelect += ::rtl::OUString::createFromAscii(" 0 = 1");
+
+                    sal_Bool bAutoIncrement = sal_False
+                            ,bIsCurrency    = sal_False;
+                    try
+                    {
+                        Reference<XStatement> xStmt = m_xConnection->createStatement();
+                        xResult = xStmt->executeQuery(sSelect);
+                        if(xResult.is())
+                        {
+                            Reference<XResultSetMetaData> xMD = Reference<XResultSetMetaDataSupplier>(xResult,UNO_QUERY)->getMetaData();
+                            bAutoIncrement = xMD->isAutoIncrement(1);
+                            bIsCurrency    = xMD->isCurrency(1);
+
+                            ::comphelper::disposeComponent(xStmt);
+                        }
+                    }
+                    catch(SQLException&)
+                    {
+                    }
 
 
                     connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
                                                 aField6,
-                                                xRow->getString(13),
+                                                sField13,
                                                 nField11,
                                                 nField7,
                                                 nField9,
                                                 nField5,
-                                                sal_False,sal_False,sal_False,isCaseSensitive());
+                                                bAutoIncrement,
+                                                sal_False,
+                                                bIsCurrency,
+                                                isCaseSensitive());
 
                     Reference<XPropertySet> xProp = pRet;
                     pReturn = new OTableColumnWrapper(xProp);
