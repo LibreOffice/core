@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: os $ $Date: 2001-03-23 11:38:14 $
+#   last change: $Author: jp $ $Date: 2001-04-25 19:32:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ IDLFILES=\
     SortDescriptor.idl\
     SortField.idl\
     SortFieldType.idl\
+    TextSearch.idl\
     Time.idl\
     URL.idl\
     URLTransformer.idl\
