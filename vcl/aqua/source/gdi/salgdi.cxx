@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.32 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-21 19:37:41 $
+ *  $Revision: 1.33 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-21 20:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,38 @@ static RGBColor SALColor2RGBColor ( const SalColor nSalColor )
 
 // =======================================================================
 
+static SalColor GetROPSalColor( SalROPColor nROPColor )
+{
+    SalColor  nSalColor = 0;
+
+    if ( nROPColor == SAL_ROP_0 )
+    {
+        RGBColor  aBlackColor;
+
+        aBlackColor.red   = 0x0000;
+        aBlackColor.green = 0x0000;
+        aBlackColor.blue  = 0x0000;
+
+        nSalColor = RGBColor2SALColor ( &aBlackColor );
+    } // if
+    else
+    {
+        RGBColor  aWhiteColor;
+
+        aWhiteColor.red   = 0xffff;
+        aWhiteColor.green = 0xffff;
+        aWhiteColor.blue  = 0xffff;
+
+        nSalColor = RGBColor2SALColor ( &aWhiteColor );
+    } // else
+
+    return nSalColor;
+} // GetROPSalColor
+
+// =======================================================================
+
+// =======================================================================
+
 static OSStatus GetGDeviceBitDepth ( unsigned short  *rGDeviceBitDepth )
 {
     GDPtr     pGDevice  = NULL;    OSStatus  nQDStatus = noErr;                                  pGDevice = *GetGDevice ( );
@@ -538,7 +570,6 @@ static void InitQD ( SalGraphicsDataPtr rSalGraphicsData )
 static void InitRegions ( SalGraphicsDataPtr rSalGraphicsData )
 {
     rSalGraphicsData->mhClipRgn = NULL;
-    rSalGraphicsData->mhGrowRgn = NewRgn();
 } // InitRegions
 
 // -----------------------------------------------------------------------
@@ -699,7 +730,9 @@ SalGraphics::~SalGraphics()
 
 // =======================================================================
 
-void SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
+void SalGraphics::GetResolution( long& rDPIX,
+                                 long& rDPIY
+                               )
 {
     long nHRes = 0;
     long nVRes = 0;
@@ -715,7 +748,9 @@ void SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
+void SalGraphics::GetScreenFontResolution( long& rDPIX,
+                                           long& rDPIY
+                                         )
 {
     long nHRes = 0;
     long nVRes = 0;
@@ -806,7 +841,11 @@ void SalGraphics::BeginSetClipRegion( ULONG nRectCount )
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+BOOL SalGraphics::UnionClipRegion( long nX,
+                                   long nY,
+                                   long nWidth,
+                                   long nHeight
+                                 )
 {
     RgnHandle  hClipRegion        = NULL;
     BOOL       bClipRegionsJoined = FALSE;
@@ -929,17 +968,25 @@ void SalGraphics::SetXORMode( BOOL bSet )
 
 void SalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
-}
+    SalColor nSalColor = GetROPSalColor( nROPColor );
+
+    SetLineColor( nSalColor );
+} // SalGraphics::SetROPLineColor
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
-}
+    SalColor nSalColor = GetROPSalColor( nROPColor );
+
+    SetFillColor( nSalColor );
+} // SalGraphics::SetROPFillColor
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPixel( long nX, long nY )
+void SalGraphics::DrawPixel( long nX,
+                             long nY
+                           )
 {
     OSStatus aQDStatus = noErr;
 
@@ -964,7 +1011,10 @@ void SalGraphics::DrawPixel( long nX, long nY )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
+void SalGraphics::DrawPixel( long      nX,
+                             long      nY,
+                             SalColor  nSalColor
+                           )
 {
     OSStatus aQDStatus = noErr;
 
@@ -991,7 +1041,11 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
+void SalGraphics::DrawLine( long nX1,
+                            long nY1,
+                            long nX2,
+                            long nY2
+                          )
 {
     OSStatus aQDStatus = noErr;
 
@@ -1041,7 +1095,11 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
+void SalGraphics::DrawRect( long  nX,
+                            long  nY,
+                            long  nWidth,
+                            long  nHeight
+                          )
 {
     OSStatus aQDStatus = noErr;
 
@@ -1101,7 +1159,9 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
+void SalGraphics::DrawPolyLine( ULONG           nPoints,
+                                const SalPoint *pPtAry
+                              )
 {
     if  ( ( nPoints > 1 ) && ( pPtAry != NULL ) )
     {
@@ -1172,7 +1232,9 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
+void SalGraphics::DrawPolygon( ULONG            nPoints,
+                               const SalPoint  *pPtAry
+                             )
 {
     if  ( ( nPoints > 1 ) && ( pPtAry != NULL ) )
     {
@@ -1514,7 +1576,9 @@ SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
 
 // -----------------------------------------------------------------------
 
-SalColor SalGraphics::GetPixel( long nX, long nY )
+SalColor SalGraphics::GetPixel( long nX,
+                                long nY
+                              )
 {
     RGBColor  aRGBColor;
     SalColor  nSalColor       = 0;
