@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:37:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,6 +897,23 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 
             for(sal_Int32 nNewPos=1;pBegin != pEnd;++pBegin,++nNewPos)
             {
+                ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(*pBegin);
+
+                if ( aDestIter != m_vDestColumns.end() )
+                {
+                    ODatabaseExport::TColumnVector::const_iterator aFind = ::std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
+                    sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
+
+                    ODatabaseExport::TPositions::iterator aPosFind = ::std::find_if(m_vColumnPos.begin(),m_vColumnPos.end(),
+                        ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),nPos),::std::select1st<ODatabaseExport::TPositions::value_type>()));
+
+                    if ( m_vColumnPos.end() != aPosFind )
+                    {
+                        aPosFind->second = nNewPos;
+                        m_vColumnTypes[m_vColumnPos.end() - aPosFind] = (*aFind)->second->GetType();
+                    }
+                }
+/*
                 ODatabaseExport::TColumnVector::const_iterator aIter = pVec->begin();
                 for(sal_Int32 nOldPos = 1;aIter != pVec->end();++aIter,++nOldPos)
                 {
@@ -908,19 +925,20 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                             ODatabaseExport::TPositions::iterator aColPos = m_vColumnPos.begin();
                             for(; aColPos != m_vColumnPos.end() && nOldPos;++aColPos,++aFound)
                             {
-                                if(aColPos->first != CONTAINER_ENTRY_NOTFOUND && !*aFound && nOldPos == aColPos->first)
+                                if(aColPos->second != CONTAINER_ENTRY_NOTFOUND && !*aFound && nOldPos == aColPos->second)
                                     break;
                             }
                             if(aColPos != m_vColumnPos.end())
                             {
                                 *aFound = 1;
-                                aColPos->first = nNewPos;
+                                aColPos->second = nNewPos;
                                 m_vColumnTypes[m_vColumnPos.end() - aColPos] = (*aIter)->second->GetType();
                             }
                         }
                         break;
                     }
                 }
+*/
             }
         }
     }
