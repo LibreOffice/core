@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:04:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,7 +946,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "å‘ä¸Šç§»å‹•";
                 Text[ arabic ] = "ÅÒÇÍÉ Åáì ÃÚáì";
                 Text[ greek ] = "ÌåôáöïñÜ ğñïò ôá ğÜíù";
-                Text[ korean ] = "ìœ„ë¡œ ì´ë™";
+                Text[ korean ] = "ìœ„ë¡œ";
                 Text[ turkish ] = "Yukarı taşı";
                 Text[ catalan ] = "Mou cap amunt";
                 Text[ finnish ] = "Siirrä ylemmäs";
@@ -1235,7 +1235,7 @@ Window DLG_NAVIGATION_PI
         Text[ russian ] = "Àêòèâíîå îêíî";
         Text[ polish ] = "Aktywne okno";
         Text[ japanese ] = "ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦";
-        Text[ language_user1 ] = "èë? Îòêğûòîå - - - èëè: Îòêğûòîå - èëè: Îòêğûòîå";
+        Text[ language_user1 ] = "; èë? Îòêğûòîå - - - èëè: Îòêğûòîå - èëè: Îòêğûòîå";
         Text[ chinese_traditional ] = "ä½¿ç”¨ä¸­çš„è¦–çª—";
         Text[ arabic ] = "ÇáäÇİĞÉ ÇáäÔØÉ";
         Text[ greek ] = "Åíåñãü ğáñÜèõñï";
@@ -1436,7 +1436,7 @@ Window DLG_NAVIGATION_PI
         Text[ english_us ] = "Edit link";
         Text[ portuguese ] = "Edit link";
         Text[ russian ] = "Ïğàâêà ññûëêè";
-        Text[ greek ] = "Edit link";
+        Text[ greek ] = "Åğåîåñãáóßá óıíäåóçò";
         Text[ dutch ] = "Koppeling bewerken";
         Text[ french ] = "Éditer le lien";
         Text[ spanish ] = "Editar vínculo";
@@ -1800,7 +1800,7 @@ Window DLG_NAVIGATION_PI
         Text = "~Verzeichnis aufheben" ;
         Text [ English ] = "Dismiss index" ;
         Text [ english_us ] = "~Remove Index" ;
-        Text [ portuguese_brazilian ] = "~Remover Índice" ;
+        Text [ portuguese_brazilian ] = "~Remover índice" ;
         Text [ swedish ] = "Upphä~v förteckning" ;
         Text [ danish ] = "Ophæv indeks" ;
         Text [ italian ] = "Rimuovi indice" ;
@@ -1982,7 +1982,7 @@ Window DLG_NAVIGATION_PI
     Text[ japanese ] = "ãƒŠãƒ“ã‚²ãƒ¼ã‚¿";
     Text[ chinese_traditional ] = "åŠ©æ‰‹";
     Text[ arabic ] = "ÇáäÇİíÌíÊæÑ";
-    Text[ greek ] = "Navigator";
+    Text[ greek ] = "ĞåñéŞãçóç";
     Text[ korean ] = "ë„¤ë¹„ê²Œì´í„°";
     Text[ turkish ] = "Dolaşma";
     Text[ catalan ] = "Navegador";
@@ -2025,6 +2025,7 @@ ImageList IMG_NAVI_ENTRYBMPH
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };
+
 
 
 
