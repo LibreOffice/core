@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 16:35:33 $
+ *  last change: $Author: sab $ $Date: 2001-02-27 13:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,9 @@ public:
     MyToFilterProperties();
     ~MyToFilterProperties();
 
-    AddProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex);
-    GetApiNames(uno::Sequence<OUString>& aApiNames);
-    FillPropertyStateArray(vector< XMLPropertyState >& aPropStates, const PropertyState *pStates,
+    void AddProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex);
+    void GetApiNames(uno::Sequence<OUString>& aApiNames);
+    void FillPropertyStateArray(vector< XMLPropertyState >& aPropStates, const PropertyState *pStates,
                             const Reference< XPropertySet >& xPropSet);
 };
 
@@ -223,7 +223,7 @@ MyToFilterProperties::~MyToFilterProperties()
 {
 }
 
-MyToFilterProperties::AddProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex)
+void MyToFilterProperties::AddProperty(const rtl::OUString& sApiName, const sal_uInt32 nIndex)
 {
     MyToFilterPropertyList::iterator aItr = aProps.begin();
     sal_Bool bInserted(sal_False);
@@ -261,7 +261,7 @@ MyToFilterProperties::AddProperty(const rtl::OUString& sApiName, const sal_uInt3
     while(!bInserted && (aItr++ != aProps.end()));
 }
 
-MyToFilterProperties::GetApiNames(uno::Sequence<OUString>& aApiNames)
+void MyToFilterProperties::GetApiNames(uno::Sequence<OUString>& aApiNames)
 {
     DBG_ASSERT(nCount == aProps.size(), "wrong property count");
     aApiNames.realloc(nCount);
@@ -270,7 +270,7 @@ MyToFilterProperties::GetApiNames(uno::Sequence<OUString>& aApiNames)
         aApiNames[i] = aItr->sApiName;
 }
 
-MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aPropStates, const PropertyState *pStates,
+void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aPropStates, const PropertyState *pStates,
                                             const Reference< XPropertySet >& xPropSet)
 {
     MyToFilterPropertyList::iterator aItr = aProps.begin();
