@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.35 2001-04-27 07:28:14 mib Exp $
+	$Id: style.mod,v 1.36 2001-05-07 12:07:26 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -376,6 +376,7 @@
 <!ATTLIST style:properties style:table-centering (horizontal | vertical | both | none) #IMPLIED>
 
 <!ATTLIST style:properties style:footnote-max-height %lengthOrNoLimit; #IMPLIED>
+<!ATTLIST style:properties style:vertical-align (top|bottom|middle|basline|auto) #IMPLIED>
 
 <!ELEMENT style:footnote-sep EMPTY>
 <!ATTLIST style:footnote-sep style:width %length; #IMPLIED>
