@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype4.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 16:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ class ExtendedTabBar : public TabBar
     EditEngine*     pEditEngine;
     EditView*       pEditView;
     BOOL            bIsInKeyInput;
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     void            ImpCheckEditEngine( BOOL bKeepNewText );
 #endif
 protected:

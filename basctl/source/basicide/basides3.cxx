@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 16:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #pragma hdrstop
 
-#define __PRIVATE 1
+#define _SOLAR__PRIVATE 1
 
 #include <basidesh.hxx>
 #include <baside3.hxx>

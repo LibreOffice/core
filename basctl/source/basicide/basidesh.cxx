@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-19 09:19:37 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 16:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 
 #pragma hdrstop
 
-#define __PRIVATE 1
+#define _SOLAR__PRIVATE 1
 
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
