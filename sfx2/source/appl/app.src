@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:12:18 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,7 +1416,7 @@ InfoBox MSG_CANT_QUIT
     Message[ chinese_simplified ] = "ÏÖÔÚÎŞ·¨½áÊøÕâ¸öÓ¦ÓÃ³ÌĞò¡£\nÇëÄúÉÔµÈÖ±µ½³ÌĞòÍê³ÉËùÓĞ´òÓ¡ÈÎÎñ»òOLE¼¤»î×´Ì¬½áÊø£¬\nÈ»ºóÔÙ¹Ø±ÕËùÓĞ¶Ô»°¿ò¡£";
     Message[ russian ] = "Âûõîä èç ïğèëîæåíèÿ ñåé÷àñ íåâîçìîæåí.\nÏîäîæäèòå, ïîæàëóéñòà, îêîí÷àíèÿ âñåõ çàäàíèé ïå÷àòè è/èëè\n äåéñòâèÿ OLE è çàêğîéòå âñå äèàëîãè.";
     Message[ polish ] = "Aplikacji nie mo¿na zakoñczyæ.\nProszê zaczekaæ na koniec zadañ wydruku i/lub\nakcji OLE i zamkn¹æ wszystkie aplikacje.";
-    Message[ japanese ] = "Œ»İÌßÛ¸Ş×Ñ‚ÍI—¹‚Å‚«‚Ü‚¹‚ñB\n‚·‚×‚Ä‚Ìˆóü¼Ş®ÌŞ‚Ü‚½‚Í\nOLE ±¸¼®İ‚ÌI—¹‚ğ‘Ò‚Á‚½ã‚Å‚·‚×‚Ä‚ÌÀŞ²±Û¸Ş‚ğ•Â‚¶‚Ä‰º‚³‚¢B";
+    Message[ japanese ] = "Œ»İÌßÛ¸Ş×Ñ‚ÍI—¹‚Å‚«‚Ü‚¹‚ñB\n‚·‚×‚Ä‚Ìˆóü¼Ş®ÌŞ‚Ü‚½‚Í\nOLE ±¸¼®İ‚ÌI—¹‚ğŠm”F‚µ‚Ä‚©‚çA‚·‚×‚Ä‚ÌÀŞ²±Û¸Ş‚ğ•Â‚¶‚Ä‚­‚¾‚³‚¢B";
     Message[ chinese_traditional ] = "²{¦bµLªkµ²§ô³o­ÓÀ³¥Îµ{¦¡¡C\n½Ğµ¥­Ô©Ò¦³¦C¦L¥ô°È©ÎOLE¨Ï¥Îª¬ºA¤w¸gµ²§ô¡M\nµM«á¦AÃö³¬©Ò¦³ªº¹ï¸Ü¤è¶ô¡C";
     Message[ arabic ] = "áÇ íãßä ÅäåÇÁ ÇáÊØÈíŞ ÍÇáíÇğ.\nÇáÑÌÇÁ ÇáÇäÊÙÇÑ ÍÊì ÇäÊåÇÁ ßá ãåÇã ÇáØÈÇÚÉ¡ æ/Ãæ\nÊäÔíØÇÊ OLE¡ Ëã Şã ÈÅÛáÇŞ ßá ãÑÈÚÇÊ ÇáÍæÇÑ.";
     Message[ dutch ] = "De applicatie kan op dit moment niet worden beëindigd.\nWacht tot alle drukopdrachten en/of\nOLE-activiteiten zijn beëindigd en \nsluit alle dialogen.";
@@ -1588,7 +1588,7 @@ String STR_RESWARNING
     TEXT[ chinese_simplified ] = "ÏµÍ³×ÊÔ´²»×ã¡£ÇëÄú¹Ø±ÕÆäËüµÄ³ÌĞò»òÕß¹Ø±ÕÒ»Ğ©ÊÓ´°£¬È»ºóÖØĞÂ³¢ÊÔÖ´ĞĞÃüÁî¡£";
     TEXT[ russian ] = "Ğåñóğñû ñèñòåìû îãğàíè÷åíû. Ïğåæäå ÷åì ïğîäîëæèòü ğàáîòó, âûéäèòå, ïîæàëóéñòà, èç äğóãèõ ïğèëîæåíèé èëè çàêğîéòå íåêîòîğûå îêíà.";
     TEXT[ polish ] = "Zasoby systemu s¹ ograniczone. Przed kontynuacj¹ pracy zakoñcz kilka aplikacji lub zamknij kilka okien.";
-    TEXT[ japanese ] = "¼½ÃÑØ¿°½‚ªŒÀŠE‚É‹ß‚Ã‚¢‚Ä‚¢‚Ü‚·Bì‹Æ‚ğ‘±‚¯‚é‘O‚É‘¼‚Ì±ÌßØ¹°¼®İ‚ğI—¹‚·‚é‚©A‚¢‚­‚Â‚©‚Ì³¨İÄŞ³‚ğ•Â‚¶‚Ä‰º‚³‚¢B";
+    TEXT[ japanese ] = "¼½ÃÑØ¿°½‚ªŒÀŠE‚É‹ß‚Ã‚¢‚Ä‚¢‚Ü‚·Bì‹Æ‚ğ‘±‚¯‚é‘O‚ÉA‘¼‚Ì±ÌßØ¹°¼®İ‚ğI—¹‚·‚é‚©A‚¢‚­‚Â‚©‚Ì³¨İÄŞ³‚ğ•Â‚¶‚Ä‚­‚¾‚³‚¢B";
     TEXT[ chinese_traditional ] = "¨t²Î¸ê·½¤£¨¬¡C½ĞÃö³¬¨ä¥¦ªºµ{¦¡©ÎªÌÃö³¬¤@¨Çµøµ¡¡MµM«á­«·s¹Á¸Õ°õ¦æ«ü¥O¡C";
     TEXT[ arabic ] = "ãÕÇÏÑ ÇáäÕ ÊÊÖÇÁá. ÇáÑÌÇÁ ÅäåÇÁ ÊØÈíŞÇÊ ÃÎÑì¡ Ãæ ÅÛáÇŞ ÈÚÖ ÇáäæÇİĞ¡ ŞÈá ãæÇÕáÉ ÇáÚãá.";
     TEXT[ dutch ] = "Onvoldoende systeemgeheugen beschikbaar. Sluit andere toepassingen af.of sluit een aantal vensters voordat u uw werkvoortzet.";
@@ -1616,7 +1616,7 @@ String STR_RESEXCEPTION
     TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½±ØÒªµÄ³ÌĞò²¿¼ş¡£Çë¼ì²éÄúµÄ°²×°¡£";
     TEXT[ russian ] = "Íå íàéäåíû âàæíûå ÷àñòè ïğîãğàììû. Ïğîâåğüòå, ïîæàëóéñòà, óñòàíîâêó ïğèëîæåíèÿ.";
     TEXT[ polish ] = "Wa¿ne czêœci programu nie zosta³y znalezione.SprawdŸ instalacjê aplikacji.";
-    TEXT[ japanese ] = "ÌßÛ¸Ş×Ñ‚Ìd—v‚È•”•ª‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB²İ½Ä°Ù‚ğÁª¯¸‚µ‚Ä‰º‚³‚¢B";
+    TEXT[ japanese ] = "ÌßÛ¸Ş×Ñ‚Ì‘åØ‚È•”•ª‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB²İ½Ä°Ù‚ğÁª¯¸‚µ‚Ä‚­‚¾‚³‚¢B";
     TEXT[ chinese_traditional ] = "¨S¦³§ä¨ì¥²­nªºµ{¦¡³¡¥ó¡C½ĞÀË¬d±zªº¦w¸Ë¡C";
     TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÃÌÒÇÁ åÇãÉ ãä ÇáÈÑäÇãÌ. ÇáÑÌÇÁ ÇáÊÍŞŞ ãä ÕÍÉ ÚãáíÉ ÇáÊËÈíÊ ÚäÏß.";
     TEXT[ dutch ] = "Er ontbreken belangrijke programmaonderdelen. Controleer of de installatie juist is doorgevoerd.";
@@ -1670,7 +1670,7 @@ String STR_SYSRESEXCEPTION
     Text[ chinese_simplified ] = "ÏµÍ³×ÊÔ´ÒÑ¾­ÓÃÍê¡£ÇëÄúÖØĞÂÆô¶¯Ó¦ÓÃ³ÌĞò¡£";
     Text[ russian ] = "Ñèñòåìíûå ğåñóğñû èçğàñõîäîâàíû. Ïåğåçàïóñòèòå ïğèëîæåíèå.";
     Text[ polish ] = "Zasoby systemu s¹ zu¿yte. Rozpocznij aplikacjê ponownie.";
-    Text[ japanese ] = "¼½ÃÑØ¿°½‚ªŒÀŠE‚É’B‚µ‚Ü‚µ‚½B±ÌßØ¹°¼®İ‚ğV‚µ‚­½À°Ä‚µ‚Ä‰º‚³‚¢B";
+    Text[ japanese ] = "¼½ÃÑØ¿°½‚ªŒÀŠE‚É’B‚µ‚Ü‚µ‚½B±ÌßØ¹°¼®İ‚ğV‚µ‚­½À°Ä‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ chinese_traditional ] = "¨t²Î¸ê·½¤w¸g¥Î§¹¡C½Ğ±z­«·s±Ò°ÊÀ³¥Îµ{¦¡¡C";
     Text[ arabic ] = "Êã ÇÓÊåáÇß ßá ãÕÇÏÑ ÇáäÙÇã. ÇáÑÌÇÁ ÈÏÁ ÇáÊØÈíŞ ãä ÌÏíÏ.";
     Text[ dutch ] = "De systeemresources zijn verbruikt. Start de applicatie opnieuw.";
@@ -2625,7 +2625,7 @@ String STR_EXTHELPSTATUS
     Text[ chinese_simplified ] = "ÇëÄúÑ¡Ôñ»òÕß°´»÷Ò»¸öÃüÁî£¬Ñ¡ÔñÒ»¸öÖ÷Ìâ¡£";
     Text[ russian ] = "Âûáåğèòå êîìàíäó èëè íàæìèòå äëÿ âûáîğà òåìû.";
     Text[ polish ] = "Wybierz polecenie lub kliknij, by wybraæ temat.";
-    Text[ japanese ] = "¸Ø¯¸‚µ‚ÄºÏİÄŞ‚Ü‚½‚ÍÃ°Ï‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢B";
+    Text[ japanese ] = "¸Ø¯¸‚µ‚ÄºÏİÄŞ‚Ü‚½‚ÍÃ°Ï‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü©ÎªÌ«ö¤@­Ó«ü¥O¡M¿ï¾Ü¤@­Ó¥DÃD¡C";
     Text[ arabic ] = "ÇÎÊÑ ÃÍÏ ÇáÃæÇãÑ¡ Ãæ ÇäŞÑ¡ áÇÎÊíÇÑ ÃÍÏ ÇáãæÇÖíÚ.";
     Text[ dutch ] = "Kies een optie of klik om een onderwerp te kiezen.";
@@ -3319,7 +3319,7 @@ String STR_CORRUPT_INSTALLATION
     Text[ danish ] = "Det var ikke muligt at initialisere vigtige programdele korrekt.\nStart venligst installationsprogrammet (Setup) med alternativet / reparation.";
     Text[ polish ] = "Wa¿ne czêœci programu nie mog³y zostaæ prawid³owo zainstalowane.\nProszê uruchomiæ program instalacyjny u¿ywaj¹c opcji / repair";
     Text[ portuguese_brazilian ] = "Important program components could not be initialized correctly. Please start the setup program with the option /repair.";
-    Text[ japanese ] = "ÌßÛ¸Ş×Ñ‚Ìd—v‚È•”•ª‚ª³í‚É‰Šú‰»‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯Ìß‚ğµÌß¼®İ/C•œ‚ÅŠJn‚µ‚Ä‰º‚³‚¢B";
+    Text[ japanese ] = "ÌßÛ¸Ş×Ñ‚Ì‘åØ‚È•”•ª‚Í³í‚É‰Šú‰»‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯ÌßÌßÛ¸Ş×Ñ‚ğµÌß¼®İ‚ÌC•œ‚ÅŠJn‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ korean ] = "ÇÁ·Î±×·¥ÀÇ Áß¿ä ºÎºĞÀ» Á¦´ë·Î ÃÊ±âÈ­ÇÏÁö ¸øÇß½À´Ï´Ù. \n¿É¼Ç/¼ö¸®·Î SetupÀ» ½ÃÀÛÇÏ½Ê½Ã¿À.";
     Text[ chinese_simplified ] = "ÎŞ·¨ÕıÈ·³õÊ¼»¯ÖØÒªµÄ³Ì²¿¼ş¡£\nÇëÄúÆô¶¯°²×°³ÌĞò£¬Ö´ĞĞÑ¡ÏîĞŞ²¹¡£";
     Text[ chinese_traditional ] = "µLªk¥¿ÚÌªì©l¤Æ­«­nªºµ{¦¡³¡¥ó¡C½Ğ±z±Ò°Ê¦w¸Ëµ{¦¡¡A°õ¦æ­×Î`¿ï¶µ¡C";
@@ -3831,7 +3831,7 @@ String STR_KEY_PLUGINS_PATH
 {
     Text = "Plugins-Verzeichnis" ;
     Text [ English ] = "Plugins directory" ;
-    Text[ english_us ] = "Plug-Ins";
+    Text[ english_us ] = "Plug-ins";
     Text[ portuguese ] = "Directório de plug-ins";
     Text[ russian ] = "Êàòàëîã Plugins";
     Text[ dutch ] = "Plugins directory";
@@ -3904,7 +3904,7 @@ String STR_KEY_ADDINS_PATH
 {
     Text = "AddIns" ;
     Text [ English ] = "AddIns" ;
-    Text[ english_us ] = "Add-Ins";
+    Text[ english_us ] = "Add-ins";
     Text[ portuguese ] = "Add-Ins";
     Text[ greek ] = "AddIns";
     Text[ dutch ] = "AddIns";
