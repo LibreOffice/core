@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:48:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,9 @@ public:
     void SetResizeHTMLTable()   { bResizeHTMLTable = TRUE; } //dito
     void SetONECalcLowers()     { bONECalcLowers = TRUE;   }
 
-    // used for breaking table rows:
+    //
+    // Start: New stuff for breaking table rows
+    //
     BOOL HasFollowFlowLine() const { return bHasFollowFlowLine; }
     void SetFollowFlowLine( BOOL bNew ) { bHasFollowFlowLine = bNew; }
 
@@ -192,8 +194,16 @@ public:
     BOOL IsRemoveFollowFlowLinePending() const { return bRemoveFollowFlowLinePending; }
     void SetRemoveFollowFlowLinePending( BOOL bNew ) { bRemoveFollowFlowLinePending = bNew; }
 
+    bool SwTabFrm::RemoveFollowFlowLine();
+    //
+    // End: New stuff for breaking table rows
+    //
+
     BOOL CalcFlyOffsets( SwTwips& rUpper, long& rLeftOffset,
                          long& rRightOffset ) const;
+
+    bool SwTabFrm::IsInHeadline( const SwFrm& rFrm ) const;
+    SwRowFrm* GetFirstNonHeadlineRow() const;
 
     bool IsLayoutSplitAllowed() const;
 
