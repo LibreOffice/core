@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:17 $
+ *  last change: $Author: cmc $ $Date: 2002-11-08 17:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2227,7 +2227,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
 
     CloseAttrEnds();
     if (!bInHyperlink)
-        bJoined = JoinNode( pPaM );
+        bJoined = JoinNode(*pPaM);
     if( nType == MAN_MAINTEXT )
         UpdatePageDescs( nPageDescOffset ); // muss passieren, solange es den
                                             // PlcxMan noch gibt

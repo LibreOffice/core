@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-08 12:43:03 $
+ *  last change: $Author: cmc $ $Date: 2002-11-08 17:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,7 +934,7 @@ friend class WW8FormulaControl;
 
     const SfxPoolItem* GetFmtAttr( USHORT nWhich );
     BYTE HdFtCorrectPara( BYTE nPara );
-    bool JoinNode(SwPaM* pPam, bool bStealAttr = false);
+    bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
 
     bool IsBorder(const WW8_BRC* pbrc, bool bChkBtwn = false);
 

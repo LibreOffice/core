@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:20 $
+ *  last change: $Author: cmc $ $Date: 2002-11-08 17:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,14 +1167,8 @@ bool SwWW8ImplReader::MustCloseSection(long nTxtPos)
         When a section is created it is created with an empty para inside it.
         We should never want this para.
         */
-#if 1
         rDoc.DelFullPara(*pPaM);
-#else
-        // remove preceeding Node
-        // if a  0x0d  came immediately before
-        if( 0 == pPaM->GetPoint()->nContent.GetIndex() )
-            JoinNode( pPaM );
-#endif
+
         // set PaM behind section
         pPaM->GetPoint()->nNode = *pAfterSection;
         pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
@@ -3007,21 +3001,21 @@ bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
     return true;
 }
 
-bool SwWW8ImplReader::JoinNode(SwPaM* pPam, bool bStealAttr)
+bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 {
     bool bRet = false;
-    pPam->GetPoint()->nContent = 0;         // an den Anfang der Zeile gehen
+    rPam.GetPoint()->nContent = 0;          // an den Anfang der Zeile gehen
 
-    SwNodeIndex aPref( pPam->GetPoint()->nNode, -1 );
+    SwNodeIndex aPref(rPam.GetPoint()->nNode, -1);
 
     SwTxtNode* pNode = aPref.GetNode().GetTxtNode();
     if (pNode)
     {
-        pPaM->GetPoint()->nNode = aPref;
-        pPaM->GetPoint()->nContent.Assign( pNode, pNode->GetTxt().Len() );
+        rPam.GetPoint()->nNode = aPref;
+        rPam.GetPoint()->nContent.Assign(pNode, pNode->GetTxt().Len());
+        if (bStealAttr)
+            pCtrlStck->StealAttr(rPam.GetPoint());
 
-        if( bStealAttr )
-            pCtrlStck->StealAttr( pPam->GetPoint() );
         pNode->JoinNext();
 
         bRet = true;
@@ -3035,16 +3029,12 @@ void SwWW8ImplReader::StopApo()
     {
         // Grafik-Rahmen, der *nicht* eingefuegt wurde leeren Absatz incl.
         // Attributen entfernen
-        JoinNode(pPaM, true);
+        JoinNode(*pPaM, true);
 
     }
     else
     {
-        // Der Rahmen wurde nur eingefuegt, wenn er *nicht* nur zum
-        // Positionieren einer einzelnen Grafik dient.
-        JoinNode(pPaM, false);// UEberfluessigen Absatz entfernen
-
-        if( !pSFlyPara->pMainTextPos || !pWFlyPara )
+        if (!pSFlyPara->pMainTextPos || !pWFlyPara)
         {
             ASSERT( pSFlyPara->pMainTextPos, "StopApo: pMainTextPos ist 0" );
             ASSERT( pWFlyPara, "StopApo: pWFlyPara ist 0" );
@@ -3060,7 +3050,27 @@ void SwWW8ImplReader::StopApo()
         if (pItem)
             pSFlyPara->pFlyFmt->SetAttr(*pItem);
 
+        /*
+        #104920#
+        What we are doing with this temporary nodeindex is as follows: The
+        stack of attributes normally only places them into the document when
+        the current insertion point has passed them by. Otherwise the end
+        point of the attribute gets pushed along with the insertion point. The
+        insertion point is moved and the properties commited during
+        MoveOutsideFly. We also may want to remove the final paragraph in the
+        frame, but we need to wait until the properties for that frame text
+        have been commited otherwise they will be lost. So we first get a
+        handle to the last the filter inserted. After the attributes are
+        commited, if that paragraph exists we join it with the para after it
+        that comes with the frame by default so that as normal we don't end up
+        with one more paragraph than we wanted.
+        */
+        SwNodeIndex aPref(pPaM->GetPoint()->nNode, -1);
+
         MoveOutsideFly(pSFlyPara->pFlyFmt,*pSFlyPara->pMainTextPos);
+
+        if (SwTxtNode* pNode = aPref.GetNode().GetTxtNode())
+            pNode->JoinNext();
 
         DeleteAnchorStk();
         pAnchorStck = pSFlyPara->pOldAnchorStck;
