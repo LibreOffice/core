@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMultipleOperation.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:01:55 $
+ *  last change:$Date: 2003-12-11 11:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,6 @@
  ************************************************************************/
 package ifc.sheet;
 
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
-
 import com.sun.star.awt.Point;
 import com.sun.star.sheet.TableOperationMode;
 import com.sun.star.sheet.XCellAddressable;
@@ -74,29 +70,27 @@ import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.uno.UnoRuntime;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 
 public class _XMultipleOperation extends MultiMethodTest {
     public XMultipleOperation oObj = null;
     protected XSpreadsheet oSheet = null;
+    boolean both = true;
 
     protected void before() {
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
 
         if (oSheet == null) {
-            log.println("Object relation oSheet is missing");
-            log.println("Trying to query the needed Interface");
-            oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
-                             XSpreadsheet.class, tEnv.getTestObject());
+            throw new StatusException(Status.failed(
+                                              "Object relation oSheet is missing"));
+        }
 
-            if (oSheet == null) {
-                throw new StatusException(Status.failed(
-                                                  "Object relation oSheet is missing"));
-            } else {
-                log.println("We have a sheet and restrict the range to A1:D4");
-                oObj = (XMultipleOperation) UnoRuntime.queryInterface(
-                               XMultipleOperation.class,
-                               oSheet.getCellRangeByName("$A$1:$D$4"));
-            }
+        if (UnoRuntime.queryInterface(XSpreadsheet.class, tEnv.getTestObject()) != null) {
+            log.println("We have a sheet and won't do TableOperationMode.BOTH");
+            both = false;
         }
     }
 
@@ -150,17 +144,20 @@ public class _XMultipleOperation extends MultiMethodTest {
         cellValues = new double[] { 12, 24, 36 };
         res &= checkValues(cellCoords, cellValues);
 
-        log.println("filling cells");
-        fillCells();
-        log.println("setting TableOperation with parameter BOTH");
-        oObj.setTableOperation(CRA.getRangeAddress(), TableOperationMode.BOTH,
-                               CA.getCellAddress(), CA2.getCellAddress());
-        log.println("checking values");
-        cellCoords = new Point[] {
-            new Point(1, 1), new Point(2, 2), new Point(3, 3)
-        };
-        cellValues = new double[] { 17, 34, 51 };
-        res &= checkValues(cellCoords, cellValues);
+        if (both) {
+            log.println("filling cells");
+            fillCells();
+            log.println("setting TableOperation with parameter BOTH");
+            oObj.setTableOperation(CRA.getRangeAddress(),
+                                   TableOperationMode.BOTH,
+                                   CA.getCellAddress(), CA2.getCellAddress());
+            log.println("checking values");
+            cellCoords = new Point[] {
+                new Point(1, 1), new Point(2, 2), new Point(3, 3)
+            };
+            cellValues = new double[] { 17, 34, 51 };
+            res &= checkValues(cellCoords, cellValues);
+        }
 
         tRes.tested("setTableOperation()", res);
     }
