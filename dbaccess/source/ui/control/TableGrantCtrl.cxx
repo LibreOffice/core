@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:41:26 $
+ *  last change: $Author: fs $ $Date: 2002-09-10 14:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ DBG_NAME(OTableGrantControl);
 // OTableGrantControl
 //================================================================================
 OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
-    :EditBrowseBox( pParent,_RsId, EBBF_NOROWPICTURE)
+    :EditBrowseBox( pParent,_RsId, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE )
     ,m_pCheckCell( NULL )
     ,m_pEdit( NULL )
     ,m_nDeActivateEvent(0)

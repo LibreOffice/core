@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:41:26 $
+ *  last change: $Author: fs $ $Date: 2002-09-10 14:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ namespace dbaui
     DBG_NAME(ORelationControl)
     //------------------------------------------------------------------------
     ORelationControl::ORelationControl( OTableListBoxControl* pParent ,const OJoinTableView::OTableWindowMap* _pTableMap)
-        :EditBrowseBox( pParent, EBBF_NOROWPICTURE, WB_TABSTOP | WB_3DLOOK | WB_BORDER )
+        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_3DLOOK | WB_BORDER )
         ,m_pListCell( NULL )
         ,m_pConnData( NULL )
         ,m_xSourceDef( NULL )
