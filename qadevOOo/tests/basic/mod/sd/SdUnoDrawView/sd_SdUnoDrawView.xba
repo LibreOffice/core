@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_SdUnoDrawView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:42 $ 
+'*  last change:$Date: 2003-03-18 12:55:48 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -136,7 +136,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    oSecDoc.dispose()
+    utils.closeObject(oSecDoc)
 End Sub
 
 sub AddShape(oPage as Object, nPosX as Integer, nPosY as Integer)

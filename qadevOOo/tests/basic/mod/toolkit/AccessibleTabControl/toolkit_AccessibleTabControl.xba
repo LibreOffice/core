@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleTabControl.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:05:19 $ 
+'*  last change:$Date: 2003-03-18 13:11:03 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -122,7 +122,7 @@ Sub DisposeObj()
         accButton.doAccessibleAction(0)
         wait(1000)
     End If
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()

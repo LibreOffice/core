@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svtools_AccessibleIconChoiceCtrlEntry.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:02:27 $ 
+'*  last change:$Date: 2003-03-18 13:00:28 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -119,7 +119,7 @@ End Sub
 
 Sub DisposeObj()
     closeButton.soAccessibleAction(0)
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()

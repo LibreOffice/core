@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: frame_XComponentLoader.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:49:49 $ 
+'*  last change:$Date: 2003-03-18 13:19:57 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -97,40 +97,40 @@ On Error Goto ErrHndl
     Out.log("load a blank impress doc")
     doc = oObj.loadComponentFromURL("private:factory/simpress", frameName, 0, szArgs())
     bOK = Not isNull(doc)
-    Out.log("disposing impress doc")
-    doc.dispose()
+    Out.log("closing impress doc")
+    utils.closeObject(doc)
 
     Dim szEmptyArgs()
 
     Out.log("load a blank writer doc")
     doc = oObj.loadComponentFromURL("private:factory/swriter", frameName, 0, szEmptyArgs())
     bOK = bOK and Not isNull(doc)
-    Out.log("disposing writer doc")
-    doc.dispose()
+    Out.log("closing writer doc")
+    utils.closeObject(doc)
 
     Out.log("load a blank calc doc")
     doc = oObj.loadComponentFromURL("private:factory/scalc", frameName, 0, szEmptyArgs())
     bOK = bOK and Not isNull(doc)
-    Out.log("disposing calc doc")
-    doc.dispose()
+    Out.log("closing calc doc")
+    utils.closeObject(doc)
 
     Out.log("load a blank draw doc")
     doc = oObj.loadComponentFromURL("private:factory/sdraw", frameName, 0, szEmptyArgs())
     bOK = bOK and Not isNull(doc)
-    Out.log("disposing draw doc")
-    doc.dispose()
+    Out.log("closing draw doc")
+    utils.closeObject(doc)
 
     Out.log("load a blank math doc")
     oDoc = oObj.loadComponentFromURL("private:factory/smath", frameName, 0, szEmptyArgs())
     bOK = bOK and Not isNull(doc)
-    Out.log("disposing math doc")
-    doc.dispose()
+    Out.log("closing math doc")
+    utils.closeObject(doc)
 
-    Out.log("load a blank  chart doc")
-    oDoc = oObj.loadComponentFromURL("private:factory/schart", frameName, 0, szEmptyArgs())
+    Out.log("load a template blank chart doc")
+    oDoc = utils.loadTestDocument("emptyChart.sds", frameName)
     bOK = bOK and Not isNull(doc)
-    Out.log("disposing schart doc")
-    doc.dispose()
+    Out.log("closing schart doc")
+    utils.closeObject(doc)
 
     Test.MethodTested("loadComponentFromURL()", bOK)
 
