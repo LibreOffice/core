@@ -2,9 +2,6 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.32 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:55:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
