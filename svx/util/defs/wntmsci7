@@ -23965,3 +23965,10 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?implGetParagraphBoundary@AccessibleEditableTextPara@accessibility@@MAEXAAUBoundary@i18n@star@sun@com@@J@Z
 ?implGetSelection@AccessibleEditableTextPara@accessibility@@MAEXAAJ0@Z
 ?implGetText@AccessibleEditableTextPara@accessibility@@MAE?AVOUString@rtl@@XZ
+?SetupOutlinerFormatting@SdrTextObj@@QBEXAAVSdrOutliner@@AAVRectangle@@@Z
+??1?$Reference@VXCloneable@util@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXCloneable@util@star@sun@com@@@uno@star@sun@com@@CAPAVXCloneable@util@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_util_XCloneable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXCloneable@util@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??0ImpRecordPortion@@QAE@PAVDrawPortionInfo@@@Z
+??1ImpRecordPortion@@QAE@XZ
+?DrawFormText@XOutputDevice@@QAEJPAVDrawPortionInfo@@ABVPolygon@@JEE@Z
