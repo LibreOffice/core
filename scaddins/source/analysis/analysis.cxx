@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:28:06 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1327,7 +1327,7 @@ STRING SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const ANY& rSuf
             THROW_IAE;
     }
 
-    return Complex( fR,fI ).GetString( bi );
+    return Complex( fR, fI, bi ? 'i' : 'j' ).GetString();
 }
 
 
