@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:43:59 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,10 +224,10 @@ Menu MN_READONLY_POPUP
             Text[ english_us ] = "Reload Frame";
             Text[ chinese_simplified ] = "ΦΨΠΒΧ°ΤΨΏς¶ΤΟσ";
             Text[ russian ] = "Οεπεηΰγπσηθςό πΰμκσ";
-            Text[ polish ] = "Za³aduj ponownie ramkκ";
+            Text[ polish ] = "Za³aduj ponownie Frame";
             Text[ japanese ] = "ΜΪ°Ρ‚πV‚½‚Ι“Η‚έ‚ή";
             Text[ chinese_traditional ] = "­«·sΈΛΈό°T®Ψ";
-            Text[ arabic ] = "ΕΪΗΟΙ ΚΝγνα Ηαά Frame";
+            Text[ arabic ] = "ΕΪΗΟΙ ΚΝγνα ΗαΕΨΗΡ";
             Text[ dutch ] = "~Frame opnieuw laden";
             Text[ chinese_simplified ] = "ΦΨΠΒΧ°ΤΨΏς¶ΤΟσ";
             Text[ greek ] = "Επαναφόρτωση ~πλαισίου";
@@ -298,7 +298,7 @@ Menu MN_READONLY_POPUP
             HelpID = SID_BROWSE_BACKWARD ;
             Text = "~Rόckwδrts" ;
             Text [ English ] = "Bac~kward" ;
-            Text [ english_us ] = "Backward" ;
+            Text [ english_us ] = "Backwards" ;
             Text [ italian ] = "~Indietro" ;
             Text [ spanish ] = "~Retroceder" ;
             Text [ french ] = "~Prιcιdent" ;
@@ -840,7 +840,7 @@ String STR_CHAIN_OK
     Text[ polish ] = "Kliknij lewy przycisk myszy, by po³Ήczyζ ramki.";
     Text[ japanese ] = "g‚π‚Β‚Θ‚®‚½‚ί‚Ι¶‚ΜΟ³½Ξήΐέ‚πΈΨ―Έ‚µ‚Δ‰Ί‚³‚Ά";
     Text[ chinese_traditional ] = "½Π±z«φ¥H¤U·ΖΉ«ªΊ¥ªΑδ΅M³sµ²°T®Ψ΅C";
-    Text[ arabic ] = ".ΗδήΡ ΗαÒΡ ΗαΓνΣΡ ααγΗζΣ αΡΘΨ ΗαΓΨΡ";
+    Text[ arabic ] = ".ΗδήΡ ΘΗαÒΡ ΗαΓνΣΡ ααγΗζΣ αΡΘΨ ΗαίζΗΟΡ";
     Text[ dutch ] = "Gebruik de linker muistoets om het kader te koppelen.";
     Text[ chinese_simplified ] = "ΗλΔϊΝ¨Ήύ°΄»χΚσ±κΧσΌόΐ΄Α¬½ΣΏς΅£";
     Text[ greek ] = "Πατήστε το αριστερό πλήκτρο του ποντικιού για να συνδεθούν τα περιγράμματα.";
@@ -866,7 +866,7 @@ String STR_CHAIN_NOT_EMPTY
     Text[ polish ] = "Ramka docelowa nie jest pusta.";
     Text[ japanese ] = "–Ϊ•W‚Μg‚Ν‹σ‚Ε‚·";
     Text[ chinese_traditional ] = "¥ΨΌΠ¤θ¶τ¤£¬OªΕªΊ΅C";
-    Text[ arabic ] = ".ΗαΕΨΗΡ ΗαεΟέ ΫνΡ έΗΡΫ";
+    Text[ arabic ] = "ΗαίΗΟΡ ΗαεΟέ ΫνΡ έΗΡΫ.";
     Text[ dutch ] = "Het doelkader is niet leeg.";
     Text[ chinese_simplified ] = "ΔΏ±κΏς²»ΚΗΏΥµΔ΅£";
     Text[ greek ] = "Το πλαίσιο προορισμού δεν είναι κενό.";
@@ -892,7 +892,7 @@ String STR_CHAIN_IS_IN_CHAIN
     Text[ polish ] = "Ramka docelowa jest juΏ po³Ήczona.";
     Text[ japanese ] = "–Ϊ•W‚Μg‚Ν‚·‚Ε‚Ι‚Β‚Θ‚ª‚κ‚Δ‚Ά‚ά‚·";
     Text[ chinese_traditional ] = "¤wΈg³sµ²¥ΨΌΠ¤θ¶τ΅C";
-    Text[ arabic ] = ".ΗαΕΨΗΡ ΗαεΟέ γΡΚΘΨ ΘΗαέΪα";
+    Text[ arabic ] = "ΗαίΗΟΡ ΗαεΟέ γΡΚΘΨΗπ ΘΗαέΪα.";
     Text[ dutch ] = "Het doelkader is reeds gekoppeld.";
     Text[ chinese_simplified ] = "ÒΡΎ­Α΄½ΣΔΏ±κΏς΅£";
     Text[ greek ] = "Το πλαίσιο προορισμού είναι ήδη συνδεδεμένο.";
@@ -918,7 +918,7 @@ String STR_CHAIN_WRONG_AREA
     Text[ polish ] = "Ramka docelowa znajduje siκ w obszarze, w ktσrym niemoΏliwe jest po³Ήczenie.";
     Text[ japanese ] = "–Ϊ•W‚Μg‚Ν‚Β‚Θ‚®‚±‚Ζ‚Μ‚Ε‚«‚Θ‚Ά”ΝΝ‚Ι‚ ‚θ‚ά‚·";
     Text[ chinese_traditional ] = "¥ΨΌΠ°T®Ψ³B©σ¤@­ΣµLªk°T®ΨªΊ°Ο°μ΅C";
-    Text[ arabic ] = ".νΚζΗΜΟ ΗαΕΨΗΡ ΗαεΟέ έν γδΨήΙ αΗ νγίδ Ϊγα ΚΣαΣα ένεΗ";
+    Text[ arabic ] = "νΚζΗΜΟ ΗαίΗΟΡ ΗαεΟέ έν γδΨήΙ αΗ νγίδ Ϊγα ΚΣαΣα ένεΗ.";
     Text[ dutch ] = "Het bronkader staat in een bereik waarin geen koppeling mogelijk is.";
     Text[ chinese_simplified ] = "ΔΏ±κΏς΄¦ΣΪÒ»ΈφΞή·¨Α΄½ΣµΔΗψΣς΅£";
     Text[ greek ] = "Το πλαίσιο προορισμού βρίσκεται σε μια περιοχή στην οποία είναι αδύνατον να δημιουργηθεί μία σύνδεση.";
@@ -944,7 +944,7 @@ String STR_CHAIN_NOT_FOUND
     Text[ polish ] = "Przy aktualnej pozycji nie znaleziono ramki docelowej.";
     Text[ japanese ] = "»Κ’u‚Ι–Ϊ•W‚Μg‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρ";
     Text[ chinese_traditional ] = "¦b·ν«eªΊ¦μΈm¨S¦³§δ¨μ¥ΨΌΠ¤θ¶τ΅C";
-    Text[ arabic ] = ".αΗ νζΜΟ ΕΨΗΡ εΟέ έν ΗαγζήΪ ΗαΝΗαν";
+    Text[ arabic ] = ".αΗ νζΜΟ ίΗΟΡ εΟέ έν ΗαγζήΪ ΗαΝΗαν";
     Text[ dutch ] = "Op de actuele positie kan geen doelkader worden gevonden.";
     Text[ chinese_simplified ] = "ΤΪµ±Η°µΔΞ»ΦΓΓ»ΣΠΥÒµ½ΔΏ±κΏς΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να βρεθεί πλαίσιο προορισμού στην τρέχουσα θέση.";
@@ -970,7 +970,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text[ polish ] = "Ramka rσd³owa jest juΏ rσd³em po³Ήczenia.";
     Text[ japanese ] = "³‚Μg‚Ν‚·‚Ε‚Ι‚Β‚Θ‚¬‚Μ³‚Ε‚·";
     Text[ chinese_traditional ] = "³o­Σ¨Σ·½°T®Ψ¤wΈg¬O¤@­Σ³sµ²ªΊ·½°T®Ψ΅C";
-    Text[ arabic ] = ".ΕΨΗΡ ΗαγΥΟΡ εζ γΣΘήΗπ γΥΟΡ ΗαΚΣαΣα";
+    Text[ arabic ] = "ίΗΟΡ ΗαγΥΟΡ εζ γΣΘήΗπ γΥΟΡ ΗαΚΣαΣα.";
     Text[ dutch ] = "Het bronkader is reeds basis van een koppeling.";
     Text[ chinese_simplified ] = "ΥβΈφΐ΄Τ΄ΏςÒΡΎ­ΚΗÒ»ΈφΑ΄½ΣµΔΐ΄Τ΄Ώς΅£";
     Text[ greek ] = "Το πλαίσιο προέλευσης είναι ήδη η προέλευση μιας σύνδεσης.";
