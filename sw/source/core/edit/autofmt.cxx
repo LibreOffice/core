@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-21 12:27:49 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 17:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ class SwAutoFormat
     BOOL DeleteAktNxtPara( const String& rNxtPara );
     // loesche im Node Anfang oder/und Ende
     void DeleteAktPara( BOOL bStart = TRUE, BOOL nEnd = TRUE );
-    void DelEmptyLine();
+    void DelEmptyLine( BOOL bTstNextPara = TRUE );
         // loesche bei mehrzeiligen Absaetzen die "linken" und/oder
         // "rechten" Raender
     void DelMoreLinesBlanks( BOOL bWithLineBreaks = FALSE );
@@ -693,7 +693,7 @@ BOOL SwAutoFormat::DoUnderline()
     if( 2 < nCnt )
     {
         // dann unterstreiche mal den vorherigen Absatz, wenn es diesen gibt!
-        DelEmptyLine();
+        DelEmptyLine( FALSE );
         aDelPam.SetMark();
         aDelPam.GetMark()->nContent = 0;
 //JP 19.03.96: kein Underline sondern eine Umrandung setzen!
@@ -1314,7 +1314,7 @@ BOOL SwAutoFormat::DeleteAktNxtPara( const String& rNxtPara )
 }
 
 
-void SwAutoFormat::DelEmptyLine()
+void SwAutoFormat::DelEmptyLine( BOOL bTstNextPara )
 {
     SetRedlineTxt( STR_AUTOFMTREDL_DEL_EMPTY_PARA );
     // Loesche Blanks den leeren Absatz
@@ -1328,7 +1328,7 @@ void SwAutoFormat::DelEmptyLine()
     if( pTNd )
         // erstmal den vorherigen Textnode benutzen.
         aDelPam.GetMark()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
-    else
+    else if( bTstNextPara )
     {
         // dann versuche den naechsten (am Anfang vom Dok, Tabellen-Zellen,
         // Rahmen, ...
@@ -1339,6 +1339,12 @@ void SwAutoFormat::DelEmptyLine()
             aDelPam.GetMark()->nContent.Assign( pTNd, 0 );
             aDelPam.GetPoint()->nContent = 0;
         }
+    }
+    else
+    {
+        aDelPam.GetMark()->nNode = aNdIdx;
+        aDelPam.GetMark()->nContent = 0;
+        pTNd = pAktTxtNd;
     }
     if( pTNd )
         DeleteSel( aDelPam );
