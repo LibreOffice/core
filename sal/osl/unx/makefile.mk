@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 17:13:13 $
+#   last change: $Author: vg $ $Date: 2003-05-28 15:55:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,6 +136,11 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/process_impl.obj\
             $(OBJ)$/file_stat.obj
 #.ENDIF
+
+.IF "$(OS)$(CPU)"=="SOLARISS"
+SLOFILES += $(SLO)$/backtrace.obj
+OBJFILES += $(OBJ)$/backtrace.obj
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
