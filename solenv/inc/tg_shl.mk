@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-30 13:08:27 $
+#   last change: $Author: hjs $ $Date: 2001-10-31 13:10:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -234,7 +234,11 @@ SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
 
 $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL$(TNR)VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""

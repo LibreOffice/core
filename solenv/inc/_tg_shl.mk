@@ -134,7 +134,11 @@ SHL1VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL1VERSIONMAP)
 
 $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL1VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL1VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL1VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
@@ -547,7 +551,11 @@ SHL2VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL2VERSIONMAP)
 
 $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL2VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL2VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL2VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
@@ -960,7 +968,11 @@ SHL3VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL3VERSIONMAP)
 
 $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL3VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL3VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL3VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
@@ -1373,7 +1385,11 @@ SHL4VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL4VERSIONMAP)
 
 $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL4VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL4VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL4VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
@@ -1786,7 +1802,11 @@ SHL5VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL5VERSIONMAP)
 
 $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL5VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL5VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL5VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
@@ -2199,7 +2219,11 @@ SHL6VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL6VERSIONMAP)
 
 $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL6VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL6VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL6VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
@@ -2612,7 +2636,11 @@ SHL7VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL7VERSIONMAP)
 
 $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL7VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL7VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL7VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
@@ -3025,7 +3053,11 @@ SHL8VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL8VERSIONMAP)
 
 $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL8VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL8VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL8VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
@@ -3438,7 +3470,11 @@ SHL9VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL9VERSIONMAP)
 
 $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL9VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL9VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL9VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
@@ -3851,7 +3887,11 @@ SHL10VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL10VERSIONMAP)
 
 $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
     @+-$(RM) -f $@ >& $(NULLDEV)
-    @+tr -d "\015" < $(SHL10VERSIONMAP) > $@
+.IF "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL10VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELSE           # "$(COMID)"=="gcc3"
+    +tr -d "\015" < $(SHL10VERSIONMAP) | > $@
+.ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
