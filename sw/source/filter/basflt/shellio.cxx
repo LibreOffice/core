@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:20:00 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <hintids.hxx>
@@ -230,7 +228,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     // Pams sind ringfoermig verkettet. Aufhoeren, wenn man wieder beim
     // ersten ist.
     SwPaM *pEnd = pPam;
-    SwUndoInsDoc* pUndo = 0L;
+    SwUndoInsDoc* pUndo = 0;
 
     BOOL bReadPageDescs = FALSE;
     BOOL bDocUndo = pDoc->DoesUndo();
@@ -266,7 +264,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         if( bSaveUndo )
             pUndo = new SwUndoInsDoc( *pPam );
 
-        SwPaM* pUndoPam = 0L;
+        SwPaM* pUndoPam = 0;
         if( bDocUndo || pCrsr )
         {
             // Pam auf den Node davor setzen damit er nicht mit verschoben wird
@@ -511,77 +509,49 @@ ULONG SwReader::Read( const Reader& rOptions )
 // Initiales Einlesben
 
 
-SwReader::SwReader( SvStream& rStrm, const String& rFileName, SwDoc *pDoc )
-    : SwDocFac( pDoc ),
-    pStrm( &rStrm ),
-    pStg( 0 ),
-    pMedium( 0 ),
-    aFileName( rFileName ),
-    pCrsr( 0 )
+SwReader::SwReader(SvStream& rStrm, const String& rFileName, SwDoc *pDoc)
+    : SwDocFac(pDoc), pStrm(&rStrm), pStg(0), pMedium(0), pCrsr(0),
+    aFileName(rFileName)
+{
+}
+
+SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwDoc *pDoc)
+    : SwDocFac(pDoc), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(0),
+    aFileName(rFileName)
 {
 }
 
 
-SwReader::SwReader( SvStorage& rStg, const String& rFileName, SwDoc *pDoc )
-    : SwDocFac( pDoc ),
-    pStrm( 0 ),
-    pStg( &rStg ),
-    pMedium( 0 ),
-    aFileName( rFileName ),
-    pCrsr( 0 )
-{
-}
-
-
-SwReader::SwReader( SfxMedium& rMedium, const String& rFileName, SwDoc *pDoc )
-    : SwDocFac( pDoc ),
-    pStrm( 0 ),
-    pStg( 0 ),
-    pMedium( &rMedium ),
-    aFileName( rFileName ),
-    pCrsr( 0 )
+SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDoc)
+    : SwDocFac(pDoc), pStrm(0), pStg(0), pMedium(&rMedium), pCrsr(0),
+    aFileName(rFileName)
 {
 }
 
 // In ein existierendes Dokument einlesen
 
-SwReader::SwReader( SvStream& rStrm, const String& rFileName, SwPaM& rPam )
-    : SwDocFac( rPam.GetDoc() ),
-    aFileName( rFileName ),
-    pStrm( &rStrm ),
-    pStg( 0 ),
-    pMedium( 0 ),
-    pCrsr( &rPam  )
+SwReader::SwReader(SvStream& rStrm, const String& rFileName, SwPaM& rPam)
+    : SwDocFac(rPam.GetDoc()), pStrm(&rStrm), pStg(0), pMedium(0), pCrsr(&rPam),
+    aFileName(rFileName)
 {
 }
 
-SwReader::SwReader( SvStorage& rStg, const String& rFileName, SwPaM& rPam )
-    : SwDocFac( rPam.GetDoc() ),
-    aFileName( rFileName ),
-    pStg( &rStg ),
-    pStrm( 0 ),
-    pMedium( 0 ),
-    pCrsr( &rPam )
+SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwPaM& rPam)
+    : SwDocFac(rPam.GetDoc()), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(&rPam),
+    aFileName(rFileName)
 {
 }
 
-
-SwReader::SwReader( SfxMedium& rMedium, const String& rFileName, SwPaM& rPam )
-    : SwDocFac( rPam.GetDoc() ),
-    aFileName( rFileName ),
-    pStg( 0 ),
-    pStrm( 0 ),
-    pMedium( &rMedium ),
-    pCrsr( &rPam )
+SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
+    : SwDocFac(rPam.GetDoc()), pStrm(0), pStg(0), pMedium(&rMedium),
+    pCrsr(&rPam), aFileName(rFileName)
 {
 }
-
 
 Reader::Reader()
-    : pStrm(0), pStg(0), pMedium(0), pTemplate(0),
-    bTmplBrowseMode( FALSE ), bInsertMode( FALSE ),
-    bReadUTF8( FALSE ), bBlockMode( FALSE ), bOrganizerMode( FALSE ),
-    bHasAskTemplateName( FALSE ), bIgnoreHTMLComments( FALSE )
+    : pTemplate(0), pStrm(0), pStg(0), pMedium(0), bInsertMode(0),
+    bTmplBrowseMode(0), bReadUTF8(0), bBlockMode(0), bOrganizerMode(0),
+    bHasAskTemplateName(0), bIgnoreHTMLComments(0)
 {
 }
 
@@ -830,14 +800,23 @@ void Reader::ResetFrmFmtAttrs( SfxItemSet &rFrmSet )
 
 void Reader::ResetFrmFmts( SwDoc& rDoc )
 {
-    for( USHORT i=0; i<3; i++ )
+    for (USHORT i=0; i<3; ++i)
     {
         USHORT nPoolId;
-        switch( i )
+        switch (i)
         {
-        case 0: nPoolId = RES_POOLFRM_FRAME;    break;
-        case 1: nPoolId = RES_POOLFRM_GRAPHIC;  break;
-        case 2: nPoolId = RES_POOLFRM_OLE;      break;
+            default:
+                ASSERT(i == 0, "Impossible");
+                //fallthrough
+            case 0:
+                nPoolId = RES_POOLFRM_FRAME;
+                break;
+            case 1:
+                nPoolId = RES_POOLFRM_GRAPHIC;
+                break;
+            case 2:
+                nPoolId = RES_POOLFRM_OLE;
+                break;
         }
 
         SwFrmFmt *pFrmFmt = rDoc.GetFrmFmtFromPool( nPoolId );
@@ -915,125 +894,48 @@ int StgReader::GetReaderType()
  * Konstruktoren, Destruktoren sind inline (inc/shellio.hxx).
  */
 
-
-SwWriter::SwWriter( SvStream& rStrm, SwCrsrShell &rShell, BOOL bWriteAll )
-    : pStrm( &rStrm ),
-    pStg( 0 ),
-    pMedium( 0 ),
-    pShell( &rShell ),
-    pOutPam( 0 ),
-    rDoc( *rShell.GetDoc() ),
-    bWriteAll( bWriteAll )
+SwWriter::SwWriter(SvStream& rStrm, SwCrsrShell &rShell, BOOL bInWriteAll)
+    : pStrm(&rStrm), pStg(0), pMedium(0), pOutPam(0), pShell(&rShell),
+    rDoc(*rShell.GetDoc()), bWriteAll(bInWriteAll)
 {
 }
-
 
 SwWriter::SwWriter(SvStream& rStrm,SwDoc &rDoc)
-    :pStrm( &rStrm ),
-    pStg( 0 ),
-    pMedium( 0 ),
-    pShell( 0 ),
-    pOutPam( 0 ),
-    rDoc( rDoc ),
-    bWriteAll( TRUE )
+    : pStrm(&rStrm), pStg(0), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc),
+    bWriteAll(true)
 {
 }
 
-
-SwWriter::SwWriter( SvStream& rStrm, SwPaM& rPam, BOOL bWriteAll )
-    : pStrm( &rStrm ),
-    pStg( 0 ),
-    pMedium( 0 ),
-    pShell( 0 ),
-    pOutPam( &rPam ),
-    rDoc( *rPam.GetDoc() ),
-    bWriteAll( bWriteAll )
+SwWriter::SwWriter(SvStream& rStrm, SwPaM& rPam, BOOL bInWriteAll)
+    : pStrm(&rStrm), pStg(0), pMedium(0), pOutPam(&rPam), pShell(0),
+    rDoc(*rPam.GetDoc()), bWriteAll(bInWriteAll)
 {
 }
-
-/*
-
-SwWriter::SwWriter( SvStorage& rStg, SwCrsrShell &rShell, BOOL bWriteAll )
-    : pStrm( 0 ),
-    pStg( &rStg ),
-    pMedium( 0 ),
-    pShell( &rShell ),
-    pOutPam( 0 ),
-    rDoc( *rShell.GetDoc() ),
-    bWriteAll( bWriteAll )
-{
-}
-*/
-
 
 SwWriter::SwWriter(SvStorage& rStg,SwDoc &rDoc)
-    :pStrm( 0 ),
-    pStg( &rStg ),
-    pMedium( 0 ),
-    pShell( 0 ),
-    pOutPam( 0 ),
-    rDoc( rDoc ),
-    bWriteAll( TRUE )
-{
-}
-/*
-
-SwWriter::SwWriter( SvStorage& rStg, SwPaM& rPam, BOOL bWriteAll )
-    : pStrm( 0 ),
-    pStg( &rStg ),
-    pMedium( 0 ),
-    pShell( 0 ),
-    pOutPam( &rPam ),
-    rDoc( *rPam.GetDoc() ),
-    bWriteAll( bWriteAll )
-{
-}
-*/
-
-SwWriter::SwWriter( SfxMedium& rMedium, SwCrsrShell &rShell, BOOL bWriteAll )
-    : pStrm( 0 ),
-    pStg( 0 ),
-    pMedium( &rMedium ),
-    pShell( &rShell ),
-    pOutPam( 0 ),
-    rDoc( *rShell.GetDoc() ),
-    bWriteAll( bWriteAll )
+    : pStrm(0), pStg(&rStg), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc),
+    bWriteAll(true)
 {
 }
 
-
-SwWriter::SwWriter( SfxMedium& rMedium, SwDoc &rDoc)
-    :pStrm( 0 ),
-    pStg( 0 ),
-    pMedium( &rMedium ),
-    pShell( 0 ),
-    pOutPam( 0 ),
-    rDoc( rDoc ),
-    bWriteAll( TRUE )
+SwWriter::SwWriter(SfxMedium& rMedium, SwCrsrShell &rShell, BOOL bInWriteAll)
+    : pStrm(0), pStg(0), pMedium(&rMedium), pOutPam(0), pShell(&rShell),
+    rDoc(*rShell.GetDoc()), bWriteAll(bInWriteAll)
 {
 }
 
-/*
-
-SwWriter::SwWriter( SfxMedium& rMedium, SwPaM& rPam, BOOL bWriteAll )
-    : pStrm( 0 ),
-    pStg( 0 ),
-    pShell( 0 ),
-    pMedium( &rMedium ),
-    pOutPam( &rPam ),
-    rDoc( *rPam.GetDoc() ),
-    bWriteAll( bWriteAll )
+SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDoc)
+    : pStrm(0), pStg(0), pMedium(&rMedium), pOutPam(0), pShell(0), rDoc(rDoc),
+    bWriteAll(true)
 {
 }
-*/
-
 
 ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 {
     BOOL bHasMark = FALSE;
     SwPaM * pPam;
 
-    SwDoc *pDoc = 0L;
+    SwDoc *pDoc = 0;
     SvEmbeddedObjectRef* pRefForDocSh = 0;
 
     if ( pShell && !bWriteAll && pShell->IsTableMode() )
