@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:21 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #define MID_FRMSIZE_FIX_HEIGHT                  9
 #define MID_FRMSIZE_COL_WIDTH                   10
 #define MID_FRMSIZE_REL_COL_WIDTH               11
+/* UNO */
+#define MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT     12
+#define MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH     13
 
 #define MID_COLUMNS                             0
 #define MID_COLUMN_SEPARATOR_LINE               1

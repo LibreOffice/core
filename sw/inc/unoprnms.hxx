@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:11:27 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,8 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_INDEX_MARK_BACKGROUND     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_FOOTNOTE_BACKGROUND       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SIZE_RELATIVE                  ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SIZE_PROTECTED                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SMOOTH_SCROLLING               ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SOLID_MARK_HANDLES             ;
