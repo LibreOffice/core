@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:20:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
+#endif
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -87,11 +90,12 @@
 #endif
 
 #include <rtl/logfile.hxx>
-#include "itemholder1.hxx"
+#include "itemholder2.hxx"
 
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+using namespace com::sun::star;
 
 static SvtHelpOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;
@@ -122,10 +126,13 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
     MapString2Int   aURLIgnoreCounters;
     ::osl::Mutex    aIgnoreCounterSafety;
 
+    Sequence< OUString > GetPropertyNames();
+
 public:
                     SvtHelpOptions_Impl();
 
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    void            Load( const ::com::sun::star::uno::Sequence< ::rtl::OUString>& aPropertyNames);
     virtual void    Commit();
 
     void            SetExtendedHelp( sal_Bool b )           { bExtendedHelp= b; SetModified(); }
@@ -156,6 +163,8 @@ public:
     const String&   GetHelpStyleSheet()const{return sHelpStyleSheet;}
     void            SetHelpStyleSheet(const String& rStyleSheet){sHelpStyleSheet = rStyleSheet; SetModified();}
 
+    static ::osl::Mutex & getInitMutex();
+
 protected:
     void    implLoadURLCounters();
     void    implSaveURLCounters();
@@ -163,7 +172,7 @@ protected:
     void    implGetURLCounters( Sequence< ::rtl::OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounter );
 };
 
-static Sequence< OUString > GetPropertyNames()
+Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
@@ -187,7 +196,7 @@ static Sequence< OUString > GetPropertyNames()
     return aNames;
 }
 
-static ::osl::Mutex & getInitMutex()
+::osl::Mutex & SvtHelpOptions_Impl::getInitMutex()
 {
     static ::osl::Mutex *pMutex = 0;
 
@@ -215,13 +224,32 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     , bWelcomeScreen( sal_False )
 {
     Sequence< OUString > aNames = GetPropertyNames();
-    Sequence< Any > aValues = GetProperties( aNames );
+    Load( aNames );
     EnableNotification( aNames );
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
+    implLoadURLCounters();
+}
+
+// -----------------------------------------------------------------------
+static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
+                const uno::Sequence< ::rtl::OUString>& aInternalPropertyNames)
+{
+    for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
     {
-        for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
+        if( aInternalPropertyNames[nProp] == rCompare )
+            return nProp;
+    }
+    return -1;
+}
+
+void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rPropertyNames)
+{
+    const uno::Sequence< ::rtl::OUString> aInternalPropertyNames( GetPropertyNames());
+    Sequence< Any > aValues = GetProperties( rPropertyNames );
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT( aValues.getLength() == rPropertyNames.getLength(), "GetProperties failed" );
+    if ( aValues.getLength() == rPropertyNames.getLength() )
+    {
+        for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
         {
             DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
@@ -231,7 +259,7 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
                 sal_Int32 nTmpInt;
                 if ( pValues[nProp] >>= bTmp )
                 {
-                    switch ( nProp )
+                    switch ( lcl_MapPropertyName(rPropertyNames[nProp], aInternalPropertyNames) )
                     {
                         case EXTENDEDHELP :
                             bExtendedHelp = bTmp;
@@ -287,9 +315,11 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
                     DBG_ERRORFILE( "Wrong Type!" );
             }
         }
+        if ( IsHelpTips() != Help::IsQuickHelpEnabled() )
+            IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
+        if ( IsExtendedHelp() != Help::IsBalloonHelpEnabled() )
+            IsExtendedHelp() ? Help::EnableBalloonHelp() : Help::DisableBalloonHelp();
     }
-
-    implLoadURLCounters();
 }
 
 // -----------------------------------------------------------------------
@@ -561,20 +591,20 @@ void SvtHelpOptions_Impl::Commit()
 
 void SvtHelpOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
 {
-    DBG_ERRORFILE( "properties have been changed" );
+    Load( aPropertyNames );
 }
 
 SvtHelpOptions::SvtHelpOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( getInitMutex() );
+    ::osl::MutexGuard aGuard( SvtHelpOptions_Impl::getInitMutex() );
     ++nRefCount;
     if ( !pOptions )
     {
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtHelpOptions_Impl::ctor()");
         pOptions = new SvtHelpOptions_Impl;
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        ItemHolder2* pHolder = ItemHolder2::getGlobalItemHolder();
         pHolder->holdConfigItem(E_HELPOPTIONS);
     }
     pImp = pOptions;
@@ -639,7 +669,7 @@ void SvtHelpOptions_Impl::resetAgentIgnoreURLCounter()
 SvtHelpOptions::~SvtHelpOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( getInitMutex() );
+    ::osl::MutexGuard aGuard( SvtHelpOptions_Impl::getInitMutex() );
     if ( !--nRefCount )
     {
         if ( pOptions->IsModified() )
