@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 08:24:01 $
+ *  last change: $Author: th $ $Date: 2001-07-25 11:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _SV_SOUND_HXX
 #include <sound.hxx>
 #endif
-#ifndef _SV_TIMER_HXX
-#include <timer.hxx>
-#endif
 #ifndef _SV_DECOVIEW_HXX
 #include <decoview.hxx>
 #endif
@@ -118,7 +115,6 @@ static long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
 
 void ScrollBar::ImplInit( Window* pParent, WinBits nStyle )
 {
-    mpDDScrollTimer     = NULL;
     mnThumbPixRange     = 0;
     mnThumbPixPos       = 0;
     mnThumbPixSize      = 0;
@@ -135,7 +131,6 @@ void ScrollBar::ImplInit( Window* pParent, WinBits nStyle )
     meDDScrollType      = SCROLL_DONTKNOW;
     mbCalcSize          = TRUE;
     mbFullDrag          = 0;
-    mbDDScroll          = FALSE;
 
     ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
@@ -181,11 +176,6 @@ ScrollBar::ScrollBar( Window* pParent, const ResId& rResId ) :
 
 ScrollBar::~ScrollBar()
 {
-    if ( mpDDScrollTimer )
-    {
-        delete mpDDScrollTimer;
-        mpDDScrollTimer = NULL;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -707,15 +697,6 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScrollBar, ImplTimerHdl, Timer*, pTimer )
-{
-    pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
-    DoScroll( meDDScrollType );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
@@ -941,19 +922,6 @@ void ScrollBar::Resize()
     Invalidate();
 }
 
-#ifndef TF_SVDATA
-
-// -----------------------------------------------------------------------
-
-BOOL ScrollBar::QueryDrop( DropEvent& rDEvt )
-{
-    if ( mbDDScroll )
-        DDScroll( rDEvt );
-    return Control::QueryDrop( rDEvt );
-}
-
-#endif
-
 // -----------------------------------------------------------------------
 
 void ScrollBar::StateChanged( StateChangedType nType )
@@ -1048,61 +1016,6 @@ long ScrollBar::DoScrollAction( ScrollType eScrollType )
     meScrollType = SCROLL_DONTKNOW;
     return nDelta;
 }
-
-// -----------------------------------------------------------------------
-
-#ifndef TF_SVDATA
-
-void ScrollBar::DDScroll( const DropEvent& rDEvt )
-{
-    if ( rDEvt.IsLeaveWindow() )
-        meDDScrollType = SCROLL_DONTKNOW;
-    else
-    {
-        const Point& rMousePos = rDEvt.GetPosPixel();
-        if ( maBtn1Rect.IsInside( rMousePos ) )
-        {
-            if ( !(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
-                meDDScrollType = SCROLL_LINEUP;
-        }
-        else if ( maBtn2Rect.IsInside( rMousePos ) )
-        {
-            if ( !(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
-                meDDScrollType = SCROLL_LINEDOWN;
-        }
-        else if ( maThumbRect.IsInside( rMousePos ) )
-            meDDScrollType = SCROLL_DONTKNOW;
-        else
-        {
-            if ( maPage1Rect.IsInside( rMousePos ) )
-                meDDScrollType = SCROLL_PAGEUP;
-            else
-                meDDScrollType = SCROLL_PAGEDOWN;
-        }
-    }
-
-    if ( meDDScrollType == SCROLL_DONTKNOW )
-    {
-        if ( mpDDScrollTimer )
-        {
-            delete mpDDScrollTimer;
-            mpDDScrollTimer = NULL;
-            meDDScrollType = SCROLL_DONTKNOW;
-        }
-    }
-    else
-    {
-        if ( !mpDDScrollTimer )
-        {
-            mpDDScrollTimer = new Timer;
-            mpDDScrollTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
-            mpDDScrollTimer->SetTimeoutHdl( LINK( this, ScrollBar, ImplTimerHdl ) );
-            mpDDScrollTimer->Start();
-        }
-    }
-}
-
-#endif
 
 // -----------------------------------------------------------------------
 
