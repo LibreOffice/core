@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:04:48 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ class ODocumentDefinition
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject>         m_xEmbeddedObject;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >   m_xListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XComponentLoader >       m_xFrameLoader;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xLastKnownConnection;
+
     OInterceptor*                                                                       m_pInterceptor;
     sal_Bool                                                                            m_bForm; // <TRUE/> if it is a form
     sal_Bool                                                                            m_bOpenInDesign;
