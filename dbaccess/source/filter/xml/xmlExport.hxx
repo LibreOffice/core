@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:21:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ class ODBExport : public SvXMLExport
         ::rtl::OUString sDecimal;
         ::rtl::OUString sThousand;
     } TDelimiter;
-    typedef ::std::map< XPropertySet* ,::rtl::OUString > TPropertyStyleMap;
+    typedef ::std::map< Reference<XPropertySet> ,::rtl::OUString > TPropertyStyleMap;
 
     ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
     ::std::auto_ptr< TDelimiter >                   m_aDelimiter;

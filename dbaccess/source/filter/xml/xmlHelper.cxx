@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:21:40 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,16 @@
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include <xmloff/xmlement.hxx>
 #endif
+#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
+#include <com/sun/star/awt/TextAlign.hpp>
+#endif
 
 namespace dbaxml
 {
     using namespace ::xmloff::token;
     using namespace ::com::sun::star::awt;
 
-    OPropertyHandlerFactory::OPropertyHandlerFactory()
+OPropertyHandlerFactory::OPropertyHandlerFactory()
 {
 }
 // -----------------------------------------------------------------------------
@@ -171,10 +174,10 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapp
 {
     static const XMLPropertyMapEntry s_aColumnStylesProperties[] =
     {
-        MAP_CONST( PROPERTY_WIDTH,          XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,       XML_TYPE_MEASURE, 0),
-        MAP_CONST( PROPERTY_HIDDEN,         XML_NAMESPACE_TABLE,    XML_DISPLAY,            XML_DB_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_DB_ISVISIBLE ),
-        MAP_CONST( PROPERTY_ALIGN,          XML_NAMESPACE_STYLE,    XML_TEXT_ALIGN,         XML_TYPE_TEXT_ALIGN, 0 ),
-        MAP_CONST( PROPERTY_NUMBERFORMAT,   XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,    XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM, CTF_DB_NUMBERFORMAT),
+        MAP_CONST( PROPERTY_WIDTH,          XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,       XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0),
+        MAP_CONST( PROPERTY_HIDDEN,         XML_NAMESPACE_TABLE,    XML_DISPLAY,            XML_TYPE_PROP_TABLE_COLUMN|XML_DB_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_DB_ISVISIBLE ),
+        MAP_CONST( PROPERTY_ALIGN,          XML_NAMESPACE_STYLE,    XML_TEXT_ALIGN,         XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_TEXT_ALIGN, 0 ),
+        MAP_CONST( PROPERTY_NUMBERFORMAT,   XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,    XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM, CTF_DB_NUMBERFORMAT),
         MAP_END()
     };
     UniReference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();

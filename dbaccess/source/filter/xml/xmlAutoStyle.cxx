@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlAutoStyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:18:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <xmloff/families.hxx>
 #endif
 
-
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
@@ -89,11 +88,11 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if ( nFamily == XML_STYLE_FAMILY_TABLE_COLUMN )
     {
+        UniReference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
         ::std::vector< XMLPropertyState >::const_iterator aEnd = rProperties.end();
         for (i; i != aEnd ; ++i)
         {
-            UniReference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
             sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
             switch (nContextID)
             {
@@ -111,8 +110,8 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
                                 sAttrValue );
                         }
                     }
+                    break;
                 }
-                break;
             }
         }
     }
