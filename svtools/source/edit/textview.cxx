@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:49:57 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,15 +1144,21 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
             SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
-                uno::Any aData = xDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aText;
-                aData >>= aText;
+                try
+                {
+                    uno::Any aData = xDataObj->getTransferData( aFlavor );
+                    ::rtl::OUString aText;
+                    aData >>= aText;
 
-                String aStr( aText );
-                aStr.ConvertLineEnd( LINEEND_LF );
+                    String aStr( aText );
+                    aStr.ConvertLineEnd( LINEEND_LF );
 
-                if ( !mpTextEngine->GetMaxTextLen() || ImplCheckTextLen( aStr ) )
-                    InsertText( aText, FALSE );
+                    if ( !mpTextEngine->GetMaxTextLen() || ImplCheckTextLen( aStr ) )
+                        InsertText( aText, FALSE );
+                }
+                catch( const ::com::sun::star::datatransfer::UnsupportedFlavorException& )
+                {
+                }
             }
         }
     }
