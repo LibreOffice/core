@@ -37,6 +37,7 @@ common
 		common_build
 		COMMON_OUTDIR
 		COPYALL
+        COPY_PACKED
 		CPPRTST
 		CVSROOT
         CWS_WORK_STAMP
