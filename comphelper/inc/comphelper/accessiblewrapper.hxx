@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-25 10:53:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-25 12:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ namespace comphelper
         // add as event listener to the inner context, because we want to be notified of disposals
         osl_incrementInterlockedCount( &m_refCount );
         {
-            Reference< XComponent > xComp( m_xInner, UNO_QUERY );
+            ::com::sun::star::uno::Reference< XComponent > xComp( m_xInner, UNO_QUERY );
             if ( xComp.is() )
                 xComp->addEventListener( this );
         }
