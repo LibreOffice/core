@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 11:37:56 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ class ScNamePasteDlg;
 class ScPivotFilterDlg;
 class ScDPFunctionDlg;
 class ScDPSubtotalDlg;
+class ScDPShowDetailDlg;
 class ScNewScenarioDlg;
 class ScShowTabDlg;
 class ScStringInputDlg;
@@ -293,6 +294,12 @@ class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg  //add for S
     virtual void FillLabelData( ScDPLabelData& rLabelData ) const;
 };
 
+class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
+{
+    DECL_ABSTDLG_BASE( AbstractScDPShowDetailDlg_Impl, ScDPShowDetailDlg);
+    virtual String GetDimensionName() const;
+};
+
 class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg  //add for ScNewScenarioDlg
 {
     DECL_ABSTDLG_BASE( AbstractScNewScenarioDlg_Impl, ScNewScenarioDlg );
@@ -447,6 +454,10 @@ public:
                                                                 const ScDPFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout );
+
+    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( Window* pParent, const ResId& rResId,
+                                                                ScDPObject& rDPObj,
+                                                                USHORT nOrient );
 
     virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const String& rName, //add for ScNewScenarioDlg
                                                                 const ResId& rResId,
