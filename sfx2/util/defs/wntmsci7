@@ -8392,3 +8392,12 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?deallocate@?$_STLP_alloc_proxy@PAU?$_List_node@U_tagFilterClass@sfx2@@@_STL@@U12@V?$allocator@U_tagFilterClass@sfx2@@@2@@_STL@@QAEXPAU?$_List_node@U_tagFilterClass@sfx2@@@2@I@Z
 ?deallocate@?$_STLP_alloc_proxy@PAU?$_List_node@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@_STL@@U12@V?$allocator@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@@_STL@@QAEXPAU?$_List_node@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@I@Z
 ?deallocate@?$_STLP_alloc_proxy@PAU?$_Rb_tree_node@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@U_tagFilterClass@sfx2@@U?$_Nonconst_traits@U_tagFilterClass@sfx2@@@_STL@@@_STL@@@_STL@@@_STL@@U12@V?$allocator@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@U_tagFilterClass@sfx2@@U?$_Nonconst_traits@U_tagFilterClass@sfx2@@@_STL@@@_STL@@@_STL@@@2@@_STL@@QAEXPAU?$_Rb_tree_node@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@U_tagFilterClass@sfx2@@U?$_Nonconst_traits@U_tagFilterClass@sfx2@@@_STL@@@_STL@@@_STL@@@2@I@Z
+?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx2353715987@@YAXABVSbxVariableRef@@PAX@Z
+??0SfxPopupWindow@@QAE@G_JAAVSfxBindings@@@Z
+??0SfxFloatingWindow@@IAE@PAVSfxBindings@@PAVSfxChildWindow@@PAVWindow@@_J@Z
+??0SfxModalDialog@@IAE@PAVSfxViewFrame@@PAVWindow@@G_J@Z
+??0SfxModalDialog@@IAE@PAVWindow@@G_J@Z
+??0SfxModelessDialog@@IAE@PAVSfxBindings@@PAVSfxChildWindow@@PAVWindow@@_J@Z
+??0SfxDockingWindow@@QAE@PAVSfxBindings@@PAVSfxChildWindow@@PAVWindow@@_J@Z
+??0SfxNavigator@@QAE@PAVSfxBindings@@PAVSfxChildWindow@@PAVWindow@@_J@Z
+??0SfxTabPage@@IAE@PAVWindow@@_JABVSfxItemSet@@@Z
