@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-27 16:14:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,11 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
 
-namespace DOM 
+namespace DOM
 {
     class CNode;
     typedef std::map< const xmlNodePtr, CNode* > nodemap_t;
-    
+
 
     class CNode : public cppu::WeakImplHelper3< XNode, XUnoTunnel, XEventTarget >
     {
@@ -105,8 +105,8 @@ namespace DOM
         friend class CElementList;
         friend class CEntitiesMap;
         friend class CNotationsMap;
-    private:        
-        static nodemap_t theNodeMap;        
+    private:
+        static nodemap_t theNodeMap;
 
     protected:
         NodeType m_aNodeType;
@@ -116,12 +116,12 @@ namespace DOM
 
         // for initialization by classes derived through ImplInheritanceHelper
         CNode();
-        void init_node(const xmlNodePtr aNode);        
+        void init_node(const xmlNodePtr aNode);
 
     public:
 
         virtual ~CNode();
-        
+
         // get a representaion for a libxml node
         static CNode* get(const xmlNodePtr aNode, sal_Bool bCreate = sal_True);
         // remove a wrapper instance
@@ -138,14 +138,14 @@ namespace DOM
             throw (DOMException);
 
         /**
-        Returns a duplicate of this node, i.e., serves as a generic copy 
+        Returns a duplicate of this node, i.e., serves as a generic copy
         constructor for nodes.
         */
         virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
             throw (RuntimeException);
 
         /**
-        A NamedNodeMap containing the attributes of this node (if it is an Element) 
+        A NamedNodeMap containing the attributes of this node (if it is an Element)
         or null otherwise.
         */
         virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
@@ -170,7 +170,7 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Returns the local part of the qualified name of this node.    
+        Returns the local part of the qualified name of this node.
         */
         virtual OUString SAL_CALL getLocalName()
             throw (RuntimeException);
@@ -258,9 +258,9 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Puts all Text nodes in the full depth of the sub-tree underneath this 
+        Puts all Text nodes in the full depth of the sub-tree underneath this
         Node, including attribute nodes, into a "normal" form where only structure
-        (e.g., elements, comments, processing instructions, CDATA sections, and 
+        (e.g., elements, comments, processing instructions, CDATA sections, and
         entity references) separates Text nodes, i.e., there are neither adjacent
         Text nodes nor empty Text nodes.
         */
@@ -299,17 +299,17 @@ namespace DOM
         virtual sal_Int64 SAL_CALL getSomething(const Sequence< sal_Int8 >& id) throw (RuntimeException);
 
         // --- XEventTarget
-        virtual void SAL_CALL addEventListener(const OUString& eventType, 
-            const Reference< XEventListener >& listener, 
+        virtual void SAL_CALL addEventListener(const OUString& eventType,
+            const Reference< XEventListener >& listener,
             sal_Bool useCapture)
             throw (RuntimeException);
 
-        virtual void SAL_CALL removeEventListener(const OUString& eventType, 
-            const Reference< XEventListener >& listener, 
+        virtual void SAL_CALL removeEventListener(const OUString& eventType,
+            const Reference< XEventListener >& listener,
             sal_Bool useCapture)
             throw (RuntimeException);
 
-        virtual sal_Bool SAL_CALL dispatchEvent(const Reference< XEvent >& evt) 
+        virtual sal_Bool SAL_CALL dispatchEvent(const Reference< XEvent >& evt)
             throw(EventException);
 
     };
