@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:43 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 07:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ OFileTable::OFileTable(OConnection* _pConnection) : OTable_TYPEDEF(_pConnection-
 {
     construct();
     TStringVector aVector;
-    m_pColumns  = new OColumns(this,m_aMutex,aVector);
+    //  m_pColumns  = new OColumns(this,m_aMutex,aVector);
     m_aColumns = new OSQLColumns();
 }
 // -------------------------------------------------------------------------

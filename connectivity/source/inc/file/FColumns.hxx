@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FColumns.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 07:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ namespace connectivity
 {
     namespace file
     {
-        class SAL_NO_VTABLE OColumns : public sdbcx::OCollection
+        class OColumns : public sdbcx::OCollection
         {
         protected:
             OFileTable* m_pTable;

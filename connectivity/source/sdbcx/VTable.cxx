@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:14 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 07:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
     if(!m_pColumns)
         refreshColumns();
 
-    return const_cast<OTable*>(this)->m_pColumns;
+    return m_pColumns;
 }
 
 // -------------------------------------------------------------------------
@@ -241,7 +241,7 @@ Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
     if(!m_pKeys)
         refreshKeys();
 
-    return const_cast<OTable*>(this)->m_pKeys;
+    return m_pKeys;
 }
 // -----------------------------------------------------------------------------
 cppu::IPropertyArrayHelper* OTable::createArrayHelper( sal_Int32 _nId) const
@@ -276,7 +276,7 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
     if(!m_pIndexes)
         refreshIndexes();
 
-    return const_cast<OTable*>(this)->m_pIndexes;
+    return m_pIndexes;
 }
 // -------------------------------------------------------------------------
 // XRename
