@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:52:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 15:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1666,6 +1666,8 @@ namespace pcr
         {
             getPropertyBox()->DisableUpdate();
 
+            sal_Bool bHaveFocus = getPropertyBox()->HasChildPathFocus();
+
             InsertEvents();
             sal_uInt32 nPropCount = m_aObjectProperties.getLength();
             const Property* pProps = m_aObjectProperties.getConstArray();
@@ -2161,7 +2163,9 @@ namespace pcr
             getPropertyBox()->SetPage( m_nDataPageId );
 
             getPropertyBox()->EnableUpdate();
-            getPropertyBox()->GrabFocus();
+
+            if ( bHaveFocus )
+                getPropertyBox()->GrabFocus();
         }
         catch (Exception&)
         {
@@ -2546,6 +2550,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38  2001/08/06 14:52:59  fs
+ *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
+ *
  *  Revision 1.37  2001/07/23 13:33:33  fs
  *  #900071# correctly call XFilePickerControlAccess::setValue
  *
