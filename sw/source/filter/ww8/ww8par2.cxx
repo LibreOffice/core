@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:18:17 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
 
 #ifndef _PAM_HXX
 #include <pam.hxx>              // fuer SwPam
@@ -169,6 +172,13 @@
 #endif
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
+#endif
+
+#ifndef WW_WWSTYLES_HXX
+#   include "../inc/wwstyles.hxx"
+#endif
+#ifndef SW_WRITERHELPER
+#   include "writerhelper.hxx"
 #endif
 
 #ifndef _WW8STRUC_HXX
@@ -381,7 +391,12 @@ sal_uInt32 wwSectionManager::GetPageRight() const
 
 sal_uInt32 wwSectionManager::GetPageWidth() const
 {
-    return !maSegments.empty() ? maSegments.back().nPgWidth : 0;
+    return !maSegments.empty() ? maSegments.back().GetPageWidth() : 0;
+}
+
+sal_uInt32 wwSectionManager::GetTextAreaWidth() const
+{
+    return !maSegments.empty() ? maSegments.back().GetTextAreaWidth() : 0;
 }
 
 sal_uInt16 SwWW8ImplReader::End_Ftn()
@@ -467,6 +482,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
                 pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 pPaM->SetMark();
                 pPaM->GetMark()->nContent++;
+                pRefStck->Delete(*pPaM);
                 rDoc.Delete( *pPaM );
                 pPaM->DeleteMark();
             }
@@ -574,8 +590,9 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
 }
 
 ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
-    WW8_TablePos *pTabPos)
+    const WW8_TablePos *pTabPos)
 {
+    const WW8_TablePos *pTopLevelTable = nCellLevel <= 1 ? pTabPos : 0;
     ApoTestResults aRet;
     // Frame in Style Definition (word appears to ignore them if inside an
     // text autoshape, e.g. #94418#)
@@ -606,7 +623,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     aRet.mpSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
 
     // Is there some frame data here
-    bool bNowApo = aRet.HasFrame() || pTabPos;
+    bool bNowApo = aRet.HasFrame() || pTopLevelTable;
     if (bNowApo)
     {
         if (WW8FlyPara *pTest = ConstructApo(aRet, pTabPos))
@@ -866,7 +883,7 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
     else
     {
         //Not StyleDef
-        if (!bAnl && !(nIniFlags & WW8FL_NO_NUMRULE))
+        if (!bAnl)
             StartAnl(pData);        // Anfang der Gliederung / Aufzaehlung
         NextAnlLine(pData);
     }
@@ -940,13 +957,12 @@ void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel)
 // von Gliederungsabsaetzen zugreifbar ist.
 void SwWW8ImplReader::Read_OLST( USHORT, const BYTE* pData, short nLen )
 {
-    if( nIniFlags & WW8FL_NO_NUMRULE )
-        return;
-    if( nLen <= 0 ){
-        DELETEZ( pNumOlst );
+    if (nLen <= 0)
+    {
+        delete pNumOlst, pNumOlst = 0;
         return;
     }
-    if( pNumOlst )
+    if (pNumOlst)
         delete pNumOlst;                    // nur sicherheitshalber
     pNumOlst = new WW8_OLST;
     if( nLen < sizeof( WW8_OLST ) )         // auffuellen, falls zu kurz
@@ -968,28 +984,44 @@ WW8LvlType GetNumType(BYTE nWwLevelNo)
     return nRet;
 }
 
+SwNumRule *ANLDRuleMap::GetNumRule(BYTE nNumType)
+{
+    return (WW8_Numbering == nNumType ? mpNumberingNumRule : mpOutlineNumRule);
+}
+
+void ANLDRuleMap::SetNumRule(SwNumRule *pRule, BYTE nNumType)
+{
+    if (WW8_Numbering == nNumType)
+        mpNumberingNumRule = pRule;
+    else
+        mpOutlineNumRule = pRule;
+}
+
+
 // StartAnl wird am Anfang eines Zeilenbereichs gerufen,
 //  der Gliederung / Nummerierung / Aufzaehlung enthaelt
-void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
+void SwWW8ImplReader::StartAnl(const BYTE* pSprm13)
 {
     bAktAND_fNumberAcross = false;
 
-    BYTE nT = GetNumType( *pSprm13 );
-    if( nT == WW8_Pause || nT == WW8_None )
+    BYTE nT = GetNumType(*pSprm13);
+    if (nT == WW8_Pause || nT == WW8_None)
         return;
 
     nWwNumType = nT;
+    SwNumRule *pNumRule = maANLDRules.GetNumRule(nWwNumType);
 
     // check for COL numbering:
     const BYTE* pS12 = 0;// sprmAnld
     String sNumRule;
-    if( pTableDesc )
+
+    if (pTableDesc)
     {
         sNumRule = pTableDesc->GetNumRuleName();
-        if( sNumRule.Len() )
+        if (sNumRule.Len())
         {
-            mpNumRule = rDoc.FindNumRulePtr( sNumRule );
-            if( !mpNumRule )
+            pNumRule = rDoc.FindNumRulePtr(sNumRule);
+            if (!pNumRule)
                 sNumRule.Erase();
             else
             {
@@ -1004,21 +1036,21 @@ void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
     if (!sNumRule.Len() && pCollA[nAktColl].bHasStyNumRule)
     {
         sNumRule = pCollA[nAktColl].pFmt->GetNumRule().GetValue();
-        mpNumRule = rDoc.FindNumRulePtr(sNumRule);
-        if (!mpNumRule)
+        pNumRule = rDoc.FindNumRulePtr(sNumRule);
+        if (!pNumRule)
             sNumRule.Erase();
     }
 
     if (!sNumRule.Len())
     {
-        if (!mpNumRule)
-            mpNumRule = rDoc.GetNumRuleTbl()[rDoc.MakeNumRule(sNumRule)];
-        if( pTableDesc )
+        if (!pNumRule)
+            pNumRule = rDoc.GetNumRuleTbl()[rDoc.MakeNumRule(sNumRule)];
+        if (pTableDesc)
         {
             if (!pS12)
                 pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
             if (!pS12 || !SVBT8ToByte( ((WW8_ANLD*)pS12)->fNumberAcross))
-                pTableDesc->SetNumRuleName( mpNumRule->GetName() );
+                pTableDesc->SetNumRuleName(pNumRule->GetName());
         }
     }
 
@@ -1026,9 +1058,10 @@ void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
 
     // NumRules ueber Stack setzen
     pCtrlStck->NewAttr(*pPaM->GetPoint(),
-            SfxStringItem(RES_FLTR_NUMRULE, mpNumRule->GetName()));
-}
+        SfxStringItem(RES_FLTR_NUMRULE, pNumRule->GetName()));
 
+    maANLDRules.SetNumRule(pNumRule, nWwNumType);
+}
 
 // NextAnlLine() wird fuer jede Zeile einer
 // Gliederung / Nummerierung / Aufzaehlung einmal gerufen
@@ -1037,6 +1070,8 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
     if (!bAnl)
         return;
 
+    SwNumRule *pNumRule = maANLDRules.GetNumRule(nWwNumType);
+
     // pNd->UpdateNum ohne Regelwerk gibt GPF spaetestens beim Speichern als
     // sdw3
 
@@ -1044,36 +1079,36 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
     if (*pSprm13 == 10 || *pSprm13 == 11)
     {
         nSwNumLevel = 0;
-        if (!mpNumRule->GetNumFmt(nSwNumLevel))
+        if (!pNumRule->GetNumFmt(nSwNumLevel))
         {
             // noch nicht definiert
             // sprmAnld o. 0
             const BYTE* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
-            SetAnld(mpNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
+            SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
         }
     }
     else if (*pSprm13 <= MAXLEVEL)          // Bereich WW:1..9 -> SW:0..8
     {
         nSwNumLevel = *pSprm13 - 1;             // Gliederung
         // noch nicht definiert
-        if (!mpNumRule->GetNumFmt(nSwNumLevel))
+        if (!pNumRule->GetNumFmt(nSwNumLevel))
         {
             if (pNumOlst)                       // es gab ein OLST
             {
                 //Assure upper levels are set, #i9556#
                 for (BYTE nI = 0; nI < nSwNumLevel; ++nI)
                 {
-                    if (!mpNumRule->GetNumFmt(nI))
-                        SetNumOlst(mpNumRule, pNumOlst, nI);
+                    if (!pNumRule->GetNumFmt(nI))
+                        SetNumOlst(pNumRule, pNumOlst, nI);
                 }
 
-                SetNumOlst(mpNumRule, pNumOlst , nSwNumLevel);
+                SetNumOlst(pNumRule, pNumOlst , nSwNumLevel);
             }
             else                                // kein Olst, nimm Anld
             {
                 // sprmAnld
                 const BYTE* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
-                SetAnld(mpNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
+                SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
             }
         }
     }
@@ -1086,26 +1121,42 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
     pNd->UpdateNum(aNum);
 }
 
-// StopAnl() wird am Ende des Zeilenbereiches gerufen
-void SwWW8ImplReader::StopAnl(bool bGoBack)
+void SwWW8ImplReader::StopAllAnl(bool bGoBack)
 {
-    if( bGoBack )
+    //Of course we're not restarting, but we'll make use of our knowledge
+    //of the implementation to do it.
+    StopAnlToRestart(WW8_None, bGoBack);
+}
+
+void SwWW8ImplReader::StopAnlToRestart(BYTE nNewType, bool bGoBack)
+{
+    if (bGoBack)
     {
-        SwPosition aTmpPos( *pPaM->GetPoint() );    // eine Zeile zu spaet
-        // gehe zurueck
-        pPaM->Move( fnMoveBackward, fnGoCntnt );
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_NUMRULE ); // Setze NumRules in Stack
-        // restore Pam
+        SwPosition aTmpPos(*pPaM->GetPoint());
+        pPaM->Move(fnMoveBackward, fnGoCntnt);
+        pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_NUMRULE);
         *pPaM->GetPoint() = aTmpPos;
     }
     else
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_NUMRULE ); // Setze NumRules in Stack
+        pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_NUMRULE);
+
+    maANLDRules.mpNumberingNumRule = 0;
+    /*
+     #i18816#
+     my take on this problem is that moving either way from an outline to a
+     numbering doesn't halt the outline, while the numbering is always halted
+    */
+    bool bNumberingNotStopOutline =
+        (((nWwNumType == WW8_Outline) && (nNewType == WW8_Numbering)) ||
+        ((nWwNumType == WW8_Numbering) && (nNewType == WW8_Outline)));
+    if (!bNumberingNotStopOutline)
+        maANLDRules.mpOutlineNumRule = 0;
 
     nSwNumLevel = 0xff;
     nWwNumType = WW8_None;
     bAnl = false;
-    mpNumRule = 0;
 }
+
 
 WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
 {
@@ -1902,7 +1953,7 @@ WW8TabDesc::~WW8TabDesc()
 void WW8TabDesc::CalcDefaults()
 {
     short nMinCols = SHRT_MAX;
-    register WW8TabBandDesc* pR;
+    WW8TabBandDesc* pR;
 
     nMinLeft = SHRT_MAX;
     nMaxRight = SHRT_MIN;
@@ -1988,9 +2039,9 @@ void WW8TabDesc::CalcDefaults()
             pR->pTCs = new WW8_TCell[ pR->nWwCols ];
             memset( pR->pTCs, 0, pR->nWwCols * sizeof( WW8_TCell ) );
         }
-        for(int k = 0; k < pR->nWwCols; k++ )
+        for (int k = 0; k < pR->nWwCols; ++k)
         {
-            register WW8_TCell* pT = &pR->pTCs[k];
+            WW8_TCell* pT = &pR->pTCs[k];
             int i, j;
             for( i = 0; i < 4; i ++ )
             {
@@ -2072,7 +2123,7 @@ void WW8TabDesc::CalcDefaults()
         short nAddCols = pR->bLEmptyCol + pR->bREmptyCol;
         USHORT i;
         USHORT j = ( pR->bLEmptyCol ) ? 1 : 0;
-        for( i = 0; i < pR->nWwCols; i++ )
+        for (i = 0; i < pR->nWwCols; ++i)
         {
             pR->nTransCell[i] = (INT8)j;
             if ( pR->nCenter[i] < pR->nCenter[i+1] )
@@ -2110,6 +2161,45 @@ void WW8TabDesc::CalcDefaults()
         pR->nSwCols += nAddCols;
         if( pR->nSwCols < nMinCols )
             nMinCols = pR->nSwCols;
+    }
+
+    /*
+    #i9718#
+    Find the largest of the borders on cells that adjoin top bottom and remove
+    the val from the top and put in on the bottom cell. I can't seem to make
+    disjoint upper and lowers to see what happens there.
+    */
+    for (pR = pFirstBand; pR; pR = pR->pNextBand)
+    {
+        WW8TabBandDesc *pNext = pR->pNextBand;
+        if (!pNext)
+            break;
+
+        for (int k = 0; k < pR->nWwCols; ++k)
+        {
+            WW8_BRC &rAbove = pR->pTCs[k].rgbrc[WW8_BOT];
+            short nAboveThick = rAbove.IsEmpty(pIo->bVer67) ?
+                0 : rAbove.DetermineBorderProperties(pIo->bVer67);
+            short nUpperLeft = pR->nCenter[k];
+            short nUpperRight = pR->nCenter[k+1];
+
+            for (int l = 0; l < pNext->nWwCols; ++l)
+            {
+                short nLowerLeft = pNext->nCenter[l];
+                short nLowerRight = pNext->nCenter[l+1];
+
+                if ((nLowerLeft < nUpperLeft) || (nLowerRight > nUpperRight))
+                    continue;
+
+                WW8_BRC &rBelow = pNext->pTCs[k].rgbrc[WW8_TOP];
+                short nBelowThick = rBelow.IsEmpty(pIo->bVer67) ?
+                    0 : rBelow.DetermineBorderProperties(pIo->bVer67);
+                if (nAboveThick > nBelowThick)
+                    rBelow = rAbove;
+            }
+
+            rAbove = WW8_BRC();
+        }
     }
 
     if (nMinLeft && (HORI_LEFT == eOri))
@@ -3037,8 +3127,8 @@ void WW8TabDesc::TableCellEnd()
     SetPamInCell(nAktCol, true);
 
     // finish Annotated Level Numbering ?
-    if( pIo->bAnl && !pIo->bAktAND_fNumberAcross )
-        pIo->StopAnl( IsValidCell( nAktCol ) );//false);//!bRowEnded ); //
+    if (pIo->bAnl && !pIo->bAktAND_fNumberAcross)
+        pIo->StopAllAnl(IsValidCell(nAktCol));
 }
 
 // ggfs. die Box in fuer diese Col offene Merge-Gruppe eintragen
@@ -3415,6 +3505,34 @@ WW8RStyle::WW8RStyle(WW8Fib& rFib, SwWW8ImplReader* pI)
     pIo->nColls = cstd;
 }
 
+void SetStyleCharSet(SwWW8StyInf &rStyle)
+{
+    /*
+     #i22206#
+     The (default) character set used for a run of text is the default
+     character set for the version of Word that last saved the document.
+
+     This is a bit tentative, more might be required if the concept is correct.
+     When later version of word write older 6/95 documents the charset is
+     correctly set in the character runs involved, so its hard to reproduce
+     documents that require this to be sure of the process involved.
+    */
+    const SvxLanguageItem *pLang =
+        sw::util::HasItem<SvxLanguageItem>(*(rStyle.pFmt), RES_CHRATR_LANGUAGE);
+    if (pLang)
+    {
+        switch (pLang->GetLanguage())
+        {
+            case LANGUAGE_CZECH:
+                rStyle.eLTRFontSrcCharSet = RTL_TEXTENCODING_MS_1250;
+                break;
+            default:
+                rStyle.eLTRFontSrcCharSet = RTL_TEXTENCODING_MS_1252;
+                break;
+        }
+    }
+}
+
 void WW8RStyle::Set1StyleDefaults()
 {
     if (!bCJKFontChanged)   // Style no CJK Font? set the default
@@ -3425,7 +3543,11 @@ void WW8RStyle::Set1StyleDefaults()
 
     //#88976# western 2nd to make western charset conversion the default
     if (!bFontChanged)      // Style has no Font? set the default,
+    {
         pIo->SetNewFontAttr(ftcStandardChpStsh, true, RES_CHRATR_FONT);
+        if (pIo->bVer67)
+            SetStyleCharSet(pIo->pCollA[pIo->nAktColl]);
+    }
 
     if( !pIo->bNoAttrImport )
     {
@@ -3456,216 +3578,6 @@ void WW8RStyle::Set1StyleDefaults()
             pIo->pAktColl->SetAttr( SvxOrphansItem( 2 ) );
         }
     }
-}
-
-//-----------------------------------------
-//      Zeichenvorlagen
-//-----------------------------------------
-SwCharFmt* WW8RStyle::SearchCharFmt( const String& rName )
-{
-    USHORT n;
-                            // Suche zuerst in den Doc-Styles
-    for( n = pIo->rDoc.GetCharFmts()->Count(); n > 0; )
-        if( (*pIo->rDoc.GetCharFmts())[ --n ]->GetName().Equals( rName ) )
-            return (*pIo->rDoc.GetCharFmts())[ n ];
-
-                    // Collection noch nicht gefunden, vielleicht im Pool ?
-    n = SwStyleNameMapper::GetPoolIdFromUIName( rName , GET_POOLID_CHRFMT );
-    if ( n != USHRT_MAX )       // gefunden oder Standard
-        return pIo->rDoc.GetCharFmtFromPool( n );
-
-    return 0;
-}
-
-SwCharFmt* WW8RStyle::MakeNewCharFmt( WW8_STD* pStd, const String& rName )
-{
-    String aName( rName );
-    SwCharFmt* pFmt = 0;
-
-    // eingebauter Style, den wir nicht kennen ? oder Namen gibts schon ?
-    if (pStd->sti != WW8_STD::STI_USER || SearchCharFmt(aName))
-    {
-        if (!aName.EqualsAscii("WW-", 0, 3))    // noch kein "WW-"
-            aName.InsertAscii("WW-", 0);        // dann aender ihn
-
-        if (SearchCharFmt(aName))               // Namen gibt's immer noch ?
-        {
-            for (USHORT n = 1; n < 1000; ++n)
-            {
-                String aName1( aName );
-                aName1 += String::CreateFromInt32( n );
-                if ((pFmt = SearchCharFmt(aName1)) == 0)
-                {
-                    aName = aName1;
-                    break;   // unbenutzten Namen gefunden
-                }
-            }
-        }
-    }
-
-    if (!pFmt)   // unbenutzter Collection-Name gefunden, erzeuge neue Coll
-        pFmt = pIo->rDoc.MakeCharFmt(aName, pIo->rDoc.GetDfltCharFmt());
-
-    return pFmt;
-}
-
-SwCharFmt* WW8RStyle::MakeOrGetCharFmt(bool * pbStyExist, WW8_STD* pStd,
-    const String& rName )
-{
-    static USHORT __READONLY_DATA aArr1[]={
-        RES_POOLCHR_FOOTNOTE, 0, RES_POOLCHR_LINENUM,
-        RES_POOLCHR_PAGENO, RES_POOLCHR_ENDNOTE };
-
-    static USHORT __READONLY_DATA aArr2[]={
-        RES_POOLCHR_INET_NORMAL, RES_POOLCHR_INET_VISIT,
-        RES_POOLCHR_HTML_STRONG, RES_POOLCHR_HTML_EMPHASIS };
-
-    // Einfuegen: immer neue Styles generieren || nicht abgeschaltet
-    if (pIo->mbNewDoc)
-    {
-        SwCharFmt* pFmt = 0;
-
-        // Default-Style bekannt ?
-        short nIdx = pStd->sti - 38;
-        if(nIdx >= 0 && nIdx < 5 && aArr1[nIdx] !=0)
-            pFmt = pIo->rDoc.GetCharFmtFromPool( aArr1[ nIdx ] );
-        else
-        {
-            nIdx = pStd->sti - 85;
-            if (nIdx >= 0 && nIdx <  4)
-                pFmt = pIo->rDoc.GetCharFmtFromPool(aArr2[nIdx]);
-        }
-        if (pFmt)
-        {
-            *pbStyExist = true;
-            return pFmt;
-        }
-    }
-    *pbStyExist = false;
-    String aName(rName);
-    xub_StrLen nPos = aName.Search(',');
-    if (STRING_NOTFOUND != nPos)   // mehrere Namen mit Komma getrennt
-        aName.Erase( nPos );        // gibts im SW nicht
-    return MakeNewCharFmt( pStd, aName );   // nicht gefunden
-}
-
-//-----------------------------------------
-//      Absatzvorlagen
-//-----------------------------------------
-
-SwTxtFmtColl* WW8RStyle::SearchFmtColl( const String& rName )
-{
-                            // Suche zuerst in den Doc-Styles
-    SwTxtFmtColl* pColl = pIo->rDoc.FindTxtFmtCollByName( rName );
-    if( !pColl )
-    {
-                    // Collection noch nicht gefunden, vielleicht im Pool ?
-        USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( rName , GET_POOLID_TXTCOLL );
-        if ( n != USHRT_MAX )       // gefunden oder Standard
-            pColl = pIo->rDoc.GetTxtCollFromPoolSimple(n, false);
-    }
-    return pColl;
-}
-
-SwTxtFmtColl* WW8RStyle::MakeNewFmtColl( WW8_STD* pStd, const String& rName )
-{
-    String aName( rName );
-    SwTxtFmtColl* pColl = 0;
-
-    // eingebauter Style, den wir nicht kennen
-    // oder Namen gibts schon ?
-    if (pStd->sti != WW8_STD::STI_USER || SearchFmtColl(aName))
-    {
-        if (!aName.EqualsIgnoreCaseAscii("WW-", 0, 3))  // noch kein "WW-"
-            aName.InsertAscii("WW-" , 0);   // dann AEnder ihn
-
-        // Namen gibt's immer noch ?
-        if (SearchFmtColl(aName))
-        {
-            for (USHORT n = 1; n < 1000; ++n)
-            {
-                // dann bastel neuen
-                String aName1(aName);
-                aName += String::CreateFromInt32(n);
-                if ((pColl = SearchFmtColl(aName1)) == 0)
-                {
-                    aName = aName1;
-                    // unbenutzten Namen gefunden
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!pColl)   // unbenutzter Collection-Name gefunden, erzeuge neue Coll
-    {
-        pColl = pIo->rDoc.MakeTxtFmtColl(aName,
-            const_cast<SwTxtFmtColl *>(pIo->rDoc.GetDfltTxtFmtColl()));
-    }
-
-    return pColl;
-}
-
-SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl(bool * pbStyExist, WW8_STD* pStd,
-    const String& rName)
-{
-#define RES_NONE RES_POOLCOLL_DOC_END
-
-    static const RES_POOL_COLLFMT_TYPE aArr[]={
-        RES_POOLCOLL_STANDARD, RES_POOLCOLL_HEADLINE1, RES_POOLCOLL_HEADLINE2,                                  // Ueberschrift 2
-        RES_POOLCOLL_HEADLINE3, RES_POOLCOLL_HEADLINE4, RES_POOLCOLL_HEADLINE5,
-        RES_POOLCOLL_HEADLINE6, RES_POOLCOLL_HEADLINE7, RES_POOLCOLL_HEADLINE8,
-        RES_POOLCOLL_HEADLINE9,
-
-        RES_POOLCOLL_TOX_IDX1, RES_POOLCOLL_TOX_IDX2, RES_POOLCOLL_TOX_IDX3,
-        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-        RES_POOLCOLL_TOX_CNTNT1,
-
-        RES_POOLCOLL_TOX_CNTNT2, RES_POOLCOLL_TOX_CNTNT3, RES_POOLCOLL_TOX_CNTNT4,
-        RES_POOLCOLL_TOX_CNTNT5, RES_POOLCOLL_TOX_CNTNT6, RES_POOLCOLL_TOX_CNTNT7,
-        RES_POOLCOLL_TOX_CNTNT8, RES_POOLCOLL_TOX_CNTNT9,
-        RES_NONE, RES_POOLCOLL_FOOTNOTE,
-
-        RES_NONE, RES_POOLCOLL_HEADER, RES_POOLCOLL_FOOTER, RES_POOLCOLL_TOX_IDXH,
-        RES_NONE, RES_NONE, RES_POOLCOLL_JAKETADRESS, RES_POOLCOLL_SENDADRESS,
-        RES_NONE, RES_NONE,
-
-        RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_ENDNOTE, RES_NONE, RES_NONE, RES_NONE,
-        RES_POOLCOLL_LISTS_BEGIN, RES_NONE, RES_NONE,
-
-        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-
-        RES_NONE,RES_NONE, RES_POOLCOLL_DOC_TITEL, RES_NONE, RES_POOLCOLL_SIGNATURE, RES_NONE,
-        RES_POOLCOLL_TEXT, RES_POOLCOLL_TEXT_MOVE, RES_NONE, RES_NONE,
-
-        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_DOC_SUBTITEL };
-
-
-    ASSERT( ( sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE ) == 75 ),
-            "Style-UEbersetzungstabelle hat falsche Groesse" );
-
-    //If this is a built-in word style that has a built-in writer
-    //equivalent, then map it to ours
-    if (
-        pStd->sti < sizeof(aArr) / sizeof(RES_POOL_COLLFMT_TYPE)
-        && aArr[pStd->sti] != RES_NONE
-       )
-    {
-        SwTxtFmtColl* pCol =
-            pIo->rDoc.GetTxtCollFromPoolSimple(aArr[pStd->sti], false);
-        if (pCol)
-        {
-            *pbStyExist = true;
-            return pCol;
-        }
-    }
-    String aName( rName );
-    xub_StrLen nPos = aName.Search( ',' );
-    if (STRING_NOTFOUND != nPos)   // mehrere Namen mit Komma getrennt
-        aName.Erase(nPos);         // gibts im SW nicht
-    *pbStyExist = false;
-    return MakeNewFmtColl( pStd, aName );   // nicht gefunden
 }
 
 void WW8RStyle::Import1Style( USHORT nNr )
@@ -3704,9 +3616,22 @@ void WW8RStyle::Import1Style( USHORT nNr )
     SwFmt* pColl;
     bool bStyExist;
     if (pStd->sgc == 1)             // Para-Style
-        pColl = MakeOrGetFmtColl( &bStyExist, pStd, sName );
-    else                                // Char-Style
-        pColl = MakeOrGetCharFmt( &bStyExist, pStd, sName );
+    {
+        sw::util::ParaStyleMapper::StyleResult aResult =
+            pIo->maParaStyleMapper.GetStyle(sName,
+            static_cast<ww::sti>(pStd->sti));
+        pColl = aResult.first;
+        bStyExist = aResult.second;
+    }
+    else
+    {   // Char-Style
+        sw::util::CharStyleMapper::StyleResult aResult =
+            pIo->maCharStyleMapper.GetStyle(sName,
+            static_cast<ww::sti>(pStd->sti));
+        pColl = aResult.first;
+        bStyExist = aResult.second;
+
+    }
 
     bool bImport = !bStyExist || pIo->mbNewDoc; // Inhalte Importieren ?
     bool bOldNoImp = pIo->bNoAttrImport;
