@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:18:52 $
+ *  last change: $Author: dvo $ $Date: 2001-09-18 16:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 #include "xmltoken.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
@@ -132,6 +136,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XLOCATOR_HPP_
+#include <com/sun/star/xml/sax/XLocator.hpp>
 #endif
 
 #ifndef _COMPHELPER_NAMECONTAINER_HXX_
@@ -1287,9 +1294,38 @@ sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
 
     return cNew;
 }
+#endif
 
-void SvXMLImport::SetError(sal_uInt16 nId, ::rtl::OUString& rErrorMessage, ::rtl::OUString& rExceptionMessage)
+
+
+void SvXMLImport::SetError(
+    sal_Int32 nId,
+    const Sequence<OUString>& rMsgParams,
+    const OUString& rExceptionMessage,
+    const Reference<xml::sax::XLocator>& rLocator )
 {
+    // maintain error flags
+    if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
+        mnErrorFlags |= ERROR_ERROR_OCCURED;
+    if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
+        mnErrorFlags |= ERROR_WARNING_OCCURED;
+    if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
+        mnErrorFlags |= ERROR_DO_NOTHING;
+
+    // create error lsit on demand
+    if ( pXMLErrors == NULL )
+        pXMLErrors = new XMLErrors();
+
+    // save error information
+    pXMLErrors->AddRecord( nId, rMsgParams, rExceptionMessage, rLocator );
+}
+
+void SvXMLImport::SetError(
+    sal_Int32 nId,
+    const Sequence<OUString>& rMsgParams)
+{
+    OUString sEmpty;
+    SetError( nId, rMsgParams, sEmpty, NULL );
 }
 
 XMLErrors* SvXMLImport::GetErrors()
@@ -1302,5 +1338,3 @@ void SvXMLImport::DisposingModel()
     xModel = 0;
     pEventListener = NULL;
 }
-
-#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-14 14:08:06 $
+ *  last change: $Author: dvo $ $Date: 2001-09-18 16:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@
 #ifndef _XMLOFF_XMLBASE64EXPORT_HXX_
 #include "XMLBase64Export.hxx"
 #endif
+#ifndef _XMLOFF_XMLERROR_HXX_
+#include "xmlerror.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -220,6 +223,8 @@ sal_Char __READONLY_DATA sXML_1_0[] = "1.0";
 #define XML_MODEL_SERVICE_IMPRESS   "com.sun.star.presentation.PresentationDocument"
 #define XML_MODEL_SERVICE_MATH      "com.sun.star.formula.FormulaProperties"
 #define XML_MODEL_SERVICE_CHART     "com.sun.star.chart.ChartDocument"
+
+
 
 struct XMLServiceMapEntry_Impl
 {
@@ -648,7 +653,9 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
 
 void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException)
 {
-    DBG_ERROR( "not supported" );
+    // stop export
+    Sequence<OUString> aEmptySeq;
+    SetError(XMLERROR_CANCEL|XMLERROR_FLAG_SEVERE, aEmptySeq);
 }
 
 // XServiceInfo
@@ -1558,15 +1565,15 @@ void SvXMLExport::StartElement(const OUString& rName,
             if( bIgnWSOutside )
                 xHandler->ignorableWhitespace( sWS );
             xHandler->startElement( rName, GetXAttrList() );
-            ClearAttrList();
         }
-        catch ( uno::Exception& )
+        catch ( SAXException& e )
         {
-            // we have to add a error here,
-            // perhaps we should change the ErrorFlag to ERROR_DO_NOTHING
-            ClearAttrList();
-            DBG_ERROR("Not handled exception");
+            Sequence<OUString> aPars(1);
+            aPars[0] = rName;
+            SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
+                      aPars, e.Message, NULL );
         }
+        ClearAttrList();
     }
 }
 
@@ -1578,11 +1585,12 @@ void SvXMLExport::Characters(const ::rtl::OUString& rChars)
         {
             xHandler->characters(rChars);
         }
-        catch ( uno::Exception& )
+        catch ( SAXException& e )
         {
-            // we have to add a error here,
-            // perhaps we should change the ErrorFlag to ERROR_DO_NOTHING
-            DBG_ERROR("Not handled exception");
+            Sequence<OUString> aPars(0);
+            aPars[0] = rChars;
+            SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
+                      aPars, e.Message, NULL );
         }
     }
 }
@@ -1605,18 +1613,46 @@ void SvXMLExport::EndElement(const OUString& rName,
                 xHandler->ignorableWhitespace( sWS );
             xHandler->endElement( rName );
         }
-        catch ( uno::Exception& )
+        catch ( SAXException& e )
         {
-            // we have to add a error here,
-            // perhaps we should change the ErrorFlag to ERROR_DO_NOTHING
-            DBG_ERROR("Not handled exception");
+            Sequence<OUString> aPars(1);
+            aPars[0] = rName;
+            SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
+                      aPars, e.Message, NULL );
         }
     }
 }
 
-void SvXMLExport::SetError(sal_uInt16 nId, ::rtl::OUString& rErrorMessage, ::rtl::OUString& rExceptionMessage)
+void SvXMLExport::SetError(
+    sal_Int32 nId,
+    const Sequence<OUString>& rMsgParams,
+    const OUString& rExceptionMessage,
+    const Reference<XLocator>& rLocator )
 {
+    // maintain error flags
+    if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
+        mnErrorFlags |= ERROR_ERROR_OCCURED;
+    if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
+        mnErrorFlags |= ERROR_WARNING_OCCURED;
+    if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
+        mnErrorFlags |= ERROR_DO_NOTHING;
+
+    // create error lsit on demand
+    if ( pXMLErrors == NULL )
+        pXMLErrors = new XMLErrors();
+
+    // save error information
+    pXMLErrors->AddRecord( nId, rMsgParams, rExceptionMessage, rLocator );
 }
+
+void SvXMLExport::SetError(
+    sal_Int32 nId,
+    const Sequence<OUString>& rMsgParams)
+{
+    OUString sEmpty;
+    SetError( nId, rMsgParams, sEmpty, NULL );
+}
+
 
 XMLErrors* SvXMLExport::GetErrors()
 {
@@ -1636,12 +1672,8 @@ void SvXMLElementExport::StartElement( SvXMLExport& rExp,
                                        const OUString& rLName,
                                        sal_Bool bIWSOutside )
 {
-    aName = rExp.GetNamespaceMap().GetQNameByKey( nPrefixKey, rLName );
-
-    if( bIWSOutside )
-        rExport.GetDocHandler()->ignorableWhitespace( rExport.sWS );
-    rExport.GetDocHandler()->startElement( aName, rExport.GetXAttrList() );
-    rExport.ClearAttrList();
+    OUString sName = rExp.GetNamespaceMap().GetQNameByKey(nPrefixKey, rLName);
+    rExp.StartElement(sName, bIWSOutside);
 }
 
 SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
@@ -1723,17 +1755,14 @@ SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
     bDoSomething( bDoSth )
 {
     if( bDoSomething )
-        StartElement( rExp, nPrefixKey, GetXMLToken(eLName), bIWSOutside );
+        StartElement( rExport, nPrefixKey, GetXMLToken(eLName), bIWSOutside );
 }
 
 SvXMLElementExport::~SvXMLElementExport()
 {
     if( bDoSomething )
     {
-        if( bIgnWS )
-            rExport.GetDocHandler()->ignorableWhitespace( rExport.sWS );
-
-        rExport.GetDocHandler()->endElement( aName );
+        rExport.EndElement( aName, bIgnWS );
     }
 }
 

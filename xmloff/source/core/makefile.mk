@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: mib $ $Date: 2001-07-25 06:46:27 $
+#   last change: $Author: dvo $ $Date: 2001-09-18 16:28:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ SLOFILES =	\
         $(SLO)$/nmspmap.obj		\
         $(SLO)$/unoatrcn.obj	\
         $(SLO)$/xmlehelp.obj	\
+        $(SLO)$/xmlerror.obj	\
         $(SLO)$/xmlexp.obj		\
         $(SLO)$/xmlictxt.obj	\
         $(SLO)$/xmlimp.obj		\
@@ -115,6 +116,7 @@ SVXLIGHTOBJFILES =	\
         $(OBJ)$/nmspmap.obj		\
         $(OBJ)$/unoatrcn.obj	\
         $(OBJ)$/xmlehelp.obj	\
+        $(OBJ)$/xmlerror.obj	\
         $(OBJ)$/xmlictxt.obj	\
         $(OBJ)$/xmlimp.obj		\
         $(OBJ)$/xmlkywd.obj		\
