@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tstMgr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 10:54:54 $
+ *  last change: $Author: pluby $ $Date: 2001-04-18 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-#include "tstmgr.hxx"
+#include "tstMgr.hxx"
 
 #ifndef _OSL_MODULE_HXX_
 #include <osl/module.hxx>

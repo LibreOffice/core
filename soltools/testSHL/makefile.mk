@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sz $ $Date: 2001-04-12 10:55:57 $
+#   last change: $Author: pluby $ $Date: 2001-04-18 14:48:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ APP1OBJS=   $(OBJ)$/$(TARGET).obj
 APP1STDLIBS=$(SALLIB)\
             $(SALHELPERLIB)
 APP1DEPN= $(LB)$/tstutil.lib
-APP1LIBS= $(LB)$/tstutil.lib \
+APP1LIBS= $(LB)$/tstutil.lib
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tutil.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 10:54:54 $
+ *  last change: $Author: pluby $ $Date: 2001-04-18 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,13 @@
 // <namespace_tstutl>
 namespace tstutl {
 
-// _getcwd hack is deprecated as soon as normalizePath works as intend
+// getcwd hack is deprecated as soon as normalizePath works as intend
+#ifdef WNT
+#define _getcwd getcwd
 #include <direct.h>                         // _getcwd
+#else
+#include <stdlib.h>                         // getcwd
+#endif
 
 // <function_cnvrtPth>
 ::rtl::OUString cnvrtPth( ::rtl::OString sysPth ) {
@@ -81,7 +86,7 @@ namespace tstutl {
 
         // <hack> for osl_normalizePath() can't handle relatives
             char buffer[256];
-            OString curPth(_getcwd(buffer,256));
+            OString curPth(getcwd(buffer,256));
         // </hack>
         OUString nrmCurPth;
         FileBase::normalizePath( OUString::createFromAscii( curPth ) ,

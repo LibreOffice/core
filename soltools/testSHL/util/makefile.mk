@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sz $ $Date: 2001-04-12 10:54:54 $
+#   last change: $Author: pluby $ $Date: 2001-04-18 14:48:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ TARGET=tstutil
 OBJFILES =\
                 $(OBJ)$/tlog.obj  \
                 $(OBJ)$/tutil.obj \
-                $(OBJ)$/tstmgr.obj
+                $(OBJ)$/tstMgr.obj
 
 # --- Targets ------------------------------------------------------
 

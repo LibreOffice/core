@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 10:55:57 $
+ *  last change: $Author: pluby $ $Date: 2001-04-18 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #endif
 
 #ifndef _SOLTOOLS_TESTSHL_TSTMGR_HXX_
-#include "inc/tstmgr.hxx"
+#include "inc/tstMgr.hxx"
 #endif
 
 using namespace tstutl;
