@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:34:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ Menu RID_MAIN_MENU
                 Text [ portuguese_brazilian ] = "~Fechar" ;
                 Text [ portuguese ] = "~Fechar" ;
                 Text [ finnish ] = "~Sulje" ;
-                Text [ danish ] = "L~uk" ;
+                Text [ danish ] = "~Luk" ;
                 Text [ french ] = "~Fermer" ;
                 Text [ swedish ] = "S~t�ng" ;
                 Text [ dutch ] = "~Sluiten" ;
@@ -140,6 +140,8 @@ Menu RID_MAIN_MENU
                         Text[ hebrew ] = "‮סגירה‬";
                         Text[ hindi ] = "~बन्द करो";
                         Text[ slovak ] = "~Zavrieť";
+                        Text[ hungarian ] = "~Bezárás";
+                        Text[ slovenian ] = "~Zapri";
                     };
             MenuItem
             {
@@ -183,7 +185,7 @@ Menu RID_MAIN_MENU
                         Text[ dutch ] = "~Zenden";
                         Text[ spanish ] = "~Enviar";
                         Text[ finnish ] = "L�he~t�";
-                        Text[ danish ] = "S~end";
+                        Text[ danish ] = "~Send";
                         Text[ polish ] = "Wy�lij";
                         Text[ portuguese_brazilian ] = "En~viar";
                         Text[ turkish ] = "G�n~der";
@@ -194,6 +196,8 @@ Menu RID_MAIN_MENU
                         Text[ hebrew ] = "‮שליחה‬";
                         Text[ hindi ] = "~भेजो";
                         Text[ slovak ] = "O~doslať";
+                        Text[ hungarian ] = "Kül~dés";
+                        Text[ slovenian ] = "Poš~lji";
                     };
             MenuItem
             {
@@ -305,6 +309,8 @@ Menu RID_MAIN_MENU
                         Text[ hebrew ] = "~Spaltenzuordnung...";
                         Text[ hindi ] = "~स्तंभ को क्रम में रखना...";
                         Text[ slovak ] = "Usporia~danie stĺpcov...";
+                        Text[ hungarian ] = "~Oszlopok elrendezése...";
+                        Text[ slovenian ] = "Razporeditev ~stolpcev...";
                     };
             MenuItem
             {
@@ -327,7 +333,7 @@ Menu RID_MAIN_MENU
                         Text[ spanish ] = "~Seleccionar fuente de datos...";
                         Text[ finnish ] = "~Tietol�hde...";
                         Text[ italian ] = "~Seleziona sorgente dati...";
-                        Text[ danish ] = "~Datakilde...";
+                        Text[ danish ] = "~V�lg datakilde...";
                         Text[ polish ] = "�r�d�o ~danych...";
                         Text[ portuguese_brazilian ] = "~Fonte de Dados...";
                         Text[ turkish ] = "~Veri Kayna��n� Se�...";
@@ -338,6 +344,8 @@ Menu RID_MAIN_MENU
                         Text[ hebrew ] = "~Datenquelle auswählen...";
                         Text[ hindi ] = "~ड़ॉटा मूल...";
                         Text[ slovak ] = "Z~droj dát...";
+                        Text[ hungarian ] = "~Adatforrás választása...";
+                        Text[ slovenian ] = "~Izberi vir podatkov...";
                     };
             MenuItem
             {
@@ -355,7 +363,7 @@ Menu RID_MAIN_MENU
                         Text[ spanish ] = "Borrar ~registro";
                         Text[ finnish ] = "Delete ~Record";
                         Text[ italian ] = "Elimina record di dati";
-                        Text[ danish ] = "Delete ~Record";
+                        Text[ danish ] = "Slet ~datapost";
                         Text[ swedish ] = "Radera data~post";
                         Text[ polish ] = "Delete ~Record";
                         Text[ portuguese_brazilian ] = "Excluir ~registro";
@@ -371,6 +379,8 @@ Menu RID_MAIN_MENU
                         Text[ hebrew ] = "~Datensatz löschen";
                         Text[ hindi ] = "Delete ~Record";
                         Text[ slovak ] = "Zmazať ~záznam";
+                        Text[ hungarian ] = "Rekord ~törlése";
+                        Text[ slovenian ] = "Izbriši ~zapis";
                     };
             };
         };
@@ -390,6 +400,8 @@ Menu RID_MAIN_MENU
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
             Text[ slovak ] = "Úp~ravy";
+            Text[ hungarian ] = "~Szerkesztés";
+            Text[ slovenian ] = "~Uredi";
         };
         MenuItem
         {
@@ -418,7 +430,7 @@ Menu RID_MAIN_MENU
                         Text[ spanish ] = "~Registro";
                         Text[ finnish ] = "~Record";
                         Text[ italian ] = "Record di dati";
-                        Text[ danish ] = "~Record";
+                        Text[ danish ] = "~Registrer";
                         Text[ swedish ] = "D~atapost";
                         Text[ polish ] = "~Record";
                         Text[ portuguese_brazilian ] = "~Registro";
@@ -434,6 +446,8 @@ Menu RID_MAIN_MENU
                         Text[ hebrew ] = "‮רשומה‬";
                         Text[ hindi ] = "~Record";
                         Text[ slovak ] = "~Záznam";
+                        Text[ hungarian ] = "~Rekord";
+                        Text[ slovenian ] = "~Zapiši";
                     };
 
                 };
@@ -448,7 +462,7 @@ Menu RID_MAIN_MENU
             Text[ spanish ] = "~Insertar";
             Text[ finnish ] = "~Lis��";
             Text[ italian ] = "~Inserisci";
-            Text[ danish ] = "Inds�t";
+            Text[ danish ] = "~Inds�t";
             Text[ swedish ] = "~Infoga";
             Text[ polish ] = "W~staw";
             Text[ portuguese_brazilian ] = "~Inserir";
@@ -464,6 +478,8 @@ Menu RID_MAIN_MENU
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~Insert";
             Text[ slovak ] = "Vlož~iť";
+            Text[ hungarian ] = "~Beszúrás";
+            Text[ slovenian ] = "~Vstavi";
         };
     MenuItem
     {
@@ -500,7 +516,7 @@ Menu RID_MAIN_MENU
                         Text[ french ] = "~Filtrer...";
                         Text[ spanish ] = "~Filtrar...";
                         Text[ italian ] = "~Filtra...";
-                        Text[ danish ] = "~Filtrer...";
+                        Text[ danish ] = "~Filter...";
                         Text[ swedish ] = "~Filtrera...";
                         Text[ polish ] = "Filtruj...";
                         Text[ portuguese_brazilian ] = "Filtrar...";
@@ -518,6 +534,8 @@ Menu RID_MAIN_MENU
                         Text[ hebrew ] = "‮סינון...‬";
                         Text[ hindi ] = "~फिल्टर...";
                         Text[ slovak ] = "~Filter...";
+                        Text[ hungarian ] = "~Szűrő...";
+                        Text[ slovenian ] = "~Filtriraj...";
                     };
              MenuItem
             {
@@ -551,11 +569,14 @@ Menu RID_MAIN_MENU
             Text[ hebrew ] = "‮כלים‬";
             Text[ hindi ] = "~औज़ार";
             Text[ slovak ] = "Nás~troje";
+            Text[ hungarian ] = "~Eszközök";
+            Text[ slovenian ] = "O~rodja";
         };
     ITEM_WINDOW_MENU
     ITEM_HELP_MENU
     };
 };
+
 
 
 
