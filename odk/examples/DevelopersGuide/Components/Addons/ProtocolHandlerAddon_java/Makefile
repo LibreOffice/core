@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:12:27 $
+#  last change: $Author: vg $ $Date: 2003-07-09 10:37:21 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -95,7 +95,7 @@ $(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar Addons.xcu ProtocolHandler.xcu
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_MISC))
 	$(COPY) Addons.xcu $(subst /,$(PS),$(OUT_COMP_MISC))
 	$(COPY) ProtocolHandler.xcu $(subst /,$(PS),$(OUT_COMP_MISC))
-	cd $(OUT_COMP_MISC) && jar cvfM ../../bin/$(@F) $(^F)
+	cd $(subst /,$(PS),$(OUT_COMP_MISC)) && jar cvfM ../../bin/$(@F) $(^F)
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
