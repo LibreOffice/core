@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:01:58 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
@@ -1513,8 +1516,7 @@ namespace dbaui
         else
             return sal_True;
 
-        aErrorText.EraseAllChars('~');
-        ErrorBox(NULL, WB_OK, aErrorText).Execute();
+        ErrorBox(NULL, WB_OK, MnemonicGenerator::EraseAllMnemonicChars( aErrorText)).Execute();
         pErrorWin->GrabFocus();
         return 0;
     }
