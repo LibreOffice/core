@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:51 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,7 +1138,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     USHORT nEndRow;
     USHORT nEndTab;
 
-    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab,TRUE))
+    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
     {
         rMark.MarkToSimple();   // not done by GetSimpleArea anymore
 
@@ -1984,9 +1984,11 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRange
                     else if ( eMode==SC_SIZE_DIRECT )
                     {
                         if (nSizeTwips)
+                        {
                             pDoc->SetRowHeightRange( nStartNo, nEndNo, nTab, nSizeTwips );
+                            pDoc->SetManualHeight( nStartNo, nEndNo, nTab, TRUE );          // height was set manually
+                        }
                         pDoc->ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
-                        pDoc->SetManualHeight( nStartNo, nEndNo, nTab, TRUE );      // Manual-Flag
                     }
                     else if ( eMode==SC_SIZE_SHOW )
                     {
