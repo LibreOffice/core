@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iniman.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:46:48 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 21:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ErrorBox ERRBOX_CHECK_PLZ
     Message[ spanish ] = "El cуdigo postal indicado no es vбlido.\nDebe comenzar con un nъmero o una letra y\nsolo puede contener nъmeros, letras, espacios y guiones.";
     Message[ english_us ] = "The ZIP code specified is invalid.\nA ZIP code should begin with a number (or in some cases a letter) and\ncan only contain numbers, letters, spaces and dashes.";
     Message[ chinese_simplified ] = "ƒъ д»лµƒ” ’ю±а¬лќё–І°£\n” ’ю±а¬л±Ў–л”…“їЄц э„÷їт“їЄц„÷ƒЄњ™ЌЈ£ђ\n«“÷їƒ№єї∞ьЇђ э„÷£ђ„÷ƒЄ£ђњ’ЄсЈыЇЌЅђ„÷Јы°£";
-    Message[ russian ] = "¬веденный почтовый индекс неправилен.\nќн должен начинатьс€ с цифры или буквы и\nможет содержать только цифры, буквы, пробелы и разделитель?";
+    Message[ russian ] = "¬веденный почтовый индекс неправилен.\nќн должен начинатьс€ с цифры или буквы и\nможет содержать только цифры, буквы, пробелы и разделительные штрихи.";
     Message[ polish ] = "Wpisany kod pocztowy jest nieprawid≥owy.\nMusi siк on zaczynaж cyfrє lub literє i \nmoњe zawieraж tylko cyfry, litery, spacje i kreski.";
     Message[ japanese ] = "УьЧЌВµВљЧXХ÷Ф‘НЖВЌХsУKРЎВ≈ВЈБB\nРФОЪВ№ВљВЌХґОЪВ≈ОnВяВ»ВѓВкВќВ»ВиВ№ВєВс\nРФОЪВ∆ХґОЪВ∆љЌя∞љВ®ВжВ—јёѓЉ≠ВћВЁОgЧpВ≈ВЂВ№ВЈБB";
     Message[ arabic ] = "«б—г“ «б»—нѕн °«б–н ёг  »≈ѕќ«бе° џн— ’«бЌ.\nнћ» √д н»ѕ√ »—ёг √ж »Ќ—Ё°\nжнћ» √д нЌ жн ЁёЎ Џбм √—ё«г° √Ќ—Ё° √Ќ—Ё г”«Ё…° ж‘—Ў Ё«’б….";
@@ -88,5 +88,6 @@ ErrorBox ERRBOX_CHECK_PLZ
     Message[ catalan ] = "El cуdigo postal indicado no es vбlido.\nDebe comenzar con un nъmero o una letra y\nsolo puede contener nъmeros, letras, espacios y guiones.";
     Message[ finnish ] = "Mддritetty postinumero on virheellinen.\nPostinumeron ensimmдinen merkki voi olla vain numero tai kirjain ja\npostinumero voi sisдltдд vain numeroita, kirjaimia, vдlilyцntejд ja vдliviivoja.";
 };
+
 
 
