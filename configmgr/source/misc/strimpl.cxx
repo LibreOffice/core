@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: lla $ $Date: 2001-08-20 11:31:47 $
+ *  last change: $Author: dg $ $Date: 2001-10-11 14:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,22 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(PARAM_OBJECT, "Object");
     IMPLEMENT_CONSTASCII_USTRING(PARAM_NAME, "Name");
     IMPLEMENT_CONSTASCII_USTRING(PARAM_ISNEWOBJECT, "IsNewObject");
+    IMPLEMENT_CONSTASCII_USTRING(PARAM_GROUP, "Group");
+
+    // Properties
+    IMPLEMENT_CONSTASCII_USTRING(PROP_MEMBEROF, "MemberOf");
+
+    // node strings
+    IMPLEMENT_CONSTASCII_USTRING(NODE_TOPLEVEL, "TOPLEVEL");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE, "org.openoffice.UserProfile");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUP_PATH, "Data");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUP_FIELD, "UserGroup");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_DEFAULTGROUP, "defaultGroup");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUPLIST, "org.openoffice.UserProfile/Group");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_USERLIST, "org.openoffice.UserProfile/User");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERTEMPLATE_MODULE, "org.openoffice.Webtop.Common");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERTEMPLATE_NAME, "User");
+
 
 // emacs:
 // create the declare from the implement
