@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:36:47 $
+ *  last change: $Author: hr $ $Date: 2004-03-12 12:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,7 +980,8 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
 {
     // search the external dispatcher causing this call
     Reference< XDispatch > xSource(_rEvent.Source, UNO_QUERY);
-    for (   SpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
+    SpecialSlotDispatchersIterator aLoop;
+    for (   aLoop = m_aDispatchers.begin();
             aLoop != m_aDispatchers.end();
             ++aLoop
         )
