@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleGraphicShape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 17:56:09 $
+ *  last change: $Author: af $ $Date: 2002-03-06 15:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ AccessibleGraphicShape::AccessibleGraphicShape (const ::com::sun::star::uno::Ref
         ::com::sun::star::drawing::XShape>& rxShape,
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent)
-    :      AccessibleShape (rxShape, rxParent)
+    :      AccessibleShape (rxShape, rxParent, NULL)
 {
 }
 
@@ -191,7 +191,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 /// Set this object's name if is different to the current name.
 ::rtl::OUString
-    AccessibleGraphicShape::createAccessibleName (void)
+    AccessibleGraphicShape::createAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName;

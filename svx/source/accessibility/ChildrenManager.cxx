@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
+ *  last change: $Author: af $ $Date: 2002-03-06 16:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,13 @@
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include "ShapeTypeHandler.hxx"
 #endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
+#include "AccessibleContextBase.hxx"
+#endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBLE_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XIndexAccess_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
@@ -83,11 +89,17 @@ namespace accessibility {
 //=====  AccessibleChildrenManager  ===========================================
 
 ChildrenManager::ChildrenManager (
-    const ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>& rxParent)
-    : mxParent (rxParent)
+    const uno::Reference<XAccessible>& rxParent,
+    const uno::Reference<document::XEventBroadcaster>& rxBroadcaster,
+    AccessibleContextBase& rContext)
+    : mxParent (rxParent),
+      mxBroadcaster (rxBroadcaster),
+      mrContext (rContext)
 {
-    // emtpy
+    // Register as document::XEventListener.
+    //    if (rxBroadcaster.is())
+    //        rxBroadcaster->addEventListener (static_cast<document::XEventListener*>(this));
+
 }
 
 
@@ -113,7 +125,7 @@ long ChildrenManager::getChildCount (void) const throw ()
     yet in the cache.
 */
 ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>
+        ::drafts::com::sun::star::accessibility::XAccessible>
     ChildrenManager::getChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -123,7 +135,20 @@ long ChildrenManager::getChildCount (void) const throw ()
             ::rtl::OUString::createFromAscii ("no accessible child with index " + nIndex),
             mxParent);
 
-    ChildDescriptor& aChildDescriptor = maChildDescriptorList[nIndex];
+    return getChild (maChildDescriptorList[nIndex]);
+}
+
+
+
+
+/** Return the requested accessible child object.  Create it if it is not
+    yet in the cache.
+*/
+::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible>
+    ChildrenManager::getChild (ChildDescriptor& aChildDescriptor)
+    throw (::com::sun::star::uno::RuntimeException)
+{
     if ( ! aChildDescriptor.mxAccessibleShape.is())
     {
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
@@ -131,11 +156,25 @@ long ChildrenManager::getChildCount (void) const throw ()
         // created while locking the global mutex.
         if ( ! aChildDescriptor.mxAccessibleShape.is())
         {
-            // Create corresponding accessible object.
+            // Create accessible object that corresponds to the descriptor's
+            // shape.
             aChildDescriptor.mxAccessibleShape =
                 ShapeTypeHandler::Instance().createAccessibleObject (
                     aChildDescriptor.mxShape,
-                    mxParent);
+                    mxParent,
+                    mxBroadcaster);
+
+            // Create event and inform listeners of the object creation.
+            uno::Any aNewValue,
+                aOldValue;
+            aOldValue <<= uno::Reference<XAccessible>();
+            aNewValue <<= aChildDescriptor.mxAccessibleShape;
+            AccessibleEventObject aEvent (
+                mxParent,
+                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                aNewValue,
+                aOldValue);
+            mrContext.fireEvent (aEvent);
         }
     }
 
@@ -145,13 +184,27 @@ long ChildrenManager::getChildCount (void) const throw ()
 
 
 
+uno::Reference<XAccessible>
+    ChildrenManager::getChild (const uno::Reference<drawing::XShape>& xShape)
+    throw (uno::RuntimeException)
+{
+    ChildDescriptorListType::iterator I;
+    for (I=maChildDescriptorList.begin(); I!=maChildDescriptorList.end(); I++)
+    {
+        if (I->mxShape == xShape)
+            return I->mxAccessibleShape;
+    }
+    return uno::Reference<XAccessible> ();
+}
+
 /** For now forward the update of the shape list to the general update
     method.
 */
 void ChildrenManager::update (const ::com::sun::star::uno::Reference<
-    ::com::sun::star::drawing::XShapes>& xShapeList)
+    ::com::sun::star::drawing::XShapes>& xShapeList,
+        bool bCreateNewObjectsOnDemand)
 {
-    update (xShapeList, maVisibleArea);
+    update (xShapeList, maVisibleArea, bCreateNewObjectsOnDemand);
 }
 
 
@@ -160,9 +213,10 @@ void ChildrenManager::update (const ::com::sun::star::uno::Reference<
 /** For now forward the update of the visible area to the general update
     method.
 */
-void ChildrenManager::update (const Rectangle& aVisibleArea)
+void ChildrenManager::update (const Rectangle& aVisibleArea,
+        bool bCreateNewObjectsOnDemand)
 {
-    update (mxOriginalShapeList, aVisibleArea);
+    update (mxOriginalShapeList, aVisibleArea, bCreateNewObjectsOnDemand);
 }
 
 
@@ -174,35 +228,114 @@ void ChildrenManager::update (const Rectangle& aVisibleArea)
 */
 void ChildrenManager::update (const ::com::sun::star::uno::Reference<
     ::com::sun::star::drawing::XShapes>& xShapeList,
-    const Rectangle& aVisibleArea)
+    const Rectangle& aVisibleArea,
+        bool bCreateNewObjectsOnDemand)
 {
-    ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
+    // Iterate over all children and create child events denoting
+    // that the children are about to be removed.
+    while (maChildDescriptorList.begin()!=maChildDescriptorList.end())
+    {
+        // Create event and inform listeners of object removal.
+        uno::Any aNewValue,
+            aOldValue;
+        aOldValue <<= maChildDescriptorList.back().mxAccessibleShape;
+        aNewValue <<= uno::Reference<XAccessible>();
+        AccessibleEventObject aEvent (
+            mxParent,
+            AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+            aNewValue,
+            aOldValue);
+        mrContext.fireEvent (aEvent);
 
-    // Clear the list of children.
-    maChildDescriptorList.clear ();
+        // Remove descriptor from list.
+        maChildDescriptorList.pop_back();
+    }
 
-    // Remember the new list and visible area for later use.
-    mxOriginalShapeList = xShapeList;
-    maVisibleArea = aVisibleArea;
+    {
+        ::vos::OGuard aGuard (maMutex);
+
+        // Clear the list of children.
+        maChildDescriptorList.clear ();
+
+        // Remember the new list and visible area for later use.
+        mxOriginalShapeList = xShapeList;
+        maVisibleArea = aVisibleArea;
+    }
 
     // Determine all fully and partially visible shapes and add those to the list
     // of managed children.
     uno::Reference<container::XIndexAccess> xIA (mxOriginalShapeList, uno::UNO_QUERY);
-    long n = xIA->getCount();
-    for (long i=0; i<n; i++)
+    if (xIA.is())
     {
-        uno::Reference<drawing::XShape> xShape (xIA->getByIndex(i), uno::UNO_QUERY);
-        Rectangle aBoundingBox (xShape->getPosition().X, xShape->getPosition().Y,
-            xShape->getSize().Width, xShape->getSize().Height);
-        if (aBoundingBox.IsOver (maVisibleArea))
+        long n = xIA->getCount();
+        for (long i=0; i<n; i++)
         {
-            // Add shape to list of visible children.
-            maChildDescriptorList.push_back (ChildDescriptor (xShape));
+            uno::Reference<drawing::XShape> xShape (xIA->getByIndex(i), uno::UNO_QUERY);
+            Rectangle aBoundingBox (xShape->getPosition().X, xShape->getPosition().Y,
+                xShape->getSize().Width, xShape->getSize().Height);
+            if (aBoundingBox.IsOver (maVisibleArea))
+            {
+                ::vos::OGuard aGuard (maMutex);
+
+                // Add shape to list of visible children.
+                maChildDescriptorList.push_back (ChildDescriptor (xShape));
+
+                // Create the associated accessible object when the flag says so.
+                if ( ! bCreateNewObjectsOnDemand)
+                    getChild (maChildDescriptorList.back());
+            }
         }
     }
 }
 
 
+/*
+
+//=====  lang::XEventListener  ================================================
+
+void SAL_CALL
+    ChildrenManager::disposing (const lang::EventObject& rEventObject)
+    throw (uno::RuntimeException)
+{
+    // Not yet interested in disposing events.
+}
+
+
+
+
+//=====  document::XEventListener  ============================================
+
+void SAL_CALL
+    ChildrenManager::notifyEvent (const document::EventObject& rEventObject)
+    throw (uno::RuntimeException)
+{
+    OSL_TRACE ("notifyEvent");
+    const OUString sShapeModified (RTL_CONSTASCII_USTRINGPARAM ("ShapeModified"));
+    if (rEventObject.EventName.equals (sShapeModified))
+    {
+        OSL_TRACE ("  Is ShapeNotified event");
+        // Some property of a shape has been modified.  Find the associated
+        // accessible object and send an event that indicates a change of the
+        // visible data to all listeners.
+        uno::Reference<drawing::XShape> xShape (rEventObject.Source, uno::UNO_QUERY);
+        uno::Any aOldValue;
+        aOldValue <<= xShape; // Test
+        uno::Reference<XAccessible> xAccessibleShape = getChild (xShape);
+        if (xAccessibleShape.is())
+        {
+            AccessibleEventObject aEvent (
+                xAccessibleShape,
+                AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
+                uno::Any(),
+                aOldValue);
+            mrContext.fireEvent (aEvent);
+        }
+        else
+            OSL_TRACE ("   Could not find accessible object for shape.");
+    }
+}
+
+*/
 
 
 // This method is experimental.  Use with care.

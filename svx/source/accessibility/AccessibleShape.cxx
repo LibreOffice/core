@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 17:56:09 $
+ *  last change: $Author: af $ $Date: 2002-03-06 15:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,19 +60,22 @@
  ************************************************************************/
 
 
-
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #include "AccessibleShape.hxx"
+#endif
+
+#ifndef _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
+#include "DescriptionGenerator.hxx"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -92,6 +95,13 @@
 #include "ShapeTypeHandler.hxx"
 #include "SvxShapeTypes.hxx"
 
+#ifndef _SVX_ACCESSIBILITY_HRC
+#include "accessibility.hrc"
+#endif
+#ifndef _SVX_DIALMGR_HXX
+#include "dialmgr.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -100,22 +110,23 @@ namespace accessibility {
 
 //=====  internal  ============================================================
 
-AccessibleShape::AccessibleShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent)
-    :      AccessibleContextBase (rxParent,
-        AccessibleRole::SHAPE),
-           mxShape (rxShape)
+AccessibleShape::AccessibleShape (const uno::Reference<drawing::XShape>& rxShape,
+    const uno::Reference<XAccessible>& rxParent,
+    const uno::Reference<document::XEventBroadcaster>& rxBroadcaster,
+    long nIndex)
+    : AccessibleContextBase (rxParent,AccessibleRole::SHAPE),
+      mxShape (rxShape),
+      mnIndex (nIndex)
 {
-    // Create a children manager if this shape has children of its own.
+    // Create a children manager when this shape has children of its own.
     uno::Reference<drawing::XShapes> xShapes (mxShape, uno::UNO_QUERY);
     if (xShapes.is() && xShapes->getCount() > 0)
     {
-        maChildrenManager = new ChildrenManager (this);
+        maChildrenManager = new ChildrenManager (this, rxBroadcaster, *this);
         Rectangle aBBox (mxShape->getPosition().X, mxShape->getPosition().Y,
             mxShape->getSize().Width, mxShape->getSize().Height);
         maChildrenManager->update (xShapes, aBBox);
+
     }
     else
         maChildrenManager = NULL;
@@ -128,6 +139,14 @@ AccessibleShape::~AccessibleShape (void)
 {
     if (maChildrenManager != NULL)
         delete maChildrenManager;
+}
+
+
+
+
+bool AccessibleShape::operator== (const AccessibleShape& rShape)
+{
+    return this==&rShape;
 }
 
 
@@ -345,7 +364,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 /// Set this object's name if is different to the current name.
 ::rtl::OUString
-    AccessibleShape::createAccessibleName (void)
+    AccessibleShape::createAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName;
@@ -435,11 +454,154 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 
+
+::rtl::OUString
+    AccessibleShape::createAccessibleName (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OUString sName (createAccessibleBaseName());
+
+    // Append the shape's index to the name to disambiguate between shapes
+    // of the same type.  If such an index where not given to the
+    // constructor then use the z-order instead.
+    long nIndex = mnIndex;
+    if (nIndex == -1)
+    {
+        uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
+        if (xSet.is())
+        {
+            uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString::createFromAscii ("ZOrder")));
+            aZOrder >>= nIndex;
+        }
+    }
+    sName += OUString::valueOf (nIndex);
+
+    return sName;
+}
+
+
+
+
 ::rtl::OUString
     AccessibleShape::createAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return createAccessibleName ();
+    DescriptionGenerator aDG (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
+    switch (nShapeType)
+    {
+        case DRAWING_RECTANGLE:
+            aDG.initialize (SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
+            aDG.addLineProperties ();
+            aDG.addFillProperties ();
+            break;
+        case DRAWING_ELLIPSE:
+            aDG.initialize (SVX_RESSTR(RID_SVXSTR_A11Y_ST_ELLIPSE));
+            aDG.addLineProperties ();
+            aDG.addFillProperties ();
+            break;
+        case DRAWING_CONTROL:
+            aDG.initialize (OUString::createFromAscii("Control"));
+            aDG.addProperty (OUString::createFromAscii ("ControlBackground"),
+                DescriptionGenerator::COLOR,
+                OUString());
+            aDG.addProperty (OUString::createFromAscii ("ControlBorder"),
+                DescriptionGenerator::INTEGER,
+                OUString());
+            break;
+        case DRAWING_CONNECTOR:
+            aDG.initialize (OUString::createFromAscii("Connector"));
+            aDG.addLineProperties ();
+            break;
+        case DRAWING_MEASURE:
+            aDG.initialize (OUString::createFromAscii("Dimension Line"));
+            aDG.addLineProperties ();
+            break;
+        case DRAWING_LINE:
+            aDG.initialize (OUString::createFromAscii("Line"));
+            aDG.addLineProperties ();
+            break;
+        case DRAWING_POLY_POLYGON:
+            aDG.initialize (OUString::createFromAscii("Poly Polygon"));
+            aDG.addLineProperties ();
+            aDG.addFillProperties ();
+            break;
+        case DRAWING_POLY_LINE:
+            aDG.initialize (OUString::createFromAscii("Poly Line"));
+            aDG.addLineProperties ();
+            break;
+        case DRAWING_OPEN_BEZIER:
+            aDG.initialize (SVX_RESSTR(RID_SVXSTR_A11Y_ST_OPEN_BEZIER_CURVE));
+            aDG.addLineProperties ();
+            break;
+        case DRAWING_CLOSED_BEZIER:
+            aDG.initialize (OUString::createFromAscii("Closed Bezier Curve"));
+            aDG.addLineProperties ();
+            aDG.addFillProperties ();
+            break;
+        case DRAWING_OPEN_FREEHAND:
+            aDG.initialize (OUString::createFromAscii("Open Freehand Curve"));
+            aDG.addLineProperties ();
+            break;
+        case DRAWING_CLOSED_FREEHAND:
+            aDG.initialize (OUString::createFromAscii("Closed Freehand Curve"));
+            aDG.addLineProperties ();
+            aDG.addFillProperties ();
+            break;
+        case DRAWING_POLY_POLYGON_PATH:
+            aDG.initialize (OUString::createFromAscii("Poly Polygon Path"));
+            aDG.addLineProperties ();
+            aDG.addFillProperties ();
+            break;
+        case DRAWING_POLY_LINE_PATH:
+            aDG.initialize (OUString::createFromAscii("Poly Line Path"));
+            aDG.addLineProperties ();
+            break;
+        case DRAWING_GROUP:
+            aDG.initialize (OUString::createFromAscii("Group"));
+            break;
+        case DRAWING_TEXT:
+            aDG.initialize (OUString::createFromAscii("Text"));
+            aDG.addTextProperties ();
+            break;
+        case DRAWING_PAGE:
+            aDG.initialize (OUString::createFromAscii("Page"));
+            break;
+        case DRAWING_3D_SCENE:
+            aDG.initialize (OUString::createFromAscii("3D Scene"));
+            break;
+        case DRAWING_3D_CUBE:
+            aDG.initialize (OUString::createFromAscii("3D Cube"));
+            aDG.add3DProperties ();
+            break;
+        case DRAWING_3D_SPHERE:
+            aDG.initialize (OUString::createFromAscii("3D Sphere"));
+            aDG.add3DProperties ();
+            break;
+        case DRAWING_3D_LATHE:
+            aDG.initialize (OUString::createFromAscii("3D Lathe Object"));
+            aDG.add3DProperties ();
+            break;
+        case DRAWING_3D_EXTRUDE:
+            aDG.initialize (OUString::createFromAscii("3D Extrusion Object"));
+            aDG.add3DProperties ();
+            break;
+        case DRAWING_3D_POLYGON:
+            aDG.initialize (OUString::createFromAscii("3D Polygon"));
+            aDG.add3DProperties ();
+            break;
+        default:
+            aDG.initialize (::rtl::OUString::createFromAscii (
+                "Unknown accessible shape"));
+            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
+            if (xDescriptor.is())
+            {
+                aDG.appendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("service name=")));
+                aDG.appendString (xDescriptor->getShapeType());
+            }
+    }
+
+    return aDG();
 }
 
 

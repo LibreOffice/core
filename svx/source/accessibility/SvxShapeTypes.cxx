@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
+ *  last change: $Author: af $ $Date: 2002-03-06 16:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,11 @@ namespace accessibility {
 ::com::sun::star::uno::Reference<
     ::drafts::com::sun::star::accessibility::XAccessible>
     createSvxAccessibleShape (const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
+            ::com::sun::star::drawing::XShape>& rxShape,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::document::XEventBroadcaster>& rxBroadcaster,
         ShapeTypeId nId)
 {
     switch (nId)
@@ -106,7 +108,7 @@ namespace accessibility {
         case DRAWING_3D_LATHE:
         case DRAWING_3D_EXTRUDE:
         case DRAWING_3D_POLYGON:
-            return new AccessibleShape (rxShape, rxParent);
+            return new AccessibleShape (rxShape, rxParent, rxBroadcaster);
 
         case DRAWING_GRAPHIC_OBJECT:
             return new AccessibleGraphicShape (rxShape, rxParent);
@@ -219,7 +221,7 @@ ShapeTypeDescriptor aSvxShapeTypeList[] = {
 void RegisterDrawShapeTypes (void)
 {
     ShapeTypeHandler::Instance().addShapeTypeList (
-        DRAWING_3D_POLYGON - DRAWING_RECTANGLE + 1,
+        DRAWING_3D_POLYGON - DRAWING_TEXT + 1,
         aSvxShapeTypeList);
 }
 
