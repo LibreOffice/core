@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:14:47 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1930,7 +1930,7 @@ Resource RID_BASIC_START
         Text [ danish ] = "Egenskaben er skrivebeskyttet" ;
         Text [ swedish ] = "Egenskapen дr skrivskyddad" ;
         Text [ finnish ] = "Property is read only" ;
-        Text [ english_us ] = "This property is read only" ;
+        Text [ english_us ] = "This property is read-only" ;
         Text[ chinese_simplified ] = "·АёІРґµДКфРФ";
         Text[ russian ] = "Свойство возможно только прочитать";
         Text[ polish ] = "Wіaњciwoњж tylko do odczytu";
