@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:34:21 $
+#   last change: $Author: kz $ $Date: 2005-01-21 13:55:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.83 $$"
+LIBSMKREV!:="$$Revision: 1.84 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -395,8 +395,7 @@ BASICLIGHTLIB=$(LIBPRE) basicl.lib
 SO2LIB=$(LIBPRE) so2.lib
 TKTLIB=$(LIBPRE) tkt.lib
 SJLIB=$(LIBPRE) sj.lib
-SVXLIB=$(LIBPRE) svx.lib
-SVXLIB+=$(LIBPRE) dl.lib
+SVXLIB=$(LIBPRE) isvx.lib
 BASCTLLIB=$(LIBPRE) basctl.lib
 BASICIDELIB=ybctl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
