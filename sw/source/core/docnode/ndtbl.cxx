@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:20:31 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,11 +529,14 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
             pColArr = 0;
     }
 
+    String aTblName = GetUniqueTblName();
+
     if( DoesUndo() )
     {
         ClearRedo();
         AppendUndo( new SwUndoInsTbl( rPos, nCols, nRows, eAdjust,
-                                      rInsTblOpts, pTAFmt, pColArr ));
+                                      rInsTblOpts, pTAFmt, pColArr,
+                                      aTblName));
     }
 
     // fuege erstmal die Nodes ein
@@ -569,7 +572,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
 
     // dann erstelle die Box/Line/Table-Struktur
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
-    SwTableFmt* pTableFmt = MakeTblFrmFmt( GetUniqueTblName(), GetDfltFrmFmt() );
+    SwTableFmt* pTableFmt = MakeTblFrmFmt( aTblName, GetDfltFrmFmt() );
 
     /* #106283# If the node to insert the table at is a context node and has a
        non-default FRAMEDIR propagate it to the table. */
@@ -1426,6 +1429,8 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     }
 
     SectionUp( &aDelRg );       // loesche die Section und damit die Tabelle
+    // #i28006#
+    ULONG nStt = aDelRg.aStart.GetIndex(), nEnd = aDelRg.aEnd.GetIndex();
     if( !pFrmNd )
     {
         pNode2Layout->RestoreUpperFrms( *this,
@@ -1436,7 +1441,6 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     {
         SwCntntNode *pCNd;
         SwSectionNode *pSNd;
-        ULONG nStt = aDelRg.aStart.GetIndex(), nEnd = aDelRg.aEnd.GetIndex();
         while( aDelRg.aStart.GetIndex() < nEnd )
         {
             if( 0 != ( pCNd = aDelRg.aStart.GetNode().GetCntntNode()))
@@ -1461,21 +1465,24 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
             }
             aDelRg.aStart++;
         }
-
-        const SwSpzFrmFmts& rFlyArr = *GetDoc()->GetSpzFrmFmts();
-        const SwPosition* pAPos;
-        for( USHORT n = 0; n < rFlyArr.Count(); ++n )
-        {
-            SwFrmFmt* pFmt = (SwFrmFmt*)rFlyArr[n];
-            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-            if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                  FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-                0 != ( pAPos = rAnchor.GetCntntAnchor() ) &&
-                nStt <= pAPos->nNode.GetIndex() &&
-                pAPos->nNode.GetIndex() < nEnd )
-                pFmt->MakeFrms();
-        }
     }
+
+    // #i28006# Fly frames have to be restored even if the table was
+    // #alone in the section
+    const SwSpzFrmFmts& rFlyArr = *GetDoc()->GetSpzFrmFmts();
+    const SwPosition* pAPos;
+    for( USHORT n = 0; n < rFlyArr.Count(); ++n )
+    {
+        SwFrmFmt* pFmt = (SwFrmFmt*)rFlyArr[n];
+        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+        if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
+              FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
+            0 != ( pAPos = rAnchor.GetCntntAnchor() ) &&
+            nStt <= pAPos->nNode.GetIndex() &&
+            pAPos->nNode.GetIndex() < nEnd )
+            pFmt->MakeFrms();
+    }
+
     return TRUE;
 }
 
@@ -1711,7 +1718,12 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
     }
 
     // dann loesche doch die Zeilen
-    return DeleteRowCol( aBoxes );
+
+    StartUndo(UNDO_ROW_DELETE);
+    BOOL bResult = DeleteRowCol( aBoxes );
+    EndUndo(UNDO_ROW_DELETE);
+
+    return bResult;
 }
 
 BOOL SwDoc::DeleteCol( const SwCursor& rCursor )
@@ -1733,7 +1745,11 @@ BOOL SwDoc::DeleteCol( const SwCursor& rCursor )
     }
 
     // dann loesche doch die Spalten
-    return DeleteRowCol( aBoxes );
+    StartUndo(UNDO_COL_DELETE);
+    BOOL bResult = DeleteRowCol( aBoxes );
+    EndUndo(UNDO_COL_DELETE);
+
+    return bResult;
 }
 
 BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
@@ -1848,6 +1864,7 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
             if( bNewTxtNd )
                 pUndo->SetTblDelLastNd();
             pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
+            pUndo->SetTableName(pTblNd->GetTable().GetFrmFmt()->GetName());
             AppendUndo( pUndo );
         }
         else
