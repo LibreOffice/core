@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:12:39 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_
 #include <helper/acceleratorinfo.hxx>
+#endif
+#ifndef __FRAMEWORK_CLASSES_MENUEXTENSIONSUPPLIER_HXX_
+#include <classes/menuextensionsupplier.hxx>
 #endif
 #include <classes/resource.hrc>
 #ifndef __FRAMEWORK_SERVICES_H_
@@ -275,6 +278,8 @@ namespace framework
 const ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
 const ::rtl::OUString aCmdHelpIndex( RTL_CONSTASCII_USTRINGPARAM( ".uno:HelpIndex" ));
 const ::rtl::OUString aCmdToolsMenu( RTL_CONSTASCII_USTRINGPARAM( ".uno:ToolsMenu" ));
+const ::rtl::OUString aCmdHelpMenu( RTL_CONSTASCII_USTRINGPARAM( ".uno:HelpMenu" ));
+const ::rtl::OUString aSlotHelpMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5410" ));
 
 const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
@@ -1024,6 +1029,44 @@ void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu )
     }
 }
 
+void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
+{
+    static const char REFERENCECOMMAND_AFTER[]  = ".uno:OnlineRegistrationDlg";
+    static const char REFERENCECOMMAND_BEFORE[] = ".uno:About";
+
+    // retrieve menu extension item
+    MenuExtensionItem aMenuItem( GetMenuExtension() );
+    if (( aMenuItem.aURL.getLength() > 0 ) &&
+        ( aMenuItem.aLabel.getLength() > 0 ))
+    {
+        // remove all old window list entries from menu
+        sal_uInt16 nNewItemId( 0 );
+        sal_uInt16 nInsertPos( MENU_APPEND );
+        sal_uInt16 nAfterPos( MENU_APPEND );
+        sal_uInt16 nBeforePos( MENU_APPEND );
+        String     aCommandAfter( String::CreateFromAscii ( REFERENCECOMMAND_AFTER ));
+        String     aCommandBefore( String::CreateFromAscii ( REFERENCECOMMAND_BEFORE ));
+        for ( sal_uInt16 n = 0; n < pMenu->GetItemCount(); n++ )
+        {
+            sal_uInt16 nItemId = pMenu->GetItemId( n );
+            nNewItemId = std::max( nItemId, nNewItemId );
+            if ( pMenu->GetItemCommand( nItemId ) == aCommandAfter )
+                nAfterPos = n+1;
+            else if ( pMenu->GetItemCommand( nItemId ) == aCommandBefore )
+                nBeforePos = n;
+        }
+        ++nNewItemId;
+
+        if ( nAfterPos != MENU_APPEND )
+            nInsertPos = nAfterPos;
+        else if ( nBeforePos != MENU_APPEND )
+            nInsertPos = nBeforePos;
+
+        pMenu->InsertItem( nNewItemId, aMenuItem.aLabel, 0, nInsertPos );
+        pMenu->SetItemCommand( nNewItemId, aMenuItem.aURL );
+    }
+}
+
 //_________________________________________________________________________________________________________________
 // vcl handler
 //_________________________________________________________________________________________________________________
@@ -1052,8 +1095,8 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 
         ::rtl::OUString aCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand == aSpecialWindowMenu ||
-                  m_aMenuItemCommand == aSlotSpecialWindowMenu ||
-                  aCommand == aSpecialWindowCommand )
+             m_aMenuItemCommand == aSlotSpecialWindowMenu ||
+             aCommand == aSpecialWindowCommand )
             UpdateSpecialWindowMenu( pMenu );
 
         // Check if some modes have changed so we have to update our menu images
@@ -1574,6 +1617,10 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
             }
             else
             {
+                // Check if this is the help menu. Add menu item if needed
+                if ( nItemId == SID_HELPMENU || aItemCommand == aSlotHelpMenu || aItemCommand == aCmdHelpMenu )
+                    CheckAndAddMenuExtension( pPopupMenu );
+
                 // #110897# MenuBarManager* pSubMenuManager = new MenuBarManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
                 MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, aModuleIdentifier, pPopupMenu, bDeleteChildren, bDeleteChildren );
                 Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
@@ -1593,10 +1640,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                     aQueryLabelItemIdVector.push_back( nItemId );
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu
-                if (( nItemId == SID_ADDONLIST ||
-                      aItemCommand == aSlotSpecialToolsMenu ||
-                      aItemCommand == aCmdToolsMenu ) &&
-                    AddonMenuManager::HasAddonMenuElements() )
+                if (( nItemId == SID_ADDONLIST || aItemCommand == aSlotSpecialToolsMenu || aItemCommand == aCmdToolsMenu ) &&
+                      AddonMenuManager::HasAddonMenuElements() )
                 {
                     USHORT      nCount   = 0;
                     AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
