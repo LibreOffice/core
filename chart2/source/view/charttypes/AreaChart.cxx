@@ -652,10 +652,15 @@ void AreaChart::createShapes()
                             {
                                 if( pSymbolProperties->aStyle == SymbolStyle_STANDARD )
                                 {
+                                    drawing::Direction3D aSize;
+                                    aSize.DirectionX = pSymbolProperties->aSize.Width;
+                                    aSize.DirectionY = pSymbolProperties->aSize.Height;
                                     m_pShapeFactory->createSymbol2D( xPointGroupShape_Shapes
-                                            , aTransformedGeom.m_aPosition, aTransformedGeom.m_aSize
-                                            , pSymbolProperties->nStandardSymbol );
+                                            , aTransformedGeom.m_aPosition, aSize
+                                            , pSymbolProperties->nStandardSymbol
+                                            , pSymbolProperties->nFillColor );
                                 }
+                                //@todo other symbol styles
                             }
                         }
                     }
