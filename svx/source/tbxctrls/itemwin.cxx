@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-04-02 13:51:10 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 12:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include "dlgutil.hxx"
 #include "itemwin.hxx"
 #include "linectrl.hxx"
+#include "colorcfg.hxx"
 
 #include "linectrl.hrc"
 
@@ -111,8 +112,9 @@ SvxLineBox::SvxLineBox( Window* pParent, SfxBindings& rBind, WinBits nBits ) :
     aLogicalSize(40,140),
     nCurPos     ( 0 ),
     rBindings   ( rBind ),
-    bRelease    ( TRUE )
-
+    bRelease    ( TRUE ),
+    mpSh        ( NULL ),
+    meBmpMode   ( GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL )
 {
     SetSizePixel( LogicToPixel( aLogicalSize, MAP_APPFONT ));
     Show();
@@ -132,25 +134,10 @@ SvxLineBox::~SvxLineBox()
 
 IMPL_LINK( SvxLineBox, DelayHdl_Impl, Timer *, pTimer )
 {
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-
-    if ( pSh && GetEntryCount() == 0 )
+    if ( GetEntryCount() == 0 )
     {
-        InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
-
-        const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-        Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
-        Color aColorOld ( 0xFF, 0xFF, 0xFF );
-        Color aColorNew = rStyles.GetWindowColor();
-        aBitmap.Replace ( aColorOld, aColorNew );
-        Image aSolidLine ( aBitmap );
-        InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID), aSolidLine );
-
-        const SvxDashListItem* pItem = (const SvxDashListItem*)( pSh->GetItem( SID_DASH_LIST ) );
-        if ( pItem )
-            Fill( pItem->GetDashList() );
-
-        rBindings.Invalidate( SID_ATTR_LINE_DASH );
+        mpSh = SfxObjectShell::Current();
+        FillControl();
     }
     return 0;
 }
@@ -283,11 +270,53 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
         Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
         SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
-    }
+   }
 
     LineLB::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        BmpColorMode eMode = GetDisplayBackground().GetColor().IsDark() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL;
+        if( eMode != meBmpMode )
+        {
+            meBmpMode = eMode;
+            FillControl();
+        }
+     }
 }
 
+void SvxLineBox::FillControl()
+{
+    Clear();
+
+    InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
+
+    Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
+
+    Color aSourceColors[2];
+    Color aDestColors[2];
+
+    aSourceColors[0] = Color( COL_WHITE );
+    aSourceColors[1] = Color( COL_BLACK );
+
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    aDestColors[0] = rStyles.GetFieldColor();
+    aDestColors[1] = rStyles.GetFieldTextColor();
+
+    aBitmap.Replace ( aSourceColors, aDestColors, 2 );
+    Image aSolidLine ( aBitmap );
+    InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID), aSolidLine );
+
+    if( mpSh )
+    {
+        const SvxDashListItem* pItem = (const SvxDashListItem*)( mpSh->GetItem( SID_DASH_LIST ) );
+        if ( pItem )
+            Fill( pItem->GetDashList() );
+    }
+
+    rBindings.Invalidate( SID_ATTR_LINE_DASH );
+}
 //========================================================================
 // SvxColorBox
 //========================================================================

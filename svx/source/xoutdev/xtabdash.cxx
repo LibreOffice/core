@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:03:31 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 12:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
 
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #include <tools/urlobj.hxx>
@@ -499,9 +502,10 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, BOOL bDelete )
         DBG_ASSERT( pVD, "XDashList: Konnte kein VirtualDevice erzeugen!" );
         pVD->SetMapMode( MAP_100TH_MM );
         pVD->SetOutputSize( pVD->PixelToLogic( Size( BITMAP_WIDTH * 2, BITMAP_HEIGHT ) ) );
-        const StyleSettings& rStyleSettings = pVD->GetSettings().GetStyleSettings();
-        pVD->SetFillColor( rStyleSettings.GetFieldColor() );
-        pVD->SetLineColor( rStyleSettings.GetFieldColor() );
+
+        const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+        pVD->SetFillColor( rStyles.GetFieldColor() );
+        pVD->SetLineColor( rStyles.GetFieldColor() );
 
         pXOut = new XOutputDevice( pVD );
         DBG_ASSERT( pVD, "XDashList: Konnte kein XOutDevice erzeugen!" );
@@ -512,7 +516,7 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, BOOL bDelete )
         pXLSet = new XLineAttrSetItem( pXPool );
         DBG_ASSERT( pVD, "XDashList: Konnte kein XLineAttrSetItem erzeugen!" );
         pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_DASH ) );
-        pXLSet->GetItemSet().Put( XLineColorItem( String(), RGB_Color( COL_BLACK ) ) );
+        pXLSet->GetItemSet().Put( XLineColorItem( String(), RGB_Color( rStyles.GetFieldTextColor().GetColor() ) ) );
         pXLSet->GetItemSet().Put( XLineWidthItem( 30 ) );
     }
 

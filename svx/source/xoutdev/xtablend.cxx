@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtablend.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:04:07 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 12:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,10 @@ Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, BOOL bDelete )
         aVDSize = pVD->PixelToLogic( Size( BITMAP_WIDTH * 2, BITMAP_HEIGHT ) );
         pVD->SetOutputSize( aVDSize );
 
+        const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+        pVD->SetFillColor( rStyles.GetFieldColor() );
+        pVD->SetLineColor( rStyles.GetFieldColor() );
+
         pXOut = new XOutputDevice( pVD );
         DBG_ASSERT( pVD, "XLineEndList: Konnte kein XOutDevice erzeugen!" );
 
@@ -577,7 +581,7 @@ Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, BOOL bDelete )
         DBG_ASSERT( pVD, "XLineEndList: Konnte kein XLineAttrSetItem erzeugen!" );
         pXLSet->GetItemSet().Put( XLineStartWidthItem( aVDSize.Height() ) );
         pXLSet->GetItemSet().Put( XLineEndWidthItem( aVDSize.Height() ) );
-        pXLSet->GetItemSet().Put( XLineColorItem( String(), RGB_Color( COL_BLACK ) ) );
+        pXLSet->GetItemSet().Put( XLineColorItem( String(), RGB_Color( rStyles.GetFieldTextColor().GetColor() ) ) );
 
     }
     else

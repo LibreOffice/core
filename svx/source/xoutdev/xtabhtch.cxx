@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-22 11:21:52 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 12:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
@@ -88,6 +91,7 @@
 #include "xiocomp.hxx"
 #include "xpool.hxx"
 #include "xoutx.hxx"
+#include "dlgutil.hxx"
 
 #ifndef _SVX_XFLHTIT_HXX //autogen
 #include <xflhtit.hxx>
@@ -496,6 +500,11 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, BOOL bDelete )
         pXFSet = new XFillAttrSetItem( pXPool );
         DBG_ASSERT( pVD, "XHatchList: Konnte kein XFillAttrSetItem erzeugen!" );
     }
+
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() != 0 )
+        pVD->SetDrawMode( OUTPUT_DRAWMODE_CONTRAST );
+    else
+        pVD->SetDrawMode( OUTPUT_DRAWMODE_COLOR );
 
     // Damit die Schraffuren mit Rahmen angezeigt werden:
     // MapMode-Aenderungen (100th mm <--> Pixel)
