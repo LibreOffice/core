@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:22:21 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 10:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2338,21 +2338,18 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
     }
 
     //Die im Absatz verankerten Flys wollen auch mitspielen.
-    if ( pCntnt->GetDrawObjs() )
+    const SwDrawObjs *pObjs = pCntnt->GetDrawObjs();
+    for ( USHORT i = 0; pObjs && i < pObjs->Count(); ++i )
     {
-        const SwDrawObjs *pObjs = pCntnt->GetDrawObjs();
-        for ( USHORT i = 0; i < pObjs->Count(); ++i )
+        SdrObject *pO = (*pObjs)[i];
+        if ( pO->IsWriterFlyFrame() )
         {
-            SdrObject *pO = (*pObjs)[i];
-            if ( pO->IsWriterFlyFrame() )
+            SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+            if ( pFly->IsFlyInCntFrm() && ((SwFlyInCntFrm*)pFly)->IsInvalid() )
             {
-                SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                if ( pFly->IsFlyInCntFrm() && ((SwFlyInCntFrm*)pFly)->IsInvalid() )
-                {
-                    FormatFlyInCnt( (SwFlyInCntFrm*)pFly );
-                    pObjs = pCntnt->GetDrawObjs();
-                    CHECKPAGE;
-                }
+                FormatFlyInCnt( (SwFlyInCntFrm*)pFly );
+                pObjs = pCntnt->GetDrawObjs();
+                CHECKPAGE;
             }
         }
     }
