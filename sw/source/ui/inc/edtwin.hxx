@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bMBPressed      : 1,
                     bInsDraw        : 1,
                     bInsFrm         : 1,
-                    bGrfToOle       : 1, //Grf to Sim, fuer den Rueckweg.
                     bIsInMove       : 1,
                     bIsInDrag       : 1, //StartExecuteDrag nich doppelt ausfuehren
                     bOldIdle        : 1, //Zum abschalten des Idle'ns
@@ -233,10 +232,6 @@ protected:
     virtual BOOL    QueryDrop( DropEvent& rEvt);
 
 public:
-
-
-    void            OleToGrf();
-    void            GrfToOle();
 
     void            UpdatePointer(const Point &, USHORT nButtons = 0);
 

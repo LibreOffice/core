@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,7 +983,6 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             sal_uInt16  nOLEOptions = rDesc.GetOLEOptions();
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_MATH,   0 != (TOO_MATH  &nOLEOptions           ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CHART,  0 != (TOO_CHART &nOLEOptions       ));
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_IMAGE,  0 != (TOO_IMAGE &nOLEOptions           ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CALC,   0 != (TOO_CALC  &nOLEOptions           ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_DRAW,   0 != (TOO_DRAW_IMPRESS&nOLEOptions));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS, 0 != (TOO_OTHER|nOLEOptions       ));
@@ -4779,6 +4778,9 @@ IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, pButton)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:43  hr
+    initial import
+
     Revision 1.162  2000/09/18 16:05:51  willem.vandorp
     OpenOffice header added.
 

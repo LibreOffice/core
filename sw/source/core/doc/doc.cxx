@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,21 +228,6 @@
 #include <statstr.hrc>          // StatLine-String
 #endif
 
-class _GrfToOleUndo : public SwClient
-{
-public:
-    String aAlternateText;
-    SwUndoReRead* pSaveObj;
-    PolyPolygon *pContour;
-
-    _GrfToOleUndo( SwUndoReRead* pObj, SwGrfNode &rNd );
-    TYPEINFO();
-
-    // wird der Parent geloescht, dann loeschen wir uns selbst
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-};
-
-
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
 // Autoren
@@ -252,16 +237,6 @@ SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
 // FeldTypen
 SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
 
-TYPEINIT1( _GrfToOleUndo, SwClient );
-
-
-_GrfToOleUndo::_GrfToOleUndo( SwUndoReRead* pObj, SwGrfNode &rNd ) :
-    SwClient( 0 ),
-    pSaveObj( pObj ),
-    aAlternateText( rNd.GetAlternateText() ),
-    pContour( rNd.HasContour() ? new PolyPolygon( *rNd.HasContour() ) : 0 )
-{
-}
 
 /*
  * Dokumenteditieren (Doc-SS) zum Fuellen des Dokuments
@@ -578,68 +553,6 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, SvInPlaceObject *pObj,
                             pFrmFmt );
 }
 
-void SwDoc::GrfToOle( const SwPaM &rRg, SvInPlaceObject * pObj )
-{
-    // haben wir ueberhaupt eine Grafik an der Hand ??
-    SwNodeIndex& rNdIdx = (SwNodeIndex&)rRg.GetPoint()->nNode;
-    SwGrfNode* pGrfNd = rNdIdx.GetNode().GetGrfNode();
-    if( !pGrfNd )
-        return;
-
-    _GrfToOleUndo* pSaveForUndo = 0;
-    if( DoesUndo() )
-        pSaveForUndo = new _GrfToOleUndo( new SwUndoReRead( rRg, *pGrfNd ), *pGrfNd);
-
-    SwOLENode* pOLENd = GetNodes().MakeOLENode( rNdIdx, pObj,
-                            (SwGrfFmtColl*)pGrfNd->GetFmtColl(),
-                            pGrfNd->GetpSwAttrSet() );
-
-    pGrfNd->MakeFrms( *pOLENd );
-
-    if( pSaveForUndo )
-        pOLENd->Add( pSaveForUndo );
-
-    ((SwPaM&)rRg).GetPoint()->nContent.Assign( pOLENd, 0 );
-    GetNodes().DelNodes( rNdIdx, 1 );
-    rNdIdx--;
-}
-
-void SwDoc::OleToGrf( const SwPaM &rRg, const Graphic *pGrf )
-{
-    // haben wir ueberhaupt eine Ole an der Hand ??
-    SwNodeIndex& rNdIdx = (SwNodeIndex&)rRg.GetPoint()->nNode;
-    SwOLENode* pOleNd = rNdIdx.GetNode().GetOLENode();
-    if( !pOleNd )
-        return;
-
-    SwGrfNode* pGrfNd = GetNodes().MakeGrfNode( rNdIdx, aEmptyStr, aEmptyStr,
-                            pGrf,
-                            (SwGrfFmtColl*)pOleNd->GetFmtColl(),
-                            pOleNd->GetpSwAttrSet() );
-
-    pOleNd->MakeFrms( *pGrfNd );
-
-    // dann suche doch mal nach unserem angehaengten Client fuers Undo
-    {
-        SwClientIter aIter( *pOleNd );
-        SwClient* pGTO = aIter.First(TYPE( _GrfToOleUndo ));
-        if( pGTO )
-        {
-            SwUndoReRead* pUndo = ((_GrfToOleUndo*)pGTO)->pSaveObj;
-            pGrfNd->SetAlternateText( ((_GrfToOleUndo*)pGTO)->aAlternateText );
-            pGrfNd->SetContour( ((_GrfToOleUndo*)pGTO)->pContour );
-            if( DoesUndo() )
-                AppendUndo( pUndo );
-            else
-                delete pUndo;       // Undo wurde abgeschaltet
-            delete pGTO;
-        }
-    }
-
-    ((SwPaM&)rRg).GetPoint()->nContent.Assign( pGrfNd, 0 );
-    GetNodes().DelNodes( rNdIdx, 1 );
-    rNdIdx--;
-}
 
 String SwDoc::GetCurWord( SwPaM& rPaM )
 {
@@ -930,19 +843,6 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
 
         pGrfNd->ReRead( rGrfName, rFltName, pGraphic, TRUE );
         SetModified();
-    }
-}
-
-    // wird der Parent geloescht, dann loeschen wir uns selbst
-void _GrfToOleUndo::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
-{
-    if( !pOld )
-        pOld = pNew;
-    if( pOld && RES_OBJECTDYING == pOld->Which() &&
-        ((SwPtrMsgPoolItem *)pOld)->pObject == (void*)GetRegisteredIn() )
-    {
-        delete pSaveObj;
-        delete this;
     }
 }
 

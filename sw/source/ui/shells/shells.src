@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:32:27 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,36 +63,6 @@
 #include <svx/globlmn.hrc>
 #include "toolbox.hrc"
 #include "helpid.h"
-InfoBox MSG_REMOVE_LINK
-{
-    Buttons = WB_YES_NO ;
-    Defbutton = WB_DEF_YES ;
-    Message = "Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten?" ;
-    Message [ English ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
-    Message [ norwegian ] = "Dette er +++linked grafikk. Ønsker du å +++unlink the graphic for å redigere?" ;
-    Message [ italian ] = "Questra immagine è collegata con il documento. Desiderate scollegare l'immagine per poterla modificare?" ;
-    Message [ portuguese_brazilian ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
-    Message [ portuguese ] = "Esta imagem está  ligada a um documento. Deseja cancelar a ligação para poder editá-la?" ;
-    Message [ english_us ] = "This graphic is linked to a document. Do you want to unlink the graphic in order to edit it?" ;
-    Message [ finnish ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
-    Message [ danish ] = "Denne grafik er kædet til dokumentet. Vil du ophæve kæden for at kunne redigere grafikken." ;
-    Message [ french ] = "Cette image est liée à un document. Désirez-vous supprimer le lien pour l'édition ?" ;
-    Message [ swedish ] = "Den här grafiken är länkad till dokumentet. Vill Du upphäva länken för att kunna redigera grafiken?" ;
-    Message [ dutch ] = "Deze afbeelding is met het document gekoppeld. Wilt u de koppeling opheffen om de afbeelding te bewerken?" ;
-    Message [ spanish ] = "Esta imagen está vinculada al documento. ¿Desea deshacer el vínculo para editar la imagen?" ;
-    Message[ chinese_simplified ] = "Õâ¸öÍ¼ĞÎÊÇºÍÒ»¸öÎÄµµÏàÁ´½ÓµÄ¡£ÄúÒªÈ¡ÏûÕâ¸öÁ´½Ó£¬±à¼­Õâ¸öÍ¼ĞÎÂğ£¿";
-    Message[ russian ] = "İòîò ğèñóíîê ññûëàåòñÿ íà äîêóìåíò. Âû õîòèòå ñíÿòü ññûëêó äëÿ âîçìîæíîñòè ïğàâêè ğèñóíêà?";
-    Message[ polish ] = "Ta grafika jest po³¹czona z dokumentem. Czy chcesz usun¹æ to po³¹czenie, aby móc edytowaæ grafikê?";
-    Message[ japanese ] = "‚±‚Ì}‚Í¤ÄŞ·­ÒİÄ‚ÆØİ¸‚³‚ê‚Ä‚¢‚Ü‚·B}‚ğ•ÒW‚·‚é‚½‚ß‚ÉØİ¸‚ğ‰ğœ‚µ‚Ü‚·‚©H";
-    Message[ chinese_traditional ] = "³o­Ó¹Ï¤ù¬O©M¤@­ÓÀÉ®×¬Û³sµ²ªº¡C±z­n¨ú®ø³o­Ó±¶®|¡A½s¿è³o­Ó¹Ï¤ù¡H";
-    Message[ arabic ] = "åĞå ÇáÑÓãÉ ãÑÊÈØÉ ÈÇáãÓÊäÏ. åá ÊÑíÏ ÅÒÇáÉ ÇáÇÑÊÈÇØ áßí ÊÊãßä ãä ÊÍÑíÑ ÇáÑÓãÉ¿";
-    Message[ dutch ] = "Deze afbeelding is met het document gekoppeld. Wilt u de koppeling opheffen om de afbeelding te bewerken?";
-    Message[ chinese_simplified ] = "Õâ¸öÍ¼ĞÎÊÇºÍÒ»¸öÎÄµµÏàÁ´½ÓµÄ¡£ÄúÒªÈ¡ÏûÕâ¸öÁ´½Ó£¬±à¼­Õâ¸öÍ¼ĞÎÂğ£¿";
-    Message[ greek ] = "Ôï ãñáöéêü áõôü åßíáé óõíäåäåìİíï ìå ôï İããñáöï. Èİëåôå íá êáôáñãçèåß ç óıíäåóç ãéá íá åğåîåñãÜóåôå ôï ãñáöéêü;";
-    Message[ korean ] = "ÀÌ ±×·¡ÇÈÀº ¹®¼­¿Í ¿¬°áµÇ¾î ÀÖ½À´Ï´Ù. ±×·¡ÇÈ ÆíÁıÀ» À§ÇØ ¿¬°áÀ» ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
-    Message[ turkish ] = "Bu grafik belgeye bağlı. Grafigi düzenlemek için bu bağlantıyı kaldırmak istiyor musunuz?";
-    Message[ language_user1 ] = " ";
-};
 InfoBox MSG_NO_RULER
 {
     BUTTONS = WB_OK ;
@@ -1163,10 +1133,6 @@ ToolBox RID_GRAFIK_TOOLBOX
             HelpID = FN_FLIP_HORZ_GRAFIC ;
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_SIM_START
-        };
         MN_ATTRIBUTES_GRAFIK
     };
     Scroll = TRUE ;

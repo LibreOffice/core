@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:04:35 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@ String STR_PAGE_COUNT_MACRO
          SID_BACKGROUND_COLOR           ;\
          SID_FRAME_LINESTYLE                ;\
          SID_FRAME_LINECOLOR                ;\
-        SID_SIM_START                   ;\
         SID_ATTR_ZOOM                   ;\
         SID_WIN_FULLSCREEN              ;\
         SID_FRAME_TO_TOP                ;\
@@ -310,7 +309,6 @@ String STR_PAGE_COUNT_MACRO
         FN_INSERT_FLD_TOPIC   ;\
         FN_INSERT_FLD_TITLE   ;\
         FN_INSERT_FLD_AUTHOR  ;\
-        FN_INSERT_SIM;        \
         FN_INSERT_SMA;        \
         FN_INSERT_FOOTNOTE;    \
         FN_INSERT_ENDNOTE;    \

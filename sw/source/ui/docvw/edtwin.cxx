@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,13 +187,6 @@
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
 #endif
-#ifndef _SIMDLL0_HXX //autogen
-#include <sim2/simdll0.hxx>
-#endif
-#ifndef _SIMDLL_HXX //autogen
-#include <sim2/simdll.hxx>
-#endif
-
 
 #ifndef _EDTWIN_HXX //autogen
 #include <edtwin.hxx>
@@ -3365,7 +3358,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     EnableChildTransparentMode();
     SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
 
-    bLinkRemoved = bMBPressed = bInsDraw = bInsFrm = bGrfToOle =
+    bLinkRemoved = bMBPressed = bInsDraw = bInsFrm =
     bIsInDrag = bOldIdle = bOldIdleSet = bChainMode = bWasShdwCrsr = FALSE;
 
     SetMapMode(MapMode(MAP_TWIP));
@@ -3411,72 +3404,6 @@ SwEditWin::~SwEditWin()
     delete pAnchorMarker;
 }
 
-
-
-
-//Fuer MSC 2.0 W95
-#pragma optimize("",off)
-
-void SwEditWin::GrfToOle()
-{
-    //Wir machen aus einer Grafik ein OLE-Object (StarImage)
-    //Wird von MouseButtonDown bei Doppelklick gerufen.
-
-    //Wer das nicht versteht ist selber schuld ;-)
-    SvStorageRef aStor = new SvStorage( aEmptyStr );
-    SvInPlaceObjectRef aIPObj;
-#ifdef SO3
-    aIPObj = &((SvFactory *)SvInPlaceObject::ClassFactory())->CreateAndInit( *SIM_MOD()->pSimDrawDocShellFactory, aStor );
-#else
-    aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit( *SIM_MOD()->pSimDrawDocShellFactory, aStor );
-#endif
-
-    if ( aIPObj.Is() )
-    {
-        SwWrtShell &rSh = GetView().GetWrtShell();
-        SimDLL::Update( aIPObj, rSh.GetGraphic(), rSh.GetOut() );
-
-        Size aSz;
-        rSh.GetGrfSize( aSz );
-        aSz = OutputDevice::LogicToLogic
-                    ( aSz, MapMode( MAP_TWIP), MapMode( aIPObj->GetMapUnit()));
-        aIPObj->SetVisAreaSize( aSz );
-
-        rSh.StartAllAction();
-        rSh.GrfToOle( aIPObj );
-        rSh.EndAllAction();
-        bGrfToOle = TRUE;
-    }
-}
-
-
-
-void SwEditWin::OleToGrf()
-{
-    //Wenn wir ein Ole an der Hand haben und dies ein SIM-Object ist, so
-    //wird daraus wieder eine Graphic.
-
-    if ( bGrfToOle )
-    {
-        SwWrtShell &rSh = GetView().GetWrtShell();
-        if ( rSh.IsOLEObj() )
-        {
-            SvInPlaceObjectRef aRef = rSh.GetOLEObj();
-
-            //Wer das nicht versteht ist selber schuld ;-)
-            if ( SimModuleDummy::HasID( *aRef->GetSvFactory() ) )
-            {
-                Graphic aGrf( SimDLL::GetGraphic( aRef ) );
-                rSh.StartAllAction();
-                rSh.OleToGrf( &aGrf );
-                rSh.EndAllAction();
-            }
-        }
-        bGrfToOle = FALSE;
-    }
-}
-
-#pragma optimize("",on)
 
 /******************************************************************************
  *  Beschreibung: DrawTextEditMode einschalten
@@ -4031,6 +3958,9 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.1.1.1  2000/09/18 17:14:35  hr
+        initial import
+
         Revision 1.776  2000/09/18 16:05:23  willem.vandorp
         OpenOffice header added.
 

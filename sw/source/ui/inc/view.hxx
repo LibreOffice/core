@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,6 @@ public:
     SfxDispatcher   &GetDispatcher();
 
     virtual SdrView*        GetDrawView() const;
-    virtual void            UIDeactivate( SvInPlaceObject *pIPObj );
     virtual BOOL            HasUIFeature( ULONG nFeature );
     virtual void            ShowCursor( FASTBOOL bOn = TRUE );
     virtual ErrCode         DoVerb( long nVerb );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,6 @@
 #endif
 #ifndef SC_SCDLL_HXX
 #include <sc/scdll.hxx>
-#endif
-#ifndef _SIM_SIMDLL0_HXX
-#include <sim2/simdll0.hxx>
 #endif
 #ifndef _SCHDLL0_HXX
 #include <sch/schdll0.hxx>
@@ -1503,24 +1500,19 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
 
                     if ( pOLENode->GetOLEObj().IsOleRef() ) //Noch nicht geladen
                     {
-                        BOOL bMath = SmModuleDummy::HasID(
-                            *pOLENode->GetOLEObj().GetOleRef()->GetSvFactory());
-                        BOOL bChart = SchModuleDummy::HasID(
-                            *pOLENode->GetOLEObj().GetOleRef()->GetSvFactory());
-                        BOOL bImage = SimModuleDummy::HasID(
-                            *pOLENode->GetOLEObj().GetOleRef()->GetSvFactory());
-                        BOOL bCalc = ScModuleDummy::HasID(
-                            *pOLENode->GetOLEObj().GetOleRef()->GetSvFactory());
-                        BOOL bDrawImage = SdModuleDummy::HasID(
-                            *pOLENode->GetOLEObj().GetOleRef()->GetSvFactory());
+                        const SotFactory* pFact = pOLENode->GetOLEObj().
+                                                GetOleRef()->GetSvFactory();
+                        BOOL bMath = SmModuleDummy::HasID( *pFact );
+                        BOOL bChart = SchModuleDummy::HasID( *pFact );
+                        BOOL bCalc = ScModuleDummy::HasID( *pFact );
+                        BOOL bDrawImage = SdModuleDummy::HasID( *pFact );
                         if(
-                            (nOLEOptions & TOO_MATH) && bMath  ||
-                            (nOLEOptions & TOO_CHART)&& bChart ||
-                            (nOLEOptions & TOO_IMAGE) && bImage  ||
-                            (nOLEOptions & TOO_CALC) && bCalc  ||
-                            (nOLEOptions & TOO_DRAW_IMPRESS) && bDrawImage  ||
-                            (nOLEOptions & TOO_OTHER) &&
-                                !bMath && !bChart && !bImage && !bCalc && !bDrawImage)
+                            ((nOLEOptions & TOO_MATH) && bMath ) ||
+                            ((nOLEOptions & TOO_CHART)&& bChart ) ||
+                            ((nOLEOptions & TOO_CALC) && bCalc ) ||
+                            ((nOLEOptions & TOO_DRAW_IMPRESS) && bDrawImage ) ||
+                            ((nOLEOptions & TOO_OTHER) &&
+                                !bMath && !bChart && !bCalc && !bDrawImage))
                             bInclude = TRUE;
                     }
                     else

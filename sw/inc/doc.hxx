@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-29 13:52:00 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -920,9 +920,6 @@ public:
                         const SfxItemSet* pGrfAttrSet = 0,
                         SwFrmFmt* = 0 );
     String GetUniqueOLEName() const;
-
-    void GrfToOle( const SwPaM &rRg, SvInPlaceObject * );
-    void OleToGrf( const SwPaM &rRg, const Graphic *pGrf );
 
     // ein bischen wa fuer die benannten FlyFrames
     String GetUniqueFrameName() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,6 @@ enum SwTOOElements
 {
     TOO_MATH        = 0x01,
     TOO_CHART       = 0x02,
-    TOO_IMAGE       = 0x04,
     TOO_CALC        = 0x08,
     TOO_DRAW_IMPRESS= 0x10,
 //  TOO_IMPRESS     = 0x20,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,6 @@
 #endif
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
-#endif
-#ifndef _SIMDLL_HXX
-#include <sim2/simdll0.hxx>
 #endif
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
@@ -449,12 +446,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         break;
 
-    case FN_INSERT_SIM:
-        {
-            rSh.Insert( 0, SIM_MOD()->pSimDrawDocShellFactory );
-        }
-        break;
-
     case FN_INSERT_SMA:
         {
             rSh.Insert( 0, SM_MOD()->pSmDocShellFactory );
@@ -714,14 +705,6 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
             case SID_INSERT_DIAGRAM:
                 if( !SFX_APP()->HasFeature( SFX_FEATURE_SCHART ) )
-                {
-                    rSet.DisableItem( nWhich );
-                    break;
-                }
-
-            case FN_INSERT_SIM:
-                if(  FN_INSERT_SIM == nWhich &&
-                     !SFX_APP()->HasFeature( SFX_FEATURE_SIMAGE ) )
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -999,6 +982,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.356  2000/09/18 16:06:06  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_VIEW_FIELDNAME       (FN_VIEW + 26)  /* Feldname anzeigen */
 #define FN_VIEW_TABLEGRID       (FN_VIEW + 27)  /* Tabellenbegrenzungen anzeigen */
 
-#define FN_LAUNCH_SIM           (FN_VIEW + 28)  /* StarImage starten */
 #define FN_SET_PAGE             (FN_VIEW + 29)  /* Seitenvorlage am Absatz setzen */
 
 #define FN_TOOLBOX_SWITCH       (FN_VIEW + 30)  /* Auf Textshell umschalten */
@@ -414,7 +413,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TOOL_ANKER_FRAME     (FN_INSERT + 66)    /* Draw-Objekt am Rahmen verankern */
 //#define FN_QRY_SWITCH             (FN_INSERT + 67)    /* Auf eine bestimmte Datenbank umschalten */
 
-#define FN_INSERT_SIM           (FN_INSERT + 68)    /* Einfuegen StarImage */
 #define FN_INSERT_SMA           (FN_INSERT + 69)    /* Einfuegen StarMath  */
 
 #define FN_QRY_GET_COLUMN_NAME  (FN_INSERT + 70)    /* Anzahl der Spalten (Basic) */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,9 +519,6 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
             case WID_CREATE_FROM_STAR_MATH:
                 nOLEOptions = lcl_AnyToBool(aValue) ? nOLEOptions | TOO_MATH : nOLEOptions & ~TOO_MATH;
             break;
-            case WID_CREATE_FROM_STAR_IMAGE            :
-                nOLEOptions = lcl_AnyToBool(aValue) ? nOLEOptions | TOO_IMAGE : nOLEOptions & ~TOO_IMAGE;
-            break;
             case WID_CREATE_FROM_STAR_CHART            :
                 nOLEOptions = lcl_AnyToBool(aValue) ? nOLEOptions | TOO_CHART : nOLEOptions & ~TOO_CHART;
             break;
@@ -762,9 +759,6 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_CREATE_FROM_STAR_MATH:
                 bRet = 0 != (nOLEOptions & TOO_MATH);
-            break;
-            case WID_CREATE_FROM_STAR_IMAGE            :
-                bRet = 0 != (nOLEOptions & TOO_IMAGE);
             break;
             case WID_CREATE_FROM_STAR_CHART            :
                 bRet = 0 != (nOLEOptions & TOO_CHART);
@@ -2535,6 +2529,9 @@ sal_Bool SwXIndexTokenAccess_Impl::hasElements(void) throw( RuntimeException )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:08:28  hr
+    initial import
+
     Revision 1.66  2000/09/18 16:04:32  willem.vandorp
     OpenOffice header added.
 
