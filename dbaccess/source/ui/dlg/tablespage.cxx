@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-31 16:01:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 08:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,17 +1125,20 @@ namespace dbaui
 
         /////////////////////////////////////////////////////////////////////////
         // create the output string which contains all the table names
-        Sequence< ::rtl::OUString > aTableFilter;
-        if (m_aTablesList.isWildcardChecked(m_aTablesList.getAllObjectsEntry()))
-        {
-            aTableFilter.realloc(1);
-            aTableFilter[0] = ::rtl::OUString("%", 1, RTL_TEXTENCODING_ASCII_US);
+        if ( m_xCurrentConnection.is() )
+        {   // collect the table filter data only if we have a connection - else no tables are displayed at all
+            Sequence< ::rtl::OUString > aTableFilter;
+            if (m_aTablesList.isWildcardChecked(m_aTablesList.getAllObjectsEntry()))
+            {
+                aTableFilter.realloc(1);
+                aTableFilter[0] = ::rtl::OUString("%", 1, RTL_TEXTENCODING_ASCII_US);
+            }
+            else
+            {
+                aTableFilter = collectDetailedSelection();
+            }
+            _rCoreAttrs.Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
         }
-        else
-        {
-            aTableFilter = collectDetailedSelection();
-        }
-        _rCoreAttrs.Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
 
         if (m_aSuppressVersionColumns.IsChecked() != m_aSuppressVersionColumns.GetSavedValue())
             _rCoreAttrs.Put( SfxBoolItem(DSID_SUPPRESSVERSIONCL, !m_aSuppressVersionColumns.IsChecked()) );
@@ -1150,6 +1153,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/07/31 16:01:33  fs
+ *  #88530# changes to operate the dialog in a mode where no type change is possible
+ *
  *  Revision 1.1  2001/05/29 09:59:39  fs
  *  initial checkin - outsourced the class from commonpages
  *
