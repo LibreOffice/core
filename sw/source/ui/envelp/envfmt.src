@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:53:25 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,11 +517,11 @@ TabPage TP_ENV_FMT
         Text [ spanish ] = "~Formato" ;
         Text [ english_us ] = "F~ormat" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¸ñÊ½";
+        Text[ chinese_simplified ] = "¸ñÊ½(~O)";
         Text[ russian ] = "Ôîğ~ìàò";
         Text[ polish ] = "Format";
         Text[ japanese ] = "••“›»²½Ş(~O)";
-        Text[ chinese_traditional ] = "®æ¦¡";
+        Text[ chinese_traditional ] = "®æ¦¡(~O)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Åğéëïãİò";
@@ -554,11 +554,11 @@ TabPage TP_ENV_FMT
         Text [ spanish ] = "A~ncho" ;
         Text [ english_us ] = "~Width" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¿í";
+        Text[ chinese_simplified ] = "¿í(~W)";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
         Text[ japanese ] = "•(~W)";
-        Text[ chinese_traditional ] = "¼e";
+        Text[ chinese_traditional ] = "¼e(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
         Text[ korean ] = "³Êºñ(~W)";
@@ -600,11 +600,11 @@ TabPage TP_ENV_FMT
         Text [ dutch ] = "~Hoogte" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "~Height" ;
-        Text[ chinese_simplified ] = "¸ß";
+        Text[ chinese_simplified ] = "¸ß(~H)";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
         Text[ japanese ] = "‚‚³(~H)";
-        Text[ chinese_traditional ] = "°ª";
+        Text[ chinese_traditional ] = "°ª(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
         Text[ korean ] = "³ôÀÌ(~H)";
@@ -664,7 +664,7 @@ Menu MNU_EDIT
             TEXT[ chinese_traditional ] = "¦r¤¸(~H)...";
             TEXT[ arabic ] = "ÎØ...";
             TEXT[ greek ] = "~×áñáêôŞñåò...";
-            TEXT[ korean ] = "±âÈ£...";
+            TEXT[ korean ] = "±âÈ£(~H)...";
             TEXT[ turkish ] = "Karakter...";
         };
         MenuItem
@@ -690,7 +690,7 @@ Menu MNU_EDIT
             TEXT[ chinese_traditional ] = "¬q¸¨(~A)...";
             TEXT[ arabic ] = "...İŞÑÉ";
             TEXT[ greek ] = "Ğ~áñÜãñáöïò...";
-            TEXT[ korean ] = "´Ü¶ô...";
+            TEXT[ korean ] = "´Ü¶ô(~A)...";
             TEXT[ turkish ] = "Paragraf...";
             TEXT[ language_user1 ] = " ";
         };
