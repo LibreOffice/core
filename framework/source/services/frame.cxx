@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:10:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1893,8 +1893,10 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // Note:
     //      (a) Do it after stopWindowListening(). May that force some active/deactive
     //          notifications which we doesn't need here realy.
-    //      (b) Don't forget to enable this dialog mode at the end of this dipose()
-    //          again. Otherwhise no dialogs will be shown in any frame anymore.
+    //      (b) Don't forget to save the old value of IsDialogCancelEnabled() to
+    //          restore it afterwards. We cannot call EnableDialogCancel( sal_False )
+    //          as we would kill the headless mode!
+    sal_Bool bCancelDialogs( Application::IsDialogCancelEnabled() );
     Application::EnableDialogCancel( sal_True );
 
     // We should be alone for ever and further dispose calls are rejected by lines before ...
@@ -1979,8 +1981,9 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // Disable this instance for further working realy!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
 
-    // Don't forget it - otherwhise no dialogs can be shown anymore in other frames.
-    Application::EnableDialogCancel( sal_False );
+    // Don't forget it restore old value -
+    // otherwhise no dialogs can be shown anymore in other frames.
+    Application::EnableDialogCancel( bCancelDialogs );
 }
 
 /*-****************************************************************************************************//**
