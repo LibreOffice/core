@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:45:44 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,7 +759,7 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
         m_xExternalDisplayedForm = NULL;
         m_xExtViewTriggerController = NULL;
 
-        InvalidateSlot(SID_FM_VIEW_AS_GRID, sal_True, sal_False);
+        InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
     }
 }
 
@@ -786,14 +786,14 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
         {
             // with the following the slot is invalidated asynchron
             LockSlotInvalidation(sal_True);
-            InvalidateSlot(SID_FM_RECORD_TOTAL , sal_True, sal_False);
+            InvalidateSlot(SID_FM_RECORD_TOTAL, sal_False);
             LockSlotInvalidation(sal_False);
         }
     }
 
     // this may be called from a non-main-thread so invalidate the shell asynchronously
     LockSlotInvalidation(sal_True);
-    InvalidateSlot(0, 0, 0);        // special meaning : invalidate m_pShell
+    InvalidateSlot(0, 0);       // special meaning : invalidate m_pShell
     LockSlotInvalidation(sal_False);
 }
 
@@ -922,19 +922,38 @@ void FmXFormShell::disposing()
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::InvalidateSlot(sal_Int16 nId, sal_Bool bWithItem, sal_Bool bWithId)
+void FmXFormShell::UpdateSlot( sal_Int16 _nId )
+{
+    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    ::osl::MutexGuard aGuard(m_aInvalidationSafety);
+
+    if ( m_nLockSlotInvalidation )
+    {
+        OSL_ENSURE( sal_False, "FmXFormShell::UpdateSlot: cannot update if invalidation is currently locked!" );
+        InvalidateSlot( _nId, sal_False );
+    }
+    else
+    {
+        OSL_ENSURE( _nId, "FmXFormShell::UpdateSlot: can't update the complete shell!" );
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( _nId, sal_True, sal_True );
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update( _nId );
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     if (m_nLockSlotInvalidation)
     {
         m_arrInvalidSlots.Insert(nId, m_arrInvalidSlots.Count());
-        BYTE nFlags = (bWithItem ? 0x02 :0) + (bWithId ? 0x01 : 0);
+        BYTE nFlags = ( bWithId ? 0x01 : 0 );
         m_arrInvalidSlots_Flags.Insert(nFlags, m_arrInvalidSlots_Flags.Count());
     }
     else
         if (nId)
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(nId, bWithItem, bWithId);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(nId, sal_True, bWithId);
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 }
@@ -971,7 +990,7 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
         nFlags = m_arrInvalidSlots_Flags[i];
 
         if (m_arrInvalidSlots[i])
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(m_arrInvalidSlots[i], (nFlags & 0x02), (nFlags & 0x01));
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(m_arrInvalidSlots[i], sal_True, (nFlags & 0x01));
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
@@ -1859,7 +1878,7 @@ void FmXFormShell::setActiveController( const Reference< XFormController>& xCont
         m_pShell->UIFeatureChanged();
         m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 
-        InvalidateSlot(SID_FM_FILTER_NAVIGATOR_CONTROL, sal_True, sal_True);
+        InvalidateSlot(SID_FM_FILTER_NAVIGATOR_CONTROL, sal_True);
     }
 }
 
@@ -1955,11 +1974,10 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
         }
     }
 
-
     // ensure some slots are updated
-    InvalidateSlot(SID_FM_CTL_PROPERTIES);
+    InvalidateSlot( SID_FM_CTL_PROPERTIES, sal_False );
     for ( sal_Int16 i = 0; i < sizeof( SelObjectSlotMap ) / sizeof( SelObjectSlotMap[0] ); ++i )
-        InvalidateSlot( SelObjectSlotMap[i] );
+        InvalidateSlot( SelObjectSlotMap[i] ,sal_False);
 
     return true;
 }
@@ -1982,7 +2000,7 @@ void FmXFormShell::forgetCurrentForm()
         pPage->GetImpl()->setCurForm( m_xCurrentForm );
 
     for ( sal_Int16 i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
-        InvalidateSlot( DlgSlotMap[i] );
+        InvalidateSlot( DlgSlotMap[i], sal_False );
 }
 
 //------------------------------------------------------------------------------
@@ -2091,14 +2109,14 @@ void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
     // if the window is already visible, only update the state
     sal_Bool bHasChild = m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_PROPERTIES );
     if ( bHasChild && bShow )
-        InvalidateSlot( SID_FM_PROPERTY_CONTROL, sal_True, sal_True );
+        UpdateSlot( SID_FM_PROPERTY_CONTROL );
 
     // else toggle state
     else
         m_pShell->GetViewShell()->GetViewFrame()->ToggleChildWindow(SID_FM_SHOW_PROPERTIES);
 
-    InvalidateSlot(SID_FM_PROPERTIES);
-    InvalidateSlot(SID_FM_CTL_PROPERTIES);
+    InvalidateSlot( SID_FM_PROPERTIES, sal_False );
+    InvalidateSlot( SID_FM_CTL_PROPERTIES, sal_False );
 }
 
 //------------------------------------------------------------------------------
@@ -3753,7 +3771,7 @@ void FmXFormShell::CreateExternalView()
         DBG_ERROR("FmXFormShell::CreateExternalView : could not create the external form view !");
     }
 #endif
-    InvalidateSlot(SID_FM_VIEW_AS_GRID, sal_True, sal_False);
+    InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
 }
 
 //------------------------------------------------------------------------
@@ -3776,7 +3794,7 @@ void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >&
         if (0 == pSearch->compareToAscii("FormControlPilotsEnabled"))
         {
             implAdjustConfigCache();
-            InvalidateSlot(SID_FM_USE_WIZARDS, sal_True, sal_True);
+            InvalidateSlot( SID_FM_USE_WIZARDS, sal_True );
         }
 }
 
@@ -4150,7 +4168,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
             sal_Int16 nSourcePos = pSource->GetItemPos(nSID);
             DBG_ASSERT(nSourcePos != MENU_ITEM_NOTFOUND, "ControlConversionMenuController::StateChanged : FmXFormShell supplied an invalid menu !");
             sal_Int16 nPrevInSource = nSourcePos;
-            sal_Int16 nPrevInConversion = MENU_ITEM_NOTFOUND;
+            sal_uInt16 nPrevInConversion = MENU_ITEM_NOTFOUND;
             while (nPrevInSource>0)
             {
                 sal_Int16 nPrevId = pSource->GetItemId(--nPrevInSource);
