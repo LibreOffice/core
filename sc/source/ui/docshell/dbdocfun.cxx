@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-02 17:44:59 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include "dociter.hxx"      // for lcl_EmptyExcept
 #include "cell.hxx"         // for lcl_EmptyExcept
 #include "editable.hxx"
+#include "attrib.hxx"
 
 // -----------------------------------------------------------------
 
@@ -1136,7 +1137,7 @@ BOOL lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rE
 }
 
 BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                                        BOOL bRecord, BOOL bApi )
+                                        BOOL bRecord, BOOL bApi, BOOL bAllowMove )
 {
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( rDocShell.GetDialogParent() );
@@ -1200,6 +1201,9 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             pDoc->DeleteAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
                                  aRange.aEnd.Col(),   aRange.aEnd.Row(),
                                  nTab, IDF_ALL );
+            pDoc->RemoveFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                                  aRange.aEnd.Col(),   aRange.aEnd.Row(),
+                                  nTab, SC_MF_AUTO );
 
             pDoc->GetDPCollection()->Free( pOldObj );   // object is deleted here
 
@@ -1237,6 +1241,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 }
 
                 pDestObj = pOldObj;
+                pDestObj->SetAllowMove( bAllowMove );
             }
             else
             {
@@ -1335,7 +1340,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     if ( bRecord && bDone )
     {
         SfxUndoAction* pAction = new ScUndoDataPilot( &rDocShell,
-                                    pOldUndoDoc, pNewUndoDoc, pUndoDPObj, pDestObj );
+                                    pOldUndoDoc, pNewUndoDoc, pUndoDPObj, pDestObj, bAllowMove );
         pOldUndoDoc = NULL;
         pNewUndoDoc = NULL;     // pointers are used in undo action
         // pUndoDPObj is copied
