@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2003-07-21 10:27:46 $
+ *  last change: $Author: dbo $ $Date: 2003-07-28 12:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,12 +277,10 @@ void TypeEmitter::emit_Any_boxed_ctor(
                       __typeof (::System::ValueType) );
             Emit::FieldBuilder * field_Type = type_builder->DefineField(
                 S"Type", __typeof (::System::Type),
-                (FieldAttributes) (FieldAttributes::Public |
-                                   FieldAttributes::InitOnly) );
+                FieldAttributes::Public );
             Emit::FieldBuilder * field_Value = type_builder->DefineField(
                 S"Value", __typeof (::System::Object),
-                (FieldAttributes) (FieldAttributes::Public |
-                                   FieldAttributes::InitOnly) );
+                FieldAttributes::Public );
             Emit::FieldBuilder * field_VOID = type_builder->DefineField(
                 S"VOID", type_builder,
                 (FieldAttributes) (FieldAttributes::Public |
