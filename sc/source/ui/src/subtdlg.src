@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 16:02:04 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 11:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ TabPage RID_SUBTBASE
         Text[ chinese_simplified ] = "ε†η±»ζ±‡ζ€»θ®΅η®—(~C)";
         Text[ russian ] = "Βϋχθρλθςό οπξμεζσςξχνϋε θςξγθ δλÿ";
         Text[ polish ] = "Oblicz sumy porednie dla";
-        Text[ japanese ] = "ε°θ¨γ‚’ε‡Ίγ™ι …η›®(~C)";
+        Text[ japanese ] = "ε°θ¨γ‚’θ¨η®—γ™γ‚‹ε—(~C)";
         Text[ chinese_traditional ] = "ε°θ¨η”¨ζ–Ό(~C)";
         Text[ arabic ] = "ΝΣΗΘ ΗαγΜΗγνΪ ΗαέΡΪνΙ αά";
         Text[ greek ] = "Υπολογισμός μερικών αθροισμά~των για";
@@ -1006,6 +1006,7 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subtotales";
 };
+
 
 
 
