@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:32:51 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ Menu MENU_TABLETREE_POPUP
             Text[ arabic ] = "İÑÒ ÊÕÇÚÏí";
             Text[ turkish ] = "Artan sıralama";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Orden ascendente";
         };
         MenuItem
         {
@@ -137,6 +138,7 @@ Menu MENU_TABLETREE_POPUP
             Text[ arabic ] = "İÑÒ ÊäÇÒáí";
             Text[ turkish ] = "Azalan sıralama";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Orden descendente";
         };
     };
 };
@@ -163,6 +165,7 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ chinese_traditional ] = "µLªk³s½u¨ì SDBC ÅX°Êµ{¦¡ºŞ²z(#servicename#) ¡C";
     Text[ turkish ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
     Text[ arabic ] = "ÊÚĞÑ ÊÃÓíÓ ÇáÇÊÕÇá ÈÜ (#servicename#) SDBC Driver Manager .";
+    Text[ catalan ] = "No se pudo establecer una conexión al administrador de controladores SDBC (#servicename#).";
 };
 
 String STR_NOREGISTEREDDRIVER
@@ -187,6 +190,7 @@ String STR_NOREGISTEREDDRIVER
     Text[ chinese_traditional ] = "¤£¦s¦b¥ô¦óµn°Oªº URL #connurl# ÅX°Êµ{§Ç¡C";
     Text[ turkish ] = "There is no registered driver for the URL #connurl#";
     Text[ arabic ] = "áÇ íæÌÏ ÈÑäÇãÌ ÊÔÛíá ãÓÌá ááÜ URL #connurl#!";
+    Text[ catalan ] = "No existe un controlador registrado para la URL #connurl#";
 };
 
 String STR_COULDNOTCONNECT
@@ -211,6 +215,7 @@ String STR_COULDNOTCONNECT
     Text[ chinese_traditional ] = "µLªk³s½u¨ì URL #connurl# ¡C";
     Text[ turkish ] = "A connection could not be established for URL #connurl#.";
     Text[ arabic ] = "ÊÚĞÑ ÊÃÓíÓ ÇÊÕÇá ááÜ URL #connurl#..";
+    Text[ catalan ] = "No se pudo realizar ninguna conexión para la URL #connurl#.";
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
@@ -234,6 +239,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ chinese_traditional ] = "½Ğ±zÀË¬d±zªº³]©w¡A¦p¨Ï¥ÎªÌ©M±K½X¡C";
     Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text[ arabic ] = "ÇáÑÌÇÁ İÍÕ ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ¡ ãËá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ Úáì ÓÈíá ÇáãËÇá.";
+    Text[ catalan ] = "Compruebe la configuración actual, p.ej. el nombre de usuario y la contraseña.";
 };
 String STR_NOTABLEINFO
 {
@@ -257,6 +263,7 @@ String STR_NOTABLEINFO
     Text[ chinese_traditional ] = "¤w¸g¦¨¥\\³s½u¡A¦ı¬O¨S¦³§ä¨ì¸ê®Æ®wªºªí®æ¤º®e¡C";
     Text[ turkish ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ arabic ] = "Êã ÊÃÓíÓ ÇáÇÊÕÇá ÈäÌÇÍ¡ ÅáÇ Ãäå ÊÚĞÑ ÇáÍÕæá Úáì ãÚáæãÇÊ ÈÎÕæÕ ÌÏÇæá ŞÇÚÏÉ ÇáÈíÇäÇÊ.";
+    Text[ catalan ] = "Se ha realizado una conexión satisfactoriamente, pero no se ha conseguido ninguna información sobre tablas en la base de datos.";
 };
 String STR_ALL_TABLES
 {
@@ -280,6 +287,7 @@ String STR_ALL_TABLES
     Text[ chinese_traditional ] = "¥ş³¡ªºªí®æ";
     Text[ turkish ] = "All tables";
     Text[ arabic ] = "ßá ÇáÌÏÇæá";
+    Text[ catalan ] = "Todas las tablas";
 };
 String STR_ALL_VIEWS
 {
@@ -303,6 +311,7 @@ String STR_ALL_VIEWS
     Text[ chinese_traditional ] = "©Ò¦³ªºªí®æÀËµø";
     Text[ turkish ] = "All views";
     Text[ arabic ] = "ßÇİÉ ØÑŞ ÚÑÖ ÇáÌÏÇæá";
+    Text[ catalan ] = "Todas las visualizaciones de tablas";
 };
 String STR_ALL_TABLES_AND_VIEWS
 {
@@ -315,7 +324,7 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ dutch ] = "Alle tabellen en tabelmodi";
     Text[ french ] = "Toutes les tables et vues";
     Text[ spanish ] = "Todas las tablas y visualizaciones de tablas";
-    Text[ italian ] = "Tutte le tabelle e le viste";
+    Text[ italian ] = "Tutte le tabelle e le vista tabelle";
     Text[ danish ] = "All tables and views";
     Text[ swedish ] = "Alla tabeller och tabellvyer";
     Text[ polish ] = "Wszystkie tabele i widoki tabeli";
@@ -326,11 +335,15 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ chinese_traditional ] = "©Ò¦³ªºªí®æ©Mªí®æÀËµø";
     Text[ turkish ] = "All tables and views";
     Text[ arabic ] = "ßÇİÉ ÇáÌÏÇæá æØÑŞ ÚÑÖåÇ";
+    Text[ catalan ] = "Todas las tablas y visualizaciones de tablas";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/19 11:32:51  kz
+ *  Merge SRC625: 19.03.01 - 12:32:26 (NoBranch)
+ *
  *  Revision 1.7  2001/03/09 20:38:12  kz
  *  Merge SRC624: 09.03.01 - 21:38:15 (NoBranch)
  *
