@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:53:26 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 13:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,8 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw();
+            virtual void SAL_CALL acquire() throw();
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
@@ -266,7 +266,7 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw();
         };
 
         class OStatement :  public OStatement_BASE2,
@@ -281,8 +281,8 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw();
+            virtual void SAL_CALL release() throw();
             // XBatchExecution
             virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
