@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionProvider.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:30:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,15 +86,16 @@
     @see com::sun::star::reflection::TypeDescriptionManager
     @see com::sun::star::reflection::XTypeDescription
 */
-service TypeDescriptionProvider
+published service TypeDescriptionProvider
 {
-    /** Interface to retrieve type descriptions:
-        <ul>
-        <li>names are given in dotted notation, e.g. "com.sun.star.uno.XInterface"</li>
-        <li>sequences are accessable via "[]element_name"</li>
-        <li>interface members are accessable via "interface_name::member_name"</li>
-        </ul>
-        The returned values are of interface type <type>XTypeDescription</type>.
+    /** Interface to retrieve type descriptions.
+
+        <p>Names are given in dotted notation, for example
+        <code>"com.sun.star.uno.XInterface"</code>.  The returned values are of
+        interface type <type>XTypeDescription</type>.</p>
+
+        <p>Even though the name of this interface suggests that the used type
+        names are hierarchic, this need not be the case.</p>
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
 
