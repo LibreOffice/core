@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 10:45:33 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 08:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,6 +457,8 @@
 #define RID_STR_EVT_APPROVEROWCHANGE                (RID_STR_EVT_START + 45)
 #define RID_STR_EVT_ROWCHANGE                       (RID_STR_EVT_START + 46)
 #define RID_STR_EVT_RELOADED                        (RID_STR_EVT_START + 47)
+#define RID_STR_EVT_UNLOADING                       (RID_STR_EVT_START + 48)
+#define RID_STR_EVT_RELOADING                       (RID_STR_EVT_START + 49)
 
 // Error-String-Id's -----------------------------------------------------------
 #define RID_ERR_START                               (RID_FORMS_START + 600)

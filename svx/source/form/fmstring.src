@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-15 09:05:16 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 08:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4865,6 +4865,13 @@ String RID_STR_EVT_LOADED
     Text[ language_user1 ] = " ";
 };
 
+String RID_STR_EVT_RELOADING
+{
+    Text = "Vor dem erneuten Laden";
+    Text [ english ] = "Before reloading" ;
+    Text [ english_us ] = "Before reloading" ;
+};
+
 String RID_STR_EVT_RELOADED
 {
     Text = "Beim erneuten Laden" ;
@@ -5276,6 +5283,14 @@ String RID_STR_EVT_TEXTCHANGED
     Text[ turkish ] = "Metin deðiþtirildi";
     Text[ language_user1 ] = " ";
 };
+
+String RID_STR_EVT_UNLOADING
+{
+    Text = "Vor dem Entladen";
+    Text [ english ] = "Before unloading" ;
+    Text [ english_us ] = "Before unloading" ;
+};
+
 String RID_STR_EVT_UNLOADED
 {
     Text = "Beim Entladen" ;
@@ -6196,7 +6211,6 @@ String RID_STR_AUTOFIELD
     Text[ arabic ] = "<ÍÞá ÊáÞÇÆí>";
     Text[ turkish ] = "<Otomatik alan>";
 };
-
 
 QueryBox RID_QRY_SAVEMODIFIED
 {
