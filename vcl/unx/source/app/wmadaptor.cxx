@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: pl $ $Date: 2001-10-25 13:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 
 WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         m_pSalDisplay( pDisplay ),
-        m_bTransientBehaviour( false ),
+        m_bTransientBehaviour( true ),
         m_bEnableAlwaysOnTopWorks( false )
 {
     Atom                aRealType   = None;
@@ -295,6 +295,14 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
 #endif
             {
                 m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
+                /*
+                 *  Note: m_bTransientBehaviour was originally false in
+                 *  in case of Dtwm. The transient behaviour can be restored
+                 *  by settting the following X-resource in $HOME/.Xdefaults:
+                 *  Dtwm*VCLSalFrame*secondariesOnTop: True
+                 *  it is expected that the installation inserts this,
+                 *  so m_bTransientBehaviour can be set to true here
+                 */
             }
             XFree (pProperty);
         }

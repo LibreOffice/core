@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: pl $ $Date: 2001-10-25 13:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,12 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
         XSetWMProtocols( GetXDisplay(), mhWindow, a, n );
+
+        XClassHint* pClass = XAllocClassHint();
+        pClass->res_name = "VCLSalFrame";
+        pClass->res_class = "VCLSalFrame";
+        XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
+        XFree( pClass );
 
         // set client leader
         XLIB_Window aLeader = GetDisplay()->GetDrawable();
