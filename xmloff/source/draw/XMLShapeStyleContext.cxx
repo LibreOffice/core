@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:08:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 19:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,16 @@ void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const ::rtl::OUS
     else
     {
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+
+        if( (XML_NAMESPACE_STYLE == nPrefixKey) &&
+            ( IsXMLToken( rLocalName, ::xmloff::token::XML_NAME ) || IsXMLToken( rLocalName, ::xmloff::token::XML_DISPLAY_NAME ) ) )
+        {
+            if( GetName().getLength() && GetDisplayName().getLength() && GetName() != GetDisplayName() )
+            {
+                const_cast< SvXMLImport&>( GetImport() ).
+                    AddStyleDisplayName( GetFamily(), GetName(), GetDisplayName() );
+            }
+        }
     }
 }
 
