@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:02:42 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,13 +250,6 @@ void XclImpRoot::CheckCellRangeList( ScRangeList& rRanges ) const
 {
     XclRoot::CheckCellRangeList( rRanges, GetScMaxPos() );
 }
-
-void XclImpRoot::SetBiff( XclBiff eBiff )
-{
-    XclRoot::SetBiff( eBiff );
-    GetPalette().OnChangeBiff();
-}
-
 
 // ============================================================================
 
