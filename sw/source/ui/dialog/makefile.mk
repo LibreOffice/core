@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:55:36 $
+#   last change: $Author: obo $ $Date: 2004-04-27 13:43:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=sw
@@ -84,7 +83,8 @@ SRC1FILES =  \
         ascfldlg.src \
         dialog.src \
         docstdlg.src \
-        regionsw.src
+        regionsw.src \
+        wordcountdialog.src
 
 SLOFILES =  \
         $(SLO)$/abstract.obj \
@@ -92,7 +92,8 @@ SLOFILES =  \
         $(SLO)$/ascfldlg.obj \
         $(SLO)$/docstdlg.obj \
         $(SLO)$/macassgn.obj \
-        $(SLO)$/regionsw.obj
+        $(SLO)$/regionsw.obj \
+        $(SLO)$/wordcountdialog.obj
 
 # --- Tagets -------------------------------------------------------
 
