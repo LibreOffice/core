@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:16:47 $
+ *  last change: $Author: sab $ $Date: 2001-10-26 05:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,6 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
     ScMyCurrencyStyle aStyle;
     if (pCurrency)
         aStyle.sCurrency = *pCurrency;
-    else
-        DBG_ERROR("here is no currency given");
     ScMyCurrencyStylesSet::iterator aItr = pCurrencyList->find(aStyle);
     if (aItr == pCurrencyList->end())
     {
