@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:44:42 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8115,6 +8115,13 @@ Window* Window::GetAccessibleParentWindow() const
             pWorkWin = pWorkWin->mpNext;
         pParent = pWorkWin;
     }
+    // If this a floating window which has a native boarder window, this one should be reported as
+    // accessible parent
+    else if( GetType() == WINDOW_FLOATINGWINDOW &&
+        mpBorderWindow && mpBorderWindow->mbFrame)
+    {
+        pParent = mpBorderWindow;
+    }
     else if( pParent && !pParent->ImplIsAccessibleCandidate() )
     {
         pParent = pParent->mpParent;
@@ -8357,7 +8364,7 @@ USHORT Window::GetAccessibleRole() const
             case WINDOW_TOOLBOX: nRole = accessibility::AccessibleRole::TOOL_BAR; break;
             case WINDOW_STATUSBAR: nRole = accessibility::AccessibleRole::STATUS_BAR; break;
 
-            case WINDOW_TABPAGE: nRole = accessibility::AccessibleRole::PAGE_TAB; break;
+            case WINDOW_TABPAGE: nRole = accessibility::AccessibleRole::PANEL; break;
             case WINDOW_TABCONTROL: nRole = accessibility::AccessibleRole::PAGE_TAB_LIST; break;
 
             case WINDOW_DOCKINGWINDOW:
@@ -8444,8 +8451,6 @@ String Window::GetAccessibleName() const
                 Window *pLabel = GetLabeledBy();
                 if ( pLabel && pLabel != this )
                     aAccessibleName = pLabel->GetText();
-                else if ( ( GetType() == WINDOW_LISTBOX ) || ( GetType() == WINDOW_MULTILISTBOX ) )
-                    aAccessibleName = GetText();
             }
             break;
 
