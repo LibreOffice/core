@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-04 17:52:40 $
+ *  last change: $Author: mtg $ $Date: 2001-12-06 12:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,7 +769,10 @@ void ZipPackage::writeTempFile()
 
     // seek back to the beginning of the temp file so we can read segments from it
     xContentSeek->seek ( 0 );
-    pZipFile->setInputStream ( xContentStream );
+    if ( pZipFile )
+        pZipFile->setInputStream ( xContentStream );
+    else
+        pZipFile = new ZipFile ( xContentStream, xFactory, sal_False );
 }
 
 // XChangesBatch
