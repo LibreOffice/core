@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-27 18:46:48 $
+ *  last change: $Author: pl $ $Date: 2001-03-01 18:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1667,24 +1667,39 @@ extern unsigned char TranslateCharName( char* );
 ULONG
 SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
 {
+    if( ! _IsPrinter() )
 #ifdef USE_BUILTIN_RASTERIZER
-    if( maGraphicsData.mpServerSideFont != NULL )
-    {
-        ImplKernPairData* pTmpKernPairs;
-        ULONG nGotPairs = maGraphicsData.mpServerSideFont->GetKernPairs( &pTmpKernPairs );
-        if( nGotPairs > nPairs )
-            nGotPairs = nPairs;
-        for( int i = 0; i < nGotPairs; ++i )
-            pKernPairs[ i ] = pTmpKernPairs[ i ];
-        delete[] pTmpKernPairs;
-        return nGotPairs;
-    }
+        if( maGraphicsData.mpServerSideFont != NULL )
+        {
+            ImplKernPairData* pTmpKernPairs;
+            ULONG nGotPairs = maGraphicsData.mpServerSideFont->GetKernPairs( &pTmpKernPairs );
+            for( int i = 0; i < nPairs && i < nGotPairs; ++i )
+                pKernPairs[ i ] = pTmpKernPairs[ i ];
+            delete[] pTmpKernPairs;
+            return nGotPairs;
+        }
+        else
+            return 0;
+#else
+        return 0;
 #endif //USE_BUILTIN_RASTERIZER
 
-    if( ! _IsPrinter() )
-        return 0;
 #ifdef USE_PSPRINT
-    return 0;
+    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    const ::std::list< ::psp::KernPair >& rPairs( rMgr.getKernPairs( maGraphicsData.m_pPrinterGfx->GetFontID() ) );
+    ULONG nHavePairs = rPairs.size();
+    if( pKernPairs && nPairs )
+    {
+        ::std::list< ::psp::KernPair >::const_iterator it;
+        int i, nHeight = maGraphicsData.m_pPrinterGfx->GetFontSize();
+        for( i = 0, it = rPairs.begin(); i < nPairs && i < nHavePairs; i++, ++it )
+        {
+            pKernPairs[i].mnChar1   = it->first;
+            pKernPairs[i].mnChar2   = it->second;
+            pKernPairs[i].mnKern    = it->kern_x * nHeight / 1000;
+        }
+    }
+    return nHavePairs;
 #else
     // get pair kerning table ( internal data from xprinter )
     int i, nCurPair=0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-14 13:34:04 $
+ *  last change: $Author: pl $ $Date: 2001-03-01 18:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,9 +513,10 @@ SalGraphics* SalInfoPrinter::GetGraphics()
         maPrinterData.m_pGraphics = new SalGraphics;
         maPrinterData.m_pGraphics->maGraphicsData.m_pJobData    = &maPrinterData.m_aJobData;
         maPrinterData.m_pGraphics->maGraphicsData.m_pPrinterGfx = &maPrinterData.m_aPrinterGfx;
+        maPrinterData.m_pGraphics->maGraphicsData.bPrinter_     = TRUE;
         pRet = maPrinterData.m_pGraphics;
     }
-    return pRet;;
+    return pRet;
 }
 
 // -----------------------------------------------------------------------
@@ -891,6 +892,7 @@ SalGraphics* SalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData )
     maPrinterData.m_pGraphics = new SalGraphics();
     maPrinterData.m_pGraphics->maGraphicsData.m_pJobData    = &maPrinterData.m_aJobData;
     maPrinterData.m_pGraphics->maGraphicsData.m_pPrinterGfx = &maPrinterData.m_aPrinterGfx;
+    maPrinterData.m_pGraphics->maGraphicsData.bPrinter_     = true;
     maPrinterData.m_pGraphics->maGraphicsData.m_pPhoneNr    = maPrinterData.m_bFax ? &maPrinterData.m_aFaxNr : NULL;
 
     maPrinterData.m_aPrintJob.StartPage( maPrinterData.m_aJobData, bNewJobData ? sal_True : sal_False );
