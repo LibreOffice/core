@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:14:14 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,10 @@ namespace dbaccess
                                     const ::com::sun::star::uno::Any& rValue
                                                      )
                                                      throw (::com::sun::star::uno::Exception);
+
+    protected:
+        // XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
     };
 
     /**
@@ -262,6 +266,10 @@ namespace dbaccess
                                     const ::com::sun::star::uno::Any& rValue
                                                      )
                                                      throw (::com::sun::star::uno::Exception);
+
+    protected:
+        // XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
     };
 
     /**
