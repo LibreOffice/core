@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:06:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,13 @@ namespace framework
 ::rtl::OUString PresetHandler::RESOURCETYPE_ACCELERATOR()
 {
     static ::rtl::OUString RSTYPE = DECLARE_ASCII("accelerator");
+    return RSTYPE;
+}
+
+//-----------------------------------------------
+::rtl::OUString PresetHandler::RESOURCETYPE_STATUSBAR()
+{
+    static ::rtl::OUString RSTYPE = DECLARE_ASCII("statusbar");
     return RSTYPE;
 }
 
@@ -394,8 +401,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             sRelPathBuf.append(sResource        );
             sRelPath = sRelPathBuf.makeStringAndClear();
 
-            xShare = m_aSharedStorages->m_lStoragesShare.openPath(sRelPath, eShareMode);
-            xUser  = m_aSharedStorages->m_lStoragesUser.openPath (sRelPath, eUserMode );
+            xShare = impl_openPathIgnoringErrors(sRelPath, eShareMode, sal_True );
+            xUser  = impl_openPathIgnoringErrors(sRelPath, eUserMode , sal_False);
         }
         break;
 
@@ -408,8 +415,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             sRelPathBuf.append(sResource         );
             sRelPath = sRelPathBuf.makeStringAndClear();
 
-            xShare = m_aSharedStorages->m_lStoragesShare.openPath(sRelPath, eShareMode);
-            xUser  = m_aSharedStorages->m_lStoragesUser.openPath (sRelPath, eUserMode );
+            xShare = impl_openPathIgnoringErrors(sRelPath, eShareMode, sal_True );
+            xUser  = impl_openPathIgnoringErrors(sRelPath, eUserMode , sal_False);
         }
         break;
 
@@ -418,49 +425,33 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             sRelPathBuf.append(sResource);
             sRelPath = sRelPathBuf.makeStringAndClear();
 
-            xUser  = m_lDocumentStorages.openPath(sRelPath, eUserMode);
-            xShare = xUser; // !!!
+            try
+            {
+                xUser  = m_lDocumentStorages.openPath(sRelPath, eUserMode);
+                xShare = xUser; // !!!
+            }
+            catch(const css::uno::RuntimeException& exRun)
+                { throw exRun; }
+            catch(const css::uno::Exception&)
+                { xShare.clear(); xUser.clear(); }
         }
         break;
     }
 
-    if (eConfigType != E_DOCUMENT) // no localization in document mode!
+
+    if (
+        (aLocale     != ::comphelper::Locale::X_NOTRANSLATE()) && // localized level?
+        (eConfigType != E_DOCUMENT                           )    // no localization in document mode!
+       )
     {
-        // localized level? (Not supported for documents!)
-        if (aLocale != ::comphelper::Locale::X_NOTRANSLATE())
-        {
-            // during next loop we try different locales ... but we shouldnt
-            // reuse our own "const" function parameter .-)
-            ::comphelper::Locale aTryLocale = aLocale;
-            while (sal_True)
-            {
-                ::rtl::OUString sLocalizedPath(sRelPath);
-                sLocalizedPath += PATH_SEPERATOR;
-                sLocalizedPath += aTryLocale.toISO();
-                try
-                {
-                    xShare   = m_aSharedStorages->m_lStoragesShare.openPath(sLocalizedPath, eShareMode);
-                    xUser    = m_aSharedStorages->m_lStoragesUser.openPath (sLocalizedPath, eUserMode );
-                    sRelPath = sLocalizedPath;
-                    break;
-                }
-                catch(const css::uno::RuntimeException& exRuntime)
-                    { throw exRuntime; }
-                catch(const css::uno::Exception& exAny)
-                {
-                    // no more fallbacks exist ... => configuration seems to be corrupted!
-                    if (!::comphelper::Locale::getFallback(aTryLocale))
-                    {
-                        ::rtl::OUStringBuffer sMsg(1024);
-                        sMsg.appendAscii("The UI configuration seems to be corrupted. Cant find a suitable localization set!\nOriginal message was:\n");
-                        sMsg.append     (exAny.Message                                                                                                );
-                        throw css::uno::RuntimeException(
-                                sMsg.makeStringAndClear(),
-                                css::uno::Reference< css::uno::XInterface >());
-                    }
-                }
-            }
-        }
+        // use different start pathes ... because called method uses it as an in/out parameter!
+        ::rtl::OUString sLocalizedSharePath(sRelPath);
+        ::rtl::OUString sLocalizedUserPath (sRelPath);
+
+        xShare   = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aLocale);
+        xUser    = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath , eUserMode , sal_False, aLocale);
+        LOG_ASSERT(sLocalizedSharePath==sLocalizedUserPath, "Presethandler::connectToResource()\nDifferent localization sets inside share and user layer found ...")
+        sRelPath = sLocalizedUserPath;
     }
 
     // read content of level 3 (presets, targets)
@@ -473,33 +464,39 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
           OUStringList                                       lTargets;
 
     // read preset names of share layer
-    xAccess = css::uno::Reference< css::container::XNameAccess >(xShare, css::uno::UNO_QUERY_THROW);
-    lNames  = xAccess->getElementNames();
-    pNames  = lNames.getConstArray();
-    c       = lNames.getLength();
-
-    for (i=0; i<c; ++i)
+    xAccess = css::uno::Reference< css::container::XNameAccess >(xShare, css::uno::UNO_QUERY);
+    if (xAccess.is())
     {
-        ::rtl::OUString sTemp = pNames[i];
-        sal_Int32       nPos  = sTemp.indexOf(FILE_EXTENSION);
-        if (nPos > -1)
-            sTemp = sTemp.copy(0,nPos);
-        lPresets.push_back(sTemp);
+        lNames  = xAccess->getElementNames();
+        pNames  = lNames.getConstArray();
+        c       = lNames.getLength();
+
+        for (i=0; i<c; ++i)
+        {
+            ::rtl::OUString sTemp = pNames[i];
+            sal_Int32       nPos  = sTemp.indexOf(FILE_EXTENSION);
+            if (nPos > -1)
+                sTemp = sTemp.copy(0,nPos);
+            lPresets.push_back(sTemp);
+        }
     }
 
     // read preset names of user layer
-    xAccess = css::uno::Reference< css::container::XNameAccess >(xUser, css::uno::UNO_QUERY_THROW);
-    lNames  = xAccess->getElementNames();
-    pNames  = lNames.getConstArray();
-    c       = lNames.getLength();
-
-    for (i=0; i<c; ++i)
+    xAccess = css::uno::Reference< css::container::XNameAccess >(xUser, css::uno::UNO_QUERY);
+    if (xAccess.is())
     {
-        ::rtl::OUString sTemp = pNames[i];
-        sal_Int32       nPos  = sTemp.indexOf(FILE_EXTENSION);
-        if (nPos > -1)
-            sTemp = sTemp.copy(0,nPos);
-        lTargets.push_back(sTemp);
+        lNames  = xAccess->getElementNames();
+        pNames  = lNames.getConstArray();
+        c       = lNames.getLength();
+
+        for (i=0; i<c; ++i)
+        {
+            ::rtl::OUString sTemp = pNames[i];
+            sal_Int32       nPos  = sTemp.indexOf(FILE_EXTENSION);
+            if (nPos > -1)
+                sTemp = sTemp.copy(0,nPos);
+            lTargets.push_back(sTemp);
+        }
     }
 
     // SAFE -> ----------------------------------
@@ -565,6 +562,15 @@ void PresetHandler::copyPresetToTarget(const ::rtl::OUString& sPreset,
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
+    // e.g. module without any config data ?!
+    if (
+        (!xWorkingShare.is()) ||
+        (!xWorkingUser.is() )
+       )
+    {
+       return;
+    }
+
     ::rtl::OUString sPresetFile(sPreset);
     sPresetFile += FILE_EXTENSION;
 
@@ -593,6 +599,10 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const ::rtl::O
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
+    // e.g. module without any config data ?!
+    if (!xFolder.is())
+       return css::uno::Reference< css::io::XStream >();
+
     ::rtl::OUString sFile(sPreset);
     sFile += FILE_EXTENSION;
 
@@ -610,6 +620,10 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const ::rtl::O
     css::uno::Reference< css::embed::XStorage > xFolder = m_xWorkingStorageUser;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
+
+    // e.g. module without any config data ?!
+    if (!xFolder.is())
+       return css::uno::Reference< css::io::XStream >();
 
     ::rtl::OUString sFile(sTarget);
     sFile += FILE_EXTENSION;
@@ -647,6 +661,10 @@ void PresetHandler::removeTarget(const ::rtl::OUString& sTarget)
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
+    // e.g. module without any config data ?!
+    if (!xFolder.is())
+       return;
+
     ::rtl::OUString sFile(sTarget);
     sFile += FILE_EXTENSION;
 
@@ -663,6 +681,10 @@ void PresetHandler::commitUserChanges()
     EConfigType                                 eCfgType = m_eConfigType;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
+
+    // e.g. module without any config data ?!
+    if (!xWorking.is())
+       return;
 
     ::rtl::OUString sPath;
 
@@ -745,6 +767,58 @@ void PresetHandler::removeStorageListener(IStorageListener* pListener)
         }
         break;
     }
+}
+
+//-----------------------------------------------
+css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const ::rtl::OUString& sPath ,
+                                                                                             sal_Int32        eMode ,
+                                                                                             sal_Bool         bShare)
+{
+    css::uno::Reference< css::embed::XStorage > xPath;
+    try
+    {
+        if (bShare)
+            xPath = m_aSharedStorages->m_lStoragesShare.openPath(sPath, eMode);
+        else
+            xPath = m_aSharedStorages->m_lStoragesUser.openPath(sPath, eMode);
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        { xPath.clear(); }
+    return xPath;
+}
+
+//-----------------------------------------------
+css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(      ::rtl::OUString&      sPath  ,
+                                                                                                      sal_Int32             eMode  ,
+                                                                                                      sal_Bool              bShare ,
+                                                                                                const ::comphelper::Locale& aLocale)
+{
+    css::uno::Reference< css::embed::XStorage > xPath;
+    ::rtl::OUString                             sLocalizedPath;
+    ::comphelper::Locale                        aTryLocale = aLocale;
+    while (sal_True)
+    {
+        sLocalizedPath  = sPath;
+        sLocalizedPath += PATH_SEPERATOR;
+        sLocalizedPath += aTryLocale.toISO();
+
+        xPath = impl_openPathIgnoringErrors(sLocalizedPath, eMode, bShare);
+        if (!xPath.is())
+        {
+            if (::comphelper::Locale::getFallback(aTryLocale))
+                continue;
+        }
+        break;
+    }
+
+    // return localized path as result too
+    if (xPath.is())
+        sPath = sLocalizedPath;
+    else
+        sPath = ::rtl::OUString();
+    return xPath;
 }
 
 //-----------------------------------------------
