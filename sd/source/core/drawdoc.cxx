@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:25:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,8 @@
 #define ITEMID_SCRIPTSPACE      EE_PARA_ASIANCJKSPACING
 #include <svx/scriptspaceitem.hxx>
 
-#ifndef _OSPLCFG_HXX
-#include <offmgr/osplcfg.hxx>
-#endif
 #ifndef _OFA_MISCCFG_HXX
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -93,7 +90,6 @@
 #include <sfx2/topfrm.hxx>
 #endif
 #include <sfx2/app.hxx>
-#include <offmgr/app.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/dialogs.hrc>
 #ifndef SD_OUTLINER_HXX
