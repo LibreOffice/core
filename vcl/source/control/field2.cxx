@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-05 13:06:21 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 11:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2275,10 +2275,12 @@ void DateField::Last()
 
 // -----------------------------------------------------------------------
 
+#if SUPD < 651
 void DateField::SetExtFormat( ExtDateFieldFormat eFormat )
 {
     DateFormatter::SetExtDateFormat( eFormat );
 }
+#endif
 
 // -----------------------------------------------------------------------
 
