@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:56:00 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE ] = "Visualização de substituição" ;
         Text[ chinese_simplified ] = "Ìæ»»ÏÔÊ¾ÄÚÈİ";
         Text[ russian ] = "Àëüòåğíàòèâíûé ïîêàç";
-        Text[ polish ] = "Wy?wietlanie zastêpcze";
+        Text[ polish ] = "Wyœwietlanie zastêpcze";
         Text[ japanese ] = "‰¼•\\¦";
         Text[ chinese_traditional ] = "´À¥NÅã¥Ü¤º®e";
         Text[ arabic ] = "ÇáÚÑÖ ÇáÈÏíá";
@@ -153,7 +153,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE ] = "Delinear imagens e~xternas" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾ÆäËü¸ñÊ½Í¼ĞÎµÄ±ß¿ò(~P)";
         Text[ russian ] = "Îáîçíà÷èòü âíåøíèå ğèñóíêè";
-        Text[ polish ] = "Zastêpczy wska?nik obcych grafik";
+        Text[ polish ] = "Zastêpczy wskaŸnik obcych grafik";
         Text[ japanese ] = "²Ò°¼Ş˜g‚Ì•\\¦(~P)";
         Text[ chinese_traditional ] = "Åã¥Ü¨ä¥L®æ¦¡¹Ï§ÎªºÃä®Ø(~P)";
         Text[ arabic ] = "ÊáãíÍ áÕæÑ ÎÇÑÌíÉ";
@@ -210,7 +210,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ portuguese_brazilian ] = "Text andeuten" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾ÎÄ×Ö¿ò(~T)";
         Text[ russian ] = "~Îáîçíà÷èòü òåêñò";
-        Text[ polish ] = "Zastêpczy wska?nik tekstu";
+        Text[ polish ] = "Zastêpczy wskaŸnik tekstu";
         Text[ japanese ] = "•¶š—ñ‚ÌÌßÚ°½ÎÙÀŞ(~T)";
         Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~T)";
         Text[ arabic ] = "ÊáãíÍ Åáì ÇáäÕ";
@@ -327,7 +327,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ portuguese_brazilian ] = "Hilfslinien beim ~Verschieben" ;
         Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß";
         Text[ russian ] = "Íàïğàâ. ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
-        Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
+        Text[ polish ] = "Linie pomocne przy przesuwaniu obiektu";
         Text[ japanese ] = "ˆÚ“®‚Ì•â•ü‚ğ•\\¦(~G)";
         Text[ chinese_traditional ] = "¦b²¾°Ê®ÉÅã¥Ü»²§U½u";
         Text[ arabic ] = "ÇáÎØæØ ÇáãÓÇÚÏÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
@@ -398,7 +398,7 @@ TabPage TP_OPTIONS_CONTENTS
     };
     Text[ chinese_simplified ] = "ÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå";
-    Text[ polish ] = "Zawarto?ci";
+    Text[ polish ] = "Zawartoœci";
     Text[ japanese ] = "“à—e";
     Text[ chinese_traditional ] = "¤º®e";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -472,7 +472,7 @@ TabPage TP_OPTIONS_MISC
         Text [ portuguese_brazilian ] = "Schnellbearbeitung zulassen" ;
         Text[ chinese_simplified ] = "ÔÊĞí¿ìËÙ±à¼­";
         Text[ russian ] = "~Äîïóñòèòü áûñòğîå ğåäàêòèğîâàíèå";
-        Text[ polish ] = "Dopu?æ szybk¹ edycjê";
+        Text[ polish ] = "Dopuœæ szybk¹ edycjê";
         Text[ japanese ] = "v‘¬•ÒW‚³‚¹‚é";
         Text[ chinese_traditional ] = "¤¹³\\§Ö³t½s¿è";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÊÍÑíÑ ÇáÓÑíÚ";
@@ -531,7 +531,7 @@ TabPage TP_OPTIONS_MISC
         Text[ russian ] = "Íîâûé äîêóìåíò";
         Text[ polish ] = "Nowy dokument";
         Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄ";
-        Text[ chinese_traditional ] = "·s¤å¥ó";
+        Text[ chinese_traditional ] = "·s¼W¤å¥ó";
         Text[ arabic ] = "ÇáãÓÊäÏ ÇáÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
         Text[ korean ] = "»õ ¹®¼­";
@@ -705,7 +705,7 @@ TabPage TP_OPTIONS_MISC
         Text [ PORTUGUESE ] = "Não distorcer objectos curvos" ;
         Text[ chinese_simplified ] = "Éè¶¨³ÉÔ²ĞÎ£º²»±äĞÎ";
         Text[ russian ] = "Íå ïğåâğàùàòü îáúåêò â êğèâóş";
-        Text[ polish ] = "Osad? na kole: nie zniekszta³caj";
+        Text[ polish ] = "OsadŸ na kole: nie zniekszta³caj";
         Text[ japanese ] = "‰~Œ`‚É‚Ì‚¹‚éA‚ä‚ª‚ß‚È‚¢";
         Text[ chinese_traditional ] = "³]©w¦¨¶ê§Î¡G¤£ÅÜ§Î";
         Text[ arabic ] = "ÚÏã ÊÔæíå ÇáßÇÆä";
@@ -869,7 +869,7 @@ TabPage TP_OPTIONS_MISC
         Text[ italian ] = "Compatibilità";
         Text[ danish ] = "Compatibility";
         Text[ swedish ] = "Kompatibilitet";
-        Text[ polish ] = "Zgodno?æ";
+        Text[ polish ] = "Zgodnoœæ";
         Text[ portuguese_brazilian ] = "Compatibility";
         Text[ japanese ] = "ŒİŠ·«";
         Text[ korean ] = "È£È¯";
