@@ -2,9 +2,6 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.12 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:52:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +63,7 @@ use Cwd;
 use installer::exiter;
 use installer::files;
 use installer::globals;
+use installer::logger;
 use installer::packagelist;
 use installer::pathanalyzer;
 use installer::remover;
@@ -162,7 +160,7 @@ sub put_directories_into_epmfile
         {
             my $hostname = $onedir->{'HostName'};
 
-            my $line = "d 755 root sys $hostname -\n";
+            my $line = "d 755 root other $hostname -\n";
 
             push(@{$epmfileref}, $line)
         }
@@ -181,7 +179,7 @@ sub put_files_into_epmfile
         my $destination = $onefile->{'destination'};
         my $sourcepath = $onefile->{'sourcepath'};
 
-        my $line = "f $unixrights root sys $destination $sourcepath\n";
+        my $line = "f $unixrights root other $destination $sourcepath\n";
 
         push(@{$epmfileref}, $line)
     }
@@ -197,7 +195,7 @@ sub put_links_into_epmfile
         my $destination = $onelink->{'destination'};
         my $destinationfile = $onelink->{'destinationfile'};
 
-        my $line = "l 000 root sys $destination $destinationfile\n";
+        my $line = "l 000 root other $destination $destinationfile\n";
 
         push(@{$epmfileref}, $line)
     }
@@ -349,7 +347,7 @@ sub create_epm_header
     my $provides = "";
     my $requires = "";
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         $provides = "solarisprovides";   # the name in the packagelist
         $requires = "solarisrequires";   # the name in the packagelist
@@ -364,7 +362,7 @@ sub create_epm_header
     {
         my $providesstring = $onepackage->{$provides};
         installer::packagelist::resolve_packagevariables(\$providesstring, $variableshashref, 1);
-        installer::packagelist::adapt_name(\$providesstring);
+        installer::packagelist::adapt_packagename(\$providesstring);
         $line = "%provides" . " " . $providesstring . "\n";
         push(@epmheader, $line);
     }
@@ -373,7 +371,7 @@ sub create_epm_header
     {
         my $requiresstring = $onepackage->{$requires};
         installer::packagelist::resolve_packagevariables(\$requiresstring, $variableshashref, 1);
-        installer::packagelist::adapt_name(\$requiresstring);
+        installer::packagelist::adapt_packagename(\$requiresstring);
         $line = "%requires" . " " . $requiresstring . "\n";
         push(@epmheader, $line);
     }
@@ -439,7 +437,7 @@ sub replace_many_variables_in_shellscripts
     {
         my $value = $variableshashref->{$key};
         $value = lc($value);    # lowercase !
-        $value =~ s/\.org//g;   # openoffice instead of openoffice.org
+        $value =~ s/\.org/org/g;    # openofficeorg instead of openoffice.org
         replace_variable_in_shellscripts($scriptref, $value, $key);
     }
 }
@@ -621,7 +619,7 @@ sub add_one_line_into_file
 {
     my ($file, $insertline, $filename) = @_;
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         push(@{$file}, $insertline);        # simply adding at the end of pkginfo file
     }
@@ -743,8 +741,8 @@ sub set_releaseversion_in_specfile
 # 1. Add "BASEDIR=/opt" into pkginfo
 # 2. Remove "/opt/" from all objects in prototype file
 # For step2 this function exists
-# Sample: d none /opt/openofficeorg20/help 0755 root sys
-# -> d none openofficeorg20/help 0755 root sys
+# Sample: d none /opt/openofficeorg20/help 0755 root other
+# -> d none openofficeorg20/help 0755 root other
 #########################################################
 
 sub make_prototypefile_relocatable
@@ -846,7 +844,7 @@ sub prepare_packages
     my $localrelocatablepath = $relocatablepath;
     $localrelocatablepath =~ s/\/\s*$//;
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         $filename = $packagename . ".pkginfo";
         $newline = "BASEDIR\=" . $localrelocatablepath . "\n";
@@ -878,7 +876,7 @@ sub prepare_packages
 
     # removing the relocatable path in prototype file
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         my $prototypefilename = $packagename . ".prototype";
         $prototypefilename = $newepmdir . $prototypefilename;
@@ -956,13 +954,13 @@ sub determine_rpm_version
 
 sub create_packages_without_epm
 {
-    my ($epmdir, $packagename) = @_;
+    my ($epmdir, $packagename, $includepatharrayref) = @_;
 
     # Solaris: pkgmk -o -f solaris-2.8-sparc/SUNWso8m34.prototype -d solaris-2.8-sparc
     # Solaris: pkgtrans solaris-2.8-sparc SUNWso8m34.pkg SUNWso8m34
     # Solaris: tar -cf - SUNWso8m34 | gzip > SUNWso8m34.tar.gz
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         my $prototypefile = $epmdir . $packagename . ".prototype";
         if (! -f $prototypefile) { installer::exiter::exit_program("ERROR: Did not find file: $prototypefile", "create_packages_without_epm"); }
@@ -1009,6 +1007,31 @@ sub create_packages_without_epm
                 push( @installer::globals::logfileinfo, $infoline);
                 last;
             }
+        }
+
+        # compressing packages
+
+        my $faspac = "faspac-so.sh";
+
+        my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
+        if ($$compressorref ne "")
+        {
+            $faspac = $$compressorref;
+            $infoline = "Found compressor: $faspac\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            print "... $faspac ...\n";
+            installer::logger::include_timestamp_into_logfile("Starting $faspac");
+
+             $systemcall = "/bin/sh $faspac -a -d $destinationdir $packagename";     # $faspac has to be the absolute path!
+             make_systemcall($systemcall);
+
+            installer::logger::include_timestamp_into_logfile("End of $faspac");
+        }
+        else
+        {
+            $infoline = "Not found: $faspac\n";
+            push( @installer::globals::logfileinfo, $infoline);
         }
 
         # Setting unix rights to "775" for all created directories inside the package
@@ -1145,7 +1168,7 @@ sub remove_temporary_epm_files
 
     # saving the files into the loggingdir
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         my @extensions = ();
         push(@extensions, ".pkginfo");
@@ -1272,7 +1295,7 @@ sub create_new_directory_structure
     installer::remover::remove_ending_pathseparator(\$localdir);
     my $newdir = "";
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         $newdir = "packages";
 
@@ -1404,7 +1427,7 @@ sub put_childprojects_into_installset
 
         # unpacking and removing the ada tar.gz file
 
-        if ( $installer::globals::issolarisbuild )
+        if ( $installer::globals::issolarispkgbuild )
         {
             # determining the tar.gz files in directory $destdir
 
@@ -1475,15 +1498,16 @@ sub put_systemintegration_into_installset
 
     my @systemfiles = ();
     my $destdir = $newdir;
+    my $infoline = "";
 
     # Attention: OOO has other names !
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         if ($installer::globals::product =~ /OpenOffice/i )
         {
-            push(@systemfiles, "OOOopenoffice-gnome.tar.gz");
-            push(@systemfiles, "OOOopenoffice-cde.tar.gz");
+            push(@systemfiles, "openofficeorg-gnome.tar.gz");
+            push(@systemfiles, "openofficeorg-cde.tar.gz");
         }
         else
         {
@@ -1499,8 +1523,8 @@ sub put_systemintegration_into_installset
 
         if ($installer::globals::product =~ /OpenOffice/i )
         {
-            push(@systemfiles, "openoffice-redhat-menus-$productversion-1.noarch.rpm");
-            push(@systemfiles, "openoffice-suse-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openofficeorg-redhat-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openofficeorg-suse-menus-$productversion-1.noarch.rpm");
         }
         else
         {
@@ -1515,12 +1539,19 @@ sub put_systemintegration_into_installset
         my $onefilename = $systemfiles[$i];
         my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
 
+        if ( $$sourcepathref eq "" )
+        {
+            $infoline = "ERROR: Did not find file for system integration: $onefilename\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            next;
+        }
+
         my $destfile = $destdir . $installer::globals::separator . $systemfiles[$i];
         installer::systemactions::copy_one_file($$sourcepathref, $destfile);
 
         # unpacking and deleting the tar.gz files for Solaris
 
-        if ( $installer::globals::issolarisbuild )
+        if ( $installer::globals::issolarispkgbuild )
         {
             # unpacking
 
