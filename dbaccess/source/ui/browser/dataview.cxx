@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 12:54:05 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,75 +77,164 @@
 #ifndef _SFXIMGMGR_HXX
 #include <sfx2/imgmgr.hxx>
 #endif
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
-//  using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-//  using namespace ::com::sun::star::container;
 
-DBG_NAME(ODataView);
-// -------------------------------------------------------------------------
-ODataView::ODataView(Window* pParent, const Reference< XMultiServiceFactory >& _rFactory, WinBits nStyle)
-    :Window(pParent,nStyle)
-    ,m_pToolBox(NULL)
-    ,m_xServiceFactory(_rFactory)
+//.........................................................................
+namespace dbaui
 {
-    DBG_CTOR(ODataView,NULL);
-}
-// -------------------------------------------------------------------------
-void ODataView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
-{
-    try
+//.........................................................................
+    //=====================================================================
+    //= ColorChanger
+    //=====================================================================
+    class ColorChanger
     {
-        // our UNO representation
-        m_xMe = VCLUnoHelper::CreateControlContainer(this);
-        DBG_ASSERT(m_xMe.is(), "ODataView::Construct : no UNO representation");
+    protected:
+        OutputDevice*   m_pDev;
+
+    public:
+        ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor )
+            :m_pDev( _pDev )
+        {
+            m_pDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            m_pDev->SetLineColor( _rNewLineColor );
+            m_pDev->SetFillColor( _rNewFillColor );
+        }
+
+        ~ColorChanger()
+        {
+            m_pDev->Pop();
+        }
+    };
+
+    DBG_NAME(ODataView);
+    // -------------------------------------------------------------------------
+    ODataView::ODataView(Window* pParent, const Reference< XMultiServiceFactory >& _rFactory, WinBits nStyle)
+        :Window(pParent,nStyle)
+        ,m_pToolBox(NULL)
+        ,m_xServiceFactory(_rFactory)
+        ,m_pSeparator( NULL )
+    {
+        DBG_CTOR(ODataView,NULL);
     }
-    catch(Exception&)
+    // -------------------------------------------------------------------------
+    void ODataView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
     {
+        try
+        {
+            // our UNO representation
+            m_xMe = VCLUnoHelper::CreateControlContainer(this);
+            DBG_ASSERT(m_xMe.is(), "ODataView::Construct : no UNO representation");
+        }
+        catch(Exception&)
+        {
+            ::comphelper::disposeComponent(m_xMe);
+            throw;
+        }
+    }
+    // -------------------------------------------------------------------------
+    ODataView::~ODataView()
+    {
+        setToolBox(NULL);
+
+        enableSeparator( sal_False );
+
         ::comphelper::disposeComponent(m_xMe);
-        throw;
+        DBG_DTOR(ODataView,NULL);
     }
-}
-// -------------------------------------------------------------------------
-ODataView::~ODataView()
-{
-    setToolBox(NULL);
 
-    ::comphelper::disposeComponent(m_xMe);
-    DBG_DTOR(ODataView,NULL);
-}
-// -------------------------------------------------------------------------
-void ODataView::setToolBox(ToolBox* pTB)
-{
-    if (pTB == m_pToolBox)
-        return;
-
-    if (m_pToolBox)
-        delete m_pToolBox;
-
-    m_pToolBox = pTB;
-    if (m_pToolBox)
+    // -------------------------------------------------------------------------
+    void ODataView::enableSeparator( const sal_Bool _bEnable )
     {
-        m_pToolBox->SetParent(this);
-        m_pToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
-        m_pToolBox->Show();
+        if ( _bEnable == isSeparatorEnabled() )
+            // nothing to do
+            return;
+
+        if ( _bEnable )
+        {
+            m_pSeparator = new FixedLine( this );
+            m_pSeparator->Show( );
+        }
+        else
+        {
+            delete m_pSeparator;
+            m_pSeparator = NULL;
+        }
+        Resize();
     }
 
-    // rearrange the grid and the TB
-    Resize();
-}
-// -------------------------------------------------------------------------
-void ODataView::Resize()
-{
-    Window::Resize();
-    Rectangle aRect(Point(0,0),GetOutputSizePixel());
-    resizeControl(aRect);
+    // -------------------------------------------------------------------------
+    void ODataView::setToolBox(ToolBox* pTB)
+    {
+        if (pTB == m_pToolBox)
+            return;
 
-    // set the size of the toolbox
-    if (m_pToolBox)
-        m_pToolBox->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
-}
-//------------------------------------------------------------------
+        if (m_pToolBox)
+            delete m_pToolBox;
 
+        m_pToolBox = pTB;
+        if (m_pToolBox)
+        {
+            m_pToolBox->SetParent(this);
+            m_pToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
+            m_pToolBox->Show();
+        }
+
+        // rearrange the grid and the TB
+        Resize();
+    }
+    // -------------------------------------------------------------------------
+    void ODataView::resizeControl( Rectangle& _rPlayground )
+    {
+    }
+
+    // -------------------------------------------------------------------------
+    void ODataView::Paint( const Rectangle& _rRect )
+    {
+        //.................................................................
+        // draw the background
+        {
+            ColorChanger aColors( this, COL_TRANSPARENT, GetSettings().GetStyleSettings().GetFaceColor() );
+            DrawRect( _rRect );
+        }
+
+        // let the base class do anything it needs
+        Window::Paint( _rRect );
+    }
+
+    // -------------------------------------------------------------------------
+    void ODataView::Resize()
+    {
+        Window::Resize();
+        Rectangle aPlayground( Point(0, 0), GetOutputSizePixel() );
+
+        if ( m_pSeparator )
+        {
+            Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
+
+            m_pSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
+
+            aPlayground.Top() += aSeparatorSize.Height() + 1;
+        }
+
+        if ( m_pToolBox )
+        {
+            m_pToolBox->SetPosPixel( aPlayground.TopLeft() );
+
+            Size aToolboxSize( aPlayground.GetSize().Width(), m_pToolBox->GetSizePixel().Height() );
+            m_pToolBox->SetSizePixel( aToolboxSize );
+
+            aPlayground.Top() += aToolboxSize.Height();
+        }
+
+        resizeControl( aPlayground );
+    }
+
+//.........................................................................
+}   // namespace dbaui
+//.........................................................................
