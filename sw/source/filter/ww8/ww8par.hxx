@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:10:30 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,6 @@ namespace com{namespace sun {namespace star{
 #define WW8FL_NO_TEXT        1
 #define WW8FL_NO_STYLES      2
 #define WW8FL_NO_ZSTYLES     4  // keine Zeichenstyles importieren
-#define WW8FL_NO_FTN      0x20
 #define WW8FL_NO_GRAF     0x80
 #define WW8FL_NO_LRUL    0x200
 
@@ -197,7 +196,6 @@ namespace com{namespace sun {namespace star{
 #define WW8FL_NO_IMPLPASP        0x4000  // no implicit para space
 #define WW8FL_NO_GRAFLAYER       0x8000
 #define WW8FL_NO_OLE            0x20000
-#define WW8FL_NO_COLS          0x200000
 #define WW8FL_NO_TOX           0x400000
 
 // Zusatz-Filter-Flags, gueltig ab Winword 8
@@ -264,7 +262,7 @@ private:
     BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
     WW8LSTInfo* GetLSTByListId(    ULONG  nIdLst     ) const;
     bool ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, USHORT nLevelStyle,
-        bool bSetStartNo);
+        bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel);
 
     // Zeichenattribute aus GrpprlChpx
     typedef SfxItemSet* WW8aISet[nMaxLevel];
@@ -274,7 +272,6 @@ private:
     void AdjustLVL(BYTE nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
         WW8aCFmt& aCharFmt, bool& bNewCharFmtCreated,
         String aPrefix = aEmptyStr);
-    bool LFOequaltoLST(WW8LFOInfo& rLFOInfo);
 
     //No copying
     WW8ListManager(const WW8ListManager&);
@@ -662,7 +659,7 @@ private:
     struct wwULSpaceData
     {
         bool bHasHeader, bHasFooter;
-        short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
+        short nSwHLo, nSwFUp, nSwUp,  nSwLo;
         wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
     };
 
@@ -897,9 +894,6 @@ friend class wwSectionManager;
     ULONG nFieldTagAlways[3];   // dito fuers Taggen von Feldern
     ULONG nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
 
-    ULONG nLastFlyNode;         // Node number of last imported Fly
-
-    ULONG nDrawObjOfs;
     WW8_CP nDrawCpO;            // Anfang der Txbx-SubDocs
 
     ULONG nPicLocFc;            // Picture Location in File (FC)
@@ -919,7 +913,6 @@ friend class wwSectionManager;
     USHORT nLFOPosition;
 
     short nCharFmt;             // gemaess WW-Zaehlung, <0 fuer keine
-    short nAlign2;
 
     short nLeftParaMgn;         // Absatz L-Space
     short nTxtFirstLineOfst;    // Absatz 1st line ofset
@@ -1004,8 +997,6 @@ friend class wwSectionManager;
 
     void HandleLineNumbering(const wwSection &rSection);
 
-    bool MustCloseSection(long nTxtPos);
-
     void CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
                            SwPageDesc* pNewPageDesc, BYTE nCode );
 
@@ -1020,7 +1011,6 @@ friend class wwSectionManager;
 
     void SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection);
 
-    void ReadPlainText( long nStartCp, long nTextLen );
     void ProcessAktCollChange(WW8PLCFManResult& rRes, bool* pStartAttr,
         bool bCallProcessSpecial);
     long ReadTextAttr(long& rTxtPos, bool& rbStartLine);
@@ -1034,7 +1024,6 @@ friend class wwSectionManager;
     void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
                            long nLen, short nType );
 
-    BYTE* ReadUntilToken( USHORT& rStrLen, USHORT nMaxLen, BYTE nToken );
     void ImportTox( int nFldId, String aStr );
 
     void EndSprm( USHORT nId );
@@ -1097,7 +1086,6 @@ friend class wwSectionManager;
     bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);
     USHORT TabRowSprm(int nLevel) const;
 
-    ULONG ReadWmfHeader( WmfFileHd* pHd, long nPos );
     bool ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
        const WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos, bool* pDelIt);
 
@@ -1113,10 +1101,8 @@ friend class wwSectionManager;
         const SfxItemSet& rGrfSet);
 
     SwFrmFmt *AddAutoAnchor(SwFrmFmt *pFmt);
-    void RemoveAutoAnchor(const SwFrmFmt *pFmt);
     SwFrmFmt* ImportGraf1(WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos);
     SwFrmFmt* ImportGraf(SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0);
-    bool ImportURL(String &sURL,String &sMark,WW8_CP nStart);
 
     SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=0,
         const SfxItemSet* pFlySet=0 );
@@ -1138,7 +1124,6 @@ friend class wwSectionManager;
     bool InEqualApo(int nLvl) const;
     bool InLocalApo() const { return InEqualApo(nInTable); }
     bool InEqualOrHigherApo(int nLvl) const;
-    bool InAnyApo() const { return InEqualOrHigherApo(0); }
     void TabCellEnd();
     void StopTable();
     short GetTableLeft();
@@ -1205,6 +1190,8 @@ friend class wwSectionManager;
     SdrObject* CreateContactObject(SwFrmFmt* pFlyFmt);
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, bool bOrgObjectWasReplace);
+    bool MiserableRTLGraphicsHack(long &rLeft, long nWidth,
+        SwHoriOrient eHoriOri, SwRelationOrient eHoriRel);
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
     SwFlyFrmFmt* ImportReplaceableDrawables( SdrObject* &rpObject,
         SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
@@ -1272,6 +1259,9 @@ friend class wwSectionManager;
 
     void SetOutLineStyles();
 
+    bool IsInlineEscherHack() const
+        {return !maFieldStack.empty() ? maFieldStack.back() == 95 : false; };
+
     void StoreMacroCmds();
 
     //No copying
@@ -1323,6 +1313,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_ParaAutoAfter(USHORT , const BYTE *pData, short nLen);
     void Read_LineSpace(        USHORT, const BYTE*, short nLen );
     void Read_Justify(USHORT, const BYTE*, short nLen);
+    bool IsRightToLeft();
     void Read_RTLJustify(USHORT, const BYTE*, short nLen);
     void Read_Hyphenation(      USHORT, const BYTE* pData, short nLen );
     void Read_WidowControl(     USHORT, const BYTE* pData, short nLen );
@@ -1386,7 +1377,6 @@ public:     // eigentlich private, geht aber leider nur public
     const String &GetMappedBookmark(String &rOrigName);
 
     // Felder
-    eF_ResT Read_F_Nul(WW8FieldDesc*, String& );
     eF_ResT Read_F_Input(WW8FieldDesc*, String& rStr);
     eF_ResT Read_F_InputVar(WW8FieldDesc*, String& rStr);
     eF_ResT Read_F_ANumber( WW8FieldDesc*, String& );
@@ -1418,7 +1408,6 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_SubF_Ruby( _ReadFieldParams& rReadParam);
     void Read_SubF_Combined( _ReadFieldParams& rReadParam);
     eF_ResT Read_F_IncludePicture( WW8FieldDesc*, String& rStr );
-    String CreateNextFileLinkName();
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, String& rStr );
 
@@ -1449,9 +1438,7 @@ public:     // eigentlich private, geht aber leider nur public
     SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage, SvStream* pSt,
         SwDoc& rD, bool bNewDoc );
 
-    const ULONG GetFieldFlags() const{ return nFieldFlags; }
     const ULONG GetIniFlags()   const{ return nIniFlags; }
-    const ULONG GetIniFlags1()  const{ return nIniFlags1; }
 
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
