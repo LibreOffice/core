@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:44:04 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,6 +1256,23 @@ FASTBOOL SwCursor::IsInWordWT( sal_Int16 nWordType ) const
             bRet = rCC.isLetterNumeric( pTxtNd->GetTxt(), aBoundary.startPos );
         }
     }
+    return bRet;
+}
+
+FASTBOOL SwCursor::IsStartEndSentence( bool bEnd ) const
+{
+    FASTBOOL bRet = bEnd ?
+                    GetCntntNode() && GetPoint()->nContent == GetCntntNode()->Len() :
+                    GetPoint()->nContent.GetIndex() == 0;
+
+    if( !bRet )
+    {
+        SwCursor aCrsr(*GetPoint());
+        SwPosition aOrigPos = *aCrsr.GetPoint();
+        aCrsr.GoSentence( bEnd ? SwCursor::END_SENT : SwCursor::START_SENT );
+        bRet = aOrigPos == *aCrsr.GetPoint();
+    }
+
     return bRet;
 }
 
