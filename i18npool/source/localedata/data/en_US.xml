@@ -377,7 +377,7 @@
 <LC_NumberingLevel>
 <NumberingLevel Prefix=" " NumType="4" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="4" Suffix="." />
-<NumberingLevel Prefix="(" NumType="4" Suffix="." />
+<NumberingLevel Prefix="(" NumType="4" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="2" Suffix="." />
 <NumberingLevel Prefix=" " NumType="0" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="1" Suffix=")" />
