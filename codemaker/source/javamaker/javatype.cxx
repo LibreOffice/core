@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-03 14:43:01 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 14:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@ JavaType::JavaType(TypeReader& typeReader,
                    const TypeDependency& typeDependencies)
     : m_indentLength(0)
     , m_typeName(typeName)
-    , m_name(typeName.getToken(typeName.getTokenCount('/') - 1, '/'))
     , m_reader(typeReader)
     , m_typeMgr((TypeManager&)typeMgr)
     , m_dependencies(typeDependencies)
 {
+    sal_Int32 nPos = typeName.lastIndexOf( '/' );
+    m_name = typeName.copy( nPos+1 );
 }
 
 JavaType::~JavaType()
@@ -920,7 +921,7 @@ void InterfaceType::dumpAttributes(FileStream& o, UnoInfoList* pUnoInfos)
             o << indent() << "public void set" << fieldName << "( ";
             dumpType(o, fieldType);
 //          o << " _" << fieldName.toLowerCase() << " ) throws com.sun.star.uno.RuntimeException;\n";
-            o << " _" << fieldName.toLowerCase() << " );\n";
+            o << " _" << fieldName.toAsciiLowerCase() << " );\n";
         }
 
         if (access == RT_ACCESS_READONLY)
@@ -1983,7 +1984,7 @@ OString scopedName(const OString& scope, const OString& type,
         return type;
 
     if (bNoNameSpace)
-        return type.getToken(type.getTokenCount('/') - 1, '/');
+        return type.copy( type.lastIndexOf( '/' )+1 );
 
     // scoped name only if the namespace is not equal
     if (scope.lastIndexOf('/') > 0)
@@ -1992,7 +1993,7 @@ OString scopedName(const OString& scope, const OString& type,
         OString tmpScp2(type.copy(0, type.lastIndexOf('/')));
 
         if (tmpScp == tmpScp2)
-            return type.getToken(type.getTokenCount('/') - 1, '/');
+            return type.copy( type.lastIndexOf( '/' )+1 );
     }
 
     return type.replace('/', '.');

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:24 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 14:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ OString createFileNameFromType( const OString& destination,
 
     if (bLowerCase)
     {
-        type = typeName.toLowerCase();
+        type = typeName.toAsciiLowerCase();
     }
 
     sal_uInt32 length = destination.getLength();
@@ -209,13 +209,15 @@ OString createFileNameFromType( const OString& destination,
     token = '\\';
 #endif
 
-    sal_Int32 count = fileName.getTokenCount(token) - 1;
+//  sal_Int32 count = fileName.getTokenCount(token) - 1;
 
     nameBuffer = OStringBuffer(length);
 
-    for (int i=0; i < count; i++)
+    sal_Int32 nIndex = 0;
+//  for (int i=0; i < count; i++)
+    do
     {
-        nameBuffer.append(fileName.getToken(i, token).getStr());
+        nameBuffer.append(fileName.getToken(0, token, nIndex).getStr());
 
         if (nameBuffer.getLength() == 0 || OString(".") == nameBuffer.getStr())
         {
@@ -238,7 +240,7 @@ OString createFileNameFromType( const OString& destination,
         }
 
         nameBuffer.append(token);
-    }
+    } while( nIndex != -1 );
 
     return fileName;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-12 07:39:26 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 14:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ CppuType::CppuType(TypeReader& typeReader,
     , m_cppuTypeStatic(sal_False)
     , m_indentLength(0)
     , m_typeName(typeName)
-    , m_name(typeName.getToken(typeName.getTokenCount('/') - 1, '/'))
     , m_reader(typeReader)
     , m_typeMgr((TypeManager&)typeMgr)
     , m_dependencies(typeDependencies)
@@ -98,6 +97,7 @@ CppuType::CppuType(TypeReader& typeReader,
 {
     // check if this type is nested
     sal_Int32 i = typeName.lastIndexOf('/');
+    m_name = typeName.copy( i != -1 ? i+1 : 0 );
 
     if (i >= 0)
     {
@@ -315,7 +315,7 @@ OString CppuType::dumpHeaderDefine(FileStream& o, sal_Char* prefix, sal_Bool bEx
     tmpBuf.append(prefix);
     tmpBuf.append('_');
 
-    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toUpperCase());
+    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
     o << "#ifndef " << tmp << "\n#define " << tmp << endl;
 
@@ -374,7 +374,7 @@ void CppuType::dumpInclude(FileStream& o, const OString& typeName, sal_Char* pre
     tmpBuf.append(prefix);
     tmpBuf.append('_');
 
-    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toUpperCase());
+    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
     length = 1 + typeName.getLength() + strlen(prefix);
     if (bExtended)
@@ -407,7 +407,7 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
 
     TypeUsingSet::const_iterator iter = usingSet.begin();
 
-    OString     sPrefix(OString(prefix).toUpperCase());
+    OString     sPrefix(OString(prefix).toAsciiUpperCase());
     sal_Bool    bSequenceDumped = sal_False;
     sal_Bool    bInterfaceDumped = sal_False;
     sal_uInt32  index = 0;
@@ -436,7 +436,7 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
             {
                 bSequenceDumped = sal_True;
                 o << "#ifndef _COM_SUN_STAR_UNO_SEQUENCE_" << defPrefix
-                  << "_\n#include <com/sun/star/uno/Sequence." << defPrefix.toLowerCase()
+                  << "_\n#include <com/sun/star/uno/Sequence." << defPrefix.toAsciiLowerCase()
                   << ">\n#endif\n";
             }
 
@@ -510,13 +510,13 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
             if (relType == "any")
             {
                 o << "#ifndef _COM_SUN_STAR_UNO_ANY_" << defPrefix
-                  << "_\n#include <com/sun/star/uno/Any." << defPrefix.toLowerCase()
+                  << "_\n#include <com/sun/star/uno/Any." << defPrefix.toAsciiLowerCase()
                   << ">\n#endif\n";
             } else
             if (relType == "type")
             {
                 o << "#ifndef _COM_SUN_STAR_UNO_TYPE_" << defPrefix
-                  << "_\n#include <com/sun/star/uno/Type." << defPrefix.toLowerCase()
+                  << "_\n#include <com/sun/star/uno/Type." << defPrefix.toAsciiLowerCase()
                   << ">\n#endif\n";
             } else
             if (relType == "string" && sPrefix.equals("HDL"))
@@ -556,33 +556,37 @@ void CppuType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, cons
     if (typeName == "/")
         return;
 
-    sal_uInt32 count = typeName.getTokenCount('/');
-
-    if (count == 1 && !bFull)
+    if (typeName.indexOf( '/' ) == -1 && !bFull)
         return;
 
-    if (!bFull) count--;
+    if (!bFull)
+        typeName = typeName.copy( 0, typeName.lastIndexOf( '/' ) );
 
     if (bOpen)
     {
-        for (sal_uInt32 i=0; i < count; i++)
+        sal_Int32 nIndex = 0;
+        do
         {
-            o << "namespace " << typeName.getToken(i, '/');
+            o << "namespace " << typeName.getToken(0, '/', nIndex);
             if (bOneLine)
                 o << " { ";
             else
                  o << "\n{\n";
-        }
+        } while( nIndex != -1 );
     } else
     {
-        for (int i=count-1; i >= 0; i--)
+        do
         {
+            sal_Int32 nPos = typeName.lastIndexOf( '/' );
+            if( nPos != -1 )
+                typeName = typeName.copy( 0, nPos );
+            nPos = typeName.lastIndexOf( '/' );
             o << "}";
-            if (bOneLine)
+            if( bOneLine )
                 o << " ";
             else
-                 o << " // " << typeName.getToken(i, '/') << "\n";
-        }
+                o << " // " << typeName.copy( nPos != -1 ? nPos+1 : 0 ) << "\n";
+        } while( typeName.getLength() );
     }
 }
 
@@ -1238,8 +1242,9 @@ void CppuType::dumpTypeInit(FileStream& o, const OString& typeName)
 
             if ( reader.isValid() )
             {
+                sal_Int32 nPos = type.lastIndexOf( '/' );
                 o << "(" << shortScopedName("", type, sal_False)
-                  << "::" << type.getToken(type.getTokenCount('/') - 1, '/')
+                  << "::" << type.copy( nPos != -1 ? nPos+1 : 0 )
                   << "_" << reader.getFieldName(0) << ")";
                 return;
             }
@@ -1750,7 +1755,7 @@ void InterfaceType::dumpAttributes(FileStream& o)
 
             o << indent() << "virtual void SAL_CALL set" << fieldName << "( ";
             dumpType(o, fieldType, bConst, bRef);
-            o << " _" << fieldName.toLowerCase() << " ) throw (::com::sun::star::uno::RuntimeException) = 0;\n";
+            o << " _" << fieldName.toAsciiLowerCase() << " ) throw (::com::sun::star::uno::RuntimeException) = 0;\n";
         }
     }
 }
@@ -2458,7 +2463,10 @@ sal_Bool ModuleType::dump(CppuOptions* pOptions)
     if (tmpName.equals("/"))
         tmpName = "global";
     else
-        tmpName += "/" + m_typeName.getToken(m_typeName.getTokenCount('/') - 1, '/');
+    {
+        sal_Int32 nPos = m_typeName.lastIndexOf( '/' );
+        tmpName += "/" + m_typeName.copy( nPos != -1 ? nPos+1 : 0 );
+    }
 
     OString tmpFileName;
     OString hFileName = createFileNameFromType(outPath, tmpName, ".hdl");
@@ -4064,41 +4072,20 @@ sal_Bool produceType(const OString& typeName,
 OString scopedName(const OString& scope, const OString& type,
                    sal_Bool bNoNameSpace)
 {
-    sal_uInt32 count = type.getTokenCount('/');
-    sal_uInt32 offset = 0;
-/*
-    if (count > 1)
-        offset = count - 1;
-    else
-        return type;
-*/
-    if (count == 1)
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+    if (nPos == -1)
         return type;
 
     if (bNoNameSpace)
-        return type.getToken(count - 1, '/');
+        return type.copy(nPos+1);
 
-    // scoped name only if the namespace is not equal
-/*
-    if (scope.lastIndexOf('/') > 0)
-    {
-        OString tmpScp(scope.copy(0, scope.lastIndexOf('/')));
-        OString tmpScp2(type.copy(0, type.lastIndexOf('/')));
-
-        if (tmpScp == tmpScp2)
-            return type.getToken(count - 1, '/');
-    }
-*/
-
-//  OStringBuffer tmpBuf(type.getLength() + offset);
-//  tmpBuf.append(type.getToken(0, '/'));
-//  for (int i=1; i < count; i++)
-    OStringBuffer tmpBuf(type.getLength() + count);
-    for (sal_uInt32 i=0; i < count; i++)
+    OStringBuffer tmpBuf(type.getLength()*2);
+    nPos = 0;
+    do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(i, '/'));
-    }
+        tmpBuf.append(type.getToken(0, '/', nPos));
+    } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }
@@ -4109,13 +4096,8 @@ OString scopedName(const OString& scope, const OString& type,
 OString shortScopedName(const OString& scope, const OString& type,
                            sal_Bool bNoNameSpace)
 {
-    sal_uInt32 count = type.getTokenCount('/');
-    sal_uInt32 offset = 0;
-
-    if (count > 1)
-//      offset = count - 2;
-        offset = count - 1;
-    else
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+    if( nPos == -1 )
         return OString();
 
     if (bNoNameSpace)
@@ -4125,19 +4107,21 @@ OString shortScopedName(const OString& scope, const OString& type,
     if (scope.lastIndexOf('/') > 0)
     {
         OString tmpScp(scope.copy(0, scope.lastIndexOf('/')));
-        OString tmpScp2(type.copy(0, type.lastIndexOf('/')));
+        OString tmpScp2(type.copy(0, nPos));
 
         if (tmpScp == tmpScp2)
             return OString();
     }
 
-    OStringBuffer tmpBuf(type.lastIndexOf('/') + offset);
+    OString aScope( type.copy( 0, nPos ) );
+    OStringBuffer tmpBuf(aScope.getLength()*2);
 
-    for (sal_uInt32 i=0; i < count - 1; i++)
+    nPos = 0;
+    do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(i, '/'));
-    }
+        tmpBuf.append(aScope.getToken(0, '/', nPos));
+    } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }
