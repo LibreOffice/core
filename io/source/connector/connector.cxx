@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:23:56 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 11:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include <osl/mutex.hxx>
+#include "osl/security.hxx"
 
 #include <uno/mapping.hxx>
 
@@ -142,7 +143,7 @@ namespace stoc_connector
 
                 PipeConnection *pConn = new PipeConnection( aName, sConnectionDescription );
 
-                if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN ) )
+                if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
                 {
                     r = Reference < XConnection > ( (XConnection * ) pConn );
                 }
