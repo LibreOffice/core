@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-22 14:23:44 $
+ *  last change: $Author: ka $ $Date: 2000-09-25 11:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,6 @@ private:
     BOOL            mbInvert;
     BYTE            mcTransparency;
     GraphicDrawMode meDrawMode;
-    Rectangle       maCropRect;
 
     void*           mpDummy;
 
