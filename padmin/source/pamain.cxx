@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:22:16 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,19 @@ void MyApp::Main()
     Reference< XMultiServiceFactory > xFactory(  xCtx->getServiceManager(), UNO_QUERY );
     if( xFactory.is() )
         setProcessServiceFactory( xFactory );
+
+    /*
+     * Initialize the Java UNO AccessBridge if accessibility is turned on
+     */
+
+    if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+    {
+        BOOL bQuitApp;
+        if( !InitAccessBridge( true, bQuitApp ) )
+            if( bQuitApp )
+                return;
+    }
+
     /*
      *  Create UCB.
      */
