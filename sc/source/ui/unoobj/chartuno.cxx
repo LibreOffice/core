@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:24:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ SC_SIMPLE_SERVICE_INFO( ScChartsObj, "ScChartsObj", "com.sun.star.table.TableCha
 
 //------------------------------------------------------------------------
 
-SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, USHORT nTab, const String& rName )
+SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const String& rName )
 {
     if (pDocShell)
     {
@@ -102,7 +102,7 @@ SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, USHORT nTab, const String& 
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         if (pDrawLayer)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             DBG_ASSERT(pPage, "Page nicht gefunden");
             if (pPage)
             {
@@ -133,7 +133,7 @@ SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, USHORT nTab, const String& 
 
 //------------------------------------------------------------------------
 
-ScChartsObj::ScChartsObj(ScDocShell* pDocSh, USHORT nT) :
+ScChartsObj::ScChartsObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
     nTab( nT )
 {
@@ -166,7 +166,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         if (pDrawLayer)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             DBG_ASSERT(pPage, "Page nicht gefunden");
             if (pPage)
             {
@@ -223,7 +223,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
 
     ScDocument* pDoc = pDocShell->GetDocument();
     ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
-    SdrPage* pPage = pModel->GetPage(nTab);
+    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"addChart: keine Page");
     if (!pPage)
         return;
@@ -232,7 +232,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     //  (empty string: generate valid name)
 
     String aNameString = aName;
-    USHORT nDummy;
+    SCTAB nDummy;
     if ( aNameString.Len() && pModel->GetNamedObject( aNameString, OBJ_OLE2, nDummy ) )
     {
         //  object exists - only RuntimeException is specified
@@ -246,8 +246,8 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
         for (USHORT i=0; i<nRangeCount; i++)
         {
-            ScRange aRange( (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow, pAry[i].Sheet,
-                            (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow,   pAry[i].Sheet );
+            ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
+                            static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
             pList->Append( aRange );
         }
     }
@@ -313,7 +313,7 @@ void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
-        SdrPage* pPage = pModel->GetPage(nTab);         // ist nicht 0
+        SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
 
         pModel->AddUndo( new SdrUndoRemoveObj( *pObj ) );   //! Undo-Kommentar?
         pPage->RemoveObject( pObj->GetOrdNum() );
@@ -343,7 +343,7 @@ sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException)
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         if (pDrawLayer)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             DBG_ASSERT(pPage, "Page nicht gefunden");
             if (pPage)
             {
@@ -416,7 +416,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         if (pDrawLayer)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             DBG_ASSERT(pPage, "Page nicht gefunden");
             if (pPage)
             {
@@ -458,7 +458,7 @@ sal_Bool SAL_CALL ScChartsObj::hasByName( const rtl::OUString& aName )
 
 //------------------------------------------------------------------------
 
-ScChartObj::ScChartObj(ScDocShell* pDocSh, USHORT nT, const String& rN) :
+ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN) :
     pDocShell( pDocSh ),
     nTab( nT ),
     aChartName( rN )
@@ -613,8 +613,8 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
         for (USHORT i=0; i<nRangeCount; i++)
         {
-            ScRange aRange( (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow, pAry[i].Sheet,
-                            (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow,   pAry[i].Sheet );
+            ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
+                            static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
             pList->Append( aRange );
         }
     }
