@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:49 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,30 @@ sal_Int32 getSize( const Type & rT )
  */
 void testCppu()
 {
+    sal_Int32 big = 0x7fffffff;
+    try
+    {
+        Sequence< Sequence< Any > > seq( big );
+    }
+    catch (::std::bad_alloc &)
+    {
+    }
+    try
+    {
+        Sequence< Sequence< Any > > seq( 0, big );
+    }
+    catch (::std::bad_alloc &)
+    {
+    }
+    try
+    {
+        Sequence< Sequence< Any > > seq;
+        seq.realloc( big );
+    }
+    catch (::std::bad_alloc &)
+    {
+    }
+
     {
     // test the size of types
     OSL_ENSURE( sizeof( Uik ) == getSize( getCppuType( (Uik *)0) ),
@@ -359,6 +383,10 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
 
     {
     // test any
+    Any tb;
+    tb <<= true;
+    OSL_ASSERT( tb.getValueType() == ::getCppuBooleanType() );
+    OSL_ASSERT( tb == makeAny( true ) );
     Any aAny = makeAny( (sal_Int8)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int8 *)0 ) );
     OSL_ASSERT( *(sal_Int8*)aAny.getValue() == 2 );
