@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:02:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #endif
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include "svx/unolingu.hxx"
 #endif
 
 #ifndef _SWMODULE_HXX
@@ -749,7 +752,7 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     // build SearchOptions to be used
     //
     SearchOptions aSearchOpt( pSrchItem->GetSearchOptions() );
-    aSearchOpt.Locale = CreateLocale( (USHORT)GetAppLanguage() );
+    aSearchOpt.Locale = SvxCreateLocale( (USHORT)GetAppLanguage() );
     if( !bDoReplace )
         aSearchOpt.replaceString = aEmptyStr;
 
