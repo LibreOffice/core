@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-30 16:52:27 $
+ *  last change: $Author: sj $ $Date: 2002-06-13 13:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1405,8 +1405,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_TEXTARRAY_ACTION ):
             {
                 MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
-                String                  aUniText( pAct->GetText() );
-                ByteString              aText( aUniText, rActualCharSet );
+                ByteString              aText( pAct->GetText(), rActualCharSet );
+                String                  aUniText( pAct->GetText(), pAct->GetIndex(), pAct->GetLen() );
                 ULONG                   nAryLen;
                 ULONG                   nLen = pAct->GetLen();
                 const ULONG             nTextLen = aText.Len();
