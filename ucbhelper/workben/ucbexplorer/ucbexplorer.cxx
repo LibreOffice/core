@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-29 09:17:57 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 10:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
+#endif
+#ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
+#include <ucbhelper/configurationkeys.hxx>
 #endif
 
 #ifndef _UCBEXPLORER_HRC
@@ -1216,8 +1219,8 @@ void MyApp::Main()
     //////////////////////////////////////////////////////////////////////
 
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString::createFromAscii( "Local" );
-    aArgs[ 1 ] <<= OUString::createFromAscii( "Office" );
+    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
     sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xFac, aArgs );
 
     if ( !bSuccess )
