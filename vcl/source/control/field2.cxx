@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:39:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1585,7 +1585,7 @@ static void ImplDateIncrementYear( Date& rDate, BOOL bUp )
 // -----------------------------------------------------------------------
 BOOL DateFormatter::ImplAllowMalformedInput() const
 {
-    return ( NULL != GetField() ) && ( ( GetField()->GetStyle() & 0x80000000 ) != 0 );
+    return !IsEnforceValidValue();
 }
 
 // -----------------------------------------------------------------------
@@ -2774,7 +2774,7 @@ BOOL TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOutStr 
 // -----------------------------------------------------------------------
 BOOL TimeFormatter::ImplAllowMalformedInput() const
 {
-    return ( NULL != GetField() ) && ( ( GetField()->GetStyle() & 0x80000000 ) != 0 );
+    return !IsEnforceValidValue();
 }
 
 // -----------------------------------------------------------------------
