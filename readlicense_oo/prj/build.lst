@@ -1,2 +1,2 @@
-rl  readlicense :   NULL
-rl  readlicense			usr1 - all rl_root NULL
+ro  readlicense_oo :   solenv NULL
+ro  readlicense_oo			usr1 - all ro_root NULL
