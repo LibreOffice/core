@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:31:56 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,9 +461,9 @@ String RID_GALLERYSTR_THEME_RULERS
 {
     Text = "Begrenzungen";
     Text[ENGLISH] = "Rulers";
-    Text[english_us] = "Borders";
-    Text[ portuguese ] = "Rйguas";
-    Text[ russian ] = "Линейки разметки";
+    Text[english_us] = "Rulers";
+    Text[ portuguese ] = "Limites";
+    Text[ russian ] = "Ограничения";
     Text[ dutch ] = "Linealen";
     Text[ french ] = "Rиgles";
     Text[ spanish ] = "Lнmites";
