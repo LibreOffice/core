@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:24:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,45 +218,85 @@ bool lcl_IsSkippableWhiteSpace( xub_Unicode cCh )
            0x0a == cCh;
 }
 
-//
-// Replaced deleted redline ranges and hidden text ranges with 0x01, which
-// is ignored by the spell checker.
-//
-bool lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode,
-                                    XubString& rText )
+/*
+ * This has basically the same function as SwScriptInfo::MaskHiddenRanges,
+ * only for deleted redlines
+ */
+
+USHORT lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
+                         const xub_StrLen nStt, const xub_StrLen nEnd,
+                         const xub_Unicode cChar )
 {
+    USHORT nNumOfMaskedRedlines = 0;
+
     const SwDoc& rDoc = *rNode.GetDoc();
-    const sal_Bool bShowChg = ::IsShowChanges( rDoc.GetRedlineMode() );
-    if ( bShowChg )
+    USHORT nAct = rDoc.GetRedlinePos( rNode );
+
+    for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
     {
-        USHORT nAct = rDoc.GetRedlinePos( rNode );
+        const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
 
-        for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
+        if ( pRed->Start()->nNode > rNode.GetIndex() )
+            break;
+
+        if( REDLINE_DELETE == pRed->GetType() )
         {
-            const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+            xub_StrLen nRedlineEnd;
+            xub_StrLen nRedlineStart;
 
-            if ( pRed->Start()->nNode > rNode.GetIndex() )
-                break;
+            pRed->CalcStartEnd( rNode.GetIndex(), nRedlineStart, nRedlineEnd );
 
-            if( REDLINE_DELETE == pRed->GetType() )
+            if ( nRedlineEnd < nStt || nRedlineStart > nEnd )
+                continue;
+
+            while ( nRedlineStart < nRedlineEnd && nRedlineStart < nEnd )
             {
-                xub_StrLen nStart, nEnd;
-                pRed->CalcStartEnd( rNode.GetIndex(), nStart, nEnd );
-
-                while ( nStart < nEnd && nStart < rText.Len() )
-                    rText.SetChar( nStart++, CH_TXTATR_INWORD );
+                if ( nRedlineStart >= nStt && nRedlineStart < nEnd )
+                {
+                    rText.SetChar( nRedlineStart, cChar );
+                    ++nNumOfMaskedRedlines;
+                }
+                ++nRedlineStart;
             }
         }
     }
 
-    const bool bHideHidden = !SW_MOD()->GetViewOption( rDoc.IsHTMLMode() )->IsShowHiddenChar();
-    if ( bHideHidden )
+    return nNumOfMaskedRedlines;
+}
+
+/*
+ * Used for spell checking. Deleted redlines and hidden characters are masked
+ */
+
+USHORT lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
+                                      const xub_StrLen nStt, const xub_StrLen nEnd,
+                                      const xub_Unicode cChar = CH_TXTATR_INWORD,
+                                      bool bCheckShowHiddenChar = true )
+{
+    USHORT nRedlinesMasked = 0;
+    USHORT nHiddenCharsMasked = 0;
+
+    const SwDoc& rDoc = *rNode.GetDoc();
+    const sal_Bool bShowChg = ::IsShowChanges( rDoc.GetRedlineMode() );
+
+    // If called from word count or from spell checking, deleted redlines
+    // should be masked:
+    if ( bShowChg )
     {
-        const xub_Unicode cChar = CH_TXTATR_INWORD;
-        SwScriptInfo::MaskHiddenRanges( rNode, rText, 0, rText.Len(), cChar );
+        nRedlinesMasked = lcl_MaskRedlines( rNode, rText, nStt, nEnd, cChar );
     }
 
-    return bShowChg || bHideHidden;
+    const bool bHideHidden = !SW_MOD()->GetViewOption( rDoc.IsHTMLMode() )->IsShowHiddenChar();
+
+    // If called from word count, we want to mask the hidden ranges even
+    // if they are visible:
+    if ( !bCheckShowHiddenChar || bHideHidden )
+    {
+        nHiddenCharsMasked =
+            SwScriptInfo::MaskHiddenRanges( rNode, rText, nStt, nEnd, cChar );
+    }
+
+    return nRedlinesMasked + nHiddenCharsMasked;
 }
 
 /*
@@ -682,7 +722,8 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
     // modify string according to redline information and hidden text
     const XubString aOldTxt( aText );
-    const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *this, aText );
+    const bool bRestoreString =
+            lcl_MaskRedlinesAndHiddenText( *this, aText, 0, aText.Len() ) > 0;
 
     if ( pArgs->pStartNode != this )
         nBegin = 0;
@@ -816,7 +857,8 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
 
     // modify string according to redline information and hidden text
     const XubString aOldTxt( aText );
-    const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *this, aText );
+    const bool bRestoreString =
+            lcl_MaskRedlinesAndHiddenText( *this, aText, 0, aText.Len() ) > 0;
 
     sal_Bool    bFound  = sal_False;
     xub_StrLen  nBegin  = nTextBegin;
@@ -883,7 +925,8 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
 
     // modify string according to redline information and hidden text
     const XubString aOldTxt( pNode->aText );
-    const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *pNode, pNode->aText );
+    const bool bRestoreString =
+            lcl_MaskRedlinesAndHiddenText( *pNode, pNode->aText, 0, pNode->aText.Len() ) > 0;
 
     // a change of data indicates that at least one word has been modified
     sal_Bool bRedlineChg = ( pNode->aText.GetBuffer() != aOldTxt.GetBuffer() );
@@ -1419,11 +1462,10 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             String& rWordStr = (String&)GetTxt();
             String aOldStr( rWordStr );
 
-            // fills the hidden ranges with cChar, so that the break iterator ignores them
+            // fills the deleted redlines and hidden ranges with cChar:
             const xub_Unicode cChar(' ');
-            USHORT nNumOfMaskedChars =
-                    SwScriptInfo::MaskHiddenRanges( *this, rWordStr,
-                                                    nStart, nEnd, cChar );
+            const USHORT nNumOfMaskedChars =
+                    lcl_MaskRedlinesAndHiddenText( *this, rWordStr, nStart, nEnd, cChar, false );
 
             if( rWordStr.Len() && pBreakIt->xBreak.is() )
             {
