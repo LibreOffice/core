@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 11:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,12 +278,16 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
                         aPnt2.X() = aTmpOutArea.Right()-1;
                 }
 
-                lcl_AllignToPixel( aPnt1, pOutWin, +1, 0 );
-                lcl_AllignToPixel( aPnt2, pOutWin, 0, ( bPixelMode ? 0 : -1 ) );
-
-                // Damit man selektierte leere Zeile erkennt, aber leider Paintprobleme
-//              if ( pLine->IsEmpty() && ( aPnt2.X() <= aPnt1.X() ) )
-//                  aPnt2.X() = aPnt1.X() + 3*pEditEngine->pImpEditEngine->nOnePixelInRef;
+                if ( !IsVertical() )
+                {
+                    lcl_AllignToPixel( aPnt1, pOutWin, +1, 0 );
+                    lcl_AllignToPixel( aPnt2, pOutWin, 0, ( bPixelMode ? 0 : -1 ) );
+                }
+                else
+                {
+                    lcl_AllignToPixel( aPnt1, pOutWin, 0, +1 );
+                    lcl_AllignToPixel( aPnt2, pOutWin, ( bPixelMode ? 0 : +1 ), 0 );
+                }
 
                 Rectangle aRect( aPnt1, aPnt2 );
                 if ( pRegion )
