@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dibpreview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-09 12:57:23 $
+ *  last change: $Author: tra $ $Date: 2001-07-11 09:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ private:
     ::com::sun::star::uno::Sequence< sal_Int8 > m_ImageData;
     sal_Int32                                   m_cx;
     sal_Int32                                   m_cy;
+    sal_Bool                                    m_bWndClassRegistered;
 
     // the preview window class has to be registered only
     // once per process, so multiple instance of this class

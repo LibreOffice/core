@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dibpreview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-09 12:57:23 $
+ *  last change: $Author: tra $ $Date: 2001-07-11 09:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,10 +123,13 @@ CDIBPreview::CDIBPreview(
     HINSTANCE hInstance,
     sal_Bool bShow ) :
     m_hwnd( NULL ),
-    m_hInstance( hInstance )
+    m_hInstance( hInstance ),
+    m_bWndClassRegistered( sal_False )
 {
     if ( RegisterDibPreviewWindowClass( ) )
     {
+        m_bWndClassRegistered = sal_True;
+
         // create the preview window in invisible state
         sal_uInt32 dwStyle = bShow ? (WS_CHILD | WS_VISIBLE ) : (WS_CHILD );
         m_hwnd = CreateWindowExW(
@@ -156,8 +159,8 @@ CDIBPreview::~CDIBPreview( )
     // preview window because it will be destroyed
     // by it's parent window (the FileOpen dialog)
     // but we have to unregister the window class
-
-    UnregisterDibPreviewWindowClass( );
+    if ( m_bWndClassRegistered )
+        UnregisterDibPreviewWindowClass( );
 }
 
 //---------------------------------------------------
@@ -420,7 +423,8 @@ void SAL_CALL CDIBPreview::UnregisterDibPreviewWindowClass( )
 {
     osl::MutexGuard aGuard( s_Mutex );
 
-    OSL_ASSERT( 0 != s_ClassAtom );
+    OSL_ASSERT( ( (0 != s_ClassAtom) && (s_RegisterDibPreviewWndCount > 0)) ||
+                ( (0 == s_ClassAtom) && (0 == s_RegisterDibPreviewWndCount) ) );
 
     // update the register class counter
     // and unregister the window class if
