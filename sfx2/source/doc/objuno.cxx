@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:56:35 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -94,6 +100,7 @@
 #include <svtools/eitem.hxx>
 #include <svtools/adrparse.hxx>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 #include "objuno.hxx"
 #include "sfx.hrc"
@@ -114,6 +121,7 @@
 
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace vos;
 using namespace ::com::sun::star;
@@ -162,8 +170,8 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
 };
 
 //-----------------------------------------------------------------------------
-SFX_IMPL_XINTERFACE_5( SfxDocumentInfoObject, OWeakObject, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess )
-SFX_IMPL_XTYPEPROVIDER_5( SfxDocumentInfoObject, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess )
+SFX_IMPL_XINTERFACE_6( SfxDocumentInfoObject, OWeakObject, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess, ::com::sun::star::beans::XPropertyContainer )
+SFX_IMPL_XTYPEPROVIDER_6( SfxDocumentInfoObject, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess, ::com::sun::star::beans::XPropertyContainer )
 /*
 ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  SfxDocumentInfoObject::getStaticIdlClass()
 {
@@ -186,12 +194,167 @@ SFX_IMPL_XTYPEPROVIDER_5( SfxDocumentInfoObject, ::com::sun::star::document::XDo
     }
 }
 */
+
+struct OUStringHashCode
+{
+    size_t operator()( const ::rtl::OUString& sString ) const
+    {
+        return sString.hashCode();
+    }
+};
+
+struct SfxExtendedItemPropertyMap : public SfxItemPropertyMap
+{
+    ::com::sun::star::uno::Any aValue;
+};
+
+typedef ::std::hash_map< ::rtl::OUString                    ,
+                         SfxExtendedItemPropertyMap         ,
+                         OUStringHashCode                   ,
+                         ::std::equal_to< ::rtl::OUString > > TDynamicProps;
+
+class MixedPropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
+{
+    private:
+
+        SfxItemPropertyMap* _pFixProps;
+        TDynamicProps*      _pDynamicProps;
+
+    public:
+
+        MixedPropertySetInfo(SfxItemPropertyMap* pFixProps    ,
+                             TDynamicProps*      pDynamicProps);
+
+        virtual ~MixedPropertySetInfo();
+
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name ) throw (::com::sun::star::uno::RuntimeException);
+};
+
+//-----------------------------------------------------------------------------
+
+MixedPropertySetInfo::MixedPropertySetInfo(SfxItemPropertyMap* pFixProps    ,
+                                           TDynamicProps*      pDynamicProps)
+    : _pFixProps    (pFixProps    )
+    , _pDynamicProps(pDynamicProps)
+{
+}
+
+//-----------------------------------------------------------------------------
+
+MixedPropertySetInfo::~MixedPropertySetInfo()
+{
+}
+
+//-----------------------------------------------------------------------------
+
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL MixedPropertySetInfo::getProperties()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ::comphelper::SequenceAsVector< ::com::sun::star::beans::Property > lProps;
+
+    // copy "fix" props
+    SfxItemPropertyMap* pFixProp = _pFixProps;
+    while(pFixProp && pFixProp->pName)
+    {
+        ::com::sun::star::beans::Property aProp;
+
+        aProp.Name       = ::rtl::OUString::createFromAscii(pFixProp->pName);
+        aProp.Handle     = pFixProp->nWID;
+        aProp.Type       = *(pFixProp->pType);
+        aProp.Attributes = (sal_Int16)(pFixProp->nFlags);
+
+        lProps.push_back(aProp);
+        ++pFixProp;
+    }
+
+    // copy "dynamic" props
+    TDynamicProps::const_iterator pDynamicProp;
+    for (pDynamicProp  = _pDynamicProps->begin();
+         pDynamicProp != _pDynamicProps->end()  ;
+         ++pDynamicProp                         )
+    {
+        const SfxExtendedItemPropertyMap& rDynamicProp = pDynamicProp->second;
+        ::com::sun::star::beans::Property aProp;
+
+        aProp.Name       = pDynamicProp->first;
+        aProp.Handle     = -1; // dont change it. Needed as difference between fix and dynamic props!
+        aProp.Type       = rDynamicProp.aValue.getValueType();
+        aProp.Attributes = (sal_Int16)(rDynamicProp.nFlags);
+
+        lProps.push_back(aProp);
+    }
+
+    return lProps.getAsConstList();
+}
+
+//-----------------------------------------------------------------------------
+
+::com::sun::star::beans::Property SAL_CALL MixedPropertySetInfo::getPropertyByName( const ::rtl::OUString& sName )
+    throw(::com::sun::star::beans::UnknownPropertyException,
+          ::com::sun::star::uno::RuntimeException          )
+{
+    ::com::sun::star::beans::Property aProp;
+
+    // search it as "fix" prop
+    SfxItemPropertyMap* pFixProp = _pFixProps;
+    while(pFixProp && pFixProp->pName)
+    {
+        if (sName.equalsAscii(pFixProp->pName))
+        {
+            aProp.Name       = sName;
+            aProp.Handle     = pFixProp->nWID;
+            aProp.Type       = *(pFixProp->pType);
+            aProp.Attributes = (sal_Int16)(pFixProp->nFlags);
+            return aProp;
+        }
+        ++pFixProp;
+    }
+
+    // search it as "dynamic" prop
+    TDynamicProps::const_iterator pDynamicProp = _pDynamicProps->find(sName);
+    if (pDynamicProp != _pDynamicProps->end())
+    {
+        const SfxExtendedItemPropertyMap& rDynamicProp = pDynamicProp->second;
+        aProp.Name       = sName;
+        aProp.Handle     = rDynamicProp.nWID;
+        aProp.Type       = *(rDynamicProp.pType);
+        aProp.Attributes = (sal_Int16)(rDynamicProp.nFlags);
+        return aProp;
+    }
+
+    throw ::com::sun::star::beans::UnknownPropertyException(
+            ::rtl::OUString(),
+            static_cast< ::cppu::OWeakObject*  >(this));
+}
+
+//-----------------------------------------------------------------------------
+
+::sal_Bool SAL_CALL MixedPropertySetInfo::hasPropertyByName(const ::rtl::OUString& sName)
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    // "fix" prop?
+    SfxItemPropertyMap* pFixProp = _pFixProps;
+    while(pFixProp && pFixProp->pName)
+    {
+        if (sName.equalsAscii(pFixProp->pName))
+            return sal_True;
+        ++pFixProp;
+    }
+
+    // "dynamic" prop?
+    TDynamicProps::const_iterator pDynamicProp = _pDynamicProps->find(sName);
+    return (pDynamicProp != _pDynamicProps->end());
+}
+
 //-----------------------------------------------------------------------------
 struct SfxDocumentInfoObject_Impl
 {
     SfxObjectShell*                     _pObjSh;
     ::osl::Mutex                        _aMutex;
     ::cppu::OInterfaceContainerHelper   _aDisposeContainer;
+    TDynamicProps                       _lDynamicProps;
 
     SfxDocumentInfoObject_Impl( SfxObjectShell* pObjSh )
         : _pObjSh( pObjSh )
@@ -269,30 +432,69 @@ void SAL_CALL  SfxDocumentInfoObject::removeEventListener(const ::com::sun::star
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL  SfxDocumentInfoObject::getPropertySetInfo()  throw( ::com::sun::star::uno::RuntimeException )
 {
-    return _aPropSet.getPropertySetInfo();
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    MixedPropertySetInfo* pInfo = new MixedPropertySetInfo(aDocInfoPropertyMap_Impl, &(_pImp->_lDynamicProps));
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo(
+        static_cast< ::com::sun::star::beans::XPropertySetInfo* >(pInfo),
+        ::com::sun::star::uno::UNO_QUERY_THROW);
+    return xInfo;
 }
 
 //-----------------------------------------------------------------------------
 
 void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
             aDocInfoPropertyMap_Impl,
             aPropertyName );
+    // fix prop!
     if ( pMap )
         setFastPropertyValue( pMap->nWID, aValue );
+    else
+    // dynamic prop!
+    {
+        TDynamicProps::iterator pProp = _pImp->_lDynamicProps.find(aPropertyName);
+        if ( pProp != _pImp->_lDynamicProps.end() )
+        {
+            SfxExtendedItemPropertyMap& rExtMap = pProp->second;
+            if (( rExtMap.nFlags & ::com::sun::star::beans::PropertyAttribute::READONLY ) != ::com::sun::star::beans::PropertyAttribute::READONLY )
+            {
+                rExtMap.aValue = aValue;
+                // TODO check if value was realy changed!
+                // no objsh if we are used from a StandaloneDocInfo!
+                if (_pImp->_pObjSh)
+                    _pImp->_pObjSh->FlushDocInfo();
+            }
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
 
 ::com::sun::star::uno::Any  SAL_CALL  SfxDocumentInfoObject::getPropertyValue(const ::rtl::OUString& aPropertyName)  throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl,
         aPropertyName );
+    // fix prop!
     if ( pMap )
         return getFastPropertyValue( pMap->nWID );
     else
-        return ::com::sun::star::uno::Any();
+    // dynamic prop!
+    {
+        TDynamicProps::iterator pProp = _pImp->_lDynamicProps.find(aPropertyName);
+        if ( pProp != _pImp->_lDynamicProps.end() )
+        {
+            SfxExtendedItemPropertyMap& rExtMap = pProp->second;
+            return rExtMap.aValue;
+        }
+    }
+
+    return ::com::sun::star::uno::Any();
 }
 
 //-----------------------------------------------------------------------------
@@ -352,6 +554,160 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValues( const ::com::sun::star:
     }
 }
 
+void SAL_CALL SfxDocumentInfoObject::addProperty(const ::rtl::OUString&            sName        ,
+                                                       sal_Int16                   nAttributes  ,
+                                                 const ::com::sun::star::uno::Any& aDefaultValue)
+    throw(::com::sun::star::beans::PropertyExistException ,
+          ::com::sun::star::beans::IllegalTypeException   ,
+          ::com::sun::star::lang::IllegalArgumentException,
+          ::com::sun::star::uno::RuntimeException         )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    // clash with "fix" properties ?
+    sal_Bool bFixProp = (SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl, sName ) != 0);
+
+    // clash with "dynamic" properties ?
+    sal_Bool bDynamicProp = (_pImp->_lDynamicProps.find(sName) != _pImp->_lDynamicProps.end());
+
+    if ( bFixProp || bDynamicProp )
+    {
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("The property \""   );
+        sMsg.append     (sName               );
+        sMsg.appendAscii("\" "               );
+        if ( bFixProp )
+            sMsg.appendAscii(" already exists as a fix property. Please have a look into the IDL documentation of the DocumentInfo service.");
+        else
+        if ( bDynamicProp )
+            sMsg.appendAscii(" already exists as a user defined property.");
+
+        throw ::com::sun::star::beans::PropertyExistException(
+                sMsg.makeStringAndClear(),
+                static_cast< ::cppu::OWeakObject* >(this));
+    }
+
+    // TODO filter Any-Type and reject unsupported ones!
+    sal_Bool bTypeOK = sal_False;
+    switch(aDefaultValue.getValueTypeClass())
+    {
+        case com::sun::star::uno::TypeClass_BYTE :
+        case com::sun::star::uno::TypeClass_SHORT :
+        case com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
+        case com::sun::star::uno::TypeClass_LONG :
+        case com::sun::star::uno::TypeClass_UNSIGNED_LONG :
+        case com::sun::star::uno::TypeClass_BOOLEAN :
+        case com::sun::star::uno::TypeClass_FLOAT :
+        case com::sun::star::uno::TypeClass_DOUBLE :
+        case com::sun::star::uno::TypeClass_STRING :
+            {
+                bTypeOK = sal_True;
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_STRUCT :
+            {
+                ::com::sun::star::util::Date     aDate    ;
+                ::com::sun::star::util::Time     aTime    ;
+                ::com::sun::star::util::DateTime aDateTime;
+                bTypeOK = (
+                            (aDefaultValue >>= aDate    ) ||
+                            (aDefaultValue >>= aTime    ) ||
+                            (aDefaultValue >>= aDateTime)
+                          );
+            }
+            break;
+    }
+
+    if (!bTypeOK)
+        throw ::com::sun::star::beans::IllegalTypeException(
+                ::rtl::OUString::createFromAscii("Only the following value types are supported:\nBYTE, SHORT, INTEGER, LONG, BOOLEAN, FLOAT, DOUBLE, STRING, DATE, TIME, DATETIME."),
+                static_cast< ::cppu::OWeakObject* >(this));
+
+    SfxExtendedItemPropertyMap aProp;
+    aProp.pName    = 0; // superflous -> holded as hash key.
+    aProp.nNameLen = 0;
+    aProp.nFlags   = nAttributes;
+    aProp.aValue   = aDefaultValue;
+    aProp.nWID     = -1;
+
+    if (aProp.nFlags == 0)
+    {
+        if (_pImp->_pObjSh && _pImp->_pObjSh->IsReadOnly())
+        {
+            aProp.nFlags = ::com::sun::star::beans::PropertyAttribute::READONLY;
+        }
+        else
+        {
+            aProp.nFlags = ::com::sun::star::beans::PropertyAttribute::TRANSIENT |
+                           ::com::sun::star::beans::PropertyAttribute::REMOVABLE ;
+        }
+    }
+
+    _pImp->_lDynamicProps[sName] = aProp;
+    // no objsh if we are used from a StandaloneDocInfo!
+    if (_pImp->_pObjSh)
+        _pImp->_pObjSh->FlushDocInfo();
+}
+
+void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName)
+    throw(::com::sun::star::beans::UnknownPropertyException,
+          ::com::sun::star::beans::NotRemoveableException  ,
+          ::com::sun::star::uno::RuntimeException          )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    // clash with "fix" properties ?
+    sal_Bool bFixProp = (SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl, sName ) != 0);
+    if ( bFixProp )
+    {
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("The property \""                                                    );
+        sMsg.append     (sName                                                                );
+        sMsg.appendAscii("\" cant be removed. Its a fix property of the DocumentInfo service.");
+
+        throw ::com::sun::star::beans::NotRemoveableException(
+                sMsg.makeStringAndClear(),
+                static_cast< ::cppu::OWeakObject* >(this));
+    }
+
+    // clash with "dynamic" properties ?
+    TDynamicProps::iterator pDynamicProp = _pImp->_lDynamicProps.find(sName);
+    sal_Bool                bDynamicProp = ( pDynamicProp != _pImp->_lDynamicProps.end() );
+    if ( bDynamicProp )
+    {
+        SfxExtendedItemPropertyMap& rProp = pDynamicProp->second;
+        if (( rProp.nFlags & ::com::sun::star::beans::PropertyAttribute::REMOVEABLE ) != ::com::sun::star::beans::PropertyAttribute::REMOVEABLE )
+        {
+            ::rtl::OUStringBuffer sMsg(256);
+            sMsg.appendAscii("The property \""                );
+            sMsg.append     (sName                            );
+            sMsg.appendAscii("\" is marked as non removeable.");
+
+            throw ::com::sun::star::beans::NotRemoveableException(
+                    sMsg.makeStringAndClear(),
+                    static_cast< ::cppu::OWeakObject* >(this));
+        }
+
+        // found and removeable -> do it
+        _pImp->_lDynamicProps.erase(pDynamicProp);
+        // no objsh if we are used from a StandaloneDocInfo!
+        if (_pImp->_pObjSh)
+            _pImp->_pObjSh->FlushDocInfo();
+        return;
+    }
+
+    // non existing
+    ::rtl::OUStringBuffer sMsg(256);
+    sMsg.appendAscii("The property \""   );
+    sMsg.append     (sName               );
+    sMsg.appendAscii("\" does not exist.");
+
+    throw ::com::sun::star::beans::UnknownPropertyException(
+            sMsg.makeStringAndClear(),
+            static_cast< ::cppu::OWeakObject* >(this));
+}
+
 ::com::sun::star::util::DateTime SfxDocumentInfoObject::impl_DateTime_Object2Struct( const ::DateTime& aDateTimeObject )
 {
     //  Attention!
@@ -393,6 +749,9 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValues( const ::com::sun::star:
 
 void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::uno::RuntimeException )
 {
+    // Attention: Only fix properties should be provided by this method.
+    // Dynamic properties has no handle in real ... because it cant be used inside multithreaded environments :-)
+
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     sal_Bool bModified = sal_True;
 
@@ -593,6 +952,9 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
 
 ::com::sun::star::uno::Any SAL_CALL  SfxDocumentInfoObject::getFastPropertyValue(sal_Int32 nHandle) throw( ::com::sun::star::uno::RuntimeException )
 {
+    // Attention: Only fix properties should be provided by this method.
+    // Dynamic properties has no handle in real ... because it cant be used inside multithreaded environments :-)
+
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     ::com::sun::star::uno::Any aValue;
     if ( nHandle == WID_CONTENT_TYPE )
@@ -802,7 +1164,7 @@ void SAL_CALL  SfxDocumentInfoObject::setUserFieldValue( sal_Int16 nIndex, const
 
 //-----------------------------------------------------------------------------
 SFX_IMPL_XINTERFACE_2( SfxStandaloneDocumentInfoObject, SfxDocumentInfoObject, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::document::XStandaloneDocumentInfo  )
-SFX_IMPL_XTYPEPROVIDER_7( SfxStandaloneDocumentInfoObject, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess, ::com::sun::star::document::XStandaloneDocumentInfo )
+SFX_IMPL_XTYPEPROVIDER_8( SfxStandaloneDocumentInfoObject, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess, ::com::sun::star::beans::XPropertyContainer, ::com::sun::star::document::XStandaloneDocumentInfo )
 SFX_IMPL_XSERVICEINFO( SfxStandaloneDocumentInfoObject, "com.sun.star.document.StandaloneDocumentInfo", "com.sun.star.comp.sfx2.StandaloneDocumentInfo" )
 SFX_IMPL_SINGLEFACTORY( SfxStandaloneDocumentInfoObject )
 
