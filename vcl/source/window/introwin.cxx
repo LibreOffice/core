@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:22 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,11 @@
 
 #define _SV_INTROWIN_CXX
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
-#endif
-#else
-#include <rmwindow.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -100,7 +96,7 @@
 
 #include <introwin.hxx>
 
-#pragma hdrstop
+
 
 
 // =======================================================================
