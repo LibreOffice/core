@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tbe $ $Date: 2002-05-13 13:38:28 $
+#   last change: $Author: hr $ $Date: 2002-05-14 12:50:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,7 @@ TARGET=basslots
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 SDINAME=$(TARGET)
 SDIEXPORT=basctl
@@ -78,8 +76,7 @@ SDIEXPORT=basctl
 # --- Files --------------------------------------------------------
 
 SVSDIDEPEND= \
-    $(SOLARINCXDIR)$/svxslots.ilb	\
-    $(SOLARINCXDIR)$/basslots.ilb	\
+    $(SOLARINCXDIR)$/svxslots.ilb \
     baside.sdi
 
 # --- Targets -------------------------------------------------------
