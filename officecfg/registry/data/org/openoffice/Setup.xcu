@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:05:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,14 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >scalc</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Calc</value>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Calc</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >CalcWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw" >
@@ -134,11 +137,14 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sdraw</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Draw</value>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Draw</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >DrawWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace" install:module="impress">
@@ -163,11 +169,14 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >simpress</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Impress</value>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Impress</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >ImpressWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace" install:module="math">
@@ -192,11 +201,14 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >smath</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Math</value>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Math</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >MathWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace" install:module="writer">
@@ -221,11 +233,14 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sglobal</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Writer</value>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Writer</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >WriterGlobalWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.text.TextDocument" oor:op="replace" install:module="writer">
@@ -250,11 +265,14 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >swriter</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Writer</value>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Writer</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >WriterWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.text.WebDocument" oor:op="replace" install:module="writer">
@@ -279,11 +297,14 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >sweb</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Writer/Web</value>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Writer/Web</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >WriterWebWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.sdb.RelationDesign" oor:op="replace">
@@ -299,6 +320,9 @@
                 <prop oor:name="ooSetupFactoryIcon">
                     <value >14</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -312,6 +336,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryIcon">
                     <value >14</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace">
@@ -327,6 +354,9 @@
                 <prop oor:name="ooSetupFactoryIcon">
                     <value >14</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -341,6 +371,9 @@
                 <prop oor:name="ooSetupFactoryIcon">
                     <value >14</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -351,6 +384,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >BibliographyWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
@@ -363,8 +399,11 @@
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >BasicIDEWindowState</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Basic</value>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
+                </prop>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Basic</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.frame.StartModule" oor:op="replace">
@@ -376,6 +415,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >StartModuleWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.chart.ChartDocument" oor:op="replace">
@@ -400,11 +442,14 @@
                 <prop oor:name="ooSetupFactoryShortName">
                     <value >schart</value>
                 </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value >Chart</value>
+                           <prop oor:name="ooSetupFactoryUIName">
+                                  <value >Chart</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >ChartWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.sdb.DatabaseDocument" oor:op="replace">
@@ -431,6 +476,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >BaseWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
                 </prop>
             </node>
         </node>
