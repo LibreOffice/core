@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:42:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ namespace dbp
                 // calculate the connection the rowset is working with
                 Reference< XConnection > xConnection;
                 if ( !(m_aContext.bEmbedded = ::dbtools::isEmbeddedInDatabase(m_aContext.xForm,xConnection)) )
-                    xConnection = ::dbtools::calcConnection(m_aContext.xRowSet, getServiceFactory());
+                    xConnection = ::dbtools::connectRowset( m_aContext.xRowSet, getServiceFactory(), sal_True );
 
                 // get the fields
                 if (xConnection.is())
