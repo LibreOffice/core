@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsdvalidationhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:14:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,29 @@
 #endif
 
 /** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XSD_DATATYPECLASS_HPP_
+#include <com/sun/star/xsd/DataTypeClass.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
+#include <com/sun/star/util/NumberFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_XFORMS_XDATATYPEREPOSITORY_HPP_
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 #endif
 /** === end UNO includes === **/
+
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 //........................................................................
 namespace pcr
@@ -84,7 +103,11 @@ namespace pcr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xsd;
+    using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::xforms;
+
+    namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 
     //====================================================================
     //= XSDValidationHelper
@@ -92,7 +115,26 @@ namespace pcr
     //--------------------------------------------------------------------
     XSDValidationHelper::XSDValidationHelper( const Reference< XPropertySet >& _rxIntrospectee, const Reference< frame::XModel >& _rxContextDocument )
         :EFormsHelper( _rxIntrospectee, _rxContextDocument )
+        ,m_bInspectingFormattedField( false )
     {
+        try
+        {
+            Reference< XPropertySetInfo > xPSI;
+            Reference< XServiceInfo >     xSI( _rxIntrospectee, UNO_QUERY );
+            if ( m_xControlModel.is() )
+                xPSI = m_xControlModel->getPropertySetInfo();
+            if  (   xPSI.is()
+                &&  xPSI->hasPropertyByName( PROPERTY_FORMATKEY )
+                &&  xPSI->hasPropertyByName( PROPERTY_FORMATSSUPPLIER )
+                &&  xSI.is()
+                &&  xSI->supportsService( SERVICE_COMPONENT_FORMATTEDFIELD )
+                )
+                m_bInspectingFormattedField = true;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "XSDValidationHelper::XSDValidationHelper: caught an exception while examining the introspectee!" );
+        }
     }
 
     //--------------------------------------------------------------------
@@ -191,7 +233,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::getValidatingDataType: caught an exception!" );
+            OSL_ENSURE( sal_False, "XSDValidationHelper::getDataTypeByName: caught an exception!" );
         }
 
         return pReturn;
@@ -332,6 +374,58 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_ENSURE( sal_False, "XSDValidationHelper::copyDataType: caught an exception!" );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void XSDValidationHelper::findDefaultFormatForIntrospectee() SAL_THROW(())
+    {
+        try
+        {
+            ::rtl::Reference< XSDDataType > xDataType = getValidatingDataType();
+            if ( xDataType.is() )
+            {
+                // find a NumberFormat type corresponding to the DataTypeClass
+                sal_Int16 nNumberFormatType = NumberFormat::NUMBER;
+                switch ( xDataType->classify() )
+                {
+                case DataTypeClass::DATETIME:
+                    nNumberFormatType = NumberFormat::DATETIME;
+                    break;
+                case DataTypeClass::DATE:
+                    nNumberFormatType = NumberFormat::DATE;
+                    break;
+                case DataTypeClass::TIME:
+                    nNumberFormatType = NumberFormat::TIME;
+                    break;
+                case DataTypeClass::STRING:
+                case DataTypeClass::anyURI:
+                case DataTypeClass::QName:
+                case DataTypeClass::NOTATION:
+                    nNumberFormatType = NumberFormat::TEXT;
+                    break;
+                }
+
+                // get the number formatter from the introspectee
+                Reference< XNumberFormatsSupplier > xSupplier;
+                Reference< XNumberFormatTypes > xFormatTypes;
+                OSL_VERIFY( m_xControlModel->getPropertyValue( PROPERTY_FORMATSSUPPLIER ) >>= xSupplier );
+                if ( xSupplier.is() )
+                    xFormatTypes = xFormatTypes.query( xSupplier->getNumberFormats() );
+                OSL_ENSURE( xFormatTypes.is(), "XSDValidationHelper::findDefaultFormatForIntrospectee: no number formats for the introspectee!" );
+                if ( !xFormatTypes.is() )
+                    return;
+
+                // and the standard format for the given NumberFormat type
+                sal_Int32 nDesiredFormat = xFormatTypes->getStandardFormat( nNumberFormatType, SvtSysLocale().GetLocaleData().getLocale() );
+
+                // set this at the introspectee
+                m_xControlModel->setPropertyValue( PROPERTY_FORMATKEY, makeAny( nDesiredFormat ) );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "XSDValidationHelper::findDefaultFormatForIntrospectee: caught an exception!" );
         }
     }
 
