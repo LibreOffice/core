@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-19 17:09:21 $
+ *  last change: $Author: abi $ $Date: 2002-10-31 16:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,13 +1063,17 @@ BaseContent::open(
                                        aCommandArgument.Properties,
                                        aCommandArgument.SortingInfo );
         }
-        else if(  aCommandArgument.Mode == OpenMode::DOCUMENT_SHARE_DENY_NONE  ||
-                  aCommandArgument.Mode == OpenMode::DOCUMENT_SHARE_DENY_WRITE )
-            m_pMyShell->installError( nMyCommandIdentifier,
-                                      TASKHANDLING_UNSUPPORTED_OPEN_MODE );
+//          else if(  aCommandArgument.Mode ==
+//                    OpenMode::DOCUMENT_SHARE_DENY_NONE  ||
+//                    aCommandArgument.Mode ==
+//                    OpenMode::DOCUMENT_SHARE_DENY_WRITE )
+//              m_pMyShell->installError( nMyCommandIdentifier,
+//                                        TASKHANDLING_UNSUPPORTED_OPEN_MODE,
+//                                        aCommandArgument.Mode);
         else
             m_pMyShell->installError( nMyCommandIdentifier,
-                                      TASKHANDLING_UNSUPPORTED_OPEN_MODE );
+                                      TASKHANDLING_UNSUPPORTED_OPEN_MODE,
+                                      aCommandArgument.Mode);
     }
 
     return retValue;
@@ -1298,7 +1302,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
 {
     // This is the only function allowed to throw an exception
-    m_pMyShell->endTask( m_pMyShell,CommandId,m_aUncPath );
+    m_pMyShell->endTask( m_pMyShell,CommandId,m_aUncPath,this );
 }
 
 

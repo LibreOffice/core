@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-13 17:02:56 $
+ *  last change: $Author: abi $ $Date: 2002-10-31 16:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1262,10 +1262,11 @@ shell::move( sal_Int32 CommandId,
             }
             break;
         }
-    case NameClash::ASK:
-    default:
+        case NameClash::ASK:
+        default:
         installError( CommandId,
-                      TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE );
+                      TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE,
+                      NameClash::ASK);
         return;
         break;
     }
@@ -1461,7 +1462,8 @@ shell::copy(
         default:
         {
             installError( CommandId,
-                          TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY );
+                          TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY,
+                          NameClash::ASK);
             return;
             break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
+ *  last change: $Author: abi $ $Date: 2002-10-31 16:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,8 @@ TaskManager::startTask(
 void SAL_CALL
 TaskManager::endTask( shell * pShell,
                       sal_Int32 CommandId,
-                      const rtl::OUString& aUncPath )
+                      const rtl::OUString& aUncPath,
+                      BaseContent* pContent)
 {
     vos::OGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
@@ -128,7 +129,14 @@ TaskManager::endTask( shell * pShell,
     m_aTaskMap.erase( it );
 
     if( ErrorCode != TASKHANDLER_NO_ERROR )
-        throw_handler( pShell,ErrorCode,MinorCode,xComEnv,aUncPath,isHandled );
+        throw_handler(
+            pShell,
+            ErrorCode,
+            MinorCode,
+            xComEnv,
+            aUncPath,
+            pContent,
+            isHandled);
 }
 
 

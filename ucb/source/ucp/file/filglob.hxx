@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
+ *  last change: $Author: abi $ $Date: 2002-10-31 16:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 namespace fileaccess {
 
     class shell;
+    class BaseContent;
 
     struct equalOUString
     {
@@ -163,6 +164,7 @@ namespace fileaccess {
                                const com::sun::star::uno::Reference<
                                com::sun::star::ucb::XCommandEnvironment >& xEnv,
                                const rtl::OUString& aUncPath,
+                               BaseContent* pContent,
                                bool isHandled = false);
                                    // the physical URL of the object
 

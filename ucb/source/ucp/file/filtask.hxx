@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
+ *  last change: $Author: abi $ $Date: 2002-10-31 16:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 namespace fileaccess
 {
     class shell;
+    class BaseContent;
 
     /*
      * This implementation is inherited by class fileaccess::shell.
@@ -260,8 +261,10 @@ namespace fileaccess
 
         void SAL_CALL endTask( shell * pShell, // must not be null
                                sal_Int32 CommandId,
-                               const rtl::OUString& aUnqPath );
                                // the physical URL of the object
+                               const rtl::OUString& aUnqPath,
+                               BaseContent* pContent);
+
 
         /**
          *  Handles an interactionrequest
