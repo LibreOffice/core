@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:16 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -372,6 +371,9 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
         SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetObj();
         pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
+        // --> OD 2004-11-22 #i35635#
+        pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
+        // <--
         pNewContact->ConnectToLayout();
         // OD 2004-04-01 #i26791# - Adjust positioning and alignment attributes.
         lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
@@ -441,6 +443,9 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                             com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
                         // <--
                         SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
+                        // --> OD 2004-11-22 #i35635#
+                        pContact->MoveObjToVisibleLayer( pSubObj );
+                        // <--
                         pContact->ConnectToLayout();
                         // OD 2004-04-07 #i26791# - Adjust positioning and
                         // alignment attributes.
