@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:25:47 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ Resource STRRES_NUMTYPES
         < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
         < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
         < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "없음" ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
         < "글머리 기호" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "그래픽" ;                    8/*SVX_NUM_BITMAP              */; > ;
@@ -367,5 +367,6 @@ Resource STRRES_NUMTYPES
     };
     };
 };
+
 
 
