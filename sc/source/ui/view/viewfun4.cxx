@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-26 18:19:14 $
+ *  last change: $Author: nn $ $Date: 2002-07-01 16:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,15 +150,8 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
             EditView aEditView( pEngine, &aWin );
             aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
 
-            if (bPasteIsDrop)
-            {
-                //! paste drag server content into EditEngine
-                //DropEvent aDropEvt;
-                //if (aEditView.QueryDrop( aDropEvt ))
-                //  aEditView.Drop( aDropEvt );
-            }
-            else
-                aEditView.PasteSpecial();
+            // same method now for clipboard or drag&drop
+            aEditView.InsertText( rxTransferable, TRUE );
         }
 
         ULONG nParCnt = pEngine->GetParagraphCount();
