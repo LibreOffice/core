@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-05 10:24:46 $
+#   last change: $Author: hjs $ $Date: 2001-09-11 13:08:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1390,9 +1390,26 @@ STDLIB+=$(LIBSTLPORT)
 STDSHL+=$(LIBSTLPORT)
 .ENDIF			# "$(NO_DEFAULT_STL)"==""
 
+.IF "$(DISABLE_JAVA)"==""
 .IF "$(SOLAR_JAVA)"!=""
 CDEFS+=$(JAVADEF)
-.ENDIF
+.ENDIF          # "$(SOLAR_JAVA)"!=""
+.ELSE           # "$(DISABLE_JAVA)"==""
+SOLAR_JAVA!:=
+.EXPORT : SOLAR_JAVA
+.IF "$(JDKPATH)"!=""
+environment_confusion:
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - Error!
+    @+echo -
+    @+echo - $$JDKPATH and $$DISABLE_JAVA are set. this will lead
+    @+echo - to impropper results.
+    @+echo -
+    @+echo ----------------------------------------------------------
+    force_dmake_to_error
+.ENDIF          # "$(JDKPATH)"!=""
+.ENDIF          # "$(DISABLE_JAVA)"==""
 
 .IF "$(WORK_STAMP)"!=""
 CDEFS+=-D$(WORK_STAMP)
