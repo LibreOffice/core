@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:51:50 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 11:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,18 +138,21 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newForm(sal_Int32 _nNewFormId
                                 ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition);
 
-        void    newWithPilot(
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newWithPilot(
                             const char* _pWizardService
+                            ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
                             ,const sal_Int32 _nCommandType = -1
                             ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                         );
 
-        void    newFormWithPilot(
-                            const sal_Int32 _nCommandType = -1
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newFormWithPilot(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
+                            ,const sal_Int32 _nCommandType = -1
                             ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                         );
-        void    newReportWithPilot(
-                            const sal_Int32 _nCommandType = -1
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newReportWithPilot(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
+                            ,const sal_Int32 _nCommandType = -1
                             ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                         );
         void    newQueryWithPilot(
