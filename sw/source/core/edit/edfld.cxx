@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:00:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,10 +370,19 @@ SwField* SwEditShell::GetCurFld() const
 {
     // Wenn es keine Selektionen gibt, gilt der Wert der aktuellen
     // Cursor-Position.
+
     SwPaM* pCrsr = GetCrsr();
     SwTxtFld *pTxtFld = GetDocTxtFld( pCrsr->Start() );
-    SwField *pCurFld;
-    if( pTxtFld && pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() )
+    SwField *pCurFld = NULL;
+
+    /* #108536# Field was only recognized if no selection was
+        present. Now it is recognized if either the cursor is in the
+        field or the selection spans exactly over the field. */
+    if( pTxtFld &&
+        pCrsr->GetNext() == pCrsr &&
+        pCrsr->Start()->nNode == pCrsr->End()->nNode &&
+        (pCrsr->End()->nContent.GetIndex() -
+         pCrsr->Start()->nContent.GetIndex()) <= 1)
     {
         pCurFld = (SwField*)pTxtFld->GetFld().GetFld();
         // TabellenFormel ? wandel internen in externen Namen um
@@ -382,66 +391,11 @@ SwField* SwEditShell::GetCurFld() const
             const SwTableNode* pTblNd = IsCrsrInTbl();
             ((SwTblField*)pCurFld)->PtrToBoxNm( pTblNd ? &pTblNd->GetTable() : 0 );
         }
-        return pCurFld;
+
     }
-    pCurFld = 0;
 
-    USHORT nCrsrCnt = 0;
-    SwMsgPoolItem aHint( RES_TXTATR_FIELD );  // Such-Hint
-    FOREACHPAM_START(this)                      // fuer jeden PaM
-        if( nMaxLookup < ++nCrsrCnt  )
-            break;
+    /* #108536# removed handling of multi-selections */
 
-        if( PCURCRSR->HasMark() )               // ... mit Selektion
-        {
-            // Kopie des PaM
-            SwPaM aCurPam( *PCURCRSR->GetMark(), *PCURCRSR->GetPoint() );
-            SwPaM aPam( *PCURCRSR->GetPoint() );
-
-            SwPosition *pCurStt = aCurPam.Start(), *pCurEnd = aCurPam.End();
-            /*
-             * Fuer den Fall, dass zwei aneinanderliegende Felder in einem
-             * PaM liegen, hangelt sich aPam portionsweise bis zum Ende.
-             * aCurPam wird dabei nach jeder Schleifenrunde verkuerzt.
-             * Wenn aCurPam vollstaendig durchsucht wurde, ist Start = End
-             * und die Schleife terminiert.
-             */
-
-            // Suche nach SwTxtFld ...
-            while( pCurStt->nContent != pCurEnd->nContent
-                   && aPam.Find( aHint, FALSE, fnMoveForward, &aCurPam,
-                                 IsReadOnlyAvailable() ) )
-            {
-                // Wenn die Start's der beiden Bereiche nicht uebereinstimmen,
-                // so liegt in dem selektierten Bereich etwas anderes als
-                // ein/mehrere Felder: RETURN.
-
-                const SwPosition* pStt;
-                if( ( pStt = aPam.Start())->nContent != pCurStt->nContent )
-                    return( 0 );
-
-                SwTxtFld *pTxtFld = GetDocTxtFld( pStt );
-                if( pTxtFld )
-                {
-                    // RETURN bei gemischten Feldtypen
-                    if( pCurFld && pCurFld->GetTyp()->Which() !=
-                        pTxtFld->GetFld().GetFld()->GetTyp()->Which() )
-                        return( 0 );
-                    pCurFld = (SwField*)pTxtFld->GetFld().GetFld();
-                    // TabellenFormel ? wandel internen in externen Namen um
-                    if( RES_TABLEFLD == pCurFld->GetTyp()->Which() )
-                    {
-                        const SwTableNode* pTblNd = GetDoc()->IsIdxInTbl( aPam.GetPoint()->nNode );
-                        ((SwTblField*)pCurFld)->PtrToBoxNm( pTblNd
-                                        ? &pTblNd->GetTable() : 0 );
-                    }
-                }
-
-                // Der Suchbereich wird um den gefundenen Bereich verkuerzt.
-                pCurStt->nContent++;
-            }
-        }
-    FOREACHPAM_END()                      // fuer jeden PaM
     return pCurFld;
 }
 
