@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@ using namespace ::com::sun::star;
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
@@ -145,6 +148,7 @@ using namespace ::com::sun::star;
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 // Konvertierung fuer UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -590,21 +594,21 @@ sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 #ifndef SVX_LIGHT
 SvXMLEnumMapEntry pXML_para_adjust_enums[] =
 {
-    { sXML_start,       SVX_ADJUST_LEFT },
-    { sXML_end,         SVX_ADJUST_RIGHT },
-    { sXML_center,      SVX_ADJUST_CENTER },
-    { sXML_justify,     SVX_ADJUST_BLOCK },
-    { sXML_justified,   SVX_ADJUST_BLOCK },
-    { 0, 0 }
+    { XML_START,        SVX_ADJUST_LEFT },
+    { XML_END,          SVX_ADJUST_RIGHT },
+    { XML_CENTER,       SVX_ADJUST_CENTER },
+    { XML_JUSTIFY,      SVX_ADJUST_BLOCK },
+    { XML_JUSTIFIED,    SVX_ADJUST_BLOCK },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry pXML_para_align_last_enums[] =
 {
-    { sXML_start,       SVX_ADJUST_LEFT },
-    { sXML_center,      SVX_ADJUST_CENTER },
-    { sXML_justify,     SVX_ADJUST_BLOCK },
-    { sXML_justified,   SVX_ADJUST_BLOCK },
-    { 0, 0 }
+    { XML_START,        SVX_ADJUST_LEFT },
+    { XML_CENTER,       SVX_ADJUST_CENTER },
+    { XML_JUSTIFY,      SVX_ADJUST_BLOCK },
+    { XML_JUSTIFIED,    SVX_ADJUST_BLOCK },
+    { XML_TOKEN_INVALID, 0 }
 };
 #endif
 
@@ -663,7 +667,7 @@ sal_Bool SvxAdjustItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const
     case MID_PARA_ADJUST:
         bOk = rUnitConverter.convertEnum( aOut,
                                           GetAdjust(),
-                                          pXML_para_adjust_enums, sXML_start );
+                                          pXML_para_adjust_enums, XML_START );
         break;
     case MID_LAST_LINE_ADJUST:
         {

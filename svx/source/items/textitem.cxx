@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-30 16:35:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 // Konvertierung fuer UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -470,22 +471,22 @@ void xml_in_font_family_impl( SvxFontItem& rItem, const OUString& rValue )
 
 static SvXMLEnumMapEntry __READONLY_DATA aFontFamilyGenericMap[] =
 {
-    { sXML_decorative,  FAMILY_DECORATIVE },
+    { XML_DECORATIVE,   FAMILY_DECORATIVE },
 
-    { sXML_modern,      FAMILY_MODERN   },
-    { sXML_roman,       FAMILY_ROMAN    },
-    { sXML_script,      FAMILY_SCRIPT   },
-    { sXML_swiss,       FAMILY_SWISS    },
-    { sXML_system,      FAMILY_SYSTEM   },
-    { 0,                0               }
+    { XML_MODERN,       FAMILY_MODERN   },
+    { XML_ROMAN,        FAMILY_ROMAN    },
+    { XML_SCRIPT,       FAMILY_SCRIPT   },
+    { XML_SWISS,        FAMILY_SWISS    },
+    { XML_SYSTEM,       FAMILY_SYSTEM   },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 static SvXMLEnumMapEntry __READONLY_DATA aFontPitchMap[] =
 {
-    { sXML_fixed,       PITCH_FIXED     },
+    { XML_FIXED,        PITCH_FIXED     },
 
-    { sXML_variable,    PITCH_VARIABLE  },
-    { 0,                0               }
+    { XML_VARIABLE,     PITCH_VARIABLE  },
+    { XML_TOKEN_INVALID, 0 }
 };
 #endif
 
@@ -634,7 +635,7 @@ sal_Bool SvxFontItem::exportXML( OUString& rValue, USHORT nMemberId, const SvXML
 
     case MID_FONT_PITCH:
         if( PITCH_DONTKNOW != ePitch )
-            bOk = rUnitConverter.convertEnum( aOut, ePitch, aFontPitchMap, sXML_fixed );
+            bOk = rUnitConverter.convertEnum( aOut, ePitch, aFontPitchMap, XML_FIXED );
         break;
     }
 
@@ -869,10 +870,10 @@ sal_Bool SvxPostureItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 #ifndef SVX_LIGHT
 static SvXMLEnumMapEntry __READONLY_DATA aPostureGenericMap[] =
 {
-    { sXML_posture_normal,      ITALIC_NONE     },
-    { sXML_posture_italic,      ITALIC_NORMAL   },
-    { sXML_posture_oblique,     ITALIC_OBLIQUE  },
-    { 0,                        0               }
+    { XML_POSTURE_NORMAL,       ITALIC_NONE     },
+    { XML_POSTURE_ITALIC,       ITALIC_NORMAL   },
+    { XML_POSTURE_OBLIQUE,      ITALIC_OBLIQUE  },
+    { XML_TOKEN_INVALID, 0 }
 };
 #endif
 
@@ -1855,25 +1856,25 @@ int SvxUnderlineItem::operator==( const SfxPoolItem& rItem ) const
 
 SvXMLEnumMapEntry pXML_underline_enums[] =
 {
-    { sXML_underline_none,              UNDERLINE_NONE },
-    { sXML_underline_single,            UNDERLINE_SINGLE },
-    { sXML_underline_double,            UNDERLINE_DOUBLE },
-    { sXML_underline_dotted,            UNDERLINE_DOTTED },
-    { sXML_underline_dash,              UNDERLINE_DASH },
-    { sXML_underline_long_dash,         UNDERLINE_LONGDASH },
-    { sXML_underline_dot_dash,          UNDERLINE_DASHDOT },
-    { sXML_underline_dot_dot_dash,      UNDERLINE_DASHDOTDOT },
-    { sXML_underline_wave,              UNDERLINE_WAVE },
-    { sXML_underline_bold,              UNDERLINE_BOLD },
-    { sXML_underline_bold_dotted,       UNDERLINE_BOLDDOTTED },
-    { sXML_underline_bold_dash,         UNDERLINE_BOLDDASH },
-    { sXML_underline_bold_long_dash,    UNDERLINE_BOLDLONGDASH },
-    { sXML_underline_bold_dot_dash,     UNDERLINE_BOLDDASHDOT },
-    { sXML_underline_bold_dot_dot_dash, UNDERLINE_BOLDDASHDOTDOT },
-    { sXML_underline_bold_wave,         UNDERLINE_BOLDWAVE },
-    { sXML_underline_double_wave,       UNDERLINE_DOUBLEWAVE },
-    { sXML_underline_small_wave,        UNDERLINE_SMALLWAVE },
-    { 0,                                0 }
+    { XML_UNDERLINE_NONE,               UNDERLINE_NONE },
+    { XML_UNDERLINE_SINGLE,             UNDERLINE_SINGLE },
+    { XML_UNDERLINE_DOUBLE,             UNDERLINE_DOUBLE },
+    { XML_UNDERLINE_DOTTED,             UNDERLINE_DOTTED },
+    { XML_UNDERLINE_DASH,               UNDERLINE_DASH },
+    { XML_UNDERLINE_LONG_DASH,          UNDERLINE_LONGDASH },
+    { XML_UNDERLINE_DOT_DASH,           UNDERLINE_DASHDOT },
+    { XML_UNDERLINE_DOT_DOT_DASH,       UNDERLINE_DASHDOTDOT },
+    { XML_UNDERLINE_WAVE,               UNDERLINE_WAVE },
+    { XML_UNDERLINE_BOLD,               UNDERLINE_BOLD },
+    { XML_UNDERLINE_BOLD_DOTTED,        UNDERLINE_BOLDDOTTED },
+    { XML_UNDERLINE_BOLD_DASH,          UNDERLINE_BOLDDASH },
+    { XML_UNDERLINE_BOLD_LONG_DASH,     UNDERLINE_BOLDLONGDASH },
+    { XML_UNDERLINE_BOLD_DOT_DASH,      UNDERLINE_BOLDDASHDOT },
+    { XML_UNDERLINE_BOLD_DOT_DOT_DASH,  UNDERLINE_BOLDDASHDOTDOT },
+    { XML_UNDERLINE_BOLD_WAVE,          UNDERLINE_BOLDWAVE },
+    { XML_UNDERLINE_DOUBLE_WAVE,        UNDERLINE_DOUBLEWAVE },
+    { XML_UNDERLINE_SMALL_WAVE,         UNDERLINE_SMALLWAVE },
+    { XML_TOKEN_INVALID, 0 }
 };
 #endif
 
@@ -2079,12 +2080,13 @@ sal_Bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 #ifndef SVX_LIGHT
 SvXMLEnumMapEntry pXML_crossedout_enums[] =
 {
-    { sXML_crossedout_none,      STRIKEOUT_NONE },
-    { sXML_crossedout_single,    STRIKEOUT_SINGLE },
-    { sXML_crossedout_double,    STRIKEOUT_DOUBLE },
-    { sXML_crossedout_thick,     STRIKEOUT_BOLD },
-    { sXML_crossedout_slash,     STRIKEOUT_SLASH },
-    { sXML_crossedout_cross,     STRIKEOUT_X }
+    { XML_CROSSEDOUT_NONE,      STRIKEOUT_NONE },
+    { XML_CROSSEDOUT_SINGLE,    STRIKEOUT_SINGLE },
+    { XML_CROSSEDOUT_DOUBLE,    STRIKEOUT_DOUBLE },
+    { XML_CROSSEDOUT_THICK,     STRIKEOUT_BOLD },
+    { XML_CROSSEDOUT_SLASH,     STRIKEOUT_SLASH },
+    { XML_CROSSEDOUT_CROSS,     STRIKEOUT_X },
+    { XML_TOKEN_INVALID, 0 }
 };
 #endif
 
@@ -2998,11 +3000,11 @@ sal_Bool SvxCaseMapItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 #ifndef SVX_LIGHT
 static SvXMLEnumMapEntry pXML_casemap_enums[] =
 {
-    { sXML_none,                SVX_CASEMAP_NOT_MAPPED },
-    { sXML_casemap_lowercase,   SVX_CASEMAP_GEMEINE },
-    { sXML_casemap_uppercase,   SVX_CASEMAP_VERSALIEN },
-    { sXML_casemap_capitalize,  SVX_CASEMAP_TITEL },
-    { 0,0 }
+    { XML_NONE,                 SVX_CASEMAP_NOT_MAPPED },
+    { XML_CASEMAP_LOWERCASE,    SVX_CASEMAP_GEMEINE },
+    { XML_CASEMAP_UPPERCASE,    SVX_CASEMAP_VERSALIEN },
+    { XML_CASEMAP_CAPITALIZE,   SVX_CASEMAP_TITEL },
+    { XML_TOKEN_INVALID, 0 }
 };
 #endif
 

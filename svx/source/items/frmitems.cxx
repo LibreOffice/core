@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-05-31 07:20:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
@@ -223,6 +226,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 
 // Konvertierung fuer UNO
@@ -2396,25 +2400,25 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 SvXMLEnumMapEntry psXML_BorderStyles[] =
 {
-    { sXML_none,                SVX_XML_BORDER_STYLE_NONE   },
-    { sXML_hidden,              SVX_XML_BORDER_STYLE_NONE   },
-    { sXML_solid,               SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_double,              SVX_XML_BORDER_STYLE_DOUBLE },
-    { sXML_dotted,              SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_dashed,              SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_groove,              SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_ridge,               SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_inset,               SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_outset,              SVX_XML_BORDER_STYLE_SOLID  },
-    { 0,        0 }
+    { XML_NONE,                 SVX_XML_BORDER_STYLE_NONE   },
+    { XML_HIDDEN,               SVX_XML_BORDER_STYLE_NONE   },
+    { XML_SOLID,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_DOUBLE,               SVX_XML_BORDER_STYLE_DOUBLE },
+    { XML_DOTTED,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_DASHED,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_GROOVE,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_RIDGE,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_INSET,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_OUTSET,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
 {
-    { sXML_thin,    SVX_XML_BORDER_WIDTH_THIN   },
-    { sXML_middle,  SVX_XML_BORDER_WIDTH_MIDDLE },
-    { sXML_thick,   SVX_XML_BORDER_WIDTH_THICK  },
-    { 0,        0 }
+    { XML_THIN,     SVX_XML_BORDER_WIDTH_THIN   },
+    { XML_MIDDLE,   SVX_XML_BORDER_WIDTH_MIDDLE },
+    { XML_THICK,    SVX_XML_BORDER_WIDTH_THICK  },
+    { XML_TOKEN_INVALID, 0 }
 };
 // mapping tables to map external xml input to intarnal box line widths
 
@@ -3788,12 +3792,12 @@ sal_Bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 #ifndef SVX_LIGHT
 SvXMLEnumMapEntry psXML_BreakType[] =
 {
-    { sXML_auto,    0 },
-    { sXML_column, 1 },
-    { sXML_page,   2 },
-    { sXML_even_page, 2 },
-    { sXML_odd_page, 2 },
-    { 0, 0}
+    { XML_AUTO,         0 },
+    { XML_COLUMN,       1 },
+    { XML_PAGE,         2 },
+    { XML_EVEN_PAGE,    2 },
+    { XML_ODD_PAGE,     2 },
+    { XML_TOKEN_INVALID, 0}
 };
 #endif
 
@@ -4612,24 +4616,24 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 SvXMLEnumMapEntry psXML_BrushRepeat[] =
 {
-    { sXML_background_repeat,       GPOS_TILED  },
-    { sXML_background_no_repeat,    GPOS_MM     },
-    { sXML_background_stretch,      GPOS_AREA   },
-    { 0,                            0           }
+    { XML_BACKGROUND_REPEAT,        GPOS_TILED  },
+    { XML_BACKGROUND_NO_REPEAT,     GPOS_MM     },
+    { XML_BACKGROUND_STRETCH,       GPOS_AREA   },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
-    { sXML_left,        GPOS_LM },
-    { sXML_right,       GPOS_RM },
-    { 0,                            0           }
+    { XML_LEFT,         GPOS_LM },
+    { XML_RIGHT,        GPOS_RM },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry psXML_BrushVertPos[] =
 {
-    { sXML_top,         GPOS_MT },
-    { sXML_bottom,      GPOS_MB },
-    { 0,                            0           }
+    { XML_TOP,          GPOS_MT },
+    { XML_BOTTOM,       GPOS_MB },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 void lcl_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
