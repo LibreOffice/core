@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:53:34 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
@@ -92,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -142,6 +151,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
 
 #define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
 #define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
@@ -569,100 +579,115 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
     return aHelpURL;
 }
 
+static ::rtl::OUString OFFICE_HELP_TASK = ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP_TASK"));
+static ::rtl::OUString OFFICE_HELP      = ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP"     ));
+
+SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
+                                    Reference< XFrame >& rHelpContent)
+{
+    Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+
+    // otherwhise - create new help task
+    Reference< XFrame > xHelpTask = xDesktop->findFrame(
+        OFFICE_HELP_TASK,
+        FrameSearchFlag::TASKS | FrameSearchFlag::CREATE);
+    if (!xHelpTask.is())
+        return 0;
+
+    // create all internal windows and sub frames ...
+    Reference< ::com::sun::star::awt::XWindow > xParentWindow = xHelpTask->getContainerWindow();
+    Window*                                     pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
+    SfxHelpWindow_Impl*                         pHelpWindow   = new SfxHelpWindow_Impl( xHelpTask, pParentWindow, WB_DOCKBORDER );
+    Reference< ::com::sun::star::awt::XWindow > xHelpWindow   = VCLUnoHelper::GetInterface( pHelpWindow );
+
+    Reference< XFrame > xHelpContent;
+    if (xHelpTask->setComponent( xHelpWindow, Reference< XController >() ))
+    {
+        // Customize UI ...
+        xHelpTask->setName( OFFICE_HELP_TASK );
+
+        Reference< XPropertySet > xProps(xHelpTask, UNO_QUERY);
+        if (xProps.is())
+            xProps->setPropertyValue(
+                DEFINE_CONST_UNICODE("Title"),
+                makeAny(::rtl::OUString(SfxResId(STR_HELP_WINDOW_TITLE))));
+
+        xParentWindow->setPosSize(50, 50, 300, 200, ::com::sun::star::awt::PosSize::SIZE);
+        pHelpWindow->setContainerWindow( xParentWindow );
+        xParentWindow->setVisible(sal_True);
+        xHelpWindow->setVisible(sal_True);
+
+        // This sub frame is created internaly (if we called new SfxHelpWindow_Impl() ...)
+        // It should exist :-)
+        xHelpContent = xHelpTask->findFrame(OFFICE_HELP, FrameSearchFlag::CHILDREN);
+    }
+
+    if (!xHelpContent.is())
+        delete pHelpWindow;
+
+    xHelpContent->setName(OFFICE_HELP);
+
+    rHelpTask    = xHelpTask;
+    rHelpContent = xHelpContent;
+    return pHelpWindow;
+}
+
 BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 {
-    String aHelpURL( rURL );
-    INetURLObject aObj( aHelpURL );
-    ::rtl::OUString sHelpKeyword;
-    if ( aObj.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
+    // check if its an URL or a jump mark!
+    String          aHelpURL(rURL    );
+    INetURLObject   aParser (aHelpURL);
+    ::rtl::OUString sJumpMark;
+    if (aParser.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP)
     {
-        aHelpURL = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( 0 ) );
-        sHelpKeyword = ::rtl::OUString( rURL );
+        aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( 0 ) );
+        sJumpMark = ::rtl::OUString( rURL );
     }
-    Reference < XDispatchProvider > xFrame;
-    Reference < XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+
+    Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XFrame > xActiveTask = xDesktop->getActiveFrame();
 
-    Sequence < PropertyValue > aArgs;
-    if ( sHelpKeyword.getLength() > 0 )
-    {
-        aArgs.realloc( 1 );
-        aArgs[0].Name = String( DEFINE_CONST_UNICODE("HelpKeyword") );
-        aArgs[0].Value <<= sHelpKeyword;
-    }
-    sal_Int32 nFlag = FrameSearchFlag::ALL;
-    sal_Bool bHelpTaskExists = sal_False;
-    if ( aTicket.Len() )
-    {
-        xFrame = Reference < XDispatchProvider > ( xActiveTask, UNO_QUERY );
-        nFlag  = FrameSearchFlag::TASKS | FrameSearchFlag::CREATE;
-    }
+    // check if help is still open
+    // If not - create new one and return acces directly
+    // to the internal sub frame, which shows the help content.
+
+    // Note further: We search for this sub frame here directly instead of
+    // the real top level help task ... Its needed to have the same
+    // sub frame available - so we can use it for loading (which is done
+    // in both cases)!
+
+    Reference< XFrame > xHelp = xDesktop->findFrame(
+        OFFICE_HELP_TASK,
+        FrameSearchFlag::CHILDREN);
+    Reference< XFrame > xHelpContent = xDesktop->findFrame(
+        OFFICE_HELP,
+        FrameSearchFlag::CHILDREN);
+
+    SfxHelpWindow_Impl* pHelpWindow = 0;
+    if (!xHelp.is())
+        pHelpWindow = impl_createHelp(xHelp, xHelpContent);
     else
-    {
-        if ( xActiveTask.is() )
-        {
-            // try to find the help frame
-            ::rtl::OUString aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("OFFICE_HELP") );
-            xFrame = Reference < XDispatchProvider > (
-                xActiveTask->findFrame( aTarget, FrameSearchFlag::GLOBAL ), UNO_QUERY );
-        }
-        // otherwise the URL can be dispatched to the help frame
-        if ( !xFrame.is() )
-        {
-            Reference < XFrame > xFrameFinder( xDesktop, UNO_QUERY );
-            Reference < XFrame > xTask = xFrameFinder->findFrame( DEFINE_CONST_UNICODE( "_blank" ), 0 );
-            xTask->setName( DEFINE_CONST_OUSTRING("OFFICE_HELP_TASK") );
-            Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
-            pWin->SetText( String( SfxResId( STR_HELP_WINDOW_TITLE ) ) );
-            SfxHelpWindow_Impl* pHlpWin = new SfxHelpWindow_Impl( xTask, pWin, WB_DOCKBORDER );
-            pHlpWin->Show();
-            Reference< ::com::sun::star::awt::XWindow > xWindow = VCLUnoHelper::GetInterface( pHlpWin );
-            xWindow->setPosSize( 50, 50, 300, 200, ::com::sun::star::awt::PosSize::SIZE );
-            if ( !xTask->setComponent( xWindow, Reference < XController >() ) )
-                return FALSE;
-            else
-            {
-                pHlpWin->setContainerWindow( xTask->getContainerWindow() );
-                pHlpWin->SetHelpURL( aHelpURL );
-                xFrame = Reference < XDispatchProvider >( pHlpWin->getTextFrame(), UNO_QUERY );
-                xTask->getContainerWindow()->setVisible( sal_True );
-            }
-        }
-        else
-            bHelpTaskExists = sal_True;
-    }
-
-    if ( xFrame.is() )
-    {
-        ::com::sun::star::util::URL aURL;
-        aURL.Complete = aHelpURL;
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-        xTrans->parseStrict( aURL );
-        Reference < XDispatch > xDispatch =
-            xFrame->queryDispatch( aURL, DEFINE_CONST_UNICODE("OFFICE_HELP"), nFlag );
-        if ( xDispatch.is() )
-            xDispatch->dispatch( aURL, aArgs );
-
-        if ( bHelpTaskExists )
-        {
-            // bring the help task to front
-            Reference < XFrame > xFrameFinder( xDesktop, UNO_QUERY );
-            Reference < XFrame > xTask = xFrameFinder->findFrame(
-                DEFINE_CONST_UNICODE("OFFICE_HELP_TASK"), FrameSearchFlag::TASKS );
-            if ( xTask.is() )
-            {
-                Reference < ::com::sun::star::awt::XTopWindow > xTopWin( xTask->getContainerWindow(), UNO_QUERY );
-                if ( xTopWin.is() )
-                    xTopWin->toFront();
-            }
-        }
-
-        return TRUE;
-    }
-    else
+        pHelpWindow = (SfxHelpWindow_Impl*)VCLUnoHelper::GetWindow(xHelp->getComponentWindow());
+    if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
         return FALSE;
+
+    Sequence< PropertyValue > aArgs;
+    if (sJumpMark.getLength() > 0)
+    {
+        aArgs.realloc(1);
+        aArgs[0].Name    = DEFINE_CONST_UNICODE("HelpKeyword");
+        aArgs[0].Value <<= sJumpMark;
+    }
+
+    pHelpWindow->SetHelpURL( aHelpURL );
+    pHelpWindow->loadHelpContent(aHelpURL);
+
+    Reference < ::com::sun::star::awt::XTopWindow > xTopWindow(xHelp->getContainerWindow(), UNO_QUERY);
+    if (xTopWindow.is())
+        xTopWindow->toFront();
+
+    return TRUE;
 }
 
 BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
