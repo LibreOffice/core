@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDateField.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 08:42:25 $
+ *  last change: $Author: mt $ $Date: 2002-09-05 08:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef __com_sun_star_awt_UnoDateFieldControl_idl__
 #define __com_sun_star_awt_UnoDateFieldControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControlEdit_idl__
-#include <com/sun/star/awt/UnoControlEdit.idl>
+#ifndef __com_sun_star_awt_UnoControlSpinField_idl__
+#include <com/sun/star/awt/UnoControlSpinField.idl>
 #endif
 
 #ifndef __com_sun_star_awt_XDateField_idl__
@@ -84,7 +84,7 @@
 service UnoControlDateField
 {
     // DocMerge: empty anyway
-    service com::sun::star::awt::UnoControlEdit;
+    service com::sun::star::awt::UnoControlSpinField;
 
     // DocMerge: empty anyway
     interface com::sun::star::awt::XDateField;
@@ -98,6 +98,9 @@ service UnoControlDateField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/04/19 08:42:25  fs
+    initial checkin
+
 
 =============================================================================*/
 #endif
