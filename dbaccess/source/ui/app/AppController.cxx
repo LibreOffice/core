@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:28:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,6 @@
 #endif
 #ifndef _DBU_APP_HRC_
 #include "dbu_app.hrc"
-#endif
-#ifndef _SV_TOOLBOX_HXX //autogen wg. ToolBox
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
@@ -346,16 +343,8 @@ OApplicationController::OApplicationController(const Reference< XMultiServiceFac
     ,m_ePreviewMode(E_PREVIEWNONE)
     ,m_bNeedToReconnect(sal_False)
     ,m_bPreviewEnabled(sal_True)
+    ,m_eOldType(E_NONE)
 {
-    m_aRefreshMenu.SetTimeoutHdl( LINK( this, OApplicationController, OnShowRefreshDropDown ) );
-    m_aRefreshMenu.SetTimeout( 300 );
-
-    m_aPasteSpecialMenu.SetTimeoutHdl( LINK( this, OApplicationController, OnPasteSpecialDropDown ) );
-    m_aPasteSpecialMenu.SetTimeout( 300 );
-
-    m_aLastSelectedPullDownActions.insert(::std::map<sal_uInt16,sal_uInt16>::value_type(ID_APP_NEW_FORM,0));
-    m_aLastSelectedPullDownActions.insert(::std::map<sal_uInt16,sal_uInt16>::value_type(SID_DB_APP_PASTE_SPECIAL,0));
-    m_aLastSelectedPullDownActions.insert(::std::map<sal_uInt16,sal_uInt16>::value_type(ID_BROWSER_PASTE,0));
 }
 //------------------------------------------------------------------------------
 OApplicationController::~OApplicationController()
@@ -562,7 +551,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
         switch (aQry.Execute())
         {
             case RET_YES:
-                Execute(ID_BROWSER_SAVEDOC);
+                Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
                 bCheck = !xModi->isModified(); // when we save the table this must be false else some press cancel
                 break;
             case RET_CANCEL:
@@ -635,7 +624,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
 
             case SID_NEWDOC:
-            case ID_APP_NEW_FORM:
+            case SID_APP_NEW_FORM:
             case ID_DOCUMENT_CREATE_REPWIZ:
                 aReturn.bEnabled = !isDataSourceReadOnly() && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
                 break;
@@ -671,7 +660,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case ID_DIRECT_SQL:
                 aReturn.bEnabled = !isConnectionReadOnly();
                 break;
-            case ID_APP_NEW_FOLDER:
+            case SID_APP_NEW_FOLDER:
                 aReturn.bEnabled = !isDataSourceReadOnly() && getContainer()->getSelectionCount() <= 1;
                 if ( aReturn.bEnabled )
                 {
@@ -679,8 +668,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = eType == E_REPORT || eType == E_FORM;
                 }
                 break;
-            case ID_FORM_NEW_PILOT_PRE_SEL:
-            case ID_DOCUMENT_CREATE_REPWIZ_PRE_SEL:
+            case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
+            case SID_FORM_CREATE_REPWIZ_PRE_SEL:
                 aReturn.bEnabled = !isDataSourceReadOnly()
                                     && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER)
                                     && getContainer()->isALeafSelected();
@@ -690,51 +679,43 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = eType == E_QUERY || eType == E_TABLE;
                 }
                 break;
-
             case SID_DB_APP_DELETE:
             case SID_DB_APP_RENAME:
-                aReturn.bEnabled = !isDataSourceReadOnly();
-                if ( aReturn.bEnabled )
-                {
-                    ElementType eType = getContainer()->getElementType();
-                    if ( E_TABLE == eType )
-                        aReturn.bEnabled = !isConnectionReadOnly() && getContainer()->isALeafSelected();
-
-                    sal_Bool bCompareRes = sal_False;
-                    if ( SID_DB_APP_DELETE == _nId )
-                        bCompareRes = getContainer()->getSelectionCount() > 0;
-                    else
-                    {
-                        bCompareRes = getContainer()->getSelectionCount() == 1;
-                        if ( aReturn.bEnabled && bCompareRes && E_TABLE == eType )
-                        {
-                            ::std::vector< ::rtl::OUString> aList;
-                            const_cast<OApplicationController*>(this)->getSelectionElementNames(aList);
-
-                            try
-                            {
-                                Reference< XNameAccess > xContainer = const_cast<OApplicationController*>(this)->getElements(eType);
-                                if ( aReturn.bEnabled = (xContainer.is() && xContainer->hasByName(*aList.begin())) )
-                                    aReturn.bEnabled = Reference<XRename>(xContainer->getByName(*aList.begin()),UNO_QUERY).is();
-                            }
-                            catch(Exception&)
-                            {
-                                aReturn.bEnabled = sal_False;
-                            }
-                        }
-                    }
-
-                    aReturn.bEnabled = aReturn.bEnabled && bCompareRes;
-                }
+                aReturn.bEnabled = isRenameDeleteAllowed(getContainer()->getElementType(), _nId == SID_DB_APP_DELETE);
                 break;
-            case SID_DB_APP_SELECTALL:
+            case SID_DB_APP_TABLE_DELETE:
+            case SID_DB_APP_TABLE_RENAME:
+                aReturn.bEnabled = isRenameDeleteAllowed(E_TABLE, _nId == SID_DB_APP_TABLE_DELETE);
+                break;
+            case SID_DB_APP_QUERY_DELETE:
+            case SID_DB_APP_QUERY_RENAME:
+                aReturn.bEnabled = isRenameDeleteAllowed(E_QUERY, _nId == SID_DB_APP_QUERY_DELETE);
+                break;
+            case SID_DB_APP_FORM_DELETE:
+            case SID_DB_APP_FORM_RENAME:
+                aReturn.bEnabled = isRenameDeleteAllowed(E_FORM, _nId == SID_DB_APP_FORM_DELETE);
+                break;
+            case SID_DB_APP_REPORT_DELETE:
+            case SID_DB_APP_REPORT_RENAME:
+                aReturn.bEnabled = isRenameDeleteAllowed(E_REPORT, _nId == SID_DB_APP_REPORT_DELETE);
+                break;
+
+            case SID_SELECTALL:
                 aReturn.bEnabled = getContainer()->getElementCount() > 0 && getContainer()->getSelectionCount() != getContainer()->getElementCount();
                 break;
             case SID_DB_APP_EDIT:
+            case SID_DB_APP_TABLE_EDIT:
+            case SID_DB_APP_QUERY_EDIT:
+            case SID_DB_APP_FORM_EDIT:
+            case SID_DB_APP_REPORT_EDIT:
                 aReturn.bEnabled = !isDataSourceReadOnly() && getContainer()->getSelectionCount() > 0
                                     && getContainer()->isALeafSelected();
                 break;
             case SID_DB_APP_OPEN:
+            case SID_DB_APP_TABLE_OPEN:
+            case SID_DB_APP_QUERY_OPEN:
+            case SID_DB_APP_FORM_OPEN:
+            case SID_DB_APP_REPORT_OPEN:
                 aReturn.bEnabled = getContainer()->getSelectionCount() > 0 && getContainer()->isALeafSelected();
                 break;
             case SID_DB_APP_DSIMPORT:
@@ -818,7 +799,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::Execute(sal_uInt16 _nId)
+void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -876,17 +857,35 @@ void OApplicationController::Execute(sal_uInt16 _nId)
                 break;
             case SID_DB_APP_PASTE_SPECIAL:
                 {
-                    SvPasteObjectDialog aDlg;
-                    ::std::vector<SotFormatStringId> aFormatIds;
-                    getSupportedFormats(getContainer()->getElementType(),aFormatIds);
-                    ::std::vector<SotFormatStringId>::iterator aEnd = aFormatIds.end();
-                    for (::std::vector<SotFormatStringId>::iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
+                    if ( !aArgs.getLength() )
                     {
-                        aDlg.Insert(*aIter,SvPasteObjectDialog::GetSotFormatUIName(*aIter));
-                    }
+                        SvPasteObjectDialog aDlg;
+                        ::std::vector<SotFormatStringId> aFormatIds;
+                        getSupportedFormats(getContainer()->getElementType(),aFormatIds);
+                        ::std::vector<SotFormatStringId>::iterator aEnd = aFormatIds.end();
+                        for (::std::vector<SotFormatStringId>::iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
+                        {
+                            aDlg.Insert(*aIter,SvPasteObjectDialog::GetSotFormatUIName(*aIter));
+                        }
 
-                    const TransferableDataHelper& rClipboard = getViewClipboard();
-                    pasteFormat(aDlg.Execute(getView(),rClipboard.GetTransferable()));
+                        const TransferableDataHelper& rClipboard = getViewClipboard();
+                        pasteFormat(aDlg.Execute(getView(),rClipboard.GetTransferable()));
+                    }
+                    else
+                    {
+                        const PropertyValue* pIter = aArgs.getConstArray();
+                        const PropertyValue* pEnd  = pIter + aArgs.getLength();
+                        for( ; pIter != pEnd ; ++pIter)
+                        {
+                            if ( pIter->Name.equalsAscii("FormatStringId") )
+                            {
+                                SotFormatStringId nFormatId = -1;
+                                if ( pIter->Value >>= nFormatId )
+                                    pasteFormat(nFormatId);
+                                break;
+                            }
+                        }
+                    }
                 }
                 break;
             case SID_OPENDOC:
@@ -934,8 +933,8 @@ void OApplicationController::Execute(sal_uInt16 _nId)
                     const SfxFilter* pFilter = getStandardFilter();
                     if ( pFilter )
                     {
-                        aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
-                        aFileDlg.SetCurrentFilter(pFilter->GetFilterName());
+                        aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
+                        aFileDlg.SetCurrentFilter(pFilter->GetUIName());
                     }
 
                     if ( aFileDlg.Execute() == ERRCODE_NONE )
@@ -973,10 +972,10 @@ void OApplicationController::Execute(sal_uInt16 _nId)
                 break;
             case ID_APP_NEW_QUERY_AUTO_PILOT:
             case ID_FORM_NEW_PILOT:
-            case ID_FORM_NEW_PILOT_PRE_SEL:
-            case ID_DOCUMENT_CREATE_REPWIZ_PRE_SEL:
+            case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
+            case SID_FORM_CREATE_REPWIZ_PRE_SEL:
             case ID_DOCUMENT_CREATE_REPWIZ:
-            case ID_APP_NEW_FORM:
+            case SID_APP_NEW_FORM:
             case ID_NEW_QUERY_SQL:
             case ID_NEW_QUERY_DESIGN:
             case ID_NEW_TABLE_DESIGN:
@@ -988,14 +987,14 @@ void OApplicationController::Execute(sal_uInt16 _nId)
                     switch( _nId )
                     {
                         case ID_FORM_NEW_PILOT:
-                        case ID_FORM_NEW_PILOT_PRE_SEL:
+                        case SID_FORM_CREATE_REPWIZ_PRE_SEL:
                             bAutoPilot = sal_True;
                             // run through
-                        case ID_APP_NEW_FORM:
+                        case SID_APP_NEW_FORM:
                             eType = E_FORM;
                             break;
                         case ID_DOCUMENT_CREATE_REPWIZ:
-                        case ID_DOCUMENT_CREATE_REPWIZ_PRE_SEL:
+                        case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
                             bAutoPilot = sal_True;
                             eType = E_REPORT;
                             break;
@@ -1017,7 +1016,7 @@ void OApplicationController::Execute(sal_uInt16 _nId)
                     newElement(eType,bAutoPilot,bSQLView);
                 }
                 break;
-            case ID_APP_NEW_FOLDER:
+            case SID_APP_NEW_FOLDER:
                 {
                     ElementType eType = getContainer()->getElementType();
                     ::rtl::OUString sName = getContainer()->getQualifiedName(NULL,NULL);
@@ -1038,30 +1037,37 @@ void OApplicationController::Execute(sal_uInt16 _nId)
                 }
                 break;
             case SID_DB_APP_DELETE:
+            case SID_DB_APP_TABLE_DELETE:
+            case SID_DB_APP_QUERY_DELETE:
+            case SID_DB_APP_FORM_DELETE:
+            case SID_DB_APP_REPORT_DELETE:
                 deleteEntries();
                 break;
             case SID_DB_APP_RENAME:
+            case SID_DB_APP_TABLE_RENAME:
+            case SID_DB_APP_QUERY_RENAME:
+            case SID_DB_APP_FORM_RENAME:
+            case SID_DB_APP_REPORT_RENAME:
                 renameEntry();
                 break;
             case SID_DB_APP_EDIT:
-            case SID_DB_APP_OPEN:
-            case SID_DB_APP_CONVERTTOVIEW:
-                {
-                    ::std::vector< ::rtl::OUString> aList;
-                    getSelectionElementNames(aList);
-                    ElementType eType = getContainer()->getElementType();
-
-                    ::std::vector< ::rtl::OUString>::iterator aEnd = aList.end();
-                    for (::std::vector< ::rtl::OUString>::iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
-                    {
-                        if ( SID_DB_APP_CONVERTTOVIEW == _nId )
-                            convertToView(*aIter);
-                        else
-                            openElement(*aIter,eType, _nId == SID_DB_APP_EDIT );
-                    }
-                }
+            case SID_DB_APP_TABLE_EDIT:
+            case SID_DB_APP_QUERY_EDIT:
+            case SID_DB_APP_FORM_EDIT:
+            case SID_DB_APP_REPORT_EDIT:
+                doAction(_nId,sal_True);
                 break;
-            case SID_DB_APP_SELECTALL:
+            case SID_DB_APP_OPEN:
+            case SID_DB_APP_TABLE_OPEN:
+            case SID_DB_APP_QUERY_OPEN:
+            case SID_DB_APP_FORM_OPEN:
+            case SID_DB_APP_REPORT_OPEN:
+                doAction(_nId,sal_False);
+                break;
+            case SID_DB_APP_CONVERTTOVIEW:
+                doAction(_nId,sal_False);
+                break;
+            case SID_SELECTALL:
                 getContainer()->selectAll();
                 break;
             case SID_DB_APP_DSIMPORT:
@@ -1152,60 +1158,75 @@ void OApplicationController::Execute(sal_uInt16 _nId)
     InvalidateFeature(_nId);
 }
 // -----------------------------------------------------------------------------
-ToolBox* OApplicationController::CreateToolBox(Window* _pParent)
-{
-    return new ToolBox( _pParent, ModuleRes( RID_BRW_APPLICATION_TOOLBOX ) );
-}
-// -----------------------------------------------------------------------------
 void OApplicationController::AddSupportedFeatures()
 {
     OApplicationController_CBASE::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Copy"))]                    = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Cut"))]                     = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Paste"))]                   = ID_BROWSER_PASTE;
+
     m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save"))]                    = ID_BROWSER_SAVEDOC;
     m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"))]                  = ID_BROWSER_SAVEASDOC;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewForm"))]              = ID_APP_NEW_FORM;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewFolder"))]            = ID_APP_NEW_FOLDER;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewFormAutoPilot"))]     = ID_FORM_NEW_PILOT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewFormAutoPilotWithPreSelection"))]     = ID_FORM_NEW_PILOT_PRE_SEL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewReportAutoPilot"))]   = ID_DOCUMENT_CREATE_REPWIZ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewReportAutoPilotWithPreSelection"))]   = ID_DOCUMENT_CREATE_REPWIZ_PRE_SEL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewQuery"))]             = ID_NEW_QUERY_DESIGN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewQuerySql"))]          = ID_NEW_QUERY_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewQueryAutoPilot"))]    = ID_APP_NEW_QUERY_AUTO_PILOT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewTable"))]             = ID_NEW_TABLE_DESIGN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewTableAutoPilot"))]    = ID_NEW_TABLE_DESIGN_AUTO_PILOT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewView"))]              = ID_NEW_VIEW_DESIGN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewViewSQL"))]           = ID_NEW_VIEW_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/NewViewAutoPilot"))]     = ID_NEW_VIEW_DESIGN_AUTO_PILOT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/Delete"))]               = SID_DB_APP_DELETE;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/Rename"))]               = SID_DB_APP_RENAME;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/Edit"))]                 = SID_DB_APP_EDIT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/Open"))]                 = SID_DB_APP_OPEN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/SelectAll"))]            = SID_DB_APP_SELECTALL;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm"))]               = SID_APP_NEW_FORM;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewFolder"))]             = SID_APP_NEW_FOLDER;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewFormAutoPilot"))]      = ID_FORM_NEW_PILOT;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewFormAutoPilotWithPreSelection"))]      = SID_FORM_CREATE_REPWIZ_PRE_SEL;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilot"))]    = ID_DOCUMENT_CREATE_REPWIZ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilotWithPreSelection"))]    = SID_REPORT_CREATE_REPWIZ_PRE_SEL;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuery"))]              = ID_NEW_QUERY_DESIGN;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuerySql"))]           = ID_NEW_QUERY_SQL;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQueryAutoPilot"))]     = ID_APP_NEW_QUERY_AUTO_PILOT;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable"))]              = ID_NEW_TABLE_DESIGN;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTableAutoPilot"))]     = ID_NEW_TABLE_DESIGN_AUTO_PILOT;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView"))]               = ID_NEW_VIEW_DESIGN;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewViewSQL"))]            = ID_NEW_VIEW_SQL;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewViewAutoPilot"))]      = ID_NEW_VIEW_DESIGN_AUTO_PILOT;
+
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDelete"))]                = SID_DB_APP_DELETE ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRename"))]                = SID_DB_APP_RENAME ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBEdit"))]                  = SID_DB_APP_EDIT   ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBOpen"))]                  = SID_DB_APP_OPEN   ;
+
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableDelete"))]           = SID_DB_APP_TABLE_DELETE   ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableRename"))]           = SID_DB_APP_TABLE_RENAME   ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableEdit"))]             = SID_DB_APP_TABLE_EDIT ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableOpen"))]             = SID_DB_APP_TABLE_OPEN ;
+
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBQueryDelete"))]           = SID_DB_APP_QUERY_DELETE   ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBQueryRename"))]           = SID_DB_APP_QUERY_RENAME   ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBQueryEdit"))]             = SID_DB_APP_QUERY_EDIT ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBQueryOpen"))]             = SID_DB_APP_QUERY_OPEN ;
+
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBFormDelete"))]            = SID_DB_APP_FORM_DELETE    ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBFormRename"))]            = SID_DB_APP_FORM_RENAME    ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBFormEdit"))]              = SID_DB_APP_FORM_EDIT  ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBFormOpen"))]              = SID_DB_APP_FORM_OPEN  ;
+
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBReportDelete"))]          = SID_DB_APP_REPORT_DELETE;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBReportRename"))]          = SID_DB_APP_REPORT_RENAME;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBReportEdit"))]            = SID_DB_APP_REPORT_EDIT    ;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBReportOpen"))]            = SID_DB_APP_REPORT_OPEN    ;
+
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SelectAll"))]               = SID_SELECTALL;
     m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Sortup"))]                  = ID_BROWSER_SORTUP;
     m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SortDown"))]                = ID_BROWSER_SORTDOWN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/DSImport"))]             = SID_DB_APP_DSIMPORT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/DSExport"))]             = SID_DB_APP_DSEXPORT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/RelationDesign"))]       = SID_DB_APP_DSRELDESIGN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/UserAdmin"))]            = SID_DB_APP_DSUSERADMIN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/TableFilter"))]          = SID_DB_APP_TABLEFILTER;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/DSProperties"))]         = SID_DB_APP_DSPROPS;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/DSConnectionType"))]     = SID_DB_APP_DSCONNECTION_TYPE;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/DSAdvancedSettings"))]   = SID_DB_APP_DSADVANCED_SETTINGS;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/PasteSpecial"))]         = SID_DB_APP_PASTE_SPECIAL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/ConvertToView"))]        = SID_DB_APP_CONVERTTOVIEW;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/RefreshTables"))]        = SID_DB_APP_REFRESH_TABLES;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/DirectSQL"))]            = ID_DIRECT_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/ViewTables"))]           = SID_DB_APP_VIEW_TABLES;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/ViewQueries"))]          = SID_DB_APP_VIEW_QUERIES;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/ViewForms"))]            = SID_DB_APP_VIEW_FORMS;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/ViewReports"))]          = SID_DB_APP_VIEW_REPORTS;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/DisablePreview"))]       = SID_DB_APP_DISABLE_PREVIEW;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/ShowDocInfoPreview"))]   = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/ShowDocPreview"))]       = SID_DB_APP_VIEW_DOC_PREVIEW;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DB/DBAdmin"))]              = SID_DB_APP_DBADMIN;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSImport"))]              = SID_DB_APP_DSIMPORT;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSExport"))]              = SID_DB_APP_DSEXPORT;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRelationDesign"))]        = SID_DB_APP_DSRELDESIGN;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBUserAdmin"))]             = SID_DB_APP_DSUSERADMIN;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableFilter"))]           = SID_DB_APP_TABLEFILTER;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSProperties"))]          = SID_DB_APP_DSPROPS;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSConnectionType"))]      = SID_DB_APP_DSCONNECTION_TYPE;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSAdvancedSettings"))]    = SID_DB_APP_DSADVANCED_SETTINGS;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:PasteSpecial"))]            = SID_DB_APP_PASTE_SPECIAL;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBConvertToView"))]         = SID_DB_APP_CONVERTTOVIEW;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRefreshTables"))]         = SID_DB_APP_REFRESH_TABLES;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDirectSQL"))]             = ID_DIRECT_SQL;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBViewTables"))]            = SID_DB_APP_VIEW_TABLES;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBViewQueries"))]           = SID_DB_APP_VIEW_QUERIES;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBViewForms"))]             = SID_DB_APP_VIEW_FORMS;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBViewReports"))]           = SID_DB_APP_VIEW_REPORTS;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDisablePreview"))]        = SID_DB_APP_DISABLE_PREVIEW;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBShowDocInfoPreview"))]    = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBShowDocPreview"))]        = SID_DB_APP_VIEW_DOC_PREVIEW;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDBAdmin"))]               = SID_DB_APP_DBADMIN;
 }
 // -----------------------------------------------------------------------------
 OApplicationView*   OApplicationController::getContainer() const
@@ -1213,154 +1234,11 @@ OApplicationView*   OApplicationController::getContainer() const
     return static_cast< OApplicationView* >( getView() );
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onCreationClick(sal_uInt16 _nId)
+void OApplicationController::onCreationClick(const ::rtl::OUString& _sCommand)
 {
-    executeChecked(_nId);
-}
-// -----------------------------------------------------------------------------
-namespace
-{
-    template <class T> void lcl_addImage(T* _pMenu,USHORT _nMenuId,USHORT _nStartId,USHORT _nImageListId)
-    {
-        ModuleRes aRes(_nImageListId);
-        ImageList aImageList(aRes);
-        _pMenu->SetItemImage(_nMenuId,aImageList.GetImage(_nStartId));
-    }
-}
-// -----------------------------------------------------------------------------
-void OApplicationController::openToolBoxPopup(USHORT _nSlotId)
-{
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    ToolBox* pToolBox = NULL;
-    if ( getView() )
-        pToolBox = getView()->getToolBox();
-    OSL_ENSURE( pToolBox, "OApplicationController::openToolBoxPopup: no toolbox (anymore)!" );
-
-    if ( !pToolBox )
-        return ;
-
-    pToolBox->EndSelection();
-
-    // tell the toolbox that the item is pressed down
-    pToolBox->SetItemDown( _nSlotId, sal_True );
-
-    // simulate a mouse move (so the "down" state is really painted)
-    Point aPoint = pToolBox->GetItemRect( _nSlotId ).TopLeft();
-    MouseEvent aMove( aPoint, 0, MOUSE_SIMPLEMOVE | MOUSE_SYNTHETIC );
-    pToolBox->MouseMove( aMove );
-
-    pToolBox->Update();
-
-    // execute the menu
-    ::std::auto_ptr<PopupMenu> pMenu;
-    if ( _nSlotId == ID_APP_NEW_FORM )
-    {
-        pMenu.reset(new PopupMenu( ModuleRes( RID_MENU_APP_NEW ) ));
-
-        sal_Bool bIsWriterInstalled = SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
-
-        sal_Bool bHighContrast = getView()->GetBackground().GetColor().IsDark();
-
-        lcl_addImage(pMenu.get(),ID_NEW_TABLE_DESIGN,ID_NEW_TABLE_DESIGN,               bHighContrast ? IMG_TABLESUBCRIPTION_SCH    :IMG_TABLESUBCRIPTION_SC        );
-        lcl_addImage(pMenu.get(),ID_NEW_VIEW_DESIGN,ID_NEW_VIEW_DESIGN,                 bHighContrast ? IMG_TABLESUBCRIPTION_SCH    :IMG_TABLESUBCRIPTION_SC        );
-        lcl_addImage(pMenu.get(),ID_NEW_VIEW_SQL,ID_NEW_VIEW_SQL,                       bHighContrast ? IMG_TABLESUBCRIPTION_SCH    :IMG_TABLESUBCRIPTION_SC        );
-        lcl_addImage(pMenu.get(),ID_NEW_QUERY_DESIGN,ID_NEW_QUERY_DESIGN,               bHighContrast ? IMG_QUERYADMINISTRATION_SCH:IMG_QUERYADMINISTRATION_SC          );
-        lcl_addImage(pMenu.get(),ID_NEW_QUERY_SQL,ID_NEW_QUERY_SQL,                     bHighContrast ? IMG_QUERYADMINISTRATION_SCH:IMG_QUERYADMINISTRATION_SC      );
-        lcl_addImage(pMenu.get(),ID_APP_NEW_FORM,ID_APP_NEW_FORM,                       bHighContrast ? IMG_DOCUMENTLINKS_SCH       :IMG_DOCUMENTLINKS_SC           );
-        lcl_addImage(pMenu.get(),ID_DOCUMENT_CREATE_REPWIZ,ID_DOCUMENT_CREATE_REPWIZ,   bHighContrast ? IMG_DOCUMENTLINKS_SCH       :IMG_DOCUMENTLINKS_SC        );
-
-        USHORT nCount = pMenu->GetItemCount();
-        for (USHORT i=0; i < nCount; ++i)
-            pMenu->EnableItem(pMenu->GetItemId(i),GetState(pMenu->GetItemId(i)).bEnabled);
-    }
-    else if ( _nSlotId == ID_BROWSER_PASTE )
-    {
-        pMenu.reset(new PopupMenu( ));
-
-        const TransferableDataHelper& rClipboard = getViewClipboard();
-        sal_uInt32 nCount = rClipboard.GetFormatCount();
-        ::std::vector<SotFormatStringId> aFormatIds;
-        getSupportedFormats(getContainer()->getElementType(),aFormatIds);
-
-        for (sal_uInt32 i = 0;  i < nCount;  ++i)
-        {
-            SotFormatStringId nSotId = rClipboard.GetFormat(i);
-            if ( ::std::find(aFormatIds.begin(),aFormatIds.end(),nSotId) != aFormatIds.end() )
-            {
-                String aFmtStr( SvPasteObjectDialog::GetSotFormatUIName(nSotId) );
-                pMenu->InsertItem( static_cast<USHORT>(nSotId), aFmtStr );
-            }
-        }
-
-    }
-    else
-        return;
-
-    // no disabled entries
-    pMenu->RemoveDisabledEntries();
-
-    ::std::map<sal_uInt16,sal_uInt16>::iterator aFind = m_aLastSelectedPullDownActions.find(_nSlotId);
-    OSL_ENSURE( aFind != m_aLastSelectedPullDownActions.end() ,"Invalid slot id!");
-    aFind->second = pMenu->Execute(pToolBox, pToolBox->GetItemRect( _nSlotId ));
-    // "cleanup" the toolbox state
-    MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
-    pToolBox->MouseMove( aLeave );
-    pToolBox->SetItemDown( _nSlotId, sal_False);
-
-    if ( aFind->second )
-    {
-        if ( _nSlotId == ID_BROWSER_PASTE )
-            pasteFormat(aFind->second);
-        else
-        {
-            pToolBox->SetItemImage(_nSlotId, pMenu->GetItemImage(aFind->second));
-            Execute( aFind->second );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
-IMPL_LINK( OApplicationController, OnShowRefreshDropDown, void*, NOTINTERESTEDIN )
-{
-    openToolBoxPopup(ID_APP_NEW_FORM);
-    return 1L;
-}
-// -----------------------------------------------------------------------------
-IMPL_LINK( OApplicationController, OnPasteSpecialDropDown, void*, NOTINTERESTEDIN )
-{
-    openToolBoxPopup(ID_BROWSER_PASTE);
-    return 1L;
-}
-// -----------------------------------------------------------------------------
-void OApplicationController::onToolBoxSelected( sal_uInt16 _nSelectedItem )
-{
-    if ( ID_APP_NEW_FORM == _nSelectedItem )
-    {
-        if ( m_aRefreshMenu.IsActive() )
-            m_aRefreshMenu.Stop();
-    }
-    else if ( SID_DB_APP_PASTE_SPECIAL == _nSelectedItem || ID_BROWSER_PASTE == _nSelectedItem)
-    {
-        if ( m_aPasteSpecialMenu.IsActive() )
-            m_aPasteSpecialMenu.Stop();
-    }
-    ::std::map<sal_uInt16,sal_uInt16>::iterator aFind = m_aLastSelectedPullDownActions.find(_nSelectedItem);
-    if ( aFind != m_aLastSelectedPullDownActions.end() && aFind->second )
-        Execute( aFind->second );
-    else
-        OGenericUnoController::onToolBoxSelected(_nSelectedItem);
-}
-// -----------------------------------------------------------------------------
-void OApplicationController::onToolBoxClicked( sal_uInt16 _nClickedItem )
-{
-    if ( ID_APP_NEW_FORM == _nClickedItem )
-        m_aRefreshMenu.Start();
-    else if ( SID_DB_APP_PASTE_SPECIAL == _nClickedItem || ID_BROWSER_PASTE == _nClickedItem )
-        m_aPasteSpecialMenu.Start();
-    else
-        OGenericUnoController::onToolBoxClicked( _nClickedItem );
+    URL aCommand;
+    aCommand.Complete = _sCommand;
+    executeChecked(aCommand,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
 // ::com::sun::star::container::XContainerListener
@@ -1478,92 +1356,89 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
         }
     }
 }
+namespace
+{
+    ::rtl::OUString lcl_getToolBarResource(ElementType _eType)
+    {
+        ::rtl::OUString sToolbar;
+        switch(_eType)
+        {
+            case E_TABLE:
+                sToolbar = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/tableobjectbar" ));
+                break;
+            case E_QUERY:
+                sToolbar = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/queryobjectbar" ));
+                break;
+            case E_FORM:
+                sToolbar = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/formobjectbar" ));
+                break;
+            case E_REPORT:
+                sToolbar = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/reportobjectbar" ));
+                break;
+            case E_NONE:
+                break;
+            default:
+                OSL_ENSURE(0,"Invalid ElementType!");
+                break;
+        }
+        return sToolbar;
+    }
+}
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
+    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(getFrame());
 
-    ToolBox* pToolBox = getView()->getToolBox();
-
-    sal_Bool bAdd = sal_True;
-    sal_Bool bHighContrast = getView()->GetBackground().GetColor().IsDark();
-    USHORT nImageListId = 0;
-    ::std::vector<USHORT> aImageIds;
-    switch( _eType )
+    if ( xLayoutManager.is() )
     {
-        case E_FORM:
-            nImageListId = bHighContrast ? IMP_FORM_SCH : IMP_FORM_SC;
-            aImageIds.push_back(SID_DB_FORM_DELETE);
-            aImageIds.push_back(SID_DB_FORM_RENAME);
-            aImageIds.push_back(SID_DB_FORM_EDIT);
-            aImageIds.push_back(SID_DB_FORM_OPEN);
-            break;
-        case E_REPORT:
-            nImageListId = bHighContrast ? IMP_REPORT_SCH : IMP_REPORT_SC;
-            aImageIds.push_back(SID_DB_REPORT_DELETE);
-            aImageIds.push_back(SID_DB_REPORT_RENAME);
-            aImageIds.push_back(SID_DB_REPORT_EDIT);
-            aImageIds.push_back(SID_DB_REPORT_OPEN);
-            break;
-        case E_QUERY:
-            nImageListId = bHighContrast ? IMG_QUERYADMINISTRATION_SCH : IMG_QUERYADMINISTRATION_SC;
-            aImageIds.push_back(ID_DROP_QUERY);
-            aImageIds.push_back(ID_RENAME_ENTRY);
-            aImageIds.push_back(SID_DB_QUERY_EDIT);
-            aImageIds.push_back(SID_DB_QUERY_OPEN);
-            break;
-        case E_TABLE:
+        sal_Bool bAdd = _eType != E_TABLE;
+        if ( !bAdd )
+        {
+            try
             {
-                bAdd = sal_False;
-                nImageListId = bHighContrast ? IMG_TABLESUBCRIPTION_SCH : IMG_TABLESUBCRIPTION_SC;
-                aImageIds.push_back(ID_DROP_TABLE);
-                aImageIds.push_back(ID_RENAME_ENTRY);
-                aImageIds.push_back(ID_EDIT_TABLE);
-                aImageIds.push_back(SID_DB_TABLE_OPEN);
                 Reference<XConnection> xConnection;
-                try
-                {
-                    ensureConnection(xConnection);
+                ensureConnection(xConnection);
 
-                    if ( xConnection.is() )
-                    {
-                        getContainer()->getDetailView()->createTablesPage(xConnection);
-                        Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
-                        if ( xTabSup.is() )
-                            addContainerListener(xTabSup->getTables());
-                    }
-                    else
-                    {
-                        return sal_False;
-                    }
+                if ( xConnection.is() )
+                {
+                    getContainer()->getDetailView()->createTablesPage(xConnection);
+                    Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
+                    if ( xTabSup.is() )
+                        addContainerListener(xTabSup->getTables());
                 }
-                catch(Exception)
+                else
                 {
                     return sal_False;
                 }
             }
-            break;
-        case E_NONE:
-            break;
-        default:
-            OSL_ENSURE(0,"Illegal call!");
-    }
+            catch(Exception)
+            {
+                return sal_False;
+            }
+        }
+        ::rtl::OUString sToolbar = lcl_getToolBarResource(_eType);
+        ::rtl::OUString sDestroyToolbar = lcl_getToolBarResource(m_eOldType);
 
-    USHORT pIds[] = { SID_DB_APP_DELETE, SID_DB_APP_RENAME, SID_DB_APP_EDIT, SID_DB_APP_OPEN };
-    OSL_ENSURE(aImageIds.size() == sizeof(pIds)/sizeof(pIds[0]),"Illegal size of vector or id list!");
-    for (USHORT i = 0; i < sizeof(pIds)/sizeof(pIds[0]); ++i)
-    {
-        lcl_addImage(pToolBox,pIds[i],aImageIds[i],nImageListId);
-    }
+        xLayoutManager->lock();
+        xLayoutManager->destroyElement( sDestroyToolbar );
+        if ( sToolbar.getLength() )
+        {
+            xLayoutManager->createElement( sToolbar );
+            xLayoutManager->requestElement( sToolbar );
+        }
+        xLayoutManager->unlock();
+        xLayoutManager->doLayout();
+        if ( bAdd )
+        {
+            Reference< XNameAccess > xContainer = getElements(_eType);
+            addContainerListener(xContainer);
+            getContainer()->getDetailView()->createPage(_eType,xContainer);
+        }
 
-    if ( bAdd )
-    {
-        Reference< XNameAccess > xContainer = getElements(_eType);
-        addContainerListener(xContainer);
-        getContainer()->getDetailView()->createPage(_eType,xContainer);
+        InvalidateAll();
     }
-
-    InvalidateAll();
+    m_eOldType = _eType;
 
     return sal_True;
 }
@@ -2053,17 +1928,37 @@ void OApplicationController::onCutEntry(SvLBoxEntry* _pEntry)
 // -----------------------------------------------------------------------------
 void OApplicationController::onCopyEntry(SvLBoxEntry* _pEntry)
 {
-    Execute(ID_BROWSER_COPY);
+    Execute(ID_BROWSER_COPY,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::onPasteEntry(SvLBoxEntry* _pEntry)
 {
-    Execute(ID_BROWSER_PASTE);
+    Execute(ID_BROWSER_PASTE,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::onDeleteEntry(SvLBoxEntry* _pEntry)
 {
-    executeChecked(SID_DB_APP_DELETE);
+    ElementType eType = getContainer()->getElementType();
+    sal_uInt16 nId = 0;
+    switch(eType)
+    {
+        case E_TABLE:
+            nId = SID_DB_APP_TABLE_DELETE;
+            break;
+        case E_QUERY:
+            nId = SID_DB_APP_QUERY_DELETE;
+            break;
+        case E_FORM:
+            nId = SID_DB_APP_FORM_DELETE;
+            break;
+        case E_REPORT:
+            nId = SID_DB_APP_REPORT_DELETE;
+            break;
+        default:
+            OSL_ENSURE(0,"Invalid ElementType!");
+            break;
+    }
+    executeChecked(nId,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationController::requestContextMenu( const CommandEvent& _rEvent )
@@ -2127,6 +2022,7 @@ struct TAppSupportedSotFunctor : ::std::unary_function<DataFlavorExVector::value
 // -----------------------------------------------------------------------------
 sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
 {
+    sal_Int8 nActionAskedFor = _rEvt.mnAction;
     // check if we're a table or query container
     OApplicationView* pView = getContainer();
     if ( pView && !isDataSourceReadOnly() )
@@ -2154,7 +2050,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                             {
                                 Reference< XHierarchicalNameAccess > xHitObject(xContainer->getByHierarchicalName(sName),UNO_QUERY);
                                 if ( xHitObject.is() )
-                                    nAction |= DND_ACTION_MOVE;
+                                    nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
                             }
                             else
                                 nAction = DND_ACTION_NONE;
