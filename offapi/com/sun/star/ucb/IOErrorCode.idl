@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IOErrorCode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-18 11:43:16 $
+ *  last change: $Author: kso $ $Date: 2001-06-22 14:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object accessed when the error occured./td>
+            <td>The name or URL of the object accessed when the error occured./td>
         </tr>
         </table>
     */
@@ -109,7 +109,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object to which the access was denied.</td>
+            <td>The name or URL of the object to which the access was denied.</td>
         </tr>
         </table>
     */
@@ -131,7 +131,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object that does already exist.</td>
+            <td>The name or URL of the object that does already exist.</td>
         </tr>
         </table>
     */
@@ -153,7 +153,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object with the bad checksum.</td>
+            <td>The name or URL of the object with the bad checksum.</td>
         </tr>
         </table>
     */
@@ -175,7 +175,14 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the parent object of the object that could not
+            <td>The name or URL of the new object. This can be an empty
+            string if the URL/name for the new object is only available after
+            it was successfully created.</td>
+        </tr>
+        <tr align=left>
+            <td>2</td>
+            <td>string</td>
+            <td>The name or URL of the parent object of the object that could not
                 be created.</td>
         </tr>
         </table>
@@ -198,7 +205,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object from that no data could be read.</td>
+            <td>The name or URL of the object from that no data could be read.</td>
         </tr>
         </table>
     */
@@ -220,7 +227,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object on which the seek operation failed.</td>
+            <td>The name or URL of the object on which the seek operation failed.</td>
         </tr>
         </table>
     */
@@ -242,7 +249,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object on which the tell operation failed.</td>
+            <td>The name or URL of the object on which the tell operation failed.</td>
         </tr>
         </table>
     */
@@ -264,7 +271,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object to that no data could be written.</td>
+            <td>The name or URL of the object to that no data could be written.</td>
         </tr>
         </table>
     */
@@ -287,7 +294,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the invalid path.</td>
+            <td>The name or URL of the invalid path.</td>
         </tr>
         </table>
     */
@@ -309,7 +316,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the device that is not ready.</td>
+            <td>The name or URL of the device that is not ready.</td>
         </tr>
         </table>
     */
@@ -332,12 +339,12 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the first device.</td>
+            <td>The name or URL of the first device.</td>
         </tr>
         <tr align=left>
             <td>2</td>
             <td>string</td>
-            <td>The URL of the second device.</td>
+            <td>The name or URL of the second device.</td>
         </tr>
         </table>
     */
@@ -359,7 +366,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object accessed when the error occured./td>
+            <td>The name or URL of the object accessed when the error occured./td>
         </tr>
         </table>
     */
@@ -381,7 +388,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object that rejected access.</td>
+            <td>The name or URL of the object that rejected access.</td>
         </tr>
         </table>
     */
@@ -403,12 +410,13 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL with the invalid characters.</td>
+            <td>The name or URL with the invalid characters.</td>
         </tr>
         <tr align=left>
-            <td>1..n</td>
+            <td>2..n</td>
             <td>long</td>
-            <td>The position of an invalid character.</td>
+            <td>The position of an invalid character. -1 means that the
+            position is unknown.</td>
         </tr>
         </table>
     */
@@ -430,7 +438,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the invalid device.</td>
+            <td>The name or URL of the invalid device.</td>
         </tr>
         </table>
     */
@@ -452,7 +460,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object with the errornous data.</td>
+            <td>The name or URL of the object with the errornous data.</td>
         </tr>
         </table>
     */
@@ -474,7 +482,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object accessed when the error occured./td>
+            <td>The name or URL of the object accessed when the error occured./td>
         </tr>
         </table>
     */
@@ -496,7 +504,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object with the invalid name./td>
+            <td>The name or URL of the object with the invalid name./td>
         </tr>
         </table>
     */
@@ -518,7 +526,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object on that the locking violation occured.</td>
+            <td>The name or URL of the object on that the locking violation occured.</td>
         </tr>
         </table>
     */
@@ -545,7 +553,8 @@ enum IOErrorCode
         <tr align=left>
             <td>2</td>
             <td>long</td>
-            <td>The position of the misplaced charcter.</td>
+            <td>The position of the misplaced charcter. -1 means that the
+            position is unknown.</td>
         </tr>
         </table>
     */
@@ -567,7 +576,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The name.</td>
+            <td>The name (not the URL!).</td>
         </tr>
         </table>
     */
@@ -589,7 +598,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the non-existing object.</td>
+            <td>The name or URL of the non-existing object.</td>
         </tr>
         </table>
     */
@@ -611,7 +620,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the non-existing path.</td>
+            <td>The full name or URL of the non-existing path.</td>
         </tr>
         </table>
     */
@@ -633,7 +642,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the related object.</td>
+            <td>The name or URL of the related object.</td>
         </tr>
         </table>
     */
@@ -655,7 +664,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object that is not a directory.</td>
+            <td>The name or URL of the object that is not a directory.</td>
         </tr>
         </table>
     */
@@ -677,7 +686,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object that is not a file.</td>
+            <td>The name or URL of the object that is not a file.</td>
         </tr>
         </table>
     */
@@ -699,7 +708,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object accessed when the error occured./td>
+            <td>The name or URL of the object accessed when the error occured./td>
         </tr>
         </table>
     */
@@ -721,7 +730,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object accessed when the error occured./td>
+            <td>The name or URL of the object accessed when the error occured./td>
         </tr>
         </table>
     */
@@ -743,7 +752,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object accessed when the error occured./td>
+            <td>The name or URL of the object accessed when the error occured./td>
         </tr>
         </table>
     */
@@ -770,12 +779,12 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the source object.</td>
+            <td>The full name or URL of the source object.</td>
         </tr>
         <tr align=left>
-            <td>1</td>
+            <td>2</td>
             <td>string</td>
-            <td>The URL of the target object.</td>
+            <td>The full name or URL of the target object.</td>
         </tr>
         </table>
     */
@@ -797,7 +806,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object accessed when the error occured./td>
+            <td>The name or URL of the object accessed when the error occured./td>
         </tr>
         </table>
     */
@@ -819,7 +828,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object that is write protected./td>
+            <td>The name or URL of the object that is write protected./td>
         </tr>
         </table>
     */
@@ -841,7 +850,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object with the wrong file format./td>
+            <td>The name or URL of the object with the wrong file format./td>
         </tr>
         </table>
     */
@@ -863,7 +872,7 @@ enum IOErrorCode
         <tr align=left>
             <td>1</td>
             <td>string</td>
-            <td>The URL of the object with the wrong file version./td>
+            <td>The name or URL of the object with the wrong file version./td>
         </tr>
         </table>
     */
