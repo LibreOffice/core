@@ -1,0 +1,559 @@
+/*************************************************************************
+ *
+ *  $RCSfile: groupboxpages.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-02-21 09:23:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
+#include "dbpresid.hrc"
+#endif
+
+TabPage RID_PAGE_GROUPRADIOSELECTION
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Daten";
+    Text [ english ] = "Data";
+    Text [ english_us ] = "Data";
+
+    FixedLine FL_DATA
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_RADIOLABELS
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 24 ) ;
+        WordBreak = TRUE;
+        Group = TRUE;
+        Text = "Welche ~Bezeichnungen sollen die Optionsfelder erhalten?";
+        Text [ english ] = "Which ~names do you want to give the Option Fields?";
+        Text [ english_us ] = "Which ~names do you want to give the Option Fields?";
+    };
+    Edit ET_RADIOLABELS
+    {
+        Pos = MAP_APPFONT ( 7 , 42  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 12 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton PB_MOVETORIGHT
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 42  ) ;
+        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
+        Text = "~>>";
+    };
+    PushButton PB_MOVETOLEFT
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 42 + ITEM_BUTTON_SIZE_Y + 3 ) ;
+        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
+        Text = "~<<";
+    };
+    FixedText FT_RADIOBUTTONS
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, 8 ) ;
+        Group = TRUE;
+        Text = "~Optionsfelder";
+        Text [ english ] = "~Option Fields";
+        Text [ english_us ] = "~Option Fields";
+    };
+    ListBox LB_RADIOBUTTONS
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 42  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, WINDOW_SIZE_Y - 42 - 6 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Sort = FALSE;
+    };
+};
+
+TabPage RID_PAGE_DEFAULTFIELDSELECTION
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Standardfeldauswahl";
+    Text [ english ] = "Default Field Selection";
+    Text [ english_us ] = "Default Field Selection";
+
+    FixedLine FL_DEFAULTSELECTION
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_DEFAULTSELECTION
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 24 ) ;
+        WordBreak = TRUE;
+
+        Text = "Soll ein Optionsfeld standardmäßig ausgewählt sein?";
+        Text [ english ] = "Should one option field be selected as a default?";
+        Text [ english_us ] = "Should one option field be selected as a default?";
+    };
+    RadioButton RB_DEFSELECTION_YES
+    {
+        Pos = MAP_APPFONT ( 7 , 44  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 10 ) ;
+        Group = TRUE;
+        TabStop = TRUE;
+        Text = "~Ja, und zwar folgendes:";
+        Text [ english ] = "~Yes, the following:";
+        Text [ english_us ] = "~Yes, the following:";
+    };
+    ListBox LB_DEFSELECTIONFIELD
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 42  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 14 ) ;
+        TabStop = TRUE;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE;
+        AutoHScroll = TRUE ;
+        Sort = FALSE;
+    };
+    RadioButton RB_DEFSELECTION_NO
+    {
+        Pos = MAP_APPFONT ( 7 , 59  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
+        TabStop = FALSE;
+        Text = "Nein, kein Feld soll ausgewählt sein.";
+        Text [ english ] = "No, one particular field is not going to be selected.";
+        Text [ english_us ] = "No, one particular field is not going to be selected.";
+    };
+};
+
+TabPage RID_PAGE_OPTIONVALUES
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Feldwerte";
+    Text [ english ] = "Field Values";
+    Text [ english_us ] = "Field Values";
+
+    FixedLine FL_OPTIONVALUES
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_OPTIONVALUES_EXPL
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 24 ) ;
+        WordBreak = TRUE;
+        Text = "Wenn Sie eine Option auswählen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
+        Text [ english ] = "When an option has been selected, is it to be given a specific value.";
+        Text [ english_us ] = "When an option has been selected, is it to be given a specific value.";
+        Text [ portuguese ] = "Se seleccionar uma opção, será atribuído um determinado valor ao grupo de opções.";
+        Text [ russian ] = "Åñëè Âû âûáåðèòå õîòÿ áû îäèí ïàðàìåòð, òî ãðóïïå ïàðàìåòðîâ áóäåò ïðèñâîåíî îïðåäåëåííîå çíà÷åíèå.";
+        Text [ dutch ] = "Als u een optie kiest wordt er een bepaalde waarde toegewezen aan de optiegroep.";
+        Text [ french ] = "Si vous sélectionnez une option, une valeur définie sera attribuée au groupe d'options correspondant.";
+        Text [ spanish ] = "Si elige una opción, se le asignará al grupo de opciones un determinado valor.";
+        Text [ italian ] = "Selezionando un'opzione, verrà assegnato un dato valore al gruppo di opzioni.";
+        Text [ danish ] = "Hvis du vælger et alternativ, får alternativgruppen tildelt en bestemt værdi.";
+        Text [ swedish ] = "Om Du väljer ett alternativ tilldelas alternativgruppen ett visst värde.";
+        Text [ polish ] = "Jeœli wybierzesz opcjê, to grupie opcji zostanie przypisana okreœlona wartoœæ.";
+        Text [ portuguese_brazilian ] = "Wenn Sie eine Option auswählen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
+        Text [ japanese ] = "µÌß¼®Ý‚ð‘I‘ð‚·‚é‚ÆAµÌß¼®Ý¸ÞÙ°Ìß‚É‚ ‚éŒˆ‚Ü‚Á‚½’l‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ü‚·B";
+        Text [ chinese_simplified ] = "Èç¹ûÑ¡ÖÐÁËÒ»¸öÑ¡Ïî£¬Õâ¸öÑ¡ÏîÐ¡×é¾Í»á»ñµÃÒ»¸öÊýÖµ¡£";
+        Text [ chinese_traditional ] = "¦pªG±z¿ï¾Ü¤F¤@­Ó¿ï¶µ¡A¿ï¶µ¸s²Õ´N·|±o¨ì¤@­Ó¼Æ­È¡C";
+        Text [ arabic ] = "ÚäÏ ÇÎÊíÇÑß áÃÍÏ ÇáÎíÇÑÇÊ¡ ÓæÝ íÊã ÊÚííä ÞíãÉ ãÚíäÉ áãÌãæÚÉ ÇáÎíÇÑÇÊ.";
+        Text [ dutch ] = "Als u een optie kiest wordt er een bepaalde waarde toegewezen aan de optiegroep.";
+        Text [ chinese_simplified ] = "Èç¹ûÑ¡ÖÐÁËÒ»¸öÑ¡Ïî£¬Õâ¸öÑ¡ÏîÐ¡×é¾Í»á»ñµÃÒ»¸öÊýÖµ¡£";
+        Text [ greek ] = "Áí åðéëÝîåôå ìßá åðéëïãÞ èá äïèåß óôçí ïìÜäá åðéëïãþí ìéá óõãêåêñéìÝíç ôéìÞ";
+        Text [ korean ] = "É¼ÇÀ» ¼±ÅÃÇÏ¸é ¿É¼Ç ±×·ì¿¡ Æ¯Á¤°ªÀÌ ÇÒ´çµË´Ï´Ù.";
+        Text [ turkish ] = "Bir seçenek belirlendiðinde, seçenek grubuna belirli bir deðer atanýr.";
+    };
+    FixedText FT_OPTIONVALUES
+    {
+        Pos = MAP_APPFONT ( 7 , 42  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 16 ) ;
+        WordBreak = TRUE;
+        Group = TRUE;
+        Text = "Welchen ~Wert möchten Sie jeder Option zuweisen?";
+        Text [ english ] = "Which ~value do you want to assign to each option?";
+        Text [ english_us ] = "Which ~value do you want to assign to each option?";
+        Text [ portuguese ] = "Qual o valor a atribuir a cada opção?";
+        Text [ russian ] = "Êàêîå çíà÷åíèå Âû õîòåëè áû ïðèñâîèòü êàæäîìó ïàðàìåòðó?";
+        Text [ dutch ] = "Welke waarde wilt u toewijzen aan de opties ?";
+        Text [ french ] = "Quelle valeur souhaitez-vous attribuer à chaque option ?";
+        Text [ spanish ] = "¿Qué valor desea asignarle a cada opción?";
+        Text [ italian ] = "Quale valore desiderate assegnare a ogni opzione?";
+        Text [ danish ] = "Hvilken værdi til du tildele hvert alternativ?";
+        Text [ swedish ] = "Vilket värde vill Du tilldela varje alternativ ?";
+        Text [ polish ] = "Jak¹ wartoœæ przypisaæ pojedynczym opcjom?";
+        Text [ portuguese_brazilian ] = "Welchen Wert möchten Sie jeder Option zuweisen ?";
+        Text [ japanese ] = "µÌß¼®Ý‚É‚Ç‚Ì’l‚ðŠ„‚è“–‚Ä‚Ü‚·‚©?";
+        Text [ chinese_simplified ] = "ÄúÒª·ÖÅä¸øÑ¡ÏîµÄÊýÖµÊÇ£¿";
+        Text [ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µªº¼Æ­È¡H";
+        Text [ arabic ] = "ãÇ åí ÇáÞíãÉ ÇáÊí ÊÑíÏ ÊÚííäåÇ áßá ÎíÇÑ¿";
+        Text [ dutch ] = "Welke waarde wilt u toewijzen aan de opties ?";
+        Text [ chinese_simplified ] = "ÄúÒª·ÖÅä¸øÑ¡ÏîµÄÊýÖµÊÇ£¿";
+        Text [ greek ] = "ÐïéÜ ôéìÞ èÝëåôå íá áíôéóôïé÷åß óå êÜèå åðéëïãÞ;";
+        Text [ korean ] = "¾î´À °ªÀ» °¢ ¿É¼Ç¿¡ ÇÒ´çÇÏ½Ã°Ú½À´Ï±î?";
+        Text [ turkish ] = "Her bir seçeneðe hangi deðeri atamak istiyorsunuz?";
+    };
+    Edit ET_OPTIONVALUE
+    {
+        Pos = MAP_APPFONT ( 7 , 61 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 12 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        TabStop = TRUE;
+    };
+    FixedText FT_RADIOBUTTONS
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14 , 8 ) ;
+        Text = "~Optionsfelder";
+        Text [ english ] = "~Option Fields";
+        Text [ english_us ] = "~Option Fields";
+        Text [ portuguese ] = "~campos de opção";
+        Text [ russian ] = "~Ïîëÿ ïàðàìåòðîâ";
+        Text [ dutch ] = "~Optievelden";
+        Text [ french ] = "~Boutons radio";
+        Text [ spanish ] = "~Botón radio";
+        Text [ italian ] = "~Campi di opzione";
+        Text [ danish ] = "A~lternativfelter";
+        Text [ swedish ] = "~Alternativfält";
+        Text [ polish ] = "~Pola opcji";
+        Text [ portuguese_brazilian ] = "~Optionsfelder";
+        Text [ japanese ] = "µÌß¼®ÝÌ¨°ÙÄÞ(~O)";
+        Text [ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î(~O)";
+        Text [ chinese_traditional ] = "¿ï¶µÄæ¦ì(~O)";
+        Text [ arabic ] = "~ÃÒÑÇÑ ÎíÇÑ";
+        Text [ dutch ] = "~Optievelden";
+        Text [ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î(~O)";
+        Text [ greek ] = "Ðåäßá åðéë~ïãþí";
+        Text [ korean ] = "¿É¼Ç ÇÊµå";
+        Text [ turkish ] = "~Seçenek alanlarý";
+    };
+    ListBox LB_RADIOBUTTONS
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 32 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        DropDown = FALSE;
+    };
+};
+
+TabPage RID_PAGE_OPTION_DBFIELD
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Datenbankfeld";
+    Text [ english ] = "Database Field";
+    Text [ english_us ] = "Database Field";
+    Text [ portuguese ] = "Campo da base de dados";
+    Text [ russian ] = "Ïîëå áàçû äàííûõ";
+    Text [ dutch ] = "databaseveld";
+    Text [ french ] = "Champ de base de données";
+    Text [ spanish ] = "Campo de base de datos";
+    Text [ italian ] = "Campo database";
+    Text [ danish ] = "Databasefelt";
+    Text [ swedish ] = "Databasfält";
+    Text [ polish ] = "Pole bazy danych";
+    Text [ portuguese_brazilian ] = "Datenbankfeld";
+    Text [ japanese ] = "ÃÞ°ÀÍÞ°½Ì¨°ÙÄÞ";
+    Text [ chinese_simplified ] = "£ºÊý¾Ý¿â×Ö¶Î";
+    Text [ chinese_traditional ] = "¡G¸ê®Æ®wÄæ¦ì";
+    Text [ arabic ] = "ÍÞá ÞÇÚÏÉ ÇáÈíÇäÇÊ";
+    Text [ dutch ] = "databaseveld";
+    Text [ chinese_simplified ] = "£ºÊý¾Ý¿â×Ö¶Î";
+    Text [ greek ] = "Ðåäßï âÜóçò äåäïìÝíùí";
+    Text [ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå";
+    Text [ turkish ] = "Veritabaný alaný";
+
+    FixedLine FL_DATABASEFIELD_EXPL
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_DATABASEFIELD_EXPL
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
+        WordBreak = TRUE;
+        Text = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
+        Text [ english ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
+        Text [ english_us ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
+        Text [ portuguese ] = "Poderá guardar o valor do grupo de opções num campo da base de dados ou utilizá-lo para uma acção posterior.";
+        Text [ russian ] = "Çíà÷åíèå ãðóïïû ïàðàìåòðîâ ìîæíî èëè ñîõðàíèòü â ïîëå áàçû äàííûõ, èëè èñïîëüçîâàòü åãî ïîòîì.";
+        Text [ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
+        Text [ french ] = "Vous pouvez soit enregistrer la valeur du groupe d'options dans un champ de base de données, soit l'utiliser pour une action ultérieure.";
+        Text [ spanish ] = "Puede guardar el valor del grupo de opciones en un campo de base de datos o usarlo para una acción posterior.";
+        Text [ italian ] = "Potete salvare il valore del gruppo di opzioni in un campo database oppure utilizzarlo per un'operazione successiva.";
+        Text [ danish ] = "Du kan enten gemme alternativgruppens værdi i et databasefelt eller bruge den til en senere handling.";
+        Text [ swedish ] = "Du kan antingen spara alternativgruppens värde i ett databasfält eller använda det till en senare åtgärd.";
+        Text [ polish ] = "Wartoœæ grupy opcji mo¿na zapisaæ w polu bazy danych lub u¿yæ jej w póŸniejszej akcji.";
+        Text [ portuguese_brazilian ] = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
+        Text [ japanese ] = "µÌß¼®Ý¸ÞÙ°Ìß‚Ì’l‚ÍAÃÞ°ÀÍÞ°½Ì¨°ÙÄÞ‚É•Û‘¶A‚Ü‚½‚ÍŒã‚Ìì‹Æ‚ÉŽg—p‚Å‚«‚Ü‚·B";
+        Text [ chinese_simplified ] = "ÄúÄÜ¹»½«Ñ¡ÏîÐ¡×éµÄÊýÖµ´æÈëÒ»¸öÊý¾Ý¿â»òÒÔºóµ÷ÓÃËü¡£";
+        Text [ chinese_traditional ] = "±z¯à°÷¦b¤@­Ó¸ê®Æ®w¤ºÀx¦s¿ï¶µ¸s²Õªº¼Æ­È¡A¥H³Æ¤µ«á¯à°÷¨Ï¥Î¥¦¡C";
+        Text [ arabic ] = "íãßäß ÍÝÙ ÞíãÉ ãÌãæÚÉ ÇáÎíÇÑÇÊ Ýí ÍÞá ÞÇÚÏÉ ÈíÇäÇÊ Ãæ ÇÓÊÎÏÇãå Ýí ÚãáíÉ áÇÍÞÉ.";
+        Text [ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
+        Text [ chinese_simplified ] = "ÄúÄÜ¹»½«Ñ¡ÏîÐ¡×éµÄÊýÖµ´æÈëÒ»¸öÊý¾Ý¿â»òÒÔºóµ÷ÓÃËü¡£";
+        Text [ greek ] = "Ìðïñåßôå íá áðïèçêåýóåôå ôçí ôéìÞ ôçò ïìÜäáò åðéëïãÞò óå Ýíá ðåäßï âÜóçò äåäïìÝíùí Þ íá ôï ÷ñçóéìïðïéÞóåôå ìåëëïíôéêÜ ãéá êÜðïéá åíÝñãåéá.";
+        Text [ korean ] = "¿É¼Ç ±×·ìÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ¾ÕÀ¸·ÎÀÇ ÀÛ¾÷¿¡ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+        Text [ turkish ] = "Seçenek alanýnýn deðerini bir veritabaný alanýnda kaydedebilir ya da bu deðeri daha sonra yapýlacak bir iþlemde kullanabilirsiniz.";
+    };
+    FixedText FT_DATABASEFIELD_QUEST
+    {
+        Pos = MAP_APPFONT ( 7 , 34  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
+        WordBreak = TRUE;
+        Text = "Möchten Sie den Wert in einem Datenbankfeld speichern?";
+        Text [ english ] = "Do you want to save the value in a database field?";
+        Text [ english_us ] = "Do you want to save the value in a database field?";
+        Text [ portuguese ] = "Guardar o valor num campo da base de dados?";
+        Text [ russian ] = "Ñîõðàíèòü ýòî çíà÷åíèå â ïîëå áàçû äàííûõ ?";
+        Text [ dutch ] = "Wilt u de waarde opslaan in een databaseveld ?";
+        Text [ french ] = "Souhaitez-vous enregistrer la valeur dans un champ de base de données ?";
+        Text [ spanish ] = "¿Desea guardar el valor en un campo de base de datos?";
+        Text [ italian ] = "Volete salvare il valore in un campo database ?";
+        Text [ danish ] = "Vil du gemme værdien i et databasefelt?";
+        Text [ swedish ] = "Vill Du spara värdet i ett databasfält ?";
+        Text [ polish ] = "Czy zapisaæ tê wartoœæ w polu bazy danych ?";
+        Text [ portuguese_brazilian ] = "Möchten Sie den Wert in einem Datenbankfeld speichern ?";
+        Text [ japanese ] = "’l‚ðÃÞ°ÀÍÞ°½Ì¨°ÙÄÞ‚É•Û‘¶‚µ‚Ü‚·‚©B";
+        Text [ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊýÖµ´æÅÌµ½Ò»¸öÊý¾Ý¿âÀ¸ÄÚ£¿";
+        Text [ chinese_traditional ] = "±z­n¦b¸ê®Æ®wÄæ¦ì¤ºÀx¦s³o­Ó¼Æ­È¡H";
+        Text [ arabic ] = "åá ÊÑíÏ ÍÝÙ ÇáÞíãÉ Ýí ÍÞá ÞÇÚÏÉ ÈíÇäÇÊ¿";
+        Text [ dutch ] = "Wilt u de waarde opslaan in een databaseveld ?";
+        Text [ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊýÖµ´æÅÌµ½Ò»¸öÊý¾Ý¿âÀ¸ÄÚ£¿";
+        Text [ greek ] = "ÈÝëåôå íá ãßíåé áðïèÞêåõóç ôçò ôéìÞò óå Ýíá ðåäßï âÜóçò äåäïìÝíùí;";
+        Text [ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµåÀÇ °ªÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+        Text [ turkish ] = "Deðeri bir veritabaný alanýnda kaydetmek istiyor musunuz?";
+    };
+    RadioButton RB_STOREINFIELD_YES
+    {
+        Pos = MAP_APPFONT ( 7 , 53  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 10 ) ;
+        Group = TRUE;
+        TabStop = TRUE;
+        Text = "~Ja, und zwar in folgendem Datenbankfeld :";
+        Text [ english ] = "~Yes, save it in the following database field:";
+        Text [ english_us ] = "~Yes, save it in the following database field:";
+        Text [ portuguese ] = "Sim, no seguinte:";
+        Text [ russian ] = "Äà. Â ñëåäóþùåì ïîëå áàçû äàííûõ :";
+        Text [ dutch ] = "Ja, en wel in het volgende databaseveld :";
+        Text [ french ] = "Oui, dans le champ suivant :";
+        Text [ spanish ] = "Sí, en el siguiente campo :";
+        Text [ italian ] = "Sì, nel seguente campo database :";
+        Text [ danish ] = "Ja, den skal gemmes i følgende databasefelt:";
+        Text [ swedish ] = "Ja, i följande databasfält :";
+        Text [ polish ] = "Tak, jest to mo¿liwe w nastêpuj¹cym polu bazy danych :";
+        Text [ portuguese_brazilian ] = "Ja, und zwar in folgendem Datenbankfeld :";
+        Text [ japanese ] = "‚Í‚¢AŽŸ‚ÌÃÞ°ÀÍÞ°½Ì¨°ÙÄÞ‚É‚É‚µ‚Ü‚·:";
+        Text [ chinese_simplified ] = "ÊÇ£¬ÔÚÒÔÏÂµÄÊý¾Ý¿âÀ¸£º";
+        Text [ chinese_traditional ] = "¬O¡A¤U¦Cªº¸ê®Æ®wÄæ¦ì¡G";
+        Text [ arabic ] = "äÚã¡ Ýí ÍÞá ÞÇÚÏÉ ÇáÈíÇäÇÊ ÇáÊÇáí:";
+        Text [ dutch ] = "Ja, en wel in het volgende databaseveld :";
+        Text [ chinese_simplified ] = "ÊÇ£¬ÔÚÒÔÏÂµÄÊý¾Ý¿âÀ¸£º";
+        Text [ greek ] = "Íáé, óôï áêüëïõèï ðåäßï âÜóçò äåäïìÝíùí :";
+        Text [ korean ] = "¿¹, ´ÙÀ½ µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ½Ê½Ã¿À:";
+        Text [ turkish ] = "Evet, aþaðýdaki veritabaný alanýnda kaydedebilirsiniz :";
+    };
+    ListBox LB_STOREINFIELD
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 51 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 14 ) ;
+        TabStop = TRUE;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE;
+        AutoHScroll = TRUE ;
+    };
+    RadioButton RB_STOREINFIELD_NO
+    {
+        Pos = MAP_APPFONT ( 7 , 68 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
+        TabStop = FALSE;
+        Text = "~Nein, ich möchte den Wert nur im Formular speichern.";
+        Text [ english ] = "~No, I only want to save the value in the form.";
+        Text [ english_us ] = "~No, I only want to save the value in the form.";
+        Text [ portuguese ] = "Não. Guardar apenas no formulário.";
+        Text [ russian ] = "Íåò. Ñîõðàíèòü ýòî çíà÷åíèå òîëüêî â ôîðìóëÿðå";
+        Text [ dutch ] = "Nee, ik wil de waarde alleen opslaan in het formulier.";
+        Text [ french ] = "Non, je souhaite enregistrer la valeur uniquement dans le formulaire.";
+        Text [ spanish ] = "No, deseo guardar el valor solo en el formulario.";
+        Text [ italian ] = "Salva il valore solo nel formulario.";
+        Text [ danish ] = "Nej, jeg vil kun gemme værdien i formularen.";
+        Text [ swedish ] = "Nej, jag vill bara spara värdet i formuläret.";
+        Text [ polish ] = "Nie, ja chcia³bym zapisaæ tê wartoœæ tylko w formularzu.";
+        Text [ portuguese_brazilian ] = "Nein, ich möchte den Wert nur im Formular speichern.";
+        Text [ japanese ] = "‚¢‚¢‚¦A’l‚ÍÌ«°Ñ‚É•Û‘¶‚µ‚Ü‚·B";
+        Text [ chinese_simplified ] = "·ñ£¬ÎÒÖ»Ïë½«Õâ¸öÊýÖµ´æÈë±íµ¥¡£";
+        Text [ chinese_traditional ] = "§_¡A¥u¦s¤J¤@­Óªí³æ¤º¡C";
+        Text [ arabic ] = "ßáÇ¡ ÃÑíÏ ÍÝÙ ÇáÞíãÉ Ýí ÇáÇÓÊãÇÑÉ ÝÞØ.";
+        Text [ dutch ] = "Nee, ik wil de waarde alleen opslaan in het formulier.";
+        Text [ chinese_simplified ] = "·ñ£¬ÎÒÖ»Ïë½«Õâ¸öÊýÖµ´æÈë±íµ¥¡£";
+        Text [ greek ] = "¼÷é, èÝëù íá ãßíåé áðïèÞêåõóç ôçò ôéìÞò ìüíï óôç öüñìá.";
+        Text [ korean ] = "¾Æ´Ï¿À, °ªÀ» ¼ö½Ä¿¡¸¸ ÀúÀåÇÏ°Ú½À´Ï´Ù.";
+        Text [ turkish ] = "Hayýr, deðeri yalnýzca form içinde kaydetmek istiyorum.";
+    };
+};
+TabPage RID_PAGE_OPTIONS_FINAL
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text = "Optionsgruppe erstellen";
+    Text [ english ] = "Create Option Group";
+    Text [ english_us ] = "Create Option Group";
+    Text [ portuguese ] = "Criar grupo de opções";
+    Text [ russian ] = "Ñîçäàòü ãðóïïó ïàðàìåòðîâ";
+    Text [ dutch ] = "optiegroep maken";
+    Text [ french ] = "Créer un groupe d'options";
+    Text [ spanish ] = "Crear grupo de opciones";
+    Text [ italian ] = "Crea gruppo di opzioni";
+    Text [ danish ] = "Opret alternativgruppe";
+    Text [ swedish ] = "Skapa alternativgrupp";
+    Text [ polish ] = "Utwórz grupê opcji";
+    Text [ portuguese_brazilian ] = "Optionsgruppe erstellen";
+    Text [ japanese ] = "µÌß¼®Ý¸ÞÙ°Ìß‚Ìì¬";
+    Text [ chinese_simplified ] = "£ºÖÆ×÷Ñ¡ÏîÐ¡×é";
+    Text [ chinese_traditional ] = "¡G«Ø¥ß¿ï¶µ¸s²Õ";
+    Text [ arabic ] = "ÅäÔÇÁ ãÌãæÚÉ ÎíÇÑÇÊ";
+    Text [ dutch ] = "optiegroep maken";
+    Text [ chinese_simplified ] = "£ºÖÆ×÷Ñ¡ÏîÐ¡×é";
+    Text [ greek ] = "Äçìéïõñãßá ïìÜäáò åðéëïãÞò";
+    Text [ korean ] = "¿É¼Ç ±×·ì ¸¸µé±â";
+    Text [ turkish ] = "Seçenek grubu oluþtur";
+
+    FixedLine FL_NAMEIT
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_NAMEIT
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
+        WordBreak = TRUE;
+        Text = "Welche ~Beschriftung soll Ihre Optionsgruppe haben?";
+        Text [ english ] = "Which ~caption is to be given to your option group?";
+        Text [ english_us ] = "Which ~caption is to be given to your option group?";
+        Text [ portuguese ] = "Qual o título a atribuir ao grupo de opções?";
+        Text [ russian ] = "Êàêîå íàçâàíèå äîëæíà ïîëó÷èòü Âàøà ãðóïïà ïàðàìåòðîâ ?";
+        Text [ dutch ] = "Welk naam wilt u uw optiegroep geven ?";
+        Text [ french ] = "Quelle étiquette souhaitez-vous attribuer au groupe d'options ?";
+        Text [ spanish ] = "¿Qué título debe tener el grupo de opciones?";
+        Text [ italian ] = "Quale dicitura volete assegnare al gruppo di opzioni ?";
+        Text [ danish ] = "Hvilken etiket skal din alternativgruppe have?";
+        Text [ swedish ] = "Vilken beteckning skall Din alternativgrupp ha ?";
+        Text [ polish ] = "Jakie etykiety powinna zawieraæ twoja grupa opcji ?";
+        Text [ portuguese_brazilian ] = "Welche  Beschriftung soll Ihre Options- gruppe haben ?";
+        Text [ japanese ] = "µÌß¼®Ý¸ÞÙ°Ìß‚É‚Ç‚Ì‚æ‚¤‚È–¼‘O‚ð•t‚¯‚Ü‚·‚©?";
+        Text [ chinese_simplified ] = "Ñ¡ÏîÐ¡×éµÄÃû³Æ£¿";
+        Text [ chinese_traditional ] = "¿ï¶µ¸s²Õªº¦WºÙ¡H";
+        Text [ arabic ] = "ßíÝ ÊÑíÏ ÊÓãíÉ ãÌãæÚÉ ÇáÎíÇÑÇÊ ÇáÎÇÕÉ Èß¿";
+        Text [ dutch ] = "Welk naam wilt u uw optiegroep geven ?";
+        Text [ chinese_simplified ] = "Ñ¡ÏîÐ¡×éµÄÃû³Æ£¿";
+        Text [ greek ] = "ÐïéÜ åðéãñáöÞ èÝëåôå íá ÷ñçóéìïðïéçèåß ãéá ôç äéêÞ óáò ïìÜäá åðéëïãþí;";
+        Text [ korean ] = "¿É¼Ç ±×·ì¿¡ ¾î´À Ä¸¼ÇÀ» ÁöÁ¤ÇÏ½Ã°Ú½À´Ï±î?";
+        Text [ turkish ] = "Seçenek grubunuza hangi resim altyazýsý verilsin?";
+    };
+    Edit ET_NAMEIT
+    {
+        Pos = MAP_APPFONT ( 7 , 34 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 12 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+    };
+    FixedText FT_THATSALL
+    {
+        Pos = MAP_APPFONT ( 7 , WINDOW_SIZE_Y - 22  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
+        WordBreak = TRUE;
+        Center = TRUE;
+        Text = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
+        Text [ english ] = "These were all details needed to create the option group.";
+        Text [ english_us ] = "These were all details needed to create the option group.";
+        Text [ portuguese ] = "As informações necessárias para criar o grupo de opções estão agora completas.";
+        Text [ russian ] = "Ýòî âñå çàäàíèÿ, íåîáõîäèìûå äëÿ ñîçäàíèÿ ãðóïïû ïàðàìåòðîâ.";
+        Text [ dutch ] = "De gegevens voor het maken van de optiegroep zijn nu compleet.";
+        Text [ french ] = "Toutes les informations nécessaires ont été rassemblées ; le groupe d'options va pouvoir être créé.";
+        Text [ spanish ] = "Ya se dispone de las informaciones necesarias para crear el grupo de opciones.";
+        Text [ italian ] = "Tutte le informazioni necessarie per creare il gruppo di opzioni sono state indicate.";
+        Text [ danish ] = "Det var alle informationer, som kræves for at kunne oprette en alternativgruppe.";
+        Text [ swedish ] = "Det var alla uppgifter som behövdes för att skapa alternativgruppen.";
+        Text [ polish ] = "To by³y dane, które potrzebne s¹ do utworzenia grupy opcji.";
+        Text [ portuguese_brazilian ] = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
+        Text [ japanese ] = "‚±‚ê‚ç‚ªµÌß¼®Ý¸ÞÙ°Ìß‚Ìì¬‚É•K—v‚È‚·‚×‚Ä‚ÌŽ–€‚Å‚·B";
+        Text [ chinese_simplified ] = "ÕâÐ©ÊÇÖÆ×÷Ñ¡ÏîÐ¡×éËùÐèµÄËùÓÐ×ÊÁÏ¡£";
+        Text [ chinese_traditional ] = "³o¨Ç¬O¨î§@¿ï¶µ¸s²Õ©Ò»Ýªº¥þ³¡¸ê®Æ¡C";
+        Text [ arabic ] = "ßÇäÊ åÐå åí ßÇÝÉ ÇáÈíÇäÇÊ ÇááÇÒãÉ áÅäÔÇÁ ãÌãæÚÉ ÇáÎíÇÑÇÊ.";
+        Text [ dutch ] = "De gegevens voor het maken van de optiegroep zijn nu compleet.";
+        Text [ chinese_simplified ] = "ÕâÐ©ÊÇÖÆ×÷Ñ¡ÏîÐ¡×éËùÐèµÄËùÓÐ×ÊÁÏ¡£";
+        Text [ greek ] = "ÁõôÜ Þôáí ôá äåäïìÝíá ðïõ áðáéôïýíôáé ãéá ôçí äçìéïõñãßá ôçò ïìÜäáò åðéëïãþí.";
+        Text [ korean ] = "ÀÌ°ÍÀÌ ¿É¼Ç ±×·ì ÀÛ¼º¿¡ ÇÊ¿äÇÑ ¸ðµç ÁöÁ¤»çÇ×ÀÌ¾ú½À´Ï´Ù.";
+        Text [ turkish ] = "Seçenek grubunun oluþturulmasý için gereken tüm bilgiler bunlardýr.";
+    };
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 14.02.01 12:47:37  fs
+ ************************************************************************/
+
