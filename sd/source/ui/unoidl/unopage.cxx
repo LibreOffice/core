@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:49:44 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,6 +1538,7 @@ void SdGenericDrawPage::release() throw()
 void SdGenericDrawPage::disposing() throw()
 {
     Invalidate();
+    SvxFmDrawPage::disposing();
 }
 
 //========================================================================
@@ -1953,9 +1954,13 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
 
         GetPage()->SetName( aName );
 
-        SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( (GetPage()->GetPageNum()-1)>>1, PK_NOTES );
-        if( pNotesPage )
-            pNotesPage->SetName(aName);
+        USHORT nNotesPageNum = (GetPage()->GetPageNum()-1)>>1;
+        if( mpModel->GetDoc()->GetSdPageCount( PK_NOTES ) > nNotesPageNum )
+        {
+            SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( nNotesPageNum, PK_NOTES );
+            if( pNotesPage )
+                pNotesPage->SetName(aName);
+        }
 
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
