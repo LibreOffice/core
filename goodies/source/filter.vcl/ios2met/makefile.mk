@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:11:52 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:37:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ SLOFILES =  $(SLO)$/ios2met.obj
 
 SHL1TARGET=     ime$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ios2met
-SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 
 SHL1DEPN=       $(LB)$/ios2met.lib
 SHL1LIBS=       $(SLB)$/ios2met.lib # $(LB)$/rtftoken.lib
