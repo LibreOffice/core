@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:53:22 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ namespace svt
                   ,nEndEvent(0)
                   ,nCellModifiedEvent(0)
                   ,m_nBrowserFlags(nBrowserFlags)
+                  ,bActiveBeforeTracking( sal_False )
     {
         DBG_CTOR(EditBrowseBox,NULL);
 
@@ -275,6 +276,7 @@ namespace svt
                   ,nCellModifiedEvent(0)
                   ,pHeader(NULL)
                   ,m_nBrowserFlags(nBrowserFlags)
+                  ,bActiveBeforeTracking( sal_False )
     {
         DBG_CTOR(EditBrowseBox,NULL);
 
@@ -455,23 +457,68 @@ namespace svt
             Size aImageSize(aImage.GetSizePixel());
             aImageSize.Width() = CalcZoom(aImageSize.Width());
             aImageSize.Height() = CalcZoom(aImageSize.Height());
-            Point aPos(rRect.TopLeft());
+            Point aPos( rRect.TopLeft() );
 
-            if (aImageSize.Width() > rRect.GetWidth() ||
-                aImageSize.Height() > rRect.GetHeight())
+            if ( ( aImageSize.Width() > rRect.GetWidth() ) || ( aImageSize.Height() > rRect.GetHeight() ) )
                 rDev.SetClipRegion(rRect);
 
-            if (aImageSize.Width() < rRect.GetWidth())
-                aPos.X() += (rRect.GetWidth() - aImageSize.Width()) / 2;
+            if ( aImageSize.Width() < rRect.GetWidth() )
+                aPos.X() += ( rRect.GetWidth() - aImageSize.Width() ) / 2;
 
-            if (IsZoom())
-                rDev.DrawImage(aPos, aImageSize, aImage, 0);
+            if ( aImageSize.Height() < rRect.GetHeight() )
+                aPos.Y() += ( rRect.GetHeight() - aImageSize.Height() ) / 2;
+
+            if ( IsZoom() )
+                rDev.DrawImage( aPos, aImageSize, aImage, 0 );
             else
-                rDev.DrawImage(aPos, aImage, 0);
+                rDev.DrawImage( aPos, aImage, 0 );
 
             if (rDev.IsClipRegion())
                 rDev.SetClipRegion();
         }
+    }
+
+    //------------------------------------------------------------------------------
+    void EditBrowseBox::ImplStartTracking()
+    {
+        bActiveBeforeTracking = IsEditing();
+        if ( bActiveBeforeTracking )
+        {
+            DeactivateCell();
+            Update();
+        }
+
+        BrowseBox::ImplStartTracking();
+    }
+
+    //------------------------------------------------------------------------------
+    void EditBrowseBox::ImplTracking()
+    {
+        BrowseBox::ImplTracking();
+    }
+
+    //------------------------------------------------------------------------------
+    void EditBrowseBox::ImplEndTracking()
+    {
+        if ( bActiveBeforeTracking )
+            ActivateCell();
+        bActiveBeforeTracking = sal_False;
+
+        BrowseBox::ImplEndTracking();
+    }
+
+    //------------------------------------------------------------------------------
+    void EditBrowseBox::RowHeightChanged()
+    {
+        if ( IsEditing() )
+        {
+            Rectangle aRect( GetCellRect( nEditRow, nEditCol, sal_False ) );
+            CellControllerRef aController( Controller() );
+            ResizeController( aController, aRect );
+            aController->GetWindow().GrabFocus();
+        }
+
+        BrowseBox::RowHeightChanged();
     }
 
     //------------------------------------------------------------------------------
