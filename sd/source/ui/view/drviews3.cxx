@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:45:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #ifndef _EEITEMID_HXX
 #include <svx/eeitemid.hxx>
@@ -152,18 +154,34 @@
 #include "undopage.hxx"
 #include "glob.hxx"
 #include "app.hxx"
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
-#include "frmview.hxx"
+#endif
+#ifndef SD_FRAME_VIEW
+#include "FrameView.hxx"
+#endif
 #include "sdpage.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "sdresid.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "drviewsh.hxx"
-#include "sdruler.hxx"
-#include "docshell.hxx"
-#include "preview.hxx"
+#include "Ruler.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
+
+namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -178,7 +196,7 @@ SO2_DECL_REF(SvInPlaceObject)
 |*
 \************************************************************************/
 
-void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
+void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausser dem Seitenwechsel und dem
     // Sprung zur Bookmark ausgefuehrt!
@@ -247,7 +265,7 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
                     else if (eEditMode != EM_MASTERPAGE)
                     {
                         if (! CHECK_RANGE (0, pWhatPage->GetValue (),
-                            pDoc->GetSdPageCount ((PageKind) pWhatKind->GetValue ())))
+                            GetDoc()->GetSdPageCount ((PageKind) pWhatKind->GetValue ())))
                         {
                             StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
                             rReq.Ignore ();
@@ -358,7 +376,8 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
             /******************************************************************
             * Der Server moechte die Clientgrosse verandern
             ******************************************************************/
-            SfxInPlaceClient* pIPClient = GetIPClient();
+            OSL_ASSERT (GetViewShell()!=NULL);
+            SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
 
             if ( pIPClient && pIPClient->IsInPlaceActive() )
             {
@@ -466,12 +485,14 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_ATTR_YEAR2000:
         {
-            FmFormShell* pShell = (FmFormShell*) aShellTable.Get(RID_FORMLAYER_TOOLBOX);
-            if( pShell )
+            FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+            if (pFormShell != NULL)
             {
                 const SfxPoolItem* pItem;
-                if (rReq.GetArgs()->GetItemState(SID_ATTR_YEAR2000, TRUE, &pItem) == SFX_ITEM_SET)
-                    pShell->SetY2KState( ( (const SfxUInt16Item*) pItem )->GetValue() );
+                if (rReq.GetArgs()->GetItemState(
+                    SID_ATTR_YEAR2000, TRUE, &pItem) == SFX_ITEM_SET)
+                    pFormShell->SetY2KState (
+                        static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             }
 
             rReq.Done();
@@ -496,7 +517,7 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
+void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual &&
@@ -514,7 +535,7 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
     if ( rReq.GetSlot() == SID_ATTR_LONG_LRSPACE ||
          rReq.GetSlot() == SID_ATTR_LONG_ULSPACE )
     {
-        pUndoGroup = new SdUndoGroup(pDoc);
+        pUndoGroup = new SdUndoGroup(GetDoc());
         String aString(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
         pUndoGroup->SetComment(aString);
     }
@@ -547,13 +568,12 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
                 long nRight = Max(0L, rLRSpace.GetRight() + aPagePos.X() +
                                       aPageSize.Width() - aViewSize.Width());
 
-                USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+                USHORT nPageCnt = GetDoc()->GetSdPageCount(ePageKind);
                 USHORT i;
-
                 for ( i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
-                    SdUndoAction* pUndo = new SdPageLRUndoAction(pDoc,
+                    SdPage* pPage = GetDoc()->GetSdPage(i, ePageKind);
+                    SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
                                             pPage,
                                             pPage->GetLftBorder(),
                                             pPage->GetRgtBorder(),
@@ -562,12 +582,12 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
                     pPage->SetLftBorder(nLeft);
                     pPage->SetRgtBorder(nRight);
                 }
-                nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+                nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
 
                 for (i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
-                    SdUndoAction* pUndo = new SdPageLRUndoAction(pDoc,
+                    SdPage* pPage = GetDoc()->GetMasterSdPage(i, ePageKind);
+                    SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
                                             pPage,
                                             pPage->GetLftBorder(),
                                             pPage->GetRgtBorder(),
@@ -607,13 +627,12 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
                 long nLower = Max(0L, rULSpace.GetLower() + aPagePos.Y() +
                                       aPageSize.Height() - aViewSize.Height());
 
-                USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
+                USHORT nPageCnt = GetDoc()->GetSdPageCount(ePageKind);
                 USHORT i;
-
                 for ( i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
-                    SdUndoAction* pUndo = new SdPageULUndoAction(pDoc,
+                    SdPage* pPage = GetDoc()->GetSdPage(i, ePageKind);
+                    SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
                                             pPage,
                                             pPage->GetUppBorder(),
                                             pPage->GetLwrBorder(),
@@ -622,12 +641,12 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
                     pPage->SetUppBorder(nUpper);
                     pPage->SetLwrBorder(nLower);
                 }
-                nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+                nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
 
                 for (i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
-                    SdUndoAction* pUndo = new SdPageULUndoAction(pDoc,
+                    SdPage* pPage = GetDoc()->GetMasterSdPage(i, ePageKind);
+                    SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
                                             pPage,
                                             pPage->GetUppBorder(),
                                             pPage->GetLwrBorder(),
@@ -722,7 +741,7 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
 |* Statuswerte der Lineale bestimmen
 |*
 \************************************************************************/
-void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
+void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 {
     Point aOrigin;
 
@@ -765,7 +784,7 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
 
     aMarkRect = pDrView->GetAllMarkedRect();
 
-    const sal_Bool bRTL = pDoc && pDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
+    const sal_Bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
 
     if( pDrView->HasMarkedObj() )
@@ -775,7 +794,7 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
             SdrObject* pObj = pDrView->GetMarkList().GetMark( 0 )->GetObj();
             if( pObj->GetObjInventor() == SdrInventor)
             {
-                SfxItemSet aEditAttr( pDoc->GetPool() );
+                SfxItemSet aEditAttr( GetDoc()->GetPool() );
                 pDrView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( ITEMID_TABSTOP ) >= SFX_ITEM_AVAILABLE )
                 {
@@ -874,7 +893,7 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-void  SdDrawViewShell::ExecStatusBar(SfxRequest& rReq)
+void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual &&
@@ -907,11 +926,12 @@ void  SdDrawViewShell::ExecStatusBar(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void  SdDrawViewShell::GetSnapItemState( SfxItemSet &rSet )
+void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 {
     SdrPageView* pPV;
     Point   aMPos = pWindow->PixelToLogic(aMousePos);
-    USHORT  nHitLog = (USHORT) pWindow->PixelToLogic(Size(HITPIX,0)).Width();
+    USHORT  nHitLog = (USHORT) pWindow->PixelToLogic(
+        Size(FuPoor::HITPIX,0)).Width();
     USHORT  nHelpLine;
 
     if ( pDrView->PickHelpLine(aMPos, nHitLog, *pWindow, nHelpLine, pPV) )
@@ -942,7 +962,7 @@ void  SdDrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::AddWindow(SdWindow* pWin)
+void DrawViewShell::AddWindow (::sd::Window* pWin)
 {
     pDrView->AddWin(pWin);
 }
@@ -953,9 +973,9 @@ void SdDrawViewShell::AddWindow(SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::RemoveWindow(SdWindow* pWin)
+void DrawViewShell::RemoveWindow(::sd::Window* pWin)
 {
     pDrView->DelWin(pWin);
 }
 
-
+} // end of namespace sd
