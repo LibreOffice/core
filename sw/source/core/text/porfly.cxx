@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
+ *  last change: $Author: fme $ $Date: 2002-03-19 09:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
 {
     // Note: rBase is an absolute value
     SWAP_IF_SWAPPED( (&rFrm ) )
+    SWRECTFN( (&rFrm ) )
 #else
 void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     long nLnDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags )
@@ -465,42 +466,75 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     else
     {
         aBoundRect = GetFlyFrm()->Frm();
+#ifdef VERTICAL_LAYOUT
+        nOldWidth = (aBoundRect.*fnRect->fnGetWidth)();
+#else
         nOldWidth = aBoundRect.Width();
+#endif
     }
 
 #ifdef VERTICAL_LAYOUT
+    long nLRSpaceLeft, nLRSpaceRight, nULSpaceUpper, nULSpaceLower;
     if ( rFrm.IsVertical() )
     {
-        // seems to be easier to do it all the horizontal way
+        // Seems to be easier to do it all the horizontal way
+        // So, from now on thinks horizontal.
         rFrm.SwitchVerticalToHorizontal( aBoundRect );
         rFrm.SwitchVerticalToHorizontal( aBase );
+
+        // convert the spacing values
+        nLRSpaceLeft = rULSpace.GetUpper();
+        nLRSpaceRight = rULSpace.GetLower();
+        nULSpaceUpper = rLRSpace.GetRight();
+        nULSpaceLower = rLRSpace.GetLeft();
     }
-#endif
+    else
+    {
+        nLRSpaceLeft = rLRSpace.GetLeft();
+        nLRSpaceRight = rLRSpace.GetRight();
+        nULSpaceUpper = rULSpace.GetUpper();
+        nULSpaceLower = rULSpace.GetLower();
+    }
 
     if( nFlags & SETBASE_ULSPACE )
-        aBase.X() += rLRSpace.GetLeft();
-    aBase.Y() += rULSpace.GetUpper();
+        aBase.X() += nLRSpaceLeft;
+    aBase.Y() += nULSpaceUpper;
+
     if( bDraw )
     {
-#ifdef VERTICAL_LAYOUT
         SwRect aSnapRect = pSdrObj->GetSnapRect();
         if ( rFrm.IsVertical() )
             rFrm.SwitchVerticalToHorizontal( aSnapRect );
-#endif
 
         if( nFlags & SETBASE_ULSPACE )
-#ifdef VERTICAL_LAYOUT
             aBase.X() += aSnapRect.Left() - aBoundRect.Left();
         aBase.Y() += aSnapRect.Top() - aBoundRect.Top();
+    }
+
+    aBoundRect.Left( aBoundRect.Left() - nLRSpaceLeft );
+    aBoundRect.Width( aBoundRect.Width() + nLRSpaceRight );
+    aBoundRect.Top( aBoundRect.Top() - nULSpaceUpper );
+    aBoundRect.Height( aBoundRect.Height() + nULSpaceLower );
+
 #else
+    if( nFlags & SETBASE_ULSPACE )
+        aBase.X() += rLRSpace.GetLeft();
+    aBase.Y() += rULSpace.GetUpper();
+
+    if( bDraw )
+    {
+        if( nFlags & SETBASE_ULSPACE )
             aBase.X() += pSdrObj->GetSnapRect().Left() - aBoundRect.Left();
         aBase.Y() += pSdrObj->GetSnapRect().Top() - aBoundRect.Top();
-#endif
     }
+
     aBoundRect.Left( aBoundRect.Left() - rLRSpace.GetLeft() );
     aBoundRect.Width( aBoundRect.Width() + rLRSpace.GetRight() );
     aBoundRect.Top( aBoundRect.Top() - rULSpace.GetUpper() );
     aBoundRect.Height( aBoundRect.Height() + rULSpace.GetLower() );
+
+#endif
+
     SwTwips nBoundHeight = ( nFlags & SETBASE_ROTATE ) ?
                             aBoundRect.Width() : aBoundRect.Height();
     SwTwips nRelPos = 0;
@@ -603,22 +637,16 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
             }
 
             pSdrObj->ImpSetAnchorPos( aAnchorBase );
-#else
-            Point aDiff = aRelPos + aBase - pSdrObj->GetSnapRect().TopLeft();
-            pSdrObj->ImpSetAnchorPos( aBase );
-#endif
+
             // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
             pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );
         }
-#ifdef VERTICAL_LAYOUT
+
         if ( rFrm.IsVertical() )
             rFrm.SwitchHorizontalToVertical( aBase );
-#endif
     }
     else
     {
-
-#ifdef VERTICAL_LAYOUT
         Point aRelAttr;
         if ( rFrm.IsVertical() )
         {
@@ -629,6 +657,15 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         else
             aRelAttr = Point( 0, nRelPos );
 #else
+            Point aDiff = aRelPos + aBase - pSdrObj->GetSnapRect().TopLeft();
+            pSdrObj->ImpSetAnchorPos( aBase );
+
+            // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
+            pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );
+        }
+    }
+    else
+    {
         Point aRelAttr( 0, nRelPos );
 #endif
 
@@ -636,6 +673,19 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
                          aRelAttr != GetFlyFrm()->GetCurRelPos()) )
         {
             GetFlyFrm()->SetRefPoint( aBase, aRelAttr, aRelPos );
+#ifdef VERTICAL_LAYOUT
+            if( nOldWidth != (GetFlyFrm()->Frm().*fnRect->fnGetWidth)() )
+            {
+                aBoundRect = GetFlyFrm()->Frm();
+                aBoundRect.Left( aBoundRect.Left() - rLRSpace.GetLeft() );
+                aBoundRect.Width( aBoundRect.Width() + rLRSpace.GetRight() );
+                aBoundRect.Top( aBoundRect.Top() - rULSpace.GetUpper() );
+                aBoundRect.Height( aBoundRect.Height() + rULSpace.GetLower() );
+            }
+        }
+        ASSERT( (GetFlyFrm()->Frm().*fnRect->fnGetHeight)(),
+            "SwFlyCntPortion::SetBase: flyfrm has an invalid height" );
+#else
             if( nOldWidth != GetFlyFrm()->Frm().Width() )
             {
                 aBoundRect = GetFlyFrm()->Frm();
@@ -647,6 +697,7 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         }
         ASSERT( GetFlyFrm()->Frm().Height(),
             "SwFlyCntPortion::SetBase: flyfrm has an invalid height" );
+#endif
     }
     aRef = aBase;
     if( nFlags & SETBASE_ROTATE )

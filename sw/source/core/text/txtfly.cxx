@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 16:44:09 $
+ *  last change: $Author: fme $ $Date: 2002-03-19 09:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,9 +616,20 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
 
 #ifdef VERTICAL_LAYOUT
     SwRect aLineVert( aLine );
+#ifdef BIDI
+    if ( pFrm->IsRightToLeft() )
+        pFrm->SwitchLTRtoRTL( aLineVert );
+#endif
+
     if ( pFrm->IsVertical() )
         pFrm->SwitchHorizontalToVertical( aLineVert );
     SwRect aInter( pTxtFly->GetFrm( aLineVert ) );
+
+#ifdef BIDI
+    if ( pFrm->IsRightToLeft() )
+        pFrm->SwitchRTLtoLTR( aInter );
+#endif
+
     if ( pFrm->IsVertical() )
         pFrm->SwitchVerticalToHorizontal( aInter );
 #else
@@ -1671,33 +1682,19 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         }
         XPolyPolygon aXPoly;
         XPolyPolygon *pXPoly = NULL;
-#ifdef VERTICAL_LAYOUT
-        sal_Bool bVert = sal_False;
-#endif
         if ( pObj->IsWriterFlyFrame() )
         {
             // Vorsicht #37347: Das GetContour() fuehrt zum Laden der Grafik,
             // diese aendert dadurch ggf. ihre Groesse, ruft deshalb ein
             // ClrObject() auf.
             PolyPolygon aPoly;
-#ifdef VERTICAL_LAYOUT
-            SwFlyFrm* pObjFrm = ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm();
-            if( ! pObjFrm->GetContour( aPoly ) )
-                aPoly = PolyPolygon( pObjFrm->Frm().SVRect() );
-            bVert = pObjFrm->IsVertical();
-#else
             if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
                 aPoly = PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
                                      GetFlyFrm()->Frm().SVRect() );
-#endif
             aXPoly = XPolyPolygon( aPoly );
         }
         else
         {
-#ifdef VERTICAL_LAYOUT
-            SwFrm* pObjFrm = ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchor();
-            bVert = pObjFrm->IsVertical();
-#endif
             if( !pObj->ISA( E3dObject ) )
                 pObj->TakeXorPoly( aXPoly, sal_True );
             pXPoly = new XPolyPolygon();
@@ -1710,33 +1707,16 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         pSdrObj[ 0 ] = pObj; // Wg. #37347 darf das Object erst nach dem
                              // GetContour() eingetragen werden.
 #ifdef VERTICAL_LAYOUT
-        if ( bVert )
-        {
-            pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
-                rULSpace.GetLower(), rULSpace.GetUpper(),
-                pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
-
-            pTextRanger[ 0 ]->SetUpper( (USHORT)rLRSpace.GetLeft() );
-            pTextRanger[ 0 ]->SetLower( (USHORT)rLRSpace.GetRight() );
-        }
-        else
-        {
-            pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
-                (USHORT)rLRSpace.GetLeft(), (USHORT)rLRSpace.GetRight(),
-                pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
-
-            pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
-            pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
-        }
-
+        pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
+            (USHORT)rLRSpace.GetLeft(), (USHORT)rLRSpace.GetRight(),
+            pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
 #else
         pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
             rLRSpace.GetLeft(), rLRSpace.GetRight(),
             pFmt->GetSurround().IsOutside(), sal_False );
-
+#endif
         pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
         pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
-#endif
 
         delete pXPoly;
         // UPPER_LOWER_TEST
