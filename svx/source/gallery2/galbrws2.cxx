@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:18:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,8 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     const Link  aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
     Font        aInfoFont( maInfoBar.GetControlFont() );
 
+    maMiscOptions.AddListener( LINK( this, GalleryBrowser2, MiscHdl ) );
+
     maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_ICON, TIB_RADIOCHECK | TIB_AUTOCHECK );
     maViewBox.SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
@@ -360,8 +362,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     maViewBox.SetQuickHelpText( TBX_ID_LIST, String( GAL_RESID( RID_SVXSTR_GALLERY_LISTVIEW ) ) );
 
     maViewBox.SetBorder( 0, 1 );
-    maViewBox.SetOutStyle( TOOLBOX_STYLE_FLAT );
-    maViewBox.SetPosSizePixel( Point(), maViewBox.CalcWindowSizePixel() );
+    MiscHdl( NULL );
     maViewBox.SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );
     maViewBox.Show();
 
@@ -380,6 +381,8 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
 
 GalleryBrowser2::~GalleryBrowser2()
 {
+    maMiscOptions.RemoveListener( LINK( this, GalleryBrowser2, MiscHdl ) );
+
     delete mpPreview;
     delete mpListView;
     delete mpIconView;
@@ -392,13 +395,7 @@ GalleryBrowser2::~GalleryBrowser2()
 
 void GalleryBrowser2::InitSettings()
 {
-    BOOL  bHC = GALLERY_DLG_COLOR.IsDark();
-    Image aIconImage( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) );
-    Image aListImage( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) );
     Font  aInfoFont( maInfoBar.GetControlFont() );
-
-    maViewBox.SetItemImage( TBX_ID_ICON, aIconImage );
-    maViewBox.SetItemImage( TBX_ID_LIST, aListImage );
 
     aInfoFont.SetWeight( WEIGHT_BOLD );
     aInfoFont.SetColor( GALLERY_FG_COLOR );
@@ -1237,6 +1234,42 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
         SetMode( GALLERYBROWSERMODE_ICON );
     else if( pBox->GetCurItemId() == TBX_ID_LIST )
         SetMode( GALLERYBROWSERMODE_LIST );
+
+    return 0L;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( GalleryBrowser2, MiscHdl, void*, p )
+{
+    sal_uInt16      nIconResId, nListResId;
+    sal_Int16       eOptSymbolSet = maMiscOptions.GetSymbolSet();
+    const sal_Bool  bHC = GALLERY_DLG_COLOR.IsDark();
+
+    if( SFX_SYMBOLS_AUTO == eOptSymbolSet )
+    {
+        eOptSymbolSet = ( Application::GetSettings().GetStyleSettings().GetToolbarIconSize() == STYLE_TOOLBAR_ICONSIZE_LARGE ) ?
+                        SFX_SYMBOLS_LARGE : SFX_SYMBOLS_SMALL;
+    }
+
+    maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
+
+    BitmapEx aIconBmpEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
+    BitmapEx aListBmpEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
+
+    if( SFX_SYMBOLS_SMALL != eOptSymbolSet )
+    {
+        const Size aLargeSize( 24, 24);
+
+        aIconBmpEx.Scale( aLargeSize );
+        aListBmpEx.Scale( aLargeSize );
+    }
+
+    maViewBox.SetItemImage( TBX_ID_ICON, aIconBmpEx );
+    maViewBox.SetItemImage( TBX_ID_LIST, aListBmpEx );
+    maViewBox.SetSizePixel( maViewBox.CalcWindowSizePixel() );
+
+    Resize();
 
     return 0L;
 }
