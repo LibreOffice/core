@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
+ *  last change: $Author: dl $ $Date: 2001-03-23 12:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@
 #include <svx/numitem.hxx>
 #endif
 
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
+#endif
+
 #ifndef _SD_STLSHEET_HXX
 #include "stlsheet.hxx"
 #endif
@@ -173,7 +177,7 @@ SdDrawView::SdDrawView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
 |*
 \************************************************************************/
 
-__EXPORT SdDrawView::~SdDrawView()
+SdDrawView::~SdDrawView()
 {
     nMagic = 0;
     delete pVDev;
@@ -188,7 +192,7 @@ __EXPORT SdDrawView::~SdDrawView()
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawView::MarkListHasChanged()
+void SdDrawView::MarkListHasChanged()
 {
     SdView::MarkListHasChanged();
 
@@ -202,7 +206,7 @@ void __EXPORT SdDrawView::MarkListHasChanged()
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawView::ModelHasChanged()
+void SdDrawView::ModelHasChanged()
 {
     SdView::ModelHasChanged();
 
@@ -255,7 +259,7 @@ void __EXPORT SdDrawView::ModelHasChanged()
 |*
 \************************************************************************/
 
-BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
+BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
                                             BOOL bReplaceAll)
 {
     BOOL bOk = FALSE;
@@ -264,18 +268,13 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
     if ( pDrawViewShell && pDrawViewShell->GetEditMode() == EM_MASTERPAGE )
     {
         SfxStyleSheetBasePool* pStShPool = pDoc->GetStyleSheetPool();
-
-        SdPage* pPage = (SdPage*)pDrawViewShell->GetActualPage()->
-                                                    GetMasterPage(0);
+        SdPage* pPage = (SdPage*)pDrawViewShell->GetActualPage()->GetMasterPage(0);
         String aLayoutName = pPage->GetName();
-
         SdrTextObj* pObject = (SdrTextObj*)GetTextEditObject();
 
-        /*********************************************************************
-        |* ein Textobjekt wird editiert
-        \********************************************************************/
         if (pObject)
         {
+            // Textedit
             String aTemplateName(aLayoutName);
 
             UINT32 nInv = pObject->GetObjInventor();
@@ -283,36 +282,30 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
             if (nInv == SdrInventor)
             {
                 UINT16 eObjKind = pObject->GetObjIdentifier();
+                PresObjKind ePresObjKind = pPage->GetPresObjKind(pObject);
 
-                /*****************************************************************
-                |* Titeltext wird editiert
-                \****************************************************************/
-                if (eObjKind == OBJ_TITLETEXT)
+                if ( ePresObjKind == PRESOBJ_TITLE ||
+                     ePresObjKind == PRESOBJ_NOTES )
                 {
-                    SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(
-                                                                    PRESOBJ_TITLE);
+                    // Presentation object (except outline)
+                    SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj( ePresObjKind );
                     DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
 
-                    // Undo-Action
-                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                            (pDoc, pSheet, &rSet);
-                    pDocSh->GetUndoManager()->AddUndoAction(pAction);
-
-                    // temp. Set anlegen, in dem die INVALIDS auf NULL-Pointer
-                    // zurueckgesetzt werden koennen (sonst landen INVALIDs
-                    // oder Pointer auf die DefaultItems in der Vorlage)
-                    SfxItemSet aTempSet(rSet);
+                    SfxItemSet aTempSet( pSheet->GetItemSet() );
+                    aTempSet.Put( rSet );
                     aTempSet.ClearInvalidItems();
+
+                    // Undo-Action
+                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
+                    pDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                     pSheet->GetItemSet().Put(aTempSet);
                     pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                     bOk = TRUE;
                 }
-                /*****************************************************************
-                |* Gliederungstext wird editiert
-                \****************************************************************/
                 else if (eObjKind == OBJ_OUTLINETEXT)
                 {
+                    // Presentation object outline
                     OutlinerView* pOV   = GetTextEditOutlinerView();
                     Outliner* pOutliner = pOV->GetOutliner();
                     List*         pList = (List*)pOV->CreateSelectionList();
@@ -328,7 +321,7 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
                     aComment.Insert( String((SdResId(STR_PSEUDOSHEET_OUTLINE))), nPos);
                     pDocSh->GetUndoManager()->EnterListAction( aComment, String() );
 
-                    Paragraph* pPara = (Paragraph*)pList->First();
+                    Paragraph* pPara = (Paragraph*)pList->Last();
                     while (pPara)
                     {
                         ULONG nParaPos = pOutliner->GetAbsPos( pPara );
@@ -336,27 +329,15 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
                         String aName(pPage->GetLayoutName());
                         aName += (sal_Unicode)(' ');
                         aName += String::CreateFromInt32( (sal_Int32)nDepth );
-                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->
-                                            Find(aName, SD_LT_FAMILY);
+                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_LT_FAMILY);
                         DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
 
-                        SfxItemSet aTempSet( rSet );
+                        SfxItemSet aTempSet( pSheet->GetItemSet() );
+                        aTempSet.Put( rSet );
+                        aTempSet.ClearInvalidItems();
+
                         if( nDepth > 1 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
                         {
-                            SvxNumRule aRule(*((SvxNumBulletItem*)aTempSet.GetItem(EE_PARA_NUMBULLET))->GetNumRule());
-
-                            String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
-                            aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ));
-                            SfxStyleSheetBase* pFirstStyleSheet = pStShPool->Find( aStyleName, SFX_STYLE_FAMILY_PSEUDO);
-
-                            DBG_ASSERT(pFirstStyleSheet, "Ich brauche die Vorlage Gliederung 1!" );
-                            if(pFirstStyleSheet)
-                            {
-                                pFirstStyleSheet->GetItemSet().Put( SvxNumBulletItem( aRule, EE_PARA_NUMBULLET ));
-                                SdStyleSheet* pRealSheet = ((SdStyleSheet*)pFirstStyleSheet)->GetRealStyleSheet();
-                                pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                            }
-
                             // Kein SvxNumBulletItem in Gliederungsebenen 2 bis 9!
                             aTempSet.ClearItem( EE_PARA_NUMBULLET );
                         }
@@ -365,25 +346,14 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
                         StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
                         pDocSh->GetUndoManager()->AddUndoAction(pAction);
 
-                        // aTempSet: in dem die INVALIDS auf NULL-Pointer
-                        // zurueckgesetzt werden koennen (sonst landen INVALIDs
-                        // oder Pointer auf die DefaultItems in der Vorlage; beides
-                        // wuerde die Attribut-Vererbung unterbinden)
-                        aTempSet.ClearInvalidItems();
-
-                        // nur die gueltigen Anteile des BulletItems
-                        if (aTempSet.GetItemState(EE_PARA_BULLET) == SFX_ITEM_SET)
-                        {
-                            SvxBulletItem aOldBulItem((SvxBulletItem&)pSheet->GetItemSet().Get(EE_PARA_BULLET));
-                            SvxBulletItem& rNewBulItem = (SvxBulletItem&)aTempSet.Get(EE_PARA_BULLET);
-                            aOldBulItem.CopyValidProperties(rNewBulItem);
-                            aTempSet.Put(aOldBulItem);
-                        }
-
                         pSheet->GetItemSet().Put(aTempSet);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 
-                        pPara = (Paragraph*)pList->Next();
+                        pPara = (Paragraph*)pList->Prev();
+
+                        if( !pPara && nDepth > 1 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
+                            pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( (Paragraph*) pList->First() ) ) > 1 )
+                            pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                     }
 
                     pDocSh->SetWaitCursor( FALSE );
@@ -394,46 +364,15 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
                     delete pList;
                     bOk = TRUE;
                 }
-                /*****************************************************************
-                |* Notizentext wird editiert
-                \****************************************************************/
-                else if (pPage->GetPresObjKind(pObject) == PRESOBJ_NOTES)
-                {
-                    SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(
-                                                                    PRESOBJ_NOTES);
-                    DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
-
-                    // Undo-Action
-                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                            (pDoc, pSheet, &rSet);
-                    pDocSh->GetUndoManager()->AddUndoAction(pAction);
-
-                    // temp. Set anlegen, in dem die INVALIDS auf NULL-Pointer
-                    // zurueckgesetzt werden koennen (sonst landen INVALIDs
-                    // oder Pointer auf die DefaultItems in der Vorlage)
-                    SfxItemSet aTempSet(rSet);
-                    aTempSet.ClearInvalidItems();
-
-                    pSheet->GetItemSet().Put(aTempSet);
-                    pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                    bOk = TRUE;
-
-                }
-                /*****************************************************************
-                |* irgendwas anderes: ab in die Basisklasse
-                \****************************************************************/
                 else
                 {
                     bOk = SdView::SetAttributes(rSet, bReplaceAll);
                 }
             }
         }
-
-        /*********************************************************************
-        |* ein oder mehrere Objekte sind selektiert
-        \********************************************************************/
         else
         {
+            // Selection
             const SdrMarkList& rList = GetMarkList();
             ULONG nMarkCount         = rList.GetMarkCount();
             SdrObject* pObject = NULL;
@@ -445,41 +384,34 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
                 if (nInv == SdrInventor)
                 {
                     UINT16 eObjKind = pObject->GetObjIdentifier();
-
+                    PresObjKind ePresObjKind = pPage->GetPresObjKind(pObject);
                     String aTemplateName(aLayoutName);
 
-                    /*****************************************************************
-                    |* Titeltext
-                    \****************************************************************/
-                    if (eObjKind == OBJ_TITLETEXT)
+                    if (ePresObjKind == PRESOBJ_TITLE ||
+                        ePresObjKind == PRESOBJ_NOTES ||
+                        ePresObjKind == PRESOBJ_BACKGROUND)
                     {
-                        SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(
-                                                                    PRESOBJ_TITLE);
-                        DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
+                        // Presentation object (except outline)
+                        SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj( ePresObjKind );
+                        DBG_ASSERT(pSheet, "StyleSheet not found");
+
+                        SfxItemSet aTempSet( pSheet->GetItemSet() );
+                        aTempSet.Put( rSet );
+                        aTempSet.ClearInvalidItems();
 
                         // Undo-Action
-                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                        (pDoc, pSheet, &rSet);
+                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
                         pDocSh->GetUndoManager()->AddUndoAction(pAction);
-
-                        // temp. Set anlegen, in dem die INVALIDS auf NULL-Pointer
-                        // zurueckgesetzt werden koennen (sonst landen INVALIDs
-                        // oder Pointer auf die DefaultItems in der Vorlage)
-                        SfxItemSet aTempSet(rSet);
-                        aTempSet.ClearInvalidItems();
 
                         pSheet->GetItemSet().Put(aTempSet);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         bOk = TRUE;
                     }
-                    /*****************************************************************
-                    |* Gliederungstext
-                    \****************************************************************/
                     else if (eObjKind == OBJ_OUTLINETEXT)
                     {
-                        SfxItemSet aTempSet(rSet);
+                        // Presentation object outline
                         aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
-                        for (USHORT nLevel = 1; nLevel < 10; nLevel++)
+                        for (USHORT nLevel = 9; nLevel == 10; nLevel--)
                         {
                             String aName(pPage->GetLayoutName());
                             aName += (sal_Unicode)(' ');
@@ -487,6 +419,10 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
                             SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->
                                                 Find(aName, SD_LT_FAMILY);
                             DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
+
+                            SfxItemSet aTempSet( pSheet->GetItemSet() );
+                            aTempSet.Put( rSet );
+                            aTempSet.ClearInvalidItems();
 
                             if( nLevel > 1 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
                                 // Kein SvxNumBulletItem in Gliederungsebenen 2 bis 9!
@@ -496,64 +432,10 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
                             StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
                             pDocSh->GetUndoManager()->AddUndoAction(pAction);
 
-                            // aTempSet: in dem die INVALIDS auf NULL-Pointer
-                            // zurueckgesetzt werden koennen (sonst landen INVALIDs
-                            // oder Pointer auf die DefaultItems in der Vorlage)
-                            aTempSet.ClearInvalidItems();
-
                             pSheet->GetItemSet().Put(aTempSet);
                             pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
                         bOk = TRUE;
-                    }
-                    /*****************************************************************
-                    |* Hintergrundobjekt
-                    \****************************************************************/
-                    else if (pPage->GetPresObjKind(pObject) == PRESOBJ_BACKGROUND)
-                    {
-                        SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(
-                                                            PRESOBJ_BACKGROUND);
-                        DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
-
-                        // Undo-Action
-                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                        (pDoc, pSheet, &rSet);
-                        pDocSh->GetUndoManager()->AddUndoAction(pAction);
-
-                        // temp. Set anlegen, in dem die INVALIDS auf NULL-Pointer
-                        // zurueckgesetzt werden koennen (sonst landen INVALIDs
-                        // oder Pointer auf die DefaultItems in der Vorlage)
-                        SfxItemSet aTempSet(rSet);
-                        aTempSet.ClearInvalidItems();
-
-                        pSheet->GetItemSet().Put(aTempSet);
-                        pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                        bOk = TRUE;
-                    }
-                    /*****************************************************************
-                    |* Notizentext
-                    \****************************************************************/
-                    else if (pPage->GetPresObjKind(pObject) == PRESOBJ_NOTES)
-                    {
-                        SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(
-                                                                    PRESOBJ_NOTES);
-                        DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
-
-                        // Undo-Action
-                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                            (pDoc, pSheet, &rSet);
-                        pDocSh->GetUndoManager()->AddUndoAction(pAction);
-
-                        // temp. Set anlegen, in dem die INVALIDS auf NULL-Pointer
-                        // zurueckgesetzt werden koennen (sonst landen INVALIDs
-                        // oder Pointer auf die DefaultItems in der Vorlage)
-                        SfxItemSet aTempSet(rSet);
-                        aTempSet.ClearInvalidItems();
-
-                        pSheet->GetItemSet().Put(aTempSet);
-                        pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                        bOk = TRUE;
-
                     }
                 }
             }
@@ -575,7 +457,7 @@ BOOL __EXPORT SdDrawView::SetAttributes(const SfxItemSet& rSet,
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
+void SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                                  const SfxHint& rHint, const TypeId& rHintType)
 {
     if ( pDrawViewShell && rHint.ISA(SdrHint) )
@@ -651,7 +533,7 @@ BOOL SdDrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardA
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void SdDrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
 
     BOOL bMPCache = FALSE;
