@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-07 10:55:03 $
+ *  last change: $Author: pl $ $Date: 2001-11-09 17:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,6 +832,7 @@ ImplTBDragMgr::~ImplTBDragMgr()
 
 ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 {
+#if 0
     // ToolBox suchen
     Point aPos = rRect.Center();
     ToolBox* pBox = mpBoxList->First();
@@ -862,11 +863,18 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 
         pBox = mpBoxList->Next();
     }
-
-    pBox = mpBoxList->First();
+#endif
+    ToolBox* pBox = mpBoxList->First();
     while ( pBox )
     {
-        if ( pBox->IsReallyVisible() )
+        /*
+         *  FIXME: since we can have multiple frames now we cannot
+         *  find the drag target by its position alone.
+         *  As long as the toolbar config dialogue is not a system window
+         *  this works in one frame only anyway. If the dialogue
+         *  changes to a system window, we need a new implementation here
+         */
+        if ( pBox->IsReallyVisible() && pBox->mpFrame == mpDragBox->mpFrame )
         {
             if ( !pBox->IsFloatingMode() )
             {
