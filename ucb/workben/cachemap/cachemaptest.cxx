@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachemaptest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-11 13:03:12 $
+ *  last change: $Author: sb $ $Date: 2001-06-26 09:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,11 +183,7 @@ sal_uInt32 test(Obj *)
 
 }
 
-int
-#if defined WNT
-__cdecl
-#endif // WNT
-main()
+int main()
 {
     // Use the second set of measurements, to avoid startup inaccuracies:
     for (int i = 0; i < 2; ++i)
