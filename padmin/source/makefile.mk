@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
+#   last change: $Author: pl $ $Date: 2001-06-20 08:49:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,12 @@ RESLIB1DEPN=\
     filedlg2.src	\
     rtsetup.src		\
     rtsetup.hrc
-RESLIB1BMPS=butter.bmp
+RESLIB1BMPS=\
+    butter.bmp		\
+    fax.bmp			\
+    pdf.bmp			\
+    print.bmp		\
+    printer_large.bmp
 
 SLOFILES=\
     $(SLO)$/padialog.obj		\
