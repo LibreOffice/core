@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-20 18:03:39 $
+ *  last change: $Author: mba $ $Date: 2001-11-27 09:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,6 +726,18 @@ BasicManager* SfxApplication::GetBasicManager()
         Any aDialogCont;
         aDialogCont <<= xDialogCont;
         xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("DialogLibraries"), aDialogCont );
+        pBas->Insert( xUnoObj );
+
+        Any aAny;
+        SfxObjectShell* pDoc = SfxObjectShell::Current();
+        if ( pDoc )
+        {
+            Reference< XInterface > xInterface ( pDoc->GetModel(), UNO_QUERY );
+            aAny <<= xInterface;
+        }
+
+        xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
+        xUnoObj->SetFlag( SBX_DONTSTORE );
         pBas->Insert( xUnoObj );
 
         // Konstanten
