@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CwsConfig.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 15:11:32 $
+#   last change: $Author: hr $ $Date: 2004-10-11 13:46:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -354,6 +354,7 @@ sub split_root
     }
 
     my ($dummy, $method, $id_at_host, $repository) = split(/:/, $root);
+    $repository =~ s/^\d*//;
     my ($id, $server);
     if ( $id_at_host ) {
         ($id, $server) = split(/@/, $id_at_host);
