@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:32 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1209,8 +1209,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 sal_Bool    bFinal      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
                 sal_Int32  nRecordCount= ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_ROWCOUNT));
 
-                if ( bFinal && (sal_Int32)nRecord >= nRecordCount )
-                    nRecord = nRecordCount - 1;
+                if ( bFinal && (sal_Int32)nRecord > nRecordCount )
+                    nRecord = nRecordCount;
 
                 if (GetImpl()->SaveModified(GetImpl()->getNavController()))
                     DO_SAFE( xCursor->absolute(nRecord); );
