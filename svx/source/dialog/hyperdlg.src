@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-12 22:48:42 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 20:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "Typ av hyperl�nk";
         Text[ polish ] = "Rodzaj hiper��cza";
         Text[ portuguese_brazilian ] = "Link Typ";
-        Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸの種類";
+        Text[ japanese ] = "ハイパーリンクの種類";
         Text[ korean ] = "하이퍼링크의 종류";
         Text[ chinese_simplified ] = "超链接的类型";
         Text[ chinese_traditional ] = "捷徑類型";
@@ -130,7 +130,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "~Internet";
         Text[ polish ] = "~Internet";
         Text[ portuguese_brazilian ] = "~Internet";
-        Text[ japanese ] = "ｲﾝﾀｰﾈｯﾄ(~I)";
+        Text[ japanese ] = "インターネット(~I)";
         Text[ korean ] = "인터넷(~I)";
         Text[ chinese_simplified ] = "国际互联网(~I)";
         Text[ chinese_traditional ] = "~Internet";
@@ -212,7 +212,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "M�~l";
         Text[ polish ] = "Cel";
         Text[ portuguese_brazilian ] = "T~arget";
-        Text[ japanese ] = "ﾀｰｹﾞｯﾄ(~G)";
+        Text[ japanese ] = "ターゲット(~G)";
         Text[ korean ] = "대상(~G)";
         Text[ chinese_simplified ] = "跳跃的目标(~G)";
         Text[ chinese_traditional ] = "跳躍的目標(~G)";
@@ -239,14 +239,14 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "~Loginnamn";
         Text[ polish ] = "Wej�cie do systemu";
         Text[ portuguese_brazilian ] = "~Loginname";
-        Text[ japanese ] = "ﾛｸﾞｲﾝ名(~L)";
+        Text[ japanese ] = "ログイン名(~L)";
         Text[ korean ] = "로그인 이름(~L)";
         Text[ chinese_simplified ] = "登录名(~L)";
         Text[ chinese_traditional ] = "使用者(~L)";
         Text[ arabic ] = "��� �������";
         Text[ turkish ] = "~Oturum a�ma ad�";
         Text[ catalan ] = "~Login";
-        Text[ finnish ] = "~K?ytt?j?tunnus";
+        Text[ finnish ] = "~K�ytt�j�tunnus";
     };
     Edit ED_LOGIN
     {
@@ -272,7 +272,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "L�sen~ord";
         Text[ polish ] = "Has�o";
         Text[ portuguese_brazilian ] = "~Password";
-        Text[ japanese ] = "ﾊﾟｽﾜｰﾄﾞ(~P)";
+        Text[ japanese ] = "パスワード(~P)";
         Text[ korean ] = "패스워드(~P)";
         Text[ chinese_simplified ] = "密码(~P)";
         Text[ chinese_traditional ] = "密碼(~P)";
@@ -308,7 +308,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "Anonym anv�ndare";
         Text[ polish ] = "Anonimowy u�ytkownik";
         Text[ portuguese_brazilian ] = "Anonymous ~user";
-        Text[ japanese ] = "匿名のﾕｰｻﾞｰ(~U)";
+        Text[ japanese ] = "匿名のユーザー(~U)";
         Text[ korean ] = "익명의 사용자(~U)";
         Text[ chinese_simplified ] = "匿名使用者(~U)";
         Text[ chinese_traditional ] = "匿名使用者(~U)";
@@ -316,7 +316,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ turkish ] = "Anonim ~kullan�c�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usuario ~an�nimo";
-        Text[ finnish ] = "Tuntematon ~k?ytt?j?";
+        Text[ finnish ] = "Tuntematon ~k�ytt�j�";
     };
     ImageButton BTN_BROWSE
     {
@@ -342,7 +342,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ swedish ] = "Webbl�sare";
         QuickHelpText[ polish ] = "Przegl�darka WWW";
         QuickHelpText[ portuguese_brazilian ] = "Browse";
-        QuickHelpText[ japanese ] = "WWWﾌﾞﾗｳｻﾞ";
+        QuickHelpText[ japanese ] = "WWWブラウザ";
         QuickHelpText[ korean ] = "브라우즈";
         QuickHelpText[ chinese_simplified ] = "万维网浏览器";
         QuickHelpText[ chinese_traditional ] = "WWW 瀏覽器";
@@ -375,7 +375,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ swedish ] = "M�l i dokumentet";
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target";
-        QuickHelpText[ japanese ] = "ﾄﾞｷｭﾒﾝﾄにあるﾀｰｹﾞｯﾄ";
+        QuickHelpText[ japanese ] = "ドキュメントにあるターゲット";
         QuickHelpText[ korean ] = "문서 내 대상";
         QuickHelpText[ chinese_simplified ] = "目标";
         QuickHelpText[ chinese_traditional ] = "文件內的目標";
@@ -396,7 +396,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     Text[ swedish ] = "Hyperl�nk";
     Text[ polish ] = "Hiper��cze";
     Text[ portuguese_brazilian ] = "Hyperlink";
-    Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸ";
+    Text[ japanese ] = "ハイパーリンク";
     Text[ korean ] = "하이퍼링크";
     Text[ chinese_simplified ] = "超链接";
     Text[ chinese_traditional ] = "超連結";
@@ -448,7 +448,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "~Ram";
         Text[ polish ] = "Ramka";
         Text[ portuguese_brazilian ] = "F~rame";
-        Text[ japanese ] = "ﾌﾚｰﾑ(~R)";
+        Text[ japanese ] = "フレーム(~R)";
         Text[ korean ] = "프레임(~R)";
         Text[ chinese_simplified ] = "框对象(~R)";
         Text[ chinese_traditional ] = "框(~R)";
@@ -484,7 +484,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "F~orm";
         Text[ polish ] = "Forma";
         Text[ portuguese_brazilian ] = "F~orm";
-        Text[ japanese ] = "ﾌｫｰﾑ(~O)";
+        Text[ japanese ] = "フォーム(~O)";
         Text[ korean ] = "양식(~O)";
         Text[ chinese_simplified ] = "方式(~O)";
         Text[ chinese_traditional ] = "方式(~O)";
@@ -579,8 +579,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         };
         StringList [ japanese ] =
         {
-            < "ﾃｷｽﾄ" ; Default ; > ;
-            < "ﾎﾞﾀﾝ" ; Default ; > ;
+            < "テキスト" ; Default ; > ;
+            < "ボタン" ; Default ; > ;
         };
         StringList [ korean ] =
         {
@@ -708,7 +708,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ swedish ] = "H�ndelser";
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
-        QuickHelpText[ japanese ] = "ｲﾍﾞﾝﾄ";
+        QuickHelpText[ japanese ] = "イベント";
         QuickHelpText[ korean ] = "이벤트";
         QuickHelpText[ chinese_simplified ] = "事件";
         QuickHelpText[ chinese_traditional ] = "事件";
@@ -757,14 +757,14 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ swedish ] = "E-post & nyheter";
         Text[ polish ] = "Poczta i wiadomo�ci";
         Text[ portuguese_brazilian ] = "Mail & News";
-        Text[ japanese ] = "ﾒｰﾙとﾆｭｰｽ";
+        Text[ japanese ] = "メールとニュース";
         Text[ korean ] = "메일 & 뉴스";
         Text[ chinese_simplified ] = "电子邮件和新闻组";
         Text[ chinese_traditional ] = "電子郵件和新聞群組";
         Text[ arabic ] = "���� �������� �����";
         Text[ turkish ] = "E-posta ve haber gruplar�";
         Text[ catalan ] = "Correo y noticias";
-        Text[ finnish ] = "S�hk�posti ja uutisryhm�";
+        Text[ finnish ] = "S�hk�posti ja uutisryhm�t";
     };
     RadioButton RB_LINKTYP_MAIL
     {
@@ -792,7 +792,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ turkish ] = "~E-posta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~E-mail";
-        Text[ finnish ] = "~S?hk?osti";
+        Text[ finnish ] = "~S�hk�posti";
     };
     RadioButton RB_LINKTYP_NEWS
     {
@@ -812,7 +812,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ swedish ] = "~Nyheter";
         Text[ polish ] = "wiado~mo�ci";
         Text[ portuguese_brazilian ] = "~News";
-        Text[ japanese ] = "ﾆｭｰｽ(~N)";
+        Text[ japanese ] = "ニュース(~N)";
         Text[ korean ] = "뉴스(~N)";
         Text[ chinese_simplified ] = "新闻(~N)";
         Text[ chinese_traditional ] = "新聞(~N)";
@@ -820,7 +820,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ turkish ] = "~Haber gruplar�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Noticias";
-        Text[ finnish ] = "~Uutisryhm?t";
+        Text[ finnish ] = "~Uutisryhm�t";
     };
     FixedText FT_RECEIVER
     {
@@ -908,7 +908,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ swedish ] = "Datak�llor...";
         QuickHelpText[ polish ] = "�r�d�a danych...";
         QuickHelpText[ portuguese_brazilian ] = "Adressbook";
-        QuickHelpText[ japanese ] = "ﾃﾞｰﾀｿｰｽ...";
+        QuickHelpText[ japanese ] = "データソース...";
         QuickHelpText[ korean ] = "주소록";
         QuickHelpText[ chinese_simplified ] = "通讯簿";
         QuickHelpText[ chinese_traditional ] = "通訊錄...";
@@ -963,7 +963,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ swedish ] = "~Ram";
         Text[ polish ] = "Ramka";
         Text[ portuguese_brazilian ] = "F~rame";
-        Text[ japanese ] = "ﾌﾚｰﾑ(~R)";
+        Text[ japanese ] = "フレーム(~R)";
         Text[ korean ] = "프레임(~R)";
         Text[ chinese_simplified ] = "框对象(~R)";
         Text[ chinese_traditional ] = "框(~R)";
@@ -999,7 +999,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ swedish ] = "F~orm";
         Text[ polish ] = "Forma";
         Text[ portuguese_brazilian ] = "F~orm";
-        Text[ japanese ] = "ﾌｫｰﾑ(~O)";
+        Text[ japanese ] = "フォーム(~O)";
         Text[ korean ] = "양식(~O)";
         Text[ chinese_simplified ] = "方式(~O)";
         Text[ chinese_traditional ] = "方式(~O)";
@@ -1094,8 +1094,8 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         };
         StringList [ japanese ] =
         {
-            < "ﾃｷｽﾄ" ; Default ; > ;
-            < "ﾎﾞﾀﾝ" ; Default ; > ;
+            < "テキスト" ; Default ; > ;
+            < "ボタン" ; Default ; > ;
         };
         StringList [ korean ] =
         {
@@ -1223,7 +1223,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ swedish ] = "H�ndelser";
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
-        QuickHelpText[ japanese ] = "ｲﾍﾞﾝﾄ";
+        QuickHelpText[ japanese ] = "イベント";
         QuickHelpText[ korean ] = "이벤트";
         QuickHelpText[ chinese_simplified ] = "事件";
         QuickHelpText[ chinese_traditional ] = "事件";
@@ -1244,7 +1244,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     Text[ swedish ] = "Hyperl�nk";
     Text[ polish ] = "Hiper��cze";
     Text[ portuguese_brazilian ] = "Hyperlink";
-    Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸ";
+    Text[ japanese ] = "ハイパーリンク";
     Text[ korean ] = "하이퍼링크";
     Text[ chinese_simplified ] = "超链接";
     Text[ chinese_traditional ] = "超連結";
@@ -1289,7 +1289,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "Dokument";
         Text[ polish ] = "Dokument";
         Text[ portuguese_brazilian ] = "Document";
-        Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄ";
+        Text[ japanese ] = "ドキュメント";
         Text[ korean ] = "문서";
         Text[ chinese_simplified ] = "文档";
         Text[ chinese_traditional ] = "文件";
@@ -1317,7 +1317,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "S�~kv�g";
         Text[ polish ] = "�cie�ka";
         Text[ portuguese_brazilian ] = "~Path";
-        Text[ japanese ] = "ﾊﾟｽ(~P)";
+        Text[ japanese ] = "パス(~P)";
         Text[ korean ] = "경로(~P)";
         Text[ chinese_simplified ] = "路径(~P)";
         Text[ chinese_traditional ] = "路徑(~P)";
@@ -1350,7 +1350,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ swedish ] = "�ppna fil";
         QuickHelpText[ polish ] = "Otw�rz plik";
         QuickHelpText[ portuguese_brazilian ] = "Fileopen";
-        QuickHelpText[ japanese ] = "ﾌｧｲﾙを開ける";
+        QuickHelpText[ japanese ] = "ファイルを開ける";
         QuickHelpText[ korean ] = "파일 열기";
         QuickHelpText[ chinese_simplified ] = "打开文件";
         QuickHelpText[ chinese_traditional ] = "開啟舊檔";
@@ -1379,7 +1379,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "M�l i dokumentet";
         Text[ polish ] = "Cel w dokumencie";
         Text[ portuguese_brazilian ] = "Target inside the document";
-        Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄにあるﾀｰｹﾞｯﾄ";
+        Text[ japanese ] = "ドキュメントにあるターゲット";
         Text[ korean ] = "문서내 대상";
         Text[ chinese_simplified ] = "文档之中跳跃的目标";
         Text[ chinese_traditional ] = "文件內的跳躍的目標";
@@ -1406,7 +1406,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "M�~l";
         Text[ polish ] = "Cel";
         Text[ portuguese_brazilian ] = "~Target";
-        Text[ japanese ] = "ﾀｰｹﾞｯﾄ(~E)";
+        Text[ japanese ] = "ターゲット(~E)";
         Text[ korean ] = "대상(~E)";
         Text[ chinese_simplified ] = "跳跃的目标(~E)";
         Text[ chinese_traditional ] = "跳躍的目標(~E)";
@@ -1467,7 +1467,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "Testtext";
         Text[ polish ] = "Tekst pr�bny";
         Text[ portuguese_brazilian ] = "URL";
-        Text[ japanese ] = "ﾃｽﾄﾃｷｽﾄ";
+        Text[ japanese ] = "テストテキスト";
         Text[ korean ] = "URL";
         Text[ chinese_simplified ] = "测试文字";
         Text[ chinese_traditional ] = "測試文";
@@ -1501,7 +1501,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ swedish ] = "M�l i dokumentet";
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target in document";
-        QuickHelpText[ japanese ] = "ﾄﾞｷｭﾒﾝﾄにあるﾀｰｹﾞｯﾄ";
+        QuickHelpText[ japanese ] = "ドキュメントにあるターゲット";
         QuickHelpText[ korean ] = "문서 내 대상";
         QuickHelpText[ chinese_simplified ] = "文档内的目标";
         QuickHelpText[ chinese_traditional ] = "文件之內的目標";
@@ -1556,7 +1556,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "~Ram";
         Text[ polish ] = "Ramka";
         Text[ portuguese_brazilian ] = "F~rame";
-        Text[ japanese ] = "ﾌﾚｰﾑ(~R)";
+        Text[ japanese ] = "フレーム(~R)";
         Text[ korean ] = "프레임(~R)";
         Text[ chinese_simplified ] = "框对象(~R)";
         Text[ chinese_traditional ] = "框(~R)";
@@ -1592,7 +1592,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "F~orm";
         Text[ polish ] = "Forma";
         Text[ portuguese_brazilian ] = "F~orm";
-        Text[ japanese ] = "ﾌｫｰﾑ(~O)";
+        Text[ japanese ] = "フォーム(~O)";
         Text[ korean ] = "양식(~O)";
         Text[ chinese_simplified ] = "方式(~O)";
         Text[ chinese_traditional ] = "方式(~O)";
@@ -1687,8 +1687,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         };
         StringList [ japanese ] =
         {
-            < "ﾃｷｽﾄ" ; Default ; > ;
-            < "ﾎﾞﾀﾝ" ; Default ; > ;
+            < "テキスト" ; Default ; > ;
+            < "ボタン" ; Default ; > ;
         };
         StringList [ korean ] =
         {
@@ -1816,7 +1816,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ swedish ] = "H�ndelser";
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
-        QuickHelpText[ japanese ] = "ｲﾍﾞﾝﾄ";
+        QuickHelpText[ japanese ] = "イベント";
         QuickHelpText[ korean ] = "이벤트";
         QuickHelpText[ chinese_simplified ] = "事件";
         QuickHelpText[ chinese_traditional ] = "事件";
@@ -1836,7 +1836,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     Text[ swedish ] = "Hyperl�nk";
     Text[ polish ] = "Hiper��cze";
     Text[ portuguese_brazilian ] = "Hyperlink";
-    Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸ";
+    Text[ japanese ] = "ハイパーリンク";
     Text[ korean ] = "하이퍼링크";
     Text[ chinese_simplified ] = "超链接";
     Text[ chinese_traditional ] = "超連結";
@@ -1881,7 +1881,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ swedish ] = "Nytt dokument";
         Text[ polish ] = "Nowy dokument";
         Text[ portuguese_brazilian ] = "New document";
-        Text[ japanese ] = "新しいﾄﾞｷｭﾒﾝﾄ";
+        Text[ japanese ] = "新しいドキュメント";
         Text[ korean ] = "새 문서";
         Text[ chinese_simplified ] = "新建文档";
         Text[ chinese_traditional ] = "新增文件";
@@ -1943,7 +1943,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "����� ���� ���";
         Text[ turkish ] = "~Sonra d�zenle";
         Text[ catalan ] = "Edit~ar m�s tarde";
-        Text[ finnish ] = "Muokkaa ~my?emmin";
+        Text[ finnish ] = "Muokkaa ~my�hemmin";
     };
     FixedText FT_PATH_NEWDOC
     {
@@ -1964,7 +1964,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ swedish ] = "~Fil";
         Text[ polish ] = "~Plik";
         Text[ portuguese_brazilian ] = "~Path";
-        Text[ japanese ] = "ﾌｧｲﾙ(~F)";
+        Text[ japanese ] = "ファイル(~F)";
         Text[ korean ] = "파일(~F)";
         Text[ chinese_simplified ] = "文件(~F)";
         Text[ chinese_traditional ] = "檔案(~F)";
@@ -1997,7 +1997,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ swedish ] = "Filt~yp";
         Text[ polish ] = "Typ pliku";
         Text[ portuguese_brazilian ] = "File~typ";
-        Text[ japanese ] = "ﾌｧｲﾙの種類(~T)";
+        Text[ japanese ] = "ファイルの種類(~T)";
         Text[ korean ] = "파일 형식(~T)";
         Text[ chinese_simplified ] = "文件类型(~T)";
         Text[ chinese_traditional ] = "檔案類型(~T)";
@@ -2040,7 +2040,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ swedish ] = "V�lj ut s�kv�g";
         QuickHelpText[ polish ] = "Wybierz �cie�k�";
         QuickHelpText[ portuguese_brazilian ] = "Create";
-        QuickHelpText[ japanese ] = "ﾊﾟｽの選択";
+        QuickHelpText[ japanese ] = "パスの選択";
         QuickHelpText[ korean ] = "생성";
         QuickHelpText[ chinese_simplified ] = "选择路径";
         QuickHelpText[ chinese_traditional ] = "選擇路徑";
@@ -2095,7 +2095,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ swedish ] = "~Ram";
         Text[ polish ] = "Ramka";
         Text[ portuguese_brazilian ] = "F~rame";
-        Text[ japanese ] = "ﾌﾚｰﾑ(~R)";
+        Text[ japanese ] = "フレーム(~R)";
         Text[ korean ] = "프레임(~R)";
         Text[ chinese_simplified ] = "框对象(~R)";
         Text[ chinese_traditional ] = "框(~R)";
@@ -2131,7 +2131,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ swedish ] = "F~orm";
         Text[ polish ] = "Forma";
         Text[ portuguese_brazilian ] = "F~orm";
-        Text[ japanese ] = "ﾌｫｰﾑ(~O)";
+        Text[ japanese ] = "フォーム(~O)";
         Text[ korean ] = "양식(~O)";
         Text[ chinese_simplified ] = "方式(~O)";
         Text[ chinese_traditional ] = "方式(~O)";
@@ -2226,8 +2226,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         };
         StringList [ japanese ] =
         {
-            < "ﾃｷｽﾄ" ; Default ; > ;
-            < "ﾎﾞﾀﾝ" ; Default ; > ;
+            < "テキスト" ; Default ; > ;
+            < "ボタン" ; Default ; > ;
         };
         StringList [ korean ] =
         {
@@ -2355,7 +2355,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ swedish ] = "H�ndelser";
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
-        QuickHelpText[ japanese ] = "ｲﾍﾞﾝﾄ";
+        QuickHelpText[ japanese ] = "イベント";
         QuickHelpText[ korean ] = "스크립트";
         QuickHelpText[ chinese_simplified ] = "事件";
         QuickHelpText[ chinese_traditional ] = "事件";
@@ -2375,7 +2375,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     Text[ swedish ] = "Hyperl�nk";
     Text[ polish ] = "Hiper��cze";
     Text[ portuguese_brazilian ] = "Hyperlink";
-    Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸ";
+    Text[ japanese ] = "ハイパーリンク";
     Text[ korean ] = "하이퍼링크";
     Text[ chinese_simplified ] = "超链接";
     Text[ chinese_traditional ] = "超連結";
@@ -2411,7 +2411,7 @@ ModalDialog RID_SVXDLG_NEWHYPERLINK
     Text[ swedish ] = "Hyperl�nk";
     Text[ polish ] = "Hiper��cze";
     Text[ portuguese_brazilian ] = "Hyperlink";
-    Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸ";
+    Text[ japanese ] = "ハイパーリンク";
     Text[ korean ] = "하이퍼링크";
     Text[ chinese_simplified ] = "超链接";
     Text[ chinese_traditional ] = "超連結";
@@ -2451,7 +2451,7 @@ String RID_SVXSTR_HYPDLG_APPLYBUT
     Text[ turkish ] = "Uygula";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aplicar";
-    Text[ finnish ] = "K?yt?";
+    Text[ finnish ] = "K�yt�";
 };
 String RID_SVXSTR_HYPDLG_CLOSEBUT
 {
@@ -2495,7 +2495,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
     Text[ swedish ] = "Mus �ver objekt";
     Text[ polish ] = "Mysz nad obiektem";
     Text[ portuguese_brazilian ] = "Mouse over object";
-    Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄ用ﾏｳｽ";
+    Text[ japanese ] = "オブジェクト用マウス";
     Text[ korean ] = "마우스를 개체위에";
     Text[ chinese_simplified ] = "鼠标在对象之上";
     Text[ chinese_traditional ] = "鼠標在物件之上";
@@ -2520,7 +2520,7 @@ String RID_SVXSTR_HYPDLG_MACROACT2
     Text[ swedish ] = "Utf�r hyperl�nk";
     Text[ polish ] = "Wykonaj hiper��cze";
     Text[ portuguese_brazilian ] = "Release hyperlink";
-    Text[ japanese ] = "ﾊｲﾊﾟｰﾘﾝｸを解除";
+    Text[ japanese ] = "ハイパーリンクを解除";
     Text[ korean ] = "하이퍼링크 실행";
     Text[ chinese_simplified ] = "执行超链接";
     Text[ chinese_traditional ] = "執行超連結";
@@ -2528,7 +2528,7 @@ String RID_SVXSTR_HYPDLG_MACROACT2
     Text[ turkish ] = "Hyperlink'i etkinle�tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ejecutar hiperenlace";
-    Text[ finnish ] = "K?ynnist? hyperlinkki";
+    Text[ finnish ] = "K�ynnist� hyperlinkki";
 };
 String RID_SVXSTR_HYPDLG_MACROACT3
 {
@@ -2546,7 +2546,7 @@ String RID_SVXSTR_HYPDLG_MACROACT3
     Text[ swedish ] = "Mus l�mnar objekt";
     Text[ polish ] = "Mysz opuszcza obiekt";
     Text[ portuguese_brazilian ] = "Mouse leave object";
-    Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄからﾏｳｽを離す";
+    Text[ japanese ] = "オブジェクトからマウスを離す";
     Text[ korean ] = "마우스가 개체를 벗어남";
     Text[ chinese_simplified ] = "鼠标离开对象";
     Text[ chinese_traditional ] = "鼠標离開物件";
@@ -2572,7 +2572,7 @@ String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
     Text[ swedish ] = "Mata in ett giltigt filnamn.";
     Text[ polish ] = "Podaj prosz� prawid�ow� nazw� pliku.";
     Text[ portuguese_brazilian ] = "Please type in a valid filename.";
-    Text[ japanese ] = "有効なﾌｧｲﾙ名を入力してください。";
+    Text[ japanese ] = "有効なファイル名を入力してください。";
     Text[ korean ] = "유효한 파일 이름을 입력하십시오.";
     Text[ chinese_simplified ] = "请键入一个有效的文件名。";
     Text[ chinese_traditional ] = "請輸入一個有效的檔案名。";
@@ -2599,7 +2599,7 @@ String RID_SVXSTR_HYPERDLG_HLINETTP
     Text[ swedish ] = "Internet";
     Text[ polish ] = "Internet";
     Text[ portuguese_brazilian ] = "Internet";
-    Text[ japanese ] = "ｲﾝﾀｰﾈｯﾄ";
+    Text[ japanese ] = "インターネット";
     Text[ korean ] = "인터넷";
     Text[ chinese_simplified ] = "国际互联网";
     Text[ chinese_traditional ] = "Internet";
@@ -2625,7 +2625,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text[ swedish ] = "E-post & nyheter";
     Text[ polish ] = "Poczta i wiadomo�ci";
     Text[ portuguese_brazilian ] = "Mail & News";
-    Text[ japanese ] = "ﾒｰﾙ & ﾆｭｰｽ";
+    Text[ japanese ] = "メール & ニュース";
     Text[ korean ] = "메일 & 뉴스";
     Text[ chinese_simplified ] = "电子邮件和新闻组";
     Text[ chinese_traditional ] = "電子郵件和新聞";
@@ -2651,7 +2651,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP
     Text[ swedish ] = "Dokument";
     Text[ polish ] = "Dokument";
     Text[ portuguese_brazilian ] = "Document";
-    Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "ドキュメント";
     Text[ korean ] = "문서";
     Text[ chinese_simplified ] = "文档";
     Text[ chinese_traditional ] = "文件";
@@ -2677,7 +2677,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP
     Text[ swedish ] = "Nytt dokument";
     Text[ polish ] = "Nowy dokument";
     Text[ portuguese_brazilian ] = "New document";
-    Text[ japanese ] = "新しいﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "新しいドキュメント";
     Text[ korean ] = "새 문서";
     Text[ chinese_simplified ] = "新建文档";
     Text[ chinese_traditional ] = "開啟新檔";
@@ -2704,7 +2704,7 @@ String RID_SVXSTR_HYPERDLG_FORM_BUTTON
     Text [ swedish ] = "Knapp" ;
     Text [ polish ] = "Przycisk" ;
     Text [ portuguese_brazilian ] = "Button" ;
-    Text [ japanese ] = "ﾎﾞﾀﾝ" ;
+    Text [ japanese ] = "ボタン" ;
     Text [ korean ] = "버튼" ;
     Text [ chinese_simplified ] = "按钮" ;
     Text [ chinese_traditional ] = "按鈕" ;
@@ -2764,6 +2764,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
