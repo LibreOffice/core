@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mba $ $Date: 2002-04-18 14:18:10 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:37:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,7 @@ TARGET=svxslots
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 SDINAME=$(TARGET)
 SDIEXPORT=svx
@@ -87,8 +85,8 @@ SVSDIDEPEND= \
     $(SOLARINCXDIR)$/sfxslots.ilb	\
     xoitems.sdi \
     svxitems.sdi
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         svxslots.src
 
 # --- Targets -------------------------------------------------------
