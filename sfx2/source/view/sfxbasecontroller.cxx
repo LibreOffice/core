@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:25:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,8 +972,13 @@ void SfxBaseController::ReleaseShell_Impl()
     {
         SfxObjectShell* pDoc = m_pData->m_pViewShell->GetObjectShell() ;
         REFERENCE< XMODEL > xModel = pDoc->GetModel();
+        REFERENCE < ::com::sun::star::util::XCloseable > xCloseable( xModel, com::sun::star::uno::UNO_QUERY );
         if ( xModel.is() )
+        {
             xModel->disconnectController( this );
+            if ( xCloseable.is() )
+                xCloseable->removeCloseListener( m_pData->m_xCloseListener );
+        }
         m_pData->m_pViewShell = 0;
 
         REFERENCE < XFRAME > aXFrame;
