@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:19:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2951,9 +2951,11 @@ sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
         DBG_WARNING("no field var name!");
         bReturn = sal_False;
     }
-
-    sFieldType = sMasterName.copy(nLength, nSeparator-nLength);
-    sVarName = sMasterName.copy(nSeparator+1);
+    else
+    {
+        sFieldType = sMasterName.copy(nLength, nSeparator-nLength);
+        sVarName = sMasterName.copy(nSeparator+1);
+    }
 
     return bReturn;
 }
