@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 17:01:51 $
+ *  last change: $Author: er $ $Date: 2001-07-10 17:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,18 @@ sal_Bool TransliterationWrapper::needLanguageForTheMode() const
 }
 
 
+void TransliterationWrapper::setLanguageLocaleImpl( sal_uInt16 nLang )
+{
+    nLanguage = nLang;
+    String aLangStr, aCtryStr;
+    if( LANGUAGE_NONE == nLanguage )
+        nLanguage = LANGUAGE_SYSTEM;
+    ConvertLanguageToIsoNames( nLanguage, aLangStr, aCtryStr );
+    aLocale.Language = aLangStr;
+    aLocale.Country = aCtryStr;
+}
+
+
 void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
 {
     sal_Bool bLoad = bFirstCall;
@@ -177,13 +189,7 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
 
     if( nLanguage != nLang )
     {
-        nLanguage = nLang;
-        String aLangStr, aCtryStr;
-        if( LANGUAGE_NONE == nLanguage )
-            nLanguage = LANGUAGE_SYSTEM;
-        ConvertLanguageToIsoNames( nLanguage, aLangStr, aCtryStr );
-        aLocale.Language = aLangStr;
-        aLocale.Country = aCtryStr;
+        setLanguageLocaleImpl( nLang );
         if( !bLoad )
             bLoad = needLanguageForTheMode();
     }
@@ -194,6 +200,9 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
 
 void TransliterationWrapper::loadModuleImpl() const
 {
+    if ( bFirstCall )
+        ((TransliterationWrapper*)this)->setLanguageLocaleImpl( LANGUAGE_SYSTEM );
+
     try
     {
         if ( xTrans.is() )
@@ -207,6 +216,7 @@ void TransliterationWrapper::loadModuleImpl() const
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
     }
+
     bFirstCall = sal_False;
 }
 

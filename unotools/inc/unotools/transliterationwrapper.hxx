@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 17:03:24 $
+ *  last change: $Author: er $ $Date: 2001-07-10 17:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ class TransliterationWrapper
     TransliterationWrapper& operator=( const TransliterationWrapper& );
 
     void loadModuleImpl() const;
+    void setLanguageLocaleImpl( sal_uInt16 nLang );
 
 public:
     TransliterationWrapper( const ::com::sun::star::uno::Reference<
