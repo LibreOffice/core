@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:27:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ korean ] = "»õ ¼­½ÄÆÄÀÏ";
         Text[ turkish ] = "Yeni belge þablonu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nueva plantilla";
     };
     FixedText FT_SECTION
     {
@@ -144,6 +145,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ korean ] = "¿µ¿ª(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Áreas";
     };
     ListBox LB_SECTION
     {
@@ -178,6 +180,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ korean ] = "¼­½ÄÆÄÀÏ(~T)";
         Text[ turkish ] = "~Þablon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "P~lantillas";
     };
     ListBox LB_STYLESHEETS
     {
@@ -212,6 +215,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ korean ] = "¼­½ÄÆÄÀÏ";
         Text[ turkish ] = "Þablon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Plantillas";
     };
     OKButton BT_OK
     {
@@ -255,6 +259,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ korean ] = "ÆíÁý(~E)";
         Text[ turkish ] = "~Düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Editar";
     };
     PushButton BT_ORGANIZE
     {
@@ -283,6 +288,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ korean ] = "°ü¸®(~O)...";
         Text[ turkish ] = "Yönet...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Administrar...";
     };
     Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
     Text[ russian ] = "Øàáëîíû äîêóìåíòà";
@@ -294,5 +300,6 @@ ModalDialog DLG_DOC_TEMPLATE
     Text[ korean ] = "¹®¼­ ¼­½ÄÆÄÀÏ";
     Text[ turkish ] = "Belge þablonu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantilla de documento";
 };
  // ********************************************************************** EOF
