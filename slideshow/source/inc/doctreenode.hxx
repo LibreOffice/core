@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctreenode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:14:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,8 @@
 #include <sal/types.h>
 #endif
 
-#include <attributableshape.hxx>
-
 #include <vector>
+
 
 /* Definition of DocTreeNode class */
 
@@ -77,40 +76,40 @@ namespace presentation
     namespace internal
     {
 
-        /** This class represents kind of a DOM tree for shape text
+        /** This class represents kind of a DOM tree node for shape
+            text
 
             In order to animate subsets of shape text, we need
             information about the logical and formatting structure of
             that text (lines, paragraphs, words etc.). This is
             represented in a tree structure, with DocTreeNodes as the
-            nodes.
+            nodes. Instances of this class can be queried from the
+            DocTreeNodeSupplier interface.
 
             This class has nothing to do with the Draw document tree.
          */
         class DocTreeNode
         {
         public:
-            typedef ::std::vector< DocTreeNode > VectorOfDocTreeNodes;
-
-            /// Type of text entity represented by this node
+            /// Type of shape entity represented by this node
             enum NodeType
             {
                 NODETYPE_INVALID=0,
 
-                /// This node contains a full shape
+                /// This node represents a full shape
                 NODETYPE_FORMATTING_SHAPE=1,
-                /// This node contains a line
+                /// This node represents a line
                 NODETYPE_FORMATTING_LINE=2,
 
-                /// This node contains a full shape
+                /// This node represents a full shape
                 NODETYPE_LOGICAL_SHAPE=128,
-                /// This node contains a paragraph
+                /// This node represents a paragraph
                 NODETYPE_LOGICAL_PARAGRAPH=129,
-                /// This node contains a sentence
+                /// This node represents a sentence
                 NODETYPE_LOGICAL_SENTENCE=130,
-                /// This node contains a word
+                /// This node represents a word
                 NODETYPE_LOGICAL_WORD=131,
-                /// This node contains a character
+                /// This node represents a character
                 NODETYPE_LOGICAL_CHARACTER_CELL=132
             };
 
@@ -118,34 +117,9 @@ namespace presentation
             static bool isLogicalNodeType( NodeType eType ) { return eType > 127; }
             static bool isFormattingNodeType( NodeType eType ) { return eType > 0 && eType < 128; }
 
-            /** Create DocTreeNode from shape subset.
-
-                This method creates a DocTreeNode from a shape, a
-                given node type an a running index into the shape's
-                DocTreeNodes of the given type.
-
-                @param rShape
-                Shape to extract the DocTreeNode from
-
-                @param nNodeIndex
-                Starting with 0, every DocTreeNode of the shape that
-                has type eNodeType is indexed. The DocTreeNode whose
-                index equals nNodeIndex will be returned.
-
-                @param eNodeType
-                Type of the node to return
-
-                @return the DocTreeNode found, or the empty
-                DocTreeNode, if nothing was found.
-             */
-            static DocTreeNode createFromShape( const AttributableShapeSharedPtr& rShape,
-                                                sal_Int16                         nNodeIndex,
-                                                DocTreeNode::NodeType             eNodeType );
-
             /** Create empty tree node
              */
             DocTreeNode() :
-                maChildren(),
                 mnStartIndex(-1),
                 mnEndIndex(-1),
                 meType(NODETYPE_INVALID)
@@ -165,39 +139,32 @@ namespace presentation
                 @param eType
                 Node type
              */
-            DocTreeNode( sal_Int32 nStartIndex, sal_Int32 nEndIndex, NodeType eType ) :
-                maChildren(),
+            DocTreeNode( sal_Int32 nStartIndex,
+                         sal_Int32 nEndIndex,
+                         NodeType  eType ) :
                 mnStartIndex(nStartIndex),
                 mnEndIndex(nEndIndex),
                 meType(eType)
             {
             }
 
-            bool                isEmpty() const;
+            bool                isEmpty() const { return mnStartIndex == mnEndIndex; }
 
             sal_Int32           getStartIndex() const { return mnStartIndex; }
             sal_Int32           getEndIndex() const { return mnEndIndex; }
             void                setStartIndex( sal_Int32 nIndex ) { mnStartIndex = nIndex; }
             void                setEndIndex( sal_Int32 nIndex ) { mnEndIndex = nIndex; }
 
-            NodeType            getType() const;
-
-            sal_Int32           getNumberOfChildren() const;
-            const DocTreeNode&  getChild( sal_Int32 nIndex ) const;
-            void                setChild( const DocTreeNode& rChild, sal_Int32 nIndex );
-            void                appendChild( const DocTreeNode& rChild );
+            NodeType            getType() const { return meType; }
 
         private:
-
-            // TODO(P2): convert to shared_ptr here
-
-            // TODO(P3): create children lazily
-            VectorOfDocTreeNodes    maChildren;
-            sal_Int32               mnStartIndex;
-            sal_Int32               mnEndIndex;
-            NodeType                meType;
+            sal_Int32   mnStartIndex;
+            sal_Int32   mnEndIndex;
+            NodeType    meType;
 
         };
+
+        typedef ::std::vector< DocTreeNode > VectorOfDocTreeNodes;
     }
 }
 
