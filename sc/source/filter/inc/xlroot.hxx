@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:13:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XLROOT_HXX
 #define SC_XLROOT_HXX
 
@@ -74,6 +73,18 @@
 
 // Global data ================================================================
 
+#ifdef DBG_UTIL
+/** Counts the number of created root objects. */
+struct XclDebugObjCounter
+{
+    sal_Int32           mnObjCnt;
+    inline explicit     XclDebugObjCounter() : mnObjCnt( 0 ) {}
+                        ~XclDebugObjCounter();
+};
+#endif
+
+// ----------------------------------------------------------------------------
+
 class SfxMedium;
 class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
@@ -85,12 +96,16 @@ struct RootData;//!
 
 /** Stores global buffers and data needed elsewhere in the Excel filters. */
 struct XclRootData
+#ifdef DBG_UTIL
+    : public XclDebugObjCounter
+#endif
 {
-    typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEEDefaulterPtr;
-    typedef ::std::auto_ptr< ScHeaderEditEngine >       ScHeaderEEPtr;
-    typedef ::std::auto_ptr< EditEngine >               EditEnginePtr;
-    typedef ::std::auto_ptr< ScExtDocOptions >          ScExtDocOptionsPtr;
-    typedef ::std::auto_ptr< XclTracer >                XclTracerPtr;
+    typedef ScfRef< ScEditEngineDefaulter > ScEEDefaulterRef;
+    typedef ScfRef< ScHeaderEditEngine >    ScHeaderEERef;
+    typedef ScfRef< EditEngine >            EditEngineRef;
+    typedef ScfRef< ScExtDocOptions >       ScExtDocOptRef;
+    typedef ScfRef< XclTracer >             XclTracerRef;
+    typedef ScfRef< RootData >              RootDataRef;
 
     XclBiff             meBiff;         /// Current BIFF version.
     SfxMedium&          mrMedium;       /// The medium to import from.
@@ -108,26 +123,18 @@ struct XclRootData
     ScAddress           maXclMaxPos;    /// Highest Excel cell position.
     ScAddress           maMaxPos;       /// Highest position valid in Calc and Excel.
 
-    ScEEDefaulterPtr    mxEditEngine;   /// Edit engine for rich strings etc.
-    ScHeaderEEPtr       mxHFEditEngine; /// Edit engine for header/footer.
-    EditEnginePtr       mxDrawEditEng;  /// Edit engine for text boxes.
+    ScEEDefaulterRef    mxEditEngine;   /// Edit engine for rich strings etc.
+    ScHeaderEERef       mxHFEditEngine; /// Edit engine for header/footer.
+    EditEngineRef       mxDrawEditEng;  /// Edit engine for text boxes.
 
-    ScExtDocOptionsPtr  mxExtDocOpt;    /// Extended document options.
-    XclTracerPtr        mxTracer;       /// Filter tracer.
+    ScExtDocOptRef      mxExtDocOpt;    /// Extended document options.
+    XclTracerRef        mxTracer;       /// Filter tracer.
+    RootDataRef         mxRD;           /// Old RootData struct. Will be removed.
 
     long                mnCharWidth;    /// Width of '0' in default font (twips).
     SCTAB               mnScTab;        /// Current Calc sheet index.
     const bool          mbExport;       /// false = Import, true = Export.
-    bool                mbColTrunc;     /// Flag for "columns truncated" warning box.
-    bool                mbRowTrunc;     /// Flag for "rows truncated" warning box.
-    bool                mbTabTrunc;     /// Flag for "tables truncated" warning box.
     bool                mbHasPassw;     /// true = Password already querried.
-
-    ::std::auto_ptr< RootData > mxRD;//!
-
-#ifdef DBG_UTIL
-    sal_Int32           mnObjCnt;       /// Object counter for mem leak tests.
-#endif
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
                             SotStorageRef xRootStrg, SvStream& rBookStrm,
@@ -159,10 +166,11 @@ public:
 
     XclRoot&            operator=( const XclRoot& rRoot );
 
-    RootData*           mpRD;//!
-
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclRoot& GetRoot() const { return *this; }
+    /** Returns old RootData struct. Deprecated. */
+    inline RootData&    GetOldRoot() const { return *mrData.mxRD; }
+
     /** Returns the current BIFF version of the importer/exporter. */
     inline XclBiff      GetBiff() const { return mrData.meBiff; }
     /** Returns true, if currently a document is imported. */
@@ -183,12 +191,6 @@ public:
     inline bool         IsInGlobals() const { return mrData.mnScTab == SCTAB_GLOBAL; }
     /** Returns the current Calc sheet index. */
     inline SCTAB        GetCurrScTab() const { return mrData.mnScTab; }
-    /** Returns whether the "some columns have been cut" warning box should be shown. */
-    inline bool         IsColTruncated() const { return mrData.mbColTrunc; }
-    /** Returns whether the "some rows have been cut" warning box should be shown. */
-    inline bool         IsRowTruncated() const { return mrData.mbRowTrunc; }
-    /** Returns whether the "some sheets have been cut" warning box should be shown. */
-    inline bool         IsTabTruncated() const { return mrData.mbTabTrunc; }
 
     /** Returns the medium to import from. */
     inline SfxMedium&   GetMedium() const { return mrData.mrMedium; }
@@ -204,6 +206,8 @@ public:
     inline SotStorageRef GetRootStorage() const { return mrData.mxRootStrg; }
     /** Returns the main import/export stream in the Excel file. */
     inline SvStream&    GetBookStream() const { return mrData.mrBookStrm; }
+    /** Returns true, if the document contains a VBA storage. */
+    bool                HasVbaStorage() const;
 
     /** Tries to open a storage as child of the specified storage for reading or writing. */
     SotStorageRef       OpenStorage( SotStorageRef xStrg, const String& rStrgName ) const;
@@ -244,7 +248,6 @@ public:
 
     /** Returns the extended document options. */
     ScExtDocOptions&    GetExtDocOptions() const;
-
     /** Returns the filter tracer. */
     XclTracer&          GetTracer() const;
 
@@ -269,32 +272,8 @@ public:
     /** Increases the current Calc sheet index by 1. */
     inline void         IncCurrScTab() { ++mrData.mnScTab; }
 
-    /** Checks if the passed cell address is valid.
-        @descr  Sets the internal flag that produces a warning box, if the cell is
-        outside the passed maximum position.
-        @param rPos  The cell address to check.
-        @param rMaxPos  Highest valid cell address.
-        @return  true = cell address is valid. */
-    bool                CheckCellAddress( const ScAddress& rPos, const ScAddress& rMaxPos ) const;
-    /** Checks and eventually crops the cell range to passed dimensions.
-        @descr  Sets the internal flag that produces a warning box, if the cell range
-        contains invalid cells. If the range is partly valid, this function sets
-        the warning flag, corrects the range and returns true.
-        @param rRange  (In/out) The cell range to check.
-        @param rMaxPos  Highest valid cell address.
-        @return  true = rRange contains a valid cell range (original or cropped). */
-    bool                CheckCellRange( ScRange& rRange, const ScAddress& rMaxPos ) const;
-    /** Checks and eventually crops the cell ranges to passed dimensions.
-        @descr  Sets the internal flag that produces a warning box, if at least one
-        cell range contains invalid cells. If the range is partly valid, this function
-        sets the warning flag and corrects the range. Cell ranges which do not fit
-        full or partly will be removed from the list.
-        @param rRangeList  (In/out) The cell range list to check.
-        @param rMaxPos  Highest valid cell address. */
-    void                CheckCellRangeList( ScRangeList& rRanges, const ScAddress& rMaxPos ) const;
-
 private:
-    mutable XclRootData& mrData;    /// Reference to the global data struct.
+    mutable XclRootData& mrData;        /// Reference to the global data struct.
 };
 
 // ============================================================================
