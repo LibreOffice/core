@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-10-17 13:21:47 $
+ *  last change: $Author: nf $ $Date: 2002-02-07 18:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,45 +599,42 @@ void XRMResExport::EndOfText(
         char cSearch = 0x00;
         ByteString sSearch( cSearch );
 
-        if ( pResData->sText[ GERMAN_INDEX ].Len())
-        {
-            if (( !pResData->sText[ ENGLISH_INDEX ].Len()) &&
-                ( !pResData->sText[ ENGLISH_US_INDEX ].Len()))
-                    pResData->sText[ ENGLISH_INDEX ] = pResData->sText[ GERMAN_INDEX ];
-            Export::FillInFallbacks( pResData );
+        if (( !pResData->sText[ ENGLISH_INDEX ].Len()) &&
+            ( !pResData->sText[ ENGLISH_US_INDEX ].Len()))
+                pResData->sText[ ENGLISH_INDEX ] = pResData->sText[ GERMAN_INDEX ];
+        Export::FillInFallbacks( pResData );
 
-            ByteString sTimeStamp( Export::GetTimeStamp());
+        ByteString sTimeStamp( Export::GetTimeStamp());
 
-            for ( ULONG i = 0; i < LANGUAGES; i++ ) {
-                if ( LANGUAGE_ALLOWED( i ) || ( i == COMMENT_INDEX )) {
-                    ByteString sAct = pResData->sText[ i ];
-                    if ( !sAct.Len() && i ) {
-                        if ( pResData->sText[ ENGLISH_US_INDEX ].Len())
-                            sAct = pResData->sText[ ENGLISH_US_INDEX ];
-                        else
-                            sAct = pResData->sText[ ENGLISH_INDEX ];
-                    }
-
-                    Export::UnquotHTML( sAct );
-                    sAct.EraseAllChars( 0x0A );
-
-                    ByteString sOutput( sPrj ); sOutput += "\t";
-                    sOutput += sPath;
-                    sOutput += "\t0\t";
-                    sOutput += "readmeitem\t";
-                    sOutput += pResData->sGId; sOutput += "\t";
-                    sOutput += pResData->sId; sOutput += "\t\t\t0\t";
-                    sOutput += ByteString::CreateFromInt64( Export::LangId[ i ] ); sOutput += "\t";
-                    sOutput += sAct; sOutput += "\t\t\t\t";
-                    sOutput += sTimeStamp;
-
-                    if ( bUTF8 )
-                        sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
-
-                    sOutput.SearchAndReplaceAll( sSearch, "_" );
-
-                    pOutputStream->WriteLine( sOutput );
+        for ( ULONG i = 0; i < LANGUAGES; i++ ) {
+            if ( LANGUAGE_ALLOWED( i )) {
+                ByteString sAct = pResData->sText[ i ];
+                if ( !sAct.Len() && i ) {
+                    if ( pResData->sText[ ENGLISH_US_INDEX ].Len())
+                        sAct = pResData->sText[ ENGLISH_US_INDEX ];
+                    else
+                        sAct = pResData->sText[ ENGLISH_INDEX ];
                 }
+
+                Export::UnquotHTML( sAct );
+                sAct.EraseAllChars( 0x0A );
+
+                ByteString sOutput( sPrj ); sOutput += "\t";
+                sOutput += sPath;
+                sOutput += "\t0\t";
+                sOutput += "readmeitem\t";
+                sOutput += pResData->sGId; sOutput += "\t";
+                sOutput += pResData->sId; sOutput += "\t\t\t0\t";
+                sOutput += ByteString::CreateFromInt64( Export::LangId[ i ] ); sOutput += "\t";
+                sOutput += sAct; sOutput += "\t\t\t\t";
+                sOutput += sTimeStamp;
+
+                if ( bUTF8 )
+                    sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
+
+                sOutput.SearchAndReplaceAll( sSearch, "_" );
+
+                pOutputStream->WriteLine( sOutput );
             }
         }
     }
