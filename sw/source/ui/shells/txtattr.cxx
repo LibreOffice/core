@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:57:34 $
+ *  last change: $Author: mba $ $Date: 2002-06-07 08:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,11 +234,14 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                     aEscape.GetEsc() *= -1;
             }
             rSh.SetAttr( aEscape );
+            rReq.AppendItem( aEscape );
+            rReq.Done();
         }
         break;
 
         case FN_UPDATE_STYLE_BY_EXAMPLE:
             rSh.QuickUpdateStyle();
+            rReq.Done();
             break;
         case FN_UNDERLINE_DOUBLE:
         {
@@ -259,6 +262,8 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 break;
             }
             rSh.SetAttr(SvxUnderlineItem(eUnderline));
+            rReq.AppendItem(SvxUnderlineItem(eUnderline));
+            rReq.Done();
         }
         break;
         default:
@@ -309,6 +314,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             if ( pColl )
                 pColl->SetAttr( aINetFmt );
             else rWrtSh.SetAttr( aINetFmt );
+            rReq.Done();
         }
         break;
 
@@ -356,6 +362,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     else
                         rWrtSh.SetAttr( aAttrSet );
                 }
+            rReq.Done();
         }
         break;
 
@@ -416,7 +423,10 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
         rWrtSh.AutoUpdatePara(pColl, *pSet);
     }
     else
+    {
         rWrtSh.SetAttr( aSet );
+        rReq.Done( aSet );
+    }
 }
 
 #else
@@ -450,6 +460,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 SET_ADJUST:
         {
             aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST ));
+            rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), TRUE ) );
         }
         break;
 
@@ -490,6 +501,7 @@ SET_LINESPACE:
     }
     else
         rWrtSh.SetAttr( aSet );
+    rReq.Done();
 }
 
 #endif
@@ -510,7 +522,10 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         case FN_FORMAT_DROPCAPS:
         {
             if(pItem)
+            {
                 rSh.SetAttr(*pItem);
+                rReq.Done();
+            }
             else
             {
                 SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP,
@@ -529,6 +544,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                     rSh.SetAttr(*pDlg->GetOutputItemSet());
                     rSh.StartUndo( UNDO_END );
                     rSh.EndAction();
+                    rReq.Done(*pDlg->GetOutputItemSet());
                 }
                 delete pDlg;
             }
@@ -538,6 +554,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             if(pItem)
             {
                 rSh.SetAttr( *pItem );
+                rReq.Done();
             }
         break;
         case SID_ATTR_PARA_MODEL:
@@ -550,6 +567,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 aCoreSet.Put(*pItem);
                 SfxToSwPageDescAttr( rSh, aCoreSet);
                 rSh.SetAttr(aCoreSet);
+                rReq.Done();
             }
         }
         break;
@@ -758,6 +776,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/07/19 16:57:34  mtg
+    #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
+
     Revision 1.3  2000/11/23 20:08:52  jp
     Task #80648#: use new class SvxScriptSetItem
 
