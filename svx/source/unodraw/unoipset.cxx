@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 12:19:47 $
+ *  last change: $Author: nn $ $Date: 2001-06-01 16:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
             return;
         }
 
-        pItem = pPool->GetPoolDefaultItem( pMap->nWID );
+        pItem = &pPool->GetDefaultItem( pMap->nWID );
     }
 
     if( pItem )
