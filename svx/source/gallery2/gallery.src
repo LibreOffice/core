@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-19 08:03:10 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,11 +521,11 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text [ english_us ] = "~File Type" ;
         Text [ italian ] = "Tipo file" ;
         Text [ spanish ] = "Tipo de archivo" ;
-        Text [ french ] = "Type" ;
+        Text [ french ] = "Type de fichier" ;
         Text [ dutch ] = "Bestandstype" ;
         Text [ swedish ] = "Filtyp" ;
         Text [ danish ] = "Filtype" ;
-        Text [ portuguese_brazilian ] = "Dateityp" ;
+        Text [ portuguese_brazilian ] = "~Dateityp" ;
         Text [ portuguese ] = "Tipo de ficheiro" ;
         Text[ chinese_simplified ] = "ζ–‡δ»¶η±»ε‹";
         Text[ russian ] = "Òθο τΰιλΰ";
@@ -2664,4 +2664,5 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
 
