@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:34:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1169,15 +1169,10 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
 void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
-    Window* pParent = _pWindow->GetParent();
-    while(pParent && !pParent->IsSystemWindow())
+    SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : NULL;
+    if ( pSystemWindow )
     {
-        pParent = pParent->GetParent();
-    }
-    if ( pParent && pParent->IsSystemWindow())
-    {
-        SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pParent);
-        _rMemFunc(pSystemWindow->GetTaskPaneList(),(_pToRegister));
+        _rMemFunc( pSystemWindow->GetTaskPaneList(), _pToRegister );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1587,7 +1582,8 @@ String convertURLtoUI(sal_Bool _bPrefix,ODsnTypeCollection* _pCollection,const :
     return sURL;
 }
 // -----------------------------------------------------------------------------
-void fillTreeListNames(const Reference< XNameAccess >& _xContainer,DBTreeListBox& _rList,USHORT _nImageId,SvLBoxEntry* _pParent,IContainerFoundListener* _pContainerFoundListener)
+void fillTreeListNames( const Reference< XNameAccess >& _xContainer, DBTreeListBox& _rList,
+        USHORT _nImageId, USHORT _nHighContrastImageId, SvLBoxEntry* _pParent, IContainerFoundListener* _pContainerFoundListener )
 {
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
 
@@ -1608,12 +1604,19 @@ void fillTreeListNames(const Reference< XNameAccess >& _xContainer,DBTreeListBox
                     Reference<XContainer> xCont(xSubElements,UNO_QUERY);
                     _pContainerFoundListener->containerFound(xCont);
                 }
-                fillTreeListNames(xSubElements,_rList,_nImageId,pEntry,_pContainerFoundListener);
+                fillTreeListNames( xSubElements, _rList, _nImageId, _nHighContrastImageId, pEntry, _pContainerFoundListener );
             }
             else
             {
-                Image aBmp = Image(ModuleRes(_nImageId));
-                pEntry = _rList.InsertEntry(*pIter,aBmp,aBmp,_pParent);
+                pEntry = _rList.InsertEntry( *pIter, _pParent );
+
+                Image aImage = Image( ModuleRes( _nImageId ) );
+                _rList.SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+                _rList.SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+
+                Image aHCImage = Image( ModuleRes( _nHighContrastImageId ) );
+                _rList.SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+                _rList.SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
             }
         }
     }
@@ -1723,69 +1726,7 @@ sal_Bool insertHierachyElement(Window* _pParent
     }
     return sal_True;
 }
-// -----------------------------------------------------------------------------
-void deleteObjects(Window* _pParent
-                   ,const Reference< XMultiServiceFactory >& _xFactory
-                   ,const Reference<XNameContainer>& _xNames
-                   ,const ::std::vector< ::rtl::OUString>& _rList
-                   ,sal_uInt16 _nTextResource
-                   ,sal_Bool _bConfirm)
-{
 
-    Reference<XHierarchicalNameContainer> xHierarchyName(_xNames, UNO_QUERY);
-    if ( _xNames.is() )
-    {
-        bool bConfirm = true;
-        ByteString sDialogPosition;
-        svtools::QueryDeleteResult_Impl eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
-        ::std::vector< ::rtl::OUString>::const_iterator aEnd = _rList.end();
-        for (::std::vector< ::rtl::OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd && ( eResult != svtools::QUERYDELETE_CANCEL ); ++aIter)
-        {
-            if ( eResult != svtools::QUERYDELETE_ALL )
-            {
-                svtools::QueryDeleteDlg_Impl aDlg(_pParent,*aIter);
-                if ( sDialogPosition.Len() )
-                    aDlg.SetWindowState( sDialogPosition );
-                if ( _rList.size() > 1 && (aIter+1) != _rList.end() )
-                    aDlg.EnableAllButton();
-                if ( aDlg.Execute() == RET_OK )
-                    eResult = aDlg.GetResult();
-                else
-                    eResult = svtools::QUERYDELETE_CANCEL;
-
-                sDialogPosition = aDlg.GetWindowState( );
-            }
-
-            if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
-                 ( eResult == svtools::QUERYDELETE_YES ) )
-            {
-                try
-                {
-                    if ( xHierarchyName.is() )
-                        xHierarchyName->removeByHierarchicalName(*aIter);
-                    else
-                        _xNames->removeByName(*aIter);
-                }
-                catch(SQLException& e)
-                {
-                    showError(SQLExceptionInfo(e),_pParent,_xFactory);
-                }
-                catch(WrappedTargetException& e)
-                {
-                    SQLException aSql;
-                    if(e.TargetException >>= aSql)
-                        showError(SQLExceptionInfo(aSql),_pParent,_xFactory);
-                    else
-                        OSL_ENSURE(sal_False, "UITOOLS::deleteQueries: something strange happended!");
-                }
-                catch(Exception&)
-                {
-                    DBG_ERROR("UITOOLS::deleteQueries: caught a generic exception!");
-                }
-            }
-        }
-    }
-}
 // .........................................................................
 } // dbaui
 // .........................................................................
