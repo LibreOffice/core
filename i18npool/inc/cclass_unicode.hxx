@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-09-20 16:12:25 $
+ *  last change: $Author: khong $ $Date: 2002-11-05 23:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,13 +177,13 @@ private:
     sal_Unicode                 cDecimalSep;
 
     /// Get corresponding KParseTokens flag for a character
-    sal_Int32 getParseTokensType( sal_Unicode c );
+    sal_Int32 getParseTokensType( const sal_Unicode* aStr, sal_Int32 nPos );
 
     /// Access parser table flags.
-    UPT_FLAG_TYPE getFlags( sal_Unicode c );
+    UPT_FLAG_TYPE getFlags( const sal_Unicode* aStr, sal_Int32 nPos );
 
     /// Access parser flags via International and special definitions.
-    UPT_FLAG_TYPE getFlagsExtended( sal_Unicode c );
+    UPT_FLAG_TYPE getFlagsExtended( const sal_Unicode* aStr, sal_Int32 nPos );
 
     /// Access parser table flags for user defined start characters.
     UPT_FLAG_TYPE getStartCharsFlags( sal_Unicode c );
