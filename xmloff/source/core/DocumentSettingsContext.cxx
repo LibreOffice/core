@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-05 16:41:01 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 10:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XVIEWDATASUPPLIER_HPP_
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -542,6 +546,38 @@ void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
     sValue += rChars;
 }
 
+
+static awt::Rectangle ImplImportRectangle( const rtl::OUString& rValue )
+{
+    awt::Rectangle aRect( 0,0,0,0 );
+
+    rtl::OUStringBuffer sBuffer;
+    const sal_Unicode * pStr = rValue.getStr();
+
+    while( ( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') ) || *pStr == sal_Unicode('-') ) sBuffer.append( *pStr++ );
+    aRect.X = sBuffer.makeStringAndClear().toInt32();
+
+    if( *pStr++ == ',' )
+    {
+        while( ( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') ) || *pStr == sal_Unicode('-') ) sBuffer.append( *pStr++ );
+        aRect.Y = sBuffer.makeStringAndClear().toInt32();
+
+        if( *pStr++ == ',' )
+        {
+            while( ( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') ) || *pStr == sal_Unicode('-') ) sBuffer.append( *pStr++ );
+            aRect.Width = sBuffer.makeStringAndClear().toInt32();
+
+            if( *pStr++ == ',' )
+            {
+                while( ( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') ) || *pStr == sal_Unicode('-') ) sBuffer.append( *pStr++ );
+                aRect.Height = sBuffer.makeStringAndClear().toInt32();
+            }
+        }
+    }
+
+    return aRect;
+}
+
 void XMLConfigItemContext::EndElement()
 {
     if (pBaseContext)
@@ -585,6 +621,10 @@ void XMLConfigItemContext::EndElement()
             util::DateTime aDateTime;
             SvXMLUnitConverter::convertDateTime(aDateTime, sValue);
             rAny <<= aDateTime;
+        }
+        else if (sType.compareToAscii(sXML_rect) == 0)
+        {
+            rAny <<= ImplImportRectangle(sValue);
         }
         else
             DBG_ERROR("wrong type");
