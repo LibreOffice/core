@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: jp $ $Date: 2001-05-14 10:17:53 $
+#   last change: $Author: bustamam $ $Date: 2001-08-03 22:06:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,104 @@ IDLFILES=\
         ChapterCollator.idl \
     CharacterClassification.idl \
     CJKBreakIterator.idl \
-        Collator.idl \
+    Collator.idl \
+    CollationImplcaESsolaris.idl \
+    CollationImplcsCZsolaris.idl \
+    CollationImpldaDKsolaris.idl \
+    CollationImpldeATsolaris.idl \
+    CollationImpldeCHsolaris.idl \
+    CollationImpldeDEdiction.idl \
+    CollationImpldeDEnormal.idl \
+    CollationImpldeDEsolaris.idl \
+    CollationImpldeLIsolaris.idl \
+    CollationImpldeLUsolaris.idl \
+    CollationImpldefault.idl \
+    CollationImplelGRsolaris.idl \
+    CollationImplenAUsolaris.idl \
+    CollationImplenBZsolaris.idl \
+    CollationImplenCAsolaris.idl \
+    CollationImplenCBsolaris.idl \
+    CollationImplenGBsolaris.idl \
+    CollationImplenIEsolaris.idl \
+    CollationImplenJMsolaris.idl \
+    CollationImplenNZsolaris.idl \
+    CollationImplenPHsolaris.idl \
+    CollationImplenTTsolaris.idl \
+    CollationImplenUSnormal.idl \
+    CollationImplenUSsolaris.idl \
+    CollationImplenZAsolaris.idl \
+    CollationImplenZWsolaris.idl \
+    CollationImplesARsolaris.idl \
+    CollationImplesBOsolaris.idl \
+    CollationImplesCLsolaris.idl \
+    CollationImplesCOsolaris.idl \
+    CollationImplesCRsolaris.idl \
+    CollationImplesDOsolaris.idl \
+    CollationImplesECsolaris.idl \
+    CollationImplesESnormal.idl \
+    CollationImplesESsolaris.idl \
+    CollationImplesGTsolaris.idl \
+    CollationImplesHNsolaris.idl \
+    CollationImplesMXsolaris.idl \
+    CollationImplesNIsolaris.idl \
+    CollationImplesPAsolaris.idl \
+    CollationImplesPEsolaris.idl \
+    CollationImplesPRsolaris.idl \
+    CollationImplesPYsolaris.idl \
+    CollationImplesSVsolaris.idl \
+    CollationImplesUYsolaris.idl \
+    CollationImplfiFIsolaris.idl \
+    CollationImplfrBEsolaris.idl \
+    CollationImplfrCAsolaris.idl \
+    CollationImplfrCHsolaris.idl \
+    CollationImplfrFRnormal.idl \
+    CollationImplfrFRsolaris.idl \
+    CollationImplfrLUsolaris.idl \
+    CollationImplfrMCsolaris.idl \
+    CollationImplhrHRsolaris.idl \
+    CollationImplhuHUsolaris.idl \
+    CollationImplisISsolaris.idl \
+    CollationImplitCHsolaris.idl \
+    CollationImplitITnormal.idl \
+    CollationImplitITsolaris.idl \
+    CollationImpljaJPcharset.idl \
+    CollationImplkoKRcharset.idl \
+    CollationImplkoKRdict.idl \
+    CollationImplnbNOsolaris.idl \
+    CollationImplnlBEsolaris.idl \
+    CollationImplnlNLsolaris.idl \
+    CollationImplnnNOsolaris.idl \
+    CollationImplnoNOsolaris.idl \
+    CollationImplplPLsolaris.idl \
+    CollationImplptBRsolaris.idl \
+    CollationImplptPTsolaris.idl \
+    CollationImplroROsolaris.idl \
+    CollationImplruRUsolaris.idl \
+    CollationImplsvFIsolaris.idl \
+    CollationImplsvSEnormal.idl \
+    CollationImplsvSEsolaris.idl \
+    CollationImpltrTRsolaris.idl \
+    CollationImplzhCNcharset.idl \
+    CollationImplzhCNpinyin.idl \
+    CollationImplzhCNradical.idl \
+    CollationImplzhCNstroke.idl \
+    CollationImplzhHKcharset.idl \
+    CollationImplzhHKpinyin.idl \
+    CollationImplzhHKradical.idl \
+    CollationImplzhHKstroke.idl \
+    CollationImplzhHKzhuyin.idl \
+    CollationImplzhMOcharset.idl \
+    CollationImplzhMOradical.idl \
+    CollationImplzhMOstroke.idl \
+    CollationImplzhSGcharset.idl \
+    CollationImplzhSGpinyin.idl \
+    CollationImplzhSGradical.idl \
+    CollationImplzhSGstroke.idl \
+    CollationImplzhTWcharset.idl \
+    CollationImplzhTWpinyin.idl \
+    CollationImplzhTWradical.idl \
+    CollationImplzhTWstroke.idl \
+    CollationImplzhTWzhuyin.idl \
     Currency.idl \
     GNUCollator.idl \
     IndexEntrySupplier.idl \
