@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-22 12:52:40 $
+ *  last change: $Author: jl $ $Date: 2004-04-23 08:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     if (errcode != JFW_E_NONE)
         return errcode;
 
-    const std::vector<rtl::OString> vecJRELocations =
+    const std::vector<rtl::OString>& vecJRELocations =
         node.getJRELocations();
     //Use every plug-in library to get Java installations.
     typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
@@ -413,7 +413,12 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     return JFW_E_NONE;
 }
 
-
+/** We do not use here jfw_findAllJREs and then check if a JavaInfo
+    meets the requirements, because that means using all plug-ins, which
+    may take quite a while. The implementation uses one plug-in and if
+    it already finds a suitable JRE then it is done and does not need to
+    load another plug-in
+ */
 javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 {
     osl::MutexGuard guard(jfw::getFwkMutex());
@@ -443,7 +448,6 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     errcode = jfw::getVendorPluginURLs(doc, context, & vecPlugins);
     if (errcode != JFW_E_NONE)
         return errcode;
-
 
     //Use every plug-in library to get Java installations. At the first usable
     //Java the loop will break
@@ -519,6 +523,83 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             break;
         //All Java installations found by the current plug-in lib
         //do not provide the required features. Try the next plug-in
+    }
+    if ((JavaInfo*) aCurrentInfo == NULL)
+    {//The plug-ins did not find a suitable Java. Now try the paths which have been
+     //added manually.
+        //get the list of paths to jre locations which have been added manually
+        jfw::CNodeJava node;
+        errcode = node.loadFromSettings();
+        if (errcode != JFW_E_NONE)
+            return errcode;
+        const std::vector<rtl::OString> & vecJRELocations =
+            node.getJRELocations();
+        //use every plug-in to determine the JavaInfo objects
+        bool bInfoFound = false;
+        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++)
+        {
+            const jfw::PluginLibrary & library = *i;
+            jfw::VersionInfo versionInfo;
+            errcode =  jfw::getVersionInformation(doc, context, library.sVendor,
+                                                  & versionInfo);
+            if (errcode != JFW_E_NONE)
+                return JFW_E_CONFIG_READWRITE;
+            osl::Module pluginLib(library.sPath);
+            if (pluginLib.is() == sal_False)
+                return JFW_E_NO_PLUGIN;
+            //Check if the current plugin can detect JREs at the location
+            // of the paths added by jfw_setJRELocations or jfw_addJRELocation
+            //get the function from the plugin
+            getJavaInfoByPath_ptr getJavaInfoByPathFunc =
+                (getJavaInfoByPath_ptr) pluginLib.getSymbol(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getJavaInfoByPath")));
+
+            OSL_ASSERT(getJavaInfoByPathFunc);
+            if (getJavaInfoByPathFunc == NULL)
+                return JFW_E_ERROR;
+
+            typedef std::vector<rtl::OString>::const_iterator citLoc;
+            for (citLoc i = vecJRELocations.begin();
+                 i != vecJRELocations.end(); i++)
+            {
+                rtl::OUString sLocation =
+                    rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
+                JavaInfo* pInfo = NULL;
+                javaPluginError err = (*getJavaInfoByPathFunc)(
+                    sLocation.pData,
+                    versionInfo.sMinVersion.pData,
+                    versionInfo.sMaxVersion.pData,
+                    versionInfo.getExcludeVersions(),
+                    versionInfo.getExcludeVersionSize(),
+                    & pInfo);
+                if (err == JFW_PLUGIN_E_NO_JRE)
+                    continue;
+                if (err == JFW_PLUGIN_E_FAILED_VERSION)
+                    continue;
+                else if (err !=JFW_PLUGIN_E_NONE)
+                    return JFW_E_ERROR;
+
+                if (pInfo)
+                {
+                    //We remember the very first installation in aCurrentInfo
+                    if (aCurrentInfo.getLocation().getLength() == 0)
+                        aCurrentInfo = pInfo;
+                    // compare features
+                    // If the user does not require any features (nFeatureFlags = 0)
+                    // then the first installation is used
+                    if ((pInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
+                    {
+                        //the just found Java implements all required features
+                        //currently there is only accessibility!!!
+                        aCurrentInfo = pInfo;
+                        bInfoFound = true;
+                        break;
+                    }
+                }
+            }//end iterate over paths
+            if (bInfoFound == true)
+                break;
+        }// end iterate plug-ins
     }
     if ((JavaInfo*) aCurrentInfo)
     {

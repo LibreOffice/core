@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-21 09:30:35 $
+ *  last change: $Author: jl $ $Date: 2004-04-23 08:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,6 +712,7 @@ CNodeJavaInfo::CNodeJavaInfo(const JavaInfo * pInfo,
 {
     if (pInfo != NULL)
     {
+        m_bEmptyNode = false;
         sAttrVendorUpdate = sUpdated;
         sVendor = pInfo->sVendor;
         sLocation = pInfo->sLocation;

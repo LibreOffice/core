@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-22 12:52:38 $
+ *  last change: $Author: jl $ $Date: 2004-04-23 08:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,13 @@ javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning);
     JREs can be provided by different vendors. In order to find the JREs of
     a certain vendor a plug-in library must be provided. There must be only one
     library for one vendor. The names of locations of those libraries have to
-    be put into the javavendors.xml file.</p>
+    be put into the javavendors.xml file.<br/>
+    The function uses the plug-in libraries to obtain information about JRE
+    installation and checks if they there is one among them that supports
+    a set of features (currently only accessibilty is possible). If none was
+    found then it also uses a list of paths, which have been registered
+    by <code>jfw_addJRELocation</code> or <code>jfw_setJRELocations</code>
+    to find JREs. Found JREs are examined in the same way.</p>
     <p>
     A JRE installation is only selected if it meets the version requirements.
     Information about the selected JRE are made persistent so that
