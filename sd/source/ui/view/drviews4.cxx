@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:29:57 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -118,20 +120,31 @@
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
+#endif
 #include "app.hxx"
-#include "sdruler.hxx"
+#ifndef SD_RULER_HXX
+#include "Ruler.hxx"
+#endif
 #include "sdresid.hxx"
-#include "drviewsh.hxx"
-#include "grviewsh.hxx"
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
+#endif
 #include "sdpage.hxx"
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "anminfo.hxx"
 #include "sdpopup.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 
 #ifndef _BMPMASK_HXX_ //autogen
 #include <svx/bmpmask.hxx>
@@ -141,6 +154,8 @@
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
 #endif
+
+namespace sd {
 
 #define PIPETTE_RANGE 0
 
@@ -155,10 +170,10 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::DeleteActualPage()
+void DrawViewShell::DeleteActualPage()
 {
     USHORT          nPage = aTabControl.GetCurPageId() - 1;
-    SdPage*         pPage = pDoc->GetSdPage(nPage,PK_STANDARD);
+    SdPage*         pPage = GetDoc()->GetSdPage(nPage,PK_STANDARD);
     String          aString(SdResId(STR_ASK_DELETE_PAGE));
     String          aPageName(pPage->GetName());
 
@@ -176,7 +191,7 @@ void SdDrawViewShell::DeleteActualPage()
 
     if (QueryBox(pWindow, WB_YES_NO, aString).Execute() == RET_YES)
     {
-        USHORT nPageCount = pDoc->GetPageCount();
+        USHORT nPageCount = GetDoc()->GetPageCount();
         DBG_ASSERT(nPageCount > 1, "aber das ist die letzte!");
 
         pDrView->EndTextEdit();
@@ -184,11 +199,11 @@ void SdDrawViewShell::DeleteActualPage()
         pDrView->BegUndo();
 
         pDrView->AddUndo(new SdrUndoDelPage(*pPage));
-        pDoc->RemovePage(pPage->GetPageNum());
+        GetDoc()->RemovePage(pPage->GetPageNum());
 
-        pPage = pDoc->GetSdPage(nPage, PK_NOTES);
+        pPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
         pDrView->AddUndo(new SdrUndoDelPage(*pPage));
-        pDoc->RemovePage(pPage->GetPageNum());
+        GetDoc()->RemovePage(pPage->GetPageNum());
 
         pDrView->EndUndo();
     }
@@ -200,9 +215,9 @@ void SdDrawViewShell::DeleteActualPage()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::DeleteActualLayer()
+void DrawViewShell::DeleteActualLayer()
 {
-    SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
+    SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
     const String&  rName  = aLayerTab.GetPageText(aLayerTab.GetCurPageId());
     String         aString(SdResId(STR_ASK_DELETE_LAYER));
 
@@ -233,7 +248,7 @@ void SdDrawViewShell::DeleteActualLayer()
 |*
 \************************************************************************/
 
-BOOL SdDrawViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
+BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
 //    // Praesentation auf Zeichentisch ein- oder ausschalten
 //    // (nur zu Testzwecken!)
@@ -319,7 +334,7 @@ BOOL SdDrawViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
         }
         else
         {
-            bRet = SdViewShell::KeyInput(rKEvt, pWin);
+            bRet = ViewShell::KeyInput(rKEvt, pWin);
         }
     }
 
@@ -332,8 +347,9 @@ BOOL SdDrawViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::StartRulerDrag(const SdRuler& rRuler,
-                                     const MouseEvent& rMEvt)
+void DrawViewShell::StartRulerDrag (
+    const Ruler& rRuler,
+    const MouseEvent& rMEvt)
 {
     if(!pDrView->IsHlplVisible())
         return;
@@ -368,11 +384,12 @@ void SdDrawViewShell::StartRulerDrag(const SdRuler& rRuler,
 |*
 \************************************************************************/
 
-void SdDrawViewShell::MouseButtonDown(const MouseEvent& rMEvt, SdWindow* pWin)
+void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
+    ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
-        SdViewShell::MouseButtonDown(rMEvt, pWin);
+        ViewShell::MouseButtonDown(rMEvt, pWin);
 
         if ( bPipette )
             ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->PipetteClicked();
@@ -386,7 +403,7 @@ void SdDrawViewShell::MouseButtonDown(const MouseEvent& rMEvt, SdWindow* pWin)
 \************************************************************************/
 
 
-void SdDrawViewShell::MouseMove(const MouseEvent& rMEvt, SdWindow* pWin)
+void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
@@ -434,12 +451,12 @@ void SdDrawViewShell::MouseMove(const MouseEvent& rMEvt, SdWindow* pWin)
         // Since the next MouseMove may execute a IsSolidDraggingNow() in
         // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
         // is needed it is necessary to set it here.
-        if(pDrView && pDoc)
+        if(pDrView && GetDoc())
         {
             svtools::ColorConfig aColorConfig;
             Color aFillColor;
 
-            if(DOCUMENT_TYPE_IMPRESS == pDoc->GetDocumentType())
+            if(DOCUMENT_TYPE_IMPRESS == GetDoc()->GetDocumentType())
             {
                 aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
             }
@@ -451,7 +468,7 @@ void SdDrawViewShell::MouseMove(const MouseEvent& rMEvt, SdWindow* pWin)
             pDrView->SetApplicationBackgroundColor(aFillColor);
         }
 
-        SdViewShell::MouseMove(rMEvt, pWin);
+        ViewShell::MouseMove(rMEvt, pWin);
 
         if( !bMousePosFreezed )
             aMousePos = rMEvt.GetPosPixel();
@@ -514,7 +531,7 @@ void SdDrawViewShell::MouseMove(const MouseEvent& rMEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
+void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
@@ -548,7 +565,7 @@ void SdDrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
             bIsRulerDrag = FALSE;
         }
         else
-            SdViewShell::MouseButtonUp(rMEvt, pWin);
+            ViewShell::MouseButtonUp(rMEvt, pWin);
     }
 }
 
@@ -558,7 +575,7 @@ void SdDrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
+void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
@@ -599,12 +616,13 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                  pWin != NULL && !pDrView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
             USHORT nSdResId = 0;          // ResourceID fuer Popup-Menue
-            BOOL bGraphicShell = this->ISA( SdGraphicViewShell );
+            BOOL bGraphicShell = this->ISA(GraphicViewShell);
 
             // Ist ein Fangobjekt unter dem Mauszeiger?
             SdrPageView* pPV;
             Point   aMPos = pWin->PixelToLogic( aMousePos );
-            USHORT  nHitLog = (USHORT) pWindow->PixelToLogic( Size( HITPIX, 0 ) ).Width();
+            USHORT  nHitLog = (USHORT) pWindow->PixelToLogic(
+                Size(FuPoor::HITPIX, 0 ) ).Width();
             USHORT  nHelpLine;
             // fuer Klebepunkt
             SdrObject*  pObj = NULL;
@@ -700,9 +718,9 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                                 if( (  rCEvt.IsMouseEvent() && pOLV->IsWrongSpelledWordAtPos(aPos) ) ||
                                     ( !rCEvt.IsMouseEvent() && pOLV->IsCursorAtWrongSpelledWord() ) )
                                 {
-                                    // #91457# Popup for Online-Spelling now handled by SdDrawDocShell
-                                    // Link aLink = LINK(pDoc, SdDrawDocument, OnlineSpellCallback);
-                                    Link aLink = LINK(pDocSh, SdDrawDocShell, OnlineSpellCallback);
+                                    // #91457# Popup for Online-Spelling now handled by DrawDocShell
+                                    // Link aLink = LINK(GetDoc(), SdDrawDocument, OnlineSpellCallback);
+                                    Link aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
                                     if( !rCEvt.IsMouseEvent() )
                                     {
@@ -862,7 +880,7 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
         }
         else
         {
-            SdViewShell::Command(rCEvt, pWin);
+            ViewShell::Command(rCEvt, pWin);
         }
     }
 }
@@ -873,7 +891,8 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ShowMousePosInfo(const Rectangle& rRect, SdWindow* pWin)
+void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
+    ::sd::Window* pWin)
 {
     if ( bHasRuler && pWin )
     {
@@ -938,7 +957,8 @@ void SdDrawViewShell::ShowMousePosInfo(const Rectangle& rRect, SdWindow* pWin)
     }
 
     // StatusBar Koordinatenanzeige
-    if( !GetIPClient() )
+    OSL_ASSERT (GetViewShell()!=NULL);
+    if ( ! GetViewShell()->GetIPClient())
     {
         SfxItemSet aSet(GetPool(), SID_CONTEXT, SID_CONTEXT,
                                    SID_ATTR_POSITION, SID_ATTR_POSITION,
@@ -963,7 +983,7 @@ void SdDrawViewShell::ShowMousePosInfo(const Rectangle& rRect, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::LockInput()
+void DrawViewShell::LockInput()
 {
     nLockCount++;
 }
@@ -974,7 +994,7 @@ void SdDrawViewShell::LockInput()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::UnlockInput()
+void DrawViewShell::UnlockInput()
 {
     DBG_ASSERT( nLockCount, "Input for this shell is not locked!" )
     if ( nLockCount )
@@ -986,4 +1006,4 @@ void SdDrawViewShell::UnlockInput()
 #pragma optimize ( "", on )
 #endif
 
-
+} // end of namespace sd
