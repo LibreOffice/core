@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: mib $ $Date: 2000-12-13 14:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ sal_Unicode SvParser::GetNextChar()
     BOOL bErr;
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
-        sal_Char c1, c2;
+        sal_uChar c1, c2;
         BOOL bSeekBack = TRUE;
 
         rInput >> c1;
@@ -288,7 +288,7 @@ sal_Unicode SvParser::GetNextChar()
     if( RTL_TEXTENCODING_UCS2 == eSrcEnc || RTL_TEXTENCODING_UTF8 == eSrcEnc )
     {
         sal_Unicode cUC = USHRT_MAX;
-        sal_Char c1, c2, c3;
+        sal_uChar c1, c2, c3;
 
         if( RTL_TEXTENCODING_UTF8 == eSrcEnc )
         {
@@ -373,7 +373,7 @@ sal_Unicode SvParser::GetNextChar()
     }
     else
     {
-        sal_Char c1;
+        sal_uChar c1;
         rInput >> c1;
         if( RTL_TEXTENCODING_DONTKNOW != eSrcEnc)
         {
