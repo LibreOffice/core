@@ -3,9 +3,9 @@
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2001-04-09 16:25:23 $
+#   last change: $Author: hr $ $Date: 2001-05-02 15:05:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,8 +62,8 @@
 #*************************************************************************
 
 # mk file for unxbsds
-ASM=
-AFLAGS=
+ASM=gcc
+AFLAGS=-Wa,-Av8plusa,-K,PIC -x assembler-with-cpp -c $(CDEFS)
 
 SOLAR_JAVA=TRUE
 JAVAFLAGSDEBUG=-g
