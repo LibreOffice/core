@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:48:35 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:00:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,8 +111,9 @@ SLOFILES =\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/versdlg.obj			\
         $(SLO)$/printopt.obj		\
-                $(SLO)$/recfloat.obj            \
-        $(SLO)$/cfgtreelstbox.obj
+        $(SLO)$/recfloat.obj		\
+        $(SLO)$/cfgtreelstbox.obj	\
+        $(SLO)$/itemconnect.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
