@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:43:06 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 21:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "½s¸¹¼Ë¦¡";
         Text[ arabic ] = "äãØ ÇáÊÑŞíã";
         Text[ greek ] = "Óôõë áñßèìçóçò";
-        Text[ korean ] = "¹øÈ£ ¸Å±â±â À¯Çü";
+        Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
         Text[ turkish ] = "Numaralama biçimi";
         Text[ language_user1 ] = " ";
     };
@@ -212,7 +212,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "½s¸¹";
         Text[ arabic ] = "ÇáÊÑŞíã";
         Text[ greek ] = "Áñßèìçóç";
-        Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+        Text[ korean ] = "¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -252,7 +252,7 @@ TabPage TP_NUMPARA
         Text [ English ] = "~Start at:" ;
         Hide = TRUE ;
         Disable = TRUE ;
-        Text [ portuguese ] = "~Começar com:" ;
+        Text [ portuguese ] = "~Começar em:" ;
         Text [ english_us ] = "~Start with:" ;
         Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
         Text [ swedish ] = "~Börja med:" ;
@@ -312,7 +312,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "¦æ½s¸¹";
         Text[ arabic ] = "ÊÑŞíã ÇáÃÓØÑ";
         Text[ greek ] = "Áñßèìçóç ãñáììşí";
-        Text[ korean ] = "Çà  ¹øÈ£ ¸Å±â±â";
+        Text[ korean ] = "Çà  ¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Satır numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -331,7 +331,7 @@ TabPage TP_NUMPARA
         Text [ spanish ] = "Con~tar las líneas de este párrafo" ;
         Text [ french ] = "~Inclure les lignes de ce paragraphe" ;
         Text [ dutch ] = "~De regels van deze alinea meetellen." ;
-        Text [ portuguese ] = "~Incluir este parágrafo na numeração de linhas" ;
+        Text [ portuguese ] = "~Incluir as linhas deste parágrafo" ;
         Text[ chinese_simplified ] = "°üÀ¨Õâ¸ö¶ÎÂäµÄĞĞ(~I)";
         Text[ russian ] = "Ñ÷èòàòü, âêëş÷àÿ ñòğîêè ıòîãî àáçàöà";
         Text[ polish ] = "W³¹cznie z wierszami tego akapitu";
@@ -339,7 +339,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "¥]¬A³o­Ó¬q¸¨ªº¦æ(~I)";
         Text[ arabic ] = "ÚÏ ÃÓØÑ åĞå ÇáİŞÑÉ ÃíÖÇğ";
         Text[ greek ] = "Íá óõìğåñéëçöèïıí ïé ãñáììİò áõôŞò ôçò ğáñáãñÜöïõ";
-        Text[ korean ] = "´Ü¶ô¿¡ ¼± ¹øÈ£ ¸Å±â±âÆ÷ÇÔ(~I)";
+        Text[ korean ] = "ÀÌ¡¡´Ü¶ôÀÇ ¼± ÇÔ²²¡¡¼¼±â(~I)";
         Text[ turkish ] = "Bu paragrafın da satırlarını numarala";
         Text[ language_user1 ] = " ";
     };
@@ -377,7 +377,7 @@ TabPage TP_NUMPARA
         Text = "B~eginnen mit:" ;
         Text [ English ] = "~Start at:" ;
         Disable = TRUE ;
-        Text [ portuguese ] = "~Começar com:" ;
+        Text [ portuguese ] = "~Começar em:" ;
         Text [ english_us ] = "~Start with:" ;
         Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
         Text [ swedish ] = "Börja m~ed:" ;
