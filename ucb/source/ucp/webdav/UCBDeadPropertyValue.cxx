@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 14:44:27 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
+#ifndef NE_XML_H
+#include <neon/ne_xml.h>
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -75,19 +81,13 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 
-#define DAV_ELM_LOCK_FIRST (NE_ELM_UNUSED)
-
-#define DAV_ELM_ucbprop (DAV_ELM_LOCK_FIRST +  1)
-#define DAV_ELM_type    (DAV_ELM_LOCK_FIRST +  2)
-#define DAV_ELM_value   (DAV_ELM_LOCK_FIRST +  3)
-
-// static
-const struct ne_xml_elm UCBDeadPropertyValue::elements[] =
+struct UCBDeadPropertyValueParseContext
 {
-    { "", "ucbprop", DAV_ELM_ucbprop, 0 },
-    { "", "type",    DAV_ELM_type,    NE_XML_CDATA },
-    { "", "value",   DAV_ELM_value,   NE_XML_CDATA },
-    { 0 }
+    rtl::OUString * pType;
+    rtl::OUString * pValue;
+
+    UCBDeadPropertyValueParseContext() : pType( 0 ), pValue( 0 ) {}
+    ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
 };
 
 // static
@@ -118,69 +118,100 @@ const rtl::OUString UCBDeadPropertyValue::aXMLMid
 const rtl::OUString UCBDeadPropertyValue::aXMLEnd
     = rtl::OUString::createFromAscii( "</value></ucbprop>" );
 
-struct UCBDeadPropertyValueParseContext
-{
-    rtl::OUString * pType;
-    rtl::OUString * pValue;
+#define STATE_TOP (1)
 
-    UCBDeadPropertyValueParseContext() : pType( 0 ), pValue( 0 ) {}
-    ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
-};
+#define STATE_UCBPROP   (STATE_TOP)
+#define STATE_TYPE      (STATE_TOP + 1)
+#define STATE_VALUE     (STATE_TOP + 2)
 
 //////////////////////////////////////////////////////////////////////////
-extern "C" int UCBDeadPropertyValue_validate_callback( void * userdata,
-                                                       ne_xml_elmid parent,
-                                                       ne_xml_elmid child )
+extern "C" int UCBDeadPropertyValue_startelement_callback(
+    void *userdata,
+    int parent,
+    const char *nspace,
+    const char *name,
+    const char **atts )
 {
-    switch ( parent )
+    if ( ( name != 0 ) &&
+         ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
     {
-        case 0:
-            if ( child == DAV_ELM_ucbprop )
-                return NE_XML_VALID;
+        switch ( parent )
+        {
+            case NE_XML_STATEROOT:
+                if ( strcmp( name, "ucbprop" ) == 0 )
+                    return STATE_UCBPROP;
+                break;
 
-            break;
-
-        case DAV_ELM_ucbprop:
-            return NE_XML_VALID;
-
-        default:
-            break;
+            case STATE_UCBPROP:
+                if ( strcmp( name, "type" ) == 0 )
+                    return STATE_TYPE;
+                else if ( strcmp( name, "value" ) == 0 )
+                    return STATE_VALUE;
+                break;
+        }
     }
-
     return NE_XML_DECLINE;
 }
 
 //////////////////////////////////////////////////////////////////////////
-// static
-extern "C" int UCBDeadPropertyValue_endelement_callback( void * userdata,
-                                                         const struct ne_xml_elm * s,
-                                                         const char * cdata )
+extern "C" int UCBDeadPropertyValue_chardata_callback(
+    void *userdata,
+    int state,
+    const char *buf,
+    size_t len )
 {
     UCBDeadPropertyValueParseContext * pCtx
             = static_cast< UCBDeadPropertyValueParseContext * >( userdata );
 
-    switch ( s->id )
+    switch ( state )
     {
-        case DAV_ELM_type:
+        case STATE_TYPE:
             OSL_ENSURE( !pCtx->pType,
-                        "UCBDeadPropertyValue::endelement_callback - "
+                        "UCBDeadPropertyValue_endelement_callback - "
                         "Type already set!" );
-            pCtx->pType = new rtl::OUString(
-                                rtl::OUString::createFromAscii( cdata ) );
+            pCtx->pType
+                = new rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             break;
 
-        case DAV_ELM_value:
+        case STATE_VALUE:
             OSL_ENSURE( !pCtx->pValue,
-                        "UCBDeadPropertyValue::endelement_callback - "
+                        "UCBDeadPropertyValue_endelement_callback - "
                         "Value already set!" );
-            pCtx->pValue = new rtl::OUString(
-                                rtl::OUString::createFromAscii( cdata ) );
-            break;
-
-        default:
+            pCtx->pValue
+                = new rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             break;
     }
-    return 0;
+    return 0; // zero to continue, non-zero to abort parsing
+}
+
+//////////////////////////////////////////////////////////////////////////
+extern "C" int UCBDeadPropertyValue_endelement_callback(
+    void *userdata,
+    int state,
+    const char *nspace,
+    const char *name )
+{
+    UCBDeadPropertyValueParseContext * pCtx
+            = static_cast< UCBDeadPropertyValueParseContext * >( userdata );
+
+    switch ( state )
+    {
+        case STATE_TYPE:
+            if ( !pCtx->pType )
+                return 1; // abort
+            break;
+
+        case STATE_VALUE:
+            if ( !pCtx->pValue )
+                return 1; // abort
+            break;
+
+        case STATE_UCBPROP:
+            if ( !pCtx->pType || ! pCtx->pValue )
+                return 1; // abort
+            break;
+    }
+    return 0; // zero to continue, non-zero to abort parsing
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -378,11 +409,10 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
     {
         UCBDeadPropertyValueParseContext aCtx;
         ne_xml_push_handler( parser,
-                                  elements,
-                                  UCBDeadPropertyValue_validate_callback,
-                                  0, // startelement_callback
-                                  UCBDeadPropertyValue_endelement_callback,
-                                  &aCtx );
+                             UCBDeadPropertyValue_startelement_callback,
+                             UCBDeadPropertyValue_chardata_callback,
+                             UCBDeadPropertyValue_endelement_callback,
+                             &aCtx );
 
         ne_xml_parse( parser, rInData.getStr(), rInData.getLength() );
 
