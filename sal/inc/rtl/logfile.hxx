@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-09 12:51:33 $
+ *  last change: $Author: cd $ $Date: 2001-07-27 18:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,11 +137,24 @@ namespace rtl
             b.  A vertical line indicating an arbitrary message.
                 4b optional function name or general scope identifier.
                 5b A colon followed by a space and a free form message terminated by a newline.
+
+        There is a second version of creating a context. RTL_LOGFILE_CONTEXT_AUTHOR takes
+        two more arguments, the name of the project and the author's sign who is responsible
+        for the code in which the macro is used.
 */
     class Logfile
     {
     public:
         inline Logfile( const sal_Char *name );
+        /** @descr  Create a log file context where the message field consists of a project
+                name, the author's shortcut, and the actual message.  These three strings
+                are written in a format that is understood by script that later parses the
+                log file and that so can extract the three strings.
+            @param  project Short name of the project, like sw for writer or sc for calc.
+            @param  author  The sign of the person responsible for the code.
+            @param  name    The actual message, typically a method name.
+        */
+        inline Logfile( const sal_Char *project, const sal_Char *author, const sal_Char *name );
         inline ~Logfile();
         inline const sal_Char *getName();
     private:
@@ -155,6 +168,19 @@ namespace rtl
                            osl_getGlobalTimer(),
                            osl_getThreadIdentifier( 0 ),
                            name );
+    }
+
+    inline Logfile::Logfile( const sal_Char *project, const sal_Char *author, const sal_Char *name )
+        : m_sName( project)
+    {
+        m_sName += " (";
+        m_sName += author;
+        m_sName += ") ";
+        m_sName += name;
+        rtl_logfile_trace( "%06lu %lu { %s\n",
+                           osl_getGlobalTimer(),
+                           osl_getThreadIdentifier( 0 ),
+                           m_sName.pData->buffer );
     }
 
     inline Logfile::~Logfile()
@@ -173,6 +199,7 @@ namespace rtl
 
 #ifdef TIMELOG
 #define RTL_LOGFILE_CONTEXT( instance, name ) ::rtl::Logfile instance( name )
+#define RTL_LOGFILE_CONTEXT_AUTHOR( instance, project, author, name ) ::rtl::Logfile instance(project, author, name )
 #define RTL_LOGFILE_CONTEXT_TRACE( instance, message ) \
         rtl_logfile_trace( "%06lu %lu | %s : %s\n", \
                            osl_getGlobalTimer(),  \
@@ -202,7 +229,8 @@ namespace rtl
         rtl_logfile_trace( "\n" )
 
 #else
-#define RTL_LOGFILE_CONTEXT( instance,name )  ((void)0)
+#define RTL_LOGFILE_CONTEXT( instance, name )  ((void)0)
+#define RTL_LOGFILE_CONTEXT_AUTHOR( instance, project, author, name )  ((void)0)
 #define RTL_LOGFILE_CONTEXT_TRACE( instance, message )  ((void)0)
 #define RTL_LOGFILE_CONTEXT_TRACE1( instance, frmt, arg1 ) ((void)0)
 #define RTL_LOGFILE_CONTEXT_TRACE2( instance, frmt, arg1, arg2 ) ((void)0)
