@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,8 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-SalDisplay::SalDisplay( Widget w )
+SalDisplay::SalDisplay( Widget w ) :
+        mpFallbackFactory ( NULL )
 {
     SalData *pSalData = GetSalData();
 
@@ -718,8 +719,9 @@ SalDisplay::SalDisplay( Widget w )
     Init( hColMap, &aXVI );
 }
 
-SalDisplay::SalDisplay( Display *display, Visual *pVisual,
-                              Colormap aColMap ) : pDisp_( display )
+SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
+        pDisp_( display ),
+        mpFallbackFactory ( NULL )
 {
     SalData *pSalData  = GetSalData();
     XVisualInfo aXVI;
@@ -861,7 +863,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     pFontCache_         = NULL;
     mpFontList          = (XlfdStorage*)NULL;
     mpFactory           = (AttributeProvider*)NULL;
-    mpCvtCache          = NULL;
     pCapture_           = NULL;
     pVisual_            = new SalVisual( pXVI );
     aSize_              = Size( DisplayWidth ( pDisp_, nScreen_ ),

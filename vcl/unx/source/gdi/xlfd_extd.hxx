@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2000-12-14 13:07:49 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,8 @@ class XlfdStorage {
                                     { return mnCount; }
         const ExtendedXlfd* Get(int nIdx) const;
         void                InterfaceFont( AttributeProvider* pFactory);
+        const ExtendedXlfd* GetInterfaceFont () const
+                                    { return mpInterfaceFont; }
         #ifdef DEBUG
         void                Dump() const ;
         #endif
@@ -275,6 +277,7 @@ class XlfdStorage {
         unsigned short      mnSize;
         const ExtendedXlfd**
                             mpList;
+        const ExtendedXlfd* mpInterfaceFont;
 };
 
 // list of fonts specific for bitmap fonts
@@ -292,11 +295,15 @@ class BitmapXlfdStorage : public XlfdStorage {
 
 class VirtualXlfd : public ExtendedXlfd
 {
+    private:
+
+        int                 GetFontQuality (unsigned short nFamily);
+
     public:
                              VirtualXlfd();
         virtual             ~VirtualXlfd();
         virtual Bool        AddEncoding( const Xlfd *pXlfd );
-        Bool                AddEncoding( const ExtendedXlfd *pXlfd );
+        Bool                AddEncoding( const ExtendedXlfd *pXlfd);
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                        rtl_TextEncoding nEncoding ) const ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-19 17:55:50 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,35 +144,61 @@ Attribute::TagFeature( unsigned short nFeature )
     {
         mnFeature |= XLFD_FEATURE_NARROW;
     }
+
     if (   (nFeature & XLFD_FEATURE_OL_CURSOR)
         && (strcmp(mpName, "open look cursor") == 0) )
     {
         mnFeature |= XLFD_FEATURE_OL_CURSOR;
     }
+
     if (   (nFeature & XLFD_FEATURE_OL_GLYPH)
         && (strcmp(mpName, "open look glyph") == 0) )
     {
         mnFeature |= XLFD_FEATURE_OL_GLYPH;
     }
+
     if (   (nFeature & XLFD_FEATURE_APPLICATION_FONT)
         && (   (strcmp(mpName, "interface user")   == 0)
             || (strcmp(mpName, "interface system") == 0)))
     {
         mnFeature |= XLFD_FEATURE_APPLICATION_FONT;
     }
-    if (   (nFeature & XLFD_FEATURE_INTERFACE_FONT)
-        && (   (strcmp(mpName, "arial")       == 0) /* european          */
-            || (strcmp(mpName, "helvetica")   == 0)
-            || (strcmp(mpName, "hg mincho l") == 0) /* solaris: japanese */
-            || (strcmp(mpName, "minchol")     == 0) /* turbo linux: jisx201 / jisx208 */
-            || (strcmp(mpName, "heiseimin")   == 0) /* */
-            || (strcmp(mpName, "myeongjo")    == 0) /* solaris: korean   */
-            || (strcmp(mpName, "kai")         == 0) /* solaris: chinese  */
-            || (strcmp(mpName, "ar pl mingti2l big5") == 0) /* turbo linux: chinese  */
-           )
-       )
+
+    if (nFeature & XLFD_FEATURE_INTERFACE_FONT)
     {
-        mnFeature |= XLFD_FEATURE_INTERFACE_FONT;
+        // european
+        if (   (strcmp(mpName, "arial")        == 0)
+            || (strcmp(mpName, "helvetica")    == 0))
+        {
+            mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_INTERFACE_FONT_HIGQ);
+        }
+        else
+        if (   (strcmp(mpName, "charter")      == 0)    /* last exit on linux */
+            || (strcmp(mpName, "lucidux sans") == 0))
+        {
+            mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_INTERFACE_FONT_MEDQ);
+        }
+        else
+        // japanese
+        if (   (strcmp(mpName, "hg mincho l")  == 0)    /* Solaris: jisx0208 jisx0201 */
+            || (strcmp(mpName, "heiseimin")    == 0)    /* Solaris: jisx0212 */
+            || (strcmp(mpName, "minchol")      == 0))   /* TurboLinux */
+        {
+            mnFeature |= XLFD_FEATURE_INTERFACE_FONT;
+        }
+        else
+        // chinese
+        if (   (strcmp(mpName, "kai")                 == 0)  /* Solaris */
+            || (strcmp(mpName, "ar pl mingti2l big5") == 0)) /* TurboLinux */
+        {
+            mnFeature |= XLFD_FEATURE_INTERFACE_FONT;
+        }
+        else
+        // korean
+        if (   (strcmp(mpName, "myeongjo")    == 0))    /* Solaris */
+        {
+            mnFeature |= XLFD_FEATURE_INTERFACE_FONT;
+        }
     }
 
     if ( nFeature & XLFD_FEATURE_REDUNDANTSTYLE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-19 11:21:45 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,16 @@ SalConverterCache::SalConverterCache()
     mpConverter = (ConverterT*)calloc( sizeof(ConverterT), RTL_TEXTENCODING_STD_COUNT );
 }
 
+SalConverterCache*
+SalConverterCache::GetInstance ()
+{
+    static SalConverterCache* pCvt = NULL;
+    if (pCvt == NULL)
+        pCvt = new SalConverterCache;
+
+    return pCvt;
+}
+
 SalConverterCache::~SalConverterCache()
 {
     for ( int i = 0; i < RTL_TEXTENCODING_STD_COUNT; i++ )
@@ -95,8 +105,7 @@ SalConverterCache::GetU2TConverter( rtl_TextEncoding nEncoding )
                     rtl_createUnicodeToTextConverter( nEncoding );
 // ---> FIXME
 if ( mpConverter[ nEncoding ].mpU2T == NULL )
-    fprintf( stderr, "failed to create Unicode -> %s converter\n",
-            pGetEncodingName(nEncoding) );
+    fprintf( stderr, "failed to create Unicode -> %i converter\n", nEncoding);
 // <---
         }
         return mpConverter[ nEncoding ].mpU2T;
@@ -115,8 +124,7 @@ SalConverterCache::GetT2UConverter( rtl_TextEncoding nEncoding )
                     rtl_createTextToUnicodeConverter( nEncoding );
 // ---> FIXME
 if ( mpConverter[ nEncoding ].mpT2U == NULL )
-    fprintf( stderr, "failed to create %s -> Unicode converter\n",
-            pGetEncodingName(nEncoding) );
+    fprintf( stderr, "failed to create %i -> Unicode converter\n", nEncoding );
 // <---
         }
         return mpConverter[ nEncoding ].mpT2U;
@@ -314,10 +322,11 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
 // wrapper for rtl_convertUnicodeToText that handles the usual cases for
 // textconversion in drawtext and gettextwidth routines
 sal_Size
-ConvertStringUTF16( const sal_Unicode *pText, int nTextLen,
-        sal_Char *pBuffer, sal_Size nBufferSize,
-        rtl_UnicodeToTextConverter aConverter )
+SalConverterCache::ConvertStringUTF16( const sal_Unicode *pText, int nTextLen,
+        sal_Char *pBuffer, sal_Size nBufferSize, rtl_TextEncoding nEncoding )
 {
+    rtl_UnicodeToTextConverter aConverter = GetU2TConverter(nEncoding);
+
     const sal_uInt32 nCvtFlags =
                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK
              | RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK ;
@@ -333,119 +342,14 @@ ConvertStringUTF16( const sal_Unicode *pText, int nTextLen,
 
     rtl_destroyUnicodeToTextContext( aConverter, aContext );
 
+    // XXX FIXME
+    if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
+        || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
+    {
+        for (int n_char = 0; n_char < nSize; n_char++ )
+            pBuffer[ n_char ] &= 0x7F;
+    }
+
     return nSize;
-}
-
-typedef struct {
-    const rtl_TextEncoding  nEncoding;
-    const char*             pEncoding;
-} DescriptionT;
-
-const DescriptionT pRTLEncoding[] = {
-    { RTL_TEXTENCODING_DONTKNOW,        "DONTKNOW" },
-    { RTL_TEXTENCODING_MS_1252,         "MS_1252" },
-    { RTL_TEXTENCODING_APPLE_ROMAN,     "APPLE_ROMAN" },
-    { RTL_TEXTENCODING_IBM_437,         "IBM_437" },
-    { RTL_TEXTENCODING_IBM_850,         "IBM_850" },
-    { RTL_TEXTENCODING_IBM_860,         "IBM_860" },
-    { RTL_TEXTENCODING_IBM_861,         "IBM_861" },
-    { RTL_TEXTENCODING_IBM_863,         "IBM_863" },
-    { RTL_TEXTENCODING_IBM_865,         "IBM_865" },
-    { RTL_TEXTENCODING_SYMBOL,          "SYMBOL" },
-    { RTL_TEXTENCODING_ASCII_US,        "ASCII_US" },
-    { RTL_TEXTENCODING_ISO_8859_1,      "ISO_8859_1" },
-    { RTL_TEXTENCODING_ISO_8859_2,      "ISO_8859_2" },
-    { RTL_TEXTENCODING_ISO_8859_3,      "ISO_8859_3" },
-    { RTL_TEXTENCODING_ISO_8859_4,      "ISO_8859_4" },
-    { RTL_TEXTENCODING_ISO_8859_5,      "ISO_8859_5" },
-    { RTL_TEXTENCODING_ISO_8859_6,      "ISO_8859_6" },
-    { RTL_TEXTENCODING_ISO_8859_7,      "ISO_8859_7" },
-    { RTL_TEXTENCODING_ISO_8859_8,      "ISO_8859_8" },
-    { RTL_TEXTENCODING_ISO_8859_9,      "ISO_8859_9" },
-    { RTL_TEXTENCODING_ISO_8859_14,     "ISO_8859_14" },
-    { RTL_TEXTENCODING_ISO_8859_15,     "ISO_8859_15" },
-    { RTL_TEXTENCODING_IBM_737,         "IBM_737" },
-    { RTL_TEXTENCODING_IBM_775,         "IBM_775" },
-    { RTL_TEXTENCODING_IBM_852,         "IBM_852" },
-    { RTL_TEXTENCODING_IBM_855,         "IBM_855" },
-    { RTL_TEXTENCODING_IBM_857,         "IBM_857" },
-    { RTL_TEXTENCODING_IBM_862,         "IBM_862" },
-    { RTL_TEXTENCODING_IBM_864,         "IBM_864" },
-    { RTL_TEXTENCODING_IBM_866,         "IBM_866" },
-    { RTL_TEXTENCODING_IBM_869,         "IBM_869" },
-    { RTL_TEXTENCODING_MS_874,          "MS_874" },
-    { RTL_TEXTENCODING_MS_1250,         "MS_1250" },
-    { RTL_TEXTENCODING_MS_1251,         "MS_1251" },
-    { RTL_TEXTENCODING_MS_1253,         "MS_1253" },
-    { RTL_TEXTENCODING_MS_1254,         "MS_1254" },
-    { RTL_TEXTENCODING_MS_1255,         "MS_1255" },
-    { RTL_TEXTENCODING_MS_1256,         "MS_1256" },
-    { RTL_TEXTENCODING_MS_1257,         "MS_1257" },
-    { RTL_TEXTENCODING_MS_1258,         "MS_1258" },
-    { RTL_TEXTENCODING_APPLE_ARABIC,    "APPLE_ARABIC" },
-    { RTL_TEXTENCODING_APPLE_CENTEURO,  "APPLE_CENTEURO" },
-    { RTL_TEXTENCODING_APPLE_CROATIAN,  "APPLE_CROATIAN" },
-    { RTL_TEXTENCODING_APPLE_CYRILLIC,  "APPLE_CYRILLIC" },
-    { RTL_TEXTENCODING_APPLE_DEVANAGARI,"APPLE_DEVANAGARI" },
-    { RTL_TEXTENCODING_APPLE_FARSI,     "APPLE_FARSI" },
-    { RTL_TEXTENCODING_APPLE_GREEK,     "APPLE_GREEK" },
-    { RTL_TEXTENCODING_APPLE_GUJARATI,  "APPLE_GUJARATI" },
-    { RTL_TEXTENCODING_APPLE_GURMUKHI,  "APPLE_GURMUKHI" },
-    { RTL_TEXTENCODING_APPLE_HEBREW,    "APPLE_HEBREW" },
-    { RTL_TEXTENCODING_APPLE_ICELAND,   "APPLE_ICELAND" },
-    { RTL_TEXTENCODING_APPLE_ROMANIAN,  "APPLE_ROMANIAN" },
-    { RTL_TEXTENCODING_APPLE_THAI,      "APPLE_THAI" },
-    { RTL_TEXTENCODING_APPLE_TURKISH,   "APPLE_TURKISH" },
-    { RTL_TEXTENCODING_APPLE_UKRAINIAN, "APPLE_UKRAINIAN" },
-    { RTL_TEXTENCODING_APPLE_CHINSIMP,  "APPLE_CHINSIMP" },
-    { RTL_TEXTENCODING_APPLE_CHINTRAD,  "APPLE_CHINTRAD" },
-    { RTL_TEXTENCODING_APPLE_JAPANESE,  "APPLE_JAPANESE" },
-    { RTL_TEXTENCODING_APPLE_KOREAN,    "APPLE_KOREAN" },
-    { RTL_TEXTENCODING_MS_932,          "MS_932" },
-    { RTL_TEXTENCODING_MS_936,          "MS_936" },
-    { RTL_TEXTENCODING_MS_949,          "MS_949" },
-    { RTL_TEXTENCODING_MS_950,          "MS_950" },
-    { RTL_TEXTENCODING_SHIFT_JIS,       "SHIFT_JIS" },
-    { RTL_TEXTENCODING_GB_2312,         "GB_2312" },
-    { RTL_TEXTENCODING_GBT_12345,       "GBT_12345" },
-    { RTL_TEXTENCODING_GBK,             "GBK" },
-    { RTL_TEXTENCODING_BIG5,            "BIG5" },
-    { RTL_TEXTENCODING_EUC_JP,          "EUC_JP" },
-    { RTL_TEXTENCODING_EUC_CN,          "EUC_CN" },
-    { RTL_TEXTENCODING_EUC_TW,          "EUC_TW" },
-    { RTL_TEXTENCODING_ISO_2022_JP,     "ISO_2022_JP" },
-    { RTL_TEXTENCODING_ISO_2022_CN,     "ISO_2022_CN" },
-    { RTL_TEXTENCODING_KOI8_R,          "KOI8_R" },
-    { RTL_TEXTENCODING_UTF7,            "UTF7" },
-    { RTL_TEXTENCODING_UTF8,            "UTF8" },
-    { RTL_TEXTENCODING_ISO_8859_10,     "ISO_8859_10" },
-    { RTL_TEXTENCODING_ISO_8859_13,     "ISO_8859_13" },
-    { RTL_TEXTENCODING_EUC_KR,          "EUC_KR" },
-    { RTL_TEXTENCODING_ISO_2022_KR,     "ISO_2022_KR" },
-    { RTL_TEXTENCODING_JIS_X_0208,      "JISX_0208_1983" },
-    { RTL_TEXTENCODING_JIS_X_0201,      "JISX_0201_1976" },
-    { RTL_TEXTENCODING_JIS_X_0212,      "JISX_0212_1990" },
-    #ifdef __notdef__
-    { RTL_TEXTENCODING_KSC_5601_1992,   "KSC_5601_1992" },
-    { RTL_TEXTENCODING_TIS_620_2533,    "TIS_620_2533" },
-    { RTL_TEXTENCODING_SUNUDC_1997,     "SUNUDC_1997" },
-    #endif
-    { RTL_TEXTENCODING_STD_COUNT,       "STD_COUNT" },
-    { RTL_TEXTENCODING_USER_START,      "USER_START" },
-    { RTL_TEXTENCODING_USER_END,        "USER_END" },
-    { RTL_TEXTENCODING_UCS4,            "UCS4" },
-    { RTL_TEXTENCODING_UCS2,            "UCS2" },
-    { RTL_TEXTENCODING_UNICODE,         "UNICODE" }
-};
-
-extern "C" const char*
-pGetEncodingName( rtl_TextEncoding nEncoding )
-{
-    for ( int i = 0; i < sizeof(pRTLEncoding)/sizeof(DescriptionT); i++ )
-        if ( nEncoding == pRTLEncoding[i].nEncoding )
-            return pRTLEncoding[i].pEncoding;
-
-    static const char p_nil[] = "not_in_list";
-    return p_nil;
 }
 

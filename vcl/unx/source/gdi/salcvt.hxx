@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@ class SalConverterCache {
         rtl_TextToUnicodeConverter
                         GetT2UConverter( rtl_TextEncoding nEncoding );
         Bool            IsSingleByteEncoding( rtl_TextEncoding nEncoding );
+        sal_Size        ConvertStringUTF16( const sal_Unicode *pText, int nTextLen,
+                                sal_Char *pBuffer, sal_Size nBufferSize,
+                                rtl_TextEncoding nEncoding);
+
+        static SalConverterCache*
+                        GetInstance ();
 
     private:
 
@@ -104,12 +110,6 @@ class SalConverterCache {
         ConverterT *mpConverter;
 };
 
-// wrapper for rtl_convertUnicodeToText that handles the usual cases for
-// textconversion in drawtext routines
-sal_Size
-ConvertStringUTF16( const sal_Unicode *pText, int nTextLen,
-        sal_Char *pBuffer, sal_Size nBufferSize,
-        rtl_UnicodeToTextConverter aConverter );
 
 
 #endif /* SAL_CONVERTER_CACHE_HXX_ */

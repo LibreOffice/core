@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-12 13:21:29 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.8 $  $Author: hdu $  $Date: 2001-03-12 13:21:29 $   //
+// $Revision: 1.9 $  $Author: cp $  $Date: 2001-03-19 08:30:34 $   //
 //                                                                            //
 // $Workfile:   salgdi.h  $                                                   //
 //  $Modtime:   10 Sep 1997 11:55:36  $                                       //
@@ -138,7 +138,9 @@ class SalGraphicsData
 
             GC              pFontGC_;           // Font attributes
             ExtendedFontStructRef       xFont_;
-            class ServerFont* mpServerSideFont;
+            ExtendedFontStructRef       mxFallbackFont;
+            class ServerFont            *mpServerSideFont;
+
             Fraction        aScale_;
             SalColor        nTextColor_;
             Pixel           nTextPixel_;
@@ -241,7 +243,10 @@ class SalGraphicsData
                                       const xub_Unicode* pStr,
                                       USHORT nLen );
 
-            void            DrawUnicodeString( int nX, int nY,
+            void            DrawStringMB( int nX, int nY,
+                                const sal_Unicode* pStr, int nLength );
+
+            void            DrawStringUCS2( int nX, int nY,
                                 const sal_Unicode* pStr, int nLength );
 
             void            DrawServerFontString( int nX, int nY,

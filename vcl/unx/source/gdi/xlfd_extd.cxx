@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-15 14:41:34 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,21 +751,38 @@ VirtualXlfd::AddEncoding( const Xlfd *pXlfd )
     return False;
 }
 
-Bool
-VirtualXlfd::AddEncoding( const ExtendedXlfd *pXlfd )
+int
+VirtualXlfd::GetFontQuality (unsigned short nFamily)
 {
+    Attribute  *pFamily  = mpFactory->RetrieveFamily(nFamily);
+
+    if (pFamily->HasFeature(XLFD_FEATURE_INTERFACE_FONT_HIGQ))
+        return 32;
+    if (pFamily->HasFeature(XLFD_FEATURE_INTERFACE_FONT_MEDQ))
+        return 16;
+    return 0;
+}
+
+Bool
+VirtualXlfd::AddEncoding( const ExtendedXlfd *pXlfd)
+{
+    mpFactory  = pXlfd->mpFactory;
+
+    int nFontQuality = GetFontQuality (pXlfd->mnFamily);
+
     for (int i = 0; i < pXlfd->NumEncodings(); i++)
     {
         rtl_TextEncoding nEncoding = pXlfd->GetEncoding(i);
-        if (!HasEncoding(nEncoding))
+        int nIdx = GetEncodingIdx( nEncoding );
+        if ( nIdx < 0 /* !HasEncoding(nEncoding) */)
         {
-            /* deep copy of the xlfd information */
-            mpFactory  = pXlfd->mpFactory;
+            /* XXX should be obsolete since all info is in mpExtEncodingInfo */
             mnFoundry  = pXlfd->mnFoundry;
             mnFamily   = pXlfd->mnFamily;
             mnWeight   = pXlfd->mnWeight;
             mnSlant    = pXlfd->mnSlant;
             mnSetwidth = pXlfd->mnSetwidth;
+            /* XXX end of obsolete */
 
             mpEncodingInfo = (EncodingInfo*)Realloc( mpEncodingInfo,
                                         (mnEncodings + 1) * sizeof(EncodingInfo) );
@@ -775,6 +792,12 @@ VirtualXlfd::AddEncoding( const ExtendedXlfd *pXlfd )
             mpExtEncodingInfo[ mnEncodings ] = pXlfd;
 
             mnEncodings++;
+        }
+        else
+        if (nFontQuality > GetFontQuality (mpExtEncodingInfo[nIdx].mnFamily))
+        {
+            mpEncodingInfo[ nIdx ]    = pXlfd->mpEncodingInfo[i];
+            mpExtEncodingInfo[ nIdx ] = pXlfd;
         }
     }
 
@@ -893,7 +916,8 @@ XlfdStorage::~XlfdStorage()
 XlfdStorage::XlfdStorage() :
     mnCount( 0 ),
     mnSize( 0 ),
-    mpList( NULL )
+    mpList( NULL ),
+    mpInterfaceFont( NULL )
 {
 }
 
@@ -989,7 +1013,14 @@ XlfdStorage::InterfaceFont (AttributeProvider* pFactory)
     }
 
     if (pVirtualFont->NumEncodings() > 0)
+    {
+        mpInterfaceFont = pVirtualFont;
         Add (pVirtualFont);
+    }
+    else
+    {
+        delete pVirtualFont;
+    }
 }
 
 // ------ bitmap font list --------------------------------------------------

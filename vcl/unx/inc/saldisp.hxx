@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@ class SalDisplay
 
             AttributeProvider           *mpFactory;
             XlfdStorage                 *mpFontList;
-            SalConverterCache           *mpCvtCache;
+            const ExtendedXlfd          *mpFallbackFactory;
 
              SalSystemData  *mpSalSystemData;
             // the one to get create and destroy notify events
@@ -461,7 +461,11 @@ public:
             void            AddFontPath( const ByteString &rPath ) const;
             XlfdStorage*    GetXlfdList();
             ExtendedFontStruct*
-                            GetFont( ExtendedXlfd *pFont, int nPixelSize );
+                            GetFont( const ExtendedXlfd *pFont,
+                                    int nPixelSize, sal_Bool bVertical );
+            const ExtendedXlfd*
+                            GetFallbackFactory()
+                                    { return mpFallbackFactory; }
 
             void            Beep() const;
 
@@ -534,7 +538,6 @@ public:
     inline void             SetKbdExtension(SalI18N_KeyboardExtension *pKbdExtension)
                                 { mpKbdExtension = pKbdExtension; }
     const char*             GetKeyboardName( BOOL bRefresh = FALSE );
-    SalConverterCache*      GetConverter() { return mpCvtCache; }
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

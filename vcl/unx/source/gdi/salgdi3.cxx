@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-15 14:24:15 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
-#ifndef _SV_OUTFONT_HXX
-#include <outfont.hxx>
+#ifndef _SV_OUTDEV_H
+#include <outdev.h>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -350,6 +350,7 @@ SalDisplay::GetXlfdList()
 
         // create a font set for user interface
         mpFontList->InterfaceFont( mpFactory );
+        mpFallbackFactory = mpFontList->GetInterfaceFont ();
 
         // cleanup the list of simple font information
         if ( pXlfdList != NULL )
@@ -362,11 +363,10 @@ SalDisplay::GetXlfdList()
 // ---------------------------------------------------------------------------
 
 ExtendedFontStruct*
-SalDisplay::GetFont( ExtendedXlfd *pRequestedFont, int nPixelSize )
+SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont, int nPixelSize, sal_Bool bVertical )
 {
     if( !pFontCache_ )
     {
-        mpCvtCache = new SalConverterCache;
         pFontCache_ = new SalFontCache( 64, 64, 16 ); // ???
     }
     else
@@ -376,7 +376,7 @@ SalDisplay::GetFont( ExtendedXlfd *pRequestedFont, int nPixelSize )
               pItem != NULL;
               pItem  = pFontCache_->Next() )
         {
-            if ( pItem->Match(pRequestedFont, nPixelSize) )
+            if ( pItem->Match(pRequestedFont, nPixelSize, bVertical) )
             {
                 if( pFontCache_->GetCurPos() )
                 {
@@ -405,11 +405,11 @@ SalDisplay::GetFont( ExtendedXlfd *pRequestedFont, int nPixelSize )
                     break;
             }
         }
-
     }
 
     ExtendedFontStruct *pItem = new ExtendedFontStruct( GetDisplay(),
-                                    nPixelSize, pRequestedFont, mpCvtCache );
+                                        nPixelSize, bVertical,
+                                        const_cast<ExtendedXlfd*>(pRequestedFont) );
     pFontCache_->Insert( pItem, 0UL );
     pItem->AddRef();
 
@@ -440,15 +440,10 @@ SalDisplay::DestroyFontCache()
     {
         delete mpFactory;
     }
-    if ( mpCvtCache )
-    {
-        delete mpCvtCache;
-    }
 
     pFontCache_ = (SalFontCache*)NULL;
     mpFontList = (XlfdStorage*)NULL;
     mpFactory  = (AttributeProvider*)NULL;
-    mpCvtCache = (SalConverterCache*)NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -521,11 +516,12 @@ GetMaxFontHeight()
 void
 SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
 {
-    bFontGC_    = FALSE;
-    xFont_      = NULL; // ->ReleaseRef()
-    aScale_     = Fraction( 1, 1 );
-    nFontOrientation_ = pEntry->mnOrientation;
-    bFontVertical_  = pEntry->mbVertical;
+    bFontGC_            = FALSE;
+    xFont_              = NULL; // ->ReleaseRef()
+    mxFallbackFont      = NULL;
+    aScale_             = Fraction( 1, 1 );
+    nFontOrientation_   = pEntry->mnOrientation;
+    bFontVertical_      = pEntry->mbVertical;
 
 #ifdef USE_BUILTIN_RASTERIZER
     if( mpServerSideFont != NULL )
@@ -566,18 +562,16 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
             nW = pEntry->mnWidth;
         }
 
-        xFont_ = GetDisplay()->GetFont( pSysFont, nH );
+        xFont_ = GetDisplay()->GetFont( pSysFont, nH, bFontVertical_ );
+        const ExtendedXlfd *pFactory = GetDisplay()->GetFallbackFactory();
+        if ( pFactory != NULL)
+            mxFallbackFont = GetDisplay()->GetFont(pFactory, nH, bFontVertical_);
         if( pEntry->mnHeight > nMaxFontHeight || pEntry->mnHeight < 2 )
             aScale_ = Fraction( pEntry->mnHeight, nH );
     }
     else
     {
-#ifdef DEBUG
-        // XXX Fix me: provide a fallback for poor font installations
-        // we may be reach this if no font matches the GUI font
-        // MS Sans Serif;Geneva;Helv;WarpSans;Dialog;Lucida; ... */
-        fprintf( stderr, "SalGraphicsData::SetFont: Invalid Font Selection\n" );
-#endif
+        xFont_ = mxFallbackFont;
     }
 }
 
@@ -589,132 +583,70 @@ SwapBytes( const sal_Unicode nIn )
     return ((nIn >> 8) & 0x00ff) | ((nIn << 8) & 0xff00);
 }
 
-
 // draw string in a specific multibyte encoding
 static void
-ConvertTextItem16( XTextItem16* pTextItem,
-        SalConverterCache* pCvt, rtl_TextEncoding nEncoding )
+ConvertTextItem16( XTextItem16* pTextItem, rtl_TextEncoding nEncoding )
 {
-    if ( pTextItem && pTextItem->nchars > 0 )
+    if ( (pTextItem == NULL) || (pTextItem->nchars <= 0) )
+        return;
+
+    SalConverterCache* pCvt = SalConverterCache::GetInstance();
+    // convert the string into the font encoding
+    sal_Size  nSize;
+    sal_Size  nBufferSize = pTextItem->nchars * 2;
+    sal_Char *pBuffer = (sal_Char*)alloca( nBufferSize );
+
+    nSize = pCvt->ConvertStringUTF16( (sal_Unicode*)pTextItem->chars, pTextItem->nchars,
+                    pBuffer, nBufferSize, nEncoding);
+
+    sal_Char *pTextChars = (sal_Char*)pTextItem->chars;
+    int n = 0, m = 0;
+
+    if (   nEncoding == RTL_TEXTENCODING_GB_2312
+        || nEncoding == RTL_TEXTENCODING_GBT_12345
+        || nEncoding == RTL_TEXTENCODING_GBK
+        || nEncoding == RTL_TEXTENCODING_BIG5 )
     {
-        // convert the string into the font encoding
-        sal_Size  nSize;
-        sal_Size  nBufferSize = pTextItem->nchars * 2;
-        sal_Char *pBuffer = (sal_Char*)alloca( nBufferSize );
-
-        nSize = ConvertStringUTF16( (sal_Unicode*)pTextItem->chars, pTextItem->nchars,
-                        pBuffer, nBufferSize, pCvt->GetU2TConverter(nEncoding));
-
-        sal_Char *pTextChars = (sal_Char*)pTextItem->chars;
-        int n = 0, m = 0;
-
-        if (   nEncoding == RTL_TEXTENCODING_GB_2312
-            || nEncoding == RTL_TEXTENCODING_GBT_12345
-            || nEncoding == RTL_TEXTENCODING_GBK
-            || nEncoding == RTL_TEXTENCODING_BIG5 )
+        // GB and Big5 needs special treatment since chars can be single or
+        // double byte: encoding is
+        // [ 0x00 - 0x7f ] | [ 0x81 - 0xfe ] [ 0x40 - 0x7e 0x80 - 0xfe ]
+        while ( n < nSize )
         {
-            // GB and Big5 needs special treatment since chars can be single or
-            // double byte: encoding is
-            // [ 0x00 - 0x7f ] | [ 0x81 - 0xfe ] [ 0x40 - 0x7e 0x80 - 0xfe ]
-            while ( n < nSize )
-            {
-                if ( (unsigned char)pBuffer[ n ] < 0x80 )
-                {
-                    pTextChars[ m++ ] = 0x0;
-                    pTextChars[ m++ ] = pBuffer[ n++ ];
-                }
-                else
-                {
-                    pTextChars[ m++ ] = pBuffer[ n++ ];
-                    pTextChars[ m++ ] = pBuffer[ n++ ];
-                }
-            }
-            pTextItem->nchars = m / 2;
-        }
-        else
-        if ( pCvt->IsSingleByteEncoding(nEncoding) )
-        {
-            // Single Byte encoding has to be padded
-            while ( n < nSize )
+            if ( (unsigned char)pBuffer[ n ] < 0x80 )
             {
                 pTextChars[ m++ ] = 0x0;
                 pTextChars[ m++ ] = pBuffer[ n++ ];
             }
-            pTextItem->nchars = nSize;
-        }
-        else
-        {
-            while ( n < nSize )
+            else
             {
                 pTextChars[ m++ ] = pBuffer[ n++ ];
+                pTextChars[ m++ ] = pBuffer[ n++ ];
             }
-            pTextItem->nchars = nSize / 2;
         }
-
-        // XXX FIXME
-        if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
-            || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
-        {
-            for (int n_char = 0; n_char < m; n_char++ )
-                pTextChars[ n_char ] &= 0x7F;
-        }
-
+        pTextItem->nchars = m / 2;
     }
-}
-
-// XXX this is a hack since XPrinter is not multibyte capable
-// XXX for printing this routine is called for each character
-void
-XPrinterDrawText16( Display* pDisplay, Drawable nDrawable, GC nGC,
-        int nX, int nY, int nAngle, XTextItem16 *pTextItem16, int nItem )
-{
-    // convert XTextItem16 to XTextItem
-    XTextItem *pTextItem = (XTextItem*)alloca( nItem * sizeof(XTextItem) );
-
-    for ( int nCurItem = 0; nCurItem < nItem; nCurItem++ )
+    else
+    if ( pCvt->IsSingleByteEncoding(nEncoding) )
     {
-        int      nChars      = pTextItem16[ nCurItem ].nchars;
-        char*    pDstCharPtr = (char*)alloca( nChars * sizeof(char) );
-        XChar2b* pSrcCharPtr = pTextItem16[ nCurItem ].chars;
-
-        pTextItem[ nCurItem ].chars  = pDstCharPtr;
-        pTextItem[ nCurItem ].nchars = nChars;
-        pTextItem[ nCurItem ].delta  = pTextItem16[ nCurItem ].delta;
-        pTextItem[ nCurItem ].font   = pTextItem16[ nCurItem ].font;
-
-        for ( int nCurChar = 0;
-              nCurChar < nChars;
-              nCurChar++, pDstCharPtr++, pSrcCharPtr++ )
+        // Single Byte encoding has to be padded
+        while ( n < nSize )
         {
-            *pDstCharPtr = (char)pSrcCharPtr->byte2;
+            pTextChars[ m++ ] = 0x0;
+            pTextChars[ m++ ] = pBuffer[ n++ ];
         }
-    }
-
-    if ( nAngle != 0 )
-    {
-        for ( int nCurItem = 0; nCurItem < nItem; nCurItem++ )
-        {
-            // XXX FIXME this is broken, because nX and nY is not sufficiently updated
-            XSetFont( pDisplay, nGC, pTextItem[ nItem ].font );
-#if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
-            if ( XSalCanDrawRotString(pDisplay, nGC) )
-            {
-                XSalDrawRotString( pDisplay, nDrawable, nGC, nX, nY,
-                    pTextItem[ nCurItem ].chars, pTextItem[ nCurItem ].nchars, nAngle );
-            }
-            else
-#endif
-            {
-                XDrawString( pDisplay, nDrawable, nGC, nX, nY,
-                    pTextItem[ nCurItem ].chars, pTextItem[ nCurItem ].nchars );
-            }
-        }
+        pTextItem->nchars = nSize;
     }
     else
     {
-        XDrawText( pDisplay, nDrawable, nGC, nX, nY, pTextItem, nItem );
+        while ( n < nSize )
+        {
+            pTextChars[ m++ ] = pBuffer[ n++ ];
+        }
+        pTextItem->nchars = nSize / 2;
     }
 }
+
+//--------------------------------------------------------------------------
 
 // draw string vertically
 static void
@@ -915,182 +847,138 @@ void SalGraphicsData::DrawServerFontString(
 
 #endif
 
-
-// draw string in one of the fonts / encodings that are available in the
-// extended font
-void SalGraphicsData::DrawUnicodeString( int nX, int nY,
-        const sal_Unicode* pStr, int nLength )
+void
+SalGraphicsData::DrawStringUCS2( int nX, int nY, const sal_Unicode* pStr, int nLength )
 {
-#ifdef USE_BUILTIN_RASTERIZER
-    if( mpServerSideFont != NULL )
-    {
-        DrawServerFontString( nX, nY, pStr, nLength );
-        return;
-    }
-#endif
+    // plain Unicode, can handle all chars and can be handled straight forward
+    XFontStruct* pFontStruct = xFont_->GetFontStruct( RTL_TEXTENCODING_UNICODE );
 
-    // sanity check
-    if ( xFont_ == NULL || nLength == 0 )
+    if ( pFontStruct == NULL )
         return;
 
     Display* pDisplay   = GetXDisplay();
-    GC  nGC             = SelectFont();
+    GC       nGC        = SelectFont();
 
-    rtl_TextEncoding nAsciiEnc = xFont_->GetAsciiEncoding();
-    if ( nAsciiEnc == RTL_TEXTENCODING_UNICODE )
+    XSetFont( pDisplay, nGC, pFontStruct->fid );
+
+    #ifdef OSL_LITENDIAN
+    sal_Unicode *pBuffer = (sal_Unicode*)alloca( nLength * sizeof(sal_Unicode) );
+    for ( int i = 0; i < nLength; i++ )
+        pBuffer[ i ] = SwapBytes(pStr[ i ]) ;
+    #else
+    sal_Unicode *pBuffer = const_cast<sal_Unicode*>(pStr);
+    #endif
+
+    XDrawString16( pDisplay, hDrawable_, nGC, nX, nY, (XChar2b*)pBuffer, nLength );
+}
+
+void
+SalGraphicsData::DrawStringMB ( int nX, int nY, const sal_Unicode* pStr, int nLength )
+{
+    // convert the string to a XTextItem16 with each item chars having the
+    // encoding matching the font of fontid
+    XTextItem16 *pTextItem = (XTextItem16*)alloca( nLength * sizeof(XTextItem16) );
+    XChar2b     *pMBChar   = (XChar2b*)    alloca( nLength * sizeof(XChar2b) );
+
+    memcpy( pMBChar, pStr, nLength * sizeof(XChar2b) );
+
+    rtl_TextEncoding  nEncoding;
+    XFontStruct      *pFontStruct;
+
+    VTextItemExt* pVTextItemExt;
+    if ( bFontVertical_ )
+        pVTextItemExt = (VTextItemExt*)alloca( nLength * sizeof(VTextItemExt) );
+
+    for ( int nChar = 0, nItem = -1; nChar < nLength; nChar++ )
     {
-        if ( bFontVertical_ )
-            DrawVerticalString( pDisplay, hDrawable_, nGC, nX, nY, pStr, nLength, xFont_ );
+        rtl_TextEncoding nOldEnc;
+
+        if (nItem != -1)
+             nOldEnc = nEncoding;
+
+        if ( !(pFontStruct = xFont_->GetFontStruct(pStr[nChar], &nEncoding)) )
+            if ( !(pFontStruct = mxFallbackFont->GetFontStruct(pStr[nChar], &nEncoding)) )
+                continue;
+
+        if ( (nItem != -1) && (pFontStruct->fid == pTextItem[ nItem ].font) )
+        {
+            pTextItem[ nItem ].nchars += 1;
+        }
         else
         {
-            // plain Unicode, can handle all chars and can be handled straight forward
-            XFontStruct* pFontStruct = xFont_->GetFontStruct( nAsciiEnc );
+            if ( nItem != -1 )
+                ConvertTextItem16( &pTextItem[ nItem ], nOldEnc );
 
-            if ( pFontStruct == NULL )
-                return;
+            ++nItem;
 
-            XSetFont( pDisplay, nGC, pFontStruct->fid );
+            pTextItem[ nItem ].chars  = pMBChar + nChar;
+            pTextItem[ nItem ].delta  = 0;
+            pTextItem[ nItem ].font   = pFontStruct->fid;
+            pTextItem[ nItem ].nchars = 1;
 
-            #ifdef OSL_LITENDIAN
-            sal_Unicode *pBuffer = (sal_Unicode*)alloca( nLength * sizeof(sal_Unicode) );
-            for ( int i = 0; i < nLength; i++ )
-                pBuffer[ i ] = SwapBytes(pStr[ i ]) ;
-            #else
-            sal_Unicode *pBuffer = const_cast<sal_Unicode*>(pStr);
-            #endif
-
-            XDrawString16( pDisplay, hDrawable_, nGC, nX, nY, (XChar2b*)pBuffer, nLength );
+            if ( bFontVertical_ )
+            {
+                pVTextItemExt[ nItem ].mnEncoding = nEncoding;
+                pVTextItemExt[ nItem ].mpString = pStr + nChar;
+            }
         }
+    }
+    ConvertTextItem16( &pTextItem[ nItem ], nEncoding );
+    ++nItem;
+
+    Display* pDisplay   = GetXDisplay();
+    GC       nGC        = SelectFont();
+
+    if ( bFontVertical_ )
+    {
+        pVTextItemExt[ nItem - 1 ].mnEncoding = nEncoding;
+        DrawVerticalTextItem( pDisplay, hDrawable_, nGC, nX, nY,
+                pTextItem, nItem, pVTextItemExt, xFont_ );
     }
     else
     {
-        // convert the string to a XTextItem16 with each item chars having the
-        // encoding matching the font of fontid
-        XTextItem16 *pTextItem = (XTextItem16*)alloca( nLength * sizeof(XTextItem16) );
-        XChar2b *pMBChar = (XChar2b*)alloca( nLength * sizeof(XChar2b) );
-        memcpy( pMBChar, pStr, nLength * sizeof(XChar2b) );
+        XDrawText16( pDisplay, hDrawable_, nGC, nX, nY, pTextItem, nItem );
+    }
+}
 
-        rtl_TextEncoding nEncoding   = nAsciiEnc;
-        XFontStruct*     pFontStruct = xFont_->GetFontStruct( nEncoding );
+// draw string in one of the fonts / encodings that are available in the
+// extended font
+void
+SalGraphicsData::DrawText( long nX, long nY,
+        const sal_Unicode* pStr, USHORT nLength )
+{
+    if (nLength == 0)
+        return;
 
-        if ( pFontStruct == NULL )
-            return;
-
-        VTextItemExt* pVTextItemExt;
-        if ( bFontVertical_ )
-            pVTextItemExt = (VTextItemExt*)alloca( nLength * sizeof(VTextItemExt) );
-
-        SalConverterCache* pCvt = GetDisplay()->GetConverter();
-        for ( int nChar = 0, nItem = -1; nChar < nLength; nChar++ )
+    #ifdef USE_BUILTIN_RASTERIZER
+    if( mpServerSideFont != NULL )
+    {
+        DrawServerFontString( nX, nY, pStr, nLength );
+    }
+    else
+    #endif
+    if ( xFont_ != NULL )
+    {
+        if ( xFont_->GetAsciiEncoding() == RTL_TEXTENCODING_UNICODE )
         {
-            rtl_TextEncoding nOldEnc = nEncoding;
-            xFont_->GetFontStruct( pStr[nChar], &nEncoding, &pFontStruct, pCvt );
-
-            if ( pFontStruct == NULL )
-                continue;
-
-            if ( (nItem != -1) && (pFontStruct->fid == pTextItem[ nItem ].font) )
+            if ( bFontVertical_ )
             {
-                pTextItem[ nItem ].nchars += 1;
+                DrawVerticalString( GetXDisplay(), hDrawable_, SelectFont(),
+                        nX, nY, pStr, nLength, xFont_ );
             }
             else
             {
-                if ( nItem != -1 )
-                    ConvertTextItem16( &pTextItem[ nItem ], pCvt, nOldEnc );
-
-                ++nItem;
-
-                pTextItem[ nItem ].chars  = pMBChar + nChar;
-                pTextItem[ nItem ].delta  = 0;
-                pTextItem[ nItem ].font   = pFontStruct->fid;
-                pTextItem[ nItem ].nchars = 1;
-
-                if ( bFontVertical_ )
-                {
-                    pVTextItemExt[ nItem ].mnEncoding = nEncoding;
-                    pVTextItemExt[ nItem ].mpString = pStr + nChar;
-                }
+                DrawStringUCS2( nX, nY, pStr, nLength );
             }
-        }
-        ConvertTextItem16( &pTextItem[ nItem ], pCvt, nEncoding );
-        ++nItem;
-
-        if ( bFontVertical_ )
-        {
-            pVTextItemExt[ nItem - 1 ].mnEncoding = nEncoding;
-            DrawVerticalTextItem( pDisplay, hDrawable_, nGC, nX, nY,
-                          pTextItem, nItem, pVTextItemExt, xFont_ );
         }
         else
         {
-#ifndef USE_PSPRINT
-            if ( XSalIsDisplay( pDisplay ) )
-                XDrawText16( pDisplay, nDrawable, nGC, nX, nY, pTextItem, nItem );
-            else
-                XPrinterDrawText16( pDisplay, hDrawable_, nGC, nX, nY,
-                        nFontOrientation_ * 64 / 10, pTextItem, nItem );
-#else
-                XDrawText16( pDisplay, hDrawable_, nGC, nX, nY, pTextItem, nItem );
-#endif
+            DrawStringMB ( nX, nY, pStr, nLength );
         }
     }
 }
 
 //--------------------------------------------------------------------------
-
-void
-SalGraphicsData::DrawText( long nX, long nY,
-        const sal_Unicode *pStr, USHORT nLen )
-{
-#ifdef __notdef__
-    // XXX Fix me this part is not unicode / multibyte aware
-
-    // Bug: #45670#
-    // some monospace ISO8859-1 fonts have a hole between chars 128 and 159
-    // some applications assume these characters have also the default width
-    if( ! bPrinter_                                 &&
-        PITCH_FIXED == xFont_->GetFont()->mePitch   &&
-        nLen > 1 )
-    {
-        XFontStruct *pXFS   = GetFontInfo();
-        long         nWidth = xFont_->GetDim()->GetWidth();
-
-        if( xFont_->GetFixedWidth() != nWidth
-            || xFont_->GetDefaultWidth() != nWidth )
-        {
-            unsigned int min_char   = pXFS->min_char_or_byte2;
-            unsigned int max_char   = pXFS->max_char_or_byte2;
-            XCharStruct *pXCS       = pXFS->per_char - min_char;
-
-            for( USHORT i = 0; i < nLen-1; i++ )
-            {
-                unsigned int c = ((unsigned char*)pStr)[i];
-
-                long nW = c < min_char || c > max_char || ! pXFS->per_char
-                    ? xFont_->GetDefaultWidth()
-                    : pXCS[c].width;
-
-                if( nW != nWidth )
-                {
-                    long *pDXAry = new long[nLen];
-
-                    for( i = 0; i < nLen; i++ )
-                        pDXAry[i] = nWidth * (i+1);
-
-                    DrawText( nX, nY, pStr, nLen, pDXAry );
-
-                    delete pDXAry;
-
-                    return;
-                }
-            }
-        }
-    }
-
-#endif /* __notdef__ */
-
-    DrawUnicodeString( nX, nY, pStr, nLen );
-}
 
 void
 SalGraphics::DrawText( long nX, long nY, const xub_Unicode* pStr, USHORT nLen )
@@ -1154,7 +1042,7 @@ void SalGraphicsData::DrawText( long nX, long nY,
     }
 
     // draw every single character
-    DrawUnicodeString( nX, nY, pStr, 1 );
+    DrawText( nX, nY, pStr, 1 );
 
     Polygon aPolygon(1);
     Point   aOrigin( nX, nY );
@@ -1165,7 +1053,7 @@ void SalGraphicsData::DrawText( long nX, long nY,
         aPolygon.Rotate( aOrigin, nFontOrientation_ );
         aCharPos = aPolygon.GetPoint( 0 );
 
-        DrawUnicodeString( aCharPos.X(), aCharPos.Y(), pStr+i, 1 );
+        DrawText( aCharPos.X(), aCharPos.Y(), pStr+i, 1 );
     }
 
     if( pTmpAry )
@@ -1384,7 +1272,6 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
     else
 #endif
     {
-
         XlfdStorage* pFonts = _GetDisplay()->GetXlfdList();
 
         for ( int nIdx = 0; nIdx < pFonts->GetCount(); nIdx++ )
@@ -1393,6 +1280,8 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
             pFonts->Get(nIdx)->ToImplFontData( pFontData );
             pList->Add( pFontData );
         }
+
+        // store data to bootstrap an X fallback font
 
 #ifdef USE_BUILTIN_RASTERIZER
         aX11GlyphPeer.SetDisplay( maGraphicsData.GetXDisplay() );
@@ -1421,7 +1310,9 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
         }
 
         rGC.FetchFontList( pList );
+
 #endif // USE_BUILTIN_RASTERIZER
+
     }
 }
 
@@ -1579,9 +1470,7 @@ SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
     // the font should know it's metrics best
     SalDisplay *pSalDisplay = maGraphicsData.GetDisplay();
 
-    nCharWidth = maGraphicsData.xFont_->GetCharWidth(
-            pSalDisplay->GetConverter(), nChar1, nChar2, pWidthAry,
-            maGraphicsData.bFontVertical_ );
+    nCharWidth = maGraphicsData.xFont_->GetCharWidth( nChar1, nChar2, pWidthAry,                        maGraphicsData.mxFallbackFont );
 
     // XXX sanity check, this may happen if the font cannot be loaded/queried
     // either because of a garbled fontpath or because of invalid fontfile

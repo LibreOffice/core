@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,13 +112,16 @@ extern "C" {
 typedef rtl_TextEncoding(*AttributeClassifierT)(const char* pStr);
 }
 
-#define XLFD_FEATURE_NONE             0x00
-#define XLFD_FEATURE_NARROW           0x01
-#define XLFD_FEATURE_OL_GLYPH         0x02
-#define XLFD_FEATURE_OL_CURSOR        0x04
-#define XLFD_FEATURE_REDUNDANTSTYLE   0x08
-#define XLFD_FEATURE_APPLICATION_FONT 0x10
-#define XLFD_FEATURE_INTERFACE_FONT   0x20
+#define XLFD_FEATURE_NONE                0x0000
+#define XLFD_FEATURE_NARROW              0x0001
+#define XLFD_FEATURE_OL_GLYPH            0x0002
+#define XLFD_FEATURE_OL_CURSOR           0x0004
+#define XLFD_FEATURE_REDUNDANTSTYLE      0x0008
+#define XLFD_FEATURE_APPLICATION_FONT    0x0010
+
+#define XLFD_FEATURE_INTERFACE_FONT      0x0020
+#define XLFD_FEATURE_INTERFACE_FONT_MEDQ 0x0040
+#define XLFD_FEATURE_INTERFACE_FONT_HIGQ 0x0080
 
 // ---------------------------------------------------------------------------
 //

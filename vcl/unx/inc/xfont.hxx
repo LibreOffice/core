@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-04 14:44:40 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 typedef unsigned short sal_MultiByte;
 
 class ImplFontMetricData;
-class SalConverterCache;
 class ExtendedXlfd;
 
 struct VerticalTextItem
@@ -136,12 +135,16 @@ class ExtendedFontStruct : public SvRefBase
 
         Display*            mpDisplay;
         unsigned short      mnPixelSize;
+        sal_Size            mnDefaultWidth;
+        sal_Bool            mbVertical;
+        rtl_TextEncoding    mnCachedEncoding;
+
         ExtendedXlfd*       mpXlfd;
         XFontStruct**       mpXFontStruct;
         XFontStruct***      mpVXFontStruct;
-        sal_Size            mnDefaultWidth;
 
         int                 LoadEncoding( rtl_TextEncoding nEncoding );
+        FontPitch           GetSpacing( rtl_TextEncoding nEncoding );
         Bool                GetFontBoundingBox( XCharStruct *pCharStruct,
                                     int *pAscent, int *pDescent ) ;
 
@@ -149,43 +152,37 @@ class ExtendedFontStruct : public SvRefBase
                                     sal_Unicode nFrom, sal_Unicode nTo,
                                     sal_Unicode nOutFrom, sal_Unicode nOutTo,
                                     long *pWidthArray );
-        sal_Size            GetDefaultWidth( SalConverterCache* pCvt );
+        sal_Size            GetDefaultWidth();
         sal_Size            GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray,
                                     rtl_TextEncoding nEncoding );
-        sal_Size            GetCharWidthUTF16(
-                                    sal_Unicode nFrom, sal_Unicode nTo,
-                                    long *pWidthArray, Bool bVertical );
-        sal_Size            GetCharWidth16( SalConverterCache *pCvt,
-                                    sal_Unicode nFrom, sal_Unicode nTo,
-                                    long *pWidthArray, Bool bVertical );
+        sal_Size            GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
+                                    long *pWidthArray );
+        sal_Size            GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
+                                    long *pWidthArray, ExtendedFontStruct *pFallback );
         XFontStruct*        GetVXFontStruct( rtl_TextEncoding nEncoding, short nVClass );
         int                 GetVTransX( rtl_TextEncoding nEncoding, short nVClass );
         int                 GetVTransY( short );
 
     public:
                             ExtendedFontStruct( Display* pDisplay,
-                                    unsigned short nPixelSize,
-                                    ExtendedXlfd* pXlfd,
-                                    SalConverterCache* pCvt );
+                                    unsigned short nPixelSize, sal_Bool bVertical,
+                                    ExtendedXlfd* pXlfd );
                             ~ExtendedFontStruct();
         Bool                Match( const ExtendedXlfd *pXlfd,
-                                    int nPixelSize) const;
-        XFontStruct*        GetFontStruct( rtl_TextEncoding nEncoding );
+                                    int nPixelSize, sal_Bool bVertical ) const;
         int                 GetVerticalTextItems( const sal_Unicode* pStr,
                                     int nLength,
                                     rtl_TextEncoding nEncoding,
                                     const sal_Unicode* pOutStr,
                                     VerticalTextItem** &pTextItems );
-        Bool                GetFontStruct( sal_Unicode nChar,
-                                    rtl_TextEncoding *pEncodingInOut,
-                                    XFontStruct **pFontInOut,
-                                    SalConverterCache *pCvt );
+        XFontStruct*        GetFontStruct( rtl_TextEncoding nEncoding );
+        XFontStruct*        GetFontStruct( sal_Unicode nChar,
+                                    rtl_TextEncoding *pEncoding );
         Bool                ToImplFontMetricData( ImplFontMetricData *pMetric );
         rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
-        sal_Size            GetCharWidth( SalConverterCache *pCvt,
-                                    sal_Unicode nFrom, sal_Unicode nTo,
-                                    long *pWidthArray, Bool bVertical );
+        sal_Size            GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo,
+                                    long *pWidthArray, ExtendedFontStruct *pFallback );
 };
 
 // Declaration and Implementation for ExtendedFontStructRef: Add RefCounting

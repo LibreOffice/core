@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-14 12:07:24 $
+ *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,12 @@
                                   // don't have spacial font
 
 ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay,
-    unsigned short nPixelSize, ExtendedXlfd* pXlfd, SalConverterCache* pCvt ) :
+    unsigned short nPixelSize, sal_Bool bVertical, ExtendedXlfd* pXlfd ) :
         mpDisplay( pDisplay ),
         mnPixelSize( nPixelSize ),
-        mpXlfd( pXlfd )
+        mbVertical( bVertical ),
+        mpXlfd( pXlfd ),
+        mnCachedEncoding( RTL_TEXTENCODING_DONTKNOW )
 {
     // member functions rely on zero initialized pointer for checking of
     // already loaded fonts
@@ -107,7 +109,7 @@ ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay,
         mpVXFontStruct[nIdx] = (XFontStruct**)calloc (VCLASS_FONT_NUM,
                                                         sizeof (XFontStruct*) );
     }
-    mnDefaultWidth = GetDefaultWidth( pCvt );
+    mnDefaultWidth = GetDefaultWidth();
 }
 
 ExtendedFontStruct::~ExtendedFontStruct()
@@ -129,6 +131,12 @@ rtl_TextEncoding
 ExtendedFontStruct::GetAsciiEncoding( int *pAsciiRange ) const
 {
     return mpXlfd->GetAsciiEncoding( pAsciiRange );
+}
+
+FontPitch
+ExtendedFontStruct::GetSpacing( rtl_TextEncoding nEncoding )
+{
+    return mpXlfd->GetSpacing( nEncoding );
 }
 
 int
@@ -236,12 +244,13 @@ ExtendedFontStruct::ToImplFontMetricData(ImplFontMetricData *pFontMetric)
 }
 
 Bool
-ExtendedFontStruct::Match( const ExtendedXlfd *pXlfd, int nPixelSize ) const
+ExtendedFontStruct::Match( const ExtendedXlfd *pXlfd,
+        int nPixelSize, sal_Bool bVertical ) const
 {
     if( mpXlfd != pXlfd )
         return FALSE;
 
-    return mnPixelSize == nPixelSize;
+    return (mnPixelSize == nPixelSize) && (mbVertical == bVertical);
 }
 
 // Get an appropriate x-font that contains a glyph for the given unicode
@@ -253,34 +262,33 @@ ExtendedFontStruct::Match( const ExtendedXlfd *pXlfd, int nPixelSize ) const
 // EncodingHasChar() to fail and thus bootstraps the encoding, otherwise
 // make sure that the initial value of pFontInOut matches the encoding and
 // that the encoding is valid for the font.
-Bool
-ExtendedFontStruct::GetFontStruct( sal_Unicode nChar,
-        rtl_TextEncoding *pEncodingInOut, XFontStruct **pFontInOut,
-        SalConverterCache *pCvt )
+XFontStruct*
+ExtendedFontStruct::GetFontStruct( sal_Unicode nChar, rtl_TextEncoding *pEncoding )
 {
-    if ( pCvt->EncodingHasChar(*pEncodingInOut, nChar) )
+    SalConverterCache *pCvt = SalConverterCache::GetInstance();
+
+    if ( pCvt->EncodingHasChar(mnCachedEncoding, nChar) )
     {
-        return True;
+        *pEncoding = mnCachedEncoding;
+        return GetFontStruct (mnCachedEncoding);
     }
     else
     {
         for ( int nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
         {
             rtl_TextEncoding nEnc = mpXlfd->GetEncoding(nIdx);
-            if (   (nEnc != *pEncodingInOut)
-                && pCvt->EncodingHasChar(nEnc, nChar) )
+            if ((nEnc != mnCachedEncoding) && pCvt->EncodingHasChar(nEnc, nChar))
             {
-                *pEncodingInOut = nEnc;
-                *pFontInOut = GetFontStruct( nEnc );
-                if (*pFontInOut != NULL)
-                    return True;
+                mnCachedEncoding = nEnc;
+                *pEncoding = mnCachedEncoding;
+                return GetFontStruct (mnCachedEncoding);
             }
         }
     }
 
-    return False;
+    *pEncoding = RTL_TEXTENCODING_DONTKNOW;
+    return NULL;
 }
-
 
 // ---------------------------------------------------------------------------
 // utility functions to handle xfontstruct information, this is all to
@@ -346,49 +354,10 @@ QueryCharWidth8( XFontStruct* pXFontStruct, sal_Char nChar,
     return CharExists( &aBoundingBox ) ? aBoundingBox.width : nDefaultWidth;
 }
 
-// the default width is the width of the question mark since this is the
-// character which is displayed for unconvertable unicode chars
 sal_Size
-ExtendedFontStruct::GetDefaultWidth( SalConverterCache* pCvt )
+ExtendedFontStruct::GetDefaultWidth()
 {
-    rtl_TextEncoding nEncoding = mpXlfd->GetAsciiEncoding();
-    XFontStruct*     pXFontStruct = GetFontStruct( nEncoding );
-
-    if ( pXFontStruct != NULL )
-    {
-        sal_Unicode   nQuestionMark = 0x3f;
-        sal_MultiByte nChar;
-        sal_Char      pBuffer[8];
-
-        sal_Size nSize = ConvertStringUTF16( &nQuestionMark, 1, pBuffer,
-                        sizeof(pBuffer), pCvt->GetU2TConverter(nEncoding) );
-
-        // XXX FIXME
-        if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
-            || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
-        {
-            for (int n_char = 0; n_char < nSize; n_char++ )
-                pBuffer[ n_char ] &= 0x7F;
-        }
-
-        if ( nSize == 2 )
-        {
-            nChar =  ((sal_MultiByte)pBuffer[0] << 8)
-                    + (sal_MultiByte)pBuffer[1];
-            return QueryCharWidth16( mpDisplay, pXFontStruct->fid, nChar, 0 );
-        }
-        else
-        if ( nSize == 1 )
-        {
-            return QueryCharWidth8( pXFontStruct, pBuffer[0], 0 );
-        }
-        else
-        {
-            return QueryCharWidth8( pXFontStruct, nQuestionMark, 0 );
-        }
-    }
-
-    return 0;
+    return (mnPixelSize + 1) / 2;
 }
 
 void
@@ -481,7 +450,7 @@ ExtendedFontStruct::GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
 // Handle utf16 encoded fonts, which do not require conversion
 sal_Size
 ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
-        long *pWidthArray, Bool bVertical )
+        long *pWidthArray )
 {
     if ( !(nFrom <= nTo) )
         return 0;
@@ -493,7 +462,7 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
         return 0;
 
     // query the font metrics
-    if ( bVertical )
+    if ( mbVertical )
     {
         GetVerticalCharWidth( RTL_TEXTENCODING_UNICODE, nFrom, nTo, nFrom, nTo,
                               pWidthArray );
@@ -532,51 +501,51 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
 // handle non unicode fonts that are converted into encoding matching the
 // font in fontstruct, 8 and 16 bit fonts are handled the same way
 sal_Size
-ExtendedFontStruct::GetCharWidth16( SalConverterCache *pCvt,
-        sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray, Bool bVertical )
+ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
+        long *pWidthArray, ExtendedFontStruct *pFallback )
 {
     if ( !(nFrom <= nTo) )
         return 0;
 
-    rtl_TextEncoding nEncoding = mpXlfd->GetAsciiEncoding();
-    XFontStruct *pXFontStruct  = GetFontStruct( nEncoding );
-
-    if ( pXFontStruct == NULL )
-        return 0;
-
-    unsigned char pBuffer[16];
+    sal_Char pBuffer[16];
     sal_MultiByte nChar;
+
+    SalConverterCache *pCvt = SalConverterCache::GetInstance();
 
     for ( sal_Int32 nIdx = nFrom ; nIdx <= nTo ; nIdx++, pWidthArray++ )
     {
-        Bool bValid;
         FontPitch nSpacing;
         sal_Size nSize;
 
         // get a matching fontstruct
-        if ( bValid = GetFontStruct( nIdx, &nEncoding, &pXFontStruct, pCvt ) )
+        rtl_TextEncoding nEncoding;
+        XFontStruct *pXFontStruct;
+
+        if ( (pXFontStruct = GetFontStruct(nIdx, &nEncoding)) != NULL )
         {
-            nSpacing = mpXlfd->GetSpacing( nEncoding );
+            nSpacing = GetSpacing( nEncoding );
+        }
+        else
+        if (   (pFallback != NULL)
+            && ((pXFontStruct = pFallback->GetFontStruct(nIdx, &nEncoding)) != NULL) )
+        {
+            nSpacing = pFallback->GetSpacing( nEncoding );
+        }
+
+        if ( pXFontStruct )
+        {
             sal_Unicode nUniIdx = (sal_Unicode)nIdx;
-            nSize = ConvertStringUTF16( &nUniIdx, 1,
-                            (sal_Char*)pBuffer, sizeof(pBuffer),
-                            pCvt->GetU2TConverter(nEncoding) );
-            // XXX FIXME
-            if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
-                || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
-            {
-                for (int n_char = 0; n_char < nSize; n_char++ )
-                    pBuffer[ n_char ] &= 0x7F;
-            }
+            nSize = pCvt->ConvertStringUTF16( &nUniIdx, 1, pBuffer, sizeof(pBuffer),
+                            nEncoding );
         }
 
         // query font metrics
-        if ( bValid && (nSize == 1 || nSize == 2) )
+        if ( pXFontStruct && (nSize == 1 || nSize == 2) )
         {
-            nChar = nSize == 1 ?  (sal_MultiByte)pBuffer[0] :
+            nChar = nSize == 1 ? (sal_MultiByte)pBuffer[0] :
                 ((sal_MultiByte)pBuffer[0] << 8) + (sal_MultiByte)pBuffer[1];
 
-            if ( bVertical )
+            if ( mbVertical )
             {
                 GetVerticalCharWidth( nEncoding, nIdx, nIdx, nChar, nChar, pWidthArray );
             }
@@ -615,8 +584,8 @@ ExtendedFontStruct::GetCharWidth16( SalConverterCache *pCvt,
 }
 
 sal_Size
-ExtendedFontStruct::GetCharWidth( SalConverterCache *pCvt,
-        sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray, Bool bVertical )
+ExtendedFontStruct::GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray,
+         ExtendedFontStruct *pFallback )
 {
     int nAsciiRange;
     sal_Size nConverted = 0;
@@ -628,7 +597,7 @@ ExtendedFontStruct::GetCharWidth( SalConverterCache *pCvt,
     {
         // if we have a unicode encoded system font than we get the charwidth
         // straight forward
-        nConverted = GetCharWidthUTF16( nFrom, nTo, pWidthArray, bVertical );
+        nConverted = GetCharWidthUTF16( nFrom, nTo, pWidthArray );
     }
     else
     {
@@ -636,15 +605,15 @@ ExtendedFontStruct::GetCharWidth( SalConverterCache *pCvt,
         {
             // optimize the most frequent case, requesting only the latin1
             // chars which are mappable to a single encoding
-            nConverted = GetCharWidth8( nFrom, min(nAsciiRange, nTo),
-                                pWidthArray, nEncoding );
+            sal_Unicode nMinTo = min(nAsciiRange, nTo);
+            nConverted = GetCharWidth8( nFrom, nMinTo, pWidthArray, nEncoding );
         }
 
         // if further requests are pending, then the according unicode
         // codepoint has to be dispatched to one of the system fonts and
         // converted to this fonts encoding
-        nConverted += GetCharWidth16( pCvt, nFrom + nConverted, nTo,
-                            pWidthArray + nConverted, bVertical );
+        nConverted += GetCharWidth16( nFrom + nConverted, nTo, pWidthArray + nConverted,
+                            pFallback );
     }
 
     return nConverted;
