@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2001-02-06 15:16:20 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ TabPage TP_DOCINFODOC
         Text[ greek ] = "ÅğåîåñãÜóôçêå:";
         Text[ korean ] = "ÆíÁı:";
         Text[ arabic ] = "ãÍÑÑ:";
-        Text[ turkish ] = "Dünzleme:";
+        Text[ turkish ] = "Düzenleme:";
         Text[ language_user1 ] = " ";
     };
     FixedText FT_TIMELOG_VAL
@@ -641,7 +641,7 @@ TabPage TP_DOCINFODOC
         Text[ japanese ] = "•s–¾";
         Text[ chinese_traditional ] = "¤£©úªº";
         Text[ greek ] = "Üãíùóôï";
-        Text[ korean ] = "¾Ë·ÁÁöÁö ¾ÊÀ½";
+        Text[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀ½";
         Text[ arabic ] = "ÛíÑ ãÚÑæİ";
         Text[ turkish ] = "bilinmiyor";
         Text[ language_user1 ] = " ";
@@ -871,7 +871,7 @@ TabPage TP_DOCINFORELOAD
         Text[ japanese ] = "ÌÚ°Ñ";
         Text[ chinese_traditional ] = "°T®Ø";
         Text[ greek ] = "Ğëáßóéï";
-        Text[ korean ] = "³»ÀÏ";
+        Text[ korean ] = "ÇÁ·¹ÀÓ";
         Text[ arabic ] = "ÅØÇÑ";
         Text[ turkish ] = "~Frame";
         Text[ language_user1 ] = " ";
@@ -984,7 +984,7 @@ TabDialog SID_DOCINFO
                 Text[ japanese ] = "Õ°»Ş°";
                 Text[ chinese_traditional ] = "¨Ï¥ÎªÌ";
                 Text[ greek ] = "×ñŞóôçò";
-                Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ";
+                Text[ korean ] = "»ç¿ëÀÚ";
                 Text[ arabic ] = "ÇáãÓÊÎÏã";
                 Text[ turkish ] = "Kullanıcı";
                 Text[ language_user1 ] = " ";
