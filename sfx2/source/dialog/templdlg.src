@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:19:28 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ ModalDialog RID_STYLECATALOG
     Text [ french ] = "Catalogue des styles" ;
     Text [ dutch ] = "Catalogus opmaakprofielen" ;
     Text [ spanish ] = "Cat�logo de estilos" ;
-    Text [ danish ] = "Typografi-katalog" ;
+    Text [ danish ] = "Typografikatalog" ;
     Text [ swedish ] = "Mallkatalog" ;
     Text [ finnish ] = "Tyyliluettelo" ;
     Text [ english_us ] = "Style Catalog" ;
@@ -146,7 +146,7 @@ ModalDialog RID_STYLECATALOG
         Text [ french ] = "~G�rer..." ;
         Text [ dutch ] = "Be~heren..." ;
         Text [ spanish ] = "~Administrar..." ;
-        Text [ danish ] = "Administrer..." ;
+        Text [ danish ] = "~Administration..." ;
         Text [ swedish ] = "~Administrera..." ;
         Text [ finnish ] = "~J�rjestelyty�kalu..." ;
         Text [ english_us ] = "~Organizer..." ;
@@ -166,6 +166,8 @@ ModalDialog RID_STYLECATALOG
         Text[ hebrew ] = "‮סדרן‬";
         Text[ hindi ] = "~व्यवस्थापक...";
         Text[ slovak ] = "~Organizátor...";
+        Text[ hungarian ] = "~Szervező...";
+        Text[ slovenian ] = "~Organizator...";
     };
     PushButton BT_DEL
     {
@@ -180,7 +182,7 @@ ModalDialog RID_STYLECATALOG
         Text [ french ] = "~Supprimer..." ;
         Text [ dutch ] = "~Wissen..." ;
         Text [ spanish ] = "~Borrar..." ;
-        Text [ danish ] = "Slet..." ;
+        Text [ danish ] = "~Slet..." ;
         Text [ swedish ] = "~Radera..." ;
         Text [ finnish ] = "~Poista..." ;
         Text [ english_us ] = "~Delete..." ;
@@ -200,6 +202,8 @@ ModalDialog RID_STYLECATALOG
         Text[ hebrew ] = "‮מחיקה...‬";
         Text[ hindi ] = "~मिटाओ...";
         Text[ slovak ] = "~Zmazať...";
+        Text[ hungarian ] = "~Törlés...";
+        Text[ slovenian ] = "~Izbriši...";
     };
     PushButton BT_EDIT
     {
@@ -214,7 +218,7 @@ ModalDialog RID_STYLECATALOG
         Text [ french ] = "Modifier..." ;
         Text [ dutch ] = "~Wijzigen..." ;
         Text [ spanish ] = "~Modificar..." ;
-        Text [ danish ] = "Modificer..." ;
+        Text [ danish ] = "~Modificer..." ;
         Text [ swedish ] = "�n~dra..." ;
         Text [ finnish ] = "~Muuta..." ;
         Text [ english_us ] = "~Modify..." ;
@@ -234,6 +238,8 @@ ModalDialog RID_STYLECATALOG
         Text[ hebrew ] = "‮שינוי...‬";
         Text[ hindi ] = "~सुधारो...";
         Text[ slovak ] = "Z~meniť...";
+        Text[ hungarian ] = "~Módosítás...";
+        Text[ slovenian ] = "~Spremeni...";
     };
     PushButton BT_NEW
     {
@@ -247,7 +253,7 @@ ModalDialog RID_STYLECATALOG
         Text [ portuguese ] = "~Novo..." ;
         Text [ english_us ] = "~New..." ;
         Text [ finnish ] = "~Uusi..." ;
-        Text [ danish ] = "Ny..." ;
+        Text [ danish ] = "~Ny(t)..." ;
         Text [ french ] = "~Nouveau..." ;
         Text [ swedish ] = "~Ny..." ;
         Text [ dutch ] = "~Nieuw.." ;
@@ -268,6 +274,8 @@ ModalDialog RID_STYLECATALOG
         Text[ hebrew ] = "‮חדש...‬";
         Text[ hindi ] = "~नया...";
         Text[ slovak ] = "~Nový...";
+        Text[ hungarian ] = "Ú~j...";
+        Text[ slovenian ] = "~Nov...";
     };
     HelpButton BT_HELP
     {
@@ -304,6 +312,8 @@ ModalDialog RID_STYLECATALOG
     Text[ hebrew ] = "‮קטלוג סגנונות‬";
     Text[ hindi ] = "शैली वर्ग";
     Text[ slovak ] = "Katalóg štýlov";
+    Text[ hungarian ] = "Stílustár";
+    Text[ slovenian ] = "Katalog slogov";
 };
  // Strings ---------------------------------------------------------------
 String DLG_STYLE_DESIGNER
@@ -325,7 +335,7 @@ String DLG_STYLE_DESIGNER
     Text[ japanese ] = "スタイリスト";
     Text[ chinese_traditional ] = "各類樣式";
     Text[ arabic ] = "�������";
-    Text[ greek ] = "Stylist";
+    Text[ greek ] = "���������";
     Text[ korean ] = "스타일리스트";
     Text[ turkish ] = "Stil listesi";
     Text[ catalan ] = "Estilista";
@@ -335,6 +345,8 @@ String DLG_STYLE_DESIGNER
     Text[ hebrew ] = "‮מעצב‬";
     Text[ hindi ] = "स्टइलिस्ट्";
     Text[ slovak ] = "Štylista";
+    Text[ hungarian ] = "Stílussegéd";
+    Text[ slovenian ] = "Slogovnik";
 };
 String STR_STYLE_FILTER_HIERARCHICAL
 {
@@ -366,6 +378,8 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT[ hebrew ] = "‮מדורג (הייררכיה)‬";
     TEXT[ hindi ] = "हइरार्किकल";
     TEXT[ slovak ] = "Hierarchický";
+    TEXT[ hungarian ] = "Hierarchikus";
+    TEXT[ slovenian ] = "Hierarhičen";
 };
  // DLG_STYLE_DESIGNER ----------------------------------------------------
 DockingWindow DLG_STYLE_DESIGNER
@@ -405,7 +419,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ portuguese ] = "Preenchimento completo" ;
                 Text [ english_us ] = "Fill Format Mode" ;
                 Text [ finnish ] = "T�ytt�muotoilutila" ;
-                Text [ danish ] = "Fyldmodus" ;
+                Text [ danish ] = "Fyldformattilstand" ;
                 Text [ french ] = "Mode Remplir tout" ;
                 Text [ swedish ] = "Tilldelningsl�ge" ;
                 Text [ dutch ] = "Gietermodus" ;
@@ -425,6 +439,8 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ hebrew ] = "‮מצב מילוי‬";
                 Text[ hindi ] = "रचना प्रकार भरो";
                 Text[ slovak ] = "Vyplniť mód formátu";
+                Text[ hungarian ] = "Kitöltés formátummal";
+                Text[ slovenian ] = "Način zapolnitev oblik";
             };
             ToolBoxItem
             {
@@ -458,6 +474,8 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ hebrew ] = "‮סגנון חדש מבחירה‬";
                 Text[ hindi ] = "चुनाव से नया शैली";
                 Text[ slovak ] = "Nový štýl z výberu";
+                Text[ hungarian ] = "Új stílus a kijelölés alapján";
+                Text[ slovenian ] = "Nov slog iz izbora";
             };
             ToolBoxItem
             {
@@ -491,10 +509,13 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ hebrew ] = "‮עידכון סגנון‬";
                 Text[ hindi ] = "शैली अपडेट् करो";
                 Text[ slovak ] = "Aktualizovať štýl";
+                Text[ hungarian ] = "Stílus frissítése";
+                Text[ slovenian ] = "Posodobi slog";
             };
         };
     };
 };
+
 
 
 
