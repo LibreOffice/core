@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:47:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -999,10 +999,7 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                     if ( pPrintAreaItem ) // Druckbereiche
                     {
                         if ( !pPrintAreaItem->GetFlags() )
-                        {
-                            SetPrintRangeCount( i, 1 );
-                            SetPrintRange( i, 0, pPrintAreaItem->GetRange() );
-                        }
+                            SetPrintRange( i, pPrintAreaItem->GetRange() );
                         rSet.ClearItem( ATTR_PAGE_PRINTAREA );
                     }
 
