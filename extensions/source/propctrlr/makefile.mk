@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:09:18 $
+#   last change: $Author: obo $ $Date: 2003-10-21 09:06:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,6 +146,10 @@ UNOTYPES=\
     com.sun.star.awt.XSpinListener				\
     com.sun.star.awt.XAdjustmentListener		\
     com.sun.star.awt.XMenuListener				\
+    drafts.com.sun.star.form.XBindableValue     \
+    drafts.com.sun.star.form.XValueBinding      \
+    drafts.com.sun.star.form.XListEntrySource   \
+    drafts.com.sun.star.form.XListEntrySink     \
 
 
 SLOFILES=			$(SLO)$/controlfontdialog.obj	\
@@ -167,7 +171,8 @@ SLOFILES=			$(SLO)$/controlfontdialog.obj	\
                     $(SLO)$/browserview.obj	\
                     $(SLO)$/propcontroller.obj	\
                     $(SLO)$/pcrcommon.obj	\
-                    $(SLO)$/modulepcr.obj
+                    $(SLO)$/modulepcr.obj   \
+                    $(SLO)$/cellbindinghelper.obj   \
 
 
 SRS1NAME=$(TARGET)
@@ -196,6 +201,7 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB) 	 \
         $(CPPUHELPERLIB) 	 \
         $(CPPULIB) 	\
+        $(UNOTOOLSLIB) 	\
         $(SALLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
