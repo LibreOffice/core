@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:34:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ ModalDialog DLG_CAPTION
         Text [ English ] = "~Options" ;
         Text [ norwegian ] = "~Options" ;
         Text [ italian ] = "~Opzioni" ;
-        Text [ portuguese_brazilian ] = "~Opções" ;
+        Text [ portuguese_brazilian ] = "~Op??s" ;
         Text [ portuguese ] = "~Opções" ;
         Text [ finnish ] = "~Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -157,7 +157,7 @@ ModalDialog DLG_CAPTION
         Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Categorie" ;
         Text [ spanish ] = "~Categoría" ;
-        Text [ english_us ] = "C~ategory" ;
+        Text [ english_us ] = "Ca~tegory" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "·ÖÀà(~A)";
         Text[ russian ] = "Êàòåãîðèÿ";
@@ -187,7 +187,7 @@ ModalDialog DLG_CAPTION
         Text [ English ] = "~Numbering" ;
         Text [ norwegian ] = "~Numbering" ;
         Text [ italian ] = "~Numerazione" ;
-        Text [ portuguese_brazilian ] = "~Numeração" ;
+        Text [ portuguese_brazilian ] = "~Numera??o" ;
         Text [ portuguese ] = "~Numeração" ;
         Text [ finnish ] = "~Numerointi" ;
         Text [ danish ] = "Nummerering" ;
@@ -264,7 +264,7 @@ ModalDialog DLG_CAPTION
         Text [ English ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
         Text [ italian ] = "~Posizione" ;
-        Text [ portuguese_brazilian ] = "~Posição" ;
+        Text [ portuguese_brazilian ] = "~Posi??o" ;
         Text [ portuguese ] = "~Posição" ;
         Text [ finnish ] = "~Sijainti" ;
         Text [ danish ] = "Placering" ;
@@ -329,7 +329,7 @@ ModalDialog DLG_CAPTION
         Size = MAP_APPFONT ( 64 , 8 ) ;
         Text = "~Objektname" ;
         Text [ English ] = "~Object name" ;
-        Text[ english_us ] = "~Object name";
+        Text[ english_us ] = "O~bject name";
         Text[ portuguese ] = "~Nome do objecto";
         Text[ russian ] = "~Èìÿ îáúåêòà";
         Text[ greek ] = "¼íïìá áíôéêåéìÝíïõ";
@@ -367,7 +367,7 @@ ModalDialog DLG_CAPTION
         Text [ English ] = "Settings" ;
         Text [ norwegian ] = "Settings" ;
         Text [ italian ] = "Impostazioni" ;
-        Text [ portuguese_brazilian ] = "Parâmetros" ;
+        Text [ portuguese_brazilian ] = "Par?metros" ;
         Text [ portuguese ] = "Definições" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -394,7 +394,7 @@ ModalDialog DLG_CAPTION
         Text [ English ] = "At the beginning" ;
         Text [ norwegian ] = "At the beginning" ;
         Text [ italian ] = "All'inizio" ;
-        Text [ portuguese_brazilian ] = "No início" ;
+        Text [ portuguese_brazilian ] = "No in?cio" ;
         Text [ portuguese ] = "No início" ;
         Text [ finnish ] = "Ylhäällä" ;
         Text [ danish ] = "Ved begyndelsen" ;
