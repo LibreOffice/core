@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:39:17 $
+ *  last change: $Author: tl $ $Date: 2001-09-10 12:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,10 @@ Menu MN_SPELL_POPUP
         {
             Identifier = MN_SPELLING ;
             HelpID = HID_LINGU_SPELLING_DLG ;
-            Text = "~Rechtschreibung" ;
-            Text [ English ] = "~Spelling" ;
-            Text [ english_us ] = "~Spellcheck" ;
+            Text = "~Rechtschreibung..." ;
+            Text [ English ] = "~Spelling..." ;
+            Text[ language_user1 ] = "triple dots (...) are required now at the end of the text";
+            Text [ english_us ] = "~Spellcheck..." ;
             Text [ italian ] = "Controllo ~ortografico" ;
             Text [ spanish ] = "Ortogra~fía" ;
             Text [ french ] = "~Orthographe" ;
@@ -93,7 +94,6 @@ Menu MN_SPELL_POPUP
             Text[ greek ] = "Ïñèïã~ñáößá";
             Text[ korean ] = "ë§žì¶¤ë²•(~S)";
             Text[ turkish ] = "~Yazým kýlavuzu";
-            Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ortogra~fía";
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
         };
