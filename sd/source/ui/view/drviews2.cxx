@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:18:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         SdPage* pPage = GetDoc()->GetSdPage(0, PK_STANDARD);
                         if (GetDoc()->GetSdPageCount(PK_STANDARD) == 1 &&
                             pPage->GetAutoLayout() == AUTOLAYOUT_TITLE &&
-                            pPage->GetPresObjList()->Count() == 0)
+                            pPage->GetPresObjList().empty())
                         {
                             // Nur eine Seite vorhanden
                             pPage->SetAutoLayout(AUTOLAYOUT_NONE);
@@ -1062,15 +1062,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // pDrView->SetAttributes( *pSet, TRUE ) verloren gehen und spaeter restauriert
                 // werden muessen
                 List* pAttrList = new List();
-                List* pPresObjList = ( (SdPage*) pDrView->GetPageViewPvNum(0)->GetPage() )
-                                                                    ->GetPresObjList();
+                SdPage* pPresPage = (SdPage*) pDrView->GetPageViewPvNum(0)->GetPage();
                 ULONG i;
 
                 for ( i = 0; i < nCount; i++ )
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
 
-                    if( pPresObjList->GetPos( pObj ) != LIST_ENTRY_NOTFOUND )
+                    if( pPresPage->IsPresObj( pObj ) )
                     {
                         SfxItemSet* pSet = new SfxItemSet( GetDoc()->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
                         pSet->Put(pObj->GetMergedItemSet());
@@ -1113,7 +1112,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         }
                     }
 
-                    if( pPresObjList->GetPos( pObj ) != LIST_ENTRY_NOTFOUND )
+                    if( pPresPage->IsPresObj( pObj ) )
                     {
                         SfxItemSet* pSet = (SfxItemSet*) pAttrList->GetObject(j++);
                         SdrObjUserCall* pUserCall = (SdrObjUserCall*) pAttrList->GetObject(j++);
