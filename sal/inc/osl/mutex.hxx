@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:10:54 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 16:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,6 @@ namespace osl
     /** A mutual exclusion synchronization object
     */
     class Mutex {
-        oslMutex mutex;
-
-        // these make no sense
-        Mutex( oslMutex );
-        Mutex( const Mutex & );
-        Mutex& operator= ( oslMutex );
-        Mutex& operator= ( const Mutex& );
 
     public:
         /** Create a thread-local mutex.
@@ -135,6 +128,35 @@ namespace osl
         {
             return (Mutex *)osl_getGlobalMutex();
         }
+
+    private:
+        oslMutex mutex;
+
+        /** The underlying oslMutex has no reference count.
+
+        Since the underlying oslMutex is not a reference counted object, copy
+        constructed Mutex may work on an already destructed oslMutex object.
+
+        */
+        Mutex(const Mutex&);
+
+        /** The underlying oslMutex has no reference count.
+
+        When destructed, the Mutex object destroys the undelying oslMutex,
+        which might cause severe problems in case it's a temporary object.
+
+        */
+        Mutex(oslMutex Mutex);
+
+        /** This assignment operator is private for the same reason as
+            the copy constructor.
+        */
+        Mutex& operator= (const Mutex&);
+
+        /** This assignment operator is private for the same reason as
+            the constructor taking a oslMutex argument.
+        */
+        Mutex& operator= (oslMutex);
     };
 
     /** A helper class for mutex objects and interfaces.
