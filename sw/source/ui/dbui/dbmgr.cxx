@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:39:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2573,8 +2573,11 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             Reference<XNameAccess> xDBContext(xInstance, UNO_QUERY_THROW);
             Reference<XSingleServiceFactory> xFact( xDBContext, UNO_QUERY);
 
-            String sNewName = aURL.getName();
-            xub_StrLen nExtLen = aURL.GetExtension().getLength();
+            String sNewName = INetURLObject::decode( aURL.getName(),
+                                                     INET_HEX_ESCAPE,
+                                                     INetURLObject::DECODE_UNAMBIGUOUS,
+                                                     RTL_TEXTENCODING_UTF8 );
+            xub_StrLen nExtLen = aURL.GetExtension().Len();
             sNewName.Erase( sNewName.Len() - nExtLen - 1, nExtLen + 1 );
 
             //find a unique name if sNewName already exists
