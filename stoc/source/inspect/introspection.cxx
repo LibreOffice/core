@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:14 $
+ *  last change: $Author: ab $ $Date: 2001-05-04 12:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1680,6 +1680,7 @@ class ImplIntrospection : public XIntrospection
 
 #ifdef USE_INTROSPECTION_CACHE
     sal_uInt16 mnCacheEntryCount;
+    sal_uInt16 mnTPCacheEntryCount;
     IntrospectionAccessCacheMap* mpCache;
     TypeProviderAccessCacheMap* mpTypeProviderCache;
 #endif
@@ -1728,6 +1729,7 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
 {
 #ifdef USE_INTROSPECTION_CACHE
     mnCacheEntryCount = 0;
+    mnTPCacheEntryCount = 0;
     mpCache = NULL;
     mpTypeProviderCache = NULL;
 #endif
@@ -2069,7 +2071,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
             pAccess->acquire();
 
             // Groesse begrenzen, alten Eintrag wieder rausschmeissen
-            if( mnCacheEntryCount > INTROSPECTION_CACHE_MAX_SIZE )
+            if( mnTPCacheEntryCount > INTROSPECTION_CACHE_MAX_SIZE )
             {
                 // Access mit dem kleinsten HitCount suchen
                 TypeProviderAccessCacheMap::iterator iter = aTPCache.begin();
@@ -2089,7 +2091,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                 aTPCache.erase( toDelete );
             }
             else
-                mnCacheEntryCount++;
+                mnTPCacheEntryCount++;
 
             // Neuer Eintrage rein in die Table
             aKeySeq.nHitCount = 1;
