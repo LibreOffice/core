@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tbe $ $Date: 2000-11-20 08:40:31 $
+#   last change: $Author: ab $ $Date: 2001-03-03 14:48:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,10 @@ SHL1STDLIBS= \
             $(SFX2LIB) \
             $(BASICLIB) \
             $(COMPHELPERLIB) \
-            $(UNOTOOLSLIB)
+            $(UNOTOOLSLIB) \
+            $(TKLIB) \
+            $(XMLSCRIPTLIB)
+
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
@@ -126,7 +129,7 @@ DEF1EXPORTFILE	= basctl.dxp
 
 LIB1TARGET      =$(SLB)$/basctl.lib
 LIB1FILES       = \
-            $(LIBPRE) $(SLB)$/vcdlged.lib   \
+            $(LIBPRE) $(SLB)$/dlged.lib   \
             $(LIBPRE) $(SLB)$/vctrls.lib    \
             $(LIBPRE) $(SLB)$/basicide.lib \
             $(LIBPRE) $(SLB)$/ibrw.lib
