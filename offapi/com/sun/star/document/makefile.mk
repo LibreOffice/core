@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: mi $ $Date: 2002-04-26 11:03:08 $
+#   last change: $Author: mav $ $Date: 2002-05-29 15:53:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,7 +112,9 @@ IDLFILES=\
     XTypeDetection.idl\
     XInteractionFilterSelect.idl\
     NoSuchFilterRequest.idl\
-    AmbigousFilterRequest.idl
+    AmbigousFilterRequest.idl\
+    XInteractionFilterOptions.idl\
+    FilterOptionsRequest.idl
 
 # ------------------------------------------------------------------
 
