@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:43:07 $
+ *  last change: $Author: obr $ $Date: 2001-05-07 11:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,10 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
 #include "urlbmk.hxx"
@@ -847,8 +851,7 @@ void TransferableHelper::ObjectReleased()
 
 void TransferableHelper::CopyToClipboard() const
 {
-    if( !mxClipboard.is() )
-        ( (TransferableHelper*) this )->mxClipboard = GetSystemClipboard();
+    mxClipboard = GetSystemClipboard();
 
     if( mxClipboard.is() && !mxTerminateListener.is() )
     {
@@ -870,6 +873,78 @@ void TransferableHelper::CopyToClipboard() const
             }
 
             mxClipboard->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
+
+        Application::AcquireSolarMutex( nRef );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferableHelper::CopyToClipboard( Window *pWindow ) const
+{
+    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+    mxClipboard = pWindow->GetClipboard();
+
+    if( mxClipboard.is() && !mxTerminateListener.is() )
+    {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
+        try
+        {
+            Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+
+            if( xFact.is() )
+            {
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+
+                if( xDesktop.is() )
+                {
+                    TransferableHelper* pThis = (TransferableHelper*) this;
+                    xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+                }
+            }
+
+            mxClipboard->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
+
+        Application::AcquireSolarMutex( nRef );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferableHelper::CopyToSelection( Window *pWindow ) const
+{
+    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+    Reference< XClipboard > xSelection( pWindow->GetSelection() );
+
+    if( xSelection.is() && !mxTerminateListener.is() )
+    {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
+        try
+        {
+            Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+
+            if( xFact.is() )
+            {
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+
+                if( xDesktop.is() )
+                {
+                    TransferableHelper* pThis = (TransferableHelper*) this;
+                    xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+                }
+            }
+
+            xSelection->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
@@ -913,25 +988,25 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
 
 // -----------------------------------------------------------------------------
 
+void TransferableHelper::ClearSelection( Window *pWindow )
+{
+    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+    Reference< XClipboard > xSelection( pWindow->GetSelection() );
+
+    if( xSelection.is() )
+        xSelection->setContents( NULL, NULL );
+}
+
+// -----------------------------------------------------------------------------
+
 Reference< XClipboard> TransferableHelper::GetSystemClipboard()
 {
-    Reference< XClipboard > xClipboard;
+    Window *pFocusWindow = Application::GetFocusWindow();
 
-    try
-    {
-        Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+    if( pFocusWindow )
+        return pFocusWindow->GetClipboard();
 
-        if( xFact.is() )
-        {
-            xClipboard = Reference< XClipboard >( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ),
-                                                                         UNO_QUERY );
-        }
-    }
-    catch( const ::com::sun::star::uno::Exception& )
-    {
-    }
-
-    return xClipboard;
+    return  Reference< XClipboard > ();
 }
 
 // ---------------------------------
@@ -1682,6 +1757,72 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
         catch( const ::com::sun::star::uno::Exception& )
         {
         }
+
+        Application::AcquireSolarMutex( nRef );
+    }
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
+TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window * pWindow )
+{
+    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+
+       TransferableDataHelper   aRet;
+    Reference< XClipboard > xClipboard( pWindow->GetClipboard() );
+
+    if( xClipboard.is() )
+       {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
+           try
+        {
+            Reference< XTransferable > xTransferable( xClipboard->getContents() );
+
+            if( xTransferable.is() )
+               {
+                aRet = TransferableDataHelper( xTransferable );
+            }
+           }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+           }
+
+        Application::AcquireSolarMutex( nRef );
+    }
+
+    return aRet;
+}
+
+
+// -----------------------------------------------------------------------------
+
+TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window * pWindow )
+{
+    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+
+    Reference< XClipboard > xSelection( pWindow->GetSelection() );
+       TransferableDataHelper   aRet;
+
+    if( xSelection.is() )
+       {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
+          try
+        {
+            Reference< XTransferable > xTransferable( xSelection->getContents() );
+
+            if( xTransferable.is() )
+               {
+                aRet = TransferableDataHelper( xTransferable );
+                   aRet.mxClipboard = xSelection;
+            }
+           }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+           }
 
         Application::AcquireSolarMutex( nRef );
     }
