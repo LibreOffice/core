@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:18:04 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 13:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,25 +653,25 @@ void __EXPORT ScEditWindow::LoseFocus()
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
     String sName;
-    String sDescription;
+    String sDescription(GetHelpText());
     switch (eLocation)
     {
     case Left:
         {
             sName = String(ScResId(STR_ACC_LEFTAREA_NAME));
-            sDescription = String(ScResId(STR_ACC_LEFTAREA_DESCR));
+//            sDescription = String(ScResId(STR_ACC_LEFTAREA_DESCR));
         }
         break;
     case Center:
         {
             sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
-            sDescription = String(ScResId(STR_ACC_CENTERAREA_DESCR));
+//            sDescription = String(ScResId(STR_ACC_CENTERAREA_DESCR));
         }
         break;
     case Right:
         {
             sName = String(ScResId(STR_ACC_RIGHTAREA_NAME));
-            sDescription = String(ScResId(STR_ACC_RIGHTAREA_DESCR));
+//            sDescription = String(ScResId(STR_ACC_RIGHTAREA_DESCR));
         }
         break;
     }
