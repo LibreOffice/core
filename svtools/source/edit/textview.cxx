@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-02 10:59:44 $
+ *  last change: $Author: sb $ $Date: 2002-07-23 13:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1073,6 +1073,8 @@ void TextView::Scroll( long ndX, long ndY )
         if ( bVisCursor && !mbReadOnly )
             mpCursor->Show();
     }
+
+    mpTextEngine->Broadcast( TextHint( TEXT_HINT_VIEWSCROLLED ) );
 }
 
 void TextView::Undo()
@@ -1697,10 +1699,7 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
             aNewStartPos.Y() = nYMax;
 
         if ( aNewStartPos != maStartDocPos )
-        {
             Scroll( -(aNewStartPos.X() - maStartDocPos.X()), -(aNewStartPos.Y() - maStartDocPos.Y()) );
-            mpTextEngine->Broadcast( TextHint( TEXT_HINT_VIEWSCROLLED ) );
-        }
     }
 
     Point aPoint( GetWindowPos( aEditCursor.TopLeft() ) );
