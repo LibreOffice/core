@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:39:43 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text = "Position" ;
                 Text [ english_us ] = "Position" ;
                 Text[ portuguese ] = "Posiзгo";
-                Text[ russian ] = "Позиция";
+                Text[ russian ] = "Положение";
                 Text[ greek ] = "ИЭуз";
                 Text[ dutch ] = "Positie";
                 Text[ french ] = "Position";
@@ -265,7 +265,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ spanish ] = "Flujo del texto" ;
                 Text [ english_us ] = "Text Flow" ;
                 Text[ chinese_simplified ] = "жЌўиЎЊе’Ње€†йЎµ";
-                Text[ russian ] = "Положение на странице";
+                Text[ russian ] = "На странице";
                 Text[ polish ] = "Tekst";
                 Text[ japanese ] = "дЅ“иЈЃ";
                 Text[ chinese_traditional ] = "жЏ›иЎЊе’Ње€†й Ѓ";
@@ -284,7 +284,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiбtica";
-                Text[ russian ] = "Азиатские шрифты";
+                Text[ russian ] = "Азиатские типографская разметка";
                 Text[ greek ] = "БуйЬфйкз фхрпгсбцЯб";
                 Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
@@ -336,7 +336,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
         };
     };
     Text[ chinese_simplified ] = "ж–‡е­—е±ћжЂ§";
-    Text[ russian ] = "Атрибуты текста";
+    Text[ russian ] = "Формат текста";
     Text[ polish ] = "Atrybuty tekstu";
     Text[ japanese ] = "гѓ†г‚­г‚№гѓ€гЃ®е±ћжЂ§";
     Text[ chinese_traditional ] = "ж–‡е­—ж јејЏ";
@@ -450,7 +450,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text [ italian ] = "Ricerca per simili" ;
     Text [ spanish ] = "Bъsqueda por semejanza" ;
     Text [ french ] = "Recherche de similaritй" ;
-    Text [ dutch ] = "Zoeken naar overeenkomsten" ;
+    Text [ dutch ] = "Overeenkomsten zoeken" ;
     Moveable = TRUE ;
     FixedText FT_OTHER
     {
@@ -468,7 +468,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ portuguese_brazilian ] = "~Zeichen tauschen" ;
         Text [ portuguese ] = "~Substituir caracteres" ;
         Text[ chinese_simplified ] = "ж›їжЌўе­—з¬¦(~E)";
-        Text[ russian ] = "Поменять знаки";
+        Text[ russian ] = "Несовпадающих";
         Text[ polish ] = "Wymieс znaki";
         Text[ japanese ] = "е…Ґг‚Њд»Јг‚ЉиЁ±еЏЇгЃ®ж–‡е­—ж•°(~E)";
         Text[ chinese_traditional ] = "ж›їд»Је­—е…ѓ(~E)";
@@ -512,7 +512,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ portuguese_brazilian ] = "Z~eichen hinzuf?en" ;
         Text [ portuguese ] = "Inserir ~caracteres" ;
         Text[ chinese_simplified ] = "ж–°еўће­—з¬¦(~A)";
-        Text[ russian ] = "Добавить знаки";
+        Text[ russian ] = "Избыточных";
         Text[ polish ] = "Dodaj znaki";
         Text[ japanese ] = "иїЅеЉ иЁ±еЏЇгЃ®ж–‡е­—ж•°(~A)";
         Text[ chinese_traditional ] = "ж–°еўће­—е…ѓ(~A)";
@@ -556,7 +556,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ portuguese_brazilian ] = "Ze~ichen entfernen" ;
         Text [ portuguese ] = "Elimina~r caracteres" ;
         Text[ chinese_simplified ] = "е€ й™¤е­—з¬¦(~R)";
-        Text[ russian ] = "Убрать знаки";
+        Text[ russian ] = "Недостающих";
         Text[ polish ] = "Usuс znaki";
         Text[ japanese ] = "дёЌи¶іиЁ±еЏЇгЃ®ж–‡е­—ж•°(~R)";
         Text[ chinese_traditional ] = "е€Єй™¤е­—е…ѓ(~R)";
@@ -630,7 +630,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ portuguese_brazilian ] = "Einstellungen" ;
         Text [ portuguese ] = "Definiзхes" ;
         Text[ chinese_simplified ] = "и®ѕе®љ";
-        Text[ russian ] = "Настройки";
+        Text[ russian ] = "Количество букв";
         Text[ polish ] = "Ustawienia";
         Text[ japanese ] = "иЁ­е®љ";
         Text[ chinese_traditional ] = "иЁ­е®љ";
@@ -666,7 +666,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text [ portuguese ] = "Procura por semelhanзa" ;
     Text [ portuguese_brazilian ] = "?hnlichkeitssuche" ;
     Text[ chinese_simplified ] = "з±»дјјжђњеЇ»";
-    Text[ russian ] = "Поиск похожих";
+    Text[ russian ] = "Поиск подобных";
     Text[ polish ] = "Szukaj podobnych";
     Text[ japanese ] = "йЎћдјјг‚№гѓљгѓ«гЃ®ж¤њзґў";
     Text[ chinese_traditional ] = "з›ёдјје­—жђње°‹";
