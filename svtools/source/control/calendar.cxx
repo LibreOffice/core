@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-10-18 11:23:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2621,7 +2621,7 @@ public:
 // -----------------------------------------------------------------------
 
 ImplCFieldFloatWin::ImplCFieldFloatWin( Window* pParent ) :
-    FloatingWindow( pParent )
+    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  )
 {
     mpCalendar  = NULL;
     mpTodayBtn  = NULL;
@@ -2928,7 +2928,7 @@ BOOL CalendarField::ShowDropDown( BOOL bShow )
         mpCalendar->StartSelection();
         mpCalendar->GrabFocus();
         mpCalendar->Show();
-        mpFloatWin->StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
+        mpFloatWin->StartPopupMode( aRect, FLOATWIN_POPUPMODE_NOFOCUSCLOSE|FLOATWIN_POPUPMODE_DOWN );
     }
     else
     {
