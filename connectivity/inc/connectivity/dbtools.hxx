@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:15:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,17 @@ namespace dbtools
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
         SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
+
+    /** return the active connection which is got from the first model which occurs and has the active connection set as argument.
+        @param  _xChild
+            The child to ask for the XModel interface, if not supported it goes the parent hierachy up.
+
+        @return ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection>
+        @see XModel::getArgs
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  getActiveConnectionFromParent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xChild);
+
     /** returns the columns of the named table of the given connection
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rName);
@@ -295,13 +306,35 @@ namespace dbtools
     */
     ::com::sun::star::sdb::SQLContext prependContextInfo(const ::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails = ::rtl::OUString());
 
+    /** search the parent hierachy for a data source.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> findDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent);
+
+    /** check if a specific property is enabled in the info sequence
+        @param  _xProp
+            The datasource or a child of it.
+        @param  _sProperty
+            The property to search in the info property of the data source.
+        @param  _bDefault
+            This value will be returned, if the property doesn't exist in the data source.
+        @return
+            <TRUE/> if so otherwise <FALSE/>
+    */
+    sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
+                                        ,const ::rtl::OUString& _sProperty,
+                                        sal_Bool _bDefault = sal_False);
+
     /** quote the given name with the given quote string.
     */
     ::rtl::OUString quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName);
 
     /** quote the given table name (which may contain a catalog and a schema) according to the rules provided by the meta data
     */
-    ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName,EComposeRule _eComposeRule);
+    ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta
+                                    , const ::rtl::OUString& _rName
+                                    ,EComposeRule _eComposeRule
+                                    ,sal_Bool _bUseCatalogInSelect = sal_True
+                                    ,sal_Bool _bUseSchemaInSelect = sal_True);
 
     /** split a fully qualified table name (including catalog and schema, if appliable) into it's component parts.
         @param  _rxConnMetaData     meta data describing the connection where you got the table name from
@@ -394,7 +427,9 @@ namespace dbtools
                             const ::rtl::OUString& _rName,
                             ::rtl::OUString& _rComposedName,
                             sal_Bool _bQuote,
-                            EComposeRule _eComposeRule);
+                            EComposeRule _eComposeRule
+                            ,sal_Bool _bUseCatalogInSelect = sal_True
+                            ,sal_Bool _bUseSchemaInSelect = sal_True);
 
     //----------------------------------------------------------------------------------
     /** compose the table name out of the property set which must support the properties from the service <member scope= "com::sun::star::sdbcx">table</member>
@@ -406,7 +441,9 @@ namespace dbtools
     ::rtl::OUString composeTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
                                      sal_Bool _bQuote,
-                                     EComposeRule _eComposeRule);
+                                     EComposeRule _eComposeRule
+                                     ,sal_Bool _bUseCatalogInSelect = sal_True
+                                     ,sal_Bool _bUseSchemaInSelect = sal_True);
 
     //----------------------------------------------------------------------------------
     sal_Int32 getSearchColumnFlag( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
