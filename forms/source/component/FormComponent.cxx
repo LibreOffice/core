@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 14:58:08 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 08:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,54 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
     DBG_ASSERT(nVersion < 5, "OControlModel::read : suspicious version number !");
     // 4 was the version where we wrote the help text
     // later versions shouldn't exist (see write for a detailed comment)
+}
+
+//------------------------------------------------------------------------------
+PropertyState OControlModel::getPropertyStateByHandle( sal_Int32 _nHandle )
+{
+    Any aDefault = getPropertyDefaultByHandle( _nHandle );
+    Any aCurrent;
+    getFastPropertyValue( aCurrent, _nHandle );
+
+    if ( ::comphelper::compare( aDefault, aCurrent ) )
+        return PropertyState_DEFAULT_VALUE;
+
+    return PropertyState_DIRECT_VALUE;
+}
+
+//------------------------------------------------------------------------------
+void OControlModel::setPropertyToDefaultByHandle( sal_Int32 _nHandle)
+{
+    Any aDefault = getPropertyDefaultByHandle( _nHandle );
+
+    Any aConvertedValue, aOldValue;
+    if ( convertFastPropertyValue( aConvertedValue, aOldValue, _nHandle, aDefault ) )
+    {
+        setFastPropertyValue_NoBroadcast( _nHandle, aConvertedValue );
+        // TODO: fire the property change
+    }
+}
+
+//------------------------------------------------------------------------------
+Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+{
+    Any aReturn;
+    switch ( _nHandle )
+    {
+        case PROPERTY_ID_NAME:
+        case PROPERTY_ID_TAG:
+            aReturn <<= ::rtl::OUString();
+            break;
+
+        case PROPERTY_ID_CLASSID:
+            aReturn <<= (sal_Int16)FormComponentType::CONTROL;
+            break;
+
+        case PROPERTY_ID_TABINDEX:
+            aReturn <<= (sal_Int16)FRM_DEFAULT_TABINDEX;
+            break;
+    }
+    return aReturn;
 }
 
 //------------------------------------------------------------------------------
