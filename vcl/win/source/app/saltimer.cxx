@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:51:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
 #endif
-
-#define _SV_SALTIMER_CXX
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
