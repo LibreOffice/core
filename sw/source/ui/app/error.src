@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:19:20 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,11 +390,6 @@ Resource RID_SW_ERRHDL
     {
         Text [ de ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
         Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_UNCONVERTABLE_CHARS )
-    {
-        Text [ de ] = "Die folgenden Zeichen konnten nicht im gewählten Zeichensatz dargestellt werden:\n$(ARG1)" ;
-        Text [ en-US ] = "The following characters could not be displayed in the selected character set:\n$(ARG1)";
     };
 };
 
