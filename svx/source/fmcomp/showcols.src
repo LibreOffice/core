@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:36:09 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 09:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     Text[ catalan ] = "Mostrar columnas";
     Text[ finnish ] = "Näytä sarakkeet";
 };
+
 
 
 
