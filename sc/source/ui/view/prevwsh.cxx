@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-03 10:23:34 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 10:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ BOOL ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
         if ( nNew != nOld )
         {
             eZoom = SVX_ZOOM_PERCENT;
-            pPreview->SetZoom( nNew );
+            pPreview->SetZoom( (USHORT)nNew );
         }
 
         bDone = TRUE;
@@ -393,12 +393,12 @@ BOOL ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
         if ( bDone )
         {
             Point aOld = pPreview->GetOffset();
-            long nHorThunb = pHorScroll->GetThumbPos();
-            if ( nHorThunb != aOld.X() )
-                pPreview->SetXOffset( nHorThunb );
-            long nVerThunb = pVerScroll->GetThumbPos();
-            if ( nVerThunb != aOld.Y() )
-                pPreview->SetYOffset( nVerThunb );
+            long nHorThumb = pHorScroll->GetThumbPos();
+            if ( nHorThumb != aOld.X() )
+                pPreview->SetXOffset( nHorThumb );
+            long nVerThumb = pVerScroll->GetThumbPos();
+            if ( nVerThumb != aOld.Y() )
+                pPreview->SetYOffset( nVerThumb );
         }
     }
 
@@ -460,7 +460,7 @@ USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, PrintDialog* pPri
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
     SfxViewShell::Print( rProgress, pPrintDialog );
-    pDocShell->Print( rProgress, pPrintDialog, NULL );
+    pDocShell->Print( rProgress, pPrintDialog, NULL, pPreview, FALSE );
 
     return 0;
 }
@@ -767,7 +767,7 @@ void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL bBrowse)
     if (nCount)
     {
         xub_StrLen nIndex = 0;
-        pPreview->SetZoom(rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
+        pPreview->SetZoom((USHORT)rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
         pPreview->SetPageNo(rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
         eZoom = SVX_ZOOM_PERCENT;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-28 19:28:10 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 10:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1112,7 +1112,8 @@ USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress,
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
     SfxViewShell::Print( rProgress, pPrintDialog );
-    pDocShell->Print( rProgress, pPrintDialog, &GetViewData()->GetMarkData(), bPrintSelected );
+    pDocShell->Print( rProgress, pPrintDialog, &GetViewData()->GetMarkData(),
+                        GetDialogParent(), bPrintSelected );
 
     return 0;
 }
