@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 20:44:19 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 12:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@ package com.sun.star.wizards.ui;
 
 import java.beans.*;
 
+import com.sun.star.wizards.ui.event.CommonListener;
 import com.sun.star.wizards.ui.event.EventNames;
 import com.sun.star.wizards.ui.event.MethodInvocation;
 import com.sun.star.uno.UnoRuntime;
@@ -69,22 +70,25 @@ import com.sun.star.awt.XItemEventBroadcaster;
 import com.sun.star.awt.*;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.container.XIndexContainer;
+import com.sun.star.frame.XTerminateListener;
+import com.sun.star.frame.TerminationVetoException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.beans.*;
 
-public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener {
+public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener {
 
     private static final String NEXT_ACTION_PERFORMED = "gotoNextAvailableStep";
     private static final String BACK_ACTION_PERFORMED = "gotoPreviousAvailableStep";
-    private static final String FINISH_ACTION_PERFORMED = "finishWizard";
-    private static final String CANCEL_ACTION_PERFORMED = "cancelWizard";
-    private static final String HELP_ACTION_PERFORMED = "callHelp";
+    private static final String FINISH_ACTION_PERFORMED = "finishWizard_1";
+    private static final String CANCEL_ACTION_PERFORMED = "cancelWizard_1";
     public VetoableChangeSupport vetos = new VetoableChangeSupport(this);
     private String[] sRightPaneHeaders;
     private int iButtonWidth = 50;
@@ -120,6 +124,17 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         sMsgEndAutopilot = oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
 
         //new Resource(xMSF,"Common","com");
+    }
+
+    public void activate() {
+        try {
+            XTopWindow top = (XTopWindow)UnoRuntime.queryInterface(XTopWindow.class,  xWindow );
+            if (top != null)
+                   top.toFront();
+        }
+        catch (Exception ex) {
+            // do nothing;
+        }
     }
 
     public void setMaxStep(int i) {
@@ -292,6 +307,13 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private boolean switchToStep() {
         leaveStep(nOldStep, nNewStep);
         if (nNewStep != nOldStep) {
+            if (nNewStep == nMaxStep) {
+                setControlProperty("btnWizardNext", "DefaultButton", Boolean.FALSE);
+                setControlProperty("btnWizardFinish", "DefaultButton", Boolean.TRUE);
+            } else {
+                setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE);
+                setControlProperty("btnWizardFinish", "DefaultButton", Boolean.FALSE);
+            }
             changeToStep(nNewStep);
             enterStep(nOldStep, nNewStep);
             return true;
@@ -341,8 +363,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
             Helper.setUnoPropertyValue(super.xDialogModel, "HelpURL", "HID:" + hid);
 
-            insertButton("btnWizardHelp", HELP_ACTION_PERFORMED, propNames ,
-                                new Object[] { new Boolean(true), IButtonHeight, "HID:" + (hid + 1), oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth });
+            insertButton("btnWizardHelp", null , propNames ,
+                                new Object[] { new Boolean(true), IButtonHeight, "HID:" + hid + 1, oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth });
 
             insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames ,
                                 new Object[] { new Boolean(false), IButtonHeight, "HID:" + (hid + 2) ,oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth });
@@ -356,7 +378,14 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             insertButton("btnWizardCancel", CANCEL_ACTION_PERFORMED, propNames,
                                 new Object[] { new Boolean(true), IButtonHeight, "HID:" + (hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), new Integer(iCancelPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth });
 
-            //          vetos.addVetoableChangeListener(new ChangesImpl());
+            setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE );
+            // add a window listener, to know
+            // if the user used "escape" key to
+            // close the dialog.
+            MethodInvocation windowHidden = new MethodInvocation("windowHidden", this);
+            xWindow.addWindowListener((CommonListener)guiEventListener);
+            String dialogName = (String)Helper.getUnoPropertyValue( xDialogModel, "Name" );
+            guiEventListener.add( dialogName, EVENT_ACTION_PERFORMED , windowHidden);
 
         } catch (java.lang.Exception jexception) {
             jexception.printStackTrace(System.out);
@@ -467,6 +496,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     public abstract void finishWizard();
 
+    public void finishWizard_1() {
+        wizardClosed = true;
+        finishWizard();
+        Desktop.getDesktop(xMSF).removeTerminateListener(this);
+    }
+
     public int getMaximalStep() {
         return this.nMaxStep;
     }
@@ -508,7 +543,39 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         xDialog.endExecute();
     }
 
-    public void callHelp() {
-        //should be overwritten by extending class
+
+    private boolean wizardClosed = false;
+    /**
+     * called by the cancel button and
+     * by the window hidden event.
+     * if this method was not called before,
+     * perform a cancel.
+     */
+    public void cancelWizard_1() {
+        if (wizardClosed)
+           return;
+        else {
+            wizardClosed = true;
+            cancelWizard();
+            Desktop.getDesktop(xMSF).removeTerminateListener(this);
+        }
+    }
+
+    public void windowHidden() {
+        cancelWizard_1();
+    }
+
+    public void notifyTermination(EventObject arg0) {
+        cancelWizard_1();
+    }
+
+    public void queryTermination(EventObject arg0)
+            throws TerminationVetoException {
+            activate();
+            throw new TerminationVetoException();
+    }
+
+    public void disposing(EventObject arg0) {
+        cancelWizard_1();
     }
 }
