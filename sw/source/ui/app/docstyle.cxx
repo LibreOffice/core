@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:48:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1760,7 +1760,7 @@ void SwDocStyleSheet::Create()
         case SFX_STYLE_FAMILY_FRAME:
             pFrmFmt = lcl_FindFrmFmt( rDoc, aName );
             if( !pFrmFmt )
-                pFrmFmt = rDoc.MakeFrmFmt(aName, rDoc.GetDfltFrmFmt(), FALSE);
+                pFrmFmt = rDoc.MakeFrmFmt(aName, rDoc.GetDfltFrmFmt(), FALSE, FALSE);
 
             break;
 
