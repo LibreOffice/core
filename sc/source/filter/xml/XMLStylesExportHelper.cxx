@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:42:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -194,28 +193,21 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     sal_Int32& nValidationIndex)
 {
     sal_Bool bAdded(sal_False);
-    uno::Reference<beans::XPropertySet> xPropertySet;
-    if (aTempAny >>= xPropertySet)
+    uno::Reference<beans::XPropertySet> xPropertySet(aTempAny, uno::UNO_QUERY);
+    if (xPropertySet.is())
     {
-        uno::Any aAny = xPropertySet->getPropertyValue(sERRMESS);
         rtl::OUString sErrorMessage;
-        aAny >>= sErrorMessage;
-        aAny = xPropertySet->getPropertyValue(sERRTITLE);
+        xPropertySet->getPropertyValue(sERRMESS) >>= sErrorMessage;
         rtl::OUString sErrorTitle;
-        aAny >>= sErrorTitle;
-        aAny = xPropertySet->getPropertyValue(sINPMESS);
+        xPropertySet->getPropertyValue(sERRTITLE) >>= sErrorTitle;
         rtl::OUString sImputMessage;
-        aAny >>= sImputMessage;
-        aAny = xPropertySet->getPropertyValue(sINPTITLE);
+        xPropertySet->getPropertyValue(sINPMESS) >>= sImputMessage;
         rtl::OUString sImputTitle;
-        aAny >>= sImputTitle;
-        aAny = xPropertySet->getPropertyValue(sSHOWERR);
-        sal_Bool bShowErrorMessage = ::cppu::any2bool(aAny);
-        aAny = xPropertySet->getPropertyValue(sSHOWINP);
-        sal_Bool bShowImputMessage = ::cppu::any2bool(aAny);
-        aAny = xPropertySet->getPropertyValue(sTYPE);
+        xPropertySet->getPropertyValue(sINPTITLE) >>= sImputTitle;
+        sal_Bool bShowErrorMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(sSHOWERR));
+        sal_Bool bShowImputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(sSHOWINP));
         sheet::ValidationType aValidationType;
-        aAny >>= aValidationType;
+        xPropertySet->getPropertyValue(sTYPE) >>= aValidationType;
         if (bShowErrorMessage || bShowImputMessage || aValidationType != sheet::ValidationType_ANY ||
             sErrorMessage.getLength() || sErrorTitle.getLength() || sImputMessage.getLength() || sImputTitle.getLength())
         {
@@ -227,12 +219,9 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
             aValidation.bShowErrorMessage = bShowErrorMessage;
             aValidation.bShowImputMessage = bShowImputMessage;
             aValidation.aValidationType = aValidationType;
-            aAny = xPropertySet->getPropertyValue(sIGNOREBL);
-            aValidation.bIgnoreBlanks = ::cppu::any2bool(aAny);
-            aAny = xPropertySet->getPropertyValue(sSHOWLIST);
-            aAny >>= aValidation.nShowList;
-            aAny = xPropertySet->getPropertyValue(sERRALSTY);
-            aAny >>= aValidation.aAlertStyle;
+            aValidation.bIgnoreBlanks = ::cppu::any2bool(xPropertySet->getPropertyValue(sIGNOREBL));
+            xPropertySet->getPropertyValue(sSHOWLIST) >>= aValidation.nShowList;
+            xPropertySet->getPropertyValue(sERRALSTY) >>= aValidation.aAlertStyle;
             uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
             if (xCondition.is())
             {
@@ -243,20 +232,20 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
             }
             //ScMyValidationRange aValidationRange;
             sal_Bool bEqualFound(sal_False);
-            sal_Int32 i = 0;
-            sal_Int32 nCount = aValidationVec.size();
+            sal_Int32 i(0);
+            sal_Int32 nCount(aValidationVec.size());
             while (i < nCount && !bEqualFound)
             {
                 bEqualFound = aValidationVec[i].IsEqual(aValidation);
                 if (!bEqualFound)
-                    i++;
+                    ++i;
             }
             if (bEqualFound)
                 nValidationIndex = i;
             else
             {
-                sal_Int32 nNameIndex = nCount + 1;
-                rtl::OUString sCount = rtl::OUString::valueOf(nNameIndex);
+                sal_Int32 nNameIndex(nCount + 1);
+                rtl::OUString sCount(rtl::OUString::valueOf(nNameIndex));
                 rtl::OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM("val"));
                 aValidation.sName += sPrefix;
                 aValidation.sName += sCount;
@@ -385,14 +374,14 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TRUE);
     else
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_FALSE);
-    SvXMLElementExport* pMessage = NULL;
+    SvXMLElementExport* pMessage(NULL);
     if (bIsHelpMessage)
         pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_HELP_MESSAGE, sal_True, sal_True);
     else
         pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MESSAGE, sal_True, sal_True);
     if (sOUMessage.getLength())
     {
-        sal_Int32 i = 0;
+        sal_Int32 i(0);
         rtl::OUStringBuffer sTemp;
         String sMessage(sOUMessage);
         rtl::OUString sText (sMessage.ConvertLineEnd(LINEEND_LF));
@@ -406,7 +395,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
             }
             else
                 sTemp.append(sText[i]);
-            i++;
+            ++i;
         }
         if (sTemp.getLength())
         {
@@ -423,11 +412,12 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
     if (aValidationVec.size())
     {
         SvXMLElementExport aElemVs(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS, sal_True, sal_True);
-        ScMyValidationVec::iterator aItr = aValidationVec.begin();
-        while (aItr != aValidationVec.end())
+        ScMyValidationVec::iterator aItr(aValidationVec.begin());
+        ScMyValidationVec::iterator aEndItr(aValidationVec.end());
+        while (aItr != aEndItr)
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sName);
-            rtl::OUString sCondition = GetCondition(rExport, *aItr);
+            rtl::OUString sCondition(GetCondition(rExport, *aItr));
             if (sCondition.getLength())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
@@ -493,7 +483,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                         }
                         {
                             uno::Sequence<beans::PropertyValue> aSeq(3);
-                            beans::PropertyValue* pArr = aSeq.getArray();
+                            beans::PropertyValue* pArr(aSeq.getArray());
                             pArr[0].Name = sEventType;
                             pArr[0].Value <<= sStarBasic;
                             pArr[1].Name = sLibrary;
@@ -508,7 +498,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     break;
                 }
             }
-            aItr++;
+            ++aItr;
         }
     }
 }
@@ -561,7 +551,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
         sal_Int32 nIndex;
         sal_Int32 nRepeat(0);
         sal_Int32 nEmptyRepeat(0);
-        for (sal_Int32 i = nLast; i >= 0; i--)
+        for (sal_Int32 i = nLast; i >= 0; --i)
         {
             if (bRow)
             {
@@ -604,7 +594,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
                     {
                         (*pDefaults)[i].nIndex = nPrevIndex;
                         (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
-                        nRepeat++;
+                        ++nRepeat;
                         if (nRepeat > 1)
                             (*pDefaults)[i].nRepeat = nRepeat;
                     }
@@ -617,7 +607,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
                     nEmptyRepeat = 1;
                 else
                 {
-                    nEmptyRepeat++;
+                    ++nEmptyRepeat;
                     if (nEmptyRepeat > 1)
                         (*pDefaults)[i].nRepeat = nEmptyRepeat;
                 }
@@ -700,7 +690,7 @@ void ScRowFormatRanges::AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 
     sal_Bool bInserted(sal_False);
     if (!aRowFormatRanges.empty())
     {
-        ScMyRowFormatRange* pRange = &aRowFormatRanges.back();
+        ScMyRowFormatRange* pRange(&aRowFormatRanges.back());
         if (pRange)
         {
             if ((nPrevStartCol == (pRange->nStartColumn + pRange->nRepeatColumns)) &&
@@ -725,7 +715,7 @@ void ScRowFormatRanges::AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 
         aRange.bIsAutoStyle = rFormatRange.bIsAutoStyle;
         aRange.nIndex = nIndex;
         aRowFormatRanges.push_back(aRange);
-        nSize++;
+        ++nSize;
     }
 }
 
@@ -782,18 +772,18 @@ void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
     {
         rFormatRange.nIndex = -1;
         aRowFormatRanges.push_back(rFormatRange);
-        nSize++;
+        ++nSize;
     }
 }
 
 sal_Bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
 {
-    ScMyRowFormatRangesList::iterator aItr = aRowFormatRanges.begin();
+    ScMyRowFormatRangesList::iterator aItr(aRowFormatRanges.begin());
     if (aItr != aRowFormatRanges.end())
     {
         aFormatRange = (*aItr);
         aRowFormatRanges.erase(aItr);
-        nSize--;
+        --nSize;
         return sal_True;
     }
     return sal_False;
@@ -801,14 +791,15 @@ sal_Bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
 
 sal_Int32 ScRowFormatRanges::GetMaxRows()
 {
-    ScMyRowFormatRangesList::iterator aItr = aRowFormatRanges.begin();
+    ScMyRowFormatRangesList::iterator aItr(aRowFormatRanges.begin());
+    ScMyRowFormatRangesList::iterator aEndItr(aRowFormatRanges.end());
     sal_Int32 nMaxRows = MAXROW + 1;
-    if (aItr != aRowFormatRanges.end())
-        while (aItr != aRowFormatRanges.end())
+    if (aItr != aEndItr)
+        while (aItr != aEndItr)
         {
             if ((*aItr).nRepeatRows < nMaxRows)
                 nMaxRows = (*aItr).nRepeatRows;
-            aItr++;
+            ++aItr;
         }
     else
         DBG_ERROR("no ranges found");
@@ -853,23 +844,26 @@ ScFormatRangeStyles::ScFormatRangeStyles()
 
 ScFormatRangeStyles::~ScFormatRangeStyles()
 {
-    ScMyOUStringVec::iterator i = aStyleNames.begin();
-    while (i != aStyleNames.end())
+    ScMyOUStringVec::iterator i(aStyleNames.begin());
+    ScMyOUStringVec::iterator endi(aStyleNames.end());
+    while (i != endi)
     {
         delete *i;
-        i++;
+        ++i;
     }
     i = aAutoStyleNames.begin();
-    while (i != aAutoStyleNames.end())
+    endi = aAutoStyleNames.end();
+    while (i != endi)
     {
         delete *i;
-        i++;
+        ++i;
     }
-    ScMyFormatRangeListVec::iterator j = aTables.begin();
-    while (j != aTables.end())
+    ScMyFormatRangeListVec::iterator j(aTables.begin());
+    ScMyFormatRangeListVec::iterator endj(aTables.end());
+    while (j != endj)
     {
         delete *j;
-        j++;
+        ++j;
     }
 }
 
@@ -877,9 +871,9 @@ void ScFormatRangeStyles::AddNewTable(const sal_Int32 nTable)
 {
     sal_Int32 nSize = aTables.size() - 1;
     if (nTable > nSize)
-        for (sal_Int32 i = nSize; i < nTable; i++)
+        for (sal_Int32 i = nSize; i < nTable; ++i)
         {
-            ScMyFormatRangeAddresses* aRangeAddresses = new ScMyFormatRangeAddresses;
+            ScMyFormatRangeAddresses* aRangeAddresses(new ScMyFormatRangeAddresses);
             aTables.push_back(aRangeAddresses);
         }
 }
@@ -894,9 +888,9 @@ sal_Bool ScFormatRangeStyles::AddStyleName(rtl::OUString* rpString, sal_Int32& r
     }
     else
     {
-        sal_Int32 nCount = aStyleNames.size();
+        sal_Int32 nCount(aStyleNames.size());
         sal_Bool bFound(sal_False);
-        sal_Int32 i = nCount - 1;
+        sal_Int32 i(nCount - 1);
         while ((i >= 0) && (!bFound))
         {
             if (aStyleNames.at(i)->equals(*rpString))
@@ -920,9 +914,9 @@ sal_Bool ScFormatRangeStyles::AddStyleName(rtl::OUString* rpString, sal_Int32& r
 
 sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle)
 {
-    sal_Int32 nPrefixLength = rPrefix.getLength();
-    rtl::OUString sTemp = rString.copy(nPrefixLength);
-    sal_Int32 nIndex = sTemp.toInt32();
+    sal_Int32 nPrefixLength(rPrefix.getLength());
+    rtl::OUString sTemp(rString.copy(nPrefixLength));
+    sal_Int32 nIndex(sTemp.toInt32());
     if (aAutoStyleNames.at(nIndex - 1)->equals(rString))
     {
         bIsAutoStyle = sal_True;
@@ -930,14 +924,14 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
     }
     else
     {
-        sal_Int32 i = 0;
+        sal_Int32 i(0);
         sal_Bool bFound(sal_False);
         while (!bFound && static_cast<size_t>(i) < aStyleNames.size())
         {
             if (aStyleNames[i]->equals(rString))
                 bFound = sal_True;
             else
-                i++;
+                ++i;
         }
         if (bFound)
         {
@@ -952,7 +946,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
                 if (aAutoStyleNames[i]->equals(rString))
                     bFound = sal_True;
                 else
-                    i++;
+                    ++i;
             }
             if (bFound)
             {
@@ -969,9 +963,10 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
     const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle) const
 {
     DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
-    ScMyFormatRangeAddresses::iterator aItr = pFormatRanges->begin();
-    while (aItr != pFormatRanges->end())
+    ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
+    ScMyFormatRangeAddresses::iterator aItr(pFormatRanges->begin());
+    ScMyFormatRangeAddresses::iterator aEndItr(pFormatRanges->end());
+    while (aItr != aEndItr)
     {
         if (((*aItr).aRangeAddress.StartColumn <= nColumn) &&
             ((*aItr).aRangeAddress.EndColumn >= nColumn) &&
@@ -982,7 +977,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
             return (*aItr).nStyleNameIndex;
         }
         else
-            aItr++;
+            ++aItr;
     }
     return -1;
 }
@@ -991,9 +986,10 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
     sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Bool bRemoveRange)
 {
     DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
-    ScMyFormatRangeAddresses::iterator aItr = pFormatRanges->begin();
-    while (aItr != pFormatRanges->end())
+    ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
+    ScMyFormatRangeAddresses::iterator aItr(pFormatRanges->begin());
+    ScMyFormatRangeAddresses::iterator aEndItr(pFormatRanges->end());
+    while (aItr != aEndItr)
     {
         if (((*aItr).aRangeAddress.StartColumn <= nColumn) &&
             ((*aItr).aRangeAddress.EndColumn >= nColumn) &&
@@ -1023,7 +1019,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
             if (bRemoveRange && (*aItr).aRangeAddress.EndRow < nRow)
                 aItr = pFormatRanges->erase(aItr);
             else
-                aItr++;
+                ++aItr;
         }
     }
     return -1;
@@ -1032,15 +1028,16 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
 void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
                     const sal_Int32 nTable, ScRowFormatRanges* pRowFormatRanges)
 {
-    sal_Int32 nTotalColumns = nEndColumn - nStartColumn + 1;
+    sal_Int32 nTotalColumns(nEndColumn - nStartColumn + 1);
     DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
-    ScMyFormatRangeAddresses::iterator aItr = pFormatRanges->begin();
+    ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
+    ScMyFormatRangeAddresses::iterator aItr(pFormatRanges->begin());
+    ScMyFormatRangeAddresses::iterator aEndItr(pFormatRanges->end());
     sal_Int32 nColumns = 0;
-    while (aItr != pFormatRanges->end() && nColumns < nTotalColumns)
+    while (aItr != aEndItr && nColumns < nTotalColumns)
     {
 #if OSL_DEBUG_LEVEL > 1
-        table::CellRangeAddress aTempRangeAddress = (*aItr).aRangeAddress;
+        table::CellRangeAddress aTempRangeAddress((*aItr).aRangeAddress);
 #endif
         if (((*aItr).aRangeAddress.StartRow <= nRow) &&
             ((*aItr).aRangeAddress.EndRow >= nRow))
@@ -1082,13 +1079,13 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                 pRowFormatRanges->AddRange(aRange, nRow);
                 nColumns += aRange.nRepeatColumns;
             }
-            aItr++;
+            ++aItr;
         }
         else
             if(aItr->aRangeAddress.EndRow < nRow)
                 aItr = pFormatRanges->erase(aItr);
             else
-                aItr++;
+                ++aItr;
     }
     pRowFormatRanges->Sort();
 }
@@ -1104,7 +1101,7 @@ void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellR
     aFormatRange.nNumberFormat = nNumberFormat;
     aFormatRange.bIsAutoStyle = bIsAutoStyle;
     DBG_ASSERT(static_cast<size_t>(aCellRangeAddress.Sheet) < aTables.size(), "wrong table");
-    ScMyFormatRangeAddresses* pFormatRanges = aTables[aCellRangeAddress.Sheet];
+    ScMyFormatRangeAddresses* pFormatRanges(aTables[aCellRangeAddress.Sheet]);
     pFormatRanges->push_back(aFormatRange);
 }
 
@@ -1119,7 +1116,7 @@ rtl::OUString* ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, 
 void ScFormatRangeStyles::Sort()
 {
     sal_Int32 nTables = aTables.size();
-    for (sal_Int32 i = 0; i < nTables; i++)
+    for (sal_Int16 i = 0; i < nTables; ++i)
         if (!aTables[i]->empty())
             aTables[i]->sort();
 }
@@ -1133,11 +1130,12 @@ ScColumnRowStylesBase::ScColumnRowStylesBase()
 
 ScColumnRowStylesBase::~ScColumnRowStylesBase()
 {
-    ScMyOUStringVec::iterator i = aStyleNames.begin();
-    while (i != aStyleNames.end())
+    ScMyOUStringVec::iterator i(aStyleNames.begin());
+    ScMyOUStringVec::iterator endi(aStyleNames.end());
+    while (i != endi)
     {
         delete *i;
-        i++;
+        ++i;
     }
 }
 
@@ -1149,21 +1147,21 @@ sal_Int32 ScColumnRowStylesBase::AddStyleName(rtl::OUString* pString)
 
 sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix)
 {
-    sal_Int32 nPrefixLength = rPrefix.getLength();
-    rtl::OUString sTemp = rString.copy(nPrefixLength);
-    sal_Int32 nIndex = sTemp.toInt32();
+    sal_Int32 nPrefixLength(rPrefix.getLength());
+    rtl::OUString sTemp(rString.copy(nPrefixLength));
+    sal_Int32 nIndex(sTemp.toInt32());
     if (aStyleNames.at(nIndex - 1)->equals(rString))
         return nIndex - 1;
     else
     {
-        sal_Int32 i = 0;
+        sal_Int32 i(0);
         sal_Bool bFound(sal_False);
         while (!bFound && static_cast<size_t>(i) < aStyleNames.size())
         {
             if (aStyleNames.at(i)->equals(rString))
                 bFound = sal_True;
             else
-                i++;
+                ++i;
         }
         if (bFound)
             return i;
@@ -1191,9 +1189,9 @@ ScColumnStyles::~ScColumnStyles()
 
 void ScColumnStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 {
-    sal_Int32 nSize = aTables.size() - 1;
+    sal_Int32 nSize(aTables.size() - 1);
     if (nTable > nSize)
-        for (sal_Int32 i = nSize; i < nTable; i++)
+        for (sal_Int32 i = nSize; i < nTable; ++i)
         {
             ScMyColumnStyleVec aFieldsVec(nFields + 1, ScColumnStyle());
             aTables.push_back(aFieldsVec);
@@ -1249,9 +1247,9 @@ ScRowStyles::~ScRowStyles()
 
 void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 {
-    sal_Int16 nSize = aTables.size() - 1;
+    sal_Int16 nSize(aTables.size() - 1);
     if (nTable > nSize)
-        for (sal_Int32 i = nSize; i < nTable; i++)
+        for (sal_Int32 i = nSize; i < nTable; ++i)
         {
             ScMysalInt32Vec aFieldsVec(nFields + 1, -1);
             aTables.push_back(aFieldsVec);
