@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2001-01-17 16:21:33 $
+ *  last change: $Author: os $ $Date: 2001-01-24 12:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,12 +1215,10 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aSectionPropertyMap_Impl[] =
                 {
                     { SW_PROP_NAME(UNO_NAME_CONDITION),         WID_SECT_CONDITION, &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
-                #ifdef DDE_AVAILABLE
                     { SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE),  WID_SECT_DDE_TYPE, &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE),  WID_SECT_DDE_FILE, &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT), WID_SECT_DDE_ELEMENT, &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE), WID_SECT_DDE_AUTOUPDATE, &::getBooleanCppuType(),             PROPERTY_NONE,  0},
-                #endif
                     { SW_PROP_NAME(UNO_NAME_FILE_LINK),         WID_SECT_LINK     , &::getCppuType((const text::SectionFileLink*)0),    PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_VISIBLE),        WID_SECT_VISIBLE   , &::getBooleanCppuType(),           PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_PROTECTED),  WID_SECT_PROTECTED, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
