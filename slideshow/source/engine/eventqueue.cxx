@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventqueue.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:41:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,21 @@
 
 // must be first
 #include <canvas/debug.hxx>
-
 #ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
 #endif
-
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <boost/shared_ptr.hpp>
-#endif
-#ifndef BOOST_MEM_FN_HPP_INCLUDED
-#include <boost/mem_fn.hpp>
-#endif
-
-#include <queue>
-#include <algorithm>
-#include <limits>
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <event.hxx>
 #include <eventqueue.hxx>
 #include <slideshowexceptions.hxx>
+
+#include <boost/shared_ptr.hpp>
+#include <boost/mem_fn.hpp>
+#include <queue>
+#include <algorithm>
+#include <limits>
 
 
 using namespace ::com::sun::star;
@@ -108,7 +104,15 @@ namespace presentation
             // dispose event queue
             while( !maEvents.empty() )
             {
-                maEvents.top().pEvent->dispose();
+                try {
+                    maEvents.top().pEvent->dispose();
+                }
+                catch (uno::Exception &) {
+                    OSL_ENSURE( false, rtl::OUStringToOString(
+                                    comphelper::anyToString(
+                                        cppu::getCaughtException() ),
+                                    RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
                 maEvents.pop();
             }
         }
