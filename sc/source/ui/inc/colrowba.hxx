@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:37:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@ public:
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
                 ~ScColBar();
 
-    virtual USHORT      GetPos();
-    virtual USHORT      GetEntrySize( USHORT nEntryNo );
-    virtual String      GetEntryText( USHORT nEntryNo );
+    virtual SCCOLROW    GetPos();
+    virtual USHORT      GetEntrySize( SCCOLROW nEntryNo );
+    virtual String      GetEntryText( SCCOLROW nEntryNo );
 
     virtual BOOL        IsLayoutRTL();                      // only for columns
 
-    virtual void        SetEntrySize( USHORT nPos, USHORT nNewSize );
-    virtual void        HideEntries( USHORT nStart, USHORT nEnd );
+    virtual void        SetEntrySize( SCCOLROW nPos, USHORT nNewSize );
+    virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
     virtual void        SetMarking( BOOL bSet );
     virtual void        SelectWindow();
@@ -120,15 +120,15 @@ public:
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
                 ~ScRowBar();
 
-    virtual USHORT      GetPos();
-    virtual USHORT      GetEntrySize( USHORT nEntryNo );
-    virtual String      GetEntryText( USHORT nEntryNo );
+    virtual SCCOLROW    GetPos();
+    virtual USHORT      GetEntrySize( SCCOLROW nEntryNo );
+    virtual String      GetEntryText( SCCOLROW nEntryNo );
 
     virtual BOOL        IsMirrored();                       // only for columns
-    virtual USHORT      GetHiddenCount( USHORT nEntryNo );  // only for columns
+    virtual SCROW       GetHiddenCount( SCROW nEntryNo );   // only for columns
 
-    virtual void        SetEntrySize( USHORT nPos, USHORT nNewSize );
-    virtual void        HideEntries( USHORT nStart, USHORT nEnd );
+    virtual void        SetEntrySize( SCCOLROW nPos, USHORT nNewSize );
+    virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
     virtual void        SetMarking( BOOL bSet );
     virtual void        SelectWindow();
