@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:50:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,6 +1020,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_FILE_LINK), WID_SECT_LINK     , CPPU_E2T(CPPUTYPE_SECTFILELNK),     PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_VISIBLE), WID_SECT_VISIBLE   , CPPU_E2T(CPPUTYPE_BOOLEAN),           PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_PROTECTED), WID_SECT_PROTECTED, CPPU_E2T(CPPUTYPE_BOOLEAN),              PROPERTY_NONE,     0},
+                    // --> FME 2004-06-22 #114856# edit in readonly sections
+                    { SW_PROP_NMID(UNO_NAME_EDIT_IN_READONLY), WID_SECT_EDIT_IN_READONLY,    CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE, 0},
+                    // <--
                     { SW_PROP_NMID(UNO_NAME_LINK_REGION), WID_SECT_REGION   , CPPU_E2T(CPPUTYPE_OUSTRING)  ,        PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_TEXT_COLUMNS), RES_COL,                CPPU_E2T(CPPUTYPE_REFTEXTCOL),    PROPERTY_NONE, MID_COLUMNS},
                     { SW_PROP_NMID(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
