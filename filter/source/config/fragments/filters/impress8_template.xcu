@@ -1,0 +1,14 @@
+    <node oor:name="impress8_template" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>6800</value></prop>
+        <prop oor:name="Type"><value>impress8_template</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>CXMLV</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Open Presentation Template</value>
+            <value xml:lang="de">Offene Präsentationsvorlage</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN</value></prop>
+    </node>
