@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crefl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-11 16:41:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
 
     case typelib_TypeClass_TYPE:
         return new IdlClassImpl( this, pTypeDescr->pTypeName, pTypeDescr->eTypeClass, pTypeDescr );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     case typelib_TypeClass_INTERFACE_METHOD:
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     case typelib_TypeClass_SERVICE:
@@ -566,7 +566,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (Exception & exc)
         {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, cstr.getStr() );
 #endif
