@@ -2,6 +2,7 @@ fx	basegfx	:	sal NULL
 fx	basegfx									usr1	-	all	fx_mkout NULL
 fx	basegfx\inc								get		-	all	fx_inc NULL
 fx	basegfx\prj								get		-	all	fx_prj NULL
+fx	basegfx\source\base1d					nmake	-	all	fx_base1d NULL
 fx	basegfx\source\base2d					nmake	-	all	fx_base2d NULL
 fx	basegfx\source\base3d					nmake	-	all	fx_base3d NULL
-fx	basegfx\util							nmake	-	all	fx_util fx_base2d NULL
+fx	basegfx\util							nmake	-	all	fx_util fx_base1d fx_base2d fx_base3d NULL
