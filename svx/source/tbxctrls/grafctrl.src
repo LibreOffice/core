@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:45:35 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     {
         SVLook = TRUE ;
         MenuStrings = TRUE ;
-        Align = BOXALIGN_TOP;
-        LineCount = 3;
+        Align = BOXALIGN_TOP; 
+        LineCount = 3; 
         ItemList =
         {
             ToolBoxItem
@@ -171,6 +171,7 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Text[ czech ] = "Filtry";
     Text[ hebrew ] = "‮מסננים‬";
     Text[ hindi ] = "फ़िल्टरें";
+    Text[ slovak ] = "Filtre";
 };
 
 // -----------
@@ -205,6 +206,7 @@ String RID_SVXSTR_UNDO_GRAFMODE
     Text[ czech ] = "Grafický režim";
     Text[ hebrew ] = "‮מצב גרפי‬";
     Text[ hindi ] = "सुचित्र प्रकार";
+    Text[ slovak ] = "Grafický režim";
 };
 String RID_SVXSTR_UNDO_GRAFRED
 {
@@ -234,6 +236,7 @@ String RID_SVXSTR_UNDO_GRAFRED
     Text[ czech ] = "Červená";
     Text[ hebrew ] = "‮אדום‬";
     Text[ hindi ] = "लाल";
+    Text[ slovak ] = "Červená";
 };
 String RID_SVXSTR_UNDO_GRAFGREEN
 {
@@ -263,6 +266,7 @@ String RID_SVXSTR_UNDO_GRAFGREEN
     Text[ czech ] = "Zelená";
     Text[ hebrew ] = "‮ירוק‬";
     Text[ hindi ] = "हरा";
+    Text[ slovak ] = "Zelená";
 };
 String RID_SVXSTR_UNDO_GRAFBLUE
 {
@@ -292,6 +296,7 @@ String RID_SVXSTR_UNDO_GRAFBLUE
     Text[ czech ] = "Modrá";
     Text[ hebrew ] = "‮כחול‬";
     Text[ hindi ] = "नीला";
+    Text[ slovak ] = "Modrá";
 };
 String RID_SVXSTR_UNDO_GRAFLUMINANCE
 {
@@ -321,6 +326,7 @@ String RID_SVXSTR_UNDO_GRAFLUMINANCE
     Text[ czech ] = "Jas";
     Text[ hebrew ] = "‮בהירות‬";
     Text[ hindi ] = "चमकीलापन";
+    Text[ slovak ] = "Jas";
 };
 String RID_SVXSTR_UNDO_GRAFCONTRAST
 {
@@ -350,6 +356,7 @@ String RID_SVXSTR_UNDO_GRAFCONTRAST
     Text[ czech ] = "Kontrast";
     Text[ hebrew ] = "‮ניגוד‬";
     Text[ hindi ] = "भेद दिखलाना";
+    Text[ slovak ] = "Kontrast";
 };
 String RID_SVXSTR_UNDO_GRAFGAMMA
 {
@@ -379,6 +386,7 @@ String RID_SVXSTR_UNDO_GRAFGAMMA
     Text[ czech ] = "Gamma";
     Text[ hebrew ] = "‮גמא‬";
     Text[ hindi ] = "गामा";
+    Text[ slovak ] = "Gamma";
 };
 String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
 {
@@ -408,6 +416,7 @@ String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
     Text[ czech ] = "Průhlednost";
     Text[ hebrew ] = "‮שקיפות‬";
     Text[ hindi ] = "पारदर्शकता";
+    Text[ slovak ] = "Priehľadnosť";
 };
 String RID_SVXSTR_GRAFCROP
 {
@@ -437,9 +446,12 @@ String RID_SVXSTR_GRAFCROP
     Text[ czech ] = "Oříznout";
     Text[ hebrew ] = "‮חיתוך‬";
     Text[ hindi ] = "क्रोप";
+    Text[ slovak ] = "Orezať";
 };
 
 // ********************************************************************** EOF
+
+
 
 
 
