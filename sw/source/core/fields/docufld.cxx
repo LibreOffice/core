@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:54:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@
 #endif
 #ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
 #endif
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
@@ -1842,6 +1845,13 @@ String SwPostItField::Expand() const
 {
     return aEmptyStr;
 }
+
+
+String SwPostItField::GetDescription() const
+{
+    return SW_RES(STR_NOTE);
+}
+
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
