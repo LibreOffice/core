@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:36:48 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,11 +295,28 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         const SvxSizeItem& rSizeItem = GETITEM( rItemSet, SvxSizeItem, ATTR_PAGE_SIZE );
         maData.SetScPaperSize( rSizeItem.GetSize(), !rPageItem.IsLandscape() );
 
-        maData.mbFitToPages = ScfTools::CheckItem( rItemSet, ATTR_PAGE_SCALETOPAGES, false );
-        if( maData.mbFitToPages )
-            maData.mnFitToHeight = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_PAGE_SCALETOPAGES, sal_uInt16 );
-        else
-            maData.mnScaling = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_PAGE_SCALE, sal_uInt16 );
+        const ScPageScaleToItem& rScaleToItem = GETITEM( rItemSet, ScPageScaleToItem, ATTR_PAGE_SCALETO );
+        sal_uInt16 nPages = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_PAGE_SCALETOPAGES, sal_uInt16 );
+        sal_uInt16 nScale = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_PAGE_SCALE, sal_uInt16 );
+
+        if( ScfTools::CheckItem( rItemSet, ATTR_PAGE_SCALETO, false ) && rScaleToItem.IsValid() )
+        {
+            maData.mnFitToWidth = rScaleToItem.GetWidth();
+            maData.mnFitToHeight = rScaleToItem.GetHeight();
+            maData.mbFitToPages = true;
+
+        }
+        else if( ScfTools::CheckItem( rItemSet, ATTR_PAGE_SCALETOPAGES, false ) && nPages )
+        {
+            maData.mnFitToWidth = 1;
+            maData.mnFitToHeight = nPages;
+            maData.mbFitToPages = true;
+        }
+        else if( nScale )
+        {
+            maData.mnScaling = nScale;
+            maData.mbFitToPages = false;
+        }
 
         maData.mpBrushItem.reset( new SvxBrushItem( GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND ) ) );
 
