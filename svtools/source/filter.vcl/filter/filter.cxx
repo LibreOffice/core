@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-01-26 13:01:08 $
+ *  last change: $Author: sj $ $Date: 2001-02-22 11:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include "filter.hxx"
+#include "FilterConfigCache.hxx"
 #include "fltcall.hxx"
 #include "wmf.hxx"
 #include "gifread.hxx"
@@ -133,37 +134,6 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
-
-#define IMPEXP_FILTERPATHES     "Pathes"
-
-#define IMP_BMP                 "SVBMP"
-#define IMP_SVMETAFILE          "SVMETAFILE"
-#define IMP_WMF                 "SVWMF"
-#define IMP_EMF                 "SVEMF"
-#define IMP_SVSGF               "SVSGF"
-#define IMP_SVSGV               "SVSGV"
-#define IMP_GIF                 "SVIGIF"
-#define IMP_PNG                 "SVIPNG"
-#define IMP_JPEG                "SVIJPEG"
-#define IMP_XBM                 "SVIXBM"
-#define IMP_XPM                 "SVIXPM"
-#define EXP_BMP                 "SVBMP"
-#define EXP_SVMETAFILE          "SVMETAFILE"
-#define EXP_WMF                 "SVWMF"
-#define EXP_EMF                 "SVEMF"
-#define EXP_JPEG                "SVEJPEG"
-#define EXP_SVG                 "SVESVG"
-
-#define BMP_SHORTNAME           "BMP"
-#define GIF_SHORTNAME           "GIF"
-#define JPG_SHORTNAME           "JPG"
-#define MET_SHORTNAME           "MET"
-#define PCT_SHORTNAME           "PCT"
-#define PNG_SHORTNAME           "PNG"
-#define SVM_SHORTNAME           "SVM"
-#define TIF_SHORTNAME           "TIF"
-#define WMF_SHORTNAME           "WMF"
-#define EMF_SHORTNAME           "EMF"
 
 #if defined WIN || (defined OS2 && !defined ICC)
 
@@ -306,35 +276,6 @@ BOOL ImpFilterCallback( void* pCallerData, USHORT nPercent )
 // - Helper functions -
 // --------------------
 
-static String ImpGetNthEntry( const String& rStr, USHORT nEntry )
-{
-    const sal_Unicode* pA = rStr.GetBuffer();
-    const sal_Unicode* pEnd = pA + rStr.Len();
-
-    sal_uInt16 i;
-    for( i = 0; ( i < nEntry ) && ( pA != pEnd ); i++ )
-    {
-        while( ( *pA != ',' ) && ( pA != pEnd ) )
-            pA++;
-
-        if( *pA == ',')
-            pA++;
-    }
-    i = 0;
-    if( *pA == '"' )
-    {
-        *pA++;
-        while( ( ( pA + i ) != pEnd ) && ( pA[i] != '"' ) )
-            i++;
-    }
-    else
-    {
-        while( ( ( pA + i ) != pEnd ) && ( pA[i] != ',' ) )
-            i++;
-    }
-    return String( pA, (xub_StrLen)i );
-}
-
 //--------------------------------------------------------------------------
 
 static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize )
@@ -352,55 +293,6 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSi
         pSource++;
     }
     return NULL;
-}
-
-//--------------------------------------------------------------------------
-
-inline String ImpGetFormatName( const String& rStr )
-{
-    return ImpGetNthEntry( rStr, 0 );
-}
-
-//--------------------------------------------------------------------------
-
-inline String ImpGetMacType( const String& rStr )
-{
-    return ImpGetNthEntry( rStr, 1 );
-}
-
-//--------------------------------------------------------------------------
-
-inline String ImpGetFormatExtension( const String& rStr )
-{
-    return ImpGetNthEntry( rStr, 2 );
-}
-
-//--------------------------------------------------------------------------
-
-inline String ImpGetFilterName( const String& rStr )
-{
-    return ImpGetNthEntry( rStr, 3 );
-}
-
-//--------------------------------------------------------------------------
-
-inline String ImpGetFilterVendor( const String& rStr )
-{
-    return ImpGetNthEntry( rStr, 4 );
-}
-
-//--------------------------------------------------------------------------
-
-inline String ImpGetFilterPixOrVec( const String& rStr )
-{
-    return ImpGetNthEntry( rStr, 5 );
-}
-
-//--------------------------------------------------------------------------
-
-inline String ImpGetFilterDialog( const String& rStr )
-{
-    return ImpGetNthEntry( rStr, 6 );
 }
 
 //--------------------------------------------------------------------------
@@ -867,11 +759,11 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
 
 //--------------------------------------------------------------------------
 
-static USHORT ImpTestOrFindFormat( GraphicFilter& rFilter, Config& rConfig, const String& rPath,
-                                   SvStream& rStream, String* pConfigString, USHORT* pFormat )
+sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rStream, sal_uInt16& rFormat )
 {
-    USHORT n = rConfig.GetKeyCount();
+    sal_uInt16 n = pConfig->GetImportFormatCount();
 
+/*
 #ifdef MAC
     // ggf. Filter anhand der Mac-Typen raussuchen:
     if( *pFormat == GRFILTER_FORMAT_DONTKNOW )
@@ -895,121 +787,45 @@ static USHORT ImpTestOrFindFormat( GraphicFilter& rFilter, Config& rConfig, cons
         }
     }
 #endif
-
+*/
     // ggf. Filter bzw. Format durch anlesen ermitteln,
     // oder durch anlesen zusichern, dass das Format stimmt:
-    if( *pFormat == GRFILTER_FORMAT_DONTKNOW )
+    if( rFormat == GRFILTER_FORMAT_DONTKNOW )
     {
         String aFormatExt;
-
         if( ImpPeekGraphicFormat( rStream, aFormatExt, FALSE ) )
         {
-            // teuer
-            for( USHORT i = 0; i < n; i++ )
+            for( sal_uInt16 i = 0; i < n; i++ )
             {
-                UniString aConfigString( rConfig.ReadKey( i ), RTL_TEXTENCODING_UTF8 );
-
-                if( ImpGetFormatExtension( aConfigString ).ToUpperAscii() == aFormatExt )
+                if( pConfig->GetImportFormatExtension( i ).EqualsIgnoreCaseAscii( aFormatExt ) )
                 {
-                    *pFormat = i;
-
-                    if( pConfigString )
-                        *pConfigString = aConfigString;
-
+                    rFormat = i;
                     return GRFILTER_OK;
                 }
             }
         }
-
         // ggf. Filter anhand der Datei-Endung raussuchen:
         if( rPath.Len() )
         {
             String aExt( ImpGetExtension( rPath ) );
-
-            for( USHORT i = 0; i < n; i++ )
+            for( sal_uInt16 i = 0; i < n; i++ )
             {
-                String aConfigString( rConfig.ReadKey( i ), RTL_TEXTENCODING_UTF8 );
-
-                if( ImpGetFormatExtension( aConfigString ).ToUpperAscii() == aExt )
+                if( pConfig->GetImportFormatExtension( i ).EqualsIgnoreCaseAscii( aExt ) )
                 {
-                    *pFormat = i;
-
-                    if( pConfigString )
-                        *pConfigString = aConfigString;
-
+                    rFormat = i;
                     return GRFILTER_OK;
                 }
             }
         }
-
         return GRFILTER_FORMATERROR;
     }
     else
     {
-        String aConfigString( rConfig.ReadKey( *pFormat ), RTL_TEXTENCODING_UTF8 );
-        String aFormatExt( ImpGetFormatExtension( aConfigString ).ToUpperAscii() );
-
-        if( !ImpPeekGraphicFormat( rStream, aFormatExt, TRUE ) )
+        if( !ImpPeekGraphicFormat( rStream, pConfig->GetImportFormatExtension( rFormat ), TRUE ) )
             return GRFILTER_FORMATERROR;
-
-        if( pConfigString )
-            *pConfigString = aConfigString;
     }
 
     return GRFILTER_OK;
-}
-
-//--------------------------------------------------------------------------
-
-static void ImpCorrectFilterUpdateNumber( String & rFilter )
-{
-    xub_StrLen  i, nq, npq;
-
-    String      aUPD( UniString::CreateFromInt32( SOLARUPD ) );
-    String      aDllExt( __DLLEXTENSION, RTL_TEXTENCODING_UTF8 );
-
-    aDllExt.Erase( 2 );
-
-    const sal_Unicode* pSource = rFilter.GetBuffer();
-    const sal_Unicode* pEnd = pSource + rFilter.Len();
-
-    // Fragezeichen suchen
-    for( i = 0, nq = 0; pSource != pEnd; i++ )
-    {
-        if( *pSource++ == '?' )
-        {
-            if( nq == 0 )
-                npq = i;
-            nq++;
-        }
-        else if( nq == aUPD.Len() )
-            break;
-        else
-            nq = 0;
-    }
-
-    // Fragezeichen durch UPD-Nummer ersetzen
-    if( nq == aUPD.Len() )
-        rFilter.Replace( npq, nq, aUPD );
-
-    // Sternchen suchen
-    pSource = rFilter.GetBuffer();
-    for( i = 0, nq = 0; pSource != pEnd; i++ )
-    {
-        if( *pSource++ == '*' )
-        {
-            if( nq == 0 )
-                npq=i;
-            nq++;
-        }
-        else if( nq == 2 )
-            break;
-        else
-            nq=0;
-    }
-    // Sternchen durch Plattform-Kuerzel ersetzen
-    if( nq == 2 )
-        rFilter.Replace( npq, nq, aDllExt );
 }
 
 //--------------------------------------------------------------------------
@@ -1246,21 +1062,7 @@ static ImpFilterLibCache aCache;
 
 GraphicFilter::GraphicFilter()
 {
-    ImplInit( String() );
-}
-
-// ------------------------------------------------------------------------
-
-GraphicFilter::GraphicFilter( const INetURLObject& rPath )
-{
-    ImplInit( rPath.GetMainURL() );
-}
-
-// ------------------------------------------------------------------------
-
-GraphicFilter::GraphicFilter( const String& rMultiPath )
-{
-    ImplInit( rMultiPath );
+    ImplInit();
 }
 
 // ------------------------------------------------------------------------
@@ -1273,7 +1075,6 @@ GraphicFilter::~GraphicFilter()
 
     delete pErrorEx;
     delete pConfig;
-    delete pConfigPath;
     delete pFilterPath;
     delete pOptionsConfigPath;
 
@@ -1286,22 +1087,17 @@ GraphicFilter::~GraphicFilter()
 
 // ------------------------------------------------------------------------
 
-void GraphicFilter::ImplInit( const String& rInitPath )
+void GraphicFilter::ImplInit()
 {
     pErrorEx = new FilterErrorEx;
     ::utl::TempFile aTempFile;
-    pConfig = new Config( aTempFile.GetURL() );
-    pConfig->EnablePersistence( FALSE );
-    pConfigPath = new String;
+    pConfig = new FilterConfigCache();
     pFilterPath = new String;
     pOptionsConfigPath = new String;
-
-    ImplCreateMultiConfig( rInitPath );
     pOptionsConfig = NULL;
     bOptionsEnabled = FALSE;
     nPercent = 0;
     bAbort = FALSE;
-    bCacheEnabled = TRUE;
 
     // first instance of GraphicFilter sets link
     if( !nFilterCount++ )
@@ -1309,41 +1105,6 @@ void GraphicFilter::ImplInit( const String& rInitPath )
         // save old link
         aLastFilterHdl = Application::GetFilterHdl();
         Application::SetFilterHdl( LINK( this, GraphicFilter, FilterCallback ) );
-    }
-}
-
-// ------------------------------------------------------------------------
-
-void GraphicFilter::ImplCreateMultiConfig( const String& rMultiPath )
-{
-    *pConfigPath = rMultiPath;
-
-    if( rMultiPath.Len() )
-    {
-        for( long i = rMultiPath.GetTokenCount( ';' ); i; )
-        {
-            String      aConfigUrl( rMultiPath.GetToken( (USHORT) --i, ';' ) );
-            Config      aCfg( aConfigUrl );
-            // clone import entries
-            if( aCfg.HasGroup( IMP_FILTERSECTION ) )
-            {
-                aCfg.SetGroup( IMP_FILTERSECTION );
-                pConfig->SetGroup( IMP_FILTERSECTION );
-
-                for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
-                    pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
-            }
-
-            // clone export entries
-            if( aCfg.HasGroup( EXP_FILTERSECTION ) )
-            {
-                aCfg.SetGroup( EXP_FILTERSECTION );
-                pConfig->SetGroup( EXP_FILTERSECTION );
-
-                for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
-                    pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
-            }
-        }
     }
 }
 
@@ -1358,50 +1119,6 @@ ULONG GraphicFilter::ImplSetError( ULONG nError, const SvStream* pStm )
 
 // ------------------------------------------------------------------------
 
-void GraphicFilter::EnableConfigCache( BOOL bEnable )
-{
-    bCacheEnabled = bEnable;
-}
-
-// ------------------------------------------------------------------------
-
-void GraphicFilter::SetConfigPath( const INetURLObject& rPath )
-{
-    SetConfigPath( rPath.GetMainURL() );
-}
-
-// ------------------------------------------------------------------------
-
-void GraphicFilter::SetConfigPath( const String& rMultiPath )
-{
-    // delete old import group
-    if( pConfig->HasGroup( IMP_FILTERSECTION ) )
-        pConfig->DeleteGroup( IMP_FILTERSECTION );
-
-    // delete old export group
-    if( pConfig->HasGroup( EXP_FILTERSECTION ) )
-        pConfig->DeleteGroup( EXP_FILTERSECTION );
-
-    ImplCreateMultiConfig( rMultiPath );
-}
-
-// ------------------------------------------------------------------------
-
-const String& GraphicFilter::GetConfigPath() const
-{
-    DBG_ASSERT( pConfigPath, "GraphicFilter::GetConfigPath(): Missing ConfigPath!" );
-    return *pConfigPath;
-}
-
-// ------------------------------------------------------------------------
-
-Config& GraphicFilter::GetConfig() const
-{
-    DBG_ASSERT( pConfig, "GraphicFilter::GetConfig(): Missing Config!" );
-    return *pConfig;
-}
-
-// ------------------------------------------------------------------------
 
 void GraphicFilter::SetFilterPath( const INetURLObject& rPath )
 {
@@ -1413,31 +1130,12 @@ void GraphicFilter::SetFilterPath( const INetURLObject& rPath )
 void GraphicFilter::SetFilterPath( const String& rMultiPath )
 {
     *pFilterPath = rMultiPath;
-
-    // delete old filter path group
-    if( pConfig->HasGroup( IMPEXP_FILTERPATHES ) )
-        pConfig->DeleteGroup( IMPEXP_FILTERPATHES );
-
-    pConfig->SetGroup( IMPEXP_FILTERPATHES );
-
-    // add new pathes to group
-    for( USHORT i = 0, nCount = rMultiPath.GetTokenCount( ';' ); i < nCount; i++ )
-    {
-        String aPath( rMultiPath.GetToken( i, ';' ) );
-        if( ImplDirEntryHelper::Exists( aPath ) )
-        {
-            ByteString  aKey( 'P' );
-            aKey        += ByteString::CreateFromInt32( i );
-            pConfig->WriteKey( aKey, aPath, RTL_TEXTENCODING_UTF8 );
-        }
-    }
 }
 
 // ------------------------------------------------------------------------
 
 const String& GraphicFilter::GetFilterPath() const
 {
-    DBG_ASSERT( pFilterPath, "GraphicFilter::GetFilterPath(): Missing FilterPath!" );
     return *pFilterPath;
 }
 
@@ -1483,108 +1181,44 @@ const String& GraphicFilter::GetOptionsConfigPath() const
 
 USHORT GraphicFilter::GetImportFormatCount()
 {
-    DBG_ASSERT (pConfig,"GraphicFilter::GetImportFormatCount() : no Config" );
-
-    pConfig->SetGroup( IMP_FILTERSECTION );
-    return pConfig->GetKeyCount();
+    return pConfig->GetImportFormatCount();
 }
 
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::GetImportFormatNumber( const String& rFormatName )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::GetImportFormatNumber() : no Config" );
-
-    pConfig->SetGroup( IMP_FILTERSECTION );
-
-    USHORT nKeys = pConfig->GetKeyCount();
-    USHORT i = 0;
-    String aFormatStr;
-    String aUpperFormat( rFormatName );
-
-    aUpperFormat.ToUpperAscii();
-
-    xub_StrLen  nLen = aUpperFormat.Len();
-    while( i < nKeys )
-    {
-        UniString aFormat( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 );
-        if( ImpGetFormatName( aFormat ).CompareIgnoreCaseToAscii( aUpperFormat.GetBuffer(), nLen ) == COMPARE_EQUAL )
-            break;
-
-        i++;
-    }
-
-    return( ( i == nKeys ) ? GRFILTER_FORMAT_NOTFOUND : i );
+    return pConfig->GetImportFormatNumber( rFormatName );
 }
 
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::GetImportFormatNumberForShortName( const String& rShortName )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::GetImportFormatNumber() : no Config" );
-
-    pConfig->SetGroup( IMP_FILTERSECTION );
-
-    USHORT i = 0, nKeys = pConfig->GetKeyCount();
-
-    while( i < nKeys )
-    {
-        UniString aTemp( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 );
-        if( ImpGetFormatExtension( aTemp ).EqualsIgnoreCaseAscii( rShortName ) )
-            break;
-
-        i++;
-    }
-
-    return( ( i == nKeys ) ? GRFILTER_FORMAT_NOTFOUND : i );
+    return pConfig->GetImportFormatNumberForShortName( rShortName );
 }
 
 // ------------------------------------------------------------------------
 
 String GraphicFilter::GetImportFormatName( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::GetImportFormatName() : no Config" );
-
-    pConfig->SetGroup( IMP_FILTERSECTION );
-    UniString aFormat( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 );
-    return ImpGetFormatName( aFormat );
+    return pConfig->GetImportFormatName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 String GraphicFilter::GetImportFormatShortName( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::GetImportFormatShortName() : no Config" );
-
-    pConfig->SetGroup( IMP_FILTERSECTION );
-    return UniString( pConfig->GetKeyName( nFormat ), RTL_TEXTENCODING_UTF8 );
+    return pConfig->GetImportFormatShortName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 String GraphicFilter::GetImportFormatType( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::GetImportFormatType() : no Config" );
-
-    pConfig->SetGroup( IMP_FILTERSECTION );
-
-#ifdef MAC
-
-    String aStr=ImpGetMacType( pConfig->ReadKey( nFormat ) );
-
-    if( !aStr.Len() )
-    {
-        aStr = "????.";
-        aStr += ImpGetFormatExtension( pConfig->ReadKey(nFormat) );
-    }
-
-    return aStr;
-
-#else
-
-    return ImpGetFormatExtension( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) );
-
-#endif
+    String aUpper( pConfig->GetImportFormatType( nFormat ) );
+    aUpper.ToUpperAscii();
+    return aUpper;
 }
 
 // ------------------------------------------------------------------------
@@ -1592,15 +1226,12 @@ String GraphicFilter::GetImportFormatType( USHORT nFormat )
 String GraphicFilter::GetImportOSFileType( USHORT nFormat )
 {
     String aOSFileType;
-
+/*
 #ifdef MAC
-
-    DBG_ASSERT( pConfig,"GraphicFilter::GetImportOSFileType() : no Config" );
     pConfig->SetGroup( IMP_FILTERSECTION );
     aOSFileType = ImpGetMacType( pConfig->ReadKey( nFormat ) );
-
 #endif
-
+*/
     return aOSFileType;
 }
 
@@ -1608,123 +1239,58 @@ String GraphicFilter::GetImportOSFileType( USHORT nFormat )
 
 String GraphicFilter::GetImportWildcard( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::GetImportWildcard() : no Config" );
-
-    String aWildcard( UniString::CreateFromAscii( "*.", 2 ) );
-    pConfig->SetGroup( IMP_FILTERSECTION );
-    aWildcard.Append( ImpGetFormatExtension( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) ) );
-    return aWildcard;
+    return pConfig->GetImportWildcard( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 BOOL GraphicFilter::IsImportPixelFormat( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::IsImportPixelFormat() : no Config" );
-
-    pConfig->SetGroup( IMP_FILTERSECTION );
-    return (  ImpGetNthEntry( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ), 5 )
-        .CompareIgnoreCaseToAscii( "PIX", 3 ) == COMPARE_EQUAL );
+    return pConfig->IsImportPixelFormat( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::GetExportFormatCount()
 {
-    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
-
-    pConfig->SetGroup( EXP_FILTERSECTION );
-    return pConfig->GetKeyCount();
+    return pConfig->GetExportFormatCount();
 }
 
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::GetExportFormatNumber( const String& rFormatName )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
-
-    pConfig->SetGroup( EXP_FILTERSECTION );
-
-    USHORT nKeys = pConfig->GetKeyCount();
-    USHORT i = 0;
-    String aUpperFormat( rFormatName );
-    while( i < nKeys )
-    {
-        UniString aTemp( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 );
-        if( ImpGetFormatName( aTemp ).EqualsIgnoreCaseAscii( aUpperFormat ) )
-            break;
-        i++;
-    }
-
-    return( ( i == nKeys ) ? GRFILTER_FORMAT_NOTFOUND : i );
+    return pConfig->GetExportFormatNumber( rFormatName );
 }
 
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::GetExportFormatNumberForShortName( const String& rShortName )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
-
-    pConfig->SetGroup( EXP_FILTERSECTION );
-
-    USHORT i = 0, nKeys = pConfig->GetKeyCount();
-
-    while( i < nKeys )
-    {
-        UniString aTemp( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 );
-        if( ImpGetFormatExtension( aTemp ).EqualsIgnoreCaseAscii( rShortName ) )
-            break;
-        i++;
-    }
-
-    return( ( i == nKeys ) ? GRFILTER_FORMAT_NOTFOUND : i );
+    return pConfig->GetExportFormatNumberForShortName( rShortName );
 }
 
 // ------------------------------------------------------------------------
 
 String GraphicFilter::GetExportFormatName( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
-
-    pConfig->SetGroup( EXP_FILTERSECTION );
-    return ImpGetFormatName( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) );
+    return pConfig->GetExportFormatName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 String GraphicFilter::GetExportFormatShortName( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
-
-    pConfig->SetGroup( EXP_FILTERSECTION );
-    return UniString( pConfig->GetKeyName( nFormat ), RTL_TEXTENCODING_UTF8 );
+    return pConfig->GetExportFormatShortName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 String GraphicFilter::GetExportFormatType( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
-
-    pConfig->SetGroup( EXP_FILTERSECTION );
-
-#ifdef MAC
-
-    String aStr = ImpGetMacType( pConfig->ReadKey( nFormat ) );
-
-    if ( !aStr.Len() )
-    {
-        aStr = "????.";
-        aStr += ImpGetFormatExtension( pConfig->ReadKey(nFormat) );
-    }
-
-    return aStr;
-
-#else
-
-    return ImpGetFormatExtension( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) );
-
-#endif
+    String aUpper( pConfig->GetExportFormatType( nFormat ) );
+    aUpper.ToUpperAscii();
+    return aUpper;
 }
 
 // ------------------------------------------------------------------------
@@ -1732,16 +1298,12 @@ String GraphicFilter::GetExportFormatType( USHORT nFormat )
 String GraphicFilter::GetExportOSFileType( USHORT nFormat )
 {
     String aOSFileType;
-
+/*
 #ifdef MAC
-
-    DBG_ASSERT( pConfig,"GraphicFilter::GetExportOSFileType() : no Config" );
-
     pConfig->SetGroup( EXP_FILTERSECTION );
     aOSFileType = ImpGetMacType( pConfig->ReadKey( nFormat ) );
-
 #endif
-
+*/
     return aOSFileType;
 }
 
@@ -1749,23 +1311,14 @@ String GraphicFilter::GetExportOSFileType( USHORT nFormat )
 
 String GraphicFilter::GetExportWildcard( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::GetExportWildcard() : no Config" );
-
-    String aWildcard( UniString::CreateFromAscii( "*.", 2 ) );
-    pConfig->SetGroup( EXP_FILTERSECTION );
-    aWildcard.Append( ImpGetFormatExtension( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) ) );
-    return aWildcard;
+    return pConfig->GetExportWildcard( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 BOOL GraphicFilter::IsExportPixelFormat( USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter::IsExportPixelFormat() : no Config" );
-
-    pConfig->SetGroup( EXP_FILTERSECTION );
-    return ( ImpGetNthEntry( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ), 5 )
-        .CompareIgnoreCaseToAscii( "PIX", 3 ) == COMPARE_EQUAL );
+    return pConfig->IsExportPixelFormat( nFormat );
 }
 
 // ------------------------------------------------------------------------
@@ -1791,13 +1344,8 @@ USHORT GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
 USHORT GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rIStream,
                                         USHORT nFormat, USHORT* pDeterminedFormat )
 {
-    DBG_ASSERT(pConfig,"GraphicFilter:: : no Config");
-
-    if( !bCacheEnabled || pConfig->GetGroup() != IMP_FILTERSECTION )
-        pConfig->SetGroup( IMP_FILTERSECTION );
-
     ULONG nStreamPos = rIStream.Tell();
-    USHORT nRes = ImpTestOrFindFormat( *this, *pConfig, rMainUrl, rIStream, NULL, &nFormat );
+    sal_uInt16 nRes = ImpTestOrFindFormat( rMainUrl, rIStream, nFormat );
 
     rIStream.Seek(nStreamPos);
 
@@ -1832,8 +1380,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
 {
     ImpFilterCallbackData   aCallbackData;
     String                  aFilterName;
-    String                  aConfigString;
-    String                  aUpperName;
     ULONG                   nStmBegin;
     USHORT                  nStatus;
     GraphicReader*          pContext = rGraphic.GetContext();
@@ -1845,8 +1391,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
 
     if( !pContext || bDummyContext )
     {
-        DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
-
         if( bDummyContext )
         {
             rGraphic.SetContext( NULL );
@@ -1855,9 +1399,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         else
             nStmBegin = rIStream.Tell();
 
-        if( !bCacheEnabled || pConfig->GetGroup() != IMP_FILTERSECTION )
-            pConfig->SetGroup( IMP_FILTERSECTION );
-
         aCallbackData.pFilt = this;
         aCallbackData.pPercent = &nPercent;
         aCallbackData.pUpdatePercentHdl = &aUpdatePercentHdlLink;
@@ -1865,8 +1406,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         aCallbackData.nFilePercentOfTotal = 100;
         bAbort = FALSE;
         nPercent = 0;
-        nStatus = ImpTestOrFindFormat( *this, *pConfig, rPath, rIStream, &aConfigString, &nFormat );
-
+        nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
         // Falls Pending, geben wir GRFILTER_OK zurueck,
         // um mehr Bytes anzufordern
         if( rIStream.GetError() == ERRCODE_IO_PENDING )
@@ -1882,162 +1422,141 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         if( ( nStatus != GRFILTER_OK ) || rIStream.GetError() )
             return (USHORT) ImplSetError( ( nStatus != GRFILTER_OK ) ? nStatus : GRFILTER_OPENERROR, &rIStream );
 
-        if( pDeterminedFormat != NULL )
+        if( pDeterminedFormat )
             *pDeterminedFormat = nFormat;
 
-        aUpperName = aFilterName = ImpGetFilterName( aConfigString );
-        aUpperName.ToUpperAscii();
+        aFilterName = pConfig->GetImportFilterName( nFormat );
     }
     else
     {
         if( pContext && !bDummyContext )
-            aUpperName = pContext->GetUpperFilterName();
+            aFilterName = pContext->GetUpperFilterName();
 
         nStmBegin = 0;
         nStatus = GRFILTER_OK;
     }
 
     // read graphic
-    if( aUpperName.CompareToAscii( IMP_GIF ) == COMPARE_EQUAL )
+    if ( pConfig->IsImportInternalFilter( nFormat ) )
     {
-        if( rGraphic.GetContext() == (GraphicReader*) 1 )
-            rGraphic.SetContext( NULL );
-
-        if( !ImportGIF( rIStream, rGraphic, NULL ) )
-            nStatus = GRFILTER_FILTERERROR;
-        else
-            eLinkType = GFX_LINK_TYPE_NATIVE_GIF;
-    }
-    else if( aUpperName.CompareToAscii( IMP_PNG ) == COMPARE_EQUAL )
-    {
-        if ( rGraphic.GetContext() == (GraphicReader*) 1 )
-            rGraphic.SetContext( NULL );
-        if ( !ImportPNG( rIStream, rGraphic, NULL ) )
-            nStatus = GRFILTER_FILTERERROR;
-        else
-            eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
-    }
-    else if( aUpperName.CompareToAscii( IMP_JPEG ) == COMPARE_EQUAL )
-    {
-        if( rGraphic.GetContext() == (GraphicReader*) 1 )
-            rGraphic.SetContext( NULL );
-
-        if( !ImportJPEG( rIStream, rGraphic, NULL ) )
-            nStatus = GRFILTER_FILTERERROR;
-        else
-            eLinkType = GFX_LINK_TYPE_NATIVE_JPG;
-    }
-    else if( aUpperName.CompareToAscii( IMP_XBM ) == COMPARE_EQUAL )
-    {
-        if( rGraphic.GetContext() == (GraphicReader*) 1 )
-            rGraphic.SetContext( NULL );
-
-        if( !ImportXBM( rIStream, rGraphic, NULL ) )
-            nStatus = GRFILTER_FILTERERROR;
-    }
-    else if( aUpperName.CompareToAscii( IMP_XPM ) == COMPARE_EQUAL )
-    {
-        if( rGraphic.GetContext() == (GraphicReader*) 1 )
-            rGraphic.SetContext( NULL );
-
-        if( !ImportXPM( rIStream, rGraphic, NULL ) )
-            nStatus = GRFILTER_FILTERERROR;
-    }
-    else if( ( aUpperName.CompareToAscii( IMP_BMP ) == COMPARE_EQUAL ) ||
-        ( aUpperName.CompareToAscii( IMP_SVMETAFILE ) == COMPARE_EQUAL ) )
-    {
-        // SV interne Importfilter fuer Bitmaps und MetaFiles
-        aStartFilterHdlLink.Call( this );
-        nPercent = 60;
-        aUpdatePercentHdlLink.Call( this );
-        rIStream >> rGraphic;
-        nPercent = 100;
-        aUpdatePercentHdlLink.Call( this );
-
-        if( rIStream.GetError() )
-            nStatus = GRFILTER_FORMATERROR;
-    }
-    else if( ( aUpperName.CompareToAscii( IMP_WMF ) == COMPARE_EQUAL ) ||
-        ( aUpperName.CompareToAscii( IMP_EMF ) == COMPARE_EQUAL ) )
-    {
-        GDIMetaFile aMtf;
-        aStartFilterHdlLink.Call( this );
-        nPercent = 1;
-
-        if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, &ImpFilterCallback, &aCallbackData ) )
-            nStatus = GRFILTER_FORMATERROR;
-        else
+        if( aFilterName.EqualsIgnoreCaseAscii( IMP_GIF )  )
         {
-            rGraphic = aMtf;
-            eLinkType = GFX_LINK_TYPE_NATIVE_WMF;
+            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+                rGraphic.SetContext( NULL );
+
+            if( !ImportGIF( rIStream, rGraphic, NULL ) )
+                nStatus = GRFILTER_FILTERERROR;
+            else
+                eLinkType = GFX_LINK_TYPE_NATIVE_GIF;
         }
-    }
-    else if( ( aUpperName.CompareToAscii( IMP_SVSGF ) == COMPARE_EQUAL )
-        || ( aUpperName.CompareToAscii( IMP_SVSGV ) == COMPARE_EQUAL ) )
-    {
-        USHORT          nVersion;
-        unsigned char   nTyp = CheckSgfTyp( rIStream, nVersion );
-
-        switch( nTyp )
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_PNG ) )
         {
-            case SGF_BITIMAGE:
+            if ( rGraphic.GetContext() == (GraphicReader*) 1 )
+                rGraphic.SetContext( NULL );
+            if ( !ImportPNG( rIStream, rGraphic, NULL ) )
+                nStatus = GRFILTER_FILTERERROR;
+            else
+                eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
+        }
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_JPEG ) )
+        {
+            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+                rGraphic.SetContext( NULL );
+
+            if( !ImportJPEG( rIStream, rGraphic, NULL ) )
+                nStatus = GRFILTER_FILTERERROR;
+            else
+                eLinkType = GFX_LINK_TYPE_NATIVE_JPG;
+        }
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_XBM ) )
+        {
+            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+                rGraphic.SetContext( NULL );
+
+            if( !ImportXBM( rIStream, rGraphic, NULL ) )
+                nStatus = GRFILTER_FILTERERROR;
+        }
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_XPM ) )
+        {
+            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+                rGraphic.SetContext( NULL );
+
+            if( !ImportXPM( rIStream, rGraphic, NULL ) )
+                nStatus = GRFILTER_FILTERERROR;
+        }
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_BMP ) ||
+                    aFilterName.EqualsIgnoreCaseAscii( IMP_SVMETAFILE ) )
+        {
+            // SV interne Importfilter fuer Bitmaps und MetaFiles
+            aStartFilterHdlLink.Call( this );
+            nPercent = 60;
+            aUpdatePercentHdlLink.Call( this );
+            rIStream >> rGraphic;
+            nPercent = 100;
+            aUpdatePercentHdlLink.Call( this );
+
+            if( rIStream.GetError() )
+                nStatus = GRFILTER_FORMATERROR;
+        }
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_WMF ) ||
+                aFilterName.EqualsIgnoreCaseAscii( IMP_EMF ) )
+        {
+            GDIMetaFile aMtf;
+            aStartFilterHdlLink.Call( this );
+            nPercent = 1;
+
+            if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, &ImpFilterCallback, &aCallbackData ) )
+                nStatus = GRFILTER_FORMATERROR;
+            else
             {
-                SvMemoryStream aTempStream;
-                if( aTempStream.GetError() )
-                    return GRFILTER_OPENERROR;
+                rGraphic = aMtf;
+                eLinkType = GFX_LINK_TYPE_NATIVE_WMF;
+            }
+        }
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_SVSGF )
+                || aFilterName.EqualsIgnoreCaseAscii( IMP_SVSGV ) )
+        {
+            USHORT          nVersion;
+            unsigned char   nTyp = CheckSgfTyp( rIStream, nVersion );
 
-                // SGF in temporaere Datei filtern
-                aStartFilterHdlLink.Call( this );
-                nPercent = 30;
-                aUpdatePercentHdlLink.Call( this );
-
-                if( !SgfBMapFilter( rIStream, aTempStream ) )
-                    nStatus = GRFILTER_FILTERERROR;
-                else
+            switch( nTyp )
+            {
+                case SGF_BITIMAGE:
                 {
-                    nPercent = 60;
-                    aUpdatePercentHdlLink.Call( this );
-                    aTempStream.Seek( 0L );
-                    aTempStream >> rGraphic;
-
-                    nPercent = 100;
-                    aUpdatePercentHdlLink.Call( this );
+                    SvMemoryStream aTempStream;
                     if( aTempStream.GetError() )
-                        nStatus = GRFILTER_FILTERERROR;
-                }
-            }
-            break;
+                        return GRFILTER_OPENERROR;
 
-            case SGF_SIMPVECT:
-            {
-                GDIMetaFile aMtf;
-
-                aStartFilterHdlLink.Call( this );
-                nPercent = 50;
-                aUpdatePercentHdlLink.Call( this );
-                if( !SgfVectFilter( rIStream, aMtf ) )
-                    nStatus = GRFILTER_FILTERERROR;
-                else
-                {
-                    nPercent = 100;
+                    // SGF in temporaere Datei filtern
+                    aStartFilterHdlLink.Call( this );
+                    nPercent = 30;
                     aUpdatePercentHdlLink.Call( this );
-                    rGraphic = Graphic( aMtf );
-                }
-            }
-            break;
 
-            case SGF_STARDRAW:
-            {
-                if( nVersion != SGV_VERSION )
-                    nStatus = GRFILTER_VERSIONERROR;
-                else
+                    if( !SgfBMapFilter( rIStream, aTempStream ) )
+                        nStatus = GRFILTER_FILTERERROR;
+                    else
+                    {
+                        nPercent = 60;
+                        aUpdatePercentHdlLink.Call( this );
+                        aTempStream.Seek( 0L );
+                        aTempStream >> rGraphic;
+
+                        nPercent = 100;
+                        aUpdatePercentHdlLink.Call( this );
+                        if( aTempStream.GetError() )
+                            nStatus = GRFILTER_FILTERERROR;
+                    }
+                }
+                break;
+
+                case SGF_SIMPVECT:
                 {
                     GDIMetaFile aMtf;
 
                     aStartFilterHdlLink.Call( this );
                     nPercent = 50;
                     aUpdatePercentHdlLink.Call( this );
-                    if( !SgfSDrwFilter( rIStream, aMtf, aFilterPath, aFilterPath, aConfigPath ) )
+                    if( !SgfVectFilter( rIStream, aMtf ) )
                         nStatus = GRFILTER_FILTERERROR;
                     else
                     {
@@ -2046,27 +1565,50 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                         rGraphic = Graphic( aMtf );
                     }
                 }
-            }
-            break;
+                break;
 
-            default:
-            {
-                nStatus = GRFILTER_FORMATERROR;
+                case SGF_STARDRAW:
+                {
+                    if( nVersion != SGV_VERSION )
+                        nStatus = GRFILTER_VERSIONERROR;
+                    else
+                    {
+                        GDIMetaFile aMtf;
+
+                        aStartFilterHdlLink.Call( this );
+                        nPercent = 50;
+                        aUpdatePercentHdlLink.Call( this );
+                        if( !SgfSDrwFilter( rIStream, aMtf, aFilterPath, aFilterPath ) )
+                            nStatus = GRFILTER_FILTERERROR;
+                        else
+                        {
+                            nPercent = 100;
+                            aUpdatePercentHdlLink.Call( this );
+                            rGraphic = Graphic( aMtf );
+                        }
+                    }
+                }
+                break;
+
+                default:
+                {
+                    nStatus = GRFILTER_FORMATERROR;
+                }
+                break;
             }
-            break;
         }
+        else
+            nStatus = GRFILTER_FILTERERROR;
     }
-    else if( ImpGetFilterVendor( aConfigString ).CompareIgnoreCaseToAscii( "SD", 2 ) == COMPARE_EQUAL )
+    else
     {
         ImpFilterLibCacheEntry* pFilter = NULL;
 
-        pConfig->SetGroup( IMPEXP_FILTERPATHES );
-        ImpCorrectFilterUpdateNumber( aFilterName );
-
         // find first filter in filter pathes
-        for( USHORT i = 0, nPathCount = pConfig->GetKeyCount(); i < nPathCount; i++ )
+        xub_StrLen i, nTokenCount = pFilterPath->GetTokenCount( ';' );
+        for( i = 0; i < nTokenCount; i++ )
         {
-            INetURLObject aFilterPath( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
+            INetURLObject aFilterPath( pFilterPath->GetToken( i ) );
             aFilterPath.Append( aFilterName );
             if ( pFilter = aCache.GetFilter( aFilterPath, aFilterName ) )
             {
@@ -2074,7 +1616,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                     break;
             }
         }
-
         if( !pFilter )
             nStatus = GRFILTER_FILTERERROR;
         else
@@ -2111,9 +1652,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
             }
         }
     }
-    else
-        nStatus = GRFILTER_FILTERERROR;
-
     // Set error code or try to set native buffer
     if( nStatus != GRFILTER_OK )
     {
@@ -2178,8 +1716,6 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
                                      SvStream& rOStm, USHORT nFormat )
 {
-    DBG_ASSERT( pConfig, "GraphicFilter:: : no Config" );
-
     USHORT nFormatCount = GetExportFormatCount();
 
     ResetLastError();
@@ -2192,8 +1728,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
 
         for( USHORT i = 0; i < nFormatCount; i++ )
         {
-            if ( ImpGetFormatExtension( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) )
-                .CompareIgnoreCaseToAscii( aExt ) == COMPARE_EQUAL )
+            if ( pConfig->GetExportFormatExtension( nFormat ).EqualsIgnoreCaseAscii( aExt ) )
             {
                 nFormat=i;
                 break;
@@ -2212,26 +1747,20 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     aCallbackData.nFilePercentOfTotal=100;
     bAbort=FALSE;
 
-    String aKey( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 );
-    String aFilterName( ImpGetFilterName( aKey ) );
-    String aUpperName( aFilterName );
-    String aFilterVendor( ImpGetFilterVendor( aKey ).ToUpperAscii() );
-    String aPixOrVec( ImpGetFilterPixOrVec( aKey).ToUpperAscii() );
+    String aFilterName( pConfig->GetExportFilterName( nFormat ) );
 
-    aUpperName.ToUpperAscii();
     nPercent=0;
     aStartFilterHdlLink.Call(this);
     aUpdatePercentHdlLink.Call(this);
 
     USHORT      nStatus = GRFILTER_OK;
     GraphicType eType;
-    Graphic     aGraphic( ImpGetScaledGraphic( rGraphic,
-                    UniString( pConfig->GetKeyName( nFormat ), RTL_TEXTENCODING_UTF8 ),
-                        GetOptionsConfig() ) );
+    Graphic     aGraphic( ImpGetScaledGraphic( rGraphic, pConfig->GetExportFormatExtension( nFormat ),
+                            GetOptionsConfig() ) );
 
     eType = aGraphic.GetType();
 
-    if( aPixOrVec.CompareToAscii( "PIX", 3 ) == COMPARE_EQUAL )
+    if( pConfig->IsExportPixelFormat( nFormat ) )
     {
         if( eType != GRAPHIC_BITMAP )
         {
@@ -2276,202 +1805,200 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             aGraphic=Graphic(aVirDev.GetBitmap(Point(0,0),aSizePixel));
         }
     }
-    else if ( aPixOrVec.CompareToAscii( "VEC", 3 ) != COMPARE_EQUAL )
-        nStatus=GRFILTER_FILTERERROR;
-
     if( GRFILTER_OK == nStatus )
     {
-        if( aUpperName.CompareToAscii( EXP_BMP ) == COMPARE_EQUAL )
+        if ( pConfig->IsExportInternalFilter( nFormat ) )
         {
-            nPercent = 60;
-            aUpdatePercentHdlLink.Call( this );
-
-            if( !rOStm.GetError() )
+            if( aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
             {
-                Bitmap aBmp( aGraphic.GetBitmap() );
-
-                if( GetOptionsConfig() )
-                {
-                    ResMgr*     pResMgr = CREATERESMGR( svt );
-                    UniString   aRLEKey( pConfig->GetKeyName( nFormat ), RTL_TEXTENCODING_UTF8 );
-
-                    aRLEKey     += UniString( ResId( KEY_RLE_CODING, pResMgr ) );
-                    ByteString  aRLEStr( GetOptionsConfig()->ReadKey( ByteString( aRLEKey, RTL_TEXTENCODING_UTF8 ) ) );
-
-                    // Wollen wir RLE-Kodiert speichern?
-                    aGraphic.GetBitmap().Write( rOStm, aRLEStr.CompareIgnoreCaseToAscii( "FALSE", 5 ) != COMPARE_EQUAL );
-
-                    delete pResMgr;
-                }
-                else
-                    rOStm << aBmp;
-            }
-
-            nPercent = 90;
-            aUpdatePercentHdlLink.Call( this );
-
-            if( rOStm.GetError() )
-                nStatus = GRFILTER_IOERROR;
-        }
-        else if( aUpperName.CompareToAscii( EXP_SVMETAFILE ) == COMPARE_EQUAL )
-        {
-            if( !rOStm.GetError() )
-            {
-                GDIMetaFile aMTF;
-
-                if ( eType != GRAPHIC_BITMAP )
-                    aMTF = aGraphic.GetGDIMetaFile();
-                else
-                {
-                    VirtualDevice aVirDev;
-
-                    aMTF.Record( &aVirDev );
-                    aGraphic.Draw( &aVirDev, Point(), aGraphic.GetPrefSize() );
-                    aMTF.Stop();
-                    aMTF.SetPrefSize( aGraphic.GetPrefSize() );
-                    aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
-                }
-
                 nPercent = 60;
                 aUpdatePercentHdlLink.Call( this );
-                rOStm << aMTF;
+
+                if( !rOStm.GetError() )
+                {
+                    Bitmap aBmp( aGraphic.GetBitmap() );
+
+                    if( GetOptionsConfig() )
+                    {
+                        ResMgr*     pResMgr = CREATERESMGR( svt );
+                        UniString   aRLEKey( pConfig->GetExportFormatType( nFormat ) );
+
+                        aRLEKey     += UniString( ResId( KEY_RLE_CODING, pResMgr ) );
+                        ByteString  aRLEStr( GetOptionsConfig()->ReadKey( ByteString( aRLEKey, RTL_TEXTENCODING_UTF8 ) ) );
+
+                        // Wollen wir RLE-Kodiert speichern?
+                        aGraphic.GetBitmap().Write( rOStm, aRLEStr.CompareIgnoreCaseToAscii( "FALSE", 5 ) != COMPARE_EQUAL );
+
+                        delete pResMgr;
+                    }
+                    else
+                        rOStm << aBmp;
+                }
+
                 nPercent = 90;
                 aUpdatePercentHdlLink.Call( this );
+
+                if( rOStm.GetError() )
+                    nStatus = GRFILTER_IOERROR;
             }
-
-            if( rOStm.GetError() )
-                nStatus = GRFILTER_IOERROR;
-        }
-        else if ( aUpperName.CompareToAscii( EXP_WMF ) == COMPARE_EQUAL )
-        {
-            if( !rOStm.GetError() )
+            else if( aFilterName.EqualsIgnoreCaseAscii( EXP_SVMETAFILE ) )
             {
-                if( eType == GRAPHIC_GDIMETAFILE )
+                if( !rOStm.GetError() )
                 {
-                    if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
-                        nStatus = GRFILTER_FORMATERROR;
-                }
-                else
-                {
-                    Bitmap          aBmp( aGraphic.GetBitmap() );
-                    GDIMetaFile     aMTF;
-                    VirtualDevice   aVirDev;
+                    GDIMetaFile aMTF;
 
-                    aMTF.Record( &aVirDev );
-                    aVirDev.DrawBitmap( Point(), aBmp );
-                    aMTF.Stop();
-                    aMTF.SetPrefSize( aBmp.GetSizePixel() );
-
-                    if( !ConvertGDIMetaFileToWMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
-                        nStatus = GRFILTER_FORMATERROR;
-                }
-            }
-
-            if( rOStm.GetError() )
-                nStatus = GRFILTER_IOERROR;
-        }
-        else if ( aUpperName.CompareToAscii( EXP_EMF ) == COMPARE_EQUAL )
-        {
-            if( !rOStm.GetError() )
-            {
-                if( eType == GRAPHIC_GDIMETAFILE )
-                {
-                    if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
-                        nStatus = GRFILTER_FORMATERROR;
-                }
-                else
-                {
-                    Bitmap          aBmp( aGraphic.GetBitmap() );
-                    GDIMetaFile     aMTF;
-                    VirtualDevice   aVirDev;
-
-                    aMTF.Record( &aVirDev );
-                    aVirDev.DrawBitmap( Point(), aBmp );
-                    aMTF.Stop();
-                    aMTF.SetPrefSize( aBmp.GetSizePixel() );
-
-                    if( !ConvertGDIMetaFileToEMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
-                        nStatus = GRFILTER_FORMATERROR;
-                }
-            }
-
-            if( rOStm.GetError() )
-                nStatus = GRFILTER_IOERROR;
-        }
-        else if( aUpperName.CompareToAscii( EXP_JPEG ) == COMPARE_EQUAL )
-        {
-            if( !rOStm.GetError() )
-            {
-                if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, GetOptionsConfig() ) )
-                    nStatus = GRFILTER_FORMATERROR;
-            }
-
-            if( rOStm.GetError() )
-                nStatus = GRFILTER_IOERROR;
-        }
-        else if( aUpperName.CompareToAscii( EXP_SVG ) == COMPARE_EQUAL )
-        {
-            if( !rOStm.GetError() )
-            {
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-
-                if( xMgr.is() )
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-                    ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-                    if( xSaxWriter.is() && xSVGWriter.is() )
+                    if ( eType != GRAPHIC_BITMAP )
+                        aMTF = aGraphic.GetGDIMetaFile();
+                    else
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
-                            xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
+                        VirtualDevice aVirDev;
 
-                        if( xActiveDataSource.is() )
+                        aMTF.Record( &aVirDev );
+                        aGraphic.Draw( &aVirDev, Point(), aGraphic.GetPrefSize() );
+                        aMTF.Stop();
+                        aMTF.SetPrefSize( aGraphic.GetPrefSize() );
+                        aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
+                    }
+
+                    nPercent = 60;
+                    aUpdatePercentHdlLink.Call( this );
+                    rOStm << aMTF;
+                    nPercent = 90;
+                    aUpdatePercentHdlLink.Call( this );
+                }
+
+                if( rOStm.GetError() )
+                    nStatus = GRFILTER_IOERROR;
+            }
+            else if ( aFilterName.EqualsIgnoreCaseAscii( EXP_WMF ) )
+            {
+                if( !rOStm.GetError() )
+                {
+                    if( eType == GRAPHIC_GDIMETAFILE )
+                    {
+                        if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
+                            nStatus = GRFILTER_FORMATERROR;
+                    }
+                    else
+                    {
+                        Bitmap          aBmp( aGraphic.GetBitmap() );
+                        GDIMetaFile     aMTF;
+                        VirtualDevice   aVirDev;
+
+                        aMTF.Record( &aVirDev );
+                        aVirDev.DrawBitmap( Point(), aBmp );
+                        aMTF.Stop();
+                        aMTF.SetPrefSize( aBmp.GetSizePixel() );
+
+                        if( !ConvertGDIMetaFileToWMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
+                            nStatus = GRFILTER_FORMATERROR;
+                    }
+                }
+
+                if( rOStm.GetError() )
+                    nStatus = GRFILTER_IOERROR;
+            }
+            else if ( aFilterName.EqualsIgnoreCaseAscii( EXP_EMF ) )
+            {
+                if( !rOStm.GetError() )
+                {
+                    if( eType == GRAPHIC_GDIMETAFILE )
+                    {
+                        if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
+                            nStatus = GRFILTER_FORMATERROR;
+                    }
+                    else
+                    {
+                        Bitmap          aBmp( aGraphic.GetBitmap() );
+                        GDIMetaFile     aMTF;
+                        VirtualDevice   aVirDev;
+
+                        aMTF.Record( &aVirDev );
+                        aVirDev.DrawBitmap( Point(), aBmp );
+                        aMTF.Stop();
+                        aMTF.SetPrefSize( aBmp.GetSizePixel() );
+
+                        if( !ConvertGDIMetaFileToEMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
+                            nStatus = GRFILTER_FORMATERROR;
+                    }
+                }
+
+                if( rOStm.GetError() )
+                    nStatus = GRFILTER_IOERROR;
+            }
+            else if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
+            {
+                if( !rOStm.GetError() )
+                {
+                    if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, GetOptionsConfig() ) )
+                        nStatus = GRFILTER_FORMATERROR;
+                }
+
+                if( rOStm.GetError() )
+                    nStatus = GRFILTER_IOERROR;
+            }
+            else if( aFilterName.EqualsIgnoreCaseAscii( EXP_SVG ) )
+            {
+                if( !rOStm.GetError() )
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+
+                    if( xMgr.is() )
+                    {
+                        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
+                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+                        ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
+                            ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+                        if( xSaxWriter.is() && xSVGWriter.is() )
                         {
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
-                                static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
+                                xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
 
-                            SvMemoryStream aMemStm( 65535, 65535 );
+                            if( xActiveDataSource.is() )
+                            {
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
+                                    static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
 
-                            aMemStm.SetCompressMode( COMPRESSMODE_FULL );
-                            ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
+                                SvMemoryStream aMemStm( 65535, 65535 );
 
-                            nPercent = 60;
-                            aUpdatePercentHdlLink.Call( this );
+                                aMemStm.SetCompressMode( COMPRESSMODE_FULL );
+                                ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
 
-                            xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
-                                xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
-                            ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
-                            xSVGWriter->write( xSaxWriter, aMtfSeq );
-                            nPercent = 90;
-                            aUpdatePercentHdlLink.Call( this );
+                                nPercent = 60;
+                                aUpdatePercentHdlLink.Call( this );
+
+                                xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
+                                    xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
+                                ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
+                                xSVGWriter->write( xSaxWriter, aMtfSeq );
+                                nPercent = 90;
+                                aUpdatePercentHdlLink.Call( this );
+                            }
                         }
                     }
                 }
             }
+            else
+                nStatus = GRFILTER_FILTERERROR;
         }
-        else if( aFilterVendor.CompareToAscii( "SD" ) == COMPARE_EQUAL )
+        else
         {
             INetURLObject   aFilterFilePath;
-            BOOL            bFound = FALSE;
+            sal_Bool        bFound = sal_False;
 
-            pConfig->SetGroup( IMPEXP_FILTERPATHES );
-            ImpCorrectFilterUpdateNumber( aFilterName );
-
-            // find first filter in filter pathes
-            for( USHORT i = 0, nPathCount = pConfig->GetKeyCount(); i < nPathCount; i++ )
+            xub_StrLen i, nTokenCount = pFilterPath->GetTokenCount( ';' );
+            for( i = 0; i < nTokenCount; i++ )
             {
-                aFilterFilePath = INetURLObject( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
+                aFilterFilePath = INetURLObject( pFilterPath->GetToken( i ) );
                 aFilterFilePath.Append( aFilterName );
                 if( ImplDirEntryHelper::Exists( aFilterFilePath ) )
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     break;
                 }
             }
-
             if( !bFound )
                 nStatus = GRFILTER_FILTERERROR;
             else
@@ -2498,10 +2025,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                     nStatus = GRFILTER_FILTERERROR;
             }
         }
-        else
-            nStatus = GRFILTER_FILTERERROR;
     }
-
     if( nStatus != GRFILTER_OK )
     {
         if( bAbort )
@@ -2532,79 +2056,59 @@ BOOL GraphicFilter::Setup( USHORT nFormat )
 
 BOOL GraphicFilter::HasImportDialog( USHORT nFormat )
 {
-    BOOL bRet = FALSE;
-
-    if( pConfig && GetOptionsConfig() )
-    {
-        pConfig->SetGroup( IMP_FILTERSECTION );
-        bRet = ( ImpGetFilterDialog( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) ).CompareToAscii( "TRUE", 4 ) == COMPARE_EQUAL );
-    }
-
-    return bRet;
+    return pConfig->IsImportDialog( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
     DBG_ASSERT( GetOptionsConfig(),"GraphicFilter:: : no OptionsConfig" );
 
-    pConfig->SetGroup( IMP_FILTERSECTION );
-
-    String  aFilterName( ImpGetFilterName( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) ) );
-    String  aUpperName( aFilterName );
+    String  aFilterName( pConfig->GetImportFilterName( nFormat ) );
     BOOL    bRet = FALSE;
 
-    aUpperName.ToUpperAscii();
-
-    if( ( aUpperName.CompareToAscii( IMP_BMP ) == COMPARE_EQUAL ) || ( aUpperName.CompareToAscii( IMP_SVMETAFILE ) == COMPARE_EQUAL ) )
+    if ( pConfig->IsImportInternalFilter( nFormat ) )
     {
-        // Bitmaps und SV-MetaFiles
-    }
-    else if( aUpperName.CompareToAscii( IMP_WMF ) == COMPARE_EQUAL )
-    {
-        // Import-Filter fuer WMF
-    }
-    else if( ( aUpperName.CompareToAscii( IMP_SVSGF ) == COMPARE_EQUAL ) || ( aUpperName.CompareToAscii( IMP_SVSGV ) == COMPARE_EQUAL ) )
-    {
-        // StarDraw- und StarWriter-Filter
+        if( ( aFilterName.EqualsIgnoreCaseAscii( IMP_BMP ) ) || ( aFilterName.EqualsIgnoreCaseAscii( IMP_SVMETAFILE ) ) )
+        {
+            // Bitmaps und SV-MetaFiles
+        }
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_WMF ) )
+        {
+            // Import-Filter fuer WMF
+        }
+        else if( ( aFilterName.EqualsIgnoreCaseAscii( IMP_SVSGF ) ) || ( aFilterName.EqualsIgnoreCaseAscii( IMP_SVSGV ) ) )
+        {
+            // StarDraw- und StarWriter-Filter
+        }
     }
     else
     {
-        // ladbare Filter
-        String      aFilterVendor( ImpGetFilterVendor( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) ) );
+        ImpFilterLibCacheEntry* pFilter = NULL;
 
-        // eigene Filter
-        if( aFilterVendor.CompareToAscii( "SD", 2 ) == COMPARE_EQUAL )
+        // find first filter in filter pathes
+        xub_StrLen i, nTokenCount = pFilterPath->GetTokenCount( ';' );
+        for( i = 0; i < nTokenCount; i++ )
         {
-            ImpFilterLibCacheEntry* pFilter = NULL;
-
-            pConfig->SetGroup( IMPEXP_FILTERPATHES );
-            ImpCorrectFilterUpdateNumber( aFilterName );
-
-            // find first filter in filter pathes
-            for( USHORT i = 0, nPathCount = pConfig->GetKeyCount(); i < nPathCount; i++ )
+            INetURLObject aFilterPath( pFilterPath->GetToken( i ) );
+            aFilterPath.Append( aFilterName );
+            if ( pFilter = aCache.GetFilter( aFilterPath, aFilterName ) )
             {
-                INetURLObject aFilterPath( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
-                aFilterPath.Append( aFilterName );
-                if ( pFilter = aCache.GetFilter( aFilterPath, aFilterName ) )
-                {
-                    if ( ImplDirEntryHelper::Exists( aFilterPath ) )
-                        break;
-                }
+                if ( ImplDirEntryHelper::Exists( aFilterPath ) )
+                    break;
             }
+        }
 
-            if( pFilter )
+        if( pFilter )
+        {
+            PFilterDlgCall pFunc = pFilter->GetImportDlgFunction();
+
+            // Dialog in DLL ausfuehren
+            if( pFunc )
             {
-                PFilterDlgCall pFunc = pFilter->GetImportDlgFunction();
-
-                // Dialog in DLL ausfuehren
-                if( pFunc )
-                {
-                    FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, GetOptionsConfig(), FUNIT_MM );
-                    bRet = (*pFunc)( aFltCallDlgPara );
-                }
+                FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, GetOptionsConfig(), FUNIT_MM );
+                bRet = (*pFunc)( aFltCallDlgPara );
             }
         }
     }
@@ -2616,16 +2120,7 @@ BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
 
 BOOL GraphicFilter::HasExportDialog( USHORT nFormat )
 {
-    BOOL bRet = FALSE;
-
-    if( pConfig && GetOptionsConfig() )
-    {
-        pConfig->SetGroup( EXP_FILTERSECTION );
-        bRet = ( ImpGetFilterDialog( UniString( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 ) )
-            .CompareToAscii( "TRUE", 4 ) == COMPARE_EQUAL );
-    }
-
-    return bRet;
+    return pConfig->IsExportDialog( nFormat );
 }
 
 // ------------------------------------------------------------------------
@@ -2637,94 +2132,81 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat )
 
 BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit eFieldUnit )
 {
-    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
-
-    pConfig->SetGroup( EXP_FILTERSECTION );
-
-    String  aKey( pConfig->ReadKey( nFormat ), RTL_TEXTENCODING_UTF8 );
-    String  aFilterName( ImpGetFilterName( aKey ) );
-    String  aUpperName( aFilterName );
-    String  aFilterVendor( ImpGetFilterVendor( aKey ).ToUpperAscii() );
+    String  aFilterName( pConfig->GetExportFilterName( nFormat ) );
     BOOL    bRet = FALSE;
-
-    aUpperName.ToUpperAscii();
 
     if( GetOptionsConfig() )
         GetOptionsConfig()->Update();
 
-    // Export-Dialog fuer Bitmap's, SVM's und WMF's
-    if( ( aUpperName.CompareToAscii( EXP_BMP ) == COMPARE_EQUAL ) ||
-        ( aUpperName.CompareToAscii( EXP_SVMETAFILE ) == COMPARE_EQUAL ) ||
-        ( aUpperName.CompareToAscii( EXP_WMF ) == COMPARE_EQUAL ) ||
-        ( aUpperName.CompareToAscii( EXP_EMF ) == COMPARE_EQUAL ) ||
-        ( aUpperName.CompareToAscii( EXP_JPEG ) == COMPARE_EQUAL ) )
+    if ( pConfig->IsExportInternalFilter( nFormat ) )
     {
-        ByteString  aResMgrName( "svt", 3 );
-        ResMgr*     pResMgr;
-
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
-
-        FltCallDialogParameter aFltCallDlgPara( pWindow, pResMgr, GetOptionsConfig(), eFieldUnit );
-
-        // JPEG-Dialog
-        if( aUpperName.CompareToAscii( EXP_JPEG ) == COMPARE_EQUAL )
-            bRet = ( DlgExportEJPG( aFltCallDlgPara ).Execute() == RET_OK );
-        // Fuer Bitmaps nehmen wir den Pixel-Dialog
-        else if( aUpperName.CompareToAscii( EXP_BMP ) != COMPARE_EQUAL )
+        // Export-Dialog fuer Bitmap's, SVM's und WMF's
+        if( ( aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) ) ||
+            ( aFilterName.EqualsIgnoreCaseAscii( EXP_SVMETAFILE ) ) ||
+            ( aFilterName.EqualsIgnoreCaseAscii( EXP_WMF ) ) ||
+            ( aFilterName.EqualsIgnoreCaseAscii( EXP_EMF ) ) ||
+            ( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) ) )
         {
-            aFltCallDlgPara.aFilterExt = UniString( pConfig->GetKeyName( nFormat ), RTL_TEXTENCODING_UTF8 );
-            bRet = ( DlgExportVec( aFltCallDlgPara ).Execute() == RET_OK );
-        }
-        // Fuer Vektorformate nehmen wir den Vektor-Dialog
-        else
-        {
-            aFltCallDlgPara.aFilterExt = UniString( pConfig->GetKeyName( nFormat ), RTL_TEXTENCODING_UTF8 );
-            bRet = ( DlgExportPix( aFltCallDlgPara ).Execute() == RET_OK );
-        }
+            ByteString  aResMgrName( "svt", 3 );
+            ResMgr*     pResMgr;
 
+            aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
+            pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
 
-        delete pResMgr;
-    }
-    // ladbare Filter
-    else
-    {
-        // eigene Filter
-        if( aFilterVendor.CompareToAscii( "SD", 2  ) == COMPARE_EQUAL )
-        {
-            INetURLObject   aFilterFilePath;
-            BOOL            bFound = FALSE;
+            FltCallDialogParameter aFltCallDlgPara( pWindow, pResMgr, GetOptionsConfig(), eFieldUnit );
 
-            pConfig->SetGroup( IMPEXP_FILTERPATHES );
-            ImpCorrectFilterUpdateNumber( aFilterName );
-
-            // find first filter in filter pathes
-            for( USHORT i = 0, nPathCount = pConfig->GetKeyCount(); i < nPathCount; i++ )
+            // JPEG-Dialog
+            if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
+                bRet = ( DlgExportEJPG( aFltCallDlgPara ).Execute() == RET_OK );
+            // Fuer Bitmaps nehmen wir den Pixel-Dialog
+            else if( !aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
             {
-                aFilterFilePath = INetURLObject( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
-                aFilterFilePath.Append( aFilterName );
-
-                if( ImplDirEntryHelper::Exists( aFilterFilePath ) )
-                {
-                    bFound = TRUE;
-                    break;
-                }
+                aFltCallDlgPara.aFilterExt = pConfig->GetExportFormatType( nFormat );
+                bRet = ( DlgExportVec( aFltCallDlgPara ).Execute() == RET_OK );
+            }
+            // Fuer Vektorformate nehmen wir den Vektor-Dialog
+            else
+            {
+                aFltCallDlgPara.aFilterExt = pConfig->GetExportFormatType( nFormat );
+                bRet = ( DlgExportPix( aFltCallDlgPara ).Execute() == RET_OK );
             }
 
-            if( bFound )
-            {
-                String aPhysicalName;
-                if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aFilterFilePath.GetMainURL(), aPhysicalName ) )
-                {
-                    ::vos::OModule aLibrary( aPhysicalName );
-                    PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getSymbol( UniString( EXPDLG_FUNCTION_NAME, RTL_TEXTENCODING_UTF8 ) );
 
-                    // Dialog in DLL ausfuehren
-                    if( pFunc )
-                    {
-                        FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, GetOptionsConfig(), eFieldUnit );
-                        bRet = (*pFunc)( aFltCallDlgPara );
-                    }
+            delete pResMgr;
+        }
+    }
+    else    // ladbare Filter
+    {
+        INetURLObject   aFilterFilePath;
+        sal_Bool        bFound = sal_False;
+
+        // find first filter in filter pathes
+        xub_StrLen i, nTokenCount = pFilterPath->GetTokenCount( ';' );
+        for( i = 0; i < nTokenCount; i++ )
+        {
+            aFilterFilePath = INetURLObject( pFilterPath->GetToken( i ) );
+            aFilterFilePath.Append( aFilterName );
+
+            if( ImplDirEntryHelper::Exists( aFilterFilePath ) )
+            {
+                bFound = sal_True;
+                break;
+            }
+        }
+
+        if( bFound )
+        {
+            String aPhysicalName;
+            if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aFilterFilePath.GetMainURL(), aPhysicalName ) )
+            {
+                ::vos::OModule aLibrary( aPhysicalName );
+                PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getSymbol( UniString( EXPDLG_FUNCTION_NAME, RTL_TEXTENCODING_UTF8 ) );
+
+                // Dialog in DLL ausfuehren
+                if( pFunc )
+                {
+                    FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, GetOptionsConfig(), eFieldUnit );
+                    bRet = (*pFunc)( aFltCallDlgPara );
                 }
             }
         }
