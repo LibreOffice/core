@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 16:13:27 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 08:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,7 @@ void Tree::integrate(NodeChange& aChange, NodeRef const& aNode, bool bLocal)  co
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    if (aChange.isChange())
+    if (aChange.test().isChange())
     {
         aChange.apply();
         if (bLocal)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:17:29 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 08:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ NodeRef NodeChange::getBaseNode() const
 // retrieve the tree where the change is actually taking place
 Tree NodeChange::getAffectedTree() const
 {
-    if (isChange())
+    if (this->maybeChange())
         return Tree(m_pImpl->getAffectedTree().getBodyPtr());
     else
         return Tree(0);
@@ -209,7 +209,7 @@ Tree NodeChange::getAffectedTree() const
 // retrieve the tree where the change is actually taking place
 NodeRef NodeChange::getAffectedNode() const
 {
-    if (isChange())
+    if (this->maybeChange())
     {
         TreeHolder aTree = m_pImpl->getAffectedTree();
         NodeOffset nOffset = m_pImpl->getAffectedNode();
@@ -292,7 +292,7 @@ bool NodeChanges::isEmpty() const
 
 static bool isEmptyChange(NodeChange const& aChange)
 {
-    return !aChange.isChange();
+    return !aChange.maybeChange();
 }
 //-----------------------------------------------------------------------------
 
