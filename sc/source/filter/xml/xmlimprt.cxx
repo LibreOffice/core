@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:12:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, XML_PROTECTED,                   XML_TOK_TABLE_PROTECTION        },
     { XML_NAMESPACE_TABLE, XML_PRINT_RANGES,                XML_TOK_TABLE_PRINT_RANGES      },
     { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY,              XML_TOK_TABLE_PASSWORD          },
+    { XML_NAMESPACE_TABLE, XML_PRINT,                       XML_TOK_TABLE_PRINT             },
     { XML_NAMESPACE_TABLE, XML_AUTOMATIC_PRINT_RANGE,       XML_TOK_TABLE_AUTOMATIC_PRINT_RANGE},
     XML_TOKEN_MAP_END
 };
