@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-01-28 17:09:26 $
+ *  last change: $Author: npower $ $Date: 2003-01-30 16:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,18 +113,20 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
         case 0:         // never
             break;
         case 1:         // according to path list
-            // check path
-            rtl::OUString path = url.copy( 0, url.lastIndexOf( '/' ) );
-            for(int j=m_secureURL.getLength();j>0;j--)
             {
-                if( path.equals( m_secureURL[j-1] ) )
+                // check path
+                rtl::OUString path = url.copy( 0, url.lastIndexOf( '/' ) );
+                for(int j=m_secureURL.getLength();j>0;j--)
                 {
-                    newPerm.execPermission=true;
-                    break;
+                    if( path.equals( m_secureURL[j-1] ) )
+                    {
+                        newPerm.execPermission=true;
+                        break;
+                    }
                 }
+                // confirm dialog
+                break;
             }
-            // confirm dialog
-            break;
         case 2:         // always
             newPerm.execPermission=true;
             break;
@@ -150,7 +152,7 @@ sal_Bool ScriptSecurityManager::checkPermission( const OUString & scriptStorageU
     {
         OSL_TRACE(
             "ScriptSecurityManager::checkPermission: execute permission request for %s",
-            ::rtl::OUStringToOString( scriptStorageURI,
+            ::rtl::OUStringToOString( scriptStorageURL,
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         ::std::vector< StoragePerm >::const_iterator iter;
         ::std::vector< StoragePerm >::const_iterator iterEnd =
@@ -164,7 +166,7 @@ sal_Bool ScriptSecurityManager::checkPermission( const OUString & scriptStorageU
             }
         }
         // we should never get here!!
-        throw RuntimeException( OUString::createFromAscii( "ScriptSecurityManager::checkPermission: storageURL not found" ) );
+        throw RuntimeException( OUString::createFromAscii( "ScriptSecurityManager::checkPermission: storageURL not found" ), Reference< XInterface > () );
     }
     else
         return sal_True;
