@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:36 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,31 @@ UINT16 SdrUnoObj::GetObjIdentifier() const
     return UINT16(OBJ_UNO);
 }
 
+/** helper class to restore graphics at <awt::XView> object after <SdrUnoObj::Paint>
+
+    OD 08.05.2003 #109432#
+    Restoration of graphics necessary to assure that paint on a window
+
+    @author OD
+*/
+class RestoreXViewGraphics
+{
+    private:
+        uno::Reference< awt::XView >        m_rXView;
+        uno::Reference< awt::XGraphics >    m_rXGraphics;
+
+    public:
+        RestoreXViewGraphics( const uno::Reference< awt::XView >& _rXView )
+        {
+             m_rXView = _rXView;
+             m_rXGraphics = m_rXView->getGraphics();
+        }
+        ~RestoreXViewGraphics()
+        {
+            m_rXView->setGraphics( m_rXGraphics );
+        }
+};
+
 FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     const SdrPageView* pPV = rInfoRec.pPV;
@@ -292,6 +317,10 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
         uno::Reference< awt::XView > xView(xUnoControl, uno::UNO_QUERY);
         if (xView.is())
         {
+            // OD 08.05.2003 #109432# - create helper object to restore graphics
+            // at <awt::XView> object.
+            RestoreXViewGraphics aRestXViewGraph( xView );
+
             OutputDevice* pOut = rXOut.GetOutDev();
             const MapMode& rMap = pOut->GetMapMode();
             xView->setZoom((float) double(rMap.GetScaleX()),
