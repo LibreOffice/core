@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:46:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 21:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,11 +598,11 @@ TabPage RID_SCPAGE_CALC
         Text [ swedish ] = "Versalkänsli~g" ;
         Text [ finnish ] = "Kirjainkoon e~rottelu" ;
         Text [ english_us ] = "Case se~nsitive" ;
-        Text[ chinese_simplified ] = "Çø·Ö´óĞ¡Ğ´(~N)";
+        Text[ chinese_simplified ] = "Çø·Ö×ÖÄ¸´óĞ¡Ğ´(~N)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
         Text[ polish ] = "Uwzglêdnij wielkie i ma³e litery";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~N)";
-        Text[ chinese_traditional ] = "°Ï¤À¤j¤p¼g(~N)";
+        Text[ chinese_traditional ] = "°Ï¤À¦r¥À¤j¤p¼g(~N)";
         Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
         Text[ greek ] = "Óõìöùíßá ğåæşí-êåöáëáßùí";
         Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~N)";
@@ -1924,8 +1924,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese_brazilian ] = "Measurement unit";
         Text[ japanese ] = "g‚¤’PˆÊ(~U)";
         Text[ korean ] = "Ä¡¼ö ´ÜÀ§(~U)";
-        Text[ chinese_simplified ] = "³ß´çµ¥Î»(~U)";
-        Text[ chinese_traditional ] = "¤Ø¤o³æ¦ì(~U)";
+        Text[ chinese_simplified ] = "¶¨Á¿µ¥Î»(~U)";
+        Text[ chinese_traditional ] = "©w¶q³æ¦ì(~U)";
         Text[ turkish ] = "Measurement unit";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
         Text[ finnish ] = "Mittayksikkö";
@@ -2350,11 +2350,11 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ dutch ] = "~Altijd";
         Text[ spanish ] = "~Siempre";
         Text[ english_us ] = "~Always";
-        Text[ chinese_simplified ] = "×ÜÊÇ(~A)";
+        Text[ chinese_simplified ] = "×Ô¶¯(~A)";
         Text[ russian ] = "Âñåãäà";
         Text[ polish ] = "Z~awsze";
         Text[ japanese ] = "í‚É‚·‚é(~A)";
-        Text[ chinese_traditional ] = "Á`¬O(~A)";
+        Text[ chinese_traditional ] = "¦Û°Ê(~A)";
         Text[ arabic ] = "ÏÇÆãÇğ";
         Text[ greek ] = "ÊÜèå öïñÜ";
         Text[ korean ] = "Ç×»ó(~A)";
@@ -2467,7 +2467,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "Êëàâèøà (Enter) ïåğåìåùàåò âûäåëåíèå";
         Text[ polish ] = "Naciœnij klawisz 'Enter' w celu przeniesienia selekcji";
         Text[ japanese ] = "Enter·°‚ğ‰Ÿ‚µ‚Ä‘I‘ğ•ûŒü‚É“ü—Í”ÍˆÍ‚ğˆÚ“®(~M)";
-        Text[ chinese_traditional ] = "«öÀ»RETURN¦Û°Ê¿ï¨ú¤U¤@­ÓÀx¦s®æªº¤è¦V(~M)";
+        Text[ chinese_traditional ] = "«öRETURN¦Û°Ê¿ï¨ú¤U¤@­ÓÀx¦s®æªº¤è¦V(~M)";
         Text[ arabic ] = "ÇÖÛØ ãİÊÇÍ ÇáÅÏÎÇá áäŞá ÇáÊÍÏíÏ Åáì";
         Text[ greek ] = "ĞáôŞóôå 'Enter' ãéá ôç åéóáãùãŞ ôçò ìåôáêßíç~óçò";
         Text[ korean ] = "¿£ÅÍ¸¦ ´­·¯ ¼±ÅÃÀ» ..·Î ÀÌµ¿.(~M)";
@@ -2664,7 +2664,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "Êëàâèøà (Enter) ïåğåêëş÷àåò â ğåæèì ïğàâêè";
         Text[ polish ] = "W celu wybrania trybu edycji naciœnij klawisz 'Enter'";
         Text[ japanese ] = "~Enter·°‚ğ‰Ÿ‚µ‚Ä•ÒWÓ°ÄŞ‚ÉØ‚è‘Ö‚¦";
-        Text[ chinese_traditional ] = "«öÀ»R~ETURNÂà¤J½s¿è¼Ò¦¡";
+        Text[ chinese_traditional ] = "«öR~ETURNÂà¤J½s¿è¼Ò¦¡";
         Text[ arabic ] = "ÅÖÛØ ãİÊÇÍ ÇáÅÏÎÇá ááÊÛííÑ Åáì æÖÚ ÇáÊÍÑíÑ";
         Text[ greek ] = "ĞáôŞóôå ôï ğëŞêôñï 'Enter' ãéá íá áëëÜîåôå óôçí êáôÜóôáóç ~åğåîåñãáóßáò";
         Text[ korean ] = "ÆíÁı ¸ğµå·Î ÀüÈ¯ÇÏ±â À§ÇØ¼­ ¿£ÅÍ¸¦ ´©¸£½Ê½Ã¿À.(~E)";
@@ -2716,11 +2716,11 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ french ] = "Expansion des ~références si insertion de colonnes ou lignes" ;
         Text [ dutch ] = "Ver~wijzingen bij invoegen van kolommen/rijen aan de randen verbreden" ;
         Text [ portuguese ] = "Expandir ~referências para as margens ao inserir colunas ou linhas" ;
-        Text[ chinese_simplified ] = "À©Õ¹ÏÔÊ¾²åÈëĞĞÁĞµÄÒıÓÃÄÚÈİ(~R)";
+        Text[ chinese_simplified ] = "À©Õ¹ÏÔÊ¾²åÈëµÄĞĞÁĞÒıÓÃÄÚÈİ(~R)";
         Text[ russian ] = "Ğàñòÿãèâàòü ññûëêè ïğè âñòàâêå íîâûõ ñòîëáöîâ/ñòğîê";
         Text[ polish ] = "Rozszerz odwo³ania do krawêdzi wstawianych kolumn lub wierszy";
         Text[ japanese ] = "—ñEs‚Ì‘}“üŒã‚ÉQÆ‚ğC³(~R)";
-        Text[ chinese_traditional ] = "ÂX®iÅã¥Ü´¡¤J¦CÄæªº°Ñ·Ó(~R)";
+        Text[ chinese_traditional ] = "ÂX®iÅã¥Ü´¡¤Jªº¦CÄæ°Ñ·Ó(~R)";
         Text[ arabic ] = "ÊæÓíÚ ÇáãÑÇÌÚ ÚäÏ ÅÏÑÇÌ ÃÚãÏÉ Ãæ Õİæİ";
         Text[ greek ] = "Åğİêôáóç ôùí áíáöï~ñşí êáôÜ ôçí åéóáãùãŞ ôùí óôçëşí/ãñáììşí";
         Text[ korean ] = "Çà°ú ¿­ »ğÀÔ½Ã Å×µÎ¸®·Î ÂüÁ¶¡¡È®Àå(~R)";
@@ -2908,6 +2908,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ catalan ] = "~Print only selected sheets";
     };
 };
+
 
 
 
