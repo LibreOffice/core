@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:15:59 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 15:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,9 +1303,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
                 goto _common;
     _common:
                 if( !( nCol1 & 0xC000 ) || ( nCol2 & 0xC000 ) )
-                    r.Insert(
-                        new ScRange( ScAddress( nCol1, nRow1, nTab1 ), ScAddress( nCol2, nRow2, nTab2 ) ),
-                        LIST_APPEND );
+                    r.Insert( new ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 ), LIST_APPEND );
                 break;
             case 0x1C: // Error Value                           [314 266]
             case 0x1D: // Boolean                               [315 266]
@@ -1405,6 +1403,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
     }
     aIn.Seek( nMaxPos );
 
+    pExcRoot->pIR->CheckCellRangeList( r );
     return r.Count() != 0;
 }
 
