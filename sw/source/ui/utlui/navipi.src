@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 23:05:49 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 23:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1705,5 +1705,6 @@ ImageList IMG_NAVI_ENTRYBMP
     };
     IdCount = { 12 ; };
 };
+
 
 
