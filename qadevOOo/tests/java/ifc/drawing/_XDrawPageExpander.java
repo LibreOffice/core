@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDrawPageExpander.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:14 $
+ *  last change:$Date: 2003-09-08 10:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.drawing;
 
+import lib.MultiMethodTest;
+import lib.Status;
+
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageExpander;
 import com.sun.star.drawing.XDrawPages;
-import lib.MultiMethodTest;
-import lib.Status;
 
 /**
 * Testing <code>com.sun.star.drawing.XDrawPageExpander</code>

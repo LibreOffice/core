@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDrawPageSummarizer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:13 $
+ *  last change:$Date: 2003-09-08 10:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.drawing;
 
-import com.sun.star.drawing.XDrawPageSummarizer;
-import com.sun.star.drawing.XDrawPages;
 import lib.MultiMethodTest;
 import lib.Status;
+
+import com.sun.star.drawing.XDrawPageSummarizer;
+import com.sun.star.drawing.XDrawPages;
 
 /**
 * Testing <code>com.sun.star.drawing.XDrawPageSummarizer</code>
