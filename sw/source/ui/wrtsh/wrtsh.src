@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-07 14:47:57 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,7 +861,7 @@ String STR_INSERT_CHART
     Text[ dutch ] = "%PRODUCTNAME Chart invoegen";
     Text[ chinese_simplified ] = "²εΘλ %PRODUCTNAME Chart";
     Text[ greek ] = "Προσθήκη %PRODUCTNAME Chart";
-    Text[ korean ] = "%PRODUCTNAME ΒχΖ® »πΐΤ";
+    Text[ korean ] = "StarChart  »πΐΤ";
     Text[ turkish ] = "%PRODUCTNAME Chart ekle";
     Text[ language_user1 ] = " ";
 };
