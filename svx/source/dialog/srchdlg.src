@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:11:34 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,14 +195,14 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ dutch ] = "Zoeken ~naar" ;
         Text [ spanish ] = "B~uscar" ;
         Text [ english_us ] = "~Search for" ;
-        Text[ chinese_simplified ] = "ËÑÑ°ÄÚÈİ(~H)";
+        Text[ chinese_simplified ] = "ËÑÑ°ÄÚÈİ(~S)";
         Text[ russian ] = "Íàéòè";
         Text[ polish ] = "Szukaj";
-        Text[ japanese ] = "ŒŸõÃ·½Ä(~H)";
-        Text[ chinese_traditional ] = "·j´M¤º®e(~H)";
+        Text[ japanese ] = "ŒŸõÃ·½Ä(~S)";
+        Text[ chinese_traditional ] = "·j´M¤º®e(~S)";
         Text[ arabic ] = "ÇáÈÍË Úä";
         Text[ greek ] = "AíáæŞôçóç ãéá";
-        Text[ korean ] = "Ã£À» ´ë»ó(~H)";
+        Text[ korean ] = "Ã£À» ´ë»ó(~S)";
         Text[ turkish ] = "Arana~n";
         Text[ language_user1 ] = " ";
     };
@@ -267,7 +267,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_traditional ] = "§ó´À¦¨(~W)";
         Text[ arabic ] = "ÇáßáãÉ ÇáÈÏíáÉ";
         Text[ greek ] = "ÁíôéêáôÜóôáóç ìå";
-        Text[ korean ] = "¹Ù²Ù±â";
+        Text[ korean ] = "¹Ù²Ù±â(~W)";
         Text[ turkish ] = "Yeni de~ğer";
         Text[ language_user1 ] = " ";
     };
@@ -358,8 +358,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "¾«È·ËÑÑ°(~T)";
         Text[ russian ] = "Òî÷íûé ïîèñê";
         Text[ polish ] = "Dok³adne wyszukiwanie";
-        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~T)";
-        Text[ chinese_traditional ] = "ºë½T·j´M";
+        Text[ japanese ] = "Š®‘S‚É“¯ˆê‚È‚à‚Ì‚ğŒŸõ‚·‚é(~T)";
+        Text[ chinese_traditional ] = "ºë½T·j´M(~T)";
         Text[ arabic ] = "ÈÍË ÏŞíŞ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "ÁêñéâŞ~ò áíáæŞôçóç";
@@ -525,22 +525,22 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ English ] = "Match half/full width forms" ;
         Text[ english_us ] = "Match half/full-width forms";
         Text[ portuguese ] = "Match half/full width forms";
-        Text[ russian ] = "Match half/full width forms";
+        Text[ russian ] = "Íîğìàëüíûå/ïîëóøèğîêèå ôîğìû";
         Text[ greek ] = "Öüñìåò ìå êáíïíéêü/ìéóü ğëÜôïò";
         Text[ dutch ] = "Match half/full width forms";
         Text[ french ] = "Match half/full width forms";
-        Text[ spanish ] = "Match half/full width forms";
+        Text[ spanish ] = "Formas con ancho medio o normal";
         Text[ italian ] = "Match half/full width forms";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Halv-/normalbreda former";
-        Text[ polish ] = "Match half/full width forms";
+        Text[ polish ] = "Formy o zwyk³ej/o po³owie szerokoœci";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
-        Text[ japanese ] = "Match half/full width forms";
+        Text[ japanese ] = "”¼Šp‚Æ‘SŠp‚ğ‹æ•Ê‚·‚é";
         Text[ korean ] = "Match half/full width forms";
-        Text[ chinese_simplified ] = "Match half/full width forms";
+        Text[ chinese_simplified ] = "°ë½ÇºÍÈ«½Ç×Ö·û";
         Text[ chinese_traditional ] = "¥b§Î©M¥ş§Î¦r¤¸";
         Text[ turkish ] = "Match half/full width forms";
-        Text[ arabic ] = "Match half/full width forms";
+        Text[ arabic ] = "äãÇĞÌ äÕİ ÇáÚÑÖ/ÚÑÖ ÚÇÏí";
     };
     CheckBox CB_JAP_SOUNDS_LIKE
     {
@@ -551,22 +551,22 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ English ] = "Sounds like (Japanese)" ;
         Text[ english_us ] = "Sounds like (Japanese)";
         Text[ portuguese ] = "Sounds like (Japanese)";
-        Text[ russian ] = "Ïîõîæåå íàïèñàíèå (ßïîíñêèé)";
+        Text[ russian ] = "Ïîäîáíîå ïèñüìî (ÿïîíñêèé)";
         Text[ greek ] = "Ğáñüìïéá ãñáöŞ (Éáğùíİæéêá)";
         Text[ dutch ] = "Sounds like (Japanese)";
         Text[ french ] = "Sounds like (Japanese)";
-        Text[ spanish ] = "Sounds like (Japanese)";
+        Text[ spanish ] = "Ortografía similar (Japonés)";
         Text[ italian ] = "Sounds like (Japanese)";
         Text[ danish ] = "Sounds like (Japanese)";
         Text[ swedish ] = "Likn. skrivsätt (japanska)";
         Text[ polish ] = "Podobna pisownia (Japoñski)";
         Text[ portuguese_brazilian ] = "Sounds like (Japanese)";
-        Text[ japanese ] = "Sounds like (Japanese)";
+        Text[ japanese ] = "‚ ‚¢‚Ü‚¢ŒŸõ(“ú–{Œê)";
         Text[ korean ] = "Sounds like (Japanese)";
-        Text[ chinese_simplified ] = "Sounds like (Japanese)";
+        Text[ chinese_simplified ] = "ÀàËÆ×Ö·û(ÈÕÎÄ)";
         Text[ chinese_traditional ] = "Ãş¦ü¦r¤¸(¤é¤å)";
         Text[ turkish ] = "Sounds like (Japanese)";
-        Text[ arabic ] = "Sounds like (Japanese)";
+        Text[ arabic ] = "ßÊÇÈÉ ãÔÇÈåÉ(íÇÈÇäíÉ)";
     };
     PushButton PB_JAP_OPTIONS
     {
@@ -686,7 +686,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_traditional ] = "³Æµù(~N)";
         Text[ arabic ] = "ÇáãáÇÍÙÇÊ";
         Text[ greek ] = "Óçìåéşóåéò";
-        Text[ korean ] = "¸Ş¸ğ";
+        Text[ korean ] = "¸Ş¸ğ(~N)";
         Text[ turkish ] = "No~t";
         Text[ language_user1 ] = " ";
     };
@@ -911,8 +911,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ËÑÑ°(~F)";
         Text[ russian ] = "Íàéòè";
         Text[ polish ] = "Szukaj";
-        Text[ japanese ] = "ŒŸõ(~S)";
-        Text[ chinese_traditional ] = "·j´M(~S)";
+        Text[ japanese ] = "ŒŸõ(~F)";
+        Text[ chinese_traditional ] = "·j´M(~F)";
         Text[ arabic ] = "ÈÍË";
         Text[ greek ] = "AíáæŞôç~óç";
         Text[ korean ] = "Ã£±â(~F)";
