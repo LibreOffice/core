@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:49:13 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,12 @@ LanguageType
 ::com::sun::star::uno::Sequence< INT16 >
     LocaleSeqToLangSeq( ::com::sun::star::uno::Sequence<
         ::com::sun::star::lang::Locale > &rLocaleSeq );
+
+///////////////////////////////////////////////////////////////////////////
+
+// checks if file pointed to by rURL is readonly
+// and may also check return if such a file exists or not
+BOOL    IsReadOnly( const String &rURL, BOOL *pbExist = 0 );
 
 ///////////////////////////////////////////////////////////////////////////
 
