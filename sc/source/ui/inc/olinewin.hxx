@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:09:47 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ private:
     ScViewData&                 mrViewData;         /// View data containing the document.
     ScSplitPos                  meWhich;            /// Which area in split window.
     bool                        mbHoriz;            /// true = Horizontal orientation.
-    bool                        mbMirrorHdr;        /// true = Header at end of the window (bottom or right).
+    bool                        mbMirrorEntries;    /// true = mirror the order of entries (including header)
+    bool                        mbMirrorLevels;     /// true = mirror the order of levels, including the border
 
     ImageList*                  mpSymbols;          /// Symbols for buttons.
     Color                       maLineColor;        /// Line color for expanded groups.
