@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:30:49 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,11 @@ void E3dLatheObj::CreateGeometry()
     // Ausgangszustand bringen
     aLathePoly3D.SetDirections();
 
+    // #i28528#
+    PolyPolygon3D aFrontLines;
+    PolyPolygon3D aBackLines;
+    PolyPolygon3D aInBetweenLines;
+
     // Spezialfall Einzelnes Polygon erzeugen
     BOOL bSinglePoly = (GetEndAngle() == 0 || GetHorizontalSegments() == 0);
     if(bSinglePoly)
@@ -334,8 +339,8 @@ void E3dLatheObj::CreateGeometry()
         AddFrontNormals(aLathePoly3D, aNormalsFront, aNormal);
         CreateFront(aLathePoly3D, aNormalsFront, GetCreateNormals(), GetCreateTexture());
 
-        // #78972#
-        maLinePolyPolygon.Insert(aLathePoly3D);
+        // #i28528#
+        aInBetweenLines.Insert(aLathePoly3D);
     }
     else
     {
@@ -430,7 +435,9 @@ void E3dLatheObj::CreateGeometry()
                 GetCharacterMode(), // #107245# GetLatheCharacterMode(),
                 TRUE,
                 // #78972#
-                &maLinePolyPolygon);
+                &aFrontLines,
+                &aBackLines,
+                &aInBetweenLines);
 
             // naechsten Schritt vorbereiten
             fTmpStart += fTmpLength;
@@ -441,8 +448,33 @@ void E3dLatheObj::CreateGeometry()
     }
 
     // #78972#
-    BOOL bClosedLines = ((GetEndAngle() == 3600) && (GetBackScale() == 100));
-    ImpCompleteLinePolygon(maLinePolyPolygon, aLathePoly3D.Count(), bClosedLines);
+    // Simply add them for preparing line geometry
+    maLinePolyPolygon.Insert(aFrontLines);
+    maLinePolyPolygon.Insert(aInBetweenLines);
+    maLinePolyPolygon.Insert(aBackLines);
+
+    // #i28528#
+    sal_Bool bClosedLines((3600 == GetEndAngle()) && (100 == GetBackScale()));
+    PolyPolygon3D aNewPolyPoly = ImpCompleteLinePolygon(maLinePolyPolygon, aLathePoly3D.Count(), bClosedLines);
+
+    if(GetReducedLineGeometry())
+    {
+        // replace vertical with horizontal lines
+        maLinePolyPolygon = aNewPolyPoly;
+
+        // append front lines
+        maLinePolyPolygon.Insert(aFrontLines);
+
+        // append back lines
+        maLinePolyPolygon.Insert(aBackLines);
+    }
+    else
+    {
+        // append horizontal lines
+        maLinePolyPolygon.Insert(aNewPolyPoly);
+    }
+
+    ImpCorrectLinePolygon(maLinePolyPolygon, aLathePoly3D.Count());
 
     // call parent
     E3dCompoundObject::CreateGeometry();
