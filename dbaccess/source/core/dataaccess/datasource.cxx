@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-03 14:35:27 $
+ *  last change: $Author: fs $ $Date: 2001-05-08 13:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,23 +509,35 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool") )
 #endif
         , UNO_QUERY);
+
+    ::rtl::OUString sUser(_rUid);
+    ::rtl::OUString sPwd(_rPwd);
+    if ((0 == sUser.getLength()) && (0 == sPwd.getLength()) && (0 != m_sUser.getLength()))
+    {   // ease the usage of this method. data source which are intended to have a user automatically
+        // fill in the user/password combination if the caller of this method does not specify otherwise
+        // 86951 - 05/08/2001 - frank.schoenheit@germany.sun.com
+        sUser = m_sUser;
+        if (0 != m_aPassword.getLength())
+            sPwd = m_aPassword;
+    }
+
     // SERVICE_SDBC_DRIVERMANAGER
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);
-        if (_rUid.getLength()) ++nAdditionalArgs;
-        if (_rPwd.getLength()) ++nAdditionalArgs;
+        if (sUser.getLength()) ++nAdditionalArgs;
+        if (sPwd.getLength()) ++nAdditionalArgs;
 
         Sequence< PropertyValue > aUserPwd(nAdditionalArgs);
-        if (_rUid.getLength())
+        if (sUser.getLength())
         {
             aUserPwd[0].Name = ::rtl::OUString::createFromAscii("user");
-            aUserPwd[0].Value <<= _rUid;
+            aUserPwd[0].Value <<= sUser;
         }
-        if (_rPwd.getLength())
+        if (sPwd.getLength())
         {
             aUserPwd[1].Name = ::rtl::OUString::createFromAscii("password");
-            aUserPwd[1].Value <<= _rPwd;
+            aUserPwd[1].Value <<= sPwd;
         }
         if (nAdditionalArgs)
             xReturn = xManager->getConnectionWithInfo(m_sConnectURL, ::comphelper::concatSequences(aUserPwd,m_aInfo));
