@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.src,v $
  *
- *  $Revision: 1.1.1.4 $
+ *  $Revision: 1.1.1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:16:03 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,4 +176,5 @@ Menu RID_FM_FILTER_MENU
         };
     };
 };
+
 
