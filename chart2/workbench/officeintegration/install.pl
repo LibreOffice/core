@@ -20,17 +20,17 @@ use English;
 
 $PRJ_PATH = $0;
 if( $OSNAME eq "MSWin32" ) {
-    chomp( $PWD = `cd` );
-    $PRJ_PATH =~ s,^(.*)\\chart2\\workbench\\.*$,$1,;
+    chomp( $PRJ_PATH = `cd` );
+    $PRJ_PATH =~ s,^(.*)\\workbench\\?.*$,$1,;
 
     $SVERSION = "$ENV{UserProfile}\\Application Data\\sversion.ini";
     $PATHSEP = "\\";
     $LIBPATTERN = "bin\\*mi*.dll";
     $COPYCMD = "copy";
 } else {
-    chomp( $PWD = `pwd` );
+    chomp( $PRJ_PATH = `pwd` );
     $PRJ_PATH = $PWD . "/" . $PRJ_PATH if( $PRJ_PATH !~ m,^/, );
-    $PRJ_PATH =~ s,^(.*)/chart2/workbench/.*$,$1,;
+    $PRJ_PATH =~ s,^(.*)/workbench/?.*$,$1,;
 
     $SVERSION = "$ENV{HOME}/.sversionrc";
     $PATHSEP = "/";
@@ -41,12 +41,25 @@ if( $OSNAME eq "MSWin32" ) {
 print "$OSNAME\n";
 
 # determine office path according to .sversionrc. Note: this only looks for a
-# prefix 'StarOffice 6.1', such that 'StarOffice 6.1 dbg=...' is still found
+# prefix 'StarOffice 8', such that 'StarOffice 8 dbg=...' is still found
+# if no 'StarOffice 8' was found, 'OpenOffice.org 2' is searched for
 
 open( SVERSION, "$SVERSION" ) || die( "couldn't find .sversionrc/sversion.ini\n" );
 while( <SVERSION> )
 {
-    if( m,^StarOffice 7.*=file://(.*)$, )
+    if( m,^StarOffice 8.*=file://(.*)$, )
+    {
+        $OFF_PATH = $1,;
+        if( $OSNAME eq "MSWin32" )
+        {
+            # remove first /
+            $OFF_PATH =~ s/^.//;
+            # replace path separators
+            $OFF_PATH =~ s,/,\\,g;
+        }
+        last;
+    }
+    elsif ( m,^OpenOffice.org 2.*=file://(.*)$, )
     {
         $OFF_PATH = $1,;
         if( $OSNAME eq "MSWin32" )
@@ -92,28 +105,10 @@ if( $ENV{PROEXT} ) {
 
 chmod 0664, "$OFF_PATH${PATHSEP}program${PATHSEP}types.rdb";
 print "registering types...\n";
-print `regmerge $OFF_PATH${PATHSEP}program${PATHSEP}types.rdb / $PRJ_PATH${PATHSEP}chart2${PATHSEP}$MY_OUTPATH${PATHSEP}bin${PATHSEP}chart2.rdb`;
-
-# print "installing apphelper library...\n";
-# @files = glob( "$PRJ_PATH${PATHSEP}apphelper${PATHSEP}$MY_OUTPATH${PATHSEP}${LIBPATTERN}" );
-# foreach $dll (@files)
-# {
-#   if( $OSNAME eq "MSWin32" ) {
-#       print `copy "$dll" "$OFF_PATH\\program"`;
-#       $dll =~ s,\\,/,g;
-#       $dll = "/" . $dll;
-#   } else {
-#       $dll =~ m,/([^/]*)$,;
-#       $copied_dll = "$OFF_PATH/program/$1";
-#       if( -l "$copied_dll" ) {
-#           unlink "$copied_dll";
-#       }
-#       symlink "$dll", "$copied_dll";
-#   }
-# }
+print `regmerge $OFF_PATH${PATHSEP}program${PATHSEP}types.rdb / $PRJ_PATH${PATHSEP}$MY_OUTPATH${PATHSEP}bin${PATHSEP}chart2.rdb`;
 
 print "installing shlibs and registering services...\n";
-@files = glob( "$PRJ_PATH${PATHSEP}chart2${PATHSEP}$MY_OUTPATH${PATHSEP}${LIBPATTERN}" );
+@files = glob( "$PRJ_PATH${PATHSEP}$MY_OUTPATH${PATHSEP}${LIBPATTERN}" );
 foreach $dll (@files)
 {
     if( $OSNAME eq "MSWin32" ) {
@@ -135,7 +130,7 @@ foreach $dll (@files)
 }
 
 print "installing resources\n";
-@files = glob( "$PRJ_PATH${PATHSEP}chart2${PATHSEP}$MY_RESPATH${PATHSEP}bin${PATHSEP}*.res" );
+@files = glob( "$PRJ_PATH${PATHSEP}$MY_RESPATH${PATHSEP}bin${PATHSEP}*.res" );
 foreach $res (@files)
 {
     if( $OSNAME eq "MSWin32" ) {
@@ -151,4 +146,4 @@ foreach $res (@files)
 }
 
 print "installing filter...\n";
-print `$COPYCMD $PRJ_PATH${PATHSEP}chart2${PATHSEP}workbench${PATHSEP}officeintegration${PATHSEP}TypeDetection.xcu $OFF_PATH${PATHSEP}user${PATHSEP}registry${PATHSEP}data${PATHSEP}org${PATHSEP}openoffice${PATHSEP}Office`;
+print `$COPYCMD $PRJ_PATH${PATHSEP}workbench${PATHSEP}officeintegration${PATHSEP}TypeDetection.xcu $OFF_PATH${PATHSEP}user${PATHSEP}registry${PATHSEP}data${PATHSEP}org${PATHSEP}openoffice${PATHSEP}Office`;
