@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:44:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <set>
 #include <stdio.h>
 #include <string.h>
 
@@ -1553,9 +1554,10 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
 {
     o << "\nclass SAL_NO_VTABLE " << m_name;
 
-    OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
-        o << " : public " << scopedName(m_typeName, superType);
+    for (sal_Int16 i = 0; i < m_reader.getMISuperTypeCount(); ++i) {
+        o << (i == 0 ? " :" : ",") << " public "
+          << scopedName(m_typeName, m_reader.getMISuperTypeName(i));
+    }
 
     o << "\n{\npublic:\n";
 
@@ -1897,22 +1899,30 @@ void InterfaceType::dumpGetCppuType(FileStream& o)
 
     o << indent() << "if ( !s_pType_" << typeName << " )\n" << indent() << "{\n";
     inc();
-    OString superType(m_reader.getSuperTypeName());
-    sal_Bool bWithBase = sal_False;
-    if (superType.getLength() > 0 && !superType.equals("com/sun/star/uno/XInterface"))
+    sal_Int16 nBases = m_reader.getMISuperTypeCount();
+    OSL_ASSERT(nBases > 0);
+    if (nBases == 1
+        && m_reader.getMISuperTypeName(0).equals("com/sun/star/uno/XInterface"))
     {
-        bWithBase = sal_True;
-        o << indent() << "const ::com::sun::star::uno::Type& rSuperType = getCppuType( ( ";
-        dumpType(o, superType, sal_True, sal_False);
-        o << " *)0 );\n";
+        nBases = 0;
+    }
+    if (nBases > 0) {
+        o << indent() << "typelib_TypeDescriptionReference * aSuperTypes["
+          << nBases << "];\n";
+        for (sal_Int16 i = 0; i < nBases; ++i) {
+            o << indent() << "aSuperTypes[" << i << "] = getCppuType( ( ";
+            dumpType(o, m_reader.getMISuperTypeName(i), sal_True, sal_False);
+            o << " *)0 ).getTypeLibType();\n";
+        }
     }
 
-    o << indent() << "typelib_static_interface_type_init( &s_pType_" << typeName
-      << ", \"" << m_typeName.replace('/', '.') << "\", ";
+    o << indent() << "typelib_static_mi_interface_type_init( &s_pType_"
+      << typeName << ", \"" << m_typeName.replace('/', '.') << "\", " << nBases
+      << ", ";
 
-    if ( bWithBase )
+    if ( nBases > 0 )
     {
-        o << "rSuperType.getTypeLibType() );\n";
+        o << "aSuperTypes );\n";
     } else
     {
         o << "0 );\n";
@@ -1974,12 +1984,13 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
          o << indent() << "// Start inline typedescription generation\n"
           << indent() << "typelib_InterfaceTypeDescription * pTD = 0;\n\n";
 
-        OString superType(m_reader.getSuperTypeName());
-        if (superType.getLength() > 0)
-        {
-            o << indent() << "const ::com::sun::star::uno::Type& rSuperType = getCppuType( ( ";
-            dumpType(o, superType, sal_True, sal_False);
-            o << " *)0 );\n";
+        OSL_ASSERT(m_reader.getMISuperTypeCount() > 0);
+        o << indent() << "typelib_TypeDescriptionReference * aSuperTypes["
+          << m_reader.getMISuperTypeCount() << "];\n";
+        for (sal_Int16 i = 0; i < m_reader.getMISuperTypeCount(); ++i) {
+            o << indent() << "aSuperTypes[" << i << "] = getCppuType( ( ";
+            dumpType(o, m_reader.getMISuperTypeName(i), sal_True, sal_False);
+            o << " *)0 ).getTypeLibType();\n";
         }
 
         sal_uInt32 count = getMemberCount();
@@ -2000,7 +2011,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
             dumpCppuMethodRefs(o, index);
         }
 
-        o << "\n" << indent() << "typelib_typedescription_newInterface(\n";
+        o << "\n" << indent() << "typelib_typedescription_newMIInterface(\n";
         inc();
         o << indent() << "&pTD,\n"
           << indent() << "sTypeName.pData, ";
@@ -2012,10 +2023,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
                 uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5);
         o << buffer;
 
-        if (superType.getLength() > 0)
-            o << indent() << "rSuperType.getTypeLibType(),\n";
-        else
-            o << indent() << "0,\n";
+        o << indent() << m_reader.getMISuperTypeCount() << ", aSuperTypes,\n";
 
         if ( count )
         {
@@ -2153,44 +2161,59 @@ sal_uInt32 InterfaceType::getMemberCount()
     return count;
 }
 
-sal_uInt32 InterfaceType::checkInheritedMemberCount(const TypeReader* pReader)
-{
-    sal_uInt32 cout = 0;
-    sal_Bool bSelfCheck = sal_True;
-    if (!pReader)
-    {
-        bSelfCheck = sal_False;
-        pReader = &m_reader;
-    }
+namespace {
 
-    sal_uInt32 count = 0;
-    OString superType(pReader->getSuperTypeName());
-    if (superType.getLength() > 0)
-    {
-        TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
-        if (aSuperReader.isValid())
-        {
-            count = checkInheritedMemberCount(&aSuperReader);
+class BaseOffset {
+public:
+    BaseOffset(TypeManager & theManager, TypeReader const & reader);
+
+    sal_Int32 get() const { return offset; }
+
+private:
+    void calculateBases(TypeReader const & reader);
+
+    void calculate(TypeReader const & reader);
+
+    TypeManager & manager;
+    std::set< rtl::OString > set;
+    sal_Int32 offset;
+};
+
+BaseOffset::BaseOffset(TypeManager & theManager, TypeReader const & reader):
+    manager(theManager)
+{
+    offset = 0;
+    calculateBases(reader);
+}
+
+void BaseOffset::calculateBases(TypeReader const & reader) {
+    for (sal_Int16 i = 0; i < reader.getMISuperTypeCount(); ++i) {
+        TypeReader super(manager.getTypeReader(reader.getMISuperTypeName(i)));
+        if (super.isValid()) {
+            calculate(super);
         }
     }
+}
 
-    if (bSelfCheck)
-    {
-        count += pReader->getMethodCount();
-        sal_uInt32 fieldCount = pReader->getFieldCount();
-        RTFieldAccess access = RT_ACCESS_INVALID;
-        for (sal_uInt16 i=0; i < fieldCount; i++)
-        {
-            access = pReader->getFieldAccess(i);
-
-            if (access != RT_ACCESS_CONST && access != RT_ACCESS_INVALID)
-            {
-                count++;
+void BaseOffset::calculate(TypeReader const & reader) {
+    if (set.insert(reader.getTypeName()).second) {
+        calculateBases(reader);
+        offset += reader.getMethodCount();
+        for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+            RTFieldAccess access = reader.getFieldAccess(i);
+            if (access != RT_ACCESS_CONST && access != RT_ACCESS_INVALID) {
+                ++offset;
             }
         }
     }
+}
 
-    return count;
+}
+
+sal_uInt32 InterfaceType::checkInheritedMemberCount(const TypeReader* pReader)
+{
+    OSL_ASSERT(pReader == 0);
+    return BaseOffset(m_typeMgr, m_reader).get();
 }
 
 sal_uInt32 InterfaceType::getInheritedMemberCount()
