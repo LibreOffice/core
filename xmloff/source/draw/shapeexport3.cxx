@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 15:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,7 @@ void XMLShapeExport::ImpExport3DLamps( const uno::Reference< beans::XPropertySet
     Vector3D aLightDirection;
     drawing::Direction3D xLightDir;
     sal_Bool bLightOnOff;
-    for(sal_Int32 nLamp; nLamp < 8; nLamp++)
+    for(sal_Int32 nLamp = 1; nLamp <= 8; nLamp++)
     {
         aIndexStr = OUString::valueOf( nLamp );
 
@@ -552,7 +552,7 @@ void XMLShapeExport::ImpExport3DLamps( const uno::Reference< beans::XPropertySet
 
         // specular
         rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_specular,
-            nLamp == 0 ? OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_true ) ) :
+            nLamp == 1 ? OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_true ) ) :
                             OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_false ) ) );
 
         // write light entry
