@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:04:58 $
+ *  last change: $Author: obo $ $Date: 2001-07-23 10:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ class CheckedIterator
 
         const TContainer*           m_pContainer    ;   // pointer to current container
         EEndState                   m_eEndState     ;   // "position state" of iterator!
-        TContainer::const_iterator  m_pPosition     ;   // point to actual element in container
+        typename TContainer::const_iterator  m_pPosition     ;   // point to actual element in container
 };
 
 }       //  namespace framework
