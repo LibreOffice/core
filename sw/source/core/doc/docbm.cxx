@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
             const SwPosition* pAPos;
 
             SwFrm* pFrm = pNode->GetFrm();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             static BOOL bViaDoc = FALSE;
             if( bViaDoc )
                 pFrm = NULL;
