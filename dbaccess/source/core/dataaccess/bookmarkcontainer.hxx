@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,6 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
-#endif
-#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
-#include "configurationflushable.hxx"
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -128,23 +122,20 @@ typedef ::cppu::WeakImplHelper6 <
 
 class OBookmarkContainer
             :public OBookmarkContainer_Base
-            ,public OConfigurationFlushable
 {
 protected:
     DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString, MapString2String);
-    DECLARE_STL_USTRINGACCESS_MAP(::utl::OConfigurationNode, ConfigNodeMap);
     DECLARE_STL_VECTOR(MapString2StringIterator, MapIteratorVector);
 
     MapString2String        m_aBookmarks;           // the bookmarks itself
-    ConfigNodeMap           m_aObjectKeys;          // the top level keys for the object persistence
     MapIteratorVector       m_aBookmarksIndexed;    // for index access to the
 
 protected:
     ::cppu::OWeakObject&    m_rParent;      // for the ref counting
     ::cppu::OInterfaceContainerHelper
                             m_aContainerListeners;
+    ::osl::Mutex&           m_rMutex;
 
-    sal_Bool    m_bInitialized : 1;     // the late ctor (initialize) was called ?
 
 public:
     /** constructs the container.<BR>
@@ -162,12 +153,8 @@ public:
     virtual ~OBookmarkContainer();
 
 // ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & _rType ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
-
-// ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -206,24 +193,11 @@ public:
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
 // helper
-    /** late construction, to be called after the construction of the object
-        @see dispose
-        @param      _rConfigurationRoot     the configuration node which is the root for all document informations
-        @param      _bRead                  if sal_True, the objects data is initialized with the data stored under
-                                            the given config node, else only the config node is saved (and propagated
-                                            to all descendants which need to know it).
-    */
-    virtual void    initialize(const ::utl::OConfigurationTreeRoot& _rConfigurationRoot, sal_Bool _bRead = sal_True);
-
     /** tell the container to free all resources. After that it's in a state like after the construction, i.e.
         you may call <code>initialize</code> again (maybe with another configuration node).
     */
     virtual void    dispose();
 
-    /// flush all persistent information (into the configuration)
-    virtual void    flush_NoBroadcast_NoCommit();
-
-    ::utl::OConfigurationNode getConfigLocation() const { return m_aConfigurationNode; }
 
 protected:
     /** checks whether the object is basically alive, i.e. it has been fully initialized (@see initialize) and
@@ -247,8 +221,7 @@ protected:
 
     void    implAppend(
         const ::rtl::OUString& _rName,
-        const ::rtl::OUString& _rDocumentLocation,
-        const ::utl::OConfigurationNode& _rObjectNode
+        const ::rtl::OUString& _rDocumentLocation
         );
 
     void implRemove(const ::rtl::OUString& _rName);
@@ -257,8 +230,6 @@ protected:
         const ::rtl::OUString& _rName,
         const ::rtl::OUString& _rNewLink);
 
-private:
-    void    initializeFromConfiguration();
 };
 
 //--------------------------------------------------------------------------
