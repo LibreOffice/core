@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 18:43:54 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text = "Ersetzen ~durch" ;
         Text [ ENGLISH ] = "Replace ~with" ;
         Text [ norwegian ] = "Erstatt ~med" ;
-        Text [ italian ] = "Sostituisci ~con" ;
+        Text [ italian ] = "Sostituisci con" ;
         Text [ portuguese_brazilian ] = "Substituir ~por" ;
         Text [ portuguese ] = "~Substituir por" ;
         Text [ finnish ] = "~Korvaa kohteella" ;
@@ -1218,6 +1218,7 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
 
