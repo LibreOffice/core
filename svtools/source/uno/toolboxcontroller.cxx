@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:13:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,11 @@ using namespace ::drafts::com::sun::star::frame;
 
 namespace svt
 {
+struct ToolboxController_Impl
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          m_xParentWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xUrlTransformer;
+};
 
 ToolboxController::ToolboxController(
     const Reference< XMultiServiceFactory >& rServiceManager,
@@ -118,12 +123,23 @@ ToolboxController::ToolboxController(
     const OUString& aCommandURL ) :
     OWeakObject()
     ,   m_aListenerContainer( m_aMutex )
+    ,   m_xFrame(xFrame)
     ,   m_xServiceManager( rServiceManager )
-    ,   m_xFrame( xFrame )
     ,   m_aCommandURL( aCommandURL )
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
 {
+    m_pImpl = new ToolboxController_Impl;
+
+    try
+    {
+        m_pImpl->m_xUrlTransformer.set( m_xServiceManager->createInstance(
+                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                                                        UNO_QUERY );
+    }
+    catch(const Exception&)
+    {
+    }
 }
 
 ToolboxController::ToolboxController() :
@@ -132,10 +148,12 @@ ToolboxController::ToolboxController() :
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
 {
+    m_pImpl = new ToolboxController_Impl;
 }
 
 ToolboxController::~ToolboxController()
 {
+    delete m_pImpl;
 }
 
 Reference< XFrame > ToolboxController::getFrameInterface() const
@@ -159,9 +177,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     {
         try
         {
-            Any a;
-            a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-            a >>= xLayoutManager;
+            xLayoutManager.set(xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))),UNO_QUERY);
         }
         catch ( Exception& )
         {
@@ -231,14 +247,25 @@ throw ( Exception, RuntimeException )
             if ( aArguments[i] >>= aPropValue )
             {
                 if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= m_xFrame;
+                    m_xFrame.set(aPropValue.Value,UNO_QUERY);
                 else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
                     aPropValue.Value >>= m_aCommandURL;
                 else if ( aPropValue.Name.equalsAscii( "ServiceManager" ))
-                    aPropValue.Value >>= m_xServiceManager;
+                    m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
                 else if ( aPropValue.Name.equalsAscii( "ParentWindow" ))
-                    aPropValue.Value >>= m_xParentWindow;
+                    m_pImpl->m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
             }
+        }
+
+        try
+        {
+            if ( !m_pImpl->m_xUrlTransformer.is() && m_xServiceManager.is() )
+                m_pImpl->m_xUrlTransformer.set( m_xServiceManager->createInstance(
+                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                                                            UNO_QUERY );
+        }
+        catch(const Exception&)
+        {
         }
 
         if ( m_aCommandURL.getLength() )
@@ -282,12 +309,11 @@ throw (::com::sun::star::uno::RuntimeException)
         try
         {
             Reference< XDispatch > xDispatch( pIter->second );
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
+
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
-            xURLTransformer->parseStrict( aTargetURL );
+            if ( m_pImpl->m_xUrlTransformer.is() )
+                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
 
             if ( xDispatch.is() && xStatusListener.is() )
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -351,7 +377,6 @@ void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
 throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XDispatch >       xDispatch;
-    Reference< XURLTransformer > xURLTransformer;
     OUString                     aCommandURL;
 
     {
@@ -365,9 +390,6 @@ throw (::com::sun::star::uno::RuntimeException)
              m_xServiceManager.is() &&
              m_aCommandURL.getLength() )
         {
-            xURLTransformer = Reference< XURLTransformer >( m_xServiceManager->createInstance(
-                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                            UNO_QUERY );
 
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );
@@ -376,7 +398,7 @@ throw (::com::sun::star::uno::RuntimeException)
         }
     }
 
-    if ( xDispatch.is() && xURLTransformer.is() )
+    if ( xDispatch.is() )
     {
         try
         {
@@ -384,7 +406,8 @@ throw (::com::sun::star::uno::RuntimeException)
             Sequence<PropertyValue>   aArgs;
 
             aTargetURL.Complete = aCommandURL;
-            xURLTransformer->parseStrict( aTargetURL );
+            if ( m_pImpl->m_xUrlTransformer.is() )
+                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
             xDispatch->dispatch( aTargetURL, aArgs );
         }
         catch ( DisposedException& )
@@ -443,11 +466,9 @@ void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( m_xServiceManager.is() && xDispatchProvider.is() )
             {
-                Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                            UNO_QUERY );
                 aTargetURL.Complete = aCommandURL;
-                xURLTransformer->parseStrict( aTargetURL );
+                if ( m_pImpl->m_xUrlTransformer.is() )
+                    m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
@@ -496,12 +517,10 @@ void ToolboxController::removeStatusListener( const rtl::OUString& aCommandURL )
 
         try
         {
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = aCommandURL;
-            xURLTransformer->parseStrict( aTargetURL );
+            if ( m_pImpl->m_xUrlTransformer.is() )
+                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
 
             if ( xDispatch.is() && xStatusListener.is() )
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -531,12 +550,10 @@ void ToolboxController::bindListener()
             URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
             while ( pIter != m_aListenerMap.end() )
             {
-                Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                            UNO_QUERY );
                 com::sun::star::util::URL aTargetURL;
                 aTargetURL.Complete = pIter->first;
-                xURLTransformer->parseStrict( aTargetURL );
+                if ( m_pImpl->m_xUrlTransformer.is() )
+                    m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
 
                 Reference< XDispatch > xDispatch( pIter->second );
                 if ( xDispatch.is() )
@@ -560,7 +577,7 @@ void ToolboxController::bindListener()
                 {
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
                 }
-                catch ( Exception& e )
+                catch ( Exception& )
                 {
                 }
                 pIter->second = xDispatch;
@@ -622,12 +639,10 @@ void ToolboxController::unbindListener()
         URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
         while ( pIter != m_aListenerMap.end() )
         {
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
-            xURLTransformer->parseStrict( aTargetURL );
+            if ( m_pImpl->m_xUrlTransformer.is() )
+                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
 
             Reference< XDispatch > xDispatch( pIter->second );
             if ( xDispatch.is() )
@@ -703,11 +718,9 @@ void ToolboxController::updateStatus( const rtl::OUString aCommandURL )
         xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
         if ( m_xServiceManager.is() && xDispatchProvider.is() )
         {
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
             aTargetURL.Complete = aCommandURL;
-            xURLTransformer->parseStrict( aTargetURL );
+            if ( m_pImpl->m_xUrlTransformer.is() )
+                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
             xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(), 0 );
         }
     }
@@ -729,4 +742,13 @@ void ToolboxController::updateStatus( const rtl::OUString aCommandURL )
     }
 }
 
+Reference< XURLTransformer > ToolboxController::getURLTransformer() const
+{
+    return m_pImpl->m_xUrlTransformer;
+}
+
+Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
+{
+    return m_pImpl->m_xParentWindow;
+}
 } // svt
