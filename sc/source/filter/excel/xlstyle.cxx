@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:35:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,12 +195,12 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
     {
         case EXC_COLOR_WINDOWTEXT3:
         case EXC_COLOR_WINDOWTEXT:
-        case EXC_COLOR_WINDOWTEXT_CH:   nColor = mnWindowText;  break;
+        case EXC_COLOR_CHWINDOWTEXT:    nColor = mnWindowText;  break;
         case EXC_COLOR_WINDOWBACK3:
         case EXC_COLOR_WINDOWBACK:
-        case EXC_COLOR_WINDOWBACK_CH:   nColor = mnWindowBack;  break;
+        case EXC_COLOR_CHWINDOWBACK:    nColor = mnWindowBack;  break;
         case EXC_COLOR_BUTTONBACK:      nColor = mnFaceColor;   break;
-        case EXC_COLOR_BORDERAUTO_CH:   nColor = COL_BLACK;     break;  // TODO: really always black?
+        case EXC_COLOR_CHBORDERAUTO:    nColor = COL_BLACK;     break;  // TODO: really always black?
         case EXC_COLOR_NOTEBACK:        nColor = mnNoteBack;    break;
         case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
         case EXC_COLOR_FONTAUTO:        nColor = COL_AUTO;      break;
@@ -572,8 +572,6 @@ namespace {
 
 // ----------------------------------------------------------------------------
 
-const sal_uInt16 EXC_BUILTIN_NOFORMAT = 0xFFFF;
-
 /** Special number format index describing a reused format. */
 const NfIndexTableOffset PRV_NF_INDEX_REUSE = NF_INDEX_TABLE_ENTRIES;
 
@@ -611,7 +609,7 @@ struct XclBuiltInFormat
 
 /** Terminates an Excel built-in number format table. */
 #define EXC_NUMFMT_ENDTABLE() \
-    { EXC_BUILTIN_NOFORMAT }
+    { EXC_FORMAT_NOTFOUND }
 
 // ----------------------------------------------------------------------------
 
@@ -1132,7 +1130,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     {
         // put LANGUAGE_SYSTEM for all entries in default table
         LanguageType eLang = ((*aVIt)->meLanguage == LANGUAGE_DONTKNOW) ? LANGUAGE_SYSTEM : meSysLang;
-        for( const XclBuiltInFormat* pBuiltIn = (*aVIt)->mpFormats; pBuiltIn && (pBuiltIn->mnXclNumFmt != EXC_BUILTIN_NOFORMAT); ++pBuiltIn )
+        for( const XclBuiltInFormat* pBuiltIn = (*aVIt)->mpFormats; pBuiltIn && (pBuiltIn->mnXclNumFmt != EXC_FORMAT_NOTFOUND); ++pBuiltIn )
         {
             XclNumFmt& rNumFmt = maFmtMap[ pBuiltIn->mnXclNumFmt ];
 
