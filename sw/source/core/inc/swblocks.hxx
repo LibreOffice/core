@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-01 14:04:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,8 +255,6 @@ public:
 
     virtual ULONG OpenFile( BOOL bReadOnly = TRUE );
     virtual void  CloseFile();
-
-    ULONG SetConvertMode( BOOL );
 
     // Methoden fuer die neue Autokorrektur
     ULONG GetText( const String& rShort, String& );
