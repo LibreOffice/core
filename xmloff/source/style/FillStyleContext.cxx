@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:16:41 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 16:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,16 @@ void XMLGradientStyleContext::EndElement()
     try
     {
         if(xGradient.is())
-            xGradient->insertByName( maStrName, maAny );
+        {
+            if( xGradient->hasByName( maStrName ) )
+            {
+                xGradient->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xGradient->insertByName( maStrName, maAny );
+            }
+        }
     }
     catch( container::ElementExistException& )
     {}
@@ -170,7 +179,16 @@ void XMLHatchStyleContext::EndElement()
     try
     {
         if(xHatch.is())
-            xHatch->insertByName( maStrName, maAny );
+        {
+            if( xHatch->hasByName( maStrName ) )
+            {
+                xHatch->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xHatch->insertByName( maStrName, maAny );
+            }
+        }
     }
     catch( container::ElementExistException& )
     {}
@@ -202,7 +220,16 @@ void XMLBitmapStyleContext::EndElement()
     try
     {
         if(xBitmap.is())
-            xBitmap->insertByName( maStrName, maAny );
+        {
+            if( xBitmap->hasByName( maStrName ) )
+            {
+                xBitmap->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xBitmap->insertByName( maStrName, maAny );
+            }
+        }
     }
     catch( container::ElementExistException& )
     {}
@@ -234,7 +261,16 @@ void XMLTransGradientStyleContext::EndElement()
     try
     {
         if(xTransGradient.is())
-            xTransGradient->insertByName( maStrName, maAny );
+        {
+            if( xTransGradient->hasByName( maStrName ) )
+            {
+                xTransGradient->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xTransGradient->insertByName( maStrName, maAny );
+            }
+        }
     }
     catch( container::ElementExistException& )
     {}
@@ -266,7 +302,16 @@ void XMLMarkerStyleContext::EndElement()
     try
     {
         if(xMarker.is())
-            xMarker->insertByName( maStrName, maAny );
+        {
+            if( xMarker->hasByName( maStrName ) )
+            {
+                xMarker->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xMarker->insertByName( maStrName, maAny );
+            }
+        }
     }
     catch( container::ElementExistException& )
     {}
@@ -298,7 +343,16 @@ void XMLDashStyleContext::EndElement()
     try
     {
         if(xDashes.is())
-            xDashes->insertByName( maStrName, maAny );
+        {
+            if( xDashes->hasByName( maStrName ) )
+            {
+                xDashes->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xDashes->insertByName( maStrName, maAny );
+            }
+        }
     }
     catch( container::ElementExistException& )
     {}
