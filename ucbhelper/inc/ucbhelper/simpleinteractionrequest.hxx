@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleinteractionrequest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 10:42:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _UCBHELPER_INTERATIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace ucbhelper {
 
@@ -102,7 +105,7 @@ static const sal_Int32 CONTINUATION_DISAPPROVE = 8;
   * @see InteractionApprove
   * @see InteractionDisapprove
   */
-class SimpleInteractionRequest : public ucbhelper::InteractionRequest
+class UCBHELPER_DLLPUBLIC SimpleInteractionRequest : public ucbhelper::InteractionRequest
 {
 public:
     /**

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplenameclashresolverequest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 11:41:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _UCBHELPER_INTERATIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace ucbhelper {
 
@@ -83,7 +86,7 @@ namespace ucbhelper {
   * @see InteractioneplaceExistingData
   * @see InteractionSupplyName
   */
-class SimpleNameClashResolveRequest : public ucbhelper::InteractionRequest
+class UCBHELPER_DLLPUBLIC SimpleNameClashResolveRequest : public ucbhelper::InteractionRequest
 {
     rtl::Reference< InteractionSupplyName > m_xNameSupplier;
 
