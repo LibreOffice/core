@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PipedConnection_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-17 09:35:10 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,39 @@
 
 package com.sun.star.comp.connections;
 
+import complexlib.ComplexTestCase;
 
-import java.util.Vector;
+public final class PipedConnection_Test extends ComplexTestCase {
+    public String getTestObjectName() {
+        return getClass().getName();
+    }
 
+    public String[] getTestMethodNames() {
+        return new String[] { "test" };
+    }
 
-public class PipedConnection_Test {
+    public void test() throws Exception {
+        PipedConnection rightSide = new PipedConnection(new Object[0]);
+        PipedConnection leftSide = new PipedConnection(new Object[]{rightSide});
+
+        byte theByte[] = new byte[1];
+
+        Reader reader = new Reader(rightSide, theByte);
+        Writer writer = new Writer(leftSide, theByte, reader);
+
+        reader.start();
+        writer.start();
+
+        Thread.sleep(2000);
+
+        writer.term();
+        writer.join();
+
+        reader.join();
+
+        assure("", writer._state && reader._state);
+    }
+
     static class Reader extends Thread {
         PipedConnection _pipedConnection;
         byte _theByte[];
@@ -149,39 +177,5 @@ public class PipedConnection_Test {
         public void term() {
             _quit = true;
         }
-    }
-
-    static public boolean test(Vector notpassed) throws Exception {
-        System.err.println("Testing PipedConnection...");
-
-        PipedConnection rightSide = new PipedConnection(new Object[0]);
-        PipedConnection leftSide = new PipedConnection(new Object[]{rightSide});
-
-        byte theByte[] = new byte[1];
-
-        Reader reader = new Reader(rightSide, theByte);
-        Writer writer = new Writer(leftSide, theByte, reader);
-
-        reader.start();
-        writer.start();
-
-        Thread.sleep(2000);
-
-        writer.term();
-        writer.join();
-
-        reader.join();
-
-        boolean passed = writer._state && reader._state;
-
-        System.err.println("PipedConnection - passed? " + passed + " transmitted:" + theByte[0]);
-        if(!passed)
-            notpassed.addElement("PipedConnection - passed? " + passed + " transmitted:" + theByte[0]);
-
-        return passed;
-    }
-
-    static public void main(String argv[]) throws Exception {
-        test(null);
     }
 }
