@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:07:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,6 +996,55 @@ void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInS
 }
 
 //------------------------------------------------------------------------------
+namespace
+{
+    static ::rtl::OUString getCompatibleControlServiceName( const ::rtl::OUString& _rServiceName )
+    {
+        ::rtl::OUString sReturn( _rServiceName );
+
+        ::rtl::OUString aServiceNamePairs[] = {
+            FRM_SUN_CONTROL_COMMANDBUTTON,  STARDIV_ONE_FORM_CONTROL_COMMANDBUTTON,
+            FRM_SUN_CONTROL_RADIOBUTTON,    STARDIV_ONE_FORM_CONTROL_RADIOBUTTON,
+            FRM_SUN_CONTROL_CHECKBOX,       STARDIV_ONE_FORM_CONTROL_CHECKBOX,
+            FRM_SUN_CONTROL_TEXTFIELD,      STARDIV_ONE_FORM_CONTROL_EDIT,
+            FRM_SUN_CONTROL_LISTBOX,        STARDIV_ONE_FORM_CONTROL_LISTBOX,
+            FRM_SUN_CONTROL_COMBOBOX,       STARDIV_ONE_FORM_CONTROL_COMBOBOX,
+            FRM_SUN_CONTROL_GROUPBOX,       STARDIV_ONE_FORM_CONTROL_GROUPBOX,
+            FRM_SUN_CONTROL_IMAGEBUTTON,    STARDIV_ONE_FORM_CONTROL_IMAGEBUTTON,
+            FRM_SUN_CONTROL_TIMEFIELD,      STARDIV_ONE_FORM_CONTROL_TIMEFIELD,
+            FRM_SUN_CONTROL_DATEFIELD,      STARDIV_ONE_FORM_CONTROL_DATEFIELD,
+            FRM_SUN_CONTROL_NUMERICFIELD,   STARDIV_ONE_FORM_CONTROL_NUMERICFIELD,
+            FRM_SUN_CONTROL_CURRENCYFIELD,  STARDIV_ONE_FORM_CONTROL_CURRENCYFIELD,
+            FRM_SUN_CONTROL_PATTERNFIELD,   STARDIV_ONE_FORM_CONTROL_PATTERNFIELD,
+            FRM_SUN_CONTROL_IMAGECONTROL,   STARDIV_ONE_FORM_CONTROL_IMAGECONTROL,
+            FRM_SUN_CONTROL_FORMATTEDFIELD, STARDIV_ONE_FORM_CONTROL_FORMATTEDFIELD
+        };
+
+    sal_Int32 i = 0;
+        for ( ; i < sizeof( aServiceNamePairs ) / sizeof( aServiceNamePairs[ 0 ] ) / 2; ++i )
+        {
+            if ( _rServiceName == aServiceNamePairs[ 2 * i ] )
+            {
+                sReturn = aServiceNamePairs[ 2 * i + 1 ];
+                break;
+            }
+        }
+#if OSL_DEBUG_LEVEL > 0
+        if ( i >= sizeof( aServiceNamePairs ) / sizeof( aServiceNamePairs[ 0 ] ) / 2 )
+        {
+            DBG_WARNING( ( ::rtl::OString( "getCompatibleControlServiceName: unknown service name (" )
+                        += ::rtl::OString( _rServiceName.getStr(), _rServiceName.getLength(), RTL_TEXTENCODING_ASCII_US )
+                        += ::rtl::OString( ")!" )
+                        ).getStr()
+                       );
+        }
+#endif
+
+        return sReturn;
+    }
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
                         throw(stario::IOException, RuntimeException)
 {
@@ -1016,7 +1065,31 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
 
     _rxOutStream->writeLong(nLen);
 
-    writeAggregate( _rxOutStream );
+    // during writing the aggregate, temporarily reset the DefaultControl property
+    // In the binary format, we need to have the old service names containing
+    // a "stardiv...." string, while today at runtime, we have "new" service names
+    // #92831# - 2004-03-17 - fs@openoffice.org
+    ::rtl::OUString sOriginalDefaultControl;
+    try
+    {
+        if ( m_xAggregateSet.is() )
+        {
+            m_xAggregateSet->getPropertyValue( PROPERTY_DEFAULTCONTROL ) >>= sOriginalDefaultControl;
+            ::rtl::OUString sNewDefaultControl( getCompatibleControlServiceName( sOriginalDefaultControl ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sNewDefaultControl ) );
+        }
+
+        writeAggregate( _rxOutStream );
+
+        if ( m_xAggregateSet.is() )
+            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sOriginalDefaultControl ) );
+    }
+    catch( const Exception& )
+    {
+        if ( m_xAggregateSet.is() )
+            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sOriginalDefaultControl ) );
+        throw;
+    }
 
     // feststellen der Laenge
     nLen = xMark->offsetToMark(nMark) - 4;
