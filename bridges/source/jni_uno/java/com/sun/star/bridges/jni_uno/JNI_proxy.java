@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JNI_proxy.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 14:41:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 package com.sun.star.bridges.jni_uno;
 
 import com.sun.star.lib.util.NativeLibraryLoader;
@@ -67,7 +68,7 @@ import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.IQueryInterface;
 
 
-//==================================================================================================
+//==============================================================================
 public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 {
     static {
@@ -87,7 +88,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     protected String m_oid;
     protected Class m_class;
 
-    //______________________________________________________________________________________________
+    //__________________________________________________________________________
     public static String get_stack_trace( Throwable throwable )
         throws Throwable
     {
@@ -97,8 +98,10 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
             throwable = new Throwable();
             current_trace = true;
         }
-        java.io.StringWriter string_writer = new java.io.StringWriter();
-        java.io.PrintWriter print_writer = new java.io.PrintWriter( string_writer, true );
+        java.io.StringWriter string_writer =
+            new java.io.StringWriter();
+        java.io.PrintWriter print_writer =
+            new java.io.PrintWriter( string_writer, true );
         throwable.printStackTrace( print_writer );
         print_writer.flush();
         print_writer.close();
@@ -114,14 +117,16 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         return "\njava stack trace:\n" + trace;
     }
 
-    //______________________________________________________________________________________________
+    //__________________________________________________________________________
     private native void finalize( long bridge_handle );
-    //______________________________________________________________________________________________
+
+    //__________________________________________________________________________
     public void finalize()
     {
         finalize( m_bridge_handle );
     }
-    //______________________________________________________________________________________________
+
+    //__________________________________________________________________________
     private JNI_proxy(
         long bridge_handle, IEnvironment java_env,
         long receiver_handle, long td_handle, Type type, String oid )
@@ -134,34 +139,38 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         m_oid = oid;
         m_class = m_type.getZClass();
     }
-    //______________________________________________________________________________________________
+
+    //__________________________________________________________________________
     public static Object create(
         long bridge_handle, IEnvironment java_env,
         long receiver_handle, long td_handle, Type type, String oid,
         java.lang.reflect.Constructor proxy_ctor )
         throws Throwable
     {
-        JNI_proxy handler =
-            new JNI_proxy( bridge_handle, java_env, receiver_handle, td_handle, type, oid );
+        JNI_proxy handler = new JNI_proxy(
+            bridge_handle, java_env, receiver_handle, td_handle, type, oid );
         Object proxy = proxy_ctor.newInstance( new Object [] { handler } );
         return java_env.registerInterface( proxy, new String [] { oid }, type );
     }
-    //______________________________________________________________________________________________
+
+    //__________________________________________________________________________
     public static java.lang.reflect.Constructor get_proxy_ctor( Class clazz )
         throws Throwable
     {
         Class proxy_class = java.lang.reflect.Proxy.getProxyClass(
             s_system_classloader,
-            new Class [] { clazz, IQueryInterface.class, com.sun.star.lib.uno.Proxy.class } );
+            new Class [] { clazz, IQueryInterface.class,
+                           com.sun.star.lib.uno.Proxy.class } );
         return proxy_class.getConstructor( s_InvocationHandler );
     }
 
-    //______________________________________________________________________________________________
+    //__________________________________________________________________________
     private native Object dispatch_call(
         long bridge_handle, String decl_class, String method, Object args [] )
         throws Throwable;
+
     // InvocationHandler impl
-    //______________________________________________________________________________________________
+    //__________________________________________________________________________
     public Object invoke(
         Object proxy, java.lang.reflect.Method method, Object args [] )
         throws Throwable
@@ -171,60 +180,68 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 
         if (Object.class.equals( decl_class ))
         {
-            if (method_name.equals( "hashCode" )) // int hashCode()
+            if (method_name.equals( "hashCode" ))
             {
-                return new Integer( System.identityHashCode( proxy ) );
+                // int hashCode()
+                return new Integer( m_oid.hashCode() );
             }
-            else if (method_name.equals( "equals" )) // boolean equals( Object obj )
+            else if (method_name.equals( "equals" ))
             {
-                return (proxy == args[ 0 ] ? Boolean.TRUE : Boolean.FALSE);
+                // boolean equals( Object obj )
+                return isSame(args[0]);
             }
-            else if (method_name.equals( "toString" )) // String toString()
+            else if (method_name.equals( "toString" ))
             {
-                return this.toString() + " [oid=" + m_oid + ", type=" + m_type.getTypeName() + "]";
+                // String toString()
+                return this.toString() + " [oid=" + m_oid +
+                    ", type=" + m_type.getTypeName() + "]";
             }
         }
         // UNO interface call
         else if (decl_class.isAssignableFrom( m_class ))
         {
             // dispatch interface call
-            return dispatch_call( m_bridge_handle, decl_class.getName(), method_name, args );
+            return dispatch_call(
+                m_bridge_handle, decl_class.getName(), method_name, args );
         }
         // IQueryInterface impl
         else if (IQueryInterface.class.equals( decl_class ))
         {
-            if (method_name.equals( "queryInterface" )) // Object queryInterface( Type type )
+            if (method_name.equals( "queryInterface" ))
             {
-                // opt
+                // Object queryInterface( Type type )
                 Object registered_proxy =
                     m_java_env.getRegisteredInterface( m_oid, (Type)args[ 0 ] );
                 if (null == registered_proxy)
                 {
                     return dispatch_call(
-                        m_bridge_handle, "com.sun.star.uno.XInterface", method_name, args );
+                        m_bridge_handle,
+                        "com.sun.star.uno.XInterface", method_name, args );
                 }
                 else
                 {
                     return registered_proxy;
                 }
             }
-            else if (method_name.equals( "isSame" )) // boolean isSame( Object object )
+            else if (method_name.equals( "isSame" ))
             {
-                Object right = args[ 0 ];
-                if (proxy == right)
-                    return Boolean.TRUE;
-                if (m_oid.equals( UnoRuntime.generateOid( right ) ))
-                    return Boolean.TRUE;
-                return Boolean.FALSE;
+                // boolean isSame( Object object )
+                return isSame(args[0]);
             }
-            else if (method_name.equals( "getOid" )) // String getOid()
+            else if (method_name.equals( "getOid" ))
             {
+                // String getOid()
                 return m_oid;
             }
         }
 
         throw new com.sun.star.uno.RuntimeException(
-            "[jni_uno bridge error] unexpected call on proxy " + proxy.toString() + ": " +
-            method.toString() );
+            "[jni_uno bridge error] unexpected call on proxy " +
+            proxy.toString() + ": " + method.toString() );
+    }
+
+    private Boolean isSame(Object obj) {
+        return new Boolean(obj != null
+                           && m_oid.equals(UnoRuntime.generateOid(obj)));
     }
 }
