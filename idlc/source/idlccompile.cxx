@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:31:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #include <io.h>
 #endif
 
-#include <string.h>
 #ifdef  SAL_UNX
 #include <unistd.h>
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
@@ -173,10 +172,19 @@ OString makeTempName(const OString& prefix, const OString& postfix)
         tmpPath = OUStringToOString(uTmpPath, RTL_TEXTENCODING_UTF8);
 
 #if defined(SAL_W32) || defined(SAL_UNX)
-    strcpy(tmpFilePattern, tmpPath);
-    strcat(tmpFilePattern, PATH_SEPARATOR);
-    strcat(tmpFilePattern, prefix.getStr());
-    strcat(tmpFilePattern, "XXXXXX");
+
+    OSL_ASSERT( sizeof(tmpFilePattern) > ( strlen(tmpPath)
+                                           + RTL_CONSTASCII_LENGTH(
+                                                PATH_SEPARATOR )
+                                           + prefix.getLength()
+                                           + RTL_CONSTASCII_LENGTH(
+                                                "XXXXXX") ) );
+
+    tmpFilePattern[ sizeof(tmpFilePattern)-1 ] = '\0';
+    strncpy(tmpFilePattern, tmpPath, sizeof(tmpFilePattern)-1);
+    strncat(tmpFilePattern, PATH_SEPARATOR, sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
+    strncat(tmpFilePattern, prefix.getStr(), sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
+    strncat(tmpFilePattern, "XXXXXX", sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
 
 #ifdef SAL_UNX
     int nDescriptor = mkstemp(tmpFilePattern);
@@ -195,11 +203,11 @@ OString makeTempName(const OString& prefix, const OString& postfix)
         Is the postfix necessarry?
     */
 //      if ( postfix.getLength() )
-//          strcat(tmpFilePattern, postfix.getStr());
+//          strncat(tmpFilePattern, postfix.getStr(), sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
 #endif
 
 #ifdef __OS2__
-    strcpy(tmpFilePattern, tempnam(NULL, prefix.getStr());
+    strncpy(tmpFilePattern, tempnam(NULL, prefix.getStr()), sizeof(tmpFilePattern)-1);
 #endif
 
     return OString(tmpFilePattern);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:48:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.1 $ $Date: 2001-03-15 12:48:45 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.2 $ $Date: 2003-03-26 12:11:11 $";
 
 int realargc;
 char* realargv[512];
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 void
     process(Tokenrow * trp)
 {
-    int anymacros = 0;  /* S390: XDBX stürzt ab! */
+    int anymacros = 0;
 
     for (;;)
     {

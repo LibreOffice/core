@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2001-09-26 14:42:47 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:11:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,10 +70,9 @@ TARGETTHREAD=ST
 # --- Settings -----------------------------------------------------
 
 NO_DEFAULT_STL=TRUE
+LIBSALCPPRT=$(0)
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 

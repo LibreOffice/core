@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-06 13:25:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,9 +329,9 @@ oneway		return IDL_ONEWAY;
 				return IDL_STRING_LITERAL;
 			}
 
-("-")?{DIGIT}*(e|E){1}(("+"|"-")?{DIGIT}+)+(f|F)?	|
-("-")?"."{DIGIT}*((e|E)("+"|"-")?{DIGIT}+)?(f|F)?	|
-("-")?{DIGIT}*"."{DIGIT}*((e|E)("+"|"-")?{DIGIT}+)?(f|F)?        {
+("-")?{DIGIT}+(e|E){1}(("+"|"-")?{DIGIT}+)+(f|F)?	|
+("-")?"."{DIGIT}+((e|E)("+"|"-")?{DIGIT}+)?(f|F)?	|
+("-")?{DIGIT}*"."{DIGIT}+((e|E)("+"|"-")?{DIGIT}+)?(f|F)?        {
             	yylval.dval = asciiToFloat( yytext );
 				return IDL_FLOATING_PT_LITERAL;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-29 12:54:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,6 @@ int fprintf(FILE* stream, const char* format, ...)
     return res;
 }
 
-/*
-   Following code not for msvc7.net compiler
-*/
-#ifndef M1300
 void* malloc( size_t size )
 {
     return ::malloc(size);
@@ -157,7 +153,6 @@ void free( void *memblock )
 {
     ::free(memblock);
 }
-#endif
     
 };
 #endif
@@ -527,7 +522,8 @@ interface_dcl :
 						 */
 						else 
 						{
-							pForward->setInheritedInterfaces(*$1->getInherits());
+                         if ( $1->getInherits() )   
+                             pForward->setInheritedInterfaces(*$1->getInherits());
 							
 							pForward->setImported(pInterface->isImported());
 							pForward->setInMainfile(pInterface->isInMainfile());
@@ -790,6 +786,11 @@ opt_attrflag :
 		idlc()->setParseState(PS_RemoveableSeen);
 		$$ = AF_REMOVEABLE;
 	}
+	| error ']' 
+	{
+       yyerror("unknown property|attribute flag");
+		yyerrok;
+	}
 	;
 
 operation :
@@ -1000,7 +1001,8 @@ constants_export :
 	{
 		idlc()->setParseState(PS_ConstantDeclSeen);
 	}
-	';'
+	';' {};
+
 
 const_dcl : 
 	IDL_CONST
@@ -1321,7 +1323,7 @@ exception_dcl :
 		 * Push the scope of the exception on the scopes stack
 		 */
 		idlc()->scopes()->push(pExcept);
-		delete $1
+		delete $1;
 	}
 	'{'
 	{
@@ -1710,10 +1712,10 @@ type_dcl :
 	{
 		idlc()->setParseState(PS_TypedefSeen);
 	}
-	type_declarator
-	| struct_type
-	| union_type
-	| enum_type
+	type_declarator {}
+	| struct_type {}
+	| union_type {}
+	| enum_type {}
 	;
 
 type_declarator :

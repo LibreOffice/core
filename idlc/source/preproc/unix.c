@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unix.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:48:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <fcntl.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__)) && !(defined S390)
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>

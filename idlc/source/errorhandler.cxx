@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-09 07:57:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,7 +548,7 @@ void ErrorHandler::warning2(WarningCode w, AstDeclaration* d1, AstDeclaration* d
 void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber, sal_Char* errmsg)
 {
     errorHeader(EIDL_SYNTAX_ERROR, lineNumber);
-    fprintf(stderr, "%s%s\n", parseStateToMessage(ps), errmsg + 11);
+    fprintf(stderr, "%s: %s\n", parseStateToMessage(ps), errmsg);
     idlc()->incErrorCount();
 }
 

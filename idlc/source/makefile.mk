@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-17 10:52:00 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:11:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,3 +147,7 @@ $(MISC)$/stripped_scanner.ll : scanner.ll
 $(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
     +flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll
 
+# JSC: Please do not remove this lines !!
+#$(MISC)$/parser.cxx: parser.y
+#	+bison -v -d -o$(MISC)$/parser.cxx parser.y
+#	+$(COPY) $(MISC)$/parser.cxx.h $(OUT)$/inc$/parser.hxx
