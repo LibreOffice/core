@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 14:53:32 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 14:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,11 +257,14 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_REVERSED                         
 const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_PROSPECT                         (MAP_CHAR_LEN("PrintProspect"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_CONTROLS                         (MAP_CHAR_LEN("PrintControls"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_DRAWINGS                         (MAP_CHAR_LEN("PrintDrawings"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_PRING_RIGHT_PAGES                      (MAP_CHAR_LEN("PrintRightPages"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_RIGHT_PAGES                      (MAP_CHAR_LEN("PrintRightPages"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_LEFT_PAGES                       (MAP_CHAR_LEN("PrintLeftPages"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_BLACK_FONTS                      (MAP_CHAR_LEN("PrintBlackFonts"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PRINTER_PAPER_TRAY                     (MAP_CHAR_LEN("PrinterPaperTray"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_PAGE_BACKGROUND                  (MAP_CHAR_LEN("PrintPageBackground"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_ANNOTATION_MODE                  (MAP_CHAR_LEN("PrintAnnotationMode"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_FAX_NAME                         (MAP_CHAR_LEN("PrintFaxName"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_PAPER_FROM_SETUP                 (MAP_CHAR_LEN("PrintPaperFromSetup"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_REGISTER_MODE_ACTIVE                   (MAP_CHAR_LEN("RegisterModeActive"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_RELATIVE_WIDTH                         (MAP_CHAR_LEN("RelativeWidth"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_RELATIVE_HEIGHT                        (MAP_CHAR_LEN("RelativeHeight"));
@@ -377,7 +380,6 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_PAGE_NUMBER_OFFSET                     
 const SwPropNameLen __FAR_DATA  UNO_NAME_PLACEHOLDER                            (MAP_CHAR_LEN("PlaceHolder"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PLACEHOLDER_TYPE                       (MAP_CHAR_LEN("PlaceHolderType"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT                                  (MAP_CHAR_LEN("Print"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_PRINT_LEFT_PAGES                       (MAP_CHAR_LEN("PrintLeftPages"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_REFERENCE_FIELD_PART                   (MAP_CHAR_LEN("ReferenceFieldPart"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_REFERENCE_FIELD_SOURCE                 (MAP_CHAR_LEN("ReferenceFieldSource"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_REGISTER_PARAGRAPH_STYLE               (MAP_CHAR_LEN("RegisterParagraphStyle"));
