@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:24:16 $
+ *  last change: $Author: nn $ $Date: 2001-10-09 12:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,16 @@ ScSelectionTransferObj::ScSelectionTransferObj( ScTabView* pSource, ScSelectionT
 
 ScSelectionTransferObj::~ScSelectionTransferObj()
 {
+    ScModule* pScMod = SC_MOD();
+    if ( pScMod->GetSelectionTransfer() == this )
+    {
+        //  this is reached when the object wasn't really copied to the selection
+        //  (CopyToSelection has no effect under Windows)
+
+        ForgetView();
+        pScMod->SetSelectionTransfer( NULL );
+    }
+
     DBG_ASSERT( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
 }
 
