@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_constgroup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ HF_IdlConstGroup::make_Navibar( const client & i_ce ) const
 {
     HF_IdlNavigationBar
         aNaviBar(Env(), CurOut());
-    aNaviBar.Produce_CeMainRow(i_ce);
+    aNaviBar.Produce_CeMainRow(i_ce,true);  // true := avoid link to Use-page.
 
     DYN HF_NaviSubRow &
         ret = aNaviBar.Add_SubRow();
