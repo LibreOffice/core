@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-02-11 19:28:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ ScSpew ScInterpreter::theSpew;
 #endif
 
 //-------------------------------------------------------------------------
-// Funktionen für den Zugriff auf das Document
+// Funktionen fuer den Zugriff auf das Document
 //-------------------------------------------------------------------------
 
 
