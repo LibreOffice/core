@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-06 08:40:56 $
+ *  last change: $Author: sb $ $Date: 2001-08-17 12:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,17 +95,6 @@ component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
                                        uno_Environment **)
 {
     *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//============================================================================
-//
-//  component_getDescription
-//
-//============================================================================
-
-extern "C" sal_Char const * SAL_CALL component_getDescription()
-{
-    return "UCB User Interface Interaction Handler";
 }
 
 //============================================================================
