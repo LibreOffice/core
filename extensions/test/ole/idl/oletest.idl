@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-13 06:39:56 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ interface XTestSequence: com::sun::star::uno::XInterface
     void testout_methodUShort( [out] unsigned short rOut);
     void testout_methodLong( [out]  long rOut);
     void testout_methodULong( [out] unsigned long rOut);
+     void testout_methodHyper( [out]  hyper rOut);
+     void testout_methodUHyper( [out] unsigned hyper rOut);
     void testout_methodString( [out] string rOut);
     void testout_methodChar( [out] char rOut);
     void testout_methodAny  ( [out] any rOut);
@@ -130,6 +132,8 @@ interface XTestSequence: com::sun::star::uno::XInterface
     void testinout_methodUShort( [inout] unsigned short rOut);
     void testinout_methodLong( [inout]  long rOut);
     void testinout_methodULong( [inout] unsigned long rOut);
+    void testinout_methodHyper( [inout]  hyper rOut);
+    void testinout_methodUHyper( [inout] unsigned hyper rOut);
     void testinout_methodString( [inout] string rOut);
     void testinout_methodChar( [inout] char rOut);
     void testinout_methodAny    ( [inout] any rOut);
@@ -154,27 +158,7 @@ interface XTestStruct: com::sun::star::uno::XInterface
     com::sun::star::beans::Property methodStruct2( [in] com::sun::star::beans::Property aProp);
 };
 
-interface XTestOutParameters: com::sun::star::uno::XInterface
-{
-    void out_methodByte( [out] byte rOut );
-    void out_methodFloat( [out] float rOut);
-    void out_methodDouble( [out] double rOut);
-    void out_methodBool( [out] boolean rOut);
-    void out_methodShort( [out] short rOut);
-    void out_methodUShort( [out] unsigned short rOut);
-    void out_methodLong( [out]  long rOut);
-    void out_methodULong( [out] unsigned long rOut);
-    void out_methodString( [out] string rOut);
-    void out_methodChar( [out] char rOut);
-    void out_methodAny  ( [out] any rOut);
-    void out_methodSequence( [out] sequence< long > rOut);
-    void out_methodSequence2( [out] sequence < sequence< long > > rOut);
-    void out_methodMulParams1( [out] long rout1, [out] long rout2);
-    void out_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3);
-    void out_methodMulParams3( [in] string sin, [out] string sout);
 
-
-};
 struct SimpleStruct
 {
     string message;
@@ -190,9 +174,12 @@ interface XTestInParameters: com::sun::star::uno::XInterface
     unsigned short in_methodUShort( [in] unsigned short rIn);
     long in_methodLong( [in]  long rIn);
     unsigned long in_methodULong( [in] unsigned long rIn);
+    hyper in_methodHyper( [in]  hyper rIn);
+    unsigned hyper in_methodUHyper( [in] unsigned hyper rIn);
     string in_methodString( [in] string rIn);
     char in_methodChar( [in] char rIn);
     any in_methodAny    ( [in] any rIn);
+    com::sun::star::uno::XInterface in_methodXInterface([in] com::sun::star::uno::XInterface rIn);
     com::sun::star::script::XInvocation in_methodInvocation( [in] com::sun::star::script::XInvocation inv);
     SimpleStruct in_methodStruct( [in] SimpleStruct aStruct);
     void in_methodAll( [in] byte b, [in] float f, [in] double d, [in] boolean bool, [in]short sh,
@@ -215,6 +202,9 @@ interface XTestOther: com::sun::star::uno::XInterface
     void other_methodAnyOut( [out] any rAny);
     any other_methodAnyRet();
     void in_float( [in] float val);
+    //typeInAny determines what type must be in rAny. If rAny contains
+    //a different type then an exception is being thrown
+    any other_methodAny([in] any rAny, [in] string typeInAny);
 };
 
 
