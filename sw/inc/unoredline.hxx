@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:35:51 $
+ *  last change: $Author: os $ $Date: 2000-12-21 12:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 /* -----------------------------19.12.00 11:35--------------------------------
 
  ---------------------------------------------------------------------------*/
-class SwXRedlinePortion : public SwXTextPortion, public SwXText
+class SwXRedlinePortion : public SwXTextPortion,
+    public SwXText,
+    public  ::com::sun::star::container::XEnumerationAccess
 {
     const SwRedline*    pRedline;
 
