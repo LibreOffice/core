@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:37:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
 
 
 using namespace dbaui;
@@ -130,29 +133,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
     switch (_rType)
     {
         case CommandType::QUERY:
-            {
-                m_aLabel.SetText(m_aQryLabel);
-                m_aCatalogLbl.Hide();
-                m_aCatalog.Hide();
-                m_aSchemaLbl.Hide();
-                m_aSchema.Hide();
-
-                Point aPos(m_aSchemaLbl.GetPosPixel());
-                m_aLabel.SetPosPixel(m_aCatalogLbl.GetPosPixel());
-                m_aTitle.SetPosPixel(m_aCatalog.GetPosPixel());
-
-                m_aPB_OK.SetPosPixel(Point(m_aPB_OK.GetPosPixel().X(),aPos.Y()));
-                m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
-                m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
-
-                sal_Int32 nNewHeight =
-                    aPos.Y() + m_aPB_OK.GetSizePixel().Height() + m_aTitle.GetSizePixel().Height() / 2;
-
-                SetSizePixel(Size(GetSizePixel().Width(), nNewHeight));
-
-                m_aTitle.SetText(m_aName);
-                m_aTitle.setCheck(sal_False); // enable non valid sql chars as well
-            }
+            implInitOnlyTitle(m_aQryLabel);
             break;
         case CommandType::TABLE:
             {
@@ -265,7 +246,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
 
 
-                sal_Int32 nLength = _rxMetaData.is() ? _rxMetaData->getMaxTableNameLength() : 0;
+                USHORT nLength =  _rxMetaData.is() ? static_cast<USHORT>(_rxMetaData->getMaxTableNameLength()) : 0;
                 nLength = nLength ? nLength : EDIT_NOLIMIT;
 
                 m_aTitle.SetMaxTextLen(nLength);
@@ -288,41 +269,67 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
             OSL_ENSURE(0,"Type not supported yet!");
     }
 
-    if ( 0 == ( m_nFlags & SAD_ADDITIONAL_DESCRIPTION ) )
-    {
-        // hide the description window
-        m_aDescription.Hide();
-
-        // the number of pixels we have to move the other controls
-        sal_Int32 nMoveUp = m_aCatalog.GetPosPixel().Y() - m_aDescription.GetPosPixel().Y();
-
-        // loop to all controls and move them ...
-        for (   Window* pChildControl = GetWindow( WINDOW_FIRSTCHILD );
-                pChildControl;
-                pChildControl= pChildControl->GetWindow( WINDOW_NEXT )
-            )
-        {
-            if ( &m_aDescription != pChildControl )
-            {
-                Point aPos = pChildControl->GetPosPixel();
-                aPos.Y() -= nMoveUp;
-                pChildControl->SetPosPixel(aPos);
-            }
-        }
-
-        // change our own size accordingly
-        Size aSize = GetSizePixel();
-        aSize.Height() -= nMoveUp;
-        SetSizePixel(aSize);
-    }
-
-    if ( SAD_TITLE_PASTE_AS == ( m_nFlags & SAD_TITLE_PASTE_AS ) )
-        SetText( String( ModuleRes( STR_TITLE_PASTE_AS ) ) );
-
-    m_aPB_OK.SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));
-    m_aTitle.SetModifyHdl(LINK(this,OSaveAsDlg,EditModifyHdl));
-    m_aTitle.GrabFocus();
-    FreeResource();
+    implInit();
+}
+// -----------------------------------------------------------------------------
+OSaveAsDlg::OSaveAsDlg( Window * pParent,
+                        const Reference<XNameAccess>& _rxNames,
+                        const String& rDefault,
+                        const String& _sLabel,
+                        sal_Int32 _nFlags)
+             :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
+             ,m_aDescription(this, ResId (FT_DESCRIPTION))
+             ,m_aCatalogLbl(this, ResId (FT_CATALOG))
+             ,m_aCatalog(this, ResId (ET_CATALOG))
+             ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
+             ,m_aSchema(this, ResId (ET_SCHEMA))
+             ,m_aLabel(this, ResId (FT_TITLE))
+             ,m_aTitle(this, ResId (ET_TITLE))
+             ,m_aPB_OK(this, ResId( PB_OK ) )
+             ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
+             ,m_aPB_HELP(this, ResId( PB_HELP))
+             ,m_aQryLabel(ResId(STR_QRY_LABEL))
+             ,m_sTblLabel(ResId(STR_TBL_LABEL))
+             ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
+             ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
+             ,m_aName(rDefault)
+             ,m_xNames(_rxNames)
+             ,m_nFlags(_nFlags)
+             ,m_nType(CommandType::COMMAND)
+{
+    implInitOnlyTitle(_sLabel);
+    implInit();
+}
+// -----------------------------------------------------------------------------
+OSaveAsDlg::OSaveAsDlg( Window * pParent,
+                        const Reference<XHierarchicalNameAccess>& _rxNames,
+                        const String& rDefault,
+                        const String& _sLabel,
+                        const String& _sParentURL,
+                        sal_Int32 _nFlags)
+             :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
+             ,m_aDescription(this, ResId (FT_DESCRIPTION))
+             ,m_aCatalogLbl(this, ResId (FT_CATALOG))
+             ,m_aCatalog(this, ResId (ET_CATALOG))
+             ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
+             ,m_aSchema(this, ResId (ET_SCHEMA))
+             ,m_aLabel(this, ResId (FT_TITLE))
+             ,m_aTitle(this, ResId (ET_TITLE))
+             ,m_aPB_OK(this, ResId( PB_OK ) )
+             ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
+             ,m_aPB_HELP(this, ResId( PB_HELP))
+             ,m_aQryLabel(ResId(STR_QRY_LABEL))
+             ,m_sTblLabel(ResId(STR_TBL_LABEL))
+             ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
+             ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
+             ,m_aName(rDefault)
+             ,m_xHierarchyNames(_rxNames)
+             ,m_nFlags(_nFlags)
+             ,m_nType(CommandType::COMMAND)
+             ,m_sParentURL(_sParentURL)
+{
+    implInitOnlyTitle(_sLabel);
+    implInit();
 }
 // -----------------------------------------------------------------------------
 
@@ -331,9 +338,20 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
     if (pButton == &m_aPB_OK)
     {
         m_aName = m_aTitle.GetText();
-        sal_Bool bError = m_xNames->hasByName(m_aName);
-        if(m_nType == CommandType::TABLE)
+        sal_Bool bError = sal_False;
+        if ( m_xHierarchyNames.is() )
         {
+            String sTest;
+            if ( m_sParentURL.Len() )
+                sTest = m_sParentURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            sTest += m_aName;
+            bError = m_xHierarchyNames->hasByHierarchicalName(sTest);
+        }
+        else
+            bError = m_xNames->hasByName(m_aName);
+        if ( m_nType == CommandType::TABLE )
+        {
+            OSL_ENSURE(m_xNames.is(),"Who try this one with a hierarchical access!");
             OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
             ::rtl::OUString sComposedName;
             ::dbtools::composeTableName(m_xMetaData,getCatalog(),getSchema(),m_aName,sComposedName,sal_False,::dbtools::eInDataManipulation);
@@ -365,5 +383,73 @@ IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
     return 0;
 }
 // -----------------------------------------------------------------------------
+void OSaveAsDlg::implInitOnlyTitle(const String& _rLabel)
+{
+    m_aLabel.SetText(_rLabel);
+    m_aCatalogLbl.Hide();
+    m_aCatalog.Hide();
+    m_aSchemaLbl.Hide();
+    m_aSchema.Hide();
 
+    Point aPos(m_aSchemaLbl.GetPosPixel());
+    m_aLabel.SetPosPixel(m_aCatalogLbl.GetPosPixel());
+    m_aTitle.SetPosPixel(m_aCatalog.GetPosPixel());
+
+    m_aPB_OK.SetPosPixel(Point(m_aPB_OK.GetPosPixel().X(),aPos.Y()));
+    m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
+    m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
+
+    sal_Int32 nNewHeight =
+        aPos.Y() + m_aPB_OK.GetSizePixel().Height() + m_aTitle.GetSizePixel().Height() / 2;
+
+    SetSizePixel(Size(GetSizePixel().Width(), nNewHeight));
+
+    m_aTitle.SetText(m_aName);
+    m_aTitle.setCheck(sal_False); // enable non valid sql chars as well
+}
+// -----------------------------------------------------------------------------
+void OSaveAsDlg::implInit()
+{
+    if ( 0 == ( m_nFlags & SAD_ADDITIONAL_DESCRIPTION ) )
+    {
+        // hide the description window
+        m_aDescription.Hide();
+
+        // the number of pixels we have to move the other controls
+        sal_Int32 nMoveUp = m_aCatalog.GetPosPixel().Y() - m_aDescription.GetPosPixel().Y();
+
+        // loop to all controls and move them ...
+        for (   Window* pChildControl = GetWindow( WINDOW_FIRSTCHILD );
+                pChildControl;
+                pChildControl= pChildControl->GetWindow( WINDOW_NEXT )
+            )
+        {
+            if ( &m_aDescription != pChildControl )
+            {
+                Point aPos = pChildControl->GetPosPixel();
+                aPos.Y() -= nMoveUp;
+                pChildControl->SetPosPixel(aPos);
+            }
+        }
+
+        // change our own size accordingly
+        Size aSize = GetSizePixel();
+        aSize.Height() -= nMoveUp;
+        SetSizePixel(aSize);
+    }
+
+    if ( SAD_TITLE_PASTE_AS == ( m_nFlags & SAD_TITLE_PASTE_AS ) )
+        SetText( String( ModuleRes( STR_TITLE_PASTE_AS ) ) );
+    else if ( SAD_TITLE_RENAME == ( m_nFlags & SAD_TITLE_RENAME ) )
+    {
+        SetText( String( ModuleRes( STR_TITLE_RENAME ) ) );
+        m_aTitle.SetHelpId(HID_DLG_RENAME);
+    }
+
+    m_aPB_OK.SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));
+    m_aTitle.SetModifyHdl(LINK(this,OSaveAsDlg,EditModifyHdl));
+    m_aTitle.GrabFocus();
+    FreeResource();
+}
+// -----------------------------------------------------------------------------
 
