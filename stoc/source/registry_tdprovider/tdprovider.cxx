@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:33:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,8 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
                                                   aName,
                                                   aBaseTypeNames,
                                                   aOptionalBaseTypeNames,
-                                                  rData ) );
+                                                  rData,
+                                                  aReader.isPublished() ) );
         }
 
         case RT_TYPE_MODULE:
@@ -508,7 +509,8 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
                 }
                 return com::sun::star::uno::Reference< XTypeDescription >(
                     new stoc::registry_tdprovider::StructTypeDescription(
-                        xNameAccess, aName, superTypeName, rData));
+                        xNameAccess, aName, superTypeName, rData,
+                        aReader.isPublished()));
             }
 
         case RT_TYPE_ENUM:
@@ -517,7 +519,7 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
                                              aName,
                                              getRTValueAsInt32(
                                                 aReader.getFieldValue( 0 ) ),
-                                             rData ) );
+                                             rData, aReader.isPublished() ) );
 
         case RT_TYPE_EXCEPTION:
             {
@@ -529,7 +531,7 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
                 return com::sun::star::uno::Reference< XTypeDescription >(
                     new CompoundTypeDescriptionImpl(
                         xNameAccess, TypeClass_EXCEPTION, aName, superTypeName,
-                        rData));
+                        rData, aReader.isPublished()));
             }
 
         case RT_TYPE_TYPEDEF:
@@ -537,21 +539,25 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
                 new TypedefTypeDescriptionImpl( xNameAccess,
                                                 aName,
                                                 aReader.getSuperTypeName(0)
-                                                    .replace( '/', '.' ) ) );
+                                                    .replace( '/', '.' ),
+                                                aReader.isPublished() ) );
         case RT_TYPE_SERVICE:
             return com::sun::star::uno::Reference< XTypeDescription >(
-                new ServiceTypeDescriptionImpl( xNameAccess, aName, rData ) );
+                new ServiceTypeDescriptionImpl(
+                    xNameAccess, aName, rData, aReader.isPublished() ) );
 
         case RT_TYPE_CONSTANTS:
             return com::sun::star::uno::Reference< XTypeDescription >(
-                new ConstantsTypeDescriptionImpl( aName, rData ) );
+                new ConstantsTypeDescriptionImpl(
+                    aName, rData, aReader.isPublished() ) );
 
         case RT_TYPE_SINGLETON:
             return com::sun::star::uno::Reference< XTypeDescription >(
                 new SingletonTypeDescriptionImpl( xNameAccess,
                                                   aName,
                                                   aReader.getSuperTypeName(0)
-                                                    .replace( '/', '.' ) ) );
+                                                    .replace( '/', '.' ),
+                                                  aReader.isPublished() ) );
         case RT_TYPE_INVALID:
         case RT_TYPE_OBJECT:      // deprecated and not used
         case RT_TYPE_UNION:       // deprecated and not used
