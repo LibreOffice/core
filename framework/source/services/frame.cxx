@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:33:19 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,11 +726,14 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     css::uno::Reference< css::frame::XFrame >                 xThis            (static_cast< css::frame::XFrame* >(this)                        , css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory(xSMGR->createInstance(IMPLEMENTATIONNAME_STATUSINDICATORFACTORY), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::lang::XInitialization >         xIndicatorInit   (xIndicatorFactory                                               , css::uno::UNO_QUERY_THROW);
-    css::uno::Sequence< css::uno::Any > lArgs(1);
+    css::uno::Sequence< css::uno::Any > lArgs(2);
     css::beans::NamedValue aArg;
     aArg.Name    = STATUSINDICATORFACTORY_PROPNAME_FRAME;
     aArg.Value <<= xThis;
     lArgs[0]   <<= aArg;
+    aArg.Name    = STATUSINDICATORFACTORY_PROPNAME_ALLOWPARENTSHOW;
+    aArg.Value <<= sal_True;
+    lArgs[1]   <<= aArg;
     xIndicatorInit->initialize(lArgs);
 
     // SAFE -> ----------------------------------
