@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:06:52 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ using namespace ::rtl                           ;
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
 {
     IMP_BMP, IMP_GIF, IMP_PNG,IMP_JPEG, IMP_XBM, IMP_XPM,
-    EXP_BMP, EXP_JPEG, NULL
+    EXP_BMP, EXP_JPEG, EXP_PNG, NULL
 };
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameList[] =
@@ -111,7 +111,7 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameL
 
 const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameList[] =
 {
-    "egi", "epn", "icd", "ipd", "ipx", "ipb", "epb", "epg",
+    "egi", "icd", "ipd", "ipx", "ipb", "epb", "epg",
     "epp", "ira", "era", "itg", "iti", "eti", "exp", NULL
 };
 
@@ -443,7 +443,7 @@ const char* FilterConfigCache::InternalFilterListForSvxLight[] =
     "met","1","ime",
     "met","2","eme",
     "png","1","SVIPNG",
-    "png","2","epn",
+    "png","2","SVEPNG",
     "pct","1","ipt",
     "pct","2","ept",
     "pcd","1","icd",
