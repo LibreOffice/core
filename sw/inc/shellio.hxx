@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ public:
                                     BOOL bNodesArray = TRUE ) const;
 
     // kopiere ggfs. eine lokale Datei ins Internet
-    BOOL CopyLocalFileToINet( String& rFileNm, BOOL bFileToFile=FALSE );
+    BOOL CopyLocalFileToINet( String& rFileNm );
 
     // Stream-spezifische Routinen, im Storage-Writer NICHT VERWENDEN!
 
