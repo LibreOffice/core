@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 09:47:27 $
+#   last change: $Author: rt $ $Date: 2004-08-20 14:11:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ SLOFILES=\
         $(SLO)$/GetModuleFileNameExA.obj\
         $(SLO)$/GetModuleFileNameExW.obj\
         $(SLO)$/GetProcessId.obj\
+        $(SLO)$/GetUserDefaultUILanguage.obj\
         $(SLO)$/GetUserDomainA.obj\
         $(SLO)$/GetUserDomainW.obj\
         $(SLO)$/GetDiskFreeSpaceExA.obj\
