@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-12 08:00:40 $
+ *  last change: $Author: cd $ $Date: 2001-05-15 06:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     Application::PostUserEvent( LINK( this, SfxApplication, OpenClients_Impl ) );
 
-    DELETEZ(pImp->pIntro);
+//  DELETEZ(pImp->pIntro);
 
     // start LateInit
     SfxAppData_Impl *pAppData = Get_Impl();
