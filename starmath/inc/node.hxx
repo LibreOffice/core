@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-20 13:22:10 $
+ *  last change: $Author: tl $ $Date: 2001-10-11 12:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ public:
 
             void ToggleDebug() const;
 
-    void         SetRectHorAlign(RectHorAlign eHorAlign);
+    void         SetRectHorAlign(RectHorAlign eHorAlign, BOOL bApplyToSubTree = TRUE );
     RectHorAlign GetRectHorAlign() const { return eRectHorAlign; }
 
     const SmRect & GetRect() const { return *this; }

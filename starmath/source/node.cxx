@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-05 11:23:06 $
+ *  last change: $Author: tl $ $Date: 2001-10-11 12:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,16 +347,19 @@ void SmNode::SetSize(const Fraction &rSize)
 }
 
 
-void SmNode::SetRectHorAlign(RectHorAlign eHorAlign)
+void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, BOOL bApplyToSubTree )
 {
     if (!(Flags() & FLG_HORALIGN))
         eRectHorAlign = eHorAlign;
 
-    SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
-        if (pNode = GetSubNode(i))
-            pNode->SetRectHorAlign(eHorAlign);
+    if (bApplyToSubTree)
+    {
+        SmNode *pNode;
+        USHORT  nSize = GetNumSubNodes();
+        for (USHORT i = 0; i < nSize; i++)
+            if (pNode = GetSubNode(i))
+                pNode->SetRectHorAlign(eHorAlign);
+    }
 }
 
 
@@ -700,7 +703,6 @@ void SmExpressionNode::CreateTextFromNode(String &rText)
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one column
 {
@@ -831,10 +833,9 @@ void SmExpressionNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
     SmLineNode::Arrange(rDev, rFormat);
 
     //  copy alignment of leftmost subnode if any
-    //! (this assumes its the one with index 0)
-    SmNode *pNode = GetSubNode(0);
+    SmNode *pNode = GetLeftMost();
     if (pNode)
-        SetRectHorAlign(pNode->GetRectHorAlign());
+        SetRectHorAlign(pNode->GetRectHorAlign(), FALSE);
 }
 
 
