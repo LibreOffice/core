@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:40:21 $
+ *  last change: $Author: jp $ $Date: 2000-10-12 12:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,11 +399,15 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
                                                     SID_ATTR_GRAF_CROP ) ) );
 
     bSetOrigSize = FALSE;
+
     // Size
-    const Size& rSize = ((const SvxSizeItem&)rSet.Get(
-                                            SID_ATTR_GRAF_FRMSIZE)).GetSize();
-    nOldWidth = rSize.Width();
-    nOldHeight = rSize.Height();
+    Size aSize;
+    const SfxPoolItem* pItem;
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_FRMSIZE, FALSE, &pItem ) )
+        aSize = ((const SvxSizeItem*)pItem)->GetSize();
+
+    nOldWidth = aSize.Width();
+    nOldHeight = aSize.Height();
 
     long nWidth = aWidthMF.Normalize(nOldWidth);
     long nHeight = aHeightMF.Normalize(nOldHeight);
@@ -435,7 +439,6 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     aHeightMF.SaveValue();
     bInitialized = TRUE;
 
-    const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, FALSE, &pItem ) )
     {
         const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
