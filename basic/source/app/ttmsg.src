@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:19:41 $
+ *  last change: $Author: kz $ $Date: 2001-01-23 13:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ String S_WARNINGS_DETECTED
 {
     Text = "** ($Arg1) Warnungen aufgetreten";
     Text[ english_us ] = "** ($Arg1) warnings occurred";
-    Text[ portuguese ] = "** ($Arg1): erros ocorridos";
+    Text[ portuguese ] = "** ($Arg1): advertências ocorridos";
     Text[ russian ] = "** ($Arg1) warnings occurred";
     Text[ greek ] = "** ($Arg1) warnings occurred";
     Text[ dutch ] = "** ($Arg1) waarschuwingen weergegeven";
@@ -561,7 +561,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
 {
     Text = "Returnwert Empfangen aber andere Id erwartet";
     Text[ english_us ] = "Return value received but different Id expected";
-    Text[ portuguese ] = "Recebido o valor Return, mas espera-se outro ID";
+    Text[ portuguese ] = "Recebido o valor Return, mas é necessário outro ID";
     Text[ russian ] = "Return value received but different Id expected";
     Text[ greek ] = "Return value received but different Id expected";
     Text[ dutch ] = "Retourwaarde ontvangen echter andere Id verwacht";
