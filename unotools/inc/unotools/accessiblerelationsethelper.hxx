@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblerelationsethelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-05 16:33:03 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 12:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ class AccessibleRelationSetHelper
 public:
     //=====  internal  ========================================================
     AccessibleRelationSetHelper ();
+    AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper);
 protected:
     virtual ~AccessibleRelationSetHelper    (void);
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblerelationsethelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-05 16:37:45 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 12:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ class AccessibleRelationSetHelperImpl
 {
 public:
     AccessibleRelationSetHelperImpl();
+    AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl);
     ~AccessibleRelationSetHelperImpl();
 
     sal_Int32 getRelationCount(  )
@@ -95,6 +96,11 @@ private:
 };
 
 AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl()
+{
+}
+
+AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl)
+    : maRelations(rImpl.maRelations)
 {
 }
 
@@ -163,6 +169,14 @@ AccessibleRelationSetHelper::AccessibleRelationSetHelper ()
     mpHelperImpl = new AccessibleRelationSetHelperImpl();
 }
 
+AccessibleRelationSetHelper::AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper)
+    : mpHelperImpl(NULL)
+{
+    if (rHelper.mpHelperImpl)
+        mpHelperImpl = new AccessibleRelationSetHelperImpl(*rHelper.mpHelperImpl);
+    else
+        mpHelperImpl = new AccessibleRelationSetHelperImpl();
+}
 
 AccessibleRelationSetHelper::~AccessibleRelationSetHelper(void)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:29:29 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 12:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ class AccessibleStateSetHelperImpl
 {
 public:
     AccessibleStateSetHelperImpl();
+    AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl);
     ~AccessibleStateSetHelperImpl();
 
     sal_Bool IsEmpty ()
@@ -102,6 +103,11 @@ private:
 };
 
 AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl()
+{
+}
+
+AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl)
+    : maStates(rImpl.maStates)
 {
 }
 
@@ -162,6 +168,14 @@ AccessibleStateSetHelper::AccessibleStateSetHelper ()
     mpHelperImpl = new AccessibleStateSetHelperImpl();
 }
 
+AccessibleStateSetHelper::AccessibleStateSetHelper (const AccessibleStateSetHelper& rHelper)
+    : mpHelperImpl(NULL)
+{
+    if (rHelper.mpHelperImpl)
+        mpHelperImpl = new AccessibleStateSetHelperImpl(*rHelper.mpHelperImpl);
+    else
+        mpHelperImpl = new AccessibleStateSetHelperImpl();
+}
 
 AccessibleStateSetHelper::~AccessibleStateSetHelper(void)
 {

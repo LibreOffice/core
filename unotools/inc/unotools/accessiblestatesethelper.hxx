@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 11:00:12 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 12:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ class AccessibleStateSetHelper
 public:
     //=====  internal  ========================================================
     AccessibleStateSetHelper ();
+    AccessibleStateSetHelper ( const AccessibleStateSetHelper& rHelper );
 protected:
     virtual ~AccessibleStateSetHelper   (void);
 public:
