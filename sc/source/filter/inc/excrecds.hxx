@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-22 14:55:27 $
+ *  last change: $Author: gt $ $Date: 2000-11-30 13:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,7 +862,7 @@ inline BOOL ExcName::IsDummy( void ) const
 
 //--------------------------------------------------------- class ExcNameList -
 
-class ExcNameList : public ExcEmptyRec, private List
+class ExcNameList : public ExcRecord, private List
 {
 private:
     inline ExcNameListEntry*    _First()    { return (ExcNameListEntry*) List::First(); }
