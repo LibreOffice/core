@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:19:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ typedef struct {
 } Hangul_Index;
 
 //  ----------------------------------------------------
-//  class TextConversion
+//  class TextConversion_ko
 //  ----------------------------------------------------
 class TextConversion_ko : public TextConversion
 {
@@ -161,6 +161,48 @@ private :
         com::sun::star::uno::Reference < com::sun::star::linguistic2::XConversionDictionaryList > xCDL;
         sal_Int32 maxLeftLength;
         sal_Int32 maxRightLength;
+};
+
+//  ----------------------------------------------------
+//  class TextConversion_zh
+//  ----------------------------------------------------
+
+// for SChines/TChinese word conversion
+typedef struct {
+    sal_uInt16 start;
+    sal_Int16 count;
+} STC_WordIndex;
+
+class TextConversion_zh : public TextConversion
+{
+public:
+    TextConversion_zh( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+
+        // Methods
+        com::sun::star::i18n::TextConversionResult SAL_CALL
+        getConversions( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions )
+            throw(  com::sun::star::uno::RuntimeException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::NoSupportException );
+        rtl::OUString SAL_CALL
+        getConversion( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions )
+            throw(  com::sun::star::uno::RuntimeException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::NoSupportException );
+        sal_Bool SAL_CALL
+        interactiveConversion(const ::com::sun::star::lang::Locale& aLocale,
+            sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions )
+            throw(  com::sun::star::uno::RuntimeException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::NoSupportException );
+private :
+        // user defined dictionary list
+        com::sun::star::uno::Reference < com::sun::star::linguistic2::XConversionDictionaryList > xCDL;
 };
 
 } // i18n
