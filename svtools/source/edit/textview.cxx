@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-26 12:46:01 $
+ *  last change: $Author: tbe $ $Date: 2002-04-29 15:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
             {
-                if ( !rKeyEvent.GetKeyCode().IsMod2() )
+                if ( !rKeyEvent.GetKeyCode().IsMod2() && !( rKeyEvent.GetKeyCode().IsMod1() && ( nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN ) ) )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
                     if ( aCurSel.HasRange() ) {
@@ -693,6 +693,8 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                     if ( nCode == KEY_END )
                         bEndKey = TRUE;
                 }
+                else
+                    bDone = FALSE;
             }
             break;
             case KEY_BACKSPACE:
