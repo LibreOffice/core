@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
+ *  last change: $Author: mib $ $Date: 2000-09-27 14:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,7 +828,7 @@ XMLParaContext::~XMLParaContext()
     Reference < XTextRange > xEnd = xTxtImport->GetCursorAsRange()->getStart();
 
     // insert a paragraph break
-    xTxtImport->InsertControlCharacter( ControlCharacter::PARAGRAPH_BREAK );
+    xTxtImport->InsertControlCharacter( ControlCharacter::APPEND_PARAGRAPH );
 
     // create a cursor that select the whole last paragraph
     Reference < XTextCursor > xAttrCursor=
