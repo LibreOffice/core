@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #ifndef _TOOLS_INTN_HXX //autogen wg. International
 #include <tools/intn.hxx>
 #endif
+#include <unotools/localedatawrapper.hxx>
 
 #include "global.hxx"
 #include "globstr.hrc"
@@ -129,7 +130,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aFtPrec         ( this, ScResId( FT_PREC ) ),
         aEdPrec         ( this, ScResId( ED_PREC ) ),
 
-        cDecSep         ( ScGlobal::pScInternational->GetNumDecimalSep() ),
+        aDecSep         ( ScGlobal::pLocaleData->getNumDecimalSep() ),
         nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) ),
         pOldOptions     ( new ScDocOptions(
                             ((const ScTpCalcItem&)rCoreAttrs.Get(
@@ -184,7 +185,7 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& rCoreAttrs )
     *pLocalOptions  = *pOldOptions;
 
     SolarMath::DoubleToString( aStrBuf, pLocalOptions->GetIterEps(),
-        'G', 6, cDecSep, TRUE );
+        'G', 6, aDecSep.GetChar(0), TRUE );
 
     aBtnCase   .Check( !pLocalOptions->IsIgnoreCase() );
     aBtnCalc   .Check( pLocalOptions->IsCalcAsShown() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-15 16:27:14 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,15 +675,12 @@ sal_Int32 ScXMLTableRowCellContext::SetCurrencySymbol(const sal_Int32 nKey)
                         lang::Locale aLocale;
                         if (aAny >>= aLocale)
                         {
-                            LanguageType aLanguageType = ConvertIsoNamesToLanguage(aLocale.Language, aLocale.Country);
-                            International aInt(aLanguageType);
-                            sal_Unicode aDecimalSep = aInt.GetNumDecimalSep();
-                            sal_Unicode aThousandSep = aInt.GetNumThousandSep();
+                            LocaleDataWrapper aLocaleData( GetScImport().GetDocument()->GetServiceManager(), aLocale );
                             rtl::OUStringBuffer aBuffer(15);
                             aBuffer.appendAscii("#");
-                            aBuffer.append(aThousandSep);
+                            aBuffer.append( aLocaleData.getNumThousandSep() );
                             aBuffer.appendAscii("##0");
-                            aBuffer.append(aDecimalSep);
+                            aBuffer.append( aLocaleData.getNumDecimalSep() );
                             aBuffer.appendAscii("00 [$");
                             aBuffer.append(sCurrencySymbol);
                             aBuffer.appendAscii("]");

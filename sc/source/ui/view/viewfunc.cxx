@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:50:11 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2409,14 +2409,10 @@ void ScViewFunc::ChangeNumFmtDecimals( BOOL bIncrement )
             bError = TRUE;                              // Exponential nicht veraendern
         else
         {
-            sal_Unicode cDecSep;
-            if ( eLanguage == ScGlobal::pScInternational->GetLanguage() )
-                cDecSep = ScGlobal::pScInternational->GetNumDecimalSep();
-            else
-                cDecSep = International(eLanguage).GetNumDecimalSep();
-            xub_StrLen nPos = aOut.Search( cDecSep );
+            String aDecSep( pFormatter->GetFormatDecimalSep( nOldFormat ) );
+            xub_StrLen nPos = aOut.Search( aDecSep );
             if ( nPos != STRING_NOTFOUND )
-                nPrecision = aOut.Len() - nPos - 1;
+                nPrecision = aOut.Len() - nPos - aDecSep.Len();
             // sonst 0 behalten
         }
     }

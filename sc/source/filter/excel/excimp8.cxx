@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-01-23 09:50:51 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/solmath.hxx>
+
+#include <unotools/localedatawrapper.hxx>
 
 #ifndef SC_DRWLAYER_HXX
 #include <drwlayer.hxx>
@@ -3248,7 +3250,7 @@ AutoFilterData::AutoFilterData( RootData* pRoot, const ScRange& rRange, const St
 void AutoFilterData::CreateFromDouble( String& rStr, double fVal )
 {
     SolarMath::DoubleToString( rStr, fVal, 'A', INT_MAX,
-        ScGlobal::pScInternational->GetNumDecimalSep(), TRUE );
+        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE );
 }
 
 void AutoFilterData::SetCellAttribs()

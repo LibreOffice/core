@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 16:43:34 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,7 +853,7 @@ BOOL ScCompiler::IsReference( const String& rName )
     // englisches 1.E2 oder 1.E+2 ist wiederum Zahl 100, 1.E-2 ist 0,01
     sal_Unicode ch1 = rName.GetChar(0);
     sal_Unicode cDecSep = ( pSymbolTable == pSymbolTableEnglish ? '.' :
-        ScGlobal::pScInternational->GetNumDecimalSep() );
+        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0) );
     if ( ch1 == cDecSep )
         return FALSE;
     BOOL bMyAlpha;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/zforlist.hxx>
 #include <tools/intn.hxx>
-#include <segmentc.hxx>
 
 #include "scitems.hxx"
 #include "column.hxx"
@@ -93,9 +92,6 @@ extern const ScFormulaCell* pLastFormulaTreeTop;    // in cellform.cxx
 
 BOOL ScColumn::bDoubleAlloc = FALSE;    // fuer Import: Groesse beim Allozieren verdoppeln
 
-SEG_EOFGLOBALS()
-
-#pragma SEG_FUNCDEF(column3_01)
 
 void ScColumn::Insert( USHORT nRow, ScBaseCell* pNewCell )
 {
@@ -186,7 +182,6 @@ void ScColumn::Insert( USHORT nRow, ScBaseCell* pNewCell )
     }
 }
 
-#pragma SEG_FUNCDEF(column3_02)
 
 void ScColumn::Insert( USHORT nRow, ULONG nNumberFormat, ScBaseCell* pCell )
 {
@@ -200,7 +195,6 @@ void ScColumn::Insert( USHORT nRow, ULONG nNumberFormat, ScBaseCell* pCell )
         ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT, (UINT32) nNumberFormat) );
 }
 
-#pragma SEG_FUNCDEF(column3_03)
 
 void ScColumn::Append( USHORT nRow, ScBaseCell* pCell )
 {
@@ -233,7 +227,6 @@ void ScColumn::Append( USHORT nRow, ScBaseCell* pCell )
     ++nCount;
 }
 
-#pragma SEG_FUNCDEF(column3_04)
 
 void ScColumn::Delete( USHORT nRow )
 {
@@ -266,7 +259,6 @@ void ScColumn::Delete( USHORT nRow )
     }
 }
 
-#pragma SEG_FUNCDEF(column3_05)
 
 void ScColumn::DeleteAtIndex( USHORT nIndex )
 {
@@ -284,7 +276,6 @@ void ScColumn::DeleteAtIndex( USHORT nIndex )
     pCell->Delete();
 }
 
-#pragma SEG_FUNCDEF(column3_06)
 
 void ScColumn::FreeAll()
 {
@@ -299,7 +290,6 @@ void ScColumn::FreeAll()
     nLimit = 0;
 }
 
-#pragma SEG_FUNCDEF(column3_07)
 
 void ScColumn::DeleteRow( USHORT nStartRow, USHORT nSize )
 {
@@ -379,7 +369,6 @@ void ScColumn::DeleteRow( USHORT nStartRow, USHORT nSize )
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
-#pragma SEG_FUNCDEF(column3_08)
 
 void ScColumn::DeleteRange( USHORT nStartIndex, USHORT nEndIndex, USHORT nDelFlag )
 {
@@ -548,7 +537,6 @@ void ScColumn::DeleteRange( USHORT nStartIndex, USHORT nEndIndex, USHORT nDelFla
     delete ppDelCells;
 }
 
-#pragma SEG_FUNCDEF(column3_09)
 
 void ScColumn::DeleteArea(USHORT nStartRow, USHORT nEndRow, USHORT nDelFlag)
 {
@@ -593,7 +581,6 @@ void ScColumn::DeleteArea(USHORT nStartRow, USHORT nEndRow, USHORT nDelFlag)
     else if ((nDelFlag & IDF_ATTRIB) != 0) pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
 }
 
-#pragma SEG_FUNCDEF(column3_26)
 
 ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& rDestPos,
                                             USHORT nIndex, USHORT nFlags ) const
@@ -655,7 +642,6 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
     return new ScFormulaCell( pDestDoc, rDestPos, &aArr );
 }
 
-#pragma SEG_FUNCDEF(column3_0a)
 
 //  rColumn = Quelle
 //  nRow1, nRow2 = Zielposition
@@ -738,7 +724,6 @@ void ScColumn::CopyFromClip(USHORT nRow1, USHORT nRow2, short nDy,
     }
 }
 
-#pragma SEG_FUNCDEF(column3_1e)
 
     //  Formelzellen werden jetzt schon hier kopiert,
     //  Notizen muessen aber evtl. noch geloescht werden
@@ -855,7 +840,6 @@ ScBaseCell* ScColumn::CloneCell(USHORT nIndex, USHORT nFlags,
     return pNew;
 }
 
-#pragma SEG_FUNCDEF(column3_27)
 
 void ScColumn::MixMarked( const ScMarkData& rMark, USHORT nFunction,
                             BOOL bSkipEmpty, ScColumn& rSrcCol )
@@ -870,7 +854,6 @@ void ScColumn::MixMarked( const ScMarkData& rMark, USHORT nFunction,
     }
 }
 
-#pragma SEG_FUNCDEF(column3_23)
 
 //  Ergebnis in rVal1
 
@@ -896,7 +879,6 @@ BOOL lcl_DoFunction( double& rVal1, double nVal2, USHORT nFunction )
     return bOk;
 }
 
-#pragma SEG_FUNCDEF(column3_24)
 
 void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
 {
@@ -916,7 +898,6 @@ void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
     rArr.AddOpCode(ocClose);
 }
 
-#pragma SEG_FUNCDEF(column3_22)
 
 void ScColumn::MixData( USHORT nRow1, USHORT nRow2,
                             USHORT nFunction, BOOL bSkipEmpty,
@@ -1093,14 +1074,12 @@ void ScColumn::MixData( USHORT nRow1, USHORT nRow2,
     }
 }
 
-#pragma SEG_FUNCDEF(column3_25)
 
 ScAttrIterator* ScColumn::CreateAttrIterator( USHORT nStartRow, USHORT nEndRow ) const
 {
     return new ScAttrIterator( pAttrArray, nStartRow, nEndRow );
 }
 
-#pragma SEG_FUNCDEF(column3_1b)
 
 void ScColumn::StartAllListeners()
 {
@@ -1118,7 +1097,6 @@ void ScColumn::StartAllListeners()
         }
 }
 
-#pragma SEG_FUNCDEF(column3_1d)
 
 void ScColumn::StartRelNameListeners()
 {
@@ -1136,7 +1114,6 @@ void ScColumn::StartRelNameListeners()
         }
 }
 
-#pragma SEG_FUNCDEF(column3_1a)
 
 void ScColumn::BroadcastInArea( USHORT nRow1, USHORT nRow2 )
 {
@@ -1157,7 +1134,6 @@ void ScColumn::BroadcastInArea( USHORT nRow1, USHORT nRow2 )
     }
 }
 
-#pragma SEG_FUNCDEF(column3_1c)
 
 void ScColumn::StartListeningInArea( USHORT nRow1, USHORT nRow2 )
 {
@@ -1177,7 +1153,6 @@ void ScColumn::StartListeningInArea( USHORT nRow1, USHORT nRow2 )
     }
 }
 
-#pragma SEG_FUNCDEF(column3_0b)
 
 //  TRUE = Zahlformat gesetzt
 BOOL ScColumn::SetString( USHORT nRow, USHORT nTab, const String& rString )
@@ -1336,7 +1311,6 @@ BOOL ScColumn::SetString( USHORT nRow, USHORT nTab, const String& rString )
     return bNumFmtSet;
 }
 
-#pragma SEG_FUNCDEF(column3_0c)
 
 void ScColumn::GetFilterEntries(USHORT nStartRow, USHORT nEndRow, TypedStrCollection& rStrings)
 {
@@ -1394,7 +1368,6 @@ void ScColumn::GetFilterEntries(USHORT nStartRow, USHORT nEndRow, TypedStrCollec
 #define DATENT_MAX      200
 #define DATENT_SEARCH   2000
 
-#pragma SEG_FUNCDEF(column3_1f)
 
 BOOL ScColumn::GetDataEntries(USHORT nStartRow, TypedStrCollection& rStrings, BOOL bLimit)
 {
@@ -1473,7 +1446,6 @@ BOOL ScColumn::GetDataEntries(USHORT nStartRow, TypedStrCollection& rStrings, BO
 #undef DATENT_MAX
 #undef DATENT_SEARCH
 
-#pragma SEG_FUNCDEF(column3_0d)
 
 void ScColumn::RemoveProtected( USHORT nStartRow, USHORT nEndRow )
 {
@@ -1516,7 +1488,6 @@ void ScColumn::RemoveProtected( USHORT nStartRow, USHORT nEndRow )
     }
 }
 
-#pragma SEG_FUNCDEF(column3_0e)
 
 void ScColumn::SetError( USHORT nRow, const USHORT nError)
 {
@@ -1529,7 +1500,6 @@ void ScColumn::SetError( USHORT nRow, const USHORT nError)
     }
 }
 
-#pragma SEG_FUNCDEF(column3_0f)
 
 void ScColumn::SetValue( USHORT nRow, const double& rVal)
 {
@@ -1540,7 +1510,6 @@ void ScColumn::SetValue( USHORT nRow, const double& rVal)
     }
 }
 
-#pragma SEG_FUNCDEF(column3_10)
 
 void ScColumn::SetNote( USHORT nRow, const ScPostIt& rNote)
 {
@@ -1562,7 +1531,6 @@ void ScColumn::SetNote( USHORT nRow, const ScPostIt& rNote)
     }
 }
 
-#pragma SEG_FUNCDEF(column3_11)
 
 void ScColumn::GetString( USHORT nRow, String& rString ) const
 {
@@ -1583,7 +1551,6 @@ void ScColumn::GetString( USHORT nRow, String& rString ) const
         rString.Erase();
 }
 
-#pragma SEG_FUNCDEF(column3_12)
 
 void ScColumn::GetInputString( USHORT nRow, String& rString ) const
 {
@@ -1603,7 +1570,6 @@ void ScColumn::GetInputString( USHORT nRow, String& rString ) const
         rString.Erase();
 }
 
-#pragma SEG_FUNCDEF(column3_13)
 
 double ScColumn::GetValue( USHORT nRow ) const
 {
@@ -1632,7 +1598,6 @@ double ScColumn::GetValue( USHORT nRow ) const
     return 0.0;
 }
 
-#pragma SEG_FUNCDEF(column3_14)
 
 void ScColumn::GetFormula( USHORT nRow, String& rFormula, BOOL ) const
 {
@@ -1649,7 +1614,6 @@ void ScColumn::GetFormula( USHORT nRow, String& rFormula, BOOL ) const
         rFormula.Erase();
 }
 
-#pragma SEG_FUNCDEF(column3_15)
 
 BOOL ScColumn::GetNote( USHORT nRow, ScPostIt& rNote) const
 {
@@ -1663,7 +1627,6 @@ BOOL ScColumn::GetNote( USHORT nRow, ScPostIt& rNote) const
     return bHasNote;
 }
 
-#pragma SEG_FUNCDEF(column3_28)
 
 CellType ScColumn::GetCellType( USHORT nRow ) const
 {
@@ -1673,7 +1636,6 @@ CellType ScColumn::GetCellType( USHORT nRow ) const
     return CELLTYPE_NONE;
 }
 
-#pragma SEG_FUNCDEF(column3_29)
 
 USHORT ScColumn::GetErrCode( USHORT nRow ) const
 {
@@ -1687,7 +1649,6 @@ USHORT ScColumn::GetErrCode( USHORT nRow ) const
     return 0;
 }
 
-#pragma SEG_FUNCDEF(column3_18)
 
 BOOL ScColumn::HasStringData( USHORT nRow ) const
 {
@@ -1697,7 +1658,6 @@ BOOL ScColumn::HasStringData( USHORT nRow ) const
     return FALSE;
 }
 
-#pragma SEG_FUNCDEF(column3_19)
 
 BOOL ScColumn::HasValueData( USHORT nRow ) const
 {
@@ -1726,7 +1686,6 @@ BOOL ScColumn::HasStringCells( USHORT nStartRow, USHORT nEndRow ) const
     return FALSE;
 }
 
-#pragma SEG_FUNCDEF(column3_20)
 
 xub_StrLen ScColumn::GetMaxStringLen( USHORT nRowStart, USHORT nRowEnd ) const
 {
@@ -1756,7 +1715,6 @@ xub_StrLen ScColumn::GetMaxStringLen( USHORT nRowStart, USHORT nRowEnd ) const
     return nStringLen;
 }
 
-#pragma SEG_FUNCDEF(column3_21)
 
 xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
         USHORT nRowStart, USHORT nRowEnd ) const
@@ -1767,7 +1725,6 @@ xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
     {
         String aString;
         SvNumberFormatter* pNumFmt = pDocument->GetFormatTable();
-        sal_Unicode cDecSep = ScGlobal::pScInternational->GetNumDecimalSep();
         USHORT nIndex, nRow;
         Search( nRowStart, nIndex );
         while ( nIndex < nCount && (nRow = pItems[nIndex].nRow) <= nRowEnd )
@@ -1784,26 +1741,26 @@ xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
                 if ( nLen )
                 {
                     if ( nFormat )
-                    {   // mehr Nachkommastellen als Standard?
+                    {   // more decimals than standard?
                         USHORT nPrec = pNumFmt->GetFormatPrecision( nFormat );
                         if ( nPrec > nPrecision )
                             nPrecision = nPrec;
                     }
                     if ( nPrecision )
-                    {   // falls im String zuwenig Nachkommas => verbreitern
-                        // falls zuviel => kuerzen
-                        xub_StrLen nToken = aString.GetTokenCount( cDecSep );
-                        xub_StrLen nPrecLen = nPrecision;
-                        if ( nToken > 1 )
-                        {
-                            String aTmp( aString.GetToken( nToken - 1, cDecSep ) );
-                            if ( aTmp.Len() != nPrecLen )
-                                nLen += nPrecLen - aTmp.Len();
-                                // nPrecision > aTmp.Len() : nLen + Diff
-                                // nPrecision < aTmp.Len() : nLen - Diff
-                        }
+                    {   // less than nPrecision in string => widen it
+                        // more => shorten it
+                        String aSep = pNumFmt->GetFormatDecimalSep( nFormat );
+                        xub_StrLen nTmp = aString.Search( aSep );
+                        if ( nTmp == STRING_NOTFOUND )
+                            nLen += nPrecision + aSep.Len();
                         else
-                            nLen += nPrecLen + 1;
+                        {
+                            nTmp = aString.Len() - (nTmp + aSep.Len());
+                            if ( nTmp != nPrecision )
+                                nLen += nPrecision - nTmp;
+                                // nPrecision > nTmp : nLen + Diff
+                                // nPrecision < nTmp : nLen - Diff
+                        }
                     }
                     if ( nStringLen < nLen )
                         nStringLen = nLen;
@@ -1814,320 +1771,4 @@ xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
     }
     return nStringLen;
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.100  2000/09/17 14:08:35  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.99  2000/08/31 16:37:56  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.98  2000/04/10 17:02:18  nn
-    unicode changes
-
-    Revision 1.97  1999/07/28 12:21:10  ER
-    #67776# DeleteRange: discard all broadcasters of deleted cells prior to broadcasting
-
-
-      Rev 1.96   28 Jul 1999 14:21:10   ER
-   #67776# DeleteRange: discard all broadcasters of deleted cells prior to broadcasting
-
-      Rev 1.95   22 Jun 1999 16:57:04   ER
-   #66563# GetFilterEntries: GetInputString instead of GetString
-
-      Rev 1.94   23 Oct 1998 09:47:00   NN
-   #58367# GetDataEntries auch ueber Luecken hinweg, HasStringData
-
-      Rev 1.93   13 Jul 1998 21:50:20   NN
-   #52337# ScBroadcasterList statt SfxBroadcaster an der Zelle
-
-      Rev 1.92   06 Jul 1998 20:56:10   ER
-   #41640# SetString: bei Import direktes Append
-
-      Rev 1.91   02 Jul 1998 21:05:08   ER
-   #43509# EditCells mit EditPool
-
-      Rev 1.90   22 Jun 1998 21:17:42   NN
-   Delete/DeleteAtIndex: EndListeningTo
-
-      Rev 1.89   08 Jun 1998 16:37:42   ER
-   SetString: einzelnes '=' ist keine Formel
-
-      Rev 1.88   27 May 1998 18:00:52   NN
-   #50580# CopyFromClip: End-Zeile richtig abfragen
-
-      Rev 1.87   05 May 1998 17:19:06   NN
-   #48491# CloneCell: Wert aus Formel nicht in Undo-Dokument
-
-      Rev 1.86   19 Mar 1998 19:13:32   NN
-   #47901# DeleteArea: Attribute erst hinterher
-
-      Rev 1.85   04 Dec 1997 22:08:16   NN
-   includes
-
-      Rev 1.84   13 Nov 1997 20:55:26   NN
-   ifndef PCH raus
-
-      Rev 1.83   07 Nov 1997 18:07:16   ER
-   #45417# SetString: NumberformatIndex mit GetNumberFormat holen statt GetAttr
-
-      Rev 1.82   13 Oct 1997 15:32:10   NN
-   DeleteArea: ggf. RemoveEditAttribs aufrufen
-
-      Rev 1.81   07 Oct 1997 14:46:18   ER
-   #43940# DeleteRow: Quelle und Ziel broadcasten; Search eingebaut
-
-      Rev 1.80   01 Oct 1997 19:51:28   NN
-   alte includes raus
-
-      Rev 1.79   21 Jul 1997 17:21:54   ER
-   Insert: EndListening wenn bestehende Formelzelle ersetzt wird
-
-      Rev 1.78   10 Jul 1997 16:06:04   NN
-   #41542# Formelzellen und Fehler in Formeln bei CloneCell
-
-      Rev 1.77   07 Jul 1997 12:57:32   ER
-   SetString: uninitialized nIndex,nOldIndex bei bIsLoading in erster Zeile
-
-      Rev 1.76   18 Jun 1997 13:20:38   ER
-   SetString: bei IsLoading pruefen, ob letzte Zellen gleichen
-   String enthalten und NumberScanner einsparen
-
-      Rev 1.75   10 Jun 1997 18:40:36   ER
-   SetString: nur eine Ziffer ist auch Zahl
-
-      Rev 1.74   09 Jun 1997 16:54:54   ER
-   opt: SetString: bei IsLoading (ConvertFrom Import) keine NumberFormate holen
-
-      Rev 1.73   18 Apr 1997 19:10:12   ER
-   Delete: Broadcaster stehenlassen
-
-      Rev 1.72   10 Apr 1997 14:18:30   NN
-   #38648# Insert: Notizen stehenlassen
-
-      Rev 1.71   03 Mar 1997 10:53:44   NN
-   #35892# DeleteRange: Value/DateTime Abfrage richtig
-
-      Rev 1.70   17 Feb 1997 18:51:26   NN
-   TypedStrData: nStrType statt bIsString
-
-      Rev 1.69   10 Jan 1997 17:29:10   ER
-   GetErrCode, GetValue non-pascal
-
-      Rev 1.68   09 Jan 1997 20:04:40   ER
-   new: GetCellType, GetErrCode non-pascal
-
-      Rev 1.67   08 Jan 1997 20:11:14   ER
-   ScAddress als Reference (keine temporaeren Objekte ohne inlining)
-
-      Rev 1.66   19 Dec 1996 12:47:00   NN
-   SetString: TRUE zurueck, wenn Zahlformat gesetzt
-
-      Rev 1.65   06 Dec 1996 18:46:54   NN
-   #34142# CopyFromClip: Resize nur bei grossen Bloecken
-
-      Rev 1.64   27 Nov 1996 20:13:50   NN
-   #33572# beim Loeschen von Notizen auch Zeichenobjekte loeschen
-
-      Rev 1.63   12 Nov 1996 19:21:16   ER
-   #33224# CloneCell: LeerStrings nicht kopieren
-
-      Rev 1.62   01 Nov 1996 09:27:02   TRI
-   scitems.hxx included
-
-      Rev 1.61   10 Oct 1996 19:54:56   RJ
-   Eingabe mit ' am Anfang => String
-
-      Rev 1.60   04 Sep 1996 20:35:18   NN
-   CopyFromClip/bAsLink: bei IDF_ALL auch leere, sonst keine NoteCells
-
-      Rev 1.59   19 Aug 1996 21:23:48   NN
-   Markierungen werden nicht mehr am Dokument gehalten
-
-      Rev 1.58   06 Aug 1996 16:59:14   ER
-   new: Numberformat LanguageItem
-
-      Rev 1.57   04 Jun 1996 13:27:24   ER
-   GetMaxNumberStringLen: GetInputString statt GetString, und nur wenn Value
-
-      Rev 1.56   23 May 1996 19:37:34   NN
-   #27994# MixData: Source-Index auch von der Source-Spalte holen
-
-      Rev 1.55   21 May 1996 15:55:04   NN
-   Parameter bLimit bei GetDataEntries
-
-      Rev 1.54   20 May 1996 17:54:24   ER
-   again: StartRelNameListeners, SetRelNameDirty
-
-      Rev 1.53   15 May 1996 18:21:58   ER
-   chg: StartListeningFromClip --> StartListeningInArea
-     BroadcastFromClip --> BroadcastInArea
-
-      Rev 1.52   15 May 1996 17:00:12   ER
-   StartListeningFromClip, BroadcastFromClip:
-   Bloecke durchlaufen statt einzeln Search
-
-      Rev 1.51   14 May 1996 16:03:50   ER
-   del: HasRelNameReference, StartRelNameListeners, SetRelNameDirty
-
-      Rev 1.50   13 May 1996 14:08:32   NN
-   MixMarked, nStartIndex suchen bei MixData
-
-      Rev 1.49   10 May 1996 16:44:36   NN
-   Verknuepfen aus dem Clipboard
-
-      Rev 1.48   09 May 1996 10:37:12   ER
-   GetFormatSpecialInfo --> GetFormatPrecision
-
-      Rev 1.47   08 May 1996 08:44:30   NN
-   MixData, CreateAttrIterator
-
-      Rev 1.46   06 May 1996 12:51:46   ER
-   new: GetMaxStringLen, GetMaxNumberStringLen
-
-      Rev 1.45   03 May 1996 18:16:58   NN
-   GetDataEntries
-
-      Rev 1.44   22 Apr 1996 16:35:40   NN
-   DeleteRange: Abfrage auf IDF_DATETIME/IDF_VALUE richtig
-
-      Rev 1.43   19 Apr 1996 17:24:20   NN
-   nicht unnoetig GetPattern rufen
-
-      Rev 1.42   27 Mar 1996 12:27:30   ER
-   sv.hxx --> svgen.hxx
-
-      Rev 1.41   11 Mar 1996 14:34:54   ER
-   new: ScBaseCell HasValueData / HasStringData
-
-      Rev 1.40   01 Mar 1996 09:23:46   NN
-   Zelltyp-Abfrage von CopyFromClip nach CloneCell
-
-      Rev 1.39   12 Feb 1996 15:58:04   NN
-   wenn bDoubleAlloc gesetzt, Array fuer neue Zellen verdoppeln
-
-      Rev 1.38   10 Feb 1996 22:13:24   ER
-   #24719# ein weiterer Err527 Workaround
-        greift jetzt auch bei zweimal gleicher Zelle editiert
-
-      Rev 1.37   26 Jan 1996 12:16:26   ER
-   SetString: Index nach EndListening ggbf. wiederfinden
-
-      Rev 1.36   25 Jan 1996 17:51:06   ER
-   SetString: EndListening der alten Zelle
-
-      Rev 1.35   11 Jan 1996 23:18:20   ER
-   #23621# #23851# referierter Bereich geloescht => ungueltige Referenz
-
-      Rev 1.34   11 Jan 1996 01:47:16   ER
-   #23721# benannte Bereiche mit relativen Referenzen
-
-      Rev 1.33   21 Dec 1995 15:21:14   ER
-   DeleteRow: Formelzelle aPos anpassen
-
-      Rev 1.32   20 Dec 1995 20:58:56   ER
-   add: StartListeningFromClip, BroadcastFromClip
-
-      Rev 1.31   16 Dec 1995 22:53:32   ER
-   #23562 DeleteRange: Broadcaster kann durch EndListening zerstoert sein
-
-      Rev 1.30   15 Dec 1995 03:02:40   ER
-   ForgetBroadcaster erst nach Broadcast
-
-      Rev 1.29   14 Dec 1995 16:17:44   ER
-   StarAllListeners: Index wiederfinden falls Listener eingefuegt
-
-      Rev 1.28   13 Dec 1995 13:37:06   ER
-   default ist jetzt bNoSetDirty==TRUE (wg. IterCircRef)
-
-      Rev 1.27   06 Dec 1995 16:19:02   ER
-   del: StartListeningFromClip, add: StartAllListeners
-
-      Rev 1.26   06 Dec 1995 12:46:34   NN
-   bei SetString keine Formate mehr fuer Formeln setzen
-
-      Rev 1.25   05 Dec 1995 20:29:08   ER
-   Dummy NoteCell fuer Interpret in Broacast bei Delete
-
-      Rev 1.24   05 Dec 1995 16:36:34   ER
-   bCalcingAfterLoad in Insert fuer NoteCell
-
-      Rev 1.23   05 Dec 1995 10:35:22   ER
-   NoteCells broadcasten nicht beim Insert => Dok laedt schneller
-
-      Rev 1.22   01 Dec 1995 14:26:50   NN
-   DeleteRange: Formelzellen spaeter loeschen wegen EndListening
-
-      Rev 1.21   28 Nov 1995 22:17:22   ER
-   chg: Insert ohne bFromClip
-
-      Rev 1.20   27 Nov 1995 16:13:26   NN
-   CopyFromClip: Resize vorher
-
-      Rev 1.19   24 Nov 1995 17:28:44   ER
-   del: StartAllListeners
-
-      Rev 1.18   24 Nov 1995 14:25:14   ER
-   add: StartAllListeners
-
-      Rev 1.17   23 Nov 1995 17:41:12   ER
-   chg: Insert mit bFromClip, nur Append nicht
-
-      Rev 1.16   22 Nov 1995 16:45:00   MD
-   Insert/Append ohne bClipMode
-
-      Rev 1.15   20 Nov 1995 09:25:56   NN
-   Klammern bei Clone richtig
-
-      Rev 1.14   19 Nov 1995 16:50:32   ER
-   aus CopyFromClip Clone mit bNoListening
-
-      Rev 1.13   19 Nov 1995 16:17:10   MD
-   Umbau auf ScTokenArray
-
-      Rev 1.12   14 Nov 1995 18:39:40   ER
-   add: StartListenigFromClip
-
-      Rev 1.11   14 Nov 1995 17:04:04   ER
-   in Clipboard- und Undo-Doc kein Broadcasting/Listening bei Insert/Append
-
-      Rev 1.10   09 Nov 1995 17:09:22   MD
-   enum ScForceTextFmt
-
-      Rev 1.9   06 Nov 1995 19:31:06   ER
-   Broadcasting in Delete* und Append
-
-      Rev 1.8   03 Nov 1995 17:12:06   NN
-   DeleteRange: Notizzellen nur loeschen, wenn keine Broadcaster
-
-      Rev 1.7   03 Nov 1995 14:36:58   ER
-   add: BroadcastFromClip
-
-      Rev 1.6   01 Nov 1995 16:29:36   ER
-   StartListeningTo() in ersetzter Zelle
-
-      Rev 1.5   01 Nov 1995 16:22:10   NN
-   Broadcaster bei DeleteRow beruecksichtigen
-
-      Rev 1.4   31 Oct 1995 17:46:32   ER
-   EndListenigTo()
-
-      Rev 1.3   30 Oct 1995 19:31:50   ER
-   Broadcast nur wenn Zelle
-
-      Rev 1.2   30 Oct 1995 16:50:54   ER
-   add: ScBaseCell::Listening()
-
-      Rev 1.1   30 Oct 1995 15:52:42   ER
-   Broadcast() Wrapper
-
-      Rev 1.0   30 Oct 1995 12:11:26   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
