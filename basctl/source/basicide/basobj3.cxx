@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:29:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,9 @@ Sequence< ::rtl::OUString > BasicIDE::GetDialogNames( SfxObjectShell* pShell, co
 
         // sort dialog names
         ::std::vector<String> aDlgList( nDlgCount );
-        for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
+        sal_Int32 i;
+
+        for ( i = 0 ; i < nDlgCount ; i++ )
             aDlgList[ i ] = pDlgNames[ i ];
         ::std::sort( aDlgList.begin() , aDlgList.end() , StringCompareLessThan );
 
