@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,9 @@ private:
 
     /// invalidate all our parameter-related stuff
     void        invlidateParameters();
+
+    void        saveInsertOnlyState( );
+    void        restoreInsertOnlyState( );
 
     // error handling
     void    onError(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent);
