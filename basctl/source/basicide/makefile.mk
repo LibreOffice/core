@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 07:50:32 $
+#   last change: $Author: obo $ $Date: 2004-11-15 13:41:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,6 +126,7 @@ EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
                 $(SLO)$/moduldl2.obj	\
                 $(SLO)$/unomodel.obj	\
                 $(SLO)$/register.obj	\
+                $(SLO)$/tbxctl.obj		\
                 $(SLO)$/basidectrlr.obj
 
 SRS1NAME=$(TARGET)
