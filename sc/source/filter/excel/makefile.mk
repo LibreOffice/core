@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2003-11-05 13:33:25 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:43:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,11 @@ SLOFILES =	\
         $(SLO)$/frmbase.obj					\
         $(SLO)$/exccomp.obj					\
         $(SLO)$/biffdump.obj
+
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
+NOOPTFILES= \
+                $(SLO)$/xiescher.obj	 
+.ENDIF
 
 EXCEPTIONSFILES = \
         $(SLO)$/xlocx.obj					\
