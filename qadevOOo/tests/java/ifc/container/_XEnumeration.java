@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XEnumeration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-03 16:42:43 $
+ *  last change:$Date: 2003-09-08 10:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,12 @@
 
 package ifc.container;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
-import lib.Status;
-
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 
 /**
 * Testing <code>com.sun.star.container.XEnumeration</code>
