@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:13:57 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "´Ùµë±â";
         Text[ turkish ] = "Kýrp";
         Text[ catalan ] = "Recortar";
+        Text[ finnish ] = "Rajaa";
     };
     FixedText FT_LEFT
     {
@@ -128,6 +129,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "¿ÞÂÊ(~L)";
         Text[ turkish ] = "So~l";
         Text[ catalan ] = "~Izquierda";
+        Text[ finnish ] = "~Vasen:";
     };
     MetricField MF_LEFT
     {
@@ -173,6 +175,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "¿À¸¥ÂÊ(~R)";
         Text[ turkish ] = "S~að";
         Text[ catalan ] = "~Derecha";
+        Text[ finnish ] = "~Oikea";
     };
     MetricField MF_RIGHT
     {
@@ -216,6 +219,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "À§(~T)";
         Text[ turkish ] = "Ü~st";
         Text[ catalan ] = "~Arriba";
+        Text[ finnish ] = "~Yläosa";
     };
     MetricField MF_TOP
     {
@@ -261,6 +265,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "¾Æ·¡(~B)";
         Text[ turkish ] = "A~lt";
         Text[ catalan ] = "A~bajo";
+        Text[ finnish ] = "~Alaosa";
     };
     MetricField MF_BOTTOM
     {
@@ -304,6 +309,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "Å©±â À¯Áö(~Z)";
         Text[ turkish ] = "Boyutu kor~u";
         Text[ catalan ] = "~Mantener el tamaño";
+        Text[ finnish ] = "Säilytä ko~ko";
     };
     RadioButton RB_ZOOMCONST
     {
@@ -331,6 +337,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "¹èÀ² À¯Áö(~S)";
         Text[ turkish ] = "~Orantýyý koru";
         Text[ catalan ] = "Mantener la ~escala";
+        Text[ finnish ] = "Säilytä ~skaala";
     };
     GroupBox GB_EXAMPLE
     {
@@ -342,7 +349,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ italian ] = "Anteprima" ;
         Text [ portuguese_brazilian ] = "Exemplo" ;
         Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Malli" ;
+        Text [ finnish ] = "Esikatselu" ;
         Text [ danish ] = "Eksempel" ;
         Text [ french ] = "Aperçu" ;
         Text [ swedish ] = "Förhandsvisning" ;
@@ -390,6 +397,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "¹èÀ²";
         Text[ turkish ] = "Ölçek";
         Text[ catalan ] = "Escala";
+        Text[ finnish ] = "Skaalaa";
     };
     FixedText FT_WIDTHZOOM
     {
@@ -450,7 +458,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ italian ] = "Altezza" ;
         Text [ portuguese_brazilian ] = "A~ltura" ;
         Text [ portuguese ] = "A~ltura" ;
-        Text [ finnish ] = "~Korkeus" ;
+        Text [ finnish ] = "K~orkeus" ;
         Text [ danish ] = "Højde" ;
         Text [ french ] = "~Hauteur" ;
         Text [ swedish ] = "H~öjd" ;
@@ -574,7 +582,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ italian ] = "Altezza" ;
         Text [ portuguese_brazilian ] = "A~ltura" ;
         Text [ portuguese ] = "A~ltura" ;
-        Text [ finnish ] = "~Korkeus" ;
+        Text [ finnish ] = "K~orkeus" ;
         Text [ danish ] = "Højde" ;
         Text [ french ] = "Hau~teur" ;
         Text [ swedish ] = "Höj~d" ;
@@ -641,6 +649,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ korean ] = "¿ø·¡ Å©±â(~O)";
         Text[ turkish ] = "Ý~lk boyut";
         Text[ catalan ] = "Tamaño ori~ginal";
+        Text[ finnish ] = "~Alkuperäinen koko";
     };
 };
 
