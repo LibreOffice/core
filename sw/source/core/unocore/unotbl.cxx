@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 14:06:06 $
+ *  last change: $Author: os $ $Date: 2000-11-17 14:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,15 +998,35 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
 /*-- 11.12.98 10:56:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName) throw( beans::UnknownPropertyException, WrappedTargetException, uno::RuntimeException )
+uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
+    throw( beans::UnknownPropertyException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
     if(IsValid())
     {
-        SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
-        const SwAttrSet& rSet = pBoxFmt->GetAttrSet();
-        aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+        if(rPropertyName.equalsAsciiL(
+            UNO_NAME_TEXT_SECTION.pName, UNO_NAME_TEXT_SECTION.nNameLen))
+        {
+            SwFrmFmt* pTblFmt = GetFrmFmt();
+            SwDoc* pDoc = pTblFmt->GetDoc();
+            SwTable* pTable = SwTable::FindTable( pTblFmt );
+            SwTableNode* pTblNode = pTable->GetTableNode();
+            SwSectionNode* pSectionNode =  pTblNode->FindSectionNode();
+            if(pSectionNode)
+            {
+                const SwSection& rSect = pSectionNode->GetSection();
+                Reference< XTextSection >  xSect =
+                                SwXTextSections::GetObject( *rSect.GetFmt() );
+                aRet <<= xSect;
+            }
+        }
+        else
+        {
+            SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
+            const SwAttrSet& rSet = pBoxFmt->GetAttrSet();
+            aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+        }
     }
     return aRet;
 }
