@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jb $ $Date: 2001-03-12 14:59:53 $
+#   last change: $Author: jb $ $Date: 2001-03-16 17:42:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 
 SLOFILES=\
+    $(SLO)$/attributeparser.obj \
+    $(SLO)$/valuenodebuilder.obj \
+    $(SLO)$/localizednodebuilder.obj \
+    $(SLO)$/valueconverter.obj \
+    $(SLO)$/matchlocale.obj \
     $(SLO)$/treebuildercallback.obj \
     $(SLO)$/notifycallback.obj \
     $(SLO)$/dataconverter.obj \
