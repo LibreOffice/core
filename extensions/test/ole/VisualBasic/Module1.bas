@@ -37,8 +37,10 @@ Dim inString As String, outString As String, retString As String
 Dim inChar As Integer, outChar As Integer, retChar As Integer, retChar2 As Integer
 Dim inCharAsString As String, outCharAsString As String, retCharAsString As String
 Dim inAny As Variant, outAny As Variant, retAny As Variant
+Dim inType As Object, outType As Object, retType As Object
 Dim inXInterface As Object, outXInterface As Object, retXInterface As Object
 Dim inXInterface2 As Object, outXInterface2 As Object, retXInterface2 As Object
+
 
 Dim outVarByte As Variant
 Dim outVarBool As Variant
@@ -51,6 +53,7 @@ Dim outVarDouble As Variant
 Dim outVarString As Variant
 Dim outVarChar As Variant
 Dim outVarAny As Variant
+Dim outVarType As Variant
 
 inByte = 10
 inBool = True
@@ -66,6 +69,7 @@ inString = "Hello World!"
 inChar = 65
 inCharAsString = "A"
 inAny = "Hello World"
+Set inType = objServiceManager.Bridge_CreateType("[]long")
 Set inXInterface = objCoreReflection
 Set inXInterface2 = objEventListener
 
@@ -83,6 +87,7 @@ retString = objOleTest.in_methodString(inString)
 retChar = objOleTest.in_methodChar(inChar)
 retChar2 = objOleTest.in_methodChar(inCharAsString)
 retAny = objOleTest.in_methodAny(inAny)
+Set retType = objOleTest.in_methodType(inType)
 Set retXInterface = objOleTest.in_methodXInterface(inXInterface) ' UNO object
 Set retXInterface2 = objOleTest.in_methodXInterface(inXInterface2)
 
@@ -93,6 +98,7 @@ If retByte <> inByte Or retBool <> inBool _
     Or retFloat <> inFloat Or retDouble <> inDouble _
     Or retString <> inString Or retChar <> inChar _
     Or retChar2 <> Asc(inCharAsString) Or retAny <> inAny _
+    Or retType <> inType _
     Or Not (inXInterface Is retXInterface) _
     Or Not (inXInterface2 Is retXInterface2) Then
     sError = "in - parameter and return value test failed"
@@ -116,6 +122,7 @@ objOleTest.testout_methodString outString
 objOleTest.testout_methodChar outChar
 objOleTest.testout_methodChar outCharAsString
 objOleTest.testout_methodAny outAny
+objOleTest.testout_methodType outType
 'objOleTest.in_methodXInterface (inXInterface) ' UNO object
 Call objOleTest.in_methodXInterface(inXInterface)  ' UNO object
 objOleTest.testout_methodXInterface outXInterface
@@ -130,7 +137,8 @@ If outByte <> inByte Or outFloat <> inFloat _
     Or outHyper <> inHyper Or outUHyper <> inUHyper _
     Or outString <> inString Or outChar <> inChar _
     Or outCharAsString <> inCharAsString _
-    Or outAny <> inAny Or Not (inXInterface Is outXInterface) _
+    Or outAny <> inAny Or outType <> inType _
+    Or Not (inXInterface Is outXInterface) _
     Or Not (inXInterface2 Is outXInterface2) Then
 
     sError = "out - parameter test failed!"
@@ -150,6 +158,7 @@ objOleTest.testout_methodString outVarString
 objOleTest.testout_methodFloat outVarFloat
 objOleTest.testout_methodDouble outVarDouble
 objOleTest.testout_methodAny outVarAny
+objOleTest.testout_methodType outVarType
 
 If outVarByte <> inByte Or outVarBool <> inBool _
     Or outVarChar <> inChar _
@@ -158,6 +167,7 @@ If outVarByte <> inByte Or outVarBool <> inBool _
     Or outVarString <> inString _
     Or outVarFloat <> inFloat Or outVarDouble <> inDouble _
     Or outVarAny <> inAny _
+    Or outVarType <> inType _
     Then
     sError = "out - parameter (VARIANT) test failed!"
     GoTo onerror
@@ -178,6 +188,7 @@ objOleTest.in_methodDouble (0)
 objOleTest.in_methodString (0)
 objOleTest.in_methodChar (0)
 objOleTest.in_methodAny (0)
+objOleTest.in_methodType (objServiceManager.Bridge_CreateType("boolean"))
 Set outXInterface = Nothing
 Call objOleTest.in_methodXInterface(outXInterface)
 
@@ -238,6 +249,11 @@ outAny = "Hello World 2!"
 retAny = outAny
 objOleTest.testinout_methodAny retAny
 objOleTest.testinout_methodAny retAny
+Set outType = objServiceManager.Bridge_CreateType("long")
+Set retType = outType
+objOleTest.testinout_methodType retType
+objOleTest.testinout_methodType retType
+
 Set outXInterface = objCoreReflection
 Set retXInterface = outXInterface
 objOleTest.testinout_methodXInterface2 retXInterface
@@ -250,6 +266,7 @@ If outByte <> retByte Or outBool <> retBool _
     Or outDouble <> retDouble _
     Or outString <> retString Or outChar <> retChar _
     Or outCharAsString <> retCharAsString Or outAny <> retAny _
+    Or outType <> retType _
     Or Not (outXInterface Is retXInterface) Then
     sError = "in/out - parameter test failed!"
     GoTo onerror
@@ -257,7 +274,27 @@ End If
 
 
 '======================================================================
+'======================================================================
+'Attributes
+objOleTest.AByte = inByte
+retByte = 0
+retByte = objOleTest.AByte
+objOleTest.AFloat = inFloat
+retFloat = 0
+retFloat = objOleTest.AFloat
+objOleTest.AType = inType
+Set retType = Nothing
+Set retType = objOleTest.AType
 
+If inByte <> retByte _
+    Or inFloat <> retFloat _
+    Or inType <> retType _
+    Then
+    sError = "Attributes - test failed!"
+    GoTo onerror
+End If
+
+'======================================================================
 ' Other Hyper tests
 Dim emptyVar As Variant
 retAny = emptyVar
