@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,12 +178,12 @@ namespace basegfx
         {
             implPrepareChange();
             mpM->doInvert(aWork, pIndex);
-            delete pIndex;
+            delete[] pIndex;
 
             return true;
         }
 
-        delete pIndex;
+        delete[] pIndex;
         return false;
     }
 
