@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNamespaceMap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:08:30 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 09:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,10 +117,10 @@ namespace svx
     {
     private:
         sal_uInt16* mpWhichIds;
-        SfxItemPool* mpPool1;
-        SfxItemPool* mpPool2;
+        SfxItemPool* mpPool;
+
     public:
-        NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 );
+        NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool );
         virtual ~NamespaceMap();
 
         // XNameAccess
@@ -141,7 +141,13 @@ namespace svx
     Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 )
         throw( Exception )
     {
-        return (XWeak*)new NamespaceMap( pWhichIds, pPool1, pPool2 );
+        return (XWeak*)new NamespaceMap( pWhichIds, pPool1 );
+    }
+
+    Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
+        throw( Exception )
+    {
+        return (XWeak*)new NamespaceMap( pWhichIds, pPool );
     }
 
     Sequence< OUString > SAL_CALL NamespaceMap_getSupportedServiceNames()
@@ -163,12 +169,8 @@ namespace svx
     class NamespaceIteratorImpl
     {
     private:
-        SfxItemPool* mpPool1;
-        SfxItemPool* mpPool2;
+        SfxItemPool* mpPool;
 
-
-        SfxItemPool* mpCurrentPool;
-        sal_uInt16* mpWhichIds;
         sal_uInt16* mpWhichId;
 
         sal_uInt16 mnItemCount;
@@ -177,10 +179,9 @@ namespace svx
         const SvXMLAttrContainerItem* mpCurrentAttr;
         sal_uInt16 mnCurrentAttr;
 
-        void startPool( SfxItemPool* pPool );
     public:
 
-        NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 );
+        NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool );
 
         sal_Bool next( OUString& rPrefix, OUString& rURL );
     };
@@ -190,27 +191,16 @@ using namespace ::svx;
 
 // -------------
 
-NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 )
+NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool )
 {
-    mpPool1 = pPool1;
-    mpPool2 = pPool2;
-
+    mpPool = pPool;
     mpCurrentAttr = NULL;
     mnCurrentAttr = 0;
 
-    mpWhichIds = pWhichIds;
-
-    startPool( pPool1 );
-}
-
-void NamespaceIteratorImpl::startPool( SfxItemPool* pPool )
-{
-    mpCurrentPool = pPool;
-
-    mpWhichId = mpWhichIds;
+    mpWhichId = pWhichIds;
 
     mnItem = 0;
-    mnItemCount = (mpWhichId && (0 != *mpWhichId) && pPool) ? pPool->GetItemCount( *mpWhichId ) : 0;
+    mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount( *mpWhichId ) : 0;
 }
 
 sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
@@ -230,7 +220,7 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
 
     const SfxPoolItem* pItem;
     // look for the next available item in the current pool
-    while( (mnItem < mnItemCount) && ( NULL == (pItem = mpCurrentPool->GetItem( *mpWhichId, mnItem ) ) ) )
+    while( (mnItem < mnItemCount) && ( NULL == (pItem = mpPool->GetItem( *mpWhichId, mnItem ) ) ) )
         mnItem++;
 
     // are we finished with the current whichid?
@@ -239,27 +229,14 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
         mpWhichId++;
 
         // are we finished with the current pool?
-        if( 0 == *mpWhichId )
-        {
-            // we already finished both pools
-            if( mpCurrentPool == mpPool2 )
-                return sal_False;
-
-            // switch to the second pool, if there is one
-            mpCurrentPool = mpPool2;
-            if( NULL == mpCurrentPool )
-                return sal_False;
-
-            // start with second pool
-            startPool( mpPool2 );
-        }
-        else
+        if( 0 != *mpWhichId )
         {
             mnItem = 0;
-            mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpCurrentPool) ? mpCurrentPool->GetItemCount( *mpWhichId ) : 0;
+            mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount( *mpWhichId ) : 0;
+            return next( rPrefix, rURL );
         }
 
-        return next( rPrefix, rURL );
+        pItem = NULL;
     }
 
     if( pItem )
@@ -281,8 +258,8 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
 
 // -------------
 
-NamespaceMap::NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 )
-: mpWhichIds( pWhichIds ), mpPool1( pPool1 ), mpPool2( pPool2 )
+NamespaceMap::NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool )
+: mpWhichIds( pWhichIds ), mpPool( pPool )
 {
 }
 
@@ -293,7 +270,7 @@ NamespaceMap::~NamespaceMap()
 // XNameAccess
 Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    NamespaceIteratorImpl aIter( mpWhichIds, mpPool1, mpPool2 );
+    NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
     OUString aPrefix;
     OUString aURL;
@@ -314,7 +291,7 @@ Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchEleme
 
 Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeException)
 {
-    NamespaceIteratorImpl aIter( mpWhichIds, mpPool1, mpPool2 );
+    NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
     OUString aPrefix;
     OUString aURL;
@@ -340,7 +317,7 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeExce
 
 sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (RuntimeException)
 {
-    NamespaceIteratorImpl aIter( mpWhichIds, mpPool1, mpPool2 );
+    NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
     OUString aPrefix;
     OUString aURL;
@@ -364,7 +341,7 @@ Type SAL_CALL NamespaceMap::getElementType() throw (RuntimeException)
 
 sal_Bool SAL_CALL NamespaceMap::hasElements() throw (RuntimeException)
 {
-    NamespaceIteratorImpl aIter( mpWhichIds, mpPool1, mpPool2 );
+    NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
     OUString aPrefix;
     OUString aURL;

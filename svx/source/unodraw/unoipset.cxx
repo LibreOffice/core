@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-08 15:47:14 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 09:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,8 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, c
     // item holen
     const SfxPoolItem* pItem = 0;
     SfxItemPool* pPool = rSet.GetPool();
-    SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
+
+    SfxItemState eState = rSet.GetItemState( pMap->nWID, pMap->nWID != SDRATTR_XMLATTRIBUTES, &pItem );
 
     if( NULL == pItem && pPool )
     {
