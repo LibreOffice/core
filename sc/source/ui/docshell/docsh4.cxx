@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-04-25 14:02:41 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 13:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_CHG_PROTECT :
             {
                 if ( ExecuteChangeProtectionDialog() )
+                {
                     rReq.Done();
+                    SetDocumentModified();
+                }
                 else
                     rReq.Ignore();
             }
