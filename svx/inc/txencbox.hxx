@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:12:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,18 @@
 #include <rtl/textenc.h>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SvxTextEncodingTable;
 
-class SvxTextEncodingBox : public ListBox
+class SVX_DLLPUBLIC SvxTextEncodingBox : public ListBox
 {
 private:
     const SvxTextEncodingTable*     m_pEncTable;
 
-    USHORT              EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
+    SVX_DLLPRIVATE USHORT               EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
 
 public:
                         SvxTextEncodingBox( Window* pParent, const ResId& rResId );
