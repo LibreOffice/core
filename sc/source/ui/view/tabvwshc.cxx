@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:09:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,10 @@
 
 //!     nach document verschieben !!!
 
-BOOL lcl_IsValueCol( ScDocument* pDoc, USHORT nCol, USHORT nRow1, USHORT nRow2, USHORT nTab )
+BOOL lcl_IsValueCol( ScDocument* pDoc, SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab )
 {
     BOOL bVal = TRUE;
-    for (USHORT nRow=nRow1; nRow<=nRow2 && bVal; nRow++)
+    for (SCROW nRow=nRow1; nRow<=nRow2 && bVal; nRow++)
         if (pDoc->HasStringData( nCol, nRow, nTab ))
             bVal = FALSE;
     return bVal;
@@ -222,8 +222,9 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             if ( !pDlgData )
             {
                 ScConsolidateParam  aConsParam;
-                USHORT              nStartCol, nStartRow, nStartTab,
-                                    nEndCol,   nEndRow,   nEndTab;
+                SCCOL nStartCol, nEndCol;
+                SCROW nStartRow, nEndRow;
+                SCTAB nStartTab, nEndTab;
 
                 GetViewData()->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                               nEndCol,   nEndRow,   nEndTab );
@@ -308,7 +309,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_OPENDLG_TABOP:
         {
             ScViewData*  pViewData  = GetViewData();
-            ScRefTripel  aCurPos    ( pViewData->GetCurX(),
+            ScRefAddress  aCurPos   ( pViewData->GetCurX(),
                                       pViewData->GetCurY(),
                                       pViewData->GetTabNo(),
                                       FALSE, FALSE, FALSE );
@@ -320,11 +321,9 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_OPENDLG_SOLVE:
         {
             ScViewData*  pViewData  = GetViewData();
-            ScRefTripel  aCurPos    ( pViewData->GetCurX(),
-                                      pViewData->GetCurY(),
-                                      pViewData->GetTabNo(),
-                                      FALSE, FALSE, FALSE );
-
+            ScAddress aCurPos(  pViewData->GetCurX(),
+                                pViewData->GetCurY(),
+                                pViewData->GetTabNo());
             pResult = new ScSolverDlg( pB, pCW, pParent, pViewData->GetDocument(), aCurPos );
         }
         break;
@@ -338,11 +337,11 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
 #if 0
             ScDocument*     pDoc = GetViewData()->GetDocument();
-            USHORT          nTab  = 0;
-            USHORT          nCol1 = 0;
-            USHORT          nCol2 = 0;
-            USHORT          nRow1 = 0;
-            USHORT          nRow2 = 0;
+            SCTAB           nTab  = 0;
+            SCCOL           nCol1 = 0;
+            SCCOL           nCol2 = 0;
+            SCROW           nRow1 = 0;
+            SCROW           nRow2 = 0;
 
             ScPivot*        pPivot = pDoc->GetPivotAtCursor(
                                         GetViewData()->GetCurX(),
@@ -410,7 +409,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             // Ermitteln der Ueberschriften:
             String      aFieldName;
             USHORT      nLabelCount = nCol2-nCol1+1;
-            short       nCol        = nCol1;
+            SCsCOL      nCol        = nCol1;
             BOOL        bIsValue    = FALSE;
             LabelData** aLabelArr   = new LabelData*[nLabelCount];
 
