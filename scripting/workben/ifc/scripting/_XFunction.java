@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFunction.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:29:36 $
+ *  last change:$Date: 2002-12-10 14:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@ import com.sun.star.beans.XPropertySet;
 import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
+import lib.Parameters;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 public class _XFunction extends MultiMethodTest {
 
@@ -84,41 +88,69 @@ public class _XFunction extends MultiMethodTest {
     }
 
     public void _invoke() {
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_invoke");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                result &= runInvokeTest((Parameters)tests.next());
+            }
+        }
+        else {
+            result = false;
+        }
+
+        tRes.tested("invoke()", result);
+    }
+
+    private boolean runInvokeTest(Parameters testdata) {
+        String description = testdata.get("description");
+        String expected = testdata.get("expected");
+        String output = "";
+
+        log.println(testdata.get("description"));
+
         try{
-           System.out.println("Here we are");
-           Object[] aParams = new Object[0];
-           short[][] aOutParamIndex = new short[1][];
-           aOutParamIndex[0] = new short[0];
-           Object[][] aOutParam = new Object[1][];
-           aOutParam[0] = new Object[0];
-           oObj.invoke( aParams, aOutParamIndex, aOutParam );
-           System.out.println("invoke finished");
+            Object[] aParams = new Object[0];
+            short[][] aOutParamIndex = new short[1][];
+            aOutParamIndex[0] = new short[0];
+            Object[][] aOutParam = new Object[1][];
+            aOutParam[0] = new Object[0];
+
+            oObj.invoke( aParams, aOutParamIndex, aOutParam );
+            output = "success";
         }
         catch (com.sun.star.lang.IllegalArgumentException iae) {
             log.println("Couldn't invoke script:" + iae);
-            tRes.tested("invoke()", false);
-            return;
+            output = "com.sun.star.lang.IllegalArgumentException";
         }
         catch (com.sun.star.script.CannotConvertException cce) {
             log.println("Couldn't invoke script:" + cce);
-            tRes.tested("invoke()", false);
-            return;
+            output = "com.sun.star.script.CannotConvertException";
         }
         catch (com.sun.star.reflection.InvocationTargetException ite) {
             log.println("Couldn't invoke script:" + ite);
-            tRes.tested("invoke()", false);
-            return;
+            output = "com.sun.star.reflection.InvocationTargetException";
         }
         catch (com.sun.star.uno.RuntimeException re) {
             log.println("Couldn't invoke script:" + re);
-            tRes.tested("invoke()", false);
-            return;
+            output = "com.sun.star.uno.RuntimeException";
         }
-        catch(Exception e){
+        catch(java.lang.Exception e){
             log.println("Couldn't invoke script:" + e);
-            tRes.tested("invoke()", false);
-            return;
+            output = "java.lang.Exception";
         }
-        tRes.tested("invoke()", true);
+
+        log.println("expected: " + expected + ", output: " + output);
+        if (output.equals(expected))
+            return true;
+        else
+            return false;
     }
 }

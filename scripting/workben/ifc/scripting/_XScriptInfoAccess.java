@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptInfoAccess.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:29:37 $
+ *  last change:$Date: 2002-12-10 14:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@ import com.sun.star.beans.XPropertySet;
 import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
+import lib.Parameters;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 public class _XScriptInfoAccess extends MultiMethodTest {
 
@@ -87,59 +91,117 @@ public class _XScriptInfoAccess extends MultiMethodTest {
     }
 
     public void _getScriptLogicalNames() {
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getScriptLogicalNames");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                result &= runGetScriptLogicalNamesTest((Parameters)tests.next());
+            }
+        }
+        else {
+            result = false;
+        }
+
+        tRes.tested("getScriptLogicalNames()", result);
+    }
+
+    private boolean runGetScriptLogicalNamesTest(Parameters testdata) {
+        String description = testdata.get("description");
+        String expected = testdata.get("expected");
+        String output = "";
+
+        log.println(testdata.get("description"));
+
         try {
             log.println("In _XScriptInfoAccess.getScriptLogicalNames()");
             String[] logicalNames = oObj.getScriptLogicalNames();
-            log.println("Retrieved " + logicalNames.length + " entries from storage" );
-            for ( int idx=0; idx < logicalNames.length; idx++ ){
-                log.println("logical name [" + idx + "] = " + logicalNames[idx]);
-            }
-            if ( logicalNames.length == 0 ){
-                log.println( "Failed:_XScriptInfoAccess.getScriptLogicalNames(), no logical names returned" );
-                tRes.tested( "getScriptLogicalNames()", false );
-            }
 
+            if (logicalNames == null)
+                output = "null";
+            else if (logicalNames.length == 0)
+                output = "empty";
+            else {
+                for (int i = 0; i < logicalNames.length; i++) {
+                    if (logicalNames[i].equals(expected)) {
+                        output = logicalNames[i];
+                        break;
+                    }
+                }
+            }
         }
         catch (com.sun.star.uno.Exception e) {
-            log.println("Failed:_XScriptInfoAccess.getScriptLogicalNames() :" + e);
-            tRes.tested("getScriptLogicalNames()", false);
-            return;
+            log.println("Caught UNO Exception :" + e);
+            output = "com.sun.star.uno.Exception";
         }
-        tRes.tested("getScriptLogicalNames()", true);
+
+        log.println("expected: " + expected + ", output: " + output);
+        if (output.equals(expected))
+            return true;
+        else
+            return false;
     }
 
     public void _getImplementations() {
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getImplementations");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                result &= runGetImplementationsTest((Parameters)tests.next());
+            }
+        }
+        else {
+            result = false;
+        }
+
+        tRes.tested("getImplementations()", result);
+    }
+
+    private boolean runGetImplementationsTest(Parameters testdata) {
+        String description = testdata.get("description");
+        String logicalname = testdata.get("logicalname");
+        String expected = testdata.get("expected");
+        String output = "";
+
+        log.println(testdata.get("description"));
+
     // performs a basic check to see if 1 match (XScriptInfo) is returned
     // the XScriptInfo object is tested more completely in _XScriptInfo
     // which is drive from ScriptInfo
+
         try {
-            log.println("In _XScriptInfoAccess._getImplementations()");
-            XScriptInfo[] impls = oObj.getImplementations("script://MemoryUtils.MemUsage?location=document");
+            XScriptInfo[] impls = oObj.getImplementations(logicalname);
+
             // should only be one match
-            log.println("_XScriptInfoAccess._getImplementations() returned " + impls.length + " items ");
-            if ( impls.length != 1 ){
-                log.println("Expected 1 implementation to be returned, got " +
-                    impls.length + " instead.");
-                tRes.tested("getImplementations()", false);
-                return;
-        }
-
-            if ( !impls[0].getLogicalName().equals( "MemoryUtils.MemUsage" ) ){
-                log.println("Expected logical name = MemoryUtils.MemUsage, got "
-                    + impls[0].getLogicalName() );
-                tRes.tested("getImplementations()", false);
-                return;
-            }
-
+            if (impls == null)
+                output = "null";
+            else if (impls.length == 0)
+                output = "empty";
+            else
+                output = impls[0].getLogicalName();
         }
         catch (com.sun.star.uno.Exception e) {
-            log.println("getImplementations: failed:" + e);
-            tRes.tested("getImplementations()()", false);
-            return;
+            log.println("Caught UNO Exception:" + e);
+            output = "com.sun.star.uno.Exception";
         }
-        log.println("_XScriptInfoAccess._getImplementations() completed sucessfully");
-        tRes.tested("getImplementations()", true);
 
+        log.println("expected: " + expected + ", output: " + output);
+        if (output.equals(expected))
+            return true;
+        else
+            return false;
     }
-
 }

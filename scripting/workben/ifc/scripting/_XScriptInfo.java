@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:29:37 $
+ *  last change:$Date: 2002-12-10 14:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,11 @@ import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Exception;
 import com.sun.star.beans.XPropertySet;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import java.io.PrintWriter;
+import lib.Parameters;
 import lib.MultiMethodTest;
 import lib.StatusException;
 
@@ -87,100 +91,274 @@ public class _XScriptInfo extends MultiMethodTest {
     }
 
     public void _getLogicalName() {
+        boolean result = true;
 
-        log.println("In _XScriptInfo.getLogicalName()");
-        if ( !oObj.getLogicalName().equals( "MemoryUtils.MemUsage" ) ){
-            log.println("Expected logical name = MemoryUtils.MemUsage, got "                    + oObj.getLogicalName() );
-            tRes.tested("getImplementations()", false);
-            return;
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getLogicalName");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                Parameters testdata = (Parameters)tests.next();
+                String expected = testdata.get("expected");
+                String output = "";
+
+                log.println(testdata.get("description"));
+
+                output = oObj.getLogicalName();
+
+                log.println("expected: " + expected + ", output: " + output);
+                result &= output.equals(expected);
+            }
+        }
+        else {
+            result = false;
         }
 
-        tRes.tested("getLogicalName()", true);
+        tRes.tested("getLogicalName()", result);
     }
+
     public void _getParcelURI() {
-        log.println("In _XScriptInfo._getParcelUR()");
-        if ( oObj.getParcelURI().length() == 0 ){
-            log.println( "Expected parcel uri to be set up" );
-            tRes.tested( "getParcelURI()", false );
-            return;
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getParcelURI");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                Parameters testdata = (Parameters)tests.next();
+                String expected = testdata.get("expected");
+                String output = "";
+
+                log.println(testdata.get("description"));
+
+                output = oObj.getParcelURI();
+
+                log.println("expected: " + expected + ", output: " + output);
+                result &= output.endsWith(expected);
+            }
         }
-        tRes.tested("getParcelURI()", true);
+        else {
+            result = false;
+        }
+        tRes.tested("getParcelURI()", result);
     }
+
     public void _getLanguage() {
-        log.println("In _XScriptInfo.getLanguage()");
-        if ( !oObj.getLanguage().equals( "Java" ) ){
-            log.println("Expected language to be Java, got " +
-                oObj.getLanguage().length() );
-            tRes.tested("getLanguage()", false);
-            return;
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getLanguage");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                Parameters testdata = (Parameters)tests.next();
+                String expected = testdata.get("expected");
+                String output = "";
+
+                log.println(testdata.get("description"));
+
+                output = oObj.getLanguage();
+
+                log.println("expected: " + expected + ", output: " + output);
+                result &= output.equals(expected);
+            }
         }
-        tRes.tested("getLanguage()", true);
+        else {
+            result = false;
+        }
+        tRes.tested("getLanguage()", result);
     }
 
     public void _getFunctionName() {
-        log.println("In _XScriptInfo.getFunctionName()");
-        if ( !oObj.getFunctionName().equals( "MemoryUsage.updateMemoryUsage" ) ) {
-            log.println(
-                "Expected functionName to be MemoryUsage.updateMemoryUsage, got ->" +
-                oObj.getFunctionName() + "<- instead." );
-            tRes.tested("getFunctionName()", false);
-            return;
-        }
-        tRes.tested("getFunctionName()", true);
-    }
-    public void _getLanguageProperties() {
-        log.println("In _XScriptInfo.getLanguageProperties()");
-        XPropertySet langProps = oObj.getLanguageProperties();
-        try{
+        boolean result = true;
 
-            String classPath = (String) langProps.getPropertyValue("classpath");            if ( classPath == null || !classPath.equals( "MemUsage.jar" ) ) {
-                log.println(
-                   "Expected classpath property to be MemUsage.jar, got ->" +
-                    classPath + "<- instead." );
-                tRes.tested("getLanguageProperties()", false);
-                return;
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getFunctionName");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                Parameters testdata = (Parameters)tests.next();
+                String expected = testdata.get("expected");
+                String output = "";
+
+                log.println(testdata.get("description"));
+
+                output = oObj.getFunctionName();
+
+                log.println("expected: " + expected + ", output: " + output);
+                result &= output.equals(expected);
             }
         }
-        catch( com.sun.star.uno.Exception e) {
-            log.println("getLanguageProperties: failed:" + e);
-            tRes.tested("getLanguageProperties()", false);
-            return;
+        else {
+            result = false;
+        }
+        tRes.tested("getFunctionName()", result);
+    }
+
+    public void _getLanguageProperties() {
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getLanguageProperties");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                Parameters testdata = (Parameters)tests.next();
+                String expected = testdata.get("expected");
+                String output = "";
+
+                log.println(testdata.get("description"));
+
+                try {
+                    XPropertySet langProps = oObj.getLanguageProperties();
+                    output = (String)langProps.getPropertyValue("classpath");
+
+                    if (output == null)
+                        output = "null";
+                }
+                catch( com.sun.star.uno.Exception e) {
+                    log.println("caught UNO Exception:" + e);
+                    output = "com.sun.star.uno.Exception";
+                }
+
+                log.println("expected: " + expected + ", output: " + output);
+                result &= output.equals(expected);
+            }
+        }
+        else {
+            result = false;
         }
         tRes.tested("getLanguageProperties()", true);
     }
+
     public void _getFileSetNames() {
-        log.println("In _XScriptInfo.getFileSetNames()");
-        String[] fileSets = oObj.getFileSetNames();
-        log.println("Got filesets of length " + fileSets.length + " first fileset is called " + fileSets[0] );
-        if ( fileSets == null || fileSets.length != 1 ||
-             !fileSets[0].equals("delivered") ) {
-           log.println(
-                       "Expected filesets with 1 element with value \"delivered\"");
-           tRes.tested("getFileSetNames()", false);
-           return;
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getFileSetNames");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                Parameters testdata = (Parameters)tests.next();
+                String expected = testdata.get("expected");
+                String output = "";
+
+                log.println(testdata.get("description"));
+
+                String[] fileSets = oObj.getFileSetNames();
+
+                if (fileSets == null)
+                    output = "null";
+                else if (fileSets.length != 1)
+                    output = "WrongNumberOfFileSets";
+                else
+                    output = fileSets[0];
+
+                log.println("expected: " + expected + ", output: " + output);
+                result &= output.equals(expected);
+            }
         }
-        tRes.tested("getFileSetNames()", true);
-    }
-    public void _getFilesInFileSet() {
-        log.println("In _XScriptInfo.getFilesInFileSet()");
-        String[] filesInFileSet = oObj.getFilesInFileSet( oObj.getFileSetNames()[0] );
-        if ( filesInFileSet == null || filesInFileSet.length != 1 ||
-            !filesInFileSet[0].equals( "google.jar" ) ) {
-            log.println(
-                "Expected a list of one file named \"google.jar\" for fileSet named \"delivered\"" );
-            tRes.tested("getFilesInFileSet()", false);
-            return;
+        else {
+            result = false;
         }
-        tRes.tested("getFilesInFileSet()", true);
-    }
-    public void _getDescription() {
-        log.println("In _XScriptInfo.getDescription()");
-        if ( oObj.getDescription().length() != 0 ){
-            log.println("Last test. Expected no description for MemoryUtils.MemUsage" + " got ->" + oObj.getDescription() + "<- instead" );
-            tRes.tested("getDescription()", false);
-            return;
-        }
-        tRes.tested("getDescription()", true);
+        tRes.tested("getFileSetNames()", result);
     }
 
+    public void _getFilesInFileSet() {
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getFilesInFileSet");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                Parameters testdata = (Parameters)tests.next();
+                String expected = testdata.get("expected");
+                String output = "";
+
+                log.println(testdata.get("description"));
+
+                String[] filesInFileSet =
+                    oObj.getFilesInFileSet(oObj.getFileSetNames()[0]);
+
+                if (filesInFileSet == null)
+                    output = "null";
+                else if (filesInFileSet.length != 1)
+                    output = "WrongNumberOfFilesInFileSet";
+                else
+                    output = filesInFileSet[0];
+
+                log.println("expected: " + expected + ", output: " + output);
+                result &= output.equals(expected);
+            }
+        }
+        else {
+            result = false;
+        }
+        tRes.tested("getFilesInFileSet()", result);
+    }
+
+    public void _getDescription() {
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getDescription");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                Parameters testdata = (Parameters)tests.next();
+                String expected = testdata.get("expected");
+                String output = "";
+
+                log.println(testdata.get("description"));
+
+                output = oObj.getDescription();
+
+                if (output == null)
+                    output = "null";
+                else if (output.length() == 0)
+                    output = "empty";
+
+                log.println("expected: " + expected + ", output: " + output);
+                result &= output.equals(expected);
+            }
+        }
+        else {
+            result = false;
+        }
+
+        tRes.tested("getDescription()", result);
+    }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptStorageRefresh.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:29:37 $
+ *  last change:$Date: 2002-12-10 14:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@ package ifc.script.framework.storage;
 
 import drafts.com.sun.star.script.framework.storage.XScriptStorageRefresh;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
@@ -73,6 +76,7 @@ import com.sun.star.beans.XPropertySet;
 import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
+import lib.Parameters;
 
 public class _XScriptStorageRefresh extends MultiMethodTest {
 
@@ -85,8 +89,36 @@ public class _XScriptStorageRefresh extends MultiMethodTest {
     }
 
     public void _refresh() {
-        log.println("In _XScriptStorageRefresh.getScriptLogicalNames()" );
-        oObj.refresh();
-        tRes.tested("refresh()", true);
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_refresh");
+
+        if (c == null) {
+            tRes.tested("refresh()", false);
+            return;
+        }
+
+        Iterator tests = c.iterator();
+
+        while (tests.hasNext()) {
+            Parameters testdata = (Parameters)tests.next();
+            String expected = testdata.get("expected");
+            String output = "";
+
+            log.println(testdata.get("description"));
+
+            try {
+                oObj.refresh();
+                output = "success";
+            }
+            catch (com.sun.star.uno.RuntimeException re) {
+                log.println("Caught RuntimeException: " + re);
+                output = "com.sun.star.uno.RuntimeException";
+            }
+            log.println("expected: " + expected + ", output: " + output);
+            result &= output.equals(expected);
+        }
+        tRes.tested("refresh()", result);
     }
 }

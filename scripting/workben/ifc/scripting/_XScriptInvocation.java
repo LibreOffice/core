@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptInvocation.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:11:23 $
+ *  last change:$Date: 2002-12-10 14:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,18 @@
 package ifc.script.framework;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Collection;
 
 import drafts.com.sun.star.script.framework.XScriptInvocation;
-import drafts.com.sun.star.script.framework.storage.XScriptInfo;
+import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.ucb.XSimpleFileAccess;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.XInterface;
-import com.sun.star.lang.XComponent;
 import com.sun.star.frame.XModel;
 
 import lib.MultiMethodTest;
@@ -80,88 +84,53 @@ import util.SOfficeFactory;
 public class _XScriptInvocation extends MultiMethodTest {
 
     public XScriptInvocation oObj = null;
-    private XComponent oDoc = null;
+    private XScriptStorageManager storageManager = null;
 
     /**
     * Retrieves object relation.
     */
     public void before() throws StatusException {
-        SOfficeFactory factory = SOfficeFactory.getFactory(tParam.getMSF());
-
-        String name = util.utils.getFullTestURL(
-            "xscriptcontext_test_document.sxw");
-
-        try {
-            oDoc = factory.loadDocument(name);
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae) {
-            log.println("Exception while preloading document: " + iae);
-        }
-        catch (Exception e) {
-            log.println("Exception while preloading document: " + e);
-        }
-
-        try {
-            Thread.sleep(5000);
-        }
-        catch (InterruptedException ie) {
-        }
     }
 
     public void after() throws StatusException {
-        if (oDoc != null)
-            oDoc.dispose();
     }
 
     public void _invoke() {
         boolean result = true;
 
-        result &= testUserInvoke();
-        result &= testUserInvokeWithContext();
-        result &= testUserInvokeScriptInJar();
-        // if (oDoc != null)
-        //    result &= testDocumentInvoke();
+        Collection c =
+            (Collection) tEnv.getObjRelation("_invoke");
 
-        // result &= testInvokeExceptions();
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                result &= runInvokeTest((Parameters)tests.next());
+            }
+        }
+        else {
+            result = false;
+        }
 
         tRes.tested("invoke()", result);
     }
 
-    private boolean testUserInvoke() {
-        log.println("Try invoking a user level script");
-        return testInvoke(ScriptingUtils.USER_LOGICAL_NAME, 1);
-    }
+    private boolean runInvokeTest(Parameters testdata) {
+        String description = testdata.get("description");
+        String logicalname = testdata.get("logicalname");
+        String context = testdata.get("context");
+        String location = testdata.get("location");
+        String expected = testdata.get("expected");
+        String output = "";
 
-    private boolean testUserInvokeWithContext() {
-        log.println("Try invoking a user level script with an XScriptContext");
+        int storageId = getStorageId(location);
 
-        XModel model = (XModel) UnoRuntime.queryInterface(XModel.class, oDoc);
-        return testInvoke("script://xscriptcontext.jsuite.test", 1, model);
-    }
+        XModel ctx = null;
+        if (!context.equals("null"))
+            ctx = loadDocument(context);
 
-    private boolean testUserInvokeScriptInJar() {
-        log.println("Try invoking a user level script in a Jar file");
-
-        return testInvoke("script://jarscript.jsuite.test", 1);
-    }
-
-    private boolean testDocumentInvoke() {
-        log.println("Try invoking a user level script");
-
-        String name = util.utils.getFullTestURL(
-            ScriptingUtils.XSCRIPTCONTEXT_TEST_DOCUMENT);
-
-        int storageId = ScriptingUtils.getDefault().getScriptStorageId(
-            tParam.getMSF(), name);
-
-        return testInvoke("script://xscriptcontext.jsuite.test", storageId);
-    }
-
-    private boolean testInvoke(String logicalName, int storageId) {
-        return testInvoke(logicalName, storageId, null);
-    }
-
-    private boolean testInvoke(String logicalName, int storageId, XModel ctx) {
         HashMap map = new HashMap();
         map.put("SCRIPTING_DOC_STORAGE_ID", new Integer(storageId));
         map.put("SCRIPTING_DOC_URI", "hahaha");
@@ -177,25 +146,119 @@ public class _XScriptInvocation extends MultiMethodTest {
         short[][] num = new short[1][0];
         num[0] = new short[0];
 
+        log.println(description + ": " + logicalname);
+
         try {
-            oObj.invoke(logicalName, params, args, num, result);
+            oObj.invoke(logicalname, params, args, num, result);
+            output = "success";
         }
         catch (com.sun.star.lang.IllegalArgumentException iae) {
             log.println("Couldn't invoke script:" + iae);
-            return false;
+            output = "com.sun.star.lang.IllegalArgumentException";
         }
         catch (com.sun.star.script.CannotConvertException cce) {
             log.println("Couldn't invoke script:" + cce);
-            return false;
+            output = "com.sun.star.script.CannotConvertException";
         }
         catch (com.sun.star.reflection.InvocationTargetException ite) {
             log.println("Couldn't invoke script:" + ite);
-            return false;
+            output = "com.sun.star.reflection.InvocationTargetException";
         }
         catch (com.sun.star.uno.RuntimeException re) {
             log.println("Couldn't invoke script:" + re);
-            return false;
+            output = "com.sun.star.uno.RuntimeException";
         }
-        return true;
+
+        if (ctx != null)
+            ctx.dispose();
+
+        log.println("expected: " + expected + ", output: " + output);
+        if (output.equals(expected))
+            return true;
+        else
+            return false;
+    }
+
+    private int getStorageId(String location) {
+
+        if (location.equals("share"))
+            return 0;
+
+        if (location.equals("user"))
+            return 1;
+
+        XSimpleFileAccess access = null;
+        String uri = util.utils.getFullTestURL(location);
+
+        if (storageManager == null) {
+            try {
+                XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
+                    XPropertySet.class, tParam.getMSF());
+
+                XComponentContext xContext = (XComponentContext)
+                    UnoRuntime.queryInterface(XComponentContext.class,
+                    xProp.getPropertyValue("DefaultContext"));
+
+                XInterface ifc = (XInterface)
+                    xContext.getValueByName("/singletons/drafts.com.sun.star." +
+                    "script.framework.storage.theScriptStorageManager");
+
+                storageManager = (XScriptStorageManager)
+                    UnoRuntime.queryInterface(XScriptStorageManager.class, ifc);
+            }
+            catch( Exception e ) {
+                return -1;
+            }
+        }
+
+        access = getXSimpleFileAccess();
+        if (access == null)
+            return -1;
+
+        int id = storageManager.createScriptStorageWithURI(access, uri);
+
+        return id;
+    }
+
+    private XSimpleFileAccess getXSimpleFileAccess() {
+        XSimpleFileAccess access = null;
+
+        try {
+            Object fa = tParam.getMSF().createInstance(
+                "com.sun.star.ucb.SimpleFileAccess");
+
+            access = (XSimpleFileAccess)
+                UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
+        }
+        catch (com.sun.star.uno.Exception e) {
+            return null;
+        }
+        return access;
+    }
+
+    private XModel loadDocument(String name) {
+        XModel model = null;
+        SOfficeFactory factory = SOfficeFactory.getFactory(tParam.getMSF());
+
+        String fullname = util.utils.getFullTestURL(name);
+
+        try {
+            Object obj = factory.loadDocument(fullname);
+            model = (XModel) UnoRuntime.queryInterface(XModel.class, obj);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException iae) {
+            return null;
+        }
+        catch (Exception e) {
+            return null;
+        }
+
+        try {
+            Thread.sleep(5000);
+        }
+        catch (InterruptedException ie) {
+        }
+
+        return model;
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptNameResolver.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:11:23 $
+ *  last change:$Date: 2002-12-10 14:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,17 @@ package ifc.script.framework;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Collection;
 
 import drafts.com.sun.star.script.framework.XScriptNameResolver;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
+import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.ucb.XSimpleFileAccess;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.XInterface;
 
 import lib.MultiMethodTest;
@@ -78,6 +83,7 @@ import lib.Parameters;
 public class _XScriptNameResolver extends MultiMethodTest {
 
     public XScriptNameResolver oObj = null;
+    private XScriptStorageManager storageManager = null;
 
     /**
     * Retrieves object relation.
@@ -88,36 +94,36 @@ public class _XScriptNameResolver extends MultiMethodTest {
     public void _resolve() {
         boolean result = true;
 
-        result &= testValidURIs();
-        result &= testInvalidURIs();
-        result &= testNonExistentURIs();
+        Collection c =
+            (Collection) tEnv.getObjRelation("_resolve");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                result &= runResolveTest((Parameters)tests.next());
+            }
+        }
+        else {
+            result = false;
+        }
 
         tRes.tested("resolve()", result);
     }
 
-    private boolean testValidURIs() {
-        boolean result = true;
+    private boolean runResolveTest(Parameters data) {
+        String description = data.get("description");
+        String location = data.get("location");
+        String logicalname = data.get("logicalname");
+        String expected = data.get("expected");
+        String output = "";
 
-        log.println("Try to resolve a valid document script URI");
+        int storageId = getStorageId(location);
 
-        String name = util.utils.getFullTestURL(
-                ScriptingUtils.SCRIPT_IN_CLASSFILE_DOC_NAME);
+        log.println(description + ": " + logicalname);
 
-        int storageId = ScriptingUtils.getDefault().getScriptStorageId(
-            tParam.getMSF(), name);
-
-        result &= testValidURI(ScriptingUtils.DOC_LOGICAL_NAME, storageId);
-
-        log.println("Try to resolve a valid user script URI");
-        result &= testValidURI(ScriptingUtils.USER_LOGICAL_NAME, 1);
-
-        log.println("Try to resolve a valid share script URI");
-        result &= testValidURI(ScriptingUtils.SHARE_LOGICAL_NAME, 0);
-
-        return result;
-    }
-
-    private boolean testValidURI(String logicalName, int storageId) {
         HashMap map = new HashMap();
         map.put("SCRIPTING_DOC_STORAGE_ID", new Integer(storageId));
         map.put("SCRIPTING_DOC_URI", "hahaha");
@@ -126,105 +132,89 @@ public class _XScriptNameResolver extends MultiMethodTest {
         Object[] args = new Object[] {params};
 
         try {
-            XInterface ifc = (XInterface)
-                oObj.resolve(logicalName, args);
+            XInterface ifc = (XInterface) oObj.resolve(logicalname, args);
 
-            Integer resolvedId = (Integer)
-                params.getPropertyValue("SCRIPTING_RESOLVED_STORAGE_ID");
-
-            if (resolvedId == null) {
-                log.println("SCRIPTING_RESOLVED_STORAGE_ID not in return args");
-                return false;
-            }
-
-            if (resolvedId.intValue() != storageId) {
-                log.println("Wrong SCRIPTING_RESOLVED_STORAGE_ID returned");
-                return false;
-            }
-
-            if (ifc == null ||
-                UnoRuntime.queryInterface(XScriptInfo.class, ifc) == null)
-            {
-                log.println("Can't get XScriptInfo from resolved interface");
-                return false;
-            }
+            if (ifc == null)
+                output = "null";
+            else if (UnoRuntime.queryInterface(XScriptInfo.class, ifc) == null)
+                output = "null";
+            else
+                output = "XScriptInfo.class";
         }
         catch (com.sun.star.lang.IllegalArgumentException iae) {
-            log.println("Couldn't resolve URI:" + iae);
-            return false;
+            log.println("caught IllegalArgumentException: " + iae);
+            output = "com.sun.star.lang.IllegalArgumentException";
         }
         catch (com.sun.star.script.CannotConvertException cce) {
-            log.println("Couldn't resolve URI:" + cce);
-            return false;
+            log.println("caught CannotConvertException: " + cce);
+            output = "com.sun.star.script.CannotConvertException";
         }
         catch (com.sun.star.uno.RuntimeException re) {
-            log.println("Couldn't resolve URI:" + re);
-            return false;
+            log.println("caught RuntimeException: " + re);
+            output = "com.sun.star.uno.RuntimeException";
         }
-        return true;
+
+        log.println("expected: " + expected + ", output: " + output);
+        if (output.equals(expected))
+            return true;
+        else
+            return false;
     }
 
-    private boolean testInvalidURIs() {
-        log.println("Try an invalid URI, should throw IllegalArgumentException");
-        try {
-            HashMap map = new HashMap();
-            map.put("SCRIPTING_DOC_STORAGE_ID", new Integer(0));
-            map.put("SCRIPTING_DOC_URI", "hahaha");
+    private int getStorageId(String location) {
 
-            Parameters params = new Parameters(map);
-            Object[] args = new Object[] {params};
+        if (location.equals("share"))
+            return 0;
 
-            XInterface ifc = (XInterface)
-                oObj.resolve("scrpit://HighlightText.showForm", args);
-            log.println("Should not have resolved invalid URI");
-            return false;
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae) {
-            log.println("Correctly got exception:" + iae);
-        }
-        catch (com.sun.star.script.CannotConvertException cce) {
-            log.println("Got wrong exception" + cce);
-            return false;
-        }
-        catch (com.sun.star.uno.RuntimeException re) {
-            log.println("Got wrong exception:" + re);
-            return false;
-        }
-        return true;
-    }
+        if (location.equals("user"))
+            return 1;
 
-    private boolean testNonExistentURIs() {
-        log.println("Try a valid but non-existent URI");
-        try {
-            HashMap map = new HashMap();
-            map.put("SCRIPTING_DOC_STORAGE_ID", new Integer(0));
-            map.put("SCRIPTING_DOC_URI", "hahaha");
+        XSimpleFileAccess access = null;
+        String uri = util.utils.getFullTestURL(location);
 
-            Parameters params = new Parameters(map);
-            Object[] args = new Object[] {params};
+        if (storageManager == null) {
+            try {
+                XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
+                    XPropertySet.class, tParam.getMSF());
 
-            XInterface ifc = (XInterface)
-                oObj.resolve("script://Non.Existent", args);
+                XComponentContext xContext = (XComponentContext)
+                    UnoRuntime.queryInterface(XComponentContext.class,
+                    xProp.getPropertyValue("DefaultContext"));
 
-            if (ifc != null &&
-                UnoRuntime.queryInterface(XScriptInfo.class, ifc) != null)
-            {
-                log.println("Should not have resolved non-existent URI");
-                return false;
+                XInterface ifc = (XInterface)
+                    xContext.getValueByName("/singletons/drafts.com.sun.star." +
+                    "script.framework.storage.theScriptStorageManager");
+
+                storageManager = (XScriptStorageManager)
+                    UnoRuntime.queryInterface(XScriptStorageManager.class, ifc);
+            }
+            catch( Exception e ) {
+                return -1;
             }
         }
-        catch (com.sun.star.lang.IllegalArgumentException iae) {
-            log.println("Couldn't resolve name:" + iae);
-            return false;
+
+        access = getXSimpleFileAccess();
+        if (access == null)
+            return -1;
+
+        int id = storageManager.createScriptStorageWithURI(access, uri);
+
+        return id;
+    }
+
+    private XSimpleFileAccess getXSimpleFileAccess() {
+        XSimpleFileAccess access = null;
+
+        try {
+            Object fa = tParam.getMSF().createInstance(
+                "com.sun.star.ucb.SimpleFileAccess");
+
+            access = (XSimpleFileAccess)
+                UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
         }
-        catch (com.sun.star.script.CannotConvertException cce) {
-            log.println("Couldn't resolve name:" + cce);
-            return false;
+        catch (com.sun.star.uno.Exception e) {
+            return null;
         }
-        catch (com.sun.star.uno.RuntimeException re) {
-            log.println("Got wrong exception:" + re);
-            return false;
-        }
-        return true;
+        return access;
     }
 }

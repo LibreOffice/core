@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFunctionProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:29:36 $
+ *  last change:$Date: 2002-12-10 14:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,15 @@ import com.sun.star.beans.XPropertySet;
 import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
+import lib.Parameters;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 public class _XFunctionProvider extends MultiMethodTest {
 
-    private String defaultScript = "script://MemoryUtils.MemUsage";
     public XFunctionProvider oObj = null;
+
     /**
     * Retrieves object relation.
     */
@@ -86,12 +90,46 @@ public class _XFunctionProvider extends MultiMethodTest {
     }
 
     public void _getFunction() {
-        XFunction function = oObj.getFunction( defaultScript );
-        if ( function == null ) {
-            log.println("Failed:_XFunctionProvider.getFunction(), no function returned.");
-            tRes.tested("getScriptLogicalNames()", false);
-            return;
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getFunction");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                result &= runGetFunctionTest((Parameters)tests.next());
+            }
         }
-        tRes.tested("getFunction()", true);
+        else {
+            result = false;
+        }
+
+        tRes.tested("getFunction()", result);
+    }
+
+    private boolean runGetFunctionTest(Parameters testdata) {
+        String description = testdata.get("description");
+        String logicalname = testdata.get("logicalname");
+        String expected = testdata.get("expected");
+        String output = "";
+
+        log.println(testdata.get("description"));
+
+        XFunction function = oObj.getFunction(logicalname);
+
+        if (function == null)
+            output = "null";
+        else
+            output = "XFunction.class";
+
+        log.println("expected: " + expected + ", output: " + output);
+        if (output.equals(expected))
+            return true;
+        else
+            return false;
     }
 }

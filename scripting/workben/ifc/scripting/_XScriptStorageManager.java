@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptStorageManager.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:11:23 $
+ *  last change:$Date: 2002-12-10 14:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@ package ifc.script.framework.storage;
 import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 import drafts.com.sun.star.script.framework.storage.XScriptInfoAccess;
 
+import java.util.Iterator;
+import java.util.Collection;
+
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
@@ -73,8 +76,7 @@ import com.sun.star.uno.Exception;
 import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
-
-import ifc.script.framework.ScriptingUtils;
+import lib.Parameters;
 
 public class _XScriptStorageManager extends MultiMethodTest {
 
@@ -89,55 +91,91 @@ public class _XScriptStorageManager extends MultiMethodTest {
     public void _createScriptStorage() {
         boolean result = true;
 
-        XSimpleFileAccess access =
-            ScriptingUtils.getDefault().getXSimpleFileAccess(tParam.getMSF());
+        Collection c =
+            (Collection) tEnv.getObjRelation("_createScriptStorage");
 
-        if (access == null) {
-            result = false;
-        }
-        else {
-            try {
-                int id = oObj.createScriptStorage(access);
-            }
-            catch (com.sun.star.uno.RuntimeException re) {
-                log.println("Exception from createScriptStorage: " + re);
-                result = false;
-            }
+        if (c == null) {
+            tRes.tested("createScriptStorage()", false);
+            return;
         }
 
+        Iterator tests = c.iterator();
+
+        while (tests.hasNext()) {
+            Parameters testdata = (Parameters)tests.next();
+            String expected = testdata.get("expected");
+            String output = "";
+
+            log.println(testdata.get("description"));
+
+            XSimpleFileAccess access = getXSimpleFileAccess();
+
+            if (access == null) {
+                output = "Couldn't create XSimpleFileAccess";
+            }
+            else {
+                try {
+                    int id = oObj.createScriptStorage(access);
+                    output = "success";
+                }
+                catch (com.sun.star.uno.RuntimeException re) {
+                    log.println("Exception from createScriptStorage: " + re);
+                    output = "com.sun.star.uno.RuntimeException";
+                }
+            }
+            log.println("expected: " + expected + ", output: " + output);
+            result &= output.equals(expected);
+        }
         tRes.tested("createScriptStorage()", result);
     }
 
     public void _createScriptStorageWithURI() {
         boolean result = true;
 
-        XSimpleFileAccess access =
-            ScriptingUtils.getDefault().getXSimpleFileAccess(tParam.getMSF());
+        Collection c =
+            (Collection) tEnv.getObjRelation("_createScriptStorageWithURI");
 
-        String name = util.utils.getFullTestURL(
-            ScriptingUtils.SCRIPT_IN_CLASSFILE_DOC_NAME);
-        int id = oObj.createScriptStorageWithURI(access, name);
-
-        XInterface ifc = (XInterface)oObj.getScriptStorage(id);
-        XScriptInfoAccess info = (XScriptInfoAccess)
-            UnoRuntime.queryInterface(XScriptInfoAccess.class, ifc);
-
-        if (info == null) {
-            log.println("Couldn't get XScriptInfoAccess:");
+        if (c == null) {
             tRes.tested("createScriptStorageWithURI()", false);
+            return;
         }
 
-        try {
-            String[] names = info.getScriptLogicalNames();
+        Iterator tests = c.iterator();
 
-            if (names == null || names.length == 0) {
-                log.println("No logical names found");
-                result = false;
+        while (tests.hasNext()) {
+            Parameters testdata = (Parameters)tests.next();
+            String expected = testdata.get("expected");
+            String location = testdata.get("location");
+            String output = "";
+
+            log.println(testdata.get("description"));
+
+            String uri = util.utils.getFullTestURL(location);
+            XSimpleFileAccess access = getXSimpleFileAccess();
+
+            try {
+                int id = oObj.createScriptStorageWithURI(access, uri);
+
+                XInterface ifc = (XInterface)oObj.getScriptStorage(id);
+
+                if (ifc == null)
+                    output = "null";
+                else {
+                    Object info = UnoRuntime.queryInterface(
+                        XScriptInfoAccess.class, ifc);
+
+                    if (info == null)
+                        output = "null";
+                    else
+                        output = "XScriptInfoAccess.class";
+                }
             }
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae) {
-            log.println("Couldn't get logical names:" + iae.getMessage());
-            result = false;
+            catch (com.sun.star.uno.RuntimeException re) {
+                log.println("Caught RuntimeException: " + re);
+                output = "com.sun.star.uno.RuntimeException";
+            }
+            log.println("expected: " + expected + ", output: " + output);
+            result &= output.equals(expected);
         }
 
         tRes.tested("createScriptStorageWithURI()", result);
@@ -146,95 +184,117 @@ public class _XScriptStorageManager extends MultiMethodTest {
     public void _getScriptStorage() {
         boolean result = true;
 
-        log.println("Try getScriptStorage for share");
-        try {
-            XInterface ifc = (XInterface)oObj.getScriptStorage(0);
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getScriptStorage");
 
-            if (ifc == null) {
-                log.println("getScriptStorage returned null");
-                result = false;
-            }
-            else {
-                XScriptInfoAccess info = (XScriptInfoAccess)
-                    UnoRuntime.queryInterface(XScriptInfoAccess.class, ifc);
-
-                if (info == null) {
-                    log.println("Couldn't get XScriptInfoAccess from storage");
-                    result = false;
-                }
-            }
-        }
-        catch (com.sun.star.uno.RuntimeException re) {
-            log.println("Caught unexpected RuntimeException: " + re);
-            result = false;
+        if (c == null) {
+            tRes.tested("getScriptStorage()", false);
+            return;
         }
 
-        log.println("Try getScriptStorage for user");
-        try {
-            XInterface ifc = (XInterface)oObj.getScriptStorage(1);
-            if (ifc == null) {
-                log.println("getScriptStorage returned null");
-                result = false;
+        Iterator tests = c.iterator();
+
+        while (tests.hasNext()) {
+            Parameters testdata = (Parameters)tests.next();
+            String expected = testdata.get("expected");
+            String location = testdata.get("location");
+            String output = "";
+
+            log.println(testdata.get("description"));
+
+            try {
+                int storageid = getStorageId(location);
+
+                XInterface ifc = (XInterface)oObj.getScriptStorage(storageid);
+
+                if (ifc == null)
+                    output = "null";
+                else {
+                    Object info = UnoRuntime.queryInterface(
+                        XScriptInfoAccess.class, ifc);
+
+                    if (info == null)
+                        output = "null";
+                    else
+                        output = "XScriptInfoAccess.class";
+                }
             }
-            else {
-                XScriptInfoAccess info = (XScriptInfoAccess)
-                    UnoRuntime.queryInterface(XScriptInfoAccess.class, ifc);
-
-                if (info == null) {
-                    log.println("Couldn't get XScriptInfoAccess from storage");
-                    result = false;
-                }
-                try {
-                    String[] names = info.getScriptLogicalNames();
-
-                    if (names == null) {
-                        log.println("No logical names found");
-                        result = false;
-                    }
-                }
-                catch (com.sun.star.lang.IllegalArgumentException iae) {
-                    log.println("Error get logical names:" + iae.getMessage());
-                    result = false;
-                }
+            catch (com.sun.star.uno.RuntimeException re) {
+                log.println("Caught RuntimeException: " + re);
+                output = "com.sun.star.uno.RuntimeException";
             }
+            log.println("expected: " + expected + ", output: " + output);
+            result &= output.equals(expected);
         }
-        catch (com.sun.star.uno.RuntimeException re) {
-            log.println("Caught unexpected RuntimeException: " + re);
-            result = false;
-        }
-
         tRes.tested("getScriptStorage()", result);
     }
 
     public void _refreshScriptStorage() {
         boolean result = true;
 
-        log.println("Try to refresh a URI for non-existent script storage");
-        try {
-            oObj.refreshScriptStorage("file:///does/not/exist");
-            result = false;
-        }
-        catch (com.sun.star.uno.RuntimeException re) {
-        }
+        Collection c =
+            (Collection) tEnv.getObjRelation("_refreshScriptStorage");
 
-        log.println("Try to refresh a valid document URI");
-        try {
-            XSimpleFileAccess access =
-                ScriptingUtils.getDefault().getXSimpleFileAccess(
-                    tParam.getMSF());
-
-            String name = util.utils.getFullTestURL(
-                ScriptingUtils.SCRIPT_IN_CLASSFILE_DOC_NAME);
-
-            int id = oObj.createScriptStorageWithURI(access, name);
-
-            oObj.refreshScriptStorage(name);
-        }
-        catch (com.sun.star.uno.RuntimeException re) {
-            log.println("Caught unexpected RuntimeException: " + re);
-            result = false;
+        if (c == null) {
+            tRes.tested("refreshScriptStorage()", false);
+            return;
         }
 
+        Iterator tests = c.iterator();
+
+        while (tests.hasNext()) {
+            Parameters testdata = (Parameters)tests.next();
+            String expected = testdata.get("expected");
+            String location = testdata.get("location");
+            String output = "";
+
+            log.println(testdata.get("description"));
+
+            try {
+                String uri = util.utils.getFullTestURL(location);
+                oObj.refreshScriptStorage(uri);
+                output = "success";
+            }
+            catch (com.sun.star.uno.RuntimeException re) {
+                log.println("Caught RuntimeException: " + re);
+                output = "com.sun.star.uno.RuntimeException";
+            }
+            log.println("expected: " + expected + ", output: " + output);
+            result &= output.equals(expected);
+        }
         tRes.tested("refreshScriptStorage()", result);
+    }
+
+    private int getStorageId(String location) {
+
+        if (location.equals("share"))
+            return 0;
+
+        if (location.equals("user"))
+            return 1;
+
+        String uri = util.utils.getFullTestURL(location);
+
+        XSimpleFileAccess access = getXSimpleFileAccess();
+        if (access == null)
+            return -1;
+
+        return oObj.createScriptStorageWithURI(access, uri);
+    }
+
+    private XSimpleFileAccess getXSimpleFileAccess() {
+        XSimpleFileAccess access = null;
+
+        try {
+            Object fa = tParam.getMSF().createInstance(
+                "com.sun.star.ucb.SimpleFileAccess");
+
+            access = (XSimpleFileAccess)
+                UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
+        }
+        catch (com.sun.star.uno.Exception e) {
+            return null;
+        }
+        return access;
     }
 }
