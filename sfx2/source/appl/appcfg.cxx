@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:28:11 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include "docfile.hxx"
 #include "viewfrm.hxx"
 #include "sfxhelp.hxx"
 #include "sfxtypes.hxx"
@@ -1435,14 +1436,19 @@ void SfxApplication::SaveConfiguration() const
 }
 
 //--------------------------------------------------------------------
-
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSynchron )
 {
     DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
-    if ( pDoc && pDoc->IsPreview() )
-        return;
+    if ( pDoc )
+    {
+        if ( pDoc->IsPreview() )
+            return;
+        SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_HIDDEN, sal_False );
+        if ( pItem && pItem->GetValue() )
+            bSynchron = TRUE;
+    }
 
     // load on demand
     pAppData_Impl->pEventConfig->GetAppEventConfig_Impl();
