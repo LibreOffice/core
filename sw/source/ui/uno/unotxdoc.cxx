@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-27 07:51:46 $
+ *  last change: $Author: tl $ $Date: 2002-09-06 05:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _PVPRTDAT_HXX
 #include <pvprtdat.hxx>
 #endif
+#ifndef _SWPRTOPT_HXX
+#include <swprtopt.hxx>
+#endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
@@ -121,6 +124,9 @@
 #endif
 #ifndef _UNOSRCH_HXX
 #include <unosrch.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
+#include <toolkit/awt/vclxdevice.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -207,6 +213,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _SFX_PROGRESS_HXX
+#include <sfx2/progress.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -2352,7 +2361,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const uno::Sequence< beans::PropertyValue >& xOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
-    return 0;
+    return pDocShell->GetDoc()->GetPageCount();
 }
 /* -----------------------------23.08.02 16:00--------------------------------
 
@@ -2363,17 +2372,81 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         const uno::Sequence< beans::PropertyValue >& xOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
-    return uno::Sequence< beans::PropertyValue >();
+    const SwDoc &rDoc = *pDocShell->GetDoc();
+    if (!(0 <= nRenderer  &&  nRenderer < rDoc.GetPageCount()))
+        throw IllegalArgumentException();
+
+    Size aPgSize( rDoc.GetPageSize( nRenderer + 1 ) );
+    awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
+                         TWIP_TO_MM100( aPgSize.Height() ));
+
+    uno::Sequence< beans::PropertyValue > aRenderer(1);
+    PropertyValue  &rValue = aRenderer.getArray()[0];
+    rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
+    rValue.Value <<= aPageSize;
+
+    return aRenderer;
 }
 /* -----------------------------23.08.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextDocument::render(
         sal_Int32 nRenderer,
-        const uno::Any& aSelection,
-        const uno::Sequence< beans::PropertyValue >& xOptions )
+        const uno::Any& rSelection,
+        const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
+    const SwDoc &rDoc = *pDocShell->GetDoc();
+    if (!(0 <= nRenderer  &&  nRenderer < rDoc.GetPageCount()))
+        throw IllegalArgumentException();
+
+    const TypeId aTypeId = TYPE(SwView);
+    SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+    while(pView && pView->GetObjectShell() != pDocShell)
+    {
+        pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
+    }
+
+    uno::Reference< awt::XDevice >  xRenderDevice;
+    const sal_Int32                 nPageNumber = nRenderer + 1;
+    for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
+    {
+        if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
+            rxOptions[ nProperty].Value >>= xRenderDevice;
+    }
+    OutputDevice*   pOut = 0;
+    if (xRenderDevice.is())
+    {
+        VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
+    }
+
+    if(pView && pOut)
+    {
+        SwWrtShell &rWrtSh = pView->GetWrtShell();
+
+        SwPrtOptions    aOptions( C2U("TestPDF") );
+        // aus MakeOptions geklaut  (siehe viewfunc.hxx, viewprt.cxx)
+        {
+            SwPrtOptions& rOpts = aOptions;
+            SwPrintData* pData = (SwPrintData*) SW_MOD()->GetPrtOptions(FALSE);
+            rOpts = *pData;
+
+            Range aPageRange( nRenderer+1, nRenderer+1 );
+            MultiSelection aPage( aPageRange );
+            aPage.SetTotalRange( Range(0,RANGE_MAX) );
+            aPage.Select( aPageRange );
+            rOpts.aMulti = aPage;
+            rOpts.nCopyCount = 1;
+            rOpts.bCollate = FALSE;
+            rOpts.bPrintSelection = FALSE;
+            rOpts.bJobStartet = FALSE;
+        }
+
+        SfxProgress aProgress( pView->GetObjectShell(), C2U("ProgressExportPDF"), 10 );
+
+        rWrtSh.Prt( aOptions, aProgress, pOut );
+    }
 }
 /* -----------------------------20.06.00 09:54--------------------------------
 

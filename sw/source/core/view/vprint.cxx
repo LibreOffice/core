@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 08:06:36 $
+ *  last change: $Author: tl $ $Date: 2002-09-06 05:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,19 +334,21 @@ const XubString& SwPrtOptions::MakeNextJobName()
  *  Aenderung   :
  ******************************************************************************/
 
-void SetSwVisArea( ViewShell *pSh, const SwRect &rRect )
+void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL bPDFExport )
 {
     ASSERT( !pSh->GetWin(), "Drucken mit Window?" );
     pSh->aVisArea = rRect;
     pSh->Imp()->SetFirstVisPageInvalid();
     Point aPt( rRect.Pos() );
 
-    aPt += pSh->aPrtOffst;
+    if (!bPDFExport)
+        aPt += pSh->aPrtOffst;
     aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
 
-    MapMode aMapMode( pSh->GetPrt()->GetMapMode() );
+    OutputDevice *pOut = bPDFExport ? pSh->GetOut() : pSh->GetPrt();
+    MapMode aMapMode( pOut->GetMapMode() );
     aMapMode.SetOrigin( aPt );
-    pSh->GetPrt()->SetMapMode( aMapMode );
+    pOut->SetMapMode( aMapMode );
 }
 
 /******************************************************************************
@@ -632,34 +634,36 @@ void lcl_PrintPostItsEndPage( ViewShell* pPrtShell,
 }
 
 /******************************************************************************
- *  Methode     :   void ViewShell::SetPrt( SfxPrinter *pNew )
+ *  Methode     :   void ViewShell::SetPrt( SfxPrinter *pNew, OutputDevice *pPDFOut )
  *  Beschreibung:
  *  Erstellt    :   OK 07.11.94 10:22
  *  Aenderung   :
  ******************************************************************************/
 
-void ViewShell::InitPrt( SfxPrinter *pPrt )
+void ViewShell::InitPrt( SfxPrinter *pPrt, OutputDevice *pPDFOut )
 {
     //Fuer den Printer merken wir uns einen negativen Offset, der
     //genau dem Offset de OutputSize entspricht. Das ist notwendig,
     //weil unser Ursprung der linken ober Ecke der physikalischen
     //Seite ist, die Ausgaben (SV) aber den Outputoffset als Urstprung
     //betrachten.
-    if ( pPrt )
+    OutputDevice *pTmpDev = pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
+    if ( pTmpDev )
     {
-        aPrtOffst = pPrt->GetPageOffset();
-        aPrtOffst += pPrt->GetMapMode().GetOrigin();
-        MapMode aMapMode( pPrt->GetMapMode() );
+        aPrtOffst = pPrt ? pPrt->GetPageOffset() : Point();
+
+        aPrtOffst += pTmpDev->GetMapMode().GetOrigin();
+        MapMode aMapMode( pTmpDev->GetMapMode() );
         aMapMode.SetMapUnit( MAP_TWIP );
-        pPrt->SetMapMode( aMapMode );
-        pPrt->SetLineColor();
-        pPrt->SetFillColor();
+        pTmpDev->SetMapMode( aMapMode );
+        pTmpDev->SetLineColor();
+        pTmpDev->SetFillColor();
     }
     else
         aPrtOffst.X() = aPrtOffst.Y() = 0;
 
     if ( !pWin )
-        pOut = pPrt;    //Oder was sonst?
+        pOut = pTmpDev;    //Oder was sonst?
 }
 
 void ViewShell::SetPrt( SfxPrinter *pNew )
@@ -841,14 +845,16 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
 }
 
 /******************************************************************************
- *  Methode     :   void ViewShell::Prt( const SwPrtOptions& rOptions )
+ *  Methode     :   void ViewShell::Prt( const SwPrtOptions& rOptions, SfxProgress& rProgress,
+                                         OutputDevice *pPDFOut )
  *  Beschreibung:
  *  Erstellt    :   OK 04.11.94 15:33
  *  Aenderung   :   MA 10. May. 95
  ******************************************************************************/
 
 
-BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
+BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
+                     OutputDevice *pPDFOut )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Immer die Druckroutine in viewpg.cxx (fuer Seitenvorschau) mitpflegen!!
@@ -872,19 +878,27 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
             "Seite 0 Drucken?" );
     ASSERT( aPages.Min() <= aPages.Max(),
             "MinSeite groesser MaxSeite." );
-    // wenn kein Drucker vorhanden ist, wird nicht gedruckt
-    SfxPrinter* pPrt = GetPrt();
-    if( !pPrt || !pPrt->GetName().Len() )
+
+    SfxPrinter* pPrt = 0;   //!! will be 0 for PDF export !!
+    if (pPDFOut)
+        pPDFOut->Push();
+    else
     {
-        ASSERT( FALSE, "Drucken ohne Drucker?" );
-        return bStartJob;
+        // wenn kein Drucker vorhanden ist, wird nicht gedruckt
+        pPrt = GetPrt();
+        if( !pPrt || !pPrt->GetName().Len() )
+        {
+            ASSERT( FALSE, "Drucken ohne Drucker?" );
+            return bStartJob;
+        }
+
+        if( !rOptions.GetJobName().Len() && !pPrt->IsJobActive() )
+            return bStartJob;
+
+        // Einstellungen am Drucker merken
+        SwPrtOptSave aPrtSave( pPrt );
     }
-
-    if( !rOptions.GetJobName().Len() && !pPrt->IsJobActive() )
-        return bStartJob;
-
-    // Einstellungen am Drucker merken
-    SwPrtOptSave aPrtSave( pPrt );
+    OutputDevice *pPrtOrPDFOut = pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
 
     // eine neue Shell fuer den Printer erzeugen
     ViewShell *pShell;
@@ -902,7 +916,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
         pPrtDoc->LockExpFlds();
 
         // Der Drucker wird uebernommen
-        pPrtDoc->SetPrt( pPrt );
+        if (pPrt)
+            pPrtDoc->SetPrt( pPrt );
 
         const SfxPoolItem* pCpyItem;
         const SfxItemPool& rPool = GetAttrPool();
@@ -982,7 +997,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
     else
     {
         pPrtDoc = GetDoc();
-        pShell = new ViewShell( *this, 0 );
+        OutputDevice *pTmpDev = pPDFOut ? pPDFOut : 0;
+        pShell = new ViewShell( *this, 0, pTmpDev );
     }
 
     {   //Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
@@ -1039,7 +1055,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
     pShell->CalcPagesForPrint( (USHORT)aPages.Max(), &rProgress, pStr,
                                 nMergeAct, nMergeCnt );
 
-    if( rOptions.GetJobName().Len() || pPrt->IsJobActive() )
+    if( pPDFOut || rOptions.GetJobName().Len() || pPrt->IsJobActive() )
     {
         BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
@@ -1058,20 +1074,23 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
             USHORT nLastPageNo  = 0;
             USHORT nPageNo      = 1;
 
-            if( rOptions.IsPrintSingleJobs() && sJobName.Len() &&
-                ( bStartJob || rOptions.bJobStartet ) )
+            if (pPrt)
             {
-                pPrt->EndJob();
-                bStartJob = FALSE;
-                rOptions.bJobStartet = TRUE;
+                if( rOptions.IsPrintSingleJobs() && sJobName.Len() &&
+                    ( bStartJob || rOptions.bJobStartet ) )
+                {
+                    pPrt->EndJob();
+                    bStartJob = FALSE;
+                    rOptions.bJobStartet = TRUE;
 
-                // Reschedule statt Yield, da Yield keine Events abarbeitet
-                // und es sonst eine Endlosschleife gibt.
-                while( pPrt->IsPrinting() )
-                        rProgress.Reschedule();
+                    // Reschedule statt Yield, da Yield keine Events abarbeitet
+                    // und es sonst eine Endlosschleife gibt.
+                    while( pPrt->IsPrinting() )
+                            rProgress.Reschedule();
 
-                sJobName = rOptions.MakeNextJobName();
-                nJobStartError = JOBSET_ERR_DEFAULT;
+                    sJobName = rOptions.MakeNextJobName();
+                    nJobStartError = JOBSET_ERR_DEFAULT;
+                }
             }
 
             for( USHORT i = 1; i <= (USHORT)aPages.Max(); ++i )
@@ -1153,7 +1172,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
             {
                 lcl_GetPostIts( pDoc, aPostItFields );
                 pPostItDoc   = new SwDoc;
-                pPostItDoc->SetPrt( pPrt );
+                if (!pPrt)
+                    pPostItDoc->SetPrt( pPrt );
                 pPostItShell = new ViewShell( *pPostItDoc, 0,
                                                pShell->GetViewOptions() );
                 // Wenn PostIts am Dokumentenende gedruckt werden sollen,
@@ -1170,11 +1190,18 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
             MapMode aOldMapMode;
 
             const SwPageDesc *pLastPageDesc = NULL;
-            const BOOL bSetOrient = pPrt->HasSupport( SUPPORT_SET_ORIENTATION );
-            const BOOL bSetPaperSz = pPrt->HasSupport( SUPPORT_SET_PAPERSIZE );
-            const BOOL bSetPaperBin =  !rOptions.bPaperFromSetup &&
+            BOOL bSetOrient   = FALSE;
+            BOOL bSetPaperSz  = FALSE;
+            BOOL bSetPaperBin = FALSE;
+            BOOL bSetPrt      = FALSE;
+            if (pPrt)
+            {
+                bSetOrient      = pPrt->HasSupport( SUPPORT_SET_ORIENTATION );
+                bSetPaperSz     = pPrt->HasSupport( SUPPORT_SET_PAPERSIZE );
+                bSetPaperBin    =  !rOptions.bPaperFromSetup &&
                                     pPrt->HasSupport( SUPPORT_SET_PAPERBIN );
-            const BOOL bSetPrt = bSetOrient || bSetPaperSz || bSetPaperBin;
+                bSetPrt = bSetOrient || bSetPaperSz || bSetPaperBin;
+            }
 
             if ( rOptions.nPrintPostIts != POSTITS_ONLY )
             {
@@ -1182,18 +1209,22 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                 {
                     // Mag der Anwender noch ?
                     rProgress.Reschedule();
-                    if( ( JOBSET_ERR_ERROR == nJobStartError )
-                        || ( !pPrt->IsJobActive() &&
-                            ( !sJobName.Len() || bStartJob ) ) )
+
+                    if (pPrt)
                     {
-                        if( bHiddenFlds )
+                        if( ( JOBSET_ERR_ERROR == nJobStartError )
+                            || ( !pPrt->IsJobActive() &&
+                                ( !sJobName.Len() || bStartJob ) ) )
                         {
-                            SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-                            pFldType->Modify( &aHnt, 0);
-                            CalcPagesForPrint( (USHORT)aPages.Max() );
+                            if( bHiddenFlds )
+                            {
+                                SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
+                                pFldType->Modify( &aHnt, 0);
+                                CalcPagesForPrint( (USHORT)aPages.Max() );
+                            }
+                            bStop = TRUE;
+                            break;
                         }
-                        bStop = TRUE;
-                        break;
                     }
 
                     ::SetSwVisArea( pShell, pStPage->Frm() );
@@ -1201,12 +1232,12 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                     //  wenn wir einen Umschlag drucken wird ein Offset beachtet
                     if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
                     {
-                        aOldMapMode = pPrt->GetMapMode();
-                        Point aNewOrigin = pPrt->GetMapMode().GetOrigin();
+                        aOldMapMode = pPrtOrPDFOut->GetMapMode();
+                        Point aNewOrigin = pPrtOrPDFOut->GetMapMode().GetOrigin();
                         aNewOrigin += rOptions.aOffset;
-                        MapMode aTmp( pPrt->GetMapMode() );
+                        MapMode aTmp( pPrtOrPDFOut->GetMapMode() );
                         aTmp.SetOrigin( aNewOrigin );
-                        pPrt->SetMapMode( aTmp );
+                        pPrtOrPDFOut->SetMapMode( aTmp );
                     }
 
                     BOOL bRightPg = pStPage->OnRightPage();
@@ -1219,10 +1250,10 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                             pLastPageDesc = pStPage->GetPageDesc();
                             BOOL bLandScp = pLastPageDesc->GetLandscape();
 
-                            if( bSetPaperBin )      // Schacht einstellen.
+                            if( pPrt && bSetPaperBin )      // Schacht einstellen.
                                 pPrt->SetPaperBin( pStPage->GetFmt()->
                                                     GetPaperBin().GetValue() );
-                            if ( bSetPaperSz )
+                            if ( pPrt && bSetPaperSz )
                             {
                                 Size aSize = pStPage->Frm().SSize();
                                 if ( bLandScp && bSetOrient )
@@ -1237,7 +1268,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                                 else
                                     pPrt->SetPaper( ePaper );
                             }
-                            if ( bSetOrient )
+                            if ( pPrt && bSetOrient )
                             {
                                 // Orientation einstellen: Breiter als Hoch
                                 //  -> Landscape, sonst -> Portrait.
@@ -1263,7 +1294,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                         if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
                             && sJobName.Len() )
                         {
-                            if( !pPrt->IsJobActive() )
+                            if( pPrt && !pPrt->IsJobActive() )
                             {
                                 bStartJob = pPrt->StartJob( sJobName );
                                 if( !bStartJob )
@@ -1272,7 +1303,9 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                                     continue;
                                 }
                             }
-                            pShell->InitPrt( pPrt );
+
+                            pShell->InitPrt( pPrt, pPDFOut );
+
                             ::SetSwVisArea( pShell, pStPage->Frm() );
                             nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
@@ -1280,11 +1313,13 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                         if( !bIgnoreEmptyPage || (0==(bIgnoreEmptyPage=TRUE)) ||
                             pStPage->Frm().Height() )
                         {
-                            pPrt->StartPage();
+                            if (pPrt)
+                                pPrt->StartPage();
                             pStPage->GetUpper()->Paint( pStPage->Frm() );
 //                          SFX_APP()->SpoilDemoOutput( *pShell->GetOut(),
 //                                                           pStPage->Frm().SVRect() );
-                            pPrt->EndPage();
+                            if (pPrt)
+                                pPrt->EndPage();
                         }
                         SwPaintQueue::Repaint();
 
@@ -1309,17 +1344,18 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                                 ::SetSwVisArea( pShell, aTmp );
                                 while ( nDiff > 0 )
                                 {
-                                    pPrt->StartPage();
+                                    if (pPrt)
+                                        pPrt->StartPage();
 
                                     //VisArea auf die Tabelle schummeln
                                     aNewVis.Pos().Y() += aNewVis.Height()+1;
 
                                     //Offset in den MapMode schummeln.
-                                    MapMode aMap( pPrt->GetMapMode() );
+                                    MapMode aMap( pPrtOrPDFOut->GetMapMode() );
                                     Point aTmp( aMap.GetOrigin() );
                                     aTmp.Y() -= aNewVis.Height()+1;
                                     aMap.SetOrigin( aTmp );
-                                    pPrt->SetMapMode( aMap );
+                                    pPrtOrPDFOut->SetMapMode( aMap );
 
                                     /// OD 30.08.2002 #102450#
                                     /// determine color of page the table is on
@@ -1353,7 +1389,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
 
 //                                  SFX_APP()->SpoilDemoOutput( *pShell->GetOut(),
 //                                                               aNewVis.SVRect() );
-                                    pPrt->EndPage();
+                                    if (pPrt)
+                                        pPrt->EndPage();
                                     SwPaintQueue::Repaint();
                                     nDiff -= pBody->Prt().Height();
                                 }
@@ -1372,7 +1409,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                     // den eventl. fuer Umschlaege modifizierte OutDevOffset wieder
                     // zuruecksetzen.
                     if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
-                        pPrt->SetMapMode( aOldMapMode );
+                        pPrtOrPDFOut->SetMapMode( aOldMapMode );
 
                     if ( pStPage == pEndPage )
                         pStPage = 0;
@@ -1429,6 +1466,11 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
         if ( !pPrtDoc->RemoveLink() )
             delete pPrtDoc;
     }
+
+    // restore settings of OutputDevicef
+    if (pPDFOut)
+        pPDFOut->Pop();
+
     return bStartJob;
 }
 
@@ -1612,6 +1654,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2002/09/03 08:06:36  od
+      #102450# - add 3rd parameter to method calls SwViewImp::PaintLayer
+
       Revision 1.8  2002/06/27 11:39:50  fme
       #89703# Controls were printed although disabled in the options
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 11:45:42 $
+ *  last change: $Author: tl $ $Date: 2002-09-06 05:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ class ViewShell : public Ring
 
     //Umsetzen der SwVisArea, damit vor dem Drucken sauber formatiert
     //werden kann.
-    friend void SetSwVisArea( ViewShell *pSh, const SwRect & );
+    friend void SetSwVisArea( ViewShell *pSh, const SwRect &, BOOL bPDFExport = FALSE );
 
     static sal_Bool bLstAct;            // sal_True wenn Das EndAction der letzten Shell
                                     // laeuft; also die EndActions der
@@ -210,7 +210,10 @@ public:
     const SwNodes& GetNodes() const;
 
     SfxPrinter*     GetPrt( sal_Bool bCreate = sal_False ) const;
-    void            InitPrt( SfxPrinter * );    //Nach Druckerwechsel, vom Doc
+
+    //Nach Druckerwechsel, vom Doc
+    //pPDFOut != NULL is used for PDF export.
+    void            InitPrt( SfxPrinter * , OutputDevice *pPDFOut = NULL );
 
     SwPrintData*    GetPrintData() const;
     void            SetPrintData(SwPrintData& rPrtData);
@@ -301,7 +304,9 @@ public:
     void   ChgAllPageSize( Size &rSz );
 
     //Druckauftrag abwickeln.
-    sal_Bool Prt( SwPrtOptions& rOptions, SfxProgress& rProgress );
+    // pPDFOut != Null is: do PDF Export (no printing!)
+    sal_Bool Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
+                  OutputDevice *pPDFOut = NULL );
     //"Drucken" fuer OLE 2.0
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt,
                          OutputDevice* pOleOut, const Rectangle& rRect );
