@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:53:32 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 22:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,24 +171,27 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
 
     for (property; property != rProperties.end(); property++)
     {
-        sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
-        switch (nContextID)
+        if (property->mnIndex != -1)
         {
-            case CTF_SC_ALLPADDING                  : pAllPaddingProperty = property; break;
-            case CTF_SC_LEFTPADDING                 : pPadding[XML_LINE_LEFT] = property; break;
-            case CTF_SC_RIGHTPADDING                : pPadding[XML_LINE_RIGHT] = property; break;
-            case CTF_SC_TOPPADDING                  : pPadding[XML_LINE_TOP] = property; break;
-            case CTF_SC_BOTTOMPADDING               : pPadding[XML_LINE_BOTTOM] = property; break;
-            case CTF_SC_ALLBORDER                   : pAllBorderProperty = property; break;
-            case CTF_SC_LEFTBORDER                  : pBorders[XML_LINE_LEFT] = property; break;
-            case CTF_SC_RIGHTBORDER                 : pBorders[XML_LINE_RIGHT] = property; break;
-            case CTF_SC_TOPBORDER                   : pBorders[XML_LINE_TOP] = property; break;
-            case CTF_SC_BOTTOMBORDER                : pBorders[XML_LINE_BOTTOM] = property; break;
-            case CTF_SC_ALLBORDERWIDTH              : pAllBorderWidthProperty = property; break;
-            case CTF_SC_LEFTBORDERWIDTH             : pBorderWidths[XML_LINE_LEFT] = property; break;
-            case CTF_SC_RIGHTBORDERWIDTH            : pBorderWidths[XML_LINE_RIGHT] = property; break;
-            case CTF_SC_TOPBORDERWIDTH              : pBorderWidths[XML_LINE_TOP] = property; break;
-            case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = property; break;
+            sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
+            switch (nContextID)
+            {
+                case CTF_SC_ALLPADDING                  : pAllPaddingProperty = property; break;
+                case CTF_SC_LEFTPADDING                 : pPadding[XML_LINE_LEFT] = property; break;
+                case CTF_SC_RIGHTPADDING                : pPadding[XML_LINE_RIGHT] = property; break;
+                case CTF_SC_TOPPADDING                  : pPadding[XML_LINE_TOP] = property; break;
+                case CTF_SC_BOTTOMPADDING               : pPadding[XML_LINE_BOTTOM] = property; break;
+                case CTF_SC_ALLBORDER                   : pAllBorderProperty = property; break;
+                case CTF_SC_LEFTBORDER                  : pBorders[XML_LINE_LEFT] = property; break;
+                case CTF_SC_RIGHTBORDER                 : pBorders[XML_LINE_RIGHT] = property; break;
+                case CTF_SC_TOPBORDER                   : pBorders[XML_LINE_TOP] = property; break;
+                case CTF_SC_BOTTOMBORDER                : pBorders[XML_LINE_BOTTOM] = property; break;
+                case CTF_SC_ALLBORDERWIDTH              : pAllBorderWidthProperty = property; break;
+                case CTF_SC_LEFTBORDERWIDTH             : pBorderWidths[XML_LINE_LEFT] = property; break;
+                case CTF_SC_RIGHTBORDERWIDTH            : pBorderWidths[XML_LINE_RIGHT] = property; break;
+                case CTF_SC_TOPBORDERWIDTH              : pBorderWidths[XML_LINE_TOP] = property; break;
+                case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = property; break;
+            }
         }
     }
     for ( i = 0; i < 4; i++)
@@ -254,12 +257,15 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
     for (property; property != rProperties.end(); property++)
     {
-        sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
-        switch (nContextID)
+        if (property->mnIndex != -1)
         {
-            case CTF_SC_ROWHEIGHT                   : pHeight = property; break;
-            case CTF_SC_ROWOPTIMALHEIGHT            : pOptimalHeight = property; break;
-            case CTF_SC_ROWBREAKBEFORE              : pPageBreak = property; break;
+            sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
+            switch (nContextID)
+            {
+                case CTF_SC_ROWHEIGHT                   : pHeight = property; break;
+                case CTF_SC_ROWOPTIMALHEIGHT            : pOptimalHeight = property; break;
+                case CTF_SC_ROWBREAKBEFORE              : pPageBreak = property; break;
+            }
         }
     }
     if (pPageBreak)
