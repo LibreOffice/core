@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:29:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ class ODocumentDefinition
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XComponentLoader >       m_xFrameLoader;
     OInterceptor*                                                                       m_pInterceptor;
     sal_Bool                                                                            m_bForm; // <TRUE/> if it is a form
+    sal_Bool                                                                            m_bOpenInDesign;
     OEmbeddedClientHelper*                                                              m_pClientHelper;
 
 private:
@@ -157,6 +158,7 @@ private:
             If <TRUE/> the document will be switched to readonly mode
     */
     void setModelReadOnly(sal_Bool _bReadOnly);
+    void updateDocumentTitle();
 protected:
     virtual ~ODocumentDefinition();
 
