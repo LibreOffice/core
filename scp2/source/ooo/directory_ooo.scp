@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: rt $ $Date: 2004-07-05 10:41:46 $
+*  last change: $Author: obo $ $Date: 2004-07-05 13:17:10 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -708,6 +708,16 @@ End
 Directory gid_Dir_Share_Registry_Res_Lang_Org_Openoffice_Ucb
     ParentID = gid_Dir_Share_Registry_Res_Lang_Org_Openoffice;
     HostName = "ucb";
+End
+
+Directory gid_Dir_Share_Registry_Spool
+    ParentID = gid_Dir_Share_Registry;
+    HostName = "spool";
+End
+
+Directory gid_Dir_Share_Registry_Modules
+    ParentID = gid_Dir_Share_Registry;
+    HostName = "modules";
 End
 
 Directory gid_Dir_Autotext
