@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:31:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,20 @@
 #ifndef INCLUDED_BRIDGES_CPP_UNO_SHARED_TYPES_HXX
 #define INCLUDED_BRIDGES_CPP_UNO_SHARED_TYPES_HXX
 
+#include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
 
 namespace bridges { namespace cpp_uno { namespace shared {
+
+/**
+ * Determines whether a type is a "simple" type (VOID, BOOLEAN, BYTE, SHORT,
+ * UNSIGNED SHORT, LONG, UNSIGNED LONG, HYPER, UNSIGNED HYPER, FLOAT, DOUBLE,
+ * CHAR, or an enum type).
+ *
+ * @param typeClass a type class
+ * @return true if the given type is "simple"
+ */
+bool isSimpleType(typelib_TypeClass typeClass);
 
 /**
  * Determines whether a type is a "simple" type (VOID, BOOLEAN, BYTE, SHORT,
