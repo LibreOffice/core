@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-19 11:20:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_JOBSET_CXX
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
