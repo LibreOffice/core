@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-04 21:44:58 $
+#   last change: $Author: fs $ $Date: 2001-08-21 13:01:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,5 +122,9 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo CLEAR_THE_FILE		> $@
     @echo _TI					>> $@
     @echo _real					>> $@
+    @NodeValueAccessor			>> $@
+    @SubNodeAccess				>> $@
+    @UpdateFromConfig			>> $@
+    @UpdateToConfig				>> $@
         @echo _Impl >> $@
 
