@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hjs $ $Date: 2002-11-04 18:52:30 $
+#   last change: $Author: vg $ $Date: 2002-11-08 10:57:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -237,10 +237,10 @@ AFLAGS=/c /Cp /coff
 OLE2ANSI=TRUE
 
 .IF "$(bndchk)" != ""
-CC=$(DEVROOT)\bcheck6\nmcl
+CC=nmcl
 .ELSE
 .IF "$(truetime)" != ""
-CC=$(DEVROOT)\truetime\nmcl /NMttOn
+CC=nmcl /NMttOn
 .ELSE
 .IF "$(syntax)"!=""
 CC=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
@@ -448,13 +448,13 @@ MAPFILE=-out:$$@
 .ENDIF
 
 .IF "$(bndchk)" != ""
-LINK=$(DEVROOT)\bcheck6\nmlink $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
+LINK=nmlink $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
 #LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv /PDB:NONE
 LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv
 .ENDIF
 
 .IF "$(truetime)" != ""
-LINK=$(DEVROOT)\truetime\nmlink /NMttOn $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
+LINK=nmlink /NMttOn $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
 #LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv 
 LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv /PDB:NONE
 .ENDIF
