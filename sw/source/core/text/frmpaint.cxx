@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: od $ $Date: 2002-11-07 09:06:05 $
+ *  last change: $Author: fme $ $Date: 2002-12-04 10:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,6 +611,9 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 }
                 pFnt->SetVertical( 0, IsVertical() );
                 SwFrmSwapper aSwapper( this, sal_True );
+                SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
+                aLayoutModeModifier.Modify( IsRightToLeft() );
+
                 pFnt->Invalidate();
                 pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
                 Point aPos = Frm().Pos() + Prt().Pos();
