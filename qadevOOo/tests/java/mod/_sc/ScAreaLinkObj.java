@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAreaLinkObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:03:58 $
+ *  last change:$Date: 2003-11-18 16:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,8 @@ public class ScAreaLinkObj extends TestCase {
             XAreaLinks links = (XAreaLinks) AnyConverter.toObject(
                 new Type(XAreaLinks.class),props.getPropertyValue("AreaLinks")) ;
             CellAddress addr = new CellAddress ((short) 1,2,3) ;
-            links.insertAtPosition (addr, "", "a2:b5", "", "") ;
+            String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
+            links.insertAtPosition (addr, aSourceArea, "a2:b5", "", "") ;
 
             oObj = (XInterface) AnyConverter.toObject(
                         new Type(XInterface.class), links.getByIndex(0)) ;
