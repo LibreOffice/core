@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:47:39 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 15:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,17 @@ void ScCsvTableBox::FillColumnData( ScAsciiOptions& rOptions ) const
         maGrid.FillColumnDataSep( rOptions );
 }
 
+void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
+{
+    if( IsValidSplitPos( nPos ) )
+    {
+        if( nPos - SCROLL_DIST + 1 <= GetFirstVisPos() )
+            CommitRequest( CSVREQ_POSOFFSET, nPos - SCROLL_DIST );
+        else if( nPos + SCROLL_DIST >= GetLastVisPos() )
+            CommitRequest( CSVREQ_POSOFFSET, nPos - GetVisPosCount() + SCROLL_DIST + 1 );
+    }
+}
+
 
 // event handling -------------------------------------------------------------
 
@@ -314,6 +325,7 @@ IMPL_LINK( ScCsvTableBox, CsvRequestHdl, ScCsvControl*, pCtrl )
     const ScCsvLayoutData aOldData( maData );
     sal_Int32 nData = rReq.GetData();
 
+    bool bFound = true;
     switch( rReq.GetType() )
     {
         case CSVREQ_REPAINT:
@@ -322,7 +334,6 @@ IMPL_LINK( ScCsvTableBox, CsvRequestHdl, ScCsvControl*, pCtrl )
                 maGrid.ImplRedraw();
                 maRuler.ImplRedraw();
             }
-            return 0;
         break;
         case CSVREQ_NEWCELLTEXTS:
             DisableRepaint();
@@ -330,16 +341,24 @@ IMPL_LINK( ScCsvTableBox, CsvRequestHdl, ScCsvControl*, pCtrl )
                 CommitRequest( CSVREQ_POSCOUNT, 1 );
             maUpdateTextHdl.Call( this );
             EnableRepaint();
-            return 0;
         break;
         case CSVREQ_UPDATECELLTEXTS:
             maUpdateTextHdl.Call( this );
-            return 0;
         break;
         case CSVREQ_COLUMNTYPE:
             maGrid.SetSelColumnType( nData );
-            return 0;
         break;
+        case CSVREQ_MAKEPOSVISIBLE:
+            MakePosVisible( nData );
+        break;
+        default:
+            bFound = false;
+    }
+    if( bFound )
+        return 0;
+
+    switch( rReq.GetType() )
+    {
         case CSVREQ_POSCOUNT:
             maData.mnPosCount = Max( nData, 1L );
             ImplSetPosOffset( GetFirstVisPos() );
@@ -377,16 +396,15 @@ IMPL_LINK( ScCsvTableBox, CsvRequestHdl, ScCsvControl*, pCtrl )
             maData.mnColCursor = ((0 <= nData) && (nData < GetPosCount())) ? nData : POS_INVALID;
         break;
     }
-
-    DisableRepaint();
     if( maData != aOldData )
     {
+        DisableRepaint();
         maRuler.ApplyLayout( aOldData );
         maGrid.ApplyLayout( aOldData );
         InitHScrollBar();
         InitVScrollBar();
+        EnableRepaint();
     }
-    EnableRepaint();
 
     return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2002-07-10 14:58:17 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 15:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,20 +117,23 @@ void ScCsvRuler::InitSizeData()
 
 void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
 {
-    if( !GetLayoutData().IsHorzEqual( rOldData ) )
-    {
-        InitSizeData();
-        DisableRepaint();
-        if( GetRulerCursorPos() >= GetPosCount() )
-            MoveCursor( GetPosCount() - 1 );
-        EnableRepaint();
-    }
+    sal_uInt32 nDiff = GetLayoutData().GetDiff( rOldData );
 
-    if( GetRulerCursorPos() != rOldData.mnPosCursor )
+    if( nDiff & (CSV_DIFF_HORIZONTAL | CSV_DIFF_RULERCURSOR) )
     {
-        ImplEraseCursor( rOldData.mnPosCursor );
-        ImplDrawCursor( GetRulerCursorPos() );
-        Repaint();
+        DisableRepaint();
+        if( nDiff & CSV_DIFF_HORIZONTAL )
+        {
+            InitSizeData();
+            if( GetRulerCursorPos() >= GetPosCount() )
+                MoveCursor( GetPosCount() - 1 );
+        }
+        if( nDiff & CSV_DIFF_RULERCURSOR )
+        {
+            ImplEraseCursor( rOldData.mnPosCursor );
+            ImplDrawCursor( GetRulerCursorPos() );
+        }
+        EnableRepaint();
     }
 }
 
@@ -161,13 +164,8 @@ sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
 void ScCsvRuler::MoveCursor( sal_Int32 nPos, bool bScroll )
 {
     DisableRepaint();
-    if( bScroll && IsValidSplitPos( nPos ) )
-    {
-        if( nPos - SCROLL_DIST + 1 <= GetFirstVisPos() )
-            CommitRequest( CSVREQ_POSOFFSET, nPos - SCROLL_DIST );
-        else if( nPos + SCROLL_DIST >= GetLastVisPos() )
-            CommitRequest( CSVREQ_POSOFFSET, nPos - GetVisPosCount() + SCROLL_DIST + 1 );
-    }
+    if( bScroll )
+        CommitRequest( CSVREQ_MAKEPOSVISIBLE, nPos );
     CommitRequest( CSVREQ_MOVERULERCURSOR, IsVisibleSplitPos( nPos ) ? nPos : POS_INVALID );
     EnableRepaint();
 }
@@ -335,12 +333,15 @@ void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )
 {
     if( mnPosMTCurr != nPos )
     {
+        DisableRepaint();
+        MoveCursor( nPos );
         if( (mnPosMTCurr != mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) )
             InsertSplit( nPos );
         else
             MoveSplit( mnPosMTCurr, nPos );
         mnPosMTCurr = nPos;
         mbPosMTMoved = true;
+        EnableRepaint();
     }
 }
 
@@ -354,6 +355,7 @@ void ScCsvRuler::EndMouseTracking( bool bApply )
     }
     else            // tracking cancelled
     {
+        MoveCursor( mnPosMTStart );
         // move split to origin
         if( maOldSplits.HasSplit( mnPosMTStart ) )
             MoveMouseTracking( mnPosMTStart );
@@ -432,14 +434,11 @@ void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
         {
             // on mouse tracking: keep position valid
             nPos = Max( Min( nPos, GetPosCount() - 1L ), 1L );
-            DisableRepaint();
-            MoveCursor( nPos );
             MoveMouseTracking( nPos );
-            EnableRepaint();
         }
         else
         {
-        Point aPoint;
+            Point aPoint;
             Rectangle aRect( aPoint, maWinSize );
             if( !IsVisibleSplitPos( nPos ) || !aRect.IsInside( rMEvt.GetPosPixel() ) )
                 // if focused, keep old cursor position for key input
@@ -508,9 +507,9 @@ void ScCsvRuler::ImplRedraw()
     {
         if( !IsValidGfx() )
         {
+            ValidateGfx();
             ImplDrawBackgrDev();
             ImplDrawRulerDev();
-            ValidateGfx();
         }
         DrawOutDev( Point(), maWinSize, Point(), maWinSize, maRulerDev );
         ImplDrawTrackingRect();

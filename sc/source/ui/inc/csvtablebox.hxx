@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:42:19 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 15:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,8 @@ private:
     /** Calculates and sets valid line offset nearest to nLine. */
     inline void                 ImplSetLineOffset( sal_Int32 nLine )
                                     { maData.mnLineOffset = Max( Min( nLine, GetMaxLineOffset() ), 0L ); }
+    /** Moves controls (not cursors!) so that nPos becomes visible. */
+    void                        MakePosVisible( sal_Int32 nPos );
 
     // event handling ---------------------------------------------------------
 

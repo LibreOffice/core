@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:47:36 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 15:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,33 +94,20 @@ ScCsvLayoutData::ScCsvLayoutData() :
 {
 }
 
-bool ScCsvLayoutData::IsHorzEqual( const ScCsvLayoutData& rData ) const
+sal_uInt32 ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
 {
-    return  (mnPosCount == rData.mnPosCount) &&
-            (mnPosOffset == rData.mnPosOffset) &&
-            (mnOffsetX == rData.mnOffsetX) &&
-            (mnCharWidth == rData.mnCharWidth);
-}
-
-bool ScCsvLayoutData::IsVertEqual( const ScCsvLayoutData& rData ) const
-{
-    return  (mnLineCount == rData.mnLineCount) &&
-            (mnLineOffset == rData.mnLineOffset) &&
-            (mnOffsetY == rData.mnOffsetY) &&
-            (mnLineHeight == rData.mnLineHeight);
-}
-
-bool ScCsvLayoutData::IsCursorEqual( const ScCsvLayoutData& rData ) const
-{
-    return  (mnPosCursor == rData.mnPosCursor) &&
-            (mnColCursor == rData.mnColCursor);
-}
-
-bool operator==( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rData2 )
-{
-    return  rData1.IsHorzEqual( rData2 ) &&
-            rData1.IsVertEqual( rData2 ) &&
-            rData1.IsCursorEqual( rData2 );
+    sal_uInt32 nRet = 0;
+    if( mnPosCount != rData.mnPosCount )        nRet |= CSV_DIFF_POSCOUNT;
+    if( mnPosOffset != rData.mnPosOffset )      nRet |= CSV_DIFF_POSOFFSET;
+    if( mnOffsetX != rData.mnOffsetX )          nRet |= CSV_DIFF_OFFSETX;
+    if( mnCharWidth != rData.mnCharWidth )      nRet |= CSV_DIFF_CHARWIDTH;
+    if( mnLineCount != rData.mnLineCount )      nRet |= CSV_DIFF_LINECOUNT;
+    if( mnLineOffset != rData.mnLineOffset )    nRet |= CSV_DIFF_LINEOFFSET;
+    if( mnOffsetY != rData.mnOffsetY )          nRet |= CSV_DIFF_OFFSETY;
+    if( mnLineHeight != rData.mnLineHeight )    nRet |= CSV_DIFF_LINEHEIGHT;
+    if( mnPosCursor != rData.mnPosCursor )      nRet |= CSV_DIFF_RULERCURSOR;
+    if( mnColCursor != rData.mnColCursor )      nRet |= CSV_DIFF_GRIDCURSOR;
+    return nRet;
 }
 
 

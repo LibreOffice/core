@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-08 08:19:56 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 15:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ private:
     ScCsvStringVecVec           maTexts;            /// 2D-vector for cell texts.
 
     sal_uInt32                  mnRecentSelCol;     /// Index of most recently selected column.
+    sal_uInt32                  mnMTCurrCol;        /// Current column of mouse tracking.
+    bool                        mbMTSelecting;      /// Mouse tracking: true = select, false = deselect.
 
     // ------------------------------------------------------------------------
 public:
@@ -189,6 +191,7 @@ protected:
     virtual void                LoseFocus();
 
     virtual void                MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void                Tracking( const TrackingEvent& rTEvt );
     virtual void                KeyInput( const KeyEvent& rKEvt );
     virtual void                Command( const CommandEvent& rCEvt );
 
@@ -278,6 +281,9 @@ private:
     /** Selects all columns. */
     void                        SelectAll();
 
+    /** Executes selection action for a specific column. */
+    void                        DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier );
+
     // painting ---------------------------------------------------------------
 protected:
     virtual void                Paint( const Rectangle& );
@@ -307,6 +313,9 @@ private:
 
     /** Redraws the entire column (background and selection). */
     void                        ImplDrawColumn( sal_uInt32 nColIndex );
+
+    /** Optimized drawing: Scrolls horizontally and redraws only missing parts. */
+    void                        ImplDrawHorzScrolled( sal_Int32 nOldPos );
 
     /** Draws the cursor bar to the specified position to maGridDev. */
     void                        ImplDrawCursor( sal_Int32 nPos );

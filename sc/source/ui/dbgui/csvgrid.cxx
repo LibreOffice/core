@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-07-10 14:58:16 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 15:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,15 @@ void ScCsvGrid::UpdateOffsetX()
 void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
 {
     DisableRepaint();
-    if( GetPosCount() != rOldData.mnPosCount )
+    sal_uInt32 nDiff = GetLayoutData().GetDiff( rOldData );
+
+    if( nDiff & CSV_DIFF_RULERCURSOR )
+    {
+        ImplEraseCursor( rOldData.mnPosCursor );
+        ImplDrawCursor( GetRulerCursorPos() );
+    }
+
+    if( nDiff & CSV_DIFF_POSCOUNT )
     {
         if( GetPosCount() < rOldData.mnPosCount )
         {
@@ -255,19 +263,19 @@ void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
         maColFlags.resize( maSplits.Count() - 1, CSV_TYPE_DEFAULT );
         maColTypes.resize( maSplits.Count() - 1, CSV_COLFLAG_NONE );
     }
-    if( GetFirstVisLine() != rOldData.mnLineOffset )
+
+    if( nDiff & CSV_DIFF_LINEOFFSET )
     {
         CommitRequest( CSVREQ_UPDATECELLTEXTS );
         UpdateOffsetX();
     }
-    if( !GetLayoutData().IsHorzEqual( rOldData ) || !GetLayoutData().IsVertEqual( rOldData ) )
+
+    if( nDiff & CSV_DIFF_POSOFFSET )
+        ImplDrawHorzScrolled( rOldData.mnPosOffset );
+
+    if( nDiff & ((CSV_DIFF_HORIZONTAL | CSV_DIFF_VERTICAL) & ~CSV_DIFF_POSOFFSET) )
         InvalidateGfx();
 
-    if( GetRulerCursorPos() != rOldData.mnPosCursor )
-    {
-        ImplEraseCursor( rOldData.mnPosCursor );
-        ImplDrawCursor( GetRulerCursorPos() );
-    }
     EnableRepaint();
 }
 
@@ -368,14 +376,18 @@ void ScCsvGrid::MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos )
             // move a split in the range between 2 others -> keep selection state of both columns
             maSplits.Remove( nPos );
             maSplits.Insert( nNewPos );
+            CommitRequest( CSVREQ_UPDATECELLTEXTS );
+            ImplDrawColumn( nColIx - 1 );
+            ImplDrawColumn( nColIx );
+            ValidateGfx();  // performance: do not redraw all columns
         }
         else
         {
             ImplRemoveSplit( nPos );
             ImplInsertSplit( nNewPos );
             CommitEvent( GRIDEVENT_SELECTION );
+            CommitRequest( CSVREQ_UPDATECELLTEXTS );
         }
-        CommitRequest( CSVREQ_UPDATECELLTEXTS );
         EnableRepaint();
     }
 }
@@ -787,6 +799,21 @@ void ScCsvGrid::SelectAll()
     SelectRange( 0, maColFlags.size() - 1 );
 }
 
+void ScCsvGrid::DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier )
+{
+    if( !(nModifier & KEY_MOD1) )
+        ImplClearSelection();
+    if( nModifier & KEY_SHIFT )             // SHIFT always expands
+        SelectRange( mnRecentSelCol, nColIndex );
+    else if( !(nModifier & KEY_MOD1) )      // no SHIFT/CTRL always selects 1 column
+        Select( nColIndex );
+    else if( IsTracking() )                 // CTRL in tracking does not toggle
+        Select( nColIndex, mbMTSelecting );
+    else                                    // CTRL only toggles
+        ToggleSelect( nColIndex );
+    CommitRequest( CSVREQ_MOVEGRIDCURSOR, GetColumnPos( nColIndex ) );
+}
+
 
 // event handling -------------------------------------------------------------
 
@@ -812,7 +839,6 @@ void ScCsvGrid::LoseFocus()
 void ScCsvGrid::MouseButtonDown( const MouseEvent& rMEvt )
 {
     DisableRepaint();
-
     if( !HasFocus() )
         GrabFocus();
 
@@ -828,19 +854,36 @@ void ScCsvGrid::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if( IsValidColumn( nColIx ) )
         {
-            if( !rMEvt.IsMod1() )
-                ImplClearSelection();
-            if( rMEvt.IsShift() )
-                SelectRange( mnRecentSelCol, nColIx );
-            else if( rMEvt.IsMod1() )
-                ToggleSelect( nColIx );
-            else
-                Select( nColIx );
-            CommitRequest( CSVREQ_MOVEGRIDCURSOR, GetColumnPos( nColIx ) );
+            DoSelectAction( nColIx, rMEvt.GetModifier() );
+            mnMTCurrCol = nColIx;
+            mbMTSelecting = IsSelected( nColIx );
+            StartTracking( STARTTRACK_BUTTONREPEAT );
         }
     }
 
     EnableRepaint();
+}
+
+void ScCsvGrid::Tracking( const TrackingEvent& rTEvt )
+{
+    if( rTEvt.IsTrackingEnded() || rTEvt.IsTrackingRepeat() )
+    {
+        DisableRepaint();
+        const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
+
+        sal_Int32 nPos = GetPosFromX( rMEvt.GetPosPixel().X() );
+        // on mouse tracking: keep position valid
+        nPos = Max( Min( nPos, GetPosCount() - 1L ), 1L );
+        CommitRequest( CSVREQ_MAKEPOSVISIBLE, nPos );
+
+        sal_uInt32 nColIx = GetColumnFromPos( nPos );
+        if( mnMTCurrCol != nColIx )
+        {
+            DoSelectAction( nColIx, rMEvt.GetModifier() );
+            mnMTCurrCol = nColIx;
+        }
+        EnableRepaint();
+    }
 }
 
 void ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
@@ -919,7 +962,7 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
         break;
         case COMMAND_WHEEL:
         {
-        Point aPoint;
+            Point aPoint;
             Rectangle aRect( aPoint, maWinSize );
             if( aRect.IsInside( rCEvt.GetMousePosPixel() ) )
             {
@@ -970,9 +1013,9 @@ void ScCsvGrid::ImplRedraw()
     {
         if( !IsValidGfx() )
         {
+            ValidateGfx();
             ImplDrawBackgrDev();
             ImplDrawGridDev();
-            ValidateGfx();
         }
         DrawOutDev( Point(), maWinSize, Point(), maWinSize, maGridDev );
         ImplDrawTrackingRect( GetFocusColumn() );
@@ -1135,12 +1178,57 @@ void ScCsvGrid::ImplDrawColumn( sal_uInt32 nColIndex )
     ImplDrawColumnSelection( nColIndex );
 }
 
+void ScCsvGrid::ImplDrawHorzScrolled( sal_Int32 nOldPos )
+{
+    sal_Int32 nPos = GetFirstVisPos();
+    if( Abs( nPos - nOldPos ) > GetVisPosCount() / 2 )
+        InvalidateGfx();
+    if( !IsValidGfx() || (nPos == nOldPos) )
+        return;
+
+    Point aSrc, aDest;
+    sal_uInt32 nFirstColIx, nLastColIx;
+    if( nPos < nOldPos )
+    {
+        aSrc = Point( GetOffsetX() + 1, 0 );
+        aDest = Point( GetOffsetX() + GetCharWidth() * (nOldPos - nPos) + 1, 0 );
+        nFirstColIx = GetColumnFromPos( nPos );
+        nLastColIx = GetColumnFromPos( nOldPos );
+    }
+    else
+    {
+        aSrc = Point( GetOffsetX() + GetCharWidth() * (nPos - nOldPos) + 1, 0 );
+        aDest = Point( GetOffsetX() + 1, 0 );
+        nFirstColIx = GetColumnFromPos( Min( nOldPos + GetVisPosCount(), GetPosCount() ) - 1 );
+        nLastColIx = GetColumnFromPos( Min( nPos + GetVisPosCount(), GetPosCount() ) - 1 );
+    }
+
+    ImplEraseCursor( GetRulerCursorPos() + (nPos - nOldPos) );
+    maBackgrDev.CopyArea( aDest, aSrc, maWinSize );
+    maGridDev.CopyArea( aDest, aSrc, maWinSize );
+    ImplDrawCursor( GetRulerCursorPos() );
+    for( sal_uInt32 nColIx = nFirstColIx; nColIx <= nLastColIx; ++nColIx )
+        ImplDrawColumn( nColIx );
+
+    sal_Int32 nLastX = GetX( GetPosCount() ) + 1;
+    if( nLastX < GetWidth() )
+    {
+        Rectangle aRect( nLastX, 0, GetWidth() - 1, GetHeight() - 1 );
+        maBackgrDev.SetLineColor();
+        maBackgrDev.SetFillColor( maAppBackColor );
+        maBackgrDev.DrawRect( aRect );
+        maGridDev.SetLineColor();
+        maGridDev.SetFillColor( maAppBackColor );
+        maGridDev.DrawRect( aRect );
+    }
+}
+
 void ScCsvGrid::ImplDrawCursor( sal_Int32 nPos )
 {
     if( IsVisibleSplitPos( nPos ) )
     {
-    int aVal = GetX( nPos ) - 1;
-        Rectangle aRect( Point( aVal, 0 ), Size( 3, GetOffsetY() ) );
+        sal_Int32 nX = GetX( nPos ) - 1;
+        Rectangle aRect( Point( nX, 0 ), Size( 3, GetOffsetY() ) );
         ImplInvertRect( maGridDev, aRect );
         aRect.Top() = GetOffsetY() + 1;
         aRect.Bottom() = GetY( GetLastVisLine() + 1 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-08 08:19:58 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 15:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,25 @@ enum ScMoveMode
 
 // ============================================================================
 
+// flags for comparison.
+const sal_uInt32 CSV_DIFF_POSCOUNT      = 0x00000001;
+const sal_uInt32 CSV_DIFF_POSOFFSET     = 0x00000002;
+const sal_uInt32 CSV_DIFF_OFFSETX       = 0x00000004;
+const sal_uInt32 CSV_DIFF_CHARWIDTH     = 0x00000008;
+const sal_uInt32 CSV_DIFF_LINECOUNT     = 0x00000010;
+const sal_uInt32 CSV_DIFF_LINEOFFSET    = 0x00000020;
+const sal_uInt32 CSV_DIFF_OFFSETY       = 0x00000040;
+const sal_uInt32 CSV_DIFF_LINEHEIGHT    = 0x00000080;
+const sal_uInt32 CSV_DIFF_RULERCURSOR   = 0x00000100;
+const sal_uInt32 CSV_DIFF_GRIDCURSOR    = 0x00000200;
+
+const sal_uInt32 CSV_DIFF_HORIZONTAL    = CSV_DIFF_POSCOUNT | CSV_DIFF_POSOFFSET | CSV_DIFF_OFFSETX | CSV_DIFF_CHARWIDTH;
+const sal_uInt32 CSV_DIFF_VERTICAL      = CSV_DIFF_LINECOUNT | CSV_DIFF_LINEOFFSET | CSV_DIFF_OFFSETY | CSV_DIFF_LINEHEIGHT;
+const sal_uInt32 CSV_DIFF_CURSOR        = CSV_DIFF_RULERCURSOR | CSV_DIFF_GRIDCURSOR;
+
+
+// ----------------------------------------------------------------------------
+
 /** A structure containing all layout data valid for both ruler and data grid
     (i.e. scroll position or column width). */
 struct ScCsvLayoutData
@@ -158,15 +177,16 @@ struct ScCsvLayoutData
 
                                 ScCsvLayoutData();
 
-    /** Returns true, if horizontal settings in rData are equal. */
-    bool                        IsHorzEqual( const ScCsvLayoutData& rData ) const;
-    /** Returns true, if vertical settings in rData are equal. */
-    bool                        IsVertEqual( const ScCsvLayoutData& rData ) const;
-    /** Returns true, if cursor settings in rData are equal. */
-    bool                        IsCursorEqual( const ScCsvLayoutData& rData ) const;
+    /** Returns differences to rData.
+        @descr  For each difference the appropriate bit is set in the returned value. */
+    sal_uInt32                  GetDiff( const ScCsvLayoutData& rData ) const;
 };
 
-bool operator==( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rData2 );
+inline bool operator==( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rData2 )
+{
+    return rData1.GetDiff( rData2 ) == 0;
+}
+
 inline bool operator!=( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rData2 )
 {
     return !(rData1 == rData2);
@@ -199,9 +219,10 @@ enum ScCsvRequestType
     CSVREQ_OFFSETY,             /// Change Y coordinate of first visible line.
     CSVREQ_LINEHEIGHT,          /// Change data line pixel height.
 
-    // cursors
+    // cursors/positions
     CSVREQ_MOVERULERCURSOR,     /// Move ruler cursor to new position.
-    CSVREQ_MOVEGRIDCURSOR       /// Move data grid cursor to new column.
+    CSVREQ_MOVEGRIDCURSOR,      /// Move data grid cursor to new column.
+    CSVREQ_MAKEPOSVISIBLE       /// Move to make passed position visible (for mouse tracking).
 };
 
 
