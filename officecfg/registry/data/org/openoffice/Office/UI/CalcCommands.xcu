@@ -494,8 +494,8 @@
             </node>
             <node oor:name=".uno:DefinePrintArea" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Druckbereich festlegen</value>
-                    <value xml:lang="en-US">Define Print Range</value>
+                    <value xml:lang="de">~Festlegen</value>
+                    <value xml:lang="en-US">~Define</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -503,8 +503,8 @@
             </node>
             <node oor:name=".uno:DeletePrintArea" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Druckbereich entfernen</value>
-                    <value xml:lang="en-US">Clear Print Range</value>
+                    <value xml:lang="de">~Entfernen</value>
+                    <value xml:lang="en-US">~Remove</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -512,8 +512,8 @@
             </node>
             <node oor:name=".uno:EditPrintArea" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Druckbereich bearbeiten</value>
-                    <value xml:lang="en-US">Edit Print Range</value>
+                    <value xml:lang="de">~Bearbeiten...</value>
+                    <value xml:lang="en-US">~Edit...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -782,8 +782,8 @@
             </node>
             <node oor:name=".uno:AddPrintArea" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Druckbereich hinzufügen</value>
-                    <value xml:lang="en-US">Add Print Range</value>
+                    <value xml:lang="de">~Hinzufügen</value>
+                    <value xml:lang="en-US">~Add</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
