@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-05 15:26:56 $
+ *  last change: $Author: dr $ $Date: 2001-07-06 07:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,7 +1109,7 @@ void ExcEscherTxo::ApplyTextOnObject( SdrObject* p_Obj )
     {
         SdrTextObj*             pTxtObj = ( SdrTextObj* ) pObj;
 
-        bIsApplied = p_Obj == NULL);
+        bIsApplied = (p_Obj == NULL);
 
         if( pFormText )
         {
