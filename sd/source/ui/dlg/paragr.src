@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:37:08 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 22:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,5 +284,6 @@ TabDialog TAB_PARAGRAPH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Párrafo";
 };
+
 
 
