@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: os $ $Date: 2001-03-21 13:02:57 $
+ *  last change: $Author: mtg $ $Date: 2001-03-21 14:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1935,6 +1935,20 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRedlineMap_Impl;
+            }
+            case PROPERTY_MAP_TEXT_DEFAULT :
+            {
+                static SfxItemPropertyMap aTextDefaultMap_Impl[] =
+                {
+                    { SW_PROP_NAME(UNO_NAME_TAB_STOP_DISTANCE ),            RES_PARATR_TABSTOP,     &::getCppuType((const sal_Int32*)0),    PROPERTY_NONE, MID_STD_TAB | CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),                RES_CHRATR_FONT,        &::getCppuType((OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),          RES_CHRATR_FONT,        &::getCppuType((OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),              RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),            RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),               RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aTextDefaultMap_Impl;
             }
             break;
         }
