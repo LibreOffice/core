@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2004-05-27 15:06:32 $
+#   last change: $Author: hjs $ $Date: 2004-06-07 13:47:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,26 @@ ALLTAR : $(HIDRES$(TNR)PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+.IF "$(common_build_reslib)"!=""
+$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION).ilst2 : $(RSC_MULTI$(TNR))
+.IF "$(use_shell)"!="4nt"	
+    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
+.ELSE			# "$(use_shell)"!="4nt"	
+    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
+.ENDIF			# "$(use_shell)"!="4nt"	
+
+ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION).ilst2
+.ELSE           # "$(common_build_reslib)"!=""
+$(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION).ilst2 : $(RSC_MULTI$(TNR))
+.IF "$(use_shell)"!="4nt"	
+    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
+.ELSE			# "$(use_shell)"!="4nt"	
+    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
+.ENDIF			# "$(use_shell)"!="4nt"	
+
+ALLTAR : $(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION).ilst2
+.ENDIF          # "$(common_build_reslib)"!=""
+
 $(RSC_MULTI$(TNR)) : \
         $(RESLIB$(TNR)SRSFILES) \
         $(RESLIB$(TNR)TARGETN) \
@@ -125,7 +145,7 @@ $(RSC_MULTI$(TNR)) : \
     $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ)$/.. \
+    -subMODULE=$(PRJ) \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -143,7 +163,7 @@ $(RSC_MULTI$(TNR)) : \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ)$/.. \
+    -subMODULE=$(PRJ) \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
