@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sigstruct.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:02:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ struct SignatureInformation
     SignatureInformation( sal_Int32 nId )
     {
         nSecurityId = nId;
-        nStatus = ::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN;
+        nStatus = ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN;
         nSecurityEnvironmentIndex = -1;
     }
 };
