@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-13 07:10:52 $
+ *  last change: $Author: fme $ $Date: 2002-08-15 16:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,23 +671,27 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
     // modify string according to redline information
     const SwDoc* pDoc = GetDoc();
-    USHORT nAct = pDoc->GetRedlinePos( *this );
-    const XubString rOldTxt( aText );
-
-    for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
+    const XubString aOldTxt( aText );
+    const sal_Bool bShowChg = ::IsShowChanges( pDoc->GetRedlineMode() );
+    if ( bShowChg )
     {
-        const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
+        USHORT nAct = pDoc->GetRedlinePos( *this );
 
-        if ( pRed->Start()->nNode > GetIndex() )
-            break;
-
-        if( REDLINE_DELETE == pRed->GetType() )
+        for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
         {
-            USHORT nStart, nEnd;
-            pRed->CalcStartEnd( GetIndex(), nStart, nEnd );
+            const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
 
-            while ( nStart < nEnd && nStart < aText.Len() )
-                aText.SetChar( nStart++, CH_TXTATR_INWORD );
+            if ( pRed->Start()->nNode > GetIndex() )
+                break;
+
+            if( REDLINE_DELETE == pRed->GetType() )
+            {
+                USHORT nStart, nEnd;
+                pRed->CalcStartEnd( GetIndex(), nStart, nEnd );
+
+                while ( nStart < nEnd && nStart < aText.Len() )
+                    aText.SetChar( nStart++, CH_TXTATR_INWORD );
+            }
         }
     }
 
@@ -810,7 +814,8 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     }
 
     // reset original text
-    aText = rOldTxt;
+    if ( bShowChg )
+        aText = aOldTxt;
 
     return pArgs->xSpellAlt.is() ? 1 : 0;
 }
@@ -834,27 +839,31 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
 
     // modify string according to redline information
     USHORT nAct = pDoc->GetRedlinePos( *pNode );
-    const XubString rOldTxt( pNode->aText );
+    const XubString aOldTxt( pNode->aText );
 
-    for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
+    const sal_Bool bShowChg = ::IsShowChanges( pDoc->GetRedlineMode() );
+    if ( bShowChg )
     {
-        const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
-
-        if ( pRed->Start()->nNode > pNode->GetIndex() )
-            break;
-
-        if( REDLINE_DELETE == pRed->GetType() )
+        for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
         {
-            USHORT nStart, nEnd;
-            pRed->CalcStartEnd( pNode->GetIndex(), nStart, nEnd );
+            const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
 
-            while ( nStart < nEnd && nStart < pNode->aText.Len() )
-                pNode->aText.SetChar( nStart++, CH_TXTATR_INWORD );
+            if ( pRed->Start()->nNode > pNode->GetIndex() )
+                break;
+
+            if( REDLINE_DELETE == pRed->GetType() )
+            {
+                USHORT nStart, nEnd;
+                pRed->CalcStartEnd( pNode->GetIndex(), nStart, nEnd );
+
+                while ( nStart < nEnd && nStart < pNode->aText.Len() )
+                    pNode->aText.SetChar( nStart++, CH_TXTATR_INWORD );
+            }
         }
     }
 
     // a change of data indicates that at least one word has been modified
-    sal_Bool bRedlineChg = ( pNode->aText.GetBuffer() != rOldTxt.GetBuffer() );
+    sal_Bool bRedlineChg = ( pNode->aText.GetBuffer() != aOldTxt.GetBuffer() );
 
     xub_StrLen nBegin;
     xub_StrLen nEnd;
@@ -1155,7 +1164,8 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         pNode->SetWrongDirty( FALSE );
 
     // reset original text
-    pNode->aText = rOldTxt;
+    if ( bShowChg )
+        pNode->aText = aOldTxt;
 
     if( bAddAutoCmpl )
         pNode->SetAutoCompleteWordDirty( FALSE );
