@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-10 08:28:16 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1155,7 +1155,9 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
             }
             catch( IllegalArgumentException )
             {
-                DBG_ERRORFILE( "Could not append Filter" );
+                ByteString aMsg( "Could not append Filter" );
+                aMsg += ByteString( String( aAllFilterName ), RTL_TEXTENCODING_UTF8 );
+                DBG_ERRORFILE( aMsg.GetBuffer() );
             }
         }
     }
@@ -1173,7 +1175,9 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         }
         catch( IllegalArgumentException )
         {
-            DBG_ERRORFILE( "Could not append Filter" );
+            ByteString aMsg( "Could not append Filter" );
+            aMsg += ByteString( String( aUIName ), RTL_TEXTENCODING_UTF8 );
+            DBG_ERRORFILE( aMsg.GetBuffer() );
         }
     }
 }
@@ -1196,7 +1200,9 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
     }
     catch( IllegalArgumentException )
     {
-        DBG_ERRORFILE( "Could not append Filter" );
+        ByteString aMsg( "Could not append Filter" );
+        aMsg += ByteString( String( rFilterName ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
     }
 }
 

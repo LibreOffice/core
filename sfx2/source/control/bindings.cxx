@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:56:51 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2764,12 +2764,16 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
 
 SfxImageManager* SfxBindings::GetImageManager() const
 {
-    return pDispatcher->GetFrame()->GetImageManager();
+    if ( pDispatcher )
+        return pDispatcher->GetFrame()->GetImageManager();
+    return NULL;
 }
 
 SfxToolBoxConfig* SfxBindings::GetToolBoxConfig() const
 {
-    return pDispatcher->GetFrame()->GetObjectShell()->GetToolBoxConfig_Impl();
+    if ( pDispatcher && pDispatcher->GetFrame()->GetObjectShell() )
+        return pDispatcher->GetFrame()->GetObjectShell()->GetToolBoxConfig_Impl();
+    return NULL;
 }
 
 SfxConfigManager* SfxBindings::GetConfigManager( USHORT nType ) const

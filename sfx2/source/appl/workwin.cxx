@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-03 17:23:07 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1137,7 +1137,6 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
     // was man so "ofters braucht, merkt man sich (spart Code und Laufzeit)
     SfxApplication *pSfxApp = SFX_APP();
-    SfxImageManager *pImgMgr = GetBindings().GetImageManager();
     SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
 
     // "uber alle Toolbox-Positionen iterieren
@@ -1516,7 +1515,7 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
     {
         BOOL bOn = FALSE;
         SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
-        if ( aStatBar.nId && aStatBar.bOn && !bIsFullScreen && pTbxCfg->IsStatusBarVisible() )
+        if ( aStatBar.nId && aStatBar.bOn && !bIsFullScreen && ( !pTbxCfg || pTbxCfg->IsStatusBarVisible() ) )
             bOn = TRUE;
 
         aStatBar.bTemp = bSet;
@@ -1582,7 +1581,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
     // keine Statusleiste, wenn keine Id gew"unscht oder bei FullScreenView
     // oder wenn ausgeschaltet
     if ( aStatBar.nId && IsDockingAllowed() &&
-            ( aStatBar.bOn && !bIsFullScreen && pTbxCfg->IsStatusBarVisible() || aStatBar.bTemp ) )
+            ( aStatBar.bOn && !bIsFullScreen && ( !pTbxCfg || pTbxCfg->IsStatusBarVisible() ) || aStatBar.bTemp ) )
     {
         if ( aStatBar.nId != nActId || aStatBar.pStatusBar && aStatBar.pStatusBar->GetBindings_Impl() != aStatBar.pBindings )
         {

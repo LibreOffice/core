@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 08:57:43 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2163,13 +2163,12 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFilterLb.SetFont( aFont );
     aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
 
-#if SUPD < 635
-    SFX_IMAGEMANAGER()->RegisterToolBox( &aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
-    SFX_IMAGEMANAGER()->RegisterToolBox( &aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
-#else
-    pB->GetImageManager()->RegisterToolBox( &aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
-    pB->GetImageManager()->RegisterToolBox( &aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
-#endif
+    SfxImageManager* pImgMgr = pBindings->GetImageManager();
+    if ( pImgMgr )
+    {
+        pImgMgr->RegisterToolBox( &aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
+        pImgMgr->RegisterToolBox( &aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -2224,13 +2223,12 @@ void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 
 SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 {
-#if SUPD < 635
-    SFX_IMAGEMANAGER()->ReleaseToolBox( &aActionTbL );
-    SFX_IMAGEMANAGER()->ReleaseToolBox( &aActionTbR );
-#else
-    pBindings->GetImageManager()->ReleaseToolBox( &aActionTbL );
-    pBindings->GetImageManager()->ReleaseToolBox( &aActionTbR );
-#endif
+    SfxImageManager* pImgMgr = pBindings->GetImageManager();
+    if ( pImgMgr )
+    {
+        pImgMgr->ReleaseToolBox( &aActionTbL );
+        pImgMgr->ReleaseToolBox( &aActionTbR );
+    }
 }
 
 //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 15:04:40 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,7 +656,11 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
 //!MBA          ToDo!
                 SfxViewFrame* pViewFrame = SfxViewFrame::Current();
                 if ( pViewFrame )
-                    pViewFrame->GetBindings().GetImageManager()->ReplaceImage(nId, 0);
+                {
+                    SfxImageManager* pImgMgr = pViewFrame->GetBindings().GetImageManager();
+                    if ( pImgMgr )
+                        pImgMgr->ReplaceImage(nId, 0);
+                }
 
                 // Sofern nicht die Applikation heruntergefahren wird, mu\s
                 // der Slot asynchron gel"oscht werden, falls er in seinem
