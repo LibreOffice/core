@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.45 $
+*  $Revision: 1.46 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-13 17:16:46 $
+*  last change: $Author: rt $ $Date: 2004-09-17 13:06:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1711,6 +1711,14 @@ End
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Localebe, localebe1.uno )
+
+#ifdef UNX
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Gconfebe, gconfbe1.uno )
+#endif
+
+#ifdef WNT
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1.uno )
+#endif
 
 File gid_File_Lib_Tcv
     TXT_FILE_BODY;
