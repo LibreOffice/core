@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-19 11:05:40 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,8 @@ interface XSingleSelectQueryComposer;
     criteria. To get the new extended statement use the methods from <type scope="com::sun::star::sdb">SingleSelectQueryAnalyzer</type>.
     </p>
 
-    @see com::sun::star::sdb::SingleSelectQueryAnalyzer
-    @see com::sun::star::sdb::XSingleSelectQueryAnalyzer
-    @see com::sun::star::sdb::XSingleSelectQueryComposer
+    <p>A <type>SingleSelectQueryComposer</type> is usually obtained from a <type>Connection</type>
+    using the <type scope="com::sun::star::lang">XMultiServiceFactory</type> interface.</p>
  */
 service SingleSelectQueryComposer
 {
