@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ private:
         Link            aFxLink;
         Link            aArgModifiedLink;
 
-        ScFuncDesc*     pFuncDesc;
+        const ScFuncDesc*   pFuncDesc;
         ScAnyRefDlg*    pMyParent;
         USHORT          nArgs;
         Font            aFntBold;
@@ -182,7 +182,7 @@ public:
                         ScParaWin(ScAnyRefDlg* pParent,Point aPos);
                         ~ScParaWin();
 
-        void            SetFunctionDesc(ScFuncDesc* pFDesc);
+        void            SetFunctionDesc(const ScFuncDesc* pFDesc);
         void            SetArgCount(USHORT nArgs, USHORT nOffset);
         void            SetEditDesc(const String& aText);
         void            UpdateParas();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcpage.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ private:
     ScListBox       aLbFunction;
     ImageButton     aIBFunction;
 
-    ScFuncDesc*     aLRUList[LRU_MAX];
+    const ScFuncDesc*   aLRUList[LRU_MAX];
 
 
                     DECL_LINK( SelHdl, ListBox* );
@@ -180,8 +180,8 @@ public:
     USHORT          GetFunction();
     USHORT          GetFunctionEntryCount();
 
-    USHORT          GetFuncPos(ScFuncDesc*);
-    ScFuncDesc*     GetFuncDesc( USHORT nPos ) const;
+    USHORT          GetFuncPos(const ScFuncDesc*);
+    const ScFuncDesc*   GetFuncDesc( USHORT nPos ) const;
     String          GetSelFunctionName() const;
 
     void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClickLink = rLink; }
