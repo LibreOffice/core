@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:05:16 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 09:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,11 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     SvxFrameDirectionItem aModeItem( FRMDIR_ENVIRONMENT, EE_PARA_WRITINGDIR );
     rPool.SetPoolDefaultItem( aModeItem );
+
+    // #i33700#
+    // Set shadow distance defaults as PoolDefaultItems. Details see bug.
+    rPool.SetPoolDefaultItem(SdrShadowXDistItem(300));
+    rPool.SetPoolDefaultItem(SdrShadowYDistItem(300));
 
     // #111216# default for script spacing depends on locale, see SdDrawDocument ctor in sd
     LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
