@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:58:45 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "De latere datum";
         Text[ chinese_simplified ] = "ΚτΣΪÒ»ΈφΔκ²ξ¶ξµΔ½ΟΝνµΔΘΥΖΪ";
         Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς σε έτη";
-        Text[ korean ] = "³β»ηΐΜΐΗ  ΒχΐΜ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ΐΟΐΪ";
+        Text[ korean ] = "³β»ηΐΜΐΗ ΒχΐΜ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ΐΟΐΪ";
         Text[ turkish ] = "Yύl farkύ hesabύ iηin daha erken olan tarih";
     };
     String DFA_YEARS_PAR3_DESC // Description of Parameter 2
