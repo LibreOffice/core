@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
+ *  last change: $Author: oj $ $Date: 2001-11-08 15:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace dbaui
         OSQLNameChecker(const ::rtl::OUString& _rAllowedChars)
             :m_sAllowedChars(_rAllowedChars)
             ,m_bOnlyUpperCase(sal_False)
+            ,m_bCheck(sal_True)
         {
         }
 
