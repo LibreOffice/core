@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YUsers.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-28 10:27:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ OUsers::OUsers( ::cppu::OWeakObject& _rParent,
 }
 // -----------------------------------------------------------------------------
 
-Reference< XNamed > OUsers::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OUsers::createObject(const ::rtl::OUString& _rName)
 {
     return new OMySQLUser(m_xConnection,_rName);
 }
@@ -127,13 +127,6 @@ Reference< XPropertySet > OUsers::createEmptyObject()
 {
     OUserExtend* pNew = new OUserExtend(m_xConnection);
     return pNew;
-}
-// -------------------------------------------------------------------------
-Reference< XNamed > OUsers::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 // XAppend
