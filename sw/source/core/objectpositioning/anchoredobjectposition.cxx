@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 11:42:32 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,10 +525,12 @@ SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwTwips _nTopOfAnch,
                                _nTopOfAnch -
                                aObjSize.Width();
         }
-        if ( _nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Right() )
+        // --> OD 2004-08-13 #i32964# - correction
+        if ( _nTopOfAnch - nAdjustedRelPosY > aPgAlignArea.Right() )
         {
-            nAdjustedRelPosY = aPgAlignArea.Right() - _nTopOfAnch;
+            nAdjustedRelPosY = _nTopOfAnch - aPgAlignArea.Right();
         }
+        // <--
     }
     else
     {
