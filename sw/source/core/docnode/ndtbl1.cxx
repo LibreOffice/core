@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:54:44 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,8 +780,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 }
 
                 //Grundsaetzlich nichts setzen in HeadlineRepeats.
-                if ( pTab->IsFollow() && pTab->GetTable()->IsHeadlineRepeat() &&
-                     ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pCell ) )
+                if ( pTab->IsFollow() && pTab->IsInHeadline( *pCell ) )
                     continue;
 
                 SvxBoxItem aBox( pCell->GetFmt()->GetBox() );
@@ -942,8 +941,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                 SwCellFrm *pCell = ( SwCellFrm* )aCellArr[j];
 
                 //Grundsaetzlich nichts setzen in HeadlineRepeats.
-                if ( pTab->IsFollow() && pTab->GetTable()->IsHeadlineRepeat() &&
-                     ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pCell ) )
+                if ( pTab->IsFollow() && pTab->IsInHeadline( *pCell ) )
                     continue;
 
                 ((SwTableBox*)pCell->GetTabBox())->ClaimFrmFmt();
