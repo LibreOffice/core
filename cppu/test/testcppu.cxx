@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-23 12:43:06 $
+ *  last change: $Author: dbo $ $Date: 2001-04-27 08:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,7 +1028,7 @@ int SAL_CALL main(int argc, char **argv)
 
     testAssignment();
     testCppu();
-    testArray();
+//  testArray();
 #ifndef SAL_W32 // cache test not possible if types are loaded dynamically...
     test_cache();
 #endif

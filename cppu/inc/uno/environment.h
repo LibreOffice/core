@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
+ *  last change: $Author: dbo $ $Date: 2001-04-27 08:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,29 @@ typedef struct _uno_Environment
         @param pEnv this environment
     */
     void (SAL_CALL * release)( struct _uno_Environment * pEnv );
+
+    /** Acquires this environment weakly.  You can only harden a weakly held environment
+        if it is still acquired hard (acquire()).
+        <br>
+        @param pEnv this environment
+    */
+    void (SAL_CALL * acquireWeak)( struct _uno_Environment * pEnv );
+
+    /** Releases this environment weakly in correspondence to acquireWeak().
+        <br>
+        @param pEnv this environment
+    */
+    void (SAL_CALL * releaseWeak)( struct _uno_Environment * pEnv );
+
+    /** Makes hard reference out of weak referenced environment.
+        You can only harden a weakly held environment if it is still acquired hard (acquire()).
+        <br>
+        @param ppHardEnv inout hard referenced environment (has to be released via release())
+        @param pEnv environment (may be weak referenced)
+    */
+    void (SAL_CALL * harden)(
+        struct _uno_Environment ** ppHardEnv,
+        struct _uno_Environment * pEnv );
 
     /** Call this function to <b>explicitly</b> dispose this environment
         (e.g., release all interfaces).<br>
