@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDrawPageDuplicator.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:14 $
+ *  last change:$Date: 2003-02-06 09:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import lib.MultiMethodTest;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 
 /**
@@ -101,10 +103,13 @@ public class _XDrawPageDuplicator extends MultiMethodTest {
         XDrawPages DPs = PS.getDrawPages();
         XDrawPage DP = null;
         try {
-            DP = (XDrawPage)DPs.getByIndex(0);
+            DP = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),DPs.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception occured while testing: " + e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Exception occured while testing: " + e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Exception occured while testing: " + e);
         }
 

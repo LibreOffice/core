@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdMasterPage.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:29 $
+ *  last change:$Date: 2003-02-06 09:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ import lib.TestParameters;
 import util.InstCreator;
 import util.SOfficeFactory;
 import util.ShapeDsc;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -162,8 +165,7 @@ public class SdMasterPage extends TestCase {
     * </ul>
     * @see com.sun.star.drawing.XMasterPagesSupplier
     */
-    public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println( "creating a test environment" );
 
@@ -178,11 +180,15 @@ public class SdMasterPage extends TestCase {
         log.println( "getting MasterPage" );
         XInterface oObj = null;
         try {
-            oObj = (XDrawPage) oMPi.getByIndex(0);
+            oObj = (XDrawPage) AnyConverter.toObject(
+                        new Type(XDrawPage.class),oMPi.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't get MasterPage by index", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace( log );
+            throw new StatusException("Couldn't get MasterPage by index", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't get MasterPage by index", e);
         }

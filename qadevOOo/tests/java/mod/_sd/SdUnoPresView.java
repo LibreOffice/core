@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoPresView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:27 $
+ *  last change:$Date: 2003-02-06 09:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@ import lib.TestParameters;
 import util.DesktopTools;
 import util.SOfficeFactory;
 import util.utils;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -204,13 +207,18 @@ public class SdUnoPresView extends TestCase {
         XDrawPage oDrawPage = null;
         XDrawPage secondDrawPage = null;
         try {
-            oDrawPage = (XDrawPage) oDPi.getByIndex(0);
+            oDrawPage = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(0));
             the_pages.insertNewByIndex(0);
-            secondDrawPage = (XDrawPage) oDPi.getByIndex(1);
+            secondDrawPage = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(1));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't get DrawPage", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace( log );
+            throw new StatusException("Couldn't get DrawPage", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't get DrawPage", e);
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXCustomPresentation.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:27 $
+ *  last change:$Date: 2003-02-06 09:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.presentation.CustomPresentation</code>. <p>
@@ -152,8 +155,7 @@ public class SdXCustomPresentation extends TestCase {
     * @see com.sun.star.presentation.XCustomPresentationSupplier
     * @see com.sun.star.presentation.CustomPresentation
     */
-    public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
@@ -203,11 +205,15 @@ public class SdXCustomPresentation extends TestCase {
 
         XDrawPage oDrawPage = null;
         try {
-            oDrawPage = (XDrawPage) oDPi.getByIndex(0);
+            oDrawPage = (XDrawPage) AnyConverter.toObject(
+                    new Type(XDrawPage.class),oDPi.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by index", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get by index", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by index", e);
         }
@@ -231,7 +237,10 @@ public class SdXCustomPresentation extends TestCase {
         log.println( "creating a new environment for XPresentation object" );
         TestEnvironment tEnv = new TestEnvironment( oInstance );
 
-        int THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        int THRCNT=1;
+        if ((String)Param.get("THRCNT") != null) {
+            THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        }
 
         // INDEX : _XNameContainer
         log.println( "adding XIndexContainerINDEX as mod relation to environment" );
@@ -244,13 +253,17 @@ public class SdXCustomPresentation extends TestCase {
                 log.println( "adding INSTANCE" + n
                     +" as mod relation to environment" );
                 oDPn.insertNewByIndex(0);
-                oDrawPage = (XDrawPage) oDPi.getByIndex(0);
+                oDrawPage = (XDrawPage) AnyConverter.toObject(
+                        new Type(XDrawPage.class),oDPi.getByIndex(0));
                 tEnv.addObjRelation("INSTANCE" + n, oDrawPage);
             }
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Could't adding INSTANCEn", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Could't adding INSTANCEn", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Could't adding INSTANCEn", e);
         }
@@ -260,4 +273,3 @@ public class SdXCustomPresentation extends TestCase {
     } // finish method getTestEnvironment
 
 }    // finish class SdXCustomPresentation
-
