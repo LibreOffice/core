@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:03:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,8 @@ public:
     void            UpdateBasic();              // DocShell-Basic in DrawPages setzen
     void            UseHyphenator();
 
-    void            Load( SvStream& rStream );
-    void            Store( SvStream& rStream ) const;
+//BFS03 void            Load( SvStream& rStream );
+//BFS03 void            Store( SvStream& rStream ) const;
 
     BOOL            GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const;
 
