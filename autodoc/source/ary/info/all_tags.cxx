@@ -2,9 +2,9 @@
  *
  *  $RCSfile: all_tags.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <limits>
 #include <ary/info/infodisp.hxx>
 
 
@@ -258,7 +259,7 @@ ImplementsTag::Title() const
 UINT8
 ImplementsTag::NrOfSpecialMeaningTokens() const
 {
-    return UINT8(-1);
+    return std::numeric_limits<UINT8>::max();
 }
 
 AtTag *
@@ -302,7 +303,7 @@ KeywordTag::Title() const
 UINT8
 KeywordTag::NrOfSpecialMeaningTokens() const
 {
-    return UINT8(-1);
+    return std::numeric_limits<UINT8>::max();
 }
 
 AtTag *
@@ -407,7 +408,7 @@ SeeTag::Title() const
 UINT8
 SeeTag::NrOfSpecialMeaningTokens() const
 {
-    return UINT8(-1);
+    return std::numeric_limits<UINT8>::max();
 }
 
 AtTag *
@@ -491,7 +492,7 @@ TemplateTag::Text()
 
 
 LabelTag::LabelTag()
-//  :   sLabel
+    :   sLabel()
 {
 }
 
@@ -529,6 +530,65 @@ LabelTag::GetFollower()
 
 DocuText *
 LabelTag::Text()
+{
+    return 0;
+}
+
+
+//*****************************     SinceTag        ***********************//
+
+SinceTag::SinceTag()
+    :   sVersion()
+{
+}
+
+bool
+SinceTag::Add_SpecialMeaningToken( const char *     i_sText,
+                                   intt             )
+{
+    const char cCiphersend = '9' + 1;
+    if (sVersion.empty() AND NOT csv::in_range('0', *i_sText, cCiphersend))
+        return true;
+
+    if (sVersion.empty())
+    {
+        sVersion = i_sText;
+    }
+    else
+    {
+        StreamLock sHelp(100);
+        sVersion = sHelp() << sVersion << i_sText << c_str;
+    }
+
+    return true;
+}
+
+const char *
+SinceTag::Title() const
+{
+    return "Label";
+}
+
+UINT8
+SinceTag::NrOfSpecialMeaningTokens() const
+{
+    return UINT8(-1);
+}
+
+AtTag *
+SinceTag::GetFollower()
+{
+    return this;
+}
+
+void
+SinceTag::do_StoreAt( DocuDisplay & o_rDisplay ) const
+{
+    o_rDisplay.Display_SinceTag( *this );
+}
+
+DocuText *
+SinceTag::Text()
 {
     return 0;
 }
