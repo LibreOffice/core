@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-03 16:37:24 $
+ *  last change: $Author: pl $ $Date: 2001-09-05 16:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,26 +237,7 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     Hints.input = True;
     hStackingWindow_ = None;
 
-    if( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
-    {
-        hShell_     = pDisplay_->GetShellWidget();
-        hComposite_ = pDisplay_->GetWidget();
-
-        XSelectInput( GetXDisplay(), XtWindow( hShell_ ), CLIENT_EVENTS );
-        XSelectInput( GetXDisplay(), XtWindow( hComposite_ ), CLIENT_EVENTS );
-
-        Hints.flags |= InputHint;
-        Hints.input       = True;
-        // default icon
-        if( SelectAppIconPixmap( pDisplay_, 1, 32,
-                Hints.icon_pixmap, Hints.icon_mask ))
-        {
-             Hints.flags     |= IconPixmapHint;
-            if( Hints.icon_mask )
-                Hints.flags |= IconMaskHint;
-        }
-    }
-    else if( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
+    if( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
     {
         Arg aArgs[10];
         int nArgs = 0;
@@ -381,16 +362,27 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
          int h = 400;
         int x = -1;
         int y = -1;
-         if( pDisplay_->GetProperties() & PROPERTY_FEATURE_Maximize )
-         {
-             w = pDisplay_->GetScreenSize().Width();
-             h = pDisplay_->GetScreenSize().Height();
-         }
+        const Size& rScreenSize( pDisplay_->GetScreenSize() );
+        w = rScreenSize.Width();
+        h = rScreenSize.Height();
         if( nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE &&
             nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
         {
-            w = pDisplay_->GetScreenSize().Width()*2/3;
-            h = pDisplay_->GetScreenSize().Height()*2/3;
+            // fill in holy default values brought to us by product management
+            if( rScreenSize.Width() >= 800 )
+                w = 785;
+            if( rScreenSize.Width() >= 1024 )
+                w = 920;
+
+            if( rScreenSize.Height() >= 600 )
+                h = 550;
+            if( rScreenSize.Height() >= 768 )
+                h = 630;
+            if( rScreenSize.Height() >= 1024 )
+                h = 875;
+#ifdef DEBUG
+            fprintf( stderr, "initial size %dx%d\n", w, h );
+#endif
         }
         if( ! mpParent )
         {
@@ -538,6 +530,9 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                                   : WMAdaptor::windowType_Normal,
                                   nDecoFlags,
                                   mpParent );
+
+    if( nStyle_ & SAL_FRAME_STYLE_DEFAULT )
+        pDisplay_->getWMAdaptor()->maximizeFrame( pFrame_, true, true );
 
     // Pointer
     pFrame_->SetPointer( POINTER_ARROW );
@@ -2586,7 +2581,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     XSizeHints* pHints = XAllocSizeHints();
     long nSuppliedFlags;
     if( XGetWMNormalHints( pEvent->display,
-                pEvent->window,
+                GetShellWindow(),
                 pHints,
                 &nSuppliedFlags ) )
     {
