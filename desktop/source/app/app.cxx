@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: kz $ $Date: 2003-07-10 14:41:29 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,23 +603,29 @@ void Desktop::Init()
 
 void Desktop::DeInit()
 {
-    // close splashscreen if it's still open
-    CloseSplashScreen();
+    try {
+        // close splashscreen if it's still open
+        CloseSplashScreen();
 
-    Reference<XMultiServiceFactory> xXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-    DestroyApplicationServiceManager( xXMultiServiceFactory );
-    // nobody should get a destroyd service factory...
-    ::comphelper::setProcessServiceFactory( NULL );
+        Reference<XMultiServiceFactory> xXMultiServiceFactory(::comphelper::getProcessServiceFactory());
+        DestroyApplicationServiceManager( xXMultiServiceFactory );
+        // nobody should get a destroyd service factory...
+        ::comphelper::setProcessServiceFactory( NULL );
 
-    // clear lockfile
-    if (m_pLockfile != NULL)
-        m_pLockfile->clean();
+        // clear lockfile
+        if (m_pLockfile != NULL)
+            m_pLockfile->clean();
 
-    if( !Application::IsRemoteServer() )
-    {
-        OfficeIPCThread::DisableOfficeIPCThread();
-        if( pSignalHandler )
-            DELETEZ( pSignalHandler );
+        if( !Application::IsRemoteServer() )
+        {
+            OfficeIPCThread::DisableOfficeIPCThread();
+            if( pSignalHandler )
+                DELETEZ( pSignalHandler );
+        }
+    } catch (RuntimeException& re) {
+        // someone threw an exception during shutdown
+        // this will leave some garbage behind..
+        return;
     }
 }
 
@@ -1789,14 +1795,6 @@ void Desktop::OpenClients()
         // create the parameter array
         Sequence < PropertyValue > aArgs( 1 );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
-        // only set if file is realy salvaged
-        if (sName != sTempName)
-        {
-            aArgs.realloc(3);
-            aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
-            aArgs[2].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
-        }
-
         // mark it as a user request
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
 
@@ -1825,6 +1823,12 @@ void Desktop::OpenClients()
                     // recover a file
                     if ( sName != sTempName )
                     {
+
+                        // only set if file is realy salvaged
+                        aArgs.realloc(3);
+                        aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+                        aArgs[2].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
+
                         if ( bIsURL )
                         {
                             // get the original URL for the recovered document
