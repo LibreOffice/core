@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:21:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2693,11 +2693,9 @@ void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
 
             //Will not be added to the charencoding stack, for styles the real
             //font setting will be put in as the styles charset, and for plain
-            //text encoding for symbols is moot.
-            bool bCharEncode = false;
-            if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
-                bCharEncode = true;
-            if (SetNewFontAttr(SVBT16ToShort( pData ), bCharEncode, RES_CHRATR_FONT))
+            //text encoding for symbols is moot. Drawing boxes will check bSymbol
+            //themselves so they don't need to add it to the stack either.
+            if (SetNewFontAttr(SVBT16ToShort( pData ), false, RES_CHRATR_FONT))
             {
                 if( bVer67 )
                 {
