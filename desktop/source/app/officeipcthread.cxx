@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:12 $
+ *  last change: $Author: ghiggins $ $Date: 2002-07-05 06:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,15 @@
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
 #include "dispatchwatcher.hxx"
-#include "officeipcmanager.hxx"
 #include <stdio.h>
-#include <sys/types.h>
-#include <unistd.h>
-#ifdef SOLARIS
-#include <door.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#endif
 
+#ifdef SOLARIS
+#include "officeipcmanager.hxx"
 #ifndef _VOS_SECURITY_HXX_
 #include <vos/security.hxx>
 #endif
+#endif
+
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
@@ -108,8 +104,10 @@ enum PipeMode
 {
     PIPEMODE_DONTKNOW,
     PIPEMODE_CREATED,
-    PIPEMODE_CONNECTED,
-    PIPEMODE_CONNECTED_TO_PARENT
+#ifdef SOLARIS
+     PIPEMODE_CONNECTED_TO_PARENT,
+#endif
+    PIPEMODE_CONNECTED
 };
 
 String GetURL_Impl( const String& rName );
@@ -118,6 +116,9 @@ namespace desktop
 {
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
+#ifndef SOLARIS
+OSecurity           OfficeIPCThread::maSecurity;
+#endif
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
 class ProcessEventsClass_Impl
@@ -275,8 +276,172 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
     }
 }
 
+#ifdef SOLARIS
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
                                             sal_Bool useParent )
+{
+    ::osl::MutexGuard   aGuard( GetMutex() );
+
+    if( pGlobalOfficeIPCThread )
+        return IPC_STATUS_OK;
+
+    ::rtl::OUString aOfficeInstallPath;
+    ::rtl::OUString aUserInstallPath;
+    ::rtl::OUString aLastIniFile;
+    ::rtl::OUString aDummy;
+
+    ::vos::OStartupInfo aInfo;
+    OfficeIPCThread* pThread = new OfficeIPCThread;
+
+    pThread->maPipeIdent = OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "SingleOfficeIPC_" ) );
+
+    // The name of the named pipe is created with the hashcode of the user
+    // installation directory (without /user). We have to retrieve
+    // this information from a unotools implementation.
+    ::utl::Bootstrap::PathStatus aLocateResult =
+        ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
+    if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS )
+        aDummy = aUserInstallPath;
+    else
+    {
+        delete pThread;
+        return IPC_STATUS_BOOTSTRAP_ERROR;
+    }
+
+    // Try to determine if we are the first office or not! This should prevent
+    // multiple access to the user directory !
+    // First we try to create our pipe if this fails we try to connect. We have
+    // to do this in a loop because the the other office can crash or shutdown
+    // between createPipe and connectPipe!!
+    pThread->maPipeIdent = pThread->maPipeIdent +
+                           OUString::valueOf( (sal_Int32)aDummy.hashCode() );
+
+    PipeMode nPipeMode = PIPEMODE_DONTKNOW;
+    // Warning: Temporarily removed loop below until I have a better mechanism
+    // Try to create pipe
+    if ( pThread->maPipe.create(
+            pThread->maPipeIdent.getStr(),
+            OPipe::TOption_Open,
+            OSecurity() ) )
+    {
+        nPipeMode = PIPEMODE_CONNECTED;
+    }
+    else if ( useParent && OfficeIPCManager::ParentExists() )
+    {
+        nPipeMode = PIPEMODE_CONNECTED_TO_PARENT;
+    }
+    else if( pThread->maPipe.create(
+                pThread->maPipeIdent.getStr(),
+                OPipe::TOption_Create,
+                OSecurity() ) )
+    {
+        nPipeMode = PIPEMODE_CREATED;
+    }
+
+    if ( nPipeMode == PIPEMODE_CREATED )
+    {
+        // Seems we are the one and only, so start listening thread
+        pGlobalOfficeIPCThread = pThread;
+        pThread->create(); // starts thread
+    }
+    else
+    {
+        // Seems another office is running. Pipe arguments to it and self
+        // terminate
+        pThread->maStreamPipe = pThread->maPipe;
+
+        sal_Bool bWaitBeforeClose = sal_False;
+        ByteString aArguments;
+        ULONG nCount = aInfo.getCommandArgCount();
+
+        if ( nCount > 0 )
+        {
+            sal_Bool    bPrintTo = sal_False;
+            OUString    aPrintToCmd( RTL_CONSTASCII_USTRINGPARAM( "-pt" ));
+            for( ULONG i=0; i < nCount; i++ )
+            {
+                aInfo.getCommandArg( i, aDummy );
+                // Make absolute pathes from relative ones!
+                // It's neccessary to use current working directory of THESE
+                // office instance and not of
+                // currently running once, which get these information by using
+                // pipe.
+                // Otherwhise relativ pathes are not right for his environment ...
+                if( aDummy.indexOf('-',0) != 0 )
+                {
+                    bWaitBeforeClose = sal_True;
+                    if ( !bPrintTo )
+                        aDummy = GetURL_Impl( aDummy );
+                    bPrintTo = sal_False;
+                }
+                else if ( aDummy == OfficeIPCManager::GetDisplayArgument() )
+                {
+                    i ++;
+                    nCount -= 2;
+                    continue;
+                }
+                else if ( aDummy == OfficeIPCManager::GetMasterArgument() )
+                {
+                    continue;
+                }
+                else
+                {
+                    if ( aDummy.equalsIgnoreAsciiCase( aPrintToCmd ))
+                        bPrintTo = sal_True;
+                    else
+                        bPrintTo = sal_False;
+                }
+
+                aArguments += ByteString( String( aDummy ),
+                                          osl_getThreadTextEncoding() );
+                aArguments += '|';
+            }
+        }
+
+        if ( nCount == 0 )
+        {
+            // Use default argument so the first office can distinguish between
+            // a real second
+            // office and another program that check the existence of the the
+            // pipe!!
+
+            aArguments += ByteString( "-show" );
+        }
+
+        if ( nPipeMode == PIPEMODE_CONNECTED_TO_PARENT )
+        {
+            OfficeIPCManager::SendParentRequest( aArguments.GetBuffer(),
+                                                 aArguments.Len() );
+        }
+        else
+        {
+            pThread->maStreamPipe.write( aArguments.GetBuffer(),
+                                         aArguments.Len() );
+        }
+        delete pThread;
+
+        if ( bWaitBeforeClose )
+        {
+            // Fix for bug #95361#
+            // We are waiting before office shutdown itself. Netscape
+            // deletes temporary files after the responsible application
+            // exited. The running office must have time to open the file
+            // before Netscape can delete it!!
+            // We have to find a better way to handle this kind of problem
+            // in the future.
+            TimeValue aTimeValue;
+            aTimeValue.Seconds = 5;
+            aTimeValue.Nanosec = 0; // 5sec
+            osl::Thread::wait( aTimeValue );
+        }
+        return IPC_STATUS_2ND_OFFICE;
+    }
+    return IPC_STATUS_OK;
+}
+#else // SOLARIS
+OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
     ::osl::MutexGuard   aGuard( GetMutex() );
 
@@ -304,8 +469,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
         return IPC_STATUS_BOOTSTRAP_ERROR;
     }
 
-    // Warning: Temporarily removed loop below until I have a better mechanism
-
     // Try to  determine if we are the first office or not! This should prevent multiple
     // access to the user directory !
     // First we try to create our pipe if this fails we try to connect. We have to do this
@@ -314,28 +477,29 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
     pThread->maPipeIdent = pThread->maPipeIdent + OUString::valueOf( (sal_Int32)aDummy.hashCode() );
 
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
-    // Try to connect to an existing office pipe
-    if ( pThread->maPipe.create(
-            pThread->maPipeIdent.getStr(),
-            OPipe::TOption_Open,
-            OSecurity() ) )
+    do
     {
-        nPipeMode = PIPEMODE_CONNECTED;
-    }
-#ifdef SOLARIS
-    else if ( useParent &&
-              OfficeIPCManager::ParentExists() )
-    {
-        nPipeMode = PIPEMODE_CONNECTED_TO_PARENT;
-    }
-#endif
-    else if ( pThread->maPipe.create(
-                pThread->maPipeIdent.getStr(),
-                OPipe::TOption_Create,
-                OSecurity() ) )
-    {
-        nPipeMode = PIPEMODE_CREATED;
-    }
+        // Try to create pipe
+        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, maSecurity ))
+        {
+            // Pipe created
+            nPipeMode = PIPEMODE_CREATED;
+        }
+        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, maSecurity )) // Creation not successfull, now we try to connect
+        {
+            // Pipe connected to first office
+            nPipeMode = PIPEMODE_CONNECTED;
+        }
+        else
+        {
+            // Wait for second office to be ready
+            TimeValue aTimeValue;
+            aTimeValue.Seconds = 0;
+            aTimeValue.Nanosec = 10000000; // 10ms
+            osl::Thread::wait( aTimeValue );
+        }
+
+    } while ( nPipeMode == PIPEMODE_DONTKNOW );
 
     if ( nPipeMode == PIPEMODE_CREATED )
     {
@@ -350,7 +514,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
 
         sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments;
-
         ULONG nCount = aInfo.getCommandArgCount();
 
         if ( nCount == 0 )
@@ -364,9 +527,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
         {
             sal_Bool    bPrintTo = sal_False;
             OUString    aPrintToCmd( RTL_CONSTASCII_USTRINGPARAM( "-pt" ));
-#ifdef SOLARIS
-            OUString    aMaster( RTL_CONSTASCII_USTRINGPARAM( "-master" ));
-#endif
             for( ULONG i=0; i < nCount; i++ )
             {
                 aInfo.getCommandArg( i, aDummy );
@@ -381,12 +541,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
                         aDummy = GetURL_Impl( aDummy );
                     bPrintTo = sal_False;
                 }
-#ifdef SOLARIS
-                else if ( aDummy.equalsIgnoreAsciiCase( aMaster ) )
-                {
-                    continue;
-                }
-#endif
                 else
                 {
                     if ( aDummy.equalsIgnoreAsciiCase( aPrintToCmd ))
@@ -400,20 +554,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
             }
         }
 
-#ifdef SOLARIS
-        if ( nPipeMode == PIPEMODE_CONNECTED_TO_PARENT )
-        {
-            OfficeIPCManager::SendParentRequest( aArguments.GetBuffer(),
-                                                 aArguments.Len() );
-        }
-        else
-        {
-            pThread->maStreamPipe.write( aArguments.GetBuffer(),
-                                         aArguments.Len() );
-        }
-#else
         pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
-#endif
         delete pThread;
 
 #ifdef UNX
@@ -438,6 +579,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
 
     return IPC_STATUS_OK;
 }
+#endif // SOLARIS
+
 
 void OfficeIPCThread::DisableOfficeIPCThread()
 {
@@ -450,7 +593,11 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // send thread a termination message
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
+#ifdef SOLARIS
         OPipe Pipe( pGlobalOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, OSecurity() );
+#else
+        OPipe Pipe( pGlobalOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, maSecurity );
+#endif
         Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
 
         // close the pipe so that the streampipe on the other
