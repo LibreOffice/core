@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.12 2000-11-01 11:55:17 dr Exp $
+	$Id: table.mod,v 1.13 2000-11-08 14:01:30 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -96,7 +96,7 @@
 	table:visibility (visible | collapse | filter) "visible"
 >
 <!ENTITY % text-wo-table "(text:h|text:p|text:ordered-list|text:unordered-list|%shapes;|chart:chart)*">
-<!ENTITY % cell-content "(table:cell-range-source?,office:annotation?,(table:subtable|%text-wo-table;))">
+<!ENTITY % cell-content "(table:cell-range-source?,office:annotation?,table:detective?,(table:subtable|%text-wo-table;))">
 <!ELEMENT table:table-cell %cell-content;>
 <!ELEMENT table:covered-table-cell %cell-content;>
 <!ATTLIST table:table-cell
@@ -222,6 +222,18 @@
 	office:create-date %date; #IMPLIED
 	office:create-date-string %string; #IMPLIED
 	office:display %boolean; "true"
+>
+<!ELEMENT table:detective (table:highlighted-range*,table:operation*)>
+<!ELEMENT table:highlighted-range EMPTY>
+<!ATTLIST table:highlighted-range
+	table:cell-range-address %cell-range-address; #REQUIRED
+	table:contains-error %boolean; "false"
+	table:direction (from-another-table|to-another-table|from-same-table|to-same-table) #REQUIRED
+>
+<!ELEMENT table:operation EMPTY>
+<!ATTLIST table:operation
+	table:name (trace-dependents|remove-dependents|trace-precedents|remove-precedents|trace-errors) #REQUIRED
+	table:index %nonNegativeInteger; #REQUIRED
 >
 <!ELEMENT table:sub-table (%table-column-groups; | %table-row-groups;)>
 <!ELEMENT table:named-expressions (table:named-range | table:named-expression)*>
