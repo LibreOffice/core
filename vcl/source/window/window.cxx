@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-30 08:28:31 $
+ *  last change: $Author: hro $ $Date: 2001-11-14 19:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7028,7 +7028,12 @@ Reference< XClipboard > Window::GetSelection()
                     mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstanceWithArguments(
                     OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
 #   else
-                    mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
+                    static Reference< XClipboard >  s_xSelection;
+
+                    if ( !s_xSelection.is() )
+                        s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
+
+                    mpFrameData->mxSelection = s_xSelection;
 #   endif
                 }
 
