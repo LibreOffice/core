@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleRadioButton.xba,v $ 
 '*
-'*  $Revision: 1.5 $ 
+'*  $Revision: 1.6 $ 
 '*
-'*  last change:$Date: 2003-06-11 16:33:03 $ 
+'*  last change:$Date: 2003-10-06 13:28:23 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -106,7 +106,7 @@ On Error Goto ErrHndl
         xRoot = utils.at_getAccessibleObject(oWin)
         ichControl = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TREE,"IconChoiceControl")
         ichControl.selectAccessibleChild(0)
-        oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.RADIO_BUTTON,"Internet")
+        oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.RADIO_BUTTON,"Web")
         accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Close")
         Out.Log("Implementation name: "+oObj.getImplementationName())
         accText = oObj.getText()
