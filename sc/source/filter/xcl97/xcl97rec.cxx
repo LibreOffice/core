@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 15:32:01 $
+ *  last change: $Author: gt $ $Date: 2001-02-02 13:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2118,7 +2118,8 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     }
 
     ScTokenArray*   pScTokArry1 = r.CreateTokenArry( 0 );
-    ExcUPN*         pForm1      = new ExcUPN( &rRD, *pScTokArry1, NULL, TRUE );
+    EC_Codetype     eDummy;
+    ExcUPN*         pForm1      = new ExcUPN( &rRD, *pScTokArry1, eDummy, NULL, TRUE );
     nFormLen1 = pForm1->GetLen();
 
     ScTokenArray*   pScTokArry2 = NULL;
@@ -2128,7 +2129,7 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     else
     {
         pScTokArry2 = r.CreateTokenArry( 1 );
-        pForm2 = new ExcUPN( &rRD, *pScTokArry2, NULL, TRUE );
+        pForm2 = new ExcUPN( &rRD, *pScTokArry2, eDummy, NULL, TRUE );
         nFormLen2 = pForm2->GetLen();
     }
 
@@ -2867,74 +2868,97 @@ const BYTE* XclProtection::GetData( void ) const
 
 
 
-static sal_Bool lcl_ExportBackgroundGraphic( SvStream& rOut, const Graphic& rGraphic )
-{
-    sal_Bool            bRetValue = FALSE;
-
-    Bitmap              aBmp( rGraphic.GetBitmap() );
-    if( aBmp.GetBitCount() != 24 )
-        aBmp.Convert( BMP_CONVERSION_24BIT );
-
-    BitmapReadAccess*   pAcc;
-
-    if( ( pAcc = aBmp.AcquireReadAccess() ) )
-    {
-        sal_uInt16 nWidth = (sal_uInt16)pAcc->Width();
-        sal_uInt16 nHeight = (sal_uInt16)pAcc->Height();
-        if ( nWidth && nHeight )
-        {
-            rOut << 0x00010009              // magic number
-                 << (sal_uInt32)1312        // unknown1 (Size - 8?)
-                 << (sal_uInt32)12          // unknown2
-                 << nWidth                  // width
-                 << nHeight                 // height
-                 << 1                       // planes
-                 << 24;                     // bits per pixel
-
-            sal_Bool    bAlignment = ( nWidth & 1 );
-
-            sal_uInt32  x, y;
-            for( y = 0 ; y < nHeight ; y++ )
-            {
-                for( x = 0 ; x < nWidth ; x++ )
-                {
-                    BitmapColor aColor( pAcc->GetPixel( y, x ) );
-                    rOut << (sal_uInt8)( aColor.GetBlue() )
-                         << (sal_uInt8)( aColor.GetGreen() )
-                         << (sal_uInt8)( aColor.GetRed() );
-                }
-                if ( bAlignment )
-                    rOut << ( sal_uInt8 ) 0;
-
-            }
-            bRetValue = TRUE;
-        }
-        aBmp.ReleaseAccess( pAcc );
-    }
-    return bRetValue;
-}
-
-
-
-
 void XclBGPic::_Save( SvStream& r )
 {
-//  if( pData )
     if( pGr )
     {
-/*      r << GetNum() << ( UINT16 ) 0;
-                        // dummy, len is written with XclContinue
+        Bitmap                      aBmp( pGr->GetBitmap() );
+        if( aBmp.GetBitCount() != 24 )
+            aBmp.Convert( BMP_CONVERSION_24BIT );
 
-        XclContinue aCont( r, 0, 0 );   // 2 B done: len!*/
-    // test implementation without continue records!
-        SvMemoryStream      aTmpStr;
+        BitmapReadAccess*           pAcc;
 
-        if( lcl_ExportBackgroundGraphic( aTmpStr, *pGr ) )
+        if( ( pAcc = aBmp.AcquireReadAccess() ) )
         {
-            UINT16          nLen = aTmpStr.Seek( STREAM_SEEK_TO_END );
-            r << GetNum() << nLen;
-            aTmpStr.Seek( STREAM_SEEK_TO_BEGIN );
-            r << aTmpStr;
+            sal_uInt16              nWidth = (sal_uInt16)pAcc->Width();
+            sal_uInt16              nHeight = (sal_uInt16)pAcc->Height();
+            if( nWidth && nHeight )
+            {
+                ULONG               nLastLenPos, nOverallSizePos;
+                UINT16              nActLen = 0;
+                UINT16              nActRecNum = GetNum();
+                UINT16              nActLastLen = 0x201C - 3;       // last len _before_ to start new record
+                UINT32              nOverAllSize = 0;
+                BOOL                bFirstRec = TRUE;
+
+                r << nActRecNum;
+                nLastLenPos = r.Tell();
+                r << nActLen;
+                r   << (sal_uInt32)0x00010009;  // magic number
+                nOverallSizePos = r.Tell();
+                r   << (sal_uInt32)0x0000       // overall size after _this_
+                    << (sal_uInt32)12           // unknown2
+                    << nWidth                   // width
+                    << nHeight                  // height
+                    << (sal_uInt16)1            // planes
+                    << (sal_uInt16)24;          // bits per pixel
+
+                nActLen += 20;
+
+                sal_Bool            bAlignment = ( nWidth & 1 );
+
+                sal_uInt32          x, y, yg;
+                for( y = 0, yg = nHeight - 1 ; y < nHeight ; y++, yg-- )
+                {
+                    for( x = 0 ; x < nWidth ; x++ )
+                    {
+                        if( nActLen > nActLastLen )
+                        {   // start new record
+                            r.Seek( nLastLenPos );
+                            r << nActLen;
+                            nOverAllSize += nActLen;
+                            // old record complete, start new one
+                            if( bFirstRec )
+                            {
+                                nOverAllSize -= 8;          // in first record magic and overall size don't count
+                                nActRecNum = 0x003C;
+                                nActLastLen = 0x2014 - 3;   // continue records are shorter than starting one
+                                bFirstRec = FALSE;
+                            }
+                            // write new header
+                            r.Seek( STREAM_SEEK_TO_END );
+                            r << nActRecNum;
+                            nLastLenPos = r.Tell();
+                            r << nActLen;
+
+                            nActLen = 0;
+                        }
+                        BitmapColor aColor( pAcc->GetPixel( yg, x ) );
+                        r   << (sal_uInt8)( aColor.GetBlue() )
+                            << (sal_uInt8)( aColor.GetGreen() )
+                            << (sal_uInt8)( aColor.GetRed() );
+                        nActLen += 3;
+                    }
+                    if ( bAlignment )
+                    {
+                        r << ( sal_uInt8 ) 0;   // here we accept, that fill byte can't interrupt record...
+                        nActLen++;
+                    }
+                }
+
+                if( nActLen )
+                {   // one header not yet completed
+                    r.Seek( nLastLenPos );
+                    r << nActLen;
+                    nOverAllSize += nActLen;
+                }
+
+                r.Seek( nOverallSizePos );
+                r << nOverAllSize;
+
+                r.Seek( STREAM_SEEK_TO_END );
+            }
+            aBmp.ReleaseAccess( pAcc );
         }
     }
 }
@@ -2944,17 +2968,10 @@ XclBGPic::XclBGPic( RootData& r )
 {
     pGr = NULL;
 
-    SfxStyleSheet*              pStSh = r.pStyleSheet;
+    SfxStyleSheet*  pStSh = r.pStyleSheet;
 
     if( pStSh )
-    {
-//      SfxItemSet&             rSet = *pExcRoot->pStyleSheetItemSet;
-//      const SvxBrushItem&     rBrItem = rSet.Get( ATTR_BACKGROUND );
-//      pGr = rBrItem.GetGraphic();
-
-//      const SvxBrushItem&     r = ( ( const SvxBrushItem& ) p->pStyleSheetItemSet->Get( ATTR_BACKGROUND ) );
         pGr = ( ( const SvxBrushItem& ) r.pStyleSheetItemSet->Get( ATTR_BACKGROUND ) ).GetGraphic();
-    }
 }
 
 
@@ -2998,4 +3015,5 @@ UINT16 XclExpPageBreaks::GetLen() const
 {
     return (UINT16)(2 + aPageBreaks.Count() * 6);
 }
+
 
