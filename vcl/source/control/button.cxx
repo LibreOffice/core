@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-06-15 12:56:11 $
+ *  last change: $Author: th $ $Date: 2001-08-07 12:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,12 +1280,12 @@ void OKButton::Click()
         {
             if ( pParent->IsDialog() )
             {
+                if ( ((Dialog*)pParent)->IsInExecute() )
+                    ((Dialog*)pParent)->EndDialog( TRUE );
                 // gegen rekursive Aufrufe schuetzen
-                if ( !((Dialog*)pParent)->IsInClose() )
+                else if ( !((Dialog*)pParent)->IsInClose() )
                 {
-                    if ( ((Dialog*)pParent)->IsInExecute() )
-                        ((Dialog*)pParent)->EndDialog( TRUE );
-                    else if ( pParent->GetStyle() & WB_CLOSEABLE )
+                    if ( pParent->GetStyle() & WB_CLOSEABLE )
                         ((Dialog*)pParent)->Close();
                 }
             }
@@ -1344,12 +1344,12 @@ void CancelButton::Click()
         {
             if ( pParent->IsDialog() )
             {
+                if ( ((Dialog*)pParent)->IsInExecute() )
+                    ((Dialog*)pParent)->EndDialog( FALSE );
                 // gegen rekursive Aufrufe schuetzen
-                if ( !((Dialog*)pParent)->IsInClose() )
+                else if ( !((Dialog*)pParent)->IsInClose() )
                 {
-                    if ( ((Dialog*)pParent)->IsInExecute() )
-                        ((Dialog*)pParent)->EndDialog( FALSE );
-                    else if ( pParent->GetStyle() & WB_CLOSEABLE )
+                    if ( pParent->GetStyle() & WB_CLOSEABLE )
                         ((Dialog*)pParent)->Close();
                 }
             }
