@@ -1,4 +1,4 @@
-cn	connectivity	:	comphelper moz svtools unixODBC ridl unoil jurt javaunohelper hsqldb NULL
+cn	connectivity	:	comphelper moz svtools unixODBC unoil jurt javaunohelper hsqldb NULL
 cn	connectivity							usr1	-	all	cn_mkout NULL
 cn	connectivity\com\sun\star\sdbcx\comp\hsqldb	nmake	-	all	cn_jhsqldbdb cn_hsqldb NULL
 cn	connectivity\source\types			nmake	-	all	cn_types NULL
