@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:20:06 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 11:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ dutch ] = "Belichting" ;
     QuickHelpText[ russian ] = "Îñâåùåíèå";
         QuickHelpText[ polish ] = "Oœwietlenie";
-        QuickHelpText[ japanese ] = "Æ–¾";
+        QuickHelpText[ japanese ] = "Æ‚è‰f‚¦!";
         QuickHelpText[ chinese_simplified ] = "ÕÕÃ÷";
         QuickHelpText[ chinese_traditional ] = "·Ó©ú";
         QuickHelpText[ arabic ] = "ÇáÅÖÇÁÉ";
@@ -1066,7 +1066,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ dutch ] = "Dubbelzijdige belichting" ;
     QuickHelpText[ russian ] = "Äâóñòîğîííåå îñâåùåíèå";
         QuickHelpText[ polish ] = "Dwustronne oœwietlenie";
-        QuickHelpText[ japanese ] = "2–Ê‚©‚ç‚ÌÆ–¾";
+        QuickHelpText[ japanese ] = "2–Ê‚©‚ç‚ÌÆ‚è‰f‚¦!";
         QuickHelpText[ chinese_simplified ] = "Á½ÃæÕÕÃ÷";
         QuickHelpText[ chinese_traditional ] = "Âù­±·Ó©ú";
         QuickHelpText[ arabic ] = "ÅÖÇÁÉ ãÒÏæÌÉ ÇáÌæÇäÈ";
