@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:21:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,11 +147,11 @@
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-// OD 27.11.2003 #112045#
-#ifndef _DFLYOBJ_HXX
-#include <dflyobj.hxx>
+// OD 08.09.2003 #108749#, #110354#
+#ifndef _ANCHOREDOBJECTPOSITION_HXX
+#include <anchoredobjectposition.hxx>
 #endif
-
+// OD 27.11.2003 #112045#
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
 #endif
@@ -866,12 +866,20 @@ SwFEShell::~SwFEShell()
     delete pChainTo;
 }
 
-void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
-    SwRelationOrient eRelOrient, BOOL bMirror, Point* pRef, Size* pPercent ) const
+// OD 18.09.2003 #i17567#, #108749#, #110354# - adjustments for allowing
+//          negative vertical positions for fly frames anchored to paragraph/to character.
+void SwFEShell::CalcBoundRect( SwRect& _orRect,
+                               const RndStdIds _nAnchorId,
+                               const SwRelationOrient _eHoriRelOrient,
+                               const SwRelationOrient _eVertRelOrient,
+                               const bool _bFollowTextFlow,
+                               bool _bMirror,
+                               Point* _opRef,
+                               Size* _opPercent ) const
 {
-    SwFrm *pFrm;
-    SwFlyFrm *pFly;
-    if( pRef )
+    SwFrm* pFrm;
+    SwFlyFrm* pFly;
+    if( _opRef )
     {
         pFrm = GetCurrFrm();
         if( 0 != ( pFly = pFrm->FindFlyFrm() ) )
@@ -892,29 +900,29 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
     }
 
     SwPageFrm* pPage = pFrm->FindPageFrm();
-    bMirror = bMirror && !pPage->OnRightPage();
+    _bMirror = _bMirror && !pPage->OnRightPage();
 
     Point aPos;
     BOOL bVertic = FALSE;
     BOOL bRTL = FALSE;
 
-    if( FLY_PAGE == nAnchorId || FLY_AT_FLY == nAnchorId ) // LAYER_IMPL
+    if( FLY_PAGE == _nAnchorId || FLY_AT_FLY == _nAnchorId ) // LAYER_IMPL
     {
 #ifdef AMA_OUT_OF_FLY
         // Falls wir uns auch ausserhalb des Rahmens aufhalten duerfen
         SwFrm *pTmp = pFrm->FindPageFrm();
         rRect = pTmp->Frm();
-        if( FLY_PAGE == nAnchorId )
+        if( FLY_PAGE == _nAnchorId )
             pFrm = pTmp;
 #else
         SwFrm *pTmp = pFrm;
-        if( FLY_PAGE == nAnchorId )
+        if( FLY_PAGE == _nAnchorId )
             pFrm = pPage;
         else
             pFrm = pFrm->FindFlyFrm();
         if( !pFrm )
             pFrm = pTmp;
-        rRect = pFrm->Frm();
+        _orRect = pFrm->Frm();
         SWRECTFN( pFrm )
         bRTL = pFrm->IsRightToLeft();
         if ( bRTL )
@@ -925,8 +933,8 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         if( bVert )
         {
             bVertic = TRUE;
-            bMirror = FALSE; // no mirroring in vertical environment
-            switch ( eRelOrient )
+            _bMirror = false; // no mirroring in vertical environment
+            switch ( _eHoriRelOrient )
             {
                 case REL_PG_RIGHT:
                 case REL_FRM_RIGHT: aPos.Y() += pFrm->Prt().Height();
@@ -935,9 +943,9 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                 case REL_PG_PRTAREA: aPos.Y() += pFrm->Prt().Top(); break;
             }
         }
-        else if( bMirror )
+        else if ( _bMirror )
         {
-            switch ( eRelOrient )
+            switch ( _eHoriRelOrient )
             {
                 case PRTAREA:
                 case REL_PG_PRTAREA: aPos.X() += pFrm->Prt().Width();
@@ -949,7 +957,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         }
         else if ( bRTL )
         {
-            switch ( eRelOrient )
+            switch ( _eHoriRelOrient )
             {
                 case PRTAREA:
                 case REL_PG_PRTAREA: aPos.X() += pFrm->Prt().Width();
@@ -961,7 +969,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         }
         else
         {
-            switch ( eRelOrient )
+            switch ( _eHoriRelOrient )
             {
                 case REL_PG_RIGHT:
                 case REL_FRM_RIGHT: aPos.X() += pFrm->Prt().Width();
@@ -971,73 +979,16 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
             }
         }
 #endif
-        if( pPercent )
-            *pPercent = pFrm->Prt().SSize();
+        if ( _opPercent )
+            *_opPercent = pFrm->Prt().SSize();
     }
     else
     {
-        BOOL bAtCntnt = FLY_AT_CNTNT == nAnchorId ||
-                        FLY_AUTO_CNTNT == nAnchorId;  // LAYER_IMPL
-        if( pRef && !bAtCntnt && pFly && pFly->IsFlyInCntFrm() )
-            *pRef = ( (SwFlyInCntFrm*)pFly )->GetRefPoint();
-
-        SwFrm *pUpper = ( pFrm->IsPageFrm() || pFrm->IsFlyFrm() ) ?
+        SwFrm* pUpper = ( pFrm->IsPageFrm() || pFrm->IsFlyFrm() ) ?
                         pFrm : pFrm->GetUpper();
-        rRect = pUpper->Frm();
         SWRECTFN( pUpper );
-        if( pPercent )
-            *pPercent = pUpper->Prt().SSize();
-        if( bAtCntnt )
-        {
-            while( pUpper->IsColumnFrm() || pUpper->IsSctFrm() ||
-                   pUpper->IsColBodyFrm() ) // auch ein Rahmen innerhalb einer Spalte darf
-                                            // ueber die ganze Seite gehen
-                pUpper = pUpper->GetUpper();
-        }
-        if( !pUpper->IsBodyFrm() )
-        {
-            rRect += pUpper->Prt().Pos();
-            rRect.SSize( pUpper->Prt().SSize() );
-            if ( pUpper->IsCellFrm() )//MA_FLY_HEIGHT
-            {
-                SwFrm *pTab = pUpper->FindTabFrm();
-                long nBottom = (pTab->GetUpper()->*fnRect->fnGetPrtBottom)();
-                (rRect.*fnRect->fnSetBottom)( nBottom );
-            }
-        }
-        if( bAtCntnt )
-        {
-            (rRect.*fnRect->fnSetTop)( (pFrm->Frm().*fnRect->fnGetTop)() );
-            // OD 26.03.2003 #105559# - determine frame, which gives the
-            // environment for the fly frame, and use this environment frame
-            // for setting top and height respectively left and width.
-            SwFrm* pEnvironmentFrm = 0;
-            if ( pFrm->IsInFly() )
-            {
-                pEnvironmentFrm = pUpper;
-            }
-            else
-            {
-                pEnvironmentFrm = pPage;
-            }
-            if( bVert )
-            {
-                rRect.Top( pEnvironmentFrm->Frm().Top() );
-                rRect.Height( pEnvironmentFrm->Frm().Height() );
-            }
-            else
-            {
-                rRect.Left( pEnvironmentFrm->Frm().Left() );
-                rRect.Width( pEnvironmentFrm->Frm().Width() );
-            }
-        }
-        else  // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
-        {
-            if( bVert )
-                rRect.Width( (rRect.Width()*9)/10 );
-            else
-                rRect.Height( (rRect.Height()*9)/10 );
-        }
+        if ( _opPercent )
+            *_opPercent = pUpper->Prt().SSize();
 
         bRTL = pFrm->IsRightToLeft();
         if ( bRTL )
@@ -1045,15 +996,124 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
 
+        // OD 08.09.2003 #i17567#, #108749#, #110354# - allow negative positions
+        // for fly frames anchor to paragraph/to character.
+        if ( _nAnchorId == FLY_AT_CNTNT || _nAnchorId == FLY_AUTO_CNTNT )
+        {
+            // The rectangle, the fly frame can be positioned in, is determined
+            // horizontally by the frame area of the horizontal environment
+            // and vertically by the printing area of the vertical environment,
+            // if the object follows the text flow, or by the frame area of the
+            // vertical environment, if the object doesn't follow the text flow.
+            const SwLayoutFrm& rHoriEnvironLayFrm =
+                    objectpositioning::SwAnchoredObjectPosition::GetHoriEnvironmentLayoutFrm( *pFrm, _bFollowTextFlow, false );
+            const SwLayoutFrm& rVertEnvironLayFrm =
+                    objectpositioning::SwAnchoredObjectPosition::GetVertEnvironmentLayoutFrm( *pFrm, _bFollowTextFlow, false );
+            SwRect aHoriEnvironRect( rHoriEnvironLayFrm.Frm() );
+            SwRect aVertEnvironRect;
+            if ( _bFollowTextFlow )
+            {
+                aVertEnvironRect = rVertEnvironLayFrm.Prt();
+                aVertEnvironRect.Pos() += rVertEnvironLayFrm.Frm().Pos();
+                // OD 19.09.2003 #i18732# - adjust vertical 'virtual' anchor position
+                // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
+                // to page areas.
+                if ( _eVertRelOrient == REL_PG_FRAME || _eVertRelOrient == REL_PG_PRTAREA )
+                {
+                    if ( bVert )
+                    {
+                        aPos.X() = aVertEnvironRect.Right();
+                    }
+                    else
+                    {
+                        aPos.Y() = aVertEnvironRect.Top();
+                    }
+                }
+            }
+            else
+            {
+                ASSERT( rVertEnvironLayFrm.IsPageFrm(),
+                        "<SwFEShell::CalcBoundRect(..)> - not following text flow, but vertical environment *not* page!" );
+                aVertEnvironRect = rVertEnvironLayFrm.Frm();
+                // OD 19.09.2003 #i18732# - adjustment vertical 'virtual' anchor position
+                // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
+                // to page areas.
+                if ( _eVertRelOrient == REL_PG_FRAME || _eVertRelOrient == REL_PG_PRTAREA )
+                {
+                    if ( bVert )
+                    {
+                        aPos.X() = aVertEnvironRect.Right();
+                        if ( _eVertRelOrient == REL_PG_PRTAREA )
+                        {
+                            aPos.X() -= rVertEnvironLayFrm.GetRightMargin();
+                        }
+                    }
+                    else
+                    {
+                        aPos.Y() = aVertEnvironRect.Top();
+                        if ( _eVertRelOrient == REL_PG_PRTAREA )
+                        {
+                            aPos.Y() += rVertEnvironLayFrm.GetTopMargin();
+                            // add height of page header
+                            const SwFrm* pTmpFrm = rVertEnvironLayFrm.Lower();
+                            if ( pTmpFrm->IsHeaderFrm() )
+                            {
+                                aPos.Y() += pTmpFrm->Frm().Height();
+                            }
+                        }
+                    }
+                }
+            }
+            if ( bVert )
+            {
+                _orRect = SwRect( aVertEnvironRect.Left(),
+                                  aHoriEnvironRect.Top(),
+                                  aVertEnvironRect.Width(),
+                                  aHoriEnvironRect.Height() );
+            }
+            else
+            {
+                _orRect = SwRect( aHoriEnvironRect.Left(),
+                                  aVertEnvironRect.Top(),
+                                  aHoriEnvironRect.Width(),
+                                  aVertEnvironRect.Height() );
+            }
+        }
+        else
+        {
+            if( _opRef && pFly && pFly->IsFlyInCntFrm() )
+                *_opRef = ( (SwFlyInCntFrm*)pFly )->GetRefPoint();
+
+            _orRect = pUpper->Frm();
+            if( !pUpper->IsBodyFrm() )
+            {
+                _orRect += pUpper->Prt().Pos();
+                _orRect.SSize( pUpper->Prt().SSize() );
+                if ( pUpper->IsCellFrm() )//MA_FLY_HEIGHT
+                {
+                    SwFrm *pTab = pUpper->FindTabFrm();
+                    long nBottom = (pTab->GetUpper()->*fnRect->fnGetPrtBottom)();
+                    (_orRect.*fnRect->fnSetBottom)( nBottom );
+                }
+            }
+            // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
+            {
+                if( bVert )
+                    _orRect.Width( (_orRect.Width()*9)/10 );
+                else
+                    _orRect.Height( (_orRect.Height()*9)/10 );
+            }
+        }
+
         const SwTwips nBaseOfstForFly = ( pFrm->IsTxtFrm() && pFly ) ?
                                         ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
                                          0;
         if( bVert )
         {
             bVertic = TRUE;
-            bMirror = FALSE;
+            _bMirror = false;
 
-            switch ( eRelOrient )
+            switch ( _eHoriRelOrient )
             {
                 case REL_FRM_RIGHT: aPos.Y() += pFrm->Prt().Height();
                                     aPos += (pFrm->Prt().*fnRect->fnGetPos)();
@@ -1070,9 +1130,9 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                 case FRAME: aPos.Y() += nBaseOfstForFly; break;
             }
         }
-        else if( bMirror )
+        else if( _bMirror )
         {
-            switch ( eRelOrient )
+            switch ( _eHoriRelOrient )
             {
                 case REL_FRM_RIGHT: aPos.X() += pFrm->Prt().Left(); break;
                 case FRAME:
@@ -1086,7 +1146,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         }
         else if ( bRTL )
         {
-            switch ( eRelOrient )
+            switch ( _eHoriRelOrient )
             {
                 case REL_FRM_LEFT:
                     aPos.X() = pFrm->Frm().Left() +
@@ -1120,7 +1180,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         }
         else
         {
-            switch ( eRelOrient )
+            switch ( _eHoriRelOrient )
             {
                 case REL_FRM_RIGHT: aPos.X() += pFrm->Prt().Width();
                                     aPos += pFrm->Prt().Pos();
@@ -1139,16 +1199,16 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         }
 
     }
-    if( !pRef )
+    if( !_opRef )
     {
         if( bVertic )
-            rRect.Pos( aPos.X() - rRect.Width() - rRect.Left(), rRect.Top() - aPos.Y() );
+            _orRect.Pos( aPos.X() - _orRect.Width() - _orRect.Left(), _orRect.Top() - aPos.Y() );
         else if ( bRTL )
-            rRect.Pos( - ( rRect.Right() - aPos.X() ), rRect.Top() - aPos.Y() );
+            _orRect.Pos( - ( _orRect.Right() - aPos.X() ), _orRect.Top() - aPos.Y() );
         else
-            rRect.Pos( rRect.Left() - aPos.X(), rRect.Top() - aPos.Y() );
-        if( bMirror )
-            rRect.Pos( -rRect.Right(), rRect.Top() );
+            _orRect.Pos( _orRect.Left() - aPos.X(), _orRect.Top() - aPos.Y() );
+        if( _bMirror )
+            _orRect.Pos( -_orRect.Right(), _orRect.Top() );
     }
 }
 
