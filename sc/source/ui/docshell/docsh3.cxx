@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:34:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,11 @@
 #include <svx/postattr.hxx>
 //#include <svx/postdlg.hxx>
 #include <svx/sizeitem.hxx>
-#include <offmgr/app.hxx>
 
+#include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docinf.hxx>
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/virdev.hxx>
