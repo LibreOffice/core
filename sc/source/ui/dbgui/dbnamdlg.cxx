@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 15:22:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,8 @@ __EXPORT ScDbNameDlg::~ScDbNameDlg()
     ScRange* pEntry = (ScRange*)aRemoveList.First();
     while ( pEntry )
     {
-        delete aRemoveList.Remove( pEntry );
+        aRemoveList.Remove( pEntry );
+        delete pEntry;
         pEntry = (ScRange*)aRemoveList.Next();
     }
 }
