@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 09:15:31 $
+ *  last change: $Author: fs $ $Date: 2001-07-27 08:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,18 @@ Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId() throw (Run
 }
 
 //--------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException)
+{
+    return *(new ODatabaseSource(m_xServiceManager));
+}
+
+//--------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
+{
+    return createInstance();
+}
+
+//--------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODatabaseContext::getSomething(const Sequence<sal_Int8>& _rIdentifier) throw( RuntimeException )
 {
     if (_rIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
@@ -380,6 +392,7 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
 
     if (m_aRootNode.hasByName(_rName))
         throw ElementExistException();
+
 
     OConfigurationNode aObjectNode;
     // here we have to check if the datasource should only be renamed

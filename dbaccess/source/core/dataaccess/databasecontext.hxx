@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:49:05 $
+ *  last change: $Author: fs $ $Date: 2001-07-27 08:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE7_HXX_
-#include <cppuhelper/compbase7.hxx>
+#ifndef _CPPUHELPER_COMPBASE8_HXX_
+#include <cppuhelper/compbase8.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -106,6 +106,9 @@
 #endif
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 
 // needed for registration
@@ -128,13 +131,14 @@ namespace dbaccess
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper7    <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::lang::XServiceInfo
                                             ,   ::com::sun::star::container::XEnumerationAccess
                                             ,   ::com::sun::star::container::XNameAccess
                                             ,   ::com::sun::star::uno::XNamingService
                                             ,   ::com::sun::star::lang::XEventListener
                                             ,   ::com::sun::star::lang::XUnoTunnel
                                             ,   ::com::sun::star::container::XContainer
+                                            ,   ::com::sun::star::lang::XSingleServiceFactory
                                             >   DatabaseAccessContext_Base;
 
 class ODatabaseContext
@@ -166,6 +170,10 @@ public:
 
 // OComponentHelper
     virtual void SAL_CALL disposing(void);
+
+// ::com::sun::star::lang::XSingleServiceFactory
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(  ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(const ::com::sun::star::uno::Sequence<sal_Int8>& _rIdentifier) throw( ::com::sun::star::uno::RuntimeException );
