@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion_zh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:57:32 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,18 @@ TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
 
         // user dictionary
         if (xCDL.is() && (!c2c || nLength == 1)) {
-            Sequence < OUString > conversions = xCDL->queryConversions(aText, nStartPos, nLength,
-                    aLocale, ConversionDictionaryType::SCHINESE_TCHINESE,
-                    /*toSChinese ?*/ ConversionDirection_FROM_LEFT /*: ConversionDirection_FROM_RIGHT*/,
-                    nConversionOptions);
+            Sequence < OUString > conversions;
+            try {
+                conversions = xCDL->queryConversions(aText, nStartPos, nLength,
+                        aLocale, ConversionDictionaryType::SCHINESE_TCHINESE,
+                        /*toSChinese ?*/ ConversionDirection_FROM_LEFT /*: ConversionDirection_FROM_RIGHT*/,
+                        nConversionOptions);
+            }
+            catch (...) {
+                // catch all exceptions (especially the NoSupportException
+                // when there is no user defined dictionary!)
+                // to allow querying the system dictionary in the next line
+            }
             if (conversions.getLength() > 0)
                 result = conversions[0];
         }
