@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:07:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ public:
     void InvalidatePage( const SwPageFrm *pPage = 0 ) const;
 
     virtual BOOL    GetCrsrOfst( SwPosition *, Point&,
-                                 const SwCrsrMoveState* = 0 ) const;
+                                 SwCrsrMoveState* = 0 ) const;
     virtual BOOL    GetCharRect( SwRect &, const SwPosition&,
                                  SwCrsrMoveState* = 0 ) const;
     virtual void    Paint( const SwRect& ) const;
