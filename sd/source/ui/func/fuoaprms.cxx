@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:07:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,14 +110,10 @@
 #include "View.hxx"
 #endif
 //CHINA001 #include "tpaction.hxx"
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #include "sdabstdlg.hxx" //CHINA001
 #include "tpaction.hrc" //CHINA001
+#include "sdresid.hxx"
+
 using namespace ::com::sun::star;
 
 namespace sd {
@@ -894,39 +890,6 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
 
         // Model geaendert
         pDoc->SetChanged();
-
-        /***************************************************************
-        |* ggfs. in Preview anzeigen
-        \**************************************************************/
-/*
-        SfxChildWindow* pPreviewChildWindow =
-            pViewShell->GetViewFrame()->GetChildWindow(
-                PreviewChildWindow::GetChildWindowId());
-        if (pPreviewChildWindow)
-        {
-            PreviewWindow* pPreviewWin =
-                static_cast<PreviewWindow*>(pPreviewChildWindow->GetWindow());
-            if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
-            {
-                for (nObject = 0; nObject < nCount; nObject++)
-                {
-                    SdrObject* pObject = rMarkList.GetMark(nObject)->GetObj();
-
-                    pInfo = pDoc->GetAnimationInfo(pObject);
-                    if (pInfo)
-                    {
-                        // das Pfadobjekt fuer 'an Kurve entlang'?
-                        if (!(eEffect == presentation::AnimationEffect_PATH &&
-                             pObject == pPath))
-                        {
-                            pPreviewWin->HideAndAnimateObject(pObject);
-                        }
-                    }
-                }
-            }
-        }
-    */
-
     }
     // sieht man nicht, also muss an den Bindings nicht invalidiert werden
 }
