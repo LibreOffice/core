@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:33:05 $
+#   last change: $Author: rt $ $Date: 2003-04-23 17:05:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,18 @@
 #
 #*************************************************************************
 
+PRJ = ..
+PRJNAME = jurt
+
+.INCLUDE: settings.mk
+
+TEST_RECURSIVE_ARGS =
+.IF "$(debug)" != ""
+TEST_RECURSIVE_ARGS +:= debug=$(debug)
+.ENDIF
+.IF "$(product)" != ""
+TEST_RECURSIVE_ARGS +:= product=$(product)
+.ENDIF
 
 test:
 #	cd ./com/sun/star/comp/bootstrap; make debug
@@ -69,14 +81,14 @@ test:
 #	cd ./com/sun/star/comp/rmserver/makefile.mk
 #	cd ./com/sun/star/comp/typedescriptionmanager/makefile.mk
 #	cd ./com/sun/star/comp/testcomp/makefile.mk
-    cd ./com/sun/star/comp/connections; dmake debug=t product=full
-    cd ./com/sun/star/lib/util; dmake debug=t  product=full
-    cd ./com/sun/star/uno; dmake debug=t  product=full
-    cd ./com/sun/star/lib/uno/environments/java; dmake debug=t  product=full
-    cd ./com/sun/star/lib/uno/bridges/java_remote; dmake debug=t  product=full
-    cd ./com/sun/star/lib/uno/environments/remote; dmake debug=t  product=full
-    cd ./com/sun/star/lib/uno/protocols; dmake debug=t  product=full
-    cd ./com/sun/star/comp/bridgefactory; dmake debug=t product=full
+    cd ./com/sun/star/comp/connections; dmake $(TEST_RECURSIVE_ARGS)
+    cd ./com/sun/star/lib/util; dmake $(TEST_RECURSIVE_ARGS)
+    cd ./com/sun/star/uno; dmake $(TEST_RECURSIVE_ARGS)
+    cd ./com/sun/star/lib/uno/environments/java; dmake $(TEST_RECURSIVE_ARGS)
+    cd ./com/sun/star/lib/uno/bridges/java_remote; dmake $(TEST_RECURSIVE_ARGS)
+    cd ./com/sun/star/lib/uno/environments/remote; dmake $(TEST_RECURSIVE_ARGS)
+    cd ./com/sun/star/lib/uno/protocols; dmake $(TEST_RECURSIVE_ARGS)
+    cd ./com/sun/star/comp/bridgefactory; dmake $(TEST_RECURSIVE_ARGS)
 #
-    javac DoTests.java
-    java -classpath $(CLASSPATH):. DoTests
+    javac -classpath $(CLASSDIR) DoTests.java
+    java -classpath .:$(CLASSDIR):$(SOLARBINDIR)$/ridl.jar:$(SOLARBINDIR)$/sandbox.jar DoTests
