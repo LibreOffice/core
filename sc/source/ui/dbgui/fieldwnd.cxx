@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ ScDPFieldWindow::ScDPFieldWindow(
     eType( eFieldType ),
     nFieldCount( 0 ),
     nFieldSelected( 0 ),
-    mbAppRTL( !!Application::GetSettings().GetLayoutRTL() ),
     pAccessible( NULL )
 {
     Init();
@@ -521,10 +520,6 @@ void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     USHORT nCode = rKeyCode.GetCode();
     BOOL bKeyEvaluated = FALSE;
-
-    // revert wrong cursor direction (left/right) in RTL windows
-    if( ((nCode == KEY_LEFT) || (nCode == KEY_RIGHT)) && mbAppRTL && IsRTLEnabled() )
-        nCode = (nCode == KEY_LEFT) ? KEY_RIGHT : KEY_LEFT;
 
     if( rKeyCode.IsMod1() && (eType != TYPE_SELECT) )
     {
