@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-13 12:22:22 $
+ *  last change: $Author: jb $ $Date: 2000-12-14 16:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,12 @@ namespace configmgr
     void OProviderImpl::releaseSubtree( OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) throw ()
     {
         m_pTreeMgr->releaseSubtree(aSubtreePath, _xOptions);
+    }
+
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::disposeData(const vos::ORef < OOptions >& _xOptions) throw ()
+    {
+        m_pTreeMgr->disposeData(_xOptions);
     }
 
     //-----------------------------------------------------------------------------

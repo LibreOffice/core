@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:14:33 $
+ *  last change: $Author: jb $ $Date: 2000-12-14 16:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,12 @@ namespace configmgr
         // bookkeeping support
         virtual void releaseSubtree(OUString const& aSubtreePath,
                                     const vos::ORef < OOptions >& _xOptions ) throw () = 0;
+
+        /** data for the given options may not be used any more
+            <p>all clients of such data must be disposed</p>
+            <p>If the locale is not set, the whole user has become invalid</p>
+        */
+        virtual void disposeData(const vos::ORef < OOptions >& _xOptions) throw () = 0;
     };
 
 
