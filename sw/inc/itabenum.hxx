@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itabenum.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,24 @@
 #ifndef _ITABENUM_HXX
 #define _ITABENUM_HXX
 
-enum SwTableInsMode
+namespace tabopts
 {
-    DEFAULT_BORDER     = 0x01,
-    HEADLINE           = 0x02,
-    REPEAT             = 0x04,
-    HEADLINE_REPEAT    = 0x06,  // Headline + Repeat
-    SPLIT_LAYOUT       = 0x08,
-    HEADLINE_NO_BORDER = HEADLINE_REPEAT|SPLIT_LAYOUT,
-    ALL_TBL_INS_ATTR   = DEFAULT_BORDER|HEADLINE_REPEAT|SPLIT_LAYOUT
+    const USHORT DEFAULT_BORDER     = 0x01;
+    const USHORT HEADLINE           = 0x02;
+//    const USHORT REPEAT             = 0x04;
+//    const USHORT HEADLINE_REPEAT    = 0x06;  // Headline + Repeat
+    const USHORT SPLIT_LAYOUT       = 0x08;
+    const USHORT HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
+    const USHORT ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;
+};
+
+struct SwInsertTableOptions
+{
+    USHORT mnInsMode;
+    USHORT mnRowsToRepeat;
+
+    SwInsertTableOptions( USHORT nInsMode, USHORT nRowsToRepeat ) :
+        mnInsMode( nInsMode ), mnRowsToRepeat( nRowsToRepeat ) {};
 };
 
 
