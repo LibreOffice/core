@@ -498,13 +498,18 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         Node tableBooleanNode =
             cellAtt.getNamedItem(ATTRIBUTE_TABLE_BOOLEAN_VALUE);
 
+        Node tableStringValueNode =
+            cellAtt.getNamedItem(ATTRIBUTE_TABLE_STRING_VALUE);
+
         if (tableFormulaNode != null) {
 
             Debug.log(Debug.INFO, "TableFormulaNode\n");
-            if(tableBooleanNode == null) {
-                fmt.setValue(tableValueNode.getNodeValue());
-            } else {
+            if(tableBooleanNode != null) {                  // Formula that returns Boolean
                 fmt.setValue(tableBooleanNode.getNodeValue());
+            } else if(tableStringValueNode != null) {       // Formula Error
+                fmt.setValue(tableStringValueNode.getNodeValue());
+            } else {                                        // Regular Formula
+                fmt.setValue(tableValueNode.getNodeValue());
             }
             String cellFormula = tableFormulaNode.getNodeValue();
             addCell(cellFormula);
