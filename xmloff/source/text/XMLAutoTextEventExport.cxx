@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:37 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,10 @@
 #include <com/sun/star/uno/Exception.hpp>
 #endif
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -131,7 +132,8 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-using ::comphelper::getProcessServiceFactory;
+// #110680#
+// using ::comphelper::getProcessServiceFactory;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::std::set;
@@ -154,22 +156,27 @@ using ::com::sun::star::xml::sax::XDocumentHandler;
 const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 
-XMLAutoTextEventExport::XMLAutoTextEventExport() :
-        SvXMLExport( MAP_INCH, XML_AUTO_TEXT ),
+// #110680#
+XMLAutoTextEventExport::XMLAutoTextEventExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    )
+:       SvXMLExport( xServiceFactory, MAP_INCH, XML_AUTO_TEXT ),
         sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
         sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
 {
 }
 
+// #110680#
 XMLAutoTextEventExport::XMLAutoTextEventExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const OUString& rFileName,
     const Reference<XDocumentHandler> & rHandler,
     const Reference<XModel> & rModel,
-    const Reference<XNameAccess> & rEvents) :
-        SvXMLExport(rFileName, rHandler, rModel, MAP_INCH),
-        xEvents(rEvents),
-        sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-        sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
+    const Reference<XNameAccess> & rEvents)
+:   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, MAP_INCH ),
+    xEvents(rEvents),
+    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
+    sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
 {
 }
 
@@ -299,6 +306,8 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventExport;
+    // #110680#
+    // return (cppu::OWeakObject*)new XMLAutoTextEventExport;
+    return (cppu::OWeakObject*)new XMLAutoTextEventExport(rSMgr);
 }
 
