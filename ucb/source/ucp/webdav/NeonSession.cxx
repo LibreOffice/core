@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:25:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,7 @@
  ************************************************************************/
 
 #include <hash_map>
-
 #include <string.h>
-
-#include <neon/config.h> /* for USE_DAV_LOCKS */
 
 #ifndef NE_AUTH_H
 #include <neon/ne_auth.h>
@@ -1485,8 +1482,8 @@ void NeonSession::Lockit( const Lock & inLock, bool inLockit )
         // Set the lock depth
         switch( inLock.depth )
         {
-            case ZERO:
-            case INFINITY:
+            case DAVZERO:
+            case DAVINFINITY:
                 theLock->depth = int ( inLock.depth );
                 break;
             default:
@@ -1570,10 +1567,8 @@ int NeonSession::PUT( ne_session * sess,
     ne_request * req = ne_request_create( sess, "PUT", uri );
     int ret;
 
-#ifdef USE_DAV_LOCKS
     ne_lock_using_resource( req, uri, 0 );
     ne_lock_using_parent( req, uri );
-#endif
 
     ne_set_request_body_buffer( req, buffer, size );
 
