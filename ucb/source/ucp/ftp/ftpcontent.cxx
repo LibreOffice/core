@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:26:46 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include "ftpcfunc.hxx"
 #include "ftpstrcont.hxx"
 #include "ftpintreq.hxx"
+#include "ftpdownloadthread.hxx"
 
 #include <memory>
 #include <vector>
@@ -514,8 +515,20 @@ Any SAL_CALL FTPContent::execute(
                         xOutputStream(aOpenCommand.Sink,UNO_QUERY);
 
                     if(xActiveDataSink.is()) {
+#ifndef ABI_IS_ON_VACATION_AETSCH
+                        FTPDownloadThread* p =
+                            new FTPDownloadThread(
+                                m_xIdentifier->getContentIdentifier(),
+                                m_pFCP);
+                        if(!p->Get(xActiveDataSink)) {
+                            curl_exception e = p->GetException();
+                            delete p;
+                            throw e;
+                        }
+#else
                         xActiveDataSink->setInputStream(
                             new FTPInputStream(m_aFTPURL.open()));
+#endif
                     }
                     else if(xOutputStream.is()) {
                         Reference<XInputStream> xStream(
