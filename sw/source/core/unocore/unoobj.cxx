@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: mib $ $Date: 2000-11-30 11:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3463,15 +3463,14 @@ sal_Bool SwXParagraphEnumeration::hasMoreElements(void) throw( uno::RuntimeExcep
                 pNewCrsr->SetRemainInSection( sal_False );
 
             //was mache ich, wenn ich schon in einer Tabelle stehe?
-            SwStartNode* pSttNode = pUnoCrsr->GetNode()->FindStartNode();
-            SwStartNodeType eType = pSttNode->GetStartNodeType();
-            if(CURSOR_TBLTEXT != eCursorType &&
-                                SwTableBoxStartNode == eType)
+            SwTableNode* pTblNode = pNewCrsr->GetNode()->FindTableNode();
+            if(CURSOR_TBLTEXT != eCursorType && pTblNode)
             {
-                // wir haben es mit einer Tabelle zu tun
-                FASTBOOL bMoved = pNewCrsr->MoveTable( fnTableCurr, fnTableEnd );
+                pNewCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
+                bRet = pNewCrsr->Move(fnMoveForward, fnGoNode);
             }
-            bRet = pNewCrsr->MovePara(fnParaNext, fnParaStart);
+            else
+                bRet = pNewCrsr->MovePara(fnParaNext, fnParaStart);
             delete pNewCrsr;
         }
     }
@@ -3501,7 +3500,6 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
                 if(pTblNode)
                 {
                     // wir haben es mit einer Tabelle zu tun - also ans Ende
-                    FASTBOOL bMoved = pUnoCrsr->MoveTable( fnTableCurr, fnTableEnd );
                     pUnoCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
                     if(!pUnoCrsr->Move(fnMoveForward, fnGoNode))
                     {
