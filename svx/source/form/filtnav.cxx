@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 15:51:53 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 15:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ sal_uInt32 OFilterItemExchange::getFormatId()
     static sal_uInt32 s_nFormat = (sal_uInt32)-1;
     if ((sal_uInt32)-1 == s_nFormat)
     {
-        s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.FilterControlExchange"));
+        s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"form.FilterControlExchange\""));
         DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OFilterExchangeHelper::getFormatId: bad exchange id!");
     }
     return s_nFormat;
