@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:50:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,38 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
+#ifndef _SVT_LISTENER_HXX
+#include <svtools/listener.hxx>
+#endif
 #ifndef _LINKSRC_HXX //autogen
 #include <so3/linksrc.hxx>
 #endif
 
+#ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 class ScDocShell;
+class ScServerObject;
+
+class ScServerObjectSvtListenerForwarder : public SvtListener
+{
+    ScServerObject* pObj;
+    SfxBroadcaster  aBroadcaster;
+public:
+                    ScServerObjectSvtListenerForwarder( ScServerObject* pObjP);
+    virtual         ~ScServerObjectSvtListenerForwarder();
+    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
+};
 
 class ScServerObject : public ::so3::SvLinkSource, public SfxListener
 {
 private:
+    ScServerObjectSvtListenerForwarder  aForwarder;
     ScDocShell*     pDocSh;
     ScRange         aRange;
     String          aItemStr;
@@ -93,6 +114,7 @@ public:
 
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                          const SfxHint& rHint, const TypeId& rHintType );
+            void    EndListeningAll();
 };
 
 //SO2_DECL_REF( ScServerObject )
