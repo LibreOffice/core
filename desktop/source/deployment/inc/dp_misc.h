@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:29:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-25 12:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ inline void extract_throw( T * p, css::uno::Any const & a )
     if (! (a >>= *p))
     {
         throw css::uno::RuntimeException(
-            OUSTR("expected ") + ::getCppuType( p ).getTypeName(),
+            OUSTR("expected ") + getCppuType( p ).getTypeName(),
             css::uno::Reference<css::uno::XInterface>() );
     }
 }
