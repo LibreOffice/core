@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-27 13:31:00 $
+ *  last change: $Author: aw $ $Date: 2002-11-20 16:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,8 +392,24 @@ void SdrUndoAttrObj::Undo()
         }
 
         SdrBroadcastItemChange aItemChange(*pObj);
+
+        // #105122# Since ClearItem sets back everything to normal
+        // it also sets fit-to-size text to non-fit-to-size text and
+        // switches on autogrowheight (the default). That may lead to
+        // loosing the geometry size info for the object when it is
+        // re-layouted from AdjustTextFrameWidthAndHeight(). This makes
+        // rescuing the size of the object necessary.
+        const Rectangle aSnapRect = pObj->GetSnapRect();
+
         pObj->ClearItem();
         pObj->SetItemSet(*pUndoSet);
+
+        // #105122# Restore prev size here when it was changed.
+        if(aSnapRect != pObj->GetSnapRect())
+        {
+            pObj->NbcSetSnapRect(aSnapRect);
+        }
+
         pObj->BroadcastItemChange(aItemChange);
 
         if(pTextUndo)
@@ -421,8 +437,19 @@ void SdrUndoAttrObj::Redo()
         }
 
         SdrBroadcastItemChange aItemChange(*pObj);
+
+        // #105122#
+        const Rectangle aSnapRect = pObj->GetSnapRect();
+
         pObj->ClearItem();
         pObj->SetItemSet(*pRedoSet);
+
+        // #105122# Restore prev size here when it was changed.
+        if(aSnapRect != pObj->GetSnapRect())
+        {
+            pObj->NbcSetSnapRect(aSnapRect);
+        }
+
         pObj->BroadcastItemChange(aItemChange);
     }
 
