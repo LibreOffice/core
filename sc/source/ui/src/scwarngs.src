@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:12:49 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ Resource RID_WRNHDLSC
         Text = "Es wurde nur die aktuelle Tabelle gespeichert." ;
         Text [ ENGLISH ] = "The current table has only been saved." ;
         Text [ english_us ] = "Only the active sheet could be saved." ;
-        Text [ italian ] = "� stata salvata solo la tabella corrente." ;
+        Text [ italian ] = "� stata salvata solo la tabella attiva." ;
         Text [ spanish ] = "S�lo se ha guardado la hoja actual." ;
         Text [ french ] = "Seule la feuille active a �t� enregistr�e." ;
         Text [ dutch ] = "Alleen de huidige tabel is opgeslagen." ;
@@ -97,6 +97,7 @@ Resource RID_WRNHDLSC
         Text[ czech ] = "Pouze aktivní list bude uložen.";
         Text[ hebrew ] = "Es wurde nur die aktuelle Tabelle gespeichert.";
         Text[ hindi ] = "केवल क्रियाशील शीट् को संचित कर सकते है ।";
+        Text[ slovak ] = "Uložený bol len aktívny list.";
     };
     String ERRCODE_SC_IMPORT_WRN_RNGOVRFLW & SH_MAX
     {
@@ -128,6 +129,7 @@ Resource RID_WRNHDLSC
         Text[ czech ] = "Počet řádek překročil maximální hodnotu. Další řádky už nebudou importovány!";
         Text[ hebrew ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert";
         Text[ hindi ] = "पंक्तियों की संख्या अधिकतम संख्या से भी अधिक है । अधिकतर पंक्तियों को आयात नहीं कर सकते है!";
+        Text[ slovak ] = "Počet riadkov presiahol maximum. Ďalšie riadky neboli vložené!";
     };
     /*
     String ERRCODE_SC_  & SH_MAX
@@ -137,6 +139,8 @@ Resource RID_WRNHDLSC
         };
 */
 };
+
+
 
 
 
