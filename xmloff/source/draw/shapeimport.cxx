@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-11 16:53:49 $
+ *  last change: $Author: bm $ $Date: 2001-01-17 14:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,5 +1035,9 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
 {
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
-    return new SvXMLImportPropertyMapper( xMapper );
+    SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper );
+
+    // chain text attributes
+    pResult->ChainImportMapper( XMLTextImportHelper::CreateCharExtPropMapper() );
+    return pResult;
 }
