@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:10:04 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 07:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1655,7 +1655,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Standaardsjabloon kon niet worden geopend";
         Text[ chinese_simplified ] = "Ξή·¨΄ςΏª±κΧΌΡωΚ½";
         Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχτεί το πρότυπο προεπιλογής.";
-        Text[ korean ] = "±βΊ» ΕΫΗΓΈ®Ζ®°΅ Ώ­Έ®Αφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "±βΊ» ΕΫΗΓΈ΄ΐ»  Ώ­Αφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Standart ώablon aηύlamadύ";
     };
     String ERRCODE_SFX_TEMPLATENOTFOUND
@@ -1680,7 +1680,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Aangegeven sjabloon niet te vinden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΦΈ¶¨µΔΡωΚ½";
         Text[ greek ] = "Δεν βρέθηκε το επιλεγμένο πρότυπο";
-        Text[ korean ] = "ΑφΑ¤µΘ ΕΫΗΓΈ®Ζ®°΅ Ήί°ίµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Α¤ΐΗµΘ ΕΫΗΓΈ΄ΐ» Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Belirtilen ώablon bulunamadύ";
     };
     String ERRCODE_SFX_NOTATEMPLATE
@@ -1705,7 +1705,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestand kan niet worden gebruikt als sjabloon";
         Text[ chinese_simplified ] = "ΥβΈφΞΔΌώΞή·¨µ±ΧχΡωΚ½ΚΉΣΓ";
         Text[ greek ] = "Δεν είναι δυνατόν να χρησιμοποιηθεί το αρχείο ως πρότυπο";
-        Text[ korean ] = "ΖΔΐΟΐΜ ΕΫΗΓΈ®Ζ®·Ξ »ηΏλµΙΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐΊ ΕΫΗΓΈ΄ΐΈ·Ξ »ηΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya, ώablon olarak kullanύlamύyor";
     };
     String ERRCODE_SFX_CANTREADDOCINFO
