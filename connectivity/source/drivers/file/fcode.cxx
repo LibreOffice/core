@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:03:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
         OSL_ASSERT("Fehler im Parse Tree");
     }
 
-    // Parameter-Column aufsetzen mit defult typ, kann zu einem späteren Zeitpunkt über DescribeParameter
+    // Parameter-Column aufsetzen mit defult typ, kann zu einem spaeteren Zeitpunkt ueber DescribeParameter
     // genauer spezifiziert werden
 
     // Identitaet merken (hier eigentlich nicht erforderlich, aber aus
