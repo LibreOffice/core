@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:23:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,10 +1329,19 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             const SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<const SwAnchoredDrawObject*>( GetAnchoredObj( &rObj ) );
             // <--
-            const Rectangle& aOldObjRect = pAnchoredDrawObj->GetLastObjRect();
+            // --> OD 2004-09-29 #i34748# - If no last object rectangle is
+            // provided by the anchored object, use parameter <pOldBoundRect>.
+            const Rectangle& aOldObjRect = pAnchoredDrawObj->GetLastObjRect()
+                                           ? *(pAnchoredDrawObj->GetLastObjRect())
+                                           : *(pOldBoundRect);
+            // <--
             // OD 2004-04-06 #i26791# - adjust positioning and alignment attributes,
             // if positioning of drawing object isn't in progress.
-            if ( !pAnchoredDrawObj->IsPositioningInProgress() )
+            // --> OD 2004-10-19 #i35798# - no adjust of positioning attributes,
+            // if drawing object isn't attached to an anchor frame
+            if ( !pAnchoredDrawObj->IsPositioningInProgress() &&
+                 !pAnchoredDrawObj->NotYetAttachedToAnchorFrm() )
+            // <--
             {
                 // --> OD 2004-08-04 #i31698# - determine layout direction
                 // via draw frame format.
@@ -1393,30 +1402,16 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     {
                         nYPosDiff = -nYPosDiff;
                     }
-                    // --> OD 2004-08-04 #i31698# - don't change orientation,
-                    // if drawing object isn't yet attached to a anchor frame
-                    SwVertOrient eVertOrient(
-                            pAnchoredDrawObj->NotYetAttachedToAnchorFrm()
-                            ? rVert.GetVertOrient()
-                            : VERT_NONE );
-                    // <--
                     aSet.Put( SwFmtVertOrient( rVert.GetPos()+nYPosDiff,
-                                               eVertOrient,
+                                               VERT_NONE,
                                                rVert.GetRelationOrient() ) );
                 }
 
                 const SwFmtHoriOrient& rHori = GetFmt()->GetHoriOrient();
                 if ( !ObjAnchoredAsChar() && nXPosDiff != 0 )
                 {
-                    // --> OD 2004-08-04 #i31698# - don't change orientation,
-                    // if drawing object isn't yet attached to a anchor frame
-                    SwHoriOrient eHoriOrient(
-                            pAnchoredDrawObj->NotYetAttachedToAnchorFrm()
-                            ? rHori.GetHoriOrient()
-                            : HORI_NONE );
-                    // <--
                     aSet.Put( SwFmtHoriOrient( rHori.GetPos()+nXPosDiff,
-                                               eHoriOrient,
+                                               HORI_NONE,
                                                rHori.GetRelationOrient() ) );
                 }
 
@@ -1427,8 +1422,10 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     // keep new object rectangle, to avoid multiple
                     // changes of the attributes by multiple event from
                     // the drawing layer - e.g. group objects and its members
+                    // --> OD 2004-09-29 #i34748# - use new method
+                    // <SwAnchoredDrawObject::SetLastObjRect(..)>.
                     const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
-                                    ->LastObjRect() = aObjRect.SVRect();
+                                    ->SetLastObjRect( aObjRect.SVRect() );
                 }
                 else if ( aObjRect.SSize() != aOldObjRect.GetSize() )
                 {
