@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,7 +954,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     if ( eLanguage == LANGUAGE_DONTKNOW )
         eLanguage = Application::GetSettings().GetUILanguage();
     if ( eLanguage == LANGUAGE_SYSTEM )
-        eLanguage = ::GetSystemLanguage();
+        eLanguage = ::GetSystemUILanguage();
 
     switch( eLanguage )
     {
