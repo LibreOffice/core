@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-11 12:35:27 $
+ *  last change: $Author: dr $ $Date: 2002-07-30 10:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,14 +836,6 @@ ImageList RID_IMAGELIST_H_NAVCONT
     SC_NAVI_CONT_IDLIST
 };
 
-Bitmap RID_BMP_EXPAND
-{
-    File = "plus.bmp" ;
-};
-Bitmap RID_BMP_COLLAPSE
-{
-    File = "minus.bmp" ;
-};
 Image RID_IMG_DROP_URL
 {
     ImageBitmap = Bitmap { File = "dropurl.bmp" ; };
@@ -1082,7 +1074,6 @@ String SCSTR_CONTENT_NOTE
 };
 String SCSTR_CONTENT_AREALINK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Verknüpfte Bereiche : Verkn³pfte Bereiche */
     TEXT = "Verknüpfte Bereiche" ;
     TEXT [ English ] = "Linked areas" ;
     Text [ portuguese_brazilian ] = "Verkn?fte Bereiche" ;
@@ -1145,7 +1136,6 @@ Menu RID_POPUP_DROPMODE
         {
             Identifier = RID_DROPMODE_URL ;
             HelpId = HID_SC_DROPMODE_URL ;
-            /* ### ACHTUNG: Neuer Text in Resource? Als Hyperlink einfügen : Als Hyperlink einf³gen */
             Text = "Als Hyperlink einfügen" ;
             Text [ ENGLISH ] = "Insert as Hyperlink" ;
             Text [ dutch ] = "Als Hyperlink invoegen" ;
@@ -1177,10 +1167,8 @@ Menu RID_POPUP_DROPMODE
         {
             Identifier = RID_DROPMODE_LINK ;
             HelpId = HID_SC_DROPMODE_LINK ;
-            /* ### ACHTUNG: Neuer Text in Resource? Als Verknüpfung einfügen : Als Verkn³pfung einf³gen */
             Text = "Als Verknüpfung einfügen" ;
             Text [ ENGLISH ] = "Insert as Link" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Drag & Drop als Verknüpfung : Drag & Drop als Verkn³pfung */
             Text [ dutch ] = "Als koppeling invoegen" ;
             Text [ english_us ] = "Insert as Link" ;
             Text [ swedish ] = "Infoga som länk" ;
@@ -1210,7 +1198,6 @@ Menu RID_POPUP_DROPMODE
         {
             Identifier = RID_DROPMODE_COPY ;
             HelpId = HID_SC_DROPMODE_COPY ;
-            /* ### ACHTUNG: Neuer Text in Resource? Als Kopie einfügen : Als Kopie einf³gen */
             Text = "Als Kopie einfügen" ;
             Text [ ENGLISH ] = "Insert as Copy" ;
             Text [ english_us ] = "Insert as Copy" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:29:58 $
+ *  last change: $Author: dr $ $Date: 2002-07-30 10:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,12 +220,6 @@ private:
     String                  aStrChildContent;
     String                  aStrChildOrgContent;
     String                  aStrEmpty;
-    Bitmap                  aExpBmp;
-    Bitmap                  aCollBmp;
-    Bitmap                  aCloseBmp;
-    Bitmap                  aOpenBmp;
-    Bitmap                  aEndBmp;
-    Bitmap                  aErrorBmp;
     ULONG                   nAcceptCount;
     ULONG                   nRejectCount;
     BOOL                    bAcceptEnableFlag;

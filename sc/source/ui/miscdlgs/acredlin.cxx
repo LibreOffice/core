@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-31 10:08:42 $
+ *  last change: $Author: dr $ $Date: 2002-07-30 10:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,11 +177,6 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         aStrContentWithChild    ( ResId( STR_CONTENT_WITH_CHILD)),
         aStrChildContent        ( ResId( STR_CHILD_CONTENT)),
         aStrChildOrgContent     ( ResId( STR_CHILD_ORGCONTENT)),
-        aExpBmp                 ( ResId( RID_BMP_EXPAND ) ),
-        aCollBmp                ( ResId( RID_BMP_COLLAPSE ) ),
-        aCloseBmp               ( ResId( BMP_STR_CLOSE ) ),
-        aOpenBmp                ( ResId( BMP_STR_OPEN  ) ),
-        aEndBmp                 ( ResId( BMP_STR_END   ) ),
 
         //
         pViewData       ( ptrViewData ),
@@ -239,7 +234,6 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     pTheView->SetDeselectHdl( LINK(this, ScAcceptChgDlg, SelectHandle));
     pTheView->SetCommandHdl( LINK(this, ScAcceptChgDlg, CommandHdl));
     pTheView->SetColCompareHdl( LINK(this, ScAcceptChgDlg,ColCompareHdl));
-    pTheView->SetNodeBitmaps( aExpBmp, aCollBmp );
     pTheView->SetSelectionMode(MULTIPLE_SELECTION);
     pTheView->SetHighlightRange(1);
 
