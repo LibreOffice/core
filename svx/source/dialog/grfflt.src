@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-31 17:57:01 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ russian ] = "Ïàðàìåòðû";
         Text[ greek ] = "ÐáñÜìåôñïé";
         Text[ dutch ] = "Parameters";
-        Text[ french ] = "Paramètres";
+        Text[ french ] = "Paramètre";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
@@ -636,7 +636,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ russian ] = "Ïàðàìåòðû";
         Text[ greek ] = "ÐáñÜìåôñïé";
         Text[ dutch ] = "Parameters";
-        Text[ french ] = "Paramètres";
+        Text[ french ] = "Paramètre";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
@@ -777,7 +777,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ russian ] = "Ïàðàìåòðû";
         Text[ greek ] = "ÐáñÜìåôñïé";
         Text[ dutch ] = "Parameters";
-        Text[ french ] = "Paramètres";
+        Text[ french ] = "Paramètre";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
@@ -856,3 +856,4 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     };
     Text[ catalan ] = "Relieve";
 };
+
