@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-21 08:13:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,6 +1280,7 @@ void ToolBox::SetItemWindow( USHORT nItemId, Window* pNewWindow )
         if ( pNewWindow )
             pNewWindow->Hide();
         ImplInvalidate( TRUE );
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED, (void*) nPos );
     }
 }
 
