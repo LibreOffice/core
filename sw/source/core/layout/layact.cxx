@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-14 14:52:30 $
+ *  last change: $Author: ama $ $Date: 2001-05-07 12:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,6 +1675,7 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
                         if ( !bResetOnly )
                         {
                             pFly->Frm().Pos().Y() += nOfst;
+                            pFly->GetVirtDrawObj()->_SetRectsDirty();
                             if ( pFly->IsFlyInCntFrm() )
                                 ((SwFlyInCntFrm*)pFly)->AddRefOfst( nOfst );
                         }
