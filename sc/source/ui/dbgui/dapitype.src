@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ swedish ] = "Datakälla som är registrerad i StarOffice";
         Text[ polish ] = "Zarejestr. ~w StarOffice Ÿród³o danych";
         Text[ portuguese_brazilian ] = "Database source";
-        Text[ japanese ] = "StarOffice‚É“o˜^‚³‚ê‚½ÃÞ°À¿°½(~I)";
+        Text[ japanese ] = "StarOffice ‚É“o˜^‚³‚ê‚½ÃÞ°À¿°½(~I)";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼Ò½º(~D)";
         Text[ chinese_simplified ] = "ÔÚ StarOffice ÖÐµÇ¼ÇµÄÊý¾ÝÔ´(~I)";
         Text[ chinese_traditional ] = "StarOffice ¤w¸gµn°Oªº¼ÆÕu·½(~I)";
