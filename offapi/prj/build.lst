@@ -32,6 +32,7 @@ oa	offapi\com\sun\star\sheet				nmake	-	all	oa_sheet NULL
 oa	offapi\com\sun\star\style				nmake	-	all	oa_style NULL
 oa	offapi\com\sun\star\svg					nmake	-	all	oa_svg NULL
 oa	offapi\com\sun\star\sync				nmake	-	all	oa_sync NULL
+oa	offapi\com\sun\star\sync2				nmake	-	all	oa_sync2 NULL
 oa	offapi\com\sun\star\system				nmake	-	all	oa_system NULL
 oa	offapi\com\sun\star\table				nmake	-	all	oa_table NULL
 oa	offapi\com\sun\star\task				nmake	-	all	oa_task NULL
@@ -46,4 +47,4 @@ oa	offapi\com\sun\star\sdbc				nmake	-	all	oa_sdbc NULL
 oa	offapi\com\sun\star\sdb					nmake	-	all	oa_sdb NULL
 oa	offapi\com\sun\star\image				nmake	-	all	oa_image NULL
 oa	offapi\com\sun\star\ui\dialogs			nmake	-	all	oa_ui_dialogs NULL
-oa	offapi\util								nmake	-	all	oa_util oa_awt oa_chart oa_config oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_pgp oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_system oa_table oa_task oa_text oa_textfield oa_ucb oa_view oa_xml oa_image oa_ui_dialogs NULL
+oa	offapi\util								nmake	-	all	oa_util oa_awt oa_chart oa_config oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_pgp oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync os_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_ucb oa_view oa_xml oa_image oa_ui_dialogs NULL
