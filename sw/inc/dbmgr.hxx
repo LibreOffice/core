@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 10:26:01 $
+ *  last change: $Author: os $ $Date: 2001-03-30 11:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,15 +66,20 @@
 #include <tools/string.hxx>
 #endif
 
-#ifndef _SBAITEMS_HXX
-#include "offmgr/sbaitems.hxx"
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+#ifndef _SVARRAY_HXX
+#include <svtools/svarray.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
 
 #include "swtypes.hxx"  // fuer aEmptyStr
-
+#ifndef _SWDBDATA_HXX
+#include <swdbdata.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -119,7 +124,7 @@ class ListBox;
 class Button;
 class SvNumberFormatter;
 class SwMailMergeDlg;
-struct SwDBData;
+
 // -----------------------------------------------------------------------
 
 enum DBMgrOptions
@@ -140,12 +145,8 @@ enum DBMgrOptions
 #define SW_DB_SELECT_TABLE      1
 #define SW_DB_SELECT_QUERY      2
 
-struct SwDSParam
+struct SwDSParam : public SwDBData
 {
-    String                      sDataSource;
-    String                      sTableOrQuery;
-    BYTE                        nTableOrQuery;
-    String                      sStatement;
     com::sun::star::util::Date  aNullDate;
 
     ::com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatter>    xFormatter;
@@ -153,33 +154,24 @@ struct SwDSParam
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       xStatement;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResultSet;
     ::com::sun::star::uno::Sequence< sal_Int32 >                                aSelection;
-    SbaSelectionListRef         xSelectionList;
     BOOL bScrollable;
-    BOOL bSelectionList;
     BOOL bEndOfDB;
     BOOL bAfterSelection;
     long nSelectionIndex;
 
-    SwDSParam(const String& rSource, const String& rTable, BYTE nType, const String& rStatement) :
-        sDataSource(rSource),
-        sTableOrQuery(rTable),
-        nTableOrQuery(nType),
-        sStatement(rStatement),
+    SwDSParam(const SwDBData& rData) :
+        SwDBData(rData),
         bScrollable(FALSE),
-        bSelectionList(FALSE),
         bEndOfDB(FALSE),
         bAfterSelection(FALSE),
         nSelectionIndex(0)
         {}
 
-    SwDSParam(const String& rSource, const String& rTable, BYTE nType,
+    SwDSParam(const SwDBData& rData,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResSet,
         ::com::sun::star::uno::Sequence< sal_Int32 >    rSelection) :
-        sDataSource(rSource),
-        sTableOrQuery(rTable),
-        nTableOrQuery(nType),
+        SwDBData(rData),
         bScrollable(TRUE),
-        bSelectionList(FALSE),
         bEndOfDB(FALSE),
         bAfterSelection(FALSE),
         nSelectionIndex(0),
@@ -199,7 +191,6 @@ SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
 
 class SwNewDBMgr
 {
-    SbaSelectionListRef pMergeList;     // Liste der fÅr Serienbrief selektierten EintrÑge
     String              sEMailAddrFld;  // Mailing: Spaltenname der E-Mail Adresse
     String              sSubject;       // Mailing: Subject
     String              sAttached;      // Mailing: Attachte Files
@@ -214,11 +205,7 @@ class SwNewDBMgr
     SwDSParam*          pMergeData;
     SwMailMergeDlg*     pMergeDialog;
 
-    BOOL                OpenMergeSource(const String& rDataSource,
-                            const String& rDataTableOrQuery,
-                            const String& rStatement,
-                            const SbaSelectionListRef xSelectionList);
-    SwDSParam*          FindDSData(const String& rDBName, BOOL bCreate);
+    SwDSParam*          FindDSData(const SwDBData& rData, BOOL bCreate);
 
 
     DECL_LINK( PrtCancelHdl, Button * );
@@ -236,11 +223,6 @@ class SwNewDBMgr
 public:
     SwNewDBMgr();
     ~SwNewDBMgr();
-    // Am Dokument Datenbank- Tabellenname und SQL-Select-Statement setzen
-    void            ChgDBName( SwWrtShell* pSh,
-                        const String& rDataSource,
-                        const String& rTableOrQuery,
-                                const String& rStatement );
 
     // Art des aktellen Mergens. Siehe DBMgrOptions-enum
     inline USHORT   GetMergeType() const            { return nMergeType; }
@@ -250,17 +232,10 @@ public:
     BOOL            MergeNew(USHORT nOpt, SwWrtShell& rSh,
                         const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties,
                         const String *pPrinter = NULL);
-    BOOL            Merge(USHORT nOpt, SwWrtShell* pSh, const String& rStatement,
-                        const SbaSelectionListRef pSelectionList,
-                        const String& rDataSource,
-                        const String& rTableOrQuery,
-                        const String *pPrinter = NULL);
     BOOL            Merge(SwWrtShell* pSh);
     // Mischen von Datensaetzen in Felder, dann drucken
     BOOL            MergePrint( SwView& rView,
                                 SwPrtOptions& rOpt, SfxProgress& rProgress );
-    inline SbaSelectionListRef& GetMergeList()  { return pMergeList; }
-
     // Datenbankfelder mit fehlendem Datenbankname initialisieren
     inline BOOL     IsInitDBFields() const  { return bInitDBFields; }
     inline void     SetInitDBFields(BOOL b) { bInitDBFields = b;    }
@@ -303,18 +278,18 @@ public:
     BOOL            IsDataSourceOpen(const String& rDataSource, const String& rTableOrQuery)const;
 
     // add data source information to the data source array - was PreInitDBData
-    void            AddDSData(const String& rDBName, long nSelStart, long nSelEnd);
-    void            GetDSSelection(const String& sDBDesc, long& rSelStart, long& rSelEnd);
+    void            AddDSData(const SwDBData& rData, long nSelStart, long nSelEnd);
+    void            GetDSSelection(const SwDBData& rData, long& rSelStart, long& rSelEnd);
 
     // open the source while fields are updated - for the calculator only!
-    BOOL            OpenDataSource(const String& rDataSource, const String& rTableOrQuery);
-    sal_uInt32      GetSelectedRecordId(const String& rDataSource, const String& rTableOrQuery);
+    BOOL            OpenDataSource(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
+    sal_uInt32      GetSelectedRecordId(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
     BOOL            GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
                             String& rResult, double* pNumber);
 
-    const SwDSParam* CreateDSData(const String& rDBName)
-                        {return FindDSData(rDBName, TRUE);}
+    const SwDSParam* CreateDSData(const SwDBData& rData)
+                        {return FindDSData(rData, TRUE);}
     const SwDSParamArr& GetDSParamArray() const {return aDataSourceParams;}
 
 

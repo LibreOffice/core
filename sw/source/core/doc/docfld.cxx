@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:40:22 $
+ *  last change: $Author: os $ $Date: 2001-03-30 12:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,7 +1418,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
                 SwDBData aDBData(((SwDBField*)pFld)->GetDBData());
 
             if( pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
-                aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand));
+                aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand, aDBData.nCommandType));
 
             const String& rName = pFld->GetTyp()->GetName();
 
@@ -1601,7 +1601,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 
         if( pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
             rCalc.VarChange( lcl_GetDBVarName( *this, rDBFld),
-                        pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand) );
+                        pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand, aDBData.nCommandType) );
     }
     else
     {
@@ -1787,7 +1787,7 @@ void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
         SwDSParam* pParam = rArr[i];
         String* pStr = new String( pParam->sDataSource );
         (*pStr) += DB_DELIM;
-        (*pStr) += pParam->sTableOrQuery;
+        (*pStr) += (String)pParam->sCommand;
         rAllDBNames.Insert( pStr, rAllDBNames.Count() );
     }
 }
@@ -1858,7 +1858,11 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
                 rDBNameList.GetObject(i)->GetToken(0) )))
                 return;
 
-    const SwDSParam* pParam = GetNewDBMgr()->CreateDSData(rDBName);
+    SwDBData aData;
+    aData.sDataSource = rDBName.GetToken(0, DB_DELIM);
+    aData.sCommand = rDBName.GetToken(1, DB_DELIM);
+    aData.nCommandType = -1;
+    const SwDSParam* pParam = GetNewDBMgr()->CreateDSData(aData);
     String* pNew = new String( rDBName );
     rDBNameList.Insert( pNew, rDBNameList.Count() );
 }

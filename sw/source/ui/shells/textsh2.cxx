@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:37 $
+ *  last change: $Author: os $ $Date: 2001-03-30 12:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,88 +165,6 @@ inline void AddSelList( List& rLst, long nRow )
 {
     rLst.Insert( (void*)nRow , LIST_APPEND );
 }
-
-void lcl_QRY_UPDATE( const SfxItemSet *pArgs, SwNewDBMgr *pNewDBMgr,
-                     SwWrtShell &rSh, USHORT nSlot )
-{
-    DBG_ASSERT( pArgs, "arguments expected" );
-    if (pArgs)
-    {
-        SbaSelectionListRef pSelectionList;
-
-        const SfxStringItem &rDBNameItem = (const SfxStringItem&) pArgs->Get(SID_ATTR_SBA_DATABASE);
-        const SfxStringItem &rTableNameItem = (const SfxStringItem&) pArgs->Get(SID_ATTR_SBA_DBOBJ_NAME);
-        const SfxStringItem &rStatementItem = (const SfxStringItem&) pArgs->Get(SID_ATTR_SBA_STATEMENT);
-        DBG_ASSERT( rStatementItem.ISA(SfxStringItem), "invalid argument type" );
-
-        const SbaSelectionItem &rSelectionItem = (const SbaSelectionItem&) pArgs->Get(SID_ATTR_SBA_SELECTION);
-        pSelectionList = rSelectionItem.GetSelectionList();
-
-
-        String sDBName(rDBNameItem.GetValue());
-        String sTableName(rTableNameItem.GetValue());
-        String sStatement(rStatementItem.GetValue());
-
-        pNewDBMgr->SetMergeType( DBMGR_MERGE );
-        pNewDBMgr->Merge(DBMGR_MERGE, &rSh,
-                        sStatement, pSelectionList, sDBName, sTableName);
-    }
-}
-
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwBaseShell::ExecDB(SfxRequest &rReq)
-{
-    const SfxItemSet *pArgs = rReq.GetArgs();
-    SwNewDBMgr* pNewDBMgr = GetShell().GetNewDBMgr();
-    USHORT nSlot = rReq.GetSlot();
-
-    switch (nSlot)
-    {
-
-        case SID_SBA_BRW_UPDATE:
-            lcl_QRY_UPDATE( pArgs, pNewDBMgr, GetShell(), nSlot );
-            break;
-
-        case SID_SBA_BRW_INSERT:
-            DBG_ASSERT( pArgs, "arguments expected" );
-            if( pArgs )
-            {
-                String sDBName = ((SfxStringItem&)pArgs->Get(
-                                        SID_ATTR_SBA_DATABASE)).GetValue();
-                String sTblName = ((SfxStringItem&)pArgs->Get(
-                                        SID_ATTR_SBA_DBOBJ_NAME)).GetValue();
-                String sStatmnt = ((SfxStringItem&)pArgs->Get(
-                                        SID_ATTR_SBA_STATEMENT)).GetValue();
-                SbaSelectionListRef xSelectionList( ((SbaSelectionItem&)
-                    pArgs->Get(SID_ATTR_SBA_SELECTION)).GetSelectionList());
-
-                String* pDataStr = new String( sDBName );
-                ((((((*pDataStr) += char(DB_DD_DELIM) )
-                    += sTblName ) += char(DB_DD_DELIM) )
-                    += '0' ) += char(DB_DD_DELIM) ) // Flag fuer Tabelle oder Query - unused!
-                    += sStatmnt;
-
-                if( xSelectionList.Is() )
-                    for( ULONG n = 0, nEnd = xSelectionList->Count();
-                                    n < nEnd; ++n )
-                        ((*pDataStr) += char(DB_DD_DELIM) )
-                            += String::CreateFromInt32(
-                                    (long)xSelectionList->GetObject( n ));
-
-                SwBaseShell::InsertDBTextHdl( this, pDataStr );
-                // der String wird im InsertDBTextHdl geloescht !!
-            }
-        break;
-        default:
-            ASSERT(!this, falscher Dispatcher);
-            return;
-    }
-}
-
-
-
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -273,19 +191,49 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 BOOL bTable = sSbaData.GetToken(2, DB_DD_DELIM) == C2S("1");
                 String sStatement = sSbaData.GetToken(3, DB_DD_DELIM);
 
-                SbaSelectionListRef pSelectionList;
-                pSelectionList.Clear();
-                pSelectionList = new SbaSelectionList;
                 USHORT nCount = sSbaData.GetTokenCount(DB_DD_DELIM);
+                Sequence<sal_Int32> aSelection(nCount - 4);
+                sal_Int32 * pSelection = aSelection.getArray();
+                sal_Int32 nIdx = 0;
+                for( USHORT i = 4; i < nCount; i++ , nIdx++)
+                    pSelection[nIdx] = sSbaData.GetToken( i, DB_DD_DELIM).ToInt32();
 
-                for( USHORT i = 4; i < nCount; i++ )
-                    AddSelList( *pSelectionList,
-                                sSbaData.GetToken( i, DB_DD_DELIM).ToInt32() );
+                Reference<XResultSet>  xResultSet;
+                Reference<XDataSource> xSource;
+                SwDBData aData;
+                aData.sDataSource = sDBName;
+                aData.sCommand = sTableName;
+                aData.nCommandType = 0;
+                Reference< XConnection> xConnection = pNewDBMgr->GetConnection(sDBName, xSource);
+                if(!xConnection.is())
+                    return ;
+                Reference<XStatement> xStatement = xConnection->createStatement();
+                if(!sStatement.Len())
+                {
+                    Reference< sdbc::XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                    OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
+                    OUString sStatement(C2U("SELECT * FROM "));
+                    sStatement = C2U("SELECT * FROM ");
+                    sStatement += aQuoteChar;
+                    sStatement += aData.sCommand;
+                    sStatement += aQuoteChar;
+                }
+                xResultSet = xStatement->executeQuery( sStatement );
+                Sequence<PropertyValue> aProperties(5);
+                PropertyValue* pProperties = aProperties.getArray();
+                pProperties[0].Name = C2U("DataSourceName");
+                pProperties[0].Value <<= (OUString)sDBName;
+                pProperties[1].Name = C2U("Command");
+                pProperties[1].Value <<= (OUString)sTableName;
+                pProperties[2].Name = C2U("Cursor");
+                pProperties[2].Value <<= xResultSet;
+                pProperties[3].Name = C2U("Selection");
+                pProperties[3].Value <<= aSelection;
+                pProperties[4].Name = C2U("CommandType");
+                pProperties[4].Value <<= (sal_Int32)0;
 
-                pNewDBMgr->SetMergeType( DBMGR_MERGE );
-                pNewDBMgr->Merge(DBMGR_MERGE,
-                                    GetShellPtr(), sStatement,
-                                    pSelectionList, sDBName, sTableName);
+                pNewDBMgr->MergeNew(DBMGR_MERGE, *GetShellPtr(), aProperties);
+
             }
             break;
 
@@ -313,8 +261,6 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
 
 IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
 {
@@ -349,7 +295,6 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
             {
                 Sequence<sal_Int32> aSelection(pString->GetTokenCount(DB_DD_DELIM) - 4 );
                 sal_Int32* pSelection = aSelection.getArray();
-                SbaSelectionList aSelectionList;
                 for(sal_Int32 nPos = 0; nPos < aSelection.getLength(); nPos++)
                 {
                     pSelection[nPos] = pString->GetToken( 0, DB_DD_DELIM, nTokenPos ).ToInt32();

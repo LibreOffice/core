@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 13:38:59 $
+ *  last change: $Author: os $ $Date: 2001-03-30 12:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,16 +329,7 @@ BOOL lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
         }
         else
         {
-            pParam->nSelectionIndex = 0;
-            pParam->xResultSet = pParam->xStatement->executeQuery( pParam->sStatement );
-            bRet = TRUE;
-            while(nAbsPos >= 0 && bRet)
-            {
-                bRet &= !pParam->xResultSet->next();
-                pParam->nSelectionIndex++;
-                nAbsPos--;
-            }
-            bRet &= nAbsPos != -1;
+            DBG_ERROR("no absolute positioning available")
         }
     }
     catch(Exception aExcept)
@@ -367,7 +358,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     aFormatData.xFormatter = pParam->xFormatter;
 
     String sLanguage, sCountry;
-    ::ConvertLanguageToIsoNames( nLanguage, sLanguage, sCountry );
+    ::ConvertLanguageToIsoNames( (USHORT)nLanguage, sLanguage, sCountry );
     aFormatData.aLocale.Language = sLanguage;
     aFormatData.aLocale.Country = sCountry;
 
@@ -384,29 +375,34 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
 
     DBG_ASSERT(!bInMerge && !pMergeData, "merge already activated!")
 
-    OUString sDataSource, sDataTableOrQuery;
+    SwDBData aData;
+    aData.nCommandType = CommandType::TABLE;
     Reference<XResultSet>  xResSet;
     Sequence<sal_Int32> aSelection;
-    sal_Int32 nCmdType = CommandType::TABLE;
     const PropertyValue* pValues = rProperties.getConstArray();
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
         if(!pValues[nPos].Name.compareToAscii("DataSourceName"))
-            pValues[nPos].Value >>= sDataSource;
+            pValues[nPos].Value >>= aData.sDataSource;
         else if(!pValues[nPos].Name.compareToAscii("Command"))
-            pValues[nPos].Value >>= sDataTableOrQuery;
+            pValues[nPos].Value >>= aData.sCommand;
         else if(!pValues[nPos].Name.compareToAscii("Cursor"))
             pValues[nPos].Value >>= xResSet;
         else if(!pValues[nPos].Name.compareToAscii("Selection"))
             pValues[nPos].Value >>= aSelection;
         else if(!pValues[nPos].Name.compareToAscii("CommandType"))
-            pValues[nPos].Value >>= nCmdType;
+            pValues[nPos].Value >>= aData.nCommandType;
     }
-    if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
+    if(!aData.sDataSource.getLength() || !aData.sCommand.getLength() || !xResSet.is())
     {
         return FALSE;
     }
-    pMergeData = new SwDSParam(sDataSource, sDataTableOrQuery, SW_DB_SELECT_UNKNOWN, xResSet, aSelection);
+    pMergeData = new SwDSParam(aData, xResSet, aSelection);
+    SwDSParam*  pTemp = FindDSData(aData, FALSE);
+    if(pTemp)
+        *pTemp = *pMergeData;
+    else
+        aDataSourceParams.Insert(new SwDSParam(*pMergeData), aDataSourceParams.Count());
 
     try{
         //set to start position
@@ -424,7 +420,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
             pMergeData->CheckEndOfDB();
         }
     }
-    catch(Exception& rExcept)
+    catch(Exception&)
     {
         pMergeData->bEndOfDB = TRUE;
         pMergeData->CheckEndOfDB();
@@ -432,12 +428,11 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     }
 
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference<XDataSource> xSource = dbtools::getDataSource(sDataSource, xMgr);
+    Reference<XDataSource> xSource = dbtools::getDataSource(aData.sDataSource, xMgr);
     if( xMgr.is() )
     {
         Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
         pMergeData->xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
-        pMergeData->nTableOrQuery = nCmdType == CommandType::TABLE ? SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY;
     }
 
     Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
@@ -458,7 +453,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         }
     }
 
-    ChgDBName(&rSh, sDataSource, sDataTableOrQuery, aEmptyStr);
+    rSh.ChgDBData(aData);
     bInMerge = TRUE;
 
     if (IsInitDBFields())
@@ -524,87 +519,6 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     return bRet;
 }
 
-BOOL SwNewDBMgr::Merge( USHORT nOpt, SwWrtShell* pSh,
-                        const String& rStatement,
-                        const SbaSelectionListRef xSelectionList,
-                        const String& rDataSource,
-                        const String& rTableOrQuery,
-                        const String *pPrinter)
-{
-    ChgDBName(pSh, rDataSource, rTableOrQuery,rStatement);
-    // Falls noch nicht offen, spaetestens hier
-
-    if(!OpenMergeSource(rDataSource, rTableOrQuery, rStatement, xSelectionList))
-        return FALSE;
-
-    if (IsInitDBFields())
-    {
-        // Bei Datenbankfeldern ohne DB-Name DB-Name von Dok einsetzen
-        SvStringsDtor aDBNames(1, 1);
-        aDBNames.Insert( new String(), 0);
-        SwDBData aData = pSh->GetDBData();
-        String sDBName = aData.sDataSource;
-        sDBName += DB_DELIM;
-        sDBName += (String)aData.sCommand;
-        sDBName += DB_DELIM;
-        sDBName += String::CreateFromInt32(aData.nCommandType);
-        pSh->ChangeDBFields( aDBNames, sDBName);
-        SetInitDBFields(FALSE);
-    }
-    const SbaSelectionList* pSelList = 0;
-    if( xSelectionList.Is() && (long)xSelectionList->GetObject(0) != -1L )
-    {
-        if( xSelectionList->Count() )
-            pSelList = &xSelectionList;
-    }
-
-    BOOL bRet = TRUE;
-    switch(nOpt)
-    {
-        case DBMGR_MERGE:
-            bRet = Merge(pSh);   // Mischen
-            break;
-
-        case DBMGR_MERGE_MAILMERGE: // Serienbrief
-            {
-            SfxDispatcher *pDis = pSh->GetView().GetViewFrame()->GetDispatcher();
-            if (pPrinter)   // Aufruf kommt aus dem Basic
-            {
-                SfxBoolItem aSilent( SID_SILENT, TRUE );
-                if (pPrinter)
-                {
-                    SfxStringItem aPrinterName(SID_PRINTER_NAME, *pPrinter);
-                    pDis->Execute( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON,
-                                   &aPrinterName, &aSilent, 0L );
-                }
-                else
-                {
-                    pDis->Execute( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON,
-                                   &aSilent, 0L );
-                }
-            }
-            else
-                pDis->Execute(SID_PRINTDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
-            }
-            break;
-
-        case DBMGR_MERGE_MAILING:
-            bRet = MergeMailing(pSh);   // Mailing
-            break;
-
-        case DBMGR_MERGE_MAILFILES:
-            bRet = MergeMailFiles(pSh); // Serienbriefe als Dateien abspeichern
-            break;
-
-        default:        // Einfuegen der selektierten Eintraege
-                        // (war: InsertRecord)
-            ImportFromConnection(pSh );
-            break;
-    }
-
-    EndMerge();
-    return bRet;
-}
 /*--------------------------------------------------------------------
     Beschreibung: Daten importieren
  --------------------------------------------------------------------*/
@@ -613,12 +527,6 @@ BOOL SwNewDBMgr::Merge( USHORT nOpt, SwWrtShell* pSh,
 BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
-
-/*  for (ULONG i = 0 ; i < GetDBData().pSelectionList->Count(); i++)
-    {
-        ULONG nIndex = (ULONG)GetDBData().pSelectionList->GetObject(i);
-        DBG_TRACE(String(nIndex));
-    }*/
 
     pSh->ViewShell::UpdateFlds(TRUE);
     pSh->SetModified();
@@ -629,41 +537,8 @@ BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Daten importieren
- --------------------------------------------------------------------*/
-
-
-/*void SwNewDBMgr::UpdateImport(    const BOOL bBasic, SwWrtShell* pSh,
-                                const String& rDBName,
-                                const String& rStatement,
-                                const SbaSelectionListRef xSelectionList )
-{
-    ChgDBName(pSh, rDBName, rStatement);
-
-    if( OpenDB( bBasic, pSh->GetDBDesc()) )
-    {
-        OfaDBParam& rParam = GetDBData(bBasic);
-
-        ChangeStatement(bBasic, rStatement);
-
-        const SbaSelectionList* pSelList = 0;
-        rParam.pSelectionList->Clear();
-        if( xSelectionList.Is() && -1L != (long)xSelectionList->GetObject(0) )
-        {
-            *rParam.pSelectionList = *xSelectionList;
-            if( xSelectionList->Count() )
-                pSelList = &xSelectionList;
-        }
-
-        ImportFromConnection( bBasic, pSh, pSelList );
-    }
-} */
-
-/*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
 void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
 {
     if(pMergeData && !pMergeData->bEndOfDB)
@@ -697,8 +572,6 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
         }
     }
 }
-
-
 /*-----------------24.02.97 10.30-------------------
 
 --------------------------------------------------*/
@@ -738,9 +611,8 @@ String  lcl_FindColumn(const String& sFormatStr,USHORT  &nUsedPos, BYTE &nSepara
     Beschreibung:
  --------------------------------------------------------------------*/
 
-inline String lcl_GetDBInsertMode( String sDBName )
+inline String lcl_GetDBInsertMode( const SwDBData& rData )
 {
-    sDBName.SearchAndReplace( DB_DELIM, '.');
     return aEmptyStr;
 #if 0
 //JP 13.11.00: must be change to the new configuration
@@ -757,10 +629,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
     {
           Reference< XColumnsSupplier > xColsSupp( pMergeData->xResultSet, UNO_QUERY );
           Reference <XNameAccess> xCols = xColsSupp->getColumns();
-        String sSymDBName(pMergeData->sDataSource);
-        sSymDBName += DB_DELIM;
-        sSymDBName += pMergeData->sTableOrQuery;
-        String sFormatStr( lcl_GetDBInsertMode( sSymDBName ));
+        String sFormatStr( lcl_GetDBInsertMode( *pMergeData ));
         USHORT nFmtLen = sFormatStr.Len();
         if( nFmtLen )
         {
@@ -821,27 +690,6 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
         }
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-void SwNewDBMgr::ChgDBName(SwWrtShell* pSh,
-                        const String& rDataSource,
-                        const String& rTableOrQuery,
-                        const String& rStatement)
-{
-    if (pSh)
-    {
-        SwDBData aData;
-        aData.sDataSource = rDataSource;
-        aData.sCommand = rStatement.Len() ? rStatement : rTableOrQuery;
-        aData.nCommandType = rStatement.Len() ? CommandType::COMMAND : CommandType::TABLE;
-        pSh->ChgDBData(aData);
-    }
-}
-
 /*--------------------------------------------------------------------
     Beschreibung: Listbox mit Tabellenliste fuellen
  --------------------------------------------------------------------*/
@@ -914,7 +762,6 @@ SwNewDBMgr::SwNewDBMgr() :
             nMergeType(DBMGR_INSERT),
             bInitDBFields(FALSE)
 {
-    pMergeList = new SbaSelectionList;
 }
 /* -----------------------------18.07.00 08:56--------------------------------
 
@@ -934,16 +781,10 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
     //merge source is already open
-    rOpt.nMergeCnt = pMergeData && pMergeData->xSelectionList.Is() ?
-                                    pMergeData->xSelectionList->Count() : 0;
+    rOpt.nMergeCnt = pMergeData && pMergeData->aSelection.getLength();
 
-//  if (IsPrintFromBasicDB())
-//      rOpt.bSinglePrtJobs = IsSingleJobs();
-//  else
-//  {
-        SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-        rOpt.bSinglePrtJobs = pModOpt->IsSinglePrintJob();
-//  }
+    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    rOpt.bSinglePrtJobs = pModOpt->IsSinglePrintJob();
 
     SfxPrinter *pPrt = pSh->GetPrt();
     Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
@@ -1402,7 +1243,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
          Reference< XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
 
         String sLanguage, sCountry;
-        ::ConvertLanguageToIsoNames( nLanguage, sLanguage, sCountry );
+        ::ConvertLanguageToIsoNames( (USHORT)nLanguage, sLanguage, sCountry );
         Locale aLocale;
         aLocale.Language = sLanguage;
         aLocale.Country = sCountry;
@@ -1649,105 +1490,6 @@ String SwNewDBMgr::GetDBField(Reference<XPropertySet> xColumnProps,
 
     return sRet;
 }
-/* -----------------------------06.07.00 14:26--------------------------------
-    opens a data source table or query and keeps the reference
-     until EndMerge() is called
- ---------------------------------------------------------------------------*/
-BOOL SwNewDBMgr::OpenMergeSource(const String& rDataSource,
-                            const String& rDataTableOrQuery,
-                            const String& rStatement,
-                            const SbaSelectionListRef xSelectionList)
-{
-    DBG_ASSERT(!bInMerge && !pMergeData, "merge already activated!")
-    bInMerge = TRUE;
-    pMergeData = new SwDSParam(rDataSource, rDataTableOrQuery, SW_DB_SELECT_UNKNOWN, rStatement);
-    //remove corresponding data from aDataSourceParams and insert the merge data
-    String sDBName(rDataSource);
-    sDBName += DB_DELIM;
-    sDBName += rDataTableOrQuery;
-    SwDSParam*  pTemp = FindDSData(sDBName, FALSE);
-    if(pTemp)
-        pTemp = pMergeData;
-    else
-        aDataSourceParams.Insert(pMergeData, aDataSourceParams.Count());
-
-    Reference<XDataSource> xSource;
-    pMergeData->xConnection = SwNewDBMgr::GetConnection(rDataSource, xSource);
-    pMergeData->xSelectionList = xSelectionList;
-    if( xSelectionList.Is() && xSelectionList->Count() && (long)xSelectionList->GetObject(0) != -1L )
-    {
-        pMergeData->bSelectionList = TRUE;
-    }
-
-    if(pMergeData->xConnection.is())
-    {
-        try
-        {
-            pMergeData->bScrollable = pMergeData->xConnection->getMetaData()
-                        ->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
-            pMergeData->xStatement = pMergeData->xConnection->createStatement();
-            pMergeData->xResultSet = pMergeData->xStatement->executeQuery( rStatement );
-            //after executeQuery the cursor must be positioned
-            if(pMergeData->bSelectionList)
-            {
-                if(pMergeData->bScrollable)
-                {
-                    pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
-                        (ULONG)pMergeData->xSelectionList->GetObject( 0 ) );
-                }
-                else
-                {
-                    ULONG nPos = (ULONG)pMergeData->xSelectionList->GetObject( 0 );
-                    while(nPos > 0 && !pMergeData->bEndOfDB)
-                    {
-                        pMergeData->bEndOfDB |= !pMergeData->xResultSet->next();
-                        nPos--;
-                    }
-                }
-                pMergeData->CheckEndOfDB();
-                if(1 == pMergeData->xSelectionList->Count())
-                    pMergeData->bEndOfDB = TRUE;
-            }
-            else
-            {
-                pMergeData->bEndOfDB = !pMergeData->xResultSet->next();
-                pMergeData->CheckEndOfDB();
-                ++pMergeData->nSelectionIndex;
-            }
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            if( xMgr.is() )
-            {
-                Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
-                pMergeData->xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
-            }
-
-            Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
-            if(xSourceProps.is())
-            {
-                Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
-                if(aFormats.hasValue())
-                {
-                    Reference<XNumberFormatsSupplier> xSuppl = *(Reference<util::XNumberFormatsSupplier>*) aFormats.getValue();
-                    if(xSuppl.is())
-                    {
-                        Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
-                        Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
-                        if(aNull.hasValue())
-                            pMergeData->aNullDate = *(util::Date*)aNull.getValue();
-                    }
-                }
-            }
-        }
-        catch(Exception aExcept)
-        {
-            DBG_ERROR("exception caught")
-        }
-    }
-    BOOL bRet = pMergeData && pMergeData->xResultSet.is();
-    if(!bRet)
-        pMergeData = 0;
-    return bRet;
-}
 /* -----------------------------06.07.00 14:28--------------------------------
     releases the merge data source table or query after merge is completed
  ---------------------------------------------------------------------------*/
@@ -1765,8 +1507,8 @@ BOOL    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource, const String& rT
 {
      if(pMergeData)
     {
-        return rDataSource == pMergeData->sDataSource &&
-                    rTableOrQuery == pMergeData->sTableOrQuery &&
+        return rDataSource == (String)pMergeData->sDataSource &&
+                    rTableOrQuery == (String)pMergeData->sCommand &&
                     pMergeData->xResultSet.is();
     }
     else
@@ -1783,8 +1525,8 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
     BOOL bRet = FALSE;
     //check if it's the merge data source
     if(pMergeData &&
-        rSourceName == pMergeData->sDataSource &&
-        rTableName == pMergeData->sTableOrQuery)
+        rSourceName == (String)pMergeData->sDataSource &&
+        rTableName == (String)pMergeData->sCommand)
     {
         if(!pMergeData->xResultSet.is())
             return FALSE;
@@ -1833,45 +1575,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
     }
     try
     {
-        if(pMergeData->bSelectionList)
-        {
-            DBG_ERROR("remove old code")
-            if(pMergeData->bScrollable)
-            {
-                pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
-                    (ULONG)pMergeData->xSelectionList->GetObject( ++pMergeData->nSelectionIndex ) );
-            }
-            else
-            {
-                ULONG nOldPos = pMergeData->nSelectionIndex ?
-                    (ULONG)pMergeData->xSelectionList->GetObject(pMergeData->nSelectionIndex): 0;
-                ULONG nPos = (ULONG)pMergeData->xSelectionList->GetObject( ++pMergeData->nSelectionIndex );
-                DBG_ASSERT(nPos >=0, "selection invalid!")
-                long nDiff = nPos - nOldPos;
-                //if a backward move is necessary then the result set must be created again
-                if(nDiff < 0)
-                {
-                    try
-                    {
-                        pMergeData->xResultSet = pMergeData->xStatement->executeQuery( pMergeData->sStatement );
-                    }
-                    catch(Exception&)
-                    {
-                        pMergeData->bEndOfDB = TRUE;
-                    }
-                    nDiff = nPos;
-                }
-                while(nDiff > 0 && !pMergeData->bEndOfDB)
-                {
-                    pMergeData->bEndOfDB |= !pMergeData->xResultSet->next();
-                    nDiff--;
-                }
-            }
-            pMergeData->CheckEndOfDB();
-            if(pMergeData->nSelectionIndex >= pMergeData->xSelectionList->Count())
-                pMergeData->bEndOfDB = TRUE;
-        }
-        else if(pMergeData->aSelection.getLength())
+        if(pMergeData->aSelection.getLength())
         {
             pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
                     (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
@@ -1929,16 +1633,7 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
     if(!pMergeData || !pMergeData->xResultSet.is()|| nSet < 0)
         return FALSE;
     sal_Bool bRet = FALSE;
-    sal_Int32 nAbsPos = -1;
-    if(pMergeData->bSelectionList)
-    {
-        if(pMergeData->xSelectionList->Count() > nSet)
-        {
-            nAbsPos = (sal_Int32)pMergeData->xSelectionList->GetObject(nSet);
-        }
-    }
-    else
-        nAbsPos = nSet;
+    sal_Int32 nAbsPos = nSet;
 
     if(nAbsPos >= 0)
     {
@@ -1993,13 +1688,14 @@ void lcl_ExtractMembers(const String& rDBName, String& sSource, String& sTable, 
 /* -----------------------------17.07.00 14:17--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableOrQuery)
+BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType)
 {
-    String sDBName = rDataSource;
-    sDBName += DB_DELIM;
-    sDBName += rTableOrQuery;
-    SwDSParam* pFound = FindDSData(sDBName, TRUE);
-    pFound->bSelectionList = pFound->xSelectionList.Is() && pFound->xSelectionList->Count();
+    SwDBData aData;
+    aData.sDataSource = rDataSource;
+    aData.sCommand = rTableOrQuery;
+    aData.nCommandType = nCommandType;
+
+    SwDSParam* pFound = FindDSData(aData, TRUE);
     Reference< XDataSource> xSource;
     if(pFound->xResultSet.is())
         return TRUE;
@@ -2012,45 +1708,18 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
             pFound->bScrollable = xMetaData
                         ->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
             pFound->xStatement = pFound->xConnection->createStatement();
-            if(!pFound->sStatement.Len())
-            {
-                OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
-                OUString sStatement(C2U("SELECT * FROM "));
-                sStatement = C2U("SELECT * FROM ");
-                sStatement += aQuoteChar;
-                sStatement += rTableOrQuery;
-                sStatement += aQuoteChar;
-                pFound->sStatement = sStatement;
-            }
-            pFound->xResultSet = pFound->xStatement->executeQuery( pFound->sStatement );
+            OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
+            OUString sStatement(C2U("SELECT * FROM "));
+            sStatement = C2U("SELECT * FROM ");
+            sStatement += aQuoteChar;
+            sStatement += rTableOrQuery;
+            sStatement += aQuoteChar;
+            pFound->xResultSet = pFound->xStatement->executeQuery( sStatement );
 
             //after executeQuery the cursor must be positioned
-            if(pFound->bSelectionList)
-            {
-                if(pFound->bScrollable)
-                {
-                    pFound->bEndOfDB = !pFound->xResultSet->absolute(
-                        (ULONG)pFound->xSelectionList->GetObject( 0 ) );
-                }
-                else
-                {
-                    ULONG nPos = (ULONG)pFound->xSelectionList->GetObject( 0 );
-                    while(nPos > 0 && !pFound->bEndOfDB)
-                    {
-                        pFound->bEndOfDB |= !pFound->xResultSet->next();
-                        nPos--;
-                    }
-                }
-                pFound->CheckEndOfDB();
-                if(1 == pFound->xSelectionList->Count())
-                    pFound->bEndOfDB = TRUE;
-            }
-            else
-            {
-                pFound->bEndOfDB = !pFound->xResultSet->next();
-                pFound->CheckEndOfDB();
-                ++pFound->nSelectionIndex;
-            }
+            pFound->bEndOfDB = !pFound->xResultSet->next();
+            pFound->CheckEndOfDB();
+            ++pFound->nSelectionIndex;
         }
         catch (Exception&)
         {
@@ -2064,20 +1733,23 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
 /* -----------------------------17.07.00 15:55--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_uInt32      SwNewDBMgr::GetSelectedRecordId(const String& rDataSource, const String& rTableOrQuery)
+sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
+    const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType)
 {
     sal_uInt32 nRet = -1;
     //check for merge data source first
-     if(pMergeData && rDataSource == pMergeData->sDataSource &&
-                    rTableOrQuery == pMergeData->sTableOrQuery &&
+    if(pMergeData && rDataSource == (String)pMergeData->sDataSource &&
+                    rTableOrQuery == (String)pMergeData->sCommand &&
+                    (nCommandType == -1 || nCommandType == pMergeData->nCommandType) &&
                     pMergeData->xResultSet.is())
         nRet = GetSelectedRecordId();
     else
     {
-        String sDBName(rDataSource);
-        sDBName += DB_DELIM;
-        sDBName += rTableOrQuery;
-        SwDSParam* pFound = SwNewDBMgr::FindDSData(sDBName, FALSE);
+        SwDBData aData;
+        aData.sDataSource = rDataSource;
+        aData.sCommand = rTableOrQuery;
+        aData.nCommandType = nCommandType;
+        SwDSParam* pFound = FindDSData(aData, FALSE);
         if(pFound && pFound->xResultSet.is())
         {
             try
@@ -2109,19 +1781,15 @@ void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
 /* -----------------------------17.07.00 14:54--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwDSParam* SwNewDBMgr::FindDSData(const String& rDBName, BOOL bCreate)
+SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
 {
-    String sSource;
-    String sTable;
-    String sStatement;
-    lcl_ExtractMembers(rDBName, sSource, sTable, sStatement);
     SwDSParam* pFound = 0;
-
     for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
     {
         SwDSParam* pParam = aDataSourceParams[nPos];
-        if(sSource == pParam->sDataSource &&
-            sTable == pParam->sTableOrQuery)
+        if(rData.sDataSource == pParam->sDataSource &&
+            rData.sCommand == pParam->sCommand &&
+            (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType))
             {
                 pFound = pParam;
                 break;
@@ -2131,63 +1799,48 @@ SwDSParam* SwNewDBMgr::FindDSData(const String& rDBName, BOOL bCreate)
     {
         if(!pFound)
         {
-            pFound = new SwDSParam(sSource, sTable, SW_DB_SELECT_UNKNOWN, sStatement);
+            pFound = new SwDSParam(rData);
             aDataSourceParams.Insert(pFound, aDataSourceParams.Count());
         }
-        else
-            pFound->sStatement = sStatement;
     }
     return pFound;
 }
 /* -----------------------------17.07.00 14:31--------------------------------
     rDBName: <Source> + DB_DELIM + <Table>; + <Statement>
  ---------------------------------------------------------------------------*/
-void    SwNewDBMgr::AddDSData(const String& rDBName, long nSelStart, long nSelEnd)
+void    SwNewDBMgr::AddDSData(const SwDBData& rData, long nSelStart, long nSelEnd)
 {
-    SwDSParam* pFound = FindDSData(rDBName, TRUE);
-    if(pFound->xSelectionList.Is())
-        pFound->xSelectionList->Clear();
-    else
-        pFound->xSelectionList = new SbaSelectionList;
-    if (nSelStart > 0)
+    SwDSParam* pFound = FindDSData(rData, TRUE);
+    if(nSelStart > 0)
     {
-        if (nSelEnd < nSelStart)
+        if(nSelEnd < nSelStart)
         {
             sal_uInt32 nZw = nSelEnd;
             nSelEnd = nSelStart;
             nSelStart = nZw;
         }
 
-        for (long i = nSelStart; i <= nSelEnd; i++)
-            pFound->xSelectionList->Insert((void*)i , LIST_APPEND);
+        pFound->aSelection.realloc(nSelEnd - nSelStart + 1);
+        sal_Int32* pSelection = pFound->aSelection.getArray();
+        sal_Int32 nIdx = 0;
+        for (long i = nSelStart; i <= nSelEnd; i++, nIdx++)
+            pSelection[nIdx] = i;
     }
+    else
+        pFound->aSelection.realloc(0);
 }
 /* -----------------------------17.07.00 14:31--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SwNewDBMgr::GetDSSelection(const String& rDBDesc, long& rSelStart, long& rSelEnd)
+void    SwNewDBMgr::GetDSSelection(const SwDBData& rData, long& rSelStart, long& rSelEnd)
 {
-    SwDSParam* pFound = FindDSData(rDBDesc, FALSE);
-    if(!pFound || !pFound->xSelectionList.Is() || !pFound->xSelectionList->Count())
+    SwDSParam* pFound = FindDSData(rData, FALSE);
+    if(!pFound || !pFound->aSelection.getLength())
         rSelStart = -1L;
     else
     {
-        if(pFound->xSelectionList->Count())
-        {
-            rSelStart = (sal_uInt32)pFound->xSelectionList->GetObject(0);
-            for (sal_uInt32 i = 1; i < pFound->xSelectionList->Count(); i++)
-            {
-                long nPrev = (sal_uInt32)pFound->xSelectionList->GetObject(i - 1);
-                long nNow = (sal_uInt32)pFound->xSelectionList->GetObject(i);
-
-                if (nNow - nPrev > 1)
-                {
-                    rSelEnd = nPrev;
-                    return;
-                }
-            }
-            rSelEnd = (sal_uInt32)pFound->xSelectionList->GetObject(i - 1);
-        }
+        rSelStart = pFound->aSelection.getConstArray()[0];
+        rSelEnd = pFound->aSelection.getConstArray()[pFound->aSelection.getLength() - 1];
     }
 }
 /* -----------------------------17.07.00 14:34--------------------------------

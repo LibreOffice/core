@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 13:24:21 $
+ *  last change: $Author: os $ $Date: 2001-03-30 12:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
+#endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
 #endif
 
 #include <float.h>

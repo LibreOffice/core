@@ -2,7 +2,7 @@
 
     $Workfile:   _BASESH.SDI  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_basesh.sdi,v 1.1.1.1 2000-09-18 17:14:29 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_basesh.sdi,v 1.2 2001-03-30 12:00:08 os Exp $
 
     Beschreibung:   interface Base - gemeinsame Basisfunktionalitaet
                     fuer SW und SW/WEB
@@ -97,28 +97,6 @@ interface BaseTextSelection : Selection
     [
         ExecMethod = ExecField ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_SBA_BRW_UPDATE
-    [
-        StateMethod = GetState;
-        ExecMethod = ExecDB;
-        Export = FALSE
-    ]
-
-    SID_SBA_BRW_INSERT
-    [
-        StateMethod = GetState;
-        ExecMethod = ExecDB;
-        Export = FALSE
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_SBA_BRW_MERGE
-    [
-        StateMethod = GetState;
-        ExecMethod = ExecDB;
-        Export = FALSE
     ]
 
     FN_UPDATE_FIELDS // status(final|play)
@@ -488,6 +466,9 @@ interface BaseTextSelection : Selection
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:29  hr
+    initial import
+
     Revision 1.46  2000/05/30 10:12:26  os
     unused slots removed
 

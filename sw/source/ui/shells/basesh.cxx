@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:50:38 $
+ *  last change: $Author: os $ $Date: 2001-03-30 12:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1473,18 +1473,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             }
             break;
 
-            case SID_SBA_BRW_UPDATE:
-            case SID_SBA_BRW_INSERT:
-            case SID_SBA_BRW_MERGE:
-            {
-                //Damit der Datenbankbrowser die Buttons fuer alle Shells
-                //anzeigt. Aber nur disabled, enabled wird nur in der Textsh.
-                const int nSelType = rSh.GetSelectionType();
-                rSet.Put(SfxBoolItem(nWhich,
-                            nSelType & SwWrtShell::SEL_TXT ? TRUE : FALSE ));
-            }
-            break;
-
             case FN_TOOL_ANKER:
             case FN_TOOL_ANKER_PAGE:
             case FN_TOOL_ANKER_PARAGRAPH:
@@ -2527,82 +2515,5 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
             ASSERT(FALSE, falscher Dispatcher);
     }
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2001/03/01 12:33:49  os
-    State contour dialog: not disabled in if swapped out anymore
-
-    Revision 1.6  2001/02/27 12:21:02  os
-    #82741# Enable image map editor also if graphic is swapped out
-
-    Revision 1.5  2001/02/02 17:43:37  jp
-    use new clipboard
-
-    Revision 1.4  2000/12/22 12:07:32  jp
-    Bug #81672#: asynch loaded graphics for status updates
-
-    Revision 1.3  2000/11/23 20:08:52  jp
-    Task #80648#: use new class SvxScriptSetItem
-
-    Revision 1.2  2000/11/13 13:19:55  jp
-    new method GetTextFontCtrl
-
-    Revision 1.1.1.1  2000/09/18 17:14:46  hr
-    initial import
-
-    Revision 1.404  2000/09/18 16:06:02  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.403  2000/09/13 11:38:45  ka
-    use URL method of Gallery instead of DirEntry method
-
-    Revision 1.402  2000/09/12 13:16:50  kz
-    add. include tools/fsys.hxx
-
-    Revision 1.401  2000/09/08 08:12:51  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.400  2000/09/07 15:59:28  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.399  2000/08/17 11:42:20  jp
-    remove the SW graphicmanager
-
-    Revision 1.398  2000/08/15 13:51:49  os
-    #77616# allow background color for graphic objects
-
-    Revision 1.397  2000/07/11 18:54:25  jp
-    Task #70407#: use the GraphikObject
-
-    Revision 1.396  2000/07/11 17:56:35  jp
-    Bug #76736#: Execute - UpdateFields reativate
-
-    Revision 1.395  2000/06/26 13:17:56  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.394  2000/06/07 13:18:20  os
-    using UCB
-
-    Revision 1.393  2000/05/30 10:40:31  os
-    unused slots removed
-
-    Revision 1.392  2000/05/26 07:21:31  os
-    old SW Basic API Slots removed
-
-    Revision 1.391  2000/05/10 11:53:01  os
-    Basic API removed
-
-    Revision 1.390  2000/05/09 14:41:35  os
-    BASIC interface partially removed
-
-    Revision 1.389  2000/05/08 11:22:47  os
-    CreateSubObject
-
-    Revision 1.388  2000/04/18 14:58:23  os
-    UNICODE
-
-------------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdbdata.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:04:41 $
+ *  last change: $Author: os $ $Date: 2001-03-30 11:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ struct SwDBData
 {
     ::rtl::OUString     sDataSource;
     ::rtl::OUString     sCommand;       //table, query or statement
-    sal_Int16           nCommandType; //com::sun::star::sdb::CommandType
+    sal_Int32           nCommandType; //com::sun::star::sdb::CommandType
     SwDBData() :
         nCommandType(0){}
 
