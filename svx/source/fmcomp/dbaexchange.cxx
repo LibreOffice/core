@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 14:38:28 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 12:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
 #endif
+#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
+#include <comphelper/propertysetinfo.hxx>
+#endif
 
 //........................................................................
 namespace svx
@@ -99,6 +102,7 @@ namespace svx
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::datatransfer;
     using namespace ::svxform;
+    using namespace ::comphelper;
 
     //====================================================================
     //= OColumnTransferable
@@ -113,7 +117,7 @@ namespace svx
 
     //--------------------------------------------------------------------
     OColumnTransferable::OColumnTransferable(const Reference< XPropertySet >& _rxForm,
-            const ::rtl::OUString& _rFieldName, sal_Int32 _nFormats)
+            const ::rtl::OUString& _rFieldName, const Reference< XPropertySet >& _rxColumn, sal_Int32 _nFormats)
         :m_nFormatFlags(_nFormats)
     {
         OSL_ENSURE(_rxForm.is(), "OColumnTransferable::OColumnTransferable: invalid form!");
@@ -176,6 +180,21 @@ namespace svx
         }
 
         implConstruct(sDatasource, nCommandType, sCommand, _rFieldName);
+
+        if (_rxColumn.is() && ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR))
+            m_aDescriptor[daColumnObject] <<= _rxColumn;
+    }
+
+    //--------------------------------------------------------------------
+    sal_uInt32 OColumnTransferable::getDescriptorFormatId()
+    {
+        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
+        if ((sal_uInt32)-1 == s_nFormat)
+        {
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.ColumnDescriptorTransfer"));
+            OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
+        }
+        return s_nFormat;
     }
 
     //--------------------------------------------------------------------
@@ -207,6 +226,15 @@ namespace svx
         m_sCompatibleFormat += ::rtl::OUString(&cCommandType, 1);
         m_sCompatibleFormat += sSeparator;
         m_sCompatibleFormat += _rFieldName;
+
+        m_aDescriptor.clear();
+        if ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR)
+        {
+            m_aDescriptor[daDataSource]     <<= _rDatasource;
+            m_aDescriptor[daCommand]        <<= _rCommand;
+            m_aDescriptor[daCommandType]    <<= _nCommandType;
+            m_aDescriptor[daColumnName]     <<= _rFieldName;
+        }
     }
 
     //--------------------------------------------------------------------
@@ -217,17 +245,23 @@ namespace svx
 
         if (CTF_FIELD_DESCRIPTOR & m_nFormatFlags)
             AddFormat(SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE);
+
+        if (CTF_COLUMN_DESCRIPTOR & m_nFormatFlags)
+            AddFormat(getDescriptorFormatId());
     }
 
     //--------------------------------------------------------------------
     sal_Bool OColumnTransferable::GetData( const DataFlavor& _rFlavor )
     {
-        switch (SotExchange::GetFormat(_rFlavor))
+        const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
+        switch (nFormatId)
         {
             case SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE:
             case SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE:
                 return SetString(m_sCompatibleFormat, _rFlavor);
         }
+        if (nFormatId == getDescriptorFormatId())
+            return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ), _rFlavor );
 
         return sal_False;
     }
@@ -235,8 +269,9 @@ namespace svx
     //--------------------------------------------------------------------
     sal_Bool OColumnTransferable::canExtractColumnDescriptor(const DataFlavorExVector& _rFlavors, sal_Int32 _nFormats)
     {
-        sal_Bool bFieldFormat   = 0 != (_nFormats & CTF_FIELD_DESCRIPTOR);
-        sal_Bool bControlFormat = 0 != (_nFormats & CTF_CONTROL_EXCHANGE);
+        sal_Bool bFieldFormat       = 0 != (_nFormats & CTF_FIELD_DESCRIPTOR);
+        sal_Bool bControlFormat     = 0 != (_nFormats & CTF_CONTROL_EXCHANGE);
+        sal_Bool bDescriptorFormat  = 0 != (_nFormats & CTF_COLUMN_DESCRIPTOR);
         for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
                 aCheck != _rFlavors.end();
                 ++aCheck
@@ -246,16 +281,73 @@ namespace svx
                 return sal_True;
             if (bControlFormat && (SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == aCheck->mnSotId))
                 return sal_True;
+            if (bDescriptorFormat && (getDescriptorFormatId() == aCheck->mnSotId))
+                return sal_True;
         }
 
         return sal_False;
     }
 
     //--------------------------------------------------------------------
+    ODataAccessDescriptor OColumnTransferable::extractColumnDescriptor(const TransferableDataHelper& _rData)
+    {
+        if (_rData.HasFormat(getDescriptorFormatId()))
+        {
+            // the object has a real descriptor object (not just the old compatible format)
+
+            // extract the any from the transferable
+            DataFlavor aFlavor;
+#ifdef _DEBUG
+            sal_Bool bSuccess =
+#endif
+            SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
+            OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
+
+            Any aDescriptor = _rData.GetAny(aFlavor);
+
+            // extract the property value sequence
+            Sequence< PropertyValue > aDescriptorProps;
+#ifdef _DEBUG
+            bSuccess =
+#endif
+            aDescriptor >>= aDescriptorProps;
+            OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid clipboard format!");
+
+            // build the real descriptor
+            return ODataAccessDescriptor(aDescriptorProps);
+        }
+
+        // only the old (compatible) format exists -> use the other extract method ...
+        ::rtl::OUString sDatasource, sCommand, sFieldName;
+        sal_Int32 nCommandType = CommandType::COMMAND;
+
+        ODataAccessDescriptor aDescriptor;
+        if (extractColumnDescriptor(_rData, sDatasource, nCommandType, sCommand, sFieldName))
+        {
+            // and build an own descriptor
+            aDescriptor[daDataSource]   <<= sDatasource;
+            aDescriptor[daCommand]      <<= sCommand;
+            aDescriptor[daCommandType]  <<= nCommandType;
+            aDescriptor[daColumnName]   <<= sFieldName;
+        }
+        return aDescriptor;
+    }
+
+    //--------------------------------------------------------------------
     sal_Bool OColumnTransferable::extractColumnDescriptor(const TransferableDataHelper& _rData,
         ::rtl::OUString& _rDatasource, sal_Int32& _nCommandType, ::rtl::OUString& _rCommand, ::rtl::OUString& _rFieldName)
     {
-        // check if we have a format we can use ....
+        if (_rData.HasFormat(getDescriptorFormatId()))
+        {
+            ODataAccessDescriptor aDescriptor = extractColumnDescriptor(_rData);
+            aDescriptor[daDataSource]   >>= _rDatasource;
+            aDescriptor[daCommand]      >>= _rCommand;
+            aDescriptor[daCommandType]  >>= _nCommandType;
+            aDescriptor[daColumnName]   >>= _rFieldName;
+            return sal_True;
+        }
+
+        // check if we have a (string) format we can use ....
         SotFormatStringId   nRecognizedFormat = 0;
         if (_rData.HasFormat(SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE))
             nRecognizedFormat = SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE;
@@ -292,6 +384,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/27 14:38:28  fs
+ *  swap the order in which the clipboard formats are added
+ *
  *  Revision 1.1  2001/03/26 15:05:04  fs
  *  initial checkin - helper classes for data access related DnD
  *
