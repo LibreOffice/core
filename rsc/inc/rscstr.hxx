@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscstr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@ class RscString : public RscTop
         BOOL    bDflt;  // Ist Default
         RscId   aRefId; // ReferenzName
     };
-    USHORT  nSize;
+    sal_uInt32  nSize;
 public:
-                    RscString( HASHID nId, USHORT nTypId );
+                    RscString( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
 
     void            SetRefClass( RscTop * pClass )
@@ -95,7 +95,7 @@ public:
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
                     // Der zulaessige Bereich wird gesetzt
     void            Destroy( const RSCINST & rInst );
-    USHORT          Size(){ return nSize; }
+    sal_uInt32          Size(){ return nSize; }
     void            SetToDefault( const RSCINST & rInst )
                     {
                         ((RscStringInst*)rInst.pData)->bDflt = TRUE;
@@ -106,14 +106,14 @@ public:
                     };
                     // Als Default setzen
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    ERRTYPE         SetString( const RSCINST &, char * pStr );
+    ERRTYPE         SetString( const RSCINST &, const char * pStr );
     ERRTYPE         GetString( const RSCINST &, char ** ppStr );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
