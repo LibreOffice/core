@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-15 13:12:51 $
+ *  last change: $Author: thb $ $Date: 2002-11-21 13:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,6 +673,15 @@ namespace accessibility
         FireEvent( nEventId, uno::Any(), rOldValue );
     }
 
+    bool AccessibleEditableTextPara::HasState( const sal_Int16 nStateId )
+    {
+        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+        if( pStateSet != NULL )
+            return pStateSet->contains(nStateId) ? true : false;
+
+        return false;
+    }
+
     void AccessibleEditableTextPara::SetState( const sal_Int16 nStateId )
     {
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
@@ -785,7 +794,8 @@ namespace accessibility
 
     uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleParent() throw (uno::RuntimeException)
     {
-        DBG_ASSERT(mxParent.is(), "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
+        DBG_ASSERT(mxParent.is() || HasState(AccessibleStateType::DEFUNC),
+                   "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
 
         return mxParent;
     }

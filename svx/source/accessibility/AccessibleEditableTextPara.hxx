@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-24 17:30:00 $
+ *  last change: $Author: thb $ $Date: 2002-11-21 13:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,8 @@ namespace accessibility
         /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
         virtual void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
+        /// Queries the given state on the internal state set
+        bool HasState( const sal_Int16 nStateId );
         /// Sets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
         void SetState( const sal_Int16 nStateId );
         /// Unsets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
