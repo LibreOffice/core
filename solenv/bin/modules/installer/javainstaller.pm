@@ -317,7 +317,7 @@ sub change_language_in_pathes
 
 sub get_licensefilesource
 {
-    my ($language, $firstlanguage, $filesref, $includepatharrayref) = @_;
+    my ($language, $firstlanguage, $includepatharrayref) = @_;
 
     my $licensefilename = "LICENSE_" . $language;
 
@@ -845,6 +845,91 @@ sub prepare_language_pack_in_xmlfile
 
 }
 
+#######################################################
+# Returning a rpm unit from a xml file
+#######################################################
+
+sub get_rpm_unit_from_xmlfile
+{
+    my ($rpmname, $xmlfile) = @_;
+
+    my $infoline = "Searching for $rpmname in xml file.\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my @rpmunit = ();
+    my $includeline = "";
+
+    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
+    {
+        my $oneline = ${$xmlfile}[$i];
+
+        if ( $oneline =~ /^\s*\<rpmunit/ ) { $record = 1; }
+
+        if ( $record ) { push(@rpmunit, $oneline); }
+
+        if ( $oneline =~ /^\s*rpmUniqueName\s*=\s*\"\Q$rpmname\E\"\s*$/ ) { $foundrpm = 1; }
+
+        if (( $record ) && ( $oneline =~ /\/\>\s*$/ )) { $record = 0; }
+
+        if (( ! $foundrpm ) && ( ! $record )) { @rpmunit = (); }
+
+        if (( $foundrpm ) && ( ! $record )) { $includeline = $i + 1; }
+
+        if (( $foundrpm ) && ( ! $record )) { last; }
+    }
+
+    if ( ! $foundrpm ) { installer::exiter::exit_program("ERROR: Did not find rpmunit $rpmname in xml file!", "get_rpm_unit_from_xmlfile"); }
+
+    $infoline = "Found $rpmname in xml file. Returning block lines: $#rpmunit + 1. Includeline: $includeline \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    return (\@rpmunit, $includeline);
+}
+
+#######################################################
+# Exchanging package names in xml file
+#######################################################
+
+sub exchange_name_in_rpmunit
+{
+    my ($rpmunit, $oldpackagename, $newpackagename) = @_;
+
+    for ( my $i = 0; $i <= $#{$rpmunit}; $i++ )
+    {
+        ${$rpmunit}[$i] =~ s/$oldpackagename/$newpackagename/;
+    }
+}
+
+#######################################################
+# Preparing link RPMs in the xml file
+#######################################################
+
+sub prepare_linkrpm_in_xmlfile
+{
+    my ($xmlfile) = @_;
+
+    for ( my $i = 0; $i <= $#installer::globals::linkrpms; $i++ )
+    {
+        my $oldpackagename = "";
+        my $newpackagename = "";
+
+        my $rpmline = $installer::globals::linkrpms[$i];
+
+        my $infoline = "Preparing link RPM: $rpmline\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ( $rpmline =~ /^\s*(\S.*?\S)\s+(\S.*?\S)\s*$/ )
+        {
+            $oldpackagename = $1;
+            $newpackagename = $2;
+        }
+
+        my ($rpmunit, $includeline) = get_rpm_unit_from_xmlfile($oldpackagename, $xmlfile);
+        exchange_name_in_rpmunit($rpmunit, $oldpackagename, $newpackagename);
+        include_component_at_specific_line($xmlfile, $rpmunit, $includeline);
+    }
+}
+
 ###########################################################
 # Removing Ada product from xml file for Solaris x86
 ###########################################################
@@ -1303,7 +1388,8 @@ sub put_filesize_into_xmlfile
         my $rpmname = $completerpmname;
         installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$rpmname);
 
-        my $systemcall = "$installer::globals::rpmcommand -qp --queryformat \"\[\%\{FILESIZES\}\\n\]\" $completerpmname 2\>\&1 |";
+        if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "put_filesize_into_xmlfile"); }
+        my $systemcall = "$installer::globals::rpmquerycommand -qp --queryformat \"\[\%\{FILESIZES\}\\n\]\" $completerpmname 2\>\&1 |";
         my $rpmout = make_systemcall($systemcall, 0);
         my $filesize = do_sum($rpmout);
 
@@ -1320,7 +1406,7 @@ sub put_filesize_into_xmlfile
 
 sub create_java_installer
 {
-    my ( $installdir, $newdir, $languagestringref, $languagesarrayref, $filesarrayref, $allvariableshashref, $includepatharrayref, $modulesarrayref ) = @_;
+    my ( $installdir, $newdir, $languagestringref, $languagesarrayref, $allvariableshashref, $includepatharrayref, $modulesarrayref ) = @_;
 
     installer::logger::include_header_into_logfile("Creating Java installer:");
 
@@ -1387,7 +1473,7 @@ sub create_java_installer
 
         # adding the license file into the Java file
 
-        my $licensefilesource = get_licensefilesource($onelanguage, $firstlanguage, $filesarrayref, $includepatharrayref);
+        my $licensefilesource = get_licensefilesource($onelanguage, $firstlanguage, $includepatharrayref);
         my $licensefile = installer::files::read_file($licensefilesource);
         add_license_file_into_javafile($templatefile, $licensefile, $includepatharrayref, $javadir, $onelanguage);
 
@@ -1397,8 +1483,9 @@ sub create_java_installer
 
         # setting the class name in the java file ( "MyResources_TEMPLATE" -> "MyResources_en" )
 
-        if ( $onelanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $onelanguage = $1; }
-        # $onelanguage =~ s/en-US/en/;   # java file name and class name contain only "_en"
+        # if ( $onelanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $onelanguage = $1; }
+        $onelanguage =~ s/en-US/en/;    # java file name and class name contain only "_en"
+        $onelanguage =~ s/\-/\_/;       # "pt-BR" -> "pt_BR"
         my $classfilename = "MyResources_" . $onelanguage;
         set_classfilename($templatefile, $classfilename, "MyResources_TEMPLATE");
 
@@ -1479,6 +1566,7 @@ sub create_java_installer
     remove_empty_packages_in_xmlfile($xmlfile);
     prepare_language_pack_in_xmlfile($xmlfile);
     substitute_variables($xmlfile, $allvariableshashref);
+    if (( $installer::globals::islinuxrpmbuild ) && ( $#installer::globals::linkrpms > -1 )) { prepare_linkrpm_in_xmlfile($xmlfile); }
     if (( $installer::globals::issolarisx86build ) || ( ! $allvariableshashref->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
