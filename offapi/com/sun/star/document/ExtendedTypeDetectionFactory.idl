@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExtendedTypeDetectionFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:03:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com { module sun { module star { module document {
 
     @since #107627#
  */
-service ExtendedTypeDetectionFactory
+published service ExtendedTypeDetectionFactory
 {
     //-------------------------------------------------------------------------
     /** factory interface to create and initialize extended type detection components.
