@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ void SwXBookmark::setPropertyValue(const OUString& PropertyName, const uno::Any&
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    throw IllegalArgumentException();
+    throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + PropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
     //hier gibt es nichts zu setzen
 }
 /*-- 30.03.99 16:02:59---------------------------------------------------
@@ -413,25 +413,3 @@ void SwXBookmark::addVetoableChangeListener(const OUString& PropertyName,
 void SwXBookmark::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/01/12 16:12:44  os
-    new: Redline container
-
-    Revision 1.1.1.1  2000/09/19 00:08:28  hr
-    initial import
-
-    Revision 1.3  2000/09/18 16:04:31  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.2  2000/09/12 11:42:57  os
-    #78682# support of service TextContent
-
-    Revision 1.1  2000/05/04 15:12:53  os
-    reduce size of unoobj.cxx
-
-
-------------------------------------------------------------------------*/
-
