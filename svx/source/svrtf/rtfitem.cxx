@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-29 10:11:55 $
+ *  last change: $Author: cmc $ $Date: 2002-08-08 12:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,6 +668,7 @@ SET_FONTALIGNMENT:
 
 /*  */
             case RTF_B:
+            case RTF_AB:
                 if( IsAttrSttPos() )    // nicht im Textfluss ?
                 {
 
@@ -798,6 +799,7 @@ SET_FONTALIGNMENT:
                 break;
 
             case RTF_I:
+            case RTF_AI:
                 if( IsAttrSttPos() )        // nicht im Textfluss ?
                 {
                     SvxPostureItem aTmpItem(
