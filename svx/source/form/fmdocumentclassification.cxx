@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdocumentclassification.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:21:41 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,7 @@ namespace svxform
 
         try
         {
-            Reference< XConnection > xContextConnection = OStaticDataAccessTools().getComponentContextConnection( _rxDocumentModel );
-            if ( xContextConnection.is() )
+            if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxDocumentModel ) )
                 eType = eDatabaseForm;
             else
             {
