@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_loader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:06:19 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,16 +96,13 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
     {
         PyRef excType, excValue, excTraceback;
         PyErr_Fetch( (PyObject **)&excType, (PyObject**)&excValue,(PyObject**)&excTraceback);
-        if( excType.is() )
-        {
-            PyRef str( PyObject_Repr( excTraceback.get() ), SAL_NO_ACQUIRE );
-            OUStringBuffer buf;
-            buf.appendAscii( "python-loader:" );
-            PyRef valueRep( PyObject_Repr( excValue.get() ), SAL_NO_ACQUIRE );
-            buf.appendAscii( PyString_AsString( valueRep.get())).appendAscii( ", traceback follows\n" );
-            buf.appendAscii( PyString_AsString( str.get() ) );
-            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface> () );
-        }
+        Runtime runtime;
+        com::sun::star::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
+        OUStringBuffer buf;
+        buf.appendAscii( "python-loader:" );
+        if( a.hasValue() )
+            buf.append( ((com::sun::star::uno::Exception *)a.getValue())->Message );
+        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface> () );
     }
 }
 
@@ -177,74 +174,76 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
     {
         // in case python path is already set, nothing is done ...
         const OUString pythonPath ( RTL_CONSTASCII_USTRINGPARAM( "PYTHONPATH" ) );
-        OUString value;
-        if( osl_Process_E_None != osl_getEnvironment( pythonPath.pData,  &value.pData ) ||
-            value.getLength() == 0 )
+
+        // otherwise, try to get the PYTHONPATH bootstrap variable
+        OUStringBuffer bufPYTHONPATH( 256 );
+        OUString path = getLibDir();
+        if( path.getLength() )
         {
-            // otherwise, try to get the PYTHONPATH bootstrap variable
-            OUString path = getLibDir();
-            if( path.getLength() )
+            path += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" SAL_CONFIGFILE("pythonloader.uno" )));
+            rtl::Bootstrap bootstrap(path);
+
+            // look for pythonhome
+            OUString pythonHome;
+            if( bootstrap.getFrom( OUString ( RTL_CONSTASCII_USTRINGPARAM( "PYTHONHOME") ),
+                                   pythonHome ) )
             {
-                path += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" SAL_CONFIGFILE("pythonloader.uno" )));
-                rtl::Bootstrap bootstrap(path);
-
-                OUString pythonPathBootstrap;
-                bootstrap.getFrom( pythonPath , pythonPathBootstrap );
-
-                OUStringBuffer buf( pythonPathBootstrap.getLength() );
-                sal_Int32 nIndex = 0;
-                while( 1 )
-                {
-                    sal_Int32 nNew = pythonPathBootstrap.indexOf( ' ', nIndex );
-                    OUString fileUrl;
-                    if( nNew == -1 )
-                    {
-                        fileUrl = OUString( &( pythonPathBootstrap[nIndex] ) );
-                    }
-                    else
-                    {
-                        fileUrl = OUString( &(pythonPathBootstrap[nIndex]) , nNew - nIndex );
-                    }
-                    OUString systemPath;
-                    osl_getSystemPathFromFileURL( fileUrl.pData, &(systemPath.pData) );
-                    buf.append( (sal_Unicode) SAL_PATHSEPARATOR );
-                    buf.append( systemPath );
-                    if( nNew == -1 )
-                        break;
-                    nIndex = nNew + 1;
-                }
-
-                rtl::OStringBuffer stringBuffer;
-                stringBuffer.append( "PYTHONPATH=" );
+                osl_getFileURLFromSystemPath( pythonHome.pData, &(pythonHome.pData) );
+                rtl::OStringBuffer stringBuffer( pythonHome.getLength() +20);
+                stringBuffer.append( "PYTHONHOME=" );
                 stringBuffer.append(
-                    rtl::OUStringToOString( buf.makeStringAndClear(), osl_getThreadTextEncoding()));
+                    rtl::OUStringToOString( pythonHome, osl_getThreadTextEncoding() ) );
 
-                OString env = stringBuffer.makeStringAndClear();
+                OString env2= stringBuffer.makeStringAndClear();
+                rtl_string_acquire(env2.pData );
+                putenv( env2.pData->buffer );
 
-                // leak this string (putenv does not make a copy)
-                rtl_string_acquire( env.pData );
-                putenv( env.pData->buffer );
+            }
 
+            // check for pythonpath
+            OUString pythonPathBootstrap;
+            bootstrap.getFrom( pythonPath , pythonPathBootstrap );
 
-                // look for pythonhome
-                OUString pythonHome;
-                if( bootstrap.getFrom( OUString ( RTL_CONSTASCII_USTRINGPARAM( "PYTHONHOME") ),
-                                       pythonHome ) )
+            sal_Int32 nIndex = 0;
+            while( 1 )
+            {
+                sal_Int32 nNew = pythonPathBootstrap.indexOf( ' ', nIndex );
+                OUString fileUrl;
+                if( nNew == -1 )
                 {
-                    osl_getFileURLFromSystemPath( pythonHome.pData, &(pythonHome.pData) );
-                    rtl::OStringBuffer stringBuffer( pythonHome.getLength() +20);
-                    stringBuffer.append( "PYTHONHOME=" );
-                    stringBuffer.append(
-                        rtl::OUStringToOString( pythonHome, osl_getThreadTextEncoding() ) );
-
-                    OString env2= stringBuffer.makeStringAndClear();
-                    rtl_string_acquire(env2.pData );
-                    putenv( env2.pData->buffer );
-
+                    fileUrl = OUString( &( pythonPathBootstrap[nIndex] ) );
                 }
+                else
+                {
+                    fileUrl = OUString( &(pythonPathBootstrap[nIndex]) , nNew - nIndex );
+                }
+                OUString systemPath;
+                osl_getSystemPathFromFileURL( fileUrl.pData, &(systemPath.pData) );
+                bufPYTHONPATH.append( systemPath );
+                bufPYTHONPATH.append( (sal_Unicode) SAL_PATHSEPARATOR );
+                if( nNew == -1 )
+                    break;
+                nIndex = nNew + 1;
             }
         }
 
+        OUString value;
+        osl_getEnvironment( pythonPath.pData,  &value.pData );
+        bufPYTHONPATH.append( value );
+
+        rtl::OStringBuffer stringBuffer;
+        stringBuffer.append( "PYTHONPATH=" );
+        stringBuffer.append(
+            rtl::OUStringToOString( bufPYTHONPATH.makeStringAndClear(), osl_getThreadTextEncoding()));
+
+        OString env = stringBuffer.makeStringAndClear();
+
+        // leak this string (putenv does not make a copy)
+        rtl_string_acquire( env.pData );
+        putenv( env.pData->buffer );
+
+
+        // initialize python
         Py_Initialize();
         PyEval_InitThreads();
 
