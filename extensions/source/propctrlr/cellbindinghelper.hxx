@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellbindinghelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:22:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
 #define EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
 
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -83,6 +87,7 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+/** === end UNO includes === **/
 
 //............................................................................
 namespace pcr
@@ -108,16 +113,18 @@ namespace pcr
                 the control model which is or will be bound
         */
         CellBindingHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
         );
 
     public:
-        /** determines whether the given control model lives in a spreadsheet document
+        /** determines whether the given model is a spreadsheet document model
+
             <p>If this method returns <FALSE/>, you cannot instantiate a CellBindingHelper with
-            this model, since then no of it's functionality will be available.</p>
+            the document, since then no of it's functionality will be available.</p>
         */
-        static  sal_Bool    livesInSpreadsheetDocument(
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel
+        static  sal_Bool    isSpreadsheetDocument(
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
                             );
 
         /** gets a cell binding for the given address
@@ -327,4 +334,4 @@ namespace pcr
 }   // namespace pcr
 //............................................................................
 
-#endif EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
+#endif // EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
