@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeTypeNames.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:12:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,11 +136,11 @@ static const NameTypeTable pNameTypeTableArray[] =
     { "mso-spt44", mso_sptAccentCallout1 },
     { "mso-spt45", mso_sptAccentCallout2 },
     { "mso-spt46", mso_sptAccentCallout3 },
-    { "mso-spt47", mso_sptBorderCallout1 },
-    { "mso-spt48", mso_sptBorderCallout2 },
+    { "line-callout-1", mso_sptBorderCallout1 },
+    { "line-callout-2", mso_sptBorderCallout2 },
     { "mso-spt49", mso_sptBorderCallout3 },
-    { "line-callout-1", mso_sptAccentBorderCallout1 },
-    { "line-callout-2", mso_sptAccentBorderCallout2 },
+    { "mso-spt50", mso_sptAccentBorderCallout1 },
+    { "mso-spt51", mso_sptAccentBorderCallout2 },
     { "mso-spt52", mso_sptAccentBorderCallout3 },
     { "mso-spt53", mso_sptRibbon },
     { "mso-spt54", mso_sptRibbon2 },
