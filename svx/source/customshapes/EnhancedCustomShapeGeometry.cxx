@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:12:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 11:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5538,14 +5538,14 @@ const sal_Bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
 
 static const sal_uInt16 msoSortFilledObjectsToBackTable[] =
 {
-    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0400, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0010, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
 };
 const sal_Bool SortFilledObjectsToBackByDefault( MSO_SPT eSpType )
 {
     sal_Bool bSortFilledObjectsToBackByDefault = sal_True;
     sal_uInt32 i = (sal_uInt32)eSpType;
     if ( i < 0x100 )
-        bSortFilledObjectsToBackByDefault = ( msoSortFilledObjectsToBackTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) == 0;
+        bSortFilledObjectsToBackByDefault = ( msoSortFilledObjectsToBackTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) != 0;
     return bSortFilledObjectsToBackByDefault;
 }
 
