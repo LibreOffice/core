@@ -392,7 +392,8 @@ sub analyze_and_save_logfile
 
         if ( $installer::globals::updatepack )
         {
-            $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed");
+            if ( $installdir =~ /_download_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_download_inprogress", "_download"); }
+            else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
             installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
         }
         else
