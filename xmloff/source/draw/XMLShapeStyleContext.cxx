@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 16:30:52 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "XMLShapePropertySetContext.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
@@ -80,6 +84,10 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmlnmspe.hxx>
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #include "sdpropls.hxx"
@@ -107,6 +115,18 @@ XMLShapeStyleContext::~XMLShapeStyleContext()
 {
 }
 
+void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if ((0 == m_sControlDataStyleName.getLength()) && (::xmloff::token::GetXMLToken(::xmloff::token::XML_DATA_STYLE_NAME) == rLocalName))
+    {
+        m_sControlDataStyleName = rValue;
+    }
+    else
+    {
+        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+    }
+}
+
 SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -131,6 +151,27 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet > & rPropSet )
+{
+    XMLPropStyleContext::FillPropertySet(rPropSet);
+    if (m_sControlDataStyleName.getLength())
+    {   // we had a data-style-name attribute
+
+        // set the formatting on the control model of the control shape
+        uno::Reference< drawing::XControlShape > xControlShape(rPropSet, uno::UNO_QUERY);
+        DBG_ASSERT(xControlShape.is(), "XMLShapeStyleContext::FillPropertySet: data style for a non-control shape!");
+        if (xControlShape.is())
+        {
+            uno::Reference< beans::XPropertySet > xControlModel(xControlShape->getControl(), uno::UNO_QUERY);
+            DBG_ASSERT(xControlModel.is(), "XMLShapeStyleContext::FillPropertySet: no control model for the shape!");
+            if (xControlModel.is())
+            {
+                GetImport().GetFormImport()->applyControlNumberStyle(xControlModel, m_sControlDataStyleName);
+            }
+        }
+    }
 }
 
 void XMLShapeStyleContext::Finish( sal_Bool bOverwrite )
