@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:46:36 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,18 @@
 
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
+#endif
+
+#ifndef _SVDPAGV_HXX
+#include <svdpagv.hxx>
+#endif
+
+#ifndef _SVDVIEW_HXX
+#include <svdview.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWCONTACTOFSDRPAGE_HXX
+#include <svx/sdr/contact/viewcontactofsdrpage.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -678,6 +690,14 @@ namespace sdr
             {
                 bRetval = sal_True;
                 rPaintRectangle.Union(aSecondRectangle);
+
+                // #i37869# Paint if no buffering to not paint this infos into the evtl.
+                // created buffer. When buffered, it will be painted over the buffer
+                // output from VOCOfMasterPageDescriptor::PaintObject(...)
+                if(!rAssociatedVOC.GetObjectContact().IsMasterPageBufferingAllowed())
+                {
+                    PaintBackgroundPageBordersAndGrids(rDisplayInfo);
+                }
             }
 
             if(pParentRedirector)
@@ -730,6 +750,38 @@ namespace sdr
             aRetval = aMasterPageBuffer.FindCandidate(rMasterPage, rPage, rMapMode, pBackgroundObject);
 
             return aRetval;
+        }
+
+        // #i37869# Support method to paint borders and grids which are overpainted from
+        // this MasterPage content to let the MasterPage appear as page background
+        void ViewContactOfMasterPageDescriptor::PaintBackgroundPageBordersAndGrids(DisplayInfo& rDisplayInfo)
+        {
+            const SdrPageView* pPageView = rDisplayInfo.GetPageView();
+            if(pPageView)
+            {
+                const SdrView& rView = pPageView->GetView();
+                const SdrPage& rOwnerPage= GetMasterPageDescriptor().GetOwnerPage();
+
+                if(rView.IsPageVisible() && rView.IsPageBorderVisible())
+                {
+                    ViewContactOfSdrPage::DrawPaperBorder(rDisplayInfo, rOwnerPage);
+                }
+
+                if(rView.IsBordVisible())
+                {
+                    ViewContactOfSdrPage::DrawBorder(rDisplayInfo, rOwnerPage);
+                }
+
+                if(rView.IsGridVisible() && !rView.IsGridFront())
+                {
+                    ViewContactOfSdrPage::DrawGrid(rDisplayInfo);
+                }
+
+                if(rView.IsHlplVisible() && !rView.IsHlplFront())
+                {
+                    ViewContactOfSdrPage::DrawHelplines(rDisplayInfo);
+                }
+            }
         }
     } // end of namespace contact
 } // end of namespace sdr
