@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnmspe.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-21 15:05:10 $
+ *  last change: $Author: sab $ $Date: 2001-03-09 19:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ XML_NAMESPACE( FORM,            15U )
 XML_NAMESPACE( SCRIPT,          16U )
 XML_NAMESPACE( BLOCKLIST,       17U )
 XML_NAMESPACE( FRAMEWORK,       18U )
+XML_NAMESPACE( CONFIG,          19U )
 
 #define _XML_OLD_NAMESPACE_BASE 19U
 
