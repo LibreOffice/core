@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:58:28 $
+ *  last change: $Author: aw $ $Date: 2000-11-29 11:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,9 +1597,14 @@ void SdrTextObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
 void SdrTextObj::TakeContour(XPolyPolygon& rPoly) const
 {
     SdrAttrObj::TakeContour(rPoly);
+
+    // #80328# using Clone()-Paint() strategy inside TakeContour() leaves a destroyed
+    // SdrObject as pointer in DrawOutliner. Set *this again in fetching the outliner
+    // in every case
+    SdrOutliner& rOutliner=ImpGetDrawOutliner();
+
     // und nun noch ggf. das BoundRect des Textes dazu
     if (pOutlinerParaObject!=NULL && !IsFontwork() && !IsContourTextFrame()) {
-        SdrOutliner& rOutliner=ImpGetDrawOutliner();
         Rectangle aAnchor;
         Rectangle aR;
         TakeTextRect(rOutliner,aR,FALSE,&aAnchor);
