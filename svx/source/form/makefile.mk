@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2001-07-25 13:44:28 $
+#   last change: $Author: tbe $ $Date: 2001-07-27 17:21:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,6 +127,7 @@ SLOFILES = \
     $(SLO)$/fmsearch.obj	\
     $(SLO)$/fmsrcimp.obj	\
     $(SLO)$/fmview.obj		\
+    $(SLO)$/siimport.obj
 
 SVXLIGHTOBJFILES= \
     $(OBJ)$/fmpage.obj      \

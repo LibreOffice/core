@@ -508,6 +508,7 @@ hedabu: ..\inc\fmmodel.hxx %_DEST%\inc%_EXT%\svx\fmmodel.hxx
 hedabu: ..\inc\fmpage.hxx %_DEST%\inc%_EXT%\svx\fmpage.hxx
 hedabu: ..\inc\fmview.hxx %_DEST%\inc%_EXT%\svx\fmview.hxx
 hedabu: ..\inc\fmobjfac.hxx %_DEST%\inc%_EXT%\svx\fmobjfac.hxx
+hedabu: ..\inc\siimport.hxx %_DEST%\inc%_EXT%\svx\siimport.hxx
 hedabu: ..\inc\fmglob.hxx %_DEST%\inc%_EXT%\svx\fmglob.hxx
 hedabu: ..\inc\fmshell.hxx %_DEST%\inc%_EXT%\svx\fmshell.hxx
 hedabu: ..\source\inc\fmstream.hxx %_DEST%\inc%_EXT%\svx\fmstream.hxx
