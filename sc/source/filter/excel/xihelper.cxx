@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:53:45 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,30 +121,49 @@ XclImpString::XclImpString( const String& rString ) :
 XclImpString::XclImpString( XclImpStream& rStrm, XclStrFlags nFlags )
 {
     DBG_ASSERT( (nFlags & ~nAllowedFlags) == 0, "XclImpString::XclImpString - unknown flag" );
+    bool b16BitLen = !::get_flag( nFlags, EXC_STR_8BITLENGTH );
 
-    // --- string header ---
-    sal_uInt16 nChars = ::get_flag( nFlags, EXC_STR_8BITLENGTH ) ? rStrm.ReaduInt8() : rStrm.ReaduInt16();
-    sal_uInt8 nFlagField = 0;
-    if( nChars || !::get_flag( nFlags, EXC_STR_SMARTFLAGS ) )
-        rStrm >> nFlagField;
+    switch( rStrm.GetRoot().GetBiff() )
+    {
+        case xlBiff2:
+        case xlBiff3:
+        case xlBiff4:
+        case xlBiff5:
+        case xlBiff7:
+            // no integrated formatting in BIFF2-BIFF7
+            maString = rStrm.ReadByteString( b16BitLen );
+        break;
 
-    bool b16Bit, bRich, bFarEast;
-    sal_uInt16 nRunCount;
-    sal_uInt32 nExtInf;
-    rStrm.ReadUniStringExtHeader( b16Bit, bRich, bFarEast, nRunCount, nExtInf, nFlagField );
+        case xlBiff8:
+        {
+            // --- string header ---
+            sal_uInt16 nChars = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+            sal_uInt8 nFlagField = 0;
+            if( nChars || !::get_flag( nFlags, EXC_STR_SMARTFLAGS ) )
+                rStrm >> nFlagField;
 
-    // --- character array ---
-    maString = rStrm.ReadRawUniString( nChars, b16Bit );
+            bool b16Bit, bRich, bFarEast;
+            sal_uInt16 nRunCount;
+            sal_uInt32 nExtInf;
+            rStrm.ReadUniStringExtHeader( b16Bit, bRich, bFarEast, nRunCount, nExtInf, nFlagField );
 
-    // --- formatting ---
-    DBG_ASSERT( bRich == (nRunCount != 0), "XclImpString::XclImpString - corrupt formatting info" );
-    if( bRich )
-        ReadFormats( rStrm, nRunCount );
+            // --- character array ---
+            maString = rStrm.ReadRawUniString( nChars, b16Bit );
 
-    // --- extended (FarEast) information ---
-    DBG_ASSERT( bFarEast == (nExtInf != 0), "XclImpString::XclImpString - corrupt far-east info" );
-    if( bFarEast )
-        rStrm.SkipUniStringExtData( nExtInf );
+            // --- formatting ---
+            DBG_ASSERT( bRich == (nRunCount != 0), "XclImpString::XclImpString - corrupt formatting info" );
+            if( bRich )
+                ReadFormats( rStrm, nRunCount );
+
+            // --- extended (FarEast) information ---
+            DBG_ASSERT( bFarEast == (nExtInf != 0), "XclImpString::XclImpString - corrupt far-east info" );
+            if( bFarEast )
+                rStrm.SkipUniStringExtData( nExtInf );
+        }
+        break;
+
+        default:    DBG_ERROR_BIFF();
+    }
 }
 
 XclImpString::~XclImpString()
@@ -163,7 +182,9 @@ void XclImpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont )
 
 void XclImpString::ReadFormats( XclImpStream& rStrm )
 {
-    ReadFormats( rStrm, rStrm.ReaduInt16() );
+    bool bBiff8 = rStrm.GetRoot().GetBiff() >= xlBiff8;
+    sal_uInt16 nCount = bBiff8 ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
+    ReadFormats( rStrm, nCount );
 }
 
 void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
@@ -172,11 +193,29 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
     maFormats.reserve( nRunCount );
     /*  #i33341# real life -- same character index may occur several times
         -> use AppendFormat() to validate formats */
-    for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
+    switch( rStrm.GetRoot().GetBiff() )
     {
-        sal_uInt16 nChar, nXclFont;
-        rStrm >> nChar >> nXclFont;
-        AppendFormat( nChar, nXclFont );
+        case xlBiff2:
+        case xlBiff3:
+        case xlBiff4:
+        case xlBiff5:
+        case xlBiff7:
+            for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
+            {
+                sal_uInt8 nChar, nXclFont;
+                rStrm >> nChar >> nXclFont;
+                AppendFormat( nChar, nXclFont );
+            }
+        break;
+        case xlBiff8:
+            for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
+            {
+                sal_uInt16 nChar, nXclFont;
+                rStrm >> nChar >> nXclFont;
+                AppendFormat( nChar, nXclFont );
+            }
+        break;
+        default:    DBG_ERROR_BIFF();
     }
 }
 
