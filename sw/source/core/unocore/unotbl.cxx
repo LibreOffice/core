@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 07:18:30 $
+ *  last change: $Author: os $ $Date: 2002-10-09 13:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1756,6 +1756,12 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
         {
             UnoActionContext aContext(pUnoCrsr->GetDoc());
             bRet = TBLMERGE_OK == pTblCrsr->GetDoc()->MergeTbl(*pTblCrsr);
+            if(bRet)
+            {
+                USHORT nCount = pTblCrsr->GetBoxesCount();
+                while(nCount--)
+                    pTblCrsr->DeleteBox(nCount);
+            }
         }
         pTblCrsr->MakeBoxSels();
     }
