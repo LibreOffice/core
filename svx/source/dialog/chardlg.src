@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-27 12:48:28 $
+ *  last change: $Author: rt $ $Date: 2002-05-28 20:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,7 +1056,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ polish ] = "Complex script font";
         Text[ portuguese_brazilian ] = "Complex script font";
         Text[ japanese ] = "Complex script font";
-        Text[ korean ] = "Complex script font";
+        Text[ korean ] = "복합 문자 폰트";
         Text[ chinese_simplified ] = "Complex script font";
         Text[ chinese_traditional ] = "複雜語言的字型";
         Text[ turkish ] = "Complex script font";
@@ -1242,9 +1242,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
         };
         StringList [ korean ] =
         {
-            "보통" ;
+            "표준" ;
             "이탤릭체" ;
-            "굵은" ;
+            "굵게" ;
             "이탤릭체 (굵게)" ;
         };
         StringList [ chinese_simplified ] =
@@ -2679,7 +2679,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Font ~Color";
         Text[ japanese ] = "ﾌｫﾝﾄの色(~C)";
-        Text[ korean ] = "글꼴(~C)";
+        Text[ korean ] = "글꼴 색상(~C)";
         Text[ chinese_simplified ] = "字体颜色(~C)";
         Text[ chinese_traditional ] = "字型顏色(~C)";
         Text[ turkish ] = "Font ~Color";
