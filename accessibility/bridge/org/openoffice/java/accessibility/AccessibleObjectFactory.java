@@ -69,6 +69,8 @@ import drafts.com.sun.star.accessibility.*;
 /**
 */
 public class AccessibleObjectFactory {
+    // This type is needed for conversions from/to uno Any
+    public static final Type XAccessibleType = new Type(XAccessible.class);
 
     private static java.util.Hashtable objectList = new java.util.Hashtable();
     private static java.awt.FocusTraversalPolicy focusTraversalPolicy = new FocusTraversalPolicy();
@@ -77,6 +79,26 @@ public class AccessibleObjectFactory {
 
     public static java.awt.EventQueue getEventQueue() {
         return eventQueue;
+    }
+
+    public static void postFocusGained(java.awt.Component c) {
+        getEventQueue().postEvent(new java.awt.event.FocusEvent(c, java.awt.event.FocusEvent.FOCUS_GAINED));
+    }
+
+    public static void postWindowGainedFocus(java.awt.Window w) {
+        getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS));
+    }
+
+    public static void postWindowLostFocus(java.awt.Window w) {
+        getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_LOST_FOCUS));
+    }
+
+    public static void postWindowActivated(java.awt.Window w) {
+        getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_ACTIVATED));
+    }
+
+    public static void postWindowDeactivated(java.awt.Window w) {
+        getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_DEACTIVATED));
     }
 
     protected static java.awt.Component getAccessibleComponent(XAccessible xAccessible) {
@@ -96,32 +118,112 @@ public class AccessibleObjectFactory {
         return c;
     }
 
+    protected static void addChild(java.awt.Container parent, Object any) {
+        try {
+            addChild(parent, (XAccessible) AnyConverter.toObject(XAccessibleType, any));
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
+        }
+    }
+
+    protected static void addChild(java.awt.Container parent, XAccessible child) {
+        try {
+            if (child != null) {
+                XAccessibleContext childAC = child.getAccessibleContext();
+                if (childAC != null) {
+                    XAccessibleStateSet stateSet = childAC.getAccessibleStateSet();
+                    if (stateSet != null) {
+                        java.awt.Component c = getAccessibleComponent(child);
+
+                        // Re-use existing wrapper if possible, create a new one otherwise
+                        if (c != null) {
+                            // Seems to be already in child list
+                            if (parent.equals(c.getParent()))
+                                return;
+                            // Update general component states
+                            c.setEnabled(stateSet.contains(AccessibleStateType.ENABLED));
+                            c.setVisible(stateSet.contains(AccessibleStateType.VISIBLE));
+                        } else {
+                            c = createAccessibleComponentImpl(child, childAC, stateSet);
+                        }
+
+                        if (c != null) {
+                            if (c instanceof java.awt.Container) {
+                                populateContainer((java.awt.Container) c, childAC);
+                            }
+                            parent.add(c);
+                            // Simulate focus gained event for new child
+                            if (stateSet.contains(AccessibleStateType.FOCUSED)) {
+                                postFocusGained(c);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (com.sun.star.uno.RuntimeException e) {
+                System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
+                e.printStackTrace();
+        }
+    }
+
+    protected static void removeChild(java.awt.Container parent, Object any) {
+        try {
+            XAccessible xAccessible = (XAccessible) AnyConverter.toObject(XAccessibleType, any);
+            java.awt.Component c = getAccessibleComponent(xAccessible);
+
+            if (c != null) {
+                    parent.remove(c);
+
+                    if (c instanceof java.awt.Container) {
+                        clearContainer((java.awt.Container) c);
+                    }
+                }
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
+        }
+    }
+
+
+    /**
+    * Removes all children from the container parent
+    */
 
     protected static void clearContainer(java.awt.Container parent) {
-        // FIXME: may need to purge the children to safe memory ..
-//        int count = parent.getComponentCount();
-//        for (int i = 0; i < count; i++) {
-//            java.awt.Component c = parent.getComponent(i);
-//        }
+        // Purge all children from this container
+        int count = parent.getComponentCount();
+        for (int i = 0; i < count; i++) {
+            java.awt.Component c = parent.getComponent(i);
+            if (c instanceof java.awt.Container) {
+                clearContainer((java.awt.Container) c);
+            }
+        }
         parent.removeAll();
     }
 
+
+    /**
+    * Populates the given Container parent with wrapper objects for all children of parentAC. This method is
+    * intended to be called when a container is added using a CHILDREN_CHANGED event.
+    */
+
     protected static void populateContainer(java.awt.Container parent, XAccessibleContext parentAC) {
-        java.awt.Window w = null;
-
-        // find the top level window of this container
-        java.awt.Container c = parent;
-        while (c != null) {
-            if (c instanceof java.awt.Window) {
-                w = (java.awt.Window) c;
-                break;
+        if (parentAC != null) {
+            try {
+                int childCount = parentAC.getAccessibleChildCount();
+                for (int i=0; i<childCount; i++) {
+                    addChild(parent, parentAC.getAccessibleChild(i));
+                }
+            } catch (java.lang.Exception e) {
+                System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
+                e.printStackTrace();
             }
-            c = c.getParent();
         }
-
-        populateContainer(parent, parentAC, w);
     }
 
+    /**
+    * Populates the given Container parent with wrapper objects for all children of parentAC. This method is
+    * intended to be called when a new window has been opened.
+    */
     protected static void populateContainer(java.awt.Container parent, XAccessibleContext parentAC, java.awt.Window frame) {
         if (parentAC != null) {
             try {
@@ -144,45 +246,21 @@ public class AccessibleObjectFactory {
             }
 
             catch (java.lang.Exception e) {
-                System.err.println("Exception caught: " + e.getMessage());
+                System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
                 e.printStackTrace();
             }
         }
     }
 
     protected static java.awt.Component createAccessibleComponent(XAccessible xAccessible) {
-        if (xAccessible != null) {
-            try {
-                XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
-                if (xAccessibleContext != null) {
-                    java.awt.Component c = createAccessibleComponentImpl(xAccessible, xAccessibleContext,
-                        xAccessibleContext.getAccessibleStateSet());
-                    if (c != null) {
-                        if (c instanceof java.awt.Container) {
-                            populateContainer(((java.awt.Container) c), xAccessibleContext, null);
-                        }
-                        return c;
-                    }
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-        }
-        return null;
-    }
-
-    protected static java.awt.Component createAccessibleComponent(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         try {
+            XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
             if (xAccessibleContext != null) {
-                java.awt.Component c = createAccessibleComponentImpl(xAccessible, xAccessibleContext,
-                    xAccessibleContext.getAccessibleStateSet());
-                if (c != null) {
-                    if (c instanceof java.awt.Container) {
-                        populateContainer(((java.awt.Container) c), xAccessibleContext, null);
-                    }
-                    return c;
-                }
+                return createAccessibleComponentImpl(xAccessible, xAccessibleContext, xAccessibleContext.getAccessibleStateSet());
             }
         } catch (com.sun.star.uno.RuntimeException e) {
+                System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
+                e.printStackTrace();
         }
         return null;
     }
@@ -203,7 +281,7 @@ public class AccessibleObjectFactory {
                     return c;
                 }
             } catch (com.sun.star.uno.RuntimeException e) {
-                System.err.println("Exception caught: " + e.getMessage());
+                System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -304,7 +382,7 @@ public class AccessibleObjectFactory {
                 break;
             case AccessibleRole.PARAGRAPH:
             case AccessibleRole.HEADING:
-                c = new TextComponent(xAccessible, xAccessibleContext, xAccessibleStateSet);
+                c = new Paragraph(xAccessible, xAccessibleContext, xAccessibleStateSet);
                 break;
             case AccessibleRole.PANEL:
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
@@ -352,6 +430,7 @@ public class AccessibleObjectFactory {
                 c = new Container(javax.accessibility.AccessibleRole.STATUS_BAR,
                     xAccessible, xAccessibleContext);
                 break;
+            case AccessibleRole.COLUMN_HEADER:
             case AccessibleRole.TABLE:
                 if (xAccessibleStateSet.contains(AccessibleStateType.MANAGES_DESCENDANT)) {
                     c = new Table(xAccessible, xAccessibleContext,
@@ -444,20 +523,30 @@ public class AccessibleObjectFactory {
                 w = new Frame(xAccessibleContext.getAccessibleName(),
                     xAccessibleComponent);
             } else if (role == AccessibleRole.WINDOW) {
-                w = new Window(new Application(), xAccessibleComponent);
+                java.awt.Window activeWindow =
+                    java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+                if (activeWindow != null) {
+                    w = new Window(activeWindow, xAccessibleComponent);
+                } else {
+                    if (Build.DEBUG) {
+                        System.err.println("no active frame found for Window: " + role);
+                    }
+                    return null;
+                }
             } else {
                 if (Build.DEBUG) {
                     System.err.println("invalid role for toplevel window: " + role);
                 }
-                w = new Window(new Application(), xAccessibleComponent);
-//              return null;
+                return null;
             }
             populateContainer(w, xAccessibleContext, w);
             w.setFocusTraversalPolicy(focusTraversalPolicy);
             w.setVisible(true);
-            // Post window gained focus event to let the frame/dialog become active
-            if (xAccessibleStateSet.contains(AccessibleStateType.ACTIVE)) {
-                getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS));
+
+            // Make the new window the focused one if it has an initialy focused object set.
+            java.awt.Component c = ((NativeFrame) w).getInitialComponent();
+            if (c != null) {
+                postWindowGainedFocus(w);
             }
             return w;
         }
