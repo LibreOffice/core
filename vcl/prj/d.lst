@@ -110,6 +110,8 @@ hedabu: ..\inc\salctype.hxx %_DEST%\inc%_EXT%\vcl\salctype.hxx
 hedabu: ..\inc\salgtype.hxx %_DEST%\inc%_EXT%\vcl\salgtype.hxx
 hedabu: ..\inc\salotype.hxx %_DEST%\inc%_EXT%\vcl\salotype.hxx
 hedabu: ..\inc\salstype.hxx %_DEST%\inc%_EXT%\vcl\salstype.hxx
+hedabu: ..\inc\salnativewidgets.hxx %_DEST%\inc%_EXT%\vcl\salnativewidgets.hxx
+hedabu: ..\unx\inc\salnativewidgets.h %_DEST%\inc%_EXT%\vcl\salnativewidgets.h
 hedabu: ..\inc\scrbar.hxx %_DEST%\inc%_EXT%\vcl\scrbar.hxx
 hedabu: ..\inc\seleng.hxx %_DEST%\inc%_EXT%\vcl\seleng.hxx
 hedabu: ..\inc\settings.hxx %_DEST%\inc%_EXT%\vcl\settings.hxx
