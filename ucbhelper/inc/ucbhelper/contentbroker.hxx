@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-03-12 09:35:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ namespace com { namespace sun { namespace star { namespace ucb {
 #ifndef _UCBHELPER_CONFIGUREUCB_HXX_
 #include <ucbhelper/configureucb.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace ucb
 {
@@ -97,15 +100,15 @@ class ContentBroker_Impl;
   * be used to initialize and deinitialize the Broker and to access its
   * interfaces directly.
   */
-class ContentBroker
+class UCBHELPER_DLLPUBLIC ContentBroker
 {
     ContentBroker_Impl*     m_pImpl;
     // The "one and only" Broker.
     static ContentBroker*   m_pTheBroker;
 
 private:
-    ContentBroker( const ContentBroker& );              // n.i.
-    ContentBroker& operator=( const ContentBroker& );   // n.i.
+    UCBHELPER_DLLPRIVATE ContentBroker( const ContentBroker& );                 // n.i.
+    UCBHELPER_DLLPRIVATE ContentBroker& operator=( const ContentBroker& );  // n.i.
 
     /** Constructor.
       *
@@ -117,7 +120,7 @@ private:
       *        Refer to http://ucb.openoffice.org/docs/ucb-configuration.html
       *        for more information on UCB configuration.
       */
-    ContentBroker( const ::com::sun::star::uno::Reference<
+    UCBHELPER_DLLPRIVATE ContentBroker( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::lang::XMultiServiceFactory >&    rSMgr,
                    const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::uno::Any >& rArguments );
@@ -128,7 +131,7 @@ private:
       * @param rData are the data for the for the content providers for
       *        the new UCB.
       */
-    ContentBroker( const ::com::sun::star::uno::Reference<
+    UCBHELPER_DLLPRIVATE ContentBroker( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::lang::XMultiServiceFactory >&    rSMgr,
                    const ContentProviderDataList & rData );
 
