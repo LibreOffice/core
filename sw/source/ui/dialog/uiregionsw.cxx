@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:25:58 $
+ *  last change: $Author: kz $ $Date: 2004-10-07 11:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1461,7 +1461,7 @@ static void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBo
 */
         sal_uInt32 nFormat = SotStorage::GetFormatID( xStg );
         if ( nFormat == SOT_FORMATSTR_ID_STARWRITER_60 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_60 )
-            ReadXML->GetSectionList( rMedium, (SvStrings&) aArr );
+            SwGetReaderXML()->GetSectionList( rMedium, (SvStrings&) aArr );
 
         for( USHORT n = 0; n < aArr.Count(); ++n )
             rBox.InsertEntry( *aArr[ n ] );
