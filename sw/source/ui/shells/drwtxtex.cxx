@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 17:37:12 $
+ *  last change: $Author: jp $ $Date: 2001-02-26 14:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,78 +496,96 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
     if (!IsTextEdit())  // Sonst manchmal Absturz!
         return;
 
-    SfxItemSet aEditAttr(pOLV->GetAttribs());
-    sal_uInt16 nWhich = 0;
+    SfxWhichIter aIter( rSet );
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    SfxItemSet aEditAttr( pOLV->GetAttribs() );
+    const SfxPoolItem *pAdjust = 0, *pLSpace = 0, *pEscItem = 0;
+    int eAdjust, nLSpace, nEsc;
 
-    const SfxPoolItem* pItem = 0;
-    SfxItemState eState = aEditAttr.GetItemState(EE_PARA_JUST, sal_False, &pItem);
-    if (eState == SFX_ITEM_DONTCARE || !pItem)
+    while(nWhich)
     {
-        rSet.InvalidateItem( SID_ATTR_PARA_ADJUST_LEFT );
-        rSet.InvalidateItem( SID_ATTR_PARA_ADJUST_CENTER );
-        rSet.InvalidateItem( SID_ATTR_PARA_ADJUST_RIGHT );
-        rSet.InvalidateItem( SID_ATTR_PARA_ADJUST_BLOCK );
-    }
-    else
-    {
-        SvxAdjust eAdjust = ((const SvxAdjustItem*)pItem)->GetAdjust();
-        switch( eAdjust )
+        USHORT nSlotId = GetPool().GetSlotId( nWhich );
+        BOOL bFlag = FALSE;
+        switch( nSlotId )
         {
-            case SVX_ADJUST_LEFT:   nWhich = SID_ATTR_PARA_ADJUST_LEFT;     break;
-            case SVX_ADJUST_CENTER: nWhich = SID_ATTR_PARA_ADJUST_CENTER;   break;
-            case SVX_ADJUST_RIGHT:  nWhich = SID_ATTR_PARA_ADJUST_RIGHT;    break;
-            case SVX_ADJUST_BLOCK:  nWhich = SID_ATTR_PARA_ADJUST_BLOCK;            break;
+         case SID_ATTR_PARA_ADJUST_LEFT:    eAdjust = SVX_ADJUST_LEFT; goto ASK_ADJUST;
+        case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjust = SVX_ADJUST_RIGHT; goto ASK_ADJUST;
+        case SID_ATTR_PARA_ADJUST_CENTER:   eAdjust = SVX_ADJUST_CENTER; goto ASK_ADJUST;
+        case SID_ATTR_PARA_ADJUST_BLOCK:    eAdjust = SVX_ADJUST_BLOCK; goto ASK_ADJUST;
+ASK_ADJUST:
+            {
+                if( !pAdjust )
+                    aEditAttr.GetItemState( EE_PARA_JUST, sal_False, &pAdjust);
+
+                if( !pAdjust || IsInvalidItem( pAdjust ))
+                    rSet.InvalidateItem( nSlotId ), nSlotId = 0;
+                else
+                    bFlag = eAdjust == ((SvxAdjustItem*)pAdjust)->GetAdjust();
+            }
+            break;
+
+        case SID_ATTR_PARA_LINESPACE_10:    nLSpace = 100;  goto ASK_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_15:    nLSpace = 150;  goto ASK_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_20:    nLSpace = 200;  goto ASK_LINESPACE;
+ASK_LINESPACE:
+            {
+                if( !pLSpace )
+                    aEditAttr.GetItemState( EE_PARA_SBL, sal_False, &pLSpace );
+
+                if( !pLSpace || IsInvalidItem( pLSpace ))
+                    rSet.InvalidateItem( nSlotId ), nSlotId = 0;
+                else if( nLSpace == ((const SvxLineSpacingItem*)pLSpace)->
+                                                GetPropLineSpace() )
+                    bFlag = sal_True;
+                else
+                    nSlotId = 0;
+            }
+            break;
+
+        case FN_SET_SUPER_SCRIPT:   nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
+                                    goto ASK_ESCAPE;
+        case FN_SET_SUB_SCRIPT:     nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
+                                    goto ASK_ESCAPE;
+ASK_ESCAPE:
+            {
+                if( !pEscItem )
+                    pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
+
+                if( nEsc == ((const SvxEscapementItem*)
+                                                pEscItem)->GetEnumValue() )
+                    bFlag = sal_True;
+                else
+                    nSlotId = 0;
+            }
+            break;
+
+        case FN_THESAURUS_DLG:
+            {
+                // disable "Thesaurus" if the language is not supported
+                const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
+                                GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                                    GetScriptTypeOfLanguage( LANGUAGE_SYSTEM )) );
+                LanguageType nLang = ((const SvxLanguageItem &)
+                                                        rItem).GetLanguage();
+                //
+                uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
+                if (!xThes.is() || nLang == LANGUAGE_NONE ||
+                    !xThes->hasLocale( SvxCreateLocale( nLang ) ))
+                    rSet.DisableItem( FN_THESAURUS_DLG );
+                nSlotId = 0;
+            }
+            break;
+
+        default:
+            nSlotId = 0;                // don't know this slot
+            break;
         }
-        if( nWhich )
-            rSet.Put( SfxBoolItem( nWhich, sal_True ) );
+
+        if( nSlotId )
+            rSet.Put( SfxBoolItem( nWhich, bFlag ));
+
+        nWhich = aIter.NextWhich();
     }
-
-    eState = aEditAttr.GetItemState(EE_PARA_SBL, sal_False, &pItem);
-    if (eState == SFX_ITEM_DONTCARE || !pItem)
-    {
-        rSet.InvalidateItem( SID_ATTR_PARA_LINESPACE_10 );
-        rSet.InvalidateItem( SID_ATTR_PARA_LINESPACE_15 );
-        rSet.InvalidateItem( SID_ATTR_PARA_LINESPACE_20 );
-    }
-    else
-    {
-        const sal_Int8 nSpace = ((const SvxLineSpacingItem*)pItem)->GetPropLineSpace();
-        nWhich = 0;
-        switch( nSpace )
-        {
-            case 100:
-                nWhich = SID_ATTR_PARA_LINESPACE_10;
-                break;
-            case 150:
-                nWhich = SID_ATTR_PARA_LINESPACE_15;
-                break;
-            case 200:
-                nWhich = SID_ATTR_PARA_LINESPACE_20;
-                break;
-        }
-        if( nWhich )
-            rSet.Put( SfxBoolItem( nWhich, sal_True ) );
-    }
-
-    SvxEscapement eEsc = (SvxEscapement)((const SvxEscapementItem&)
-                    aEditAttr.Get(EE_CHAR_ESCAPEMENT)).GetEnumValue();
-
-    if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-        rSet.Put( SfxBoolItem( FN_SET_SUPER_SCRIPT, sal_True ) );
-    else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-        rSet.Put( SfxBoolItem( FN_SET_SUB_SCRIPT, sal_True ) );
-
-
-    // disable "Thesaurus" if the language is not supported
-    const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
-                    GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                        GetScriptTypeOfLanguage( LANGUAGE_SYSTEM )) );
-    LanguageType nLang = ((const SvxLanguageItem &) rItem).GetLanguage();
-    //
-    uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
-    if (!xThes.is() || nLang == LANGUAGE_NONE ||
-        !xThes->hasLocale( SvxCreateLocale( nLang ) ))
-        rSet.DisableItem( FN_THESAURUS_DLG );
 }
 
 /*--------------------------------------------------------------------
