@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-07 13:23:02 $
+#   last change: $Author: hjs $ $Date: 2001-11-14 12:59:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -223,7 +223,7 @@ $(P_ADDITIONAL_FILES) :
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
-$(T_ADDITIONAL_FILES) :
+$(T_ADDITIONAL_FILES) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
     +-echo dummy > $@
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
