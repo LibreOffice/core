@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mba $ $Date: 2000-12-01 11:54:31 $
+#   last change: $Author: mba $ $Date: 2001-01-17 13:55:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=\
                         $(SLO)$/ucblockbytes.obj \
                         $(SLO)$/localfilehelper.obj \
+                        $(SLO)$/ucbhelper.obj \
                         $(SLO)$/ucbstreamhelper.obj \
                         $(SLO)$/tempfile.obj
 
