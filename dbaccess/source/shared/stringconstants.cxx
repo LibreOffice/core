@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:29:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 12:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TEXTRELIEF, "FontRelief");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DEFAULTTEXT, "DefaultText");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_EFFECTIVEDEFAULT, "EffectiveDefault");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_AUTOINCREMENTCREATION, "AutoIncrementCreation");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ORIGINAL, "Original");
 
 //============================================================
 //= service names
@@ -222,4 +223,4 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_ADABASCREATIONDIALOG, "com.sun.star.sdb
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_UI_FOLDERPICKER, "com.sun.star.ui.dialogs.FolderPicker");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_I18N_COLLATOR, "com.sun.star.i18n.Collator");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_EXTENDED_ADABAS_DRIVER, "com.sun.star.comp.sdbcx.adabas.ext.ODriver");
-
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER, "com.sun.star.sdb.SingleSelectQueryComposer");
