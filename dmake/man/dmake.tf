@@ -5,28 +5,21 @@
 .ds TB "0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.2i +0.5i +0.5i +2.0i
 .de Ip
 .sp \\n[PD]u
-.fi
-.nr an-prevailing-indent (n;\w@\\$1 @u)
-.it 1 an-trap
-.if !\\n[an-div?] .di an-div
-.in 0
-.nr an-div? 1
 .nf
-\&\\$1 \\$2
+.nr dmake-indent \w@\\$1 @u
+.IP "\\$1" \\n[dmake-indent]u
+\\$2
 ..
 .de Is
-.nr an-prevailing-indent \w@\\$1@u
+.nr dmake-indent \w@\\$1@u
+.nf
 ..
 .de Ii
-.fi
-.it 1 an-trap
-.if !\\n[an-div?] .di an-div
-.in 0
-.nr an-div? 1
-.nf
-\&\\$1
+.PD 0
+.IP "\\$1" \\n[dmake-indent]u
+.it 1 PD
 ..
-.TH DMAKE p  "UW" "Version 4.01 PL0" "Unsupported Free Software"
+.TH DMAKE 1  "UW" "Version 4.01 PL0"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
@@ -310,7 +303,10 @@ The location given as the value of the environment variable MAKESTARTUP
 defined in the current environment.
 .IP 3.
 The location given as the value of the macro
-MAKESTARTUP defined internally within \fBdmake\fP.
+MAKESTARTUP defined internally within \fBdmake\fP.  In this version, the
+internal definition of MAKESTARTUP is "$(DMAKEROOT)/startup.mk", so you
+can set the environment variable DMAKEROOT to the location of your startup
+directory.
 .RE
 .LP
 The above search is disabled by specifying the \-r option on the command line.
@@ -3128,6 +3124,11 @@ informative bug reports.  Many thanks also go to those on the
 NET that have helped in making \fBdmake\fP one of the best Make tools
 available.
 .SH BUGS
+Dmake's temporary file creation uses the tempnam function to generate unique
+filenames in its working directory, but does not check that the file does not
+exist at the time it is created.  This could possibly be a security problem if
+the directory where dmake is run is writeable by untrusted users.
+.PP
 Some system commands return non-zero status inappropriately.
 Use
 .B \-i

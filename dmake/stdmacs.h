@@ -1,4 +1,4 @@
-/* RCS  $Id: stdmacs.h,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: stdmacs.h,v 1.2 2002-10-03 12:29:44 waratah Exp $
 --
 -- SYNOPSIS
 --      General use macros.
@@ -43,7 +43,8 @@
 
 #define NIL(p)  ((p*)NULL)
 
-#if !defined(atarist) && !defined(__STDDEF_H)
+/* Cygwin defines _STDDEF_H with only one leading '_' */
+#if !defined(atarist) && !defined(__STDDEF_H) && !defined(_STDDEF_H)
 #define offsetof(type,id) ((size_t)&((type*)NULL)->id)
 #endif
 

@@ -1,7 +1,6 @@
 
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.13)
-
 AC_INIT(acconfig.h)
 
 dnl set the DMAKEROOT
@@ -10,6 +9,7 @@ PACKAGE=dmake
 VERSION=4.2
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+AM_MAINTAINER_MODE
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -18,6 +18,9 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
+
+dnl Checks for utilities.
+AC_PROG_AWK
 
 dnl Checks for libraries.
 
@@ -44,29 +47,55 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(getcwd getwd putenv strcspn strerror strspn strstr)
 
 dnl Checks for OS
-OS_UNAME=`uname`
-if test ${OS_UNAME} = SunOS; then
-	echo "Solaris found"
-	OS_VERSION=solaris  
+AC_MSG_CHECKING([the operating system])
+
+_os=`uname`
+
+if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
+   _os="WINNT"
 fi
-if test ${OS_UNAME} = Linux; then
-	echo "Linux found"
-	OS_VERSION=linux
-fi
-if test ${OS_UNAME} = Irix; then
-	echo "Irix found"
-	OS_VERSION=sysvr4
-fi
-if test ${OS_UNAME} = Darwin; then
-	echo "Mac OS X found"
-	OS_VERSION=macosx
-fi
+
+case "$_os" in
+	"SunOS")
+	  OS_VERSION=solaris  
+	  ;;
+	"Linux")
+	  OS_VERSION=linux
+	  ;;
+	"WINNT")
+	  OS_VERSION=cygwin
+	  ;;
+	"Darwin")
+	  OS_VERSION=macosx
+	  ;;
+	"FreeBSD")
+	  OS_VERSION=linux
+	  ;;
+	"OSF1")
+	  OS_VERSION=tru64
+	  ;;
+	"NetBSD")
+	  OS_VERSION=linux
+	  ;;
+	"IRIX")
+	  OS_VERSION=sysvr4
+	  ;;
+	"IRIX64")
+	  OS_VERSION=sysvr4
+	  ;;
+   *)
+      AC_MSG_ERROR([$_os operating system is not suitable to build dmake!])
+      ;;
+esac
+
+AC_MSG_RESULT([checked ($_os)])
+
+
 AC_SUBST(OS_VERSION)
 
 AC_OUTPUT(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
-		startup/unix/macosx/Makefile dmakeroot.h )
-#AC_OUTPUT(unix/bsd43/Makefile Makefile makefile unix/solaris/Makefile dbug/malloc/makefile unix/Makefile)
+		startup/unix/macosx/Makefile startup/unix/cygwin/Makefile dmakeroot.h )
 
 dnl ******************************
 dnl *** output the whole stuff ***
