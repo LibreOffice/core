@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:04:11 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,7 +747,7 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(FASTBOOL bAuto)
 
 FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
 {
-    if(bTextFrame)
+    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // SJ: #i44922#
     {
         SetObjectItem(SdrTextMinFrameHeightItem(nHgt));
 
@@ -786,7 +786,7 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(FASTBOOL bAuto)
 
 FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
 {
-    if(bTextFrame)
+    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // SJ: #i44922#
     {
         SetObjectItem(SdrTextMinFrameWidthItem(nWdt));
 
