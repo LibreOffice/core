@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:59 $
+ *  last change: $Author: iha $ $Date: 2004-01-19 14:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,14 +106,15 @@ void VPolarCoordinateSystem::createAxesShapes( const awt::Size& rReferenceSize, 
     for( sal_Int32 nDim = 0; nDim < 3; nDim++ )
         fCoordinateOrigin[nDim] = this->getOriginByDimension( nDim );
     //create angle axis (dimension index 0)
-    nDim = 0;
+    for( nDim = 0; nDim < 3; nDim++ )
     {
-        uno::Reference< XAxis > xAxis = this->getAxisByDimension(0);
+        uno::Reference< XAxis > xAxis = this->getAxisByDimension(nDim);
+        if(!xAxis.is())
+            continue;
         AxisProperties aAxisProperties;
         aAxisProperties.m_xAxisModel = xAxis;
-        aAxisProperties.m_pfExrtaLinePositionAtOtherAxis =
-            new double(nDim==1?fCoordinateOrigin[0]:fCoordinateOrigin[1]);
         aAxisProperties.m_aReferenceSize = rReferenceSize;
+        aAxisProperties.init();
         //-------------------
         VPolarAxis aAxis(aAxisProperties,pNumberFormatterWrapper);
         aAxis.setMeterData( m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
@@ -123,30 +124,6 @@ void VPolarCoordinateSystem::createAxesShapes( const awt::Size& rReferenceSize, 
         aAxis.setScales( m_aExplicitScales );
         aAxis.createShapes();
     }
-
-    /*
-    for( nDim = 0; nDim < 3; nDim++ )
-    {
-        uno::Reference< XAxis > xAxis = this->getAxisByDimension(nDim);
-        if(xAxis.is()
-            &&2==nDimensionCount) //@todo remove this restriction if 3D axes are available
-        {
-            AxisProperties aAxisProperties;
-            aAxisProperties.m_xAxisModel = xAxis;
-            aAxisProperties.m_pfExrtaLinePositionAtOtherAxis =
-                new double(nDim==1?fCoordinateOrigin[0]:fCoordinateOrigin[1]);
-            aAxisProperties.m_aReferenceSize = rReferenceSize;
-            //-------------------
-            VAxis aAxis(aAxisProperties,pNumberFormatterWrapper);
-            aAxis.setMeterData( m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
-            aAxis.init(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory);
-            if(2==nDimensionCount)
-                aAxis.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            aAxis.setScales( m_aExplicitScales );
-            aAxis.createShapes();
-        }
-    }
-    */
 }
 
 //.............................................................................
