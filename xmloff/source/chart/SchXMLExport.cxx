@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:32:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,11 +480,18 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                 sAddInName = sChartType;
             }
 
-            if( eXMLChartType != XML_TOKEN_INVALID )
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, eXMLChartType );
-
-            if( sAddInName.getLength())
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ADD_IN_NAME, sAddInName );
+            if( XML_ADD_IN == eXMLChartType )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
+                        mrExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_OOO, sAddInName) );
+            }
+            else if( eXMLChartType != XML_TOKEN_INVALID )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
+                        mrExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_CHART, GetXMLToken(eXMLChartType )) );
+            }
 
             // translated rows/columns
             if( xDocPropSet.is())
@@ -894,7 +901,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                 }
                 for( nSeries = 0; nSeries < nSeriesLablesLength; nSeries++ )
                 {
-                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_STRING );
+                    mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING );
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
                     exportText( xSeriesLabels[ nSeries ] );
                 }
@@ -911,7 +918,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                 if( mbHasCategoryLabels )
                 {
                     // cells containing row descriptions (in the first column)
-                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_STRING );
+                    mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING );
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
                     if( nDataPoint < nCategoryLabelsLength )
                         exportText( xCategoryLabels[ nDataPoint ] );
@@ -931,8 +938,8 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                     msString = msStringBuffer.makeStringAndClear();
 
                     // <table:table-cell>
-                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_FLOAT );
-                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE, msString );
+                    mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
+                    mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
 
                     // <text:p>
@@ -1088,41 +1095,14 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     // remove property states for autostyles
     aPropertyStates.clear();
 
-    // axis elements
-    // -------------
-    exportAxes( xDiagram, bExportContent );
-
-    // categories element
-    // ------------------
+    // axes and series
+    // ===============
     sal_Int32 nDataPointOffset = mbHasSeriesLabels? 1 : 0;
     sal_Int32 nSeriesOffset = mbHasCategoryLabels ? 1 : 0;
 
-    if( bExportContent &&
-        mbHasCategoryLabels )
-    {
-        // fill msString with cell-range-address of categories
-        if( bIncludeTable )
-        {
-            // export own table references
-            msStringBuffer.append( msTableName );
-
-            getCellAddress( 0, nDataPointOffset );
-            msStringBuffer.append( (sal_Unicode) ':' );
-            getCellAddress( 0, mnSeriesLength + nDataPointOffset - 1 );
-        }
-        else
-        {
-            // deprecated
-//              msString = msCategoriesAddress;
-        }
-
-        if( msStringBuffer.getLength())
-        {
-            msString = msStringBuffer.makeStringAndClear();
-            mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, msString );
-            SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, XML_CATEGORIES, sal_True, sal_True );
-        }
-    }
+    // axis elements
+    // -------------
+    exportAxes( xDiagram, bExportContent );
 
     // series elements
     // ---------------
@@ -1240,7 +1220,8 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             {
                 DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
                 aSeriesASName = maAutoStyleNameQueue.front();
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aSeriesASName );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME,
+                        aSeriesASName );
                 maAutoStyleNameQueue.pop();
             }
 
@@ -1975,6 +1956,24 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                 }
             }
 
+            // categories if we have a categories chart
+            sal_Int32 nDataPointOffset = mbHasSeriesLabels? 1 : 0;
+            if( bExportContent &&
+                mbHasCategoryLabels )
+            {
+                // fill msString with cell-range-address of categories
+                // export own table references
+                msStringBuffer.append( msTableName );
+
+                getCellAddress( 0, nDataPointOffset );
+                msStringBuffer.append( (sal_Unicode) ':' );
+                getCellAddress( 0, mnSeriesLength + nDataPointOffset - 1 );
+
+                msString = msStringBuffer.makeStringAndClear();
+                mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, msString );
+                SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, XML_CATEGORIES, sal_True, sal_True );
+            }
+
             // grid
             uno::Reference< beans::XPropertySet > xMajorGrid( xAxisSupp->getXMainGrid(), uno::UNO_QUERY );
             if( bHasXAxisMajorGrid && xMajorGrid.is())
@@ -2408,7 +2407,7 @@ void SchXMLExportHelper::AddAutoStyleAttribute( const std::vector< XMLPropertySt
     {
         DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
 
-        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, maAutoStyleNameQueue.front());
+        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME,  maAutoStyleNameQueue.front() );
         maAutoStyleNameQueue.pop();
     }
 }
@@ -2620,6 +2619,26 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const uno
     return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
 }
 
+// Oasis format
+uno::Sequence< OUString > SAL_CALL SchXMLExport_Oasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisExporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLExport_Oasis_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Oasis.Compact" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    // #103997# removed some flags from EXPORT_ALL
+    return (cppu::OWeakObject*)new SchXMLExport( rSMgr,
+        (EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS )) | EXPORT_OASIS );
+}
+
 // ============================================================
 
 // multiple storage version: one for content / styles / meta
@@ -2643,6 +2662,24 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(co
     return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_STYLES );
 }
 
+// Oasis format
+uno::Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisStylesExporter" ));
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLExport_Oasis_Styles_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Oasis.Styles" ));
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_STYLES | EXPORT_OASIS );
+}
+
 // ------------------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw()
@@ -2664,26 +2701,60 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(c
     return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS );
 }
 
-// ------------------------------------------------------------
-
-uno::Sequence< OUString > SAL_CALL SchXMLExport_Meta_getSupportedServiceNames() throw()
+// Oasis format
+uno::Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLMetaExporter" ));
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisContentExporter" ));
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw()
+OUString SAL_CALL SchXMLExport_Oasis_Content_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Meta" ));
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Oasis.Content" ));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory >& rSMgr) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
-    return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_META );
+    return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS | EXPORT_OASIS );
 }
+
+// ------------------------------------------------------------
+
+// uno::Sequence< OUString > SAL_CALL SchXMLExport_Meta_getSupportedServiceNames() throw()
+// {
+//  const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLMetaExporter" ));
+//  const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+//  return aSeq;
+// }
+
+// OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw()
+// {
+//  return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Meta" ));
+// }
+
+// uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+// {
+//  return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
+// }
+
+// // Oasis format
+// uno::Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw()
+// {
+//  const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisMetaExporter" ));
+//  const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+//  return aSeq;
+// }
+
+// OUString SAL_CALL SchXMLExport_Oasis_Meta_getImplementationName() throw()
+// {
+//  return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Oasis.Meta" ));
+// }
+
+// uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+// {
+//  return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META | EXPORT_OASIS  );
+// }
 
 
 // XServiceInfo
@@ -2697,8 +2768,18 @@ OUString SAL_CALL SchXMLExport::getImplementationName() throw( uno::RuntimeExcep
             return SchXMLExport_Styles_getImplementationName();
         case ( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS ):
             return SchXMLExport_Content_getImplementationName();
-        case EXPORT_META:
-            return SchXMLExport_Meta_getImplementationName();
+//         case EXPORT_META:
+//             return SchXMLExport_Meta_getImplementationName();
+
+        // Oasis format
+        case ( EXPORT_ALL | EXPORT_OASIS ):
+            return SchXMLExport_Oasis_getImplementationName();
+        case ( EXPORT_STYLES | EXPORT_OASIS ):
+            return SchXMLExport_Oasis_Styles_getImplementationName();
+        case ( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS | EXPORT_OASIS  ):
+            return SchXMLExport_Oasis_Content_getImplementationName();
+//         case ( EXPORT_META | EXPORT_OASIS ):
+//             return SchXMLExport_Meta_getImplementationName();
 
         case EXPORT_SETTINGS:
         // there is no settings component in chart
