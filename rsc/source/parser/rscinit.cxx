@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mm $ $Date: 2001-05-16 15:31:40 $
+ *  last change: $Author: mm $ $Date: 2001-05-17 15:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,8 @@ void RscTypCont::Init()
     pRoot->Insert( pClassCheckBox );
 
     // Variablen anlegen
+    INS_WINBIT(pClassCheckBox,WordBreak)
+
     nId = aNmTb.Put( "Check", VARNAME );
     pClassCheckBox->SetVariable( nId, &aBool );
 
@@ -609,6 +611,8 @@ void RscTypCont::Init()
     pRoot->Insert( pClassRadioButton );
 
     // Variablen anlegen
+    INS_WINBIT(pClassRadioButton,WordBreak)
+
     nId = aNmTb.Put( "Check", VARNAME );
     pClassRadioButton->SetVariable( nId, &aBool );
 
