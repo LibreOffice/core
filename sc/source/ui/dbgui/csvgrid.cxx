@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-08 08:19:25 $
+ *  last change: $Author: dr $ $Date: 2002-07-08 13:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,8 +332,16 @@ void ScCsvGrid::ImplClearSplits()
 void ScCsvGrid::InsertSplit( sal_Int32 nPos )
 {
     if( ImplInsertSplit( nPos ) )
+    {
+        DisableRepaint();
         CommitRequest( CSVREQ_UPDATECELLTEXTS );
-    // new column is equal to old -> no selection event
+        sal_uInt32 nColIx = GetColumnFromPos( nPos );
+        ImplDrawColumn( nColIx - 1 );
+        ImplDrawColumn( nColIx );
+        ValidateGfx();  // performance: do not redraw all columns
+        EnableRepaint();
+        // new column is equal to old -> no selection event
+    }
 }
 
 void ScCsvGrid::RemoveSplit( sal_Int32 nPos )
@@ -343,6 +351,8 @@ void ScCsvGrid::RemoveSplit( sal_Int32 nPos )
         DisableRepaint();
         CommitRequest( CSVREQ_UPDATECELLTEXTS );
         CommitEvent( GRIDEVENT_SELECTION );
+        ImplDrawColumn( GetColumnFromPos( nPos ) );
+        ValidateGfx();  // performance: do not redraw all columns
         EnableRepaint();
     }
 }
