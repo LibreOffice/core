@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-31 15:40:14 $
+ *  last change: $Author: as $ $Date: 2002-06-13 08:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,12 +545,24 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     //-----------------------------------------------------------------------------------------------------
     // I.III) "_helpagent"
-    //  Special mode on frame or task to start the help agent inside this frame. Not supported by findFrame()
+    //  Special mode on frame or task to start the help agent.
+    //  It's defined for top level frames only.
     //-----------------------------------------------------------------------------------------------------
     else
     if (sTargetFrameName==SPECIALTARGET_HELPAGENT)
     {
-        xDispatcher = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER, xFrame );
+        if (xFrame->isTop())
+            xDispatcher = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER, xFrame );
+        else
+        {
+            // Don''t use findFrame() here - because it's not possible to find
+            // a top lebel frame without knowing his name. And a frame with name
+            // "" can't be realy searched! That's why forward query to any parent
+            // explicitly.
+            css::uno::Reference< css::frame::XDispatchProvider > xProvider( xFrame->getCreator(), css::uno::UNO_QUERY );
+            if (xProvider.is())
+                xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_HELPAGENT,0);
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -595,6 +607,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
         if (xController.is())
             xDispatcher = xController->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
+
         // If controller has no fun to dispatch these URL - we must search another right dispatcher.
         // Search for any registered protocol handler first.
         // Note: member "m_aProtocolHandlerCache" use singleton mechanism to implement an internal threadsafe data container
@@ -706,7 +719,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryPlugi
        )
     {
         if (implts_isLoadableContent(aURL))
-            xDispatcher = implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER, xPlugin );
+            xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xPlugin );
+        fprintf(stderr,"plugin query for _self return %d\n", xDispatcher.is());
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -723,8 +737,13 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryPlugi
         if ( !xDispatcher.is() && ( nSearchFlags & css::frame::FrameSearchFlag::CREATE ) )
         {
             if ( implts_isLoadableContent ( aURL ) )
-                xDispatcher = implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER, xPlugin );
+            {
+                ::com::sun::star::uno::Any aParam;
+                aParam <<= sTargetFrameName;
+                xDispatcher = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, xPlugin, aParam );
+            }
         }
+        fprintf(stderr,"plugin query for possible CREATE return %d\n", xDispatcher.is());
     }
 
     return xDispatcher;
