@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:57:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,11 @@ Resource RID_UUI_ERRHDL
         Text [ en-US ] = "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the missing configuration data?";
     };
 
+    STRING (ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA & ERRCODE_RES_MASK)
+    {
+        Text [ de ] = "Das Formular enthält ungültige Daten. Möchten Sie trotzdem fortfahren?";
+        Text [ en-US ] = "The form contains invalid data. Do you still want to continue?";
+    };
 };
 
 
