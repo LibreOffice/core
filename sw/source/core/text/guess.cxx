@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 08:20:02 $
+ *  last change: $Author: fme $ $Date: 2002-08-19 15:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,11 +435,17 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if (!pModule->GetLngSvcEvtListener().is())
             pModule->CreateLngSvcEvtListener();
 
+        // !!! We must have a local copy of the locale, because inside
+        // getLineBreak the LinguEventListener can trigger a new formatting,
+        // which can corrupt the locale pointer inside pBreakIt.
+        const com::sun::star::lang::Locale aLocale = pBreakIt->GetLocale( aLang );
+
         // determines first possible line break from nRightPos to
         // start index of current line
         LineBreakResults aResult = pBreakIt->xBreak->getLineBreak(
-                rInf.GetTxt(), nCutPos, pBreakIt->GetLocale(aLang),
-                rInf.GetLineStart(), aHyphOpt, aUserOpt );
+            rInf.GetTxt(), nCutPos, aLocale,
+            rInf.GetLineStart(), aHyphOpt, aUserOpt );
+
         nBreakPos = (xub_StrLen)aResult.breakIndex;
 
         // if we are formatting multi portions we want to allow line breaks
