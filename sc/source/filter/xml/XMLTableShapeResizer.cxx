@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
+ *  last change: $Author: sab $ $Date: 2001-03-20 16:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,16 @@ ScMyShapeResizer::~ScMyShapeResizer()
 
 void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
     table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
-    sal_Int32 nX, sal_Int32 nY)
+    sal_Int32 nStartX, sal_Int32 nStartY, sal_Int32 nEndX, sal_Int32 nEndY)
 {
     ScMyToResizeShape aShape;
     aShape.xShape = rShape;
     aShape.aEndCell = rEndAddress;
     aShape.aStartCell = rStartAddress;
-    aShape.nY = nY;
-    aShape.nX = nX;
+    aShape.nStartY = nStartY;
+    aShape.nStartX = nStartX;
+    aShape.nEndY = nEndY;
+    aShape.nEndX = nEndX;
     aShapes.push_back(aShape);
 }
 
@@ -144,17 +146,17 @@ void ScMyShapeResizer::ResizeShapes(uno::Reference< sheet::XSpreadsheet > xSheet
                                 pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
                                     static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
                                     static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
-                                sal_Int32 Y (nHeight - aItr->nY);
-                                aItr->nX += pRect->Left();
+                                sal_Int32 Y (nHeight - aItr->nEndY);
+                                aItr->nEndX += pRect->Left();
                                 Y = pRect->Bottom() - Y;
-                                awt::Point aPoint = aItr->xShape->getPosition();
+                                awt::Point aPoint(aItr->nStartX, aItr->nStartY);// = aItr->xShape->getPosition();
                                 awt::Size aSize = aItr->xShape->getSize();
                                 aPoint.X += aRefPoint.X;
                                 aPoint.Y += aRefPoint.Y;
-                                aSize.Width = aItr->nX - aPoint.X;
+                                aSize.Width = aItr->nEndX - aPoint.X;
                                 aSize.Height = Y - aPoint.Y;
-                                aItr->xShape->setSize(aSize);
                                 aItr->xShape->setPosition(aPoint);
+                                aItr->xShape->setSize(aSize);
                                 delete pRect;
                             }
                         }
