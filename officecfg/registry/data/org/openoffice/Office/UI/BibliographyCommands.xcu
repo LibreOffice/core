@@ -158,6 +158,30 @@
                     <value xml:lang="pt">~Fonte de dados...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:Bib/source" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabelle</value>
+                    <value xml:lang="en-US">Table</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Bib/query" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Suchbegriff</value>
+                    <value xml:lang="en-US">Search Key</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Bib/autoFilter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">AutFilter</value>
+                    <value xml:lang="en-US">AutoFilter</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Bib/removeFilter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Filter entfernen</value>
+                    <value xml:lang="en-US">Remove Filter</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
         </node>
