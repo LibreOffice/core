@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-11-03 14:19:57 $
+ *  last change: $Author: th $ $Date: 2000-11-06 20:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,62 @@ void SalGraphics::SetTextColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void ImplGetLogFontFromFontSelect( const ImplFontSelectData* pFont,
+int CALLBACK SalEnumQueryFontProcExA( const ENUMLOGFONTEXA*,
+                                      const NEWTEXTMETRICEXA*,
+                                      DWORD, LPARAM lParam )
+{
+    *((BOOL*)(void*)lParam) = TRUE;
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
+                                      const NEWTEXTMETRICEXW*,
+                                      DWORD, LPARAM lParam )
+{
+    *((BOOL*)(void*)lParam) = TRUE;
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplSalIsVerticalFontAvailableW( HDC hDC, const UniString& rName )
+{
+    if ( !rName.Len() )
+        return FALSE;
+
+    LOGFONTW    aLogFont;
+    UINT        nNameLen = rName.Len();
+    if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1-1 )
+        nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1-1;
+
+    // Test, if vertical Font available
+    BOOL bAvailable = FALSE;
+    memset( &aLogFont, 0, sizeof( aLogFont ) );
+    aLogFont.lfFaceName[0] = '@';
+    memcpy( aLogFont.lfFaceName+1, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
+    aLogFont.lfFaceName[nNameLen+1] = 0;
+    EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
+                         (LPARAM)(void*)&bAvailable, 0 );
+    return bAvailable;
+}
+
+/*
+        LOGFONTA aLogFont;
+        memset( &aLogFont, 0, sizeof( aLogFont ) );
+        aLogFont.lfCharSet = DEFAULT_CHARSET;
+        aInfo.mpLogFontA = &aLogFont;
+        EnumFontFamiliesExA( maGraphicsData.mhDC, &aLogFont, (FONTENUMPROCA)SalEnumFontsProcExA,
+                             (LPARAM)(void*)&aInfo, 0 );
+    }
+}
+*/
+
+// -----------------------------------------------------------------------
+
+void ImplGetLogFontFromFontSelect( HDC hDC,
+                                   const ImplFontSelectData* pFont,
                                    LOGFONTW& rLogFont )
 {
     UniString   aName;
@@ -493,11 +548,22 @@ void ImplGetLogFontFromFontSelect( const ImplFontSelectData* pFont,
     else
         aName = pFont->maName.GetToken( 0 );
 
+    // Test for vertical
+    UINT nOff = 0;
+    if ( pFont->mbVertical )
+    {
+        if ( ImplSalIsVerticalFontAvailableW( hDC, aName ) )
+        {
+            nOff = 1;
+            rLogFont.lfFaceName[0] = '@';
+        }
+    }
+
     UINT nNameLen = aName.Len();
-    if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
-        nNameLen = (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1;
-    memcpy( rLogFont.lfFaceName, aName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
-    rLogFont.lfFaceName[nNameLen] = 0;
+    if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1-nOff )
+        nNameLen = (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1-nOff;
+    memcpy( rLogFont.lfFaceName+nOff, aName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
+    rLogFont.lfFaceName[nNameLen+nOff] = 0;
     if ( pFont->mpFontData &&
          ((pFont->meCharSet == RTL_TEXTENCODING_DONTKNOW) ||
           ((WIN_BYTE)(pFont->mpFontData->mpSysData) == OEM_CHARSET)) )
@@ -533,7 +599,7 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
     if ( aSalShlData.mbWNT )
     {
         LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( pFont, aLogFont );
+        ImplGetLogFontFromFontSelect( maGraphicsData.mhDC, pFont, aLogFont );
 
         // Auf dem Bildschirm nehmen wir Courier New, wenn Courier nicht
         // skalierbar ist und wenn der Font skaliert oder rotiert werden
@@ -557,6 +623,11 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
             aName = ImplSalGetWinAnsiString( pFont->mpFontData->maName );
         else
             aName = ImplSalGetWinAnsiString( pFont->maName.GetToken( 0 ) );
+        if ( pFont->mbVertical )
+        {
+            aName.Insert( '@', 0 );
+        }
+
         UINT nNameLen = aName.Len();
         if ( nNameLen > sizeof( maGraphicsData.mpLogFont->lfFaceName )-1 )
             nNameLen = sizeof( maGraphicsData.mpLogFont->lfFaceName )-1;
