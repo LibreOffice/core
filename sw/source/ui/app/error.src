@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:04:54 $
+ *  last change: $Author: jp $ $Date: 2000-12-07 14:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
     {
-        TEXT = "Die Datei ist keine StarWriter-Datei" ;
-        TEXT [ English ] = "This isn't a StarWriter file" ;
+        TEXT = "Die Datei ist keine %PRODUCTNAME Writer-Datei" ;
+        TEXT [ English ] = "This isn't a %PRODUCTNAME Writer file" ;
         TEXT [ norwegian ] = "Dette er ikke en Star Writer fil" ;
         TEXT [ italian ] = "Questo non и un file di %PRODUCTNAME Writer" ;
         TEXT [ portuguese_brazilian ] = "Este nгo й um arquivo do %PRODUCTNAME Writer" ;
@@ -651,8 +651,8 @@ Resource RID_SW_ERRHDL
      // Import-/Export-Errors
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
     {
-        TEXT = "Interner Fehler im StarWriter Dateiformat" ;
-        TEXT [ English ] = "Internal Error in StarWriter file" ;
+        TEXT = "Interner Fehler im %PRODUCTNAME Writer Dateiformat" ;
+        TEXT [ English ] = "Internal Error in %PRODUCTNAME Writer file" ;
         TEXT [ norwegian ] = "Intern feil i StarWriter fil" ;
         TEXT [ italian ] = "Errore interno nel formato di file di %PRODUCTNAME Writer" ;
         TEXT [ portuguese_brazilian ] = "Erro interno em arquivo do %PRODUCTNAME Writer" ;
@@ -677,8 +677,8 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
     {
-        TEXT = "Interner Fehler im StarWriter Dateiformat" ;
-        TEXT [ English ] = "Internal Error in StarWriter file" ;
+        TEXT = "Interner Fehler im %PRODUCTNAME Writer Dateiformat" ;
+        TEXT [ English ] = "Internal Error in %PRODUCTNAME Writer file" ;
         TEXT [ norwegian ] = "Intern feil i StarWriter fil" ;
         TEXT [ italian ] = "Errore interno nel formato di file di %PRODUCTNAME Writer" ;
         TEXT [ portuguese_brazilian ] = "Erro interno em arquivo do %PRODUCTNAME Writer" ;
@@ -1236,8 +1236,8 @@ Resource RID_SW_ERRHDL
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
     {
-        Text = "Das HTML-Dokument enthдlt StarBasic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert." ;
-        Text [ English ] = "This HTML document contains StarBasic macros.\nThey were not saved because of the current export options." ;
+        Text = "Das HTML-Dokument enthдlt %PRODUCTNAME Basic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert." ;
+        Text [ English ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved because of the current export options." ;
         Text[ english_us ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings.";
         Text[ portuguese ] = "Este documento HTML contйm macros %PRODUCTNAME Basic.\nEstas nгo foram guardadas com as predefiniзхes de exportaзгo activas.";
         Text[ russian ] = "Этот документ HTML содержит макросы %PRODUCTNAME Basic.\nОни не сохранились с текущими настройками экспорта.";
