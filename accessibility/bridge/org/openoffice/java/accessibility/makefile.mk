@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 16:16:29 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:14:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,10 +72,6 @@ USE_JAVAVER:=TRUE
 .INCLUDE :  settings.mk
 
 .IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
-.IF "$(JDK)" == "gcj"
-all:
-        @echo This dir cannot be build with gcj because of java.awt.Window.AccessibleAWTWindow
-.ELSE
 JAVADIR = $(OUT)$/misc$/java
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
@@ -129,7 +125,6 @@ JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
 JARCLASSDIRS            = $(PACKAGE)
 
-.ENDIF
 .ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
 # --- Targets ------------------------------------------------------
