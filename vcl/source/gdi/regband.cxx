@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regband.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_REGBAND_CXX
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -633,7 +631,6 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
         //   -> reduce boundaries of new separation
         if ( (nXLeft <= pSep->mnXLeft) && (nXRight >= pSep->mnXRight) )
         {
-            int iOldXRight = pSep->mnXRight;
             pSep->mnXRight = pSep->mnXLeft;
             pSep->mnXLeft = nXLeft;
             nXLeft = pSep->mnXRight;
@@ -644,7 +641,6 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
         //   -> set boundaries of new separation to right remainder
         if ( (nXRight >= pSep->mnXLeft) && (nXLeft <= pSep->mnXLeft) )
         {
-            int iOldXRight = pSep->mnXRight;
             pSep->mnXRight = pSep->mnXLeft;
             pSep->mnXLeft = nXLeft;
             nXLeft = pSep->mnXRight;
