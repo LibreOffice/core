@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-12-02 11:42:31 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     sal_uInt32  aFontHeights[7];    // die Font-Hoehen 1-7
     sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
+    sal_uInt32                  nEventId;
 
     sal_uInt16  nBaseFontStMin;     //
     sal_uInt16  nFontStMin;         //
@@ -537,10 +538,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_Bool bSelect : 1;
     sal_Bool bInFootEndNoteAnchor : 1;
     sal_Bool bInFootEndNoteSymbol : 1;
-    sal_Bool bDataAvailableLinkSet : 1;
     sal_Bool bIgnoreHTMLComments : 1;
-
-    SvRefBaseRef aLoadEnv;
 
     void DeleteFormImpl();
 
@@ -553,6 +551,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     inline void GetSaveAndSetOwnBaseURL();
     inline void SetSaveBaseURL();
+
+    DECL_LINK( AsyncCallback, void* );
 
     // Attribute am Dok setzen
     void _SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable, _HTMLAttrs *pPostIts );
