@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: mba $ $Date: 2002-03-28 16:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,14 +1530,15 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, USHORT nCount,
         rOutStm << '0';
     }
 
-    if ( GetUnoName().Len() )
+//    if ( GetUnoName().Len() )
     {
         rOutStm << ",\"";
-        rOutStm << GetUnoName().GetBuffer();
+        rOutStm << GetMangleName( FALSE ).GetBuffer();
+        //rOutStm << GetUnoName().GetBuffer();
         rOutStm << "\"";
     }
-    else
-        rOutStm << ", 0";
+//    else
+//        rOutStm << ", 0";
 
     rOutStm << " )," << endl;
 }
