@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:10:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #include <vector>
 #include <map>
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
+#include <sfx2/objsh.hxx>
+
 #ifndef WW_TYPES
 #   include "types.hxx"
 #endif
@@ -91,9 +97,6 @@
 #ifndef _PAM_HXX
 #   include <pam.hxx>                  //SwPaM
 #endif
-#ifndef _IPOBJ_HXX
-#   include <so3/ipobj.hxx>            //SvInPlaceObjectRef
-#endif
 #ifndef _TL_POLY_HXX
 #   include <tools/poly.hxx>           //Polygon, PolyPolygon
 #endif
@@ -108,13 +111,13 @@ class SwTxtFmtColl;
 class SwCharFmt;
 class SdrObject;
 class SdrOle2Obj;
-class SvPersist;
 class OutlinerParaObject;
 class SdrTextObj;
 class SwNumFmt;
 class SwTxtNode;
 class SwNoTxtNode;
 class SwFmtCharFmt;
+class Graphic;
 
 namespace sw
 {
@@ -971,7 +974,6 @@ namespace sw
             const SwDoc &rDoc, USHORT nWhich);
 
 
-
         /** Make inserting an OLE object into a Writer document easy
 
             The rest of Office uses SdrOle2Obj for their OLE objects, Writer
@@ -993,8 +995,9 @@ namespace sw
         {
         private:
             String msOrigPersistName;
-            SvInPlaceObjectRef mxIPRef;
-            SvPersist &mrPers;
+            com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxIPRef;
+            SfxObjectShell& mrPers;
+            Graphic* mpGraphic;
         public:
             /** Take ownership of a SdrOle2Objs OLE object
 
@@ -1005,7 +1008,7 @@ namespace sw
                 The SvPersist of a SwDoc (SwDoc::GetPersist()) into which we
                 may want to move the object, or remove it from if unwanted.
             */
-            DrawingOLEAdaptor(SdrOle2Obj &rObj, SvPersist &rPers);
+            DrawingOLEAdaptor(SdrOle2Obj &rObj, SfxObjectShell &rPers);
 
             /// Destructor will destroy the owned OLE object if not transferred
             ~DrawingOLEAdaptor();
@@ -1025,7 +1028,7 @@ namespace sw
                 @return On success true is returned, otherwise false. On
                 success rName is then suitable for user with SwDoc::InsertOLE
             */
-            bool TransferToDoc(const String &rName);
+            bool TransferToDoc(::rtl::OUString &rName);
         private:
             /// No assigning allowed
             DrawingOLEAdaptor& operator=(const DrawingOLEAdaptor&);
