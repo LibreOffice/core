@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-16 11:12:46 $
+ *  last change: $Author: thb $ $Date: 2001-10-16 12:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,13 +347,6 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
         }
 
         aTransGraphic = pGraphic->GetTransformedGraphic( &aActAttr );
-
-        if( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_SIZE )
-        {
-            // #86518# also set size and mapmode to new graphic
-            aTransGraphic.SetPrefMapMode( GetModel()->GetScaleUnit() );
-            aTransGraphic.SetPrefSize( GetSnapRect().GetSize() );
-        }
     }
 
     return aTransGraphic;
@@ -532,6 +525,7 @@ void SdrGrafObj::ImpLinkAbmeldung()
 
 void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterName )
 {
+#ifndef SVX_LIGHT
     ImpLinkAbmeldung();
     aFileName = rFileName;
     aFilterName = rFilterName;
@@ -540,6 +534,25 @@ void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterN
 
     // #92205# A linked graphic is per definition swapped out (has to be loaded)
     pGraphic->SetSwapState();
+#else
+    // #92205# Preload linked graphics for player
+    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
+
+    if( pIStm )
+    {
+        Graphic         aGraphic;
+        GraphicFilter*  pFilter = GetGrfFilter();
+        USHORT          nFilter = pFilter->GetImportFormatNumber( rFilterName );
+        USHORT          nError = pFilter->ImportGraphic( aGraphic, rFileName, *pIStm, nFilter );
+
+        pGraphic->SetGraphic( aGraphic );
+
+        // enforce resolved link state
+        aFileName = aFilterName = String();
+
+        delete pIStm;
+    }
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -1573,30 +1586,14 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
 
         if( bGraphicLink && aFileName.Len() && aFilterName.Len() )
         {
-#ifndef SVX_LIGHT
             SetGraphicLink( aFileName, aFilterName );
 
+#ifndef SVX_LIGHT
             if( pGraphicLink && !bDelayedLoad )
             {
                 BOOL bIsChanged = pModel->IsChanged();
                 pGraphicLink->UpdateSynchron();
                 pModel->SetChanged( bIsChanged );
-            }
-#else
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
-
-            if( pIStm )
-            {
-                Graphic         aGraphic;
-                GraphicFilter*  pFilter = GetGrfFilter();
-                USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
-                USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter );
-
-                pGraphic->SetGraphic( aGraphic );
-                bGraphicLink = FALSE;
-                aFileName = aFilterName = String();
-
-                delete pIStm;
             }
 #endif
         }
