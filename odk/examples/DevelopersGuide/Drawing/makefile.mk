@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:44:14 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:25:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ DRAWING_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/PageHelper.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/PresentationDemo.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/ShapeHelper.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/SimplePresentation.sxi \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/SimplePresentation.odp \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/StyleDemo.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/TextDemo.java
 
