@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.21 2003-06-12 10:28:00 vg Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.22 2003-08-18 14:47:02 hjs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: vg $ $Date: 2003-06-12 10:28:00 $ $Revision: 1.21 $
+//	$Author: hjs $ $Date: 2003-08-18 14:47:02 $ $Revision: 1.22 $
 //
 // Description:
 //
@@ -277,7 +277,6 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 "<>"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
 "!="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
 
-
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
 
 <SQL>[A-Za-z][A-Za-z0-9_]*		{return gatherName( SQLyytext);}
@@ -312,8 +311,10 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 <PREDICATE_GER,PREDICATE_ENG>[0-9.,][A-Za-z0-9_.,%]* {return gatherNamePre(SQLyytext);}
 
+
 <SQL>\"	{ return gatherString('\"',0); }
 <SQL>`	{ return gatherString('`' ,0); }											 
+
 
 <PREDICATE_GER,PREDICATE_ENG,DATE>"["		{ return gatherString(']' ,0);}
 
@@ -328,12 +329,14 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 <STRING>"["					{ return gatherString(']' ,0); }
 <STRING>[^ ':["?"]*			{ return gatherNamePre(SQLyytext); }
 
+
 \n              {}
 
 [ \t\r]+        ;       
 
 "--".*$         ;       
 
+[^[:blank:][:space:][:cntrl:]\-\+\*\/:\(\)\,\\\.\;\?\{\}#\'\"´`´\[\]=]*			{return gatherNamePre( SQLyytext);}
 .				{YY_FATAL_ERROR("Invalid symbol"); return SQL_TOKEN_INVALIDSYMBOL;}
 
 %%
@@ -498,6 +501,7 @@ sal_Int32 gatherName(const sal_Char* text)
 			return SQL_TOKEN_NAME; 
 	}
 }
+
 /**
  Read SQL Name literal for predicate check
  Valid Names or internatioanl keywords:
