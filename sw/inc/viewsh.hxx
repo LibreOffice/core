@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: od $ $Date: 2002-12-03 15:37:10 $
+ *  last change: $Author: od $ $Date: 2002-12-06 16:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,14 @@ class ViewShell : public Ring
     void PrepareForPrint( const SwPrtOptions &rOptions );
 
     void ImplApplyViewOptions( const SwViewOption &rOpt );
+
+    /** calculate visible pages and further needed data for current preview settings
+
+        OD 04.12.2002 #103492#
+
+        @author OD
+    */
+    void _CalcVisiblePagesForPreview();
 
 protected:
     static ShellResource*   pShellRes;      // Resourcen fuer die Shell
@@ -463,6 +471,10 @@ public:
         @param _orDocPreviewPaintRect
         output parameter - rectangle of preview document, which will be painted.
 
+        @param _bPaintPageAtFirstCol
+        input parameter with default value "true" - controls, if start page
+        is set to page in first column the proposed start page is located.
+
         @return boolean, indicating, if prepare of preview paint was successful.
     */
     bool PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
@@ -470,7 +482,8 @@ public:
                               const Size*      _pPxWinSize,
                               sal_uInt16&      _onStartPageNum,
                               sal_uInt16&      _onStartPageVirtNum,
-                              Rectangle&       _orDocPreviewPaintRect
+                              Rectangle&       _orDocPreviewPaintRect,
+                              const bool       _bPaintPageAtFirstCol = true
                             );
 
     /** paint prepared preview
@@ -502,6 +515,69 @@ public:
         fit into the current window size.
     */
     bool DoesPreviewLayoutRowsFitIntoWindow();
+
+    /** property <DoesPreviewLayoutColsFitIntoWin> of current preview layout
+
+        OD 03.12.2002 #103492#
+
+        @author OD
+
+        @return boolean, indicating that the columns of the current preview layout
+        fit into the current window size.
+    */
+    bool DoesPreviewLayoutColsFitIntoWindow();
+
+    /** calculate start position for new scaling
+
+        OD 04.12.2002 #103492#
+
+        @author OD
+
+        @return Point, start position for new scale
+    */
+    Point GetPreviewStartPosForNewScale( const Fraction& _aNewScale,
+                                         const Fraction& _aOldScale,
+                                         const Size&     _aNewWinSize );
+
+    /** determines, if page with given page number is visible in preview
+
+        OD 05.12.2002 #103492#
+
+        @author OD
+
+        @return boolean, indicating, if page with given page number is visible
+        in preview
+    */
+    bool IsPageVisibleInCurrPreview( const sal_uInt16 _nPageNum );
+
+    /** prepares re-paint of preview to bring new selected page into view.
+
+        OD 06.12.2002 #103492#
+
+        @author OD
+
+        @param _nCurrSelectedPage
+        input parameter - number of current selected page.
+
+        @param _nHoriMove
+        input parameter - positive/negative number of columns the current
+        selected page have to be moved.
+
+        @param _nVertMove
+        input parameter - positive/negative number of rows the current
+        selected page have to be moved.
+
+        @param _orNewSelectedPage
+        output parameter - number of new selected page
+
+        @return boolean - indicating, that move was sucessful.
+    */
+    bool MovePreviewSelectedPage( const sal_uInt16 _nCurrSelectedPage,
+                                  const sal_Int16  _nHoriMove,
+                                  const sal_Int16  _nVertMove,
+                                  sal_uInt16&      _orNewSelectedPage,
+                                  sal_uInt16&      _orNewStartPage,
+                                  Point&           _orNewStartPos );
 
     // Prospekt-Format drucken
     void PrintProspect( SwPrtOptions&, SfxProgress& );
