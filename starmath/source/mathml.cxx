@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-22 12:33:08 $
+ *  last change: $Author: dvo $ $Date: 2001-10-30 16:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3320,7 +3320,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
 }
 void SmXMLExport::_ExportContent()
 {
-    SvXMLElementExport aEquation(*this,XML_NAMESPACE_MATH,sXML_math, sal_False,
+    SvXMLElementExport aEquation(*this,XML_NAMESPACE_MATH,sXML_math, sal_True,
         sal_True);
     SvXMLElementExport *pSemantics=0;
 
