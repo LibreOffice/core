@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 11:53:15 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,13 @@
 #ifndef _CONNECTIVITY_ADO_AOLEVARIANT_HXX_
 #define _CONNECTIVITY_ADO_AOLEVARIANT_HXX_
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _OSL_TYPES_H_
-#include <osl/types.h>
-#endif
 #ifndef _CONNECTIVITY_DATECONVERSION_HXX_
 #include "connectivity/DateConversion.hxx"
 #endif
