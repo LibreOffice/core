@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:01:57 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,7 +1476,7 @@ QueryBox MSG_OPEN_READONLY
     MESSAGE [ swedish ] = "Dokumentet kan inte цppnas fцr redigering. \nVill Du цppna det fцr lдsning?" ;
     MESSAGE [ dutch ] = "Dit document is schrijfbeveiligd.\nWilt u het alleen-lezen?" ;
     MESSAGE [ spanish ] = "El documento no se puede abrir para editar.\nїDesea abrirlo solo para leer?" ;
-    MESSAGE [ english_us ] = "Document can't be opened for editing.\nDo you want to open it as read only?" ;
+    MESSAGE [ english_us ] = "Document cannot be opened for editing.\nDo you want to open it as read-only?" ;
     MESSAGE[ chinese_simplified ] = "ДъІ»ДЬ±ај­ХвёцОДјюЎЈ\nДъТЄґтїЄФД¶БЛьВрЈї";
     MESSAGE[ russian ] = "Открыть документ для правки не удается.\nВы хотите открыть его для чтения?";
     MESSAGE[ polish ] = "Dokumentu nie moїna otworzyж do edycji.\nCzy chcesz go otworzyж do odczytu?";
