@@ -2,9 +2,9 @@
  *
  *  $RCSfile: version.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2002-04-15 12:14:17 $
+ *  last change: $Author: hr $ $Date: 2002-04-16 10:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ __declspec(dllexport) const struct VersionInfo* GetVersionInfo();
 #ifdef WNT
 __declspec(dllexport) const struct VersionInfo* GetVersionInfo()
 #else
-const VersionInfo *GetVersionInfo()
+const struct VersionInfo *GetVersionInfo()
 #endif
 {
     return &g_aVersionInfo;
