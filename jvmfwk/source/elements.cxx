@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-10 13:40:47 $
+ *  last change: $Author: jl $ $Date: 2004-05-13 08:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,6 +1123,8 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
         cur = cur->next;
     }
 
+    if (sVendor.getLength() == 0)
+        m_bEmptyNode = true;
     //Get the javainfo attributes
     CXmlCharPtr sVendorUpdate;
     sVendorUpdate = xmlGetProp(pJavaInfo,
@@ -1252,7 +1254,7 @@ javaFrameworkError CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
 JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 {
-    if (bNil == true)
+    if (bNil == true || m_bEmptyNode == true)
         return NULL;
     JavaInfo * pInfo = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
     if (pInfo == NULL)
