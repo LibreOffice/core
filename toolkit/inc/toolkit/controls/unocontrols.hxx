@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-04 16:03:03 $
+ *  last change: $Author: mt $ $Date: 2001-04-11 15:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _COM_SUN_STAR_AWT_XPATTERNFIELD_HPP_
 #include <com/sun/star/awt/XPatternField.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
+#endif
 // #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 // #include <com/sun/star/container/XIndexContainer.hpp>
 // #endif
@@ -220,8 +223,12 @@ public:
 //  ----------------------------------------------------
 class UnoDialogControl : public UnoControlContainer,
                          public ::com::sun::star::container::XContainerListener,
+                         public ::com::sun::star::awt::XTopWindow,
                          public ::com::sun::star::awt::XDialog
 {
+private:
+    TopWindowListenerMultiplexer    maTopWindowListeners;
+
 protected:
 
     void        ImplInsertControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel, const ::rtl::OUString& rName );
@@ -241,6 +248,13 @@ public:
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlContainer::disposing( Source ); }
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XTopWindow
+    void SAL_CALL addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL toFront(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL toBack(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& xMenu ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XPropertiesChangeListener
     void SAL_CALL propertiesChange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& evt ) throw(::com::sun::star::uno::RuntimeException);
@@ -441,15 +455,11 @@ class UnoControlButtonModel :   public ::com::sun::star::awt::XImageProducer,
                                 public UnoControlModel
 {
 private:
-//  ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > mxImageProducer;
-
     std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > maListeners;
 
 protected:
     ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > ImplGetImageProducer();
 
 public:
                         UnoControlButtonModel();
@@ -468,9 +478,6 @@ public:
     void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    // ::cppu::OPropertySetHelper
-    // void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -547,8 +554,12 @@ public:
 //  ----------------------------------------------------
 //  class UnoControlImageControlModel
 //  ----------------------------------------------------
-class UnoControlImageControlModel : public UnoControlModel
+class UnoControlImageControlModel : public ::com::sun::star::awt::XImageProducer,
+                                    public UnoControlModel
 {
+private:
+    std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > maListeners;
+
 protected:
     ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
@@ -561,6 +572,15 @@ public:
 
     ::rtl::OUString                 getServiceName() const;
 
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::release(); }
+
+    // ::com::sun::star::awt::XImageProducer
+    void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -592,6 +612,8 @@ public:
 
                             UnoImageControlControl();
     ::rtl::OUString         GetComponentServiceName();
+
+    void                    ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

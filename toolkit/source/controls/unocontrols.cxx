@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-10 11:42:28 $
+ *  last change: $Author: mt $ $Date: 2001-04-11 15:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ void UnoControlDialogModel::removeByName( const ::rtl::OUString& aName ) throw(c
 //  ----------------------------------------------------
 //  class UnoDialogControl
 //  ----------------------------------------------------
-UnoDialogControl::UnoDialogControl()
+UnoDialogControl::UnoDialogControl() : maTopWindowListeners( *this )
 {
     maComponentInfos.nWidth = 300;
     maComponentInfos.nHeight = 450;
@@ -440,6 +440,7 @@ UnoDialogControl::UnoDialogControl()
 uno::Any UnoDialogControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XTopWindow*, this ),
                                         SAL_STATIC_CAST( awt::XDialog*, this ) );
     return (aRet.hasValue() ? aRet : UnoControlContainer::queryAggregation( rType ));
 }
@@ -447,6 +448,7 @@ uno::Any UnoDialogControl::queryAggregation( const uno::Type & rType ) throw(uno
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoDialogControl )
 getCppuType( ( uno::Reference< awt::XDialog>* ) NULL ),
+getCppuType( ( uno::Reference< awt::XTopWindow>* ) NULL ),
 UnoControlContainer::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -553,6 +555,9 @@ void UnoDialogControl::ImplSetPosSize( uno::Reference< awt::XControl >& rxCtrl )
 
 void UnoDialogControl::dispose() throw(uno::RuntimeException)
 {
+    lang::EventObject aEvt;
+    aEvt.Source = (::cppu::OWeakObject*)this;
+    maTopWindowListeners.disposeAndClear( aEvt );
     UnoControlContainer::dispose();
 }
 
@@ -614,6 +619,10 @@ void UnoDialogControl::setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno
 void UnoDialogControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
+
+    uno::Reference < awt::XTopWindow > xTW( mxPeer, uno::UNO_QUERY );
+    if ( maTopWindowListeners.getLength() )
+        xTW->addTopWindowListener( &maTopWindowListeners );
 }
 
 void UnoDialogControl::elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
@@ -645,6 +654,51 @@ void UnoDialogControl::elementReplaced( const ::com::sun::star::container::Conta
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
     ImplInsertControl( xModel, aName );
+}
+
+void UnoDialogControl::addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maTopWindowListeners.addInterface( rxListener );
+    if( mxPeer.is() && maTopWindowListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XTopWindow >  xTW( mxPeer, uno::UNO_QUERY );
+        xTW->addTopWindowListener( &maTopWindowListeners );
+    }
+}
+
+void UnoDialogControl::removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if( mxPeer.is() && maTopWindowListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XTopWindow >  xTW( mxPeer, uno::UNO_QUERY );
+        xTW->removeTopWindowListener( &maTopWindowListeners );
+    }
+    maTopWindowListeners.removeInterface( rxListener );
+}
+
+void UnoDialogControl::toFront(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( getPeer().is() )
+    {
+        uno::Reference< awt::XTopWindow > xTW( getPeer(), uno::UNO_QUERY );
+        if( xTW.is() )
+            xTW->toFront();
+    }
+}
+
+void UnoDialogControl::toBack(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( getPeer().is() )
+    {
+        uno::Reference< awt::XTopWindow > xTW( getPeer(), uno::UNO_QUERY );
+        if( xTW.is() )
+            xTW->toBack();
+    }
+}
+
+void UnoDialogControl::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& ) throw (::com::sun::star::uno::RuntimeException)
+{
+    DBG_ERROR( "UnoDialogControl::setMenuBar niy" );
 }
 
 // beans::XPropertiesChangeListener
