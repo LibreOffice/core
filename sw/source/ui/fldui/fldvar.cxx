@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:54:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,11 +582,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         aChapterLevelLB.SelectEntryPos( 0 );
                     else
                         aChapterLevelLB.SelectEntryPos( nLevel + 1 );
-                    sal_Unicode cDelim = ((SwSetExpFieldType*)pFldTyp)->GetDelimiter();
-                    if(cDelim)
-                        aSeparatorED.SetText( cDelim );
-                    else
-                        aSeparatorED.SetText( aEmptyStr );
+                    String sDelim = ((SwSetExpFieldType*)pFldTyp)->GetDelimiter();
+                    aSeparatorED.SetText( sDelim );
                     ChapterHdl();
                 }
             }
