@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: os $ $Date: 2000-11-08 12:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
             {
                 SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pCurFld->GetTyp();
                 pTyp->SetOutlineLvl(nSubType & 0xff);
-                pTyp->SetDelimiter((char)((nSubType & 0xff00) >> 8));
+                pTyp->SetDelimiter(cSeparator);
 
                 nSubType = GSE_SEQ;
             }
@@ -456,89 +456,5 @@ IMPL_LINK( SwFldPage, NumFormatHdl, ListBox *, pLst )
 
     return 0;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.25  2000/09/18 16:05:29  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.24  2000/06/30 08:52:53  os
-    #76541# string assertions removed
-
-    Revision 1.23  2000/05/10 11:55:13  os
-    Basic API removed
-
-    Revision 1.22  2000/04/18 15:17:32  os
-    UNICODE
-
-    Revision 1.21  2000/02/11 14:46:39  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.20  1999/01/20 13:16:52  JP
-    Task #58677#: Crsr in Readonly Bereichen zulassen
-
-
-      Rev 1.19   20 Jan 1999 14:16:52   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.18   29 Oct 1998 14:08:32   OM
-   #58544# Butzerfeld: richtigen Inhalt anzeigen
-
-      Rev 1.17   15 Oct 1998 16:02:52   OM
-   #57965# Variablennamen fuer Eingabefeld verwenden
-
-      Rev 1.16   18 Jun 1998 11:16:44   OM
-   Kapitelebenen fuer Nummernkreise
-
-      Rev 1.15   27 Mar 1998 16:26:18   OM
-   #48007# UpdateExpFlds bei Aenderung von HiddenText und HiddenParaField
-
-      Rev 1.14   18 Mar 1998 10:33:56   OM
-   #48197# Focus restaurieren nach InputDlg
-
-      Rev 1.13   06 Mar 1998 14:54:24   OM
-   Nur bei Aenderung Feld aktualisieren
-
-      Rev 1.12   08 Jan 1998 13:36:20   OM
-   Feldbefehl-Traveling
-
-      Rev 1.11   08 Jan 1998 10:19:04   OM
-   Referenzen editieren
-
-      Rev 1.10   06 Jan 1998 18:13:34   OM
-   Felbefehl-Dlg
-
-      Rev 1.9   19 Dec 1997 18:25:00   OM
-   Feldbefehl-bearbeiten Dlg
-
-      Rev 1.8   16 Dec 1997 17:01:44   OM
-   Feldbefehle bearbeiten
-
-      Rev 1.7   12 Dec 1997 16:10:08   OM
-   AutoUpdate bei FocusWechsel u.a.
-
-      Rev 1.6   11 Dec 1997 16:58:50   OM
-   Feldumstellung
-
-      Rev 1.5   09 Dec 1997 17:16:46   OM
-   Kein alter Feldbefehl-Dialog mehr
-
-      Rev 1.4   28 Nov 1997 19:51:32   MA
-   includes
-
-      Rev 1.3   20 Nov 1997 17:02:04   OM
-   Neuer Felddialog
-
-      Rev 1.2   19 Nov 1997 16:30:42   OM
-   Datenbank-TP Drag&Drop
-
-      Rev 1.1   18 Nov 1997 10:34:36   OM
-   Neuer Feldbefehldialog
-
-      Rev 1.0   17 Nov 1997 09:07:00   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 
