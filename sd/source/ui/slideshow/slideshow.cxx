@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:34:40 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,17 @@ bool Slideshow::startPreview(
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
         ::Window* pParent )
 {
-    return mpImpl->startPreview( xDrawPage, xAnimationNode, pParent );
+    if( mpImpl->startPreview( xDrawPage, xAnimationNode, pParent ) )
+    {
+        ShowWindow* pShowWindow = mpImpl->getShowWindow();
+        if( pShowWindow )
+            pShowWindow->setSlideshow( this );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void Slideshow::paint( const Rectangle& rRect )
