@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokens.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:47:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #define IGNOREDTOKENS       400         /* #include | #pragma | //... | ... */
 #define COMMEND             401         /*...                               */
 #define DEFINEDRES          402         /* Text = {                         */
-#define NORMDEFINE          403         /* #define ...                      */
 #define ANYTOKEN            404         /* XYZ                              */
 #define UNKNOWNTOKEN        405         /* XYZ[ \t]$                        */
 #define UNKNOWNCONSTRUCTION 406         /* XYZ ( xxx, yyy, zzz )            */
@@ -103,7 +102,7 @@
 #define TEXTREFID           522         /* Text = 12345                     */
 #define LISTRESID           523         /* < 12345; ... >                   */
 #define _LISTRESID          523         /* { 12345; ... }                   */
-
+#define NORMDEFINE          524         /* #define ...                      */
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */
 /* Tokens for parsing cfg files                                             */
