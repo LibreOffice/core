@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 16:06:28 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 15:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,6 @@
 #define SID_UNSELECT                        (SID_SD_START+280)
 #define SID_TEXTATTR_DLG                    (SID_SD_START+281)
 #define SID_ORIGINAL_SIZE                   (SID_SD_START+282)
-#define SID_PUBLISH                         (SID_SD_START+283)
 #define SID_PAGES_PER_ROW                   (SID_SD_START+284)
 #define SID_TEXT_FITTOSIZE                  (SID_SD_START+285)
 #define SID_TEXT_FITTOSIZE_VERTICAL         (SID_SD_START+286)

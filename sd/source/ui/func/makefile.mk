@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cl $ $Date: 2001-11-27 16:02:49 $
+#   last change: $Author: ka $ $Date: 2002-04-18 15:47:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 CXXFILES = $(PRJ)$/util$/sd.cxx \
-        fuhtmlex.cxx	\
         fupoor.cxx		\
         fudraw.cxx		\
         fusel.cxx		\
@@ -143,8 +142,6 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         fudspord.cxx	\
         unmovss.cxx 	\
         fucon3d.cxx 	\
-        fuexp1.cxx		\
-        fuexp2.cxx		\
         fumorph.cxx		\
         fuexpand.cxx	\
         fusumry.cxx     \
@@ -162,7 +159,6 @@ EXCEPTIONSFILES= \
         $(SLO)$/fuinsert.obj	
 
 SLOFILES = \
-        $(SLO)$/fuhtmlex.obj	\
         $(SLO)$/fupoor.obj		\
         $(SLO)$/fudraw.obj		\
         $(SLO)$/fuzoom.obj		\
@@ -225,8 +221,6 @@ SLOFILES = \
         $(SLO)$/fudspord.obj 	\
         $(SLO)$/unmovss.obj		\
         $(SLO)$/fucon3d.obj		\
-        $(SLO)$/fuexp1.obj		\
-        $(SLO)$/fuexp2.obj		\
         $(SLO)$/fumorph.obj		\
         $(SLO)$/fuexpand.obj    \
         $(SLO)$/fusumry.obj     \

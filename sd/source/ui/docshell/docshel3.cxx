@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-27 16:05:18 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 15:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@
 #include "fusearch.hxx"
 #include "viewshel.hxx"
 #include "sdview.hxx"
-#include "fuexport.hxx"
 #include "fuslshow.hxx"
 
 #define POOL_BUFFER_SIZE        (USHORT)32768
@@ -277,24 +276,6 @@ void SdDrawDocShell::Execute( SfxRequest& rReq )
         {
 //            SfxObjectShell::DoClose();
             ExecuteSlot(rReq, SfxObjectShell::GetInterface());
-        }
-        break;
-
-        case SID_PUBLISH:
-        {
-            if ( pViewShell )
-            {
-                pFuActual = new FuExport( pViewShell, pViewShell->GetActiveWindow(),
-                                          pViewShell->GetView(), pDoc, rReq );
-
-                pFuActual->Activate();
-                pFuActual->Deactivate();
-
-                delete pFuActual;
-                pFuActual = NULL;
-
-                rReq.Done();
-            }
         }
         break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-04-05 08:42:44 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 15:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@
             SID_WIN_FULLSCREEN;\
             SID_COLORVIEW;\
             SID_ATTR_LINEEND_STYLE;\
-            SID_PUBLISH;\
+            SID_EXPORTDOC;\
             SID_MAIL_SENDDOC;\
             SID_SAVEASDOC;\
             SID_BEZIER_ELIMINATE_POINTS;\

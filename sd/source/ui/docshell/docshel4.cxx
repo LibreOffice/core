@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 16:25:29 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 15:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@
 #include "sdcgmfilter.hxx"
 #include "sdgrffilter.hxx"
 #include "sdbinfilter.hxx"
+#include "sdhtmlfilter.hxx"
 
 /*************************************************************************
 |*
@@ -691,10 +692,15 @@ BOOL SdDrawDocShell::ConvertTo( SfxMedium& rMedium )
 
     if( pDoc->GetPageCount() )
     {
-        String      aFilterName( rMedium.GetFilter()->GetFilterName() );
-        SdFilter*   pFilter = NULL;
+        const SfxFilter*    pMediumFilter = rMedium.GetFilter();
+        const String        aTypeName( pMediumFilter->GetTypeName() );
+        SdFilter*           pFilter = NULL;
 
-        if( aFilterName.SearchAscii( "MS PowerPoint 97" ) != STRING_NOTFOUND )
+        if( aTypeName.SearchAscii( "graphic_HTML" ) != STRING_NOTFOUND )
+        {
+            pFilter = new SdHTMLFilter( rMedium, *this, sal_True );
+        }
+        else if( aTypeName.SearchAscii( "MS_PowerPoint_97" ) != STRING_NOTFOUND )
         {
             pFilter = new SdPPTFilter( rMedium, *this, sal_True );
             ((SdPPTFilter*)pFilter)->PreSaveBasic();
@@ -706,15 +712,19 @@ BOOL SdDrawDocShell::ConvertTo( SfxMedium& rMedium )
             if ( bInPlaceObjects )
                 ((SdPPTFilter*)pFilter)->SetOleSource( xOleSource );
         }
-        else if ( aFilterName.SearchAscii( "CGM - Computer Graphics Metafile" ) != STRING_NOTFOUND )
+        else if ( aTypeName.SearchAscii( "CGM_Computer_Graphics_Metafile" ) != STRING_NOTFOUND )
         {
             pFilter = new SdCGMFilter( rMedium, *this, sal_True );
         }
-        else if( ( aFilterName.SearchAscii("StarOffice XML (Draw)" )  != STRING_NOTFOUND ) ||
-                 ( aFilterName.SearchAscii("StarOffice XML (Impress)")  != STRING_NOTFOUND ) )
+        else if( ( aTypeName.SearchAscii( "StarOffice_XML_Impress " ) != STRING_NOTFOUND ) ||
+                 ( aTypeName.SearchAscii( "StarOffice_XML_Draw" ) != STRING_NOTFOUND ) )
         {
             pFilter = new SdXMLFilter( rMedium, *this, sal_True );
             UpdateDocInfoForSave();
+        }
+        else
+        {
+            pFilter = new SdGRFFilter( rMedium, *this, sal_True );
         }
 
         if( pFilter )

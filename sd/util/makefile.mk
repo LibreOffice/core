@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: af $ $Date: 2002-02-05 14:39:38 $
+#   last change: $Author: ka $ $Date: 2002-04-18 15:48:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,12 +88,12 @@ LINKFLAGS+=/SEGMENTS:512 /PACKD:32768
 .IF "$(GUI)"=="WIN"
 RESLIBSPLIT1NAME=sd
 RESLIBSPLIT1SRSFILES= \
-     $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/sdslots.srs \
+     $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
      $(SOLARRESDIR)$/sfx.srs
 .ELSE
 RESLIB1NAME=sd
 RESLIB1SRSFILES=\
-     $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/sdslots.srs \
+     $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
      $(SOLARRESDIR)$/sfx.srs
 .ENDIF
 
@@ -182,6 +182,7 @@ LIB3FILES=      \
             $(SLB)$/cgm.lib			\
             $(SLB)$/grf.lib			\
             $(SLB)$/bin.lib			\
+            $(SLB)$/html.lib		\
             $(SLB)$/filter.lib		\
             $(SLB)$/unoidl.lib		\
             $(SLB)$/accessibility.lib		

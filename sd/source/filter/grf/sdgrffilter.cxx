@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:30:55 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 15:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,37 @@
  *
  ************************************************************************/
 
+#include <unotools/localfilehelper.hxx>
 #include <tools/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/virdev.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/xoutbmp.hxx>
 
 #ifndef MAC
 #ifndef SVX_LIGHT
 #include "../../ui/inc/strings.hrc"
 #include "../../ui/inc/graphpro.hxx"
+#include "../../ui/inc/drviewsh.hxx"
+#include "../../ui/inc/docshell.hxx"
+#include "../../ui/inc/clview.hxx"
+#include "../../ui/inc/frmview.hxx"
 #endif //!SVX_LIGHT
 #else  //MAC
 #ifndef SVX_LIGHT
 #include "strings.hrc"
 #include "graphpro.hxx"
+#include "drviewsh.hxx"
+#include "docshell.hxx"
+#include "clview.hxx"
+#include "frmview.hxx"
 #endif //!SVX_LIGHT
 #endif //!MAC
 
@@ -98,6 +112,63 @@ SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Boo
 
 SdGRFFilter::~SdGRFFilter()
 {
+}
+
+// -----------------------------------------------------------------------------
+
+GDIMetaFile SdGRFFilter::ImplRemoveClipRegionActions( const GDIMetaFile& rMtf )
+{
+    GDIMetaFile     aMtf;
+    const ULONG     nActionCount = rMtf.GetActionCount();
+
+    aMtf.SetPrefSize( rMtf.GetPrefSize() );
+    aMtf.SetPrefMapMode( rMtf.GetPrefMapMode() );
+
+    // Actions untersuchen und ClipRegion-Action herausnehmen
+    for ( ULONG nAction = 0; nAction < nActionCount; nAction++ )
+    {
+        MetaAction* pCopyAction = ( (GDIMetaFile&) rMtf ).CopyAction( nAction );
+
+        if( pCopyAction )
+        {
+            switch( pCopyAction->GetType() )
+            {
+                case( META_CLIPREGION_ACTION ) :
+                    delete pCopyAction;
+                break;
+
+                default:
+                    aMtf.AddAction( pCopyAction );
+                break;
+            }
+        }
+    }
+
+    return aMtf;
+}
+
+// -----------------------------------------------------------------------------
+
+BitmapEx SdGRFFilter::ImplGetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSizePixel )
+{
+    Graphic     aGraphic( rMtf );
+    BitmapEx    aBmpEx;
+
+    if( bTransparent )
+    {
+        Graphic aMaskGraphic( rMtf.GetMonochromeMtf( COL_BLACK ) );
+        Bitmap  aMaskBmp( aMaskGraphic.GetBitmap( pSizePixel) );
+
+        aMaskBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+        aBmpEx = BitmapEx( aGraphic.GetBitmap( pSizePixel ), aMaskBmp );
+    }
+    else
+        aBmpEx = BitmapEx( aGraphic.GetBitmap( pSizePixel ) );
+
+    aBmpEx.SetPrefMapMode( rMtf.GetPrefMapMode() );
+    aBmpEx.SetPrefSize( rMtf.GetPrefSize() );
+
+    return aBmpEx;
 }
 
 // -----------------------------------------------------------------------------
@@ -147,10 +218,9 @@ void SdGRFFilter::HandleGraphicFilterError( USHORT nFilterError, ULONG nStreamEr
 sal_Bool SdGRFFilter::Import()
 {
     Graphic         aGraphic;
-    const String    aName( mrMedium.GetFilter()->GetName() );
     const String    aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
     GraphicFilter*  pGraphicFilter = GetGrfFilter();
-    const USHORT    nFilter = pGraphicFilter->GetImportFormatNumber( aName );
+    const USHORT    nFilter = pGraphicFilter->GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
     sal_Bool        bRet = sal_False;
 
     // ggf. Filterdialog ausfuehren
@@ -202,6 +272,196 @@ sal_Bool SdGRFFilter::Import()
 
             pPage->InsertObject( new SdrGrafObj( aGraphic, Rectangle( aPos, aGrfSize ) ) );
             bRet = sal_True;
+        }
+
+        delete pFilterProgress;
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SdGRFFilter::Export()
+{
+    const String        aTypeName( mrMedium.GetFilter()->GetTypeName() );
+    SfxItemSet*         pSet = mrMedium.GetItemSet();
+    VirtualDevice       aVDev;
+    Graphic             aGraphic;
+    SdDrawViewShell*    pDrawViewShell = static_cast< SdDrawViewShell* >( ( ( mrDocShell.GetViewShell() && mrDocShell.GetViewShell()->ISA( SdDrawViewShell ) ) ? mrDocShell.GetViewShell() : NULL ) );
+    const Fraction      aFrac( mrDocument.GetScaleFraction() );
+    const MapMode       aMap( mrDocument.GetScaleUnit(), Point(), aFrac, aFrac );
+    GraphicFilter*      pGraphicFilter = GetGrfFilter();
+    SdPage*             pPage = NULL;
+    const USHORT        nFilter = pGraphicFilter->GetExportFormatNumberForTypeName( aTypeName );
+    USHORT              nPage;
+    PageKind            ePageKind = PK_STANDARD;
+    BOOL                bVectorType = !pGraphicFilter->IsExportPixelFormat( nFilter );
+    BOOL                bTranslucent = pGraphicFilter->GetExportFormatShortName( nFilter ).ToLowerAscii().EqualsAscii( "gif" );
+    BOOL                bSelection = FALSE;
+    sal_Bool            bRet = sal_False;
+
+    if( pSet && ( SFX_ITEM_SET == pSet->GetItemState( SID_SELECTION ) ) && static_cast< const SfxBoolItem& >( pSet->Get( SID_SELECTION ) ).GetValue() )
+        bSelection = TRUE;
+
+    if( pDrawViewShell )
+    {
+        ePageKind = pDrawViewShell->GetPageKind();
+
+        if( PK_HANDOUT == ePageKind )
+            pPage = mrDocument.GetSdPage( 0, PK_HANDOUT );
+        else
+            pPage = pDrawViewShell->GetActualPage();
+    }
+    else
+        pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
+
+    if( pPage )
+    {
+        FilterProgress* pFilterProgress = mbShowProgress ? new FilterProgress( pGraphicFilter, &(SfxObjectShell&) mrDocShell ) : NULL;
+
+        if( pFilterProgress )
+            pFilterProgress->SetState( 10 );
+
+        // translucent speichern?
+        if( bTranslucent )
+        {
+            FilterConfigItem aConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/GIF" ) ) );
+            bTranslucent = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Translucent" ) ), 1 ) != 0;
+        }
+        else
+            bTranslucent = FALSE;
+
+        // 'richtige' Zeichenseitennummer ermitteln
+        if( pPage->GetPageNum() )
+            nPage = ( pPage->GetPageNum() - 1 ) >> 1;
+        else
+            nPage = 0;
+
+        // 'richtige' Seite besorgen
+        pPage = mrDocument.GetSdPage( nPage, ePageKind );
+
+        if( !bSelection || !pDrawViewShell )
+        {
+            // export the whole page
+            const Size aSize( pPage->GetSize() );
+
+            if ( !bVectorType && !bTranslucent )
+            {
+                const Size      aSizePix( aVDev.LogicToPixel( aSize, aMap ) );
+                const long      nWidthPix = ( aSizePix.Width() > 2048 || aSizePix.Height() > 2048 ) ? 2048 : 0;
+                SdView*         pView = new SdView( &mrDocument, &aVDev );
+                VirtualDevice*  pVDev = pView->CreatePageVDev( nPage, ePageKind, nWidthPix );
+
+                if( pVDev )
+                {
+                    aGraphic = pVDev->GetBitmap( Point(), pVDev->GetOutputSize() );
+                    aGraphic.SetPrefMapMode( aMap );
+                    aGraphic.SetPrefSize( aSize );
+                    delete pVDev;
+                }
+
+                delete pView;
+            }
+            else
+            {
+                GDIMetaFile aMtf;
+
+                aVDev.SetMapMode( aMap );
+                aVDev.EnableOutput( FALSE );
+                aMtf.Record( &aVDev );
+
+                SdClientView* pView = new SdClientView( &mrDocShell, &aVDev, NULL );
+
+                pView->SetBordVisible( FALSE );
+                pView->SetPageVisible( FALSE );
+                pView->ShowPage( pPage, Point() );
+
+                const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
+                const Size  aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
+                                      aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
+                const Rectangle aClipRect( aNewOrg, aNewSize );
+                MapMode         aVMap( aMap );
+
+                SdrPageView* pPageView  = pView->GetPageView( pPage );
+                FrameView*   pFrameView = mrDocShell.GetFrameView();
+
+                pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
+                pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
+                pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
+
+                aVDev.Push();
+                aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
+                aVDev.SetRelativeMapMode( aVMap );
+                aVDev.IntersectClipRegion( aClipRect );
+                pView->InitRedraw( &aVDev, Region( Rectangle( Point(), aNewSize ) ) );
+                aVDev.Pop();
+
+                aMtf.Stop();
+                aMtf.WindStart();
+                aMtf.SetPrefMapMode( aMap );
+                aMtf.SetPrefSize( aNewSize );
+
+                aGraphic = Graphic( ImplRemoveClipRegionActions( aMtf ) );
+
+                if( bTranslucent )
+                    aGraphic = ImplGetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE );
+
+                delete pView;
+            }
+        }
+        else
+        {
+            // export selected objects
+            SdView* pView = pDrawViewShell->GetView();
+
+            if( pView )
+            {
+                if( !bVectorType )
+                {
+                    const SdrMarkList&  rMarkList = pView->GetMarkList();
+                    BOOL                bGraf = FALSE;
+
+                    if( rMarkList.GetMarkCount() == 1 )
+                    {
+                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+
+                        if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->HasText() )
+                        {
+                            aGraphic = ( (SdrGrafObj*) pObj )->GetTransformedGraphic();
+                            bGraf = TRUE;
+                        }
+                    }
+
+                    if( !bGraf )
+                        aGraphic = ImplGetBitmapFromMetaFile( pView->GetAllMarkedMetaFile(), bTranslucent );
+                }
+                else
+                    aGraphic = pView->GetAllMarkedMetaFile();
+            }
+        }
+
+        const Size aGraphSize( aGraphic.GetPrefSize() );
+
+        if ( ( aGraphSize.Width() > 1 ) && ( aGraphSize.Height() > 1 ) )
+        {
+            String aTmp;
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( mrMedium.GetPhysicalName(), aTmp );
+            const INetURLObject aURL( aTmp );
+
+            mrMedium.Close();
+
+            const USHORT nRet = pGraphicFilter->ExportGraphic( aGraphic, aURL, nFilter, sal_False );
+
+            if( nRet )
+                SdGRFFilter::HandleGraphicFilterError( nRet, pGraphicFilter->GetLastError().nStreamError );
+            else
+                bRet = sal_True;
+        }
+        else
+        {
+            ErrorBox aErrBox( NULL, WB_OK, String( SdResId( STR_EXPORT_EMPTYGRAPHIC ) ) );
+            aErrBox.Execute();
         }
 
         delete pFilterProgress;

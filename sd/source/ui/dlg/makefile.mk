@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cl $ $Date: 2001-11-27 16:01:14 $
+#   last change: $Author: ka $ $Date: 2002-04-18 15:45:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,6 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         dlgass.cxx   \
         assclass.cxx \
         graphpro.cxx    \
-        pubdlg.cxx	 \
         navigatr.cxx    \
         sdpreslt.cxx	\
         preview.cxx    \
@@ -120,7 +119,6 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         dlgfield.cxx	\
         custsdlg.cxx	\
         brkdlg.cxx      \
-        htmlattr.cxx	\
         vectdlg.cxx		\
         docprev.cxx     \
         TemplateThread.cxx
@@ -142,7 +140,6 @@ SRCFILES =\
     copydlg.src\
     tpoption.src\
     dlgass.src\
-    pubdlg.src\
     navigatr.src\
     sdpreslt.src\
     preview.src\
@@ -184,7 +181,6 @@ SLOFILES =  \
         $(SLO)$/dlgass.obj  \
         $(SLO)$/assclass.obj \
         $(SLO)$/graphpro.obj \
-        $(SLO)$/pubdlg.obj	\
         $(SLO)$/navigatr.obj \
         $(SLO)$/preview.obj    \
         $(SLO)$/effect.obj   \
@@ -200,7 +196,6 @@ SLOFILES =  \
         $(SLO)$/dlgfield.obj	\
         $(SLO)$/custsdlg.obj	\
         $(SLO)$/brkdlg.obj      \
-        $(SLO)$/htmlattr.obj	\
         $(SLO)$/vectdlg.obj		\
         $(SLO)$/docprev.obj     \
         $(SLO)$/TemplateThread.obj

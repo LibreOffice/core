@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:01:15 $
+ *  last change: $Author: ka $ $Date: 2002-04-18 15:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,18 @@
 
 class SdGRFFilter : public SdFilter
 {
+private:
+
+    static GDIMetaFile      ImplRemoveClipRegionActions( const GDIMetaFile& rMtf );
+    static BitmapEx         ImplGetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSizePixel = NULL );
+
 public:
 
                             SdGRFFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
                             ~SdGRFFilter();
 
     virtual sal_Bool        Import();
+    virtual sal_Bool        Export();
 
 public:
 
