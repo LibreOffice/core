@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-15 18:01:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@ struct RegistryTypeWriter_Api
     sal_uInt32              (TYPEREG_CALLTYPE *getBlopSize)         (TypeWriterImpl);
 
     void                    (TYPEREG_CALLTYPE *setReferenceData)    (TypeWriterImpl, sal_uInt16, rtl_uString*, RTReferenceType, rtl_uString*, RTFieldAccess);
+
+    TypeWriterImpl          (TYPEREG_CALLTYPE *createMIEntry)       (RTTypeClass, rtl_uString*, sal_uInt16, sal_uInt16, sal_uInt16, sal_uInt16);
+    void                    (TYPEREG_CALLTYPE *setMISuperTypeData)  (TypeWriterImpl, sal_uInt16, rtl_uString*);
 };
 
 /** specifies a function pointer of the initialization function which is called to initialize
@@ -179,6 +182,27 @@ public:
                               RTTypeClass               RTTypeClass,
                               const ::rtl::OUString&    typeName,
                               const ::rtl::OUString&    superTypeName,
+                              sal_uInt16                fieldCount,
+                              sal_uInt16                methodCount,
+                              sal_uInt16                referenceCount);
+
+    /** Constructor using the registry Api directly, for multiple-inheritance
+        types.
+
+        The constructor is used if the api is known.
+        @param RTTypeClass specifies the type of the new blob.
+        @param typeName specifies the full qualified type name with '/' as separator.
+        @param superTypeCount specifies the number of base types.
+        @param fieldCount specifies the number of fields (eg. number of attrbutes/properties,
+                          enum values or constants).
+        @param methodCount specifies the number of methods.
+        @param referenceCount specifies the number of references (eg. number of supported interfaces,
+                              exported services ...)
+     */
+    inline RegistryTypeWriter(const RegistryTypeWriter_Api* pApi,
+                              RTTypeClass               RTTypeClass,
+                              const ::rtl::OUString&    typeName,
+                              sal_uInt16                superTypeCount,
                               sal_uInt16                fieldCount,
                               sal_uInt16                methodCount,
                               sal_uInt16                referenceCount);
@@ -324,6 +348,15 @@ public:
                                     const ::rtl::OUString&  doku,
                                     RTFieldAccess               access = RT_ACCESS_INVALID);
 
+    /** sets the data for a base type of a multiple-inheritance type.
+
+        @param index indicates the index of the base type.
+        @param name specifies the full qualified type name of the base type
+                    with '/' as separator.
+     */
+    inline void setMISuperTypeData( sal_uInt16              index,
+                                    const ::rtl::OUString&  name);
+
 protected:
 
     /// stores the registry type writer Api.
@@ -355,6 +388,24 @@ inline RegistryTypeWriter::RegistryTypeWriter(const RegistryTypeWriter_Api* pApi
                                   referenceCount);
 }
 
+inline RegistryTypeWriter::RegistryTypeWriter(const RegistryTypeWriter_Api* pApi,
+                                              RTTypeClass               RTTypeClass,
+                                              const ::rtl::OUString&    typeName,
+                                              sal_uInt16                superTypeCount,
+                                              sal_uInt16                fieldCount,
+                                              sal_uInt16                methodCount,
+                                              sal_uInt16                referenceCount)
+    : m_pApi(pApi)
+    , m_Api()
+    , m_hImpl(NULL)
+{
+    m_hImpl = m_pApi->createMIEntry(RTTypeClass,
+                                    typeName.pData,
+                                    superTypeCount,
+                                    fieldCount,
+                                    methodCount,
+                                    referenceCount);
+}
 
 inline RegistryTypeWriter::RegistryTypeWriter(const RegistryTypeWriterLoader& rLoader,
                                               RTTypeClass               RTTypeClass,
@@ -475,6 +526,12 @@ inline void RegistryTypeWriter::setReferenceData( sal_uInt16                inde
                                                     RTFieldAccess           access)
 {
     m_pApi->setReferenceData(m_hImpl, index, name.pData, refType, doku.pData, access);
+}
+
+inline void RegistryTypeWriter::setMISuperTypeData( sal_uInt16              index,
+                                                    const ::rtl::OUString&  name)
+{
+    m_pApi->setMISuperTypeData(m_hImpl, index, name.pData);
 }
 
 #endif
