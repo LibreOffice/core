@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-14 16:04:47 $
+ *  last change: $Author: tl $ $Date: 2002-05-13 15:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3309,6 +3309,29 @@ SfxItemPresentation SvxCharScaleWidthItem::GetPresentation(
         break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
+}
+
+sal_Bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+{
+    // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
+    // where we still want this to be a sal_Int16
+    sal_Int16 nValue;
+    if (rVal >>= nValue)
+    {
+        SetValue( (UINT16) nValue );
+        return TRUE;
+    }
+
+    DBG_ERROR( "SvxCharScaleWidthItem::PutValue - Wrong type!" );
+    return FALSE;
+}
+
+sal_Bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+    // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
+    // where we still want this to be a sal_Int16
+    rVal <<= (sal_Int16)GetValue();
+    return TRUE;
 }
 
 /*************************************************************************
