@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:13:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Refer
     mfBegin(-1.0),
     mfDuration(-1.0),
     mfAbsoluteDuration(-1.0),
-    mnMasterRel(0),
+    mnMasterRel(2),
     mbHasAfterEffect(false),
     mfIterateInterval(0.0),
     mnIterateType(0),
@@ -1006,7 +1006,7 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     }
 
     Any aBegin;
-    if( mnMasterRel == 0 ) // sameClick
+    if( mnMasterRel == 2 ) // sameClick
     {
         Event aEvent;
 
@@ -2001,7 +2001,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
             // insert after effect node into timeline
             Reference< XTimeContainer > xContainer( rNode.mxMaster->getParent(), UNO_QUERY_THROW );
 
-            if( rNode.mnMasterRel == 0 ) // sameClick
+            if( rNode.mnMasterRel != 0 ) // sameClick
             {
                 // insert the aftereffect after its effect is animated
                 xContainer->insertAfter( rNode.mxNode, rNode.mxMaster );
@@ -2938,7 +2938,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
                     // its a dim
                     Reference< XAnimate > xAnimate( xNode, UNO_QUERY_THROW );
                     pMasterEffect->setDimColor( xAnimate->getTo() );
-                    pMasterEffect->setMasterRel( 0 );
+                    pMasterEffect->setMasterRel( 2 );
                 }
                 else
                 {
