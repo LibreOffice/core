@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:37 $
+#   last change: $Author: rt $ $Date: 2005-01-11 15:00:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,9 +57,12 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=sfxpch
-PROJECTPCHSOURCE=$(PRJ)$/util$/sfxpch
-PDBTARGET=sfx2
+
+# Reduction of exported symbols:
+CDEFS += -DSFX2_DLLIMPLEMENTATION
+.IF "$(COMNAME)" == "gcc3" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGS += -fvisibility=hidden
+.ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
+CFLAGS += -xldscope=hidden
+.ENDIF
