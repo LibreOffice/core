@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2002-11-28 17:56:11 $
+ *  last change: $Author: er $ $Date: 2002-12-08 17:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2479,7 +2479,7 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 SetError(errIllegalParameter);
         }
     }
-    rVal = fSumSqr - fSum*fSum/rValCount;
+    rVal = SolarMath::ApproxSub( fSumSqr, fSum*fSum/rValCount );
 }
 
 
@@ -4446,69 +4446,65 @@ void ScInterpreter::ScDBProduct()
 }
 
 
-ULONG ScInterpreter::StdDev( double& rSum, double& rSum2 )
+void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 {
+    rValCount = 0.0;
+    double fSum    = 0.0;
+    double fSumSqr = 0.0;
     USHORT nTab;
-    ULONG nCount = 0;
     ScQueryParam aQueryParam;
     if (GetDBParams(nTab, aQueryParam))
     {
-        double fVal, fSum = 0.0, fSumSqr = 0.0;
+        double fVal;
         USHORT nErr;
         ScQueryValueIterator aValIter(pDok, nTab, aQueryParam);
         if (aValIter.GetFirst(fVal, nErr) && !nErr)
         {
             do
             {
-                nCount++;
+                rValCount++;
                 fSum += fVal;
                 fSumSqr += fVal*fVal;
             }
             while ((nErr == 0) && aValIter.GetNext(fVal, nErr));
         }
         SetError(nErr);
-        rSum = fSum;
-        rSum2 = fSumSqr;
     }
     else
         SetIllegalParameter();
-    return nCount;
+    rVal = SolarMath::ApproxSub( fSumSqr, fSum*fSum/rValCount );
 }
 
 
 void ScInterpreter::ScDBStdDev()
 {
-    ULONG nCount;
-    double fSum, fSumSqr;
-    nCount = StdDev( fSum, fSumSqr );
-    PushDouble( sqrt((fSumSqr - fSum*fSum/nCount)/(nCount-1)));
+    double fVal, fCount;
+    GetDBStVarParams( fVal, fCount );
+    PushDouble( sqrt(fVal/(fCount-1)));
 }
 
 
 void ScInterpreter::ScDBStdDevP()
 {
-    ULONG nCount;
-    double fSum, fSumSqr;
-    nCount = StdDev( fSum, fSumSqr );
-    PushDouble( sqrt((fSumSqr - fSum*fSum/nCount)/nCount));
+    double fVal, fCount;
+    GetDBStVarParams( fVal, fCount );
+    PushDouble( sqrt(fVal/fCount));
 }
 
 
 void ScInterpreter::ScDBVar()
 {
-    ULONG nCount;
-    double fSum, fSumSqr;
-    nCount = StdDev( fSum, fSumSqr );
-    PushDouble((fSumSqr - fSum*fSum/nCount)/(nCount-1));
+    double fVal, fCount;
+    GetDBStVarParams( fVal, fCount );
+    PushDouble(fVal/(fCount-1));
 }
 
 
 void ScInterpreter::ScDBVarP()
 {
-    ULONG nCount;
-    double fSum, fSumSqr;
-    nCount = StdDev( fSum, fSumSqr );
-    PushDouble((fSumSqr - fSum*fSum/nCount)/nCount);
+    double fVal, fCount;
+    GetDBStVarParams( fVal, fCount );
+    PushDouble(fVal/fCount);
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 21:30:11 $
+ *  last change: $Author: er $ $Date: 2002-12-08 17:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ void ScDBGet();
 void ScDBMax();
 void ScDBMin();
 void ScDBProduct();
-ULONG StdDev( double& rSum, double& rSum2 );
+void GetDBStVarParams( double& rVal, double& rValCount );
 void ScDBStdDev();
 void ScDBStdDevP();
 void ScDBVar();
