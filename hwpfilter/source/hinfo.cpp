@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hinfo.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:40:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hinfo.cpp,v 1.1 2003-10-15 14:40:04 dvo Exp $ */
+/* $Id: hinfo.cpp,v 1.2 2005-02-16 18:15:40 vg Exp $ */
 
 #include    "precompile.h"
 
@@ -107,37 +107,37 @@ HWPInfo::~HWPInfo(void)
  */
 bool HWPInfo::Read(HWPFile & hwpf)
 {
-    hwpf.Read2b(&cur_col, 1);                     // 문서를 저장할 당시의 커서가 위치한 문단번호
-    hwpf.Read2b(&cur_row, 1);                     // 문단 칸
+    hwpf.Read2b(&cur_col, 1);                     /* 문서를 저장할 당시의 커서가 위치한 문단번호 */
+    hwpf.Read2b(&cur_row, 1);                     /* 문단 칸 */
 
-    hwpf.Read1b(&paper.paper_kind, 1);            // 용지 종류
-    hwpf.Read1b(&paper.paper_direction, 1);       // 용지 방향
+    hwpf.Read1b(&paper.paper_kind, 1);            /* 용지 종류 */
+    hwpf.Read1b(&paper.paper_direction, 1);       /* 용지 방향 */
 
 // paper geometry information
-    paper.paper_height = (short) hwpf.Read2b();   // 용지 길이
-    paper.paper_width = (short) hwpf.Read2b();    // 용지 너비
-    paper.top_margin = (short) hwpf.Read2b();     // 위쪽 여백
-    paper.bottom_margin = (short) hwpf.Read2b();  // 아래쪽 여백
-    paper.left_margin = (short) hwpf.Read2b();    // 왼쪽 여백
-    paper.right_margin = (short) hwpf.Read2b();   // 오른쪽 여백
-    paper.header_length = (short) hwpf.Read2b();  // 머리말 길이
-    paper.footer_length = (short) hwpf.Read2b();  // 꼬리말 길이
-    paper.gutter_length = (short) hwpf.Read2b();  // 제본여백
-    hwpf.Read2b(&readonly, 1);                    // 예약
-    hwpf.Read1b(reserved1, 4);                    // 예약
-    hwpf.Read1b(&chain_info.chain_page_no, 1);    // 쪽 번호 연결 1-연결, 0-새로시작 (연결인쇄에서 사용)
-    hwpf.Read1b(&chain_info.chain_footnote_no, 1);// 각주번호 연결 1-연결 0-새로시작
-                                                  // 연결인쇄할 파일의 이름
+    paper.paper_height = (short) hwpf.Read2b();   /* 용지 길이 */
+    paper.paper_width = (short) hwpf.Read2b();    /* 용지 너비 */
+    paper.top_margin = (short) hwpf.Read2b();     /* 위쪽 여백 */
+    paper.bottom_margin = (short) hwpf.Read2b();  /* 아래쪽 여백 */
+    paper.left_margin = (short) hwpf.Read2b();    /* 왼쪽 여백 */
+    paper.right_margin = (short) hwpf.Read2b();   /* 오른쪽 여백 */
+    paper.header_length = (short) hwpf.Read2b();  /* 머리말 길이 */
+    paper.footer_length = (short) hwpf.Read2b();  /* 꼬리말 길이 */
+    paper.gutter_length = (short) hwpf.Read2b();  /* 제본여백 */
+    hwpf.Read2b(&readonly, 1);                    /* 예약 */
+    hwpf.Read1b(reserved1, 4);                    /* 예약 */
+    hwpf.Read1b(&chain_info.chain_page_no, 1);    /* 쪽 번호 연결 1-연결, 0-새로시작 (연결인쇄에서 사용) */
+    hwpf.Read1b(&chain_info.chain_footnote_no, 1);/* 각주번호 연결 1-연결 0-새로시작 */
+                                                  /* 연결인쇄할 파일의 이름 */
     hwpf.Read1b(chain_info.chain_filename, CHAIN_MAX_PATH);
 
-    hwpf.Read1b(annotation, ANNOTATION_LEN);      // 덧붙이는 말 ( 파일 저장할 때 덧붙이는 말에 지정한 내용 )
-    hwpf.Read2b(&encrypted, 1);                   // 암호 여부 0-보통파일, 그외-암호걸린 파일
-//hwpf.Read1b(reserved2, 6);    // 아래 3개의값으로 바뀌었다.
-    hwpf.Read2b(&beginpagenum,1);                 // 페이지시작번호
+    hwpf.Read1b(annotation, ANNOTATION_LEN);      /* 덧붙이는 말 ( 파일 저장할 때 덧붙이는 말에 지정한 내용 ) */
+    hwpf.Read2b(&encrypted, 1);                   /* 암호 여부 0-보통파일, 그외-암호걸린 파일 */
+//hwpf.Read1b(reserved2, 6);                      /* 아래 3개의값으로 바뀌었다. */
+    hwpf.Read2b(&beginpagenum,1);                 /* 페이지시작번호 */
 
 // footnote
-    hwpf.Read2b(&beginfnnum,1);                   // 각주 시작번호
-    hwpf.Read2b(&countfn,1);                      // 각주 갯수
+    hwpf.Read2b(&beginfnnum,1);                   /* 각주 시작번호 */
+    hwpf.Read2b(&countfn,1);                      /* 각주 갯수 */
     splinetext = (short) hwpf.Read2b();
     splinefn = (short) hwpf.Read2b();
     spfnfn = (short) hwpf.Read2b();
@@ -158,7 +158,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
     if (hwpf.State())
         return false;
 
-// 문서 요약을 읽는다.
+/* 문서 요약을 읽는다. */
     if (!summary.Read(hwpf))
         return false;
     if (info_block_len > 0)
@@ -170,7 +170,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
             return false;
     }
 
-// hwpf의 값을 재설정 한다.
+/* hwpf의 값을 재설정 한다. */
     hwpf.compressed = compressed ? true : false;
     hwpf.encrypted = encrypted ? true : false;
     hwpf.info_block_len = info_block_len;

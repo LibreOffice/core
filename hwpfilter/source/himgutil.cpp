@@ -2,9 +2,9 @@
  *
  *  $RCSfile: himgutil.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:39:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ const char *GetPictureFilename(const char *picname)
     else if ((ptr = strrchr(fname, DIRSEP)) && access(ptr + 1, 0) != -1)
         return ptr + 1;
 
-// 소문자로
+/* 소문자로 */
     ptr = fname;
     while (*ptr)
     {
