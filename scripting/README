@@ -18,7 +18,7 @@ setenv APPLICAT to your $OFFICE_PROGRAM_PATH/applicat.rdb
 you need to set your LD_LIBRARY_PATH:
 setenv LD_LIBRARY_PATH `$OFFICE_PROGRAM_PATH/javaldx`:$LD_LIBRARY_PATH
 setenv CLASSPATH {full_path}/scripting/util/xerces.jar:{full_path}/unoil/unxsols3.pro/class/unoil.jar:
-$OFFICE_PROGRAM_PATH/classes/sandbox.jar:$OFFICE_PROGRAM_PATH/classes/jut.jar:$OFFICE_PROGRAM_PATH/classes/java_uno.jar:
+$OFFICE_PROGRAM_PATH/classes/jut.jar:$OFFICE_PROGRAM_PATH/classes/java_uno.jar:
 $OFFICE_PROGRAM_PATH/classes/ridl.jar:$OFFICE_PROGRAM_PATH/classes/jurt.jar:$OFFICE_PROGRAM_PATH/classes/juh.jar
 
 then you can start to build.
