@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:32:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 
 //------------------------------------------------------------------------
 
+#include "excrecds.hxx"
+
 #include <map>
 
 #ifndef INCLUDED_SVX_COUNTRYID_HXX
@@ -126,13 +128,10 @@
 #include "editutil.hxx"
 #include "errorcodes.hxx"
 
-#include "excrecds.hxx"
 #include "excdoc.hxx"
-#include "root.hxx"
-#include "excupn.hxx"
 
-#ifndef SC_XLFORMULA_HXX
-#include "xlformula.hxx"
+#ifndef SC_XEFORMULA_HXX
+#include "xeformula.hxx"
 #endif
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
@@ -532,8 +531,7 @@ void XclExpCountry::WriteBody( XclExpStream& rStrm )
 //---------------------------------------------------- class ExcNameListEntry -
 
 ExcNameListEntry::ExcNameListEntry() :
-    pData( NULL ),
-    nFormLen( 0 ),
+    mxTokArr( new XclExpTokenArray ),
     nTabNum( 0 ),
     nBuiltInKey( EXC_BUILTIN_UNKNOWN ),
     bDummy( FALSE )
@@ -542,8 +540,7 @@ ExcNameListEntry::ExcNameListEntry() :
 
 
 ExcNameListEntry::ExcNameListEntry( RootData& rRootData, SCTAB nScTab, UINT8 nKey ) :
-    pData( NULL ),
-    nFormLen( 0 ),
+    mxTokArr( new XclExpTokenArray ),
     nTabNum( rRootData.pER->GetTabInfo().GetXclTab( nScTab ) + 1 ),
     nBuiltInKey( nKey ),
     bDummy( FALSE )
@@ -553,30 +550,8 @@ ExcNameListEntry::ExcNameListEntry( RootData& rRootData, SCTAB nScTab, UINT8 nKe
 
 ExcNameListEntry::~ExcNameListEntry()
 {
-    DeleteData();
 }
 
-
-void ExcNameListEntry::DeleteData()
-{
-    if( pData )
-        delete[] pData;
-    pData = NULL;
-    nFormLen = 0;
-}
-
-
-void ExcNameListEntry::SetCode( const ExcUPN& rUPN )
-{
-    DeleteData();
-
-    nFormLen = rUPN.GetLen();
-    if( nFormLen )
-    {
-        pData = new UINT8[ nFormLen ];
-        memcpy( pData, rUPN.GetData(), nFormLen );
-    }
-}
 
 void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
 {
@@ -585,7 +560,7 @@ void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
         rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
             << (UINT8)  0x00                // chKey (keyboard shortcut)
             << (UINT8)  0x01                // cch (string len)
-            << nFormLen                     // cce (formula len)
+            << mxTokArr->GetSize()          // cce (formula len)
             << nTabNum                      // set ixals = itab
             << nTabNum                      // itab (table index, 1-based)
             << (UINT32) 0x00000000          // cch
@@ -596,14 +571,14 @@ void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
         rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
             << (UINT8)  0x00                // chKey (keyboard shortcut)
             << (UINT8)  0x01                // cch (string len)
-            << nFormLen                     // cce (formula len)
+            << mxTokArr->GetSize()          // cce (formula len)
             << (UINT16) 0x0000              // ixals
             << nTabNum                      // itab (table index, 1-based)
             << (UINT32) 0x00000000          // cch
             << (UINT8)  0x00                // string grbit
             << nBuiltInKey;                 // string
     }
-    rStrm.Write( pData, nFormLen );
+    mxTokArr->WriteArray( rStrm );
 }
 
 
@@ -615,7 +590,7 @@ UINT16 ExcNameListEntry::GetNum() const
 
 ULONG ExcNameListEntry::GetLen() const
 {
-    return 16 + nFormLen;
+    return 16 + mxTokArr->GetSize();
 }
 
 const String& ExcNameListEntry::GetName() const
@@ -636,24 +611,8 @@ void ExcName::Init( BOOL bHid, BOOL bBIn, BOOL bBMacro )
 
 
 void ExcName::BuildFormula( const ScRange& rRange )
-{   // build formula from range
-    ScTokenArray        aArr;
-
-    if( rRange.aStart == rRange.aEnd )
-    {
-        SingleRefData   aRef;
-        aRef.InitAddress( rRange.aStart );
-        aArr.AddSingleReference( aRef );
-    }
-    else
-    {
-        ComplRefData    aRef;
-        aRef.InitRange( rRange );
-        aArr.AddDoubleReference( aRef );
-    }
-
-    EC_Codetype         eDummy;
-    SetCode( ExcUPN( pExcRoot, aArr, eDummy ) );
+{
+    mxTokArr = pExcRoot->pER->GetFormulaCompiler().CreateRangeRefFormula( rRange, true );
 }
 
 
@@ -673,10 +632,7 @@ ExcName::ExcName( RootData& rRootData, ScRangeData* pRange ) :
     SetName( aRangeName );
     const ScTokenArray* pTokArray = pRange->GetCode();
     if( pTokArray && pTokArray->GetLen() )
-    {
-        EC_Codetype eDummy;
-        SetCode( ExcUPN( pExcRoot, *pTokArray, eDummy ) );
-    }
+        mxTokArr = pExcRoot->pER->GetFormulaCompiler().CreateNameFormula( *pTokArray );
 }
 
 
@@ -789,13 +745,13 @@ void ExcName::SaveCont( XclExpStream& rStrm )
 {
     UINT8   nNameLen = (UINT8) Min( aName.Len(), (xub_StrLen)255 );
     UINT16  nGrbit = (bHidden ? EXC_NAME_HIDDEN : 0) | (bBuiltIn ? EXC_NAME_BUILTIN : 0);
-    if( !nFormLen || bMacro )
+    if( mxTokArr->Empty() || bMacro )
         nGrbit |= EXC_NAME_FUNC | EXC_NAME_VB | EXC_NAME_PROC;
 
     rStrm   << nGrbit                   // grbit
             << (BYTE) 0x00              // chKey
             << nNameLen                 // cch
-            << nFormLen                 // cce
+            << mxTokArr->GetSize()      // cce
             << (UINT16) 0x0000          // ixals
             << nTabNum                  // itab
             << (UINT32) 0x00000000;     // cch...
@@ -809,13 +765,13 @@ void ExcName::SaveCont( XclExpStream& rStrm )
         aUni.WriteBuffer( rStrm );
     }
 
-    rStrm.Write( pData, nFormLen );
+    mxTokArr->WriteArray( rStrm );
 }
 
 
 ULONG ExcName::GetLen() const
 {   // only a guess for Biff8 (8bit/16bit unknown)
-    return 14 + nFormLen + (eBiff < Biff8 ? 0 : 1) + Min( aName.Len(), (xub_StrLen)255 );
+    return 14 + mxTokArr->GetSize() + (eBiff < Biff8 ? 0 : 1) + Min( aName.Len(), (xub_StrLen)255 );
 }
 
 
@@ -830,14 +786,8 @@ XclBuildInName::XclBuildInName( RootData& rRootData, SCTAB nScTab, UINT8 nKey ) 
 
 void XclBuildInName::CreateFormula( RootData& rRootData )
 {
-    if( aRL.Count() )
-    {
-        ExcUPN* pUPN = CreateExcUpnFromScRangeList( rRootData, aRL );
-        SetCode( *pUPN );
-        delete pUPN;
-    }
-    else
-        bDummy = TRUE;
+    mxTokArr = rRootData.pER->GetFormulaCompiler().CreateRangeListFormula( aRL, true );
+    bDummy = !mxTokArr;
 }
 
 
@@ -920,8 +870,8 @@ ExcNameList::ExcNameList( RootData& rRootData ) :
         ScRangeData* pData = (*pRangeNames)[ nIndex ];
         DBG_ASSERT( pData, "ExcNameList::ExcNameList - missing range name" );
 
-        if ( !rRootData.bBreakSharedFormula || !pData->HasType( RT_SHARED ) )
-        {   // no SHARED_FORMULA_... names if not needed
+        if ( !pData->HasType( RT_SHARED ) )
+        {
             ExcName* pExcName = new ExcName( rRootData, pData );
             if( pExcName->IsDummy() )
             {
