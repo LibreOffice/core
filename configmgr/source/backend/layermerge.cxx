@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:31:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,8 @@ node::Attributes LayerMergeHandler::makePropertyAttributes(sal_Int16 aSchemaAttr
     if (aSchemaAttributes & SchemaAttribute::REQUIRED)
         aAttributes.setNullable (false);
 
-    //Set removable and mandatory attribute flags
+    //Set state, removable and mandatory attribute flags
+    aAttributes.setState(node::isAdded);
     aAttributes.setRemovability(true,true);
 
 
@@ -566,8 +567,6 @@ bool LayerMergeHandler::startOverride(INode * pNode, sal_Bool bClear) /* ensure 
             OSL_ASSERT(m_aLocale.getLength() != 0);
     }
 
-    if (pNode->isDefault()) pNode->modifyState( node::isMerged );
-
     OSL_ENSURE(!bClear,"'clear' operation is not yet supported");
     if (bClear)
         m_aContext.getLogger().warning("'clear' operation is not yet supported",
@@ -752,7 +751,7 @@ void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const Templ
     //Set removable flag
     apNewInstance->markRemovable();
 
-
+    m_aContext.markCurrentMerged();
 
     if (pReplacedNode) m_aContext.getCurrentParent().removeChild( aName );
 
@@ -832,6 +831,7 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
         }
         // m_aContext.raiseNoSuchElementException("Layer merging: The node to be removed does not exist.",aName);
     }
+    m_aContext.markCurrentMerged();
     m_aContext.getCurrentParent().removeChild(aName);
 }
 // -----------------------------------------------------------------------------
@@ -907,6 +907,7 @@ void SAL_CALL LayerMergeHandler::addProperty( const OUString& aName, sal_Int16 a
     applyAttributes(aPropertyValue.get(),aAttributes & NodeAttribute::MASK);
 
     // can be a replace for dynamic properties (current update limitation)
+    m_aContext.markCurrentMerged();
     m_aContext.addPropertyToCurrent(aPropertyValue, true);
 }
 // -----------------------------------------------------------------------------
@@ -925,6 +926,7 @@ void SAL_CALL LayerMergeHandler::addPropertyWithValue( const OUString& aName, sa
     applyAttributes(aPropertyValue.get(),aAttributes & NodeAttribute::MASK);
 
     // can be a replace for dynamic properties (current update limitation)
+    m_aContext.markCurrentMerged();
     m_aContext.addPropertyToCurrent(aPropertyValue, true);
 }
 // -----------------------------------------------------------------------------
@@ -938,6 +940,10 @@ void SAL_CALL LayerMergeHandler::setPropertyValue( const uno::Any& aValue )
     if (!m_pProperty)
         m_aContext.raiseMalformedDataException("Layer merging: Invalid data: Overriding a value without a property.");
 
+    OSL_ASSERT( !m_pProperty->getAttributes().isReplacedForUser() );
+    m_pProperty->modifyState( node::isMerged );
+    m_aContext.markCurrentMerged();
+
     applyPropertyValue(aValue);
 }
 // -----------------------------------------------------------------------------
@@ -950,6 +956,10 @@ void SAL_CALL LayerMergeHandler::setPropertyValueForLocale( const uno::Any& aVal
 
     if (!m_pProperty)
         m_aContext.raiseMalformedDataException("Layer merging: Invalid data: Overriding a (localized) value without a property.");
+
+    OSL_ASSERT( !m_pProperty->getAttributes().isReplacedForUser() );
+    m_pProperty->modifyState( node::isMerged );
+    m_aContext.markCurrentMerged();
 
     applyPropertyValue(aValue,aLocale);
 }
