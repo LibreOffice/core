@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change:$Date: 2004-07-23 10:42:42 $
+ *  last change:$Date: 2004-07-23 13:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 package helper;
 
+import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
@@ -280,12 +281,7 @@ public class OfficeProvider implements AppProvider {
         XMultiComponentFactory xLocalServiceManager = xcomponentcontext.getServiceManager();
 
         // create a connector, so that it can contact the office
-        Object xUrlResolver = xLocalServiceManager.createInstanceWithContext(
-        "com.sun.star.bridge.UnoUrlResolver",
-        xcomponentcontext);
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-        XUnoUrlResolver.class,
-        xUrlResolver);
+        XUnoUrlResolver urlResolver = UnoUrlResolver.create(xcomponentcontext);
 
         Object rInitialObject = urlResolver.resolve(connectStr);
 
