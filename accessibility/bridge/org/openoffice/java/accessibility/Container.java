@@ -248,6 +248,9 @@ public class Container extends java.awt.Container implements javax.accessibility
                     break;
                 case AccessibleStateType.ENABLED:
                     setEnabled(enable);
+                    // Since we can't access awt.Componet.accessibleContext, we need to fire
+                    // this event manually ..
+                    fireStatePropertyChange(AccessibleState.ENABLED, enable);
                     break;
                 case AccessibleStateType.FOCUSED:
                     getEventQueue().postEvent(new java.awt.event.FocusEvent(
@@ -487,6 +490,12 @@ public class Container extends java.awt.Container implements javax.accessibility
                     }
                     if (unoAS.contains(AccessibleStateType.MULTI_SELECTABLE)) {
                         states.add(AccessibleState.MULTISELECTABLE);
+                    }
+                    if (unoAS.contains(AccessibleStateType.HORIZONTAL)) {
+                        states.add(AccessibleState.HORIZONTAL);
+                    }
+                    if (unoAS.contains(AccessibleStateType.VERTICAL)) {
+                        states.add(AccessibleState.VERTICAL);
                     }
                 }
             } catch (com.sun.star.uno.RuntimeException e) {
