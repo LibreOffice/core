@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:32:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,8 +213,8 @@ void OJoinController::disposing()
 {
     OJoinController_BASE::disposing();
 
-    m_pView         = NULL;
     m_pAddTabDlg    = NULL;
+    m_pView         = NULL;
 
     {
         ::std::vector< OTableConnectionData*>::iterator aIter = m_vTableConnectionData.begin();
