@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:31:52 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 12:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
 BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
                             BYTE nMemberId  )
 {
-    BOOL bRet;
+    BOOL bRet = TRUE;
     switch( nMemberId )
     {
         case MID_RUBY_TEXT:
