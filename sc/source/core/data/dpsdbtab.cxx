@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:26:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ BOOL ScDatabaseDPData::GetNextRow( const ScDPTableIteratorParam& rParam )
         pImpl->bAtStart = FALSE;
         if ( xRow.is() && xRowSet->next() )
         {
-            long i;
+            SCSIZE i;
 
             for (i=0; i<rParam.nColCount; i++)
             {
