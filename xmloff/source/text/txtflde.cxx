@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-30 11:48:11 $
+ *  last change: $Author: dvo $ $Date: 2002-01-11 16:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1299,14 +1299,16 @@ void XMLTextFieldExport::ExportFieldHelper(
             ProcessDateTime(XML_DATE_VALUE,
                             GetDateTimeProperty(sPropertyDateTimeValue,
                                                 rPropSet),
-                            sal_True);
+                            // #96457#: date fields should also save time
+                            sal_False);
         }
         // TODO: remove double-handling after SRC614
         else if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
         {
             ProcessDateTime(XML_DATE_VALUE,
                             GetDateTimeProperty(sPropertyDateTime,rPropSet),
-                            sal_True );
+                            // #96457#: date fields should also save time
+                            sal_False);
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {

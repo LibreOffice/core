@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:12 $
+ *  last change: $Author: dvo $ $Date: 2002-01-11 16:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1468,7 +1468,8 @@ void XMLDateFieldImportContext::ProcessAttribute(
             if (GetImport().GetMM100UnitConverter().
                 convertDateTime(fTmp, sAttrValue))
             {
-                fTimeValue = SolarMath::ApproxFloor(fTmp);
+                // #96457#: don't truncate in order to read date+time
+                fTimeValue = fTmp;
                 bTimeOK = sal_True;
             }
 
