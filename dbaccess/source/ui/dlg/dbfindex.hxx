@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 01:59:15 $
+ *  last change: $Author: fs $ $Date: 2001-03-07 16:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,12 +179,12 @@ protected:
     void        SetCtrls();
     sal_Bool    GetTable(const String& rName, TableInfoListIterator& _rPosition);
 
-    OTableIndex implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay);
+    OTableIndex implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist);
     void        implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
 
-    OTableIndex RemoveFreeIndex( const String& _rName ) { return implRemoveIndex(_rName, m_aFreeIndexList, aLB_FreeIndexes); }
+    OTableIndex RemoveFreeIndex( const String& _rName, sal_Bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, aLB_FreeIndexes, _bMustExist); }
     void        InsertFreeIndex( const OTableIndex& _rIndex ) { implInsertIndex(_rIndex, m_aFreeIndexList, aLB_FreeIndexes); }
-    OTableIndex RemoveTableIndex( const String& _rTableName, const String& _rIndexName );
+    OTableIndex RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist );
     void        InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex );
 
 public:
@@ -201,6 +201,9 @@ public:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/23 01:59:15  svesik
+ *  Remove stl/ from #include statement
+ *
  *  Revision 1.2  2000/10/11 11:31:03  fs
  *  new implementations - still under construction
  *

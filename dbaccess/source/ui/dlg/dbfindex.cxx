@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-14 15:43:32 $
+ *  last change: $Author: fs $ $Date: 2001-03-07 16:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
+#ifndef _OSL_FILE_H_
+#include <osl/file.h>
+#endif
+
 //.........................................................................
 namespace dbaui
 {
@@ -102,7 +106,7 @@ namespace dbaui
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
-const ByteString aGroupIdent("dbase III");
+const ByteString aGroupIdent("dBase III");
 
 //////////////////////////////////////////////////////////////////////////
 // Klasse ODbaseIndexDialog
@@ -131,6 +135,7 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     aPB_RemoveAll.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveAllClickHdl) );
     aPB_OK.SetClickHdl( LINK(this, ODbaseIndexDialog, OKClickHdl) );
 
+    aCB_Tables.SetDropDownLineCount(8);
     Init();
     SetCtrls();
     FreeResource();
@@ -161,7 +166,7 @@ sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator
     return sal_False;
 }
 
-OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay)
+OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist)
 {
     OTableIndex aReturn;
 
@@ -188,7 +193,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
         }
     }
 
-    DBG_ASSERT(aSearch != _rList.end(), "ODbaseIndexDialog::RemoveFreeIndex : did not find the index!");
+    DBG_ASSERT(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
     return aReturn;
 }
 
@@ -199,7 +204,7 @@ void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexLi
     _rDisplay.SelectEntryPos(0);
 }
 
-OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, const String& _rIndexName )
+OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist )
 {
     OTableIndex aReturn;
 
@@ -208,10 +213,10 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, cons
     if (!GetTable(_rTableName, aTablePos))
         return aReturn;
 
-    return implRemoveIndex(_rIndexName, aTablePos->aIndexList, aLB_TableIndexes);
+    return implRemoveIndex(_rIndexName, aTablePos->aIndexList, aLB_TableIndexes, _bMustExist);
 }
 
-void ODbaseIndexDialog::InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex )
+void ODbaseIndexDialog::InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex)
 {
     TableInfoListIterator aTablePos;
     if (!GetTable(_rTableName, aTablePos))
@@ -238,7 +243,7 @@ IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, pButton )
 {
     String aSelection = aLB_FreeIndexes.GetSelectEntry();
     String aTableName = aCB_Tables.GetText();
-    OTableIndex aIndex = RemoveFreeIndex( aSelection );
+    OTableIndex aIndex = RemoveFreeIndex( aSelection, sal_True );
     InsertTableIndex( aTableName, aIndex );
     return 0;
 }
@@ -247,7 +252,7 @@ IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, pButton )
 {
     String aSelection = aLB_TableIndexes.GetSelectEntry();
     String aTableName = aCB_Tables.GetText();
-    OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection );
+    OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection, sal_True );
     InsertFreeIndex( aIndex );
 
     return 0;
@@ -260,7 +265,7 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, pButton )
     String aEntry;
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
-        InsertTableIndex( aTableName, RemoveFreeIndex( aLB_FreeIndexes.GetEntry(0) ) );
+        InsertTableIndex( aTableName, RemoveFreeIndex( aLB_FreeIndexes.GetEntry(0), sal_True ) );
 
     return 0;
 }
@@ -272,7 +277,7 @@ IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, pButton )
     String aEntry;
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
-        InsertFreeIndex( RemoveTableIndex( aTableName, aLB_TableIndexes.GetEntry(0) ) );
+        InsertFreeIndex( RemoveTableIndex( aTableName, aLB_TableIndexes.GetEntry(0), sal_True ) );
 
     return 0;
 }
@@ -361,7 +366,7 @@ void ODbaseIndexDialog::Init()
 
             // open the INF file
             aURL.setExtension(String::CreateFromAscii("inf"));
-            Config aInfFile( aURL.GetURLNoPass() );
+            Config aInfFile( aURL.getFSysPath(INetURLObject::FSYS_DETECT) );
             aInfFile.SetGroup( aGroupIdent );
 
             ///////////////////////////////////////////////////////////////////////////
@@ -384,7 +389,7 @@ void ODbaseIndexDialog::Init()
                     rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
 
                     // and remove it from the free index list
-                    RemoveFreeIndex( aEntry );
+                    RemoveFreeIndex( aEntry, sal_False );
                 }
 
             }
@@ -526,6 +531,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/14 15:43:32  oj
+ *  use ucb instead of DirEntry
+ *
  *  Revision 1.2  2000/11/09 12:55:31  fs
  *  no usage of the SfxIniManager anymore - MUST change
  *
