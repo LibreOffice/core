@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:48:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2700,7 +2700,7 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 }
 
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible>
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>
     SwPagePreViewWin::CreateAccessible()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
