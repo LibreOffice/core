@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:25:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ japanese ] = "η·¨ι›†(~E)...";
         Text[ chinese_traditional ] = "η·¨θΌ―(~E)...";
         Text[ arabic ] = "ΚΝΡνΡ...";
-        Text[ greek ] = "~Επεξεργασία...";
+        Text[ greek ] = "Επε~ξεργασία...";
         Text[ korean ] = "νΈμ§‘(~E)...";
         Text[ turkish ] = "Dόzenle...";
         Text[ language_user1 ] = " ";
@@ -224,7 +224,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ japanese ] = "ζ¨™ζΊ–(~D)";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
-        Text[ greek ] = "Προεπιλογή";
+        Text[ greek ] = "Προεπι~λογή";
         Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
@@ -259,7 +259,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ japanese ] = "ζ¨™ζΊ–";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–";
         Text[ arabic ] = "ΗέΚΡΗΦν";
-        Text[ greek ] = "Προεπιλογή";
+        Text[ greek ] = "Π~ροεπιλογή";
         Text[ korean ] = "κΈ°λ³Έκ°’";
         Text[ turkish ] = "Φntanύmlύ";
         Text[ language_user1 ] = " ";
@@ -327,6 +327,7 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message[ slovak ] = "KonfiguraΔnΓ½ a poΕ΅tovΓ½ adresΓ΅r musia byΕ¥ urΔenΓ© ako rozdielne adresΓ΅re.\nProsΓ­m zadajte novΓΊ cestu.";
 };
  // ******************************************************************* EOF
+
 
 
 
