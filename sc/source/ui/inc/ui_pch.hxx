@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-30 16:06:03 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 15:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,6 @@
 #include <shellids.hxx>
 #include <vcl/event.hxx>
 #include <so3/advise.hxx>
-#include <so3/dtrans.hxx>
 #include <so3/protocol.hxx>
 #include <svtools/intitem.hxx>
 #include <so3/ipclient.hxx>

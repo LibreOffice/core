@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-30 15:53:27 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 15:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,6 @@
 #include <vcl/mapmod.hxx>
 #include <progress.hxx>
 #include <sfx2/progress.hxx>
-#include <so3/dtrans.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
 #include <so3/advise.hxx>

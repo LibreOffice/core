@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:31:58 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 15:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <svx/outliner.hxx>
 #include <svx/spltitem.hxx>
 #include <svx/widwitem.hxx>
-#include <so3/dtrans.hxx>
 #include <so3/pastedlg.hxx>
 #include <sot/exchange.hxx>
 #include <vcl/msgbox.hxx>
