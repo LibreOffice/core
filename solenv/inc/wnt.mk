@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2000-10-30 06:00:05 $
+#   last change: $Author: hjs $ $Date: 2000-11-03 12:50:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -384,7 +384,11 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-GX
 CFLAGS_NO_EXCEPTIONS=
 
+.IF "$(CALL_CDECL)"=="TRUE"
+CFLAGSCALL=-Gd
+.ELSE			# "$(CALL_CDECL)"=="TRUE"
 CFLAGSCALL=-Gz
+.ENDIF			# "$(CALL_CDECL)"=="TRUE"
 
 CFLAGSCC=
 .IF "$(DYNAMIC_CRT)"!=""
@@ -438,6 +442,10 @@ CFLAGSDEBUG=
 .ENDIF			# "$(syntax)"!=""
 .IF "$(COMEX)"=="3"
 CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=321 -D__STL_USE_ABBREVS -D_USE_NAMESPACE=1
+CDEFS+=-D_MT
+.ENDIF
+.IF "$(COMEX)"=="7"
+CDEFS+=-D__STL_NO_NEW_IOSTREAMS -D__STL_NO_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS -D_USE_NAMESPACE=1
 CDEFS+=-D_MT
 .ENDIF
 
