@@ -1,0 +1,18 @@
+#/bin/tcsh
+
+setenv MYBOOTSTRAPTESTVALUE 0
+echo 1
+./testbootstrap 1 -env:MYBOOTSTRAPTESTVALUE=1
+echo 2
+./testbootstrap file
+echo 3
+./testbootstrap 0 -env:INIFILENAME=
+
+unsetenv MYBOOTSTRAPTESTVALUE
+echo 4
+./testbootstrap default -env:INIFILENAME=
+
+echo 5
+./testbootstrap default -env:MYBOOTSTRAPTESTVALUE2=1 -env:INIFILENAME=
+
+echo bootstrap test finished
