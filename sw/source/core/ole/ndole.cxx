@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:10:20 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #endif
@@ -466,7 +469,18 @@ Size SwOLENode::GetTwipSize() const
     uno::Reference < embed::XEmbeddedObject > xObj = ((SwOLENode*)this)->aOLEObj.GetOleRef();
 
     // TODO/LEAN: getMapUnit may switch object to running state
-    awt::Size aSize = xObj->getVisualAreaSize( nViewAspect );
+    awt::Size aSize;
+    try
+    {
+        aSize = xObj->getVisualAreaSize( nViewAspect );
+    }
+    catch( embed::NoVisualAreaSizeException& )
+    {
+        DBG_ASSERT( sal_False, "Can't get visual area size!" );
+        aSize.Width = 5000;
+        aSize.Height = 5000;
+    }
+
     Size aSz( aSize.Width, aSize.Height );
     const MapMode aDest( MAP_TWIP );
     const MapMode aSrc ( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) ) );
