@@ -248,7 +248,9 @@ public class AccessibilityTreeModel
         }
         catch (Exception e)
         {
-            System.out.println ("caught exception while removing child " + aNode + " : " + e);
+            System.out.println ("caught exception while removing child "
+                + aNode + " : " + e);
+            e.printStackTrace ();
             return false;
         }
         return true;
@@ -268,7 +270,9 @@ public class AccessibilityTreeModel
         }
         catch (Exception e)
         {
-            System.out.println ("caught exception while removing node " + aNode + " : " + e);
+            System.out.println ("caught exception while removing node "
+                + aNode + " : " + e);
+            e.printStackTrace();
         }
     }
 
@@ -294,8 +298,9 @@ public class AccessibilityTreeModel
         }
         catch (Exception e)
         {
-            System.out.println ("caught exception while adding child " + xNewChild
-                + " to parent " + aParentNode + ": " + e);
+            System.out.println ("caught exception while adding child "
+                + xNewChild + " to parent " + aParentNode + ": " + e);
+            e.printStackTrace ();
         }
         return aChildNode;
     }
@@ -326,7 +331,9 @@ public class AccessibilityTreeModel
         }
         catch (Exception e)
         {
-            System.out.println ("caught exception while adding node " + aNode + ": " + e);
+            System.out.println ("caught exception while adding node "
+                + aNode + ": " + e);
+            e.printStackTrace ();
         }
         return bRet;
     }
@@ -591,20 +598,9 @@ public class AccessibilityTreeModel
             sDisplay = xContext.getAccessibleName();
             if (sDisplay.length()==0)
             {
-                sDisplay = "<no name>";
-                // Try to determine some usefull name that indicates the
-                // function of the object in question.
-                XServiceName xSN = (XServiceName) UnoRuntime.queryInterface (
-                    XServiceName.class, xAccessible);
-                if (xSN != null)
-                    sDisplay = xSN.getServiceName ();
-                else
-                {
-                    XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
-                    XServiceInfo.class, xAccessible);
-                    if (xSI != null)
-                        sDisplay = xSI.getImplementationName ();
-                }
+                sDisplay = "<no name> Role: "
+                    + AccessibleContextHandler.GetRoleName (
+                        xContext.getAccessibleRole());
             }
         }
         else
@@ -907,6 +903,7 @@ public class AccessibilityTreeModel
                         {
                             System.out.println(
                                 "Exception during event delivery: " + e );
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -923,6 +920,7 @@ public class AccessibilityTreeModel
                 {
                     // can't wait? odd!
                     System.err.println("Can't wait!");
+                    e.printStackTrace();
                 }
             }
         }
