@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:26 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace configmgr
     }
 
     // -----------------------------------------------------------------------------
-    void FileHelper::removeFile(const rtl::OUString& _aURL) throw (io::IOException)
+    void FileHelper::removeFile(const rtl::OUString& _aURL) CFG_THROW1 (io::IOException)
     {
         FileBase::RC eError = File::remove(_aURL);
         if (eError != osl_File_E_None &&
@@ -111,7 +111,7 @@ namespace configmgr
 
     // -----------------------------------------------------------------------------
     void FileHelper::replaceFile(
-        const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) throw (io::IOException)
+        const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) CFG_THROW1 (io::IOException)
     {
         FileHelper::removeFile(_aToURL);
         FileBase::RC eError = File::move(_aFromURL, _aToURL);
@@ -137,7 +137,7 @@ namespace configmgr
     }
 
     // -----------------------------------------------------------------------------
-    TimeValue FileHelper::getModifyTime(rtl::OUString const& _sURL) throw (io::IOException)
+    TimeValue FileHelper::getModifyTime(rtl::OUString const& _sURL)
     {
         TimeValue aTime = {0,0};
         DirectoryItem aItem;
