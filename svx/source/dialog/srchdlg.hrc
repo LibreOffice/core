@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-04 11:11:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,59 +63,60 @@
 
 // defines ------------------------------------------------------------------
 
-#define FT_SEARCH       10
-#define ED_SEARCH       11
-#define LB_SEARCH       12
-#define FL_SEARCH_VERT          13
-#define FT_SEARCH_ATTR          14
-#define FT_REPLACE      15
-#define ED_REPLACE      16
-#define LB_REPLACE      17
-#define FL_SEARCHDIR_VERT       18
-#define FT_REPLACE_ATTR         19
+#define FT_SEARCH                       10
+#define ED_SEARCH                       11
+#define LB_SEARCH                       12
+#define FT_SEARCH_ATTR                  13
+#define FT_SEARCH_FORMATS               14
+#define FT_REPLACE                      15
+#define ED_REPLACE                      16
+#define LB_REPLACE                      17
+#define FT_REPLACE_ATTR                 18
+#define FT_REPLACE_FORMATS              19
 
-#define BTN_CELLS       20
-#define BTN_LAYOUTS     21
-#define BTN_SELECTIONS          22
-#define CB_MATCH_CASE           23
-#define BTN_REGEXP      24
-#define BTN_BACKWARDS           25
-#define FL_OPTIONS              26
+#define BTN_SEARCH                      20
+#define BTN_SEARCH_ALL                  21
+#define FL_SEARCH_COMMAND               22
+#define BTN_REPLACE                     23
+#define BTN_REPLACE_ALL                 24
 
-#define BTN_FORMULAS            30
-#define BTN_VALUES      31
-#define BTN_NOTES       32
-#define FL_SEARCH               33
-#define BTN_ROWS        34
-#define BTN_COLUMNS     35
-#define FL_SEARCHDIR            36
-#define CB_ALLTABLES            37
-#define FL_CALCEXTRAS           38
+#define CB_MATCH_CASE                   25
+#define CB_WHOLE_WORDS                  26
 
-#define BTN_SEARCH      40
-#define BTN_SEARCH_ALL          41
-#define BTN_REPLACE     42
-#define BTN_REPLACE_ALL         43
-#define BTN_CLOSE       44
-#define BTN_HELP        45
-#define BTN_MORE        46
-#define STR_WORDCALC            47
-#define BTN_FORMAT      48
-#define BTN_NOFORMAT            49
-#define BTN_ATTRIBUTE           50
+#define FL_BUTTONS                      30
+#define BTN_MORE                        31
+#define BTN_HELP                        32
+#define BTN_CLOSE                       33
 
-#define CB_SIMILARITY           51
-#define PB_SIMILARITY           52
+#define FL_OPTIONS                      40
+#define CB_SELECTIONS                   41
+#define CB_BACKWARDS                    42
+#define CB_REGEXP                       43
+#define CB_SIMILARITY                   44
+#define PB_SIMILARITY                   45
+#define CB_LAYOUTS                      46
+#define CB_JAP_MATCH_FULL_HALF_WIDTH    47
+#define CB_JAP_SOUNDS_LIKE              48
+#define PB_JAP_OPTIONS                  49
 
-#define CB_JAP_MATCH_FULL_HALF_WIDTH    55
-#define CB_JAP_SOUNDS_LIKE      56
-#define PB_JAP_OPTIONS          57
+#define BTN_ATTRIBUTE                   50
+#define BTN_FORMAT                      51
+#define BTN_NOFORMAT                    52
 
-#define ED_SEARCH_FORMATS   60
-#define ED_REPLACE_FORMATS  61
-#define FT_SEARCH_FORMATS   62
-#define FT_REPLACE_FORMATS  63
+#define FL_CALC                         53
+#define FT_CALC_SEARCHIN                54
+#define LB_CALC_SEARCHIN                55
+#define FT_CALC_SEARCHDIR               56
+#define RB_CALC_ROWS                    57
+#define RB_CALC_COLUMNS                 58
+#define CB_ALL_SHEETS                   59
 
+#define IMG_MOREBTN_DOWN                100
+#define IMG_MOREBTN_UP                  101
 
-#endif
+#define STR_WORDCALC                    100
+#define STR_MORE_BTN                    101
+#define STR_LESS_BTN                    102
+
+#endif // #ifndef _SVX_SRCHDLG_HRC
 
