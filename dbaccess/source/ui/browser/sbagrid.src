@@ -1,0 +1,290 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sbagrid.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2000-10-26 14:42:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#include <svx/globlmn.hrc>
+
+Menu RID_SBA_GRID_COLCTXMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_BROWSER_COLATTRSET ;
+            HelpID = ID_BROWSER_COLATTRSET ;
+            Text = "Spalten~formatierung..." ;
+            Text [ ENGLISH ] = "Column ~format..." ;
+            Text [ norwegian ] = "Kolonne format..." ;
+            Text [ italian ] = "Formattazione ~colonna..." ;
+            Text [ portuguese_brazilian ] = "Formatar coluna..." ;
+            Text [ portuguese ] = "~Formatar colunas..." ;
+            Text [ finnish ] = "Sarakkeen muoto..." ;
+            Text [ danish ] = "Kolonneformatering..." ;
+            Text [ french ] = "Formatage de colonne..." ;
+            Text [ swedish ] = "Kolumnformatering..." ;
+            Text [ dutch ] = "~Kolomopmaak..." ;
+            Text [ spanish ] = "Formateado de ~columnas..." ;
+            Text [ english_us ] = "Column Format..." ;
+            Text[ chinese_simplified ] = "ÁĞ¸ñÊ½...";
+            Text[ russian ] = "Ôîğìàò êîëîíîê...";
+            Text[ polish ] = "Formatowanie kolumn...";
+            Text[ japanese ] = "—ñ‚Ì‘®...";
+            Text[ chinese_traditional ] = "Äæ®æ¦¡...";
+            Text[ arabic ] = "ÊäÓíŞ ÇáÃÚãÏÉ...";
+            Text[ greek ] = "Ìïñ~öïğïßçóç óôŞëçò...";
+            Text[ korean ] = "¿­ ¼­½Ä...";
+            Text[ turkish ] = "Sütun formatı...";
+        };
+        MenuItem
+        {
+            Identifier = ID_BROWSER_COLWIDTH ;
+            HelpID = ID_BROWSER_COLWIDTH ;
+            Text = "Spalten~breite..." ;
+            Text [ ENGLISH ] = "Column ~width..." ;
+            Text [ finnish ] = "Sarakkeen leveyden..." ;
+            Text [ danish ] = "Kolonnebredde..." ;
+            Text [ french ] = "Largeur de colonne..." ;
+            Text [ swedish ] = "Kolumnbredd..." ;
+            Text [ dutch ] = "K~olombreedte..." ;
+            Text [ spanish ] = "Anc~ho de columna..." ;
+            Text [ english_us ] = "Column Width..." ;
+            Text [ italian ] = "~Larghezza colonna..." ;
+            Text [ portuguese_brazilian ] = "Spaltenbreite..." ;
+            Text [ portuguese ] = "~Largura de coluna..." ;
+            Text[ chinese_simplified ] = "ÁĞ¿í...";
+            Text[ russian ] = "Øèğèíà êîëîíîê...";
+            Text[ polish ] = "Szerokoœæ kolumn...";
+            Text[ japanese ] = "—ñ•...";
+            Text[ chinese_traditional ] = "Äæ¼e...";
+            Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
+            Text[ greek ] = "~ĞëÜôïò óôŞëçò...";
+            Text[ korean ] = "¿­ ³Êºñ...";
+            Text[ turkish ] = "Sütun genişliği...";
+        };
+    };
+};
+
+Menu RID_SBA_GRID_ROWCTXMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_BROWSER_TABLEATTR ;
+            HelpID = ID_BROWSER_TABLEATTR ;
+            Text = "Tabellenformatierung..." ;
+            Text [ ENGLISH ] = "Table format..." ;
+            Text [ dutch ] = "Tabelopmaak..." ;
+            Text [ english_us ] = "Table Format..." ;
+            Text [ italian ] = "Formattazione tabella..." ;
+            Text [ spanish ] = "Formateado de tabla..." ;
+            Text [ french ] = "Formatage de table..." ;
+            Text [ swedish ] = "Tabellformatering..." ;
+            Text [ danish ] = "Tabelformatering..." ;
+            Text [ portuguese_brazilian ] = "Tabellenformatierung..." ;
+            Text [ portuguese ] = "Formatar tabelas..." ;
+            Text[ chinese_simplified ] = "±í¸ñ¸ñÊ½...";
+            Text[ russian ] = "Ôîğìàò òàáëèöû...";
+            Text[ polish ] = "Formatowanie tabeli...";
+            Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘®...";
+            Text[ chinese_traditional ] = "¤u§@ªí®æ¦¡...";
+            Text[ arabic ] = "ÊäÓíŞ ÇáÃÚãÏÉ...";
+            Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá...";
+            Text[ korean ] = "Å×ÀÌºí ¼­½Ä...";
+            Text[ turkish ] = "Tablo formatı...";
+        };
+        MenuItem
+        {
+            Identifier = ID_BROWSER_ROWHEIGHT ;
+            HelpID = ID_BROWSER_ROWHEIGHT ;
+            Text = "Zeilenhöhe..." ;
+            Text [ ENGLISH ] = "Row height..." ;
+            Text [ norwegian ] = "Radhøyde..." ;
+            Text [ italian ] = "Altezza riga..." ;
+            Text [ portuguese_brazilian ] = "Altura da fileira..." ;
+            Text [ portuguese ] = "Altura da linha..." ;
+            Text [ finnish ] = "Rivin korkeus..." ;
+            Text [ danish ] = "Rækkehøjde..." ;
+            Text [ french ] = "Hauteur de ligne..." ;
+            Text [ swedish ] = "Radhöjd..." ;
+            Text [ dutch ] = "Rijhoogte..." ;
+            Text [ spanish ] = "Altura de fila..." ;
+            Text [ english_us ] = "Row Height..." ;
+            Text[ chinese_simplified ] = "ĞĞ¸ß...";
+            Text[ russian ] = "Âûñîòà ñòğîê...";
+            Text[ polish ] = "Wysokoœæ wierszy...";
+            Text[ japanese ] = "s‚Ì‚‚³...";
+            Text[ chinese_traditional ] = "¦C°ª...";
+            Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİæİ...";
+            Text[ greek ] = "¾øïò ãñáììŞò...";
+            Text[ korean ] = "Çà ³ôÀÌ...";
+            Text[ turkish ] = "Satır yüksekliği...";
+        };
+    };
+};
+
+String RID_STR_UNDO_MODIFY_RECORD
+{
+    Text = "Rückgängig: Dateneingabe" ;
+    Text [ ENGLISH ] = "Undo: input data";
+    Text [ english_us ] = "Undo: Data input";
+    Text[ portuguese ] = "Anular: entrada de dados";
+    Text[ russian ] = "Îòìåíèòü: ââîä äàííûõ";
+    Text[ greek ] = "Áíáßñåóç: ÅéóáãùãŞ äåäïìİíùí";
+    Text[ dutch ] = "Ongedaan maken: gegevens invoeren";
+    Text[ french ] = "Annuler : saisie des données";
+    Text[ spanish ] = "Deshacer: Entrada de datos";
+    Text[ italian ] = "Annulla: Immissione dati";
+    Text[ danish ] = "Fortryd: Datainput";
+    Text[ swedish ] = "Ångra: Datainmatning";
+    Text[ polish ] = "Cofniêcie: Wpisywanie danych";
+    Text[ portuguese_brazilian ] = "Undo: input data";
+    Text[ japanese ] = "Œ³‚É–ß‚·: ÃŞ°À“ü—Í";
+    Text[ korean ] = "½ÇÇàÃë¼Ò: µ¥ÀÌÅÍ ÀÔ·Â";
+    Text[ chinese_simplified ] = "³·ÏúÃüÁî£ºÊäÈëÊı¾İ";
+    Text[ chinese_traditional ] = "´_­ì¡G¼ÆÕu¿é¤J";
+    Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
+    Text[ turkish ] = "Geri al: Veri girişi";
+};
+
+String RID_STR_SAVE_CURRENT_RECORD
+{
+    Text = "aktuellen Datensatz speichern" ;
+    Text [ ENGLISH ] = "aktuellen Datensatz speichern" ;
+    Text[ english_us ] = "Save current record";
+    Text[ portuguese ] = "Guardar registo de dados activo";
+    Text[ russian ] = "Ñîõğàíèòü òåêóùóş çàïèñü";
+    Text[ dutch ] = "actuele record opslaan";
+    Text[ french ] = "enregistrer l'enregistrement actif";
+    Text[ spanish ] = "guardar registro actual";
+    Text[ italian ] = "Salva record di dati attuale";
+    Text[ danish ] = "Gem aktuel datapost";
+    Text[ swedish ] = "spara aktuell datapost";
+    Text[ polish ] = "Zapisz bie¿¹cy rekord";
+    Text[ portuguese_brazilian ] = "aktuellen Datensatz speichern";
+    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚Ì•Û‘¶";
+    Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";
+    Text[ chinese_traditional ] = "«O¦s·í«eªº¸ê®Æ±ø¥Ø";
+    Text[ arabic ] = "ÍİÙ ÇáÓÌá ÇáÍÇáí";
+    Text[ dutch ] = "actuele record opslaan";
+    Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";
+    Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò äåäïìİíùí";
+    Text[ korean ] = "ÇöÀç ·¹ÄÚµå ÀúÀå";
+    Text[ turkish ] = "Yürürlükteki verileri kaydet";
+};
+
+String STR_QRY_TITLE
+{
+    Text = "Abfrage #" ;
+    Text [ ENGLISH ] = "Query #" ;
+    Text [ english_us ] = "Query #" ;
+    Text [ portuguese ] = "Consulta #" ;
+    Text [ portuguese_brazilian ] = "Abfrage #" ;
+    Text [ swedish ] = "Sökning #" ;
+    Text [ danish ] = "Forespørgsel #" ;
+    Text [ italian ] = "Ricerca #" ;
+    Text [ spanish ] = "Consulta #" ;
+    Text [ french ] = "Requête #" ;
+    Text [ dutch ] = "Query #" ;
+    Text[ chinese_simplified ] = "²éÑ¯ #";
+    Text[ russian ] = "Çàïğîñ #";
+    Text[ polish ] = "Kwerenda #";
+    Text[ japanese ] = "¸´Ø° #";
+    Text[ dutch ] = "Query #";
+    Text[ chinese_simplified ] = "²éÑ¯ #";
+    Text[ greek ] = "Åñşôçìá #";
+    Text[ korean ] = "ÁúÀÇ #";
+    Text[ chinese_traditional ] = "¬d¸ß #";
+    Text[ arabic ] = "ÇáÇÓÊİÓÇÑ #";
+    Text[ turkish ] = "Sorgu #";
+    Text[ language_user1 ] = " ";
+};
+String STR_TBL_TITLE
+{
+    Text = "Tabelle #" ;
+    Text [ ENGLISH ] = "Table #" ;
+    Text [ english_us ] = "Table #" ;
+    Text [ portuguese ] = "Tabela #" ;
+    Text [ portuguese_brazilian ] = "Tabelle #" ;
+    Text [ swedish ] = "Tabell #" ;
+    Text [ danish ] = "Tabel #" ;
+    Text [ italian ] = "Tabella #" ;
+    Text [ spanish ] = "Tabla #" ;
+    Text [ french ] = "Table #" ;
+    Text [ dutch ] = "Tabel #" ;
+    Text[ chinese_simplified ] = "±í¸ñ #";
+    Text[ russian ] = "Òàáëèöà #";
+    Text[ polish ] = "Tabela #";
+    Text[ japanese ] = "Ã°ÌŞÙ #";
+    Text[ dutch ] = "Tabel #";
+    Text[ chinese_simplified ] = "±í¸ñ #";
+    Text[ greek ] = "Ğßíáêáò #";
+    Text[ korean ] = "Å×ÀÌºí #";
+    Text[ chinese_traditional ] = "ªí®æ #";
+    Text[ arabic ] = "ÌÏæá #";
+    Text[ turkish ] = "Tablo #";
+    Text[ language_user1 ] = " ";
+};
+

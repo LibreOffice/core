@@ -1,0 +1,982 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sbabrw.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2000-10-26 14:41:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+//  #include <sfx2/sfx.hrc>
+#include <svx/globlmn.hrc>
+
+#define IL_TOOL \
+    MaskColor   = Color {\
+    Red   = 0xC000;\
+    Green = 0xC000;\
+    Blue  = 0xC000;\
+    };\
+\
+    IdList = {\
+        ID_BROWSER_SEARCH;\
+        ID_BROWSER_REFRESH;\
+        ID_BROWSER_SORTUP;\
+        ID_BROWSER_SORTDOWN;\
+        ID_BROWSER_ORDERCRIT;\
+        ID_BROWSER_FILTERCRIT;\
+        ID_BROWSER_AUTOFILTER;\
+        ID_BROWSER_COUNTALL;\
+        ID_BROWSER_INSERT;\
+        ID_BROWSER_UPDATE;\
+        ID_BROWSER_MERGE;\
+        ID_BROWSER_SQL;\
+        ID_BROWSER_ADDTABLE;\
+        ID_BROWSER_DESIGN;\
+        ID_BROWSER_REMOVEFILTER;\
+        ID_BROWSER_UNDO;\
+        ID_BROWSER_SAVEDOC;\
+        ID_BROWSER_EDITDOC;\
+        ID_BROWSER_CUT;\
+        ID_BROWSER_COPY;\
+        ID_BROWSER_PASTE;\
+        ID_BROWSER_FILTERED;\
+    };\
+    IdCount = {\
+    22;\
+    }
+
+ // Default Image-Liste ----------------------------------------------------------------
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "scqrtl.bmp";
+    };
+    IL_TOOL ;
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lcqrtl.bmp" ;
+    };
+    IL_TOOL ;
+};
+
+
+ // Toolbox----------------------------------------------------------------------------
+
+#define CUR_ITEM ToolBoxItem
+#define CUR_SEPARATOR CUR_ITEM {Type = TOOLBOXITEM_SEPARATOR;}
+
+#define MID_SBA_QRY_SAVE \
+    Identifier = ID_BROWSER_SAVEDOC ; \
+    Text = "aktuellen Datensatz speichern" ; \
+    Text [ ENGLISH ] = "aktuellen Datensatz speichern" ; \
+    Hide = FALSE ;  \
+    Text[ english_us ] = "Save current record"; \
+    Text[ portuguese ] = "Guardar registo de dados activo"; \
+    Text[ russian ] = "Ñîõğàíèòü òåêóùóş çàïèñü";   \
+    Text[ dutch ] = "Actuele record opslaan";   \
+    Text[ french ] = "enregistrer l'enregistrement actif";  \
+    Text[ spanish ] = "guardar registro actual";    \
+    Text[ italian ] = "Salva record di dati attuale";   \
+    Text[ danish ] = "Gem aktuel datapost"; \
+    Text[ swedish ] = "Spara den aktuella dataposten";  \
+    Text[ polish ] = "Zapisz bie¿¹cy rekord";   \
+    Text[ portuguese_brazilian ] = "aktuellen Datensatz speichern"; \
+    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚Ì•Û‘¶"; \
+    Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";  \
+    Text[ chinese_traditional ] = "«O¦s·í«eªº¸ê®Æ¶µ¥Ø"; \
+    Text[ arabic ] = "ÍİÙ ÇáÓÌá ÇáÍÇáí";    \
+    Text[ dutch ] = "Actuele record opslaan";   \
+    Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";  \
+    Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò äåäïìİíùí";  \
+    Text[ korean ] = "ÇöÀç ·¹ÄÚµå ÀúÀå";    \
+    Text[ turkish ] = "Güncel veri kümesini kaydet";    \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_UNDO \
+    ITEM_EDIT_UNDO \
+    Text = "Rückgängig : Dateneingabe" ; \
+    Text [ ENGLISH ] = "Rückgängig : Dateneingabe" ; \
+    Hide = FALSE ;  \
+    Text[ english_us ] = "Undo: Entry"; \
+    Text[ portuguese ] = "Anular: entrada de dados";    \
+    Text[ russian ] = "Îòìåíèòü : ââîä äàííûõ"; \
+    Text[ dutch ] = "Ongedaan maken: Gegevensinvoer";   \
+    Text[ french ] = "Annuler : saisie des données";    \
+    Text[ spanish ] = "Deshacer: Entrada";  \
+    Text[ italian ] = "Annulla: Immissione dati";   \
+    Text[ danish ] = "Fortryd : Datainput"; \
+    Text[ swedish ] = "Ångra : inmatning av data";  \
+    Text[ polish ] = "Cofnij : Wprowadzanie danych";    \
+    Text[ portuguese_brazilian ] = "Rückgängig : Dateneingabe"; \
+    Text[ japanese ] = "Œ³‚É–ß‚·:ÃŞ°À“ü—Í"; \
+    Text[ chinese_simplified ] = "³·ÏûÃüÁî£ºÊäÈëÊı¾İ";  \
+    Text[ chinese_traditional ] = "ºM®ø©R¥O¡G¿é¤J¸ê®Æ"; \
+    Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÇáÈíÇäÇÊ";   \
+    Text[ dutch ] = "Ongedaan maken: Gegevensinvoer";   \
+    Text[ chinese_simplified ] = "³·ÏûÃüÁî£ºÊäÈëÊı¾İ";  \
+    Text[ greek ] = "Áíáßñåóç: ÅéóáãùãŞ äåäïìİíùí"; \
+    Text[ korean ] = "½ÇÇàÃë¼Ò: ÀÔ·Â";  \
+    Text[ turkish ] = "Geri al: Veri girişi";   \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_CUT \
+    Identifier = ID_BROWSER_CUT ; \
+    Text = "Ausschneiden" ; \
+    Text [ ENGLISH ] = "Ausschneiden" ; \
+    Hide = FALSE ;  \
+    Text[ english_us ] = "Cut"; \
+    Text[ portuguese ] = "Cortar";  \
+    Text[ russian ] = "Âûğåçàòü";   \
+    Text[ dutch ] = "Knippen";  \
+    Text[ french ] = "Couper";  \
+    Text[ spanish ] = "Cortar"; \
+    Text[ italian ] = "Taglia"; \
+    Text[ danish ] = "Klip";    \
+    Text[ swedish ] = "Klipp ut";   \
+    Text[ polish ] = "Wytnij";  \
+    Text[ portuguese_brazilian ] = "Ausschneiden";  \
+    Text[ japanese ] = "Ø‚èæ‚è";  \
+    Text[ chinese_simplified ] = "¼ô³ı";    \
+    Text[ chinese_traditional ] = "°Å¤U";   \
+    Text[ arabic ] = "ŞÕ";  \
+    Text[ dutch ] = "Knippen";  \
+    Text[ chinese_simplified ] = "¼ô³ı";    \
+    Text[ greek ] = "ÁğïêïğŞ";  \
+    Text[ korean ] = "Àß¶ó³»±â";    \
+    Text[ turkish ] = "Kes";    \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_COPY \
+    Identifier = ID_BROWSER_COPY ; \
+    Text = "Kopieren" ; \
+    Text [ ENGLISH ] = "Kopieren" ; \
+    Hide = FALSE ;  \
+    Text[ english_us ] = "Copy";    \
+    Text[ portuguese ] = "Copiar";  \
+    Text[ russian ] = "Êîïèğîâàòü"; \
+    Text[ dutch ] = "Kopiëren"; \
+    Text[ french ] = "Copier";  \
+    Text[ spanish ] = "Copiar"; \
+    Text[ italian ] = "Copia";  \
+    Text[ danish ] = "Kopier";  \
+    Text[ swedish ] = "Kopiera";    \
+    Text[ polish ] = "Kopiuj";  \
+    Text[ portuguese_brazilian ] = "Kopieren";  \
+    Text[ japanese ] = "ºËß°";  \
+    Text[ chinese_simplified ] = "¸´ÖÆ";    \
+    Text[ chinese_traditional ] = "½Æ»s";   \
+    Text[ arabic ] = "äÓÎ"; \
+    Text[ dutch ] = "Kopiëren"; \
+    Text[ chinese_simplified ] = "¸´ÖÆ";    \
+    Text[ greek ] = "ÁíôéãñáöŞ";    \
+    Text[ korean ] = "º¹»ç";    \
+    Text[ turkish ] = "Kopyala";    \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_PASTE \
+    Identifier = ID_BROWSER_PASTE ; \
+    Text = "Einfügen" ; \
+    Text [ ENGLISH ] = "Einfügen" ; \
+    Hide = FALSE ;  \
+    Text[ english_us ] = "Paste";   \
+    Text[ portuguese ] = "Colar";   \
+    Text[ russian ] = "Âñòàâèòü";   \
+    Text[ dutch ] = "Plakken";  \
+    Text[ french ] = "Coller";  \
+    Text[ spanish ] = "Pegar";  \
+    Text[ italian ] = "Incolla";    \
+    Text[ danish ] = "Indsæt";  \
+    Text[ swedish ] = "Klistra in"; \
+    Text[ polish ] = "Wstaw";   \
+    Text[ portuguese_brazilian ] = "Einfügen";  \
+    Text[ japanese ] = "“\\‚è•t‚¯"; \
+    Text[ chinese_simplified ] = "²åÈë";    \
+    Text[ chinese_traditional ] = "´¡¤J";   \
+    Text[ arabic ] = "áÕŞ"; \
+    Text[ dutch ] = "Plakken";  \
+    Text[ chinese_simplified ] = "²åÈë";    \
+    Text[ greek ] = "Åğéêüëëçóç";   \
+    Text[ korean ] = "ºÙ¿©³Ö±â";    \
+    Text[ turkish ] = "Yapıştır";   \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_EDIT \
+    Identifier = ID_BROWSER_EDITDOC ; \
+    Text = "Daten bearbeiten" ; \
+    Text [ ENGLISH ] = "Daten bearbeiten" ; \
+    Hide = FALSE ; \
+    Text[ english_us ] = "Edit data"; \
+    Text[ portuguese ] = "Editar dados"; \
+    Text[ russian ] = "Ïğàâêà äàííûõ"; \
+    Text[ dutch ] = "Gegegens bewerken"; \
+    Text[ french ] = "Édition de données"; \
+    Text[ spanish ] = "Editar datos"; \
+    Text[ italian ] = "Modifica dati"; \
+    Text[ danish ] = "Rediger data"; \
+    Text[ swedish ] = "Redigera data"; \
+    Text[ polish ] = "Edytuj dane"; \
+    Text[ portuguese_brazilian ] = "Bearbeiten"; \
+    Text[ japanese ] = "ÃŞ°À‚Ì•ÒW"; \
+    Text[ chinese_simplified ] = "±à¼­Êı¾İ"; \
+    Text[ chinese_traditional ] = "½s¿è¸ê®Æ";   \
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÈíÇäÇÊ";  \
+    Text[ dutch ] = "Gegegens bewerken";    \
+    Text[ chinese_simplified ] = "±à¼­Êı¾İ";    \
+    Text[ greek ] = "Åğåîåñãáóßá äåäïìİíùí";    \
+    Text[ korean ] = "µ¥ÀÌÅÍ ÆíÁı"; \
+    Text[ turkish ] = "Verileri işle";  \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_ORDERCRIT \
+    Identifier = ID_BROWSER_ORDERCRIT ; \
+    Text = "Sortieren ..." ; \
+    Text [ ENGLISH ] = "Sortieren ..." ; \
+    Text[ english_us ] = "Sort..."; \
+    Text[ portuguese ] = "Ordenar..."; \
+    Text[ russian ] = "Ñîğòèğîâàòü..."; \
+    Text[ dutch ] = "Sorteren ..."; \
+    Text[ french ] = "Trier ..."; \
+    Text[ spanish ] = "Ordenar ..."; \
+    Text[ italian ] = "Ordina..."; \
+    Text[ danish ] = "Sorter ..."; \
+    Text[ swedish ] = "Sortera ..."; \
+    Text[ polish ] = "Sortuj..."; \
+    Text[ portuguese_brazilian ] = "Ordenar..."; \
+    Text[ japanese ] = "•À‚×‘Ö‚¦..."; \
+    Text[ chinese_simplified ] = "ÅÅĞò..."; \
+    Text[ chinese_traditional ] = "±Æ§Ç...";    \
+    Text[ arabic ] = "İÑÒ...";  \
+    Text[ dutch ] = "Sorteren ..."; \
+    Text[ chinese_simplified ] = "ÅÅĞò..."; \
+    Text[ greek ] = "Ôáîéíüìçóç ...";   \
+    Text[ korean ] = "Á¤·Ä..."; \
+    Text[ turkish ] = "Sırala ..."; \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_FILTERCRIT \
+    Identifier = ID_BROWSER_FILTERCRIT ; \
+    Text = "Standardfilter ..." ; \
+    Text [ ENGLISH ] = "Standardfilter ..." ; \
+    Text[ english_us ] = "Default Filter..."; \
+    Text[ portuguese ] = "Filtro padrão..."; \
+    Text[ russian ] = "Ñòàíäàğòíûé ôèëüòğ..."; \
+    Text[ dutch ] = "Standaardfilter ..."; \
+    Text[ french ] = "Filtre standard..."; \
+    Text[ spanish ] = "Filtro estándar..."; \
+    Text[ italian ] = "Filtro standard..."; \
+    Text[ danish ] = "Standardfilter ..."; \
+    Text[ swedish ] = "Standardfilter ..."; \
+    Text[ polish ] = "Filtr standardowy..."; \
+    Text[ portuguese_brazilian ] = "Filter..."; \
+    Text[ japanese ] = "•W€Ì¨ÙÀ..."; \
+    Text[ chinese_simplified ] = "±ê×¼É¸Ñ¡..."; \
+    Text[ chinese_traditional ] = "¼Ğ·Ç¿z¿ï...";    \
+    Text[ arabic ] = "İáÊÑ ŞíÇÓí...";   \
+    Text[ dutch ] = "Standaardfilter ...";  \
+    Text[ chinese_simplified ] = "±ê×¼É¸Ñ¡..."; \
+    Text[ greek ] = "Ößëôñï ğñïåğéëïãŞò...";    \
+    Text[ korean ] = "±âº» ÇÊÅÍ...";    \
+    Text[ turkish ] = "Standart filtre ...";    \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_BRW_UPDATE \
+    Hide = TRUE ; \
+    Identifier = ID_BROWSER_UPDATE ; \
+    Text = "Daten in Felder"; \
+    Text [ ENGLISH ] = "Daten in Felder"; \
+    Text[ english_us ] = "Data to Fields"; \
+    Text[ portuguese ] = "Dados em campos"; \
+    Text[ russian ] = "Äàííûå â ïîëÿ"; \
+    Text[ dutch ] = "Gegevens in velden"; \
+    Text[ french ] = "Données dans les champs"; \
+    Text[ spanish ] = "Datos en campos"; \
+    Text[ italian ] = "Dati in campi"; \
+    Text[ danish ] = "Data i felter"; \
+    Text[ swedish ] = "Data i fält"; \
+    Text[ polish ] = "Dane w polach"; \
+    Text[ portuguese_brazilian ] = "Daten in Felder"; \
+    Text[ japanese ] = "ÃŞ°À‚ğÌ¨°ÙÄŞ‚É‘}“ü"; \
+    Text[ chinese_simplified ] = "²åÈëÊı¾İ"; \
+    Text[ chinese_traditional ] = "¸ê®Æ´¡¤JÄæ¦ì";   \
+    Text[ arabic ] = "ÈíÇäÇÊ Åáì ÍŞæá"; \
+    Text[ dutch ] = "Gegevens in velden";   \
+    Text[ chinese_simplified ] = "²åÈëÊı¾İ";    \
+    Text[ greek ] = "Äåäïìİíá óå ğåäßá";    \
+    Text[ korean ] = "µ¥ÀÌÅÍ¸¦ ÇÊµå¿¡"; \
+    Text[ turkish ] = "Alan verileri";  \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_BRW_INSERT \
+    Identifier = ID_BROWSER_INSERT ; \
+    Hide = TRUE ; \
+    Text = "Daten in Text ..."; \
+    Text [ ENGLISH ] = "Daten in Text ..."; \
+    Text[ english_us ] = "Data to Text..."; \
+    Text[ portuguese ] = "Dados em texto..."; \
+    Text[ russian ] = "Äàííûå â òåêñò"; \
+    Text[ dutch ] = "Gegevens in tekst ..."; \
+    Text[ french ] = "Données dans le texte ..."; \
+    Text[ spanish ] = "Datos en texto ..."; \
+    Text[ italian ] = "Dati nel testo ..."; \
+    Text[ danish ] = "Data i tekst ..."; \
+    Text[ swedish ] = "Data i text ..."; \
+    Text[ polish ] = "Dane do tekstu..."; \
+    Text[ portuguese_brazilian ] = "Daten in Text"; \
+    Text[ japanese ] = "ÃŞ°À‚ğÃ·½Ä‚É‘}“ü..."; \
+    Text[ chinese_simplified ] = "Êı¾İ×ª»»³ÉÎÄ×Ö..."; \
+    Text[ chinese_traditional ] = "¸ê®ÆÂà´«¦¨¤å¦r...";  \
+    Text[ arabic ] = "ÈíÇäÇÊ Åáì äÕ";   \
+    Text[ dutch ] = "Gegevens in tekst ...";    \
+    Text[ chinese_simplified ] = "Êı¾İ×ª»»³ÉÎÄ×Ö...";   \
+    Text[ greek ] = "Äåäïìİíá óå êåßìåíï ...";  \
+    Text[ korean ] = "µ¥ÀÌÅÍ¸¦ ÅØ½ºÆ®·Î...";    \
+    Text[ turkish ] = "Metin verileri ..."; \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_BRW_MERGE \
+    Identifier = ID_BROWSER_MERGE ; \
+    Hide = TRUE ; \
+    Text = "Serienbrief ..."; \
+    Text [ ENGLISH ] = "Serienbrief ..."; \
+    Text[ english_us ] = "Form Letter..."; \
+    Text[ portuguese ] = "Carta em série..."; \
+    Text[ russian ] = "Ñëèÿíèå"; \
+    Text[ dutch ] = "Standaardbrief ..."; \
+    Text[ french ] = "Mailing ..."; \
+    Text[ spanish ] = "Carta en serie ..."; \
+    Text[ italian ] = "Stampa in serie..."; \
+    Text[ danish ] = "Brevfletning ..."; \
+    Text[ swedish ] = "Kopplad utskrift ..."; \
+    Text[ polish ] = "Korespondencja seryjna"; \
+    Text[ portuguese_brazilian ] = "Serienbrief"; \
+    Text[ japanese ] = "·‚µ‚İˆóü"; \
+    Text[ chinese_simplified ] = "ÓÊ¼şºÏ²¢..."; \
+    Text[ chinese_traditional ] = "¦X¨Ö¦C¦L...";    \
+    Text[ arabic ] = "ÎØÇÈ ãÓáÓá ...";  \
+    Text[ dutch ] = "Standaardbrief ...";   \
+    Text[ chinese_simplified ] = "ÓÊ¼şºÏ²¢..."; \
+    Text[ greek ] = "Åãêıêëéïò åğéóôïëŞ ...";   \
+    Text[ korean ] = "ÆíÁö ¾ç½Ä...";    \
+    Text[ turkish ] = "Mektup formu ...";   \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_SORTUP \
+    Identifier = ID_BROWSER_SORTUP ; \
+    Text = "Aufsteigend sortieren" ; \
+    Text [ ENGLISH ] = "Aufsteigend sortieren" ; \
+    Text[ english_us ] = "Sort Ascending"; \
+    Text[ portuguese ] = "Ordem ascendente"; \
+    Text[ russian ] = "Ñîğòèğîâêà ïî âîçğàñòàíèş"; \
+    Text[ dutch ] = "Oplopend sorteren"; \
+    Text[ french ] = "Tri croissant"; \
+    Text[ spanish ] = "Orden ascendente"; \
+    Text[ italian ] = "Ordina in modo crescente"; \
+    Text[ danish ] = "Sorter stigende"; \
+    Text[ swedish ] = "Sortera stigande"; \
+    Text[ polish ] = "Sortuj rosn¹co"; \
+    Text[ portuguese_brazilian ] = "Sort ascending"; \
+    Text[ japanese ] = "¸‡‚Å•À‚×‘Ö‚¦"; \
+    Text[ chinese_simplified ] = "ÏòÉÏÅÅĞò"; \
+    Text[ chinese_traditional ] = "¦V¤W±Æ§Ç";   \
+    Text[ arabic ] = "İÑÒ ÊÕÇÚÏí";  \
+    Text[ dutch ] = "Oplopend sorteren";    \
+    Text[ chinese_simplified ] = "ÏòÉÏÅÅĞò";    \
+    Text[ greek ] = "Ôáîéíüìçóç êáôÜ áıîïõóá";  \
+    Text[ korean ] = "¿À¸§Â÷¼øÀ¸·Î Á¤·Ä";   \
+    Text[ turkish ] = "Artan sıralama"; \
+    Text[ language_user1 ] = " ";
+
+#define MID_EXPLORER_PREVLEVEL \
+    Identifier = ID_BROWSER_EXPL_PREVLEVEL; \
+    Text = "Übergeordnete Ebene";\
+    Text [ english_us] = "parent level";    \
+    Text[ portuguese ] = "Nível superior";  \
+    Text[ greek ] = "áíşôåñï ğåäßï";    \
+    Text[ dutch ] = "Hoger niveau"; \
+    Text[ french ] = "Niveau supérieur";    \
+    Text[ spanish ] = "Nivel superior"; \
+    Text[ swedish ] = "Överordnad nivå";    \
+    Text[ russian ] = "Íà óğîâåíü âûøå";\
+    Text[ italian ] = "Livello superiore";\
+    Text[ danish ] = "Overordnet niveau";\
+    Text[ polish ] = "poziom nadrzêdny";\
+    Text[ portuguese_brazilian ] = "previous level";\
+    Text[ japanese ] = "ˆê‚Âã‚ÌÚÍŞÙ";\
+    Text[ korean ] = "»óÀ§ ·¹º§";\
+    Text[ chinese_simplified ] = "ÉÏÒ»²ã";\
+    Text[ chinese_traditional ] = "¤W¤@¼h";\
+    Text[ arabic ] = "ãÓÊæì æÇÍÏ áÃÚáì";    \
+    Text[ turkish ] = "Üst düzey";
+
+#define MID_FM_SEARCH \
+    Identifier = ID_BROWSER_SEARCH ; \
+    Text = "Datensatz suchen" ; \
+    Text [ ENGLISH ] = "Datensatz suchen" ; \
+    Text[ english_us ] = "Find Record"; \
+    Text[ portuguese ] = "Localizar registo de dados"; \
+    Text[ russian ] = "Íàéòè çàïèñü"; \
+    Text[ dutch ] = "Record zoeken"; \
+    Text[ french ] = "Rechercher un enregistrement"; \
+    Text[ spanish ] = "Buscar registro"; \
+    Text[ italian ] = "Cerca record di dati"; \
+    Text[ danish ] = "Søg datapost"; \
+    Text[ swedish ] = "Sök datapost"; \
+    Text[ polish ] = "Szukaj rekordu"; \
+    Text[ portuguese_brazilian ] = "Datensatz suchen"; \
+    Text[ japanese ] = "Úº°ÄŞ‚ÌŒŸõ"; \
+    Text[ chinese_simplified ] = "ËÑÑ°Êı¾İÌõÄ¿"; \
+    Text[ chinese_traditional ] = "´M§ä¸ê®Æ¶µ¥Ø";   \
+    Text[ arabic ] = "ÇáÈÍË Úä ÓÌá";    \
+    Text[ dutch ] = "Record zoeken";    \
+    Text[ chinese_simplified ] = "ËÑÑ°Êı¾İÌõÄ¿";    \
+    Text[ greek ] = "ÁíáæŞôçóç åããñáöŞò";   \
+    Text[ korean ] = "·¹ÄÚµå Ã£±â"; \
+    Text[ turkish ] = "Kayıt ara";  \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_SORTDOWN \
+    Identifier = ID_BROWSER_SORTDOWN ; \
+    Text = "Absteigend sortieren" ; \
+    Text [ ENGLISH ] = "Absteigend sortieren" ; \
+    Text[ english_us ] = "Sort Descending"; \
+    Text[ portuguese ] = "Ordem descendente"; \
+    Text[ russian ] = "Ñîğòèğîâêà ïî óáûâàíèş"; \
+    Text[ dutch ] = "Aflopend sorteren"; \
+    Text[ french ] = "Tri décroissant"; \
+    Text[ spanish ] = "Orden descendente"; \
+    Text[ italian ] = "Ordina in modo decrescente"; \
+    Text[ danish ] = "Sorter faldende"; \
+    Text[ swedish ] = "Sortera fallande"; \
+    Text[ polish ] = "Sortuj malej¹co"; \
+    Text[ portuguese_brazilian ] = "Sort descending"; \
+    Text[ japanese ] = "~‡‚Å•À‚×‘Ö‚¦"; \
+    Text[ chinese_simplified ] = "ÏòÏÂÅÅĞò"; \
+    Text[ chinese_traditional ] = "¦V¤U±Æ§Ç";   \
+    Text[ arabic ] = "İÑÒ ÊäÇÒáí";  \
+    Text[ dutch ] = "Aflopend sorteren";    \
+    Text[ chinese_simplified ] = "ÏòÏÂÅÅĞò";    \
+    Text[ greek ] = "Ôáîéíüìçóç êáôÜ öèßíïõóá"; \
+    Text[ korean ] = "³»¸²Â÷¼øÀ¸·Î Á¤·Ä";   \
+    Text[ turkish ] = "Azalan sıralama";    \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_AUTOFILTER \
+    Identifier = ID_BROWSER_AUTOFILTER ; \
+    Text = "Autofilter" ; \
+    Text [ ENGLISH ] = "Autofilter" ; \
+    Text[ english_us ] = "AutoFilter"; \
+    Text[ portuguese ] = "AutoFiltro"; \
+    Text[ russian ] = "Àâòîôèëüòğ"; \
+    Text[ dutch ] = "AutoFilter"; \
+    Text[ french ] = "AutoFiltre"; \
+    Text[ spanish ] = "AutoFiltro"; \
+    Text[ italian ] = "Filtro automatico"; \
+    Text[ danish ] = "AutoFilter"; \
+    Text[ swedish ] = "AutoFilter"; \
+    Text[ polish ] = "Autofiltr"; \
+    Text[ portuguese_brazilian ] = "Auto filter"; \
+    Text[ japanese ] = "µ°ÄÌ¨ÙÀ"; \
+    Text[ chinese_simplified ] = "×Ô¶¯É¸Ñ¡"; \
+    Text[ chinese_traditional ] = "¦Û°Ê¿z¿ï";   \
+    Text[ arabic ] = "İáÊÑ Âáí";    \
+    Text[ dutch ] = "AutoFilter";   \
+    Text[ chinese_simplified ] = "×Ô¶¯É¸Ñ¡";    \
+    Text[ greek ] = "ÁõôïÖßëôñï";   \
+    Text[ korean ] = "ÀÚµ¿ÇÊÅÍ";    \
+    Text[ turkish ] = "OtomatikFiltre"; \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_COUNTALL \
+    Identifier = ID_BROWSER_COUNTALL ; \
+    Text = "Anzahl Datensätze" ; \
+    Text [ ENGLISH ] = "Anzahl Datensätze" ; \
+    Text[ english_us ] = "Records Count"; \
+    Text[ portuguese ] = "Contar registos"; \
+    Text[ russian ] = "Êîëè÷åñòâî çàïèñåé"; \
+    Text[ dutch ] = "Aantal records"; \
+    Text[ french ] = "Nombre d'enregistrements "; \
+    Text[ spanish ] = "Cantidad de registros"; \
+    Text[ italian ] = "Numero dei record di dati"; \
+    Text[ danish ] = "Antal dataposter"; \
+    Text[ swedish ] = "Antal dataposter"; \
+    Text[ polish ] = "Iloœæ rekordów"; \
+    Text[ portuguese_brazilian ] = "Anzahl Datensätze"; \
+    Text[ japanese ] = "Úº°ÄŞ”"; \
+    Text[ chinese_simplified ] = "Êı¾İ¼ÇÂ¼µÄÊıÄ¿"; \
+    Text[ chinese_traditional ] = "¸ê®Æ¶µ¥Øªº¼Æ¥Ø"; \
+    Text[ arabic ] = "ÚÏÏ ÇáÓÌáÇÊ"; \
+    Text[ dutch ] = "Aantal records";   \
+    Text[ chinese_simplified ] = "Êı¾İ¼ÇÂ¼µÄÊıÄ¿";  \
+    Text[ greek ] = "Áñéèìüò åããñáöşí"; \
+    Text[ korean ] = "·¹ÄÚµå ¼ö";   \
+    Text[ turkish ] = "Veri kümeleri sayısı";   \
+    Text[ language_user1 ] = " ";
+
+
+#define MID_SBA_QRY_REFRESH \
+    Identifier = ID_BROWSER_REFRESH ; \
+    Text = "Aktualisieren" ; \
+    Text [ ENGLISH ] = "Aktualisieren" ; \
+    Text[ english_us ] = "Refresh"; \
+    Text[ portuguese ] = "Actualizar"; \
+    Text[ russian ] = "Îáíîâèòü"; \
+    Text[ dutch ] = "Actualiseren"; \
+    Text[ french ] = "Actualiser";  \
+    Text[ spanish ] = "Actualizar"; \
+    Text[ italian ] = "Aggiorna";   \
+    Text[ danish ] = "Opdater"; \
+    Text[ swedish ] = "Uppdatera";    \
+    Text[ polish ] = "Aktualizuj";    \
+    Text[ portuguese_brazilian ] = "Aktualisieren"; \
+    Text[ japanese ] = "XV"; \
+    Text[ chinese_simplified ] = "¸üĞÂ"; \
+    Text[ chinese_traditional ] = "§ó·s";   \
+    Text[ arabic ] = "ÊÍÏíË";   \
+    Text[ dutch ] = "Actualiseren"; \
+    Text[ chinese_simplified ] = "¸üĞÂ";    \
+    Text[ greek ] = "Åíçìİñùóç";    \
+    Text[ korean ] = "»õ·Î °íÄ§";   \
+    Text[ turkish ] = "Yenile"; \
+    Text[ language_user1 ] = " ";
+
+#define MID_SBA_QRY_REMOVEFILTER \
+    Identifier = ID_BROWSER_REMOVEFILTER ; \
+    Text = "Filter/Sortierung entfernen" ; \
+    Text [ ENGLISH ] = "Filter/Sortierung entfernen" ; \
+    Text[ english_us ] = "Remove Filter/Sort"; \
+    Text[ portuguese ] = "Remover filtro/ordem"; \
+    Text[ russian ] = "Óáğàòü ôèëüòğ/ñîğòèğîâêó"; \
+    Text[ dutch ] = "Filter/sortering verwijderen"; \
+    Text[ french ] = "Supprimer le filtre/tri"; \
+    Text[ spanish ] = "Eliminar Filtro/Orden"; \
+    Text[ italian ] = "Elimina filtro/ordine"; \
+    Text[ danish ] = "Fjern filter/sortering"; \
+    Text[ swedish ] = "Ta bort filter/sortering";   \
+    Text[ polish ] = "Usuñ filtr/sortowanie";       \
+    Text[ portuguese_brazilian ] = "Filter/Sortierung entfernen"; \
+    Text[ japanese ] = "Ì¨ÙÀ‚Æ•À‚×‘Ö‚¦‚Ìíœ"; \
+    Text[ chinese_simplified ] = "É¾³ıÉ¸Ñ¡/ÅÅĞò"; \
+    Text[ chinese_traditional ] = "§R°£¿z¿ï/±Æ§Ç";  \
+    Text[ arabic ] = "ÅÒÇáÉ ÇáİáÊÑ/ÇáİÑÒ";  \
+    Text[ dutch ] = "Filter/sortering verwijderen"; \
+    Text[ chinese_simplified ] = "É¾³ıÉ¸Ñ¡/ÅÅĞò";   \
+    Text[ greek ] = "ÊáôÜñãçóç ößëôñïõ/ôáîéíüìçóçò";    \
+    Text[ korean ] = "ÇÊÅÍ/Á¤·Ä Á¦°Å";  \
+    Text[ turkish ] = "Filtre/sıralamayı kaldır";   \
+    Text[ language_user1 ] = " ";
+
+
+#define MID_SBA_BROWSER_FILTERED \
+    Identifier = ID_BROWSER_FILTERED ; \
+    Text = "Filter anwenden" ; \
+    Text [ english ] = "Apply filter" ; \
+    Text [ english_us ] = "Apply Filter" ; \
+    Text [ portuguese ] = "Aplicar filtro" ; \
+    Text [ russian ] = "Ïğèìåíèòü ôèëüòğ" ; \
+    Text [ greek ] = "ÅöáñìïãŞ ößëôñïõ" ; \
+    Text [ dutch ] = "Filter toepassen" ; \
+    Text [ french ] = "Appliquer le filtre" ; \
+    Text [ spanish ] = "Usar filtro" ; \
+    Text [ italian ] = "Usa filtro" ; \
+    Text [ danish ] = "Anvend filter" ; \
+    Text [ swedish ] = "Använd filter" ; \
+    Text [ polish ] = "U¿yj filtru" ; \
+    Text [ portuguese_brazilian ] = "FormFiltered" ; \
+    Text [ japanese ] = "Ì¨ÙÀ‚Ìg—p" ; \
+    Text [ korean ] = "ÇÊÅÍ Àû¿ë" ; \
+    Text [ chinese_simplified ] = "Ê¹ÓÃ¹ıÂËÆ÷" ; \
+    Text [ chinese_traditional ] = "¨Ï¥Î¿z¿ï" ; \
+    Text [ arabic ] = "ÇÓÊÎÏÇã İáÊÑ" ;  \
+    Text[ turkish ] = "Filtre kullan";
+
+
+ // HelpIds duerfen nur in dieser Form angegeben werden,
+ // ansonsten können keine langnamen erzeugt werden
+ToolBox RID_BRW_QRY_TOOLBOX
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 3 , 1 ) ;
+    Size = MAP_APPFONT ( 200 , 14 ) ;
+    OutputSize = TRUE ;
+    Align = BOXALIGN_TOP ;
+    HideWhenDeactivate = TRUE ;
+    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
+    //  HelpId = HID_TLB_TABBROWSER ;
+    ItemList =
+    {
+    CUR_ITEM
+    {
+        MID_FM_SEARCH
+        HelpId = ID_BROWSER_SEARCH ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_QRY_SORTUP
+        HelpId = ID_BROWSER_SORTUP ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_SORTDOWN
+        HelpId = ID_BROWSER_SORTDOWN ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_AUTOFILTER
+        HelpId = ID_BROWSER_AUTOFILTER ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_QRY_FILTERCRIT
+        HelpId = ID_BROWSER_FILTERCRIT ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_ORDERCRIT
+        HelpId = ID_BROWSER_ORDERCRIT ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_REMOVEFILTER
+        HelpId = ID_BROWSER_REMOVEFILTER ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_BROWSER_FILTERED
+        HelpId = ID_BROWSER_FILTERED ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_QRY_REFRESH
+        HelpId = ID_BROWSER_REFRESH ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_BRW_INSERT
+        HelpId = ID_BROWSER_INSERT ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_BRW_UPDATE
+        HelpId = ID_BROWSER_UPDATE ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_BRW_MERGE
+        HelpId = ID_BROWSER_MERGE ;
+    };
+    };
+};
+
+
+ToolBox RID_BRW_TAB_TOOLBOX
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 3 , 1 ) ;
+    Size = MAP_APPFONT ( 200 , 14 ) ;
+    OutputSize = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
+    HideWhenDeactivate = TRUE ;
+    //  HelpId = HID_TLB_TABBROWSER ;
+    ItemList =
+    {
+    CUR_ITEM
+    {
+        MID_FM_SEARCH
+        HelpId = ID_BROWSER_SEARCH ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_QRY_SORTUP
+        HelpId = ID_BROWSER_SORTUP ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_SORTDOWN
+        HelpId = ID_BROWSER_SORTDOWN ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_AUTOFILTER
+        HelpId = ID_BROWSER_AUTOFILTER ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_QRY_FILTERCRIT
+        HelpId = ID_BROWSER_FILTERCRIT ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_ORDERCRIT
+        HelpId = ID_BROWSER_ORDERCRIT ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_QRY_REMOVEFILTER
+        HelpId = ID_BROWSER_REMOVEFILTER ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_BROWSER_FILTERED
+        HelpId = ID_BROWSER_FILTERED ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_QRY_REFRESH
+        HelpId = ID_BROWSER_REFRESH ;
+    };
+    CUR_SEPARATOR ;
+    CUR_ITEM
+    {
+        MID_SBA_BRW_INSERT
+        HelpId = ID_BROWSER_INSERT ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_BRW_UPDATE
+        HelpId = ID_BROWSER_UPDATE ;
+    };
+    CUR_ITEM
+    {
+        MID_SBA_BRW_MERGE
+        HelpId = ID_BROWSER_MERGE ;
+    };
+    };
+};
+
+String RID_STR_LOADING_DATASOURCE
+{
+    Text = "Daten laden";
+    Text [ ENGLISH ] = "load data";
+    Text[ english_us ] = "Load data";
+    Text[ portuguese ] = "Carregar dados";
+    Text[ greek ] = "Öüñôùóç äåäïìİíùí";
+    Text[ dutch ] = "Gegevens laden";
+    Text[ french ] = "Charger les données";
+    Text[ spanish ] = "Cargar datos";
+    Text[ swedish ] = "Ladda data";
+    Text[ russian ] = "Çàãğóçèòü äàííûå";
+    Text[ italian ] = "Carica dati";
+    Text[ danish ] = "Indlæs data";
+    Text[ polish ] = "³adowaæ dane";
+    Text[ portuguese_brazilian ] = "load data";
+    Text[ japanese ] = "ÃŞ°À‚Ì“Ç‚İ‚İ";
+    Text[ korean ] = "µ¥ÀÌÅÍ ·Îµå";
+    Text[ chinese_simplified ] = "ÏÂÔØÊı¾İ";
+    Text[ chinese_traditional ] = "¤U¸ü¼ÆÕu";
+    Text[ arabic ] = "ÊÍãíá ÇáÈíÇäÇÊ";
+    Text[ turkish ] = "Verileri yükle";
+};
+
+QueryBox QUERY_BRW_SAVEMODIFIED
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der geänderte Datensatz gespeichert werden? : Soll der geänderte Datensatz gespeichert werden? */
+    Message = "Der aktuelle Datensatz wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Message [ English ] = "The current row has been modified.\nDo you want to save your changes?" ;
+    Message [ english_us ] = "The current record has been changed.\nDo you want to save the changes?" ;
+    Message[ portuguese ] = "O registo de dados activo foi modificado.\nGuardar as modificações?";
+    Message[ russian ] = "Òåêóùàÿ çàïèñü äàííûõ áûëà èçìåíåíà. Ñîõğàíèòü ıòè èçìåíåíèÿ?";
+    Message[ dutch ] = "De actuele record werd gewijzigd.\nWilt u de wijzigingen opslaan?";
+    Message[ french ] = "L'enregistrement actif a été modifié. Souhaitez-vous enregistrer les modifications ?";
+    Message[ spanish ] = "El registro actual ha sido modificado.\n¿Desea guardar las modificaciones?";
+    Message[ italian ] = "Il record di dati attuale è stato modificato.\nVolete salvare le modifiche?";
+    Message[ danish ] = "Den aktuelle datapost er blevet ændret.\nSkal ændringerne gemmes?";
+    Message[ swedish ] = "Den aktuella dataposten har ändrats.\nSkall ändringarna sparas?";
+    Message[ polish ] = "Aktualny rekord zosta³ zmodyfikowany.\nCzy chcesz zapisaæ zmodyfikowane dane?";
+    Message[ portuguese_brazilian ] = "Soll der geänderter Datensatz gespeichert werden?";
+    Message[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
+    Message[ chinese_simplified ] = "Êı¾İÌõÄ¿ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª´æÅÌ¸ü¸ÄºóµÄÊı¾İ¼ÇÂ¼Âğ£¿";
+    Message[ chinese_traditional ] = "·í«eªº¸ê®Æ¤w¸gÅÜ§ó¡C­nÀx¦sÅÜ§óªº¸ê®Æ¶µ¥Ø¡H";
+    Message[ arabic ] = "Êã ÊÛííÑ ÇáÓÌá ÇáÍÇáí.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊı¿";
+    Message[ dutch ] = "De actuele record werd gewijzigd.\nWilt u de wijzigingen opslaan?";
+    Message[ chinese_simplified ] = "Êı¾İÌõÄ¿ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª´æÅÌ¸ü¸ÄºóµÄÊı¾İ¼ÇÂ¼Âğ£¿";
+    Message[ greek ] = "Ç ôñİ÷ïõóá åããñáöŞ ôñïğïğïéŞèçêå.\nÍá áğïèçêåõôïıí ïé áëëáãİò;";
+    Message[ korean ] = "ÇöÀç µ¥ÀÌÅÍ ·¹ÄÚµå°¡ º¯°æµÇ¾ú½À´Ï´Ù. º¯°æµÈ »çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Güncel veri kümesi değiştirildi.\nDeğişiklikler saklansın mı?";
+    Message[ language_user1 ] = " ";
+};
+
+
+String RID_STR_DATABROWSER_FILTERED
+{
+    Text = "(gefiltert)" ;
+    Text [ English ] = "(filtered)" ;
+    Text [ english_us ] = "(filtered)" ;
+    Text[ italian ] = "(filtrato)";
+    Text[ portuguese_brazilian ] = "(filtered)";
+    Text[ portuguese ] = "(filtrado)";
+    Text[ danish ] = "(filtreret)";
+    Text[ french ] = "(filtré)";
+    Text[ swedish ] = "(filtrerad)";
+    Text[ dutch ] = "(gefilterd)";
+    Text[ spanish ] = "(filtrado)";
+    Text[ chinese_simplified ] = "(ÒÑ¾­É¸Ñ¡)";
+    Text[ russian ] = "(îòôèëüòğîâàíî)";
+    Text[ polish ] = "(przefiltrowany)";
+    Text[ japanese ] = "(Ì¨ÙÀÏ‚İ)";
+    Text[ chinese_traditional ] = "(¤w¸g¿z¿ï)";
+    Text[ arabic ] = "(ãõÕİøì)";
+    Text[ dutch ] = "(gefilterd)";
+    Text[ chinese_simplified ] = "(ÒÑ¾­É¸Ñ¡)";
+    Text[ greek ] = "(öéëôñáñéóìİíá)";
+    Text[ korean ] = "(ÇÊÅÍµÊ)";
+    Text[ turkish ] = "(filtrelenmiş)";
+    Text[ language_user1 ] = " ";
+};
+
+String SBA_BROWSER_SETTING_ORDER
+{
+    Text = "Fehler beim Setzen der Sortier-Kriterien";
+    Text [ english ] = "error setting the sort criteria";
+    Text [ english_us ] = "Error setting the sort criteria";
+    Text[ portuguese ] = "Erro ao definir critérios de ordem";
+    Text[ russian ] = "Îøèáêà ïğè óñòàíîâëåíèè óñëîâèé ñîğòèğîâêè";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôïí ïñéóìü ôùí êñéôçñßùí ôáîéíüìçóçò";
+    Text[ dutch ] = "fout bij vastleggen van sorteercriteria";
+    Text[ french ] = "Erreur de définition des critères de tri";
+    Text[ spanish ] = "Error al definir los criterios de ordenación";
+    Text[ italian ] = "Errore nell'impostare i criteri";
+    Text[ danish ] = "Fejl ved definition af sorteringskriterierne";
+    Text[ swedish ] = "fel vid definition av sorteringskriterier";
+    Text[ polish ] = "B³¹d podczas osadzania kryteriów sortowania";
+    Text[ portuguese_brazilian ] = "error setting the sort criteria";
+    Text[ japanese ] = "•À‚×‘Ö‚¦ğŒ‚Ìİ’è‚Ì´×°";
+    Text[ korean ] = "Á¤·Ä±âÁØ ¼³Á¤¿¡ ¿À·ù";
+    Text[ chinese_simplified ] = "ÔÚÉè¶¨ÅÅĞòÌõ¼şÊ±·¢Éú´íÎó";
+    Text[ chinese_traditional ] = "¦b³]©w½s±Æ©w¸q®Éµo¥Í¿ù»~";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáİÑÒ";
+    Text[ turkish ] = "Sıralama ölçütlerinin ayarlanmasında hata";
+};
+String SBA_BROWSER_SETTING_FILTER
+{
+    Text = "Fehler beim Setzen der Filter-Kriterien";
+    Text [ english ] = "error setting the filter criteria";
+    Text [ english_us ] = "Error setting the filter criteria";
+    Text[ portuguese ] = "Erro ao definir critérios dos filtros";
+    Text[ russian ] = "Îøèáêà ïğè óñòàíîâëåíèè óñëîâèé ôèëüòğà";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôïí ïñéóìü ôùí êñéôçñßùí ößëôñïõ";
+    Text[ dutch ] = "fout bij vastleggen van filtercriteria";
+    Text[ french ] = "Erreur de définition des critères de filtre";
+    Text[ spanish ] = "Error al definir los criterios de filtro";
+    Text[ italian ] = "Errore nell'impostare i criteri";
+    Text[ danish ] = "Fejl ved definition af filterkriterierne";
+    Text[ swedish ] = "fel vid definition av filterkriterier";
+    Text[ polish ] = "B³¹d podczas osadzania kryteriów filtra";
+    Text[ portuguese_brazilian ] = "error setting the filter criteria";
+    Text[ japanese ] = "Ì¨ÙÀğŒ‚Ìİ’è‚Ì´×°";
+    Text[ korean ] = "ÇÊÅÍ±âÁØ ¼³Á¤¿¡ ¿À·ù";
+    Text[ chinese_simplified ] = "ÔÚÉè¶¨É¸Ñ¡Ìõ¼şÊ±·¢Éú´íÎó";
+    Text[ chinese_traditional ] = "¦b³]©w¿z¿ï©w¸qªºµo¥Í¿ù»~";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáÊÕİíÉ";
+    Text[ turkish ] = "Filtre ölçütlerinin ayarlanmasında hata";
+};
+
+String RID_STR_CONNECTION_LOST
+{
+    Text = "Vebindung verloren";
+    Text [ english ] = "connection lost";
+    Text [ english_us ] = "Connection lost";
+    Text[ portuguese ] = "Ligação perdida";
+    Text[ russian ] = "Ïîäêëş÷åíèå óòåğÿíî";
+    Text[ greek ] = "Óıíäåóç ÷Üèçêå";
+    Text[ dutch ] = "Verbinding verbroken";
+    Text[ french ] = "La connexion a éte perdue";
+    Text[ spanish ] = "Se perdió la conexión";
+    Text[ italian ] = "Il collegamento è stato interrotto";
+    Text[ danish ] = "Tabt forbindelse";
+    Text[ swedish ] = "Bruten förbindelse";
+    Text[ polish ] = "Brak po³¹czenia";
+    Text[ portuguese_brazilian ] = "connection lost";
+    Text[ japanese ] = "Ú‘±‚Ì’†’f";
+    Text[ korean ] = "¿¬°áÀ» ÀÒÀ½";
+    Text[ chinese_simplified ] = "Á¬½ÓÊ§°Ü";
+    Text[ chinese_traditional ] = "³s½u¤w¸g¤¤Â_";
+    Text[ arabic ] = "Êã İŞÏÇä ÇáÇÊÕÇá";
+    Text[ turkish ] = "Bağlantı koptu";
+};
+
+Image QUERYFOLDER_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "sx03201.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image QUERY_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "sx03202.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+
