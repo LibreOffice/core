@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-13 01:25:42 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,15 +216,40 @@ typedef struct _sal_Sequence
 #endif /* SAL_W32, SOLARIS, LINUX */
 #endif /* __cplusplus */
 
+/** Definition of function throw clause macros.  These have been introduced
+    to reduce code size by balancing out compiler bugs.
+
+    These macros are ONLY for function declarations,
+    use common C++ throw statement for throwing exceptions, e.g.
+    throw RuntimeException();
+
+    SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW( () )
+    SAL_THROW_EXTERN_C() should be used for all C functions
+*/
 #ifdef __cplusplus
-#define SAL_THROW() throw ()
-#else
-#define SAL_THROW()
+#if defined(__GNUC__) || defined(__SUNPRO_CC)
+#define SAL_THROW( exc )
+#else /* MSVC, all other */
+#define SAL_THROW( exc ) throw exc
+#endif /* __GNUC__, __SUNPRO_CC */
+#define SAL_THROW_EXTERN_C() throw ()
+#else /* ! __cplusplus */
+/* SAL_THROW() must not be used in C headers, only SAL_THROW_EXTERN_C() is defined */
+#define SAL_THROW_EXTERN_C()
 #endif
 
 #ifdef __cplusplus
+enum __sal_NoAcquire
+{
+    /** definition of a no acquire enum for ctors
+    */
+    SAL_NO_ACQUIRE
+};
+#endif /* __cplusplus */
+
+#ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 
 #endif /*_SAL_TYPES_H_ */
