@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-23 17:27:57 $
+ *  last change: $Author: sab $ $Date: 2001-05-02 14:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             {
                 rtl::OUString sOUCellAddress;
                 ScXMLConverter::GetStringFromRange( sOUCellAddress, aAdvSource, pDoc );
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_condition_source_range_address, sOUCellAddress);
             }
 
             sal_Bool bSkipDuplicates;
