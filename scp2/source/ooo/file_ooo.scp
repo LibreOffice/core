@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.56 $
+*  $Revision: 1.57 $
 *
-*  last change: $Author: vg $ $Date: 2004-12-02 11:52:38 $
+*  last change: $Author: rt $ $Date: 2004-12-02 14:18:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -410,6 +410,13 @@ End
 #endif
 
 STD_SETUPZIP_BMP_FILE( gid_File_Bmp_Installation, oo_product.bmp )
+
+File gid_File_Bmp_Intro
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "intro.bmp";
+    Styles = (PACKED);
+End
 
 File gid_File_Dtd_Accelerator
     TXT_FILE_BODY;
