@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:52:54 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,9 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                                 (sheet::DataPilotFieldOrientation) pDim->GetOrientation() );
                             if( sValueStr.getLength() )
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, sValueStr );
+                            if (pDim->GetOrientation() == sheet::DataPilotFieldOrientation_PAGE)
+                                if (pDim->HasCurrentPage())
+                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SELECTED_PAGE, pDim->GetCurrentPage());
                             if (pDim->GetUsedHierarchy() != 1)
                             {
                                 rtl::OUStringBuffer sBuffer;
