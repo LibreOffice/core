@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiltdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 08:38:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
             : UpdateValueList( 3 );
     }
 
-    return NULL;
+    return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -628,7 +628,7 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         aEdVal3.SetText( aCurVal3 );
     }
 
-    return NULL;
+    return 0;
 }
 
 //------------------------------------------------------------------------
@@ -655,7 +655,7 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
             pLb->Enable();
     }
 
-    return NULL;
+    return 0;
 }
 
 
