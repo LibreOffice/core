@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:52:22 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     Text[ russian ] = "Ñîçäàòü ñëîâàğü ïîëüçîâàòåëÿ";
     Text[ polish ] = "Utwórz w³asny s³ownik";
     Text[ japanese ] = "Õ°»Ş°«‘‚Ìì¬";
-    Text[ chinese_traditional ] = "¦Û­qµü¨å";
+    Text[ chinese_traditional ] = "¦Û­q¦r¨å";
     Text[ arabic ] = "ÅäÔÇÁ ŞÇãæÓ ÇáãÓÊÎÏã";
     Text[ greek ] = "Äçìéïõñãßá ëåîéêïı";
     Text[ korean ] = "»õ »ç¿ëÀÚ»çÀü";
@@ -546,7 +546,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text[ russian ] = "Ïğàâêà ñëîâàğÿ ïîëüçîâàòåëÿ";
     Text[ polish ] = "Edytuj s³ownik u¿ytkownika";
     Text[ japanese ] = "Õ°»Ş°«‘‚Ì•ÒW";
-    Text[ chinese_traditional ] = "½s¿è¦Û­qµü¨å";
+    Text[ chinese_traditional ] = "½s¿è¦Û­q¦r¨å";
     Text[ arabic ] = "ÊÍÑíÑ ŞÇãæÓ ÇáãÓÊÎÏã";
     Text[ greek ] = "Åğåîåñãáóßá ëåîéêïı";
     Text[ korean ] = "»ç¿ëÀÚ»çÀü ÆíÁı";
