@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:16:37 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ service DocumentSettings
 
         <p>If <TRUE\> centered and right-aligned paragraphs containing
         tabs are formatted as a whole in the center or aligned to the
-        right. If <FLASE\>, only the text to the right of the last
+        right. If <FALSE\>, only the text to the right of the last
         tab, for example, is aligned to the right, while the text to
         the left remains where it is.</p>
     */
@@ -156,6 +156,27 @@ service DocumentSettings
 
     */
     [optional, property] boolean IsLabelDocument;
+    // ------------------------------------------------------------
+    /** specifies if the former (till OpenOffice.org 1.1) or the new
+        line spacing formatting is applied.
+
+        @since #i11859#
+
+        <p>This property controls how a set line spacing at a paragraph
+        influences the formatting of the text lines and the spacing between
+        paragraphs.
+        If <TRUE\>, the formatting till OpenOffice.org 1.1 is
+        applied. This means, that a proportional line spacing is applied
+        above and below a text line and that the maximum of the line spacing
+        value between two paragraph is added respectively reckoned up with the
+        paragraph spacing (adding or reckoning up is controlled by document
+        option AddParaTableSpacing).
+        If <FALSE\> (default for documents since OpenOffice.org 2.0),
+        a proportional line spacing is only applied below a text line and
+        it's always added to the paragraph spacing between two paragraphs.</p>
+
+    */
+    [optional, property] boolean UseFormerLineSpacing;
 };
 
 //=============================================================================
