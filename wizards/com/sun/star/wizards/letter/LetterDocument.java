@@ -1,19 +1,19 @@
 package com.sun.star.wizards.letter;
 
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.text.*;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XTerminateListener;
 import com.sun.star.table.BorderLine;
 import com.sun.star.text.*;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.drawing.XShape;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.awt.Size;
 import com.sun.star.style.NumberingType;
 import com.sun.star.style.ParagraphAdjust;
 import com.sun.star.style.XStyleFamiliesSupplier;
@@ -23,9 +23,13 @@ public class LetterDocument extends TextDocument {
 
     XDesktop xDesktop;
     //Size DocSize = null;
+    boolean keepLogoFrame = true;
+    boolean keepBendMarksFrame = true;
+    boolean keepLetterSignsFrame = true;
 
-    public LetterDocument(XMultiServiceFactory xMSF) {
-        super(xMSF);
+
+    public LetterDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
+        super(xMSF, listener);
     }
 
 
@@ -45,9 +49,15 @@ public class LetterDocument extends TextDocument {
         }
     }
 
+    public void updateDateFields() {
+        TextFieldHandler FH = new TextFieldHandler(xMSFDoc, xTextDocument);
+        FH.updateDateFields();
+    }
+
     public void switchFooter(String sPageStyle, boolean bState, boolean bPageNumber, String sText) {
         if (xTextDocument != null) {
             try {
+                xTextDocument.lockControllers();
                 XStyleFamiliesSupplier xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
                 com.sun.star.container.XNameAccess xNameAccess = null;
                 xNameAccess = xStyleFamiliesSupplier.getStyleFamilies();
@@ -78,6 +88,7 @@ public class LetterDocument extends TextDocument {
                 } else {
                     Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", new Boolean(false));
                 }
+                xTextDocument.unlockControllers();
             } catch (Exception exception) {
                 exception.printStackTrace(System.out);
             }
@@ -86,8 +97,8 @@ public class LetterDocument extends TextDocument {
 
     public boolean hasElement(String sElement) {
         if (xTextDocument != null) {
-            TextSectionHandler mySectionHandler = new TextSectionHandler(xMSF, xTextDocument);
-            return mySectionHandler.hasTextSectionByName(sElement);
+            TextSectionHandler SH = new TextSectionHandler(xMSF, xTextDocument);
+            return SH.hasTextSectionByName(sElement);
         } else {
             return false;
         }
@@ -121,13 +132,24 @@ public class LetterDocument extends TextDocument {
         myFieldHandler.removeUserFieldByContent("");
     }
 
-    public void loadResult(String sLoadURL, boolean bAsTemplate) {
-        PropertyValue loadValues[] = new PropertyValue[1];
-        loadValues[0] = new PropertyValue();
-        loadValues[0].Name = "AsTemplate";
-        loadValues[0].Value = new Boolean(bAsTemplate);
-        String sFrame = "_self";
-        OfficeDocument.load(xDesktop, sLoadURL, sFrame, loadValues);
+    public void killEmptyFrames() {
+        try {
+            if (!keepLogoFrame) {
+                XTextFrame xTF = TextFrameHandler.getFrameByName("Company Logo", xTextDocument);
+                if (xTF != null) xTF.dispose();
+            }
+            if (!keepBendMarksFrame) {
+                XTextFrame xTF = TextFrameHandler.getFrameByName("Bend Marks", xTextDocument);
+                if (xTF != null) xTF.dispose();
+            }
+            if (!keepLetterSignsFrame) {
+                XTextFrame xTF = TextFrameHandler.getFrameByName("Letter Signs", xTextDocument);
+                if (xTF != null) xTF.dispose();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -166,6 +188,7 @@ public class LetterDocument extends TextDocument {
                 Helper.setUnoPropertyValue(xFrame, "RightBorder", myBorder);
                 Helper.setUnoPropertyValue(xFrame, "TopBorder", myBorder);
                 Helper.setUnoPropertyValue(xFrame, "BottomBorder", myBorder);
+                Helper.setUnoPropertyValue(xFrame, "Print", new Boolean(false));
 
                 XTextCursor xTextCursor = xTextDocument.getText().createTextCursor();
                 xTextCursor.gotoEnd(true);
