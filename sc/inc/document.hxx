@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:31:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,6 +1165,10 @@ public:
     USHORT          GetLastFlaggedRow( USHORT nTab ) const;
     USHORT          GetNextDifferentFlaggedCol( USHORT nTab, USHORT nStart) const;
     USHORT          GetNextDifferentFlaggedRow( USHORT nTab, USHORT nStart) const;
+    // returns whether to export a Default style for this col/row or not
+    // nDefault is setted to one possition in the current row/col where the Default style is
+    BOOL            GetColDefault( USHORT nTab, USHORT nCol, USHORT nLastRow, USHORT& nDefault) const;
+    BOOL            GetRowDefault( USHORT nTab, USHORT nRow, USHORT nLastCol, USHORT& nDefault) const;
 
     BOOL            IsFiltered( USHORT nRow, USHORT nTab ) const;
 

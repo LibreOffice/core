@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 09:49:34 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 07:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2356,6 +2356,18 @@ USHORT ScDocument::GetNextDifferentFlaggedRow( USHORT nTab, USHORT nStart) const
         return MAXROW;
     }
     return 0;
+}
+
+BOOL ScDocument::GetColDefault( USHORT nTab, USHORT nCol, USHORT nLastRow, USHORT& nDefault) const
+{
+    BOOL bRet(FALSE);
+    return bRet;
+}
+
+BOOL ScDocument::GetRowDefault( USHORT nTab, USHORT nRow, USHORT nLastCol, USHORT& nDefault) const
+{
+    BOOL bRet(FALSE);
+    return bRet;
 }
 
 void ScDocument::StripHidden( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2, USHORT nTab )
