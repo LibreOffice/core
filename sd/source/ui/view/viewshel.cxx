@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-16 10:13:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,6 @@
 #ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
 #endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
 #ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
 #endif
@@ -118,9 +115,6 @@
 #endif
 #ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
-#endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
 #endif
 #ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
@@ -148,9 +142,6 @@
 #include "FrameView.hxx"
 #endif
 #include "optsitem.hxx"
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
@@ -580,20 +571,6 @@ void ViewShell::Deactivate(BOOL bIsMDIActivate)
         if (pFuActual)
         {
             pFuActual->Deactivate();
-        }
-
-        // ggfs. Preview vom Kontext loesen
-        SfxChildWindow* pPreviewChildWindow =
-            pViewShell->GetViewFrame()->GetChildWindow(
-                PreviewChildWindow::GetChildWindowId());
-        if (pPreviewChildWindow)
-        {
-            PreviewWindow* pPreviewWin =
-                static_cast<PreviewWindow*>(pPreviewChildWindow->GetWindow());
-            if (pPreviewWin && pPreviewWin->GetDoc() == GetDoc())
-            {
-                pPreviewWin->SetContext(NULL, 0, NULL);
-            }
         }
 
         ::sd::View* pView = GetView();
@@ -1133,25 +1110,11 @@ USHORT ViewShell::PrepareClose (BOOL bUI, BOOL bForBrowsing)
 
 
 
-/*************************************************************************
-|*
-|* Update preview context
-|*
-\************************************************************************/
 void ViewShell::UpdatePreview (SdPage* pPage, BOOL bInit)
 {
-    SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(
-        PreviewChildWindow::GetChildWindowId() );
-    if (pPreviewChildWindow!=NULL && pPage!=NULL)
-    {
-        PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
-            pPreviewChildWindow->GetWindow());
-        if ( pPreviewWin && ( bInit || pPreviewWin->GetDoc() == GetDoc() ) )
-        {
-            USHORT nSdPageNo = ( pPage->GetPageNum() - 1 ) / 2;
-            pPreviewWin->SetContext(GetDoc(), nSdPageNo, pFrameView);
-        }
-    }
+    // Do nothing.  After the actual preview has been removed,
+    // OutlineViewShell::UpdatePreview() is the place where something
+    // usefull is still done.
 }
 
 
@@ -1374,58 +1337,6 @@ void ViewShell::ExecReq( SfxRequest& rReq )
             rReq.Done();
             break;
         }
-
-        case SID_PREVIEW_QUALITY_COLOR:
-        case SID_PREVIEW_QUALITY_GRAYSCALE:
-        case SID_PREVIEW_QUALITY_BLACKWHITE:
-        case SID_PREVIEW_QUALITY_CONTRAST:
-        {
-            ULONG nMode = PREVIEW_DRAWMODE_COLOR;
-
-            switch( nSlot )
-            {
-                case SID_PREVIEW_QUALITY_COLOR:
-                    nMode = PREVIEW_DRAWMODE_COLOR;
-                    break;
-                case SID_PREVIEW_QUALITY_GRAYSCALE:
-                    nMode = PREVIEW_DRAWMODE_GRAYSCALE;
-                    break;
-                case SID_PREVIEW_QUALITY_BLACKWHITE:
-                    nMode = PREVIEW_DRAWMODE_BLACKWHITE;
-                    break;
-                case SID_PREVIEW_QUALITY_CONTRAST:
-                    nMode = PREVIEW_DRAWMODE_CONTRAST;
-                    break;
-            }
-
-/*
-            SfxChildWindow* pPreviewChildWindow =
-                GetViewFrame()->GetChildWindow(
-                    PreviewChildWindow::GetChildWindowId());
-            PreviewWindow* pPreviewWindow = static_cast<PreviewWindow*>(
-                pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL);
-            FuSlideShow* pShow = pPreviewWindow!=NULL
-                ? pPreviewWindow->GetSlideShow()
-                : NULL;
-            ShowWindow* pShowWindow = const_cast<ShowWindow*>(
-                pShow!=NULL ? pShow->GetShowWindow() : NULL);
-
-            if( pShowWindow )
-            {
-                pShowWindow->SetDrawMode( nMode );
-                pShow->Resize( pShowWindow->GetOutputSizePixel() );
-                pShowWindow->Invalidate();
-            }
-*/
-            pFrameView->SetPreviewDrawMode( nMode );
-            SdOptions* pOptions = SD_MOD()->GetSdOptions (
-                GetDoc()->GetDocumentType() );
-            pOptions->SetPreviewQuality( nMode );
-
-            Invalidate();
-            rReq.Done();
-        }
-        break;
     }
 }
 
