@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:18:26 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kohei Yoshida__________________________
  *
  *
  ************************************************************************/
@@ -942,12 +942,20 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 BOOL ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
     BOOL bRet = FALSE;
+
+    // #i3875# *Hack*
+    BOOL bMod1Locked = aViewData.GetViewShell()->GetLockedModifiers() & KEY_MOD1 ? TRUE : FALSE;
+    aViewData.SetSelCtrlMouseClick( rMEvt.IsMod1() || bMod1Locked );
+
     if ( pSelEngine )
     {
         bMoveIsShift = rMEvt.IsShift();
         bRet = pSelEngine->SelMouseButtonDown( rMEvt );
         bMoveIsShift = FALSE;
     }
+
+    aViewData.SetSelCtrlMouseClick( FALSE ); // #i3875# *Hack*
+
     return bRet;
 }
 
