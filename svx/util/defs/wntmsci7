@@ -16809,3 +16809,9 @@ _real@8@3ffd820c49ba5e354000
 ?s_pType_com_sun_star_i18n_XForbiddenCharacters@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXForbiddenCharacters@i18n@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_text_WritingMode@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4WritingMode@text@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_drawing_BitmapMode@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4BitmapMode@drawing@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?LinkStubOnAsyncGetFocus@FmPropBrw@@KAJPAX0@Z
+?OnAsyncGetFocus@FmPropBrw@@IAEJPAX@Z
+??0?$_Vector_base@V?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@@_STL@@QAE@ABV?$allocator@V?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@1@@Z
+?getImplementationId@?$WeakImplHelper2@VXPropertySet@beans@star@sun@com@@VXPropertyState@2345@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?isComposeable@OPropertySetComposerCallback@svxform@@UBEEABVOUString@rtl@@@Z
+?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXFormComponent@form@456@PAVXChild@container@456@@Z
