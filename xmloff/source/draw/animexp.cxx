@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-17 13:55:25 $
+ *  last change: $Author: cl $ $Date: 2002-10-29 15:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ void XMLAnimationsExporter::prepare( Reference< XShape > xShape )
         // check for presentation shape service
         {
             Reference< XServiceInfo > xServiceInfo( xShape, UNO_QUERY );
-            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.shape" ) ) ) )
+            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.Shape" ) ) ) )
                 return;
         }
 
@@ -380,7 +380,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
         // check for presentation shape service
         {
             Reference< XServiceInfo > xServiceInfo( xShape, UNO_QUERY );
-            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.shape" ) ) ) )
+            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.Shape" ) ) ) )
                 return;
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-17 12:42:27 $
+ *  last change: $Author: cl $ $Date: 2002-10-29 15:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ public:
         msSoundOn( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ),
         msSpeed( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ),
         msTextEffect( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ),
-        msPresShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.shape" ) ),
+        msPresShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.Shape" ) ),
         msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) ),
         msIsAnimation( RTL_CONSTASCII_USTRINGPARAM( "IsAnimation" ) )
     {}
