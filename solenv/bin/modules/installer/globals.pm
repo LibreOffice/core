@@ -172,6 +172,7 @@ BEGIN
     $is_copy_only_project = 0;
     $addchildprojects = 0;
     $languagepack = 0;
+    $tab = 0;
 
     $unomaxservices = 25;
     $javamaxservices = 15;
