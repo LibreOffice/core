@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:37:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ void SdTransferable::CreateData()
     {
         bOwnDocument = TRUE;
 
-        const SdrMarkList& rMarkList = pSdView->GetMarkList();
+        const SdrMarkList& rMarkList = pSdView->GetMarkedObjectList();
 
         if( rMarkList.GetMarkCount() == 1 )
             CreateObjectReplacement( rMarkList.GetMark( 0 )->GetObj() );
