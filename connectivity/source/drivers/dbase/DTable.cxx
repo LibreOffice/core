@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-21 14:50:26 $
+ *  last change: $Author: oj $ $Date: 2002-03-19 14:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1995,6 +1995,13 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                 }
                 bOk = _pNewTable->InsertRow(*aInsertRow,sal_True,_pNewTable->m_pColumns);
                 OSL_ENSURE(bOk,"Row could not be inserted!");
+                // now adjust the delete state
+                if ( aRow->isDeleted() )
+                {
+                    sal_Int32 nCurPos = 0;
+                    _pNewTable->seekRow( IResultSetHelper::LAST ,0,nCurPos);
+                    _pNewTable->DeleteRow(*_pNewTable->m_aColumns);
+                }
             }
             else
                 OSL_ENSURE(bOk,"Row could not be fetched!");
