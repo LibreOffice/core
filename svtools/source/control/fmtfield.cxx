@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 10:07:32 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 11:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,22 @@ String FormattedField::GetTextValue() const
         ((FormattedField*)this)->m_bValueDirty = FALSE;
     }
     return m_sCurrentTextValue;
+}
+
+//------------------------------------------------------------------------------
+void FormattedField::SetAutoColor(BOOL _bAutomatic)
+{
+    if (_bAutomatic == m_bAutoColor)
+        return;
+
+    m_bAutoColor = _bAutomatic;
+    if (m_bAutoColor)
+    {   // if auto color is switched on, adjust the current text color, too
+        if (m_pLastOutputColor)
+            SetControlForeground(*m_pLastOutputColor);
+        else
+            SetControlForeground();
+    }
 }
 
 //------------------------------------------------------------------------------
