@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-31 22:57:51 $
+#   last change: $Author: svesik $ $Date: 2000-11-08 15:04:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -217,6 +217,8 @@ desktop : sc sd sw
 eventattacher : cppuhelper
 extensions : rdbmaker svx xml2cmp
 external: std2
+extras : xml2cmp
+fileaccess: xml2cmp
 forms : svx
 framework : svtools
 goodies : so3
@@ -268,7 +270,8 @@ uui : svtools
 vcl : rsc sot ucbhelper unotools xprinter
 vos : sal
 wizards : offmgr
-xmloff : lingu
+xml2cmp : tools
+xmloff : tools lingu
 xmlhelp : jut
 
 # 
