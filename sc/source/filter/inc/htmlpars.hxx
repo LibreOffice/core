@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,14 +513,17 @@ private:
     void                        ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryPtr& rpEntry );
     /** Tries to insert the entry into the current cell.
         @descr  If insertion is not possible (i.e., currently no cell open), the
-        entry will be inserted into the parent table. */
-    void                        PushEntry( ScHTMLEntryPtr& rpEntry );
+        entry will be inserted into the parent table.
+        @return  true = Entry as been pushed into the current cell; false = Entry dropped. */
+    bool                        PushEntry( ScHTMLEntryPtr& rpEntry );
     /** Puts the current entry into the entry list, if it is not empty.
         @param rInfo  The import info struct containing the end position of the current entry.
-        @param bLastInCell  true = If cell is still empty, put this entry always. */
-    void                        PushEntry( const ImportInfo& rInfo, bool bLastinCell = false );
-    /** Pushes a new entry into current cell which references a nested table. */
-    void                        PushTableEntry( ScHTMLTableId nTableId );
+        @param bLastInCell  true = If cell is still empty, put this entry always.
+        @return  true = Entry as been pushed into the current cell; false = Entry dropped. */
+    bool                        PushEntry( const ImportInfo& rInfo, bool bLastInCell = false );
+    /** Pushes a new entry into current cell which references a nested table.
+        @return  true = Entry as been pushed into the current cell; false = Entry dropped. */
+    bool                        PushTableEntry( ScHTMLTableId nTableId );
 
     /** Tries to find a table from the table container.
         @descr  Assumes that the table is located in the current container or
