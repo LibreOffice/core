@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:17:53 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 10:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 ///////////////////////////////
 String S_NAME_NOT_THERE
 {
-    Text = "Name nicht vorhanden: #($Arg1)";
+    Text = "Name%PRODUCTVERSIONnicht%PRODUCTVERSIONvorhanden%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Name doesn't exist: #($Arg1)";
     Text[ portuguese ] = "Nome inexistente: #($Arg1)";
     Text[ russian ] = "Name doesn't exist: #($Arg1)";
@@ -97,7 +97,7 @@ String S_NAME_NOT_THERE
 };
 String S_DOUBLE_NAME
 {
-    Text = "Name Doppelt: ($Arg1)";
+    Text = "Name%PRODUCTVERSIONDoppelt%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Name double: ($Arg1)";
     Text[ portuguese ] = "Nome duplo: ($Arg1)";
     Text[ russian ] = "Name double: ($Arg1)";
@@ -119,7 +119,7 @@ String S_DOUBLE_NAME
 };
 String S_READING_FILE
 {
-    Text = "Einlesen der Dateien";
+    Text = "Einlesen%PRODUCTVERSIONder%PRODUCTVERSIONDateien";
     Text[ english_us ] = "Reading the files";
     Text[ portuguese ] = "Leitura dos ficheiros";
     Text[ russian ] = "Reading the files";
@@ -141,7 +141,7 @@ String S_READING_FILE
 };
 String S_CANNOT_OPEN_FILE
 {
-    Text = "Kann Datei nicht ÷ffnen: ($Arg1)";
+    Text = "Kann%PRODUCTVERSIONDatei%PRODUCTVERSIONnicht%PRODUCTVERSION÷ffnen%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "File cannot be opened: ($Arg1)";
     Text[ portuguese ] = "ImpossÌvel abrir ficheiro: ($Arg1)";
     Text[ russian ] = "File cannot be opened: ($Arg1)";
@@ -163,7 +163,7 @@ String S_CANNOT_OPEN_FILE
 };
 String S_INVALID_LINE
 {
-    Text = "Zeile \"($Arg1)\" Ist ung¸ltig.";
+    Text = "Zeile%PRODUCTVERSIONArg%PRODUCTVERSIONIst%PRODUCTVERSIONung¸ltig%PRODUCTVERSION";
     Text[ english_us ] = "Line \"($Arg1)\" is invalid.";
     Text[ portuguese ] = "A linha \"($Arg1)\" n„o È v·lida.";
     Text[ russian ] = "Line \"($Arg1)\" is invalid.";
@@ -185,7 +185,7 @@ String S_INVALID_LINE
 };
 String S_SHORTNAME_UNKNOWN
 {
-    Text = "Kurzname Unbekannt beim Kopieren: ($Arg1)";
+    Text = "Kurzname%PRODUCTVERSIONUnbekannt%PRODUCTVERSIONbeim%PRODUCTVERSIONKopieren%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Short name unknown during copying: ($Arg1)";
     Text[ portuguese ] = "Abreviatura desconhecida ao copiar: ($Arg1)";
     Text[ russian ] = "Short name unknown during copying: ($Arg1)";
@@ -207,7 +207,7 @@ String S_SHORTNAME_UNKNOWN
 };
 String S_LONGNAME_UNKNOWN
 {
-    Text = "Kurzname Unbekannt beim Kopieren: ($Arg1)";
+    Text = "Kurzname%PRODUCTVERSIONUnbekannt%PRODUCTVERSIONbeim%PRODUCTVERSIONKopieren%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Short name unknown during copying: ($Arg1)";
     Text[ portuguese ] = "Abreviatura desconhecida ao copiar: ($Arg1)";
     Text[ russian ] = "Short name unknown during copying: ($Arg1)";
@@ -229,7 +229,7 @@ String S_LONGNAME_UNKNOWN
 };
 String S_FIRST_SHORTNAME_REQ_ASTRX
 {
-    Text = "Erster Kurzname muss mit * beginnen. ‹berspringe.";
+    Text = "Erster%PRODUCTVERSIONKurzname%PRODUCTVERSIONmuss%PRODUCTVERSIONmit%PRODUCTVERSIONbeginnen%PRODUCTVERSION‹berspringe%PRODUCTVERSION";
     Text[ english_us ] = "First short name must start with * . Ignore.";
     Text[ portuguese ] = "A primeira abreviatura dever· comeÁar com *. Ignorar.";
     Text[ russian ] = "First short name must start with * . Leave out.";
@@ -251,7 +251,7 @@ String S_FIRST_SHORTNAME_REQ_ASTRX
 };
 String S_TIMOUT_WAITING
 {
-    Text = "Server Timeout beim Warten auf Antwort. Sequenz Nr: ($Arg1)";
+    Text = "Server%PRODUCTVERSIONTimeout%PRODUCTVERSIONbeim%PRODUCTVERSIONWarten%PRODUCTVERSIONauf%PRODUCTVERSIONAntwort%PRODUCTVERSIONSequenz%PRODUCTVERSIONNr%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ portuguese ] = "Server Timeout ao esperar pela resposta. SequÍncia n∫: ($Arg1)";
     Text[ russian ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
@@ -273,7 +273,7 @@ String S_TIMOUT_WAITING
 };
 String S_APPLICATION_RESTARTED
 {
-    Text = "Applikation wurde neu gestartet.";
+    Text = "Applikation%PRODUCTVERSIONwurde%PRODUCTVERSIONneu%PRODUCTVERSIONgestartet%PRODUCTVERSION";
     Text[ english_us ] = "Application has been restarted.";
     Text[ portuguese ] = "A aplicaÁ„o foi reiniciada.";
     Text[ russian ] = "Application has been restarted.";
@@ -295,7 +295,7 @@ String S_APPLICATION_RESTARTED
 };
 String S_APPLICATION_START_FAILED
 {
-    Text = "Applikation \"($Arg1)\" kann nicht gestartet werden. ";
+    Text = "Applikation%PRODUCTVERSIONArg%PRODUCTVERSIONkann%PRODUCTVERSIONnicht%PRODUCTVERSIONgestartet%PRODUCTVERSIONwerden%PRODUCTVERSION";
     Text[ english_us ] = "Application \"($Arg1)\" cannot be started. ";
     Text[ portuguese ] = "ImpossÌvel iniciar a aplicaÁ„o \"($Arg1)\". ";
     Text[ russian ] = "Application \"($Arg1)\" cannot be started. ";
@@ -317,7 +317,7 @@ String S_APPLICATION_START_FAILED
 };
 String S_TIMOUT_SENDING
 {
-    Text = "Server Timeout beim Senden. Sequenz Nr: ($Arg1)";
+    Text = "Server%PRODUCTVERSIONTimeout%PRODUCTVERSIONbeim%PRODUCTVERSIONSenden%PRODUCTVERSIONSequenz%PRODUCTVERSIONNr%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ portuguese ] = "Server Timeout ao enviar. SequÍncia n∫: ($Arg1)";
     Text[ russian ] = "Server Timeout while sending. Sequence No: ($Arg1)";
@@ -339,7 +339,7 @@ String S_TIMOUT_SENDING
 };
 String S_NO_CONNECTION
 {
-    Text = "Keine Verbindung. Sequenz Nr: ($Arg1)";
+    Text = "Keine%PRODUCTVERSIONVerbindung%PRODUCTVERSIONSequenz%PRODUCTVERSIONNr%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "No connection. Sequence No: ($Arg1)";
     Text[ portuguese ] = "Sem ligaÁ„o. SequÍncia n∫: ($Arg1)";
     Text[ russian ] = "No connection. Sequence No: ($Arg1)";
@@ -361,7 +361,7 @@ String S_NO_CONNECTION
 };
 String S_NO_FILES_FOUND
 {
-    Text = "Keine ($Arg1) Dateien gefunden";
+    Text = "Keine%PRODUCTVERSIONArg%PRODUCTVERSIONDateien%PRODUCTVERSIONgefunden";
     Text[ english_us ] = "No ($Arg1) files found";
     Text[ portuguese ] = "N„o foram encontrados quaisquer ficheiros ($Arg1)";
     Text[ russian ] = "No ($Arg1) files found";
@@ -383,7 +383,7 @@ String S_NO_FILES_FOUND
 };
 String S_ERRORS_DETECTED
 {
-    Text = "** ($Arg1) Fehler aufgetreten";
+    Text = "%PRODUCTVERSIONArg%PRODUCTVERSIONFehler%PRODUCTVERSIONaufgetreten";
     Text[ english_us ] = "** ($Arg1) errors occurred";
     Text[ portuguese ] = "** ($Arg1): erros ocorridos";
     Text[ russian ] = "** ($Arg1) errors occurred";
@@ -405,7 +405,7 @@ String S_ERRORS_DETECTED
 };
 String S_NO_ERRORS_DETECTED
 {
-    Text = "** Keine Fehler aufgetreten";
+    Text = "%PRODUCTVERSIONKeine%PRODUCTVERSIONFehler%PRODUCTVERSIONaufgetreten";
     Text[ english_us ] = "** No errors have occurred";
     Text[ portuguese ] = "**N„o ocorreram erros";
     Text[ russian ] = "** No errors have occurred";
@@ -427,7 +427,7 @@ String S_NO_ERRORS_DETECTED
 };
 String S_WARNINGS_DETECTED
 {
-    Text = "** ($Arg1) Warnungen aufgetreten";
+    Text = "%PRODUCTVERSIONArg%PRODUCTVERSIONWarnungen%PRODUCTVERSIONaufgetreten";
     Text[ english_us ] = "** ($Arg1) warnings occurred";
     Text[ portuguese ] = "** ($Arg1): erros ocorridos";
     Text[ russian ] = "** ($Arg1) warnings occurred";
@@ -449,7 +449,7 @@ String S_WARNINGS_DETECTED
 };
 String S_NO_WARNINGS_DETECTED
 {
-    Text = "** Keine Warnungen aufgetreten";
+    Text = "%PRODUCTVERSIONKeine%PRODUCTVERSIONWarnungen%PRODUCTVERSIONaufgetreten";
     Text[ english_us ] = "** No warnings have occurred";
     Text[ portuguese ] = "**N„o ocorreram quaisquer erros";
     Text[ russian ] = "** No warnings have occurred";
@@ -471,7 +471,7 @@ String S_NO_WARNINGS_DETECTED
 };
 String S_INCLUDE_FILE_WARNINGS_DETECTED
 {
-    Text = "** ($Arg1) Warnungen bei der Initialisierung aufgetreten";
+    Text = "%PRODUCTVERSIONArg%PRODUCTVERSIONWarnungen%PRODUCTVERSIONbei%PRODUCTVERSIONder%PRODUCTVERSIONInitialisierung%PRODUCTVERSIONaufgetreten";
     Text[ english_us ] = "** ($Arg1) warnings occurred during initialization";
     Text[ portuguese ] = "AdvertÍncias ** ($Arg1) durante a inicializaÁ„o";
     Text[ russian ] = "**¬Ó ‚ÂÏˇ ËÌËˆË‡ÎËÁ‡ˆËË ‚˚‰‡‚‡ÎÓÒ¸ ($Arg1) ÔÂ‰ÛÔÂÊ‰ÂÌËÈ";
@@ -493,7 +493,7 @@ String S_INCLUDE_FILE_WARNINGS_DETECTED
 };
 String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
 {
-    Text = "** Keine Warnungen bei der Initialisierung aufgetreten";
+    Text = "%PRODUCTVERSIONKeine%PRODUCTVERSIONWarnungen%PRODUCTVERSIONbei%PRODUCTVERSIONder%PRODUCTVERSIONInitialisierung%PRODUCTVERSIONaufgetreten";
     Text[ english_us ] = "** No warnings occurred during initialization";
     Text[ portuguese ] = "**N„o apareceram advertÍncias durante a inicializaÁ„o";
     Text[ russian ] = "**¬Ó ‚ÂÏˇ ËÌËˆË‡ÎËÁ‡ˆËË ÔÂ‰ÛÔÂÊ‰ÂÌËˇ ÌÂ ‚˚‰‡‚‡ÎËÒ¸";
@@ -515,7 +515,7 @@ String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
 };
 String S_UNKNOWN_SLOT_CONTROL
 {
-    Text = "Slot/Control unbekannt :\"($Arg1)\"";
+    Text = "Slot%PRODUCTVERSIONControl%PRODUCTVERSIONunbekannt%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Slot/Control unknown :\"($Arg1)\"";
     Text[ portuguese ] = "Slot/Control desconhecido :\"($Arg1)\"";
     Text[ russian ] = "Slot/Control unknown :\"($Arg1)\"";
@@ -537,7 +537,7 @@ String S_UNKNOWN_SLOT_CONTROL
 };
 String S_RETURN_SEQUENCE_MISSMATCH
 {
-    Text = "Return Stream mit falscher Sequenz: ($Arg1) statt ($Arg2)";
+    Text = "Return%PRODUCTVERSIONStream%PRODUCTVERSIONmit%PRODUCTVERSIONfalscher%PRODUCTVERSIONSequenz%PRODUCTVERSIONArg%PRODUCTVERSIONstatt%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
     Text[ portuguese ] = "Return Stream com sequÍncia incorrecta: ($Arg1) em lugar de ($Arg2)";
     Text[ russian ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
@@ -559,7 +559,7 @@ String S_RETURN_SEQUENCE_MISSMATCH
 };
 String S_RETURNED_VALUE_ID_MISSMATCH
 {
-    Text = "Returnwert Empfangen aber andere Id erwartet";
+    Text = "Returnwert%PRODUCTVERSIONEmpfangen%PRODUCTVERSIONaber%PRODUCTVERSIONandere%PRODUCTVERSIONId%PRODUCTVERSIONerwartet";
     Text[ english_us ] = "Return value received but different Id expected";
     Text[ portuguese ] = "Recebido o valor Return, mas espera-se outro ID";
     Text[ russian ] = "Return value received but different Id expected";
@@ -573,7 +573,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
     Text[ polish ] = "Odebrano wartoúÊ return, ale oczekiwane jest inne ID";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber andere Id erwartet";
     Text[ japanese ] = "ÿ¿∞›ílÇéÛÇØéÊÇËÇ‹ÇµÇΩÇ™ÅAï ÇÃIdÇ™ïKóvÇ≈Ç∑ÅB";
-    Text[ korean ] = "ºˆΩ≈¿« ∏Æ≈œ∞™¿Ã ¥Ÿ∏• Id∏¶ ±‚¥Î«‘";
+    Text[ korean ] = "π›»Ø∞™ ºˆΩ≈«‘,  «œ¡ˆ∏∏ ¥Ÿ∏• Id∏¶ ±‚¥Î«‘";
     Text[ chinese_simplified ] = "∑µªÿ÷µΩ” ’∆⁄¥˝µƒ «∆‰À¸µƒ Id(±Í ∂∑˚)";
     Text[ chinese_traditional ] = "±µ¶¨®Ï™¶^≠»°A¶˝¨O¥¡´›¨O®‰•¶ Id";
     Text[ arabic ] = "Return value received but different Id expected";
@@ -581,7 +581,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
 };
 String S_RETURNED_VALUE_NO_RECEIVER
 {
-    Text = "Returnwert Empfangen aber kein Empf‰nger definiert";
+    Text = "Returnwert%PRODUCTVERSIONEmpfangen%PRODUCTVERSIONaber%PRODUCTVERSIONkein%PRODUCTVERSIONEmpf‰nger%PRODUCTVERSIONdefiniert";
     Text[ english_us ] = "Return value received but receiver not defined";
     Text[ portuguese ] = "Recebido o valor Return, mas o destinat·rio n„o foi definido";
     Text[ russian ] = "Return value received but receiver not defined";
@@ -595,7 +595,7 @@ String S_RETURNED_VALUE_NO_RECEIVER
     Text[ polish ] = "Odebrano wartoúÊ return, ale brak zdefiniowanego odbiorcy";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber kein Empf‰nger definiert";
     Text[ japanese ] = "ÿ¿∞›ílÇéÛÇØéÊÇËÇ‹ÇµÇΩÇ™ÅAéÛêMé“Ç™åàíËÇ≈Ç´Ç‹ÇπÇÒÅB";
-    Text[ korean ] = "ºˆΩ≈¿« ∏Æ≈œ∞™ø° ºˆΩ≈¿Œ¿Ã ¡§¿«µ«¡ˆ æ ¿Ω";
+    Text[ korean ] = "π›»Ø∞™ ºˆΩ≈«‘, «œ¡ˆ∏∏ ºˆΩ≈¿⁄∞°  ¡§¿«µ«¡ˆ æ æ“¿Ω";
     Text[ chinese_simplified ] = "∑µªÿ÷µΩ” ’√ª”–÷∏∂®Ω” ’’ﬂ";
     Text[ chinese_traditional ] = "±µ¶¨®Ï™¶^≠»°A¶˝¨O®S¶≥´¸©w±µ¶¨•ÿº–°C";
     Text[ arabic ] = "Return value received but receiver not defined";
@@ -603,7 +603,7 @@ String S_RETURNED_VALUE_NO_RECEIVER
 };
 String S_UNKNOWN_METHOD
 {
-    Text = "Unbekannte Methode an Objekt : ($Arg1).($Arg2)";
+    Text = "Unbekannte%PRODUCTVERSIONMethode%PRODUCTVERSIONan%PRODUCTVERSIONObjekt%PRODUCTVERSIONArg%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Unknown method on object :($Arg1).($Arg2)";
     Text[ portuguese ] = "MÈtodo desconhecido ($Arg1) para ($Arg2)";
     Text[ russian ] = "Unknown method '($Arg1)' to ($Arg2)";
