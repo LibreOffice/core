@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:58 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,10 @@ class SvxPosSizeStatusBarControl : public SfxStatusBarControl
 {
 private:
     SvxPosSizeStatusBarControl_Impl*    pImp;
-
-    SfxStatusForwarder                  aPosForwarder;
-    SfxStatusForwarder                  aTableForwarder;
-    SfxStatusForwarder                  aFuncForwarder;
-
 public:
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxPosSizeStatusBarControl( USHORT nId, StatusBar& rStb, SfxBindings& rBind );
+    SvxPosSizeStatusBarControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
     ~SvxPosSizeStatusBarControl();
 
     virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
