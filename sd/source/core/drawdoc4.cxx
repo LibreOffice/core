@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-26 06:36:39 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 14:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,7 +1315,6 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
     {
         SdPage* pPage = (SdPage*) GetMasterPage(nPage);
-        pPage->SetName(rNewName);
         String aTemp(pPage->GetLayoutName());
 
         if (aTemp == rOldLayoutName)
