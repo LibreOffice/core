@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:35:19 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,12 @@
 #include "xmlnumfe.hxx"
 #endif
 
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
+/** === end UNO includes === **/
+
 //.........................................................................
 namespace xmloff
 {
@@ -154,6 +160,7 @@ namespace xmloff
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::text;
 
     //=====================================================================
     //= OFormLayerXMLExport_Impl
@@ -591,6 +598,14 @@ namespace xmloff
             }
 
             // ----------------------------------
+            // check if it's a control providing text
+            Reference< XText > xControlText( _rxObject, UNO_QUERY );
+            if ( xControlText.is() )
+            {
+                m_rContext.GetTextParagraphExport()->collectTextAutoStyles( xControlText );
+            }
+
+            // ----------------------------------
             // check if it is a grid control - in this case, we need special handling for the columns
             sal_Int16 nControlType = FormComponentType::CONTROL;
             _rxObject->getPropertyValue( PROPERTY_CLASSID ) >>= nControlType;
@@ -640,7 +655,7 @@ namespace xmloff
                             aPropertyStates.push_back( aNumberStyleState );
                         }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                         ::std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
                         for ( ; aHaveALook != aPropertyStates.end(); ++aHaveALook )
                         {
