@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 15:06:55 $
+ *  last change: $Author: mtg $ $Date: 2002-01-09 11:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,12 +1030,9 @@ SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const String& rGroupName
                                             const String& rEntryName) :
     pGlossaries(pGlss),
     sGroupName(rGroupName),
-    sEntryName(rEntryName)
+    sEntryName(rEntryName),
+    pBodyText ( NULL )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    xDocSh = pGlossaries->EditGroupDoc ( rGroupName, rEntryName, FALSE );
-    pBodyText = new SwXBodyText ( xDocSh->GetDoc() );
-    xBodyText = Reference < XServiceInfo > ( *pBodyText, UNO_QUERY);
 }
 /*-- 21.12.98 12:42:33---------------------------------------------------
 
@@ -1043,18 +1040,26 @@ SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const String& rGroupName
 SwXAutoTextEntry::~SwXAutoTextEntry()
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    if ( xDocSh->GetDoc()->IsModified () )
-        xDocSh->Save();
+    if ( xDocSh.Is() )
+    {
+        if ( xDocSh->GetDoc()->IsModified () )
+            xDocSh->Save();
+        xDocSh->DoClose();
+    }
 }
-/*-- 21.12.98 12:42:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-/*-- 21.12.98 12:42:34---------------------------------------------------
+void SwXAutoTextEntry::GetBodyText ()
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, FALSE );
+    pBodyText = new SwXBodyText ( xDocSh->GetDoc() );
+    xBodyText = Reference < XServiceInfo > ( *pBodyText, UNO_QUERY);
+}
 
-  -----------------------------------------------------------------------*/
 Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     return pBodyText->createTextCursor();
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
@@ -1064,6 +1069,7 @@ Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
     const Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     return pBodyText->createTextCursorByRange ( aTextPosition );
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
@@ -1072,6 +1078,7 @@ Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
 void SwXAutoTextEntry::insertString(const Reference< text::XTextRange > & xRange, const OUString& aString, sal_Bool bAbsorb) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     pBodyText->insertString ( xRange, aString, bAbsorb );
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
@@ -1082,6 +1089,7 @@ void SwXAutoTextEntry::insertControlCharacter(const Reference< text::XTextRange 
         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     pBodyText->insertControlCharacter ( xRange, nControlCharacter, bAbsorb );
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
@@ -1093,6 +1101,7 @@ void SwXAutoTextEntry::insertTextContent(
         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     pBodyText->insertTextContent ( xRange, xContent, bAbsorb );
 }
 /*-- 21.12.98 12:42:34---------------------------------------------------
@@ -1103,6 +1112,7 @@ void SwXAutoTextEntry::removeTextContent(
         throw( container::NoSuchElementException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     pBodyText->removeTextContent ( xContent );
 }
 /*-- 21.12.98 12:42:35---------------------------------------------------
@@ -1120,6 +1130,7 @@ Reference< text::XText >  SwXAutoTextEntry::getText(void) throw( uno::RuntimeExc
 Reference< text::XTextRange >  SwXAutoTextEntry::getStart(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     return pBodyText->getStart();
 }
 /*-- 21.12.98 12:42:36---------------------------------------------------
@@ -1128,6 +1139,7 @@ Reference< text::XTextRange >  SwXAutoTextEntry::getStart(void) throw( uno::Runt
 Reference< text::XTextRange >  SwXAutoTextEntry::getEnd(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     return pBodyText->getEnd();
 }
 /*-- 21.12.98 12:42:36---------------------------------------------------
@@ -1136,6 +1148,7 @@ Reference< text::XTextRange >  SwXAutoTextEntry::getEnd(void) throw( uno::Runtim
 OUString SwXAutoTextEntry::getString(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     return pBodyText->getString();
 }
 /*-- 21.12.98 12:42:36---------------------------------------------------
@@ -1144,6 +1157,7 @@ OUString SwXAutoTextEntry::getString(void) throw( uno::RuntimeException )
 void SwXAutoTextEntry::setString(const OUString& aString) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    EnsureBodyText();
     pBodyText->setString( aString );
 }
 /* -----------------15.07.99 10:11-------------------
