@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2005-01-25 15:39:29 $
+#   last change: $Date: 2005-03-15 09:21:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,11 +69,6 @@ TARGET = runner_convwatch
 
 .INCLUDE :  settings.mk
 
-.IF "$(JDK)" == "gcj"
-all:
-    @echo This dir cannot be build with gcj because of javax.imageio.ImageIO.write
-.ELSE
-
 # --- Files --------------------------------------------------------
 
 JARFILES = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
@@ -112,4 +107,3 @@ JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.ENDIF
