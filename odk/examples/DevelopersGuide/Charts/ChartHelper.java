@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:08:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -44,22 +44,25 @@
 // base classes
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.uno.Any;
 
 // factory for creating components
 import com.sun.star.lang.XMultiServiceFactory;
-
-// property access
-import com.sun.star.beans.*;
-
-// container access
-import com.sun.star.container.*;
+import com.sun.star.lang.XComponent;
+import com.sun.star.beans.XPropertySet;
 
 // application specific classes
 import com.sun.star.chart.XChartDocument;
 import com.sun.star.chart.XDiagram;
 import com.sun.star.drawing.*;
 import com.sun.star.frame.XModel;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XText;
+//import com.sun.star.text.VertOrientation;
+//import com.sun.star.text.HoriOrientation;
+import com.sun.star.document.XEmbeddedObjectSupplier;
 
 // base graphics things
 import com.sun.star.awt.Point;
@@ -83,9 +86,83 @@ public class ChartHelper
         maContainerDocument = aContainerDoc;
     }
 
-    // ____________________
+    public XChartDocument insertOLEChartInWriter(
+        String sChartName,
+        Point  aUpperLeft,
+        Size   aExtent,
+        String sChartServiceName )
+    {
+        XChartDocument aResult = null;
 
-    public XChartDocument insertOLEChart(
+        XMultiServiceFactory aFact = (XMultiServiceFactory)
+            UnoRuntime.queryInterface(XMultiServiceFactory.class,
+                                      maContainerDocument );
+
+        if( aFact != null )
+        {
+            try
+            {
+                XTextContent xTextContent = (XTextContent)UnoRuntime.queryInterface(
+                XTextContent.class,
+                aFact.createInstance("com.sun.star.text.TextEmbeddedObject"));
+
+                if ( xTextContent != null )
+                {
+                    XPropertySet xPropSet = (XPropertySet)UnoRuntime.queryInterface(
+                        XPropertySet.class, xTextContent);
+
+                    Any aAny = new Any(String.class, msChartClassID);
+                    xPropSet.setPropertyValue("CLSID", aAny );
+
+                    XTextDocument xTextDoc = (XTextDocument)
+                        UnoRuntime.queryInterface(XTextDocument.class,
+                                                  maContainerDocument);
+                    XText xText = xTextDoc.getText();
+                    XTextCursor xCursor = xText.createTextCursor();
+
+                    //insert embedded object in text -> object will be created
+                    xText.insertTextContent( xCursor, xTextContent, true );
+
+                    // set size and position
+                    XShape xShape = (XShape)UnoRuntime.queryInterface(
+                        XShape.class, xTextContent);
+                    xShape.setSize( aExtent );
+
+                    aAny = new Any(Short.class,
+                               new Short(com.sun.star.text.VertOrientation.NONE));
+                    xPropSet.setPropertyValue("VertOrient", aAny );
+                    aAny = new Any(Short.class,
+                               new Short(com.sun.star.text.HoriOrientation.NONE));
+                    xPropSet.setPropertyValue("HoriOrient", aAny );
+                    aAny = new Any(Integer.class, new Integer(aUpperLeft.Y));
+                    xPropSet.setPropertyValue("VertOrientPosition", aAny );
+                    aAny = new Any(Integer.class, new Integer(aUpperLeft.X));
+                    xPropSet.setPropertyValue("HoriOrientPosition", aAny );
+
+                    // retrieve the chart document as model of the OLE shape
+                    aResult = (XChartDocument) UnoRuntime.queryInterface(
+                            XChartDocument.class,
+                            xPropSet.getPropertyValue( "Model" ));
+
+                    // create a diagram via the factory and set this as
+                    // new diagram
+                    aResult.setDiagram(
+                        (XDiagram) UnoRuntime.queryInterface(
+                            XDiagram.class,
+                            ((XMultiServiceFactory) UnoRuntime.queryInterface(
+                                XMultiServiceFactory.class,
+                                aResult )).createInstance(sChartServiceName )));
+                }
+            } catch( Exception ex)
+            {
+                System.out.println( "caught exception: " + ex );
+            }
+        }
+
+        return aResult;
+    }
+
+    public XChartDocument insertOLEChartInDraw(
         String sChartName,
         Point  aUpperLeft,
         Size   aExtent,
@@ -96,8 +173,9 @@ public class ChartHelper
         XShapes aPage = null;
 
         // try interface for multiple pages in a document
-        XDrawPagesSupplier aSupplier = (XDrawPagesSupplier) UnoRuntime.queryInterface(
-            XDrawPagesSupplier.class, maContainerDocument );
+        XDrawPagesSupplier aSupplier = (XDrawPagesSupplier)
+            UnoRuntime.queryInterface(XDrawPagesSupplier.class,
+                                      maContainerDocument );
 
         if( aSupplier != null )
         {
@@ -109,14 +187,16 @@ public class ChartHelper
             }
             catch( Exception ex )
             {
-                System.out.println( "First page not found in shape collection: " + ex );
+                System.out.println( "First page not found in shape collection: " +
+                                    ex );
             }
         }
         else
         {
             // try interface for single draw page (e.g. spreadsheet)
-            XDrawPageSupplier aOnePageSupplier = (XDrawPageSupplier) UnoRuntime.queryInterface(
-                XDrawPageSupplier.class, maContainerDocument );
+            XDrawPageSupplier aOnePageSupplier = (XDrawPageSupplier)
+                UnoRuntime.queryInterface(XDrawPageSupplier.class,
+                                          maContainerDocument );
 
             if( aOnePageSupplier != null )
             {
@@ -127,8 +207,9 @@ public class ChartHelper
 
         if( aPage != null )
         {
-            XMultiServiceFactory aFact = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                XMultiServiceFactory.class, maContainerDocument );
+            XMultiServiceFactory aFact = (XMultiServiceFactory)
+                UnoRuntime.queryInterface(XMultiServiceFactory.class,
+                                          maContainerDocument );
 
             if( aFact != null )
             {
@@ -145,8 +226,8 @@ public class ChartHelper
                     aShape.setSize( aExtent );
 
                     // make the OLE shape a chart
-                    XPropertySet aShapeProp = (XPropertySet) UnoRuntime.queryInterface(
-                        XPropertySet.class, aShape );
+                    XPropertySet aShapeProp = (XPropertySet)
+                        UnoRuntime.queryInterface(XPropertySet.class, aShape );
                     if( aShapeProp != null )
                     {
                         // set the class id for charts
@@ -157,13 +238,14 @@ public class ChartHelper
                             XChartDocument.class,
                             aShapeProp.getPropertyValue( "Model" ));
 
-                        // create a diagram via the factory and set this as new diagram
+                        // create a diagram via the factory and set this as
+                        // new diagram
                         aResult.setDiagram(
                             (XDiagram) UnoRuntime.queryInterface(
                                 XDiagram.class,
                                 ((XMultiServiceFactory) UnoRuntime.queryInterface(
                                     XMultiServiceFactory.class,
-                                    aResult )).createInstance( sChartServiceName )));
+                                    aResult )).createInstance(sChartServiceName )));
                     }
                 }
                 catch( Exception ex )
