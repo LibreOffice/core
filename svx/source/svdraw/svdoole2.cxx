@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:17:08 $
+ *  last change: $Author: ka $ $Date: 2001-08-17 12:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,12 +589,19 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
                         pSdrView->DoConnect(pOle2Obj);
                     }
                 }
-                pOut->Push( PUSH_CLIPREGION );
-                pOut->IntersectClipRegion( aRect );
-                (*ppObjRef)->DoDraw(pOut,aRect.TopLeft(),aRect.GetSize(),JobSetup());
-                pOut->Pop();
+
+
+                // don't call DoDraw if this ís a special object and SDRPAINTMODE_HIDEDRAFTGRAF is set
+                if( ( ( (*ppObjRef)->GetMiscStatus() & SVOBJ_MISCSTATUS_SPECIALOBJECT ) == 0 ) ||
+                    ( ( rInfoRec.nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF ) == 0 ) )
+                {
+                    pOut->Push( PUSH_CLIPREGION );
+                    pOut->IntersectClipRegion( aRect );
+                    (*ppObjRef)->DoDraw(pOut,aRect.TopLeft(),aRect.GetSize(),JobSetup());
+                    pOut->Pop();
+                }
             }
-            else
+            else if( ( rInfoRec.nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF ) == 0 )
             { // sonst SDRPAINTMODE_DRAFTGRAF
                 Polygon aPoly(Rect2Poly(aRect,aGeo));
                 pOut->SetLineColor(Color(COL_BLACK));
