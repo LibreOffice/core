@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-20 11:04:28 $
+ *  last change: $Author: cl $ $Date: 2002-04-24 11:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,13 +1292,23 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             if( aName != pPage->GetName() )
                 pPage->SetName( aName );
 
+            SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
+
             if( pPage->GetPageKind() == PK_STANDARD )
             {
-                SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
-
                 DBG_ASSERT( pPresObj, "Masterpage without a background object!" );
                 if (pPresObj && pPresObj->GetOrdNum() != 0 )
                     pPage->NbcSetObjectOrdNum(pPresObj->GetOrdNum(),0);
+            }
+            else
+            {
+                DBG_ASSERT( pPresObj == NULL, "Non Standard Masterpage with a background object!\n(This assertion is ok for old binary files)" );
+                if( pPresObj )
+                {
+                    pPage->RemoveObject( pPresObj->GetOrdNum() );
+                    pPage->GetPresObjList()->Remove(pPresObj);
+                    delete pPresObj;
+                }
             }
         }
 
