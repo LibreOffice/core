@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-22 13:30:44 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XSCENARIO_HPP_
 #include <com/sun/star/sheet/XScenario.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
@@ -252,8 +255,8 @@ class SvxBoxInfoItem;
 
 
 typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertyChangeListener >* XPropertyChangeListenerPtr;
-SV_DECL_PTRARR_DEL( XPropertyChangeListenerArr_Impl, XPropertyChangeListenerPtr, 4, 4 );
+            ::com::sun::star::util::XModifyListener >* XModifyListenerPtr;
+SV_DECL_PTRARR_DEL( XModifyListenerArr_Impl, XModifyListenerPtr, 4, 4 );
 
 class ScNamedEntry;
 typedef ScNamedEntry* ScNamedEntryPtr;
@@ -286,6 +289,7 @@ class ScCellRangesBase : public com::sun::star::beans::XPropertySet,
                          public com::sun::star::sheet::XCellRangesQuery,
                          public com::sun::star::sheet::XFormulaQuery,
                          public com::sun::star::util::XReplaceable,
+                         public com::sun::star::util::XModifyBroadcaster,
                          public com::sun::star::lang::XServiceInfo,
                          public com::sun::star::lang::XUnoTunnel,
                          public com::sun::star::lang::XTypeProvider,
@@ -307,11 +311,10 @@ private:
     BOOL                    bChartColAsHdr;
     BOOL                    bChartRowAsHdr;
     BOOL                    bCursorOnly;
-    BOOL                    bValueChangePosted;
-    XPropertyChangeListenerArr_Impl aValueListeners;
+    BOOL                    bGotDataChangedHint;
+    XModifyListenerArr_Impl aValueListeners;
 
     DECL_LINK( ValueListenerHdl, SfxHint* );
-    DECL_LINK( ValueChanged, com::sun::star::beans::PropertyChangeEvent* );
 
 private:
     void            PaintRanges_Impl( USHORT nPart );
@@ -552,6 +555,14 @@ public:
     virtual sal_Int32 SAL_CALL replaceAll( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::util::XSearchDescriptor >& xDesc )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+                            // XModifyBroadcaster
+    virtual void SAL_CALL   addModifyListener( const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::util::XModifyListener >& aListener )
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeModifyListener( const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::util::XModifyListener >& aListener )
+                                throw (::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
