@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-02 16:36:26 $
+ *  last change: $Author: tra $ $Date: 2001-10-04 13:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,14 +451,17 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
             nHelpId = HID_FILESAVE_DOPLAY;
             break;
 
+        case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_VERSION :
             nHelpId = HID_FILEOPEN_VERSION;
             break;
 
+        case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE :
             nHelpId = HID_FILESAVE_TEMPLATE;
             break;
 
+        case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE :
             nHelpId = HID_FILEOPEN_IMAGE_TEMPLATE;
             break;
