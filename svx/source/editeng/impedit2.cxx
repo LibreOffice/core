@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-21 15:03:59 $
+ *  last change: $Author: mt $ $Date: 2002-08-26 15:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3641,8 +3641,24 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, USHORT nIndex, US
     nY += pLine->GetHeight();
     aEditCursor.Bottom() = nY-1;
 
-    // innerhalb der Zeile suchen....
-    long nX = GetXPos( pPortion, pLine, nIndex );
+    // innerhalb der Zeile suchen...
+    long nX;
+
+    if ( ( nIndex == pLine->GetStart() ) && ( nFlags & GETCRSR_STARTOFLINE ) )
+    {
+        Range aXRange = GetLineXPosStartEnd( pPortion, pLine );
+        nX = !IsRightToLeft( GetEditDoc().GetPos( pPortion->GetNode() ) ) ? aXRange.Min() : aXRange.Max();
+    }
+    else if ( ( nIndex == pLine->GetEnd() ) && ( nFlags & GETCRSR_ENDOFLINE ) )
+    {
+        Range aXRange = GetLineXPosStartEnd( pPortion, pLine );
+        nX = !IsRightToLeft( GetEditDoc().GetPos( pPortion->GetNode() ) ) ? aXRange.Max() : aXRange.Min();
+    }
+    else
+    {
+        nX = GetXPos( pPortion, pLine, nIndex );
+    }
+
     aEditCursor.Left() = aEditCursor.Right() = nX;
 
     if ( nFlags & GETCRSR_TXTONLY )

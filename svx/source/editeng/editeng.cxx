@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 11:39:48 $
+ *  last change: $Author: mt $ $Date: 2002-08-26 15:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,9 +821,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
 
     sal_Bool bModified  = sal_False;
     sal_Bool bMoved     = sal_False;
-    sal_Bool bEndKey    = sal_False;    // spezielle CursorPosition
     sal_Bool bAllowIdle = sal_True;
     sal_Bool bReadOnly  = pEditView->IsReadOnly();
+
+    USHORT nShowCursorFlags = 0;
 
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     DBG_ASSERT( !aCurSel.IsInvalid(), "Blinde Selection in EditEngine::PostKeyEvent" );
@@ -917,8 +918,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     }
 
                     bMoved = sal_True;
-                    if ( nCode == KEY_END )
-                        bEndKey = sal_True;
+                    if ( nCode == KEY_HOME )
+                        nShowCursorFlags |= GETCRSR_STARTOFLINE;
+                    else if ( nCode == KEY_END )
+                        nShowCursorFlags |= GETCRSR_ENDOFLINE;
                 }
 #ifdef DEBUG
                 GetLanguage( pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() ), aCurSel.Max().GetIndex() );
@@ -1120,7 +1123,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     else if ( bMoved )
     {
         sal_Bool bGotoCursor = pEditView->pImpEditView->DoAutoScroll();
-        pEditView->pImpEditView->ShowCursor( bGotoCursor, sal_True, bEndKey );
+        pEditView->pImpEditView->ShowCursor( bGotoCursor, sal_True, nShowCursorFlags );
         pImpEditEngine->CallStatusHdl();
     }
 

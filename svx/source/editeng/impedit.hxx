@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 09:21:12 $
+ *  last change: $Author: mt $ $Date: 2002-08-26 15:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,9 @@ DBG_NAMEEX( EditEngine );
 #define ATTRSPECIAL_WHOLEWORD   1
 #define ATTRSPECIAL_EDGE        2
 
-#define GETCRSR_ENDOFLINE   0x0001
-#define GETCRSR_TXTONLY     0x0002
+#define GETCRSR_TXTONLY         0x0001
+#define GETCRSR_STARTOFLINE     0x0002
+#define GETCRSR_ENDOFLINE       0x0004
 
 #define LINE_SEP    0x0A
 
@@ -367,7 +368,8 @@ public:
     void            CalcAnchorPoint();
     void            RecalcOutputArea();
 
-    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sal_Bool bSpecial = sal_False );
+    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, BOOL test );
+    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, USHORT nShowCursorFlags = 0 );
     Pair            Scroll( long ndX, long ndY, BYTE nRangeCheck = RGCHK_NEG );
 
     void            SetInsertMode( sal_Bool bInsert );

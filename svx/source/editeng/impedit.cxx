@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 09:21:10 $
+ *  last change: $Author: mt $ $Date: 2002-08-26 15:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,7 +704,7 @@ void ImpEditView::CalcAnchorPoint()
     }
 }
 
-void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sal_Bool bSpecial )
+void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, USHORT nShowCursorFlags )
 {
     // Kein ShowCursor bei einer leeren View...
     if ( ( aOutArea.Left() >= aOutArea.Right() ) && ( aOutArea.Top() >= aOutArea.Bottom() ) )
@@ -726,12 +726,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     if ( pOutWin->GetCursor() != GetCursor() )
         pOutWin->SetCursor( GetCursor() );
 
-    sal_uInt16 nFlags = GETCRSR_TXTONLY;
-    if ( bSpecial )
-        nFlags |= GETCRSR_ENDOFLINE;
-
     EditPaM aPaM( aEditSelection.Max() );
-    Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nFlags );
+    Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|nShowCursorFlags );
     if ( !IsInsertMode() && !aEditSelection.HasRange() )
     {
         // Bei Overwrite die Breite korrigieren
