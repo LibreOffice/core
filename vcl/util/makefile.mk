@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:59:08 $
+#   last change: $Author: vg $ $Date: 2003-04-11 17:35:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -198,7 +198,7 @@ LIB1FILES+= \
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
-    SHL1STDLIBS+=   $(FREETYPELIBST)
+    SHL1STDLIBS+=   $(FREETYPELIB)
 .ENDIF
 
 .IF "$(ENABLE_CTL)"!=""
@@ -285,7 +285,7 @@ SHL1STDLIBS += -lXext
 .IF "$(OS)"=="SOLARIS"
 
 .IF "$(USE_XPRINT)" == "TRUE"
-SHL1STDLIBS += -lXp Xext -lSM -lICE -lX11
+SHL1STDLIBS += -lXp -lXext -lSM -lICE -lX11
 .ELSE
 SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
@@ -295,6 +295,9 @@ SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXext -lSM -lICE -lX11
 .ELSE
+.IF "$(CPU)" == "I"
+SHL1STDLIBS += -Wl,-Bstatic -lXinerama -Wl,-Bdynamic 
+.ENDIF
 SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
 .ENDIF          # "$(OS)"=="SOLARIS"
