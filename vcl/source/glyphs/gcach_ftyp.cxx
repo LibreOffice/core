@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.44 $
- *  last change: $Author: hdu $ $Date: 2001-05-23 12:26:53 $
+ *  $Revision: 1.45 $
+ *  last change: $Author: hdu $ $Date: 2001-05-29 15:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,13 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 
-//#define FT20b8 true /* VERSION_MINOR in freetype.h is too coarse */
+// VERSION_MINOR in freetype.h is too coarse, we need to fine-tune ourselves:
+#if (SUPD <= 632)
+    #define FTVERSION 198
+#else
+    #define FTVERSION 202
+#endif
+
 #include "freetype/freetype.h"
 #include "freetype/ftglyph.h"
 #include "freetype/ftoutln.h"
@@ -195,7 +201,7 @@ void FtFontFile::Unmap()
 #if defined(UNX)
     munmap( (char*)mpFileMap, mnFileSize );
 #elif defined(WIN32)
-    UnmapViewOfFile( (char*)mpFileMap );
+    UnmapViewOfFile( (LPCVOID)mpFileMap );
 #else
     delete[] mpFileMap;
 #endif
@@ -332,14 +338,13 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
             {
                 const FT_CharMap aCM = aFaceFT->charmaps[i];
-#ifdef FT20b8
+#if (FTVERSION < 200)
                 if( aCM->encoding == ft_encoding_none )
-                    aFontData.meCharSet = RTL_TEXTENCODING_SYMBOL;
-#else // FT20b8
+#else
                 if( (aCM->platform_id == TT_PLATFORM_MICROSOFT)
                 &&  (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
+#endif
                     aFontData.meCharSet = RTL_TEXTENCODING_SYMBOL;
-#endif // FT20b8
             }
 
             aFontData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
@@ -416,11 +421,11 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     FT_Encoding eEncoding = ft_encoding_unicode;
     if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
     {
-#ifdef FT20b8
+#if (FTVERSION < 200)
         eEncoding = ft_encoding_none;
-#else // FT20b8
+#else
         eEncoding = ft_encoding_symbol;
-#endif FT20b8
+#endif
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
 
@@ -439,7 +444,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     if( nSin != 0 && nCos != 0 )        // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
 
-#if defined(FT20B8) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if (FTVERSION < 203) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
 #endif
 }
@@ -464,11 +469,11 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
-#ifdef FT20b8
+#if (FTVERSION < 200)
     rTo.mnDescent           = (+rMetrics.descender + 32) >> 6;
-#else // FT20b8
+#else
     rTo.mnDescent           = (-rMetrics.descender + 32) >> 6;
-#endif // FT20b8
+#endif
     rTo.mnLeading           = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
     rTo.mnSlant             = 0;
 
@@ -587,12 +592,7 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     GlyphSubstitution::const_iterator it = aGlyphSubstitution.find( nGlyphIndex );
     // use OpenType substitution if available
     if( it != aGlyphSubstitution.end() )
-    {
-#ifdef DEBUG
-        fprintf(stderr,"GetGlyphIndex(0x%04X) subst 0x%04X=>0x%04X\n", aChar, nGlyphIndex, (*it).second);
-#endif
         nGlyphIndex = (*it).second;
-    }
 
     // CJK vertical writing needs special treatment
     if( nGlyphIndex!=0 && GetFontSelData().mbVertical )
@@ -668,8 +668,8 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     FT_Int nLoadFlags = mnLoadFlags;
     if( nGlyphFlags != 0 )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
-#if !defined(FT20B8)
-    if( nCos==0 || nSin==0)
+#if (FTVERSION >= 202)
+    if( nCos==0 || nSin==0 )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
 #endif
 
@@ -732,7 +732,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     FT_Int nLoadFlags = mnLoadFlags;
     if( nGlyphFlags != 0 )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
-#if !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if (FTVERSION < 203) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     // autohinting in FT<=2.0.2 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
@@ -1119,7 +1119,6 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
 
     if( aGlyphFT->format != ft_glyph_format_outline )
         return false;
-
 
     FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>( aGlyphFT ) -> outline;
     const long nMaxPoints = rOutline.n_points * 2;
