@@ -127,7 +127,7 @@ End Sub
 Sub LoadWebPageStyles()
 Dim CurIndex as Integer
 	ToggleDialogControls(False)
-	oBaseDocument.LockControllers
+&apos;	oBaseDocument.LockControllers
 	CurIndex = GetCurIndex(DialogModel.lbStyles, Style(), NumberofStyles%,8)
 	LoadNewStyles(oBaseDocument, DialogModel, CurIndex, FileStr, Style(), TextureDir)
 	CurrentBullet$ = BulletDir + Style(6, CurIndex)
@@ -144,7 +144,7 @@ Dim CurIndex as Integer
 	SetBulletAndGraphics()
 	CheckControls(oBaseDocument.DrawPage)
 	oViewCursor.GotoStart(False)
-	oBaseDocument.UnlockControllers
+&apos;	oBaseDocument.UnlockControllers
 	ToggleDialogControls(True)
 End Sub
 
@@ -287,6 +287,7 @@ End Function
 
 Function FillupWebListbox(oUcb as Object, sFileFilter as String, oDialog as Object, ListboxName as String, List() as String)
 Dim oDocInfo as Object
+Dim oAloneDocInfo as Object
 Dim oListboxControl as Object
 Dim Description as String
 Dim sField as String
@@ -305,8 +306,8 @@ Dim a as Integer
 Dim SelList(0) as Integer
 Dim LocMaxIndex as Integer
 	oListboxControl = oDialog.GetControl(ListboxName)
-
-	oDocInfo = createUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
+	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
+	oAloneDocInfo = createUnoService( &quot;com.sun.star.document.StandaloneDocumentInfo&quot; )
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
 	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
@@ -330,6 +331,7 @@ Dim LocMaxIndex as Integer
 		If Instr(1,Filename, sFileFilter) Then
 			bItemFound = True
 			Description = RetrieveDocTitle(oDocInfo, FileName)
+			oAloneDocInfo.LoadFromUrl(FileName)
 			oListboxControl.AddItem(Description,a)
 			a = a + 1
 			List(1,i) = Description
@@ -338,7 +340,7 @@ Dim LocMaxIndex as Integer
 			Else
 				m = 2
 				For n = 0 To 3
-					sField = oDocInfo.GetUserFieldValue(n)
+					sField = oAloneDocInfo.GetUserFieldValue(n)
 					sFieldList() = ArrayoutofString(sField, &quot; &quot;, MaxIndex)
 					For s = 0 To MaxIndex
 						If m &lt; 6 Then
