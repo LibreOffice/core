@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XListEntrySource.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:33:24 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ interface XListEntryListener;
     as well as components which want to passively being notified of changes in the list.</p>
 
     @see XListEntrySink
+
+    @deprecated
+        This interface is superseeded by <type scope="com::sun::star::form::binding">XListEntrySource</type>
 */
 interface XListEntrySource : com::sun::star::uno::XInterface
 {
