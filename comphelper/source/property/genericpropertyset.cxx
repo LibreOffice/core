@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericpropertyset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 12:12:06 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 11:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,8 @@ namespace comphelper
         // XInterface
         virtual  Any SAL_CALL queryAggregation( const  Type & rType ) throw( RuntimeException);
         virtual  Any SAL_CALL queryInterface( const  Type & rType ) throw( RuntimeException);
-        virtual void SAL_CALL acquire() throw( RuntimeException);
-        virtual void SAL_CALL release() throw( RuntimeException);
+        virtual void SAL_CALL acquire() throw();
+        virtual void SAL_CALL release() throw();
 
         // XTypeProvider
         virtual  Sequence<  Type > SAL_CALL getTypes(  ) throw( RuntimeException);
@@ -222,12 +222,12 @@ Any SAL_CALL GenericPropertySet::queryAggregation( const Type & rType )
     return aAny;
 }
 
-void SAL_CALL GenericPropertySet::acquire() throw(uno::RuntimeException)
+void SAL_CALL GenericPropertySet::acquire() throw()
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL GenericPropertySet::release() throw(uno::RuntimeException)
+void SAL_CALL GenericPropertySet::release() throw()
 {
     OWeakAggObject::release();
 }
