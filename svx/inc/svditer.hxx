@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-13 17:20:37 $
+ *  last change: $Author: sj $ $Date: 2001-02-09 12:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ public:
     SdrObjListIter(const SdrObject& rGroup, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
 
     void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
-    BOOL IsMore() const { return (mbReverse ? mnIndex : (mnIndex < maObjList.Count())); }
+    BOOL IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }
     SdrObject* Next() { return (SdrObject*)maObjList.GetObject(mbReverse ? --mnIndex : mnIndex++); }
 };
 
