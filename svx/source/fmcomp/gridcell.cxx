@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 14:59:56 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 16:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2484,7 +2484,7 @@ Reference< XInterface >  FmXGridCell::getContext() throw( RuntimeException )
 }
 
 //-----------------------------------------------------------------------------
-Reference< ::com::sun::star::awt::XControlModel >  FmXGridCell::getModel()
+Reference< ::com::sun::star::awt::XControlModel >  FmXGridCell::getModel() throw( ::com::sun::star::uno::RuntimeException )
 {
     return Reference< ::com::sun::star::awt::XControlModel > (m_pColumn->getModel(), UNO_QUERY);
 }
