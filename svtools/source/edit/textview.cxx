@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:51:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,7 +1167,12 @@ void TextView::Paste()
 
 String TextView::GetSelected()
 {
-    return mpTextEngine->GetText( maSelection, GetSystemLineEnd() );
+    return GetSelected( GetSystemLineEnd() );
+}
+
+String TextView::GetSelected( LineEnd aSeparator )
+{
+    return mpTextEngine->GetText( maSelection, aSeparator );
 }
 
 void TextView::SetInsertMode( BOOL bInsert )
