@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 17:47:08 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 03:08:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,19 +67,19 @@
 MAXPROCESS=1
 .ENDIF
 
-ALLDOCS = $(foreach,i,$(alllangext) $(foreach,j,$(READMEFILES) $(j:d)$i$/$(j:b)$i$(j:e)))
+ALLDOCS = $(foreach,i,$(alllangiso) $(foreach,j,$(READMEFILES) $(j:d)$i$/$(j:b)_$i$(j:e)))
 
 .INCLUDE : target.mk
 
 ALLTAR : $(ALLDOCS)
 
-$(ALLDOCS) : $(READMEFILES:b:+".xrm") $(PRJ)$/docs/readme.xsl
+$(ALLDOCS) : $(COMMONMISC)$/$(TARGET)$/$(READMEFILES:b:+".xrm") $(PRJ)$/docs/readme.xsl
 
 
 $(MISC)$/%.html :
     @+-$(MKDIR) $(@:d)
 .IF "$(SOLAR_JAVA)"!=""
-    $(JAVA) -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $(subst,$(@::d:d:b), $(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(iso_$(@:d:d:b)) type=html file=$@
+    $(JAVA) -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $(subst,_$(@:d:d:b), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:d:d:b) type=html file=$@
 .ELSE
     sed 's|xmlns:xt="http://www.jclark.com/xt"||;s|extension-element-prefixes="xt"||;s|.*xt:document.*||;s|<xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" />|<xsl:output method="html" doctype-public="-//W3C//DTD HTML 3.2//EN" />|' < ..$/readme.xsl > ..$/readme2.xsl
     xsltproc -o $@ \
@@ -87,17 +87,17 @@ $(MISC)$/%.html :
              --stringparam gui1 $(GUI) \
              --stringparam cp1 $(CPUNAME) \
              --stringparam com1 $(COM) \
-             --stringparam lang1 $(iso_$(@:d:d:b)) \
+             --stringparam lang1 $(@:d:d:b) \
              --stringparam type html \
              ..$/readme2.xsl \
-             $(subst,$(@::d:d:b), $(@:b).xrm)
+             $(subst,_$(@:d:d:b), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm)
     rm ..$/readme2.xsl
 .ENDIF
 
 $(MISC)$/%.txt :
     @+-$(MKDIR) $(@:d)
 .IF "$(SOLAR_JAVA)"!=""
-    $(JAVA) -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $(subst,$(@::d:d:b), $(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(iso_$(@:d:d:b)) type=text file=$@
+    $(JAVA) -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $(subst,_$(@:d:d:b), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:d:d:b) type=text file=$@
 .ELSE
     sed 's|xmlns:xt="http://www.jclark.com/xt"||;s|extension-element-prefixes="xt"||;s|.*xt:document.*||;s|<xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" />|<xsl:output method="text" />|' < ..$/readme.xsl > ..$/readme2.xsl
     xsltproc -o $@ \
@@ -105,9 +105,10 @@ $(MISC)$/%.txt :
              --stringparam gui1 $(GUI) \
              --stringparam cp1 $(CPUNAME) \
              --stringparam com1 $(COM) \
-             --stringparam lang1 $(iso_$(@:d:d:b)) \
+             --stringparam lang1 $(@:d:d:b) \
              --stringparam type text \
              ..$/readme2.xsl \
-             $(subst,$(@::d:d:b), $(@:b).xrm)
+             $(subst,_$(@:d:d:b), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm)
     rm ..$/readme2.xsl
 .ENDIF
+
