@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hro $ $Date: 2002-06-24 16:20:02 $
+ *  last change: $Author: hro $ $Date: 2002-07-01 08:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
             nCharsNeeded = WideCharToMultiByte( CP_ACP, 0, name->buffer, name->length, NULL, 0, NULL, NULL );
             pszTempBuffer = alloca( nCharsNeeded * sizeof(CHAR) );
             nCharsNeeded = WideCharToMultiByte( CP_ACP, 0, name->buffer, name->length, pszTempBuffer, nCharsNeeded, NULL, NULL );
-            pszTempBuffer[nCharsNeeded] = 0;
+            pszTempBuffer[nCharsNeeded-1] = 0;
 
             pPipe->m_NamedObject = CreateMutexA( NULL, FALSE, pszTempBuffer );
         }
@@ -272,7 +272,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                     nCharsNeeded = WideCharToMultiByte( CP_ACP, 0, path->buffer, path->length, NULL, 0, NULL, NULL );
                     pszTempBuffer = alloca( nCharsNeeded * sizeof(CHAR) );
                     nCharsNeeded = WideCharToMultiByte( CP_ACP, 0, path->buffer, path->length, pszTempBuffer, nCharsNeeded, NULL, NULL );
-                    pszTempBuffer[nCharsNeeded] = 0;
+                    pszTempBuffer[nCharsNeeded-1] = 0;
 
                     pPipe->m_File = CreateSimplePipe( pszTempBuffer );
 
@@ -338,7 +338,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
             nCharsNeeded = WideCharToMultiByte( CP_ACP, 0, path->buffer, path->length, NULL, 0, NULL, NULL );
             pszTempBuffer = alloca( nCharsNeeded * sizeof(CHAR) );
             nCharsNeeded = WideCharToMultiByte( CP_ACP, 0, path->buffer, path->length, pszTempBuffer, nCharsNeeded, NULL, NULL );
-            pszTempBuffer[nCharsNeeded] = 0;
+            pszTempBuffer[nCharsNeeded-1] = 0;
 
             pPipe->m_File = OpenSimplePipe( pszTempBuffer );
 
