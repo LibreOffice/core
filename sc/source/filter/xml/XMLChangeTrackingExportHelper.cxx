@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 13:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,6 +951,13 @@ void ScChangeTrackingExportHelper::CollectAndWriteChanges()
 {
     if (pChangeTrack)
     {
+        if (pChangeTrack->IsProtected())
+        {
+            rtl::OUStringBuffer aBuffer;
+            SvXMLUnitConverter::encodeBase64(aBuffer, pChangeTrack->GetProtection());
+            if (aBuffer.getLength())
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_protection_key, aBuffer.makeStringAndClear());
+        }
         SvXMLElementExport aCangeListElem(rExport, XML_NAMESPACE_TABLE, sXML_tracked_changes, sal_True, sal_True);
         {
             ScChangeAction* pAction = pChangeTrack->GetFirst();

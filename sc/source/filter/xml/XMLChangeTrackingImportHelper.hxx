@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 13:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ class ScXMLChangeTrackingImportHelper
 {
     StrCollection       aUsers;
     ScMyActions         aActions;
+    com::sun::star::uno::Sequence<sal_Int8> aProtect;
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
     ScMyBaseAction*     pCurrentAction;
@@ -243,6 +244,7 @@ public:
     ~ScXMLChangeTrackingImportHelper();
 
     void SetChangeTrack(sal_Bool bValue) { bChangeTrack = bValue; }
+    void SetProtection(const com::sun::star::uno::Sequence<sal_Int8>& rProtect) { aProtect = rProtect; }
     void StartChangeAction(const ScChangeActionType nActionType);
 
     sal_uInt32 GetIDFromString(const rtl::OUString& sID);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 13:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,28 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
 {
     pChangeTrackingImportHelper = pTempChangeTrackingImportHelper;
     pChangeTrackingImportHelper->SetChangeTrack(sal_True);
-    // here are no attributes
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        if (nPrefix == XML_NAMESPACE_TABLE)
+        {
+            if (aLocalName.compareToAscii(sXML_protection_key) == 0)
+            {
+                if (sValue.getLength())
+                {
+                    uno::Sequence<sal_Int8> aPass;
+                    SvXMLUnitConverter::decodeBase64(aPass, sValue);
+                    pChangeTrackingImportHelper->SetProtection(aPass);
+                }
+            }
+        }
+    }
 }
 
 ScXMLTrackedChangesContext::~ScXMLTrackedChangesContext()
