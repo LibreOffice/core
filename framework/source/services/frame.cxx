@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:38:45 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,11 +715,6 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
         DockingAreaDefaultAcceptor* pAcceptor = new DockingAreaDefaultAcceptor(this);
         css::uno::Reference< css::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject* >(pAcceptor), css::uno::UNO_QUERY );
         xLayoutManager->setDockingAreaAcceptor(xDockingAreaAcceptor);
-
-        // create the status bar ... but dont show it here!
-//        xLayoutManager->lock();
-//        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
-//        xLayoutManager->unlock();
     }
 
     // create progress helper
