@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IndexAccessor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-18 12:10:12 $
+ *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #endif
 
 
+using namespace xmlsearch::excep;
 using namespace xmlsearch::util;
 
 
@@ -97,7 +98,7 @@ public:
         sal_uInt64 nbytesread;
         osl::FileBase::RC err = file_.read( (void*)(data), sal_uInt64(num),nbytesread );
 
-        OSL_ASSERT( err == osl::FileBase::E_None );
+        OSL_ENSURE( err == osl::FileBase::E_None, "RandomAccessStreamImpl::readBytes: -> file not open" );
 
         return sal_Int32( nbytesread );
     }
@@ -121,11 +122,16 @@ public:
         file_.close();
     }
 
+    bool isOpen()
+    {
+        return isOpen_;
+    }
 
 private:
 
     rtl::OUString   path_;
     osl::File       file_;
+    bool            isOpen_;
 };
 
 
@@ -146,25 +152,48 @@ RandomAccessStreamImpl::RandomAccessStreamImpl( const rtl::OUString& aPath,const
             flags |= Create;
     }
 
-    if( file_.open( flags ) != osl::FileBase::E_None )
+    if( !( isOpen_ = ( file_.open( flags ) == osl::FileBase::E_None )) )
     {
         file_.close();
-        OSL_ASSERT( false );
+        OSL_ENSURE( false,"RandomAccessStreamImpl::RandomAccessStreamImpl -> could not open file" );
     }
 }
 
 
 
-
 RandomAccessStream* IndexAccessor::getStream( const rtl::OUString& fileName,const rtl::OUString& how ) const
 {
-    return new RandomAccessStreamImpl( dirName_ + fileName,how );
+    rtl::OUString qualifiedName;
+    int retry = 2;
+    RandomAccessStreamImpl *p = 0;
+
+    while( retry-- && ! p )
+    {
+        if( retry == 1 )
+            qualifiedName = dirName_ + fileName;
+        else if( retry == 0 )
+            qualifiedName = dirName_ + fileName.toAsciiLowerCase();
+
+        p = new RandomAccessStreamImpl( qualifiedName,how );
+        if( ! p->isOpen() )
+        {
+            delete p; p = 0;
+        }
+    }
+
+    return p;
 }
 
 
 sal_Int32 IndexAccessor::readByteArray( sal_Int8*& out,const rtl::OUString& fileName )
+    throw( IOException )
 {
     RandomAccessStream* in = getStream( fileName,rtl::OUString::createFromAscii("r") );
+    if( ! in )
+        throw IOException(
+            rtl::OUString::createFromAscii( "IndexAccessor::readByteArray -> cannot open file " ) +
+            fileName );
+
     sal_Int32 n;
     delete[] out;
     out = new sal_Int8[ n = in->length() ];
@@ -172,3 +201,10 @@ sal_Int32 IndexAccessor::readByteArray( sal_Int8*& out,const rtl::OUString& file
     delete in;
     return n;
 }
+
+
+
+
+
+
+

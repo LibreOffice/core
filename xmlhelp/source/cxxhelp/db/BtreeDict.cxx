@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-18 12:10:11 $
+ *  last change: $Author: abi $ $Date: 2001-06-19 13:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,7 @@ namespace xmlsearch {
 
 
 using namespace xmlsearch;
+using namespace xmlsearch::excep;
 using namespace xmlsearch::db;
 using namespace xmlsearch::util;
 
@@ -355,30 +356,37 @@ void BlockProcessorImpl::process( Block* block ) const
 #include <stdlib.h>
 
 
-BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor )
-    : blockManager_( new DBEnvImpl( indexAccessor ) )
+BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor ) throw( IOException )
+    : blocks_( 0 ),
+      blockManager_( new DBEnvImpl( indexAccessor ) )   // may throw IOExcption
 {
 
     RandomAccessStream* SCHEMA = indexAccessor.getStream( rtl::OUString::createFromAscii( "SCHEMA" ),
                                                           rtl::OUString::createFromAscii( "r" ) );
-    sal_Int32 len = SCHEMA->length();
-    char* bff = new char[ 1 + len ];
-    bff[ 1 + len ] = 0;
-    SCHEMA->readBytes( reinterpret_cast<sal_Int8*>( bff ),len );
-    delete SCHEMA;
 
-    rtl::OString aStr( bff );
+    if( SCHEMA )
+    {
+        sal_Int32 len = SCHEMA->length();
+        char* bff = new char[ 1 + len ];
+        bff[ 1 + len ] = 0;
+        SCHEMA->readBytes( reinterpret_cast<sal_Int8*>( bff ),len );
+        delete SCHEMA;
 
-    sal_Int32 idx = 3 + aStr.lastIndexOf( "rt=" );
-    root_ = atoi( bff + idx );
+        rtl::OString aStr( bff );
 
-    idx = 4 + aStr.lastIndexOf( "id1=" );
-    sal_Int32 count = atoi( bff + idx );
-    blocks_ = new sal_Int32[ count ];
+        sal_Int32 idx = 3 + aStr.lastIndexOf( "rt=" );
+        root_ = atoi( bff + idx );
 
-    delete[] bff;
-    BlockProcessorImpl blProc( this );
-    blockManager_.mapBlocks( blProc );
+        idx = 4 + aStr.lastIndexOf( "id1=" );
+        sal_Int32 count = atoi( bff + idx );
+        blocks_ = new sal_Int32[ count ];
+
+        delete[] bff;
+        BlockProcessorImpl blProc( this );
+        blockManager_.mapBlocks( blProc );
+    }
+    else
+        throw IOException( rtl::OUString::createFromAscii( "BtreeDict::BtreeDict -> no SCHEMA/schema" ) );
 }
 
 
@@ -536,13 +544,17 @@ sal_Int32 DBEnvImpl::getEntryHeaderLen() const
 
 sal_Int32 DBEnvImpl::getBlockCount() const
 {
-    return file_->length() / BtreeDict::BLOCKSIZE;
+    if( file_ )
+        return file_->length() / BtreeDict::BLOCKSIZE;
+    else
+        return 0;
 }
 
 sal_Int32 DBEnvImpl::getMaximumBlockCount() const
 {
     return BtreeDict::nBlocksLimit;
 }
+
 
 sal_Int32 util::DBEnvImpl::getDataLen() const
 {
@@ -561,9 +573,11 @@ void DBEnvImpl::read( sal_Int32 blNum,xmlsearch::db::Block*& block ) const
     if( ! block )
         block = new xmlsearch::db::DictBlock( this );
 
-    file_->seek( blNum * getBlockLen() );
-
-    block->read( file_ );
+    if( file_ )
+    {
+        file_->seek( blNum * getBlockLen() );
+        block->read( file_ );
+    }
 }
 
 
@@ -572,6 +586,3 @@ void DBEnvImpl::write( sal_Int32 blNum,xmlsearch::db::Block* block )
     if( ! block )
         return;
 }
-
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #endif
 
 using namespace chelp;
+using namespace xmlsearch::excep;
 using namespace xmlsearch::qe;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
@@ -125,22 +126,34 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     sal_Int32 hitCount = m_aURLParameter.get_hitCount();
 
     QueryStatement queryStatement( hitCount,queryList,scope );
-    QueryProcessor queryProcessor( m_pDatabases->getInstallPathAsURL()                    +
-                                   m_pDatabases->lang( m_aURLParameter.get_language() )   +
-                                   rtl::OUString::createFromAscii( "/" )                  +
-                                   m_aURLParameter.get_module()                           +
-                                   rtl::OUString::createFromAscii( ".idx/" ) );
+    QueryResults *queryResults = 0;
 
-    QueryResults *queryResults = queryProcessor.processQuery( queryStatement );
+    try
+    {
+        QueryProcessor queryProcessor( m_pDatabases->getInstallPathAsURL()                    +
+                                       m_pDatabases->lang( m_aURLParameter.get_language() )   +
+                                       rtl::OUString::createFromAscii( "/" )                  +
+                                       m_aURLParameter.get_module()                           +
+                                       rtl::OUString::createFromAscii( ".idx/" ) );
+
+        queryResults = queryProcessor.processQuery( queryStatement );
+    }
+    catch( IOException )
+    {
+    }
 
     sal_Int32 replIdx = rtl::OUString::createFromAscii( "#HLP#" ).getLength();
     rtl::OUString replWith = rtl::OUString::createFromAscii( "vnd.sun.star.help://" );
 
-    QueryHitIterator* it = queryResults->makeQueryHitIterator();
-    while( it->next() )
+    QueryHitIterator* it = 0;
+    if( queryResults )
+        it = queryResults->makeQueryHitIterator();
+
+    while( it && it->next() )
     {
         QueryHitData* qhd = it->getHit( 0 );
-        m_aPath.push_back( replWith + ( qhd->getDocument()).copy( replIdx ) );
+        if( qhd )
+            m_aPath.push_back( replWith + ( qhd->getDocument()).copy( replIdx ) );
     }
     delete it;  // deletes also queryResults
 
@@ -151,24 +164,22 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     aCommand.Name = rtl::OUString::createFromAscii( "getPropertyValues" );
     aCommand.Argument <<= m_sProperty;
 
-    for( sal_uInt32 i = 0; i < m_aPath.size(); ++i )
+    for( m_nRow = 0; m_nRow < m_aPath.size(); ++m_nRow )
     {
-        m_aPath[i] =
-            m_aPath[i]                                               +
+        m_aPath[m_nRow] =
+            m_aPath[m_nRow]                                          +
             rtl::OUString::createFromAscii( "?Language=" )           +
             m_aURLParameter.get_language()                           +
             rtl::OUString::createFromAscii( "&System=" )             +
             m_aURLParameter.get_system();
 
-        m_nRow = sal_Int32( i );
-
         uno::Reference< XContent > content = queryContent();
         if( content.is() )
         {
             uno::Reference< XCommandProcessor > cmd( content,uno::UNO_QUERY );
-            if( ! ( cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[i] ) )
+            if( ! ( cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[m_nRow] ) )
                 ;
         }
-        m_nRow = -1;
     }
+    m_nRow = -1;
 }

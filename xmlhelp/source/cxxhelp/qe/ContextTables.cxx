@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
+ *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,8 +168,8 @@ ContextTables::~ContextTables()
     delete[] dests_;
     delete[] initialWords_;
 
-    for( sal_uInt32 i = 0; i < cache_.size(); ++i )
-        delete cache_[i];
+    for( sal_uInt32 i = 0; i < cache_.size(); ++i );
+    // delete cache_[i];
 }
 
 

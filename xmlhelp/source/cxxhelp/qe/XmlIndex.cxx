@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 #ifndef _XMLSEARCH_QE_XMLINDEX_HXX_
 #include <qe/XmlIndex.hxx>
 #endif
@@ -76,6 +79,7 @@
 
 
 using namespace xmlsearch;
+using namespace xmlsearch::excep;
 using namespace xmlsearch::qe;
 
 
@@ -83,6 +87,7 @@ using namespace xmlsearch::qe;
 
 
 XmlIndex::XmlIndex( const rtl::OUString& indexDir )
+    throw( IOException )
     : indexAccessor_( indexDir ),
       dict_( indexAccessor_ ),
       documents_( 0 ),
@@ -98,15 +103,28 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
       maxDocNumberInCache_( -1 )
 {
     // reading DOCS
+    try
     {
         allListsL_ = indexAccessor_.readByteArray( allLists_,
                                                    rtl::OUString::createFromAscii("DOCS") ); // reading DOCS
     }
+    catch( IOException )
+    {
+        OSL_ENSURE( allLists_ != 0, "XmlIndex::XmlIndex -> cannot open DOCS/docs" );
+        throw;
+    }
 
     // reading CONTEXTS
+    try
     {
         contextsDataL_ = indexAccessor_.readByteArray( contextsData_,
                                                        rtl::OUString::createFromAscii("CONTEXTS") ); // reading CONTEXTS
+    }
+    catch( IOException )
+    {
+        OSL_ENSURE( allLists_ != 0, "XmlIndex::XmlIndex -> cannot open CONTEXTS/contexts" );
+        delete[] allLists_;
+        throw;
     }
 
     // reading POSITIONS
@@ -114,12 +132,23 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
         positionsFile_ = indexAccessor_.getStream( rtl::OUString::createFromAscii( "POSITIONS" ),
                                                    rtl::OUString::createFromAscii( "r" ) );
 
-        //!!! temporary: better than fixed large value, worse than 'intelligent' size mgt
-        if( allInCache_ = true )   // yes, intended
+        OSL_ENSURE( positionsFile_ != 0, "XmlIndex::XmlIndex -> cannot open POSITIONS/positions" );
+
+        if( positionsFile_ )
         {
-            reset();
-            positions_ = new sal_Int8[ positionsL_ = positionsFile_->length() ];
-            positionsFile_->readBytes( positions_,positionsL_ );
+            //!!! temporary: better than fixed large value, worse than 'intelligent' size mgt
+            if( allInCache_ = true )   // yes, intended
+            {
+                reset();
+                positions_ = new sal_Int8[ positionsL_ = positionsFile_->length() ];
+                positionsFile_->readBytes( positions_,positionsL_ );
+            }
+        }
+        else
+        {
+            delete[] allLists_;
+            delete[] contextsData_;
+            throw IOException( rtl::OUString::createFromAscii( "XmlIndex::XmlIndex -> no POSITIONS/positions") );
         }
     }
 
@@ -128,47 +157,69 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
     {
         util::RandomAccessStream* in = indexAccessor_.getStream( rtl::OUString::createFromAscii( "DOCS.TAB" ),
                                                                  rtl::OUString::createFromAscii( "r" ) );
-        sal_Int8 a[4];
-        a[0] = a[1] = a[2] = 0;
-        in->readBytes( &a[3],1 );
-        sal_Int32 k1 = ::getInteger_( a );
-        util::StreamDecompressor sddocs( in );
-        sddocs.ascDecode( k1,concepts_ );
-        in->readBytes( &a[3],1 );
-        sal_Int32 k2 = ::getInteger_( a );
-        offsets_.push_back( 0 );
-        util::StreamDecompressor sdoffsets( in );
-        sdoffsets.ascDecode( k2,offsets_ );
-        delete in;
+
+        if( in )
+        {
+            sal_Int8 a[4];
+            a[0] = a[1] = a[2] = 0;
+            in->readBytes( &a[3],1 );
+            sal_Int32 k1 = ::getInteger_( a );
+            util::StreamDecompressor sddocs( in );
+            sddocs.ascDecode( k1,concepts_ );
+            in->readBytes( &a[3],1 );
+            sal_Int32 k2 = ::getInteger_( a );
+            offsets_.push_back( 0 );
+            util::StreamDecompressor sdoffsets( in );
+            sdoffsets.ascDecode( k2,offsets_ );
+            delete in;
+        }
+        else
+        {
+            delete[] allLists_;
+            delete[] contextsData_;
+            delete[] positions_;
+            delete positionsFile_;
+            throw IOException( rtl::OUString::createFromAscii( "XmlIndex::XmlIndex -> no DOCS.TAB/docs.tab") );
+        }
     }
 
     // reading OFFSETS
     {
         util::RandomAccessStream* in = indexAccessor_.getStream( rtl::OUString::createFromAscii( "OFFSETS" ),
                                                                  rtl::OUString::createFromAscii( "r" ) );
-        sal_Int8 a[4];
-        a[0] = a[1] = a[2] = 0;
-        in->readBytes( &a[3],1 );
-        sal_Int32 k1 = ::getInteger_( a );
-        util::StreamDecompressor sddocs( in );
-        sddocs.decode( k1,documents_ );
-        in->readBytes( &a[3],1 );
-        sal_Int32 k2 = ::getInteger_( a );
-        util::StreamDecompressor sdoffsets( in );
-        sdoffsets.ascDecode( k2,microIndexOffsets_ );
-        in->readBytes( &a[3],1 );
-        sal_Int32 k3 = ::getInteger_( a );
-        util::StreamDecompressor sdtitles( in );
-        sdtitles.decode( k3,titles_ );
+        if( in )
+        {
+            sal_Int8 a[4];
+            a[0] = a[1] = a[2] = 0;
+            in->readBytes( &a[3],1 );
+            sal_Int32 k1 = ::getInteger_( a );
+            util::StreamDecompressor sddocs( in );
+            sddocs.decode( k1,documents_ );
+            in->readBytes( &a[3],1 );
+            sal_Int32 k2 = ::getInteger_( a );
+            util::StreamDecompressor sdoffsets( in );
+            sdoffsets.ascDecode( k2,microIndexOffsets_ );
+            in->readBytes( &a[3],1 );
+            sal_Int32 k3 = ::getInteger_( a );
+            util::StreamDecompressor sdtitles( in );
+            sdtitles.decode( k3,titles_ );
 
-        in->readBytes( &a[3],1 );
-        sal_Int32 k4 = ::getInteger_( a );
-        //     contextsOffsets_ = new IntegerArray(_documents.cardinality() + 1);
-        util::StreamDecompressor co(in);
-        //    _contextsOffsets.add(0);  // first, trivial offset
-        co.ascDecode( k4,contextsOffsets_ );
-
-        delete in;
+            in->readBytes( &a[3],1 );
+            sal_Int32 k4 = ::getInteger_( a );
+            //     contextsOffsets_ = new IntegerArray(_documents.cardinality() + 1);
+            util::StreamDecompressor co(in);
+            //    _contextsOffsets.add(0);  // first, trivial offset
+            co.ascDecode( k4,contextsOffsets_ );
+            delete in;
+        }
+        else
+        {
+            delete[] allLists_;
+            delete[] contextsData_;
+            delete[] positions_;
+            delete positionsFile_;
+            throw IOException( rtl::OUString::createFromAscii( "XmlIndex::XmlIndex -> no OFFSETS/offsets") );
+        }
     }
 
     // Hard coding linknames ( object serialization is hard to undo )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryProcessor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 using namespace std;
 using namespace xmlsearch;
+using namespace xmlsearch::excep;
 using namespace xmlsearch::qe;
 
 
@@ -76,21 +77,22 @@ const double QueryProcessor::INFLpenalty = 0.0;
 
 
 QueryProcessor::QueryProcessor( const rtl::OUString& installDir )
-    : env_( new XmlIndex( installDir ) )
+    throw( IOException )
+    : env_( installDir )
 {
 }
 
 
 QueryProcessor::~QueryProcessor()
 {
-    delete env_;
+    // delete env_;
 }
 
 
 
 QueryResults* QueryProcessor::processQuery( const QueryStatement& ment )
 {
-    Search search( env_ );
+    Search search( &env_ );
     Query* query = processQuery( search,ment );
     query->setIgnoredElements( 0,0 );
     search.startSearch();
@@ -130,24 +132,24 @@ Query* QueryProcessor::processQuery( Search& search,const QueryStatement& ment )
             std::vector< sal_Int32 > ids;
             if( str[0] == sal_Unicode('\"') )
             {
-                id = env_->fetch( term.copy( 1 ) );                // goes to BtreeDict::fetch
+                id = env_.fetch( term.copy( 1 ) );                // goes to BtreeDict::fetch
             }
             else if( str[lgt-1] == sal_Unicode( '*' ) )
             {
-                ids = env_->withPrefix( term.copy( 0,lgt - 1 ) );     // goes to BtreeDict::withPrefix
+                ids = env_.withPrefix( term.copy( 0,lgt - 1 ) );     // goes to BtreeDict::withPrefix
                 variantPenalty = 0.0;
             }
             else
             {
                 sal_Int32 formID;
-                id = env_->fetch( term );
+                id = env_.fetch( term );
 
                 // std::vector< rtl::OUString > variants( morph_->getVariants( term ) );
                 std::vector< rtl::OUString > variants;
 
                 for( sal_uInt32 i = 0; i < variants.size(); ++i )
                 {
-                    formID = env_->fetch( variants[i] );
+                    formID = env_.fetch( variants[i] );
                     if( formID > 0 && formID != id )
                         ids.push_back( formID );
                 }

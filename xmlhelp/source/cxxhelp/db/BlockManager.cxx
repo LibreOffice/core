@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BlockManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-06-19 13:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,25 @@
 
 
 using namespace ::xmlsearch;
+using namespace ::xmlsearch::excep;
 using namespace ::xmlsearch::db;
 
 
 
-BlockManager::BlockManager( DBEnv* dbenv )
+BlockManager::BlockManager( DBEnv* dbenv ) throw( IOException )
     : oldest_( 0 ),
       newest_( 0 ),
       dbenv_( dbenv ),
       blockused_( 0 ),
       blockTable_( dbenv_ ? dbenv_->getBlockCount() : 0 )   // Hardcoded headerlen?
 {
-    mapStorage2Memory( 0 );
+    if( blockTable_.size() )
+        mapStorage2Memory( 0 );
+    else
+    {
+        delete dbenv_;
+        throw IOException( rtl::OUString::createFromAscii( "BlockManager::BlockManager -> no blockcount" ) );
+    }
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-13 14:03:19 $
+ *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,8 @@ namespace chelp {
 
     inline bool ascii_isLetter( sal_Unicode ch )
     {
-        return (( (ch >= 0x0041) && (ch <= 0x005A)) || ((ch >=
-                                                         0x0061) && (ch <= 0x007A)));
+        return ( ( (ch >= 0x0041) && (ch <= 0x005A) ) ||
+                 ( (ch >= 0x0061) && (ch <= 0x007A) ) );
     }
 
     inline bool isLetterOrDigit( sal_Unicode ch )
