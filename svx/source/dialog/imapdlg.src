@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-12 09:39:46 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,7 +749,7 @@ ModelessDialog RID_SVXDLG_IMAP
         DropDown = TRUE ;
         HScroll = TRUE ;
     };
-    Text[ thai ] = "ตัวแก้ไขแผนที่ภาพ";
+    Text[ thai ] = "ฉบับภาพแผนที่";
 
 
 #define IMAPDLG_IDLIST \
@@ -1138,7 +1138,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ french ] = "Texte (facultatif)" ;
         Text [ dutch ] = "~Alternatieve tekst" ;
         Text [ swedish ] = "~Alternativtext" ;
-        Text [ danish ] = "Alternativtekst:" ;
+        Text [ danish ] = "~Alternativtekst" ;
         Text [ portuguese_brazilian ] = "Alternativtext:" ;
         Text [ portuguese ] = "Te~xto facultativo" ;
         Text[ chinese_simplified ] = "替代文字(~T)";
@@ -1175,7 +1175,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ spanish ] = "URL" ;
         Text [ french ] = "URL" ;
         Text [ swedish ] = "~URL" ;
-        Text [ danish ] = "URL:" ;
+        Text [ danish ] = "~URL" ;
         Text [ portuguese_brazilian ] = "URL:" ;
         Text [ portuguese ] = "~URL" ;
         Text[ chinese_simplified ] = "~URL";
@@ -1251,7 +1251,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ english_us ] = "F~rame" ;
         Text [ portuguese_brazilian ] = "Frame:" ;
         Text [ swedish ] = "~Ram" ;
-        Text [ danish ] = "Frame:" ;
+        Text [ danish ] = "~Frame" ;
         Text [ italian ] = "Frame" ;
         Text [ spanish ] = "Frame" ;
         Text [ french ] = "Frame" ;
@@ -1291,7 +1291,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ portuguese ] = "~Nome" ;
         Text [ portuguese_brazilian ] = "Name:" ;
         Text [ swedish ] = "~Namn" ;
-        Text [ danish ] = "Navn:" ;
+        Text [ danish ] = "~Navn" ;
         Text [ italian ] = "Nome" ;
         Text [ spanish ] = "Nombre" ;
         Text [ french ] = "Nom" ;
