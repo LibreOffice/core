@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-09 14:57:38 $
+ *  last change: $Author: mtg $ $Date: 2001-10-16 11:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,6 +607,9 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
                                 aPropSet.getPropertyMap(), rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only:" ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
             if(pMap->nWID < RES_FRMATR_END)
             {
                 SvUShortsSort aWhichIds;
@@ -663,6 +666,8 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
                                 aPropSet.getPropertyMap(), rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only:" ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pMap->nWID < RES_FRMATR_END)
             {
                 const SfxPoolItem& rDefItem =

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-15 13:54:21 $
+ *  last change: $Author: mtg $ $Date: 2001-10-16 11:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,6 +1607,9 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
         if(!pCur)
             throw UnknownPropertyException();
+        if ( pCur->nFlags & PropertyAttribute::READONLY)
+            throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
         BOOL bNextFrame;
         if( pCur->nWID &&
             pCur->nWID != FN_UNO_ANCHOR_TYPES &&
@@ -1676,7 +1679,9 @@ Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
         const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
         if(pCur)
         {
-            if(pCur->nWID < RES_FRMATR_END)
+            if ( pCur->nFlags & PropertyAttribute::READONLY )
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            if ( pCur->nWID < RES_FRMATR_END )
             {
                 const SfxPoolItem& rDefItem =
                     pFmt->GetDoc()->GetAttrPool().GetDefaultItem(pCur->nWID);

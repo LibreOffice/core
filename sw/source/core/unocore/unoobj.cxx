@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-09 15:01:55 $
+ *  last change: $Author: mtg $ $Date: 2001-10-16 11:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,9 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -2055,6 +2058,8 @@ void SwXTextCursor::SetPropertyToDefault(
                             rPropSet.getPropertyMap(), rPropertyName);
     if(pMap)
     {
+        if ( pMap->nFlags & PropertyAttribute::READONLY)
+            throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
         if(pMap->nWID < RES_FRMATR_END)
         {
             SvUShortsSort aWhichIds;
@@ -2104,6 +2109,8 @@ Any SwXTextCursor::GetPropertyDefault(
                             rPropSet.getPropertyMap(), rPropertyName);
     if(pMap)
     {
+        if ( pMap->nFlags & PropertyAttribute::READONLY)
+            throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
         if(pMap->nWID < RES_FRMATR_END)
         {
             const SfxPoolItem& rDefItem =
