@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:03 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 //------------------------------------------------------------------------
 
+#include <sot/exchange.hxx>
 #include <so3/outplace.hxx>
 #include <svtools/globalnameitem.hxx>
 #include <sfx2/frameobj.hxx>
@@ -77,8 +78,6 @@
 #include <so3/plugin.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
-#include <sch/schdll0.hxx>
-#include <starmath/smdll0.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
 #include <svx/pfiledlg.hxx>
@@ -88,6 +87,7 @@
 #include <svtools/urihelper.hxx>
 #endif
 #include <svtools/moduleoptions.hxx>
+#include <sot/clsids.hxx>
 
 #include "fuinsert.hxx"
 #include "tabvwsh.hxx"
@@ -257,10 +257,14 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
     else if (nSlot == SID_INSERT_SMATH)
     {
         if ( SvtModuleOptions().IsMath() )
-            aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
+        {
+            nSlot = SID_INSERT_OBJECT;
+            rReq.AppendItem( SfxGlobalNameItem( SID_INSERT_OBJECT, SvGlobalName( SO3_SM_CLASSID_60 ) ) );
+//          aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
 //                                      *OFF_APP()->GetSmDLL()->pSmDocShellFactory,
-                                        *SM_MOD()->pSmDocShellFactory,
-                                        aStor );
+//                                      *SM_MOD()->pSmDocShellFactory,
+//                                      aStor );
+        }
     }
     else if (nSlot == SID_INSERT_PLUGIN)
     {
@@ -287,7 +291,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             if ( aURL.SetURL( aStrURL ) )
             {
                 // create plugin, initialize, etc.
-                SvFactory * pPlugIn = SvFactory::GetDefaultPlugInFactory();
+                SvFactory *pPlugIn = (SvFactory*) SvPlugInObject::ClassFactory();
                 SvStorageRef aStor = new SvStorage( EMPTY_STRING, STREAM_STD_READWRITE );
                 SvPlugInObjectRef xObj = &pPlugIn->CreateAndInit( *pPlugIn, aStor );
                 xObj->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
@@ -308,25 +312,14 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
         aIPObj = aDlg.Execute( pWin, aStor );
         bIsFromFile = TRUE;                                 // nicht aktivieren
     }
-    else    // SID_INSERT_OBJECT
+
+    if ( nSlot == SID_INSERT_OBJECT )
     {
         SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
         if ( pNameItem )
         {
             SvGlobalName aName = pNameItem->GetValue();
-            const SotFactory* pFact = SvFactory::Find( aName );
-            if ( pFact )
-            {
-                SvStorageRef aStor = new SvStorage( String() );
-                aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aName,aStor );
-            }
-            else
-            {
-                SvStorageRef aStor = new SvStorage( FALSE, String() );
-                String aFileName;
-                BOOL bOk;
-                aIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, aName, aFileName );
-            }
+            aIPObj = SvInPlaceObject::CreateObject( aName );
         }
         else
         {
@@ -378,8 +371,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
 
             //  Chart initialisieren ?
 
-            if ( SvtModuleOptions().IsChart() &&
-                    aIPObj->GetClassName() == *SCH_MOD()->pSchChartDocShellFactory )
+            if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( aIPObj->GetClassName() ) )
                 lcl_ChartInit( aIPObj, pViewSh->GetViewData(), pWin );
 
             Point aPnt = pViewSh->GetInsertPos();
@@ -475,13 +467,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
     if( ! rReq.IsAPI() )
         rReq.Done();
 
-    SvStorageRef aStor = new SvStorage( String() );
     SvInPlaceObjectRef aIPObj;
     if ( SvtModuleOptions().IsChart() )
-        aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                                        *SCH_MOD()->pSchChartDocShellFactory,
-                                        aStor );
-
+        aIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
     if( aIPObj.Is() )
     {
         pView->UnmarkAll();
