@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRowUpdate.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:47 $
+ *  last change:$Date: 2003-05-27 12:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package ifc.sdbc;
 import com.sun.star.io.XDataInputStream;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTextInputStream;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XRowUpdate;
@@ -576,8 +577,8 @@ public class _XRowUpdate extends MultiMethodTest {
         }
 
         try {
-            Object oStream = tParam.getMSF().createInstance
-                ("com.sun.star.io.DataInputStream") ;
+            Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
+                createInstance("com.sun.star.io.DataInputStream") ;
             XInputStream newVal = (XInputStream) UnoRuntime.queryInterface
                 (XInputStream.class, oStream);
 
@@ -613,8 +614,8 @@ public class _XRowUpdate extends MultiMethodTest {
         }
 
         try {
-            Object oStream = tParam.getMSF().createInstance
-                ("com.sun.star.io.TextInputStream") ;
+            Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
+                createInstance("com.sun.star.io.TextInputStream") ;
             XInputStream newVal = (XInputStream) UnoRuntime.queryInterface
                 (XInputStream.class, oStream);
 
@@ -650,8 +651,8 @@ public class _XRowUpdate extends MultiMethodTest {
         }
 
         try {
-            Object newVal = tParam.getMSF().createInstance
-                ("com.sun.star.io.Pipe") ;
+            Object newVal = ((XMultiServiceFactory)tParam.getMSF()).
+                createInstance("com.sun.star.io.Pipe") ;
 
             //oObj.updateObject(idx, newVal) ;
             //Object getVal = row.getObject(idx) ;
@@ -685,8 +686,8 @@ public class _XRowUpdate extends MultiMethodTest {
         }
 
         try {
-            Object newVal = tParam.getMSF().createInstance
-                ("com.sun.star.io.Pipe") ;
+            Object newVal = ((XMultiServiceFactory)tParam.getMSF()).
+                                createInstance("com.sun.star.io.Pipe") ;
 
             oObj.updateNumericObject(idx, newVal, 0) ;
             //Object getVal = row.getObject(idx) ;

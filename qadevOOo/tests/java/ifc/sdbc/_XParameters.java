@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XParameters.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:51 $
+ *  last change:$Date: 2003-05-27 12:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package ifc.sdbc;
 import com.sun.star.io.XDataInputStream;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTextInputStream;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XParameters;
@@ -122,7 +123,8 @@ import lib.Status;
 *        <code>java.lang.Object[]</code> class, the element with
 *         index 0 must be used. </li>
 * </ul>
-* Other methods uses types of their arguments (i.e. <code>java.lang.String</code>
+* Other methods uses types of their arguments (i.e.
+* <code>java.lang.String</code>
 * for <code>setString</code> method, <code>com.sun.star.sdbc.XRef</code>
 * for <code>setRef</code> method).
 * </li>
@@ -373,7 +375,8 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                oObj.setDate(idx, new Date ((short)19, (short)01, (short)1979)) ;
+                oObj.setDate(
+                    idx, new Date ((short)19, (short)01, (short)1979)) ;
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -394,7 +397,8 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                oObj.setTime(idx, new Time((short)1,(short)2,(short)3,(short)44)) ;
+                oObj.setTime(
+                    idx, new Time((short)1,(short)2,(short)3,(short)44)) ;
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -437,9 +441,9 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object oStream = tParam.getMSF().createInstance
-                    ("com.sun.star.io.DataInputStream") ;
-                XInputStream xStream = (XInputStream) UnoRuntime.queryInterface
+                Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
+                        createInstance("com.sun.star.io.DataInputStream") ;
+                XInputStream xStream = (XInputStream)UnoRuntime.queryInterface
                     (XInputStream.class, oStream);
 
                 oObj.setBinaryStream(idx, xStream, 2) ;
@@ -467,9 +471,9 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object oStream = tParam.getMSF().createInstance
-                    ("com.sun.star.io.TextInputStream") ;
-                XInputStream xStream = (XInputStream) UnoRuntime.queryInterface
+                Object oStream = ((XMultiServiceFactory)tParam.getMSF())
+                        .createInstance("com.sun.star.io.TextInputStream") ;
+                XInputStream xStream = (XInputStream)UnoRuntime.queryInterface
                     (XInputStream.class, oStream);
 
                 oObj.setCharacterStream(idx, xStream, 2) ;
@@ -497,8 +501,8 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object obj = tParam.getMSF().createInstance
-                    ("com.sun.star.io.Pipe") ;
+                Object obj = ((XMultiServiceFactory)tParam.getMSF()).
+                                createInstance("com.sun.star.io.Pipe") ;
 
                 oObj.setObject(idx, obj) ;
             } catch (SQLException e) {
@@ -525,8 +529,8 @@ public class _XParameters extends MultiMethodTest {
         if (idx < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object obj = tParam.getMSF().createInstance
-                    ("com.sun.star.io.Pipe") ;
+                Object obj = ((XMultiServiceFactory)tParam.getMSF()).
+                    createInstance("com.sun.star.io.Pipe") ;
 
                 oObj.setObjectWithInfo(idx, obj, DataType.OBJECT, 0) ;
             } catch (SQLException e) {
