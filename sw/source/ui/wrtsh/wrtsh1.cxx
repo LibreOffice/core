@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:02:33 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,7 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
 void SwWrtShell::LaunchOLEObj( long nVerb )
 {
     if ( GetCntType() == CNT_OLE &&
-         !GetView().GetDocShell()->GetProtocol().IsInPlaceActive() )
+         !GetView().GetDocShell()->IsInPlaceActive() )
     {
         SvInPlaceObjectRef xRef = GetOLEObj();
         ASSERT( xRef.Is(), "OLE not found" );
