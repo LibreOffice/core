@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestPanel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:25:03 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,18 @@
  *
  ************************************************************************/
 
-#ifndef SD_TOOLPANEL_TEST_PANEL_HXX
-#define SD_TOOLPANEL_TEST_PANEL_HXX
+#ifndef SD_TASKPANE_TEST_PANEL_HXX
+#define SD_TASKPANE_TEST_PANEL_HXX
 
-#include "SubToolPanel.hxx"
-#include "TaskPaneTreeNode.hxx"
-
-
-namespace sd {
-
-    namespace toolpanel {
+#include "taskpane/SubToolPanel.hxx"
 
 
-/** This panel demonstrates how to create panel for the task pane.
-    The base class is Control because it wants the focus.
+namespace sd { namespace toolpanel {
+
+class ControlFactory;
+class TreeNode;
+
+/** This panel demonstrates how to create a panel for the task pane.
 */
 class TestPanel
     : public SubToolPanel
@@ -80,6 +78,8 @@ class TestPanel
 public:
     TestPanel (TreeNode* pParent);
     virtual ~TestPanel (void);
+
+    static std::auto_ptr<ControlFactory> CreateControlFactory (void);
 };
 
 } } // end of namespace ::sd::toolpanel
