@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-08 14:54:15 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 19:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,24 +234,6 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
     }
     else
         DBG_ERROR("wat fuer ne Version?");
-}
-
-//------------------------------------------------------------------
-
-void __EXPORT ScDocShell::FillRegInfo( SvEmbeddedRegistryInfo* pInfo )
-{
-    SfxInPlaceObject::FillRegInfo( pInfo );
-
-    pInfo->aObjName             = String::CreateFromAscii(pStarCalcDoc);
-    pInfo->nMajorVers           = 6;
-    pInfo->nMinorVers           = 0;
-    pInfo->aHumanShortTypeName  = String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) );
-
-    //! nIconResId nur, wenn Desktop?
-
-    pInfo->nIconResId           = REG_ICON_RESID_CALC;
-
-    //  nShell und aExt sind schon gefuellt
 }
 
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:49:47 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 19:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,10 +152,6 @@ public:
 
     void            PasteFromSystem();
     BOOL            PasteFromSystem( ULONG nFormatId, BOOL bApi = FALSE );
-
-    BOOL            DropFiles( const DropEvent& );
-    BOOL            DropFile( const DropEvent&, const String& );
-    BOOL            OpenFile( const String& );
 
     void            PasteDraw();
     void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,

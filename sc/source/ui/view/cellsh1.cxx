@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:29:47 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 19:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@
 #include <vcl/msgbox.hxx>
 #include <so3/pastedlg.hxx>
 #include <sot/formats.hxx>
-#include <vcl/clip.hxx>
 #include <svx/postattr.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/charmap.hxx>
@@ -1307,7 +1306,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
             break;
 
-        //  Clipboard-Abfrage-Slots wie im Writer (da auch an der Selection)
+#if 0
+        //  clipboard slots were used only for old basic:
 
         case SID_GET_CLPBRD_FORMAT_COUNT:
             rReq.SetReturnValue( SfxUInt16Item( nSlot, Clipboard::GetFormatCount() ) );
@@ -1341,6 +1341,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
             }
             break;
+#endif
 
         //
         //  sonstiges

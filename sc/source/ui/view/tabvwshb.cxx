@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:53:32 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 19:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,10 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     ErrCode nErr = ERRCODE_NONE;
     BOOL bErrorShown = FALSE;
 
-    if ( xIPObj->IsLink() )
-        nErr = xIPObj->DoVerb(nVerb);           // gelinkt -> ohne Client etc.
-    else
+    // linked objects aren't supported
+//  if ( xIPObj->IsLink() )
+//      nErr = xIPObj->DoVerb(nVerb);           // gelinkt -> ohne Client etc.
+//  else
     {
         SfxInPlaceClientRef xClient = FindIPClient( xIPObj, pWin );
         if ( !xClient.Is() )

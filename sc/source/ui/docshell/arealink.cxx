@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-10 14:11:39 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 19:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                         const String& rFilter, const String& rOpt,
                         const String& rArea, const ScRange& rDest,
                         ULONG nRefresh ) :
-    ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::so3::SvBaseLink(so3::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer  ( nRefresh ),
     pDocShell       ((ScDocShell*)pShell),
     aFileName       (rFile),
@@ -168,7 +168,7 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
 
             // adjust in dialog:
             String aLinkName;
-            MakeLnkName( aLinkName, NULL, aFile, aArea, &aFilter );
+            so3::MakeLnkName( aLinkName, NULL, aFile, aArea, &aFilter );
             SetName( aLinkName );
         }
 

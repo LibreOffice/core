@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: nn $ $Date: 2001-04-03 17:41:34 $
+#   last change: $Author: nn $ $Date: 2001-06-22 20:03:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,9 +89,6 @@ SLOFILES =  \
     $(SLO)$/scmod2.obj  \
     $(SLO)$/scdll.obj  \
     $(SLO)$/typemap.obj  \
-    $(SLO)$/dataobj.obj \
-    $(SLO)$/dataobj2.obj \
-    $(SLO)$/dataobj3.obj \
     $(SLO)$/transobj.obj \
     $(SLO)$/drwtrans.obj \
     $(SLO)$/lnktrans.obj \

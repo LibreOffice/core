@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:30:51 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 19:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,8 +271,8 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
             if (pViewSh->GetViewData()->GetDocShell() == this)
                 pViewSh->UpdateOleZoom();
         }
-        else
-            DataChanged( SvDataType() );            // fuer Zuppeln wenn nicht IP-aktiv
+        //else
+        //  DataChanged( SvDataType() );            // fuer Zuppeln wenn nicht IP-aktiv
     }
 
     if (aDocument.IsEmbedded())
@@ -333,8 +333,8 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
         bChange = TRUE;
     }
 
-    if (bChange)
-        DataChanged( SvDataType() );        //! passiert auch bei SetModified
+//  if (bChange)
+//      DataChanged( SvDataType() );        //! passiert auch bei SetModified
 }
 
 //

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-10 18:52:48 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 20:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ BOOL ScDdeLink::bIsInUpdate = FALSE;
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const String& rI,
                         BYTE nM ) :
-    ::so3::SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::so3::SvBaseLink(so3::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
     aAppl( rA ),
     aTopic( rT ),
@@ -117,7 +117,7 @@ __EXPORT ScDdeLink::~ScDdeLink()
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
-    ::so3::SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::so3::SvBaseLink(so3::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc    ( pD ),
     aAppl   ( rOther.aAppl ),
     aTopic  ( rOther.aTopic ),
@@ -131,7 +131,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
-    ::so3::SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::so3::SvBaseLink(so3::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
     pResult( NULL ),
     bNeedUpdate( FALSE )

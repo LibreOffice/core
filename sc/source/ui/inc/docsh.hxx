@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 10:05:38 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 19:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,6 @@ public:
 
     virtual SfxUndoManager*     GetUndoManager();
 
-    virtual void    FillRegInfo( SvEmbeddedRegistryInfo* pInfo );
     virtual void    FillClass( SvGlobalName * pClassName,
                                ULONG * pFormat,
                                String * pAppName,
@@ -231,8 +230,6 @@ public:
     virtual void    SetModified( BOOL = TRUE );
 
     void            SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart );
-
-    virtual SvDataMemberObjectRef CreateSnapshot();
 
     virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( Window *pParent,
                                                               const SfxItemSet &rSet );

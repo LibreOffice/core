@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:36:04 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 19:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@
 #include "printfun.hxx"              // DrawToDev
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
-#include "dataobj.hxx"
 #include "impex.hxx"
 #include "attrib.hxx"
 #include "corodlg.hxx"
@@ -2000,50 +1999,6 @@ Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
     }
     else
         return SfxInPlaceObject::GetVisArea( nAspect );
-}
-
-SvDataMemberObjectRef __EXPORT ScDocShell::CreateSnapshot()
-{
-    ScDocShell* pNewSh = new ScDocShell;
-    SvEmbeddedObjectRef aDocShellRef = pNewSh;
-    pNewSh->DoInitNew(NULL);
-    pNewSh->ResetEmpty();
-    ScDocument* pDestDoc = pNewSh->GetDocument();
-    pDestDoc->RenameTab( 0,
-                String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("______42_____")),
-                FALSE );
-
-    //  Kopieren (wie in ScDataObject::GetCalcData):
-    //  - Tabellen
-    //  - Seitenvorlage
-
-    if (aDocument.GetDrawLayer())
-        pNewSh->MakeDrawLayer();
-
-    ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
-    ScStyleSheetPool* pDestPool = pDestDoc->GetStyleSheetPool();
-
-    USHORT nCount = aDocument.GetTableCount();
-    for (USHORT nTab=0; nTab<nCount; nTab++)
-    {
-        pDestDoc->MakeTable( nTab );
-        pDestDoc->TransferTab( &aDocument, nTab, nTab );        // nicht einfuegen
-        String aStyleName = aDocument.GetPageStyle( nTab );
-        //  CopyStyleFrom kopiert SetItems mit richtigem Pool
-        pDestPool->CopyStyleFrom( pStylePool, aStyleName, SFX_STYLE_FAMILY_PAGE );
-    }
-
-    pDestDoc->DeleteTab( nCount );      // vorher kann die einzige Tab nicht geloescht werden
-
-    aDocument.CopyDdeLinks( pDestDoc );                     // Werte von DDE-Links kopieren
-
-    pDestDoc->SetViewOptions( aDocument.GetViewOptions() );
-
-    pDestDoc->SetVisibleTab( aDocument.GetVisibleTab() );
-    // hier muss auch der Start angepasst werden
-    pNewSh->SetVisAreaOrSize( SfxInPlaceObject::GetVisArea(), TRUE );
-
-    return new ScDataObject( pNewSh );
 }
 
 void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
