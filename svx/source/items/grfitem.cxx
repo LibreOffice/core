@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,13 +217,13 @@ SfxItemPresentation SvxGrfCrop::GetPresentation(
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         {
             ( rText.AssignAscii( "L: " )) += ::GetMetricText( GetLeft(),
-                                            eCoreUnit, SFX_MAPUNIT_MM );
+                                            eCoreUnit, SFX_MAPUNIT_MM, pIntl );
             ( rText.AppendAscii( " R: " )) += ::GetMetricText( GetRight(),
-                                            eCoreUnit, SFX_MAPUNIT_MM );
+                                            eCoreUnit, SFX_MAPUNIT_MM, pIntl );
             ( rText.AppendAscii( " T: " )) += ::GetMetricText( GetTop(),
-                                            eCoreUnit, SFX_MAPUNIT_MM );
+                                            eCoreUnit, SFX_MAPUNIT_MM, pIntl );
             ( rText.AppendAscii( " B: " )) += ::GetMetricText( GetBottom(),
-                                            eCoreUnit, SFX_MAPUNIT_MM );
+                                            eCoreUnit, SFX_MAPUNIT_MM, pIntl );
         }
         break;
 
