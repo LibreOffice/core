@@ -57,10 +57,27 @@ public class AbstractListener {
             else
                 return null;
         } catch (InvocationTargetException ite) {
+
+            System.out.println("=======================================================");
+            System.out.println("=== Note: An Exception was thrown which should have ===");
+            System.out.println("=== caused a crash. I Catched it. Please report this ==");
+            System.out.println("=== to  openoffice.org                               ==");
+            System.out.println("=======================================================");
+
             ite.printStackTrace();
-            throw (RuntimeException) ite.getTargetException();
+            ite.getCause().printStackTrace();
+
+
         } catch (IllegalAccessException iae) {
             iae.printStackTrace();
+        }
+        catch (Exception ex) {
+            System.out.println("=======================================================");
+            System.out.println("=== Note: An Exception was thrown which should have ===");
+            System.out.println("=== caused a crash. I Catched it. Please report this ==");
+            System.out.println("=== to  openoffice.org                               ==");
+            System.out.println("=======================================================");
+            ex.printStackTrace();
         }
 
         return null;
