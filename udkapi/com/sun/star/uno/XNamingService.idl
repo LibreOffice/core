@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNamingService.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:37:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 /** allows to insert, remove and access named objects.
  */
-interface XNamingService: com::sun::star::uno::XInterface
+published interface XNamingService: com::sun::star::uno::XInterface
 {
 
     /** provides a previous registered object.
