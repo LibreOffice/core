@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:36:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,13 +246,13 @@ long DelListBox::Notify( NotifyEvent& rEvent )
  */
 
 QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const ::std::list< String >& rChoices ) :
-        m_rReturnValue( rRet ),
         ModalDialog( pParent, PaResId( RID_STRINGQUERYDLG ) ),
         m_aOKButton( this, PaResId( RID_STRQRY_BTN_OK ) ),
+        m_aCancelButton( this, PaResId( RID_STRQRY_BTN_CANCEL ) ),
+        m_aFixedText( this, PaResId( RID_STRQRY_TXT_RENAME ) ),
         m_aEdit( this, PaResId( RID_STRQRY_EDT_NEWNAME ) ),
         m_aComboBox( this, PaResId( RID_STRQRY_BOX_NEWNAME ) ),
-        m_aFixedText( this, PaResId( RID_STRQRY_TXT_RENAME ) ),
-        m_aCancelButton( this, PaResId( RID_STRQRY_BTN_CANCEL ) )
+        m_rReturnValue( rRet )
 {
     m_aOKButton.SetClickHdl( LINK( this, QueryString, ClickBtnHdl ) );
     m_aFixedText.SetText( rQuery );
