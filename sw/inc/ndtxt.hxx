@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2004-03-11 14:04:02 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@ class SwTxtNode: public SwCntntNode
     SwpHints    *pSwpHints;
     SwWrongList *pWrong;    // Rechtschreibfehler nach Online-Spelling
     SwNodeNum   *pNdNum;    // Numerierung fuer diesen Absatz
-    SwNodeNum   *pNdOutl;   // Outline fuer diesen Absatz
     XubString   aText;
 
     // Some of the chars this para are hidden. Paragraph has to be reformatted
@@ -298,13 +297,9 @@ public:
     // Numerierung
     const SwNodeNum* UpdateNum( const SwNodeNum& );
     SwNumRule *GetNumRule() const;
-    // #111955#
-    const SwNodeNum* GetNum(BOOL bOutline = FALSE) const
-    { return bOutline ? pNdOutl : pNdNum; }
-    // OutlineNumerierung
-    const SwNodeNum* UpdateOutlineNum( const SwNodeNum& );
-    // #111955#
-    const SwNodeNum* GetOutlineNum() const      { return GetNum(TRUE); }
+    const SwNodeNum* GetNum() const             { return pNdNum; }
+    const SwNodeNum* GetOutlineNum() const;
+    BOOL MayBeNumbered() const;
     BOOL IsOutlineNum() const;
     void NumRuleChgd();                 // Frames benachrichtigen
     XubString GetNumString() const;     // returnt Outline oder Num - String
