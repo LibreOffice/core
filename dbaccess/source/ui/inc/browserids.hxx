@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 10:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #define ID_BROWSER_COUNTALL                 SID_FM_COUNTALL // count all
 #define ID_BROWSER_SQL                      SID_SOURCEVIEW
 #define ID_BROWSER_ADDTABLE                 SID_FM_ADDTABLE
-#define ID_BROWSER_DESIGN                   (SID_SBA_START+120)
+#define ID_BROWSER_DESIGN                   SID_SBA_QRY_DESIGN
 #define ID_BROWSER_EXPLORER                 SID_DSBROWSER_EXPLORER
 
 // menu MENU_BROWSERTREE_CONTEXT
@@ -116,12 +116,12 @@
 #define ID_TREE_RELATION_DESIGN            14
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
-#define ID_BROWSER_CLEAR_QUERY              (SID_SBA_START+130)
-#define ID_REALTION_ADD_RELATION            (SID_SBA_START+131)
-#define ID_BROWSER_QUERY_VIEW_FUNCTIONS     (SID_SBA_START+134)
-#define ID_BROWSER_QUERY_VIEW_TABLES        (SID_SBA_START+135)
-#define ID_BROWSER_QUERY_VIEW_ALIASES       (SID_SBA_START+136)
-#define ID_BROWSER_QUERY_DISTINCT_VALUES    (SID_SBA_START+137)
+#define ID_BROWSER_CLEAR_QUERY              SID_SBA_CLEAR_QUERY
+#define ID_REALTION_ADD_RELATION            SID_SBA_ADD_RELATION
+#define ID_BROWSER_QUERY_VIEW_FUNCTIONS     SID_SBA_QUERY_VIEW_FUNCTIONS
+#define ID_BROWSER_QUERY_VIEW_TABLES        SID_SBA_QUERY_VIEW_TABLES
+#define ID_BROWSER_QUERY_VIEW_ALIASES       SID_SBA_QUERY_VIEW_ALIASES
+#define ID_BROWSER_QUERY_DISTINCT_VALUES    SID_SBA_QUERY_DISTINCT_VALUES
 #define ID_BROWSER_CLOSE                    SID_CLOSEDOC
 #define ID_BROWSER_ESACPEPROCESSING         SID_FM_NATIVESQL
 
