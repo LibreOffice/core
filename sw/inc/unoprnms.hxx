@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 13:22:57 $
+ *  last change: $Author: mtg $ $Date: 2001-06-05 14:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,4 +698,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_TWO_DIGIT_YEAR        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PROTECTION_KEY        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_PROTECTION_KEY;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_DISTANCE;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_CONTROL_FOCUS;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_FORM_DESIGN_MODE;
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 13:23:22 $
+ *  last change: $Author: mtg $ $Date: 2001-06-05 14:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1822,6 +1822,9 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
 #endif
                     { SW_PROP_NAME(UNO_NAME_FORBIDDEN_CHARACTERS),          WID_DOC_FORBIDDEN_CHARS,    &::getCppuType((Reference<XForbiddenCharacters>*)0), PropertyAttribute::READONLY,   0},
                     { SW_PROP_NAME(UNO_NAME_TWO_DIGIT_YEAR),                WID_DOC_TWO_DIGIT_YEAR, &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_AUTOMATIC_CONTROL_FOCUS),       WID_DOC_AUTOMATIC_CONTROL_FOCUS,    &::getBooleanCppuType(),    PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_APPLY_FORM_DESIGN_MODE),        WID_DOC_APPLY_FORM_DESIGN_MODE,     &::getBooleanCppuType(),    PROPERTY_NONE,   0},
+
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
