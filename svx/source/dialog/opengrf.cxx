@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
+ *  last change: $Author: svesik $ $Date: 2001-06-26 23:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@
 #include <svtools/transfer.hxx>
 #endif
 #ifndef _SVDOGRAF_HXX //autogen
-#include <svx/svdograf.hxx>
+#include "svdograf.hxx"
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
@@ -140,7 +140,7 @@
 #include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include <svx/dialmgr.hxx>
+#include "dialmgr.hxx"
 #endif
 
 #ifndef _SVX_OPENGRF_HXX
