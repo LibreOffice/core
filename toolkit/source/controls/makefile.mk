@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:37 $
+#   last change: $Author: fs $ $Date: 2002-04-26 14:34:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
+            $(SLO)$/accessiblecontrolcontext.obj    \
             $(SLO)$/geometrycontrolmodel.obj        \
             $(SLO)$/eventcontainer.obj				\
             $(SLO)$/stdtabcontroller.obj 			\
