@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edws.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:03:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
 #endif
 
 /********************************************************
@@ -349,8 +352,9 @@ void SwEditShell::DelAllUndoObj()
 // setzt Undoklammerung auf, liefert nUndoId der Klammerung
 
 
-sal_uInt16 SwEditShell::StartUndo( sal_uInt16 nUndoId )
-{ return GetDoc()->StartUndo( nUndoId ); }
+sal_uInt16 SwEditShell::StartUndo( sal_uInt16 nUndoId,
+                                   const SwRewriter *pRewriter )
+{ return GetDoc()->StartUndo( nUndoId, pRewriter ); }
 
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
@@ -365,6 +369,9 @@ sal_uInt16 SwEditShell::EndUndo(sal_uInt16 nUndoId)
 sal_uInt16 SwEditShell::GetUndoIds(String* pStr,SwUndoIds *pUndoIds) const
 { return GetDoc()->GetUndoIds(pStr,pUndoIds); }
 
+String SwEditShell::GetUndoIdsStr(String* pStr,SwUndoIds *pUndoIds) const
+{ return GetDoc()->GetUndoIdsStr(pStr,pUndoIds); }
+
 // liefert die Id der letzten Redofaehigen Aktion zurueck
 // fuellt ggf. VARARR mit RedoIds
 
@@ -372,12 +379,18 @@ sal_uInt16 SwEditShell::GetUndoIds(String* pStr,SwUndoIds *pUndoIds) const
 sal_uInt16 SwEditShell::GetRedoIds(String* pStr,SwUndoIds *pRedoIds) const
 { return GetDoc()->GetRedoIds(pStr,pRedoIds); }
 
+String SwEditShell::GetRedoIdsStr(String* pStr,SwUndoIds *pRedoIds) const
+{ return GetDoc()->GetRedoIdsStr(pStr,pRedoIds); }
+
 // liefert die Id der letzten Repeatfaehigen Aktion zurueck
 // fuellt ggf. VARARR mit RedoIds
 
 
 sal_uInt16 SwEditShell::GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const
 { return GetDoc()->GetRepeatIds(pStr,pRedoIds); }
+
+String SwEditShell::GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const
+{ return GetDoc()->GetRepeatIdsStr(pStr,pRedoIds); }
 
 
 
