@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceImpl.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: kr $ $Date: 2001-03-13 09:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,7 @@ class ResourceImpl implements Resource {
                     }
 
                       jarResourceProxys.addElement(ResourceProxy.create(new URL(baseURL, fileName), bytes, tmpProtectionDomain));
+                      jarResourceProxys.addElement(ResourceProxy.create(new URL(baseURL + "/" +  fileName), bytes, tmpProtectionDomain));
 
                     jarEntry = jar.getNextJarEntry();
                 }
