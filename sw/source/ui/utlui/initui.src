@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 07:23:53 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ Resource RID_SW_SHELLRES
         TEXT [ ENGLISH ] = "Page" ;
         TEXT [ norwegian ] = "Page" ;
         TEXT [ italian ] = "Pagina" ;
-        TEXT [ portuguese_brazilian ] = "Página" ;
+        TEXT [ portuguese_brazilian ] = "P?gina" ;
         TEXT [ portuguese ] = "Página" ;
         TEXT [ finnish ] = "Sivu " ;
         TEXT [ danish ] = "Side" ;
@@ -208,7 +208,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "** Mistakable brackets **" ;
         TEXT [ norwegian ] = "+++** Mistakable brackets **" ;
         TEXT [ italian ] = "** Parentesi errate **" ;
-        TEXT [ portuguese_brazilian ] = "** Colchetes errôneos **" ;
+        TEXT [ portuguese_brazilian ] = "** Colchetes err?eos **" ;
         TEXT [ portuguese ] = "** Parênteses errados **" ;
         TEXT [ finnish ] = "** Virheellinen sulkeiden käyttö **" ;
         TEXT [ danish ] = "** Forkert brug af parenteser **" ;
@@ -235,7 +235,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "** Square function overflow **" ;
         TEXT [ norwegian ] = "+++** Square function overflow **" ;
         TEXT [ italian ] = "** Overflow nella funzione quadrato **" ;
-        TEXT [ portuguese_brazilian ] = "** Transbordo de função quadrática **" ;
+        TEXT [ portuguese_brazilian ] = "** Transbordo de fun??o quadr?tica **" ;
         TEXT [ portuguese ] = "** Transbordo da função quadrática **" ;
         TEXT [ finnish ] = "** Neliöfunktion ylivuoto **" ;
         TEXT [ danish ] = "** Overløb i kvadratfunktion **" ;
@@ -263,7 +263,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "** Variable not found **" ;
         TEXT [ norwegian ] = "** Variabel ikke funnet **" ;
         TEXT [ italian ] = "** Variabile non trovata **" ;
-        TEXT [ portuguese_brazilian ] = "** Variável não encontrada **" ;
+        TEXT [ portuguese_brazilian ] = "** Vari?vel n?o encontrada **" ;
         TEXT [ portuguese ] = "** Variável não encontrada **" ;
         TEXT [ finnish ] = "** Muuttujaa ei löydy **" ;
         TEXT [ danish ] = "** Variabel blev ikke fundet **" ;
@@ -373,7 +373,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "** Error in expression **" ;
         TEXT [ norwegian ] = "** Error in expression **" ;
         TEXT [ italian ] = "** Errore nell'espressione **" ;
-        TEXT [ portuguese_brazilian ] = "** Erro na expressão **" ;
+        TEXT [ portuguese_brazilian ] = "** Erro na express?o **" ;
         TEXT [ portuguese ] = "** Expressão errada **" ;
         TEXT [ finnish ] = "** Virheellinen lauseke **" ;
         TEXT [ danish ] = "** Fejlagtigt udtryk **" ;
@@ -531,7 +531,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "Index" ;
         TEXT [ norwegian ] = "Stikkordregister" ;
         TEXT [ italian ] = "Indice analitico" ;
-        TEXT [ portuguese_brazilian ] = "Índice" ;
+        TEXT [ portuguese_brazilian ] = "?ndice" ;
         TEXT [ portuguese ] = "Índice remissivo" ;
         TEXT [ finnish ] = "Aakkostettu hakemisto" ;
         TEXT [ danish ] = "Stikordsregister" ;
@@ -559,7 +559,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "User-defined" ;
         TEXT [ norwegian ] = "Brukerdefinert tabell for" ;
         TEXT [ italian ] = "Indice personalizzato" ;
-        TEXT [ portuguese_brazilian ] = "Tabela definida pelo usuário de" ;
+        TEXT [ portuguese_brazilian ] = "Tabela definida pelo usu?rio de" ;
         TEXT [ portuguese ] = "Personalizado" ;
         TEXT [ finnish ] = "Käyttäjän määrittämä" ;
         TEXT [ danish ] = "Brugerdefineret" ;
@@ -587,7 +587,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "Table of contents" ;
         TEXT [ norwegian ] = "Innholdsfortegnelse" ;
         TEXT [ italian ] = "Indice generale" ;
-        TEXT [ portuguese_brazilian ] = "Tabela de conteúdos" ;
+        TEXT [ portuguese_brazilian ] = "Tabela de conte?os" ;
         TEXT [ portuguese ] = "Índice geral" ;
         TEXT [ finnish ] = "Sisällysluettelo" ;
         TEXT [ danish ] = "Indholdsfortegnelse" ;
@@ -599,7 +599,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_simplified ] = "ÄÚÈÝÄ¿Â¼";
         TEXT[ language_user1 ] = " ";
         TEXT[ russian ] = "Îãëàâëåíèå";
-        TEXT[ polish ] = "Spis treœci";
+        TEXT[ polish ] = "Spis tre?ci";
         TEXT[ japanese ] = "–ÚŽŸ";
         TEXT[ chinese_traditional ] = "¤º®e¥Ø¿ý";
         TEXT[ arabic ] = "ÝåÑÓ ÇáãÍÊæíÇÊ";
@@ -723,7 +723,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "Title" ;
         TEXT [ norwegian ] = "Tittel" ;
         TEXT [ italian ] = "Titolo" ;
-        TEXT [ portuguese_brazilian ] = "Título" ;
+        TEXT [ portuguese_brazilian ] = "T?tulo" ;
         TEXT [ portuguese ] = "Capitulo" ;
         TEXT [ finnish ] = "Otsikko" ;
         TEXT [ danish ] = "Titel" ;
@@ -805,7 +805,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "Description" ;
         TEXT [ norwegian ] = "Beskrivelse" ;
         TEXT [ italian ] = "Descrizione" ;
-        TEXT [ portuguese_brazilian ] = "Descrição" ;
+        TEXT [ portuguese_brazilian ] = "Descri??o" ;
         TEXT [ portuguese ] = "Descrição" ;
         TEXT [ finnish ] = "Kuvaus" ;
         TEXT [ danish ] = "Beskrivelse" ;
@@ -832,7 +832,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "Info 0" ;
         TEXT [ norwegian ] = "Info 0" ;
         TEXT [ italian ] = "Info 0" ;
-        TEXT [ portuguese_brazilian ] = "Informação 0" ;
+        TEXT [ portuguese_brazilian ] = "Informa??o 0" ;
         TEXT [ portuguese ] = "Informação 0" ;
         TEXT [ finnish ] = "Tiedot 0" ;
         TEXT [ danish ] = "Info 0" ;
@@ -859,7 +859,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "Info 1" ;
         TEXT [ norwegian ] = "Info 1" ;
         TEXT [ italian ] = "Info 1" ;
-        TEXT [ portuguese_brazilian ] = "Informação 1" ;
+        TEXT [ portuguese_brazilian ] = "Informa??o 1" ;
         TEXT [ portuguese ] = "Informação 1" ;
         TEXT [ finnish ] = "Tiedot 1" ;
         TEXT [ danish ] = "Info 1" ;
@@ -886,7 +886,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "Info 2" ;
         TEXT [ norwegian ] = "Info 2" ;
         TEXT [ italian ] = "Info 2" ;
-        TEXT [ portuguese_brazilian ] = "Informação 2" ;
+        TEXT [ portuguese_brazilian ] = "Informa??o 2" ;
         TEXT [ portuguese ] = "Informação 2" ;
         TEXT [ finnish ] = "Tiedot 2" ;
         TEXT [ danish ] = "Info 2" ;
@@ -913,7 +913,7 @@ Resource RID_SW_SHELLRES
         TEXT [ English ] = "Info 3" ;
         TEXT [ norwegian ] = "Info 3" ;
         TEXT [ italian ] = "Info 3" ;
-        TEXT [ portuguese_brazilian ] = "Informação 3" ;
+        TEXT [ portuguese_brazilian ] = "Informa??o 3" ;
         TEXT [ portuguese ] = "Informação 3" ;
         TEXT [ finnish ] = "Tiedot 3" ;
         TEXT [ danish ] = "Info 3" ;
@@ -1137,7 +1137,7 @@ Resource RID_SW_SHELLRES
         Text[ italian ] = "Conversione seguente $(ARG1)";
         Text[ danish ] = "Convert follow $(ARG1)";
         Text[ swedish ] = "Konvertering följd $(ARG1)";
-        Text[ polish ] = "Kolejnoœæ konwersji $(ARG1)";
+        Text[ polish ] = "Kolejno?æ konwersji $(ARG1)";
         Text[ portuguese_brazilian ] = "Convert follow $(ARG1)";
         Text[ japanese ] = "ŽŸ‚É $(ARG1) ‚ð•ÏŠ·";
         Text[ korean ] = "º¯È¯ $(ARG1)";
