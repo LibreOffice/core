@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-18 11:54:41 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,8 @@ public:
     SwAutoCorrExceptWord( ULONG nAFlags, ULONG nNd, xub_StrLen nContent,
                                         const String& rWord, sal_Unicode cChr,
                                         LanguageType eLang )
-        : sWord( rWord ), nFlags( nAFlags ), nNode( nNd ),
-            nCntnt( nContent ), cChar( cChr ), bDeleted( FALSE ),
-            eLanguage(eLang)
+        : sWord(rWord), nFlags(nAFlags), nNode(nNd), nCntnt(nContent),
+        cChar(cChr), eLanguage(eLang), bDeleted(FALSE)
     {}
 
     BOOL IsDeleted() const                          { return bDeleted; }
