@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:40:19 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,40 +92,53 @@ Classes for export of different kinds of internal/external references.
 
 // Excel sheet indexes ========================================================
 
-typedef ::std::vector< ::std::pair< sal_uInt16, sal_uInt16 > > XclExpRefLogVec;
+typedef ::std::pair< sal_uInt16, sal_uInt16 >   XclExpRefLogEntry;
+typedef ::std::vector< XclExpRefLogEntry >      XclExpRefLogVec;
 
 /** Stores the correct Excel sheet index for each Calc sheet.
     @descr  The class knows all sheets which will not exported
     (i.e. external link sheets, scenario sheets). */
-class XclExpTabIdBuffer
+class XclExpTabInfo
 {
 public:
-    /** Initializes the complete buffer from the passed document. */
-    explicit                    XclExpTabIdBuffer( ScDocument& rDoc );
+    /** Initializes the complete buffer from the current exported document. */
+    explicit                    XclExpTabInfo( const XclExpRoot& rRoot );
 
+    /** Returns true, if the specified Calc sheet will be exported. */
+    bool                        IsExportTab( USHORT nScTab ) const;
     /** Returns true, if the specified Calc sheet is used to store external cell contents. */
-    bool                        IsExternal( sal_uInt16 nScTab ) const;
-    /** Returns true, if the specified Calc sheet has to be exported. */
-    bool                        IsExportTable( sal_uInt16 nScTab ) const;
+    bool                        IsExternalTab( USHORT nScTab ) const;
+    /** Returns true, if the specified Calc sheet is visible and will be exported. */
+    bool                        IsVisibleTab( USHORT nScTab ) const;
+    /** Returns true, if the specified Calc sheet is selected and will be exported. */
+    bool                        IsSelectedTab( USHORT nScTab ) const;
+    /** Returns true, if the specified Calc sheet is the active displayed sheet. */
+    bool                        IsActiveTab( USHORT nScTab ) const;
 
     /** Returns the Excel sheet index for a given Calc sheet. */
-    sal_uInt16                  GetXclTab( sal_uInt16 nScTab ) const;
+    sal_uInt16                  GetXclTab( USHORT nScTab ) const;
 
     /** Returns the Calc sheet index of the nSortedTab-th entry in the sorted sheet names list. */
-    sal_uInt16                  GetRealScTab( sal_uInt16 nSortedTab ) const;
+    USHORT                      GetRealScTab( USHORT nSortedTab ) const;
     /** Returns the index of the passed Calc sheet in the sorted sheet names list. */
-    sal_uInt16                  GetSortedScTab( sal_uInt16 nScTab ) const;
+    USHORT                      GetSortedScTab( USHORT nScTab ) const;
 
     /** Returns the number of Calc sheets. */
-    inline sal_uInt16           GetScTabCount() const { return mnScCnt; }
+    inline USHORT               GetScTabCount() const { return mnScCnt; }
+
     /** Returns the number of Excel sheets to be exported. */
     inline sal_uInt16           GetXclTabCount() const { return mnXclCnt; }
-    /** Returns the number of external linked sheets (in Calc). */
-    inline sal_uInt16           GetExternTabCount() const { return mnExtCnt; }
+    /** Returns the number of external linked sheets. */
+    inline sal_uInt16           GetXclExtTabCount() const { return mnXclExtCnt; }
     /** Returns the number of codepages (VBA modules). */
-    inline sal_uInt16           GetCodenameCount() const { return mnCodeCnt; }
-    /** Returns the maximum number of Calc sheets and codepages. */
-    inline sal_uInt16           GetMaxScTabCount() const { return ::std::max( mnScCnt, mnCodeCnt ); }
+    inline sal_uInt16           GetXclCodenameCount() const { return mnXclCodeCnt; }
+    /** Returns the number of exported selected sheets. */
+    inline sal_uInt16           GetXclSelectedCount() const { return mnXclSelected; }
+
+    /** Returns the Excel index of the active, displayed sheet. */
+    inline sal_uInt16           GetXclActiveTab() const { return mnXclActive; }
+    /** Returns the Excel index of the first visible sheet. */
+    inline sal_uInt16           GetXclFirstVisTab() const { return mnXclFirstVis; }
 
     // *** for change tracking ***
 
@@ -137,20 +150,29 @@ public:
     const XclExpRefLogVec&      EndRefLog();
 
 private:
+    /** Returns true, if any of the passed flags is set for the specified Calc sheet. */
+    bool                        GetFlag( USHORT nScTab, sal_uInt8 nFlags ) const;
+    /** Sets or clears (depending on bSet) all passed flags for the specified Calc sheet. */
+    void                        SetFlag( USHORT nScTab, sal_uInt8 nFlags, bool bSet = true );
+
     /** Searches for sheets not to be exported. */
     void                        CalcXclIndexes();
     /** Sorts the names of all tables and stores the indexes of the sorted indexes. */
     void                        CalcSortedIndexes( ScDocument& rDoc );
 
 private:
-    typedef ::std::vector< ::std::pair< sal_uInt16, sal_uInt8 > > IndexEntryVec;
+    typedef ::std::pair< sal_uInt16, sal_uInt8 >    ScTabInfoEntry;
+    typedef ::std::vector< ScTabInfoEntry >         ScTabInfoVec;
 
-    IndexEntryVec               maIndexVec;         /// Array of sheet index information.
+    ScTabInfoVec                maTabInfoVec;       /// Array of Calc sheet index information.
 
-    sal_uInt16                  mnScCnt;            /// Count of Calc sheets.
+    USHORT                      mnScCnt;            /// Count of Calc sheets.
     sal_uInt16                  mnXclCnt;           /// Count of Excel sheets to be exported.
-    sal_uInt16                  mnExtCnt;           /// Count of external link sheets (in Calc).
-    sal_uInt16                  mnCodeCnt;          /// Count of codepages.
+    sal_uInt16                  mnXclExtCnt;        /// Count of external link sheets.
+    sal_uInt16                  mnXclCodeCnt;       /// Count of codepages.
+    sal_uInt16                  mnXclSelected;      /// Count of selected and exported sheets.
+    sal_uInt16                  mnXclActive;        /// Active (selected) sheet.
+    sal_uInt16                  mnXclFirstVis;      /// First visible sheet.
 
     ScfUInt16Vec                maFromSortedVec;    /// Sorted index -> real index.
     ScfUInt16Vec                maToSortedVec;      /// Real index -> sorted index.
@@ -164,19 +186,18 @@ private:
 
 class XclExpLinkManager_Impl;
 
-/** Stores all EXTERNSHEET and SUPBOOK record data.
-    @descr  This is the central class for export of all external references.
-    File contents in BIFF8:
+/** Stores all data for internal/external references (the link table).
+    @descr  Contents in BIFF8:
     - Record SUPBOOK: Contains the name of an external workbook and the names of its sheets.
-    This record is followed by EXTERNNAME, XCT and CRN records.
+        This record is followed by EXTERNNAME, XCT and CRN records.
     - Record XCT: Contains the sheet index of the following CRN records.
     - Record CRN: Contains addresses (row and column) and values of external referenced cells.
     - Record NAME: Contains defined names of the own workbook. This record follows the
-    EXTERNSHEET record.
+        EXTERNSHEET record.
     - Record EXTERNNAME: Contains external defined names or DDE links or OLE object links.
     - Record EXTERNSHEET: Contains indexes to URLs of external documents (SUPBOOKs)
-    and sheet indexes for each external reference used anywhere in the workbook.
-    This record follows a list of SUPBOOK records.
+        and sheet indexes for each external reference used anywhere in the workbook.
+        This record follows a list of SUPBOOK records (it is the last record of the link table).
 */
 class XclExpLinkManager : public XclExpRecordBase
 {
@@ -191,10 +212,10 @@ public:
     /** Returns the external document URL of the specified Excel sheet. */
     const XclExpString*         GetUrl( sal_uInt16 nXclTab ) const;
     /** Returns the external sheet name of the specified Excel sheet. */
-    const XclExpString*         GetTableName( sal_uInt16 nXclTab ) const;
+    const XclExpString*         GetTabName( sal_uInt16 nXclTab ) const;
 
     /** Stores the cell with the given address in a CRN record list. */
-    void                        StoreCellCont( const SingleRefData& rRef );
+    void                        StoreCell( const SingleRefData& rRef );
     /** Stores all cells in the given range in a CRN record list. */
     void                        StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
 
