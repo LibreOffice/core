@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:22:22 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~C)";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
-        Text[ japanese ] = "¾Ù‚Ì½À²Ù(~C)";
+        Text[ japanese ] = "¾Ù½À²Ù(~C)";
         Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡(~C)";
         Text[ arabic ] = "äãØ ÎáíÉ";
         Text[ greek ] = "Óô~õë êåëéïı";
@@ -1146,7 +1146,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~E)";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
-        Text[ japanese ] = "¾Ù‚Ì½À²Ù(~E)";
+        Text[ japanese ] = "¾Ù½À²Ù(~E)";
         Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡(~E)";
         Text[ arabic ] = "äãØ ÎáíÉ";
         Text[ greek ] = "Óôõë ê~åëéïı";
@@ -1695,7 +1695,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~L)";
         Text[ russian ] = "Ñòèëü ÿ÷åéêè";
         Text[ polish ] = "Styl komórki";
-        Text[ japanese ] = "¾Ù‚Ì½À²Ù(~L)";
+        Text[ japanese ] = "¾Ù½À²Ù(~L)";
         Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡(~L)";
         Text[ arabic ] = "äãØ ÎáíÉ";
         Text[ greek ] = "Óôõë êå~ëéïı";
@@ -1754,6 +1754,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ catalan ] = "Formato condicionado";
     Text[ finnish ] = "Ehdollinen muotoilu";
 };
+
 
 
 
