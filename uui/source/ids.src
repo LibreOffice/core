@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-27 20:06:12 $
+ *  last change: $Author: kz $ $Date: 2001-07-31 20:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kz $ $Date: 2001-07-27 20:06:12 $ $Revision: 1.18 $
+// $Author: kz $ $Date: 2001-07-31 20:11:01 $ $Revision: 1.19 $
 //============================================================================
 
 #define __RSC
@@ -1119,6 +1119,7 @@ Resource RID_UUI_ERRHDL
         Text[ catalan ] = "$(ARG1) has an incorrect version";
     };
 };
+
 
 
 
