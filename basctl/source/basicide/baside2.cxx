@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:38:46 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,10 +748,10 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 
     // Gibt es hier einen BreakPoint?
     BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nErrorLine );
-    if ( pBrk && pBrk->nStopAfter )
+    if ( pBrk )
     {
-        pBrk->nStopAfter--;
-        if ( pBrk->nStopAfter && GetBasic()->IsBreak() )
+        pBrk->nHitCount++;
+        if ( pBrk->nHitCount < pBrk->nStopAfter && GetBasic()->IsBreak() )
             return aStatus.nBasicFlags; // weiterlaufen...
     }
 
@@ -1348,9 +1348,11 @@ void __EXPORT ModulWindow::BasicStarted()
     if ( xModule.Is() )
     {
         aStatus.bIsRunning = TRUE;
-        if ( GetBreakPoints().Count() )
+        BreakPointList& rList = GetBreakPoints();
+        if ( rList.Count() )
         {
-            GetBreakPoints().SetBreakPointsInBasic( xModule );
+            rList.ResetHitCount();
+            rList.SetBreakPointsInBasic( xModule );
             for ( USHORT nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
             {
                 SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( nMethod );
