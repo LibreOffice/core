@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-02-20 12:43:51 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 15:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,11 @@
 #define _CPPU_THREADPOOL_THREAD_HXX
 
 #include <list>
-#include <osl/types.h>
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
 #include <osl/thread.h>
 
 #include "jobqueue.hxx"

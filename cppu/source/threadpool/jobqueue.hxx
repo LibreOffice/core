@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobqueue.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 15:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,10 @@
 
 #include <list>
 
-#include <osl/types.h>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
 #include <osl/conditn.h>
 #include <osl/mutex.hxx>
 
