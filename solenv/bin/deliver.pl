@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-28 12:41:55 $
+#   last change: $Author: rt $ $Date: 2002-12-16 12:28:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.39 $ ';
+$id_str = ' $Revision: 1.40 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -765,7 +765,7 @@ sub push_default_actions
     # @action_data list.
     my $subdir;
     my @subdirs = (
-                    'bin/app',
+                    'bin',
                     'idl',
                     'inc',
                     'lib',
@@ -782,10 +782,10 @@ sub push_default_actions
 
     # create all the subdirectories on solver
     foreach $subdir (@subdirs) {
-        push(@action_data, ['mkdir', "%_DEST%/$subdir"]);
+        push(@action_data, ['mkdir', "%_DEST%/$subdir%_EXT%"]);
     }
     foreach $subdir (@common_subdirs) {
-        push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir"]);
+        push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
     }
 
     # deliver build.lst to $dest/inc/$module
