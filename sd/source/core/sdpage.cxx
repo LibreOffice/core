@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:25:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@
 #include "stlsheet.hxx"
 #include "glob.hrc"
 #include "glob.hxx"
+#include "helpids.h"
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -719,6 +720,48 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind)
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, eFamily);
     return (SfxStyleSheet*)pResult;
+}
+
+/** returns the presentation style with the given helpid from this masterpage or this
+    slides masterpage */
+SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
+{
+    String aStyleName( pPage->GetLayoutName() );
+    const String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    aStyleName.Erase(aStyleName.Search(aSep) + aSep.Len());
+
+    sal_uInt16 nNameId;
+    switch( nHelpId )
+    {
+    case HID_PSEUDOSHEET_TITLE:             nNameId = STR_LAYOUT_TITLE;             break;
+    case HID_PSEUDOSHEET_SUBTITLE:          nNameId = STR_LAYOUT_SUBTITLE;          break;
+    case HID_PSEUDOSHEET_OUTLINE1:
+    case HID_PSEUDOSHEET_OUTLINE2:
+    case HID_PSEUDOSHEET_OUTLINE3:
+    case HID_PSEUDOSHEET_OUTLINE4:
+    case HID_PSEUDOSHEET_OUTLINE5:
+    case HID_PSEUDOSHEET_OUTLINE6:
+    case HID_PSEUDOSHEET_OUTLINE7:
+    case HID_PSEUDOSHEET_OUTLINE8:
+    case HID_PSEUDOSHEET_OUTLINE9:          nNameId = STR_LAYOUT_OUTLINE;           break;
+    case HID_PSEUDOSHEET_BACKGROUNDOBJECTS: nNameId = STR_LAYOUT_BACKGROUNDOBJECTS; break;
+    case HID_PSEUDOSHEET_BACKGROUND:        nNameId = STR_LAYOUT_BACKGROUND;        break;
+    case HID_PSEUDOSHEET_NOTES:             nNameId = STR_LAYOUT_NOTES;             break;
+
+    default:
+        DBG_ERROR( "SdPage::getPresentationStyle(), illegal argument!" );
+        return 0;
+    }
+    aStyleName.Append( String( SdResId( nNameId ) ) );
+    if( nNameId == STR_LAYOUT_OUTLINE )
+    {
+        aStyleName.Append( sal_Unicode( ' ' ));
+        aStyleName.Append( String::CreateFromInt32( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE )));
+    }
+
+    SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
+    SfxStyleSheetBase*     pResult   = pStShPool->Find(aStyleName, SD_LT_FAMILY);
+    return dynamic_cast<SdStyleSheet*>(pResult);
 }
 
 /*************************************************************************
@@ -3466,9 +3509,3 @@ bool HeaderFooterSettings::operator==( const HeaderFooterSettings& rSettings ) c
            (maDateTimeText == rSettings.maDateTimeText);
 }
 
-// stl functions to use with the presentation object list
-
-void sd::removePresObj_func::operator() (PresentationObjectDescriptor x)
-{
-    delete mpPage->RemoveObject(x.mpObject->GetOrdNum());
-}
