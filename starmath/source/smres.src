@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:16:22 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3151,7 +3151,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ greek ] = "Παλιά σ~ειρά συμβόλων:";
         Text[ dutch ] = "Oud s~ymbolenset";
         Text[ french ] = "Jeu prιcιdent";
-        Text[ spanish ] = "Conjunto ~anterior";
+        Text[ spanish ] = "Conjunto anterior";
         Text[ finnish ] = "Va~nha symbolijoukko";
         Text[ italian ] = "Set simboli preced.:";
         Text[ danish ] = "Oprindeligt symbolsζt:";
@@ -3464,7 +3464,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ french ] = "Modifier" ;
         Text [ swedish ] = "Δ~ndra" ;
         Text [ dutch ] = "Wij~zigen" ;
-        Text [ spanish ] = "~Modificar" ;
+        Text [ spanish ] = "Modificar" ;
         Text [ english_us ] = "~Modify" ;
         Text[ greek ] = "Τροποποίηση";
         Text[ korean ] = "μμ •(~M)";
