@@ -88,16 +88,16 @@ namespace treeview {
 
         void setTitle( const char* itle )
         {
-            title = rtl::OUString( (sal_Char*)(itle),
-                                   strlen( itle ),
-                                   RTL_TEXTENCODING_UTF8 );
+            title += rtl::OUString( (sal_Char*)(itle),
+                                    strlen( itle ),
+                                    RTL_TEXTENCODING_UTF8 );
         }
 
         void setTitle( const XML_Char* itle,int len )
         {
-            title = rtl::OUString( (sal_Char*)(itle),
-                                   len,
-                                   RTL_TEXTENCODING_UTF8 );
+            title += rtl::OUString( (sal_Char*)(itle),
+                                    len,
+                                    RTL_TEXTENCODING_UTF8 );
         }
 
         void setId( const char* d )
