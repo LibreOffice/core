@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:37:47 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,8 +1309,11 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
             // OD 2004-05-13 #i28701# - consider all objects in same context,
             // if wrapping style is considered on object positioning.
             // Thus, text will wrap around negative positioned objects.
-            if ( pCurrFrm->GetTxtNode()->GetDoc()->ConsiderWrapOnObjPos() &&
-                 ::FindKontext( pTmp, 0 ) == ::FindKontext( pCurrFrm, 0 ) )
+            // --> OD 2004-08-25 #i3317# - remove condition on checking,
+            // if wrappings style is considered on object postioning.
+            // Thus, text is wrapping around negative positioned objects.
+            if ( ::FindKontext( pTmp, 0 ) == ::FindKontext( pCurrFrm, 0 ) )
+            // <--
             {
                 return sal_True;
             }
