@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:32:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 11:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG
 {
-    ImageBitmap = Bitmap { File = "lx_files.bmp" ; };
+    Prefix = "lx";
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
@@ -139,7 +139,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
 
 ImageList RID_SVTOOLS_IMAGELIST_SMALL
 {
-    ImageBitmap = Bitmap { File = "sx_files.bmp" ; };
+    Prefix = "sx";
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
@@ -153,7 +153,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
 {
-    ImageBitmap = Bitmap { File = "lxh_files.bmp" ; };
+    Prefix = "lxh";
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
@@ -167,7 +167,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
 
 ImageList RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST
 {
-    ImageBitmap = Bitmap { File = "sxh_files.bmp" ; };
+    Prefix = "sxh";
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
