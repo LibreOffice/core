@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 15:11:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ BOOL lcl_UpdateOutline( const SwNodePtr& rpNd, void* pPara )
 
 
 void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
-                                 BYTE nNewLevel )
+                                BYTE nNewLevel )
 {
     const SwNodePtr pSrch = (SwNodePtr)&rNd;
     USHORT nSttPos;
@@ -351,40 +351,27 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
     else if( !bSeekIdx )        // Update und Index nicht gefunden ??
         return ;
 
-    if (GetDoc()->IsOldNumbering())
+    _OutlinePara aPara( *this, nSttPos, nOldLevel, nNewLevel );
+    pOutlineNds->ForEach( nSttPos, pOutlineNds->Count(),
+                        lcl_UpdateOutline, &aPara );
+
+//FEATURE::CONDCOLL
     {
-        _OutlinePara aPara( *this, nSttPos, nOldLevel, nNewLevel );
-        pOutlineNds->ForEach( nSttPos, pOutlineNds->Count(),
-                              lcl_UpdateOutline, &aPara );
+        SwCntntNode* pCNd;
+        ULONG nSttNd = rNd.GetIndex();
+        if( NO_NUMBERING != nNewLevel )
+            ++nSttPos;
 
-        //FEATURE::CONDCOLL
-        {
-            SwCntntNode* pCNd;
-            ULONG nSttNd = rNd.GetIndex();
-            if( NO_NUMBERING != nNewLevel )
-                ++nSttPos;
-
-            ULONG nChkCount = ( nSttPos < pOutlineNds->Count()
+        ULONG nChkCount = ( nSttPos < pOutlineNds->Count()
                                 ? (*pOutlineNds)[ nSttPos ]->GetIndex()
                                 : GetEndOfContent().GetIndex()  )
-                - nSttNd;
-            for( ; nChkCount--; ++nSttNd )
-                if( 0 != (pCNd = (*this)[ nSttNd ]->GetCntntNode() ) &&
-                    RES_CONDTXTFMTCOLL == pCNd->GetFmtColl()->Which() )
-                    pCNd->ChkCondColl();
-        }
-        //FEATURE::CONDCOLL
-
+                            - nSttNd;
+        for( ; nChkCount--; ++nSttNd )
+            if( 0 != (pCNd = (*this)[ nSttNd ]->GetCntntNode() ) &&
+                RES_CONDTXTFMTCOLL == pCNd->GetFmtColl()->Which() )
+                pCNd->ChkCondColl();
     }
-    else // #111955#
-    {
-        SwTxtNode & rTxtNd = (SwTxtNode &) rNd;
-        SwNodeNum aNum = rTxtNd.GetOutlineNum();
-        aNum.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
-        rTxtNd.UpdateOutlineNum(aNum);
-
-        GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0, TRUE);
-    }
+//FEATURE::CONDCOLL
 
     // die Gliederungs-Felder Updaten
     GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();

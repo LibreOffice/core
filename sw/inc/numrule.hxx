@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 15:13:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,8 +252,6 @@ class SwNodeNum
     USHORT nSetValue;                   // vorgegeben Nummer
     BYTE nMyLevel;                      // akt. Level
     BOOL bStartNum;                     // Numerierung neu starten
-    BOOL bContNum;                      // #111955#
-                                        // TRUE -> in continuous numbering
 
 public:
     inline SwNodeNum( BYTE nLevel = NO_NUM, USHORT nSetVal = USHRT_MAX );
@@ -267,12 +265,6 @@ public:
     BOOL IsStart() const                    { return bStartNum; }
     void SetStart( BOOL bFlag = TRUE )      { bStartNum = bFlag; }
 
-    // -> #111955#
-    BOOL IsContinuousNum() const { return bContNum; }
-    void SetContinuousNum( BOOL bFlag = TRUE ) { bContNum = bFlag; }
-    // <- #111955#
-
-    BOOL HasSetValue() const { return USHRT_MAX != nSetValue; }
     USHORT GetSetValue() const              { return nSetValue; }
     void SetSetValue( USHORT nVal )         { nSetValue = nVal; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 15:11:10 $
+ *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,14 +406,12 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
 
 BOOL SwNodeNum::operator==( const SwNodeNum& rNum ) const
 {
-    return
-        nMyLevel == rNum.nMyLevel &&
-        nSetValue == rNum.nSetValue &&
-        bStartNum == rNum.bStartNum &&
-        bContNum == rNum.bContNum && // #111955#
-        ( nMyLevel >= MAXLEVEL ||
-          0 == memcmp( nLevelVal, rNum.nLevelVal,
-                       sizeof( USHORT ) * (nMyLevel+1) ));
+    return nMyLevel == rNum.nMyLevel &&
+           nSetValue == rNum.nSetValue &&
+           bStartNum == rNum.bStartNum &&
+           ( nMyLevel >= MAXLEVEL ||
+             0 == memcmp( nLevelVal, rNum.nLevelVal,
+                        sizeof( USHORT ) * (nMyLevel+1) ));
 }
 
 SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )

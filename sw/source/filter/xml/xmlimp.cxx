@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 15:09:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,8 +991,153 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    // #111955#
-#include <hash.hxx>
+    // static array of setting names which are not loaded.
+    // This table is created with the iout commended procedure. This will
+    // be need if anybody add more or change strings!!!
+    /*
+        program to calculate the best hash parameters for the property names.
+-----------------------------------------------------------------
+#include <stdio.h>
+#include <string.h>
+
+ const char* aNmArr[] = {
+ "ForbiddenCharacters" ,
+ "IsKernAsianPunctuation" ,
+ "CharacterCompressionType" ,
+ "LinkUpdateMode" ,
+ "FieldAutoUpdate" ,
+ "ChartAutoUpdate" ,
+ "AddParaTableSpacing" ,
+ "AddParaTableSpacingAtStart" ,
+ "PrintAnnotationMode" ,
+ "PrintBlackFonts" ,
+ "PrintControls" ,
+ "PrintDrawings" ,
+ "PrintGraphics" ,
+ "PrintLeftPages" ,
+ "PrintPageBackground" ,
+ "PrintProspect" ,
+ "PrintReversed" ,
+ "PrintRightPages" ,
+ "PrintFaxName" ,
+ "PrintPaperFromSetup" ,
+ "PrintTables" ,
+ "PrintSingleJobs",
+ "UpdateFromTemplate",
+ "PrinterIndependentLayout"
+  };
+#define TBL_MAX 100
+int aArr[ TBL_MAX ];
+int nPrime, nSub;
+
+unsigned long calc_hash( const char* p )
+{
+    unsigned long ii = 0;
+    while( *p )
+        ii = (ii * nPrime) ^ ( *p++ - nSub );
+    return ii;
+}
+int Chk_Unique_hashValue( unsigned short nTblSize )
+{
+    memset( aArr, 0, sizeof( aArr ) );
+    unsigned long ii;
+    for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
+    {
+        ii = calc_hash( aNmArr[ n ] ) % nTblSize;
+        if( aArr[ ii ] )
+            break;
+        aArr[ ii ] = 1;
+    }
+    return n == ( sizeof( aNmArr ) / sizeof( aNmArr[0] ) );
+}
+
+void Show_Result( unsigned short nTblSize )
+{
+    printf( "\nTblSz = %d\n", nTblSize );
+    for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
+    {
+        unsigned long ii = calc_hash( aNmArr[ n ] ) % nTblSize;
+        printf( "%-30s -> %3d\n", aNmArr[ n ], ii );
+    }
+}
+
+void main()
+{
+    int nPrm = nPrime, nSb = nSub;
+    unsigned short nLTbl = TBL_MAX, nTblSize;
+
+    for( nSub = ' '; nSub < 127; ++nSub )
+        for( nPrime = 13 ; nPrime < 99; ++nPrime )
+            for( nTblSize = sizeof( aNmArr ) / sizeof( aNmArr[0] );
+                    nTblSize < TBL_MAX; ++nTblSize )
+                if( Chk_Unique_hashValue( nTblSize ))
+                {
+                    if( nLTbl > nTblSize )
+                    {
+                        nLTbl = nTblSize;
+                        nPrm = nPrime;
+                        nSb = nSub;
+                    }
+                    break;
+                }
+
+    nPrime = nPrm;
+    nSub = nSb;
+    nTblSize = nLTbl;
+
+    Show_Result( nTblSize );
+    printf( "\nPrime: %d, nSub: %d, TblSz = %d - %d", nPrime, nSub,
+            sizeof( aNmArr ) / sizeof( aNmArr[0] ), nTblSize );
+}
+-----------------------------------------------------------------
+    */
+        static const struct {
+                const sal_Char* pName;
+                sal_uInt16 nLen;
+    }  aNotSetArr[40] = {
+/* 0*/      {0,0},
+/* 1*/      {RTL_CONSTASCII_STRINGPARAM( "PrintTables" )},
+/* 2*/      {RTL_CONSTASCII_STRINGPARAM( "ForbiddenCharacters" )},
+/* 3*/      {0,0},
+/* 4*/      {0,0},
+/* 5*/      {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacingAtStart" )},
+/* 6*/      {0,0},
+/* 7*/      {RTL_CONSTASCII_STRINGPARAM( "CharacterCompressionType" )},
+/* 8*/      {0,0},
+/* 9*/      {RTL_CONSTASCII_STRINGPARAM( "PrintDrawings" )},
+/*10*/      {RTL_CONSTASCII_STRINGPARAM( "PrintRightPages" )},
+/*11*/      {RTL_CONSTASCII_STRINGPARAM( "PrintPageBackground" )},
+/*12*/      {RTL_CONSTASCII_STRINGPARAM( "LinkUpdateMode" )},
+/*13*/      {RTL_CONSTASCII_STRINGPARAM( "UpdateFromTemplate" )},
+/*14*/      {0,0},
+/*15*/      {RTL_CONSTASCII_STRINGPARAM( "PrintBlackFonts" )},
+/*16*/      {RTL_CONSTASCII_STRINGPARAM( "PrintSingleJobs" )},
+/*17*/      {RTL_CONSTASCII_STRINGPARAM( "ChartAutoUpdate" )},
+/*18*/      {RTL_CONSTASCII_STRINGPARAM( "IsKernAsianPunctuation" )},
+/*19*/      {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacing" )},
+/*20*/      {0,0},
+/*21*/      {0,0},
+/*22*/      {0,0},
+/*23*/      {0,0},
+/*24*/      {RTL_CONSTASCII_STRINGPARAM( "PrintReversed" )},
+/*25*/      {RTL_CONSTASCII_STRINGPARAM( "FieldAutoUpdate" )},
+/*26*/      {RTL_CONSTASCII_STRINGPARAM( "PrintProspect" )},
+/*27*/      {0,0},
+/*28*/      {RTL_CONSTASCII_STRINGPARAM( "PrintControls" )},
+/*29*/      {0,0},
+/*30*/      {RTL_CONSTASCII_STRINGPARAM( "PrintAnnotationMode" )},
+/*31*/      {RTL_CONSTASCII_STRINGPARAM( "PrintGraphics" )},
+/*32*/      {RTL_CONSTASCII_STRINGPARAM( "PrinterIndependentLayout" )},
+/*33*/      {0,0},
+/*34*/      {0,0},
+/*35*/      {RTL_CONSTASCII_STRINGPARAM( "PrintPaperFromSetup" )},
+/*36*/      {RTL_CONSTASCII_STRINGPARAM( "PrintLeftPages" )},
+/*37*/      {RTL_CONSTASCII_STRINGPARAM( "PrintFaxName" )},
+/*38*/      {0,0},
+/*39*/      {0,0},
+    };
+    const ULONG nPrime = 51;
+    const ULONG nSub = 51;
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1030,20 +1175,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 {
                     xProps->setPropertyValue( pValues->Name, pValues->Value );
                 }
-<<<<<<< xmlimp.cxx
-
-                // did we find any of the non-default cases?
-                // #111955#
-                if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldNumbering")) )
-                    bUseOldNumbering = true;
-
-=======
 
                 // did we find any of the non-default cases?
                 if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout")) )
                     bPrinterIndependentLayout = true;
 
->>>>>>> 1.68
             }
             catch( Exception& )
             {
@@ -1052,45 +1188,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         }
         pValues++;
     }
-<<<<<<< xmlimp.cxx
-
-    // finally, treat the non-default cases
-    if( ! bUseOldNumbering)
-    {
-        Any aAny;
-        sal_Bool bOldNum = true;
-        aAny.setValue(&bOldNum, ::getBooleanCppuType());
-        xProps->setPropertyValue
-            (OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldNumbering")),
-                       aAny );
-    }
-
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( xTextTunnel.is() )
-    {
-        SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                        SwXText::getUnoTunnelId() );
-        ASSERT( pText, "SwXText missing" );
-        if( pText )
-        {
-            SwDoc *pDoc = pText->GetDoc();
-            if( pDoc )
-            {
-                // If the printer is known, then the OLE objects will
-                // already have correct sizes, and we don't have to call
-                // PrtOLENotify again. Otherwise we have to call it.
-                // The flag might be set from setting the printer, so it
-                // it is required to clear it.
-                SfxPrinter *pPrinter = pDoc->GetPrt( sal_False );
-                if( pPrinter )
-                    pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
-            }
-        }
-    }
-=======
 
     // finally, treat the non-default cases
     if( ! bPrinterIndependentLayout )
@@ -1128,7 +1225,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             }
         }
     }
->>>>>>> 1.68
 }
 
 

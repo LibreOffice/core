@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 15:11:44 $
+ *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2256,9 +2256,6 @@ void SwTxtNode::GCAttr()
 
 const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
 {
-    // #111955#
-    const SwNodeNum * pOldNum = pNdNum;
-
     if( NO_NUMBERING == rNum.GetLevel() )       // kein Nummerierung mehr ?
     {
         if( !pNdNum )
@@ -2272,11 +2269,6 @@ const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
         else if( !( *pNdNum == rNum ))
             *pNdNum = rNum;
     }
-
-    // #111955#
-    if ((0 == pOldNum || 0 == pNdNum) && pOldNum != pNdNum)
-        GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0, TRUE);
-
     NumRuleChgd();
     return pNdNum;
 }
@@ -2332,12 +2324,6 @@ const SwNodeNum* SwTxtNode::UpdateOutlineNum( const SwNodeNum& rNum )
     // 6969: Aktualisierung der NumPortions auch bei leeren Zeilen!
     NumRuleChgd();
     return pNdOutl;
-}
-
-// #111955#
-BOOL SwTxtNode::IsOutlineNum() const
-{
-    return pNdOutl != NULL && pNdNum == NULL;
 }
 
 SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
