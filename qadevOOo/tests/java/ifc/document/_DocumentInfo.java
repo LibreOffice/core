@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _DocumentInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 09:07:56 $
+ *  last change:$Date: 2003-09-08 10:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package ifc.document;
 
-import com.sun.star.util.DateTime;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+
+import com.sun.star.util.DateTime;
 
 /**
 * Testing <code>com.sun.star.document.DocumentInfo</code>
