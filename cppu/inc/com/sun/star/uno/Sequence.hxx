@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-09-25 14:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <cppu/macros.hxx>
 #endif
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 #ifndef _OSL_INTERLCK_H_
 #include <osl/interlck.h>
 #endif
@@ -159,6 +162,20 @@ inline E * Sequence< E >::getArray()
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_reference2One( &_pSequence, rType.getTypeLibType(), cpp_acquire, cpp_release );
     return reinterpret_cast< E * >( _pSequence->elements );
+}
+//__________________________________________________________________________________________________
+template< class E >
+inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
+{
+    OSL_ENSURE( nIndex < getLength(), "### illegal index of sequence!" );
+    return getArray()[ nIndex ];
+}
+//__________________________________________________________________________________________________
+template< class E >
+inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
+{
+    OSL_ENSURE( nIndex < getLength(), "### illegal index of sequence!" );
+    return getConstArray()[ nIndex ];
 }
 //__________________________________________________________________________________________________
 template< class E >

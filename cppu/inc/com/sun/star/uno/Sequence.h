@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: dbo $ $Date: 2000-09-25 14:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,8 +207,7 @@ public:
         @param nIndex index
         @return non-const C++ reference to element
     */
-    inline E & SAL_CALL operator [] ( sal_Int32 nIndex )
-        { return getArray()[ nIndex ]; }
+    inline E & SAL_CALL operator [] ( sal_Int32 nIndex );
     /** Const index operator:
         Obtains a reference to element indexed at given position.<br>
         The implementation does <b>not</b> check for array bounds!<br>
@@ -216,8 +215,7 @@ public:
         @param nIndex index
         @return const C++ reference to element
     */
-    inline const E & SAL_CALL operator [] ( sal_Int32 nIndex ) const
-        { return getConstArray()[ nIndex ]; }
+    inline const E & SAL_CALL operator [] ( sal_Int32 nIndex ) const;
 
     /** Equality operator:
         Compares two sequences.
