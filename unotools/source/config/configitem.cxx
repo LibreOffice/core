@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-29 15:14:35 $
+ *  last change: $Author: os $ $Date: 2000-11-30 10:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,17 +180,6 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
     {
         OUString sTemp;
         pElementChanges[i].Accessor >>= sTemp;
-//#ifdef DEBUG // workaround to #79499#
-//      if(0 == sTemp.compareToAscii("/org.openoffice.Office.Writer/Print/", 36))
-//      {
-//          OUString sValue = sTemp.copy(36);
-//          sTemp = OUString::createFromAscii("/org.openoffice.Office.Writer/Print/");
-//          sTemp += OUString::createFromAscii("Content/");
-//          sTemp += sValue;
-//      }
-//#endif
-        OSL_ENSHURE(nBaseTreeLen < sTemp.getLength(),"property name incorrect");
-        sTemp = sTemp.copy(nBaseTreeLen);
         if(lcl_Find(sTemp, pCheckPropertyNames, aPropertyNames.getLength()))
             pNames[nNotify++] = sTemp;
     }
