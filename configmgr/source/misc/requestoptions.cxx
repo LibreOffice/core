@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:24 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,21 @@ namespace configmgr
 
 // ---------------------------------------------------------------------------
 
+    RequestOptions::LocaleString RequestOptions::getIsoLocale() const
+    {
+        return localehelper::makeIsoLocale( m_sLocale );
+    }
+// ---------------------------------------------------------------------------
+
     bool RequestOptions::isForAllLocales() const
     {
-        return localehelper::designatesAllLocales( localehelper::makeLocale(m_sLocale) );
+        return localehelper::designatesAllLocales( m_sLocale );
+    }
+// ---------------------------------------------------------------------------
+
+    void RequestOptions::setIsoLocale(LocaleString const & _sLocale)
+    {
+        setLocale( localehelper::makeLocale( _sLocale ) );
     }
 // ---------------------------------------------------------------------------
 
@@ -113,9 +125,36 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------
 
+    void RequestOptions::ensureLocaleSet()
+    {
+        if (!hasLocale())
+            m_sLocale = localehelper::getDefaultLocale();
+    }
+// ---------------------------------------------------------------------------
+
+    static inline
+    sal_Int32 hashRequestLocale(RequestOptions::Locale const & aLocale)
+    {
+        return aLocale.Language.hashCode() ^ aLocale.Country.hashCode();
+    }
+// ---------------------------------------------------------------------------
+
     sal_Int32 RequestOptions::hashCode() const
     {
-        return m_sLocale.hashCode() ^ m_sEntity.hashCode();
+        return hashRequestLocale(m_sLocale) ^ m_sEntity.hashCode();
+    }
+// ---------------------------------------------------------------------------
+
+    static inline
+    sal_Int32 compareRequestLocale(RequestOptions::Locale const& lhs, RequestOptions::Locale const& rhs)
+    {
+        sal_Int32 nDiff = lhs.Language.compareTo(rhs.Language);
+        if (nDiff == 0)
+        {
+            nDiff = lhs.Country.compareTo(rhs.Country);
+        }
+
+        return nDiff;
     }
 // ---------------------------------------------------------------------------
 
@@ -123,7 +162,9 @@ namespace configmgr
     {
         sal_Int32 nDiff = lhs.getEntity().compareTo(rhs.getEntity());
         if (nDiff == 0)
-            nDiff = lhs.getLocale().compareTo(rhs.getLocale());
+        {
+            nDiff = compareRequestLocale(lhs.getUnoLocale(),rhs.getUnoLocale());
+        }
 
         return nDiff;
     }
