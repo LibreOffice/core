@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: er $ $Date: 2002-09-17 16:38:59 $
+ *  last change: $Author: er $ $Date: 2002-09-24 14:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2552,7 +2552,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
                 {
                     double fDiff = DateTime(*(rScan.GetNullDate())) - GetCal().getEpochStart();
                     fDiff += fNumberOrig;
-                    GetCal().setDateTime( fDiff );
+                    GetCal().setLocalDateTime( fDiff );
                     bCalendarSet = TRUE;
                 }
                 if (cAmPm == 'a')
@@ -2756,7 +2756,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
     fNumber += fDiff;
-    rCal.setDateTime( fNumber );
+    rCal.setLocalDateTime( fNumber );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     BOOL bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
@@ -2938,7 +2938,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
     fNumber += fDiff;
-    rCal.setDateTime( fNumber );
+    rCal.setLocalDateTime( fNumber );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     BOOL bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );

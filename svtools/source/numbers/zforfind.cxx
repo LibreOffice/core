@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: er $ $Date: 2002-09-09 12:56:10 $
+ *  last change: $Author: er $ $Date: 2002-09-24 14:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
 #ifdef PRODUCT
 #define NF_TEST_CALENDAR 0
 #else
-#define NF_TEST_CALENDAR 0
+#define NF_TEST_CALENDAR 1
 #endif
 #if NF_TEST_CALENDAR
 #include <comphelper/processfactory.hxx>
@@ -1297,7 +1297,7 @@ input for the following reasons:
         if ( res && pCal->isValid() )
         {
             double fDiff = DateTime(*pNullDate) - pCal->getEpochStart();
-            fDays = floor( pCal->getDateTime() );
+            fDays = floor( pCal->getLocalDateTime() );
             fDays -= fDiff;
             nTryOrder = nFormatOrder;   // break for
         }
@@ -1323,7 +1323,9 @@ input for the following reasons:
     };
     lang::Locale aLocale;
     sal_Bool bValid;
-    sal_Int16 nDay, nMonth, nYear, nDaySet, nMonthSet, nYearSet;
+    sal_Int16 nDay, nMonth, nYear, nHour, nMinute, nSecond;
+    sal_Int16 nDaySet, nMonthSet, nYearSet, nHourSet, nMinuteSet, nSecondSet;
+    sal_Int16 nZO, nDST1, nDST2, nDST;
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
     uno::Reference< ::drafts::com::sun::star::i18n::XExtendedCalendar > xCal(
@@ -1337,18 +1339,41 @@ input for the following reasons:
         aLocale.Country = ::rtl::OUString::createFromAscii( p->cou );
         xCal->loadCalendar( ::rtl::OUString::createFromAscii( p->cal ),
                 aLocale );
-        xCal->setDateTime( 0.0 );   // 1-Jan-1970
-        nDaySet   = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
-        nMonthSet = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
-        nYearSet  = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
+        double nDateTime = 0.0;     // 1-Jan-1970 00:00:00
+        nZO        = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
+        nDST1      = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+        nDateTime -= (double)(nZO + nDST1) / 60.0 / 24.0;
+        xCal->setDateTime( nDateTime );
+        nDST2      = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+        if ( nDST1 != nDST2 )
+        {
+            nDateTime = 0.0 - (double)(nZO + nDST2) / 60.0 / 24.0;
+            xCal->setDateTime( nDateTime );
+        }
+        nDaySet    = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
+        nMonthSet  = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
+        nYearSet   = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
+        nHourSet   = xCal->getValue( i18n::CalendarFieldIndex::HOUR );
+        nMinuteSet = xCal->getValue( i18n::CalendarFieldIndex::MINUTE );
+        nSecondSet = xCal->getValue( i18n::CalendarFieldIndex::SECOND );
+        nZO        = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
+        nDST       = xCal->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
         xCal->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDaySet );
         xCal->setValue( i18n::CalendarFieldIndex::MONTH, nMonthSet );
         xCal->setValue( i18n::CalendarFieldIndex::YEAR, nYearSet );
-        bValid = xCal->isValid();
-        nDay   = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
-        nMonth = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
-        nYear  = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
-        bValid = bValid && nDay == nDaySet && nMonth == nMonthSet && nYear == nYearSet;
+        xCal->setValue( i18n::CalendarFieldIndex::HOUR, nHourSet );
+        xCal->setValue( i18n::CalendarFieldIndex::MINUTE, nMinuteSet );
+        xCal->setValue( i18n::CalendarFieldIndex::SECOND, nSecondSet );
+        bValid  = xCal->isValid();
+        nDay    = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
+        nMonth  = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
+        nYear   = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
+        nHour   = xCal->getValue( i18n::CalendarFieldIndex::HOUR );
+        nMinute = xCal->getValue( i18n::CalendarFieldIndex::MINUTE );
+        nSecond = xCal->getValue( i18n::CalendarFieldIndex::SECOND );
+        bValid = bValid && nDay == nDaySet && nMonth == nMonthSet && nYear ==
+            nYearSet && nHour == nHourSet && nMinute == nMinuteSet && nSecond
+            == nSecondSet;
     }
 }
 #endif  // NF_TEST_CALENDAR
