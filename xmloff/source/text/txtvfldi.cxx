@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,7 +1150,7 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
     const OUString& rLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database,
-                                      nPrfx, rLocalName),
+                                      nPrfx, rLocalName, false),
         aValueHelper(rImport, rHlp, sal_False, sal_True, sal_False, sal_False),
         sColumnName(),
         bColumnOK(sal_False),
@@ -1159,7 +1159,11 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
         sPropertyDatabaseFormat(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_is_data_base_format)),
         sPropertyCurrentPresentation(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation))
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
+        sPropertyIsVisible(
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_is_visible)),
+        bDisplayOK( sal_False ),
+        bDisplay( sal_True )
 {
 }
 
@@ -1171,6 +1175,14 @@ void XMLDatabaseDisplayImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_COLUMN_NAME:
             sColumnName = sAttrValue;
             bColumnOK = sal_True;
+            break;
+        case XML_TOK_TEXTFIELD_DISPLAY:
+            {
+                sal_Bool bNone = IsXMLToken( sAttrValue, XML_NONE );
+                sal_Bool bValue = IsXMLToken( sAttrValue, XML_VALUE );
+                bDisplay = bValue;
+                bDisplayOK = bNone || bValue;
+            }
             break;
         case XML_TOK_TEXTFIELD_DATABASE_NAME:
         case XML_TOK_TEXTFIELD_TABLE_NAME:
@@ -1241,6 +1253,13 @@ void XMLDatabaseDisplayImportContext::EndElement()
 
                         // value, value-type and format done by value helper
                         aValueHelper.PrepareField(xField);
+
+                        // visibility
+                        if( bDisplayOK )
+                        {
+                            aAny.setValue( &bDisplay, ::getBooleanCppuType() );
+                            xField->setPropertyValue(sPropertyIsVisible, aAny);
+                        }
 
                         // set presentation
                         aAny <<= GetContent();
