@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:55:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,9 +175,6 @@ public:
 
     /// get the position in the accessibility string for a given model position
     sal_Int32 GetAccessiblePosition( USHORT nPos );
-
-    /// get the line number for a given (accessibility) position
-    sal_Int32 GetLineNumber( sal_Int32 nPos );
 
     /// fill a SwSpecialPos structure, suitable for calling
     /// SwTxtFrm->GetCharRect
