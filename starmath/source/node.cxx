@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-12 07:26:02 $
+ *  last change: $Author: tl $ $Date: 2002-08-05 10:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,21 +180,27 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, BOOL bUseMap100th_mm) :
 
 Color SmTmpDevice::Impl_GetColor( const Color& rColor )
 {
-    ColorData nNewCol;
-    if (COL_AUTO == rColor.GetColor())
+    ColorData nNewCol = rColor.GetColor();
+    if (COL_AUTO == nNewCol)
     {
-        Color aBgCol( rOutDev.GetBackground().GetColor() );
-        if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
-            aBgCol = ((Window &) rOutDev).GetDisplayBackground().GetColor();
-        SmViewShell *pViewSh = SmGetActiveView();
-        if (pViewSh  &&  OUTDEV_PRINTER != rOutDev.GetOutDevType())
-        {
-            const StyleSettings& rS =
-                    pViewSh->GetGraphicWindow().GetSettings().GetStyleSettings();
-            nNewCol = rS.GetWindowTextColor().GetColor();
-        }
+        if (OUTDEV_PRINTER == rOutDev.GetOutDevType())
+            nNewCol = COL_BLACK;
         else
-            nNewCol = aBgCol.IsDark() ? COL_WHITE : COL_BLACK;
+        {
+            Color aBgCol( rOutDev.GetBackground().GetColor() );
+            if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                aBgCol = ((Window &) rOutDev).GetDisplayBackground().GetColor();
+
+            nNewCol = COL_BLACK;
+            if (aBgCol.IsDark())
+            {
+                SmViewShell *pViewSh = SmGetActiveView();
+                const StyleSettings& rS = pViewSh ?
+                        pViewSh->GetGraphicWindow().GetSettings().GetStyleSettings() :
+                        Application::GetSettings().GetStyleSettings();
+                nNewCol = rS.GetWindowTextColor().GetColor();
+            }
+        }
     }
     return Color( nNewCol );
 }
