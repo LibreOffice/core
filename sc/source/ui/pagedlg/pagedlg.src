@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:32:52 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 22:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ DUTCH ] = "Afdrukbereik" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Area de impress?o" ;
         Text [ SWEDISH ] = "Utskriftsområ~de" ;
-        Text [ PORTUGUESE ] = "Área de impressão" ;
+        Text [ PORTUGUESE ] = "Á~rea de impressão" ;
         Text[ chinese_simplified ] = "´òÓ¡ÇøÓò";
         Text[ russian ] = "Îáëàñòü ïå÷àòè";
         Text[ polish ] = "Zakres wydruku";
@@ -326,7 +326,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ russian ] = "Ñòğîêà ïîâòîğà";
         Text[ polish ] = "Powtarzaj wiersz";
         Text[ japanese ] = "ŒJ‚è•Ô‚·s";
-        Text[ chinese_traditional ] = "­«½Æ¦C";
+        Text[ chinese_traditional ] = "­«½Æªº¦C";
         Text[ arabic ] = "ÇáÕİ ÇáãßÑÑ";
         Text[ greek ] = "Åğáíáëáìâáíüìåíç ãñáììŞ";
         Text[ korean ] = "Çà ¹İº¹";
@@ -510,12 +510,12 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ DUTCH ] = "Kolom herhalen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Colunas para repetir ? esquerda" ;
         Text [ SWEDISH ] = "Upprepning~skolumn" ;
-        Text [ PORTUGUESE ] = "Coluna a repetir" ;
+        Text [ PORTUGUESE ] = "~Coluna a repetir" ;
         Text[ chinese_simplified ] = "ÖØ¸´µÄÁĞ";
         Text[ russian ] = "Êîëîíêà ïîâòîğà";
         Text[ polish ] = "Powtarzaj kolumny";
         Text[ japanese ] = "ŒJ‚è•Ô‚·—ñ";
-        Text[ chinese_traditional ] = "­«½ÆÄæ";
+        Text[ chinese_traditional ] = "­«½ÆªºÄæ";
         Text[ arabic ] = "ÇáÚãæÏ ÇáãßÑÑ";
         Text[ greek ] = "Åğáíáëáìâáíüìåíç ~óôŞëç";
         Text[ korean ] = "¿­ ¹İº¹";
@@ -976,7 +976,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ norwegian ] = "~Top to bottom" ;
         Text [ italian ] = "Dall'al~to in basso, poi a destra" ;
         Text [ portuguese_brazilian ] = "~De cima para baixo" ;
-        Text [ portuguese ] = "De ~cima para baixo" ;
+        Text [ portuguese ] = "De ~cima para baixo, depois à direita" ;
         Text [ finnish ] = "~Ylhäältä alas" ;
         Text [ danish ] = "Fra øverst til nederst" ;
         Text [ french ] = "~De haut en bas, puis vers la droite" ;
@@ -989,7 +989,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ russian ] = "Ñâåğõó âíèç, çàòåì âïğàâî";
         Text[ polish ] = "Od g~óry do do³u, nastêpnie w prawo";
         Text[ japanese ] = "ã‚©‚ç‰º‚»‚µ‚Ä‰E‚Ö";
-        Text[ chinese_traditional ] = "±q¤W¦V¤U(~T)";
+        Text[ chinese_traditional ] = "±q¤W¦V¤U¡AµM«á¦V¥k";
         Text[ arabic ] = "ãä ÃÚáì áÃÓİá";
         Text[ greek ] = "Áğü ğÜíù ğñïò ôá êÜôù, óôç óõíİ÷åéá ğñïò ôá äåîéÜ";
         Text[ korean ] = "À§¿¡¼­ ¾Æ·¡·Î(~T)";
@@ -1005,7 +1005,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ norwegian ] = "Left to rig~ht" ;
         Text [ italian ] = "Da sinistra a d~estra, poi in basso" ;
         Text [ portuguese_brazilian ] = "Da esquerda para a di~reita" ;
-        Text [ portuguese ] = "Da esquerda para a di~reita" ;
+        Text [ portuguese ] = "Da esquerda para a di~reita, depois para baixo" ;
         Text [ finnish ] = "~Vasemmalta oikealle" ;
         Text [ danish ] = "Fra venstre til højre" ;
         Text [ french ] = "De gauche à dro~ite, puis vers le bas" ;
@@ -1018,7 +1018,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ russian ] = "Ñëåâà íàïğàâî, çàòåì âíèç";
         Text[ polish ] = "Od lewej do prawej, nastêpnie na dó³";
         Text[ japanese ] = "¶‚©‚ç‰E‚»‚µ‚Ä‰º‚Ö";
-        Text[ chinese_traditional ] = "±q¥ª¦V¥k(~L)";
+        Text[ chinese_traditional ] = "±q¥ª¦V¥k¡AµM«á¦V¤U";
         Text[ arabic ] = "ãä ÇáíÓÇÑ Åáì Çáíãíä";
         Text[ language_user1 ] = "ÌŞêïò; - - - -";
         Text[ greek ] = "Áğü áñéóôåñÜ ğñïò ôá äåîéÜ, óôç óõíİ÷åéá ğñïò ôá ~êÜôù";
@@ -1112,7 +1112,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "Sc~ale down/scale up printout" ;
         TabStop = TRUE ;
         Text[ english_us ] = "Reduce/enlarge printout";
-        Text[ portuguese ] = "~Tudo para [%]";
+        Text[ portuguese ] = "~Ampliar/diminuir impressão";
         Text[ russian ] = "Óìåíüøèòü/óâåëè÷èòü ğàñïå÷àòêó";
         Text[ greek ] = "Óìßêñõíóç/Ìåãİèõíóç åêôığùóçò";
         Text[ dutch ] = "~Alles naar [%]";
@@ -1127,7 +1127,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ japanese ] = "Šg‘åk¬ˆóü";
         Text[ korean ] = "ÀüÃ¼¸¦  [%] ·Î(~A)";
         Text[ chinese_simplified ] = "ËõĞ¡»ò·Å´ó´òÓ¡Ò³Ãæ";
-        Text[ chinese_traditional ] = "¥ş³¡±Ä¥Î[%](~A)";
+        Text[ chinese_traditional ] = "ÁY¤p©Î©ñ¤j¦C¦L";
         Text[ turkish ] = "T~ümü [%]";
         Text[ arabic ] = "Çáßá Åáì  [%]";
         Text[ catalan ] = "~Todo al [%]";
@@ -1140,7 +1140,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Fit printout on pages" ;
         TabStop = TRUE ;
         Text[ english_us ] = "Adjust printout to nu~mber of pages";
-        Text[ portuguese ] = "~Máximo de páginas";
+        Text[ portuguese ] = "A~justar impressão ao número de páginas";
         Text[ russian ] = "Ñîãëàñîâàòü ğàñïå÷àòêó ñ ÷èñëîì ñòğàíèö";
         Text[ greek ] = "ĞñïóáñìïãŞ åêôığùóçò ùò ğñïò ôïí áñéèìü óåëßäù~í";
         Text[ dutch ] = "Hoogste ~paginanr.";
@@ -1155,7 +1155,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ japanese ] = "Íß°¼Ş”‚É‡‚í‚¹‚Äˆóü";
         Text[ korean ] = "ÃÖ´ë ÂÊ ¼ö(~M)";
         Text[ chinese_simplified ] = "°´Ò³Êıµ÷Õû´òÓ¡Ò³Ãæ";
-        Text[ chinese_traditional ] = "³Ì¦h­¶¼Æ(~M)";
+        Text[ chinese_traditional ] = "«ö­¶¼Æ½Õ¾ã¦C¦L(~M)";
         Text[ turkish ] = "A~zami sayfa sayısı";
         Text[ arabic ] = "ÇáÚÏÏ ÇáÃŞÕì ááÕİÍÇÊ";
         Text[ catalan ] = "Núm. ~máx. de páginas";
@@ -1215,4 +1215,5 @@ TabPage RID_SCPAGE_TABLE
         Text[ finnish ] = "Skaalaa";
     };
 };
+
 
