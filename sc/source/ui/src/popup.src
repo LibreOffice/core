@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:50:59 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,7 +1491,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "΄΅¤J΄«¦C(~R)";
             Text[ arabic ] = "ΕΟΡΗΜ έΗΥα ΓΣΨΡ";
             Text[ greek ] = "~Εισαγωγή αλλαγής γραμμής";
-            Text[ korean ] = "Ηΰ ΊΠΈ® »πΐΤ(~R)";
+            Text[ korean ] = "°³Ηΰ »πΐΤ(~R)";
             Text[ turkish ] = "Satύr sonu ekle";
             Text[ language_user1 ] = " ";
         };
@@ -1653,7 +1653,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "­«³]¦C¦L­S³ς(~R)";
             Text[ arabic ] = "ΕαΫΗΑ δΨΗή ΗαΨΘΗΪΙ";
             Text[ greek ] = "Κ~ατάργηση περιοχής εκτύπωσης";
-            Text[ korean ] = "ΐΞΌβ ΏµΏª ΐη Ό³Α¤";
+            Text[ korean ] = "ΐΞΌβΉόΐ§ ½ΗΗΰΓλΌÒ";
             Text[ turkish ] = "Yazdύrma aralύπύnύ kaldύr";
             Text[ language_user1 ] = " ";
         };
