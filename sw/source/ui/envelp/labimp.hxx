@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: os $ $Date: 2000-09-26 11:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,17 +238,17 @@ public:
     SwLabRec() {}
     SwLabRec( String& rStr, MetricField& rField );
 
-    String aMake;
-    String aType;
-    long   lHDist;
-    long   lVDist;
-    long   lWidth;
-    long   lHeight;
-    long   lLeft;
-    long   lUpper;
-    sal_uInt16 nCols;
-    sal_uInt16 nRows;
-    sal_Bool   bCont;
+    String          aMake;
+    String          aType;
+    long            lHDist;
+    long            lVDist;
+    long            lWidth;
+    long            lHeight;
+    long            lLeft;
+    long            lUpper;
+    sal_Int32       nCols;
+    sal_Int32       nRows;
+    sal_Bool        bCont;
 };
 
 /* --------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: os $ $Date: 2000-09-26 11:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,25 +75,24 @@
 #ifndef _SVX_ADRITEM_HXX
 #include <svx/adritem.hxx>
 #endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
+
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
 #endif
-
-
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#include "labimg.hxx"
 #include "cmdid.h"
 #include "swtypes.hxx"
-#include "cfgid.h"
-#include "labimg.hxx"
-#include "cfgstr.hrc"
 
-#define LAB_VERSION  1
-#define LAB_VERSION2 2
-#define LAB_VERSION3 3
-#define LAB_VERSION4 4
-#define LAB_VERSION5 5
-#define LAB_VERSION6 6
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
 
-#define CUR_LAB_VERSION LAB_VERSION6
+#define C2U(cChar) OUString::createFromAscii(cChar)
+
+// ----------------------------------------------------------------------------
 SwLabItem::SwLabItem() :
 
     SfxPoolItem(FN_LABEL),
@@ -113,19 +112,12 @@ SwLabItem::SwLabItem() :
 }
 
 // ----------------------------------------------------------------------------
-
-
-
 SwLabItem::SwLabItem(const SwLabItem& rItem) :
     SfxPoolItem(FN_LABEL)
 {
         *this = rItem;
 }
-
 // ----------------------------------------------------------------------------
-
-
-
 SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
 {
     bAddr    = rItem.bAddr;
@@ -252,343 +244,256 @@ int SwLabItem::operator ==(const SfxPoolItem& rItem) const
 }
 
 // --------------------------------------------------------------------------
-
-
-
 SfxPoolItem* SwLabItem::Clone(SfxItemPool*) const
 {
     return new SwLabItem(*this);
 }
 
-// ----------------------------------------------------------------------------
-SwLabCfgItem::SwLabCfgItem() :
-    SfxConfigItem(CFG_LAB_ITEM)
+/* -----------------------------25.09.00 16:25--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence<rtl::OUString> SwLabCfgItem::GetPropertyNames()
 {
+    static const char* aLabelPropNames[] =
+    {
+        "Medium/Continous",         // 0
+        "Medium/Brand",             // 1
+        "Medium/Type",              // 2
+        "Format/Column",            // 3
+        "Format/Row",               // 4
+        "Format/HorizontalDistance",// 5
+        "Format/VerticalDistance",  // 6
+        "Format/Width",             // 7
+        "Format/Height",            // 8
+        "Format/LeftMargin",        // 9
+        "Format/TopMargin",         //10
+        "Option/Synchronize",       //11
+        "Option/Page",              //12
+        "Option/Column",            //13
+        "Option/Row",               //14
+        "Inscription/UseAddress",   //15
+        "Inscription/Address",      //16
+        "Inscription/Database"      //17
+    };
+    static const char* aBusinessPropNames[] =
+    {
+        "PrivateAddress/FirstName",             //  0
+        "PrivateAddress/Name",                  //  1
+        "PrivateAddress/ShortCut",              //  2
+        "PrivateAddress/SecondFirstName",       //  3
+        "PrivateAddress/SecondName",            //  4
+        "PrivateAddress/SecondShortCut",        //  5
+        "PrivateAddress/Street",                //  6
+        "PrivateAddress/Zip",                   //  7
+        "PrivateAddress/City",                  //  8
+        "PrivateAddress/Country",               //  9
+        "PrivateAddress/State",                 // 10
+        "PrivateAddress/Title",                 // 11
+        "PrivateAddress/Profession",            // 12
+        "PrivateAddress/Phone",                 // 13
+        "PrivateAddress/Mobile",                // 14
+        "PrivateAddress/Fax",                   // 15
+        "PrivateAddress/WebAddress",            // 16
+        "PrivateAddress/Email",                 // 17
+        "BusinessAddress/Company",              // 18
+        "BusinessAddress/CompanyExt",           // 19
+        "BusinessAddress/Slogan",               // 20
+        "BusinessAddress/Street",               // 21
+        "BusinessAddress/Zip",                  // 22
+        "BusinessAddress/City",                 // 23
+        "BusinessAddress/Country",              // 24
+        "BusinessAddress/State",                // 25
+        "BusinessAddress/Position",             // 26
+        "BusinessAddress/Phone",                // 27
+        "BusinessAddress/Mobile",               // 28
+        "BusinessAddress/Fax",                  // 29
+        "BusinessAddress/WebAddress",           // 30
+        "BusinessAddress/Email",                // 31
+        "AutoText/Group",                       // 32
+        "AutoText/Block"                        // 33
+    };
+    const int nBusinessCount = bIsLabel ? 0 : 34;
+    const int nLabelCount = bIsLabel ? 18 : 15;
+    Sequence<OUString> aNames(nBusinessCount + nLabelCount);
+    OUString* pNames = aNames.getArray();
+    int nIndex = 0;
+    for(int nLabel = 0; nLabel < nLabelCount; nLabel++)
+        pNames[nIndex++] = OUString::createFromAscii(aLabelPropNames[nLabel]);
+    for(int nBusiness = 0; nBusiness < nBusinessCount; nBusiness++)
+        pNames[nIndex++] = OUString::createFromAscii(aBusinessPropNames[nBusiness]);
+    return aNames;
 }
+/* ----------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------
-
-int  SwLabItem::Load (SvStream& rStrm, USHORT nVersion, BOOL bLabel)
+ ---------------------------------------------------------------------------*/
+SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
+    ConfigItem(bLabel ? C2U("Office.Writer/Label") :  C2U("Office.Writer/BusinessCard")),
+    bIsLabel(bLabel)
 {
-    unsigned char b;
-    USHORT        i;
-    long          l;
-
-    rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    rStrm >> b; bAddr     = (BOOL) b;
-    rStrm.ReadByteString(aWriting, eEncoding);
-    rStrm >> b; bCont     = (BOOL) b;
-    rStrm.ReadByteString(aMake, eEncoding);
-    rStrm.ReadByteString(aType, eEncoding);
-    rStrm >> b; bPage     = (BOOL) b;
-    rStrm.ReadByteString(aBin, eEncoding);
-    rStrm >> i; nCol    =   i;
-    rStrm >> i; nRow    =   i;
-    rStrm >> l; lHDist  =   l;
-    rStrm >> l; lVDist  =   l;
-    rStrm >> l; lWidth  =   l;
-    rStrm >> l; lHeight =   l;
-    rStrm >> l; lLeft   =   l;
-    rStrm >> l; lUpper  =   l;
-    rStrm >> i; nCols   =   i;
-    rStrm >> i; nRows   =   i;
-
-    if ( nVersion >= LAB_VERSION2 )
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    EnableNotification(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
     {
-        rStrm.ReadByteString(aLstMake, eEncoding);
-        rStrm.ReadByteString(aLstType, eEncoding);
-    }
-    if ( nVersion >= LAB_VERSION3 )
-        rStrm.ReadByteString(sDBName, eEncoding);
-
-    if ( nVersion >= LAB_VERSION4 )
-    {
-        rStrm >> b;
-        bSynchron = (BOOL)b;
-    }
-    if(!bLabel)
-    {
-        rStrm.ReadByteString(aPrivFirstName, eEncoding);
-        rStrm.ReadByteString(aPrivName, eEncoding);
-        rStrm.ReadByteString(aPrivShortCut, eEncoding);
-        if ( nVersion >= LAB_VERSION6 )
+        for(int nProp = 0, nProperty = 0; nProp < aNames.getLength(); nProp++, nProperty++)
         {
-            rStrm.ReadByteString(aPrivFirstName2, eEncoding);
-            rStrm.ReadByteString(aPrivName2, eEncoding);
-            rStrm.ReadByteString(aPrivShortCut2, eEncoding);
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                //to have a contiuous switch an offset is added
+                if(nProp == 15 && !bIsLabel)
+                    nProperty += 3;
+                switch(nProperty)
+                {
+                    case  0: aItem.bCont = *(sal_Bool*)pValues[nProp].getValue(); break;// "Medium/Continous",
+                    case  1: pValues[nProp] >>= aItem.aMake;            break;// "Medium/Brand",
+                    case  2: pValues[nProp] >>= aItem.aType;            break;// "Medium/Type",
+                    case  3: pValues[nProp] >>= aItem.nCols;            break;// "Format/Column",
+                    case  4: pValues[nProp] >>= aItem.nRows;            break;// "Format/Row",
+                    case  5:
+                        pValues[nProp] >>= aItem.lHDist;
+                        aItem.lHDist = MM100_TO_TWIP(aItem.lHDist);
+                    break;// "Format/HorizontalDistance",
+                    case  6:
+                        pValues[nProp] >>= aItem.lVDist;
+                        aItem.lVDist = MM100_TO_TWIP(aItem.lVDist);
+                    break;// "Format/VerticalDistance",
+                    case  7:
+                        pValues[nProp] >>= aItem.lWidth;
+                        aItem.lWidth = MM100_TO_TWIP(aItem.lWidth);
+                    break;// "Format/Width",
+                    case  8:
+                        pValues[nProp] >>= aItem.lHeight;
+                        aItem.lHeight = MM100_TO_TWIP(aItem.lHeight);
+                    break;// "Format/Height",
+                    case  9:
+                        pValues[nProp] >>= aItem.lLeft;
+                        aItem.lLeft = MM100_TO_TWIP(aItem.lLeft);
+                    break;// "Format/LeftMargin",
+                    case 10:
+                        pValues[nProp] >>= aItem.lUpper;
+                        aItem.lUpper = MM100_TO_TWIP(aItem.lUpper);
+                    break;// "Format/TopMargin",
+                    case 11: aItem.bSynchron = *(sal_Bool*)pValues[nProp].getValue(); break;// "Option/Synchronize",
+                    case 12: aItem.bPage = *(sal_Bool*)pValues[nProp].getValue(); break;// "Option/Page",
+                    case 13: pValues[nProp] >>= aItem.nCol;     break;// "Option/Column",
+                    case 14: pValues[nProp] >>= aItem.nRow;     break;// "Option/Row"
+                    case 15: aItem.bAddr = *(sal_Bool*)pValues[nProp].getValue();       break;// "Inscription/UseAddress",
+                    case 16: pValues[nProp] >>= aItem.aWriting;         break;// "Inscription/Address",
+                    case 17: pValues[nProp] >>= aItem.sDBName;          break;// "Inscription/Database"
+                    case 18: pValues[nProp] >>= aItem.aPrivFirstName;   break;// "PrivateAddress/FirstName",
+                    case 19: pValues[nProp] >>= aItem.aPrivName;        break;// "PrivateAddress/Name",
+                    case 20: pValues[nProp] >>= aItem.aPrivShortCut;    break;// "PrivateAddress/ShortCut",
+                    case 21: pValues[nProp] >>= aItem.aPrivFirstName2;  break;// "PrivateAddress/SecondFirstName",
+                    case 22: pValues[nProp] >>= aItem.aPrivName2;       break;// "PrivateAddress/SecondName",
+                    case 23: pValues[nProp] >>= aItem.aPrivShortCut2;   break;// "PrivateAddress/SecondShortCut",
+                    case 24: pValues[nProp] >>= aItem.aPrivStreet;      break;// "PrivateAddress/Street",
+                    case 25: pValues[nProp] >>= aItem.aPrivZip;         break;// "PrivateAddress/Zip",
+                    case 26: pValues[nProp] >>= aItem.aPrivCity;        break;// "PrivateAddress/City",
+                    case 27: pValues[nProp] >>= aItem.aPrivCountry;     break;// "PrivateAddress/Country",
+                    case 28: pValues[nProp] >>= aItem.aPrivState;       break;// "PrivateAddress/State",
+                    case 29: pValues[nProp] >>= aItem.aPrivTitle;       break;// "PrivateAddress/Title",
+                    case 30: pValues[nProp] >>= aItem.aPrivProfession;  break;// "PrivateAddress/Profession",
+                    case 31: pValues[nProp] >>= aItem.aPrivPhone;       break;// "PrivateAddress/Phone",
+                    case 32: pValues[nProp] >>= aItem.aPrivMobile;      break;// "PrivateAddress/Mobile",
+                    case 33: pValues[nProp] >>= aItem.aPrivFax;         break;// "PrivateAddress/Fax",
+                    case 34: pValues[nProp] >>= aItem.aPrivWWW;         break;// "PrivateAddress/WebAddress",
+                    case 35: pValues[nProp] >>= aItem.aPrivMail;        break;// "PrivateAddress/Email",
+                    case 36: pValues[nProp] >>= aItem.aCompCompany;     break;// "BusinessAddress/Company",
+                    case 37: pValues[nProp] >>= aItem.aCompCompanyExt;  break;// "BusinessAddress/CompanyExt",
+                    case 38: pValues[nProp] >>= aItem.aCompSlogan;      break;// "BusinessAddress/Slogan",
+                    case 39: pValues[nProp] >>= aItem.aCompStreet;      break;// "BusinessAddress/Street",
+                    case 40: pValues[nProp] >>= aItem.aCompZip;         break;// "BusinessAddress/Zip",
+                    case 41: pValues[nProp] >>= aItem.aCompCity;        break;// "BusinessAddress/City",
+                    case 42: pValues[nProp] >>= aItem.aCompCountry;     break;// "BusinessAddress/Country",
+                    case 43: pValues[nProp] >>= aItem.aCompState;       break;// "BusinessAddress/State",
+                    case 44: pValues[nProp] >>= aItem.aCompPosition;    break;// "BusinessAddress/Position",
+                    case 45: pValues[nProp] >>= aItem.aCompPhone;       break;// "BusinessAddress/Phone",
+                    case 46: pValues[nProp] >>= aItem.aCompMobile;      break;// "BusinessAddress/Mobile",
+                    case 47: pValues[nProp] >>= aItem.aCompFax;         break;// "BusinessAddress/Fax",
+                    case 48: pValues[nProp] >>= aItem.aCompWWW;         break;// "BusinessAddress/WebAddress",
+                    case 49: pValues[nProp] >>= aItem.aCompMail;        break;// "BusinessAddress/Email",
+                    case 50: pValues[nProp] >>= aItem.sGlossaryGroup;   break;// "AutoText/Group"
+                    case 51: pValues[nProp] >>= aItem.sGlossaryBlockName; break;// "AutoText/Block"
+                }
+            }
         }
-        rStrm.ReadByteString(aPrivStreet, eEncoding);
-        rStrm.ReadByteString(aPrivZip, eEncoding);
-        rStrm.ReadByteString(aPrivCity, eEncoding);
-        rStrm.ReadByteString(aPrivCountry, eEncoding);
-        rStrm.ReadByteString(aPrivState         , eEncoding);
-        rStrm.ReadByteString(aPrivTitle         , eEncoding);
-        rStrm.ReadByteString(aPrivProfession    , eEncoding);
-        rStrm.ReadByteString(aPrivPhone         , eEncoding);
-        rStrm.ReadByteString(aPrivMobile        , eEncoding);
-        rStrm.ReadByteString(aPrivFax           , eEncoding);
-        rStrm.ReadByteString(aPrivWWW           , eEncoding);
-        rStrm.ReadByteString(aPrivMail          , eEncoding);
-        rStrm.ReadByteString(aCompCompany       , eEncoding);
-        rStrm.ReadByteString(aCompCompanyExt    , eEncoding);
-        rStrm.ReadByteString(aCompSlogan        , eEncoding);
-        rStrm.ReadByteString(aCompStreet        , eEncoding);
-        rStrm.ReadByteString(aCompZip           , eEncoding);
-        rStrm.ReadByteString(aCompCity          , eEncoding);
-        rStrm.ReadByteString(aCompCountry       , eEncoding);
-        rStrm.ReadByteString(aCompState         , eEncoding);
-        rStrm.ReadByteString(aCompPosition      , eEncoding);
-        rStrm.ReadByteString(aCompPhone         , eEncoding);
-        rStrm.ReadByteString(aCompMobile        , eEncoding);
-        rStrm.ReadByteString(aCompFax           , eEncoding);
-        rStrm.ReadByteString(aCompWWW           , eEncoding);
-        rStrm.ReadByteString(aCompMail          , eEncoding);
-
-        rStrm.ReadByteString(sGlossaryGroup     , eEncoding);
-        rStrm.ReadByteString(sGlossaryBlockName , eEncoding);
     }
-    return SfxConfigItem::ERR_OK;
 }
-// ----------------------------------------------------------------------------
+/* -----------------------------25.09.00 16:26--------------------------------
 
-BOOL SwLabItem::Store(SvStream& rStrm, BOOL bLabel)
+ ---------------------------------------------------------------------------*/
+void    SwLabCfgItem::Commit()
 {
-    rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    rStrm << (unsigned char) bAddr;
-    rStrm.WriteByteString(aWriting, eEncoding);
-    rStrm << (unsigned char) bCont;
-    rStrm.WriteByteString(aMake, eEncoding);
-    rStrm.WriteByteString(aType, eEncoding);
-    rStrm << (unsigned char) bPage;
-    rStrm.WriteByteString(aBin, eEncoding);
-    rStrm <<                 nCol;
-    rStrm <<                 nRow;
-    rStrm <<                 lHDist;
-    rStrm <<                 lVDist;
-    rStrm <<                 lWidth;
-    rStrm <<                 lHeight;
-    rStrm <<                 lLeft;
-    rStrm <<                 lUpper;
-    rStrm <<                 nCols;
-    rStrm <<                 nRows;
-    rStrm.WriteByteString(aLstMake, eEncoding);
-    rStrm.WriteByteString(aLstType, eEncoding);
-    rStrm.WriteByteString(sDBName, eEncoding);
-    rStrm <<                 bSynchron;
-    if(!bLabel)
+    Sequence<OUString> aNames = GetPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0, nProperty = 0; nProp < aNames.getLength(); nProp++, nProperty++)
     {
-        rStrm.WriteByteString(aPrivFirstName, eEncoding);
-        rStrm.WriteByteString(aPrivName, eEncoding);
-        rStrm.WriteByteString(aPrivShortCut, eEncoding);
-        rStrm.WriteByteString(aPrivFirstName2, eEncoding);
-        rStrm.WriteByteString(aPrivName2, eEncoding);
-        rStrm.WriteByteString(aPrivShortCut2, eEncoding);
-        rStrm.WriteByteString(aPrivStreet, eEncoding);
-        rStrm.WriteByteString(aPrivZip, eEncoding);
-        rStrm.WriteByteString(aPrivCity, eEncoding);
-        rStrm.WriteByteString(aPrivCountry, eEncoding);
-        rStrm.WriteByteString(aPrivState, eEncoding);
-        rStrm.WriteByteString(aPrivTitle, eEncoding);
-        rStrm.WriteByteString(aPrivProfession, eEncoding);
-        rStrm.WriteByteString(aPrivPhone, eEncoding);
-        rStrm.WriteByteString(aPrivMobile, eEncoding);
-        rStrm.WriteByteString(aPrivFax, eEncoding);
-        rStrm.WriteByteString(aPrivWWW, eEncoding);
-        rStrm.WriteByteString(aPrivMail, eEncoding);
-        rStrm.WriteByteString(aCompCompany, eEncoding);
-        rStrm.WriteByteString(aCompCompanyExt, eEncoding);
-        rStrm.WriteByteString(aCompSlogan, eEncoding);
-        rStrm.WriteByteString(aCompStreet, eEncoding);
-        rStrm.WriteByteString(aCompZip, eEncoding);
-        rStrm.WriteByteString(aCompCity, eEncoding);
-        rStrm.WriteByteString(aCompCountry, eEncoding);
-        rStrm.WriteByteString(aCompState, eEncoding);
-        rStrm.WriteByteString(aCompPosition, eEncoding);
-        rStrm.WriteByteString(aCompPhone, eEncoding);
-        rStrm.WriteByteString(aCompMobile, eEncoding);
-        rStrm.WriteByteString(aCompFax, eEncoding);
-        rStrm.WriteByteString(aCompWWW, eEncoding);
-        rStrm.WriteByteString(aCompMail, eEncoding);
-
-        rStrm.WriteByteString(sGlossaryGroup, eEncoding);
-        rStrm.WriteByteString(sGlossaryBlockName, eEncoding);
+        //to have a contiuous switch an offset is added
+        if(nProp == 15 && !bIsLabel)
+            nProperty += 3;
+        switch(nProperty)
+        {
+            case  0: pValues[nProp].setValue(&aItem.bCont, rType); break;// "Medium/Continous",
+            case  1: pValues[nProp] <<= aItem.aMake;            break;// "Medium/Brand",
+            case  2: pValues[nProp] <<= aItem.aType;            break;// "Medium/Type",
+            case  3: pValues[nProp] <<= aItem.nCols;            break;// "Format/Column",
+            case  4: pValues[nProp] <<= aItem.nRows;            break;// "Format/Row",
+            case  5: pValues[nProp] <<= TWIP_TO_MM100(aItem.lHDist);break;// "Format/HorizontalDistance",
+            case  6: pValues[nProp] <<= TWIP_TO_MM100(aItem.lVDist);break;// "Format/VerticalDistance",
+            case  7: pValues[nProp] <<= TWIP_TO_MM100(aItem.lWidth);            break;// "Format/Width",
+            case  8: pValues[nProp] <<= TWIP_TO_MM100(aItem.lHeight);           break;// "Format/Height",
+            case  9: pValues[nProp] <<= TWIP_TO_MM100(aItem.lLeft);         break;// "Format/LeftMargin",
+            case 10: pValues[nProp] <<= TWIP_TO_MM100(aItem.lUpper);            break;// "Format/TopMargin",
+            case 11: pValues[nProp].setValue(&aItem.bSynchron, rType); break;// "Option/Synchronize",
+            case 12: pValues[nProp].setValue(&aItem.bPage, rType); break;// "Option/Page",
+            case 13: pValues[nProp] <<= aItem.nCol;     break;// "Option/Column",
+            case 14: pValues[nProp] <<= aItem.nRow;     break;// "Option/Row"
+            case 15: pValues[nProp].setValue(&aItem.bAddr, rType);      break;// "Inscription/UseAddress",
+            case 16: pValues[nProp] <<= aItem.aWriting;         break;// "Inscription/Address",
+            case 17: pValues[nProp] <<= aItem.sDBName;          break;// "Inscription/Database"
+            case 18: pValues[nProp] <<= aItem.aPrivFirstName;   break;// "PrivateAddress/FirstName",
+            case 19: pValues[nProp] <<= aItem.aPrivName;        break;// "PrivateAddress/Name",
+            case 20: pValues[nProp] <<= aItem.aPrivShortCut;    break;// "PrivateAddress/ShortCut",
+            case 21: pValues[nProp] <<= aItem.aPrivFirstName2;  break;// "PrivateAddress/SecondFirstName",
+            case 22: pValues[nProp] <<= aItem.aPrivName2;       break;// "PrivateAddress/SecondName",
+            case 23: pValues[nProp] <<= aItem.aPrivShortCut2;   break;// "PrivateAddress/SecondShortCut",
+            case 24: pValues[nProp] <<= aItem.aPrivStreet;      break;// "PrivateAddress/Street",
+            case 25: pValues[nProp] <<= aItem.aPrivZip;         break;// "PrivateAddress/Zip",
+            case 26: pValues[nProp] <<= aItem.aPrivCity;        break;// "PrivateAddress/City",
+            case 27: pValues[nProp] <<= aItem.aPrivCountry;     break;// "PrivateAddress/Country",
+            case 28: pValues[nProp] <<= aItem.aPrivState;       break;// "PrivateAddress/State",
+            case 29: pValues[nProp] <<= aItem.aPrivTitle;       break;// "PrivateAddress/Title",
+            case 30: pValues[nProp] <<= aItem.aPrivProfession;  break;// "PrivateAddress/Profession",
+            case 31: pValues[nProp] <<= aItem.aPrivPhone;       break;// "PrivateAddress/Phone",
+            case 32: pValues[nProp] <<= aItem.aPrivMobile;      break;// "PrivateAddress/Mobile",
+            case 33: pValues[nProp] <<= aItem.aPrivFax;         break;// "PrivateAddress/Fax",
+            case 34: pValues[nProp] <<= aItem.aPrivWWW;         break;// "PrivateAddress/WebAddress",
+            case 35: pValues[nProp] <<= aItem.aPrivMail;        break;// "PrivateAddress/Email",
+            case 36: pValues[nProp] <<= aItem.aCompCompany;     break;// "BusinessAddress/Company",
+            case 37: pValues[nProp] <<= aItem.aCompCompanyExt;  break;// "BusinessAddress/CompanyExt",
+            case 38: pValues[nProp] <<= aItem.aCompSlogan;      break;// "BusinessAddress/Slogan",
+            case 39: pValues[nProp] <<= aItem.aCompStreet;      break;// "BusinessAddress/Street",
+            case 40: pValues[nProp] <<= aItem.aCompZip;         break;// "BusinessAddress/Zip",
+            case 41: pValues[nProp] <<= aItem.aCompCity;        break;// "BusinessAddress/City",
+            case 42: pValues[nProp] <<= aItem.aCompCountry;     break;// "BusinessAddress/Country",
+            case 43: pValues[nProp] <<= aItem.aCompState;       break;// "BusinessAddress/State",
+            case 44: pValues[nProp] <<= aItem.aCompPosition;    break;// "BusinessAddress/Position",
+            case 45: pValues[nProp] <<= aItem.aCompPhone;       break;// "BusinessAddress/Phone",
+            case 46: pValues[nProp] <<= aItem.aCompMobile;      break;// "BusinessAddress/Mobile",
+            case 47: pValues[nProp] <<= aItem.aCompFax;         break;// "BusinessAddress/Fax",
+            case 48: pValues[nProp] <<= aItem.aCompWWW;         break;// "BusinessAddress/WebAddress",
+            case 49: pValues[nProp] <<= aItem.aCompMail;        break;// "BusinessAddress/Email",
+            case 50: pValues[nProp] <<= aItem.sGlossaryGroup;   break;// "AutoText/Group"
+            case 51: pValues[nProp] <<= aItem.sGlossaryBlockName; break;// "AutoText/Block"
+        }
     }
-
-    return SfxConfigItem::ERR_OK;
+    PutProperties(aNames, aValues);
 }
-// ----------------------------------------------------------------------------
-int SwLabCfgItem::Load(SvStream& rStrm)
-{
-    USHORT nVersion;
-    rStrm >> nVersion;
-
-    if( nVersion >= LAB_VERSION )
-    {
-        aLabItem.Load(rStrm, nVersion, TRUE);
-        if(LAB_VERSION5 <= nVersion)
-            aBusinessItem.Load(rStrm, nVersion, FALSE);
-
-        SetDefault(FALSE);
-
-        return SfxConfigItem::ERR_OK;
-    }
-    else
-        return SfxConfigItem::WARNING_VERSION;
-}
-
-BOOL SwLabCfgItem::Store(SvStream& rStrm)
-{
-    rStrm << (USHORT)CUR_LAB_VERSION;
-    aLabItem.Store(rStrm, TRUE);
-    aBusinessItem.Store(rStrm, FALSE);
-    return SfxConfigItem::ERR_OK;
-}
-// ----------------------------------------------------------------------------
-void SwLabCfgItem::UseDefault()
-{
-    aLabItem = SwLabItem();
-    aBusinessItem = SwLabItem();
-    //Fill item with user data
-    SvxAddressItem aAdr( pPathFinder->GetAddress() );
-
-    aBusinessItem.aPrivFirstName = aAdr.GetFirstName();
-    aBusinessItem.aPrivName = aAdr.GetName();
-    aBusinessItem.aPrivShortCut = aAdr.GetShortName();
-    aBusinessItem.aCompCompany = aAdr.GetToken( ADDRESS_COMPANY       );
-    aBusinessItem.aCompStreet = aBusinessItem.aPrivStreet = aAdr.GetToken( ADDRESS_STREET);
-
-    aBusinessItem.aCompCountry = aBusinessItem.aPrivCountry = aAdr.GetToken( ADDRESS_COUNTRY);
-    aBusinessItem.aCompZip = aBusinessItem.aPrivZip= aAdr.GetToken( ADDRESS_PLZ );
-    aBusinessItem.aCompCity = aBusinessItem.aPrivCity = aAdr.GetToken( ADDRESS_CITY );
-    aBusinessItem.aPrivTitle = aAdr.GetToken( ADDRESS_TITLE );
-    aBusinessItem.aCompPosition = aAdr.GetToken( ADDRESS_POSITION );
-    aBusinessItem.aPrivPhone = aAdr.GetToken( ADDRESS_TEL_PRIVATE );
-    aBusinessItem.aCompPhone = aAdr.GetToken( ADDRESS_TEL_COMPANY );
-    aBusinessItem.aCompFax = aBusinessItem.aPrivFax = aAdr.GetToken( ADDRESS_FAX    );
-    aBusinessItem.aCompMail = aBusinessItem.aPrivMail = aAdr.GetToken( ADDRESS_EMAIL    );
-    aBusinessItem.aCompState = aBusinessItem.aPrivState = aAdr.GetToken( ADDRESS_STATE  );
-    aBusinessItem.bSynchron = TRUE;
-
-    SfxConfigItem::UseDefault();
-}
-// ----------------------------------------------------------------------------
-String SwLabCfgItem::GetName() const
-{
-    return SW_RESSTR(STR_CFG_LABIMG);
-}
-
-
-
-/*
-$Log: not supported by cvs2svn $
-Revision 1.38  2000/09/18 16:05:26  willem.vandorp
-OpenOffice header added.
-
-Revision 1.37  2000/06/26 16:32:15  jp
-have to change: enums of AddressToken
-
-Revision 1.36  2000/05/26 07:21:29  os
-old SW Basic API Slots removed
-
-Revision 1.35  2000/04/18 15:31:35  os
-UNICODE
-
-Revision 1.34  2000/02/11 14:45:49  hr
-#70473# changes for unicode ( patched by automated patchtool )
-
-Revision 1.33  2000/01/11 13:26:13  os
-#71720# business cards synchronized by default
-
-Revision 1.32  1999/12/07 16:34:13  os
-#70355##70559# SHORTCUT->INITIALS; second private name
-
-Revision 1.31  1999/09/30 07:53:06  os
-Label config item and LabItem contain business information
-
-Revision 1.30  1998/03/14 16:06:50  OM
-Gelinkte Etiketten
-
-
-      Rev 1.29   14 Mar 1998 17:06:50   OM
-   Gelinkte Etiketten
-
-      Rev 1.28   24 Nov 1997 11:52:10   MA
-   includes
-
-      Rev 1.27   03 Nov 1997 13:17:14   MA
-   precomp entfernt
-
-      Rev 1.26   08 Aug 1997 17:29:34   OM
-   Headerfile-Umstellung
-
-      Rev 1.25   18 Nov 1996 10:45:48   SWG
-   includes
-
-      Rev 1.24   14 Nov 1996 15:24:44   TRI
-   includes
-
-      Rev 1.23   11 Nov 1996 09:44:16   MA
-   ResMgr
-
-      Rev 1.22   26 Jul 1996 20:36:40   MA
-   includes
-
-      Rev 1.21   28 Jun 1996 10:10:52   OS
-   UseDefault: Basisklasse rufen
-
-      Rev 1.20   06 Jun 1996 12:59:42   OM
-   Datenbankname merken
-
-      Rev 1.19   27 Nov 1995 18:55:40   OS
-   Umstellung 303a
-
-      Rev 1.18   24 Nov 1995 16:59:40   OM
-   PCH->PRECOMPILED
-
-      Rev 1.17   16 Nov 1995 18:37:46   OS
-   neu: Get/SetVariable, nicht impl.
-
-      Rev 1.16   21 Sep 1995 00:40:56   JP
-   Bug 19511: VersionsNummer im richtigen Format aus dem Stream lesen (int <-> USHORT!!!)
-
-      Rev 1.15   15 Sep 1995 21:14:22   OS
-   add: cfgstr.hrc
-
-      Rev 1.14   15 Sep 1995 12:41:00   OS
-   GetName() implementiert
-
-      Rev 1.13   04 Sep 1995 13:53:58   HJS
-   add: #include <sbx.hxx>
-
-      Rev 1.12   09 Aug 1995 18:59:46   AMA
-   kein GetPresentation
-
-      Rev 1.11   07 Aug 1995 18:19:46   AMA
-   Umbau: GetValueText -> GetPresentation
-
-      Rev 1.10   30 Jul 1995 11:25:30   MA
-   chg: Letze Einstellung merken fuer Label
-
-      Rev 1.9   10 Jul 1995 09:52:36   MA
-   LabelDlg optimiert und etwas aufgeraeumt.
-
-      Rev 1.8   24 May 1995 18:17:14   ER
-   Segmentierung
-
-      Rev 1.7   17 Mar 1995 17:10:30   PK
-   geht immer weiter
-
-      Rev 1.6   15 Mar 1995 13:27:04   PK
-   geht immer weiter
-
-      Rev 1.5   06 Mar 1995 00:08:28   PK
-   linkbarer envelp-zustand
-
-      Rev 1.4   20 Feb 1995 19:39:52   PK
-   erstma eingecheckt
-
-      Rev 1.3   09 Jan 1995 16:57:48   ER
-    del: envelp hrc
-
-*/
 

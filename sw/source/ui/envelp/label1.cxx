@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 13:52:52 $
+ *  last change: $Author: os $ $Date: 2000-09-26 11:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,6 @@ using namespace ::rtl;
 
 // dont use RTL_CONSTASCII_STRINGPARAM for UNO_NAME ...
 // #define CL2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 #define USER_FIELD_FIRSTNAME        "BC_PRIV_FIRSTNAME"
 #define USER_FIELD_NAME             "BC_PRIV_NAME"
@@ -365,7 +364,7 @@ void SwLabDlg::_ReplaceGroup( const String &rMake, SwLabItem *pItem )
         {
             pRecs->C40_INSERT( SwLabRec, pRec, pRecs->Count() );
 
-            if ( pRec->aMake == pItem->aMake && pRec->aType == pItem->aType )
+            if ( pRec->aMake == String(pItem->aMake) && pRec->aType == String(pItem->aType) )
             {
                 pItem->lHDist  = pRec->lHDist;
                 pItem->lVDist  = pRec->lVDist;
@@ -486,7 +485,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
         pMake->EraseLeadingChars();
         pMake->EraseTrailingChars();
         aMakes.Insert( pMake, aMakes.Count() );
-        if ( *pMake == aItem.aLstMake )
+        if ( *pMake == String(aItem.aLstMake) )
             nLstGroup = nGroup;
     }
     if ( aMakes.Count() )
@@ -516,7 +515,7 @@ gespeichert.
 
 void SwLabDlg::MakeConfigItem( SwLabItem& rItem ) const
 {
-    if ( rItem.aType != String(SW_RES(STR_CUSTOM)) )
+    if ( String(rItem.aType) != String(SW_RES(STR_CUSTOM)) )
     {
         SwLabRec* pRec = (*pRecs)[0];
         rItem.lHDist  = pRec->lHDist;
@@ -656,7 +655,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     {
         String &rStr = *GetParent()->Makes()[i];
         aMakeBox.InsertEntry( rStr );
-        if ( rStr == aItem.aLstMake )
+        if ( rStr == String(aItem.aLstMake) )
             nLstGroup = i;
     }
 //  Reset(rSet);
@@ -819,7 +818,7 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
             const String aType ( GetParent()->Recs()[i]->aType );
             if ( aTypeBox.GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {
-                if ( !nLstType && aType == aItem.aLstType )
+                if ( !nLstType && aType == String(aItem.aLstType) )
                     nLstType = GetParent()->TypeIds().Count();
                 aTypeBox.InsertEntry( aType );
                 GetParent()->TypeIds().Insert(i, GetParent()->TypeIds().Count());
@@ -1028,7 +1027,7 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     aWritingEdit.SetText    ( aWriting.ConvertLineEnd() );
     aMakeBox    .SelectEntry( aItem.aMake );
 
-    if (aTypeBox.GetEntryPos(aItem.aType) != LISTBOX_ENTRY_NOTFOUND)
+    if (aTypeBox.GetEntryPos(String(aItem.aType)) != LISTBOX_ENTRY_NOTFOUND)
     {
         aTypeBox.SelectEntry(aItem.aType);
         aTypeBox.GetSelectHdl().Call(&aTypeBox);
@@ -1171,7 +1170,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 
     sal_Bool bFound = sal_False;
     for(sal_uInt16 i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
-        if(aLabItem.sGlossaryGroup == *(String*)aAutoTextGroupLB.GetEntryData( i ))
+        if(String(aLabItem.sGlossaryGroup) == *(String*)aAutoTextGroupLB.GetEntryData( i ))
         {
             bFound = sal_True;
             break;
@@ -1188,7 +1187,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
         {
             SvLBoxEntry* pSelEntry = aAutoTextLB.FirstSelected();
             if( pSelEntry &&
-                *(String*)pSelEntry->GetUserData() != aLabItem.sGlossaryBlockName)
+                *(String*)pSelEntry->GetUserData() != String(aLabItem.sGlossaryBlockName))
             {
                 lcl_SelectBlock(aAutoTextLB, aLabItem.sGlossaryBlockName);
                 AutoTextSelectHdl(&aAutoTextLB);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: os $ $Date: 2000-09-26 11:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,18 +66,16 @@
 #include <svtools/poolitem.hxx>
 #endif
 
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
-#endif
-
-#ifndef _STRING_HXX //autogen
-#include <tools/string.hxx>
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
 #endif
 
 // class SwLabItem ----------------------------------------------------------
 
+class SwLabCfgItem;
 class SwLabItem : public SfxPoolItem
 {
+
 public:
 
     SwLabItem();
@@ -89,87 +87,81 @@ public:
 
     virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const;
 
-    int  Load (SvStream& rStrm, USHORT nVersion, BOOL bLabel);
-    BOOL Store(SvStream& rStrm, BOOL bLabel);
+    rtl::OUString   aLstMake; //Letzte Auswahl merken.
+    rtl::OUString   aLstType;
+    rtl::OUString   sDBName;  // Verwendete Datenbank
 
-    String aLstMake; //Letzte Auswahl merken.
-    String aLstType;
-    String sDBName;  // Verwendete Datenbank
-
-    String aWriting; // Aufschrift
-    String aMake;    // Etikettenmarke
-    String aType;    // Etikettentyp
-    String aBin;     // Druckerschacht
-    long   lHDist;   // Horizontaler Abstand   (Benutzer)
-    long   lVDist;   // Vertikaler Abstand     (Benutzer)
-    long   lWidth;   // Breite                 (Benutzer)
-    long   lHeight;  // Hoehe                  (Benutzer)
-    long   lLeft;    // Rand links             (Benutzer)
-    long   lUpper;   // Rand oben              (Benutzer)
-    USHORT nCols;    // Anzahl Spalten         (Benutzer)
-    USHORT nRows;    // Anzahl Zeilen          (Benutzer)
-    USHORT nCol;     // Spalte fuer Einzeldruck
-    USHORT nRow;     // Zeile fuer Einzeldruck
-    BOOL   bAddr  :1;// Adresse als Aufschrift?
-    BOOL   bCont  :1;// Endlospapier?
-    BOOL   bPage  :1;// Ganze Seite oder einzelnes Etikett?
-    BOOL   bSynchron:1;// Alle Etiketten synchronisieren
+    rtl::OUString   aWriting; // Aufschrift
+    rtl::OUString   aMake;   // Etikettenmarke
+    rtl::OUString   aType;   // Etikettentyp
+    rtl::OUString   aBin;    // Druckerschacht
+    sal_Int32       lHDist;  // Horizontaler Abstand   (Benutzer)
+    sal_Int32       lVDist;  // Vertikaler Abstand     (Benutzer)
+    sal_Int32       lWidth;  // Breite                 (Benutzer)
+    sal_Int32       lHeight;  // Hoehe                 (Benutzer)
+    sal_Int32       lLeft;   // Rand links             (Benutzer)
+    sal_Int32       lUpper;  // Rand oben              (Benutzer)
+    sal_Int32       nCols;   // Anzahl Spalten         (Benutzer)
+    sal_Int32       nRows;   // Anzahl Zeilen          (Benutzer)
+    sal_Int32       nCol;    // Spalte fuer Einzeldruck
+    sal_Int32       nRow;    // Zeile fuer Einzeldruck
+    sal_Bool        bAddr;// Adresse als Aufschrift?
+    sal_Bool        bCont;// Endlospapier?
+    sal_Bool        bPage;// Ganze Seite oder einzelnes Etikett?
+    sal_Bool        bSynchron;// Alle Etiketten synchronisieren
 
     //parts of the business card
-    String  aPrivFirstName;
-    String  aPrivName;
-    String  aPrivShortCut;
-    String  aPrivFirstName2;
-    String  aPrivName2;
-    String  aPrivShortCut2;
-    String  aPrivStreet;
-    String  aPrivZip;
-    String  aPrivCity;
-    String  aPrivCountry;
-    String  aPrivState;
-    String  aPrivTitle;
-    String  aPrivProfession;
-    String  aPrivPhone;
-    String  aPrivMobile;
-    String  aPrivFax;
-    String  aPrivWWW;
-    String  aPrivMail;
-    String  aCompCompany;
-    String  aCompCompanyExt;
-    String  aCompSlogan;
-    String  aCompStreet;
-    String  aCompZip;
-    String  aCompCity;
-    String  aCompCountry;
-    String  aCompState;
-    String  aCompPosition;
-    String  aCompPhone;
-    String  aCompMobile;
-    String  aCompFax;
-    String  aCompWWW;
-    String  aCompMail;
+    rtl::OUString   aPrivFirstName;
+    rtl::OUString   aPrivName;
+    rtl::OUString   aPrivShortCut;
+    rtl::OUString   aPrivFirstName2;
+    rtl::OUString   aPrivName2;
+    rtl::OUString   aPrivShortCut2;
+    rtl::OUString   aPrivStreet;
+    rtl::OUString   aPrivZip;
+    rtl::OUString   aPrivCity;
+    rtl::OUString   aPrivCountry;
+    rtl::OUString   aPrivState;
+    rtl::OUString   aPrivTitle;
+    rtl::OUString   aPrivProfession;
+    rtl::OUString   aPrivPhone;
+    rtl::OUString   aPrivMobile;
+    rtl::OUString   aPrivFax;
+    rtl::OUString   aPrivWWW;
+    rtl::OUString   aPrivMail;
+    rtl::OUString   aCompCompany;
+    rtl::OUString   aCompCompanyExt;
+    rtl::OUString   aCompSlogan;
+    rtl::OUString   aCompStreet;
+    rtl::OUString   aCompZip;
+    rtl::OUString   aCompCity;
+    rtl::OUString   aCompCountry;
+    rtl::OUString   aCompState;
+    rtl::OUString   aCompPosition;
+    rtl::OUString   aCompPhone;
+    rtl::OUString   aCompMobile;
+    rtl::OUString   aCompFax;
+    rtl::OUString   aCompWWW;
+    rtl::OUString   aCompMail;
 
-    String  sGlossaryGroup;
-    String  sGlossaryBlockName;
+    rtl::OUString   sGlossaryGroup;
+    rtl::OUString   sGlossaryBlockName;
 };
 
 // class SwLabCfgItem -------------------------------------------------------
 
-class SwLabCfgItem : public SfxConfigItem
+class SwLabCfgItem : public utl::ConfigItem
 {
-    SwLabItem aLabItem;
-    SwLabItem aBusinessItem;
-protected:
-    virtual int  Load (SvStream& rStrm);
-    virtual BOOL Store(SvStream& rStrm);
-    virtual void UseDefault();
+    SwLabItem   aItem;
+    sal_Bool    bIsLabel;
 
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 public:
-    SwLabCfgItem();
+    SwLabCfgItem(sal_Bool bLabel);
 
-    SwLabItem&      GetLabItem() {return aLabItem;}
-    SwLabItem&      GetBusinessItem() {return aBusinessItem;}
-    virtual String  GetName() const;
+    SwLabItem&              GetItem() {return aItem;}
+
+    virtual void            Commit();
 };
 
 #endif
