@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasfont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:11:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 #include "textlayout.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 
 namespace vclcanvas
@@ -174,7 +173,7 @@ namespace vclcanvas
         return uno::Sequence< beans::PropertyValue >();
     }
 
-#define SERVICE_NAME "drafts.com.sun.star.rendering.CanvasFont"
+#define SERVICE_NAME "com.sun.star.rendering.CanvasFont"
 
     ::rtl::OUString SAL_CALL CanvasFont::getImplementationName() throw( uno::RuntimeException )
     {
