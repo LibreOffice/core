@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.107 $
+#   $Revision: 1.108 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-14 15:48:35 $
+#   last change: $Author: vg $ $Date: 2004-04-21 10:36:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,11 @@
 
     if (defined $ENV{CWS_WORK_STAMP}) {
         require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
-        require Logging; import Logging if (!defined $ENV{NO_LOGGING});
+        if (defined $ENV{NO_LOGGING}) {
+            require Cws; import Cws;
+        } else {
+            require Logging; import Logging ;
+        }
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
@@ -84,7 +88,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.107 $ ';
+    $id_str = ' $Revision: 1.108 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -549,7 +553,7 @@ sub CorrectPath {
 
 
 sub check_dmake {
-    print "Checking dmake...";
+#print "Checking dmake...";
     if (open(DMAKEVERSION, "dmake -V |")) {
         my @dmake_version = <DMAKEVERSION>;
         close DMAKEVERSION;
