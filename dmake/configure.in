@@ -1,0 +1,90 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(acconfig.h)
+
+dnl set the DMAKEROOT
+#AC_FUNC_SET_DMAKEROOT
+
+dnl Checks for programs.
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+
+dnl Checks for libraries.
+
+dnl Initialize libtool
+#AM_PROG_LIBTOOL
+
+
+dnl Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/file.h sys/time.h unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+dnl Checks for library functions.
+AC_FUNC_MEMCMP
+AC_FUNC_SETVBUF_REVERSED
+AC_TYPE_SIGNAL
+AC_FUNC_UTIME_NULL
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(getcwd getwd putenv strcspn strerror strspn strstr)
+
+AC_OUTPUT(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
+		startup/unix/linux/Makefile dmakeroot.h )
+#AC_OUTPUT(unix/bsd43/Makefile Makefile makefile unix/solaris/Makefile dbug/malloc/makefile unix/Makefile)
+
+dnl ******************************
+dnl *** output the whole stuff ***
+dnl ******************************
+
+AC_OUTPUT_COMMANDS([
+
+## Generate `dmakeroot.h' in two cases
+## 1. `config.status' is run either explicitly, or via configure.
+##     Esp. not when it is run in `Makefile' to generate makefiles and
+##     config.h
+## 2. CONFIG_OTHER is set explicitly
+##
+## Case 1 is difficult.  We know that `automake' sets one of
+## CONFIG_FILES or CONFIG_HEADERS to empty.  This heuristic works
+## only when AM_CONFIG_HEADER is set, however.
+
+if test -n "${CONFIG_FILES}" && test -n "${CONFIG_HEADERS}"; then
+	# Both CONFIG_FILES and CONFIG_HEADERS are non-empty ==> Case 1
+	CONFIG_OTHER=${CONFIG_OTHER:-dmakeroot.h}
+fi
+    outfile=dmakeroot.h-tmp
+    cat > $outfile <<\_______EOF
+	/* dmakeroot.h
+	 *
+  	 * This is a generated file.  Please modify `configure.in'
+     */
+
+_______EOF
+
+if test x$prefix != x; then
+       echo '"DMAKEROOT := '$prefix'/share/startup",' >> $outfile
+       echo '"OS := '`uname`'",' >> $outfile
+fi
+if cmp -s $outfile dmakeroot.h; then
+    echo dmakeroot.h is unchanged
+    rm -f $outfile
+else
+    mv $outfile dmakeroot.h
+fi 
+])
+							  
+				   
+dnl set the DMAKEROOT
+AC_SET_DMAKEROOT
+
+

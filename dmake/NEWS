@@ -1,0 +1,6 @@
+
+dmake NEWS
+
+Version 4.2
+
+* give dmake automake/autoconf -> configure
