@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:52 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,13 +92,11 @@ namespace pcr
         sal_uInt32      nHelpId;
         sal_Int32       nId;
         sal_uInt16      nPos;
-        sal_Bool        bMultiSelectable;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
                         const ::rtl::OUString&      rName,
                         sal_Int32                   _nId,
-                        sal_Bool                    bMSel,
                         const String&               aTranslation,
                         sal_uInt16                  nPosId,
                         sal_uInt32                  nHelpId,
@@ -106,11 +104,10 @@ namespace pcr
     };
 
     //------------------------------------------------------------------------
-    OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId, sal_Bool bMSel,
+    OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
                                    const String& aString, sal_uInt16 nP, sal_uInt32 nHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,nId(_nId)
-       ,bMultiSelectable(bMSel)
        ,sTranslation(aString)
        ,nPos(nP)
        ,nHelpId(nHid)
@@ -135,6 +132,10 @@ namespace pcr
     //========================================================================
     //= OFormPropertyInfoService
     //========================================================================
+#define DEF_INFO( ident, uinameres, helpid, flags )   \
+    OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
+                        String( ModuleRes( uinameres ) ), nPos++, helpid, flags )
+
     sal_uInt16              OFormPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OFormPropertyInfoService::s_pPropertyInfos = NULL;
     //------------------------------------------------------------------------
@@ -149,131 +150,136 @@ namespace pcr
             // somewhat ugly ... but this way we easily ensure that the
             static OPropertyInfoImpl __READONLY_DATA aPropertyInfos[] =
             {
-                OPropertyInfoImpl(PROPERTY_NAME,                PROPERTY_ID_NAME,               sal_False, String(ModuleRes(RID_STR_NAME)),             nPos++, HID_PROP_NAME,                      PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_TITLE,               PROPERTY_ID_TITLE,              sal_True,  String(ModuleRes(RID_STR_TITLE)),            nPos++, HID_PROP_TITLE,                     PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_LABEL,               PROPERTY_ID_LABEL,              sal_True,  String(ModuleRes(RID_STR_LABEL)),            nPos++, HID_PROP_LABEL,                     PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_CONTROLLABEL,        PROPERTY_ID_CONTROLLABEL,       sal_False, String(ModuleRes(RID_STR_LABELCONTROL)),     nPos++, HID_PROP_CONTROLLABEL,              PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_TEXT,                PROPERTY_ID_TEXT,               sal_True,  String(ModuleRes(RID_STR_TEXT)),             nPos++, HID_PROP_TEXT,                                        PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_MAXTEXTLEN,          PROPERTY_ID_MAXTEXTLEN,         sal_True,  String(ModuleRes(RID_STR_MAXTEXTLEN)),       nPos++, HID_PROP_MAXTEXTLEN,                PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_EDITMASK,            PROPERTY_ID_EDITMASK,           sal_True,  String(ModuleRes(RID_STR_EDITMASK)),         nPos++, HID_PROP_EDITMASK,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_LITERALMASK,         PROPERTY_ID_LITERALMASK,        sal_True,  String(ModuleRes(RID_STR_LITERALMASK)),      nPos++, HID_PROP_LITERALMASK,               PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_STRICTFORMAT,        PROPERTY_ID_STRICTFORMAT,       sal_True,  String(ModuleRes(RID_STR_STRICTFORMAT)),     nPos++, HID_PROP_STRICTFORMAT,              PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_ENABLED,             PROPERTY_ID_ENABLED,            sal_True,  String(ModuleRes(RID_STR_ENABLED)),          nPos++, HID_PROP_ENABLED,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_READONLY,            PROPERTY_ID_READONLY,           sal_True,  String(ModuleRes(RID_STR_READONLY)),         nPos++, HID_PROP_READONLY,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_PRINTABLE,           PROPERTY_ID_PRINTABLE,          sal_True,  String(ModuleRes(RID_STR_PRINTABLE)),        nPos++, HID_PROP_PRINTABLE,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_CONTROLSOURCE,       PROPERTY_ID_CONTROLSOURCE,      sal_True,  String(ModuleRes(RID_STR_CONTROLSOURCE)),    nPos++, HID_PROP_CONTROLSOURCE,             PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_STEP,                PROPERTY_ID_STEP,               sal_True,  String(ModuleRes(RID_STR_STEP)),             nPos++, HID_PROP_STEP,                      PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_TABSTOP,             PROPERTY_ID_TABSTOP,            sal_True,  String(ModuleRes(RID_STR_TABSTOP)),          nPos++, HID_PROP_TABSTOP,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_TABINDEX,            PROPERTY_ID_TABINDEX,           sal_True,  String(ModuleRes(RID_STR_TABINDEX)),         nPos++, HID_PROP_TABINDEX,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DATASOURCE,          PROPERTY_ID_DATASOURCE,         sal_True,  String(ModuleRes(RID_STR_DATASOURCE)),       nPos++, HID_PROP_DATASOURCE,                PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_COMMANDTYPE,         PROPERTY_ID_COMMANDTYPE,        sal_False, String(ModuleRes(RID_STR_CURSORSOURCETYPE)), nPos++, HID_PROP_CURSORSOURCETYPE,          PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_COMMAND,             PROPERTY_ID_COMMAND,            sal_False, String(ModuleRes(RID_STR_CURSORSOURCE)),     nPos++, HID_PROP_CURSORSOURCE,              PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_ESCAPE_PROCESSING,   PROPERTY_ID_ESCAPE_PROCESSING,  sal_False, String(ModuleRes(RID_STR_ESCAPE_PROCESSING)),nPos++, HID_PROP_ESCAPE_PROCESSING,         PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_FILTER_CRITERIA,     PROPERTY_ID_FILTER_CRITERIA,    sal_False, String(ModuleRes(RID_STR_FILTER_CRITERIA)),  nPos++, HID_PROP_FILTER_CRITERIA,           PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_SORT,                PROPERTY_ID_SORT,               sal_False, String(ModuleRes(RID_STR_SORT_CRITERIA)),    nPos++, HID_PROP_SORT_CRITERIA,             PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_ALLOWADDITIONS,      PROPERTY_ID_ALLOWADDITIONS,     sal_True,  String(ModuleRes(RID_STR_ALLOW_ADDITIONS)),  nPos++, HID_PROP_ALLOW_ADDITIONS,           PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_ALLOWEDITS,          PROPERTY_ID_ALLOWEDITS,         sal_True,  String(ModuleRes(RID_STR_ALLOW_EDITS)),      nPos++, HID_PROP_ALLOW_EDITS,               PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_ALLOWDELETIONS,      PROPERTY_ID_ALLOWDELETIONS,     sal_True,  String(ModuleRes(RID_STR_ALLOW_DELETIONS)),  nPos++, HID_PROP_ALLOW_DELETIONS,           PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_INSERTONLY,          PROPERTY_ID_INSERTONLY,         sal_True,  String(ModuleRes(RID_STR_DATAENTRY)),        nPos++, HID_PROP_DATAENTRY,                 PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_NAVIGATION,          PROPERTY_ID_NAVIGATION,         sal_True,  String(ModuleRes(RID_STR_NAVIGATION)),       nPos++, HID_PROP_NAVIGATION,                PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_CYCLE,               PROPERTY_ID_CYCLE,              sal_True,  String(ModuleRes(RID_STR_CYCLE)),            nPos++, HID_PROP_CYCLE,                     PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_HIDDEN_VALUE,        PROPERTY_ID_HIDDEN_VALUE,       sal_True,  String(ModuleRes(RID_STR_VALUE)),            nPos++, HID_PROP_HIDDEN_VALUE,              PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_VALUE,               PROPERTY_ID_VALUE,              sal_True,  String(ModuleRes(RID_STR_VALUE)),            nPos++, HID_PROP_VALUE,                                       PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_VALUEMIN,            PROPERTY_ID_VALUEMIN,           sal_True,  String(ModuleRes(RID_STR_VALUEMIN)),         nPos++, HID_PROP_VALUEMIN,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_VALUEMAX,            PROPERTY_ID_VALUEMAX,           sal_True,  String(ModuleRes(RID_STR_VALUEMAX)),         nPos++, HID_PROP_VALUEMAX,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_VALUESTEP,           PROPERTY_ID_VALUESTEP,          sal_True,  String(ModuleRes(RID_STR_VALUESTEP)),        nPos++, HID_PROP_VALUESTEP,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DEFAULT_VALUE,       PROPERTY_ID_DEFAULT_VALUE,      sal_True,  String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_DEFAULT_LONG_VALUE,        PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_DECIMAL_ACCURACY,    PROPERTY_ID_DECIMAL_ACCURACY,   sal_True,  String(ModuleRes(RID_STR_DECIMAL_ACCURACY)), nPos++, HID_PROP_DECIMAL_ACCURACY,          PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_SHOWTHOUSANDSEP,     PROPERTY_ID_SHOWTHOUSANDSEP,    sal_True,  String(ModuleRes(RID_STR_SHOWTHOUSANDSEP)),  nPos++, HID_PROP_SHOWTHOUSANDSEP,           PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
+                DEF_INFO( NAME,             RID_STR_NAME,               HID_PROP_NAME,                      PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( TITLE,            RID_STR_TITLE,              HID_PROP_TITLE,                     PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( LABEL,            RID_STR_LABEL,              HID_PROP_LABEL,                     PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( CONTROLLABEL,     RID_STR_LABELCONTROL,       HID_PROP_CONTROLLABEL,              PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( TEXT,             RID_STR_TEXT,               HID_PROP_TEXT,                                             PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( MAXTEXTLEN,       RID_STR_MAXTEXTLEN,         HID_PROP_MAXTEXTLEN,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( EDITMASK,         RID_STR_EDITMASK,           HID_PROP_EDITMASK,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( LITERALMASK,      RID_STR_LITERALMASK,        HID_PROP_LITERALMASK,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( STRICTFORMAT,     RID_STR_STRICTFORMAT,       HID_PROP_STRICTFORMAT,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( ENABLED,          RID_STR_ENABLED,            HID_PROP_ENABLED,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( READONLY,         RID_STR_READONLY,           HID_PROP_READONLY,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( PRINTABLE,        RID_STR_PRINTABLE,          HID_PROP_PRINTABLE,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( STEP,             RID_STR_STEP,               HID_PROP_STEP,                      PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( TABSTOP,          RID_STR_TABSTOP,            HID_PROP_TABSTOP,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( TABINDEX,         RID_STR_TABINDEX,           HID_PROP_TABINDEX,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
 
-                OPropertyInfoImpl(PROPERTY_REFVALUE,            PROPERTY_ID_REFVALUE,           sal_True,  String(ModuleRes(RID_STR_REFVALUE)),         nPos++, HID_PROP_REFVALUE,                  PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_CURRENCYSYMBOL,      PROPERTY_ID_CURRENCYSYMBOL,     sal_True,  String(ModuleRes(RID_STR_CURRENCYSYMBOL)),   nPos++, HID_PROP_CURRENCYSYMBOL,            PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_CURRSYM_POSITION,    PROPERTY_ID_CURRSYM_POSITION,   sal_True,  String(ModuleRes(RID_STR_CURRSYM_POSITION)), nPos++, HID_PROP_CURRSYM_POSITION,          PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
+                DEF_INFO( BOUND_CELL,       RID_STR_BOUND_CELL,         HID_PROP_BOUND_CELL,                PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY|PROP_FLAG_VIRTUAL_PROP),
+                DEF_INFO( CELL_EXCHANGE_TYPE,RID_STR_CELL_EXCHANGE_TYPE,HID_PROP_CELL_EXCHANGE_TYPE,        PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY|PROP_FLAG_VIRTUAL_PROP),
+                DEF_INFO( LIST_CELL_RANGE,  RID_STR_LIST_CELL_RANGE,    HID_PROP_LIST_CELL_RANGE,           PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY|PROP_FLAG_VIRTUAL_PROP),
+                DEF_INFO( CONTROLSOURCE,    RID_STR_CONTROLSOURCE,      HID_PROP_CONTROLSOURCE,             PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( DATASOURCE,       RID_STR_DATASOURCE,         HID_PROP_DATASOURCE,                PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( COMMANDTYPE,      RID_STR_CURSORSOURCETYPE,   HID_PROP_CURSORSOURCETYPE,          PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( COMMAND,          RID_STR_CURSORSOURCE,       HID_PROP_CURSORSOURCE,              PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( ESCAPE_PROCESSING,RID_STR_ESCAPE_PROCESSING,  HID_PROP_ESCAPE_PROCESSING,         PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( FILTER_CRITERIA,  RID_STR_FILTER_CRITERIA,    HID_PROP_FILTER_CRITERIA,           PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( SORT,             RID_STR_SORT_CRITERIA,      HID_PROP_SORT_CRITERIA,             PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( ALLOWADDITIONS,   RID_STR_ALLOW_ADDITIONS,    HID_PROP_ALLOW_ADDITIONS,           PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( ALLOWEDITS,       RID_STR_ALLOW_EDITS,        HID_PROP_ALLOW_EDITS,               PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( ALLOWDELETIONS,   RID_STR_ALLOW_DELETIONS,    HID_PROP_ALLOW_DELETIONS,           PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( INSERTONLY,       RID_STR_DATAENTRY,          HID_PROP_DATAENTRY,                 PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( NAVIGATION,       RID_STR_NAVIGATION,         HID_PROP_NAVIGATION,                PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( CYCLE,            RID_STR_CYCLE,              HID_PROP_CYCLE,                     PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( EMPTY_IS_NULL,    RID_STR_EMPTY_IS_NULL,      HID_PROP_EMPTY_IS_NULL,             PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( FILTERPROPOSAL,   RID_STR_FILTERPROPOSAL,     HID_PROP_FILTERPROPOSAL,            PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( BOUNDCOLUMN,      RID_STR_BOUNDCOLUMN,        HID_PROP_BOUNDCOLUMN,               PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( LISTSOURCETYPE,   RID_STR_LISTSOURCETYPE,     HID_PROP_LISTSOURCETYPE,            PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( LISTSOURCE,       RID_STR_LISTSOURCE,         HID_PROP_LISTSOURCE,                PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( MASTERFIELDS,     RID_STR_MASTERFIELDS,       HID_PROP_MASTERFIELDS,              PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+                DEF_INFO( DETAILFIELDS,     RID_STR_SLAVEFIELDS,        HID_PROP_SLAVEFIELDS,               PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
 
-                OPropertyInfoImpl(PROPERTY_DATE,                PROPERTY_ID_DATE,               sal_True,  String(ModuleRes(RID_STR_DATE)),             nPos++, HID_PROP_DATE,                                        PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DATEMIN,             PROPERTY_ID_DATEMIN,            sal_True,  String(ModuleRes(RID_STR_DATEMIN)),          nPos++, HID_PROP_DATEMIN,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DATEMAX,             PROPERTY_ID_DATEMAX,            sal_True,  String(ModuleRes(RID_STR_DATEMAX)),          nPos++, HID_PROP_DATEMAX,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DATEFORMAT,          PROPERTY_ID_DATEFORMAT,         sal_True,  String(ModuleRes(RID_STR_DATEFORMAT)),       nPos++, HID_PROP_DATEFORMAT,                PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DEFAULT_DATE,        PROPERTY_ID_DEFAULT_DATE,       sal_True,  String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_DEFAULT_DATE,              PROP_FORM_VISIBLE                    ),
+                DEF_INFO( HIDDEN_VALUE,     RID_STR_VALUE,              HID_PROP_HIDDEN_VALUE,              PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( VALUE,            RID_STR_VALUE,              HID_PROP_VALUE,                                            PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( VALUEMIN,         RID_STR_VALUEMIN,           HID_PROP_VALUEMIN,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( VALUEMAX,         RID_STR_VALUEMAX,           HID_PROP_VALUEMAX,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( VALUESTEP,        RID_STR_VALUESTEP,          HID_PROP_VALUESTEP,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DEFAULT_VALUE,    RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULT_LONG_VALUE,        PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( DECIMAL_ACCURACY, RID_STR_DECIMAL_ACCURACY,   HID_PROP_DECIMAL_ACCURACY,          PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( SHOWTHOUSANDSEP,  RID_STR_SHOWTHOUSANDSEP,    HID_PROP_SHOWTHOUSANDSEP,           PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
 
-                OPropertyInfoImpl(PROPERTY_TIME,                PROPERTY_ID_TIME,               sal_True,  String(ModuleRes(RID_STR_TIME)),             nPos++, HID_PROP_TIME,                                        PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_TIMEMIN,             PROPERTY_ID_TIMEMIN,            sal_True,  String(ModuleRes(RID_STR_TIMEMIN)),          nPos++, HID_PROP_TIMEMIN,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_TIMEMAX,             PROPERTY_ID_TIMEMAX,            sal_True,  String(ModuleRes(RID_STR_TIMEMAX)),          nPos++, HID_PROP_TIMEMAX,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_TIMEFORMAT,          PROPERTY_ID_TIMEFORMAT,         sal_True,  String(ModuleRes(RID_STR_TIMEFORMAT)),       nPos++, HID_PROP_TIMEFORMAT,                PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DEFAULT_TIME,        PROPERTY_ID_DEFAULT_TIME,       sal_True,  String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_DEFAULT_TIME,              PROP_FORM_VISIBLE                    ),
+                DEF_INFO( REFVALUE,         RID_STR_REFVALUE,           HID_PROP_REFVALUE,                  PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( CURRENCYSYMBOL,   RID_STR_CURRENCYSYMBOL,     HID_PROP_CURRENCYSYMBOL,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( CURRSYM_POSITION, RID_STR_CURRSYM_POSITION,   HID_PROP_CURRSYM_POSITION,          PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
 
-                OPropertyInfoImpl(PROPERTY_EFFECTIVE_VALUE,     PROPERTY_ID_EFFECTIVE_VALUE,    sal_False, String(ModuleRes(RID_STR_VALUE)),            nPos++, HID_PROP_VALUE,                                       PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_EFFECTIVE_MIN,       PROPERTY_ID_EFFECTIVE_MIN,      sal_False, String(ModuleRes(RID_STR_VALUEMIN)),         nPos++, HID_PROP_EFFECTIVEMIN,              PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_EFFECTIVE_MAX,       PROPERTY_ID_EFFECTIVE_MAX,      sal_False, String(ModuleRes(RID_STR_VALUEMAX)),         nPos++, HID_PROP_EFFECTIVEMAX,              PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_EFFECTIVE_DEFAULT,   PROPERTY_ID_EFFECTIVE_DEFAULT,  sal_False, String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_EFFECTIVEDEFAULT,          PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_FORMATKEY,           PROPERTY_ID_FORMATKEY,          sal_True,  String(ModuleRes(RID_STR_FORMATKEY)),        nPos++, HID_PROP_FORMATKEY,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
+                DEF_INFO( DATE,             RID_STR_DATE,               HID_PROP_DATE,                                             PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DATEMIN,          RID_STR_DATEMIN,            HID_PROP_DATEMIN,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DATEMAX,          RID_STR_DATEMAX,            HID_PROP_DATEMAX,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DATEFORMAT,       RID_STR_DATEFORMAT,         HID_PROP_DATEFORMAT,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DEFAULT_DATE,     RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULT_DATE,              PROP_FLAG_FORM_VISIBLE                         ),
 
-                OPropertyInfoImpl(PROPERTY_PROGRESSVALUE,       PROPERTY_ID_PROGRESSVALUE,      sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE)),    nPos++, HID_PROP_PROGRESSVALUE,             PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_PROGRESSVALUE_MIN,   PROPERTY_ID_PROGRESSVALUE_MIN,  sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE_MIN)),nPos++, HID_PROP_PROGRESSVALUE_MIN,         PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_PROGRESSVALUE_MAX,   PROPERTY_ID_PROGRESSVALUE_MAX,  sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE_MAX)),nPos++, HID_PROP_PROGRESSVALUE_MAX,         PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
+                DEF_INFO( TIME,             RID_STR_TIME,               HID_PROP_TIME,                                             PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( TIMEMIN,          RID_STR_TIMEMIN,            HID_PROP_TIMEMIN,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( TIMEMAX,          RID_STR_TIMEMAX,            HID_PROP_TIMEMAX,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( TIMEFORMAT,       RID_STR_TIMEFORMAT,         HID_PROP_TIMEFORMAT,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DEFAULT_TIME,     RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULT_TIME,              PROP_FLAG_FORM_VISIBLE                         ),
 
-                OPropertyInfoImpl(PROPERTY_SCROLLVALUE,         PROPERTY_ID_SCROLLVALUE,        sal_True,  String(ModuleRes(RID_STR_SCROLLVALUE)),      nPos++, HID_PROP_SCROLLVALUE,               PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_SCROLLVALUE_MAX,     PROPERTY_ID_SCROLLVALUE_MAX,    sal_True,  String(ModuleRes(RID_STR_SCROLLVALUE_MAX)),  nPos++, HID_PROP_SCROLLVALUE_MAX,           PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_LINEINCREMENT,       PROPERTY_ID_LINEINCREMENT,      sal_True,  String(ModuleRes(RID_STR_LINEINCREMENT)),    nPos++, HID_PROP_LINEINCREMENT,             PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_BLOCKINCREMENT,      PROPERTY_ID_BLOCKINCREMENT,     sal_True,  String(ModuleRes(RID_STR_BLOCKINCREMENT)),   nPos++, HID_PROP_BLOCKINCREMENT,            PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_VISIBLESIZE,         PROPERTY_ID_VISIBLESIZE,        sal_True,  String(ModuleRes(RID_STR_VISIBLESIZE)),      nPos++, HID_PROP_VISIBLESIZE,               PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_ORIENTATION,         PROPERTY_ID_ORIENTATION,        sal_True,  String(ModuleRes(RID_STR_ORIENTATION)),      nPos++, HID_PROP_ORIENTATION,               PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
+                DEF_INFO( EFFECTIVE_VALUE,  RID_STR_VALUE,              HID_PROP_VALUE,                                            PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( EFFECTIVE_MIN,    RID_STR_VALUEMIN,           HID_PROP_EFFECTIVEMIN,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( EFFECTIVE_MAX,    RID_STR_VALUEMAX,           HID_PROP_EFFECTIVEMAX,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( EFFECTIVE_DEFAULT,RID_STR_DEFAULTVALUE,       HID_PROP_EFFECTIVEDEFAULT,          PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( FORMATKEY,        RID_STR_FORMATKEY,          HID_PROP_FORMATKEY,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
 
-                OPropertyInfoImpl(PROPERTY_CLASSID,             PROPERTY_ID_CLASSID,            sal_False, String(ModuleRes(RID_STR_CLASSID)),          nPos++, HID_PROP_CLASSID,                   PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_HEIGHT,              PROPERTY_ID_HEIGHT,             sal_True,  String(ModuleRes(RID_STR_HEIGHT)),           nPos++, HID_PROP_HEIGHT,                    PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_WIDTH,               PROPERTY_ID_WIDTH,              sal_True,  String(ModuleRes(RID_STR_WIDTH)),            nPos++, HID_PROP_WIDTH,                     PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_POSITIONX,           PROPERTY_ID_POSITIONX,          sal_True,  String(ModuleRes(RID_STR_POSITIONX)),        nPos++, HID_PROP_POSITIONX,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_POSITIONY,           PROPERTY_ID_POSITIONY,          sal_True,  String(ModuleRes(RID_STR_POSITIONY)),        nPos++, HID_PROP_POSITIONY,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
+                DEF_INFO( PROGRESSVALUE,    RID_STR_PROGRESSVALUE,      HID_PROP_PROGRESSVALUE,             PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( PROGRESSVALUE_MIN,RID_STR_PROGRESSVALUE_MIN,  HID_PROP_PROGRESSVALUE_MIN,         PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( PROGRESSVALUE_MAX,RID_STR_PROGRESSVALUE_MAX,  HID_PROP_PROGRESSVALUE_MAX,         PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
 
-                OPropertyInfoImpl(PROPERTY_BOUNDCOLUMN,         PROPERTY_ID_BOUNDCOLUMN,        sal_True,  String(ModuleRes(RID_STR_BOUNDCOLUMN)),      nPos++, HID_PROP_BOUNDCOLUMN,               PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_LISTSOURCETYPE,      PROPERTY_ID_LISTSOURCETYPE,     sal_True,  String(ModuleRes(RID_STR_LISTSOURCETYPE)),   nPos++, HID_PROP_LISTSOURCETYPE,            PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_LISTSOURCE,          PROPERTY_ID_LISTSOURCE,         sal_True,  String(ModuleRes(RID_STR_LISTSOURCE)),       nPos++, HID_PROP_LISTSOURCE,                PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_LISTINDEX,           PROPERTY_ID_LISTINDEX,          sal_True,  String(ModuleRes(RID_STR_LISTINDEX)),        nPos++, HID_PROP_LISTINDEX,                 PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_STRINGITEMLIST,      PROPERTY_ID_STRINGITEMLIST,     sal_True,  String(ModuleRes(RID_STR_STRINGITEMLIST)),   nPos++, HID_PROP_STRINGITEMLIST,            PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DEFAULT_TEXT,        PROPERTY_ID_DEFAULT_TEXT,       sal_True,  String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_DEFAULTVALUE,              PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_FONT_NAME,           PROPERTY_ID_FONT_NAME,          sal_True,  String(ModuleRes(RID_STR_FONT)),             nPos++, HID_PROP_FONT,                      PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_ALIGN,               PROPERTY_ID_ALIGN,              sal_True,  String(ModuleRes(RID_STR_ALIGN)),            nPos++, HID_PROP_ALIGN,                     PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_ROWHEIGHT,           PROPERTY_ID_ROWHEIGHT,          sal_True,  String(ModuleRes(RID_STR_ROWHEIGHT)),        nPos++, HID_PROP_ROWHEIGHT,                 PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_BACKGROUNDCOLOR,     PROPERTY_ID_BACKGROUNDCOLOR,    sal_True,  String(ModuleRes(RID_STR_BACKGROUNDCOLOR)),  nPos++, HID_PROP_BACKGROUNDCOLOR,           PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_FILLCOLOR,           PROPERTY_ID_FILLCOLOR,          sal_True,  String(ModuleRes(RID_STR_FILLCOLOR)),        nPos++, HID_PROP_FILLCOLOR,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_LINECOLOR,           PROPERTY_ID_LINECOLOR,          sal_True,  String(ModuleRes(RID_STR_LINECOLOR)),        nPos++, HID_PROP_LINECOLOR,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_BORDER,              PROPERTY_ID_BORDER,             sal_True,  String(ModuleRes(RID_STR_BORDER)),           nPos++, HID_PROP_BORDER,                    PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DROPDOWN,            PROPERTY_ID_DROPDOWN,           sal_True,  String(ModuleRes(RID_STR_DROPDOWN)),         nPos++, HID_PROP_DROPDOWN,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_AUTOCOMPLETE,        PROPERTY_ID_AUTOCOMPLETE,       sal_True,  String(ModuleRes(RID_STR_AUTOCOMPLETE)),     nPos++, HID_PROP_AUTOCOMPLETE,              PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_LINECOUNT,           PROPERTY_ID_LINECOUNT,          sal_True,  String(ModuleRes(RID_STR_LINECOUNT)),        nPos++, HID_PROP_LINECOUNT,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_MULTI,               PROPERTY_ID_MULTI,              sal_True,  String(ModuleRes(RID_STR_MULTILINE)),        nPos++, HID_PROP_MULTILINE,                 PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_MULTILINE,           PROPERTY_ID_MULTILINE,          sal_True,  String(ModuleRes(RID_STR_MULTILINE)),        nPos++, HID_PROP_MULTILINE,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_MULTISELECTION,      PROPERTY_ID_MULTISELECTION,     sal_True,  String(ModuleRes(RID_STR_MULTISELECTION)),   nPos++, HID_PROP_MULTISELECTION,            PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_HARDLINEBREAKS,      PROPERTY_ID_HARDLINEBREAKS,     sal_True,  String(ModuleRes(RID_STR_HARDLINEBREAKS)),   nPos++, HID_PROP_HARDLINEBREAKS,            PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_HSCROLL,             PROPERTY_ID_HSCROLL,            sal_True,  String(ModuleRes(RID_STR_HSCROLL)),          nPos++, HID_PROP_HSCROLL,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_VSCROLL,             PROPERTY_ID_VSCROLL,            sal_True,  String(ModuleRes(RID_STR_VSCROLL)),          nPos++, HID_PROP_VSCROLL,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_SPIN,                PROPERTY_ID_SPIN,               sal_True,  String(ModuleRes(RID_STR_SPIN)),             nPos++, HID_PROP_SPIN,                      PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_BUTTONTYPE,          PROPERTY_ID_BUTTONTYPE,         sal_True,  String(ModuleRes(RID_STR_BUTTONTYPE)),       nPos++, HID_PROP_BUTTONTYPE,                PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_PUSHBUTTONTYPE,      PROPERTY_ID_PUSHBUTTONTYPE,     sal_True,  String(ModuleRes(RID_STR_PUSHBUTTONTYPE)),   nPos++, HID_PROP_PUSHBUTTONTYPE,                              PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_TARGET_URL,          PROPERTY_ID_TARGET_URL,         sal_True,  String(ModuleRes(RID_STR_TARGET_URL)),       nPos++, HID_PROP_TARGET_URL,                PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_TARGET_FRAME,        PROPERTY_ID_TARGET_FRAME,       sal_True,  String(ModuleRes(RID_STR_TARGET_FRAME)),     nPos++, HID_PROP_TARGET_FRAME,              PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_SUBMIT_ACTION,       PROPERTY_ID_SUBMIT_ACTION,      sal_True,  String(ModuleRes(RID_STR_SUBMIT_ACTION)),    nPos++, HID_PROP_SUBMIT_ACTION,             PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_SUBMIT_TARGET,       PROPERTY_ID_SUBMIT_TARGET,      sal_True,  String(ModuleRes(RID_STR_SUBMIT_TARGET)),    nPos++, HID_PROP_SUBMIT_TARGET,             PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_SUBMIT_METHOD,       PROPERTY_ID_SUBMIT_METHOD,      sal_True,  String(ModuleRes(RID_STR_SUBMIT_METHOD)),    nPos++, HID_PROP_SUBMIT_METHOD,             PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_SUBMIT_ENCODING,     PROPERTY_ID_SUBMIT_ENCODING,    sal_True,  String(ModuleRes(RID_STR_SUBMIT_ENCODING)),  nPos++, HID_PROP_SUBMIT_ENCODING,           PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_STATE,               PROPERTY_ID_STATE,              sal_True,  String(ModuleRes(RID_STR_STATE)),            nPos++, HID_PROP_STATE,                                       PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DEFAULTCHECKED,      PROPERTY_ID_DEFAULT_CHECKED,    sal_True,  String(ModuleRes(RID_STR_DEFAULT_CHECKED)),  nPos++, HID_PROP_DEFAULT_CHECKED,           PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_DEFAULTBUTTON,       PROPERTY_ID_DEFAULT_BUTTON,     sal_True,  String(ModuleRes(RID_STR_DEFAULT_BUTTON)),   nPos++, HID_PROP_DEFAULT_BUTTON,            PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_IMAGE_URL,           PROPERTY_ID_IMAGE_URL,          sal_True,  String(ModuleRes(RID_STR_IMAGE_URL)),        nPos++, HID_PROP_IMAGE_URL,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_IMAGEALIGN,          PROPERTY_ID_IMAGEALIGN,         sal_True,  String(ModuleRes(RID_STR_ALIGN)),            nPos++, HID_PROP_IMAGE_ALIGN,               PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_SCALEIMAGE,          PROPERTY_ID_SCALEIMAGE,         sal_True,  String(ModuleRes(RID_STR_SCALEIMAGE)),       nPos++, HID_PROP_SCALEIMAGE,                                  PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DEFAULT_SELECT_SEQ,  PROPERTY_ID_DEFAULT_SELECT_SEQ, sal_True,  String(ModuleRes(RID_STR_DEFAULT_SELECT_SEQ)),nPos++, HID_PROP_DEFAULT_SELECT_SEQ,       PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_ECHO_CHAR,           PROPERTY_ID_ECHO_CHAR,          sal_True,  String(ModuleRes(RID_STR_ECHO_CHAR)),        nPos++, HID_PROP_ECHO_CHAR,                 PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_EMPTY_IS_NULL,       PROPERTY_ID_EMPTY_IS_NULL,      sal_True,  String(ModuleRes(RID_STR_EMPTY_IS_NULL)),    nPos++, HID_PROP_EMPTY_IS_NULL,             PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_TRISTATE,            PROPERTY_ID_TRISTATE    ,       sal_True,  String(ModuleRes(RID_STR_TRISTATE)),         nPos++, HID_PROP_TRISTATE,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_MASTERFIELDS,        PROPERTY_ID_MASTERFIELDS,       sal_True,  String(ModuleRes(RID_STR_MASTERFIELDS)),     nPos++, HID_PROP_MASTERFIELDS,              PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_DETAILFIELDS,        PROPERTY_ID_DETAILFIELDS,       sal_True,  String(ModuleRes(RID_STR_SLAVEFIELDS)),      nPos++, HID_PROP_SLAVEFIELDS,               PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_HASNAVIGATION,       PROPERTY_ID_HASNAVIGATION,      sal_True,  String(ModuleRes(RID_STR_NAVIGATION)),       nPos++, HID_PROP_NAVIGATIONBAR,             PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_RECORDMARKER,        PROPERTY_ID_RECORDMARKER,       sal_True,  String(ModuleRes(RID_STR_RECORDMARKER)),     nPos++, HID_PROP_RECORDMARKER,              PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_FILTERPROPOSAL,      PROPERTY_ID_FILTERPROPOSAL,     sal_True,  String(ModuleRes(RID_STR_FILTERPROPOSAL)),   nPos++, HID_PROP_FILTERPROPOSAL,            PROP_FORM_VISIBLE                    ),
-                OPropertyInfoImpl(PROPERTY_TAG,                 PROPERTY_ID_TAG,                sal_True,  String(ModuleRes(RID_STR_TAG)),              nPos++, HID_PROP_TAG,                       PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_HELPTEXT,            PROPERTY_ID_HELPTEXT,           sal_False, String(ModuleRes(RID_STR_HELPTEXT)),         nPos++, HID_PROP_HELPTEXT,                  PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_HELPURL,             PROPERTY_ID_HELPURL,            sal_False, String(ModuleRes(RID_STR_HELPURL)),          nPos++, HID_PROP_HELPURL,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE)
+                DEF_INFO( SCROLLVALUE,      RID_STR_SCROLLVALUE,        HID_PROP_SCROLLVALUE,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( SCROLLVALUE_MAX,  RID_STR_SCROLLVALUE_MAX,    HID_PROP_SCROLLVALUE_MAX,           PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( LINEINCREMENT,    RID_STR_LINEINCREMENT,      HID_PROP_LINEINCREMENT,             PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( BLOCKINCREMENT,   RID_STR_BLOCKINCREMENT,     HID_PROP_BLOCKINCREMENT,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( VISIBLESIZE,      RID_STR_VISIBLESIZE,        HID_PROP_VISIBLESIZE,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( ORIENTATION,      RID_STR_ORIENTATION,        HID_PROP_ORIENTATION,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+
+                DEF_INFO( CLASSID,          RID_STR_CLASSID,            HID_PROP_CLASSID,                   PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( HEIGHT,           RID_STR_HEIGHT,             HID_PROP_HEIGHT,                    PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( WIDTH,            RID_STR_WIDTH,              HID_PROP_WIDTH,                     PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( POSITIONX,        RID_STR_POSITIONX,          HID_PROP_POSITIONX,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( POSITIONY,        RID_STR_POSITIONY,          HID_PROP_POSITIONY,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+
+                DEF_INFO( LISTINDEX,        RID_STR_LISTINDEX,          HID_PROP_LISTINDEX,                 PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( STRINGITEMLIST,   RID_STR_STRINGITEMLIST,     HID_PROP_STRINGITEMLIST,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DEFAULT_TEXT,     RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULTVALUE,              PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( FONT_NAME,        RID_STR_FONT,               HID_PROP_FONT,                      PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( ALIGN,            RID_STR_ALIGN,              HID_PROP_ALIGN,                     PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( ROWHEIGHT,        RID_STR_ROWHEIGHT,          HID_PROP_ROWHEIGHT,                 PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( BACKGROUNDCOLOR,  RID_STR_BACKGROUNDCOLOR,    HID_PROP_BACKGROUNDCOLOR,           PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( FILLCOLOR,        RID_STR_FILLCOLOR,          HID_PROP_FILLCOLOR,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( LINECOLOR,        RID_STR_LINECOLOR,          HID_PROP_LINECOLOR,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( BORDER,           RID_STR_BORDER,             HID_PROP_BORDER,                    PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DROPDOWN,         RID_STR_DROPDOWN,           HID_PROP_DROPDOWN,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( AUTOCOMPLETE,     RID_STR_AUTOCOMPLETE,       HID_PROP_AUTOCOMPLETE,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( LINECOUNT,        RID_STR_LINECOUNT,          HID_PROP_LINECOUNT,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( MULTI,            RID_STR_MULTILINE,          HID_PROP_MULTILINE,                 PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( MULTILINE,        RID_STR_MULTILINE,          HID_PROP_MULTILINE,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( MULTISELECTION,   RID_STR_MULTISELECTION,     HID_PROP_MULTISELECTION,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( HARDLINEBREAKS,   RID_STR_HARDLINEBREAKS,     HID_PROP_HARDLINEBREAKS,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( HSCROLL,          RID_STR_HSCROLL,            HID_PROP_HSCROLL,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( VSCROLL,          RID_STR_VSCROLL,            HID_PROP_VSCROLL,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( SPIN,             RID_STR_SPIN,               HID_PROP_SPIN,                      PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( BUTTONTYPE,       RID_STR_BUTTONTYPE,         HID_PROP_BUTTONTYPE,                PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( PUSHBUTTONTYPE,   RID_STR_PUSHBUTTONTYPE,     HID_PROP_PUSHBUTTONTYPE,                                   PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( TARGET_URL,       RID_STR_TARGET_URL,         HID_PROP_TARGET_URL,                PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( TARGET_FRAME,     RID_STR_TARGET_FRAME,       HID_PROP_TARGET_FRAME,              PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( SUBMIT_ACTION,    RID_STR_SUBMIT_ACTION,      HID_PROP_SUBMIT_ACTION,             PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( SUBMIT_TARGET,    RID_STR_SUBMIT_TARGET,      HID_PROP_SUBMIT_TARGET,             PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( SUBMIT_METHOD,    RID_STR_SUBMIT_METHOD,      HID_PROP_SUBMIT_METHOD,             PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( SUBMIT_ENCODING,  RID_STR_SUBMIT_ENCODING,    HID_PROP_SUBMIT_ENCODING,           PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( STATE,            RID_STR_STATE,              HID_PROP_STATE,                                            PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DEFAULTCHECKED,   RID_STR_DEFAULT_CHECKED,    HID_PROP_DEFAULT_CHECKED,           PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( DEFAULTBUTTON,    RID_STR_DEFAULT_BUTTON,     HID_PROP_DEFAULT_BUTTON,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( IMAGE_URL,        RID_STR_IMAGE_URL,          HID_PROP_IMAGE_URL,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( IMAGEALIGN,       RID_STR_ALIGN,              HID_PROP_IMAGE_ALIGN,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( SCALEIMAGE,       RID_STR_SCALEIMAGE,         HID_PROP_SCALEIMAGE,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( DEFAULT_SELECT_SEQ,RID_STR_DEFAULT_SELECT_SEQ,HID_PROP_DEFAULT_SELECT_SEQ,        PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( ECHO_CHAR,        RID_STR_ECHO_CHAR,          HID_PROP_ECHO_CHAR,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( TRISTATE,         RID_STR_TRISTATE,           HID_PROP_TRISTATE,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( HASNAVIGATION,    RID_STR_NAVIGATION,         HID_PROP_NAVIGATIONBAR,             PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( RECORDMARKER,     RID_STR_RECORDMARKER,       HID_PROP_RECORDMARKER,              PROP_FLAG_FORM_VISIBLE                         ),
+                DEF_INFO( TAG,              RID_STR_TAG,                HID_PROP_TAG,                       PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( HELPTEXT,         RID_STR_HELPTEXT,           HID_PROP_HELPTEXT,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+                DEF_INFO( HELPURL,          RID_STR_HELPURL,            HID_PROP_HELPURL,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE)
             };
 
             s_pPropertyInfos = const_cast<OPropertyInfoImpl*>(aPropertyInfos);
@@ -315,13 +321,6 @@ namespace pcr
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nPos : 0xFFFF;
-    }
-
-    //------------------------------------------------------------------------
-    sal_Bool OFormPropertyInfoService::getPropertyMultiFlag(sal_Int32 _nId) const
-    {
-        const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->bMultiSelectable : sal_False;
     }
 
     //------------------------------------------------------------------------
@@ -370,7 +369,7 @@ namespace pcr
             case PROPERTY_ID_TIMEFORMAT:
                 sSeparatedList = String(ModuleRes(RID_STR_TIMEFORMAT_LIST));
                 break;
-            case PROPERTY_ID_DEFAULT_CHECKED:
+            case PROPERTY_ID_DEFAULTCHECKED:
             case PROPERTY_ID_STATE:
                 sSeparatedList = String(ModuleRes(RID_STR_ENUM_CHECKED));
                 break;
@@ -385,6 +384,9 @@ namespace pcr
                 break;
             case PROPERTY_ID_ORIENTATION:
                 sSeparatedList = String(ModuleRes(RID_STR_ENUM_ORIENTATION));
+                break;
+            case PROPERTY_ID_CELL_EXCHANGE_TYPE:
+                sSeparatedList = String( ModuleRes( RID_STR_ENUM_CELL_EXCHANGE_TYPE ) );
                 break;
         }
 
@@ -403,7 +405,7 @@ namespace pcr
         // intialisierung
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, sal_False, String(), 0, 0, 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, 0, 0);
 
         const OPropertyInfoImpl* pPropInfo = (OPropertyInfoImpl*) bsearch(&aSearch,
                                         static_cast<void*>(s_pPropertyInfos),
