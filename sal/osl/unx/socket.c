@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: mfe $ $Date: 2000-10-31 15:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1744,10 +1744,18 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
         {
             Flags |= FD_CLOEXEC;
             if (fcntl(pSockImpl->m_Socket, F_SETFD, Flags) == -1)
+            {
+                pSockImpl->m_nLastError=errno;
                 OSL_TRACE("osl_createSocket failed changing socket flags. Errno: %d; %s\n",
-                                          errno,
-                                          strerror(errno));
+                          errno,
+                          strerror(errno));
+            }
         }
+        else
+        {
+            pSockImpl->m_nLastError=errno;
+        }
+
 
         pSockImpl->m_CloseCallback  = NULL;
         pSockImpl->m_CallbackArg    = NULL;
@@ -1783,6 +1791,8 @@ oslSocket SAL_CALL osl_copySocket(oslSocket Socket)
     /* copy socket */
     memcpy(pSockImpl, pParamSockImpl, sizeof(oslSocketImpl));
 
+    pSockImpl->m_nLastError=0;
+
     return (oslSocket)pSockImpl;
 }
 
@@ -1817,6 +1827,7 @@ void SAL_CALL osl_closeSocket(oslSocket Socket)
         return;
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     /* registrierten Callback ausfuehren */
     if (pSockImpl->m_CloseCallback != NULL)
@@ -1827,6 +1838,7 @@ void SAL_CALL osl_closeSocket(oslSocket Socket)
     nRet=close(pSockImpl->m_Socket);
     if ( nRet != 0 )
     {
+        pSockImpl->m_nLastError=errno;
         OSL_TRACE("closeSocket close error '%s'\n",strerror(errno));
     }
 
@@ -1859,10 +1871,15 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket Socket)
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
     AddrLen= sizeof(struct sockaddr);
 
     if(getsockname(pSockImpl->m_Socket, &Addr, PTR_SIZE_T(AddrLen)) == OSL_SOCKET_ERROR)
+    {
+        pSockImpl->m_nLastError=errno;
         return 0;
+    }
+
 
     return osl_copySocketAddr((oslSocketAddr)&Addr);
 }
@@ -1883,10 +1900,15 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket Socket)
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
     AddrLen= sizeof(struct sockaddr);
 
     if(getpeername(pSockImpl->m_Socket, &Addr, PTR_SIZE_T(AddrLen)) == OSL_SOCKET_ERROR)
+    {
+        pSockImpl->m_nLastError=errno;
         return 0;
+    }
+
 
     return osl_copySocketAddr((oslSocketAddr)&Addr);
 }
@@ -1898,6 +1920,7 @@ sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket Socket,
                              oslSocketAddr Addr)
 {
     oslSocketImpl* pSockImpl;
+    int nRet;
 
     OSL_ASSERT(Socket);
     if ( Socket == 0 )
@@ -1906,10 +1929,18 @@ sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket Socket,
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
-    return (bind(pSockImpl->m_Socket,
-            (struct sockaddr*)Addr,
-            sizeof(struct sockaddr)) != OSL_SOCKET_ERROR);
+    nRet = bind(pSockImpl->m_Socket, (struct sockaddr*)Addr,
+                sizeof(struct sockaddr));
+
+    if ( nRet == OSL_SOCKET_ERROR)
+    {
+        pSockImpl->m_nLastError=errno;
+        return sal_False;
+    }
+
+    return sal_True;
 }
 
 
@@ -1920,6 +1951,7 @@ sal_Bool SAL_CALL osl_listenOnSocket(oslSocket Socket,
                            sal_Int32 MaxPendingConnections)
 {
     oslSocketImpl* pSockImpl;
+    int nRet;
 
     OSL_ASSERT(Socket);
     if ( Socket == 0 )
@@ -1928,11 +1960,19 @@ sal_Bool SAL_CALL osl_listenOnSocket(oslSocket Socket,
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
-    return (listen(pSockImpl->m_Socket,
-                   MaxPendingConnections == -1 ?
-                        SOMAXCONN :
-                        MaxPendingConnections) != OSL_SOCKET_ERROR);
+    nRet = listen(pSockImpl->m_Socket,
+                  MaxPendingConnections == -1 ?
+                  SOMAXCONN :
+                  MaxPendingConnections);
+    if ( nRet == OSL_SOCKET_ERROR)
+    {
+        pSockImpl->m_nLastError=errno;
+        return sal_False;
+    }
+
+    return sal_True;
 }
 
 
@@ -1954,6 +1994,13 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket Socket,
 
     pSockImpl= (oslSocketImpl*)Socket;
 
+    if ( pSockImpl == 0 )
+    {
+        return osl_Socket_Error;
+    }
+
+    pSockImpl->m_nLastError=0;
+
     if (osl_isNonBlockingMode(Socket))
     {
         if (connect(pSockImpl->m_Socket,
@@ -1962,8 +2009,14 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket Socket,
             return osl_Socket_Ok;
         else
             if (errno == EWOULDBLOCK || errno == EINPROGRESS)
+            {
+                pSockImpl->m_nLastError=EINPROGRESS;
                 return osl_Socket_InProgress;
+            }
 
+
+        pSockImpl->m_nLastError=errno;
+        OSL_TRACE("can't connect : '%s'",strerror(errno));
         return osl_Socket_Error;
     }
 
@@ -1985,12 +2038,12 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket Socket,
         /* really an error or just delayed? */
         if (errno != EINPROGRESS)
         {
+            pSockImpl->m_nLastError=errno;
             OSL_TRACE(
                 "osl_connectSocketTo(): connect failed: errno: %d (%s)\n",
                 errno, strerror(errno));
 
             osl_enableNonBlockingMode(Socket, sal_False);
-
             return osl_Socket_Error;
         }
     }
@@ -2062,11 +2115,14 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket Socket,
             return osl_Socket_Interrupted;
         }
         else
+        {
+            pSockImpl->m_nLastError=errno;
             Result= osl_Socket_Error;
-
+        }
     }
     else    /* timeout */
     {
+        pSockImpl->m_nLastError=errno;
         Result= osl_Socket_TimedOut;
     }
 
@@ -2094,6 +2150,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket Socket,
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     if(pAddr)
     {
@@ -2102,8 +2159,16 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket Socket,
         do
         {
             /* user wants to know peer address */
-            Connection= accept(pSockImpl->m_Socket, (struct sockaddr*)&Addr, PTR_SIZE_T(AddrLen));
+            Connection = accept(pSockImpl->m_Socket, (struct sockaddr*)&Addr, PTR_SIZE_T(AddrLen));
         } while (Connection == -1 && errno == EINTR);
+
+
+        /* accept failed? */
+        if( Connection == OSL_SOCKET_ERROR )
+        {
+            pSockImpl->m_nLastError=errno;
+            return 0;
+        }
 
         OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
 
@@ -2117,11 +2182,15 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket Socket,
             Connection= accept(pSockImpl->m_Socket, 0, 0);
         } while ( Connection == -1 && errno == EINTR);
 
+        /* accept failed? */
+        if( Connection == OSL_SOCKET_ERROR )
+        {
+            pSockImpl->m_nLastError=errno;
+            return 0;
+        }
     }
 
-    /* accept failed? */
-    if(Connection == OSL_SOCKET_ERROR)
-        return 0;
+
 
     /* alloc memory */
     pConnectionSockImpl= __osl_createSocketImpl(0);
@@ -2131,12 +2200,17 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket Socket,
     {
         Flags |= FD_CLOEXEC;
         if (fcntl(Connection, F_SETFD, Flags) == -1)
+        {
+            pSockImpl->m_nLastError=errno;
             OSL_TRACE("osl_acceptConnectionOnSocket failed changing socket flags. Errno: %d (%s)\n",
-                                  errno,
-                                  strerror(errno));
+                      errno,
+                      strerror(errno));
+        }
+
     }
 
     pConnectionSockImpl->m_Socket           = Connection;
+    pConnectionSockImpl->m_nLastError       = 0;
     pConnectionSockImpl->m_CloseCallback    = NULL;
     pConnectionSockImpl->m_CallbackArg      = NULL;
 
@@ -2158,28 +2232,34 @@ sal_Int32 SAL_CALL osl_receiveSocket(oslSocket Socket,
     if ( Socket == 0 )
     {
         OSL_TRACE("osl_receiveSocket : Invalid socket");
-        errno=EINVAL;
         return -1;
     }
 
     pSockImpl = (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
-    nRead =  recv(pSockImpl->m_Socket,
-                  (sal_Char*)pBuffer,
-                  BytesToRead,
-                  MSG_FLAG_TO_NATIVE(Flag));
-
-    if ( nRead <= 0 )
+    do
     {
+        nRead =  recv(pSockImpl->m_Socket,
+                      (sal_Char*)pBuffer,
+                      BytesToRead,
+                      MSG_FLAG_TO_NATIVE(Flag));
+    } while ( nRead < 0 && errno == EINTR );
+
+
+/*      OSL_TRACE("osl_receiveSocket : read on FD '%i' '%i' Bytes\n",pSockImpl->m_Socket, BytesToRead); */
+
+    if ( nRead < 0 )
+    {
+        pSockImpl->m_nLastError=errno;
         OSL_TRACE("osl_receiveSocket failed : %i '%s'",nRead,strerror(errno));
+    }
+    else if ( nRead == 0 )
+    {
+        OSL_TRACE("osl_receiveSocket failed : %i '%s'",nRead,"EOL");
     }
 
     return nRead;
-
-/*      return recv(pSockImpl->m_Socket, */
-/*                  (sal_Char*)pBuffer, */
-/*                  BytesToRead, */
-/*                  MSG_FLAG_TO_NATIVE(Flag)); */
 }
 
 
@@ -2194,18 +2274,17 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket Socket,
 {
     oslSocketImpl* pSockImpl;
     int nRead;
-
     sal_uInt32 AddrLen= SenderAddr == 0 ? 0 : sizeof(struct sockaddr);
 
     OSL_ASSERT(Socket);
     if ( Socket == 0 )
     {
         OSL_TRACE("osl_receiveFromSocket : Invalid socket");
-        errno=EINVAL;
         return -1;
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     nRead = recvfrom(pSockImpl->m_Socket,
                      (sal_Char*)pBuffer,
@@ -2214,9 +2293,16 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket Socket,
                      (struct sockaddr*)SenderAddr,
                      PTR_SIZE_T(AddrLen));
 
-    if ( nRead <= 0 )
+/*      OSL_TRACE("osl_receiveFromSocket : read on FD '%i' '%i' Bytes\n",pSockImpl->m_Socket, BufferSize); */
+
+    if ( nRead < 0 )
     {
+        pSockImpl->m_nLastError=errno;
         OSL_TRACE("osl_receiveFromSocket failed : %i '%s'",nRead,strerror(errno));
+    }
+    else if ( nRead == 0 )
+    {
+        OSL_TRACE("osl_receiveSocket failed : %i '%s'",nRead,"EOL");
     }
 
     return nRead;
@@ -2238,20 +2324,31 @@ sal_Int32 SAL_CALL osl_sendSocket(oslSocket Socket,
     if ( Socket == 0 )
     {
         OSL_TRACE("osl_sendSocket : Invalid socket");
-        errno=EINVAL;
         return -1;
     }
 
     pSockImpl = (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
-    nWritten = send(pSockImpl->m_Socket,
-                    (sal_Char*)pBuffer,
-                    BytesToSend,
-                    MSG_FLAG_TO_NATIVE(Flag));
+/*      OSL_TRACE("osl_sendSocket : sending on FD '%i' '%i' Bytes\n",pSockImpl->m_Socket, BytesToSend); */
 
-    if ( nWritten <= 0 )
+    do
     {
+        nWritten = send(pSockImpl->m_Socket,
+                        (sal_Char*)pBuffer,
+                        BytesToSend,
+                        MSG_FLAG_TO_NATIVE(Flag));
+    } while ( nWritten < 0 && errno == EINTR );
+
+
+    if ( nWritten < 0 )
+    {
+        pSockImpl->m_nLastError=errno;
         OSL_TRACE("osl_sendSocket failed : %i '%s'",nWritten,strerror(errno));
+    }
+    else if ( nWritten == 0 )
+    {
+        OSL_TRACE("osl_sendSocket failed : %i '%s'",nWritten,"EOL");
     }
 
     return nWritten;
@@ -2272,15 +2369,17 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket Socket,
     OSL_ASSERT(Socket);
     if ( Socket == 0 )
     {
-        OSL_TRACE("osl_sendSocket : Invalid socket");
-        errno=EINVAL;
+        OSL_TRACE("osl_sendToSocket : Invalid socket");
         return -1;
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     /* ReceiverAddr might be 0 when used on a connected socket. */
     /* Then sendto should behave like send. */
+
+/*      OSL_TRACE("osl_sendToSocket : sending on FD '%i' '%i' Bytes\n",pSockImpl->m_Socket, BytesToSend); */
 
     nWritten = sendto(pSockImpl->m_Socket,
                       (sal_Char*)pBuffer,
@@ -2289,9 +2388,14 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket Socket,
                       (struct sockaddr*)ReceiverAddr,
                       ReceiverAddr == 0 ? 0 : sizeof(struct sockaddr));
 
-    if ( nWritten <= 0 )
+    if ( nWritten < 0 )
     {
+        pSockImpl->m_nLastError=errno;
         OSL_TRACE("osl_sendToSocket failed : %i '%s'",nWritten,strerror(errno));
+    }
+    else if ( nWritten == 0 )
+    {
+        OSL_TRACE("osl_sendToSocket failed : %i '%s'",nWritten,"EOL");
     }
 
     return nWritten;
@@ -2315,6 +2419,7 @@ sal_Bool SAL_CALL osl_isReceiveReady(oslSocket Socket, const TimeValue* pTimeout
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     FD_ZERO(&fds);
     FD_SET(pSockImpl->m_Socket, &fds);
@@ -2333,12 +2438,14 @@ sal_Bool SAL_CALL osl_isReceiveReady(oslSocket Socket, const TimeValue* pTimeout
 
     if(result < 0)     /* error */
     {
-       OSL_TRACE("osl_isReceiveReady(): select-error: %d (%s)\n", errno, strerror(errno));
-       return sal_False;
+        pSockImpl->m_nLastError=errno;
+        OSL_TRACE("osl_isReceiveReady(): select-error: %d (%s)\n", errno, strerror(errno));
+        return sal_False;
     }
 
     if(result == 0)    /* timeout */
     {
+        pSockImpl->m_nLastError=errno;
         return sal_False;
     }
 
@@ -2354,6 +2461,7 @@ sal_Bool SAL_CALL osl_isSendReady(oslSocket Socket, const TimeValue* pTimeout)
     fd_set fds;
     struct timeval tv;
     oslSocketImpl* pSockImpl;
+    int nRet;
 
     OSL_ASSERT(Socket);
     if ( Socket == 0 )
@@ -2362,6 +2470,7 @@ sal_Bool SAL_CALL osl_isSendReady(oslSocket Socket, const TimeValue* pTimeout)
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     FD_ZERO(&fds);
     FD_SET(pSockImpl->m_Socket, &fds);
@@ -2372,11 +2481,26 @@ sal_Bool SAL_CALL osl_isSendReady(oslSocket Socket, const TimeValue* pTimeout)
         tv.tv_usec = pTimeout->Nanosec / 1000L;
     }
 
-    return (select(pSockImpl->m_Socket+1,       /* highest socketno to monitor */
-                   0,                           /* check read operations */
-                   PTR_FD_SET(fds),             /* check write ops */
-                   0,                           /* ckeck for OOB */
-                   (pTimeout) ? &tv : 0)==1);   /* use timeout? */
+    nRet = select(pSockImpl->m_Socket+1,        /* highest socketno to monitor */
+                  0,                            /* check read operations */
+                  PTR_FD_SET(fds),              /* check write ops */
+                  0,                            /* ckeck for OOB */
+                  (pTimeout) ? &tv : 0);    /* use timeout? */
+
+    if ( nRet < 0 )
+    {
+        pSockImpl->m_nLastError=errno;
+        OSL_TRACE("osl_isSendReady(): select-error: %d (%s)\n", errno, strerror(errno));
+        return sal_False;
+    }
+
+    if( nRet == 0 )
+    {
+        pSockImpl->m_nLastError=errno;
+        return sal_False;
+    }
+
+    return sal_True;
 }
 
 /*****************************************************************************/
@@ -2387,6 +2511,7 @@ sal_Bool SAL_CALL osl_isExceptionPending(oslSocket Socket, const TimeValue* pTim
     fd_set fds;
     struct timeval tv;
     oslSocketImpl* pSockImpl;
+    int nRet;
 
     OSL_ASSERT(Socket);
     if ( Socket == 0 )
@@ -2395,6 +2520,7 @@ sal_Bool SAL_CALL osl_isExceptionPending(oslSocket Socket, const TimeValue* pTim
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     FD_ZERO(&fds);
     FD_SET(pSockImpl->m_Socket, &fds);
@@ -2405,11 +2531,26 @@ sal_Bool SAL_CALL osl_isExceptionPending(oslSocket Socket, const TimeValue* pTim
         tv.tv_usec = pTimeout->Nanosec / 1000L;
     }
 
-    return (select(pSockImpl->m_Socket+1,       /* highest socketno to monitor */
-                   0,                           /* check read operations */
-                   0,                           /* check write ops */
-                   PTR_FD_SET(fds),             /* ckeck for OOB */
-                   (pTimeout) ? &tv : 0)==1);   /* use timeout? */
+    nRet = select(pSockImpl->m_Socket+1,        /* highest socketno to monitor */
+                  0,                            /* check read operations */
+                  0,                            /* check write ops */
+                  PTR_FD_SET(fds),              /* ckeck for OOB */
+                  (pTimeout) ? &tv : 0);        /* use timeout? */
+
+    if ( nRet < 0 )
+    {
+        pSockImpl->m_nLastError=errno;
+        OSL_TRACE("osl_isExceptionPending(): select-error: %d (%s)\n", errno, strerror(errno));
+        return sal_False;
+    }
+
+    if( nRet == 0 )
+    {
+        pSockImpl->m_nLastError=errno;
+        return sal_False;
+    }
+
+    return sal_True;
 }
 
 /*****************************************************************************/
@@ -2428,10 +2569,12 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     nRet=shutdown(pSockImpl->m_Socket, DIRECTION_TO_NATIVE(Direction));
     if (nRet != 0 )
     {
+        pSockImpl->m_nLastError=errno;
 #ifdef DEBUG
         fprintf(stderr,"shutdown error '%s'\n",strerror(errno));
 #endif
@@ -2458,6 +2601,7 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket Socket,
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     if(getsockopt(pSockImpl->m_Socket,
                   OPTION_LEVEL_TO_NATIVE(Level),
@@ -2465,6 +2609,7 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket Socket,
                   (sal_Char*)pBuffer,
                   PTR_SIZE_T(BufferLen)) == -1)
     {
+        pSockImpl->m_nLastError=errno;
         return -1;
     }
 
@@ -2481,6 +2626,7 @@ sal_Bool SAL_CALL osl_setSocketOption(oslSocket Socket,
                             sal_uInt32                  BufferLen)
 {
     oslSocketImpl* pSockImpl;
+    int nRet;
 
     OSL_ASSERT(Socket);
     if ( Socket == 0 )
@@ -2489,13 +2635,21 @@ sal_Bool SAL_CALL osl_setSocketOption(oslSocket Socket,
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
-    return(setsockopt(pSockImpl->m_Socket,
+    nRet = setsockopt(pSockImpl->m_Socket,
                       OPTION_LEVEL_TO_NATIVE(Level),
                       OPTION_TO_NATIVE(Option),
                       (sal_Char*)pBuffer,
-                      BufferLen) == 0);
+                      BufferLen);
 
+    if ( nRet < 0 )
+    {
+        pSockImpl->m_nLastError=errno;
+        return sal_False;
+    }
+
+    return sal_True;
 }
 
 /*****************************************************************************/
@@ -2506,6 +2660,7 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode(oslSocket Socket,
 {
     int flags;
     oslSocketImpl* pSockImpl;
+    int nRet;
 
     OSL_ASSERT(Socket);
     if ( Socket == 0 )
@@ -2514,6 +2669,7 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode(oslSocket Socket,
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     flags = fcntl(pSockImpl->m_Socket, F_GETFL, 0);
 
@@ -2522,7 +2678,15 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode(oslSocket Socket,
     else
         flags &= ~(O_NONBLOCK);
 
-    return fcntl(pSockImpl->m_Socket, F_SETFL, flags) != -1;
+    nRet = fcntl(pSockImpl->m_Socket, F_SETFL, flags);
+
+    if  ( nRet < 0 )
+    {
+        pSockImpl->m_nLastError=errno;
+        return sal_False;
+    }
+
+    return sal_True;
 }
 
 /*****************************************************************************/
@@ -2540,6 +2704,7 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket Socket)
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     flags = fcntl(pSockImpl->m_Socket, F_GETFL, 0);
 
@@ -2565,6 +2730,7 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket Socket)
     }
 
     pSockImpl= (oslSocketImpl*)Socket;
+    pSockImpl->m_nLastError=0;
 
     if(getsockopt(pSockImpl->m_Socket,
                   OPTION_LEVEL_TO_NATIVE(osl_Socket_LevelSocket),
@@ -2573,6 +2739,7 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket Socket)
                   PTR_SIZE_T(TypeSize)) == -1)
     {
         /* error */
+        pSockImpl->m_nLastError=errno;
         return osl_Socket_TypeInvalid;
     }
 
@@ -2597,11 +2764,19 @@ void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **
 
 void SAL_CALL osl_psz_getLastSocketErrorDescription(oslSocket Socket, sal_Char* pBuffer, sal_uInt32 BufferSize)
 {
+    oslSocketImpl* pSockImpl = (oslSocketImpl*) Socket;
+
     /* make shure pBuffer will be a zero-terminated string even when strncpy has to cut */
     pBuffer[BufferSize-1]= '\0';
 
-    strncpy(pBuffer, strerror(errno), BufferSize-1);
+    if ( pSockImpl == 0 )
+    {
+        strncpy(pBuffer, strerror(EINVAL), BufferSize-1);
+        return;
+    }
 
+    strncpy(pBuffer, strerror(pSockImpl->m_nLastError), BufferSize-1);
+    return;
 }
 
 /*****************************************************************************/
@@ -2609,7 +2784,14 @@ void SAL_CALL osl_psz_getLastSocketErrorDescription(oslSocket Socket, sal_Char* 
 /*****************************************************************************/
 oslSocketError SAL_CALL osl_getLastSocketError(oslSocket Socket)
 {
-    return ERROR_FROM_NATIVE(errno);
+    oslSocketImpl* pSockImpl = (oslSocketImpl*) Socket;
+
+    if ( pSockImpl == 0 )
+    {
+        return ERROR_FROM_NATIVE(EINVAL);
+    }
+
+    return ERROR_FROM_NATIVE(pSockImpl->m_nLastError);
 }
 
 /*****************************************************************************/
