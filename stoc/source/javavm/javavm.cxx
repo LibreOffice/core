@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: jbu $ $Date: 2002-08-13 16:12:55 $
+ *  last change: $Author: jl $ $Date: 2002-09-06 07:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,8 +1446,14 @@ JavaVirtualMachine_Impl::~JavaVirtualMachine_Impl() throw()
 JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeException)
 {
     JavaVM * pJavaVM;
-
+    // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
+    // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
+    // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
+#ifdef LINUX
+    if(!_javaLib.load(jvm.getRuntimeLib(), SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW))
+#else
     if(!_javaLib.load(jvm.getRuntimeLib()))
+#endif
     {
         //Java installation was deleted or moved
         OUString libURL;
