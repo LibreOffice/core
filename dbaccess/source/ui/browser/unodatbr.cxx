@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-21 15:01:39 $
+ *  last change: $Author: fs $ $Date: 2002-04-03 15:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1766,15 +1766,20 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                     SbaGridControl* pGrid = getBrowserView()->getVclControl();
                     MultiSelection* pSelection = (MultiSelection*)pGrid->GetSelection();
                     Sequence< Any > aSelection;
-                    if (pSelection != NULL)
-                    {
-                        aSelection.realloc(pSelection->GetSelectCount());
-                        long nIdx = pSelection->FirstSelected();
-                        Any* pSelectionNos = aSelection.getArray();
-                        while (nIdx >= 0)
+                    if ( !pGrid->IsAllSelected() )
+                    {   // transfer the selected rows only if not all rows are selected
+                        // (all rows means the whole table)
+                        // i3832 - 03.04.2002 - fs@openoffice.org
+                        if (pSelection != NULL)
                         {
-                            *pSelectionNos++ <<= (sal_Int32)(nIdx + 1);
-                            nIdx = pSelection->NextSelected();
+                            aSelection.realloc(pSelection->GetSelectCount());
+                            long nIdx = pSelection->FirstSelected();
+                            Any* pSelectionNos = aSelection.getArray();
+                            while (nIdx >= 0)
+                            {
+                                *pSelectionNos++ <<= (sal_Int32)(nIdx + 1);
+                                nIdx = pSelection->NextSelected();
+                            }
                         }
                     }
 
@@ -1804,7 +1809,8 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                         aDescriptor[daCommandType]  =   xProp->getPropertyValue(PROPERTY_COMMANDTYPE);
                         aDescriptor[daConnection]   =   xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION);
                         aDescriptor[daCursor]       <<= xCursorClone;
-                        aDescriptor[daSelection]    <<= aSelection;
+                        if ( aSelection.getLength() )
+                            aDescriptor[daSelection]    <<= aSelection;
 
                         xDispatch->dispatch(aParentUrl, aDescriptor.createPropertyValueSequence());
                     }
