@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:02:36 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4119,7 +4119,7 @@ String STR_INSTEXT
     TEXT[ portuguese_brazilian ] = "Inserir ~texto";
     TEXT[ japanese ] = "隠しテキスト(~E)";
     TEXT[ korean ] = "숨겨진 텍스트(~E)";
-    TEXT[ chinese_simplified ] = "隐藏的文字(~E)";
+    TEXT[ chinese_simplified ] = "隐藏的文字";
     TEXT[ chinese_traditional ] = "隱藏的文字(~E)";
     TEXT[ turkish ] = "Met~ni sakla";
     TEXT[ arabic ] = "����� ��";
