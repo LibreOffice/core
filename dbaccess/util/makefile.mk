@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-14 14:42:41 $
+#   last change: $Author: oj $ $Date: 2001-02-28 10:23:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,13 +130,14 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=\
-        $(SLB)$/tabledesign.lib	\
-        $(SLB)$/querydesign.lib	\
-        $(SLB)$/uimisc.lib		\
-        $(SLB)$/uidlg.lib		\
-        $(SLB)$/dbushared.lib	\
-        $(SLB)$/browser.lib		\
-        $(SLB)$/uiuno.lib		\
+        $(SLB)$/relationdesign.lib	\
+        $(SLB)$/tabledesign.lib		\
+        $(SLB)$/querydesign.lib		\
+        $(SLB)$/uimisc.lib			\
+        $(SLB)$/uidlg.lib			\
+        $(SLB)$/dbushared.lib		\
+        $(SLB)$/browser.lib			\
+        $(SLB)$/uiuno.lib			\
         $(SLB)$/uicontrols.lib
 
 SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
@@ -182,12 +183,13 @@ ALL: \
 
 # --- .res file ----------------------------------------------------------
 RES2FILELIST=\
-    $(SRS)$/uidlg.srs			\
-    $(SRS)$/uicontrols.srs		\
-    $(SRS)$/browser.srs			\
-    $(SRS)$/uiuno.srs			\
-    $(SRS)$/querydesign.srs		\
-    $(SRS)$/tabledesign.srs		\
+    $(SRS)$/uidlg.srs				\
+    $(SRS)$/uicontrols.srs			\
+    $(SRS)$/browser.srs				\
+    $(SRS)$/uiuno.srs				\
+    $(SRS)$/querydesign.srs			\
+    $(SRS)$/tabledesign.srs			\
+    $(SRS)$/relationdesign.srs		\
     $(SRS)$/uimisc.srs
 
 RESLIB2NAME=$(TARGET2)
