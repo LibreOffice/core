@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:56:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,10 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             break;
 
         case KEY_ADD:
-            pViewShell->SetZoom (pWindow->GetZoom() * 3 / 2);
+            // Scale up by 3/2 of the current zoom scale.  Round so that
+            // even with the smallest zoom scale of 1 the scale is
+            // increased.
+            pViewShell->SetZoom ((pWindow->GetZoom() * 3 + 1) / 2);
             bResult = TRUE;
             break;
 
