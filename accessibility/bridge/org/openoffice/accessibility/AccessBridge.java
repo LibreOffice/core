@@ -84,7 +84,7 @@ public class AccessBridge {
 
     //
     static public class _AccessBridge implements XAccessibleTopWindowMap, XInitialization {
-        static final String _serviceName = "com.sun.star.accessibilityAccessBridge";
+        static final String _serviceName = "com.sun.star.accessibility.AccessBridge";
 
         XMultiServiceFactory serviceManager;
         java.util.Hashtable frameMap;
