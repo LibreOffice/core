@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
+ *  last change: $Author: jsc $ $Date: 2002-03-08 14:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,7 +994,6 @@ double SAL_CALL rtl_ustr_toDouble( const sal_Unicode * str ) SAL_THROW_EXTERN_C(
 
 /** The implementation of a Unicode string.
 
-    @internal
 */
 typedef struct _rtl_uString
 {
