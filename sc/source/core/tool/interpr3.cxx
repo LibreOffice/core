@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:16 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,11 +454,15 @@ double ScInterpreter::GetBetaDist(double x, double alpha, double beta)
             }
         }
         if (fB < fEps)
-            b1 = 1.0E30;
+            b1 = 69;            // ln(1.0E30)
         else
-            b1 = exp(GetLogGamma(fA)+GetLogGamma(fB)-GetLogGamma(fA+fB));
+            b1 = GetLogGamma(fA)+GetLogGamma(fB)-GetLogGamma(fA+fB);
 
-        cf *= pow(x, fA)*pow(1.0-x,fB)/(fA*b1);
+        // cf *= pow(x, fA)*pow(1.0-x,fB)/(fA*exp(b1));
+        // #108995# The formula above has 0 as results for the terms too easily,
+        // resulting in an error where the equivalent formula below still works:
+        // (x can't be 0 or 1, this is handled above)
+        cf *= exp( log(x)*fA + log(1.0-x)*fB - b1 ) / fA;
     }
     if (bReflect)
         return 1.0-cf;
