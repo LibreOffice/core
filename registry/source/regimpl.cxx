@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jbu $ $Date: 2002-10-23 15:27:47 $
+ *  last change: $Author: jbu $ $Date: 2002-11-12 16:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,8 +758,8 @@ RegError ORegistry::openKeyWithoutLink(
         pRet = ii->second;
         OSL_ASSERT( pRet );
         *phOpenKey = pRet;
+        pRet->acquire();
     }
-    pRet->acquire();
     return REG_NO_ERROR;
 }
 
@@ -803,8 +803,8 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
                     *phOpenKey = handle;
                     return REG_NO_ERROR;
                 }
-                sFullKeyName = resolveLinks(pKey, keyName);
 
+                sFullKeyName = resolveLinks(pKey, keyName);
                 if ( !sFullKeyName.getLength() )
                     return REG_DETECT_RECURSION;
 
