@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salstd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-12 09:20:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,6 @@
 #endif
 #ifndef _SV_SV_H
 #include <sv.h>
-#endif
-
-// -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#ifndef STDAPI
-#define STDAPI(Class)   int     operator != ( const Class& ) const; \
-                        int     operator == ( const Class& ) const; \
-                        Class  &operator = ( const Class& ); \
-                        Class( const Class& )
 #endif
 
 // -=-= X-Lib forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
