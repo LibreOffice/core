@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XParagraphCursor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:13 $
+ *  last change:$Date: 2003-09-08 11:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.text;
 
-import com.sun.star.text.XParagraphCursor;
 import lib.MultiMethodTest;
 import util.XInstCreator;
+
+import com.sun.star.text.XParagraphCursor;
 
 /**
  * Testing <code>com.sun.star.text.XParagraphCursor</code>
