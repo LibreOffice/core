@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:57:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,8 @@ TYPEINIT1(SdrMeasureObj,SdrTextObj);
 SdrMeasureObj::SdrMeasureObj():
     bTextDirty(FALSE)
 {
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_False;
 }
 
 SdrMeasureObj::SdrMeasureObj(const Point& rPt1, const Point& rPt2):
@@ -331,6 +333,8 @@ SdrMeasureObj::SdrMeasureObj(const Point& rPt1, const Point& rPt2):
     aPt2(rPt2),
     bTextDirty(FALSE)
 {
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_False;
 }
 
 SdrMeasureObj::~SdrMeasureObj()
