@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:38:37 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <string.h>
+#include <rtl/uri.hxx>
 
 #include "ftpstrcont.hxx"
 #include "ftpurl.hxx"
@@ -717,10 +718,15 @@ void FTPURL::mkdir(bool ReplaceExisting) const
     throw(curl_exception)
 {
     rtl::OString title;
-    if(m_aPathSegmentVec.size())
-        title = rtl::OString(m_aPathSegmentVec.back().getStr(),
-                            m_aPathSegmentVec.back().getLength(),
+    if(m_aPathSegmentVec.size()) {
+        rtl::OUString titleOU = m_aPathSegmentVec.back();
+        titleOU = rtl::Uri::decode(titleOU,
+                                 rtl_UriDecodeWithCharset,
+                                 RTL_TEXTENCODING_UTF8);
+        title = rtl::OString(titleOU.getStr(),
+                            titleOU.getLength(),
                             RTL_TEXTENCODING_UTF8);
+    }
     else
         // will give an error
         title = rtl::OString("/");
@@ -814,8 +820,16 @@ void FTPURL::del() const
                       aDirentry.m_aName.getLength(),
                       RTL_TEXTENCODING_UTF8);
 
-    if(aDirentry.m_nMode & INETCOREFTP_FILEMODE_ISDIR)
+    if(aDirentry.m_nMode & INETCOREFTP_FILEMODE_ISDIR) {
+        std::vector<FTPDirentry> vec = list(sal_Int16(OpenMode::ALL));
+        for( int i = 0; i < vec.size(); ++i )
+            try {
+                FTPURL url(vec[i].m_aURL,m_pFCP);
+                url.del();
+            } catch(const curl_exception&) {
+            }
         dele = rtl::OString("RMD ") + dele;
+    }
     else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
         dele = rtl::OString("DELE ") + dele;
     else
