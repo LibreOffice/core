@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:22:41 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
     Text [ italian ] = "Intestazione/piè di pagina" ; \
     Text [ portuguese_brazilian ] = "Cabeþalho/RodapÚ" ; \
     Text [ portuguese ] = "Cabeçalhos/Rodapés" ; \
-    Text [ finnish ] = "Ylä/alateksti" ; \
+    Text [ finnish ] = "Yläotsikot/alaselitteet" ; \
     Text [ danish ] = "Sidehoved/Sidefod" ; \
     Text [ french ] = "En-tête/Pied de page" ; \
     Text [ swedish ] = "Sidhuvud/sidfot" ; \
@@ -97,7 +97,7 @@
     Text [ italian ] = "Riga d'intestazione" ; \
     Text [ portuguese_brazilian ] = "Cabeçalho" ; \
     Text [ portuguese ] = "Cabeçalho" ; \
-    Text [ finnish ] = "Yläteksti" ; \
+    Text [ finnish ] = "Yläotsikko" ; \
     Text [ danish ] = "Sidehoved" ; \
     Text [ french ] = "En-tête" ; \
     Text [ swedish ] = "Sidhuvud" ; \
@@ -126,7 +126,7 @@
     Text [ italian ] = "Piè di pagina" ; \
     Text [ portuguese_brazilian ] = "RodapÚ" ; \
     Text [ portuguese ] = "Rodapé" ; \
-    Text [ finnish ] = "Alateksti" ; \
+    Text [ finnish ] = "Alaselite" ; \
     Text [ danish ] = "Sidefod" ; \
     Text [ french ] = "Pied de page" ; \
     Text [ swedish ] = "Sidfot" ; \
@@ -154,7 +154,7 @@
     Text [ italian ] = "Riga d'intestazione (destra)" ; \
     Text [ portuguese_brazilian ] = "Cabeçalho (direito)" ; \
     Text [ portuguese ] = "Cabeçalho (direito)" ; \
-    Text [ finnish ] = "Yläteksti (oikea)" ; \
+    Text [ finnish ] = "Yläotsikko (oikea)" ; \
     Text [ danish ] = "Sidehoved (højre)" ; \
     Text [ french ] = "En-tête (droit)" ; \
     Text [ swedish ] = "Sidhuvud (höger)" ; \
@@ -182,7 +182,7 @@
     Text [ italian ] = "Riga d'intestazione (sinistra)" ; \
     Text [ portuguese_brazilian ] = "Cabeçalho (esquerdo)" ; \
     Text [ portuguese ] = "Cabeçalho (esquerdo)" ; \
-    Text [ finnish ] = "Yläteksti (vasen)" ; \
+    Text [ finnish ] = "Yläotsikko (vasen)" ; \
     Text [ danish ] = "Sidehoved (venstre)" ; \
     Text [ french ] = "En-tête (à gauche)" ; \
     Text [ swedish ] = "Sidhuvud (vänster)" ; \
@@ -211,7 +211,7 @@
     Text [ italian ] = "Piè di pagina (destra)" ; \
     Text [ portuguese_brazilian ] = "RodapÚ (direito)" ; \
     Text [ portuguese ] = "Rodapé (direito)" ; \
-    Text [ finnish ] = "Alateksti (oikea)" ; \
+    Text [ finnish ] = "Alaselite (oikea)" ; \
     Text [ danish ] = "Sidefod (højre)" ; \
     Text [ french ] = "Pied de page (droit)" ; \
     Text [ swedish ] = "Sidfot (höger)" ; \
@@ -240,7 +240,7 @@
     Text [ italian ] = "Piè di pagina (sinistra)" ; \
     Text [ portuguese_brazilian ] = "RodapÚ (esquerdo)" ; \
     Text [ portuguese ] = "Rodapé (esquerdo)" ; \
-    Text [ finnish ] = "Yläteksti (vasen)" ; \
+    Text [ finnish ] = "Alaselite (vasen)" ; \
     Text [ danish ] = "Sidefod (venstre)" ; \
     Text [ french ] = "Pied de page (gauche)" ; \
     Text [ swedish ] = "Sidfot (vänster)" ; \
@@ -275,7 +275,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text [ italian ] = "Intestazioni" ;
     Text [ portuguese_brazilian ] = "Cabeçalho" ;
     Text [ portuguese ] = "Cabeçalhos" ;
-    Text [ finnish ] = "Yläteksti" ;
+    Text [ finnish ] = "Yläotsikot" ;
     Text [ danish ] = "Sidehoveder" ;
     Text [ french ] = "En-têtes" ;
     Text [ swedish ] = "Sidhuvuden" ;
@@ -332,7 +332,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text [ italian ] = "Piè di pagina" ;
     Text [ portuguese_brazilian ] = "Rodapé" ;
     Text [ portuguese ] = "Rodapé" ;
-    Text [ finnish ] = "Alateksti" ;
+    Text [ finnish ] = "Alaselitteet" ;
     Text [ danish ] = "Sidefødder" ;
     Text [ french ] = "Pieds de pages" ;
     Text [ swedish ] = "Sidfötter" ;
@@ -749,7 +749,7 @@ TabPage RID_HFBASE
         Text [ italian ] = "Area ~centrale" ;
         Text [ portuguese_brazilian ] = "~Área Central" ;
         Text [ portuguese ] = "~Área central" ;
-        Text [ finnish ] = "~Keskialue" ;
+        Text [ finnish ] = "~Keskitä alue" ;
         Text [ danish ] = "Midterområde" ;
         Text [ french ] = "Plage centrale" ;
         Text [ swedish ] = "~Mittområde" ;
@@ -795,7 +795,7 @@ TabPage RID_HFBASE
         Text [ swedish ] = "~Höger område" ;
         Text [ dutch ] = "~Rechter bereik" ;
         Text [ spanish ] = "Área ~derecha" ;
-        Text [ english_us ] = "~Right Area" ;
+        Text [ english_us ] = "R~ight Area" ;
         Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~R)";
         Text[ russian ] = "Ïðàâàÿ îáëàñòü";
         Text[ polish ] = "Prawy obszar";
@@ -831,7 +831,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Attributi di testo" ;
         QuickHelpText [ portuguese_brazilian ] = "Atributos de Texto" ;
         QuickHelpText [ portuguese ] = "Atributos de texto" ;
-        QuickHelpText [ finnish ] = "Tekstimääritteet" ;
+        QuickHelpText [ finnish ] = "Tekstin ominaisuudet!" ;
         QuickHelpText [ danish ] = "Tekstattributter" ;
         QuickHelpText [ french ] = "Attributs de texte" ;
         QuickHelpText [ swedish ] = "Textattribut" ;
@@ -870,7 +870,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Nome del file" ;
         QuickHelpText [ portuguese_brazilian ] = "Nome do Arquivo" ;
         QuickHelpText [ portuguese ] = "Nome do ficheiro" ;
-        QuickHelpText [ finnish ] = "Tiedostonimi" ;
+        QuickHelpText [ finnish ] = "Tiedoston nimi!" ;
         QuickHelpText [ danish ] = "Filnavn" ;
         QuickHelpText [ french ] = "Nom de fichier" ;
         QuickHelpText [ swedish ] = "Filnamn" ;
@@ -930,6 +930,7 @@ TabPage RID_HFBASE
                 Text[ turkish ] = "Baþlýk";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Título";
+                Text[ finnish ] = "Otsikko";
             };
             MenuItem
             {
@@ -960,6 +961,7 @@ TabPage RID_HFBASE
                 Text[ turkish ] = "Dosya adý";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Nombre del archivo";
+                Text[ finnish ] = "Tiedoston nimi";
             };
             MenuItem
             {
@@ -990,6 +992,7 @@ TabPage RID_HFBASE
                 Text[ turkish ] = "Yol/dosya adý";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Ruta/Nombre de archivo";
+                Text[ finnish ] = "Polun/tiedoston nimi";
             };
         };
     };
@@ -1006,7 +1009,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Nome tabella" ;
         QuickHelpText [ portuguese_brazilian ] = "Tabela Nome" ;
         QuickHelpText [ portuguese ] = "Nome da folha" ;
-        QuickHelpText [ finnish ] = "Taulukon nimi" ;
+        QuickHelpText [ finnish ] = "Lomakkeen nimi!" ;
         QuickHelpText [ danish ] = "Arknavn" ;
         QuickHelpText [ french ] = "Nom de feuille" ;
         QuickHelpText [ swedish ] = "Tabellnamn" ;
@@ -1045,7 +1048,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Pagina" ;
         QuickHelpText [ portuguese_brazilian ] = "Página" ;
         QuickHelpText [ portuguese ] = "Página" ;
-        QuickHelpText [ finnish ] = "Sivu" ;
+        QuickHelpText [ finnish ] = "Sivu!" ;
         QuickHelpText [ danish ] = "Side" ;
         QuickHelpText [ french ] = "Page" ;
         QuickHelpText [ swedish ] = "Sida" ;
@@ -1084,7 +1087,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Pagine" ;
         QuickHelpText [ portuguese_brazilian ] = "Páginas" ;
         QuickHelpText [ portuguese ] = "Páginas" ;
-        QuickHelpText [ finnish ] = "Sivumäärä" ;
+        QuickHelpText [ finnish ] = "Sivut!" ;
         QuickHelpText [ danish ] = "Sider" ;
         QuickHelpText [ french ] = "Pages" ;
         QuickHelpText [ swedish ] = "Sidor" ;
@@ -1123,7 +1126,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Data" ;
         QuickHelpText [ portuguese_brazilian ] = "Data" ;
         QuickHelpText [ portuguese ] = "Data" ;
-        QuickHelpText [ finnish ] = "Päiväys" ;
+        QuickHelpText [ finnish ] = "Päivämäärä!" ;
         QuickHelpText [ danish ] = "Dato" ;
         QuickHelpText [ french ] = "Date" ;
         QuickHelpText [ swedish ] = "Datum" ;
@@ -1162,7 +1165,7 @@ TabPage RID_HFBASE
         QuickHelpText [ italian ] = "Ora" ;
         QuickHelpText [ portuguese_brazilian ] = "Hora" ;
         QuickHelpText [ portuguese ] = "Hora" ;
-        QuickHelpText [ finnish ] = "Aika" ;
+        QuickHelpText [ finnish ] = "Aika!" ;
         QuickHelpText [ danish ] = "Klokkeslæt" ;
         QuickHelpText [ french ] = "Heure" ;
         QuickHelpText [ swedish ] = "Klockslag" ;
@@ -1201,7 +1204,7 @@ TabPage RID_HFBASE
         Text [ italian ] = "Usare i pulsanti per modificare il tipo di carattere\no per inserire comandi speciali come data, ora, ecc." ;
         Text [ portuguese_brazilian ] = "Use os botões de imagem para mudar a fonte do texto ouinserir comandos especiais como data hora, etc." ;
         Text [ portuguese ] = "Use os botões para mudar o tipo de letra ou inserir campos como data, hora, etc." ;
-        Text [ finnish ] = "Kuvapainikkeilla voit vaihtaa tekstin fontin tai lisätä erikoiskomennon, kuten päiväyksen tai ajan." ;
+        Text [ finnish ] = "Näppäimien avulla voit vaihtaa fonttia tai lisätä kenttäkomentoja, kuten päivämäärän tai kellonajan." ;
         Text [ danish ] = "Brug knapperne til at forandre skrifttypen eller til at indsætte felter som dato, klokkeslæt etc." ;
         Text [ french ] = "Utilisez les boutons pour modifier la police ou pour insérer des champs tels que la date, l'heure, etc." ;
         Text [ swedish ] = "Använd kommandoknapparna för att ändra teckensnitt eller infoga fältkommandon som datum, klockslag etc." ;
@@ -1232,7 +1235,7 @@ TabPage RID_HFBASE
         Text [ italian ] = "Nota" ;
         Text [ portuguese_brazilian ] = "Dica" ;
         Text [ portuguese ] = "Observação" ;
-        Text [ finnish ] = "Vihje" ;
+        Text [ finnish ] = "Huomautus" ;
         Text [ danish ] = "Tip" ;
         Text [ french ] = "Remarque" ;
         Text [ swedish ] = "Tips" ;
