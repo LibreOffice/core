@@ -200,6 +200,8 @@ public class XSLTValidate {
      public void convert (com.sun.star.io.XInputStream xml) throws com.sun.star.uno.RuntimeException {
          XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
          parseErrors =new Vector();
+           //String defaultTimeOut = System.getProperty("sun.net.client.defaultConnectTimeout");
+           System.getProperties().setProperty("sun.net.client.defaultConnectTimeout", "10000");
          try{
              DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
              dFactory.setNamespaceAware(true);
