@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-19 14:43:51 $
+ *  last change: $Author: ka $ $Date: 2000-12-21 17:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,10 +456,19 @@ const Size& SdrGrafObj::GetGrafPrefSize() const
 
 void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
 {
-    if( pModel->IsSwapGraphics() && ( pModel->GetSwapGraphicsMode() & SDR_SWAPGRAPHICSMODE_DOC ) )
+    if( !rGraphicStreamURL.Len() )
+    {
+        pGraphic->SetUserData();
+        nGrafStreamPos = GRAFSTREAMPOS_INVALID;
+    }
+    else if( pModel->IsSwapGraphics() && ( pModel->GetSwapGraphicsMode() & SDR_SWAPGRAPHICSMODE_DOC ) )
     {
         pGraphic->SetUserData( rGraphicStreamURL );
         nGrafStreamPos = GRAFSTREAMPOS_INVALID;
+
+        // set state of graphic object to 'swapped out'
+        if( pGraphic->GetType() == GRAPHIC_NONE )
+            pGraphic->SetSwapState();
     }
 }
 
@@ -536,14 +545,11 @@ void SdrGrafObj::ImpLinkAnmeldung()
         if(aFileName.Len())
         {
             pGraphicLink = new SdrGraphicLink( this );
-            pLinkManager->InsertFileLink( *pGraphicLink, OBJECT_CLIENT_GRF, aFileName,
-                (aFilterName.Len() ? &aFilterName : NULL) , NULL );
+            pLinkManager->InsertFileLink( *pGraphicLink, OBJECT_CLIENT_GRF, aFileName, ( aFilterName.Len() ? &aFilterName : NULL ), NULL );
             pGraphicLink->Connect();
 
-            FASTBOOL bDelayedLoad = pModel != NULL && pModel->IsSwapGraphics();
-
 #ifndef SVX_LIGHT
-            if( !bDelayedLoad )
+            if( pModel && pModel->IsSwapGraphics() )
             {
                 BOOL bIsChanged = pModel->IsChanged();
                 pGraphicLink->UpdateSynchron();
@@ -582,6 +588,7 @@ void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterN
     aFileName = rFileName;
     aFilterName = rFilterName;
     ImpLinkAnmeldung();
+    pGraphic->SetUserData();
 }
 
 // -----------------------------------------------------------------------------
@@ -597,10 +604,9 @@ void SdrGrafObj::ReleaseGraphicLink()
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    FASTBOOL bBmp = pGraphic->GetType() == GRAPHIC_BITMAP;
     FASTBOOL bTrans = pGraphic->IsTransparent();
     FASTBOOL bAnim = pGraphic->IsAnimated();
-    FASTBOOL bNoPresBmp = bBmp && !bEmptyPresObj;
+    FASTBOOL bNoPresBmp = ( pGraphic->GetType() == GRAPHIC_BITMAP ) && !bEmptyPresObj;
 
     rInfo.bResizeFreeAllowed = aGeo.nDrehWink % 9000 == 0 ||
                                aGeo.nDrehWink % 18000 == 0 ||
@@ -644,11 +650,9 @@ FASTBOOL SdrGrafObj::ImpPaintEmptyPres( OutputDevice* pOutDev ) const
 
     if( aPos.X() > aRect.Left() && aPos.Y() > aRect.Top())
     {
-        const Graphic&  rGraphic = pGraphic->GetGraphic();
-        FASTBOOL        bCache=pModel!=NULL && pModel->IsBitmapCaching();
-        FASTBOOL        bBmp = pGraphic->GetType() == GRAPHIC_BITMAP;
+        const Graphic& rGraphic = pGraphic->GetGraphic();
 
-        if( bBmp )
+        if( pGraphic->GetType() == GRAPHIC_BITMAP )
         {
             const Size aSz( pOutDev->PixelToLogic( rGraphic.GetBitmap().GetSizePixel() ) );
             pGraphic->Draw( pOutDev, aPos, aSz, NULL );
@@ -881,70 +885,55 @@ void SdrGrafObj::ImpPaintReplacement(OutputDevice* pOutDev, const XubString& rTe
 FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
 {
     // Hidden objects on masterpages, draw nothing
-    if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-        return TRUE;
-
-    // Do not print empty PresObj's
-    if(OUTDEV_PRINTER == rOut.GetOutDev()->GetOutDevType() && bEmptyPresObj)
-        return TRUE;
-
-    FASTBOOL        bDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF));
-    FASTBOOL        bSwappedOut = pGraphic->IsSwappedOut() || ( pGraphic->GetType() == GRAPHIC_NONE );
-    FASTBOOL        bLoading=FALSE;
-    OutputDevice*   pOutDev=rOut.GetOutDev();
-    OutDevType      eOutDevType=pOutDev!=NULL ? pOutDev->GetOutDevType() : OUTDEV_DONTKNOW;
-    FASTBOOL        bJustFillCache=pOutDev==NULL;
-    FASTBOOL        bPrn=!bJustFillCache && eOutDevType==OUTDEV_PRINTER;
-    GDIMetaFile*    pRecMetaFile=!bJustFillCache ? pOutDev->GetConnectMetaFile() : NULL;
-    FASTBOOL        bMtfRecording=pRecMetaFile!=NULL && pRecMetaFile->IsRecord() && !pRecMetaFile->IsPause();
-    const SdrView*  pView=rInfoRec.pPV!=NULL ? &rInfoRec.pPV->GetView() : NULL;
-
-    if( !bDraft && bSwappedOut )
+    if( ( ( rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE ) && bNotVisibleAsMaster ) ||
+        ( ( OUTDEV_PRINTER == rOut.GetOutDev()->GetOutDevType() ) && bEmptyPresObj ) )
     {
-        if( !bPrn && !bMtfRecording && eOutDevType == OUTDEV_WINDOW && pView && pView->IsSwapAsynchron() )
+        return TRUE;
+    }
+
+    FASTBOOL        bDraft = ( 0 != ( rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF ) );
+    FASTBOOL        bSwappedOut = pGraphic->IsSwappedOut();
+    FASTBOOL        bLoading = FALSE;
+    OutputDevice*   pOutDev = rOut.GetOutDev();
+    OutDevType      eOutDevType = ( pOutDev ? pOutDev->GetOutDevType() : OUTDEV_DONTKNOW );
+    FASTBOOL        bJustFillCache = ( NULL == pOutDev );
+    FASTBOOL        bPrn = ( !bJustFillCache && ( OUTDEV_PRINTER == eOutDevType ) );
+    GDIMetaFile*    pRecMetaFile = ( !bJustFillCache ? pOutDev->GetConnectMetaFile() : NULL );
+    FASTBOOL        bMtfRecording = ( pRecMetaFile && pRecMetaFile->IsRecord() && !pRecMetaFile->IsPause() );
+    const SdrView*  pView = ( rInfoRec.pPV ? &rInfoRec.pPV->GetView() : NULL );
+
+    if( bSwappedOut && !bDraft )
+    {
+#ifndef SVX_LIGHT
+        if( pGraphicLink )
         {
-            ( (SdrView*) pView )->ImpAddAsyncObj( this, pOutDev );
-            bLoading=TRUE;
+            BOOL bIsChanged = pModel->IsChanged();
+            pGraphicLink->UpdateSynchron();
+            pModel->SetChanged( bIsChanged );
         }
         else
-            ForceSwapIn();
-    }
-#ifndef SVX_LIGHT
-    else if( !bSwappedOut && pGraphicLink && ( pGraphic->GetType() == GRAPHIC_NONE ) )
-    {
-        BOOL bIsChanged = pModel->IsChanged();
-        pGraphicLink->UpdateSynchron();
-        pModel->SetChanged( bIsChanged );
-    }
 #endif
-
-    if( pGraphic->IsSwappedOut() ||
-        pGraphic->GetType() == GRAPHIC_NONE ||
-        pGraphic->GetType() == GRAPHIC_DEFAULT )
-    {
-        bDraft=TRUE;
+        {
+            if( !bPrn && !bMtfRecording && ( eOutDevType == OUTDEV_WINDOW ) && pView && pView->IsSwapAsynchron() )
+            {
+                ( (SdrView*) pView )->ImpAddAsyncObj( this, pOutDev );
+                bLoading = TRUE;
+            }
+            else
+                ForceSwapIn();
+        }
     }
 
-    long          nDrehWink = aGeo.nDrehWink;
-    long          nShearWink = aGeo.nShearWink;
-    USHORT        nMirrorCase = 0;
-    FASTBOOL      bCache = pModel != NULL && pModel->IsBitmapCaching();
-    FASTBOOL      bBmp = ( pGraphic->GetType() == GRAPHIC_BITMAP );
-    FASTBOOL      bRotate = nDrehWink!=0 && nDrehWink!=18000;
-    FASTBOOL      bShear = nShearWink!=0;
-    FASTBOOL      bMirror = bMirrored;
-    FASTBOOL      bHMirr;
-    FASTBOOL      bVMirr;
-    FASTBOOL      bRota90 = nDrehWink==9000 || nDrehWink==18000 || nDrehWink==27000;
-    FASTBOOL      bRota180 = nDrehWink==18000;
+    if( !bDraft && ( pGraphic->IsSwappedOut() || pGraphic->GetType() == GRAPHIC_NONE || pGraphic->GetType() == GRAPHIC_DEFAULT ) )
+        bDraft = TRUE;
 
-    // 4 Faelle:
-    //  4 | 3   H&V gespiegelt | nur Vertikal
-    // ---+---  ---------------+-----------------
-    //  2 | 1   nur Horizontal | nicht gespiegelt
-    nMirrorCase=bRota180 ? (bMirror ? 3 : 4) : (bMirror ? 2 : 1);
-    bHMirr= nMirrorCase==2 || nMirrorCase==4;
-    bVMirr= nMirrorCase==3 || nMirrorCase==4;
+    long          nDrehWink = aGeo.nDrehWink, nShearWink = aGeo.nShearWink;
+    FASTBOOL      bRotate = ( nDrehWink != 0 && nDrehWink != 18000 );
+    FASTBOOL      bShear = ( nShearWink != 0 );
+    FASTBOOL      bRota180 = nDrehWink == 18000;
+    USHORT        nMirrorCase = ( bRota180 ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 ) );   //  4 | 3   H&V gespiegelt | nur Vertikal
+    FASTBOOL      bHMirr = ( ( 2 == nMirrorCase ) || ( 4 == nMirrorCase ) );                    // ---+---  ---------------+-----------------
+    FASTBOOL      bVMirr = ( ( 3 == nMirrorCase ) || ( 4 == nMirrorCase ) );                    //  2 | 1   nur Horizontal | nicht gespiegelt
 
     if( !bEmptyPresObj && !bDraft )
     {
@@ -954,7 +943,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
 
         aAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
 
-        if( bBmp )
+        if( pGraphic->GetType() == GRAPHIC_BITMAP )
         {
             if( pGraphic->IsAnimated() )
             {
@@ -1569,6 +1558,8 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
                 rIn >> aGraphic;
                 pGraphic->SetGraphic( aGraphic );
             }
+            else
+                pGraphic->SetSwapState();
 
             // Ist die Grafik defekt, oder wurde nur eine leere Graphik eingelesen?
             // Daran soll mein Read jedoch nicht scheitern.
@@ -2114,7 +2105,15 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
 #ifndef SVX_LIGHT
                     if( pGraphic->HasUserData() )
-                        GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream );
+                    {
+                        if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream ) )
+                        {
+                            const String aUserData( pGraphic->GetUserData() );
+
+                            pGraphic->SetGraphic( aGraphic );
+                            pGraphic->SetUserData( aUserData );
+                        }
+                    }
                     else
 #endif
                     {
