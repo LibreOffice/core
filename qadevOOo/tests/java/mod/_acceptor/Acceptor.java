@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Acceptor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:15 $
+ *  last change:$Date: 2003-05-27 12:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._acceptor;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -122,7 +123,8 @@ public class Acceptor extends TestCase {
         XInterface acceptor = null;
 
         try {
-            acceptor = (XInterface) Param.getMSF().createInstance
+            acceptor = (XInterface)
+                ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.connection.Acceptor");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;
