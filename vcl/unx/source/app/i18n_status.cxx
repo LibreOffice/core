@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:28:19 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,13 +213,11 @@ bool XIMStatusWindow::checkLastParent() const
 {
     if( m_pLastParent )
     {
-        // FIXME: remove X11SalFrame
-        X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
-        while( pFrame )
+        const std::list< SalFrame* >& rFrames = GetSalData()->GetDisplay()->getFrames();
+        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
-            if( pFrame == m_pLastParent )
+            if( *it == m_pLastParent )
                 return true;
-            pFrame = pFrame->GetNextFrame();
         }
     }
     return false;
@@ -244,7 +242,7 @@ Point XIMStatusWindow::updatePosition()
         XLIB_Window aChild;
         XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
                                (XLIB_Window)pParentEnvData->aShellWindow,
-                               GetSalData()->GetDefDisp()->GetRootWindow(),
+                               GetSalData()->GetDisplay()->GetRootWindow(),
                                0, 0,
                                &x, &y,
                                &aChild );
@@ -491,13 +489,14 @@ void IIIMPStatusWindow::GetFocus()
          *  since reset focus really is an internal hack there should
          *  not be a method to be called in SalFrame destructor
          */
-        X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
-        while( pFrame && pFrame != m_pResetFocus )
-            pFrame = pFrame->GetNextFrame();
-        if( pFrame == m_pResetFocus )
+        const std::list< SalFrame* >& rFrames = GetSalData()->GetDisplay()->getFrames();
+        std::list< SalFrame* >::const_iterator it;
+        for( it = rFrames.begin(); it != rFrames.end() && *it != m_pResetFocus; ++it )
+            ;
+        if( it != rFrames.end() )
         {
             const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
-            SalXLib* pXLib = GetSalData()->GetDefDisp()->GetXLib();
+            SalXLib* pXLib = GetSalData()->GetDisplay()->GetXLib();
             BOOL bIgnore = pXLib->GetIgnoreXErrors();
             pXLib->SetIgnoreXErrors( TRUE );
             XSetInputFocus( (Display*)pParentEnvData->pDisplay,
@@ -532,7 +531,7 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
             if( pParent && pParent->isMapped() )
             {
                 const SystemEnvData* pEnv = pParent->GetSystemData();
-                SalXLib* pXLib = GetSalData()->GetDefDisp()->GetXLib();
+                SalXLib* pXLib = GetSalData()->GetDisplay()->GetXLib();
                 BOOL bIgnore = pXLib->GetIgnoreXErrors();
                 pXLib->SetIgnoreXErrors( TRUE );
                 XSetInputFocus( (Display*)pEnv->pDisplay,
