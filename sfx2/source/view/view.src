@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 07:58:23 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 17:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ String STR_NODEFPRINTER
     TEXT[ chinese_traditional ] = "¨S¦³§δ¨μΐq»{¦LªνΎχ΅C\n½ΠΏοΎά¤@­Σ¦LªνΎχ΅MµM«α¦A­«ΈΥ¦C¦L΅C";
     TEXT[ language_user1 ] = " ";
     TEXT[ greek ] = "Δεν βρέθηκε προεπιλεγμένος εκτυπωτής.\nΠαρακαλώ επιλέξτε έναν εκτυπωτή και ξαναπροσπαθήστε.";
-    TEXT[ korean ] = "±βΊ» ΗΑΈ°ΕΝΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω. \nΗΑΈ°ΕΝΈ¦ Ό±ΕΓΗΟΏ© ΐη½ΓµµΗΟ½Κ½ΓΏΐ.";
+    TEXT[ korean ] = "±βΊ» ΗΑΈ°ΕΝΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω. \nΗΑΈ°ΕΝΈ¦ Ό±ΕΓΗΡ ΄Ωΐ½, ΐη½ΓµµΗΟ½Κ½ΓΏΐ.";
     TEXT[ arabic ] = "αγ νΚγ ΗαΪΛζΡ Ϊαμ ΨΗΘΪΙ ήνΗΣνΙ. γδ έΦαί ΗΞΚΡ ΨΗΘΪΙ Λγ ΝΗζα γΡΙ ΓΞΡμ";
     TEXT[ turkish ] = "Standart yazύcύ bulunamadύ.\nBir yazύcύ seηip yeniden deneyin.";
 };
@@ -112,7 +112,7 @@ String STR_NOSTARTPRINTER
     TEXT[ japanese ] = "ΜίΨέΐ‚ΝσόJn‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B\nΥ°»ή°‚ΜΜίΨέΐέ’θ‚πΑª―Έ‚µ‚Δ‰Ί‚³‚ΆB";
     TEXT[ chinese_traditional ] = "µLªk±Ò°Κ¦LªνΎχ΅C\n½ΠΐΛ¬d¦LªνΎχªΊ°tΈm΅C";
     TEXT[ greek ] = "Δεν ήταν δυνατόν να τεθεί σε λειτουργία ο εκτυπωτής.\nΠαρακαλώ ελέγξτε τις ρυθμίσεις του.";
-    TEXT[ korean ] = "ΗΑΈ°ΕΝ°΅ ½ΓµΏµΗΑφ ΈψΗί½ΐ΄Ο΄Ω.\nΗΑΈ°ΕΝ±ΈΌΊΐ» °ΛΕδΗΨ ΊΈ½Κ½ΓΏΐ.";
+    TEXT[ korean ] = "ΗΑΈ°ΕΝ°΅ ½ΓΐΫµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\nΗΑΈ°ΕΝ±ΈΌΊΐ» °Λ»ηΗΟ½Κ½ΓΏΐ.";
     TEXT[ arabic ] = "ΚΪΠΡ ΚΤΫνα ΗαΨΗΘΪΙ. ΗαΡΜΗΑ έΝΥ\nΚίζνδ ΗαΨΗΘΪΙ.";
     TEXT[ turkish ] = "Yazύcύ ηalύώtύrύlamadύ.\nYazύcύ konfigόrasyonunu kontrol edin.";
     TEXT[ language_user1 ] = " ";
@@ -138,7 +138,7 @@ String STR_PRINTER_NOTAVAIL
     TEXT[ japanese ] = "Δή·­ÒέΔ‚ΝΜίΨέΐ $1—p‚Ι‘®έ’θ‚³‚κ‚ά‚µ‚½BΜίΨέΐ‚Ν‚ ‚θ‚ά‚Ή‚ρB\n•W€ΜίΨέΐ $2‚πg—p‚µ‚Δ‚ΰ‚ζ‚λ‚µ‚Ά‚Ε‚µ‚ε‚¤‚©?";
     TEXT[ chinese_traditional ] = "³o­Σ¤ε¥σ®ζ¦΅¬O±Mªω¬°¦LªνΎχ $1 ³]©wªΊ΅C\n¦ύ¬O³o­Σ¦LªνΎχ¤£¦s¦b΅C±z­n¨Ο¥Ξΐq»{¦LªνΎχ $2 ΅H";
     TEXT[ greek ] = "Το έγγραφο έχει διαμορφωποιηθεί για τον εκτυπωτή $1. Ο εκτυπωτής αυτός δεν είναι \nδιαθέσιμος. Να χρησιμοποιηθεί ο προεπιλεγμένος εκτυπωτής $2 ;";
-    TEXT[ korean ] = "ΐΜ Ή®Ό­΄Β ΗΑΈ°ΕΝ$1ΏλΐΈ·Ξ ΖχΈΛµΗΎϊ½ΐ΄Ο΄Ω. ΑφΑ¤µΘ ΗΑΈ°ΕΝ°΅ Ύψ½ΐ΄Ο΄Ω. \n±βΊ» ΗΑΈ°ΕΝ$2Έ¦ »ηΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    TEXT[ korean ] = "ΐΜ Ή®Ό­΄Β ΗΑΈ°ΕΝ$1ΏλΐΈ·Ξ ΖχΈΛµΗΎϊ½ΐ΄Ο΄Ω. ΑφΑ¤µΘ ΗΑΈ°ΕΝ°΅ Ύψ½ΐ΄Ο΄Ω. \n±βΊ» ΗΑΈ°ΕΝ$2 ΐ» (Έ¦) »ηΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     TEXT[ arabic ] = "Κγ ΚδΣνή ΗαγΣΚδΟ ααΨΗΘΪΙ $1. ΕαΗ Γδ εΠε ΗαΨΗΘΪΙ ΫνΡ γζΜζΟΙ.\nεα ΚΡνΟ ΗΣΚΞΟΗγ ΗαΨΗΘΪΙ ΗαΗέΚΡΗΦνΙ $2Ώ";
     TEXT[ turkish ] = "Belge, $1 yazύcύsύ iηin formatlandύ. Belirtilen yazύcύ bulunamadύ.\nStandart yazύcύ $2 kullanύlsύn mύ?";
     TEXT[ language_user1 ] = " ";
@@ -1255,7 +1255,7 @@ String STR_FORWARDMAIL
     Text[ polish ] = "Wiadomoζ przes³ana dalej wed³ug regu³y.\nOrygina³ wiadomoci jako za³Ήcznik.";
     Text[ portuguese_brazilian ] = "Per Regel weitergeleitete Nachricht.\nDie Originalnachricht als Anhang.";
     Text[ japanese ] = "Ω°Ω‚Ε“]‘—‚³‚κ‚½Ò―Ύ°ΌήB\nµΨΌήΕΩ‚ΜÒ―Ύ°Όή‚Ν“Y•t‚Ζ‚µ‚ΔB";
-    Text[ korean ] = "±ΤΔΆΏ΅ ΐΗΗΨ ΐό΄ήµΘ Έή½ΓΑφ. \nΏψ·΅ ΈήΌΌΑφ΄Β Γ·ΊΞ·Ξ.";
+    Text[ korean ] = "±ΤΔΆΏ΅ ΐΗΗΨ ΐό΄ήµΘ Έή½ΓΑφ. \nΏψ·΅ Έή½ΓΑφ΄Β Γ·ΊΞ Ηό½ΔΐΈ·Ξ.";
     Text[ chinese_simplified ] = "°΄³£ΉζΧªΌΔµΔµηΧΣΣΚΌώ΅£\nµηΧΣΣΚΌώΤ­ΌώΧχΞªΈ½Όώ΅£";
     Text[ chinese_traditional ] = "³zΉL³W«hΒΰ±HªΊΉq¤l¶l¥σ΅C\n·½Ήq¤l¶l¥σ·ν§@ªώ¥[΅C";
     Text[ arabic ] = "ΡΣΗαΙ Κγ ΚγΡνΡεΗ ΝΣΘ ΗαήΗΪΟΙ.\nΗαΡΣΗαΙ ΗαΓΥανΙ ίγΡέήΗΚ.";
