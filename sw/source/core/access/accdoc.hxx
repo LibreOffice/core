@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:50:53 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _ACCDOC_HXX
 #define _ACCDOC_HXX
-
 #ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
 #endif
@@ -241,8 +240,9 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
+    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
     virtual void SAL_CALL deselectAccessibleChild(
-        sal_Int32 nSelectedChildIndex )
+        sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
