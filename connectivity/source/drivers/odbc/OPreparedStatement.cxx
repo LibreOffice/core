@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 09:09:10 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -645,83 +648,15 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 
     switch (sqlType)
     {
-        case DataType::CHAR:
-            setString (parameterIndex, *(::rtl::OUString*) x.getValue());
-            break;
-
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
-            setChar (parameterIndex, sqlType, 0, *(::rtl::OUString*) x.getValue());
+            if(x.hasValue())
+                setChar (parameterIndex, sqlType, 0, *(::rtl::OUString*) x.getValue());
+            else
+                setNull(parameterIndex,sqlType);
             break;
-        case DataType::BIT:
-            setBoolean (parameterIndex,*(sal_Bool*) x.getValue());
-            break;
-
-        case DataType::TINYINT:
-            setByte (parameterIndex, *(sal_Int8*)x.getValue());
-            break;
-
-        case DataType::SMALLINT:
-            setShort (parameterIndex, *(short*)x.getValue());
-            break;
-
-        case DataType::INTEGER:
-            setInt (parameterIndex,*(sal_Int32*)x.getValue ());
-            break;
-
-        case DataType::BIGINT:
-            //  setLong (parameterIndex,((sal_Int32) x).longValue ());
-            break;
-
-        case DataType::REAL:
-        case DataType::FLOAT:
-            setFloat (parameterIndex, *(float*)x.getValue ());
-            break;
-        case DataType::DOUBLE:
-            setDouble (parameterIndex,*(double*)x.getValue ());
-            break;
-
-        case DataType::BINARY:
-            setBytes (parameterIndex, *(Sequence<sal_Int8>*)x.getValue());
-            break;
-
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            {
-                Sequence<sal_Int8> y;
-                x >>= y;
-
-                if ( y.getLength() > 2000 )
-                {
-                    //  setBinaryStream (parameterIndex, y, y.getLength());
-                }
-                else
-                {
-                    setBinary (parameterIndex, sqlType, y);
-                }
-            }
-
-            break;
-
-        case DataType::DATE:
-            setDate (parameterIndex,*(Date*) x.getValue());
-            break;
-
-        case DataType::TIME:
-            setTime (parameterIndex, *(Time*)x.getValue());
-            break;
-
-        case DataType::TIMESTAMP:
-            setTimestamp (parameterIndex,*(DateTime*)x.getValue());
-            break;
-
         default:
-            {
-                ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("Unknown SQL Type for PreparedStatement.setObject (SQL Type=");
-                aVal += ::rtl::OUString::valueOf(sqlType);
-                throw SQLException( aVal,*this,::rtl::OUString(),0,Any());
-            }
-
+            ::dbtools::setObjectWithInfo(this,parameterIndex,x,sqlType,scale);
         }
 }
 // -------------------------------------------------------------------------

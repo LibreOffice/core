@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
 #endif
 
 
@@ -449,62 +452,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    if( parameterIndex < 1)
-        throwInvalidIndexException(*this);
-    // For each known SQL Type, call the appropriate
-        // set routine
-
-    switch (sqlType)
-    {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::LONGVARCHAR:
-            (*m_aRow)[parameterIndex] = *(::rtl::OUString*) x.getValue();
-            break;
-        case DataType::BIT:
-            (*m_aRow)[parameterIndex] = *(sal_Bool*) x.getValue();
-            break;
-
-        case DataType::TINYINT:
-        case DataType::SMALLINT:
-        case DataType::INTEGER:
-            (*m_aRow)[parameterIndex] = *(sal_Int32*)x.getValue();
-            break;
-
-        case DataType::BIGINT:
-        case DataType::REAL:
-        case DataType::FLOAT:
-        case DataType::DOUBLE:
-            (*m_aRow)[parameterIndex] = *(double*)x.getValue();
-            break;
-
-        case DataType::BINARY:
-            break;
-
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            break;
-
-        case DataType::DATE:
-            (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(*(Date*) x.getValue());
-            break;
-
-        case DataType::TIME:
-            (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(*(Time*)x.getValue());
-            break;
-
-        case DataType::TIMESTAMP:
-            (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(*(DateTime*)x.getValue());
-            break;
-
-        default:
-            {
-                ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("Unknown SQL Type for PreparedStatement.setObject (SQL Type=");
-                aVal += ::rtl::OUString::valueOf(sqlType);
-                throw SQLException( aVal,*this,::rtl::OUString(),0,Any());
-            }
-
-        }
+    ::dbtools::setObjectWithInfo(this,parameterIndex,x,sqlType,scale);
 }
 // -------------------------------------------------------------------------
 

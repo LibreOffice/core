@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 14:49:05 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2339,9 +2339,9 @@ void OResultSet::GetAssignValues()
             {
                 pRow_Value_Const = pRow_Value_Const->getChild(1); // row_value_const_list
                 OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
-                if(pRow_Value_Const->count() == 0)
+                if(SQL_ISRULE(pRow_Value_Const,parameter))
                 {
-                    if(pRow_Value_Const->count() == (aColumnNameList.size()-1))
+                    if(pRow_Value_Const->count() == aColumnNameList.size())
                         ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // kann nur ein Columnname vorhanden sein pro Schleife
                     else
                     {
