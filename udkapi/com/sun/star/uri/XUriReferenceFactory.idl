@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUriReferenceFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 18:19:58 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ module com { module sun { module star { module uri {
 
    <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
    description of URI references and related terms.</p>
+
+   @since #i19971#
  */
 interface XUriReferenceFactory: com::sun::star::uno::XInterface {
     /**

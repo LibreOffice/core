@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XVndSunStarScriptUrl.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 18:20:34 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ module com { module sun { module star { module uri {
    byte sequence.  Keys are compared for equality character-by-character,
    without considering case folding or normalization.  There may be multiple
    parameters with equal keys.</p>
+
+   @since #i19971#
  */
 interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
     /**
