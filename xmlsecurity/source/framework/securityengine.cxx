@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityengine.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ SecurityEngine::SecurityEngine( const cssu::Reference< cssl::XMultiServiceFactor
      m_nNumOfResolvedReferences(0),
      m_bMissionDone(false),
      m_nSecurityId(-1),
-     m_bOperationSucceed(false)
+     m_nStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN)
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decryptorimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,10 +156,7 @@ void DecryptorImpl::notifyResultListener() const
     cssu::Reference< cssxc::sax::XDecryptionResultListener >
         xDecryptionResultListener ( m_xResultListener , cssu::UNO_QUERY ) ;
 
-    xDecryptionResultListener->decrypted(
-        m_nSecurityId,
-        m_bOperationSucceed?(cssxc::sax::DecryptionResult_DECRYPTIONSUCCEED):
-                         (cssxc::sax::DecryptionResult_DECRYPTIONFAIL));
+    xDecryptionResultListener->decrypted(m_nSecurityId,m_nStatus);
 }
 
 void DecryptorImpl::startEngine( const cssu::Reference<
@@ -193,20 +190,22 @@ void DecryptorImpl::startEngine( const cssu::Reference<
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    cssu::Reference< cssxw::XXMLElementWrapper > xDecryptedElement;
+    cssu::Reference< cssxc::XXMLEncryptionTemplate > xResultTemplate;
     try
     {
-        xDecryptedElement = m_xXMLEncryption->decrypt(xEncryptionTemplate, m_xXMLSecurityContext);
+        xResultTemplate = m_xXMLEncryption->decrypt(xEncryptionTemplate, m_xXMLSecurityContext);
+        m_nStatus = xResultTemplate->getStatus();
     }
     catch( cssu::Exception& )
     {
-        xDecryptedElement = NULL;
+        m_nStatus = cssxc::SecurityOperationStatus_RUNTIMEERROR_FAILED;
     }
 
-    if (xDecryptedElement.is())
+    if (m_nStatus == cssxc::SecurityOperationStatus_OPERATION_SUCCEEDED)
     {
+        cssu::Reference< cssxw::XXMLElementWrapper > xDecryptedElement
+            = xResultTemplate->getTemplate();
         m_xSAXEventKeeper->setElement(m_nIdOfTemplateEC, xDecryptedElement);
-        m_bOperationSucceed = true;
     }
 }
 

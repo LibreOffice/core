@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityengine.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,9 +160,10 @@ protected:
     sal_Int32 m_nSecurityId;
 
     /*
-     * the result of the operation
+     * the status of the operation
      */
-    bool      m_bOperationSucceed;
+    //bool      m_bOperationSucceed;
+    com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
     /*
      * the result listener, which will receives the security operation result.

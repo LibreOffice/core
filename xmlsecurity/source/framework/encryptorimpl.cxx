@@ -2,9 +2,9 @@
  *
  *  $RCSfile: encryptorimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,7 @@ void EncryptorImpl::notifyResultListener() const
     cssu::Reference< cssxc::sax::XEncryptionResultListener >
         xEncryptionResultListener ( m_xResultListener , cssu::UNO_QUERY ) ;
 
-    xEncryptionResultListener->encrypted(
-        m_nSecurityId,
-        m_bOperationSucceed?(cssxc::sax::EncryptionResult_ENCRYPTIONSUCCEED):
-                         (cssxc::sax::EncryptionResult_ENCRYPTIONFAIL));
+    xEncryptionResultListener->encrypted( m_nSecurityId, m_nStatus );
 }
 
 void EncryptorImpl::startEngine( const cssu::Reference<
@@ -213,21 +210,19 @@ void EncryptorImpl::startEngine( const cssu::Reference<
     {
         xResultTemplate = m_xXMLEncryption->encrypt(
             xEncryptionTemplate, m_xXMLSecurityContext);
+        m_nStatus = xResultTemplate->getStatus();
     }
     catch( cssu::Exception& )
     {
-        xResultTemplate = NULL;
+        m_nStatus = cssxc::SecurityOperationStatus_RUNTIMEERROR_FAILED;
     }
 
-    if (xResultTemplate.is())
+    if (m_nStatus == cssxc::SecurityOperationStatus_OPERATION_SUCCEEDED)
     {
         cssu::Reference < cssxw::XXMLElementWrapper > xResultEncryption
             = xResultTemplate->getTemplate();
         m_xSAXEventKeeper->setElement(m_nIdOfTemplateEC, xResultEncryption);
-
         m_xSAXEventKeeper->setElement(m_nReferenceId, NULL);
-
-        m_bOperationSucceed = true;
     }
 }
 
