@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:00:20 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,7 +1100,9 @@ Ww1Assoc::Ww1Assoc(Ww1Fib& rFib)
     : rFib(rFib), pBuffer(NULL), bOK(FALSE)
 {
     USHORT cb = rFib.GetFIB().cbSttbfAssocGet();
-    for (USHORT i=0;i<MaxFields;i++)
+    USHORT i;
+
+    for ( i = 0; i < MaxFields; i++ )
         pStrTbl[i] = NULL;
     if ((pBuffer = new sal_Char[cb]) != NULL
      && rFib.GetStream().Seek(rFib.GetFIB().fcSttbfAssocGet()) ==
