@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-14 12:20:00 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 16:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,10 +350,9 @@ void VCLXWindow::removePaintListener( const ::com::sun::star::uno::Reference< ::
 // ::com::sun::star::awt::XWindowPeer
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > VCLXWindow::getToolkit(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > xRef = Application::GetVCLToolkit();
-    return xRef;
+    // no guard. nothing to guard here.
+    // 82463 - 12/21/00 - fs
+    return Application::GetVCLToolkit();
 }
 
 void VCLXWindow::setPointer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >& rxPointer ) throw(::com::sun::star::uno::RuntimeException)
