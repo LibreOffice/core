@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: as $ $Date: 2002-03-22 11:37:57 $
+ *  last change: $Author: as $ $Date: 2002-03-22 11:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,13 +872,27 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         xParser->parseStrict( aURL );
     }
 
-    // special mode for plugged office: we can't guarantee synchronous functionality inside the webtop environment.
-    // So we create a system task every time!
-    // Of course for fat office it should work also.
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
-    css::uno::Reference< css::frame::XDispatchProvider > xSysTask( findFrame(sTargetFrameName,nSearchFlags), css::uno::UNO_QUERY );
-    if(xSysTask.is())
-        xDispatcher= xSysTask->queryDispatch(aURL,SPECIALTARGET_SELF,0);
+    css::uno::Reference< css::frame::XDispatchProvider > xSysTask;
+    sal_Bool bPlugin = impl_checkPlugInState();
+    // webtop mode
+    if( bPlugin )
+    {
+        // "_default" isn't allowed for webtop
+        // force using of "_blank"
+        ::rtl::OUString sTarget = sTargetFrameName;
+        if(sTarget==SPECIALTARGET_DEFAULT)
+            sTarget=SPECIALTARGET_BLANK;
+
+        // We can't guarantee synchronous functionality inside the webtop environment.
+        // We create a system task every time!
+        xSysTask = css::uno::Reference< css::frame::XDispatchProvider >( findFrame(sTarget,nSearchFlags), css::uno::UNO_QUERY );
+        if(xSysTask.is())
+            xDispatcher= xSysTask->queryDispatch(aURL,SPECIALTARGET_SELF,0);
+    }
+    // FATOffice
+    else
+        xDispatcher = queryDispatch(aURL,sTargetFrameName,nSearchFlags);
 
     if( xDispatcher.is() == sal_True )
     {
@@ -911,15 +925,24 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         {
             // We can't work without any notification!
             // Don't forget to dispose possible new created system task.
-            // But do it for "_blank" created ones only. Otherwise we can't be shure
+            // But do it for "_blank" created ones inside a webtop environment only. Otherwise we can't be shure
             // that variable xSysTask doesn't mean any found task for other target names or flags!!!
             // Case of "blubber" and CREATE flag can be detected here right and will produce ZOMBIE tasks
             // ... but nothing is perfect here ... it's a hack currently and shouldn't occure in current
             // implementation.
             LOG_WARNING("Desktop::loadComponentFromURL()", "Missing interface XNotifyingDispatch. Return NULL!")
             css::uno::Reference< css::frame::XTask > xClosable( xSysTask, css::uno::UNO_QUERY );
-            if(xClosable.is() && sTargetFrameName==SPECIALTARGET_BLANK)
+            if(
+                    bPlugin &&
+                    xClosable.is() &&
+                    (
+                        sTargetFrameName==SPECIALTARGET_BLANK ||
+                        sTargetFrameName==SPECIALTARGET_DEFAULT
+                    )
+              )
+            {
                 xClosable->close();
+            }
             return xComponent;
         }
 
