@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:50:57 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,7 @@ Resource RID_SW_ERRHDL
         TEXT [ dutch ] = "Wachtwoorden worden niet ondersteund" ;
         TEXT [ spanish ] = "Los archivos protegidos por contraseсas no se pueden abrir." ;
         TEXT [ english_us ] = "Password-protected files cannot be opened." ;
-        TEXT[ chinese_simplified ] = "ж— жі•ж‰“ејЂз”ЁеЇ†з ЃдїќжЉ¤зљ„ж–‡д»¶гЂ‚";
+        TEXT[ chinese_simplified ] = "ж— жі•ж‰“ејЂжњ‰еЇ†з ЃдїќжЉ¤зљ„ж–‡д»¶";
         TEXT[ russian ] = "Не поддерживаются файлы, защищенные паролями";
         TEXT[ polish ] = "Pliki zabezpieczone hasіami nie s№ obsіugiwane";
         TEXT[ japanese ] = "гѓ‘г‚№гѓЇгѓјгѓ‰дїќи­·гЃ•г‚ЊгЃ¦гЃ„г‚‹гѓ•г‚Ўг‚¤гѓ«гЃЇй–‹гЃ‘гЃѕгЃ›г‚“гЂ‚";
@@ -476,7 +476,7 @@ Resource RID_SW_ERRHDL
         TEXT [ dutch ] = "Dit bestand is met de WinWord-optie \"Snel opslaan\" opgeslagen. Schakel a.u.b. in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
         TEXT [ spanish ] = "Este archivo ha sido guardado con la opciуn de WinWord 'guardar rбpidamente' . Por favor desactive en WinWord la opciуn 'permitir guardar rбpidamente' y guarde el archivo de nuevo en WinWord." ;
         TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
-        TEXT[ chinese_simplified ] = "иї™дёЄж–‡д»¶е­з›й‡‡з”Ёзљ„жЇ WinWord йЂ‰йЎ№ 'еї«йЂџдїќе­'ж–№ејЏгЂ‚иЇ·е…ій—­иї™дёЄйЂ‰йЎ№пјЊз„¶еђЋе†Ќй‡Ќж–°е­з›иї™дёЄж–‡д»¶гЂ‚";
+        TEXT[ chinese_simplified ] = "иї™дёЄж–‡д»¶йЂљиї‡ WinWord вЂеї«йЂџдїќе­вЂ™ж–№ејЏдїќе­зљ„гЂ‚иЇ·еЏ–ж¶€ WinWord йЂ‰йЎ№вЂње…Ѓи®ёеї«йЂџдїќе­вЂќпјЊз„¶еђЋе†Ќдїќе­иї™дёЄж–‡д»¶гЂ‚";
         TEXT[ russian ] = "Этот файл сохранен из WinWord в режиме 'Быстрое сохранение'. Пожалуйста, отключите параметр 'Разрешить быстрое сохранение' и заново сохраните этот файл из WinWord.";
         TEXT[ polish ] = "Ten plik zostaі zapisany za pomoc№ programu WinWord z wі№czon№ opcj№ 'Szybkie zapisywanie'. Wyі№cz w programie WinWord opcjк 'Szybkie zapisywanie' i ponownie zapisz plik.";
         TEXT[ japanese ] = "гЃ“гЃ®гѓ•г‚Ўг‚¤гѓ«гЃЇ WinWord г‚Єгѓ—г‚·гѓ§гѓігЃ®гЂЊй«йЂџдїќе­гЂЌгЃ§дїќе­гЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚WinWord гЃ®г‚Єгѓ—г‚·гѓ§гѓігЂЊй«йЂџдїќе­гЃ™г‚‹гЂЌг‚’г‚Єгѓ•гЃ«гЃ—гЃ¦ WinWord гЃ§гѓ•г‚Ўг‚¤гѓ«г‚’дїќе­гЃ—гЃЄгЃЉгЃ—гЃ¦гЃЏгЃ гЃ•гЃ„гЂ‚";
@@ -1454,7 +1454,7 @@ Resource RID_SW_ERRHDL
         TEXT [ dutch ] = "Dit bestand is met de WinWord optie \"Snel opslaan\" opgeslagen. Schakel a.u.b. in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
         TEXT [ spanish ] = "Este archivo ha sido guardado con la opciуn de WinWord 'guardar rбpidamente' . Por favor desactive en WinWord la opciуn 'permitir guardar rбpidamente' y guarde nuevamente el archivo con WinWord" ;
         TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
-        TEXT[ chinese_simplified ] = "иї™дёЄж–‡д»¶е­з›й‡‡з”Ёзљ„жЇ WinWord йЂ‰йЎ№ 'еї«йЂџдїќе­'ж–№ејЏгЂ‚иЇ·и®ѕе®љдёЌдЅїз”Ёиї™дёЄйЂ‰йЎ№пјЊз„¶еђЋе†Ќй‡Ќж–°е­з›иї™дёЄж–‡д»¶гЂ‚";
+        TEXT[ chinese_simplified ] = "иї™дёЄж–‡д»¶йЂљиї‡ WinWord вЂеї«йЂџдїќе­вЂ™ж–№ејЏдїќе­зљ„гЂ‚иЇ·еЏ–ж¶€ WinWord йЂ‰йЎ№вЂње…Ѓи®ёеї«йЂџдїќе­вЂќпјЊз„¶еђЋе†Ќдїќе­иї™дёЄж–‡д»¶гЂ‚";
         TEXT[ russian ] = "Этот файл сохранен из WinWord в режиме 'Быстрое сохранение'. Пожалуйста, отключите параметр 'Разрешить быстрое сохранение' и заново сохраните этот файл из WinWord.";
         TEXT[ polish ] = "Ten plik zostaі zapisany za pomoc№ programu WinWord z wі№czon№ opcj№ 'Szybkie zapisywanie'. Wyі№cz w programie WinWord opcjк 'Szybkie zapisywanie' i ponownie zapisz plik.";
         TEXT[ japanese ] = "гЃ“гЃ®гѓ•г‚Ўг‚¤гѓ«гЃЇгЂЃWinWord г‚Єгѓ—г‚·гѓ§гѓігЂЊй«йЂџдїќе­гЂЌгЃ§дїќе­гЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚WinWord г‚Єгѓ—г‚·гѓ§гѓігЂЊй«йЂџдїќе­гЂЌг‚’г‚Єгѓ•гЃ«гЃ—гЃ¦гЃ‹г‚‰гЂЃгѓ•г‚Ўг‚¤гѓ«г‚’ WinWord гЃ§дїќе­гЃ—гЃЄгЃЉгЃ—гЃ¦гЃЏгЃ гЃ•гЃ„гЂ‚";
@@ -1791,7 +1791,7 @@ Resource RID_SW_ERRHDL
         TEXT[ portuguese_brazilian ] = "Nгo foi possнvel exibir os seguintes caracteres do conjunto de caracteres selecionado: $(ARG1)";
         TEXT[ japanese ] = "д»Ґдё‹гЃ®ж–‡е­—гЃЇйЃёжЉћгЃ•г‚ЊгЃџж–‡е­—г‚»гѓѓгѓ€гЃ§гЃЇиЎЁз¤єгЃ§гЃЌгЃѕгЃ›г‚“гЃ§гЃ—гЃџ:\n$(ARG1)";
         TEXT[ korean ] = "м•„лћмќ л¬ёмћђлЉ” м„ нѓќн•њ л¬ёмћђ м§‘н•©м—ђм„њ н‘њм‹њн•  м€ м—†мЉµл‹€л‹¤:\n$(ARG1)";
-        TEXT[ chinese_simplified ] = "д»Ґдё‹зљ„е­—з¬¦ж— жі•й‡‡з”Ёиї™дёЄйЂ‰ж‹©зљ„е­—з¬¦й›†жѕз¤єпјљ\n$(ARG1)";
+        TEXT[ chinese_simplified ] = "д»Ґдё‹зљ„е­—з¬¦ж— жі•й‡‡з”ЁйЂ‰ж‹©зљ„е­—з¬¦й›†жѕз¤є:$(ARG1)";
         TEXT[ chinese_traditional ] = "з„Ўжі•жЋЎз”ЁйЂ™еЂ‹йЃёеЏ–зљ„е­—е…ѓй›†дѕ†йЎЇз¤єд»Ґдё‹зљ„е­—е…ѓпјљ\n$(ARG1)";
         TEXT[ turkish ] = "Bu karakterler, seзilen karakter kodu $(ARG1) ile gцsterilemez.";
         TEXT[ arabic ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
