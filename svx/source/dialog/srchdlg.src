@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:20:07 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ String RID_SVXSTR_SEARCH_STYLES
     Text [ finnish ] = "Sis‰llytet‰‰n tyylit" ;
     Text [ danish ] = "Inklusive typografier" ;
     Text [ french ] = "Y compris les styles" ;
-    Text [ swedish ] = "Inklusive ~mallar" ;
+    Text [ swedish ] = "Inklusive mallar" ;
     Text [ dutch ] = "Inclusief ~opmaakprofielen" ;
     Text [ spanish ] = "Incluir ~estilos" ;
     Text [ english_us ] = "Including Styles" ;
@@ -194,7 +194,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Etsitt‰v‰ merkkijono" ;
         Text [ danish ] = "S¯g efter" ;
         Text [ french ] = "Rechercher" ;
-        Text [ swedish ] = "S~ˆk efter" ;
+        Text [ swedish ] = "Sˆk efter" ;
         Text [ dutch ] = "Zoeken ~naar" ;
         Text [ spanish ] = "Buscar" ;
         Text [ english_us ] = "~Search for" ;
@@ -264,7 +264,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Korvaa kohteella" ;
         Text [ danish ] = "Erstat med" ;
         Text [ french ] = "Remplacer par" ;
-        Text [ swedish ] = "Ers‰tt me~d" ;
+        Text [ swedish ] = "Ers‰tt med" ;
         Text [ dutch ] = "Vervangen ~door" ;
         Text [ spanish ] = "Reemplazar ~por" ;
         Text [ english_us ] = "Re~place with" ;
@@ -333,7 +333,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Vain kokonaiset sanat" ;
         Text [ danish ] = "Kun hele ord" ;
         Text [ french ] = "Uniquement les mots entiers" ;
-        Text [ swedish ] = "Bara hela ~ord" ;
+        Text [ swedish ] = "Bara hela ord" ;
         Text [ dutch ] = "Alleen hele ~woorden" ;
         Text [ spanish ] = "SÛlo pa~labras completas" ;
         Text [ english_us ] = "Whole wor~ds only" ;
@@ -368,7 +368,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ finnish ] = "Sa~ma kirjainkoko";
         Text[ italian ] = "Ricerca esatta";
         Text[ danish ] = "S¯g eksakt";
-        Text[ swedish ] = "E~xakt sˆkning";
+        Text[ swedish ] = "Exakt sˆkning";
         Text[ polish ] = "Dok≥adne wyszukiwanie";
         Text[ portuguese_brazilian ] = "Igua~lar Caixa";
         Text[ japanese ] = "Â§ßÊñáÂ≠ó„Å®Â∞èÊñáÂ≠ó„ÇíÂå∫Âà•„Åô„Çã";
@@ -392,7 +392,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Taaksep‰in" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "~Vers le haut" ;
-        Text [ swedish ] = "Ba~kl‰nges" ;
+        Text [ swedish ] = "Bakl‰nges" ;
         Text [ dutch ] = "Ac~hterwaarts" ;
         Text [ spanish ] = "Retroceder" ;
         Text [ english_us ] = "Bac~kwards" ;
@@ -422,7 +422,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Vain nykyinen valinta" ;
         Text [ danish ] = "Kun det markerede" ;
         Text [ french ] = "Uniquement dans la sÈlection" ;
-        Text [ swedish ] = "Bara markeri~ng" ;
+        Text [ swedish ] = "Bara markering" ;
         Text [ dutch ] = "Alleen in sele~ctie" ;
         Text [ spanish ] = "SÛlo e~n la selecciÛn" ;
         Text [ english_us ] = "Current selection ~only" ;
@@ -452,7 +452,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~S‰‰nnˆlliset lausekkeet" ;
         Text [ danish ] = "RegulÊrt udtryk" ;
         Text [ french ] = "CaractËre ~gÈnÈrique" ;
-        Text [ swedish ] = "Regulj‰rt uttr~yck" ;
+        Text [ swedish ] = "Regulj‰rt uttryck" ;
         Text [ dutch ] = "Gangbare ~uitdrukking" ;
         Text [ spanish ] = "ExpresiÛn re~gular" ;
         Text [ english_us ] = "Regular e~xpressions" ;
@@ -482,7 +482,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Etsitt‰v‰t tyylit" ;
         Text [ danish ] = "S¯g efter typografier" ;
         Text [ french ] = "Recherche de st~yles" ;
-        Text [ swedish ] = "Sˆk efter ~formatmallar" ;
+        Text [ swedish ] = "Sˆk efter formatmallar" ;
         Text [ dutch ] = "O~pmaakprofielen" ;
         Text [ spanish ] = "Buscar ~estilos" ;
         Text [ english_us ] = "Search for St~yles" ;
@@ -511,7 +511,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "Ricerca per simili" ;
         Text [ spanish ] = "B˙squeda por se~mejanza" ;
         Text [ french ] = "Recherche de similaritÈ" ;
-        Text [ swedish ] = "~Likhetssˆkning" ;
+        Text [ swedish ] = "Likhetssˆkning" ;
         Text [ danish ] = "S¯g lignende" ;
         Text [ portuguese_brazilian ] = "~?hnlichkeitssuche" ;
         Text [ portuguese ] = "Pro~cura por semelhanÁa" ;
@@ -640,7 +640,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Kaavat" ;
         Text [ danish ] = "Formler" ;
         Text [ french ] = "F~ormules" ;
-        Text [ swedish ] = "F~ormler" ;
+        Text [ swedish ] = "Formler" ;
         Text [ dutch ] = "~Formules" ;
         Text [ spanish ] = "~FÛrmulas" ;
         Text [ english_us ] = "F~ormulas" ;
@@ -670,7 +670,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Arvot" ;
         Text [ danish ] = "VÊrdier" ;
         Text [ french ] = "V~aleurs" ;
-        Text [ swedish ] = "~V‰rden" ;
+        Text [ swedish ] = "V‰rden" ;
         Text [ dutch ] = "~Waarden" ;
         Text [ spanish ] = "~Valores" ;
         Text [ english_us ] = "~Values" ;
@@ -700,7 +700,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Huomautukset" ;
         Text [ danish ] = "Noter" ;
         Text [ french ] = "Notes" ;
-        Text [ swedish ] = "Antecknin~gar" ;
+        Text [ swedish ] = "Anteckningar" ;
         Text [ dutch ] = "Aan~tekeningen" ;
         Text [ spanish ] = "Not~as" ;
         Text [ english_us ] = "~Notes" ;
@@ -766,7 +766,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "RÊkkevis" ;
         Text [ french ] = "~Ligne par ligne" ;
-        Text [ swedish ] = "Radv~is" ;
+        Text [ swedish ] = "Radvis" ;
         Text [ dutch ] = "~Rijen" ;
         Text [ spanish ] = "Por f~ilas" ;
         Text [ english_us ] = "Ro~ws" ;
@@ -796,7 +796,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Sarakkeet" ;
         Text [ danish ] = "Kolonnevis" ;
         Text [ french ] = "Col~onne par colonne" ;
-        Text [ swedish ] = "Kol~umnvis" ;
+        Text [ swedish ] = "Kolumnvis" ;
         Text [ dutch ] = "K~olommen" ;
         Text [ spanish ] = "Por columna~s" ;
         Text [ english_us ] = "Col~umns" ;
@@ -859,7 +859,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese ] = "~Procurar em todas as folhas" ;
         Text [ english_us ] = "Search in all sheets" ;
         Text [ portuguese_brazilian ] = "~In allen Tabellen suchen" ;
-        Text [ swedish ] = "Sˆk i alla ta~beller" ;
+        Text [ swedish ] = "Sˆk i alla tabeller" ;
         Text [ danish ] = "S¯g i alle tabeller" ;
         Text [ italian ] = "~Cerca in tutte le tabelle" ;
         Text [ spanish ] = "~Buscar en todas las hojas" ;
@@ -920,7 +920,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Etsi kaikki" ;
         Text [ danish ] = "S¯g alle" ;
         Text [ french ] = "Rechercher ~tout" ;
-        Text [ swedish ] = "Sˆk ~alla" ;
+        Text [ swedish ] = "Sˆk alla" ;
         Text [ dutch ] = "~Alles zoeken" ;
         Text [ spanish ] = "Buscar ~todo" ;
         Text [ english_us ] = "Find ~All" ;
@@ -950,7 +950,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Etsi" ;
         Text [ danish ] = "S¯g" ;
         Text [ french ] = "Rechercher" ;
-        Text [ swedish ] = "~Sˆk" ;
+        Text [ swedish ] = "Sˆk" ;
         Text [ dutch ] = "~Zoeken" ;
         Text [ spanish ] = "~Buscar" ;
         Text [ english_us ] = "~Find" ;
@@ -981,7 +981,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Korvaa kaikki" ;
         Text [ danish ] = "Erstat alle" ;
         Text [ french ] = "Remplacer t~out" ;
-        Text [ swedish ] = "E~rs‰tt alla" ;
+        Text [ swedish ] = "Ers‰tt alla" ;
         Text [ dutch ] = "A~lles vervangen" ;
         Text [ spanish ] = "Reemplazar todo" ;
         Text [ english_us ] = "Replace A~ll" ;
@@ -1011,7 +1011,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Korvaa" ;
         Text [ danish ] = "Erstat" ;
         Text [ french ] = "Remplacer" ;
-        Text [ swedish ] = "~Ers‰tt" ;
+        Text [ swedish ] = "Ers‰tt" ;
         Text [ dutch ] = "~Vervangen" ;
         Text [ spanish ] = "~Reemplazar" ;
         Text [ english_us ] = "~Replace" ;
@@ -1041,7 +1041,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Sulje" ;
         Text [ danish ] = "Luk" ;
         Text [ french ] = "Fermer" ;
-        Text [ swedish ] = "S~t‰ng" ;
+        Text [ swedish ] = "St‰ng" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ spanish ] = "~Cerrar" ;
         Text [ english_us ] = "~Close" ;
@@ -1077,7 +1077,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Lis‰‰" ;
         Text [ danish ] = "Flere" ;
         Text [ french ] = "O~ptions" ;
-        Text [ swedish ] = "~Fler" ;
+        Text [ swedish ] = "Fler" ;
         Text [ dutch ] = "Over~ige" ;
         Text [ spanish ] = "~Opciones" ;
         Text [ english_us ] = "~More" ;
@@ -1110,7 +1110,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~M‰‰ritteet..." ;
         Text [ danish ] = "Attributter..." ;
         Text [ french ] = "Attri~buts..." ;
-        Text [ swedish ] = "Attri~but..." ;
+        Text [ swedish ] = "Attribut..." ;
         Text [ dutch ] = "A~ttributen..." ;
         Text [ spanish ] = "~Atributos..." ;
         Text [ english_us ] = "Attri~butes..." ;
@@ -1140,7 +1140,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Muotoile..." ;
         Text [ danish ] = "Format..." ;
         Text [ french ] = "Format..." ;
-        Text [ swedish ] = "~Format..." ;
+        Text [ swedish ] = "Format..." ;
         Text [ dutch ] = "~Opmaak..." ;
         Text [ spanish ] = "~Formato..." ;
         Text [ english_us ] = "~Format..." ;
@@ -1170,7 +1170,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Ei muotoilua" ;
         Text [ danish ] = "Intet format" ;
         Text [ french ] = "Aucun attribut" ;
-        Text [ swedish ] = "Inget for~mat" ;
+        Text [ swedish ] = "Inget format" ;
         Text [ dutch ] = "~Geen opmaak" ;
         Text [ spanish ] = "S~in formato" ;
         Text [ english_us ] = "~No Format" ;
@@ -1198,7 +1198,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "~Kaikki solut" ;
         Text [ danish ] = "Kun hele rÊkker" ;
         Text [ french ] = "Cellules entiËres" ;
-        Text [ swedish ] = "Bara hela ~celler" ;
+        Text [ swedish ] = "Bara hela celler" ;
         Text [ dutch ] = "Alleen hele c~ellen" ;
         Text [ spanish ] = "SÛlo celdas completas" ;
         Text [ english_us ] = "~Entire cells" ;
