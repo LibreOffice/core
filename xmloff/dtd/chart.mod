@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.17 2001-05-15 12:20:24 bm Exp $
+	$Id: chart.mod,v 1.18 2001-05-21 10:54:14 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -64,6 +64,8 @@
 <!ATTLIST chart:chart
 		  chart:class %chart-class; #REQUIRED
 		  chart:add-in-name %string; #IMPLIED
+		  table:cell-range-address %cell-range-address; #IMPLIED
+		  chart:table-number-list %string; #IMPLIED
 		  draw:name %string; #IMPLIED
 		  %draw-position;
 		  %draw-size;
