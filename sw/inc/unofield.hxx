@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:00:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
     String                      sParam1;    //Content / Database / NumberingSeparator
     String                      sParam2;    // -    /DataTablename
     String                      sParam3;    // -    /DataFieldName
+    String                      sParam5;    // -    /DataBaseURL
+    String                      sParam6;    // -    /DataBaseResource
     double                      fParam1;    // Value / -
     sal_Int8                    nParam1;    // ChapterNumberingLevel
     sal_Bool                    bParam1;    // IsExpression
