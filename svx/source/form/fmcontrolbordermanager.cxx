@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmcontrolbordermanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:22:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_FORM_VALIDATION_XVALIDATABLEFORMCOMPONENT_HPP_
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
+#include <com/sun/star/awt/XTextComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
+#include <com/sun/star/awt/XListBox.hpp>
 #endif
 /** === end UNO includes === **/
 
@@ -154,10 +160,35 @@ namespace svxform
     bool ControlBorderManager::canColorBorder( const Reference< XVclWindowPeer >& _rxPeer )
     {
         OSL_PRECOND( _rxPeer.is(), "ControlBorderManager::canColorBorder: invalid peer!" );
-        sal_Int16 nBorderStyle = VisualEffect::NONE;
-        OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDER ) >>= nBorderStyle );
-        return ( nBorderStyle == VisualEffect::FLAT );
-            // if you change this to also accept LOOK3D, then this would also work, but look ugly
+
+        PeerBag::const_iterator aPos = m_aColorableControls.find( _rxPeer );
+        if ( aPos != m_aColorableControls.end() )
+            return true;
+
+        aPos = m_aNonColorableControls.find( _rxPeer );
+        if ( aPos != m_aNonColorableControls.end() )
+            return false;
+
+        // this peer is not yet known
+
+        // no border coloring for controls which are not for text input
+        // #i37434# / 2004-11-19 / frank.schoenheit@sun.com
+        Reference< XTextComponent > xText( _rxPeer, UNO_QUERY );
+        Reference< XListBox > xListBox( _rxPeer, UNO_QUERY );
+        if ( xText.is() || xListBox.is() )
+        {
+            sal_Int16 nBorderStyle = VisualEffect::NONE;
+            OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDER ) >>= nBorderStyle );
+            if ( nBorderStyle == VisualEffect::FLAT )
+                // if you change this to also accept LOOK3D, then this would also work, but look ugly
+            {
+                m_aColorableControls.insert( _rxPeer );
+                return true;
+            }
+        }
+
+        m_aNonColorableControls.insert( _rxPeer );
+        return false;
     }
 
     //--------------------------------------------------------------------
