@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-16 11:23:07 $
+ *  last change: $Author: cp $ $Date: 2001-05-29 07:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ FontFallback::FontFallback () :
     rMgr.getFontList( aList, NULL );
 
     // get fontid of andale
-    ::rtl::OUString aName (RTL_CONSTASCII_USTRINGPARAM("Andale WT UI"));
+    ::rtl::OUString aName (RTL_CONSTASCII_USTRINGPARAM("Andale Sans UI"));
     ::std::list< psp::fontID >::iterator it;
     for (it = aList.begin(); it != aList.end() && mnId == -1; ++it)
     {
@@ -460,7 +460,11 @@ FontFallback::FontFallback () :
                 continue;
             if ( ! equalWeight (aInfo.m_eWeight, psp::weight::Normal) )
                 continue;
-            if ( aName.equalsIgnoreAsciiCase (aInfo.m_aFamilyName) )
+            if ( ! aName.getLength() >= aInfo.m_aFamilyName.getLength() )
+                continue;
+            if ( 0 == rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                        aName.getStr(), aName.getLength(),
+                        aInfo.m_aFamilyName.getStr(), aName.getLength()) )
                 mnId = *it;
         }
     }
