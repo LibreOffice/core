@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:11:54 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,10 +267,19 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& rBC,
 {
     // do not broadcast notifications for writer fly frames, because there
     // are no shapes that need to know about them.
+    // OD 01.07.2003 #110554# - correct condition in order not to broadcast
+    // notifications for writer fly frames.
+    // OD 01.07.2003 #110554# - do not broadcast notifications for plane
+    // <SdrObject>objects
     const SdrHint *pSdrHint = PTR_CAST( SdrHint, &rHint );
-    if( !pSdrHint ||
-        (pSdrHint->GetObject() && pSdrHint->GetObject()->IsWriterFlyFrame()) )
+    if ( !pSdrHint ||
+         ( pSdrHint->GetObject() &&
+           ( pSdrHint->GetObject()->ISA(SwFlyDrawObj) ||
+             pSdrHint->GetObject()->ISA(SwVirtFlyDrawObj) ||
+             IS_TYPE(SdrObject,pSdrHint->GetObject()) ) ) )
+    {
         return;
+    }
 
     ASSERT( mpDrawModel, "draw model listener is disposed" );
     if( !mpDrawModel )
