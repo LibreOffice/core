@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iso.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:12:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,9 +201,10 @@ ImageList RID_IMGLIST_TREEOPT_HC
         IMG_DRAW ;              \
         IMG_DRAWTEMPLATE ;      \
         IMG_NEWFROMTEMPLATE ;   \
+        IMG_DATABASE ;  \
     };                          \
     IdCount = {                 \
-        14;                     \
+        15;                     \
     };
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG
