@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:02:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,16 @@ using namespace dbaui;
 #if SUPD > 636
 using namespace ::svt;
 #endif
+
+TYPEINIT1( OCommentUndoAction,          SfxUndoAction );
+TYPEINIT1( OTableDesignUndoAct,         OCommentUndoAction );
+TYPEINIT1( OTableEditorUndoAct,         OTableDesignUndoAct );
+TYPEINIT1( OTableDesignCellUndoAct,     OTableDesignUndoAct );
+TYPEINIT1( OTableEditorTypeSelUndoAct,  OTableEditorUndoAct );
+TYPEINIT1( OTableEditorDelUndoAct,      OTableEditorUndoAct );
+TYPEINIT1( OTableEditorInsUndoAct,      OTableEditorUndoAct );
+TYPEINIT1( OTableEditorInsNewUndoAct,   OTableEditorUndoAct );
+TYPEINIT1( OPrimKeyUndoAct,             OTableEditorUndoAct );
 
 //==============================================================================
 // class OTableDesignUndoAct
