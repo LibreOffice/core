@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:48:48 $
+ *  last change: $Author: cl $ $Date: 2000-11-24 18:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1505,7 +1505,6 @@ XML_CONSTASCII_ACTION( sXML_enabled, "enabled" );
 XML_CONSTASCII_ACTION( sXML_disabled, "disabled" );
 XML_CONSTASCII_ACTION( sXML_double_sided, "double-sided" );
 XML_CONSTASCII_ACTION( sXML_normal, "normal" );
-XML_CONSTASCII_ACTION( sXML_inverse, "inverse" );
 XML_CONSTASCII_ACTION( sXML_attractive, "attractive");
 XML_CONSTASCII_ACTION( sXML_correct, "correct");
 
@@ -1521,5 +1520,5 @@ XML_CONSTASCII_ACTION( sXML_ambient_color, "ambient-color");
 XML_CONSTASCII_ACTION( sXML_lighting_mode, "lighting-mode");
 XML_CONSTASCII_ACTION( sXML_specular, "specular");
 XML_CONSTASCII_ACTION( sXML_light, "light");
-
+XML_CONSTASCII_ACTION( sXML_3DScene, "scene");
 #endif
