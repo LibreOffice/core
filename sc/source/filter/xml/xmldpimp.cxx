@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: nn $ $Date: 2001-08-15 09:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,20 @@ void ScXMLDataPilotTableContext::SetButtons()
                 pDoc->ApplyAttr( aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aAttr );
             }
         }
+    }
+}
+
+void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
+{
+    if (pDPSave)
+    {
+        //  #91045# if a dimension with that name has already been inserted,
+        //  mark the new one as duplicate
+        if ( !pDim->IsDataLayout() &&
+                pDPSave->GetExistingDimensionByName(pDim->GetName()) )
+            pDim->SetDupFlag( TRUE );
+
+        pDPSave->AddDimension(pDim);
     }
 }
 

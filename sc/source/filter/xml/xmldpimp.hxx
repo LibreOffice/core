@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: nn $ $Date: 2001-08-15 09:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ public:
     void SetFilterSourceRange(const ScRange& aValue) { aFilterSourceRange = aValue; }
     void SetFilterIsCaseSensitive(const sal_Bool bValue) { bIsCaseSensitive = bValue; }
     void SetFilterSkipDuplicates(const sal_Bool bValue) { bSkipDuplicates = bValue; }
-    void AddDimension(ScDPSaveDimension* pDim) { if (pDPSave) pDPSave->AddDimension(pDim); }
+    void AddDimension(ScDPSaveDimension* pDim);
     void SetButtons();
 };
 
