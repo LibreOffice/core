@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:27:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@ pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaCon
 
 #define PROPERTY_ID_PRIVILEGES                      50
 #define PROPERTY_ID_HAVINGCLAUSE                    51
+
+#define PROPERTY_ID_ISSIGNED                    52
 
 #endif // _CONNECTIVITY_PROPERTYIDS_HXX_
 
