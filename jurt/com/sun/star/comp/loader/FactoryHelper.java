@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FactoryHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-27 09:38:07 $
+ *  last change: $Author: kr $ $Date: 2000-11-28 14:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ import com.sun.star.uno.UnoRuntime;
  * This class has default implementations for <code>getServiceFactory</code>
  * and <code>writeRegistryServiceInfo</code>.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-09-27 09:38:07 $
+ * @version     $Revision: 1.3 $ $ $Date: 2000-11-28 14:46:09 $
  * @author      Kay Ramme
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
@@ -127,23 +127,23 @@ public class FactoryHelper {
             for(int i = 0; i < constructors.length && _parameters == null; ++i) {
                 Class parameters[] = constructors[i].getParameterTypes();
 
-                if(parameters.length == 4
+                if(parameters.length == 3
                      && parameters[0].equals(XMultiServiceFactory.class)
                      && parameters[1].equals(XRegistryKey.class)
-                     && parameters[0].equals(__objectArray)) {
+                     && parameters[2].equals(__objectArray)) {
                     _bArgs = true;
                     _parameters = new Object[]{xMultiServiceFactory, xRegistryKey, new Object[]{}};
                     _constructor = constructors[i];
                 }
-                else if(parameters.length == 3
+                else if(parameters.length == 2
                      && parameters[0].equals(XMultiServiceFactory.class)
-                        && parameters[1].equals(XRegistryKey.class)) {
+                     && parameters[1].equals(XRegistryKey.class)) {
                     _parameters = new Object[]{xMultiServiceFactory, xRegistryKey};
                     _constructor = constructors[i];
                 }
                 else if(parameters.length == 2
                      && parameters[0].equals(XMultiServiceFactory.class)
-                     && parameters[0].equals(__objectArray)) {
+                     && parameters[1].equals(__objectArray)) {
                     _bArgs = true;
                     _parameters = new Object[]{xMultiServiceFactory, new Object[]{}};
                     _constructor = constructors[i];
@@ -164,6 +164,9 @@ public class FactoryHelper {
                     _constructor = constructors[i];
                 }
             }
+
+            if(_constructor == null) // have not found a useable constructor
+                throw new com.sun.star.uno.RuntimeException(getClass().getName() + " can not find a useable constructor");
         }
 
         /**
@@ -237,7 +240,8 @@ public class FactoryHelper {
                 instance = createInstance();
 
                 XInitialization xInitialization = (XInitialization)UnoRuntime.queryInterface(XInitialization.class, instance);
-                xInitialization.initialize(args);
+                if(xInitialization != null) // check if XInitialization is supported
+                    xInitialization.initialize(args);
             }
 
             return instance;
