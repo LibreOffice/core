@@ -49,14 +49,8 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -205,14 +199,8 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -361,14 +349,8 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -517,14 +499,8 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -673,14 +649,8 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -829,14 +799,8 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -985,14 +949,8 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1141,14 +1099,8 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1297,14 +1249,8 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1453,14 +1399,8 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TARGETTYPE)"=="GUI"
-    @+-$(RM) -R $@.app
     @echo "Making: $@.app"
-    @$(MKDIRHIER) $@.app$/Contents$/MacOS
-    @$(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f)
-    @$(RM) $@
-    @echo '#\!/bin/sh' >> $@
-    @echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@
-    @chmod a+x $@
+    @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF

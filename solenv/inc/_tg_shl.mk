@@ -327,10 +327,8 @@ $(SHL1TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -676,10 +674,8 @@ $(SHL2TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -1025,10 +1021,8 @@ $(SHL3TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -1374,10 +1368,8 @@ $(SHL4TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -1723,10 +1715,8 @@ $(SHL5TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -2072,10 +2062,8 @@ $(SHL6TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -2421,10 +2409,8 @@ $(SHL7TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -2770,10 +2756,8 @@ $(SHL8TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -3119,10 +3103,8 @@ $(SHL9TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
@@ -3468,10 +3450,8 @@ $(SHL10TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"

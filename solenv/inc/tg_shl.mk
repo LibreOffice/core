@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_shl.mk  $
 #*
 #*    Ersterstellung    MH 01.09.97
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-26 03:39:24 $
-#*    $Revision: 1.7 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-26 21:41:43 $
+#*    $Revision: 1.8 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_shl.mkv  $
 #*
@@ -379,10 +379,8 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -R $@.framework
     @echo "Making: $@.framework"
-    @$(MKDIRHIER) $@.framework
-    @$(COPY) $@ $@.framework$/$(@:f)
+    @create-bundle $@
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="MACOSX"
