@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-18 13:23:27 $
+ *  last change: $Author: mib $ $Date: 2001-05-31 09:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,13 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
         aAny.setValue( &bFalse, ::getBooleanCppuType() );
         xDocStream->SetProperty( aPropName, aAny );
     }
+    else
+    {
+        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
+        sal_Bool bTrue = sal_True;
+        aAny.setValue( &bTrue, ::getBooleanCppuType() );
+        xDocStream->SetProperty( aPropName, aAny );
+    }
 
     // set buffer and create outputstream
     xDocStream->SetBufferSize( 16*1024 );
@@ -664,7 +671,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
 
 sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 {
-    sal_Bool bRet=sal_False;
+    sal_Bool bRet=sal_True;
     uno::Reference<lang::XMultiServiceFactory>
         xServiceFactory(utl::getProcessServiceFactory());
     DBG_ASSERT(xServiceFactory.is(),"got no service manager");
@@ -674,15 +681,30 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 
     if (!bFlat) //Storage (Package) of Stream
     {
+        sal_Bool bEmbedded = sal_False;
+        uno::Reference <lang::XUnoTunnel> xTunnel;
+        xTunnel = uno::Reference <lang::XUnoTunnel> (rModel,uno::UNO_QUERY);
+        SmModel *pModel = reinterpret_cast<SmModel *>
+            (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+
+        if (pModel)
+        {
+            SmDocShell *pDocShell =
+                static_cast<SmDocShell*>(pModel->GetObjectShell());
+            if( pDocShell &&
+                SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
+                bEmbedded = sal_True;
+        }
         SvStorage *pStg = rMedium.GetOutputStorage(sal_True);
-        bRet = WriteThroughComponent(
-                pStg, xModelComp, "meta.xml", xServiceFactory,
-                "com.sun.star.comp.Math.XMLMetaExporter", sal_False );
+        if( !bEmbedded )
+            bRet = WriteThroughComponent(
+                    pStg, xModelComp, "meta.xml", xServiceFactory,
+                    "com.sun.star.comp.Math.XMLMetaExporter", sal_False );
         if( bRet )
             bRet = WriteThroughComponent(
                     pStg, xModelComp, "content.xml", xServiceFactory,
                     "com.sun.star.comp.Math.XMLExporter" );
-        if( bRet )
+        if( bRet && !bEmbedded )
             bRet = WriteThroughComponent(
                     pStg, xModelComp, "settings.xml", xServiceFactory,
                     "com.sun.star.comp.Math.XMLSettingsExporter" );
