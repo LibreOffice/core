@@ -1,6 +1,5 @@
 ### 110439 ###
 sd.SdUnoOutlineView::com::sun::star::frame::XController
-
 ### i22883 ###
 sd.SdUnoPresView::com::sun::star::ui::XContextMenuInterception
 sd.SdUnoDrawView::com::sun::star::ui::XContextMenuInterception
@@ -17,24 +16,16 @@ sd.SdUnoDrawView::com::sun::star::view::XSelectionSupplier
 ### i22891 ###
 sd.SdUnoPresView::com::sun::star::presentation::PreviewView
 
-### i22893 ###
-sd.SdXImpressDocument::com::sun::star::document::XDocumentInfoSupplier
-sd.SdXImpressDocument::com::sun::star::view::XPrintJobBroadcaster
-sd.SdXImpressDocument::com::sun::star::document::XViewDataSupplier
-
 ### i22896 ###
 sd.SdXImpressDocument::com::sun::star::document::XEventBroadcaster
 
-### i26264 ###
-sd.SdXImpressDocument::com::sun::star::view::XPrintable
-
-### i36322 ###
-sd.SdUnoPresView::com::sun::star::lang::XComponent
-sd.SdUnoDrawView::com::sun::star::lang::XComponent
-
-### i36330 ###
-sd.SdUnoPresView::com::sun::star::lang::XServiceInfo
-sd.SdUnoDrawView::com::sun::star::lang::XServiceInfo
-
 ### i34994 ###
 sd.SdXPresentation::com::sun::star::presentation::Presentation
+
+### i42991 ###
+sd.SdUnoDrawView::com::sun::star::lang::XServiceInfo
+
+### runner creates faulty urls ###
+sd.SdXImpressDocument::com::sun::star::view::XPrintable
+sd.SdXImpressDocument::com::sun::star::view::XPrintJobBroadcaster
+sd.SdXImpressDocument::com::sun::star::frame::XStorable
