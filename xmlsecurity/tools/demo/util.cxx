@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:15:29 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,10 @@
 #include "util.hxx"
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/security/KeyUsage.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <xmlsecurity/biginteger.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -176,7 +178,11 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
         "Cannot create intial service manager" ) ;
 
     xContext = xLocalComponentContext ;
-    return cssu::Reference< cssl::XMultiServiceFactory >(xLocalServiceManager, cssu::UNO_QUERY) ;
+    cssu::Reference< cssl::XMultiServiceFactory > xManager = cssu::Reference< cssl::XMultiServiceFactory >(xLocalServiceManager, cssu::UNO_QUERY) ;
+
+    ::comphelper::setProcessServiceFactory( xManager );
+
+    return xManager;
 }
 
 ::rtl::OUString getSignatureInformation(
@@ -352,7 +358,45 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
                     result += rtl::OUString::createFromAscii( "\n  <<\n" );
         }
 
-            result += rtl::OUString::createFromAscii( "\n" );
+                   result += rtl::OUString::createFromAscii( "\n    Key Usage : " );
+                   sal_Int32 usage = xCert->getCertificateUsage();
+
+                   if (usage & ::com::sun::star::security::KeyUsage::DIGITAL_SIGNATURE)
+                   {
+                       result += rtl::OUString::createFromAscii( "DIGITAL_SIGNATURE " );
+                   }
+
+                   if (usage & ::com::sun::star::security::KeyUsage::NON_REPUDIATION)
+                   {
+                       result += rtl::OUString::createFromAscii( "NON_REPUDIATION " );
+                   }
+
+                   if (usage & ::com::sun::star::security::KeyUsage::KEY_ENCIPHERMENT)
+                   {
+                       result += rtl::OUString::createFromAscii( "KEY_ENCIPHERMENT " );
+                   }
+
+                   if (usage & ::com::sun::star::security::KeyUsage::DATA_ENCIPHERMENT)
+                   {
+                       result += rtl::OUString::createFromAscii( "DATA_ENCIPHERMENT " );
+                   }
+
+                   if (usage & ::com::sun::star::security::KeyUsage::KEY_AGREEMENT)
+                   {
+                       result += rtl::OUString::createFromAscii( "KEY_AGREEMENT " );
+                   }
+
+                   if (usage & ::com::sun::star::security::KeyUsage::KEY_CERT_SIGN)
+                   {
+                       result += rtl::OUString::createFromAscii( "KEY_CERT_SIGN " );
+                   }
+
+                   if (usage & ::com::sun::star::security::KeyUsage::CRL_SIGN)
+                   {
+                       result += rtl::OUString::createFromAscii( "CRL_SIGN " );
+                   }
+
+                   result += rtl::OUString::createFromAscii( "\n" );
         }
 
     result += rtl::OUString::createFromAscii( "\n" );
