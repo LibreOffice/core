@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:23:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,11 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
 
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
+    static char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID = NULL;
+    if ( !mID  )
+        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
@@ -176,9 +178,11 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
 
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
+    static char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID = NULL;
+    if ( !mID  )
+        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
     t.pEnv->DeleteLocalRef((jstring)args[0].l);
     saveRef( t.pEnv, tempObj );
@@ -241,9 +245,11 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
 
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
+    static char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID = NULL;
+    if ( !mID  )
+        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
 
     saveRef( t.pEnv, tempObj );
@@ -258,10 +264,12 @@ sal_Int32 java_sql_Timestamp::getNanos()
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getNanos";
+        static char * cSignature = "()I";
+        static char * cMethodName = "getNanos";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
         } //mID
@@ -273,16 +281,15 @@ void java_sql_Timestamp::setNanos( sal_Int32 _par0 )
 {
     SDBThreadAttach t;
     if( t.pEnv ){
-    jvalue args[1];
-        // Parameter konvertieren
-        args[0].i = (sal_Int32)_par0;
         // temporaere Variable initialisieren
-        char * cSignature = "(I)V";
-        char * cMethodName = "setNanos";
+        static char * cSignature = "(I)V";
+        static char * cMethodName = "setNanos";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
-            t.pEnv->CallVoidMethod( object, mID, args[0].i );
+            t.pEnv->CallVoidMethod( object, mID, _par0 );
             // und aufraeumen
         } //mID
     } //t.pEnv
