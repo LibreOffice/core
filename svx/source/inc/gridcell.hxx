@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:38:19 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 16:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,13 +553,13 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL getContext() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException){}
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > SAL_CALL getPeer() {return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > ();}
-    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) {return sal_False;}
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > SAL_CALL getView() {return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > ();}
-    virtual void SAL_CALL setDesignMode(sal_Bool bOn) {}
-    virtual sal_Bool SAL_CALL isDesignMode() {return sal_False;}
-    virtual sal_Bool SAL_CALL isTransparent() {return sal_False;}
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException) {return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > ();}
+    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw (::com::sun::star::uno::RuntimeException) {return sal_False;}
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > SAL_CALL getView() throw (::com::sun::star::uno::RuntimeException) {return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > ();}
+    virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw (::com::sun::star::uno::RuntimeException) {}
+    virtual sal_Bool SAL_CALL isDesignMode() throw (::com::sun::star::uno::RuntimeException) {return sal_False;}
+    virtual sal_Bool SAL_CALL isTransparent() throw (::com::sun::star::uno::RuntimeException) {return sal_False;}
 
 // ::com::sun::star::form::XBoundControl
     virtual sal_Bool SAL_CALL getLock() throw(::com::sun::star::uno::RuntimeException);
