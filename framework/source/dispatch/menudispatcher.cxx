@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:00:26 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 #include <dispatch/menudispatcher.hxx>
 #endif
 
-#ifndef __FRAMEWORK_CLASSES_ARGUMENTANALYZER_HXX_
-#include <classes/argumentanalyzer.hxx>
-#endif
-
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
 #endif
@@ -109,10 +105,6 @@
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
-#include <com/sun/star/mozilla/XPluginInstance.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
@@ -161,7 +153,6 @@ using namespace ::com::sun::star::beans         ;
 using namespace ::com::sun::star::container     ;
 using namespace ::com::sun::star::frame         ;
 using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::mozilla       ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::com::sun::star::util          ;
 using namespace ::cppu                          ;
