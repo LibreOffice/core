@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 12:40:27 $
+ *  last change: $Author: dl $ $Date: 2001-06-21 09:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _IDETEMP_HXX //autogen
-#include <basctl/idetemp.hxx>
-#endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -220,15 +217,6 @@ void __EXPORT SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem(SID_CONVERT_TO_24BIT);
             }
 
-            if(nInv == SdrInventor && nId == OBJ_OLE2)
-            {
-                if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT)
-                {
-                    SfxAllEnumItem aItem(SID_OBJECT_SELECT, SVX_SNAP_SELECT);
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT,
-                            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
-                }
-            }
             if( nInv == SdrInventor &&
                (nId == OBJ_LINE ||
                 nId == OBJ_PLIN ||
