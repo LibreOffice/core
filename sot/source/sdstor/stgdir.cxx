@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgdir.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:47:56 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@ BOOL StgDirEntry::SetSize( INT32 nNewSize )
                     if( pOld->Read( pBuf, nOldSize )
                      && pStgStrm->Write( pBuf, nOldSize ) )
                         bRes = TRUE;
-                    delete pBuf;
+                    delete[] pBuf;
                 }
                 else
                     bRes = TRUE;
@@ -501,7 +501,8 @@ void StgDirEntry::Copy( StgDirEntry& rDest )
     INT32 n = GetSize();
     if( rDest.SetSize( n ) && n )
     {
-        void* p = new BYTE[ 4096 ];
+        BYTE aTempBytes[ 4096 ];
+        void* p = static_cast<void*>( aTempBytes );
         Seek( 0L );
         rDest.Seek( 0L );
         while( n )
@@ -515,7 +516,6 @@ void StgDirEntry::Copy( StgDirEntry& rDest )
                 break;
             n -= nn;
         }
-        delete p;
     }
 }
 
@@ -525,7 +525,8 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
     if( rDest.SetSize( n ) && n )
     {
         ULONG nPos = rDest.Tell();
-        void* p = new BYTE[ 4096 ];
+        BYTE aTempBytes[ 4096 ];
+        void* p = static_cast<void*>( aTempBytes );
         Seek( 0L );
         rDest.Seek( 0L );
         while( n )
@@ -539,7 +540,6 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
                 break;
             n -= nn;
         }
-        delete p;
         rDest.Seek( nPos );             // ?! Seems to be undocumented !
     }
 }
@@ -648,7 +648,8 @@ BOOL StgDirEntry::Strm2Tmp()
             {
                 if( n )
                 {
-                    void* p = new BYTE[ 4096 ];
+                    BYTE aTempBytes[ 4096 ];
+                    void* p = static_cast<void*>( aTempBytes );
                     pStgStrm->Pos2Page( 0L );
                     while( n )
                     {
@@ -661,7 +662,6 @@ BOOL StgDirEntry::Strm2Tmp()
                             break;
                         n -= nn;
                     }
-                    delete p;
                     pStgStrm->Pos2Page( nPos );
                     pTmpStrm->Seek( nPos );
                 }
@@ -699,7 +699,7 @@ BOOL StgDirEntry::Tmp2Strm()
             pNewStrm = new StgDataStrm( rIo, STG_EOF, 0 );
         if( pNewStrm->SetSize( n ) )
         {
-            BYTE* p = new BYTE[ 4096 ];
+            BYTE p[ 4096 ];
             pTmpStrm->Seek( 0L );
             while( n )
             {
@@ -712,7 +712,6 @@ BOOL StgDirEntry::Tmp2Strm()
                     break;
                 n -= nn;
             }
-            delete [] p;
             if( n )
             {
                 pTmpStrm->Seek( nPos );
