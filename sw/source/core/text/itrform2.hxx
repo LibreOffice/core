@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
+ *  last change: $Author: fme $ $Date: 2001-11-02 13:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,18 +128,13 @@ class SwTxtFormatter : public SwTxtPainter
     void CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor );
 
     // determines, if a optimized repaint rectange is allowed
-    sal_Bool AllowRepaintOpt( const SwTxtFormatInfo& rInf ) const;
+    sal_Bool AllowRepaintOpt() const;
 
     // calculates and sets the optimized repaint offset
-    long CalcOptRepaint( SwTxtFormatInfo& rInf,
-                         const SvLongs* pFlyStart );
+    long CalcOptRepaint( xub_StrLen nOldLineEnd, const SvLongs* pFlyStart );
 
     // wird von FormatLine gerufen.
     void FormatReset( SwTxtFormatInfo &rInf );
-
-    // Sind wir in der ersten zu formatierenden Zeile?
-    inline sal_Bool IsFirstReformat() const
-        { return GetInfo().GetIdx() < GetInfo().GetReformatStart(); }
 
     // durch das Adjustment aendert sich die Position der Portions
     void UpdatePos( SwLineLayout *pCurr, Point aStart, xub_StrLen nStartIdx,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 13:47:02 $
+ *  last change: $Author: fme $ $Date: 2001-11-02 13:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,7 +1273,8 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
 
     // for an optimal repaint rectangle, we want to compare fly portions
     // before and after the BuildPortions call
-    const sal_Bool bOptimizeRepaint = AllowRepaintOpt( GetInfo() );
+    const sal_Bool bOptimizeRepaint = AllowRepaintOpt();
+    const xub_StrLen nOldLineEnd = nStart + pCurr->GetLen();
     SvLongs* pFlyStart = 0;
 
     // these are the conditions for a fly position comparison
@@ -1376,7 +1377,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     // calculate optimal repaint rectangle
     if ( bOptimizeRepaint )
     {
-        GetInfo().SetPaintOfst( CalcOptRepaint( GetInfo(), pFlyStart ) );
+        GetInfo().SetPaintOfst( CalcOptRepaint( nOldLineEnd, pFlyStart ) );
         if ( pFlyStart )
             delete pFlyStart;
     }
@@ -1569,11 +1570,12 @@ KSHORT SwTxtFormatter::_CalcFitToContent()
  * otherwise each line is painted from 0 (this is a copy of the beginning
  * of the former SwTxtFormatter::Recycle() function
  *************************************************************************/
-sal_Bool SwTxtFormatter::AllowRepaintOpt( const SwTxtFormatInfo& rInf ) const
+sal_Bool SwTxtFormatter::AllowRepaintOpt() const
 {
     // reformat position in front of current line? Only in this case
     // we want to set the repaint offset
-    sal_Bool bOptimizeRepaint = IsFirstReformat() && pCurr->GetLen();
+    sal_Bool bOptimizeRepaint = nStart < GetInfo().GetReformatStart() &&
+                                pCurr->GetLen();
 
     // a special case is the last line of a block adjusted paragraph:
     if ( bOptimizeRepaint )
@@ -1607,12 +1609,12 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt( const SwTxtFormatInfo& rInf ) const
     }
 
     // Schon wieder ein Sonderfall: unsichtbare SoftHyphs
-    const xub_StrLen nReformat = rInf.GetReformatStart();
+    const xub_StrLen nReformat = GetInfo().GetReformatStart();
     if( bOptimizeRepaint && STRING_LEN != nReformat )
     {
-        const xub_Unicode cCh = rInf.GetTxt().GetChar( nReformat );
+        const xub_Unicode cCh = GetInfo().GetTxt().GetChar( nReformat );
         bOptimizeRepaint = ( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
-                            || !rInf.HasHint( nReformat );
+                            || ! GetInfo().HasHint( nReformat );
     }
 
     return bOptimizeRepaint;
@@ -1623,15 +1625,15 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt( const SwTxtFormatInfo& rInf ) const
  *
  * calculates an optimal repaint offset for the current line
  *************************************************************************/
-long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
+long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
                                      const SvLongs* pFlyStart )
 {
-    if ( IsFirstReformat() )
+    if ( GetInfo().GetIdx() < GetInfo().GetReformatStart() )
     // the reformat position is behind our new line, that means
     // something of our text has moved to the next line
         return 0;
 
-    xub_StrLen nReformat = rInf.GetReformatStart();
+    xub_StrLen nReformat = Min( GetInfo().GetReformatStart(), nOldLineEnd );
 
     // in case we do not have any fly in our line, our repaint position
     // is the changed position - 1
@@ -1641,27 +1643,27 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
         // for example: the beginning of the first right tab stop
         // if this value is 0, this means that we do not have an upper
         // limit for the repaint offset
-        const long nFormatRepaint = rInf.GetPaintOfst();
+        const long nFormatRepaint = GetInfo().GetPaintOfst();
 
-        if ( nReformat <= rInf.GetLineStart() )
+        if ( nReformat <= GetInfo().GetLineStart() )
             return 0;
 
         // Weird situation: Our line used to end with a hole portion
         // and we delete some characters at the end of our line. We have
         // to take care for repainting the blanks which are not anymore
         // covered by the hole portion
-        while ( --nReformat > rInf.GetLineStart() &&
-                CH_BLANK == rInf.GetChar( nReformat ) )
+        while ( --nReformat > GetInfo().GetLineStart() &&
+                CH_BLANK == GetInfo().GetChar( nReformat ) )
             ;
 
-        ASSERT( nReformat < rInf.GetIdx(), "Reformat too small for me!" );
+        ASSERT( nReformat < GetInfo().GetIdx(), "Reformat too small for me!" );
         SwRect aRect;
 
         // Note: GetChareRect is not const. It definitely changes the
         // bMulti flag. We have to save and resore the old value.
-        sal_Bool bOldMulti = rInf.IsMulti();
+        sal_Bool bOldMulti = GetInfo().IsMulti();
         GetCharRect( &aRect, nReformat );
-        rInf.SetMulti( bOldMulti );
+        GetInfo().SetMulti( bOldMulti );
 
         return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :
                                 aRect.Left();
@@ -1675,7 +1677,7 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
         long nPOfst = 0;
         USHORT nCnt = 0;
         USHORT nX = 0;
-        USHORT nIdx = rInf.GetLineStart();
+        USHORT nIdx = GetInfo().GetLineStart();
         SwLinePortion* pPor = pCurr->GetFirstPortion();
 
         while ( pPor )
