@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:59:33 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ String STR_SVT_NEWDOC
     Text[ hebrew ] = "‮מסמך חדש‬";
     Text[ hindi ] = "नया लेखपत्र";
     Text[ slovak ] = "Nový dokument";
+    Text[ hungarian ] = "Új dokumentum";
+    Text[ slovenian ] = "Nov dokument";
 };
 
 Image IMG_SVT_NEWDOC
@@ -128,7 +130,7 @@ String STR_SVT_MYDOCS
     Text[ spanish ] = "Mis documentos";
     Text[ finnish ] = "Omat asiakirjat";
     Text[ italian ] = "Documenti";
-    Text[ danish ] = "Egne filer";
+    Text[ danish ] = "Dokumenter";
     Text[ swedish ] = "Mina dokument";
     Text[ polish ] = "Moje dokumenty";
     Text[ portuguese_brazilian ] = "Meus documentos";
@@ -144,6 +146,8 @@ String STR_SVT_MYDOCS
     Text[ hebrew ] = "‮המסמכים שלי‬";
     Text[ hindi ] = "My Documents";
     Text[ slovak ] = " Moje dokumenty";
+    Text[ hungarian ] = "Dokumentumok";
+    Text[ slovenian ] = "Moji dokumenti";
 };
 
 Image IMG_SVT_MYDOCS
@@ -170,7 +174,7 @@ String STR_SVT_TEMPLATES
     Text[ spanish ] = "Plantillas";
     Text[ finnish ] = "Mallit";
     Text[ italian ] = "Modelli";
-    Text[ danish ] = "Typografier";
+    Text[ danish ] = "Skabeloner";
     Text[ swedish ] = "Mallar";
     Text[ polish ] = "Szablony";
     Text[ portuguese_brazilian ] = "Modelos";
@@ -186,6 +190,8 @@ String STR_SVT_TEMPLATES
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूने";
     Text[ slovak ] = "Šablóny";
+    Text[ hungarian ] = "Sablonok";
+    Text[ slovenian ] = "Predloge";
 };
 
 Image IMG_SVT_TEMPLATES
@@ -211,7 +217,7 @@ String STR_SVT_SAMPLES
     Text[ french ] = "Exemples";
     Text[ spanish ] = "Ejemplos";
     Text[ italian ] = "Esempi";
-    Text[ danish ] = "Eksempler:";
+    Text[ danish ] = "Eksempler";
     Text[ swedish ] = "Exempel";
     Text[ polish ] = "Przyk�ady";
     Text[ portuguese_brazilian ] = "Exemplos";
@@ -228,6 +234,8 @@ String STR_SVT_SAMPLES
     Text[ hebrew ] = "‮דוגמאות‬";
     Text[ hindi ] = "नमूनें";
     Text[ slovak ] = "Príklady";
+    Text[ hungarian ] = "Minták";
+    Text[ slovenian ] = "Vzorci";
 };
 
 Image IMG_SVT_SAMPLES
@@ -279,6 +287,8 @@ ToolBox TB_SVT_FILEVIEW
             Text[ hebrew ] = "‮הקודם‬";
             Text[ hindi ] = "पीछे";
             Text[ slovak ] = "Späť";
+            Text[ hungarian ] = "Vissza";
+            Text[ slovenian ] = "Nazaj";
         };
         ToolBoxItem
         {
@@ -294,7 +304,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ french ] = "Au r�pertoire sup�rieur";
             Text[ spanish ] = "Subir un nivel";
             Text[ italian ] = "Alla cartella superiore";
-            Text[ danish ] = "Et bibliotek op";
+            Text[ danish ] = "Et niveau op";
             Text[ swedish ] = "Upp en niv�";
             Text[ polish ] = "Jeden poziom wy�ej";
             Text[ portuguese_brazilian ] = "Subir um n�vel";
@@ -311,6 +321,8 @@ ToolBox TB_SVT_FILEVIEW
             Text[ hebrew ] = "‮רמה אחת למעלה‬";
             Text[ hindi ] = "एक स्तर ऊपर";
             Text[ slovak ] = "O úroveň vyššie";
+            Text[ hungarian ] = "Egy szinttel feljebb";
+            Text[ slovenian ] = "Eno raven višje";
         };
         ToolBoxItem
         {
@@ -347,6 +359,8 @@ ToolBox TB_SVT_FILEVIEW
             Text[ hebrew ] = "‮הדפסה‬";
             Text[ hindi ] = "छपाई";
             Text[ slovak ] = "Tlač";
+            Text[ hungarian ] = "Nyomtatás";
+            Text[ slovenian ] = "Natisni";
         };
     };
 };
@@ -450,6 +464,8 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ hebrew ] = "‮תכונות קובץ‬";
             Text[ hindi ] = "Document Properties";
             Text[ slovak ] = "Vlastnosti dokumentu";
+            Text[ hungarian ] = "Dokumentum tulajdonsága";
+            Text[ slovenian ] = "Lastnosti dokumenta";
         };
         ToolBoxItem
         {
@@ -483,6 +499,8 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ hebrew ] = "‮תצוגה מקדימה‬";
             Text[ hindi ] = "पूर्वदृश्य";
             Text[ slovak ] = "Náhľad";
+            Text[ hungarian ] = "Előnézet";
+            Text[ slovenian ] = "Predogled";
         };
     };
 };
@@ -591,6 +609,8 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ hebrew ] = "‮סידור...‬";
         Text[ hindi ] = "व्यवस्था ~करो...";
         Text[ slovak ] = "Organi~zovať...";
+        Text[ hungarian ] = "~Szervező...";
+        Text[ slovenian ] = "Organi~ziraj...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
@@ -622,6 +642,8 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन";
         Text[ slovak ] = "~Upraviť";
+        Text[ hungarian ] = "~Szerkesztés";
+        Text[ slovenian ] = "~Uredi";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
@@ -654,6 +676,8 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ hebrew ] = "‮פתיחה‬";
         Text[ hindi ] = "~खोलो";
         Text[ slovak ] = "~Otvoriť";
+        Text[ hungarian ] = "~Megnyitás";
+        Text[ slovenian ] = "~Odpri";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
@@ -670,6 +694,8 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ hebrew ] = "‮תבניות ומסמכים‬";
     Text[ hindi ] = "नमूनें और लेखपत्रें";
     Text[ slovak ] = "Šablóny a dokumenty";
+    Text[ hungarian ] = "Sablonok és dokumentumok";
+    Text[ slovenian ] = "Predloge in dokumenti";
 };
 
 StringArray STRARY_SVT_DOCINFO
@@ -844,9 +870,9 @@ StringArray STRARY_SVT_DOCINFO
         < "Titel" ; DI_TITLE ; > ;
         < "Af" ; DI_FROM ; > ;
         < "Dato" ; DI_DATE ; > ;
-        < "N�gleord" ; DI_KEYWORDS ; > ;
+        < "Stikord" ; DI_KEYWORDS ; > ;
         < "Beskrivelse" ; DI_DESCRIPTION ; > ;
-        < "Indholdstype" ; DI_MIMETYPE ; > ;
+        < "Type" ; DI_MIMETYPE ; > ;
         < "�ndringsdato" ; DI_MODIFIEDDATE ; > ;
         < "�ndret af" ; DI_MODIFIEDBY ; > ;
         < "Udskriftsdato" ; DI_PRINTDATE ; > ;
@@ -1079,6 +1105,36 @@ ItemList [ czech ] =
         < "Predmet" ; DI_THEME ; > ;
         < "Veľkosť" ; DI_SIZE ; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "Cím" ; DI_TITLE ; > ;
+        < "Szerző" ; DI_FROM ; > ;
+        < "Dátum" ; DI_DATE ; > ;
+        < "Kulcsszavak" ; DI_KEYWORDS ; > ;
+        < "Leírás" ; DI_DESCRIPTION ; > ;
+        < "Típus" ; DI_MIMETYPE ; > ;
+        < "Változtatás dátuma" ; DI_MODIFIEDDATE ; > ;
+        < "Utolsó változás szerzője" ; DI_MODIFIEDBY ; > ;
+        < "Nyomtatás dátuma" ; DI_PRINTDATE ; > ;
+        < "Utoljára nyomtatta" ; DI_PRINTBY ; > ;
+        < "Tárgy" ; DI_THEME ; > ;
+        < "Méret" ; DI_SIZE ; > ;
+    };
+    ItemList [ slovenian ] =
+    {
+         < "Naslov" ; DI_TITLE ; > ;
+        < "Od" ; DI_FROM ; > ;
+        < "Datum" ; DI_DATE ; > ;
+        < "Ključne besede" ; DI_KEYWORDS ; > ;
+        < "Opis" ; DI_DESCRIPTION ; > ;
+        < "Vrsta" ; DI_MIMETYPE ; > ;
+        < "Spremenjeno dne" ; DI_MODIFIEDDATE ; > ;
+        < "Spremenil" ; DI_MODIFIEDBY ; > ;
+        < "Natisnjeno dne" ; DI_PRINTDATE ; > ;
+        < "Natisnil" ; DI_PRINTBY ; > ;
+        < "Zadeva" ; DI_THEME ; > ;
+        < "Velikost" ; DI_SIZE ; > ;
+    };
     };
 
 String STR_SVT_NEWDOC_HELP
@@ -1088,12 +1144,12 @@ String STR_SVT_NEWDOC_HELP
     Text[ portuguese ] = "Click here to create new documents.";
     Text[ russian ] = "Click here to create new documents.";
     Text[ greek ] = "Click here to create new documents.";
-    Text[ dutch ] = "Click here to create new documents.";
+    Text[ dutch ] = "Klik hier om nieuwe documenten aan te maken.";
     Text[ french ] = "Point de d�part pour la cr�ation de nouveaux documents";
     Text[ spanish ] = "Pulse aqu� para crear documentos nuevos.";
     Text[ finnish ] = "Click here to create new documents.";
     Text[ italian ] = "Cliccate il simbolo per creare nuovi documenti.";
-    Text[ danish ] = "Click here to create new documents.";
+    Text[ danish ] = "Klik her for at oprette nye dokumenter.";
     Text[ swedish ] = "Klicka h�r f�r att skapa nya dokument.";
     Text[ polish ] = "Click here to create new documents.";
     Text[ japanese ] = "ここをクリックすると、新しいドキュメントが作成できます。";
@@ -1109,6 +1165,8 @@ String STR_SVT_NEWDOC_HELP
     Text[ thai ] = "Click here to create new documents.";
     Text[ hindi ] = "Click here to create new documents.";
     Text[ slovak ] = "Kliknite tu pre vytváranie nových dokumentov.";
+    Text[ hungarian ] = "Kattintson ide új dokumentum létrehozásához.";
+    Text[ slovenian ] = "Kliknite tukaj, da ustvarite nove dokumente.";
 };
 String STR_SVT_MYDOCS_HELP
 {
@@ -1117,12 +1175,12 @@ String STR_SVT_MYDOCS_HELP
     Text[ portuguese ] = "Contains your letters, reports and other documents";
     Text[ russian ] = "Contains your letters, reports and other documents";
     Text[ greek ] = "Contains your letters, reports and other documents";
-    Text[ dutch ] = "Contains your letters, reports and other documents";
+    Text[ dutch ] = "Bevat uw brieven, rapporten en andere documenten";
     Text[ french ] = "Contient vos lettres, rapports et autres documents";
     Text[ spanish ] = "Contiene cartas, informes y otros documentos.";
     Text[ finnish ] = "Contains your letters, reports and other documents";
     Text[ italian ] = "Contiene lettere, rapporti e altri documenti.";
-    Text[ danish ] = "Contains your letters, reports and other documents";
+    Text[ danish ] = "Indeholder dine breve, rapporter og andre dokumenter";
     Text[ swedish ] = "Inneh�ller dina brev, rapporter och andra dokument";
     Text[ polish ] = "Contains your letters, reports and other documents";
     Text[ japanese ] = "レター、レポート、その他のドキュメントが含まれています";
@@ -1138,6 +1196,8 @@ String STR_SVT_MYDOCS_HELP
     Text[ thai ] = "Contains your letters, reports and other documents";
     Text[ hindi ] = "Contains your letters, reports and other documents";
     Text[ slovak ] = "Obsahuje vaše listy, správy a iné dokumenty";
+    Text[ hungarian ] = "Leveleket, jelentéseket és más dokumentumokat tartalmaz.";
+    Text[ slovenian ] = "Vsebuje vaša pisma, poročila in ostale dokumente.";
 };
 String STR_SVT_TEMPLATES_HELP
 {
@@ -1146,12 +1206,12 @@ String STR_SVT_TEMPLATES_HELP
     Text[ portuguese ] = "Contains templates for creating new documents";
     Text[ russian ] = "Contains templates for creating new documents";
     Text[ greek ] = "Contains templates for creating new documents";
-    Text[ dutch ] = "Contains templates for creating new documents";
+    Text[ dutch ] = "Bevat sjablonen voor het maken van nieuwe documenten";
     Text[ french ] = "Contient des mod�les pour la cr�ation de nouveaux documents";
     Text[ spanish ] = "Contiene plantillas para la creaci�n de documentos nuevos.";
     Text[ finnish ] = "Contains templates for creating new documents";
     Text[ italian ] = "Contiene modelli per creare nuovi documenti.";
-    Text[ danish ] = "Contains templates for creating new documents";
+    Text[ danish ] = "Indeholder skabeloner til oprettelse af nye dokumenter";
     Text[ swedish ] = "Inneh�ller mallar f�r att skapa nya dokument";
     Text[ polish ] = "Contains templates for creating new documents";
     Text[ japanese ] = "新しいドキュメントが作成できるテンプレートが含まれています";
@@ -1167,6 +1227,8 @@ String STR_SVT_TEMPLATES_HELP
     Text[ thai ] = "Contains templates for creating new documents";
     Text[ hindi ] = "Contains templates for creating new documents";
     Text[ slovak ] = "Obsahuje šablóny pre vytváranie nových dokumentov";
+    Text[ hungarian ] = "Új dokumentumok létrehozásához való sablonokat tartalmaz.";
+    Text[ slovenian ] = "Vsebuje predloge za sestavljanje novih dokumentov.";
 };
 String STR_SVT_SAMPLES_HELP
 {
@@ -1175,12 +1237,12 @@ String STR_SVT_SAMPLES_HELP
     Text[ portuguese ] = "Contains a selection of sample letters, reports and other documents";
     Text[ russian ] = "Contains a selection of sample letters, reports and other documents";
     Text[ greek ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ dutch ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ dutch ] = "Bevat een assortiment van voorbeeldbrieven, -rapporten en andere documenten";
     Text[ french ] = "Contient des exemples de document (lettres, rapports, etc.)";
     Text[ spanish ] = "Contiene ejemplos de cartas, informes y otros documentos.";
     Text[ finnish ] = "Contains a selection of sample letters, reports and other documents";
     Text[ italian ] = "Contiene una selezione di documenti di esempio per lettere, rapporti e altro.";
-    Text[ danish ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ danish ] = "Indeholder et udvalg af pr�ver p� breve, rapporter og andre dokumenter";
     Text[ swedish ] = "Inneh�ller exempeldokument f�r brev, rapporter och andra dokument";
     Text[ polish ] = "Contains a selection of sample letters, reports and other documents";
     Text[ japanese ] = "レター、レポート、その他のドキュメントに使えるサンプル文書が含まれています";
@@ -1196,7 +1258,10 @@ String STR_SVT_SAMPLES_HELP
     Text[ thai ] = "Contains a selection of sample letters, reports and other documents";
     Text[ hindi ] = "Contains a selection of sample letters, reports and other documents";
     Text[ slovak ] = "Obsahuje výber vzorových listov, správ a iných dokumetov";
+    Text[ hungarian ] = "Mintaleveleket, jelentéseket és más dokumentumokat tartalmaz.";
+    Text[ slovenian ] = "Vsebuje izbor vzorčnih pisem, poročil in ostalih dokumentov.";
 };
+
 
 
 
