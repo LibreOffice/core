@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 13:52:38 $
+#   last change: $Author: rt $ $Date: 2004-11-26 13:00:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,8 @@ SLOFILES =	\
         $(SLO)$/XMLShapeStyleContext.obj \
         $(SLO)$/ximppage.obj \
         $(SLO)$/ximpcustomshape.obj \
-        $(SLO)$/EnhancedCustomShapeToken.obj
+        $(SLO)$/EnhancedCustomShapeToken.obj \
+        $(SLO)$/XMLReplacementImageContext.obj
 
 SVXLIGHTOBJFILES =	\
         $(OBJ)$/XMLNumberStyles.obj\
