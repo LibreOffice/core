@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_codemaker_cppumaker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 10:28:51 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@
 #include "test/codemaker/cppumaker/AlignmentDerivedStruct.hpp"
 #include "test/codemaker/cppumaker/TestException1.hpp"
 #include "test/codemaker/cppumaker/TestException2.hpp"
+#include "test/codemaker/cppumaker/Constants.hpp"
 
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -254,10 +255,13 @@ public:
 
     void testExceptions();
 
+    void testConstants();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testBigStruct);
     CPPUNIT_TEST(testPolyCharStruct);
     CPPUNIT_TEST(testExceptions);
+    CPPUNIT_TEST(testConstants);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -363,6 +367,38 @@ void Test::testExceptions() {
     test::codemaker::cppumaker::TestException2 e23;
     e23 = e21;
     CPPUNIT_ASSERT_EQUAL(e21, e23);
+}
+
+void Test::testConstants() {
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MIN_INT16, test::codemaker::cppumaker::Constants::shortMin);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MAX_INT16, test::codemaker::cppumaker::Constants::shortMax);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast< sal_uInt16 >(0),
+        test::codemaker::cppumaker::Constants::unsignedShortMin);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MAX_UINT16,
+        test::codemaker::cppumaker::Constants::unsignedShortMax);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MIN_INT32, test::codemaker::cppumaker::Constants::longMin);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MAX_INT32, test::codemaker::cppumaker::Constants::longMax);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast< sal_uInt32 >(0),
+        test::codemaker::cppumaker::Constants::unsignedLongMin);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MAX_UINT32, test::codemaker::cppumaker::Constants::unsignedLongMax);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MIN_INT64, test::codemaker::cppumaker::Constants::hyperMin);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MAX_INT64, test::codemaker::cppumaker::Constants::hyperMax);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast< sal_uInt64 >(0),
+        test::codemaker::cppumaker::Constants::unsignedHyperMin);
+    CPPUNIT_ASSERT_EQUAL(
+        SAL_MAX_UINT64,
+        test::codemaker::cppumaker::Constants::unsignedHyperMax);
 }
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
