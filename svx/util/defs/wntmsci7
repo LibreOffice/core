@@ -18974,3 +18974,10 @@ _real@8@40088000000000000000
 ?exportDoc@SvXMLExceptionListExport@@QAEKPBD@Z
 ?AcceptDrop@SvxHyperURLBox@@MAECABUAcceptDropEvent@@@Z
 ?ExecuteDrop@SvxHyperURLBox@@MAECABUExecuteDropEvent@@@Z
+?GetNumberFormatter@SdrModel@@QBEABVSvNumberFormatter@@XZ
+?GetLineGeometry@E3dPolygonObj@@UBEXAAVPolyPolygon3D@@@Z
+?GetLineGeometry@E3dCompoundObject@@UBEXAAVPolyPolygon3D@@@Z
+?GetLineGeometry@E3dCubeObj@@UBEXAAVPolyPolygon3D@@@Z
+?GetLineGeometry@E3dSphereObj@@UBEXAAVPolyPolygon3D@@@Z
+?GetLineGeometry@E3dExtrudeObj@@UBEXAAVPolyPolygon3D@@@Z
+?GetLineGeometry@E3dLatheObj@@UBEXAAVPolyPolygon3D@@@Z
