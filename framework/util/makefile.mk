@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: fs $ $Date: 2001-05-07 15:09:29 $
+#   last change: $Author: pb $ $Date: 2001-05-11 10:13:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,8 @@ LIB1TARGET=$(SLB)$/fweobj.lib
 LIB1OBJFILES=	$(SLO)$/menuconfiguration.obj		\
                 $(SLO)$/attributelist.obj			\
                 $(SLO)$/imageproducer.obj			\
-                $(SLO)$/menudocumenthandler.obj
+                $(SLO)$/menudocumenthandler.obj		\
+                $(SLO)$/bmkmenu.obj
 
 # --- services library ----------------------------------------------------
 
@@ -124,10 +125,9 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/resetableguard.obj			\
                 $(SLO)$/gate.obj					\
                 $(SLO)$/omenudispatcher.obj			\
-                $(SLO)$/timerhelper.obj				\
+                 $(SLO)$/timerhelper.obj				\
                 $(SLO)$/helpagentdispatcher.obj		\
-                $(SLO)$/menumanager.obj				\
-                $(SLO)$/bmkmenu.obj
+                $(SLO)$/menumanager.obj
 
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
@@ -224,6 +224,7 @@ SHL4STDLIBS=	$(VCLLIB)							\
                 $(VOSLIB)							\
                 $(SALLIB)							\
                 $(SVLIB)							\
+                $(SVLLIB)							\
                 $(TOOLSLIB)
 
 SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
