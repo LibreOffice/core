@@ -21,10 +21,13 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\point
 ..\inc\basegfx\point\b3dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b3dhompoint.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\range
+..\inc\basegfx\range\rangeexpander.hxx %_DEST%\inc%_EXT%\basegfx\range\rangeexpander.hxx
 ..\inc\basegfx\range\basicrange.hxx %_DEST%\inc%_EXT%\basegfx\range\basicrange.hxx
 ..\inc\basegfx\range\b1drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b1drange.hxx
+..\inc\basegfx\range\b2dmultirange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2dmultirange.hxx
 ..\inc\basegfx\range\b2drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drange.hxx
 ..\inc\basegfx\range\b2drectangle.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drectangle.hxx
+..\inc\basegfx\range\b2dconnectedranges.hxx %_DEST%\inc%_EXT%\basegfx\range\b2dconnectedranges.hxx
 ..\inc\basegfx\range\b3drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b3drange.hxx
 ..\inc\basegfx\range\b3dbox.hxx %_DEST%\inc%_EXT%\basegfx\range\b3dbox.hxx
 ..\inc\basegfx\range\b1irange.hxx %_DEST%\inc%_EXT%\basegfx\range\b1irange.hxx
@@ -53,8 +56,10 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\numeric
 mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 ..\inc\basegfx\polygon\b2dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygon.hxx
 ..\inc\basegfx\polygon\b2dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygon.hxx
+..\inc\basegfx\polygon\b2dpolypolygonfillrule.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygonfillrule.hxx
 ..\inc\basegfx\polygon\b2dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygontools.hxx
 ..\inc\basegfx\polygon\b2dpolypolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygontools.hxx
+..\inc\basegfx\polygon\b2dpolypolygonrasterconverter.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygonrasterconverter.hxx
 ..\inc\basegfx\polygon\b2dlinegeometry.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dlinegeometry.hxx
 ..\inc\basegfx\polygon\b3dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygon.hxx
 ..\inc\basegfx\polygon\b3dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygon.hxx
