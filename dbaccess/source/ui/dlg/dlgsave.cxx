@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 09:31:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 11:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
              ,m_aQryLabel(ResId(STR_QRY_LABEL))
              ,m_sTblLabel(ResId(STR_TBL_LABEL))
              ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
+             ,m_aExistsOverwrite(ResId(STR_OBJECT_EXISTS_ALREADY_OVERWRITE))
              ,m_aName(rDefault)
              ,m_xNames(_rxNames)
              ,m_xMetaData(_rxMetaData)
@@ -219,8 +220,8 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
         if(bError)
         {
             m_aTitle.GrabFocus();
-            String aText(m_aExists);
-            aText.SearchAndReplace(String::CreateFromAscii("'$Name: not supported by cvs2svn $'"),m_aName);
+            String aText(m_bOverWrite ? m_aExistsOverwrite : m_aExists);
+            aText.SearchAndReplace(String::CreateFromAscii("$Name: not supported by cvs2svn $"),m_aName);
             OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, m_bOverWrite ? WB_YES_NO : WB_OK, OSQLMessageBox::Query);
             if(aDlg.Execute() == RET_YES)
                 EndDialog(RET_OK);

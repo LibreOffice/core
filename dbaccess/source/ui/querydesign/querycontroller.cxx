@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 09:31:23 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 11:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,8 +367,16 @@ void OQueryController::Execute(sal_uInt16 _nId)
                     bNew = bNew || (ID_BROWSER_SAVEASDOC == _nId);
                     if(bNew)
                     {
-                        String aDefaultName = (ID_BROWSER_SAVEASDOC == _nId && !bNew) ? String(m_sName.getStr()) : String(ModuleRes(STR_QRY_TITLE));
-                        aDefaultName.SearchAndReplace(String::CreateFromAscii(" #"),String::CreateFromInt32(xQueries->getElementNames().getLength()+1));
+                        String aDefaultName;
+                        if(ID_BROWSER_SAVEASDOC == _nId && !bNew)
+                            aDefaultName = String(m_sName);
+                        else
+                        {
+                            String aName = String(ModuleRes(STR_QRY_TITLE));
+                            aName = aName.GetToken(0,' ');
+                            aDefaultName = String(::dbtools::createUniqueName(xQueries,aName));
+                        }
+
                         OSaveAsDlg aDlg(getView(),CommandType::QUERY,xQueries,m_xConnection->getMetaData(),aDefaultName,(ID_BROWSER_SAVEASDOC == _nId));
                         if(aDlg.Execute() == RET_OK)
                             m_sName = aDlg.getName();
