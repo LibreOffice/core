@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:19:15 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Πρώτη εικόνα";
         QuickHelpText[ korean ] = "First Image";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Erstes Bild";
     };
     ImageButton BTN_REVERSE
     {
@@ -157,6 +158,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Πίσω";
         QuickHelpText[ korean ] = "Backwards";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Rόckwδrts";
     };
     ImageButton BTN_STOP
     {
@@ -186,6 +188,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Διακοπή";
         QuickHelpText[ korean ] = "Stop";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Stopp";
     };
     ImageButton BTN_PLAY
     {
@@ -214,6 +217,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Αναπαραγωγή";
         QuickHelpText[ korean ] = "Play";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Abspielen";
     };
     ImageButton BTN_LAST
     {
@@ -242,6 +246,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Τελευταία εικόνα";
         QuickHelpText[ korean ] = "Last Image";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Letztes Bild";
     };
     NumericField NUM_FLD_BITMAP
     {
@@ -280,6 +285,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Αριθμός εικόνας";
         QuickHelpText[ korean ] = "Image Number";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Bildnummer";
     };
     TimeField TIME_FIELD
     {
@@ -321,6 +327,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ greek ] = "Διάρκεια";
         QuickHelpText[ korean ] = "Duration";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Anzeigedauer";
     };
     ListBox LB_LOOP_COUNT
     {
@@ -790,6 +797,7 @@ DockingWindow FLT_WIN_ANIMATION
         < " " ; > ;
         < " " ; > ;
     };
+        QuickHelpText[ turkish ] = "Anzahl der Durchlδufe";
     };
     ImageButton BTN_GET_ONE_OBJECT
     {
