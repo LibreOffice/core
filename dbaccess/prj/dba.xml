@@ -19,13 +19,27 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>com.sun.star.sdb.DataSource</supported-service>
+        <supported-service>com.sun.star.sdb.DocumentDataSource</supported-service>
         <service-dependency>com.sun.star.sdb.QueryDefinition</service-dependency>
         <service-dependency>com.sun.star.sdbc.DriverManager</service-dependency>
         <service-dependency>com.sun.star.util.NumberFormatsSupplier</service-dependency>
         <service-dependency>com.sun.star.io.ObjectInputStream</service-dependency>
         <service-dependency>com.sun.star.io.ObjectOutputStream</service-dependency>
-        <service-dependency>com.sun.star.configuration.ConfigurationProvider</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.dba.ODatabaseDocument</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.OfficeDatabaseDocument</supported-service>
+        <service-dependency>com.sun.star.sdb.Forms</service-dependency>
+        <service-dependency>com.sun.star.sdb.Reports</service-dependency>
+        <service-dependency>com.sun.star.document.OfficeDocument</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatsSupplier</service-dependency>
+        <service-dependency>com.sun.star.io.ObjectInputStream</service-dependency>
+        <service-dependency>com.sun.star.io.ObjectOutputStream</service-dependency>
     </component-description>
     <component-description>
         <author>Frank Schönheit</author>
