@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:53:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,11 +144,9 @@ class SwScriptInfo
 private:
     SvXub_StrLens aScriptChg;
     SvBytes aScriptType;
-#ifdef BIDI
     SvXub_StrLens aDirChg;
     SvBytes aDirType;
     SvXub_StrLens aKashida;
-#endif
     SvXub_StrLens aCompChg;
     SvXub_StrLens aCompLen;
     SvBytes aCompType;
@@ -178,14 +176,12 @@ public:
     inline xub_StrLen GetScriptChg( const USHORT nCnt ) const;
     inline BYTE GetScriptType( const USHORT nCnt ) const;
 
-#ifdef BIDI
     inline USHORT CountDirChg() const;
     inline xub_StrLen GetDirChg( const USHORT nCnt ) const;
     inline BYTE GetDirType( const USHORT nCnt ) const;
 
     inline USHORT CountKashida() const;
     inline xub_StrLen GetKashida( const USHORT nCnt ) const;
-#endif
 
     inline USHORT CountCompChg() const;
     inline xub_StrLen GetCompStart( const USHORT nCnt ) const;
@@ -195,7 +191,7 @@ public:
     // "high" level operations, nPos refers to string position
     xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
     BYTE ScriptType( const xub_StrLen nPos ) const;
-#ifdef BIDI
+
     // Returns the position of the next direction level change.
     // If bLevel is set, the position of the next level which is smaller
     // than the level at position nPos is returned. This is required to
@@ -203,7 +199,7 @@ public:
     xub_StrLen NextDirChg( const xub_StrLen nPos,
                            const BYTE* pLevel = 0 ) const;
     BYTE DirType( const xub_StrLen nPos ) const;
-#endif
+
     BYTE CompType( const xub_StrLen nPos ) const;
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
@@ -215,7 +211,6 @@ public:
                    const USHORT nCompress, const USHORT nFontHeight,
                    Point* pPoint = NULL ) const;
 
-#ifdef BIDI
 /** Performes a kashida justification on the kerning array
 
     @descr  Add some extra space for kashida justification to the
@@ -244,8 +239,6 @@ public:
     @return Returns if the language is an Arabic language
 */
     static BOOL IsArabicLanguage( LanguageType aLang );
-
-#endif
 
 /** Performes a thai justification on the kerning array
 
@@ -290,8 +283,6 @@ inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
     return aScriptType[ nCnt ];
 }
 
-#ifdef BIDI
-
 inline USHORT SwScriptInfo::CountDirChg() const { return aDirChg.Count(); }
 inline xub_StrLen SwScriptInfo::GetDirChg( const USHORT nCnt ) const
 {
@@ -310,8 +301,6 @@ inline xub_StrLen SwScriptInfo::GetKashida( const USHORT nCnt ) const
     ASSERT( nCnt < aKashida.Count(),"No Kashidas today!");
     return aKashida[ nCnt ];
 }
-
-#endif
 
 inline USHORT SwScriptInfo::CountCompChg() const { return aCompChg.Count(); };
 inline xub_StrLen SwScriptInfo::GetCompStart( const USHORT nCnt ) const
@@ -372,10 +361,11 @@ class SwDrawTextInfo
                             // is right in front of a hole portion or a
                             // fix margin portion.
     BOOL bSnapToGrid : 1;   // Does paragraph snap to grid?
-#ifdef BIDI
     BOOL bIgnoreFrmRTL : 1; // Paint text as if text has LTR direction, used for
                             // line numbering
-#endif
+    BOOL bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
+                                // position if screen position is inside second
+                                // have of bound rect, used for Accessibility
 
     SwDrawTextInfo();       // nicht zulaessig
 public:
@@ -425,9 +415,8 @@ public:
         bGreyWave = FALSE;
         bSpaceStop = FALSE;
         bSnapToGrid = FALSE;
-#ifdef BIDI
         bIgnoreFrmRTL = FALSE;
-#endif
+        bPosMatchesBounds = FALSE;
 
 #ifndef PRODUCT
         bOut = bText = bIdx = bLen = bWidth = bKern = bBull = bSpec =
@@ -632,6 +621,11 @@ public:
     BOOL IsIgnoreFrmRTL() const
     {
         return bIgnoreFrmRTL;
+    }
+
+    BOOL IsPosMatchesBounds() const
+    {
+        return bPosMatchesBounds;
     }
 
     void SetOut( OutputDevice &rNew )
@@ -847,12 +841,15 @@ public:
         bSnapToGrid = bNew;
     }
 
-#ifdef BIDI
     void SetIgnoreFrmRTL( BOOL bNew )
     {
         bIgnoreFrmRTL = bNew;
     }
-#endif
+
+    void SetPosMatchesBounds( BOOL bNew )
+    {
+        bPosMatchesBounds = bNew;
+    }
 
     void Shift( USHORT nDir );
 
