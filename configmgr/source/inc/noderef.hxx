@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 16:13:26 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,14 @@
 #ifndef CONFIGMGR_CONFIGNODE_HXX_
 #define CONFIGMGR_CONFIGNODE_HXX_
 
+#include "apitypes.hxx"
+#include "configexcept.hxx"
+#include "configpath.hxx"
+#include <vector>
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
-#include "apitypes.hxx"
-#include "configexcept.hxx"
-#include <vector>
 
 namespace configmgr
 {
@@ -83,7 +84,6 @@ namespace configmgr
         class AbsolutePath;
         class RelativePath;
 
-        struct NodeInfo;
         struct Attributes;
 
         class NodeChange;
@@ -97,14 +97,12 @@ namespace configmgr
         typedef com::sun::star::uno::Any        UnoAny;
     //-------------------------------------------------------------------------
 
-        struct NodeState
-        {
-            enum State { eDEFAULT, eREPLACING, eMODIFYING, eREMOVING, eUNCHANGED = -1 };
-        };
-    //-------------------------------------------------------------------------
+        class NodeRef;
+        class ValueRef;
+        class AnyNodeRef;
+        class ElementRef;
 
         class NodeID;
-        class NodeRef;
         class Tree;
 
         class Node;
@@ -115,17 +113,19 @@ namespace configmgr
         const TreeDepth C_TreeDepthAll = ~0u;
     //-------------------------------------------------------------------------
 
-        /// interface for a class that can be used to do some operation on a set of <type>NodeRef</type>s.
+        /// interface for a class that can be used to do some operation on a set of <type>NodeRef</type>s and <type>ValueRef</type>s.
         struct NodeVisitor
         {
             /// returned from <method>handle</method> to indicate whether the operation is complete or should continue
             enum Result { DONE, CONTINUE };
             /// do the operation on <var>aNode</var>. needs to be implemented by concrete visitor classes
-            virtual Result handle(NodeRef const& aNode) = 0;
+            virtual Result handle(Tree const& aTree, NodeRef const& aNode) = 0;
+            /// do the operation on <var>aValue</var>. needs to be implemented by concrete visitor classes
+            virtual Result handle(Tree const& aTree, ValueRef const& aValue) = 0;
         };
     //-------------------------------------------------------------------------
 
-        /// represents a node position in some tree
+        /// represents a inner node position in some tree
         class NodeRef
         {
         public:
@@ -144,50 +144,10 @@ namespace configmgr
             /// checks, if this represents an existing node
             inline bool isValid() const;
 
-            /// checks whether this node has any child nodes (of its own).
-            bool hasChildren() const;
-
-            /// checks whether this node owns a child node named <var>aName</var>.
-            bool hasChild(Name const& aName) const;
-
-            /** gets the owned child node named <var>aName</var> of this node.
-                <p>Also sets <var>aTree<var/> to point to the tree containing that node.</p>
-                <p>PRE: <code>hasChild(aName) == true</code></p>
-                <p>If there is no such node, may return an empty node or raise an exception (?)</p>
-
-                @throws InvalidName
-                    if <var>aName</var> is not a valid child name for this node
-            */
-            NodeRef getChild(Name const& aName, Tree& aTree) const;
-
-            /** gets the owned child node named <var>aName</var> of this node, if it is available.
-                <p>Also sets <var>aTree<var/> to point to the tree containing that node.</p>
-                <p>If there is no such node, returns an empty node.</p>
-                <p>Caution: May miss existing children unless hasChild/getChild has been called before.</p>
-
-                @throws InvalidName
-                    if <var>aName</var> is not a valid child name for this node
-            */
-            NodeRef getAvailableChild(Name const& aName, Tree& aTree) const;
-
-            /// return a <type>NodeInfo</type> showing the attributes of this
-            NodeInfo        getInfo()   const;
-
-            /// return a <type>NodeInfo</type> showing the attributes of this
-            Attributes      getAttributes() const;
-
-            /// return the local <type>Name</type> of this (or an empty name, if there isn't one)
-            Name            getName() const;
-
-            /// get the Uno <type scope='com::sun::star::uno'>Type</type> of the object represented by this node
-            UnoType         getUnoType() const;
-
-            /// dispatch this node to a Visitor
-            NodeVisitor::Result accept(NodeVisitor& aVisitor) const { return aVisitor.handle(*this); }
-
         private:
             friend class Tree;
             friend class TreeImplHelper;
+            friend class AnyNodeRef;
             NodeRef(Node*   pImpl, NodeOffset nPos, TreeDepth nDepth);
         private:
             Node*   m_pImpl;
@@ -196,7 +156,7 @@ namespace configmgr
         };
     //-------------------------------------------------------------------------
 
-        /** represents a hierarchy of config entries (identified by <type>NodeRef</type>s)
+        /** represents a hierarchy of config entries (identified by <type>NodeRef</type>s and <type>ValueRef</type>s)
 
             <p>Examples for trees include</p>
             <ulist>
@@ -225,34 +185,128 @@ namespace configmgr
             // releases the data this tree operates on
             void disposeData();
 
-            /// retrieves the number of immediately contained nodes
-            NodeOffset getContainedNodeCount() const;
+            /// retrieves the number of immediately contained (subtree) nodes
+            NodeOffset getContainedInnerNodeCount() const;
 
-            /// checks whether the node <var>aNode</var> is a valid node in this tree.
+            /// checks whether the node <var>aNode</var> is a valid inner node in this tree.
+            bool isValidNode(AnyNodeRef const& aNode) const;
+
+            /// checks whether the node <var>aNode</var> is a valid inner node in this tree.
             bool isValidNode(NodeRef const& aNode) const;
+
+            /// checks whether the node <var>aNode</var> is a valid value node in this tree.
+            bool isValidNode(ValueRef const& aNode) const;
+
+            /// checks whether the node <var>aNode</var> has any element nodes (of its own).
+            bool hasElements(NodeRef const& aNode) const;
+
+            /// checks whether the node <var>aNode</var> has a element node named <var>aName</var>.
+            bool hasElement(NodeRef const& aNode, Name const& aName) const;
+
+            /** gets the element named <var>aName</var> of node <var>aNode</var>.
+                <p>PRE: <code>hasElement(aNode,aName) == true</code></p>
+                <p>If there is no such element, may return an empty node or raise an exception (?)</p>
+
+                @throws InvalidName
+                    if <var>aName</var> is not a valid child name for this node
+            */
+            ElementRef getElement(NodeRef const& aNode, Name const& aName) const;
+
+            /** gets the element named <var>aName</var> of node <var>aNode</var>, if it is available.
+                <p>PRE: <code>hasElement(aNode,aName) == true</code></p>
+                <p>If there is no such element, may return an empty node or raise an exception (?)</p>
+                <p>Caution: May miss existing children unless hasChild/getChild has been called before.</p>
+
+                @throws InvalidName
+                    if <var>aName</var> is not a valid child name for this node
+            */
+            ElementRef getAvailableElement(NodeRef const& aNode, Name const& aName) const;
+
+            /// checks whether the node <var>aNode</var> has any child value (in this tree).
+            bool hasChildValues(NodeRef const& aNode) const;
+
+            /// checks whether the node <var>aNode</var> has any child subtrees (in this tree).
+            bool hasChildNodes(NodeRef const& aNode) const;
 
             /// checks whether the node <var>aNode</var> has any child nodes (in this tree).
             bool hasChildren(NodeRef const& aNode) const;
 
-            /// checks whether the node <var>aNode</var> have a child node (in this tree) named <var>aName</var>.
+            /// checks whether the node <var>aNode</var> has a child value (in this tree) named <var>aName</var>.
+            bool hasChildValue(NodeRef const& aNode, Name const& aName) const;
+
+            /// checks whether the node <var>aNode</var> has a child subtree (in this tree) named <var>aName</var>.
+            bool hasChildNode(NodeRef const& aNode, Name const& aName) const;
+
+            /// checks whether the node <var>aNode</var> has a child node (in this tree) named <var>aName</var>.
             bool hasChild(NodeRef const& aNode, Name const& aName) const;
 
-            /** gets the child node (in this tree) named <var>aName</var> of node <var>aNode</var>.
-                <p>PRE: <code>hasChild(aNode,aName) == true</code></p>
+            /** gets the child value (in this tree) named <var>aName</var> of node <var>aNode</var>.
+                <p>PRE: <code>hasChildValue(aNode,aName) == true</code></p>
                 <P>If there is no such node, may return an empty node or raise an exception (?)</p>
 
                 @throws InvalidName
                     if <var>aName</var> is not a valid child name for this node
             */
-            NodeRef getChild(NodeRef const& aNode, Name const& aName) const;
+            ValueRef getChildValue(NodeRef const& aNode, Name const& aName) const;
+
+            /** gets the child value (in this tree) named <var>aName</var> of node <var>aNode</var>.
+                <p>PRE: <code>hasChildNode(aNode,aName) == true</code></p>
+                <P>If there is no such node, may return an empty node or raise an exception (?)</p>
+
+                @throws InvalidName
+                    if <var>aName</var> is not a valid child name for this node
+            */
+            NodeRef getChildNode(NodeRef const& aNode, Name const& aName) const;
+
+            /** gets the child value (in this tree) named <var>aName</var> of node <var>aNode</var>.
+                <p>PRE: <code>hasChildNode(aNode,aName) == true</code></p>
+                <P>If there is no such node, may return an empty node or raise an exception (?)</p>
+
+                @throws InvalidName
+                    if <var>aName</var> is not a valid child name for this node
+            */
+            AnyNodeRef getAnyChild(NodeRef const& aNode, Name const& aName) const;
+
+            /// return the local <type>Name</type> of the root node of this tree
+            Name            getRootName() const;
+
+            /// return the local <type>Name</type> of node <var>aNode</var> in this tree
+            Name            getName(NodeRef const& aNode) const;
+
+            /// return the local <type>Name</type> of node <var>aNode</var> in this tree
+            Name            getName(AnyNodeRef const& aNode) const;
+
+            /// return the local <type>Name</type> of value <var>aValue</var> in this tree
+            Name            getName(ValueRef const& aValue) const;
+
+            /// return the <type>Attributes</type> of node <var>aNode</var> in this tree
+            Attributes      getAttributes(NodeRef const& aNode) const;
+
+            /// return the <type>Attributes</type> of node <var>aNode</var> in this tree
+            Attributes      getAttributes(AnyNodeRef const& aNode)  const;
+
+            /// return the <type>Attributes</type> of value <var>aValue</var> in this tree
+            Attributes      getAttributes(ValueRef const& aValue)   const;
+
+            /// get the Uno <type scope='com::sun::star::uno'>Type</type> of value <var>aValue</var> in this tree
+            UnoType         getUnoType(ValueRef const& aValue) const;
 
         // Parent/NodeRef context handling
         public:
             /// return the parent <type>NodeRef</type> of <var>aNode</var> (or an empty node, if it is the tree root)
-            NodeRef         getParent(NodeRef const& aNode) const;
+            NodeRef getParent(AnyNodeRef const& aNode) const;
+
+            /// return the parent <type>NodeRef</type> of <var>aNode</var> (or an empty node, if it is the tree root)
+            NodeRef getParent(NodeRef const& aNode) const;
+
+            /// return the parent <type>NodeRef</type> of <var>aValue</var> (or an empty node, if it is the tree root)
+            NodeRef getParent(ValueRef const& aValue) const;
 
             /// return the <type>Path</type> of <var>aNode</var>, relative to the tree root (or an empty path if it is empty)
             RelativePath    getLocalPath(NodeRef const& aNode) const;
+
+            /// return the <type>Path</type> of <var>aNode</var>
+            RelativePath    getLocalPath(ValueRef const& aNode) const;
 
             /// gets the root node of this tree
             NodeRef         getRootNode() const;
@@ -260,19 +314,34 @@ namespace configmgr
             /// checks whether <var>aNode</var> is the root node of this tree
             bool            isRootNode(NodeRef const& aNode) const;
 
-        // default value handling
         public:
+        // value handling
+            /** retrieves the current value for <var>aNode</var>, provided there is one and it
+                is available.
+            */
+            UnoAny      getNodeValue(ValueRef const& aNode)     const; // only works for value nodes
+
+        // default value handling
             /// ensure default values are available for nodes where they can be provided at all
             void        ensureDefaults() const;
 
             /// checks whether <var>aNode</var> assumes its default value
-            bool        isNodeDefault(NodeRef const& aNode)     const; // only works for value nodes
+            bool        isNodeDefault(ValueRef const& aNode)        const; // only works for value nodes
+
+            /// checks whether <var>aNode</var> assumes its default state
+            bool        isNodeDefault(AnyNodeRef const& aNode)      const;
 
             /** retrieves the default value for <var>aNode</var>, provided there is one and it
                 is available.
                 <p>call <method>Tree::ensureDefaults</method> first to achieve best results</p>
             */
-            UnoAny      getNodeDefault(NodeRef const& aNode)        const; // only works for value nodes
+            UnoAny      getNodeDefault(ValueRef const& aNode)       const; // only works for value nodes
+
+            /** retrieves the default value for <var>aNode</var>, provided there is one and it
+                is available.
+                <p>call <method>Tree::ensureDefaults</method> first to achieve best results</p>
+            */
+            UnoAny      getNodeDefault(AnyNodeRef const& aNode)     const;
 
         // Tree context handling
         public:
@@ -294,6 +363,9 @@ namespace configmgr
             /// applies <var>aChange</var> to <var>aNode</var> within this tree
             void integrate(NodeChange& aChange, NodeRef const& aNode, bool bLocal)  const;
 
+            /// applies <var>aChange</var> to <var>aNode</var> within this tree
+            void integrate(NodeChange& aChange, ValueRef const& aNode, bool bLocal)  const;
+
             /// applies <var>aChanges</var> to the children or descendants of <var>aNode</var> within this tree
             void integrate(NodeChanges& aChanges, NodeRef const& aNode, bool bLocal) const;
 
@@ -302,6 +374,17 @@ namespace configmgr
 
         // Visitor handling
         public:
+            /// dispatch node <var>aNode</var> to a Visitor
+            NodeVisitor::Result visit(NodeRef const& aNode, NodeVisitor& aVisitor) const
+            { return aVisitor.handle(*this,aNode); }
+
+            /// dispatch node <var>aNode</var> to a Visitor
+            NodeVisitor::Result visit(ValueRef const& aNode, NodeVisitor& aVisitor) const
+            { return aVisitor.handle(*this,aNode); }
+
+            /// dispatch node <var>aNode</var> to a Visitor
+            NodeVisitor::Result visit(AnyNodeRef const& aNode, NodeVisitor& aVisitor) const;
+
             /** lets <var>aVisitor</var> visit the child nodes of <var>aNode</var>
                 <p>The order in which nodes are visited is repeatable (but currently unspecified)</p>
                 <p> Visits nodes until NodeVisitor::DONE is returned, then returns NodeVisitor::DONE.<BR/>
@@ -310,6 +393,15 @@ namespace configmgr
                 </p>
             */
             NodeVisitor::Result dispatchToChildren(NodeRef const& aNode, NodeVisitor& aVisitor) const;
+
+            /** lets <var>aVisitor</var> visit the child nodes of <var>aNode</var>
+                <p>The order in which nodes are visited is repeatable (but currently unspecified)</p>
+                <p> Visits nodes until NodeVisitor::DONE is returned, then returns NodeVisitor::DONE.<BR/>
+                    If all visits return NodeVisitor::CONTINUE, returns NodeVisitor::CONTINUE.<BR/>
+                    If no children are present, returns NodeVisitor::CONTINUE
+                </p>
+            */
+            NodeVisitor::Result dispatchToChildren(AnyNodeRef const& aNode, NodeVisitor& aVisitor) const;
         // More NodeRef handling
         public:
             NodeRef bind(NodeOffset nNode) const;
@@ -368,24 +460,13 @@ namespace configmgr
         */
         RelativePath reduceRelativePath(OUString const& aPath, Tree const& aTree, NodeRef const& aBaseNode);
 
-        /* * reduce <var>aPath</var> to be a path relative to (<var>aTree<var/>,<var>aNode<var/>)
-
-            @returns
-                <var>aPath<var/> if it already is a relative path or the part of it relative to <var>aNode<var/>
-                if it is an absolute path that to a descendant of <var>aNode<var/>
-
-            @returns
-                an empty path, if <var>aPath<var/> is an absolute path that is not to a descendant of <var>aNode<var/>
-        RelativePath reduceRelativePath(OUString const& aPath, Tree const& aTree, NodeRef const& aBaseNode, argument::NoValidate);
-        */
-
         /** checks whether there are any immediate children of <var>aNode</var> (which is in <var>aTree</var>)
 
             @return
                 <TRUE/> if a child node exists
                 <FALSE/> otherwise
         */
-        bool hasChildNode(Tree const& aTree, NodeRef const& aNode);
+        bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode);
 
         /** checks whether there is an immediate child of <var>aNode</var> (which is in <var>aTree</var>)
             specified by <var>aName</var>
@@ -394,7 +475,7 @@ namespace configmgr
                 <TRUE/> if the child node exists
                 <FALSE/> otherwise
         */
-        bool hasChildNode(Tree const& aTree, NodeRef const& aNode, Name const& aName);
+        bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode, Name const& aName);
 
         /** tries to find the immediate child of <var>aNode</var> (which is in <var>aTree</var>)
             specified by <var>aName</var>
@@ -407,7 +488,7 @@ namespace configmgr
                 (so <var>aNode</var> and <var>aTree</var> refer to the desired node),
                 <FALSE/> otherwise
         */
-        bool findChildNode(Tree& aTree, NodeRef& aNode, Name const& aName);
+        bool findInnerChildNode(Tree& aTree, NodeRef& aNode, Name const& aName);
 
         /** tries to find the immediate child of <var>aNode</var> (which is in <var>aTree</var>)
             specified by <var>aName</var>
@@ -423,7 +504,7 @@ namespace configmgr
 
             @see NodeRef::getAvailableChild
         */
-        bool findAvailableChildNode(Tree& aTree, NodeRef& aNode, Name const& aName);
+        bool findInnerAvailableChildNode(Tree& aTree, NodeRef& aNode, Name const& aName);
 
         /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
             <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>
@@ -439,7 +520,7 @@ namespace configmgr
                 <var>aPath</var> is empty)<BR/>
                 <FALSE/> otherwise
         */
-        bool findDescendantNode(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
+        bool findInnerDescendantNode(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
 
         /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
             <p> This function follows the given path stepwise, until a requested node is miss in the tree,
@@ -458,32 +539,26 @@ namespace configmgr
                 <var>aPath</var> is empty)<BR/>
                 <FALSE/> otherwise
         */
-        bool findDescendantAvailable(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
+        bool findInnerDescendantAvailable(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
 
-        /// test whether the given node is a plain value
-        bool isSimpleValue(Tree const& aTree, NodeRef const& aNode);
+        /// test whether the given node is a structural (inner) node
+        bool isStructuralNode(Tree const& aTree, NodeRef const& aNode);
 
-        /// test whether the given node is a inner group node
+        /// test whether the given inner node is a group node
         bool isGroupNode(Tree const& aTree, NodeRef const& aNode);
 
-        /// test whether the given node is a inner set node
-        bool isSetNode(Tree const& aTree, NodeRef const& aNode);
+        /// get the value for a node that is a simple value (as tree element)
+        UnoAny getSimpleElementValue(Tree const& aTree, NodeRef const& aNode);
 
-        /** extract the value from a plain value
-            <p> PRE: <code>isSimpleValue(aTree,aNode)</code>
-            </p>
-        */
-        UnoAny getSimpleValue(Tree const& aTree, NodeRef const& aNode);
+        /// test whether the given inner node is a set node
+        bool isSetNode(Tree const& aTree, NodeRef const& aNode);
 
         ISynchronizedData* getRootLock(Tree const& aTree);
 
         typedef std::vector<NodeID>     NodeIDList;
 
         void getAllContainedNodes(Tree const& aTree, NodeIDList& aList);
-        void getAllChildrenHelper(NodeID const& aNode, NodeIDList& aList);
-        NodeID getParentHelper(NodeID const& aNode);
-        NodeID findNeighbor(NodeID const& aNode, NodeOffset nIndex);
-        NodeID findNodeFromIndex(NodeID const& aNode, NodeOffset nIndex);
+        NodeID findNodeFromIndex(Tree const& aTree, NodeOffset nIndex);
 
     //-------------------------------------------------------------------------
         inline bool NodeRef::isValid() const
@@ -492,6 +567,7 @@ namespace configmgr
             return m_pImpl != 0;
         }
 
+    //-------------------------------------------------------------------------
         inline bool operator!=(NodeID const& lhs, NodeID const& rhs)
         { return !(lhs == rhs); }
         //---------------------------------------------------------------------
