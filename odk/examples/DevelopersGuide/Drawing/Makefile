@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:23:26 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:23:34 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,32 +48,49 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=DrawingExamples
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
+SAMPLE_NAME=DrawingExamples
+SAMPLE_CLASS_OUT = $(OUT_CLASS)/$(SAMPLE_NAME)
+SAMPLE_GEN_OUT = $(OUT_MISC)/$(SAMPLE_NAME)
 
-JAVAFILES  = \
-	ChangeOrderDemo.java \
-	ControlAndSelectDemo.java \
-	CustomShowDemo.java \
-	DrawingDemo.java \
-	DrawViewDemo.java \
-	FillAndLineStyleDemo.java \
-	GluePointDemo.java \
-	GraphicExportDemo.java \
+APP1_NAME=ChangeOrderDemo
+APP1_JAR=$(SAMPLE_CLASS_OUT)/$(APP1_NAME).jar
+APP2_NAME=ControlAndSelectDemo
+APP2_JAR=$(SAMPLE_CLASS_OUT)/$(APP2_NAME).jar
+APP3_NAME=CustomShowDemo
+APP3_JAR=$(SAMPLE_CLASS_OUT)/$(APP3_NAME).jar
+APP4_NAME=DrawingDemo
+APP4_JAR=$(SAMPLE_CLASS_OUT)/$(APP4_NAME).jar
+APP5_NAME=DrawViewDemo
+APP5_JAR=$(SAMPLE_CLASS_OUT)/$(APP5_NAME).jar
+APP6_NAME=FillAndLineStyleDemo
+APP6_JAR=$(SAMPLE_CLASS_OUT)/$(APP6_NAME).jar
+APP7_NAME=GluePointDemo
+APP7_JAR=$(SAMPLE_CLASS_OUT)/$(APP7_NAME).jar
+APP8_NAME=GraphicExportDemo
+APP8_JAR=$(SAMPLE_CLASS_OUT)/$(APP8_NAME).jar
+APP9_NAME=LayerDemo
+APP9_JAR=$(SAMPLE_CLASS_OUT)/$(APP9_NAME).jar
+APP10_NAME=ObjectTransformationDemo
+APP10_JAR=$(SAMPLE_CLASS_OUT)/$(APP10_NAME).jar
+APP11_NAME=Organigram
+APP11_JAR=$(SAMPLE_CLASS_OUT)/$(APP11_NAME).jar
+APP12_NAME=PresentationDemo
+APP12_JAR=$(SAMPLE_CLASS_OUT)/$(APP12_NAME).jar
+APP13_NAME=StyleDemo
+APP13_JAR=$(SAMPLE_CLASS_OUT)/$(APP13_NAME).jar
+APP14_NAME=TextDemo
+APP14_JAR=$(SAMPLE_CLASS_OUT)/$(APP14_NAME).jar
+
+APP_JAVAFILES  = \
 	Helper.java \
-	LayerDemo.java \
-	ObjectTransformationDemo.java \
-	Organigram.java \
 	PageHelper.java \
-	PresentationDemo.java \
-	ShapeHelper.java \
-	StyleDemo.java \
-	TextDemo.java
+	ShapeHelper.java
 
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+APP_CLASSFILES = $(patsubst %.java,$(SAMPLE_CLASS_OUT)/%.class,$(APP_JAVAFILES))
+APP_CLASSNAMES = $(patsubst %.java,%.class,$(APP_JAVAFILES))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(SAMPLE_CLASS_OUT))
 
 
 # Targets
@@ -83,47 +100,82 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(CLASSFILES) : $(JAVAFILES)
+$(APP_CLASSFILES) : $(APP_JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(SAMPLE_CLASS_OUT) $(APP_JAVAFILES)
 
-DrawingExamples : $(CLASSFILES)
+$(SAMPLE_CLASS_OUT)/%.class : %.java $(APP_CLASSFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(SAMPLE_CLASS_OUT) $<
+
+$(SAMPLE_CLASS_OUT)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+$(SAMPLE_CLASS_OUT)/%.jar : $(SAMPLE_CLASS_OUT)/%.mf $(SAMPLE_CLASS_OUT)/%.class $(APP_CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_JAR) cvfm $(@F) $*.mf $*.class $(APP_CLASSNAMES)
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+$(APP1_JAR) : $(SAMPLE_CLASS_OUT)/$(APP1_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP1_NAME).class
+$(APP2_JAR) : $(SAMPLE_CLASS_OUT)/$(APP2_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP2_NAME).class
+$(APP3_JAR) : $(SAMPLE_CLASS_OUT)/$(APP3_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP3_NAME).class
+$(APP4_JAR) : $(SAMPLE_CLASS_OUT)/$(APP4_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP4_NAME).class
+$(APP5_JAR) : $(SAMPLE_CLASS_OUT)/$(APP5_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP5_NAME).class
+$(APP6_JAR) : $(SAMPLE_CLASS_OUT)/$(APP6_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP6_NAME).class
+$(APP7_JAR) : $(SAMPLE_CLASS_OUT)/$(APP7_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP7_NAME).class
+$(APP8_JAR) : $(SAMPLE_CLASS_OUT)/$(APP8_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP8_NAME).class
+$(APP9_JAR) : $(SAMPLE_CLASS_OUT)/$(APP9_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP9_NAME).class
+$(APP10_JAR) : $(SAMPLE_CLASS_OUT)/$(APP10_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP10_NAME).class
+$(APP11_JAR) : $(SAMPLE_CLASS_OUT)/$(APP11_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP11_NAME).class
+$(APP12_JAR) : $(SAMPLE_CLASS_OUT)/$(APP12_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP12_NAME).class
+$(APP13_JAR) : $(SAMPLE_CLASS_OUT)/$(APP13_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP13_NAME).class
+$(APP14_JAR) : $(SAMPLE_CLASS_OUT)/$(APP14_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP14_NAME).class
+
+DrawingExamples : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR) $(APP4_JAR) $(APP5_JAR) $(APP6_JAR) $(APP7_JAR) $(APP8_JAR) $(APP9_JAR) $(APP10_JAR) $(APP11_JAR) $(APP12_JAR) $(APP13_JAR) $(APP14_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make ChangeOrderDemo.run
-	@echo make ControlAndSelectDemo.run
-	@echo make CustomShowDemo.run
-	@echo make DrawingDemo.run
-	@echo make DrawViewDemo.run
-	@echo make FillAndLineStyleDemo.run
-	@echo make GluePointDemo.run
-	@echo make GraphicExportDemo.run
-	@echo make LayerDemo.run
-	@echo make ObjectTransformationDemo.run
-	@echo make Organigram.run
-	@echo make PresentationDemo.run
-	@echo make StyleDemo.run
-	@echo make TextDemo.run
+	@echo make $(APP1_NAME).run
+	@echo make $(APP2_NAME).run
+	@echo make $(APP3_NAME).run
+	@echo make $(APP4_NAME).run
+	@echo make $(APP5_NAME).run
+	@echo make $(APP6_NAME).run
+	@echo make $(APP7_NAME).run
+	@echo make $(APP8_NAME).run
+	@echo make $(APP9_NAME).run
+	@echo make $(APP10_NAME).run
+	@echo make $(APP11_NAME).run
+	@echo make $(APP12_NAME).run
+	@echo make $(APP13_NAME).run
+	@echo make $(APP14_NAME).run
 	@echo --------
-	@echo The DrawViewDemo and the GraphicExportDemo needs parameters. Please use the
+	@echo The $(APP5_NAME) and the $(APP8_NAME) needs parameters. Please use the
 	@echo following command to start the demo if you do not want the default parameters
 	@echo specified in the this makefile:
-	@echo --- DrawViewDemo ---
-	@echo java -classpath "$(QM)$(SDK_CLASSPATH)$(QM)" DrawViewDemo "$(QM)SourceUrl$(QM)"
-	@echo --- GraphicExportDemo ---
-	@echo java -classpath "$(QM)$(SDK_CLASSPATH)$(QM)" DrawViewDemo "$(QM)SourceUrl$(QM)" "$(QM)DestinationUrl$(QM)" "$(QM)index$(QM)"
+	@echo --- $(APP5_NAME) ---
+	@echo java -Dcom.sun.star.lib.loader.unopath="$(QM)$(OFFICE_PROGRAM_PATH)$(QM)" -jar $(APP5_NAME).jar "$(QM)SourceUrl$(QM)"
+	@echo --- $(APP8_NAME) ---
+	@echo java -Dcom.sun.star.lib.loader.unopath="$(QM)$(OFFICE_PROGRAM_PATH)$(QM)" -jar $(APP8_NAME).jar "$(QM)SourceUrl$(QM)" "$(QM)DestinationUrl$(QM)" "$(QM)index$(QM)"
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(SAMPLE_CLASS_OUT)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
-DrawViewDemo.run :
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" DrawViewDemo SimplePresentation.sxi 
+$(APP5_NAME).run: $(APP5_JAR)
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< SimplePresentation.odp
 
-GraphicExportDemo.run :
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" GraphicExportDemo SimplePresentation.sxi MyTestExport.gif 2
+$(APP8_NAME).run: $(APP8_JAR)
+	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT)/export)
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< SimplePresentation.odp "$(SAMPLE_GEN_OUT)/export/MyTestExport.gif" 2
+
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_CLASS_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
