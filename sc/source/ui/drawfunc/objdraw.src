@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:06:58 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 20:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@
                     Text[ chinese_simplified ] = "ÔÚÒ³ÃæÉÏ(~A)";\
                     Text[ russian ] = "~Ê ñòğàíèöå";\
                     Text[ polish ] = "~Na stronie";\
-                    Text[ japanese ] = "Íß°¼Ş‚Ö(~A)";\
+                    Text[ japanese ] = "Íß°¼Ş‚É(~A)";\
                     Text[ chinese_traditional ] = "¦b­¶­±¤W(~A)";\
                     Text[ arabic ] = "Úáì Çá~ÕİÍÉ";\
                     Text[ greek ] = "~Óôç óåëßäá";\
