@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ private:
 
     ::osl::Mutex                maMutex;
 
-    const ::rtl::OUString       maDefaultContainerStorageName;
+    const ::rtl::OUString       maReplacementGraphicsContainerStorageName;
+    const ::rtl::OUString       maReplacementGraphicsContainerStorageName60;
     ::rtl::OUString             maCurContainerStorageName;
 
 
@@ -126,7 +127,8 @@ private:
                                     const ::rtl::OUString& rURLStr,
                                     ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjectStorageName,
-                                    sal_Bool bInternalToExternal ) const;
+                                    sal_Bool bInternalToExternal,
+                                       sal_Bool *pGraphicRepl=0 ) const;
 
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
                                     const ::rtl::OUString& rStorageName );
