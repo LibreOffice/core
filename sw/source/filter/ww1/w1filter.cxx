@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:00:31 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -567,20 +565,11 @@ void Ww1Manager::Pop()
 
 void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, USHORT)
 {
-#if OSL_DEBUG_LEVEL > 1
-    const String & rN = GetName();
-    long nHandle = GetHandle();
-#endif
-
-    if( GetIsEnd() ){
-        rOut.SetBookEnd( GetHandle() );
+    if (GetIsEnd())
+    {
+        rOut.SetBookEnd(GetHandle());
         return;
     }
-#if 0
-    eBookStatus eB = pB->GetStatus();
-    if( ( eB & BOOK_IGNORE ) != 0 )
-        return 0;                               // Bookmark zu ignorieren
-#endif
 
     const String & rName = GetName();
     if( rName.EqualsAscii( "_Toc", 0, 4 ) ) // "_Toc*" ist ueberfluessig
@@ -590,29 +579,22 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, USHORT)
         && rName.EqualsIgnoreCaseAscii( "FORMULAR" ) )
         rOut.SetProtect();
 
-            // Fuer UEbersetzung Bookmark -> Variable setzen
+    // Fuer UEbersetzung Bookmark -> Variable setzen
     long nLen = Len();
     if( nLen > MAX_FIELDLEN )
         nLen = MAX_FIELDLEN;
-                                // Lese Inhalt des Bookmark
-                                // geht vermulich auch ueber Ww1PlainText
+
+    // Lese Inhalt des Bookmark
+    // geht vermulich auch ueber Ww1PlainText
     String aVal( rMan.GetText().GetText( Where(), nLen ) );
 
-        // in 2 Schritten, da OS/2 zu doof ist
+    // in 2 Schritten, da OS/2 zu doof ist
     SwFltBookmark aBook( rName, aVal, GetHandle(), FALSE );
     rOut << aBook;
-//          ( eB & BOOK_ONLY_REF ) != 0, TRUE  );
-
-//  rOut << GetName();  // Test
 }
 
 void Ww1Bookmarks::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-#if OSL_DEBUG_LEVEL > 1
-    ULONG ulMan = rMan.Where();
-    ULONG ulBook = Where();
-#endif
-
     if (rMan.Where() >= Where())
     {
         Out(rOut, rMan);
@@ -1022,6 +1004,7 @@ oncemore:
 
                     switch( rbType )
                     {
+                        default:
                         case 21: nSub = DI_CREATE;  nReg = DI_SUB_DATE; break;
                         case 23: nSub = DI_PRINT;   nReg = DI_SUB_DATE; break;
                         case 22: nSub = DI_CHANGE;  nReg = DI_SUB_DATE; break;
@@ -1032,6 +1015,8 @@ oncemore:
                         case WW_DATE: nReg = DI_SUB_DATE; break;
                         case WW_TIME: nReg = DI_SUB_TIME; break;
                         case WW_BOTH: nReg = DI_SUB_DATE; break;
+                        default:
+                            break;
                         // WW_DONTKNOW -> Default bereits gesetzt
                     }
                     pField = new SwDocInfoField((SwDocInfoFieldType*)
@@ -1353,11 +1338,6 @@ void Ww1Pap::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 
 void Ww1Pap::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
 {
-#if OSL_DEBUG_LEVEL > 1
-    ULONG ulMan = rMan.Where();
-    ULONG ulPap = Where();
-    BOOL bIsStopAll = rMan.IsStopAll();
-#endif
     if (rMan.Where() >= Where() || rMan.IsStopAll())
     {
         BYTE* p;
@@ -1459,11 +1439,6 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 /////////////////////////////////////////////////////////////////// Chp
 void Ww1Chp::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-#if OSL_DEBUG_LEVEL > 1
-    ULONG ulMan = rMan.Where();
-    ULONG ulChp = Where();
-#endif
-
     if (rMan.Where() >= Where())
     {
         W1_CHP aChpx;
@@ -2066,8 +2041,6 @@ void Ww1StyleSheet::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 ////////////////////////////////////////////////////////////// Picture
 static ULONG GuessPicSize(W1_PIC* pPic)
 {
-    long nSize = pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb));
-    register BYTE* p = pPic->rgbGet();
     USHORT maxx = pPic->mfp.xExtGet();
     USHORT padx = ((maxx + 7) / 8) * 8;
     USHORT maxy = pPic->mfp.yExtGet();
@@ -2082,12 +2055,12 @@ static ULONG GuessPicSize(W1_PIC* pPic)
 void Ww1Picture::WriteBmp(SvStream& rOut)
 {
     long nSize = pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb));
-    register BYTE* p = pPic->rgbGet();
+    BYTE* p = pPic->rgbGet();
     USHORT maxx = pPic->mfp.xExtGet();
     USHORT padx = ((maxx + 7) / 8) * 8;
     USHORT maxy = pPic->mfp.yExtGet();
-    USHORT unknown1 = SVBT16ToShort(p); p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
-    USHORT unknown2 = SVBT16ToShort(p); p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+    /*USHORT unknown1 = SVBT16ToShort(p);*/ p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+    /*USHORT unknown2 = SVBT16ToShort(p);*/ p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
     USHORT x = SVBT16ToShort(p); p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
     DBG_ASSERT(x==maxx, "Ww1Picture");
     USHORT y = SVBT16ToShort(p); p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
@@ -2124,7 +2097,7 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
     wLong(0);
     wLong(16);
     wLong(16);
-    register USHORT i;
+    USHORT i;
     for (i=0;nSize>0&&i<16;i++)
     {
         wByte(*p);
@@ -2139,14 +2112,13 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
         wByte(0);
     }
     DBG_ASSERT(padx*maxy/2==nSize, "Ww1Picture");
-    register USHORT j;
+    USHORT j;
 #if 1
     {
         BYTE* pBuf = new BYTE[padx];
-        BYTE* q = pBuf;
         for (j=0;nSize>0&&j<maxy;j++)
         {
-            register BYTE* q = pBuf;
+            BYTE* q = pBuf;
             for (i=0;nSize>0&&i<maxx;i+=2)
             {
                 *q++ = *p>>4;
@@ -2308,6 +2280,8 @@ void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
             }
             break;
             case FirstHeadL:
+            break;
+            default:
             break;
             }
     }
