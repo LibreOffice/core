@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
+ *  last change: $Author: jb $ $Date: 2001-05-28 14:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,20 +139,6 @@ namespace configmgr
             uno::Reference< lang::XMultiServiceFactory > const& rServiceManager
         );
     const ServiceInfo* getConfigurationRegistryServiceInfo();
-
-    // Import / export
-    uno::Reference< uno::XInterface > SAL_CALL instantiateDataExport
-        (
-            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager
-        );
-    const ServiceInfo* getDataExportServiceInfo();
-
-    uno::Reference< uno::XInterface > SAL_CALL instantiateDataImport
-        (
-            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager
-        );
-    const ServiceInfo* getDataImportServiceInfo();
-
 
 } //  namespace configmgr
 

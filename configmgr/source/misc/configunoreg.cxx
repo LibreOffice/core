@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-22 09:52:14 $
+ *  last change: $Author: jb $ $Date: 2001-05-28 14:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,9 +252,10 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
 
         // im/export
+#if 0
         RegisterService(configmgr::getDataExportServiceInfo(), xKey);
         RegisterService(configmgr::getDataImportServiceInfo(), xKey);
-
+#endif
         return sal_True;
     }
     catch (::com::sun::star::registry::InvalidRegistryException& )
@@ -296,24 +297,12 @@ extern "C" void* SAL_CALL component_getFactory(
             &configmgr::instantiateConfigRegistry,
             ::cppu::createSingleFactory)
         ||
-            /* Export */
-        aReq.CreateService(
-            configmgr::getDataExportServiceInfo(),
-            &configmgr::instantiateDataExport,
-            ::cppu::createSingleFactory)
-        ||
-            /* Import */
-        aReq.CreateService(
-            configmgr::getDataImportServiceInfo(),
-            &configmgr::instantiateDataImport,
-            ::cppu::createSingleFactory)
-        ||
         false;
 
         pRet = aReq.getProvider();
     }
 
     return pRet;
-};
+}
 //---------------------------------------------------------------------------------------
 
