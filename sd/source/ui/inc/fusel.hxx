@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 15:11:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,21 @@ class FuSelection : public FuDraw
         @returns true if a active function was aborted
     */
     virtual bool cancel();
+
+private:
+    /** This pointer stores a canidate for assigning a style in the water
+        can mode between mouse button down and mouse button up.
+    */
+    SdrObject* pWaterCanCandidate;
+
+    /** Find the object under the given test point without selecting it.
+        @param rTestPoint
+            The coordinates at which to search for a shape.
+        @return
+            The shape at the test point.  When there is no shape at this
+            position then NULL is returned.
+    */
+    SdrObject* pickObject (const Point& rTestPoint);
 };
 
 
