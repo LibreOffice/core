@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:05:34 $
+ *  last change: $Author: mib $ $Date: 2002-02-14 10:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,10 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bTblIsColMode   : 1, //
                     bChainMode      : 1, //Rahmen verbinden
                     bWasShdwCrsr    : 1, //ShadowCrsr war im MouseButtonDown an
-                    bLockInput      : 1; //Lock waehrend die Rechenleiste aktiv ist
+                    bLockInput      : 1, //Lock waehrend die Rechenleiste aktiv ist
+#ifdef ACCESSIBLE_LAYOUT
+                    bHasAccessible  : 1;
+#endif
 
 
     void            LeaveArea(const Point &);
@@ -286,6 +289,11 @@ public:
 
     const SwView &GetView() const { return rView; }
           SwView &GetView()       { return rView; }
+
+#ifdef ACCESSIBLE_LAYOUT
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    void UpdateAccessible();
+#endif
 
     // Tipfenster loeschen
     static void ClearTip();
