@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-01 15:43:23 $
+ *  last change: $Author: ssa $ $Date: 2002-10-08 08:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,8 +532,6 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     long*   pDXBuffer = NULL;
     long*   pDX = nDXBuffer;
 
-    ImplClearBackground( 0, GetOutputSizePixel().Width() );
-
     if( aText.Len() )
     {
         if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
@@ -564,6 +562,8 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
             delete [] pDXBuffer;
         return;
     }
+
+    ImplClearBackground( 0, GetOutputSizePixel().Width() );
 
     Cursor* pCursor = GetCursor();
     BOOL bVisCursor = pCursor ? pCursor->IsVisible() : FALSE;
