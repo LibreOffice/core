@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:58:08 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,9 +508,9 @@
             Text[ polish ] = "Dok³adne wyszukiwanie";\
             Text[ portuguese_brazilian ] = "Match case";\
             Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~T)";\
-            Text[ korean ] = "Á¤È®ÇÏ°Ô¡¡Ã£±â";\
-            Text[ chinese_simplified ] = "¾«È·ËÑÑ°";\
-            Text[ chinese_traditional ] = "ºëÚÌ·j´M";\
+            Text[ korean ] = "Á¤È®ÇÏ°Ô¡¡Ã£±â(~T)";\
+            Text[ chinese_simplified ] = "¾«È·ËÑÑ°(~T)";\
+            Text[ chinese_traditional ] = "ºëÚÌ·j´M(~T)";\
             Text[ arabic ] = "ÈÍË ÏŞíŞ";\
             Text[ turkish ] = "BÜYÜK/küçük ~harf duyarlı";\
         };                                                                      \
@@ -535,8 +535,8 @@
             Text[ portuguese_brazilian ] = "Whole words only";\
             Text[ japanese ] = "’PŒê‚Æ‚µ‚Ä(~W)";\
             Text[ korean ] = "ÀüÃ¼ ´Ü¾î¸¸(~W)";\
-            Text[ chinese_simplified ] = "Ö»ÔÊĞíÕû¸ö´Ê";\
-            Text[ chinese_traditional ] = "¥u¬O¾ã­Ó¦r";\
+            Text[ chinese_simplified ] = "Ö»ÔÊĞíÕû¸ö´Ê(~W)";\
+            Text[ chinese_traditional ] = "¥u¬O¾ã­Ó¦r(~W)";\
             Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";\
             Text[ turkish ] = "Yalnızca ~tam sözcükler bul";\
         };                                                                      \
@@ -761,9 +761,9 @@ String STR_IDXMRK_INSERT
             Text[ polish ] = "Z bibliograficznej bazy danych";\
             Text[ portuguese_brazilian ] = "Form bibliography database";\
             Text[ japanese ] = "‘ ‘ŠÇ—ÃŞ°ÀÍŞ°½‚©‚ç(~D)";\
-            Text[ korean ] = "Âü°í¹®Çå µ¥ÀÌÅÍº£ÀÌ½º·ÎºÎÅÍ";\
-            Text[ chinese_simplified ] = "²ÉÓÃÎÄÏ×Êı¾İ¿â";\
-            Text[ chinese_traditional ] = "±q¤åÄm¸ê®Æ®w";\
+            Text[ korean ] = "Âü°í¹®Çå µ¥ÀÌÅÍº£ÀÌ½º·ÎºÎÅÍ(~D)";\
+            Text[ chinese_simplified ] = "²ÉÓÃÎÄÏ×Êı¾İ¿â(~D)";\
+            Text[ chinese_traditional ] = "±q¤åÄm¸ê®Æ®w(~D)";\
             Text[ arabic ] = "ãä ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";\
             Text[ turkish ] = "Kaynakça veritabanından";\
         };                                                          \
@@ -787,8 +787,8 @@ String STR_IDXMRK_INSERT
             Text[ portuguese_brazilian ] = "From document content";\
             Text[ japanese ] = "ÄŞ·­ÒİÄ‚©‚ç(~F)";\
             Text[ korean ] = "¹®¼­ ³»¿ëÀ¸·ÎºÎÅÍ(~F)";\
-            Text[ chinese_simplified ] = "²ÉÓÃÎÄµµÄÚÈİ";\
-            Text[ chinese_traditional ] = "±q¤å¥ó¤º®e";\
+            Text[ chinese_simplified ] = "²ÉÓÃÎÄµµÄÚÈİ(~F)";\
+            Text[ chinese_traditional ] = "±q¤å¥ó¤º®e(~F)";\
             Text[ arabic ] = "ãä ãÍÊæíÇÊ ÇáãÓÊäÏ";\
             Text[ turkish ] = "~Belge içeriğinden";\
         };                                                          \
@@ -1001,10 +1001,10 @@ String STR_IDXMRK_INSERT
             Text[ swedish ] = "N~y";\
             Text[ polish ] = "Nowy";\
             Text[ portuguese_brazilian ] = "Create entry";\
-            Text[ japanese ] = "V‹Kì¬";\
+            Text[ japanese ] = "V‹Kì¬(~N)";\
             Text[ korean ] = "»õ·Î(~N)";\
-            Text[ chinese_simplified ] = "ĞÂ½¨";\
-            Text[ chinese_traditional ] = "·s«Ø";\
+            Text[ chinese_simplified ] = "ĞÂ½¨(~N)";\
+            Text[ chinese_traditional ] = "·s«Ø(~N)";\
             Text[ arabic ] = "ÌÏíÏ";\
             Text[ turkish ] = "~Yeni";\
             Text[ language_user1 ] = " ";\
@@ -1223,7 +1223,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ italian ] = "La voce bibliografica è già presente nel documento con dati diversi. ";
     MESSAGE[ danish ] = "Litteraturlisteelementet er allerede indeholdt i dokumentet med afvigende data. ";
     MESSAGE[ swedish ] = "Bibliografiposten finns redan med avvikande data i dokumentet. Vill du anpassa posterna som redan finns där?";
-    MESSAGE[ polish ] = "Wpis bibliograficzny zawarty jest w dokumencie z innymi danymi. Dopasowaæ je?";
+    MESSAGE[ polish ] = "Dokument zawiera ju¿ wpis bibliograficzny, ale z innymi danymi. Dopasowaæ zawarte wpisy?";
     MESSAGE[ portuguese_brazilian ] = "The bibliography entry is already contained in the document with different data.";
     MESSAGE[ japanese ] = "‚±‚ÌQl•¶Œ£‚Ì€–Ú‚Í‚±‚Ì•¶‘‚Ì•Ê‚Ì‰ÓŠ‚É‚·‚Å‚Éo‚Ä‚«‚Ä‚¢‚Ü‚·B‚±‚ÌŠù‘¶€–Ú‚É“K‡‚³‚¹‚Ü‚·‚©B";
     MESSAGE[ korean ] = "Âü°í¹®Çå Ç×¸ñÀº ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ¿Í ÇÔ²² ¹®¼­¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù. ";
