@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 07:58:36 $
+ *  last change: $Author: mba $ $Date: 2000-12-15 15:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ sal_Bool SfxMailModel_Impl::Send()
                 ByteString aError( UniString( e.Message ), RTL_TEXTENCODING_MS_1252 );
                 DBG_ERRORFILE( aError.GetBuffer() );
             }
-            catch( ... )
+            catch( Exception& )
             {
                 DBG_ERRORFILE( "Any other exception" );
             }
