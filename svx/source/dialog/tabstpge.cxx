@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-03-13 10:46:17 $
+ *  last change: $Author: os $ $Date: 2002-04-29 13:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,11 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 
     if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, TRUE, &pItem ) ==
          SFX_ITEM_SET )
+    {
         nOffset = ( (const SfxInt32Item*)pItem )->GetValue();
+        MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
+        nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
+    }
     const long nReal = nVal - nOffset;
     USHORT nSize = aTabBox.GetEntryCount();
 
