@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-09-03 08:08:38 $
+ *  last change: $Author: os $ $Date: 2002-11-06 10:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,10 +876,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // Numerierungseigenschaften
             if(rWrtSh.GetCurNumRule())
             {
-                aCoreSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
-                                    USHRT_MAX != rWrtSh.IsNodeNumStart()));
-                aCoreSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
-                                                rWrtSh.IsNodeNumStart()));
+                SfxBoolItem aStart(FN_NUMBER_NEWSTART,
+                                    rWrtSh.IsNumRuleStart());
+                aCoreSet.Put(aStart);
+                SfxUInt16Item aStartAt(FN_NUMBER_NEWSTART_AT,
+                                                rWrtSh.IsNodeNumStart());
+                aCoreSet.Put(aStartAt);
             }
             SwParaDlg *pDlg = NULL;
             if ( bUseDialog && GetActiveView() )
@@ -907,15 +909,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
                 }
 
-                if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
-                {
-                    // only one item is needed, especially for recording
-                    BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                    if ( !bStart )
-                        pSet->ClearItem( FN_NUMBER_NEWSTART_AT );
-                    else
-                        pSet->ClearItem( FN_NUMBER_NEWSTART );
-                }
                 if ( SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_1,FALSE,&pItem) )
                 {
                     pSet->Put(SfxStringItem(FN_DROP_TEXT, ((const SfxStringItem*)pItem)->GetValue()));
@@ -956,22 +949,27 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
                 {
+                    //SetNumRuleStart(TRUE) restarts the numbering at the value
+                    //that is defined at the starting point of the numbering level
+                    //otherwise the SetNodeNumStart() value determines the start
+                    //if it's set to something different than USHRT_MAX
+
                     BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+                    USHORT nNumStart = USHRT_MAX;
                     if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
-                        // das zweite Item muss immer drin sein!
-                        USHORT nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
-                        if(!bStart)
-                            nNumStart = USHRT_MAX;
-                        rWrtSh.SetNodeNumStart(nNumStart);
+                        nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+                        if(USHRT_MAX != nNumStart)
+                            bStart = FALSE;
                     }
-                    else
-                        rWrtSh.SetNodeNumStart(bStart ? 1 : USHRT_MAX);
+                    rWrtSh.SetNumRuleStart(bStart);
+                    rWrtSh.SetNodeNumStart(nNumStart);
                 }
                 else if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                 {
                     USHORT nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                     rWrtSh.SetNodeNumStart(nNumStart);
+                    rWrtSh.SetNumRuleStart(FALSE);
                 }
             }
 
@@ -1173,7 +1171,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case FN_NUMBER_NEWSTART :
             rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
-                                        USHRT_MAX != rSh.IsNodeNumStart()));
+                rSh.IsNumRuleStart()||USHRT_MAX != rSh.IsNodeNumStart()));
         break;
         case FN_EDIT_FORMULA:
         case FN_INSERT_SYMBOL:

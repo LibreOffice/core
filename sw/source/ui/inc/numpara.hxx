@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:23:35 $
+ *  last change: $Author: os $ $Date: 2002-11-06 10:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ class SwParagraphNumTabPage : public SfxTabPage
 
     FixedLine               aNewStartFL;
     TriStateBox             aNewStartCB;
-    FixedText               aNewStartFT;
+    TriStateBox             aNewStartNumberCB;
     NumericField            aNewStartNF;
 
     FixedLine               aCountParaFL;
