@@ -2,9 +2,9 @@
 #
 #   $RCSfile: exiter.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:43:19 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:58:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,9 +92,12 @@ sub exit_program
     $infoline = "***************************************************************\n";
     push(@par2script::globals::logfileinfo, $infoline);
 
-    par2script::files::save_file($par2script::globals::logfilename ,\@par2script::globals::logfileinfo);
+    if ($par2script::globals::logging)
+    {
+        par2script::files::save_file($par2script::globals::logfilename, \@par2script::globals::logfileinfo);
+        print("Saved logfile: $par2script::globals::logfilename\n");
+    }
 
-    print("Saved logfile: $par2script::globals::logfilename\n");
     print("$infoline");
 
     exit(-1);
