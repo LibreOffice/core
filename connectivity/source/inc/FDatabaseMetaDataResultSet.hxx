@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 14:10:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,12 +137,9 @@ namespace connectivity
         DECLARE_STL_VECTOR(ORow, ORows);
 
     private:
-        ORows                           m_aRows;
-        ORows::iterator                 m_aRowsIter;
         ORowSetValue                    m_aEmptyValue;
         ::com::sun::star::uno::WeakReferenceHelper    m_aStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-        sal_Int32                       m_nRowPos;
         sal_Int32                       m_nColPos;
 
         sal_Int32                       m_nFetchSize;
@@ -150,14 +147,15 @@ namespace connectivity
         sal_Int32                       m_nFetchDirection;
         sal_Int32                       m_nResultSetConcurrency;
 
-        sal_Bool                        m_bWasNull;
-        sal_Bool                        m_bBOF;
-
         void construct();
         void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
 
     protected:
-        const ORowSetValue& getValue(sal_Int32 columnIndex);
+        ORows                           m_aRows;
+        ORows::iterator                 m_aRowsIter;
+        sal_Bool                        m_bBOF;
+
+        virtual const ORowSetValue& getValue(sal_Int32 columnIndex);
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
