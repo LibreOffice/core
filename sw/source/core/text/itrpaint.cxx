@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-08 08:02:47 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,13 +300,21 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if( GetInfo().OnWin() && pPor && !pPor->Width() )
     {
         SeekAndChg( GetInfo() );
-        const SwTwips nOldY = GetInfo().Y();
 
         if( GetLineInfo().HasSpecialAlign() )
-            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, *pPor ) );
+        {
+            const SwTwips nOldY = GetInfo().Y();
 
-        pPor->PrePaint( GetInfo(), pPor );
-        GetInfo().Y( nOldY );
+            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr,
+                GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), pOut ),
+                GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), pOut )
+            ) );
+
+            pPor->PrePaint( GetInfo(), pPor );
+            GetInfo().Y( nOldY );
+        }
+        else
+            pPor->PrePaint( GetInfo(), pPor );
     }
 
     // 7923: EndPortions geben auch Zeichen aus, deswegen den Fnt wechseln!
@@ -330,7 +338,13 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if ( GetLineInfo().HasSpecialAlign() )
         {
             GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, *pPor ) );
-            pLastPor = pPor;
+
+            // we store the last portion, because a possible paragraph
+            // end character has the same font as this portion
+            // (only in special vertical alignment case, otherwise the first
+            // portion of the line is used)
+            if ( pPor->Width() )
+                pLastPor = pPor;
         }
 
         // Ein Sonderfall sind GluePortions, die Blanks ausgeben.

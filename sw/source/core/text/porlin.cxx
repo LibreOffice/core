@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,31 +141,53 @@ SwLinePortion::SwLinePortion( ) :
 }
 
 /*************************************************************************
- *               virtual SwLinePortion::PrePaint()
+ *               SwLinePortion::PrePaint()
  *************************************************************************/
 
-void SwLinePortion::PrePaint( const SwTxtPaintInfo &rInf, SwLinePortion *pLast ) const
+void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
+                              const SwLinePortion* pLast ) const
 {
-    ASSERT(rInf.OnWin(), "SwLinePortion::PrePaint: don't prepaint on a printer");
+    ASSERT( rInf.OnWin(), "SwLinePortion::PrePaint: don't prepaint on a printer");
     ASSERT( !Width(), "SwLinePortion::PrePaint: For Width()==0 only!");
 
     const KSHORT nViewWidth = GetViewWidth( rInf );
-    if( !nViewWidth )
+
+    if( ! nViewWidth )
         return;
+
     const KSHORT nHalfView = nViewWidth / 2;
+    USHORT nLastWidth = pLast->Width();
 
-    KSHORT nPos = KSHORT(rInf.X());
-    KSHORT pLastWidth = pLast->Width();
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        pLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
-    if( pLast && pLastWidth > nHalfView )
-        nPos += pLastWidth - nHalfView;
+        nLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
-    // logisches const, da wir den Wert wieder zuruecksetzen
+    KSHORT nPos;
+    SwTxtPaintInfo aInf( rInf );
+
+    switch ( rInf.GetFont()->GetOrientation() )
+    {
+    case 0 :
+        nPos = KSHORT( rInf.X() );
+        if( nLastWidth > nHalfView )
+            nPos += nLastWidth - nHalfView;
+        aInf.X( nPos );
+        break;
+    case 900 :
+        nPos = KSHORT( rInf.Y() );
+        if( nLastWidth > nHalfView )
+            nPos -= nLastWidth + nHalfView;
+        aInf.Y( nPos );
+        break;
+    case 2700 :
+        nPos = KSHORT( rInf.Y() );
+        if( nLastWidth > nHalfView )
+            nPos += nLastWidth - nHalfView;
+        aInf.Y( nPos );
+        break;
+    }
+
     SwLinePortion *pThis = (SwLinePortion*)this;
     pThis->Width( nViewWidth );
-    SwTxtPaintInfo aInf( rInf );
-    aInf.X( nPos );
     Paint( aInf );
     pThis->Width(0);
 }

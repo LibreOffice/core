@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:42:43 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,11 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( Width() )
     {
         rInf.DrawBackBrush( *this );
+
+        // do we have to repaint a post it portion?
+        if( rInf.OnWin() && pPortion && !pPortion->Width() )
+            pPortion->PrePaint( rInf, this );
+
         if( rInf.GetFont()->IsPaintBlank() )
         {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-07 11:47:27 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,6 @@ xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst,
 {
     rSizeInf.SetLen( rSizeInf.GetTxtBreak( nOfst, nLineLength )
                    - rSizeInf.GetIdx() );
-
     return rSizeInf.GetLen();
 }
 
@@ -446,6 +445,11 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( GetLen() )
     {
         rInf.DrawBackBrush( *this );
+
+        // do we have to repaint a post it portion?
+        if( rInf.OnWin() && pPortion && !pPortion->Width() )
+            pPortion->PrePaint( rInf, this );
+
         const SwWrongList *pWrongList = rInf.GetpWrongList();
         if ( pWrongList )
             rInf.DrawWrongText( *this, rInf.GetLen(), sal_False );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 15:13:56 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,6 +449,11 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 #endif
 
     rInf.DrawBackBrush( *this );
+
+    // do we have to repaint a post it portion?
+    if( rInf.OnWin() && pPortion && !pPortion->Width() )
+        pPortion->PrePaint( rInf, this );
+
     // Darstellung von Sonderzeichen
     if( rInf.OnWin() && rInf.GetOpt().IsTab() )
     {

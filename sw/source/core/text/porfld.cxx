@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-07 11:46:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,6 +1055,11 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         rInf.DrawBackBrush( *this );
         rInf.DrawViewOpt( *this, POR_FLD );
+
+        // do we have to repaint a post it portion?
+        if( rInf.OnWin() && pPortion && !pPortion->Width() )
+            pPortion->PrePaint( rInf, this );
+
         USHORT nCount = aExpand.Len();
         if( !nCount )
             return;

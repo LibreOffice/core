@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-08 08:02:47 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,9 +839,36 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
 {
     if( OnWin() && pOpt->IsPostIts() )
     {
-        const Size aSize( pOpt->GetPostItsWidth( pWin ),
-            pFnt->GetHeight( pVsh, GetOut() ) );
-        const Point aTmp( aPos.X(), aPos.Y() - pFnt->GetAscent( pVsh, GetOut() ) );
+        Size aSize;
+        Point aTmp;
+
+        const USHORT nPostItsWidth = pOpt->GetPostItsWidth( pWin );
+        const USHORT nFontHeight = pFnt->GetHeight( pVsh, GetOut() );
+        const USHORT nFontAscent = pFnt->GetAscent( pVsh, GetOut() );
+
+        switch ( pFnt->GetOrientation() )
+        {
+        case 0 :
+            aSize.Width() = nPostItsWidth;
+            aSize.Height() = nFontHeight;
+            aTmp.X() = aPos.X();
+            aTmp.Y() = aPos.Y() - nFontAscent;
+            break;
+        case 900 :
+            aSize.Height() = nPostItsWidth;
+            aSize.Width() = nFontHeight;
+            aTmp.X() = aPos.X() - nFontAscent;
+            aTmp.Y() = aPos.Y();
+            break;
+        case 2700 :
+            aSize.Height() = nPostItsWidth;
+            aSize.Width() = nFontHeight;
+            aTmp.X() = aPos.X() - nFontHeight +
+                                  nFontAscent;
+            aTmp.Y() = aPos.Y();
+            break;
+        }
+
         const Rectangle aRect( aTmp, aSize );
         pOpt->PaintPostIts( pWin, aRect, bScript ? COL_LIGHTGREEN : COL_YELLOW );
     }

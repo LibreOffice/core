@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 10:56:47 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,11 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     SwTxtSlotLen aDiffTxt( &rInf, this );
     rInf.DrawBackBrush( *this );
+
+    // do we have to repaint a post it portion?
+    if( rInf.OnWin() && pPortion && !pPortion->Width() )
+        pPortion->PrePaint( rInf, this );
+
     rInf.DrawText( *this, rInf.GetLen(), sal_False );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-03 11:54:12 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,6 +1292,11 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 {
     if( rMulti.Width() > 1 )
         GetInfo().DrawViewOpt( rMulti, POR_FLD );
+
+    // do we have to repaint a post it portion?
+    if( GetInfo().OnWin() && rMulti.GetPortion() &&
+        ! rMulti.GetPortion()->Width() )
+        rMulti.GetPortion()->PrePaint( GetInfo(), &rMulti );
 
     // old values must be saved and restored at the end
     xub_StrLen nOldLen = GetInfo().GetLen();
