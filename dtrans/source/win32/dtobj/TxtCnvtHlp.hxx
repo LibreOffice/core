@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TxtCnvtHlp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:54:44 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,14 +81,16 @@
 // deklarations
 //------------------------------------------------------------------------
 
-int MultiByteToWideCharEx( UINT cp_src, LPCSTR lpMultiByteString, CStgTransferHelper& refDTransHelper, BOOL bEnsureTrailingZero = TRUE );
-int WideCharToMultiByteEx( UINT cp_dest, LPCWSTR lpWideCharString, CStgTransferHelper& refDTransHelper, BOOL bEnsureTrailingZero = TRUE );
+int MultiByteToWideCharEx( UINT cp_src,
+                           LPCSTR lpMultiByteString,
+                           sal_uInt32 lenStr,
+                           CStgTransferHelper& refDTransHelper,
+                           BOOL bEnsureTrailingZero = TRUE );
 
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-BOOL FindBestDataFlavorForTextConversion( const ::com::sun::star::datatransfer::DataFlavor& dfDest,
-                                          const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& seqSupportedDF,
-                                          ::com::sun::star::datatransfer::DataFlavor& bestDF );
+int WideCharToMultiByteEx( UINT cp_dest,
+                           LPCWSTR lpWideCharString,
+                           sal_uInt32 lenStr,
+                           CStgTransferHelper& refDTransHelper,
+                           BOOL bEnsureTrailingZero = TRUE );
 
 #endif

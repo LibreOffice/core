@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 08:46:46 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,16 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable, const FORMATETC& aFormatEtc ) const;
 
     CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
+    CFormatEtc SAL_CALL getFormatEtcForClipformatName( const rtl::OUString& aClipFmtName ) const;
+    rtl::OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;
+
+    sal_Bool SAL_CALL isHTMLFormat( CLIPFORMAT cf ) const;
+    sal_Bool SAL_CALL isTextHtmlFormat( CLIPFORMAT cf ) const;
+    sal_Bool SAL_CALL isOemOrAnsiTextFormat( CLIPFORMAT cf ) const;
+    sal_Bool SAL_CALL isUnicodeTextFormat( CLIPFORMAT cf ) const;
+    sal_Bool SAL_CALL isTextFormat( CLIPFORMAT cf ) const;
 
 private:
-    rtl::OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;
-    sal_Bool      SAL_CALL isOemOrAnsiTextClipformat( CLIPFORMAT aClipformat ) const;
-
     LCID          SAL_CALL getCurrentLocaleFromClipboard( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable ) const;
     rtl::OUString SAL_CALL getTextCharsetFromClipboard(
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable, CLIPFORMAT aClipformat ) const;

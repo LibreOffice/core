@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 13:02:38 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,9 +210,8 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
     {
         HRESULT hr = DV_E_FORMATETC;
 
-        if ( isSynthesizeableFormat( pFormatetc ) )
-            hr = renderSynthesizedFormatAndSetupStgMedium(
-                *pFormatetc, *pmedium );
+        if ( m_FormatRegistrar.isSynthesizeableFormat( *pFormatetc ) )
+            hr = renderSynthesizedFormatAndSetupStgMedium( *pFormatetc, *pmedium );
 
         return hr;
     }
@@ -231,36 +230,6 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 
     return S_OK;
 }
-
-/*
-    FORMATETC fetc;
-
-    synthesize format
-    if ( requested format is unicodetext ) // implies the transferable has really only text
-    {
-        fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_TEXT );
-        aFlavor = formatEtcToDataFlavor( fetc );
-
-        get transfer data
-        convert transfer data to unicode text
-        transfer result to storage
-    }
-    else // implies the transferable has really only unicodetext
-    {
-        fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_UNICODETEXT );
-        aFlavor = formatEtcToDataFlavor( fetc );
-
-        get transfer data
-        if ( request is for ansi text )
-            convert transfer data to text using the CP_ACP
-        else
-            convert transfer data to oemtext using CP_OEMCP
-
-        transfer result to storage
-    }
-
-    transfer data to storage
-*/
 
 //------------------------------------------------------------------------
 //
@@ -372,7 +341,7 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     aAny >>= clipDataStream;
 
     sal_uInt32 nRequiredMemSize = 0;
-    if ( isOemOrAnsiTextFormat( fetc.cfFormat ) )
+    if ( m_DataFormatTranslator.isOemOrAnsiTextFormat( fetc.cfFormat ) )
         nRequiredMemSize = sizeof( sal_Int8 ) * clipDataStream.getLength( ) + 1;
 
     // prepare data for transmision
@@ -417,7 +386,7 @@ HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMAT
         if ( CF_UNICODETEXT == fetc.cfFormat )
             // the transferable seems to have only text
             renderSynthesizedUnicodeAndSetupStgMedium( fetc, stgmedium );
-        else if ( isOemOrAnsiTextFormat( fetc.cfFormat ) )
+        else if ( m_DataFormatTranslator.isOemOrAnsiTextFormat( fetc.cfFormat ) )
             // the transferable seems to have only unicode text
             renderSynthesizedTextAndSetupStgMedium( fetc, stgmedium );
         else
@@ -428,7 +397,7 @@ HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMAT
     {
         hr = DV_E_FORMATETC;
     }
-    catch( CInvalidFormatEtcException& ex )
+    catch( CInvalidFormatEtcException& )
     {
         OSL_ENSURE( sal_False, "Unexpected exception" );
     }
@@ -445,25 +414,52 @@ HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMAT
 }
 
 //------------------------------------------------------------------------
-//
+// the transferable must have only text, so we will synthesize unicode text
 //------------------------------------------------------------------------
 
 void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     OSL_ASSERT( CF_UNICODETEXT == fetc.cfFormat );
 
-    //m_FormatRegistrar.getRegisteredTextCodePage( );
+    Any aAny = m_XTransferable->getTransferData( m_FormatRegistrar.getRegisteredTextFlavor( ) );
+    Sequence< sal_Int8 > aText;
+    aAny >>= aText;
 
+    CStgTransferHelper stgTransfHelper;
+
+    MultiByteToWideCharEx(
+        m_FormatRegistrar.getRegisteredTextCodePage( ),
+        reinterpret_cast< char* >( aText.getArray( ) ),
+        aText.getLength( ),
+        stgTransfHelper );
+
+    setupStgMedium( fetc, stgTransfHelper, stgmedium );
 }
 
 //------------------------------------------------------------------------
-//
+// the transferable must have only unicode text so we will sythesize text
 //------------------------------------------------------------------------
 
 void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
-    OSL_ASSERT( isOemOrAnsiTextFormat( fetc.cfFormat ) );
+    OSL_ASSERT( m_DataFormatTranslator.isOemOrAnsiTextFormat( fetc.cfFormat ) );
 
+    DataFlavor aFlavor = formatEtcToDataFlavor(
+        m_DataFormatTranslator.getFormatEtcForClipformat( CF_UNICODETEXT ) );
+
+    Any aAny = m_XTransferable->getTransferData( aFlavor );
+    OUString aUnicodeText;
+    aAny >>= aUnicodeText;
+
+    CStgTransferHelper stgTransfHelper;
+
+    WideCharToMultiByteEx(
+        GetACP( ),
+        static_cast< const sal_Unicode* >( aUnicodeText.getStr( ) ),
+        aUnicodeText.getLength( ),
+        stgTransfHelper );
+
+    setupStgMedium( fetc, stgTransfHelper, stgmedium );
 }
 
 //------------------------------------------------------------------------
@@ -472,7 +468,29 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
 
 void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
+    OSL_ASSERT( m_DataFormatTranslator.isHTMLFormat( fetc.cfFormat ) );
 
+    DataFlavor aFlavor;
+
+    // creating a DataFlavor on the fly
+    aFlavor.MimeType = OUString::createFromAscii( "text/html" );
+    aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
+
+    Any aAny = m_XTransferable->getTransferData( aFlavor );
+
+    Sequence< sal_Int8 > aTextHtmlSequence;
+    aAny >>= aTextHtmlSequence;
+
+    Sequence< sal_Int8 > aHTMLFormatSequence = TextHtmlToHTMLFormat( aTextHtmlSequence );
+
+    sal_uInt32 nBytesToTransfer = aHTMLFormatSequence.getLength( );
+
+    renderDataAndSetupStgMedium(
+        reinterpret_cast< const sal_Int8* >( aHTMLFormatSequence.getArray( ) ),
+        fetc,
+        0,
+        nBytesToTransfer,
+        stgmedium );
 }
 
 //------------------------------------------------------------------------
@@ -600,17 +618,6 @@ DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aForm
 //
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CXTDataObject::isSynthesizeableFormat( LPFORMATETC lpFormatEtc ) const
-{
-    return ( (lpFormatEtc->cfFormat == CF_TEXT) ||
-             (lpFormatEtc->cfFormat == CF_OEMTEXT) ||
-             (lpFormatEtc->cfFormat == CF_UNICODETEXT) );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 inline
 void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
 {
@@ -683,16 +690,6 @@ inline
 void SAL_CALL CXTDataObject::invalidateStgMedium( STGMEDIUM& stgmedium ) const
 {
     stgmedium.tymed = TYMED_NULL;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-inline
-sal_Bool SAL_CALL CXTDataObject::isOemOrAnsiTextFormat( const CLIPFORMAT& aClipformat ) const
-{
-    return ( (aClipformat == CF_TEXT) || (aClipformat == CF_OEMTEXT) );
 }
 
 //------------------------------------------------------------------------

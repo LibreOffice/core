@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 13:02:37 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,18 +159,15 @@ public:
     sal_uInt32 SAL_CALL getRegisteredTextCodePage( ) const;
     com::sun::star::datatransfer::DataFlavor SAL_CALL getRegisteredTextFlavor( ) const;
 
-private:
-    sal_Bool  SAL_CALL isOemOrAnsiTextFormat( CLIPFORMAT cf ) const;
-    sal_Bool  SAL_CALL isUnicodeTextFormat( CLIPFORMAT cf ) const;
-    sal_Bool  SAL_CALL isTextFormat( CLIPFORMAT cf ) const;
-    CFormatEtc SAL_CALL dataFlavorToFormatEtc( const com::sun::star::datatransfer::DataFlavor& aFlavor ) const;
+    sal_Bool  SAL_CALL isSynthesizeableFormat( const CFormatEtc& aFormatEtc ) const;
     sal_Bool  SAL_CALL needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc ) const;
 
-    sal_Bool SAL_CALL isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) const;
+private:
+    sal_Bool      SAL_CALL isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) const;
     rtl::OUString SAL_CALL getCharsetFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
-    CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const;
 
-    sal_Bool SAL_CALL hasUnicodeFlavor( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable ) const;
+    sal_Bool SAL_CALL hasUnicodeFlavor(
+        const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable ) const;
 
     sal_Bool SAL_CALL findLocaleForTextCodePage( );
 

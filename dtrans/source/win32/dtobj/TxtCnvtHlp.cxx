@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TxtCnvtHlp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:54:52 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ using namespace ::com::sun::star::uno;
 // assuming a '\0' terminated string if no length specified
 //------------------------------------------------------------------
 
-inline
 int CalcBuffSizeForTextConversion( LPCSTR lpMultiByteString, int nLen = -1 )
 {
     return ( MultiByteToWideChar( CP_ACP,
@@ -101,7 +100,6 @@ int CalcBuffSizeForTextConversion( LPCSTR lpMultiByteString, int nLen = -1 )
 // assuming a '\0' terminated string if no length specified
 //------------------------------------------------------------------
 
-inline
 int CalcBuffSizeForTextConversion( LPCWSTR lpWideCharString, int nLen = -1 )
 {
     return WideCharToMultiByte( CP_ACP,
@@ -120,7 +118,9 @@ int CalcBuffSizeForTextConversion( LPCWSTR lpWideCharString, int nLen = -1 )
 // the buffer
 //------------------------------------------------------------------
 
-int MultiByteToWideCharEx( UINT cp_src, LPCSTR lpMultiByteString,
+int MultiByteToWideCharEx( UINT cp_src,
+                           LPCSTR lpMultiByteString,
+                           sal_uInt32 lenStr,
                            CStgTransferHelper& refDTransHelper,
                            BOOL bEnsureTrailingZero )
 {
@@ -128,7 +128,7 @@ int MultiByteToWideCharEx( UINT cp_src, LPCSTR lpMultiByteString,
     OSL_ASSERT( NULL != lpMultiByteString );
 
     // calculate the required buff size
-    int reqSize = CalcBuffSizeForTextConversion( lpMultiByteString );
+    int reqSize = CalcBuffSizeForTextConversion( lpMultiByteString, lenStr );
 
     if ( bEnsureTrailingZero )
         reqSize += sizeof( sal_Unicode );
@@ -143,7 +143,7 @@ int MultiByteToWideCharEx( UINT cp_src, LPCSTR lpMultiByteString,
     return MultiByteToWideChar( cp_src,
                                 0,
                                 lpMultiByteString,
-                                -1,
+                                lenStr,
                                 static_cast< LPWSTR >( ptrHGlob.GetMemPtr( ) ),
                                 ptrHGlob.MemSize( ) );
 }
@@ -154,7 +154,9 @@ int MultiByteToWideCharEx( UINT cp_src, LPCSTR lpMultiByteString,
 // the buffer
 //------------------------------------------------------------------
 
-int WideCharToMultiByteEx( UINT cp_dest, LPCWSTR lpWideCharString,
+int WideCharToMultiByteEx( UINT cp_dest,
+                           LPCWSTR lpWideCharString,
+                           sal_uInt32 lenStr,
                            CStgTransferHelper& refDTransHelper,
                            BOOL bEnsureTrailingZero )
 {
@@ -162,7 +164,7 @@ int WideCharToMultiByteEx( UINT cp_dest, LPCWSTR lpWideCharString,
     OSL_ASSERT( NULL != lpWideCharString );
 
     // calculate the required buff size
-    int reqSize = CalcBuffSizeForTextConversion( lpWideCharString );
+    int reqSize = CalcBuffSizeForTextConversion( lpWideCharString, lenStr );
 
     if ( bEnsureTrailingZero )
         reqSize += sizeof( sal_Int8 );
@@ -177,46 +179,10 @@ int WideCharToMultiByteEx( UINT cp_dest, LPCWSTR lpWideCharString,
     return WideCharToMultiByte( cp_dest,
                                 0,
                                 lpWideCharString,
-                                -1,
+                                lenStr,
                                 static_cast< LPSTR >( ptrHGlob.GetMemPtr( ) ),
                                 ptrHGlob.MemSize( ),
                                 NULL,
                                 NULL );
 }
 
-//------------------------------------------------------------------
-// iterates through a sequence of dataflavors in order to find
-// the first non unicode character set
-//------------------------------------------------------------------
-/*
-BOOL FindFirstTextDataFlavor( const Sequence< DataFlavor >& dflvList, DataFlavor& aTxtDFlv )
-{
-    sal_Int32 nDFlv = dflvList.getLength( );
-    sal_Bool  bRet  = sal_False;
-
-    for ( sal_Int32 i = 0; i < nDFlv; ++i )
-    {
-        if ( MimeIsTextPlainAnyCharset( dflvList[i].MimeType ) )
-        {
-            aTxtDFlv = dflvList[i];
-            bRet = sal_True;
-            break;
-        }
-    }
-
-    return bRet;
-}
-
-//------------------------------------------------------------------
-// given a list of dataflavors this function searches for the
-// best dataflavor used to be converted into the destination
-// dataflavor
-//------------------------------------------------------------------
-
-BOOL FindBestDataFlavorForTextConversion( const DataFlavor& destDFlv,
-                                          const Sequence< DataFlavor >& suppDFlv,
-                                          DataFlavor& bestDFlv )
-{
-    return FindFirstTextDataFlavor( suppDFlv, bestDFlv );
-}
-*/

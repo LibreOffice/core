@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 12:58:01 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,5 +98,14 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const com::sun
     aOOBmp - sequence of bytes containing a openoffice bitmap
 ------------------------------------------------------------------------*/
 com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( com::sun::star::uno::Sequence< sal_Int8 >& aOOBmp );
+
+/*------------------------------------------------------------------------
+    input:
+    aTextHtml - a sequence of text/html which will be converted to the
+    HTML Format; the HTML Format has header before the real html data
+    the Format is described in the MSDN Library under HTML Clipboard
+    Format
+------------------------------------------------------------------------*/
+com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( com::sun::star::uno::Sequence< sal_Int8 >& aTextHtml );
 
 #endif

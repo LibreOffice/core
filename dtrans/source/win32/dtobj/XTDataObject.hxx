@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 13:02:38 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,6 @@ public:
 private:
     void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
-    sal_Bool SAL_CALL isSynthesizeableFormat( LPFORMATETC lpFormatEtc ) const;
     void SAL_CALL renderDataAndSetupStgMedium( const sal_Int8* lpStorage,
                                                const FORMATETC& fetc,
                                                sal_uInt32 nInitStgSize,
@@ -163,7 +162,6 @@ private:
 
     void SAL_CALL invalidateStgMedium( STGMEDIUM& stgmedium ) const;
 
-    sal_Bool SAL_CALL isOemOrAnsiTextFormat( const CLIPFORMAT& aClipformat ) const;
     HRESULT SAL_CALL translateStgExceptionCode( HRESULT hr ) const;
 
 private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 12:57:31 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,13 @@
 #include <osl/diagnose.h>
 #endif
 
+
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
 
 using namespace com::sun::star::uno;
+using rtl::OString;
 
 //------------------------------------------------------------------------
 // implementation
@@ -237,4 +239,101 @@ Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
                     aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
 
     return winDIBStream;
+}
+
+//------------------------------------------------------------------------------
+// converts the openoffice text/html clipboard format to the HTML Format
+// well known under MS Windows
+// the MS HTML Format has a header before the real html data
+//
+// Version:1.0      Version number of the clipboard. Staring is 0.9
+// StartHTML:       Byte count from the beginning of the clipboard to the start
+//                  of the context, or -1 if no context
+// EndHTML:         Byte count from the beginning of the clipboard to the end
+//                  of the context, or -1 if no context
+// StartFragment:   Byte count from the beginning of the clipboard to the
+//                  start of the fragment
+// EndFragment:     Byte count from the beginning of the clipboard to the
+//                  end of the fragment
+// StartSelection:  Byte count from the beginning of the clipboard to the
+//                  start of the selection
+// EndSelection:    Byte count from the beginning of the clipboard to the
+//                  end of the selection
+//
+// StartSelection and EndSelection are optional
+// The fragment should be preceded and followed by the HTML comments
+// <!--StartFragment--> and <!--EndFragment--> (no space between !-- and the
+// text
+//------------------------------------------------------------------------------
+
+Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextHtml )
+{
+    OSL_ASSERT( aTextHtml.getLength( ) > 0 );
+
+    // check parameter
+    if ( !(aTextHtml.getLength( ) > 0) )
+        return Sequence< sal_Int8 >( );
+
+    // we create a buffer with the approximated size of
+    // the HTML Format header
+    char aHTMLFmtHdr[120];
+
+    rtl_zeroMemory( aHTMLFmtHdr, sizeof( aHTMLFmtHdr ) );
+
+    // fill the buffer with dummy values to calc the
+    // exact length
+    wsprintf(
+        aHTMLFmtHdr,
+        "Version:1.0\nStartHTML:%010d\nEndHTML:%010d\nStartFragment:%010d\nEndFragment:%010d\n", 0, 0, 0, 0 );
+
+    sal_uInt32 lHTMLFmtHdr = rtl_str_getLength( aHTMLFmtHdr );
+
+    OString startHtmlTag( "<HTML>" );
+    OString endHtmlTag(   "</HTML>" );
+    OString startBodyTag( "<BODY>" );
+    OString endBodyTag(   "</BODY" );
+
+    OString textHtml(
+        reinterpret_cast< const sal_Char* >( aTextHtml.getConstArray( ) ),
+        aTextHtml.getLength( ) );
+
+    sal_Int32 nStartHtml  = textHtml.search( startHtmlTag );
+    sal_Int32 nEndHtml    = textHtml.search( endHtmlTag );
+    sal_Int32 nStartFrgmt = textHtml.search( startBodyTag );
+    sal_Int32 nEndFrgmt   = textHtml.search( endBodyTag );
+
+    Sequence< sal_Int8 > aHTMLFmtSequence;
+
+    if ( (nStartHtml > -1) && (nEndHtml > -1) && (nStartFrgmt > -1) && (nEndFrgmt > -1) )
+    {
+        nStartHtml  = nStartHtml  + lHTMLFmtHdr - 1; // we start one before <HTML> Word 2000 does also so
+        nEndHtml    = nEndHtml    + lHTMLFmtHdr + endHtmlTag.getLength( ) + 1; // our SOffice 5.2 wants 2 behind </HTML>?
+        nStartFrgmt = nStartFrgmt + startBodyTag.getLength( ) + lHTMLFmtHdr; // after the <BODY> tag
+        nEndFrgmt   = nEndFrgmt   + lHTMLFmtHdr;
+
+        // fill the html header
+        rtl_zeroMemory( aHTMLFmtHdr, sizeof( aHTMLFmtHdr ) );
+
+        wsprintf(
+            aHTMLFmtHdr,
+            "Version:1.0\nStartHTML:%010d\nEndHTML:%010d\nStartFragment:%010d\nEndFragment:%010d\n",
+            nStartHtml, nEndHtml, nStartFrgmt, nEndFrgmt );
+
+        // we add space for a trailing \0
+        aHTMLFmtSequence.realloc( lHTMLFmtHdr + aTextHtml.getLength( ) + 1 );
+        rtl_zeroMemory( aHTMLFmtSequence.getArray( ), aHTMLFmtSequence.getLength( ) );
+
+        // copy the HTML Format header
+        rtl_copyMemory(
+            static_cast< LPVOID >( aHTMLFmtSequence.getArray( ) ),
+            static_cast< LPVOID >( aHTMLFmtHdr ), lHTMLFmtHdr );
+
+        // concat the text/html
+        rtl_copyMemory(
+            static_cast< LPVOID >( aHTMLFmtSequence.getArray( ) + lHTMLFmtHdr ),
+            static_cast< LPVOID >( aTextHtml.getArray( ) ),
+            aTextHtml.getLength( ) );
+    }
+
+    return aHTMLFmtSequence;
 }

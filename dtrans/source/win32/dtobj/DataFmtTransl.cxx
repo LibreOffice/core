@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 09:11:03 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const Reference< X
         Any aAny;
         aAny <<= static_cast< sal_Int32 >( aClipformat );
 
-        if ( isOemOrAnsiTextClipformat( aClipformat ) )
+        if ( isOemOrAnsiTextFormat( aClipformat ) )
         {
             aFlavor.MimeType             = OUString::createFromAscii( "text/plain;charset=" );
             aFlavor.MimeType            += getTextCharsetFromClipboard( refXTransferable, aClipformat );
@@ -235,6 +235,20 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const Reference< X
     }
 
     return aFlavor;
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const OUString& aClipFmtName ) const
+{
+    // check parameter
+    if ( !aClipFmtName.getLength( ) )
+        return CFormatEtc( CF_INVALID );
+
+    CLIPFORMAT cf = RegisterClipboardFormatW( aClipFmtName.getStr( ) );
+    return getFormatEtcForClipformat( cf );
 }
 
 //------------------------------------------------------------------------
@@ -280,11 +294,49 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT
 //
 //------------------------------------------------------------------------
 
-inline
-sal_Bool SAL_CALL CDataFormatTranslator::isOemOrAnsiTextClipformat( CLIPFORMAT aClipformat ) const
+sal_Bool SAL_CALL CDataFormatTranslator::isOemOrAnsiTextFormat( CLIPFORMAT cf ) const
 {
-    return ( (aClipformat == CF_TEXT) ||
-             (aClipformat == CF_OEMTEXT) );
+    return ( (cf == CF_TEXT) || (cf == CF_OEMTEXT) );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_Bool SAL_CALL CDataFormatTranslator::isUnicodeTextFormat( CLIPFORMAT cf ) const
+{
+    return ( cf == CF_UNICODETEXT );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_Bool SAL_CALL CDataFormatTranslator::isTextFormat( CLIPFORMAT cf ) const
+{
+    return ( isOemOrAnsiTextFormat( cf ) || isUnicodeTextFormat( cf ) );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_Bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf ) const
+{
+    OUString clipFormatName = getClipboardFormatName( cf );
+    return ( clipFormatName == OUString::createFromAscii( "HTML Format" ) );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_Bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf ) const
+{
+    OUString clipFormatName = getClipboardFormatName( cf );
+
+    return ( clipFormatName.equalsIgnoreCase(
+        OUString::createFromAscii( "HTML (HyperText Markup Language)" ) ) );
 }
 
 //------------------------------------------------------------------------
@@ -334,7 +386,7 @@ LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
 OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromClipboard(
     const Reference< XTransferable >& refXTransferable, CLIPFORMAT aClipformat ) const
 {
-    OSL_ASSERT( isOemOrAnsiTextClipformat( aClipformat ) );
+    OSL_ASSERT( isOemOrAnsiTextFormat( aClipformat ) );
 
     OUString charset;
     if ( CF_TEXT == aClipformat )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 13:02:38 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,23 +270,24 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
     for( sal_Int32 i = 0; i < nFlavors; i++ )
     {
         aFlavor = aFlavorList[i];
-        CFormatEtc fetc = dataFlavorToFormatEtc( aFlavor );
+        CFormatEtc fetc = m_DataFormatTranslator.getFormatEtcFromDataFlavor( aFlavor );
 
         if ( !needsToSynthesizeAccompanyFormats( fetc ) )
             aFormatEtcContainer.addFormatEtc( fetc );
         else
         {
             // if we haven't registered any text format up to now
-            if ( isTextFormat( fetc.getClipformat() ) && !bUnicodeRegistered )
+            if ( m_DataFormatTranslator.isTextFormat( fetc.getClipformat() ) && !bUnicodeRegistered )
             {
                 // if the transferable supports unicode text we ignore
                 // any further text format the transferable offers
                 // because we can create it from Unicode text in addition
                 // we register CF_TEXT for non unicode clients
-                if ( isUnicodeTextFormat( fetc.getClipformat() ) )
+                if ( m_DataFormatTranslator.isUnicodeTextFormat( fetc.getClipformat() ) )
                 {
                     aFormatEtcContainer.addFormatEtc( fetc ); // add CF_UNICODE
-                    aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_TEXT ) ); // add CF_TEXT
+                    aFormatEtcContainer.addFormatEtc(
+                        m_DataFormatTranslator.getFormatEtcForClipformat( CF_TEXT ) ); // add CF_TEXT
                     bUnicodeRegistered = sal_True;
                 }
                 else if ( !hasUnicodeFlavor( aXTransferable ) )
@@ -302,14 +303,18 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
                     {
                         m_TxtCodePage = txtCP;
 
-                        aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_UNICODETEXT ) );
+                        aFormatEtcContainer.addFormatEtc(
+                            m_DataFormatTranslator.getFormatEtcForClipformat( CF_UNICODETEXT ) );
 
                         if ( !IsOEMCP( m_TxtCodePage ) )
-                            aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_TEXT ) );
+                            aFormatEtcContainer.addFormatEtc(
+                                m_DataFormatTranslator.getFormatEtcForClipformat( CF_TEXT ) );
                         else
-                            aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_OEMTEXT ) );
+                            aFormatEtcContainer.addFormatEtc(
+                                m_DataFormatTranslator.getFormatEtcForClipformat( CF_OEMTEXT ) );
 
-                        aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_LOCALE ) );
+                        aFormatEtcContainer.addFormatEtc(
+                            m_DataFormatTranslator.getFormatEtcForClipformat( CF_LOCALE ) );
 
                         // we save the flavor so it's easier when
                         // queried for it in XTDataObject::GetData(...)
@@ -320,6 +325,13 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
             }
             else // Html (Hyper Text...)
             {
+                // we add text/html ( HTML (HyperText Markup Language) )
+                aFormatEtcContainer.addFormatEtc( fetc );
+
+                // and HTML Format
+                OUString htmlFormat( OUString::createFromAscii( "HTML Format" ) );
+                aFormatEtcContainer.addFormatEtc(
+                    m_DataFormatTranslator.getFormatEtcForClipformatName( htmlFormat ) );
             }
         }
     }
@@ -356,40 +368,20 @@ sal_uInt32 SAL_CALL CFormatRegistrar::getRegisteredTextCodePage( ) const
 //
 //------------------------------------------------------------------------
 
-inline
-sal_Bool SAL_CALL CFormatRegistrar::isOemOrAnsiTextFormat( CLIPFORMAT cf ) const
+DataFlavor SAL_CALL CFormatRegistrar::getRegisteredTextFlavor( ) const
 {
-    return ( (cf == CF_TEXT) || (cf == CF_OEMTEXT) );
+    return m_RegisteredTextFlavor;
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-inline
-sal_Bool SAL_CALL CFormatRegistrar::isUnicodeTextFormat( CLIPFORMAT cf ) const
+sal_Bool SAL_CALL CFormatRegistrar::isSynthesizeableFormat( const CFormatEtc& aFormatEtc ) const
 {
-    return ( cf == CF_UNICODETEXT );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-inline
-sal_Bool SAL_CALL CFormatRegistrar::isTextFormat( CLIPFORMAT cf ) const
-{
-    return ( isOemOrAnsiTextFormat( cf ) ||
-             isUnicodeTextFormat( cf ) );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-CFormatEtc SAL_CALL CFormatRegistrar::dataFlavorToFormatEtc( const DataFlavor& aFlavor ) const
-{
-    return m_DataFormatTranslator.getFormatEtcFromDataFlavor( aFlavor );
+    return ( m_DataFormatTranslator.isOemOrAnsiTextFormat( aFormatEtc.getClipformat() ) ||
+             m_DataFormatTranslator.isUnicodeTextFormat( aFormatEtc.getClipformat() ) ||
+             m_DataFormatTranslator.isHTMLFormat( aFormatEtc.getClipformat() ) );
 }
 
 //------------------------------------------------------------------------
@@ -399,8 +391,9 @@ CFormatEtc SAL_CALL CFormatRegistrar::dataFlavorToFormatEtc( const DataFlavor& a
 inline
 sal_Bool SAL_CALL CFormatRegistrar::needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc ) const
 {
-    return ( isOemOrAnsiTextFormat( aFormatEtc.getClipformat() ) ||
-             isUnicodeTextFormat( aFormatEtc.getClipformat() ) );
+    return ( m_DataFormatTranslator.isOemOrAnsiTextFormat( aFormatEtc.getClipformat() ) ||
+             m_DataFormatTranslator.isUnicodeTextFormat( aFormatEtc.getClipformat() ) ||
+             m_DataFormatTranslator.isTextHtmlFormat( aFormatEtc.getClipformat( ) ) );
 }
 
 //------------------------------------------------------------------------
@@ -436,16 +429,6 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
     }
 
     return charset;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-inline
-CFormatEtc SAL_CALL CFormatRegistrar::getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const
-{
-    return m_DataFormatTranslator.getFormatEtcForClipformat( aClipformat );
 }
 
 //------------------------------------------------------------------------
