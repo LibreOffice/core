@@ -54,6 +54,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\data\org\openoffice\Setup.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Setup.xcd
 ..\data\org\openoffice\Types.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Types.xcd
 ..\data\org\openoffice\UserProfile.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\UserProfile.xcd
+..\data\org\openoffice\VCL.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\VCL.xcd
 
 ..\%__SRC%\misc\instance\org\openoffice\Office\Bibliography.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Bibliography.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Calc.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Calc.xml
@@ -80,6 +81,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\instance\org\openoffice\ucb\Store.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb\Store.xml
 ..\%__SRC%\misc\instance\org\openoffice\Setup.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Setup.xml
 ..\%__SRC%\misc\instance\org\openoffice\UserProfile.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\UserProfile.xml
+..\%__SRC%\misc\instance\org\openoffice\VCL.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\VCL.xml
 
 ..\%__SRC%\misc\template\org\openoffice\Office\Bibliography.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Bibliography.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Calc.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Calc.xml
@@ -106,7 +108,4 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\template\org\openoffice\ucb\Store.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\ucb\Store.xml
 ..\%__SRC%\misc\template\org\openoffice\Setup.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Setup.xml
 ..\%__SRC%\misc\template\org\openoffice\UserProfile.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\UserProfile.xml
-
-
-
-
+..\%__SRC%\misc\template\org\openoffice\VCL.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\VCL.xml
