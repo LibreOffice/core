@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:25:36 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,7 +1057,7 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
     XFormTextAdjust eAdjust = XFT_AUTOSIZE;
 
 //-/    rOldObj.TakeAttributes(aAttr, TRUE, FALSE);
-    aAttr.Put(rOldObj.GetItemSet());
+    aAttr.Put(rOldObj.GetMergedItemSet());
 
     const XFormTextStdFormItem& rOldForm = (const XFormTextStdFormItem&)
                                             aAttr.Get(XATTR_FORMTXTSTDFORM);
