@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 15:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,17 +128,10 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#endif
-
 #include <comphelper/processfactory.hxx>
 
-#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
-
-#define LINE_SEP    0x0A
 
 using namespace ::com::sun::star;
 
@@ -652,73 +645,6 @@ BOOL ImpEditEngine::MouseMove( const MouseEvent& rMEvt, EditView* pView )
     GetSelEngine().SetCurView( pView );
     GetSelEngine().SelMouseMove( rMEvt );
     return TRUE;
-}
-
-
-
-EditSelection ImpEditEngine::CutCopy( EditView* pView, BOOL bCut )
-{
-    EditSelection aSel( pView->pImpEditView->GetEditSelection() );
-    if ( !aSel.HasRange() )
-        return aSel;
-
-    GetEditEnginePtr()->CopyClipboard( CreateESel( aSel ) );
-
-    if ( bCut )
-    {
-        pView->pImpEditView->DrawSelection();
-        aSel = ImpDeleteSelection( aSel );
-    }
-    return aSel;
-}
-
-EditSelection ImpEditEngine::Paste( EditView* pView, BOOL bUseSpecial )
-{
-    EditSelection aSel( pView->pImpEditView->GetEditSelection() );
-
-    // Wenn keine Datan, dann auch nicht Selektion loeschen:
-    if ( !HasData( EXCHANGE_CLIPBOARD ) )
-        return aSel;
-
-    if ( aSel.HasRange() )
-    {
-        pView->pImpEditView->DrawSelection();
-        aSel = ImpDeleteSelection( aSel );
-    }
-
-    uno::Reference< datatransfer::XTransferable > xDataObj;
-    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = pView->GetWindow()->GetClipboard();
-
-    if ( xClipboard.is() )
-    {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        xDataObj = xClipboard->getContents();
-        Application::AcquireSolarMutex( nRef );
-    }
-
-    if ( xDataObj.is() )
-    {
-        if ( pView->pImpEditView->DoSingleLinePaste() )
-        {
-            datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
-            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
-            {
-                uno::Any aData = xDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aTmpText;
-                aData >>= aTmpText;
-                String aText( aTmpText );
-                aText.ConvertLineEnd( LINEEND_LF );
-                aText.SearchAndReplaceAll( LINE_SEP, ' ' );
-                aSel = ImpInsertText( aSel, aText );
-            }
-        }
-        else
-        {
-            aSel = InsertText( xDataObj, aSel.Min(), GetStatus().AllowPasteSpecial() );
-        }
-    }
-    return aSel;
 }
 
 EditPaM ImpEditEngine::InsertText( EditSelection aSel, const XubString& rStr )
@@ -2675,41 +2601,6 @@ void ImpEditEngine::SetActiveView( EditView* pView )
         delete mpIMEInfos;
         mpIMEInfos = NULL;
     }
-}
-
-BOOL ImpEditEngine::HasData( ExchangeType eExchange )
-{
-    BOOL bData = FALSE;
-
-    if ( eExchange == EXCHANGE_CLIPBOARD )
-    {
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
-
-        DBG_ASSERT( GetActiveView(), "HasData: No active view!" );
-        DBG_ASSERT( GetActiveView()->GetWindow(), "HasData: Active view has no window!" );
-
-        if( GetActiveView() && GetActiveView()->GetWindow() )
-            xClipboard = GetActiveView()->GetWindow()->GetClipboard();
-
-        if ( xClipboard.is() )
-        {
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-            uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
-            Application::AcquireSolarMutex( nRef );
-            if ( xDataObj.is() )
-            {
-                datatransfer::DataFlavor aFlavor;
-                SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
-                bData = xDataObj->isDataFlavorSupported( aFlavor );
-            }
-        }
-    }
-    else
-    {
-        bData = DragServer::HasFormat ( 0, SOT_FORMAT_STRING );
-    }
-
-    return bData;
 }
 
 uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable( const EditSelection& rSelection ) const

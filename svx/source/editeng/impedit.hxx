@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 15:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ DBG_NAMEEX( EditEngine );
 #define GETCRSR_ENDOFLINE   0x0001
 #define GETCRSR_TXTONLY     0x0002
 
+#define LINE_SEP    0x0A
+
 class EditView;
 class EditEngine;
 class SvxFontTable;
@@ -140,8 +142,6 @@ class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 
-
-enum ExchangeType { EXCHANGE_CLIPBOARD, EXCHANGE_DRAGSERVER };
 
 struct DragAndDropInfo
 {
@@ -291,6 +291,9 @@ public:
     BOOL            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
+    void            CutCopy( sal_Bool bCut );
+    void            Paste( sal_Bool bUseSpecial = sal_False );
+
     void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
     const Point&    GetVisDocStartPos() const { return aVisDocStartPos; }
 
@@ -339,7 +342,7 @@ public:
     void            SetInsertMode( sal_Bool bInsert );
     sal_Bool            IsInsertMode() const            { return ( ( nControl & EV_CNTRL_OVERWRITE ) == 0 ); }
 
-    void            EnablePaste( sal_Bool bEnable )     { SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
+    void                EnablePaste( sal_Bool bEnable )     { SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
     sal_Bool            IsPasteEnabled() const          { return ( ( nControl & EV_CNTRL_ENABLEPASTE ) != 0 ); }
 
     sal_Bool            DoSingleLinePaste() const       { return ( ( nControl & EV_CNTRL_SINGLELINEPASTE ) != 0 ); }
@@ -614,8 +617,6 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection ) const;
 
-    sal_Bool            HasData( ExchangeType eExchange );
-
     void                SetValidPaperSize( const Size& rSz );
 
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator();
@@ -697,8 +698,6 @@ public:
     EditPaM         InsertTab( EditSelection aEditSelection );
     EditPaM         InsertField( EditSelection aEditSelection, const SvxFieldItem& rFld );
     sal_Bool        UpdateFields();
-    EditSelection   CutCopy( EditView* pView, sal_Bool bCut );
-    EditSelection   Paste( EditView* pView, sal_Bool bUseSpecial = sal_False );
 
     EditPaM         Read( SvStream& rInput, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     void            Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel );

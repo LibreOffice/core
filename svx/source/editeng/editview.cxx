@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 15:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,50 +524,25 @@ sal_uInt32 EditView::Write( SvStream& rOutput, EETextFormat eFormat )
 void EditView::Cut()
 {
     DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-    PIMPEE->UndoActionStart( EDITUNDO_CUT );
-    EditSelection aCurSel ( PIMPEE->CutCopy( this, sal_True ) );
-    PIMPEE->UndoActionEnd( EDITUNDO_CUT );
-
-    pImpEditView->SetEditSelection( aCurSel );
-    PIMPEE->UpdateSelections();
-    PIMPEE->FormatAndUpdate( this );
+    pImpEditView->CutCopy( sal_True );
 }
 
 void EditView::Copy()
 {
     DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->CutCopy( this, sal_False );
+    pImpEditView->CutCopy( sal_False );
 }
 
 void EditView::Paste()
 {
     DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-    PIMPEE->UndoActionStart( EDITUNDO_PASTE );
-    EditSelection aCurSel( PIMPEE->Paste( this, sal_False ) );
-    PIMPEE->UndoActionEnd( EDITUNDO_PASTE );
-
-    pImpEditView->SetEditSelection( aCurSel );
-    PIMPEE->UpdateSelections();
-    PIMPEE->FormatAndUpdate( this );
+    pImpEditView->Paste( sal_False );
 }
 
 void EditView::PasteSpecial()
 {
     DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-    PIMPEE->UndoActionStart( EDITUNDO_PASTE );
-    EditSelection aCurSel ( PIMPEE->Paste( this, sal_True ) );
-    PIMPEE->UndoActionEnd( EDITUNDO_PASTE );
-
-    pImpEditView->SetEditSelection( aCurSel );
-    PIMPEE->UpdateSelections();
-    PIMPEE->FormatAndUpdate( this );
+    pImpEditView->Paste( sal_True );
 }
 
 void EditView::EnablePaste( sal_Bool bEnable )

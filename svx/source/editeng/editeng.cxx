@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 15:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@
 #include <charscaleitem.hxx>
 #include <charreliefitem.hxx>
 
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
 
 #ifndef _SV_SYSTEM_HXX
 #include <vcl/system.hxx>
@@ -718,33 +720,6 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     {
         switch ( eFunc )
         {
-            case KEYFUNC_CUT:
-            {
-                if ( !bReadOnly )
-                {
-                    pImpEditEngine->UndoActionStart( EDITUNDO_CUT );
-                    aCurSel = pImpEditEngine->CutCopy( pEditView, sal_True );
-                    pImpEditEngine->UndoActionEnd( EDITUNDO_CUT );
-                    bModified = sal_True;
-                }
-            }
-            break;
-            case KEYFUNC_COPY:
-            {
-                aCurSel = pImpEditEngine->CutCopy( pEditView, sal_False );
-            }
-            break;
-            case KEYFUNC_PASTE:
-            {
-                if ( !bReadOnly && pEditView->IsPasteEnabled() )
-                {
-                    pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
-                    aCurSel = pImpEditEngine->Paste( pEditView, pImpEditEngine->GetStatus().AllowPasteSpecial() );
-                    pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
-                    bModified = sal_True;
-                }
-            }
-            break;
             case KEYFUNC_UNDO:
             {
                 if ( !bReadOnly )
@@ -1912,88 +1887,6 @@ void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
     }
 }
 
-sal_Bool EditEngine::CopyDragServer() const
-{
-    return FALSE;
-}
-
-sal_Bool EditEngine::CopyDragServer( const ESelection& rSel ) const
-{
-    return FALSE;
-}
-
-sal_Bool EditEngine::PasteDragServer( sal_uInt16 )
-{
-    return FALSE;
-}
-
-
-sal_Bool EditEngine::CopyClipboard() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-
-    const EditDoc& rDoc = pImpEditEngine->GetEditDoc();
-    EditSelection aSel( rDoc.GetStartPaM(), rDoc.GetEndPaM() );
-    return CopyClipboard( pImpEditEngine->CreateESel( aSel ) );
-}
-
-sal_Bool EditEngine::CopyClipboard( const ESelection& rSel ) const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-
-    EditSelection aSel( pImpEditEngine->
-        ConvertSelection( rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos ) );
-
-    if ( aSel.HasRange() )
-    {
-        uno::Reference< datatransfer::XTransferable > xData = pImpEditEngine->CreateTransferable( aSel );
-
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
-
-        DBG_ASSERT( GetActiveView(), "CopyClipboard: No active view!" );
-        DBG_ASSERT( GetActiveView()->GetWindow(), "CopyClipboard: Active view has no window!" );
-
-        if( GetActiveView() && GetActiveView()->GetWindow() )
-            xClipboard = GetActiveView()->GetWindow()->GetClipboard();
-
-        if( xClipboard.is() )
-        {
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-            xClipboard->setContents( xData, NULL );
-            Application::AcquireSolarMutex( nRef );
-        }
-        return sal_True;
-    }
-    return sal_False;
-}
-
-sal_Bool EditEngine::PasteClipboard()
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-
-    if ( !pImpEditEngine->HasData( EXCHANGE_CLIPBOARD ) )
-        return sal_False;
-
-    SetText( String() );
-
-    uno::Reference< datatransfer::XTransferable > xDataObj;
-    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
-    if ( GetActiveView() )
-        xClipboard = GetActiveView()->GetWindow()->GetClipboard();
-
-    if ( xClipboard.is() )
-    {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        xDataObj = xClipboard->getContents();
-        Application::AcquireSolarMutex( nRef );
-    }
-
-    if ( xDataObj.is() )
-        pImpEditEngine->InsertText( xDataObj, pImpEditEngine->GetEditDoc().GetStartPaM(), TRUE );
-
-    return sal_True;
-}
-
 sal_Bool EditEngine::HasOnlineSpellErrors() const
 {
 #ifndef SVX_LIGHT
@@ -2416,6 +2309,21 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
         rNumBullet.GetNumRule()->SetLevel( nLevel, *pNumberFormat );
         delete pNumberFormat;
     }
+}
+
+BOOL EditEngine::HasValidData( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )
+{
+    BOOL bValidData = FALSE;
+
+    if ( rTransferable.is() )
+    {
+        // Every application that copies rtf or any other text format also copies plain text into the clipboard....
+        datatransfer::DataFlavor aFlavor;
+        SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+        bValidData = rTransferable->isDataFlavorSupported( aFlavor );
+    }
+
+    return bValidData;
 }
 
 
