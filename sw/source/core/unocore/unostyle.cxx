@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:43:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #endif
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
 #endif
 
 #ifndef _SVX_PAGEITEM_HXX //autogen
