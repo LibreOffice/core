@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:24:37 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,6 +627,33 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
     if( pNode && pNode->IsTxtNode() )
     {
+        // -> #i27615#
+        if (rRg.IsInFrontOfLabel())
+        {
+            SwTxtNode * pTxtNd = pNode->GetTxtNode();
+            const SwNodeNum * pNdNum = pTxtNd->GetNum();
+
+            if (pNdNum )
+            {
+                SwNumRule * pNumRule = pTxtNd->GetNumRule();
+
+                SwNumFmt aNumFmt = pNumRule->Get(pNdNum->GetRealLevel());
+                SwCharFmt * pCharFmt =
+                    pDoc->FindCharFmtByName(aNumFmt.GetCharFmtName());
+
+                if (pCharFmt)
+                {
+                    if (pHistory)
+                        pHistory->Add(pCharFmt->GetAttrSet(), *pCharFmt);
+
+                    pCharFmt->SetAttr(aCharSet);
+                }
+            }
+
+            return TRUE;
+        }
+        // <- #i27615#
+
         const SwIndex& rSt = pStt->nContent;
 
         // Attribute ohne Ende haben keinen Bereich
