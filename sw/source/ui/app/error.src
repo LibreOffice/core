@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:13:22 $
+ *  last change: $Author: kz $ $Date: 2000-12-11 23:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ Resource RID_SW_ERRHDL
         TEXT [ english_us ] = "This is not a %PRODUCTNAME Writer file" ;
         TEXT[ chinese_simplified ] = "Õâ²»ÊÇÒ»¸ö %PRODUCTNAME Writer ÎÄ¼ş";
         TEXT[ russian ] = "İòîò ôàéë íå ÿâëÿåòñÿ ôàéëîì %PRODUCTNAME Writer";
-        TEXT[ polish ] = "Ten plik nie jest plikiem %PRODUCTNAME Writer";
+        TEXT[ polish ] = "Ten plik nie jest plikiem %PRODUCTNAME Writer.";
         TEXT[ japanese ] = "‚±‚ê‚Í %PRODUCTNAME Writer ‚ÌÌ§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
         TEXT[ chinese_traditional ] = "³o¤£¬O¤@­Ó %PRODUCTNAME Writer ÀÉ®×";
         TEXT[ arabic ] = "åĞÇ Çáãáİ áíÓ ãáİ %PRODUCTNAME Writer";
@@ -1248,7 +1248,7 @@ Resource RID_SW_ERRHDL
         Text[ italian ] = "Il documento HTML contiene macro %PRODUCTNAME Basic che\nnon sono state salvate con le impostazioni attuali di esportazione.";
         Text[ danish ] = "Dette HTML-dokument indeholder %PRODUCTNAME Basic-makroer.\nDe blev ikke gemt med de aktuelle eksportindstillinger.";
         Text[ swedish ] = "HTML-dokumentet innehåller %PRODUCTNAME Basic-makron.\nDe sparades inte med de aktuella exportinställningarna.";
-        Text[ polish ] = "Dokument HTML zawiera Makra %PRODUCTNAME Basic.\nNie zosta³y one zapisane razem z aktualnymi ustawieniami ekspotru.";
+        Text[ polish ] = "Dokument HTML zawiera makra %PRODUCTNAME Basic.\nNie zosta³y one zapisane razem z aktualnymi ustawieniami eksportu.";
         Text[ portuguese_brazilian ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved because of the current export options.";
         Text[ japanese ] = "‚±‚ÌHTMLÄŞ·­ÒİÄ‚Í%PRODUCTNAME Basic Ï¸Û‚ğŠÜ‚ñ‚Å‚¢‚Ü‚·B\n‚»‚ê‚ç‚ÍŒ»İ‚Ì´¸½Îß°Äİ’è‚Å‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
         Text[ korean ] = "ÀÌ HTML ¹®¼­´Â %PRODUCTNAME Basic ¸ÅÅ©·Î¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nÇöÀçÀÇ º¸³»±â ¼³Á¤À¸·Î´Â ¸ÅÅ©·Î°¡ ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.";
