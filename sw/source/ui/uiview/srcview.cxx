@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-23 14:48:44 $
+ *  last change: $Author: jp $ $Date: 2001-09-07 11:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,7 +799,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
                                                             &aEditWin) );
-                    bDisable = !aDataHelper.GetTransferable().is() ||
+                    bDisable = !aDataHelper.GetXTransferable().is() ||
                                 0 == aDataHelper.GetFormatCount();
                 }
                 if( bDisable )

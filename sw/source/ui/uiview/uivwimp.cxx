@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:26 $
+ *  last change: $Author: jp $ $Date: 2001-09-07 11:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,10 +322,10 @@ void SAL_CALL SwClipboardChangeListener::changedContents(
         SwWrtShell& rSh = pView->GetWrtShell();
 
         pView->nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
-        pView->bPasteState = aDataHelper.GetTransferable().is() &&
+        pView->bPasteState = aDataHelper.GetXTransferable().is() &&
                         SwTransferable::IsPaste( rSh, aDataHelper );
 
-        pView->bPasteSpecialState = aDataHelper.GetTransferable().is() &&
+        pView->bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
                     SwTransferable::IsPasteSpecial( rSh, aDataHelper );
         }
 

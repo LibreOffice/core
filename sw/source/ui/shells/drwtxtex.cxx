@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 16:37:11 $
+ *  last change: $Author: jp $ $Date: 2001-09-07 11:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,7 +775,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
                         TransferableDataHelper::CreateFromSystemClipboard(
                                 &GetView().GetEditWin() ) );
 
-                    if( !aDataHelper.GetTransferable().is() ||
+                    if( !aDataHelper.GetXTransferable().is() ||
                         !SwTransferable::IsPaste( GetShell(), aDataHelper ))
                         rSet.DisableItem( SID_PASTE );
                 }

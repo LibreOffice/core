@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-30 12:04:00 $
+ *  last change: $Author: jp $ $Date: 2001-09-07 11:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1650,7 +1650,7 @@ BOOL SwView::IsPasteAllowed()
         TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
                                                         &GetEditWin()) );
-        if( aDataHelper.GetTransferable().is() )
+        if( aDataHelper.GetXTransferable().is() )
         {
             bPasteState = SwTransferable::IsPaste( *pWrtShell, aDataHelper );
             bPasteSpecialState = SwTransferable::IsPasteSpecial(
@@ -1674,7 +1674,7 @@ BOOL SwView::IsPasteSpecialAllowed()
         TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
                                                         &GetEditWin()) );
-        if( aDataHelper.GetTransferable().is() )
+        if( aDataHelper.GetXTransferable().is() )
         {
             bPasteState = SwTransferable::IsPaste( *pWrtShell, aDataHelper );
             bPasteSpecialState = SwTransferable::IsPasteSpecial(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-21 10:27:01 $
+ *  last change: $Author: jp $ $Date: 2001-09-07 11:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         TransferableDataHelper::CreateFromSystemClipboard(
                                         &rSh.GetView().GetEditWin() ) );
 
-                if( aDataHelper.GetTransferable().is() &&
+                if( aDataHelper.GetXTransferable().is() &&
                     SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
                     // temp. Variablen, da die Shell nach dem Paste schon
@@ -519,7 +519,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
                                             &rSh.GetView().GetEditWin()) );
-                    if( aDataHelper.GetTransferable().is()
+                    if( aDataHelper.GetXTransferable().is()
                         /*&& SwTransferable::IsPaste( rSh, aDataHelper )*/ )
                     {
                         // temp. Variablen, da die Shell nach dem Paste schon
@@ -542,7 +542,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
                                         &rSh.GetView().GetEditWin()) );
-                if( aDataHelper.GetTransferable().is() &&
+                if( aDataHelper.GetXTransferable().is() &&
                     SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
                     // temp. Variablen, da die Shell nach dem Paste schon
