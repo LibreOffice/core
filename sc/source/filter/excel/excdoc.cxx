@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:07:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -122,6 +121,9 @@
 #ifndef SC_XEPAGE_HXX
 #include "xepage.hxx"
 #endif
+#ifndef SC_XEVIEW_HXX
+#include "xeview.hxx"
+#endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
 #endif
@@ -180,11 +182,11 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 {
     InitializeGlobals();
 
-    RootData& rR = *mpRD;
+    RootData& rR = GetOldRoot();
     ScDocument& rDoc = GetDoc();
     XclExpTabInfo& rTabInfo = GetTabInfo();
 
-    if ( rR.eDateiTyp < Biff8 )
+    if ( GetBiff() <= EXC_BIFF5 )
         Add( new ExcBofW );
     else
         Add( new ExcBofW8 );
@@ -193,30 +195,28 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     String  aTmpString;
     SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
-    UINT16  nCodenames      = rTabInfo.GetXclCodenameCount();
+    UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
 
     rR.pObjRecs = NULL;             // per sheet
 
-    if( rR.eDateiTyp < Biff8 )
+    if( GetBiff() <= EXC_BIFF5 )
         Add( new ExcDummy_00 );
     else
     {
         Add( new ExcDummy8_00a );
         rR.pTabId = new XclExpChTrTabId( Max( nExcTabCount, nCodenames ) );
         Add( rR.pTabId );
-        if( rR.bWriteVBAStorage )
+        if( HasVbaStorage() )
         {
             Add( new XclObproj );
-            const String*   p = GetExtDocOptions().GetCodename();
-            if( p )
-                Add( new XclCodename( *p ) );
+            const String& rCodeName = GetExtDocOptions().GetDocSettings().maGlobCodeName;
+            if( rCodeName.Len() )
+                Add( new XclCodename( rCodeName ) );
         }
         Add( new ExcDummy8_00b );
     }
 
     // erst Namen- und Tabellen-Eintraege aufbauen
-    DBG_ASSERT( rDoc.GetRangeName(), "-ExcTable::Header(): Keine Namen? Kann nicht angehen!" );
-
     String          aName;
 
     for( nC = 0 ; nC < nScTabCount ; nC++ )
@@ -226,26 +226,42 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
             *pTabNames << aTmpString;
         }
 
-    if ( rR.eDateiTyp < Biff8 )
+    if ( GetBiff() <= EXC_BIFF5 )
     {
         // global link table: EXTERNCOUNT, EXTERNSHEET, NAME
         aRecList.AppendRecord( CreateRecord( EXC_ID_EXTERNSHEET ) );
         aRecList.AppendRecord( CreateRecord( EXC_ID_NAME ) );
+    }
 
-        Add( new XclExpWindowProtection(false) );
-        Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
-        Add( new XclExpBoolRecord( 0x0013, false ) );   // PASSWORD
-        Add( new XclExpWindow1( GetRoot() ) );
+    aRecList.AppendNewRecord( new XclExpWindowProtection( GetExtDocOptions().GetDocSettings().mbWinProtected ) );
+    aRecList.AppendNewRecord( new XclExpDocProtection( rDoc.IsDocProtected() ) );
+    aRecList.AppendNewRecord( new XclExpBoolRecord( EXC_ID_PASSWORD, false ) );
+
+    if( GetBiff() == EXC_BIFF8 )
+        Add( new ExcDummy8_040 );
+
+    aRecList.AppendNewRecord( new XclExpWindow1( GetRoot() ) );
+
+    if( GetBiff() <= EXC_BIFF5 )
+    {
         Add( new ExcDummy_040 );
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy_041 );
+    }
+    else
+    {
+        Add( new Exc1904( rDoc ) );
+        Add( new ExcDummy8_041 );
+    }
 
-        // Formatting: FONT, FORMAT, XF, STYLE, PALETTE
-        aRecList.AppendRecord( CreateRecord( EXC_ID_FONT ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_FORMAT ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_XF ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
+    // Formatting: FONT, FORMAT, XF, STYLE, PALETTE
+    aRecList.AppendRecord( CreateRecord( EXC_ID_FONT ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_FORMAT ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_XF ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
 
+    if( GetBiff() <= EXC_BIFF5 )
+    {
         // Bundlesheet
         for( nC = 0 ; nC < nScTabCount ; nC++ )
             if( rTabInfo.IsExportTab( nC ) )
@@ -257,22 +273,6 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     }
     else
     {
-        if(rDoc.GetExtDocOptions())
-            Add( new XclExpWindowProtection(rDoc.GetExtDocOptions()->IsWinProtected()) );
-        else
-            Add( new XclExpWindowProtection(false));
-        Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
-        Add( new ExcDummy8_040 );
-        Add( new XclExpWindow1( GetRoot() ) );
-        Add( new Exc1904( rDoc ) );
-        Add( new ExcDummy8_041 );
-
-        // Formatting: FONT, FORMAT, XF, STYLE, PALETTE
-        aRecList.AppendRecord( CreateRecord( EXC_ID_FONT ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_FORMAT ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_XF ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
-
         // Pivot Cache
         GetPivotTableManager().CreatePivotTables();
         aRecList.AppendRecord( GetPivotTableManager().CreatePivotCachesRecord() );
@@ -320,31 +320,18 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 }
 
 
-void ExcTable::FillAsTable()
+void ExcTable::FillAsTable( size_t nCodeNameIdx )
 {
     InitializeTable( mnScTab );
 
-    RootData& rR = *mpRD;
+    RootData& rR = GetOldRoot();
     XclBiff eBiff = GetBiff();
     ScDocument& rDoc = GetDoc();
-    XclExpTabInfo& rTabInfo = GetTabInfo();
-    XclExpXFBuffer& rXFBuffer = GetXFBuffer();
-
-    if( mnScTab >= rTabInfo.GetScTabCount() )
-    {
-        if( CodenameList* pL = GetExtDocOptions().GetCodenames() )
-            if( const String* p = pL->Next() )
-                NullTab( p );
-        return;
-    }
-
-    SvNumberFormatter&      rFormatter = *rR.pDoc->GetFormatTable();
-    const BiffTyp           eDateiTyp = rR.eDateiTyp;
 
     DBG_ASSERT( (mnScTab >= 0L) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
     DBG_ASSERT( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
-    if ( eBiff >= xlBiff8 )
+    if ( eBiff == EXC_BIFF8 )
         // list holding OBJ records and creating MSODRAWING per-sheet data
         rR.pObjRecs = new XclObjList( GetRoot() );
 
@@ -356,7 +343,7 @@ void ExcTable::FillAsTable()
     ScfRef< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
-    if( eBiff <= xlBiff7 )
+    if( eBiff <= EXC_BIFF5 )
     {
         Add( new ExcBof );
         Add( new ExcDummy_02a );
@@ -377,7 +364,7 @@ void ExcTable::FillAsTable()
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_DEFROWHEIGHT ) );
 
     // COUNTRY - in BIFF5/7 in every worksheet
-    if( eBiff <= xlBiff7 )
+    if( eBiff <= EXC_BIFF5 )
         Add( new XclExpCountry( GetRoot() ) );
 
     Add( new XclExpWsbool( bFitToPages ) );
@@ -389,10 +376,10 @@ void ExcTable::FillAsTable()
         Add( new XclProtection() );
 
     // local link table: EXTERNCOUNT, EXTERNSHEET
-    if( eBiff <= xlBiff7 )
+    if( eBiff <= EXC_BIFF5 )
         aRecList.AppendRecord( CreateRecord( EXC_ID_EXTERNSHEET ) );
 
-    if ( eBiff >= xlBiff8 )
+    if ( eBiff == EXC_BIFF8 )
     {
         // Scenarios
         Add( new ExcEScenarioManager( rDoc, mnScTab ) );
@@ -406,19 +393,14 @@ void ExcTable::FillAsTable()
     // MERGEDCELLS record, generated by the cell table
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_MERGEDCELLS ) );
     // label ranges
-    if( eBiff >= xlBiff8 )
+    if( eBiff == EXC_BIFF8 )
         Add( new XclExpLabelranges( GetRoot() ) );
     // data validation (DVAL and list of DV records), generated by the cell table
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_DVAL ) );
 
-    if( eBiff <= xlBiff7 )
+    if( eBiff == EXC_BIFF8 )
     {
-        Add( new XclExpWindow2( GetRoot(), mnScTab ) );
-        Add( new ExcSelection( 0, 0, 3 ) );
-    }
-    else
-    {
-        rR.pEscher->AddSdrPage( rR );
+        rR.pEscher->AddSdrPage( GetRoot() );
         //! close Escher group shape and ESCHER_DgContainer
         //! opened by XclObjList ctor MSODRAWING
         rR.pObjRecs->EndSheet();
@@ -427,15 +409,15 @@ void ExcTable::FillAsTable()
 
         // pivot tables
         aRecList.AppendRecord( GetPivotTableManager().CreatePivotTablesRecord( mnScTab ) );
-
-        // WINDOW2
-        Add( new XclExpWindow28( GetRoot(), mnScTab ) );
     }
 
     // list of NOTE records, generated by the cell table
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_NOTE ) );
 
-    if( eBiff >= xlBiff8 )
+    // sheet view settings: WINDOW2, SCL, PANE, SELECTION
+    aRecList.AppendNewRecord( new XclExpTabViewSettings( GetRoot(), mnScTab ) );
+
+    if( eBiff == EXC_BIFF8 )
     {
         // web queries
         Add( new XclExpWebQueryBuffer( GetRoot() ) );
@@ -443,10 +425,9 @@ void ExcTable::FillAsTable()
         // conditional formats
         Add( new XclExpCondFormatBuffer( GetRoot() ) );
 
-        if( rR.bWriteVBAStorage )
-            if( CodenameList* pL = GetExtDocOptions().GetCodenames() )
-                if( const String* p = nExcTab ? pL->Next() : pL->First() )
-                    Add( new XclCodename( *p ) );
+        if( HasVbaStorage() )
+            if( nCodeNameIdx < GetExtDocOptions().GetCodeNameCount() )
+                Add( new XclCodename( GetExtDocOptions().GetCodeName( nCodeNameIdx ) ) );
     }
 
     // list of HLINK records, generated by the cell table
@@ -467,39 +448,25 @@ void ExcTable::FillAsTable()
 }
 
 
-void ExcTable::NullTab( const String* pCodename )
+void ExcTable::FillAsEmptyTable( size_t nCodeNameIdx )
 {
-    DBG_ASSERT( (mnScTab >= 0L) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
-    DBG_ASSERT( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
+    InitializeTable( mnScTab );
 
-    RootData& rR = *mpRD;
-
-    if ( rR.eDateiTyp < Biff8 )
+    if( HasVbaStorage() && (nCodeNameIdx < GetExtDocOptions().GetCodeNameCount()) )
     {
-        Add( new ExcBof );
-        Add( new XclExpWindow2( GetRoot(), mnScTab ) );
-    }
-    else
-    {
-        Add( new ExcBof8 );
-
-        if( pCodename )
-            Add( new XclCodename( *pCodename ) );
+        if( GetBiff() <= EXC_BIFF5 )
+        {
+            Add( new ExcBof );
+        }
         else
         {
-            // create at least the MSODRAWING per-sheet data
-            rR.pObjRecs = new XclObjList( GetRoot() );
-            // all drawing obects
-            rR.pEscher->AddSdrPage( rR );
-            //! close Escher group shape and ESCHER_DgContainer
-            //! opened by XclObjList ctor MSODRAWING
-            rR.pObjRecs->EndSheet();
-            Add( rR.pObjRecs );
+            Add( new ExcBof8 );
+            Add( new XclCodename( GetExtDocOptions().GetCodeName( nCodeNameIdx ) ) );
         }
-        // WINDOW2
-        Add( new XclExpWindow28( GetRoot(), mnScTab ) );
+        // sheet view settings: WINDOW2, SCL, PANE, SELECTION
+        aRecList.AppendNewRecord( new XclExpTabViewSettings( GetRoot(), mnScTab ) );
+        Add( new ExcEof );
     }
-    Add( new ExcEof );
 }
 
 
@@ -535,27 +502,34 @@ void ExcDocument::ReadDoc( void )
 
     aHeader.FillAsHeader( maBoundsheetList );
 
-    SCTAB nScTabCount = ::std::max< SCTAB >(
-        GetTabInfo().GetScTabCount(), static_cast<SCTAB>(GetTabInfo().GetXclCodenameCount()) );
+    SCTAB nScTab = 0, nScTabCount = GetTabInfo().GetScTabCount();
+    size_t nCodeNameIdx = 0, nCodeNameCount = GetExtDocOptions().GetCodeNameCount();
 
-    for( SCTAB nScTab = 0; nScTab < nScTabCount; ++nScTab )
+    for( ; nScTab < nScTabCount; ++nScTab )
     {
         if( GetTabInfo().IsExportTab( nScTab ) )
         {
             ExcTableList::RecordRefType xTab( new ExcTable( GetRoot(), nScTab ) );
             maTableList.AppendRecord( xTab );
-            xTab->FillAsTable();
+            xTab->FillAsTable( nCodeNameIdx );
+            ++nCodeNameIdx;
         }
     }
+    for( ; nCodeNameIdx < nCodeNameCount; ++nScTab, ++nCodeNameIdx )
+    {
+        ExcTableList::RecordRefType xTab( new ExcTable( GetRoot(), nScTab ) );
+        maTableList.AppendRecord( xTab );
+        xTab->FillAsEmptyTable( nCodeNameIdx );
+    }
 
-    if ( GetBiff() >= xlBiff8 )
+    if ( GetBiff() == EXC_BIFF8 )
     {
         // complete temporary Escher stream
-        mpRD->pEscher->GetEx()->EndDocument();
+        GetOldRoot().pEscher->GetEx()->EndDocument();
 
         // change tracking
         if ( GetDoc().GetChangeTrack() )
-            pExpChangeTrack = new XclExpChangeTrack( mpRD );
+            pExpChangeTrack = new XclExpChangeTrack( GetRoot() );
     }
 }
 
@@ -566,8 +540,8 @@ void ExcDocument::Write( SvStream& rSvStrm )
     {
         InitializeSave();
 
-        if ( GetBiff() >= xlBiff8 )
-            mpRD->pEscher->GetStrm().Seek(0);   // ready for take off
+        if ( GetBiff() == EXC_BIFF8 )
+            GetOldRoot().pEscher->GetStrm().Seek(0);   // ready for take off
 
         XclExpStream aXclStrm( rSvStrm, GetRoot() );
 
