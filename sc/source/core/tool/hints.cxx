@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:08:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ ScPaintHint::~ScPaintHint()
 // -----------------------------------------------------------------------
 
 ScUpdateRefHint::ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
-                                    short nX, short nY, short nZ ) :
+                                    SCsCOL nX, SCsROW nY, SCsTAB nZ ) :
     eUpdateRefMode( eMode ),
     aRange( rR ),
     nDx( nX ),
