@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:18:56 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@
 #include <svtools/stritem.hxx>
 #include <svtools/ptitem.hxx>
 #include <svtools/urlbmk.hxx>
-#include <so3/clsids.hxx>
+#include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
@@ -391,7 +391,7 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
 
                 if ( ScGlobal::pDrawClipDocShellRef )
                 {
-                    SvEmbeddedObjectRef aPersistRef( *ScGlobal::pDrawClipDocShellRef );
+                    SfxObjectShellRef aPersistRef( &(*ScGlobal::pDrawClipDocShellRef) );
                     pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
                 }
 
@@ -476,7 +476,7 @@ void ScViewFunc::PasteFromSystem()
                 if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
                     aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
                 {
-                    SvStorageRef xStore( new SvStorage( *xStm ) );
+                    SotStorageRef xStore( new SotStorage( *xStm ) );
                     bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                  aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
                                && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
