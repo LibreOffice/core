@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStyles.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:22:05 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,12 +380,40 @@ const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
 
 #ifndef SVX_LIGHT
 
-static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle )
+static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumber& rElement )
+{
+    if( rElement.mbDecimal02 )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES, XML_2 );
+    }
+
+    if( rElement.mbLong )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_STYLE, XML_LONG );
+    }
+
+    if( rElement.mbTextual )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TEXTUAL, XML_TRUE );
+    }
+
+    SvXMLElementExport aNumberStyle( rExport, XML_NAMESPACE_NUMBER, rElement.meNumberStyle, sal_True, sal_False );
+    if( rElement.mpText )
+    {
+        OUString sAttrValue( OUString::createFromAscii( rElement.mpText ) );
+        rExport.GetDocHandler()->characters( sAttrValue );
+    }
+}
+
+static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle, const SdXMLFixedDataStyle* pStyle2 = NULL )
 {
     OUString sAttrValue;
 
     // name
     sAttrValue = OUString::createFromAscii( pStyle->mpName );
+    if( pStyle2 )
+        sAttrValue += OUString::createFromAscii( pStyle2->mpName );
+
     rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sAttrValue );
 
     // family
@@ -399,46 +427,81 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
 
     SvXMLElementExport aElement( rExport, XML_NAMESPACE_NUMBER, pStyle->mbDateStyle ? XML_DATE_STYLE : XML_TIME_STYLE, sal_True, sal_True );
 
-    const sal_uInt8* pElements = (const sal_uInt8*)&pStyle->mpFormat[0];
-
-    while( *pElements )
+    do
     {
-        SdXMLDataStyleNumber& rElement = aSdXMLDataStyleNumbers[ (*pElements++) - 1 ];
 
-        if( rElement.mbDecimal02 )
+        const sal_uInt8* pElements = (const sal_uInt8*)&pStyle->mpFormat[0];
+
+        while( *pElements )
         {
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES, XML_2 );
+            SdXMLDataStyleNumber& rElement = aSdXMLDataStyleNumbers[ (*pElements++) - 1 ];
+            SdXMLExportDataStyleNumber( rExport, rElement );
         }
 
-        if( rElement.mbLong )
+        if( pStyle2 )
         {
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_STYLE, XML_LONG );
+            SdXMLDataStyleNumber& rElement = aSdXMLDataStyleNumbers[ DATA_STYLE_NUMBER_TEXT_SPACE - 1 ];
+            SdXMLExportDataStyleNumber( rExport, rElement );
         }
 
-        if( rElement.mbTextual )
-        {
-            rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TEXTUAL, XML_TRUE );
-        }
-
-        SvXMLElementExport aNumberStyle( rExport, XML_NAMESPACE_NUMBER, rElement.meNumberStyle, sal_True, sal_False );
-        if( rElement.mpText )
-        {
-            sAttrValue = OUString::createFromAscii( rElement.mpText );
-            rExport.GetDocHandler()->characters( sAttrValue );
-        }
+        pStyle = pStyle2;
+        pStyle2 = NULL;
     }
+    while( pStyle );
 }
 
 void SdXMLNumberStylesExporter::exportTimeStyle( SdXMLExport& rExport, sal_Int32 nStyle )
 {
     DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLTimeFormatCount), "Unknown time style!" )
-    SdXMLExportStyle( rExport, aSdXMLFixedTimeFormats[ nStyle ] );
+    if( (nStyle >= 0) && (nStyle < SdXMLTimeFormatCount) )
+        SdXMLExportStyle( rExport, aSdXMLFixedTimeFormats[ nStyle ] );
 }
 
 void SdXMLNumberStylesExporter::exportDateStyle( SdXMLExport& rExport, sal_Int32 nStyle )
 {
-    DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLDateFormatCount), "Unknown date style!" )
-    SdXMLExportStyle( rExport, aSdXMLFixedDateFormats[ nStyle ] );
+    if( nStyle > 0x0f )
+    {
+        int nDateStyle = nStyle & 0x0f;
+        bool bHasDate = nDateStyle != 0;
+
+        if( nDateStyle > 1 )
+            nDateStyle -= 2;
+
+        DBG_ASSERT( (nDateStyle >= 0) && (nDateStyle < SdXMLDateFormatCount), "unknown date style!" );
+
+        int nTimeStyle = (nStyle >> 4) & 0x0f;
+        bool bHasTime = nTimeStyle != 0;
+
+        if( nTimeStyle > 1 )
+            nTimeStyle -= 2;
+
+        DBG_ASSERT( (nTimeStyle >= 0) && (nTimeStyle < SdXMLTimeFormatCount), "Unknown time style!" );
+
+        if( (nDateStyle >= 0) && (nDateStyle < SdXMLDateFormatCount) && (nTimeStyle >= 0) && (nTimeStyle < SdXMLTimeFormatCount) )
+        {
+            if( bHasDate )
+            {
+                if( bHasTime )
+                {
+                    SdXMLExportStyle( rExport, aSdXMLFixedDateFormats[ nDateStyle ], aSdXMLFixedTimeFormats[ nTimeStyle ] );
+                }
+                else
+                {
+                    SdXMLExportStyle( rExport, aSdXMLFixedDateFormats[ nDateStyle ] );
+                }
+            }
+            else if( bHasTime )
+            {
+                SdXMLExportStyle( rExport, aSdXMLFixedTimeFormats[ nTimeStyle ] );
+            }
+        }
+    }
+    else
+    {
+        DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLDateFormatCount), "unknown date style!" );
+        if( (nStyle >= 0) && (nStyle < SdXMLDateFormatCount) )
+            SdXMLExportStyle( rExport, aSdXMLFixedDateFormats[ nStyle ] );
+    }
 }
 
 OUString SdXMLNumberStylesExporter::getTimeStyleName(const sal_Int32 nTimeFormat )
@@ -460,6 +523,16 @@ OUString SdXMLNumberStylesExporter::getTimeStyleName(const sal_Int32 nTimeFormat
 OUString SdXMLNumberStylesExporter::getDateStyleName(const sal_Int32 nDateFormat )
 {
     sal_Int32 nFormat = nDateFormat;
+
+    if( nFormat > 0x0f )
+    {
+        OUString aStr;
+        if( nFormat & 0x0f )
+            aStr = getDateStyleName( nFormat & 0x0f );
+        aStr += getTimeStyleName( (nFormat >> 4) & 0x0f );
+        return aStr;
+    }
+
     if( nFormat > 1 )
         nFormat -= 2;
 
@@ -615,7 +688,7 @@ SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
 
 void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool   bDecimal02, OUString& rText )
 {
-    if( mnIndex == -1 || mnIndex == 8 )
+    if( mnIndex == -1 || mnIndex == 16 )
     {
         mnIndex = -1;
         return;
@@ -637,14 +710,15 @@ void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong
     }
 }
 
-sal_Bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle* pStyle ) const
+bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const
 {
-    if( pStyle->mbAutomatic != mbAutomatic )
+    if( (pStyle->mbAutomatic != mbAutomatic) && (nIndex == 0))
         return sal_False;
 
-    for( sal_Int16 nIndex = 0; nIndex < 8; nIndex++ )
+    sal_Int16 nCompareIndex;
+    for( nCompareIndex = 0; nCompareIndex < 8; nIndex++, nCompareIndex++ )
     {
-        if( pStyle->mpFormat[nIndex] != mnElements[nIndex] )
+        if( pStyle->mpFormat[nCompareIndex] != mnElements[nIndex] )
             return sal_False;
     }
 
@@ -655,7 +729,7 @@ void SdXMLNumberFormatImportContext::EndElement()
 {
     SvXMLNumFormatContext::EndElement();
 
-    for( ; mnIndex < 8; mnIndex++ )
+    for( ; mnIndex < 16; mnIndex++ )
     {
         mnElements[mnIndex] = 0;
     }
@@ -665,7 +739,8 @@ void SdXMLNumberFormatImportContext::EndElement()
         // compare import with all time styles
         for( sal_Int16 nFormat = 0; nFormat < SdXMLTimeFormatCount; nFormat++ )
         {
-            if( compareStyle( aSdXMLFixedTimeFormats[nFormat] ) )
+            sal_Int16 nIndex = 0;
+            if( compareStyle( aSdXMLFixedTimeFormats[nFormat], nIndex ) )
             {
                 mnKey = nFormat + 2;
                 break;
@@ -677,10 +752,39 @@ void SdXMLNumberFormatImportContext::EndElement()
         // compare import with all date styles
         for( sal_Int16 nFormat = 0; nFormat < SdXMLDateFormatCount; nFormat++ )
         {
-            if( compareStyle( aSdXMLFixedDateFormats[nFormat] ) )
+            sal_Int16 nIndex = 0;
+            if( compareStyle( aSdXMLFixedDateFormats[nFormat], nIndex ) )
             {
                 mnKey = nFormat + 2;
                 break;
+            }
+            else if( mnElements[nIndex] == DATA_STYLE_NUMBER_TEXT_SPACE )
+            {
+                // if its a valid date ending with a space, see if a time style follows
+                for( sal_Int16 nTimeFormat = 0; nTimeFormat < SdXMLTimeFormatCount; nTimeFormat++ )
+                {
+                    sal_Int16 nIndex2 = nIndex + 1;
+                    if( compareStyle( aSdXMLFixedTimeFormats[nTimeFormat], nIndex2 ) )
+                    {
+                        mnKey = nFormat + 2 | ((nTimeFormat + 2) << 4);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // no date style found? maybe its an extended time style
+        if( mnKey == -1 )
+        {
+            // compare import with all time styles
+            for( sal_Int16 nFormat = 0; nFormat < SdXMLTimeFormatCount; nFormat++ )
+            {
+                sal_Int16 nIndex = 0;
+                if( compareStyle( aSdXMLFixedTimeFormats[nFormat], nIndex ) )
+                {
+                    mnKey = (nFormat + 2) << 4;
+                    break;
+                }
             }
         }
     }
