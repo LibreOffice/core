@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_math.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:23:13 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ de = "%PRODUCTNAME Math"
 en-US = "%PRODUCTNAME Math"
 
 [STR_DESC_MODULE_PRG_MATH]
-de = "Der Formeleditor bietet Ihnen die Möglichkeit mathematische Formeln in Ihre Dokumente einzubinden."
-en-US = "The formula editor enables you to include mathematical formula in your documents."
+de = "Wissenschaftliche Formeln erstellen und bearbeiten mit %PRODUCTNAME Math."
+en-US = "Create and edit scientific formulas and equations by using %PRODUCTNAME Math."
 
 [STR_NAME_MODULE_PRG_MATH_BIN]
 de = "Programmodul"
@@ -73,7 +73,7 @@ en-US = "Program Module"
 
 [STR_DESC_MODULE_PRG_MATH_BIN]
 de = "Die Anwendung %PRODUCTNAME Math"
-en-US = "The %PRODUCTNAME Math Application"
+en-US = "The application %PRODUCTNAME Math"
 
 [STR_NAME_MODULE_PRG_MATH_HELP]
 de = "%PRODUCTNAME Math Hilfe"
