@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:20:36 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -227,9 +226,9 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
-#ifndef _LINENUM_HXX
-#include <linenum.hxx>
-#endif
+//CHINA001 #ifndef _LINENUM_HXX
+//CHINA001 #include <linenum.hxx>
+//CHINA001 #endif
 #ifndef _SECTION_HXX
 #include <section.hxx>
 #endif
@@ -301,9 +300,9 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#ifndef _MAILMRGE_HXX
-#include "mailmrge.hxx"
-#endif
+//CHINA001 #ifndef _MAILMRGE_HXX
+//CHINA001 #include "mailmrge.hxx"
+//CHINA001 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -316,6 +315,9 @@
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+#include "swabstdlg.hxx" //CHINA001
+#include "globals.hrc" //CHINA001
+#include <envelp.hrc> //CHINA001
 
 //Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
 static String sLstPg;
@@ -372,7 +374,11 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 
         case FN_LINE_NUMBERING_DLG:
         {
-            SwLineNumberingDlg *pDlg = new SwLineNumberingDlg(this);
+            //CHINA001 SwLineNumberingDlg *pDlg = new SwLineNumberingDlg(this);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( ResId(DLG_LINE_NUMBERING),  *this);
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
             break;
@@ -827,8 +833,13 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             {
                 SfxViewFrame* pFrame = GetViewFrame();
                 SfxHelp::OpenHelpAgent( pFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
-                SwMailMergeCreateFromDlg* pDlg = new SwMailMergeCreateFromDlg(
-                        &pFrame->GetWindow());
+//CHINA001                 SwMailMergeCreateFromDlg* pDlg = new SwMailMergeCreateFromDlg(
+//CHINA001              &pFrame->GetWindow());
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( ResId(DLG_MERGE_CREATE),
+                                                        &pFrame->GetWindow());
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if(RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
@@ -1649,8 +1660,14 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             else
             {
                 //take an existing data source or create a new one?
-                    SwMailMergeFieldConnectionsDlg* pConnectionsDlg = new SwMailMergeFieldConnectionsDlg(
-                                                                    &GetViewFrame()->GetWindow());
+//CHINA001                     SwMailMergeFieldConnectionsDlg* pConnectionsDlg = new SwMailMergeFieldConnectionsDlg(
+//CHINA001              &GetViewFrame()->GetWindow());
+                    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                    AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(
+                                                        ResId(DLG_MERGE_FIELD_CONNECTIONS),
+                                                        &GetViewFrame()->GetWindow());
+                    DBG_ASSERT(pConnectionsDlg, "Dialogdiet fail!");//CHINA001
                     if(RET_OK == pConnectionsDlg->Execute())
                         bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();
                     else
