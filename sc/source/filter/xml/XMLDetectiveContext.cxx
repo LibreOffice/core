@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 15:50:07 $
+ *  last change: $Author: sab $ $Date: 2002-05-03 13:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,12 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CONTAINS_ERROR:
                 aDetectiveObj.bHasError = IsXMLToken(sValue, XML_TRUE);
             break;
+            case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_MARKED_INVALID:
+                {
+                    if (IsXMLToken(sValue, XML_TRUE))
+                        aDetectiveObj.eObjType = SC_DETOBJ_CIRCLE;
+                }
+            break;
         }
     }
 }
@@ -239,6 +245,7 @@ void ScXMLDetectiveHighlightedContext::EndElement()
         case SC_DETOBJ_TOOTHERTAB:
         break;
         case SC_DETOBJ_FROMOTHERTAB:
+        case SC_DETOBJ_CIRCLE:
             bValid = sal_True;
         break;
         default:
