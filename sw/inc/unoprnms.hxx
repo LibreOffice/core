@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 20:00:33 $
+ *  last change: $Author: os $ $Date: 2000-12-14 10:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,20 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_SECTION;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_HANGING_PUNCTUATION;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_CHARACTER_DISTANCE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_FORBIDDEN_RULES;
+
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_MAIN_ENTRY;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_ROTATION;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_LUMINANCE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_CONTRAST;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_RED;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_GREEN;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_BLUE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_GAMMA;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_INVERSION;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_TRANSPARENCY;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_COLOR_MODE;
+
 #endif
 
 

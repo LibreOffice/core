@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 15:37:44 $
+ *  last change: $Author: os $ $Date: 2000-12-14 10:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
+#include <com/sun/star/drawing/ColorMode.hpp>
 #endif
 #ifndef _SVX_PBINITEM_HXX //autogen
 #include <svx/pbinitem.hxx>
@@ -1328,6 +1331,16 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_ROTATION),      RES_GRFATR_ROTATION,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_LUMINANCE),     RES_GRFATR_LUMINANCE,    &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_CONTRAST),      RES_GRFATR_CONTRAST,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_RED),           RES_GRFATR_CHANNELR,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_GREEN),         RES_GRFATR_CHANNELG,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_BLUE),          RES_GRFATR_CHANNELB,     &::getCppuType((sal_Int16*)0), 0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_GAMMA),         RES_GRFATR_GAMMA,        &::getCppuType((double*)0),        0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_INVERSION),     RES_GRFATR_INVERT,       &::getBooleanCppuType(),   0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int8*)0),  0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_COLOR_MODE),    RES_GRFATR_DRAWMODE,     &::getCppuType((drawing::ColorMode*)0),        0,   0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aGraphicPropertyMap_Impl;
