@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-06-15 13:27:00 $
+ *  last change: $Author: th $ $Date: 2001-06-21 21:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,10 +1011,10 @@ void Window::SetZoomedPointFont( const Font& rFont )
         {
             USHORT nType;
             if ( aMetric.GetPitch() == PITCH_FIXED )
-                nType = FONT_DEFAULT_FIXED;
+                nType = DEFAULTFONT_FIXED;
             else
-                nType = FONT_DEFAULT_UI_SANS;
-            Font aTempFont = GetDefaultFont( nType, GetSettings().GetLanguage(), FALSE );
+                nType = DEFAULTFONT_UI_SANS;
+            Font aTempFont = GetDefaultFont( nType, GetSettings().GetLanguage(), 0 );
             aFont.SetName( aTempFont.GetName() );
             SetPointFont( aFont );
         }
