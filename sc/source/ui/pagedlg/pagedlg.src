@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:34:50 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,14 +698,14 @@ TabPage RID_SCPAGE_TABLE
         Text [ spanish ] = "Tít~ulos de filas y columnas" ;
         Text [ english_us ] = "~Column and row headers" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ĞĞ±êÌâºÍÁĞ±êÌâ(~H)";
+        Text[ chinese_simplified ] = "ĞĞ±êÌâºÍÁĞ±êÌâ(~C)";
         Text[ russian ] = "Çàãîëîâêè ñòğîê è ñòîëáöîâ";
         Text[ polish ] = "~Nag³ówki wierszy & kolumn";
-        Text[ japanese ] = "s‚Æ—ñ‚Ì”Ô†(~H)";
+        Text[ japanese ] = "s‚Æ—ñ‚Ì”Ô†(~C)";
         Text[ chinese_traditional ] = "Äæ©M¦C¼ĞÃD(~C)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÓØÑ æÇáÃÚãÏÉ";
         Text[ greek ] = "Êåöáëßäåò ãñáììşí/óôçëşí";
-        Text[ korean ] = "¿­°ú Çà ¸Ó¸®±Û";
+        Text[ korean ] = "¿­°ú Çà ¸Ó¸®±Û(~C)";
         Text[ turkish ] = "Satır ve sütun ~başlıkları";
     };
     CheckBox BTN_GRID
@@ -733,7 +733,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "¤u§@ªíºô®æ(~G)";
         Text[ arabic ] = "ÔÈßÉ ÇáÌÏæá";
         Text[ greek ] = "Ğëİ~ãìá ğßíáêá";
-        Text[ korean ] = "Ç¥¡¡´«±İ¼±";
+        Text[ korean ] = "Ç¥¡¡´«±İ¼±(~G)";
         Text[ turkish ] = "~Kılavuz çizgiler";
     };
     CheckBox BTN_NOTES
@@ -761,7 +761,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "³Æµù(~N)";
         Text[ arabic ] = "ãáÇÍÙÇÊ";
         Text[ greek ] = "Óçìåéşóåéò";
-        Text[ korean ] = "¸Ş¸ğ";
+        Text[ korean ] = "¸Ş¸ğ(~N)";
         Text[ turkish ] = "~Notlar";
     };
     CheckBox BTN_OBJECTS
@@ -789,7 +789,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "ª«¥ó/¹Ï§Î(~O)";
         Text[ arabic ] = "ßÇÆäÇÊ/ÕæÑ";
         Text[ greek ] = "Áíôéêåßìåíá/ÃñáöéêÜ";
-        Text[ korean ] = "°³Ã¼/±×·¡ÇÈ";
+        Text[ korean ] = "°³Ã¼/±×·¡ÇÈ(~O)";
         Text[ turkish ] = "~Nesne/grafikler";
     };
     CheckBox BTN_CHARTS
@@ -810,14 +810,14 @@ TabPage RID_SCPAGE_TABLE
         Text [ spanish ] = "~Diagramas" ;
         Text [ ENGLISH_US ] = "Ch~arts" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Í¼±í(~C)";
+        Text[ chinese_simplified ] = "Í¼±í(~A)";
         Text[ russian ] = "Äèàãğàììà";
         Text[ polish ] = "Wy~kresy";
-        Text[ japanese ] = "¸Ş×Ì(~C)";
+        Text[ japanese ] = "¸Ş×Ì(~A)";
         Text[ chinese_traditional ] = "¹Ïªí(~A)";
         Text[ arabic ] = "ÑÓæã ÈíÇäíÉ";
         Text[ greek ] = "ÄéáãñÜììáôá";
-        Text[ korean ] = "Â÷Æ®";
+        Text[ korean ] = "Â÷Æ®(~A)";
         Text[ turkish ] = "~Şemalar";
     };
     CheckBox BTN_DRAWINGS
@@ -845,7 +845,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó(~D)";
         Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
         Text[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
-        Text[ korean ] = "°³Ã¼ ±×¸®±â";
+        Text[ korean ] = "°³Ã¼ ±×¸®±â(~D)";
         Text[ turkish ] = "Çizim nesnele~ri";
     };
     CheckBox BTN_FORMULAS
@@ -873,7 +873,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "¤½¦¡(~F)";
         Text[ arabic ] = "ÕíÛ";
         Text[ greek ] = "Ôığïé";
-        Text[ korean ] = "¼ö½Ä";
+        Text[ korean ] = "¼ö½Ä(~F)";
         Text[ turkish ] = "~Formül";
     };
     CheckBox BTN_NULLVALS
@@ -901,7 +901,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "¹s­È(~Z)";
         Text[ arabic ] = "Şíã ÇáÕİÑ";
         Text[ greek ] = "Ìçäåíéêİò ôéìİò";
-        Text[ korean ] = "0 °ª";
+        Text[ korean ] = "0 °ª(~Z)";
         Text[ turkish ] = "Sıfır değer~leri";
     };
     GroupBox GB_PRINT
@@ -956,7 +956,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "±q¤W¦V¤U(~T)";
         Text[ arabic ] = "ãä ÃÚáì áÃÓİá";
         Text[ greek ] = "Áğü ğÜíù ğñïò ôá êÜôù";
-        Text[ korean ] = "À§¿¡¼­ ¾Æ·¡·Î";
+        Text[ korean ] = "À§¿¡¼­ ¾Æ·¡·Î(~T)";
         Text[ turkish ] = "~Yukardan aşağı";
     };
     RadioButton BTN_LEFTRIGHT
@@ -985,7 +985,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ arabic ] = "ãä ÇáíÓÇÑ Åáì Çáíãíä";
         Text[ language_user1 ] = "ÌŞêïò; - - - -";
         Text[ greek ] = "Áğü áñéóôåñÜ ğñïò ôá äåîéÜ";
-        Text[ korean ] = "¿ŞÂÊ¿¡¼­ ¿À¸¥ÂÊÀ¸·Î";
+        Text[ korean ] = "¿ŞÂÊ¿¡¼­ ¿À¸¥ÂÊÀ¸·Î(~L)";
         Text[ turkish ] = "S~oldan sağa";
     };
     FixedBitmap BMP_PAGEDIR
@@ -1022,7 +1022,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "²Ä¤@­¶­¶½X(~P)";
         Text[ arabic ] = "ÑŞã ÇáÕİÍÉ ÇáÃæáì";
         Text[ greek ] = "Ğñşôïò áñéèìüò óåëßäáò";
-        Text[ korean ] = "Ã¹ ÂÊ ¹øÈ£";
+        Text[ korean ] = "Ã¹ ÂÊ ¹øÈ£(~P)";
         Text[ turkish ] = "İlk sayfa ~numarası";
     };
     NumericField ED_PAGENO
@@ -1085,10 +1085,10 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_simplified ] = "È«²¿²ÉÓÃ°Ù·Ö±È[%](~A)";
         Text[ russian ] = "Âñå íà [%]";
         Text[ polish ] = "Wszystko na [%] ";
-        Text[ japanese ] = "‚·‚×‚Ä [%]";
+        Text[ japanese ] = "‚·‚×‚Ä [%](~A)";
         Text[ greek ] = "¼~ëá óå [%]";
         Text[ korean ] = "ÀüÃ¼¸¦  [%] ·Î(~A)";
-        Text[ chinese_traditional ] = "¥ş³¡±Ä¥Î[%]";
+        Text[ chinese_traditional ] = "¥ş³¡±Ä¥Î[%](~A)";
         Text[ arabic ] = "Çáßá Åáì  [%]";
         Text[ turkish ] = "T~ümü [%]";
     };
@@ -1117,7 +1117,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "³Ì¦h­¶¼Æ(~M)";
         Text[ arabic ] = "ÇáÚÏÏ ÇáÃŞÕì ááÕİÍÇÊ";
         Text[ greek ] = "Ìİ~ã. áñéèìüò óåëßäùí";
-        Text[ korean ] = "ÃÖ´ë ÂÊ ¼ö";
+        Text[ korean ] = "ÃÖ´ë ÂÊ ¼ö(~M)";
         Text[ turkish ] = "A~zami sayfa sayısı";
     };
     NumericField ED_SCALEALL
@@ -1160,7 +1160,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ danish ] = "Skalering" ;
         Text [ portuguese ] = "Escala" ;
         Text [ portuguese_brazilian ] = "Skalierung" ;
-        Text[ chinese_simplified ] = "¿Ì¶È";
+        Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
         Text[ russian ] = "Ìàñøòàá";
         Text[ polish ] = "Skalowanie";
         Text[ japanese ] = "½¹°Ù";
