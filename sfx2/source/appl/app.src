@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 13:13:44 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 16:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,7 @@ String STR_RECOVER_TITLE
     Text [ ENGLISH ] = "File Recovery" ;
     Text [ english_us ] = "File Recovery" ;
     Text [ portuguese_brazilian ] = "Datei-Wiederherstellung" ;
-    Text [ swedish ] = "Filεterstδllande" ;
+    Text [ swedish ] = "Εterstδlla fil" ;
     Text [ danish ] = "Fil-gendannelse" ;
     Text [ italian ] = "Recupero file" ;
     Text [ spanish ] = "Recuperar archivo" ;
@@ -3425,7 +3425,7 @@ String STR_KEY_CONFIG_DIR
     Text[ arabic ] = "Κίζνδ";
     Text[ dutch ] = "Configuraties";
     Text[ chinese_simplified ] = "ΕδΦΓ";
-    Text[ greek ] = "Παράμετροι";
+    Text[ greek ] = "Διαμόρφωση";
     Text[ korean ] = "Ό³Α¤";
     Text[ turkish ] = "Konfigόrasyon";
     Text[ language_user1 ] = " ";
@@ -3441,7 +3441,7 @@ String STR_KEY_WORK_PATH
     Text [ finnish ] = "Tyφhakemisto" ;
     Text [ danish ] = "Arbejdsmappe" ;
     Text [ french ] = "Dossier de travail" ;
-    Text [ swedish ] = "Arbetsmapp" ;
+    Text [ swedish ] = "Arbetskatalog" ;
     Text [ dutch ] = "Werkmap" ;
     Text [ spanish ] = "Directorio de trabajo" ;
     Text [ english_us ] = "My Documents" ;
@@ -3754,7 +3754,7 @@ String STR_KEY_GALLERY_DIR
     Text[ arabic ] = "ΗαΜΗανΡν";
     Text[ dutch ] = "Gallery";
     Text[ chinese_simplified ] = "»­ΐΘ";
-    Text[ greek ] = "Gallery";
+    Text[ greek ] = "Γκαλερί";
     Text[ korean ] = "°¶·―Έ®";
     Text[ turkish ] = "Galeri";
     Text[ language_user1 ] = " ";
@@ -3832,7 +3832,7 @@ String STR_KEY_STORAGE_DIR
     Text[ arabic ] = "ΝέΩ ΗαΓΞΘΗΡ";
     Text[ dutch ] = "Geheugen voor berichten";
     Text[ chinese_simplified ] = "µηΧΣΣΚΌώ/ΠΒΞΕ΄Ά΄ζΜε";
-    Text[ greek ] = "Αποθήκευση μηνυμάτων";
+    Text[ greek ] = "Στοιχείο αποθήκευσης μηνυμάτων";
     Text[ korean ] = "ΏμΖν/΄Ί½Ί ΐϊΐεΌÒ";
     Text[ turkish ] = "έleti depolama alanύ";
     Text[ language_user1 ] = " ";
@@ -3875,7 +3875,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ spanish ] = "Directorio de Plug-ins";
     Text[ italian ] = "Cartella plugin";
     Text[ danish ] = "PlugIn-bibliotek";
-    Text[ swedish ] = "Plugins-mapp";
+    Text[ swedish ] = "Plugins-katalog";
     Text[ polish ] = "Katalog dodatkσw Plugin";
     Text[ portuguese_brazilian ] = "Plugins directory";
     Text[ japanese ] = "ΜίΧΈή²έ Γή¨ΪΈΔΨ";
@@ -3965,7 +3965,7 @@ String STR_KEY_USERCONFIG_PATH
     Text [ English ] = "User Settings" ;
     Text[ english_us ] = "User Configuration";
     Text[ portuguese ] = "Configuraηγo personalizada";
-    Text[ greek ] = "Διαμόρφωση του χρήστη";
+    Text[ greek ] = "Διαμόρφωση χρήστη";
     Text[ dutch ] = "Gebruikerscofiguratie";
     Text[ french ] = "Configuration d'utilisateur";
     Text[ spanish ] = "Configuraciσn de usuario";
