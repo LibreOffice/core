@@ -65,7 +65,7 @@ GEN_HID2=TRUE
 
 .IF "$(GUI)"=="WNT"
 .IF "$(USE_SHELL)"=="4nt"
-PYTHONPATH:=$(BIN);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
+PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
 .ELSE			# "$(USE_SHELL)"=="4nt"
 PYTHONPATH:=$(shell $(WRAPCMD) echo $(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
