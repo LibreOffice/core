@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 06:59:12 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,6 @@
 
 #define CTL_TABLESUBSCRIPTION   1
 
-#define RB_INCLUDEALL           1
-#define RB_INCLUDENONE          2
-#define RB_INCLUDESPECIFIC      3
-
 //========================================================================
 // string ids (usually relative to other resources, that's why not necessarily unique)
 
@@ -165,6 +161,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/01/26 06:59:12  fs
+ *  some basics for the query administration page - not enabled yet
+ *
  *  Revision 1.9  2001/01/04 11:22:06  fs
  *  #81485# +STR_PAGETITLE_ADO
  *

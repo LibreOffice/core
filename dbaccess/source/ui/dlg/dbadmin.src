@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 06:59:12 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1663,89 +1663,10 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ turkish ] = "Filter";
         Text[ arabic ] = "ÇáÝáÊÑ";
     };
-    RadioButton RB_INCLUDEALL
-    {
-        Pos     = MAP_APPFONT ( 12 , 15 ) ;
-        Size    = MAP_APPFONT ( 60 , 12 ) ;
-        Group   = TRUE;
-        HelpId = HID_DSADMIN_ALL_TABLES;
-        Text = "~Alle";
-        Text [ english ] = "~All";
-        Text [ english_us ] = "~All";
-        Text[ portuguese ] = "~Tudo";
-        Text[ russian ] = "~Âñå";
-        Text[ greek ] = "¼ë~á";
-        Text[ dutch ] = "~Alle";
-        Text[ french ] = "~Toutes";
-        Text[ spanish ] = "~Todas";
-        Text[ italian ] = "Tutto";
-        Text[ danish ] = "Alle";
-        Text[ swedish ] = "~Alla";
-        Text[ polish ] = "~Wszystkie";
-        Text[ portuguese_brazilian ] = "~All";
-        Text[ japanese ] = "‚·‚×‚Ä";
-        Text[ korean ] = "¸ðµÎ";
-        Text[ chinese_simplified ] = "È«²¿(~A)";
-        Text[ chinese_traditional ] = "¥þ³¡(~A)";
-        Text[ turkish ] = "~All";
-        Text[ arabic ] = "Çáßá";
-    };
-    RadioButton RB_INCLUDENONE
-    {
-        Pos     = MAP_APPFONT ( 12 , 30 ) ;
-        Size    = MAP_APPFONT ( 60 , 12 ) ;
-        HelpId = HID_DSADMIN_NO_TABLES;
-        Text = "~Keine";
-        Text [ english ] = "~None";
-        Text [ english_us ] = "~None";
-        Text[ portuguese ] = "~Nenhuma";
-        Text[ russian ] = "~Áåç";
-        Text[ greek ] = "~ÊáíÝíá";
-        Text[ dutch ] = "~Geen";
-        Text[ french ] = "~Aucune";
-        Text[ spanish ] = "~Ninguna";
-        Text[ italian ] = "Nessuno";
-        Text[ danish ] = "Ingen";
-        Text[ swedish ] = "I~nga";
-        Text[ polish ] = "~Brak";
-        Text[ portuguese_brazilian ] = "~None";
-        Text[ japanese ] = "‚È‚µ";
-        Text[ korean ] = "¾øÀ½";
-        Text[ chinese_simplified ] = "ÎÞ(~N)";
-        Text[ chinese_traditional ] = "µL(~N)";
-        Text[ turkish ] = "~None";
-        Text[ arabic ] = "ÈÏæä";
-    };
-    RadioButton RB_INCLUDESPECIFIC
-    {
-        Pos     = MAP_APPFONT ( 12 , 45 ) ;
-        Size    = MAP_APPFONT ( 60 , 12 ) ;
-        HelpId = HID_DSADMIN_SELECT_TABLES;
-        Text = "Aus~wahl";
-        Text [ english ] = "~Selection";
-        Text [ english_us ] = "~Selection";
-        Text[ portuguese ] = "~Selecção";
-        Text[ russian ] = "~Âûáîð";
-        Text[ greek ] = "ÅðéëïãÞ";
-        Text[ dutch ] = "~Selectie";
-        Text[ french ] = "~Sélection";
-        Text[ spanish ] = "~Selección";
-        Text[ italian ] = "~Selezione";
-        Text[ danish ] = "Udvalg";
-        Text[ swedish ] = "Ur~val";
-        Text[ polish ] = "~Wybór";
-        Text[ portuguese_brazilian ] = "~Selection";
-        Text[ japanese ] = "‘I‘ð";
-        Text[ korean ] = "¼±ÅÃ";
-        Text[ chinese_simplified ] = "Ñ¡Ôñ(~S)";
-        Text[ chinese_traditional ] = "¿ï¨ú(~S)";
-        Text[ turkish ] = "~Selection";
-        Text[ arabic ] = "ÇáÇÎÊíÇÑ";
-    };
     Control CTL_TABLESUBSCRIPTION
     {
-        Pos     = MAP_APPFONT ( 75 , 15 ) ;
-        Size    = MAP_APPFONT ( 173 , 72 ) ;
+        Pos     = MAP_APPFONT ( 12 , 15 ) ;
+        Size    = MAP_APPFONT ( 236 , 72 ) ;
         Group   = TRUE;
         Border  = TRUE ;
         TabStop = TRUE ;
@@ -2028,6 +1949,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/01/26 06:59:12  fs
+ *  some basics for the query administration page - not enabled yet
+ *
  *  Revision 1.23  2001/01/04 11:22:36  fs
  *  #81485# +ADO page
  *
