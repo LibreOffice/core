@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpsum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 11:11:30 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/pngread.hxx>
 
 #include "solar.hrc"
 #include "filedlg.hxx"
@@ -242,9 +243,6 @@ int BmpSum::Start( const ::std::vector< String >& rArgs )
         cExitCode = EXIT_COMMONERROR;
     }
 
-    if ( EXIT_NOERROR != cExitCode )
-        raise( SIGABRT );
-
     return cExitCode;
 }
 
@@ -308,7 +306,25 @@ void BmpSum::ProcessFile( const String& rBmpFileName )
 #endif
         }
         else
-            Message( String( RTL_CONSTASCII_USTRINGPARAM( "file not valid" ) ), EXIT_INVALIDFILE );
+        {
+            aIStm.ResetError();
+            aIStm.Seek( 0 );
+
+               ::vcl::PNGReader aPngReader( aIStm );
+
+            aBmp = aPngReader.Read().GetBitmap();
+
+              if( !aBmp.IsEmpty() )
+            {
+#ifdef WNT
+                fprintf( stdout, "%I64u\r\n", GetCRC( aBmp ) );
+#else
+                fprintf( stdout, "%llu\r\n", GetCRC( aBmp ) );
+#endif
+            }
+            else
+                Message( String( RTL_CONSTASCII_USTRINGPARAM( "file not valid" ) ), EXIT_INVALIDFILE );
+        }
     }
 }
 
@@ -392,7 +408,20 @@ void BmpSum::ProcessFileList( const String& rInFileList,
                 if( !aBmp.IsEmpty() )
                     nCRC = GetCRC( aBmp );
                 else
-                    fprintf( stderr, "%s could not be opened\n", aStr.GetBuffer() );
+                {
+                    aBmpStm.ResetError();
+                    aBmpStm.Seek( 0 );
+
+                       ::vcl::PNGReader aPngReader( aBmpStm );
+
+                    aBmp = aPngReader.Read().GetBitmap();
+
+                      if( !aBmp.IsEmpty() )
+                           nCRC = GetCRC( aBmp );
+
+                    else
+                        fprintf( stderr, "%s could not be opened\n", aStr.GetBuffer() );
+               }
 
                 aBmpStm.Close();
             }
