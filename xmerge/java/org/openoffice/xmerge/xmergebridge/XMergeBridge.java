@@ -79,6 +79,7 @@ import com.sun.star.xml.sax.XParser;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.xml.sax.XDocumentHandler;
+import com.sun.star.uno.AnyConverter;
 
 /* Generated from Idls */
 import com.sun.star.xml.XImportFilter;
@@ -219,21 +220,24 @@ public class XMergeBridge {
         for  (int  i = 0 ; i < pValue.length; i++)
         {
 
-        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
-        if (pValue[i].Name.compareTo("InputStream")==0){
-            xis =(com.sun.star.io.XInputStream) pValue[i].Value;
+        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value;
 
-            //System.out.println(pValue[i].Name+" "+xis);
-        }
-        if (pValue[i].Name.compareTo("FileName")==0){
-            sFileName=(String) pValue[i].Value;
-            //System.out.println(pValue[i].Name+" "+sFileName);
-        }
+         try{
+             //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
+             if (pValue[i].Name.compareTo("InputStream")==0){
+            xis=(com.sun.star.io.XInputStream)AnyConverter.toObject(new Type(com.sun.star.io.XInputStream.class), pValue[i].Value);
+             }
+             if (pValue[i].Name.compareTo("FileName")==0){
+             sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
+             }
 
-        if (pValue[i].Name.compareTo("URL")==0){
-            sURL = (String)pValue[i].Value;
-            //System.out.println(pValue[i].Name+" "+sURL);
-        }
+         }
+         catch(com.sun.star.lang.IllegalArgumentException AnyExec){
+             System.out.println("\nIllegalArgumentException "+AnyExec);
+         }
+
+
+
         }
 
 
@@ -313,21 +317,31 @@ public class XMergeBridge {
         {
 
         //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
-        if (pValue[i].Name.compareTo("OutputStream")==0){
-            xos =(com.sun.star.io.XOutputStream)pValue[i].Value;
-            //System.out.println(pValue[i].Name+" "+xos);
-        }
-        if (pValue[i].Name.compareTo("FileName")==0){
-            sFileName=(String) pValue[i].Value;
+
+
+        try{
+            //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
+            if (pValue[i].Name.compareTo("OutputStream")==0){
+            xos=(com.sun.star.io.XOutputStream)AnyConverter.toObject(new Type(com.sun.star.io.XOutputStream.class), pValue[i].Value);
+            //  System.out.println(pValue[i].Name+" "+xos);
+            }
+            if (pValue[i].Name.compareTo("FileName")==0){
+            sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
             //System.out.println(pValue[i].Name+" "+sFileName);
-        }
-        if (pValue[i].Name.compareTo("Title")==0){
-            title=(String) pValue[i].Value;
-            //System.out.println(pValue[i].Name+" "+title);
-        }
-        if (pValue[i].Name.compareTo("URL")==0){
-            sURL = (String)pValue[i].Value;
+            }
+            if (pValue[i].Name.compareTo("URL")==0){
+            sURL=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
             // System.out.println("\nMediaDescriptor url "+pValue[i].Name+" "+sURL);
+
+            }
+            if (pValue[i].Name.compareTo("Title")==0){
+
+            title=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
+            //System.out.println(pValue[i].Name+" "+title);
+            }
+        }
+        catch(com.sun.star.lang.IllegalArgumentException AnyExec){
+             System.out.println("\nIllegalArgumentException "+AnyExec);
         }
         }
 

@@ -258,9 +258,6 @@ public class XFlatXml {
         if (origString.indexOf("&")!=-1){
         origString=replace(origString,"&","&amp;");
         }
-        if (origString.indexOf("\"")!=-1){
-        origString=replace(origString,"\"","&quot;");
-        }
         if (origString.indexOf("<")!=-1){
         origString=replace(origString,"<","&lt;");
         }
