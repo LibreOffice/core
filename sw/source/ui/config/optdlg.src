@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 10:28:53 $
+ *  last change: $Author: os $ $Date: 2001-05-10 13:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3223,7 +3223,7 @@ TabPage TP_OPTSHDWCRSR
     FixedLine GB_CRSR_OPT
     {
         Pos = MAP_APPFONT ( 130 , 110 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
         Text = "~Cursor in geschützten Zonen" ;
         Text [ ENGLISH ] = "Cursor in protected areas" ;
         Text[ english_us ] = "Cursor in protected areas";
