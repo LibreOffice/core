@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 17:35:37 $
+ *  last change: $Author: nn $ $Date: 2001-07-11 19:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,21 +839,20 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInter
         //  copy data into new edit engine so alignment isn't removed
         //  from source edit engine
         EditEngine aCopyEngine( rEngine.GetEmptyItemSet().GetPool() );
+        aCopyEngine.SetEditTextObjectPool( rEngine.GetEditTextObjectPool() );
         EditTextObject* pOldData = rEngine.CreateTextObject();
         aCopyEngine.SetText( *pOldData );
         delete pOldData;
 
-        //  remove alignment attribute from local copy
+        //  All paragraph attributes must be removed before calling CreateTextObject,
+        //  not only alignment, so the object doesn't contain the cell attributes as
+        //  paragraph attributes.
         USHORT nCount = aCopyEngine.GetParagraphCount();
         for (USHORT i=0; i<nCount; i++)
         {
             const SfxItemSet& rOld = aCopyEngine.GetParaAttribs( i );
-            if ( rOld.GetItemState( EE_PARA_JUST ) == SFX_ITEM_SET )
-            {
-                SfxItemSet aNew( rOld );
-                aNew.ClearItem( EE_PARA_JUST );
-                aCopyEngine.SetParaAttribs( i, aNew );
-            }
+            if ( rOld.Count() )
+                aCopyEngine.SetParaAttribs( i, SfxItemSet( *rOld.GetPool(), rOld.GetRanges() ) );
         }
 
         EditTextObject* pNewData = aCopyEngine.CreateTextObject();
