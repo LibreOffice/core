@@ -2,9 +2,9 @@
 #
 #   $RCSfile: uno.py,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2003-03-30 13:32:01 $
+#   last change: $Author: jbu $ $Date: 2003-04-06 17:13:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -337,3 +337,17 @@ def _uno_struct__eq__(self,cmp):
        return self.__dict__["value"] == cmp.__dict__["value"]
     return False
      
+def _uno_extract_printable_stacktrace( trace ):
+    mod = None
+    try:
+        mod = __import__("traceback")
+    except ImportError,e:
+        pass
+    ret = ""
+    if mod:
+        lst = mod.format_tb( trace )
+        for i in lst:
+            ret = ret + i
+    else:
+        ret = "Coludn't import traceback module"
+    return ret
