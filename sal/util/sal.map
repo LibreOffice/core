@@ -264,6 +264,7 @@ UDK_3_0_0 {
         rtl_ustr_ascii_compareIgnoreAsciiCase;
         rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength;
         rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength;
+        rtl_ustr_asciil_reverseEquals_WithLength;
         rtl_ustr_getLength;
         rtl_ustr_hashCode;
         rtl_ustr_hashCode_WithLength;
