@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:19:15 $
+ *  last change: $Author: hro $ $Date: 2001-07-31 15:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4008,9 +4008,9 @@ String STR_KEY_LINGUISTIC_DIR
 
 String STR_QUICKSTART_EXIT
 {
-    Text = "SchnellStarter beenden" ;
-    Text [ English ] = "Exit QuickLauncher" ;
-    Text[ english_us ] = "Exit quick launch";
+    Text = "Schnellstarter beenden" ;
+    Text [ English ] = "Exit Quickstarter" ;
+    Text[ english_us ] = "Exit Quickstarter";
     Text[ portuguese ] = "Terminar inнcio rбpido";
     Text[ russian ] = "Выход из быстрого запуска";
     Text[ greek ] = "Exit %PRODUCTNAME QuickStart";
@@ -4033,9 +4033,9 @@ String STR_QUICKSTART_EXIT
 };
 String STR_QUICKSTART_TIP
 {
-    Text = "%PRODUCTNAME %PRODUCTVERSION SchnellStarter" ;
-    Text [ English ] = "%PRODUCTNAME %PRODUCTVERSION QuickLauncher" ;
-    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Quick Launch";
+    Text = "%PRODUCTNAME %PRODUCTVERSION Schnellstarter" ;
+    Text [ English ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter" ;
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter";
     Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION Inнcio rбpido";
     Text[ russian ] = "%PRODUCTNAME %PRODUCTVERSION Быстрый запуск";
     Text[ greek ] = "%PRODUCTNAME QuickStart active";
@@ -4109,7 +4109,7 @@ String STR_QUICKSTART_FROMTEMPLATE
 String STR_QUICKSTART_PRELAUNCH
 {
     Text = "%PRODUCTNAME beim Systemstart laden" ;
-    Text [ English ] = "Pre-launch %PRODUCTNAME during system start" ;
+    Text [ English ] = "Load %PRODUCTNAME during system start" ;
     Text[ english_us ] = "Load %PRODUCTNAME during system start";
     Text[ portuguese ] = "Carregar %PRODUCTNAME ao iniciar o sistema";
     Text[ russian ] = "Загружать %PRODUCTNAME во время запуска системы";
