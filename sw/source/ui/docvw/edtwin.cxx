@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:01:01 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4832,6 +4832,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 //            bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,bOnlyText));
             (rSh.*rSh.fnSetCrsr)(&aDocPos, FALSE);
 //            bCallBase = FALSE;
+            bRet = TRUE;
         }
 
 //        if( bLockView )
