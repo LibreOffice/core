@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 14:27:10 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 15:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ import java.io.*;
  *  which are neccessary to work with a xml file - especialy
  *  the filter configuration.
  *
- *  @author  Andreas Schlüns
+ *
  */
 public class XMLHelper
 {
