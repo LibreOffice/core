@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-19 13:41:04 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 14:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,17 +422,41 @@ bool BtreeDict::isLocked( sal_Int32 blNum ) const throw( excep::IllegalIndexExce
 
 sal_Int32 BtreeDict::fetch( const rtl::OUString& key ) const throw( excep::XmlSearchException )
 {
-  rtl::OString searchString( key.getStr(),key.getLength(),RTL_TEXTENCODING_UTF8 );
+    /**
+     *  Here is the correct code. To function it requires a bug fix in the old Javacode of
+     *  Jaczeks index engine.
+     */
 
-  return find( accessBlock( root_ ),
-           reinterpret_cast< const sal_Int8* >( searchString.getStr() ),
-           searchString.getLength() );
+    //    rtl::OString searchString( key.getStr(),key.getLength(),RTL_TEXTENCODING_UTF8 );
+
+    //    return find( accessBlock( root_ ),
+    //             reinterpret_cast< const sal_Int8* >( searchString.getStr() ),
+    //             searchString.getLength() );
+
+
+    /**
+     *   The key has to be replaced by UTF8-encoded byterepresentations of unicode string,
+     *   as a workaround to Jazceks bug.
+     */
+
+    rtl::OString Key( key.getStr(),key.getLength(),RTL_TEXTENCODING_ISO_8859_1 );
+
+    sal_Int32 len = key.getLength();
+    sal_Int8 *searchStr = new sal_Int8[ 1+len ];
+    searchStr[len] = 0;
+
+    rtl_copyMemory( searchStr,(const sal_Int8*)(Key.getStr()),len );
+    sal_Int32 ret = find( accessBlock( root_ ),
+                          searchStr,
+                          len );
+    delete[] searchStr;
+    return ret;
 }
 
 
 rtl::OUString BtreeDict::fetch( sal_Int32 conceptID ) const throw( excep::XmlSearchException )
 {
-  return findID( blocks_[conceptID], conceptID );
+    return findID( blocks_[conceptID], conceptID );
 }
 
 
