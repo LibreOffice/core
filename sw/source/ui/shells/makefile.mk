@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:57:21 $
+#   last change: $Author: obo $ $Date: 2004-03-17 12:20:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,7 @@ TARGET=shells
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
-        shells.src \
-        pseudo.src
+        shells.src 
 
 SLOFILES =  \
         $(SLO)$/basesh.obj \
