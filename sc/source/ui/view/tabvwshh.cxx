@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:23:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 SdrView* pDrView = GetSdrView();
                 if (pDrView)
                 {
-                    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                     if (rMarkList.GetMarkCount() == 1)
                         aName = ScDrawLayer::GetVisibleName( rMarkList.GetMark(0)->GetObj() );
                 }
@@ -164,7 +164,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if (rMarkList.GetMarkCount() == 1)
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -200,7 +200,7 @@ SvInPlaceObjectRef lcl_GetSelectedObj( SdrView* pDrView )       //! Member von S
 
     if (pDrView)
     {
-        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -246,7 +246,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if (rMarkList.GetMarkCount() == 1)
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
