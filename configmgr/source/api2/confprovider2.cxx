@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-17 13:22:13 $
+ *  last change: $Author: jb $ $Date: 2002-10-28 14:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
 #endif
@@ -88,6 +91,7 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 
 #define THISREF() static_cast< ::cppu::OWeakObject* >(this)
 
@@ -268,30 +272,13 @@ namespace configmgr
     uno::Reference< uno::XInterface > SAL_CALL OConfigurationProvider::createInstance( const OUString& aServiceSpecifier )
         throw(uno::Exception, uno::RuntimeException)
     {
-
-        OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
-
-        CFG_TRACE_INFO("going to create a read access instance for %s", "missing unicode conversion");
-        if (ServiceCreationInfo const* pInfo = findCreationInfo(aServiceSpecifier))
-        {
-            // it's a known service name - try to create without args
-            if (CreatorFunc create = pInfo->create)
-            {
-                uno::Sequence< uno::Any > aArguments;
-                return (m_pImpl->*create)(
-                    aArguments);
-            }
-        }
-
-        // Otherwise try to use it as a configuration node name (and create a deep reader)
-        uno::Sequence< uno::Any > aArguments(1);
-        aArguments[0] <<= aServiceSpecifier;
-        return m_pImpl->createReadAccess(aArguments);
+        // same as creating with empty sequence of arguments
+        return this->createInstanceWithArguments( aServiceSpecifier, uno::Sequence< uno::Any >() );
     }
 
     //-----------------------------------------------------------------------------
     uno::Reference< uno::XInterface > SAL_CALL
-        OConfigurationProvider::createInstanceWithArguments( const ::rtl::OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& aArguments )
+        OConfigurationProvider::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& aArguments )
             throw(uno::Exception, uno::RuntimeException)
     {
         OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
@@ -304,13 +291,12 @@ namespace configmgr
                 return (m_pImpl->*create)(aArguments);
             }
         }
-        // Otherwise try to use it as a configuration node name (and create a deep reader)
-        sal_Int32 nLength = aArguments.getLength();
-        uno::Sequence< uno::Any > aMoreArguments( 1 + nLength );
 
-        aMoreArguments[0] <<= aServiceSpecifier;
-        std::copy(aArguments.getConstArray(),aArguments.getConstArray() + nLength, aMoreArguments.getArray()+1);
-        return m_pImpl->createReadAccess(aMoreArguments);
+        rtl::OUStringBuffer sMsg;
+        sMsg.appendAscii("ConfigurationProvider: Cannot create view - ");
+        sMsg.append( aServiceSpecifier ) .appendAscii(" is not a valid configuration access service. ");
+
+        throw lang::ServiceNotRegisteredException(sMsg.makeStringAndClear(),*this);
     }
 
     //-----------------------------------------------------------------------------
