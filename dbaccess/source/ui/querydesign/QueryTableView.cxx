@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-08 09:26:59 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 07:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef DBACCESS_JACCESS_HXX
+#include "JAccess.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #endif
@@ -153,6 +157,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::drafts::com::sun::star::accessibility;
 
 TYPEINIT1(OQueryTableView, OJoinTableView);
 
@@ -599,81 +604,93 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     OTableWindowMap* pTabWins = GetTabWinMap();
     if(bNewTable && !pTabWins->empty() && strTableName.getLength())
     {
-        Reference<XConnection> xCon = m_pView->getController()->getConnection();
-        OSL_ENSURE(xCon.is(),"OQueryTableView::AddTabWin connection is null!");
-        if(!xCon.is())
-            return;
-        Reference<XTablesSupplier> xSup(xCon,UNO_QUERY);
-        Reference<XNameAccess> xTables = xSup->getTables();
-        Reference<XPropertySet> xTable;
-
-        if(xTables->hasByName(strTableName) && ::cppu::extractInterface(xTable,xTables->getByName(strTableName)) && xTable.is())
+        modified();
+        if ( m_pAccessible )
+            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                                                    Any(),
+                                                    makeAny(pNewTabWin->GetAccessible())
+                                                    );
+        try
         {
-            //////////////////////////////////////////////////////////////////////
-            // find relations between the table an the tables already inserted
-            Reference<XKeysSupplier> xKeys(xTable,UNO_QUERY);
-            Reference<XNameAccess> xFKeyColumns;
-            ::rtl::OUString aReferencedTable;
-            if(xKeys.is())
+            Reference<XConnection> xCon = m_pView->getController()->getConnection();
+            OSL_ENSURE(xCon.is(),"OQueryTableView::AddTabWin connection is null!");
+            if(!xCon.is())
+                return;
+            Reference<XTablesSupplier> xSup(xCon,UNO_QUERY);
+            Reference<XNameAccess> xTables = xSup->getTables();
+            Reference<XPropertySet> xTable;
+
+            if(xTables->hasByName(strTableName) && ::cppu::extractInterface(xTable,xTables->getByName(strTableName)) && xTable.is())
             {
-                Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
-                Reference<XColumnsSupplier> xColumnsSupplier;
-                for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+                //////////////////////////////////////////////////////////////////////
+                // find relations between the table an the tables already inserted
+                Reference<XKeysSupplier> xKeys(xTable,UNO_QUERY);
+                Reference<XNameAccess> xFKeyColumns;
+                ::rtl::OUString aReferencedTable;
+                if(xKeys.is())
                 {
-                    Reference<XPropertySet> xProp;
-                    ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
-                    sal_Int32 nKeyType = 0;
-                    xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                    xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                    OSL_ENSURE(xColumnsSupplier.is(),"Key isn't a column supplier");
-                    xFKeyColumns = xColumnsSupplier->getColumns();
-                    OSL_ENSURE(xFKeyColumns.is(),"No Key columns available!");
+                    Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
+                    Reference<XColumnsSupplier> xColumnsSupplier;
+                    for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+                    {
+                        Reference<XPropertySet> xProp;
+                        ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
+                        sal_Int32 nKeyType = 0;
+                        xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                        xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                        OSL_ENSURE(xColumnsSupplier.is(),"Key isn't a column supplier");
+                        xFKeyColumns = xColumnsSupplier->getColumns();
+                        OSL_ENSURE(xFKeyColumns.is(),"No Key columns available!");
 
-                    if(KeyType::FOREIGN == nKeyType)
-                    {   // our new table has a foreign key
-                        // so look if the referenced table is already in our list
-                        xProp->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= aReferencedTable;
-                        OSL_ENSURE(aReferencedTable.getLength(),"Foreign key without referencedTableName");
+                        if(KeyType::FOREIGN == nKeyType)
+                        {   // our new table has a foreign key
+                            // so look if the referenced table is already in our list
+                            xProp->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= aReferencedTable;
+                            OSL_ENSURE(aReferencedTable.getLength(),"Foreign key without referencedTableName");
 
-                        OTableWindowMap::const_iterator aIter = pTabWins->find(aReferencedTable);
-                        if(aIter == pTabWins->end())
+                            OTableWindowMap::const_iterator aIter = pTabWins->find(aReferencedTable);
+                            if(aIter == pTabWins->end())
+                            {
+                                for(aIter = pTabWins->begin();aIter != pTabWins->end();++aIter)
+                                {
+                                    OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(aIter->second);
+                                    OSL_ENSURE(pTabWinTmp,"TableWindow is null!");
+                                    if(pTabWinTmp != pNewTabWin && pTabWinTmp->GetComposedName() == aReferencedTable.getStr())
+                                        break;
+                                }
+                            }
+                            if(aIter != pTabWins->end())
+                                addConnections(this,pNewTabWin,static_cast<OQueryTableWindow*>(aIter->second),xFKeyColumns);
+                        }
+                        else if(KeyType::PRIMARY == nKeyType)
                         {
-                            for(aIter = pTabWins->begin();aIter != pTabWins->end();++aIter)
+                            // we have a primary key so look in our list if there exsits a key which this is refered to
+                            OTableWindowMap::const_iterator aIter = pTabWins->begin();
+                            for(;aIter != pTabWins->end();++aIter)
                             {
                                 OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(aIter->second);
-                                OSL_ENSURE(pTabWinTmp,"TableWindow is null!");
-                                if(pTabWinTmp != pNewTabWin && pTabWinTmp->GetComposedName() == aReferencedTable.getStr())
-                                    break;
-                            }
-                        }
-                        if(aIter != pTabWins->end())
-                            addConnections(this,pNewTabWin,static_cast<OQueryTableWindow*>(aIter->second),xFKeyColumns);
-                    }
-                    else if(KeyType::PRIMARY == nKeyType)
-                    {
-                        // we have a primary key so look in our list if there exsits a key which this is refered to
-                        OTableWindowMap::const_iterator aIter = pTabWins->begin();
-                        for(;aIter != pTabWins->end();++aIter)
-                        {
-                            OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(aIter->second);
-                            if(pTabWinTmp != pNewTabWin)
-                            {
-                                OSL_ENSURE(pTabWinTmp,"TableWindow is null!");
-                                Reference<XPropertySet> xFKKey = getKeyReferencedTo(Reference<XKeysSupplier>(pTabWinTmp->GetTable(),UNO_QUERY),pNewTabWin->GetComposedName());
-                                if(xFKKey.is())
+                                if(pTabWinTmp != pNewTabWin)
                                 {
-                                    Reference<XColumnsSupplier> xFKColumnsSupplier = Reference<XColumnsSupplier>(xFKKey,UNO_QUERY);
-                                    OSL_ENSURE(xFKColumnsSupplier.is(),"Key isn't a column supplier");
-                                    Reference<XNameAccess> xTColumns = xFKColumnsSupplier->getColumns();
-                                    OSL_ENSURE(xTColumns.is(),"No Key columns available!");
-                                    addConnections(this,pTabWinTmp,pNewTabWin,xTColumns);
+                                    OSL_ENSURE(pTabWinTmp,"TableWindow is null!");
+                                    Reference<XPropertySet> xFKKey = getKeyReferencedTo(Reference<XKeysSupplier>(pTabWinTmp->GetTable(),UNO_QUERY),pNewTabWin->GetComposedName());
+                                    if(xFKKey.is())
+                                    {
+                                        Reference<XColumnsSupplier> xFKColumnsSupplier = Reference<XColumnsSupplier>(xFKKey,UNO_QUERY);
+                                        OSL_ENSURE(xFKColumnsSupplier.is(),"Key isn't a column supplier");
+                                        Reference<XNameAccess> xTColumns = xFKColumnsSupplier->getColumns();
+                                        OSL_ENSURE(xTColumns.is(),"No Key columns available!");
+                                        addConnections(this,pTabWinTmp,pNewTabWin,xTColumns);
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
+                }
             }
+        }
+        catch(const Exception&)
+        {
         }
     }
 
@@ -885,6 +902,13 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
         TabWinsChangeNotification aHint(TabWinsChangeNotification::AT_REMOVED_WIN, static_cast< OQueryTableWindow*>(pTabWin)->GetAliasName());
         m_lnkTabWinsChangeHandler.Call(&aHint);
     }
+
+    modified();
+    if ( m_pAccessible )
+        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                                                makeAny(pTabWin->GetAccessible()),
+                                                Any()
+                                                );
 }
 
 //------------------------------------------------------------------------
@@ -1014,6 +1038,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
             ::rtl::OUString sName = static_cast< OQueryTableWindowData*>(pData)->GetAliasName();
             OSL_ENSURE(GetTabWinMap()->find(sName) == GetTabWinMap()->end(),"Alias name already in list!");
             GetTabWinMap()->insert(OTableWindowMap::value_type(sName,pTabWin));
+
             pTabWin->Show();
 
             pTabWin->Update();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 13:56:07 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 07:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,10 @@
 #ifndef DBAUI_RELTABLEWINDOW_HXX
 #include "RTableWindow.hxx"
 #endif
-
+#ifndef DBACCESS_JACCESS_HXX
+#include "JAccess.hxx"
+#endif
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 
 using namespace dbaui;
 using namespace ::dbtools;
@@ -154,6 +157,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::drafts::com::sun::star::accessibility;
 
 TYPEINIT1(ORelationTableWindow, OTableWindow);
 
@@ -252,7 +256,7 @@ BOOL ORelationTableView::IsAddAllowed()
     DBG_CHKTHIS(ORelationTableView,NULL);
 
     BOOL bAllowed = !m_pView->getController()->isReadOnly();
-    if(bAllowed)
+    if ( bAllowed )
     {
         Reference<XConnection> xConnection = m_pView->getController()->getConnection();
         if(!xConnection.is())
@@ -266,7 +270,7 @@ BOOL ORelationTableView::IsAddAllowed()
 
                 bAllowed = xMetaData.is() && xMetaData->supportsIntegrityEnhancementFacility();
             }
-            catch(SQLException&)
+            catch(const SQLException&)
             {
             }
         }
@@ -463,7 +467,6 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
     OTableWindowData* pNewTabWinData = CreateImpl( _rComposedName, rWinName );
     pNewTabWinData->ShowAll(FALSE);
 
-
     //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
@@ -476,9 +479,12 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
         SetDefaultTabWinPosSize( pNewTabWin );
         pNewTabWin->Show();
 
-        m_pView->getController()->setModified( sal_True );
-        m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
-        m_pView->getController()->InvalidateFeature(ID_RELATION_ADD_RELATION);
+        modified();
+
+        if ( m_pAccessible )
+            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                                                    Any(),
+                                                    makeAny(pNewTabWin->GetAccessible()));
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-08 09:27:36 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 07:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ namespace dbaui
         OTableWindow*           m_pDragWin;
         OTableWindow*           m_pSizingWin;
         OTableConnection*       m_pSelectedConn;
-        IAccessibleHelper*      m_pAccessible;
+
 
         BOOL                    m_bTrackingInitiallyMoved;
 
@@ -154,6 +154,7 @@ namespace dbaui
     protected:
         OTableWindow*       m_pLastFocusTabWin;
         OJoinDesignView*    m_pView;
+        IAccessibleHelper*      m_pAccessible;
 
     public:
         TYPEINFO();
@@ -283,11 +284,7 @@ namespace dbaui
             // negativ ist.
         virtual void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
 
-        /** should be called when the table or connection count changed
-            @param  _nOldCount
-                    the old child count
-        */
-        void childCountChanged(sal_Int32 _nOldCount);
+        void modified();
 
         /** returns if teh given window is visible.
             @param  _rPoint

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-08 09:26:56 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 07:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -344,7 +345,11 @@ void OJoinTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJo
     ::std::vector<OTableConnection*>::const_iterator aNextPos = m_vTableConnection.erase(
                         ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),_pConn) );
 
-    childCountChanged(m_vTableConnection.size() + 1);
+    modified();
+    if ( m_pAccessible )
+        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                                                makeAny(_pConn->getAccessible()),
+                                                Any());
     if ( _bDelete )
     {
         delete _pConn->GetData();
@@ -394,7 +399,11 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
         SetDefaultTabWinPosSize( pNewTabWin );
         pNewTabWin->Show();
 
-        childCountChanged(m_aTableMap.size() - 1);
+        modified();
+        if ( m_pAccessible )
+            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                                                    Any(),
+                                                    makeAny(pNewTabWin->GetAccessible()));
     }
     else
     {
@@ -430,8 +439,13 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
 
     //////////////////////////////////////////////////////////////////////
     // then delete the window itself
-    if(bRemove)
+    if ( bRemove )
     {
+        if ( m_pAccessible )
+            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                                                    makeAny(pTabWin->GetAccessible()),Any()
+                                                    );
+
         pTabWin->Hide();
         ::std::vector< OTableWindowData*>::iterator aFind = ::std::find(m_pView->getController()->getTableWindowData()->begin(),m_pView->getController()->getTableWindowData()->end(),pTabWin->GetData());
         if(aFind != m_pView->getController()->getTableWindowData()->end())
@@ -453,8 +467,8 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
         delete pTabWin;
     }
 
-    if(bRemove && (sal_Int32)m_aTableMap.size() < (nCount-1)) // if some connections could be removed
-        childCountChanged(m_aTableMap.size() + 1);
+    if ( bRemove && (sal_Int32)m_aTableMap.size() < (nCount-1) ) // if some connections could be removed
+        modified();
 }
 namespace
 {
@@ -1705,14 +1719,12 @@ Reference< XAccessible > OJoinTableView::CreateAccessible()
     return aRet;
 }
 // -----------------------------------------------------------------------------
-void OJoinTableView::childCountChanged(sal_Int32 _nOldCount)
+void OJoinTableView::modified()
 {
     OJoinController* pController = m_pView->getController();
     pController->setModified( sal_True );
     pController->InvalidateFeature(ID_BROWSER_ADDTABLE);
     pController->InvalidateFeature(ID_RELATION_ADD_RELATION);
-    if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(3/* AccessibleEventId::ACCESSIBLE_CHILD_EVENT */,makeAny(_nOldCount),makeAny(GetTabWinCount() + getTableConnections()->size()));
 }
 // -----------------------------------------------------------------------------
 void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAddData)
@@ -1728,7 +1740,12 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAdd
     m_vTableConnection.push_back(_pConnection);
     _pConnection->RecalcLines();
     _pConnection->Invalidate();
-    childCountChanged(m_vTableConnection.size() - 1);
+
+    modified();
+    if ( m_pAccessible )
+        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                                                Any(),
+                                                makeAny(_pConnection->getAccessible()));
 }
 // -----------------------------------------------------------------------------
 

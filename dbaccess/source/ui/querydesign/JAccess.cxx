@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-13 08:54:31 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 07:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ namespace dbaui
             else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections()->size() )
                 aRet = (*m_pTableView->getTableConnections())[i - nTableWindowCount]->getAccessible();
         }
+        else
+            throw IndexOutOfBoundsException();
         return aRet;
     }
     // -----------------------------------------------------------------------------

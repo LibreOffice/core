@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-13 08:54:33 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 07:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
+#endif
 
 
 namespace dbaui
@@ -154,12 +157,22 @@ namespace dbaui
         return 1;
     }
     // -----------------------------------------------------------------------------
-    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleChild( sal_Int32 i ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         Reference< XAccessible > aRet;
         if(i == 0 && m_pTable)
+        {
+            if ( !m_pTable->GetListBox()->GetAccessibleDescription().Len() )
+            {
+                String sTitle = String(ModuleRes(STR_TBL_TITLE));
+                sTitle.SearchAndReplace('#',getAccessibleName().getStr());
+                m_pTable->GetListBox()->SetAccessibleDescription(sTitle);
+            }
             aRet = m_pTable->GetListBox()->GetAccessible();
+        }
+        else
+            throw IndexOutOfBoundsException();
         return aRet;
     }
     // -----------------------------------------------------------------------------
