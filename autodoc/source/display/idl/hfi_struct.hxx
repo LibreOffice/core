@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_struct.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,8 @@
     // COMPONENTS
     // PARAMETERS
 
-
+/** Is used to display ->ary::idl::Exception s as well as ->ary::idl::Struct s.
+*/
 class HF_IdlStruct : public HtmlFactory_Idl
 {
   public:
