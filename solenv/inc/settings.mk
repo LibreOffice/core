@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.131 $
+#   $Revision: 1.132 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:43:15 $
+#   last change: $Author: rt $ $Date: 2003-04-29 10:02:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -945,9 +945,6 @@ SOLARDOCDIR=$(SOLARVERSION)$/$(INPATH)$/doc$(EXT_UPDMINOR)
 SOLARPCKDIR=$(SOLARVERSION)$/$(INPATH)$/pck$(EXT_UPDMINOR)
 SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
 .IF "$(common_build)"==""
-SOLARCOMMONBINDIR=$(SOLARBINDIR)
-.ENDIF
-.IF "$(COMMON_BUILD)"==""
 SOLARCOMMONBINDIR=$(SOLARBINDIR)
 .ENDIF
 
