@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 14:53:00 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ X11SalInstance::~X11SalInstance()
     // a little late
 
     SalData *pSalData = GetSalData();
+    pSalData->deInitNWF();
     delete pSalData;
     SetSalData( NULL );
 
@@ -234,11 +235,11 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 bool X11SalInstance::AnyInput(USHORT nType)
 {
     SalData *pSalData = GetSalData();
-    Display *pDisplay  = pSalData->GetDefDisp()->GetDisplay();
+    Display *pDisplay  = pSalData->GetDisplay()->GetDisplay();
     BOOL bRet = FALSE;
 
     if( (nType & INPUT_TIMER) &&
-        pSalData->GetDefDisp()->GetXLib()->CheckTimeout( false ) )
+        pSalData->GetDisplay()->GetXLib()->CheckTimeout( false ) )
     {
         bRet = TRUE;
     }
