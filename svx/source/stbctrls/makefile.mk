@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:39:13 $
+#   last change: $Author: kz $ $Date: 2004-08-31 12:14:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,8 @@ SLOFILES=	\
         $(SLO)$/zoomctrl.obj	\
         $(SLO)$/pszctrl.obj	\
         $(SLO)$/selctrl.obj	\
-        $(SLO)$/modctrl.obj
+        $(SLO)$/modctrl.obj \
+        $(SLO)$/xmlsecctrl.obj
 
 HXX1TARGET=stbctrls
 HXX1EXT=   hxx
@@ -97,7 +98,8 @@ HXX1DEPN=\
         $(INC)$/zoomctrl.hxx	\
         $(INC)$/pszctrl.hxx	\
         $(INC)$/selctrl.hxx	\
-        $(INC)$/modctrl.hxx
+        $(INC)$/modctrl.hxx \
+        $(INC)$/xmlsecctrl.hxx
 
 # --- Targets -------------------------------------------------------
 
