@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:16:15 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 22:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ Menu MN_ANCHOR_POPUP
             Text [ portuguese_brazilian ] = "Zeichen" ;
             Text [ swedish ] = "Som tecken" ;
             Text [ danish ] = "Som tegn" ;
-            Text [ italian ] = "Quale carattere" ;
+            Text [ italian ] = "Come carattere" ;
             Text [ spanish ] = "Como carácter" ;
             Text [ french ] = "Comme caractère" ;
             Text [ dutch ] = "Als teken" ;
@@ -212,5 +212,6 @@ Menu MN_ANCHOR_POPUP
         };
     };
 };
+
 
 
