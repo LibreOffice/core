@@ -6,7 +6,7 @@ Option Explicit
 Public sDatabaseList()
 Public iCommandTypes() as Integer
 Public CurCommandType as Integer
-Dim oDataSource as Object
+Public oDataSource as Object
 Public bEnableBinaryOptionGroup as Boolean
 
 
@@ -140,6 +140,7 @@ Dim oField as Object
 	ReDim oDBShapeList(MaxIndex) as Object
 	ReDim oTCShapeList(MaxIndex) as Object
 	ReDim oDBModelList(MaxIndex) as Object
+&apos;	ReDim oGroupShapeList(MaxIndex) as Object
 End Sub
 
 
@@ -227,7 +228,11 @@ Dim m as Integer
 		RemoveListItems(oDialogModel.lstFields(), oDialogModel.lstSelFields(), ImgFieldNames())
 	End If
 WIZARDERROR:
-	ShowErrorMessage(True)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		Resume LOCERROR
+		LOCERROR:		
+	End If
 End Sub
 
 

@@ -8,12 +8,12 @@ Global Const RID_FORM	= 2200
 
 Public Const SBCANCEL = 2
 Public Const SBREPEAT = 4
+Public LabelDiffHeight as Long
 
 Public WizardTitle(1 To 3) as String
 Public DlgFormDB as Object
 Public oDialogModel as Object
 
-&apos;	Global Msg
 Dim sMsgWizardName as String
 Dim sMsgErrMsg as String
 Dim sMsgErrFormOpen as String
@@ -34,7 +34,6 @@ Public sGoOn as String
 Public sReady as String
 Public sMsgNoConnection as String
 Public sWriterFilterName as String		
-Public sWriterTemplateFiltername as String		
 Public XPixelFactor as Long		
 Public YPixelFactor as Long
 
@@ -75,8 +74,6 @@ Sub SetDialogLanguage ()
 		.cmdGoOn.Label = sGoOn
 		.lblDatabases.Label = GetResText(RID_FORM + 11)
 		.lblTables.Label = GetResText(RID_FORM + 6)
-		XPixelFactor = 100000/DlgFormDB.GetControl(&quot;lstDatabases&quot;).Peer.GetInfo.PixelPerMeterX
-		YPixelFactor = 100000/DlgFormDB.GetControl(&quot;lstDatabases&quot;).Peer.GetInfo.PixelPerMeterY
 
 		.lblFields.Label = GetResText(RID_FORM + 12)
 		.lblSelFields.Label = GetResText(RID_FORM + 13)
@@ -123,7 +120,6 @@ Sub SetDialogLanguage ()
 		.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
 
 		sWriterFilterName = GetResText(RID_FORM + 70)
-		sWriterTemplateFilterName = GetResText(RID_FORM + 71)
 	End With
 End Sub
 
@@ -131,7 +127,6 @@ End Sub
 
 Sub InitializeWidthList()
 
-&apos;Todo: Was ist mit Currencies? Wieso sind dafür in der API keine Feldtypen definiert?
 &apos;  &apos;Currency&apos; ist ein Flag, dass grundsätzlich an jedes Feld angehängt sein kann.
 &apos; An der Connection kann man irgendwie abfragen, ob ein bestimmter Datentyp als Währung 
 &apos; interpretiert wird. Darstellung über Numberformatter. Ist nicht konsistent über Datenbanken.

@@ -2,11 +2,8 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
 
-&apos; Todo: Gruppieren der DBControls mit den Textfeldern einbinden
-&apos; Evtl könnte dies auch am Ende geschehen
 Public DocumentName as String
-Public FormPath$, FormDBName$, FormReturnValue$
-Public TemplatePath$
+Public FormPath as String
 Public WizardPath as String
 Public WebWizardPath as String
 Public WorkPath as String
@@ -33,8 +30,6 @@ Public Tablename as String
 Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.&quot;
 Public bDisposeDoc as Boolean
 Public bDebug as Boolean
-&apos; Todo: Mit FS absprechen, dass als CommandType Nur Queries und Tables zugelassen sind. Dabei müsste noch abgklärt werden
-&apos; wann ein Content ein &apos;Command&apos; ist.
 
 
 &apos; The macro can be called in 4 possible scenarios:
@@ -74,6 +69,7 @@ Dim SelCount as Integer
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
+	OpenFormDocument()
 	CurArrangement = 0
 	bControlsareCreated = False
 	bEnableBinaryOptionGroup = False
@@ -89,11 +85,15 @@ Dim SelCount as Integer
 	WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
 	TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
 	WorkPath = GetPathSettings(&quot;Work&quot;)
-	OpenFormDocument()
 	ToggleWindow(False)
+	oProgressBar.Value = 5
 	GetDatabaseNames()
+	oProgressBar.Value = 10
 	InitializeWidthList()
+	oProgressBar.Value = 20
 	LoadLanguage
+	InitializeLabelValues()
+	oProgressBar.Value = 30
 	bNeedFieldRefresh = True
 	With oDialogModel
 		.cmdBack.Enabled = False
@@ -121,7 +121,7 @@ Dim SelCount as Integer
 					SelCount = CountItemsInArray(oDialogModel.lstTables.StringItemList(), sContent)
 					If SelCount = 1 Then
 						DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItem(sContent, True)
-					Else 		&apos; Note: Here is no Error Handling in case that no valid content is transferred
+					Else
 						If CommandType = com.sun.star.sdb.CommandType.QUERY Then
 							SelIndex = IndexInArray(sContent, QueryNames()
 							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
@@ -142,17 +142,24 @@ Dim SelCount as Integer
 		&apos; Scenario 1: No parameters are given
 		ToggleListboxControls(oDialogModel, False)
 	End If
+	oProgressBar.Value = 50
 	DlgFormDB.Title = WizardTitle(1)
 	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, DlgFormDB, &quot;lstStyles&quot;, Styles())
+	oProgressBar.Value = 60
 	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
 	SetImportStyle()
+	oProgressBar.Value = 70
 	ConfigurePageStyle()
+	oProgressBar.Value = 80
 	ToggleWindow(True)
+	oProgressBar.Value = 90
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	ToggleDatabasePage(True)
+	oProgressBar.Value = 100
 	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
+	oProgressbar.End
 	DlgFormDB.Execute()
-	DlgFormDB.Dispose
+	DlgFormDB.Dispose()
 	If Not IsNull(oDBConnection) Then
 		oDBConnection.Dispose()
 	End If
@@ -160,7 +167,11 @@ Dim SelCount as Integer
 		oDocument.Dispose()
 	End If
 WIZARDERROR:
-	ShowErrorMessage(True)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		Resume LOCERROR
+		LOCERROR:		
+	End If
 End Sub
 
 
@@ -208,7 +219,6 @@ Sub PreviousStep()
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-
 	With oDialogModel
 		.Step = 1
 		.cmdBack.Enabled = False
@@ -218,7 +228,11 @@ Sub PreviousStep()
 		.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	End With
 WIZARDERROR:
-	ShowErrorMessage(True)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		Resume LOCERROR
+		LOCERROR:		
+	End If
 End Sub
 
 
@@ -247,7 +261,11 @@ Sub NextStep()
 	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; oDialogModel.Step &amp; &quot;.bmp&quot;
 	DlgFormDB.Title = WizardTitle(oDialogModel.Step)
 WIZARDERROR:
-	ShowErrorMessage(True)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		Resume LOCERROR
+		LOCERROR:		
+	End If
 End Sub
 
 

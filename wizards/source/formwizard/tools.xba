@@ -4,8 +4,6 @@
 Option Explicit
 
 
-Public CurIndex as Integer
-
 Function SetProgressValue(iValue as Integer)	
 	If iValue = 0 Then
 		oProgressbar.End
@@ -154,7 +152,11 @@ Dim OldIndex as Integer
 		oDocument.UnlockControllers()
 	End If
 WIZARDERROR:
-	ShowErrorMessage(True)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		Resume LOCERROR
+		LOCERROR:		
+	End If
 End Sub
 
 
@@ -214,6 +216,7 @@ Dim oShape as Object
 	Next n
 End Sub
 
+
 &apos; Note as Shapes cannot be removed from the DrawPage without destroying
 &apos; the object we have to park them somewhere in Nirwana
 Sub ShapesToNirwana()
@@ -258,12 +261,6 @@ Function GetDBHeight(oDBModel as Object)
 	If CurControlType = cImageControl Then
 		nDBHeight = 2000
 	Else
-		If bIsVeryFirstValueField Then
-			&apos; Todo: Hier wird vereinfachend davon ausgegangen, dass alle DB-Feldern immer die selbe Höhe wie Textfelder haben
-			nDBRefHeight = GetPreferredHeight(oDBModel)
-			bIsVeryFirstValueField = False
-		End If
-		&apos;Todo: Vielleicht könnte man dieses Feld auch noch tiefer machen
 		If CurFieldType = com.sun.star.sdbc.DataType.LONGVARCHAR Then
 			oDBModel.MultiLine = True
 			nDBHeight = nDBRefHeight * 4
@@ -275,16 +272,16 @@ Function GetDBHeight(oDBModel as Object)
 End Function
 
 
-Sub ShowErrorMessage(bEndExecute as Boolean)
-	If Err &lt;&gt; 0 Then	
-		Msgbox(sMsgErrMsg, 16, GetProductName())
-		oDocument.UnlockControllers()
-		ToggleWindow(True)
-		Resume LOCERROR
-		LOCERROR:		
-		On Local Error Goto 0
-		If bEndExecute Then
-			DlgFormDB.EndExecute()	
-		End If
-	End If
-End Sub</script:module>
+&apos;Sub ShowErrorMessage(bEndExecute as Boolean)
+&apos;	If Err &lt;&gt; 0 Then	
+&apos;		Msgbox(sMsgErrMsg, 16, GetProductName())
+&apos;		Resume LOCERROR
+&apos;		LOCERROR:		
+&apos;		On Local Error Goto 0
+&apos;		oDocument.UnlockControllers()
+&apos;		ToggleWindow(True)
+&apos;		If bEndExecute Then
+&apos;			DlgFormDB.EndExecute()	
+&apos;		End If
+&apos;	End If
+&apos;End Sub</script:module>

@@ -16,6 +16,8 @@ Public nMaxRowRightX as Long
 Public nMaxRowY as Long
 Public nSecMaxRowY as Long
 Public MaxIndex as Integer
+Public CurIndex as Integer
+
 Public Const cVertDistance = 200
 Public Const cHoriDistance = 300
 
@@ -76,7 +78,6 @@ Public oModelService(cControlCollectionCount) as String
 Public oGridModel as Object
 
 
-
 Function InsertControl(oContainer as Object, oControlObject as object, aPoint as Object, aSize as Object)
 Dim oShape as object
 	oShape = oDocument.CreateInstance (&quot;com.sun.star.drawing.ControlShape&quot;)
@@ -115,6 +116,8 @@ Sub OpenFormDocument()
 Dim NoArgs() as new com.sun.star.beans.PropertyValue
 Dim oViewSettings as Object
 	oDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, NoArgs())
+	oProgressbar = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator()
+	oProgressbar.Start(&quot;&quot;, 100)
 	oDocument.ApplyFormDesignMode = False
 	oController = oDocument.GetCurrentController
 	oViewSettings = oDocument.CurrentController.ViewSettings
@@ -124,6 +127,33 @@ Dim oViewSettings as Object
 	oViewSettings.ShowHoriRuler = True
 	oDrawPage = oDocument.DrawPage
 	oPageStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)
+End Sub
+
+
+Sub	InitializeLabelValues()
+Dim oLabelModel as Object
+Dim oTBModel as Object
+Dim oLabelShape as Object
+Dim oTBShape as Object
+Dim aTBSize As New com.sun.star.awt.Size
+Dim aLabelSize As New com.sun.star.awt.Size
+Dim aPoint As New com.sun.star.awt.Point
+Dim oLocControl as Object
+Dim oLocPeer as Object
+	oLabelModel =  CreateUnoService(&quot;com.sun.star.form.component.FixedText&quot;)
+	oTBModel =  CreateUnoService(&quot;com.sun.star.form.component.TextField&quot;)
+	Set oLabelShape = InsertControl(oDrawPage, oLabelModel, aPoint, aSize)
+	Set oTBShape = InsertControl(oDrawPage, oTBModel, aPoint, aSize)
+	oLocPeer = oController.GetControl(oLabelModel).Peer
+	XPixelFactor = 100000/oLocPeer.GetInfo.PixelPerMeterX
+	YPixelFactor = 100000/oLocPeer.GetInfo.PixelPerMeterY
+	aLabelSize = GetPeerSize(oLabelModel, oLocControl, &quot;The quick brown fox...&quot;)
+	nTCHeight = aLabelSize.Height * YPixelFactor
+	aTBSize = GetPeerSize(oTBModel, oLocControl, &quot;The quick brown fox...&quot;)
+	nDBRefHeight = aTBSize.Height * YPixelFactor
+	LabelDiffHeight = Clng((aTBSize.Height - aLabelSize.Height)/2) * YPixelFactor
+	oDrawPage.Remove(oLabelShape)
+	oDrawPage.Remove(oTBShape)
 End Sub
 
 
@@ -171,9 +201,11 @@ Dim sLocText as String
 		End If
 	End If
 WIZARDERROR:
-	ShowErrorMessage(True)
-	oDocument.UnlockControllers()
-	ToggleLayoutPage(True)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		Resume LOCERROR
+		LOCERROR:		
+	End If
 End Sub
 
 
@@ -201,9 +233,13 @@ Dim oModel as Object
 		Next i
 	End If
 WIZARDERROR:
-	ShowErrorMessage(True)
-	oDocument.UnlockControllers()
-	ToggleLayoutPage(True)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		Resume LOCERROR
+		LOCERROR:		
+	End If
+&apos;	oDocument.UnlockControllers()
+&apos;	ToggleLayoutPage(True)
 End Sub
 
 
@@ -237,7 +273,11 @@ Dim oModel as Object
 		End Select
 	End If
 WIZARDERROR:
-	ShowErrorMessage(True)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		Resume LOCERROR
+		LOCERROR:		
+	End If
 End Sub
 
 
@@ -264,8 +304,7 @@ End Sub
 
 
 Sub ToggleLayoutPage(bDoEnable as Boolean, Optional FocusControlName as String)
-&apos; Todo: Diese Zeile wieder reinnehmen und schauen, ob alles richtig getogglet wird.
-&apos;	oDialogModel.Enabled = bDoEnable
+	oDialogModel.Enabled = bDoEnable
 	If bDoEnable Then
 		ToggleOptionButtons(oDialogModel,(bWithBackGraphic = True))
 		ToggleAlignGroup(bDoEnable)
