@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 11:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
 
 #define C2U( cChar ) ::rtl::OUString::createFromAscii( cChar )
 
@@ -233,9 +232,9 @@ namespace bib
     //---------------------------------------------------------------------
     //--- 18.10.01 18:52:45 -----------------------------------------------
 
-    Reference< XControlContainer > BibView::getControlContainer()
+    Reference< awt::XControlContainer > BibView::getControlContainer()
     {
-        Reference< XControlContainer > xReturn;
+        Reference< awt::XControlContainer > xReturn;
         if ( m_pGeneralPage )
             xReturn = m_pGeneralPage->GetControlContainer();
         return xReturn;
