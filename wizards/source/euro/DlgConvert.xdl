@@ -5,7 +5,9 @@
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="0" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34673" dlg:value="cmdCancel">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Euro.Common.CloseDialog"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdHelp" dlg:tab-index="1" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34674" dlg:value="cmdHelp"/>
+  <dlg:button dlg:id="cmdHelp" dlg:tab-index="1" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:tag="34674" dlg:help-url="HID:34674" dlg:value="cmdHelp">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Recursive.ShowHelperDialog"/>
+  </dlg:button>
   <dlg:button dlg:id="cmdBack" dlg:tab-index="2" dlg:left="155" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34675" dlg:value="cmdBack"/>
   <dlg:button dlg:id="cmdGoOn" dlg:tab-index="3" dlg:left="211" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34676" dlg:value="cmdGoOn">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Euro.Common.StartConversion"/>
