@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2000-09-27 16:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,6 +453,8 @@ struct XForm
         eM11 = eM12 = eM21 = eM22 = 1.0f;
         eDx = eDx = 0.0f;
     };
+
+    friend SvStream& operator>>( SvStream& rIn, XForm& rXForm );
 };
 
 // -----------------------------------------------------------------------------
