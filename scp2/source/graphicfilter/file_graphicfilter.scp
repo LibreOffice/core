@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_graphicfilter.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:09:17 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,6 @@ STD_FILTER_FILE( gid_File_Filter_Egi, egi)
 STD_FILTER_FILE( gid_File_Filter_Epb, epb)
 
 STD_FILTER_FILE( gid_File_Filter_Epg, epg)
-
-STD_FILTER_FILE( gid_File_Filter_Epn, epn)
 
 STD_FILTER_FILE( gid_File_Filter_Epp, epp)
 
