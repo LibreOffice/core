@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:13:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,12 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
                             GetXMLToken ( XML_N_BLOCK_LIST ),
                             XML_NAMESPACE_BLOCKLIST );
+    _GetNamespaceMap().Add( GetXMLToken ( XML_NP_OFFICE ),
+                            GetXMLToken(XML_N_OFFICE_OOO),
+                            XML_NAMESPACE_OFFICE );
+    _GetNamespaceMap().Add( GetXMLToken ( XML_NP_TEXT ),
+                            GetXMLToken(XML_N_TEXT_OOO),
+                            XML_NAMESPACE_TEXT );
 }
 
 sal_uInt32 SwXMLTextBlockExport::exportDoc(const String &rText)
