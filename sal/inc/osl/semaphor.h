@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:44:26 $
+ *  last change: $Author: svesik $ $Date: 2001-02-16 01:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,14 @@ sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore);
     @return False if the system-call failed.
 */
 sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore);
+
+#if defined(NETBSD)
+union semun {
+        int     val;            /* value for SETVAL */
+        struct  semid_ds *buf;  /* buffer for IPC_STAT & IPC_SET */
+        u_short *array;         /* array for GETALL & SETALL */
+};
+#endif
 
 #ifdef __cplusplus
 }
