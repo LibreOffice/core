@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-10 09:31:28 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@
 
 //--------------------------------------------------------------------------------------------------------
 
-#define LOCALE                      ::com::sun::star::lang::Locale
+#define UNOLOCALE                   ::com::sun::star::lang::Locale
 #define REFERENCE                   ::com::sun::star::uno::Reference
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
 #define PROPERTYVALUE               ::com::sun::star::beans::PropertyValue
@@ -150,8 +150,8 @@ public:
                                    ~SfxDocTplService();
 
     // --- XLocalizable ---
-    void SAL_CALL                   setLocale( const LOCALE & eLocale ) throw( RUNTIMEEXCEPTION );
-    LOCALE SAL_CALL                 getLocale() throw( RUNTIMEEXCEPTION );
+    void SAL_CALL                   setLocale( const UNOLOCALE & eLocale ) throw( RUNTIMEEXCEPTION );
+    UNOLOCALE SAL_CALL              getLocale() throw( RUNTIMEEXCEPTION );
 
     // --- XDocumentTemplates ---
     REFERENCE< XCONTENT > SAL_CALL  getContent() throw( RUNTIMEEXCEPTION );
