@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscchar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:50:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <rtl/alloc.h>
 
 /*************************************************************************
 |*
@@ -89,9 +90,9 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
 {
     sal_Size        nMaxUniCodeBuf = strlen( pStr ) + 1;
     char *          pOrgStr = new char[ nMaxUniCodeBuf ];
-    USHORT          nOrgLen = 0;
+    sal_uInt32      nOrgLen = 0;
 
-    if( nMaxUniCodeBuf * 6 > 0xFFFF )
+    if( nMaxUniCodeBuf * 6 > 0x0FFFFF )
         RscExit( 10 );
 
     char cOld = '1';
@@ -141,8 +142,8 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                 {
                     if( '0' <= *pStr && '7' >= *pStr )
                     {
-                        USHORT  nChar = 0;
-                        USHORT  i = 0;
+                        sal_uInt16  nChar = 0;
+                        int  i = 0;
                         while( '0' <= *pStr && '7' >= *pStr && i != 3 )
                         {
                             nChar = nChar * 8 + (BYTE)*pStr - (BYTE)'0';
@@ -151,7 +152,7 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                         }
                         if( nChar > 255 )
                         {
-                            RscMem::Free( pOrgStr );
+                            rtl_freeMemory( pOrgStr );
 
                             // Wert zu gross, oder kein 3 Ziffern
                             return( NULL );
@@ -161,8 +162,8 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                     }
                     else if( 'x' == *pStr )
                     {
-                        USHORT  nChar = 0;
-                        USHORT  i = 0;
+                        sal_uInt16  nChar = 0;
+                        int  i = 0;
                         ++pStr;
                         while( isxdigit( *pStr ) && i != 2 )
                         {
@@ -209,12 +210,10 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
     // factor fo 6 is the maximum size of an UNICODE character as utf8
-    char * pUtf8 = (char *)RscMem::Malloc( (USHORT)(nMaxUniCodeBuf * 6) );
-    UINT16  nUtf8Len = 0;
-
+    char * pUtf8 = (char *)rtl_allocateMemory( nUniSize * 6 );
     rtl_convertUnicodeToText( hConv, 0,
                             pUniCode, nUniSize,
-                            pUtf8, nMaxUniCodeBuf * 6,
+                            pUtf8, nUniSize * 6,
                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT
                             | RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT
                             | RTL_UNICODETOTEXT_FLAGS_FLUSH,
@@ -290,7 +289,7 @@ char * RscChar::MakeUTF8FromL( char * pStr )
                     if( '0' <= *pStr && '7' >= *pStr )
                     {
                         UINT32  nChar = 0;
-                        USHORT  i = 0;
+                        int  i = 0;
                         while( '0' <= *pStr && '7' >= *pStr && i != 6 )
                         {
                             nChar = nChar * 8 + (BYTE)*pStr - (BYTE)'0';
@@ -306,7 +305,7 @@ char * RscChar::MakeUTF8FromL( char * pStr )
                     else if( 'x' == *pStr || 'X' == *pStr )
                     {
                         UINT32  nChar = 0;
-                        USHORT  i = 0;
+                        int  i = 0;
                         ++pStr;
                         while( isxdigit( *pStr ) && i != 4 )
                         {
@@ -337,22 +336,22 @@ char * RscChar::MakeUTF8FromL( char * pStr )
 
     // factor fo 6 is the maximum size of an UNICODE character as utf8
     sal_Size nMaxUtf8Len = nUniPos * 6;
-    if( nUniPos * 6 > 0xFFFF )
+    if( nUniPos * 6 > 0x0FFFFF )
         RscExit( 10 );
 
-    char * pUtf8 = (char *)RscMem::Malloc( (USHORT)nMaxUtf8Len );
+    char * pUtf8 = (char *)rtl_allocateMemory( nMaxUtf8Len );
     rtl_TextToUnicodeConverter hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
 
     sal_uInt32 nInfo;
     sal_Size   nSrcCvtBytes;
-    sal_Size nSize = rtl_convertUnicodeToText( hConv, 0,
-                                                pUniCode, nUniPos,
-                                                pUtf8, nMaxUtf8Len,
-                                                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT
-                                                | RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT
-                                                | RTL_UNICODETOTEXT_FLAGS_FLUSH,
-                                                &nInfo,
-                                                &nSrcCvtBytes );
+    rtl_convertUnicodeToText( hConv, 0,
+                              pUniCode, nUniPos,
+                              pUtf8, nMaxUtf8Len,
+                              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT
+                              | RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT
+                              | RTL_UNICODETOTEXT_FLAGS_FLUSH,
+                              &nInfo,
+                              &nSrcCvtBytes );
 
     rtl_destroyUnicodeToTextConverter( hConv );
 
