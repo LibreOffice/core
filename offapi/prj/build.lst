@@ -43,6 +43,7 @@ oa	offapi\com\sun\star\packages\manifest	nmake	-	all	oa_manifest NULL
 oa	offapi\com\sun\star\packages\zip	    nmake	-	all	oa_zippackage NULL
 oa	offapi\com\sun\star\plugin				nmake	-	all	oa_plug NULL
 oa	offapi\com\sun\star\presentation		nmake	-	all	oa_pres NULL
+oa	offapi\com\sun\star\animations			nmake	-	all oa_animations oa_pres NULL
 oa	offapi\com\sun\star\presentation\textfield		nmake	-	all	oa_prestextfield NULL
 oa	offapi\com\sun\star\resource			nmake	-	all	oa_resrc NULL
 oa	offapi\com\sun\star\xml\sax				nmake	-	all	oa_sax NULL
