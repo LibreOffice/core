@@ -84,11 +84,11 @@
 <!-- Date formats. Index range is 18-38. -->
 <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="18">
 <FormatCode>YY"年"M"月"D"日"</FormatCode>
-<DefaultName>System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="true" type="long" usage="DATE" formatindex="19">
 <FormatCode>YYYY"年"M"月"D"日"　NNNN</FormatCode>
-<DefaultName>System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey3" default="true" type="medium" usage="DATE" formatindex="20">
 <FormatCode>YY/M/D</FormatCode>
@@ -96,31 +96,31 @@
 </FormatElement>
 <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
 <FormatCode>YYYY/M/D</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="22">
 <FormatCode>YY"年"MMM"月"D"日"</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
 <FormatCode>YYYY"年"MMM"月"D"日"</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
 <FormatCode>D. MMM YYYY</FormatCode>
-<DefaultName>DIN 5008(EN 28601)</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
 <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="26">
 <FormatCode>YYYY "年"M"月"D"日"</FormatCode>
-<DefaultName>DIN 5008 (EN 28601)</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
 <FormatCode>YY"年"M"月"D"日" NNNN</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="28">
 <FormatCode>YY/M/D NNNN</FormatCode>
@@ -128,27 +128,27 @@
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="29">
 <FormatCode>YYYY/M/D NNNN</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
 <FormatCode>YYYY"年，"M"月，"D"日，"NNNN</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="short" usage="DATE" formatindex="31">
 <FormatCode>M"月"D"日"</FormatCode>
-<DefaultName>DIN 5008 (EN 28601)</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="medium" usage="DATE" formatindex="32">
 <FormatCode>YY-MM-DD</FormatCode>
-<DefaultName>DIN 5008 (EN 28601)</DefaultName>
+<DefaultName>ISO 8601</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="33">
 <FormatCode>YYYY-MM-DD</FormatCode>
-<DefaultName>DIN 5008 (EN 28601)</DefaultName>
+<DefaultName>ISO 8601</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="true" type="short" usage="DATE" formatindex="34">
 <FormatCode>YY"年"M"日"</FormatCode>
-<DefaultName>def/System</DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="35">
 <FormatCode>M"月，"D"日"</FormatCode>
