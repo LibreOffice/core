@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-28 16:20:01 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,18 +106,8 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         NeonUri aURI( inUri );
 
         std::auto_ptr< DAVSession > xElement(
-            ( aURI.GetScheme().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "http" ) ) ||
-             aURI.GetScheme().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
-            ? new NeonSession(
-                this, inUri, m_xProxyDecider->getProxy( aURI.GetScheme(),
-                                                        aURI.GetHost(),
-                                                        aURI.GetPort() ) )
-            : new NeonSession(
-                this, inUri, m_xProxyDecider->getProxy( aURI.GetScheme(),
-                                                        rtl::OUString() /* not used */,
-                                                        -1 /* not used */ ) ) );
+            new NeonSession( this, inUri, *m_xProxyDecider.get() ) );
+
         aIt = m_aMap.insert( Map::value_type( inUri, xElement.get() ) ).first;
         aIt->second->m_aContainerIt = aIt;
         xElement.release();
@@ -139,23 +129,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         // call a little:
         NeonUri aURI( inUri );
 
-        if ( aURI.GetScheme().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "http" ) ) ||
-             aURI.GetScheme().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
-            aIt->second = new NeonSession( this,
-                                           inUri,
-                                           m_xProxyDecider->getProxy(
-                                            aURI.GetScheme(),
-                                            aURI.GetHost(),
-                                            aURI.GetPort() ) );
-        else
-            aIt->second = new NeonSession( this,
-                                           inUri,
-                                           m_xProxyDecider->getProxy(
-                                            aURI.GetScheme(),
-                                            rtl::OUString() /* not used */,
-                                            -1 /* not used */ ) );
+        aIt->second = new NeonSession( this, inUri, *m_xProxyDecider.get() );
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }
