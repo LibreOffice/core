@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-20 19:07:04 $
+#   last change: $Author: hjs $ $Date: 2001-02-28 15:55:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -513,6 +513,7 @@ $(MISC)$/%.dpsc :
     @makedepend -f - -p$(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/ -o.par -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $@
 .IF "$(LAZY_DEPS)"==""	
     @+echo $@ : $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par  >> $@
+    @+echo $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par : $(*:b).scp >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
