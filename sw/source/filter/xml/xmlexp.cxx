@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:14:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,10 +441,8 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         // additionally, we take care of the save-linked-sections-thingy
         bSaveLinkedSections = pDoc->IsGlblDocSaveLinks();
     }
-    else if (pDoc->IsLabelDoc())
-    {
-        eClass = XML_LABEL;
-    }
+    // MIB: 03/26/04: The Label information is saved in the settings, so
+    // we don't need it here.
     // else: keep default pClass that we received
 
     SvXMLGraphicHelper *pGraphicResolver = 0;
@@ -723,10 +721,121 @@ void SwXMLExport::_ExportContent()
 // helper functions for export service(s)
 //
 
-OUString SAL_CALL SwXMLExport_getImplementationName() throw()
+// OOo
+OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.comp.Writer.XMLExporter" ) );
+}
+
+Sequence< OUString > SAL_CALL SwXMLExportOOO_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName(SwXMLExportOOO_getImplementationName());
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+Reference< XInterface > SAL_CALL SwXMLExportOOO_createInstance(
+        const Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_ALL);
+}
+
+OUString SAL_CALL SwXMLExportStylesOOO_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLStylesExporter" ) );
+}
+
+Sequence< OUString > SAL_CALL SwXMLExportStylesOOO_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName(SwXMLExportStylesOOO_getImplementationName());
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+Reference< XInterface > SAL_CALL SwXMLExportStylesOOO_createInstance(
+        const Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr,
+        EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
+        EXPORT_FONTDECLS );
+}
+
+OUString SAL_CALL SwXMLExportContentOOO_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLContentExporter" ) );
+}
+
+Sequence< OUString > SAL_CALL SwXMLExportContentOOO_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName(SwXMLExportContentOOO_getImplementationName());
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+Reference< XInterface > SAL_CALL SwXMLExportContentOOO_createInstance(
+        const Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLExport(rSMgr,
+        EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
+        EXPORT_FONTDECLS );
+}
+
+OUString SAL_CALL SwXMLExportMetaOOO_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLMetaExporter" ) );
+}
+
+Sequence< OUString > SAL_CALL SwXMLExportMetaOOO_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName(SwXMLExportMetaOOO_getImplementationName());
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+Reference< XInterface > SAL_CALL SwXMLExportMetaOOO_createInstance(
+        const Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_META);
+}
+
+OUString SAL_CALL SwXMLExportSettingsOOO_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLSettingsExporter" ) );
+}
+
+Sequence< OUString > SAL_CALL SwXMLExportSettingsOOO_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName(SwXMLExportSettingsOOO_getImplementationName());
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+Reference< XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(
+        const Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_SETTINGS);
+}
+
+// OASIS
+OUString SAL_CALL SwXMLExport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLOasisExporter" ) );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExport_getSupportedServiceNames()
@@ -741,15 +850,13 @@ Reference< XInterface > SAL_CALL SwXMLExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SwXMLExport(EXPORT_ALL);
-    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_ALL );
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_ALL|EXPORT_OASIS);
 }
 
 OUString SAL_CALL SwXMLExportStyles_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLStylesExporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisStylesExporter" ) );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportStyles_getSupportedServiceNames()
@@ -768,15 +875,15 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
     //return (cppu::OWeakObject*)new SwXMLExport(
     //  EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
     //  EXPORT_FONTDECLS );
-    return (cppu::OWeakObject*)new SwXMLExport(
-        rSMgr,
-        EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr,
+        EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
+        EXPORT_FONTDECLS|EXPORT_OASIS );
 }
 
 OUString SAL_CALL SwXMLExportContent_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLContentExporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisContentExporter" ) );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportContent_getSupportedServiceNames()
@@ -798,13 +905,13 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
     return (cppu::OWeakObject*)new SwXMLExport(
         rSMgr,
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
-        EXPORT_FONTDECLS );
+        EXPORT_FONTDECLS|EXPORT_OASIS );
 }
 
 OUString SAL_CALL SwXMLExportMeta_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLMetaExporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisMetaExporter" ) );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportMeta_getSupportedServiceNames()
@@ -819,15 +926,13 @@ Reference< XInterface > SAL_CALL SwXMLExportMeta_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SwXMLExport(EXPORT_META);
-    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_META );
+    return (cppu::OWeakObject*)new SwXMLExport(rSMgr, EXPORT_META|EXPORT_OASIS);
 }
 
 OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLSettingsExporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisSettingsExporter" ) );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportSettings_getSupportedServiceNames()
@@ -842,9 +947,7 @@ Reference< XInterface > SAL_CALL SwXMLExportSettings_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SwXMLExport(EXPORT_SETTINGS);
-    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SwXMLExport(rSMgr, EXPORT_SETTINGS|EXPORT_OASIS);
 }
 
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
