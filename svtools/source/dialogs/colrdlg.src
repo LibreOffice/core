@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:00:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "Àû»ö(~R)";
         Text[ turkish ] = "~Kýrmýzý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Rojo";
     };
     FixedText FT_GREEN
     {
@@ -161,6 +162,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "³ì»ö(~G)";
         Text[ turkish ] = "~Yeþil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Verde";
     };
     FixedText FT_BLUE
     {
@@ -189,6 +191,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "Ã»»ö(~B)";
         Text[ turkish ] = "~Mavi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Azul";
     };
     NumericField NUM_RED
     {
@@ -250,6 +253,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "Ã»·Ï(~C)";
         Text[ turkish ] = "~Camgöbeði";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cian";
     };
     FixedText FT_MAGENTA
     {
@@ -278,6 +282,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "¼±È«»ö(~M)";
         Text[ turkish ] = "M~or";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Magenta";
     };
     FixedText FT_YELLOW
     {
@@ -306,6 +311,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "È²»ö(~Y)";
         Text[ turkish ] = "~Sarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Amarillo";
     };
     FixedText FT_KEY
     {
@@ -334,6 +340,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "Å°(~K)";
         Text[ turkish ] = "~Key";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Llave";
     };
     MetricField NUM_CYAN
     {
@@ -435,6 +442,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "»ö(~U)";
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Color";
     };
     NumericField NUM_HUE
     {
@@ -476,6 +484,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "Ã¤µµ(~S)";
         Text[ turkish ] = "~Doygunluk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Saturación";
     };
     NumericField NUM_SATURATION
     {
@@ -515,6 +524,7 @@ ModalDialog DLG_COLOR
         Text[ korean ] = "¹à±â(~N)";
         Text[ turkish ] = "Par~laklýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Brillo";
     };
     NumericField NUM_LUMINANCE
     {
@@ -573,4 +583,5 @@ ModalDialog DLG_COLOR
     Text[ korean ] = "»ö»ó";
     Text[ turkish ] = "Renk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color";
 };
