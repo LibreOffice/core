@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-06-27 07:57:41 $ $Revision: 1.10 $
+// $Author: mba $ $Date: 2002-07-08 07:36:45 $ $Revision: 1.11 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -192,6 +192,7 @@ SfxRequest::SfxRequest
     pImp->SetPool( &pViewFrame->GetPool() );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
+    pImp->pSlot = 0;
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
     pImp->bUseTarget = FALSE;
     pImp->pViewFrame = pViewFrame;
@@ -724,7 +725,8 @@ void SfxRequest::Done_Impl
 
                 // einen Sub-Request recorden
                 SfxRequest aReq( pImp->pViewFrame, nSlotId );
-                aReq.AppendItem( *pItem );
+                if ( aReq.pImp->pSlot )
+                    aReq.AppendItem( *pItem );
                 aReq.Done();
             }
         }
