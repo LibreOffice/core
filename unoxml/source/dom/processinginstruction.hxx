@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processinginstruction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace DOM
         virtual OUString SAL_CALL getNodeName()
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException);        
+            throw (RuntimeException);
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
         throw (DOMException)

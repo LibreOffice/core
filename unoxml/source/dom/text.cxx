@@ -2,9 +2,9 @@
  *
  *  $RCSfile: text.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-19 13:24:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
