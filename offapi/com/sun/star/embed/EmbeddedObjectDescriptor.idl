@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ *  $RCSfile: EmbeddedObjectDescriptor.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-01-06 08:49:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_EmbeddedObjectDescriptor_idl__
+#define __com_sun_star_document_EmbeddedObjectDescriptor_idl__
+
+#ifndef __com_sun_star_io_XInputStream_idl__
+#include <com/sun/star/io/XInputStream.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+
+#ifndef __com_sun_star_util_URL_idl__
+#include <com/sun/star/util/URL.idl>
+#endif
+
+#ifndef __com_sun_star_task_XInteractionHandler_idl__
+#include <com/sun/star/task/XInteractionHandler.idl>
+#endif
+
+#ifndef __com_sun_star_task_XStatusIndicator_idl__
+#include <com/sun/star/task/XStatusIndicator.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+/** describes properties of an embedded object
+
+    <p>
+    This service may be represented by a
+    <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
+    Such descriptors will be passed to different functions, included into possible
+    load/save proccesses. Every member of such process can use this descriptor
+    and may change it if to actualize the informations about the document.
+    So this descriptor should be used as an in/out parameter.
+    </p>
+
+    <p>
+    Note:<br>
+    It's not allowed to hold member of this descriptor by references longer the they
+    will be used (especialy a possible stream). It's allowed to use it directly
+    or by copying it only.
+    </p>
+
+    @see com::sun::star::beans::PropertyValue
+ */
+service EmbeddedObjectDescriptor
+{
+    //-------------------------------------------------------------------------
+    /** let the graphical representation of embedded document be stored
+
+        <p>
+        Tells the embedded object that controlls the document to store or not to store
+        the graphical representation of the document in to the object persistence.
+        If this property is not set the object makes the decision itself.
+        </p>
+    */
+    [optional,property] boolean StoreVisualReplacement;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
