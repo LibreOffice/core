@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:27:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
 #endif
 #ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
@@ -1594,13 +1597,15 @@ sal_Bool SwXTextCursor::isStartOfSentence(void) throw( uno::RuntimeException )
         // start of paragraph?
         bRet = pUnoCrsr->GetPoint()->nContent == 0;
         // with mark ->no sentence start
-        if(!bRet && !pUnoCrsr->HasMark())
+        // (check if cursor is no selection, i.e. it does not have
+        // a mark or else point and mark are identical)
+        if(!bRet && (!pUnoCrsr->HasMark() ||
+                        *pUnoCrsr->GetPoint() == *pUnoCrsr->GetMark()))
         {
             SwCursor aCrsr(*pUnoCrsr->GetPoint());
-            aCrsr.Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
-            if(aCrsr.GoSentence(SwCursor::START_SENT) &&
-                aCrsr.GetPoint()->nContent == pUnoCrsr->GetPoint()->nContent)
-                bRet = sal_True;
+            SwPosition aOrigPos = *aCrsr.GetPoint();
+            aCrsr.GoSentence(SwCursor::START_SENT );
+            bRet = aOrigPos == *aCrsr.GetPoint();
         }
     }
     else
@@ -1617,16 +1622,19 @@ sal_Bool SwXTextCursor::isEndOfSentence(void) throw( uno::RuntimeException )
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        //start of paragraph?
+        //end of paragraph?
         bRet = pUnoCrsr->GetCntntNode() &&
                 pUnoCrsr->GetPoint()->nContent == pUnoCrsr->GetCntntNode()->Len();
         // with mark->no sentence end
-        if(!bRet && !pUnoCrsr->HasMark())
+        // (check if cursor is no selection, i.e. it does not have
+        // a mark or else point and mark are identical)
+        if(!bRet && (!pUnoCrsr->HasMark() ||
+                        *pUnoCrsr->GetPoint() == *pUnoCrsr->GetMark()))
         {
             SwCursor aCrsr(*pUnoCrsr->GetPoint());
-            aCrsr.Left( 1, CRSR_SKIP_CHARS, FALSE, FALSE);
-            if(aCrsr.GoSentence(SwCursor::END_SENT) && aCrsr.GetPoint()->nContent == pUnoCrsr->GetPoint()->nContent)
-                bRet = sal_True;
+            SwPosition aOrigPos = *aCrsr.GetPoint();
+            aCrsr.GoSentence(SwCursor::END_SENT );
+            bRet = aOrigPos == *aCrsr.GetPoint();
         }
     }
     else
