@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:12:03 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ String STR_FILEDLG_SELECT
     Text[ korean ] = "µð·ºÅä¸® ¼±ÅÃ";
     Text[ turkish ] = "Dizin seç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccionar directorio";
 };
 String STR_FILEDLG_CANTCHDIR
 {
@@ -107,6 +108,7 @@ String STR_FILEDLG_CANTCHDIR
     Text[ korean ] = "µð·ºÅä¸®¸¦ º¯°æÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Dizin deðiþtirilemiyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No es posible cambiar en directorio";
 };
 String STR_FILEDLG_OPEN
 {
@@ -131,6 +133,7 @@ String STR_FILEDLG_OPEN
     Text[ korean ] = "¿­±â";
     Text[ turkish ] = "Aç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Abrir";
 };
 String STR_FILEDLG_FILE
 {
@@ -155,6 +158,7 @@ String STR_FILEDLG_FILE
     Text[ korean ] = "ÆÄÀÏ(~F)";
     Text[ turkish ] = "~Dosya";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Archivo";
 };
 String STR_FILEDLG_DIR
 {
@@ -179,6 +183,7 @@ String STR_FILEDLG_DIR
     Text[ korean ] = "µð·ºÅä¸®(~D)";
     Text[ turkish ] = "~Dizin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Directorio";
 };
 String STR_FILEDLG_TYPE
 {
@@ -203,6 +208,7 @@ String STR_FILEDLG_TYPE
     Text[ korean ] = "ÆÄÀÏ  À¯Çü(~T)";
     Text[ turkish ] = "Dosya ~tipi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo de ar~chivo";
 };
 String STR_FILEDLG_CANTOPENFILE
 {
@@ -227,6 +233,7 @@ String STR_FILEDLG_CANTOPENFILE
     Text[ korean ] = "ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Dosya açýlamýyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No es posible abrir el archivo";
 };
 String STR_FILEDLG_CANTOPENDIR
 {
@@ -251,6 +258,7 @@ String STR_FILEDLG_CANTOPENDIR
     Text[ korean ] = "µð·ºÅä¸®¸¦ ¿­ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Dizin açýlamýyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No es posible abrir el directorio";
 };
 String STR_FILEDLG_OVERWRITE
 {
@@ -275,6 +283,7 @@ String STR_FILEDLG_OVERWRITE
     Text[ korean ] = "ÀÌ ÆÄÀÏÀº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. \n µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î ?";
     Text[ turkish ] = "Dosya mevcut. \nÜzerine yazýlsýn mý?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El archivo ya existe.\n¿Desea sobrescribirlo?";
 };
 String STR_FILEDLG_GOUP
 {
@@ -299,6 +308,7 @@ String STR_FILEDLG_GOUP
     Text[ korean ] = "ÇÑ ¼öÁØ À§·Î";
     Text[ turkish ] = "Bir seviye yukarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Subir un nivel";
 };
 String STR_FILEDLG_SAVE
 {
@@ -323,6 +333,7 @@ String STR_FILEDLG_SAVE
     Text[ korean ] = "ÀúÀå";
     Text[ turkish ] = "Kaydet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar";
 };
 String STR_FILEDLG_DRIVES
 {
@@ -347,6 +358,7 @@ String STR_FILEDLG_DRIVES
     Text[ korean ] = "µå¶óÀÌºê(~R)";
     Text[ turkish ] = "~Sürücü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Unidades";
 };
 String STR_FILEDLG_HOME
 {
@@ -371,6 +383,7 @@ String STR_FILEDLG_HOME
     Text[ korean ] = "»ç¿ëÀÚ µð·ºÅä¸®";
     Text[ turkish ] = "Kullanýcý dizini";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Directorio de usuario";
 };
 String STR_FILEDLG_NEWDIR
 {
@@ -395,6 +408,7 @@ String STR_FILEDLG_NEWDIR
     Text[ korean ] = "µð·ºÅä¸® ¸¸µé±â";
     Text[ turkish ] = "Dizin oluþtur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear directorio";
 };
 String STR_FILEDLG_ASKNEWDIR
 {
@@ -419,4 +433,5 @@ String STR_FILEDLG_ASKNEWDIR
     Text[ korean ] = "µð·ºÅä¸® %s ¸¦ ¸¸µå½Ã°Ú½À´Ï±î ?";
     Text[ turkish ] = "%s oluþturulsun mu ?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea crear el directorio %s?";
 };
