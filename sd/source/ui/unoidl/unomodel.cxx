@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2000-09-29 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,6 +1065,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
         // get the first page for initial size and border settings
         SdPage* pPage = rModel.pDoc->GetSdPage( (sal_uInt16)0, PK_STANDARD );
+        SdPage* pRefNotesPage = rModel.pDoc->GetSdPage( (sal_uInt16)0, PK_NOTES);
 
         // create and instert new draw masterpage
         SdPage* pMPage = (SdPage*)rModel.pDoc->AllocPage(sal_True);
@@ -1080,14 +1081,16 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
         // create and instert new notes masterpage
         SdPage* pMNotesPage = (SdPage*)rModel.pDoc->AllocPage(sal_True);
-        pMNotesPage->SetSize( pPage->GetSize() );
-        pMNotesPage->SetBorder( pPage->GetLftBorder(),
-                                   pPage->GetUppBorder(),
-                                pPage->GetRgtBorder(),
-                                pPage->GetLwrBorder() );
+        pMNotesPage->SetSize( pRefNotesPage->GetSize() );
+        pMNotesPage->SetPageKind(PK_NOTES);
+        pMNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),
+                                pRefNotesPage->GetUppBorder(),
+                                pRefNotesPage->GetRgtBorder(),
+                                pRefNotesPage->GetLwrBorder() );
         pDoc->InsertMasterPage(pMNotesPage,  nIndex + 1);
+        pMNotesPage->InsertMasterPage( pMPage->GetPageNum() );
         pMNotesPage->SetLayoutName( aLayoutName );
-
+        pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, TRUE);
         rModel.SetModified();
     }
 
