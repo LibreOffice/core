@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ void UnoControlContainer::dispose(  ) throw(::com::sun::star::uno::RuntimeExcept
     lang::EventObject aDisposeEvent;
     aDisposeEvent.Source = static_cast< uno::XAggregation* >( this );
 
-    // DG: zuerst der Welt mitteilen, daﬂ der Container wegfliegt. Dieses ist um einiges
+    // DG: zuerst der Welt mitteilen, dass der Container wegfliegt. Dieses ist um einiges
     // schneller wenn die Welt sowohl an den Controls als auch am Container horcht
     maDisposeListeners.disposeAndClear( aDisposeEvent );
     maCListeners.disposeAndClear( aDisposeEvent );
