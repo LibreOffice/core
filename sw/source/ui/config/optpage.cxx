@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:52:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -139,9 +138,9 @@
 #ifndef _SWATRSET_HXX
 #include <swatrset.hxx>
 #endif
-#ifndef _OPTDLG_HXX
-#include <optdlg.hxx>
-#endif
+//CHINA001 #ifndef _OPTDLG_HXX
+//CHINA001 #include <optdlg.hxx>
+//CHINA001 #endif
 #ifndef _CFGITEMS_HXX
 #include <cfgitems.hxx> //Items fuer Sw-Seiten
 #endif
@@ -198,7 +197,19 @@
 #ifndef _SVX_STRARRAY_HXX
 #include <svx/strarray.hxx>
 #endif
-
+#ifndef _SFXSLSTITM_HXX //CHINA001
+#include <svtools/slstitm.hxx> //CHINA001
+#endif //CHINA001
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
+#endif
+#include <swwrtshitem.hxx> //CHINA001
 #define C2S(cChar) String::CreateFromAscii(cChar)
 /*******************************************************
  ******************************************************/
@@ -634,6 +645,40 @@ IMPL_LINK_INLINE_START( SwAddPrinterTabPage, SelectHdl, ListBox *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwAddPrinterTabPage, SelectHdl, ListBox *, EMPTYARG )
 
+void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    //SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_FAX_LIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pListItem,SfxBoolItem,SID_FAX_LIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE,sal_False);
+    if (pPreviewItem)
+    {
+        SetPreview(pPreviewItem->GetValue());
+        Reset(aSet);
+    }
+    if (pListItem && pListItem->GetValue())
+    {
+        SvStringsDtor aFaxList;
+        const USHORT nCount = Printer::GetQueueCount();
+        for (USHORT i = 0; i < nCount; ++i)
+        {
+            String* pString = new String( Printer::GetQueueInfo( i ).GetPrinterName());
+            String* &rpString = pString;
+            aFaxList.Insert(rpString, 0);
+        }
+        SetFax( aFaxList );
+/*      SvStringsDtor aFaxList;
+        const List *pList = (pListItem)->GetList();
+        sal_uInt32 nCount = pList->Count();
+        for(sal_uInt32 i = 0; i < nCount ; i++)
+        {
+            String* pString = (String*)(pList->GetObject(i));
+            String* &rpString = pString;
+            aFaxList.Insert(rpString, 0 );
+        }
+        SetFax(aFaxList);
+*/
+    }
+}
 /*-----------------03.09.96 11.53-------------------
     Tabpage Standardfonts
 --------------------------------------------------*/
@@ -975,6 +1020,13 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
     }
     return 0;
 }
+
+void SwStdFontTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt16Item,SID_FONTMODE_TYPE,sal_False);
+    if (pFlagItem)
+        SetFontMode(pFlagItem->GetValue());
+}
 /*-----------------18.01.97 12.14-------------------
     Optionen Tabelle
 --------------------------------------------------*/
@@ -1235,6 +1287,12 @@ IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
     aNumAlignmentCB.Enable(aNumFormattingCB.IsChecked());
     aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
     return 0;
+}
+void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
+    if (pWrtSh)
+        SetWrtShell(pWrtSh->GetValue());
 }
 /*  */
 
