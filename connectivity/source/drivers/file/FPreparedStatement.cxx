@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:25:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,17 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
         }
 
         if (m_aParameterRow.isValid() &&  (m_xParamColumns->size()+1) != m_aParameterRow->size() )
-            m_aParameterRow->resize(m_xParamColumns->size()+1);
+        {
+            sal_Int32 i = m_aParameterRow->size();
+            sal_Int32 nCount = m_xParamColumns->size()+1;
+            m_aParameterRow->resize(nCount);
+            for ( ;i <= nCount; ++i )
+            {
+                if ( !(*m_aParameterRow)[i].isValid() )
+                    (*m_aParameterRow)[i] = new ORowSetValueDecorator;
+            }
+            //m_aParameterRow->resize(m_xParamColumns->size()+1);
+        }
         if (m_aParameterRow.isValid() && nParaCount < m_aParameterRow->size() )
         {
 
