@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: htajima $ $Date: 2000-12-11 23:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,9 +324,9 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 //
 
 Bool
-SalI18N_InputMethod::FilterEvent( XEvent *pEvent )
+SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
 {
-    return mbUseable && (Bool)XFilterEvent( pEvent, None );
+    return mbUseable && (Bool)XFilterEvent( pEvent, window );
 }
 
 

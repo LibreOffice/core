@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-28 16:50:01 $
+ *  last change: $Author: htajima $ $Date: 2000-12-11 23:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2640,12 +2640,14 @@ final long SalDisplay::Dispatch( XEvent *pEvent )
              && pFrame->maFrameData.GetShellWindow() != aWindow;
              pFrame = pFrame->maFrameData.GetNextFrame() )
           ;
-        if( pFrame )
-          if ( mpInputMethod->FilterEvent( pEvent ) )
+        if( pFrame ) {
+          XLIB_Window window= pFrame->maFrameData.GetWindow();
+          if ( mpInputMethod->FilterEvent( pEvent , window) )
         return 0;
+        }
       }
     else
-      if ( mpInputMethod->FilterEvent( pEvent ) )
+      if ( mpInputMethod->FilterEvent( pEvent, None ) )
         return 0;
 
     DtIntegrator::HandleXEvent( pEvent );
