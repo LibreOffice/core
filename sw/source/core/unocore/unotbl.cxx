@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:43:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,6 @@
 #endif
 #ifndef _NDOLE_HXX //autogen
 #include <ndole.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
 #endif
 
 #ifndef _FRAME_HXX //autogen
@@ -3641,6 +3638,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
                         pData->SetMainTitle( sNewTblName );
 //Window??
                         SchDLL::Update( rOObj.GetOleRef(), pData, 0/*GetWin()*/ );
+                        rOObj.GetObject().UpdateReplacement();
                     }
                     SwFrm *pFrm;
                     SwClientIter aIter( *((SwOLENode*)pNd) );
