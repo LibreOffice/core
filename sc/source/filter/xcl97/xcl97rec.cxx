@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:27:57 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,13 +1817,13 @@ UINT16 XclNoteList::GetLen() const
 
 // --- class XclNote -------------------------------------------------
 
-XclNote::XclNote( RootData& rRoot, const ScAddress& rPos, const ScPostIt& rNote )
+XclNote::XclNote( RootData& rRoot, const ScAddress& rPos, const String& rNoteText, const String& rNoteAuthor )
             :
-            aAuthor( rNote.GetAuthor() ),
+            aAuthor( rNoteAuthor ),
             aPos( rPos ),
             nGrbit(0)
 {
-    XclObjComment* pObj = new XclObjComment( rRoot, rPos, rNote.GetText() );
+    XclObjComment* pObj = new XclObjComment( rRoot, rPos, rNoteText );
     nObjId = rRoot.pObjRecs->Add( pObj );
 }
 
@@ -2683,223 +2683,164 @@ UINT16 ExcEScenarioManager::GetLen() const
 
 
 
+//___________________________________________________________________
+// HLINK - hyperlinks
 
-const BYTE XclHlink::pStaticData1[] =
+const BYTE XclHlink::pStaticData[] =
 {
     0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11,
     0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B,
     0x02, 0x00, 0x00, 0x00
 };
 
-
-inline UINT32 XclHlink::StaticLen( void )
+inline UINT32 XclHlink::GetStaticLen()
 {
-    return sizeof( pStaticData1 );
+    return sizeof( pStaticData );
 }
 
-
-inline UINT32 XclHlink::VarLen( void ) const
+inline UINT32 XclHlink::GetVarLen() const
 {
     pVarData->Seek( STREAM_SEEK_TO_END );
     return pVarData->Tell();
 }
 
-
-void XclHlink::SaveCont( SvStream& rOut )
+XclHlink::XclHlink( RootData& rRootData, const SvxURLField& rURLField ) :
+    pVarData( new SvMemoryStream ),
+    nFlags( EXC_HLINK_BODY ),
+    pRepr( NULL )
 {
-    if( IsValid() )
+    const XubString&    rURL = rURLField.GetURL();
+    const XubString&    rRepr = rURLField.GetRepresentation();
+    INetURLObject       aURLObj( rURL );
+    const INetProtocol  eProtocol = aURLObj.GetProtocol();
+    BOOL                bWithRepr = rRepr.Len() > 0;
+    SvMemoryStream&     rOut = *pVarData;
+
+    // description
+    if( bWithRepr )
     {
-        rOut << nRowFirst << nRowFirst << nColFirst << nColFirst;
+        XclRawUnicodeString aDescr( rRepr, 255, TRUE );
+        rOut    << (UINT32) (aDescr.GetLen() + 1);
+        aDescr.WriteToStream( rOut );
+        rOut    << (UINT16) 0x0000;
 
-        rOut.Write( pStaticData1, sizeof( pStaticData1 ) );
-
-        rOut << nFlags;
-
-        pVarData->Seek( STREAM_SEEK_TO_BEGIN );
-        rOut << *pVarData;
+        nFlags |= EXC_HLINK_DESCR;
+        pRepr = new String( rRepr );
     }
-}
 
-
-#define CHARCOUNT   TRUE
-#define BYTECOUNT   FALSE
-
-
-static void lcl_SaveHlinkString16( SvStream& rOut, const String& rStr, BOOL bCharCount )
-{
-    XclRawUnicodeString     s( rStr, 0xFFFF, TRUE );
-    UINT32                  nLen = bCharCount? s.GetLen() + 1 : s.GetByteCount() + 2;   // + 0-Byte!
-
-    rOut << nLen;
-    s.WriteToStream( rOut );
-    rOut << ( UINT16 ) 0x0000;
-}
-
-
-static ByteString lcl_Get83Repr( const INetURLObject& r, CharSet e )
-{
-    String      aExt( r.GetExtension() );
-    String      aName( r.GetBase() );
-
-    if( aExt.Len() > 3 )
-        aExt.Erase( 0, 3 );
-    aExt.ToUpperAscii();
-
-    String      aS( RTL_CONSTASCII_STRINGPARAM( "..\\") );
-    String      aR;
-    while( aName.SearchAndReplace( aS, aR ) != STRING_NOTFOUND );
-
-    if( aName.Len() > 8 )
+    // file link or URL
+    if( eProtocol == INET_PROT_FILE )
     {
-        aName.Erase( 6 );
-        aName.AppendAscii( "~1" );
-    }
-    aName.ToUpperAscii();
+        String  aPathAndName( aURLObj.getFSysPath( INetURLObject::FSYS_DOS ) );
+        String  aOrigPaN( aPathAndName );
+        UINT16  nLevel = 0;
+        BOOL    bRel = rRootData.bStoreRel;
 
-    aName.AppendAscii( "." );
-    aName += aExt;
-
-    return ByteString( aName, e );
-}
-
-
-XclHlink::XclHlink( RootData& rR, const SvxURLField& rURLField )
-{
-    pVarData = NULL;
-    pRepr = NULL;
-    {
-        nFlags = 0x00000001;
-
-        const XubString&    rURL = rURLField.GetURL();
-        const XubString&    rRepr = rURLField.GetRepresentation();
-        const XubString&    rTargFrame = rURLField.GetTargetFrame();
-
-        SvxURLFormat        eFormat = rURLField.GetFormat();
-
-        INetURLObject       aURLObj( rURL );
-
-        const INetProtocol  eProtocol = aURLObj.GetProtocol();
-
-        UINT32              n1, n2;
-        const BOOL          bWithRepr = rRepr.Len() > 0;
-
-        SvMemoryStream&     rOut = *( pVarData = new SvMemoryStream );
-
-        if( bWithRepr )
+        if( bRel )
         {
-            if( pRepr )
-                delete pRepr;
-            pRepr = new String( rRepr );
-        }
+            DBG_ASSERT( rRootData.pBasePath, "-XclHlink::XclHlink(): on the meadow is not... :-)" );
+            aPathAndName = aURLObj.GetRelURL( *rRootData.pBasePath, aPathAndName,
+                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
 
-        if( eProtocol == INET_PROT_FILE )
-        {
-            BOOL            bRel = rR.bStoreRel;
-            String          aPathAndName( aURLObj.getFSysPath( INetURLObject::FSYS_DOS ) );
-            UINT32          nLen;
-
-            UINT16          nDL = 0;
-
-            String          aOrgPaN( aPathAndName );
-            if( bRel )
-            {
-                DBG_ASSERT( rR.pBasePath, "-XclHlink::XclHlink(): on the meadow is not... :-)" );
-
-                aPathAndName = aURLObj.GetRelURL( *rR.pBasePath, aPathAndName, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
-
-                if( aPathAndName.SearchAscii( INET_FILE_SCHEME ) == 0 )
-                {   // not converted to rel -> make abs
-                    aPathAndName = aOrgPaN;
-                    bRel = FALSE;
-                }
-                else
-                {
-                    if( aPathAndName.SearchAscii( "./" ) == 0 )
-                        aPathAndName.Erase( 0, 2 );
-                    else
-                    {
-                        while( aPathAndName.SearchAndReplaceAscii( "../", EMPTY_STRING ) != STRING_NOTFOUND )
-                            nDL++;
-                    }
-                }
+            if( aPathAndName.SearchAscii( INET_FILE_SCHEME ) == 0 )
+            {   // not converted to rel -> make abs
+                aPathAndName = aOrigPaN;
+                bRel = FALSE;
             }
-
-            // 8.3-representation... not really useful but necessary
-            n1 = 0x00000303;
-            n2 = 0x00000000;
-
-            ByteString      aEtRepr( lcl_Get83Repr( aURLObj, *rR.pCharset ) );
-            nLen = aEtRepr.Len() + 1;   // + 0-Byte
-
-                                // C0 00 00 00 00 00 00 46
-            rOut << n1 << n2 << ( UINT32 ) 0x000000C0 << ( UINT32 ) 0x46000000 << nDL << nLen;
-            rOut.Write( aEtRepr.GetBuffer(), nLen - 1 );
-            rOut << ( UINT8 ) 0x00;
-
-            // full path and filename
-            n1 = 0xDEADFFFF;
-            n2 = 0x00000000;
-                                // 4x non-interesting data...
-            rOut << n1 << n2 << n2 << n2 << n2 << n2;
-
-            XclRawUnicodeString     s( aPathAndName, 0xFFFF, TRUE );
-            nLen = s.GetByteCount();
-            n1 = bRel? 0x00000040 : 0x00000004;
-            //                      UNICODE-flags?
-            rOut << n1 << nLen << ( UINT16 ) 0x0003;
-            s.WriteToStream( rOut );
+            else if( aPathAndName.SearchAscii( "./" ) == 0 )
+                aPathAndName.Erase( 0, 2 );
+            else
+            {
+                while( aPathAndName.SearchAndReplaceAscii( "../", EMPTY_STRING ) != STRING_NOTFOUND )
+                    nLevel++;
+            }
         }
-        else
-        {
-            if( bWithRepr )
-                lcl_SaveHlinkString16( rOut, rRepr, CHARCOUNT );
+        if( !bRel )
+            nFlags |= EXC_HLINK_ABS;
 
-            String          aURL = aURLObj.GetURLNoMark();
+        ByteString          aAsciiLink( aPathAndName, *rRootData.pCharset );
+        XclRawUnicodeString aLink( aPathAndName, 255, TRUE );
+        rOut    << (UINT32) 0x00000303
+                 << (UINT32)    0x00000000
+                << (UINT32) 0x000000C0
+                << (UINT32) 0x46000000
+                << nLevel
+                << (UINT32) (aAsciiLink.Len() + 1);
+        rOut.Write( aAsciiLink.GetBuffer(), aAsciiLink.Len() );
+        rOut    << (UINT8)  0x00
+                << (UINT32) 0xDEADFFFF
+                << (UINT32) 0x00000000
+                << (UINT32) 0x00000000
+                << (UINT32) 0x00000000
+                << (UINT32) 0x00000000
+                << (UINT32) 0x00000000
+                << (UINT32) (aLink.GetByteCount() + 6)
+                << (UINT32) aLink.GetByteCount()
+                << (UINT16) 0x0003;
+        aLink.WriteToStream( rOut );
 
-            n1 = 0x79EAC9E0;
-            n2 = 0x11CEBAF9;
-                                // 8C 82 00 AA 00 4B A9 0B
-            rOut << n1 << n2 << ( UINT32 ) 0xAA00828C << ( UINT32 ) 0x0BA94B00;
+        if( !pRepr )
+            pRepr = new String( aPathAndName );
+    }
+    else
+    {
+        XclRawUnicodeString aURL( aURLObj.GetURLNoMark(), 255, TRUE );
+        rOut    << (UINT32) 0x79EAC9E0
+                << (UINT32) 0x11CEBAF9
+                << (UINT32) 0xAA00828C
+                << (UINT32) 0x0BA94B00
+                << (UINT32) (aURL.GetByteCount() + 2);
+        aURL.WriteToStream( rOut );
+        rOut    << (UINT16) 0x0000;
 
-            lcl_SaveHlinkString16( rOut, aURL, BYTECOUNT );
+        nFlags |= EXC_HLINK_ABS;
+        if( !pRepr )
+            pRepr = new String( rURL );
+    }
 
-            if( !pRepr )
-                pRepr = new String( aURL );
-        }
+    // text mark
+    if( aURLObj.HasMark() )
+    {
+        XclRawUnicodeString aTextmark( aURLObj.GetMark(), 255, TRUE );
+        rOut    << (UINT32) (aTextmark.GetLen() + 1);
+        aTextmark.WriteToStream( rOut );
+        rOut    << (UINT16) 0x0000;
 
-        if( aURLObj.HasMark() )
-        {
-            String          aMark = aURLObj.GetMark();
-            lcl_SaveHlinkString16( rOut, aMark, CHARCOUNT );
-
-            nFlags |= 0x00000008;
-        }
+        nFlags |= EXC_HLINK_MARK;
     }
 }
-
 
 XclHlink::~XclHlink()
 {
     if( pVarData )
         delete pVarData;
-
     if( pRepr )
         delete pRepr;
 }
 
+void XclHlink::SaveCont( SvStream& rStrm )
+{
+    rStrm << nRowFirst << nRowFirst << nColFirst << nColFirst;
+    rStrm.Write( pStaticData, GetStaticLen() );
+    rStrm << nFlags;
+
+    pVarData->Seek( STREAM_SEEK_TO_BEGIN );
+    rStrm << *pVarData;
+}
 
 UINT16 XclHlink::GetNum() const
 {
     return 0x01B8;
 }
 
-
 UINT16 XclHlink::GetLen() const
 {
-    pVarData->Seek( STREAM_SEEK_TO_END );
-    return IsValid()? ( UINT16 ) ( 12 + StaticLen() + VarLen() ) : 0;
-                    // 12 = cols/rows + flags
+    // 12 = cols/rows + flags
+    return (UINT16)(12 + GetStaticLen() + GetVarLen());
 }
+
+//___________________________________________________________________
+
 
 const BYTE      XclProtection::pMyData[] =
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:22:30 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,7 +694,7 @@ private:
 
 public:
                             XclNote( RootData& rD, const ScAddress& rPos,
-                                const ScPostIt& rNote );
+                                const String& rNoteText, const String& rNoteAuthor );
     virtual                 ~XclNote();
 
     virtual UINT16          GetNum() const;
@@ -1203,55 +1203,39 @@ public:
 class SvMemoryStream;
 class SvxURLField;
 
-
 class XclHlink : public ExcRecord
 {
 private:
     UINT16                      nColFirst;
     UINT16                      nRowFirst;
     UINT32                      nFlags;
+    String*                     pRepr;
 
-    String*                     pRepr;      // to B displayed in cell text
-
-    static const BYTE           pStaticData1[];
+    static const BYTE           pStaticData[];
     SvMemoryStream*             pVarData;
 
-    static inline UINT32        StaticLen( void );          // -> xcl97rec.cxx!
-    inline UINT32               VarLen( void ) const;       // -> xcl97rec.cxx!
+    static inline UINT32        GetStaticLen();             // -> xcl97rec.cxx!
+    inline UINT32               GetVarLen() const;          // -> xcl97rec.cxx!
 
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( SvStream& rStrm );
+
 public:
-                                XclHlink( RootData&, const SvxURLField& );
+                                XclHlink( RootData& rRootData, const SvxURLField& rField );
     virtual                     ~XclHlink();
+
+    inline void                 SetPosition( const ScAddress& rPos );
+
+    inline const String*        GetRepr() const     { return pRepr; }
 
     virtual UINT16              GetNum() const;
     virtual UINT16              GetLen() const;
-
-    inline void                 Set( const ScAddress& rPos );
-
-    inline BOOL                 IsValid( void ) const;
-    inline const String*        GetRepr( void ) const;
 };
 
-
-inline void XclHlink::Set( const ScAddress& r )
+inline void XclHlink::SetPosition( const ScAddress& rPos )
 {
-    nColFirst = r.Col();
-    nRowFirst = r.Row();
+    nColFirst = rPos.Col();
+    nRowFirst = rPos.Row();
 }
-
-
-inline BOOL XclHlink::IsValid( void ) const
-{
-    return pVarData != NULL;
-}
-
-
-inline const String* XclHlink::GetRepr( void ) const
-{
-    return pRepr;
-}
-
 
 
 

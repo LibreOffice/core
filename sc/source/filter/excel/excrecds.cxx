@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:25:09 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,9 +1364,8 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
     eBiff( rRoot.eDateiTyp )
 {
     const EditTextObject*   p = rEdCell.GetData();
-
-//  const SvxURLField*&     rpLastHlink = rRoot.pLastHlink;
     XclHlink*&              rpLastHlink = rRoot.pLastHlink;
+
     if( rpLastHlink )
     {
         delete rpLastHlink;
@@ -1395,16 +1394,16 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
         USHORT              nF = 0;
         USHORT              nListLen;
         xub_StrLen          nParPos = 0;
-        xub_StrLen          nStartPos;
+        xub_StrLen          nExcStartPos;
         String              aParText;
         const sal_Unicode   cParSep = 0x0A;
-        SvUShorts           aPosList;
         ESelection          aSel;
         ScPatternAttr       aPatAttr( rRoot.pDoc->GetPool() );
         UsedFontList&       rFontList = *rRoot.pFontRecs;
+        String              sURLList;
+        BOOL                bMultipleHlink = FALSE;
 
-        // Erster Font ist der Font der Zelle, erst nachfolgende Abweichungen
-        // werden im RichStr gespeichert.
+        // first font is the cell font, following font changes are stored in richstring
         Font*               pFont = new Font;
         pAttr->GetFont( *pFont );
         USHORT              nLastFontIndex = rFontList.Add( pFont );
@@ -1415,12 +1414,14 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
             nParPos = rText.Len();
 
             aParText = rEdEng.GetText( nPar );
+            String aExcParText;
 
             if( aParText.Len() )
             {
 //              if ( eBiff < Biff8 )
 //                  aParText.Convert( CHARSET_SYSTEM, CHARSET_ANSI );
 
+                SvUShorts aPosList;
                 rEdEng.GetPortions( nPar, aPosList );
                 nListLen = aPosList.Count();
 
@@ -1428,12 +1429,16 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                 for( n = 0 ; n < nListLen ; n++ )
                 {
                     aSel.nEndPos = ( xub_StrLen ) aPosList.GetObject( n );
+                    nExcStartPos = nParPos + aExcParText.Len();
+                    aExcParText += aParText.Copy( aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
                     {
                         SfxItemSet  aItemSet( rEdEng.GetAttribs( aSel ) );
+                        BOOL        bWasHLink = FALSE;
 
-                        // detect hyperlink but only take first one!
-                        if( aSel.nEndPos == aSel.nStartPos + 1 && !rpLastHlink )
+                        // detect hyperlinks, export single hyperlink, create note if multiple hyperlinks,
+                        // export hyperlink text in every case
+                        if( aSel.nEndPos == (aSel.nStartPos + 1) )
                         {
                             const SfxPoolItem*          pItem;
 
@@ -1443,10 +1448,32 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
 
                                 if( pField && pField->ISA( SvxURLField ) )
                                 {
-                                    rpLastHlink = new XclHlink( rRoot, *( ( const SvxURLField* ) pField ) );
-                                    const String*       p = rpLastHlink->GetRepr();
-                                    if( p )
-                                        aParText = *p;
+                                    // create new excel hyperlink and add text to cell text
+                                    const SvxURLField& rURLField = *((const SvxURLField*) pField);
+                                    bWasHLink = TRUE;
+
+                                    if( sURLList.Len() )
+                                        sURLList += cParSep;
+                                    sURLList += rURLField.GetURL();
+
+                                    XclHlink* pNewHlink = new XclHlink( rRoot, rURLField );
+                                    const String* pReprString = pNewHlink->GetRepr();
+                                    if( pReprString )
+                                    {
+                                        aExcParText.Erase( aExcParText.Len() - 1 );
+                                        aExcParText += *pReprString;
+                                    }
+
+                                    if( rpLastHlink )
+                                    {
+                                        bMultipleHlink = TRUE;
+                                        delete rpLastHlink;
+                                        rpLastHlink = NULL;
+                                    }
+                                    if( bMultipleHlink )
+                                        delete pNewHlink;
+                                    else
+                                        rpLastHlink = pNewHlink;
                                 }
                             }
                         }
@@ -1454,20 +1481,25 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                         aPatAttr.GetItemSet().ClearItem();
                         aPatAttr.GetFromEditItemSet( &aItemSet );
 
-                        Font*       pFont = new Font;
+                        Font* pFont = new Font;
                         aPatAttr.GetFont( *pFont );
-                        UINT16      nFontIndex = rFontList.Add( pFont );
+                        if( bWasHLink )
+                        {
+                            pFont->SetColor( Color( COL_LIGHTBLUE ) );
+                            pFont->SetUnderline( UNDERLINE_SINGLE );
+                        }
+
+                        UINT16 nFontIndex = rFontList.Add( pFont );
 
                         if( nFontIndex > 255 && eBiff < Biff8 )
                             nFontIndex = 0;
 
-                        nStartPos = nParPos + aSel.nStartPos;
-                        if( nStartPos <= nMaxChars && (eBiff >= Biff8 || nF < 256) )
+                        if( nExcStartPos <= nMaxChars && (eBiff >= Biff8 || nF < 256) )
                         {
                             if( nLastFontIndex != nFontIndex )
                             {
-                                DBG_ASSERT( nStartPos <= 0xFFFF, "*ExcRichStr::ExcRichStr(): Start pos to big!" );
-                                aForms.Append( ( UINT16 ) nStartPos );
+                                DBG_ASSERT( nExcStartPos <= 0xFFFF, "*ExcRichStr::ExcRichStr(): Start pos to big!" );
+                                aForms.Append( ( UINT16 ) nExcStartPos );
                                 aForms.Append( nFontIndex );
                                 nLastFontIndex = nFontIndex;
                                 nF++;
@@ -1476,8 +1508,7 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                     }
                     aSel.nStartPos = aSel.nEndPos;
                 }
-
-                rText += aParText;
+                rText += aExcParText;
             }
 
             nPar++;
@@ -1486,6 +1517,13 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
         }
 
         rEdEng.SetUpdateMode( bOldMode );
+
+        if( bMultipleHlink && sURLList.Len() )
+        {
+            if( rRoot.sAddNoteText.Len() )
+                (rRoot.sAddNoteText += cParSep) += cParSep;
+            rRoot.sAddNoteText += sURLList;
+        }
 
         // XF mit Umbruch auswaehlen?
         rExcCell.SetXF( nParCnt <= 1 ? ExcCell::GetXFRecs()->Find( pAttr ) :
