@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameOASISTContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:51:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@ class XMLFrameOASISTransformerContext : public XMLTransformerContext
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
 
     ::rtl::OUString m_aElemQName;
+
+    bool m_bIgnoreElement;
 
 public:
     TYPEINFO();

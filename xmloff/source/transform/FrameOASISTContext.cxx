@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameOASISTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:51:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ TYPEINIT1( XMLFrameOASISTransformerContext, XMLTransformerContext );
 XMLFrameOASISTransformerContext::XMLFrameOASISTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :
-    XMLTransformerContext( rImp, rQName )
+    XMLTransformerContext( rImp, rQName ),
+    m_bIgnoreElement( false )
 {
 }
 
@@ -106,6 +107,26 @@ void XMLFrameOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
     m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
+
+    sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = rAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+
+        if( (nPrefix == XML_NAMESPACE_PRESENTATION) && IsXMLToken( aLocalName, XML_CLASS ) )
+        {
+            const OUString& rAttrValue = rAttrList->getValueByIndex( i );
+            if( IsXMLToken( rAttrValue, XML_HEADER ) || IsXMLToken( rAttrValue, XML_FOOTER ) ||
+                IsXMLToken( rAttrValue, XML_PAGE_NUMBER ) || IsXMLToken( rAttrValue, XML_DATE_TIME ) )
+            {
+                m_bIgnoreElement = true;
+                break;
+            }
+        }
+    }
 }
 
 XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
@@ -116,41 +137,51 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
 {
     XMLTransformerContext *pContext = 0;
 
-    XMLTransformerActions *pActions =
-        GetTransformer().GetUserDefinedActions( OASIS_FRAME_ELEM_ACTIONS );
-    OSL_ENSURE( pActions, "go no actions" );
-    XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
-    XMLTransformerActions::const_iterator aIter = pActions->find( aKey );
-
-    if( !(aIter == pActions->end()) )
+    if( m_bIgnoreElement )
     {
-        switch( (*aIter).second.m_nActionType )
+        // do not export the frame element and all of its children
+        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+                                                                rQName,
+                                                                sal_True, sal_True );
+    }
+    else
+    {
+        XMLTransformerActions *pActions =
+            GetTransformer().GetUserDefinedActions( OASIS_FRAME_ELEM_ACTIONS );
+        OSL_ENSURE( pActions, "go no actions" );
+        XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
+        XMLTransformerActions::const_iterator aIter = pActions->find( aKey );
+
+        if( !(aIter == pActions->end()) )
         {
-        case XML_ETACTION_COPY:
-            if( !m_aElemQName.getLength() )
+            switch( (*aIter).second.m_nActionType )
             {
-                pContext = new XMLIgnoreTransformerContext( GetTransformer(),
-                                                            rQName,
-                                                            sal_False, sal_False );
-                m_aElemQName = rQName;
-                static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
-                    ->AppendAttributeList( rAttrList );
-                GetTransformer().ProcessAttrList( m_xAttrList,
-                                                  OASIS_SHAPE_ACTIONS,
-                                                     sal_False  );
-                GetTransformer().GetDocHandler()->startElement( m_aElemQName,
-                                                                m_xAttrList );
+            case XML_ETACTION_COPY:
+                if( !m_aElemQName.getLength() )
+                {
+                    pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+                                                                rQName,
+                                                                sal_False, sal_False );
+                    m_aElemQName = rQName;
+                    static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
+                        ->AppendAttributeList( rAttrList );
+                    GetTransformer().ProcessAttrList( m_xAttrList,
+                                                    OASIS_SHAPE_ACTIONS,
+                                                       sal_False    );
+                    GetTransformer().GetDocHandler()->startElement( m_aElemQName,
+                                                                    m_xAttrList );
+                }
+                else
+                {
+                    pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+                                                                rQName,
+                                                                sal_True, sal_True );
+                }
+                break;
+            default:
+                OSL_ENSURE( !this, "unknown action" );
+                break;
             }
-            else
-            {
-                pContext = new XMLIgnoreTransformerContext( GetTransformer(),
-                                                            rQName,
-                                                            sal_True, sal_True );
-            }
-            break;
-        default:
-            OSL_ENSURE( !this, "unknown action" );
-            break;
         }
     }
 
@@ -166,12 +197,13 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
 
 void XMLFrameOASISTransformerContext::EndElement()
 {
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    if( !m_bIgnoreElement )
+        GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 void XMLFrameOASISTransformerContext::Characters( const OUString& rChars )
 {
     // ignore
-    if( m_aElemQName.getLength() )
+    if( m_aElemQName.getLength() && !m_bIgnoreElement )
         XMLTransformerContext::Characters( rChars );
 }
