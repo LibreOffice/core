@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-15 17:54:01 $
+ *  last change: $Author: bm $ $Date: 2001-01-08 12:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,16 +145,19 @@ class SchXMLSeriesContext : public SvXMLImportContext
 private:
     SchXMLImportHelper& mrImportHelper;
     com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
+    std::vector< SchXMLAxis >& mrAxes;
     com::sun::star::chart::ChartSeriesAddress& mrSeriesAddress;
     rtl::OUString msAutoStyleName;
     sal_Int32 mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
     sal_Int32& mrDomainOffset;
+    SchXMLAxis* mpAttachedAxis;
 
 public:
     SchXMLSeriesContext( SchXMLImportHelper& rImpHelper,
                          SvXMLImport& rImport, const rtl::OUString& rLocalName,
                          com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram,
+                         std::vector< SchXMLAxis >& rAxes,
                          com::sun::star::chart::ChartSeriesAddress& rSeriesAddress,
                          sal_Int32 nSeriesIndex,
                          sal_Int32& rDomainOffset );
