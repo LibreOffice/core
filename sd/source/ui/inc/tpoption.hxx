@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:13:39 $
+ *  last change: $Author: sj $ $Date: 2001-04-02 11:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,21 +155,22 @@ private:
     FixedLine   aGrpProgramStart;
     CheckBox    aCbxStartWithTemplate;
 
-    FixedLine   aGrpOther;
+    FixedLine   aGrpSettings;
     CheckBox    aCbxMasterPageCache;
     CheckBox    aCbxCopy;
     CheckBox    aCbxMarkedHitMovesAlways;
     CheckBox    aCbxCrookNoContortion;
 
+    FixedText   aTxtMetric;
+    ListBox     aLbMetric;
+    FixedText   aTxtTabstop;
+    MetricField aMtrFldTabstop;
+
     FixedLine   aGrpStartWithActualPage;
     CheckBox    aCbxStartWithActualPage;
 
-    FixedLine   aGrpSettings;
-    FixedText   aTxtMetric;
-    ListBox     aLbMetric;
-
-    FixedText   aTxtTabstop;
-    MetricField aMtrFldTabstop;
+    FixedLine   aTxtCompatibility;
+    CheckBox    aCbxCompatibility;
 
     DECL_LINK( SelectMetricHdl_Impl, ListBox * );
 

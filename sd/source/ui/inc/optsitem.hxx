@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-11 15:01:04 $
+ *  last change: $Author: sj $ $Date: 2001-04-02 11:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,8 @@ private:
     ULONG   nPreviewQuality;                // !!!Misc/Preview (double=>integer)!!!
     BOOL    bSolidDragging          : 1;    // Misc/CreateWithAttributes
     BOOL    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
+    BOOL    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
+
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, ULONG& rCount ) const;
@@ -346,6 +348,7 @@ public:
     ULONG   GetPreviewQuality() const { Init(); return nPreviewQuality; }
     BOOL    IsSolidDragging() const { Init(); return (BOOL) bSolidDragging; }
     BOOL    IsSolidMarkHdl() const { Init(); return (BOOL) bSolidMarkHdl; }
+    BOOL    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
 
     void    SetStartWithTemplate( BOOL bOn = TRUE ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( BOOL bOn = TRUE ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
@@ -359,6 +362,7 @@ public:
     void    SetDoubleClickTextEdit( BOOL bOn = TRUE ) { if( bDoubleClickTextEdit != bOn ) { OptionsChanged(); bDoubleClickTextEdit = bOn; } }
     void    SetClickChangeRotation( BOOL bOn = TRUE ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
     void    SetStartWithActualPage( BOOL bOn = TRUE ) { if( bStartWithActualPage != bOn ) { OptionsChanged(); bStartWithActualPage = bOn; } }
+    void    SetSummationOfParagraphs( BOOL bOn = TRUE ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
     void    SetPreviewQuality( ULONG nQual ) { if( nPreviewQuality != nQual ) { OptionsChanged(); nPreviewQuality = nQual; } }
     void    SetSolidDragging( BOOL bOn = TRUE ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
     void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }

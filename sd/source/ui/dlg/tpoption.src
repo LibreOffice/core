@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:15:10 $
+ *  last change: $Author: sj $ $Date: 2001-04-02 11:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,33 +515,12 @@ TabPage TP_OPTIONS_MISC
         Text[ turkish ] = "OtoPilot ile başla";
         Text[ language_user1 ] = " ";
     };
-    FixedLine GRP_OTHER
+    FixedLine GRP_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 69  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Sonstiges" ;
-        Text [ ENGLISH ] = "Sonstiges" ;
-        Text [ NORWEGIAN ] = "Sonstiges" ;
-        Text [ DANISH ] = "Andet" ;
-        Text [ ENGLISH_US ] = "Other" ;
-        Text [ SPANISH ] = "Otros" ;
-        Text [ FINNISH ] = "Sonstiges" ;
-        Text [ FRENCH ] = "Autres" ;
-        Text [ ITALIAN ] = "Altro" ;
-        Text [ DUTCH ] = "Overige" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Sonstiges" ;
-        Text [ SWEDISH ] = "Övrigt" ;
-        Text [ PORTUGUESE ] = "Outros" ;
-        Text[ chinese_simplified ] = "ÆäËû";
-        Text[ russian ] = "Ïğî÷åå";
-        Text[ polish ] = "Inne";
-        Text[ japanese ] = "‚»‚Ì‘¼";
-        Text[ chinese_traditional ] = "¨ä¥¦";
-        Text[ arabic ] = "ÛíÑ Ğáß";
-        Text[ greek ] = "¢ëëá";
-        Text[ korean ] = "±âÅ¸";
-        Text[ turkish ] = "Diğer";
-        Text[ language_user1 ] = " ";
+        Text = "Einstellungen" ;
+        Text [ ENGLISH ] = "Settings" ;
     };
     CheckBox CBX_MASTERPAGE_CACHE
     {
@@ -656,87 +635,9 @@ TabPage TP_OPTIONS_MISC
         Text[ turkish ] = "Daireye oturt (çarpıtmadan)";
         Text[ language_user1 ] = " ";
     };
-    FixedLine GRP_START_WITH_ACTUAL_PAGE
-    {
-        Pos = MAP_APPFONT ( 6 , 120  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Starten der Präsentation" ;
-        Text [ ENGLISH ] = "Start presentation" ;
-        Text [ english_us ] = "Start presentation" ;
-        Text [ portuguese_brazilian ] = "Starten der Präsentation" ;
-        Text [ swedish ] = "Starta presentation" ;
-        Text [ danish ] = "Start præsentation" ;
-        Text [ italian ] = "Avvio della presentazione" ;
-        Text [ spanish ] = "Iniciar la presentación" ;
-        Text [ french ] = "Lancement de la présentation" ;
-        Text [ dutch ] = "Presentatie starten" ;
-        Text [ portuguese ] = "Começar apresentação" ;
-        Text[ chinese_simplified ] = "·ÅÓ³ÑİÊ¾ÎÄ¸å";
-        Text[ russian ] = "Çàïóñê ïğåçåíòàöèè";
-        Text[ polish ] = "Pocz¹tek prezentacji";
-        Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚ÌŠJn";
-        Text[ chinese_traditional ] = "©ñ¬MÂ²³ø";
-        Text[ arabic ] = "ÈÏÁ ÇáÚÑÖ ÇáÊŞÏíãí";
-        Text[ greek ] = "Åêêßíçóç ğáñïõóßáóçò";
-        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ½ÃÀÛ";
-        Text[ turkish ] = "Sunuyu başlat";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_START_WITH_ACTUAL_PAGE
-    {
-        Pos = MAP_APPFONT ( 12 , 131  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "~Immer mit aktueller Seite" ;
-        Text [ ENGLISH ] = "Always with actual page" ;
-        Text [ english_us ] = "Always with current page" ;
-        Text [ portuguese_brazilian ] = "~Immer mit aktueller Seite" ;
-        Text [ swedish ] = "Allt~id med aktuell sida" ;
-        Text [ danish ] = "Altid med aktuel side" ;
-        Text [ italian ] = "Sempre con la pag~ina corrente" ;
-        Text [ spanish ] = "~Siempre con página actual" ;
-        Text [ french ] = "~Toujours avec la page active" ;
-        Text [ dutch ] = "~Steeds met actuele pagina" ;
-        Text [ portuguese ] = "~Sempre com página actual" ;
-        Text[ chinese_simplified ] = "×ÜÊÇ´Óµ±Ç°µÄÒ³Ãæ¿ªÊ¼";
-        Text[ russian ] = "~Âñåãäà ñ òåêóùåãî ñëàéäà";
-        Text[ polish ] = "Za~wsze z aktualn¹ stron¹";
-        Text[ japanese ] = "í‚ÉŒ»İ‚ÌÍß°¼Ş";
-        Text[ chinese_traditional ] = "Á`¬O±q·í«eªº­¶­±¶}©l";
-        Text[ arabic ] = "ÏÇÆãÇğ ãÚ ÇáÕİÍÉ ÇáÍÇáíÉ";
-        Text[ greek ] = "ĞÜíôá ìå ôçí ôñİ÷ïõóá óåëßäá";
-        Text[ korean ] = "Ç×»ó ÇöÀç ÂÊÀ¸·Î";
-        Text[ turkish ] = "Hep güncel sayfa ile";
-        Text[ language_user1 ] = " ";
-    };
-    FixedLine GRP_SETTINGS
-    {
-        Pos = MAP_APPFONT ( 6 , 146  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Einstellungen" ;
-        Text [ ENGLISH ] = "Settings" ;
-        Text[ english_us ] = "Settings";
-        Text[ portuguese ] = "Settings";
-        Text[ russian ] = "Settings";
-        Text[ greek ] = "Settings";
-        Text[ dutch ] = "Settings";
-        Text[ french ] = "Settings";
-        Text[ spanish ] = "Settings";
-        Text[ italian ] = "Settings";
-        Text[ danish ] = "Settings";
-        Text[ swedish ] = "Settings";
-        Text[ polish ] = "Settings";
-        Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "İ’è";
-        Text[ korean ] = "Settings";
-        Text[ chinese_simplified ] = "Settings";
-        Text[ chinese_traditional ] = "³]©w";
-        Text[ turkish ] = "Settings";
-        Text[ arabic ] = "Settings";
-    };
     FixedText FT_METRIC
     {
-        Pos = MAP_APPFONT ( 6 , 159  ) ;
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Maßeinheit" ;
         Text [ ENGLISH ] = "Metric Units" ;
@@ -765,13 +666,13 @@ TabPage TP_OPTIONS_MISC
     ListBox LB_METRIC
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 157  ) ;
+        Pos = MAP_APPFONT ( 60 , 117  ) ;
         Size = MAP_APPFONT ( 60 , 50 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_TABSTOP
     {
-        Pos = MAP_APPFONT ( 130 , 159  ) ;
+        Pos = MAP_APPFONT ( 136 , 119  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Tabulatorabstand" ;
         Text [ ENGLISH ] = "Tab distance" ;
@@ -798,7 +699,7 @@ TabPage TP_OPTIONS_MISC
     MetricField MTR_FLD_TABSTOP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 157  ) ;
+        Pos = MAP_APPFONT ( 185 , 117 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -811,6 +712,73 @@ TabPage TP_OPTIONS_MISC
         Last = 2000 ;
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
+    };
+    FixedLine GRP_START_WITH_ACTUAL_PAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 134  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Starten der Präsentation" ;
+        Text [ ENGLISH ] = "Start presentation" ;
+        Text [ english_us ] = "Start presentation" ;
+        Text [ portuguese_brazilian ] = "Starten der Präsentation" ;
+        Text [ swedish ] = "Starta presentation" ;
+        Text [ danish ] = "Start præsentation" ;
+        Text [ italian ] = "Avvio della presentazione" ;
+        Text [ spanish ] = "Iniciar la presentación" ;
+        Text [ french ] = "Lancement de la présentation" ;
+        Text [ dutch ] = "Presentatie starten" ;
+        Text [ portuguese ] = "Começar apresentação" ;
+        Text[ chinese_simplified ] = "·ÅÓ³ÑİÊ¾ÎÄ¸å";
+        Text[ russian ] = "Çàïóñê ïğåçåíòàöèè";
+        Text[ polish ] = "Pocz¹tek prezentacji";
+        Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚ÌŠJn";
+        Text[ chinese_traditional ] = "©ñ¬MÂ²³ø";
+        Text[ arabic ] = "ÈÏÁ ÇáÚÑÖ ÇáÊŞÏíãí";
+        Text[ greek ] = "Åêêßíçóç ğáñïõóßáóçò";
+        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ½ÃÀÛ";
+        Text[ turkish ] = "Sunuyu başlat";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_START_WITH_ACTUAL_PAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 145  ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "~Immer mit aktueller Seite" ;
+        Text [ ENGLISH ] = "Always with actual page" ;
+        Text [ english_us ] = "Always with current page" ;
+        Text [ portuguese_brazilian ] = "~Immer mit aktueller Seite" ;
+        Text [ swedish ] = "Allt~id med aktuell sida" ;
+        Text [ danish ] = "Altid med aktuel side" ;
+        Text [ italian ] = "Sempre con la pag~ina corrente" ;
+        Text [ spanish ] = "~Siempre con página actual" ;
+        Text [ french ] = "~Toujours avec la page active" ;
+        Text [ dutch ] = "~Steeds met actuele pagina" ;
+        Text [ portuguese ] = "~Sempre com página actual" ;
+        Text[ chinese_simplified ] = "×ÜÊÇ´Óµ±Ç°µÄÒ³Ãæ¿ªÊ¼";
+        Text[ russian ] = "~Âñåãäà ñ òåêóùåãî ñëàéäà";
+        Text[ polish ] = "Za~wsze z aktualn¹ stron¹";
+        Text[ japanese ] = "í‚ÉŒ»İ‚ÌÍß°¼Ş";
+        Text[ chinese_traditional ] = "Á`¬O±q·í«eªº­¶­±¶}©l";
+        Text[ arabic ] = "ÏÇÆãÇğ ãÚ ÇáÕİÍÉ ÇáÍÇáíÉ";
+        Text[ greek ] = "ĞÜíôá ìå ôçí ôñİ÷ïõóá óåëßäá";
+        Text[ korean ] = "Ç×»ó ÇöÀç ÂÊÀ¸·Î";
+        Text[ turkish ] = "Hep güncel sayfa ile";
+        Text[ language_user1 ] = " ";
+    };
+    FixedLine FT_COMPATIBILITY
+    {
+        Pos = MAP_APPFONT ( 6 , 160 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Kompatibilität" ;
+        Text [ English ] = "Compatibility" ;
+    };
+    CheckBox CB_MERGE_PARA_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Size = MAP_APPFONT ( 242, 10 ) ;
+        Text = "Im aktuellen Dokument alle ~Absatzabstände addieren";
+        Text [ English ] = "Add ~distances between paragraphs" ;
     };
     Text[ chinese_simplified ] = "ÆäËü";
     Text[ russian ] = "Ïğî÷åå";
