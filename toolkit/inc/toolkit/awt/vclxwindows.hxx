@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:02:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ private:
 protected:
     void            ImplUpdateImage( sal_Bool bGetNewImage );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 public:
                     VCLXButton();
@@ -409,7 +409,7 @@ private:
 
 protected:
     void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 public:
                     VCLXCheckBox();
@@ -465,7 +465,7 @@ private:
 protected:
     void            ImplClickedOrToggled( BOOL bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 
 public:
@@ -571,7 +571,7 @@ class VCLXFixedText :   public ::com::sun::star::awt::XFixedText,
                         public VCLXWindow
 {
 protected:
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 public:
                         VCLXFixedText();
@@ -609,7 +609,7 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 
 public:
@@ -662,7 +662,7 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 
 public:
@@ -727,7 +727,7 @@ private:
 
 protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
     void            ImplCallItemListeners();
 
@@ -797,7 +797,7 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 
 public:
@@ -1112,7 +1112,7 @@ class VCLXToolBox : public VCLXWindow
 private:
 
 protected:
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                         CreateAccessibleContext();
 
 public:
