@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:33:13 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2545,9 +2545,18 @@ namespace xmloff { namespace token {
         TOKEN( "data-pilot-groups"),                // XML_DATA_PILOT_GROUPS
         TOKEN( "data-pilot-group"),                 // XML_DATA_PILOT_GROUP
         TOKEN( "group-source-field-name"),          // XML_GROUP_SOURCE_FIELD_NAME
-
+        TOKEN( "japanese-candle-stick" ),   // XML_JAPANESE_CANDLE_STICK
+        TOKEN( "named-symbol" ),            // XML_NAMED_SYMBOL
+        TOKEN( "diamond" ),                 // XML_DIAMOND
+        TOKEN( "arrow-down" ),              // XML_ARROW_DOWN
+        TOKEN( "arrow-up" ),                // XML_ARROW_UP
+        TOKEN( "arrow-right" ),             // XML_ARROW_RIGHT
+        TOKEN( "arrow-left" ),              // XML_ARROW_LEFT
+        TOKEN( "bow-tie" ),                 // XML_BOW_TIE
+        TOKEN( "hourglass" ),               // XML_HOURGLASS
+        TOKEN( "symbol-name" ),             // XML_SYMBOL_NAME,
+        TOKEN( "symbol-type" ),             // XML_SYMBOL_TYPE
         TOKEN( "image-opacity" ),               // XML_IMAGE_OPACITY // #i25616#
-
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
 
