@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:17 $
+ *  last change:$Date: 2003-05-27 14:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.awt.XControl;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XGraphics;
@@ -91,7 +92,7 @@ public class UnoControlFormattedField extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
 
         try {
             log.println( "creating a textdocument" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedFieldModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:16 $
+ *  last change:$Date: 2003-05-27 14:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.text.XTextDocument;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
 import lib.StatusException;
@@ -81,7 +82,7 @@ public class UnoControlFormattedFieldModel extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     /**
@@ -99,7 +100,7 @@ public class UnoControlFormattedFieldModel extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance(
+            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.awt.UnoControlFormattedFieldModel");
         } catch (Exception e) {
 
