@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:31:21 $
+ *  last change: $Author: jbu $ $Date: 2002-06-24 15:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ OString makeTempName(sal_Char* prefix)
 #endif
 
 #ifdef SAL_UNX
-    strcat(tmpPattern, "\\");
+    strcat(tmpPattern, "/");
     strcat(tmpPattern, pPrefix);
     strcat(tmpPattern, "XXXXXX");
 #ifdef FREEBSD
