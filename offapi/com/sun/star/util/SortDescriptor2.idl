@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor2.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:04:35 $
+ *  last change: $Author: vg $ $Date: 2003-07-23 08:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 #ifndef __com_sun_star_util_SortDescriptor2_idl__
 #define __com_sun_star_util_SortDescriptor2_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
 
 //=============================================================================
 
@@ -72,7 +68,8 @@ module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-/** gives access to the properties of a sort descriptor.
+/** gives access to the properties of a sort descriptor. The properties are
+    given in a sequence of PropertyValue.
 
     <p>The available properties are listed in the specific sort
     descriptor implementing this service.</p>
@@ -85,7 +82,6 @@ module com {  module sun {  module star {  module util {
  */
 service SortDescriptor2
 {
-     interface com::sun::star::beans::XPropertySet;
 };
 
 //=============================================================================
