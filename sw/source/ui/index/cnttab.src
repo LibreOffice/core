@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:09:12 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Créer un index";
         Text[ spanish ] = "Crear índice";
         Text[ finnish ] = "Create index of";
-        Text[ italian ] = "Create index of";
+        Text[ italian ] = "Crea ~indice";
         Text[ danish ] = "Create index of";
         Text[ swedish ] = "Skapa förte~ckning";
         Text[ polish ] = "Utwórz indeks";
@@ -831,7 +831,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Pour";
         Text[ spanish ] = "Para";
         Text[ finnish ] = "Type";
-        Text[ italian ] = "Type";
+        Text[ italian ] = "Per";
         Text[ danish ] = "Type";
         Text[ swedish ] = "För";
         Text[ polish ] = "Dotyczy";
@@ -2264,7 +2264,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Sort";
         Text[ spanish ] = "Ordenar";
         Text[ finnish ] = "Sort";
-        Text[ italian ] = "Sort";
+        Text[ italian ] = "Ordina";
         Text[ danish ] = "Sort";
         Text[ swedish ] = "Sortera";
         Text[ polish ] = "Sortuj";
@@ -2291,7 +2291,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Language";
         Text[ spanish ] = "Idioma";
         Text[ finnish ] = "Language";
-        Text[ italian ] = "Language";
+        Text[ italian ] = "Lingua";
         Text[ danish ] = "Language";
         Text[ swedish ] = "Språk";
         Text[ polish ] = "Jêzyk";
@@ -2325,7 +2325,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Key type";
         Text[ spanish ] = "Tipo de clave";
         Text[ finnish ] = "Key type";
-        Text[ italian ] = "Key type";
+        Text[ italian ] = "Tipo chiave";
         Text[ danish ] = "Key type";
         Text[ swedish ] = "Nyckeltyp";
         Text[ polish ] = "Typ klucza";
@@ -4781,6 +4781,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
