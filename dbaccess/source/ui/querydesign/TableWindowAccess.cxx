@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 12:45:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,11 @@
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -95,7 +95,7 @@
 
 namespace dbaui
 {
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
@@ -141,8 +141,8 @@ namespace dbaui
     Sequence< ::rtl::OUString > OTableWindowAccess::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
         Sequence< ::rtl::OUString > aSupported(2);
-        aSupported[0] = ::rtl::OUString::createFromAscii("drafts.com.sun.star.accessibility.Accessible");
-        aSupported[1] = ::rtl::OUString::createFromAscii("drafts.com.sun.star.accessibility.AccessibleContext");
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.accessibility.Accessible");
+        aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.accessibility.AccessibleContext");
         return aSupported;
     }
     // -----------------------------------------------------------------------------
@@ -198,7 +198,7 @@ namespace dbaui
     }
     // -----------------------------------------------------------------------------
     // XAccessibleComponent
-    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleAt( const awt::Point& _aPoint ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         Reference< XAccessible > aRet;
