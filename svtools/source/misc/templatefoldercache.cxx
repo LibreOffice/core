@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:15:22 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,8 @@ namespace svt
             // #116281# Keep office installtion relocatable. Never store
             // any direct references to office installation directory.
             sURL = getOfficeInstDirs()->makeAbsoluteURL( sURL );
-            m_aPreviousState.push_back( new TemplateContent( sURL ) );
+            m_aPreviousState.push_back(
+                new TemplateContent( INetURLObject(sURL) ) );
         }
 
         // read the contents of the root folders
