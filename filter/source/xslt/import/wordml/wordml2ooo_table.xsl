@@ -55,11 +55,11 @@
     <xsl:template match="w:style[@w:type='table']" mode="table">
         <style:style style:family="table">
             <xsl:attribute name="style:name">
-                <xsl:value-of select="concat('w',translate(@w:styleId,' ','_'))"/>
+                <xsl:value-of select="concat('w',translate(@w:styleId,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
             </xsl:attribute>
             <xsl:if test="w:basedOn">
                 <xsl:attribute name="style:parent-style-name">
-                    <xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ','_'))"/>
+                    <xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
                 </xsl:attribute>
             </xsl:if>
             <style:table-properties table:align="margins"/>
@@ -73,7 +73,15 @@
             <xsl:attribute name="style:family">table</xsl:attribute>
             <xsl:if test="w:tblStyle">
                 <xsl:attribute name="style:parent-style-name">
-                    <xsl:value-of select="concat('w',translate(w:tblStyle/@w:val,' ','_'))"/>
+                    <xsl:value-of select="concat('w',translate(w:tblStyle/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:variable name="section-property-number" select="count(preceding::w:sectPr)"/>
+            <xsl:variable name="last-section-property" select="preceding::w:pPr/w:sectPr[1]"/>
+            <xsl:variable name="next-section-property" select="following::w:sectPr[1]"/>
+            <xsl:variable name="last-next-p-tbl" select="$last-section-property[last()]/following::*[name()='w:p' or name()='w:tbl']"/>
+            <xsl:if test="not($next-section-property/w:type/@w:val = 'continuous') and  generate-id($last-next-p-tbl[1]) = generate-id(..) and not(ancestor::w:sectPr or ancestor::w:styles)">
+                <xsl:attribute name="style:master-page-name">Standard<xsl:value-of select="$section-property-number + 1"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:element name="style:table-properties">
