@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: as $ $Date: 2001-04-26 13:51:15 $
+#   last change: $Author: as $ $Date: 2001-04-26 13:53:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,10 +59,14 @@
 #
 #
 #*************************************************************************
-PRJ=..$/..
+PRJ=..$/..$/..
 
-PRJNAME=SVTOOLS
-TARGET=config
+PRJNAME=			svtools
+TARGET=				test_configitems
+LIBTARGET=			NO
+ENABLE_EXCEPTIONS=	TRUE
+USE_DEFFILE=		TRUE
+NO_BSYMBOLIC=		TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -70,35 +74,33 @@ TARGET=config
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-# --- Files --------------------------------------------------------
+.IF "$(COM)"=="ICC"
+LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
+.ENDIF
 
-SLOFILES = \
-    $(SLO)$/cjkoptions.obj             \
-    $(SLO)$/pathoptions.obj             \
-    $(SLO)$/saveopt.obj					\
-    $(SLO)$/undoopt.obj             	\
-    $(SLO)$/helpopt.obj             	\
-    $(SLO)$/useroptions.obj				\
-    $(SLO)$/moduleoptions.obj			\
-    $(SLO)$/securityoptions.obj			\
-    $(SLO)$/localisationoptions.obj		\
-    $(SLO)$/workingsetoptions.obj		\
-    $(SLO)$/viewoptions.obj				\
-    $(SLO)$/internaloptions.obj			\
-    $(SLO)$/startoptions.obj			\
-    $(SLO)$/historyoptions.obj			\
-    $(SLO)$/inetoptions.obj				\
-    $(SLO)$/menuoptions.obj				\
-    $(SLO)$/dynamicmenuoptions.obj		\
-    $(SLO)$/options3d.obj				\
-    $(SLO)$/fontoptions.obj				\
-    $(SLO)$/addxmltostorageoptions.obj	\
-    $(SLO)$/miscopt.obj					\
-    $(SLO)$/defaultoptions.obj			\
-    $(SLO)$/searchopt.obj				\
-    $(SLO)$/cacheoptions.obj
+# --- application: "test" --------------------------------------------------
+
+APP1TARGET= 	test
+
+APP1OBJS=		$(SLO)$/test.obj					\
+                $(SLO)$/dynamicmenuoptions.obj
+
+APP1STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(COMPHELPERLIB)					\
+                $(UNOTOOLSLIB) 						\
+                $(OSLLIB)							\
+                $(SALLIB)							\
+                $(VOSLIB)							\
+                $(TOOLSLIB) 						\
+                $(SVLIB)
+
+APP1DEPN=		$(SLO)$/dynamicmenuoptions.obj
+
+.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
+APP1DEF=		$(MISC)$/$(APP1TARGET).def
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :  target.mk
-
+.INCLUDE :	target.mk
