@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:47:47 $
+ *  last change: $Author: mav $ $Date: 2004-11-29 10:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,7 +903,7 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
 
         // initialize root storages for all resource types
         m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(
-                                    m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY_THROW);
+                                    m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY); // can be empty
         m_xDefaultConfigStorage = m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageShare(
                                     m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageShare());
         m_xUserConfigStorage    = m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageUser(
