@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.9 2001-03-21 13:52:43 jl Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.10 2001-05-25 13:09:27 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: jl $ $Date: 2001-03-21 13:52:43 $ $Revision: 1.9 $
+//	$Author: oj $ $Date: 2001-05-25 13:09:27 $ $Revision: 1.10 $
 //
 // Description:
 //
@@ -520,6 +520,7 @@ OSQLScanner::~OSQLScanner()
 //------------------------------------------------------------------------------
 void OSQLScanner::SQLyyerror(sal_Char *fmt)
 {
+
 	if(IN_SQLyyerror)
 		return;
 	IN_SQLyyerror = true;
@@ -571,6 +572,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 		m_sErrorMessage += aError;
 	}
 	IN_SQLyyerror = false;
+	YY_FLUSH_BUFFER;
 }
 
 //------------------------------------------------------------------------------

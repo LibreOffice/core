@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 15:26:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,6 @@ namespace dbtools
 
     class DBTypeConversion
     {
-    protected:
-        static ::com::sun::star::util::Date STANDARD_DB_DATE;
-
     public:
         static ::com::sun::star::util::Date getStandardDate();
         static void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,

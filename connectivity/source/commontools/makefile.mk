@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-23 09:15:42 $
+#   last change: $Author: oj $ $Date: 2001-05-25 13:09:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJ=..$/..
 PRJNAME=connectivity
 TARGET=commontools
 
-ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
@@ -82,6 +81,7 @@ SLOFILES=\
         $(SLO)$/dbtools.obj								\
         $(SLO)$/dbexception.obj							\
         $(SLO)$/dbconversion.obj						\
+        $(SLO)$/DateConversion.obj						\
         $(SLO)$/CommonTools.obj							\
         $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
         $(SLO)$/FDatabaseMetaDataResultSet.obj			\
@@ -94,7 +94,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/emptymetadata.obj						\
         $(SLO)$/dbtools.obj								\
         $(SLO)$/dbexception.obj							\
-        $(SLO)$/dbconversion.obj						\
+        $(SLO)$/DateConversion.obj						\
         $(SLO)$/FDatabaseMetaDataResultSet.obj			\
         $(SLO)$/TDatabaseMetaDataBase.obj
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:15:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,13 +648,11 @@ void TransferFormComponentProperties(
     ::rtl::OUString sPropDefaultControl(::rtl::OUString::createFromAscii("DefaultControl"));
     ::rtl::OUString sPropLabelControl(::rtl::OUString::createFromAscii("LabelControl"));
     ::rtl::OUString sPropFormatsSupplier(::rtl::OUString::createFromAscii("FormatsSupplier"));
-    ::rtl::OUString sPropFormatKey(::rtl::OUString::createFromAscii("FormatKey"));
     ::rtl::OUString sPropCurrencySymbol(::rtl::OUString::createFromAscii("CurrencySymbol"));
     ::rtl::OUString sPropDecimals(::rtl::OUString::createFromAscii("Decimals"));
     ::rtl::OUString sPropEffectiveMin(::rtl::OUString::createFromAscii("EffectiveMin"));
     ::rtl::OUString sPropEffectiveMax(::rtl::OUString::createFromAscii("EffectiveMax"));
     ::rtl::OUString sPropEffectiveDefault(::rtl::OUString::createFromAscii("EffectiveDefault"));
-    ::rtl::OUString sPropDefaultValue(::rtl::OUString::createFromAscii("DefaultValue"));
     ::rtl::OUString sPropDefaultText(::rtl::OUString::createFromAscii("DefaultText"));
     ::rtl::OUString sPropDefaultDate(::rtl::OUString::createFromAscii("DefaultDate"));
     ::rtl::OUString sPropDefaultTime(::rtl::OUString::createFromAscii("DefaultTime"));
@@ -696,8 +694,8 @@ void TransferFormComponentProperties(
 
 
     // fuer formatierte Felder (entweder alt oder neu) haben wir ein paar Sonderbehandlungen
-    sal_Bool bOldIsFormatted = hasProperty(sPropFormatsSupplier, xOldProps) && hasProperty(sPropFormatKey, xOldProps);
-    sal_Bool bNewIsFormatted = hasProperty(sPropFormatsSupplier, xNewProps) && hasProperty(sPropFormatKey, xNewProps);
+    sal_Bool bOldIsFormatted = hasProperty(sPropFormatsSupplier, xOldProps) && hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), xOldProps);
+    sal_Bool bNewIsFormatted = hasProperty(sPropFormatsSupplier, xNewProps) && hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), xNewProps);
 
     if (!bOldIsFormatted && !bNewIsFormatted)
         return; // nothing to do
@@ -710,7 +708,7 @@ void TransferFormComponentProperties(
     if (bOldIsFormatted)
     {
         // aus dem eingestellten Format ein paar Properties rausziehen und zum neuen Set durchschleifen
-        Any aFormatKey( xOldProps->getPropertyValue(sPropFormatKey) );
+        Any aFormatKey( xOldProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)) );
         if (aFormatKey.hasValue())
         {
             Reference< XNumberFormatsSupplier> xSupplier;
@@ -776,9 +774,9 @@ void TransferFormComponentProperties(
                 xNewProps->setPropertyValue(sPropDefaultTime, makeAny(aTime));
             }
 
-            if (hasProperty(sPropDefaultValue, xNewProps) && !bIsString)
+            if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), xNewProps) && !bIsString)
             {   // hier koennen wir einfach das double durchreichen
-                xNewProps->setPropertyValue(sPropDefaultValue, aEffectiveDefault);
+                xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), aEffectiveDefault);
             }
 
             if (hasProperty(sPropDefaultText, xNewProps) && bIsString)
@@ -851,7 +849,7 @@ void TransferFormComponentProperties(
                 nKey = xFormats->addNew(sNewFormat, _rLocale);
             }
 
-            xNewProps->setPropertyValue(sPropFormatKey, makeAny((sal_Int32)nKey));
+            xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), makeAny((sal_Int32)nKey));
         }
 
         // min-/max-Werte
@@ -880,8 +878,8 @@ void TransferFormComponentProperties(
         }
 
         // double oder ::rtl::OUString werden direkt uebernommen
-        if (hasProperty(sPropDefaultValue, xOldProps))
-            aNewDefault = xOldProps->getPropertyValue(sPropDefaultValue);
+        if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), xOldProps))
+            aNewDefault = xOldProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE));
         if (hasProperty(sPropDefaultText, xOldProps))
             aNewDefault = xOldProps->getPropertyValue(sPropDefaultText);
 
@@ -1241,6 +1239,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/05/23 09:15:42  oj
+ *  #86528# disable exception in some files
+ *
  *  Revision 1.27  2001/05/21 09:06:17  oj
  *  #87050# composeTableName corrected
  *

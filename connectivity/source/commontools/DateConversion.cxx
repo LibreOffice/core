@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:15:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,365 @@
  *
  ************************************************************************/
 
-#ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include "connectivity/DateConversion.hxx"
+
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
-using namespace connectivity;
+#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
+#include <com/sun/star/script/XTypeConverter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
+#include <com/sun/star/util/NumberFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
+#include <com/sun/star/sdb/XColumnUpdate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
+#include <com/sun/star/sdb/XColumn.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
+#endif
+
+
+using namespace ::connectivity;
+using namespace ::comphelper;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::dbtools;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+// -----------------------------------------------------------------------------
+::rtl::OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bool bQuote,
+                                              const Reference< XTypeConverter >&  _rxTypeConverter)
+{
+    ::rtl::OUString aRet;
+    if (_rVal.hasValue())
+    {
+        try
+        {
+            switch (eType)
+            {
+                case DataType::INTEGER:
+                case DataType::BIT:
+                case DataType::TINYINT:
+                case DataType::SMALLINT:
+                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
+                    {
+                        if (::cppu::any2bool(_rVal))
+                            aRet = ::rtl::OUString::createFromAscii("1");
+                        else
+                            aRet = ::rtl::OUString::createFromAscii("0");
+                    }
+                    else
+                        _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
+                    break;
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                    if (bQuote)
+                        aRet += ::rtl::OUString::createFromAscii("'");
+                    {
+                        ::rtl::OUString aTemp;
+                        _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
+                        aRet += aTemp;
+                    }
+                    if (bQuote)
+                        aRet += ::rtl::OUString::createFromAscii("'");
+                    break;
+                case DataType::REAL:
+                case DataType::DOUBLE:
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                    _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
+                    break;
+                case DataType::TIMESTAMP:
+                {
+                    DateTime aDateTime;
 
+                    // check if this is really a timestamp or only a date
+                    if ((_rVal >>= aDateTime) &&
+                        (aDateTime.Hours || aDateTime.Minutes || aDateTime.Seconds || aDateTime.HundredthSeconds))
+                    {
+                        if (bQuote) aRet += ::rtl::OUString::createFromAscii("{TS '");
+                        aRet += DBTypeConversion::toDateTimeString(aDateTime);
+                        if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                        break;
+                    }
+                    // else continue
+                }
+                case DataType::DATE:
+                {
+                    Date aDate;
+                    sal_Bool bRet = _rVal >>= aDate;
+                    OSL_ENSURE(bRet,"DBTypeConversion::toSQLString: _rVal is not date!");
+                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("{D '");
+                    aRet += DBTypeConversion::toDateString(aDate);;
+                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                }   break;
+                case DataType::TIME:
+                {
+                    Time aTime;
+                    sal_Bool bRet = _rVal >>= aTime;
+                    OSL_ENSURE(bRet,"DBTypeConversion::toSQLString: _rVal is not time!");
+                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("{T '");
+                    aRet += DBTypeConversion::toTimeString(aTime);
+                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                } break;
+                default:
+                    _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
+            }
+        }
+        catch ( ... )
+        {
+            OSL_ENSURE(0,"TypeConversion Error");
+        }
+    }
+    else
+        aRet = ::rtl::OUString::createFromAscii(" NULL ");
+    return aRet;
+}
+// -----------------------------------------------------------------------------
+Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xSupplier)
+{
+    OSL_ENSURE(xSupplier.is(), "getNULLDate : the formatter doesn't implement a supplier !");
+    if (xSupplier.is())
+    {
+        try
+        {
+            // get the null date
+            Date aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
+            return aDate;
+        }
+        catch ( ... )
+        {
+        }
+    }
 
+    return getStandardDate();
+}
+// -----------------------------------------------------------------------------
+void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
+                                const Reference<XNumberFormatter>& xFormatter,
+                                const Date& rNullDate,
+                                const ::rtl::OUString& rString,
+                                sal_Int32 nKey,
+                                sal_Int16 nFieldType,
+                                sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
+{
+    double fValue = 0;
+    if (rString.getLength())
+    {
+            // Muss der String formatiert werden?
+        sal_Int16 nTypeClass = nKeyType & ~NumberFormat::DEFINED;
+        sal_Bool bTextFormat = nTypeClass == NumberFormat::TEXT;
+        sal_Int32 nKeyToUse  = bTextFormat ? 0 : nKey;
+        sal_Int16 nRealUsedTypeClass = nTypeClass;
+            // bei einem Text-Format muessen wir dem Formatter etwas mehr Freiheiten einraeumen, sonst
+            // wirft convertStringToNumber eine NotNumericException
+        try
+        {
+            fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
+            sal_Int32 nRealUsedKey = xFormatter->detectNumberFormat(0, rString);
+            if (nRealUsedKey != nKeyToUse)
+                nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~NumberFormat::DEFINED;
 
+            // und noch eine Sonderbehandlung, diesmal fuer Prozent-Formate
+            if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
+            {   // die Formatierung soll eigentlich als Prozent erfolgen, aber der String stellt nur eine
+                // einfache Nummer dar -> anpassen
+                ::rtl::OUString sExpanded(rString);
+                static ::rtl::OUString s_sPercentSymbol = ::rtl::OUString::createFromAscii("%");
+                    // need a method to add a sal_Unicode to a string, 'til then we use a static string ...
+                sExpanded += s_sPercentSymbol;
+                fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);
+            }
+
+            switch (nRealUsedTypeClass)
+            {
+                case NumberFormat::DATE:
+                case NumberFormat::DATETIME:
+                    xVariant->updateDouble(toStandardDbDate(rNullDate, fValue));
+                    break;
+                case NumberFormat::TIME:
+                case NumberFormat::CURRENCY:
+                case NumberFormat::NUMBER:
+                case NumberFormat::SCIENTIFIC:
+                case NumberFormat::FRACTION:
+                case NumberFormat::PERCENT:
+                    xVariant->updateDouble(fValue);
+                    break;
+                default:
+                    xVariant->updateString(rString);
+            }
+        }
+        catch(...)
+        {
+            xVariant->updateString(rString);
+        }
+    }
+    else
+    {
+        switch (nFieldType)
+        {
+            case ::com::sun::star::sdbc::DataType::CHAR:
+            case ::com::sun::star::sdbc::DataType::VARCHAR:
+            case ::com::sun::star::sdbc::DataType::LONGVARCHAR:
+                xVariant->updateString(rString);
+                break;
+            default:
+                xVariant->updateNull();
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
+                                const Date& rNullDate,
+                                const double& rValue,
+                                sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
+{
+    switch (nKeyType & ~NumberFormat::DEFINED)
+    {
+        case NumberFormat::DATE:
+        case NumberFormat::DATETIME:
+        //  case NumberFormat::TIME:
+            xVariant->updateDouble(toStandardDbDate(rNullDate, rValue));
+            break;
+        default:
+            xVariant->updateDouble(rValue);
+    }
+}
+
+//------------------------------------------------------------------------------
+double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
+                                  const Date& rNullDate,
+                                  sal_Int16 nKeyType)
+{
+    try
+    {
+        switch (nKeyType & ~NumberFormat::DEFINED)
+        {
+            case NumberFormat::DATE:
+            case NumberFormat::DATETIME:
+            //  case NumberFormat::TIME:
+                return toNullDate(rNullDate, xVariant->getDouble());
+            default:
+                return xVariant->getDouble();
+        }
+    }
+    catch(...)
+    {
+        return 0.0;
+    }
+}
+//------------------------------------------------------------------------------
+::rtl::OUString DBTypeConversion::getValue(const Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+                                           const Reference<XNumberFormatter>& _xFormatter,
+                                           const ::com::sun::star::lang::Locale& _rLocale,
+                                           const Date& _rNullDate)
+{
+    sal_Int32 nKey;
+    sal_Int16 nKeyType;
+
+    OSL_ENSURE(_xColumn.is() && _xFormatter.is(), "DBTypeConversion::getValue: invalid arg !");
+    if (!_xColumn.is() || !_xFormatter.is())
+        return ::rtl::OUString();
+
+    try
+    {
+        _xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)) >>= nKey;
+    }
+    catch (...)
+    {
+    }
+
+    if (!nKey)
+    {
+        Reference<XNumberFormats> xFormats( _xFormatter->getNumberFormatsSupplier()->getNumberFormats() );
+        Reference<XNumberFormatTypes> xTypeList(_xFormatter->getNumberFormatsSupplier()->getNumberFormats(), UNO_QUERY);
+
+        nKey = ::dbtools::getDefaultNumberFormat(_xColumn,
+                                           Reference< XNumberFormatTypes > (xFormats, UNO_QUERY),
+                                           _rLocale);
+
+        nKeyType = getNumberFormatType(_xFormatter, nKey) & ~NumberFormat::DEFINED;
+    }
+
+    return DBTypeConversion::getValue(Reference< XColumn > (_xColumn, UNO_QUERY), _xFormatter, _rNullDate, nKey, nKeyType);
+}
+
+//------------------------------------------------------------------------------
+::rtl::OUString DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
+                                   const Reference<XNumberFormatter>& xFormatter,
+                                   const Date& rNullDate,
+                                   sal_Int32 nKey,
+                                   sal_Int16 nKeyType)
+{
+    ::rtl::OUString aString;
+    if (xVariant.is())
+    {
+        try
+        {
+            switch (nKeyType & ~NumberFormat::DEFINED)
+            {
+                case NumberFormat::DATE:
+                case NumberFormat::DATETIME:
+                {
+                    double fValue = xVariant->getDouble();
+                    if (!xVariant->wasNull())
+                        aString = xFormatter->convertNumberToString(nKey, toNullDate(rNullDate, fValue));
+                }   break;
+                case NumberFormat::TIME:
+                case NumberFormat::NUMBER:
+                case NumberFormat::SCIENTIFIC:
+                case NumberFormat::FRACTION:
+                case NumberFormat::PERCENT:
+                {
+                    double fValue = xVariant->getDouble();
+                    if (!xVariant->wasNull())
+                        aString = xFormatter->convertNumberToString(nKey, fValue);
+                }   break;
+                case NumberFormat::CURRENCY:
+                {
+                    double fValue = xVariant->getDouble();
+                    if (!xVariant->wasNull())
+                        aString = xFormatter->getInputString(nKey, fValue);
+                }   break;
+                case NumberFormat::TEXT:
+                    aString = xFormatter->formatString(nKey, xVariant->getString());
+                    break;
+                default:
+                    aString = xVariant->getString();
+            }
+        }
+        catch(...)
+        {
+            aString = xVariant->getString();
+        }
+    }
+    return aString;
+}
+//------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:10 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
                     Reference<XPropertySet> xFormat = xFormats->getByKey( nKey );
                     if ( xFormat.is() )
                     {
-                        Any aTypeAny = xFormat->getPropertyValue( ::rtl::OUString::createFromAscii("Type") );
+                        Any aTypeAny = xFormat->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE) );
                         aTypeAny >>= nNumType;
                     }
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
                     ADOProperties* pProps = m_aTable.get_Properties();
                     pProps->AddRef();
                     ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Type")),&pProp);
+                    pProps->get_Item(OLEVariant(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)),&pProp);
                     WpADOProperty aProp(pProp);
                     if(pProp)
                         aProp.PutValue(getString(rValue));

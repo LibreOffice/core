@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:28 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,20 @@
  *
  *
  ************************************************************************/
+
+
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include <connectivity/sqlnode.hxx>
 #endif
+#ifndef _CONNECTIVITY_SQLINTERNALNODE_HXX
+#include <internalnode.hxx>
+#endif
+#define YYBISON   1
+#include <connectivity/sqlbison.hxx>
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
@@ -78,6 +86,33 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
+#include <com/sun/star/util/XNumberFormats.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
+#include <com/sun/star/util/NumberFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_KPARSETYPE_HPP_
+#include <com/sun/star/i18n/KParseType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_KPARSETOKENS_HPP_
+#include <com/sun/star/i18n/KParseTokens.hpp>
 #endif
 
 #ifndef _DBHELPER_DBCONVERSION_HXX_
@@ -95,15 +130,25 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_SQLSCAN_HXX
+#include "sqlscan.hxx"
+#endif
+
+
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 using namespace ::osl;
 using namespace connectivity;
 using namespace dbtools;
+
+
+extern int SQLyyparse (void);
 
 extern Any getNumberFormatProperty(const Reference< XNumberFormatsSupplier > & xFormatter,
                                                           sal_Int32 nKey,
@@ -135,9 +180,9 @@ sal_Int32 getToken(const ::rtl::OUString& _rValue,const ::rtl::OUString& _rToken
     // get the token out of a string
     static ::rtl::OUString sDateSep = ::rtl::OUString::createFromAscii("-");
 
-    sal_Int32 nYear     = getToken(rString,sDateSep,0);
-    sal_Int32 nMonth    = getToken(rString,sDateSep,1);
-    sal_Int32 nDay      = getToken(rString,sDateSep,2);
+    sal_uInt16 nYear    = (sal_uInt16)getToken(rString,sDateSep,0);
+    sal_uInt16 nMonth   = (sal_uInt16)getToken(rString,sDateSep,1);
+    sal_uInt16 nDay     = (sal_uInt16)getToken(rString,sDateSep,2);
 
     Date aDate(nDay,nMonth,nYear);
     Reference< XNumberFormatsSupplier > xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -154,12 +199,12 @@ sal_Int32 getToken(const ::rtl::OUString& _rValue,const ::rtl::OUString& _rToken
     static ::rtl::OUString sDateSep = ::rtl::OUString::createFromAscii("-");
     static ::rtl::OUString sTimeSep = ::rtl::OUString::createFromAscii(":");
 
-    sal_Int32 nYear     = getToken(rString,sDateSep,0);
-    sal_Int32 nMonth    = getToken(rString,sDateSep,1);
-    sal_Int32 nDay      = getToken(rString,sDateSep,2);
-    sal_Int32 nHour     = getToken(rString,sTimeSep,0);
-    sal_Int32 nMinute   = getToken(rString,sTimeSep,1);
-    sal_Int32 nSecond   = getToken(rString,sTimeSep,2);
+    sal_uInt16 nYear    = (sal_uInt16)getToken(rString,sDateSep,0);
+    sal_uInt16 nMonth   = (sal_uInt16)getToken(rString,sDateSep,1);
+    sal_uInt16 nDay     = (sal_uInt16)getToken(rString,sDateSep,2);
+    sal_uInt16 nHour    = (sal_uInt16)getToken(rString,sTimeSep,0);
+    sal_uInt16 nMinute  = (sal_uInt16)getToken(rString,sTimeSep,1);
+    sal_uInt16 nSecond  = (sal_uInt16)getToken(rString,sTimeSep,2);
 
     DateTime aDate(0,nSecond,nMinute,nHour,nDay,nMonth,nYear);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -175,9 +220,9 @@ sal_Int32 getToken(const ::rtl::OUString& _rValue,const ::rtl::OUString& _rToken
 {
     static ::rtl::OUString sTimeSep = ::rtl::OUString::createFromAscii(":");
 
-    sal_Int32 nHour     = getToken(rString,sTimeSep,0);
-    sal_Int32 nMinute   = getToken(rString,sTimeSep,1);
-    sal_Int32 nSecond   = getToken(rString,sTimeSep,2);
+    sal_uInt16 nHour    = (sal_uInt16)getToken(rString,sTimeSep,0);
+    sal_uInt16 nMinute  = (sal_uInt16)getToken(rString,sTimeSep,1);
+    sal_uInt16 nSecond  = (sal_uInt16)getToken(rString,sTimeSep,2);
 
     Time aTime(0,nHour,nMinute,nSecond);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
@@ -531,6 +576,561 @@ sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
     return _rTable.getLength() != 0;
 }
 // -----------------------------------------------------------------------------
+sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare)
+{
+    sal_Int16 nErg = 0;
+    if (m_xField.is())
+    {
+        sal_Int32 nType = 0;
+        try
+        {
+            Any aValue;
+            {
+                aValue = m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE));
+                aValue >>= nType;
+            }
+        }
+        catch( Exception& )
+        {
+            return nErg;
+        }
+
+        if (pLiteral->isRule() && !SQL_ISRULE(pLiteral,value_exp))
+        {
+            switch(nType)
+            {
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                case DataType::LONGVARCHAR:
+                    if(!SQL_ISRULE(pLiteral,char_value_exp) && !buildStringNodes(pLiteral))
+                        break;
+                default:
+                    nErg = buildNode(pAppend,pLiteral,pCompare);
+            }
+        }
+        else
+        {
+            switch(pLiteral->getNodeType())
+            {
+                case SQL_NODE_STRING:
+                    switch(nType)
+                    {
+                        case DataType::CHAR:
+                        case DataType::VARCHAR:
+                        case DataType::LONGVARCHAR:
+                            nErg = buildNode(pAppend,pLiteral,pCompare);
+                            break;
+                        case DataType::DATE:
+                        case DataType::TIME:
+                        case DataType::TIMESTAMP:
+                            if (m_xFormatter.is())
+                            {
+                                try
+                                {
+                                    // do we have a date
+                                    double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
+                                    nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
+                                }
+                                catch( Exception& )
+                                {
+                                    try
+                                    {
+                                        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
+                                        Reference< ::com::sun::star::util::XNumberFormatTypes >  xFormatTypes(xFormatSup->getNumberFormats(),UNO_QUERY);
+                                        if (xFormatTypes.is())
+                                        {
+                                            double fValue = m_xFormatter->convertStringToNumber(
+                                                xFormatTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, *m_pLocale),
+                                                                                pLiteral->getTokenValue().getStr());
+                                            nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
+                                        }
+                                        else
+                                        {
+                                            nErg = -1;
+                                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                        }
+
+                                    }
+                                    catch( Exception& )
+                                    {
+                                        nErg = -1;
+                                        m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                    }
+                                }
+                            }
+                            else
+                                nErg = buildNode(pAppend,pLiteral,pCompare);
+
+                            break;
+                        default:
+                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                    }
+                    break;
+                case SQL_NODE_ACCESS_DATE:
+                    switch(nType)
+                    {
+                        case DataType::DATE:
+                        case DataType::TIME:
+                        case DataType::TIMESTAMP:
+                            if (m_xFormatter.is())
+                            {
+                                try
+                                {
+                                    // do we have a date
+                                    double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
+                                    nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
+                                }
+                                catch( Exception& )
+                                {
+                                    try
+                                    {
+                                        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
+                                        Reference< ::com::sun::star::util::XNumberFormatTypes >  xFormatTypes(xFormatSup->getNumberFormats(),UNO_QUERY);
+                                        if (xFormatTypes.is())
+                                        {
+                                            double fValue = m_xFormatter->convertStringToNumber(
+                                                xFormatTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, *m_pLocale),
+                                                                pLiteral->getTokenValue().getStr());
+                                            nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
+                                        }
+                                        else
+                                        {
+                                            nErg = -1;
+                                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                        }
+                                    }
+                                    catch( Exception& )
+                                    {
+                                        nErg = -1;
+                                        m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                nErg = -1;
+                                m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                            }
+                            break;
+                        default:
+                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                    }
+                    break;
+                case SQL_NODE_INTNUM:
+                    switch(nType)
+                    {
+                        case DataType::BIT:
+                        case DataType::DECIMAL:
+                        case DataType::NUMERIC:
+                        case DataType::TINYINT:
+                        case DataType::SMALLINT:
+                        case DataType::INTEGER:
+                        case DataType::BIGINT:
+                        case DataType::REAL:
+                        case DataType::DOUBLE:
+                            // kill thousand seperators if any
+                            if (s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
+                            {
+                                pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
+                                // and replace decimal
+                                pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', '.');
+                            }
+                            else
+                                pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', sal_Unicode());
+                            nErg = buildNode(pAppend,pLiteral,pCompare);
+                            break;
+                        case DataType::CHAR:
+                        case DataType::VARCHAR:
+                        case DataType::LONGVARCHAR:
+                            nErg = buildNode_STR_NUM(pAppend,pLiteral,pCompare);
+                            break;
+                        default:
+                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_INT_COMPARE);
+                    }
+                    break;
+                case SQL_NODE_APPROXNUM:
+                    switch(nType)
+                    {
+                        case DataType::DECIMAL:
+                        case DataType::NUMERIC:
+                        case DataType::REAL:
+                        case DataType::DOUBLE:
+                            if (inPredicateCheck())
+                            {
+                                // kill thousand seperators if any
+                                if (s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
+                                {
+                                    pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
+                                    // and replace decimal
+                                    pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', '.');
+                                }
+                                else
+                                    pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace(',', sal_Unicode());
+                            }
+                            nErg = buildNode(pAppend,pLiteral,pCompare);
+                            break;
+                        case DataType::CHAR:
+                        case DataType::VARCHAR:
+                        case DataType::LONGVARCHAR:
+                            nErg = buildNode_STR_NUM(pAppend,pLiteral,pCompare);
+                            break;
+                        case DataType::INTEGER:
+                        default:
+                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_REAL_COMPARE);
+                    }
+                    break;
+            }
+        }
+        if (!nErg)
+            --nErg;
+    }
+    if (!pCompare->getParent()) // I have no parent so I was not used and I must die :-)
+        delete pCompare;
+    return nErg;
+}
+// -----------------------------------------------------------------------------
+sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLiteral, const OSQLParseNode* pEscape)
+{
+    sal_Int16 nErg = 0;
+    sal_Int32 nType = 0;
+
+    if (!m_xField.is())
+        return nErg;
+    try
+    {
+        Any aValue;
+        {
+            aValue = m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE));
+            aValue >>= nType;
+        }
+    }
+    catch( Exception& )
+    {
+        return nErg;
+    }
+
+    switch (nType)
+    {
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+        case DataType::LONGVARCHAR:
+            if(pLiteral->isRule())
+            {
+                pAppend->append(pLiteral);
+                nErg = 1;
+            }
+            else
+            {
+                switch(pLiteral->getNodeType())
+                {
+                    case SQL_NODE_STRING:
+                        pLiteral->m_aNodeValue = ConvertLikeToken(pLiteral, pEscape, sal_False);
+                        pAppend->append(pLiteral);
+                        nErg = 1;
+                        break;
+                    case SQL_NODE_APPROXNUM:
+                        if (m_xFormatter.is() && m_nFormatKey)
+                        {
+                            sal_Int16 nScale = 0;
+                            try
+                            {
+                                Any aValue = getNumberFormatProperty(m_xFormatter->getNumberFormatsSupplier(),
+                                                            m_nFormatKey, rtl::OUString::createFromAscii("Decimals"));
+                                aValue >>= nScale;
+                            }
+                            catch( Exception& )
+                            {
+                            }
+
+                            pAppend->append(new OSQLInternalNode(stringToDouble(pLiteral->getTokenValue(),nScale),SQL_NODE_STRING));
+                        }
+                        else
+                            pAppend->append(new OSQLInternalNode(pLiteral->getTokenValue(),SQL_NODE_STRING));
+
+                        delete pLiteral;
+                        nErg = 1;
+                        break;
+                    default:
+                    {
+                        m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_VALUE_NO_LIKE);
+                        m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf(::rtl::OUString::createFromAscii("#1")),2,pLiteral->getTokenValue());
+                    }
+                }
+            }
+            break;
+        default:
+            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_FIELD_NO_LIKE);
+    }
+    return nErg;
+}
+// -----------------------------------------------------------------------------
+sal_Int16 OSQLParser::buildNode_STR_NUM(OSQLParseNode*& pAppend,OSQLParseNode*& pLiteral,OSQLParseNode*& pCompare)
+{
+    static ::rtl::OUString aEmptyString;
+    OSQLParseNode* pColumnRef = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+    pColumnRef->append(new OSQLInternalNode(m_sFieldName,SQL_NODE_NAME));
+    OSQLParseNode* pComp = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::comparison_predicate));
+    pComp->append(pColumnRef);
+    pComp->append(pCompare);
+
+    if (m_nFormatKey)
+    {
+        sal_Int16 nScale = 0;
+        ::rtl::OUString aDec;
+        try
+        {
+            Any aValue = getNumberFormatProperty(m_xFormatter->getNumberFormatsSupplier(),
+                                        m_nFormatKey, rtl::OUString::createFromAscii("Decimals"));
+            aValue >>= nScale;
+        }
+        catch( Exception& )
+        {
+        }
+
+        pComp->append(new OSQLInternalNode(stringToDouble(pLiteral->getTokenValue(),nScale),SQL_NODE_STRING));
+    }
+    else
+        pComp->append(new OSQLInternalNode(pLiteral->getTokenValue(),SQL_NODE_STRING));
+
+    pAppend->append(pComp);
+
+    delete pLiteral;
+    pLiteral = NULL;
+
+    return 1;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OSQLParser::stringToDouble(const ::rtl::OUString& _rValue,sal_Int16 _nScale)
+{
+    ::rtl::OUString aValue;
+    if(!m_xCharClass.is())
+        m_xCharClass  = Reference<XCharacterClassification>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.CharacterClassification")),UNO_QUERY);
+    if(m_xCharClass.is() && s_xLocaleData.is())
+    {
+        try
+        {
+            ParseResult aResult = m_xCharClass->parsePredefinedToken(KParseType::ANY_NUMBER,_rValue,0,*m_pLocale,0,::rtl::OUString(),KParseType::ANY_NUMBER,::rtl::OUString());
+            if((aResult.TokenType & KParseType::IDENTNAME) && aResult.EndPos == _rValue.getLength())
+            {
+                aValue = ::rtl::OUString::valueOf(aResult.Value);
+                sal_Int32 nPos = aValue.lastIndexOf(::rtl::OUString::createFromAscii("."));
+                if((nPos+_nScale) < aValue.getLength())
+                    aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale,::rtl::OUString());
+                aValue = aValue.replaceAt(aValue.lastIndexOf(::rtl::OUString::createFromAscii(".")),1,s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator);
+                return aValue;
+            }
+        }
+        catch(Exception&)
+        {
+        }
+    }
+    return aValue;
+}
+
+extern void setParser(OSQLParser*);
+//-----------------------------------------------------------------------------
+OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const ::rtl::OUString& rStatement,
+                                          const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
+                                         const Reference< XPropertySet > & xField)
+{
+
+
+    // mutex for parsing
+    static ::osl::Mutex aMutex;
+
+    // Guard the parsing
+    ::osl::MutexGuard aGuard(s_aMutex);
+    // must be reset
+    setParser(this);
+
+
+    // reset the parser
+    if (!m_pLocale)
+        m_pLocale = new Locale(m_pContext->getDefaultLocale());
+
+    m_xField        = xField;
+    m_xFormatter    = xFormatter;
+
+    if (m_xField.is())
+    {
+        sal_Int32 nType=0;
+        try
+        {
+            // get the field name
+            rtl::OUString aString;
+
+            // retrieve the fields name
+            // #75243# use the RealName of the column if there is any otherwise the name which could be the alias
+            // of the field
+            if (m_xField->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)))
+                m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)) >>= aString;
+            else
+                m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aString;
+
+            m_sFieldName = aString;
+
+            // get the field format key
+            if (m_xField->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)))
+                m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)) >>= m_nFormatKey;
+            else
+                m_nFormatKey = 0;
+
+            // get the field type
+            m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
+        }
+        catch ( Exception& )
+        {
+            OSL_ASSERT(0);
+        }
+
+        if (m_nFormatKey && m_xFormatter.is())
+        {
+            Any aValue = getNumberFormatProperty(m_xFormatter->getNumberFormatsSupplier(), m_nFormatKey, OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LOCALE));
+            OSL_ENSURE(aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0), "OSQLParser::PredicateTree : invalid language property !");
+
+            if (aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0))
+                aValue >>= *m_pLocale;
+        }
+        else
+            *m_pLocale = m_pContext->getDefaultLocale();
+
+        switch (nType)
+        {
+            case DataType::DATE:
+            case DataType::TIME:
+            case DataType::TIMESTAMP:
+                s_pScanner->SetRule(s_pScanner->GetDATERule());
+                break;
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::LONGVARCHAR:
+                s_pScanner->SetRule(s_pScanner->GetSTRINGRule());
+                break;
+            default:
+                if (m_pLocale && s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',')
+                    s_pScanner->SetRule(s_pScanner->GetGERRule());
+                else
+                    s_pScanner->SetRule(s_pScanner->GetENGRule());
+        }
+
+    }
+    else
+        s_pScanner->SetRule(s_pScanner->GetSQLRule());
+
+    s_pScanner->prepareScan(rStatement, m_pContext, sal_True);
+
+    SQLyylval.pParseNode = NULL;
+    //  SQLyypvt = NULL;
+    m_pParseTree = NULL;
+    m_sErrorMessage= ::rtl::OUString();
+
+    // ... und den Parser anwerfen ...
+    if (SQLyyparse() != 0)
+    {
+        m_sFieldName= ::rtl::OUString();
+        m_xField = NULL;
+        m_xFormatter = NULL;
+        m_nFormatKey = 0;
+
+        if (!m_sErrorMessage.getLength())
+            m_sErrorMessage = s_pScanner->getErrorMessage();
+        if (!m_sErrorMessage.getLength())
+            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL);
+
+        rErrorMessage = m_sErrorMessage;
+
+        // clear the garbage collector
+        while (!s_pGarbageCollector->empty())
+        {
+            OSQLParseNode* pNode = *s_pGarbageCollector->begin();
+            while (pNode->getParent())
+                pNode = pNode->getParent();
+            delete pNode;
+        }
+        return NULL;
+    }
+    else
+    {
+        s_pGarbageCollector->clear();
+
+        m_sFieldName= ::rtl::OUString();
+        m_xField = NULL;
+        m_xFormatter = NULL;
+        m_nFormatKey = 0;
+
+        // Das Ergebnis liefern (den Root Parse Node):
+
+        // Stattdessen setzt die Parse-Routine jetzt den Member pParseTree
+        // - einfach diesen zurueckliefern:
+        OSL_ENSURE(m_pParseTree != NULL,"OSQLParser: Parser hat keinen ParseTree geliefert");
+        return m_pParseTree;
+    }
+}
+// -----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const OParseContext* _pContext)
+           :m_pContext(_pContext)
+           ,m_pParseTree(NULL)
+           ,m_pLocale(NULL)
+           ,m_nFormatKey(0)
+           ,m_xServiceFactory(_xServiceFactory)
+{
+
+
+    setParser(this);
+
+#ifdef SQLYYDEBUG
+#ifdef SQLYYDEBUG_ON
+    SQLyydebug = 1;
+#endif
+#endif
+
+    ::osl::MutexGuard aGuard(s_aMutex);
+    // do we have to initialize the data
+    if (s_nRefCount == 0)
+    {
+        s_pScanner = new OSQLScanner();
+        s_pScanner->setScanner();
+        s_pGarbageCollector = new OSQLParseNodes();
+
+        if(!s_xLocaleData.is())
+            s_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
+
+        // auf 0 zuruecksetzen
+        memset(OSQLParser::s_nRuleIDs,0,sizeof(sal_uInt16) * OSQLParseNode::rule_count+1);
+    }
+    ++s_nRefCount;
+
+    if (m_pContext == NULL)
+        // take the default context
+        m_pContext = &s_aDefaultContext;
+}
+// -----------------------------------------------------------------------------
+Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberFormatsSupplier > &xSupplier,
+                                                   sal_Int32 nKey,
+                                                   const rtl::OUString& aPropertyName)
+{
+    OSL_ENSURE(xSupplier.is(), "getNumberFormatProperty : the formatter doesn't implement a supplier !");
+    Reference< ::com::sun::star::util::XNumberFormats >  xFormats = xSupplier->getNumberFormats();
+
+    if (xFormats.is())
+    {
+        try
+        {
+            Reference< XPropertySet > xProperties(xFormats->getByKey(nKey));
+            return xProperties->getPropertyValue(aPropertyName);
+        }
+        catch( ... )
+        {
+        }
+    }
+    return Any();
+}
+// -----------------------------------------------------------------------------
+
+
+
+
 
 
 

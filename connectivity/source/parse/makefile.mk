@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-23 09:10:28 $
+#   last change: $Author: oj $ $Date: 2001-05-25 13:09:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,12 +83,9 @@ SLOFILES =  \
         $(SLO)$/internalnode.obj
 
 EXCEPTIONSFILES =  \
-        $(SLO)$/sqlbison.obj		\
-        $(SLO)$/sqlflex.obj			\
         $(SLO)$/PColumn.obj			\
         $(SLO)$/sqliterator.obj		\
-        $(SLO)$/sqlnode.obj			\
-        $(SLO)$/internalnode.obj
+        $(SLO)$/sqlnode.obj
 
 all: \
         $(MISC)$/sqlflex.cxx \

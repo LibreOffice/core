@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:24 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,11 +242,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    if(!url.compareTo(::rtl::OUString::createFromAscii("sdbc:adabas:"),12))
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:adabas:"),12));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& , const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1591,10 +1591,10 @@ void OSQLParseTreeIterator::appendWarning(const ::rtl::OUString& _sErrMsg)
             SQLWarning aWarning = m_aWarning;
             while(aWarning.NextException.hasValue())
                 aWarning.NextException >>= aWarning;
-            aWarning.NextException <<= SQLWarning(_sErrMsg,NULL,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+            aWarning.NextException <<= SQLWarning(_sErrMsg,NULL,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
         }
         else
-            m_aWarning = SQLWarning(_sErrMsg,NULL,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+            m_aWarning = SQLWarning(_sErrMsg,NULL,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
 }
 // -----------------------------------------------------------------------------
