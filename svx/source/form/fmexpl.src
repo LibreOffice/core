@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:07:24 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text = "~Optionsfeld" ;
             Text [ ENGLISH ] = "~Option Button" ;
             Text[ english_us ] = "~Radio Button";
-            Text[ portuguese ] = "Botão de ~opção";
+            Text[ portuguese ] = "B~otão de opção";
             Text[ russian ] = "~Ïåðåêëþ÷àòåëü";
             Text[ greek ] = "Ðåäß~ï åðéëïãþí";
             Text[ dutch ] = "~Optieveld";
@@ -981,5 +981,6 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ catalan ] = "Navegador de formulario";
     Text[ finnish ] = "Lomakkeen siirtymävalikko";
 };
+
 
 
