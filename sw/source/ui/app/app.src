@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:56:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 15:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,199 +94,19 @@ String STR_PAGE_COUNT_MACRO
 };
 
  // Image-Liste ----------------------------------------------------------------
- //Dafuer gibt es jetzt eine Vorsortierung:
- //1. SID_
- //2. RID_
- //3. FN_
- //4. Ids, die noch aus der Default-Liste entfernt werden muessen
+ // Don't use this image list for normal toolbar images. We have now our commandimagelist
+ // folder in default_images. This list is now only used for special toolboxes that are
+ // used in floating windows.
 
 #define IMAGELIST_AND_COUNT             \
     IdList = {                          \
-        SID_SELECTALL                   ;\
-        SID_NEWDOCDIRECT                ;\
-        SID_CLOSEDOCS                   ;\
-        SID_MAIL_SENDDOC                ;\
-        SID_PRINTPREVIEW                ;\
-                                        \
-           SID_INSERT_GRAPHIC               ;\
-           SID_INSERT_DRAW                  ;\
-        SID_DOCTEMPLATE                 ;\
-        SID_AUTOFORMAT                  ;\
-        SID_AUTOSPELL_CHECK             ;\
-        SID_EXTENDEDHELP                ;\
-        SID_ATTR_CHAR_FONT              ;\
-        SID_ATTR_CHAR_FONTHEIGHT        ;\
-        SID_ATTR_CHAR_STRIKEOUT         ;\
-        SID_ATTR_CHAR_SHADOWED          ;\
-        SID_OBJECT_HELL                 ;\
-        SID_OBJECT_HEAVEN               ;\
-        SID_ATTR_FILL_STYLE             ;\
-        SID_ATTR_LINE_STYLE             ;\
-        SID_ATTR_LINE_WIDTH             ;\
-         SID_ATTR_LINE_COLOR                ;\
-        SID_ATTR_LINEEND_STYLE          ;\
-         SID_BACKGROUND_COLOR           ;\
-         SID_FRAME_LINESTYLE                ;\
-         SID_FRAME_LINECOLOR                ;\
-        SID_ATTR_ZOOM                   ;\
-        SID_WIN_FULLSCREEN              ;\
-        SID_FRAME_TO_TOP                ;\
-        SID_FRAME_TO_BOTTOM             ;\
-        SID_FONTWORK                    ;\
-                                        \
-        SID_ATTR_TRANSFORM              ;\
-        SID_ATTR_CHAR_COLOR2;\
-        SID_ATTR_CHAR_COLOR_BACKGROUND ;\
-                                        \
-        FN_NUMBER_BULLETS               ;\
-        FN_NUM_BULLET_DOWN              ;\
-         FN_NUM_BULLET_UP               ;\
-         FN_NUM_BULLET_MOVEUP           ;\
-         FN_NUM_BULLET_MOVEDOWN             ;\
-         FN_NUM_BULLET_NONUM                ;\
-         FN_NUM_BULLET_OFF              ;\
-         FN_NUM_BULLET_OUTLINE_DOWN         ;\
-         FN_NUM_BULLET_OUTLINE_UP       ;\
-         FN_NUM_BULLET_OUTLINE_MOVEUP   ;\
-         FN_NUM_BULLET_OUTLINE_MOVEDOWN     ;\
-        FN_NUMBER_NEWSTART ;\
-          FN_INSERT_FIELD                   ;\
-        FN_VIEW_FIELDS                  ;\
-        FN_VIEW_FIELDNAME               ;\
-        FN_VIEW_GRAPHIC                 ;\
-        FN_VIEW_MARKS                   ;\
-           FN_VIEW_META_CHARS               ;\
-           FN_INSERT_TABLE                  ;\
-           FN_INSERT_FRAME_INTERACT     ;\
-           FN_INSERT_FRAME_INTERACT_NOCOL   ;\
-           FN_FRAME_CHAIN                   ;\
-           FN_FRAME_UNCHAIN             ;\
-           FN_INSERT_FRAME                  ;\
-         FN_TOOL_ANKER                  ;\
-        FN_SET_SUPER_SCRIPT             ;\
-        FN_SET_SUB_SCRIPT               ;\
-        FN_UNDERLINE_DOUBLE             ;\
-        SID_ATTR_PARA_ADJUST_BLOCK              ;\
-        FN_FORMAT_FRAME_DLG             ;\
-        FN_FRAME_NOWRAP                 ;\
-        FN_FRAME_WRAP                   ;\
-        FN_FRAME_WRAPTHRU               ;\
-        FN_FRAME_WRAP_IDEAL             ;\
-        FN_FRAME_WRAP_LEFT              ;\
-        FN_FRAME_WRAP_RIGHT             ;\
-        FN_FRAME_WRAP_CONTOUR           ;\
-        SID_CONTOUR_DLG                 ;\
-        FN_FRAME_ALIGN_HORZ_LEFT        ;\
-        FN_FRAME_ALIGN_HORZ_RIGHT       ;\
-        FN_FRAME_ALIGN_HORZ_CENTER      ;\
-        FN_FRAME_ALIGN_VERT_TOP         ;\
-        FN_FRAME_ALIGN_VERT_BOTTOM      ;\
-        FN_FRAME_ALIGN_VERT_CENTER      ;\
-        FN_TABLE_INSERT_ROW             ;\
-        FN_TABLE_INSERT_COL             ;\
-        FN_TABLE_DELETE_ROW             ;\
-        FN_TABLE_DELETE_COL             ;\
-        FN_TABLE_SPLIT_CELLS            ;\
-        FN_TABLE_MERGE_CELLS            ;\
-        FN_TABLE_SELECT_ROW             ;\
-        FN_TABLE_SELECT_COL             ;\
-        FN_TABLE_SELECT_ALL             ;\
-        FN_OPTIMIZE_TABLE ;\
-        FN_TABLE_OPTIMAL_HEIGHT;\
-        FN_TABLE_BALANCE_ROWS  ;\
-        FN_TABLE_ADJUST_CELLS  ;\
-        FN_TABLE_BALANCE_CELLS ;\
-        FN_PAGE_STYLE_SET_COLS          ;\
-        FN_FLIP_HORZ_GRAFIC             ;\
-        FN_FLIP_VERT_GRAFIC             ;\
-        FN_START_TABLE                  ;\
-        FN_END_TABLE                    ;\
         FN_FORMULA_CALC                 ;\
         FN_FORMULA_CANCEL               ;\
          FN_FORMULA_APPLY               ;\
-        SID_NAVIGATOR               ;\
-        FN_PAGEUP                       ;\
-        FN_PAGEDOWN                     ;\
-        FN_START_OF_DOCUMENT            ;\
-        FN_END_OF_DOCUMENT              ;\
-        FN_SHOW_TWO_PAGES               ;\
-        FN_SHOW_MULTIPLE_PAGES              ;\
-        FN_SHOW_BOOKVIEW                ;\
-        FN_PRINT_PAGEPREVIEW            ;\
-        FN_FAX                          ;\
-        FN_MAILMERGE_WIZARD                    ;\
-        FN_EDIT_FORMULA; \
-        FN_INSERT_CTRL       ;\
-        FN_INSERT_OBJ_CTRL   ;\
-        FN_INSERT_FIELD_CTRL ;\
-        SID_SOURCEVIEW;\
-        FN_TABLE_VERT_NONE;\
-        FN_TABLE_VERT_CENTER;\
-        FN_TABLE_VERT_BOTTOM;\
-        FN_TABLE_MODE_FIX      ;\
-        FN_TABLE_MODE_FIX_PROP ;\
-        FN_TABLE_MODE_VARIABLE ;\
-        FN_PRINT_LAYOUT ;\
-        FN_TABLE_AUTOSUM;\
-        FN_PREVIEW_PRINT_OPTIONS;\
-        FN_PREVIEW_ZOOM;\
-                                        \
-        SID_STYLE_APPLY                 ;\
-        SID_STYLE_NEW_BY_EXAMPLE        ;\
-        SID_STYLE_UPDATE_BY_EXAMPLE ;\
-         SID_ATTR_BORDER                    ;\
-        SID_PLAYMACRO                   ;\
-        SID_CHAR_DLG                    ;\
-        SID_PARA_DLG                    ;\
-        SID_INSERT_SPINBUTTON ;\
-        SID_INSERT_HSCROLLBAR ;\
-        SID_INSERT_VSCROLLBAR ;\
-           FN_INSERT_OBJECT_DLG         ;\
-           FN_INSERT_SYMBOL             ;\
-           FN_POSTIT                        ;\
-        FN_GROW_FONT_SIZE               ;\
-        FN_SHRINK_FONT_SIZE             ;\
-        FN_THESAURUS_DLG                ;\
-        FN_HYPHENATE_OPT_DLG            ;\
-        FN_GLOSSARY_DLG                 ;\
-                                                    \
-        FN_INSERT_FLD_DATE    ;\
-        FN_INSERT_FLD_TIME    ;\
-        FN_INSERT_FLD_PGNUMBER;\
-        FN_INSERT_FLD_PGCOUNT ;\
-        FN_INSERT_FLD_TOPIC   ;\
-        FN_INSERT_FLD_TITLE   ;\
-        FN_INSERT_FLD_AUTHOR  ;\
-        FN_INSERT_SMA;        \
-        FN_INSERT_FOOTNOTE;    \
-        FN_INSERT_ENDNOTE;    \
-        FN_INSERT_IDX_ENTRY_DLG;\
-        FN_INSERT_BOOKMARK;      \
-        SID_SEARCH_DLG; \
-        SID_INSERTDOC;              \
-        SID_INSERT_FLOATINGFRAME;\
-        FN_SHADOWCURSOR;\
-        FN_INSERT_CAPTION;\
-        FN_INSERT_REF_FIELD;\
-        FN_INSERT_REGION;\
-        SID_EXTRUSION_TOOGLE;\
-        SID_EXTRUSION_TILT_DOWN;\
-        SID_EXTRUSION_TILT_UP;\
-        SID_EXTRUSION_TILT_LEFT;\
-        SID_EXTRUSION_TILT_RIGHT;\
-        SID_EXTRUSION_DEPTH_FLOATER;\
-        SID_EXTRUSION_DIRECTION_FLOATER;\
-        SID_EXTRUSION_LIGHTING_FLOATER;\
-        SID_EXTRUSION_SURFACE_FLOATER;\
-        SID_EXTRUSION_3D_COLOR;\
-                                        \
-                                        \
         };                              \
     IdCount = {                         \
-        173;                            \
+        3;                              \
     };
-
-
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
@@ -314,7 +134,7 @@ ImageList RID_DEFAULTIMAGELIST_LCH
     IMAGELIST_AND_COUNT
 };
 
- // Vorlagen
+// Vorlagen
 #define STYLE_IMAGE_LISTEF \
     MaskColor = IMAGE_MASK_COLOR ; \
     IdList = \
