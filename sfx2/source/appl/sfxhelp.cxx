@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 11:04:15 $
+ *  last change: $Author: pb $ $Date: 2001-04-18 14:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         return FALSE;
 }
 
-XubString SfxHelp_Impl::GetHelpText( ULONG nHelpId )
+XubString SfxHelp_Impl::GetHelpText( ULONG nHelpId, const Window* pWindow )
 {
     String aModuleName = GetHelpModuleName( nHelpId );
     XubString aHelpText = pDB->GetHelpText( nHelpId, aModuleName );;

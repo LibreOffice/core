@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 11:03:10 $
+ *  last change: $Author: pb $ $Date: 2001-04-18 14:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ public:
     void            SetUser( const String& rUser )
                     { aUser = rUser;}
 
-    virtual XubString   GetHelpText( ULONG nHelpId );
+    virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
 };
 #endif // _PRIVATE
 
