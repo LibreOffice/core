@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:46:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ public:
         SEL_DRW       = 0x0200, // Zeichenobjekte (Rechteck, Kreis...)
         SEL_DRW_TXT   = 0x0400, // Draw-Textobjekte im Editmode
         SEL_BEZ       = 0x0800, // Bezierobjekte editieren
-        SEL_DRW_FORM  = 0x1000  // Zeichenobjekte: DB-Forms
+        SEL_DRW_FORM  = 0x1000, // Zeichenobjekte: DB-Forms
+        FOC_FRM_CTRL  = 0x2000  // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by it's clients.
     };
     int     GetSelectionType() const;
 
