@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterGlobalWindowState.xcu,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 15:21:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,18 +358,6 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Design</value>
                     <value xml:lang="de">Formular Entwurf</value>
-                </prop>
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-            </node>
-            <node oor:name="private:resource/toolbar/formsobjectbar" oor:op="replace">
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Form Object</value>
-                    <value xml:lang="de">Form Objekt</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
