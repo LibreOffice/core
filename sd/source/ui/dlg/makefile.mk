@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:14:37 $
+#   last change: $Author: obo $ $Date: 2004-01-20 10:46:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,6 @@ SRC1FILES =\
     dlgass.src\
     navigatr.src\
     sdpreslt.src\
-    preview.src\
     effect.src\
     slidechg.src\
     morphdlg.src\
@@ -109,7 +108,8 @@ SRC1FILES =\
     custsdlg.src\
     brkdlg.src\
     vectdlg.src\
-    dlgolbul.src
+    dlgolbul.src \
+    PreviewWindow.src	\
 
 
 SLOFILES =  \
@@ -141,7 +141,6 @@ SLOFILES =  \
         $(SLO)$/assclass.obj \
         $(SLO)$/graphpro.obj \
         $(SLO)$/navigatr.obj \
-        $(SLO)$/preview.obj    \
         $(SLO)$/effect.obj   \
         $(SLO)$/effcthdl.obj   \
         $(SLO)$/effcthlp.obj   \
@@ -157,6 +156,12 @@ SLOFILES =  \
         $(SLO)$/brkdlg.obj      \
         $(SLO)$/vectdlg.obj		\
         $(SLO)$/docprev.obj     \
+        $(SLO)$/AnimationChildWindow.obj	\
+        $(SLO)$/EffectChildWindow.obj		\
+        $(SLO)$/NavigatorChildWindow.obj	\
+        $(SLO)$/PreviewWindow.obj			\
+        $(SLO)$/PreviewChildWindow.obj		\
+        $(SLO)$/SlideChangeChildWindow.obj	\
         $(SLO)$/TemplateScanner.obj
 
 EXCEPTIONSFILES= \
