@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-21 12:57:25 $
+ *  last change: $Author: sab $ $Date: 2002-07-10 15:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ SO2_DECL_REF(SvInPlaceObject)
 #include "chartarr.hxx"
 #include "chartlis.hxx"
 #include "refupdat.hxx"
+#ifndef _GLOBNAME_HXX
+#include <tools/globname.hxx>
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -510,109 +513,120 @@ void ScDocument::UpdateChartListenerCollection()
                             //  so SchModuleDummy::HasID must be tested before
 
                             BOOL bIsChart = FALSE;
-                            SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                             USHORT nId;
-                            if ( aIPObj.Is() &&
-                                 ((nId = SchModuleDummy::HasID( aIPObj->GetStorage()->GetClassName() )) != 0) )
+
+                            //  Ask the SvPersist for the InfoObject to find out
+                            //  whether it is a Chart. The old way with GetObjRef
+                            //  loads the object which takes too much unnecessary
+                            //  time
+                            SvInfoObject* pInfoObj = pShell->Find(aObjName);
+                            DBG_ASSERT(pInfoObj, "Why isn't here a SvInfoObject?");
+                            if ( pInfoObj &&
+                                 ((nId = SchModuleDummy::HasID(pInfoObj->GetClassName()) ) != 0) )
                             {
-                                BOOL bSO6 = (nId >= SOFFICE_FILEFORMAT_60);
-                                SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
-                                // #84359# manually inserted OLE object
-                                // => no listener at ScAddress(0,0,0)
-                                // >=SO6: if no series set
-                                // < SO6: if no SomeData set
-                                if ( pChartData &&
-                                    ((!bSO6 && pChartData->SomeData1().Len()) ||
-                                    (bSO6 && pChartData->GetChartRange().maRanges.size())) )
+                                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                                DBG_ASSERT(aIPObj.Is(), "no SvInPlaceObject given");
+                                if (aIPObj.Is())
                                 {
-                                    if ( PastingDrawFromOtherDoc() )
+                                    BOOL bSO6 = (nId >= SOFFICE_FILEFORMAT_60);
+                                    SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                                    // #84359# manually inserted OLE object
+                                    // => no listener at ScAddress(0,0,0)
+                                    // >=SO6: if no series set
+                                    // < SO6: if no SomeData set
+                                    if ( pChartData &&
+                                        ((!bSO6 && pChartData->SomeData1().Len()) ||
+                                        (bSO6 && pChartData->GetChartRange().maRanges.size())) )
                                     {
-                                        // #89247# Remove series ranges from
-                                        // charts not originating from the
-                                        // same document, they become true OLE
-                                        // objects.
-                                        pChartData->SomeData1().Erase();
-                                        pChartData->SomeData2().Erase();
-                                        pChartData->SomeData3().Erase();
-                                        pChartData->SomeData4().Erase();
-                                        SchChartRange aChartRange;
-                                        pChartData->SetChartRange( aChartRange );
-                                        pChartData->SetReadOnly( FALSE );
-                                        SchDLL::Update( aIPObj, pChartData );
-                                    }
-                                    else
-                                    {
-                                        bIsChart = TRUE;
-
-                                        ScChartArray aArray( this, *pChartData );
-                                        ScChartListener* pCL = new ScChartListener(
-                                            aObjName,
-                                            this, aArray.GetRangeList() );
-                                        pChartListenerCollection->Insert( pCL );
-                                        pCL->StartListeningTo();
-                                        pCL->SetUsed( TRUE );
-
-                                        BOOL bForceSave = FALSE;
-
-                                        //  Set ReadOnly flag at MemChart, so Chart knows
-                                        //  about the external data in a freshly loaded document.
-                                        //  #73642# only if the chart really has external data
-                                        if ( aArray.IsValid() )
+                                        if ( PastingDrawFromOtherDoc() )
                                         {
-                                            pChartData->SetReadOnly( TRUE );
+                                            // #89247# Remove series ranges from
+                                            // charts not originating from the
+                                            // same document, they become true OLE
+                                            // objects.
+                                            pChartData->SomeData1().Erase();
+                                            pChartData->SomeData2().Erase();
+                                            pChartData->SomeData3().Erase();
+                                            pChartData->SomeData4().Erase();
+                                            SchChartRange aChartRange;
+                                            pChartData->SetChartRange( aChartRange );
+                                            pChartData->SetReadOnly( FALSE );
+                                            SchDLL::Update( aIPObj, pChartData );
+                                        }
+                                        else
+                                        {
+                                            bIsChart = TRUE;
 
-                                            //  #81525# re-create series ranges from old extra string
-                                            //  if not set (after loading)
-                                            if ( !bSO6 )
+                                            ScChartArray aArray( this, *pChartData );
+                                            ScChartListener* pCL = new ScChartListener(
+                                                aObjName,
+                                                this, aArray.GetRangeList() );
+                                            pChartListenerCollection->Insert( pCL );
+                                            pCL->StartListeningTo();
+                                            pCL->SetUsed( TRUE );
+
+                                            BOOL bForceSave = FALSE;
+
+                                            //  Set ReadOnly flag at MemChart, so Chart knows
+                                            //  about the external data in a freshly loaded document.
+                                            //  #73642# only if the chart really has external data
+                                            if ( aArray.IsValid() )
                                             {
-                                                String aOldData3 = pChartData->SomeData3();
-                                                aArray.SetExtraStrings( *pChartData );
-                                                if ( aOldData3 != pChartData->SomeData3() )
-                                                {
-                                                    //  #96148# ChartRange isn't saved in binary format anyway,
-                                                    //  but SomeData3 (sheet names) has to survive swapping out,
-                                                    //  or the chart can't be saved to 6.0 format.
+                                                pChartData->SetReadOnly( TRUE );
 
-                                                    bForceSave = TRUE;
+                                                //  #81525# re-create series ranges from old extra string
+                                                //  if not set (after loading)
+                                                if ( !bSO6 )
+                                                {
+                                                    String aOldData3 = pChartData->SomeData3();
+                                                    aArray.SetExtraStrings( *pChartData );
+                                                    if ( aOldData3 != pChartData->SomeData3() )
+                                                    {
+                                                        //  #96148# ChartRange isn't saved in binary format anyway,
+                                                        //  but SomeData3 (sheet names) has to survive swapping out,
+                                                        //  or the chart can't be saved to 6.0 format.
+
+                                                        bForceSave = TRUE;
+                                                    }
                                                 }
                                             }
-                                        }
 
-#if 1
-// #74046# initially loaded charts need the number formatter standard precision
-                                        BOOL bEnabled = aIPObj->IsEnableSetModified();
-                                        if (bEnabled)
-                                            aIPObj->EnableSetModified(FALSE);
-                                        pChartData->SetNumberFormatter( GetFormatTable() );
-                                        SchDLL::Update( aIPObj, pChartData );
-                                        //! pChartData got deleted, don't use it anymore
-                                        if (bEnabled)
-                                            aIPObj->EnableSetModified(TRUE);
-#ifndef PRODUCT
-//                                      static BOOL bShown74046 = 0;
-//                                      if ( !bShown74046 && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
-//                                      {
-//                                          bShown74046 = 1;
-//                                          DBG_ERRORFILE( "on incompatible file format save number formatter standard precision in chart" );
-//                                      }
-#endif
-#endif
-                                        if ( bForceSave )
-                                        {
-                                            //  #96148# after adjusting the data that wasn't in the MemChart
-                                            //  in a binary file (ChartRange etc.), the chart object has to be
-                                            //  saved (within the open document, in transacted mode, so the
-                                            //  original file isn't changed yet), so the changes are still
-                                            //  there after the chart is swapped out and loaded again.
-                                            //  The chart can't get the modified flag set, because then it
-                                            //  wouldn't be swapped out at all. So it has to be saved manually
-                                            //  here (which is unnecessary if the chart is modified before it
-                                            //  it swapped out). At this point, we don't have to care about
-                                            //  contents being lost when saving in old binary format, because
-                                            //  the chart was just loaded from that format.
+    #if 1
+    // #74046# initially loaded charts need the number formatter standard precision
+                                            BOOL bEnabled = aIPObj->IsEnableSetModified();
+                                            if (bEnabled)
+                                                aIPObj->EnableSetModified(FALSE);
+                                            pChartData->SetNumberFormatter( GetFormatTable() );
+                                            SchDLL::Update( aIPObj, pChartData );
+                                            //! pChartData got deleted, don't use it anymore
+                                            if (bEnabled)
+                                                aIPObj->EnableSetModified(TRUE);
+    #ifndef PRODUCT
+    //                                          static BOOL bShown74046 = 0;
+    //                                          if ( !bShown74046 && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
+    //                                          {
+    //                                              bShown74046 = 1;
+    //                                              DBG_ERRORFILE( "on incompatible file format save number formatter standard precision in chart" );
+    //                                          }
+    #endif
+    #endif
+                                            if ( bForceSave )
+                                            {
+                                                //  #96148# after adjusting the data that wasn't in the MemChart
+                                                //  in a binary file (ChartRange etc.), the chart object has to be
+                                                //  saved (within the open document, in transacted mode, so the
+                                                //  original file isn't changed yet), so the changes are still
+                                                //  there after the chart is swapped out and loaded again.
+                                                //  The chart can't get the modified flag set, because then it
+                                                //  wouldn't be swapped out at all. So it has to be saved manually
+                                                //  here (which is unnecessary if the chart is modified before it
+                                                //  it swapped out). At this point, we don't have to care about
+                                                //  contents being lost when saving in old binary format, because
+                                                //  the chart was just loaded from that format.
 
-                                            aIPObj->DoSave();
-                                            aIPObj->DoSaveCompleted();
+                                                aIPObj->DoSave();
+                                                aIPObj->DoSaveCompleted();
+                                            }
                                         }
                                     }
                                 }
