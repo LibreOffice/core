@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:25:05 $
+ *  last change: $Author: kz $ $Date: 2004-03-24 12:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1568,7 +1568,7 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
         bCommonBorder = pSectFrm->GetFmt()->GetBalancedColumns().GetValue();
     }
     nLowerSpace = bCommonBorder ?
-                  _pAttrs->GetBottomLine( &rThis ) :
+                  _pAttrs->GetBottomLine( rThis ) :
                   _pAttrs->CalcBottomLine();
 
     if ( rThis.GetShell()->GetDoc()->IsAddParaSpacingToTableCells() &&
