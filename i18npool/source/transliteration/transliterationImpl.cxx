@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-10 18:06:08 $
+ *  last change: $Author: khong $ $Date: 2002-08-20 18:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ TransliterationImpl::compareSubstring(
 
     unistr1++; unistr2++; strlen1--; strlen2--;
     }
-    return strlen1 = strlen2 ? 0 : (strlen1 > strlen2 ? 1 : -1);
+    return strlen1 == strlen2 ? 0 : (strlen1 > strlen2 ? 1 : -1);
 }
 
 
