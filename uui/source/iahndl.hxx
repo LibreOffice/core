@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2001-05-14 15:42:51 $
+ *  last change: $Author: sb $ $Date: 2001-08-07 13:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,49 +62,67 @@
 #ifndef UUI_IAHNDL_HXX
 #define UUI_IAHNDL_HXX
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include "com/sun/star/lang/XServiceInfo.hpp"
 #endif
-#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP_
+#include "com/sun/star/task/PasswordRequestMode.hpp"
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include "com/sun/star/task/XInteractionHandler.hpp"
 #endif
-#ifndef _COM_SUN_STAR_TASK_XPASSWORDCONTAINER_HPP_
-#include <com/sun/star/task/XPasswordContainer.hpp>
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include "com/sun/star/uno/Exception.hpp"
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include "com/sun/star/uno/RuntimeException.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include "com/sun/star/uno/Sequence.hxx"
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include "cppuhelper/implbase2.hxx"
+#endif
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+#ifndef _SOLAR_H
+#include "tools/solar.h"
 #endif
 
-//============================================================================
+namespace com { namespace sun { namespace star {
+    namespace lang { class XMulitServiceFactory; }
+    namespace task {
+        class PasswordRequest;
+        class XInteractionContinuation;
+        class XPasswordContainer;
+    }
+    namespace ucb {
+        class AuthenticationRequest;
+        class HandleCookiesRequest;
+    }
+    namespace uno { class XInterface; }
+} } }
+namespace rtl { class OUString; }
+struct CntHTTPCookieRequest;
+class LoginErrorInfo;
+
 class UUIInteractionHandler:
-    public cppu::OWeakObject,
-    public com::sun::star::lang::XServiceInfo,
-    public com::sun::star::lang::XTypeProvider,
-    public com::sun::star::task::XInteractionHandler
+    public cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
+                                  com::sun::star::task::XInteractionHandler >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XPasswordContainer > mPContainer;
-
 public:
     static sal_Char const m_aImplementationName[];
 
-    UUIInteractionHandler( com::sun::star::uno::Reference<
-                      com::sun::star::lang::XMultiServiceFactory > const & );
+    UUIInteractionHandler(com::sun::star::uno::Reference<
+                                  com::sun::star::lang::XMultiServiceFactory >
+                              const & rServiceFactory)
+        SAL_THROW((com::sun::star::uno::Exception));
 
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface(com::sun::star::uno::Type const & rType)
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL acquire()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL release()
-        throw (com::sun::star::uno::RuntimeException);
+    virtual ~UUIInteractionHandler() SAL_THROW(());
 
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException);
@@ -114,14 +132,8 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
-    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
-
-    virtual
-    com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
-    getTypes() throw (com::sun::star::uno::RuntimeException);
-
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() throw (com::sun::star::uno::RuntimeException);
+    getSupportedServiceNames()
+        throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
     handle(com::sun::star::uno::Reference<
@@ -133,12 +145,61 @@ public:
     getSupportedServiceNames_static();
 
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-#if SUPD >= 590
     SAL_CALL
-#endif // SUPD 590
-    createInstance(com::sun::star::uno::Reference<
-                       com::sun::star::lang::XMultiServiceFactory > const &);
+    createInstance(
+        com::sun::star::uno::Reference<
+                com::sun::star::lang::XMultiServiceFactory > const &
+            rServiceFactory)
+        SAL_THROW((com::sun::star::uno::Exception));
+
+private:
+    com::sun::star::uno::Reference< com::sun::star::task::XPasswordContainer >
+        m_xContainer;
+
+    UUIInteractionHandler(UUIInteractionHandler &); // not implemented
+    void operator =(UUIInteractionHandler); // not implemented
+
+    USHORT executeErrorDialog(ULONG nID, USHORT nMask)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void executeLoginDialog(LoginErrorInfo & rInfo,
+                            rtl::OUString const & rRealm)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    executePasswordDialog(LoginErrorInfo & rInfo,
+                          com::sun::star::task::PasswordRequestMode nMode)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void executeCookieDialog(CntHTTPCookieRequest & rRequest)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleAuthenticationRequest(
+        com::sun::star::ucb::AuthenticationRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handlePasswordRequest(
+        com::sun::star::task::PasswordRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleCookiesRequest(
+        com::sun::star::ucb::HandleCookiesRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
 };
 
 #endif // UUI_IAHNDL_HXX
-
