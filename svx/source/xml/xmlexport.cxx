@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:56:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
                 bDocRet = sal_False;
             }
 
-            // init resolver
-            SvPersist *pPersist = pModel->GetPersist();
+            SfxObjectShell *pPersist = pModel->GetPersist();
             if( pPersist )
             {
                 pObjectHelper = SvXMLEmbeddedObjectHelper::Create( *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE );
@@ -291,7 +290,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
             pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
             xGraphicResolver = pGraphicHelper;
 
-            SvPersist *pPersist = pModel->GetPersist();
+            SfxObjectShell *pPersist = pModel->GetPersist();
             if( pPersist )
             {
                 pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
