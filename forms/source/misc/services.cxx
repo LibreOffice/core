@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:51:58 $
+ *  last change: $Author: hr $ $Date: 2002-03-05 13:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,9 @@ namespace starlang      = ::com::sun::star::lang;
 //.......................................................................................
 #define DECLARE_SERVICE_INFO(classImplName) \
     namespace frm { \
-        extern Reference<XInterface> SAL_CALL classImplName##_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException); \
+        extern ::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface> SAL_CALL \
+            classImplName##_CreateInstance(const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) \
+                throw (::com::sun::star::uno::RuntimeException); \
     }
 
 //---------------------------------------------------------------------------------------
