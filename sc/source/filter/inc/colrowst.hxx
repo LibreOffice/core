@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ private:
                             { if( !pExtTabOpt ) pExtTabOpt = new ScExtTabOptions; return *pExtTabOpt; }
 
 public:
-                        ColRowSettings( void );
+                        ColRowSettings( RootData& rRootData );
                         ~ColRowSettings();
     void                Reset( void );
 

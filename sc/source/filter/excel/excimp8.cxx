@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-29 14:52:44 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,7 +646,7 @@ void ImportExcel8::Verticalpagebreaks( void )
         aIn >> nCol;
         aIn.Ignore( 4 );        // beide Rows ueberlesen
 
-        aColRowBuff.SetVertPagebreak( nCol );
+        pColRowBuff->SetVertPagebreak( nCol );
 
         n--;
     }
@@ -665,7 +665,7 @@ void ImportExcel8::Horizontalpagebreaks( void )
         aIn >> nRow;
         aIn.Ignore( 4 );        // beide Cols ueberlesen
 
-        aColRowBuff.SetHorizPagebreak( nRow );
+        pColRowBuff->SetHorizPagebreak( nRow );
 
         n--;
     }
@@ -1015,7 +1015,7 @@ void ImportExcel8::Labelsst( void )
         if( pCell )
             pD->PutCell( nCol, nRow, nTab, pCell, ( BOOL ) TRUE );
 
-        aColRowBuff.Used( nCol, nRow );
+        pColRowBuff->Used( nCol, nRow );
 
         pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
@@ -1039,7 +1039,7 @@ void ImportExcel8::Label( void )
         if( pCell )
             pD->PutCell( nCol, nRow, nTab, pCell, ( BOOL ) TRUE );
 
-        aColRowBuff.Used( nCol, nRow );
+        pColRowBuff->Used( nCol, nRow );
 
         pCellStyleBuffer->SetXF( nCol, nRow, nXF );
 
@@ -1332,7 +1332,7 @@ void ImportExcel8::Dimensions( void )
     if( nColFirst > nColLast )
         nColFirst = nColLast;
 
-    aColRowBuff.SetDimension(
+    pColRowBuff->SetDimension(
         ScRange( nColFirst, ( UINT16 ) nRowFirst, nTab, nColLast, ( UINT16 ) nRowLast, nTab ) );
 }
 

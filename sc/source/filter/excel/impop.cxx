@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,12 +188,9 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
 {
     pChart = pUsedChartFirst = pUsedChartLast = NULL;
 
-    aColRowBuff.SetDefWidth( STD_COL_WIDTH );
-    aColRowBuff.SetDefHeight( ( UINT16 ) STD_ROW_HEIGHT );
     nTab = nBdshtTab = 0;
     nFirstVisTab = 0xFFFF;
     nIxfeIndex = 0;     // zur Sicherheit auf 0
-    aExtNameBuff.SetBase( 1 );
 
     pPrintRanges = new _ScRangeListTabs;
     pPrintTitles = new _ScRangeListTabs;
@@ -228,11 +225,15 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pExcRoot->pValueFormBuffer = new ValueFormBuffer( pExcRoot );
     pExcRoot->pXFBuffer = new XclImpXFBuffer( *pExcRoot );
 
+    pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
+    pExtNameBuff->SetBase( 1 );
+
+    pColRowBuff = new ColRowSettings( *pExcRoot );      //#94039# prevent empty rootdata
+    pColRowBuff->SetDefWidth( STD_COL_WIDTH );
+    pColRowBuff->SetDefHeight( ( UINT16 ) STD_ROW_HEIGHT );
+
     // ab Biff8
     pExcRoot->nCondRangeCnt = ( UINT32 ) -1;    // GetCondFormStyleName() starts with increment!
-
-    aColRowBuff.Set( pExcRoot );
-    aExtNameBuff.Set( pExcRoot );
 
     pCellStyleBuffer = new XclImpCellStyleBuffer( *pExcRoot );
 
@@ -269,6 +270,9 @@ ImportExcel::~ImportExcel( void )
 
     pExcRoot->pDoc->SetSrcCharSet( eQuellChar );
 
+    delete pExtNameBuff;
+    delete pColRowBuff;
+
     delete pFormConv;
 
     delete pCellStyleBuffer;
@@ -284,7 +288,7 @@ void ImportExcel::Dimensions( void )
     aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
     if( aIn.IsValid() )
-        aColRowBuff.SetDimension(
+        pColRowBuff->SetDimension(
             ScRange( nColFirst, nRowFirst, nTab, nColLast, nRowLast, nTab ) );
 }
 
@@ -305,7 +309,7 @@ void ImportExcel::Blank25( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        aColRowBuff.Used( nCol, nRow );
+        pColRowBuff->Used( nCol, nRow );
         pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
     }
     else
@@ -328,7 +332,7 @@ void ImportExcel::Integer( void )
         ScValueCell* pZelle = new ScValueCell( nInt );
 
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL) TRUE );
-        aColRowBuff.Used( nCol, nRow );
+        pColRowBuff->Used( nCol, nRow );
         pCellStyleBuffer->SetXF( nCol, nRow, 0 );
     }
     else
@@ -360,7 +364,7 @@ void ImportExcel::Number25( void )
         ScValueCell* pZelle = new ScValueCell( fValue );
 
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL) TRUE );
-        aColRowBuff.Used( nCol, nRow );
+        pColRowBuff->Used( nCol, nRow );
 
         pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
@@ -439,7 +443,7 @@ void ImportExcel::Boolerr25( void )
 
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
 
-        aColRowBuff.Used( nCol, nRow );
+        pColRowBuff->Used( nCol, nRow );
 
         pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
@@ -476,7 +480,7 @@ void ImportExcel::Row25( void )
         if( pExcRoot->eHauptDateiTyp == Biff2 )
         {// -------------------- BIFF2
             nRowHeight = ( UINT16 ) ( ( double ) nRowHeight * pExcRoot->fRowScale );
-            aColRowBuff.SetHeight( nRow, nRowHeight );
+            pColRowBuff->SetHeight( nRow, nRowHeight );
         }
         else
         {// -------------------- BIFF5
@@ -488,7 +492,7 @@ void ImportExcel::Row25( void )
             aRowOutlineBuff.SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
                 TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_ZEROHEIGHT ) );
 
-            aColRowBuff.SetRowSettings( nRow, nRowHeight, nGrbit );
+            pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
         }
     }
 }
@@ -670,7 +674,7 @@ void ImportExcel::Verticalpagebreaks( void )
 
     while( n )
     {
-        aColRowBuff.SetVertPagebreak( aIn.ReaduInt16() );
+        pColRowBuff->SetVertPagebreak( aIn.ReaduInt16() );
         n--;
     }
 }
@@ -682,7 +686,7 @@ void ImportExcel::Horizontalpagebreaks( void )
 
     while( n )
     {
-        aColRowBuff.SetHorizPagebreak( aIn.ReaduInt16() );
+        pColRowBuff->SetHorizPagebreak( aIn.ReaduInt16() );
         n--;
     }
 }
@@ -711,12 +715,12 @@ void ImportExcel::Selection( void )
     aIn.Ignore( 6 );
     aIn >> nNumRefs;
 
-    if( (nPane == aColRowBuff.GetActivePane()) && nNumRefs )
+    if( (nPane == pColRowBuff->GetActivePane()) && nNumRefs )
     {
         nNumRefs--;
         aIn.Ignore( nNumRefs * 6 );     // nur letzte Selektion interessiert
         aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-        aColRowBuff.SetSelection( ScRange( ( UINT16 ) nFirstCol, nFirstRow, nTab,
+        pColRowBuff->SetSelection( ScRange( ( UINT16 ) nFirstCol, nFirstRow, nTab,
                                             ( UINT16 ) nLastCol, nLastRow, nTab ) );
     }
 }
@@ -758,7 +762,7 @@ void ImportExcel::Columndefault( void )
         aIn.Ignore( 2 );    // nur 0. Attribut-Byte benutzt
 
         if( nOpt0 & 0x80 )  // Col hidden?
-            aColRowBuff.HideCol( nCol );
+            pColRowBuff->HideCol( nCol );
     }
 }
 
@@ -803,7 +807,7 @@ void ImportExcel::Array25( void )
             for( nRowCnt = nFirstRow ; nRowCnt <= nLastRow ; nRowCnt++ )
             {
                 pCellStyleBuffer->SetXF( nColCnt, nRowCnt, nLastXF );
-                aColRowBuff.Used( nColCnt, nRowCnt );
+                pColRowBuff->Used( nColCnt, nRowCnt );
             }*/
     }
 }
@@ -861,7 +865,7 @@ void ImportExcel::Colwidth( void )
     if( nColLast > MAXCOL )
         nColLast = MAXCOL;
 
-    aColRowBuff.SetWidthRange( nColFirst, nColLast, CalcColWidth( nColWidth ) );
+    pColRowBuff->SetWidthRange( nColFirst, nColLast, CalcColWidth( nColWidth ) );
 }
 
 
@@ -874,7 +878,7 @@ void ImportExcel::Defrowheight2( void )
     nDef &=0x7FFF;
     nDef = ( UINT16 ) ( ( double ) nDef * pExcRoot->fRowScale );
 
-    aColRowBuff.SetDefHeight( nDef );
+    pColRowBuff->SetDefHeight( nDef );
 }
 
 
@@ -973,7 +977,7 @@ void ImportExcel::Font25( void )
 
 void ImportExcel::Pane( void )
 {
-    aColRowBuff.ReadSplit( aIn );
+    pColRowBuff->ReadSplit( aIn );
 }
 
 
@@ -1014,7 +1018,7 @@ void ImportExcel::DefColWidth( void )
     UINT16  nWidth;
     aIn >> nWidth;
 
-    aColRowBuff.SetDefWidth( CalcColWidth( (UINT16) ( (double)nWidth * 292.5 ) ) );
+    pColRowBuff->SetDefWidth( CalcColWidth( (UINT16) ( (double)nWidth * 292.5 ) ) );
 }
 
 
@@ -1040,11 +1044,10 @@ void ImportExcel::Colinfo( void )
         TRUEBOOL( nOpt & EXC_COL_COLLAPSED ), TRUEBOOL( nOpt & EXC_COL_HIDDEN ) );
 
     if( nOpt & EXC_COL_HIDDEN ) // Cols hidden?
-        aColRowBuff.HideColRange( nColFirst, nColLast );
+        pColRowBuff->HideColRange( nColFirst, nColLast );
 
-    aColRowBuff.SetWidthRange( nColFirst, nColLast, CalcColWidth( nColWidth ) );
-
-    aColRowBuff.SetDefaultXF( nColFirst, nColLast, nXF );
+    pColRowBuff->SetWidthRange( nColFirst, nColLast, CalcColWidth( nColWidth ) );
+    pColRowBuff->SetDefaultXF( nColFirst, nColLast, nXF );
 }
 
 
@@ -1060,7 +1063,7 @@ void ImportExcel::Rk( void )
         ScValueCell*    pZelle = new ScValueCell( XclImpHelper::GetDoubleFromRK( nRkNum ) );
 
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
-        aColRowBuff.Used( nCol, nRow );
+        pColRowBuff->Used( nCol, nRow );
 
         pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
@@ -1296,7 +1299,7 @@ void ImportExcel::Standardwidth( void )
     UINT16  nWidth;
     aIn >> nWidth;
 
-    aColRowBuff.SetDefWidth( CalcColWidth( nWidth ), TRUE );
+    pColRowBuff->SetDefWidth( CalcColWidth( nWidth ), TRUE );
 }
 
 
@@ -1506,7 +1509,7 @@ void ImportExcel::Mulrk( void )
                 ScValueCell* pZelle = new ScValueCell( XclImpHelper::GetDoubleFromRK( nRkNum ) );
 
                 pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
-                aColRowBuff.Used( nCol, nRow );
+                pColRowBuff->Used( nCol, nRow );
                 pCellStyleBuffer->SetXF( nCol, nRow, nXF );
             }
         }
@@ -1533,7 +1536,7 @@ void ImportExcel::Mulblank( void )
 
             if( nCol <= MAXCOL )
             {
-                aColRowBuff.Used( nCol, nRow );
+                pColRowBuff->Used( nCol, nRow );
                 pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
             }
         }
@@ -1569,9 +1572,7 @@ void ImportExcel::Rstring( void )
 
             pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
         }
-
-        aColRowBuff.Used( nCol, nRow );
-
+        pColRowBuff->Used( nCol, nRow );
         pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
@@ -1599,8 +1600,7 @@ void ImportExcel::Blank34( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        aColRowBuff.Used( nCol, nRow );
-
+        pColRowBuff->Used( nCol, nRow );
         pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
     }
     else
@@ -1623,9 +1623,7 @@ void ImportExcel::Number34( void )
         DBG_ASSERT( pZelle != NULL, "ImportExcel::Number34(): Nix Zelle!" );
 
         pD->PutCell( nCol, nRow, nTab, pZelle, ( BOOL )TRUE );
-
-        aColRowBuff.Used( nCol, nRow );
-
+        pColRowBuff->Used( nCol, nRow );
         pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
@@ -1671,9 +1669,7 @@ void ImportExcel::Boolerr34( void )
         pZelle->SetDouble( fVal );
 
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
-
-        aColRowBuff.Used( nCol, nRow );
-
+        pColRowBuff->Used( nCol, nRow );
         pCellStyleBuffer->SetXF( nCol, nRow, nXF );
     }
     else
@@ -1700,7 +1696,7 @@ void ImportExcel::Row34( void )
         aRowOutlineBuff.SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
             TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_ZEROHEIGHT ) );
 
-        aColRowBuff.SetRowSettings( nRow, nRowHeight, nGrbit );
+        pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
 
         if( nGrbit & EXC_ROW_GHOSTDIRTY )
             pCellStyleBuffer->SetRowDefXF( nRow, nXF & EXC_ROW_XFMASK );
@@ -1825,7 +1821,7 @@ void ImportExcel::Array34( void )
             for( nRowCnt = nFirstRow ; nRowCnt <= nLastRow ; nRowCnt++ )
             {
                 pCellStyleBuffer->SetXF( nColCnt, nRowCnt, nLastXF );
-                aColRowBuff.Used( nColCnt, nRowCnt );
+                pColRowBuff->Used( nColCnt, nRowCnt );
             }*/
     }
 
@@ -1847,9 +1843,9 @@ void ImportExcel::Defrowheight345( void )
     nDef = ( UINT16 ) ( ( double ) nDef * pExcRoot->fRowScale );
 
     if( nOpt && 0x0002 )
-        aColRowBuff.SetDefHeight( 0 );
+        pColRowBuff->SetDefHeight( 0 );
     else
-        aColRowBuff.SetDefHeight( nDef );
+        pColRowBuff->SetDefHeight( nDef );
 }
 
 
@@ -1910,11 +1906,11 @@ void ImportExcel::TableOp( void )
             pD->InsertTableOp( aTabOpParam, nCol, nRow, nLastCol, nLastRow, aMarkData );
         }
 
-        for( UINT16 nColCnt = nFirstCol + 1; nColCnt <= nLastCol; nColCnt++ )
-            for( UINT16 nRowCnt = nFirstRow; nRowCnt <= nLastRow; nRowCnt++ )
+        for( UINT16 nColIx = nFirstCol + 1; nColIx <= nLastCol; ++nColIx )
+            for( UINT16 nRowIx = nFirstRow; nRowIx <= nLastRow; ++nRowIx )
             {
-                pCellStyleBuffer->SetXF( nColCnt, nRowCnt, nLastXF );
-                aColRowBuff.Used( nColCnt, nRowCnt );
+                pCellStyleBuffer->SetXF( nColIx, nRowIx, nLastXF );
+                pColRowBuff->Used( nColIx, nRowIx );
             }
     }
     else
@@ -1934,14 +1930,14 @@ void ImportExcel::Window2_5( void )
 
     nRow = Min( nRow, (UINT16)MAXROW );
     nCol = Min( nCol, (UINT16)MAXCOL );
-    aColRowBuff.SetVisCorner( nCol, nRow );
+    pColRowBuff->SetVisCorner( nCol, nRow );
 
     if( nOpt & EXC_WIN2_DISPLAYED )
         rExtOpt.SetActTab( nTab );
-    aColRowBuff.SetTabSelected( TRUEBOOL( nOpt & EXC_WIN2_SELECTED ) );
+    pColRowBuff->SetTabSelected( TRUEBOOL( nOpt & EXC_WIN2_SELECTED ) );
 
     if( nOpt & EXC_WIN2_FROZEN )        // Frozen
-        aColRowBuff.SetFrozen( TRUE );
+        pColRowBuff->SetFrozen( TRUE );
 
     if( !( nOpt & EXC_WIN2_DEFAULTCOLOR ) )
     {
@@ -2054,7 +2050,7 @@ void ImportExcel::Bof5( void )
 
 void ImportExcel::ResetBof( void )
 {   // setzt alle Einstellungen fuer neuen Tabellenbeginn zurueck
-    aColRowBuff.Reset();
+    pColRowBuff->Reset();
     pCellStyleBuffer->Reset();
 }
 
@@ -2069,7 +2065,7 @@ void ImportExcel::EndSheet( void )
     aRowOutlineBuff.MakeScOutline();
     aRowOutlineBuff.Reset();
 
-    aColRowBuff.Apply( nTab );
+    pColRowBuff->Apply( nTab );
 
     pCellStyleBuffer->Apply( nTab );
 
@@ -2638,9 +2634,7 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
 
             pD->PutCell( nC, nR, nTab, pZelle, ( BOOL ) TRUE );
         }
-
-        aColRowBuff.Used( nC, nR );
-
+        pColRowBuff->Used( nC, nR );
         pCellStyleBuffer->SetXF( nC, nR, nXF );
     }
     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ void ImportExcel::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
 
             pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
 
-            aColRowBuff.Used( nCol, nRow );
+            pColRowBuff->Used( nCol, nRow );
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_op.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,14 @@ public:
 
 
 
-class ExportBiff5 : public ExportTyp, public ExcRoot
+class ExportBiff5 : public ExportTyp
 {
 private:
     ExcDocument*        pExcDoc;
+
+protected:
+    RootData*           pExcRoot;
+
 public:
                         ExportBiff5( SvStorage&, SvStream&, ScDocument*, CharSet eDest );
     virtual             ~ExportBiff5();

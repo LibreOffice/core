@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:47:49 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ class NameBuffer : private List, public ExcRoot
 private:
     UINT16                  nBase;      // Index-Basis
 public:
-    inline                  NameBuffer( void );
+//    inline                  NameBuffer( void );   //#94039# prevent empty rootdata
     inline                  NameBuffer( RootData* );
     inline                  NameBuffer( RootData*, UINT16 nNewBase );
 
@@ -159,11 +159,11 @@ public:
     BOOL                    Find( const sal_Char* pRefName, UINT16& rIndex );
 };
 
-
-inline NameBuffer::NameBuffer( void )
-{
-    nBase = 0;
-}
+//#94039# prevent empty rootdata
+//inline NameBuffer::NameBuffer( void )
+//{
+//    nBase = 0;
+//}
 
 
 inline NameBuffer::NameBuffer( RootData* p ) : ExcRoot( p )

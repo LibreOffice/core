@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,8 @@
 #endif
 
 
-ColRowSettings::ColRowSettings( void )
+ColRowSettings::ColRowSettings( RootData& rRootData ) :
+    ExcRoot( &rRootData )
 {
     pHorizPb = pVertPb = NULL;
 

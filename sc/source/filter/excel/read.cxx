@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,17 @@ ByteString& AddRecordName( UINT16 nOpcode, ByteString& rRet );
 
 FltError ImportExcel::Read( void )
 {
+#ifdef DEBUGGING
+    BOOL bDebugging = TRUE;
+    if( bDebugging )
+    {
+        Biff8RecDumper  aDumper( *pExcRoot );
+
+        if( aDumper.Dump( aIn ) )
+            return eERR_OK;
+    }
+#endif
+
     const BOOL  bWithDrawLayer = pD->GetDrawLayer() != NULL;
 
     enum Zustand {
@@ -824,7 +835,7 @@ FltError ImportExcel::Read( void )
                         {
                             case Biff5:
                                 eAkt = Z_Biff5Pre;  // Shrfmla Prefetch, Row-Prefetch
-                                aColRowBuff.Reset();
+                                pColRowBuff->Reset();
                                 pCellStyleBuffer->Reset();
                                 nBofLevel = 0;
 
@@ -865,7 +876,7 @@ FltError ImportExcel::Read( void )
                         case 0x0A:                          // EOF          [ 2345]
                             eAkt = Z_Biff5I;
                             aIn.SeekUserPosition(); // und zurueck an alte Position
-                            aColRowBuff.Apply( nTab );
+                            pColRowBuff->Apply( nTab );
                             break;
                         case 0x1A:  Verticalpagebreaks(); break;
                         case 0x1B:  Horizontalpagebreaks(); break;
@@ -1360,7 +1371,7 @@ FltError ImportExcel8::Read( void )
                         {
                             case Biff8:
                                 eAkt = Z_Biff8Pre;  // Shrfmla Prefetch, Row-Prefetch
-                                aColRowBuff.Reset();
+                                pColRowBuff->Reset();
                                 pCellStyleBuffer->Reset();
                                 nBofLevel = 0;
 
@@ -1403,7 +1414,7 @@ FltError ImportExcel8::Read( void )
                         case 0x0A:                          // EOF          [ 2345   ]
                             eAkt = Z_Biff8I;
                             aIn.SeekUserPosition();         // und zurueck an alte Position
-                            aColRowBuff.Apply( nTab );
+                            pColRowBuff->Apply( nTab );
                             break;
                         case 0x12:  Protect(); break;
                         case 0x1A:  Verticalpagebreaks(); break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-23 15:03:02 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ struct ExcelChartData
 
 
 
-class ImportExcel : public ImportTyp, protected ExcRoot
+class ImportExcel : public ImportTyp
 {
 private:
     ExcelChartData*         pChart;             // aktuelle Chart-Daten
@@ -165,7 +165,9 @@ private:
 protected:
     static const double     fExcToTwips;        // Umrechnung 1/256 Zeichen -> Twips
 
-    NameBuffer              aExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
+    RootData*               pExcRoot;
+
+    NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     _ScRangeListTabs*       pPrintRanges;
     _ScRangeListTabs*       pPrintTitles;
     ExcelToSc*              pFormConv;          // Formel-Konverter
@@ -174,7 +176,7 @@ protected:
 
     OutlineBuffer           aColOutlineBuff;    // temporaere Puffer fuer Outline-
     OutlineBuffer           aRowOutlineBuff;    //  Angabe
-    ColRowSettings          aColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
+    ColRowSettings*         pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
     XclImpCellStyleBuffer*  pCellStyleBuffer;   // buffer for cell XF indexes
 
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record

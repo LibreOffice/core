@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-26 16:46:10 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,21 +232,22 @@ class ExcRoot
 private:
 protected:
     RootData*       pExcRoot;
-    inline          ExcRoot( void );
+//    inline          ExcRoot( void );              //#94039# prevent empty rootdata
     inline          ExcRoot( RootData* pNexExcRoot );
 public:
-    inline void     Set( RootData* pExcRoot );
+//    inline void     Set( RootData* pExcRoot );    //#94039# prevent empty rootdata
 };
 
 
 
+//#94039# prevent empty rootdata
 
-inline ExcRoot::ExcRoot( void )
-{
-#ifdef DBG_UTIL
-    pExcRoot = NULL;
-#endif
-}
+//inline ExcRoot::ExcRoot( void )
+//{
+//#ifdef DBG_UTIL
+//    pExcRoot = NULL;
+//#endif
+//}
 
 
 inline ExcRoot::ExcRoot( RootData* pNexExcRoot )
@@ -254,11 +255,12 @@ inline ExcRoot::ExcRoot( RootData* pNexExcRoot )
     pExcRoot = pNexExcRoot;
 }
 
+//#94039# prevent empty rootdata
 
-inline void ExcRoot::Set( RootData* pRD )
-{
-    pExcRoot = pRD;
-}
+//inline void ExcRoot::Set( RootData* pRD )
+//{
+//    pExcRoot = pRD;
+//}
 
 
 

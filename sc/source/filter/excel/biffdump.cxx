@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-24 13:49:15 $
+ *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,7 +977,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 
     if( HasModeNameOnly( nR ) )
         ;
-    else if( HasModeHex( nR ) )
+    else if( HasModeHex( nR ) || (pExcRoot->eGlobalDateiTyp < Biff8) )
         ContDump( nL );
     else if( nMaxBodyLines && nL )
     {
@@ -6952,12 +6952,15 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         pPivotCache = NULL;
 
         // dump substreams
-        DumpSubStream( pExcRoot->pRootStorage, pUserNamesStreamName );
-        DumpSubStream( pExcRoot->pRootStorage, pRevLogStreamName );
+        if( pExcRoot->pRootStorage )
+        {
+            DumpSubStream( pExcRoot->pRootStorage, pUserNamesStreamName );
+            DumpSubStream( pExcRoot->pRootStorage, pRevLogStreamName );
 
-        SvStorageStream*    pContrIn = pExcRoot->pRootStorage->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
-        if( pContrIn )
-            ControlsDump( *pContrIn );
+            SvStorageStream*    pContrIn = pExcRoot->pRootStorage->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
+            if( pContrIn )
+                ControlsDump( *pContrIn );
+        }
     }
 
     return !bEndLoading;
