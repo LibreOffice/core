@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 12:04:10 $
+ *  last change: $Author: tl $ $Date: 2001-08-23 13:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,10 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( Ru
         m_nMinRange = nMax  ;
         m_nMaxRange = nMin  ;
     }
+
+    // assure that m_nValue is within the range
+    if (!(m_nMinRange < m_nValue  &&  m_nValue < m_nMaxRange))
+        m_nValue = m_nMinRange;
 
     impl_recalcRange () ;
 
