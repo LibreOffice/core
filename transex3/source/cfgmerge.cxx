@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:24:39 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 16:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ ByteString sInputFileName;
 ByteString sActFileName;
 ByteString sOutputFile;
 ByteString sMergeSrc;
+String sUsedTempFile;
 
 CfgParser *pParser;
 
@@ -249,15 +250,33 @@ int EndCfgExport()
     return 1;
 }
 
+void removeTempFile(){
+    if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
+        DirEntry aTempFile( sUsedTempFile );
+        aTempFile.Kill();
+    }
+}
+
 /*****************************************************************************/
 extern FILE *GetCfgFile()
 /*****************************************************************************/
 {
+    FILE *pFile = 0;
     // look for valid filename
     if ( sInputFileName.Len()) {
-
-        // able to open file?
-        FILE *pFile = fopen( sInputFileName.GetBuffer(), "r" );
+        if( Export::fileHasUTF8ByteOrderMarker( sInputFileName ) ){
+            DirEntry aTempFile = Export::GetTempFile();
+            DirEntry aSourceFile( String( sInputFileName , RTL_TEXTENCODING_ASCII_US ) );
+            aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
+            String sTempFile = aTempFile.GetFull();
+            Export::RemoveUTF8ByteOrderMarkerFromFile( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ) );
+            pFile = fopen( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ).GetBuffer(), "r" );
+            sUsedTempFile = sTempFile;
+        }else{
+            // able to open file?
+            pFile = fopen( sInputFileName.GetBuffer(), "r" );
+            sUsedTempFile = String::CreateFromAscii("");
+        }
         if ( !pFile )
             fprintf( stderr, "Error: Could not open file %s\n",
                 sInputFileName.GetBuffer());
