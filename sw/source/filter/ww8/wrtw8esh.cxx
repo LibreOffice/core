@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:22:24 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2233,9 +2233,11 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                                          SwFmtVertOrient& _iorVertOri,
                                          const SwFrmFmt& _rFrmFmt )
 {
-    if ( _rFrmFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+    const RndStdIds eAnchor = _rFrmFmt.GetAnchor().GetAnchorId();
+
+    if ( FLY_IN_CNTNT == eAnchor || FLY_AT_FLY == eAnchor )
     {
-        // no conversion for as-character anchored objects
+        // no conversion for as-character or at frame anchored objects
         return false;
     }
 
