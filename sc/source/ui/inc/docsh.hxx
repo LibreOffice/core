@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:13:45 $
+ *  last change: $Author: sab $ $Date: 2001-10-15 11:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ class ScMarkData;
 class ScPaintLockData;
 class ScJobSetup;
 class ScChangeAction;
+class VirtualDevice;
 
 //==================================================================
 
@@ -149,6 +150,8 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     ScAutoStyleList*    pAutoStyleList;
     ScPaintLockData*    pPaintLockData;
     ScJobSetup*         pOldJobSetup;
+
+    VirtualDevice*      pVirtualDevice_100th_mm;
 
     void            InitItems();
     void            DoEnterHandler();
@@ -382,6 +385,8 @@ public:
                         { bDocumentModifiedPending = bVal; }
     BOOL            IsDocumentModifiedPending() const
                         { return bDocumentModifiedPending; }
+
+    VirtualDevice*  GetVirtualDevice_100th_mm();
 
     static ScViewData* GetViewData();
     static USHORT      GetCurTab();

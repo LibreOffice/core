@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: er $ $Date: 2001-08-14 10:18:58 $
+ *  last change: $Author: sab $ $Date: 2001-10-15 11:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #include <offmgr/fltrcfg.hxx>
 #include <so3/clsids.hxx>
 #include <unotools/charclass.hxx>
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
@@ -2084,7 +2087,8 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         bIsEmpty        ( TRUE ), \
         bIsInUndo       ( FALSE ), \
         bDocumentModifiedPending( FALSE ), \
-        nDocumentLock   ( 0 )
+        nDocumentLock   ( 0 ), \
+        pVirtualDevice_100th_mm ( NULL )
 
 //------------------------------------------------------------------
 
@@ -2176,6 +2180,8 @@ __EXPORT ScDocShell::~ScDocShell()
     delete pPaintLockData;
 
     delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
+
+    delete pVirtualDevice_100th_mm;
 }
 
 //------------------------------------------------------------------
@@ -2319,6 +2325,15 @@ Window* ScDocShell::GetDialogParent()
         return Application::GetDefDialogParent();
 }
 
+VirtualDevice* ScDocShell::GetVirtualDevice_100th_mm()
+{
+    if (!pVirtualDevice_100th_mm)
+    {
+        pVirtualDevice_100th_mm = new VirtualDevice;
+        pVirtualDevice_100th_mm->SetMapMode( MAP_100TH_MM );
+    }
+    return pVirtualDevice_100th_mm;
+}
 
 // --- ScDocShellModificator ------------------------------------------
 
@@ -2363,5 +2378,3 @@ void ScDocShellModificator::SetDocumentModified()
         pDoc->BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
     }
 }
-
-
