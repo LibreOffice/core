@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-18 20:19:51 $
+#   last change: $Author: csaba $ $Date: 2000-10-19 12:25:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,9 +83,6 @@ patchinf:
 
 clean:
     @+rm -f patchinf
-    @+rm -rf rtufiles
-    @+mkdir rtufiles
-    @+echo dummy for kepping this directory alive > rtufiles$/dummy
     @+rm -f patcherror
 
 
