@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:44:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2440,82 +2440,78 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
     {
         EffectSequence::iterator aInsertIter( find( pEffect ) );
 
-        sal_Int16 nPara = 0, nParaCount = 0;
-
         const OUString strNumberingLevel( RTL_CONSTASCII_USTRINGPARAM("NumberingLevel") );
         Reference< XEnumerationAccess > xText( xTarget, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
 
-        while( xEnumeration->hasMoreElements()  )
+        std::list< sal_Int16 > aParaList;
+        sal_Int16 nPara;
+
+        // fill the list with all valid paragraphs
+        for( nPara = 0; xEnumeration->hasMoreElements(); nPara++ )
         {
-            xEnumeration->nextElement();
-            nParaCount++;
+            Reference< XTextRange > xRange( xEnumeration->nextElement(), UNO_QUERY );
+            if( xRange.is() && xRange->getString().getLength() )
+            {
+                if( bTextReverse ) // sort them
+                    aParaList.push_front( nPara );
+                else
+                    aParaList.push_back( nPara );
+            }
         }
 
         ParagraphTarget aTarget;
         aTarget.Shape = xTarget;
-        aTarget.Paragraph = bTextReverse ? nParaCount - 1 : 0;
 
-        if( nParaCount )
+        std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
+        std::list< sal_Int16 >::iterator aEnd( aParaList.end() );
+        while( aIter != aEnd )
         {
-            // danger, if bTextReverse then nParaCount will be counted downwards
-            // so don't use it as a value inside the loop
-            while( nParaCount && (aTarget.Paragraph < nParaCount) )
+            aTarget.Paragraph = (*aIter++);
+
+            CustomAnimationEffectPtr pNewEffect;
+            if( bUsed )
             {
-                CustomAnimationEffectPtr pNewEffect;
-                if( bUsed )
-                {
-                    // clone a new effect from first effect
-                    pNewEffect = pEffect->clone();
-                    ++aInsertIter;
-                    aInsertIter = maEffects.insert( aInsertIter, pNewEffect );
-                }
-                else
-                {
-                    // reuse first effect if its not yet used
-                    pNewEffect = pEffect;
-                    bUsed = true;
-                    aInsertIter = find( pNewEffect );
-                }
+                // clone a new effect from first effect
+                pNewEffect = pEffect->clone();
+                ++aInsertIter;
+                aInsertIter = maEffects.insert( aInsertIter, pNewEffect );
+            }
+            else
+            {
+                // reuse first effect if its not yet used
+                pNewEffect = pEffect;
+                bUsed = true;
+                aInsertIter = find( pNewEffect );
+            }
 
-                // set target and group-id
-                pNewEffect->setTarget( makeAny( aTarget ) );
-                pNewEffect->setTargetSubItem( ShapeAnimationSubType::ONLY_TEXT );
-                pNewEffect->setGroupId( pTextGroup->mnGroupId );
-                pNewEffect->setEffectSequence( this );
+            // set target and group-id
+            pNewEffect->setTarget( makeAny( aTarget ) );
+            pNewEffect->setTargetSubItem( ShapeAnimationSubType::ONLY_TEXT );
+            pNewEffect->setGroupId( pTextGroup->mnGroupId );
+            pNewEffect->setEffectSequence( this );
 
-                // set correct node type
-                if( pNewEffect->getParaDepth() < nTextGrouping )
+            // set correct node type
+            if( pNewEffect->getParaDepth() < nTextGrouping )
+            {
+                if( fTextGroupingAuto == -1.0 )
                 {
-                    if( fTextGroupingAuto == -1.0 )
-                    {
-                        pNewEffect->setNodeType( EffectNodeType::ON_CLICK );
-                        pNewEffect->setBegin( 0.0 );
-                    }
-                    else
-                    {
-                        pNewEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
-                        pNewEffect->setBegin( fTextGroupingAuto );
-                    }
-                }
-                else
-                {
-                    pNewEffect->setNodeType( EffectNodeType::WITH_PREVIOUS );
+                    pNewEffect->setNodeType( EffectNodeType::ON_CLICK );
                     pNewEffect->setBegin( 0.0 );
                 }
-
-                pTextGroup->addEffect( pNewEffect );
-
-                if( bTextReverse )
-                {
-                    aTarget.Paragraph--;
-                    nParaCount--;
-                }
                 else
                 {
-                    aTarget.Paragraph++;
+                    pNewEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
+                    pNewEffect->setBegin( fTextGroupingAuto );
                 }
             }
+            else
+            {
+                pNewEffect->setNodeType( EffectNodeType::WITH_PREVIOUS );
+                pNewEffect->setBegin( 0.0 );
+            }
+
+            pTextGroup->addEffect( pNewEffect );
         }
         notify_listeners();
     }
