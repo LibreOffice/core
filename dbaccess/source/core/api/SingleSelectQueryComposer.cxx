@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:01:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ namespace
         _rIterator.setParseTree( pStatementNode );
         _rIterator.traverseAll();
         bool bIsSingleSelect = ( _rIterator.getStatementType() == SQL_STATEMENT_SELECT )
-                            || ( _rIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT );
+                            || ( _rIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT );
 
         // throw the error, if necessary
         if ( !bIsSingleSelect || SQL_ISRULE( pStatementNode, union_statement ) ) // #i4229# OJ
@@ -382,8 +382,8 @@ void SAL_CALL OSingleSelectQueryComposer::setQuery( const ::rtl::OUString& comma
     // first clear the tables and columns
     clearCurrentCollections();
     // now set the new one
+    setQuery_Impl(command);
     m_sOrignal = command;
-    setQuery_Impl(m_sOrignal);
 
     // reset the additive iterator to the same statement
     parseAndCheck_throwError( m_aSqlParser, m_sOrignal, m_aAdditiveIterator, *this );
