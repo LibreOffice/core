@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-22 11:26:29 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 18:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2699,23 +2699,25 @@ IMPL_LINK( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit *, pEdit )
 /*-----------------02.12.97 11:38-------------------
 
 --------------------------------------------------*/
-IMPL_STATIC_LINK(SvxNumOptionsTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
+IMPL_STATIC_LINK( SvxNumOptionsTabPage, GraphicArrivedHdl_Impl,
+                    SvxBrushItem*, pItem )
 {
     PopupMenu* pPopup = pThis->aBitmapMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
-    SvxBmpItemInfo* pInfo = 0;
+    SvxBmpItemInfo* pBmpInfo = 0;
     for ( USHORT i = 0; i < pThis->aGrfBrushItems.Count(); i++ )
     {
         SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)pThis->aGrfBrushItems.GetObject(i);
-        if(&pInfo->pBrushItem == &pItem)
+        if( pInfo->pBrushItem == pItem )
         {
-            pInfo = pInfo; break;
+            pBmpInfo = pInfo;
+            break;
         }
     }
-    if(pInfo)
+    if(pBmpInfo)
     {
-        Image aImage(pItem->GetGraphic()->GetBitmap());
-        pPopup->SetItemImage( pInfo->nItemId, aImage );
+        Image aImage( pItem->GetGraphic()->GetBitmap() );
+        pPopup->SetItemImage( pBmpInfo->nItemId, aImage );
     }
 
     return 0;
