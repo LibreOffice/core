@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-10 13:05:49 $
+#   last change: $Author: hjs $ $Date: 2002-03-27 16:35:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,7 @@ NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -111,6 +109,7 @@ CXXFILES= \
 
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJ)$/unoexe.obj 
+DEPOBJFILES+=$(APP1OBJFILES)
 
 APP1STDLIBS= \
     $(SALLIB)		\
