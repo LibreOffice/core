@@ -6,3 +6,4 @@
 ..\source\unix\exec\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
 ..\source\win32\simplemail\smplmail.xml %_DEST%\xml%_EXT%\smplmail.xml
 ..\source\proxysettings\proxyset.xml %_DEST%\xml%_EXT%\proxyset.xml
+..\source\cmdmail\cmdmail.xml %_DEST%\xml%_EXT%\cmdmail.xml
