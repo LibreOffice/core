@@ -1,0 +1,12 @@
+    <node oor:name="writer8_template" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.text.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>ott</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>true</value></prop>
+        <prop oor:name="PreferredFilter"><value>writer8_template</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Writer 8 Template</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Writer 8</value></prop>
+    </node>
