@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 13:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                 if(xQueries->hasByName(m_sName) && ::cppu::extractInterface(xProp,xQueries->getByName(m_sName)) && xProp.is())
                 {
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= m_sStatement;
-                    m_bEsacpeProcessing = ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
+                    m_bDesign = m_bDesign && (m_bEsacpeProcessing = ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING)));
                     // load the layoutInformation
                     try
                     {
