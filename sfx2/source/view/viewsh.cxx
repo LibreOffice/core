@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:20:49 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,15 +292,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             {
                 if ( !GetViewFrame()->KnowsChildWindow( SID_STYLE_DESIGNER ) )
                     rSet.DisableItem( nSID );
-                break;
-            }
-
-            // Printer-Property
-            case SID_PRINTER_NAME:
-            {
-                SfxPrinter *pPrinter = GetPrinter(TRUE);
-                if ( pPrinter )
-                    rSet.Put( SfxStringItem( SID_PRINTER_NAME, pPrinter->GetName() ) );
                 break;
             }
 
