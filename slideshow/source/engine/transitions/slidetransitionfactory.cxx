@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slidetransitionfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:52:52 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ void FadingSlideChange::performOut(
         // Until half of the active time, fade out old
         // slide. After half of the active time, old slide
         // will be invisible.
-        rSprite->setAlpha( t > 0.5 ? 0.0 : 2.0*t );
+        rSprite->setAlpha( t > 0.5 ? 0.0 : 2.0*(0.5-t) );
     }
 }
 
@@ -603,13 +603,13 @@ SlideChangeAnimationSharedPtr createSlideWipeTransition(
 
 
 SlideChangeAnimationSharedPtr TransitionFactory::createSlideTransition(
-    const SlideSharedPtr&                           pLeavingSlide,
-    const SlideSharedPtr&                           pEnteringSlide,
-    sal_Int16                                       nTransitionType,
-    sal_Int16                                       nTransitionSubType,
-    bool                                            bTransitionDirection,
-    const ::comphelper::OptionalValue< RGBColor >&  rTransitionFadeColor,
-    const SoundPlayerSharedPtr&                     pSoundPlayer            )
+    const SlideSharedPtr&       pLeavingSlide,
+    const SlideSharedPtr&       pEnteringSlide,
+    sal_Int16                   nTransitionType,
+    sal_Int16                   nTransitionSubType,
+    bool                        bTransitionDirection,
+    const RGBColor&             rTransitionFadeColor,
+    const SoundPlayerSharedPtr& pSoundPlayer            )
 {
     ENSURE_AND_THROW(
         pEnteringSlide.get(),
@@ -717,11 +717,32 @@ SlideChangeAnimationSharedPtr TransitionFactory::createSlideTransition(
                     {
                         // black page:
                         boost::optional<SlideSharedPtr> leavingSlide;
-                        if (pLeavingSlide.get() != 0 &&
-                            rTransitionFadeColor.isValid()) {
-                            // only generate, if fade
-                            // effect really needs it.
-                            leavingSlide.reset( pLeavingSlide );
+
+                        switch( nTransitionSubType )
+                        {
+                            case animations::TransitionSubType::CROSSFADE:
+                                // crossfade needs no further setup,
+                                // just blend new slide over existing
+                                // background.
+                                break;
+
+                                // TODO(F1): Implement toColor/fromColor fades
+                            case animations::TransitionSubType::FADETOCOLOR:
+                                // FALLTHROUGH intended
+                            case animations::TransitionSubType::FADEFROMCOLOR:
+                                // FALLTHROUGH intended
+                            case animations::TransitionSubType::FADEOVERCOLOR:
+                                if (pLeavingSlide.get() != 0)
+                                {
+                                    // only generate, if fade
+                                    // effect really needs it.
+                                    leavingSlide.reset( pLeavingSlide );
+                                }
+                                break;
+
+                            default:
+                                ENSURE_AND_THROW( false,
+                                                  "SlideTransitionFactory::createSlideTransition(): Unknown FADE subtype" );
                         }
 
                         return SlideChangeAnimationSharedPtr(
