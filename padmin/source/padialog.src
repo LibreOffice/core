@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 23:27:40 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,26 @@ ModalDialog RID_FONTIMPORT_DIALOG
         WordBreak=TRUE;
         Text = "Bitte wählen Sie zunächst den Ordner aus dem Sie Schriften importieren möchten an. Starten Sie dann das Hinzufügen der selektierten Schriften mit der OK-Schaltfläche.";
         Text [ English ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ english_us ] = "Please select the folder from which you want to import fonts. Add the selected fonts by clicking the OK button.";
+        Text[ portuguese ] = "Seleccione primeiro a pasta a partir da qual deseja importar os tipos de letra e clique depois no botão OK para iniciar o processo.";
+        Text[ russian ] = "Âûáåðèòå ñíà÷àëà ïàïêó, èç êîòîðîé íåîáõîäèìî èìïîðòèðîâàòü øðèôòû. Çàòåì íàæàòèåì íà êíîïêó OK çàïóñòèòå âñòàâêó âûáðàííûõ øðèôòîâ.";
+        Text[ greek ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ dutch ] = "Kies eerst de map waaruit u lettertypen wilt importeren. Start dan het toevoegen van de geselecteerde lettertypen met de OK-knop.";
+        Text[ french ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ spanish ] = "Elija primero la carpeta de la que desee tomar las fuentes y pulse luego la tecla Aceptar para añadirlas.";
+        Text[ finnish ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ italian ] = "Selezionate la cartella da cui volete importare i caratteri. Aggiungete poi i caratteri selezionati tramite il pulsante OK.";
+        Text[ danish ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ swedish ] = "Välj först den mapp från vilken du vill importera teckensnitt. Lägg sedan till de markerade teckensnitten med OK.";
+        Text[ polish ] = "W pierwszej kolejnoœci nale¿y wybraæ folder, z którego importowane zostan¹ czcionki. Klikniêciem przycisku OK nale¿y uruchomiæ funkcjê dodawania zaznaczonych czcionek.";
+        Text[ portuguese_brazilian ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ japanese ] = "‚Ü‚¸Ì«ÝÄ‚ð²ÝÎß°Ä‚·‚éÌ«ÙÀÞ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B‚»‚ê‚©‚ç‘I‘ð‚µ‚½Ì«ÝÄ‚ð’Ç‰Á‚·‚é‚Ì‚É OK ÎÞÀÝ‚ð‰Ÿ‚µ‚Ü‚·B";
+        Text[ korean ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ chinese_simplified ] = "ÏÈÑ¡ÔñÒªÊäÈëµÄ×ÖÌåµÄÎÄ¼þ¼Ð¡£È»ºóµã»÷È·¶¨°´Å¥£¬ÐÂÔöÒÑ¾­Ñ¡ÖÐµÄ×ÖÌå¡£";
+        Text[ chinese_traditional ] = "¥ý¿ï¾Ü­n¶×¤J¦r«¬ªº¸ê®Æ§¨¡CµM«á«öÀ»½T©w«ö¶s¡A·s¼W¤w¸g¿ï¨úªº¦r«¬¡C";
+        Text[ turkish ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ arabic ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
+        Text[ catalan ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
     };
     GroupBox RID_FIMP_GRP_FROM
     {
@@ -132,6 +152,27 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Size = MAP_APPFONT( 145, 10 );
         Text = "Beim Hinzufügen nur ~Softlinks anlegen";
         Text [ English ] = "Create ~Softlinks only";
+        Text[ language_user1 ] = "ZL: well, Softlinks? I suppose only a Link is added in. ";
+        Text[ english_us ] = "Create ~soft links only";
+        Text[ portuguese ] = "Criar apenas ligações simbólicas";
+        Text[ russian ] = "Create ~Softlinks only";
+        Text[ greek ] = "Create ~Softlinks only";
+        Text[ dutch ] = "Bij het toevoegen alleen ~softlinks aanleggen";
+        Text[ french ] = "Create ~Softlinks only";
+        Text[ spanish ] = "Al añadir, crear solo softlinks";
+        Text[ finnish ] = "Create ~Softlinks only";
+        Text[ italian ] = "Crea solo collegamento simbolico";
+        Text[ danish ] = "Create ~Softlinks only";
+        Text[ swedish ] = "Skapa bara ~softlinks vid tillägg";
+        Text[ polish ] = "Create ~Softlinks only";
+        Text[ portuguese_brazilian ] = "Create ~Softlinks only";
+        Text[ japanese ] = "’Ç‰ÁŽž‚É¿ÌÄØÝ¸‚Ì‚ÝŠi”[";
+        Text[ korean ] = "Create ~Softlinks only";
+        Text[ chinese_simplified ] = "ÐÂÔöÊ±Ö»¼ÓÈëÁ´½Ó";
+        Text[ chinese_traditional ] = "·s¼W®É¶È´¡¤J±¶®|";
+        Text[ turkish ] = "Create ~Softlinks only";
+        Text[ arabic ] = "Create ~Softlinks only";
+        Text[ catalan ] = "Create ~Softlinks only";
     };
     OKButton RID_FIMP_BTN_OK
     {
@@ -150,28 +191,48 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Size = MAP_APPFONT( 50, 14 );
         Text = "~Alle markieren";
         Text [ English ] = "~Select all";
+        Text[ english_us ] = "~Select All";
+        Text[ portuguese ] = "~Seleccionar tudo";
+        Text[ russian ] = "~Âûäåëèòü âñå";
+        Text[ greek ] = "ÅðéëïãÞ üë~ùí";
+        Text[ dutch ] = "~Alle markeren";
+        Text[ french ] = "~Select all";
+        Text[ spanish ] = "~Seleccionar todos";
+        Text[ finnish ] = "~Select all";
+        Text[ italian ] = "~Seleziona tutto";
+        Text[ danish ] = "~Select all";
+        Text[ swedish ] = "Markera ~alla";
+        Text[ polish ] = "Zaznacz wszystko";
+        Text[ portuguese_brazilian ] = "~Select all";
+        Text[ japanese ] = "‚·‚×‚Ä‘I‘ð";
+        Text[ korean ] = "~Select all";
+        Text[ chinese_simplified ] = "È«²¿Ñ¡ÖÐ";
+        Text[ chinese_traditional ] = "¥þ³¡¿ï¨ú";
+        Text[ turkish ] = "~Select all";
+        Text[ arabic ] = "~Select all";
+        Text[ catalan ] = "~Select all";
     };
     String RID_FIMP_STR_IMPORTOP
     {
         Text = "Füge Schriften hinzu";
         Text[ English ] = "Adding fonts";
-        Text[ english_us ] = "Importing fonts";
-        Text[ portuguese ] = "Importar tipos de letra";
-        Text[ russian ] = "Èìïîðò øðèôòîâ";
+        Text[ english_us ] = "Add fonts";
+        Text[ portuguese ] = "Adicionar tipos de letra";
+        Text[ russian ] = "Äîáàâèòü øðèôòû";
         Text[ greek ] = "ÅéóáãùãÞ ãñáììáôïóåéñþí";
         Text[ dutch ] = "Lettertypen worden geïmporteerd";
         Text[ french ] = "Import de polices";
-        Text[ spanish ] = "Fuentes importadas";
+        Text[ spanish ] = "Añade fuentes";
         Text[ finnish ] = "Importing fonts";
         Text[ italian ] = "Importa font";
         Text[ danish ] = "Importing fonts";
-        Text[ swedish ] = "Importerar teckensnitt";
-        Text[ polish ] = "Importuj czcionki";
+        Text[ swedish ] = "Lägger till teckensnitt";
+        Text[ polish ] = "Dodaj czcionki";
         Text[ portuguese_brazilian ] = "Importing fonts";
-        Text[ japanese ] = "Ì«ÝÄ‚ð²ÝÎß°Ä‚µ‚Ü‚·";
+        Text[ japanese ] = "Ì«ÝÄ‚ð’Ç‰Á‚µ‚Ü‚·";
         Text[ korean ] = "±Û²Ã¡¡°¡Á®¿À±â";
-        Text[ chinese_simplified ] = "ÊäÈë×ÖÌå";
-        Text[ chinese_traditional ] = "¿é¤J¦r«¬";
+        Text[ chinese_simplified ] = "ÐÂÔö×ÖÌå";
+        Text[ chinese_traditional ] = "·s¼W¦r«¬";
         Text[ turkish ] = "Importing fonts";
         Text[ arabic ] = "ÇÓÊíÑÇÏ ÎØæØ";
         Text[ catalan ] = "Fuentes importadas";
@@ -266,10 +327,10 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ italian ] = "Impossibile installare il font\n%s\nperché non è stato trovato il rispettivo file di formato (con estensione .afm). I file di formato si possono creare ad esempio con ghostscript e si devono trovare nella stessa cartella dei font oppure nella rispettiva sottocartella afm.";
         Text[ danish ] = "Noo format file ( with .afm extension ) for font\n%s\n was found, hence the font will not be installed. Format files can be made e.g. with ghostscript and have to reside in the same directory as the font file or in its afm subdir ectory.";
         Text[ swedish ] = "Det hittades ingen formatfil (med filtillägget .afm) till teckensnittsfilen\n%s\n, varför den inte kan installeras. Formatfiler kan t.ex. skapas med ghostscript och måste finnas i samma katalog som teckensnittsfilerna eller i katalogens underordnade kataloger.";
-        Text[ polish ] = "Czcionka\n%s\nnie zostanie zainstalowana, poniewa¿ nie znaleziono dla niej ¿adnego pliku formatu (z koñcówk¹ .afm ). Pliki formatu mo¿na utworzyæ n.p. za pomoc¹ programu ghostscript. Musz¹ siê one znajdowaæ w tym samym katalogu, co pliki czcionki lub w jego katalogu podrzêdnym afm.";
+        Text[ polish ] = "Czcionka\n%s\nnie zostanie zainstalowana, poniewa¿ nie znaleziono dla niej ¿adnego pliku formatu (z koñcówk¹ .afm ). Pliki formatu mo¿na utworzyæ np. za pomoc¹ programu ghostscript. Musz¹ siê one znajdowaæ w tym samym katalogu, co pliki czcionki, lub w jego katalogu podrzêdnym afm.";
         Text[ portuguese_brazilian ] = "Noo format file ( with .afm extension ) for font\n%s\n was found, hence the font will not be installed. Format files can be made e.g. with ghostscript and have to reside in the same directory as the font file or in its afm subdir ectory.";
         Text[ japanese ] = "Ì«ÝÄÌ§²Ù\n%s\n‚Ì‘Ž®Ì§²Ù(.afm Šg’£Žq)‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚ÅA²Ý½Ä°Ù‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B‘Ž®Ì§²Ù‚ÍAghostscript ‚È‚Ç‚Åì¬‚Å‚«‚Ü‚·‚ªA‚»‚ÌÛ‚É‘Ž®Ì§²Ù‚Æ“¯‚¶ÃÞ¨Ú¸ÄØ‚©A‚ ‚é‚¢‚Í‚»‚Ì»ÌÞÃÞ¨Ú¸ÄØ‚É afm ‚É‚ ‚é‚±‚Æ‚ª•K—v‚Å‚·B";
-        Text[ korean ] = "±Û²Ã\n%s\n ¿¡¡¡´ëÇÑ¡¡Æ÷¸ËÆÄÀÏ (È®ÀåÀÚ .afm  )À»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù, µû¶ó¼­¡¡¼³Ä¡ÇÒ¡¡¼ö¡¡¾ø½À´Ï´Ù. Æ÷¸ËÆÄÀÏÀº¡¡¿¹¸¦¡¡µé¸é¡¡°í½ºÆ®½ºÅ©¸³Æ®·Î¡¡¸¸µé¼ö¡¡ÀÖÀ¸¸ç£¬±Û²ÃÆÄÀÏ°ú¡¡µ¿ÀÏÇÑ¡¡µð·ºÅä¸®¿¡¡¡¶Ç´Â¡¡ÀÌ°ÍÀÇ¡¡ÇÏÀ§µð·ºÅä¸®¿¡¡¡ÀÖ¾î¾ßÇÕ´Ï´Ù.";
+        Text[ korean ] = "±Û²Ã\n%s\n¿¡¡¡´ëÇÑ¡¡Æ÷¸ËÆÄÀÏ ( È®ÀåÀÚ .afm )À»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù, µû¶ó¼­¡¡¼³Ä¡ÇÒ¡¡¼ö¡¡¾ø½À´Ï´Ù. Æ÷¸ËÆÄÀÏÀº¡¡¿¹¸¦¡¡µé¸é¡¡°í½ºÆ®½ºÅ©¸³Æ®·Î¡¡¸¸µé¼ö¡¡ÀÖÀ¸¸ç£¬±Û²ÃÆÄÀÏ°ú¡¡µ¿ÀÏÇÑ¡¡µð·ºÅä¸®¿¡¡¡¶Ç´Â¡¡ÀÌ°ÍÀÇ¡¡ÇÏÀ§µð·ºÅä¸®¿¡¡¡ÀÖ¾î¾ßÇÕ´Ï´Ù.";
         Text[ chinese_simplified ] = "Ã»ÓÐÕÒµ½×ÖÌå\n%s\nµÄ¸ñÊ½ÎÄ¼þ(À©Õ¹Ãû .afm )£¬Òò´ËÎÞ·¨°²×°Õâ¸ö×ÖÌå¡£¸ñÊ½ÎÄ¼þÊÇÓÉ ghostscript Éú³ÉµÄ£¬²¢´æ·ÅÔÚÏàÍ¬µÄ×ÖÌåÄ¿Â¼»òÆä×ÓÄ¿Â¼ afm Ö®ÖÐ¡£";
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì¦r«¬\n%s\nªº®æ¦¡ÀÉ®×(°ÆÀÉ¦W .afm )¡A¦]¦¹µLªk¦w¸Ë³o­Ó¦r«¬¡C®æ¦¡ÀÉ®×¬O¥Ñ ghostscript ¥Í¦¨¡A¦}¦s©ñ¦b¬Û¦Pªº¦r«¬¥Ø¿ý©Î¨ä¤l¥Ø¿ý afm ¤§¤¤¡C";
         Text[ turkish ] = "Noo format file ( with .afm extension ) for font\n%s\n was found, hence the font will not be installed. Format files can be made e.g. with ghostscript and have to reside in the same directory as the font file or in its afm subdir ectory.";
@@ -294,7 +355,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ polish ] = "Skopiowanie pliku metryki nale¿¹cego do pliku czcionki\n   %s\nnie by³o mo¿liwe. Czcionka nie zostanie zainstalowana.";
         Text[ portuguese_brazilian ] = "The metric file for font file\n   %s\ncould not be copied. The font wille not be installed.";
         Text[ japanese ] = "Ì«ÝÄÌ§²Ù\n   %s\n‚ÌÒÄØ¯¸Ì§²Ù‚ÍAºËß°‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½BÌ«ÝÄ‚Í²Ý½Ä°Ù‚³‚ê‚Ü‚¹‚ñB";
-        Text[ korean ] = " ±Û²ÃÆÄÀÏ\n   %s\nÀÇ¡¡¸ÞÆ®¸¯ÆÄÀÏÀ»¡¡º¹»çÇÏÁö¸øÇß½À´Ï´Ù. ±Û²ÃÀº¡¡¼³Ä¡µÇÁö¡¡¾Ê½À´Ï´Ù.";
+        Text[ korean ] = "±Û²ÃÆÄÀÏ\n   %s\nÀÇ¡¡¸ÞÆ®¸¯ÆÄÀÏÀ»¡¡º¹»çÇÏÁö¸øÇß½À´Ï´Ù. ±Û²ÃÀº¡¡¼³Ä¡µÇÁö¡¡¾Ê½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÎÞ·¨¸´ÖÆ×ÖÌå¶ÈÁ¿ÎÄ¼þ\n   %s\n¡£ÎÞ·¨°²×°Õâ¸ö×ÖÌå¡£";
         Text[ chinese_traditional ] = "µLªkÎ`»s¦r«¬«×¶qÀÉ®×\n   %s\n¡CµLªk¦w¸Ë³o­Ó¦r«¬¡C";
         Text[ turkish ] = "The metric file for font file\n   %s\ncould not be copied. The font wille not be installed.";
@@ -344,7 +405,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ polish ] = "Instalacja czionek nie jest mo¿liwa, poniewa¿ nie znaleziono na œcie¿ce fontów (fontpath) ¿adnego katalogu z plikiem fonts.dir, który mo¿na by by³o zapisaæ.";
         Text[ portuguese_brazilian ] = "In the fontpath there is no directory containing a writeable fonts.dir file. Therefore no fonts can be installed.";
         Text[ japanese ] = "‘‚«ž‚Ý‰Â”\\‚È fonts.dir Ì§²Ù‚ðŠÜ‚ÞÃÞ¨Ú¸ÄØ‚ÍAÌ«ÝÄÊß½‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BÌ«ÝÄ‚Í²Ý½Ä°Ù‚Å‚«‚Ü‚¹‚ñB";
-        Text[ korean ] = " ±Û²Ã°æ·Î¿¡¼­ ¾µ ¼ö ÀÖ´Â ±Û²Ã.dir ÆÄÀÏÀ»¡¡Æ÷ÇÔÇÏ°í¡¡ÀÖ´Â¡¡µð·ºÅä¸®¸¦¡¡Ã£Áö ¸øÇß½À´Ï´Ù£®±Û²ÃÀº ¼³Ä¡µÉ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ korean ] = "±Û²Ã°æ·Î¿¡¼­ ¾µ ¼ö ÀÖ´Â ±Û²Ã.dir ÆÄÀÏÀ»¡¡Æ÷ÇÔÇÏ°í¡¡ÀÖ´Â¡¡µð·ºÅä¸®¸¦¡¡Ã£Áö ¸øÇß½À´Ï´Ù£®±Û²ÃÀº ¼³Ä¡µÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ chinese_simplified ] = "×ÖÌåÂ·¾¶Ö®ÖÐÃ»ÓÐÓÐÐ§µÄ¿É¶ÁÐ´µÄ fonts.dir ÎÄ¼þ¡£Òò´ËÎÞ·¨°²×°ÈÎºÎ×ÖÌå¡£";
         Text[ chinese_traditional ] = "¦r«¬¸ô®|¤§¤¤¨S¦³¦³®Äªº¥iÅª¼gªº fonts.dir ÀÉ®×¡C¦]¦¹µLªk¦w¸Ë¥ô¦ó¦r«¬¡C";
         Text[ turkish ] = "In the fontpath there is no directory containing a writeable fonts.dir file. Therefore no fonts can be installed.";
@@ -356,44 +417,44 @@ ModalDialog RID_FONTIMPORT_DIALOG
     {
         Text = "Es wurden %d neue Schriften hinzugefügt.";
         Text [ English ] = "%d new fonts were added.";
-        Text[ english_us ] = "%d new fonts were installed.";
+        Text[ english_us ] = "%d new fonts were added.";
         Text[ portuguese ] = "Instalados %d novos tipos de letra.";
-        Text[ russian ] = "Èíñòàëëèðîâàíî %d íîâûõ øðèôòà(îâ).";
+        Text[ russian ] = "Äîáàâëåíî %d íîâûõ øðèôòà(îâ).";
         Text[ greek ] = "¸÷ïõí åãêáôáóôáèåß %d íÝåò ãñáììáôïóåéñÝò.";
         Text[ dutch ] = "Er werden %d nieuwe lettertypen geïnstalleerd.";
         Text[ french ] = "%d nouvelles polices installées.";
-        Text[ spanish ] = "Se instalaron %d nuevas fuentes.";
+        Text[ spanish ] = "Se añadieron %d nuevas fuentes.";
         Text[ finnish ] = "%d new fonts were installed.";
         Text[ italian ] = "Sono stati installati %d nuovi font.";
         Text[ danish ] = "%d new fonts were installed.";
-        Text[ swedish ] = "%d nya teckensnitt har installerats.";
-        Text[ polish ] = "Zainstalowano %d nowych czionek.";
+        Text[ swedish ] = "%d nya teckensnitt har lagts till.";
+        Text[ polish ] = "Dodano %d nowych czionek.";
         Text[ portuguese_brazilian ] = "%d new fonts were installed.";
-        Text[ japanese ] = "%d V‚µ‚¢Ì«ÝÄ‚ª²Ý½Ä°Ù‚³‚ê‚Ü‚µ‚½B";
+        Text[ japanese ] = "V‚µ‚¢Ì«ÝÄ‚ª %d ’Ç‰Á‚³‚ê‚Ü‚µ‚½B";
         Text[ korean ] = "%d »õ¡¡±Û²ÃÀÌ¡¡¼³Ä¡µÇ¾ú½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÒÑ¾­°²×° %d ÐÂµÄ×ÖÌå¡£";
-        Text[ chinese_traditional ] = "¤w¸g¦w¸Ë·s¦r«¬ %d ¡C";
+        Text[ chinese_simplified ] = "ÒÑ¾­ÐÂÔö %d ¸öÐÂ×ÖÌå¡£";
+        Text[ chinese_traditional ] = "¤w¸g¦w¸Ë %d ·sªº¦r«¬¡C";
         Text[ turkish ] = "%d new fonts were installed.";
         Text[ arabic ] = "Êã ÊËÈíÊ %d ÎØÇó (ÎØæØ) ÌÏíÏÇð (ÌÏíÏÉ).";
         Text[ catalan ] = "Se instalaron %d nuevas fuentes.";
     };
-    Text[ english_us ] = "Import Fonts";
-    Text[ portuguese ] = "Importar tipos de letra";
-    Text[ russian ] = "Èìïîðò øðèôòîâ";
+    Text[ english_us ] = "Add Fonts";
+    Text[ portuguese ] = "Adicionar tipos de letra";
+    Text[ russian ] = "Äîáàâèòü øðèôòû";
     Text[ greek ] = "ÅéóáãùãÞ ãñáììáôïóåéñþí";
-    Text[ dutch ] = "Lettertypen importeren";
+    Text[ dutch ] = "Lettertypen toevoegen";
     Text[ french ] = "Import de polices";
-    Text[ spanish ] = "Importar fuentes";
+    Text[ spanish ] = "Añadir fuentes";
     Text[ finnish ] = "Import Fonts";
     Text[ italian ] = "Importa font";
     Text[ danish ] = "Import fonts";
-    Text[ swedish ] = "Importera teckensnitt";
-    Text[ polish ] = "Importuj czcionki";
+    Text[ swedish ] = "Lägg till teckensnitt";
+    Text[ polish ] = "Dodaj czcionki";
     Text[ portuguese_brazilian ] = "Import fonts";
-    Text[ japanese ] = "Ì«ÝÄ‚Ì²ÝÎß°Ä";
+    Text[ japanese ] = "Ì«ÝÄ‚Ì’Ç‰Á";
     Text[ korean ] = "±Û²Ã¡¡°¡Á®¿À±â";
-    Text[ chinese_simplified ] = "ÊäÈë×ÖÌå";
-    Text[ chinese_traditional ] = "¿é¤J¦r«¬";
+    Text[ chinese_simplified ] = "ÐÂÔö×ÖÌå";
+    Text[ chinese_traditional ] = "·s¼W¦r«¬";
     Text[ turkish ] = "Import fonts";
     Text[ arabic ] = "ÇÓÊíÑÇÏ ÎØæØ";
     Text[ catalan ] = "Importar fuentes";
@@ -416,17 +477,17 @@ ModalDialog RID_PADIALOG
         Size = MAP_APPFONT( 50, 15 );
         Text = "Schließen";
         Text [ english ] = "Close";
-        Text[ english_us ] = "~Close";
+        Text[ english_us ] = "Close";
         Text[ portuguese ] = "~Fechar";
-        Text[ russian ] = "~Çàêðûòü";
+        Text[ russian ] = "~??àê????????";
         Text[ greek ] = "Êëåß~óéìï";
-        Text[ dutch ] = "~Sluiten";
+        Text[ dutch ] = "Sluiten";
         Text[ french ] = "~Fermer";
         Text[ spanish ] = "~Cerrar";
         Text[ italian ] = "C~hiudi";
         Text[ danish ] = "~Close";
-        Text[ swedish ] = "~Stäng";
-        Text[ polish ] = "~Zamknij";
+        Text[ swedish ] = "Stäng";
+        Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "~Close";
         Text[ japanese ] = "•Â‚¶‚é(~C)";
         Text[ korean ] = "´Ý±â(~C)";
@@ -481,7 +542,7 @@ ModalDialog RID_PADIALOG
         Text[ english_us ] = "Command :";
         Text[ portuguese ] = "Comando :";
         Text[ russian ] = "Êîìàíäà :";
-        Text[ greek ] = "Command :";
+        Text[ greek ] = "ÅíôïëÞ :";
         Text[ dutch ] = "Commando :";
         Text[ french ] = "Commande :";
         Text[ spanish ] = "Comando :";
@@ -513,7 +574,7 @@ ModalDialog RID_PADIALOG
         Text[ english_us ] = "Driver :";
         Text[ portuguese ] = "Controlador :";
         Text[ russian ] = "Äðàéâåð :";
-        Text[ greek ] = "Driver :";
+        Text[ greek ] = "Ðñüãñáììá ïäÞãçóçò :";
         Text[ dutch ] = "Driver :";
         Text[ french ] = "Pilote :";
         Text[ spanish ] = "Controlador :";
@@ -545,7 +606,7 @@ ModalDialog RID_PADIALOG
         Text[ english_us ] = "Location :";
         Text[ portuguese ] = "Posição :";
         Text[ russian ] = "Ðàñïîëîæåíèå :";
-        Text[ greek ] = "Location :";
+        Text[ greek ] = "Ôïðïèåóßá :";
         Text[ dutch ] = "Locatie :";
         Text[ french ] = "Emplacement :";
         Text[ spanish ] = "Ubicación :";
@@ -577,7 +638,7 @@ ModalDialog RID_PADIALOG
         Text[ english_us ] = "Comment :";
         Text[ portuguese ] = "Comentário :";
         Text[ russian ] = "Êîììåíòàðèé :";
-        Text[ greek ] = "Comment :";
+        Text[ greek ] = "Ó÷üëéï :";
         Text[ dutch ] = "Commentaar :";
         Text[ french ] = "Commentaire :";
         Text[ spanish ] = "Comentario :";
@@ -661,21 +722,21 @@ ModalDialog RID_PADIALOG
         Text = "~Standard";
         Text [english] = "~Default";
         Text[ language_user1 ] = "EM30.3.01 this refers to the Default Printer";
-        Text[ english_us ] = "Default";
+        Text[ english_us ] = "~Default";
         Text[ portuguese ] = "~Padrão";
         Text[ russian ] = "Ïî óìîë÷àíèþ";
         Text[ greek ] = "Ïñéóìüò ùò åêôõðùôÞ ðñïåðéëïãÞò";
         Text[ dutch ] = "~Standaard";
         Text[ french ] = "Par ~défaut";
         Text[ spanish ] = "~Estándar";
-        Text[ italian ] = "Imposta come stampante standard";
+        Text[ italian ] = "~Standard";
         Text[ danish ] = "~Set as default Printer";
-        Text[ swedish ] = "St~andard";
-        Text[ polish ] = "Drukarka domyœlna";
+        Text[ swedish ] = "~Standard";
+        Text[ polish ] = "Domyœlna";
         Text[ portuguese_brazilian ] = "~Set as default Printer";
         Text[ japanese ] = "•W€";
         Text[ korean ] = "±âº»(~S)";
-        Text[ chinese_simplified ] = "Ä¬ÈÏµÄ´òÓ¡»ú";
+        Text[ chinese_simplified ] = "Ä¬ÈÏ´òÓ¡»ú";
         Text[ chinese_traditional ] = "Àq»{¦Lªí¾÷";
         Text[ turkish ] = "~Set as default Printer";
         Text[ arabic ] = "ÇÝÊÑÇÖíÉ";
@@ -810,7 +871,7 @@ ModalDialog RID_PADIALOG
         Text[ portuguese_brazilian ] = "default printer";
         Text[ japanese ] = "•W€ÌßØÝÀ";
         Text[ korean ] = "±âº» ÇÁ¸°ÅÍ";
-        Text[ chinese_simplified ] = "Ä¬ÈÏµÄ´òÓ¡»ú";
+        Text[ chinese_simplified ] = "Ä¬ÈÏ´òÓ¡»ú";
         Text[ chinese_traditional ] = "Àq»{ªº¦Lªí¾÷";
         Text[ turkish ] = "default printer";
         Text[ arabic ] = "ÇáØÇÈÚÉ ÇáÇÝÊÑÇÖíÉ";
@@ -824,7 +885,7 @@ ModalDialog RID_PADIALOG
         Text[ english_us ] = "Rename";
         Text[ portuguese ] = "Mudar nome";
         Text[ russian ] = "Ïåðåèìåíîâàòü";
-        Text[ greek ] = "Rename";
+        Text[ greek ] = "Ìåôïíïìáóßá";
         Text[ dutch ] = "Naam wijzigen";
         Text[ french ] = "Renommer";
         Text[ spanish ] = "Cambiar nombre";
@@ -1174,22 +1235,22 @@ ModalDialog RID_FONTNAMEDIALOG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Entfernen..." ;
         Text [ English ] = "~Remove..." ;
-        Text[ english_us ] = "~Remove";
-        Text[ portuguese ] = "~Remover";
-        Text[ russian ] = "~Óáðàòü";
+        Text[ english_us ] = "~Remove...";
+        Text[ portuguese ] = "~Remover...";
+        Text[ russian ] = "~Óáðàòü...";
         Text[ greek ] = "ÄéáãñáöÞ";
-        Text[ dutch ] = "~Verwijderen";
+        Text[ dutch ] = "~Verwijderen...";
         Text[ french ] = "~Supprimer";
-        Text[ spanish ] = "~Eliminar";
+        Text[ spanish ] = "~Eliminar...";
         Text[ italian ] = "Rimuo~vi";
         Text[ danish ] = "~Remove";
         Text[ swedish ] = "Ta b~ort";
-        Text[ polish ] = "Usuñ";
+        Text[ polish ] = "Usuñ...";
         Text[ portuguese_brazilian ] = "~Remove";
-        Text[ japanese ] = "íœ(~R)";
+        Text[ japanese ] = "íœ...(~R)";
         Text[ korean ] = "Á¦°Å(~R)";
-        Text[ chinese_simplified ] = "É¾³ý(~R)";
-        Text[ chinese_traditional ] = "²¾°£(~R)";
+        Text[ chinese_simplified ] = "ÒÆ³ý(~R)...";
+        Text[ chinese_traditional ] = "²¾°£(~R)...";
         Text[ turkish ] = "~Remove";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ finnish ] = "~Remove";
@@ -1201,6 +1262,26 @@ ModalDialog RID_FONTNAMEDIALOG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Hinzufügen...";
         Text [ English ] = "~Add...";
+        Text[ english_us ] = "~Add...";
+        Text[ portuguese ] = "~Adicionar...";
+        Text[ russian ] = "~Äîáàâèòü...";
+        Text[ greek ] = "~ÐñïóèÞêç...";
+        Text[ dutch ] = "~Toevoegen...";
+        Text[ french ] = "~Add...";
+        Text[ spanish ] = "~Añadir...";
+        Text[ finnish ] = "~Add...";
+        Text[ italian ] = "~Importa...";
+        Text[ danish ] = "~Add...";
+        Text[ swedish ] = "~Lägg till...";
+        Text[ polish ] = "Dodaj...";
+        Text[ portuguese_brazilian ] = "~Add...";
+        Text[ japanese ] = "’Ç‰Á...";
+        Text[ korean ] = "~Add...";
+        Text[ chinese_simplified ] = "ÐÂÔö...";
+        Text[ chinese_traditional ] = "·s¼W...";
+        Text[ turkish ] = "~Add...";
+        Text[ arabic ] = "~Add...";
+        Text[ catalan ] = "~Add...";
     };
     ListBox RID_FNTNM_LB_FONTS
     {
@@ -1217,23 +1298,23 @@ ModalDialog RID_FONTNAMEDIALOG
         WordBreak = TRUE;
         Text = "Hinweis: Die Schriften sind nur für die Applikation verfügbar";
         Text [ English ] = "Hint: the fonts are avalable for the application only.";
-        Text[ english_us ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ portuguese ] = "O nome Xwindow do tipo de letra constrói-se\na partir das propriedades.";
-        Text[ russian ] = "Èìÿ øðèôòà Xwindow îáðàçîâàíî\nèç ñâîéñòâ";
+        Text[ english_us ] = "Note: The fonts are only available to the applications.";
+        Text[ portuguese ] = "Observação: os tipos de letra só estão disponíveis para a aplicação.";
+        Text[ russian ] = "Óêàçàíèå: øðèôòû äîñòóïíû òîëüêî äëÿ ýòîãî ïðèëîæåíèÿ";
         Text[ greek ] = "Ôï üíïìá Xwindow ôçò ãñáììáôïóåéñÜò äçìéïõñãåßôáé\náðü ôéò éäéüôçôÝò ôçò.";
-        Text[ dutch ] = "De Xwindow-naam van het lettertype\nwordt samengesteld uit de eigenschappen";
+        Text[ dutch ] = "Let op: de lettertypen zijn alleen beschikbaar voor deze applicatie";
         Text[ french ] = "Le nom Xwindow de la police\nest généré à partir des propriétés";
-        Text[ spanish ] = "De las propiedades se construirá el nombre\nXwindow de la fuente.";
+        Text[ spanish ] = "Nota: Las fuentes están disponibles sólo para la aplicación.";
         Text[ finnish ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ italian ] = "Il nome Xwindow è determinato\ndalle caratteristiche";
+        Text[ italian ] = "Attenzione: i caratteri sono disponibili solo per l'applicazione";
         Text[ danish ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ swedish ] = "Xwindow-namnet på teckensnittet konstrueras\nutifrån egenskaperna";
-        Text[ polish ] = "Nazwa Xwindow czcionki utworzona\nzostanie z w³aœciwoœci.";
+        Text[ swedish ] = "OBS!: teckensnitten är bara tillgängliga för tillämpningarna";
+        Text[ polish ] = "Uwaga: Czcionki dostêpne bêd¹ tylko w aplikacji";
         Text[ portuguese_brazilian ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ japanese ] = "Ì«ÝÄ‚Ì X ³¨ÝÄÞ³–¼‚Í‘®«‚©‚ç\\¬‚³‚ê‚Ü‚·B";
+        Text[ japanese ] = "ËÝÄ: Ì«ÝÄ‚Í±ÌßØ¹°¼®Ý‚Å‚Ì‚ÝŽg—p‰Â”\\‚Å‚·B";
         Text[ korean ] = "µî·ÏÁ¤º¸·ÎºÎÅÍ¡¡±Û²ÃÀÇ XÀ©µµ¿ì¡¡ÀÌ¸§ÀÌ¡¡±¸¼ºµË´Ï´Ù";
-        Text[ chinese_simplified ] = "Xwindow Ãû³ÆÊÇÓÉ×ÖÌåÊôÐÔ¹¹³ÉµÄ";
-        Text[ chinese_traditional ] = "Xwindow ¦WºÙ¥Ñ¦r«¬ÄÝ©ÊÌÛ¦¨";
+        Text[ chinese_simplified ] = "ÌáÊ¾£ºÕâÐ©×ÖÌå¿ÉÒÔÌá¹©¸øÓ¦ÓÃ³ÌÐòÊ¹ÓÃ¡£";
+        Text[ chinese_traditional ] = "´£¥Ü¡G³o¨Ç¦r«¬¥i¥H´£¨Ñµ¹À³¥Îµ{¦¡¨Ï¥Î";
         Text[ turkish ] = "The Xwindow name of the font is constructed\nfrom the properties";
         Text[ arabic ] = "íÊÑßÈ ÇÓã ÎØXwindow   \n ãä ÇáÎÕÇÆÕ";
         Text[ catalan ] = "De las propiedades se construirá el nombre\nXwindow de la fuente.";
@@ -1433,7 +1514,7 @@ String RID_AFMERROR_NO_FAMILY_NAME
     Text[ polish ] = "Metryka nie zawiera wpisu 'FamilyName'.";
     Text[ portuguese_brazilian ] = "The metric does not contain a 'FamilyName' entry.";
     Text[ japanese ] = "ÒÄØ¯¸‚ÉuFamilyNamev‚Ì€–Ú‚ÍŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    Text[ korean ] = "  ¸ÞÆ®¸¯¿¡´Â 'FamilyName'  Ç×¸ñÀÌ¡¡Æ÷ÇÔµÇ¾îÀÖÁö¡¡¾Ê½À´Ï´Ù£®";
+    Text[ korean ] = "¸ÞÆ®¸¯¿¡´Â 'FamilyName'  Ç×¸ñÀÌ¡¡Æ÷ÇÔµÇ¾îÀÖÁö¡¡¾Ê½À´Ï´Ù£®";
     Text[ chinese_simplified ] = "×ÖÌå¶ÈÁ¿ÎÄ¼þÃ»ÓÐ 'FamilyName' ÌõÄ¿¡£";
     Text[ chinese_traditional ] = "¦r«¬«×¶qÀÉ®×¨S¦³ 'FamilyName' ¶µ¥Ø¡C";
     Text[ turkish ] = "The metric does not contain a 'FamilyName' entry.";
@@ -1812,8 +1893,8 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ portuguese_brazilian ] = "Please select the drivers to install and press \"%s\".";
         Text[ japanese ] = "ÄÞ×²ÌÞ‚ð‘I‘ð‚µ‚ÄAm%snÎÞÀÝ‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ korean ] = "¿øÇÏ´Â¡¡µå¶óÀÌ¹ö¸¦¡¡¼±ÅÃÇÑ¡¡´ÙÀ½£¬ \"%s\"¹öÆ°À»¡¡´­·¯¡¡È®ÀÎÇÏ½Ê½Ã¿À.";
-        Text[ chinese_simplified ] = "ÔÚÑ¡ÔñÒª°²×°µÄÇý¶¯³ÌÐòÖ®ºóµã»÷°´Å¥ \"%s\" ¡£";
-        Text[ chinese_traditional ] = "¿ï¤¤­n¦w¸ËªºÅX°Êµ{¦¡¤§«á«öÀ»«ö¶s \"%s\" ¡C";
+        Text[ chinese_simplified ] = "ÔÚÑ¡ÔñÒª°²×°µÄÇý¶¯³ÌÐòÖ®ºóµã»÷°´Å¥ %s ¡£";
+        Text[ chinese_traditional ] = "¿ï¤¤­n¦w¸ËªºÅX°Êµ{¦¡¤§«á«öÀ»«ö¶s %s ¡C";
         Text[ turkish ] = "Please select the drivers to install and press \"%s\".";
         Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÈÑÇãÌ ÇáÊÔÛíá ÇáÐí ÊÑÛÈ ÝíåÇ Ëã ÇÖÛØ Úáì \"%s\" ááÊÃßíÏ.";
         Text[ finnish ] = "Please select the drivers to install and press \"%s\".";
@@ -1963,7 +2044,7 @@ String RID_QUERY_DRIVERUSED
     Text[ english_us ] = "There are still printers using the driver \"%s\". Do you really want to remove it? The corresponding printers will also be removed.";
     Text[ portuguese ] = "Existem ainda impressoras a utilizar o controlador \"%s\". Ao removê-lo estará também a remover as respectivas impressoras. Continuar?";
     Text[ russian ] = "Èìåþòñÿ ïðèíòåðû, êîòîðûå èñïîëüçóþò äðàéâåð \"%s\". Âû äåéñòâèòåëüíî õîòèòå åãî óäàëèòü? Â ñëó÷àå óäàëåíèÿ ýòîãî äðàéâåðà óäàëÿòñÿ è ñîîòâåòñòâóþùèå ïðèíòåðû.";
-    Text[ greek ] = "ÕðÜñ÷ïõí áêüìç åêôõðùôÝò, ïé ïðïßïé ÷ñçóéìïðïéïýí áõôü ôï ðñüãñáììá ïäÞãçóçò. ÈÝëåôå ðñáãìáôéêÜ íá êáôáñãçèåß; Óå áõôÞ ôç ðåñßðôùóç èá ãßí?";
+    Text[ greek ] = "ÕðÜñ÷ïõí áêüìç åêôõðùôÝò, ïé ïðïßïé ÷ñçóéìïðïéïýí áõôü ôï ðñüãñáììá ïäÞãçóçò. ÈÝëåôå ðñáãìáôéêÜ íá êáôáñãçèåß; Óå áõôÞ ôç ðåñßðôùóç èá ãßí? ";
     Text[ dutch ] = "Driver \"%s\" is nog in gebruik voor enkele printers. Wilt u hem werkelijk verwijderen? De desbetreffende printers worden dan eveneens verwijderd.";
     Text[ french ] = "D'autres imprimantes utilisent le pilote \"%s\". Voulez-vous vraiment le supprimer ? Ceci entraînera également la suppression des imprimantes correspondantes.";
     Text[ spanish ] = "Existen aún impresoras que usan el controlador \"%s\". ¿Desea realmente eliminarlo? También se eliminarán las impresoras correspondientes.";
@@ -2143,7 +2224,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ english_us ] = "~Finish";
         Text[ portuguese ] = "~Criar";
         Text[ russian ] = "~Ãîòîâî";
-        Text[ greek ] = "~Finish";
+        Text[ greek ] = "ÏëïêëÞñ~ùóç";
         Text[ dutch ] = "~Voltooien";
         Text[ french ] = "~Créer";
         Text[ spanish ] = "~Crear";
@@ -2175,7 +2256,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ english_us ] = "~Next >>";
         Text[ portuguese ] = "~Seguinte >>";
         Text[ russian ] = "~Äàëåå >>";
-        Text[ greek ] = "~Next >>";
+        Text[ greek ] = "Åðüìåí~ï >>";
         Text[ dutch ] = "~Next >>";
         Text[ french ] = "~Suivant >>";
         Text[ spanish ] = "~Avanzar >>";
@@ -2202,7 +2283,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ english_us ] = "<< ~Back";
         Text[ portuguese ] = "<< ~Anterior";
         Text[ russian ] = "<< ~Íàçàä";
-        Text[ greek ] = "<< ~Back";
+        Text[ greek ] = "<< ~Ðßóù";
         Text[ dutch ] = "<< ~Vorige";
         Text[ french ] = "<< ~Précédent";
         Text[ spanish ] = "<< ~Regresar";
@@ -2212,7 +2293,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ polish ] = "<< Wstecz";
         Text[ portuguese_brazilian ] = "<< ~Back";
         Text[ japanese ] = "<< –ß‚é";
-        Text[ korean ] = "<< ~µÚ·Î";
+        Text[ korean ] = "<< µÚ·Î";
         Text[ chinese_simplified ] = "<< ·µ»Ø";
         Text[ chinese_traditional ] = "<< ªð¦^";
         Text[ turkish ] = "<< ~Back";
@@ -2223,7 +2304,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     Text[ english_us ] = "Add Printer";
     Text[ portuguese ] = "Adicionar impressora";
     Text[ russian ] = "Äîáàâèòü ïðèíòåð";
-    Text[ greek ] = "Add printer";
+    Text[ greek ] = "ÐñïóèÞêç åêôõðùôÞ";
     Text[ dutch ] = "~Nieuwe printer toevoegen";
     Text[ french ] = "Ajouter une imprimante";
     Text[ spanish ] = "Añadir impresora";
@@ -2289,7 +2370,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ english_us ] = "~Import...";
         Text[ portuguese ] = "~Importar...";
         Text[ russian ] = "~Èìïîðò...";
-        Text[ greek ] = "~Import...";
+        Text[ greek ] = "Å~éóáãùãÞ...";
         Text[ dutch ] = "~Importeren...";
         Text[ french ] = "~Importer...";
         Text[ spanish ] = "~Importar...";
@@ -2299,7 +2380,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ polish ] = "Importuj..";
         Text[ portuguese_brazilian ] = "~Import...";
         Text[ japanese ] = "²ÝÎß°Ä...";
-        Text[ korean ] = "~µé¿©¿À±â...";
+        Text[ korean ] = "µé¿©¿À±â...";
         Text[ chinese_simplified ] = "ÊäÈë...";
         Text[ chinese_traditional ] = "¶×¤J...";
         Text[ turkish ] = "~Import...";
@@ -2316,7 +2397,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ english_us ] = "~Delete";
         Text[ portuguese ] = "~Eliminar";
         Text[ russian ] = "~Óäàëèòü";
-        Text[ greek ] = "~Delete";
+        Text[ greek ] = "Äéáãñá~öÞ";
         Text[ dutch ] = "~Wissen";
         Text[ french ] = "~Supprimer";
         Text[ spanish ] = "~Eliminar";
@@ -2326,7 +2407,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "~Delete";
         Text[ japanese ] = "íœ";
-        Text[ korean ] = "~»èÁ¦";
+        Text[ korean ] = "»èÁ¦";
         Text[ chinese_simplified ] = "ÒÆ³ý";
         Text[ chinese_traditional ] = "§R°£";
         Text[ turkish ] = "~Delete";
@@ -2341,7 +2422,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ english_us ] = "Delete driver";
         Text[ portuguese ] = "Eliminar controlador";
         Text[ russian ] = "Óäàëèòü äðàéâåð";
-        Text[ greek ] = "Delete driver";
+        Text[ greek ] = "ÄéáãñáöÞ ðñïãñÜììáôïò ïäÞãçóçò";
         Text[ dutch ] = "Driver wissen";
         Text[ french ] = "Supprimer le pilote";
         Text[ spanish ] = "Eliminar controlador";
@@ -2374,7 +2455,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ english_us ] = "Do you want to";
         Text[ portuguese ] = "Deseja";
         Text[ russian ] = "Âû õîòèòå";
-        Text[ greek ] = "Do you want to";
+        Text[ greek ] = "ÈÝëåôå íá";
         Text[ dutch ] = "Wilt u";
         Text[ french ] = "Que souhaitez-vous faire ?";
         Text[ spanish ] = "Desea";
@@ -2411,7 +2492,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ polish ] = "Do³¹cz drukarkê";
         Text[ portuguese_brazilian ] = "add a ~printer";
         Text[ japanese ] = "ÌßØÝÀ‚Ì’Ç‰Á";
-        Text[ korean ] = "~ÇÁ¸°ÅÍ Ãß°¡";
+        Text[ korean ] = "ÇÁ¸°ÅÍ Ãß°¡";
         Text[ chinese_simplified ] = "ÅäÖÃÒ»¸ö´òÓ¡»ú";
         Text[ chinese_traditional ] = "·s¼W¤@¥x¦Lªí¾÷";
         Text[ turkish ] = "add a ~printer";
@@ -2438,7 +2519,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ polish ] = "Do³¹cz faks";
         Text[ portuguese_brazilian ] = "add a fa~x";
         Text[ japanese ] = "Fa~x ‚Ì’Ç‰Á";
-        Text[ korean ] = "ÆÑ~½º Ãß°¡";
+        Text[ korean ] = "ÆÑ½º Ãß°¡";
         Text[ chinese_simplified ] = "ÅäÖÃÒ»¸ö´«ÕæÉè±¸";
         Text[ chinese_traditional ] = "³]¸m¤@¥x¶Ç¯u¾÷";
         Text[ turkish ] = "add a fa~x";
@@ -2492,7 +2573,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ polish ] = "Importuj drukarkê z zainstalowanego programu StarOffice";
         Text[ portuguese_brazilian ] = "~import printers from a StarOffice installation";
         Text[ japanese ] = "StarSuite ‚Ì²Ý½Ä°Ù‚©‚çÌßØÝÀ‚ð²ÝÎß°Ä";
-        Text[ korean ] = "~StarOffice ¼³Ä¡·ÎºÎÅÍ ÇÁ¸°ÅÍ °¡Á®¿À±â";
+        Text[ korean ] = "StarSuite ¼³Ä¡·ÎºÎÅÍ ÇÁ¸°ÅÍ °¡Á®¿À±â";
         Text[ chinese_simplified ] = "´Ó StarSuite °²×°³ÌÐòÊäÈëÒ»¸ö´òÓ¡»ú";
         Text[ chinese_traditional ] = "±q StarSuite ¦w¸Ëµ{¦¡¶×¤J¦Lªí¾÷";
         Text[ turkish ] = "~import printers from a StarOffice installation";
@@ -2658,7 +2739,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ english_us ] = "~Use as default printer";
         Text[ portuguese ] = "~Definir como impressora padrão";
         Text[ russian ] = "Èñïîëüçîâàòü êàê ïðèíòåð ïî óìîë÷àíèþ";
-        Text[ greek ] = "~Set as default printer";
+        Text[ greek ] = "×ñÞ~óç ùò ðñïåðéëåãìÝíï åêôõðùôÞ";
         Text[ dutch ] = "Standaardprinter";
         Text[ french ] = "Utiliser comme imprimante par ~défaut";
         Text[ spanish ] = "Definir como ~impresora estándar";
@@ -2797,7 +2878,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ english_us ] = "~Help";
         Text[ portuguese ] = "~Ajuda";
         Text[ russian ] = "Ñï~ðàâêà";
-        Text[ greek ] = "~Help";
+        Text[ greek ] = "ÂïÞ~èåéá";
         Text[ dutch ] = "~Help";
         Text[ french ] = "~Aide";
         Text[ spanish ] = "~Ayuda";
@@ -2914,7 +2995,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ english_us ] = "~Remove";
         Text[ portuguese ] = "~Remover";
         Text[ russian ] = "Óáðàòü";
-        Text[ greek ] = "~Remove";
+        Text[ greek ] = "Äéá~ãñáöÞ";
         Text[ dutch ] = "~Verwijderen";
         Text[ french ] = "~Supprimer";
         Text[ spanish ] = "~Eliminar";
@@ -2941,7 +3022,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ english_us ] = "~Undo";
         Text[ portuguese ] = "~Restaurar";
         Text[ russian ] = "~Îòìåíà";
-        Text[ greek ] = "~Undo";
+        Text[ greek ] = "Á~íáßñåóç";
         Text[ dutch ] = "~Ongedaan maken";
         Text[ french ] = "~Restaurer";
         Text[ spanish ] = "~Deshacer";
@@ -3002,7 +3083,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ english_us ] = "The default driver";
         Text[ portuguese ] = "Controlador padrão";
         Text[ russian ] = "Äðàéâåð ïî óìîë÷àíèþ";
-        Text[ greek ] = "the default driver";
+        Text[ greek ] = "Ôï ðñïåðéëåãìÝíï ðñüãñáììá ïäÞãçóçò";
         Text[ dutch ] = "de standaarddriver";
         Text[ french ] = "Pilote par défaut";
         Text[ spanish ] = "el controlador estándar";
@@ -3090,7 +3171,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ english_us ] = "The default driver";
         Text[ portuguese ] = "Controlador padrão";
         Text[ russian ] = "Äðàéâåð ïî óìîë÷àíèþ";
-        Text[ greek ] = "the default driver";
+        Text[ greek ] = "Ôï ðñïåðéëåãìÝíï ðñüãñáììá ïäÞãçóçò";
         Text[ dutch ] = "de standaarddriver";
         Text[ french ] = "Pilote par défaut";
         Text[ spanish ] = "el controlador estándar";
@@ -3142,7 +3223,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text = "ein spezifischer Treiber, um die Formatierung einem anderen Drucker anzugleichen";
         Text [ english ] = "a specific driver to format identical to a certain printer";
         Text[ english_us ] = "A specific driver, to adapt the format to another printer";
-        Text[ portuguese ] = "Controlar específico para adaptar o formato a outra impressora";
+        Text[ portuguese ] = "Controlador específico para adaptar o formato a outra impressora";
         Text[ russian ] = "Ñïåöèàëüíûé äðàéâåð äëÿ ñîãëàñîâàíèÿ ôîðìàòà ñ äðóãèì ïðèíòåðîì";
         Text[ greek ] = "a specific driver to format identical to a certain printer";
         Text[ dutch ] = "een speciale driver voor het aanpassen van de opmaakattributen aan een andere printer";
@@ -3168,107 +3249,468 @@ String RID_TXT_FONT_ITALIC
 {
     Text = "Kursiv";
     Text [ english ] = "Italic";
+    Text[ english_us ] = "Italic";
+    Text[ portuguese ] = "Itálico";
+    Text[ russian ] = "Êóðñèâ";
+    Text[ greek ] = "ÐëÜãéá";
+    Text[ dutch ] = "Italic";
+    Text[ french ] = "Italic";
+    Text[ spanish ] = "Cursiva";
+    Text[ finnish ] = "Italic";
+    Text[ italian ] = "Corsivo";
+    Text[ danish ] = "Italic";
+    Text[ swedish ] = "Kursiv";
+    Text[ polish ] = "Italic";
+    Text[ portuguese_brazilian ] = "Italic";
+    Text[ japanese ] = "²ÀØ¯¸‘Ì";
+    Text[ korean ] = "Italic";
+    Text[ chinese_simplified ] = "Ð±Ìå";
+    Text[ chinese_traditional ] = "±×Åé¦r";
+    Text[ turkish ] = "Italic";
+    Text[ arabic ] = "Italic";
+    Text[ catalan ] = "Italic";
 };
 
 String RID_TXT_FONT_OBLIQUE
 {
     Text = "Schräg";
     Text [english] = "Oblique";
+    Text[ english_us ] = "Oblique";
+    Text[ portuguese ] = "Oblíquo";
+    Text[ russian ] = "Íàêëîííûé";
+    Text[ greek ] = "Oblique";
+    Text[ dutch ] = "Schuin";
+    Text[ french ] = "Oblique";
+    Text[ spanish ] = "Oblicuo";
+    Text[ finnish ] = "Oblique";
+    Text[ italian ] = "Obliquo";
+    Text[ danish ] = "Oblique";
+    Text[ swedish ] = "Sned";
+    Text[ polish ] = "Oblique";
+    Text[ portuguese_brazilian ] = "Oblique";
+    Text[ japanese ] = "ŽÎ‘Ì";
+    Text[ korean ] = "Oblique";
+    Text[ chinese_simplified ] = "Ð±Ìå";
+    Text[ chinese_traditional ] = "±×Åé";
+    Text[ turkish ] = "Oblique";
+    Text[ arabic ] = "Oblique";
+    Text[ catalan ] = "Oblique";
 };
 
 String RID_TXT_FONT_THIN
 {
     Text = "Dünn";
     Text [english] = "Thin";
+    Text[ english_us ] = "Thin";
+    Text[ portuguese ] = "Fino";
+    Text[ russian ] = "Òîíêèé";
+    Text[ greek ] = "Thin";
+    Text[ dutch ] = "Thin";
+    Text[ french ] = "Thin";
+    Text[ spanish ] = "Delgada";
+    Text[ finnish ] = "Thin";
+    Text[ italian ] = "sottile";
+    Text[ danish ] = "Thin";
+    Text[ swedish ] = "Tunn";
+    Text[ polish ] = "Thin";
+    Text[ portuguese_brazilian ] = "Thin";
+    Text[ japanese ] = "×Žš";
+    Text[ korean ] = "Thin";
+    Text[ chinese_simplified ] = "Ï¸Ìå";
+    Text[ chinese_traditional ] = "²ÓÅé¦r";
+    Text[ turkish ] = "Thin";
+    Text[ arabic ] = "Thin";
+    Text[ catalan ] = "Thin";
 };
 
 String RID_TXT_FONT_ULTRALIGHT
 {
     Text = "Ultralight";
     Text [english] = "Ultralight";
+    Text[ english_us ] = "Ultralight";
+    Text[ portuguese ] = "Ultra-claro";
+    Text[ russian ] = "Ultralight";
+    Text[ greek ] = "Ultralight";
+    Text[ dutch ] = "Ultralight";
+    Text[ french ] = "Ultralight";
+    Text[ spanish ] = "Ultraligero";
+    Text[ finnish ] = "Ultralight";
+    Text[ italian ] = "Extra chiaro";
+    Text[ danish ] = "Ultralight";
+    Text[ swedish ] = "Ultralätt";
+    Text[ polish ] = "Ultralight";
+    Text[ portuguese_brazilian ] = "Ultralight";
+    Text[ japanese ] = "’´×Žš";
+    Text[ korean ] = "Ultralight";
+    Text[ chinese_simplified ] = "³¬Ï¸Ìå×ÖÌå";
+    Text[ chinese_traditional ] = "¶W²ÓÅé";
+    Text[ turkish ] = "Ultralight";
+    Text[ arabic ] = "Ultralight";
+    Text[ catalan ] = "Ultralight";
 };
 
 String RID_TXT_FONT_SEMILIGHT
 {
     Text = "Semilight";
     Text [english] = "Semilight";
+    Text[ english_us ] = "Semilight";
+    Text[ portuguese ] = "Semi-claro";
+    Text[ russian ] = "Semilight";
+    Text[ greek ] = "Semilight";
+    Text[ dutch ] = "Semilight";
+    Text[ french ] = "Semilight";
+    Text[ spanish ] = "Semiligero";
+    Text[ finnish ] = "Semilight";
+    Text[ italian ] = "Semichiaro";
+    Text[ danish ] = "Semilight";
+    Text[ swedish ] = "Semilight";
+    Text[ polish ] = "Semilight";
+    Text[ portuguese_brazilian ] = "Semilight";
+    Text[ japanese ] = "‚â‚â×Žš";
+    Text[ korean ] = "Semilight";
+    Text[ chinese_simplified ] = "°ëÏ¸×ÖÌå";
+    Text[ chinese_traditional ] = "¥b²ÓÅé¦r";
+    Text[ turkish ] = "Semilight";
+    Text[ arabic ] = "Semilight";
+    Text[ catalan ] = "Semilight";
 };
 
 String RID_TXT_FONT_LIGHT
 {
     Text = "Light";
     Text [english] = "Light";
+    Text[ english_us ] = "Light";
+    Text[ portuguese ] = "Claro";
+    Text[ russian ] = "Òîíêèé";
+    Text[ greek ] = "Áðáëü";
+    Text[ dutch ] = "Light";
+    Text[ french ] = "Estompé";
+    Text[ spanish ] = "Ligero";
+    Text[ finnish ] = "Vaalea";
+    Text[ italian ] = "Chiaro";
+    Text[ danish ] = "Light";
+    Text[ swedish ] = "Ljus";
+    Text[ polish ] = "Light";
+    Text[ portuguese_brazilian ] = "Light";
+    Text[ japanese ] = "×Žš";
+    Text[ korean ] = "°¡´Â";
+    Text[ chinese_simplified ] = "Ï¸Ìå";
+    Text[ chinese_traditional ] = "²ÓÅé¦r";
+    Text[ turkish ] = "Ýnce";
+    Text[ arabic ] = "ÝÇÊÍ";
+    Text[ catalan ] = "Light";
 };
 
 String RID_TXT_FONT_SEMIBOLD
 {
     Text = "Halbfett";
     Text [english] = "Semibold";
+    Text[ english_us ] = "Semibold";
+    Text[ portuguese ] = "Semi-negrito";
+    Text[ russian ] = "Ïîëóæèðíûé";
+    Text[ greek ] = "Çìé-Ýíôïíï";
+    Text[ dutch ] = "Semibold";
+    Text[ french ] = "Semibold";
+    Text[ spanish ] = "Seminegrita";
+    Text[ finnish ] = "Semibold";
+    Text[ italian ] = "Semigrassetto";
+    Text[ danish ] = "Semibold";
+    Text[ swedish ] = "Halvfet";
+    Text[ polish ] = "Semibold";
+    Text[ portuguese_brazilian ] = "Semibold";
+    Text[ japanese ] = "‚â‚â‘¾Žš";
+    Text[ korean ] = "Semibold";
+    Text[ chinese_simplified ] = "°ë´ÖÌå";
+    Text[ chinese_traditional ] = "¥b²ÊÅé¦r";
+    Text[ turkish ] = "Semibold";
+    Text[ arabic ] = "Semibold";
+    Text[ catalan ] = "Semibold";
 };
 
 String RID_TXT_FONT_BOLD
 {
     Text = "Fett";
     Text [english] = "Bold";
+    Text[ english_us ] = "Bold";
+    Text[ portuguese ] = "Negrito";
+    Text[ russian ] = "Æèðíûé";
+    Text[ greek ] = "¸íôïíï";
+    Text[ dutch ] = "Vet";
+    Text[ french ] = "Bold";
+    Text[ spanish ] = "Negrita";
+    Text[ finnish ] = "Bold";
+    Text[ italian ] = "Grassetto";
+    Text[ danish ] = "Bold";
+    Text[ swedish ] = "Fet";
+    Text[ polish ] = "Bold";
+    Text[ portuguese_brazilian ] = "Bold";
+    Text[ japanese ] = "‘¾Žš";
+    Text[ korean ] = "Bold";
+    Text[ chinese_simplified ] = "´ÖÌå";
+    Text[ chinese_traditional ] = "²ÊÅé¦r";
+    Text[ turkish ] = "Bold";
+    Text[ arabic ] = "Bold";
+    Text[ catalan ] = "Bold";
 };
 
 String RID_TXT_FONT_ULTRABOLD
 {
     Text = "Ultrafett";
     Text [english] = "Ultrabold";
+    Text[ english_us ] = "Ultrabold";
+    Text[ portuguese ] = "Ultra-negrito";
+    Text[ russian ] = "Ñâåðõæèðíûé";
+    Text[ greek ] = "Ultrabold";
+    Text[ dutch ] = "Ultrabold";
+    Text[ french ] = "Ultrabold";
+    Text[ spanish ] = "Ultranegrita";
+    Text[ finnish ] = "Ultrabold";
+    Text[ italian ] = "Extra grassetto";
+    Text[ danish ] = "Ultrabold";
+    Text[ swedish ] = "Ultrabold";
+    Text[ polish ] = "Ultrabold";
+    Text[ portuguese_brazilian ] = "Ultrabold";
+    Text[ japanese ] = "’´‘¾Žš";
+    Text[ korean ] = "Ultrabold";
+    Text[ chinese_simplified ] = "³¬´ÖÌå";
+    Text[ chinese_traditional ] = "¶W²ÊÅé¦r";
+    Text[ turkish ] = "Ultrabold";
+    Text[ arabic ] = "Ultrabold";
+    Text[ catalan ] = "Ultrabold";
 };
 
 String RID_TXT_FONT_ULTRACONDENSED
 {
     Text = "Ultragestraucht";
     Text [english] = "Ultracondensed";
+    Text[ english_us ] = "Ultracondensed";
+    Text[ portuguese ] = "Ultracondensado";
+    Text[ russian ] = "Ñâåðõñæàòûé";
+    Text[ greek ] = "Ultracondensed";
+    Text[ dutch ] = "Ultragecondenseerd";
+    Text[ french ] = "Ultracondensed";
+    Text[ spanish ] = "Ultracondensado";
+    Text[ finnish ] = "Ultracondensed";
+    Text[ italian ] = "Extra compatto";
+    Text[ danish ] = "Ultracondensed";
+    Text[ swedish ] = "Ultrakomprimerat";
+    Text[ polish ] = "Ultracondensed";
+    Text[ portuguese_brazilian ] = "Ultracondensed";
+    Text[ japanese ] = "’´ˆ³kŽš‘Ì";
+    Text[ korean ] = "Ultracondensed";
+    Text[ chinese_simplified ] = "³¬Ñ¹Ëõ×ÖÌå";
+    Text[ chinese_traditional ] = "¶WÀ£ÁY¦rÅé";
+    Text[ turkish ] = "Ultracondensed";
+    Text[ arabic ] = "Ultracondensed";
+    Text[ catalan ] = "Ultracondensed";
 };
 
 String RID_TXT_FONT_EXTRACONDENSED
 {
     Text = "Extragestaucht";
     Text [english] = "Extracondensed";
+    Text[ english_us ] = "Extracondensed";
+    Text[ portuguese ] = "Extra-condensado";
+    Text[ russian ] = "Ñâåðõñæàòûé";
+    Text[ greek ] = "Extracondensed";
+    Text[ dutch ] = "Extracondensed";
+    Text[ french ] = "Extracondensed";
+    Text[ spanish ] = "Extracondensado";
+    Text[ finnish ] = "Extracondensed";
+    Text[ italian ] = "Extra compatto";
+    Text[ danish ] = "Extracondensed";
+    Text[ swedish ] = "Extracondensed";
+    Text[ polish ] = "Extracondensed";
+    Text[ portuguese_brazilian ] = "Extracondensed";
+    Text[ japanese ] = "“ÁŽêˆ³kŽš‘Ì";
+    Text[ korean ] = "Extracondensed";
+    Text[ chinese_simplified ] = "³¬Ñ¹Ëõ×ÖÌå";
+    Text[ chinese_traditional ] = "¶WÀ£ÁY¦rÅé";
+    Text[ turkish ] = "Extracondensed";
+    Text[ arabic ] = "Extracondensed";
+    Text[ catalan ] = "Extracondensed";
 };
 
 String RID_TXT_FONT_CONDENSED
 {
     Text = "Gestaucht";
     Text [english] = "Condensed";
+    Text[ english_us ] = "Condensed";
+    Text[ portuguese ] = "Condensado";
+    Text[ russian ] = "Ñæàòûé";
+    Text[ greek ] = "Condensed";
+    Text[ dutch ] = "Gecondenseerd";
+    Text[ french ] = "Condensed";
+    Text[ spanish ] = "Condensado";
+    Text[ finnish ] = "Condensed";
+    Text[ italian ] = "Compatto";
+    Text[ danish ] = "Condensed";
+    Text[ swedish ] = "Komprimerat";
+    Text[ polish ] = "Condensed";
+    Text[ portuguese_brazilian ] = "Condensed";
+    Text[ japanese ] = "ˆ³kŽš‘Ì";
+    Text[ korean ] = "Condensed";
+    Text[ chinese_simplified ] = "Ñ¹Ëõ×ÖÌå";
+    Text[ chinese_traditional ] = "À£ÁY¦rÅé";
+    Text[ turkish ] = "Condensed";
+    Text[ arabic ] = "Condensed";
+    Text[ catalan ] = "Condensed";
 };
 
 String RID_TXT_FONT_SEMICONDENSED
 {
     Text = "Halbgestaucht";
     Text [english] = "Semicondensed";
+    Text[ english_us ] = "Semicondensed";
+    Text[ portuguese ] = "Semi-condensado";
+    Text[ russian ] = "Ïîëóñæàòûé";
+    Text[ greek ] = "Semicondensed";
+    Text[ dutch ] = "Semicondensed";
+    Text[ french ] = "Semicondensed";
+    Text[ spanish ] = "Semicondensado";
+    Text[ finnish ] = "Semicondensed";
+    Text[ italian ] = "Semi compatto";
+    Text[ danish ] = "Semicondensed";
+    Text[ swedish ] = "Semicondensed";
+    Text[ polish ] = "Semicondensed";
+    Text[ portuguese_brazilian ] = "Semicondensed";
+    Text[ japanese ] = "‚â‚âˆ³kŽš‘Ì";
+    Text[ korean ] = "Semicondensed";
+    Text[ chinese_simplified ] = "°ëÑ¹Ëõ×ÖÌå";
+    Text[ chinese_traditional ] = "¥bÀ£ÁY¦rÅé";
+    Text[ turkish ] = "Semicondensed";
+    Text[ arabic ] = "Semicondensed";
+    Text[ catalan ] = "Semicondensed";
 };
 
 String RID_TXT_FONT_SEMIEXPANDED
 {
     Text = "Halbgestreckt";
     Text [english] = "Semiexpanded";
+    Text[ english_us ] = "Semiexpanded";
+    Text[ portuguese ] = "Semi-expandido";
+    Text[ russian ] = "Ïîëóðàñòÿíóòûé";
+    Text[ greek ] = "Semiexpanded";
+    Text[ dutch ] = "Semiexpanded";
+    Text[ french ] = "Semiexpanded";
+    Text[ spanish ] = "Semiexpandido";
+    Text[ finnish ] = "Semiexpanded";
+    Text[ italian ] = "Semiespanso";
+    Text[ danish ] = "Semiexpanded";
+    Text[ swedish ] = "Semiexpanded";
+    Text[ polish ] = "Semiexpanded";
+    Text[ portuguese_brazilian ] = "Semiexpanded";
+    Text[ japanese ] = "‚â‚âŠg’£Žš‘Ì";
+    Text[ korean ] = "Semiexpanded";
+    Text[ chinese_simplified ] = "°ë¿í×ÖÌå";
+    Text[ chinese_traditional ] = "¥b¼e«¬¦r";
+    Text[ turkish ] = "Semiexpanded";
+    Text[ arabic ] = "Semiexpanded";
+    Text[ catalan ] = "Semiexpanded";
 };
 
 String RID_TXT_FONT_EXPANDED
 {
     Text = "Gestreckt";
     Text [english] = "Expanded";
+    Text[ english_us ] = "Expanded";
+    Text[ portuguese ] = "Expandido";
+    Text[ russian ] = "Ðàñòÿíóòûé";
+    Text[ greek ] = "Expanded";
+    Text[ dutch ] = "Expanded";
+    Text[ french ] = "Expanded";
+    Text[ spanish ] = "Expandido";
+    Text[ finnish ] = "Expanded";
+    Text[ italian ] = "Espanso";
+    Text[ danish ] = "Expanded";
+    Text[ swedish ] = "Expanded";
+    Text[ polish ] = "Expanded";
+    Text[ portuguese_brazilian ] = "Expanded";
+    Text[ japanese ] = "Šg’£Žš‘Ì";
+    Text[ korean ] = "Expanded";
+    Text[ chinese_simplified ] = "¿íÐÎ×ÖÌå";
+    Text[ chinese_traditional ] = "¼e«¬¦r";
+    Text[ turkish ] = "Expanded";
+    Text[ arabic ] = "Expanded";
+    Text[ catalan ] = "Expanded";
 };
 
 String RID_TXT_FONT_EXTRAEXPANDED
 {
     Text = "Extragestreckt";
     Text [english] = "Extraexpanded";
+    Text[ english_us ] = "Extraexpanded";
+    Text[ portuguese ] = "Extra-expandido";
+    Text[ russian ] = "Ñâåðõðàñòÿíóòûé";
+    Text[ greek ] = "Extraexpanded";
+    Text[ dutch ] = "Extraexpanded";
+    Text[ french ] = "Extraexpanded";
+    Text[ spanish ] = "Extraexpandido";
+    Text[ finnish ] = "Extraexpanded";
+    Text[ italian ] = "Extra espanso";
+    Text[ danish ] = "Extraexpanded";
+    Text[ swedish ] = "Extraexpanded";
+    Text[ polish ] = "Extraexpanded";
+    Text[ portuguese_brazilian ] = "Extraexpanded";
+    Text[ japanese ] = "“ÁŽêŠg’£Žš‘Ì";
+    Text[ korean ] = "Extraexpanded";
+    Text[ chinese_simplified ] = "³¬¿íÐÎ×ÖÌå";
+    Text[ chinese_traditional ] = "¶W¼e«¬¦r";
+    Text[ turkish ] = "Extraexpanded";
+    Text[ arabic ] = "Extraexpanded";
+    Text[ catalan ] = "Extraexpanded";
 };
 
 String RID_TXT_FONT_ULTRAEXPANDED
 {
     Text = "Ultragestreckt";
     Text [english] = "Ultraexpanded";
+    Text[ english_us ] = "Ultraexpanded";
+    Text[ portuguese ] = "Ultra-expandido";
+    Text[ russian ] = "Ñâåðõðàñòÿíóòûé";
+    Text[ greek ] = "Ultraexpanded";
+    Text[ dutch ] = "Ultraexpanded";
+    Text[ french ] = "Ultraexpanded";
+    Text[ spanish ] = "Ultraexpandido";
+    Text[ finnish ] = "Ultraexpanded";
+    Text[ italian ] = "Extra espanso";
+    Text[ danish ] = "Ultraexpanded";
+    Text[ swedish ] = "Ultraexpanded";
+    Text[ polish ] = "Ultraexpanded";
+    Text[ portuguese_brazilian ] = "Ultraexpanded";
+    Text[ japanese ] = "’´Šg’£Žš‘Ì";
+    Text[ korean ] = "Ultraexpanded";
+    Text[ chinese_simplified ] = "³¬¿íÐÎ×ÖÌå";
+    Text[ chinese_traditional ] = "¶W¼e«¬¦r";
+    Text[ turkish ] = "Ultraexpanded";
+    Text[ arabic ] = "Ultraexpanded";
+    Text[ catalan ] = "Ultraexpanded";
 };
 
 String RID_TXT_FONT_REGULAR
 {
     Text = "Standard";
     Text [english] = "Regular";
+    Text[ english_us ] = "Regular";
+    Text[ portuguese ] = "Padrão";
+    Text[ russian ] = "Ñòàíäàðò";
+    Text[ greek ] = "ÐñïåðéëïãÞ";
+    Text[ dutch ] = "Regular";
+    Text[ french ] = "Regular";
+    Text[ spanish ] = "Predeterminado";
+    Text[ finnish ] = "Regular";
+    Text[ italian ] = "Standard";
+    Text[ danish ] = "Regular";
+    Text[ swedish ] = "Standard";
+    Text[ polish ] = "Regular";
+    Text[ portuguese_brazilian ] = "Regular";
+    Text[ japanese ] = "•W€";
+    Text[ korean ] = "Regular";
+    Text[ chinese_simplified ] = "±ê×¼×ÖÌå";
+    Text[ chinese_traditional ] = "¼Ð·Ç¦rÅé";
+    Text[ turkish ] = "Regular";
+    Text[ arabic ] = "Regular";
+    Text[ catalan ] = "Regular";
 };
+
 
