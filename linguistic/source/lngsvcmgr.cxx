@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-29 16:39:55 $
+ *  last change: $Author: tl $ $Date: 2001-02-02 11:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _SOLAR_H
-#include <tools/solar.h>
-#endif
-
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
@@ -81,20 +77,29 @@
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
+#ifndef _SVARRAY_HXX
+#include <svtools/svarray.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+#include <cppuhelper/extract.hxx>
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+
 #include "lngsvcmgr.hxx"
 #include "lngopt.hxx"
 #include "misc.hxx"
 #include "spelldsp.hxx"
 #include "hyphdsp.hxx"
 #include "thesdsp.hxx"
-
-#include <cppuhelper/extract.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
-#endif
-#ifndef _SVARRAY_HXX
-#include <svtools/svarray.hxx>
-#endif
 
 
 using namespace utl;
@@ -266,7 +271,7 @@ void SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
         const SvcInfoArray &rAvailSvcs )
 {
     String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-    LinguOptConfig aCfg( aRoot );
+    LinguConfigItem aCfg( aRoot );
 
     // get list of nodenames to look at for their service list
     const char *pEntryName = 0;
@@ -315,7 +320,7 @@ void SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
             {
                 const OUString *pImplNames = aSvcImplNames.getConstArray();
 
-                INT16 nLang = CfgLocaleStrToLanguage( pNodeNames[i] );
+                INT16 nLang = ConvertIsoStringToLanguage( pNodeNames[i] );
 
                 // build list of available services from those
                 INT32 nCnt = 0;
@@ -1157,7 +1162,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
     if (pDsp  &&  aLocales.getLength())
     {
         String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-        LinguOptConfig aCfg( aRoot );
+        LinguConfigItem aCfg( aRoot );
 
         INT32 nLen = aLocales.getLength();
         const Locale *pLocale = aLocales.getConstArray();
@@ -1200,7 +1205,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             // build property value(s) to be set
             Sequence< PropertyValue > aValues( 1 );
             PropertyValue &rPropVal = aValues.getArray()[0];
-            OUString aCfgLocaleStr( LanguageToCfgLocaleStr(
+            OUString aCfgLocaleStr( ConvertLanguageToIsoString(
                                         LocaleToLanguage( pLocale[i] ) ) );
             rPropVal.Value  = aCfgAny;
             rPropVal.Name   = aNodeName;
@@ -1292,10 +1297,10 @@ Sequence< OUString > SAL_CALL
     Sequence< OUString > aSvcImplNames;
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    String aCfgLocale( LanguageToCfgLocaleStr( nLanguage ) );
+    String aCfgLocale( ConvertLanguageToIsoString( nLanguage ) );
 
     String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-    LinguOptConfig aCfg( aRoot );
+    LinguConfigItem aCfg( aRoot );
 
     Sequence< Any > aValues;
     Sequence< OUString > aName( 1 );
