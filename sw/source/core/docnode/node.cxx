@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:20:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,9 @@ USHORT SwNode::GetSectionLevel() const
 |*
 *******************************************************************/
 
+#ifndef PRODUCT
+long SwNode::nSerial = 0;
+#endif
 
 SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     : pStartOfSection( 0 ), nNodeType( nNdType )
@@ -293,6 +296,11 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
         rNodes.Insert( pInsNd, rWhere );
         pStartOfSection = (SwStartNode*)this;
     }
+
+#ifndef PRODUCT
+    nMySerial = nSerial;
+    nSerial++;
+#endif
 }
 
 SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
@@ -322,6 +330,11 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
         rNodes.Insert( pInsNd, nPos );
         pStartOfSection = (SwStartNode*)this;
     }
+
+#ifndef PRODUCT
+    nMySerial = nSerial;
+    nSerial++;
+#endif
 }
 
 SwNode::~SwNode()
