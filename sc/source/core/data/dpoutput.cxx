@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:53:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,34 @@ void lcl_FillNumberFormats( UINT32*& rFormats, long& rCount,
     }
 }
 
+UINT32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAccess>& xDims )
+{
+    long nDimCount = xDims->getCount();
+    for (long nDim=0; nDim<nDimCount; nDim++)
+    {
+        uno::Reference<uno::XInterface> xDim =
+                ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
+        uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
+        if ( xDimProp.is() )
+        {
+            sheet::DataPilotFieldOrientation eDimOrient =
+                (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
+                    xDimProp, rtl::OUString::createFromAscii(DP_PROP_ORIENTATION),
+                    sheet::DataPilotFieldOrientation_HIDDEN );
+            if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
+            {
+                long nFormat = ScUnoHelpFunctions::GetLongProperty(
+                                        xDimProp,
+                                        rtl::OUString::createFromAscii(DP_PROP_NUMBERFORMAT) );
+
+                return nFormat;     // use format from first found data dimension
+            }
+        }
+    }
+
+    return 0;       // none found
+}
+
 void lcl_SortFields( ScDPOutLevelData* pFields, long nFieldCount )
 {
     for (long i=0; i+1<nFieldCount; i++)
@@ -362,7 +390,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     pColNumFmt( NULL ),
     pRowNumFmt( NULL ),
     nColFmtCount( 0 ),
-    nRowFmtCount( 0 )
+    nRowFmtCount( 0 ),
+    nSingleNumFmt( 0 )
 {
     nTabStartCol = nMemberStartCol = nDataStartCol = nTabEndCol = 0;
     nTabStartRow = nMemberStartRow = nDataStartRow = nTabEndRow = 0;
@@ -477,6 +506,13 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                         }
                     }
                 }
+                else if ( bIsDataLayout )
+                {
+                    // data layout dimension is hidden (allowed if there is only one data dimension)
+                    // -> use the number format from the first data dimension for all results
+
+                    nSingleNumFmt = lcl_GetFirstNumberFormat( xDims );
+                }
             }
         }
         lcl_SortFields( pColFields, nColFieldCount );
@@ -563,6 +599,8 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
                     nFormat = pRowNumFmt[nIndex];
             }
         }
+        else if ( nSingleNumFmt != 0 )
+            nFormat = nSingleNumFmt;        // single format is used everywhere
         if ( nFormat != 0 )
             pDoc->ApplyAttr( nCol, nRow, nTab, SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat ) );
     }
