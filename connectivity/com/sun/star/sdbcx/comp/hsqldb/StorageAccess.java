@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:06:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,45 +80,74 @@ import com.sun.star.io.XSeekable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.NamedValue;
+// import org.hsqldb.lib.SimpleLog;
 
-public class StorageAccess implements org.hsqldb.Storage {
+public class StorageAccess implements org.hsqldb.lib.Storage {
     String key;
     String name;
+    boolean readonly;
     NativeStorageAccess access;
+//  public SimpleLog appLog;
     /** Creates a new instance of StorageAccess */
-    public StorageAccess(String name,String _mode,Object key) throws java.lang.Exception{
+    public StorageAccess(String name,Boolean readonly,Object key) throws java.io.IOException{
         this.key = (String)key;
         this.name = name;
+        this.readonly = readonly.booleanValue();
         try {
-            access = new NativeStorageAccess(name,_mode,key);
+            access = new NativeStorageAccess(name,
+                    this.readonly ? "r" : "rw"
+                    ,key);
         } catch(Exception e){
-            throw new java.lang.Exception();
+            throw new java.io.IOException();
         }
+    //  appLog = new SimpleLog(name +".app3.log", true);
     }
-    public void close() throws java.lang.Exception{
+    public void close() throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.close() ");
+        //appLog.close();
         access.close(name,key);
     }
 
-    public long getFilePointer() throws java.lang.Exception{
+    public long getFilePointer() throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.getFilePointer() ");
         return access.getFilePointer(name,key);
     }
 
-    public long length() throws java.lang.Exception{
+    public long length() throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.length() ");
         return access.length(name,key);
     }
 
-    public int read() throws java.lang.Exception{
+    public int read() throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.read() ");
         return access.read(name,key);
     }
 
-    public void read(byte[] b, int off, int len) throws java.lang.Exception{
+    public void read(byte[] b, int off, int len) throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.read(" + b + ","+ off +","+len + ") ");
         access.read(name,key,b,off,len);
     }
 
-    public int readInt() throws java.lang.Exception{
+    // fredt - this is based on the same code that reads an int from the .data file in HSQLDB
+    public int readInt() throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.readInt() ");
         byte [] tmp = new byte [4];
-        read(tmp,0, 4);
 
+        int count = access.read(name,key,tmp,0, 4);
+
+        if (count != 4){
+            throw new java.io.IOException();
+        }
+
+        count = 0;
+        int ch0 = tmp[count++] & 0xff;
+        int ch1 = tmp[count++] & 0xff;
+        int ch2 = tmp[count++] & 0xff;
+        int ch3 = tmp[count] & 0xff;
+
+        return ((ch0 << 24) + (ch1 << 16) + (ch2 << 8) + (ch3));
+
+/*
         int ch [] = new int[4];
         for(int i = 0;i < 4; ++i){
             ch[i] = tmp[i];
@@ -128,20 +157,24 @@ public class StorageAccess implements org.hsqldb.Storage {
         }
 
     if ((ch[0] | ch[1] | ch[2] | ch[3]) < 0)
-        throw new Exception();
+        throw new java.io.IOException();
     return ((ch[0] << 24) + (ch[1] << 16) + (ch[2] << 8) + (ch[3] << 0));
         //return access.readInt(name,key);
+*/
     }
 
-    public void seek(long position) throws java.lang.Exception{
+    public void seek(long position) throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.seek("+position +") ");
         access.seek(name,key,position);
     }
 
-    public void write(byte[] b, int offset, int length) throws java.lang.Exception{
+    public void write(byte[] b, int offset, int length) throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.write(" + b + "," + offset +","+length+") ");
         access.write(name,key,b,offset,length);
     }
 
-    public void writeInt(int v) throws java.lang.Exception{
+    public void writeInt(int v) throws java.io.IOException{
+        //appLog.sendLine("NIOScaledRAFile.writeInt(" +v+") ");
         byte [] oneByte = new byte [4];
         oneByte[0] = (byte) ((v >>> 24) & 0xFF);
         oneByte[1] = (byte) ((v >>> 16) & 0xFF);
@@ -149,6 +182,35 @@ public class StorageAccess implements org.hsqldb.Storage {
         oneByte[3] = (byte) ((v >>>  0) & 0xFF);
 
         write(oneByte,0,4);
-        //access.writeInt(name,key,v);
+    }
+
+    public boolean isReadOnly() {
+        return readonly;
+    }
+
+    // fredt - minor change of brackets
+    public long readLong() throws java.io.IOException {
+        // return ((long)(readInt()) << 32) + (readInt() & 0xFFFFFFFFL);
+        return (((long) readInt()) << 32) + (((long) readInt()) & 0xFFFFFFFFL);
+    }
+
+    public boolean wasNio() {
+        return false;
+    }
+
+    public void writeLong(long v) throws java.io.IOException {
+        //appLog.sendLine("NIOScaledRAFile.writeLong(" +v+") ");
+        byte [] oneByte = new byte [8];
+
+        oneByte[0] = (byte) ((v >>> 56) & 0xFF);
+        oneByte[1] = (byte) ((v >>> 48) & 0xFF);
+        oneByte[2] = (byte) ((v >>> 40) & 0xFF);
+        oneByte[3] = (byte) ((v >>> 32) & 0xFF);
+        oneByte[4] = (byte) ((v >>> 24) & 0xFF);
+        oneByte[5] = (byte) ((v >>> 16) & 0xFF);
+        oneByte[6] = (byte) ((v >>>  8) & 0xFF);
+        oneByte[7] = (byte) ((v >>>  0) & 0xFF);
+
+        write(oneByte,0,8);
     }
 }
