@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-08 15:20:24 $
+ *  last change: $Author: mt $ $Date: 2001-08-15 15:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1807,8 +1807,8 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
         ParagraphInfos aInfos = pEditEngine->GetParagraphInfos( nPara );
         if ( aInfos.bValid )
         {
-            aTopLeft.Y() = aInfos.nFirstLineOffset
-                            + aInfos.nFirstLineHeight - aInfos.nFirstLineTextHeight
+            aTopLeft.Y() = /* aInfos.nFirstLineOffset + */ // #91076# nFirstLineOffset is already added to the StartPos (PaintBullet) from the EditEngine
+                            aInfos.nFirstLineHeight - aInfos.nFirstLineTextHeight
                             + aInfos.nFirstLineTextHeight / 2
                             - aBulletSize.Height() / 2;
             // ggf. lieber auf der Baseline ausgeben...
@@ -1822,7 +1822,7 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
                     pRefDev->SetFont( aBulletFont );
                     FontMetric aMetric( pRefDev->GetFontMetric() );
                     // Leading der ersten Zeile...
-                    aTopLeft.Y() = aInfos.nFirstLineOffset + aInfos.nFirstLineMaxAscent;
+                    aTopLeft.Y() = /* aInfos.nFirstLineOffset + */ aInfos.nFirstLineMaxAscent;
                     aTopLeft.Y() -= aMetric.GetAscent();
                     pRefDev->SetFont( aOldFont );
                 }
