@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcache.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ protected:
     inline SwCacheAccess( SwCache &rCache, const void *pOwner, const USHORT nIndex );
 
 public:
-    ~SwCacheAccess() { if ( pObj ) pObj->Unlock(); }
+    virtual ~SwCacheAccess();
 
     virtual BOOL IsAvailable() const;
 
@@ -308,8 +308,8 @@ inline SwCacheObj *SwCache::Next( SwCacheObj *pCacheObj)
 
 inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, BOOL bSeek ) :
     rCache( rC ),
-    pOwner( pOwn ),
-    pObj( 0 )
+    pObj( 0 ),
+    pOwner( pOwn )
 {
     if ( bSeek && pOwner && 0 != (pObj = rCache.Get( pOwner )) )
         pObj->Lock();
@@ -318,8 +318,8 @@ inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, BOOL bSeek )
 inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn,
                               const USHORT nIndex ) :
     rCache( rC ),
-    pOwner( pOwn ),
-    pObj( 0 )
+    pObj( 0 ),
+    pOwner( pOwn )
 {
     if ( pOwner && 0 != (pObj = rCache.Get( pOwner, nIndex )) )
         pObj->Lock();
