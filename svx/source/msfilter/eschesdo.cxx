@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-22 18:26:02 $
+ *  last change: $Author: sj $ $Date: 2001-03-09 13:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,7 +1317,7 @@ BOOL ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
             if( mAny.hasValue() )
                 bRetValue = TRUE;
         }
-        catch(...)
+        catch( ::com::sun::star::uno::Exception& )
         {
             bRetValue = FALSE;
         }
@@ -1332,17 +1332,16 @@ BOOL ImplEESdrObject::ImplGetPropertyValue( const Reference< XPropertySet >& rXP
     BOOL bRetValue = FALSE;
     if( mbValid )
     {
-        TRY
+        try
         {
             mAny = rXPropSet->getPropertyValue( rString );
             if( 0 != mAny.get() )
                 bRetValue = TRUE;
         }
-        CATCH_ALL()
+        catch( ::com::sun::star::uno::Exception& )
         {
             bRetValue = FALSE;
         }
-        END_CATCH;
     }
     return bRetValue;
 }
@@ -1371,6 +1370,6 @@ UINT32 ImplEESdrObject::ImplGetText()
 BOOL ImplEESdrObject::ImplHasText() const
 {
     Reference< XText > xXText( mXShape, UNO_QUERY );
-    return xXText.is();
+    return xXText.is() && xXText->getString().getLength();
 }
 

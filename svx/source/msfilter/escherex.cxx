@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-26 13:57:57 $
+ *  last change: $Author: sj $ $Date: 2001-03-09 13:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,7 +997,7 @@ sal_Bool EscherPropertyContainer::CreatePolygonProperties(
     static String sPolyPolygon      ( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygon" ) );
 
     sal_Bool    bRetValue = sal_True;
-    sal_Bool    bNoLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) == 0;
+    sal_Bool    bLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) != 0;
 
     PolyPolygon aPolyPolygon;
     Polygon     aPolygon;
@@ -1074,25 +1074,6 @@ sal_Bool EscherPropertyContainer::CreatePolygonProperties(
                 bRetValue = pOuterSequence != NULL;
                 if ( bRetValue )
                 {
-                    // ist dies ein Polygon oder gar ein PolyPolygon ?
-                    // sogar eine einfache Line wird als Polygon verpackt !!! ????
-
-                    if ( !bNoLine )
-                    {
-                        ::com::sun::star::drawing::PointSequence* pInnerSequence = pOuterSequence++;
-                        bRetValue = pInnerSequence != NULL;
-                        if ( bRetValue )
-                        {
-                            ::com::sun::star::awt::Point* pArray = pInnerSequence->getArray();
-                            if ( pArray )
-                            {
-                                ::com::sun::star::awt::Point aTopLeft( pArray[ 0 ] );
-                                ::com::sun::star::awt::Point aBottomRight( pArray[ 1 ] );
-                                rGeoRect = ::com::sun::star::awt::Rectangle(
-                                                aTopLeft.X, aTopLeft.Y, aBottomRight.X - aTopLeft.X, aBottomRight.Y - aTopLeft.Y );
-                            }
-                        }
-                    }
                     sal_uInt16 a, b, nInnerSequenceCount;
                     ::com::sun::star::awt::Point* pArray;
 
@@ -1121,104 +1102,120 @@ sal_Bool EscherPropertyContainer::CreatePolygonProperties(
             }
         }
     }
-    if ( bRetValue && bNoLine )
+    if ( bRetValue )
     {
-        sal_uInt16 i, j, k, nPoints, nBezPoints, nPolyCount = aPolyPolygon.Count();
-        Rectangle aRect( aPolyPolygon.GetBoundRect() );
-        rGeoRect = ::com::sun::star::awt::Rectangle( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
-
-        for ( nBezPoints = nPoints = i = 0; i < nPolyCount; i++ )
+        if ( bLine )
         {
-            k = aPolyPolygon[ i ].GetSize();
-            nPoints += k;
-            for ( j = 0; j < k; j++ )
+            if ( aPolygon.GetSize() == 2 )
             {
-                if ( aPolyPolygon[ i ].GetFlags( j ) != POLY_CONTROL )
-                    nBezPoints++;
+                rGeoRect = ::com::sun::star::awt::Rectangle(
+                    aPolygon[ 0 ].X(),
+                        aPolygon[ 0 ].Y(),
+                            aPolygon[ 1 ].X() - aPolygon[ 0 ].X(),
+                                aPolygon[ 1 ].Y() - aPolygon[ 0 ].Y() );
             }
+            else
+                bRetValue = sal_False;
         }
-        sal_uInt32 nVerticesBufSize = ( nPoints << 2 ) + 6;
-        sal_uInt8* pVerticesBuf = new sal_uInt8[ nVerticesBufSize ];
-
-
-        sal_uInt32 nSegmentBufSize = ( ( nBezPoints << 2 ) + 8 );
-        if ( nPolyCount > 1 )
-            nSegmentBufSize += ( nPolyCount << 1 );
-        sal_uInt8* pSegmentBuf = new sal_uInt8[ nSegmentBufSize ];
-
-        sal_uInt8* pPtr = pVerticesBuf;
-        *pPtr++ = (sal_uInt8)( nPoints );                    // Little endian
-        *pPtr++ = (sal_uInt8)( nPoints >> 8 );
-        *pPtr++ = (sal_uInt8)( nPoints );
-        *pPtr++ = (sal_uInt8)( nPoints >> 8 );
-        *pPtr++ = (sal_uInt8)0xf0;
-        *pPtr++ = (sal_uInt8)0xff;
-
-        for ( j = 0; j < nPolyCount; j++ )
+        else
         {
-            aPolygon = aPolyPolygon[ j ];
-            nPoints = aPolygon.GetSize();
-            for ( i = 0; i < nPoints; i++ )             // Punkte aus Polygon in Buffer schreiben
+            sal_uInt16 i, j, k, nPoints, nBezPoints, nPolyCount = aPolyPolygon.Count();
+            Rectangle aRect( aPolyPolygon.GetBoundRect() );
+            rGeoRect = ::com::sun::star::awt::Rectangle( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
+
+            for ( nBezPoints = nPoints = i = 0; i < nPolyCount; i++ )
             {
-                Point aPoint = aPolygon[ i ];
-                aPoint.X() -= rGeoRect.X;
-                aPoint.Y() -= rGeoRect.Y;
-
-                *pPtr++ = (sal_uInt8)( aPoint.X() );
-                *pPtr++ = (sal_uInt8)( aPoint.X() >> 8 );
-                *pPtr++ = (sal_uInt8)( aPoint.Y() );
-                *pPtr++ = (sal_uInt8)( aPoint.Y() >> 8 );
-            }
-        }
-
-        pPtr = pSegmentBuf;
-        *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 1 );
-        *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 9 );
-        *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 1 );
-        *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 9 );
-        *pPtr++ = (sal_uInt8)2;
-        *pPtr++ = (sal_uInt8)0;
-
-        for ( j = 0; j < nPolyCount; j++ )
-        {
-            *pPtr++ = 0x0;          // Polygon start
-            *pPtr++ = 0x40;
-            aPolygon = aPolyPolygon[ j ];
-            nPoints = aPolygon.GetSize();
-            for ( i = 0; i < nPoints; i++ )         // Polyflags in Buffer schreiben
-            {
-                *pPtr++ = 0;
-                if ( bBezier )
-                    *pPtr++ = 0xb3;
-                else
-                    *pPtr++ = 0xac;
-                if ( ( i + 1 ) != nPoints )
+                k = aPolyPolygon[ i ].GetSize();
+                nPoints += k;
+                for ( j = 0; j < k; j++ )
                 {
-                    *pPtr++ = 1;
-                    if ( aPolygon.GetFlags( i + 1 ) == POLY_CONTROL )
-                    {
-                        *pPtr++ = 0x20;
-                        i += 2;
-                    }
-                    else
-                        *pPtr++ = 0;
+                    if ( aPolyPolygon[ i ].GetFlags( j ) != POLY_CONTROL )
+                        nBezPoints++;
                 }
             }
+            sal_uInt32 nVerticesBufSize = ( nPoints << 2 ) + 6;
+            sal_uInt8* pVerticesBuf = new sal_uInt8[ nVerticesBufSize ];
+
+
+            sal_uInt32 nSegmentBufSize = ( ( nBezPoints << 2 ) + 8 );
             if ( nPolyCount > 1 )
+                nSegmentBufSize += ( nPolyCount << 1 );
+            sal_uInt8* pSegmentBuf = new sal_uInt8[ nSegmentBufSize ];
+
+            sal_uInt8* pPtr = pVerticesBuf;
+            *pPtr++ = (sal_uInt8)( nPoints );                    // Little endian
+            *pPtr++ = (sal_uInt8)( nPoints >> 8 );
+            *pPtr++ = (sal_uInt8)( nPoints );
+            *pPtr++ = (sal_uInt8)( nPoints >> 8 );
+            *pPtr++ = (sal_uInt8)0xf0;
+            *pPtr++ = (sal_uInt8)0xff;
+
+            for ( j = 0; j < nPolyCount; j++ )
             {
-                *pPtr++ = 1;                        // end of polygon
-                *pPtr++ = 0x60;
+                aPolygon = aPolyPolygon[ j ];
+                nPoints = aPolygon.GetSize();
+                for ( i = 0; i < nPoints; i++ )             // Punkte aus Polygon in Buffer schreiben
+                {
+                    Point aPoint = aPolygon[ i ];
+                    aPoint.X() -= rGeoRect.X;
+                    aPoint.Y() -= rGeoRect.Y;
+
+                    *pPtr++ = (sal_uInt8)( aPoint.X() );
+                    *pPtr++ = (sal_uInt8)( aPoint.X() >> 8 );
+                    *pPtr++ = (sal_uInt8)( aPoint.Y() );
+                    *pPtr++ = (sal_uInt8)( aPoint.Y() >> 8 );
+                }
             }
+
+            pPtr = pSegmentBuf;
+            *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 1 );
+            *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 9 );
+            *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 1 );
+            *pPtr++ = (sal_uInt8)( ( nSegmentBufSize - 6 ) >> 9 );
+            *pPtr++ = (sal_uInt8)2;
+            *pPtr++ = (sal_uInt8)0;
+
+            for ( j = 0; j < nPolyCount; j++ )
+            {
+                *pPtr++ = 0x0;          // Polygon start
+                *pPtr++ = 0x40;
+                aPolygon = aPolyPolygon[ j ];
+                nPoints = aPolygon.GetSize();
+                for ( i = 0; i < nPoints; i++ )         // Polyflags in Buffer schreiben
+                {
+                    *pPtr++ = 0;
+                    if ( bBezier )
+                        *pPtr++ = 0xb3;
+                    else
+                        *pPtr++ = 0xac;
+                    if ( ( i + 1 ) != nPoints )
+                    {
+                        *pPtr++ = 1;
+                        if ( aPolygon.GetFlags( i + 1 ) == POLY_CONTROL )
+                        {
+                            *pPtr++ = 0x20;
+                            i += 2;
+                        }
+                        else
+                            *pPtr++ = 0;
+                    }
+                }
+                if ( nPolyCount > 1 )
+                {
+                    *pPtr++ = 1;                        // end of polygon
+                    *pPtr++ = 0x60;
+                }
+            }
+            *pPtr++ = 0;
+            *pPtr++ = 0x80;
+
+            AddOpt( ESCHER_Prop_geoRight, rGeoRect.Width );
+            AddOpt( ESCHER_Prop_geoBottom, rGeoRect.Height );
+
+            AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+            AddOpt( ESCHER_Prop_pVertices, TRUE, nVerticesBufSize - 6, (sal_uInt8*)pVerticesBuf, nVerticesBufSize );
+            AddOpt( ESCHER_Prop_pSegmentInfo, TRUE, nSegmentBufSize, (sal_uInt8*)pSegmentBuf, nSegmentBufSize );
         }
-        *pPtr++ = 0;
-        *pPtr++ = 0x80;
-
-        AddOpt( ESCHER_Prop_geoRight, rGeoRect.Width );
-        AddOpt( ESCHER_Prop_geoBottom, rGeoRect.Height );
-
-        AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-        AddOpt( ESCHER_Prop_pVertices, TRUE, nVerticesBufSize - 6, (sal_uInt8*)pVerticesBuf, nVerticesBufSize );
-        AddOpt( ESCHER_Prop_pSegmentInfo, TRUE, nSegmentBufSize, (sal_uInt8*)pSegmentBuf, nSegmentBufSize );
     }
     return bRetValue;
 }
@@ -1483,10 +1480,6 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
                     sal_Bool bTestPropertyAvailability )
 {
     sal_Bool bRetValue = sal_True;
-
-#ifdef UNX
-    bTestPropertyAvailability = sal_True;
-#endif
     if ( bTestPropertyAvailability )
     {
         bRetValue = sal_False;
@@ -1497,9 +1490,9 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rString );
         }
-        catch(...)
+        catch( ::com::sun::star::uno::Exception& )
         {
-            //...
+            bRetValue = sal_False;
         }
     }
     if ( bRetValue )
@@ -1510,7 +1503,7 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
             if ( !rAny.hasValue() )
                 bRetValue = sal_False;
         }
-        catch(...)
+        catch( ::com::sun::star::uno::Exception& )
         {
             bRetValue = sal_False;
         }
@@ -1532,7 +1525,7 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
         if ( aXPropState.is() )
             eRetValue = aXPropState->getPropertyState( rPropertyName );
     }
-    catch(...)
+    catch( ::com::sun::star::uno::Exception& )
     {
         //...
     }
