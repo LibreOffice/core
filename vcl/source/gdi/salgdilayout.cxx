@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:34:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,10 @@
 
 #define _SV_OUTDEV_CXX
 #include <tools/ref.hxx>
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#endif
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
@@ -79,11 +76,6 @@
 #endif
 #ifndef _SV_SALPRN_HXX
 #include <salprn.hxx>
-#endif
-#else
-#ifndef _SV_RMOUTDEV_HXX
-#include <rmoutdev.hxx>
-#endif
 #endif
 
 #ifndef _DEBUG_HXX
