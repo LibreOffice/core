@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 14:03:04 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 10:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,9 +592,16 @@ void OFormattedModel::fillProperties(
 
         // der Supplier ist fuer uns nur read-only
         ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATSSUPPLIER, com::sun::star::beans::PropertyAttribute::READONLY, 0);
+
         // TreatAsNumeric nicht transient : wir wollen es an der UI anbinden (ist noetig, um dem EffectiveDefault
         // - der kann Text oder Zahl sein - einen Sinn zu geben)
         ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, com::sun::star::beans::PropertyAttribute::TRANSIENT);
+        // same for FormatKey
+        // (though the paragraph above for the TreatAsNumeric does not hold anymore - we do not have an UI for this.
+        // But we have for the format key ...)
+        // 25.06.2001 - 87862 - frank.schoenheit@sun.com
+        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATKEY, 0, com::sun::star::beans::PropertyAttribute::TRANSIENT);
+
         RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
             // no strict format property for formatted fields: it does not make sense, 'cause
             // there is no general way to decide which characters/sub strings are allowed during the input of an
