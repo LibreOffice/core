@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:27:07 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,8 @@ FASTBOOL SfxApplication::Initialize_Impl()
 //! FSysEnableSysErrorBox( FALSE ); (pb) replaceable?
 
     Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    if (!xDesktop.is())
+         throw RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Couldn't create mandatory desktop service!" )), xDesktop );
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl() );
 
     if( !CheckTryBuy_Impl() )
