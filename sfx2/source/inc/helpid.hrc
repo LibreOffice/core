@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:37:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,6 @@
 #define HID_CNT_CB_FORCE_BODY_EXPORT                (HID_SFX_START + 240)
 #define HID_CNT_PAGE_REPSTATE_CONTROL               (HID_SFX_START + 241)
 #define HID_TASKSTATUSBAR                           (HID_SFX_START + 242)
-#define HID_STATUSBAR                               (HID_SFX_START + 243)
 #define HID_CNT_PAGE_HEADER_TABBAR                  (HID_SFX_START + 244)
 #define HID_CNT_PAGE_SUBSCR_TABBAR                  (HID_SFX_START + 245)
 #define HID_CHAOSDOC_MN_PART_PRINT                  (HID_SFX_START + 246)
