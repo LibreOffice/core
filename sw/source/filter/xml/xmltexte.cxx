@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:09:39 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
 {
     String sRelURL;
 
-    if( bToRel )
+    if( bToRel && (rURL.Len() > 0) )
         sRelURL = INetURLObject::AbsToRel(rURL,
                       INetURLObject::WAS_ENCODED,
                       INetURLObject::DECODE_UNAMBIGUOUS);
