@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:47:21 $
+ *  last change: $Author: gh $ $Date: 2001-11-13 12:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,8 +352,8 @@ void SbiImage::MakeStrings( short nSize )
 // Hinzufuegen eines Strings an den StringPool. Der String-Puffer
 // waechst dynamisch in 1K-Schritten
 
-// AB 12.5.2000 Aus Zeitgruenden vorerst weiter auf char-Basis
-// TODO: Auch hier auf Unicode umstellen, d.h. sal_Unicode-Array
+
+
 void SbiImage::AddString( const String& r )
 {
     if( nStringIdx >= nStrings )
@@ -366,13 +366,15 @@ void SbiImage::AddString( const String& r )
             bError = TRUE;  // out of mem!
         else if( (USHORT) needed > nStringSize )
         {
-            sal_Unicode* p = new sal_Unicode[ nStringSize + 1024 ];
+            UINT16 nNewLen = needed + 1024;
+            nNewLen &= 0xFC00;  // trim to 1K border
+            sal_Unicode* p = new sal_Unicode[ nNewLen ];
             if( p )
             {
                 memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
                 delete pStrings;
                 pStrings = p;
-                nStringSize += 1024;
+                nStringSize += nNewLen;
             }
             else
                 bError = TRUE;
