@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 13:06:27 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
-#ifndef _FM_IMPLEMENTATION_IDS_HXX_
-#include "fmimplids.hxx"
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 
 DBG_NAME(SvxFmDrawPage);
@@ -92,18 +92,26 @@ SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
     SvxDrawPage( pInPage )
 {
     DBG_CTOR(SvxFmDrawPage,NULL);
-    m_pHoldImplIdHelper = new ::form::OImplementationIdsRef();
 }
 
 SvxFmDrawPage::~SvxFmDrawPage() throw ()
 {
-    delete m_pHoldImplIdHelper;
     DBG_DTOR(SvxFmDrawPage,NULL);
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SvxFmDrawPage::getImplementationId() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::form::OImplementationIds::getImplementationId(getTypes());
+    static ::cppu::OImplementationId* pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 ::com::sun::star::uno::Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException)
