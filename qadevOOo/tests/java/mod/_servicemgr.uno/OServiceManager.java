@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OServiceManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:25:05 $
+ *  last change:$Date: 2005-03-29 11:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,12 +162,12 @@ public class OServiceManager extends TestCase {
                 (XSet.class, oInterface) ;
             XSet set1 = (XSet) UnoRuntime.queryInterface
                 (XSet.class, srvMan) ;
-            XEnumeration enum = set1.createEnumeration();
-            Object srv = enum.nextElement();
+            XEnumeration oEnum = set1.createEnumeration();
+            Object srv = oEnum.nextElement();
 
             set.insert(srv) ;
 
-            newElement = enum.nextElement();
+            newElement = oEnum.nextElement();
 
             XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
                                             XPropertySet.class, oInterface);
