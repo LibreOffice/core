@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2002-06-13 09:09:46 $
+#   last change: $Author: dbo $ $Date: 2002-08-13 10:35:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/InterfaceContainer.class	\
     $(CLASSDIR)$/$(PACKAGE)$/MultiTypeInterfaceContainer.class \
         $(CLASSDIR)$/$(PACKAGE)$/PropertySet.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/UnoUrl.class
+    $(CLASSDIR)$/$(PACKAGE)$/UnoUrl.class		\
+    $(CLASSDIR)$/$(PACKAGE)$/Factory.class
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk

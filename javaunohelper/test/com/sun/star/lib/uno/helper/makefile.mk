@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2002-08-06 13:55:53 $
+#   last change: $Author: dbo $ $Date: 2002-08-13 10:35:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,8 @@ TARGET  = com_sun_star_lib_uno_helper_test
 # --- Settings -----------------------------------------------------
 
 #.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+.INCLUDE :  $(PRJ)$/util/makefile.pmk
+
 # --- Files --------------------------------------------------------
 
 JARFILES = sandbox.jar jurt.jar ridl.jar juh.jar
@@ -81,10 +82,23 @@ JAVACLASSFILES=	\
     $(CLASSDIR)$/$(PACKAGE)$/ProxyProvider.class \
     $(CLASSDIR)$/$(PACKAGE)$/AWeakBase.class    \
         $(CLASSDIR)$/$(PACKAGE)$/PropertySet_Test.class \
-    $(CLASSDIR)$/$(PACKAGE)$/UnoUrlTest.class
-
-#JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
+    $(CLASSDIR)$/$(PACKAGE)$/UnoUrlTest.class	\
+    $(CLASSDIR)$/$(PACKAGE)$/Factory_Test.class
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+CPATH_JARS = java_uno.jar $(JARFILES)
+CPATH_TMP1 = $(foreach,j,$(CPATH_JARS) $(SOLARBINDIR)$/$j)
+CPATH_TMP2 = $(strip $(subst,!,$(PATH_SEPERATOR) $(CPATH_TMP1:s/ /!/)))
+CPATH = $(CPATH_TMP2)$(PATH_SEPERATOR)$(OUT)$/bin$/factory_test.jar$(PATH_SEPERATOR)$(XCLASSPATH)
+
+$(OUT)$/bin$/factory_test.jar : $(CLASSDIR)$/$(PACKAGE)$/Factory_Test.class
+    -rm -f $@
+    @echo RegistrationClassName: com.sun.star.lib.uno.helper.Factory_Test > $(OUT)$/bin$/manifest.mf
+    -jar cvfm $@ $(OUT)$/bin$/manifest.mf -C $(CLASSDIR) $(PACKAGE)$/Factory_Test.class
+
+run_factory_test : $(OUT)$/bin$/factory_test.jar
+    -$(GNUCOPY) $(SOLARBINDIR)$/udkapi.rdb $(OUT)$/bin$/factory_test.rdb
+    -java -classpath $(CPATH) com.sun.star.lib.uno.helper.Factory_Test $(OUT)$/bin$/factory_test.jar $(OUT)$/bin$/factory_test.rdb
