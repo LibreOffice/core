@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:23:55 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,6 +1125,28 @@ void ScDocument::DeleteAreaTab( const ScRange& rRange, USHORT nDelFlag )
         DeleteAreaTab( rRange.aStart.Col(), rRange.aStart.Row(),
                        rRange.aEnd.Col(),   rRange.aEnd.Row(),
                        nTab, nDelFlag );
+}
+
+
+void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
+                                BOOL bColInfo, BOOL bRowInfo )
+{
+    if (bIsUndo)
+    {
+        Clear();
+
+        xPoolHelper = pSrcDoc->xPoolHelper;
+
+        String aString;
+        for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+            if ( rTabSelection.GetTableSelect( nTab ) )
+            {
+                pTab[nTab] = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+                nMaxTableNumber = nTab + 1;
+            }
+    }
+    else
+        DBG_ERROR("InitUndo");
 }
 
 
