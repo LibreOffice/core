@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 12:59:42 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 09:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #ifndef _TOOLS_INTN_HXX
 #include <tools/intn.hxx>
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
+
 
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -105,7 +109,7 @@ namespace dbaccess
                                     ::com::sun::star::sdbcx::XColumnsSupplier,
                                     ::com::sun::star::lang::XServiceInfo    > OQueryComposer_BASE;
 
-    class OQueryComposer :  public ::connectivity::OBaseMutex,
+    class OQueryComposer :  public ::comphelper::OBaseMutex,
                             public OSubComponent,
                             public OQueryComposer_BASE
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 09:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1670,51 +1670,7 @@ Reference< XConnection >  ORowSet::calcConnection() throw( SQLException, Runtime
                     throw SQLException();
                 }
             }
-            else
-            {
-#ifdef DEBUG
-                Reference<XDriverManager> xMan(m_xServiceManager->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager")),UNO_QUERY);
-                Sequence<PropertyValue> aInfo(2);
-                aInfo[0].Name    = ::rtl::OUString::createFromAscii("CharSet");
-                aInfo[0].Value <<= RTL_TEXTENCODING_IBM_850;
-                aInfo[1].Name    = ::rtl::OUString::createFromAscii("Extension");
-                aInfo[1].Value <<= ::rtl::OUString::createFromAscii("txt");
-
-                m_xActiveConnection = xMan->getConnectionWithInfo(::rtl::OUString::createFromAscii("sdbc:flat:file:///G|/Office50/user/database/"),aInfo);
-                if(!m_xActiveConnection.is())
-#endif
-                    throw SQLException();
-
-            }
-//          {
-//              Reference< XDatabaseEnvironment >  xEnvironment(m_xServiceManager->createInstance(SERVICE_SDB_DATABASEENVIRONMENT), UNO_QUERY);
-//              if (xEnvironment.is())
-//              {
-//                  Reference< XDataSource >  xDataSource(xEnvironment->getDatabaseAccess(m_aDataSourceName), UNO_QUERY);
-//                  if (xDataSource.is())
-//                      m_xActiveConnection = xDataSource->getConnection(m_aUser, m_aPassword);
-//              }
-//          }
         }
-//      else if (m_aURL.len())
-//      {
-//          Reference< XDatabaseEnvironment >  xEnvironment(m_xServiceManager->createInstance(SERVICE_SDB_DATABASEENVIRONMENT), UNO_QUERY);
-//          if (xEnvironment.is())
-//          {
-//              if (m_aUser.len())
-//              {
-//                  Sequence< PropertyValue > aInfo(2);
-//                  aInfo.getArray()[0].Name = rtl::OUString::createFromAscii("User");
-//                  aInfo.getArray()[0].Value <<= m_aUser;
-//                  aInfo.getArray()[1].Name = rtl::OUString::createFromAscii("Password");
-//                  aInfo.getArray()[1].Value <<= m_aPassword;
-//                  m_xActiveConnection = xEnvironment->getConnectionWithInfo(m_aURL, aInfo);
-//              }
-//              else
-//                  m_xActiveConnection = xEnvironment->getConnection(m_aURL);
-//          }
-//      }
-
         // listen if the connection disappears
         Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
         if (xComponent.is())

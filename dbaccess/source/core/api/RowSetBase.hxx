@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 09:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 
 
 namespace connectivity { class OSQLParseTreeIterator; }
@@ -125,7 +128,7 @@ namespace dbaccess
     class ORowSetCache;
     class ORowSetDataColumns;
 
-    class ORowSetBase : public connectivity::OBaseMutex,
+    class ORowSetBase : public comphelper::OBaseMutex,
                         public ORowSetBase_BASE,
                         public ::comphelper::OPropertyContainer,
                         public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info

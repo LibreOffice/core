@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:07:50 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 09:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include <connectivity/sdbcx/VCollection.hxx>
 #endif
@@ -140,7 +143,7 @@ typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::lang::XServiceInfo
 
 //------------------------------------------------------------
 class OColumnSettings;
-class OColumn   :public connectivity::OBaseMutex
+class OColumn   :public comphelper::OBaseMutex
                 ,public OColumnBase
                 ,public ::cppu::OPropertySetHelper
 
