@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2003-05-28 10:03:37 $
+ *  last change:$Date: 2003-09-08 13:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,6 @@ package mod._toolkit;
 
 import java.io.PrintWriter;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -81,6 +70,18 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 
 /**
  * Test for object that implements the following interfaces :
@@ -128,7 +129,7 @@ public class AccessibleToolBoxItem extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
+                    XDesktop.class, DesktopTools.createDesktop( (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -139,7 +140,7 @@ public class AccessibleToolBoxItem extends TestCase {
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
-            xTextDoc.dispose();
+            closeDoc();
         }
     }
 
@@ -171,10 +172,10 @@ public class AccessibleToolBoxItem extends TestCase {
 
         log.println( "creating a test environment" );
 
-        if (xTextDoc != null) xTextDoc.dispose();
+        if (xTextDoc != null) closeDoc();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
@@ -188,13 +189,11 @@ public class AccessibleToolBoxItem extends TestCase {
         XModel aModel = (XModel)
                     UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
-        XController xController = aModel.getCurrentController();
-
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) tParam.getMSF(), aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
@@ -227,5 +226,16 @@ public class AccessibleToolBoxItem extends TestCase {
         tEnv.addObjRelation("XAccessibleText.Text", "Bold");
 
         return tEnv;
+    }
+
+    protected void closeDoc() {
+        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xTextDoc);
+        try {
+            closer.close(true);
+        } catch(com.sun.star.util.CloseVetoException e) {
+            log.println("Couldn't close document "+e.getMessage());
+        } catch(com.sun.star.lang.DisposedException e) {
+            log.println("Couldn't close document "+e.getMessage());
+        }
     }
 }
