@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuItem.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-03-26 12:24:26 $
+ *  last change: $Date: 2003-03-26 12:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,9 +157,10 @@ public class AccessibleMenuItem extends TestCase {
             XAccessibleAction act = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class, Menu);
             act.doAccessibleAction(0);
 
-            //get a menue-item
-            oObj = Menu.getAccessibleContext().getAccessibleChild(6);
+            shortWait();
 
+            //get a menue-item
+            oObj = Menu.getAccessibleContext().getAccessibleChild(9);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
 
         }
