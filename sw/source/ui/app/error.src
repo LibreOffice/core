@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:05:30 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ InfoBox ERR_CLPBRD_WRITE
     MESSAGE[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚ÉºËß°’†‚É´×°”­¶";
     MESSAGE[ chinese_traditional ] = "½Æ»s¸ê®Æ¨ì°Å¶KÃ¯®Éµo¥Í¿ù»~¡C";
     MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáäÓÎ Åáì ÇáÍÇİÙÉ.";
-    MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíôéãñáöŞ óôï clipboard.";
+    MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíôéãñáöŞ óôï ğñü÷åéñï.";
     MESSAGE[ korean ] = "Å¬¸³º¸µå¿¡ º¹»ç Áß ¿À·ù.";
     MESSAGE[ turkish ] = "Panoya kopyalama hatası.";
     MESSAGE[ language_user1 ] = " ";
@@ -164,7 +164,7 @@ InfoBox ERR_CLPBRD_READ
     MESSAGE [ finnish ] = "Virhe luettaessa leikepöydältä." ;
     MESSAGE [ danish ] = "Fejl under læsning fra udskriftsholderen." ;
     MESSAGE [ french ] = "Erreur lors de la lecture du presse-papiers." ;
-    MESSAGE [ swedish ] = "Fel vid läsning ur urklippet." ;
+    MESSAGE [ swedish ] = "Fel vid läsning från urklippet." ;
     MESSAGE [ dutch ] = "Fout bij lezen van Klembord." ;
     MESSAGE [ spanish ] = "Error al leer del portapapeles." ;
     MESSAGE [ english_us ] = "Error reading from the clipboard." ;
@@ -175,7 +175,7 @@ InfoBox ERR_CLPBRD_READ
     MESSAGE[ chinese_traditional ] = "¦bÅª¨ú°Å¶KÃ¯®Éµo¥Í¿ù»~¡C";
     MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáŞÑÇÁÉ ãä ÇáÍÇİÙÉ.";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç áğü ôï Clipboard.";
+    MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç áğü ôï ğñü÷åéñï.";
     MESSAGE[ korean ] = "Å¬¸³º¸µå·ÎºÎÅÍ ÀĞ±â ¿À·ù.";
     MESSAGE[ turkish ] = "Panodan okuma hatası.";
 };
@@ -411,7 +411,7 @@ Resource RID_SW_ERRHDL
         TEXT [ finnish ] = "Virhe kirjoitettaessa tilapäistiedostoa " ;
         TEXT [ danish ] = "Fejl under skrivning af midlertidig fil" ;
         TEXT [ french ] = "Erreur d'écriture du fichier temporaire" ;
-        TEXT [ swedish ] = "Fel vid skrivning till temporär fil" ;
+        TEXT [ swedish ] = "Fel vid skrivning av temporär fil" ;
         TEXT [ dutch ] = "Fout bij het schrijven van tijdelijk bestand" ;
         TEXT [ spanish ] = "Error al escribir el archivo temporal" ;
         TEXT [ english_us ] = "Error writing temporary file" ;
@@ -438,7 +438,7 @@ Resource RID_SW_ERRHDL
         TEXT [ dutch ] = "Invoegbereik in INI-bestand is te groot" ;
         TEXT [ spanish ] = "El área de inserción en el archivo Ini es demasiado grande" ;
         TEXT [ danish ] = "Importområdet i ini-filen er for stort" ;
-        TEXT [ swedish ] = "Importområdet i Ini-filen är för stort" ;
+        TEXT [ swedish ] = "Importområdet i ini-filen är för stort" ;
         TEXT [ finnish ] = "Import range from ini file to large" ;
         TEXT [ english_us ] = "Inserted section in ini file too large" ;
         TEXT[ chinese_simplified ] = "Ini ÎÄ¼ş²åÈëÇøÓòÌ«´ó";
@@ -485,7 +485,7 @@ Resource RID_SW_ERRHDL
         Text [ spanish ] = "El archivo se escribió en una versión más nueva" ;
         Text [ french ] = "Ce fichier a été créé à l'aide d'une version plus récente" ;
         Text [ dutch ] = "Bestand werd onder een nieuwere versie opgeslagen" ;
-        Text [ swedish ] = "Filen är skriven i en nyare version" ;
+        Text [ swedish ] = "Filen har skrivits i en nyare version" ;
         Text [ danish ] = "Filen er blevet skrevet af en nyere version" ;
         Text [ portuguese ] = "O ficheiro foi escrito numa versão mais moderna" ;
         Text [ portuguese_brazilian ] = "Datei wurde von einer neueren Version geschrieben" ;
@@ -506,7 +506,7 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "This isn't a WinWord97 file" ;
         TEXT[ english_us ] = "This is not a WinWord97 file";
         TEXT[ portuguese ] = "Não é um ficheiro WinWord97";
-        TEXT[ russian ] = "This isn't a WinWord97 file";
+        TEXT[ russian ] = "Äàííûé ôàéë íå ÿâëÿåòñÿ ôàéëîì WinWord97";
         TEXT[ greek ] = "Ôï áñ÷åßï áõôü äåí åßíáé ôığïõ WinWord97";
         TEXT[ dutch ] = "Dit is geen WinWord97 bestand";
         TEXT[ french ] = "Il ne s'agit pas d'un fichier WinWord97 !";
@@ -535,7 +535,7 @@ Resource RID_SW_ERRHDL
         TEXT [ finnish ] = "Virhe kirjoitettaessa tiedostoa " ;
         TEXT [ danish ] = "Fejl under skrivning af filen " ;
         TEXT [ french ] = "Erreur d'écriture du fichier " ;
-        TEXT [ swedish ] = "Fel vid skrivning till fil " ;
+        TEXT [ swedish ] = "Fel vid skrivning av fil " ;
         TEXT [ dutch ] = "Fout bij het schrijven van het bestand  " ;
         TEXT [ spanish ] = "Error al escribir el archivo " ;
         TEXT [ english_us ] = "Error writing file " ;
@@ -583,7 +583,7 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Non è possibile creare il documento" ;
         Text [ spanish ] = "No se puede crear el documento" ;
         Text [ french ] = "Impossible de créer le document" ;
-        Text [ swedish ] = "Dokumentet kan inte skapas" ;
+        Text [ swedish ] = "Det går inte att skapa dokumentet" ;
         Text [ danish ] = "Dokumentet kan ikke oprettes" ;
         Text [ portuguese ] = "É impossível criar o documento" ;
         Text [ portuguese_brazilian ] = "Das Dokument kann nicht angelegt werden" ;
@@ -966,7 +966,7 @@ Resource RID_SW_ERRHDL
         Text [ english_us ] = "Cells cannot be further split" ;
         Text [ italian ] = "Non è più possibile dividere le celle" ;
         Text [ spanish ] = "Las celdas no se pueden dividir más" ;
-        Text [ french ] = "Impossible de scinder (davantage) les cellules" ;
+        Text [ french ] = "Impossible de scinder davantage les cellules" ;
         Text [ swedish ] = "Cellerna kan inte delas mer" ;
         Text [ danish ] = "Cellerne kan ikke deles mere" ;
         Text [ portuguese ] = "É impossível dividir mais as células" ;
@@ -992,7 +992,7 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Impossibile inserire altre colonne." ;
         Text [ spanish ] = "No se pueden insertar columnas adicionales" ;
         Text [ french ] = "Impossible d'insérer des colonnes supplémentaires" ;
-        Text [ swedish ] = "Ytterligare kolumner kan inte infogas" ;
+        Text [ swedish ] = "Det går inte att infoga fler kolumner" ;
         Text [ danish ] = "Det er ikke muligt at indsætte flere kolonner" ;
         Text [ portuguese ] = "Impossível inserir colunas adicionais" ;
         Text [ portuguese_brazilian ] = "weitere Spalten können nicht eingefügt werden" ;
@@ -1041,7 +1041,7 @@ Resource RID_SW_ERRHDL
         Text [ spanish ] = "No se pudo cargar ningún dibujo" ;
         Text [ french ] = "Impossible de charger des dessins" ;
         Text [ dutch ] = "Er konden geen tekeningen worden geladen" ;
-        Text [ swedish ] = "Inga teckningar kunde laddas" ;
+        Text [ swedish ] = "Det gick inte att ladda några teckningar" ;
         Text [ danish ] = "Det var ikke muligt at indlæse nogen tegninger" ;
         Text [ portuguese ] = "Foi impossível carregar desenhos" ;
         Text [ portuguese_brazilian ] = "Es konnten keine Zeichnungen geladen werden" ;
@@ -1095,7 +1095,7 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Non è stato possibile leggere tutti gli attributi" ;
         Text [ spanish ] = "No se pudieron leer todos los atributos" ;
         Text [ french ] = "Impossible de lire tous les attributs" ;
-        Text [ swedish ] = "Alla attribut kunde inte läsas" ;
+        Text [ swedish ] = "Det gick inte att läsa alla attribut" ;
         Text [ danish ] = "Det var ikke muligt at læse alle attributter" ;
         Text [ portuguese ] = "Foi impossível ler todos os atributos" ;
         Text [ portuguese_brazilian ] = "Es konnten nicht alle Attribute gelesen werden" ;
@@ -1119,7 +1119,7 @@ Resource RID_SW_ERRHDL
         Text [ spanish ] = "No se pudieron grabar todos los atributos" ;
         Text [ french ] = "Impossible d'écrire tous les attributs" ;
         Text [ dutch ] = "Niet alle attributen konden worden geschreven" ;
-        Text [ swedish ] = "Alla attribut kunde inte skrivas" ;
+        Text [ swedish ] = "Det gick inte att skriva alla attribut" ;
         Text [ danish ] = "Det var ikke muligt at skrive alle attributter" ;
         Text [ portuguese ] = "Foi impossível gravar todos os atributos" ;
         Text [ portuguese_brazilian ] = "Es konnten nicht alle Attribute geschrieben werden" ;
@@ -1194,7 +1194,7 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Non è stato possibile caricare il file completamente" ;
         Text [ spanish ] = "No se pudo cargar completamente el documento" ;
         Text [ french ] = "Le document n'a pas pu être chargé dans son intégralité" ;
-        Text [ swedish ] = "Dokumentet kunde inte laddas fullständigt" ;
+        Text [ swedish ] = "Det gick inte att ladda dokumentet fullständigt" ;
         Text [ danish ] = "Det var ikke muligt at indlæse dokumentet helt" ;
         Text [ portuguese ] = "Foi impossível carregar o documento completamente" ;
         Text [ portuguese_brazilian ] = "Dokument konnte nicht vollständig geladen werden" ;
@@ -1219,7 +1219,7 @@ Resource RID_SW_ERRHDL
         Text [ spanish ] = "No se pudo guardar completamente el documento" ;
         Text [ french ] = "Le document n'a pas pu être enregistré dans son intégralité" ;
         Text [ dutch ] = "Document kon niet volledig worden opgeslagen" ;
-        Text [ swedish ] = "Dokumentet kunde inte sparas fullständigt" ;
+        Text [ swedish ] = "Det gick inte att spara dokumentet fullständigt" ;
         Text [ danish ] = "Det var ikke muligt at gemme dokumentet helt" ;
         Text [ portuguese ] = "Foi impossível guardar o documento completamente" ;
         Text [ portuguese_brazilian ] = "Dokument konnte nicht vollständig gespeichert werden" ;
