@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:09:11 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "Podmínka 1";
         Text[ hebrew ] = "Bedingung ~1";
         Text[ hindi ] = "शर्त ~1";
+        Text[ slovak ] = "Podmienka ~1";
     };
     ListBox LB_COND1_1
     {
@@ -245,6 +246,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
          < "कोष्ठ का मूल्य" ; Default ; > ;
         < "सूत्र" ; Default ; > ;
+    };
+    StringList [ slovak ] =
+    {
+         < "Hodnota bunky je" ; Default ; > ;
+        < "Vzorec je" ; Default ; > ;
     };
     };
     ListBox LB_COND1_2
@@ -542,6 +548,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "बीच में" ; Default ; > ;
         < "बीच में नहीं" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "sa rovná" ; Default ; > ;
+        < "je menšie ako" ; Default ; > ;
+        < "je väčší ako" ; Default ; > ;
+        < "je menšie alebo sa rovná" ; Default ; > ;
+        < "je väčší alebo sa rovná" ; Default ; > ;
+        < "nie je rovné" ; Default ; > ;
+        < "medzi" ; Default ; > ;
+        < "nie je medzi" ; Default ; > ;
+    };
     };
     Edit EDT_COND1_1
     {
@@ -583,6 +600,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_COND1_AND
     {
@@ -616,6 +634,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "a";
         Text[ hebrew ] = "‮לבין‬";
         Text[ hindi ] = "और";
+        Text[ slovak ] = "a";
     };
     Edit EDT_COND1_2
     {
@@ -657,6 +676,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_COND1_TEMPLATE
     {
@@ -690,6 +710,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "Styl buňky";
         Text[ hebrew ] = "~Zellvorlage";
         Text[ hindi ] = "~कोष्ठ शैली";
+        Text[ slovak ] = "Štýl ~bunky";
     };
     ListBox LB_COND1_TEMPLATE
     {
@@ -737,6 +758,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "Podmínka 2";
         Text[ hebrew ] = "Bedingung ~2";
         Text[ hindi ] = "शर्त ~2";
+        Text[ slovak ] = "Podmienka ~2";
     };
     ListBox LB_COND2_1
     {
@@ -879,6 +901,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
          < "कोष्ठ का मूल्य" ; Default ; > ;
         < "सूत्र" ; Default ; > ;
+    };
+    StringList [ slovak ] =
+    {
+         < "Hodnota bunky je" ; Default ; > ;
+        < "Vzorec je" ; Default ; > ;
     };
     };
     ListBox LB_COND2_2
@@ -1176,6 +1203,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "बीच में" ; Default ; > ;
         < "बीच में नहीं" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "sa rovná" ; Default ; > ;
+        < "je menšie ako" ; Default ; > ;
+        < "je väčší ako" ; Default ; > ;
+        < "je menšie alebo sa rovná" ; Default ; > ;
+        < "je väčší alebo sa rovná" ; Default ; > ;
+        < "nie je rovné" ; Default ; > ;
+        < "medzi" ; Default ; > ;
+        < "nie je medzi" ; Default ; > ;
+    };
     };
     Edit EDT_COND2_1
     {
@@ -1217,6 +1255,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_COND2_AND
     {
@@ -1250,6 +1289,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "a";
         Text[ hebrew ] = "‮לבין‬";
         Text[ hindi ] = "और";
+        Text[ slovak ] = "a";
     };
     Edit EDT_COND2_2
     {
@@ -1291,6 +1331,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_COND2_TEMPLATE
     {
@@ -1324,6 +1365,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "Styl buňky";
         Text[ hebrew ] = "Z~ellvorlage";
         Text[ hindi ] = "को~ष्ठ शैली";
+        Text[ slovak ] = "Štýl bun~ky";
     };
     ListBox LB_COND2_TEMPLATE
     {
@@ -1371,6 +1413,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "Podmínka 3";
         Text[ hebrew ] = "Bedingung ~3";
         Text[ hindi ] = "शर्त ~3";
+        Text[ slovak ] = "Podmienka ~3";
     };
     ListBox LB_COND3_1
     {
@@ -1513,6 +1556,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
          < "कोष्ठ का मूल्य" ; Default ; > ;
         < "सूत्र" ; Default ; > ;
+    };
+    StringList [ slovak ] =
+    {
+         < "Hodnota bunky je" ; Default ; > ;
+        < "Vzorec je" ; Default ; > ;
     };
     };
     ListBox LB_COND3_2
@@ -1810,6 +1858,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "बीच में" ; Default ; > ;
         < "बीच में नहीं" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "sa rovná" ; Default ; > ;
+        < "je menšie ako" ; Default ; > ;
+        < "je väčší ako" ; Default ; > ;
+        < "je menšie alebo sa rovná" ; Default ; > ;
+        < "je väčší alebo sa rovná" ; Default ; > ;
+        < "nie je rovné" ; Default ; > ;
+        < "medzi" ; Default ; > ;
+        < "nie je medzi" ; Default ; > ;
+    };
     };
     Edit EDT_COND3_1
     {
@@ -1851,6 +1910,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_COND3_AND
     {
@@ -1884,6 +1944,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "a";
         Text[ hebrew ] = "‮לבין‬";
         Text[ hindi ] = "और";
+        Text[ slovak ] = "a";
     };
     Edit EDT_COND3_2
     {
@@ -1925,6 +1986,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_COND3_TEMPLATE
     {
@@ -1958,6 +2020,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ czech ] = "Styl buňky";
         Text[ hebrew ] = "Ze~llvorlage";
         Text[ hindi ] = "को~ष्ठ शैली";
+        Text[ slovak ] = "Štý~l bunky";
     };
     ListBox LB_COND3_TEMPLATE
     {
@@ -2012,7 +2075,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ czech ] = "Podmíněné formátování";
     Text[ hebrew ] = "Bedingte Formatierung";
     Text[ hindi ] = "शर्त के अन्तर्गत रचना";
+    Text[ slovak ] = "Podmienené formátovanie";
 };
+
+
 
 
 
