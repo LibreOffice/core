@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: gt $ $Date: 2002-11-19 11:17:00 $
+ *  last change: $Author: gt $ $Date: 2002-11-22 14:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,8 @@ private:
 protected:
     virtual void    Resize();
     virtual BOOL    Close();
+    virtual Window* GetPreferredKeyInputWindow();
+    virtual void    GetFocus();
 
 public:
     SvxLineWindow_Impl( USHORT nId, SfxBindings& rBindings );
@@ -1424,10 +1426,9 @@ BOOL SvxFrameWindow_Impl::Close()
 
 SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, SfxBindings &rBindings ) :
 
-    SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK ), rBindings ),
+    SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL ), rBindings ),
 
-    aLineSet( this, WinBits( WB_3DLOOK | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_NONEFIELD ) )
-
+    aLineSet( this, WinBits( WB_3DLOOK | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_NONEFIELD | WB_NO_DIRECTSELECT ) )
 {
     Size    aBmpSize( 55, 12 );
     Bitmap  aBmp;
@@ -1721,6 +1722,20 @@ void SvxLineWindow_Impl::StartSelection()
 BOOL SvxLineWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
+}
+
+// -----------------------------------------------------------------------
+
+Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
+{
+    return &aLineSet;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxLineWindow_Impl::GetFocus()
+{
+    aLineSet.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -2669,6 +2684,7 @@ SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
 
     :    SfxToolBoxControl( nId, rTbx, rBindings )
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
