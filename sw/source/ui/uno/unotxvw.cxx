@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:33:56 $
+ *  last change: $Author: dvo $ $Date: 2001-08-23 15:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             {
                 SwTableBox* pBox = pCell->GetTblBox();
                 SwTable* pTable = SwTable::FindTable( pTblFrmFmt );
-                pBox = SwXCell::FindBox(pTable, pBox);
+                pBox = pCell->FindBox(pTable, pBox);
                 if(pBox)
                 {
                     const SwStartNode* pSttNd = pBox->GetSttNd();
