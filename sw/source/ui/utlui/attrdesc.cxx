@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:02:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,7 +1186,7 @@ SfxItemPresentation SwRotationGrf::GetPresentation(
             rText = SW_RESSTR( STR_ROTATION );
         else if( rText.Len() )
             rText.Erase();
-        ( rText += UniString::CreateFromInt32( GetValue() )) += '°';
+        ( rText += UniString::CreateFromInt32( GetValue() )) += '\xB0';
         break;
 
     default:
