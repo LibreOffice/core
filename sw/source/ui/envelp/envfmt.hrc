@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,29 +68,34 @@
 
 // Lokale Resourcen *********************************************************
 
-#define TXT_ADDRESSEE   1
-#define TXT_ADDR_LEFT   2
-#define FLD_ADDR_LEFT   3
-#define TXT_ADDR_TOP    4
-#define FLD_ADDR_TOP    5
-#define BTN_ADDR_EDIT   6
-#define TXT_SENDER      7
-#define TXT_SEND_LEFT   8
-#define FLD_SEND_LEFT   9
-#define TXT_SEND_TOP   10
-#define FLD_SEND_TOP   11
-#define BTN_SEND_EDIT  12
-#define WIN_PREVIEW    13
-#define GRP_POSITIONS  14
-#define TXT_FORMAT     15
-#define BOX_FORMAT     16
-#define TXT_WIDTH      17
-#define FLD_WIDTH      18
-#define TXT_HEIGHT     19
-#define FLD_HEIGHT     20
-#define GRP_SIZE       21
-#define BTN_OK         22
-#define BTN_CANCEL     23
+#define GRP_ADDRESSEE       11
+#define TXT_ADDR_POS        12
+#define TXT_ADDR_LEFT       13
+#define FLD_ADDR_LEFT       14
+#define TXT_ADDR_TOP        15
+#define FLD_ADDR_TOP        16
+#define TXT_ADDR_FORMAT     17
+#define BTN_ADDR_EDIT       18
+
+#define GRP_SENDER          21
+#define TXT_SEND_POS        22
+#define TXT_SEND_LEFT       23
+#define FLD_SEND_LEFT       24
+#define TXT_SEND_TOP        25
+#define FLD_SEND_TOP        26
+#define TXT_SEND_FORMAT     27
+#define BTN_SEND_EDIT       28
+
+#define GRP_SIZE            31
+#define TXT_SIZE_FORMAT     32
+#define BOX_SIZE_FORMAT     33
+#define TXT_SIZE_WIDTH      34
+#define FLD_SIZE_WIDTH      35
+#define TXT_SIZE_HEIGHT     36
+#define FLD_SIZE_HEIGHT     37
+
+#define WIN_PREVIEW         41
+
 
 #define MID_CHAR        1
 #define MID_PARA        2

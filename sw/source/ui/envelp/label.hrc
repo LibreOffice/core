@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,10 @@
 #define FT_TITLEPROF            42
 #define ED_PROFESSION           43
 #define ED_TITLE                44
-#define FT_PHONE                45
+
 #define ED_PHONE                46
 #define ED_MOBILE               47
-#define FT_FAX                  48
+
 #define ED_FAX                  49
 #define FT_WWWMAIL              50
 #define ED_WWW                  51
@@ -141,6 +141,11 @@
 #define ED_FIRSTNAME_2          66
 #define ED_NAME_2               67
 #define ED_SHORTCUT_2           68
+
+#define FT_PHONE_MOBILE         70
+//#define FT_PHONE              71
+//#define FT_MOBILE             72
+#define FT_FAX                  73
 
 // Globale Resourcen ********************************************************
 #define STR_DOC_TITLE           (RC_LABEL_BEGIN)

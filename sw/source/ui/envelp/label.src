@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,32 +122,6 @@ TabDialog DLG_LAB
         OutputSize = TRUE ;
         PageList =
         {
-/*          PageItem
-            {
-                Identifier = TP_LAB_LAB ;
-                Text = "Etiketten" ;
-                Text [ ENGLISH ] = "Labels" ;
-                Text [ norwegian ] = "Etiketter" ;
-                Text [ italian ] = "Etichette" ;
-                Text [ portuguese_brazilian ] = "Etiquetas" ;
-                Text [ portuguese ] = "Etiquetas" ;
-                Text [ finnish ] = "Tarrat" ;
-                Text [ danish ] = "Etiketter" ;
-                Text [ french ] = "Etiquettes" ;
-                Text [ swedish ] = "Etiketter" ;
-                Text [ dutch ] = "Etiketten" ;
-                Text [ spanish ] = "Etiquetas" ;
-                Text [ english_us ] = "Labels" ;
-                PageResID = TP_LAB_LAB ;
-                Text[ chinese_simplified ] = "±êÇ©";
-                Text[ russian ] = "Íàêëåéêè";
-                Text[ polish ] = "Etykiety";
-                Text[ japanese ] = "×ÍÞÙ";
-                Text[ chinese_traditional ] = "¼ÐÅÒ";
-                Text[ arabic ] = "ÈØÇÞÇÊ ÚäæäÉ";
-                Text[ greek ] = "ÅôéêÝôåò";
-                Text[ korean ] = "Labels";
-            };*/
             PageItem
             {
                 Identifier = TP_VISITING_CARDS;
@@ -297,12 +271,14 @@ TabDialog DLG_LAB
 TabPage TP_LAB_LAB
 {
     HelpID = HID_LAB_LAB ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     FixedText TXT_WRITING
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
         Text = "~Aufschrift" ;
         Text [ English ] = "Writing" ;
         Text [ norwegian ] = "Writing" ;
@@ -316,8 +292,6 @@ TabPage TP_LAB_LAB
         Text [ dutch ] = "~Tekst" ;
         Text [ spanish ] = "Te~xto" ;
         Text [ english_us ] = "Label text" ;
-        Group = TRUE ;
-        Left = TRUE ;
         Text[ chinese_simplified ] = "ÊäÈëÎÄ×Ö";
         Text[ russian ] = "Íàäïèñü";
         Text[ polish ] = "Oznaczenie";
@@ -331,8 +305,9 @@ TabPage TP_LAB_LAB
     };
     CheckBox BOX_ADDR
     {
-        Pos = MAP_APPFONT ( 82 , 13 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 67 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        TabStop = TRUE ;
         Text = "Adre~sse" ;
         Text [ English ] = "Address" ;
         Text [ norwegian ] = "Adresse" ;
@@ -346,7 +321,6 @@ TabPage TP_LAB_LAB
         Text [ dutch ] = "Adre~s" ;
         Text [ spanish ] = "~Dirección" ;
         Text [ english_us ] = "Address" ;
-        TabStop = TRUE ;
         Text[ chinese_simplified ] = "µØÖ·";
         Text[ russian ] = "Àäðåñ";
         Text[ polish ] = "Adres";
@@ -361,8 +335,8 @@ TabPage TP_LAB_LAB
     MultiLineEdit EDT_WRITING
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 110 , 44 ) ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 105 , 89 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         HScroll = TRUE ;
@@ -371,8 +345,8 @@ TabPage TP_LAB_LAB
     };
     FixedText FT_DATABASE
     {
-        Pos = MAP_APPFONT ( 128 , 14 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 149 , 27 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "~Datenbank" ;
         Text [ English ] = "Database" ;
         Text [ norwegian ] = "Database" ;
@@ -400,15 +374,15 @@ TabPage TP_LAB_LAB
     ListBox LB_DATABASE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 128 , 25 ) ;
-        Size = MAP_APPFONT ( 57 , 60 ) ;
+        Pos = MAP_APPFONT ( 149 , 38 ) ;
+        Size = MAP_APPFONT ( 99 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_TABLE
     {
-        Pos = MAP_APPFONT ( 191 , 14 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 149 , 54 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "Tabe~lle" ;
         Text [ ENGLISH ] = "Table" ;
         Text [ english_us ] = "Table" ;
@@ -434,22 +408,22 @@ TabPage TP_LAB_LAB
     ListBox LB_TABLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 191 , 25 ) ;
-        Size = MAP_APPFONT ( 57 , 60 ) ;
+        Pos = MAP_APPFONT ( 149 , 65 ) ;
+        Size = MAP_APPFONT ( 99 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ImageButton BTN_INSERT
     {
-        Pos = MAP_APPFONT ( 128 , 56 ) ;
+        Pos = MAP_APPFONT ( 124 , 104 ) ;
         Size = MAP_APPFONT ( 18 , 12 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
         TabStop = TRUE ;
     };
     FixedText FT_DBFIELD
     {
-        Pos = MAP_APPFONT ( 152 , 45 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 149 , 93 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "Datenbank~feld" ;
         Text [ English ] = "Database field" ;
         Text [ norwegian ] = "Database field" ;
@@ -477,15 +451,16 @@ TabPage TP_LAB_LAB
     ListBox LB_DBFIELD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 152 , 56 ) ;
-        Size = MAP_APPFONT ( 96 , 60 ) ;
+        Pos = MAP_APPFONT ( 149 , 104 ) ;
+        Size = MAP_APPFONT ( 99 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     GroupBox GRP_WRITING
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 72 ) ;
+        Size = MAP_APPFONT ( 248 , 119 ) ;
+        Group = TRUE ;
         Text = "Aufschrift" ;
         Text [ English ] = "Writing" ;
         Text [ norwegian ] = "Writing" ;
@@ -499,7 +474,6 @@ TabPage TP_LAB_LAB
         Text [ dutch ] = "Tekst" ;
         Text [ spanish ] = "Etiqueta" ;
         Text [ english_us ] = "Inscription" ;
-        Group = TRUE ;
         Text[ chinese_simplified ] = "ÄÚÈÝ";
         Text[ russian ] = "Íàäïèñü";
         Text[ polish ] = "Oznaczenie";
@@ -513,8 +487,10 @@ TabPage TP_LAB_LAB
     };
     RadioButton BTN_CONT
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
-        Size = MAP_APPFONT ( 43 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 137 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
         Text = "~Endlos" ;
         Text [ English ] = "Continuous" ;
         Text [ norwegian ] = "Continuous" ;
@@ -528,8 +504,6 @@ TabPage TP_LAB_LAB
         Text [ dutch ] = "~Eindeloos" ;
         Text [ spanish ] = "Cont~inuo" ;
         Text [ english_us ] = "~Continuous" ;
-        TabStop = TRUE ;
-        Group = TRUE ;
         Text[ chinese_simplified ] = "Á¬Ðø(~C)";
         Text[ russian ] = "Íåïðåðûâíî";
         Text[ polish ] = "Bez koñca";
@@ -543,8 +517,8 @@ TabPage TP_LAB_LAB
     };
     RadioButton BTN_SHEET
     {
-        Pos = MAP_APPFONT ( 12 , 105 ) ;
-        Size = MAP_APPFONT ( 43 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "~Bogen" ;
         Text [ English ] = "Sheet" ;
         Text [ norwegian ] = "Sheet" ;
@@ -571,8 +545,8 @@ TabPage TP_LAB_LAB
     };
     FixedText TXT_MAKE
     {
-        Pos = MAP_APPFONT ( 58 , 91 ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Pos = MAP_APPFONT ( 91 , 138 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "~Marke" ;
         Text [ English ] = "Make" ;
         Text [ norwegian ] = "Make" ;
@@ -601,15 +575,16 @@ TabPage TP_LAB_LAB
     ListBox BOX_MAKE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 92 , 89 ) ;
-        Size = MAP_APPFONT ( 119 , 91 ) ;
+        Pos = MAP_APPFONT ( 124 , 136 ) ;
+        Size = MAP_APPFONT ( 124 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText TXT_TYPE
     {
-        Pos = MAP_APPFONT ( 58 , 106 ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Pos = MAP_APPFONT ( 91 , 154 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Left = TRUE ;
         Text = "~Typ" ;
         Text [ English ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -623,7 +598,6 @@ TabPage TP_LAB_LAB
         Text [ dutch ] = "~Type" ;
         Text [ spanish ] = "~Tipo" ;
         Text [ english_us ] = "~Type" ;
-        Left = TRUE ;
         Text[ chinese_simplified ] = "ÀàÐÍ(~T)";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
@@ -638,22 +612,23 @@ TabPage TP_LAB_LAB
     ListBox BOX_TYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 92 , 104 ) ;
-        Size = MAP_APPFONT ( 119 , 100 ) ;
+        Pos = MAP_APPFONT ( 124 , 152 ) ;
+        Size = MAP_APPFONT ( 124 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
     FixedText INF_FORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
-        Size = MAP_APPFONT ( 199 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 168 ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
         Left = TRUE ;
     };
     GroupBox GRP_FORMAT
     {
-        Pos = MAP_APPFONT ( 6 , 78 ) ;
-        Size = MAP_APPFONT ( 248 , 55 ) ;
+        Pos = MAP_APPFONT ( 6 , 125 ) ;
+        Size = MAP_APPFONT ( 248 , 54 ) ;
+        Group = TRUE ;
         Text = "Format" ;
         Text [ English ] = "Format" ;
         Text [ norwegian ] = "Format" ;
@@ -675,7 +650,6 @@ TabPage TP_LAB_LAB
         Text[ arabic ] = "ÇáÊäÓíÞ";
         Text[ greek ] = "ÌïñöÞ";
         Text[ korean ] = "¼­½Ä";
-        Group = TRUE ;
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
     };
@@ -776,20 +750,20 @@ String STR_CUSTOM
 TabPage TP_VISITING_CARDS
 {
     HelpID = HID_TP_VISITING_CARDS ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
 
     Control LB_AUTO_TEXT
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
-        Size = MAP_APPFONT ( 109 , 83 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 109 , 135 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     FixedText FT_AUTO_TEXT_GROUP
     {
-        Pos = MAP_APPFONT ( 12 ,  98) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  153) ;
+        Size = MAP_APPFONT ( 109 , 8 ) ;
         Text = "AutoText - ~Bereich" ;
         Text [ English ] = "AutoText group" ;
         Text[ english_us ] = "AutoText - Section";
@@ -814,8 +788,8 @@ TabPage TP_VISITING_CARDS
     };
     ListBox LB_AUTO_TEXT_GROUP
     {
-        Pos = MAP_APPFONT ( 12 , 111) ;
-        Size = MAP_APPFONT ( 109 , 40 ) ;
+        Pos = MAP_APPFONT ( 12 , 164) ;
+        Size = MAP_APPFONT ( 109 , 50 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -823,7 +797,7 @@ TabPage TP_VISITING_CARDS
     GroupBox GB_CONTENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 121 , 129 ) ;
+        Size = MAP_APPFONT ( 121 , 179 ) ;
         Text = "Inhalt" ;
         Text [ English ] = "Content" ;
         Text[ english_us ] = "Content";
@@ -848,13 +822,13 @@ TabPage TP_VISITING_CARDS
     };
     Window WIN_EXAMPLE
     {
-        Pos = MAP_APPFONT ( 136, 12 ) ;
-        Size = MAP_APPFONT ( 115 , 117 ) ;
+        Pos = MAP_APPFONT ( 139, 14 ) ;
+        Size = MAP_APPFONT ( 109 , 162 ) ;
     };
     GroupBox GB_EXAMPLE
     {
         Pos = MAP_APPFONT ( 133 , 3 ) ;
-        Size = MAP_APPFONT ( 121 , 129 ) ;
+        Size = MAP_APPFONT ( 121 , 179 ) ;
         Text = "Vorschau" ;
         Text [ English ] = "Preview" ;
         Text[ english_us ] = "Preview";
@@ -884,12 +858,12 @@ TabPage TP_VISITING_CARDS
 TabPage TP_PRIVATE_DATA
 {
     HelpID = HID_TP_PRIVATE_DATA  ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_DATA
     {
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 248 , 130 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 154 ) ;
         Text = "Private Daten" ;
         Text [ English ] = "Private data" ;
         Text[ english_us ] = "Private data";
@@ -914,8 +888,8 @@ TabPage TP_PRIVATE_DATA
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 12 ,  13) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  16) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Vor-/Name/Kürzel" ;
         Text [ English ] = "First/Last ~name" ;
         Text[ english_us ] = "First/Last ~name/Initials";
@@ -940,26 +914,26 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_FIRSTNAME
     {
-        Pos = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 14 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_NAME
     {
-        Pos = MAP_APPFONT ( 163 , 12 ) ;
+        Pos = MAP_APPFONT ( 163 , 14 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_SHORTCUT
     {
-        Pos = MAP_APPFONT ( 221 , 12 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 221 , 14 ) ;
+        Size = MAP_APPFONT ( 27 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_NAME_2
     {
-        Pos = MAP_APPFONT ( 12 ,  26) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  32) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Vor-/Name/Kürzel 2" ;
         Text [ English ] = "First/Last ~name 2" ;
         Text[ english_us ] = "First / Last ~Name / Initials 2";
@@ -983,26 +957,26 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_FIRSTNAME_2
     {
-        Pos = MAP_APPFONT ( 105 , 25 ) ;
+        Pos = MAP_APPFONT ( 105 , 30 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_NAME_2
     {
-        Pos = MAP_APPFONT ( 163 , 25 ) ;
+        Pos = MAP_APPFONT ( 163 , 30 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_SHORTCUT_2
     {
-        Pos = MAP_APPFONT ( 221 , 25 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 221 , 30 ) ;
+        Size = MAP_APPFONT ( 27 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_STREET
     {
-        Pos = MAP_APPFONT ( 12 ,  39) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  48) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Straße" ;
         Text [ English ] = "Street" ;
         Text[ english_us ] = "S~treet";
@@ -1027,14 +1001,14 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_STREET
     {
-        Pos = MAP_APPFONT ( 105 , 38 ) ;
-        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 46 ) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_ZIPCITY
     {
-        Pos = MAP_APPFONT ( 12 ,  52) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  64) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "PLZ/Or~t" ;
         Text [ English ] = "Zip/City" ;
         Text[ english_us ] = "Zip/Cit~y";
@@ -1059,20 +1033,20 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_ZIP
     {
-        Pos = MAP_APPFONT ( 105 , 51 ) ;
+        Pos = MAP_APPFONT ( 105 , 62 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_CITY
     {
-        Pos = MAP_APPFONT ( 158 , 51 ) ;
-        Size = MAP_APPFONT ( 93 , 12 ) ;
+        Pos = MAP_APPFONT ( 158 , 62 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_COUNTRYSTATE
     {
-        Pos = MAP_APPFONT ( 12 ,  65) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  80) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Land/Bundesland" ;
         Text [ English ] = "Country/State" ;
         Text[ english_us ] = "Co~untry/State";
@@ -1097,20 +1071,20 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_COUNTRY
     {
-        Pos = MAP_APPFONT ( 105 , 64 ) ;
+        Pos = MAP_APPFONT ( 105 , 78 ) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_STATE
     {
-        Pos = MAP_APPFONT ( 179 , 64 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 179 , 78 ) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_TITLEPROF
     {
-        Pos = MAP_APPFONT ( 12 ,  78) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  96) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Titel/Beruf" ;
         Text [ English ] = "Title/Profession" ;
         Text[ english_us ] = "Title/~Profession";
@@ -1135,58 +1109,39 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_TITLE
     {
-        Pos = MAP_APPFONT ( 105 , 77 ) ;
+        Pos = MAP_APPFONT ( 105 , 94 ) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_PROFESSION
     {
-        Pos = MAP_APPFONT ( 179 , 77 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 179 , 94 ) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
     };
-    FixedText FT_PHONE
+    FixedText FT_PHONE_MOBILE
     {
-        Pos = MAP_APPFONT ( 12 ,  91) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "Telef~on/Mobil" ;
-        Text [ English ] = "Phone/mobile" ;
-        Text[ english_us ] = "Phone/cellphone";
-        Text[ portuguese ] = "Telefone/Tele~móvel";
-        Text[ russian ] = "Òåëåôîí/ìîáèëüíûé";
-        Text[ greek ] = "ÔçëÝöùíï/Êéíçôü";
-        Text[ dutch ] = "Tele~foon/mobile";
-        Text[ french ] = "~Tel/Portable";
-        Text[ spanish ] = "T~eléfono/Móvil";
-        Text[ italian ] = "Tel./Cell.";
-        Text[ danish ] = "Telefon/Mobil";
-        Text[ swedish ] = "Telef~on/Mobil";
-        Text[ polish ] = "Telefon/Komórka";
-        Text[ portuguese_brazilian ] = "Phone/mobile";
-        Text[ japanese ] = "“d˜b/Œg‘Ñ“d˜b";
-        Text[ korean ] = "ÀüÈ­/ ÇÚµåÆù";
-        Text[ chinese_simplified ] = "µç»°/ÊÖ»ú";
-        Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü";
-        Text[ arabic ] = "ÇáåÇÊÝ/ÇáãÍãæá";
-        Text[ turkish ] = "Telef~on/Cep telefonu";
-        Text[ language_user1 ] = " ";
+        Pos = MAP_APPFONT ( 12 ,  112) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text = "Telefon/Mobil" ;
+        Text [ English ] = "Phone/Mobile" ;
     };
     Edit ED_PHONE
     {
-        Pos = MAP_APPFONT ( 105 , 90 ) ;
+        Pos = MAP_APPFONT ( 105 , 110 ) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_MOBILE
     {
-        Pos = MAP_APPFONT ( 179 , 90 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 179 , 110 ) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_FAX
     {
-        Pos = MAP_APPFONT ( 12 ,  104) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  128) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Fa~x" ;
         Text [ English ] = "Fax" ;
         Text[ english_us ] = "Fa~x";
@@ -1211,14 +1166,14 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_FAX
     {
-        Pos = MAP_APPFONT ( 105 , 103 ) ;
-        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 126 ) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_WWWMAIL
     {
-        Pos = MAP_APPFONT ( 12 ,  117) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  144) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Homepage / E-Mail" ;
         Text [ English ] = "Homepage / eMail" ;
         Text[ english_us ] = "Homepage / e-mail";
@@ -1243,26 +1198,26 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_WWW
     {
-        Pos = MAP_APPFONT ( 105 , 116) ;
+        Pos = MAP_APPFONT ( 105 , 142) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_MAIL
     {
-        Pos = MAP_APPFONT ( 179 , 116) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 179 , 142) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
     };
 };
 TabPage TP_BUSINESS_DATA
 {
     HelpID = HID_TP_BUSINESS_DATA;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_DATA
     {
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 248 , 130 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 170 ) ;
         Text = "Geschäftliche Daten" ;
         Text [ English ] = "Business data" ;
         Text[ english_us ] = "Business data";
@@ -1287,8 +1242,8 @@ TabPage TP_BUSINESS_DATA
     };
     FixedText FT_COMP
     {
-        Pos = MAP_APPFONT ( 12 ,  13) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  16) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Firma" ;
         Text [ English ] = "Company" ;
         Text[ english_us ] = "Company";
@@ -1313,14 +1268,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_COMP
     {
-        Pos = MAP_APPFONT ( 105 , 12) ;
-        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 14) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_COMP_EXT
     {
-        Pos = MAP_APPFONT ( 12 ,  26) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  32) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Firma ~2. Zeile" ;
         Text [ English ] = "Company 2nd line" ;
         Text[ english_us ] = "Company 2nd line";
@@ -1345,14 +1300,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_COMP_EXT
     {
-        Pos = MAP_APPFONT ( 105 , 25) ;
-        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 30) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_SLOGAN
     {
-        Pos = MAP_APPFONT ( 12 ,  39) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  48) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Sl~ogan" ;
         Text [ English ] = "Slogan" ;
         Text[ english_us ] = "Slogan";
@@ -1377,14 +1332,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_SLOGAN
     {
-        Pos = MAP_APPFONT ( 105 , 38) ;
-        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 46) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_STREET
     {
-        Pos = MAP_APPFONT ( 12 ,  52) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  64) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Straße" ;
         Text [ English ] = "Street" ;
         Text[ english_us ] = "Street";
@@ -1409,14 +1364,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_STREET
     {
-        Pos = MAP_APPFONT ( 105 , 51) ;
-        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 62) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_ZIPCITY
     {
-        Pos = MAP_APPFONT ( 12 ,  65) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  80) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "PLZ/Or~t" ;
         Text [ English ] = "ZIP/City" ;
         Text[ english_us ] = "ZIP/City";
@@ -1441,20 +1396,20 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_ZIP
     {
-        Pos = MAP_APPFONT ( 105 , 64) ;
+        Pos = MAP_APPFONT ( 105 , 78) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_CITY
     {
-        Pos = MAP_APPFONT ( 158 , 64) ;
-        Size = MAP_APPFONT ( 93 , 12 ) ;
+        Pos = MAP_APPFONT ( 158 , 78) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_COUNTRYSTATE
     {
-        Pos = MAP_APPFONT ( 12 ,  78) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  96) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Land/Bundesland" ;
         Text [ English ] = "Country/State" ;
         Text[ english_us ] = "Country/State";
@@ -1479,20 +1434,20 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_COUNTRY
     {
-        Pos = MAP_APPFONT ( 105 , 77) ;
+        Pos = MAP_APPFONT ( 105 , 94) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_STATE
     {
-        Pos = MAP_APPFONT ( 179 , 77) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 179 , 94) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 12 ,  91) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  112) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Position" ;
         Text [ English ] = "Position" ;
         Text[ english_us ] = "Position";
@@ -1517,58 +1472,46 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_POSITION
     {
-        Pos = MAP_APPFONT ( 105 , 90) ;
-        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 110) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
     };
-    FixedText FT_PHONE
+    FixedText FT_PHONE_MOBILE
     {
-        Pos = MAP_APPFONT ( 12 ,  104) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "Telefo~n/Mobil/Fax" ;
-        Text [ English ] = "Phone/Mobile/Fax" ;
-        Text[ english_us ] = "Phone/Cellphone/Fax";
-        Text[ portuguese ] = "Telefo~ne/Telemóvel/Fax";
-        Text[ russian ] = "Òåëåôîí/Ìîáèëüíûé/Ôàêñ";
-        Text[ greek ] = "ÔçëÝöùíï/Êéíçôü/Fax";
-        Text[ dutch ] = "Telefoo~n/Mobile/Fax";
-        Text[ french ] = "~Téléphone/Portable/Fax";
-        Text[ spanish ] = "~Teléfono/Móvil/Fax";
-        Text[ italian ] = "Tel./Cell./Fax";
-        Text[ danish ] = "Telefon/Mobil/Fax";
-        Text[ swedish ] = "Telefo~n/Mobil/Fax";
-        Text[ polish ] = "Telefon/Komórka/Faks";
-        Text[ portuguese_brazilian ] = "Phone/Mobile/Fax";
-        Text[ japanese ] = "“d˜b/Œg‘Ñ“d˜b/Fax";
-        Text[ korean ] = "ÀüÈ­/ÇÚµåÆù/ÆÑ½º";
-        Text[ chinese_simplified ] = "µç»°/ÊÖ»ú/´«Õæ";
-        Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü/¶Ç¯u";
-        Text[ arabic ] = "ÇáåÇÊÝ/ÇáãÍãæá/ÇáÝÇßÓ";
-        Text[ turkish ] = "Telefon/Cep telefonu/Faks";
-        Text[ language_user1 ] = " ";
+        Pos = MAP_APPFONT ( 12 ,  128) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text = "Telefon/Mobil" ;
+        Text [ English ] = "Phone/Mobile" ;
     };
     Edit ED_PHONE
     {
-        Pos = MAP_APPFONT ( 105 , 103) ;
-        Size = MAP_APPFONT ( 47 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 126) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_MOBILE
     {
-        Pos = MAP_APPFONT ( 155 , 103) ;
-        Size = MAP_APPFONT ( 47 , 12 ) ;
+        Pos = MAP_APPFONT ( 179 , 126) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
+    };
+    FixedText FT_FAX
+    {
+        Pos = MAP_APPFONT ( 12 ,  144) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text = "Fax" ;
+        Text [ English ] = "Fax" ;
     };
     Edit ED_FAX
     {
-        Pos = MAP_APPFONT ( 205 , 103) ;
-        Size = MAP_APPFONT ( 46 , 12 ) ;
+        Pos = MAP_APPFONT ( 105 , 142) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_WWWMAIL
     {
-        Pos = MAP_APPFONT ( 12 ,  117) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 ,  160) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Ho~mepage / E-Mail" ;
         Text [ English ] = "Homepage / eMail" ;
         Text[ english_us ] = "Ho~mepage / e-mail";
@@ -1593,14 +1536,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_WWW
     {
-        Pos = MAP_APPFONT ( 105 , 116) ;
+        Pos = MAP_APPFONT ( 105 , 158) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_MAIL
     {
-        Pos = MAP_APPFONT ( 179 , 116) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Pos = MAP_APPFONT ( 179 , 158) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
     };
 };

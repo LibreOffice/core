@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 18:19:42 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@ TabPage TP_ENV_PRT
     HelpID = HID_ENV_PRT ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
     Hide = TRUE ;
+    GroupBox GRP_NONAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 123 ) ;
+        Group = TRUE ;
+    };
     ToolBox BOX_ALIGN
     {
         Pos = MAP_APPFONT ( 35 , 14 ) ;
@@ -109,7 +115,7 @@ TabPage TP_ENV_PRT
     RadioButton BTN_TOP
     {
         Pos = MAP_APPFONT ( 12 , 39 ) ;
-        Size = MAP_APPFONT ( 166 , 10 ) ;
+        Size = MAP_APPFONT ( 179 , 10 ) ;
         Text = "Von ~oben bedrucken" ;
         Text [ ENGLISH ] = "Print upper side" ;
         Text [ NORWEGIAN ] = "Print upper side" ;
@@ -139,8 +145,8 @@ TabPage TP_ENV_PRT
     };
     RadioButton BTN_BOTTOM
     {
-        Pos = MAP_APPFONT ( 12 , 52 ) ;
-        Size = MAP_APPFONT ( 166 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 179 , 10 ) ;
         Text = "Von ~unten bedrucken" ;
         Text [ ENGLISH ] = "Print lower side" ;
         Text [ NORWEGIAN ] = "Print lower side" ;
@@ -168,7 +174,7 @@ TabPage TP_ENV_PRT
     };
     FixedText TXT_RIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 68 ) ;
+        Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Nach ~rechts" ;
         Text [ ENGLISH ] = "Shift right" ;
@@ -198,7 +204,7 @@ TabPage TP_ENV_PRT
     MetricField FLD_RIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 66 ) ;
+        Pos = MAP_APPFONT ( 66 , 67 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -214,7 +220,7 @@ TabPage TP_ENV_PRT
     };
     FixedText TXT_DOWN
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Nach unten" ;
         Text [ ENGLISH ] = "Shift down" ;
@@ -244,7 +250,7 @@ TabPage TP_ENV_PRT
     MetricField FLD_DOWN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 81 ) ;
+        Pos = MAP_APPFONT ( 66 , 83 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -261,7 +267,7 @@ TabPage TP_ENV_PRT
     FixedText TXT_PRINTER
     {
         Pos = MAP_APPFONT ( 12 , 111 ) ;
-        Size = MAP_APPFONT ( 183 , 10 ) ;
+        Size = MAP_APPFONT ( 179 , 8 ) ;
         Text = "- Kein Drucker installiert -" ;
         Text [ ENGLISH ] = "- No printer installed -" ;
         Text [ NORWEGIAN ] = "- No printer installed -" ;
@@ -287,16 +293,10 @@ TabPage TP_ENV_PRT
         Text[ turkish ] = "- Kurulu yazýcý yok -";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GRP_NONAME
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 125 ) ;
-        Group = TRUE ;
-    };
     PushButton BTN_PRTSETUP
     {
-        Pos = MAP_APPFONT ( 201 , 109 ) ;
-        Size = MAP_APPFONT ( 48 , 14 ) ;
+        Pos = MAP_APPFONT ( 198 , 109 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Einrichten..." ;
         Text [ ENGLISH ] = "Setup..." ;
         TabStop = TRUE ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:48:10 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,12 +241,12 @@ TabDialog DLG_ENV
 TabPage TP_ENV_ENV
 {
     HelpID = HID_ENV_ENV ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     FixedText TXT_ADDR
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "~Empfänger" ;
         Text [ English ] = "Addressee" ;
         Text [ norwegian ] = "Addressee" ;
@@ -276,8 +276,8 @@ TabPage TP_ENV_ENV
     MultiLineEdit EDT_ADDR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 14 ) ;
-        Size = MAP_APPFONT ( 110 , 44 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 124 , 77 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         HScroll = TRUE ;
@@ -286,8 +286,8 @@ TabPage TP_ENV_ENV
     };
     FixedText FT_DATABASE
     {
-        Pos = MAP_APPFONT ( 122 , 3 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 162 , 17 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "~Datenbank" ;
         Text [ English ] = "Database" ;
         Text [ norwegian ] = "Database" ;
@@ -315,15 +315,15 @@ TabPage TP_ENV_ENV
     ListBox LB_DATABASE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122 , 14 ) ;
-        Size = MAP_APPFONT ( 57 , 60 ) ;
+        Pos = MAP_APPFONT ( 162 , 28 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_TABLE
     {
-        Pos = MAP_APPFONT ( 185 , 3 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 162 , 44 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "~Tabelle" ;
         Text [ ENGLISH ] = "Table" ;
         Text [ english_us ] = "Table" ;
@@ -349,22 +349,23 @@ TabPage TP_ENV_ENV
     ListBox LB_TABLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 14 ) ;
-        Size = MAP_APPFONT ( 57 , 60 ) ;
+        Pos = MAP_APPFONT ( 162 , 55 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ImageButton BTN_INSERT
     {
-        Pos = MAP_APPFONT ( 122 , 45 ) ;
-        Size = MAP_APPFONT ( 18 , 12 ) ;
+        Pos = MAP_APPFONT ( 137 , 82 ) ;
+        Size = MAP_APPFONT ( 18 , 12
+        ) ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
         TabStop = TRUE ;
     };
     FixedText FT_DBFIELD
     {
-        Pos = MAP_APPFONT ( 146 , 34 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 162 , 71 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "Datenbank~feld" ;
         Text [ English ] = "Database field" ;
         Text [ norwegian ] = "Database field" ;
@@ -392,15 +393,15 @@ TabPage TP_ENV_ENV
     ListBox LB_DBFIELD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 146 , 45 ) ;
-        Size = MAP_APPFONT ( 96 , 60 ) ;
+        Pos = MAP_APPFONT ( 162 , 82 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     CheckBox BOX_SEND
     {
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 105 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "~Absender" ;
         Text [ English ] = "Sender" ;
         Text [ norwegian ] = "Sender" ;
@@ -429,8 +430,8 @@ TabPage TP_ENV_ENV
     MultiLineEdit EDT_SEND
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 85 ) ;
-        Size = MAP_APPFONT ( 110 , 44 ) ;
+        Pos = MAP_APPFONT ( 6 , 116) ;
+        Size = MAP_APPFONT ( 124 , 63 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         HScroll = TRUE ;
@@ -440,8 +441,8 @@ TabPage TP_ENV_ENV
     Window WIN_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122 , 68 ) ;
-        Size = MAP_APPFONT ( 83 , 61 ) ;
+        Pos = MAP_APPFONT ( 170 , 116 ) ;
+        Size = MAP_APPFONT ( 84 , 63 ) ;
     };
 };
  // Strings ******************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,27 +85,31 @@
 
 class SwEnvFmtPage : public SfxTabPage
 {
-    FixedInfo    aAddrInfo;
+
+    GroupBox     aAddrGroup;
+    FixedInfo    aAddrPosInfo;
     FixedText    aAddrLeftText;
     MetricField  aAddrLeftField;
     FixedText    aAddrTopText;
     MetricField  aAddrTopField;
+    FixedInfo    aAddrFormatInfo;
     MenuButton   aAddrEditButton;
-    FixedInfo    aSendInfo;
+    GroupBox     aSendGroup;
+    FixedInfo    aSendPosInfo;
     FixedText    aSendLeftText;
     MetricField  aSendLeftField;
     FixedText    aSendTopText;
     MetricField  aSendTopField;
+    FixedInfo    aSendFormatInfo;
     MenuButton   aSendEditButton;
-    SwEnvPreview aPreview;
-    GroupBox     aPositionsGroup;
-    FixedText    aFormatText;
-    ListBox      aFormatBox;
-    FixedText    aWidthText;
-    MetricField  aWidthField;
-    FixedText    aHeightText;
-    MetricField  aHeightField;
     GroupBox     aSizeGroup;
+    FixedText    aSizeFormatText;
+    ListBox      aSizeFormatBox;
+    FixedText    aSizeWidthText;
+    MetricField  aSizeWidthField;
+    FixedText    aSizeHeightText;
+    MetricField  aSizeHeightField;
+    SwEnvPreview aPreview;
 
     SvUShorts  aIDs;
     Timer      aPreviewTimer;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 12:12:16 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,7 @@ class SwBusinessDataPage : public SfxTabPage
     FixedText       aPhoneFT;
     Edit            aPhoneED;
     Edit            aMobilePhoneED;
+    FixedText       aFaxFT;
     Edit            aFaxED;
 
     FixedText       aWWWMailFT;

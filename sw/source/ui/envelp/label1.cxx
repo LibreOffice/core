@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,7 +610,7 @@ void SwLabPage::SetToBusinessCard()
      Point aGBPos(aWritingGroup.GetPosPixel());
     long nDiffPos = aFormatGroup.GetPosPixel().Y() - aGBPos.Y();
      Size aGBSz(aFormatGroup.GetSizePixel());
-    aGBSz.Height() += nDiffPos;
+//  aGBSz.Height() += nDiffPos;
     aFormatGroup.SetPosSizePixel(aGBPos, aGBSz);
 
     // move all controls up
@@ -1308,34 +1308,34 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
  --------------------------------------------------*/
 SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_PRIVATE_DATA), rSet),
-    aDataGB(this, ResId(        GB_DATA         )),
-    aNameFT(this, ResId(        FT_NAME         )),
-    aFirstNameED(this, ResId(   ED_FIRSTNAME    )),
-    aNameED(this, ResId(        ED_NAME         )),
-    aShortCutED(this, ResId(    ED_SHORTCUT     )),
-    aName2FT(this, ResId(       FT_NAME_2       )),
-    aFirstName2ED(this, ResId(  ED_FIRSTNAME_2  )),
-    aName2ED(this, ResId(       ED_NAME_2       )),
-    aShortCut2ED(this, ResId(   ED_SHORTCUT_2   )),
-    aStreetFT(this, ResId(      FT_STREET       )),
-    aStreetED(this, ResId(      ED_STREET       )),
-    aZipCityFT(this, ResId(     FT_ZIPCITY      )),
-    aZipED(this, ResId(         ED_ZIP          )),
-    aCityED(this, ResId(        ED_CITY         )),
-    aCountryStateFT(this, ResId(FT_COUNTRYSTATE )),
-    aCountryED(this, ResId(     ED_COUNTRY      )),
-    aStateED(this, ResId(       ED_STATE        )),
-    aTitleProfessionFT(this, ResId(FT_TITLEPROF )),
-    aProfessionED(this, ResId(  ED_PROFESSION   )),
-    aTitleED(this, ResId(       ED_TITLE        )),
-    aPhoneFT(this, ResId(       FT_PHONE        )),
-    aPhoneED(this, ResId(       ED_PHONE        )),
-    aMobilePhoneED(this, ResId( ED_MOBILE       )),
-    aFaxFT(this, ResId(         FT_FAX          )),
-    aFaxED(this, ResId(         ED_FAX          )),
-    aWWWMailFT(this, ResId(     FT_WWWMAIL      )),
-    aHomePageED(this, ResId(    ED_WWW          )),
-    aMailED(this, ResId(        ED_MAIL         ))
+    aDataGB             (this, ResId( GB_DATA       )),
+    aNameFT             (this, ResId( FT_NAME       )),
+    aFirstNameED        (this, ResId( ED_FIRSTNAME  )),
+    aNameED             (this, ResId( ED_NAME       )),
+    aShortCutED         (this, ResId( ED_SHORTCUT   )),
+    aName2FT            (this, ResId( FT_NAME_2     )),
+    aFirstName2ED       (this, ResId( ED_FIRSTNAME_2)),
+    aName2ED            (this, ResId( ED_NAME_2     )),
+    aShortCut2ED        (this, ResId( ED_SHORTCUT_2 )),
+    aStreetFT           (this, ResId( FT_STREET     )),
+    aStreetED           (this, ResId( ED_STREET     )),
+    aZipCityFT          (this, ResId( FT_ZIPCITY    )),
+    aZipED              (this, ResId( ED_ZIP        )),
+    aCityED             (this, ResId( ED_CITY       )),
+    aCountryStateFT     (this, ResId( FT_COUNTRYSTATE )),
+    aCountryED          (this, ResId( ED_COUNTRY    )),
+    aStateED            (this, ResId( ED_STATE      )),
+    aTitleProfessionFT  (this, ResId( FT_TITLEPROF  )),
+    aProfessionED       (this, ResId( ED_PROFESSION )),
+    aTitleED            (this, ResId( ED_TITLE      )),
+    aPhoneFT            (this, ResId( FT_PHONE_MOBILE   )),
+    aPhoneED            (this, ResId( ED_PHONE      )),
+    aMobilePhoneED      (this, ResId( ED_MOBILE     )),
+    aFaxFT              (this, ResId( FT_FAX        )),
+    aFaxED              (this, ResId( ED_FAX        )),
+    aWWWMailFT          (this, ResId( FT_WWWMAIL    )),
+    aHomePageED         (this, ResId( ED_WWW        )),
+    aMailED             (this, ResId( ED_MAIL       ))
 {
     FreeResource();
     SetExchangeSupport();
@@ -1429,30 +1429,31 @@ void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
  --------------------------------------------------*/
 SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_BUSINESS_DATA), rSet),
-    aDataGB(this, ResId(GB_DATA)),
-    aCompanyFT(this, ResId(     FT_COMP     )),
-    aCompanyED(this, ResId(     ED_COMP     )),
-    aCompanyExtFT(this, ResId(  FT_COMP_EXT )),
-    aCompanyExtED(this, ResId(  ED_COMP_EXT )),
-    aSloganFT(this, ResId(      FT_SLOGAN   )),
-    aSloganED(this, ResId(      ED_SLOGAN   )),
-    aStreetFT(this, ResId(      FT_STREET   )),
-    aStreetED(this, ResId(      ED_STREET   )),
-    aZipCityFT(this, ResId(     FT_ZIPCITY  )),
-    aZipED(this, ResId(         ED_ZIP      )),
-    aCityED(this, ResId(        ED_CITY     )),
-    aCountryStateFT(this, ResId(FT_COUNTRYSTATE )),
-    aCountryED(this, ResId(     ED_COUNTRY  )),
-    aStateED(this, ResId(       ED_STATE    )),
-    aPositionFT(this, ResId(    FT_POSITION )),
-    aPositionED(this, ResId(    ED_POSITION )),
-    aPhoneFT(this, ResId(       FT_PHONE    )),
-    aPhoneED(this, ResId(       ED_PHONE    )),
-    aMobilePhoneED(this, ResId( ED_MOBILE   )),
-    aFaxED(this, ResId(         ED_FAX      )),
-    aWWWMailFT(this, ResId(     FT_WWWMAIL  )),
-    aHomePageED(this, ResId(    ED_WWW      )),
-    aMailED(this, ResId(        ED_MAIL     ))
+    aDataGB             (this, ResId( GB_DATA       )),
+    aCompanyFT          (this, ResId( FT_COMP       )),
+    aCompanyED          (this, ResId( ED_COMP       )),
+    aCompanyExtFT       (this, ResId( FT_COMP_EXT   )),
+    aCompanyExtED       (this, ResId( ED_COMP_EXT   )),
+    aSloganFT           (this, ResId( FT_SLOGAN     )),
+    aSloganED           (this, ResId( ED_SLOGAN     )),
+    aStreetFT           (this, ResId( FT_STREET     )),
+    aStreetED           (this, ResId( ED_STREET     )),
+    aZipCityFT          (this, ResId( FT_ZIPCITY    )),
+    aZipED              (this, ResId( ED_ZIP        )),
+    aCityED             (this, ResId( ED_CITY       )),
+    aCountryStateFT     (this, ResId( FT_COUNTRYSTATE   )),
+    aCountryED          (this, ResId( ED_COUNTRY    )),
+    aStateED            (this, ResId( ED_STATE      )),
+    aPositionFT         (this, ResId( FT_POSITION   )),
+    aPositionED         (this, ResId( ED_POSITION   )),
+    aPhoneFT            (this, ResId( FT_PHONE_MOBILE   )),
+    aPhoneED            (this, ResId( ED_PHONE      )),
+    aMobilePhoneED      (this, ResId( ED_MOBILE     )),
+    aFaxFT              (this, ResId( FT_FAX        )),
+    aFaxED              (this, ResId( ED_FAX        )),
+    aWWWMailFT          (this, ResId( FT_WWWMAIL    )),
+    aHomePageED         (this, ResId( ED_WWW        )),
+    aMailED             (this, ResId( ED_MAIL       ))
 {
     FreeResource();
     SetExchangeSupport();

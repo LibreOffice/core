@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,27 +122,30 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_ENV_FMT), rSet),
 
-    aAddrInfo      (this, SW_RES(TXT_ADDRESSEE)),
-    aAddrLeftText  (this, SW_RES(TXT_ADDR_LEFT)),
-    aAddrLeftField (this, SW_RES(FLD_ADDR_LEFT)),
-    aAddrTopText   (this, SW_RES(TXT_ADDR_TOP )),
-    aAddrTopField  (this, SW_RES(FLD_ADDR_TOP )),
-    aAddrEditButton(this, SW_RES(BTN_ADDR_EDIT)),
-    aSendInfo      (this, SW_RES(TXT_SENDER   )),
-    aSendLeftText  (this, SW_RES(TXT_SEND_LEFT)),
-    aSendLeftField (this, SW_RES(FLD_SEND_LEFT)),
-    aSendTopText   (this, SW_RES(TXT_SEND_TOP )),
-    aSendTopField  (this, SW_RES(FLD_SEND_TOP )),
-    aSendEditButton(this, SW_RES(BTN_SEND_EDIT)),
-    aPreview       (this, SW_RES(WIN_PREVIEW  )),
-    aPositionsGroup(this, SW_RES(GRP_POSITIONS)),
-    aFormatText    (this, SW_RES(TXT_FORMAT   )),
-    aFormatBox     (this, SW_RES(BOX_FORMAT   )),
-    aWidthText     (this, SW_RES(TXT_WIDTH    )),
-    aWidthField    (this, SW_RES(FLD_WIDTH    )),
-    aHeightText    (this, SW_RES(TXT_HEIGHT   )),
-    aHeightField   (this, SW_RES(FLD_HEIGHT   )),
-    aSizeGroup     (this, SW_RES(GRP_SIZE     ))
+    aAddrGroup          (this, SW_RES( GRP_ADDRESSEE )),
+    aAddrPosInfo        (this, SW_RES( TXT_ADDR_POS )),
+    aAddrLeftText       (this, SW_RES( TXT_ADDR_LEFT )),
+    aAddrLeftField      (this, SW_RES( FLD_ADDR_LEFT )),
+    aAddrTopText        (this, SW_RES( TXT_ADDR_TOP )),
+    aAddrTopField       (this, SW_RES( FLD_ADDR_TOP )),
+    aAddrFormatInfo     (this, SW_RES( TXT_ADDR_FORMAT )),
+    aAddrEditButton     (this, SW_RES( BTN_ADDR_EDIT )),
+    aSendGroup          (this, SW_RES( GRP_SENDER )),
+    aSendPosInfo        (this, SW_RES( TXT_SEND_POS )),
+    aSendLeftText       (this, SW_RES( TXT_SEND_LEFT )),
+    aSendLeftField      (this, SW_RES( FLD_SEND_LEFT )),
+    aSendTopText        (this, SW_RES( TXT_SEND_TOP )),
+    aSendTopField       (this, SW_RES( FLD_SEND_TOP )),
+    aSendFormatInfo     (this, SW_RES( TXT_SEND_FORMAT )),
+    aSendEditButton     (this, SW_RES( BTN_SEND_EDIT )),
+    aSizeGroup          (this, SW_RES( GRP_SIZE )),
+    aSizeFormatText     (this, SW_RES( TXT_SIZE_FORMAT )),
+    aSizeFormatBox      (this, SW_RES( BOX_SIZE_FORMAT )),
+    aSizeWidthText      (this, SW_RES( TXT_SIZE_WIDTH )),
+    aSizeWidthField     (this, SW_RES( FLD_SIZE_WIDTH )),
+    aSizeHeightText     (this, SW_RES( TXT_SIZE_HEIGHT )),
+    aSizeHeightField    (this, SW_RES( FLD_SIZE_HEIGHT )),
+    aPreview            (this, SW_RES( WIN_PREVIEW ))
 
 {
     FreeResource();
@@ -150,12 +153,12 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     // Metriken
     FieldUnit aMetric = ::GetDfltMetric(FALSE);
-    SetMetric(aAddrLeftField, aMetric);
-    SetMetric(aAddrTopField , aMetric);
-    SetMetric(aSendLeftField, aMetric);
-    SetMetric(aSendTopField , aMetric);
-    SetMetric(aWidthField   , aMetric);
-    SetMetric(aHeightField  , aMetric);
+    SetMetric(aAddrLeftField,   aMetric);
+    SetMetric(aAddrTopField,    aMetric);
+    SetMetric(aSendLeftField,   aMetric);
+    SetMetric(aSendTopField,    aMetric);
+    SetMetric(aSizeWidthField,  aMetric);
+    SetMetric(aSizeHeightField, aMetric);
 
     // Menues einhaengen
     ::pMenu = new PopupMenu(SW_RES(MNU_EDIT));
@@ -164,20 +167,20 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     // Handler installieren
     Link aLk = LINK(this, SwEnvFmtPage, ModifyHdl);
-    aAddrLeftField .SetModifyHdl( aLk );
-    aAddrTopField  .SetModifyHdl( aLk );
-    aSendLeftField .SetModifyHdl( aLk );
-    aSendTopField  .SetModifyHdl( aLk );
-    aWidthField    .SetModifyHdl( aLk );
-    aHeightField   .SetModifyHdl( aLk );
+    aAddrLeftField  .SetModifyHdl( aLk );
+    aAddrTopField   .SetModifyHdl( aLk );
+    aSendLeftField  .SetModifyHdl( aLk );
+    aSendTopField   .SetModifyHdl( aLk );
+    aSizeWidthField .SetModifyHdl( aLk );
+    aSizeHeightField.SetModifyHdl( aLk );
 
     aLk = LINK(this, SwEnvFmtPage, EditHdl );
     aAddrEditButton.SetSelectHdl( aLk );
     aSendEditButton.SetSelectHdl( aLk );
 
-    aFormatBox     .SetSelectHdl(LINK(this, SwEnvFmtPage, FormatHdl));
+    aSizeFormatBox     .SetSelectHdl(LINK(this, SwEnvFmtPage, FormatHdl));
 
-    // aFormatBox
+    // aSizeFormatBox
     int i;
     for (i = SVX_PAPER_A3; i <= SVX_PAPER_KAI32BIG; i++)
     {
@@ -188,19 +191,19 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
             USHORT nPos   = 0;
             BOOL   bFound = FALSE;
-            while (nPos < aFormatBox.GetEntryCount() && !bFound)
+            while (nPos < aSizeFormatBox.GetEntryCount() && !bFound)
             {
-                aEntryName = aFormatBox.GetEntry(i);
+                aEntryName = aSizeFormatBox.GetEntry(i);
                 if (aEntryName < aPaperName)
                     nPos++;
                 else
                     bFound = TRUE;
             }
-            aFormatBox.InsertEntry(aPaperName, nPos);
+            aSizeFormatBox.InsertEntry(aPaperName, nPos);
             aIDs.Insert((USHORT) i, nPos);
         }
     }
-    aFormatBox.InsertEntry(SvxPaperInfo::GetName(SVX_PAPER_USER));
+    aSizeFormatBox.InsertEntry(SvxPaperInfo::GetName(SVX_PAPER_USER));
     aIDs.Insert((USHORT) SVX_PAPER_USER, aIDs.Count());
 
     // Timer einstellen
@@ -441,7 +444,7 @@ IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
     long lAddrFromLeft;
     long lAddrFromTop;
 
-    USHORT nPaper = aIDs[aFormatBox.GetSelectEntryPos()];
+    USHORT nPaper = aIDs[aSizeFormatBox.GetSelectEntryPos()];
     if (nPaper != (USHORT)SVX_PAPER_USER)
     {
         Size aSz = SvxPaperInfo::GetPaperSize((SvxPaper)nPaper);
@@ -464,8 +467,8 @@ IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
     SetFldVal(aSendLeftField, lSendFromLeft);
     SetFldVal(aSendTopField , lSendFromTop );
 
-    SetFldVal(aWidthField , lWidth );
-    SetFldVal(aHeightField, lHeight);
+    SetFldVal(aSizeWidthField , lWidth );
+    SetFldVal(aSizeHeightField, lHeight);
 
     SetMinMax();
 
@@ -479,28 +482,28 @@ IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SwEnvFmtPage, PreviewHdl, Timer *, EMPTYARG )
 {
-    long lWVal = GetFldVal(aWidthField );
-    long lHVal = GetFldVal(aHeightField);
+    long lWVal = GetFldVal(aSizeWidthField );
+    long lHVal = GetFldVal(aSizeHeightField);
 
     long lWidth  = Max(lWVal, lHVal);
     long lHeight = Min(lWVal, lHVal);
 
-    if (pLastEdit == &aWidthField || pLastEdit == &aHeightField)
+    if (pLastEdit == &aSizeWidthField || pLastEdit == &aSizeHeightField)
     {
         SvxPaper ePaper = SvxPaperInfo::GetPaper(
             Size(lHeight, lWidth), MAP_TWIP, TRUE);
         for (USHORT i = 0; i < aIDs.Count(); i++)
             if (aIDs[i] == (USHORT)ePaper)
-                aFormatBox.SelectEntryPos(i);
+                aSizeFormatBox.SelectEntryPos(i);
 
         // Benutzergroesse merken
-        if (aIDs[aFormatBox.GetSelectEntryPos()] == (USHORT)SVX_PAPER_USER)
+        if (aIDs[aSizeFormatBox.GetSelectEntryPos()] == (USHORT)SVX_PAPER_USER)
         {
             lUserW = lWidth ;
             lUserH = lHeight;
         }
 
-        aFormatBox.GetSelectHdl().Call(&aFormatBox);
+        aSizeFormatBox.GetSelectHdl().Call(&aSizeFormatBox);
     }
     else
     {
@@ -516,8 +519,8 @@ IMPL_LINK( SwEnvFmtPage, PreviewHdl, Timer *, EMPTYARG )
 
 void SwEnvFmtPage::SetMinMax()
 {
-    long lWVal = GetFldVal(aWidthField );
-    long lHVal = GetFldVal(aHeightField);
+    long lWVal = GetFldVal(aSizeWidthField );
+    long lHVal = GetFldVal(aSizeHeightField);
 
     long lWidth  = Max(lWVal, lHVal),
          lHeight = Min(lWVal, lHVal);
@@ -543,12 +546,12 @@ void SwEnvFmtPage::SetMinMax()
     aSendTopField .SetLast (aSendTopField .GetMax());
 
     // Fields neu formatieren
-    aAddrLeftField.Reformat();
-    aAddrTopField .Reformat();
-    aSendLeftField.Reformat();
-    aSendTopField .Reformat();
-    aWidthField   .Reformat();
-    aHeightField  .Reformat();
+    aAddrLeftField  .Reformat();
+    aAddrTopField   .Reformat();
+    aSendLeftField  .Reformat();
+    aSendTopField   .Reformat();
+    aSizeWidthField .Reformat();
+    aSizeHeightField.Reformat();
 }
 
 // --------------------------------------------------------------------------
@@ -588,11 +591,11 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     rItem.lSendFromLeft = GetFldVal(aSendLeftField);
     rItem.lSendFromTop  = GetFldVal(aSendTopField );
 
-    USHORT nPaper = aIDs[aFormatBox.GetSelectEntryPos()];
+    USHORT nPaper = aIDs[aSizeFormatBox.GetSelectEntryPos()];
     if (nPaper == (USHORT)SVX_PAPER_USER)
     {
-        long lWVal = GetFldVal(aWidthField );
-        long lHVal = GetFldVal(aHeightField);
+        long lWVal = GetFldVal(aSizeWidthField );
+        long lHVal = GetFldVal(aSizeHeightField);
         rItem.lWidth  = Max(lWVal, lHVal);
         rItem.lHeight = Min(lWVal, lHVal);
     }
@@ -627,15 +630,15 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
         Max(rItem.lWidth, rItem.lHeight)), MAP_TWIP, TRUE);
     for (USHORT i = 0; i < (USHORT) aIDs.Count(); i++)
         if (aIDs[i] == (USHORT)ePaper)
-            aFormatBox.SelectEntryPos(i);
+            aSizeFormatBox.SelectEntryPos(i);
 
     // Die MetricFields
     SetFldVal(aAddrLeftField, rItem.lAddrFromLeft);
     SetFldVal(aAddrTopField , rItem.lAddrFromTop );
     SetFldVal(aSendLeftField, rItem.lSendFromLeft);
     SetFldVal(aSendTopField , rItem.lSendFromTop );
-    SetFldVal(aWidthField   , Max(rItem.lWidth, rItem.lHeight));
-    SetFldVal(aHeightField  , Min(rItem.lWidth, rItem.lHeight));
+    SetFldVal(aSizeWidthField  , Max(rItem.lWidth, rItem.lHeight));
+    SetFldVal(aSizeHeightField , Min(rItem.lWidth, rItem.lHeight));
     SetMinMax();
 
     DELETEZ(GetParent()->pSenderSet);
@@ -645,6 +648,9 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 
 /*--------------------------------------------------------------------
 $Log: not supported by cvs2svn $
+Revision 1.1.1.1  2000/09/18 17:14:35  hr
+initial import
+
 Revision 1.78  2000/09/18 16:05:24  willem.vandorp
 OpenOffice header added.
 

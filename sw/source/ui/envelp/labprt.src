@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 18:23:05 $
+ *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,14 @@
 TabPage TP_LAB_PRT
 {
     HelpID = HID_LAB_PRT ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     RadioButton BTN_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
         Text = "~Ganze Seite" ;
         Text [ ENGLISH ] = "Whole page" ;
         Text [ NORWEGIAN ] = "Hele siden" ;
@@ -86,8 +88,6 @@ TabPage TP_LAB_PRT
         Text [ PORTUGUESE_BRAZILIAN ] = "Pßgina inteira" ;
         Text [ SWEDISH ] = "H~ela sidan" ;
         Text [ PORTUGUESE ] = "Página ~inteira" ;
-        TabStop = TRUE ;
-        Group = TRUE ;
         Text[ chinese_simplified ] = "ÕûÒ³(~E)";
         Text[ russian ] = "Âñÿ ñòðàíèöà";
         Text[ polish ] = "Ca³a strona";
@@ -100,7 +100,7 @@ TabPage TP_LAB_PRT
     };
     RadioButton BTN_SINGLE
     {
-        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Einzelnes Eti~kett" ;
         Text [ ENGLISH ] = "Single label" ;
@@ -127,8 +127,8 @@ TabPage TP_LAB_PRT
     };
     FixedText TXT_COL
     {
-        Pos = MAP_APPFONT ( 132 , 27 ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Pos = MAP_APPFONT ( 127 , 29 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "S~palte" ;
         Text [ ENGLISH ] = "Column" ;
         Text [ NORWEGIAN ] = "Column" ;
@@ -156,7 +156,7 @@ TabPage TP_LAB_PRT
     NumericField FLD_COL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 161 , 24 ) ;
+        Pos = MAP_APPFONT ( 160 , 27 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -167,8 +167,8 @@ TabPage TP_LAB_PRT
     };
     FixedText TXT_ROW
     {
-        Pos = MAP_APPFONT ( 193 , 27 ) ;
-        Size = MAP_APPFONT ( 28 , 10 ) ;
+        Pos = MAP_APPFONT ( 191 , 29 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "Zei~le" ;
         Text [ ENGLISH ] = "Row" ;
         Text [ NORWEGIAN ] = "Row" ;
@@ -196,7 +196,7 @@ TabPage TP_LAB_PRT
     NumericField FLD_ROW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 224 , 24 ) ;
+        Pos = MAP_APPFONT ( 224 , 27 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -208,7 +208,7 @@ TabPage TP_LAB_PRT
     CheckBox CB_SYNCHRON
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Inhalte ~synchronisieren" ;
         Text [ ENGLISH ] = "~Synchronize content" ;
         TabStop = TRUE ;
@@ -234,12 +234,12 @@ TabPage TP_LAB_PRT
     GroupBox GB_DONTKNOW
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 60 ) ;
+        Size = MAP_APPFONT ( 248 , 53 ) ;
     };
     FixedText INF_PRINTER
     {
-        Pos = MAP_APPFONT ( 12 , 82 ) ;
-        Size = MAP_APPFONT ( 171 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
         Text = "Druckername" ;
         Text [ ENGLISH ] = "Printer name" ;
         Left = TRUE ;
@@ -264,8 +264,8 @@ TabPage TP_LAB_PRT
     };
     PushButton BTN_PRTSETUP
     {
-        Pos = MAP_APPFONT ( 200 , 80 ) ;
-        Size = MAP_APPFONT ( 48 , 14 ) ;
+        Pos = MAP_APPFONT ( 198 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Einrichten..." ;
         Text [ ENGLISH ] = "Setup..." ;
         TabStop = TRUE ;
@@ -290,8 +290,8 @@ TabPage TP_LAB_PRT
     };
     GroupBox GB_PRINTER
     {
-        Pos = MAP_APPFONT ( 6 , 70 ) ;
-        Size = MAP_APPFONT ( 248 , 32 ) ;
+        Pos = MAP_APPFONT ( 6 , 59 ) ;
+        Size = MAP_APPFONT ( 248 , 28 ) ;
         Text = " Drucker " ;
         Text [ ENGLISH ] = " Printer " ;
         Text [ dutch ] = "Printer " ;
