@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 10:39:12 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,8 +446,8 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     // UI mode
     if (
         ((m_eFeature & E_WORK_WITH_UI)                                                                                 == E_WORK_WITH_UI) &&
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_HIDDEN , sal_False) == sal_True      ) &&
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_PREVIEW, sal_False) == sal_True      )
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_HIDDEN , sal_False) == sal_False     ) &&
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_PREVIEW, sal_False) == sal_False     )
        )
     {
         nMacroMode  = css::document::MacroExecMode::USE_CONFIG;
