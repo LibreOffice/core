@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-24 11:38:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <svtools/itemset.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwDoc;
 class SwDocStyleSheetPool;
 class SwPageDesc;
@@ -97,7 +101,7 @@ public:
 /*--------------------------------------------------------------------
     Beschreibung:   temp. StyleSheet
  --------------------------------------------------------------------*/
-class SwDocStyleSheet : public SfxStyleSheetBase
+class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
 {
     friend class SwDocStyleSheetPool;
     friend class SwStyleSheetIterator;
@@ -115,7 +119,7 @@ class SwDocStyleSheet : public SfxStyleSheetBase
 
 
     // leere Huelse zum richtigen StyleSheet (Core) machen
-    void                Create();
+    SW_DLLPRIVATE void              Create();
 
     // den StyleSheet mit Daten fuellen
     enum FillStyleType {
@@ -123,8 +127,8 @@ class SwDocStyleSheet : public SfxStyleSheetBase
         FillAllInfo,
         FillPhysical
     };
-    BOOL                FillStyleSheet( FillStyleType eFType );
 
+    SW_DLLPRIVATE BOOL FillStyleSheet( FillStyleType eFType );
 
 public:
     SwDocStyleSheet( SwDoc&                 rDoc,
