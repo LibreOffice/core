@@ -18,7 +18,7 @@ ODKDOCPATH=$(UDKZIPPATH)$/$(ODKDOCNAME).tar.gz
 
 all: ..$/misc$/deltree.txt
 
-..$/misc$/deltree.txt .SETDIR=$(OUT)$/bin : $(UDKPATH) $(ODKDOCPATH) ..$/..$/pack$/unzip_udk$/deltree.txt
+..$/misc$/deltree.txt .SETDIR=$(OUT)$/bin : $(UDKPATH) ..$/..$/pack$/unzip_udk$/deltree.txt
 # first clean everything
 .IF "$(BUILD_SOSL)"==""
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME) >& $(NULLDEV)
@@ -49,6 +49,7 @@ all: ..$/misc$/deltree.txt
     gzip -df < $(ODKDOCNAME).tar.gz | tar -xvf -
 .ENDIF
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME)$/settings$/dk.mk
+    +-$(MY_DELETE_RECURSIVE) $(ODKNAME)$/docs$/basic
 .IF "$(BUILD_SOSL)"!=""
 # for OpenOffice build rename to PRODUCT_NAME
     +-$(RENAME) $(ODKNAME) $(PRODUCT_NAME)
