@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:25:34 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): cmc@openoffice.org, tono@openoffice.org
  *
  *
  ************************************************************************/
@@ -84,10 +84,16 @@
 #ifndef _SVX_NUMITEM_HXX
 #include <svx/numitem.hxx>
 #endif
+#ifndef _SVX_BOXITEM_HXX //autogen
+#include <svx/boxitem.hxx>
+#endif
 
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
 #endif
+
+extern void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, BYTE nCol, short nIdx,
+    USHORT nOOIndex, USHORT nWWIndex, short *pSize);
 
 class Font;
 class Graphic;
@@ -117,6 +123,21 @@ public:
     SwNodeIdx( const SwNodeIndex& rIdx ) : aIdx( rIdx ) {}
     virtual ULONG   GetIdx() const;
     virtual SvxNodeIdx* Clone() const;
+};
+
+class BookmarkPosition
+{
+public:
+    SwNodeIndex maMkNode;
+    xub_StrLen mnMkCntnt;
+    BookmarkPosition(const SwPaM &rPaM);
+    BookmarkPosition(const BookmarkPosition &rEntry);
+
+    bool operator==(const BookmarkPosition);
+private:
+    //No assignment
+    BookmarkPosition& operator=(const BookmarkPosition&);
+
 };
 
 class SwxPosition : public SvxPosition
@@ -176,6 +197,7 @@ SV_DECL_VARARR( SwListArr, SwListEntry, 0, 20 )
 
 struct DocPageInformation
 {
+    SvxBoxItem maBox;
     long mnPaperw;
     long mnPaperh;
     long mnMargl;
@@ -193,6 +215,7 @@ struct DocPageInformation
 struct SectPageInformation
 {
     std::vector<long> maColumns;
+    SvxBoxItem maBox;
     SvxNumberType maNumType;
     SwPageDesc *mpTitlePageHdFt;
     SwPageDesc *mpPageHdFt;
@@ -303,6 +326,7 @@ class SwRTFParser : public SvxRTFParser
     SwListArr aListArr;
     SvPtrarr aTblFmts;
     SvPtrarr aRubyCharFmts;
+    BookmarkPosition* mpBookmarkStart;
 
     SfxItemSet* pGrfAttrSet;
     SwTableNode* pTableNode, *pOldTblNd; // fuers Lesen von Tabellen: akt. Tab
@@ -347,6 +371,7 @@ class SwRTFParser : public SvxRTFParser
     virtual void ReadInfo( const sal_Char* pChkForVerNo = 0 );
 
     void ReadListLevel( SwNumRule& rRule, BYTE nLvl );
+    void SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine);
     void ReadListTable();
     void ReadListOverrideTable();
     SwNumRule *ReadNumSecLevel( int nToken );
@@ -364,6 +389,7 @@ class SwRTFParser : public SvxRTFParser
     void SetStyleAttr( SfxItemSet& rCollSet,
                         const SfxItemSet& rStyleSet,
                         const SfxItemSet& rDerivedSet );
+    String XlateFmtColName(const String &rName) const;  //Takashi Ono for CJK
     SwTxtFmtColl* MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
     SwCharFmt* MakeCharStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
     void MakeStyleTab();
@@ -392,6 +418,7 @@ class SwRTFParser : public SvxRTFParser
                                 const SwNodeIndex& rEnd );
     void SetNumLSpace( SwTxtNode& rNd, const SwNodeNum& rNum,
                                 const SwNumRule& rRule );
+    long GetSafePos(long nPos);
 
 protected:
     // wird fuer jedes Token gerufen, das in CallParser erkannt wird
