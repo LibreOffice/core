@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:53:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "dpsave.hxx"
+#include "dpdimsave.hxx"
 #include "miscuno.hxx"
 #include "scerrors.hxx"
 #include "unonames.hxx"
@@ -205,6 +206,14 @@ BOOL ScDPSaveMember::HasShowDetails() const
 void ScDPSaveMember::SetShowDetails(BOOL bSet)
 {
     nShowDetailsMode = bSet;
+}
+
+void ScDPSaveMember::SetName( const String& rNew )
+{
+    // Used only if the source member was renamed (groups).
+    // For UI renaming of members, a layout name must be used.
+
+    aName = rNew;
 }
 
 void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMember )
@@ -426,6 +435,13 @@ BOOL ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
     return TRUE;
 }
 
+void ScDPSaveDimension::SetName( const String& rNew )
+{
+    // Used only if the source dim was renamed (groups).
+    // For UI renaming of dimensions, the layout name must be used.
+
+    aName = rNew;
+}
 
 void ScDPSaveDimension::SetOrientation(USHORT nNew)
 {
@@ -757,6 +773,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 // -----------------------------------------------------------------------
 
 ScDPSaveData::ScDPSaveData() :
+    pDimensionData( NULL ),
     nColumnGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nRowGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nIgnoreEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
@@ -774,6 +791,11 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown )
 {
+    if ( r.pDimensionData )
+        pDimensionData = new ScDPDimensionSaveData( *r.pDimensionData );
+    else
+        pDimensionData = NULL;
+
     long nCount = r.aDimList.Count();
     for (long i=0; i<nCount; i++)
     {
@@ -786,6 +808,12 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
 {
     if ( &r != this )
     {
+        delete pDimensionData;
+        if ( r.pDimensionData )
+            pDimensionData = new ScDPDimensionSaveData( *r.pDimensionData );
+        else
+            pDimensionData = NULL;
+
         nColumnGrandMode = r.nColumnGrandMode;
         nRowGrandMode    = r.nRowGrandMode;
         nIgnoreEmptyMode = r.nIgnoreEmptyMode;
@@ -824,6 +852,10 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
          bDrillDown       != r.bDrillDown )
         return FALSE;
 
+    if ( pDimensionData || r.pDimensionData )
+        if ( !pDimensionData || !r.pDimensionData || !( *pDimensionData == *r.pDimensionData ) )
+            return FALSE;
+
     long nCount = aDimList.Count();
     if ( nCount != r.aDimList.Count() )
         return FALSE;
@@ -842,6 +874,8 @@ ScDPSaveData::~ScDPSaveData()
     for (long i=0; i<nCount; i++)
         delete (ScDPSaveDimension*)aDimList.GetObject(i);
     aDimList.Clear();
+
+    delete pDimensionData;
 }
 
 ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const String& rName)
@@ -908,6 +942,21 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const String& rName)
     pNew->SetDupFlag( TRUE );
     aDimList.Insert( pNew, LIST_APPEND );
     return pNew;
+}
+
+void ScDPSaveData::RemoveDimensionByName(const String& rName)
+{
+    long nCount = aDimList.Count();
+    for (long i=0; i<nCount; i++)
+    {
+        ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
+        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
+        {
+            delete pDim;
+            aDimList.Remove(i);
+            break;
+        }
+    }
 }
 
 ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rDim )
@@ -1190,5 +1239,19 @@ BOOL ScDPSaveData::IsEmpty() const
     return TRUE;    // no entries that are not hidden
 }
 
+ScDPDimensionSaveData* ScDPSaveData::GetDimensionData()
+{
+    if (!pDimensionData)
+        pDimensionData = new ScDPDimensionSaveData;
+    return pDimensionData;
+}
 
+void ScDPSaveData::SetDimensionData( const ScDPDimensionSaveData* pNew )
+{
+    delete pDimensionData;
+    if ( pNew )
+        pDimensionData = new ScDPDimensionSaveData( *pNew );
+    else
+        pDimensionData = NULL;
+}
 
