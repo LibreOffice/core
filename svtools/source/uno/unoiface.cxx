@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:06 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 14:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,9 +921,15 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
             break;
             case BASEPROPERTY_VALUESTEP_DOUBLE:
             {
-                sal_Int32 n;
-                if ( Value >>= n )
-                     pField->SetSpinSize( n );
+                double d;
+                if ( Value >>= d )
+                     pField->SetSpinSize( d );
+                else
+                {
+                    sal_Int32 n;
+                    if ( Value >>= n )
+                         pField->SetSpinSize( n );
+                }
             }
             break;
             case BASEPROPERTY_DECIMALACCURACY:
