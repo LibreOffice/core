@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 16:14:38 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,34 +289,6 @@ USHORT BookmarkCombo::GetSelectEntryCount() const
     }
 
     return nCnt;
-}
-
-/*------------------------------------------------------------------------
-     Beschreibung:
- -----------------------------------------------------------------------*/
-
-String BookmarkCombo::GetSelectEntry( USHORT nSelIndex ) const
-{
-    USHORT nCnt = 0;
-    USHORT nPos = GetFirstSelEntryPos();
-    String sEntry;
-
-    while (nPos != COMBOBOX_ENTRY_NOTFOUND)
-    {
-        if (nSelIndex == nCnt)
-        {
-            char cSep = GetMultiSelectionSeparator();
-            sEntry = GetText().GetToken(nPos, cSep);
-            sEntry.EraseLeadingChars();
-            sEntry.EraseTrailingChars();
-
-            break;
-        }
-        nPos = GetNextSelEntryPos(nPos);
-        nCnt++;
-    }
-
-    return sEntry;
 }
 
 /*------------------------------------------------------------------------
