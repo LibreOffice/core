@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 20:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,11 @@ private:
     SfxShell*       GetMySubShell() const;
 
     void            DoReadUserData( const String& rData );
+
+    DECL_LINK( SimpleRefClose, String* );
+    DECL_LINK( SimpleRefDone, String* );
+    DECL_LINK( SimpleRefAborted, String* );
+    DECL_LINK( SimpleRefChange, String* );
 
 protected:
     virtual void    Activate(BOOL bMDI);
@@ -408,8 +413,9 @@ public:
 
     BOOL    GetFunction( String& rFuncStr );
 
-    // Ein kleiner Hack
-    ScCellShell* GetCellShell(){return pCellShell;}
+    void    StartSimpleRefDialog( const String& rTitle, const String& rInitVal,
+                                    BOOL bCloseOnButtonUp );
+    void    StopSimpleRefDialog();
 };
 
 //==================================================================

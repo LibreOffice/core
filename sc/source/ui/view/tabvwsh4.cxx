@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:31:22 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 20:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,6 +1071,97 @@ void ScTabViewShell::StopEditShell()
 {
     if ( pEditShell != NULL && !bDontSwitch )
         SetEditShell(NULL, FALSE );
+}
+
+//------------------------------------------------------------------
+
+// close handler to ensure function of dialog:
+
+IMPL_LINK( ScTabViewShell, SimpleRefClose, String*, pResult )
+{
+    ScSimpleRefDlgWrapper::SetAutoReOpen( TRUE );
+    return 0;
+}
+
+// handlers to call UNO listeners:
+
+ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
+{
+    ScTabViewObj* pRet = NULL;
+    SfxViewFrame* pViewFrame = rShell.GetViewFrame();
+    if (pViewFrame)
+    {
+        SfxFrame* pFrame = pViewFrame->GetFrame();
+        if (pFrame)
+        {
+            uno::Reference<frame::XController> xController = pFrame->GetController();
+            if (xController.is())
+                pRet = ScTabViewObj::getImplementation( xController );
+        }
+    }
+    return pRet;
+}
+
+IMPL_LINK( ScTabViewShell, SimpleRefDone, String*, pResult )
+{
+    ScTabViewObj* pImp = lcl_GetViewObj( *this );
+    if ( pImp && pResult )
+        pImp->RangeSelDone( *pResult );
+    return 0;
+}
+
+IMPL_LINK( ScTabViewShell, SimpleRefAborted, String*, pResult )
+{
+    ScTabViewObj* pImp = lcl_GetViewObj( *this );
+    if ( pImp && pResult )
+        pImp->RangeSelAborted( *pResult );
+    return 0;
+}
+
+IMPL_LINK( ScTabViewShell, SimpleRefChange, String*, pResult )
+{
+    ScTabViewObj* pImp = lcl_GetViewObj( *this );
+    if ( pImp && pResult )
+        pImp->RangeSelChanged( *pResult );
+    return 0;
+}
+
+void ScTabViewShell::StartSimpleRefDialog(
+            const String& rTitle, const String& rInitVal, BOOL bCloseOnButtonUp )
+{
+    SfxViewFrame* pViewFrm = GetViewFrame();
+    USHORT nId = ScSimpleRefDlgWrapper::GetChildWindowId();
+
+    SC_MOD()->SetRefDialog( nId, TRUE, pViewFrm );
+
+    ScSimpleRefDlgWrapper* pWnd = (ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
+    if (pWnd)
+    {
+        pWnd->SetCloseHdl( LINK( this, ScTabViewShell, SimpleRefClose ) );
+        pWnd->SetUnoLinks( LINK( this, ScTabViewShell, SimpleRefDone ),
+                           LINK( this, ScTabViewShell, SimpleRefAborted ),
+                           LINK( this, ScTabViewShell, SimpleRefChange ) );
+        pWnd->SetRefString( rInitVal );
+        pWnd->SetFlags( bCloseOnButtonUp );
+        pWnd->SetAutoReOpen( FALSE );
+        Window* pWin = pWnd->GetWindow();
+        pWin->SetText( rTitle );
+        pWnd->StartRefInput();
+    }
+}
+
+void ScTabViewShell::StopSimpleRefDialog()
+{
+    SfxViewFrame* pViewFrm = GetViewFrame();
+    USHORT nId = ScSimpleRefDlgWrapper::GetChildWindowId();
+
+    ScSimpleRefDlgWrapper* pWnd = (ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
+    if (pWnd)
+    {
+        Window* pWin = pWnd->GetWindow();
+        if (pWin && pWin->IsSystemWindow())
+            ((SystemWindow*)pWin)->Close();     // calls abort handler
+    }
 }
 
 //------------------------------------------------------------------
