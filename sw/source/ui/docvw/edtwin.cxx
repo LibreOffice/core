@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:34:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,7 +723,17 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
     }
     if ( !bDone && !(bFrmDrag || bInsDraw) )
     {
-        (rSh.*rSh.fnSetCrsr)( &aModPt, FALSE );
+        if ( pRowColumnSelectionStart )
+        {
+            Point aPos( aModPt );
+            if( bIsRowDrag )
+                aPos.X() = 0;
+            else
+                aPos.Y() = 0;
+            rSh.SelectTableRowCol( *pRowColumnSelectionStart, &aPos );
+        }
+        else
+            (rSh.*rSh.fnSetCrsr)( &aModPt, FALSE );
 
         //fix(24138): Es kann sein, dass der "Sprung" ueber eine Tabelle so
         //nicht geschafft wird. Deshalb wir hier eben per Up/Down ueber die
@@ -2448,7 +2458,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     BYTE nMouseTabCol = 0;
     const BOOL bTmp = !rSh.IsDrawCreate() && !pApplyTempl && !rSh.IsInSelect() &&
          rMEvt.GetClicks() == 1 && MOUSE_LEFT == rMEvt.GetButtons();
-
     if (  bTmp &&
          0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
          !rSh.IsObjSelectable( aDocPos ) )
@@ -2457,6 +2466,15 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         if ( SW_TABSEL_HORI <= nMouseTabCol && SW_TABCOLSEL_VERT >= nMouseTabCol )
         {
             rSh.SelectTableRowCol( aDocPos );
+            if( SW_TABSEL_HORI  != nMouseTabCol && SW_TABSEL_HORI_RTL  != nMouseTabCol)
+            {
+                pRowColumnSelectionStart = new Point( aDocPos );
+                bIsRowDrag = SW_TABROWSEL_HORI == nMouseTabCol||
+                            SW_TABROWSEL_HORI_RTL == nMouseTabCol ||
+                            SW_TABCOLSEL_VERT == nMouseTabCol;
+                bMBPressed = TRUE;
+                CaptureMouse();
+            }
             return;
         }
         // <--
@@ -3194,6 +3212,18 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     if( pShadCrsr && !bInsWin )
         delete pShadCrsr, pShadCrsr = 0;
 
+    if( bInsWin && pRowColumnSelectionStart )
+    {
+        EnterArea();
+        Point aPos( aDocPt );
+        if( bIsRowDrag )
+            aPos.X() = 0;
+        else
+            aPos.Y() = 0;
+        if( rSh.SelectTableRowCol( *pRowColumnSelectionStart, &aPos ))
+            return;
+    }
+
     // Position ist noetig fuer OS/2, da dort nach einem MB-Down
     // offensichtlich sofort ein MB-Move gerufen wird.
     if( bDDTimerStarted )
@@ -3601,6 +3631,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     bWasShdwCrsr = FALSE;
     if( pShadCrsr )
         delete pShadCrsr, pShadCrsr = 0;
+
+    if( pRowColumnSelectionStart )
+        DELETEZ( pRowColumnSelectionStart );
 
     SdrHdlKind eOldSdrMoveHdl = eSdrMoveHdl;
     eSdrMoveHdl = HDL_USER;     // fuer die MoveEvents - wieder zuruecksetzen
@@ -4177,6 +4210,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     pUserMarker( 0 ),
     pUserMarkerObj( 0 ),
     pShadCrsr( 0 ),
+    pRowColumnSelectionStart( 0 ),
     nDropAction( 0 ),
     nDropFormat( 0 ),
     nDropDestination( 0 ),
@@ -4226,6 +4260,7 @@ SwEditWin::~SwEditWin()
 {
     aKeyInputTimer.Stop();
     delete pShadCrsr;
+    delete pRowColumnSelectionStart;
     if( pQuickHlpData->bClear && rView.GetWrtShellPtr() )
         pQuickHlpData->Stop( rView.GetWrtShell() );
     bExecuteDrag = FALSE;
