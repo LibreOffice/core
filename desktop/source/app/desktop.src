@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-07-08 13:58:50 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String STR_RECOVER_QUERY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "�Desea restaurar el archivo \"$1\"?";
     Text[ finnish ] = "Palautetaanko tiedosto $1?";
+    Text[ thai ] = "จะคืนสภาพแฟ้ม \"$1\" หรือไม่?";
 };
 
 String STR_RECOVER_TITLE
@@ -117,6 +118,7 @@ String STR_RECOVER_TITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Recuperar archivo";
     Text[ finnish ] = "Tiedoston palautus";
+    Text[ thai ] = "กู้คืนแฟ้ม";
 };
 
 WarningBox STR_RECOVER_PREPARED
@@ -127,7 +129,7 @@ WarningBox STR_RECOVER_PREPARED
     Message [ english_us ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
     Message [ portuguese_brazilian ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und k?nen voraussichtlich beim n?chsten\nProgrammstart wiederhergestellt werden." ;
     Message [ swedish ] = "Ett irreparabelt fel har uppst�tt.\n\nMen alla �ndrade filer sparades\noch kan f�rmodligen �terst�llas\nvid n�sta programstart." ;
-    Message [ danish ] = "Der opstod en irreparabel fejl.\n\nAlle �ndrede filer er dog\nblevet gemt og kan sandsynligvis gendannes\nved n�ste programstart." ;
+    Message [ danish ] = "Der er opst�et en uoprettelig fejl.\n\nAlle �ndrede filer blev dog sikkerhedskopieret\n og kan formodentlig gendannes ved n�ste \nstart af programmet." ;
     Message [ italian ] = "Si � verificato un errore irrimediabile.\n\nTutti i file modificati sono stati salvati e probabilmente verranno recuperati\nal prossimo avvio del programma." ;
     Message [ spanish ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los archivos modificados\ny quiz�s podr�n recuperarse\nal iniciar de nuevo el programa." ;
     Message [ french ] = "Une erreur irr�cup�rable s'est produite.\n\nTous les fichiers modifi�s ont �t� sauvegard�s\net devraient �tre restaur�s au\nred�marrage du programme." ;
@@ -144,8 +146,9 @@ WarningBox STR_RECOVER_PREPARED
     Message[ korean ] = "치명적인 오류가 발생했습니다.\n\n그러나 변경된 모든 파일이\n저장되었으므로, 다음\n프로그램 시작시에는 복구될 수 있을 것입니다.";
     Message[ turkish ] = "D�zeltilemeyen bir hata olu�tu.\n\nDe�i�tirilen t�m dosyalar\nkaydedildi ve muhtemelen uygulama yeniden ba�lat�ld���nda\nkurtar�labilecek.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los cambios realizados\nen los archivos y quiz�s podr�n recuperarse\nal iniciar de nuevo el programa.";
+    Message[ catalan ] = "S'ha produ�t un error irreparable.\n\nTot i aix� es desaran els canvis realitzats\nen els fitxers i potser es podran recuperar\nen iniciar de nou el programa.";
     Message[ finnish ] = "On ilmennyt peruuttamaton virhe.\n\nKaikki muokatut tiedostot on tallennettu\nja ne voidaan ehk� palauttaa, kun k�ynnist�t ohjelman uudelleen.";
+    Message[ thai ] = "เกิดข้อผิดพลาดที่ไม่สามารถกู้คืนได้\n\nแฟ้มที่ดัดแปลงแก้ไขได้ถูกบันทึกและน่าจะสามารถ\nถูกกู้คืนที่โปรแกรมเริ่มต้นได้";
 };
 
 String STR_BOOTSTRAP_ERR_CANNOT_START
@@ -161,7 +164,7 @@ String STR_BOOTSTRAP_ERR_CANNOT_START
     Text[ spanish ] = "No se puede iniciar la aplicaci�n. ";
     Text[ finnish ] = "The program cannot be started. ";
     Text[ italian ] = "Impossibile avviare l'applicazione. ";
-    Text[ danish ] = "The program cannot be started. ";
+    Text[ danish ] = "Programmet kan ikke startes. ";
     Text[ swedish ] = "Det g�r inte att starta programmet. ";
     Text[ polish ] = "Uruchomienie aplikacji nie jest mo�liwe.";
     Text[ portuguese_brazilian ] = "The program cannot be started. ";
@@ -171,7 +174,7 @@ String STR_BOOTSTRAP_ERR_CANNOT_START
     Text[ chinese_traditional ] = "無法啓動這個應用程式。";
     Text[ turkish ] = "The program cannot be started. ";
     Text[ arabic ] = "The program cannot be started. ";
-    Text[ catalan ] = "The program cannot be started. ";
+    Text[ catalan ] = "No es pot iniciar el programa. ";
 };
 
 String STR_BOOTSTRAP_ERR_DIR_MISSING
@@ -187,7 +190,7 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
     Text[ spanish ] = "No se encontr� el directorio de configuraci�n \"$1\".";
     Text[ finnish ] = "The configuration directory \"$1\" is missing.";
     Text[ italian ] = "Impossibile trovare il percorso di configurazione \"$1\".";
-    Text[ danish ] = "The configuration directory \"$1\" is missing.";
+    Text[ danish ] = "\"Kunne ikke finde konfigurationsstien \"\"$1\"\".\"";
     Text[ swedish ] = "Konfigurationss�kv�gen \"$1\" hittades inte.";
     Text[ polish ] = "Nie znaleziono �cie�ki konfiguracyjnej \"$1\".";
     Text[ portuguese_brazilian ] = "The configuration directory \"$1\" is missing.";
@@ -197,7 +200,7 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
     Text[ chinese_traditional ] = "沒有找到配置路徑 \"$1\" 。";
     Text[ turkish ] = "The configuration directory \"$1\" is missing.";
     Text[ arabic ] = "The configuration directory \"$1\" is missing.";
-    Text[ catalan ] = "The configuration directory \"$1\" is missing.";
+    Text[ catalan ] = "No es pot trobar el directori de configuraci� \"$1\".";
 };
 
 String STR_BOOTSTRAP_ERR_PATH_INVALID
@@ -213,7 +216,7 @@ String STR_BOOTSTRAP_ERR_PATH_INVALID
     Text[ spanish ] = "La ruta de instalaci�n no es v�lida.";
     Text[ finnish ] = "The installation path is invalid.";
     Text[ italian ] = "Il percorso d'installazione non � valido.";
-    Text[ danish ] = "The installation path is invalid.";
+    Text[ danish ] = "Installationsstien er ugyldig.";
     Text[ swedish ] = "Installationss�kv�gen �r ogiltig.";
     Text[ polish ] = "�cie�ka instalacyjna jest nieprawid�owa.";
     Text[ portuguese_brazilian ] = "The installation path is invalid.";
@@ -223,7 +226,7 @@ String STR_BOOTSTRAP_ERR_PATH_INVALID
     Text[ chinese_traditional ] = "這個安裝路徑無效。";
     Text[ turkish ] = "The installation path is invalid.";
     Text[ arabic ] = "The installation path is invalid.";
-    Text[ catalan ] = "The installation path is invalid.";
+    Text[ catalan ] = "El cam� d'instal.laci� no �s correcte.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATH
@@ -239,7 +242,7 @@ String STR_BOOTSTRAP_ERR_NO_PATH
     Text[ spanish ] = "No se pudo determinar la ruta de instalaci�n.";
     Text[ finnish ] = "The installation path is not available.";
     Text[ italian ] = "Impossibile definire il percorso di installazione.";
-    Text[ danish ] = "The installation path is not available.";
+    Text[ danish ] = "Installationsstien kunne ikke findes.";
     Text[ swedish ] = "Det gick inte att best�mma installationss�kv�gen.";
     Text[ polish ] = "Ustalenie �cie�ki instalacyjnej nie powiod�o si�.";
     Text[ portuguese_brazilian ] = "The installation path is not available.";
@@ -249,7 +252,7 @@ String STR_BOOTSTRAP_ERR_NO_PATH
     Text[ chinese_traditional ] = "無法確定這個安裝路徑。";
     Text[ turkish ] = "The installation path is not available.";
     Text[ arabic ] = "The installation path is not available.";
-    Text[ catalan ] = "The installation path is not available.";
+    Text[ catalan ] = "El cam� d'instal.laci� no est� disponible.";
 };
 
 String STR_BOOTSTRAP_ERR_INTERNAL
@@ -265,7 +268,7 @@ String STR_BOOTSTRAP_ERR_INTERNAL
     Text[ spanish ] = "Ha occurrido un error interno.";
     Text[ finnish ] = "An internal failure occurred.";
     Text[ italian ] = "Si � verificato un errore interno.";
-    Text[ danish ] = "An internal failure occurred.";
+    Text[ danish ] = "Der er opst�et en intern fejl.";
     Text[ swedish ] = "Det har uppst�tt ett internt fel.";
     Text[ polish ] = "Wyst�pi� wewn�trzny b��d.";
     Text[ portuguese_brazilian ] = "An internal failure occurred.";
@@ -275,7 +278,7 @@ String STR_BOOTSTRAP_ERR_INTERNAL
     Text[ chinese_traditional ] = "發生一個不明的內部錯誤。";
     Text[ turkish ] = "An internal failure occurred.";
     Text[ arabic ] = "An internal failure occurred.";
-    Text[ catalan ] = "An internal failure occurred.";
+    Text[ catalan ] = "S'ha produ�t un error intern.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_CORRUPT
@@ -291,7 +294,7 @@ String STR_BOOTSTRAP_ERR_FILE_CORRUPT
     Text[ spanish ] = "El archivo de configuraci�n \"$1\" est� da�ado.";
     Text[ finnish ] = "The configuration file \"$1\" is corrupt.";
     Text[ italian ] = "Il file di configurazione \"$1\" � danneggiato.";
-    Text[ danish ] = "The configuration file \"$1\" is corrupt.";
+    Text[ danish ] = "\"Konfigurationsfilen \"\"$1\"\" er beskadiget.\"";
     Text[ swedish ] = "Konfigurationsfilen \"$1\" �r skadad.";
     Text[ polish ] = "Plik konfiguracyjny \"$1\" jest uszkodzony.";
     Text[ portuguese_brazilian ] = "The configuration file \"$1\" is corrupt.";
@@ -301,7 +304,7 @@ String STR_BOOTSTRAP_ERR_FILE_CORRUPT
     Text[ chinese_traditional ] = "配置檔案 \"$1\" 已經損壞。";
     Text[ turkish ] = "The configuration file \"$1\" is corrupt.";
     Text[ arabic ] = "The configuration file \"$1\" is corrupt.";
-    Text[ catalan ] = "The configuration file \"$1\" is corrupt.";
+    Text[ catalan ] = "El fitxer de configuraci� \"$1\" est� malm�s.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_MISSING
@@ -317,7 +320,7 @@ String STR_BOOTSTRAP_ERR_FILE_MISSING
     Text[ spanish ] = "No se encontr� el archivo de configuraci�n \"$1\".";
     Text[ finnish ] = "The configuration file \"$1\" is missing.";
     Text[ italian ] = "Impossibile trovare il file di configurazione \"$1\".";
-    Text[ danish ] = "The configuration file \"$1\" is missing.";
+    Text[ danish ] = "\"Kunne ikke finde konfigurationsfilen \"\"$1\"\".\"";
     Text[ swedish ] = "Konfigurationsfilen \"$1\" hittades inte.";
     Text[ polish ] = "Nie znaleziono pliku konfiguracyjnego \"$1\".";
     Text[ portuguese_brazilian ] = "The configuration file \"$1\" is missing.";
@@ -327,7 +330,7 @@ String STR_BOOTSTRAP_ERR_FILE_MISSING
     Text[ chinese_traditional ] = "沒有找到配置檔案 \"$1\" 。";
     Text[ turkish ] = "The configuration file \"$1\" is missing.";
     Text[ arabic ] = "The configuration file \"$1\" is missing.";
-    Text[ catalan ] = "The configuration file \"$1\" is missing.";
+    Text[ catalan ] = "No es pot trobar el fitxer de configuraci� \"$1\".";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SUPPORT
@@ -343,7 +346,7 @@ String STR_BOOTSTRAP_ERR_NO_SUPPORT
     Text[ spanish ] = "El archivo de configuraci�n \"$1\" no apoya esta versi�n.";
     Text[ finnish ] = "The main configuration file \"$1\" does not support the current version.";
     Text[ italian ] = "Il file di configurazione principale \"$1\" non supporta questa versione.";
-    Text[ danish ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ danish ] = "\"Konfigurationsfilen \"\"$1\"\" underst�tter ikke denne version.\"";
     Text[ swedish ] = "Konfigurationsfilen \"$1\" underst�der inte den h�r versionen.";
     Text[ polish ] = "Plik konfiguracyjny \"$1\" nie obs�uguje danej wersji.";
     Text[ portuguese_brazilian ] = "The main configuration file \"$1\" does not support the current version.";
@@ -353,7 +356,7 @@ String STR_BOOTSTRAP_ERR_NO_SUPPORT
     Text[ chinese_traditional ] = "配置檔案 \"$1\" 不支援這個版本。";
     Text[ turkish ] = "The main configuration file \"$1\" does not support the current version.";
     Text[ arabic ] = "The main configuration file \"$1\" does not support the current version.";
-    Text[ catalan ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ catalan ] = "El fitxer de configuraci� principal \"$1\" no suporta la versi� actual.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SERVICE
@@ -369,7 +372,7 @@ String STR_BOOTSTRAP_ERR_NO_SERVICE
     Text[ spanish ] = "El gestor de componentes no est� disponible.";
     Text[ finnish ] = "The service manager is not available.";
     Text[ italian ] = "Il gestore dei componenti non � disponibile.";
-    Text[ danish ] = "The service manager is not available.";
+    Text[ danish ] = "Komponentmanageren er ikke til r�dighed.";
     Text[ swedish ] = "Komponenthanteraren �r inte tillg�nglig.";
     Text[ polish ] = "Brak dost�pu do mened�era komponent�w.";
     Text[ portuguese_brazilian ] = "The service manager is not available.";
@@ -379,7 +382,7 @@ String STR_BOOTSTRAP_ERR_NO_SERVICE
     Text[ chinese_traditional ] = "程式元件管理員不存在。";
     Text[ turkish ] = "The service manager is not available.";
     Text[ arabic ] = "The service manager is not available.";
-    Text[ catalan ] = "The service manager is not available.";
+    Text[ catalan ] = "El gestor de serveis no est� disponible.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
@@ -395,7 +398,7 @@ String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
     Text[ spanish ] = "No se puede crear el gestor de configuraci�n.";
     Text[ finnish ] = "The configuration service is not available.";
     Text[ italian ] = "Impossibile creare il gestore di configurazione.";
-    Text[ danish ] = "The configuration service is not available.";
+    Text[ danish ] = "Konfigurationsmanageren kan ikke oprettes.";
     Text[ swedish ] = "Det g�r inte att skapa konfigurationshanteraren.";
     Text[ polish ] = "Utworzenie mened�era konfiguracyjnego nie jest mo�liwe.";
     Text[ portuguese_brazilian ] = "The configuration service is not available.";
@@ -405,7 +408,7 @@ String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
     Text[ chinese_traditional ] = "無法建立配置管理員。";
     Text[ turkish ] = "The configuration service is not available.";
     Text[ arabic ] = "The configuration service is not available.";
-    Text[ catalan ] = "The configuration service is not available.";
+    Text[ catalan ] = "El servei de configuraci� no est� disponible.";
 };
 
 String STR_ASK_START_SETUP_REPAIR
@@ -421,7 +424,7 @@ String STR_ASK_START_SETUP_REPAIR
     Text[ spanish ] = "�Desea iniciar el programa de instalaci�n setup para reparar la instalaci�n?";
     Text[ finnish ] = "Start setup application to repair installation?";
     Text[ italian ] = "Volete avviare il programma di setup per riparare l'installazione?";
-    Text[ danish ] = "Start setup application to repair installation?";
+    Text[ danish ] = "Skal setup-programmet startes for at reparere installationen?";
     Text[ swedish ] = "Ska setupprogrammet startas s� att din installation kan repareras?";
     Text[ polish ] = "Uruchomi� aplikacj� instalacyjn� w celu naprawy zainstalowanego programu?";
     Text[ portuguese_brazilian ] = "Start setup application to repair installation?";
@@ -431,7 +434,7 @@ String STR_ASK_START_SETUP_REPAIR
     Text[ chinese_traditional ] = "要啓動安裝程式，修復已經安裝的應用程式？";
     Text[ turkish ] = "Start setup application to repair installation?";
     Text[ arabic ] = "Start setup application to repair installation?";
-    Text[ catalan ] = "Start setup application to repair installation?";
+    Text[ catalan ] = "Inicio la instal.laci� per a reparar el producte?";
 };
 
 String STR_ASK_START_SETUP
@@ -447,7 +450,7 @@ String STR_ASK_START_SETUP
     Text[ spanish ] = "�Desea iniciar el programa de instalaci�n setup para comprobar la instalaci�n?";
     Text[ finnish ] = "Start setup application to check installation?";
     Text[ italian ] = "Volete avviare il programma di setup per verificare l'installazione?";
-    Text[ danish ] = "Start setup application to check installation?";
+    Text[ danish ] = "Skal setup-programmet startes for at kontrollere installationen?";
     Text[ swedish ] = "Ska setupprogrammet startas s� att din installation kan kontrolleras?";
     Text[ polish ] = "Uruchomi� aplikacj� instalacyjn� w celu sprawdzenia zainstalowanego programu?";
     Text[ portuguese_brazilian ] = "Start setup application to check installation?";
@@ -457,7 +460,7 @@ String STR_ASK_START_SETUP
     Text[ chinese_traditional ] = "要啓動安裝程式，檢查已安裝的應用程式？";
     Text[ turkish ] = "Start setup application to check installation?";
     Text[ arabic ] = "Start setup application to check installation?";
-    Text[ catalan ] = "Start setup application to check installation?";
+    Text[ catalan ] = "Inicio la instal.laci� per a comprovar el producte?";
 };
 
 String STR_SETUP_ERR_CANNOT_START
@@ -473,7 +476,7 @@ String STR_SETUP_ERR_CANNOT_START
     Text[ spanish ] = "No se pudo iniciar autom�ticamente el programa de instalaci�n setup. In�cielo manualmente.";
     Text[ finnish ] = "Couldn't start setup application! Please start it manually.";
     Text[ italian ] = "Impossibile avviare il programma di setup in modo automatico. Avviatelo manualmente.";
-    Text[ danish ] = "Couldn't start setup application! Please start it manually.";
+    Text[ danish ] = "Setup-programmet kunne ikke startes automatisk! Start programmet manuelt.";
     Text[ swedish ] = "Det gick inte att starta setupprogrammet automatiskt! Starta det manuellt.";
     Text[ polish ] = "Automatyczne uruchomienie aplikacji instalacyjnej nie powiod�o si�! Nale�y uruchomi� j� r�cznie.";
     Text[ portuguese_brazilian ] = "Couldn't start setup application! Please start it manually.";
@@ -483,7 +486,7 @@ String STR_SETUP_ERR_CANNOT_START
     Text[ chinese_traditional ] = "無法自動啓動安裝程式！請手動啓動安裝程式。";
     Text[ turkish ] = "Couldn't start setup application! Please start it manually.";
     Text[ arabic ] = "Couldn't start setup application! Please start it manually.";
-    Text[ catalan ] = "Couldn't start setup application! Please start it manually.";
+    Text[ catalan ] = "No es pot iniciar la instal.laci�! Feu-ho manualment.";
 };
 
 String STR_ASK_START_SETUP_MANUALLY
@@ -499,7 +502,7 @@ String STR_ASK_START_SETUP_MANUALLY
     Text[ spanish ] = "Para reparar la instalaci�n inicie la aplicaci�n de Setup, o programa de instalaci�n, desde el CD o desde la carpeta que contenga los archivos de instalaci�n. ";
     Text[ finnish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ italian ] = "Per riparare l'installazione avviate il programma di setup dal CD-ROM oppure dalla cartella in cui avete installato il programma.";
-    Text[ danish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ danish ] = "Du skal starte setup-programmet fra cd'en eller fra det bibliotek, hvor installationspakkerne findes, for at reparere installationen.";
     Text[ swedish ] = "Starta setupprogrammet fr�n cd:n eller fr�n katalogen d�r installationspaketen finns f�r att reparera installationen.";
     Text[ polish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ portuguese_brazilian ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
