@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_type.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2003-05-24 23:29:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ const char *typeClassToString( TypeClass t )
     case com::sun::star::uno::TypeClass_LONG:
         ret = "LONG"; break;
     case com::sun::star::uno::TypeClass_UNSIGNED_LONG:
-        ret = "UNSIGNED_LONG";
+        ret = "UNSIGNED_LONG"; break;
     case com::sun::star::uno::TypeClass_HYPER:
         ret = "HYPER"; break;
     case com::sun::star::uno::TypeClass_UNSIGNED_HYPER:
