@@ -267,6 +267,12 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         // Get number of worksheets
         int numSheets = decoder.getNumberOfSheets();
+        // #i33702# - check for an Empty InputStream.
+        if(numSheets == 0)
+        {
+            System.err.println("Error decoding invalid Input stream");
+            return;
+        }
 
         //  Traverse to the office:body element.
         //  There should only be one.
