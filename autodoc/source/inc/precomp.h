@@ -2,9 +2,9 @@
  *
  *  $RCSfile: precomp.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:45:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,6 @@ Endl()  { return csv::Endl; }
 inline csv::F_FLUSHING_FUNC
 Flush() { return csv::Flush; }
 
-
-// Hack for GCC 2.95:
-template <class XY>
-inline bool BOOL_OF(const XY & x) { return x.operator bool(); }
 
 #endif
 
