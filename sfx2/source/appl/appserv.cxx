@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:47:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,13 +201,11 @@
 #include "objitem.hxx"
 #include "objsh.hxx"
 #include "hintpost.hxx"
-#include "stbmgr.hxx"
 #include "viewsh.hxx"
 #include "docfac.hxx"
 #include "docfile.hxx"
 #include "docfilt.hxx"
 #include "docvor.hxx"
-#include "cfg.hxx"
 #include "new.hxx"
 #include "docinf.hxx"
 #include "templdlg.hxx"
@@ -218,19 +216,14 @@
 #include "fltfnc.hxx"
 #include "sfx.hrc"
 #include "app.hrc"
-#include "tbxcust.hxx"
 #include "passwd.hxx"
 #include "sfxresid.hxx"
 #include "arrdecl.hxx"
 #include "childwin.hxx"
 #include "appdata.hxx"
-#include "tbxconf.hxx"
 #include "macrconf.hxx"
 #include "minfitem.hxx"
 #include "event.hxx"
-#include "cfgmgr.hxx"
-#include "accmgr.hxx"
-#include "mnumgr.hxx"
 #include "intfrm.hxx"
 #include "urlframe.hxx"
 #include "module.hxx"
@@ -270,14 +263,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
     FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
-        case SID_UPDATE_CONFIG:
-        {
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_UPDATE_CONFIG, FALSE );
-            if ( pItem )
-                GetConfigManager_Impl()->ReInitialize( pItem->GetValue() );
-            break;
-        }
-
         case SID_SETOPTIONS:
         {
             if( rReq.GetArgs() )
