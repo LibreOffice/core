@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:57:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,10 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
             maDrawNotesPagesStyleNames.insert( maDrawNotesPagesStyleNames.begin(), mnDocDrawPageCount, aEmpty );
             if( !mbIsDraw )
                 maDrawPagesAutoLayoutNames.realloc( mnDocDrawPageCount + 1 );
+
+            HeaderFooterPageSettingsImpl aEmptySettings;
+            maDrawPagesHeaderFooterSettings.insert( maDrawPagesHeaderFooterSettings.begin(), mnDocDrawPageCount, aEmptySettings );
+            maDrawNotesPagesHeaderFooterSettings.insert( maDrawNotesPagesHeaderFooterSettings.begin(), mnDocDrawPageCount, aEmptySettings );
         }
     }
 
@@ -1595,8 +1599,204 @@ void SdXMLExport::ImpPrepDrawPageInfos()
 
         Reference< presentation::XPresentationPage > xPresPage(xDrawPage, UNO_QUERY);
         if(xPresPage.is())
+        {
             maDrawNotesPagesStyleNames[nCnt] = ImpCreatePresPageStyleName( xPresPage->getNotesPage(), false );
+
+            maDrawPagesHeaderFooterSettings[nCnt] = ImpPrepDrawPageHeaderFooterDecls( xDrawPage );
+            maDrawNotesPagesHeaderFooterSettings[nCnt] = ImpPrepDrawPageHeaderFooterDecls( xPresPage->getNotesPage() );
+        }
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUString& rText, const sal_Char* pPrefix )
+{
+    // search rVector if there is already a string that equals rText
+    std::vector< OUString >::iterator aIter;
+    sal_Int32 nIndex;
+    for( nIndex = 1, aIter = rVector.begin(); aIter != rVector.end(); aIter++, nIndex++ )
+    {
+        if( (*aIter) == rText )
+            break;
+    }
+
+    // if nothing is found, append the string at the end of rVector
+    if( aIter == rVector.end() )
+        rVector.push_back( rText );
+
+    // create a reference string with pPrefix and the index of the
+    // found or created rText
+    OUString aStr( OUString::createFromAscii( pPrefix ) );
+    aStr += OUString::valueOf( nIndex );
+    return aStr;
+}
+
+static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, sal_Bool bFixed, sal_Int32 nFormat, const sal_Char* pPrefix )
+{
+    // search rVector if there is already a DateTimeDeclImpl with rText,bFixed and nFormat
+    std::vector< DateTimeDeclImpl >::iterator aIter;
+    sal_Int32 nIndex;
+    for( nIndex = 1, aIter = rVector.begin(); aIter != rVector.end(); aIter++, nIndex++ )
+    {
+        const DateTimeDeclImpl& rDecl = (*aIter);
+        if( (rDecl.mbFixed == bFixed ) &&
+            (!bFixed || rDecl.maStrText == rText) &&
+            (bFixed || (rDecl.mnFormat == nFormat) ) )
+            break;
+    }
+
+    // if nothing is found, append a new DateTimeDeclImpl
+    if( aIter == rVector.end() )
+    {
+        DateTimeDeclImpl aDecl;
+        aDecl.maStrText = rText;
+        aDecl.mbFixed = bFixed;
+        aDecl.mnFormat = nFormat;
+        rVector.push_back( aDecl );
+    }
+
+    // create a reference string with pPrefix and the index of the
+    // found or created DateTimeDeclImpl
+    OUString aStr( OUString::createFromAscii( pPrefix ) );
+    aStr += OUString::valueOf( nIndex );
+    return aStr;
+
+}
+
+static const sal_Char* gpStrHeaderTextPrefix = "hdr";
+static const sal_Char* gpStrFooterTextPrefix = "ftr";
+static const sal_Char* gpStrDateTimeTextPrefix = "dtd";
+
+HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( const Reference<XDrawPage>& xDrawPage )
+{
+    HeaderFooterPageSettingsImpl aSettings;
+
+    try
+    {
+        Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
+
+        OUString aStrText;
+
+        const OUString aStrHeaderTextProp( RTL_CONSTASCII_USTRINGPARAM( "HeaderText" ) );
+        if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
+        {
+            xSet->getPropertyValue( aStrHeaderTextProp  ) >>= aStrText;
+            if( aStrText.getLength() )
+                aSettings.maStrHeaderDeclName = findOrAppendImpl( maHeaderDeclsVector, aStrText, gpStrHeaderTextPrefix );
+        }
+
+        const OUString aStrFooterTextProp( RTL_CONSTASCII_USTRINGPARAM( "FooterText" ) );
+        if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
+        {
+            xSet->getPropertyValue( aStrFooterTextProp ) >>= aStrText;
+            if( aStrText.getLength() )
+                aSettings.maStrFooterDeclName = findOrAppendImpl( maFooterDeclsVector, aStrText, gpStrFooterTextPrefix );
+        }
+
+        const OUString aStrDateTimeTextProp( RTL_CONSTASCII_USTRINGPARAM( "DateTimeText" ) );
+        if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
+        {
+            sal_Bool bFixed;
+            sal_Int32 nFormat;
+            xSet->getPropertyValue( aStrDateTimeTextProp ) >>= aStrText;
+            xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDateTimeFixed" ) ) ) >>= bFixed;
+            xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DateTimeFormat" ) ) ) >>= nFormat;
+
+            if( !bFixed || aStrText.getLength() )
+            {
+                aSettings.maStrDateTimeDeclName = findOrAppendImpl( maDateTimeDeclsVector, aStrText, bFixed, nFormat, gpStrDateTimeTextPrefix );
+                if( !bFixed )
+                    addDataStyle( nFormat );
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "SdXMLExport::ImpPrepDrawPageHeaderFooterDecls(), unexpected exception cought!" );
+    }
+
+    return aSettings;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::ImpWriteHeaderFooterDecls()
+{
+    OUStringBuffer sBuffer;
+
+    if( !maHeaderDeclsVector.empty() )
+    {
+        // export header decls
+        const OUString aPrefix( OUString::createFromAscii( gpStrHeaderTextPrefix ) );
+        std::vector< OUString >::iterator aIter;
+        sal_Int32 nIndex;
+        for( nIndex = 1, aIter = maHeaderDeclsVector.begin(); aIter != maHeaderDeclsVector.end(); aIter++, nIndex++ )
+        {
+            sBuffer.append( aPrefix );
+            sBuffer.append( nIndex );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
+
+            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_HEADER_DECL, sal_True, sal_True);
+            Characters((*aIter));
+        }
+    }
+
+    if( !maFooterDeclsVector.empty() )
+    {
+        // export footer decls
+        const OUString aPrefix( OUString::createFromAscii( gpStrFooterTextPrefix ) );
+        std::vector< OUString >::iterator aIter;
+        sal_Int32 nIndex;
+        for( nIndex = 1, aIter = maFooterDeclsVector.begin(); aIter != maFooterDeclsVector.end(); aIter++, nIndex++ )
+        {
+            sBuffer.append( aPrefix );
+            sBuffer.append( nIndex );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
+
+            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL, sal_True, sal_True);
+            Characters((*aIter));
+        }
+    }
+
+    if( !maDateTimeDeclsVector.empty() )
+    {
+        // export footer decls
+        const OUString aPrefix( OUString::createFromAscii( gpStrDateTimeTextPrefix ) );
+        std::vector< DateTimeDeclImpl >::iterator aIter;
+        sal_Int32 nIndex;
+        for( nIndex = 1, aIter = maDateTimeDeclsVector.begin(); aIter != maDateTimeDeclsVector.end(); aIter++, nIndex++ )
+        {
+            const DateTimeDeclImpl& rDecl = (*aIter);
+
+            sBuffer.append( aPrefix );
+            sBuffer.append( nIndex );
+            AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
+
+            AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SOURCE, rDecl.mbFixed ? XML_FIXED : XML_CURRENT_DATE );
+
+            if( !rDecl.mbFixed )
+                AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, getDataStyleName( rDecl.mnFormat ) );
+
+            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL, sal_True, sal_True);
+            if( rDecl.mbFixed )
+                Characters(rDecl.maStrText);
+        }
+    }
+}
+
+void SdXMLExport::ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSettingsImpl& aSettings )
+{
+    if( aSettings.maStrHeaderDeclName.getLength() )
+        AddAttribute( XML_NAMESPACE_PRESENTATION, XML_USE_HEADER_NAME, aSettings.maStrHeaderDeclName );
+
+    if( aSettings.maStrFooterDeclName.getLength() )
+        AddAttribute( XML_NAMESPACE_PRESENTATION, XML_USE_FOOTER_NAME, aSettings.maStrFooterDeclName );
+
+    if( aSettings.maStrDateTimeDeclName.getLength() )
+        AddAttribute( XML_NAMESPACE_PRESENTATION, XML_USE_DATE_TIME_NAME, aSettings.maStrDateTimeDeclName );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1680,6 +1880,7 @@ void SdXMLExport::ImpPrepMasterPageInfos()
     if( xHandoutSupp.is() )
     {
         Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
+        maHandoutPageHeaderFooterSettings = ImpPrepDrawPageHeaderFooterDecls( xHandoutPage );
         maHandoutMasterStyleName = ImpCreatePresPageStyleName( xHandoutPage, false );
     }
 }
@@ -1830,6 +2031,9 @@ void SdXMLExport::_ExportContent()
                 }
             }
 
+            if( IsImpress() )
+                ImplExportHeaderFooterDeclAttributes( maDrawPagesHeaderFooterSettings[nPageInd] );
+
             // write page
             SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, XML_PAGE, sal_True, sal_True);
 
@@ -1871,6 +2075,8 @@ void SdXMLExport::_ExportContent()
                         {
                             if( maDrawNotesPagesStyleNames[nPageInd].getLength() )
                                 AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maDrawNotesPagesStyleNames[nPageInd]);
+
+                            ImplExportHeaderFooterDeclAttributes( maDrawNotesPagesHeaderFooterSettings[nPageInd] );
 
                             // write presentation notes
                             SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, sal_True, sal_True);
@@ -2307,6 +2513,9 @@ void SdXMLExport::_ExportAutoStyles()
 
     // ...for text
     GetTextParagraphExport()->exportTextAutoStyles();
+
+    // export <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl> elements
+    ImpWriteHeaderFooterDecls();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2341,6 +2550,8 @@ void SdXMLExport::_ExportMasterStyles()
                 // draw:style-name
                 if( maHandoutMasterStyleName.getLength() )
                     AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maHandoutMasterStyleName);
+
+                ImplExportHeaderFooterDeclAttributes( maHandoutPageHeaderFooterSettings );
 
                 // write masterpage
                 SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_HANDOUT_MASTER, sal_True, sal_True);
