@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:00:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,6 +470,18 @@ namespace vclcanvas
             return; // we're disposed
 
         mpRedrawManager->updateSprite( sprite, rPos, rUpdateArea );
+    }
+
+    bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
+                                const ::Point&                  rPt,
+                                const ::Size&                   rSz,
+                                const GraphicAttr&              rAttr ) const
+    {
+        tools::LocalGuard aGuard;
+
+        mbSurfaceDirty = true;
+
+        return maCanvasHelper.repaint( rGrf, rPt, rSz, rAttr );
     }
 
 }
