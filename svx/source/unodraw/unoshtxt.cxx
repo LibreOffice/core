@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-16 14:59:35 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 11:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,6 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if( mpObject == pSdrHint->GetObject() )
             {
-                mpObject = NULL;
                 mbDestroyed = TRUE;
             }
         }
@@ -241,7 +240,6 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if( mpObject )
                 EndListening( *mpObject->GetModel() );
-            mpObject = NULL;
             mbDestroyed = TRUE;
         }
     }
@@ -266,6 +264,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             mpOutliner = NULL;
         }
+        mpObject = NULL;
     }
 }
 
