@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:45:36 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@ namespace sdr
             // Interface method for VOCOfMasterPageDescriptor to ask for buffered data. If
             // the page is the sane and the MapMode is the same, return the Bitmap.
             Bitmap RequestBufferedData(const MapMode& rMapMode);
+
+            // #i37869# Support method to paint borders and grids which are overpainted from
+            // this MasterPage content to let the MasterPage appear as page background
+            void PaintBackgroundPageBordersAndGrids(DisplayInfo& rDisplayInfo);
         };
     } // end of namespace contact
 } // end of namespace sdr
