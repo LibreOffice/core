@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 22:11:20 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,15 +116,15 @@
 #include "appoptio.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
-#include "styledlg.hxx"
-#include "hfedtdlg.hxx"
+//CHINA001 #include "styledlg.hxx"
+//CHINA001 #include "hfedtdlg.hxx"
 #include "dbdocfun.hxx"
 #include "printfun.hxx"              // DrawToDev
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "impex.hxx"
 #include "attrib.hxx"
-#include "corodlg.hxx"
+//CHINA001 #include "corodlg.hxx"
 #include "undodat.hxx"
 #include "autostyl.hxx"
 #include "undocell.hxx"
@@ -134,7 +134,7 @@
 #include "servobj.hxx"
 #include "rangenam.hxx"
 #include "scmod.hxx"
-#include "scendlg.hxx"
+//CHINA001 #include "scendlg.hxx"
 #include "chgviset.hxx"
 #include "reffact.hxx"
 #include "chartlis.hxx"
@@ -150,7 +150,8 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
-
+#include "scresid.hxx" //add by CHINA001
+#include "scabstdlg.hxx" //CHINA001
 //------------------------------------------------------------------
 
 #define IS_SHARE_HEADER(set) \
@@ -440,17 +441,23 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 if (aDocument.HasValueData( nCol1, i, nTab ))
                                     bRowHeaders = FALSE;
 
-                        ScColRowLabelDlg aDlg( pParent, bRowHeaders, bColHeaders );
-                        if ( aDlg.Execute() == RET_OK )
+                        //CHINA001 ScColRowLabelDlg aDlg( pParent, bRowHeaders, bColHeaders );
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                        AbstractScColRowLabelDlg* pDlg = pFact->CreateScColRowLabelDlg( pParent,ResId(RID_SCDLG_CHARTCOLROW), bRowHeaders, bColHeaders);
+                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        if ( pDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
                         {
-                            bColHeaders = aDlg.IsRow();     // Spaltenkoepfe = 1. Zeile
-                            bRowHeaders = aDlg.IsCol();
+                            bColHeaders = pDlg->IsRow();        //CHINA001 bColHeaders = aDlg.IsRow();  // Spaltenkoepfe = 1. Zeile
+                            bRowHeaders = pDlg->IsCol(); //CHINA001 bRowHeaders = aDlg.IsCol();
 
                             rReq.AppendItem(SfxBoolItem(FN_PARAM_1, bColHeaders));
                             rReq.AppendItem(SfxBoolItem(FN_PARAM_2, bRowHeaders));
                         }
                         else
                             bOk = FALSE;
+                        delete pDlg; //CHINA001
                     }
 
                     if (bOk)            // ausfuehren
@@ -938,8 +945,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 BOOL bSheetProtected = aDocument.IsTabProtected(nActualTab);
 
                                 //! anderen Titel am Dialog setzen
-                                ScNewScenarioDlg* pNewDlg =
-                                    new ScNewScenarioDlg( GetDialogParent(), aName, TRUE, bSheetProtected);
+//CHINA001                              ScNewScenarioDlg* pNewDlg =
+//CHINA001                              new ScNewScenarioDlg( GetDialogParent(), aName, TRUE, bSheetProtected);
+                                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                                AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( GetDialogParent(), aName, ResId(RID_SCDLG_NEWSCENARIO), TRUE,bSheetProtected);
+                                DBG_ASSERT(pNewDlg, "Dialog create fail!");//CHINA001
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
                                 {
@@ -1388,9 +1400,15 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
 
-                        ScStyleDlg* pDlg = new ScStyleDlg( GetDialogParent(),
-                                                           *pStyleSheet,
-                                                           RID_SCDLG_STYLES_PAGE );
+//CHINA001                      ScStyleDlg* pDlg = new ScStyleDlg( GetDialogParent(),
+//CHINA001                      *pStyleSheet,
+//CHINA001                      RID_SCDLG_STYLES_PAGE );
+//CHINA001
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                        SfxAbstractTabDialog* pDlg = pFact->CreateScStyleDlg( GetDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE,ResId(RID_SCDLG_STYLES_PAGE) );
+                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -1541,13 +1559,22 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             }
                         }
 
-                        ScHFEditDlg* pDlg
-                             = new ScHFEditDlg( SFX_APP()->GetViewFrame(),
-                                                GetDialogParent(),
-                                                rStyleSet,
-                                                aStr,
-                                                nResId );
+//CHINA001                      ScHFEditDlg* pDlg
+//CHINA001                      = new ScHFEditDlg( SFX_APP()->GetViewFrame(),
+//CHINA001                      GetDialogParent(),
+//CHINA001                      rStyleSet,
+//CHINA001                      aStr,
+//CHINA001                      nResId );
+//CHINA001
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
+                        SfxAbstractTabDialog* pDlg = pFact->CreateScHFEditDlg( SFX_APP()->GetViewFrame(),
+                                                                                GetDialogParent(),
+                                                                                rStyleSet,
+                                                                                aStr,
+                                                                                ResId(RID_SCDLG_HFEDIT), nResId);
+                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                         if ( pDlg->Execute() == RET_OK )
                         {
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
