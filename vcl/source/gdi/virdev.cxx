@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:35:02 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,8 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
     mbScreenComp    = TRUE;
+    mbScreenComp    = FALSE;
+    mnAlphaDepth    = -1;
 
     if( mnBitCount < 8 )
         SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
@@ -291,6 +293,19 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount )
 
 // -----------------------------------------------------------------------
 
+VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount, USHORT nAlphaBitCount )
+    : mpVirDev( NULL )
+{
+    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+
+    ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
+
+    // #110958# Enable alpha channel
+    mnAlphaDepth = nAlphaBitCount;
+}
+
+// -----------------------------------------------------------------------
+
 VirtualDevice::~VirtualDevice()
 {
     DBG_TRACE( "VirtualDevice::~VirtualDevice()" );
@@ -339,9 +354,9 @@ VirtualDevice::~VirtualDevice()
 
 // -----------------------------------------------------------------------
 
-BOOL VirtualDevice::SetOutputSizePixel( const Size& rNewSize, BOOL bErase )
+BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
 {
-    DBG_TRACE3( "VirtualDevice::SetOutputSizePixel( %ld, %ld, %d )", rNewSize.Width(), rNewSize.Height(), (int)bErase );
+    DBG_TRACE3( "VirtualDevice::ImplSetOutputSizePixel( %ld, %ld, %d )", rNewSize.Width(), rNewSize.Height(), (int)bErase );
 
     if ( !mpVirDev )
         return FALSE;
@@ -462,6 +477,43 @@ BOOL VirtualDevice::SetOutputSizePixel( const Size& rNewSize, BOOL bErase )
 
 // -----------------------------------------------------------------------
 
+BOOL VirtualDevice::SetOutputSizePixel( const Size& rNewSize, BOOL bErase )
+{
+    if( ImplSetOutputSizePixel(rNewSize, bErase) )
+    {
+        if( mnAlphaDepth != -1 )
+        {
+            // #110958# Setup alpha bitmap
+            if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
+            {
+                delete mpAlphaVDev;
+                mpAlphaVDev = 0L;
+            }
+
+            if( !mpAlphaVDev )
+            {
+                mpAlphaVDev = new VirtualDevice( *this, mnAlphaDepth );
+                mpAlphaVDev->ImplSetOutputSizePixel(rNewSize, bErase);
+            }
+
+            // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
+            if( GetLineColor() != Color( COL_TRANSPARENT ) )
+                mpAlphaVDev->SetLineColor( COL_BLACK );
+
+            if( GetFillColor() != Color( COL_TRANSPARENT ) )
+                mpAlphaVDev->SetFillColor( COL_BLACK );
+
+            mpAlphaVDev->SetMapMode( GetMapMode() );
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
 void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
 {
     switch( eRefDevMode )
@@ -543,3 +595,4 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
 }
 
 // -----------------------------------------------------------------------
+// eof
