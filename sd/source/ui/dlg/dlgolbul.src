@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:43:17 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ hebrew ] = "Bullets";
                 Text[ hindi ] = "बुल्लेट्स";
                 Text[ slovak ] = "Odrážky";
+                Text[ hungarian ] = "Felsorolásjel";
+                Text[ slovenian ] = "Oznake";
             };
             PageItem
             {
@@ -136,6 +138,8 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ hebrew ] = "Nummerierungsart";
                 Text[ hindi ] = "संख्या देना का क्रम";
                 Text[ slovak ] = "Typ číslovania";
+                Text[ hungarian ] = "Számozás típusa";
+                Text[ slovenian ] = "Vrsta oštevilčevanja";
             };
             PageItem
             {
@@ -168,6 +172,8 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ hebrew ] = "‮גרפיקה‬";
                 Text[ hindi ] = "सुचित्र";
                 Text[ slovak ] = "Obrázky";
+                Text[ hungarian ] = "Kép";
+                Text[ slovenian ] = "Grafika";
             };
             PageItem
             {
@@ -200,6 +206,8 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
                 Text[ slovak ] = "Umiestnenie";
+                Text[ hungarian ] = "Pozíció";
+                Text[ slovenian ] = "Položaj";
             };
             PageItem
             {
@@ -209,7 +217,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ english_us ] = "Customize" ;
                 Text [ portuguese_brazilian ] = "Personalizar" ;
                 Text [ swedish ] = "Alternativ" ;
-                Text [ danish ] = "Indstillinger" ;
+                Text [ danish ] = "Tilpas" ;
                 Text [ italian ] = "Opzioni" ;
                 Text [ spanish ] = "Opciones" ;
                 Text [ french ] = "Options" ;
@@ -232,6 +240,8 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ hebrew ] = "‮התאמה אישית‬";
                 Text[ hindi ] = "व्यवस्था करो";
                 Text[ slovak ] = "Prispôsobiť";
+                Text[ hungarian ] = "Testreszabás";
+                Text[ slovenian ] = "Po meri";
             };
         };
     };
@@ -239,11 +249,11 @@ TabDialog TAB_OUTLINEBULLET
     Text [ english_us ] = "Numbering/Bullets" ;
     Text [ portuguese_brazilian ] = "Numera��o / Marcas" ;
     Text [ swedish ] = "Numrering/punktuppst�llning" ;
-    Text [ danish ] = "Nummerering/punkttegn" ;
+    Text [ danish ] = "Nummerering/punktopstilling" ;
     Text [ italian ] = "Elenchi puntati e numerati" ;
     Text [ spanish ] = "Numeraci�n y vi�etas" ;
     Text [ french ] = "Num�rotation/Puces" ;
-    Text [ dutch ] = "Nummering/opsomming" ;
+    Text [ dutch ] = "Nummering/opsommingstekens" ;
     Text [ portuguese ] = "Numera��o & Marcas" ;
     Text[ chinese_simplified ] = "编号/项目符号";
     Text[ russian ] = "���������/����������";
@@ -262,7 +272,11 @@ TabDialog TAB_OUTLINEBULLET
     Text[ hebrew ] = "‮תבליטים/מיספור‬";
     Text[ hindi ] = "संख्या देना/बुल्लेट्स";
     Text[ slovak ] = "Číslovanie/odrážky";
+    Text[ hungarian ] = "Számozás és felsorolás";
+    Text[ slovenian ] = "Oštevilčevanje/označevanje";
 };
+
+
 
 
 
