@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:18:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@
 #define PAGE_DS_PROPERTIES_3            RID_PAGE_START + 29
 #define PAGE_DS_PROPERTIES_ACCESS       RID_PAGE_START + 30
 #define PAGE_DS_PROPERTIES_ENABLEOJ     RID_PAGE_START + 31
+#define PAGE_MOZILLA                    RID_PAGE_START + 32
 
 #define PAGE_DBWIZARD_INTRO                     RID_PAGE_START + 40
 #define PAGE_DBWIZARD_DBASE                     RID_PAGE_START + 41
