@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:07:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,9 +1164,10 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                                                           xConvPropSet )
                         : xExportInfo;
 
-                Sequence<Any> aArgs( 2 );
+                Sequence<Any> aArgs( 3 );
                 aArgs[0] <<= xHandler;
                 aArgs[1] <<= xPropSet;
+                aArgs[2] <<= xModel;
 
                 // get filter component
                 Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
