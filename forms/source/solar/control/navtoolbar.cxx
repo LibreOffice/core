@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navtoolbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:52:08 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,8 @@ namespace frm
                     else
                     {
                         pItemWindow = new FixedText( m_pToolbar, WB_VCENTER );
-                        pItemWindow->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+                        pItemWindow->SetBackground();
+                        pItemWindow->SetPaintTransparent(TRUE);
                     }
                     m_aChildWins.push_back( pItemWindow );
 
