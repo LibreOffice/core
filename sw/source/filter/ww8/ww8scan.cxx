@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-06 17:28:21 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5758,7 +5758,7 @@ static SprmInfo aWwSprmTab[] = {
     0x4A4F, 2, L_FIX, // "sprmCRgFtc0" chp.rgftc[0];ftc for ASCII text (see below);short;
     0x4A50, 2, L_FIX, // "sprmCRgFtc1" chp.rgftc[1];ftc for Far East text (see below);short;
     0x4A51, 2, L_FIX, // "sprmCRgFtc2" chp.rgftc[2];ftc for non-Far East text (see below);short;
-//0x4852, 0, L_FIX, // "sprmCCharScale" ;;;
+    0x4852, 2, L_FIX, // "sprmCCharScale" ;;short;
     0x2A53, 1, L_FIX, // "sprmCFDStrike" chp.fDStrike;;byte;
     0x0854, 1, L_FIX, // "sprmCFImprint" chp.fImprint;1 or 0;bit;
     0x0855, 1, L_FIX, // "sprmCFSpec" chp.fSpec ;1 or 0;bit;
@@ -6093,11 +6093,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.8 2001-02-06 17:28:21 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.9 2001-02-15 20:08:10 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/02/06 17:28:21  cmc
+      #83581# CJK Two Lines in One {Im|Ex}port for Word
+
       Revision 1.7  2001/01/30 20:11:06  cmc
       #83362# CJK Forbidden Character {Im|Ex}port
 

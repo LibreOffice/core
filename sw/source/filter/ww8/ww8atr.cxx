@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-06 17:28:21 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,12 @@
 #endif
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
+#endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <svx/charscaleitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 
 #ifndef _FMTFLD_HXX //autogen
@@ -924,6 +930,35 @@ static Writer& OutWW8_SwSize( Writer& rWrt, const SfxPoolItem& rHt )
     }
     return rWrt;
 }
+
+static Writer& OutWW8_ScaleWidth( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if( rWrtWW8.bWrtWW8 )
+    {
+        rWrtWW8.InsUInt16( 0x4852 );
+        rWrtWW8.InsUInt16( ((SvxCharScaleWidthItem&)rHt).GetValue() );
+    }
+    return rWrt;
+}
+static Writer& OutWW8_CharRotate( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if( rWrtWW8.bWrtWW8 )
+    {
+        const SvxCharRotateItem& rAttr = (const SvxCharRotateItem&)rHt;
+
+        rWrtWW8.InsUInt16( 0xCA78 );
+        rWrtWW8.pO->Insert( (BYTE)0x06, rWrtWW8.pO->Count() ); //len 6
+        rWrtWW8.pO->Insert( (BYTE)0x01, rWrtWW8.pO->Count() );
+
+        rWrtWW8.InsUInt16( rAttr.IsFitToLine() ? 1 : 0 );
+        static const BYTE aZeroArr[ 3 ] = { 0, 0, 0 };
+        rWrtWW8.pO->Insert( aZeroArr, 3, rWrtWW8.pO->Count() );
+    }
+    return rWrt;
+}
+
 
 static Writer& OutWW8_EmphasisMark( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -2147,9 +2182,8 @@ static Writer& OutWW8_SvxTwoLinesItem( Writer& rWrt, const SfxPoolItem& rHt )
     else
         nType = 1;
     rWrtWW8.InsUInt16( nType );
-    rWrtWW8.pO->Insert( (BYTE)0x00, rWrtWW8.pO->Count() );
-    rWrtWW8.pO->Insert( (BYTE)0x00, rWrtWW8.pO->Count() );
-    rWrtWW8.pO->Insert( (BYTE)0x00, rWrtWW8.pO->Count() );
+    static const BYTE aZeroArr[ 3 ] = { 0, 0, 0 };
+    rWrtWW8.pO->Insert( aZeroArr, 3, rWrtWW8.pO->Count() );
     return rWrt;
 }
 
@@ -3467,10 +3501,10 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_CTL_LANGUAGE */       0,
 /* RES_CHRATR_CTL_POSTURE */        0,
 /* RES_CHRATR_CTL_WEIGHT */         0,
-/* RES_CHRATR_WRITING_DIRECTION */  0,
+/* RES_CHRATR_WRITING_DIRECTION */  OutWW8_CharRotate,
 /* RES_CHRATR_EMPHASIS_MARK*/       OutWW8_EmphasisMark,
 /* RES_TXTATR_TWO_LINES */          OutWW8_SvxTwoLinesItem,
-/* RES_CHRATR_DUMMY4 */             0,
+/* RES_CHRATR_DUMMY4 */             OutWW8_ScaleWidth,
 /* RES_CHRATR_DUMMY5 */             0,
 /* RES_CHRATR_DUMMY1 */             0, // Dummy:
 
@@ -3580,6 +3614,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/02/06 17:28:21  cmc
+      #83581# CJK Two Lines in One {Im|Ex}port for Word
+
       Revision 1.6  2001/01/16 17:18:46  jp
       Bug #80650#: Out_SfxItemSet: if switch off the numrule then write the LR_Space direct
 

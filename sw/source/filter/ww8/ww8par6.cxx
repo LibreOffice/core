@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-07 16:15:13 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,12 @@
 #endif
 #ifndef _SVX_PBINITEM_HXX
 #include <svx/pbinitem.hxx>
+#endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <svx/charscaleitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 
 #ifndef _SVX_HYZNITEM_HXX //autogen
@@ -3190,37 +3196,37 @@ NoBracket   78 CA 06 -  02 00 00 02 34 52
 <>          78 CA 06 -  02 03 00 02 34 52
 {}          78 CA 06 -  02 04 00 02 34 52
 */
-void SwWW8ImplReader::Read_DoubleLine( USHORT, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_DoubleLine_Rotate( USHORT, BYTE* pData, short nLen )
 {
     if( nLen < 0 ) // close the tag
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_TWO_LINES);
-    else
     {
-        if( pData )
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_TWO_LINES );
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_ROTATE );
+    }
+    else if( pData && 6 == nLen )
+    {
+        switch( *pData )
         {
-            ASSERT( (nLen == 6) && (pData[0] == 0x02),
-                "Problems with Two Lines in One CJK feature");
-            if (nLen != 6)
-                return;
-            switch (SVBT16ToShort(pData+1))
+        case 2:                     // double line
             {
-                default:
-                case 0:
-                    NewAttr( SvxTwoLinesItem());
-                    break;
-                case 1:
-                    NewAttr( SvxTwoLinesItem(sal_True,'(',')'));
-                    break;
-                case 2:
-                    NewAttr( SvxTwoLinesItem(sal_True,'[',']'));
-                    break;
-                case 3:
-                    NewAttr( SvxTwoLinesItem(sal_True,'<','>'));
-                    break;
-                case 4:
-                    NewAttr( SvxTwoLinesItem(sal_True,'{','}'));
-                    break;
+                sal_Unicode cStt = 0, cEnd = 0;
+                switch( SVBT16ToShort( pData+1 ) )
+                {
+                case 1: cStt = '(', cEnd = ')'; break;
+                case 2: cStt = '[', cEnd = ']'; break;
+                case 3: cStt = '<', cEnd = '>'; break;
+                case 4: cStt = '{', cEnd = '}'; break;
+                }
+                NewAttr( SvxTwoLinesItem( sal_True, cStt, cEnd ));
             }
+            break;
+
+        case 1:                         // rotated characters
+            {
+                BOOL bFitToLine = 0 != *(pData+1);
+                NewAttr( SvxCharRotateItem( 900, bFitToLine ));
+            }
+            break;
         }
     }
 }
@@ -3943,6 +3949,17 @@ void SwWW8ImplReader::Read_Emphasis( USHORT, BYTE* pData, short nLen )
         }
 
         NewAttr( SvxEmphasisMarkItem( nVal ) );
+    }
+}
+
+void SwWW8ImplReader::Read_ScaleWidth( USHORT, BYTE* pData, short nLen )
+{
+    if( nLen < 0 )
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_SCALEW );
+    else
+    {
+        sal_uInt16 nVal = SVBT16ToShort( pData );
+        NewAttr( SvxCharScaleWidthItem( nVal ) );
     }
 }
 
@@ -4694,7 +4711,7 @@ SprmReadInfo aSprmReadTab[] = {
     0x4A4F, &SwWW8ImplReader::Read_FontCode, //"sprmCRgFtc0" // chp.rgftc[0];ftc for ASCII text (see below);short;
     0x4A50, &SwWW8ImplReader::Read_FontCode, //"sprmCRgFtc1" // chp.rgftc[1];ftc for Far East text (see below);short;
     0x4A51, &SwWW8ImplReader::Read_FontCode, //"sprmCRgFtc2" // chp.rgftc[2];ftc for non-Far East text (see below);short;
-//0x4852, ? ? ?  , "sprmCCharScale", // ;;;
+    0x4852, &SwWW8ImplReader::Read_ScaleWidth,  // ? ? ?  , "sprmCCharScale", // ;;;
     0x2A53, &SwWW8ImplReader::Read_BoldUsw, //"sprmCFDStrike" // chp.fDStrike;;byte;
     0x0854, (FNReadRecord)0, //"sprmCFImprint" // chp.fImprint;1 or 0;bit;
     0x0855, &SwWW8ImplReader::Read_Special, //"sprmCFSpec" // chp.fSpec ;1 or 0;bit;
@@ -4805,7 +4822,7 @@ SprmReadInfo aSprmReadTab[] = {
 //0xD62A, ? ? ?  , "sprmTDiagLine", // ;;;
     0xD62B, (FNReadRecord)0, //"sprmTVertMerge" // tap.rgtc[].vertMerge;complex (see below);variable length always recorded as 2 bytes;
     0xD62C, (FNReadRecord)0, //"sprmTVertAlign" // tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
-    0xCA78, &SwWW8ImplReader::Read_DoubleLine
+    0xCA78, &SwWW8ImplReader::Read_DoubleLine_Rotate
 };
 
 //-----------------------------------------
@@ -4907,12 +4924,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.11 2001-02-07 16:15:13 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.12 2001-02-15 20:08:10 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/02/07 16:15:13  cmc
+      #83307# Change automatic width handling for frames, with special care for header/footer problems
+
       Revision 1.10  2001/02/07 11:12:31  cmc
       #83308# Allow negative frame positions
 
