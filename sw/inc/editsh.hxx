@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:57:23 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,11 @@ public:
     BYTE GetNumLevel( BOOL* pHasChilds = 0 ) const;
     // detect highest and lowest level to check moving of outline levels
     void GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower );
+
+    // -> i29560
+    BOOL HasNumber() const;
+    BOOL HasBullet() const;
+    // <- i29560
 
     String GetUniqueNumRuleName( const String* pChkStr = 0, BOOL bAutoNum = TRUE ) const;
     void ChgNumRuleFmts( const SwNumRule& rRule );
