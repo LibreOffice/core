@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.190 $
+ *  $Revision: 1.191 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:43:10 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,8 +303,8 @@
 #ifndef _COM_SUN_STAR_SHEET_XSHEETLINKABLE_HPP_
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER_HPP_
-#include <com/sun/star/form/XFormsSupplier.hpp>
+#ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER2_HPP_
+#include <com/sun/star/form/XFormsSupplier2.hpp>
 #endif
 
 #include <sfx2/objsh.hxx>
@@ -863,15 +863,11 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
             if (xShapes.is())
             {
                 GetShapeExport()->seekShapes(xShapes);
-                uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
-                if( xFormsSupplier.is() )
+                uno::Reference< form::XFormsSupplier2 > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
+                if( xFormsSupplier.is() && xFormsSupplier->hasForms() )
                 {
-                    uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
-                    if( xForms.is() && xForms->hasElements() )
-                    {
-                        GetFormExport()->examineForms(xDrawPage);
-                        pSharedData->SetDrawPageHasForms(nTable, sal_True);
-                    }
+                    GetFormExport()->examineForms(xDrawPage);
+                    pSharedData->SetDrawPageHasForms(nTable, sal_True);
                 }
                 ScMyTableShapes* pTableShapes = pSharedData->GetTableShapes();
                 if (pTableShapes)
