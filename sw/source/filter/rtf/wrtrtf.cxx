@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:25 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,11 +716,13 @@ void SwRTFWriter::OutDocInfoStat()
 
 static void InsColor( RTFColorTbl& rTbl, const Color& rCol )
 {
-    for( USHORT n = 0; n < rTbl.Count(); ++n )
+    USHORT n;
+    for( n = 0; n < rTbl.Count(); ++n )
         if( rTbl[n] == rCol )
             return;         // schon vorhanden, zurueck
 
-    rTbl.Insert( rCol, rTbl.Count() );
+    n = COL_AUTO == rCol.GetColor() ? 0 : rTbl.Count();
+    rTbl.Insert( rCol, n );
 }
 
 static void InsColorLine( RTFColorTbl& rTbl, const SvxBoxItem& rBox )
@@ -763,24 +765,24 @@ void SwRTFWriter::OutRTFColorTab()
     }
 
     // das Frame Hintergrund - Attribut
+    static const USHORT aBrushIds[] = {
+                                RES_BACKGROUND, RES_CHRATR_BACKGROUND, 0 };
+
+    for( const USHORT* pIds = aBrushIds; *pIds; ++pIds )
     {
-        const SvxBrushItem* pBkgrd = (const SvxBrushItem*)GetDfltAttr(
-                                                            RES_BACKGROUND );
+        const SvxBrushItem* pBkgrd = (const SvxBrushItem*)GetDfltAttr( *pIds );
         InsColor( *pColTbl, pBkgrd->GetColor() );
-//      InsColor( *pColTbl, pBkgrd->GetBrush().GetFillColor() );
         if( 0 != ( pBkgrd = (const SvxBrushItem*)rPool.GetPoolDefaultItem(
-                        RES_BACKGROUND ) ))
+                        *pIds ) ))
         {
             InsColor( *pColTbl, pBkgrd->GetColor() );
-//          InsColor( *pColTbl, pBkgrd->GetBrush().GetFillColor() );
         }
-        nMaxItem = rPool.GetItemCount(RES_BACKGROUND);
+        nMaxItem = rPool.GetItemCount( *pIds );
         for( n = 0; n < nMaxItem; ++n )
             if( 0 != (pBkgrd = (const SvxBrushItem*)rPool.GetItem(
-                RES_BACKGROUND, n ) ))
+                    *pIds , n ) ))
             {
                 InsColor( *pColTbl, pBkgrd->GetColor() );
-//              InsColor( *pColTbl, pBkgrd->GetBrush().GetFillColor() );
             }
     }
 
@@ -789,12 +791,10 @@ void SwRTFWriter::OutRTFColorTab()
         const SvxShadowItem* pShadow = (const SvxShadowItem*)GetDfltAttr(
                                                             RES_SHADOW );
         InsColor( *pColTbl, pShadow->GetColor() );
-//      InsColor( *pColTbl, pShadow->GetBrush().GetFillColor() );
         if( 0 != ( pShadow = (const SvxShadowItem*)rPool.GetPoolDefaultItem(
                         RES_SHADOW ) ))
         {
             InsColor( *pColTbl, pShadow->GetColor() );
-//          InsColor( *pColTbl, pShadow->GetBrush().GetFillColor() );
         }
         nMaxItem = rPool.GetItemCount(RES_SHADOW);
         for( n = 0; n < nMaxItem; ++n )
@@ -802,7 +802,6 @@ void SwRTFWriter::OutRTFColorTab()
                 RES_SHADOW, n ) ) )
             {
                 InsColor( *pColTbl, pShadow->GetColor() );
-//              InsColor( *pColTbl, pShadow->GetBrush().GetFillColor() );
             }
     }
 
@@ -825,10 +824,14 @@ void SwRTFWriter::OutRTFColorTab()
     for( n = 0; n < pColTbl->Count(); n++ )
     {
         const Color& rCol = (*pColTbl)[ n ];
-        Strm() << sRTF_RED;
-        OutULong( rCol.GetRed() ) << sRTF_GREEN;
-        OutULong( rCol.GetGreen() ) << sRTF_BLUE;
-        OutULong( rCol.GetBlue() ) << ';';
+        if( n || COL_AUTO != rCol.GetColor() )
+        {
+            Strm() << sRTF_RED;
+            OutULong( rCol.GetRed() ) << sRTF_GREEN;
+            OutULong( rCol.GetGreen() ) << sRTF_BLUE;
+            OutULong( rCol.GetBlue() );
+        }
+        Strm() << ';';
     }
     Strm() << '}';
 }
