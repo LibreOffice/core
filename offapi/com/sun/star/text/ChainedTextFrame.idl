@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChainedTextFrame.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 23:57:52 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,22 +76,28 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::ChainedTextFrame
 /** extends a <type>TextFrame</type> which shares the same <type>Text</type>
     with other <type>ChainedTextFrame</type> instances that will make the text
-    flow through the chained frames.
+    flow through the chained frames. The text flows in the next frame if
+    there is no space left in the current frame.
  */
 published service ChainedTextFrame
 {
-    // DocMerge: empty anyway
     service com::sun::star::text::TextFrame;
 
+    //-------------------------------------------------------------------------
+    /** name of the previous frame in the chain
 
-    // DocMerge from xml: service com::sun::star::text::ChainedTextFrame: interface com::sun::star::util::XChainable
-    /** makes it possible to chain this <type>TextFrame</type> to others.
+        <p>An empty string indicates that there is no previous frame.</p>
      */
-    interface com::sun::star::util::XChainable;
+    [property, maybevoid] string ChainNextName;
 
+    //-------------------------------------------------------------------------
+    /** name of the next frame in the chain
+
+        <p>An empty string indicates that there is no next frame.</p>
+     */
+    [property, maybevoid] string ChainPrevName;
 };
 
 //=============================================================================
