@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:25:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,9 +574,6 @@ public:
                                                             const ResId& rResId); //add for SvxJSearchOptionsDialog
     virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( Window* pParent,
                                                             const ResId& rResId); //add for FmInputRecordNoDialog
-    virtual VclAbstractDialog*      CreateFmTabOrderDlg( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
-                                            Window* pParent, FmFormShell* pShell,
-                                            const ResId& rResId ); //add for FmTabOrderDlg
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( Window* pParent,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl,
                                             const ResId& rResId ); //add for SvxNewDictionaryDialog
