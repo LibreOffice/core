@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-03-14 12:28:21 $
+ *  last change: $Author: fs $ $Date: 2001-06-20 08:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,9 +227,9 @@ BibConfig::BibConfig() :
                 sSubPrefix += C2U("/");
                 sSubPrefix += pAssignmentNodeNames[nField];
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
-                pAssignmentPropertyNames[nFieldIdx++] += C2U("/FieldName");
+                pAssignmentPropertyNames[nFieldIdx++] += C2U("/ProgrammaticFieldName");
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
-                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/DatabaseFieldName");
+                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/AssignedFieldName");
             }
             Sequence<Any> aAssignmentValues = GetProperties(aAssignmentPropertyNames);
             const Any* pAssignmentValues = aAssignmentValues.getConstArray();
@@ -344,8 +344,8 @@ void    BibConfig::Commit()
 
         sPrefix += C2U("Fields");
         sal_Int32 nFieldAssignment = 0;
-        OUString sFieldName = C2U("/FieldName");
-        OUString sDatabaseFieldName = C2U("/DatabaseFieldName");
+        OUString sFieldName = C2U("/ProgrammaticFieldName");
+        OUString sDatabaseFieldName = C2U("/AssignedFieldName");
         ClearNodeSet( sPrefix );
 
         while(nFieldAssignment < COLUMN_COUNT &&
