@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-17 10:45:37 $
+ *  last change: $Author: mba $ $Date: 2001-07-17 10:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ SfxMapUnit SfxControllerItem::GetCoreMetric() const
             pDispat = pViewFrame->GetDispatcher();
     }
 
-    if ( pDispat )
+    if ( pDispat && pCache )
     {
         const SfxSlotServer *pServer = pCache->GetSlotServer( *pDispat );
         if ( pServer )
