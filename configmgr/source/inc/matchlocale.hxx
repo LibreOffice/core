@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-04-25 15:44:34 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ namespace configmgr
     {
     // -------------------------------------------------------------------------
         using ::rtl::OUString;
+        using ::com::sun::star::lang::Locale;
         namespace uno       = ::com::sun::star::uno;
         namespace lang      = ::com::sun::star::lang;
 
@@ -88,16 +89,16 @@ namespace configmgr
         extern char const * const c_sAnyLanguage;
         extern char const * const c_sDefLanguage;
 
-        extern bool isAnyLocale(OUString const & _sLocale);
-        extern bool isDefaultLocale(OUString const & _sLocale);
+        extern bool isAnyLanguage(OUString const & _sLanguage);
+        extern bool isDefaultLanguage(OUString const & _sLanguage);
 
-        extern OUString getAnyLocale();
-        extern OUString getDefaultLocale();
+        extern OUString getAnyLanguage();
+        extern OUString getDefaultLanguage();
+
+        extern Locale getAnyLocale();
+        extern Locale getDefaultLocale();
 
     // -------------------------------------------------------------------------
-    /// Type for storing a Locale. May in future be upgraded to a struct
-        struct Locale { OUString aLanguage, aCountry; };
-
     /// Type for storing a list of Locales
         typedef std::vector< Locale > LocaleSequence;
         typedef LocaleSequence::size_type SequencePos;
@@ -107,10 +108,10 @@ namespace configmgr
 
         // conversion helpers
         Locale makeLocale(OUString const& sLocaleName_);
-        Locale makeLocale(lang::Locale const& aUnoLocale_);
+        OUString makeIsoLocale(Locale const& aUnoLocale_);
 
         LocaleSequence makeLocaleSequence(uno::Sequence<OUString> const& sLocaleNames_);
-        LocaleSequence makeLocaleSequence(uno::Sequence<lang::Locale> const& aUnoLocales_);
+        LocaleSequence makeLocaleSequence(uno::Sequence<Locale> const& aUnoLocales_);
 
     // -------------------------------------------------------------------------
         bool designatesAllLocales(Locale const& aLocale_);
