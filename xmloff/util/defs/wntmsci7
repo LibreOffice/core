@@ -10967,3 +10967,5 @@ _real@8@3ffdaaaaaaaaaaaaa800
 ?Imp_CorrectPolygonFlag@@YAXKQBUPoint@awt@star@sun@com@@QAW4PolygonFlags@drawing@345@JJ@Z
 ?Imp_ImportDoubleAndSpaces@@YANNABVOUString@rtl@@AAJJABVSvXMLUnitConverter@@@Z
 ?Imp_SkipDoubleAndSpacesAndCommas@@YAXABVOUString@rtl@@AAJJ@Z
+?ProcessCommandType@XMLTextFieldExport@@IAEXJ@Z
+?CreateChildContext@SdXMLObjectShapeContext@@UAEPAVSvXMLImportContext@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
