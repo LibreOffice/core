@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-09 17:11:04 $
+#   last change: $Author: vg $ $Date: 2005-02-16 16:31:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,8 @@ SLOFILES=			\
                     $(SLO)$/statusbarmanager.obj			\
                     $(SLO)$/recentfilesmenucontroller.obj   \
                     $(SLO)$/progressbarwrapper.obj          \
-                    $(SLO)$/statusindicatorinterfacewrapper.obj
+                    $(SLO)$/statusindicatorinterfacewrapper.obj \
+                    $(SLO)$/newmenucontroller.obj
 
 # --- Targets ------------------------------------------------------
 
