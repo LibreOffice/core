@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-04 09:29:59 $
+ *  last change: $Author: ka $ $Date: 2002-04-05 10:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,21 @@
 #include <algorithm>
 
 #define FILETEST(FileEntry) ((FileEntry).Exists())
+
+// -------------------------
+// - ImplGetSystemFileName -
+// -------------------------
+
+static String ImplGetSystemFileName( const String& rFileName )
+{
+    String              aRet( rFileName );
+    const sal_Unicode   aReplace = DirEntry::GetAccessDelimiter( FSYS_STYLE_HOST ).GetChar( 0 );
+
+    aRet.SearchAndReplaceAll( '/', aReplace );
+    aRet.SearchAndReplaceAll( '\\', aReplace );
+
+    return aRet;
+}
 
 // --------------
 // - BmpCreator -
@@ -370,7 +385,7 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
 void BmpCreator::Create( const String& rSRSName, const String& rInName,
                          const String& rOutName, const LangInfo& rLang )
 {
-    DirEntry    aFileName( rSRSName ), aInDir( rInName ), aOutDir( rOutName );
+    DirEntry    aFileName( ImplGetSystemFileName( rSRSName ) ), aInDir( ImplGetSystemFileName( rInName ) ), aOutDir( ImplGetSystemFileName( rOutName ) );
     BOOL        bDone = FALSE;
 
     aFileName.ToAbs();
