@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:15:06 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,64 +76,295 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
        Text [ en-US ] = "Complex Text Layout" ;
     FixedLine FL_SEQUENCECHECKING
     {
-        Pos = MAP_APPFONT ( 6, 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, ROW_0 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ de ] = "Sequenz�berpr�fung" ;
         Text [ en-US ] = "Sequence checking";
+        Text[ hu ] = "Sorrendellenőrzés";
+        Text[ hi-IN ] = "Sequence checking";
+        Text[ pl ] = "Sequence checking";
+        Text[ et ] = "Sequence checking";
+        Text[ fr ] = "Contrôle de séquence";
+        Text[ zh-TW ] = "順序檢查";
+        Text[ he ] = "Sequence checking";
+        Text[ es ] = "Control de secuencia";
+        Text[ it ] = "Controllo sequenza";
+        Text[ nl ] = "Sequence checking";
+        Text[ cs ] = "Kontrola pořadí";
+        Text[ zh-CN ] = "检查顺序";
+        Text[ sk ] = "Preverenie sekvencie";
+        Text[ ko ] = "순서 검사";
+        Text[ pt ] = "Sequence checking";
+        Text[ da ] = "Sekvenskontrol";
+        Text[ el ] = "Sequence checking";
+        Text[ ja ] = "シーケンスチェック";
+        Text[ ca ] = "Sequence checking";
+        Text[ tr ] = "Ardıllık kontrolü";
+        Text[ sl ] = "Preverjanje niza";
+        Text[ sv ] = "Sekvenskontroll";
+        Text[ cz ] = "Kontrola pořadí";
+        Text[ ru ] = "Sequence checking";
+        Text[ pt-BR ] = "Controle de seqüência";
+        Text[ fi ] = "Sequence checking";
+        Text[ th ] = "Sequence checking";
+        Text[ ar ] = "Sequence checking";
     };
     CheckBox CB_SEQUENCECHECKING
     {
-        Pos = MAP_APPFONT ( 12, 14 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, ROW_1 ) ;
+        Size = MAP_APPFONT ( 236 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "Se~quenz�berpr�fung anwenden" ;
         Text [ en-US ] = "Use se~quence checking";
+        Text[ hu ] = "~Jelsorrend ellenőrzése";
+        Text[ hi-IN ] = "Use se~quence checking";
+        Text[ pl ] = "Use se~quence checking";
+        Text[ et ] = "Use se~quence checking";
+        Text[ fr ] = "Appliquer le contrôle de séquence";
+        Text[ zh-TW ] = "使用順序檢查(~q)";
+        Text[ he ] = "Se~quenzüberprüfung anwenden";
+        Text[ es ] = "Aplicar el ~control de secuencia";
+        Text[ it ] = "Applica controllo se~quenza";
+        Text[ nl ] = "Use se~quence checking";
+        Text[ cs ] = "Povolit kontrolu pořadí";
+        Text[ zh-CN ] = "使用顺序检查(~Q)";
+        Text[ sk ] = "Použiť preverenie se~kvencie";
+        Text[ ko ] = "순서 검사 사용(~Q)";
+        Text[ pt ] = "Use se~quence checking";
+        Text[ da ] = "Brug sekvenskontrol";
+        Text[ el ] = "Use se~quence checking";
+        Text[ ja ] = "シーケンスチェックを使用(~Q)";
+        Text[ ca ] = "Use se~quence checking";
+        Text[ tr ] = "Ardıllık kontrolünü kullan";
+        Text[ sl ] = "Uporabi pre~verjanje niza";
+        Text[ sv ] = "Använd sekvenskontroll";
+        Text[ cz ] = "Povolit kontrolu pořadí";
+        Text[ ru ] = "Use se~quence checking";
+        Text[ pt-BR ] = "Usar o controle de seqüência";
+        Text[ fi ] = "Use se~quence checking";
+        Text[ th ] = "Use se~quence checking";
+        Text[ ar ] = "Use se~quence checking";
+    };
+    CheckBox CB_RESTRICTED
+    {
+        Pos = MAP_APPFONT ( 18, ROW_2 );
+        Size = MAP_APPFONT ( 236, RSC_CD_CHECKBOX_HEIGHT );
+        Text[ de ] = "~Eingeschr�nkt";
+        Text[ en-US ] = "Restricted";
     };
     FixedLine FL_CURSORCONTROL
     {
-        Pos = MAP_APPFONT ( 6, 27 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, ROW_3 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ de ] = "Cursorkontrolle" ;
         Text [ en-US ] = "Cursor control";
+        Text[ hu ] = "Kurzor beállítása";
+        Text[ hi-IN ] = "Cursor control";
+        Text[ pl ] = "Cursor control";
+        Text[ et ] = "Cursor control";
+        Text[ fr ] = "Contrôle du curseur";
+        Text[ zh-TW ] = "游標控制";
+        Text[ he ] = "Cursor control";
+        Text[ es ] = "Control del cursor";
+        Text[ it ] = "Controllo cursore";
+        Text[ nl ] = "Cursorbesturing";
+        Text[ cs ] = "Ovládání kurzoru";
+        Text[ zh-CN ] = "鼠标控制";
+        Text[ sk ] = "Ovládací prvok kurzora";
+        Text[ ko ] = "커서 제어";
+        Text[ pt ] = "Cursor control";
+        Text[ da ] = "Markørkontrol";
+        Text[ el ] = "Cursor control";
+        Text[ ja ] = "カーソル制御";
+        Text[ ca ] = "Cursor control";
+        Text[ tr ] = "İmleç kontrolü";
+        Text[ sl ] = "Nadzor kazalke";
+        Text[ sv ] = "Markörkontroll";
+        Text[ cz ] = "Ovládání kurzoru";
+        Text[ ru ] = "Cursor control";
+        Text[ pt-BR ] = "Controle do cursor";
+        Text[ fi ] = "Cursor control";
+        Text[ th ] = "Cursor control";
+        Text[ ar ] = "Cursor control";
     };
     FixedText FT_MOVEMENT
     {
-        Pos = MAP_APPFONT ( 12, 38 ) ;
-        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, ROW_5 ) ;
+        Size = MAP_APPFONT ( 90 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "Bewegung" ;
         Text [ en-US ] = "Movement";
+        Text[ hu ] = "Mozgás";
+        Text[ hi-IN ] = "Movement";
+        Text[ pl ] = "Movement";
+        Text[ et ] = "Movement";
+        Text[ fr ] = "Mouvement";
+        Text[ zh-TW ] = "移動";
+        Text[ he ] = "Movement";
+        Text[ es ] = "Movimiento";
+        Text[ it ] = "Movimento";
+        Text[ nl ] = "Beweging";
+        Text[ cs ] = "Pohyb";
+        Text[ zh-CN ] = "移动";
+        Text[ sk ] = "Pohyb";
+        Text[ ko ] = "움직임";
+        Text[ pt ] = "Movement";
+        Text[ da ] = "Bevægelse";
+        Text[ el ] = "Movement";
+        Text[ ja ] = "移動";
+        Text[ ca ] = "Movement";
+        Text[ tr ] = "Hareket";
+        Text[ sl ] = "Gibanje";
+        Text[ sv ] = "Rörelse";
+        Text[ cz ] = "Pohyb";
+        Text[ ru ] = "Movement";
+        Text[ pt-BR ] = "Movimento";
+        Text[ fi ] = "Movement";
+        Text[ th ] = "Movement";
+        Text[ ar ] = "Movement";
     };
     RadioButton RB_MOVEMENT_LOGICAL
     {
-        Pos = MAP_APPFONT ( 105, 38 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 105, ROW_4 ) ;
+        Size = MAP_APPFONT ( 69 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
         Text [ de ] = "Lo~gisch" ;
         Text [ en-US ] = "Lo~gical";
+        Text[ hu ] = "Lo~gikai";
+        Text[ hi-IN ] = "Lo~gical";
+        Text[ pl ] = "Lo~gical";
+        Text[ et ] = "Lo~gical";
+        Text[ fr ] = "Logique";
+        Text[ zh-TW ] = "邏輯(~G)";
+        Text[ he ] = "Lo~gical";
+        Text[ es ] = "Ló~gico";
+        Text[ it ] = "Lo~gico";
+        Text[ nl ] = "Lo~gisch";
+        Text[ cs ] = "Logický";
+        Text[ zh-CN ] = "逻辑的(~G)";
+        Text[ sk ] = "Lo~gické";
+        Text[ ko ] = "논리적(~G)";
+        Text[ pt ] = "Lo~gical";
+        Text[ da ] = "Lo~gisk";
+        Text[ el ] = "Lo~gical";
+        Text[ ja ] = "論理(~G)";
+        Text[ ca ] = "Lo~gical";
+        Text[ tr ] = "~Mantıksal";
+        Text[ sl ] = "Lo~gično";
+        Text[ sv ] = "Lo~gisk";
+        Text[ cz ] = "Logický";
+        Text[ ru ] = "Lo~gical";
+        Text[ pt-BR ] = "Lógico";
+        Text[ fi ] = "Lo~gical";
+        Text[ th ] = "Lo~gical";
+        Text[ ar ] = "Lo~gical";
     };
     RadioButton RB_MOVEMENT_VISUAL
     {
-        Pos = MAP_APPFONT ( 177, 38 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 177, ROW_4 ) ;
+        Size = MAP_APPFONT ( 69 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
         Text [ de ] = "~Visuell" ;
         Text [ en-US ] = "~Visual";
+        Text[ hu ] = "~Látható";
+        Text[ hi-IN ] = "~Visual";
+        Text[ pl ] = "~Visual";
+        Text[ et ] = "~Visual";
+        Text[ fr ] = "Visuel";
+        Text[ zh-TW ] = "視覺(~V)";
+        Text[ he ] = "~Visual";
+        Text[ es ] = "~Visual";
+        Text[ it ] = "~Visivo";
+        Text[ nl ] = "~Visueel";
+        Text[ cs ] = "Vizuální";
+        Text[ zh-CN ] = "视觉的(~V)";
+        Text[ sk ] = "~Vizuálne";
+        Text[ ko ] = "시각적(~V)";
+        Text[ pt ] = "~Visual";
+        Text[ da ] = "~Visuel";
+        Text[ el ] = "~Visual";
+        Text[ ja ] = "ビジュアル(~V)";
+        Text[ ca ] = "~Visual";
+        Text[ tr ] = "~Görsel";
+        Text[ sl ] = "~Vidno";
+        Text[ sv ] = "~Visuell";
+        Text[ cz ] = "Vizuální";
+        Text[ ru ] = "~Visual";
+        Text[ pt-BR ] = "Visual";
+        Text[ fi ] = "~Visual";
+        Text[ th ] = "~Visual";
+        Text[ ar ] = "~Visual";
     };
     FixedLine FL_GENERAL
     {
-        Pos = MAP_APPFONT ( 6, 51 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, ROW_6 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ de ] = "Allgemeine Optionen" ;
         Text [ en-US ] = "General options";
+        Text[ hu ] = "Általános beállítások";
+        Text[ hi-IN ] = "सामान्य विकल्प";
+        Text[ pl ] = "Opcje ogólne";
+        Text[ et ] = "General options";
+        Text[ fr ] = "Options générales";
+        Text[ zh-TW ] = "一般選項";
+        Text[ he ] = "‮אפשריות כלליות‬";
+        Text[ es ] = "Opciones generales";
+        Text[ it ] = "Opzioni generali";
+        Text[ nl ] = "Algemene opties";
+        Text[ cs ] = "Obecné vlastnosti";
+        Text[ zh-CN ] = "常规选项";
+        Text[ sk ] = "Všeobecné voľby";
+        Text[ ko ] = "일반 옵션";
+        Text[ pt ] = "Opções gerais";
+        Text[ da ] = "Generelle indstillinger";
+        Text[ el ] = "Γενικές επιλογές";
+        Text[ ja ] = "一般オプション";
+        Text[ ca ] = "Opcions generals";
+        Text[ tr ] = "Genel özellikler";
+        Text[ sl ] = "Splošne možnosti";
+        Text[ sv ] = "Allmänna alternativ";
+        Text[ cz ] = "Obecné vlastnosti";
+        Text[ ru ] = "Общие параметры";
+        Text[ pt-BR ] = "Opções gerais";
+        Text[ fi ] = "Yleisasetukset";
+        Text[ th ] = "ตัวเลือกทั่วไป";
+        Text[ ar ] = "خيارات عامة";
     };
     FixedText FT_NUMERALS
     {
-        Pos = MAP_APPFONT ( 12, 64 ) ;
-        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Pos = MAP_APPFONT ( 12, ROW_8 ) ;
+        Size = MAP_APPFONT ( 90 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ de ] = "~Ziffern" ;
         Text [ en-US ] = "~Numerals";
+        Text[ hu ] = "~Számok";
+        Text[ hi-IN ] = "~Numerals";
+        Text[ pl ] = "~Numerals (in text only)";
+        Text[ et ] = "~Numerals";
+        Text[ fr ] = "Chiffres";
+        Text[ zh-TW ] = "數字(~N)";
+        Text[ he ] = "~Numerals";
+        Text[ es ] = "~Numerales";
+        Text[ it ] = "~Numerali (solo nel testo)";
+        Text[ nl ] = "~Cijfers";
+        Text[ cs ] = "Číslice";
+        Text[ zh-CN ] = "数字(~N)";
+        Text[ sk ] = "~Numerické";
+        Text[ ko ] = "숫자(텍스트에서만)(~N)";
+        Text[ pt ] = "~Numerals (in text only)";
+        Text[ da ] = "~Tal";
+        Text[ el ] = "~Numerals (in text only)";
+        Text[ ja ] = "数値(テキストのみ) (~N)";
+        Text[ ca ] = "~Numerals (in text only)";
+        Text[ tr ] = "~Sayılar";
+        Text[ sl ] = "~Številski sistem";
+        Text[ sv ] = "~Siffror";
+        Text[ cz ] = "Číslice";
+        Text[ ru ] = "~Numerals (in text only)";
+        Text[ pt-BR ] = "Númeração (somente no texto)";
+        Text[ fi ] = "~Numerals (in text only)";
+        Text[ th ] = "~Numerals (in text only)";
+        Text[ ar ] = "~Numerals (in text only)";
     };
     ListBox LB_NUMERALS
     {
-        Pos = MAP_APPFONT ( 105, 62 ) ;
-        Size = MAP_APPFONT ( 69 , 8 ) ;
+        Pos = MAP_APPFONT ( 105, ROW_7 ) ;
+        Size = MAP_APPFONT ( 69 , 3*RSC_CD_DROPDOWN_HEIGHT ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         StringList [ de ] =
@@ -154,26 +385,201 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         < "; ; Hindi" ; > ;
         < "; ; System" ; > ;
     };
+    StringList [ hu ] =
+    {
+         < "Arab" ; > ;
+        < "Hindi" ; > ;
+        < "Rendszer" ; > ;
     };
+    StringList [ hi-IN ] =
+    {
+         < "अरेबिक" ; > ;
+        < "हन्गेरियन" ; > ;
+        < "सिस्टम" ; > ;
+    };
+    StringList [ pl ] =
+    {
+         < "Arabski" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ et ] =
+    {
+         < "Arabisch" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ fr ] =
+    {
+         < "Arabe" ; > ;
+        < "Hindi" ; > ;
+        < "Système" ; > ;
+    };
+    StringList [ zh-TW ] =
+    {
+         < "阿拉伯數字" ; > ;
+        < "北印度語" ; > ;
+        < "系統" ; > ;
+    };
+    StringList [ he ] =
+    {
+         < "‮הינדיות‬" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ es ] =
+    {
+         < "Árabe" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ it ] =
+    {
+         < "Arabo" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ nl ] =
+    {
+         < "Arabisch" ; > ;
+        < "Hindi" ; > ;
+        < "Systeem" ; > ;
+    };
+    StringList [ cs ] =
+    {
+         < "Arabské" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ zh-CN ] =
+    {
+         < "阿拉伯数字" ; > ;
+        < "北印度语" ; > ;
+        < "系统" ; > ;
+    };
+    StringList [ sk ] =
+    {
+         < "Arabské" ; > ;
+        < "Hindi" ; > ;
+        < "Systémové" ; > ;
+    };
+    StringList [ ko ] =
+    {
+         < "아랍어" ; > ;
+        < "힌두어" ; > ;
+        < "시스템" ; > ;
+    };
+    StringList [ pt ] =
+    {
+         < "Árabe" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ da ] =
+    {
+         < "Arabisk" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ el ] =
+    {
+         < "Αραβικά" ; > ;
+        < "Hindi" ; > ;
+        < "Σύστημα" ; > ;
+    };
+    StringList [ ja ] =
+    {
+         < "アラビア数字" ; > ;
+        < "ヒンディー語" ; > ;
+        < "システム" ; > ;
+    };
+    StringList [ ca ] =
+    {
+         < "Àrab" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ tr ] =
+    {
+         < "Arapça" ; > ;
+        < "Hintçe" ; > ;
+        < "Sistem" ; > ;
+    };
+    StringList [ sl ] =
+    {
+         < "Arabski" ; > ;
+        < "Hindujski" ; > ;
+        < "Sistem" ; > ;
+    };
+    StringList [ sv ] =
+    {
+         < "Arabiska" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ cz ] =
+    {
+         < "Arabské" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ ru ] =
+    {
+         < "Арабский" ; > ;
+        < "Хинди" ; > ;
+        < "Из системы" ; > ;
+    };
+    StringList [ pt-BR ] =
+    {
+         < "Arábicos" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ fi ] =
+    {
+         < "arabia" ; > ;
+        < "unkari" ; > ;
+        < "Järjestelmä" ; > ;
+    };
+    StringList [ th ] =
+    {
+         < "ภาษาอารบิก" ; > ;
+        < "ฮินดี" ; > ;
+        < "ระบบ" ; > ;
+    };
+    StringList [ ar ] =
+    {
+         < "عربي" ; > ;
+        < "Hindi" ; > ;
+        < "النظام" ; > ;
+    };
+    };
+    Text[ hu ] = "Komplex szöveg megjelenítése";
+    Text[ hi-IN ] = "Complex Text Layout";
+    Text[ pl ] = "Complex Text Layout";
+    Text[ et ] = "Complex Text Layout";
+    Text[ fr ] = "Scripts complexes";
+    Text[ zh-TW ] = "複雜文字版式";
+    Text[ he ] = "Complex Text Layout";
+    Text[ es ] = "Diseño de texto complejo (CTL)";
+    Text[ it ] = "Disposizione testo complesso";
+    Text[ nl ] = "Complex Text Layout";
+    Text[ cs ] = "Komplexní rozvržení textu";
+    Text[ zh-CN ] = "复杂文字的版式";
+    Text[ sk ] = "Komplexné rozloženie textu";
+    Text[ ko ] = "CTL(Complex Text Layout)";
+    Text[ pt ] = "Complex Text Layout";
+    Text[ da ] = "Complex Text Layout (CTL)";
+    Text[ el ] = "Complex Text Layout";
+    Text[ ja ] = "複合文字言語";
+    Text[ ca ] = "Complex Text Layout";
+    Text[ tr ] = "Karmaşık Metin Yerleşimi";
+    Text[ sl ] = "Postavitev kompleksnega besedila (CTL)";
+    Text[ sv ] = "Komplex textlayout";
+    Text[ cz ] = "Komplexní rozvržení textu";
+    Text[ ru ] = "Complex Text Layout";
+    Text[ pt-BR ] = "Texto de layout complexo (TLC)";
+    Text[ fi ] = "Complex Text Layout";
+    Text[ th ] = "Complex Text Layout";
+    Text[ ar ] = "Complex Text Layout";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
