@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:16:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,12 @@ using namespace ::com::sun::star::registry;
 //
 // registry functions
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseContext();
-extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
 //  extern "C" void SAL_CALL createRegistryInfo_ODocumentDefinition();
 extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition();
 extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition();
 extern "C" void SAL_CALL createRegistryInfo_ORowSet();
+extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument();
+extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
 
 //***************************************************************************************
 //
@@ -97,11 +98,12 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
     if (!bInit)
     {
         createRegistryInfo_ODatabaseContext();
-        createRegistryInfo_ODatabaseSource();
         //  createRegistryInfo_ODocumentDefinition();
         createRegistryInfo_OCommandDefinition();
         createRegistryInfo_OComponentDefinition();
         createRegistryInfo_ORowSet();
+        createRegistryInfo_ODatabaseDocument();
+        createRegistryInfo_ODatabaseSource();
         bInit = sal_True;
     }
 }
