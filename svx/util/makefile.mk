@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:46:50 $
+#   last change: $Author: af $ $Date: 2002-02-05 10:39:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -218,8 +218,9 @@ LIB1FILES       = \
             $(LIBPRE) $(SLB)$/stbctrls.lib  \
             $(LIBPRE) $(SLB)$/tbxctrls.lib  \
             $(LIBPRE) $(SLB)$/unoedit.lib   \
-            $(LIBPRE) $(SLB)$/unodraw.lib	\
-            $(LIBPRE) $(SLB)$/gal.lib
+        $(LIBPRE) $(SLB)$/unodraw.lib	\
+            $(LIBPRE) $(SLB)$/gal.lib		\
+            $(LIBPRE) $(SLB)$/accessibility.lib
 
 
 .IF "$(SVXLIGHT)" != ""
