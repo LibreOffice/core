@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ValueComparer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-01-31 11:11:34 $
+ *  last change:$Date: 2003-11-18 16:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ public class ValueComparer {
         for(int i = 0; i < fields.length && result; ++ i) {
             if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
                 Object obj1 = fields[i].get(op1);
-                Object obj2 = fields[i].get(op1);
+                Object obj2 = fields[i].get(op2);
                 if (obj1 instanceof com.sun.star.uno.Any) {
                     try {
                         if (utils.isVoid(obj1)) {
