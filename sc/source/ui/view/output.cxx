@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2001-05-09 19:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,8 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                             double nPixelPerTwipsX, double nPixelPerTwipsY,
                             const Fraction* pZoomX, const Fraction* pZoomY ) :
     pDev( pNewDev ),
-    pRefDevice( pNewDev ),  // Default: Ausgabe-Device
+    pRefDevice( pNewDev ),      // default is output device
+    pFmtDevice( pNewDev ),      // default is output device
     eType( eNewType ),
     pRowInfo( pNewRowInfo ),
     nArrCount( nNewCount ),
