@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:39:55 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String EXPORT_DIALOG_TITLE
     Text[ czech ] = " Volby";
     Text[ hebrew ] = "‮אפשרויות‬";
     Text[ hindi ] = " विकल्प";
+    Text[ slovak ] = " Voľby";
 };
 
 String KEY_MODE
@@ -116,6 +117,8 @@ String KEY_RLE_CODING
 {
     Text = "RLE_Coding" ;
 };
+
+
 
 
 
