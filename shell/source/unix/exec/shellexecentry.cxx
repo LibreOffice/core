@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexecentry.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-20 13:55:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 #include <cppuhelper/factory.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
-#include <com/sun/star/container/XSet.hpp>
-#endif
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -85,7 +81,6 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::cppu;
@@ -105,9 +100,9 @@ using com::sun::star::system::XSystemShellExecute;
 
 namespace
 {
-    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
+    Reference< XInterface > SAL_CALL createInstance(const Reference< XComponentContext >& xContext)
     {
-        return Reference< XInterface >( static_cast< XSystemShellExecute* >( new ShellExec( rServiceManager ) ) );
+        return Reference< XInterface >( static_cast< XSystemShellExecute* >( new ShellExec(xContext) ) );
     }
 }
 
@@ -129,58 +124,51 @@ void SAL_CALL component_getImplementationEnvironment(
 }
 
 //-----------------------------------------------------------------------
-//
+// component_writeInfo
 //-----------------------------------------------------------------------
 
 sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
 {
-    sal_Bool bRetVal = sal_True;
-
-    if ( pRegistryKey )
+    if (pRegistryKey)
     {
         try
         {
             Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey(
-                OUString::createFromAscii( SHELLEXEC_REGKEY_NAME ) );
+            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( SHELLEXEC_REGKEY_NAME ) ) );
+            return sal_True;
         }
         catch( InvalidRegistryException& )
         {
             OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-            bRetVal = sal_False;
-        }
+    }
     }
 
-    return bRetVal;
+    return sal_False;
 }
 
 //----------------------------------------------------------------------
 // component_getFactory
-// returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
 void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )
 {
-    void* pRet = 0;
+    Reference< XSingleComponentFactory > xFactory;
 
-    if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, SHELLEXEC_IMPL_NAME ) ) )
+    if (0 == ::rtl_str_compare( pImplName, SHELLEXEC_IMPL_NAME ))
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString::createFromAscii( SHELLEXEC_SERVICE_NAME );
+        OUString serviceName( RTL_CONSTASCII_USTRINGPARAM(SHELLEXEC_SERVICE_NAME) );
 
-        Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
-            OUString::createFromAscii( pImplName ),
+        xFactory = ::cppu::createSingleComponentFactory(
             createInstance,
-            aSNS ) );
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
+            OUString( RTL_CONSTASCII_USTRINGPARAM(SHELLEXEC_IMPL_NAME) ),
+            Sequence< OUString >( &serviceName, 1 ) );
+
     }
 
-    return pRet;
+    if (xFactory.is())
+    xFactory->acquire();
+
+    return xFactory.get();
 }
 
 } // extern "C"
