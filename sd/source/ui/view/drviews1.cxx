@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 15:52:32 $
+ *  last change: $Author: dl $ $Date: 2001-05-16 09:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,7 +997,7 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
             {
                 if (eEditMode == EM_MASTERPAGE)
                 {
-                    pNewPage = (SdPage*) pNewPage->GetMasterPageNum(0);
+                    pNewPage = (SdPage*) pNewPage->GetMasterPage(0);
                 }
 
                 SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
