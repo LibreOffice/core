@@ -269,12 +269,9 @@ End Sub
 
 Sub CheckRangeSelection(Optional oEvent)
 &apos; Todo: Beim Startup werden die folgenden zwei Zeilen doppelt ausgeführt
-&apos;	oPreSelRange = AddSelectedRangeToSelRangesEnum()
-&apos;	bPreSelected = CheckFormatType(oRange)
- &apos;	If bPreSelected Then
-		EmptySelection()
-		AddRangeToListbox(oPreSelRange)
-&apos;	End If
+	EmptySelection()
+	AddRangeToListbox(oPreSelRange)
+	oPreSelRange = AddSelectedRangeToSelRangesEnum()	
 End Sub
 
 

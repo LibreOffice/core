@@ -80,7 +80,6 @@ Dim nFormatLeading as Integer
 Dim bFormatLeading as Integer
 Dim bFormatNegRed as Integer
 Dim bFormatThousands as Integer
-Dim aLocLocale As New com.sun.star.lang.Locale
 Dim i as Integer
 Dim aNewStr as String
 Dim iNumberFormat as Long
@@ -106,9 +105,8 @@ Dim sOldCurrSymbol as String
 	nFormatLeading = aFormat.LeadingZeros
 	bFormatNegRed = aFormat.NegativeRed
 	bFormatThousands = aFormat.ThousandsSeparator
-	aLocLocale = aFormat.Locale
-	aNewStr = oFormats.generateFormat( nSimpleKey, oLocale, bFormatThousands, bFormatNegRed, nFormatDecimals, nFormatLeading)
-	oObject.NumberFormat = Numberformat(oFormats, aNewStr, aLocLocale)
+	aNewStr = oFormats.generateFormat( nSimpleKey, aFormat.Locale, bFormatThousands, bFormatNegRed, nFormatDecimals, nFormatLeading)
+	oObject.NumberFormat = Numberformat(oFormats, aNewStr, aFormat.Locale)
 	NOKEY:
 	If Err &lt;&gt; 0 Then
 		Resume CLERROR
@@ -119,8 +117,12 @@ End Sub
 
 Function Numberformat( oFormats as Object, aFormatStr as String, oLocale as Object)
 Dim nRetkey 
+Dim l as String
+Dim c as String
 	nRetKey = oFormats.queryKey( aFormatStr, oLocale, True )
 	If nRetKey = -1 Then
+		l = oLocale.Language
+		c = oLocale.Country
 		nRetKey = oFormats.addNew( aFormatStr, oLocale )
 		If nRetKey = -1 Then nRetKey = 0
 	End If
@@ -232,7 +234,7 @@ Dim OldCurrIndex as Integer
 				CreateRangeEnumeration(False)
 			ElseIf DialogModel.optSelRange.State= 1 Then
 				&apos;Preselected Range
-				CheckRangeSelection()
+&apos;				CheckRangeSelection()
 			End If
 			EnableStep1DialogControls(True, True, True)
 		End If
