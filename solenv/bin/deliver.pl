@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-05 12:46:58 $
+#   last change: $Author: rt $ $Date: 2004-11-18 16:26:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.76 $ ';
+$id_str = ' $Revision: 1.77 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -110,8 +110,7 @@ $is_debug           = 0;
 $module             = 0;            # module name
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
-@ilst_file          = ();           # array of pathes to image lists
-$ilst_ext           = 'ilst';      # extension of image lists
+$ilst_ext           = 'ilst';       # extension of image lists
 $umask              = 22;           # default file/directory creation mask
 $dest               = 0;            # optional destination path
 $common_build       = 0;            # do we have common trees?
@@ -157,7 +156,6 @@ parse_options();
 init_globals();
 push_default_actions();
 parse_dlst();
-parse_imagelists();
 walk_action_data();
 walk_hedabu_list();
 zip_files() if $opt_zip;
@@ -510,9 +508,6 @@ sub init_globals
         $common_dest = $dest;
     }
 
-    # find image lists
-    @ilst_file = get_imagelists($common_outdir);
-
     # the following macros are obsolete, will be flagged as error
     # %__WORKSTAMP%
     # %GUIBASE%
@@ -582,69 +577,19 @@ sub parse_dlst
         }
         else {
             push(@action_data, ['copy', $_]);
+            # for each ressource file (.res) copy its image list (.ilst)
+            if ( /\.res\s/ ) {
+                my $imagelist = $_;
+                $imagelist =~ s/\.res/\.$ilst_ext/g;
+                $imagelist =~ s/\\bin%_EXT%\\/\\res%_EXT%\\img\\/;
+                push(@action_data, ['copy', $imagelist]);
+            }
         }
         # call expand_macros()just to find any undefined macros early
         # real expansion is done later
         expand_macros($_, $line_cnt);
     }
     close(DLST);
-}
-
-sub get_imagelists
-{
-    my $common_outdir = shift;
-    chdir("$base_dir") or die "Cannot change into $base_dir";
-    my @ilst = glob("$common_outdir/bin/*.$ilst_ext");
-    return wantarray ? @ilst : \@ilst;
-}
-
-sub parse_imagelists
-{
-    my $resdirvariable = "%MODULE%";
-    my $destdir; # where to put images and image lists
-    if ( $common_build ) {
-        $destdir =  "%COMMON_DEST%\\res%_EXT%\\img";
-    } else {
-        $destdir =  "%_DEST%\\res%_EXT%\\img";
-    }
-    if ( ! @ilst_file ) {
-        print "No image lists\n" if $is_debug;
-        return;
-    }
-    # collect files to deliver
-    my %files;
-    my %subdirs;
-    foreach my $list (@ilst_file) {
-        print "$list\n" if $is_debug;
-        # read images list
-        open(IMGLST, "<$list") or die "Error: cannot open image list $list";
-        while(<IMGLST>) {
-            chomp;
-            next if /^#/;
-            next if ! s/$resdirvariable//;
-            s:\\:\/:g;
-            next if ! /^(\/.+)\/\w/;
-            $subdirs{$1} = 1;
-            $files{$_} = 1;
-        }
-        close(IMGLST);
-    }
-    # now add them to @action_data
-    push(@action_data, ['mkdir', $destdir]);
-    push(@action_data, ['copy', "..\\%__SRC%\\bin\\*.$ilst_ext $destdir"]);
-    foreach ( sort keys %subdirs ) {
-        # d.lst syntax uses backslashes as path delimiter
-        s:\/:\\:g;
-        push(@action_data, ['mkdir', $destdir . $_]);
-    }
-    foreach ( sort keys %files ) {
-        # d.lst syntax uses backslashes as path delimiter
-        s:\/:\\:g;
-        my $dlst_line = "$_ $destdir$_";
-        $dlst_line =~ s/^\\$module/\.\./;
-        push(@action_data, ['copy', $dlst_line]);
-    }
-    return;
 }
 
 sub expand_macros
@@ -961,6 +906,7 @@ sub push_default_actions
                     'idl',
                     'inc',
                     'pck',
+                    'res',
                 );
     push(@common_subdirs, 'zip') if $opt_zip;
 
@@ -976,6 +922,11 @@ sub push_default_actions
         }
         push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
         push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
+        if ( $common_build ) {
+            push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img"]);
+        } else {
+            push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
+        }
 
         # deliver build.lst to $dest/inc/$module
         push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]); # might be necessary
