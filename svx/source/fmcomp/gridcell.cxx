@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-30 17:01:13 $
+ *  last change: $Author: fs $ $Date: 2002-07-31 10:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::form;
 
 //------------------------------------------------------------------------------
 CellControllerRef DbGridColumn::s_xEmptyController;
@@ -1429,25 +1430,23 @@ CellControllerRef DbCheckBox::CreateController() const
     return new CheckBoxCellController((CheckBoxControl*)m_pWindow);
 }
 //------------------------------------------------------------------------------
-namespace
+static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
+                        CheckBoxControl* _pCheckBoxControl )
 {
-    void setCheckBoxState(  const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
-                            CheckBoxControl* _pCheckBoxControl )
+    TriState eState = STATE_DONTKNOW;
+    if (_xVariant.is())
     {
-        TriState eState = STATE_DONTKNOW;
-        if (_xVariant.is())
-        {
-            sal_Bool bValue = _xVariant->getBoolean();
-            if (!_xVariant->wasNull())
-                eState = bValue ? STATE_CHECK : STATE_NOCHECK;
-        }
-        _pCheckBoxControl->GetBox().SetState(eState);
+        sal_Bool bValue = _xVariant->getBoolean();
+        if (!_xVariant->wasNull())
+            eState = bValue ? STATE_CHECK : STATE_NOCHECK;
     }
+    _pCheckBoxControl->GetBox().SetState(eState);
 }
+
 //------------------------------------------------------------------------------
 void DbCheckBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pWindow) );
+    lcl_setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pWindow) );
 }
 
 //------------------------------------------------------------------------------
@@ -1455,7 +1454,7 @@ void DbCheckBox::Paint(OutputDevice& rDev, const Rectangle& rRect,
                           const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
                           const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pPainter) );
+    lcl_setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pPainter) );
     DbCellControl::Paint(rDev, rRect);
 }
 
@@ -2525,22 +2524,27 @@ void DbFilterField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
             sal_Int16 nClassId = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_CLASSID));
             switch (nClassId)
             {
-                case ::com::sun::star::form::FormComponentType::CHECKBOX:
-                case ::com::sun::star::form::FormComponentType::LISTBOX:
-                case ::com::sun::star::form::FormComponentType::COMBOBOX:
+                case FormComponentType::CHECKBOX:
+                case FormComponentType::LISTBOX:
+                case FormComponentType::COMBOBOX:
                     m_nControlClass = nClassId;
                     break;
                 default:
                     if (m_bFilterList)
-                        m_nControlClass = ::com::sun::star::form::FormComponentType::COMBOBOX;
+                        m_nControlClass = FormComponentType::COMBOBOX;
                     else
-                        m_nControlClass = ::com::sun::star::form::FormComponentType::TEXTFIELD;
+                        m_nControlClass = FormComponentType::TEXTFIELD;
             }
         }
     }
 
     CreateControl(pParent, xModel);
     DbCellControl::Init(pParent, xCursor);
+
+    // filter cells are never readonly
+    // 31.07.2002 - 101584 - fs@openoffice.org
+    if ( FormComponentType::LISTBOX != m_nControlClass )
+        static_cast< Edit* >( m_pWindow )->SetReadOnly( sal_False );
 }
 
 //------------------------------------------------------------------------------
