@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:36:53 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,22 +65,22 @@ String RID_STR_TRIED_OPEN_TABLE
 {
     Text = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
     Text [ english ] = "Tried to open the table $name$";
-    Text [ english_us ] = "Tried to open the table $name$";
-    Text[ portuguese ] = "Tried to open the table $name$";
-    Text[ russian ] = "Tried to open the table $name$";
-    Text[ greek ] = "Tried to open the table $name$";
-    Text[ dutch ] = "Tried to open the table $name$";
-    Text[ french ] = "Tried to open the table $name$";
+    Text [ english_us ] = "Tried to open the table $name$.";
+    Text[ portuguese ] = "Tentativa de abrir a tabela $name$.";
+    Text[ russian ] = "Áûëà ñîâåğøåíà ïîïûòêà îòêğûòü òàáëèöó $name$";
+    Text[ greek ] = "Åğé÷åéñŞèçêå ôï Üíïéãìá ôïõ ğßíáêá $name$.";
+    Text[ dutch ] = "Er werd getracht tabel $name$ te openen.";
+    Text[ french ] = "Tentative d'ouverture de la table $name$ ...";
     Text[ spanish ] = "Se intentó abrir la tabla $name$";
-    Text[ italian ] = "Tried to open the table $name$";
+    Text[ italian ] = "Tentativo di aprire la tabella $name$";
     Text[ danish ] = "Tried to open the table $name$";
-    Text[ swedish ] = "Det gick inte att öppna tabellen $name$";
+    Text[ swedish ] = "Försök gjordes att öppna tabellen $name$";
     Text[ polish ] = "Próbowano otworzyæ tabelê $name$.";
     Text[ portuguese_brazilian ] = "Tried to open the table $name$";
-    Text[ japanese ] = "Tried to open the table $name$";
+    Text[ japanese ] = "$name$ Ã°ÌŞÙ‚ğŠJ‚±‚¤‚Æ‚µ‚Ü‚µ‚½B";
     Text[ korean ] = "Tried to open the table $name$";
     Text[ chinese_simplified ] = "ÒÑ¾­³¢ÊÔ¹ı´ò¿ª±í¸ñ $name$ ¡£";
-    Text[ chinese_traditional ] = "Tried to open the table $name$";
+    Text[ chinese_traditional ] = "¤w¸g¹Á¸Õ¹L¶}±Òªí®æ $name$ ¡C";
     Text[ turkish ] = "Tried to open the table $name$";
-    Text[ arabic ] = "Tried to open the table $name$";
+    Text[ arabic ] = "Êã ãÍÇæáÉ İÊÍ ÇáÌÏæá $name$.";
 };
