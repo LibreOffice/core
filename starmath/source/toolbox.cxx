@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
 {
     nActiveCategory = -1;
 
-    SfxImageManager *pImgMan = SFX_APP()->GetImageManager();
+    SfxImageManager *pImgMan = pBindings->GetImageManager();
 
     aToolBoxCat.SetClickHdl(LINK(this, SmToolBoxWindow, CategoryClickHdl));
     pImgMan->RegisterToolBox( &aToolBoxCat );
@@ -117,7 +117,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
 
 SmToolBoxWindow::~SmToolBoxWindow()
 {
-    SfxImageManager *pImgMan = SFX_APP()->GetImageManager();
+    SfxImageManager *pImgMan = GetBindings().GetImageManager();
     pImgMan->ReleaseToolBox( &aToolBoxCat );
 
     for (int i = 0;  i < NUM_TBX_CATEGORIES;  i++)
