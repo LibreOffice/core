@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_xml.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:06:25 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/xml/input/XRoot.hpp"
 #include "com/sun/star/xml/sax/XDocumentHandler.hpp"
 
