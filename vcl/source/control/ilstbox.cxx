@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-01 12:45:28 $
+ *  last change: $Author: mt $ $Date: 2001-08-01 14:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2419,7 +2419,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         aFloatSz.Width() = aSz.Width() + nLeft + nRight;
         aFloatSz.Width() += nRight; // etwas mehr Platz sieht besser aus...
 
-        if ( aFloatSz.Height() < nMaxHeight )
+        if ( ( aFloatSz.Height() < nMaxHeight ) || ( mnDDLineCount && ( mnDDLineCount < mpImplLB->GetEntryList()->GetEntryCount() ) ) )
         {
             // dann wird noch der vertikale Scrollbar benoetigt
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
