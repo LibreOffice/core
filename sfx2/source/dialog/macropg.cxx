@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
+ *  last change: $Author: pl $ $Date: 2001-10-25 14:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,8 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
-#ifdef VCL
 #ifndef _SV_MEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
 #endif
 
 #include "cfg.hxx"
