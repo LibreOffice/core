@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sownstck.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <estack.hxx>
     // PARAMETERS
 #include <ary/cpp/c_namesp.hxx>
+#include <x_parse.hxx>
 
 
 namespace cpp
@@ -308,10 +309,17 @@ S_OwnerStack::CloseBlock()
     }
     else
     {
-        csv_assert( aStack_Classes.size() == 0 );
+        // csv_assert( aStack_Classes.size() == 0 );
+        if ( aStack_Classes.size() > 0 )
+            throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", udmstri::Null_(), 0);
+
         csv_assert( pCurEnum == 0 );
         aStack_Namespaces.pop();
-        csv_assert( aStack_Namespaces.size() > 0 );
+
+        // csv_assert( aStack_Namespaces.size() > 0 );
+        if( aStack_Namespaces.size() == 0 )
+            throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", udmstri::Null_(), 0);
+
     }
     SetOwner_2CurNamespace();
 }
@@ -320,7 +328,10 @@ void
 ContextForAry::
 S_OwnerStack::CloseClass()
 {
-    csv_assert( aStack_Classes.size() > 0 );
+    // csv_assert( aStack_Classes.size() > 0 );
+    if ( aStack_Classes.size() == 0 )
+          throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", udmstri::Null_(), 0);
+
     aStack_Classes.pop();
     if ( aStack_Classes.size() > 0 )
         SetOwner_2CurClass();
