@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamsection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:34:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include <com/sun/star/io/XDataOutputStream.hpp>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 namespace comphelper
 {
 
@@ -86,7 +90,7 @@ namespace comphelper
     @since  00/26/05
 */
 
-class OStreamSection
+class COMPHELPER_DLLPUBLIC OStreamSection
 {
     staruno::Reference< stario::XMarkableStream >       m_xMarkStream;
     staruno::Reference< stario::XDataInputStream >      m_xInStream;
@@ -125,5 +129,3 @@ public:
 }   // namespace comphelper
 
 #endif // _COMPHELPER_STREAMSECTION_HXX_
-
-
