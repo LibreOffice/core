@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.37 2001-05-15 12:44:13 dvo Exp $
+	$Id: style.mod,v 1.38 2001-05-28 13:19:14 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -387,13 +387,17 @@
 <!ATTLIST style:footnote-sep style:distance-before-sep %length; #IMPLIED>
 <!ATTLIST style:footnote-sep style:distance-after-sep %length; #IMPLIED>
 
-<!-- master page properties -->
+<!-- master page -->
 <!ELEMENT style:master-page ( (style:header, style:header-left?)?, (style:footer, style:footer-left?)?,
 								office:forms?,style:style*, (%shapes;)*, presentation:notes? )>
 <!ATTLIST style:master-page style:name %styleName; #REQUIRED>
 <!ATTLIST style:master-page style:page-master-name %styleName; #REQUIRED>
 <!ATTLIST style:master-page style:next-style-name %styleName; #IMPLIED>
 <!ATTLIST style:master-page draw:style-name %styleName; #IMPLIED>
+
+<!-- handout master -->
+<!ELEMENT style:handout-master (%shapes;)*>
+<!ATTLIST style:handout-master presentation:presentation-page-layout-name %styleName; #IMPLIED>
 
 <!ENTITY % hd-ft-content "( text:p | (style:region-left?, style:region-center?, style:region-right?) )">
 <!ELEMENT style:header %hd-ft-content;>

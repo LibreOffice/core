@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.53 2001-05-23 11:53:10 cl Exp $
+	$Id: drawing.mod,v 1.54 2001-05-28 13:19:14 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -684,6 +684,7 @@
 <!ATTLIST dr3d:cube %draw-end-position; >
 <!ATTLIST dr3d:cube %table-background; >
 <!ATTLIST dr3d:cube %draw-style-name; >
+<!ATTLIST dr3d:cube draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT dr3d:sphere EMPTY>
 <!ATTLIST dr3d:sphere dr3d:transform CDATA #IMPLIED>
@@ -694,6 +695,7 @@
 <!ATTLIST dr3d:sphere %draw-end-position; >
 <!ATTLIST dr3d:sphere %table-background; >
 <!ATTLIST dr3d:sphere %draw-style-name; >
+<!ATTLIST dr3d:sphere draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT dr3d:extrude EMPTY>
 <!ATTLIST dr3d:extrude dr3d:transform CDATA #IMPLIED>
@@ -704,6 +706,7 @@
 <!ATTLIST dr3d:extrude %draw-end-position; >
 <!ATTLIST dr3d:extrude %table-background; >
 <!ATTLIST dr3d:extrude %draw-style-name; >
+<!ATTLIST dr3d:extrude draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT dr3d:rotate EMPTY>
 <!ATTLIST dr3d:rotate dr3d:transform CDATA #IMPLIED>
@@ -714,6 +717,7 @@
 <!ATTLIST dr3d:rotate %draw-end-position; >
 <!ATTLIST dr3d:rotate %table-background; >
 <!ATTLIST dr3d:rotate %draw-style-name; >
+<!ATTLIST dr3d:rotate draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT dr3d:scene (dr3d:light*,(%shapes3d;)*)>
 <!ATTLIST dr3d:scene %draw-style-name; >
