@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:36:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,8 @@
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
 #include "PropertySetMerger.hxx"
 #endif
+
+#include "svtools/urihelper.hxx"
 
 #ifndef _XMLOFF_XFORMSEXPORT_HXX
 #include "xformsexport.hxx"
@@ -2000,19 +2002,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 
 OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
 {
-    // That's ugly, but it is a temporary solution only that will be
-    // changed in CWS sab19
-    OUString aOldBaseURL( INetURLObject::GetBaseURL() );
-    sal_Bool bSet = sOrigFileName != aOldBaseURL;
-    if( bSet )
-        INetURLObject::SetBaseURL( sOrigFileName );
-
-    OUString aRet( INetURLObject::AbsToRel( rValue ) );
-
-    if( bSet )
-        INetURLObject::SetBaseURL( aOldBaseURL );
-
-    return aRet;
+    return URIHelper::simpleNormalizedMakeRelative(sOrigFileName, rValue);
 }
 
 void SvXMLExport::StartElement(sal_uInt16 nPrefix,
