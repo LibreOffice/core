@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-25 17:09:58 $
+ *  last change: $Author: ssa $ $Date: 2002-11-26 16:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3269,6 +3269,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     static WPARAM   nDeadChar       = 0;
     static WPARAM   nLastVKChar     = 0;
     static USHORT   nLastChar       = 0;
+    static USHORT   nLastModKeyCode = 0;
+    static bool     bWaitForModKeyRelease = false;
     USHORT          nRepeat         = LOWORD( lParam )-1;
     USHORT          nModCode        = 0;
 
@@ -3365,19 +3367,36 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             SalKeyModEvent aModEvt;
             aModEvt.mnTime = GetMessageTime();
             aModEvt.mnCode = nModCode;
-            aModEvt.mnModKeyCode = 0;
+            aModEvt.mnModKeyCode = 0;   // no command events will be sent if this member is 0
+
+            USHORT tmpCode = 0;
             if( GetKeyState( VK_LSHIFT )  & 0x8000 )
-                aModEvt.mnModKeyCode |= MODKEY_LSHIFT;
+                tmpCode |= MODKEY_LSHIFT;
             if( GetKeyState( VK_RSHIFT )  & 0x8000 )
-                aModEvt.mnModKeyCode |= MODKEY_RSHIFT;
+                tmpCode |= MODKEY_RSHIFT;
             if( GetKeyState( VK_LCONTROL ) & 0x8000 )
-                aModEvt.mnModKeyCode |= MODKEY_LMOD1;
+                tmpCode |= MODKEY_LMOD1;
             if( GetKeyState( VK_RCONTROL ) & 0x8000 )
-                aModEvt.mnModKeyCode |= MODKEY_RMOD1;
+                tmpCode |= MODKEY_RMOD1;
             if( GetKeyState( VK_LMENU )  & 0x8000 )
-                aModEvt.mnModKeyCode |= MODKEY_LMOD2;
+                tmpCode |= MODKEY_LMOD2;
             if( GetKeyState( VK_RMENU )  & 0x8000 )
-                aModEvt.mnModKeyCode |= MODKEY_RMOD2;
+                tmpCode |= MODKEY_RMOD2;
+
+            if( tmpCode < nLastModKeyCode )
+            {
+                aModEvt.mnModKeyCode = nLastModKeyCode;
+                nLastModKeyCode = 0;
+                bWaitForModKeyRelease = true;
+            }
+            else
+            {
+                if( !bWaitForModKeyRelease )
+                    nLastModKeyCode = tmpCode;
+            }
+
+            if( !tmpCode )
+                bWaitForModKeyRelease = false;
 
             return pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                                SALEVENT_KEYMODCHANGE, &aModEvt );
@@ -3390,6 +3409,9 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             WIN_BOOL        bCharPeek = FALSE;
             UINT            nCharMsg = WM_CHAR;
             BOOL            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
+
+            nLastModKeyCode = 0; // make sure no modkey messages are sent if they belong to a hotkey (see above)
+            bWaitForModKeyRelease = true;
 
             aKeyEvt.mnCode = ImplSalGetKeyCode( wParam );
             if ( !bKeyUp )

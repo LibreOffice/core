@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-25 17:09:08 $
+ *  last change: $Author: ssa $ $Date: 2002-11-26 16:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1973,8 +1973,12 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
     if ( !pChild )
         return;
 
-    CommandModKeyData data( pEvent->mnModKeyCode );
-    ImplCallCommand( pChild, COMMAND_MODKEYCHANGE, &data );
+    // send modkey events only if useful data is available
+    if( pEvent->mnModKeyCode != 0 )
+    {
+        CommandModKeyData data( pEvent->mnModKeyCode );
+        ImplCallCommand( pChild, COMMAND_MODKEYCHANGE, &data );
+    }
 }
 
 // -----------------------------------------------------------------------
