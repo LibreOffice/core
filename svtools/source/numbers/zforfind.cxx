@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:32:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ BOOL ImpSvNumberInputScan::SkipThousands(
     const String& rThSep = pFormatter->GetNumThousandSep();
     register const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
-    xub_StrLen nCounter;                                // counts 3 digits
+    xub_StrLen nCounter = 0;                                // counts 3 digits
 
     while ( ((cToken = *pHere) != 0) && eState != SsStop)
     {
@@ -1038,6 +1038,8 @@ BOOL ImpSvNumberInputScan::GetDateRef( double& fDays, USHORT& nCounter,
             break;
             default:
                 DBG_ERROR( "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
+                DateFmt = YMD;
+                bFormatTurn = FALSE;
         }
         if ( bFormatTurn )
         {
