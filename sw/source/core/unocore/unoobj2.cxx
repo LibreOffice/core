@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-03-01 16:17:47 $
+ *  last change: $Author: os $ $Date: 2001-03-08 10:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,6 +627,39 @@ Reference< XEnumeration >  SAL_CALL SwXTextCursor::createContentEnumeration(cons
     Reference< XEnumeration > xRet = new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_TEXTRANGE);
     return xRet;
 }
+/* -----------------------------07.03.01 14:53--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( RuntimeException )
+{
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    if( !pUnoCrsr  )
+        throw RuntimeException();
+    Reference<XUnoTunnel> xTunnel(xParentText, UNO_QUERY);
+    SwXText* pParentText = 0;
+    if(xTunnel.is())
+    {
+        pParentText = (SwXText*)xTunnel->getSomething(SwXText::getUnoTunnelId());
+    }
+    DBG_ASSERT(pParentText, "parent is not a SwXText")
+    Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pUnoCrsr, CURSOR_SELECTION);
+
+    return xRet;
+}
+/* -----------------------------07.03.01 15:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Type  SwXTextCursor::getElementType(void) throw( RuntimeException )
+{
+    return ::getCppuType((uno::Reference<XTextRange>*)0);
+}
+/* -----------------------------07.03.01 15:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXTextCursor::hasElements(void) throw( RuntimeException )
+{
+    return sal_True;
+}
 /* -----------------------------03.04.00 09:11--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -801,7 +834,8 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
                                                     CursorType eType) :
         xParentText(pParent),
         bFirstParagraph(sal_True),
-        eCursorType(eType)
+        eCursorType(eType),
+        nEndIndex(rPos.nNode.GetIndex())
 {
     SwUnoCrsr* pUnoCrsr = pParent->GetDoc()->CreateUnoCrsr(rPos, sal_False);
     pUnoCrsr->Add(this);
@@ -816,8 +850,16 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
         SwClient(pCrsr),
         xParentText(pParent),
         bFirstParagraph(sal_True),
-        eCursorType(eType)
+        eCursorType(eType),
+        nEndIndex(pCrsr->End()->nNode.GetIndex())
 {
+    if(CURSOR_SELECTION == eCursorType)
+    {
+        if(*pCrsr->GetPoint() > *pCrsr->GetMark())
+            pCrsr->Exchange();
+        if(pCrsr->HasMark())
+            pCrsr->DeleteMark();
+    }
 }
 /*-- 10.12.98 11:52:12---------------------------------------------------
 
@@ -843,7 +885,7 @@ sal_Bool SwXParagraphEnumeration::hasMoreElements(void) throw( uno::RuntimeExcep
             bRet = sal_True;
         else
         {
-            SwPosition* pStart = pUnoCrsr->GetPoint();
+            SwPosition* pStart = pUnoCrsr->Start();
             SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False);
             //man soll hier auch in Tabellen landen duerfen
             if(CURSOR_TBLTEXT != eCursorType)
@@ -858,6 +900,8 @@ sal_Bool SwXParagraphEnumeration::hasMoreElements(void) throw( uno::RuntimeExcep
             }
             else
                 bRet = pNewCrsr->MovePara(fnParaNext, fnParaStart);
+            if(CURSOR_SELECTION == eCursorType && nEndIndex < pNewCrsr->Start()->nNode.GetIndex())
+                bRet = FALSE;
             delete pNewCrsr;
         }
     }
@@ -902,7 +946,7 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
         if( bFirstParagraph || bInTable || pUnoCrsr->MovePara(fnParaNext, fnParaStart))
         {
             bFirstParagraph = sal_False;
-            SwPosition* pStart = pUnoCrsr->GetPoint();
+            SwPosition* pStart = pUnoCrsr->Start();
             //steht man nun in einer Tabelle, oder in einem einfachen Absatz?
 
             SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
@@ -1663,6 +1707,46 @@ Reference< XEnumeration >  SAL_CALL SwXTextRange::createContentEnumeration(
     Reference< XEnumeration > xRet = new SwXParaFrameEnumeration(*pNewCrsr, PARAFRAME_PORTION_TEXTRANGE);
     delete pNewCrsr;
     return xRet;
+}
+/* -----------------------------07.03.01 14:55--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( RuntimeException )
+{
+    SwBookmark* pBkm = GetBookmark();
+    if( !pBkm  )
+        throw RuntimeException();
+    const SwPosition& rPoint = pBkm->GetPos();
+    const SwPosition* pMark = pBkm->GetOtherPos();
+    SwUnoCrsr* pNewCrsr = pDoc->CreateUnoCrsr(rPoint, FALSE);
+    if(pMark && *pMark != rPoint)
+    {
+        pNewCrsr->SetMark();
+        *pNewCrsr->GetMark() = *pMark;
+    }
+    Reference<XUnoTunnel> xTunnel(xParentText, UNO_QUERY);
+    SwXText* pParentText = 0;
+    if(xTunnel.is())
+    {
+        pParentText = (SwXText*)xTunnel->getSomething(SwXText::getUnoTunnelId());
+    }
+    DBG_ASSERT(pParentText, "parent is not a SwXText")
+    Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, CURSOR_SELECTION);
+    return xRet;
+}
+/* -----------------------------07.03.01 15:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Type  SwXTextRange::getElementType(void) throw( RuntimeException )
+{
+    return ::getCppuType((uno::Reference<XTextRange>*)0);
+}
+/* -----------------------------07.03.01 15:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXTextRange::hasElements(void) throw( RuntimeException )
+{
+    return sal_True;
 }
 /* -----------------------------03.04.00 09:11--------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 12:53:56 $
+ *  last change: $Author: os $ $Date: 2001-03-08 10:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,8 @@
 #ifndef _CPPUHELPER_IMPLBASE8_HXX_
 #include <cppuhelper/implbase8.hxx> // helper for implementations
 #endif
-#ifndef _CPPUHELPER_IMPLBASE10_HXX_
-#include <cppuhelper/implbase10.hxx>    // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE11_HXX_
+#include <cppuhelper/implbase11.hxx>    // helper for implementations
 #endif
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
@@ -222,7 +222,8 @@ enum CursorType
     CURSOR_HEADER,
     CURSOR_FOOTER,
     CURSOR_REDLINE,
-    CURSOR_ALL          // fuer Search&Replace
+    CURSOR_ALL,          // fuer Search&Replace
+    CURSOR_SELECTION    // create a paragraph enumeration from a text range or cursor
 };
 
 /* -----------------29.04.98 07:35-------------------
@@ -369,7 +370,7 @@ public:
 /* -----------------03.12.98 12:16-------------------
  *
  * --------------------------------------------------*/
-class SwXTextCursor : public cppu::WeakImplHelper10
+class SwXTextCursor : public cppu::WeakImplHelper11
 <
     ::com::sun::star::text::XSentenceCursor,
     ::com::sun::star::text::XWordCursor,
@@ -380,7 +381,8 @@ class SwXTextCursor : public cppu::WeakImplHelper10
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::util::XSortable,
-    ::com::sun::star::container::XContentEnumerationAccess
+    ::com::sun::star::container::XContentEnumerationAccess,
+    ::com::sun::star::container::XEnumerationAccess
 >,
     public SwClient
 {
@@ -432,14 +434,6 @@ public:
     virtual BOOL SAL_CALL gotoStartOfSentence( BOOL Expand ) throw(::com::sun::star::uno::RuntimeException);
     virtual BOOL SAL_CALL gotoEndOfSentence( BOOL Expand ) throw(::com::sun::star::uno::RuntimeException);
 
-    //XLineCursor - alt
-//  virtual BOOL goDown(sal_uInt16 nCount, BOOL Expand);
-//    virtual BOOL goUp(sal_uInt16 nCount, BOOL Expand);
-//    virtual BOOL isAtStartOfLine(void);
-//    virtual BOOL isAtEndOfLine(void);
-//    virtual void gotoEndOfLine(BOOL Expand);
-//    virtual void gotoStartOfLine(BOOL Expand);
-
     //ParagraphCursor - neu
     virtual BOOL SAL_CALL isStartOfParagraph(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL isEndOfParagraph(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -477,15 +471,8 @@ public:
      static void SwXTextCursor::SetPropertyToDefault( SwPaM& rPaM, const SfxItemPropertySet& rPropSet,  const rtl::OUString& rPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Any  SwXTextCursor::GetPropertyDefault( SwPaM& rPaM, const SfxItemPropertySet& rPropSet,  const ::rtl::OUString& rPropertyName)   throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    //XPropertySetCloner - alt
-//    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  cloneProperties(void);
-//    virtual void applyProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & PropertySet);
-
     //XDocumentInsertable - neu
     virtual void SAL_CALL insertDocumentFromURL(const rtl::OUString& rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aOptions) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
-
-    //XAutoTextInsertable - alt
-//  virtual void insertAutoTextEntry(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextEntry > & ::com::sun::star::text::AutoTextEntry);
 
     //XSortable - neu
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL createSortDescriptor(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -494,6 +481,13 @@ public:
     //XContentEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createContentEnumeration(const rtl::OUString& aServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -686,16 +680,16 @@ public:
 /*-----------------23.02.98 12:05-------------------
 
 --------------------------------------------------*/
-class SwXTextRange : public cppu::WeakImplHelper6
+class SwXTextRange : public cppu::WeakImplHelper7
 <
     ::com::sun::star::text::XTextRange,
     ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::container::XContentEnumerationAccess,
     ::com::sun::star::beans::XPropertySet,
-    ::com::sun::star::beans::XPropertyState
->,
-                        public SwClient
+    ::com::sun::star::beans::XPropertyState,
+    ::com::sun::star::container::XEnumerationAccess
+>,  public SwClient
 {
     friend class SwXText;
     enum RangePosition
@@ -746,6 +740,13 @@ public:
     //XContentEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createContentEnumeration(const rtl::OUString& aServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -1021,6 +1022,7 @@ class SwXParagraphEnumeration : public SwSimpleEnumerationBaseClass,
     BOOL                bFirstParagraph;
     SwUnoCrsr*          GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
     CursorType          eCursorType;
+    ULONG               nEndIndex;
 public:
     SwXParagraphEnumeration(SwXText* pParent, SwPosition& rPos, CursorType eType);
     SwXParagraphEnumeration(SwXText* pParent, SwUnoCrsr* pCrsr, CursorType eType);
