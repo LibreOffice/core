@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:29:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
     {
         case HINT_FORMATCHANGED:
             SetFormulaArranged(FALSE);
-            nModifyCount++;     //! merkwrdig...
+            nModifyCount++;     //! merkwuerdig...
                                 // ohne dies wird die Grafik letztlich
                                 // nicht geupdatet
             Repaint();
@@ -422,7 +422,7 @@ void SmDocShell::ArrangeFormula()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ArrangeFormula" );
 
-    //! Nur für die Dauer der Existenz dieses Objekts sind am Drucker die
+    //! Nur fuer die Dauer der Existenz dieses Objekts sind am Drucker die
     //! richtigen Einstellungen garantiert.
     SmPrinterAccess  aPrtAcc(*this);
 //  OutputDevice    *pOutDev = aPrtAcc.GetPrinter();
@@ -433,7 +433,7 @@ void SmDocShell::ArrangeFormula()
         DBG_WARNING("Sm : kein Drucker vorhanden");
 #endif
 
-    // falls nötig ein anderes OutputDevice holen für das formatiert wird
+    // falls naetig ein anderes OutputDevice holen fuer das formatiert wird
     if (!pOutDev)
     {
         SmViewShell *pView = SmGetActiveView();
@@ -847,7 +847,7 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     StartListening(*pp->GetConfig());
 
     SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
-                                    //! im Destruktor nicht explizit gelöscht werden.
+                                    //! im Destruktor nicht explizit geloescht werden.
                                     //! Dies erledigt das Sfx.
 }
 
@@ -1365,7 +1365,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 UpdateText();
                 ArrangeFormula();
                 Repaint();
-                // Fenster anpassen, neuzeichnen, ModifyCount erhöhen,...
+                // Fenster anpassen, neuzeichnen, ModifyCount erhoehen,...
                 if (pBindings)
                     pBindings->Invalidate(SID_GAPHIC_SM);
             }
