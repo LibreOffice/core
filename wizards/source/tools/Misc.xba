@@ -208,7 +208,7 @@ Dim oUcb as Object
 	Else
 		GetPathSettings = sPath
 	End If
-	
+
 End Function
 
 
@@ -266,7 +266,7 @@ Dim oLocResSrv as Object
 	If bResObjectexists Then
 		oResSrv = oLocResSrv
 	End If
-	
+
 End Sub
 
 
@@ -737,9 +737,9 @@ Function isHighContrast(oPeer as Object)
 	Dim myLuminance as Double
 
 	UIColor = oPeer.getProperty( &quot;DisplayBackgroundColor&quot; )
-	myRed = Red (UIColor) 
+	myRed = Red (UIColor)
 	myGreen = Green (UIColor)
-	myBlue = Blue (UIColor)		
+	myBlue = Blue (UIColor)
 	myLuminance = (( myBlue*28 + myGreen*151 + myRed*77 ) / 256	)
 	isHighContrast = false
 	If myLuminance &lt;= 25 Then isHighContrast = true
@@ -781,7 +781,30 @@ NOMODULEINSTALLED:
 			Resume GOON
 		End If
 	End If
-GOON:		
-	CreateNewDocument = oDocument	
+GOON:
+	CreateNewDocument = oDocument
 End Function
+
+
+&apos; This Sub has been used in order to ensure that after disposing a document
+&apos; from the backing window it is returned to the backing window, so the
+&apos; office won&apos;t be closed
+Sub DisposeDocument(oDocument as Object)
+Dim dispatcher as Object
+Dim parser as Object
+Dim disp as Object
+Dim url	as new com.sun.star.util.URL
+Dim NoArgs() as New com.sun.star.beans.PropertyValue
+Dim oFrame as Object
+	If Not IsNull(oDocument) Then
+		oDocument.setModified(false)
+		parser   = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
+		url.Complete = &quot;.uno:CloseDoc&quot;
+		parser.parseStrict(url)
+		oFrame = oDocument.CurrentController.Frame
+		disp = oFrame.queryDispatch(url,&quot;_self&quot;, com.sun.star.util.SearchFlags.NORM_WORD_ONLY)
+		disp.dispatch(url, NoArgs())
+	End If
+End Sub
+
 </script:module>
