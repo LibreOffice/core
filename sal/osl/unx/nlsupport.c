@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mh $ $Date: 2001-11-22 14:56:18 $
+ *  last change: $Author: svesik $ $Date: 2002-01-02 12:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
-#if defined(LINUX) || defined(SOLARIS)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX)
 #include <pthread.h>
 #include <locale.h>
 #include <langinfo.h>
@@ -242,12 +242,12 @@ static rtl_Locale * _parse_locale( const char * locale )
     return NULL;
 }
 
-#if defined(LINUX) || defined(SOLARIS)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX)
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
  * from nl_langinfo(CODESET) to rtl_textencoding defines.
- * nl_langinfo() is supported only on Linux and Solaris.
+ * nl_langinfo() is supported only on Linux, Solaris and IRIX.
  *
  * This routine is SLOW because of the setlocale call, so
  * grab the result and cache it.
@@ -295,6 +295,24 @@ const _pair _nl_language_list[] = {
 
 /* XXX MS-874 is an extension to tis620, so this is not
  * really equivalent */
+#elif defined(IRIX)
+
+const _pair _nl_language_list[] = {
+   { "ISO8859-1",   RTL_TEXTENCODING_ISO_8859_1 }, /* Western */
+   { "ISO8859-2",   RTL_TEXTENCODING_ISO_8859_2     }, /* Central European */
+   { "ISO8859-5",   RTL_TEXTENCODING_ISO_8859_5     }, /* Cyrillic */
+   { "ISO8859-7",   RTL_TEXTENCODING_ISO_8859_7     }, /* Greek */
+   { "ISO8859-9",   RTL_TEXTENCODING_ISO_8859_9     }, /* Turkish */
+   { "ISO8859-15",  RTL_TEXTENCODING_ISO_8859_15    }, /* Western Updated (w/Euro sign) */
+   { "eucJP",       RTL_TEXTENCODING_EUC_JP     }, /* Japan */
+   { "eucKR",       RTL_TEXTENCODING_EUC_KR     }, /* Korea */
+   { "eucCN",       RTL_TEXTENCODING_EUC_CN     }, /* China */
+   { "eucTW",       RTL_TEXTENCODING_EUC_TW     }, /* Taiwan - Traditional Chinese */
+   { "big5",        RTL_TEXTENCODING_BIG5       }, /* China - Traditional Chinese */
+   { "eucgbk",      RTL_TEXTENCODING_DONTKNOW   }, /* China - Simplified Chinese */
+   { "gbk",     RTL_TEXTENCODING_GBK        }, /* China - Simplified Chinese */
+   { "sjis",        RTL_TEXTENCODING_SHIFT_JIS  }, /* Japan */
+};
 
 #elif defined(LINUX)
 
