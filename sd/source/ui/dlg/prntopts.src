@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:30:34 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ spanish ] = "Calidad de impresión" ;
         Text [ french ] = "Qualité" ;
         Text [ dutch ] = "Weergavekwaliteit" ;
-        Text [ portuguese ] = "Qualidade de impressão" ;
+        Text [ portuguese ] = "Qualidade" ;
         Text[ chinese_simplified ] = "´òÓ¡µÄÖÊÁ¿";
         Text[ russian ] = "Êà÷åñòâî";
         Text[ polish ] = "Jakoœæ";
@@ -676,7 +676,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ chinese_simplified ] = "Ì×ÓÃ´òÓ¡»úÉè¶¨µÄÖ½ÕÅÀ´Ô´(~E)";
         Text[ russian ] = "Ïîäà÷à áóìàãè èç óñòàíîâêè ïğèíòåğà";
         Text[ polish ] = "Zasobnik z ustawie~ñ drukarki";
-        Text[ japanese ] = "ÌßØİÀİ’è‚©‚ç‚Ì‹‹†•û–@(~E)";
+        Text[ japanese ] = "ÌßØİÀ‚Ìİ’è‚Ì—p†ÄÚ²‚ğ’Êíg—p(~E)";
         Text[ chinese_traditional ] = "¨Ï¥Î¦Lªí¾÷³]©wªº¯È±i¨Ó·½(~E)";
         Text[ arabic ] = "ÏÑÌ ÇáæÑŞ ÍÓÈ ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ";
         Text[ greek ] = "~Äßóêïò ÷áñôéïı áğü ñõèìßóåéò åêôõğùôŞ";
