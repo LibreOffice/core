@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-17 13:33:36 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 14:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
         _FileListEntry* pNewEntry = NULL;
         BOOL bHasLongName = pTmp->GetMedium()->GetLongName().Len() != 0;
         String aTitle = pTmp->GetTitle( SFX_TITLE_TITLE );
-        pNewEntry = new _FileListEntry( pTmp->GetTitle( SFX_TITLE_FULLNAME ), aInter, &aTitle );
+        pNewEntry = new _FileListEntry( pTmp->GetMedium()->GetName(), aInter, &aTitle );
         pNewEntry->aDocShell = pTmp;
 #if defined( SOLARIS )
         pDocList->Insert( (_FileListEntry const *)pNewEntry );
@@ -310,7 +310,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
         INetURLObject aFileObj( pEntry->aFileName );
         BOOL bDum = FALSE;
         SfxApplication* pSfxApp = SFX_APP();
-        String aFilePath = aFileObj.PathToFileName();
+        String aFilePath = aFileObj.GetMainURL();
         pEntry->aDocShell = pSfxApp->DocAlreadyLoaded( aFilePath, FALSE, bDum );
         if ( !pEntry->aDocShell.Is() )
         {
