@@ -18318,3 +18318,11 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ??0OColumnTransferable@svx@@QAE@ABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@0J@Z
 ?extractColumnDescriptor@OColumnTransferable@svx@@SA?AVODataAccessDescriptor@2@ABVTransferableDataHelper@@@Z
 ?getDescriptorFormatId@OColumnTransferable@svx@@KAKXZ
+?Connect@SdrOle2Obj@@QAEXXZ
+?Disconnect@SdrOle2Obj@@QAEXXZ
+?SetInserted@SdrPage@@QAEXH@Z
+?EnableSearchForDependees@FmSearchDialog@@IAEXE@Z
+?GetCaseSensitive@FmSearchEngine@@QBEEXZ
+?GetIgnoreWidthCJK@FmSearchEngine@@QBEEXZ
+?SetCaseSensitive@FmSearchEngine@@QAEXE@Z
+?SetIgnoreWidthCJK@FmSearchEngine@@QAEXE@Z
