@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:19:07 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,12 @@
 
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
 #endif
 
 // #UndoRedo#
@@ -232,6 +238,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if ( bDisableVerticalText )
     {
+        rSet.DisableItem( SID_DRAW_FONTWORK_VERTICAL );
         rSet.DisableItem( SID_DRAW_CAPTION_VERTICAL );
         rSet.DisableItem( SID_TEXT_FITTOSIZE_VERTICAL );
         rSet.DisableItem( SID_DRAW_TEXT_VERTICAL );
@@ -1190,6 +1197,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_DRAW_CIRCLE_NOFILL);
         rSet.ClearItem(SID_DRAW_CAPTION);
         rSet.DisableItem(SID_DRAW_CAPTION);
+        rSet.ClearItem(SID_DRAW_FONTWORK);
+        rSet.DisableItem(SID_DRAW_FONTWORK);
+        rSet.ClearItem(SID_DRAW_FONTWORK_VERTICAL);
+        rSet.DisableItem(SID_DRAW_FONTWORK_VERTICAL);
         rSet.ClearItem(SID_DRAW_CAPTION_VERTICAL);
         rSet.DisableItem(SID_DRAW_CAPTION_VERTICAL);
         rSet.ClearItem(SID_TEXT_FITTOSIZE);
@@ -1702,6 +1713,10 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
         // aTabControl.Enable();
         // aLayerTab.Enable();
     }
+
+
+    svx::ExtrusionBar::getState( pDrView, rSet );
+    svx::FontworkBar::getState( pDrView, rSet );
 }
 
 
