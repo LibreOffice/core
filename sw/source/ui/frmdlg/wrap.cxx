@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 15:07:40 $
+ *  last change: $Author: os $ $Date: 2002-10-09 11:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aWrapThroughRB.Enable( bEnable );
         aWrapParallelRB.Enable( bEnable );
         aWrapAnchorOnlyCB.Enable( (nAnchorId == FLY_AT_CNTNT || nAnchorId == FLY_AUTO_CNTNT)
-                && nSur != SURROUND_NONE && nSur != SURROUND_THROUGHT );
+                && nSur != SURROUND_NONE );
     }
     ContourHdl(0);
 }
@@ -720,10 +720,10 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
     BOOL bWrapThrough = (pBtn == &aWrapThroughRB);
     aWrapTransparentCB.Enable( bWrapThrough && !bHtmlMode );
     bWrapThrough |= ( nAnchorId == FLY_IN_CNTNT );
-    aWrapOutlineCB.Enable( !bWrapThrough );
+    aWrapOutlineCB.Enable( !bWrapThrough && pBtn != &aNoWrapRB);
     aWrapOutsideCB.Enable( !bWrapThrough && aWrapOutlineCB.IsChecked() );
     aWrapAnchorOnlyCB.Enable( (nAnchorId == FLY_AT_CNTNT || nAnchorId == FLY_AUTO_CNTNT) &&
-        (pBtn != &aNoWrapRB) && !bWrapThrough );
+        (pBtn != &aNoWrapRB) );
 
     ContourHdl(0);
     return 0;
