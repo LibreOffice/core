@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:20:35 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text [ portuguese ] = "~Categoria" ;
         Text [ finnish ] = "~Luokka" ;
-        Text [ danish ] = "Kategori" ;
+        Text [ danish ] = "~Kategori" ;
         Text [ french ] = "~Cat�gorie" ;
         Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Categorie" ;
@@ -116,6 +116,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Kategória";
+        Text[ hungarian ] = "~Kategória";
+        Text[ slovenian ] = "~Kategorija";
     };
     ListBox LB_CATEGORY
     {
@@ -273,7 +275,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
             < "Valuta" ; Default ; > ;
             < "Datum" ; Default ; > ;
             < "Tijd" ; Default ; > ;
-            < "Wetenschap" ; Default ; > ;
+            < "Wetenschappelijk" ; Default ; > ;
             < "Breuk" ; Default ; > ;
             < "Logische waarde" ; Default ; > ;
             < "Tekst" ; Default ; > ;
@@ -530,6 +532,34 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         < "Booleovská hodnota" ; Default ; > ;
         < "Text" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Összes" ; Default ; > ;
+        < "Egyéni" ; Default ; > ;
+        < "Szám" ; Default ; > ;
+        < "Százalék" ; Default ; > ;
+        < "Pénznem" ; Default ; > ;
+        < "Dátum" ; Default ; > ;
+        < "Idő" ; Default ; > ;
+        < "Tudományos" ; Default ; > ;
+        < "Tört" ; Default ; > ;
+        < "Logikai érték" ; Default ; > ;
+        < "Szöveg" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Vse" ; Default ; > ;
+        < "Uporabniško določeno" ; Default ; > ;
+        < "Število" ; Default ; > ;
+        < "Odstotek" ; Default ; > ;
+        < "Valuta" ; Default ; > ;
+        < "Datum" ; Default ; > ;
+        < "Čas" ; Default ; > ;
+        < "Znanstveno" ; Default ; > ;
+        < "Ulomek" ; Default ; > ;
+        < "Logična vrednost" ; Default ; > ;
+        < "Besedilo" ; Default ; > ;
+    };
     };
     FixedText FT_EDFORMAT
     {
@@ -542,10 +572,10 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese_brazilian ] = "C�digo do for~mato" ;
         Text [ portuguese ] = "C�digo do formato" ;
         Text [ finnish ] = "~Muotoilukoodi" ;
-        Text [ danish ] = "Format-kode" ;
+        Text [ danish ] = "~Formatkode" ;
         Text [ french ] = "Description de format" ;
         Text [ swedish ] = "Format~beskrivning" ;
-        Text [ dutch ] = "F~ormaatcode" ;
+        Text [ dutch ] = "Notatiecode" ;
         Text [ spanish ] = "C�digo del for~mato" ;
         Text [ english_us ] = "~Format code" ;
         Text[ chinese_simplified ] = "格式码(~F)";
@@ -564,6 +594,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮קוד צורה‬";
         Text[ hindi ] = "~रचना कोड्";
         Text[ slovak ] = "~Formátovací kód";
+        Text[ hungarian ] = "F~ormátumkód";
+        Text[ slovenian ] = "Koda ~oblike";
     };
     Edit ED_FORMAT
     {
@@ -599,7 +631,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ danish ] = "~Format" ;
         Text [ french ] = "Forma~t" ;
         Text [ swedish ] = "~Format" ;
-        Text [ dutch ] = "~Formaat" ;
+        Text [ dutch ] = "Notatie" ;
         Text [ spanish ] = "~Formato" ;
         Text [ english_us ] = "F~ormat" ;
         Text[ chinese_simplified ] = "格式(~O)";
@@ -618,6 +650,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮צורה‬";
         Text[ hindi ] = "र~चना";
         Text[ slovak ] = "F~ormát";
+        Text[ hungarian ] = "~Formátum";
+        Text[ slovenian ] = "O~blika";
     };
 
     ListBox LB_CURRENCY
@@ -739,6 +773,14 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
          < "Automaticky" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Automatikusan" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Samodejno" ; Default ; > ;
+    };
     };
 
     Control LB_FORMAT
@@ -761,7 +803,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese_brazilian ] = "Casas ~decimais" ;
         Text [ portuguese ] = "Casas ~decimais" ;
         Text [ finnish ] = "~Desimaaleja" ;
-        Text [ danish ] = "Antal decimaler" ;
+        Text [ danish ] = "~Antal decimaler" ;
         Text [ french ] = "D�cimales" ;
         Text [ swedish ] = "~Antal decimaler" ;
         Text [ dutch ] = "~Aantal decimalen" ;
@@ -783,6 +825,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮ספרות עשרוניות‬";
         Text[ hindi ] = "~दशांश स्थान";
         Text[ slovak ] = "~Desatinné miesta";
+        Text[ hungarian ] = "~Tizedeshelyek";
+        Text[ slovenian ] = "~Decimalna mesta";
     };
     NumericField ED_DECIMALS
     {
@@ -809,7 +853,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese_brazilian ] = "~Zeros � esquerda" ;
         Text [ portuguese ] = "~Zeros � esquerda" ;
         Text [ finnish ] = "~Etunollat" ;
-        Text [ danish ] = "Indledende nuller" ;
+        Text [ danish ] = "Foranstillede nuller" ;
         Text [ french ] = "~Z�ro(s) non significatif(s)" ;
         Text [ swedish ] = "Inledande ~nollor" ;
         Text [ dutch ] = "Voo~rloopnullen" ;
@@ -831,6 +875,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮אפסים לפני‬";
         Text[ hindi ] = "आरम्भ का ~शून्य";
         Text[ slovak ] = "Uvád~zajúce nuly";
+        Text[ hungarian ] = "Ve~zető nullák";
+        Text[ slovenian ] = "Vodilne ~ničle";
     };
     NumericField ED_LEADZEROES
     {
@@ -856,7 +902,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese_brazilian ] = "N�meros negativos em ~vermelho" ;
         Text [ portuguese ] = "Negativos em ~vermelho" ;
         Text [ finnish ] = "Negatiiviset luvut ~punaisina" ;
-        Text [ danish ] = "R�de negative tal" ;
+        Text [ danish ] = "R�de ~negative tal" ;
         Text [ french ] = "~Nbres n�g. en rouge" ;
         Text [ swedish ] = "Negativa v�rden i ~r�tt" ;
         Text [ dutch ] = "~Negatieve getallen rood" ;
@@ -878,6 +924,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮מספרים שליליים באדום‬";
         Text[ hindi ] = "~क्षयराशि संख्याएँ लाल";
         Text[ slovak ] = "Zápor~né čísla červené";
+        Text[ hungarian ] = "Neg~atív számok pirossal";
+        Text[ slovenian ] = "~Negativna števila rdeča";
     };
     CheckBox BTN_THOUSAND
     {
@@ -890,7 +938,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese_brazilian ] = "Separador de ~milhares" ;
         Text [ portuguese ] = "Casa dos ~milhares" ;
         Text [ finnish ] = "~Tuhaterotin" ;
-        Text [ danish ] = "Tusindtalsse~parator" ;
+        Text [ danish ] = "~Tusindtalsseparator" ;
         Text [ french ] = "~S�parateur de milliers" ;
         Text [ swedish ] = "~Tusentalsavgr�nsare" ;
         Text [ dutch ] = "~Scheidingsteken duizendtallen" ;
@@ -912,6 +960,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮מפריד אלפים‬";
         Text[ hindi ] = "~सहस्र अलगानेवाला";
         Text[ slovak ] = "Oddeľovač ~tisícok";
+        Text[ hungarian ] = "~Ezreselválasztók";
+        Text[ slovenian ] = "Ločilo ~tisočic";
     };
     FixedLine FL_OPTIONS
     {
@@ -946,6 +996,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     FixedText FT_LANGUAGE
     {
@@ -958,7 +1010,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese_brazilian ] = "~Idioma" ;
         Text [ portuguese ] = "~L�ngua" ;
         Text [ finnish ] = "~Kieli" ;
-        Text [ danish ] = "Sprog" ;
+        Text [ danish ] = "S~prog" ;
         Text [ french ] = "~Langue" ;
         Text [ swedish ] = "S~pr�k" ;
         Text [ dutch ] = "~Taal" ;
@@ -980,6 +1032,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
         Text[ slovak ] = "~Jazyk";
+        Text[ hungarian ] = "~Nyelv";
+        Text[ slovenian ] = "~Jezik";
     };
     ListBox LB_LANGUAGE
     {
@@ -1020,6 +1074,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮צורת מקור‬";
         Text[ hindi ] = "मू~ल रचना";
         Text[ slovak ] = "Formát ~zdroja";
+        Text[ hungarian ] = "F~orrásformátum";
+        Text[ slovenian ] = "Iz~vorna oblika";
     };
     Window WND_NUMBER_PREVIEW
     {
@@ -1067,6 +1123,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ hebrew ] = "‮הוספה‬";
         QuickHelpText[ hindi ] = "जोड़ो";
         QuickHelpText[ slovak ] = "Pridať";
+        QuickHelpText[ hungarian ] = "Hozzáadás";
+        QuickHelpText[ slovenian ] = "Dodaj";
     };
     ImageButton IB_REMOVE
     {
@@ -1106,6 +1164,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ hebrew ] = "‮הסרה‬";
         QuickHelpText[ hindi ] = "हटाओ";
         QuickHelpText[ slovak ] = "Odstrániť";
+        QuickHelpText[ hungarian ] = "Eltávolítás";
+        QuickHelpText[ slovenian ] = "Odstrani";
     };
     ImageButton IB_INFO
     {
@@ -1143,6 +1203,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ hebrew ] = "Kommentar ändern";
         QuickHelpText[ hindi ] = "अपवाद संपादन";
         QuickHelpText[ slovak ] = "Upraviť komentár";
+        QuickHelpText[ hungarian ] = "Megjegyzés szerkesztése";
+        QuickHelpText[ slovenian ] = "Uredi komentar";
     };
     ImageList IL_ICON
     {
@@ -1199,6 +1261,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮אירופה‬";
         Text[ hindi ] = "यूरोप";
         Text[ slovak ] = "Európa";
+        Text[ hungarian ] = "Európa";
+        Text[ slovenian ] = "Evropa";
     };
     String STR_AUTO_ENTRY
     {
@@ -1228,6 +1292,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्वचालित प्रकार से";
         Text[ slovak ] = "Automaticky";
+        Text[ hungarian ] = "Automatikus";
+        Text[ slovenian ] = "Samodejno";
     };
 
     Text[ chinese_simplified ] = "数字格式";
@@ -1246,8 +1312,11 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ hebrew ] = "‮תבנית מספר‬";
     Text[ hindi ] = "संख्या रचना";
     Text[ slovak ] = "Formát čísla";
+    Text[ hungarian ] = "Számformátum";
+    Text[ slovenian ] = "Oblika številk";
 };
  // ********************************************************************** EOF
+
 
 
 
