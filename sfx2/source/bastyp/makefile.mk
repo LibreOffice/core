@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dv $ $Date: 2001-07-02 11:49:55 $
+#   last change: $Author: obo $ $Date: 2001-07-03 14:05:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,8 +103,6 @@ SRCFILES =\
 
 EXCEPTIONSFILES =\
     $(SLO)$/propset.obj		\
-    $(SLO)$/streams.obj		\
-    $(SLO)$/downimpl.obj	\
     $(SLO)$/helper.obj
 
 # --- Targets -------------------------------------------------------
