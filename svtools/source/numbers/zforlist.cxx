@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: er $ $Date: 2001-10-04 08:43:30 $
+ *  last change: $Author: er $ $Date: 2001-11-14 14:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3315,7 +3315,8 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( BOOL & bFoundBank,
             return pFoundEntry;
     }
 
-    // then try without language/country
+    // then try without language/country if no extension specified
+    if ( !nExtLen )
     {
         const NfCurrencyEntryPtr* ppData = rTable.GetData();
         for ( USHORT j = 0; j < nCount && bCont; j++, ppData++ )
