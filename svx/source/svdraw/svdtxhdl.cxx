@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-18 14:50:39 $
+ *  last change: $Author: aw $ $Date: 2001-11-29 15:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,10 +131,17 @@ void ImpTextPortionHandler::ConvertToPathObj(SdrObjGroup& rGroup, FASTBOOL bPoly
     rOutliner.StripPortions();
     rOutliner.SetDrawPortionHdl(Link());
     rOutliner.Clear();
-    if (bFitToSize) {
+
+    if(bFitToSize)
+    {
         Fraction nX(aAnchorRect.Right()-aAnchorRect.Left(),aTextRect.Right()-aTextRect.Left());
         Fraction nY(aAnchorRect.Bottom()-aAnchorRect.Top(),aTextRect.Bottom()-aTextRect.Top());
-        pGroup->NbcResize(aAnchorRect.TopLeft(),nX,nY);
+
+        // #95395# scale from top-right when vertical text
+        if(rOutliner.IsVertical())
+            pGroup->NbcResize(aAnchorRect.TopRight(),nX,nY);
+        else
+            pGroup->NbcResize(aAnchorRect.TopLeft(),nX,nY);
     }
     if (rTextObj.aGeo.nDrehWink!=0) { // #35825# Rotieren erst nach Resize (wg. FitToSize)
         pGroup->NbcRotate(aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nDrehWink,rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
