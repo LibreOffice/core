@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:33:46 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,6 @@ SwBookmark& SwDoc::GetBookmark(USHORT nPos, BOOL bBkmrk)
 {
     if( bBkmrk )
     {
-        USHORT nCount = pBookmarkTbl->Count();
         USHORT i = 0;
         do {
             if(!(*pBookmarkTbl)[i]->IsBookMark())
@@ -484,7 +483,6 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
     for( nCnt = 0; nCnt < rTbl.Count(); ++nCnt )
     {
         // liegt auf der Position ??
-        int eType = BKMK_POS_NONE;
         SwRedline* pRedl = rTbl[ nCnt ];
 
         SwPosition *pRStt = &pRedl->GetBound(TRUE),
