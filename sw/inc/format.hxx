@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:57:20 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,13 @@
 #ifndef _FORMAT_HXX
 #define _FORMAT_HXX
 
-
 #ifndef  _SOLAR_H
 #include <tools/solar.h>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>       // fuer ASSERT
 #endif
@@ -143,11 +145,11 @@ public:
                                         BOOL bInParents = TRUE ) const;
     inline SfxItemState GetItemState( USHORT nWhich, BOOL bSrchInParent = TRUE,
                                     const SfxPoolItem **ppItem = 0 ) const;
-    BOOL SetAttr( const SfxPoolItem& );
-    BOOL SetAttr( const SfxItemSet& rSet );
+    SW_DLLPUBLIC BOOL SetAttr( const SfxPoolItem& );
+    SW_DLLPUBLIC BOOL SetAttr( const SfxItemSet& rSet );
 
     // Nimmt den Hint mit nWhich aus dem Delta-Array
-    BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
+    SW_DLLPUBLIC BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
 
     // Nimmt alle Hints aus dem Delta-Array,
     // liefert die Anzahl der geloeschten Hints
