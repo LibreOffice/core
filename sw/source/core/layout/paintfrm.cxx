@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-06-21 07:39:45 $
+ *  last change: $Author: ama $ $Date: 2002-06-25 11:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2291,7 +2291,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     OutputDevice *pOut = pGlobalShell->GetOut();
 
     Color aShadowColor( rShadow.GetColor() );
-    if( aRegion.Count() &&
+    if( aRegion.Count() && pGlobalShell->GetWin() &&
         pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
         aShadowColor = pGlobalShell->GetWin()->GetSettings().
                        GetStyleSettings().GetFieldTextColor();
@@ -2335,7 +2335,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     BYTE nSubCol = ( IsCellFrm() || IsRowFrm() ) ? SUBCOL_TAB :
                    ( IsInSct() ? SUBCOL_SECT :
                    ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
-    if( pColor &&
+    if( pColor && pGlobalShell->GetWin() &&
         pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
         pColor = &pGlobalShell->GetWin()->GetSettings().GetStyleSettings().
                                                GetFieldTextColor();
