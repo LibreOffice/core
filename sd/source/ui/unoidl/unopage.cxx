@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-22 13:09:34 $
+ *  last change: $Author: cl $ $Date: 2001-03-26 16:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,8 @@ SfxItemPropertyMap aEmptyPropertyMap_Impl[] =
     {0,0,0,0,0}
 };
 
+UNO3_GETIMPLEMENTATION2_IMPL( SdGenericDrawPage, SvxFmDrawPage );
+
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
@@ -286,7 +288,8 @@ SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPa
         mpModel     ( _pModel ),
         maPropSet   ( (pInPage&& (pInPage->GetPageKind() != PK_STANDARD))?&pMap[1]:pMap ),
         SdUnoSearchReplaceShape(this),
-        mbHasBackgroundObject(sal_False)
+        mbHasBackgroundObject(sal_False),
+        mrBHelper( maMutex )
 {
     mxModel = (::cppu::OWeakObject*)(SvxDrawPage*)mpModel;
 }
@@ -391,6 +394,7 @@ uno::Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
     else QUERYINT( document::XLinkTargetSupplier );
     else QUERYINT( drawing::XShapeCombiner );
     else QUERYINT( drawing::XShapeBinder );
+    else QUERYINT( lang::XComponent );
     else
         return SvxDrawPage::queryInterface( rType );
 
@@ -1072,6 +1076,117 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
     }
 }
 
+// XInterface
+void SdGenericDrawPage::release() throw()
+{
+    uno::Reference< uno::XInterface > x( xDelegator );
+    if (! x.is())
+    {
+        if (osl_decrementInterlockedCount( &m_refCount ) == 0)
+        {
+            if (! mrBHelper.bDisposed)
+            {
+                uno::Reference< uno::XInterface > xHoldAlive( (uno::XWeak*)this );
+                // First dispose
+                try
+                {
+                    dispose();
+                }
+                catch(::com::sun::star::uno::Exception&)
+                {
+                    // release should not throw exceptions
+                }
+
+                // only the alive ref holds the object
+                OSL_ASSERT( m_refCount == 1 );
+                // destroy the object if xHoldAlive decrement the refcount to 0
+                return;
+            }
+        }
+        // restore the reference count
+        osl_incrementInterlockedCount( &m_refCount );
+    }
+    OWeakAggObject::release();
+}
+
+// XComponent
+void SdGenericDrawPage::disposing() throw()
+{
+    Invalidate();
+}
+
+// XComponent
+void SdGenericDrawPage::dispose()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    // An frequently programming error is to release the last
+    // reference to this object in the disposing message.
+    // Make it rubust, hold a self Reference.
+    uno::Reference< lang::XComponent > xSelf( this );
+
+    // Guard dispose against multible threading
+    // Remark: It is an error to call dispose more than once
+    sal_Bool bDoDispose = sal_False;
+    {
+    osl::MutexGuard aGuard( mrBHelper.rMutex );
+    if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
+    {
+        // only one call go into this section
+        mrBHelper.bInDispose = sal_True;
+        bDoDispose = sal_True;
+    }
+    }
+
+    // Do not hold the mutex because we are broadcasting
+    if( bDoDispose )
+    {
+        // Create an event with this as sender
+        try
+        {
+            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( (lang::XComponent *)this ) );
+            document::EventObject aEvt;
+            aEvt.Source = xSource;
+            // inform all listeners to release this object
+            // The listener container are automaticly cleared
+            mrBHelper.aLC.disposeAndClear( aEvt );
+            // notify subclasses to do their dispose
+            disposing();
+        }
+        catch(::com::sun::star::uno::Exception& e)
+        {
+            // catch exception and throw again but signal that
+            // the object was disposed. Dispose should be called
+            // only once.
+            mrBHelper.bDisposed = sal_True;
+            mrBHelper.bInDispose = sal_False;
+            throw e;
+        }
+
+        // the values bDispose and bInDisposing must set in this order.
+        // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
+        mrBHelper.bDisposed = sal_True;
+        mrBHelper.bInDispose = sal_False;
+    }
+    else
+    {
+        // in a multithreaded environment, it can't be avoided, that dispose is called twice.
+        // However this condition is traced, because it MAY indicate an error.
+        OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );
+    }
+}
+
+// XComponent
+void SAL_CALL SdGenericDrawPage::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    mrBHelper.addListener( ::getCppuType( &aListener ) , aListener );
+}
+
+// XComponent
+void SAL_CALL SdGenericDrawPage::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    mrBHelper.removeListener( ::getCppuType( &aListener ) , aListener );
+}
+
 //========================================================================
 // SdPageLinkTargets
 //========================================================================
@@ -1281,7 +1396,7 @@ uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExc
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        const sal_Int32 nOwnTypes = bPresPage ? 10 : 9;     // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = bPresPage ? 11 : 10;        // !DANGER! Keep this updated!
 
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -1295,6 +1410,7 @@ uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExc
         *pTypes++ = ITYPE(document::XLinkTargetSupplier);
         *pTypes++ = ITYPE( drawing::XShapeCombiner );
         *pTypes++ = ITYPE( drawing::XShapeBinder );
+        *pTypes++ = ITYPE( lang::XComponent );
 
         if( bPresPage )
             *pTypes++ = ITYPE(presentation::XPresentationPage);
