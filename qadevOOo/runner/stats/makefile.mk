@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Date: 2003-03-31 17:07:37 $
+#   last change: $Date: 2003-10-06 12:41:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,16 @@ TARGET = runner_stats
 JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
 
 JAVAFILES =	\
-            SimpleOutProducer.java	\
-            SimpleFileOutProducer.java	\
-            SimpleLogWriter.java    \
-            Summarizer.java \
+            DataBaseOutProducer.java        \
+            ComplexDataBaseOutProducer.java \
+            FatDataBaseOutProducer.java     \
+            FileLogWriter.java              \
+            OutProducerFactory.java         \
+            SQLExecution.java               \
+            SimpleOutProducer.java          \
+            SimpleFileOutProducer.java      \
+            SimpleLogWriter.java            \
+            Summarizer.java                 \
             InternalLogWriter.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
