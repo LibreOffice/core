@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:16:07 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ LayerMergeHandler::~LayerMergeHandler(  )
 void LayerMergeHandler::prepareLayer()
 {
     OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Previous layer or schema not terminated properly");
-    m_aLocale = localehelper:: getDefaultLocale();
+    m_aLocale = localehelper:: getDefaultLanguage();
     m_bSublayer = false;
 
     promoteToDefault(m_rData);
