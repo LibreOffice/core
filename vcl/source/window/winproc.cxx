@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:56:10 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,14 @@
 #endif
 #ifndef _INTN_HXX
 //#include <tools/intn.hxx>
+#endif
+
+#ifndef _VCL_I18NHELP_HXX
+#include <i18nhelp.hxx>
+#endif
+#include <unohelp.hxx>
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 #define private public
@@ -994,6 +1002,16 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
         }
         if( nVCLEvent && pSVData->mpApp->HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
             return 1;
+    }
+
+    // #i1820# use locale specific decimal separator
+    if( nCode == KEY_DECIMAL )
+    {
+        if( Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep() )
+        {
+            String aSep( pWindow->GetSettings().GetLocaleDataWrapper().getNumDecimalSep() );
+            nCharCode = (USHORT) aSep.GetChar(0);
+        }
     }
 
     BOOL bCtrlF6 = (aKeyCode.GetCode() == KEY_F6) && aKeyCode.IsMod1();
