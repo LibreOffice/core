@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:58:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,6 +548,7 @@ BOOL lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
         (*((String *) pArgs)) += lcl_dbg_out(*pNode);
         (*((String *) pArgs)) += String("\n", RTL_TEXTENCODING_ASCII_US);
     }
+
     return TRUE;
 }
 
