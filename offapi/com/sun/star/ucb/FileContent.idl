@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileContent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ module com { module sun { module star { module ucb {
 
     @see com::sun::star::ucb::FileContentProvider
 */
-service FileContent
+published service FileContent
 {
     //-------------------------------------------------------------------------
     /** This interface is implemented according to the specification of
