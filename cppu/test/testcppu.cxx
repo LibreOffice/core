@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-09 09:50:03 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 13:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include <stdio.h>
 
 #include <uno/environment.h>
 #include <uno/mapping.hxx>
@@ -836,20 +837,32 @@ static void testEnvironment(void)
     OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
     uno_getEnvironment( &pEnv, aUnoEnvTypeName.pData, 0 );
     (*pEnv->pExtEnv->getRegisteredInterfaces)( pEnv->pExtEnv, &ppInterfaces, &nLen, rtl_allocateMemory );
-    while (nLen--)
+    if (nLen)
     {
-        uno_Interface * pUnoI = (uno_Interface *)ppInterfaces[nLen];
-        (*pUnoI->release)( pUnoI );
+        OSL_TRACE( "### UNO interfaces left:\n" );
+        ::uno_dumpEnvironment( stderr, pEnv, 0 );
+
+        while (nLen--)
+        {
+            uno_Interface * pUnoI = (uno_Interface *)ppInterfaces[nLen];
+            (*pUnoI->release)( pUnoI );
+        }
     }
     rtl_freeMemory( ppInterfaces );
 
     OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
     uno_getEnvironment( &pEnv, aCppEnvTypeName.pData, 0 );
     (*pEnv->pExtEnv->getRegisteredInterfaces)( pEnv->pExtEnv, &ppInterfaces, &nLen, rtl_allocateMemory );
-    while (nLen--)
+    if (nLen)
     {
-        uno_Interface * pUnoI = (uno_Interface *)ppInterfaces[nLen];
-        (*pUnoI->release)( pUnoI );
+        OSL_TRACE( "### C++ interfaces left:\n" );
+        ::uno_dumpEnvironment( stderr, pEnv, 0 );
+
+        while (nLen--)
+        {
+            XInterface * p = (XInterface *)ppInterfaces[nLen];
+            p->release();
+        }
     }
     rtl_freeMemory( ppInterfaces );
     (*pEnv->release)( pEnv );
