@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityengine.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:54:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #ifndef _COM_SUN_STAR_XML_CRYPTO_SAX_XSAXEVENTKEEPER_HPP_
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
 #endif
-#ifndef _COM_SUN_STAR_XML_CRYPTO_XXMLSECURITYCONTEXT_HPP_
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#endif
 #ifndef _COM_SUN_STAR_XML_CRYPTO_XXMLSIGNATURE_HPP_
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #endif
@@ -115,9 +112,6 @@ class SecurityEngine : public cppu::WeakImplHelper3
 protected:
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > mxMSF;
-
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLSecurityContext > m_xXMLSecurityContext;
 
     /*
      * A SAXEventKeeper internally maintians all resources that a security
