@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
+ *  last change: $Author: as $ $Date: 2001-12-05 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+#include <com/sun/star/task/XJobExecutor.hpp>
+#endif
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
@@ -277,6 +280,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::task;
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
 
@@ -2053,41 +2057,15 @@ void Desktop::CloseStartupScreen()
 // ========================================================================
 void Desktop::DoFirstRunInitializations()
 {
-    // TODO: as soon as there's more to do than starting this one special pilot,
-    // we most probably should have a better concept for services to be invoked upon
-    // running the first time ....
-
-    // --------------------------------------------------------------------
-    // execute the auto pilot which registers the users address book as data source
-
-    if ( !Application::IsRemoteServer() )
-    {   // not in the WebTop, only for locally cached components and FAT office
-        // (only where the office runs on client-side - else the address data sources do not make any sense,
-        // as they're not able to access resources other than client-side ones)
-        // This is a work around - as soon as 91602 is fixed, and the startup of this service is configured
-        // in the configuration (and not hard coded), the problem has to be solved, again.
-        // 93353 - 22.10.2001 - frank.schoenheit@sun.com
-        try
-        {
-            const ::rtl::OUString sAddressBookPilotServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AddressBookSourcePilot" );
-            // create the pilot's service
-            Reference< XInterface > xDialog = ::comphelper::getProcessServiceFactory()->createInstance( sAddressBookPilotServiceName );
-            if ( !xDialog.is() )
-            {
-                ShowServiceNotAvailableError( NULL, sAddressBookPilotServiceName, sal_True );
-            }
-            else
-            {
-                Reference< XExecutableDialog > xExecute( xDialog, UNO_QUERY );
-                OSL_ENSURE( xExecute.is(), "Desktop::DoFirstRunInitializations: missing an interface (XExecutableDialog)!" );
-                if ( xExecute.is() )
-                    xExecute->execute();
-            }
-        }
-        catch(const ::com::sun::star::uno::Exception&)
-        {
-            OSL_ENSURE( sal_False, "Desktop::DoFirstRunInitializations: caught an exception while executing the Address Book AutoPilot!" );
-        }
+    try
+    {
+        Reference< XJobExecutor > xExecutor( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.task.JobExecutor" ) ), UNO_QUERY );
+        if( xExecutor.is() )
+            xExecutor->trigger( ::rtl::OUString::createFromAscii("onFirstRunInitialization") );
+    }
+    catch(const ::com::sun::star::uno::Exception&)
+    {
+        OSL_ENSURE( sal_False, "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
     }
 }
 
