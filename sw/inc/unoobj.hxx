@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:39:53 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,8 +275,10 @@ SV_DECL_PTRARR(SwDependArr, SwDepend*, 2, 2);
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
 ::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
 
+// OD 2004-05-07 #i28701# - adjust 4th parameter
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
-                            SwDependArr& rFrameArr, BOOL bSort );
+                         SwDependArr& rFrameArr,
+                         const bool _bAtCharAnchoredObjs );
 
 /* -----------------29.04.98 07:35-------------------
  *
