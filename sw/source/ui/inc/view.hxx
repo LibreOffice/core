@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:32:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ class SwView: public SfxViewShell
     friend void lcl_SelectShellForDrop( SwView &rView );
 
     friend class TestTemplateItem;
+    friend class SwHHCWrapper;
     friend class SwSpellWrapper;
     friend class SwHyphWrapper;
     friend class SwView_Impl;
@@ -349,10 +350,16 @@ class SwView: public SfxViewShell
     void            HyphenateDrawText();
     void            StartThesaurus();
 
+    // text conversion
+    void            ConvertDocument( const String* pStr );
+    void            _ConvertDocument( const String* pStr );
+
+    // used for spell checking and text conversion
     void            SpellStart( SvxSpellArea eSpell, BOOL bStartDone,
-                                BOOL bEndDone );
+                                BOOL bEndDone, sal_Bool bIsConversion = sal_False );
+    void            SpellEnd( sal_Bool bIsConversion = sal_False );
+
     void            HyphStart( SvxSpellArea eSpell );
-    void            SpellEnd();
     void            _SpellDocument( const String* pStr, BOOL bAllRight );
     BOOL            CheckSpecialCntnt();
     void            SpellKontext(BOOL bOn = TRUE)
