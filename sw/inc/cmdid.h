@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:25:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_FORMAT_APPLY_HEAD3               (FN_FORMAT2 + 156)
 #define FN_FORMAT_APPLY_DEFAULT             (FN_FORMAT2 + 157)
 #define FN_FORMAT_APPLY_TEXTBODY            (FN_FORMAT2 + 158)
+#define FN_REMOVE_DIRECT_CHAR_FORMATS       (FN_FORMAT2 + 159)
 
 /*--------------------------------------------------------------------
     Bereich: Extras
