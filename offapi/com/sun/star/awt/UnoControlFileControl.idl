@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFileControl.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:55:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
     <p>A file control extends the <type>UnoControlEdit</type> with a file
     dialog.</p>
  */
-service UnoControlFileControl
+published service UnoControlFileControl
 {
     service com::sun::star::awt::UnoControlEdit;
 
