@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-10-26 14:20:25 $
+ *  last change: $Author: os $ $Date: 2001-10-30 14:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,8 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             if ( (GPOS_NONE == eOldPos) || !aLbSelect.IsVisible() )
             {
                 // Brush-Behandlung:
-                if ( rOldItem.GetColor() != aBgdColor || SFX_ITEM_AVAILABLE >= eOldItemState)
+                if ( rOldItem.GetColor() != aBgdColor ||
+                        (SFX_ITEM_AVAILABLE >= eOldItemState && !aBackgroundColorSet.IsNoSelection()))
                 {
                     bModified = TRUE;
                     rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
