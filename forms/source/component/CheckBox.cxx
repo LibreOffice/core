@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 18:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,10 +129,11 @@ InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServic
 
 //------------------------------------------------------------------
 OCheckBoxModel::OCheckBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                 :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_CONTROL_CHECKBOX, sal_False)
+                 :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_CONTROL_CHECKBOX, sal_False, sal_False)
                                     // use the old control name for compytibility reasons
                  ,OPropertyChangeListener(m_aMutex)
                  ,m_bInReset(sal_False)
+                 ,m_pAggregatePropertyMultiplexer(NULL)
 {
     m_nClassId = FormComponentType::CHECKBOX;
     m_nDefaultChecked = CB_NOCHECK;
@@ -141,10 +142,35 @@ OCheckBoxModel::OCheckBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
     increment(m_refCount);
     if (m_xAggregateSet.is())
     {
-        OPropertyChangeMultiplexer* pMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet);
-        pMultiplexer->addProperty(PROPERTY_STATE);
+        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
+        m_pAggregatePropertyMultiplexer->acquire();
+        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_STATE);
     }
     decrement(m_refCount);
+
+    doSetDelegator();
+}
+
+//------------------------------------------------------------------------------
+OCheckBoxModel::~OCheckBoxModel()
+{
+    doResetDelegator();
+
+    if (m_pAggregatePropertyMultiplexer)
+    {
+        m_pAggregatePropertyMultiplexer->dispose();
+        m_pAggregatePropertyMultiplexer->release();
+        m_pAggregatePropertyMultiplexer = NULL;
+    }
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OCheckBoxModel::disposing()
+{
+    if (m_pAggregatePropertyMultiplexer)
+        m_pAggregatePropertyMultiplexer->dispose();
+
+    OBoundControlModel::disposing();
 }
 
 //------------------------------------------------------------------------------

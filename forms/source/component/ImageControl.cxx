@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 08:56:12 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 18:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,11 +182,12 @@ Sequence<Type> OImageControlModel::_getTypes()
 DBG_NAME(OImageControlModel)
 //------------------------------------------------------------------
 OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False)
+                    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False, sal_False)
                                     // use the old control name for compytibility reasons
                     ,OPropertyChangeListener(m_aMutex)
                     ,m_pImageProducer(new ImageProducer)
                     ,m_bReadOnly(sal_False)
+                    ,m_pAggregatePropertyMultiplexer(NULL)
 {
     DBG_CTOR(OImageControlModel,NULL);
     m_nClassId = FormComponentType::IMAGECONTROL;
@@ -197,10 +198,13 @@ OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _r
     increment(m_refCount);
     if (m_xAggregateSet.is())
     {
-        OPropertyChangeMultiplexer* pMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet);
-        pMultiplexer->addProperty(PROPERTY_IMAGE_URL);
+        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
+        m_pAggregatePropertyMultiplexer->acquire();
+        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_IMAGE_URL);
     }
     decrement(m_refCount);
+
+    doSetDelegator();
 }
 
 //------------------------------------------------------------------
@@ -210,6 +214,15 @@ OImageControlModel::~OImageControlModel()
     {
         acquire();
         dispose();
+    }
+
+    doResetDelegator();
+
+    if (m_pAggregatePropertyMultiplexer)
+    {
+        m_pAggregatePropertyMultiplexer->dispose();
+        m_pAggregatePropertyMultiplexer->release();
+        m_pAggregatePropertyMultiplexer = NULL;
     }
 
     DBG_DTOR(OImageControlModel,NULL);
@@ -466,6 +479,9 @@ Any OImageControlModel::_getControlValue() const
 //------------------------------------------------------------------
 void OImageControlModel::disposing()
 {
+    if (m_pAggregatePropertyMultiplexer)
+        m_pAggregatePropertyMultiplexer->dispose();
+
     OBoundControlModel::disposing();
 
     Reference<XInputStream>  xInStream;

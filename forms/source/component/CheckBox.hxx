@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 18:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ class OCheckBoxModel    :public OBoundControlModel
     sal_Int16           m_nDefaultChecked;      // Soll beim Reset gecheckt werden ?
     sal_Bool            m_bInReset;
 
+    OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
+
 protected:
     sal_Int16   getState(const ::com::sun::star::uno::Any& rValue);
 
@@ -96,6 +98,7 @@ protected:
 
 public:
     OCheckBoxModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ~OCheckBoxModel();
 
     // XServiceInfo
     IMPLEMENTATION_NAME(OCheckBoxModel);
@@ -132,6 +135,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    virtual void SAL_CALL disposing();
 
 protected:
     virtual void        _reset();
