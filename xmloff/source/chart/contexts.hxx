@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contexts.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ public:
         sal_uInt16 nPrefix,
         const rtl::OUString& rLName );
     virtual ~SchXMLDocContext();
+
+    TYPEINFO();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
