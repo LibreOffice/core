@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 10:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,9 +141,9 @@ OTableFieldDescWin::~OTableFieldDescWin()
     m_pGenPage->Hide();
     m_pHeader->Hide();
 
-    delete m_pHelpBar;
     delete m_pGenPage;
     delete m_pHeader;
+    delete m_pHelpBar;
 }
 
 //------------------------------------------------------------------------------
