@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: as $ $Date: 2001-10-12 11:48:49 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 09:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1865,26 +1865,35 @@ void Desktop::DoFirstRunInitializations()
 
     // --------------------------------------------------------------------
     // execute the auto pilot which registers the users address book as data source
-    try
-    {
-        const ::rtl::OUString sAddressBookPilotServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AddressBookSourcePilot" );
-        // create the pilot's service
-        Reference< XInterface > xDialog = ::comphelper::getProcessServiceFactory()->createInstance( sAddressBookPilotServiceName );
-        if ( !xDialog.is() )
+
+    if ( !Application::IsRemoteServer() )
+    {   // not in the WebTop, only for locally cached components and FAT office
+        // (only where the office runs on client-side - else the address data sources do not make any sense,
+        // as they're not able to access resources other than client-side ones)
+        // This is a work around - as soon as 91602 is fixed, and the startup of this service is configured
+        // in the configuration (and not hard coded), the problem has to be solved, again.
+        // 93353 - 22.10.2001 - frank.schoenheit@sun.com
+        try
         {
-            ShowServiceNotAvailableError( NULL, sAddressBookPilotServiceName, sal_True );
+            const ::rtl::OUString sAddressBookPilotServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AddressBookSourcePilot" );
+            // create the pilot's service
+            Reference< XInterface > xDialog = ::comphelper::getProcessServiceFactory()->createInstance( sAddressBookPilotServiceName );
+            if ( !xDialog.is() )
+            {
+                ShowServiceNotAvailableError( NULL, sAddressBookPilotServiceName, sal_True );
+            }
+            else
+            {
+                Reference< XExecutableDialog > xExecute( xDialog, UNO_QUERY );
+                OSL_ENSURE( xExecute.is(), "Desktop::DoFirstRunInitializations: missing an interface (XExecutableDialog)!" );
+                if ( xExecute.is() )
+                    xExecute->execute();
+            }
         }
-        else
+        catch(const ::com::sun::star::uno::Exception&)
         {
-            Reference< XExecutableDialog > xExecute( xDialog, UNO_QUERY );
-            OSL_ENSURE( xExecute.is(), "Desktop::DoFirstRunInitializations: missing an interface (XExecutableDialog)!" );
-            if ( xExecute.is() )
-                xExecute->execute();
+            OSL_ENSURE( sal_False, "Desktop::DoFirstRunInitializations: caught an exception while executing the Address Book AutoPilot!" );
         }
-    }
-    catch(const ::com::sun::star::uno::Exception&)
-    {
-        OSL_ENSURE( sal_False, "Desktop::DoFirstRunInitializations: caught an exception while executing the Address Book AutoPilot!" );
     }
 }
 
