@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:48:32 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 16:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ _Optlink
 #endif
     PropertyInfoCompare(const void* pFirst, const void* pSecond)
 {
-    return reinterpret_cast<const FmPropertyInfo*>(pFirst)->aName.CompareTo(reinterpret_cast<const FmPropertyInfo*>(pSecond)->aName);
+    return reinterpret_cast<const FmPropertyInfo*>(pFirst)->aName.compareTo(reinterpret_cast<const FmPropertyInfo*>(pSecond)->aName);
 }
 
 namespace svxform
@@ -508,18 +508,18 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
 }
 
 //------------------------------------------------------------------
-FmPropertyInfo::FmPropertyInfo(const UniString& _rName, sal_Int32 _nId, sal_Bool bMSel,
-                               const UniString& aString, sal_uInt16 nP, sal_uInt32 nHid)
+FmPropertyInfo::FmPropertyInfo(const ::rtl::OUString& _rName, sal_Int32 _nId, sal_Bool bMSel,
+                               const ::rtl::OUString& aString, sal_uInt16 nP, sal_uInt32 nHid)
 
                :aName(_rName),nId(_nId),bMultiSelectable(bMSel),
                 aTranslation(aString),nPos(nP),nHelpId(nHid)
 {}
 
 //------------------------------------------------------------------
-UniString FmPropertyInfoService::getPropertyTranslation(sal_Int32 _nId)
+::rtl::OUString FmPropertyInfoService::getPropertyTranslation(sal_Int32 _nId)
 {
     const FmPropertyInfo* pInfo = getPropertyInfo(_nId);
-    return (pInfo) ? pInfo->aTranslation : UniString();
+    return (pInfo) ? pInfo->aTranslation : ::rtl::OUString();
 }
 
 //------------------------------------------------------------------
@@ -530,7 +530,7 @@ sal_uInt32 FmPropertyInfoService::getPropertyHelpId(sal_Int32 _nId)
 }
 
 //------------------------------------------------------------------
-sal_Int32 FmPropertyInfoService::getPropertyId(const UniString& _rName)
+sal_Int32 FmPropertyInfoService::getPropertyId(const ::rtl::OUString& _rName)
 {
     const FmPropertyInfo* pInfo = getPropertyInfo(_rName);
     return pInfo ? pInfo->nId : -1;
@@ -551,12 +551,12 @@ sal_Bool FmPropertyInfoService::getPropertyMultiFlag(sal_Int32 _nId)
 }
 
 //------------------------------------------------------------------------
-const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo(const UniString& _rName)
+const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo(const ::rtl::OUString& _rName)
 {
     // intialisierung
     if(!pPropertyInfos)
         getPropertyInfo();
-    FmPropertyInfo  aSearch(_rName, 0L, sal_False,UniString(),0);
+    FmPropertyInfo  aSearch(_rName, 0L, sal_False,::rtl::OUString(),0);
 
     const FmPropertyInfo* pPropInfo = (FmPropertyInfo*) bsearch(&aSearch,
                                     (void*) pPropertyInfos,
