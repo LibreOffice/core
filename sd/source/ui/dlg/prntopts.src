@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:15:38 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ russian ] = "Ξςςενκθ ρεπξγξ";
         Text[ polish ] = "Odcienie szaroci";
         Text[ japanese ] = "ΈήΪ°½Ή°Ω";
-        Text[ chinese_traditional ] = "¦Η¦β―Ε";
+        Text[ chinese_traditional ] = "¦Η¶¥";
         Text[ arabic ] = "ΟΡΜΗΚ ΗαΡγΗΟν";
         Text[ greek ] = "Διαβάθμιση του γκρι";
         Text[ korean ] = "ΘΈ»φΑ¶";
@@ -373,7 +373,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ russian ] = "Κΰχερςβξ οεχΰςθ";
         Text[ polish ] = "Jakoζ wyjciowa";
         Text[ japanese ] = "σό‰ζ‘•iΏ";
-        Text[ chinese_traditional ] = "¦C¦L½θ¶q";
+        Text[ chinese_traditional ] = "¦C¦L«~½θ";
         Text[ arabic ] = "ΗαδζΪνΙ";
         Text[ greek ] = "Ποιότητα εξαγωγής";
         Text[ korean ] = "Γϊ·ΒΐΗ Αϊ";
@@ -570,7 +570,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ russian ] = "Οπθμεχΰνθÿ";
         Text[ polish ] = "Notatki";
         Text[ japanese ] = "Ι°Δ(~N)";
-        Text[ chinese_traditional ] = "³Ζª`(~N)";
+        Text[ chinese_traditional ] = "³Ζµω(~N)";
         Text[ arabic ] = "ΗαγαΗΝΩΗΚ";
         Text[ greek ] = "Σημειώσεις";
         Text[ korean ] = "ΈήΈπ";
