@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:40:35 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,10 +153,10 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ english_us ] = "~User-defined" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ΚΉΣΓΥίΧΤΙθ(~U)";
-        Text[ russian ] = "Ηΰδΰνξ οξλόηξβΰςελεμ";
+        Text[ russian ] = "Ξοπεδελÿεμϋι οξλόηξβΰςελεμ";
         Text[ polish ] = "Zdefinowany przez uΏytkownika";
         Text[ japanese ] = "Υ°»ή°’θ‹`(~U)";
-        Text[ chinese_traditional ] = "¦Ϋ³](~U)";
+        Text[ chinese_traditional ] = "¨Ο¥ΞªΜ¦Ϋ­q(~U)";
         Text[ arabic ] = "γΪΡέ γδ ήΘα ΗαγΣΚΞΟγ";
         Text[ greek ] = "Οριζόμενο από τον χρήστη";
         Text[ korean ] = "»ηΏλΐΪ Α¤ΐΗ(~U)";
@@ -510,7 +510,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ ENGLISH ] = "Show elements without data" ;
         TabStop = TRUE ;
         Text[ english_us ] = "Show ~elements without data";
-        Text[ portuguese ] = "Mostrar ~elementos sem data";
+        Text[ portuguese ] = "Mostrar ~elementos sem dados";
         Text[ russian ] = "Οξκΰηΰςό ύλεμενςϋ αεη δΰννϋυ";
         Text[ greek ] = "Εμφάνιση στοιχείων δίχως δεδομένα";
         Text[ dutch ] = "~Elementen weergeven zonder gegevens";
