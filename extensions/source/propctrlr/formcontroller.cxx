@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:12:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,6 +1032,9 @@ class EventsNameReplace_Impl:
             }
             // additional info about what happended
             String sInfo( ModuleRes( RID_STR_UNABLETOCONNECT ) );
+            INetURLObject aParser( sDataSourceName );
+            if ( aParser.GetProtocol() != INET_PROT_NOT_VALID )
+                sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
             sInfo.SearchAndReplaceAllAscii( "$name$", sDataSourceName );
 
             SQLContext aContext;
@@ -3561,10 +3564,13 @@ class EventsNameReplace_Impl:
 
         case PROPERTY_ID_DETAILFIELDS:
         {
+            Reference< XConnection > xDummyConn;
+            bool bAllowEmptyDS = ::dbtools::isEmbeddedInDatabase( m_xObjectParent, xDummyConn );
+
             // both our current form, and it's parent form, need to have a valid
             // data source signature
-            bIsEnabled = hasValidDataSourceSignature( Reference< XForm >( m_xIntrospecteeAsProperty, UNO_QUERY ) )
-                      && hasValidDataSourceSignature( Reference< XForm >( m_xObjectParent,           UNO_QUERY ) );
+            bIsEnabled = hasValidDataSourceSignature( Reference< XForm >( m_xIntrospecteeAsProperty, UNO_QUERY ), bAllowEmptyDS )
+                      && hasValidDataSourceSignature( Reference< XForm >( m_xObjectParent,           UNO_QUERY ), bAllowEmptyDS );
 
             // in opposite to the other properties, here in real *two* properties are
             // affected
@@ -3577,9 +3583,12 @@ class EventsNameReplace_Impl:
         case PROPERTY_ID_SORT:
         case PROPERTY_ID_FILTER:
         {
+            Reference< XConnection > xDummyConn;
+            bool bAllowEmptyDS = ::dbtools::isEmbeddedInDatabase( m_xObjectParent, xDummyConn );
+
             sal_Bool  bBoolValue( sal_False );
             GetAnyPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bBoolValue;
-            bIsEnabled = hasValidDataSourceSignature( Reference< XForm >( m_xIntrospecteeAsProperty, UNO_QUERY ) )
+            bIsEnabled = hasValidDataSourceSignature( Reference< XForm >( m_xIntrospecteeAsProperty, UNO_QUERY ), bAllowEmptyDS )
                       && bBoolValue;
 
             getPropertyBox()->EnablePropertyLine( _rPropertyName, bBoolValue );
@@ -3619,7 +3628,7 @@ class EventsNameReplace_Impl:
 
 
     //------------------------------------------------------------------------
-    bool OPropertyBrowserController::hasValidDataSourceSignature( const Reference< XForm >& _rxForm ) SAL_THROW(())
+    bool OPropertyBrowserController::hasValidDataSourceSignature( const Reference< XForm >& _rxForm, bool _bAllowEmptyDataSourceName ) SAL_THROW(())
     {
         Reference< XPropertySet > xProps( _rxForm, UNO_QUERY );
         DBG_ASSERT( xProps.is(), "OPropertyBrowserController::hasValidDataSourceSignature: invalid form!" );
@@ -3632,7 +3641,8 @@ class EventsNameReplace_Impl:
             ::rtl::OUString sPropertyValue;
             // first, we need the name of an existent data source
             xProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sPropertyValue;
-            bHas = ( sPropertyValue.getLength() != 0 );
+            bHas = ( sPropertyValue.getLength() != 0 ) || _bAllowEmptyDataSourceName;
+
             // then, the command should not be empty
             if ( bHas )
             {
