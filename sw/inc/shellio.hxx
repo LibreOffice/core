@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:05:44 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #include <sot/formats.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -116,7 +119,7 @@ struct Writer_Impl;
 #define MAX_ASCII_PARA 10000
 
 
-class SwAsciiOptions
+class SW_DLLPUBLIC SwAsciiOptions
 {
     String sFont;
     rtl_TextEncoding eCharSet;
@@ -384,7 +387,7 @@ public:
 
 class SwImpBlocks;
 
-class SwTextBlocks
+class SW_DLLPUBLIC SwTextBlocks
 {
     friend class Sw2TextBlocks;
     friend class Sw3IoImp;
@@ -441,10 +444,18 @@ public:
     void EndPutMuchBlockEntries();
 };
 
+// BEGIN source/filter/basflt/fltini.cxx
 
 extern void _InitFilter();
 extern void _FinitFilter();
+
 extern SwRead ReadRtf, ReadAscii, ReadSwg, ReadSw3, ReadHTML, ReadXML;
+
+SW_DLLPUBLIC SwRead SwGetReaderSw3();
+SW_DLLPUBLIC SwRead SwGetReaderXML();
+
+// END source/filter/basflt/fltini.cxx
+
 
 extern BOOL SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden shellio.cxx
 
@@ -704,26 +715,27 @@ public:
 // bekannt. Die UI-Seite benutzt die GetReader()/GetWriter() -Funktionen,
 // um die speziellen zu erhalten.
 
-extern sal_Char __FAR_DATA FILTER_SWG[];    // SWG-Filter
-extern sal_Char __FAR_DATA FILTER_RTF[];    // RTF-Filter
-extern sal_Char __FAR_DATA FILTER_TEXT[];   // Text-Filter mit Default-CodeSet
-extern sal_Char __FAR_DATA FILTER_BAS[];    // StarBasic (identisch mit ANSI)
-extern sal_Char __FAR_DATA FILTER_W4W[];    // W4W-Filter
-extern sal_Char __FAR_DATA FILTER_WW8[];    // WinWord 97-Filter
-extern sal_Char __FAR_DATA FILTER_SW3[];    // SW3-Storage Filter
-extern sal_Char __FAR_DATA FILTER_SW4[];    // SW4-Storage Filter
-extern sal_Char __FAR_DATA FILTER_SW4[];    // SW4-Storage Filter
-extern sal_Char __FAR_DATA FILTER_SW5[];    // SW5-Storage Filter
-extern sal_Char __FAR_DATA FILTER_SWGV[];   // SWG-Vorlagen Filter
-extern sal_Char __FAR_DATA FILTER_SW3V[];   // SW3-Storage Vorlagen Filter
-extern sal_Char __FAR_DATA FILTER_SW4V[];   // SW4-Storage Vorlagen Filter
-extern sal_Char __FAR_DATA FILTER_SW5V[];   // SW5-Storage Vorlagen Filter
-extern sal_Char __FAR_DATA FILTER_SWW4V[];  // SW/Web Storage Vorlagen Filter
-extern sal_Char __FAR_DATA FILTER_SWW5V[];  // SW/Web Storage Vorlagen Filter
-extern sal_Char __FAR_DATA FILTER_TEXT_DLG[];   // text filter with encoding dialog
-extern sal_Char __FAR_DATA FILTER_XML[];    // XML filter
-extern sal_Char __FAR_DATA FILTER_XMLV[];   // XML filter
-extern sal_Char __FAR_DATA FILTER_XMLVW[];  // XML filter
+extern const sal_Char __FAR_DATA FILTER_SWG[];  // SWG-Filter
+extern const sal_Char __FAR_DATA FILTER_RTF[];  // RTF-Filter
+extern const sal_Char __FAR_DATA FILTER_TEXT[]; // Text-Filter mit Default-CodeSet
+extern const sal_Char __FAR_DATA FILTER_BAS[];  // StarBasic (identisch mit ANSI)
+extern const sal_Char __FAR_DATA FILTER_W4W[];  // W4W-Filter
+extern const sal_Char __FAR_DATA FILTER_WW8[];  // WinWord 97-Filter
+extern const sal_Char __FAR_DATA FILTER_SW3[];  // SW3-Storage Filter
+extern const sal_Char __FAR_DATA FILTER_SW4[];  // SW4-Storage Filter
+extern const sal_Char __FAR_DATA FILTER_SW4[];  // SW4-Storage Filter
+extern const sal_Char __FAR_DATA FILTER_SW5[];  // SW5-Storage Filter
+extern const sal_Char __FAR_DATA FILTER_SWGV[]; // SWG-Vorlagen Filter
+extern const sal_Char __FAR_DATA FILTER_SW3V[]; // SW3-Storage Vorlagen Filter
+extern const sal_Char __FAR_DATA FILTER_SW4V[]; // SW4-Storage Vorlagen Filter
+extern const sal_Char __FAR_DATA FILTER_SW5V[]; // SW5-Storage Vorlagen Filter
+extern const sal_Char __FAR_DATA FILTER_SWW4V[];    // SW/Web Storage Vorlagen Filter
+extern const sal_Char __FAR_DATA FILTER_SWW5V[];    // SW/Web Storage Vorlagen Filter
+extern const sal_Char __FAR_DATA FILTER_TEXT_DLG[]; // text filter with encoding dialog
+extern const sal_Char __FAR_DATA FILTER_XML[];  // XML filter
+extern const sal_Char __FAR_DATA FILTER_XMLV[]; // XML filter
+extern const sal_Char __FAR_DATA FILTER_XMLVW[];    // XML filter
 
+SW_DLLPUBLIC const sal_Char * SwGetFILTER_WW8();    // WinWord 97-Filter
 
 #endif
