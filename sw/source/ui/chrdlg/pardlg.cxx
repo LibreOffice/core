@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pardlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:16:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,8 @@
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
+
+#include <svx/htmlcfg.hxx>
 
 #ifndef _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSISORTDTOR
@@ -151,7 +147,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     AddTabPage(TP_PARA_STD,  SvxStdParagraphTabPage::Create,SvxStdParagraphTabPage::GetRanges);
     AddTabPage(TP_PARA_ALIGN,  SvxParaAlignTabPage::Create,SvxParaAlignTabPage::GetRanges);
 
-    OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     if (!bDrawParaDlg && (!bHtmlMode || pHtmlOpt->IsPrintLayoutExtension()))
         AddTabPage(TP_PARA_EXT,  SvxExtParagraphTabPage::Create,SvxExtParagraphTabPage::GetRanges);
     else
