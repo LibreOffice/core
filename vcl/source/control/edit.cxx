@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:22:03 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,18 @@ void Edit::ImplInitData()
 
 // -----------------------------------------------------------------------
 
+bool Edit::ImplUseNativeBorder( WinBits nStyle )
+{
+    bool bRet = IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE)
+                && ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
+    if( bRet && mbIsSubEdit )
+    {
+        nStyle = GetParent()->GetStyle();
+        bRet = ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
+    }
+    return bRet;
+}
+
 void Edit::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
@@ -390,7 +402,7 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
         mnAlign = EDIT_ALIGN_CENTER;
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if ( IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE) )
+    if ( ImplUseNativeBorder(nStyle) )
     {
         SetBackground();
         SetFillColor();
@@ -472,7 +484,7 @@ void Edit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
 
     if ( bBackground )
     {
-        if ( IsNativeControlSupported( ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE ) )
+        if ( ImplUseNativeBorder( GetStyle() ) )
         {
             // Transparent background
             SetBackground();
@@ -585,7 +597,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         SetTextColor( rStyleSettings.GetDisableColor() );
 
     // Set background color of the normal text
-    if ( IsNativeControlSupported( ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE ) )
+    if ( ImplUseNativeBorder( GetStyle() ) )
         SetTextFillColor();
     else
         SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
@@ -634,7 +646,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         SetClipRegion( aNormalClipRegion );
 
         // Set background color when part of the text is selected
-        if ( IsNativeControlSupported( ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE ) )
+        if ( ImplUseNativeBorder( GetStyle() ) )
             SetTextFillColor();
         else
             SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
@@ -935,7 +947,7 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
     if ( pCursor )
         pCursor->Hide();
 
-    if ( IsNativeControlSupported( ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE ) )
+    if ( ImplUseNativeBorder( GetStyle() ) )
     {
         // draw the inner part by painting the whole control using its border window
         Window *pControl = this;
