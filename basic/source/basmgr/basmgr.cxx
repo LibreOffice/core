@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-20 17:39:32 $
+ *  last change: $Author: ab $ $Date: 2001-11-22 13:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,10 @@ static const char* szImbedded = "LIBIMBEDDED";
 static const char* szCryptingKey = "CryptedBasic";
 static const char* szScriptLanguage = "StarBasic";
 
+static const String BasicStreamName( String::CreateFromAscii(szBasicStorage) );
+static const String ManagerStreamName( String::CreateFromAscii(szManagerStream) );
+
+
 #define DEFINE_CONST_UNICODE(CONSTASCII)    UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 
 
@@ -163,6 +167,40 @@ StreamMode eStorageReadMode = STREAM_READ | STREAM_SHARE_DENYWRITE;
 DECLARE_LIST( BasErrorLst, BasicError* );
 
 
+//----------------------------------------------------------------------------
+// BasicManager impl data
+struct BasicManagerImpl
+{
+    LibraryContainerInfo* mpInfo;
+
+    // Save stream data
+    SvMemoryStream*  mpManagerStream;
+    SvMemoryStream** mppLibStreams;
+    sal_Int32        mnLibStreamCount;
+    sal_Bool         mbModifiedByLibraryContainer;
+    sal_Bool         mbError;
+
+    BasicManagerImpl( void )
+        : mpInfo( NULL )
+        , mpManagerStream( NULL )
+        , mppLibStreams( NULL )
+        , mnLibStreamCount( 0 )
+        , mbModifiedByLibraryContainer( sal_False )
+        , mbError( sal_False )
+    {}
+    ~BasicManagerImpl();
+};
+
+BasicManagerImpl::~BasicManagerImpl()
+{
+    delete mpManagerStream;
+    if( mppLibStreams )
+    {
+        for( sal_Int32 i = 0 ; i < mnLibStreamCount ; i++ )
+            delete mppLibStreams[i];
+        delete mppLibStreams;
+    }
+}
 
 //============================================================================
 // BasMgrContainerListenerImpl
@@ -228,9 +266,6 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const Reference< XLibraryCo
         xLibContainer->addContainerListener( xLibraryListener );
     }
 
-    // HACK: Load every lib (problem with TreeListBox)
-    // xScriptCont->loadLibrary( aLibName );
-
     if( xScriptCont->isLibraryLoaded( aLibName ) )
     {
         addLibraryModulesImpl( pMgr, xLibNameAccess, aLibName );
@@ -265,7 +300,6 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
 
 
 
-
 // XEventListener
 //----------------------------------------------------------------------------
 
@@ -283,6 +317,8 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
     sal_Bool bLibContainer = ( maLibName.getLength() == 0 );
     OUString aName;
     Event.Accessor >>= aName;
+
+    mpMgr->mpImpl->mbModifiedByLibraryContainer = sal_True;
 
     if( bLibContainer )
     {
@@ -317,6 +353,8 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const ContainerEvent
     OUString aName;
     Event.Accessor >>= aName;
 
+    mpMgr->mpImpl->mbModifiedByLibraryContainer = sal_True;
+
     // Replace not possible for library container
     sal_Bool bLibContainer = ( maLibName.getLength() == 0 );
     DBG_ASSERT( !bLibContainer, "library container fired elementReplaced()");
@@ -343,6 +381,8 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const ContainerEvent&
 {
     OUString aName;
     Event.Accessor >>= aName;
+
+    mpMgr->mpImpl->mbModifiedByLibraryContainer = sal_True;
 
     sal_Bool bLibContainer = ( maLibName.getLength() == 0 );
     if( bLibContainer )
@@ -674,7 +714,7 @@ BasicManager::BasicManager( SotStorage& rStorage, StarBASIC* pParentFromStdLib, 
 
     // Wenn es den Manager-Stream nicht gibt, sind keine weiteren
     // Aktionen noetig.
-    if ( rStorage.IsStream( String::CreateFromAscii(szManagerStream) ) )
+    if ( rStorage.IsStream( ManagerStreamName ) )
     {
         LoadBasicManager( rStorage );
         // StdLib erhaelt gewuenschten Parent:
@@ -711,6 +751,31 @@ BasicManager::BasicManager( SotStorage& rStorage, StarBASIC* pParentFromStdLib, 
             // Durch das Insert modified:
             pStdLib->SetModified( FALSE );
         }
+
+        // #91626 Save all stream data to save it unmodified if basic isn't modified
+        // in an 6.0+ office. So also the old basic dialogs can be saved.
+        SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
+            ( ManagerStreamName, eStreamReadMode );
+        mpImpl->mpManagerStream = new SvMemoryStream();
+        *static_cast<SvStream*>(&xManagerStream) >> *mpImpl->mpManagerStream;
+
+        SotStorageRef xBasicStorage = rStorage.OpenSotStorage
+                                ( BasicStreamName, eStorageReadMode, FALSE );
+        if( xBasicStorage.Is() && !xBasicStorage->GetError() )
+        {
+            USHORT nLibs = GetLibCount();
+            mpImpl->mppLibStreams = new SvMemoryStream*[ nLibs ];
+            for( USHORT nL = 0; nL < nLibs; nL++ )
+            {
+                BasicLibInfo* pInfo = pLibs->GetObject( nL );
+                DBG_ASSERT( pInfo, "pInfo?!" );
+                SotStorageStreamRef xBasicStream = xBasicStorage->OpenSotStream( pInfo->GetLibName(), eStreamReadMode );
+                mpImpl->mppLibStreams[nL] = new SvMemoryStream();
+                *static_cast<SvStream*>(&xBasicStream) >> *( mpImpl->mppLibStreams[nL] );
+            }
+        }
+        else
+            mpImpl->mbError = sal_True;
     }
     else
     {
@@ -721,16 +786,6 @@ BasicManager::BasicManager( SotStorage& rStorage, StarBASIC* pParentFromStdLib, 
 
     bBasMgrModified = FALSE;
 }
-
-
-struct BasicManagerImpl
-{
-    LibraryContainerInfo* mpInfo;
-
-    BasicManagerImpl( void )
-        : mpInfo( NULL )
-    {}
-};
 
 
 void copyToLibraryContainer( StarBASIC* pBasic, LibraryContainerInfo* pInfo )
@@ -831,6 +886,8 @@ void BasicManager::SetLibraryContainerInfo( LibraryContainerInfo* pInfo )
                     }
                 }
             }
+
+            mpImpl->mbModifiedByLibraryContainer = sal_False;
         }
     }
 }
@@ -868,7 +925,7 @@ BasicManager::BasicManager()
 
 BOOL BasicManager::HasBasicManager( const SotStorage& rStorage )
 {
-    return rStorage.IsStream( String::CreateFromAscii(szManagerStream) );
+    return rStorage.IsStream( ManagerStreamName );
 }
 
 void BasicManager::ImpMgrNotLoaded( const String& rStorageName )
@@ -909,7 +966,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, BOOL bLoadLibs )
 //  StreamMode eStreamMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE;
 
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
-        ( String::CreateFromAscii(szManagerStream), eStreamReadMode );
+        ( ManagerStreamName, eStreamReadMode );
 
     String aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -1132,9 +1189,9 @@ BOOL BasicManager::CopyBasicData( SotStorage* pStorFrom, const String& rSourceUR
     // bei remote Dokumenten identische Storage
     if ( pStorFrom != pStorTo )
     {
-        if( pStorFrom->IsStorage( String::CreateFromAscii(szBasicStorage) ) )
-            bOk = pStorFrom->CopyTo( String::CreateFromAscii(szBasicStorage), pStorTo, String::CreateFromAscii(szBasicStorage) );
-        if( bOk && pStorFrom->IsStream( String::CreateFromAscii(szManagerStream) ) )
+        if( pStorFrom->IsStorage( BasicStreamName ) )
+            bOk = pStorFrom->CopyTo( BasicStreamName, pStorTo, BasicStreamName );
+        if( bOk && pStorFrom->IsStream( ManagerStreamName ) )
         {
             // bOk = pStorFrom->CopyTo( szManagerStream, pStorTo, szManagerStream );
             BasicManager aBasMgr;
@@ -1198,7 +1255,7 @@ void BasicManager::Store( SotStorage& rStorage )
 void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
 {
     // #91626
-    sal_Bool bModified = IsModified();
+    sal_Bool bModified = mpImpl->mbModifiedByLibraryContainer || mpImpl->mbError;
 
     // #92172 Password handling
     OldBasicPassword* pOldBasicPassword = mpImpl->mpInfo->mpOldBasicPassword;
@@ -1264,15 +1321,41 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
         }
         else
         {
+            if( pInfo->GetPassword().Len() != 0 )
+                bModified = sal_True;
             pInfo->SetPassword( aPassword );
         }
     }
 
     // #91626
-    if( !bModified )
+    if( !bModified && bStoreLibs )
     {
-        // TODO: Store saved streams
-        // return;
+        // Store saved streams
+        SotStorageStreamRef xManagerStream = rStorage.OpenSotStream(
+            ManagerStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+            //ManagerStreamName, STREAM_STD_READWRITE /* | STREAM_TRUNC */ );
+        // STREAM_TRUNC buggy??!!! Then
+        // xManagerStream->Seek( 0 );
+        mpImpl->mpManagerStream->Seek( 0 );
+        *static_cast<SvStream*>(&xManagerStream) << *mpImpl->mpManagerStream;
+
+        SotStorageRef xBasicStorage = rStorage.OpenSotStorage
+                                ( BasicStreamName, STREAM_STD_READWRITE, FALSE );
+
+        if ( xBasicStorage.Is() && !xBasicStorage->GetError() )
+        {
+            for( USHORT nL = 0; nL < nLibs; nL++ )
+            {
+                BasicLibInfo* pInfo = pLibs->GetObject( nL );
+                DBG_ASSERT( pInfo, "pInfo?!" );
+                SotStorageStreamRef xBasicStream = xBasicStorage->OpenSotStream( pInfo->GetLibName(), STREAM_STD_READWRITE );
+                mpImpl->mppLibStreams[nL]->Seek( 0 );
+                *static_cast<SvStream*>(&xBasicStream) << *( mpImpl->mppLibStreams[nL] );
+            }
+
+            xBasicStorage->Commit();
+        }
+        return;
     }
 
 
@@ -1280,10 +1363,10 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
     // Neue Bibliotheken sind nicht unbedingt modified, muessen aber trotzdem
     // gespeichert werden.
     BOOL bStoreAll = FALSE;
-    if ( bStoreLibs && !rStorage.IsStorage( String::CreateFromAscii(szBasicStorage) ) )
+    if ( bStoreLibs && !rStorage.IsStorage( BasicStreamName ) )
         bStoreAll = TRUE;
 
-    SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( String::CreateFromAscii(szManagerStream), STREAM_STD_READWRITE /* | STREAM_TRUNC */ );
+    SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( ManagerStreamName, STREAM_STD_READWRITE /* | STREAM_TRUNC */ );
     // Assertion, weil es eigentlich nie vorkommen darf.
     DBG_ASSERT( xManagerStream.Is(), "Kein ManagerStream!");
 
@@ -1400,7 +1483,7 @@ BOOL BasicManager::ImpStoreLibary( StarBASIC* pLib, SotStorage& rStorage ) const
     DBG_ASSERT( pLib, "pLib = 0 (ImpStorageLibary)" );
 
     SotStorageRef xBasicStorage = rStorage.OpenSotStorage
-                            ( String::CreateFromAscii(szBasicStorage), STREAM_STD_READWRITE, FALSE );
+                            ( BasicStreamName, STREAM_STD_READWRITE, FALSE );
 
     String aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -1500,7 +1583,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
         xStorage = new SotStorage( FALSE, aStorageName, eStorageReadMode );
 
     SotStorageRef xBasicStorage = xStorage->OpenSotStorage
-                            ( String::CreateFromAscii(szBasicStorage), eStorageReadMode, FALSE );
+                            ( BasicStreamName, eStorageReadMode, FALSE );
 
     if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
     {
@@ -1811,10 +1894,10 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
         else
             xStorage = new SotStorage( FALSE, pLibInfo->GetStorageName() );
 
-        if ( xStorage->IsStorage( String::CreateFromAscii(szBasicStorage) ) )
+        if ( xStorage->IsStorage( BasicStreamName ) )
         {
             SotStorageRef xBasicStorage = xStorage->OpenSotStorage
-                            ( String::CreateFromAscii(szBasicStorage), STREAM_STD_READWRITE, FALSE );
+                            ( BasicStreamName, STREAM_STD_READWRITE, FALSE );
 
             if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
             {
@@ -1834,7 +1917,7 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
                 if ( !aInfoList.Count() )
                 {
                     xBasicStorage.Clear();
-                    xStorage->Remove( String::CreateFromAscii(szBasicStorage) );
+                    xStorage->Remove( BasicStreamName );
                     xStorage->Commit();
                     // Wenn kein weiterer Streams oder SubStorages vorhanden,
                     // dann auch den Storage loeschen.
