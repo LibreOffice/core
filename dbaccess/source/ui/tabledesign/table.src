@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-28 16:57:25 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 12:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2224,21 +2224,12 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text[ catalan ] = "No s'ha pogut modificar la columna \"\\$column\\$\". Voleu eliminar-la i adjuntar el nou format?";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message = "Es wurden alle Spalten der Tabelle gelöscht. Ohne Spalten kann eine Tabelle nicht bestehen, soll sie aus der Datenbank gelöscht werden?" ;
+    Message [ English ] = "All columns out of the table were deleted. Without columns a table can not exist. Should the table be deleted, too?" ;
+};
 
 
