@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:40:33 $
+ *  last change: $Author: nf $ $Date: 2001-03-19 09:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ TabDialog DLG_ATTR
         Text [ swedish ] = "Format" ;
         Text [ dutch ] = "Formaat" ;
         Text [ spanish ] = "Formato" ;
-        Text [ english_us ] = "Numbers" ;
+        Text [ english_us ] = "Format" ;
         Text[ chinese_simplified ] = "¸ñÊ½";
         Text[ russian ] = "Ôîğìàò";
         Text[ polish ] = "Format";
@@ -204,7 +204,7 @@ TabDialog DLG_ATTR
         Text [ dutch ] = "Uitlijning" ;
         Text [ spanish ] = "Alineación" ;
         Text [ english_us ] = "Alignment" ;
-        Text[ chinese_simplified ] = "¶¨Ïò";
+        Text[ chinese_simplified ] = "¶ÔÆë";
         Text[ russian ] = "Âûğàâíèâàíèå";
         Text[ polish ] = "Wyrównanie";
         Text[ japanese ] = "”z’u";
@@ -227,7 +227,7 @@ TabDialog DLG_ATTR
         Text [ danish ] = "Tabelformatering" ;
         Text [ portuguese_brazilian ] = "Tabellenformatierung" ;
         Text [ portuguese ] = "Formatar tabela" ;
-        Text[ chinese_simplified ] = "±íµ¥¸ñÊ½";
+        Text[ chinese_simplified ] = "±í¸ñ¸ñÊ½";
         Text[ russian ] = "Ôîğìàò òàáëèöû";
         Text[ polish ] = "Formatowanie tabeli";
         Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘®İ’è";
