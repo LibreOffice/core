@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-12 12:18:28 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 04:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include "miscuno.hxx"
 #include "forbiuno.hxx"
 #include "viewopti.hxx"
+#ifndef SC_SCDOCPOL_HXX
+#include "docpool.hxx"
+#endif
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -81,6 +84,12 @@
 #endif
 #ifndef _SFXDOCINF_HXX
 #include <sfx2/docinf.hxx>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -111,6 +120,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_RASTERSYNC),   0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_AUTOCALC),     0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_PRINTERNAME),  0,  &getCppuType((rtl::OUString*)0),    0},
+        {MAP_CHAR_LEN(SC_UNO_PRINTERSETUP), 0,  &getCppuType((rtl::OUString*)0),    0},
         {MAP_CHAR_LEN(SC_UNO_APPLYDOCINF),  0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
         {0,0,0,0}
@@ -218,6 +228,28 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 else
                     throw uno::RuntimeException();
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERSETUP ) == 0 )
+            {
+                rtl::OUString sValue;
+                if ( aValue >>= sValue )
+                {
+                    if (sValue.getLength())
+                    {
+                        uno::Sequence < sal_Int8 > aSequence;
+                        SvXMLUnitConverter::decodeBase64(aSequence, sValue);
+                        sal_uInt32 nSize = aSequence.getLength();
+                        SvMemoryStream aStream;
+                        aStream.Write ( aSequence.getArray(), nSize );
+                        aStream.Flush();
+                        aStream.Seek(STREAM_SEEK_TO_BEGIN);
+                        SfxItemSet* pSet = new SfxItemSet( *pDoc->GetPool(),
+                                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                                SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                                NULL );
+                        pDoc->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
+                    }
+                }
+            }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
                 pDocShell->GetDocInfo().SetUseUserData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_FORBIDDEN ) == 0 )
@@ -298,6 +330,21 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                     aRet <<= rtl::OUString ( pPrinter->GetName());
                 else
                     throw uno::RuntimeException();
+            }
+            else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERSETUP ) == 0 )
+            {
+                SfxPrinter *pPrinter = pDocShell->GetPrinter();
+                if (pPrinter)
+                {
+                    SvMemoryStream aStream;
+                    pPrinter->Store( aStream );
+                    sal_uInt32 nSize = aStream.GetSize();
+                    uno::Sequence < sal_Int8 > aSequence ( nSize );
+                    memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
+                    rtl::OUStringBuffer sBuffer;
+                    SvXMLUnitConverter::encodeBase64(sBuffer, aSequence);
+                    aRet <<= sBuffer.makeStringAndClear();
+                }
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsUseUserData() );
