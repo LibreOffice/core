@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:41:29 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifndef SVX_COMMON_LINGUI_HXX
 #define SVX_COMMON_LINGUI_HXX
@@ -123,7 +122,8 @@ public:
         eIgnore,
         eIgnoreAll,
         eChange,
-        eChangeAll
+        eChangeAll,
+        eOptions
     };
 
 protected:
@@ -139,6 +139,7 @@ protected:
     PushButton      aIgnoreAllBtn;
     PushButton      aChangeBtn;
     PushButton      aChangeAllBtn;
+    PushButton      aOptionsBtn;
 
     FixedInfo       aStatusText;
     HelpButton      aHelpBtn;
