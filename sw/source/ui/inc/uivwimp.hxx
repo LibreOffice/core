@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:49:15 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 15:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing(
-                    const ::com::sun::star::lang::EventObject& rEventObject );
+                    const ::com::sun::star::lang::EventObject& rEventObject ) throw(::com::sun::star::uno::RuntimeException);
 
     void ViewDestroyed() { pView = 0; }
 };

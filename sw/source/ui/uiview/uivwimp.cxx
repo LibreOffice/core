@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:48:15 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 15:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ SwScannerEventListener::~SwScannerEventListener()
 {
 }
 
-void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject )
+void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException)
 {
     if( pView )
         pView->ScannerEventHdl( rEventObject );
