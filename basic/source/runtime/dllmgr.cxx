@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: hjs $ $Date: 2000-11-06 13:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,19 +105,12 @@ typedef void* SbiDllProc;
 #include "dllmgr.hxx"
 #include <sberrors.hxx>
 
-#ifndef CDECL
+#ifndef WINAPI
 #ifdef WNT
-//#define CDECL __cdecl
-#define CDECL
-#else
-#ifdef WTC
-#define CDECL cdecl
+#define WINAPI __far __pascal
 #else
 #if defined(ICC) && defined(OS2)
-#define CDECL _System
-#else
-#define CDECL
-#endif
+#define WINAPI _System
 #endif
 #endif
 #endif
@@ -125,13 +118,13 @@ typedef void* SbiDllProc;
 extern "C" {
 #if defined(INTEL) && (defined(WIN) || defined(WNT) || defined(OS2))
 
-extern INT16 CDECL CallINT( SbiDllProc, char *stack, short nstack);
-extern INT32 CDECL CallLNG( SbiDllProc, char *stack, short nstack);
+extern INT16 WINAPI CallINT( SbiDllProc, char *stack, short nstack);
+extern INT32 WINAPI CallLNG( SbiDllProc, char *stack, short nstack);
 #ifndef WNT
-extern float CDECL CallSNG( SbiDllProc, char *stack, short nstack);
+extern float WINAPI CallSNG( SbiDllProc, char *stack, short nstack);
 #endif
-extern double CDECL CallDBL( SbiDllProc, char *stack, short nstack);
-extern char* CDECL CallSTR( SbiDllProc, char *stack, short nstack);
+extern double WINAPI CallDBL( SbiDllProc, char *stack, short nstack);
+extern char* WINAPI CallSTR( SbiDllProc, char *stack, short nstack);
 // extern CallFIX( SbiDllProc, char *stack, short nstack);
 
 #else
