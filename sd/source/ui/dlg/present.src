@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:58:32 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_simplified ] = "ΟΤΚΎ»Υ±κ(~L)";
         Text[ chinese_traditional ] = "Εγ₯άΉΟΌΠ(~L)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΤΪΗΡ";
-        Text[ greek ] = "Εμφάνιση λογότυπου";
+        Text[ greek ] = "Εμφάνιση ~λογότυπου";
         Text[ korean ] = "·Ξ°ν ³ͺΕΈ³»±β(~L)";
         Text[ turkish ] = "Logo gφrόntόle";
         Text[ language_user1 ] = " ";
