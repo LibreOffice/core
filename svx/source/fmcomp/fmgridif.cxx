@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:20:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
 #ifndef _SVX_FMTOOLS_HXX
@@ -555,6 +558,9 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit >& rToolkit, const Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer) throw( RuntimeException )
 {
+    if ( !mxModel.is() )
+        throw DisposedException( ::rtl::OUString(), *this );
+
     DBG_ASSERT(/*(0 == m_nPeerCreationLevel) && */!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
         // I think this should never assert, now that we're using the base class' mbCreatingPeer in addition to
         // our own m_nPeerCreationLevel
