@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:27:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,6 +1619,8 @@ public:
        \param rNumRule     numbering rule to replace the present numbering rules
      */
     void ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule);
+
+    void MakeUniqueNumRules(const SwPaM & rPaM);
 
     void SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag = sal_True );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt = USHRT_MAX );
