@@ -53,7 +53,7 @@ REM Add directory of the C++ tools to the path, if necessary.
 if defined SDK_CPP_HOME set PATH=%PATH%;%SDK_CPP_HOME%
 
 REM Add directory of the Java tools to the path, if necessary.
-if defined SDK_JAVA_HOME set PATH=%PATH%;%SDK_JAVA_HOME%\bin
+if defined SDK_JAVA_HOME set PATH=%PATH%;%SDK_JAVA_HOME%\bin;%SDK_JAVA_HOME%\jre\bin
 
 REM Add directory of the ANT tools to the path, if necessary.
 if defined SDK_ANT set PATH=%PATH%;%SDK_ANT%\bin
