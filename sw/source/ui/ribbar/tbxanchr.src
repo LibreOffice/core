@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:02:03 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ Menu MN_ANCHOR_POPUP
             Text[ hebrew ] = "‮דף‬";
             Text[ hindi ] = "पृष्ठ";
             Text[ slovak ] = "Stránka";
+            Text[ hungarian ] = "Oldal";
+            Text[ slovenian ] = "Stran";
         };
         MenuItem
         {
@@ -132,6 +134,8 @@ Menu MN_ANCHOR_POPUP
             Text[ hebrew ] = "‮פסקאות‬";
             Text[ hindi ] = "परिच्छेद";
             Text[ slovak ] = "Odstavec";
+            Text[ hungarian ] = "Bekezdés";
+            Text[ slovenian ] = "Odstavek";
         };
         MenuItem
         {
@@ -166,6 +170,8 @@ Menu MN_ANCHOR_POPUP
             Text[ hebrew ] = "Am Zeichen";
             Text[ hindi ] = "अक्षर में";
             Text[ slovak ] = "Na znak";
+            Text[ hungarian ] = "Karakterhez";
+            Text[ slovenian ] = "Na znak";
         };
         MenuItem
         {
@@ -200,6 +206,8 @@ Menu MN_ANCHOR_POPUP
             Text[ hebrew ] = "Als Zeichen";
             Text[ hindi ] = "अक्षर जैसे";
             Text[ slovak ] = "Ako znak";
+            Text[ hungarian ] = "Karakterként";
+            Text[ slovenian ] = "Kot znak";
         };
         MenuItem
         {
@@ -234,9 +242,12 @@ Menu MN_ANCHOR_POPUP
             Text[ hebrew ] = "‮מסגרת‬";
             Text[ hindi ] = "फ्रेम ";
             Text[ slovak ] = "Rámček";
+            Text[ hungarian ] = "Keret";
+            Text[ slovenian ] = "Okvir";
         };
     };
 };
+
 
 
 
