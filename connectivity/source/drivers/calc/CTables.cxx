@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTables.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:45:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #endif
 
 using namespace ::comphelper;
-
+using namespace connectivity;
 using namespace connectivity::calc;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
@@ -90,7 +90,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 namespace starutil      = ::com::sun::star::util;
 
-Reference< XNamed > OCalcTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OCalcTables::createObject(const ::rtl::OUString& _rName)
 {
     return new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
