@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:38:16 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModelessDialog RID_SCDLG_TABOP
     Text [ portuguese_brazilian ] = "Opera��es m�ltiplas" ;
     Text [ portuguese ] = "Opera��es m�ltiplas" ;
     Text [ finnish ] = "Useita toimintoja" ;
-    Text [ danish ] = "Multioperationer" ;
+    Text [ danish ] = "Multioperation" ;
     Text [ french ] = "Op�rations multiples" ;
     Text [ swedish ] = "Multipla r�kneoperationer" ;
     Text [ dutch ] = "Meervoudige operaties" ;
@@ -115,6 +115,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "~Formeln";
         Text[ hindi ] = "~सूत्र";
         Text[ slovak ] = "Vzorc~e";
+        Text[ hungarian ] = "~Képletek";
+        Text[ slovenian ] = "~Formule";
     };
     Edit ED_FORMULARANGE
     {
@@ -156,6 +158,8 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_ROWCELL
     {
@@ -168,7 +172,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "C�lula de entrada da ~linha" ;
         Text [ portuguese ] = "~Linha" ;
         Text [ finnish ] = "~Rivien sy�tt�solu" ;
-        Text [ danish ] = "R�kke" ;
+        Text [ danish ] = "~R�kke input celle" ;
         Text [ french ] = "~Ligne" ;
         Text [ swedish ] = "~Rad" ;
         Text [ dutch ] = "~Rij" ;
@@ -190,6 +194,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "~Zeile";
         Text[ hindi ] = "~पंक्ति इनपुट कोष्ठ";
         Text[ slovak ] = "Vložiť bunku do ~riadka";
+        Text[ hungarian ] = "~Sorbemeneti cella";
+        Text[ slovenian ] = "Vnosna celica v~rstice";
     };
     Edit ED_ROWCELL
     {
@@ -231,6 +237,8 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_COLCELL
     {
@@ -243,7 +251,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "C�lula de entrada da ~coluna" ;
         Text [ portuguese ] = "~Coluna" ;
         Text [ finnish ] = "~Sarakkeiden sy�tt�solu" ;
-        Text [ danish ] = "Kolonne" ;
+        Text [ danish ] = "~Kolonne input celle" ;
         Text [ french ] = "Colonne" ;
         Text [ swedish ] = "~Kolumn" ;
         Text [ dutch ] = "~Kolom" ;
@@ -265,6 +273,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "~Spalte";
         Text[ hindi ] = "~स्तंभ इनपुट कोष्ठ";
         Text[ slovak ] = "Vložiť bunku do stĺp~ca";
+        Text[ hungarian ] = "~Oszlopbemeneti cella";
+        Text[ slovenian ] = "Vnosna celica ~stolpca";
     };
     Edit ED_COLCELL
     {
@@ -306,6 +316,8 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedLine FL_VARIABLES
     {
@@ -318,7 +330,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "Configura��es padr�o" ;
         Text [ portuguese ] = "Predefini��es" ;
         Text [ finnish ] = "Oletusasetukset" ;
-        Text [ danish ] = "Forudindstillinger" ;
+        Text [ danish ] = "Standardindstillinger" ;
         Text [ french ] = "D�finitions" ;
         Text [ swedish ] = "F�rinst�llningar" ;
         Text [ dutch ] = "Standaard" ;
@@ -340,6 +352,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "Vorgaben";
         Text[ hindi ] = "अनुपस्थिति निर्धारण";
         Text[ slovak ] = "Východzie nastavenia";
+        Text[ hungarian ] = "Alapbeállítások";
+        Text[ slovenian ] = "Privzete nastavitve";
     };
     OKButton BTN_OK
     {
@@ -366,7 +380,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "Nenhuma f�rmula especificada." ;
         Text [ portuguese ] = "F�rmula n�o especificada!" ;
         Text [ finnish ] = "Kaavaa ei ole m��ritetty." ;
-        Text [ danish ] = "Der er ikke specificeret nogen formel!" ;
+        Text [ danish ] = "Der er ikke specificeret nogen formel." ;
         Text [ french ] = "Aucune formule n'a �t� sp�cifi�e !" ;
         Text [ swedish ] = "Ingen formel specificerad!" ;
         Text [ dutch ] = "Geen formule gespecificeerd." ;
@@ -388,6 +402,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "Keine Formel eingetragen";
         Text[ hindi ] = "कोई सूत्र निर्दिष्ट नहीं किया है ।";
         Text[ slovak ] = "Vzorec nebol zadaný.";
+        Text[ hungarian ] = "Nem adott meg képletet.";
+        Text[ slovenian ] = "Formula ni določena.";
     };
     String STR_NOCOLROW
     {
@@ -398,7 +414,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "Nenhuma linha ou coluna especificada." ;
         Text [ portuguese ] = "Linha e coluna indefinidas!" ;
         Text [ finnish ] = "Rivi� tai saraketta ei ole m��ritetty." ;
-        Text [ danish ] = "Der er hverken specificeret r�kke eller kolonne!" ;
+        Text [ danish ] = "Der er hverken specificeret r�kke eller kolonne." ;
         Text [ french ] = "Ni ligne ni colonne n'ont �t� sp�cifi�es !" ;
         Text [ swedish ] = "Varken rad eller kolumn specificerad!" ;
         Text [ dutch ] = "Noch rij, noch kolom gespecificeerd!" ;
@@ -420,6 +436,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "Weder Zeile noch Spalte eingetragen";
         Text[ hindi ] = "न पंक्ति को निर्दिष्ट किया है न स्तंभ को ।";
         Text[ slovak ] = "Nebol zadaný riadok ani stĺpec.";
+        Text[ hungarian ] = "Sem oszlopot, sem sort nem adott meg.";
+        Text[ slovenian ] = "Vrstica in stolpec nista določena.";
     };
     String STR_WRONGFORMULA
     {
@@ -430,7 +448,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "Nome ou intervalo indefinido!" ;
         Text [ portuguese ] = "Nome ou �rea indefinidos!" ;
         Text [ finnish ] = "M��ritt�m�t�n nimi tai alue." ;
-        Text [ danish ] = "Udefineret navn eller omr�de!" ;
+        Text [ danish ] = "Udefineret navn eller omr�de." ;
         Text [ french ] = "Nom ou plage ind�fini(e) !" ;
         Text [ swedish ] = "Odefinierat namn eller omr�de!" ;
         Text [ dutch ] = "Ongedefinieerde naam of bereik!" ;
@@ -452,6 +470,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "Undefinierter Name oder Bereich";
         Text[ hindi ] = "Undefined name or range.";
         Text[ slovak ] = "Nedefinovaný názov alebo oblasť!";
+        Text[ hungarian ] = "Meghatározatlan név vagy tartomány.";
+        Text[ slovenian ] = "Nedefinirano ime ali obseg.";
     };
     String STR_WRONGROWCOL
     {
@@ -462,7 +482,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "Nome indefinido ou refer�ncia de c�lula incorreta." ;
         Text [ portuguese ] = "Nome ou refer�ncia da c�lula indefinidos!" ;
         Text [ finnish ] = "M��ritt�m�t�n nimi tai virheellinen soluviite." ;
-        Text [ danish ] = "Udefineret navn eller forkert cellereference!" ;
+        Text [ danish ] = "Udefineret navn eller forkert cellereference." ;
         Text [ french ] = "Nom ind�fini ou r�f�rence de cellule incorrecte !" ;
         Text [ swedish ] = "Odefinierat namn eller fel cellreferens!" ;
         Text [ dutch ] = "Ongedefinieerde naam of verkeerde celverwijzing." ;
@@ -484,6 +504,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "Undefinierter Name oder falsche Zellreferenz";
         Text[ hindi ] = "परिभाषा न किया हुआ नाम् अथवा गलत कोष्ठ का रेफरेन्स ।";
         Text[ slovak ] = "Nedefinovaný názov alebo nesprávny odkaz na bunku.";
+        Text[ hungarian ] = "Meghatározatlan név vagy helytelen cellahivatkozás.";
+        Text[ slovenian ] = "Nedefinirano ime ali napačen sklic celice.";
     };
     String STR_NOCOLFORMULA
     {
@@ -494,7 +516,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "As f�rmulas n�o formam uma coluna." ;
         Text [ portuguese ] = "F�rmulas n�o formam coluna!" ;
         Text [ finnish ] = "Kaavat eiv�t muodosta saraketta." ;
-        Text [ danish ] = "Formler danner ikke kolonne!" ;
+        Text [ danish ] = "Formler danner ikke en kolonne." ;
         Text [ french ] = "Les formules ne forment pas de colonne !" ;
         Text [ swedish ] = "Formlerna bildar ingen kolumn!" ;
         Text [ dutch ] = "Formules vormen geen kolom!" ;
@@ -516,6 +538,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "Formeln bilden keine Spalte";
         Text[ hindi ] = "सूत्र स्तंभ को उत्पन्न नहीं करता है ।";
         Text[ slovak ] = "Vzorce netvoria stĺpec!";
+        Text[ hungarian ] = "A képletek nem alkotnak oszlopot.";
+        Text[ slovenian ] = "Formule ne oblikujejo stolpca.";
     };
     String STR_NOROWFORMULA
     {
@@ -526,7 +550,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ portuguese_brazilian ] = "As f�rmulas n�o formam uma linha." ;
         Text [ portuguese ] = "F�rmulas n�o formam linha!" ;
         Text [ finnish ] = "Kaavat eiv�t muodosta rivi�." ;
-        Text [ danish ] = "Formler danner ikke r�kke!" ;
+        Text [ danish ] = "Formler danner ikke en r�kke." ;
         Text [ french ] = "Les formules ne forment pas de ligne !" ;
         Text [ swedish ] = "Formlerna bildar ingen rad!" ;
         Text [ dutch ] = "Formules vormen geen rij!" ;
@@ -548,6 +572,8 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ hebrew ] = "Formeln bilden keine Zeile";
         Text[ hindi ] = "सूत्र पंक्ति को उत्पन्न नहीं करता है ।";
         Text[ slovak ] = "Vzorce netvoria riadok!";
+        Text[ hungarian ] = "A képletek nem alkotnak sort.";
+        Text[ slovenian ] = "Formule ne oblikujejo vrstice.";
     };
     Text[ chinese_simplified ] = "多重计算";
     Text[ russian ] = "����������� ��������";
@@ -565,6 +591,6 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ hebrew ] = "Mehrfachoperationen";
     Text[ hindi ] = "बहुमुखी कार्य";
     Text[ slovak ] = "Viacnásobné operácie";
+    Text[ hungarian ] = "Többszörös műveletek";
+    Text[ slovenian ] = "Večkratne operacije";
 };
-
-
