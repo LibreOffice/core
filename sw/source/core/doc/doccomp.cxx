@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 18:08:21 $
+ *  last change: $Author: jp $ $Date: 2001-09-12 11:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
+#endif
+#ifndef _SFXDOCINF_HXX
+#include <sfx2/docinf.hxx>
 #endif
 
 #ifdef JP_DUMP
@@ -978,7 +981,7 @@ public:
     SwCompareData( SwDoc& rD ) : rDoc( rD ), pInsRing(0), pDelRing(0) {}
     virtual ~SwCompareData();
 
-    void SetRedlinesToDoc();
+    void SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc );
 
 #ifdef JP_DUMP
     // zum Debuggen!
@@ -1388,22 +1391,48 @@ void SwCompareData::CheckForChangesInLine( const CompareData& rData,
     }
 }
 
-void SwCompareData::SetRedlinesToDoc()
+void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
 {
     SwPaM* pTmp = pDelRing;
+
+    // Bug #83296#: get the Author / TimeStamp from the "other"
+    //              document info
+    USHORT nAuthor = rDoc.GetRedlineAuthor();
+    DateTime aTimeStamp;
+    const SfxDocumentInfo* pDocInfo;
+    if( bUseDocInfo && 0 != (pDocInfo = rDoc.GetpInfo()) )
+    {
+        SfxStamp aTmp( 1 == pDocInfo->GetDocumentNumber()
+                            ? pDocInfo->GetCreated()
+                            : pDocInfo->GetChanged() );
+        if( aTmp.GetName().Len() )
+        {
+            nAuthor = rDoc.InsertRedlineAuthor( aTmp.GetName() );
+            aTimeStamp = aTmp.GetTime();
+        }
+    }
+
     if( pTmp )
+    {
+
+        SwRedlineData aRedlnData( REDLINE_DELETE, nAuthor, aTimeStamp,
+                                    aEmptyStr, 0, 0 );
         do {
             rDoc.DeleteRedline( *pTmp, FALSE );
 
             if( rDoc.DoesUndo() )
                 rDoc.AppendUndo( new SwUndoCompDoc( *pTmp, FALSE ));
-            rDoc.AppendRedline( new SwRedline( REDLINE_DELETE, *pTmp ) );
+            rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp ) );
 
         } while( pDelRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
+    }
 
     pTmp = pInsRing;
     if( pTmp )
     {
+        SwRedlineData aRedlnData( REDLINE_INSERT, nAuthor, aTimeStamp,
+                                    aEmptyStr, 0, 0 );
+
         // zusammenhaengende zusammenfassen
         if( pTmp->GetNext() != pInsRing )
         {
@@ -1438,7 +1467,7 @@ void SwCompareData::SetRedlinesToDoc()
         }
 
         do {
-            if( rDoc.AppendRedline( new SwRedline( REDLINE_INSERT, *pTmp )) &&
+            if( rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp )) &&
                 rDoc.DoesUndo() )
                 rDoc.AppendUndo( new SwUndoCompDoc( *pTmp, TRUE ));
         } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
@@ -1486,7 +1515,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     long nRet = 0;
 
     StartUndo();
-
+    BOOL bDocWasModified = IsModified();
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     BOOL bSrcModified = rSrcDoc.IsModified();
 
@@ -1504,7 +1533,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     if( nRet )
     {
         SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
-        aD1.SetRedlinesToDoc();
+        aD1.SetRedlinesToDoc( !bDocWasModified, rSrcDoc );
     }
 
 #ifdef JP_DUMP
