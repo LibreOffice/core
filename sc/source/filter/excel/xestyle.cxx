@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:16:31 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,8 @@
 #include "globstr.hrc"
 #endif
 
-#ifndef SC_XEHELPER_HXX
-#include "xehelper.hxx"
+#ifndef SC_XESTRING_HXX
+#include "xestring.hxx"
 #endif
 
 
@@ -781,9 +781,9 @@ sal_uInt16 XclExpFontBuffer::Insert( const SvxFont& rFont, bool bAppFont )
 
 sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet, bool bAppFont )
 {
-    /** We need to determine if a CJK or CTL fontitem is set in the itemset.
-    This is discussed in #i17050#. It is possible that both may be present.
-    In this case, we will choose CJK. Either option is equally correct. */
+    /*  We need to determine if a CJK or CTL fontitem is set in the itemset.
+        This is discussed in #i17050#. It is possible that both may be present.
+        In this case, we will choose CJK. Either option is equally correct. */
     bool bCjk   = ScfTools::CheckItem( rItemSet, ATTR_CJK_FONT, true );
     bool bCtl   = ScfTools::CheckItem( rItemSet, ATTR_CTL_FONT, true );
     BYTE nScript = SCRIPTTYPE_LATIN;
@@ -861,27 +861,6 @@ sal_uInt32 XclExpFontBuffer::Find( const XclExpFont& rFont )
 
 // FORMAT record - number formats =============================================
 
-/** Data for a default number format. */
-struct XclExpDefaultFormat
-{
-    sal_uInt16                  mnIndex;        /// Excel index of the format.
-    const sal_Char*             mpFormat;       /// Format string.
-    bool                        mbBlindCurr;    /// true = Currency symbol is blind placeholder.
-};
-
-#define CURRSYMB "$"
-
-static const XclExpDefaultFormat pDefaultFormats[] =
-{
-    { 0x05, "#,##0\\ \"" CURRSYMB "\";\\-#,##0\\ \"" CURRSYMB "\"",                                                         false   },
-    { 0x06, "#,##0\\ \"" CURRSYMB "\";[Red]\\-#,##0\\ \"" CURRSYMB "\"",                                                    false   },
-    { 0x07, "#,##0.00\\ \"" CURRSYMB "\";\\-#,##0.00\\ \"" CURRSYMB "\"",                                                   false   },
-    { 0x08, "#,##0.00\\ \"" CURRSYMB "\";[Red]\\-#,##0.00\\ \"" CURRSYMB "\"",                                              false   },
-    { 0x2A, "_-* #,##0\\ \"" CURRSYMB "\"_-;\\-* #,##0\\ \"" CURRSYMB "\"_-;_-* \"-\"\\ \"" CURRSYMB "\"_-;_-@_-",          false   },
-    { 0x29, "_-* #,##0\\ " CURRSYMB "_-;\\-* #,##0\\ " CURRSYMB "_-;_-* \"-\"\\ " CURRSYMB "_-;_-@_-",                      true    },
-    { 0x2C, "_-* #,##0.00\\ \"" CURRSYMB "\"_-;\\-* #,##0.00\\ \"" CURRSYMB "\"_-;_-* \"-\"??\\ \"" CURRSYMB "\"_-;_-@_-",  false   },
-    { 0x2B, "_-* #,##0.00\\ " CURRSYMB "_-;\\-* #,##0.00\\ " CURRSYMB "_-;_-* \"-\"??\\ " CURRSYMB "_-;_-@_-",              true    }
-};
 
 /** Predicate for search algorithm. */
 struct XclExpNumFmtPred
@@ -945,7 +924,6 @@ sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nScFormatIx )
 
 void XclExpNumFmtBuffer::Save( XclExpStream& rStrm )
 {
-    WriteDefaultFormats( rStrm );
     for( XclExpNumFmtVec::const_iterator aIter = maFormatMap.begin(), aEnd = maFormatMap.end(); aIter != aEnd; ++aIter )
         WriteFormatRecord( rStrm, *aIter );
 }
@@ -1008,37 +986,9 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
     WriteFormatRecord( rStrm, rFormat.mnXclIx, aFormatStr );
 }
 
-void XclExpNumFmtBuffer::WriteDefaultFormats( XclExpStream& rStrm )
-{
-    // the currency symbol
-    String aCurrSymbol( ScGlobal::pLocaleData->getCurrSymbol() );
-    // the currency symbol where all characters are escaped with an underscore
-    String aBlindSymbol;
-    for( xub_StrLen nChar = 0, nLen = aCurrSymbol.Len(); nChar < nLen; ++nChar )
-        aBlindSymbol.Append( '_' ).Append( aCurrSymbol.GetChar( nChar ) );
-    // the original currency symbol in the built-in formats
-    String aOrigSymbol( RTL_CONSTASCII_USTRINGPARAM( CURRSYMB ) );
-
-    const XclExpDefaultFormat* pEnd = STATIC_TABLE_END( pDefaultFormats );
-    for( const XclExpDefaultFormat* pCurr = pDefaultFormats; pCurr != pEnd; ++pCurr )
-    {
-        String aFormat( pCurr->mpFormat, RTL_TEXTENCODING_UTF8 );
-        // replace the currency placeholder with current currency symbol
-        if( pCurr->mbBlindCurr )
-            aFormat.SearchAndReplaceAll( aOrigSymbol, aBlindSymbol );
-        else
-            aFormat.SearchAndReplaceAll( aOrigSymbol, aCurrSymbol );
-
-        WriteFormatRecord( rStrm, pCurr->mnIndex, aFormat );
-    }
-}
-
-#undef CURRSYMB
 
 
 // XF, STYLE record - Cell formatting =========================================
-
-// ----------------------------------------------------------------------------
 
 bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bStyle )
 {
