@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:50:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <sfx2/app.hxx>
 #endif
 #ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #endif
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
@@ -120,18 +120,18 @@ FltError ScImportExcel( SfxMedium& r, ScDocument* p )
 FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
     FltError eRet = eERR_OK;
-    SvStorage* pStorage = rMedium.GetStorage();
+    SotStorageRef xStorage = new SotStorage( rMedium.GetInStream(), FALSE );
 
     // OLE2 compound file
-    if( pStorage )
+    if( xStorage.Is() )
     {
         // *** look for contained streams ***
 
         const String aStreamName5( EXC_STREAM_BOOK );
-        sal_Bool bHasBook = pStorage->IsContained( aStreamName5 ) && pStorage->IsStream( aStreamName5 );
+        sal_Bool bHasBook = xStorage->IsContained( aStreamName5 ) && xStorage->IsStream( aStreamName5 );
 
         const String aStreamName8( EXC_STREAM_WORKBOOK );
-        sal_Bool bHasWorkbook = pStorage->IsContained( aStreamName8 ) && pStorage->IsStream( aStreamName8 );
+        sal_Bool bHasWorkbook = xStorage->IsContained( aStreamName8 ) && xStorage->IsStream( aStreamName8 );
 
         // *** handle user-defined filter selection ***
 
@@ -180,7 +180,7 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
 
         if( (eRet == eERR_OK) && pStreamName )
         {
-            SvStorageStreamRef xStream = ScfTools::OpenStorageStreamRead( pStorage, *pStreamName );
+            SotStorageStreamRef xStream = ScfTools::OpenStorageStreamRead( xStorage, *pStreamName );
             DBG_ASSERT( xStream.Is(), "ScImportExcel - missing stream" );
             xStream->SetBufferSize( 32768 );
 
@@ -292,10 +292,10 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
 
     if( &rOutMedium != NULL )
     {
-        SvStorage* pStorage = rOutMedium.GetStorage();
-        if( pStorage )
+        SotStorageRef xStorage = new SotStorage( rOutMedium.GetOutStream(), FALSE );
+        if( xStorage.Is() )
         {// OLE2-Datei
-            SvStorageStreamRef xStStream = ScfTools::OpenStorageStreamWrite( pStorage, aWrkBook );
+            SotStorageStreamRef xStStream = ScfTools::OpenStorageStreamWrite( xStorage, aWrkBook );
 
             xStStream->SetBufferSize( 32768 );
 
@@ -327,8 +327,9 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
             SvGlobalName        aName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00,
                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
             UINT32              nClip = SotExchange::RegisterFormatName( _STRING( pClipboard ) );
-            pStorage->SetClass( aName, nClip, _STRING( pClassName ) );
+            xStorage->SetClass( aName, nClip, _STRING( pClassName ) );
             xStStream->Commit();
+            xStorage->Commit();
         }
         else
             eRet = eERR_OPEN;
