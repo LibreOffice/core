@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-16 14:42:13 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 15:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,6 @@
 // header for class OUStringBuffer
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-// header for class SvxCharacterMap
-#ifndef _SVX_CHARMAP_HXX
-#include <svx/charmap.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
@@ -544,59 +540,6 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
     catch( uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
-    }
-}
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
-void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
-{
-    SvxCharacterMap aDlg( NULL, FALSE );
-    /*
-    OutlinerView* pOV = NULL;
-    SdrOutliner*  pOL = NULL;
-
-    // set the current font
-    pOV = pView->GetTextEditOutlinerView();
-    if( !pOV )
-        return;
-    pOL = pView->GetTextEditOutliner();
-    OutputDevice *pOut = pOL->GetRefDevice();
-    aDlg.SetFont( pOut->GetFont() );
-
-    // the font mustn't be changed
-    aDlg.DisableFontSelection();
-    */
-    if( aDlg.Execute() == RET_OK )
-    {
-        String aString( aDlg.GetCharacters() );
-        /*
-        // insert string
-
-        // prevent flicker
-        pOV->HideCursor();
-        pOL->SetUpdateMode(FALSE);
-
-        // delete current selection by inserting empty String, so current
-        // attributes become unique (sel. has to be erased anyway)
-        pOV->InsertText(String());
-
-        SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
-        rUndoMgr.EnterListAction( String( SchResId( STR_UNDO_INSERT_SPECCHAR )), String( SchResId( STR_UNDO_INSERT_SPECCHAR )));
-        pOV->InsertText(aString, TRUE);
-
-        ESelection aSel = pOV->GetSelection();
-        aSel.nStartPara = aSel.nEndPara;
-        aSel.nStartPos = aSel.nEndPos;
-        pOV->SetSelection(aSel);
-
-        rUndoMgr.LeaveListAction();
-
-        // show changes
-        pOL->SetUpdateMode(TRUE);
-        pOV->ShowCursor();
-        */
     }
 }
 
