@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astinterface.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,15 +73,11 @@ class AstInterface : public AstType
                    , public AstScope
 {
 public:
-    AstInterface(const ::rtl::OString& name, DeclList* pInherits, sal_Bool bIsDefined, AstScope* pScope);
+    AstInterface(const ::rtl::OString& name, AstDeclaration* pInherits, AstScope* pScope);
     virtual ~AstInterface();
 
     const DeclList& getInheritedInterfaces()
         { return m_inheritedInterfaces; }
-    void setInheritedInterfaces(const DeclList& inherits)
-        {
-            m_inheritedInterfaces = inherits;
-        }
     sal_Int32   nInheritedInterfaces()
         {
             return m_inheritedInterfaces.size();
@@ -96,10 +92,15 @@ public:
     sal_Bool isForwardedInSameFile()
         { return m_bForwardedInSameFile; }
 
-    void setDefined(sal_Bool bIsDefined)
-        { m_bIsDefined = bIsDefined; }
+    void setDefined() { m_bIsDefined = true; }
     sal_Bool isDefined()
         { return m_bIsDefined; }
+
+    bool usesSingleInheritance() const { return m_bSingleInheritance; }
+
+    bool addInheritedInterface(AstInterface * pInherits);
+
+    void forwardDefined(AstInterface const & def);
 
     virtual sal_Bool dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader);
 private:
@@ -107,6 +108,7 @@ private:
     sal_Bool    m_bIsDefined;
     sal_Bool    m_bForwarded;
     sal_Bool    m_bForwardedInSameFile;
+    bool m_bSingleInheritance;
 };
 
 #endif // _IDLC_ASTINTERFACE_HXX_
