@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:59:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             {
                                 SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
                                 aBoxInfoItem.SetTable(FALSE);       // keine inneren Linien
-                                aBoxInfoItem.SetDist(FALSE);
+                                aBoxInfoItem.SetDist(TRUE);
                                 aBoxInfoItem.SetMinDist(FALSE);
                                 rSet.Put( aBoxInfoItem );
                             }
@@ -1074,7 +1074,7 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
                         case SID_ATTR_ALIGN_DEGREES:
                         case SID_ATTR_ALIGN_LOCKPOS:
                         case SID_ATTR_ALIGN_MARGIN:
-                        case SID_ATTR_ALIGN_ORIENTATION:
+                        case SID_ATTR_ALIGN_STACKED:
                             pTabViewShell->ApplyAttr( *pItem );
                         break;
 
@@ -2037,10 +2037,9 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
             BOOL bVert = (nSlot == SID_TEXTDIRECTION_TOP_TO_BOTTOM);
-            SvxCellOrientation eOrient = bVert ? SVX_ORIENTATION_STACKED : SVX_ORIENTATION_STANDARD;
             ScPatternAttr aAttr( GetViewData()->GetDocument()->GetPool() );
             SfxItemSet& rItemSet = aAttr.GetItemSet();
-            rItemSet.Put( SvxOrientationItem( eOrient, ATTR_ORIENTATION ) );
+            rItemSet.Put( SfxBoolItem( ATTR_STACKED, bVert ) );
             rItemSet.Put( SfxBoolItem( ATTR_VERTICAL_ASIAN, bVert ) );
             pTabViewShell->ApplySelectionPattern( aAttr );
             pTabViewShell->AdjustBlockHeight();
@@ -2065,9 +2064,9 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
 
     BOOL bVertDontCare =
         (rAttrSet.GetItemState( ATTR_VERTICAL_ASIAN ) == SFX_ITEM_DONTCARE) ||
-        (rAttrSet.GetItemState( ATTR_ORIENTATION ) == SFX_ITEM_DONTCARE);
+        (rAttrSet.GetItemState( ATTR_STACKED ) == SFX_ITEM_DONTCARE);
     BOOL bLeftRight = !bVertDontCare &&
-        (((const SvxOrientationItem&) rAttrSet.Get( ATTR_ORIENTATION )).GetValue() != SVX_ORIENTATION_STACKED);
+        !((const SfxBoolItem&) rAttrSet.Get( ATTR_STACKED )).GetValue();
     BOOL bTopBottom = !bVertDontCare && !bLeftRight &&
         ((const SfxBoolItem&) rAttrSet.Get( ATTR_VERTICAL_ASIAN )).GetValue();
 
