@@ -59,7 +59,7 @@ package org.openoffice.xmerge.converter.xml;
  *  This interface contains constants for StarOffice XML tags,
  *  attributes (StarCalc cell types, etc.).
  *
- *  @author      Herbie Ong, Paul Rank
+ *  @author      Herbie Ong, Paul Rank, Martin Maher
  */
 public interface OfficeConstants {
 
@@ -71,6 +71,12 @@ public interface OfficeConstants {
      *  tag in content.xml.
      */
     public final static String TAG_OFFICE_DOCUMENT_CONTENT = "office:document-content";
+
+    /**
+     *  Element tag for <i>office:document-settings</i>, this is the root
+     *  tag in content.xml.
+     */
+    public final static String TAG_OFFICE_DOCUMENT_SETTINGS= "office:document-settings";
 
     /**
      *  Element tag for <i>office:document-styles</i>, this is the root tag
@@ -95,6 +101,9 @@ public interface OfficeConstants {
 
     /** Element tag for <i>office:body</i>. */
     public final static String TAG_OFFICE_BODY = "office:body";
+
+    /** Element tag for <i>office:settings</i>. */
+    public final static String TAG_OFFICE_SETTINGS = "office:settings";
 
  //Adding
 
@@ -377,6 +386,35 @@ public interface OfficeConstants {
      * <i>manifest:file-entry.</i>
      */
     public final static String ATTRIBUTE_MANIFEST_FILE_PATH = "manifest:full-path";
+
+    // Tags and Elements for the settings.xml
+
+    /** Element tag for <i>config:config-item</i>. */
+    public final static String TAG_CONFIG_ITEM = "config:config-item";
+
+    /** Element tag for <i>config:config-item-set</i>. */
+    public final static String TAG_CONFIG_ITEM_SET = "config:config-item-set";
+
+    /** Element tag for <i>config:config-item-map-indexed</i>. */
+    public final static String TAG_CONFIG_ITEM_MAP_INDEXED = "config:config-item-map-indexed";
+
+    /** Element tag for <i>config:config-item-map-named</i>. */
+    public final static String TAG_CONFIG_ITEM_MAP_NAMED = "config:config-item-map-named";
+
+    /** Element tag for <i>config:config-item-map-entry</i>. */
+    public final static String TAG_CONFIG_ITEM_MAP_ENTRY= "config:config-item-map-entry";
+
+    /**
+     *  Attribute tag for <i>config:name</i> of element
+     *  <i>config:config-item</i>.
+     */
+    public final static String ATTRIBUTE_CONFIG_NAME = "config:name";
+
+    /**
+     *  Attribute tag for <i>config:type</i> of element
+     *  <i>config:config-item</i>.
+     */
+    public final static String ATTRIBUTE_CONFIG_TYPE = "config:type";
 
 
     /** StarWriter XML MIME type. */

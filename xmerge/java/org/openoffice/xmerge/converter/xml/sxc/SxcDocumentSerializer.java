@@ -171,6 +171,47 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
     public abstract ConvertData serialize() throws ConvertException,
         IOException;
 
+
+    /**
+     *  This method traverses <i>office:settings</i> <code>Element</code>.
+     *
+     *  @param  node  <i>office:settings</i> <code>Node</code>.
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    public void traverseSettings(Node node) throws IOException {
+        if (node.hasChildNodes()) {
+
+            NodeList nodeList = node.getChildNodes();
+            int len = nodeList.getLength();
+            for (int i = 0; i < len; i++) {
+                Node child = nodeList.item(i);
+
+                if (child.getNodeType() == Node.ELEMENT_NODE) {
+                    String nodeName = child.getNodeName();
+
+                    if (nodeName.equals(TAG_CONFIG_ITEM_SET)) {
+
+                        traverseSettings(child);
+
+                    } else if (nodeName.equals(TAG_CONFIG_ITEM_MAP_INDEXED)) {
+
+                        traverseSettings(child);
+
+                     } else if (nodeName.equals(TAG_CONFIG_ITEM_MAP_ENTRY)) {
+
+                        BookSettings bs = new BookSettings(child);
+                        encoder.addSettings(bs);
+
+                    } else {
+
+                        Debug.log(Debug.TRACE, "<OTHERS " + XmlUtil.getNodeInfo(child) + " />");
+                    }
+                }
+            }
+        }
+    }
+
     /*
      * Handles the loading of defined styles from the style.xml file as well
      * as automatic styles from the content.xml file.
@@ -178,8 +219,9 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      * Any change to a defined style, such as a short bold section, falls into
      * the latter category.
      */
-    protected void loadStyles(SxcDocument sxwDoc) {
-        org.w3c.dom.Document contentDom = sxwDoc.getContentDOM();
+    protected void loadStyles(SxcDocument sxcDoc) {
+
+        org.w3c.dom.Document contentDom = sxcDoc.getContentDOM();
 
         styleCat = new StyleCatalog(25);
 
@@ -269,13 +311,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         Debug.log(Debug.TRACE, "<NAMED:EXPRESSIONS>");
 
-        // Get table attributes
-        // TODO - extract style from attribute
-
         NamedNodeMap att = node.getAttributes();
-
-        //String tableName =
-        //    att.getNamedItem(ATTRIBUTE_TABLE_NAME).getNodeValue();
 
         if (node.hasChildNodes()) {
 
@@ -286,47 +322,9 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 Node child = nodeList.item(i);
 
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
-                    String nodeName = child.getNodeName();
-
-                    if (nodeName.equals(TAG_TABLE_NAMED_RANGE)) {
-                        NamedNodeMap cellAtt = child.getAttributes();
-
-                        Node tableNameNode =
-                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_NAME);
-                        Node tableBaseCellAddress =
-                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS);
-                        Node tableCellRangeAddress =
-                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS);
-                        Debug.log(Debug.TRACE,"Named-range : " + tableNameNode.getNodeValue());
-                        // Create a named-range name definition
-                        NameDefinition nd = new NameDefinition(tableNameNode.getNodeValue(),
-                                                tableCellRangeAddress.getNodeValue(),
-                                                tableBaseCellAddress.getNodeValue(),
-                                                true,
-                                                false);
-                        encoder.setNameDefinition(nd);
-
-                    } else if (nodeName.equals(TAG_TABLE_NAMED_EXPRESSION)) {
-                        NamedNodeMap cellAtt = child.getAttributes();
-                        Node tableNameNode =
-                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_NAME);
-                        Node tableBaseCellAddress =
-                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS);
-                        Node tableExpression=
-                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_EXPRESSION);
-                        Debug.log(Debug.TRACE,"Named-expression: " + tableNameNode.getNodeValue());
-                        // Create a named-range name definition
-                        NameDefinition nd = new NameDefinition(tableNameNode.getNodeValue(),
-                                                tableExpression.getNodeValue(),
-                                                tableBaseCellAddress.getNodeValue(),
-                                                false,
-                                                true);
-                        encoder.setNameDefinition(nd);
-
-                    } else {
-
-                        Debug.log(Debug.TRACE, "<OTHERS " + XmlUtil.getNodeInfo(child) + " />");
-                    }
+                    NameDefinition nd = new NameDefinition();
+                    nd.readNode(child);
+                    encoder.setNameDefinition(nd);
                 }
             }
 

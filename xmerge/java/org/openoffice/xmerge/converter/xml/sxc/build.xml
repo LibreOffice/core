@@ -142,6 +142,8 @@
             <include name="${package}/SxcConstants.java"/>
             <include name="${package}/SxcDocument.java"/>
             <include name="${package}/Format.java"/>
+            <include name="${package}/BookSettings.java"/>
+            <include name="${package}/SheetSettings.java"/>
             <include name="${package}/NameDefinition.java"/>
             <include name="${package}/SpreadsheetDecoder.java"/>
             <include name="${package}/SpreadsheetEncoder.java"/>

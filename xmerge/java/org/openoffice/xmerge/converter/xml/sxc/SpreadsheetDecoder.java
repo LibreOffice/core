@@ -90,6 +90,13 @@ public abstract class SpreadsheetDecoder {
      */
     public abstract Enumeration getNameDefinitions();
 
+    /**
+     *  Returns an <code>BookSettings</code>
+     *
+     *  @return  The Enumeration
+     */
+    public abstract BookSettings getSettings();
+
      /**
      *  Returns an Enumeration to a Vector of <code>ColumnRowInfo</code>.
      *

@@ -59,16 +59,21 @@ import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.awt.Point;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 
 
 /**
  * Represents a BIFF Record that describes worksheet window attributes
  */
 public class Window2 implements BIFFRecord {
+
+    private final static int FROZEN     = 0x08;
+    private final static int NOSPLIT    = 0x01;
 
     private byte[] rwTop    = new byte[2];
     private byte   colLeft;
@@ -99,6 +104,53 @@ public class Window2 implements BIFFRecord {
      */
     public short getBiffType() {
         return PocketExcelConstants.SHEET_WINDOW_INFO;
+    }
+
+    /**
+     * Sets the split type for this pane, the split type is the same for both
+     * x and y so we only test against one.
+     *
+     * @param splitType the split type based on types defined in
+     * <code>sheetSettings</code>
+     */
+    public void setSplitType(Point splitType) {
+        if(splitType.getX()==SheetSettings.SPLIT) {
+            grbit[0] &= ~FROZEN;
+            grbit[1] &= ~NOSPLIT;
+        } else {
+            grbit[0] |= FROZEN;
+            grbit[1] |= NOSPLIT;
+        }
+    }
+
+    /**
+     * This method tests if this object describes a freeze
+     *
+     * @return true if freeze otherwise false
+     */
+     public boolean isFrozen() {
+        if((grbit[0] & FROZEN) != FROZEN)
+            return false;
+
+        if((grbit[1] & NOSPLIT) != NOSPLIT)
+            return false;
+
+        return true;
+    }
+
+    /**
+     * This method tests if this object describes a split
+     *
+     * @return true if split otherwise false
+     */
+     public boolean isSplit() {
+        if((grbit[0] & FROZEN) == FROZEN)
+            return false;
+
+        if((grbit[1] & NOSPLIT) == NOSPLIT)
+            return false;
+
+        return true;
     }
 
        /**

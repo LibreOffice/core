@@ -124,6 +124,18 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
             traverseBody(node);
         }
 
+        // get settings for this document
+        org.w3c.dom.Document settingsDoc = sxcDoc.getSettingsDOM();
+        if(settingsDoc!=null) {
+            NodeList settingsList = settingsDoc.getElementsByTagName(TAG_OFFICE_SETTINGS);
+            int slen = settingsList.getLength();
+
+            if (slen > 0) {
+                Node settingsNode = settingsList.item(0);
+                traverseSettings(settingsNode);
+            }
+        }
+
         // Get the number of sheets in the workbook
         // This will equal the number of PDBs we need
         ConvertData cd = new ConvertData();

@@ -69,6 +69,8 @@ import java.util.NoSuchElementException;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.util.Debug;
+import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
+import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
@@ -160,6 +162,16 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         return (nameDefinitionVector.elements());
     }
 
+    /**
+     *  This method returns an enumeration of Settings object(s),
+     *  one for each worksheet
+     *
+     *  @return An enumerattion of <code>Settings</code>
+     */
+    public BookSettings getSettings() {
+
+        return (wb.getSettings());
+    }
     /**
      *  This method returns the number of spreadsheets
      *  stored in the WorkBook.

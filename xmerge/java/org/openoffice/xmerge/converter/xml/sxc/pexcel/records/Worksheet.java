@@ -60,9 +60,11 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.awt.Point;
 
 import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.util.Debug;
+import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
@@ -77,13 +79,14 @@ public class Worksheet {
 
     private String name;
     private Workbook wb;
-    private Vector rows     = new Vector();
-    private Vector colInfo  = new Vector();
-    private Vector cells    = new Vector();
-    private DefColWidth dcw = new DefColWidth();
+    private Vector rows         = new Vector();
+    private Vector colInfo      = new Vector();
+    private Vector cells        = new Vector();
+    private DefColWidth dcw     = new DefColWidth();
     private DefRowHeight drh    = new DefRowHeight();
-    private Window2 win2    = new Window2();
-    private Selection s     = new Selection();
+    private Window2 win2        = new Window2();
+    private Selection sel       = new Selection();
+    private Pane p              = new Pane();
     private BeginningOfFile bof;
     private Eof eof;
 
@@ -128,7 +131,8 @@ public class Worksheet {
             cv.write(os);
         }
         win2.write(os);
-        s.write(os);
+        p.write(os);
+        sel.write(os);
         eof     = new Eof();
         eof.write(os);
     }
@@ -198,15 +202,10 @@ public class Worksheet {
                     Debug.log(Debug.TRACE,"EOF Marker");
                     eof = new Eof();
                     return true;
-                   /*
-                case PocketExcelConstants.DEFINED_NAME:
-                    Debug.log(Debug.TRACE,"NAME: Defined Name (18h)");
-                    DefinedName dn = new DefinedName(is, wb);
-                    break;
-                     */
+
                 case PocketExcelConstants.CURRENT_SELECTION:
                     Debug.log(Debug.TRACE,"SELECTION: Current Selection (1Dh)");
-                    Selection s = new Selection(is);
+                    sel = new Selection(is);
                     break;
 
                 case PocketExcelConstants.NUMBER_FORMAT:
@@ -226,7 +225,7 @@ public class Worksheet {
 
                 case PocketExcelConstants.PANE_INFO:
                     Debug.log(Debug.TRACE,"PANE: Number of Panes and their Position (41h) [PXL 2.0]");
-                    Pane p = new Pane(is);
+                    p = new Pane(is);
                     break;
 
                 case PocketExcelConstants.DEF_COL_WIDTH:
@@ -313,11 +312,49 @@ public class Worksheet {
      *
      * @return an <code>Enumeration</code> to the ColInfo's
      */
+    public void addSettings(SheetSettings s) {
+
+        sel.setActiveCell(s.getCursor());
+        p.setLeft(s.getLeft());
+        p.setTop(s.getTop());
+        p.setPaneNumber(s.getPaneNumber());
+        Point split = s.getSplit();
+        if(split.getX()!=0 || split.getY()!=0) {
+            p.setSplitPoint(s.getSplitType(), split);
+            win2.setSplitType(s.getSplitType());
+        }
+    }
+
+    /**
+     * Returns an <code>Enumeration</code> to the ColInfo's for this worksheet
+     *
+     * @return an <code>Enumeration</code> to the ColInfo's
+     */
      public Enumeration getColInfos() {
 
          return (colInfo.elements());
      }
 
+    /**
+     * Returns a <code>SheetSettings</code> object containing a collection of data
+     * contained in <code>Pane</code>, <code>Window2</code> and
+     * <code>Selection</code>
+     *
+     * @return an <code>SheetSettings</code>
+     */
+     public SheetSettings getSettings() {
+
+        SheetSettings s = new SheetSettings();
+        s.setCursor(sel.getActiveCell());
+        if(win2.isFrozen()) {
+            s.setFreeze(p.getFreezePoint());
+        } else if(win2.isSplit()) {
+            s.setSplit(p.getSplitPoint());
+        }
+        s.setPaneNumber(p.getPaneNumber());
+        s.setTopLeft(p.getTop(), p.getLeft());
+         return s;
+     }
     /**
      * Returns an <code>Enumeration</code> to the Rows for this worksheet
      *

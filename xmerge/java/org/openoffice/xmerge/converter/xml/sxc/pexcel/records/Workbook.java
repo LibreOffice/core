@@ -64,6 +64,8 @@ import java.util.Enumeration;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
+import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
+import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
@@ -327,11 +329,32 @@ OfficeConstants {
     /**
       * Returns an enumeration of DefinedNames for this workbook
      *
-      * @return Enumeration enumeration for the DefinedNames
+      * @return Enumeration for the DefinedNames
       */
     public Enumeration getDefinedNames() {
 
         return definedNames.elements();
+    }
+
+    /**
+      * Returns an enumeration of <code>Settings</code> for this workbook
+     *
+      * @return Enumeration of <code>Settings</code>
+      */
+    public BookSettings getSettings() {
+
+        Vector settingsVector = new Vector();
+        int index = 0;
+        for(Enumeration e = worksheets.elements();e.hasMoreElements();) {
+            Worksheet ws = (Worksheet) e.nextElement();
+            SheetSettings s = ws.getSettings();
+            s.setSheetName(getSheetName(index++));
+            settingsVector.add(s);
+        }
+        BookSettings bs = new BookSettings(settingsVector);
+        String activeSheetName = getSheetName(win1.getActiveSheet());
+        bs.setActiveSheet(activeSheetName);
+        return bs;
     }
 
     /**
@@ -447,6 +470,33 @@ OfficeConstants {
 
         DefinedName dn = new DefinedName(nameDefinition, this);
         definedNames.add(dn);
+    }
+
+    /**
+      * Adds the <code>BookSettings</code> for this workbook.
+     *
+      * @param book the <code>BookSettings</code> to add
+      */
+    public void addSettings(BookSettings book) throws IOException {
+
+        int index = 0;
+        Vector sheetSettings = book.getSheetSettings();
+        String activeSheetName = book.getActiveSheet();
+
+        for(Enumeration e = worksheets.elements();e.hasMoreElements();) {
+            Worksheet ws = (Worksheet) e.nextElement();
+            String name = getSheetName(index++);
+            if(activeSheetName.equals(name)) {
+                win1.setActiveSheet(index-1);
+            }
+            for(Enumeration eSettings = sheetSettings.elements();eSettings.hasMoreElements();) {
+                SheetSettings s = (SheetSettings) eSettings.nextElement();
+                if(name.equals(s.getSheetName())) {
+                    ws.addSettings(s);
+                }
+            }
+        }
+
     }
 
     /**

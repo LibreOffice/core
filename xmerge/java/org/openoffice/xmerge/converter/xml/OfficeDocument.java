@@ -824,6 +824,23 @@ public abstract class OfficeDocument
         root.appendChild(child);
     }
 
+    /**
+     *  Initializes a new DOM <code>Document</code> with the content
+     *  containing minimum OpenOffice XML tags.
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    public final void initSettingsDOM() throws IOException {
+
+        settingsDoc = createSettingsDOM(TAG_OFFICE_DOCUMENT_SETTINGS);
+
+        // this is a work-around for a bug in Office6.0 - not really
+        // needed but StarCalc 6.0 will crash without this tag.
+        Element root = settingsDoc.getDocumentElement();
+
+        Element child = settingsDoc.createElement(TAG_OFFICE_SETTINGS);
+        root.appendChild(child);
+    }
 
     /**
      *  Initializes a new DOM Document with styles
@@ -834,6 +851,44 @@ public abstract class OfficeDocument
     public final void initStyleDOM() throws IOException {
 
         styleDoc = createDOM(TAG_OFFICE_DOCUMENT_STYLES);
+    }
+
+    /**
+     *  <p>Creates a new DOM <code>Document</code> containing minimum
+     *  OpenOffice XML tags.</p>
+     *
+     *  <p>This method uses the subclass
+     *  <code>getOfficeClassAttribute</code> method to get the
+     *  attribute for <i>office:class</i>.</p>
+     *
+     *  @param  rootName  root name of <code>Document</code>.
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    private final Document createSettingsDOM(String rootName) throws IOException {
+
+        Document doc = null;
+
+        try {
+
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            doc = builder.newDocument();
+
+        } catch (ParserConfigurationException ex) {
+
+            throw new OfficeDocumentException(ex);
+
+        }
+
+        Element root = (Element) doc.createElement(rootName);
+        doc.appendChild(root);
+
+        root.setAttribute("xmlns:office", "http://openoffice.org/2000/office");
+        root.setAttribute("xmlns:xlink", "http://openoffice.org/1999/xlink");
+        root.setAttribute("xmlns:config", "http://openoffice.org/2001/config");
+        root.setAttribute("office:version", "1.0");
+
+        return doc;
     }
 
 

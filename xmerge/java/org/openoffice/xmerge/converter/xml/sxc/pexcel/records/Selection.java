@@ -59,6 +59,7 @@ import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.awt.Point;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
@@ -78,7 +79,7 @@ public class Selection implements BIFFRecord {
     private byte   colActive;
 
     /**
-     * Constructor
+     * Default Constructor
      */
     public Selection() {
         this.rwTop          = EndianConverter.writeShort((short) 0);
@@ -106,6 +107,27 @@ public class Selection implements BIFFRecord {
      */
     public short getBiffType() {
         return PocketExcelConstants.CURRENT_SELECTION;
+    }
+
+    /**
+     * Get the hex code for this particular <code>BIFFRecord</code>
+     *
+     * @return the hex code for <code>Selection</code>
+     */
+    public Point getActiveCell() {
+        Point p = new Point(colActive, EndianConverter.readShort(rwActive));
+        return p;
+    }
+
+    /**
+     * Get the hex code for this particular <code>BIFFRecord</code>
+     *
+     * @return the hex code for <code>Selection</code>
+     */
+    public void setActiveCell(Point p) {
+
+        colActive = (byte) p.getX();
+        rwActive = EndianConverter.writeShort((short) p.getY());
     }
 
     /**

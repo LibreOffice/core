@@ -59,6 +59,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.Enumeration;
 
@@ -68,6 +69,8 @@ import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
+import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
+import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.converter.xml.sxc.CellStyle;
 import org.openoffice.xmerge.converter.xml.Style;
@@ -97,6 +100,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *  device formats.
      */
     private SpreadsheetDecoder decoder = null;
+
+    /**  A w3c <code>Document</code>. */
+    private org.w3c.dom.Document settings = null;
 
     /**  A w3c <code>Document</code>. */
     private org.w3c.dom.Document doc = null;
@@ -192,11 +198,13 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // Create a document
         SxcDocument sxcDoc = new SxcDocument(workbookName);
         sxcDoc.initContentDOM();
+        sxcDoc.initSettingsDOM();
 
         // Default to an initial 5 entries in the catalog.
         styleCat = new StyleCatalog(5);
 
         doc = sxcDoc.getContentDOM();
+        settings = sxcDoc.getSettingsDOM();
 
         // Little fact for the curious reader: workbookName should
         // be the name of the StarCalc file minus the file extension suffix.
@@ -257,6 +265,37 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             processNameDefinition(node, nameDefinitionTable);
         }
 
+        // add settings
+        NodeList settingsList = settings.getElementsByTagName(TAG_OFFICE_SETTINGS);
+        Node settingsNode = settingsList.item(0);;
+        processSettings(settingsNode);
+
+    }
+
+
+
+    /**
+     *  This method process the settings portion
+     *  of the <code>Document</code>.
+     *
+     *  @param  root  The root <code>Node</code> of the
+     *                <code>Document</code> we are building.  This
+     *                <code>Node</code> should be a TAG_OFFICE_SETTINGS
+     *                tag.
+     */
+    protected void processSettings(Node root) {
+
+        Element configItemSetEntry      = (Element) settings.createElement(TAG_CONFIG_ITEM_SET);
+        configItemSetEntry.setAttribute(ATTRIBUTE_CONFIG_NAME, "view-settings");
+        Element configItemMapIndexed    = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_INDEXED);
+        configItemMapIndexed.setAttribute(ATTRIBUTE_CONFIG_NAME, "Views");
+        Element configItemMapEntry      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
+        BookSettings bs = (BookSettings) decoder.getSettings();
+        bs.writeNode(settings, configItemMapEntry);
+
+        configItemMapIndexed.appendChild(configItemMapEntry);
+        configItemSetEntry.appendChild(configItemMapIndexed);
+        root.appendChild(configItemSetEntry);
     }
 
     /**
@@ -279,27 +318,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         while(eNameDefinitions.hasMoreElements()) {
 
             NameDefinition tableEntry = (NameDefinition) eNameDefinitions.nextElement();
-
-            if(tableEntry.isRangeType()) {
-
-                Debug.log(Debug.TRACE, "Found Range Name : " + tableEntry.getName());
-                Element namedRangeElement = (Element) doc.createElement(TAG_TABLE_NAMED_RANGE);
-                namedRangeElement.setAttribute(ATTRIBUTE_TABLE_NAME, tableEntry.getName());
-                namedRangeElement.setAttribute(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS, tableEntry.getBaseCellAddress());
-                namedRangeElement.setAttribute(ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS, tableEntry.getDefinition());
-                namedExpressionsElement.appendChild(namedRangeElement);
-            } else if (tableEntry.isExpressionType()) {
-
-                Debug.log(Debug.TRACE, "Found Expression Name : " + tableEntry.getName());
-                Element namedExpressionElement = (Element) doc.createElement(TAG_TABLE_NAMED_EXPRESSION);
-                namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_NAME, tableEntry.getName());
-                namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS,tableEntry.getBaseCellAddress());
-                namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_EXPRESSION, tableEntry.getDefinition());
-                namedExpressionsElement.appendChild(namedExpressionElement);
-            } else {
-
-                Debug.log(Debug.TRACE, "Unknown Name Definition : " + tableEntry.getName());
-            }
+            tableEntry.writeNode(doc, namedExpressionsElement);
         }
 
         root.appendChild(namedExpressionsElement);
