@@ -31,9 +31,5 @@ hedabu: ..\inc\dispatch\interaction.hxx %_DEST%\inc%_EXT%\framework\interaction.
 hedabu: ..\inc\classes\addonsoptions.hxx %_DEST%\inc%_EXT%\framework\addonsoptions.hxx
 hedabu: ..\inc\classes\addonmenu.hxx %_DEST%\inc%_EXT%\framework\addonmenu.hxx
 
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-
 ..\source\unotypes\fw?.xml %_DEST%\xml%_EXT%\*.xml
 
