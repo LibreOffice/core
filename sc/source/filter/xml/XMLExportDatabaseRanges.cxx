@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:53:05 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
             uno::Any aSourceType = aImportDescriptor[i].Value;
             aSourceType >>= nSourceType;
         }
-        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NATIVE)))
+        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISNATIVE)))
         {
             uno::Any aNative = aImportDescriptor[i].Value;
             aNative >>= bNative;
