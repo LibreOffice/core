@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 12:19:09 $
+#   last change: $Author: obo $ $Date: 2005-03-15 08:52:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,8 @@ APP1STDLIBS+=-lpthread
 .IF "$(OS)"=="NETBSD"
 APP1STDLIBS+=-lpthread
 .ENDIF
-APP1LIBS=	$(LB)$/bootstrp.lib
-APP1DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
+APP1LIBS=	$(LB)$/bootstrp.lib $(LB)$/bootstrp2.lib
+APP1DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(LB)$/bootstrp2.lib
 
 
 DEPOBJFILES		=	$(APP1OBJS)
