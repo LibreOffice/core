@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:34:14 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,8 @@ package com.sun.star.uno;
 import complexlib.ComplexTestCase;
 
 public final class Type_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
     public String[] getTestMethodNames() {
-        return new String[] { "testZClass" };
+        return new String[] { "testZClass", "testIsSupertypeOf" };
     }
 
     public void testZClass() {
@@ -122,5 +118,17 @@ public final class Type_Test extends ComplexTestCase {
                new Type("com.sun.star.uno.XComponentContext",
                         TypeClass.INTERFACE).getZClass()
                == XComponentContext.class);
+    }
+
+    public void testIsSupertypeOf() {
+        Type ifc = new Type(com.sun.star.uno.XInterface.class);
+        Type ctx = new Type(com.sun.star.uno.XComponentContext.class);
+        Type exc = new Type(com.sun.star.uno.RuntimeException.class);
+        assure("", !Type.ANY.isSupertypeOf(ifc));
+        assure("", !ifc.isSupertypeOf(Type.ANY));
+        assure("", ifc.isSupertypeOf(ctx));
+        assure("", !ctx.isSupertypeOf(ifc));
+        assure("", ctx.isSupertypeOf(ctx));
+        assure("", !ifc.isSupertypeOf(exc));
     }
 }
