@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlPatternFieldModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:06:47 $
+ *  last change:$Date: 2003-09-08 13:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,64 +58,38 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
 
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
+
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.WriterTools;
 import util.utils;
 
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
+
+
 public class UnoControlPatternFieldModel extends TestCase {
-
-    XTextDocument xTextDoc;
-
-    /**
-    * Creates StarOffice Writer document.
-    */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-
-        log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
-    }
-
-    /**
-    * Disposes StarOffice Writer document.
-    */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
-    }
-
-
-    public synchronized TestEnvironment createTestEnvironment
-        (TestParameters Param, PrintWriter log) {
-
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                              PrintWriter log) {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance(
-                "com.sun.star.awt.UnoControlPatternFieldModel");
+            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
+                                     .createInstance("com.sun.star.awt.UnoControlPatternFieldModel");
         } catch (Exception e) {
-
         }
 
+        log.println(
+                "creating a new environment for UnoControlPatternFieldModel object");
 
-        log.println( "creating a new environment for UnoControlPatternFieldModel object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("OBJNAME", "stardiv.vcl.controlmodel.PatternField");
-        System.out.println("ImplementationName: "+utils.getImplName(oObj));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
         return tEnv;
-
     } // finish method getTestEnvironment
-
-}    // finish class UnoControlPatternFieldModel
-
+} // finish class UnoControlPatternFieldModel
