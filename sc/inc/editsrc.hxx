@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:27:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_EDITSRC_HXX
 #define SC_EDITSRC_HXX
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"           // ScRange, ScAddress
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef _SVX_UNOEDSRC_HXX
