@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 09:02:03 $
+ *  last change: $Author: os $ $Date: 2002-06-14 11:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,10 +202,6 @@ void SwListShell::Execute(SfxRequest &rReq)
             rSh.NumOrNoNum( bDelete, !bApi );
         }
         break;
-        case FN_NUMBER_NEWSTART:
-            rSh.SetNumRuleStart(!rSh.IsNumRuleStart());
-        break;
-
         default:
             ASSERT(!this, falscher Dispatcher);
             return;
@@ -229,9 +225,6 @@ void SwListShell::GetState(SfxItemSet &rSet)
         {
             case FN_NUM_OR_NONUM:
                 rSet.Put(SfxBoolItem(nWhich, GetShell().IsNoNum(FALSE)));
-            break;
-            case FN_NUMBER_NEWSTART:
-                rSet.Put(SfxBoolItem(nWhich, GetShell().IsNumRuleStart()));
             break;
             case FN_NUM_BULLET_OUTLINE_UP:
             case FN_NUM_BULLET_UP:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:56:41 $
+ *  last change: $Author: os $ $Date: 2002-06-14 11:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_NUMBER_NEWSTART_AT :
         {
             USHORT nWhich = GetPool().GetWhich( nSlot );
-            if ( pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
+            if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
                 bUseDialog = FALSE;
             // intentionally no break
 
@@ -756,8 +756,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                 nNumStart = USHRT_MAX;
                             rWrtSh.SetNodeNumStart(nNumStart);
                         }
-                        else if (!bStart)
-                            rWrtSh.SetNodeNumStart(USHRT_MAX);
+                        else
+                            rWrtSh.SetNodeNumStart(bStart ? 1 : USHRT_MAX);
                     }
                     else if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
@@ -939,6 +939,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.DisableItem(nWhich);
             break;
 
+        case FN_NUMBER_NEWSTART :
+            rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
+                                        USHRT_MAX != rSh.IsNodeNumStart()));
+        break;
         case FN_EDIT_FORMULA:
         case FN_INSERT_SYMBOL:
             {

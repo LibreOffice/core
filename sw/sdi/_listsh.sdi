@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _listsh.sdi,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *  last change: $Author: os $ $Date: 2002-06-14 11:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,6 @@ interface BaseTextList : Selection
     Automation = FALSE
 ]
 {
-    FN_NUMBER_NEWSTART // status()
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
     FN_NUM_BULLET_DOWN // status(final|play)
     [
         ExecMethod = Execute ;
