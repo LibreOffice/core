@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 18:25:08 $
+ *  last change: $Author: nn $ $Date: 2000-11-25 14:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <sfx2/request.hxx>
 #include <svtools/whiter.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/grfflt.hxx>
 
 #include "graphsh.hxx"
 #include "sc.hrc"
@@ -298,6 +299,58 @@ void ScGraphicShell::Execute( SfxRequest& rReq )
     Invalidate();
 }
 
+void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkList();
+    BOOL bEnable = FALSE;
 
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
 
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
+            bEnable = TRUE;
+    }
+
+    if( !bEnable )
+        SvxGraphicFilter::DisableGraphicFilterSlots( rSet );
+}
+
+void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+        {
+            GraphicObject aFilterObj( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+
+            if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
+                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
+            {
+                SdrPageView* pPageView = pView->GetPageViewPvNum( 0 );
+
+                if( pPageView )
+                {
+                    SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
+                    String      aStr( pView->GetMarkDescription() );
+
+                    aStr.Append( sal_Unicode(' ') );
+                    aStr.Append( String( ScResId( SCSTR_UNDO_GRAFFILTER ) ) );
+                    pView->BegUndo( aStr );
+                    pFilteredObj->SetGraphicObject( aFilterObj );
+                    pView->ReplaceObject( pObj, *pPageView, pFilteredObj );
+                    pView->EndUndo();
+                }
+            }
+        }
+    }
+
+    Invalidate();
+}
 
