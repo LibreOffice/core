@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:21:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,8 +335,8 @@ String STR_INSERTPAGE
 String STR_MODIFYPAGE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Seitenlayout ändern : Seitenlayout õndern */
-    Text [ de ] = "Seitenlayout ändern" ;
-    Text [ en-US ] = "Modify Slide" ;
+    Text [ de ] = "Folienlayout" ;
+    Text [ en-US ] = "Slide Layout" ;
 };
 String STR_INSERTLAYER
 {
@@ -413,7 +413,7 @@ String STR_UNDO_DRAGDROP
 };
 String STR_INSERTGRAPHIC
 {
-    Text [ de ] = "Grafik einfügen" ;
+    Text [ de ] = "Bild einfügen" ;
     Text [ en-US ] = "Insert picture" ;
 };
 String STR_LINESTYLE
@@ -1401,8 +1401,8 @@ String STR_UNDO_CHANGE_PRES_OBJECT
 String STR_UNDO_MODIFY_PAGE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Seite ändern : Seite õndern */
-    Text [ de ] = "Seite ändern" ;
-    Text [ en-US ] = "Modify slide" ;
+    Text [ de ] = "Folienlayout" ;
+    Text [ en-US ] = "Slide layout" ;
 };
 String STR_STATSTR_PRINT
 {
