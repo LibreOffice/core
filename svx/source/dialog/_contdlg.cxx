@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-31 14:00:22 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,7 +978,7 @@ IMPL_LINK( SvxSuperContourDlg, UpdateHdl, Timer*, pTimer )
         aUpdatePolyPoly = PolyPolygon();
         bUpdateGraphicLinked = FALSE;
 
-        aContourWnd.GetSdrModel()->SetChanged( FALSE );
+        aContourWnd.GetSdrModel()->SetChanged( sal_False );
     }
 
     GetBindings().Invalidate( SID_CONTOUR_EXEC );
