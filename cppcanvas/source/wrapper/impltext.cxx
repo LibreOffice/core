@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impltext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:02:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,14 @@
 #include <impltext.hxx>
 #include <canvas/canvastools.hxx>
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
-#include <drafts/com/sun/star/rendering/TextDirection.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
+#include <com/sun/star/rendering/TextDirection.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
+#include <com/sun/star/rendering/XCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
-#include <drafts/com/sun/star/rendering/StringContext.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
+#include <com/sun/star/rendering/StringContext.hpp>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -81,7 +81,7 @@
 #endif
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace cppcanvas
