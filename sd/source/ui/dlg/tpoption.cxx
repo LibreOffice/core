@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 11:09:50 $
+ *  last change: $Author: sj $ $Date: 2001-04-23 15:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,7 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aCbxMasterPageCache.GetSavedValue()     != aCbxMasterPageCache.IsChecked() ||
         aCbxCopy.GetSavedValue()                != aCbxCopy.IsChecked() ||
         aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() ||
-        aCbxCompatibility.GetSavedValue()       != aCbxCompatibility.GetSavedValue() )
+        aCbxCompatibility.GetSavedValue()       != aCbxCompatibility.IsChecked() )
     {
         SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
 
@@ -496,10 +496,7 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.SetMasterPagePaintCaching( aCbxMasterPageCache.IsChecked() );
         aOptsItem.SetDragWithCopy( aCbxCopy.IsChecked() );
         aOptsItem.SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
-#if SUPD>627
         aOptsItem.SetSummationOfParagraphs( aCbxCompatibility.IsChecked() );
-#endif
-
         rAttrs.Put( aOptsItem );
 
         bModified = TRUE;
