@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:30:24 $
+ *  last change: $Author: cl $ $Date: 2001-10-05 06:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
+#endif
+
+#ifndef _SVX_XMLCNITM_HXX
+#include "xmlcnitm.hxx"
 #endif
 
 #include "svxids.hrc"
@@ -331,8 +335,9 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
     ppPoolDefaults[SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, TRUE );
     ppPoolDefaults[SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM, FALSE );
+    ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
 
-    for (i=SDRATTR_NOTPERSISTRESERVE3; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
+    for (i=SDRATTR_NOTPERSISTRESERVE4; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
     }
 
