@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:52 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,15 +240,10 @@ public:
         Ensures that the capacity of the buffer is at least equal to the
         specified minimum.
 
-        If the current capacity of this string buffer is less than the
-        argument, then a new internal buffer is allocated with greater
-        capacity. The new capacity is the larger of:
-        <ul>
-        <li>The <code>minimumCapacity</code> argument.
-        <li>Twice the old capacity, plus <code>2</code>.
-        </ul>
-        If the <code>minimumCapacity</code> argument is nonpositive, this
-        method takes no action and simply returns.
+        The new capacity will be at least as large as the maximum of the current
+        length (so that no contents of the buffer is destroyed) and the given
+        minimumCapacity.  If the given minimumCapacity is negative, nothing is
+        changed.
 
         @param   minimumCapacity   the minimum desired capacity.
      */
@@ -277,6 +272,7 @@ public:
      */
     void setLength(sal_Int32 newLength)
     {
+        OSL_ASSERT(newLength >= 0);
         if( newLength > nCapacity )
             rtl_uStringbuffer_ensureCapacity(&pData, &nCapacity, newLength);
         else
@@ -299,6 +295,7 @@ public:
      */
     sal_Unicode charAt( sal_Int32 index )
     {
+        OSL_ASSERT(index >= 0 && index < pData->length);
         return pData->buffer[ index ];
     }
 
@@ -317,7 +314,7 @@ public:
         The character at the specified index of this string buffer is set
         to <code>ch</code>.
 
-        The offset argument must be greater than or equal to
+        The index argument must be greater than or equal to
         <code>0</code>, and less than the length of this string buffer.
 
         @param      index   the index of the character to modify.
@@ -325,6 +322,7 @@ public:
      */
     OUStringBuffer & setCharAt(sal_Int32 index, sal_Unicode ch)
     {
+        OSL_ASSERT(index >= 0 && index < pData->length);
         pData->buffer[ index ] = ch;
         return *this;
     }
@@ -368,8 +366,9 @@ public:
         in order, to the contents of this string buffer. The length of this
         string buffer increases by the value of <code>len</code>.
 
-        @param   str      the characters to be appended.
-        @param   len      the number of characters to append.
+        @param str the characters to be appended; must be non-null, and must
+        point to at least len characters
+        @param len the number of characters to append; must be non-negative
         @return  this string buffer.
      */
     OUStringBuffer & append( const sal_Unicode * str, sal_Int32 len)
@@ -413,8 +412,9 @@ public:
         in order, to the contents of this string buffer. The length of this
         string buffer increases by the value of <code>len</code>.
 
-        @param   str      the 8-Bit ASCII characters to be appended.
-        @param   len      the number of characters to append.
+        @param str the 8-Bit ASCII characters to be appended; must be non-null,
+        and must point to at least len characters
+        @param len the number of characters to append; must be non-negative
         @return  this string buffer.
      */
     OUStringBuffer & appendAscii( const sal_Char * str, sal_Int32 len)
@@ -552,6 +552,10 @@ public:
         contents of this string buffer at the position indicated by
         <code>offset</code>. The length of this string buffer increases by
         the length of the argument.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
 
         @param      offset   the offset.
         @param      ch       a character array.
@@ -570,6 +574,10 @@ public:
         contents of this string buffer at the position indicated by
         <code>offset</code>. The length of this string buffer increases by
         the length of the argument.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
 
         @param      offset   the offset.
         @param      ch       a character array.
