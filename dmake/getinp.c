@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: getinp.c,v 1.2 2000-10-20 11:12:55 hjs Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -667,5 +667,5 @@ int partcomp( char* lhs, int opcode )
     }
 /*  printf("partresult %d\n",result);*/
     return result;
-};
+}
 
