@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-06 09:59:43 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 10:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@
 
 #define BOOTSTRAP_ITEM_SHAREDIR             "SharedDataDir"
 #define BOOTSTRAP_ITEM_USERDIR              "UserDataDir"
+
+#define BOOTSTRAP_ITEM_PRODUCT_PATCH_LEVEL  "ProductPatch"
 
 #define BOOTSTRAP_DEFAULT_BASEINSTALL       "$SYSBINDIR/.."
 
@@ -714,6 +716,14 @@ OUString Bootstrap::getInstallMode(rtl::OUString const& _sDefault)
     OUString const csInstallModeItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_INSTALLMODE));
 
     return data().getBootstrapValue( csInstallModeItem, _sDefault );
+}
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::getProductPatchLevel(OUString const& _sDefault)
+{
+    OUString const csBuildIdItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_PRODUCT_PATCH_LEVEL));
+
+    return data().getBootstrapValue( csBuildIdItem, _sDefault );
 }
 // ---------------------------------------------------------------------------------------
 

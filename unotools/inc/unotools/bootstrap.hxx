@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-06 09:58:48 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 10:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,10 @@ namespace utl
         /// retrieve the installation mode information item; uses the given default, if not found
         static rtl::OUString getInstallMode(rtl::OUString const& _sDefault);
 
-     public: // retrieve path information about the installatíon location
+        /// retrieve the product patch level; uses the given default, if not found
+        static rtl::OUString getProductPatchLevel(rtl::OUString const& _sDefault);
+
+    public: // retrieve path information about the installatíon location
         enum PathStatus
         {
             PATH_EXISTS,  // Success: Found a path to an existing file or directory
