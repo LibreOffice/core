@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-08 13:55:24 $
+ *  last change: $Author: hro $ $Date: 2001-11-30 16:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,42 @@ public:
     inline sal_Bool getRemoveableFlag() const
     {
         return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_Removeable);
+    }
+
+    /** @return sal_True if attributes are valid and the volume is a CDROM,
+     sal_False otherwise.
+    */
+
+    inline sal_Bool getCompactDiscFlag() const
+    {
+        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_CompactDisc);
+    }
+
+    /** @return sal_True if attributes are valid and the volume is a floppy disk,
+     sal_False otherwise.
+    */
+
+    inline sal_Bool getFloppyDiskFlag() const
+    {
+        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_FloppyDisk);
+    }
+
+    /** @return sal_True if attributes are valid and the volume is a fixed disk,
+     sal_False otherwise.
+    */
+
+    inline sal_Bool getFixedDiskFlag() const
+    {
+        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_FixedDisk);
+    }
+
+    /** @return sal_True if attributes are valid and the volume is a RAM disk,
+     sal_False otherwise.
+    */
+
+    inline sal_Bool getRAMDiskFlag() const
+    {
+        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_RAMDisk);
     }
 
     /** @return the total diskspace of this volume if this information is valid,
