@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:44:25 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text [ french ] = "Insertion de pages/d'objets" ;
     Text [ dutch ] = "Pagina/objecten invoegen" ;
     Text [ swedish ] = "Infoga sidor/objekt" ;
-    Text [ danish ] = "IndsÊt sider/objekter" ;
+    Text [ danish ] = "IndsÊt dias/objekter" ;
     Text [ portuguese ] = "Inserir p·ginas/objectos" ;
     Text [ portuguese_brazilian ] = "Inserir Slides/Objetos" ;
     Text[ chinese_simplified ] = "ÊèíÂÖ•È°µÈù¢ÊàñÂØπË±°";
@@ -127,7 +127,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text [ french ] = "~Lien" ;
         Text [ dutch ] = "~Koppeling" ;
         Text [ swedish ] = "~L‰nk" ;
-        Text [ danish ] = "KÊde" ;
+        Text [ danish ] = "~KÊde" ;
         Text [ portuguese ] = "~LigaÁ„o" ;
         Text [ portuguese_brazilian ] = "~VÌnculo" ;
         Text[ chinese_simplified ] = "ÈìæÊé•(~L)";
@@ -147,6 +147,8 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ hebrew ] = "~Verkn√ºpfung";
         Text[ hindi ] = "~‡§ï‡§°‡§º‡•Ä";
         Text[ slovak ] = "~Odkaz";
+        Text[ hungarian ] = "~Hivatkoz√°s";
+        Text[ slovenian ] = "~Povezava";
     };
     CheckBox CBX_CHECK_MASTERS
     {
@@ -162,7 +164,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ french ] = "Supprimer les pages d'arriËre-plan ~inutilisÈes";
         Text[ spanish ] = "~Borrar las p·ginas de fondo no utilizadas";
         Text[ italian ] = "Elimi~na pagine di sfondo non utilizzate";
-        Text[ danish ] = "Slet ikke-brugte baggrundssider";
+        Text[ danish ] = "Slet ubrugte baggrundssider";
         Text[ swedish ] = "Radera ej a~nv‰nda bakgrundssidor";
         Text[ polish ] = "UsuÒ nieuøywane ~t≥a";
         Text[ portuguese_brazilian ] = "~Excluir planos de fundo n„o utilizados";
@@ -180,6 +182,8 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ hebrew ] = "~Nicht verwendete Hintergrundseiten l√∂schen";
         Text[ hindi ] = "~‡§Ö‡§®‡•Å‡§≠‡•ç‡§Ø‡§∏‡•ç‡§§ ‡§™‡•É‡§∑‡•ç‡§†‡§≠‡§æ‡§ó ‡§ï‡•ã ‡§Æ‡§ø‡§ü‡§æ‡§ì";
         Text[ slovak ] = "~Zmaza≈• nepou≈æit√© pozadia";
+        Text[ hungarian ] = "Nem haszn√°lt ~h√°tterek t√∂rl√©se";
+        Text[ slovenian ] = "Izbri≈°i neupo~rabljena ozadja";
     };
     Text[ greek ] = "≈ÈÛ·„˘„ﬁ ‰È·ˆ·ÌÂÈ˛Ì/·ÌÙÈÍÂÈÏ›Ì˘Ì";
     Text[ korean ] = "Ïä¨ÎùºÏù¥Îìú/Í∞úÏ≤¥ ÏÇΩÏûÖ";
@@ -192,7 +196,10 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text[ hebrew ] = "Seiten/Objekte einf√ºgen";
     Text[ hindi ] = "‡§∏‡•ç‡§≤‡§á‡§°‡•ã‡§Ç/‡§µ‡§∏‡•ç‡§§‡•Å‡§ì‡§Ç ‡§ï‡•ã ‡§ú‡•ã‡§°‡§º‡•ã";
     Text[ slovak ] = "Vlo≈æi≈• sn√≠mky/objekty";
+    Text[ hungarian ] = "Di√°k/objektumok besz√∫r√°sa";
+    Text[ slovenian ] = "Vstavi diapozitive/predmete";
 };
+
 
 
 
