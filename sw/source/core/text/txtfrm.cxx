@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:30:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
-
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
 #endif
@@ -429,6 +428,9 @@ void SwTxtFrm::InitCtor()
     nOfst = 0;
     nAllLines = 0;
     nThisLines = 0;
+    mnFlyAnchorOfst = 0;
+    mnFlyAnchorOfstNoWrap = 0;
+
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
         bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
@@ -2266,3 +2268,103 @@ const SwScriptInfo* SwTxtFrm::GetScriptInfo() const
     return pPara ? &pPara->GetScriptInfo() : 0;
 }
 
+/*************************************************************************
+ *                      lcl_CalcFlyBasePos()
+ * Helper function for SwTxtFrm::CalcBasePosForFly()
+ *************************************************************************/
+
+SwTwips lcl_CalcFlyBasePos( const SwTxtFrm& rFrm, SwRect aFlyRect,
+                            SwTxtFly& rTxtFly )
+{
+    SWRECTFN( (&rFrm) )
+    SwTwips nRet = rFrm.IsRightToLeft() ?
+                   (rFrm.Frm().*fnRect->fnGetRight)() :
+                   (rFrm.Frm().*fnRect->fnGetLeft)();
+
+    do
+    {
+        SwRect aRect = rTxtFly.GetFrm( aFlyRect );
+        if ( 0 != (aRect.*fnRect->fnGetWidth)() )
+        {
+            if ( rFrm.IsRightToLeft() )
+            {
+                if ( (aRect.*fnRect->fnGetRight)() -
+                     (aFlyRect.*fnRect->fnGetRight)() >= 0 )
+                {
+                    (aFlyRect.*fnRect->fnSetRight)(
+                        (aRect.*fnRect->fnGetLeft)() );
+                    nRet = (aRect.*fnRect->fnGetLeft)();
+                }
+                else
+                    break;
+            }
+            else
+            {
+                if ( (aFlyRect.*fnRect->fnGetLeft)() -
+                     (aRect.*fnRect->fnGetLeft)() >= 0 )
+                {
+                    (aFlyRect.*fnRect->fnSetLeft)(
+                        (aRect.*fnRect->fnGetRight)() + 1 );
+                    nRet = (aRect.*fnRect->fnGetRight)();
+                }
+                else
+                    break;
+            }
+        }
+        else
+            break;
+    }
+    while ( sal_True );
+
+    return nRet;
+}
+
+/*************************************************************************
+ *                      SwTxtFrm::CalcBasePosForFly()
+ *************************************************************************/
+
+void SwTxtFrm::CalcBaseOfstForFly()
+{
+    ASSERT( !IsVertical() || !IsSwapped(),
+            "SwTxtFrm::CalcBasePosForFly with swapped frame!" )
+
+    const SwNode* pNode = GetTxtNode();
+    const SwDoc* pDoc = pNode->GetDoc();
+    if ( !pDoc->IsAddFlyOffsets() )
+        return;
+
+    SWRECTFN( this )
+
+    SwTwips nTop = 0;
+    SwTwips nLineHeight = 200;
+    SwRect aFlyRect( Frm().Pos() + Prt().Pos(), Prt().SSize() );
+
+    // Get first 'real' line
+    const SwLineLayout* pLay = GetPara();
+    while( pLay && pLay->IsDummy() )
+    {
+        nTop += pLay->Height();
+        pLay = pLay->GetNext();
+    }
+    if ( pLay )
+        nLineHeight = pLay->Height();
+
+    SwTwips nNewTop = (aFlyRect.*fnRect->fnGetTop)() +
+                      ( bVert ? -nTop : nTop );
+    (aFlyRect.*fnRect->fnSetTopAndHeight)( nNewTop, nLineHeight );
+
+    SwTxtFly aTxtFly( this );
+    aTxtFly.SetIgnoreCurrentFrame( sal_True );
+    aTxtFly.SetIgnoreContour( sal_True );
+    SwTwips nRet1 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
+    aTxtFly.SetIgnoreCurrentFrame( sal_False );
+    SwTwips nRet2 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
+
+    // make values relative to frame start position
+    SwTwips nLeft = IsRightToLeft() ?
+                    (Frm().*fnRect->fnGetRight)() :
+                    (Frm().*fnRect->fnGetLeft)();
+
+    mnFlyAnchorOfst = nRet1 - nLeft;
+    mnFlyAnchorOfstNoWrap = nRet2 - nLeft;
+}
