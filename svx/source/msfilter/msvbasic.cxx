@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:39:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ const int MINVBASTRING = 6;
 
 VBA_Impl::VBA_Impl(SvStorage &rIn, bool bCmmntd)
     : aVBAStrings(0),
-    sComment(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Rem "))),
+    sComment(RTL_CONSTASCII_USTRINGPARAM("Rem ")),
     xStor(&rIn), pOffsets(0), nOffsets(0), meCharSet(RTL_TEXTENCODING_MS_1252),
     bCommented(bCmmntd), mbMac(false), nLines(0)
 {
@@ -186,9 +186,8 @@ void VBA_Impl::Output( int nLen, const sal_uInt8*pData )
 int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 {
     SvStorageStreamRef xVBAProject;
-    xVBAProject = rxVBAStorage->OpenSotStream( String(
-                                RTL_CONSTASCII_STRINGPARAM( "_VBA_PROJECT" ),
-                                RTL_TEXTENCODING_MS_1252 ),
+    xVBAProject = rxVBAStorage->OpenSotStream(
+                    String( RTL_CONSTASCII_USTRINGPARAM( "_VBA_PROJECT" ) ),
                     STREAM_STD_READ | STREAM_NOCREATE );
 
     if( !xVBAProject.Is() || SVSTREAM_OK != xVBAProject->GetError() )
@@ -465,7 +464,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 
 
 /* #117718# For a given Module name return its type,
- * Form, Class, Normal or Unknown
+ * Form, Class, Document, Normal or Unknown
  *
 */
 
@@ -511,20 +510,16 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
          * entries are of the form Key=Value, the ones that we are interested
          * in have the keys; Class, BaseClass & Module indicating the module
          * ( value ) is either a Class Module, Form Module or a plain VB Module.        */
-        SvStorageStreamRef xProject = xMacros->OpenSotStream( String(
-                                               RTL_CONSTASCII_STRINGPARAM( "PROJECT" ),
-                                               RTL_TEXTENCODING_MS_1252 ) );
+        SvStorageStreamRef xProject = xMacros->OpenSotStream(
+            String( RTL_CONSTASCII_USTRINGPARAM( "PROJECT" ) ) );
         SvStorageStream* pStp = xProject;
         int i = 0;
         UniString tmp;
-        UniString sThisDoc( RTL_CONSTASCII_STRINGPARAM( "ThisDocument" ),
-                                        RTL_TEXTENCODING_MS_1252 );
-        UniString sModule( RTL_CONSTASCII_STRINGPARAM( "Module" ),
-                                        RTL_TEXTENCODING_MS_1252 );
-        UniString sClass( RTL_CONSTASCII_STRINGPARAM( "Class" ),
-                                        RTL_TEXTENCODING_MS_1252 );
-        UniString sBaseClass( RTL_CONSTASCII_STRINGPARAM( "BaseClass" ),
-                                        RTL_TEXTENCODING_MS_1252 );
+        static const String sThisDoc(   RTL_CONSTASCII_USTRINGPARAM( "ThisDocument" ) );
+        static const String sModule(    RTL_CONSTASCII_USTRINGPARAM( "Module" ) );
+        static const String sClass(     RTL_CONSTASCII_USTRINGPARAM( "Class" ) );
+        static const String sBaseClass( RTL_CONSTASCII_USTRINGPARAM( "BaseClass" ) );
+        static const String sDocument(  RTL_CONSTASCII_USTRINGPARAM( "Document" ) );
         mhModHash[ sThisDoc ] = Class;
         while ( pStp->ReadByteStringLine( tmp, meCharSet ) )
         {
@@ -547,6 +542,19 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
                         ::rtl::OUStringToOString( value ,
                             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 }
+                else if ( key == sDocument )
+                {
+                    /*  #i37965# DR 2004-12-03: add "Document", used i.e.
+                        in Excel for macros attached to sheet or document. */
+
+                    // value is of form <name>/&H<identifier>, strip the identifier
+                    value.Erase( value.Search( '/' ) );
+
+                    mhModHash[ value ] = Document;
+                    OSL_TRACE("Module %s is of type Document VBA",
+                        ::rtl::OUStringToOString( value ,
+                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                }
                 else if ( key == sModule )
                 {
                     mhModHash[ value ] = Normal;
@@ -554,7 +562,6 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
                         ::rtl::OUStringToOString( value ,
                             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 }
-
             }
         }
     }
@@ -591,9 +598,9 @@ const StringArray &VBA_Impl::Decompress(sal_uInt16 nIndex, int *pOverflow)
         {
             String sTempStringa;
             if (mbMac)
-                sTempStringa = String(RTL_CONSTASCII_STRINGPARAM("\x0D"));
+                sTempStringa = String( RTL_CONSTASCII_USTRINGPARAM( "\x0D" ) );
             else
-                sTempStringa = String(RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"));
+                sTempStringa = String( RTL_CONSTASCII_USTRINGPARAM( "\x0D\x0A" ) );
             String sTempStringb(sTempStringa);
             sTempStringb+=sComment;
             for(ULONG i=0;i<aVBAStrings.GetSize();i++)
