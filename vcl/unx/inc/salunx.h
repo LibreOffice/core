@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salunx.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 12:18:43 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <sys/time.h>
 #include <strings.h>
 #elif defined IRIX
+#ifdef __cplusplus
+#include <ctime>
+#endif
 #include <sys/time.h>
 #include <unistd.h>
 #endif
