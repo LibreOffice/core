@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:19:53 $
+ *  last change: $Author: cl $ $Date: 2001-12-17 16:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode,       "ApplyFormDesignMode" );
 SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundVisible,    "IsBackgroundVisible" );
 SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundObjectsVisible, "IsBackgroundObjectsVisible" );
 SD_CONSTASCII_ACTION( sUNO_Prop_UserDefinedAttributes, "UserDefinedAttributes" );
+SD_CONSTASCII_ACTION( sUNO_Prop_BookmarkURL,            "BookmarkURL" );
 
 // view settings
 SD_CONSTASCII_ACTION( sUNO_View_ViewId,                         "ViewId" );
