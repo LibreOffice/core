@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_uriproc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:22:26 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,17 @@
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uri/ExternalUriReferenceTranslator.hpp"
+#include "com/sun/star/uri/UriReferenceFactory.hpp"
+#include "com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp"
+#include "com/sun/star/uri/XExternalUriReferenceTranslator.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "com/sun/star/uri/XUriReferenceFactory.hpp"
+#include "com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarScriptUrlReference.hpp"
 #include "cppuhelper/servicefactory.hxx"
 #include "cppunit/simpleheader.hxx"
+#include "osl/diagnose.h"
 #include "osl/thread.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -149,11 +155,17 @@ public:
 
     void testVndSunStarScript();
 
+    void testTranslator();
+
+    void testPkgUrlFactory();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testParse);
     CPPUNIT_TEST(testMakeAbsolute);
     CPPUNIT_TEST(testMakeRelative);
     CPPUNIT_TEST(testVndSunStarScript);
+    CPPUNIT_TEST(testTranslator);
+    CPPUNIT_TEST(testPkgUrlFactory);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -163,22 +175,16 @@ private:
 
 void Test::setUp() {
     char const * registry = getForwardString();
-    css::uno::Reference< css::lang::XMultiComponentFactory > factory(
+    css::uno::Reference< css::lang::XMultiServiceFactory > factory(
         cppu::createRegistryServiceFactory(
             rtl::OUString(
                 registry, rtl_str_getLength(registry),
-                osl_getThreadTextEncoding())),
-        css::uno::UNO_QUERY_THROW);
+                osl_getThreadTextEncoding())));
         //TODO: check for string conversion failure
     css::uno::Reference< css::beans::XPropertySet >(
         factory, css::uno::UNO_QUERY_THROW)->getPropertyValue(
             rtl::OUString::createFromAscii("DefaultContext")) >>= m_context;
-    m_uriFactory = css::uno::Reference< css::uri::XUriReferenceFactory >(
-        factory->createInstanceWithContext(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory"),
-            m_context),
-        css::uno::UNO_QUERY_THROW);
+    m_uriFactory = css::uri::UriReferenceFactory::create(m_context);
 }
 
 void Test::tearDown() {
@@ -825,6 +831,83 @@ void Test::testVndSunStarScript() {
                                 data[i].parameters[j].key)));
                 }
             }
+        }
+    }
+}
+
+void Test::testTranslator() {
+    struct Data {
+        char const * externalUriReference;
+        char const * internalUriReference;
+    };
+    Data data[] = {
+        { "", "" },
+        { "#fragment", "#fragment" },
+        { "segment/segment?query#fragment", "segment/segment?query#fragment" },
+        { "/segment/segment?query#fragment",
+          "/segment/segment?query#fragment" },
+        { "//authority/segment?query#fragment",
+          "//authority/segment?query#fragment" },
+        { "foo:bar#fragment", "foo:bar#fragment" },
+        { "file:///abc/def", "file:///abc/def" },
+        { 0, "file:///abc/%FEef" },
+        { 0, "file:///abc/%80%80ef" },
+        { 0, "file:///abc/%ED%A0%80%ED%B0%80ef" } };
+    css::uno::Reference< css::uri::XExternalUriReferenceTranslator >
+        translator(css::uri::ExternalUriReferenceTranslator::create(m_context));
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        if (data[i].externalUriReference != 0) {
+            TEST_ASSERT_EQUAL(
+                "testTranslator, translateToInternal", i,
+                data[i].externalUriReference,
+                (data[i].internalUriReference == 0
+                 ? rtl::OUString()
+                 : rtl::OUString::createFromAscii(
+                     data[i].internalUriReference)),
+                translator->translateToInternal(
+                    rtl::OUString::createFromAscii(
+                        data[i].externalUriReference)));
+        }
+        if (data[i].internalUriReference != 0) {
+            TEST_ASSERT_EQUAL(
+                "testTranslator, translateToExternal", i,
+                data[i].internalUriReference,
+                (data[i].externalUriReference == 0
+                 ? rtl::OUString()
+                 : rtl::OUString::createFromAscii(
+                     data[i].externalUriReference)),
+                translator->translateToExternal(
+                    rtl::OUString::createFromAscii(
+                        data[i].internalUriReference)));
+        }
+    }
+}
+
+void Test::testPkgUrlFactory() {
+    struct Data {
+        char const * authority;
+        char const * result;
+    };
+    Data data[] = {
+        { "a/b/c", 0 },
+        { "file:///#foo", 0 },
+        { "file:///a%25b%2fc/d~e&f@g?h",
+          "vnd.sun.star.pkg://file:%2F%2F%2Fa%2525b%252fc%2Fd~e&f@g%3Fh" } };
+    css::uno::Reference< css::uri::XVndSunStarPkgUrlReferenceFactory > factory(
+        css::uri::VndSunStarPkgUrlReferenceFactory::create(m_context));
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        css::uno::Reference< css::uri::XUriReference > url(
+            factory->createVndSunStarPkgUrlReference(
+                m_uriFactory->parse(
+                    rtl::OUString::createFromAscii(data[i].authority))));
+        TEST_ASSERT_EQUAL(
+            "testVndSunStarPkgFactory", i, data[i].authority,
+            data[i].result != 0, static_cast< bool >(url.is()));
+        if (data[i].result != 0) {
+            TEST_ASSERT_EQUAL(
+                "testVndSunStarPkgFactory", i, data[i].authority,
+                rtl::OUString::createFromAscii(data[i].result),
+                url->getUriReference());
         }
     }
 }
