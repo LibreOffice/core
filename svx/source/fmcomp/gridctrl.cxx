@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 15:07:09 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,6 +985,7 @@ DbGridControl::DbGridControl(
             ,m_bInAdjustDataSource(sal_False)
             ,m_bPendingAdjustRows(sal_False)
             ,m_xServiceFactory(_rxFactory)
+            ,m_pSelectionListener(NULL)
 {
     DBG_CTOR(DbGridControl,NULL);
 
@@ -1018,6 +1019,7 @@ DbGridControl::DbGridControl(
             ,m_bInAdjustDataSource(sal_False)
             ,m_bPendingAdjustRows(sal_False)
             ,m_xServiceFactory(_rxFactory)
+            ,m_pSelectionListener(NULL)
 {
     DBG_CTOR(DbGridControl,NULL);
 
@@ -1165,6 +1167,9 @@ void DbGridControl::Select()
 
     // as the selected rows may have changed, udate the according display in our navigation bar
     m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
+
+    if (m_pSelectionListener)
+        m_pSelectionListener->selectionChanged();
 }
 
 //------------------------------------------------------------------------------
