@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:49:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #endif
 
 #include <svx/svxids.hrc>
-#include <offmgr/hyprlink.hxx>
+#include <svx/hyprlink.hxx>
 
 #ifndef _SVX_TAB_HYPERLINK_HXX
 #include <svx/hyperdlg.hxx>
