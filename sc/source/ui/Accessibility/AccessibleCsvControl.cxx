@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-05 07:59:06 $
+ *  last change: $Author: sab $ $Date: 2002-11-15 09:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,7 +1069,7 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleStat
     {
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         pStateSet->AddState( AccessibleStateType::MULTISELECTABLE );
-        pStateSet->AddState( AccessibleStateType::CHILDREN_TRANSIENT );
+        pStateSet->AddState( AccessibleStateType::MANAGES_DESCENDANT );
         if( implGetGrid().HasFocus() )
             pStateSet->AddState( AccessibleStateType::FOCUSED );
     }

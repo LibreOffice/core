@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:01:58 $
+ *  last change: $Author: sab $ $Date: 2002-11-15 09:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAcce
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
-        pStateSet->AddState(AccessibleStateType::CHILDREN_TRANSIENT);
+        pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANT);
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::OPAQUE);
         if (isShowing())
