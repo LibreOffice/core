@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:30:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,12 @@
 #include "sdresid.hxx"
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_PANE_MANAGER_HXX
+#include "PaneManager.hxx"
 #endif
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
@@ -830,9 +836,8 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
 
         if (nPgNum != SDRPAGE_NOTFOUND)
         {
-            /**********************************************************
-            * Zur Seite springen
-            **********************************************************/
+            // Jump to the bookmarked page.  This is done in three steps.
+
             bFound = TRUE;
             SdPage* pPage;
             if (bIsMasterPage)
@@ -840,22 +845,43 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
             else
                 pPage = (SdPage*) pDoc->GetPage(nPgNum);
 
+            // 1.) Change the view shell to the edit view, the notes view,
+            // or the handout view.
             PageKind eNewPageKind = pPage->GetPageKind();
-
             if (eNewPageKind != pDrViewSh->GetPageKind())
             {
                 // Arbeitsbereich wechseln
                 GetFrameView()->SetPageKind(eNewPageKind);
-                ( ( pViewShell && pViewShell->GetViewFrame() ) ?
-                  pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
-                  GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
-
+                if (pViewShell != NULL)
+                {
+                    ViewShell::ShellType eShellType(
+                        pViewShell->GetShellType());
+                    switch (eNewPageKind)
+                    {
+                        case PK_STANDARD:
+                            eShellType = ViewShell::ST_IMPRESS;
+                            break;
+                        case PK_NOTES:
+                            eShellType = ViewShell::ST_NOTES;
+                            break;
+                        case PK_HANDOUT:
+                            eShellType = ViewShell::ST_HANDOUT;
+                            break;
+                        default:
+                            break;
+                    }
+                    pViewShell->GetViewShellBase().GetPaneManager()
+                        .RequestMainViewShellChange(
+                            eShellType,
+                            PaneManager::CM_SYNCHRONOUS);
+                }
                 // Die aktuelle ViewShell hat sich geaendert!
                 pDrViewSh = static_cast<DrawViewShell*>(pViewShell);
             }
 
+            // 2.) Set the edit mode to either the normal edit mode or the
+            // master page mode.
             EditMode eNewEditMode = EM_PAGE;
-
             if( bIsMasterPage )
             {
                 eNewEditMode = EM_MASTERPAGE;
@@ -867,9 +893,10 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
                 pDrViewSh->ChangeEditMode(eNewEditMode, FALSE);
             }
 
-            // Jump to the page.  This is done by using the API because this
-            // takes care of all the little things to be done.  Especially
-            // writing the view data to the frame view (see bug #107803#).
+            // 3.) Make the bookmarked page the current page.  This is done
+            // by using the API because this takes care of all the little
+            // things to be done.  Especially writing the view data to the
+            // frame view (see bug #107803#).
             USHORT nSdPgNum = (nPgNum - 1) / 2;
             SdUnoDrawView* pUnoDrawView = static_cast<SdUnoDrawView*>(
                 pDrViewSh->GetController());
