@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:15:41 $
+#   last change: $Author: hjs $ $Date: 2004-06-29 08:50:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -286,13 +286,13 @@ sub create_epm_header
 
     if ( $installer::globals::iswindowsbuild )
     {
-        $licensefilename = "license" . $searchlanguage . ".txt";
-        $readmefilename = "readme". $searchlanguage . ".txt";
+        $licensefilename = "license.txt";
+        $readmefilename = "readme.txt";
     }
     else
     {
-        $licensefilename = "LICENSE" . $searchlanguage;
-        $readmefilename = "README" . $searchlanguage;
+        $licensefilename = "LICENSE";
+        $readmefilename = "README";
     }
 
     for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )

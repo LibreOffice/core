@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-16 15:05:05 $
+#   last change: $Author: hjs $ $Date: 2004-06-29 08:50:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -745,7 +745,7 @@ sub add_License_Files_into_Installdir
         my $onefile = ${$filesarrayref}[$i];
         my $destination = $onefile->{'destination'};
 
-        if ( $destination =~ /^\s*share\Q$installer::globals::separator\Ereadme\Q$installer::globals::separator\E(\w+)$defaultlanguage\.?(\w*)\s*/ )
+        if ( $destination =~ /^\s*share\Q$installer::globals::separator\Ereadme\Q$installer::globals::separator\E(\w+?)_?$defaultlanguage\.?(\w*)\s*/ )
         {
             my $filename = $1;
             my $extension = $2;
