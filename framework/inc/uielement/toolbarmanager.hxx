@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:31:03 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XSUBTOOLBARCONTROLLER_HPP_
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_ITEMSTYLE_HPP_
+#include <com/sun/star/ui/ItemStyle.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -220,6 +223,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void UpdateImageOrientation();
         void ImplClearPopupMenu( ToolBox *pToolBar );
         void RequestImages();
+        sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
 
     protected:
         struct CommandInfo
