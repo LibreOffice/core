@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: abi $ $Date: 2002-03-28 12:39:32 $
+#   last change: $Author: hjs $ $Date: 2002-09-09 11:15:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ NO_BSYMBOLIC=TRUE
 CFLAGS +=  -DHAVE_EXPAT_H
 
 .IF "$(GUI)"=="WNT"
-CFLAGS+=/GR
+CFLAGS+=-GR
 .ENDIF
 
 .IF "$(COM)"=="GCC"

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-10 15:26:22 $
+#   last change: $Author: hjs $ $Date: 2002-09-09 11:13:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 
 .IF "$(GUI)"=="WNT"
-CFLAGS+=/GR
+CFLAGS+=-GR
 .ENDIF
 
 # --- Files ---
