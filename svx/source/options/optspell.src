@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ finnish ] = "Sanastot" ;
         Text [ danish ] = "Ordbøger" ;
         Text [ french ] = "Dictionnaires" ;
-        Text [ swedish ] = "Ordböcker" ;
+        Text [ swedish ] = "Ordlistor" ;
         Text [ dutch ] = "Woordenboeken" ;
         Text [ spanish ] = "Diccionarios" ;
         Text [ english_us ] = "Dictionaries" ;
@@ -232,10 +232,10 @@ TabPage RID_SFXPAGE_SPELL
         Text [ spanish ] = "~Mayúsculas y minúsculas  " ;
         Text [ english_us ] = "~Case sensitive " ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´(~C) ";
+        Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´ (~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ ";
         Text[ polish ] = "Wielkie i ma³e litery ";
-        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C) ";
+        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê (~C)";
         Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ ";
         Text[ greek ] = "ĞåæÜ-Êåöáëáßá ";
