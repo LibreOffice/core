@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-02 15:21:22 $
+ *  last change: $Author: mav $ $Date: 2003-12-09 15:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nObjectState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
 , m_bStoreVisRepl( sal_True )
+, m_bNewStoreVisRepl( sal_True )
 , m_xFactory( xFactory )
 , m_aClassID( aClassID )
 , m_aClassName( aClassName )
@@ -110,6 +111,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nObjectState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
 , m_bStoreVisRepl( sal_True )
+, m_bNewStoreVisRepl( sal_True )
 , m_xFactory( xFactory )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( bLink )

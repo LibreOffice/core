@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 12:49:46 $
+ *  last change: $Author: mav $ $Date: 2003-12-09 15:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper8
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xClosePreventer;
 
     sal_Bool m_bWaitSaveCompleted;
+    sal_Bool m_bNewStoreVisRepl;
     ::rtl::OUString m_aNewEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xNewObjectStream;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-09 12:52:28 $
+ *  last change: $Author: mav $ $Date: 2003-12-09 15:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium, const datatransfer::Dat
 
                 if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
                 {
-                      if ( aFlavor.MimeType.compareToAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"", 57 ) == 0 )
+                      if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image WMF\"", 57 ) )
                     {
                         aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize + 22 );
                         bAnyIsReady = sal_True;
@@ -191,7 +191,7 @@ sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium, const datatransfer::Dat
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
             {
-                  if ( aFlavor.MimeType.compareToAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"", 57 ) == 0 )
+                  if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image EMF\"", 57 ) )
                 {
                     aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize );
                     bAnyIsReady = sal_True;
@@ -204,7 +204,7 @@ sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium, const datatransfer::Dat
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) )
             {
-                  if ( aFlavor.MimeType.compareToAscii( "application/x-openoffice;windows_formatname=\"Bitmap\"", 54 ) == 0 )
+                  if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Bitmap\"", 54 ) )
                 {
                     aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize );
                     bAnyIsReady = sal_True;
@@ -229,10 +229,10 @@ sal_Bool GraphicalFlavor( const datatransfer::DataFlavor& aFlavor )
     if ( aFlavor.DataType == getCppuType( ( const uno::Sequence< sal_Int8 >* ) 0 ) )
     {
         // TODO: extend support for graphical formats
-        if ( aFlavor.MimeType.compareToAscii( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"", 59 ) == 0
-          || aFlavor.MimeType.compareToAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"", 57 ) == 0
-          || aFlavor.MimeType.compareToAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"", 57 ) == 0
-          || aFlavor.MimeType.compareToAscii( "image/png", 9 ) == 0 )
+        if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"", 59 )
+          || aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image EMF\"", 57 )
+          || aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image WMF\"", 57 )
+          || aFlavor.MimeType.matchAsciiL( "image/png", 9 ) )
             return sal_True;
     }
 
@@ -620,35 +620,25 @@ sal_Bool OleComponent::InitializeObject_Impl()
     // not realy needed for now, since object is updated on saving
     // m_pViewObject2->SetAdvise( DVASPECT_CONTENT, 0, m_pImplAdviseSink );
 
-    // register cache in case there is no ( Visio 2000 workaround )
+    // remove all the caches and register own specific one
     IOleCache* pIOleCache = NULL;
     if ( SUCCEEDED( m_pObj->QueryInterface( IID_IOleCache, (void**)&pIOleCache ) ) && pIOleCache )
     {
         IEnumSTATDATA* pEnumSD = NULL;
         HRESULT hr = pIOleCache->EnumCache( &pEnumSD );
 
-        sal_Bool bRegister = sal_True;
         if ( SUCCEEDED( hr ) && pEnumSD )
         {
             pEnumSD->Reset();
             STATDATA aSD;
             DWORD nNum;
             while( SUCCEEDED( pEnumSD->Next( 1, &aSD, &nNum ) ) && nNum == 1 )
-            {
-                if ( aSD.formatetc.cfFormat == 0 )
-                {
-                    bRegister = sal_False;
-                    break;
-                }
-            }
+                hr = pIOleCache->Uncache( aSD.dwConnection );
         }
 
-        if ( bRegister )
-        {
-            DWORD nConn;
-            FORMATETC aFormat = { 0, 0, DVASPECT_CONTENT, -1, TYMED_MFPICT };
-            hr = pIOleCache->Cache( &aFormat, ADVFCACHE_ONSAVE, &nConn );
-        }
+        DWORD nConn;
+        FORMATETC aFormat = { 0, 0, DVASPECT_CONTENT, -1, TYMED_MFPICT };
+        hr = pIOleCache->Cache( &aFormat, ADVFCACHE_ONSAVE, &nConn );
 
         pIOleCache->Release();
         pIOleCache = NULL;
@@ -1064,6 +1054,19 @@ void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOut
     hr = pPersistStorage->SaveCompleted( NULL );
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO
+
+    if ( !bStoreVisReplace )
+    {
+        // remove all the cache streams from the storage
+        for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
+        {
+            ::rtl::OUString aStreamName = ::rtl::OUString::createFromAscii( "\002OlePres00" );
+            aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
+            hr = m_pIStorage->DestroyElement( aStreamName.getStr() );
+            if ( FAILED( hr ) )
+                break;
+        }
+    }
 
     hr = m_pIStorage->Commit( STGC_DEFAULT );
     if ( FAILED( hr ) )

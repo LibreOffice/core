@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-09 12:52:34 $
+ *  last change: $Author: mav $ $Date: 2003-12-09 15:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,12 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
     if ( !xOutStream.is() )
         throw io::IOException(); //TODO: access denied
 
-    m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
+    sal_Bool bStoreVis = m_bStoreVisRepl;
+    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+        if ( lObjArgs[nInd].Name.equalsAscii( "StoreVisualReplacement" ) )
+            lObjArgs[nInd].Value >>= bStoreVis;
+
+    m_pOleComponent->StoreObjectToStream( xOutStream, bStoreVis );
 
     uno::Reference< lang::XComponent > xComp( xTargetStream, uno::UNO_QUERY );
     if ( xComp.is() )
@@ -572,12 +577,18 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
     if ( !xOutStream.is() )
         throw io::IOException(); //TODO: access denied
 
-    m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
+    sal_Bool bStoreVis = m_bStoreVisRepl;
+    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+        if ( lObjArgs[nInd].Name.equalsAscii( "StoreVisualReplacement" ) )
+            lObjArgs[nInd].Value >>= bStoreVis;
+
+    m_pOleComponent->StoreObjectToStream( xOutStream, bStoreVis );
 
     m_bWaitSaveCompleted = sal_True;
     m_xNewObjectStream = xTargetStream;
     m_xNewParentStorage = xStorage;
-    m_aEntryName = sEntName;
+    m_aNewEntryName = sEntName;
+    m_bNewStoreVisRepl = bStoreVis;
 
     // TODO: register listeners for storages above, in case thay are disposed
     //       an exception will be thrown on saveCompleted( true )
@@ -613,6 +624,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( bUseNew )
     {
         SwitchOwnPersistence( m_xNewParentStorage, m_xNewObjectStream, m_aNewEntryName );
+        m_bStoreVisRepl = m_bNewStoreVisRepl;
     }
     else
     {
