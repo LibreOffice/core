@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 10:09:02 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 10:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,26 @@ XMLTableStylesContext::~XMLTableStylesContext()
 {
 }
 
+SvXMLImportContext *XMLTableStylesContext::CreateChildContext( sal_uInt16 nPrefix,
+                                         const OUString& rLocalName,
+                                         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext = 0;
+
+    if( XML_NAMESPACE_OFFICE == nPrefix &&
+        rLocalName.compareToAscii( sXML_master_styles ) == 0L )
+    {
+//      pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
+//                                            xAttrList, GetScImport().GetAutoStyles() );
+    }
+
+    if (!pContext)
+        pContext = SvXMLImportContext::CreateChildContext( nPrefix,
+                                               rLocalName, xAttrList );
+
+    return pContext;
+}
+
 void XMLTableStylesContext::EndElement()
 {
     SvXMLStylesContext::EndElement();
@@ -799,5 +819,94 @@ OUString XMLTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     return sServiceName;
 }
 
+TYPEINIT1( ScXMLMasterStylesContext, SvXMLStylesContext );
 
+sal_Bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
+{
+    return sal_True;
+}
 
+ScXMLMasterStylesContext::ScXMLMasterStylesContext(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx, const OUString& rLName,
+        const Reference< XAttributeList > & xAttrList ) :
+    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
+{
+}
+
+ScXMLMasterStylesContext::~ScXMLMasterStylesContext()
+{
+}
+
+SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const Reference< XAttributeList > & xAttrList )
+{
+    SvXMLStyleContext *pContext = 0;
+
+    if( XML_NAMESPACE_STYLE == nPrefix &&
+        rLocalName.equalsAsciiL( sXML_master_page, sizeof(sXML_master_page)-1 ) &&
+         InsertStyleFamily( XML_STYLE_FAMILY_MASTER_PAGE ) )
+        pContext = new ScMasterPageContext(
+                        GetImport(), nPrefix, rLocalName, xAttrList,
+                        !GetImport().GetTextImport()->IsInsertMode() );
+
+    // any other style will be ignored here!
+
+    return pContext;
+}
+
+SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
+        sal_uInt16 nFamily,
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const Reference< XAttributeList > & xAttrList )
+{
+    return 0;
+}
+
+TYPEINIT1( ScMasterPageContext, XMLTextMasterPageContext );
+
+ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
+        sal_uInt16 nPrfx, const OUString& rLName,
+        const Reference< XAttributeList > & xAttrList,
+        sal_Bool bOverwrite ) :
+    XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite )
+{
+}
+
+ScMasterPageContext::~ScMasterPageContext()
+{
+}
+
+SvXMLImportContext *ScMasterPageContext::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const Reference< XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext = XMLTextMasterPageContext::CreateChildContext( nPrefix, rLocalName,
+                                                          xAttrList );
+    return pContext;
+}
+
+SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
+            sal_uInt16 nPrefix,
+            const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const sal_Bool bFooter,
+            const sal_Bool bLeft )
+{
+/*  Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+    return new XMLTextHeaderFooterContext( GetImport(),
+                                                nPrefix, rLocalName,
+                                                xAttrList,
+                                                xPropSet,
+                                                bFooter, bLeft );*/
+    return NULL;
+}
+
+void ScMasterPageContext::Finish( sal_Bool bOverwrite )
+{
+    XMLTextMasterPageContext::Finish(bOverwrite);
+}

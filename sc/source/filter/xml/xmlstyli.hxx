@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 10:09:02 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 10:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 #endif
 #ifndef _XMLOFF_XMLIMPPR_HXX
 #include <xmloff/xmlimppr.hxx>
+#endif
+#ifndef _XMLTEXTMASTERPAGECONTEXT_HXX
+#include <xmloff/XMLTextMasterPageContext.hxx>
+#endif
+#ifndef _XMLTEXTMASTERSTYLESCONTEXT_HXX
+#include <xmloff/XMLTextMasterStylesContext.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
 #include <com/sun/star/sheet/ConditionOperator.hpp>
@@ -213,6 +219,12 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual ~XMLTableStylesContext();
 
+    // Create child element.
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
     virtual void EndElement();
 
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
@@ -223,5 +235,62 @@ public:
     virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
 };
 
+class ScXMLMasterStylesContext : public SvXMLStylesContext
+{
+protected:
+    virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
+        sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+
+public:
+    TYPEINFO();
+
+    ScXMLMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
+
+    virtual ~ScXMLMasterStylesContext();
+};
+
+namespace com { namespace sun { namespace star {
+    namespace style { class XStyle; }
+} } }
+
+class ScMasterPageContext : public XMLTextMasterPageContext
+{
+public:
+
+    TYPEINFO();
+
+    ScMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            sal_Bool bOverwrite );
+    virtual ~ScMasterPageContext();
+
+    virtual SvXMLImportContext *CreateChildContext(
+            sal_uInt16 nPrefix,
+            const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual SvXMLImportContext *CreateHeaderFooterContext(
+            sal_uInt16 nPrefix,
+            const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const sal_Bool bFooter,
+            const sal_Bool bLeft );
+
+    virtual void Finish( sal_Bool bOverwrite );
+};
 
 #endif

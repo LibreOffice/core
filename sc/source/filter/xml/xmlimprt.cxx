@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 16:03:05 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 10:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, sXML_styles,            XML_TOK_DOC_STYLES      },
     { XML_NAMESPACE_OFFICE, sXML_automatic_styles,  XML_TOK_DOC_AUTOSTYLES  },
-    { XML_NAMESPACE_OFFICE, sXML_use_styles,        XML_TOK_DOC_USESTYLES   },
+    { XML_NAMESPACE_OFFICE, sXML_master_styles,     XML_TOK_DOC_MASTERSTYLES},
     { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META        },
     { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY        },
     XML_TOKEN_MAP_END
@@ -645,9 +645,9 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
     case XML_TOK_DOC_AUTOSTYLES:
         pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_True);
         break;
-//  case XML_TOK_DOC_USESTYLES:
-//      pContext = GetScImport().CreateUseStylesContext( rLocalName,
-//                                                       xAttrList );
+        break;
+    case XML_TOK_DOC_MASTERSTYLES:
+        pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_False);
         break;
     case XML_TOK_DOC_META:
         pContext = GetScImport().CreateMetaContext( rLocalName );

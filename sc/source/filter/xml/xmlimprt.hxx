@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 16:03:05 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 10:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ enum ScXMLDocTokens
 {
     XML_TOK_DOC_STYLES,
     XML_TOK_DOC_AUTOSTYLES,
-    XML_TOK_DOC_USESTYLES,
+    XML_TOK_DOC_MASTERSTYLES,
     XML_TOK_DOC_META,
     XML_TOK_DOC_BODY,
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
