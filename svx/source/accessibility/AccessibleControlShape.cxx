@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 09:56:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -110,7 +110,7 @@
 
 using namespace ::comphelper;
 using namespace ::accessibility;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -161,7 +161,7 @@ namespace
                 &&  ( AccessibleStateType::RESIZABLE != _nState )
                 &&  ( AccessibleStateType::SELECTABLE != _nState )
                 &&  ( AccessibleStateType::SHOWING != _nState )
-                &&  ( AccessibleStateType::MANAGES_DESCENDANT != _nState )
+                &&  ( AccessibleStateType::MANAGES_DESCENDANTS != _nState )
                 &&  ( AccessibleStateType::VISIBLE != _nState )
                 );
     }
@@ -287,7 +287,7 @@ void AccessibleControlShape::Init()
             {
                 Reference< XAccessibleStateSet > xStates( getAccessibleStateSet( ) );
                 OSL_ENSURE( xStates.is(), "AccessibleControlShape::AccessibleControlShape: no inner state set!" );
-                m_pChildManager->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANT ) );
+                m_pChildManager->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS ) );
             }
 
             // .................................................................
@@ -497,7 +497,7 @@ Sequence< Type > SAL_CALL AccessibleControlShape::getTypes() throw (RuntimeExcep
 //--------------------------------------------------------------------
 void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException)
 {
-    if ( AccessibleEventId::ACCESSIBLE_STATE_EVENT == _rEvent.EventId )
+    if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
     {
         // multiplex this change
         sal_Int16 nLostState( 0 ), nGainedState( 0 );
