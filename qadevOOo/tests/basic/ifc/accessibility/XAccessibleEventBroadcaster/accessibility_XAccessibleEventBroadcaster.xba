@@ -5,9 +5,9 @@
 &apos;*
 &apos;*  $RCSfile: accessibility_XAccessibleEventBroadcaster.xba,v $ 
 &apos;*
-&apos;*  $Revision: 1.1 $ 
+&apos;*  $Revision: 1.2 $ 
 &apos;*
-&apos;*  last change:$Date: 2003-01-27 17:43:30 $ 
+&apos;*  last change:$Date: 2004-03-19 14:30:23 $ 
 &apos;*
 &apos;*  The Contents of this file are made available subject to the terms of
 &apos;*  either of the following licenses
@@ -100,12 +100,12 @@ On Error Goto ErrHndl
     bOK = true
 
     &apos;out.log(&quot;Creating Listeners...&quot;)
-    oListener1 = createUNOListener(&quot;EL1_&quot;,&quot;drafts.com.sun.star.accessibility.XAccessibleEventListener&quot;)
-    oListener2 = createUNOListener(&quot;EL2_&quot;,&quot;drafts.com.sun.star.accessibility.XAccessibleEventListener&quot;)
+    oListener1 = createUNOListener(&quot;EL1_&quot;,&quot;com.sun.star.accessibility.XAccessibleEventListener&quot;)
+    oListener2 = createUNOListener(&quot;EL2_&quot;,&quot;com.sun.star.accessibility.XAccessibleEventListener&quot;)
     bOK = bOK AND NOT isNULL(oListener1) AND NOT isNULL(oListener2)
-    if NOT bOK then print &quot;ERROR: Cannot create listeners...&quot;
+    if NOT bOK then out.log( &quot;ERROR: Cannot create listeners...&quot;)
 
-    if NOT hasUNOInterfaces(oObj,&quot;drafts.com.sun.star.accessibility.XAccessibleContext&quot;) then
+    if NOT hasUNOInterfaces(oObj,&quot;com.sun.star.accessibility.XAccessibleContext&quot;) then
         &apos;out.log(&quot;Object does not implement XAccessibleContext.&quot;)
         isTransient = false
     else
@@ -118,13 +118,13 @@ On Error Goto ErrHndl
     bL1called = false
     bL2called = false
     &apos;out.log(&quot;Adding two listeners...&quot;)
-    oObj.drafts_com_sun_star_accessibility_XAccessibleEventBroadcaster_addEventListener(oListener1)
-    oObj.drafts_com_sun_star_accessibility_XAccessibleEventBroadcaster_addEventListener(oListener2)
+    oObj.com_sun_star_accessibility_XAccessibleEventBroadcaster_addEventListener(oListener1)
+    oObj.com_sun_star_accessibility_XAccessibleEventBroadcaster_addEventListener(oListener2)
     &apos;out.log(&quot;fire event&quot;)
     fireEvent()
     wait(500)
-    &apos;out.log(&quot;Listener1 called: &quot;+bL1called)
-    &apos;out.log(&quot;Listener2 called: &quot;+bL2called)
+    out.log(&quot;Listener1 called: &quot;+bL1called)
+    out.log(&quot;Listener2 called: &quot;+bL2called)
     if NOT isTransient then
         bOK = bOK AND bL1called AND bL2called
     else
@@ -139,12 +139,12 @@ On Error Goto ErrHndl
     bL1called = false
     bL2called = false
     &apos;out.log(&quot;Removing one listener...&quot;)
-    oObj.drafts_com_sun_star_accessibility_XAccessibleEventBroadcaster_removeEventListener(oListener1)
+    oObj.com_sun_star_accessibility_XAccessibleEventBroadcaster_removeEventListener(oListener1)
     &apos;out.log(&quot;fire event&quot;)
     fireEvent()
     wait(500)
-    &apos;out.log(&quot;Listener1 called: &quot;+bL1called)
-    &apos;out.log(&quot;Listener2 called: &quot;+bL2called)
+    out.log(&quot;Listener1 called: &quot;+bL1called)
+    out.log(&quot;Listener2 called: &quot;+bL2called)
     if NOT isTransient then
         bOK = bOK AND NOT bL1called AND bL2called
     else
@@ -154,7 +154,7 @@ On Error Goto ErrHndl
     Test.MethodTested(&quot;removeEventListener()&quot;,bOK)
 
     &apos; Removing the second listener...
-    oObj.drafts_com_sun_star_accessibility_XAccessibleEventBroadcaster_removeEventListener(oListener2)
+    oObj.com_sun_star_accessibility_XAccessibleEventBroadcaster_removeEventListener(oListener2)
 
 
 Exit Sub
