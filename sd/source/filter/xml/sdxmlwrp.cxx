@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-29 15:52:41 $
+ *  last change: $Author: cl $ $Date: 2002-06-25 11:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,64 +499,22 @@ sal_Bool SdXMLFilter::Import()
     pStorage = mrMedium.GetStorage();
 
     if( !pStorage )
-    {
-        // if there is a medium and if this medium has a load environment,
-        // we get an active data source from the medium.
-        mrMedium.GetInStream()->Seek( 0 );
-        xSource = mrMedium.GetDataSource();
-        DBG_ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
-        if( !xSource.is() )
-        {
-            nRet = SD_XML_READERROR;
-        }
-        else
-        {
-            // get a pipe for connecting the data source to the parser
-            xPipe = xServiceFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.io.Pipe") );
-            DBG_ASSERT( xPipe.is(),
-                    "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-            if( !xPipe.is() )
-            {
-                nRet = SD_XML_READERROR;
-            }
-            else
-            {
-                // connect pipe's output stream to the data source
-                Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
-                xSource->setOutputStream( xPipeOutput );
-
-                xInputStream = Reference< io::XInputStream >( xPipe, UNO_QUERY );
-            }
-        }
-    }
+        nRet = SD_XML_READERROR;
 
     if( 0 == nRet )
     {
-        if( pStorage )
-        {
-            pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
-                                                         GRAPHICHELPER_MODE_READ,
-                                                         sal_False );
-        }
-        else
-        {
-            pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
-        }
+        pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+                                                     GRAPHICHELPER_MODE_READ,
+                                                     sal_False );
+
         xGraphicResolver = pGraphicHelper;
         SvPersist *pPersist = pDoc->GetPersist();;
         if( pPersist )
         {
-            if( pStorage )
                 pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                             *pStorage, *pPersist,
                                             EMBEDDEDOBJECTHELPER_MODE_READ,
                                             sal_False );
-            else
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                            *pPersist,
-                                            EMBEDDEDOBJECTHELPER_MODE_READ );
-
             xObjectResolver = pObjectHelper;
         }
     }
@@ -581,59 +539,39 @@ sal_Bool SdXMLFilter::Import()
 
         const OUString aName( mrMedium.GetName() );
 
-        if ( NULL != pStorage )
+        sal_uInt32 nWarn = 0;
+        sal_uInt32 nWarn2 = 0;
+        // read storage streams
+        if( meFilterMode != SDXMLMODE_Organizer )
         {
-            sal_uInt32 nWarn = 0;
-            sal_uInt32 nWarn2 = 0;
-            // read storage streams
-            if( meFilterMode != SDXMLMODE_Organizer )
-            {
-                nWarn = ReadThroughComponent(
-                    pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
-                    IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service,
-                    aEmptyArgs, aName, sal_False );
+            nWarn = ReadThroughComponent(
+                pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+                IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service,
+                aEmptyArgs, aName, sal_False );
 
-                nWarn2 = ReadThroughComponent(
-                    pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
-                    IsDraw() ? sXML_import_draw_settings_service : sXML_import_impress_settings_service,
-                    aFilterArgs, aName, sal_False );
-            }
-
-            nRet = ReadThroughComponent(
-                pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
-                IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service,
-                aFilterArgs, aName, sal_True );
-
-            if( !nRet && (meFilterMode != SDXMLMODE_Organizer) )
-                nRet = ReadThroughComponent(
-                   pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
-                   IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service,
-                   aFilterArgs, aName, sal_True );
-
-            if( !nRet )
-            {
-                if( nWarn )
-                    nRet = nWarn;
-                else if( nWarn2 )
-                    nRet = nWarn2;
-            }
+            nWarn2 = ReadThroughComponent(
+                pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+                IsDraw() ? sXML_import_draw_settings_service : sXML_import_impress_settings_service,
+                aFilterArgs, aName, sal_False );
         }
-        else
-        {
-            // read plain file
-            const OUString aEmptyStr;
 
-            // parse
-            if( xSource.is() )
-            {
-                Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY );
-                xSourceControl->start();
-            }
+        nRet = ReadThroughComponent(
+            pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
+            IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service,
+            aFilterArgs, aName, sal_True );
 
+        if( !nRet && (meFilterMode != SDXMLMODE_Organizer) )
             nRet = ReadThroughComponent(
-                xInputStream, xModelComp, aEmptyStr, xServiceFactory,
-                IsDraw() ? sXML_import_draw_service : sXML_import_impress_service,
-                aFilterArgs, aName, sal_True, sal_False );
+               pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+               IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service,
+               aFilterArgs, aName, sal_True );
+
+        if( !nRet )
+        {
+            if( nWarn )
+                nRet = nWarn;
+            else if( nWarn2 )
+                nRet = nWarn2;
         }
     }
 
