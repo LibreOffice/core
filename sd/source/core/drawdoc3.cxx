@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-11-02 12:24:44 $
+ *  last change: $Author: thb $ $Date: 2001-12-14 11:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,25 +629,25 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
         List aNameList;
 
-        if (bLink)
+        for (USHORT nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
-            // Es werden sich die Namen aller Seiten gemerkt
-            for (USHORT nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
+            SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD);
+            String* pName = new String(pBMPage->GetName());
+            BOOL    bIsMasterPage;
+
+            if (bLink)
             {
-                SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD);
-                String* pName = new String(pBMPage->GetName());
-                BOOL    bIsMasterPage;
-
+                // Es werden sich die Namen aller Seiten gemerkt
                 aNameList.Insert(pName, nBMSdPage);
+            }
 
-                if( GetPageByName(*(pName), bIsMasterPage ) != SDRPAGE_NOTFOUND)
-                {
-                    // Seitenname schon vorhanden -> Defaultname
-                    // fuer Standard & Notizseite
-                    pBMPage->SetName(String());
-                    SdPage* pBMNotesPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_NOTES);
-                    pBMNotesPage->SetName(String());
-                }
+            if( GetPageByName(*(pName), bIsMasterPage ) != SDRPAGE_NOTFOUND)
+            {
+                // Seitenname schon vorhanden -> Defaultname
+                // fuer Standard & Notizseite
+                pBMPage->SetName(String());
+                SdPage* pBMNotesPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_NOTES);
+                pBMNotesPage->SetName(String());
             }
         }
 
