@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 17:44:04 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,7 @@ void lcl_WriteTeamInfo( SvStream& rStrm, rtl_TextEncoding eDestEnc )
     lcl_OUT_COMMENT( _STRINGCONST( "Michael Hagen                      " ) );
     lcl_OUT_COMMENT( _STRINGCONST( "Roland Jakobs                      " ) );
     lcl_OUT_COMMENT( _STRINGCONST( "Andreas Krebs                      " ) );
+    lcl_OUT_COMMENT( _STRINGCONST( "John Marmion                       " ) );
     lcl_OUT_COMMENT( _STRINGCONST( "Niklas Nebel                       " ) );
     lcl_OUT_COMMENT( _STRINGCONST( "Jacques Nietsch                    " ) );
     lcl_OUT_COMMENT( _STRINGCONST( "Marcus Olk                         " ) );
