@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-12 09:53:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 14:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@
 #define ALIGNDLG_VERALIGN_BOTTOM    3
 
 // image list for ValueSets:
-#define IL_LOCK_BMPS                1
-#define IL_LOCK_BMPS_HC             2
+#define IL_LOCK_BMPS                1100
+#define IL_LOCK_BMPS_HC             1101
 #define IID_BOTTOMLOCK              1
 #define IID_TOPLOCK                 2
 #define IID_CELLLOCK                3
