@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-29 15:55:38 $
+ *  last change: $Author: mav $ $Date: 2002-06-07 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,8 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
-#include <com/sun/star/document/XExporter.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
+#include <com/sun/star/document/XImporter.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -1876,11 +1876,11 @@ UUIInteractionHandler::handleFilterOptionsRequest(
 
                             if( xFilterDialog.is() && xFilterProperties.is() )
                             {
-                                star::uno::Reference< star::document::XExporter > xExporter(
+                                star::uno::Reference< star::document::XImporter > xImporter(
                                                 xFilterDialog,
                                                 star::uno::UNO_QUERY );
-                                if( xExporter.is() )
-                                    xExporter->setSourceDocument( star::uno::Reference< star::lang::XComponent >(
+                                if( xImporter.is() )
+                                    xImporter->setTargetDocument( star::uno::Reference< star::lang::XComponent >(
                                                     rRequest.rModel,
                                                     star::uno::UNO_QUERY ) );
 
