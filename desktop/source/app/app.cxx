@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:22:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,6 +1566,7 @@ void Desktop::EnableOleAutomation()
 #ifdef WNT
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
     xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.bridge.OleApplicationRegistration"));
+    xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.comp.ole.EmbedServer"));
 #endif
 }
 
