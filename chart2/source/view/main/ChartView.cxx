@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 20:15:30 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 20:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,6 +797,9 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
     //sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
     awt::Rectangle aRemainingSpace( 0, 0, rPageSize.Width, rPageSize.Height );
 
+    //create the group shape for diagram and axes first to have title and legends on top of it
+    uno::Reference< drawing::XShapes > xDiagramPlusAxesGroup_Shapes = ShapeFactory(m_xShapeFactory).createGroup2D(xPageShapes,C2U("CID/Diagram=XXX_CID"));//@todo read CID from model
+
     //------------ create some titles
     std::auto_ptr<VTitle> apVTitle(0);
     bool bAutoPositionDummy;
@@ -846,8 +849,6 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
     if( getPosAndSizeForDiagram( aPosDia, aSizeDia, aRemainingSpace, rPageSize, ChartModelHelper::findDiagram( m_xChartModel ) ) )
     {
         //create diagram and all its content
-        uno::Reference< drawing::XShapes > xDiagramPlusAxesGroup_Shapes = ShapeFactory(m_xShapeFactory).createGroup2D(xPageShapes,C2U("CID/Diagram=XXX_CID"));//@todo read CID from model
-
         initializeDiagramAndGetCooSys( m_aVCooSysList
                     , m_xCC, xDiagramPlusAxesGroup_Shapes, m_xShapeFactory, m_pNumberFormatterWrapper
                     , aPosDia ,aSizeDia, m_xChartModel );
