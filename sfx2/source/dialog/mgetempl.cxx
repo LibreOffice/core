@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:31:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "styfitem.hxx"
 #include "styledlg.hxx"
@@ -120,12 +122,12 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     pStyle( &( (SfxStyleDialog*)pParent->GetParent() )->GetStyleSheet() ),
 
+    pItem       ( 0 ),
     bModified   ( FALSE ),
     aName       ( pStyle->GetName() ),
     aFollow     ( pStyle->GetFollow() ),
     aParent     ( pStyle->GetParent() ),
-    nFlags      ( pStyle->GetMask() ),
-    pItem       ( 0 )
+    nFlags      ( pStyle->GetMask() )
 
 /*  [Beschreibung]
 
