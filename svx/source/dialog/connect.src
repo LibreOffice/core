@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:41:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "¼± °£°Ý";
         Text[ turkish ] = "Çizgi aralýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Distancia entre líneas";
     };
     FixedText FT_TYPE
     {
@@ -133,6 +134,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "ÇüÅÂ(~T)";
         Text[ turkish ] = "~Tip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo";
     };
     GroupBox GRP_DELTA
     {
@@ -159,6 +161,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "¼± ºø±è";
         Text[ turkish ] = "Çizgi eðriliði";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desplazamiento de líneas";
     };
     GroupBox GRP_PREVIEW
     {
@@ -185,6 +188,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     ListBox LB_TYPE
     {
@@ -219,6 +223,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "¼±1";
         Text[ turkish ] = "Çizgi ~1";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea ~1";
     };
     MetricField MTR_FLD_LINE_1
     {
@@ -261,6 +266,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "¼±2";
         Text[ turkish ] = "Çizgi ~2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea ~2";
     };
     MetricField MTR_FLD_LINE_2
     {
@@ -303,6 +309,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "¼±3";
         Text[ turkish ] = "Çizgi ~3";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea~3";
     };
     MetricField MTR_FLD_LINE_3
     {
@@ -345,6 +352,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "°¡·Î¼± ½ÃÀÛ(~B)";
         Text[ turkish ] = "Baþý ~yatay";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comienzo h~orizontal";
     };
     MetricField MTR_FLD_HORZ_1
     {
@@ -387,6 +395,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "°¡·Î¼± ³¡(~H)";
         Text[ turkish ] = "Sonu ya~tay";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Final hori~zontal";
     };
     MetricField MTR_FLD_HORZ_2
     {
@@ -429,6 +438,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "¼¼·Î¼± ½ÃÀÛ(~V)";
         Text[ turkish ] = "Baþý ~dikey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comienzo ~vertical";
     };
     MetricField MTR_FLD_VERT_1
     {
@@ -471,6 +481,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ korean ] = "¼¼·Î¼± ³¡(~E)";
         Text[ turkish ] = "Sonu d~ikey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Final v~ertical";
     };
     MetricField MTR_FLD_VERT_2
     {
@@ -506,6 +517,7 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ korean ] = "¿¬°á¼±";
     Text[ turkish ] = "Baðlayýcý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conector";
 };
  // ******************************************************************* EOF
 
