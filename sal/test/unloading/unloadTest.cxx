@@ -40,9 +40,13 @@ using namespace ::com::sun::star::container;
 #define IMPLNAME23 "com.sun.star.comp.sal.UnloadingTest23"
 #define SERVICENAME23 "com.sun.star.UnloadingTest23"
 
-
+#ifdef UNX
+#define LIBRARY1 "libsamplelib1.so"
+#define LIBRARY2 "libsamplelib2.so"
+#elif defined WNT
 #define LIBRARY1 "samplelib1"
 #define LIBRARY2 "samplelib2"
+#endif
 /*
 Tested: rtl_registerModuleForUnloading, rtl_unregisterModuleForUnloading, rtl_unloadUnusedLibraries
         1 component.
@@ -62,33 +66,87 @@ sal_Bool test8();
 sal_Bool test9();
 void SAL_CALL listenerCallback( void* id);
 
-void main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
+  // Test if the servicemanager can be created and if the sample libs
+  // can be loaded
+//  Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
+//     OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+//    if( !serviceManager.is())
+//    {
+//      printf("\n ####################################################\n"
+//         "Error: could not create service manager. \n"
+//         "Is the executable in the office program directory?\n");
+//      return -1;
+//    }
 
-//  sal_Bool ret1= test1();
-//  if( ret1) printf( "\n Test 1 successful \n");
-//  else printf("\n !!!!!! Test 1 failed\n");
-//  sal_Bool ret2= test2();
-//  if( ret2) printf( "\n Test 2 successful \n");
-//  else printf("\n !!!!!! Test 2 failed\n");
-//  sal_Bool ret3= test3();
-//  if( ret3) printf( "\n Test 3 successful \n");
-//  else printf("\n !!!!!! Test 3 failed\n");
-//  sal_Bool ret4= test4();
-//  if( ret4) printf( "\n Test 4 successful \n");
-//  else printf("\n !!!!!! Test 4 failed\n");
-//  sal_Bool ret5= test5();
-//  if( ret5) printf( "\n Test 5 successful \n");
-//  else printf("\n !!!!!! Test 5 failed\n");
-//  // takes some time (10s)
-//  sal_Bool ret6= test6();
-//  sal_Bool ret7= test7(); // prints message itself
-//  sal_Bool ret8= test8();
-//  if( ret8) printf( "\n Test 8 successful \n");
-//  else printf("\n !!!!!! Test 8 failed\n");
+//    Reference<XInterface> xint1=  serviceManager->createInstance( OUString(
+//                  RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
+
+//    if( !xint1.is())
+//    {
+//        printf("\n ###################################################\n"
+//           "Error: could not create service from samplelib1\n"
+//           "Is samplelib1 in the office program directory and is it "
+//           "registered?\n");
+//        return -1;
+//    }
+//    Reference<XInterface> xint2=  serviceManager->createInstance( OUString(
+//                  RTL_CONSTASCII_USTRINGPARAM(SERVICENAME21)));
+//    if( !xint2.is())
+//      {
+//        printf("\n ###################################################"
+//           "Error: could not create service from samplelib2\n"
+//           "Is samplelib2 in the office program directory and is it "
+//           "registered?\n");
+//        return -1;
+//      }
+//        //destroy servicemanager
+//        Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
+//        Any any_prop= xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+//        Reference<XComponentContext> xContext;
+//        any_prop >>= xContext;
+//        Reference<XComponent> xComponent( xContext, UNO_QUERY);
+//        xComponent->dispose();
+
+//        //unload samplelib1 and samplelib2. We need the handles, therefore load
+//        // the libs
+//        OUString libname1( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
+//        OUString libname2( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
+//        oslModule m1= osl_loadModule(libname1.pData, 0);
+//        oslModule m2= osl_loadModule(libname2.pData, 0);
+//        osl_unloadModule( m1);
+//        osl_unloadModule( m1);
+//        osl_unloadModule( m2);
+//        osl_unloadModule( m2);
+
+
+  sal_Bool ret1= test1();
+  if( ret1) printf( "\n Test 1 successful \n");
+    else printf("\n !!!!!! Test 1 failed\n");
+    sal_Bool ret2= test2();
+    if( ret2) printf( "\n Test 2 successful \n");
+    else printf("\n !!!!!! Test 2 failed\n");
+    sal_Bool ret3= test3();
+    if( ret3) printf( "\n Test 3 successful \n");
+    else printf("\n !!!!!! Test 3 failed\n");
+    sal_Bool ret4= test4();
+    if( ret4) printf( "\n Test 4 successful \n");
+    else printf("\n !!!!!! Test 4 failed\n");
+    sal_Bool ret5= test5();
+    if( ret5) printf( "\n Test 5 successful \n");
+    else printf("\n !!!!!! Test 5 failed\n");
+    // takes some time (10s)
+    sal_Bool ret6= test6();
+    sal_Bool ret7= test7(); // prints message itself
+    sal_Bool ret8= test8();
+    if( ret8) printf( "\n Test 8 successful \n");
+    else printf("\n !!!!!! Test 8 failed\n");
     sal_Bool ret9= test9();
     if( ret9) printf( "\n Test 9 successful: service manager is unloading listener\n");
     else printf("\n !!!!! Test 9 failed\n");
+
+    return 0;
 }
 
 /* Create an instance of SERVICENAME1, call a function and unload module.
@@ -210,7 +268,7 @@ sal_Bool test3()
     }
     rtl_unloadUnusedModules( NULL);
 
-    // Try to get a symbol, must fail
+    // Try to get a symbol, must succeed
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
 
@@ -218,11 +276,12 @@ sal_Bool test3()
     {
         retval= sal_True;
         osl_unloadModule( handleMod);
+        pSymbol= osl_getSymbol( handleMod, sSymbol.pData);
     }
     return retval;
 }
 /* 2 Modules
-The module will be registered one time less as it has been loaded.
+
 */
 sal_Bool test4()
 {

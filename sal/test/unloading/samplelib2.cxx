@@ -5,8 +5,8 @@
 #include <uno/environment.h>
 #include <cppu/macros.hxx>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/uno/reference.hxx>
-#include <com/sun/star/uno/sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/unload.h>
 #include <rtl/string.hxx>
