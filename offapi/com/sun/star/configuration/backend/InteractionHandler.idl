@@ -1,0 +1,136 @@
+/*************************************************************************
+ *
+ *  $RCSfile: InteractionHandler.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:58:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2004 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_configuration_backend_InteractionHandler_idl__
+#define __com_sun_star_configuration_backend_InteractionHandler_idl__
+
+module com { module sun { module star {
+    module lang { published interface XInitialization; };
+    module task { published interface XInteractionHandler; };
+}; }; };
+
+module com { module sun { module star { module configuration { module backend {
+
+//============================================================================
+/** An interaction request handler that lets the user handle a number of well
+    known requests via GUI dialogs.
+
+    <P>The well known requests handled by this service include
+    <UL>
+        <LI><type>MergeRecoveryRequest</type>*</LI>
+    </UL>
+    The requests marked with an asterisk are only handled if (a) their
+    continuations match certain restrictions (see below), and (b) the
+    necessary resource strings are available (this can be exploited by
+    applications that carry only a subset of all resource files with
+    them).</P>
+
+    <P>The continuation restrictions are as follows:  Let <VAR>C</VAR> be the
+    subset of the provided continuations that are of type
+    <type scope="com::sun::star::task">XInteractionApprove</type>,
+    <type scope="com::sun::star::task">XInteractionDisapprove</type>,
+    <type scope="com::sun::star::task">XInteractionRetry</type>, or
+    <type scope="com::sun::star::task">XInteractionAbort</type> (or of a
+    derived type).  All other continuations are ignored for these requests.
+    The request is only handled if the set <VAR>C</VAR> is any of the
+    following:
+    <UL>
+        <LI>Abort</LI>
+        <LI>Retry, Abort</LI>
+        <LI>Approve</LI>
+        <LI>Approve, Abort</LI>
+        <LI>Approve, Disapprove</LI>
+        <LI>Approve, Disapprove, Abort</LI>
+    </UL></P>
+
+    @since #i28654#
+
+    @see com::sun::star::task::InteractionHandler
+ */
+published service InteractionHandler
+{
+    //------------------------------------------------------------------------
+    /** Handle an interaction request.
+     */
+    interface com::sun::star::task::XInteractionHandler;
+
+    //------------------------------------------------------------------------
+    /** Initialize the interaction handler.
+
+        <P>The arguments must be a sequence of
+        <type scope="com::sun::star::beans">PropertyValue</type>s.  The
+        currently supported properties are:
+        <UL>
+            <LI><code>"Parent"</code> of type
+            <type scope="com::sun::star::awt">XWindow</type> denotes the
+            parent window for any GUI dialogs the interaction handler pops up;
+            it is strongly recommended that this property is supplied;</LI>
+            <LI><code>"Context"</code> of type <atom>string</atom> is a
+            textual description of the current context (used, e.g., as a first
+            line of text in error boxes); this property is optional.</LI>
+        </UL></P>
+     */
+    interface com::sun::star::lang::XInitialization;
+};
+
+}; }; }; }; };
+
+#endif
