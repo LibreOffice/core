@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleComboBox.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:33 $ 
+'*  last change:$Date: 2003-05-27 12:20:36 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -98,11 +98,11 @@ On Error Goto ErrHndl
     oWin = tk.getActiveTopWindow()
     xRoot = utils.at_getAccessibleObject(oWin)
     'utils.at_printAccessibleTree(xRoot)
-    tabControl = utils.at_getAccessibleObjectForRole(xRoot,31)
+    tabControl = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PAGE_TAB_LIST)
     tabControl.selectAccessibleChild(0)
     wait(500)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot,7,"","AccessibleComboBox")
-    accButton = utils.at_getAccessibleObjectForRole(xRoot,35,"Cancel")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.COMBO_BOX,"","AccessibleComboBox")
+    accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Cancel")
     Out.Log("Implementation Name: "+oObj.getImplementationName())
 
 Exit Sub
@@ -115,7 +115,7 @@ Sub DisposeObj()
         accButton.doAccessibleAction(0)
         wait(1000)
     End If
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()
