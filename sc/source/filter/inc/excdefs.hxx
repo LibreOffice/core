@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
+ *  last change: $Author: dr $ $Date: 2001-10-30 13:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ enum XclTextOrient
     xlTextOrient90ccw               = 0x02,
     xlTextOrient90cw                = 0x03,
     xlTextOrientRot                 = 0x04,
-    xlTextOrientParent              = 0xFF,
+    xlTextOrientParent              = 0xFF
 };
 
 enum XclTextWrap
