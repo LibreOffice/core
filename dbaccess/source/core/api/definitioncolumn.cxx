@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,9 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptor::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(18)
+    BEGIN_PROPERTY_HELPER(19)
         DECL_PROP1(ALIGN,               sal_Int32,          MAYBEVOID);
+        DECL_PROP0(CONTROLDEFAULT,          ::rtl::OUString     );
         DECL_PROP0_IFACE(CONTROLMODEL,  XPropertySet        );
         DECL_PROP0(DEFAULTVALUE,            ::rtl::OUString     );
         DECL_PROP0(DESCRIPTION,         ::rtl::OUString     );
@@ -406,9 +407,10 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(18)
+    BEGIN_PROPERTY_HELPER(19)
         DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
         DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
+        DECL_PROP0(CONTROLDEFAULT,      ::rtl::OUString     );
         DECL_PROP1(DEFAULTVALUE,        ::rtl::OUString,    READONLY);
         DECL_PROP1(DESCRIPTION,         ::rtl::OUString,    READONLY);
         DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
@@ -567,7 +569,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptorWrapper::createArrayHelper( sal_Int32 nId ) const
 {
     // BEGIN_PROPERTY_HELPER(17)
-    sal_Int32 nPropertyCount = 15;
+    sal_Int32 nPropertyCount = 16;
     // How many properties do we have?
     // Which optional properties are contained?
     if (nId & HAS_DESCRIPTION)
@@ -583,6 +585,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
 
     //      Description, Defaultvalue, IsRowVersion
         DECL_PROP1(ALIGN,               sal_Int32,          MAYBEVOID);
+        DECL_PROP0(CONTROLDEFAULT,      ::rtl::OUString     );
         DECL_PROP0_IFACE(CONTROLMODEL,  XPropertySet        );
         if (nId & HAS_DEFAULTVALUE)
         {
@@ -635,6 +638,7 @@ void OTableColumnDescriptorWrapper::getFastPropertyValue( Any& rValue, sal_Int32
         case PROPERTY_ID_HIDDEN:
         case PROPERTY_ID_CONTROLMODEL:
         case PROPERTY_ID_HELPTEXT:
+        case PROPERTY_ID_CONTROLDEFAULT:
             OColumnSettings::getFastPropertyValue( rValue, nHandle );
             break;
         default:
@@ -670,6 +674,7 @@ sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue(
         case PROPERTY_ID_HIDDEN:
         case PROPERTY_ID_CONTROLMODEL:
         case PROPERTY_ID_HELPTEXT:
+        case PROPERTY_ID_CONTROLDEFAULT:
             bModified = OColumnSettings::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
             break;
         default:
@@ -694,6 +699,7 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
         case PROPERTY_ID_HIDDEN:
         case PROPERTY_ID_CONTROLMODEL:
         case PROPERTY_ID_HELPTEXT:
+        case PROPERTY_ID_CONTROLDEFAULT:
             OColumnSettings::setFastPropertyValue_NoBroadcast( nHandle, rValue );
             break;
         default:
@@ -747,7 +753,7 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
 ::cppu::IPropertyArrayHelper* OTableColumnWrapper::createArrayHelper( sal_Int32 nId ) const
 {
     // BEGIN_PROPERTY_HELPER(17)
-    sal_Int32 nPropertyCount = 15;
+    sal_Int32 nPropertyCount = 16;
     // How many properties do we have?
     // Which optional properties are contained?
     if (nId & HAS_DESCRIPTION)
@@ -763,6 +769,7 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
 
     //      Description, Defaultvalue, IsRowVersion
         DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
+        DECL_PROP0(CONTROLDEFAULT,      ::rtl::OUString     );
         DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
         if (nId & HAS_DEFAULTVALUE)
         {

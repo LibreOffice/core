@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 15:30:38 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1624,6 +1624,8 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
                                 if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT))
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
+                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
                             }
                             catch(Exception&)
                             {
@@ -2233,6 +2235,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
+        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
 
     }
     m_pColumns = new ORowSetDataColumns(rParent.m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),

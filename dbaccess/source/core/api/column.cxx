@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,9 @@ void OColumnSettings::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
         case PROPERTY_ID_HELPTEXT:
             rValue = m_aHelpText;
             break;
+        case PROPERTY_ID_CONTROLDEFAULT:
+            rValue = m_aControlDefault;
+            break;
     }
 }
 
@@ -412,6 +415,10 @@ sal_Bool OColumnSettings::convertFastPropertyValue(
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aHelpText,
                 ::getCppuType(static_cast< ::rtl::OUString* >(NULL)));
             break;
+        case PROPERTY_ID_CONTROLDEFAULT:
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aControlDefault,
+                ::getCppuType(static_cast< ::rtl::OUString* >(NULL)));
+            break;
     }
     return bModified;
 }
@@ -455,6 +462,9 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(ID_RELATIVEPOSITION) : invalid value !");
             m_aHelpText = rValue;
             break;
+        case PROPERTY_ID_CONTROLDEFAULT:
+            m_aControlDefault = rValue;
+            break;
     }
 }
 
@@ -467,6 +477,7 @@ sal_Bool OColumnSettings::isDefaulted() const
         &&  !m_aFormatKey.hasValue()
         &&  !m_aRelativePosition.hasValue()
         &&  !m_aHelpText.hasValue()
+        &&  !m_aControlDefault.hasValue()
         &&  !m_bHidden;
 }
 
@@ -548,7 +559,8 @@ sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode, cons
     _rConfigNode.setNodeValue( CONFIGKEY_FORMATSTRING, aPersistentFormatString );
     _rConfigNode.setNodeValue( CONFIGKEY_FORMATLOCALE, aPersistentFomatLocale );
 
-    _rConfigNode.setNodeValue( CONFIGKEY_COLUMN_HELPTEXT, m_aHelpText );
+    _rConfigNode.setNodeValue( CONFIGKEY_COLUMN_HELPTEXT,       m_aHelpText );
+    _rConfigNode.setNodeValue( CONFIGKEY_COLUMN_CONTROLDEFAULT, m_aControlDefault );
 
     return sal_True;
 }
@@ -565,12 +577,14 @@ void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode, const R
     m_aWidth.clear();
     m_aAlignment.clear();
     m_aHelpText.clear();
+    m_aControlDefault.clear();
 
     m_aAlignment        = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_ALIGNMENT);
     m_aWidth            = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_WIDTH);
     m_aRelativePosition = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_RELPOSITION);
     m_bHidden           = ::cppu::any2bool(_rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HIDDEN));
     m_aHelpText         = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HELPTEXT);
+    m_aControlDefault   = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_CONTROLDEFAULT);
 
     // the format key is somewhat more complicated
     m_aFormatKey        = _rConfigNode.getNodeValue( CONFIGKEY_COLUMN_NUMBERFORMAT );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 12:01:30 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,11 +231,12 @@ namespace dbaccess
     class OColumnSettings
     {
     //  <properties>
-        ::com::sun::star::uno::Any  m_aWidth;       // sal_Int32 or void
-        ::com::sun::star::uno::Any  m_aFormatKey;   // sal_Int32 or void
+        ::com::sun::star::uno::Any  m_aWidth;               // sal_Int32 or void
+        ::com::sun::star::uno::Any  m_aFormatKey;           // sal_Int32 or void
         ::com::sun::star::uno::Any  m_aRelativePosition;    // sal_Int32 or void
-        ::com::sun::star::uno::Any  m_aAlignment;   // sal_Int32 (::com::sun::star::awt::TextAlign) or void
-        ::com::sun::star::uno::Any  m_aHelpText;    // the description of the column which is visible in the helptext of the column
+        ::com::sun::star::uno::Any  m_aAlignment;           // sal_Int32 (::com::sun::star::awt::TextAlign) or void
+        ::com::sun::star::uno::Any  m_aHelpText;            // the description of the column which is visible in the helptext of the column
+        ::com::sun::star::uno::Any  m_aControlDefault;      // the default value which should be displayed as by a control when moving to a new row
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     m_xControlModel;
 
