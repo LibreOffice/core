@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include "valuenode.hxx"
 #include "change.hxx"
 
+#include "valuenodeimpl.hxx"
+#include "setnodeimplbase.hxx"
+#include "groupnodeimpl.hxx"
 
 #include <algorithm> // for reverse
 #include <osl/diagnose.h>
@@ -106,6 +109,7 @@ public:
         , m_nDepthLeft(rTree.m_nDepth)
     {
         OSL_ASSERT(m_rTree.m_aNodes.empty());
+        OSL_DEBUG_ONLY(m_bMemberCheck = false);
     }
 
 private:
@@ -119,19 +123,27 @@ private:
     /// add a Node for set node <var>rSet</var> to the list
     void addSet(ISubtree& rSet);
     /// add a Node for value node <var>rValue</var> to the list
-    void addValue(ValueNode& rValue);
+    void addValueElement(ValueNode& rValue);
+    /// add a Member for value node <var>rValue</var> to the list
+    void addValueMember(ValueNode& rValue);
 
     TemplateProvider m_aTemplateProvider;
     NodeFactory&    m_rFactory;
-    TreeImpl&   m_rTree;
-    NodeOffset  m_nParent;
-    TreeDepth   m_nDepthLeft;
+    TreeImpl&       m_rTree;
+    NodeOffset      m_nParent;
+    TreeDepth       m_nDepthLeft;
+#ifdef _DEBUG
+    bool m_bMemberCheck;
+#endif
 };
 //-----------------------------------------------------------------------------
 
 void TreeImplBuilder::handle(ValueNode& rValue)
 {
-    addValue(rValue);
+    if (m_nParent == 0)
+        addValueElement(rValue); // if it is the root it is a value set element
+    else
+        addValueMember(rValue); // if it is not the root it is a group member
 }
 //-----------------------------------------------------------------------------
 
@@ -144,16 +156,24 @@ void TreeImplBuilder::handle(ISubtree& rTree)
 }
 //-----------------------------------------------------------------------------
 
-void TreeImplBuilder::addValue(ValueNode& rValue)
+void TreeImplBuilder::addValueElement(ValueNode& rValue)
 {
     NodeImplHolder aValueNode( m_rFactory.makeValueNode(rValue) );
     OSL_ENSURE( aValueNode.isValid(), "could not make value node wrapper" );
 
+    OSL_ENSURE( m_nParent == 0, "Adding value element that is not root of its fragment" );
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
     if( aValueNode.isValid() )
     {
         m_rTree.m_aNodes.push_back( Node(aValueNode,nodeName(rValue),m_nParent) );
     }
+}
+//-----------------------------------------------------------------------------
+
+void TreeImplBuilder::addValueMember(ValueNode& )
+{
+    // nothing to do
+    OSL_DEBUG_ONLY(m_bMemberCheck = true);
 }
 //-----------------------------------------------------------------------------
 
@@ -175,10 +195,19 @@ void TreeImplBuilder::addGroup(ISubtree& rTree)
 
             m_nParent = m_rTree.m_aNodes.size() + m_rTree.root() - 1;
 
+        #ifdef _DEBUG
+            bool bSaveMemberCheck = m_bMemberCheck;
+            m_bMemberCheck = false;
+        #endif
+
             // now recurse:
             this->applyToChildren(rTree);
 
-            OSL_ENSURE(m_nParent < m_rTree.m_aNodes.size(),"WARNING: Configuration: Group within requested depth has no members");
+            OSL_ENSURE(m_nParent < m_rTree.m_aNodes.size() || m_bMemberCheck,
+                        "WARNING: Configuration: Group within requested depth has no members");
+
+            OSL_DEBUG_ONLY(m_bMemberCheck = bSaveMemberCheck);
+
             incDepth(m_nDepthLeft);
             m_nParent = nSaveParent;
         }
@@ -216,15 +245,6 @@ Node::Node(NodeImplHolder const& aSpecificNode, Name const& aName, NodeOffset nP
 , m_nParent(nParent)
 , m_aName(aName)
 {
-}
-//-----------------------------------------------------------------------------
-
-NodeInfo Node::info()   const
-{
-    NodeInfo info;
-    info.aName      = this->name();
-    info.aAttributes = this->attributes();
-    return info;
 }
 //-----------------------------------------------------------------------------
 
@@ -393,21 +413,21 @@ void TreeImpl::markChanged(NodeOffset nNode)
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::commitChanges()
+void TreeImpl::commitDirect()
 {
-    implCommitChangesFrom(root());
+    implCommitDirectFrom(root());
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::implCommitChangesFrom(NodeOffset nNode)
+void TreeImpl::implCommitDirectFrom(NodeOffset nNode)
 {
     Node* pNode = node(nNode);
     if (pNode->hasChanges())
     {
-        pNode->commitChanges();
+        pNode->commitDirect();
         for (NodeOffset nChild = firstChild(nNode); isValidNode(nChild); nChild = findNextChild(nNode, nChild) )
         {
-            implCommitChangesFrom(nChild);
+            implCommitDirectFrom(nChild);
         }
     }
 }
@@ -427,31 +447,31 @@ void TreeImpl::makeIndirect(bool bIndirect)
 // old-style commit handling
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<Change> TreeImpl::legacyCommitChanges()
+std::auto_ptr<SubtreeChange> TreeImpl::preCommitChanges()
 {
     return doCommitChanges( root() );
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::legacyFinishCommit(Change& rRootChange)
+void TreeImpl::finishCommit(SubtreeChange& rRootChange)
 {
     doFinishCommit( rRootChange, root() );
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::legacyRevertCommit(Change& rRootChange)
+void TreeImpl::revertCommit(SubtreeChange& rRootChange)
 {
     doRevertCommit( rRootChange, root() );
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::legacyFailedCommit(Change& rRootChange)
+void TreeImpl::recoverFailedCommit(SubtreeChange& rRootChange)
 {
     doFailedCommit( rRootChange, root() );
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, Change const& aExternalChange)
+void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& aExternalChange)
 {
     OSL_PRECOND( name(root()).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
 
@@ -461,7 +481,7 @@ void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, Change con
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, Change const& aExternalChange)
+void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, SubtreeChange const& aExternalChange)
 {
     OSL_PRECOND( isValidNode(nNode), "ERROR: Valid node required for adjusting to changes" );
     OSL_PRECOND( name(nNode).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
@@ -472,12 +492,12 @@ void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<Change> TreeImpl::doCommitChanges(NodeOffset nNode)
+std::auto_ptr<SubtreeChange> TreeImpl::doCommitChanges(NodeOffset nNode)
 {
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    std::auto_ptr<Change> aRet;
+    std::auto_ptr<SubtreeChange> aRet;
 
     if (!pNode->hasChanges())
     {
@@ -485,178 +505,126 @@ std::auto_ptr<Change> TreeImpl::doCommitChanges(NodeOffset nNode)
         OSL_ASSERT(!aRet.get());
         OSL_ASSERT(nNode == root()); // only hit this for root (external request)
     }
-    else if (pNode->isValueNode())
-    {
-        std::auto_ptr<ValueChange> aValueChange(pNode->valueImpl().preCommitChange());
-        aRet.reset(aValueChange.release());
-    }
     else if (pNode->isSetNode())
     {
-        std::auto_ptr<SubtreeChange> aSetChange(pNode->setImpl().preCommitChanges());
-        aRet.reset(aSetChange.release());
+        aRet = pNode->setImpl().preCommitChanges();
     }
-    else
+    else if (pNode->isGroupNode())
     {
-        OSL_ENSURE(pNode->isGroupNode(),"INTERNAL ERROR: Unknown kind of node");
         std::auto_ptr<SubtreeChange> aGroupChange(pNode->groupImpl().preCommitChanges());
 
         OSL_ASSERT(aGroupChange.get());
         if (aGroupChange.get())
             doCommitSubChanges( *aGroupChange, nNode);
 
-        aRet.reset(aGroupChange.release());
+        aRet = aGroupChange;
     }
+    else
+        OSL_ENSURE(nNode == root() && pNode->isValueElementNode(), "TreeImpl: Cannot commit changes: Unexpected node type");
+
     return aRet;
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::doFinishCommit(Change& rChange, NodeOffset nNode)
+void TreeImpl::doFinishCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
 {
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    OSL_ENSURE(rChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
-    if (pNode->isValueNode())
+    OSL_ENSURE(rSubtreeChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    if (pNode->isSetNode())
     {
-        OSL_ENSURE(rChange.ISA(ValueChange),"ERROR: Change type does not match node");
-
-        ValueChange& rValueChange = static_cast<ValueChange&>(rChange);
-
-        pNode->valueImpl().finishCommit(rValueChange);
-    }
-    else if (pNode->isSetNode())
-    {
-        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
-
-        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
-
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
 
         pNode->setImpl().finishCommit(rSubtreeChange);
     }
-    else
+    else if (pNode->isGroupNode())
     {
-        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
-
-        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
-
         OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
         pNode->groupImpl().finishCommit(rSubtreeChange);
         doFinishSubCommitted( rSubtreeChange, nNode);
     }
+    else
+        OSL_ENSURE(nNode == root() && pNode->isValueElementNode(), "TreeImpl: Cannot finish commit: Unexpected node type");
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::doRevertCommit(Change& rChange, NodeOffset nNode)
+void TreeImpl::doRevertCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
 {
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    OSL_ENSURE(rChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
-    if (pNode->isValueNode())
+    OSL_ENSURE(rSubtreeChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    if (pNode->isSetNode())
     {
-        OSL_ENSURE(rChange.ISA(ValueChange),"ERROR: Change type does not match node");
-
-        ValueChange& rValueChange = static_cast<ValueChange&>(rChange);
-
-        pNode->valueImpl().revertCommit(rValueChange);
-    }
-    else if (pNode->isSetNode())
-    {
-        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
-
-        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
-
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
 
         pNode->setImpl().revertCommit(rSubtreeChange);
     }
-    else
+    else if (pNode->isGroupNode())
     {
-        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
-
-        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
-
         OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
         pNode->groupImpl().revertCommit(rSubtreeChange);
         doRevertSubCommitted( rSubtreeChange, nNode);
     }
+    else
+        OSL_ENSURE(nNode == root() && pNode->isValueElementNode(), "TreeImpl: Cannot revert commit: Unexpected node type");
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::doFailedCommit(Change& rChange, NodeOffset nNode)
+void TreeImpl::doFailedCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
 {
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    OSL_ENSURE(rChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
-    if (pNode->isValueNode())
+    OSL_ENSURE(rSubtreeChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    if (pNode->isSetNode())
     {
-        OSL_ENSURE(rChange.ISA(ValueChange),"ERROR: Change type does not match node");
-
-        ValueChange& rValueChange = static_cast<ValueChange&>(rChange);
-
-        pNode->valueImpl().failedCommit(rValueChange);
-    }
-    else if (pNode->isSetNode())
-    {
-        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
-
-        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
-
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
 
         pNode->setImpl().failedCommit(rSubtreeChange);
     }
-    else
+    else if (pNode->isGroupNode())
     {
-        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
-
-        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
-
         OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
         pNode->groupImpl().failedCommit(rSubtreeChange);
         doFailedSubCommitted( rSubtreeChange, nNode);
     }
+    else
+        OSL_ENSURE(nNode == root() && pNode->isValueElementNode(), "TreeImpl: Cannot finish commit: Unexpected node type");
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change const& rChange, NodeOffset nNode, TreeDepth nDepth)
+void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rSubtreeChange, NodeOffset nNode, TreeDepth nDepth)
 {
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    OSL_ENSURE(rChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
-    if (pNode->isValueNode())
+    OSL_ENSURE(rSubtreeChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+
+    if (pNode->isSetNode())
     {
-        OSL_ENSURE(rChange.ISA(ValueChange),"ERROR: Change type does not match node");
-
-        ValueChange const& rValueChange = static_cast<ValueChange const&>(rChange);
-
-        pNode->valueImpl().adjustToChange(rLocalChanges, rValueChange, *this, nNode);
-    }
-    else if (pNode->isSetNode())
-    {
-        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
-
-        SubtreeChange const& rSubtreeChange = static_cast<SubtreeChange const&>(rChange);
-
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
 
         pNode->setImpl().adjustToChanges(rLocalChanges, rSubtreeChange, nDepth);
     }
-    else
+    else if (pNode->isGroupNode())
     {
-        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
-
-        SubtreeChange const& rSubtreeChange = static_cast<SubtreeChange const&>(rChange);
-
         OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
+        pNode->groupImpl().adjustToChanges(rLocalChanges, rSubtreeChange, *this, nNode);
         doAdjustToSubChanges( rLocalChanges, rSubtreeChange, nNode, nDepth);
+    }
+    else // might occur on external change (?)
+    {
+        OSL_ENSURE(pNode->isValueElementNode(), "TreeImpl: Unknown node type to adjust to changes");
+
+        OSL_ENSURE(nNode == root(), "TreeImpl: Unexpected node type - non-root value element");
+
+        OSL_ENSURE(false,"ERROR: Change type does not match node: Trying to apply subtree change to value element.");
     }
 }
 //-----------------------------------------------------------------------------
@@ -666,7 +634,11 @@ void TreeImpl::doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nPar
     for(NodeOffset nNode = firstChild(nParentNode); nNode != 0; nNode = findNextChild(nParentNode,nNode) )
     {
         if (node(nNode)->hasChanges())
-            aChangesParent.addChange( doCommitChanges(nNode) );
+        {
+            std::auto_ptr<SubtreeChange> aSubChanges( doCommitChanges(nNode) );
+            std::auto_ptr<Change> aSubChangesBase( aSubChanges.release() );
+            aChangesParent.addChange( aSubChangesBase );
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -679,10 +651,19 @@ void TreeImpl::doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nP
         it != stop;
         ++it)
     {
-        NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
-        OSL_ENSURE( nNode != 0, "Changed node not found in tree");
+        if ( it->ISA(SubtreeChange) )
+        {
+            NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
+            OSL_ENSURE( nNode != 0, "Changed sub-node not found in tree");
 
-        doFinishCommit(*it,nNode);
+            doFinishCommit(static_cast<SubtreeChange&>(*it),nNode);
+        }
+        else
+        {
+            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for child of group node; change is ignored");
+            OSL_ENSURE(0 == findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate())),
+                        "Found sub(tree) node where a value was expected");
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -695,10 +676,19 @@ void TreeImpl::doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nP
         it != stop;
         ++it)
     {
-        NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
-        OSL_ENSURE( nNode != 0, "Changed node not found in tree");
+        if ( it->ISA(SubtreeChange) )
+        {
+            NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
+            OSL_ENSURE( nNode != 0, "Changed sub-node not found in tree");
 
-        doRevertCommit(*it,nNode);
+            doRevertCommit(static_cast<SubtreeChange&>(*it),nNode);
+        }
+        else
+        {
+            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for child of group node; change is ignored");
+            OSL_ENSURE(0 == findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate())),
+                        "Found sub(tree) node where a value was expected");
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -711,10 +701,19 @@ void TreeImpl::doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nP
         it != stop;
         ++it)
     {
-        NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
-        OSL_ENSURE( nNode != 0, "Changed node not found in tree");
+        if ( it->ISA(SubtreeChange) )
+        {
+            NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
+            OSL_ENSURE( nNode != 0, "Changed node not found in tree");
 
-        doFailedCommit(*it,nNode);
+            doFailedCommit(static_cast<SubtreeChange&>(*it),nNode);
+        }
+        else
+        {
+            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for child of group node; change is ignored");
+            OSL_ENSURE(0 == findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate())),
+                        "Found sub(tree) node where a value was expected");
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -728,13 +727,22 @@ void TreeImpl::doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, Subtr
         it != stop;
         ++it)
     {
-        NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
-        OSL_ENSURE( nNode != 0 || depthTo(nParentNode) >= getAvailableDepth(), "Changed node not found in tree");
-
-        if (nNode != 0)
+        if ( it->ISA(SubtreeChange) )
         {
-            OSL_ENSURE( nDepth > 0, "Depth is smaller than expected for tree");
-            doAdjustToChanges(rLocalChanges, *it,nNode,childDepth(nDepth));
+            NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
+            OSL_ENSURE( nNode != 0 || depthTo(nParentNode) >= getAvailableDepth(), "Changed node not found in tree");
+
+            if (nNode != 0)
+            {
+                OSL_ENSURE( nDepth > 0, "Depth is smaller than expected for tree");
+                doAdjustToChanges(rLocalChanges, static_cast<SubtreeChange const&>(*it),nNode,childDepth(nDepth));
+            }
+        }
+        else
+        {
+            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for child of group node; change is ignored");
+            OSL_ENSURE(0 == findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate())),
+                        "Found sub(tree) node where a value was expected");
         }
     }
 }

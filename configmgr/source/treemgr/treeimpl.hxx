@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,10 @@ namespace configmgr
         typedef com::sun::star::uno::Any UnoAny;
 
 //-----------------------------------------------------------------------------
-        struct NodeInfo;
         struct Attributes;
 
 //-----------------------------------------------------------------------------
         class Node;
-        class NodeRef;
-        class NodeID;
-        class Tree;
         class TreeImpl;
         class TemplateProvider;
         struct NodeFactory;
@@ -174,13 +170,13 @@ namespace configmgr
 
             Name                name()          const { return m_aName; }
             Attributes          attributes()    const { return m_pSpecificNode->getAttributes(); }
-            NodeInfo            info()          const;
 
         // change management
             bool hasChanges()                   const { return m_pSpecificNode->hasChanges(); }
             void markChanged()                        { m_pSpecificNode->markChanged(); }
-            void commitChanges()                      { m_pSpecificNode->commitChanges(); }
             void makeIndirect(bool bIndirect)         { NodeImpl::makeIndirect(m_pSpecificNode,bIndirect); }
+
+            void commitDirect()                       { m_pSpecificNode->directCommitChanges(); }
 
             void collectChanges(NodeChanges& rChanges, TreeImpl* pTree, NodeOffset nContext)    const
             { m_pSpecificNode->collectChanges(rChanges,pTree,nContext); }
@@ -194,9 +190,9 @@ namespace configmgr
             SetNodeImpl const&  setImpl()       const { return implGetSetImpl(); }
 
         // VALUES: access to data
-            bool                isValueNode()   const { return NodeType::isValue(getNodeType()); }
-            ValueNodeImpl&      valueImpl()           { return implGetValueImpl(); }
-            ValueNodeImpl const&valueImpl()     const { return implGetValueImpl(); }
+            bool                        isValueElementNode()    const { return NodeType::isValue(getNodeType()); }
+            ValueElementNodeImpl&       valueElementImpl()            { return implGetValueImpl(); }
+            ValueElementNodeImpl const& valueElementImpl()      const { return implGetValueImpl(); }
 
         // GROUP: access to children
             bool                isGroupNode()   const { return NodeType::isGroup(getNodeType()); }
@@ -207,9 +203,9 @@ namespace configmgr
             void renameNode(Name const& aNewName) { m_aName = aNewName; }
             friend class ElementTreeImpl; // can rename root nodes
         private:
-            SetNodeImpl&   implGetSetImpl()   const;
-            GroupNodeImpl& implGetGroupImpl() const ;
-            ValueNodeImpl& implGetValueImpl() const ;
+            SetNodeImpl&    implGetSetImpl()   const;
+            GroupNodeImpl&  implGetGroupImpl() const ;
+            ValueElementNodeImpl& implGetValueImpl() const ;
         };
 //-----------------------------------------------------------------------------
         class RootTreeImpl; // for 'dynamic-casting'
@@ -296,11 +292,11 @@ namespace configmgr
             bool    hasChanges() const;
             void    collectChanges(NodeChanges& rChanges);
             void    markChanged(NodeOffset nNode);
-            void    commitChanges();
+
             void    makeIndirect(bool bIndirect);
         // external update
-            void    adjustToChanges(NodeChangesInformation& rLocalChanges, Change const& aExternalChange);
-            void    adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, Change const& aExternalChange);
+            void    adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& aExternalChange);
+            void    adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, SubtreeChange const& aExternalChange);
 
 
         // Node iteration and access
@@ -364,25 +360,37 @@ namespace configmgr
             ISynchronizedData const* getRootLock() const;
 
         public:
-            // old style commit
-            std::auto_ptr<Change>   legacyCommitChanges();
-            void legacyFinishCommit(Change& rRootChange);
-            void legacyRevertCommit(Change& rRootChange);
-            void legacyFailedCommit(Change& rRootChange);
+            // immediate commit
+            void commitDirect();
+
+            // full commit protocol
+            std::auto_ptr<SubtreeChange>    preCommitChanges();
+            void finishCommit(SubtreeChange& rRootChange);
+            void revertCommit(SubtreeChange& rRootChange);
+            void recoverFailedCommit(SubtreeChange& rRootChange);
         protected:
-            std::auto_ptr<Change> doCommitChanges(NodeOffset nNode);
-            void doFinishCommit(Change& rChange, NodeOffset nNode);
-            void doRevertCommit(Change& rChange, NodeOffset nNode);
-            void doFailedCommit(Change& rChange, NodeOffset nNode);
-            void doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change const& rChange, NodeOffset nNode,
+            // implementation of  commit protocol
+            std::auto_ptr<SubtreeChange> doCommitChanges(NodeOffset nNode);
+            void doFinishCommit(SubtreeChange& rChange, NodeOffset nNode);
+            void doRevertCommit(SubtreeChange& rChange, NodeOffset nNode);
+            void doFailedCommit(SubtreeChange& rChange, NodeOffset nNode);
+
+            // implementation of notification protocol
+            void doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rChange, NodeOffset nNode,
                                     TreeDepth nDepth);
 
+        private:
+            // recursion helpers for implementation of protocols
             void doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
+
             void doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rChange, NodeOffset nParentNode,
                                         TreeDepth nDepth);
+
+            void implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges);
+            void implCommitDirectFrom(NodeOffset nNode);
         protected:
             /// set a new parent context for this tree
             void setContext(TreeImpl* pParentTree, NodeOffset nParentNode);
@@ -401,9 +409,6 @@ namespace configmgr
             virtual ElementTreeImpl const* doCastToElementTree() const = 0;
 
             virtual void doGetPathRoot(Path::Components& rPath) const = 0;
-        private:
-            void implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges);
-            void implCommitChangesFrom(NodeOffset nNode);
 
             mutable OTreeAccessor m_aOwnLock;
 
@@ -491,6 +496,11 @@ namespace configmgr
             INode* m_pOwnedNode;
         };
 //-----------------------------------------------------------------------------
+#if 1 // OLD_NODE_IMPL_USED
+        SetNodeImpl&    AsSetNode  (NodeImpl& rNode);
+        GroupNodeImpl&  AsGroupNode(NodeImpl& rNode);
+        ValueElementNodeImpl&   AsValueNode(NodeImpl& rNode);
+
         inline
         SetNodeImpl&   Node::implGetSetImpl()   const
         {
@@ -506,11 +516,12 @@ namespace configmgr
         }
         //---------------------------------------------------------------------
         inline
-        ValueNodeImpl& Node::implGetValueImpl() const
+        ValueElementNodeImpl& Node::implGetValueImpl() const
         {
-            OSL_ASSERT(isValueNode());
+            OSL_ASSERT(isValueElementNode());
             return AsValueNode(m_pSpecificNode.getBody());
         }
+#endif
 //-----------------------------------------------------------------------------
         inline
         bool TreeImpl::isValidNode(NodeOffset nNode) const
@@ -544,6 +555,14 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 // helper for other impl classes
 //-----------------------------------------------------------------------------
+    class Tree;
+    class NodeRef;
+    class ValueRef;
+    class AnyNodeRef;
+    class NodeID;
+
+    class ValueMemberNode;
+//-----------------------------------------------------------------------------
     /// is a hack to avoid too many friend declarations in public headers
     class TreeImplHelper
     {
@@ -558,13 +577,22 @@ namespace configmgr
         NodeRef makeNode(NodeID const& aNodeID);
 
         static
+        ValueRef makeValue(Name const& aName, Node* pParentNode, NodeOffset nParentOffset);
+
+        static
+        AnyNodeRef makeAnyNode(Node* pNode, NodeOffset nOffset, TreeDepth nDepth);
+
+        static
+        AnyNodeRef makeAnyNode(Name const& aName, Node* pParentNode, NodeOffset nParentOffset);
+
+        static
         bool isSet(NodeRef const& aNode);
 
         static
         bool isGroup(NodeRef const& aNode);
 
         static
-        bool isValue(NodeRef const& aNode);
+        bool isValueElement(NodeRef const& aNode);
 
         static
         TreeImpl* impl(Tree const& aTree);
@@ -576,6 +604,18 @@ namespace configmgr
         NodeOffset offset(NodeRef const& aNode);
 
         static
+        Node* parent_node(ValueRef const& aNode);
+
+        static
+        NodeOffset parent_offset(ValueRef const& aNode);
+
+        static
+        Name value_name(ValueRef const& aNode);
+
+        static
+        ValueMemberNode member_node(ValueRef const& aValue);
+
+        static
         TreeImpl* tree(NodeID const& aNodeID);
 
         static
@@ -583,7 +623,20 @@ namespace configmgr
 
     };
 //-----------------------------------------------------------------------------
+    class ElementRef;
+//-----------------------------------------------------------------------------
+
+    struct ElementHelper
+    {
+        static
+        UnoType getUnoType(ElementRef const& aElement);
+
+        static
+        Name getElementName(ElementRef const& aElement);
+    };
+//-----------------------------------------------------------------------------
     }
+//-----------------------------------------------------------------------------
 }
 
 #endif // CONFIGMGR_CONFIGNODEIMPL_HXX_
