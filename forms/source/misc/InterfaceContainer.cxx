@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 11:21:56 $
+ *  last change: $Author: fs $ $Date: 2001-10-29 15:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,9 +870,31 @@ void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( Index
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& Name, const Any& _rElement) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, const Any& _rElement) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
 {
-    insertByIndex( m_aItems.size(), _rElement );
+    Reference< XPropertySet > xElementProps;
+    // ensure the correct name of the element
+    try
+    {
+        _rElement >>= xElementProps;
+        approveNewElement( xElementProps );
+
+        xElementProps->setPropertyValue( PROPERTY_NAME, makeAny( _rName ) );
+    }
+    catch( const IllegalArgumentException& )
+    {
+        throw;  // allowed to leave
+    }
+    catch( const ElementExistException& )
+    {
+        throw;  // allowed to leave
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "OInterfaceContainer::insertByName: caught an exception!" );
+    }
+    implInsert( m_aItems.size(), xElementProps, sal_True, sal_False, sal_True );
+        // do not approve - we already did this
 }
 
 //------------------------------------------------------------------------
