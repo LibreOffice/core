@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 12:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,26 @@ public:
 
     BOOL operator<( const SwTxtFtn* pTxtFtn ) const;
 
-    SwCntntFrm *GetRef()  { return pRef; }
-    SwFtnFrm *GetFollow() { return pFollow; }
-    SwFtnFrm *GetMaster() { return pMaster; }
-    const SwTxtFtn   *GetAttr() const { return pAttr; }
-          SwTxtFtn   *GetAttr()       { return pAttr; }
-    const SwCntntFrm *GetRef()  const { return pRef; }
-    const SwFtnFrm *GetFollow() const { return pFollow; }
-    const SwFtnFrm *GetMaster() const { return pMaster; }
+#ifdef PRODUCT
+    const SwCntntFrm *GetRef() const    { return pRef; }
+         SwCntntFrm  *GetRef()          { return pRef; }
+#else
+    //JP 15.10.2001: in a non pro version test if the attribute has the same
+    //              meaning which his reference is
+    const SwCntntFrm *GetRef() const;
+         SwCntntFrm  *GetRef();
+#endif
+    const SwCntntFrm *GetRefFromAttr()  const;
+          SwCntntFrm *GetRefFromAttr();
+
+    const SwFtnFrm *GetFollow() const   { return pFollow; }
+          SwFtnFrm *GetFollow()         { return pFollow; }
+
+    const SwFtnFrm *GetMaster() const   { return pMaster; }
+          SwFtnFrm *GetMaster()         { return pMaster; }
+
+    const SwTxtFtn   *GetAttr() const   { return pAttr; }
+          SwTxtFtn   *GetAttr()         { return pAttr; }
 
     void SetFollow( SwFtnFrm *pNew ) { pFollow = pNew; }
     void SetMaster( SwFtnFrm *pNew ) { pMaster = pNew; }

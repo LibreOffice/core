@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-08 14:10:07 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 12:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,31 +65,66 @@
 
 #pragma hdrstop
 
-#ifndef _TXTFTN_HXX //autogen
+#ifndef _TXTFTN_HXX
 #include <txtftn.hxx>
 #endif
-#ifndef _FMTFTN_HXX //autogen
+#ifndef _FMTFTN_HXX
 #include <fmtftn.hxx>
 #endif
-#ifndef _FTNIDX_HXX //autogen
+#ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
 #endif
-#include "pagefrm.hxx"
-#include "colfrm.hxx"
-#include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "doc.hxx"
-#include "ndtxt.hxx"
-#include "frmtool.hxx"
-#include "errhdl.hxx"
-#include "swtable.hxx"
-#include "ftnfrm.hxx"
-#include "txtfrm.hxx"
-#include "tabfrm.hxx"
-#include "pagedesc.hxx"
-#include "ftninfo.hxx"
-#include "ndindex.hxx"
-#include "sectfrm.hxx"
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _COLFRM_HXX
+#include <colfrm.hxx>
+#endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
+#endif
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _FRMTOOL_HXX
+#include <frmtool.hxx>
+#endif
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>
+#endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
+#endif
+#ifndef _FTNFRM_HXX
+#include <ftnfrm.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+#ifndef _TABFRM_HXX
+#include <tabfrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
+#ifndef _FTNINFO_HXX
+#include <ftninfo.hxx>
+#endif
+#ifndef _NDINDEX_HXX
+#include <ndindex.hxx>
+#endif
+#ifndef _SECTFRM_HXX
+#include <sectfrm.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -3065,4 +3100,37 @@ SwSaveFtnHeight::~SwSaveFtnHeight()
         pBoss->nMaxFtnHeight = nOldHeight;
 }
 
+
+#ifndef PRODUCT
+//JP 15.10.2001: in a non pro version test if the attribute has the same
+//              meaning which his reference is
+
+const SwCntntFrm* SwFtnFrm::GetRef() const
+{
+    ASSERT( pRef == GetRefFromAttr(), "access to deleted Frame? pRef != pAttr->GetRef()" );
+    return pRef;
+}
+
+SwCntntFrm* SwFtnFrm::GetRef()
+{
+    ASSERT( pRef == GetRefFromAttr(), "access to deleted Frame? pRef != pAttr->GetRef()" );
+    return pRef;
+}
+
+#endif
+
+const SwCntntFrm* SwFtnFrm::GetRefFromAttr()  const
+{
+    SwFtnFrm* pThis = (SwFtnFrm*)this;
+    return pThis->GetRefFromAttr();
+}
+
+SwCntntFrm* SwFtnFrm::GetRefFromAttr()
+{
+    ASSERT( pAttr, "invalid Attribute" );
+    SwTxtNode& rTNd = (SwTxtNode&)pAttr->GetTxtNode();
+    SwPosition aPos( rTNd, SwIndex( &rTNd, *pAttr->GetStart() ));
+    SwCntntFrm* pCFrm = rTNd.GetFrm( 0, &aPos, FALSE );
+    return pCFrm;
+}
 
