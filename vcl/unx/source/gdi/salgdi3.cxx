@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-02 13:01:19 $
+ *  last change: $Author: cp $ $Date: 2001-11-22 14:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1314,7 +1314,8 @@ void SalGraphicsData::DrawServerFontString(
         {
             while (pFGlyph[ nFrom + nLen ] != 0 && (nFrom + nLen) < nLength)
             {
-                pDeltaArray[ nLen ] = pDXAry[ nFrom + nLen ] - nAdvance;
+                if ( (nFrom + nLen) < (nLength - 1) )
+                    pDeltaArray[ nLen ] = pDXAry[ nFrom + nLen ] - nAdvance;
                 nLen++;
             }
             if (nLen)
@@ -1332,7 +1333,8 @@ void SalGraphicsData::DrawServerFontString(
                 pFFGlyph[ nFrom + nLen ] = mpSrvFallbackFont->GetGlyphIndex(pStr[nFrom + nLen]);
                 if (pFFGlyph[ nFrom + nLen ] == 0)
                     pFFGlyph[ nFrom + nLen ] = mpSrvFallbackFont->GetGlyphIndex( '?' );
-                pDeltaArray[ nLen ] = pDXAry[ nFrom + nLen ] - nAdvance;
+                if ( (nFrom + nLen) < (nLength - 1) )
+                    pDeltaArray[ nLen ] = pDXAry[ nFrom + nLen ] - nAdvance;
                 nLen++;
             }
             if (nLen)
@@ -1345,7 +1347,8 @@ void SalGraphicsData::DrawServerFontString(
         }
 
         nFrom    += nLen;
-        nAdvance  = pDXAry[ nFrom - 1];
+        if (nFrom < nLength)
+            nAdvance  = pDXAry[ nFrom - 1];
     }
 
     return;
