@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-20 16:24:54 $
+ *  last change: $Author: ama $ $Date: 2001-11-22 16:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 #endif
 
     pFoll->MoveFlyInCnt( this, nStart, STRING_LEN );
+    pFoll->SetFtn( FALSE );
     pFoll->Cut();
     delete pFoll;
     pFollow = pNxt;
