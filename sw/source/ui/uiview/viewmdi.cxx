@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-12-13 16:06:40 $
+ *  last change: $Author: os $ $Date: 2002-02-27 09:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,8 @@ int SwView::_CreateVLineal()
     Window *pMDI = &GetViewFrame()->GetWindow();
 
     pVLineal = new SvxRuler(pMDI, pEditWin,
-                            0,
+                            SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL|
+                                SVXRULER_SUPPORT_BORDERS,
                             GetViewFrame()->GetBindings(),
                             WB_VSCROLL |  WB_3DLOOK | WB_BORDER );
     if( pVLineal && pHLineal )
@@ -771,6 +772,9 @@ void SwView::SetImageButtonColor(Color& rColor)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/12/13 16:06:40  os
+    #95871# OuterResizePixel mustn't initiate a change of global view options
+
     Revision 1.5  2001/10/10 18:26:41  jp
     Bug #91228#: _SetZoom - don't move the cursor into the visible area
 
