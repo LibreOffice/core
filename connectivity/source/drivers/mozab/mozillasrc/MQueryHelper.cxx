@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:02:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ MQueryHelper::notifyResultOrComplete()
 sal_Bool
 MQueryHelper::waitForResultOrComplete( ::rtl::OUString& _rError )
 {
-    TimeValue               timeValue = { 20, 0 };  // 20 Seconds 0 NanoSecond timeout
+    TimeValue               timeValue = { 5, 0 };  // 20 Seconds 0 NanoSecond timeout
     osl::Condition::Result  rv = ::osl::Condition::result_ok;
 
     OSL_TRACE("In : waitForResultOrComplete()");
@@ -467,9 +467,6 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
     NS_ENSURE_SUCCESS(rv, rv);
 
 
-
-    // Need to determine if it's a MailingList, so first find the
-    // nsIAbCard property and check the boolean isMailList
     nsCOMPtr<nsISupports> item;
     rv = properties -> GetElementAt(0, getter_AddRefs(item));
     NS_ENSURE_SUCCESS(rv, rv);
@@ -487,18 +484,7 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
         nsCOMPtr<nsIAbCard> card(do_QueryInterface(cardSupports, &rv));
         NS_ENSURE_SUCCESS(rv, rv);
 
-        PRBool bIsMailList = PR_FALSE;
-        card->GetIsMailList( &bIsMailList );
-        if ( bIsMailList )
-        {
-            // No just skip, ie. return without inserting.
-            nsMemory::Free(name);
-            return(NS_OK);
-        }
-        else
-        {
             getCardValues(card);
-        }
     }
     nsMemory::Free(name);
 
