@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ english_us ] = "Value" ;
         Text[ chinese_simplified ] = "Öµ";
         Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Warto?æ";
+        Text[ polish ] = "Wartoœæ";
         Text[ japanese ] = "’l";
         Text[ chinese_traditional ] = "¼Æ­È";
         Text[ arabic ] = "ÇáŞíãÉ";
@@ -1433,6 +1433,26 @@ ModelessDialog RID_SCDLG_FILTER
         Size = MAP_APPFONT ( 230 , 8 ) ;
         Text = "Filterkriterien" ;
         Text [ ENGLISH ] = "Filter criteria" ;
+        Text[ english_us ] = "Filter criteria";
+        Text[ portuguese ] = "Filter criteria";
+        Text[ russian ] = "Filter criteria";
+        Text[ greek ] = "Filter criteria";
+        Text[ dutch ] = "Filter criteria";
+        Text[ french ] = "Filter criteria";
+        Text[ spanish ] = "Criterios de filtro";
+        Text[ finnish ] = "Filter criteria";
+        Text[ italian ] = "Filter criteria";
+        Text[ danish ] = "Filter criteria";
+        Text[ swedish ] = "Filterkriterier";
+        Text[ polish ] = "Kryteria filtrowania";
+        Text[ portuguese_brazilian ] = "Filter criteria";
+        Text[ japanese ] = "Filter criteria";
+        Text[ korean ] = "Filter criteria";
+        Text[ chinese_simplified ] = "É¸Ñ¡Ìõ¼ş";
+        Text[ chinese_traditional ] = "¿z¿ï±ø¥ó";
+        Text[ turkish ] = "Filter criteria";
+        Text[ arabic ] = "Filter criteria";
+        Text[ catalan ] = "Filter criteria";
     };
     CheckBox BTN_CASE
     {
@@ -1493,7 +1513,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "±`³Wªí¹F(~E)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
         Text[ greek ] = "ÊáíïíéêŞ ğá~ñÜóôáóç";
-        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö(~E)";
+        Text[ korean ] = "º¸Åë Ç¥Çö(~E)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Expresión corriente";
@@ -1656,7 +1676,7 @@ ModelessDialog RID_SCDLG_FILTER
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -1720,7 +1740,7 @@ ModelessDialog RID_SCDLG_FILTER
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ñù±¾";
         Text[ russian ] = "ôèêòèâíûé";
-        Text[ polish ] = "Za?lepka";
+        Text[ polish ] = "Zaœlepka";
         Text[ japanese ] = "ÀŞĞ°";
         Text[ chinese_traditional ] = "¼Ë¥»";
         Text[ arabic ] = "äãæĞÌ ãÕØäÚ";
@@ -1883,7 +1903,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -1955,7 +1975,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "±`³Wªí¹F(~E)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
         Text[ greek ] = "ÊáíïíéêŞ ğá~ñÜóôáóç";
-        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö(~E)";
+        Text[ korean ] = "º¸Åë Ç¥Çö(~E)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Expresión corriente";
@@ -2118,7 +2138,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -2182,7 +2202,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ñù±¾";
         Text[ russian ] = "ôèêòèâíûé";
-        Text[ polish ] = "Za?lepka";
+        Text[ polish ] = "Zaœlepka";
         Text[ japanese ] = "ÀŞĞ°";
         Text[ chinese_traditional ] = "¼Ë¥»";
         Text[ arabic ] = "äãæĞÌ ãÕØäÚ";
@@ -2391,7 +2411,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ english_us ] = "Value" ;
         Text[ chinese_simplified ] = "ÊıÖµ";
         Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Warto?æ";
+        Text[ polish ] = "Wartoœæ";
         Text[ japanese ] = "’l";
         Text[ chinese_traditional ] = "¼Æ­È";
         Text[ arabic ] = "ÇáŞíãÉ";
@@ -3380,6 +3400,26 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Size = MAP_APPFONT ( 230 , 8 ) ;
         Text = "Filterkriterien" ;
         Text [ ENGLISH ] = "Filter criteria" ;
+        Text[ english_us ] = "Filter criteria";
+        Text[ portuguese ] = "Filter criteria";
+        Text[ russian ] = "Filter criteria";
+        Text[ greek ] = "Filter criteria";
+        Text[ dutch ] = "Filter criteria";
+        Text[ french ] = "Filter criteria";
+        Text[ spanish ] = "Criterios de filtro";
+        Text[ finnish ] = "Filter criteria";
+        Text[ italian ] = "Filter criteria";
+        Text[ danish ] = "Filter criteria";
+        Text[ swedish ] = "Filterkriterier";
+        Text[ polish ] = "Kryteria filtrowania";
+        Text[ portuguese_brazilian ] = "Filter criteria";
+        Text[ japanese ] = "Filter criteria";
+        Text[ korean ] = "Filter criteria";
+        Text[ chinese_simplified ] = "É¸Ñ¡Ìõ¼ş";
+        Text[ chinese_traditional ] = "¿z¿ï±ø¥ó";
+        Text[ turkish ] = "Filter criteria";
+        Text[ arabic ] = "Filter criteria";
+        Text[ catalan ] = "Filter criteria";
     };
     CheckBox BTN_CASE
     {
@@ -3440,7 +3480,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "±`³Wªí¹F(~R)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
         Text[ greek ] = "ÊáíïíéêŞ ğá~ñÜóôáóç";
-        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö(~R)";
+        Text[ korean ] = "º¸Åë Ç¥Çö(~R)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Expresión corriente";
@@ -3527,7 +3567,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Left = TRUE ;
         Text[ chinese_simplified ] = "ĞéÉè";
         Text[ russian ] = "ôèêòèâíûé";
-        Text[ polish ] = "Za?lepka";
+        Text[ polish ] = "Zaœlepka";
         Text[ japanese ] = "ÀŞĞ°";
         Text[ chinese_traditional ] = "¼Ë¦¡";
         Text[ arabic ] = "äãæĞÌ ãÕØäÚ";
