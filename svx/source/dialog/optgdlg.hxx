@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 16:40:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,10 +195,12 @@ public:
 class OfaLanguagesTabPage : public SfxTabPage
 {
     FixedLine       aUILanguageGB;
-//  FixedText       aUILanguageFT;
-//  SvxLanguageBox  aUILanguageLB;
     FixedText       aLocaleSettingFT;
     SvxLanguageBox  aLocaleSettingLB;
+
+    FixedText       aDecimalSeparatorFT;
+    CheckBox        aDecimalSeparatorCB;
+
     FixedText       aCurrencyFT;
     ListBox         aCurrencyLB;
 
@@ -214,6 +216,8 @@ class OfaLanguagesTabPage : public SfxTabPage
     CheckBox        aAsianSupportCB;
     FixedLine       aCTLSupportFL;
     CheckBox        aCTLSupportCB;
+
+    const String    sDecimalSeparatorLabel;
 
     sal_Bool        m_bOldAsian;
     sal_Bool        m_bOldCtl;
