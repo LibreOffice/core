@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-12 11:56:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ protected:
     BOOL       bStatic  : 1;        // TRUE: STATIC-Variable
     BOOL       bAs      : 1;        // TRUE: Datentyp per AS XXX definiert
     BOOL       bGlobal  : 1;        // TRUE: Global-Variable
+    USHORT     nDefaultId;          // Symbol number of default value
 public:
     SbiSymDef( const String& );
     virtual ~SbiSymDef();
@@ -197,6 +198,8 @@ public:
     void       SetNew()         { bNew = TRUE;      }
     void       SetDefinedAs()   { bAs = TRUE;       }
     void       SetGlobal(BOOL b){ bGlobal = b;  }
+    void       SetDefaultId( USHORT n ) { nDefaultId = n; }
+    USHORT     GetDefaultId( void ) { return nDefaultId; }
     BOOL       IsOptional() const{ return bOpt;     }
     BOOL       IsByVal() const  { return bByVal;    }
     BOOL       IsStatic() const { return bStatic;   }
