@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-22 23:16:45 $
+ *  last change: $Author: rt $ $Date: 2001-11-27 23:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,7 +869,7 @@ String RID_SVXITEMS_BRUSHSTYLE_HORZ
     Text[ korean ] = "ÏàòÌèâ";
     Text[ turkish ] = "Yatay";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Horizontal";
+    Text[ catalan ] = "Horitzontal";
 };
 String RID_SVXITEMS_BRUSHSTYLE_VERT
 {
@@ -3375,7 +3375,7 @@ String RID_ATTR_CHAR_WEIGHT
     Text = "Schriftst‰rke" ;
     Text [ English ] = "Fontweight" ;
     Text [ norwegian ] = "Skriftvekt" ;
-    Text [ italian ] = "Spessore del font" ;
+    Text [ italian ] = "Spessore del carattere" ;
     Text [ portuguese_brazilian ] = "Peso de fonte" ;
     Text [ portuguese ] = "Espessura da letra" ;
     Text [ finnish ] = "Fontin paino" ;
@@ -3537,7 +3537,7 @@ String RID_ATTR_CHAR_FONTHEIGHT
     Text = "Schriftgrad" ;
     Text [ English ] = "Fontheight" ;
     Text [ norwegian ] = "Skrifth¯yde" ;
-    Text [ italian ] = "Altezza font" ;
+    Text [ italian ] = "Dimensioni carattere" ;
     Text [ portuguese_brazilian ] = "Altura de fonte" ;
     Text [ portuguese ] = "Altura do tipo de letra" ;
     Text [ finnish ] = "Fontin korkeus" ;
@@ -3564,7 +3564,7 @@ String RID_ATTR_CHAR_PROPSIZE
     Text = "Rel. Schriftgrˆﬂe" ;
     Text [ English ] = "rel. Fontsize" ;
     Text [ norwegian ] = "rel. Skriftst¯rrelse" ;
-    Text [ italian ] = "Dimensione font rel." ;
+    Text [ italian ] = "Dimensione carattere rel." ;
     Text [ portuguese_brazilian ] = "Tamanho relativo de letra" ;
     Text [ portuguese ] = "Tamanho da letra relativo" ;
     Text [ finnish ] = "Suht. fonttikoko" ;
@@ -3591,7 +3591,7 @@ String RID_ATTR_CHAR_COLOR
     Text = "Schriftfarbe" ;
     Text [ English ] = "Fontcolor" ;
     Text [ norwegian ] = "Skriftfarge" ;
-    Text [ italian ] = "Colore font" ;
+    Text [ italian ] = "Colore carattere" ;
     Text [ portuguese_brazilian ] = "Cor de fonte" ;
     Text [ portuguese ] = "Cor do tipo de letra" ;
     Text [ finnish ] = "Fontin v‰ri" ;
@@ -4308,7 +4308,7 @@ String RID_ATTR_FLASH
     Text[ french ] = "Clignotant";
     Text[ spanish ] = "Intermitente";
     Text[ finnish ] = "Blinking";
-    Text[ italian ] = "Blinking";
+    Text[ italian ] = "Lampeggiante";
     Text[ danish ] = "Blinking";
     Text[ swedish ] = "Blinkande";
     Text[ polish ] = "Blinking";
@@ -4332,7 +4332,7 @@ String RID_ATTR_PARA_REGISTER
     Text[ french ] = "ContrÙle de repÈrage";
     Text[ spanish ] = "Conformidad registro";
     Text[ finnish ] = "Register-true";
-    Text[ italian ] = "Register-true";
+    Text[ italian ] = "Conformit‡ registro";
     Text[ danish ] = "Register-true";
     Text[ swedish ] = "Register";
     Text[ polish ] = "Register-true";
@@ -4356,7 +4356,7 @@ String RID_ATTR_BRUSH_CHAR
     Text[ french ] = "Trame de fond";
     Text[ spanish ] = "Fondo de car·cter";
     Text[ finnish ] = "Character Background";
-    Text[ italian ] = "Character Background";
+    Text[ italian ] = "Sfondo carattere";
     Text[ danish ] = "Character Background";
     Text[ swedish ] = "Teckenbakgrund";
     Text[ polish ] = "Character Background";
@@ -4380,7 +4380,7 @@ String RID_ATTR_CHAR_CJK_FONT
     Text[ french ] = "Police asiatique";
     Text[ spanish ] = "Fuente asi·tica";
     Text[ finnish ] = "Asian Font";
-    Text[ italian ] = "Asian Font";
+    Text[ italian ] = "Caratteri asiatici";
     Text[ danish ] = "Asian Font";
     Text[ swedish ] = "Asiatiskt teckensnitt";
     Text[ polish ] = "Asian Font";
@@ -4404,7 +4404,7 @@ String RID_ATTR_CHAR_CJK_FONTHEIGHT
     Text[ french ] = "Taille police asiatique";
     Text[ spanish ] = "TamaÒo de la fuente asi·tica";
     Text[ finnish ] = "Size asian font";
-    Text[ italian ] = "Size asian font";
+    Text[ italian ] = "Dimensioni del carattere asiatico";
     Text[ danish ] = "Size asian font";
     Text[ swedish ] = "Teckenstorlek asiatiskt teckensnitt";
     Text[ polish ] = "Size asian font";
@@ -4428,7 +4428,7 @@ String RID_ATTR_CHAR_CJK_LANGUAGE
     Text[ french ] = "Langue police asiatique";
     Text[ spanish ] = "Idioma de la fuente asi·tica";
     Text[ finnish ] = "Language asian font";
-    Text[ italian ] = "Language asian font";
+    Text[ italian ] = "Lingua carattere asiatico";
     Text[ danish ] = "Language asian font";
     Text[ swedish ] = "SprÂk asiatiskt teckensnitt";
     Text[ polish ] = "Language asian font";
@@ -4452,7 +4452,7 @@ String RID_ATTR_CHAR_CJK_POSTURE
     Text[ french ] = "Inclinaison police asiatique";
     Text[ spanish ] = "PosiciÛn de la fuente asi·tica";
     Text[ finnish ] = "Posture asian font";
-    Text[ italian ] = "Posture asian font";
+    Text[ italian ] = "Orientamento carattere asiatico";
     Text[ danish ] = "Posture asian font";
     Text[ swedish ] = "Teckenstil asiatiskt teckensnitt";
     Text[ polish ] = "Posture asian font";
@@ -4476,7 +4476,7 @@ String RID_ATTR_CHAR_CJK_WEIGHT
     Text[ french ] = "Graisse police asiatique";
     Text[ spanish ] = "Peso de la fuente asi·tica";
     Text[ finnish ] = "Weight asian font";
-    Text[ italian ] = "Weight asian font";
+    Text[ italian ] = "Spessore carattere asiatico";
     Text[ danish ] = "Weight asian font";
     Text[ swedish ] = "Tjocklek asiatiskt teckensnitt";
     Text[ polish ] = "Weight asian font";
@@ -4500,7 +4500,7 @@ String RID_ATTR_CHAR_CTL_FONT
     Text[ french ] = "Scripts complexes";
     Text[ spanish ] = "Scripts complejos";
     Text[ finnish ] = "Complex scripts";
-    Text[ italian ] = "Complex scripts";
+    Text[ italian ] = "Script complessi";
     Text[ danish ] = "Complex scripts";
     Text[ swedish ] = "Komplexa skript";
     Text[ polish ] = "Complex scripts";
@@ -4524,7 +4524,7 @@ String RID_ATTR_CHAR_CTL_FONTHEIGHT
     Text[ french ] = "Taille scripts complexes";
     Text[ spanish ] = "TamaÒo de scripts complejos";
     Text[ finnish ] = "Size complex scripts";
-    Text[ italian ] = "Size complex scripts";
+    Text[ italian ] = "Dimensioni degli script complessi";
     Text[ danish ] = "Size complex scripts";
     Text[ swedish ] = "Teckenstorlek komplexa teckensnitt";
     Text[ polish ] = "Size complex scripts";
@@ -4548,7 +4548,7 @@ String RID_ATTR_CHAR_CTL_LANGUAGE
     Text[ french ] = "Langue scripts complexes";
     Text[ spanish ] = "Idioma de scripts complejos";
     Text[ finnish ] = "Language complex scripts";
-    Text[ italian ] = "Language complex scripts";
+    Text[ italian ] = "Lingua script complessi";
     Text[ danish ] = "Language complex scripts";
     Text[ swedish ] = "SprÂk komplexa skript";
     Text[ polish ] = "Language complex scripts";
@@ -4572,7 +4572,7 @@ String RID_ATTR_CHAR_CTL_POSTURE
     Text[ french ] = "Inclinaison scripts complexes";
     Text[ spanish ] = "PosiciÛn de scripts complejos";
     Text[ finnish ] = "Posture complex scripts";
-    Text[ italian ] = "Posture complex scripts";
+    Text[ italian ] = "Orientamento script complessi";
     Text[ danish ] = "Posture complex scripts";
     Text[ swedish ] = "Teckenstil komplexa skript";
     Text[ polish ] = "Posture complex scripts";
@@ -4596,7 +4596,7 @@ String RID_ATTR_CHAR_CTL_WEIGHT
     Text[ french ] = "Graisse scripts complexes";
     Text[ spanish ] = "Peso de scripts complejos";
     Text[ finnish ] = "Weight complex scripts";
-    Text[ italian ] = "Weight complex scripts";
+    Text[ italian ] = "Spessore script complessi";
     Text[ danish ] = "Weight complex scripts";
     Text[ swedish ] = "Tjocklek komplexa skript";
     Text[ polish ] = "Weight complex scripts";
@@ -4620,7 +4620,7 @@ String RID_ATTR_CHAR_TWO_LINES
     Text[ french ] = "Deux lignes en une";
     Text[ spanish ] = "LÌneas dobles";
     Text[ finnish ] = "Double lined";
-    Text[ italian ] = "Double lined";
+    Text[ italian ] = "Due linee in una";
     Text[ danish ] = "Double lined";
     Text[ swedish ] = "Dubbla rader";
     Text[ polish ] = "Double lined";
@@ -4644,7 +4644,7 @@ String RID_ATTR_CHAR_EMPHASISMARK
     Text[ french ] = "CaractËres d'accentuation";
     Text[ spanish ] = "Caracteres de acentuaciÛn";
     Text[ finnish ] = "Emphasis mark";
-    Text[ italian ] = "Emphasis mark";
+    Text[ italian ] = "Segni esclamativi";
     Text[ danish ] = "Emphasis mark";
     Text[ swedish ] = "Betoningstecken";
     Text[ polish ] = "Emphasis mark";
@@ -4668,7 +4668,7 @@ String RID_ATTR_PARA_SCRIPTSPACE
     Text[ french ] = "Espacement du texte";
     Text[ spanish ] = "Espacio del texto";
     Text[ finnish ] = "Text spacing";
-    Text[ italian ] = "Text spacing";
+    Text[ italian ] = "Spaziatura testo";
     Text[ danish ] = "Text spacing";
     Text[ swedish ] = "TextavstÂnd";
     Text[ polish ] = "Text spacing";
@@ -4692,7 +4692,7 @@ String RID_ATTR_PARA_HANGPUNCTUATION
     Text[ french ] = "Ponctuation en retrait";
     Text[ spanish ] = "PuntuaciÛn libre";
     Text[ finnish ] = "Hanging punctuation";
-    Text[ italian ] = "Hanging punctuation";
+    Text[ italian ] = "Punteggiatura sospesa";
     Text[ danish ] = "Hanging punctuation";
     Text[ swedish ] = "H‰ngande interpunktion";
     Text[ polish ] = "Hanging punctuation";
@@ -4716,7 +4716,7 @@ String RID_ATTR_PARA_FORBIDDEN_RULES
     Text[ french ] = "CaractËres non permis";
     Text[ spanish ] = "Caracteres no permitidos";
     Text[ finnish ] = "Forbidden characters";
-    Text[ italian ] = "Forbidden characters";
+    Text[ italian ] = "Caratteri non ammessi";
     Text[ danish ] = "Forbidden characters";
     Text[ swedish ] = "Fˆrbjudna tecken";
     Text[ polish ] = "Forbidden characters";
@@ -4740,7 +4740,7 @@ String RID_ATTR_CHAR_ROTATED
     Text[ french ] = "Rotation";
     Text[ spanish ] = "RotaciÛn";
     Text[ finnish ] = "Kierto";
-    Text[ italian ] = "Ruota";
+    Text[ italian ] = "Rotazione";
     Text[ danish ] = "Rotation";
     Text[ swedish ] = "Rotation";
     Text[ polish ] = "Rotation";
@@ -4764,7 +4764,7 @@ String RID_ATTR_CHAR_SCALEWIDTH
     Text[ french ] = "…chelle";
     Text[ spanish ] = "Escala";
     Text[ finnish ] = "Scaling";
-    Text[ italian ] = "Scaling";
+    Text[ italian ] = "Scala";
     Text[ danish ] = "Scaling";
     Text[ swedish ] = "Skalning";
     Text[ polish ] = "Scaling";
@@ -4812,7 +4812,7 @@ String RID_PARA_VERTALIGN
     Text[ french ] = "Alignement vertical du texte";
     Text[ spanish ] = "AlineaciÛn vertical del texto";
     Text[ finnish ] = "Vertical text alignment";
-    Text[ italian ] = "Vertical text alignment";
+    Text[ italian ] = "Allineamento del testo verticale";
     Text[ danish ] = "Vertical text alignment";
     Text[ swedish ] = "Vertikal textjustering";
     Text[ polish ] = "Vertical text alignment";
@@ -8661,6 +8661,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
 
 
