@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:15:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,6 +1033,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUseFormerLineSpacing = false;
     // OD 2004-03-17 #i11860#
     bool bUseFormerObjectPositioning = false;
+    // --> FME #108724#
+    bool bUseFormerTextWrapping = false;
 
     while( nCount-- )
     {
@@ -1068,6 +1070,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // OD 2004-03-17 #i11860#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning")) )
                     bUseFormerObjectPositioning = true;
+                // OD 2004-03-17 #i11860#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping")) )
+                    bUseFormerTextWrapping = true;
+
 
                 // #111955#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldNumbering")) )
@@ -1107,13 +1113,13 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     }
 
     // OD 2004-03-17 #i11860#
-    if( ! bUseFormerObjectPositioning )
+    if( !bUseFormerObjectPositioning )
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerObjectPositioning")), makeAny( true ) );
     }
 
-    if( ! bUseOldNumbering) // #111955#
+    if( !bUseOldNumbering ) // #111955#
     {
         Any aAny;
         sal_Bool bOldNum = true;
@@ -1130,6 +1136,14 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("AddParaSpacingToTableCells")), makeAny( false ) );
     }
+
+    // --> FME #108724#
+    if( !bUseFormerTextWrapping )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerTextWrapping")), makeAny( true ) );
+    }
+    // <--
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
