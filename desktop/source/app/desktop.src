@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-10-09 12:57:22 $
+ *  last change: $Author: lo $ $Date: 2002-10-10 09:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,7 +927,7 @@ QueryBox QBX_USERDATALOCKED
     DefButton = WB_DEF_NO ;
     Message = "Eine andere Instanz von %PRODUCTNAME scheint auf Ihre Benutzerdaten zuzugreifen.\n"\
               "Die Daten wurden von dem Benutzer $u auf dem Host $h am $t geöffnet.\n"\
-              "Das gleichzeitige Öffnen der Benutzerdaten durch mehrere Instanzen von %PRODUCTNAME kann zu Inkonsitenzen in den Daten Führen.\n"\
+              "Das gleichzeitige Öffnen der Benutzerdaten durch mehrere Instanzen von %PRODUCTNAME kann zu Inkonsistenzen in den Daten führen.\n"\
               "Möchten Sie wirklich fortfahren?" ;
 };
 
