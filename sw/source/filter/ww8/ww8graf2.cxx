@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:58 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 11:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef __SGI_STL_ITERATOR
+#include <iterator>
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -177,11 +181,11 @@ wwZOrderer::wwZOrderer(SdrPage* pDrawPg,
 
 void wwZOrderer::InsertEscherObject(SdrObject* pObject, ULONG nSpId)
 {
-    USHORT nInsertPos = GetEscherObjectPos(nSpId);
+    ULONG nInsertPos = GetEscherObjectPos(nSpId);
     mpDrawPg->InsertObject(pObject,nInsertPos + mnNoInitialObjects + mnInlines);
 }
 
-USHORT wwZOrderer::GetEscherObjectPos(ULONG nSpId)
+ULONG wwZOrderer::GetEscherObjectPos(ULONG nSpId)
 {
     /*
     #97824# EscherObjects have their own ordering which needs to be matched to
@@ -198,34 +202,29 @@ USHORT wwZOrderer::GetEscherObjectPos(ULONG nSpId)
         const SvxMSDffShapeOrder *pOrder = mpShapeOrders->GetObject(nShapePos);
         if (pOrder->nShapeId == nSpId)
         {
-            nFound=nShapePos;
+            nFound = nShapePos;
             break;
         }
     }
-
     // Match the ordering position from the ShapeOrders to the ordering of all
     // objects in the document.
-    USHORT nInsertPos, nMax;
-    nInsertPos = nMax = maEscherLayer.Count();
-    for (USHORT i=0; i < nMax; ++i)
+    myeiter aIter = maEscherLayer.begin();
+    myeiter aEnd = maEscherLayer.end();
+    while (aIter != aEnd)
     {
-        if (maEscherLayer.GetObject(i) > nFound)
-        {
-            nInsertPos = i;
+        if (*aIter > nFound)
             break;
-        }
+        ++aIter;
     }
-
-    maEscherLayer.Insert(nFound, nInsertPos);
-
-    return nInsertPos;
+    aIter = maEscherLayer.insert(aIter, nFound);
+    return std::distance(maEscherLayer.begin(), aIter);
 }
 
 // InsertObj() fuegt das Objekt in die Sw-Page ein und merkt sich die Z-Pos in
 // einem VarArr
 void wwZOrderer::InsertDrawingObject(SdrObject* pObj, short nWwHeight)
 {
-    USHORT nPos = GetDrawingObjectPos(nWwHeight);
+    ULONG nPos = GetDrawingObjectPos(nWwHeight);
     if (nWwHeight & 0x2000)                 // Heaven ?
         pObj->SetLayer(mnHeaven);
     else
@@ -246,24 +245,20 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
 // Der Offset bei Datei in bestehendes Dokument mit Grafiklayer einfuegen
 // muss der Aufrufer den Index um mnNoInitialObjects erhoeht werden, damit die
 // neuen Objekte am Ende landen ( Einfuegen ist dann schneller )
-USHORT wwZOrderer::GetDrawingObjectPos(short nWwHeight)
+ULONG wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 {
-    USHORT nInsertPos, nMax;
-    nInsertPos = nMax = maDrawHeight.Count();
-    // lineare Suche: langsam
-    for (USHORT i=0; i < nMax; i++)
+    myditer aIter = maDrawHeight.begin();
+    myditer aEnd = maDrawHeight.end();
+
+    while (aIter != aEnd)
     {
-        if ( (maDrawHeight.GetObject(i) & 0x1fff) > (nWwHeight & 0x1fff) )
-        {
-            nInsertPos = i;
+        if ((*aIter & 0x1fff) > (nWwHeight & 0x1fff))
             break;
-        }
+        ++aIter;
     }
 
-    maDrawHeight.Insert(nWwHeight, nInsertPos);
-
-    return nInsertPos;
-
+    aIter = maDrawHeight.insert(aIter, nWwHeight);
+    return std::distance(maDrawHeight.begin(), aIter);
 }
 
 #ifdef __WW8_NEEDS_COPY

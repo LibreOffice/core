@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:37 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 11:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,13 @@
 #ifndef _WW8GRAF_HXX
 #define _WW8GRAF_HXX
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_SHORTS
-#define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
+
+#if defined WNT || defined WIN || defined OS2
+#define __WW8_NEEDS_PACK
+#pragma pack(2)
 #endif
 
 struct WW8_FSPA
@@ -149,8 +152,12 @@ class wwZOrderer
 private:
     //No of objects in doc before starting (always 0 unless using file->insert
     //and probably 0 then as well
-    SvUShorts maEscherLayer;
-    SvShorts maDrawHeight;
+    std::vector<ULONG> maEscherLayer;
+    typedef std::vector<ULONG>::iterator myeiter;
+
+    std::vector<short> maDrawHeight;
+    typedef std::vector<short>::iterator myditer;
+
     ULONG mnNoInitialObjects;
     ULONG mnInlines;
     SdrPage* mpDrawPg;
@@ -158,14 +165,14 @@ private:
     sal_Int8 mnHeaven;
     sal_Int8 mnHell;
 
-    USHORT GetEscherObjectPos(ULONG nSpId);
-    USHORT GetDrawingObjectPos(short nWwHeight);
+    ULONG GetEscherObjectPos(ULONG nSpId);
+    ULONG GetDrawingObjectPos(short nWwHeight);
 public:
     wwZOrderer(SdrPage* pDrawPg, const SvxMSDffShapeOrders *pShapeOrders,
         sal_Int8 nHeaven, sal_Int8 nHell);
     void InsertTextLayerObject(SdrObject* pObject);
     /*
-     cmc: We could have have seperate ZOrder classes for 95- and 97+ and
+     cmc: We should have have seperate ZOrder classes for 95- and 97+ and
      instantiate the appropiate one at run time.
      */
     void InsertDrawingObject(SdrObject* pObj, short nWwHeight);
