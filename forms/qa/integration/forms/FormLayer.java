@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormLayer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:53:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,33 +82,24 @@ import integration.forms.DocumentHelper;
  *
  * @author  fs@openoffice.org
  */
-public class FormLayer
-{
+    public class FormLayer
+    {
     private DocumentHelper  m_document;
-    private int             m_insertPage;
+    private XDrawPage       m_page;
 
     /* ------------------------------------------------------------------ */
     /** Creates a new instance of FormLayer */
     public FormLayer( DocumentHelper _document )
     {
         m_document = _document;
-        m_insertPage = -1;
     }
 
     /* ------------------------------------------------------------------ */
     /** sets the page which is to be used for subsequent insertions of controls/shapes
      */
-    void setInsertPage( int page )
+    void setInsertPage( int page ) throws com.sun.star.lang.IndexOutOfBoundsException, com.sun.star.lang.WrappedTargetException
     {
-        m_insertPage = page;
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** retrieves the page which is to be used for subsequent insertions of controls/shapes
-     */
-    final int getInsertPage( )
-    {
-        return m_insertPage;
+        m_page = m_document.getDrawPage( page );
     }
 
     /* ------------------------------------------------------------------ */
@@ -149,7 +140,7 @@ public class FormLayer
         xShape.setPosition( new Point( nXPos * 100, nYPos * 100 ) );
 
         // adjust the anchor so that the control is tied to the page
-        XPropertySet xShapeProps = dbfTools.queryXPropertySet( xShape );
+        XPropertySet xShapeProps = dbfTools.queryPropertySet( xShape );
         TextContentAnchorType eAnchorType = TextContentAnchorType.AT_PARAGRAPH;
         xShapeProps.setPropertyValue( "AnchorType", eAnchorType );
 
@@ -168,13 +159,13 @@ public class FormLayer
         xShape.setControl( xModel );
 
         // add the shape to the shapes collection of the document
-        XDrawPage pageWhereToInsert = ( m_insertPage != -1 ) ? m_document.getDrawPage( m_insertPage ) : m_document.getMainDrawPage();
+        XDrawPage pageWhereToInsert = ( m_page != null ) ? m_page : m_document.getMainDrawPage();
 
         XShapes xDocShapes = (XShapes)UnoRuntime.queryInterface( XShapes.class, pageWhereToInsert );
         xDocShapes.add( xShape );
 
         // and outta here with the XPropertySet interface of the model
-        XPropertySet xModelProps = dbfTools.queryXPropertySet( xModel );
+        XPropertySet xModelProps = dbfTools.queryPropertySet( xModel );
         return xModelProps;
     }
 
@@ -271,17 +262,42 @@ public class FormLayer
      *  @param refValue
      *      the reference value of the radio button
     */
-    public XPropertySet getRadioModel( XPropertySet form, String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
+    public XPropertySet getRadioModelByRefValue( XPropertySet form, String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
         XIndexAccess indexAccess = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
             form );
 
         for ( int i=0; i<indexAccess.getCount(); ++i )
         {
-            XPropertySet control = dbfTools.queryXPropertySet( indexAccess.getByIndex( i ) );
+            XPropertySet control = dbfTools.queryPropertySet( indexAccess.getByIndex( i ) );
 
             if ( ((String)control.getPropertyValue( "Name" )).equals( name ) )
                 if ( ((String)control.getPropertyValue( "RefValue" )).equals( refValue ) )
+                    return control;
+        }
+        return null;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** retrieves the radio button model with the given name and the given tag
+     *  @param form
+     *      the parent form of the radio button model to find
+     *  @param name
+     *      the name of the radio button
+     *  @param refValue
+     *      the tag of the radio button
+    */
+    public XPropertySet getRadioModelByTag( XPropertySet form, String name, String tag ) throws com.sun.star.uno.Exception, java.lang.Exception
+    {
+        XIndexAccess indexAccess = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
+            form );
+
+        for ( int i=0; i<indexAccess.getCount(); ++i )
+        {
+            XPropertySet control = dbfTools.queryPropertySet( indexAccess.getByIndex( i ) );
+
+            if ( ((String)control.getPropertyValue( "Name" )).equals( name ) )
+                if ( ((String)control.getPropertyValue( "Tag" )).equals( tag ) )
                     return control;
         }
         return null;
