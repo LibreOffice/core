@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:34 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 17:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ public:
     ActDic(const ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary > &rDic) : xDic(rDic) {}
 };
-SV_DECL_OBJARR(ActDicArray, ActDic, 16, 16);
+SV_DECL_OBJARR( ActDicArray, ActDic, 16, 16 );
 
 class DicList :
     public cppu::WeakImplHelper3
@@ -122,27 +122,35 @@ class DicList :
 
     LinguOptions    aOpt;
 
-    ::cppu::OInterfaceContainerHelper                               aEvtListeners;
-    ActDicArray                                                     aDicList;
+    ::cppu::OInterfaceContainerHelper       aEvtListeners;
+    ActDicArray*                            pDicList;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryEventListener >   xDicEvtLstnrHelper;
-    DicEvtListenerHelper                                           *pDicEvtLstnrHelper;
+    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::
+                XDictionaryEventListener >  xDicEvtLstnrHelper;
+    DicEvtListenerHelper                    *pDicEvtLstnrHelper;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XTerminateListener >               xExitListener;
-    MyAppExitListener                                              *pExitListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::
+                XTerminateListener >        xExitListener;
+    MyAppExitListener                       *pExitListener;
 
     BOOL    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
-    DicList(const DicList &);
+    DicList( const DicList & );
     DicList & operator = (const DicList &);
+
+    void            _CreateDicList();
+    ActDicArray&    GetDicList()
+                        {
+                            if( !pDicList )
+                                _CreateDicList();
+                            return *pDicList;
+                        }
 
     void            launchEvent(INT16 nEvent, com::sun::star::uno::Sequence<
                             ::com::sun::star::linguistic2::XDictionary > xDic);
     void            searchForDictionaries( ActDicArray &rDicList,
-                            const String &rDicDir );
+                                            const String &rDicDir );
     INT32           getDicPos(const com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XDictionary > &xDic);
 

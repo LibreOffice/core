@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 14:49:20 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 17:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,59 +380,22 @@ void DicList::MyAppExitListener::AtExit()
 
 
 DicList::DicList() :
-    aEvtListeners   ( GetLinguMutex() )
+    aEvtListeners   ( GetLinguMutex() ),
+    pDicList( 0 )
 {
     pDicEvtLstnrHelper  = new DicEvtListenerHelper( this );
     xDicEvtLstnrHelper  = pDicEvtLstnrHelper;
     bDisposing = FALSE;
 
-    // look for dictionaries
-    SvtPathOptions aPathOpt;
-    searchForDictionaries( aDicList, aPathOpt.GetUserDictionaryPath() );
-    searchForDictionaries( aDicList, aPathOpt.GetDictionaryPath() );
-
-    // create IgnoreAllList dictionary with empty URL (non persistent)
-    // and add it to list
-    OUString aDicName( A2OU( "IgnoreAllList" ) );
-    Reference< XDictionary > xIgnAll(
-            createDictionary( aDicName, CreateLocale( LANGUAGE_NONE ),
-                              DictionaryType_POSITIVE, OUString() ) );
-    if (xIgnAll.is())
-    {
-        AddUserData( xIgnAll );
-        xIgnAll->setActive( TRUE );
-        addDictionary( xIgnAll );
-    }
-
     pExitListener = new MyAppExitListener( *this );
     xExitListener = pExitListener;
     pExitListener->Activate();
-
-    // evaluate list of dictionaries to be activated from configuration
-    //
-    //! to suppress overwriting the list of active dictionaries in the
-    //! configuration with incorrect arguments during the following
-    //! activation of the dictionaries
-    pDicEvtLstnrHelper->BeginCollectEvents();
-    //
-    const Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
-    const OUString *pActiveDic = aActiveDics.getConstArray();
-    INT32 nLen = aActiveDics.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
-    {
-        if (pActiveDic[i].getLength())
-        {
-            Reference< XDictionary > xDic( getDictionaryByName( pActiveDic[i] ) );
-            if (xDic.is())
-                xDic->setActive( TRUE );
-        }
-    }
-    pDicEvtLstnrHelper->EndCollectEvents();
 }
 
 DicList::~DicList()
 {
     pExitListener->Deactivate();
+    delete pDicList;
 }
 
 
@@ -511,10 +474,11 @@ INT32 DicList::getDicPos(const Reference< XDictionary > &xDic)
     MutexGuard  aGuard( GetLinguMutex() );
 
     INT32 nPos = -1;
-    INT32 n = aDicList.Count();
+    ActDicArray& rDicList = GetDicList();
+    INT32 n = rDicList.Count();
     for (INT32 i = 0;  i < n;  i++)
     {
-        if (aDicList.GetObject(i).xDic == xDic)
+        if ( rDicList.GetObject(i).xDic == xDic )
             return i;
     }
     return nPos;
@@ -532,7 +496,7 @@ Reference< XInterface > SAL_CALL
 sal_Int16 SAL_CALL DicList::getCount() throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return aDicList.Count();
+    return GetDicList().Count();
 }
 
 uno::Sequence< Reference< XDictionary > > SAL_CALL
@@ -541,12 +505,14 @@ uno::Sequence< Reference< XDictionary > > SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    uno::Sequence< Reference< XDictionary > > aDics( aDicList.Count() );
+    ActDicArray& rDicList = GetDicList();
+
+    uno::Sequence< Reference< XDictionary > > aDics( rDicList.Count() );
     Reference< XDictionary > *pDic = aDics.getArray();
 
     INT32 n = aDics.getLength();
     for (INT32 i = 0;  i < n;  i++)
-        pDic[i] = aDicList.GetObject(i).xDic;
+        pDic[i] = rDicList.GetObject(i).xDic;
 
     return aDics;
 }
@@ -558,10 +524,11 @@ Reference< XDictionary > SAL_CALL
     MutexGuard  aGuard( GetLinguMutex() );
 
     Reference< XDictionary > xDic;
-    INT32 nCount = aDicList.Count();
+    ActDicArray& rDicList = GetDicList();
+    INT32 nCount = rDicList.Count();
     for (INT32 i = 0;  i < nCount;  i++)
     {
-        const Reference< XDictionary > &rDic = aDicList.GetObject(i).xDic;
+        const Reference< XDictionary > &rDic = rDicList.GetObject(i).xDic;
         if (rDic.is()  &&  rDic->getName() == aDictionaryName)
         {
             xDic = rDic;
@@ -584,7 +551,8 @@ sal_Bool SAL_CALL DicList::addDictionary(
     BOOL bRes = FALSE;
     if (xDictionary.is())
     {
-        aDicList.Insert( ActDic(xDictionary), aDicList.Count() );
+        ActDicArray& rDicList = GetDicList();
+        rDicList.Insert( ActDic(xDictionary), rDicList.Count() );
         bRes = TRUE;
 
         // add listener helper to the dictionaries listener lists
@@ -607,7 +575,8 @@ sal_Bool SAL_CALL
     if (nPos >= 0)
     {
         // remove dictionary list from the dictionaries listener lists
-        Reference< XDictionary > xDic( aDicList.GetObject( nPos ).xDic );
+        ActDicArray& rDicList = GetDicList();
+        Reference< XDictionary > xDic( rDicList.GetObject( nPos ).xDic );
         DBG_ASSERT(xDic.is(), "lng : empty reference");
         if (xDic.is())
         {
@@ -617,7 +586,7 @@ sal_Bool SAL_CALL
             xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
         }
 
-        aDicList.Remove(nPos);
+        rDicList.Remove(nPos);
         bRes = TRUE;
     }
     return bRes;
@@ -717,10 +686,11 @@ void SAL_CALL
         if (pDicEvtLstnrHelper)
             pDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
 
-        INT16 nCount = aDicList.Count();
+        ActDicArray& rDicList = GetDicList();
+        INT16 nCount = rDicList.Count();
         for (INT16 i = 0;  i < nCount;  i++)
         {
-            Reference< XDictionary > xDic( aDicList.GetObject(i).xDic , UNO_QUERY );
+            Reference< XDictionary > xDic( rDicList.GetObject(i).xDic , UNO_QUERY );
 
             // save (modified) dictionaries
             Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
@@ -762,6 +732,49 @@ void SAL_CALL
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
+}
+
+void DicList::_CreateDicList()
+{
+    pDicList = new ActDicArray;
+
+    // look for dictionaries
+    SvtPathOptions aPathOpt;
+    searchForDictionaries( *pDicList, aPathOpt.GetUserDictionaryPath() );
+    searchForDictionaries( *pDicList, aPathOpt.GetDictionaryPath() );
+
+    // create IgnoreAllList dictionary with empty URL (non persistent)
+    // and add it to list
+    OUString aDicName( A2OU( "IgnoreAllList" ) );
+    Reference< XDictionary > xIgnAll(
+            createDictionary( aDicName, CreateLocale( LANGUAGE_NONE ),
+                              DictionaryType_POSITIVE, OUString() ) );
+    if (xIgnAll.is())
+    {
+        AddUserData( xIgnAll );
+        xIgnAll->setActive( TRUE );
+        addDictionary( xIgnAll );
+    }
+    // evaluate list of dictionaries to be activated from configuration
+    //
+    //! to suppress overwriting the list of active dictionaries in the
+    //! configuration with incorrect arguments during the following
+    //! activation of the dictionaries
+    pDicEvtLstnrHelper->BeginCollectEvents();
+    //
+    const Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
+    const OUString *pActiveDic = aActiveDics.getConstArray();
+    INT32 nLen = aActiveDics.getLength();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        if (pActiveDic[i].getLength())
+        {
+            Reference< XDictionary > xDic( getDictionaryByName( pActiveDic[i] ) );
+            if (xDic.is())
+                xDic->setActive( TRUE );
+        }
+    }
+    pDicEvtLstnrHelper->EndCollectEvents();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -935,7 +948,6 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
 {
     if (rFileURL.Len() == 0)
         return FALSE;
-
     String aDIC( GetDicExtension() );
     String aExt;
     xub_StrLen nPos = rFileURL.SearchBackward( '.' );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 14:52:48 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 17:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,21 +173,29 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
     nDicVersion  = -1;
     bNeedEntries = TRUE;
     bIsModified  = bIsActive = FALSE;
+    bIsReadonly = FALSE;
 
-    if (rMainURL.getLength() > 0)
+    if( rMainURL.getLength() > 0 )
     {
+        bIsReadonly = TRUE;
         BOOL bExists = FALSE;
+
         try
         {
-            ::ucb::Content aTestContent( rMainURL ,
-                            Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-            bExists = aTestContent.isDocument();
+            ::ucb::Content aContent( rMainURL ,
+                Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+            bExists = aContent.isDocument();
+            if( bExists )
+            {
+                Any aAny( aContent.getPropertyValue( A2OU( "IsReadOnly" )) );
+                aAny >>= bIsReadonly;
+            }
         }
         catch( ::com::sun::star::uno::Exception )
         {
-            bExists = FALSE;
         }
-        if (!bExists)
+
+        if( !bExists )
         {
             // save new dictionaries with in 6.0 Format (uses UTF8)
             nDicVersion  = 6;
@@ -203,10 +211,6 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
     {
         bNeedEntries = FALSE;
     }
-
-    //! Creates empty file if there is no one yet!
-    //! Thus it must be called after the test for the files existence.
-    bIsReadonly = isReadonly_Impl();
 }
 
 DictionaryNeo::~DictionaryNeo()
