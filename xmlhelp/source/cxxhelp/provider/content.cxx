@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-13 09:10:13 $
+ *  last change: $Author: abi $ $Date: 2001-07-02 08:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             xRow->appendString( rProp,rtl::OUString::createFromAscii( "application/vnd.sun.star.help" ) );
         else if( rProp.Name.compareToAscii( "Title" ) == 0 )
             xRow->appendString ( rProp,m_aURLParameter.get_title() );
+        else if( rProp.Name.compareToAscii( "IsReadOnly" ) == 0 )
+            xRow->appendBoolean( rProp,true );
         else if( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
             xRow->appendBoolean( rProp,m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
         else if( rProp.Name.compareToAscii( "IsFolder" ) == 0 )

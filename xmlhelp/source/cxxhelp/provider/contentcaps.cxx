@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentcaps.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-18 12:10:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-02 08:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ Sequence< Property > Content::getProperties( const Reference< XCommandEnvironmen
     bool isModule = m_aURLParameter.isModule();
     bool isFile = m_aURLParameter.isFile();
 
-    sal_Int32 num = withMediaType ? 5 : 4;
+    sal_Int32 num = withMediaType ? 6 : 5;
     if( isModule ) num+=5;
     if( isFile )   num++;
 
@@ -107,6 +107,13 @@ Sequence< Property > Content::getProperties( const Reference< XCommandEnvironmen
             OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
             -1,
             getCppuType( static_cast< const OUString * >( 0 ) ),
+            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
+
+    props[idx++] =
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+            -1,
+            getCppuBooleanType(),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY );
 
     props[idx++] =
