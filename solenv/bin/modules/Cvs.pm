@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2002-10-14 12:38:13 $
+#   last change: $Author: hr $ $Date: 2002-10-16 13:21:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -280,12 +280,13 @@ sub update
         my $failure = 'unkownfailure';
         $failure = 'conflict' if $conflict;
         $failure = 'notknown' if $notknown;
-        return $failure
+        return $failure;
     }
-    return 'success'
+    return 'success';
 }
 
 # Commit $file with option $option; return 'success' or reason for failure.
+# If 'success' return the new revision as second element.
 sub commit
 {
     my $self = shift;
@@ -293,27 +294,32 @@ sub commit
 
     my $file = $self->name();
     open (CVSCOMMIT, "$self->{CVS_BINARY} commit $options $file 2>&1 |");
-    my $conflict = 0;
-    my $uptodate = 0;
-    my $notknown = 0;
-    my $success  = 0;
-    while(<CVSCOMMIT>) {
+    my @commit_message = <CVSCOMMIT>;
+    close(CVSCOMMIT);
+
+    # already commited ?
+    return 'nothingcommited' if !@commit_message;
+
+    my $conflict     = 0;
+    my $uptodate     = 0;
+    my $notknown     = 0;
+    my $success      = 0;
+    my $new_revision = undef;
+    foreach (@commit_message) {
         /Up-to-date check failed/ && ++$uptodate;
         /nothing known about/ && ++$notknown;
         /had a conflict and has not been modified/ && ++$conflict;
-        /new revision: ((?:\d|\.)+|delete);/ && ++$success;
+        /new revision: (delete);/ && (++$success, $new_revision = $1);
+        /new revision: ([\d\.]+);/ && (++$success, $new_revision = $1);
     }
-    # might be either 'delete' or numeric rev.
-    my $new_revision = $success ? $1 : undef;
-    close(CVSCOMMIT);
     if ( !$success ) {
         my $failure = 'unkownfailure';
         $failure = 'conflict' if $conflict;
         $failure = 'notuptodate' if $uptodate;
         $failure = 'notknown' if $notknown;
-        return $failure
+        return $failure;
     }
-    return wantarray ? 'success' : ('success', $new_revision);
+    return wantarray ? ('success', $new_revision) : 'success';
 }
 
 
