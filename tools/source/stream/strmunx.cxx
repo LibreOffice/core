@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmunx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ InternalStreamLock::InternalStreamLock(
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     stat( aFileName.GetBuffer(), &m_aStat );
     LockList.Insert( this, LIST_APPEND );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "locked %s", aFileName.GetBuffer() );
     if( m_nStartPos || m_nEndPos )
         fprintf(stderr, " [ %d ... %d ]", m_nStartPos, m_nEndPos );
@@ -136,7 +136,7 @@ InternalStreamLock::InternalStreamLock(
 InternalStreamLock::~InternalStreamLock()
 {
     LockList.Remove( this );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     fprintf( stderr, "unlocked %s", aFileName.GetBuffer() );
     if( m_nStartPos || m_nEndPos )
@@ -541,7 +541,7 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
 
     if( ! InternalStreamLock::LockFile( nByteOffset, nByteOffset+nBytes, this ) )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "InternalLock on %s [ %d ... %d ] failed\n",
                  ByteString(aFilename, osl_getThreadTextEncoding()).GetBuffer(), nByteOffset, nByteOffset+nBytes );
 #endif
