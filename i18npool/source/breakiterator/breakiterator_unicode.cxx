@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-04-16 00:05:32 $
+ *  last change: $Author: khong $ $Date: 2002-05-14 17:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,9 +272,14 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 
     if (!lineBreak) lineBreak = loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR);
 
-    if (bOptions.allowPunctuationOutsideMargin &&
+    if ((bOptions.allowPunctuationOutsideMargin &&
         bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 &&
-        ++nStartPos == Text.getLength()) {
+        ++nStartPos == Text.getLength()) ||
+        // Bug 4503876. We fixed the problem in 6.0 by changing line break data.
+        // Since we are using ICU data after 6.0, and it is difficult to patch line
+        // break data in ICU, because the data is in binary mode, we have to add
+        // following condition to break Hangul characters for line break.
+        unicode::isUnicodeScriptType(Text[nStartPos], UnicodeScript_kHangulSyllable)) {
         result.breakIndex = nStartPos;
         result.breakType = BreakType::WORDBOUNDARY;
         return result;
@@ -308,11 +313,24 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         result.breakType = BreakType::WORDBOUNDARY;
     }
 
-    if (0 < result.breakIndex && result.breakIndex < Text.getLength() && bOptions.applyForbiddenRules) {
+    if (0 < result.breakIndex && result.breakIndex < Text.getLength()) {
+
+        // Bug 4627181. ICU has defined line can be broken after ':' and 0x00BB (end quotation mark).
+        // In StarOffice, we don't want ':' to be broken in any locale and 0x00BB in German locale
+        // since 0x00BB are commonly used as start quotation mark in German.
+        sal_Unicode ch = Text[result.breakIndex-1];
+        while (ch == 0x003A || (ch == 0x00BB && rLocale.Language.compareToAscii("de") == 0)) {
+        result.breakIndex = lineBreak->preceding(result.breakIndex-1);
+        if (result.breakIndex <= 0) return result;
+        ch = Text[result.breakIndex-1];
+        }
+
+        if (bOptions.applyForbiddenRules) {
         while (result.breakIndex > 0 &&
             (bOptions.forbiddenBeginCharacters.indexOf(Text[result.breakIndex]) != -1 ||
             bOptions.forbiddenEndCharacters.indexOf(Text[result.breakIndex - 1]) != -1))
-        result.breakIndex--;
+            result.breakIndex--;
+        }
     }
     return result;
 }
