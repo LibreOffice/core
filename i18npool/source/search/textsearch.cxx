@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:08:05 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #include "textsearch.hxx"
 #include "levdis.hxx"
@@ -115,10 +114,28 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
 
+static sal_Int32 COMPLEX_TRANS_MASK_TMP =
+    TransliterationModules_ignoreBaFa_ja_JP |
+    TransliterationModules_ignoreIterationMark_ja_JP |
+    TransliterationModules_ignoreTiJi_ja_JP |
+    TransliterationModules_ignoreHyuByu_ja_JP |
+    TransliterationModules_ignoreSeZe_ja_JP |
+    TransliterationModules_ignoreIandEfollowedByYa_ja_JP |
+    TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
+    TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+static const sal_Int32 SIMPLE_TRANS_MASK = 0xffffffff ^ COMPLEX_TRANS_MASK_TMP;
+static const sal_Int32 COMPLEX_TRANS_MASK =
+    COMPLEX_TRANS_MASK_TMP |
+    TransliterationModules_IGNORE_KANA |
+    TransliterationModules_IGNORE_WIDTH;
+    // Above 2 transliteration is simple but need to take effect in
+    // complex transliteration
+
 TextSearch::TextSearch(const Reference < XMultiServiceFactory > & rxMSF)
         : pRegExp( 0 )
         , pWLD( 0 )
         , pJumpTable( 0 )
+        , pJumpTable2( 0 )
         , xMSF( rxMSF )
 {
     SearchOptions aOpt;
@@ -133,6 +150,7 @@ TextSearch::~TextSearch()
     delete pRegExp;
     delete pWLD;
     delete pJumpTable;
+    delete pJumpTable2;
 }
 
 void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeException )
@@ -142,9 +160,10 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     delete pRegExp, pRegExp = 0;
     delete pWLD, pWLD = 0;
     delete pJumpTable, pJumpTable = 0;
+    delete pJumpTable2, pJumpTable2 = 0;
 
     // Create Transliteration class
-    if( aSrchPara.transliterateFlags )
+    if( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
     {
         if( !xTranslit.is() )
         {
@@ -156,15 +175,34 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
                             (const Reference< XExtendedTransliteration >*)0))
                     >>= xTranslit;
         }
-
         // Load transliteration module
         if( xTranslit.is() )
             xTranslit->loadModule(
-                    (TransliterationModules)aSrchPara.transliterateFlags,
+                    (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK ),
                     aSrchPara.Locale);
     }
     else if( xTranslit.is() )
         xTranslit = 0;
+
+    // Create Transliteration for 2<->1, 2<->2 transliteration
+    if ( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
+    {
+        if( !xTranslit2.is() )
+        {
+            Reference < XInterface > xI = xMSF->createInstance(
+                    OUString::createFromAscii(
+                        "com.sun.star.i18n.Transliteration"));
+            if ( xI.is() )
+                xI->queryInterface( ::getCppuType(
+                            (const Reference< XExtendedTransliteration >*)0))
+                    >>= xTranslit2;
+        }
+        // Load transliteration module
+        if( xTranslit2.is() )
+            xTranslit2->loadModule(
+                    (TransliterationModules)( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK ),
+                    aSrchPara.Locale);
+    }
 
     if ( !xBreak.is() )
     {
@@ -180,9 +218,14 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 
     // use transliteration here, but only if not RegEx, which does it different
     if ( aSrchPara.algorithmType != SearchAlgorithms_REGEXP && xTranslit.is() &&
-            aSrchPara.transliterateFlags )
+     aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
         sSrchStr = xTranslit->transliterateString2String(
                 aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
+
+    if ( aSrchPara.algorithmType != SearchAlgorithms_REGEXP && xTranslit2.is() &&
+     aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
+    sSrchStr2 = xTranslit2->transliterateString2String(
+            aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
     // When start or end of search string is a complex script type, we need to
     // make sure the result boundary is not located in the middle of cell.
@@ -240,14 +283,54 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
     SearchResult sres;
 
     OUString in_str(searchStr);
+    sal_Int32 newStartPos = startPos;
+    sal_Int32 newEndPos = endPos;
+
+    bUsePrimarySrchStr = true;
 
     if ( xTranslit.is() )
     {
+        // apply normal transliteration (1<->1, 1<->0)
         com::sun::star::uno::Sequence <sal_Int32> offset( in_str.getLength());
-
-        in_str = xTranslit->transliterate( searchStr, 0, in_str.getLength(), offset);
+        in_str = xTranslit->transliterate( searchStr, 0, in_str.getLength(), offset );
 
         // JP 20.6.2001: also the start and end positions must be corrected!
+        if( startPos )
+            newStartPos = FindPosInSeq_Impl( offset, startPos );
+
+        if( endPos < searchStr.getLength() )
+        newEndPos = FindPosInSeq_Impl( offset, endPos );
+        else
+            newEndPos = in_str.getLength();
+
+        sres = (this->*fnForward)( in_str, newStartPos, newEndPos );
+
+        for ( int k = 0; k < sres.startOffset.getLength(); k++ )
+        {
+            if (sres.startOffset[k])
+          sres.startOffset[k] = offset[sres.startOffset[k]];
+            // JP 20.6.2001: end is ever exclusive and then don't return
+            //               the position of the next character - return the
+            //               next position behind the last found character!
+            //               "a b c" find "b" must return 2,3 and not 2,4!!!
+            if (sres.endOffset[k])
+          sres.endOffset[k] = offset[sres.endOffset[k]-1] + 1;
+        }
+    }
+    else
+    {
+        sres = (this->*fnForward)( in_str, startPos, endPos );
+    }
+
+    if ( xTranslit2.is() && aSrchPara.algorithmType != SearchAlgorithms_REGEXP)
+    {
+        SearchResult sres2;
+
+    in_str = OUString(searchStr);
+        com::sun::star::uno::Sequence <sal_Int32> offset( in_str.getLength());
+
+        in_str = xTranslit2->transliterate( searchStr, 0, in_str.getLength(), offset );
+
         if( startPos )
             startPos = FindPosInSeq_Impl( offset, startPos );
 
@@ -256,24 +339,28 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         else
             endPos = in_str.getLength();
 
-        sres = (this->*fnForward)( in_str, startPos, endPos );
+    bUsePrimarySrchStr = false;
+        sres2 = (this->*fnForward)( in_str, startPos, endPos );
 
-        for ( int k = 0; k < sres.startOffset.getLength(); k++ )
+        for ( int k = 0; k < sres2.startOffset.getLength(); k++ )
         {
-            if (sres.startOffset[k])
-                sres.startOffset[k] = offset[sres.startOffset[k]-1] + 1;
-            // JP 20.6.2001: end is ever exclusive and then don't return
-            //               the position of the next character - return the
-            //               next position behind the last found character!
-            //               "a b c" find "b" must return 2,3 and not 2,4!!!
-            if (sres.endOffset[k])
-                sres.endOffset[k] = offset[sres.endOffset[k]-1] + 1;
+            if (sres2.startOffset[k])
+          sres2.startOffset[k] = offset[sres2.startOffset[k]-1] + 1;
+            if (sres2.endOffset[k])
+          sres2.endOffset[k] = offset[sres2.endOffset[k]-1] + 1;
         }
 
-    }
-    else
+    // pick first and long one
+    if ( sres.subRegExpressions == 0)
+        return sres2;
+    if ( sres2.subRegExpressions == 1)
     {
-        sres = (this->*fnForward)( in_str, startPos, endPos );
+        if ( sres.startOffset[0] > sres2.startOffset[0])
+            return sres2;
+        else if ( sres.startOffset[0] == sres2.startOffset[0] &&
+            sres.endOffset[0] < sres2.endOffset[0])
+            return sres2;
+    }
     }
 
     return sres;
@@ -285,14 +372,54 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     SearchResult sres;
 
     OUString in_str(searchStr);
+    sal_Int32 newStartPos = startPos;
+    sal_Int32 newEndPos = endPos;
+
+    bUsePrimarySrchStr = true;
 
     if ( xTranslit.is() )
     {
+        // apply only simple 1<->1 transliteration here
+        com::sun::star::uno::Sequence <sal_Int32> offset( in_str.getLength());
+    in_str = xTranslit->transliterate( searchStr, 0, in_str.getLength(), offset );
+
+        // JP 20.6.2001: also the start and end positions must be corrected!
+        if( startPos < searchStr.getLength() )
+            newStartPos = FindPosInSeq_Impl( offset, startPos );
+    else
+        newStartPos = in_str.getLength();
+
+        if( endPos )
+        newEndPos = FindPosInSeq_Impl( offset, endPos );
+
+        sres = (this->*fnBackward)( in_str, newStartPos, newEndPos );
+
+        for ( int k = 0; k < sres.startOffset.getLength(); k++ )
+        {
+            if (sres.startOffset[k])
+          sres.startOffset[k] = offset[sres.startOffset[k] - 1] + 1;
+            // JP 20.6.2001: end is ever exclusive and then don't return
+            //               the position of the next character - return the
+            //               next position behind the last found character!
+            //               "a b c" find "b" must return 2,3 and not 2,4!!!
+            if (sres.endOffset[k])
+          sres.endOffset[k] = offset[sres.endOffset[k]];
+        }
+    }
+    else
+    {
+        sres = (this->*fnBackward)( in_str, startPos, endPos );
+    }
+
+    if ( xTranslit2.is() && aSrchPara.algorithmType != SearchAlgorithms_REGEXP )
+    {
+    SearchResult sres2;
+
+    in_str = OUString(searchStr);
         com::sun::star::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
-        in_str = xTranslit->transliterate(searchStr, 0, in_str.getLength(), offset);
+        in_str = xTranslit2->transliterate(searchStr, 0, in_str.getLength(), offset);
 
-        // JP 20.6.2001: the start and end positions must be corrected too!
         if( startPos < searchStr.getLength() )
             startPos = FindPosInSeq_Impl( offset, startPos );
         else
@@ -301,23 +428,28 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         if( endPos )
             endPos = FindPosInSeq_Impl( offset, endPos );
 
-        sres = (this->*fnBackward)( in_str, startPos, endPos );
+    bUsePrimarySrchStr = false;
+    sres2 = (this->*fnBackward)( in_str, startPos, endPos );
 
-        for( int k = 0; k < sres.startOffset.getLength(); k++ )
+        for( int k = 0; k < sres2.startOffset.getLength(); k++ )
         {
-            // JP 20.6.2001: start is ever exclusive and then don't return
-            //               the position of the prev character - return the
-            //               prev position before the first found character!
-            //               "a b c" find "b" must return 3,2 and not 4,2!!!
-            if (sres.startOffset[k])
-                sres.startOffset[k] = offset[sres.startOffset[k]-1]+1;
-            if (sres.endOffset[k])
-                sres.endOffset[k] = offset[sres.endOffset[k]-1]+1;
+            if (sres2.startOffset[k])
+                sres2.startOffset[k] = offset[sres2.startOffset[k]-1]+1;
+            if (sres2.endOffset[k])
+                sres2.endOffset[k] = offset[sres2.endOffset[k]-1]+1;
         }
-    }
-    else
+
+    // pick last and long one
+    if ( sres.subRegExpressions == 0 )
+        return sres2;
+    if ( sres2.subRegExpressions == 1 )
     {
-        sres = (this->*fnBackward)( in_str, startPos, endPos );
+        if ( sres.startOffset[0] < sres2.startOffset[0] )
+            return sres2;
+        if ( sres.startOffset[0] == sres2.startOffset[0] &&
+        sres.endOffset[0] > sres2.endOffset[0] )
+            return sres2;
+    }
     }
 
     return sres;
@@ -357,6 +489,7 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
 
 // --------- methods for the kind of boyer-morre search ------------------
 
+
 void TextSearch::MakeForwardTab()
 {
     // create the jumptable for the search text
@@ -375,9 +508,37 @@ void TextSearch::MakeForwardTab()
     {
         sal_Unicode cCh = sSrchStr[n];
         sal_Int32 nDiff = nLen - n - 1;
-        TextSearchJumpTable::value_type aEntry( cCh, nDiff );
+    TextSearchJumpTable::value_type aEntry( cCh, nDiff );
+
         ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
             pJumpTable->insert( aEntry );
+        if ( !aPair.second )
+            (*(aPair.first)).second = nDiff;
+    }
+}
+
+void TextSearch::MakeForwardTab2()
+{
+    // create the jumptable for the search text
+    if( pJumpTable2 )
+    {
+        if( bIsForwardTab )
+            return ;                                        // the jumpTable is ok
+        delete pJumpTable2;
+    }
+    bIsForwardTab = true;
+
+    sal_Int32 n, nLen = sSrchStr2.getLength();
+    pJumpTable2 = new TextSearchJumpTable;
+
+    for( n = 0; n < nLen - 1; ++n )
+    {
+        sal_Unicode cCh = sSrchStr2[n];
+        sal_Int32 nDiff = nLen - n - 1;
+
+    TextSearchJumpTable::value_type aEntry( cCh, nDiff );
+        ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
+            pJumpTable2->insert( aEntry );
         if ( !aPair.second )
             (*(aPair.first)).second = nDiff;
     }
@@ -408,11 +569,47 @@ void TextSearch::MakeBackwardTab()
     }
 }
 
+void TextSearch::MakeBackwardTab2()
+{
+    // create the jumptable for the search text
+    if( pJumpTable2 )
+    {
+        if( !bIsForwardTab )
+            return ;                                        // the jumpTable is ok
+        delete pJumpTable2;
+    }
+    bIsForwardTab = false;
+
+    sal_Int32 n, nLen = sSrchStr2.getLength();
+    pJumpTable2 = new TextSearchJumpTable;
+
+    for( n = nLen-1; n > 0; --n )
+    {
+        sal_Unicode cCh = sSrchStr2[n];
+        TextSearchJumpTable::value_type aEntry( cCh, n );
+        ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
+            pJumpTable2->insert( aEntry );
+        if ( !aPair.second )
+            (*(aPair.first)).second = n;
+    }
+}
+
 sal_Int32 TextSearch::GetDiff( const sal_Unicode cChr ) const
 {
-    TextSearchJumpTable::const_iterator iLook = pJumpTable->find( cChr );
-    if ( iLook == pJumpTable->end() )
-        return sSrchStr.getLength();
+    TextSearchJumpTable *pJump;
+    OUString sSearchKey;
+
+    if ( bUsePrimarySrchStr ) {
+      pJump = pJumpTable;
+      sSearchKey = sSrchStr;
+    } else {
+      pJump = pJumpTable2;
+      sSearchKey = sSrchStr2;
+    }
+
+    TextSearchJumpTable::const_iterator iLook = pJump->find( cChr );
+    if ( iLook == pJump->end() )
+        return sSearchKey.getLength();
     return (*iLook).second;
 }
 
@@ -423,37 +620,42 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
     SearchResult aRet;
     aRet.subRegExpressions = 0;
 
+    OUString sSearchKey = bUsePrimarySrchStr ? sSrchStr : sSrchStr2;
+
     OUString aStr( searchStr );
     sal_Int32 nSuchIdx = aStr.getLength();
     sal_Int32 nEnde = endPos;
-    if( !nSuchIdx || !sSrchStr.getLength() || sSrchStr.getLength() > nSuchIdx )
+    if( !nSuchIdx || !sSearchKey.getLength() || sSearchKey.getLength() > nSuchIdx )
         return aRet;
 
 
-    if( nEnde < sSrchStr.getLength() )  // position inside the search region ?
+    if( nEnde < sSearchKey.getLength() )  // position inside the search region ?
         return aRet;
 
-    nEnde -= sSrchStr.getLength();
+    nEnde -= sSearchKey.getLength();
 
-    MakeForwardTab();                   // create the jumptable
+    if (bUsePrimarySrchStr)
+      MakeForwardTab();                   // create the jumptable
+    else
+      MakeForwardTab2();
 
     for (sal_Int32 nCmpIdx = startPos; // start position for the search
             nCmpIdx <= nEnde;
-            nCmpIdx += GetDiff( aStr[nCmpIdx + sSrchStr.getLength()-1]))
+            nCmpIdx += GetDiff( aStr[nCmpIdx + sSearchKey.getLength()-1]))
     {
         // if the match would be the completed cells, skip it.
         if ( (checkCTLStart && !isCellStart( aStr, nCmpIdx )) || (checkCTLEnd
-                    && !isCellStart( aStr, nCmpIdx + sSrchStr.getLength())) )
+                    && !isCellStart( aStr, nCmpIdx + sSearchKey.getLength())) )
             continue;
 
-        nSuchIdx = sSrchStr.getLength() - 1;
-        while( nSuchIdx >= 0 && sSrchStr[nSuchIdx] == aStr[nCmpIdx + nSuchIdx])
+        nSuchIdx = sSearchKey.getLength() - 1;
+        while( nSuchIdx >= 0 && sSearchKey[nSuchIdx] == aStr[nCmpIdx + nSuchIdx])
         {
             if( nSuchIdx == 0 )
             {
                 if( SearchFlags::NORM_WORD_ONLY & aSrchPara.searchFlag )
                 {
-                    sal_Int32 nFndEnd = nCmpIdx + sSrchStr.getLength();
+                    sal_Int32 nFndEnd = nCmpIdx + sSearchKey.getLength();
                     bool bAtStart = !nCmpIdx;
                     bool bAtEnd = nFndEnd == endPos;
                     bool bDelimBefore = bAtStart || IsDelimiter( aStr, nCmpIdx-1 );
@@ -473,7 +675,8 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
                 aRet.startOffset.realloc( 1 );
                 aRet.startOffset[ 0 ] = nCmpIdx;
                 aRet.endOffset.realloc( 1 );
-                aRet.endOffset[ 0 ] = nCmpIdx + sSrchStr.getLength();
+                aRet.endOffset[ 0 ] = nCmpIdx + sSearchKey.getLength();
+
                 return aRet;
             }
             else
@@ -489,18 +692,23 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     SearchResult aRet;
     aRet.subRegExpressions = 0;
 
+    OUString sSearchKey = bUsePrimarySrchStr ? sSrchStr : sSrchStr2;
+
     OUString aStr( searchStr );
     sal_Int32 nSuchIdx = aStr.getLength();
     sal_Int32 nEnde = endPos;
-    if( nSuchIdx == 0 || sSrchStr.getLength() == 0 || sSrchStr.getLength() > nSuchIdx)
+    if( nSuchIdx == 0 || sSearchKey.getLength() == 0 || sSearchKey.getLength() > nSuchIdx)
         return aRet;
 
-    MakeBackwardTab();                      // create the jumptable
+    if (bUsePrimarySrchStr)
+      MakeBackwardTab();                      // create the jumptable
+    else
+      MakeBackwardTab2();
 
     if( nEnde == nSuchIdx )                 // end position for the search
-        nEnde = sSrchStr.getLength();
+        nEnde = sSearchKey.getLength();
     else
-        nEnde += sSrchStr.getLength();
+        nEnde += sSearchKey.getLength();
 
     sal_Int32 nCmpIdx = startPos;          // start position for the search
 
@@ -508,18 +716,18 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     {
         // if the match would be the completed cells, skip it.
         if ( (!checkCTLStart || isCellStart( aStr, nCmpIdx -
-                        sSrchStr.getLength() )) && (!checkCTLEnd ||
+                        sSearchKey.getLength() )) && (!checkCTLEnd ||
                     isCellStart( aStr, nCmpIdx)))
         {
             nSuchIdx = 0;
-            while( nSuchIdx < sSrchStr.getLength() && sSrchStr[nSuchIdx] ==
-                    aStr[nCmpIdx + nSuchIdx - sSrchStr.getLength()] )
+            while( nSuchIdx < sSearchKey.getLength() && sSearchKey[nSuchIdx] ==
+                    aStr[nCmpIdx + nSuchIdx - sSearchKey.getLength()] )
                 nSuchIdx++;
-            if( nSuchIdx >= sSrchStr.getLength() )
+            if( nSuchIdx >= sSearchKey.getLength() )
             {
                 if( SearchFlags::NORM_WORD_ONLY & aSrchPara.searchFlag )
                 {
-                    sal_Int32 nFndStt = nCmpIdx - sSrchStr.getLength();
+                    sal_Int32 nFndStt = nCmpIdx - sSearchKey.getLength();
                     bool bAtStart = !nFndStt;
                     bool bAtEnd = nCmpIdx == startPos;
                     bool bDelimBehind = IsDelimiter( aStr, nCmpIdx );
@@ -538,7 +746,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
                         aRet.startOffset.realloc( 1 );
                         aRet.startOffset[ 0 ] = nCmpIdx;
                         aRet.endOffset.realloc( 1 );
-                        aRet.endOffset[ 0 ] = nCmpIdx - sSrchStr.getLength();
+                        aRet.endOffset[ 0 ] = nCmpIdx - sSearchKey.getLength();
                         return aRet;
                     }
                 }
@@ -548,12 +756,12 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
                     aRet.startOffset.realloc( 1 );
                     aRet.startOffset[ 0 ] = nCmpIdx;
                     aRet.endOffset.realloc( 1 );
-                    aRet.endOffset[ 0 ] = nCmpIdx - sSrchStr.getLength();
+                    aRet.endOffset[ 0 ] = nCmpIdx - sSearchKey.getLength();
                     return aRet;
                 }
             }
         }
-        nSuchIdx = GetDiff( aStr[nCmpIdx - sSrchStr.getLength()] );
+        nSuchIdx = GetDiff( aStr[nCmpIdx - sSearchKey.getLength()] );
         if( nCmpIdx < nSuchIdx )
             return aRet;
         nCmpIdx -= nSuchIdx;
