@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngreg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:38 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@ extern sal_Bool SAL_CALL LinguProps_writeInfo
     XRegistryKey * pRegistryKey
 );
 
+extern sal_Bool SAL_CALL ConvDicList_writeInfo
+(
+    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
+);
+
 extern void * SAL_CALL LngSvcMgr_getFactory
 (
     const sal_Char * pImplName,
@@ -107,6 +112,13 @@ extern void * SAL_CALL DicList_getFactory
 );
 
 void * SAL_CALL LinguProps_getFactory
+(
+    const sal_Char * pImplName,
+    XMultiServiceFactory * pServiceManager,
+    void *
+);
+
+extern void * SAL_CALL ConvDicList_getFactory
 (
     const sal_Char * pImplName,
     XMultiServiceFactory * pServiceManager,
@@ -131,6 +143,8 @@ sal_Bool SAL_CALL component_writeInfo
         bRet = LinguProps_writeInfo( pServiceManager, pRegistryKey );
     if(bRet)
         bRet = DicList_writeInfo( pServiceManager, pRegistryKey );
+    if(bRet)
+        bRet = ConvDicList_writeInfo( pServiceManager, pRegistryKey );
     return bRet;
 }
 
@@ -157,6 +171,12 @@ void * SAL_CALL component_getFactory(
 
     if(!pRet)
         pRet =  DicList_getFactory(
+            pImplName,
+            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            pRegistryKey );
+
+    if(!pRet)
+        pRet =  ConvDicList_getFactory(
             pImplName,
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
