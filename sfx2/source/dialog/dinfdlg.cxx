@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2002-07-23 12:00:51 $
+ *  last change: $Author: svesik $ $Date: 2002-08-30 18:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <svtools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
 
-#include <stl/memory>
+#include <memory>
 
 #pragma hdrstop
 
