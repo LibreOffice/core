@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:57:18 $
+ *  last change: $Author: obo $ $Date: 2001-07-24 20:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ String RID_BIB_STR_FIELDSELECTION
     Text[ portuguese_brazilian ] = "Fieldselection:";
     Text[ japanese ] = "Ì¨°ÙÄÞ‘I‘ð:";
     Text[ korean ] = "ÇÊµå ¼±ÅÃ:";
-    Text[ chinese_simplified ] = "ÇøÓòÑ¡Ôñ£º";
+    Text[ chinese_simplified ] = "Ñ¡Ôñ×Ö¶Î£º";
     Text[ chinese_traditional ] = "¿ï¾ÜÄæ¦ì¡G";
     Text[ arabic ] = "ÇÎÊíÇÑ ÇáÍÞá:";
     Text[ turkish ] = "Alan seçimi:";
@@ -195,6 +195,7 @@ String RID_MAP_QUESTION
     Text[ catalan ] = "¿Desea modificar el orden de las columnas?";
     Text[ finnish ] = "Haluatko muokata sarakejärjestystä?";
 };
+
 
 
 
