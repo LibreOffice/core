@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:08:50 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,8 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     bIdentifyCategories(sal_False),
     bTargetRangeAddress(sal_False),
     bSourceCellRange(sal_False),
+    bShowFilter(sal_True),
+    bDrillDown(sal_True),
     pDoc(GetScImport().GetDocument()),
     pDPObject(NULL),
     pDPSave(NULL)
@@ -221,6 +223,16 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS :
             {
                 sButtons = sValue;
+            }
+            break;
+            case XML_TOK_DATA_PILOT_TABLE_ATTR_SHOW_FILTER_BUTTON :
+            {
+                bShowFilter = IsXMLToken(sValue, XML_TRUE);
+            }
+            break;
+            case XML_TOK_DATA_PILOT_TABLE_ATTR_DRILL_DOWN :
+            {
+                bDrillDown = IsXMLToken(sValue, XML_TRUE);
             }
             break;
         }
@@ -400,6 +412,8 @@ void ScXMLDataPilotTableContext::EndElement()
         }
         pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
         pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
+        pDPSave->SetFilterButton(bShowFilter);
+        pDPSave->SetDrillDown(bDrillDown);
         pDPObject->SetSaveData(*pDPSave);
         if (pDoc)
         {
