@@ -3,6 +3,8 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include <systools/win32/uwinapi.h>
+#include <stdio.h>
 
 #define MY_TASKBAR_NOTIFICATION         WM_USER+1
 
@@ -47,14 +49,19 @@ bool launchSoffice( )
     {
         // UINT ret = WinExec( "h:\\office60.630b\\program\\swriter.exe -bean", SW_SHOW );
         char filename[_MAX_PATH + 1];
+
+        filename[_MAX_PATH] = 0;
         GetModuleFileName( NULL, filename, _MAX_PATH ); // soffice resides in the same dir
         char *p = strrchr( filename, '\\' );
         if ( !p )
             return false;
-        strcpy( p+1, "soffice.exe" );
+
+        strncpy( p+1, "soffice.exe", _MAX_PATH - (p+1 - filename) );
 
         char imagename[_MAX_PATH + 1];
-        wsprintf(imagename, "\"%s\" -quickstart", filename );
+
+        imagename[_MAX_PATH] = 0;
+        _snprintf(imagename, _MAX_PATH, "\"%s\" -quickstart", filename );
 
         UINT ret = WinExec( imagename, SW_SHOW );
         if ( ret < 32 )
@@ -94,10 +101,11 @@ void NotifyListener( HWND hWnd )
     nid.cbSize = sizeof(NOTIFYICONDATA);
     nid.hWnd   = hWnd;
     nid.uID    = IDM_QUICKSTART;
+    nid.szTip[elementsof(nid.szTip) - 1] = 0;
 //    nid.hIcon = bTerminateVeto ? hIconActive : hIconInActive;
-//    strcpy(nid.szTip, bTerminateVeto ? STRING_QUICKSTARTACTIVE : STRING_QUICKSTARTINACTIVE);
+//    strncpy(nid.szTip, bTerminateVeto ? STRING_QUICKSTARTACTIVE : STRING_QUICKSTARTINACTIVE, elementsof(nid.szTip) - 1 );
     nid.hIcon = hIconActive;
-    strcpy(nid.szTip, szTooltipString);
+    strncpy(nid.szTip, szTooltipString, elementsof(nid.szTip) - 1);
     nid.uFlags = NIF_TIP|NIF_ICON;
 
     // update systray
