@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:27:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,8 +858,7 @@ void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTok
 ::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScAddress& rPos ) const
 {
     XclExpTokArrPtr pXclTokArr;
-    XclExpTabIdBuffer& rTabIdBuffer = GetTabIdBuffer();
-    if( rTabIdBuffer.IsExportTable( rPos.Tab() ) && !rTabIdBuffer.IsExternal( rPos.Tab() ) )
+    if( GetTabInfo().IsExportTab( rPos.Tab() ) )
     {
         ScTokenArray aScTokArr;
         SingleRefData aRef;
@@ -879,8 +878,7 @@ void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTok
     }
     else if( rRange.aStart.Tab() == rRange.aEnd.Tab() )
     {
-        XclExpTabIdBuffer& rTabIdBuffer = GetTabIdBuffer();
-        if( rTabIdBuffer.IsExportTable( rRange.aStart.Tab() ) && !rTabIdBuffer.IsExternal( rRange.aStart.Tab() ) )
+        if( GetTabInfo().IsExportTab( rRange.aStart.Tab() ) )
         {
             ScTokenArray aScTokArr;
             ComplRefData aRef;
@@ -1490,37 +1488,29 @@ ULONG ExcBundlesheet8::GetLen() const
 
 // --- class ExcWindow18 ---------------------------------------------
 
-ExcWindow18::ExcWindow18( RootData& rRootData )
+XclExpWindow1::XclExpWindow1( const XclExpRoot& rRoot ) :
+    XclExpRecord( EXC_ID_WINDOW1, 10 ),
+    mnActiveTab( 0 ),
+    mnFirstVisTab( 0 ),
+    mnSelectedTabs( 1 )
 {
-    ScExtDocOptions& rOpt = *rRootData.pExtDocOpt;
-    nCurrTable = rOpt.nActTab;
-    nSelTabs = rOpt.nSelTabs;
+    XclExpTabInfo rTabInfo = rRoot.GetTabInfo();
+    mnActiveTab = rTabInfo.GetXclActiveTab();
+    mnFirstVisTab = rTabInfo.GetXclFirstVisTab();
+    mnSelectedTabs = rTabInfo.GetXclSelectedCount();
 }
 
-
-void ExcWindow18::SaveCont( XclExpStream& rStrm )
+void XclExpWindow1::WriteBody( XclExpStream& rStrm )
 {
-    rStrm   << (UINT16) 0x01E0
-            << (UINT16) 0x005A
-            << (UINT16) 0x3FCF
-            << (UINT16) 0x2A4E
-            << (UINT16) 0x0038
-            << nCurrTable
-            << (UINT16) 0x0000
-            << nSelTabs
-            << (UINT16) 0x0258;
-}
-
-
-UINT16 ExcWindow18::GetNum( void ) const
-{
-    return 0x003D;
-}
-
-
-ULONG ExcWindow18::GetLen( void ) const
-{
-    return 18;
+    rStrm   << sal_uInt16( 0x01E0 )
+            << sal_uInt16( 0x005A )
+            << sal_uInt16( 0x3FCF )
+            << sal_uInt16( 0x2A4E )
+            << EXC_WIN1_DEFAULTFLAGS
+            << mnActiveTab
+            << mnFirstVisTab
+            << mnSelectedTabs
+            << EXC_WIN1_TABBARRATIO;
 }
 
 
@@ -1533,6 +1523,16 @@ ExcPane8::ExcPane8( const ScExtTabOptions& rTabOptions ) :
     nTopRow( rTabOptions.nTopSplitRow ),
     nActivePane( rTabOptions.nActPane )
 {
+    // #i20671# right/bottom pane is active if panes are frozen, regardless of cursor pos
+    if( rTabOptions.bFrozen )
+    {
+        if( (nSplitX != 0) && (nSplitY != 0) )
+            nActivePane = 0;
+        else if( nSplitY == 0 )
+            nActivePane = 1;
+        else if( nSplitX == 0 )
+            nActivePane = 2;
+    }
 }
 
 
@@ -1556,7 +1556,7 @@ ULONG ExcPane8::GetLen() const
 
 // --- class ExcWindow28 ---------------------------------------------
 
-ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, sal_uInt16 nScTab ) :
+ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, USHORT nScTab ) :
     XclExpRoot( rRoot ),
     pPaneRec( NULL ),
     nFlags( 0 ),
@@ -1567,34 +1567,35 @@ ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, sal_uInt16 nScTab ) :
     bHorSplit( FALSE ),
     bVertSplit( FALSE )
 {
+    const XclExpTabInfo& rTabInfo = GetTabInfo();
     const ScViewOptions& rViewOpt = GetDoc().GetViewOptions();
-    nFlags |= rViewOpt.GetOption( VOPT_FORMULAS ) ? EXC_WIN2_SHOWFORMULAS : 0;
-    nFlags |= rViewOpt.GetOption( VOPT_GRID ) ? EXC_WIN2_SHOWGRID : 0;
-    nFlags |= rViewOpt.GetOption( VOPT_HEADER ) ? EXC_WIN2_SHOWHEADINGS : 0;
-    nFlags |= rViewOpt.GetOption( VOPT_NULLVALS ) ? EXC_WIN2_SHOWZEROS : 0;
-    nFlags |= rViewOpt.GetOption( VOPT_OUTLINER ) ? EXC_WIN2_OUTLINE : 0;
+    ScExtDocOptions& rExtDocOpt = GetExtDocOptions();
 
-    ScExtDocOptions& rOpt = *rRoot.mpRD->pExtDocOpt;
-    XclExpPalette& rPal = GetPalette();
-    nFlags |= (nScTab == rOpt.nActTab) ? (EXC_WIN2_DISPLAYED|EXC_WIN2_SELECTED) : 0;
-    nFlags |= rOpt.pGridCol ? 0 : EXC_WIN2_DEFAULTCOLOR;
-    nGridColorSer = rOpt.pGridCol ?
-        rPal.InsertColor( *rOpt.pGridCol, xlColorGrid ) :
+    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SHOWFORMULAS, rViewOpt.GetOption( VOPT_FORMULAS ) );
+    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SHOWGRID,     rViewOpt.GetOption( VOPT_GRID ) );
+    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SHOWHEADINGS, rViewOpt.GetOption( VOPT_HEADER ) );
+    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SHOWZEROS,    rViewOpt.GetOption( VOPT_NULLVALS ) );
+    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_OUTLINE,      rViewOpt.GetOption( VOPT_OUTLINER ) );
+
+    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SELECTED,     rTabInfo.IsSelectedTab( nScTab ) );
+    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_DISPLAYED,    rTabInfo.IsActiveTab( nScTab ) );
+
+    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_DEFAULTCOLOR, !rExtDocOpt.pGridCol );
+    nGridColorSer = rExtDocOpt.pGridCol ?
+        GetPalette().InsertColor( *rExtDocOpt.pGridCol, xlColorGrid ) :
         XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT );
 
-    const ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nScTab );
-    if( pTabOpt )
+    if( const ScExtTabOptions* pExtTabOpt = rExtDocOpt.GetExtTabOptions( nScTab ) )
     {
-        nFlags |= pTabOpt->bSelected ? EXC_WIN2_SELECTED : 0;
-        nFlags |= pTabOpt->bFrozen ? (EXC_WIN2_FROZEN|EXC_WIN2_FROZENNOSPLIT) : 0;
-        nLeftCol = pTabOpt->nLeftCol;
-        nTopRow = pTabOpt->nTopRow;
-        nActiveCol = pTabOpt->aLastSel.aStart.Col();
-        nActiveRow = pTabOpt->aLastSel.aStart.Row();
-        bHorSplit = (pTabOpt->nSplitX != 0);
-        bVertSplit = (pTabOpt->nSplitY != 0);
+        ::set_flag( nFlags, static_cast< sal_uInt16 >( EXC_WIN2_FROZEN | EXC_WIN2_FROZENNOSPLIT ), pExtTabOpt->bFrozen );
+        nLeftCol = pExtTabOpt->nLeftCol;
+        nTopRow = pExtTabOpt->nTopRow;
+        nActiveCol = pExtTabOpt->aLastSel.aStart.Col();
+        nActiveRow = pExtTabOpt->aLastSel.aStart.Row();
+        bHorSplit = (pExtTabOpt->nSplitX != 0);
+        bVertSplit = (pExtTabOpt->nSplitY != 0);
         if( bHorSplit || bVertSplit )
-            pPaneRec = new ExcPane8( *pTabOpt );
+            pPaneRec = new ExcPane8( *pExtTabOpt );
     }
 
     // #106948# RTL layout
