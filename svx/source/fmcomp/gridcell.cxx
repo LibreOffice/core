@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:56:25 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const ::com::sun::star::u
     }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xCur;
     if (m_rParent.getDataSource())
-        xCur = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (*m_rParent.getDataSource(), ::com::sun::star::uno::UNO_QUERY);
+        xCur = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > ((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)*m_rParent.getDataSource(), ::com::sun::star::uno::UNO_QUERY);
         // TODO : the cursor wrapper should use an ::com::sun::star::sdbc::XRowSet interface, too
 
     pCellControl->Init(&m_rParent.GetDataWindow(), xCur );
@@ -2140,7 +2140,7 @@ sal_Bool DbFilterField::Commit()
                 ::com::sun::star::lang::Locale aAppLocale(sLanguage, sCountry, ::rtl::OUString());
 
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > xDataSourceRowSet(
-                    *m_rColumn.GetParent().getDataSource(), ::com::sun::star::uno::UNO_QUERY);
+                    (::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)*m_rColumn.GetParent().getDataSource(), ::com::sun::star::uno::UNO_QUERY);
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  xConnection(
                     ::dbtools::getConnection(xDataSourceRowSet));
 
