@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,12 +182,12 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     {
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
         {
-            USHORT nTab = aRange.aStart.Tab();
+            SCTAB nTab = aRange.aStart.Tab();
             const ScMergeAttr* pItem = (ScMergeAttr*) pDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
             if( pItem->IsMerged() )
             {
-                USHORT nColMerge = pItem->GetColMerge();
-                USHORT nRowMerge = pItem->GetRowMerge();
+                SCCOL nColMerge = pItem->GetColMerge();
+                SCROW nRowMerge = pItem->GetRowMerge();
 
                 const SvxBoxItem* pToItem = (const SvxBoxItem*)
                     pDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
@@ -212,7 +212,7 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     // create ranges for HTML tables
      // 1 - entire document
     ScRange aNewRange( aRange.aStart );
-    aNewRange.aEnd.IncCol( pGlobTable->GetDocSize( tdCol ) - 1 );
+    aNewRange.aEnd.IncCol( static_cast<SCsCOL>(pGlobTable->GetDocSize( tdCol )) - 1 );
     aNewRange.aEnd.IncRow( pGlobTable->GetDocSize( tdRow ) - 1 );
     InsertRangeName( pDoc, ScfTools::GetHTMLDocName(), aNewRange );
 
@@ -220,9 +220,9 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     InsertRangeName( pDoc, ScfTools::GetHTMLTablesName(), ScRange( aRange.aStart ) );
 
     // 3 - single tables
-    short nColDiff = (short)aRange.aStart.Col();
-    short nRowDiff = (short)aRange.aStart.Row();
-    short nTabDiff = (short)aRange.aStart.Tab();
+    SCsCOL nColDiff = (SCsCOL)aRange.aStart.Col();
+    SCsROW nRowDiff = (SCsROW)aRange.aStart.Row();
+    SCsTAB nTabDiff = (SCsTAB)aRange.aStart.Tab();
 
     ScHTMLTable* pTable = NULL;
     ScHTMLTableId nTableId = SC_HTML_GLOBAL_TABLE;
