@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:15:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,30 @@ void DeletePaM::operator()(const Position &rPaM)
     mrDoc.Delete(aPaM);
 }
 
+bool lcl_ShouldMakeHidden(const SwFltStackEntry* pEntry, const SwPaM &rPaM)
+{
+    bool bEmpty = false;
+    if (pEntry->nMkNode.GetIndex() == pEntry->nPtNode.GetIndex())
+    {
+        /*
+        An empty paragraph that is hidden is acceptable, otherwise it only
+        makes sense to make it hidden if there is something to hide.  and if
+        there is some "hidden" content already, e.g. #110465# we will retain it
+        this way.
+        */
+        if (pEntry->nMkCntnt == pEntry->nPtCntnt && !pEntry->nPtCntnt)
+            bEmpty = false;
+        else if (const SwTxtNode *pDest = rPaM.GetNode()->GetTxtNode())
+        {
+            String sString = pDest->GetExpandTxt(pEntry->nMkCntnt,
+                pEntry->nPtCntnt-pEntry->nMkCntnt);
+            if (!sString.Len())
+                bEmpty = true;
+        }
+    }
+    return bEmpty;
+}
+
 void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry* pEntry)
 {
@@ -719,14 +743,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
             bool bEmpty = false;
             if (bIsHidden)
-            {
-                //if empty
-                if (pEntry->nMkNode.GetIndex() == pEntry->nPtNode.GetIndex()
-                 && pEntry->nMkCntnt == pEntry->nPtCntnt && pEntry->nPtCntnt)
-                {
-                    bEmpty = true;
-                }
-            }
+                bEmpty = lcl_ShouldMakeHidden(pEntry, aPaM);
 
             if (!bEmpty)
             {
