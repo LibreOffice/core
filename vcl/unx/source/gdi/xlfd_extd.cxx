@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 15:38:03 $
+ *  last change: $Author: cp $ $Date: 2000-12-02 16:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,8 @@ BitmapXlfd::ToString( ByteString &rString,
     rString += '-';
     rString += rInfo.mcSpacing;
     rString += '-';
-    rString += ByteString::CreateFromInt32( mnAverageWidth );
+    // rString += ByteString::CreateFromInt32( mnAverageWidth );
+    rString += '*';
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
 }
