@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 18:18:24 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 19:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/cjkoptions.hxx>
+#include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
@@ -143,7 +144,9 @@ void ScDrawTextObjectBar::StateDisableItems( SfxItemSet &rSet )
 
 ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),
-    pViewData(pData)
+    pViewData(pData),
+    pClipEvtLstnr(NULL),
+    bPastePossible(FALSE)
 {
     SetPool( pViewData->GetScDrawView()->GetDefaultAttr().GetPool() );
 
@@ -156,6 +159,11 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
 
 __EXPORT ScDrawTextObjectBar::~ScDrawTextObjectBar()
 {
+    if ( pClipEvtLstnr )
+    {
+        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), FALSE );
+        pClipEvtLstnr->release();
+    }
 }
 
 //========================================================================
@@ -410,6 +418,20 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     }
 }
 
+IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+{
+    if ( pDataHelper )
+    {
+        bPastePossible = ( pDataHelper->HasFormat( SOT_FORMAT_STRING ) || pDataHelper->HasFormat( SOT_FORMAT_RTF ) );
+
+        SfxBindings& rBindings = pViewData->GetBindings();
+        rBindings.Invalidate( SID_PASTE );
+        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+    }
+    return 0;
+}
+
 void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
 {
     SdrView* pView = pViewData->GetScDrawView();
@@ -419,8 +441,18 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         return;
     }
 
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
-    BOOL bPaste = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+    if ( !pClipEvtLstnr )
+    {
+        // create listener
+        pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScDrawTextObjectBar, ClipboardChanged ) );
+        pClipEvtLstnr->acquire();
+        Window* pWin = pViewData->GetActiveWin();
+        pClipEvtLstnr->AddRemoveListener( pWin, TRUE );
+
+        // get initial state
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
+        bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+    }
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
@@ -430,13 +462,15 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         {
             case SID_PASTE:
             case FID_PASTE_CONTENTS:
-                if( !bPaste )
+                if( !bPastePossible )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_CLIPBOARD_FORMAT_ITEMS:
-                if ( bPaste )
+                if ( bPastePossible )
                 {
                     SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                    TransferableDataHelper aDataHelper(
+                            TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
                     if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
                         aFormats.AddClipbrdFormat( SOT_FORMAT_STRING, String( ScResId( SCSTR_CLIP_STRING ) ) );

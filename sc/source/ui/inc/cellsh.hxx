@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:50:01 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 19:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,16 +74,28 @@
 #include <svx/svdmark.hxx>
 #endif
 
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+
 #ifndef SC_FORMATSH_HXX
 #include "formatsh.hxx"
 #endif
 
 class SvxClipboardFmtItem;
+class TransferableDataHelper;
+class TransferableClipboardListener;
+
 
 class ScCellShell: public ScFormatShell
 {
 private:
+    TransferableClipboardListener* pClipEvtLstnr;
+    BOOL        bPastePossible;
+
     void        GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
+
+    DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
 public:
 

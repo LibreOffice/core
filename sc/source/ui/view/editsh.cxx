@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 19:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include <so3/pastedlg.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/cjkoptions.hxx>
+#include <svtools/cliplistener.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
@@ -133,6 +134,8 @@ SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     pEditView       (pView),
     pViewData       (pData),
+    pClipEvtLstnr   (NULL),
+    bPastePossible  (FALSE),
     bIsInsertMode   (TRUE)
 {
     SetPool( pEditView->GetEditEngine()->GetEmptyItemSet().GetPool() );
@@ -142,6 +145,11 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
 
 ScEditShell::~ScEditShell()
 {
+    if ( pClipEvtLstnr )
+    {
+        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), FALSE );
+        pClipEvtLstnr->release();
+    }
 }
 
 ScInputHandler* ScEditShell::GetMyInputHdl()
@@ -567,10 +575,34 @@ const SvxURLField* ScEditShell::GetURLField()
     return NULL;
 }
 
+IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+{
+    if ( pDataHelper )
+    {
+        bPastePossible = ( pDataHelper->HasFormat( SOT_FORMAT_STRING ) || pDataHelper->HasFormat( SOT_FORMAT_RTF ) );
+
+        SfxBindings& rBindings = pViewData->GetBindings();
+        rBindings.Invalidate( SID_PASTE );
+        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+    }
+    return 0;
+}
+
 void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
 {
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
-    BOOL bPaste = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+    if ( !pClipEvtLstnr )
+    {
+        // create listener
+        pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScEditShell, ClipboardChanged ) );
+        pClipEvtLstnr->acquire();
+        Window* pWin = pViewData->GetActiveWin();
+        pClipEvtLstnr->AddRemoveListener( pWin, TRUE );
+
+        // get initial state
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
+        bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+    }
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
@@ -580,13 +612,15 @@ void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
         {
             case SID_PASTE:
             case FID_PASTE_CONTENTS:
-                if( !bPaste )
+                if( !bPastePossible )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_CLIPBOARD_FORMAT_ITEMS:
-                if( bPaste )
+                if( bPastePossible )
                 {
                     SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                    TransferableDataHelper aDataHelper(
+                            TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
                     if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
                         aFormats.AddClipbrdFormat( SOT_FORMAT_STRING, String( ScResId( SCSTR_CLIP_STRING ) ) );

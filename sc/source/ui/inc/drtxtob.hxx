@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-23 17:02:34 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 19:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,25 @@
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
 #endif
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
 
 #include "shellids.hxx"
 
 USHORT ScGetFontWorkId();       // statt SvxFontWorkChildWindow::GetChildWindowId()
 
 class ScViewData;
+class TransferableDataHelper;
+class TransferableClipboardListener;
 
 class ScDrawTextObjectBar : public SfxShell
 {
     ScViewData*         pViewData;
+    TransferableClipboardListener* pClipEvtLstnr;
+    BOOL                bPastePossible;
+
+    DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
 public:
     TYPEINFO();

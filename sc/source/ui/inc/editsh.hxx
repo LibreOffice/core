@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-09 12:51:39 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 19:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
 #endif
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
 
 #include "shellids.hxx"
 
@@ -75,16 +78,22 @@ class EditView;
 class ScViewData;
 class ScInputHandler;
 class SvxURLField;
+class TransferableDataHelper;
+class TransferableClipboardListener;
 
 class ScEditShell : public SfxShell
 {
 private:
     EditView*   pEditView;
     ScViewData* pViewData;
+    TransferableClipboardListener* pClipEvtLstnr;
+    BOOL        bPastePossible;
     BOOL        bIsInsertMode;
 
     const SvxURLField* GetURLField();
     ScInputHandler* GetMyInputHdl();
+
+    DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
 public:
     TYPEINFO();
