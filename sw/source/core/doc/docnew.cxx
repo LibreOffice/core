@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-01 13:43:12 $
+ *  last change: $Author: jp $ $Date: 2001-06-26 14:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,6 +976,27 @@ void SwDoc::ClearForbiddenCharacters( USHORT nLang )
     }
 }
 
+void SwDoc::SetCharCompressType( SwCharCompressType n )
+{
+    if( eChrCmprType != n )
+    {
+        eChrCmprType = n;
+        if( pDrawModel )
+        {
+            pDrawModel->SetCharCompressType( n );
+            if( !bInReading )
+                pDrawModel->ReformatAllTextObjects();
+        }
+
+        if( pLayout && !bInReading )
+        {
+            pLayout->StartAllAction();
+            pLayout->InvalidateAllCntnt();
+            pLayout->EndAllAction();
+        }
+    }
+}
+
 /*-----------------28.5.2001 10:06------------------
  * SwDoc:
  *  Reading and writing of the layout cache.
@@ -997,5 +1018,6 @@ void SwDoc::WriteLayoutCache( SvStream& rStream )
 {
     pLayoutCache->Write( rStream, *this );
 }
+
 
 

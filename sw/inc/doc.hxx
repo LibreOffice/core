@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 18:34:53 $
+ *  last change: $Author: jp $ $Date: 2001-06-26 14:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@ public:
     sal_uInt16 _GetLinkUpdMode() const                  { return nLinkUpdMode; }
 
     SwCharCompressType GetCharCompressType() const      { return eChrCmprType; }
-    void SetCharCompressType( SwCharCompressType n )    { eChrCmprType = n; }
+    void SetCharCompressType( SwCharCompressType n );
 
     inline sal_Bool IsInDtor() const { return bDtor; }
 
