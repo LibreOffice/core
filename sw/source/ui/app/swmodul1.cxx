@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-09-18 10:39:28 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,13 +307,13 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
         pView->InvalidateBorder();
 
     // Lineale an / aus
-    if(pNewPref->IsViewVLin())
+    if(pNewPref->IsViewVRuler())
         pView->CreateVLineal();
     else
         pView->KillVLineal();
 
     // TabWindow an/aus
-    if(pNewPref->IsViewTabwin())
+    if(pNewPref->IsViewHRuler())
         pView->CreateTab();
     else
         pView->KillTab();
@@ -387,8 +387,8 @@ void SwModule::MakeUsrPref( SwViewOption &rToFill, sal_Bool bWeb ) const
         SfxFrame* pTopFrame = pView->GetViewFrame()->GetTopFrame();
         if( pTopFrame->GetChildFrameCount() != 0 )
         {
-            rToFill.SetViewTabwin(pUsrPref->IsViewTabwin());
-            rToFill.SetViewVLin(pUsrPref->IsViewVLin());
+            rToFill.SetViewHRuler(pUsrPref->IsViewHRuler());
+            rToFill.SetViewVRuler(pUsrPref->IsViewVRuler());
         }
     }
     else if( 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
@@ -408,46 +408,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                             sal_uInt16 nDest )
 {
     SwView* pView = pActView;
-    ViewShell* pSh = 0;
-    sal_Bool bFrameDoc = sal_False;
-
-    if ( pView )
-    {
-        //Fuer FrameViews wird das Umschalten der Grafiken in allen Frames
-        //mit Writer-Dokumenten eingestellt.
-        //Auserdem werden die UI-Prefs in allen Frames eingestellt.
-
-        pSh = &pView->GetWrtShell();
-        SfxFrameIterator aIter( *pView->GetViewFrame()->GetTopFrame() );
-        SfxFrame *pChildFrame;
-        if ( 0 != (pChildFrame = aIter.FirstFrame()) )
-        {
-            bFrameDoc = sal_True;
-            sal_Bool bGraphic = rUsrPref.IsGraphic();
-            do
-            {
-                SfxViewShell* pVShell = pChildFrame->GetCurrentViewFrame()
-                                        ? pChildFrame->GetCurrentViewFrame()->GetViewShell()
-                                        : 0;
-                SwView* pFrameView = PTR_CAST(SwView, pVShell);
-                if(!pFrameView || pFrameView == pView)
-                    continue;
-
-                SwWrtShell &rSh = pFrameView->GetWrtShell();
-                const SwViewOption* pVOpt = rSh.GetViewOptions();
-                SwViewOption aVOpt(*pVOpt);
-                if(aVOpt.IsGraphic() != bGraphic)
-                {
-                    aVOpt.SetReadonly(pVOpt->IsReadonly());
-                    aVOpt.SetGraphic( bGraphic );
-                    rSh.ApplyViewOptions(aVOpt);
-                }
-                lcl_SetUIPrefs(&rUsrPref, pFrameView, &rSh );
-
-            } while ( 0 != (pChildFrame = aIter.NextFrame( *pChildFrame )));
-        }
-
-    }
+    ViewShell* pSh = pView ? &pView->GetWrtShell() : 0;
 
     SwMasterUsrPref* pPref = (SwMasterUsrPref*)GetUsrPref(
                                          VIEWOPT_DEST_WEB == nDest ? sal_True  :
@@ -470,16 +431,6 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
             pPref->SetPagePrevCol(rUsrPref.GetPagePrevCol());
         }
         return;
-    }
-
-    sal_Bool bViewHLin, bViewVLin;
-    if(bFrameDoc)
-    {
-        //In Frame-Dokumenten soll die Linealumschaltung nicht in den
-        //default uebernommen werden.
-        const sal_uInt32 nUIOptions = pPref->GetUIOptions();
-        bViewHLin = 0 != (nUIOptions & VIEWOPT_2_TABWIN);
-        bViewVLin = 0 != (nUIOptions & VIEWOPT_2_VLIN);
     }
 
     if(!bViewOnly)
@@ -511,11 +462,6 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
         pSh->SetReadonlyOption(bReadonly);
 
     lcl_SetUIPrefs(pViewOpt, pView, pSh);
-    if(bFrameDoc && !bViewOnly)
-    {
-        pPref->SetViewTabwin(bViewHLin);
-        pPref->SetViewVLin(bViewVLin);
-    }
     // zum Schluss wird das Idle-Flag wieder gesetzt
     // #42510#
     pPref->SetIdle(sal_True);
