@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-16 11:51:52 $
+ *  last change: $Author: as $ $Date: 2000-10-16 13:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,12 @@ class FrameContainer
         sal_Bool impldbg_checkParameter_exist           (   const   REFERENCE< XFRAME >&    xFrame  ) const;
         sal_Bool impldbg_checkParameter_IndexOperator   (           sal_uInt32              nIndex  ) const;
         sal_Bool impldbg_checkParameter_setActive       (   const   REFERENCE< XFRAME >&    xFrame  ) const;
+
+        // These method search for empty frames in our container.
+        // It's a programming error if someone found.
+        // But no error if given frame is the empty one(!) ...
+        // because it's allowed to "remove()" or "append()" (FOR A SHORT TIME!) a zombie but not to HAVE it already in container.
+        sal_Bool impldbg_lookForZombieFrames            (   const   REFERENCE< XFRAME >&    xFrame  ) const;
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 

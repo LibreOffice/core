@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-16 11:52:06 $
+ *  last change: $Author: as $ $Date: 2000-10-16 13:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,8 @@ FrameContainer::FrameContainer()
 FrameContainer::~FrameContainer()
 {
     // Don't forget to free memory!
-    clear();
     disableQuitTimer();
+    clear();
 }
 
 //*****************************************************************************************************************
@@ -129,6 +129,8 @@ void FrameContainer::append( const Reference< XFrame >& xFrame )
     LOG_ASSERT( impldbg_checkParameter_append( xFrame ), "FrameContainer::append()\nInvalid parameter detected!\n" )
     // Warn programmer at already existing elements in container.
     LOG_ASSERT( !(exist(xFrame)==sal_True), "FrameContainer::append()\nNew frame already exist in container!\n" )
+    // We search for hidden tasks which have no component!
+    LOG_ASSERT( impldbg_lookForZombieFrames( xFrame ), "FrameContainer::append()\nZombie frame detected!\n" )
 
     // Work only, if container not locked!
     if ( m_bLock == LOCK_OFF )
@@ -149,7 +151,9 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
     // This method is not defined for ALL incoming parameters!
     LOG_ASSERT( impldbg_checkParameter_remove( xFrame ), "FrameContainer::remove()\nInvalid parameter detected!\n" )
     // Warn programmer at non existing elements in container.
-    LOG_ASSERT( !(exist(xFrame)==sal_False), "FrameContainer::append()\nFrame to remove not exist in container!\n" )
+    LOG_ASSERT( !(exist(xFrame)==sal_False), "FrameContainer::remove()\nFrame to remove not exist in container!\n" )
+    // Safe impossible cases.
+    LOG_ASSERT( impldbg_lookForZombieFrames( xFrame ), "FrameContainer::remove()\nZombie frame detected!\n" )
 
     // Work only, if container not locked!
     if ( m_bLock == LOCK_OFF )
@@ -210,6 +214,10 @@ sal_Bool FrameContainer::exist( const REFERENCE< XFRAME >& xFrame )
 //*****************************************************************************************************************
 void FrameContainer::clear()
 {
+    // Safe impossible cases.
+    // We search for hidden tasks which have no component!
+    LOG_ASSERT( impldbg_lookForZombieFrames( Reference< XFrame >() ), "FrameContainer::clear()\nZombie frame detected!\n" )
+
     // This method is only allowed, if no lock is set!
     // Warn programmer, if its not true.
     LOG_ASSERT( !(m_bLock==LOCK_ON), "FrameContainer::clear()\nContainer is locked! You can't clear it.\n" )
@@ -494,6 +502,32 @@ sal_Bool FrameContainer::impldbg_checkParameter_setActive( const Reference< XFra
     }
     // Return result of check.
     return bOK ;
+}
+
+//*****************************************************************************************************************
+sal_Bool FrameContainer::impldbg_lookForZombieFrames( const Reference< XFrame >& xFrame ) const
+{
+    // Step over all container items and search for a frame which contains no component.
+    // (He has no component window!)
+
+    // Use return value directly for an assert ...
+    sal_Bool bSuppressAssert = sal_True;
+
+    sal_Int32 nCount = m_aContainer.size();
+    for( sal_Int32 nPosition=0; nPosition<nCount; ++nPosition )
+    {
+        Reference< XFrame > xZombieFrame = m_aContainer.at(nPosition);
+        if  (
+                (   xZombieFrame.is()                       ==  sal_True    )   &&
+                (   xZombieFrame                            !=  xFrame      )   &&
+                (   xZombieFrame->getComponentWindow().is() ==  sal_False   )
+            )
+        {
+            bSuppressAssert = sal_False;
+        }
+    }
+
+    return bSuppressAssert;
 }
 
 #endif  //  #ifdef ENABLE_ASSERTIONS
