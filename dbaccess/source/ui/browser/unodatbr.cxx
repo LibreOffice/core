@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 14:23:11 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 09:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1870,6 +1870,21 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 {
     ::osl::MutexGuard aGuard(m_aEntryMutex);
 
+    DBTreeListModel::DBTreeListUserData* pEntryData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pEntry->GetUserData());
+    switch (pEntryData->eType)
+    {
+        case etTable:
+        case etQuery:
+        case etView:
+            break;
+        default:
+            // nothing to do
+            return 0L;
+    }
+
+    OSL_ENSURE(m_pTreeModel->HasParent(_pEntry), "SbaTableQueryBrowser::OnSelectEntry: invalid entry (1)!");
+    OSL_ENSURE(m_pTreeModel->HasParent(m_pTreeModel->GetParent(_pEntry)), "SbaTableQueryBrowser::OnSelectEntry: invalid entry (2)!");
+
     // get the entry for the tables or queries
     SvLBoxEntry* pContainer = m_pTreeModel->GetParent(_pEntry);
     DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
@@ -1877,10 +1892,6 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     // get the entry for the datasource
     SvLBoxEntry* pConnection = m_pTreeModel->GetParent(pContainer);
     DBTreeListModel::DBTreeListUserData* pConData = static_cast<DBTreeListModel::DBTreeListUserData*>(pConnection->GetUserData());
-
-    if (etBookmark == pContainerData->eType)
-        // nothing to display if it's a bookmark
-        return 0L;
 
     // reinitialize the rowset
     // but first check if it is necessary
