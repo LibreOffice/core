@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:52 $
+ *  last change: $Author: rt $ $Date: 2001-07-12 12:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #ifndef _SD_PUBDLG_HXX
 #define _SD_PUBDLG_HXX
 
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
+#endif
 #ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
 #endif
