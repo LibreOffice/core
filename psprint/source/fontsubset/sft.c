@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-30 06:54:57 $
+ *  last change: $Author: cp $ $Date: 2001-06-08 11:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.2 2001-05-30 06:54:57 cp Exp $
+/* $Id: sft.c,v 1.3 2001-06-08 11:13:19 cp Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -2438,11 +2438,6 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     info->subfamily = ttf->subfamily;
     info->psname = ttf->psname;
     info->symbolEncoded = ttf->cmapType == CMAP_MS_Symbol ? 1 : 0;
-
-    /* XXX enable gui font */
-    if (strncasecmp(ttf->family, "Andale Sans UI", sizeof("Andale Sans UI") - 1) == 0)
-        info->family = "Andale Sans UI";
-    /* XXX */
 
     table = getTable(ttf, O_OS2);
     if (table) {
