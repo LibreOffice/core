@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: jp $ $Date: 2000-10-09 13:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -855,14 +855,12 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
     }
     rWrt.OutULong( nVal );
 
+    ULONG nChSet = 0;
     rtl_TextEncoding eChrSet = rFont.GetCharSet();
-    if( RTL_TEXTENCODING_DONTKNOW == eChrSet )
-    {
-        ASSERT( FALSE, "Wrong font encoding" );
-        eChrSet = RTL_TEXTENCODING_MS_1252;
-    }
+    if( RTL_TEXTENCODING_DONTKNOW != eChrSet )
+        nChSet = rtl_getBestWindowsCharsetFromTextEncoding( eChrSet );
     rWrt.Strm() << sRTF_FCHARSET;
-    rWrt.OutULong( rtl_getBestWindowsCharsetFromTextEncoding( eChrSet ) );
+    rWrt.OutULong( nChSet );
 
     rWrt.Strm() << ' ';
     RTFOutFuncs::Out_String( rWrt.Strm(), rFont.GetFamilyName(), DEF_ENCODING,
@@ -1426,11 +1424,14 @@ void GetRTFWriter( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.1.1.1 2000-09-18 17:14:56 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.2 2000-10-09 13:31:40 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.202  2000/09/18 16:04:51  willem.vandorp
       OpenOffice header added.
 
