@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 19:18:21 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:18:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ PRJNAME=sd
 TARGET=unoidl
 ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
+LIBTARGET = NO
 
 # --- Settings -----------------------------------------------------
 
@@ -83,7 +84,7 @@ AUTOSEG=true
 NOOPTFILES= $(SLO)$/unowcntr.obj
 .ENDIF
 
-SLOFILES =      \
+SLO1FILES =      \
         $(SLO)$/SdUnoPresView.obj\
         $(SLO)$/SdUnoSlideView.obj\
         $(SLO)$/SdUnoOutlineView.obj\
@@ -107,7 +108,23 @@ SLOFILES =      \
         $(SLO)$/unostyls.obj	\
         $(SLO)$/unopback.obj	\
         $(SLO)$/unovwcrs.obj	\
-        $(SLO)$/unodoc.obj
+        $(SLO)$/unodoc.obj      \
+        $(SLO)$/unomodule.obj
+
+SLO2FILES = \
+    $(SLO)$/sddetect.obj		\
+    $(SLO)$/detreg.obj
+
+SLOFILES = \
+    $(SLO1FILES) \
+    $(SLO2FILES)
+
+LIB1TARGET = \
+    $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES = \
+    $(SLO1FILES)
+
 
 # --- Tagets -------------------------------------------------------
 
