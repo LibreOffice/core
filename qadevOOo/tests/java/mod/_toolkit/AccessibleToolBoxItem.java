@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-04-28 11:22:23 $
+ *  last change:$Date: 2003-05-22 13:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,8 @@ public class AccessibleToolBoxItem extends TestCase {
 
         tEnv.addObjRelation("EditOnly",
                     "This method isn't supported in this dialog");
+
+        tEnv.addObjRelation("LimitedBounds", "yes");
 
         final XAccessibleAction oAction = (XAccessibleAction)
             UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
