@@ -72,11 +72,16 @@ use installer::windows::language;
 
 sub get_arpcomments_for_property_table
 {
-    my ( $allvariables ) = @_;
+    my ( $allvariables, $languagestringref ) = @_;
 
     my $name = $allvariables->{'PRODUCTNAME'};
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $comment = $name . " " . $version;
+
+    my $languagestring = $$languagestringref;
+    $languagestring =~ s/\_/\,/g;
+
+    $comment = $comment . " ($languagestring)";
 
     my $localminor = "";
     if ( $installer::globals::updatepack ) { $localminor = $installer::globals::lastminor; }
@@ -89,43 +94,10 @@ sub get_arpcomments_for_property_table
 
     $comment = $comment . " " . $buildidstring;
 
+    # $comment = $comment . " [INSTALLLOCATION]";
+
     return $comment;
 }
-
-#   sub get_arpcontact_for_property_table
-#   {
-#       my $contact   = "";
-#       if ( ! $installer::globals::isopensourceproduct ) { $contact   = "Abteilung für Technischen Support"; }
-#       return $contact;
-#   }
-
-#   sub get_arphelplink_for_property_table
-#   {
-#       my $helplink  = "";
-#       if ( ! $installer::globals::isopensourceproduct ) { $helplink  = 'http://www.sun.com/help'; }
-#       return $helplink;
-#   }
-
-#   sub get_arphelptelephone_for_property_table
-#   {
-#       my $telephone = "";
-#       if ( ! $installer::globals::isopensourceproduct ) { $telephone = '1-555-555-4505'; }
-#       return $telephone;
-#   }
-
-#   sub get_arpurlinfoabout_for_property_table
-#   {
-#       my $urlinfoabout = "";
-#       if ( ! $installer::globals::isopensourceproduct ) { $urlinfoabout = 'http://www.sun.com'; }
-#       return $urlinfoabout;
-#   }
-
-#   sub get_arpurlupdateinfo_for_property_table
-#   {
-#       my $urlupdateinfo = "";
-#       if ( ! $installer::globals::isopensourceproduct ) { $urlupdateinfo = 'http://www.sun.com/updateinfo'; }
-#       return $urlupdateinfo;
-#   }
 
 sub get_installlevel_for_property_table
 {
@@ -143,14 +115,6 @@ sub get_manufacturer_for_property_table
 {
     return $installer::globals::manufacturer;
 }
-
-#   sub get_productcode_for_property_table
-#   {
-#       my ( $allvariables ) = @_;
-#
-#       my $productcode = '{CBF271AE-179C-4601-BAA8-D0E728FA70DE}';
-#       return $productcode;
-#   }
 
 sub get_productlanguage_for_property_table
 {
@@ -194,16 +158,25 @@ sub get_productname_for_property_table
 sub get_productversion_for_property_table
 {
     my ( $allvariables ) = @_;
-    my $productversion = $allvariables->{'PRODUCTVERSION'} . ".00." . $installer::globals::buildid;
+
+    my $productversion = $allvariables->{'PRODUCTVERSION'};
+
+    if ( $productversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
+    {
+        $productversion = $1 . "\." . $2 . $3 . "\." . $installer::globals::buildid;
+    }
+    elsif  ( $productversion =~ /^\s*(\d+)\.(\d+)\s*$/ )
+    {
+        $productversion = $1 . "\." . $2 . "\." . $installer::globals::buildid;
+    }
+    else
+    {
+        $productversion = $productversion . "\." . "00" . "\." . $installer::globals::buildid;
+    }
+
+    # my $productversion = $allvariables->{'PRODUCTVERSION'} . ".00." . $installer::globals::buildid;
     return $productversion;
 }
-
-#   sub get_upgradecode_for_property_table
-#   {
-#       my ( $allvariables ) = @_;
-#       my $upgradecode = '{826F42D3-1493-4D0D-BB64-5A040DD3AFD7}';
-#       return $upgradecode;
-#   }
 
 ####################################################################################
 # Updating the file Property.idt dynamically
@@ -213,7 +186,7 @@ sub get_productversion_for_property_table
 
 sub update_property_table
 {
-    my ($basedir, $language, $allvariables) = @_;
+    my ($basedir, $language, $allvariables, $languagestringref) = @_;
 
     my $properyfilename = $basedir . $installer::globals::separator . "Property.idt";
 
@@ -222,39 +195,25 @@ sub update_property_table
     # Getting the new values
     # Some values (arpcomments, arpcontacts, ...) are inserted from the Property.mlf
 
-    my $arpcomments = get_arpcomments_for_property_table($allvariables);
-    #   my $arpcontact = get_arpcontact_for_property_table();
-    #   my $arphelplink = get_arphelplink_for_property_table();
-    #   my $arphelptelephone = get_arphelptelephone_for_property_table();
-    #   my $arpurlinfoabout = get_arpurlinfoabout_for_property_table();
-    #   my $arpurlupdateinfo = get_arpurlupdateinfo_for_property_table();
+    my $arpcomments = get_arpcomments_for_property_table($allvariables, $languagestringref);
     my $installlevel = get_installlevel_for_property_table();
     my $ischeckforproductupdates = get_ischeckforproductupdates_for_property_table();
     my $manufacturer = get_manufacturer_for_property_table();
-    #   my $productcode = get_productcode_for_property_table($allvariables);
     my $productlanguage = get_productlanguage_for_property_table($language);
     my $productname = get_productname_for_property_table($allvariables);
     my $productversion = get_productversion_for_property_table($allvariables);
-    #   my $upgradecode = get_upgradecode_for_property_table($allvariables);
 
     # Updating the values
 
     for ( my $i = 0; $i <= $#{$propertyfile}; $i++ )
     {
         ${$propertyfile}[$i] =~ s/\bARPCOMMENTSTEMPLATE\b/$arpcomments/;
-        #   ${$propertyfile}[$i] =~ s/\bARPCONTACTTEMPLATE\b/$arpcontact/;
-        #   ${$propertyfile}[$i] =~ s/\bARPHELPLINKTEMPLATE\b/$arphelplink/;
-        #   ${$propertyfile}[$i] =~ s/\bARPHELPTELEPHONETEMPLATE\b/$arphelptelephone/;
-        #   ${$propertyfile}[$i] =~ s/\bARPURLINFOABOUTTEMPLATE\b/$arpurlinfoabout/;
-        #   ${$propertyfile}[$i] =~ s/\bARPURLUPDATEINFOTEMPLATE\b/$arpurlupdateinfo/;
         ${$propertyfile}[$i] =~ s/\bINSTALLLEVELTEMPLATE\b/$installlevel/;
         ${$propertyfile}[$i] =~ s/\bISCHECKFORPRODUCTUPDATESTEMPLATE\b/$ischeckforproductupdates/;
         ${$propertyfile}[$i] =~ s/\bMANUFACTURERTEMPLATE\b/$manufacturer/;
-        #   ${$propertyfile}[$i] =~ s/\bPRODUCTCODETEMPLATE\b/$productcode/;
         ${$propertyfile}[$i] =~ s/\bPRODUCTLANGUAGETEMPLATE\b/$productlanguage/;
         ${$propertyfile}[$i] =~ s/\bPRODUCTNAMETEMPLATE\b/$productname/;
         ${$propertyfile}[$i] =~ s/\bPRODUCTVERSIONTEMPLATE\b/$productversion/;
-        #   ${$propertyfile}[$i] =~ s/\bUPGRADECODETEMPLATE\b/$upgradecode/;
     }
 
     # Saving the file
