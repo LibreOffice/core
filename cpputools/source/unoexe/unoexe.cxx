@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:44:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,23 +284,37 @@ void createInstance(
                     Reference< XMultiServiceFactory > xSF( xMgr, UNO_QUERY );
                     // acceptor
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor") ), OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.io.Acceptor") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "acceptor.uno" SAL_DLLEXTENSION) ),
+                        OUString(),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "com.sun.star.comp.io.Acceptor") ),
                         xSF, Reference< XRegistryKey >() ) ) );
                     // connector
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("connectr") ), OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.io.Connector") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "connector.uno" SAL_DLLEXTENSION) ),
+                        OUString(),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "com.sun.star.comp.io.Connector") ),
                         xSF, Reference< XRegistryKey >() ) ) );
                     // iiop bridge
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge") ), OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.remotebridges.Bridge.various") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "remotebridge.uno" SAL_DLLEXTENSION) ),
+                        OUString(),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "com.sun.star.comp.remotebridges."
+                                      "Bridge.various") ),
                         xSF, Reference< XRegistryKey >() ) ) );
                     // bridge factory
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr") ), OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.remotebridges.BridgeFactory") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "bridgefac.uno" SAL_DLLEXTENSION) ),
+                        OUString(),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "com.sun.star.comp.remotebridges."
+                                      "BridgeFactory") ),
                         xSF, Reference< XRegistryKey >() ) ) );
                 }
                 s_bSet = sal_True;
@@ -753,7 +767,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
             out( "\n> warning: no registry given!" );
         }
 
-        Reference< XComponentContext > xContext( bootstrap_InitialComponentContext( xRegistry ) );
+        xContext = bootstrap_InitialComponentContext( xRegistry );
 
         //#### accept, instanciate, etc. ###########################################################
 
