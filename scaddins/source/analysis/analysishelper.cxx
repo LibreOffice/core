@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-13 10:10:54 $
+ *  last change: $Author: dr $ $Date: 2001-08-16 11:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1655,35 +1655,206 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 }*/
 
 
-double GetCoupnum( sal_Int32 nND, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+//-----------------------------------------------------------------------------
+
+ScAddInDate::ScAddInDate() :
+    nOrigDay( 1 ),
+    nDay( 1 ),
+    nMonth( 1 ),
+    nYear( 1900 ),
+    bLastDay( sal_False ),
+    b30Days( sal_False ),
+    bUSMode( sal_False )
 {
-    if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
-
-//    return ceil( GetYearFrac( nND, nSettle, nMat, nBase ) * nFreq );
-
-    sal_Int32 nRet = 0;
-    sal_uInt16 nSetDay, nSetMonth, nSetYear;
-    nSettle += nND;
-    DaysToDate( nSettle, nSetDay, nSetMonth, nSetYear );
-    sal_Bool bSetLastDay = (DaysInMonth( nSetMonth, nSetYear ) == nSetDay);
-
-    sal_uInt16 nMatDay, nMatMonth, nMatYear;
-    nMat += nND;
-    DaysToDate( nMat, nMatDay, nMatMonth, nMatYear );
-    sal_Bool bMatLastDay = (DaysInMonth( nMatMonth, nMatYear ) == nMatDay);
-
-    sal_uInt16 nFreqMonths = 12 / nFreq;
-    nRet = (nMatYear - nSetYear) * nFreq;
-    nRet += (nMatMonth - nSetMonth + nFreqMonths + 11) / nFreqMonths - nFreq;
-    nSetMonth %= nFreqMonths;
-    nMatMonth %= nFreqMonths;
-    if( (nSetMonth == nMatMonth) && !bSetLastDay && (bMatLastDay || (nMatDay > nSetDay)) )
-        nRet += 1;
-
-    return (double) nRet;
 }
 
+ScAddInDate::ScAddInDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase )
+{
+    DaysToDate( nNullDate + nDate, nOrigDay, nMonth, nYear );
+    bLastDay = (nOrigDay >= DaysInMonth( nMonth, nYear ));
+    b30Days = (nBase == 0) || (nBase == 4);
+    bUSMode = (nBase == 0);
+    SetDay();
+}
+
+ScAddInDate::ScAddInDate( const ScAddInDate& rCopy ) :
+    nOrigDay( rCopy.nOrigDay ),
+    nDay( rCopy.nDay ),
+    nMonth( rCopy.nMonth ),
+    nYear( rCopy.nYear ),
+    bLastDay( rCopy.bLastDay ),
+    b30Days( rCopy.b30Days ),
+    bUSMode( rCopy.bUSMode )
+{
+}
+
+ScAddInDate& ScAddInDate::operator=( const ScAddInDate& rCopy )
+{
+    nOrigDay = rCopy.nOrigDay;
+    nDay = rCopy.nDay;
+    nMonth = rCopy.nMonth;
+    nYear = rCopy.nYear;
+    bLastDay = rCopy.bLastDay;
+    b30Days = rCopy.b30Days;
+    bUSMode = rCopy.bUSMode;
+    return *this;
+}
+
+void ScAddInDate::SetDay()
+{
+    if( b30Days )
+    {
+        nDay = Min( nOrigDay, static_cast< sal_uInt16 >( 30 ) );
+        if( bLastDay || (nDay >= DaysInMonth( nMonth, nYear )) )
+            nDay = 30;
+    }
+    else
+    {
+        sal_uInt16 nLastDay = DaysInMonth( nMonth, nYear );
+        nDay = bLastDay ? nLastDay : Min( nOrigDay, nLastDay );
+    }
+}
+
+sal_Int32 ScAddInDate::GetDaysInMonthRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const
+{
+    if( nFrom > nTo )
+        return 0;
+
+    sal_Int32 nRet = 0;
+    if( b30Days )
+        nRet = (nTo - nFrom + 1) * 30;
+    else
+    {
+        for( sal_uInt16 nMonthIx = nFrom; nMonthIx <= nTo; nMonthIx++ )
+            nRet += GetDaysInMonth( nMonthIx );
+    }
+    return nRet;
+}
+
+sal_Int32 ScAddInDate::GetDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const
+{
+    if( nFrom > nTo )
+        return 0;
+
+    return b30Days ? ((nTo - nFrom + 1) * 360) : GetDaysInYears( nFrom, nTo );
+}
+
+void ScAddInDate::AddMonths( sal_uInt16 nAddMonths )
+{
+    nMonth += nAddMonths;
+    nYear += (nMonth - 1) / 12;
+    nMonth = ((nMonth - 1) % 12) + 1;
+    SetDay();
+}
+
+void ScAddInDate::SubMonths( sal_uInt16 nSubMonths )
+{
+    if( nSubMonths >= nMonth )
+    {
+        nYear -= ((nSubMonths - nMonth) / 12 + 1);
+        nSubMonths %= 12;
+        if( nSubMonths )
+            nMonth += 12 - nSubMonths;
+    }
+    else
+        nMonth -= nSubMonths;
+    SetDay();
+}
+
+sal_Int32 ScAddInDate::GetDate( sal_Int32 nNullDate ) const
+{
+    sal_uInt16 nLastDay = DaysInMonth( nMonth, nYear );
+    sal_uInt16 nRealDay = bLastDay ? nLastDay : Min( nLastDay, nOrigDay );
+    return DateToDays( nRealDay, nMonth, nYear ) - nNullDate;
+}
+
+sal_Int32 ScAddInDate::GetDiff( const ScAddInDate& rFrom ) const
+{
+    if( *this < rFrom )
+        return rFrom.GetDiff( *this );
+
+    sal_Int32 nDiff = 0;
+    ScAddInDate aFrom( rFrom );
+    ScAddInDate aTo( *this );
+
+    if( b30Days )
+    {
+        // corrections for base 0 (US NASD)
+        if( bUSMode )
+        {
+            if( ((aFrom.nMonth == 2) || (aFrom.nDay < 30)) && (aTo.nOrigDay == 31) )
+                aTo.nDay = 31;
+            else if( (aTo.nMonth == 2) && aTo.bLastDay )
+                aTo.nDay = DaysInMonth( 2, aTo.nYear );
+        }
+        // corrections for base 4 (Europe)
+        else
+        {
+            if( (aFrom.nMonth == 2) && (aFrom.nDay == 30) )
+                aFrom.nDay = DaysInMonth( 2, aFrom.nYear );
+            if( (aTo.nMonth == 2) && (aTo.nDay == 30) )
+                aTo.nDay = DaysInMonth( 2, aTo.nYear );
+        }
+    }
+
+    if( (aFrom.nYear < aTo.nYear) || ((aFrom.nYear == aTo.nYear) && (aFrom.nMonth < aTo.nMonth)) )
+    {
+        // move aFrom to 1st day of next month
+        nDiff = aFrom.GetDaysInMonth() - aFrom.nDay + 1;
+        aFrom.nOrigDay = aFrom.nDay = 1;
+        aFrom.bLastDay = sal_False;
+        aFrom.AddMonths( 1 );
+
+        if( aFrom.nYear < aTo.nYear )
+        {
+            // move aFrom to 1st day of next year
+            nDiff += aFrom.GetDaysInMonthRange( aFrom.nMonth, 12 );
+            aFrom.AddMonths( 13 - aFrom.nMonth );
+
+            // move aFrom to 1st day of this year
+            nDiff += aFrom.GetDaysInYearRange( aFrom.nYear, aTo.nYear - 1 );
+            aFrom.AddYears( aTo.nYear - aFrom.nYear );
+        }
+
+        // move aFrom to 1st day of this month
+        nDiff += aFrom.GetDaysInMonthRange( aFrom.nMonth, aTo.nMonth - 1 );
+        aFrom.AddMonths( aTo.nMonth - aFrom.nMonth );
+    }
+    // finally add remaining days in this month
+    nDiff += aTo.nDay - aFrom.nDay;
+    return Max( nDiff, 0L );
+}
+
+sal_Bool ScAddInDate::operator<( const ScAddInDate& rCmp ) const
+{
+    if( nYear != rCmp.nYear )
+        return nYear < rCmp.nYear;
+    if( nMonth != rCmp.nMonth )
+        return nMonth < rCmp.nMonth;
+    if( nDay != rCmp.nDay )
+        return nDay < rCmp.nDay;
+    if( bLastDay || rCmp.bLastDay )
+        return !bLastDay && rCmp.bLastDay;
+    return nOrigDay < rCmp.nOrigDay;
+}
+
+
+//-----------------------------------------------------------------------------
+// financial functions COUP***
+
+
+//-------
+// COUPPCD: find last coupon date before settlement (can be equal to settlement)
+void lcl_GetCouppcd( ScAddInDate& rDate, const ScAddInDate& rSettle, const ScAddInDate& rMat, sal_Int32 nFreq )
+{
+    sal_uInt16 nFreqMonths = static_cast< sal_uInt16 >( 12 / nFreq );
+    rDate = rMat;
+    rDate.SetYear( rSettle.nYear );
+    if( rDate < rSettle )
+        rDate.AddYears( 1 );
+    while( rDate > rSettle )
+        rDate.SubMonths( nFreqMonths );
+}
 
 double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     THROWDEF_RTE_IAE
@@ -1691,53 +1862,24 @@ double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
     if( nSettle >= nMat || CHK_Freq )
         THROW_IAE;
 
-    sal_Int32   nRet = nMat;
-    sal_Int32   nPeriodsDelta = sal_Int32( GetCoupnum( nNullDate, nSettle, nRet, nFreq, nBase ) );
-
-    AddDate( nNullDate, nRet, 0, -( nPeriodsDelta * 12 / nFreq ), 0 );
-    nRet = AdjustLastDayInMonth( nNullDate, nMat, nRet );
-
-    return nRet;
+    ScAddInDate aDate;
+    lcl_GetCouppcd( aDate, ScAddInDate( nNullDate, nSettle, nBase ), ScAddInDate( nNullDate, nMat, nBase ), nFreq );
+    return aDate.GetDate( nNullDate );
 }
 
 
-double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    THROWDEF_RTE_IAE
+//-------
+// COUPNCD: find first coupon date after settlement (is never equal to settlement)
+void lcl_GetCoupncd( ScAddInDate& rDate, const ScAddInDate& rSettle, const ScAddInDate& rMat, sal_Int32 nFreq )
 {
-    if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
-
-    double nRet;
-    if( nBase == 1 )
-    {
-        sal_Int32   nStart = sal_Int32( GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase ) );
-        sal_Int32   nEnd = nStart;
-        AddDate( nNullDate, nEnd, 0, 12 / nFreq, 0 );
-        nStart = AdjustLastDayInMonth( nNullDate, nEnd, nStart );
-        nRet = nEnd - nStart;
-    }
-    else
-    {
-        // get constant default day count for bases 0, 2, 3, 4
-        nRet = GetDaysInYear( 0, 0, nBase );
-        nRet /= nFreq;
-    }
-    return nRet;
+    sal_uInt16 nFreqMonths = static_cast< sal_uInt16 >( 12 / nFreq );
+    rDate = rMat;
+    rDate.SetYear( rSettle.nYear );
+    if( rDate > rSettle )
+        rDate.SubYears( 1 );
+    while( rDate <= rSettle )
+        rDate.AddMonths( nFreqMonths );
 }
-
-
-double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    THROWDEF_RTE_IAE
-{
-    if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
-
-    sal_Int32   nDate = sal_Int32( GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase ) );
-    AddDate( nNullDate, nDate, 0, 12 / nFreq, 0 );
-
-    return nDate - nSettle;
-}
-
 
 double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     THROWDEF_RTE_IAE
@@ -1745,12 +1887,75 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
     if( nSettle >= nMat || CHK_Freq )
         THROW_IAE;
 
-    sal_Int32   nPeriodsDelta = sal_Int32( GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) );
-
-    AddDate( nNullDate, nMat, 0, -( ( nPeriodsDelta - 1 ) * 12 / nFreq ), 0 );
-
-    return nMat;
+    ScAddInDate aDate;
+    lcl_GetCoupncd( aDate, ScAddInDate( nNullDate, nSettle, nBase ), ScAddInDate( nNullDate, nMat, nBase ), nFreq );
+    return aDate.GetDate( nNullDate );
 }
+
+
+//-------
+// COUPDAYSBS: get day count: coupon date before settlement <-> settlement
+double GetCoupdaysbs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+    THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    ScAddInDate aSettle( nNullDate, nSettle, nBase );
+    ScAddInDate aDate;
+    lcl_GetCouppcd( aDate, aSettle, ScAddInDate( nNullDate, nMat, nBase ), nFreq );
+    return aSettle.GetDiff( aDate );
+}
+
+
+//-------
+// COUPDAYSNC: get day count: settlement <-> coupon date after settlement
+double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+    THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    ScAddInDate aSettle( nNullDate, nSettle, nBase );
+    ScAddInDate aDate;
+    lcl_GetCoupncd( aDate, aSettle, ScAddInDate( nNullDate, nMat, nBase ), nFreq );
+    return aDate.GetDiff( aSettle );
+}
+
+
+//-------
+// COUPDAYS: get day count: coupon date before settlement <-> coupon date after settlement
+double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+    THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    ScAddInDate aDate;
+    lcl_GetCouppcd( aDate, ScAddInDate( nNullDate, nSettle, nBase ), ScAddInDate( nNullDate, nMat, nBase ), nFreq );
+    ScAddInDate aNextDate( aDate );
+    aNextDate.AddMonths( static_cast< sal_uInt16 >( 12 / nFreq ) );
+    return aNextDate.GetDiff( aDate );
+}
+
+
+//-------
+// COUPNUM: get count of coupon dates
+double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+    THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    ScAddInDate aMat( nNullDate, nMat, nBase );
+    ScAddInDate aDate;
+    lcl_GetCouppcd( aDate, ScAddInDate( nNullDate, nSettle, nBase ), aMat, nFreq );
+    sal_uInt16 nMonths = (aMat.nYear - aDate.nYear) * 12 + aMat.nMonth - aDate.nMonth;
+    return static_cast< double >( nMonths * nFreq / 12 );
+}
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-18 09:16:23 $
+ *  last change: $Author: dr $ $Date: 2001-08-16 11:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,21 +173,97 @@ double              GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_In
 double              GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF );
 double              GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF );
 //double                TBillYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )THROWDEF_RTE_IAE;
-double              GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat,
-                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double              GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat,
-                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+
 double              GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
-                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
-//double                GetCouppcd( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
-//                              sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
-                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double              GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
 double              GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetCoupdaysbs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
 
+double              GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat,
+                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+
+
+
+
+//-----------------------------------------------------------------------------
+// date helper class for financial functions COUP***
+
+class ScAddInDate
+{
+private:
+    void                        SetDay();
+
+    inline sal_uInt16           GetDaysInMonth() const;
+    inline sal_uInt16           GetDaysInMonth( sal_uInt16 _nMon ) const;
+
+    sal_Int32                   GetDaysInMonthRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
+    sal_Int32                   GetDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
+
+public:
+    sal_uInt16                  nOrigDay;
+    sal_uInt16                  nDay;
+    sal_uInt16                  nMonth;
+    sal_uInt16                  nYear;
+    sal_Bool                    bLastDay;
+    sal_Bool                    b30Days;
+    sal_Bool                    bUSMode;
+
+                                ScAddInDate();
+                                ScAddInDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase );
+                                ScAddInDate( const ScAddInDate& rCopy );
+    ScAddInDate&                operator=( const ScAddInDate& rCopy );
+
+    void                        AddMonths( sal_uInt16 nAddMonths );
+    void                        SubMonths( sal_uInt16 nSubMonths );
+    inline void                 SetYear( sal_uInt16 nNewYear );
+    inline void                 AddYears( sal_uInt16 nAddYears );
+    inline void                 SubYears( sal_uInt16 nSubYears );
+
+    sal_Int32                   GetDate( sal_Int32 nNullDate ) const;
+    sal_Int32                   GetDiff( const ScAddInDate& rFrom ) const;
+
+    sal_Bool                    operator<( const ScAddInDate& rCmp ) const;
+    inline sal_Bool             operator<=( const ScAddInDate& rCmp ) const { return !(rCmp < *this); }
+    inline sal_Bool             operator>( const ScAddInDate& rCmp ) const  { return rCmp < *this; }
+    inline sal_Bool             operator>=( const ScAddInDate& rCmp ) const { return !(*this < rCmp); }
+};
+
+inline sal_uInt16 ScAddInDate::GetDaysInMonth() const
+{
+    return GetDaysInMonth( nMonth );
+}
+
+inline sal_uInt16 ScAddInDate::GetDaysInMonth( sal_uInt16 _nMon ) const
+{
+    return b30Days ? 30 : DaysInMonth( _nMon, nYear );
+}
+
+inline void ScAddInDate::SetYear( sal_uInt16 nNewYear )
+{
+    nYear = nNewYear;
+    SetDay();
+}
+
+inline void ScAddInDate::AddYears( sal_uInt16 nAddYears )
+{
+    nYear += nAddYears;
+    SetDay();
+}
+
+inline void ScAddInDate::SubYears( sal_uInt16 nSubYears )
+{
+    nYear -= nSubYears;
+    SetDay();
+}
+
+
+//-----------------------------------------------------------------------------
 
 
 

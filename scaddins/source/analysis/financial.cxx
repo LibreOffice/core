@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-13 10:10:54 $
+ *  last change: $Author: dr $ $Date: 2001-08-16 11:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,7 @@ double SAL_CALL AnalysisAddIn::getCoupdaysnc( constREFXPS& xOpt,
 double SAL_CALL AnalysisAddIn::getCoupdaybs( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    return nSettle - GetCouppcd( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    return GetCoupdaysbs( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
 }
 
 
