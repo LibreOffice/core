@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:06:57 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,14 @@
 // #i11426#
 #ifndef _SVDOGRP_HXX
 #include <svdogrp.hxx>
+#endif
+
+#ifndef _SDR_PROPERTIES_ITEMSETTOOLS_HXX
+#include <svx/sdr/properties/itemsettools.hxx>
+#endif
+
+#ifndef _SDR_PROPERTIES_PROPERTIES_HXX
+#include <svx/sdr/properties/properties.hxx>
 #endif
 
 // #109587#
@@ -327,8 +335,6 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
     bHaveToTakeRedoSet(TRUE)
 {
     bStyleSheet = bStyleSheet1;
-    pUndoSet = rNewObj.CreateNewItemSet(*((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
-    pRedoSet = rNewObj.CreateNewItemSet(*((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
 
     SdrObjList* pOL = rNewObj.GetSubList();
     BOOL bIsGroup(pOL!=NULL && pOL->GetObjCount());
@@ -349,7 +355,14 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
 
     if(!bIsGroup || bIs3DScene)
     {
-        pUndoSet->Put(pObj->GetItemSet());
+        const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
+
+        if(!pUndoSet)
+        {
+            pUndoSet = rObjItemSet.Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
+        }
+
+        pUndoSet->Put(rObjItemSet);
 
         if(bStyleSheet)
             pUndoStyleSheet = pObj->GetStyleSheet();
@@ -386,7 +399,7 @@ void SdrUndoAttrObj::SetRepeatAttr(const SfxItemSet& rSet)
     if(pRepeatSet)
         delete pRepeatSet;
 
-    pRepeatSet = pObj->CreateNewItemSet(*((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
+    pRepeatSet = pObj->GetMergedItemSet().Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
 
     pRepeatSet->Put(rSet);
 }
@@ -403,7 +416,15 @@ void SdrUndoAttrObj::Undo()
         if(bHaveToTakeRedoSet)
         {
             bHaveToTakeRedoSet = FALSE;
-            pRedoSet->Put(pObj->GetItemSet());
+            const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
+
+            if(!pRedoSet)
+            {
+                pRedoSet = rObjItemSet.Clone(FALSE, (SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool());
+            }
+
+            pRedoSet->Put(rObjItemSet);
+
             if(bStyleSheet)
                 pRedoStyleSheet=pObj->GetStyleSheet();
 
@@ -423,7 +444,7 @@ void SdrUndoAttrObj::Undo()
             pObj->SetStyleSheet(pUndoStyleSheet, TRUE);
         }
 
-        SdrBroadcastItemChange aItemChange(*pObj);
+        sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
 
         // #105122# Since ClearItem sets back everything to normal
         // it also sets fit-to-size text to non-fit-to-size text and
@@ -433,33 +454,36 @@ void SdrUndoAttrObj::Undo()
         // rescuing the size of the object necessary.
         const Rectangle aSnapRect = pObj->GetSnapRect();
 
-        // #109587#
-        if(pObj->ISA(SdrCaptionObj))
+        if(pUndoSet)
         {
-            // do a more smooth item deletion here, else the text
-            // rect will be reformatted, especially when information regarding
-            // vertical text is changed. When clearing only set items it's
-            // slower, but safer regarding such information (it's not changed
-            // usually)
-            SfxWhichIter aIter(*pUndoSet);
-            sal_uInt16 nWhich(aIter.FirstWhich());
-
-            while(nWhich)
+            // #109587#
+            if(pObj->ISA(SdrCaptionObj))
             {
-                if(SFX_ITEM_SET != pUndoSet->GetItemState(nWhich, sal_False))
+                // do a more smooth item deletion here, else the text
+                // rect will be reformatted, especially when information regarding
+                // vertical text is changed. When clearing only set items it's
+                // slower, but safer regarding such information (it's not changed
+                // usually)
+                SfxWhichIter aIter(*pUndoSet);
+                sal_uInt16 nWhich(aIter.FirstWhich());
+
+                while(nWhich)
                 {
-                    pObj->ClearItem(nWhich);
+                    if(SFX_ITEM_SET != pUndoSet->GetItemState(nWhich, sal_False))
+                    {
+                        pObj->ClearMergedItem(nWhich);
+                    }
+
+                    nWhich = aIter.NextWhich();
                 }
-
-                nWhich = aIter.NextWhich();
             }
-        }
-        else
-        {
-            pObj->ClearItem();
-        }
+            else
+            {
+                pObj->ClearMergedItem();
+            }
 
-        pObj->SetItemSet(*pUndoSet);
+            pObj->SetMergedItemSet(*pUndoSet);
+        }
 
         // #105122# Restore prev size here when it was changed.
         if(aSnapRect != pObj->GetSnapRect())
@@ -467,7 +491,7 @@ void SdrUndoAttrObj::Undo()
             pObj->NbcSetSnapRect(aSnapRect);
         }
 
-        pObj->BroadcastItemChange(aItemChange);
+        pObj->GetProperties().BroadcastItemChange(aItemChange);
 
         if(pTextUndo)
         {
@@ -493,38 +517,41 @@ void SdrUndoAttrObj::Redo()
             pObj->SetStyleSheet(pRedoStyleSheet, TRUE);
         }
 
-        SdrBroadcastItemChange aItemChange(*pObj);
+        sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
 
         // #105122#
         const Rectangle aSnapRect = pObj->GetSnapRect();
 
-        // #109587#
-        if(pObj->ISA(SdrCaptionObj))
+        if(pRedoSet)
         {
-            // do a more smooth item deletion here, else the text
-            // rect will be reformatted, especially when information regarding
-            // vertical text is changed. When clearing only set items it's
-            // slower, but safer regarding such information (it's not changed
-            // usually)
-            SfxWhichIter aIter(*pRedoSet);
-            sal_uInt16 nWhich(aIter.FirstWhich());
-
-            while(nWhich)
+            // #109587#
+            if(pObj->ISA(SdrCaptionObj))
             {
-                if(SFX_ITEM_SET != pRedoSet->GetItemState(nWhich, sal_False))
+                // do a more smooth item deletion here, else the text
+                // rect will be reformatted, especially when information regarding
+                // vertical text is changed. When clearing only set items it's
+                // slower, but safer regarding such information (it's not changed
+                // usually)
+                SfxWhichIter aIter(*pRedoSet);
+                sal_uInt16 nWhich(aIter.FirstWhich());
+
+                while(nWhich)
                 {
-                    pObj->ClearItem(nWhich);
+                    if(SFX_ITEM_SET != pRedoSet->GetItemState(nWhich, sal_False))
+                    {
+                        pObj->ClearMergedItem(nWhich);
+                    }
+
+                    nWhich = aIter.NextWhich();
                 }
-
-                nWhich = aIter.NextWhich();
             }
-        }
-        else
-        {
-            pObj->ClearItem();
-        }
+            else
+            {
+                pObj->ClearMergedItem();
+            }
 
-        pObj->SetItemSet(*pRedoSet);
+            pObj->SetMergedItemSet(*pRedoSet);
+        }
 
         // #105122# Restore prev size here when it was changed.
         if(aSnapRect != pObj->GetSnapRect())
@@ -532,7 +559,7 @@ void SdrUndoAttrObj::Redo()
             pObj->NbcSetSnapRect(aSnapRect);
         }
 
-        pObj->BroadcastItemChange(aItemChange);
+        pObj->GetProperties().BroadcastItemChange(aItemChange);
 
         // #i8508#
         if(pTextRedo)
@@ -675,12 +702,14 @@ void SdrUndoGeoObj::Undo()
     if(pUndoGroup)
     {
         // #97172#
-        pObj->SendRepaintBroadcast();
+        // #110094#-14 pObj->SendRepaintBroadcast();
 
         pUndoGroup->Undo();
 
         // #97172#
-        pObj->SendRepaintBroadcast();
+        // only repaint, no objectchange
+        pObj->ActionChanged();
+        // pObj->BroadcastObjectChange();
     }
     else
     {
@@ -695,12 +724,14 @@ void SdrUndoGeoObj::Redo()
     if(pUndoGroup)
     {
         // #97172#
-        pObj->SendRepaintBroadcast();
+        // #110094#-14 pObj->SendRepaintBroadcast();
 
         pUndoGroup->Redo();
 
         // #97172#
-        pObj->SendRepaintBroadcast();
+        // only repaint, no objectchange
+        pObj->ActionChanged();
+        //pObj->BroadcastObjectChange();
     }
     else
     {
