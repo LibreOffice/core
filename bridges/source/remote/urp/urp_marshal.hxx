@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:08 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _URP_MARSHAL_HXX_
 #define _URP_MARSHAL_HXX_
-
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -145,7 +144,6 @@ namespace bridges_urp
     inline void Marshal::packInt16( void *pSource )
     {
         ensureAdditionalMem( 2 );
-        sal_uInt16 *p = ( sal_uInt16 *  ) pSource;
         if( isSystemLittleEndian() )
         {
             m_pos[0] = ((unsigned char *)pSource)[1];
