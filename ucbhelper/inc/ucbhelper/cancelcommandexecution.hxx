@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-29 13:32:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace uno { class Any; }
@@ -100,7 +103,7 @@ namespace ucbhelper
     @param xEnv is the command environment that may contain an Interaction
            Handler to use before throwing the appropriate exception.
  */
-void cancelCommandExecution( const com::sun::star::uno::Any & rException,
+UCBHELPER_DLLPUBLIC void cancelCommandExecution( const com::sun::star::uno::Any & rException,
                              const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XCommandEnvironment > &
                                     xEnv )
@@ -222,7 +225,7 @@ void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
            Used as debugging aid only. Passed to the member 'Context' of the
            uno::Exception thrown by this function.
  */
-void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
+UCBHELPER_DLLPUBLIC void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
                              const com::sun::star::uno::Sequence<
                                 com::sun::star::uno::Any > & rArgs,
                              const com::sun::star::uno::Reference<
