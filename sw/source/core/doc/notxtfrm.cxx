@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:04:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,76 +1157,23 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         if( bDummyJobSetup )
             pJobSetup = new JobSetup();
 
-        // #114233#
-        const sal_Bool bOutToPrinter(OUTDEV_PRINTER == pOut->GetOutDevType());
-        const sal_Bool bOutToRecordingMetaFile(pOut->GetConnectMetaFile()
-            && pOut->GetConnectMetaFile()->IsRecord() && !pOut->GetConnectMetaFile()->IsPause());
-        sal_Bool bBufferOLEOutput(!bOutToPrinter && !bOutToRecordingMetaFile);
-
-        if(bBufferOLEOutput)
+        // #i42323#
+        // The reason for #114233# is gone, so i remove it again
+        //TODO/LATER: is it a problem that the JopSetup isn't used?
+        //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
+        if ( pOLENd->GetGraphic() && pOLENd->GetGraphic()->GetType() != GRAPHIC_NONE )
         {
-            // needs to be buffered to a VirtualDevice
-            VirtualDevice aBufferDevice(*pOut, 0L, 0L);
+            pOLENd->GetGraphic()->Draw( pOut, aPosition, aSize );
 
-            // calulate PixelSize
-            Rectangle aRectPixel(aPosition, aSize);
-            aRectPixel = pOut->LogicToPixel(aRectPixel);
-
-            // Prepare MapMode for BufferDevice
-            MapMode aMapMode(pOut->GetMapMode());
-            const Point aNegativeMapModeOffset(-aPosition.X(), -aPosition.Y());
-            aMapMode.SetOrigin(aNegativeMapModeOffset);
-
-            // Set OutputSize and MapMode
-            aBufferDevice.SetOutputSizePixel(aRectPixel.GetSize());
-            aBufferDevice.SetMapMode(aMapMode);
-
-            // draw to VDev
-            //TODO/LATER: is it a problem that the JopSetup isn't used? It seems that only Writer uses it (does it really?)
-            //xRef->DoDraw( &aBufferDevice, aPosition, aSize, *pJobSetup );
-            if ( pOLENd->GetGraphic() && pOLENd->GetGraphic()->GetType() != GRAPHIC_NONE )
+            // shade the representation if the object is activated outplace
+            if ( pOLENd->GetOLEObj().GetOleRef().is()
+                && pOLENd->GetOLEObj().GetOleRef()->getCurrentState() == embed::EmbedStates::ACTIVE )
             {
-                pOLENd->GetGraphic()->Draw( &aBufferDevice, aPosition, aSize );
-
-                // shade the representation if the object is activated outplace
-                if ( pOLENd->GetOLEObj().GetOleRef().is()
-                  && pOLENd->GetOLEObj().GetOleRef()->getCurrentState() == embed::EmbedStates::ACTIVE )
-                {
-                    ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), &aBufferDevice );
-                }
+                ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), pOut );
             }
-            else
-                ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), &aBufferDevice );
-
-            // draw VDev to pOut
-            const sal_Bool bWasEnabled(pOut->IsMapModeEnabled());
-            pOut->EnableMapMode(sal_False);
-            aBufferDevice.EnableMapMode(sal_False);
-
-            pOut->DrawOutDev(
-                aRectPixel.TopLeft(), aRectPixel.GetSize(),
-                Point(), aRectPixel.GetSize(), aBufferDevice);
-
-            pOut->EnableMapMode(bWasEnabled);
         }
         else
-        {
-            //TODO/LATER: is it a problem that the JopSetup isn't used?
-            //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
-            if ( pOLENd->GetGraphic() && pOLENd->GetGraphic()->GetType() != GRAPHIC_NONE )
-            {
-                pOLENd->GetGraphic()->Draw( pOut, aPosition, aSize );
-
-                // shade the representation if the object is activated outplace
-                if ( pOLENd->GetOLEObj().GetOleRef().is()
-                  && pOLENd->GetOLEObj().GetOleRef()->getCurrentState() == embed::EmbedStates::ACTIVE )
-                {
-                    ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), pOut );
-                }
-            }
-            else
-                ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
-        }
+            ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
 
         if( bDummyJobSetup )
             delete pJobSetup;  // ... und raeumen wieder auf.
