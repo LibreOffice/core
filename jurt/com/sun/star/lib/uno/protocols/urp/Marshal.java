@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:57:12 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@ import com.sun.star.lib.uno.environments.remote.IMarshal;
 import com.sun.star.lib.uno.environments.remote.Protocol;
 import com.sun.star.lib.uno.environments.remote.ThreadID;
 
+import com.sun.star.uno.ITypeDescription;
+import com.sun.star.uno.IFieldDescription;
+
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 
 import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
@@ -99,11 +102,11 @@ class Marshal implements IMarshal {
     /**
      * When set to true, enables various debugging output.
      */
-    static public final boolean DEBUG = false;
+    static private final boolean DEBUG = false;
 
-    static public final TypeDescription __xInterfaceTypeDescription           = TypeDescription.getTypeDescription(XInterface.class);
-    static public final TypeDescription __M_InterfaceReferenceTypeDescription = TypeDescription.getTypeDescription(M_InterfaceReference.class);
-    static public final TypeDescription __M_ThreadIdTypeDescription           = TypeDescription.getTypeDescription(M_ThreadId.class);
+    static public final ITypeDescription __xInterfaceTypeDescription           = TypeDescription.getTypeDescription(XInterface.class);
+    static public final ITypeDescription __M_InterfaceReferenceTypeDescription = TypeDescription.getTypeDescription(M_InterfaceReference.class);
+    static public final ITypeDescription __M_ThreadIdTypeDescription           = TypeDescription.getTypeDescription(M_ThreadId.class);
 
     static private final M_InterfaceReference __null_M_InterfaceReference = new M_InterfaceReference("", (short)0xffff);
 
@@ -165,26 +168,31 @@ class Marshal implements IMarshal {
     void writeAny(Object object) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeAny:" + object);
 
-        TypeDescription typeDescription = null;
+        ITypeDescription iTypeDescription = null;
 
         if(object == null)
-            typeDescription = TypeDescription.getTypeDescription(XInterface.class);
-//              typeDescription = TypeDescription.__void_TypeDescription;
+            iTypeDescription = __xInterfaceTypeDescription;
 
         else if(object instanceof Any) {
             Any any = (Any)object;
 
-            typeDescription = (TypeDescription)any.getType().getTypeDescription();
+            try {
+                iTypeDescription = TypeDescription.getTypeDescription(any.getType());
+            }
+            catch(ClassNotFoundException classNotFoundException) {
+                throw new com.sun.star.uno.RuntimeException(getClass().getName() + " - unexpected:" + classNotFoundException);
+            }
+
             object = any.getObject();
         }
         else if(object instanceof XInterface)
-            typeDescription = __xInterfaceTypeDescription;
+            iTypeDescription = __xInterfaceTypeDescription;
 
         else
-            typeDescription = TypeDescription.getTypeDescription(object.getClass());
+            iTypeDescription = TypeDescription.getTypeDescription(object.getClass());
 
-        writeTypeDescrption(typeDescription);
-        writeObject(typeDescription, object);
+        writeTypeDescrption(iTypeDescription);
+        writeObject(iTypeDescription, object);
     }
 
     void writeboolean(boolean bool) {
@@ -286,13 +294,13 @@ class Marshal implements IMarshal {
         writeint(enum.getValue());
     }
 
-    void writeThrowable(TypeDescription typeDescription, Throwable throwable) {
+    void writeThrowable(ITypeDescription iTypeDescription, Throwable throwable) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeThrowable:" + throwable);
 
         String message = throwable.getMessage();
         writeString((message == null) ? "" : message);
 
-        writeStruct(typeDescription, throwable);
+        writeStruct(iTypeDescription, throwable);
     }
 
     void writefloat(float zfloat) {
@@ -346,18 +354,26 @@ class Marshal implements IMarshal {
         writelong(zLong.longValue());
     }
 
-    public void writeObject(TypeDescription typeDescription, Object object) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeObject: <" + typeDescription + "> <" + object + ">");
+    public void writeObject(ITypeDescription iTypeDescription, Object object) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeObject: <" + iTypeDescription + "> <" + object + ">");
 
-        switch(typeDescription.getTypeClass().getValue()) {
+        switch(iTypeDescription.getTypeClass().getValue()) {
         case TypeClass.ANY_value:       writeAny(object);                                     break; // write an any ?
         case TypeClass.SEQUENCE_value:
-        case TypeClass.ARRAY_value:     writeSequence(typeDescription, object);               break; // write a sequence ?
+        case TypeClass.ARRAY_value:     writeSequence(iTypeDescription, object);               break; // write a sequence ?
         case TypeClass.VOID_value:                                                            break; // write nothing ?
         case TypeClass.ENUM_value:      writeEnum((Enum)object);                              break; // write an enum ?
         case TypeClass.UNION_value:     writeUnion((Union)object);                            break; // write a union ?
-        case TypeClass.TYPE_value:      writeTypeDescrption((TypeDescription)((Type)object).getTypeDescription()); break; // write a type ?
-        case TypeClass.INTERFACE_value: writeReference(typeDescription, object);              break; // is it an interface ?
+        case TypeClass.TYPE_value:
+            try {
+                writeTypeDescrption(TypeDescription.getTypeDescription((Type)object));
+            }
+            catch(ClassNotFoundException classNotFoundException) {
+                throw new com.sun.star.uno.RuntimeException(getClass().getName() + " - unexpected:" + classNotFoundException);
+            }
+            break; // write a type ?
+
+        case TypeClass.INTERFACE_value: writeReference(iTypeDescription, object);              break; // is it an interface ?
         case TypeClass.BOOLEAN_value:   writeBoolean((Boolean)object);                        break; // is it a boolean
         case TypeClass.CHAR_value:      writeCharacter((Character)object);                    break; // is it a character ?
         case TypeClass.BYTE_value:      writeByte((Byte)object);                              break; // is it a byte ?
@@ -371,13 +387,13 @@ class Marshal implements IMarshal {
             if(object instanceof ThreadID) // is it a thread id ?
                 writeThreadID((ThreadID)object);
             else // is it a struct ?
-                writeStruct(typeDescription, object);
+                writeStruct(iTypeDescription, object);
 
             break;
-        case TypeClass.EXCEPTION_value: writeThrowable(typeDescription, (Throwable)object);   break; // is it an exception?
+        case TypeClass.EXCEPTION_value: writeThrowable(iTypeDescription, (Throwable)object);   break; // is it an exception?
 
         default:
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeObject - unknown typeClass:" + typeDescription.getTypeClass().getValue());
+            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeObject - unknown typeClass:" + iTypeDescription.getTypeClass().getValue());
         }
     }
 
@@ -402,17 +418,17 @@ class Marshal implements IMarshal {
         writeObject(__M_InterfaceReferenceTypeDescription, m_InterfaceReference);
     }
 
-    void writeReference(TypeDescription typeDescription, Object object) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReference:" + typeDescription + " " + object);
+    void writeReference(ITypeDescription iTypeDescription, Object object) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReference:" + iTypeDescription + " " + object);
 
         // map the object to universe
-        writeOid(object != null ? (String)_iBridge.mapInterfaceTo(object, new Type(typeDescription)) : null);
+        writeOid(object != null ? (String)_iBridge.mapInterfaceTo(object, new Type(iTypeDescription)) : null);
     }
 
-    void writeSequence(TypeDescription typeDescription, Object object) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeSequence:" + typeDescription + " " + object);
+    void writeSequence(ITypeDescription iTypeDescription, Object object) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeSequence:" + iTypeDescription + " " + object);
 
-        if(typeDescription.getTypeClass() == TypeClass.BYTE) // write a byte sequence ?
+        if(iTypeDescription.getTypeClass() == TypeClass.BYTE) // write a byte sequence ?
             writebyteSequence((byte [])object);
 
         else {
@@ -424,9 +440,9 @@ class Marshal implements IMarshal {
 
             writeCompressedInt(size);
 
-            typeDescription = typeDescription.getComponentType();
+            iTypeDescription = iTypeDescription.getComponentType();
             for(int i = 0; i < size; ++ i)
-                writeObject(typeDescription, Array.get(object, i));
+                writeObject(iTypeDescription, Array.get(object, i));
         }
     }
 
@@ -472,51 +488,16 @@ class Marshal implements IMarshal {
         }
     }
 
-    void writeStruct(TypeDescription typeDescription, Object object) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeStruct:" + typeDescription + " " + object);
+    void writeStruct(ITypeDescription iTypeDescription, Object object) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeStruct:" + iTypeDescription + " " + object);
 
-        Field fields[] = typeDescription.getFields();
-        for(int i = 0; i < fields.length; ++ i) {
-            if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
-                MemberTypeInfo memberTypeInfo = typeDescription.getMemberTypeInfo(fields[i].getName());
-
-                // default the member type to the declared type
-                Class zInterface = fields[i].getType();
-
-                if(memberTypeInfo != null) { // do we have any type infos?
-                    if(memberTypeInfo.isAny()) // is the member any any?
-                        if(zInterface.isArray())
-                            zInterface = __anyArray;
-                        else
-                            zInterface = Any.class;
-
-                    else if(memberTypeInfo.isInterface()) { // is the member an interface ?
-                        fields[i].getType().getFields();
-
-                        Class xInterface = zInterface;
-
-                        if(!XInterface.class.isAssignableFrom(fields[i].getType())) // is the member type not derived of XInterface ?
-                            xInterface = XInterface.class; // ensure that we write at least an XInterface
-
-                        if(zInterface.isArray()) {
-                            try {
-                                zInterface = Class.forName("[L" + xInterface.getName() + ";");
-                            }
-                            catch(ClassNotFoundException classNotFoundException) {
-                                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeStruct - unexpected:" + classNotFoundException);
-                            }
-                        }
-                        else
-                            zInterface = xInterface;
-                    }
-                }
-
-                try {
-                    writeObject(TypeDescription.getTypeDescription(zInterface), fields[i].get(object));
-                }
-                catch(IllegalAccessException illegalAccessException) {
-                    throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeStruct - unexpected:" + illegalAccessException);
-                }
+        IFieldDescription iFieldDescriptions[] = iTypeDescription.getFieldDescriptions();
+        for(int i = 0; i < iFieldDescriptions.length; ++ i) {
+            try {
+                writeObject(iFieldDescriptions[i].getTypeDescription(), iFieldDescriptions[i].getField().get(object));
+            }
+            catch(IllegalAccessException illegalAccessException) {
+                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".writeStruct - unexpected:" + illegalAccessException);
             }
         }
     }
@@ -536,8 +517,10 @@ class Marshal implements IMarshal {
         writeObject(__M_ThreadIdTypeDescription, m_ThreadId);
     }
 
-    void writeTypeDescrption(TypeDescription typeDescription) {
-        TypeClass typeClass = typeDescription.getTypeClass();
+    void writeTypeDescrption(ITypeDescription iTypeDescription) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeTypeDescrption:" + iTypeDescription);
+
+        TypeClass typeClass = iTypeDescription.getTypeClass();
 
         if(TypeDescription.isTypeClassSimple(typeClass))
             writebyte((byte)typeClass.getValue()); // write the typeclass value
@@ -547,7 +530,7 @@ class Marshal implements IMarshal {
             short index;
 
             if(_useCaches)
-                index = _typeCache.add(found, typeDescription.getTypeName());
+                index = _typeCache.add(found, iTypeDescription.getTypeName());
             else
                 index = (short)0xffff;
 
@@ -556,7 +539,7 @@ class Marshal implements IMarshal {
             writeshort(index); // write the cache index
 
             if(!found[0]) // if not found in cache and the type is complex, write the type name
-                writeString(typeDescription.getTypeName());
+                writeString(iTypeDescription.getTypeName());
         }
     }
 

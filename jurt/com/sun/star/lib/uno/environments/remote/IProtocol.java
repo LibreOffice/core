@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IProtocol.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,14 @@ import com.sun.star.uno.IBridge;
 
 
 
-import com.sun.star.lib.uno.typedesc.TypeDescription;
+import com.sun.star.uno.ITypeDescription;
 
 
 /**
  * This interface provides an abstraction for protocols
  * for remote bridges.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-05-04 11:56:03 $
+ * @version     $Revision: 1.6 $ $ $Date: 2001-05-08 09:41:00 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IMessage
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -100,7 +100,7 @@ public interface IProtocol {
 
 
     public void writeRequest(String oid,
-                             TypeDescription zInterface,
+                             ITypeDescription zInterface,
                              String operation,
                              ThreadID threadId,
                              Object params[],

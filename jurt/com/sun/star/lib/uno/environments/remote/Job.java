@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.sun.star.lib.uno.typedesc.TypeDescription;
+import com.sun.star.uno.ITypeDescription;
 
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2001-05-04 11:56:03 $
+ * @version     $Revision: 1.8 $ $ $Date: 2001-05-08 09:41:00 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -135,7 +135,7 @@ public class Job {
      * @param o_out_sig     the out signature as an out parameter
      */
     protected Object dispatch_queryInterface(Type type) {
-        Class zInterface = ((TypeDescription)type.getTypeDescription()).getZClass();
+        Class zInterface = type.getTypeDescription().getZClass();
 
         Object result = null;
 
@@ -253,7 +253,7 @@ public class Job {
      * <p>
      * @return  returns the interface
      */
-    public TypeDescription getInterface() {
+    public ITypeDescription getInterface() {
         return _iMessage.getInterface();
     }
 

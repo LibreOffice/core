@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_environment.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:01:27 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ import java.util.Enumeration;
 
 import com.sun.star.lib.util.WeakTable;
 
-import com.sun.star.lib.uno.typedesc.TypeDescription;
+import com.sun.star.uno.ITypeDescription;
 
 import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.Type;
@@ -131,13 +131,13 @@ public class remote_environment implements IEnvironment {
         if(oId[0] == null)
             oId[0] = UnoRuntime.generateOid(object);
 
-        Object p_object = (Object)_objects.get(oId[0] + type.getTypeDescription(), ((TypeDescription)type.getTypeDescription()).getZClass());
+        Object p_object = (Object)_objects.get(oId[0] + type.getTypeDescription(), type.getTypeDescription().getZClass());
 
         if(DEBUG)
             System.err.println("#### AbstractEnvironment.registerInterface:" + object + " " + UnoRuntime.generateOid(object) + " " + p_object);
 
         if(p_object == null)
-            object = _objects.put(oId[0] + type.getTypeDescription(), object, ((TypeDescription)type.getTypeDescription()).getZClass());
+            object = _objects.put(oId[0] + type.getTypeDescription(), object, type.getTypeDescription().getZClass());
         else
             object = p_object;
 
@@ -161,7 +161,7 @@ public class remote_environment implements IEnvironment {
      * @param xtypeDescr description of interface to be retrieved
      */
     public Object getRegisteredInterface(String oId, Type type)     {
-        Object object = _objects.get(oId + type.getTypeDescription(), ((TypeDescription)type.getTypeDescription()).getZClass());
+        Object object = _objects.get(oId + type.getTypeDescription(), type.getTypeDescription().getZClass());
 
         if(DEBUG) System.err.println("#### AbstractEnvironment(" + getName() + ").getRegisteredInterface:>" + oId + "< " + type +" " + object);
 

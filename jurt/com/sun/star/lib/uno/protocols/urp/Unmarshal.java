@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:57:12 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,42 +91,42 @@ import com.sun.star.lib.uno.environments.remote.IUnmarshal;
 import com.sun.star.lib.uno.environments.remote.Protocol;
 import com.sun.star.lib.uno.environments.remote.ThreadID;
 
+import com.sun.star.uno.ITypeDescription;
+import com.sun.star.uno.IFieldDescription;
+
 import com.sun.star.lib.uno.typedesc.TypeDescription;
-
-import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
-
 
 class Unmarshal implements IUnmarshal {
     /**
      * When set to true, enables various debugging output.
      */
-    static public final boolean DEBUG = false;
+    static private final boolean DEBUG = false;
 
     private InputStream _inputStream;
     private DataInput   _dataInput;
     private IBridge     _iBridge;
     private Object      _objectCache[];
-    private TypeDescription        _typeDescriptionCache[];
+    private ITypeDescription        _iTypeDescriptionCache[];
     private ThreadID    _threadIdCache[];
 
     Unmarshal(IBridge iBridge, short cacheSize) {
         _iBridge         = iBridge;
 
         _objectCache          = new Object[cacheSize];
-        _typeDescriptionCache = new TypeDescription[cacheSize];
+        _iTypeDescriptionCache = new ITypeDescription[cacheSize];
         _threadIdCache        = new ThreadID[cacheSize];
         _inputStream          = new ByteArrayInputStream(new byte[0]);
         _dataInput            = new DataInputStream(_inputStream);
     }
 
     Object readAny() {
-        TypeDescription typeDescription = readTypeDescription();
-        Object object = readObject(typeDescription);
+        ITypeDescription iTypeDescription = readTypeDescription();
+        Object object = readObject(iTypeDescription);
 
         // the object can only be null, if the return is an void-any or null interface
         // cause java does not know a "void value", we create a special any
-        if(object == null && typeDescription.getZClass() == void.class)
-            object = new Any(new Type(typeDescription), null);
+        if(object == null && iTypeDescription.getZClass() == void.class)
+            object = new Any(new Type(iTypeDescription), null);
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readAny:" + object);
 
@@ -239,11 +239,11 @@ class Unmarshal implements IUnmarshal {
         return result;
     }
 
-    Enum readEnum(TypeDescription typeDescription) {
+    Enum readEnum(ITypeDescription iTypeDescription) {
         try {
             Integer index = readInteger();
 
-            Method fromInt = typeDescription.getZClass().getMethod("fromInt", new Class[] {int.class});
+            Method fromInt = iTypeDescription.getZClass().getMethod("fromInt", new Class[] {int.class});
             Enum result = (Enum)fromInt.invoke(null, new Object[]{index});
 
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".readEnum:" + result);
@@ -261,14 +261,14 @@ class Unmarshal implements IUnmarshal {
         }
     }
 
-    Throwable readThrowable(TypeDescription typeDescription) {
+    Throwable readThrowable(ITypeDescription iTypeDescription) {
         try {
             String message = readString();
 
-            Constructor constructor = typeDescription.getZClass().getConstructor(new Class[]{String.class});
+            Constructor constructor = iTypeDescription.getZClass().getConstructor(new Class[]{String.class});
             Throwable throwable = (Throwable)constructor.newInstance(new Object[]{message});
 
-            readStruct(typeDescription, throwable);
+            readStruct(iTypeDescription, throwable);
 
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThrowable:" + throwable);
 
@@ -351,18 +351,18 @@ class Unmarshal implements IUnmarshal {
         return result;
     }
 
-    public Object readObject(TypeDescription typeDescription) {
+    public Object readObject(ITypeDescription iTypeDescription) {
         Object result = null;
 
-        switch(typeDescription.getTypeClass().getValue()) {
+        switch(iTypeDescription.getTypeClass().getValue()) {
         case TypeClass.ANY_value:       result = readAny();           break; // read an any?
         case TypeClass.SEQUENCE_value:
-        case TypeClass.ARRAY_value:     result = readSequence(typeDescription);  break;  // read a sequence ?
+        case TypeClass.ARRAY_value:     result = readSequence(iTypeDescription);  break;  // read a sequence ?
         case TypeClass.VOID_value:                                    break; // nop  // read nothing ?
-        case TypeClass.ENUM_value:      result = readEnum(typeDescription);      break;  // read an enum ?
-        case TypeClass.UNION_value:     result = readUnion(typeDescription);     break;  // read a union ?
+        case TypeClass.ENUM_value:      result = readEnum(iTypeDescription);      break;  // read an enum ?
+        case TypeClass.UNION_value:     result = readUnion(iTypeDescription);     break;  // read a union ?
         case TypeClass.TYPE_value:      result = new Type(readTypeDescription());          break;  // read a type ?
-        case TypeClass.INTERFACE_value: result = readReference(typeDescription); break;  // read an interface ?
+        case TypeClass.INTERFACE_value: result = readReference(iTypeDescription); break;  // read an interface ?
         case TypeClass.BOOLEAN_value:   result = readBoolean();       break;  // is it a boolean
         case TypeClass.CHAR_value:      result = readCharacter();     break;  // is it a character ?)
         case TypeClass.BYTE_value:      result = readByte();          break; // is it a byte ?
@@ -375,20 +375,20 @@ class Unmarshal implements IUnmarshal {
         case TypeClass.FLOAT_value:     result = readFloat();         break;  // is it a float ?
         case TypeClass.DOUBLE_value:    result = readDouble();        break;  // is it a double ?
         case TypeClass.STRING_value:    result = readString();        break;  // is it a String ?
-        case TypeClass.EXCEPTION_value: result = readThrowable(typeDescription); break;  // is it an exception?
+        case TypeClass.EXCEPTION_value: result = readThrowable(iTypeDescription); break;  // is it an exception?
         case TypeClass.STRUCT_value:
-            if(typeDescription.getZClass() == ThreadID.class) // read a thread id ?
+            if(iTypeDescription.getZClass() == ThreadID.class) // read a thread id ?
                 result = readThreadID();
             else   // otherwise read a struct
-                result = readStruct(typeDescription);
+                result = readStruct(iTypeDescription);
 
             break;
 
         default:
-            throw new com.sun.star.uno.RuntimeException("unknown typeClass:" + typeDescription.getTypeClass());
+            throw new com.sun.star.uno.RuntimeException("unknown typeClass:" + iTypeDescription.getTypeClass());
         }
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readObject:" + typeDescription + " " + result);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readObject:" + iTypeDescription + " >" + result + "<");
 
         return result;
     }
@@ -412,7 +412,7 @@ class Unmarshal implements IUnmarshal {
         return oid;
     }
 
-    Object readReference(TypeDescription typeDescription) {
+    Object readReference(ITypeDescription iTypeDescription) {
         Object oid = readOid();;
 
         // the result is a null ref, in case cache and oid are invalid
@@ -420,30 +420,30 @@ class Unmarshal implements IUnmarshal {
 
         // map the object from universe
         if(oid != null)
-            result = _iBridge.mapInterfaceFrom(oid, new Type(typeDescription));
+            result = _iBridge.mapInterfaceFrom(oid, new Type(iTypeDescription));
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readReference:" + typeDescription + " " + result);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readReference:" + iTypeDescription + " " + result);
 
         return result;
     }
 
-    Object readSequence(TypeDescription typeDescription) {
+    Object readSequence(ITypeDescription iTypeDescription) {
         Object result = null;
-        if(typeDescription.getTypeClass() == TypeClass.BYTE) // read a byte sequence ?
+        if(iTypeDescription.getTypeClass() == TypeClass.BYTE) // read a byte sequence ?
               result = readbyteSequence();
 
         else {
             int size = readCompressedInt();
 
-            typeDescription = typeDescription.getComponentType();
+            iTypeDescription = iTypeDescription.getComponentType();
 
-            if(typeDescription.getTypeClass() == TypeClass.ANY) // take special care of any array (cause anys are mapped to objects)
+            if(iTypeDescription.getTypeClass() == TypeClass.ANY) // take special care of any array (cause anys are mapped to objects)
                 result = Array.newInstance(Object.class, size);
             else
-                result = Array.newInstance(typeDescription.getZClass(), size);
+                result = Array.newInstance(iTypeDescription.getZClass(), size);
 
             for(int i = 0; i < size; ++ i)
-                Array.set(result, i, readObject(typeDescription));
+                Array.set(result, i, readObject(iTypeDescription));
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readSequence:" + result);
@@ -497,76 +497,26 @@ class Unmarshal implements IUnmarshal {
         }
     }
 
-    void readStruct(TypeDescription typeDescription, Object object) {
-        Field fields[] = typeDescription.getFields();
+    void readStruct(ITypeDescription iTypeDescription, Object object) {
+        IFieldDescription iFieldDescriptions[] = iTypeDescription.getFieldDescriptions();
 
-        for(int i = 0; i < fields.length; ++ i) {
-            if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
-                MemberTypeInfo memberTypeInfo = typeDescription.getMemberTypeInfo(fields[i].getName());
-
-                // default the member type to the declared type
-                Class zInterface = fields[i].getType();
-
-                if(memberTypeInfo != null) {
-                    if(memberTypeInfo.isAny()) // is the member an any?
-                        if(zInterface.isArray())
-                            zInterface = Marshal.__anyArray;
-                        else
-                            zInterface = Any.class;
-
-                    else if(memberTypeInfo.isInterface()) { // is the member an interface ?
-                        // if the field type is an array
-                        // we have to unrole it,
-                        // to ensure that the component type
-                        // is at least an XInterface.
-                        Class xInterface = zInterface;
-
-                        int array_deepness = 0;
-                        while(xInterface.isArray()) {
-                            xInterface = xInterface.getComponentType();
-                            ++ array_deepness;
-                        }
-
-                        if(!XInterface.class.isAssignableFrom(xInterface)) // is the member type not derived of XInterface ?
-                            xInterface = XInterface.class; // ensure that we get at least an XInterface
-
-                        String array_prefix = "";
-                        while(array_deepness > 0) {
-                            array_prefix += "[";
-
-                            -- array_deepness;
-                        }
-
-                        if(array_prefix.length() != 0) {
-                            try {
-                                xInterface = Class.forName(array_prefix + "L" + xInterface.getName() + ";");
-                            }
-                            catch(ClassNotFoundException classNotFoundException) {
-                                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + classNotFoundException);
-                            }
-                        }
-
-                        zInterface = xInterface;
-                    }
-                }
-
-                try {
-                    fields[i].set(object, readObject(TypeDescription.getTypeDescription(zInterface)));
-                }
-                catch(IllegalAccessException illegalAccessException) {
-                    throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + illegalAccessException);
-                }
+          for(int i = 0; i < iFieldDescriptions.length; ++ i) {
+            try {
+                iFieldDescriptions[i].getField().set(object, readObject(iFieldDescriptions[i].getTypeDescription()));
+            }
+            catch(IllegalAccessException illegalAccessException) {
+                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + illegalAccessException);
             }
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readStruct:" + object);
     }
 
-    Object readStruct(TypeDescription typeDescription) {
+    Object readStruct(ITypeDescription iTypeDescription) {
         try {
-            Object object = typeDescription.getZClass().newInstance();
+            Object object = iTypeDescription.getZClass().newInstance();
 
-            readStruct(typeDescription, object);
+            readStruct(iTypeDescription, object);
 
             return object;
         }
@@ -611,14 +561,14 @@ class Unmarshal implements IUnmarshal {
         }
     }
 
-    TypeDescription readTypeDescription() {
+    ITypeDescription readTypeDescription() {
         int typeClassValue = readunsignedbyte() & 0xff;
 
         TypeClass typeClass = TypeClass.fromInt(typeClassValue & 0x7f);
-        TypeDescription typeDescription = null;
+        ITypeDescription iTypeDescription = null;
 
         if(TypeDescription.isTypeClassSimple(typeClass)) // is it a simple type?
-            typeDescription = TypeDescription.getTypeDescription(typeClass);
+            iTypeDescription = TypeDescription.getTypeDescription(typeClass);
 
         else {
             try {
@@ -626,27 +576,24 @@ class Unmarshal implements IUnmarshal {
 
                 if(index != (short)0xffff) { // shall we update the cache?
                     if((typeClassValue & 0x80) != 0) {// update the cache?
-                        _typeDescriptionCache[index] = TypeDescription.getTypeDescription(readString());
-//                      _typeDescriptionCache[index] = TypeDescription.getType(typeClass, readString());
+                        _iTypeDescriptionCache[index] = TypeDescription.getTypeDescription(readString());
                     }
-
-                    typeDescription = _typeDescriptionCache[index];
+                    iTypeDescription = _iTypeDescriptionCache[index];
                 }
                 else
-                    typeDescription = TypeDescription.getTypeDescription(readString());
-//                  type = TypeDescription.getType(typeClass, readString());
+                    iTypeDescription = TypeDescription.getTypeDescription(readString());
             }
             catch(ClassNotFoundException classNotFoundException) {
                 throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readTypeDescription - unexpected:" + classNotFoundException);
             }
         }
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readType:" + typeDescription);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readTypeDescription:" + iTypeDescription);
 
-        return typeDescription;
+        return iTypeDescription;
     }
 
-    Union readUnion(TypeDescription typeDescription) {
+    Union readUnion(ITypeDescription iTypeDescription) {
         throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readUnion - not implemented!!!");
     }
 
