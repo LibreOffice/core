@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:57 $
+ *  last change: $Author: aw $ $Date: 2003-12-03 09:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ namespace basegfx
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    inline B3DTuple min(const B3DTuple& rTupA, const B3DTuple& rTupB)
+    inline B3DTuple minimum(const B3DTuple& rTupA, const B3DTuple& rTupB)
     {
         B3DTuple aMin(
             (rTupB.getX() < rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
@@ -353,7 +353,7 @@ namespace basegfx
         return aMin;
     }
 
-    inline B3DTuple max(const B3DTuple& rTupA, const B3DTuple& rTupB)
+    inline B3DTuple maximum(const B3DTuple& rTupA, const B3DTuple& rTupB)
     {
         B3DTuple aMax(
             (rTupB.getX() > rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
@@ -362,7 +362,7 @@ namespace basegfx
         return aMax;
     }
 
-    inline B3DTuple abs(const B3DTuple& rTup)
+    inline B3DTuple absolute(const B3DTuple& rTup)
     {
         B3DTuple aAbs(
             (0.0 > rTup.getX()) ? -rTup.getX() : rTup.getX(),

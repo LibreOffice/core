@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhompoint.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:51 $
+ *  last change: $Author: aw $ $Date: 2003-12-03 09:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ namespace basegfx
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    inline B3DHomPoint min(const B3DHomPoint& rVecA, const B3DHomPoint& rVecB)
+    inline B3DHomPoint minimum(const B3DHomPoint& rVecA, const B3DHomPoint& rVecB)
     {
         B3DHomPoint aMin(
             (rVecB.getX() < rVecA.getX()) ? rVecB.getX() : rVecA.getX(),
@@ -352,7 +352,7 @@ namespace basegfx
         return aMin;
     }
 
-    inline B3DHomPoint max(const B3DHomPoint& rVecA, const B3DHomPoint& rVecB)
+    inline B3DHomPoint maximum(const B3DHomPoint& rVecA, const B3DHomPoint& rVecB)
     {
         B3DHomPoint aMax(
             (rVecB.getX() > rVecA.getX()) ? rVecB.getX() : rVecA.getX(),
@@ -361,7 +361,7 @@ namespace basegfx
         return aMax;
     }
 
-    inline B3DHomPoint abs(const B3DHomPoint& rVec)
+    inline B3DHomPoint absolute(const B3DHomPoint& rVec)
     {
         B3DHomPoint aAbs(
             (0.0 > rVec.getX()) ? -rVec.getX() : rVec.getX(),

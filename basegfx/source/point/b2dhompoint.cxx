@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhompoint.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:04 $
+ *  last change: $Author: aw $ $Date: 2003-12-03 09:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ namespace basegfx
         return *this;
     }
 
-    B2DHomPoint min(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
+    B2DHomPoint minimum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
     {
         B2DHomPoint aMin(
             (rVecB.getX() < rVecA.getX()) ? rVecB.getX() : rVecA.getX(),
@@ -208,14 +208,14 @@ namespace basegfx
         return aMin;
     }
 
-    B2DHomPoint max(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
+    B2DHomPoint maximum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
     {
         B2DHomPoint aMax(
             (rVecB.getX() > rVecA.getX()) ? rVecB.getX() : rVecA.getX(),
             (rVecB.getY() > rVecA.getY()) ? rVecB.getY() : rVecA.getY());
         return aMax;
     }
-    B2DHomPoint abs(const B2DHomPoint& rVec)
+    B2DHomPoint absolute(const B2DHomPoint& rVec)
     {
         B2DHomPoint aAbs(
             (0.0 > rVec.getX()) ? -rVec.getX() : rVec.getX(),

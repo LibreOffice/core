@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhompoint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:51 $
+ *  last change: $Author: aw $ $Date: 2003-12-03 09:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,11 +243,11 @@ namespace basegfx
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    B2DHomPoint min(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    B2DHomPoint minimum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
 
-    B2DHomPoint max(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    B2DHomPoint maximum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
 
-    B2DHomPoint abs(const B2DHomPoint& rVec);
+    B2DHomPoint absolute(const B2DHomPoint& rVec);
 
     B2DHomPoint interpolate(B2DHomPoint& rOld1, B2DHomPoint& rOld2, double t);
 
