@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 13:01:29 $
+ *  last change: $Author: er $ $Date: 2001-07-24 09:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,13 +103,9 @@
 #undef _ZFORFIND_CXX
 
 
-// wenn's geht das schnellere isdigit benutzen
-#ifdef ENABLEUNICODE
+// use faster isdigit() if possible
 //#define MyIsdigit(c)  (pFormatter->GetCharClass()->isDigit(c))
 #define MyIsdigit(c)    ((c) < 256 && isdigit((unsigned char)(c)))
-#else
-#define MyIsdigit(c)    (isdigit((unsigned sal_Unicode)(c)))
-#endif
 
 //---------------------------------------------------------------------------
 //      Konstruktor
