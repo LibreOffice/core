@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:49:26 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,22 +461,22 @@ String RID_GALLERYSTR_THEME_RULERS
 {
     Text = "Begrenzungen";
     Text[ENGLISH] = "Rulers";
-    Text[english_us] = "Rulers";
+    Text[english_us] = "Borders";
     Text[ portuguese ] = "Réguas";
     Text[ russian ] = "Ëèíåéêè ğàçìåòêè";
     Text[ dutch ] = "Linealen";
     Text[ french ] = "Règles";
-    Text[ spanish ] = "Rulers";
+    Text[ spanish ] = "Límites";
     Text[ italian ] = "Rulers";
     Text[ danish ] = "Linealer";
-    Text[ swedish ] = "Linjaler";
-    Text[ polish ] = "Obramowania";
+    Text[ swedish ] = "Begränsningar";
+    Text[ polish ] = "Ograniczenia";
     Text[ portuguese_brazilian ] = "Rulers";
     Text[ japanese ] = "Ù°×°";
     Text[ chinese_simplified ] = "²ÊÉ«ÏßÌõ";
     Text[ chinese_traditional ] = "±m¦â½u±ø";
-    Text[ arabic ] = "ãÓÇØÑ";
-    Text[ greek ] = "×Üñáêåò";
+    Text[ arabic ] = "ÍÏæÏ";
+    Text[ greek ] = "¼ñéá";
     Text[ korean ] = "´«±İÀÚ";
     Text[ turkish ] = "Çizgiler";
     Text[ language_user1 ] = " ";
@@ -503,7 +503,7 @@ String RID_GALLERYSTR_THEME_SOUNDS
     Text[ chinese_simplified ] = "ÉùÒôÍ¼±ê";
     Text[ chinese_traditional ] = "Án­µ¹Ï¥Ü";
     Text[ arabic ] = "ÃÕæÇÊ";
-    Text[ greek ] = "¹÷ïò";
+    Text[ greek ] = "¹÷ïé";
     Text[ korean ] = "»ç¿îµå";
     Text[ turkish ] = "Sesler";
     Text[ language_user1 ] = " ";
