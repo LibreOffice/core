@@ -2,9 +2,9 @@
 #
 #   $RCSfile: shortcut.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:34:54 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:20:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -308,11 +308,21 @@ sub get_folderitem_directory
 {
     my ($shortcut) = @_;
 
+    my $directory = "$installer::globals::programmenufolder";    # default
+
+    # The value $installer::globals::programmenufolder is not correct for the
+    # PREDEFINED folders, like PREDEFINED_AUTOSTART
+
+    if ( $shortcut->{'FolderID'} eq "PREDEFINED_AUTOSTART" )
+    {
+        $directory = $installer::globals::startupfolder;
+    }
+
     # saving the directory in the folderitems collector
 
-    $shortcut->{'directory'} = $installer::globals::officemenufolder;
+    $shortcut->{'directory'} = $directory;
 
-    return $installer::globals::officemenufolder;
+    return $directory;
 }
 
 ########################################################################
@@ -370,7 +380,11 @@ sub get_folderitem_arguments
 {
     my ($shortcut) = @_;
 
-    return $shortcut->{'Parameter'};
+    my $parameter = "";
+
+    if ( $shortcut->{'Parameter'} ) { $parameter = $shortcut->{'Parameter'}; }
+
+    return $parameter;
 }
 
 ########################################################################
@@ -382,7 +396,10 @@ sub get_folderitem_icon
 {
     my ($shortcut, $filesref, $iconfilecollector) = @_;
 
-    my $iconfilegid = $shortcut->{'IconFile'};
+    my $iconfilegid = "";
+
+    if ( $shortcut->{'IconFile'} ) { $iconfilegid = $shortcut->{'IconFile'}; }
+    else { $iconfilegid = $shortcut->{'FileID'}; }
 
     my $onefile;
     my $found = 0;
