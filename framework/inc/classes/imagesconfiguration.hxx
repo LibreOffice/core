@@ -19,6 +19,8 @@ namespace framework
 
 struct ImageItemDescriptor
 {
+    ImageItemDescriptor() : nIndex( -1 ) {}
+
     String  aCommandURL;                // URL command to dispatch
     long    nIndex;                     // index of the bitmap inside the bitmaplist
 };
@@ -37,9 +39,12 @@ SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptor
 
 struct ImageListItemDescriptor
 {
+    ImageListItemDescriptor() : pImageItemList( 0 ) {}
+    ~ImageListItemDescriptor() { delete pImageItemList; }
+
     String                      aURL;           // a URL to a bitmap with several images inside
     Color                       aMaskColor;     // a color used as transparent
-    ImageItemListDescriptor*    pImageItemList; // an array of ItemItemDescriptors that describes every image inside
+    ImageItemListDescriptor*    pImageItemList; // an array of ImageItemDescriptors that describes every image
 };
 
 typedef ImageListItemDescriptor* ImageListItemDescriptorPtr;
@@ -47,6 +52,10 @@ SV_DECL_PTRARR_DEL( ImageListDescriptor, ImageListItemDescriptorPtr, 10, 2)
 
 struct ImageListsDescriptor
 {
+    ImageListsDescriptor() : pImageList( 0 ),
+                             pExternalImageList( 0 ) {}
+    ~ImageListsDescriptor() { delete pImageList; delete pExternalImageList; }
+
     ImageListDescriptor*                pImageList;
     ExternalImageItemListDescriptor*    pExternalImageList;
 };
