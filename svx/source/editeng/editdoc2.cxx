@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:31:13 $
+ *  last change: $Author: mt $ $Date: 2002-08-28 15:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,92 +293,6 @@ void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
     aScriptInfos.Remove( 0, aScriptInfos.Count() );
     aWritingDirectionInfos.Remove( 0, aWritingDirectionInfos.Count() );
 //  aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
-}
-
-void ParaPortion::AdjustBlocks( EditLine* pLine, long nRemainingSpace )
-{
-    DBG_ASSERT( nRemainingSpace > 0, "AdjustBlocks: Etwas zuwenig..." );
-    DBG_ASSERT( pLine, "AdjustBlocks: Zeile ?!" );
-    if ( ( nRemainingSpace < 0 ) || pLine->IsEmpty() )
-        return ;
-
-//  USHORTs aBlanks;
-    const USHORT nFirstChar = pLine->GetStart();
-    const USHORT nLastChar = pLine->GetEnd() -1;    // Last zeigt dahinter
-
-    DBG_ASSERT( nLastChar < pNode->Len(), "AdjustBlocks: Out of range!" );
-
-    // Blanks suchen:
-    USHORT nBlanks = 0;
-    USHORT nChar;
-    for ( nChar = nFirstChar; nChar <= nLastChar; nChar++ )
-    {
-        if ( pNode->GetChar(nChar) == ' ' )
-            nBlanks++;
-    }
-
-    if ( !nBlanks )
-        return;
-
-    // Wenn das letzte Zeichen ein Blank ist, will ich es nicht haben!
-    // Die Breite muss auf die Blocker davor verteilt werden...
-    // Aber nicht, wenn es das einzige ist
-    if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( nBlanks > 1 ) )
-    {
-        nBlanks--;
-        USHORT nPortionStart, nPortion;
-        nPortion = GetTextPortions().FindPortion( nLastChar+1, nPortionStart );
-        TextPortion* pLastPortion = GetTextPortions()[ nPortion ];
-        long nRealWidth = pLine->GetCharPosArray()[nLastChar-nFirstChar];
-        long nBlankWidth = nRealWidth;
-        if ( nLastChar > nPortionStart )
-            nBlankWidth -= pLine->GetCharPosArray()[nLastChar-nFirstChar-1];
-        // Evtl. ist das Blank schon in ImpBreakLine abgezogen worden:
-        if ( nRealWidth == pLastPortion->GetSize().Width() )
-        {
-            // Beim letzten Zeichen muss die Portion hinter dem Blank aufhoeren
-            // => Korrektur vereinfachen:
-            DBG_ASSERT( ( nPortionStart + pLastPortion->GetLen() ) == ( nLastChar+1 ), "Blank doch nicht am Portion-Ende?!" );
-            pLastPortion->GetSize().Width() -= nBlankWidth;
-            nRemainingSpace += nBlankWidth;
-        }
-        pLine->GetCharPosArray()[nLastChar-nFirstChar] -= nBlankWidth;
-    }
-
-    const long nMore4Everyone = nRemainingSpace / nBlanks;
-    long nSomeExtraSpace = nRemainingSpace - nMore4Everyone*nBlanks;
-
-    DBG_ASSERT( nSomeExtraSpace < (long)nBlanks, "AdjustBlocks: ExtraSpace zu gross" );
-    DBG_ASSERT( nSomeExtraSpace >= 0, "AdjustBlocks: ExtraSpace < 0 " );
-
-    // Die Positionen im Array und die Portion-Breiten korrigieren:
-    // Letztes Zeichen wird schon nicht mehr beachtet...
-    for ( nChar = nFirstChar; nChar < nLastChar; nChar++ )
-    {
-        if ( pNode->GetChar( nChar ) == ' ' )
-        {
-            USHORT nPortionStart, nPortion;
-            nPortion = GetTextPortions().FindPortion( nChar, nPortionStart );
-            TextPortion* pLastPortion = GetTextPortions()[ nPortion ];
-
-            // Die Breite der Portion:
-            pLastPortion->GetSize().Width() += nMore4Everyone;
-            if ( nSomeExtraSpace )
-                pLastPortion->GetSize().Width()++;
-
-            // Die Zeichenpositionen ab dem Blank:
-            USHORT nPortionEnd = nPortionStart + pLastPortion->GetLen();
-            for ( USHORT n = nChar; n < nPortionEnd; n++ )
-            {
-                pLine->GetCharPosArray()[n-nFirstChar] += nMore4Everyone;
-                if ( nSomeExtraSpace )
-                    pLine->GetCharPosArray()[n-nFirstChar]++;
-            }
-
-            if ( nSomeExtraSpace )
-                nSomeExtraSpace--;
-        }
-    }
 }
 
 USHORT ParaPortion::GetLineNumber( USHORT nIndex )

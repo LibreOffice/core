@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-20 14:44:21 $
+ *  last change: $Author: mt $ $Date: 2002-08-28 15:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 #include <eeng_pch.hxx>
+
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
@@ -283,7 +286,26 @@ Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCo
     return aTranslatedPos;
 }
 
+sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Kashidas from sw/source/core/text/porlay.txt
+{
+            // Lam + Alef
+    return ( 0x644 == cCh && 0x627 == cNextCh ) ||
+            // Beh + Reh
+           ( 0x628 == cCh && 0x631 == cNextCh );
+}
 
+sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )  // For Kashidas from sw/source/core/text/porlay.txt
+{
+    // Alef, Dal, Thal, Reh, Zain, and Waw do not connect to the left
+    sal_Bool bRet = 0x627 != cPrevCh && 0x62F != cPrevCh && 0x630 != cPrevCh &&
+                    0x631 != cPrevCh && 0x632 != cPrevCh && 0x648 != cPrevCh;
+
+    // check for ligatures cPrevChar + cChar
+    if ( bRet )
+        bRet = ! lcl_IsLigature( cPrevCh, cCh );
+
+    return bRet;
+}
 
 
 // ----------------------------------------------------------------------
@@ -1384,7 +1406,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 long nRemainingSpace = nMaxLineWidth - aTextSize.Width();
                 pLine->SetStartPosX( (sal_uInt16)nStartX );
                 if ( !bEOC && ( nRemainingSpace > 0 ) ) // nicht die letzte Zeile...
-                    pParaPortion->AdjustBlocks( pLine, nRemainingSpace );
+                    ImpAdjustBlocks( pParaPortion, pLine, nRemainingSpace );
             }
             break;
             default:
@@ -1930,6 +1952,216 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         pParaPortion->GetTextPortions().Insert( pHyphPortion, ++nEndPortion );
     }
     pLine->SetEndPortion( nEndPortion );
+}
+
+void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, long nRemainingSpace )
+{
+    DBG_ASSERT( nRemainingSpace > 0, "AdjustBlocks: Etwas zuwenig..." );
+    DBG_ASSERT( pLine, "AdjustBlocks: Zeile ?!" );
+    if ( ( nRemainingSpace < 0 ) || pLine->IsEmpty() )
+        return ;
+
+    const USHORT nFirstChar = pLine->GetStart();
+    const USHORT nLastChar = pLine->GetEnd() -1;    // Last zeigt dahinter
+    ContentNode* pNode = pParaPortion->GetNode();
+
+    DBG_ASSERT( nLastChar < pNode->Len(), "AdjustBlocks: Out of range!" );
+
+    // Search blanks or Kashidas...
+    SvUShorts aPositions;
+    USHORT nChar;
+    for ( nChar = nFirstChar; nChar <= nLastChar; nChar++ )
+    {
+        if ( pNode->GetChar(nChar) == ' ' )
+        {
+            // Don't use blank if language is arabic
+            LanguageType eLang = GetLanguage( EditPaM( pNode, nChar ) );
+            if ( eLang != LANGUAGE_ARABIC )
+                aPositions.Insert( nChar, aPositions.Count() );
+        }
+    }
+
+    // Kashidas ?
+    ImpFindKashidas( pNode, nFirstChar, nLastChar, aPositions );
+
+
+    if ( !aPositions.Count() )
+        return;
+
+    // Wenn das letzte Zeichen ein Blank ist, will ich es nicht haben!
+    // Die Breite muss auf die Blocker davor verteilt werden...
+    // Aber nicht, wenn es das einzige ist
+    if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( aPositions.Count() > 1 ) && ( GetLanguage( EditPaM( pNode, nLastChar ) ) != LANGUAGE_ARABIC ) )
+    {
+        aPositions.Remove( aPositions.Count()-1, 1 );
+        USHORT nPortionStart, nPortion;
+        nPortion = pParaPortion->GetTextPortions().FindPortion( nLastChar+1, nPortionStart );
+        TextPortion* pLastPortion = pParaPortion->GetTextPortions()[ nPortion ];
+        long nRealWidth = pLine->GetCharPosArray()[nLastChar-nFirstChar];
+        long nBlankWidth = nRealWidth;
+        if ( nLastChar > nPortionStart )
+            nBlankWidth -= pLine->GetCharPosArray()[nLastChar-nFirstChar-1];
+        // Evtl. ist das Blank schon in ImpBreakLine abgezogen worden:
+        if ( nRealWidth == pLastPortion->GetSize().Width() )
+        {
+            // Beim letzten Zeichen muss die Portion hinter dem Blank aufhoeren
+            // => Korrektur vereinfachen:
+            DBG_ASSERT( ( nPortionStart + pLastPortion->GetLen() ) == ( nLastChar+1 ), "Blank doch nicht am Portion-Ende?!" );
+            pLastPortion->GetSize().Width() -= nBlankWidth;
+            nRemainingSpace += nBlankWidth;
+        }
+        pLine->GetCharPosArray()[nLastChar-nFirstChar] -= nBlankWidth;
+    }
+
+    USHORT nGaps = aPositions.Count();
+    const long nMore4Everyone = nRemainingSpace / nGaps;
+    long nSomeExtraSpace = nRemainingSpace - nMore4Everyone*nGaps;
+
+    DBG_ASSERT( nSomeExtraSpace < (long)nGaps, "AdjustBlocks: ExtraSpace zu gross" );
+    DBG_ASSERT( nSomeExtraSpace >= 0, "AdjustBlocks: ExtraSpace < 0 " );
+
+    // Die Positionen im Array und die Portion-Breiten korrigieren:
+    // Letztes Zeichen wird schon nicht mehr beachtet...
+    for ( USHORT n = 0; n < aPositions.Count(); n++ )
+    {
+        nChar = aPositions[n];
+        if ( nChar < nLastChar )
+        {
+            USHORT nPortionStart, nPortion;
+            nPortion = pParaPortion->GetTextPortions().FindPortion( nChar, nPortionStart );
+            TextPortion* pLastPortion = pParaPortion->GetTextPortions()[ nPortion ];
+
+            // Die Breite der Portion:
+            pLastPortion->GetSize().Width() += nMore4Everyone;
+            if ( nSomeExtraSpace )
+                pLastPortion->GetSize().Width()++;
+
+            // Correct positions in array
+            // Even for kashidas just change positions, VCL will then draw the kashida automaticly
+            USHORT nPortionEnd = nPortionStart + pLastPortion->GetLen();
+            for ( USHORT n = nChar; n < nPortionEnd; n++ )
+            {
+                pLine->GetCharPosArray()[n-nFirstChar] += nMore4Everyone;
+                if ( nSomeExtraSpace )
+                    pLine->GetCharPosArray()[n-nFirstChar]++;
+            }
+
+            if ( nSomeExtraSpace )
+                nSomeExtraSpace--;
+        }
+    }
+}
+
+void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT nEnd, SvUShorts& rArray )
+{
+    // the search has to be performed on a per word base
+
+    EditSelection aWordSel( EditPaM( pNode, nStart ) );
+    aWordSel = SelectWord( aWordSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+    if ( aWordSel.Min().GetIndex() < nStart )
+       aWordSel.Min().GetIndex() = nStart;
+
+    while ( ( aWordSel.Min().GetNode() == pNode ) && ( aWordSel.Min().GetIndex() < nEnd ) )
+    {
+        if ( aWordSel.Max().GetIndex() > nEnd )
+           aWordSel.Max().GetIndex() = nEnd;
+
+        String aWord = GetSelected( aWordSel );
+        xub_StrLen nIdx = 0;
+        xub_StrLen nKashidaPos = STRING_LEN;
+        xub_Unicode cCh;
+        xub_Unicode cPrevCh = 0;
+
+        while ( nIdx < aWord.Len() )
+        {
+            cCh = aWord.GetChar( nIdx );
+
+            // 1. Priority:
+            // after user inserted kashida
+            if ( 0x640 == cCh )
+            {
+                nKashidaPos = aWordSel.Min().GetIndex() + nIdx;
+                break;
+            }
+
+            // 2. Priority:
+            // after a Seen or Sad
+            if ( nIdx + 1 < aWord.Len() &&
+                 ( 0x633 == cCh || 0x635 == cCh ) )
+            {
+                nKashidaPos = aWordSel.Min().GetIndex() + nIdx;
+                break;
+            }
+
+            // 3. Priority:
+            // before final form of Teh Marbuta, Hah, Dal
+            // 4. Priority:
+            // before final form of Alef, Lam or Kaf
+            if ( nIdx && nIdx + 1 == aWord.Len() &&
+                 ( 0x629 == cCh || 0x62D == cCh || 0x62F == cCh ||
+                   0x627 == cCh || 0x644 == cCh || 0x643 == cCh ) )
+            {
+                DBG_ASSERT( 0 != cPrevCh, "No previous character" )
+
+                // check if character is connectable to previous character,
+                if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
+                {
+                    nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
+                    break;
+                }
+            }
+
+            // 5. Priority:
+            // before media Bah
+            if ( nIdx && nIdx + 1 < aWord.Len() && 0x628 == cCh )
+            {
+                DBG_ASSERT( 0 != cPrevCh, "No previous character" )
+
+                // check if next character is Reh, Yeh or Alef Maksura
+                xub_Unicode cNextCh = aWord.GetChar( nIdx + 1 );
+
+                if ( 0x631 == cNextCh || 0x64A == cNextCh ||
+                     0x649 == cNextCh )
+                {
+                    // check if character is connectable to previous character,
+                    if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
+                        nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
+                }
+            }
+
+            // 6. Priority:
+            // other connecting possibilities
+            if ( nIdx && nIdx + 1 == aWord.Len() &&
+                 0x60C <= cCh && 0x6FE >= cCh )
+            {
+                DBG_ASSERT( 0 != cPrevCh, "No previous character" )
+
+                // check if character is connectable to previous character,
+                if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
+                {
+                    // only choose this position if we did not find
+                    // a better one:
+                    if ( STRING_LEN == nKashidaPos )
+                        nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
+                    break;
+                }
+            }
+
+            // Do not consider Fathatan, Dammatan, Kasratan, Fatha,
+            // Damma, Kasra, Shadda and Sukun when checking if
+            // a character can be connected to previous character.
+            if ( cCh < 0x64B || cCh > 0x652 )
+                cPrevCh = cCh;
+
+            ++nIdx;
+        } // end of current word
+
+        if ( STRING_LEN != nKashidaPos )
+            rArray.Insert( nKashidaPos, rArray.Count() );
+
+        aWordSel = WordRight( aWordSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aWordSel = SelectWord( aWordSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+    }
 }
 
 sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nPos, EditLine* pCurLine )

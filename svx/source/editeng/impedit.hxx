@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-26 17:20:18 $
+ *  last change: $Author: mt $ $Date: 2002-08-28 15:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,8 @@ class SvxLRSpaceItem;
 class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
+
+class SvUShorts;
 
 namespace com {
 namespace sun {
@@ -579,6 +581,7 @@ private:
     void                CheckAutoPageSize();
 
     void                ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion* pPortion, sal_uInt16 nPortionStart, long nRemainingWidth, sal_Bool bCanHyphenate );
+    void                ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, long nRemainingSpace );
     EditPaM             ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, sal_Bool bBackward = sal_False );
     EditPaM             ImpDeleteSelection( EditSelection aEditSelection);
     EditPaM             ImpInsertParaBreak( const EditPaM& rPaM, sal_Bool bKeepEndingAttribs = sal_True );
@@ -595,6 +598,8 @@ private:
     sal_Bool            ImpCheckRefMapMode();
 
     BOOL                ImplHasText() const;
+
+    void                ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT nEnd, SvUShorts& rArray );
 
     void                InsertContent( ContentNode* pNode, sal_uInt16 nPos );
     EditPaM             SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos );
@@ -893,6 +898,7 @@ public:
     LanguageType        GetDefaultLanguage() const { return eDefLanguage; }
 
 
+    LanguageType        GetLanguage( const EditSelection rSelection ) const;
     LanguageType        GetLanguage( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
     ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 10:31:17 $
+ *  last change: $Author: mt $ $Date: 2002-08-28 15:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,7 +649,6 @@ public:
 
     ContentNode*        GetNode() const             { return pNode; }
     TextPortionList&    GetTextPortions()           { return aTextPortionList; }
-    void                AdjustBlocks( EditLine* pLine, long nRemainingSpace );
 
     USHORT              GetInvalidPosStart() const  { return nInvalidPosStart; }
     short               GetInvalidDiff() const      { return nInvalidDiff; }
