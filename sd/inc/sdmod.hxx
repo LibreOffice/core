@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:14:40 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,16 @@ class SvxErrorHandler;
 class EditFieldInfo;
 class SvFactory;
 class SdTransferable;
-class SdDrawDocShell;
 class SvNumberFormatter;
 class SfxErrorHandler;
-class SdView;
 class OutputDevice;
 class SdPage;
 class SdDrawDocument;
+
+namespace sd {
+class DrawDocShell;
+}
+
 // ----------------------
 // - SdOptionStreamMode -
 // ----------------------
@@ -124,24 +127,6 @@ enum SdOptionStreamMode
 
 class SdModule : public SfxModule, public SfxListener
 {
-protected:
-
-    SdOptions*              pImpressOptions;
-    SdOptions*              pDrawOptions;
-    SvxSearchItem*          pSearchItem;
-    SvNumberFormatter*      pNumberFormatter;
-    SvStorageRef            xOptionStorage;
-    BOOL                    bAutoSave;
-    BOOL                    bWaterCan;
-    SfxErrorHandler*        mpErrorHdl;
-    /** This device is used for printer independent layout.  It is virtual
-        in the sense that it does not represent a printer.  The pointer may
-        be NULL when the virtual device could not be created.
-    */
-    OutputDevice*           mpVirtualRefDevice;
-
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
 public:
 
                             TYPEINFO();
@@ -181,7 +166,7 @@ public:
         @param rDocShell
             Unused dummy parameter.
     */
-    OutputDevice* GetRefDevice (SdDrawDocShell& rDocShell);
+    OutputDevice* GetRefDevice (::sd::DrawDocShell& rDocShell);
 
     SvNumberFormatter*      GetNumberFormatter();
 
@@ -191,6 +176,24 @@ public:
     virtual SfxItemSet*  CreateItemSet( USHORT nId );
     virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
+
+protected:
+
+    SdOptions*              pImpressOptions;
+    SdOptions*              pDrawOptions;
+    SvxSearchItem*          pSearchItem;
+    SvNumberFormatter*      pNumberFormatter;
+    SvStorageRef            xOptionStorage;
+    BOOL                    bAutoSave;
+    BOOL                    bWaterCan;
+    SfxErrorHandler*        mpErrorHdl;
+    /** This device is used for printer independent layout.  It is virtual
+        in the sense that it does not represent a printer.  The pointer may
+        be NULL when the virtual device could not be created.
+    */
+    OutputDevice*           mpVirtualRefDevice;
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 private:
 
@@ -205,6 +208,14 @@ private:
             the information about the default transition is retrieved.
     */
     void AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument);
+
+    /** Take an outline from a text document and create a new impress
+        document according to the structure of the outline.
+        @param rRequest
+            This typically is the unmodified request from a execute()
+            function from where this function is called.
+    */
+    void OutlineToImpress (SfxRequest& rRequest);
 };
 
 
