@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleCsvRuler.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change: $Author: sw $
  *
@@ -86,6 +86,7 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
+import com.sun.star.beans.PropertyValue;
 
 public class ScAccessibleCsvRuler extends TestCase {
 
@@ -165,6 +166,9 @@ public class ScAccessibleCsvRuler extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
+        tEnv.addObjRelation("EditOnly",
+                    "This method isn't supported in this dialog");
+
         return tEnv;
     }
 
@@ -200,7 +204,16 @@ public class ScAccessibleCsvRuler extends TestCase {
 
         log.println("opening dialog");
 
-        lThread = new loadThread(SOF);
+        PropertyValue[] args = new PropertyValue[1];
+        try {
+            args[0] = new PropertyValue();
+            args[0].Name = "InteractionHandler";
+            args[0].Value = Param.getMSF().createInstance(
+                "com.sun.star.comp.uui.UUIInteractionHandler");
+        } catch(com.sun.star.uno.Exception e) {
+        }
+
+        lThread = new loadThread(SOF, args);
         lThread.start();
 
     }
@@ -220,19 +233,21 @@ public class ScAccessibleCsvRuler extends TestCase {
     public class loadThread extends Thread {
 
         private SOfficeFactory SOF = null ;
+        private PropertyValue[] args = null;
         public XComponent xSpreadSheedDoc = null;
 
-        public loadThread(SOfficeFactory SOF) {
-            this.SOF = SOF ;
+        public loadThread(SOfficeFactory SOF, PropertyValue[] Args) {
+            this.SOF = SOF;
+            this.args = Args;
         }
 
         public void run() {
             try {
                 String url= utils.getFullTestURL("10test.csv");
                 log.println("loading "+url);
-                XComponent xSpreadsheetDoc = SOF.loadDocument(url);
+                XComponent xSpreadsheetDoc = SOF.loadDocument(url,args);
             } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace( log );
+                e.printStackTrace();
                 throw new StatusException( "Couldn't create document ", e );
             }
         }
