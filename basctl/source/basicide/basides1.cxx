@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:01:23 $
+ *  last change: $Author: hr $ $Date: 2004-06-28 14:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1486,13 +1486,10 @@ IMPL_LINK( BasicIDEShell, AccelSelectHdl, Accelerator*, pAccel )
     switch ( pAccel->GetCurKeyCode().GetCode() )
     {
         case KEY_F5:
-            if ( pAccel->GetCurKeyCode().IsShift() || pAccel->GetCurKeyCode().IsMod2() )
+            if ( pAccel->GetCurKeyCode().IsShift() )
                 pDispatcher->Execute( SID_BASICSTOP, SFX_CALLMODE_SYNCHRON );
-            if ( !pAccel->GetCurKeyCode().IsMod2() )
-            {
-                // Muss asynchron sein, damit ggf. STOP wirken kan (Reschedule).
-                pDispatcher->Execute( SID_BASICRUN, SFX_CALLMODE_ASYNCHRON );
-            }
+            else
+                pDispatcher->Execute( SID_BASICRUN, SFX_CALLMODE_SYNCHRON );
         break;
         case KEY_F7:
             pDispatcher->Execute( SID_BASICIDE_ADDWATCH, SFX_CALLMODE_SYNCHRON );
