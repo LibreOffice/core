@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: as $ $Date: 2001-12-05 13:18:25 $
+#   last change: $Author: jl $ $Date: 2002-07-18 14:26:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,21 +83,21 @@ IDLFILES=\
     UrlRecord.idl\
     UserRecord.idl\
     XAsyncJob.idl\
-    XInteractionAbort.idl\
     XInteractionApprove.idl\
-    XInteractionContinuation.idl\
     XInteractionDisapprove.idl\
-    XInteractionHandler.idl\
-    XInteractionRequest.idl\
-    XInteractionRetry.idl\
     XJob.idl\
     XJobExecutor.idl\
     XJobListener.idl\
     XPasswordContainer.idl\
     XStatusIndicator.idl\
     XStatusIndicatorFactory.idl\
-    XStatusIndicatorSupplier.idl\
+    XStatusIndicatorSupplier.idl
 
+#	XInteractionRequest.idl\
+#	XInteractionRetry.idl\
+#	XInteractionHandler.idl\
+#	XInteractionContinuation.idl\
+#	XInteractionAbort.idl\
 #		FinishTaskEvent.idl	\
 #		ResourceAccess.idl	\
 #		ResourceLockException.idl	\
