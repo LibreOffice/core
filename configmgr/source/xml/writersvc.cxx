@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:35 $
+ *  last change: $Author: obo $ $Date: 2002-12-10 12:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,7 @@ AsciiServiceName const aLayerWriterServices[] =
     "com.sun.star.configuration.backend.xml.LayerWriter",
     0
 };
+extern // needed by SunCC 5.2, if used from template
 const ServiceImplementationInfo aLayerWriterSI =
 {
     "com.sun.star.comp.configuration.backend.xml.LayerWriter",
