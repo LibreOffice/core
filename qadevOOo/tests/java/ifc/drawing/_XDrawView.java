@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDrawView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:12 $
+ *  last change:$Date: 2003-02-28 08:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@ import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawView;
 import lib.MultiMethodTest;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Testing <code>com.sun.star.drawing.XDrawView</code>
@@ -113,7 +115,8 @@ public class _XDrawView extends MultiMethodTest {
         try {
             XDrawPages the_pages = (XDrawPages) tEnv.getObjRelation("Pages");
             the_pages.insertNewByIndex(0);
-            XDrawPage newPage = (XDrawPage) the_pages.getByIndex(1);
+            XDrawPage newPage = (XDrawPage) AnyConverter.toObject(
+                            new Type(XDrawPage.class),the_pages.getByIndex(1));
             oObj.setCurrentPage(newPage);
             XDrawPage getting = oObj.getCurrentPage();
             boolean eq = newPage.equals(getting);
@@ -132,8 +135,12 @@ public class _XDrawView extends MultiMethodTest {
             log.println("Exception occured while checking 'setCurrentPage()'");
             ex.printStackTrace(log);
             tRes.tested("setCurrentPage()",false);
+        } catch (com.sun.star.lang.IllegalArgumentException ex) {
+            log.println("Exception occured while checking 'setCurrentPage()'");
+            ex.printStackTrace(log);
+            tRes.tested("setCurrentPage()",false);
         }
-    } // end getCurrentPage
+    } // end setCurrentPage
 
 } // end DrawView
 
