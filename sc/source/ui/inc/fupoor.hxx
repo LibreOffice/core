@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 09:32:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,10 @@ private:
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 protected:
     void ImpForceQuadratic(Rectangle& rRect);
+
+public:
+    // #i33136#
+    virtual bool doConstructOrthogonal() const;
 };
 
 
