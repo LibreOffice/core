@@ -60,6 +60,40 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 	CURRENCY ,DATE ,TIME ,DATE_TIME
 -->
 <!ATTLIST FormatElement formatindex  CDATA #REQUIRED>
+<!--
+    The following FormatElements must follow specific rules:
+
+    All:
+        The format indices 1..49 are reserved and, for backwards compatibility,
+        MUST be used as stated in
+        offapi/com/sun/star/i18n/NumberFormatIndex.idl.
+        Note that 48 and 49 are used internally and must not be used in locale
+        data XML files. All other formats have to be present.
+
+    Of usage="DATE":
+        formatindex="21" is used to edit already existing date data. In order
+        to always edit the full century the long year YYYY code must be used.
+        Furthermore, the format has to be of an editable type, of course, which
+        means parseable. Therefore it should only contain DD, MM, YYYY and date
+        separators, and the YMD order must be the same as in the date format
+        marked as medium default.
+        TODO: Future versions should make use of an edit="true" attribute
+        instead of relying on this special requirement.
+
+    Of usage="DATE_TIME":
+        formatindex="47" is used to edit already existing combined date/time
+        data. The requirements are the same as for formatindex="21" above.
+
+    Of usage="CURRENCY":
+        formatindices 12, 13, 14, 15, 17 with [$xxx-yyy] notation must use the
+        xxx currency symbol that has the attribute
+        usedInCompatibleFormatCodes="true".  The hexadecimal yyy LCID must be
+        properly set. It can be found in project util module tools file
+        tools/inc/lang.hxx.  You may verify the proper use of the xxx currency
+        symbol with the AWK script
+        i18npool/source/localedata/data/currency-check.awk, it mustn't display
+        any output. If it does, then there's something wrong.
+-->
 <!ELEMENT FormatCode      (#PCDATA)>
 
 <!-- Depricated
