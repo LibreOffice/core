@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-05 11:01:37 $
+ *  last change: $Author: sb $ $Date: 2002-11-05 16:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,12 +310,10 @@ inline void doubleToString(StringT ** pResult,
             }
         }
         break;
-        default:
-            OSL_ASSERT(nDecPlaces >= 0);
-        break;
     }
+    OSL_ASSERT(nDecPlaces >= 0);
 
-    int nDigits = nDecPlaces + 1;
+    sal_Int32 nDigits = nDecPlaces + 1;
 
     if( eFormat == rtl_math_StringFormat_F )
         nDigits += nExp;
@@ -335,10 +333,9 @@ inline void doubleToString(StringT ** pResult,
     static sal_Int32 const nBufMax = 256;
     typename T::Char aBuf[nBufMax];
     typename T::Char * pBuf;
-    sal_Int32 nAbsDecPlaces = nDecPlaces >= 0 ? nDecPlaces : -nDecPlaces;
     sal_Int32 nBuf = static_cast< sal_Int32 >
-        ( nDigits <= 0 ? std::max< sal_Int32 >( nAbsDecPlaces, abs(nExp) )
-          : nDigits + nAbsDecPlaces ) + 10;
+        ( nDigits <= 0 ? std::max< sal_Int32 >( nDecPlaces, abs(nExp) )
+          : nDigits + nDecPlaces ) + 10;
     if ( nBuf > nBufMax )
         pBuf = new typename T::Char[nBuf];
     else
@@ -361,7 +358,7 @@ inline void doubleToString(StringT ** pResult,
                 *p++ = cDecSeparator;
                 bHasDec = true;
             }
-            int i = ( nDigits <= 0 ? nDecPlaces : -nExp - 1 );
+            sal_Int32 i = ( nDigits <= 0 ? nDecPlaces : -nExp - 1 );
             while( (i--) > 0 )
                 *p++ = static_cast< typename T::Char >('0');
             nDecPos = 0;
@@ -388,7 +385,7 @@ inline void doubleToString(StringT ** pResult,
                         // vorher 1E-14
                 if (nDigit >= 10)
                 {                                   // Nachbehandlung:
-                    long sLen = static_cast< long >(p-pBuf)-1;
+                    sal_Int32 sLen = static_cast< long >(p-pBuf)-1;
                     if (sLen == -1)
                     {
                         p = pBuf;
@@ -408,7 +405,7 @@ inline void doubleToString(StringT ** pResult,
                     }
                     else
                     {
-                        for (long j = sLen; j >= 0; j--)
+                        for (sal_Int32 j = sLen; j >= 0; j--)
                         {
                             typename T::Char cS = pBuf[j];
                             if (cS != cDecSeparator)
