@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:58:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
+#endif
+#ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
+#include <comphelper/implementationreference.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -193,41 +196,78 @@ protected:
 };
 
 //==================================================================
-// OImageControlControl
+//= OImageIndicator (helper class for OImageControlControl)
 //==================================================================
-class OImageControlControl : public ::com::sun::star::awt::XMouseListener,
-                               public OBoundControl
+typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XImageConsumer
+                                >   OImageIndicator_Base;
+
+class OImageIndicator : public OImageIndicator_Base
 {
+private:
+    sal_Bool    m_bIsProducing  : 1;
+    sal_Bool    m_bIsEmptyImage : 1;
+
+public:
+    OImageIndicator( );
+
+            void        reset();
+    inline  sal_Bool    isEmptyImage() const { return m_bIsEmptyImage; }
+
 protected:
-    // UNO Anbindung
+    ~OImageIndicator( );
+    // XImageProducer
+    virtual void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    OImageIndicator( const OImageIndicator& );              // never implemented
+    OImageIndicator& operator=( const OImageIndicator& );   // never implemented
+};
+
+//==================================================================
+//= OImageControlControl
+//==================================================================
+class OImageControlControl  :public ::com::sun::star::awt::XMouseListener
+                            ,public OBoundControl
+{
+private:
+    typedef ::comphelper::ImplementationReference< OImageIndicator, ::com::sun::star::awt::XImageConsumer >
+                                ImageIndicatorReference;
+    ImageIndicatorReference     m_pImageIndicator;
+
+protected:
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
     OImageControlControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
-// UNO Anbindung
+    // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OImageControlControl, OBoundControl);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XEventListener
+    // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException)
         { OBoundControl::disposing(_rSource); }
 
-// ::com::sun::star::lang::XServiceInfo
+    // XServiceInfo
     IMPLEMENTATION_NAME(OImageControlControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// ::com::sun::star::awt::XMouseListener
+    // XMouseListener
     virtual void SAL_CALL mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
     virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
     virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException) { }
 
-// ::com::sun::star::awt::XControl
-    virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& _rParent) throw(::com::sun::star::uno::RuntimeException);
+    // XControl
+    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference<starawt::XControlModel>& _rxModel ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    void    implClearGraphics();
+    void    implClearGraphics( sal_Bool _bForce );
     void    implInsertGraphics();
 };
 
