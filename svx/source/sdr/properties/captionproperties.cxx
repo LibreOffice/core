@@ -2,9 +2,9 @@
  *
  *  $RCSfile: captionproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:09:08 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,12 @@ namespace sdr
             return *(new SfxItemSet(rPool,
 
                 // range from SdrAttrObj
-                SDRATTR_START, SDRATTRSET_SHADOW,
-                SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // range from SdrCaptionObj
-                SDRATTR_CAPTION_FIRST, SDRATTRSET_CAPTION,
+                SDRATTR_CAPTION_FIRST, SDRATTR_CAPTION_LAST,
 
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END,
@@ -154,35 +154,35 @@ namespace sdr
             rObj.ImpRecalcTail();
         }
 
-        void CaptionProperties::PreProcessSave()
-        {
-            // call parent
-            RectangleProperties::PreProcessSave();
+//BFS01     void CaptionProperties::PreProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         RectangleProperties::PreProcessSave();
+//BFS01
+//BFS01         // force ItemSet
+//BFS01         GetObjectItemSet();
+//BFS01
+//BFS01         // prepare SetItems for storage
+//BFS01         const SfxItemSet& rSet = *mpItemSet;
+//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
+//BFS01
+//BFS01         SdrCaptionSetItem aCaptAttr(rSet.GetPool());
+//BFS01         aCaptAttr.GetItemSet().Put(rSet);
+//BFS01         aCaptAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aCaptAttr);
+//BFS01     }
 
-            // force ItemSet
-            GetObjectItemSet();
-
-            // prepare SetItems for storage
-            const SfxItemSet& rSet = *mpItemSet;
-            const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-
-            SdrCaptionSetItem aCaptAttr(rSet.GetPool());
-            aCaptAttr.GetItemSet().Put(rSet);
-            aCaptAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aCaptAttr);
-        }
-
-        void CaptionProperties::PostProcessSave()
-        {
-            // call parent
-            RectangleProperties::PostProcessSave();
-
-            // remove SetItems from local itemset
-            if(mpItemSet)
-            {
-                mpItemSet->ClearItem(SDRATTRSET_CAPTION);
-            }
-        }
+//BFS01     void CaptionProperties::PostProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         RectangleProperties::PostProcessSave();
+//BFS01
+//BFS01         // remove SetItems from local itemset
+//BFS01         if(mpItemSet)
+//BFS01         {
+//BFS01             mpItemSet->ClearItem(SDRATTRSET_CAPTION);
+//BFS01         }
+//BFS01     }
 
         void CaptionProperties::ForceDefaultAttributes()
         {

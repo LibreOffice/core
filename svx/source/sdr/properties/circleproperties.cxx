@@ -2,9 +2,9 @@
  *
  *  $RCSfile: circleproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:09:23 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <svx/sdr/properties/circleproperties.hxx>
 #endif
 
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
@@ -107,12 +111,12 @@ namespace sdr
             return *(new SfxItemSet(rPool,
 
                 // range from SdrAttrObj
-                SDRATTR_START, SDRATTRSET_SHADOW,
-                SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // range from SdrCircObj
-                SDRATTR_CIRC_FIRST, SDRATTRSET_CIRC,
+                SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST,
 
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END,
@@ -165,35 +169,35 @@ namespace sdr
             rObj.ImpSetAttrToCircInfo();
         }
 
-        void CircleProperties::PreProcessSave()
-        {
-            // call parent
-            RectangleProperties::PreProcessSave();
+//BFS01     void CircleProperties::PreProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         RectangleProperties::PreProcessSave();
+//BFS01
+//BFS01         // force ItemSet
+//BFS01         GetObjectItemSet();
+//BFS01
+//BFS01         // prepare SetItems for storage
+//BFS01         const SfxItemSet& rSet = *mpItemSet;
+//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
+//BFS01
+//BFS01         SdrCircSetItem aCircAttr(rSet.GetPool());
+//BFS01         aCircAttr.GetItemSet().Put(rSet);
+//BFS01         aCircAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aCircAttr);
+//BFS01     }
 
-            // force ItemSet
-            GetObjectItemSet();
-
-            // prepare SetItems for storage
-            const SfxItemSet& rSet = *mpItemSet;
-            const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-
-            SdrCircSetItem aCircAttr(rSet.GetPool());
-            aCircAttr.GetItemSet().Put(rSet);
-            aCircAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aCircAttr);
-        }
-
-        void CircleProperties::PostProcessSave()
-        {
-            // call parent
-            RectangleProperties::PostProcessSave();
-
-            // remove SetItems from local itemset
-            if(mpItemSet)
-            {
-                mpItemSet->ClearItem(SDRATTRSET_CIRC);
-            }
-        }
+//BFS01     void CircleProperties::PostProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         RectangleProperties::PostProcessSave();
+//BFS01
+//BFS01         // remove SetItems from local itemset
+//BFS01         if(mpItemSet)
+//BFS01         {
+//BFS01             mpItemSet->ClearItem(SDRATTRSET_CIRC);
+//BFS01         }
+//BFS01     }
 
         void CircleProperties::ForceDefaultAttributes()
         {

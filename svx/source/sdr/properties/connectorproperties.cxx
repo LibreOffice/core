@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connectorproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:09:39 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <svx/sdr/properties/connectorproperties.hxx>
 #endif
 
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
@@ -95,12 +99,12 @@ namespace sdr
             return *(new SfxItemSet(rPool,
 
                 // range from SdrAttrObj
-                SDRATTR_START, SDRATTRSET_SHADOW,
-                SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // range from SdrEdgeObj
-                SDRATTR_EDGE_FIRST, SDRATTRSET_EDGE,
+                SDRATTR_EDGE_FIRST, SDRATTR_EDGE_LAST,
 
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END,
@@ -150,35 +154,35 @@ namespace sdr
             rObj.ImpSetAttrToEdgeInfo();
         }
 
-        void ConnectorProperties::PreProcessSave()
-        {
-            // call parent
-            TextProperties::PreProcessSave();
+//BFS01     void ConnectorProperties::PreProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         TextProperties::PreProcessSave();
+//BFS01
+//BFS01         // force ItemSet
+//BFS01         GetObjectItemSet();
+//BFS01
+//BFS01         // prepare SetItems for storage
+//BFS01         const SfxItemSet& rSet = *mpItemSet;
+//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
+//BFS01
+//BFS01         SdrEdgeSetItem aEdgeAttr(rSet.GetPool());
+//BFS01         aEdgeAttr.GetItemSet().Put(rSet);
+//BFS01         aEdgeAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aEdgeAttr);
+//BFS01     }
 
-            // force ItemSet
-            GetObjectItemSet();
-
-            // prepare SetItems for storage
-            const SfxItemSet& rSet = *mpItemSet;
-            const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-
-            SdrEdgeSetItem aEdgeAttr(rSet.GetPool());
-            aEdgeAttr.GetItemSet().Put(rSet);
-            aEdgeAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aEdgeAttr);
-        }
-
-        void ConnectorProperties::PostProcessSave()
-        {
-            // call parent
-            TextProperties::PostProcessSave();
-
-            // remove SetItems from local itemset
-            if(mpItemSet)
-            {
-                mpItemSet->ClearItem(SDRATTRSET_EDGE);
-            }
-        }
+//BFS01     void ConnectorProperties::PostProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         TextProperties::PostProcessSave();
+//BFS01
+//BFS01         // remove SetItems from local itemset
+//BFS01         if(mpItemSet)
+//BFS01         {
+//BFS01             mpItemSet->ClearItem(SDRATTRSET_EDGE);
+//BFS01         }
+//BFS01     }
     } // end of namespace properties
 } // end of namespace sdr
 
