@@ -2,9 +2,9 @@
  *
  *  $RCSfile: markdata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 #ifndef SC_MARKDATA_HXX
 #define SC_MARKDATA_HXX
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+#ifndef _SOLAR_H
+#include <tools/solar.h>
 #endif
 
 class ScMarkArray;
@@ -80,7 +83,7 @@ private:
     ScRange         aMarkRange;             // Bereich
     ScRange         aMultiRange;            // maximaler Bereich insgesamt
     ScMarkArray*    pMultiSel;              // Mehrfachselektion
-    BOOL            bTabMarked[MAXTAB+1];   // Tabelle selektiert
+    BOOL            bTabMarked[MAXTABCOUNT];// Tabelle selektiert
     BOOL            bMarked;                // Rechteck markiert
     BOOL            bMultiMarked;           // mehrfach markiert
 
@@ -108,14 +111,14 @@ public:
     void        GetMarkArea( ScRange& rRange ) const;
     void        GetMultiMarkArea( ScRange& rRange ) const;
 
-    void        SetAreaTab( USHORT nTab );
+    void        SetAreaTab( SCTAB nTab );
 
-    void        SelectTable( USHORT nTab, BOOL bNew )       { bTabMarked[nTab] = bNew; }
-    BOOL        GetTableSelect( USHORT nTab ) const         { return bTabMarked[nTab]; }
+    void        SelectTable( SCTAB nTab, BOOL bNew )        { bTabMarked[nTab] = bNew; }
+    BOOL        GetTableSelect( SCTAB nTab ) const          { return bTabMarked[nTab]; }
 
-    void        SelectOneTable( USHORT nTab );
-    USHORT      GetSelectCount() const;
-    USHORT      GetFirstSelected() const;
+    void        SelectOneTable( SCTAB nTab );
+    SCTAB       GetSelectCount() const;
+    SCTAB       GetFirstSelected() const;
 
     void        SetMarkNegative( BOOL bFlag )   { bMarkIsNeg = bFlag; }
     BOOL        IsMarkNegative() const          { return bMarkIsNeg;  }
@@ -125,26 +128,27 @@ public:
     //  fuer FillInfo / Document etc.
     const ScMarkArray* GetArray() const         { return pMultiSel; }
 
-    BOOL        IsCellMarked( USHORT nCol, USHORT nRow, BOOL bNoSimple = FALSE ) const;
+    BOOL        IsCellMarked( SCCOL nCol, SCROW nRow, BOOL bNoSimple = FALSE ) const;
     void        FillRangeListWithMarks( ScRangeList* pList, BOOL bClear ) const;
     void        ExtendRangeListTables( ScRangeList* pList ) const;
 
     void        MarkFromRangeList( const ScRangeList& rList, BOOL bReset );
 
-    USHORT      GetMarkColumnRanges( USHORT* pRanges );
-    USHORT      GetMarkRowRanges( USHORT* pRanges );
+    SCCOLROW    GetMarkColumnRanges( SCCOLROW* pRanges );
+    SCCOLROW    GetMarkRowRanges( SCCOLROW* pRanges );
 
-    BOOL        IsColumnMarked( USHORT nCol ) const;
-    BOOL        IsRowMarked( USHORT nRow ) const;
+    BOOL        IsColumnMarked( SCCOL nCol ) const;
+    BOOL        IsRowMarked( SCROW nRow ) const;
     BOOL        IsAllMarked( const ScRange& rRange ) const;     // Multi
 
-    short       GetNextMarked( USHORT nCol, short nRow, BOOL bUp ) const;
-    BOOL        HasMultiMarks( USHORT nCol ) const;
+                /// May return -1
+    SCsROW      GetNextMarked( SCCOL nCol, SCsROW nRow, BOOL bUp ) const;
+    BOOL        HasMultiMarks( SCCOL nCol ) const;
     BOOL        HasAnyMultiMarks() const;
 
     //  Tabellen-Markierungen anpassen:
-    void        InsertTab( USHORT nTab );
-    void        DeleteTab( USHORT nTab );
+    void        InsertTab( SCTAB nTab );
+    void        DeleteTab( SCTAB nTab );
 };
 
 
