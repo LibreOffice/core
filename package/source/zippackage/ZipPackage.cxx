@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-31 10:01:28 $
+ *  last change: $Author: mtg $ $Date: 2001-09-03 13:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,9 @@ void ZipPackage::getZipFileContents()
             }
         }
     }
+    const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
+    if (xRootFolder->hasByName( sMeta ) )
+        xRootFolder->removeByName( sMeta );
 }
 // XInitialization
 void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
