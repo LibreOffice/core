@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:22:42 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ String RID_SVXSTR_UNDO_GRAFMODE
     Text[ danish ] = "Grafikmodus";
     Text[ polish ] = "Tryb grafiki";
     Text[ portuguese_brazilian ] = "Graphics mode";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ó°ÄŞ";
+    Text[ japanese ] = "}Ó°ÄŞ";
     Text[ korean ] = "±×·¡ÇÈ ¸ğµå";
     Text[ chinese_simplified ] = "Í¼ĞÎÄ£Ê½";
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
