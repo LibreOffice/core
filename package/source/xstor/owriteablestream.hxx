@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:15:39 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 09:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,11 @@
 #include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -114,6 +119,7 @@
 
 #include "ocompinstream.hxx"
 #include "mutexholder.hxx"
+
 
 struct PreCreationStruct
 {
@@ -173,7 +179,7 @@ struct OWriteStream_Impl : public PreCreationStruct
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
 
-    ::rtl::OUString GetNewFilledTempFile();
+    ::rtl::OUString GetFilledTempFile();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >       GetTempFileAsStream();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  GetTempFileAsInputStream();
 
@@ -191,6 +197,12 @@ public:
                        sal_Bool bForceEncrypted );
 
     ~OWriteStream_Impl();
+
+    void InsertIntoPackageFolder(
+            const ::rtl::OUString& aName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xParentPackageFolder );
+
+    void SetToBeCommited() { m_bCommited = sal_True; }
 
     sal_Bool HasCachedPassword() { return m_bHasCachedPassword; }
     ::com::sun::star::uno::Sequence< sal_Int8 > GetCachedPassword() { return m_aKey; }
