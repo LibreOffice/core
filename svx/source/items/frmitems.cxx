@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:22:31 $
+ *  last change: $Author: os $ $Date: 2002-08-16 12:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3302,12 +3302,14 @@ class SvxBrushItem_Impl
 {
 public:
     GraphicObject*  pGraphicObject;
+    sal_Int8        nGraphicTransparency; //contains a percentage value which is
+                                          //copied to the GraphicObject when necessary
 #ifndef SVX_LIGHT
     SfxMediumRef    xMedium;
 #endif
     Link            aDoneLink;
 
-    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ) {}
+    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0) {}
 };
 
 // class SvxBrushItemLink_Impl -------------------------------------------
@@ -3607,6 +3609,15 @@ sal_uInt16 SvxBrushItem::GetVersion( sal_uInt16 nFileVersion ) const
 }
 
 // -----------------------------------------------------------------------
+inline sal_Int8 lcl_PercentToTransparency(long nPercent)
+{
+    //0xff must not be returned!
+    return sal_Int8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
+}
+inline sal_Int8 lcl_TransparencyToPercent(sal_Int32 nTrans)
+{
+    return (nTrans * 100 + 127) / 254;
+}
 
 sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
@@ -3617,7 +3628,12 @@ sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_BACK_COLOR:
             rVal <<= (sal_Int32)( aColor.GetColor() );
         break;
-
+        case MID_BACK_COLOR_R_G_B:
+            rVal <<= (sal_Int32)( aColor.GetRGBColor() );
+        break;
+        case MID_BACK_COLOR_TRANSPARENCY:
+            rVal <<= lcl_TransparencyToPercent(aColor.GetTransparency());
+        break;
         case MID_GRAPHIC_POSITION:
             rVal <<= (style::GraphicLocation)(sal_Int16)eGraphicPos;
         break;
@@ -3627,7 +3643,7 @@ sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
-            rVal = Bool2Any( aColor.GetTransparency() != 0 );
+            rVal = Bool2Any( aColor.GetTransparency() == 0xff );
         break;
 
         case MID_GRAPHIC_URL:
@@ -3655,6 +3671,9 @@ sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= sFilter;
         }
         break;
+        case MID_GRAPHIC_TRANSPARENCY :
+            rVal <<= pImpl->nGraphicTransparency;
+        break;
     }
 
     return sal_True;
@@ -3669,11 +3688,25 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     switch( nMemberId)
     {
         case MID_BACK_COLOR:
+        case MID_BACK_COLOR_R_G_B:
         {
             sal_Int32 nCol;
             if ( !( rVal >>= nCol ) )
                 return sal_False;
+            if(MID_BACK_COLOR_R_G_B == nMemberId)
+            {
+                nCol = COLORDATA_RGB( nCol );
+                nCol += aColor.GetColor() & 0xff000000;
+            }
             aColor = Color( nCol );
+        }
+        break;
+        case MID_BACK_COLOR_TRANSPARENCY:
+        {
+            sal_Int32 nTrans;
+            if ( !( rVal >>= nTrans ) || nTrans < 0 || nTrans > 100 )
+                return sal_False;
+            aColor.SetTransparency(lcl_PercentToTransparency(nTrans));
         }
         break;
 
@@ -3720,6 +3753,7 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                                     RTL_TEXTENCODING_ASCII_US );
                     GraphicObject *pOldGrfObj = pImpl->pGraphicObject;
                     pImpl->pGraphicObject = new GraphicObject( sId );
+                    ApplyGraphicTransparency_Impl();
                     delete pOldGrfObj;
                 }
                 else
@@ -3741,6 +3775,18 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 OUString sLink;
                 rVal >>= sLink;
                 SetGraphicFilter( sLink );
+            }
+        }
+        break;
+        case MID_GRAPHIC_TRANSPARENCY :
+        {
+            sal_Int32 nTmp;
+            rVal >>= nTmp;
+            if(nTmp >= 0 && nTmp <= 100)
+            {
+                pImpl->nGraphicTransparency = sal_Int8(nTmp);
+                if(pImpl->pGraphicObject)
+                    ApplyGraphicTransparency_Impl();
             }
         }
         break;
@@ -3809,8 +3855,11 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
         if ( rItem.pStrFilter )
             pStrFilter = new String( *rItem.pStrFilter );
         if ( rItem.pImpl->pGraphicObject )
+        {
             pImpl->pGraphicObject = new GraphicObject( *rItem.pImpl->pGraphicObject );
+        }
     }
+    pImpl->nGraphicTransparency = rItem.pImpl->nGraphicTransparency;
     return *this;
 }
 
@@ -3821,7 +3870,8 @@ int SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
     SvxBrushItem& rCmp = (SvxBrushItem&)rAttr;
-    sal_Bool bEqual = ( aColor == rCmp.aColor && eGraphicPos == rCmp.eGraphicPos );
+    sal_Bool bEqual = ( aColor == rCmp.aColor && eGraphicPos == rCmp.eGraphicPos &&
+        pImpl->nGraphicTransparency == rCmp.pImpl->nGraphicTransparency);
 
     if ( bEqual )
     {
@@ -3909,7 +3959,6 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 nItemVersion ) con
 // wenn GetGraphic() gerufen wird, soll sich das Item darum kuemmern,
 // eine gelinkte Grafik zu holen.
 
-
 GraphicFilter* GetGrfFilter();
 
 IMPL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void*, EMPTYARG )
@@ -3930,7 +3979,10 @@ IMPL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void*, EMPTYARG )
             pThis->bLoadAgain = sal_False;
         }
         else
+        {
             pThis->pImpl->pGraphicObject->SetGraphic( aGraphic );
+            pThis->ApplyGraphicTransparency_Impl();
+        }
     }
     else
     {
@@ -4059,6 +4111,8 @@ void SvxBrushItem::SetGraphic( const Graphic& rNew )
         else
             pImpl->pGraphicObject = new GraphicObject( rNew );
 
+        ApplyGraphicTransparency_Impl();
+
         if ( GPOS_NONE == eGraphicPos )
             eGraphicPos = GPOS_MM; // None waere Brush, also Default: Mitte
     }
@@ -4076,6 +4130,8 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
             *pImpl->pGraphicObject = rNewObj;
         else
             pImpl->pGraphicObject = new GraphicObject( rNewObj );
+
+        ApplyGraphicTransparency_Impl();
 
         if ( GPOS_NONE == eGraphicPos )
             eGraphicPos = GPOS_MM; // None waere Brush, also Default: Mitte
@@ -4201,8 +4257,20 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
 #ifdef WNT
 #pragma optimize ( "", on )
 #endif
+/* -----------------------------16.08.2002 09:18------------------------------
 
-
+ ---------------------------------------------------------------------------*/
+void  SvxBrushItem::ApplyGraphicTransparency_Impl()
+{
+    DBG_ASSERT(pImpl->pGraphicObject, "no GraphicObject available" )
+    if(pImpl->pGraphicObject)
+    {
+        GraphicAttr aAttr(pImpl->pGraphicObject->GetAttr());
+        aAttr.SetTransparency(lcl_PercentToTransparency(
+                            pImpl->nGraphicTransparency));
+        pImpl->pGraphicObject->SetAttr(aAttr);
+    }
+}
 // class SvxFrameDirectionItem ----------------------------------------------
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,

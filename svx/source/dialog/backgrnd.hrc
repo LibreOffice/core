@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: os $ $Date: 2002-08-16 12:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #define LB_TBL_BOX      32
 #define FT_TBL_DESC     33
 #define LB_PARA_BOX     34
+#define FT_COL_TRANS    35
+#define MF_COL_TRANS    36
+#define FL_GRAPH_TRANS  37
+#define MF_GRAPH_TRANS  38
 
 #define STR_BROWSE      1
 #define STR_UNLINKED    2

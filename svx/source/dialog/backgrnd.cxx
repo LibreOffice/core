@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-07 13:45:38 $
+ *  last change: $Author: os $ $Date: 2002-08-16 12:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,9 @@
 #include "drawitem.hxx"
 #include "dialmgr.hxx"
 #include "htmlmode.hxx"
-
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
 // static ----------------------------------------------------------------
 
 static USHORT pRanges[] =
@@ -159,7 +161,30 @@ struct SvxBackgroundPage_Impl
     SvxBackgroundPage_Impl() :
         pLoadTimer(NULL), bIsImportDlgInExecute(FALSE) {}
 };
+/* -----------------------------15.08.2002 12:21------------------------------
 
+ ---------------------------------------------------------------------------*/
+inline BYTE lcl_PercentToTransparency(long nPercent)
+{
+    //0xff must not be returned!
+    return BYTE(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
+}
+inline BYTE lcl_TransparencyToPercent(BYTE nTrans)
+{
+    return (nTrans * 100 + 127) / 254;
+}
+void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
+{
+    const GraphicObject* pObject = rBrush.GetGraphicObject(SfxObjectShell::Current());
+    if(pObject)
+    {
+        GraphicObject aObject(*pObject);
+        GraphicAttr aAttr(aObject.GetAttr());
+        aAttr.SetTransparency(lcl_PercentToTransparency(nTransparency));
+        aObject.SetAttr(aAttr);
+        rBrush.SetGraphicObject(aObject);
+    }
+}
 //-------------------------------------------------------------------------
 
 /*  [Beschreibung]
@@ -213,6 +238,7 @@ private:
     Point           aDrawPos;
     Size            aDrawSize;
     Rectangle       aDrawRect;
+    BYTE            nTransparency;
 };
 
 //-----------------------------------------------------------------------
@@ -232,7 +258,8 @@ BackgroundPreviewImpl::BackgroundPreviewImpl
 
     bIsBmp   ( bIsBmpPreview ),
     pBitmap  ( NULL ),
-    aDrawRect( Point(0,0), GetOutputSizePixel() )
+    aDrawRect( Point(0,0), GetOutputSizePixel() ),
+    nTransparency(0)
 
 {
     SetBorderStyle(WINDOW_BORDER_MONO);
@@ -261,12 +288,13 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 {
     if ( !bIsBmp )
     {
+        nTransparency = lcl_TransparencyToPercent(rColor.GetTransparency());
         if ( rColor == Color( COL_TRANSPARENT ) )
         {
             SetFillColor( GetSettings().GetStyleSettings().GetFieldColor() );
             Paint( aDrawRect );
         }
-        SetFillColor( rColor );
+        SetFillColor( rColor.GetRGBColor());
         Paint( aDrawRect );
     }
 }
@@ -338,7 +366,7 @@ void BackgroundPreviewImpl::Paint( const Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
-    SetLineColor();
+    SetLineColor( rStyleSettings.GetFieldTextColor() );
     if(bIsBmp)
         SetFillColor( Color(COL_TRANSPARENT) );
     DrawRect( aDrawRect );
@@ -385,6 +413,8 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     aBackgroundColorBox ( this, ResId( GB_BGDCOLOR ) ),
     pPreviewWin1        ( new BackgroundPreviewImpl(
                             this, ResId( WIN_PREVIEW1 ), FALSE ) ),
+    aColTransFT         ( this, ResId( FT_COL_TRANS ) ),
+    aColTransMF         ( this, ResId( MF_COL_TRANS ) ),
     aBtnBrowse          ( this, ResId( BTN_BROWSE ) ),
     aBtnLink            ( this, ResId( BTN_LINK ) ),
     aBtnPreview         ( this, ResId( BTN_PREVIEW ) ),
@@ -395,6 +425,8 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     aBtnTile            ( this, ResId( BTN_TILE ) ),
     aWndPosition        ( this, ResId( WND_POSITION ), RP_MM ),
     aGbPosition         ( this, ResId( GB_POSITION ) ),
+    aGraphTransFL       ( this, ResId( FL_GRAPH_TRANS ) ),
+    aGraphTransMF       ( this, ResId( MF_GRAPH_TRANS ) ),
     pPreviewWin2        ( new BackgroundPreviewImpl(
                             this, ResId( WIN_PREVIEW2 ), TRUE ) ),
     aSelectTxt          ( this, ResId( FT_SELECTOR ) ),
@@ -409,6 +441,9 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     bIsGraphicValid     ( FALSE ),
     bLinkOnly           ( FALSE ),
     bResized            ( FALSE ),
+    bColTransparency    ( FALSE ),
+    bGraphTransparency  ( FALSE ),
+
     pPageImpl           ( new SvxBackgroundPage_Impl ),
     pImportDlg          ( NULL ),
     pTableBck_Impl      ( NULL ),
@@ -815,12 +850,20 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     SfxItemState eOldItemState = rCoreSet.GetItemState(nSlot, FALSE);
     const SfxItemSet& rOldSet = GetItemSet();
 
+    BOOL bGraphTransparencyChanged = bGraphTransparency && (aGraphTransMF.GetText() != aGraphTransMF.GetSavedValue());
     if ( pOld )
     {
         const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
         const BOOL          bIsBrush    = ( 0 == aLbSelect.GetSelectEntryPos() );
 
+        // transparency has to be set if enabled, the color not already set to "No fill" and
+        // if the spin field has been modified
+        if( bColTransparency && (aColTransMF.GetSavedValue() != aColTransMF.GetText()) &&
+            aBgdColor.GetTransparency() < 0xff)
+        {
+            aBgdColor.SetTransparency(lcl_PercentToTransparency(aColTransMF.GetValue()));
+        }
         if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
             || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap gewechselt?
         {
@@ -850,7 +893,8 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 if ( !bIsLink && !bIsGraphicValid )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
 
-                if (   eNewPos != eOldPos
+                if (    bGraphTransparencyChanged ||
+                        eNewPos != eOldPos
                     || bIsLink != bWasLink
                     || ( bWasLink  &&    *rOldItem.GetGraphicLink()
                                       != aBgdGraphicPath )
@@ -860,18 +904,23 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 {
                     bModified = TRUE;
 
+                    SvxBrushItem aTmpBrush(nWhich);
                     if ( bIsLink )
                     {
                         String aAbs = INetURLObject::RelToAbs( aBgdGraphicPath );
-                        rCoreSet.Put( SvxBrushItem( aAbs,
-                                                    aBgdGraphicFilter,
-                                                    eNewPos,
-                                                    nWhich ) );
+                        aTmpBrush = SvxBrushItem( aAbs,
+                                                aBgdGraphicFilter,
+                                                eNewPos,
+                                                nWhich );
                     }
                     else
-                        rCoreSet.Put( SvxBrushItem( aBgdGraphic,
-                                                    eNewPos,
-                                                    nWhich ) );
+                        aTmpBrush = SvxBrushItem( aBgdGraphic,
+                                        eNewPos,
+                                        nWhich );
+                    if(bGraphTransparencyChanged)
+                        lcl_SetTransparency(aTmpBrush, aGraphTransMF.GetValue());
+
+                    rCoreSet.Put(aTmpBrush);
                 }
                 else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
                     rCoreSet.ClearItem( nWhich );
@@ -883,13 +932,14 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
             else
             {
+                SvxBrushItem* pTmpBrush = 0;
                 if ( aBtnLink.IsChecked() )
                 {
                     String aAbs = INetURLObject::RelToAbs( aBgdGraphicPath );
-                    rCoreSet.Put( SvxBrushItem( aAbs,
+                    pTmpBrush = new SvxBrushItem( aAbs,
                                                 aBgdGraphicFilter,
                                                 GetGraphicPosition_Impl(),
-                                                nWhich ) );
+                                                nWhich );
                 }
                 else
                 {
@@ -897,9 +947,16 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                         bIsGraphicValid = LoadLinkedGraphic_Impl();
 
                     if ( bIsGraphicValid )
-                        rCoreSet.Put( SvxBrushItem( aBgdGraphic,
+                        pTmpBrush = new SvxBrushItem( aBgdGraphic,
                                                     GetGraphicPosition_Impl(),
-                                                    nWhich ) );
+                                                    nWhich );
+                }
+                if(pTmpBrush)
+                {
+                    if(bGraphTransparencyChanged)
+                        lcl_SetTransparency(*pTmpBrush, aGraphTransMF.GetValue());
+                    rCoreSet.Put(*pTmpBrush);
+                    delete pTmpBrush;
                 }
             }
             bModified = ( bIsBrush || aBtnLink.IsChecked() || bIsGraphicValid );
@@ -1310,6 +1367,13 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
         aWndPosition.Hide();
         aGbPosition.Hide();
         pPreviewWin2->Hide();
+        aGraphTransFL.Show(FALSE);
+        aGraphTransMF.Show(FALSE);
+        if(bColTransparency)
+        {
+            aColTransFT.Show();
+            aColTransMF.Show();
+        }
     }
 }
 
@@ -1346,6 +1410,13 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
         aWndPosition.Show();
         aGbPosition.Show();
         pPreviewWin2->Show();
+        if(bGraphTransparency)
+        {
+            aGraphTransFL.Show();
+            aGraphTransMF.Show();
+        }
+        aColTransFT.Show(FALSE);
+        aColTransMF.Show(FALSE);
     }
 }
 
@@ -1437,28 +1508,17 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 //-----------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMTPYARG )
-/*  [Beschreibung]
-
+/*
+    Handler, called when color selection is changed
 */
-
-{
-    PatternHdl_Impl(0);
-    return 0;
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxBackgroundTabPage, PatternHdl_Impl, ValueSet* , EMPTYARG)
-/*  [Beschreibung]
-
-    Handler, der beim Selektieren des Musters gerufen wird
-*/
-
 {
     USHORT nItemId = aBackgroundColorSet.GetSelectItemId();
     Color aColor = nItemId ? ( aBackgroundColorSet.GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
     aBgdColor = aColor;
     pPreviewWin1->NotifyChange( aBgdColor );
+    BOOL bEnableTransp = aBgdColor.GetTransparency() < 0xff;
+    aColTransFT.Enable(bEnableTransp);
+    aColTransMF.Enable(bEnableTransp);
     return 0;
 }
 
@@ -1849,6 +1909,17 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 {
     SvxGraphicPosition  ePos = rBgdAttr.GetGraphicPos();
     const Color& rColor = rBgdAttr.GetColor();
+    if(bColTransparency)
+    {
+        aColTransMF.SetValue(lcl_TransparencyToPercent(rColor.GetTransparency()));
+        aColTransMF.SaveValue();
+        BOOL bEnableTransp = rColor.GetTransparency() < 0xff;
+        aColTransFT.Enable(bEnableTransp);
+        aColTransMF.Enable(bEnableTransp);
+        //the default setting should be "no transparency"
+        if(!bEnableTransp)
+            aColTransMF.SetValue(0);
+    }
 
     if ( GPOS_NONE == ePos || !aLbSelect.IsVisible() )
     {
@@ -1904,6 +1975,16 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             aBtnLink.Disable();
         }
 
+        if(bGraphTransparency)
+        {
+            const GraphicObject* pObject = rBgdAttr.GetGraphicObject(SfxObjectShell::Current());
+            if(pObject)
+                aGraphTransMF.SetValue(lcl_TransparencyToPercent(pObject->GetAttr().GetTransparency()));
+            else
+                aGraphTransMF.SetValue(0);
+            aGraphTransMF.SaveValue();
+        }
+
         FileClickHdl_Impl( &aBtnLink );
 
         if ( pStrFilter )
@@ -1948,6 +2029,30 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             pPreviewWin2->NotifyChange( NULL );
 
         SetGraphicPosition_Impl( ePos );
+    }
+}
+/* -----------------------------09.08.2002 14:04------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxBackgroundTabPage::EnableTransparency(BOOL bColor, BOOL bGraphic)
+{
+    bColTransparency  = bColor;
+    bGraphTransparency = bGraphic;
+    if(bColor)
+    {
+        aColTransFT.Show();
+        aColTransMF.Show();
+    }
+    if(bGraphic)
+    {
+        Size aRectSize(aWndPosition.GetSizePixel());
+        Point aRectPos(aWndPosition.GetPosPixel());
+        Point aFLPos(aGraphTransFL.GetPosPixel());
+        Size aTmp(LogicToPixel(Size(RSC_SP_FLGR_SPACE_Y, RSC_SP_FLGR_SPACE_Y), MAP_APPFONT));
+        long nRectHeight = aFLPos.Y() - aRectPos.Y() - aTmp.Height();
+        aRectSize.Height() = nRectHeight;
+        aWndPosition.SetSizePixel(aRectSize);
+        aWndPosition.Invalidate();
     }
 }
 
