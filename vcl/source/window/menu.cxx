@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-12 11:39:14 $
+ *  last change: $Author: th $ $Date: 2001-06-15 13:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ MenuItemData* MenuItemList::GetData( USHORT nSVId, USHORT& rPos ) const
 
 MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, USHORT& rPos ) const
 {
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
+    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
     xub_Unicode cCharCode = GetCharClass()->toUpper( String(cSelectChar), 0, 1, rLocale )[0];
     for ( rPos = (USHORT)Count(); rPos; )
     {
