@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-08 10:44:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,11 @@ namespace connectivity
             ::cppu::OBroadcastHelper& rBHelper;
             OStatement_Base(OConnection* _pConnection );
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
+
+            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            {
+                return m_pConnection->getOdbcFunction(_nIndex);
+            }
             // OComponentHelper
             virtual void SAL_CALL disposing(void){OStatement_BASE::disposing();}
             // XInterface

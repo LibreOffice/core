@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 10:48:34 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _VECTOR_
 #include <vector>
 #endif
+#ifndef _CONNECTIVITY_ODBC_OCONNECTION_HXX_
+#include "odbc/OConnection.hxx"
+#endif
 
 namespace connectivity
 {
@@ -88,18 +91,24 @@ namespace connectivity
         {
             ::std::vector<sal_Int32> m_vMapping; // when not every column is needed
 
-            SQLHANDLE m_aStatementHandle;
-            sal_Int32 m_nColCount;
+            SQLHANDLE       m_aStatementHandle;
+            OConnection*    m_pConnection;
+            sal_Int32       m_nColCount;
 
             ::rtl::OUString getCharColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getNumColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSetMetaData( SQLHANDLE _pStmt ) : m_aStatementHandle( _pStmt ),m_nColCount(-1){}
-            OResultSetMetaData( SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
-                    : m_aStatementHandle( _pStmt ),m_vMapping(_vMapping),m_nColCount(_vMapping.size()-1){}
+            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ) : m_pConnection(_pConnection),m_aStatementHandle( _pStmt ),m_nColCount(-1){}
+            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
+                    : m_pConnection(_pConnection),m_aStatementHandle( _pStmt ),m_vMapping(_vMapping),m_nColCount(_vMapping.size()-1){}
             ~OResultSetMetaData();
 
+
+            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            {
+                return m_pConnection->getOdbcFunction(_nIndex);
+            }
             /// Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
             { return this; }

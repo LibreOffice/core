@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:50:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 #endif
 
 #define THROW_SQL(x) \
-    OTools::ThrowException(x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
+    OTools::ThrowException(m_pConnection,x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
 
 #ifdef DEBUG
 #define DEBUG_THROW                 \
@@ -165,7 +165,7 @@ void OStatement_BASE2::disposing()
     if (N3SQLFreeStmt(m_aStatementHandle,SQL_RESET_PARAMS) ||
         N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND) ||
         N3SQLFreeStmt(m_aStatementHandle,SQL_CLOSE))
-        OTools::ThrowException(N3SQLFreeStmt(m_aStatementHandle,SQL_DROP),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+        OTools::ThrowException(m_pConnection,N3SQLFreeStmt(m_aStatementHandle,SQL_DROP),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     if (m_pConnection)
         m_pConnection->release();
@@ -203,7 +203,7 @@ void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    OTools::ThrowException(N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 
@@ -287,7 +287,11 @@ sal_Bool OStatement_Base::lockIfNecessary (const ::rtl::OUString& sql) throw( SQ
 
     // First, convert the statement to upper case
 
+#if SUPD > 631
     ::rtl::OUString sqlStatement = sql.toAsciiUpperCase ();
+#else
+    ::rtl::OUString sqlStatement = sql.toUpperCase ();
+#endif
 
     // Now, look for the FOR UPDATE keywords.  If there is any extra white
     // space between the FOR and UPDATE, this will fail.
@@ -916,7 +920,7 @@ void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLExcep
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     ::rtl::OString aName(::rtl::OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
-    THROW_SQL(N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),aName.getLength()));
+    THROW_SQL(N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),(SQLSMALLINT)aName.getLength()));
 }
 // -------------------------------------------------------------------------
 sal_Bool OStatement_Base::isUsingBookmarks() const throw(SQLException, RuntimeException)

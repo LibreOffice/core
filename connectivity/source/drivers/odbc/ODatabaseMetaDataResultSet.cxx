@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:50:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 
 // -------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding) :   ODatabaseMetaDataResultSet_BASE(m_aMutex)
+ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection,SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding) : ODatabaseMetaDataResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
                         ,m_aStatement(NULL)
                         ,m_xMetaData(NULL)
@@ -124,7 +124,9 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(SQLHANDLE _pStatementHand
                         ,m_bEOF(sal_False)
                         ,m_nTextEncoding(_nTextEncoding)
                         ,m_bFreeHandle(sal_False)
+                        ,m_pConnection(_pConnection)
 {
+    OSL_ENSURE(m_pConnection,"ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet: No parent set!");
     osl_incrementInterlockedCount( &m_refCount );
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
     osl_decrementInterlockedCount( &m_refCount );
@@ -208,7 +210,12 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
-        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) : columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
+#if SUPD > 630
+                columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+#else
+                columnName.equalsIgnoreCase(xMeta->getColumnName(i)))
+#endif
             break;
     return i;
 }
@@ -251,7 +258,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
         case DataType::BIT:
             {
                 sal_Int8 nValue = 0;
-                OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,&nValue,sizeof nValue);
+                OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,&nValue,sizeof nValue);
                 bRet = nValue != 0;
             }
             break;
@@ -271,7 +278,7 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
 
     columnIndex = mapColumn(columnIndex);
     sal_Int8  nVal = 0;
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nVal,sizeof nVal);
+    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nVal,sizeof nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return sal_Int8((*m_aValueRangeIter).second[(sal_Int32)nVal]);
@@ -287,18 +294,18 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 
 
     columnIndex = mapColumn(columnIndex);
-    sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
+    SWORD nType = getMetaData()->getColumnType(columnIndex);
     switch(nType)
     {
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
             {
-                ::rtl::OUString aRet = OTools::getStringValue(m_aStatementHandle,(SQLUSMALLINT)columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+                ::rtl::OUString aRet = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,nType,m_bWasNull,**this,m_nTextEncoding);
                 return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
             }
             break;
     }
-    return OTools::getBytesValue(m_aStatementHandle,(SQLUSMALLINT)columnIndex,nType,m_bWasNull,**this);
+    return OTools::getBytesValue(m_pConnection,m_aStatementHandle,columnIndex,nType,m_bWasNull,**this);
 }
 // -------------------------------------------------------------------------
 
@@ -313,7 +320,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     aDate.day = 0;
     aDate.month = 0;
     aDate.year = 0;
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
+    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
     return Date(aDate.day,aDate.month,aDate.year);
 }
 // -------------------------------------------------------------------------
@@ -327,7 +334,7 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) t
 
     columnIndex = mapColumn(columnIndex);
     double nValue(0.0);
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,&nValue,sizeof nValue);
+    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,&nValue,sizeof nValue);
     return nValue;
 }
 // -------------------------------------------------------------------------
@@ -341,7 +348,7 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
 
     columnIndex = mapColumn(columnIndex);
     float nVal(0);
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
+    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
     return nVal;
 }
 // -------------------------------------------------------------------------
@@ -355,7 +362,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 
     columnIndex = mapColumn(columnIndex);
     sal_Int32 nVal = 0;
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nVal,sizeof nVal);
+    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nVal,sizeof nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return (*m_aValueRangeIter).second[(sal_Int32)nVal];
@@ -390,7 +397,7 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_xMetaData.is() ? m_xMetaData :  (m_xMetaData = new OResultSetMetaData(m_aStatementHandle));
+    return m_xMetaData.is() ? m_xMetaData :  (m_xMetaData = new OResultSetMetaData(m_pConnection,m_aStatementHandle));
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -462,7 +469,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     sal_Int16 nVal = 0;
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nVal,sizeof nVal);
+    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nVal,sizeof nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return sal_Int16((*m_aValueRangeIter).second[(sal_Int32)nVal]);
@@ -478,7 +485,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
 
     columnIndex = mapColumn(columnIndex);
-    ::rtl::OUString aVal = OTools::getStringValue(m_aStatementHandle,(SQLUSMALLINT)columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+    ::rtl::OUString aVal = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,(SWORD)getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
 
     return aVal;
 }
@@ -495,7 +502,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     TIME_STRUCT aTime={0,0,0};
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
+    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
     return Time(0,aTime.second,aTime.minute,aTime.hour);
 }
 // -------------------------------------------------------------------------
@@ -510,7 +517,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
+    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
     return DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
 }
 // -------------------------------------------------------------------------
@@ -590,7 +597,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, Runt
 
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_FIRST,0);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet;
     if(bRet = (m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO))
         m_nRowPos = 1;
@@ -605,7 +612,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, Runti
 
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_LAST,0);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // here I know definitely that I stand on the last record
     return m_bLastRecord = (m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO);
 }
@@ -618,7 +625,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQ
 
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_ABSOLUTE,row);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
         m_nRowPos = row;
@@ -633,7 +640,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQ
 
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,row);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
         m_nRowPos += row;
@@ -648,7 +655,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, R
 
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_PRIOR,0);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
         --m_nRowPos;
@@ -711,7 +718,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
 
     //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
     m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
 }
 // -------------------------------------------------------------------------
@@ -742,7 +749,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::cancel(  ) throw(RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
-    OTools::ThrowException(N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
@@ -915,7 +922,7 @@ void ODatabaseMetaDataResultSet::openTypeInfo() throw(SQLException, RuntimeExcep
 
     m_aValueRange[2] = aMap;
 
-    OTools::ThrowException(N3SQLGetTypeInfo(m_aStatementHandle, SQL_ALL_TYPES),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,N3SQLGetTypeInfo(m_aStatementHandle, SQL_ALL_TYPES),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 //-----------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUString& schemaPattern,
@@ -956,7 +963,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, pCOL ? SQL_NTS : 0);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
 }
 //-----------------------------------------------------------------------------
@@ -968,12 +975,12 @@ void ODatabaseMetaDataResultSet::openTablesTypes( ) throw(SQLException, RuntimeE
                             0,0,
                             0,0,
                             (SDB_ODBC_CHAR *) SQL_ALL_TABLE_TYPES,SQL_NTS);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     m_aColMapping.clear();
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(4);
-    m_xMetaData = new OResultSetMetaData(m_aStatementHandle,m_aColMapping);
+    m_xMetaData = new OResultSetMetaData(m_pConnection,m_aStatementHandle,m_aColMapping);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeException)
@@ -985,12 +992,12 @@ void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeExcep
                             0,0,
                             (SDB_ODBC_CHAR *) "",SQL_NTS);
 
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     m_aColMapping.clear();
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(1);
-    m_xMetaData = new OResultSetMetaData(m_aStatementHandle,m_aColMapping);
+    m_xMetaData = new OResultSetMetaData(m_pConnection,m_aStatementHandle,m_aColMapping);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openSchemas() throw(SQLException, RuntimeException)
@@ -1001,12 +1008,12 @@ void ODatabaseMetaDataResultSet::openSchemas() throw(SQLException, RuntimeExcept
                             (SDB_ODBC_CHAR *) SQL_ALL_SCHEMAS,SQL_NTS,
                             0,0,
                             (SDB_ODBC_CHAR *) "",SQL_NTS);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     m_aColMapping.clear();
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(2);
-    m_xMetaData = new OResultSetMetaData(m_aStatementHandle,m_aColMapping);
+    m_xMetaData = new OResultSetMetaData(m_pConnection,m_aStatementHandle,m_aColMapping);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, const ::rtl::OUString& schema,
@@ -1037,7 +1044,7 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
 
 }
@@ -1070,7 +1077,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
 
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     TInt2IntMap aMap;
     aMap[SQL_BIT]               = DataType::BIT;
     aMap[SQL_TINYINT]           = DataType::TINYINT;
@@ -1133,7 +1140,7 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
 
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl::OUString& schemaPattern,
@@ -1162,7 +1169,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any& catalog, const ::rtl::OUString& schema,
@@ -1190,9 +1197,9 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
-                            scope,
+                            (SQLSMALLINT)scope,
                             nullable ? SQL_NULLABLE : SQL_NO_NULLS);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openVersionColumns(const Any& catalog, const ::rtl::OUString& schema,
@@ -1234,7 +1241,7 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
                             (SDB_ODBC_CHAR *) pFKO, pFKO ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pFKN, SQL_NTS
                             );
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openImportedKeys(const Any& catalog, const ::rtl::OUString& schema,
@@ -1275,7 +1282,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const ::rtl::OUString& schemaPattern,
@@ -1303,7 +1310,7 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const :
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl::OUString& schema,
@@ -1334,7 +1341,7 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             unique ? SQL_INDEX_UNIQUE : SQL_INDEX_ALL,
                             approximate);
-    OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 

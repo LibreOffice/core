@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
         prepareStatement();
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(m_aStatementHandle);
+        m_xMetaData = new OResultSetMetaData(getOwnConnection(),m_aStatementHandle);
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
@@ -208,7 +208,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     {
         SQLRETURN nReturn = N3SQLExecute(m_aStatementHandle);
 
-        OTools::ThrowException(nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+        OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
         needData = nReturn == SQL_NEED_DATA;
 
         // Now loop while more data is needed (i.e. a data-at-
@@ -237,7 +237,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
         }
 
     }
-    catch (SQLWarning& ex)
+    catch (const SQLWarning&)
     {
     }
 
@@ -367,10 +367,12 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
 }
 // -------------------------------------------------------------------------
 #define PREP_BIND_PARAM(_ty,_jt) \
-    OTools::bindParameter(          m_aStatementHandle,                     \
+    OTools::bindParameter(m_pConnection,                                \
+                                m_aStatementHandle,                     \
                                 parameterIndex,                         \
-                                bindBuf,getLengthBuf(parameterIndex),   \
-                                _jt,                                    \
+                                bindBuf,                                \
+                                getLengthBuf(parameterIndex),           \
+                                (SWORD)_jt,                                 \
                                 sal_False,sal_False,&x,(Reference <XInterface>)*this,getOwnConnection()->getTextEncoding())
 
 
@@ -562,7 +564,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     *(SDWORD*)lenBuf = SQL_NULL_DATA;
 
 
-    UDWORD  prec = 0;
+    SQLINTEGER  prec = 0;
     if (sqlType == SQL_CHAR || sqlType == SQL_VARCHAR || sqlType == SQL_LONGVARCHAR)
         prec = 1;
 
@@ -572,18 +574,18 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     SQLSMALLINT nDecimalDigits = 0;
     OTools::getBindTypes(sal_False,sal_False,sqlType,fCType,fSqlType,nColumnSize,nDecimalDigits);
 
-    SQLRETURN nReturn = N3SQLBindParameter(m_aStatementHandle,
-                            parameterIndex,
-                            SQL_PARAM_INPUT,
-                            fCType,
-                            fSqlType,
-                            nDecimalDigits,
-                            nColumnSize,
-                            NULL,
-                            prec,
-                            (SDWORD*)lenBuf
-                            );
-    OTools::ThrowException(nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    SQLRETURN nReturn = N3SQLBindParameter( m_aStatementHandle,
+                                            (SQLUSMALLINT)parameterIndex,
+                                            (SQLSMALLINT)SQL_PARAM_INPUT,
+                                            fCType,
+                                            fSqlType,
+                                            nColumnSize,
+                                            nDecimalDigits,
+                                            NULL,
+                                            prec,
+                                            (SDWORD*)lenBuf
+                                            );
+    OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 
@@ -1083,7 +1085,7 @@ sal_Int32 OPreparedStatement::getPrecision ( sal_Int32 sqlType)
     if (m_aTypeInfo.size())
     {
         OTypeInfo aInfo;
-        aInfo.nType = sqlType;
+        aInfo.nType = (sal_Int16)sqlType;
         TTypeInfoVector::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
         if(aIter != m_aTypeInfo.end())
             prec = (*aIter).nPrecision;
@@ -1097,12 +1099,12 @@ sal_Int32 OPreparedStatement::getPrecision ( sal_Int32 sqlType)
 //--------------------------------------------------------------------
 
 void OPreparedStatement::setStream (
-    sal_Int32 ParameterIndex,
-    const Reference< XInputStream>& x,
-    sal_Int32 length,
-    sal_Int32 SQLtype,
-    sal_Int32 streamType)
-    throw(SQLException)
+                                    sal_Int32 ParameterIndex,
+                                    const Reference< XInputStream>& x,
+                                    sal_Int32 length,
+                                    sal_Int32 SQLtype,
+                                    sal_Int32 streamType)
+                                    throw(SQLException)
 {
     if( !ParameterIndex || ParameterIndex > numParams)
         ::dbtools::throwInvalidIndexException(*this);
@@ -1117,7 +1119,7 @@ void OPreparedStatement::setStream (
     sal_Int8* dataBuf = allocBindBuf (ParameterIndex, 4);
 
     // Bind the parameter with SQL_LEN_DATA_AT_EXEC
-    SWORD   Ctype = SQL_C_CHAR;
+    SQLSMALLINT   Ctype = SQL_C_CHAR;
     SDWORD  atExec = SQL_LEN_DATA_AT_EXEC (length);
     memcpy (dataBuf, &ParameterIndex, sizeof(ParameterIndex));
     memcpy (lenBuf, &atExec, sizeof (atExec));
@@ -1127,8 +1129,16 @@ void OPreparedStatement::setStream (
 
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLBindParameter(m_aStatementHandle, (SQLUSMALLINT)ParameterIndex,SQL_PARAM_INPUT,Ctype,
-                                SQLtype, length,0, dataBuf, sizeof(ParameterIndex),(SDWORD*)lenBuf);
+    N3SQLBindParameter(m_aStatementHandle,
+                        (SQLUSMALLINT)ParameterIndex,
+                        (SQLSMALLINT)SQL_PARAM_INPUT,
+                        Ctype,
+                        (SQLSMALLINT)SQLtype,
+                        (SQLUINTEGER)length,
+                        0,
+                        dataBuf,
+                        sizeof(ParameterIndex),
+                        (SDWORD*)lenBuf);
 
     // Save the input stream
 
@@ -1202,11 +1212,15 @@ void OPreparedStatement::setBinary (sal_Int32 parameterIndex,sal_Int32 SQLtype,
     // Get the buffer needed for the length
 
     //  sal_Int8* lenBuf = getLengthBuf (parameterIndex);
-    OTools::bindParameter(          m_aStatementHandle,
-                                parameterIndex,
-                                bindBuf,getLengthBuf(parameterIndex),
-                                SQLtype,
-                                sal_False,sal_False,&x,(Reference <XInterface>)*this,getOwnConnection()->getTextEncoding());
+    OTools::bindParameter(  m_pConnection,
+                            m_aStatementHandle,
+                            (SQLUSMALLINT)parameterIndex,
+                            bindBuf,getLengthBuf(parameterIndex),
+                            (SQLSMALLINT)SQLtype,
+                            sal_False,
+                            sal_False,
+                            &x,
+                            (Reference <XInterface>)*this,getOwnConnection()->getTextEncoding());
 
 
     //  N3SQLBindInParameterBinary (m_aStatementHandle, parameterIndex,
@@ -1252,7 +1266,7 @@ void OPreparedStatement::prepareStatement()
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     ::rtl::OString aSql(::rtl::OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
     SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
-    OTools::ThrowException(nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     initBoundParam();
 }
 // -----------------------------------------------------------------------------

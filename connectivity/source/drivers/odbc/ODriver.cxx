@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
 #include "odbc/OFunctions.hxx"
 #endif
+#include "odbc/OTools.hxx"
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -137,11 +138,6 @@ SS SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
     return getSupportedServiceNames_Static();
 }
 
-//------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::odbc::ODBCDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
-{
-    return *(new ODBCDriver());
-}
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODBCDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
@@ -181,26 +177,5 @@ sal_Int32 SAL_CALL ODBCDriver::getMinorVersion(  ) throw(RuntimeException)
 }
 // --------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-// ODBC Environment (gemeinsam fuer alle Connections):
-SQLHANDLE ODBCDriver::EnvironmentHandle(::rtl::OUString &_rPath)
-{
-    // Ist (fuer diese Instanz) bereits ein Environment erzeugt worden?
-    if (!m_pDriverHandle)
-    {
-        SQLHANDLE h = SQL_NULL_HANDLE;
-        // Environment allozieren
-
-        // ODBC-DLL jetzt laden:
-        if (!LoadLibrary_ODBC3(_rPath) || N3SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&h) != SQL_SUCCESS)
-            return SQL_NULL_HANDLE;
-
-        // In globaler Struktur merken ...
-        m_pDriverHandle = h;
-        SQLRETURN nError = N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION,(SQLPOINTER) SQL_OV_ODBC3, SQL_IS_UINTEGER);
-        //N3SQLSetEnvAttr(h, SQL_ATTR_CONNECTION_POOLING,(SQLPOINTER) SQL_CP_ONE_PER_HENV, SQL_IS_INTEGER);
-    }
-
-    return m_pDriverHandle;
-}
 
 

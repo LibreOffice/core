@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _CONNECTIVITY_ODBC_OSTATEMENT_HXX_
 #include "odbc/OStatement.hxx"
 #endif
+#ifndef _CONNECTIVITY_ODBC_ODATABASEMETADATA_HXX_
+#include "odbc/ODatabaseMetaData.hxx"
+#endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
@@ -144,6 +147,7 @@ namespace connectivity
             ::com::sun::star::uno::WeakReferenceHelper                                  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             SQLUSMALLINT*                               m_pRowStatusArray;
+            OConnection*                                m_pConnection;
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
@@ -192,9 +196,13 @@ namespace connectivity
                                          ) const;
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            ODatabaseMetaDataResultSet( SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding);
+            ODatabaseMetaDataResultSet(OConnection* _pConnection,SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding);
             ~ODatabaseMetaDataResultSet();
 
+            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            {
+                return m_pConnection->getOdbcFunction(_nIndex);
+            }
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface

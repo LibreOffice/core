@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,27 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _CONNECTIVITY_ODBC_OCONNECTION_HXX_
+#include "odbc/OConnection.hxx"
+#endif
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 
-void OTools::getValue(  SQLHANDLE _aStatementHandle,
-                                        sal_Int32 columnIndex,
-                                        SQLSMALLINT _nType,
-                                        sal_Bool &_bWasNull,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                        void* _pValue,SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void OTools::getValue(  OConnection* _pConnection,
+                        SQLHANDLE _aStatementHandle,
+                        sal_Int32 columnIndex,
+                        SQLSMALLINT _nType,
+                        sal_Bool &_bWasNull,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                        void* _pValue,
+                        SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SQLINTEGER pcbValue;
-    OTools::ThrowException(N3SQLGetData(_aStatementHandle,
+    OTools::ThrowException(_pConnection,
+                            (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         _nType,
                                         _pValue,
@@ -100,7 +106,8 @@ void OTools::getValue(  SQLHANDLE _aStatementHandle,
     _bWasNull = pcbValue == SQL_NULL_DATA;
 }
 // -----------------------------------------------------------------------------
-void OTools::bindParameter(SQLHANDLE _hStmt,
+void OTools::bindParameter( OConnection* _pConnection,
+                            SQLHANDLE _hStmt,
                             sal_Int32 nPos,
                             sal_Int8* pDataBuffer,
                             sal_Int8* pLenBuffer,
@@ -128,9 +135,9 @@ void OTools::bindParameter(SQLHANDLE _hStmt,
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
         memcpy(pData,&nPos,sizeof(nPos));
 
-    nRetcode = N3SQLDescribeParam(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
+    nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
 
-    nRetcode = N3SQLBindParameter(_hStmt,
+    nRetcode = (*(T3SQLBindParameter)_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(_hStmt,
                   (SQLUSMALLINT)nPos,
                   SQL_PARAM_INPUT,
                   fCType,
@@ -141,7 +148,7 @@ void OTools::bindParameter(SQLHANDLE _hStmt,
                   nMaxLen,
                   pLen);
 
-    OTools::ThrowException(nRetcode,_hStmt,SQL_HANDLE_STMT,_xInterface);
+    OTools::ThrowException(_pConnection,nRetcode,_hStmt,SQL_HANDLE_STMT,_xInterface);
 }
 // -----------------------------------------------------------------------------
 void OTools::bindData(  SWORD fSqlType,
@@ -254,16 +261,17 @@ void OTools::bindData(  SWORD fSqlType,
     }
 }
 // -------------------------------------------------------------------------
-void OTools::bindValue( SQLHANDLE _aStatementHandle,
-                                            sal_Int32 columnIndex,
-                                            SQLSMALLINT _nType,
-                                            SQLSMALLINT _nMaxLen,
-                                            SQLSMALLINT _nScale,
-                                            const void* _pValue,
-                                            void* _pData,
-                                            SQLINTEGER *pLen,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                            rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void OTools::bindValue( OConnection* _pConnection,
+                        SQLHANDLE _aStatementHandle,
+                        sal_Int32 columnIndex,
+                        SQLSMALLINT _nType,
+                        SQLSMALLINT _nMaxLen,
+                        SQLSMALLINT _nScale,
+                        const void* _pValue,
+                        void* _pData,
+                        SQLINTEGER *pLen,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                        rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SQLRETURN nRetcode;
     SWORD   fSqlType;
@@ -372,7 +380,7 @@ void OTools::bindValue( SQLHANDLE _aStatementHandle,
     if (columnIndex != 0 && !_pValue)
     {
         *pLen = SQL_NULL_DATA;
-        nRetcode = N3SQLBindCol(_aStatementHandle,
+        nRetcode = (*(T3SQLBindCol)_pConnection->getOdbcFunction(ODBC3SQLBindCol))(_aStatementHandle,
                                 columnIndex,
                                 fCType,
                                 _pData,
@@ -488,7 +496,7 @@ void OTools::bindValue( SQLHANDLE _aStatementHandle,
 //              bindData< T >(fSqlType,sal_False,_pData,pLen,_pValue);
 
 
-        nRetcode = N3SQLBindCol(_aStatementHandle,
+        nRetcode = (*(T3SQLBindCol)_pConnection->getOdbcFunction(ODBC3SQLBindCol))(_aStatementHandle,
                                 columnIndex,
                                 fCType,
                                 _pData,
@@ -497,10 +505,16 @@ void OTools::bindValue( SQLHANDLE _aStatementHandle,
                                 );
     }
 
-    OTools::ThrowException(nRetcode,_aStatementHandle,SQL_HANDLE_STMT,_xInterface);
+    OTools::ThrowException(_pConnection,nRetcode,_aStatementHandle,SQL_HANDLE_STMT,_xInterface);
 }
 // -----------------------------------------------------------------------------
-void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT _nHandleType,const Reference< XInterface >& _xInterface,sal_Bool _bNoFound,rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
+void OTools::ThrowException(OConnection* _pConnection,
+                            SQLRETURN _rRetCode,
+                            SQLHANDLE _pContext,
+                            SQLSMALLINT _nHandleType,
+                            const Reference< XInterface >& _xInterface,
+                            sal_Bool _bNoFound,
+                            rtl_TextEncoding _nTextEncoding) throw(SQLException)
 {
     switch(_rRetCode)
     {
@@ -536,7 +550,7 @@ void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT 
     // Statements zu dieser Verbindung [was in unserem Fall wahrscheinlich gleichbedeutend ist,
     // aber das Reference Manual drueckt sich da nicht so klar aus ...].
     // Entsprechend bei hdbc.
-    SQLRETURN n = N3SQLGetDiagRec(_nHandleType,_pContext,1,
+    SQLRETURN n = (*(T3SQLGetDiagRec)_pConnection->getOdbcFunction(ODBC3SQLGetDiagRec))(_nHandleType,_pContext,1,
                          szSqlState,
                          &pfNativeError,
                          szErrorMessage,sizeof szErrorMessage - 1,&pcbErrorMsg);
@@ -553,8 +567,12 @@ void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT 
 
 }
 // -------------------------------------------------------------------------
-Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,SWORD  _fSqlType,sal_Bool &_bWasNull,
-                const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
+                                         SQLHANDLE _aStatementHandle,
+                                         sal_Int32 columnIndex,
+                                         SWORD  _fSqlType,
+                                         sal_Bool &_bWasNull,
+                                         const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     char aCharArray[2048];
     // Erstmal versuchen, die Daten mit dem kleinen Puffer
@@ -562,7 +580,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
     SQLINTEGER nMaxLen = sizeof aCharArray - 1;
     //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
     SQLINTEGER pcbValue = 0;
-    OTools::ThrowException(N3SQLGetData(_aStatementHandle,
+    OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         SQL_C_BINARY,
                                         &aCharArray,
@@ -594,7 +612,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
 
         // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
         //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
-        OTools::ThrowException(N3SQLGetData(_aStatementHandle,
+        OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         SQL_C_BINARY,
                                         &aCharArray,
@@ -608,8 +626,13 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
     return aData;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OTools::getStringValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,SWORD  _fSqlType,sal_Bool &_bWasNull,
-                const Reference< XInterface >& _xInterface,rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
+::rtl::OUString OTools::getStringValue(OConnection* _pConnection,
+                                       SQLHANDLE _aStatementHandle,
+                                       sal_Int32 columnIndex,
+                                       SWORD  _fSqlType,
+                                       sal_Bool &_bWasNull,
+                                       const Reference< XInterface >& _xInterface,
+                                       rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aData;
     switch(_fSqlType)
@@ -624,7 +647,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
             //  GETDATA(SQL_C_WCHAR, waCharArray, nMaxLen + sizeof(sal_Unicode));
 
             SQLINTEGER pcbValue=0;
-            OTools::ThrowException(N3SQLGetData(_aStatementHandle,
+            OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_WCHAR,
                                                 &waCharArray,
@@ -656,7 +679,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
 
                 // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
                 //  GETDATA(SQL_C_CHAR,waCharArray, nLen + 1);
-                OTools::ThrowException(N3SQLGetData(_aStatementHandle,
+                OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_WCHAR,
                                                 &waCharArray,
@@ -677,7 +700,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
             SDWORD nMaxLen = sizeof aCharArray - 1;
             //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
             SQLINTEGER pcbValue = 0;
-            OTools::ThrowException(N3SQLGetData(_aStatementHandle,
+            OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_CHAR,
                                                 &aCharArray,
@@ -708,7 +731,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
 
                 // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
                 //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
-                OTools::ThrowException(N3SQLGetData(_aStatementHandle,
+                OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_CHAR,
                                                 &aCharArray,
@@ -728,32 +751,45 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
     return aData;
 }
 // -------------------------------------------------------------------------
-void OTools::GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,::rtl::OUString &_rValue,const Reference< XInterface >& _xInterface,rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
+void OTools::GetInfo(OConnection* _pConnection,
+                     SQLHANDLE _aConnectionHandle,
+                     SQLUSMALLINT _nInfo,
+                     ::rtl::OUString &_rValue,
+                     const Reference< XInterface >& _xInterface,
+                     rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     char aValue[512];
     SQLSMALLINT nValueLen=0;
-    OTools::ThrowException(
-        N3SQLGetInfo(_aConnectionHandle,_nInfo,aValue,sizeof aValue,&nValueLen),
+    OTools::ThrowException(_pConnection,
+        (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,aValue,sizeof aValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 
     _rValue = ::rtl::OUString(aValue,nValueLen,_nTextEncoding);
 }
 // -------------------------------------------------------------------------
-void OTools::GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,sal_Int32 &_rValue,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+void OTools::GetInfo(OConnection* _pConnection,
+                     SQLHANDLE _aConnectionHandle,
+                     SQLUSMALLINT _nInfo,
+                     sal_Int32 &_rValue,
+                     const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
     _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
-    OTools::ThrowException(
-        N3SQLGetInfo(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
+    OTools::ThrowException(_pConnection,
+        (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 // -------------------------------------------------------------------------
-void OTools::GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,sal_Bool &_rValue,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+void OTools::GetInfo(OConnection* _pConnection,
+                     SQLHANDLE _aConnectionHandle,
+                     SQLUSMALLINT _nInfo,
+                     sal_Bool &_rValue,
+                     const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
-    OTools::ThrowException(
-        N3SQLGetInfo(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
-        _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
+    OTools::ThrowException(_pConnection,
+                            (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
+                            _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 // -------------------------------------------------------------------------
 sal_Int32 OTools::MapOdbcType2Jdbc(sal_Int32 _nType)

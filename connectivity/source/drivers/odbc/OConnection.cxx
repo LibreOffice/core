@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:37:35 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,11 @@ void SAL_CALL OConnection::release() throw(RuntimeException)
 {
     relase_ChildImpl();
 }
-
+// -----------------------------------------------------------------------------
+void* OConnection::getOdbcFunction(sal_Int32 _nIndex)  const
+{
+    return m_pDriver->getOdbcFunction(_nIndex);
+}
 //-----------------------------------------------------------------------------
 SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, sal_Bool bSilent)
 {
@@ -187,7 +191,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     try
     {
         ::rtl::OUString aVal;
-        OTools::GetInfo(m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this,getTextEncoding());
+        OTools::GetInfo(this,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this,getTextEncoding());
         bReadOnly = !aVal.compareToAscii("Y");
     }
     catch(...)
@@ -279,7 +283,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, bSilent);
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
     {
-        OTools::ThrowException(nSQLRETURN,m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+        OTools::ThrowException(this,nSQLRETURN,m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     }
     else if(SQL_SUCCESS_WITH_INFO == nSQLRETURN) // this driver does not support odbc3
     {
@@ -330,7 +334,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     ::rtl::OString aSql(::rtl::OUStringToOString(sql.getStr(),getTextEncoding()));
     char pOut[2048];
     SQLINTEGER nOutLen;
-    OTools::ThrowException(N3SQLNativeSql(m_aConnectionHandle,(SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength(),(SDB_ODBC_CHAR*)pOut,2048,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+    OTools::ThrowException(this,N3SQLNativeSql(m_aConnectionHandle,(SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength(),(SDB_ODBC_CHAR*)pOut,2048,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     return ::rtl::OUString(pOut,nOutLen,getTextEncoding());
 }
 // --------------------------------------------------------------------------------
@@ -340,7 +344,7 @@ void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLExcepti
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OTools::ThrowException(N3SQLSetConnectAttr(m_aConnectionHandle,
+    OTools::ThrowException(this,N3SQLSetConnectAttr(m_aConnectionHandle,
                                    SQL_ATTR_AUTOCOMMIT,
                                    (SQLPOINTER)((autoCommit) ? SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF) ,SQL_IS_INTEGER),
                                    m_aConnectionHandle,SQL_HANDLE_DBC,*this);
@@ -353,7 +357,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
 
 
     sal_uInt32 nOption = 0;
-    OTools::ThrowException(N3SQLGetConnectAttr(m_aConnectionHandle,
+    OTools::ThrowException(this,N3SQLGetConnectAttr(m_aConnectionHandle,
                                    SQL_ATTR_AUTOCOMMIT, &nOption,0,0),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     return nOption == SQL_AUTOCOMMIT_ON ;
 }
@@ -364,7 +368,7 @@ void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OTools::ThrowException(N3SQLEndTran(SQL_HANDLE_DBC,m_aConnectionHandle,SQL_COMMIT),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+    OTools::ThrowException(this,N3SQLEndTran(SQL_HANDLE_DBC,m_aConnectionHandle,SQL_COMMIT),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
@@ -373,7 +377,7 @@ void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OTools::ThrowException(N3SQLEndTran(SQL_HANDLE_DBC,m_aConnectionHandle,SQL_ROLLBACK),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+    OTools::ThrowException(this,N3SQLEndTran(SQL_HANDLE_DBC,m_aConnectionHandle,SQL_ROLLBACK),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
@@ -405,7 +409,7 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, 
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OTools::ThrowException(
+    OTools::ThrowException(this,
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_ACCESS_MODE,(SQLPOINTER)readOnly,SQL_IS_INTEGER),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
@@ -417,7 +421,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
 
 
     ::rtl::OUString aValue;
-    OTools::GetInfo(m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aValue,*this,getTextEncoding());
+    OTools::GetInfo(this,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aValue,*this,getTextEncoding());
     return !aValue.compareToAscii("Y");
 }
 // --------------------------------------------------------------------------------
@@ -428,7 +432,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
 
 
     ::rtl::OString aCat(::rtl::OUStringToOString(catalog.getStr(),getTextEncoding()));
-    OTools::ThrowException(
+    OTools::ThrowException(this,
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)aCat.getStr(),SQL_NTS),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
@@ -441,7 +445,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
 
     sal_Int32 nValueLen;
     char pCat[1024];
-    OTools::ThrowException(
+    OTools::ThrowException(this,
         N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)pCat,1024,&nValueLen),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 
@@ -454,7 +458,7 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLE
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OTools::ThrowException(N3SQLSetConnectAttr(m_aConnectionHandle,
+    OTools::ThrowException(this,N3SQLSetConnectAttr(m_aConnectionHandle,
                                    SQL_ATTR_TXN_ISOLATION,
                                    (SQLPOINTER)level,SQL_IS_INTEGER),
                                    m_aConnectionHandle,SQL_HANDLE_DBC,*this);
@@ -468,7 +472,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
 
     sal_Int32 nTxn = 0;
     SQLINTEGER nValueLen;
-    OTools::ThrowException(
+    OTools::ThrowException(this,
         N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_TXN_ISOLATION,&nTxn,sizeof nTxn,&nValueLen),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     return nTxn;
@@ -536,7 +540,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         aInfo.aLocalTypeName    = xRow->getString   (13);
         aInfo.nMinimumScale     = xRow->getShort    (14);
         aInfo.nMaximumScale     = xRow->getShort    (15);
-        aInfo.nNumPrecRadix     = xRow->getInt      (18);
+        aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
 
 
 
@@ -567,7 +571,7 @@ void OConnection::disposing()
     }
     m_aStatements.clear();
 
-    OTools::ThrowException(N3SQLDisconnect(m_aConnectionHandle),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+    OTools::ThrowException(this,N3SQLDisconnect(m_aConnectionHandle),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 

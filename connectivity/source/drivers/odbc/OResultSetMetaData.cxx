@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,15 +79,15 @@ OResultSetMetaData::~OResultSetMetaData()
 ::rtl::OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
 {
     sal_Int32 column = _column;
-    if(_column < m_vMapping.size()) // use mapping
+    if(_column <(sal_Int32) m_vMapping.size()) // use mapping
         column = m_vMapping[_column];
 
     sal_Int32 BUFFER_LEN = 128;
     char *pName = new char[BUFFER_LEN];
     SQLSMALLINT nRealLen=0;
-    OTools::ThrowException(N3SQLColAttribute(m_aStatementHandle,
+    OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
-                                    (SQLUSMALLINT)ident,
+                                    (SQLSMALLINT)ident,
                                     (SQLPOINTER)pName,
                                     BUFFER_LEN,
                                     &nRealLen,
@@ -97,7 +97,7 @@ OResultSetMetaData::~OResultSetMetaData()
     {
         delete pName;
         pName = new char[nRealLen];
-        OTools::ThrowException(N3SQLColAttribute(m_aStatementHandle,
+        OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
                                     (SQLUSMALLINT)ident,
                                     (SQLPOINTER)pName,
@@ -113,12 +113,12 @@ OResultSetMetaData::~OResultSetMetaData()
 sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
 {
     sal_Int32 column = _column;
-    if(_column < m_vMapping.size()) // use mapping
+    if(_column < (sal_Int32)m_vMapping.size()) // use mapping
         column = m_vMapping[_column];
 
     sal_Int32 nValue=0;
     sal_Int16 nLen = sizeof(nValue);
-    OTools::ThrowException(N3SQLColAttribute(m_aStatementHandle,
+    OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
                                          (SQLUSMALLINT)column,
                                          (SQLUSMALLINT)ident,
                                          NULL,
@@ -154,7 +154,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
     if(m_nColCount != -1)
         return m_nColCount;
     sal_Int16 nNumResultCols=0;
-    OTools::ThrowException(N3SQLNumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,N3SQLNumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return m_nColCount = nNumResultCols;
 }
 // -------------------------------------------------------------------------

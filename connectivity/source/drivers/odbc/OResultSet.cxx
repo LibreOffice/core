@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:50:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_bInserting(sal_False)
                         ,m_nLastColumnPos(0)
                         ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
+                        ,m_pStatement(pStmt)
 {
     osl_incrementInterlockedCount( &m_refCount );
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
@@ -160,25 +161,25 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
-OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,rtl_TextEncoding _nTextEncoding) :  OResultSet_BASE(m_aMutex)
-                        ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-                        ,m_aStatement(NULL)
-                        ,m_aStatementHandle(_pStatementHandle)
-                        ,m_aConnectionHandle(NULL)
-                        ,m_nRowPos(0)
-                        ,m_bLastRecord(sal_False)
-                        ,m_bEOF(sal_False)
-                        ,m_bFreeHandle(sal_False)
-                        ,m_xMetaData(NULL)
-                        ,m_bInserting(sal_False)
-                        ,m_nLastColumnPos(0)
-                        ,m_nTextEncoding(_nTextEncoding)
-{
-    osl_incrementInterlockedCount( &m_refCount );
-    m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
-    osl_decrementInterlockedCount( &m_refCount );
-    //  allocBuffer();
-}
+//OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,rtl_TextEncoding _nTextEncoding) :    OResultSet_BASE(m_aMutex)
+//                      ,OPropertySetHelper(OResultSet_BASE::rBHelper)
+//                      ,m_aStatement(NULL)
+//                      ,m_aStatementHandle(_pStatementHandle)
+//                      ,m_aConnectionHandle(NULL)
+//                      ,m_nRowPos(0)
+//                      ,m_bLastRecord(sal_False)
+//                      ,m_bEOF(sal_False)
+//                      ,m_bFreeHandle(sal_False)
+//                      ,m_xMetaData(NULL)
+//                      ,m_bInserting(sal_False)
+//                      ,m_nLastColumnPos(0)
+//                      ,m_nTextEncoding(_nTextEncoding)
+//{
+//  osl_incrementInterlockedCount( &m_refCount );
+//  m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
+//  osl_decrementInterlockedCount( &m_refCount );
+//  //  allocBuffer();
+//}
 
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
@@ -378,7 +379,12 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
-        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) : columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
+#if SUPD > 631
+                columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+#else
+                columnName.equalsIgnoreCase(xMeta->getColumnName(i)))
+#endif
             break;
     return i;
 }
@@ -423,7 +429,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
 
 
     sal_Int8 nVal(0);
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,&nVal,sizeof nVal);
+    OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,&nVal,sizeof nVal);
     return nVal;
 }
 // -------------------------------------------------------------------------
@@ -445,7 +451,7 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
         m_aRow[columnIndex] >>= nRet;
     }
     else
-        OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nRet,sizeof nRet);
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nRet,sizeof nRet);
     return nRet;
 }
 // -------------------------------------------------------------------------
@@ -473,18 +479,18 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         return nRet;
     }
 
-    sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
+    SWORD nType = getMetaData()->getColumnType(columnIndex);
     switch(nType)
     {
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
             {
-                ::rtl::OUString aRet = OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+                ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nType,m_bWasNull,**this,m_nTextEncoding);
                 return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
             }
             break;
     }
-    return OTools::getBytesValue(m_aStatementHandle,columnIndex,nType,m_bWasNull,**this);
+    return OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nType,m_bWasNull,**this);
 }
 // -------------------------------------------------------------------------
 
@@ -510,7 +516,7 @@ Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, R
         aDate.day = 0;
         aDate.month = 0;
         aDate.year = 0;
-        OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
         nRet = Date(aDate.day,aDate.month,aDate.year);
     }
     return nRet;
@@ -534,7 +540,7 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
 
     }
     else
-        OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,&nRet,sizeof nRet);
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,&nRet,sizeof nRet);
     return nRet;
 }
 // -------------------------------------------------------------------------
@@ -547,7 +553,7 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
 
     columnIndex = mapColumn(columnIndex);
     float nVal(0);
-    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
+    OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
     return nVal;
 }
 // -------------------------------------------------------------------------
@@ -567,7 +573,7 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
         m_aRow[columnIndex] >>= nRet;
     }
     else
-        OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nRet,sizeof nRet);
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nRet,sizeof nRet);
 
     return nRet;
 }
@@ -580,7 +586,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
 
     sal_Int32 nValue = 0;
-    OTools::ThrowException(N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_NUMBER,&nValue,SQL_IS_UINTEGER,0),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_NUMBER,&nValue,SQL_IS_UINTEGER,0),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(!nValue) // some driver dosen't support this
         m_nRowPos = nValue;
     return nValue;
@@ -605,7 +611,7 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 
 
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(m_aStatementHandle);
+        m_xMetaData = new OResultSetMetaData(m_pStatement->getOwnConnection(),m_aStatementHandle);
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
@@ -681,7 +687,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
     }
     else
-        OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nRet,sizeof nRet);
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nRet,sizeof nRet);
     return nRet;
 }
 // -------------------------------------------------------------------------
@@ -702,7 +708,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         m_aRow[columnIndex] >>= nRet;
     }
     else
-        nRet = OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,(SWORD)getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
     return nRet;
 }
 // -------------------------------------------------------------------------
@@ -724,7 +730,7 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
     else
     {
         TIME_STRUCT aTime={0,0,0};
-        OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
         nRet = Time(0,aTime.second,aTime.minute,aTime.hour);
     }
     return nRet;
@@ -752,7 +758,7 @@ DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLExc
     else
     {
         TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-        OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
         nRet = DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
     }
     return nRet;
@@ -838,7 +844,7 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 
     m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_FIRST,0);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet;
     if(bRet = (m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO))
         m_nRowPos = 1;
@@ -854,7 +860,7 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
 
     m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_LAST,0);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // here I know definitely that I stand on the last record
     return m_bLastRecord = (m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO);
 }
@@ -867,7 +873,7 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
 
     m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_ABSOLUTE,row);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
         m_nRowPos = row;
@@ -882,7 +888,7 @@ sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, Runt
 
     m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,row);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
         m_nRowPos += row;
@@ -897,7 +903,7 @@ sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 
     m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_PRIOR,0);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet || m_nCurrentFetchState == SQL_NO_DATA)
         --m_nRowPos;
@@ -951,7 +957,7 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
     m_nLastColumnPos = 0;
     //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
     m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO)
         ++m_nRowPos;
     return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
@@ -974,7 +980,7 @@ void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    OTools::ThrowException(N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
@@ -993,7 +999,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 
 
     SQLRETURN nRet;
-    if(pODBC3SQLBulkOperations)
+    if(getOdbcFunction(ODBC3SQLBulkOperations))
         nRet = N3SQLBulkOperations(m_aStatementHandle, SQL_ADD);
     else
     {
@@ -1001,7 +1007,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
             next(); // must be done
         nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_ADD,SQL_LOCK_NO_CHANGE);
     }
-    OTools::ThrowException(nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
 }
 // -------------------------------------------------------------------------
@@ -1032,7 +1038,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
         while (nRet == SQL_NEED_DATA);
 
     }
-    OTools::ThrowException(nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // now unbind all columns so we can fetch all columns again with SQLGetData
     nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
 }
@@ -1040,7 +1046,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
 {
     SQLRETURN nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_DELETE,SQL_LOCK_NO_CHANGE);
-    OTools::ThrowException(nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 
@@ -1076,7 +1082,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 
 
     columnIndex = mapColumn(columnIndex);
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_CHAR,0,0,(sal_Int8*)NULL,NULL,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,(sal_Int8*)NULL,NULL,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 
@@ -1088,7 +1094,7 @@ void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) thr
 
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_BIT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BIT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
@@ -1100,7 +1106,7 @@ void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(
 
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_CHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 
@@ -1112,7 +1118,7 @@ void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
 
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_TINYINT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TINYINT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
@@ -1124,7 +1130,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
 
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_INTEGER,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_INTEGER,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
@@ -1145,7 +1151,7 @@ void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQ
 
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_REAL,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_REAL,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 
@@ -1157,7 +1163,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
 
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_DOUBLE,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DOUBLE,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
@@ -1168,7 +1174,7 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
 
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_VARCHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_VARCHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
@@ -1179,7 +1185,7 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
 
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_BINARY,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BINARY,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) throw(SQLException, RuntimeException)
@@ -1191,7 +1197,7 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) thr
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
     DATE_STRUCT aVal = OTools::DateToOdbcDate(x);
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_DATE,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DATE,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 
@@ -1204,7 +1210,7 @@ void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const Time& x ) thr
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
     TIME_STRUCT aVal = OTools::TimeToOdbcTime(x);
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_TIME,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIME,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 
@@ -1217,7 +1223,7 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const DateTime
     columnIndex = mapColumn(columnIndex);
     void* pData = m_aBindVector[columnIndex];
     TIMESTAMP_STRUCT aVal = OTools::DateTimeToTimestamp(x);
-    OTools::bindValue(m_aStatementHandle,columnIndex,SQL_TIMESTAMP,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIMESTAMP,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 
@@ -1247,7 +1253,7 @@ void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 
     //  SQLRETURN nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_REFRESH,SQL_LOCK_NO_CHANGE);
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,0);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
@@ -1369,7 +1375,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
         throw SQLException();
 
 
-     return makeAny(OTools::getBytesValue(m_aStatementHandle,0,SQL_BINARY,m_bWasNull,**this));
+     return makeAny(OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_BINARY,m_bWasNull,**this));
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
@@ -1384,7 +1390,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
     SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,aBookmark.getArray(),SQL_IS_POINTER);
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,0);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
 }
 // -------------------------------------------------------------------------
@@ -1400,7 +1406,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_
     SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,aBookmark.getArray(),SQL_IS_POINTER);
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,rows);
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
 }
 // -------------------------------------------------------------------------
@@ -1514,13 +1520,13 @@ sal_Bool  OResultSet::isBookmarkable() const throw( SQLException,  RuntimeExcept
         return sal_False;
         break;
     case SQL_CURSOR_STATIC:
-        OTools::GetInfo(m_aConnectionHandle,SQL_STATIC_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
+        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_STATIC_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
         break;
     case SQL_CURSOR_KEYSET_DRIVEN:
-        OTools::GetInfo(m_aConnectionHandle,SQL_KEYSET_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
+        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_KEYSET_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
         break;
     case SQL_CURSOR_DYNAMIC:
-        OTools::GetInfo(m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
+        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
         break;
     }
     sal_uInt32 nUseBookmark = SQL_UB_OFF;
@@ -1642,7 +1648,7 @@ void OResultSet::getFastPropertyValue(
 // -------------------------------------------------------------------------
 void OResultSet::fillRow(sal_Int32 _nToColumn)
 {
-    if(m_aRow.size() <= _nToColumn)
+    if((sal_Int32)m_aRow.size() <= _nToColumn)
         m_aRow.resize(_nToColumn+1);
     m_bFetchData = sal_False;
     Reference< XResultSetMetaData > xMeta = getMetaData();

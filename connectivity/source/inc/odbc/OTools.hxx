@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:08 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,66 @@
 #include <rtl/textenc.h>
 #endif
 
+#define ODBC3SQLAllocHandle         1
+#define ODBC3SQLConnect             2
+#define ODBC3SQLDriverConnect       3
+#define ODBC3SQLBrowseConnect       4
+#define ODBC3SQLDataSources         5
+#define ODBC3SQLDrivers             6
+#define ODBC3SQLGetInfo             7
+#define ODBC3SQLGetFunctions        8
+#define ODBC3SQLGetTypeInfo         9
+#define ODBC3SQLSetConnectAttr      10
+#define ODBC3SQLGetConnectAttr      11
+#define ODBC3SQLSetEnvAttr          12
+#define ODBC3SQLGetEnvAttr          13
+#define ODBC3SQLSetStmtAttr         14
+#define ODBC3SQLGetStmtAttr         15
+#define ODBC3SQLPrepare             16
+#define ODBC3SQLBindParameter       17
+#define ODBC3SQLSetCursorName       18
+#define ODBC3SQLExecute             19
+#define ODBC3SQLExecDirect          20
+#define ODBC3SQLDescribeParam       21
+#define ODBC3SQLNumParams           22
+#define ODBC3SQLParamData           23
+#define ODBC3SQLPutData             24
+#define ODBC3SQLRowCount            25
+#define ODBC3SQLNumResultCols       26
+#define ODBC3SQLDescribeCol         27
+#define ODBC3SQLColAttribute        28
+#define ODBC3SQLBindCol             29
+#define ODBC3SQLFetch               30
+#define ODBC3SQLFetchScroll         31
+#define ODBC3SQLGetData             32
+#define ODBC3SQLSetPos              33
+#define ODBC3SQLBulkOperations      34
+#define ODBC3SQLMoreResults         35
+#define ODBC3SQLGetDiagRec          36
+#define ODBC3SQLColumnPrivileges    37
+#define ODBC3SQLColumns             38
+#define ODBC3SQLForeignKeys         39
+#define ODBC3SQLPrimaryKeys         40
+#define ODBC3SQLProcedureColumns    41
+#define ODBC3SQLProcedures          42
+#define ODBC3SQLSpecialColumns      43
+#define ODBC3SQLStatistics          44
+#define ODBC3SQLTablePrivileges     45
+#define ODBC3SQLTables              46
+#define ODBC3SQLFreeStmt            47
+#define ODBC3SQLCloseCursor         48
+#define ODBC3SQLCancel              49
+#define ODBC3SQLEndTran             50
+#define ODBC3SQLDisconnect          51
+#define ODBC3SQLFreeHandle          52
+#define ODBC3SQLGetCursorName       53
+#define ODBC3SQLNativeSql           54
+
 namespace connectivity
 {
     namespace odbc
     {
+        class OConnection;
 
         const sal_uInt32 ODBC_FRACTION_UNITS_PER_HSECOND = 10000000L;
         const sal_Int32 MAX_PUT_DATA_LENGTH = 2000;
@@ -100,18 +156,35 @@ namespace connectivity
         class OTools
         {
         public:
-            static void ThrowException( SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT _nHandleType,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,sal_Bool _bNoFound=sal_True,
+            static void ThrowException( OConnection* _pConnection,
+                                        SQLRETURN _rRetCode,
+                                        SQLHANDLE _pContext,
+                                        SQLSMALLINT _nHandleType,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                        sal_Bool _bNoFound=sal_True,
                                         rtl_TextEncoding _nTextEncoding = RTL_TEXTENCODING_MS_1252)
-                                        throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                                        throw(::com::sun::star::sdbc::SQLException);
 
-            static void GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,::rtl::OUString &_rValue,
-                                                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                                                rtl_TextEncoding _nTextEncoding)
-                                                                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static void GetInfo(OConnection* _pConnection,
+                                SQLHANDLE _aConnectionHandle,
+                                SQLUSMALLINT _nInfo,
+                                ::rtl::OUString &_rValue,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                rtl_TextEncoding _nTextEncoding)
+                                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            static void GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,sal_Int32 &_rValue,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            static void GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,sal_Bool &_rValue,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static void GetInfo(OConnection* _pConnection,
+                                SQLHANDLE _aConnectionHandle,
+                                SQLUSMALLINT _nInfo,
+                                sal_Int32 &_rValue,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            static void GetInfo(OConnection* _pConnection,
+                                SQLHANDLE _aConnectionHandle,
+                                SQLUSMALLINT _nInfo,
+                                sal_Bool &_rValue,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
             static sal_Int32 MapOdbcType2Jdbc(sal_Int32 _nType);
             static sal_Int32 jdbcTypeToOdbc(sal_Int32 jdbcType);
 
@@ -146,58 +219,72 @@ namespace connectivity
             static void getBindTypes(sal_Bool _bUseWChar,sal_Bool _bUseOldTimeDate,
                               sal_Int32 jdbcType,SQLSMALLINT& fCType,SQLSMALLINT& fSqlType,
                               SQLUINTEGER& nColumnSize,SQLSMALLINT& nDecimalDigits);
-            static ::rtl::OUString getStringValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,SWORD  _fSqlType,sal_Bool &_bWasNull,
-                                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                                rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            static  ::com::sun::star::uno::Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,SWORD  _fSqlType,sal_Bool &_bWasNull,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            static void getValue(   SQLHANDLE _aStatementHandle,
-                                        sal_Int32 columnIndex,
-                                        SQLSMALLINT _nType,
-                                        sal_Bool &_bWasNull,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                        void* _pValue,
-                                        SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static ::rtl::OUString getStringValue(  OConnection* _pConnection,
+                                                    SQLHANDLE _aStatementHandle,
+                                                    sal_Int32 columnIndex,
+                                                    SWORD  _fSqlType,
+                                                    sal_Bool &_bWasNull,
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                                    rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            static  ::com::sun::star::uno::Sequence<sal_Int8> getBytesValue(OConnection* _pConnection,
+                                                                            SQLHANDLE _aStatementHandle,
+                                                                            sal_Int32 columnIndex,
+                                                                            SWORD  _fSqlType,
+                                                                            sal_Bool &_bWasNull,
+                                                                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static void getValue(   OConnection* _pConnection,
+                                    SQLHANDLE _aStatementHandle,
+                                    sal_Int32 columnIndex,
+                                    SQLSMALLINT _nType,
+                                    sal_Bool &_bWasNull,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                    void* _pValue,
+                                    SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             static void bindData(   SWORD fSqlType,
-                                            sal_Bool _bUseWChar,
-                                            void *&_pData,
-                                            SDWORD*& pLen,
-                                            const void* _pValue,
-                                            rtl_TextEncoding _nTextEncoding);
+                                    sal_Bool _bUseWChar,
+                                    void *&_pData,
+                                    SDWORD*& pLen,
+                                    const void* _pValue,
+                                    rtl_TextEncoding _nTextEncoding);
 
-            static void bindParameter(SQLHANDLE _hStmt,
-                            sal_Int32 nPos,
-                            sal_Int8* pDataBuffer,
-                            sal_Int8* pLenBuffer,
-                            SQLSMALLINT _nJDBCtype,
-                            sal_Bool _bUseWChar,
-                            sal_Bool _bUseOldTimeDate,
-                            const void* _pValue,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                            rtl_TextEncoding _nTextEncoding)
-                             throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            static void bindValue(  SQLHANDLE _aStatementHandle,
-                                            sal_Int32 columnIndex,
-                                            SQLSMALLINT _nType,
-                                            SQLSMALLINT _nMaxLen,
-                                            SQLSMALLINT _nScale,
-                                            const void* _pValue,
-                                            void* _pData,
-                                            SQLINTEGER *pLen,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                            rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static void bindParameter(  OConnection* _pConnection,
+                                        SQLHANDLE _hStmt,
+                                        sal_Int32 nPos,
+                                        sal_Int8* pDataBuffer,
+                                        sal_Int8* pLenBuffer,
+                                        SQLSMALLINT _nJDBCtype,
+                                        sal_Bool _bUseWChar,
+                                        sal_Bool _bUseOldTimeDate,
+                                        const void* _pValue,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                        rtl_TextEncoding _nTextEncoding)
+                                         throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            static void bindValue(  OConnection* _pConnection,
+                                    SQLHANDLE _aStatementHandle,
+                                    sal_Int32 columnIndex,
+                                    SQLSMALLINT _nType,
+                                    SQLSMALLINT _nMaxLen,
+                                    SQLSMALLINT _nScale,
+                                    const void* _pValue,
+                                    void* _pData,
+                                    SQLINTEGER *pLen,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                    rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
-        template <class T> void getValue(   SQLHANDLE _aStatementHandle,
-                                        sal_Int32 columnIndex,
-                                        SQLSMALLINT _nType,
-                                        sal_Bool &_bWasNull,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                        T& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        template <class T> void getValue(   OConnection* _pConnection,
+                                            SQLHANDLE _aStatementHandle,
+                                            sal_Int32 columnIndex,
+                                            SQLSMALLINT _nType,
+                                            sal_Bool &_bWasNull,
+                                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                            T& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
-            OTools::getValue(_aStatementHandle,columnIndex,_nType,_bWasNull,_xInterface,&_rValue,sizeof _rValue);
+            OTools::getValue(_pConnection,_aStatementHandle,columnIndex,_nType,_bWasNull,_xInterface,&_rValue,sizeof _rValue);
         }
         //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-14 11:48:18 $
+#   last change: $Author: oj $ $Date: 2001-05-15 08:18:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
+        $(SLO)$/BFunctions.obj					\
         $(SLO)$/BConnection.obj					\
         $(SLO)$/BDriver.obj						\
         $(SLO)$/BCatalog.obj					\

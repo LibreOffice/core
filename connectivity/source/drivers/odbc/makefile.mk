@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
+#   last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ SLOFILES=\
         $(SLO)$/ODatabaseMetaDataResultSet.obj	\
         $(SLO)$/ODatabaseMetaData.obj			\
         $(SLO)$/ODriver.obj						\
-        $(SLO)$/OFunctions.obj					\
         $(SLO)$/OConnection.obj
 
         
@@ -121,7 +120,9 @@ DEFLIB1NAME=$(TARGET)
 # --- ODBC Library -----------------------------------
 # --- Files -------------------------------------
 SLO2FILES=\
-        $(SLO)$/oservices.obj
+        $(SLO)$/oservices.obj	\
+        $(SLO)$/ORealDriver.obj	\
+        $(SLO)$/OFunctions.obj
 
 # --- ODBC Library -----------------------------------
 SHL2TARGET=	$(ODBC_TARGET)$(ODBC_MAJOR)

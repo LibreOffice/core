@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BResultSet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:21:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@ using namespace com::sun::star::util;
 sal_Bool SAL_CALL OAdabasResultSet::next(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_nLastColumnPos = 0;
     //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
@@ -97,15 +97,15 @@ sal_Bool SAL_CALL OAdabasResultSet::next(  ) throw(SQLException, RuntimeExceptio
     if(m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO)
         ++m_nRowPos;
 
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OAdabasResultSet::first(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_nLastColumnPos = 0;
     // don't ask why !
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL OAdabasResultSet::first(  ) throw(SQLException, RuntimeExcepti
         m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     }
 
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(bRet = (m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO))
         m_nRowPos = 1;
     return bRet;
@@ -129,8 +129,8 @@ sal_Bool SAL_CALL OAdabasResultSet::first(  ) throw(SQLException, RuntimeExcepti
 sal_Bool SAL_CALL OAdabasResultSet::last(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_nLastColumnPos = 0;
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_RETRIEVE_DATA,(SQLPOINTER)SQL_RD_OFF,SQL_IS_UINTEGER);
@@ -144,7 +144,7 @@ sal_Bool SAL_CALL OAdabasResultSet::last(  ) throw(SQLException, RuntimeExceptio
     }
 
     m_bEOF = sal_True;
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // here I know definitely that I stand on the last record
     return m_bLastRecord = (m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO);
 }
@@ -152,8 +152,8 @@ sal_Bool SAL_CALL OAdabasResultSet::last(  ) throw(SQLException, RuntimeExceptio
 sal_Bool SAL_CALL OAdabasResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_nLastColumnPos = 0;
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_RETRIEVE_DATA,(SQLPOINTER)SQL_RD_OFF,SQL_IS_UINTEGER);
@@ -167,7 +167,7 @@ sal_Bool SAL_CALL OAdabasResultSet::absolute( sal_Int32 row ) throw(SQLException
         m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     }
 
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(bRet)
         m_nRowPos = row;
     return bRet;
@@ -176,8 +176,8 @@ sal_Bool SAL_CALL OAdabasResultSet::absolute( sal_Int32 row ) throw(SQLException
 sal_Bool SAL_CALL OAdabasResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_nLastColumnPos = 0;
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_RETRIEVE_DATA,(SQLPOINTER)SQL_RD_OFF,SQL_IS_UINTEGER);
@@ -190,7 +190,7 @@ sal_Bool SAL_CALL OAdabasResultSet::relative( sal_Int32 row ) throw(SQLException
         m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     }
 
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(bRet)
         m_nRowPos += row;
     return bRet;
@@ -199,8 +199,8 @@ sal_Bool SAL_CALL OAdabasResultSet::relative( sal_Int32 row ) throw(SQLException
 sal_Bool SAL_CALL OAdabasResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_nLastColumnPos = 0;
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_RETRIEVE_DATA,(SQLPOINTER)SQL_RD_OFF,SQL_IS_UINTEGER);
@@ -213,7 +213,7 @@ sal_Bool SAL_CALL OAdabasResultSet::previous(  ) throw(SQLException, RuntimeExce
         m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     }
 
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(bRet || m_nCurrentFetchState == SQL_NO_DATA)
         --m_nRowPos;
     return bRet;
@@ -222,8 +222,8 @@ sal_Bool SAL_CALL OAdabasResultSet::previous(  ) throw(SQLException, RuntimeExce
 void SAL_CALL OAdabasResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     //  SQLRETURN nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_REFRESH,SQL_LOCK_NO_CHANGE);
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_RETRIEVE_DATA,(SQLPOINTER)SQL_RD_OFF,SQL_IS_UINTEGER);
@@ -235,7 +235,7 @@ void SAL_CALL OAdabasResultSet::refreshRow(  ) throw(SQLException, RuntimeExcept
         N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_RETRIEVE_DATA,(SQLPOINTER)SQL_RD_ON,SQL_IS_UINTEGER);
         m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     }
-    OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -----------------------------------------------------------------------------
 

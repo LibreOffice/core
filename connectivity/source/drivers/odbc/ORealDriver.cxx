@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: BDriver.cxx,v $
+ *  $RCSfile: ORealDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -37,11 +37,11 @@
  *  Sun Industry Standards Source License Version 1.1
  *  =================================================
  *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
+ *  Source License Version 1.1 (the License); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
  *  License at http://www.openoffice.org/license.html.
  *
- *  Software provided under this License is provided on an "AS IS" basis,
+ *  Software provided under this License is provided on an AS IS basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
@@ -59,28 +59,21 @@
  *
  ************************************************************************/
 
-#ifndef _CONNECTIVITY_ADABAS_BDRIVER_HXX_
-#include "adabas/BDriver.hxx"
-#endif
-#ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
-#include "adabas/BConnection.hxx"
-#endif
-#ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
-#include "odbc/OFunctions.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
+#ifndef _CONNECTIVITY_ODBC_ODRIVER_HXX_
+#include "odbc/ODriver.hxx"
 #endif
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
 #endif
+#ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
+#include "odbc/OFunctions.hxx"
+#endif
 
-using namespace connectivity;
 namespace connectivity
 {
-    namespace adabas
-    {
-        // extern declaration of the function pointer
+    sal_Bool LoadFunctions(oslModule pODBCso);
+    sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath);
+    // extern declaration of the function pointer
     extern T3SQLAllocHandle pODBC3SQLAllocHandle;
     extern T3SQLConnect pODBC3SQLConnect;
     extern T3SQLDriverConnect pODBC3SQLDriverConnect;
@@ -143,200 +136,20 @@ namespace connectivity
     extern T3SQLGetCursorName pODBC3SQLGetCursorName;
     extern T3SQLNativeSql pODBC3SQLNativeSql;
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
 
-    sal_Bool LoadFunctions(oslModule pODBCso);
-    sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath);
-
-// --------------------------------------------------------------------------------
-ODriver::ODriver()
-{
-}
-//------------------------------------------------------------------------------
-void ODriver::disposing()
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    ODriver_BASE::disposing();
-}
-
-// static ServiceInfo
-//------------------------------------------------------------------------------
-rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
-{
-    return rtl::OUString::createFromAscii("com.sun.star.sdbc.BDriver");
-}
-//------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
-    aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
-    return aSNS;
-}
-//------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
-{
-    return getImplementationName_Static();
-}
-
-//------------------------------------------------------------------
-sal_Bool SAL_CALL ODriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
-
-    return sal_False;
-}
-//------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL ODriver::getSupportedServiceNames(  ) throw(RuntimeException)
-{
-    return getSupportedServiceNames_Static();
-}
-//------------------------------------------------------------------
-Any SAL_CALL ODriver::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = ::cppu::queryInterface(rType, static_cast<XDataDefinitionSupplier*>(this));
-    if(aRet.hasValue())
-       return aRet;
-    return ODriver_BASE::queryInterface(rType);
-}
-//------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) throw( ::com::sun::star::uno::Exception )
-{
-    return *(new ODriver());
-}
-// --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
-{
-    if(!m_pDriverHandle)
+    namespace odbc
     {
-        ::rtl::OUString aPath;
-        if(!EnvironmentHandle(aPath))
-            throw SQLException(aPath,*this,::rtl::OUString(),1000,Any());
-    }
-    OAdabasConnection* pCon = new OAdabasConnection(m_pDriverHandle,this);
-    SQLRETURN nSQLRETURN = pCon->Construct(url,info);
-
-    if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
-    {
-        odbc::OTools::ThrowException(pCon,nSQLRETURN,pCon->getConnection(),SQL_HANDLE_DBC,*this);
-    }
-    else if(SQL_SUCCESS_WITH_INFO == nSQLRETURN) // this driver does not support odbc3
-    {
-    }
-    Reference< XConnection > xCon = pCon;
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
-
-    return xCon;
-}
-
-// --------------------------------------------------------------------------------
-sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
-        throw(SQLException, RuntimeException)
-{
-    if(!url.compareTo(::rtl::OUString::createFromAscii("sdbc:adabas:"),12))
-    {
-        return sal_True;
-    }
-    return sal_False;
-}
-// --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& , const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
-{
-    return Sequence< DriverPropertyInfo >();
-}
-// --------------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODriver::getMajorVersion(  ) throw(RuntimeException)
-{
-    return 1;
-}
-// --------------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODriver::getMinorVersion(  ) throw(RuntimeException)
-{
-    return 0;
-}
-// --------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-// ODBC Environment (gemeinsam fuer alle Connections):
-SQLHANDLE ODriver::EnvironmentHandle(::rtl::OUString &_rPath)
-{
-    // Ist (fuer diese Instanz) bereits ein Environment erzeugt worden?
-    if (!m_pDriverHandle)
-    {
-        SQLHANDLE h = SQL_NULL_HANDLE;
-        // Environment allozieren
-
-        // ODBC-DLL jetzt laden:
-        if (! LoadLibrary_ADABAS(_rPath))
-            return SQL_NULL_HANDLE;
-
-        if (N3SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&h) != SQL_SUCCESS)
-            return SQL_NULL_HANDLE;
-
-        // In globaler Struktur merken ...
-        m_pDriverHandle = h;
-        SQLRETURN nError = N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION,(SQLPOINTER) SQL_OV_ODBC3, SQL_IS_INTEGER);
-        //N3SQLSetEnvAttr(h, SQL_ATTR_CONNECTION_POOLING,(SQLPOINTER) SQL_CP_ONE_PER_HENV, SQL_IS_INTEGER);
-    }
-
-    return m_pDriverHandle;
-}
-// --------------------------------------------------------------------------------
-// XDataDefinitionSupplier
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( const Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODriver_BASE::rBHelper.bDisposed)
-        throw DisposedException();
-
-    Reference< XTablesSupplier > xTab;
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
-    if(xTunnel.is())
-    {
-
-        OAdabasConnection* pConnection = NULL;
-        OAdabasConnection* pSearchConnection = (OAdabasConnection*)xTunnel->getSomething(OAdabasConnection::getUnoTunnelImplementationId());
-        for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+        class ORealObdcDriver : public ODBCDriver
         {
-            if ((OAdabasConnection*) Reference< XConnection >::query(i->get().get()).get() == pSearchConnection)
-            {
-                pConnection = pSearchConnection;
-                break;
-            }
-        }
+        protected:
+            virtual void* getOdbcFunction(sal_Int32 _nIndex)  const;
+            virtual SQLHANDLE   EnvironmentHandle(::rtl::OUString &_rPath);
+        public:
+            ORealObdcDriver(){}
+        };
 
-
-        if(pConnection)
-            xTab = pConnection->createCatalog();
-    }
-    return xTab;
-}
-
-// --------------------------------------------------------------------------------
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
-{
-    return getDataDefinitionByConnection(connect(url,info));
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL ODriver::acquire() throw(::com::sun::star::uno::RuntimeException)
-{
-    ODriver_BASE::acquire();
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL ODriver::release() throw(::com::sun::star::uno::RuntimeException)
-{
-    ODriver_BASE::release();
-}
-// -----------------------------------------------------------------------------
-void* ODriver::getOdbcFunction(sal_Int32 _nIndex) const
+        //------------------------------------------------------------------
+void* ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
 {
     void* pFunction = NULL;
     switch(_nIndex)
@@ -556,11 +369,36 @@ void* ODriver::getOdbcFunction(sal_Int32 _nIndex) const
     }
     return pFunction;
 }
+
+//------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODBCDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+{
+    return *(new ORealObdcDriver());
+}
 // -----------------------------------------------------------------------------
+// ODBC Environment (gemeinsam fuer alle Connections):
+SQLHANDLE ORealObdcDriver::EnvironmentHandle(::rtl::OUString &_rPath)
+{
+    // Ist (fuer diese Instanz) bereits ein Environment erzeugt worden?
+    if (!m_pDriverHandle)
+    {
+        SQLHANDLE h = SQL_NULL_HANDLE;
+        // Environment allozieren
+
+        // ODBC-DLL jetzt laden:
+        if (!LoadLibrary_ODBC3(_rPath) || N3SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&h) != SQL_SUCCESS)
+            return SQL_NULL_HANDLE;
+
+        // In globaler Struktur merken ...
+        m_pDriverHandle = h;
+        SQLRETURN nError = N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION,(SQLPOINTER) SQL_OV_ODBC3, SQL_IS_UINTEGER);
+        //N3SQLSetEnvAttr(h, SQL_ATTR_CONNECTION_POOLING,(SQLPOINTER) SQL_CP_ONE_PER_HENV, SQL_IS_INTEGER);
     }
+
+    return m_pDriverHandle;
 }
 // -----------------------------------------------------------------------------
 
-
-
+    }
+}
 

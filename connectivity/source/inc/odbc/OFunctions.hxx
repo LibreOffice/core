@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctions.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,18 +75,18 @@
 namespace connectivity
 {
 
-    sal_Bool LoadFunctions(oslModule pODBCso, sal_Bool _bDS=sal_True);
-    sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath);
-    sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath);
+//  sal_Bool LoadFunctions(oslModule pODBCso, sal_Bool _bDS=sal_True);
+//  sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath);
+//  sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath);
 
     // Connecting to a data source
     typedef SQLRETURN  (SQL_API  *T3SQLAllocHandle) (SQLSMALLINT HandleType,SQLHANDLE InputHandle,SQLHANDLE *   OutputHandlePtr);
-    extern T3SQLAllocHandle pODBC3SQLAllocHandle;
-    #define N3SQLAllocHandle(a,b,c) (*pODBC3SQLAllocHandle)(a,b,c)
+
+    #define N3SQLAllocHandle(a,b,c) (*(T3SQLAllocHandle)getOdbcFunction(ODBC3SQLAllocHandle))(a,b,c)
 
     typedef SQLRETURN  (SQL_API  *T3SQLConnect) (SQLHDBC ConnectionHandle,SQLCHAR *ServerName,SQLSMALLINT   NameLength1,SQLCHAR *UserName,SQLSMALLINT NameLength2,SQLCHAR *Authentication,SQLSMALLINT NameLength3);
-    extern T3SQLConnect pODBC3SQLConnect;
-    #define N3SQLConnect(a,b,c,d,e,f,g) (*pODBC3SQLConnect)(a,b,c,d,e,f,g)
+
+    #define N3SQLConnect(a,b,c,d,e,f,g) (*(T3SQLConnect)getOdbcFunction(ODBC3SQLConnect))(a,b,c,d,e,f,g)
 
     typedef SQLRETURN  (SQL_API  *T3SQLDriverConnect) ( SQLHDBC         ConnectionHandle,
                                                         HWND            WindowHandle,
@@ -96,8 +96,8 @@ namespace connectivity
                                                         SQLSMALLINT     BufferLength,
                                                         SQLSMALLINT *   StringLength2Ptr,
                                                         SQLUSMALLINT    DriverCompletion);
-    extern T3SQLDriverConnect pODBC3SQLDriverConnect;
-    #define N3SQLDriverConnect(a,b,c,d,e,f,g,h) (*pODBC3SQLDriverConnect)(a,b,c,d,e,f,g,h)
+
+    #define N3SQLDriverConnect(a,b,c,d,e,f,g,h) (*(T3SQLDriverConnect)getOdbcFunction(ODBC3SQLDriverConnect))(a,b,c,d,e,f,g,h)
 
     typedef SQLRETURN  (SQL_API  *T3SQLBrowseConnect) ( SQLHDBC         ConnectionHandle,
                                                         SQLCHAR *       InConnectionString,
@@ -105,8 +105,8 @@ namespace connectivity
                                                         SQLCHAR *       OutConnectionString,
                                                         SQLSMALLINT     BufferLength,
                                                         SQLSMALLINT *   StringLength2Ptr);
-    extern T3SQLBrowseConnect pODBC3SQLBrowseConnect;
-    #define N3SQLBrowseConnect(a,b,c,d,e,f) (*pODBC3SQLBrowseConnect)(a,b,c,d,e,f)
+
+    #define N3SQLBrowseConnect(a,b,c,d,e,f) (*(T3SQLBrowseConnect)getOdbcFunction(ODBC3SQLBrowseConnect))(a,b,c,d,e,f)
 
     // Obtaining information about a driver and data source
     typedef SQLRETURN  (SQL_API  *T3SQLDataSources) (   SQLHENV         EnvironmentHandle,
@@ -117,8 +117,8 @@ namespace connectivity
                                                         SQLCHAR *       Description,
                                                         SQLSMALLINT     BufferLength2,
                                                         SQLSMALLINT *   NameLength2Ptr);
-    extern T3SQLDataSources pODBC3SQLDataSources;
-    #define N3SQLDataSources(a,b,c,d,e,f,g,h) (*pODBC3SQLDataSources)(a,b,c,d,e,f,g,h)
+
+    #define N3SQLDataSources(a,b,c,d,e,f,g,h) (*(T3SQLDataSources)getOdbcFunction(ODBC3SQLDataSources))(a,b,c,d,e,f,g,h)
 
     typedef SQLRETURN  (SQL_API  *T3SQLDrivers) (   SQLHENV         EnvironmentHandle,
                                                     SQLUSMALLINT    Direction,
@@ -128,75 +128,75 @@ namespace connectivity
                                                     SQLCHAR *       DriverAttributes,
                                                     SQLSMALLINT     BufferLength2,
                                                     SQLSMALLINT *   AttributesLengthPtr);
-    extern T3SQLDrivers pODBC3SQLDrivers;
-    #define N3SQLDrivers(a,b,c,d,e,f,g,h) (*pODBC3SQLDrivers)(a,b,c,d,e,f,g,h)
+
+    #define N3SQLDrivers(a,b,c,d,e,f,g,h) (*(T3SQLDrivers)getOdbcFunction(ODBC3SQLDrivers))(a,b,c,d,e,f,g,h)
 
     typedef SQLRETURN  (SQL_API  *T3SQLGetInfo) (   SQLHDBC         ConnectionHandle,
                                                     SQLUSMALLINT    InfoType,
                                                     SQLPOINTER      InfoValuePtr,
                                                     SQLSMALLINT     BufferLength,
                                                     SQLSMALLINT *   StringLengthPtr);
-    extern T3SQLGetInfo pODBC3SQLGetInfo;
-    #define N3SQLGetInfo(a,b,c,d,e) (*pODBC3SQLGetInfo)(a,b,c,d,e)
+
+    #define N3SQLGetInfo(a,b,c,d,e) (*(T3SQLGetInfo)getOdbcFunction(ODBC3SQLGetInfo))(a,b,c,d,e)
 
     typedef SQLRETURN  (SQL_API  *T3SQLGetFunctions) (SQLHDBC           ConnectionHandle,
                                                     SQLUSMALLINT    FunctionId,
                                                     SQLUSMALLINT *  SupportedPtr);
-    extern T3SQLGetFunctions pODBC3SQLGetFunctions;
-    #define N3SQLGetFunctions(a,b,c) (*pODBC3SQLGetFunctions)(a,b,c)
+
+    #define N3SQLGetFunctions(a,b,c) (*(T3SQLGetFunctions)getOdbcFunction(ODBC3SQLGetFunctions))(a,b,c)
 
     typedef SQLRETURN  (SQL_API  *T3SQLGetTypeInfo) (   SQLHSTMT    StatementHandle,
                                                     SQLSMALLINT     DataType);
-    extern T3SQLGetTypeInfo pODBC3SQLGetTypeInfo;
-    #define N3SQLGetTypeInfo(a,b) (*pODBC3SQLGetTypeInfo)(a,b)
+
+    #define N3SQLGetTypeInfo(a,b) (*(T3SQLGetTypeInfo)getOdbcFunction(ODBC3SQLGetTypeInfo))(a,b)
 
     // Setting and retrieving driver attributes
     typedef SQLRETURN (SQL_API *T3SQLSetConnectAttr)(SQLHDBC        ConnectionHandle,
                                                     SQLINTEGER      Attribute,
                                                     SQLPOINTER      ValuePtr,
                                                     SQLINTEGER      StringLength);
-    extern T3SQLSetConnectAttr pODBC3SQLSetConnectAttr;
-    #define N3SQLSetConnectAttr(a,b,c,d) (*pODBC3SQLSetConnectAttr)(a,b,c,d)
+
+    #define N3SQLSetConnectAttr(a,b,c,d) (*(T3SQLSetConnectAttr)getOdbcFunction(ODBC3SQLSetConnectAttr))(a,b,c,d)
 
     typedef SQLRETURN (SQL_API *T3SQLGetConnectAttr) (SQLHDBC       ConnectionHandle,
                                                     SQLINTEGER      Attribute,
                                                     SQLPOINTER      ValuePtr,
                                                     SQLINTEGER      BufferLength,
                                                     SQLINTEGER*     StringLength);
-    extern T3SQLGetConnectAttr pODBC3SQLGetConnectAttr;
-    #define N3SQLGetConnectAttr(a,b,c,d,e) (*pODBC3SQLGetConnectAttr)(a,b,c,d,e)
+
+    #define N3SQLGetConnectAttr(a,b,c,d,e) (*(T3SQLGetConnectAttr)getOdbcFunction(ODBC3SQLGetConnectAttr))(a,b,c,d,e)
 
 
     typedef SQLRETURN (SQL_API *T3SQLSetEnvAttr) (  SQLHENV         EnvironmentHandle,
                                                     SQLINTEGER      Attribute,
                                                     SQLPOINTER      ValuePtr,
                                                     SQLINTEGER      StringLength);
-    extern T3SQLSetEnvAttr pODBC3SQLSetEnvAttr;
-    #define N3SQLSetEnvAttr(a,b,c,d) (*pODBC3SQLSetEnvAttr)(a,b,c,d)
+
+    #define N3SQLSetEnvAttr(a,b,c,d) (*(T3SQLSetEnvAttr)getOdbcFunction(ODBC3SQLSetEnvAttr))(a,b,c,d)
 
     typedef SQLRETURN (SQL_API *T3SQLGetEnvAttr) (  SQLHENV         EnvironmentHandle,
                                                     SQLINTEGER      Attribute,
                                                     SQLPOINTER      ValuePtr,
                                                     SQLINTEGER      BufferLength,
                                                     SQLINTEGER*     StringLength);
-    extern T3SQLGetEnvAttr pODBC3SQLGetEnvAttr;
-    #define N3SQLGetEnvAttr(a,b,c,d,e) (*pODBC3SQLGetEnvAttr)(a,b,c,d,e)
+
+    #define N3SQLGetEnvAttr(a,b,c,d,e) (*(T3SQLGetEnvAttr)getOdbcFunction(ODBC3SQLGetEnvAttr))(a,b,c,d,e)
 
 
     typedef SQLRETURN (SQL_API *T3SQLSetStmtAttr) ( SQLHSTMT        StatementHandle,
                                                     SQLINTEGER      Attribute,
                                                     SQLPOINTER      ValuePtr,
                                                     SQLINTEGER      StringLength);
-    extern T3SQLSetStmtAttr pODBC3SQLSetStmtAttr;
-    #define N3SQLSetStmtAttr(a,b,c,d) (*pODBC3SQLSetStmtAttr)(a,b,c,d)
+
+    #define N3SQLSetStmtAttr(a,b,c,d) (*(T3SQLSetStmtAttr)getOdbcFunction(ODBC3SQLSetStmtAttr))(a,b,c,d)
 
     typedef SQLRETURN (SQL_API *T3SQLGetStmtAttr) ( SQLHSTMT        StatementHandle,
                                                     SQLINTEGER      Attribute,
                                                     SQLPOINTER      ValuePtr,
                                                     SQLINTEGER      BufferLength,
                                                     SQLINTEGER*     StringLength);
-    extern T3SQLGetStmtAttr pODBC3SQLGetStmtAttr;
-    #define N3SQLGetStmtAttr(a,b,c,d,e) (*pODBC3SQLGetStmtAttr)(a,b,c,d,e)
+
+    #define N3SQLGetStmtAttr(a,b,c,d,e) (*(T3SQLGetStmtAttr)getOdbcFunction(ODBC3SQLGetStmtAttr))(a,b,c,d,e)
 
     // Setting and retrieving descriptor fields
     /*typedef SQLRETURN (SQL_API *T3SQLSetDescField) (SQLHDESC      DescriptorHandle,
@@ -204,8 +204,8 @@ namespace connectivity
                                                     SQLSMALLINT     FieldIdentifier,
                                                     SQLPOINTER      ValuePtr,
                                                     SQLINTEGER      BufferLength);
-    extern T3SQLSetDescField pODBC3SQLSetDescField;
-    #define N3SQLSetDescField(a,b,c,d,e) (*pODBC3SQLSetDescField)(a,b,c,d,e)
+
+    #define N3SQLSetDescField(a,b,c,d,e) (*(T3SQLSetDescField)getOdbcFunction(ODBC3SQLSetDescField))(a,b,c,d,e)
 
     typedef SQLRETURN (SQL_API *T3SQLGetDescField) (    SQLHDESC        DescriptorHandle,
                                                     SQLSMALLINT     RecNumber,
@@ -213,8 +213,8 @@ namespace connectivity
                                                     SQLPOINTER      ValuePtr,
                                                     SQLINTEGER      BufferLength,
                                                     SQLINTEGER *    StringLengthPtr);
-    extern T3SQLGetDescField pODBC3SQLGetDescField;
-    #define N3SQLGetDescField(a,b,c,d,e,f) (*pODBC3SQLGetDescField)(a,b,c,d,e,f)
+
+    #define N3SQLGetDescField(a,b,c,d,e,f) (*(T3SQLGetDescField)getOdbcFunction(ODBC3SQLGetDescField))(a,b,c,d,e,f)
 
 
     typedef SQLRETURN (SQL_API *T3SQLGetDescRec) (  SQLHDESC            DescriptorHandle,
@@ -228,8 +228,8 @@ namespace connectivity
                                                     SQLSMALLINT *       PrecisionPtr,
                                                     SQLSMALLINT *       ScalePtr,
                                                     SQLSMALLINT *       NullablePtr);
-    extern T3SQLGetDescRec pODBC3SQLGetDescRec;
-    #define N3SQLGetDescRec(a,b,c,d,e,f,g,h,i,j,k) (*pODBC3SQLGetDescRec)(a,b,c,d,e,f,g,h,i,j,k)
+
+    #define N3SQLGetDescRec(a,b,c,d,e,f,g,h,i,j,k) (*(T3SQLGetDescRec)getOdbcFunction(ODBC3SQLGetDescRec))(a,b,c,d,e,f,g,h,i,j,k)
 
 
     typedef SQLRETURN (SQL_API *T3SQLSetDescRec) (  SQLHDESC            DescriptorHandle,
@@ -242,16 +242,16 @@ namespace connectivity
                                                     SQLPOINTER          DataPtr,
                                                     SQLINTEGER *        StringLengthPtr,
                                                     SQLINTEGER *        IndicatorPtr);
-    extern T3SQLSetDescRec pODBC3SQLSetDescRec;
-    #define N3SQLSetDescRec(a,b,c,d,e,f,g,h,i,j) (*pODBC3SQLSetDescRec)(a,b,c,d,e,f,g,h,i,j)
+
+    #define N3SQLSetDescRec(a,b,c,d,e,f,g,h,i,j) (*(T3SQLSetDescRec)getOdbcFunction(ODBC3SQLSetDescRec))(a,b,c,d,e,f,g,h,i,j)
     */
 
     // Preparing SQL requests
     typedef SQLRETURN  (SQL_API  *T3SQLPrepare) (       SQLHSTMT            StatementHandle,
                                                     SQLCHAR *           StatementText,
                                                     SQLINTEGER          TextLength);
-    extern T3SQLPrepare pODBC3SQLPrepare;
-    #define N3SQLPrepare(a,b,c) (*pODBC3SQLPrepare)(a,b,c)
+
+    #define N3SQLPrepare(a,b,c) (*(T3SQLPrepare)getOdbcFunction(ODBC3SQLPrepare))(a,b,c)
 
     typedef SQLRETURN (SQL_API  *T3SQLBindParameter) (SQLHSTMT          StatementHandle,
                                                     SQLUSMALLINT        ParameterNumber,
@@ -263,33 +263,33 @@ namespace connectivity
                                                     SQLPOINTER          ParameterValuePtr,
                                                     SQLINTEGER          BufferLength,
                                                     SQLINTEGER *        StrLen_or_IndPtr);
-    extern T3SQLBindParameter pODBC3SQLBindParameter;
-    #define N3SQLBindParameter(a,b,c,d,e,f,g,h,i,j) (*pODBC3SQLBindParameter)(a,b,c,d,e,f,g,h,i,j)
+
+    #define N3SQLBindParameter(a,b,c,d,e,f,g,h,i,j) (*(T3SQLBindParameter)getOdbcFunction(ODBC3SQLBindParameter))(a,b,c,d,e,f,g,h,i,j)
 
     /*typedef SQLRETURN (SQL_API  *T3SQLGetCursorName) (SQLHSTMT            StatementHandle,
                                                     SQLCHAR *           CursorName,
                                                     SQLSMALLINT         BufferLength,
                                                     SQLSMALLINT *       NameLengthPtr);
-    extern T3SQLGetCursorName pODBC3SQLGetCursorName;
-    #define N3SQLGetCursorName(a,b,c,d) (*pODBC3SQLGetCursorName)(a,b,c,d)
+
+    #define N3SQLGetCursorName(a,b,c,d) (*(T3SQLGetCursorName)getOdbcFunction(ODBC3SQLGetCursorName))(a,b,c,d)
     */
 
     typedef SQLRETURN (SQL_API  *T3SQLSetCursorName) (SQLHSTMT          StatementHandle,
                                                     SQLCHAR *           CursorName,
                                                     SQLSMALLINT         NameLength);
-    extern T3SQLSetCursorName pODBC3SQLSetCursorName;
-    #define N3SQLSetCursorName(a,b,c) (*pODBC3SQLSetCursorName)(a,b,c)
+
+    #define N3SQLSetCursorName(a,b,c) (*(T3SQLSetCursorName)getOdbcFunction(ODBC3SQLSetCursorName))(a,b,c)
 
     // Submitting requests
     typedef SQLRETURN  (SQL_API  *T3SQLExecute) (       SQLHSTMT            StatementHandle);
-    extern T3SQLExecute pODBC3SQLExecute;
-    #define N3SQLExecute(a) (*pODBC3SQLExecute)(a)
+
+    #define N3SQLExecute(a) (*(T3SQLExecute)getOdbcFunction(ODBC3SQLExecute))(a)
 
     typedef SQLRETURN  (SQL_API  *T3SQLExecDirect) (    SQLHSTMT            StatementHandle,
                                                     SQLCHAR *           StatementText,
                                                     SQLINTEGER          TextLength);
-    extern T3SQLExecDirect pODBC3SQLExecDirect;
-    #define N3SQLExecDirect(a,b,c) (*pODBC3SQLExecDirect)(a,b,c)
+
+    #define N3SQLExecDirect(a,b,c) (*(T3SQLExecDirect)getOdbcFunction(ODBC3SQLExecDirect))(a,b,c)
 
     /*typedef SQLRETURN  (SQL_API  *T3SQLNativeSql) (   SQLHDBC             ConnectionHandle,
                                                     SQLCHAR *           InStatementText,
@@ -297,8 +297,8 @@ namespace connectivity
                                                     SQLCHAR *           utStatementText,
                                                     SQLINTEGER          BufferLength,
                                                     SQLINTEGER *        TextLength2Ptr);
-    extern T3SQLNativeSql pODBC3SQLNativeSql;
-    #define N3SQLNativeSql(a,b,c,d,e,f) (*pODBC3SQLNativeSql)(a,b,c,d,e,f)*/
+
+    #define N3SQLNativeSql(a,b,c,d,e,f) (*(T3SQLNativeSql)getOdbcFunction(ODBC3SQLNativeSql))(a,b,c,d,e,f)*/
 
     typedef SQLRETURN (SQL_API  *T3SQLDescribeParam) (SQLHSTMT          StatementHandle,
                                                     SQLUSMALLINT        ParameterNumber,
@@ -306,35 +306,35 @@ namespace connectivity
                                                     SQLUINTEGER *       ParameterSizePtr,
                                                     SQLSMALLINT *       DecimalDigitsPtr,
                                                     SQLSMALLINT *       NullablePtr);
-    extern T3SQLDescribeParam pODBC3SQLDescribeParam;
-    #define N3SQLDescribeParam(a,b,c,d,e,f) (*pODBC3SQLDescribeParam)(a,b,c,d,e,f)
+
+    #define N3SQLDescribeParam(a,b,c,d,e,f) (*(T3SQLDescribeParam)getOdbcFunction(ODBC3SQLDescribeParam))(a,b,c,d,e,f)
 
     typedef SQLRETURN  (SQL_API  *T3SQLNumParams) ( SQLHSTMT            StatementHandle,
                                                     SQLSMALLINT *       ParameterCountPtr);
-    extern T3SQLNumParams pODBC3SQLNumParams;
-    #define N3SQLNumParams(a,b) (*pODBC3SQLNumParams)(a,b)
+
+    #define N3SQLNumParams(a,b) (*(T3SQLNumParams)getOdbcFunction(ODBC3SQLNumParams))(a,b)
 
     typedef SQLRETURN  (SQL_API  *T3SQLParamData) ( SQLHSTMT            StatementHandle,
                                                     SQLPOINTER *        ValuePtrPtr);
-    extern T3SQLParamData pODBC3SQLParamData;
-    #define N3SQLParamData(a,b) (*pODBC3SQLParamData)(a,b)
+
+    #define N3SQLParamData(a,b) (*(T3SQLParamData)getOdbcFunction(ODBC3SQLParamData))(a,b)
 
     typedef SQLRETURN  (SQL_API  *T3SQLPutData) (       SQLHSTMT            StatementHandle,
                                                     SQLPOINTER          DataPtr,
                                                     SQLINTEGER          StrLen_or_Ind);
-    extern T3SQLPutData pODBC3SQLPutData;
-    #define N3SQLPutData(a,b,c) (*pODBC3SQLPutData)(a,b,c)
+
+    #define N3SQLPutData(a,b,c) (*(T3SQLPutData)getOdbcFunction(ODBC3SQLPutData))(a,b,c)
 
     // Retrieving results and information about results
     typedef SQLRETURN  (SQL_API  *T3SQLRowCount) (  SQLHSTMT            StatementHandle,
                                                     SQLINTEGER *        RowCountPtr);
-    extern T3SQLRowCount pODBC3SQLRowCount;
-    #define N3SQLRowCount(a,b) (*pODBC3SQLRowCount)(a,b)
+
+    #define N3SQLRowCount(a,b) (*(T3SQLRowCount)getOdbcFunction(ODBC3SQLRowCount))(a,b)
 
     typedef SQLRETURN  (SQL_API  *T3SQLNumResultCols) (SQLHSTMT         StatementHandle,
                                                     SQLSMALLINT *       ColumnCountPtr);
-    extern T3SQLNumResultCols pODBC3SQLNumResultCols;
-    #define N3SQLNumResultCols(a,b) (*pODBC3SQLNumResultCols)(a,b)
+
+    #define N3SQLNumResultCols(a,b) (*(T3SQLNumResultCols)getOdbcFunction(ODBC3SQLNumResultCols))(a,b)
 
     typedef SQLRETURN  (SQL_API  *T3SQLDescribeCol) (   SQLHSTMT            StatementHandle,
                                                     SQLSMALLINT         ColumnNumber,
@@ -345,8 +345,8 @@ namespace connectivity
                                                     SQLUINTEGER *       ColumnSizePtr,
                                                     SQLSMALLINT *       DecimalDigitsPtr,
                                                     SQLSMALLINT *       NullablePtr);
-    extern T3SQLDescribeCol pODBC3SQLDescribeCol;
-    #define N3SQLDescribeCol(a,b,c,d,e,f,g,h,i) (*pODBC3SQLDescribeCol)(a,b,c,d,e,f,g,h,i)
+
+    #define N3SQLDescribeCol(a,b,c,d,e,f,g,h,i) (*(T3SQLDescribeCol)getOdbcFunction(ODBC3SQLDescribeCol))(a,b,c,d,e,f,g,h,i)
 
     typedef SQLRETURN  (SQL_API  *T3SQLColAttribute) (SQLHSTMT          StatementHandle,
                                                     SQLUSMALLINT        ColumnNumber,
@@ -355,8 +355,8 @@ namespace connectivity
                                                     SQLSMALLINT         BufferLength,
                                                     SQLSMALLINT *       StringLengthPtr,
                                                     SQLPOINTER          NumericAttributePtr);
-    extern T3SQLColAttribute pODBC3SQLColAttribute;
-    #define N3SQLColAttribute(a,b,c,d,e,f,g) (*pODBC3SQLColAttribute)(a,b,c,d,e,f,g)
+
+    #define N3SQLColAttribute(a,b,c,d,e,f,g) (*(T3SQLColAttribute)getOdbcFunction(ODBC3SQLColAttribute))(a,b,c,d,e,f,g)
 
     typedef SQLRETURN  (SQL_API  *T3SQLBindCol) (       SQLHSTMT            StatementHandle,
                                                     SQLUSMALLINT        ColumnNumber,
@@ -364,18 +364,18 @@ namespace connectivity
                                                     SQLPOINTER          TargetValuePtr,
                                                     SQLINTEGER          BufferLength,
                                                     SQLINTEGER *        StrLen_or_IndPtr);
-    extern T3SQLBindCol pODBC3SQLBindCol;
-    #define N3SQLBindCol(a,b,c,d,e,f) (*pODBC3SQLBindCol)(a,b,c,d,e,f)
+
+    #define N3SQLBindCol(a,b,c,d,e,f) (*(T3SQLBindCol)getOdbcFunction(ODBC3SQLBindCol))(a,b,c,d,e,f)
 
     typedef SQLRETURN  (SQL_API  *T3SQLFetch) (     SQLHSTMT            StatementHandle);
-    extern T3SQLFetch pODBC3SQLFetch;
-    #define N3SQLFetch(a) (*pODBC3SQLFetch)(a)
+
+    #define N3SQLFetch(a) (*(T3SQLFetch)getOdbcFunction(ODBC3SQLFetch))(a)
 
     typedef SQLRETURN  (SQL_API  *T3SQLFetchScroll) (   SQLHSTMT            StatementHandle,
                                                     SQLSMALLINT         FetchOrientation,
                                                     SQLINTEGER          FetchOffset);
-    extern T3SQLFetchScroll pODBC3SQLFetchScroll;
-    #define N3SQLFetchScroll(a,b,c) (*pODBC3SQLFetchScroll)(a,b,c)
+
+    #define N3SQLFetchScroll(a,b,c) (*(T3SQLFetchScroll)getOdbcFunction(ODBC3SQLFetchScroll))(a,b,c)
 
     typedef SQLRETURN  (SQL_API  *T3SQLGetData) (       SQLHSTMT            StatementHandle,
                                                     SQLUSMALLINT        ColumnNumber,
@@ -383,24 +383,24 @@ namespace connectivity
                                                     SQLPOINTER          TargetValuePtr,
                                                     SQLINTEGER          BufferLength,
                                                     SQLINTEGER *        StrLen_or_IndPtr);
-    extern T3SQLGetData pODBC3SQLGetData;
-    #define N3SQLGetData(a,b,c,d,e,f) (*pODBC3SQLGetData)(a,b,c,d,e,f)
+
+    #define N3SQLGetData(a,b,c,d,e,f) (*(T3SQLGetData)getOdbcFunction(ODBC3SQLGetData))(a,b,c,d,e,f)
 
     typedef SQLRETURN  (SQL_API  *T3SQLSetPos) (        SQLHSTMT            StatementHandle,
                                                     SQLUSMALLINT        RowNumber,
                                                     SQLUSMALLINT        Operation,
                                                     SQLUSMALLINT        LockType);
-    extern T3SQLSetPos pODBC3SQLSetPos;
-    #define N3SQLSetPos(a,b,c,d) (*pODBC3SQLSetPos)(a,b,c,d)
+
+    #define N3SQLSetPos(a,b,c,d) (*(T3SQLSetPos)getOdbcFunction(ODBC3SQLSetPos))(a,b,c,d)
 
     typedef SQLRETURN  (SQL_API  *T3SQLBulkOperations) (    SQLHSTMT        StatementHandle,
                                                         SQLUSMALLINT    Operation);
-    extern T3SQLBulkOperations pODBC3SQLBulkOperations;
-    #define N3SQLBulkOperations(a,b) (*pODBC3SQLBulkOperations)(a,b)
+
+    #define N3SQLBulkOperations(a,b) (*(T3SQLBulkOperations)getOdbcFunction(ODBC3SQLBulkOperations))(a,b)
 
     typedef SQLRETURN  (SQL_API  *T3SQLMoreResults) (   SQLHSTMT            StatementHandle);
-    extern T3SQLMoreResults pODBC3SQLMoreResults;
-    #define N3SQLMoreResults(a) (*pODBC3SQLMoreResults)(a)
+
+    #define N3SQLMoreResults(a) (*(T3SQLMoreResults)getOdbcFunction(ODBC3SQLMoreResults))(a)
 
     /*typedef SQLRETURN  (SQL_API  *T3SQLGetDiagField) (SQLSMALLINT         HandleType,
                                                     SQLHANDLE           Handle,
@@ -409,8 +409,8 @@ namespace connectivity
                                                     SQLPOINTER          DiagInfoPtr,
                                                     SQLSMALLINT         BufferLength,
                                                     SQLSMALLINT *       StringLengthPtr);
-    extern T3SQLGetDiagField pODBC3SQLGetDiagField;
-    #define N3SQLGetDiagField(a,b,c,d,e,f,g) (*pODBC3SQLGetDiagField)(a,b,c,d,e,f,g)*/
+
+    #define N3SQLGetDiagField(a,b,c,d,e,f,g) (*(T3SQLGetDiagField)getOdbcFunction(ODBC3SQLGetDiagField))(a,b,c,d,e,f,g)*/
 
     typedef SQLRETURN  (SQL_API  *T3SQLGetDiagRec) (    SQLSMALLINT         HandleType,
                                                     SQLHANDLE           Handle,
@@ -421,8 +421,8 @@ namespace connectivity
                                                     SQLSMALLINT         BufferLength,
                                                     SQLSMALLINT *       TextLengthPtr);
 
-    extern T3SQLGetDiagRec pODBC3SQLGetDiagRec;
-    #define N3SQLGetDiagRec(a,b,c,d,e,f,g,h) (*pODBC3SQLGetDiagRec)(a,b,c,d,e,f,g,h)
+
+    #define N3SQLGetDiagRec(a,b,c,d,e,f,g,h) (*(T3SQLGetDiagRec)getOdbcFunction(ODBC3SQLGetDiagRec))(a,b,c,d,e,f,g,h)
 
     // Obtaining information about the data source’s system tables (catalog functions)
     typedef SQLRETURN  (SQL_API  *T3SQLColumnPrivileges) (SQLHSTMT      StatementHandle,
@@ -434,8 +434,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength3,
                                                     SQLCHAR *           ColumnName,
                                                     SQLSMALLINT         NameLength4);
-    extern T3SQLColumnPrivileges pODBC3SQLColumnPrivileges;
-    #define N3SQLColumnPrivileges(a,b,c,d,e,f,g,h,i) (*pODBC3SQLColumnPrivileges)(a,b,c,d,e,f,g,h,i)
+
+    #define N3SQLColumnPrivileges(a,b,c,d,e,f,g,h,i) (*(T3SQLColumnPrivileges)getOdbcFunction(ODBC3SQLColumnPrivileges))(a,b,c,d,e,f,g,h,i)
 
     typedef SQLRETURN  (SQL_API  *T3SQLColumns) (       SQLHSTMT            StatementHandle,
                                                     SQLCHAR *           CatalogName,
@@ -446,8 +446,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength3,
                                                     SQLCHAR *           ColumnName,
                                                     SQLSMALLINT         NameLength4);
-    extern T3SQLColumns pODBC3SQLColumns;
-    #define N3SQLColumns(a,b,c,d,e,f,g,h,i) (*pODBC3SQLColumns)(a,b,c,d,e,f,g,h,i)
+
+    #define N3SQLColumns(a,b,c,d,e,f,g,h,i) (*(T3SQLColumns)getOdbcFunction(ODBC3SQLColumns))(a,b,c,d,e,f,g,h,i)
 
     typedef SQLRETURN  (SQL_API  *T3SQLForeignKeys) (   SQLHSTMT            StatementHandle,
                                                     SQLCHAR *           PKCatalogName,
@@ -462,8 +462,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength5,
                                                     SQLCHAR *           FKTableName,
                                                     SQLSMALLINT         NameLength6);
-    extern T3SQLForeignKeys pODBC3SQLForeignKeys;
-    #define N3SQLForeignKeys(a,b,c,d,e,f,g,h,i,j,k,l,m) (*pODBC3SQLForeignKeys)(a,b,c,d,e,f,g,h,i,j,k,l,m)
+
+    #define N3SQLForeignKeys(a,b,c,d,e,f,g,h,i,j,k,l,m) (*(T3SQLForeignKeys)getOdbcFunction(ODBC3SQLForeignKeys))(a,b,c,d,e,f,g,h,i,j,k,l,m)
 
     typedef SQLRETURN  (SQL_API  *T3SQLPrimaryKeys) (   SQLHSTMT            StatementHandle,
                                                     SQLCHAR *           CatalogName,
@@ -472,8 +472,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength2,
                                                     SQLCHAR *           TableName,
                                                     SQLSMALLINT         NameLength3);
-    extern T3SQLPrimaryKeys pODBC3SQLPrimaryKeys;
-    #define N3SQLPrimaryKeys(a,b,c,d,e,f,g) (*pODBC3SQLPrimaryKeys)(a,b,c,d,e,f,g)
+
+    #define N3SQLPrimaryKeys(a,b,c,d,e,f,g) (*(T3SQLPrimaryKeys)getOdbcFunction(ODBC3SQLPrimaryKeys))(a,b,c,d,e,f,g)
 
     typedef SQLRETURN  (SQL_API  *T3SQLProcedureColumns) (SQLHSTMT      StatementHandle,
                                                     SQLCHAR *           CatalogName,
@@ -484,8 +484,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength3,
                                                     SQLCHAR *           ColumnName,
                                                     SQLSMALLINT         NameLength4);
-    extern T3SQLProcedureColumns pODBC3SQLProcedureColumns;
-    #define N3SQLProcedureColumns(a,b,c,d,e,f,g,h,i) (*pODBC3SQLProcedureColumns)(a,b,c,d,e,f,g,h,i)
+
+    #define N3SQLProcedureColumns(a,b,c,d,e,f,g,h,i) (*(T3SQLProcedureColumns)getOdbcFunction(ODBC3SQLProcedureColumns))(a,b,c,d,e,f,g,h,i)
 
     typedef SQLRETURN  (SQL_API  *T3SQLProcedures) (    SQLHSTMT            StatementHandle,
                                                     SQLCHAR *           CatalogName,
@@ -494,8 +494,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength2,
                                                     SQLCHAR *           ProcName,
                                                     SQLSMALLINT         NameLength3);
-    extern T3SQLProcedures pODBC3SQLProcedures;
-    #define N3SQLProcedures(a,b,c,d,e,f,g) (*pODBC3SQLProcedures)(a,b,c,d,e,f,g)
+
+    #define N3SQLProcedures(a,b,c,d,e,f,g) (*(T3SQLProcedures)getOdbcFunction(ODBC3SQLProcedures))(a,b,c,d,e,f,g)
 
     typedef SQLRETURN  (SQL_API  *T3SQLSpecialColumns) (SQLHSTMT            StatementHandle,
                                                     SQLSMALLINT         IdentifierType,
@@ -507,8 +507,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength3,
                                                     SQLSMALLINT         Scope,
                                                     SQLSMALLINT         Nullable);
-    extern T3SQLSpecialColumns pODBC3SQLSpecialColumns;
-    #define N3SQLSpecialColumns(a,b,c,d,e,f,g,h,i,j) (*pODBC3SQLSpecialColumns)(a,b,c,d,e,f,g,h,i,j)
+
+    #define N3SQLSpecialColumns(a,b,c,d,e,f,g,h,i,j) (*(T3SQLSpecialColumns)getOdbcFunction(ODBC3SQLSpecialColumns))(a,b,c,d,e,f,g,h,i,j)
 
     typedef SQLRETURN  (SQL_API  *T3SQLStatistics) (    SQLHSTMT            StatementHandle,
                                                     SQLCHAR *           CatalogName,
@@ -519,8 +519,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength3,
                                                     SQLUSMALLINT        Unique,
                                                     SQLUSMALLINT        Reserved);
-    extern T3SQLStatistics pODBC3SQLStatistics;
-    #define N3SQLStatistics(a,b,c,d,e,f,g,h,i) (*pODBC3SQLStatistics)(a,b,c,d,e,f,g,h,i)
+
+    #define N3SQLStatistics(a,b,c,d,e,f,g,h,i) (*(T3SQLStatistics)getOdbcFunction(ODBC3SQLStatistics))(a,b,c,d,e,f,g,h,i)
 
     typedef SQLRETURN  (SQL_API  *T3SQLTablePrivileges) (SQLHSTMT           StatementHandle,
                                                     SQLCHAR *           CatalogName,
@@ -529,8 +529,8 @@ namespace connectivity
                                                     SQLSMALLINT         NameLength2,
                                                     SQLCHAR *           TableName,
                                                     SQLSMALLINT         NameLength3);
-    extern T3SQLTablePrivileges pODBC3SQLTablePrivileges;
-    #define N3SQLTablePrivileges(a,b,c,d,e,f,g) (*pODBC3SQLTablePrivileges)(a,b,c,d,e,f,g)
+
+    #define N3SQLTablePrivileges(a,b,c,d,e,f,g) (*(T3SQLTablePrivileges)getOdbcFunction(ODBC3SQLTablePrivileges))(a,b,c,d,e,f,g)
 
     typedef SQLRETURN  (SQL_API  *T3SQLTables) (    SQLHSTMT                StatementHandle,
                                                     SQLCHAR *               CatalogName,
@@ -541,45 +541,45 @@ namespace connectivity
                                                     SQLSMALLINT             NameLength3,
                                                     SQLCHAR *               TableType,
                                                     SQLSMALLINT             NameLength4);
-    extern T3SQLTables pODBC3SQLTables;
-    #define N3SQLTables(a,b,c,d,e,f,g,h,i) (*pODBC3SQLTables)(a,b,c,d,e,f,g,h,i)
+
+    #define N3SQLTables(a,b,c,d,e,f,g,h,i) (*(T3SQLTables)getOdbcFunction(ODBC3SQLTables))(a,b,c,d,e,f,g,h,i)
 
     // Terminating a statement
     typedef SQLRETURN  (SQL_API  *T3SQLFreeStmt) (  SQLHSTMT                StatementHandle,
                                                     SQLUSMALLINT            Option);
-    extern T3SQLFreeStmt pODBC3SQLFreeStmt;
-    #define N3SQLFreeStmt(a,b) (*pODBC3SQLFreeStmt)(a,b)
+
+    #define N3SQLFreeStmt(a,b) (*(T3SQLFreeStmt)getOdbcFunction(ODBC3SQLFreeStmt))(a,b)
 
     typedef SQLRETURN  (SQL_API  *T3SQLCloseCursor) (SQLHSTMT           StatementHandle);
-    extern T3SQLCloseCursor pODBC3SQLCloseCursor;
-    #define N3SQLCloseCursor(a) (*pODBC3SQLCloseCursor)(a)
+
+    #define N3SQLCloseCursor(a) (*(T3SQLCloseCursor)getOdbcFunction(ODBC3SQLCloseCursor))(a)
 
     typedef SQLRETURN  (SQL_API  *T3SQLCancel) (    SQLHSTMT                StatementHandle);
-    extern T3SQLCancel pODBC3SQLCancel;
-    #define N3SQLCancel(a) (*pODBC3SQLCancel)(a)
+
+    #define N3SQLCancel(a) (*(T3SQLCancel)getOdbcFunction(ODBC3SQLCancel))(a)
 
     typedef SQLRETURN  (SQL_API  *T3SQLEndTran) (   SQLSMALLINT             HandleType,
                                                     SQLHANDLE               Handle,
                                                     SQLSMALLINT             CompletionType);
-    extern T3SQLEndTran pODBC3SQLEndTran;
-    #define N3SQLEndTran(a,b,c) (*pODBC3SQLEndTran)(a,b,c)
+
+    #define N3SQLEndTran(a,b,c) (*(T3SQLEndTran)getOdbcFunction(ODBC3SQLEndTran))(a,b,c)
 
     // Terminating a connection
     typedef SQLRETURN  (SQL_API  *T3SQLDisconnect) (SQLHDBC ConnectionHandle);
-    extern T3SQLDisconnect pODBC3SQLDisconnect;
-    #define N3SQLDisconnect(a) (*pODBC3SQLDisconnect)(a)
+
+    #define N3SQLDisconnect(a) (*(T3SQLDisconnect)getOdbcFunction(ODBC3SQLDisconnect))(a)
 
     typedef SQLRETURN  (SQL_API  *T3SQLFreeHandle) (SQLSMALLINT             HandleType,
                                                     SQLHANDLE               Handle);
-    extern T3SQLFreeHandle pODBC3SQLFreeHandle;
-    #define N3SQLFreeHandle(a,b) (*pODBC3SQLFreeHandle)(a,b)
+
+    #define N3SQLFreeHandle(a,b) (*(T3SQLFreeHandle)getOdbcFunction(ODBC3SQLFreeHandle))(a,b)
 
     typedef SQLRETURN  (SQL_API  *T3SQLGetCursorName) ( SQLHSTMT            StatementHandle,
                                                         SQLCHAR *           CursorName,
                                                         SQLSMALLINT         BufferLength,
                                                         SQLSMALLINT*        NameLength2);
-    extern T3SQLGetCursorName pODBC3SQLGetCursorName;
-    #define N3SQLGetCursorName(a,b,c,d) (*pODBC3SQLGetCursorName)(a,b,c,d)
+
+    #define N3SQLGetCursorName(a,b,c,d) (*(T3SQLGetCursorName)getOdbcFunction(ODBC3SQLGetCursorName))(a,b,c,d)
 
     typedef SQLRETURN  (SQL_API  *T3SQLNativeSql) ( SQLHSTMT                ConnectionHandle,
                                                     SQLCHAR *               InStatementText,
@@ -587,8 +587,8 @@ namespace connectivity
                                                     SQLCHAR *               OutStatementText,
                                                     SQLINTEGER              BufferLength,
                                                     SQLINTEGER *            TextLength2Ptr);
-    extern T3SQLNativeSql pODBC3SQLNativeSql;
-    #define N3SQLNativeSql(a,b,c,d,e,f) (*pODBC3SQLNativeSql)(a,b,c,d,e,f)
+
+    #define N3SQLNativeSql(a,b,c,d,e,f) (*(T3SQLNativeSql)getOdbcFunction(ODBC3SQLNativeSql))(a,b,c,d,e,f)
 }
 
 #endif // _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_

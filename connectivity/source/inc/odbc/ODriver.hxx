@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "connectivity/CommonTools.hxx"
 #endif
 
+
 namespace connectivity
 {
     namespace odbc
@@ -97,11 +98,14 @@ namespace connectivity
 
             SQLHANDLE   m_pDriverHandle;
 
-            virtual SQLHANDLE   EnvironmentHandle(::rtl::OUString &_rPath);
+            virtual SQLHANDLE   EnvironmentHandle(::rtl::OUString &_rPath) = 0;
+
         public:
 
             ODBCDriver();
 
+            // only possibility to get the odbc functions
+            virtual void* getOdbcFunction(sal_Int32 _nIndex)  const = 0;
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface

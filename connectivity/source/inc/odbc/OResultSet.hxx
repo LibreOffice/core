@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:08 $
+ *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ namespace connectivity
             ::std::vector< ::com::sun::star::uno::Any>  m_aRow; // only used when SQLGetData can't be called in any order
             SQLHANDLE                                   m_aStatementHandle;
             SQLHANDLE                                   m_aConnectionHandle;
+            OStatement_Base*                            m_pStatement;
             ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             SQLUSMALLINT*                               m_pRowStatusArray;
@@ -202,9 +203,13 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSet( SQLHANDLE _pStatementHandle,OStatement_Base* pStmt);
-            OResultSet( SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding);
+            //  OResultSet( SQLHANDLE _pStatementHandle,OStatement_Base* pStmt,rtl_TextEncoding _nTextEncoding);
             ~OResultSet();
 
+            inline void* getOdbcFunction(sal_Int32 _nIndex)  const
+            {
+                return m_pStatement->getOdbcFunction(_nIndex);
+            }
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
