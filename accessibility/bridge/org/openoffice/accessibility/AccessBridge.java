@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-19 11:20:47 $
+ *  last change: $Author: obr $ $Date: 2002-08-23 09:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package org.openoffice.accessibility;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;
 
+import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.*;
@@ -75,6 +76,7 @@ import org.openoffice.java.accessibility.*;
 
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.bridge.XAccessibleTopWindowMap;
+import drafts.com.sun.star.awt.XExtendedToolkit;
 
 import javax.accessibility.Accessible;
 import java.lang.reflect.Method;
@@ -83,7 +85,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class AccessBridge {
 
-    static public class _AccessBridge implements XAccessibleTopWindowMap {
+    static public class _AccessBridge implements XAccessibleTopWindowMap, XInitialization {
         static private final String _serviceName = "drafts.com.sun.star.accessibility.bridge.AccessBridge";
         private XMultiServiceFactory _xMultiServiceFactory;
 
@@ -140,6 +142,34 @@ public class AccessBridge {
                     }
 
                     catch(java.io.FileNotFoundException e) {
+                    }
+                }
+            }
+        }
+
+        /*
+        * XInitialization
+        */
+
+        public void initialize(java.lang.Object[] arguments) {
+            for(int i = 0; i < arguments.length; i++) {
+                if( AnyConverter.isObject(arguments[i]) ) {
+                    try {
+                        // Currently there is no way to determine if key event forwarding is needed or not,
+                        // so we have to do it always ..
+                        XExtendedToolkit unoToolkit = (XExtendedToolkit)
+                            AnyConverter.toObject(new Type(XExtendedToolkit.class), arguments[i]);
+
+                        if(unoToolkit != null) {
+                            System.err.println("added KeyHandler.");
+                            unoToolkit.addKeyHandler(new KeyHandler());
+                        } else if( Build.DEBUG) {
+                            System.err.println("argument " + i + "is not of type XExtendedToolkit.");
+                        }
+                    }
+
+                    catch(com.sun.star.lang.IllegalArgumentException e) {
+                        // FIXME: output
                     }
                 }
             }
