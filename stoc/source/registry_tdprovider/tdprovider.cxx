@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:49 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 11:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,9 +152,9 @@ class ProviderImpl
                                        XTypeDescriptionEnumerationAccess,
                                        XInitialization >
 {
-    Reference< XComponentContext >              _xContext;
-    Reference< XHierarchicalNameAccess >        _xTDMgr;
-    Reference< XHierarchicalNameAccess > getTDMgr() SAL_THROW( () );
+    com::sun::star::uno::Reference< XComponentContext >              _xContext;
+    com::sun::star::uno::Reference< XHierarchicalNameAccess >        _xTDMgr;
+    com::sun::star::uno::Reference< XHierarchicalNameAccess > getTDMgr() SAL_THROW( () );
 
     RegistryKeyList                             _aBaseKeys;
     RegistryTypeReaderLoader                    _aLoader;
@@ -163,7 +163,7 @@ protected:
     virtual void SAL_CALL disposing();
 
 public:
-    ProviderImpl( const Reference< XComponentContext > & xContext );
+    ProviderImpl( const com::sun::star::uno::Reference< XComponentContext > & xContext );
     virtual ~ProviderImpl();
 
     // XInitialization
@@ -191,7 +191,7 @@ public:
                     ::com::sun::star::uno::RuntimeException );
 };
 //__________________________________________________________________________________________________
-ProviderImpl::ProviderImpl( const Reference< XComponentContext > & xContext )
+ProviderImpl::ProviderImpl( const com::sun::star::uno::Reference< XComponentContext > & xContext )
     : WeakComponentImplHelper4<
         XServiceInfo, XHierarchicalNameAccess,
         XTypeDescriptionEnumerationAccess, XInitialization >( _aComponentMutex )
@@ -205,12 +205,12 @@ ProviderImpl::~ProviderImpl()
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
-Reference< XHierarchicalNameAccess > ProviderImpl::getTDMgr()
+com::sun::star::uno::Reference< XHierarchicalNameAccess > ProviderImpl::getTDMgr()
     SAL_THROW( () )
 {
     if (! _xTDMgr.is())
     {
-        Reference< XHierarchicalNameAccess > xTDMgr;
+        com::sun::star::uno::Reference< XHierarchicalNameAccess > xTDMgr;
         _xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
             "/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= xTDMgr;
         OSL_ENSURE( xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
@@ -250,10 +250,10 @@ void ProviderImpl::initialize(
     Any const * pRegistries = args.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < args.getLength(); ++nPos )
     {
-        Reference< XSimpleRegistry > xRegistry( pRegistries[ nPos ], UNO_QUERY );
+        com::sun::star::uno::Reference< XSimpleRegistry > xRegistry( pRegistries[ nPos ], UNO_QUERY );
         if (xRegistry.is() && xRegistry->isValid())
         {
-            Reference< XRegistryKey > xKey( xRegistry->getRootKey()->openKey(
+            com::sun::star::uno::Reference< XRegistryKey > xKey( xRegistry->getRootKey()->openKey(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR") ) ) );
             if (xKey.is() && xKey->isValid())
             {
@@ -306,8 +306,8 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
         {
             try
             {
-                Reference< XRegistryKey > xBaseKey( *iPos );
-                Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey ) );
+                com::sun::star::uno::Reference< XRegistryKey > xBaseKey( *iPos );
+                com::sun::star::uno::Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey ) );
                 if (xKey.is())
                 {
                     // closes key in it's dtor (which is
@@ -319,7 +319,7 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
                         if (xKey->getValueType() == RegistryValueType_BINARY)
                         {
                             Sequence< sal_Int8 > aBytes( xKey->getBinaryValue() );
-                            Reference< XTypeDescription > xTD(
+                            com::sun::star::uno::Reference< XTypeDescription > xTD(
                                 createTypeDescription( _aLoader,
                                                        aBytes,
                                                        getTDMgr(),
@@ -335,7 +335,7 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
                     if (nIndex > 0)
                     {
                         // open module
-                        Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey.copy( 0, nIndex ) ) );
+                        com::sun::star::uno::Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey.copy( 0, nIndex ) ) );
                         if (xKey.is())
                         {
                             // closes key in it's dtor (which is
@@ -408,7 +408,7 @@ sal_Bool ProviderImpl::hasByHierarchicalName( const OUString & rName )
 // XTypeDescriptionEnumerationAccess
 //__________________________________________________________________________________________________
 // virtual
-Reference< XTypeDescriptionEnumeration > SAL_CALL
+com::sun::star::uno::Reference< XTypeDescriptionEnumeration > SAL_CALL
 ProviderImpl::createTypeDescriptionEnumeration(
         const OUString & moduleName,
         const Sequence< TypeClass > & types,
@@ -417,7 +417,7 @@ ProviderImpl::createTypeDescriptionEnumeration(
             InvalidTypeNameException,
             RuntimeException )
 {
-    return Reference< XTypeDescriptionEnumeration >(
+    return com::sun::star::uno::Reference< XTypeDescriptionEnumeration >(
         TypeDescriptionEnumerationImpl::createInstance( _xContext,
                                                         moduleName,
                                                         types,
@@ -427,19 +427,19 @@ ProviderImpl::createTypeDescriptionEnumeration(
 }
 
 //==================================================================================================
-static Reference< XInterface > SAL_CALL ProviderImpl_create(
-    Reference< XComponentContext > const & xContext )
+static com::sun::star::uno::Reference< XInterface > SAL_CALL ProviderImpl_create(
+    com::sun::star::uno::Reference< XComponentContext > const & xContext )
     throw(::com::sun::star::uno::Exception)
 {
-    return Reference< XInterface >( *new ProviderImpl( xContext ) );
+    return com::sun::star::uno::Reference< XInterface >( *new ProviderImpl( xContext ) );
 }
 
 //__________________________________________________________________________________________________
 // global helper function
-Reference< XTypeDescription > createTypeDescription(
+com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
     const RegistryTypeReaderLoader & rLoader,
     const Sequence< sal_Int8 > & rData,
-    const Reference< XHierarchicalNameAccess > & xNameAccess,
+    const com::sun::star::uno::Reference< XHierarchicalNameAccess > & xNameAccess,
     bool bReturnEmptyRefForUnknownType )
 {
     RegistryTypeReader aReader( rLoader,
@@ -455,7 +455,7 @@ Reference< XTypeDescription > createTypeDescription(
         {
             RTUik aUik;
             aReader.getUik( aUik );
-            return Reference< XTypeDescription >(
+            return com::sun::star::uno::Reference< XTypeDescription >(
                 new InterfaceTypeDescriptionImpl( xNameAccess,
                                                   aName,
                                                   aReader.getSuperTypeName()
@@ -466,11 +466,11 @@ Reference< XTypeDescription > createTypeDescription(
 
         case RT_TYPE_MODULE:
             // @@@ not quite correct, XModuleTypeDescription missing.
-            return Reference< XTypeDescription >(
+            return com::sun::star::uno::Reference< XTypeDescription >(
                 new TypeDescriptionImpl( TypeClass_MODULE, aName ) );
 
         case RT_TYPE_STRUCT:
-            return Reference< XTypeDescription >(
+            return com::sun::star::uno::Reference< XTypeDescription >(
                 new CompoundTypeDescriptionImpl( xNameAccess,
                                                  TypeClass_STRUCT,
                                                  aName,
@@ -478,7 +478,7 @@ Reference< XTypeDescription > createTypeDescription(
                                                     .replace( '/', '.' ),
                                                  rData ) );
         case RT_TYPE_ENUM:
-            return Reference< XTypeDescription >(
+            return com::sun::star::uno::Reference< XTypeDescription >(
                 new EnumTypeDescriptionImpl( xNameAccess,
                                              aName,
                                              getRTValueAsInt32(
@@ -486,7 +486,7 @@ Reference< XTypeDescription > createTypeDescription(
                                                     0 ) ),
                                              rData ) );
         case RT_TYPE_EXCEPTION:
-            return Reference< XTypeDescription >(
+            return com::sun::star::uno::Reference< XTypeDescription >(
                 new CompoundTypeDescriptionImpl( xNameAccess,
                                                  TypeClass_EXCEPTION,
                                                  aName,
@@ -494,13 +494,13 @@ Reference< XTypeDescription > createTypeDescription(
                                                     .replace( '/', '.' ),
                                                  rData ) );
         case RT_TYPE_TYPEDEF:
-            return Reference< XTypeDescription >(
+            return com::sun::star::uno::Reference< XTypeDescription >(
                 new TypedefTypeDescriptionImpl( xNameAccess,
                                                 aName,
                                                 aReader.getSuperTypeName()
                                                     .replace( '/', '.' ) ) );
         case RT_TYPE_SERVICE:
-            return Reference< XTypeDescription >(
+            return com::sun::star::uno::Reference< XTypeDescription >(
                 new ServiceTypeDescriptionImpl( xNameAccess, aName, rData ) );
 
 // @@@ X...Typedescription + TypeClass missing
@@ -517,9 +517,9 @@ Reference< XTypeDescription > createTypeDescription(
     // Unknown type.
 
     if ( bReturnEmptyRefForUnknownType )
-        return Reference< XTypeDescription >();
+        return com::sun::star::uno::Reference< XTypeDescription >();
 
-    return Reference< XTypeDescription >(
+    return com::sun::star::uno::Reference< XTypeDescription >(
                 new TypeDescriptionImpl( TypeClass_UNKNOWN, aName ) );
 }
 
