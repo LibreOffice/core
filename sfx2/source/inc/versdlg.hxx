@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-10 11:04:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ public:
                                     Window* pParent, const ResId& );
 };
 
+class SfxVersionTableDtor;
 class SfxVersionDialog : public SfxModalDialog
 {
     FixedLine                   aNewGroup;
@@ -107,6 +108,7 @@ class SfxVersionDialog : public SfxModalDialog
     PushButton                  aCompareButton;
     HelpButton                  aHelpButton;
     SfxViewFrame*               pViewFrame;
+    SfxVersionTableDtor*        mpTable;
 
     DECL_LINK(                  DClickHdl_Impl, Control* );
     DECL_LINK(                  SelectHdl_Impl, Control* );
