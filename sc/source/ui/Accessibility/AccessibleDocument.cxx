@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-21 11:07:56 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 11:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,7 @@ public:
 
     utl::AccessibleRelationSetHelper* GetRelationSet(const ScAddress* pAddress) const;
 
+    void VisAreaChanged() const;
 private:
     typedef std::vector<ScAccessibleShapeData*> SortedShapes;
 
@@ -1241,6 +1242,25 @@ sal_Int8 ScChildrenShapes::Compare(const ScAccessibleShapeData* pData1,
     return nResult;
 }
 
+struct ScVisAreaChanged
+{
+    ScAccessibleDocument* mpAccDoc;
+    ScVisAreaChanged(ScAccessibleDocument* pAccDoc) : mpAccDoc(pAccDoc) {}
+    void operator() (const ScAccessibleShapeData* pAccShapeData) const
+    {
+        if (pAccShapeData && pAccShapeData->pAccShape)
+        {
+            pAccShapeData->pAccShape->ViewForwarderChanged(accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpAccDoc);
+        }
+    }
+};
+
+void ScChildrenShapes::VisAreaChanged() const
+{
+    ScVisAreaChanged aVisAreaChanged(mpAccessibleDocument);
+    std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aVisAreaChanged);
+}
+
 // ============================================================================
 
 ScAccessibleDocument::ScAccessibleDocument(
@@ -1279,6 +1299,7 @@ ScAccessibleDocument::ScAccessibleDocument(
             AddChild(xAcc, sal_False);
         }
     }
+    maVisArea = GetVisibleArea_Impl();
 }
 
 void ScAccessibleDocument::Init()
@@ -1417,12 +1438,38 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 mpTempAccEdit->GotFocus();
             }
         }
-        else if ((rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE))
+        else if (rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE)
         {
             if (mxTempAcc.is())
             {
                 mpTempAccEdit = NULL;
                 RemoveChild(mxTempAcc, sal_True);
+            }
+        }
+        else if ((rRef.GetId() == SC_HINT_ACC_VISAREACHANGED) || (rRef.GetId() == SC_HINT_ACC_WINDOWRESIZED))
+        {
+            Rectangle aOldVisArea(maVisArea);
+            maVisArea = GetVisibleArea_Impl();
+
+            if (maVisArea != aOldVisArea)
+            {
+                if (maVisArea.GetSize() != aOldVisArea.GetSize())
+                {
+                    AccessibleEventObject aEvent;
+                    aEvent.EventId = AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT;
+                    aEvent.Source = uno::Reference< XAccessible >(this);
+
+                    CommitChange(aEvent);
+
+                    if (mpAccessibleSpreadsheet)
+                        mpAccessibleSpreadsheet->BoundingBoxChanged();
+                }
+                else if (mpAccessibleSpreadsheet)
+                {
+                    mpAccessibleSpreadsheet->VisAreaChanged();
+                }
+                if (mpChildrenShapes)
+                    mpChildrenShapes->VisAreaChanged();
             }
         }
     }
@@ -1845,10 +1892,8 @@ sal_Bool ScAccessibleDocument::IsValid (void) const
     return (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose);
 }
 
-Rectangle ScAccessibleDocument::GetVisibleArea() const
+Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
     Rectangle aVisRect(GetBoundingBox());
 
     Point aPoint(mpViewShell->GetViewData()->GetPixPos(meSplitPos)); // returns a negative Point
@@ -1861,6 +1906,13 @@ Rectangle ScAccessibleDocument::GetVisibleArea() const
         aVisRect = pWin->PixelToLogic(aVisRect, pWin->GetDrawMapMode());
 
     return aVisRect;
+}
+
+Rectangle ScAccessibleDocument::GetVisibleArea() const
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    return maVisArea;
 }
 
 Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
