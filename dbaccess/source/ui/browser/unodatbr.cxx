@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
+ *  last change: $Author: oj $ $Date: 2001-08-28 13:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1696,13 +1696,17 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
         case ID_BROWSER_REFRESH_REBUILD:
         {
             SvLBoxEntry* pSelected = m_pCurrentlyDisplayed;
-            OSL_ENSURE( pSelected, "SbaTableQueryBrowser::Execute: invalid current selection!" );
-
             // unload
             unloadAndCleanup( sal_False, sal_True );
 
             // reselect the entry
-            OnSelectEntry( pSelected );
+            if(pSelected)
+                OnSelectEntry( pSelected );
+            else
+            {
+                Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
+                implSelect(::svx::ODataAccessDescriptor(xProp));
+            }
         }
         break;
 
@@ -2981,7 +2985,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
     ::rtl::OUString aTableName,aCatalogName,aSchemaName;
 
     sal_Bool bEsacpeProcessing = sal_True;
-    sal_Int32 nInitialDisplayCommandType;
+    sal_Int32 nInitialDisplayCommandType = CommandType::COMMAND;
     ::rtl::OUString sInitialDataSourceName;
     ::rtl::OUString sInitialCommand;
 
@@ -3620,6 +3624,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     {   // no -> disable the connection-related menu entries
         aContextMenu.EnableItem(ID_TREE_CLOSE_CONN, sal_False);
         aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
+        aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN, sal_False);
     }
     else
     {
