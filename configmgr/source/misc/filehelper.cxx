@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:27:07 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,29 @@ namespace configmgr
     bool FileHelper::dirExists(rtl::OUString const& _sDirURL)
     {
         return Directory(_sDirURL).open() == Directory::E_None;
+    }
+
+    // -----------------------------------------------------------------------------
+    sal_uInt64 FileHelper::getModifyStatus(rtl::OUString const& _sURL, TimeValue & rModifyTime)
+    {
+        static const TimeValue k_NullTime = {0,0};
+        sal_uInt64 aSize = 0;
+        rModifyTime = k_NullTime;
+
+        DirectoryItem aItem;
+        if (osl::FileBase::E_None == DirectoryItem::get(_sURL, aItem))
+        {
+            FileStatus aStatus(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type|osl_FileStatus_Mask_FileSize);
+            if (osl::FileBase::E_None == aItem.getFileStatus(aStatus))
+            {
+                if (aStatus.isValid(osl_FileStatus_Mask_ModifyTime))
+                    rModifyTime = aStatus.getModifyTime();
+
+                if (aStatus.isValid(osl_FileStatus_Mask_FileSize))
+                    aSize = aStatus.getFileSize();
+            }
+        }
+        return aSize;
     }
 
     // -----------------------------------------------------------------------------
