@@ -2,9 +2,9 @@
  *
  *  $RCSfile: movedfwdfrmsbyobjpos.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:06:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 class SwTxtNode;
 class SwTxtFrm;
+// --> OD 2004-10-05 #i26945#
+class SwRowFrm;
+// <--
 
 class SwMovedFwdFrmsByObjPos
 {
@@ -91,6 +94,9 @@ class SwMovedFwdFrmsByObjPos
         bool FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                   sal_uInt32& _ornToPageNum ) const;
 
+        // --> OD 2004-10-05 #i26945#
+        bool DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const;
+        // <--
         void Clear();
 };
 
