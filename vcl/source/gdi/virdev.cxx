@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:34:15 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include <svsys.h>
 #endif
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
 #endif
@@ -77,7 +76,6 @@
 #endif
 #ifndef _SV_SALVD_HXX
 #include <salvd.hxx>
-#endif
 #endif
 
 #ifndef _DEBUG_HXX
@@ -104,52 +102,6 @@
 
 using namespace ::com::sun::star::uno;
 
-// appserver
-#ifdef REMOTE_APPSERVER
-#ifndef _SV_RMOUTDEV_HXX
-#include <rmoutdev.hxx>
-#endif
-#ifndef _SV_RMVIRDEV_HXX
-#include <rmvirdev.hxx>
-#endif
-#ifndef _VCL_RMCACHE_HXX_
-#include <rmcache.hxx>
-#endif
-#endif
-
-// =======================================================================
-
-// interface cache
-#ifdef REMOTE_APPSERVER
-
-static ::vcl::InterfacePairCache< ::com::sun::star::portal::client::XRmVirtualDevice, ::com::sun::star::portal::client::XRmOutputDevice >* pRemoteVirdevCache = NULL;
-
-typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::portal::client::XRmVirtualDevice >, ::com::sun::star::uno::Reference< ::com::sun::star::portal::client::XRmOutputDevice > > virdevInterfacePair;
-
-
-void createRemoteVirdevCache( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aInterfaceSeq )
-{
-    if( ! pRemoteVirdevCache )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        pRemoteVirdevCache = new ::vcl::InterfacePairCache< ::com::sun::star::portal::client::XRmVirtualDevice, ::com::sun::star::portal::client::XRmOutputDevice >(
-            pSVData->mxMultiFactory,
-            aInterfaceSeq,
-            ::rtl::OUString::createFromAscii( "OfficeVirtualDevice.stardiv.de" ), 10, 40 );
-    }
-}
-
-void eraseRemoteVirdevCache()
-{
-    if( pRemoteVirdevCache )
-    {
-        delete pRemoteVirdevCache;
-        pRemoteVirdevCache = NULL;
-    }
-}
-
-#endif
-
 // =======================================================================
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
@@ -169,7 +121,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if ( !pOutDev )
         pOutDev = ImplGetDefaultWindow();
 
-#ifndef REMOTE_APPSERVER
     SalGraphics* pGraphics;
     if ( !pOutDev->mpGraphics )
         ((OutputDevice*)pOutDev)->ImplGetGraphics();
@@ -180,57 +131,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         mpVirDev = NULL;
     if ( !mpVirDev )
         GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
-#else
-
-    if( pOutDev->GetOutDevType() == OUTDEV_PRINTER || ! mpVirDev )
-    {
-        virdevInterfacePair aPair = pRemoteVirdevCache->takeInterface();
-        if( aPair.first.is() && aPair.second.is() )
-        {
-            if( ! mpVirDev )
-                mpVirDev = new RmVirtualDevice;
-            mpVirDev->SetInterface( aPair.first );
-            mpVirDev->Create( (ULONG) pOutDev, nDX, nDY, nBitCount );
-
-            if( ! mpGraphics )
-                mpGraphics = new ImplServerGraphics();
-            mpGraphics->SetInterface( aPair.second );
-        }
-    }
-    else
-    {
-        // this was done in ImpGetServerGraphics before
-        // and is now here because of interface caching
-        if( mpGraphics && mpGraphics->GetInterface().is() )
-        {
-            try
-            {
-                CHECK_FOR_RVPSYNC_NORMAL();
-                mpGraphics->GetInterface()->SetFillColor( mpGraphics->maFillColor.GetColor() );
-            }
-            catch (...)
-            {
-                if( mpGraphics )
-                    delete mpGraphics, mpGraphics = NULL;
-
-                if( mpVirDev )
-                {
-                    virdevInterfacePair aPair = pRemoteVirdevCache->takeInterface();
-                    if( aPair.first.is() && aPair.second.is() )
-                    {
-                        mpVirDev->SetInterface( aPair.first );
-                        mpVirDev->Create( (ULONG)NULL, mnOutWidth, mnOutHeight, mnBitCount );
-                        mpGraphics = new ImplServerGraphics();
-                        mpGraphics->SetInterface( aPair.second );
-                    }
-                    else
-                        mpVirDev->SetInterface( REF( NMSP_CLIENT::XRmVirtualDevice )() );
-                }
-            }
-        }
-        ImplGetServerGraphics( TRUE );
-    }
-#endif
 
     mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );
     mnOutWidth      = nDX;
@@ -312,33 +212,10 @@ VirtualDevice::~VirtualDevice()
 
    ImplSVData* pSVData = ImplGetSVData();
 
-#ifndef REMOTE_APPSERVER
     ImplReleaseGraphics();
 
     if ( mpVirDev )
         pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
-#else
-    if ( pRemoteVirdevCache && mpVirDev && mpGraphics )
-    {
-        virdevInterfacePair aPair( mpVirDev->GetInterface(), mpGraphics->GetInterface() );
-        CHECK_FOR_RVPSYNC_NORMAL();
-        try
-        {
-            aPair.first->Create( 0, 0, 0, 0 );
-            pRemoteVirdevCache->putInterface( aPair );
-        }
-        catch ( RuntimeException &e )
-        {
-            rvpExceptionHandler();
-        }
-    }
-
-    REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
-    mpGraphics->SetInterface( aTmp );
-    ImplReleaseServerGraphics();
-    delete mpVirDev;
-    delete mpGraphics;
-#endif
 
     // VirDev aus der Liste eintragen
     if( mpPrev )
@@ -367,33 +244,6 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
         return TRUE;
     }
 
-#ifdef REMOTE_APPSERVER
-    long nOldWidth = mnOutWidth, nOldHeight = mnOutHeight;
-
-    try
-    {
-        mnOutWidth  = rNewSize.Width();
-        mnOutHeight = rNewSize.Height();
-        mpVirDev->ResizeOutputSizePixel( mnOutWidth, mnOutHeight );
-    }
-    catch (...)
-    {
-        delete mpVirDev, mpVirDev = NULL;
-        ImplInitVirDev( NULL, mnOutWidth, mnOutHeight, mnBitCount );
-    }
-
-    if( bErase )
-        Erase();
-    else
-    {
-        if ( nOldWidth < mnOutWidth )
-            Erase( Rectangle( Point( nOldWidth, 0 ), Size( mnOutWidth-nOldWidth, Max( nOldHeight, mnOutHeight ) ) ) );
-        if ( nOldHeight< mnOutHeight )
-            Erase( Rectangle( Point( 0, nOldHeight ), Size( Max( nOldWidth, mnOutWidth ), mnOutHeight-nOldHeight ) ) );
-    }
-
-    return TRUE;
-#else
     BOOL bRet;
     long nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
 
@@ -472,7 +322,6 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
     }
 
     return bRet;
-#endif
 }
 
 // -----------------------------------------------------------------------
