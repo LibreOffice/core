@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventHandler.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:00:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module awt {
 /** This interface can be implemented by clients that need access to the
     toolkits window message loop.
 */
-interface XEventHandler: com::sun::star::uno::XInterface
+published interface XEventHandler: com::sun::star::uno::XInterface
 {
 
     //-------------------------------------------------------------------------
