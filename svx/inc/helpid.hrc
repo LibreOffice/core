@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-30 10:47:39 $
+ *  last change: $Author: pb $ $Date: 2002-12-02 07:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,6 +510,7 @@
 #define HID_GALLERY_NEWTHEME_FINDFILES          (HID_SVX_EXT0_START + 9)
 #define HID_GALLERY_NEWTHEME_ADDFILES           (HID_SVX_EXT0_START + 10)
 #define HID_NUMBERINGOPT_SEL_GRF_FROM_FILE      (HID_SVX_EXT0_START + 11)
+#define HID_OPTIONS_CTL                         (HID_SVX_EXT0_START + 12)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
@@ -523,7 +524,7 @@
 
 // overrun check 2
 
-#define ACT_SVX_HID_END2 HID_NUMBERINGOPT_SEL_GRF_FROM_FILE
+#define ACT_SVX_HID_END2 HID_OPTIONS_CTL
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
