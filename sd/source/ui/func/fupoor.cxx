@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-14 17:38:40 $
+ *  last change: $Author: aw $ $Date: 2002-03-18 15:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,11 @@
 // #97016# IV
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
+#endif
+
+// #98198#
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 TYPEINIT0( FuPoor );
@@ -313,51 +318,68 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         // #97016# IV
         case KEY_RETURN:
         {
-            if(rKEvt.GetKeyCode().IsMod1() && pViewShell && pViewShell->ISA(SdDrawViewShell))
+            if(rKEvt.GetKeyCode().IsMod1())
             {
-                SdDrawViewShell* pDrawViewShell = (SdDrawViewShell*)pViewShell;
-                SdPage* pActualPage = pDrawViewShell->GetActualPage();
-                SdrTextObj* pCandidate = 0L;
-
-                if(pActualPage)
+                if(pViewShell && pViewShell->ISA(SdDrawViewShell))
                 {
-                    SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
+                    SdDrawViewShell* pDrawViewShell = (SdDrawViewShell*)pViewShell;
+                    SdPage* pActualPage = pDrawViewShell->GetActualPage();
+                    SdrTextObj* pCandidate = 0L;
 
-                    while(aIter.IsMore() && !pCandidate)
+                    if(pActualPage)
                     {
-                        SdrObject* pObj = aIter.Next();
+                        SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
 
-                        if(pObj && pObj->ISA(SdrTextObj))
+                        while(aIter.IsMore() && !pCandidate)
                         {
-                            sal_uInt32 nInv(pObj->GetObjInventor());
-                            sal_uInt16 nKnd(pObj->GetObjIdentifier());
+                            SdrObject* pObj = aIter.Next();
 
-                            if(SdrInventor == nInv &&
-                                (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd))
+                            if(pObj && pObj->ISA(SdrTextObj))
                             {
-                                pCandidate = (SdrTextObj*)pObj;
+                                sal_uInt32 nInv(pObj->GetObjInventor());
+                                sal_uInt16 nKnd(pObj->GetObjIdentifier());
+
+                                if(SdrInventor == nInv &&
+                                    (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd))
+                                {
+                                    pCandidate = (SdrTextObj*)pObj;
+                                }
                             }
                         }
                     }
+
+                    if(pCandidate)
+                    {
+                        pView->UnMarkAll();
+                        pView->MarkObj(pCandidate, pView->GetPageViewPvNum(0));
+
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                            SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
+                    }
+                    else
+                    {
+                        // insert a new page with the same page layout
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                            SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
+                    }
+
+                    // consumed
+                    bReturn = TRUE;
                 }
+            }
+            else
+            {
+                // #98198# activate text edit on RETURN for selected object
+                const SdrMarkList& rMarkList = pView->GetMarkList();
 
-                if(pCandidate)
+                if(!pView->IsTextEdit() && 1 == rMarkList.GetMarkCount())
                 {
-                    pView->UnMarkAll();
-                    pView->MarkObj(pCandidate, pView->GetPageViewPvNum(0));
-
                     pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                         SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
-                }
-                else
-                {
-                    // insert a new page with the same page layout
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                        SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
-                }
 
-                // consumed
-                bReturn = TRUE;
+                    // consumed
+                    bReturn = TRUE;
+                }
             }
         }
         break;
@@ -769,6 +791,48 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     if (bReturn)
     {
         pWindow->ReleaseMouse();
+    }
+
+    // #98198# when a text-editable object is selected and the
+    // input character is printable, activate text edit on that object
+    // and feed character to object
+    if(!bReturn)
+    {
+        const SdrMarkList& rMarkList = pView->GetMarkList();
+
+        if(!pView->IsTextEdit() && 1 == rMarkList.GetMarkCount())
+        {
+            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+
+            if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
+            {
+                // is the character a printable one?
+                SvtSysLocale aSysLocale;
+                const CharClass& rCharClass = aSysLocale.GetCharClass();
+                String aCharString(rKEvt.GetCharCode());
+
+                if(aCharString.Len())
+                {
+                    sal_Int32 nCharType = rCharClass.getCharacterType(aCharString, 0);
+                    sal_Bool bPrintable(0 != (nCharType & ::com::sun::star::i18n::KCharacterType::PRINTABLE));
+
+                    if(bPrintable)
+                    {
+                        // try to activate textedit mode for the selected object
+                        SfxStringItem aInputString(SID_ATTR_CHAR, aCharString);
+
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                            SID_ATTR_CHAR,
+                            SFX_CALLMODE_ASYNCHRON,
+                            &aInputString,
+                            0L);
+
+                        // consumed
+                        bReturn = TRUE;
+                    }
+                }
+            }
+        }
     }
 
     return(bReturn);
