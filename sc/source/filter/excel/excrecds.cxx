@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 11:35:57 $
+ *  last change: $Author: dr $ $Date: 2002-04-18 10:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3976,231 +3976,188 @@ ULONG ExcSetup::GetLen( void ) const
 
 
 
-//------------------- class ExcHeaderFooter, class ExcHeader, class ExcFooter -
+// Header/Footer ==============================================================
 
-ExcHeaderFooter::ExcHeaderFooter( RootData* p, const BOOL b ) :
-    nLen( 0 ),
-    bUnicode( b ),
-    ExcRoot( p )
+// XclExpHeaderFooter ---------------------------------------------------------
+
+XclExpHeaderFooter::XclExpHeaderFooter(
+        sal_uInt16 nRecId,
+        RootData& rRootData,
+        sal_uInt16 nHFSetWhichId,
+        sal_uInt16 nHFTextWhichId ) :
+    XclExpRecord( nRecId ),
+    ExcRoot( &rRootData ),
+    mbUnicode( rRootData.eDateiTyp >= Biff8 )
 {
-}
-
-
-String ExcHeaderFooter::GetFormatString( USHORT nWhich )
-{
-    SfxItemSet*                 pItemSet = pExcRoot->pStyleSheetItemSet;
-
+    SfxItemSet* pItemSet = rRootData.pStyleSheetItemSet;
     if( pItemSet )
-        return GetFormatString( ( const ScPageHFItem& ) pItemSet->Get( nWhich ) );
-    else
-        return EMPTY_STRING;
+    {
+        const SvxSetItem& rSetItem = (const SvxSetItem&) pItemSet->Get( nHFSetWhichId );
+        if( ((const SfxBoolItem&) rSetItem.GetItemSet().Get( ATTR_PAGE_ON )).GetValue() )
+        {
+            GetFormatString( maFormatString, rRootData, nHFTextWhichId );
+            // set record size, for Biff8 only a prediction, assuming 8-bit string
+            SetRecSize( mbUnicode ?
+                3 + Min( static_cast< sal_uInt32 >( maFormatString.Len() ), 0xFFFFUL ) :
+                1 + Min( static_cast< sal_uInt32 >( maFormatString.Len() ), 0xFFUL ) );
+        }
+    }
 }
 
-
-String ExcHeaderFooter::GetFormatString( const ScPageHFItem& r )
+void XclExpHeaderFooter::GetFormatString( String& rString, RootData& rRootData, const EditTextObject& rEdTxtObj )
 {
-    String                  aRet;
+    const sal_Unicode cParSep = 0x000A;
+    sal_Bool bFields = sal_False;
 
-    const EditTextObject*   pLeft = r.GetLeftArea();
-    const EditTextObject*   pMid = r.GetCenterArea();
-    const EditTextObject*   pRight = r.GetRightArea();
-
-    if( pLeft )
-    {
-        String              aStr( GetFormatString( *pLeft ) );
-
-        if( aStr.Len() )
-        {
-            aRet.AppendAscii( "&L" );
-            aRet.Append( aStr );
-        }
-    }
-
-    if( pMid )
-    {
-        String              aStr( GetFormatString( *pMid ) );
-
-        if( aStr.Len() )
-        {
-            aRet.AppendAscii( "&C" );
-            aRet.Append( aStr );
-        }
-    }
-
-    if( pRight )
-    {
-        String              aStr( GetFormatString( *pRight ) );
-
-        if( aStr.Len() )
-        {
-            aRet.AppendAscii( "&R" );
-            aRet.Append( aStr );
-        }
-    }
-
-    return aRet;
-}
-
-
-String ExcHeaderFooter::GetFormatString( const EditTextObject& rEdTxtObj )
-{
-    String                  aRet;
-
-    const sal_Unicode       cParSep = 0x0A;
-    BOOL                    bFields = FALSE;
-
-    EditEngine&             rEdEng = pExcRoot->GetEdEngForHF();
-
+    EditEngine& rEdEng = rRootData.GetEdEngForHF();
     rEdEng.SetText( rEdTxtObj );
 
-    UINT16                  nParas = rEdEng.GetParagraphCount();
+    sal_uInt16 nParas = rEdEng.GetParagraphCount();
     if( nParas )
     {
-        ESelection          aSel( 0, 0, nParas - 1, rEdEng.GetTextLen( nParas - 1 ) );
-        SfxItemSet          aSet( rEdEng.GetAttribs( aSel ) );
-        SfxItemState        eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, FALSE );
-        if( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
-            bFields = TRUE;
+        ESelection aSel( 0, 0, nParas - 1, rEdEng.GetTextLen( nParas - 1 ) );
+        SfxItemSet aSet( rEdEng.GetAttribs( aSel ) );
+        SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, sal_False );
+        if( (eFieldState == SFX_ITEM_DONTCARE) || (eFieldState == SFX_ITEM_SET) )
+            bFields = sal_True;
     }
 
-    BOOL                bOldUpdateMode = rEdEng.GetUpdateMode();
+    sal_Bool bOldUpdateMode = rEdEng.GetUpdateMode();
+    rEdEng.SetUpdateMode( sal_True );
 
-    rEdEng.SetUpdateMode( TRUE );
-
-    for( UINT16 nPar = 0 ; nPar < nParas ; nPar++ )
+    for( sal_uInt16 nPar = 0; nPar < nParas; ++nPar )
     {
         if( nPar )
-            aRet += cParSep;
+            rString += cParSep;
 
         if( bFields )   // text and fields
         {
-            SvUShorts       aPortions;
-
+            SvUShorts aPortions;
             rEdEng.GetPortions( nPar, aPortions );
 
-            UINT16          nCnt = aPortions.Count();
-            UINT16          nStart = 0;
-            UINT16          nPos;
+            sal_uInt16 nCnt = aPortions.Count();
+            sal_uInt16 nStart = 0;
 
-            for( nPos = 0 ; nPos < nCnt ; nPos++ )
+            for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
             {
-                UINT16      nEnd = aPortions.GetObject( nPos );
-                ESelection  aSel( nPar, nStart, nPar, nEnd );
+                sal_uInt16 nEnd = aPortions.GetObject( nPos );
+                ESelection aSel( nPar, nStart, nPar, nEnd );
 
                 // fields are single characters
                 if( nEnd == nStart + 1 )
                 {
-                    const SfxPoolItem*      pItem;
-                    SfxItemSet              aSet = rEdEng.GetAttribs( aSel );
-                    if( aSet.GetItemState( EE_FEATURE_FIELD, FALSE, &pItem ) == SFX_ITEM_ON )
+                    const SfxPoolItem* pItem;
+                    SfxItemSet aSet( rEdEng.GetAttribs( aSel ) );
+                    if( aSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET )
                     {
-                        const SvxFieldData* pField = ( ( const SvxFieldItem* ) pItem )->GetField();
+                        const SvxFieldData* pField = ((const SvxFieldItem*) pItem)->GetField();
 
                         if( pField )
                         {
-                            const char*     p;
+                            const sal_Char* pText;
                             if( pField->ISA( SvxPageField ) )
-                                p = "&P";
+                                pText = "&P";
                             else if( pField->ISA( SvxPagesField ) )
-                                p = "&N";
+                                pText = "&N";
                             else if( pField->ISA( SvxDateField ) )
-                                p = "&D";
+                                pText = "&D";
                             else if( pField->ISA( SvxTimeField ) || pField->ISA( SvxExtTimeField ) )
-                                p = "&T";
+                                pText = "&T";
                             else if( pField->ISA( SvxFileField ) || pField->ISA( SvxExtFileField ) )
-                                p = "&F";
+                                pText = "&F";
                             else if( pField->ISA( SvxTableField ) )
-                                p = "&A";
+                                pText = "&A";
                             else
-                                p = "<unsupported field>";
+                                pText = "<unsupported field>";
 
-                            aRet.AppendAscii( p );
+                            rString.AppendAscii( pText );
                         }
                     }
                     else
-                        aRet += rEdEng.GetText( aSel );
+                        rString += rEdEng.GetText( aSel );
                 }
                 else
-                    aRet += rEdEng.GetText( aSel );
+                    rString += rEdEng.GetText( aSel );
 
                 nStart = nEnd;
             }
         }
         else        // no fields, text only
-        {
-            aRet += rEdTxtObj.GetText( nPar );
-        }
+            rString += rEdTxtObj.GetText( nPar );
     }
     rEdEng.SetUpdateMode( bOldUpdateMode );
-
-    return aRet;
 }
 
-
-void ExcHeaderFooter::CalcLen()
-{   //! for Biff8 only a prediction, assumes 8-bit string
-    if( bUnicode )
-        nLen = 3 + Min( aFormatString.Len(), (xub_StrLen) 0xFFFF );
-    else
-        nLen = 1 + Min( aFormatString.Len(), (xub_StrLen) 255 );
-}
-
-
-void ExcHeaderFooter::SaveCont( XclExpStream& rStrm )
+void XclExpHeaderFooter::GetFormatString( String& rString, RootData& rRootData, sal_uInt16 nWhich )
 {
-    if( bUnicode )          // >= Biff8
+    SfxItemSet* pItemSet = rRootData.pStyleSheetItemSet;
+    if( !pItemSet )
+        return;
+
+    const ScPageHFItem& rHFItem = (const ScPageHFItem&) pItemSet->Get( nWhich );
+
+    const EditTextObject* pLeft = rHFItem.GetLeftArea();
+    if( pLeft )
+    {
+        String aTempStr;
+        GetFormatString( aTempStr, rRootData, *pLeft );
+        if( aTempStr.Len() )
+            rString.AppendAscii( "&L" ).Append( aTempStr );
+    }
+
+    const EditTextObject* pMid = rHFItem.GetCenterArea();
+    if( pMid )
+    {
+        String aTempStr;
+        GetFormatString( aTempStr, rRootData, *pMid );
+        if( aTempStr.Len() )
+            rString.AppendAscii( "&C" ).Append( aTempStr );
+    }
+
+    const EditTextObject* pRight = rHFItem.GetRightArea();
+    if( pRight )
+    {
+        String aTempStr;
+        GetFormatString( aTempStr, rRootData, *pRight );
+        if( aTempStr.Len() )
+            rString.AppendAscii( "&R" ).Append( aTempStr );
+    }
+}
+
+void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
+{
+    if( mbUnicode )
         // normal unicode string
-        XclExpUniString( aFormatString ).Write( rStrm );
-    else                    // < Biff8
+        XclExpUniString( maFormatString ).Write( rStrm );
+    else
         // 8 bit length, max 255 chars
-        rStrm.WriteByteString( ByteString( aFormatString, *pExcRoot->pCharset ), 255 );
+        rStrm.WriteByteString( ByteString( maFormatString, *pExcRoot->pCharset ), 255 );
 }
 
-
-void ExcHeaderFooter::Save( XclExpStream& rStrm )
+void XclExpHeaderFooter::Save( XclExpStream& rStrm )
 {
-    if( aFormatString.Len() )
-        ExcRecord::Save( rStrm );
+    if( maFormatString.Len() )
+        XclExpRecord::Save( rStrm );
 }
 
 
-ULONG ExcHeaderFooter::GetLen( void ) const
+// XclExpHeader ---------------------------------------------------------------
+
+XclExpHeader::XclExpHeader( RootData& rRootData ) :
+    XclExpHeaderFooter( EXC_ID_HEADER, rRootData, ATTR_PAGE_HEADERSET, ATTR_PAGE_HEADERRIGHT )
 {
-    return nLen;
 }
 
 
+// XclExpFooter ---------------------------------------------------------------
 
-
-ExcHeader::ExcHeader( RootData* p, const BOOL b ) : ExcHeaderFooter( p, b )
+XclExpFooter::XclExpFooter( RootData& rRootData ) :
+    XclExpHeaderFooter( EXC_ID_FOOTER, rRootData, ATTR_PAGE_FOOTERSET, ATTR_PAGE_FOOTERRIGHT )
 {
-    aFormatString = GetFormatString( ATTR_PAGE_HEADERRIGHT );
-    CalcLen();
 }
 
 
-UINT16 ExcHeader::GetNum( void ) const
-{
-    return 0x0014;
-}
-
-
-
-
-ExcFooter::ExcFooter( RootData* p, const BOOL b ) : ExcHeaderFooter( p, b )
-{
-    aFormatString = GetFormatString( ATTR_PAGE_FOOTERRIGHT );
-    CalcLen();
-}
-
-
-UINT16 ExcFooter::GetNum( void ) const
-{
-    return 0x0015;
-}
-
-
-
+// ============================================================================
 //----------------------------------------------------- class ExcPrintheaders -
 
 ExcPrintheaders::ExcPrintheaders( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_HEADERS, TRUE )

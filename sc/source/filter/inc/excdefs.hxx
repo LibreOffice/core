@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 11:38:04 $
+ *  last change: $Author: dr $ $Date: 2002-04-18 10:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,11 @@ enum XclTextWrap
 
 #define EXC_ROT_STACKED             0xFF
 
+
+// (0x0014, 0x0015) HEADER, FOOTER ============================================
+
+const sal_uInt16 EXC_ID_HEADER              = 0x0014;
+const sal_uInt16 EXC_ID_FOOTER              = 0x0015;
 
 // (0x0018, 0x0218) NAME ======================================================
 

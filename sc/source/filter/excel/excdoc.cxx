@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 11:35:57 $
+ *  last change: $Author: dr $ $Date: 2002-04-18 10:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,8 +726,8 @@ void ExcTable::FillAsTable( void )
         Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbVertical ) );
     }
 
-    Add( new ExcHeader( &rR, eDateiTyp >= Biff8 ) );
-    Add( new ExcFooter( &rR, eDateiTyp >= Biff8 ) );
+    Add( new XclExpHeader( rR ) );
+    Add( new XclExpFooter( rR ) );
     Add( new ExcHcenter( pStyleSheetItemSet ) );
     Add( new ExcVcenter( pStyleSheetItemSet ) );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 11:38:04 $
+ *  last change: $Author: dr $ $Date: 2002-04-18 10:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1716,53 +1716,61 @@ public:
 };
 
 
-//------------------- class ExcHeaderFooter, class ExcHeader, class ExcFooter -
+// Header/Footer ==============================================================
 
-class ExcHeaderFooter : public ExcRecord, ExcRoot
+// XclExpHeaderFooter ---------------------------------------------------------
+
+/** Base class for header/footer contents. Constructs the complete format string
+    based on the given which IDs. */
+class XclExpHeaderFooter : public XclExpRecord, public ExcRoot
 {
-protected:
-    String                  aFormatString;
-    ULONG                   nLen;
-    BOOL                    bUnicode;
+private:
+    String                      maFormatString;     /// The content of the header/footer.
+    sal_Bool                    mbUnicode;          /// <TRUE/> = write Unicode string.
 
-    String                  GetFormatString( USHORT nWhich );
-    String                  GetFormatString( const ScPageHFItem& );
-    String                  GetFormatString( const EditTextObject& );
+    /** Constructs the contents of one text portion (left, center or right). */
+    static void                 GetFormatString( String& rString, RootData& rRootData, const EditTextObject& rEdTxtObj );
+    /** Constructs the contents of the complete header/footer. */
+    static void                 GetFormatString( String& rString, RootData& rRootData, sal_uInt16 nWhich );
 
-    void                    CalcLen();
-
-    virtual void            SaveCont( XclExpStream& rStrm );
+    /** Writes the string (Byte or Unicode, depending on mbUnicode). */
+    virtual void                WriteBody( XclExpStream& rStrm );
 
 public:
-                            ExcHeaderFooter( RootData*, const BOOL bUnicode );
+    /** @param nHFSetWhichId  The which ID of the SetItem of the header/footer.
+        @param nHFTextWhichId  The which ID od the text contents of the header/footer. */
+                                XclExpHeaderFooter(
+                                    sal_uInt16 nRecId,
+                                    RootData& rRootData,
+                                    sal_uInt16 nHFSetWhichId,
+                                    sal_uInt16 nHFTextWhichId );
 
-    virtual void            Save( XclExpStream& rStrm );
-    virtual ULONG           GetLen( void ) const;
+    /** Writes the record, if the text is not empty. */
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 
+// XclExpHeader ---------------------------------------------------------------
 
-class ExcHeader : public ExcHeaderFooter
+/** Contains the header text of a sheet. */
+class XclExpHeader : public XclExpHeaderFooter
 {
-protected:
 public:
-                            ExcHeader( RootData*, const BOOL bUnicode );
-
-    virtual UINT16          GetNum( void ) const;
+                                XclExpHeader( RootData& rRootData );
 };
 
 
+// XclExpFooter ---------------------------------------------------------------
 
-class ExcFooter : public ExcHeaderFooter
+/** Contains the footer text of a sheet. */
+class XclExpFooter : public XclExpHeaderFooter
 {
-protected:
 public:
-                            ExcFooter( RootData*, const BOOL bUnicode );
-
-    virtual UINT16          GetNum( void ) const;
+                                XclExpFooter( RootData& rRootData );
 };
 
 
+// ============================================================================
 //----------------------------------------------------- class ExcPrintheaders -
 
 class ExcPrintheaders : public ExcBoolRecord
