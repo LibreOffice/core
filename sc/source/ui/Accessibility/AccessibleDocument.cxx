@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-02 14:11:19 $
+ *  last change: $Author: vg $ $Date: 2002-04-02 14:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
+#endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
+#include <svx/AccessibleShape.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -477,7 +480,6 @@ uno::Reference< XAccessible > ScAccessibleDocument::GetShape(sal_Int32 nIndex)
             }
         }
     }
-
     return maShapes[nIndex].pAccShape;
 }
 
