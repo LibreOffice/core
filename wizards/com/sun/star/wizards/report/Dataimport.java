@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Dataimport.java,v $
 *
-*  $Revision: 1.28 $
+*  $Revision: 1.29 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:20:16 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:36:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -82,7 +82,7 @@ import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.InvalidQueryException;
 import com.sun.star.uno.Exception;
 
-public class Dataimport extends UnoDialog2 { // extends ReportWizard
+public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionListener{ // extends ReportWizard
 
     ReportDocument CurReportDocument;
     static boolean bStopProcess;
@@ -119,13 +119,12 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
 
     }
 
-    class ActionListenerImpl implements com.sun.star.awt.XActionListener {
+    public void disposing(com.sun.star.lang.EventObject eventObject){
+    }
 
-        public void disposing(com.sun.star.lang.EventObject eventObject) {
-        }
-        public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent) {
-            bStopProcess = true;
-        }
+
+    public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent) {
+        bStopProcess = true;
     }
 
     public static void main(String args[]) {
@@ -135,8 +134,11 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
             xMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
             if (xMSF != null)
                 System.out.println("Connected to " + ConnectStr);
-//          Dataimport CurDataimport = new Dataimport(xMSF);
-//          CurDataimport.createReport(xMSF);
+            Dataimport CurDataimport = new Dataimport(xMSF);
+            XTextDocument xTextDocument = null;
+            TextDocument oTextDocument = new TextDocument(xMSF, true, true);
+            CurDataimport.createReport(xMSF, oTextDocument.xTextDocument);
+
         } catch (Exception e) {
             e.printStackTrace(System.out);
         } catch (java.lang.Exception javaexception) {
@@ -167,7 +169,7 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
                     new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "Width" },
                     new Object[] { new Integer(10), "", new Integer(12), new Integer(42), new Integer(0), new Integer(120)});
 
-            insertButton("cmdCancel", 10000, new ActionListenerImpl(),
+            insertButton("cmdCancel", 10000, this,
                     new String[] { "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label" },
                     new Object[] { new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop });
             createWindowPeer(CurReportDocument.xWindowPeer);
@@ -184,14 +186,6 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
     }
 
     public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport, final ReportDocument CurReportDocument) {
-        /*    Thread ProgressThread = new Thread(new Runnable(CurUnoProgressDialog) {
-                private UnoControl dialog;
-            public Runnable( UnoControl x )
-            {
-                dialog = x;
-            }*/
-
-        // TODO: the dialog has to be in a thread again, but before the deadlock has to be fixed which otherwise appears
         try {
             if (reconnectToDatabase(xMSF)) {
                 modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
@@ -204,38 +198,14 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
             System.out.println("could not stop thread");
             xComponent.dispose();
         }
-/*
-        Thread ProgressThread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    if (reconnectToDatabase(xMSF)) {
-                        modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
-                        modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
-                        insertDatabaseDatatoReportDocument(xMSF);
-                    }
-                    xComponent.dispose();
-                    CurReportDocument.CurDBMetaData.disposeDBMetaData();
-                } catch (ThreadDeath td) {
-                    System.out.println("could not stop thread");
-                    xComponent.dispose();
-                }
-            }
-        });
-
-        ProgressThread.start();
-        */
     }
 
 
     public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument) {
-        try {
-            CurReportDocument = new ReportDocument(xMSF, _textDocument,false, oResource);
-            int iWidth = CurReportDocument.xFrame.getComponentWindow().getPosSize().Width;
-            showProgressDisplay(xMSF, true);
-            importReportData(xMSF, this, CurReportDocument);
-        } catch (java.lang.Exception jexception) {
-            jexception.printStackTrace(System.out);
-        }
+        CurReportDocument = new ReportDocument(xMSF, _textDocument,false, oResource);
+        int iWidth = CurReportDocument.xFrame.getComponentWindow().getPosSize().Width;
+        showProgressDisplay(xMSF, true);
+        importReportData(xMSF, this, CurReportDocument);
     }
 
     public boolean reconnectToDatabase(XMultiServiceFactory xMSF) {
@@ -256,7 +226,7 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
                 CurReportDocument.CurDBMetaData.FieldNames = JavaTools.ArrayoutofString(sFieldNames, ";");
                 CurReportDocument.CurDBMetaData.RecordFieldNames = JavaTools.ArrayoutofString(sRecordFieldNames, ";");
                 CurReportDocument.CurDBMetaData.GroupFieldNames = JavaTools.ArrayoutofString(sGroupFieldNames, ";");
-                CurReportDocument.CurDBMetaData.CommandType = Integer.valueOf(sCommandType).intValue();
+                CurReportDocument.CurDBMetaData.setCommandType(Integer.valueOf(sCommandType).intValue());
                 sMsgQueryCreationImpossible = JavaTools.replaceSubString(sMsgQueryCreationImpossible, CurReportDocument.CurDBMetaData.Command, "<STATEMENT>");
                 bgetConnection = CurReportDocument.CurDBMetaData.getConnection(DataSourceName);
                 if (bgetConnection) {
@@ -268,7 +238,7 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
                     return false;
             } else {
                 sReportFormNotExisting = JavaTools.replaceSubString(sReportFormNotExisting, ReportWizard.SOREPORTFORMNAME, "<REPORTFORM>");
-                com.sun.star.wizards.common.SystemDialog.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sReportFormNotExisting + (char) 13 + sMsgEndAutopilot);
+                showMessageBox("ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sReportFormNotExisting + (char) 13 + sMsgEndAutopilot);
                 return false;
             }
         } catch (InvalidQueryException queryexception) {
