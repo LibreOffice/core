@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 13:20:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,10 @@ namespace configmgr
             /// does this hold a child value of the given name
             bool hasValue(GroupNode const& _aNode, Name const& _aName) const
             { return m_xStrategy->hasValue(_aNode,_aName); }
+
+            /// does this hold a child value
+            bool hasValue(GroupNode const& _aNode) const
+            { return m_xStrategy->hasValue(_aNode); }
 
             /// are defaults for this node available ?
             bool areValueDefaultsAvailable(GroupNode const& _aNode) const
