@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 11:08:36 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1672,7 +1672,7 @@ JavaVM * JavaVirtualMachine::createJavaVM(stoc_javavm::JVM const & jvm,
     JavaVMInitArgs vm_args;
 
     // we have "addOpt" additional properties to those kept in the JVM struct
-    sal_Int32 addOpt=2;
+    sal_Int32 addOpt=3;
     JavaVMOption * options= new JavaVMOption[cprops + addOpt];
     rtl::OString sClassPath= rtl::OString("-Djava.class.path=")
         + rtl::OUStringToOString(jvm.getClassPath(),
@@ -1687,6 +1687,12 @@ JavaVM * JavaVirtualMachine::createJavaVM(stoc_javavm::JVM const & jvm,
     // LD_LIBRARY_PATH need not to be set anymore.
     options[1].optionString= "abort";
     options[1].extraInfo= (void* )abort_handler;
+
+    // Set a flag that this JVM has been created via the JNI Invocation API
+    // (used, for example, by UNO remote bridges to share a common thread pool
+    // factory among Java and native bridge implementations):
+    options[2].optionString = "-Dorg.openoffice.native=";
+    options[2].extraInfo = 0;
 
     rtl::OString * arProps= new rtl::OString[cprops];
 
