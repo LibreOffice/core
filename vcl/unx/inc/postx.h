@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postx.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.1.1.1 $  $Author: hr $  $Date: 2000-09-18 17:05:41 $    //
+// $Revision: 1.2 $  $Author: vg $  $Date: 2003-06-12 10:25:22 $    //
 //                                                                            //
 // $Workfile:   postx.h  $                                                    //
 //  $Modtime:   08 Aug 1997 10:13:36  $                                       //
@@ -72,7 +72,7 @@
 #ifndef _POSTX_H
 #define _POSTX_H
 
-#if defined __cplusplus && ! defined LINUX
+#if defined __cplusplus
 }
 #endif
 
