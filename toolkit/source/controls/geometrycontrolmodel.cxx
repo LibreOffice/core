@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-05 06:41:27 $
+ *  last change: $Author: jbu $ $Date: 2001-11-23 17:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,10 @@
     {
         increment(m_refCount);
         {
-            m_xAggregate = Reference< XAggregation >(_rxAggregateInstance, UNO_QUERY);
+            {
+                // ensure that the temporary gets destructed NOW
+                m_xAggregate = Reference< XAggregation >(_rxAggregateInstance, UNO_QUERY);
+            }
             OSL_ENSURE(m_xAggregate.is(), "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid object given!");
 
             // now the aggregate has a ref count of 2, but before setting the delegator it must be 1
@@ -478,6 +481,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/09/05 06:41:27  fs
+ *  #88891# override the XTypeProvider methods
+ *
  *  Revision 1.12  2001/05/15 10:38:19  ab
  *  #85996# Clone ScriptEventsSupplier
  *
