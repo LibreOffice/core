@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:29:10 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,14 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
         sal_Int32 nHandle = PROPERTY_ID_VALUE;
         m_aOldValue = _rOldValue.makeAny();
         Any aNew = (*(*m_aColumnValue))[m_nPos].makeAny();
+
+        fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
+    }
+    else if ( !m_aColumnValue.isNull() && m_aColumnValue == m_rEnd && !_rOldValue.isNull() )
+    {
+        sal_Int32 nHandle = PROPERTY_ID_VALUE;
+        m_aOldValue = _rOldValue.makeAny();
+        Any aNew;
 
         fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
     }
