@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:58:00 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -1156,14 +1156,15 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 aQuoteChar = xMetaData->getIdentifierQuoteString();
 
-                Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
-                m_xParser = xFactory->createQueryComposer();
+                Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
+                if ( xFactory.is() )
+                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
 
                 rtl::OUString aString(C2U("SELECT * FROM "));
                 sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
                 sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
                 aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
-                m_xParser->setQuery(aString);
+                m_xParser->setElementaryQuery(aString);
                 BibConfig* pConfig = BibModul::GetConfig();
                 pConfig->setQueryField(getQueryField());
                 startQueryWith(pConfig->getQueryText());
@@ -1330,8 +1331,9 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
         }
         Any aVal; aVal <<= xConnection;
         aPropertySet->setPropertyValue(C2U("ActiveConnection"), aVal);
-        Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
-        m_xParser = xFactory->createQueryComposer();
+        Reference< XMultiServiceFactory >   xFactory(xConnection, UNO_QUERY);
+        if ( xFactory.is() )
+            m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
 
         if(xOldConnection.is())
             xOldConnection->dispose();
@@ -1360,7 +1362,7 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
             sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
             sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
             aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
-            m_xParser->setQuery(aString);
+            m_xParser->setElementaryQuery(aString);
             BibConfig* pConfig = BibModul::GetConfig();
             pConfig->setQueryField(getQueryField());
             startQueryWith(pConfig->getQueryText());
@@ -1422,14 +1424,15 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                 Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 aQuoteChar = xMetaData->getIdentifierQuoteString();
 
-                Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
-                m_xParser = xFactory->createQueryComposer();
+                Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
+                if ( xFactory.is() )
+                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
 
                 rtl::OUString aString(C2U("SELECT * FROM "));
                 sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
                 sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
                 aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
-                m_xParser->setQuery(aString);
+                m_xParser->setElementaryQuery(aString);
 
                 BibConfig* pConfig = BibModul::GetConfig();
                 pConfig->setQueryField(getQueryField());
@@ -1665,9 +1668,10 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
             Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
             Any aFieldName; aFieldName <<= aName;
-            xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
 
-            xPropSet->setPropertyValue(FM_PROP_CONTROLSOURCE, makeAny( rName ) );
+            xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
+            xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, makeAny( rName ) );
+            xPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeWidgetLook" ) ), makeAny( (sal_Bool)sal_True ) );
 
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 
