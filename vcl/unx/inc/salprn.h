@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: pl $ $Date: 2000-09-25 14:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,11 @@ class SalPrinterData
 
     BOOL                    mbJobStarted;       // is job started
     BOOL                    mbPageStarted;      // is page started
-    XubString*              mpFileName;         // print to file
+    String                  maFileName;         // print to file
     int                     mnError;            // error code
+    ImplJobSetup*           mpJobSetup;         // job setup
     BOOL                    mbAbort:1;          // is job aborted
     BOOL                    mbFirstPage:1;      // false after first startpage
-    int                     mnDelTime;          // time in h to wait before disposing temp file
 
     inline      SalPrinterData();
     inline      ~SalPrinterData();
