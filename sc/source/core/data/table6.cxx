@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-20 10:28:32 $
+ *  last change: $Author: nn $ $Date: 2001-05-02 19:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
         xub_StrLen nStart = 0;
         xub_StrLen nEnd = aString.Len();
 
-        if (pSearchParam && pSearchText)
+        if (pSearchText)
         {
             if ( bDoBack )
             {
@@ -189,7 +189,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
         }
         else
         {
-            DBG_ERROR("pSearchParam || pSearchText == NULL");
+            DBG_ERROR("pSearchText == NULL");
             return bFound;
         }
 
@@ -710,19 +710,11 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
         }
         else
         {
-            if ( rSearchItem.GetRegExp() )
-                pSearchParam = new utl::SearchParam(rSearchItem.GetSearchString(), utl::SearchParam::SRCH_REGEXP, rSearchItem.GetExact(), FALSE, FALSE);
-            else if ( rSearchItem.IsLevenshtein() )
-            {
-                pSearchParam = new utl::SearchParam(rSearchItem.GetSearchString(), utl::SearchParam::SRCH_LEVDIST, rSearchItem.GetExact(), FALSE, FALSE);
-                pSearchParam->SetSrchRelaxed(   rSearchItem.IsLEVRelaxed() );
-                pSearchParam->SetLEVOther(      rSearchItem.GetLEVOther() );
-                pSearchParam->SetLEVShorter(    rSearchItem.GetLEVShorter() );
-                pSearchParam->SetLEVLonger(     rSearchItem.GetLEVLonger() );
-            }
-            else
-                pSearchParam = new utl::SearchParam(rSearchItem.GetSearchString(), utl::SearchParam::SRCH_NORMAL, rSearchItem.GetExact(), FALSE, FALSE);
-            pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
+            //  SearchParam no longer needed - SearchOptions contains all settings
+            com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
+            aSearchOptions.Locale = *ScGlobal::pLocale;
+            pSearchText = new utl::TextSearch( aSearchOptions );
+
             if (nCommand == SVX_SEARCHCMD_FIND)
                 bFound = Search(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
             else if (nCommand == SVX_SEARCHCMD_FIND_ALL)
@@ -731,8 +723,7 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
                 bFound = Replace(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
             else if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
                 bFound = ReplaceAll(rSearchItem, rMark, rUndoStr, pUndoDoc);
-            delete pSearchParam;
-            pSearchParam = NULL;
+
             delete pSearchText;
             pSearchText = NULL;
         }
