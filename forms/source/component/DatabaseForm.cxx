@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 13:52:30 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 10:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2691,7 +2691,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
         // the rowset changed it's active connection itself (without interaction from our side), so
         // we need to fire this event, too
         sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
-        fire(&nHandle, &evt.OldValue, &evt.NewValue, 1, sal_False);
+        fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, sal_False);
     }
     else    // it was one of the statement relevant props
     {
