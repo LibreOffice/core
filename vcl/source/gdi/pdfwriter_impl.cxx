@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-08 14:18:55 $
+ *  last change: $Author: kz $ $Date: 2002-07-10 14:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "implncvt.hxx"
 
 #include <math.h>
+#ifdef WNT
+// Aaarrgh
+#define M_PI 3.14159265
+#endif
 
 using namespace vcl;
 using namespace rtl;
@@ -214,7 +218,7 @@ void PDFWriterImpl::PDFPage::endStream()
     m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-bool PDFWriterImpl::PDFPage::PDFPage::emit(sal_Int32 nParentObject )
+bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
 {
     // emit page object
     m_nPageObject = m_pWriter->createObject();
@@ -1079,14 +1083,14 @@ bool PDFWriterImpl::emitTrailer()
 
     // remember start
     sal_uInt64 nXRefOffset = 0;
-    CHECK_RETURN( osl_File_E_None == osl_getFilePos( m_aFile, &nXRefOffset ) );
+    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nXRefOffset )) );
     nXRefOffset;
     CHECK_RETURN( writeBuffer( "xref\r\n", 6 ) );
 
     sal_Int32 nObjects = m_aObjects.size();
     OStringBuffer aLine;
     aLine.append( "0 " );
-    aLine.append( nObjects+1 );
+    aLine.append( (sal_Int32)(nObjects+1) );
     aLine.append( "\r\n" );
     aLine.append( "0000000000 65535 f\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -1106,7 +1110,7 @@ bool PDFWriterImpl::emitTrailer()
     // emit trailer
     aLine.setLength( 0 );
     aLine.append( "trailer\r\n<< /Size " );
-    aLine.append( nObjects+1 );
+    aLine.append( (sal_Int32)(nObjects+1) );
     aLine.append( "\r\n   /Root " );
     aLine.append( m_nCatalogObject );
     aLine.append( " 0 R\r\n>>\r\nstartxref\r\n" );
@@ -1154,7 +1158,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const String& rText )
     aLine.append( " Td\r\n   <" );
     for( int i = 0; i < aText.Len(); i++ )
     {
-        sal_Int8 aChar = rText.GetChar( i );
+        sal_Int8 aChar = aText.GetChar( i );
         appendHex( aChar, aLine );
     }
     aLine.append( "> Tj\r\nET\r\n" );
@@ -1308,9 +1312,9 @@ void PDFWriterImpl::drawRectangle( const Rectangle& rRect, sal_uInt32 nHorzRound
 
     updateGraphicsState();
 
-    if( nHorzRound > rRect.GetWidth()/2 )
+    if( nHorzRound > (sal_uInt32)rRect.GetWidth()/2 )
         nHorzRound = rRect.GetWidth()/2;
-    if( nVertRound > rRect.GetWidth()/2 )
+    if( nVertRound > (sal_uInt32)rRect.GetWidth()/2 )
         nVertRound = rRect.GetWidth()/2;
 
     Point aPoints[16];
@@ -1693,6 +1697,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     aLine.append( nFunctionObject );
     aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    return true;
 }
 
 bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
@@ -1771,7 +1776,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         else
         {
             aLine.append( "[  /Indexed /DeviceRGB " );
-            aLine.append( (sal_Int32)pAccess->GetPaletteEntryCount()-1 );
+            aLine.append( (sal_Int32)(pAccess->GetPaletteEntryCount()-1) );
             aLine.append( " <\r\n" );
             for( int i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
             {
@@ -1835,7 +1840,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     aLine.append( "  >>\r\nstream\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     sal_uInt64 nStartPos = 0;
-    CHECK_RETURN( osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) );
+    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos )) );
 
     if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
     {
@@ -1863,7 +1868,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     }
 
     sal_uInt64 nEndPos = 0;
-    CHECK_RETURN( osl_File_E_None == osl_getFilePos( m_aFile, &nEndPos ) );
+    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nEndPos )) );
     aLine.setLength( 0 );
     aLine.append( "\r\nendstream\r\nendobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
