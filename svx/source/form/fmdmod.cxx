@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdmod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 16:05:49 $
+ *  last change: $Author: hr $ $Date: 2002-03-19 15:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ using namespace ::svxform;
 //-----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
-    static const UniString aSvxComponentServiceNameList[] =
+    static const ::rtl::OUString aSvxComponentServiceNameList[] =
     {
         FM_SUN_COMPONENT_TEXTFIELD,
         FM_SUN_COMPONENT_FORM,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-27 17:08:50 $
+ *  last change: $Author: hr $ $Date: 2002-03-19 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,7 @@ Reference< ::com::sun::star::frame::XDispatch> FmXFormShell::interceptedQueryDis
             sAccessPath = sMark.getStr();
 
             // check if it comes from our external form grid view
-            String sComponentName = FMURL_COMPONENT_FORMGRIDVIEW;
+            String sComponentName = (::rtl::OUString)FMURL_COMPONENT_FORMGRIDVIEW;
             sExternalCheck = sComponentName;
             INetURLObject aExternalCheck(sExternalCheck);
             if (String(aExternalCheck.GetURLPath()) == sAccessPath)
