@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 11:56:21 $
+ *  last change: $Author: pb $ $Date: 2001-06-19 10:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ public :
 #ifndef TF_SVDATA
     virtual BOOL                QueryDrop( DropEvent& );
 #endif
+    virtual sal_Int8            AcceptDrop( const AcceptDropEvent& rEvt );
     virtual BOOL                NotifyMoving(SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG& );
     void                        Apply( SfxMenuManager* pMgr, SvLBoxEntry *pParent = NULL );
 };
