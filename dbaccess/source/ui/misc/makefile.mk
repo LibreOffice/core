@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: fs $ $Date: 2001-08-14 12:01:06 $
+#   last change: $Author: fs $ $Date: 2001-09-07 10:04:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ SRCFILES =	\
 # ... object files ............................
 
 EXCEPTIONSFILES=	\
+        $(SLO)$/componentclientmonitor.obj		\
         $(SLO)$/singledoccontroller.obj		\
         $(SLO)$/datasourceconnector.obj		\
         $(SLO)$/documentautolinker.obj		\
