@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:42:27 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 // C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
+#include <tools/isolang.hxx>
 #include <tools/intn.hxx>
 #include <tools/rc.h>
 #include <tools/color.hxx>
@@ -92,15 +94,23 @@
 #include "rsclex.hxx"
 #include <yyrscyacc.hxx>
 
+#include <hash_map>
+
 /****************** M A C R O S ******************************************/
 void RscTypCont::SETCONST( RscConst * pClass, char * szString, UINT32 nVal )
 {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "setconst : %s\n", szString );
+#endif
     pClass->SetConstant( aNmTb.Put( szString,
                          (USHORT)CONSTNAME, nVal ), nVal );
 }
 
 void RscTypCont::SETCONST( RscConst * pClass, HASHID nName, UINT32 nVal )
 {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "setconst hash: %d\n", nName );
+#endif
     pClass->SetConstant( aNmTb.Put( nName,
                          (USHORT)CONSTNAME, nVal ), nVal );
 }
@@ -111,24 +121,118 @@ void RscTypCont::SETCONST( RscConst * pClass, HASHID nName, UINT32 nVal )
 |*
 |*    Beschreibung
 *************************************************************************/
-#define LT(Name)                                                \
-    SETCONST( &aLangType, #Name, LANGUAGE_##Name )
+
+typedef std::hash_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
+static langmap ULong_Iso_map;
+
+USHORT GetLangId( const ByteString& aLang )
+{
+    langmap::iterator pIter = ULong_Iso_map.find( aLang );
+    if ( pIter != ULong_Iso_map.end())
+        return pIter->second;
+    return 0;
+}
+
+void RscLangEnum::Init( RscNameTable& rNames )
+{
+    SetConstant( rNames.Put( "SYSTEM", (USHORT)CONSTNAME, (long)LANGUAGE_SYSTEM ), LANGUAGE_SYSTEM );
+    SetConstant( rNames.Put( "DONTKNOW", (USHORT)CONSTNAME, LANGUAGE_DONTKNOW ), LANGUAGE_DONTKNOW );
+
+    sal_Int32 nIndex = 0;
+    unsigned long nI = 0x400; // stay away from selfdefined...
+    char csep = '-';
+    const IsoLangEntry* pLangEntry;
+    ByteString aCountry, aLang;
+
+    while (( pLangEntry = GetIsoLangEntry( nIndex )) && ( pLangEntry->meLang != LANGUAGE_DONTKNOW ))
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "ISO Language in : %d %d %s\n",
+                 nIndex,
+                 pLangEntry->meLang,
+                 ConvertLanguageToIsoByteString( pLangEntry->meLang ).GetBuffer() );
+#endif
+        aLang = pLangEntry->maLangStr;
+        aCountry = pLangEntry->maCountry;
+        if ( aLang.EqualsIgnoreCaseAscii( aCountry ) ||  ! aCountry.Len() )
+        {
+            SetConstant( rNames.Put( aLang.GetBuffer(), (USHORT)CONSTNAME, nI ), nI );
+            if ( ! GetLangId( aLang ))
+                ULong_Iso_map[ aLang ] = nI;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "ISO Language out: %s 0x%hx\n", aLang.GetBuffer(), nI );
+#endif
+            nI++;
+        }
+        else
+        {
+            SetConstant( rNames.Put( aLang.GetBuffer(), (USHORT)CONSTNAME, nI ), nI );
+            if ( ! GetLangId( aLang ))
+                ULong_Iso_map[ aLang ] = nI;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "ISO Language out: %s 0x%hx", aLang.GetBuffer(), nI );
+#endif
+            nI++;
+            aLang += csep;
+            aLang += aCountry.ToUpperAscii();
+            SetConstant( rNames.Put( aLang.GetBuffer(), (USHORT)CONSTNAME, nI ), nI );
+            if ( ! GetLangId( aLang ))
+                ULong_Iso_map[ aLang ] = nI;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, " %s 0x%hx\n", aLang.GetBuffer(), nI );
+#endif
+            nI++;
+// hack - survive "x-no-translate"
+            if ( aLang == "en-US" )
+            {
+//                SetConstant( rNames.Put( "x-no-translate", (USHORT)CONSTNAME, nI ), nI );
+//                nI++;
+                SetConstant( rNames.Put( "x-comment", (USHORT)CONSTNAME, nI ), nI );
+                nI++;
+            }
+        }
+        nIndex++;
+    }
+
+    ByteString aEnvIsoTokens = getenv( "RSC_LANG_ISO" );
+    if ( aEnvIsoTokens.Len() )
+    {
+        ByteString aIsoToken;
+        sal_Int32 nTokenCounter = 0;
+        sal_Bool bOneMore = 1;
+        while ( bOneMore )
+        {
+            aIsoToken = aEnvIsoTokens.GetToken( nTokenCounter, ' ' );
+            if ( aIsoToken.Len() )
+            {
+                SetConstant( rNames.Put( aIsoToken.GetBuffer(), (USHORT)CONSTNAME, nI ), nI );
+                if ( ! GetLangId( aIsoToken ))
+                    ULong_Iso_map[ aIsoToken ] = nI;
+#if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "Env ISO Language out: %s 0x%hx\n", aIsoToken.GetBuffer(), nI );
+#endif
+                nI++;
+            }
+            else
+                bOneMore = 0;
+            nTokenCounter++;
+        }
+    }
+
+    SetConstant( rNames.Put( "LANGUAGE_USER1", (USHORT)CONSTNAME, LANGUAGE_USER1 ), LANGUAGE_USER1 );
+    SetConstant( rNames.Put( "LANGUAGE_USER2", (USHORT)CONSTNAME, LANGUAGE_USER2 ), LANGUAGE_USER2 );
+    SetConstant( rNames.Put( "LANGUAGE_USER3", (USHORT)CONSTNAME, LANGUAGE_USER3 ), LANGUAGE_USER3 );
+    SetConstant( rNames.Put( "LANGUAGE_USER4", (USHORT)CONSTNAME, LANGUAGE_USER4 ), LANGUAGE_USER4 );
+    SetConstant( rNames.Put( "LANGUAGE_USER5", (USHORT)CONSTNAME, LANGUAGE_USER5 ), LANGUAGE_USER5 );
+    SetConstant( rNames.Put( "LANGUAGE_USER6", (USHORT)CONSTNAME, LANGUAGE_USER6 ), LANGUAGE_USER6 );
+    SetConstant( rNames.Put( "LANGUAGE_USER7", (USHORT)CONSTNAME, LANGUAGE_USER7 ), LANGUAGE_USER7 );
+    SetConstant( rNames.Put( "LANGUAGE_USER8", (USHORT)CONSTNAME, LANGUAGE_USER8 ), LANGUAGE_USER8 );
+    SetConstant( rNames.Put( "EXTERN", (USHORT)CONSTNAME, LANGUAGE_USER9 ), LANGUAGE_USER9 );
+}
 
 RscEnum * RscTypCont::InitLangType()
 {
-    LT( SYSTEM              );
-    LT( DONTKNOW            );
-#include <rsclang.c>
-    SETCONST( &aLangType, "LANGUAGE_USER1",             LANGUAGE_USER1 );
-    SETCONST( &aLangType, "LANGUAGE_USER2",             LANGUAGE_USER2 );
-    SETCONST( &aLangType, "LANGUAGE_USER3",             LANGUAGE_USER3 );
-    SETCONST( &aLangType, "LANGUAGE_USER4",             LANGUAGE_USER4 );
-    SETCONST( &aLangType, "LANGUAGE_USER5",             LANGUAGE_USER5 );
-    SETCONST( &aLangType, "LANGUAGE_USER6",             LANGUAGE_USER6 );
-    SETCONST( &aLangType, "LANGUAGE_USER7",             LANGUAGE_USER7 );
-    SETCONST( &aLangType, "LANGUAGE_USER8",             LANGUAGE_USER8 );
-    SETCONST( &aLangType, "EXTERN",                     LANGUAGE_USER9 );
-
+    aLangType.Init( aNmTb );
     return( &aLangType );
 }
 
@@ -577,9 +681,7 @@ RscTupel * RscTypCont::InitGeometry()
 *************************************************************************/
 RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
 {
-    return new RscArray( pHS->Insert( "Lang_TupelGeometry" ),
-                    RSC_NOTYPE, pGeo, &aLangType,
-                    &nLangTypeId, &nDfltLangTypeId );
+    return new RscArray( pHS->Insert( "Lang_TupelGeometry" ), RSC_NOTYPE, pGeo, &aLangType );
 }
 
 /*************************************************************************
@@ -613,8 +715,7 @@ RscCont * RscTypCont::InitStringList()
 RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
 {
     return new RscArray( pHS->Insert( "Lang_CharsList" ),
-                    RSC_NOTYPE, pStrLst, &aLangType,
-                    &nLangTypeId, &nDfltLangTypeId );
+                         RSC_NOTYPE, pStrLst, &aLangType );
 }
 
 /*************************************************************************
@@ -632,8 +733,7 @@ RscTupel * RscTypCont::InitStringTupel()
     HASHID      nId;
 
     // Clientvariablen einfuegen
-    pTupel = new RscTupel( pHS->Insert( "CharsTupel" ),
-                                RSC_NOTYPE, NULL );
+    pTupel = new RscTupel( pHS->Insert( "CharsTupel" ), RSC_NOTYPE, NULL );
     nId = aNmTb.Put( "FILTER", VARNAME );
     pTupel->SetVariable( nId, &aString );
     nId = aNmTb.Put( "MASK", VARNAME );
@@ -716,8 +816,7 @@ RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
 RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 {
     return new RscArray( pHS->Insert( "Lang_CharsCharsTupel" ),
-                    RSC_NOTYPE, pStrTupelLst, &aLangType,
-                    &nLangTypeId, &nDfltLangTypeId );
+                    RSC_NOTYPE, pStrTupelLst, &aLangType );
 }
 
 /*************************************************************************
@@ -732,7 +831,6 @@ RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 RscArray * RscTypCont::InitLangStringLongTupelList( RscCont * pStrLongTupelLst )
 {
     return new RscArray( pHS->Insert( "Lang_CharsLongTupelList" ),
-                    RSC_NOTYPE, pStrLongTupelLst, &aLangType,
-                    &nLangTypeId, &nDfltLangTypeId );
+                         RSC_NOTYPE, pStrLongTupelLst, &aLangType );
 }
 
