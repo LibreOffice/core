@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSearchableDictionaryList.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:05 $
+ *  last change:$Date: 2003-09-08 10:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.linguistic2;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.Locale;
 import com.sun.star.linguistic2.XDictionaryEntry;
 import com.sun.star.linguistic2.XSearchableDictionaryList;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.linguistic2.XSearchableDictionaryList</code>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XLinguServiceEventBroadcaster.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:07 $
+ *  last change:$Date: 2003-09-08 10:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.linguistic2;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.EventObject;
 import com.sun.star.linguistic2.LinguServiceEvent;
 import com.sun.star.linguistic2.XLinguServiceEventBroadcaster;
 import com.sun.star.linguistic2.XLinguServiceEventListener;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.linguistic2.XLinguServiceEventBroadcaster</code>
