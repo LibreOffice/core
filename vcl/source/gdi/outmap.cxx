@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:28:59 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
                                      const ImplMapRes& rMapRes,
                                      ImplThresholdRes& rThresRes )
 {
-    if ( LONG_MAX / nDPIX < Abs( rMapRes.mnMapScNumX ) )
+    if ( nDPIX && (LONG_MAX / nDPIX < Abs( rMapRes.mnMapScNumX ) ) ) // #111139# avoid div by zero
     {
         rThresRes.mnThresLogToPixX = 0;
         rThresRes.mnThresPixToLogX = 0;
@@ -200,7 +200,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
             rThresRes.mnThresPixToLogX = (long)(((ULONG)LONG_MAX + (ULONG)(-nProductX/2)) / nDenomX);
     }
 
-    if ( LONG_MAX / nDPIY < Abs( rMapRes.mnMapScNumY ) )
+    if ( nDPIY && (LONG_MAX / nDPIY < Abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
     {
         rThresRes.mnThresLogToPixY = 0;
         rThresRes.mnThresPixToLogY = 0;
