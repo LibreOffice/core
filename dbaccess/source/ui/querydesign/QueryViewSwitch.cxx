@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:23 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 11:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,8 +285,7 @@ void OQueryViewSwitch::switchView()
         pContainer->Resize();
 
     m_pDesignView->getController()->getUndoMgr()->Clear();
-    m_pDesignView->getController()->InvalidateFeature(ID_BROWSER_UNDO);
-    m_pDesignView->getController()->InvalidateFeature(ID_BROWSER_REDO);
+    m_pDesignView->getController()->InvalidateAll();
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::clearDesignView()

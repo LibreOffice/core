@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 11:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
 #define ID_BROWSER_CLEAR_QUERY              SID_SBA_CLEAR_QUERY
-#define ID_REALTION_ADD_RELATION            SID_SBA_ADD_RELATION
+#define ID_RELATION_ADD_RELATION            SID_SBA_ADD_RELATION
 #define ID_BROWSER_QUERY_VIEW_FUNCTIONS     SID_SBA_QUERY_VIEW_FUNCTIONS
 #define ID_BROWSER_QUERY_VIEW_TABLES        SID_SBA_QUERY_VIEW_TABLES
 #define ID_BROWSER_QUERY_VIEW_ALIASES       SID_SBA_QUERY_VIEW_ALIASES

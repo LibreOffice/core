@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 11:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
 
         m_pView->getController()->setModified( sal_True );
         m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
-        m_pView->getController()->InvalidateFeature(ID_REALTION_ADD_RELATION);
+        m_pView->getController()->InvalidateFeature(ID_RELATION_ADD_RELATION);
     }
     else
     {
@@ -431,7 +431,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     {
         m_pView->getController()->setModified( sal_True );
         m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
-        m_pView->getController()->InvalidateFeature(ID_REALTION_ADD_RELATION);
+        m_pView->getController()->InvalidateFeature(ID_RELATION_ADD_RELATION);
     }
 }
 
