@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:49:27 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Date 1";
         Text[ spanish ] = "Fecha 1";
         Text[ italian ] = "Data 1";
-        Text[ danish ] = "Dato_1";
+        Text[ danish ] = "Dato 1";
         Text[ swedish ] = "Datum 1";
         Text[ polish ] = "Data 1";
         Text[ portuguese_brazilian ] = "Data 1";
@@ -94,6 +94,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Datum 1";
         Text[ hindi ] = "दिनांक 1";
         Text[ slovak ] = "Dátum 1";
+        Text[ hungarian ] = "Dátum 1";
+        Text[ slovenian ] = "Datum 1";
     };
     String DFA_PAR_DATE2_NAME // Name of Date2 Parameter
     {
@@ -106,7 +108,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Date 2";
         Text[ spanish ] = "Fecha 2";
         Text[ italian ] = "Data 2";
-        Text[ danish ] = "Dato_2";
+        Text[ danish ] = "Dato 2";
         Text[ swedish ] = "Datum 2";
         Text[ polish ] = "Data 2";
         Text[ portuguese_brazilian ] = "Data 2";
@@ -126,6 +128,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Datum 2";
         Text[ hindi ] = "दिनांक 2";
         Text[ slovak ] = "Dátum 2";
+        Text[ hungarian ] = "Dátum 2";
+        Text[ slovenian ] = "Datum 2";
     };
     String DFA_PAR_MODE_NAME // Name of Mode Parameter
     {
@@ -158,6 +162,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Art";
         Text[ hindi ] = "प्रकार";
         Text[ slovak ] = "Režim";
+        Text[ hungarian ] = "Mód";
+        Text[ slovenian ] = "Način";
     };
 
     String DFA_PAR_DATE_NAME // Name of Date Parameter
@@ -191,6 +197,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "‮תאריף‬";
         Text[ hindi ] = "दिनांक";
         Text[ slovak ] = "Dátum";
+        Text[ hungarian ] = "Dátum";
+        Text[ slovenian ] = "Datum";
     };
 
     String DFA_PAR_DATE_DESC // Description of Date Parameter
@@ -224,6 +232,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Interne Zahl des Datums";
         Text[ hindi ] = "दिनांक का भीतरी संख्या";
         Text[ slovak ] = "Číslo vnútorne reprezentujúce dátum";
+        Text[ hungarian ] = "A dátum belső száma";
+        Text[ slovenian ] = "Notranja številka datuma";
     };
 
 /*-=======================================================================*/
@@ -258,6 +268,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Wochen";
         Text[ hindi ] = "सप्ताह";
         Text[ slovak ] = "Týždne";
+        Text[ hungarian ] = "Weeks";
+        Text[ slovenian ] = "Tedni";
     };
     String DFA_WEEK_DESC // Description
     {
@@ -270,7 +282,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Renvoie la diff�rence en semaines de deux dates";
         Text[ spanish ] = "Devuelve la diferencia semanal de dos fechas";
         Text[ italian ] = "Restituisce la differenza settimanale di due date";
-        Text[ danish ] = "Bestemmer ugedifferensen mellem to datoer";
+        Text[ danish ] = "Returnerer antal uger mellem to datoer";
         Text[ swedish ] = "Best�mmer veckodifferensen mellan tv� datum";
         Text[ polish ] = "Zwraca liczb� tygodni zawartych mi�dzy dwiema datami";
         Text[ portuguese_brazilian ] = "Retorna a diferen�a em semanas entre duas datas";
@@ -290,6 +302,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Bestimmt die Wochendifferenz zweier Daten";
         Text[ hindi ] = "दो दिनांकों के बीच का अंतर को सप्ताह में वापस करता है";
         Text[ slovak ] = "Vráti rozdiel v týždňoch medzi dvoma dátumami";
+        Text[ hungarian ] = "Két dátum különbségének visszaadása hetekben";
+        Text[ slovenian ] = "Vrne razliko med dvema datumoma v tednih";
     };
     String DFA_WEEK_PAR1_DESC // Description of Parameter 1
     {
@@ -303,7 +317,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Date la plus r�cente pour la diff�rence en semaines";
         Text[ spanish ] = "La fecha m�s reciente para la diferencia semanal";
         Text[ italian ] = "La data pi� recente per la differenza settimanale";
-        Text[ danish ] = "Yngre dato for ugedifferensen";
+        Text[ danish ] = "Slutdato for beregning af antal uger i intervallet.";
         Text[ swedish ] = "Yngre datum f�r veckodifferensen";
         Text[ polish ] = "P�niejsza data przy obliczaniu r�nicy (liczby tygodni)";
         Text[ portuguese_brazilian ] = "A data final para calcular a diferen�a em semanas";
@@ -323,6 +337,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Jüngeres Datum für die Wochendifferenz";
         Text[ hindi ] = "अंतर को सप्ताह में गणना करने केलिए अंतिम दिनांक";
         Text[ slovak ] = "Koncový dátum pre výpočet rozdielu v týždňoch";
+        Text[ hungarian ] = "A befejező dátum a hetekben való különbség kiszámításához.";
+        Text[ slovenian ] = "Končni datum za izračun razlike v tednih";
     };
     String DFA_WEEK_PAR2_DESC // Description of Parameter 2
     {
@@ -335,7 +351,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Date la plus ancienne pour la diff�rence en semaines";
         Text[ spanish ] = "La fecha m�s vieja para la diferencia semanal";
         Text[ italian ] = "La data meno recente per la differenza settimanale";
-        Text[ danish ] = "�ldre dato for ugedifferensen";
+        Text[ danish ] = "Startdatoen for beregning af uger i intervallet.";
         Text[ swedish ] = "�ldre datum f�r veckodifferensen";
         Text[ polish ] = "Wcze�niejsza data przy obliczaniu r�nicy (liczby tygodni)";
         Text[ portuguese_brazilian ] = "A data inicial para calcular a diferen�a em semanas";
@@ -355,6 +371,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Älteres Datum für die Wochendifferenz";
         Text[ hindi ] = "अंतर को सप्ताह में गणना करने केलिए प्रारंभ दिनांक";
         Text[ slovak ] = "Počiatočný dátum pre výpočet rozdielu v týždňoch";
+        Text[ hungarian ] = "A kezdő dátum a hetekben való különbség kiszámításához.";
+        Text[ slovenian ] = "Začetni datum za izračun razlike v tednih";
     };
     String DFA_WEEK_PAR3_DESC // Description of Parameter 3
     {
@@ -363,11 +381,11 @@ Resource RID_SC_ADDIN_DFA
         Text[ english_us ] = "Type of difference calculation: mode=0 means the interval, mode=1 means calendar weeks";
         Text[ portuguese ] = "Modo de forma��o da diferen�a: modo=0 para intervalos; modo=1 para semanas.";
         Text[ russian ] = "���� ����������: �����=0 �������� ��������, �����=1 �������� �������� � ����������� �������";
-        Text[ dutch ] = "Modus=0 betekent aantal , Modus=1 betekent in kalenderweken";
+        Text[ dutch ] = "Modus=0 betekent aantal, Modus=1 betekent in kalenderweken";
         Text[ french ] = "Mode de calcul de la diff�rence Mode=0 pour l'intervalle, Mode=1 pour les semaines de l'ann�e";
         Text[ spanish ] = "Tipo de c�lculo de la diferencia, tipo=0 significa intervalo, tipo=1, semanas del a�o";
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per le settimane dell'anno";
-        Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalenderuger";
+        Text[ danish ] = "Beregningstype for differencen: Type = 0 betyder interval, type = 1 betyder i kalenderuger.";
         Text[ swedish ] = "Typ av differensbildning typ=0 betyder intervall, typ=1 betyder i kalenderveckor";
         Text[ polish ] = "Rodzaj obliczania r�nicy: Typ = 0 oznacza przedzia�, Typ = 1 - tygodnie kalendarzowe.";
         Text[ portuguese_brazilian ] = "Tipo de c�lculo da diferen�a: modo=0 para intervalo, modo=1 para semanas-calend�rio";
@@ -375,7 +393,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ chinese_simplified ] = "得出差额的类型 Mode=0 表示间隔， Mode=1 表示一年的星期数";
         Text[ chinese_traditional ] = "得出差額的類型 Mode=0 表示間隔， Mode=1 表示一年的星期數";
         Text[ arabic ] = "����� ���� �����: mode=0 ���� ������ ������� mode=1 ���� �� ������ �������";
-        Text[ dutch ] = "Modus=0 betekent aantal , Modus=1 betekent in kalenderweken";
+        Text[ dutch ] = "Modus=0 betekent aantal, Modus=1 betekent in kalenderweken";
         Text[ chinese_simplified ] = "得出差额的类型 Mode=0 表示间隔， Mode=1 表示一年的星期数";
         Text[ greek ] = "������ ����������� ��� ��������: ������=0 �������� ��������, ������=1 �������� ������������� ���������";
         Text[ korean ] = "차이 계산 유형: 모드=0인 경우는 간격, 모드=1인 경우에는 1년 중 몇 번째 주에 해당하는지를 의미합니다.";
@@ -387,6 +405,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderwochen";
         Text[ hindi ] = "अंतर को गणना करने का वर्ग: प्रकार=0 का अर्थ अंतराल है, प्रकार=1 का अर्थ केलन्डर सप्ताह है";
         Text[ slovak ] = "Typ výpočtu rozdielu: mode=0 znamená interval, mode=1 znamená kalendárne týždne";
+        Text[ hungarian ] = "Különbségszámítás módja: Mode=0 időintervallumot, Mode=1 pedig naptári hetet jelent.";
+        Text[ slovenian ] = "Način izračuna razlike: način=0 pomeni interval, način=1 pa pomeni v koledarskih tednih";
     };
 
 /*-=======================================================================*/
@@ -422,6 +442,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Monate";
         Text[ hindi ] = "मास";
         Text[ slovak ] = "Mesiace";
+        Text[ hungarian ] = "Months";
+        Text[ slovenian ] = "Meseci";
     };
     String DFA_MONTHS_DESC // Description
     {
@@ -434,7 +456,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Renvoie la diff�rence en mois de deux dates";
         Text[ spanish ] = "Devuelve la diferencia mensual de dos fechas";
         Text[ italian ] = "Restituisce la differenza mensile di due date";
-        Text[ danish ] = "Bestemmer m�nedsdifferensen mellem to datoer";
+        Text[ danish ] = "Beregner antal m�neder mellem to datoer";
         Text[ swedish ] = "Best�mmer m�nadsdifferensen mellan tv� datum";
         Text[ polish ] = "Okre�la liczb� miesi�cy mi�dzy dwiema datami.";
         Text[ portuguese_brazilian ] = "Determina o n�mero de meses entre duas datas";
@@ -454,6 +476,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Bestimmt die Monatsdifferenz zweier Daten";
         Text[ hindi ] = "दो दिनांकों के बीच का अंतर को मास में निर्धार करता है";
         Text[ slovak ] = "Vráti počet mesiacov medzi dvoma dátumami";
+        Text[ hungarian ] = "Hónapokban megadja két dátum különbségét";
+        Text[ slovenian ] = "Določi število mesecev med dvema datumoma";
     };
     String DFA_MONTHS_PAR1_DESC // Description of Parameter 1
     {
@@ -466,7 +490,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Date la plus r�cente pour la diff�rence en mois";
         Text[ spanish ] = "La fecha m�s reciente para la diferencia mensual";
         Text[ italian ] = "La data pi� recente per la differenza mensile";
-        Text[ danish ] = "Yngre dato for m�nedsdifferensen";
+        Text[ danish ] = "Slutdato for beregning af antal m�neder i intervallet.";
         Text[ swedish ] = "Yngre datum f�r m�nadsdifferensen";
         Text[ polish ] = "P�niejsza data przy obliczaniu r�nicy (liczby miesi�cy)";
         Text[ portuguese_brazilian ] = "A data final para calcular a diferen�a em meses";
@@ -486,6 +510,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Jüngeres Datum für die Monatsdifferenz";
         Text[ hindi ] = "अंतर को मास में गणना करने केलिए अंतिम दिनांक";
         Text[ slovak ] = "Koncový dátum pre výpočet rozdielu v mesiacoch";
+        Text[ hungarian ] = "A befejező dátum a hónapokban való különbség kiszámításához.";
+        Text[ slovenian ] = "Končni datum za izračun razlike v mesecih";
     };
     String DFA_MONTHS_PAR2_DESC // Description of Parameter 2
     {
@@ -498,7 +524,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Date la plus ancienne pour la diff�rence en mois";
         Text[ spanish ] = "La fecha m�s vieja para la diferencia mensual";
         Text[ italian ] = "La data meno recente per la differenza mensile";
-        Text[ danish ] = "�ldre dato for m�nedsdifferensen";
+        Text[ danish ] = "Startdato for m�nedsintervallet";
         Text[ swedish ] = "�ldre datum f�r m�nadsdifferensen";
         Text[ polish ] = "Wcze�niejsza data przy obliczaniu r�nicy (liczby miesi�cy)";
         Text[ portuguese_brazilian ] = "A data inicial para calcular a diferen�a em meses";
@@ -518,6 +544,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Älteres Datum für die Monatsdifferenz";
         Text[ hindi ] = "अंतर को मास में गणना करने केलिए प्रारंभ दिनांक";
         Text[ slovak ] = "Počiatočný dátum pre výpočet rozdielu v týždňoch";
+        Text[ hungarian ] = "A kezdő dátum a hónapokban való különbség kiszámításához.";
+        Text[ slovenian ] = "Začetni datum za izračun razlike v mesecih";
     };
     String DFA_MONTHS_PAR3_DESC // Description of Parameter 2
     {
@@ -530,7 +558,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Mode de calcul de la diff�rence Mode=0 pour l'intervalle, Mode=1 pour les mois de l'ann�e";
         Text[ spanish ] = "Tipo de c�lculo de la diferencia, tipo=0 significa intervalo, tipo=1, meses del a�o";
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per i mesi dell'anno";
-        Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalenderm�neder";
+        Text[ danish ] = "Beregningstype for differencen: Type = 0 betyder interval, type = 1 betyder i kalenderm�neder.";
         Text[ swedish ] = "Typ av differensbildning typ=0 betyder intervall, typ=1 betyder i kalenderm�nader";
         Text[ polish ] = "Rodzaj obliczania r�nicy: Typ = 0 oznacza przedzia�, Typ = 1 - miesi�ce kalendarzowe.";
         Text[ portuguese_brazilian ] = "Tipo de c�lculo da diferen�a: modo=0 para intervalo, modo=1 para meses-calend�rio";
@@ -550,6 +578,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalendermonaten";
         Text[ hindi ] = "अंतर को गणना करने का वर्ग: प्रकार=0 का अर्थ अंतराल है, प्रकार=1 का अर्थ केलन्डर मास है";
         Text[ slovak ] = "Typ výpočtu rozdielu: mode=0 znamená interval, mode=1 znamená kalendárne mesiace";
+        Text[ hungarian ] = "Különbségszámítás módja: Mode=0 időintervallumot, Mode=1 pedig naptári hónapot jelent.";
+        Text[ slovenian ] = "Način izračuna razlike: način=0 pomeni interval, način=1 pa pomeni v koledarskih mesecih";
     };
 
 /*-=======================================================================*/
@@ -585,6 +615,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Jahre";
         Text[ hindi ] = "वर्ष";
         Text[ slovak ] = "Roky";
+        Text[ hungarian ] = "Years";
+        Text[ slovenian ] = "Leta";
     };
     String DFA_YEARS_DESC // Description
     {
@@ -597,7 +629,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Renvoie la diff�rence en ann�es de deux dates";
         Text[ spanish ] = "Devuelve la diferencia anual de dos fechas";
         Text[ italian ] = "Restituisce la differenza annuale di due date";
-        Text[ danish ] = "Bestemmer �rsdifferensen mellem to datoer";
+        Text[ danish ] = "Returnerer antal �r mellem to datoer";
         Text[ swedish ] = "Best�mmer �rsdifferensen mellan tv� datum";
         Text[ polish ] = "Zwraca liczb� lat zawartych mi�dzy dwiema datami";
         Text[ portuguese_brazilian ] = "Retorna em anos a diferen�a entre duas datas";
@@ -617,6 +649,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Bestimmt die Jahresdifferenz zweier Daten";
         Text[ hindi ] = "दो दिनांकों के बीच का अंतर को वर्ष में वापस करता है";
         Text[ slovak ] = "Vráti počet v rokoch medzi dvoma dátumami";
+        Text[ hungarian ] = "Években megadja két dátum különbségét";
+        Text[ slovenian ] = "Vrne razliko med dvema datumoma v letih";
     };
     String DFA_YEARS_PAR1_DESC // Description of Parameter 1
     {
@@ -629,7 +663,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Date la plus r�cente pour la diff�rence en ann�es";
         Text[ spanish ] = "La fecha m�s reciente para la diferencia anual";
         Text[ italian ] = "La data meno recente per la differenza annuale";
-        Text[ danish ] = "Yngre dato for �rsdifferensen";
+        Text[ danish ] = "Slutdato for beregning af antal �r i intervallet.";
         Text[ swedish ] = "Yngre datum f�r �rsdifferensen";
         Text[ polish ] = "P�niejsza data przy obliczaniu r�nicy (liczby lat)";
         Text[ portuguese_brazilian ] = "A data final para calcular a diferen�a em anos";
@@ -649,6 +683,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Jüngeres Datum für die Jahresdifferenz";
         Text[ hindi ] = "अंतर को वर्ष में गणना करने केलिए अंतिम दिनांक";
         Text[ slovak ] = "Koncový dátum pre výpočet rozdielu v rokoch";
+        Text[ hungarian ] = "A befejező dátum az években való különbség kiszámításához.";
+        Text[ slovenian ] = "Končni datum za izračun razlike v letih";
     };
     String DFA_YEARS_PAR2_DESC // Description of Parameter 2
     {
@@ -661,7 +697,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Date la plus ancienne pour la diff�rence en ann�es";
         Text[ spanish ] = "La fecha m�s vieja para la diferencia anual";
         Text[ italian ] = "La data meno recente per la differenza annuale";
-        Text[ danish ] = "�ldre dato for �rsdifferensen";
+        Text[ danish ] = "Startdato for beregning af differencen i �r";
         Text[ swedish ] = "�ldre datum f�r �rsdifferensen";
         Text[ polish ] = "Wcze�niejsza data przy obliczaniu r�nicy (liczby lat)";
         Text[ portuguese_brazilian ] = "A data inicial para calcular a diferen�a em anos";
@@ -681,6 +717,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Älteres Datum für die Jahresdifferenz";
         Text[ hindi ] = "अंतर को वर्ष में गणना करने केलिए प्रारंभ दिनांक";
         Text[ slovak ] = "Počiatočný dátum pre výpočet rozdielu v rokoch";
+        Text[ hungarian ] = "A kezdő dátum az években való különbség kiszámításához.";
+        Text[ slovenian ] = "Začetni datum za izračun razlike v letih";
     };
     String DFA_YEARS_PAR3_DESC // Description of Parameter 2
     {
@@ -693,7 +731,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Mode de calcul de la diff�rence Mode=0 pour l'intervalle, Mode=1 pour les ann�es";
         Text[ spanish ] = "Tipo de c�lculo de la diferencia, tipo=0 significa intervalo, tipo=1, a�os naturales";
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per l'anno";
-        Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalender�r";
+        Text[ danish ] = "Beregningstype for differencen: Type = 0 betyder interval, type = 1 betyder i kalender�r.";
         Text[ swedish ] = "Typ av differensbildning typ=0 betyder intervall, typ=1 betyder i kalender�r";
         Text[ polish ] = "Rodzaj obliczania r�nicy: Typ = 0 oznacza przedzia�, Typ = 1 - lata kalendarzowe.";
         Text[ portuguese_brazilian ] = "Tipo de c�lculo da diferen�a: modo=0 para intervalo, modo=1 para anos-calend�rio.";
@@ -713,6 +751,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderjahren";
         Text[ hindi ] = "अंतर को गणना करने का वर्ग: प्रकार=0 का अर्थ अंतराल है, प्रकार=1 का अर्थ केलन्डर वर्ष है";
         Text[ slovak ] = "Typ výpočtu rozdielu: mode=0 znamená interval, mode=1 znamená kalendárne roky";
+        Text[ hungarian ] = "Különbségszámítás módja: Mode=0 időintervallumot, Mode=1 pedig naptári évet jelent.";
+        Text[ slovenian ] = "Način izračuna razlike: način=0 pomeni interval, način=1 pa pomeni v koledarskih letih.";
     };
 
 /*-=======================================================================*/
@@ -748,6 +788,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "IstSchaltJahr";
         Text[ hindi ] = "IsLeapYear";
         Text[ slovak ] = "JePrestupnýRok";
+        Text[ hungarian ] = "IsLeapYear";
+        Text[ slovenian ] = "JePrestopnoLeto";
     };
     String DFA_ISLEAPYEAR_DESC // Description
     {
@@ -760,7 +802,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Renvoie 1 (VRAI) si l'ann�e est une ann�e bissextile, sinon 0 (FAUX)";
         Text[ spanish ] = "Devuelve 1(VERDADERO) si el a�o es bisiesto; si no, 0(FALSO)";
         Text[ italian ] = "Restituisce 1(VERO) se l'anno � bisestile, altrimenti 0(FALSO)";
-        Text[ danish ] = "Returnerer 1(SAND) hvis �ret er et skud�r ellers 0(FALSK)";
+        Text[ danish ] = "Returnerer 1(SAND) hvis �ret er et skud�r ellers returneres 0 (FALSK)";
         Text[ swedish ] = "Returnerar 1(SANT) om �ret �r ett skott�r annars 0(FALSKT)";
         Text[ polish ] = "Zwraca 1 (PRAWDA), je�li rok jest rokiem przest�pnym, w przeciwnym razie 0 (FA�SZ).";
         Text[ portuguese_brazilian ] = "Retorna 1 (VERDADEIRO) se o ano for bissexto, caso contr�rio 0 (FALSO) � retornado";
@@ -780,6 +822,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Liefert 1(WAHR) wenn das Jahr ein Schaltjahr ist sonst 0(FALSCH)";
         Text[ hindi ] = "अगर लीप वर्ष है तो वह 1 (TRUE) को वापस करता है, नहीं तो 0 (FALSE) को वापस करता है ";
         Text[ slovak ] = "Vráti 1 (TRUE) ak je použitý prestupný rok, inak je vrátená 0 (FALSE)";
+        Text[ hungarian ] = "A visszatérési érték szökőév esetén 1 (TRUE), egyébként 0 (FALSE)";
+        Text[ slovenian ] = "Vrne 1 (TRUE), če je uporabljeno prestopno leto, sicer vrne 0 (FALSE)";
     };
 
 /*-=======================================================================*/
@@ -795,7 +839,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "JoursDansMois";
         Text[ spanish ] = "D�asEnMes";
         Text[ italian ] = "GiorniMese";
-        Text[ danish ] = "DageM�ned";
+        Text[ danish ] = "DageIM�ned";
         Text[ swedish ] = "DagarIM�naden";
         Text[ polish ] = "Dni w miesi�cu";
         Text[ portuguese_brazilian ] = "DiasNoM�s";
@@ -815,6 +859,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "TageImMonat";
         Text[ hindi ] = "DaysInMonth";
         Text[ slovak ] = "DniVMesiaci";
+        Text[ hungarian ] = "DaysInMonth";
+        Text[ slovenian ] = "DniVMesecu";
     };
     String DFA_DAYSINMONTH_DESC // Description
     {
@@ -827,7 +873,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Renvoie le nombre de jours dans le mois en relation avec la date indiqu�e.";
         Text[ spanish ] = "Devuelve el n�mero de d�as del mes en relaci�n a la fecha indicada.";
         Text[ italian ] = "Restituisce il numero dei giorni del mese per una determinata data";
-        Text[ danish ] = "Bestemmer antallet af dage i en m�ned til en dato";
+        Text[ danish ] = "Returnerer antal dage i den angivne m�ned";
         Text[ swedish ] = "Best�mmer antalet dagar i m�naden till ett datum";
         Text[ polish ] = "Zwraca liczb� dni w miesi�cu w odniesieniu do podanej daty";
         Text[ portuguese_brazilian ] = "Retorna o n�mero de dias no m�s para uma determinada data";
@@ -847,6 +893,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Bestimmt die Anzahl an Tagen im Monat zu einem Datum";
         Text[ hindi ] = "प्रविष्ट की हुयी दिनांक के अनुसार मास में रहनेवाला दिनों को वापस करता है";
         Text[ slovak ] = "Vráti počet dní v mesiaci v súvislosti so zadaným dátumom";
+        Text[ hungarian ] = "A beírt dátum hónapjában levő napok számát adja vissza";
+        Text[ slovenian ] = "Vrne število dni v mesecu glede na vnešeni datum";
     };
 
 /*-=======================================================================*/
@@ -862,7 +910,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "JoursDansAnn�e";
         Text[ spanish ] = "D�asEnA�o";
         Text[ italian ] = "GiorniAnno";
-        Text[ danish ] = "Dage�r";
+        Text[ danish ] = "DageI�r";
         Text[ swedish ] = "DagarP��ret";
         Text[ polish ] = "Dni w roku";
         Text[ portuguese_brazilian ] = "DiasNoAno";
@@ -882,6 +930,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "TageImJahr";
         Text[ hindi ] = "DaysInYear";
         Text[ slovak ] = "DniVRoku";
+        Text[ hungarian ] = "DaysInYear";
+        Text[ slovenian ] = "DniVLetu";
     };
     String DFA_DAYSINYEAR_DESC // Description
     {
@@ -894,7 +944,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Renvoie le nombre de jours dans l'ann�e en relation avec la date indiqu�e.";
         Text[ spanish ] = "Devuelve el n�mero de d�as del a�o en relaci�n a la fecha introducida. ";
         Text[ italian ] = "Restituisce il numero dei giorni dell'anno per una deteminata data";
-        Text[ danish ] = "Bestemmer antallet af dage i et �r til en dato";
+        Text[ danish ] = "Returnerer antal dage i det angivne �r";
         Text[ swedish ] = "Best�mmer antalet dagar i �ret till ett datum";
         Text[ polish ] = "Zwraca liczb� dni w roku w odniesieniu do podanej daty";
         Text[ portuguese_brazilian ] = "Retorna o n�mero de dias no ano para uma determinada data";
@@ -914,6 +964,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Bestimmt die Anzahl an Tagen im Jahr zu einem Datum";
         Text[ hindi ] = "प्रविष्ट की हुयी दिनांक के अनुसार वर्ष में रहनेवाला दिनों को वापस करता है";
         Text[ slovak ] = "Vráti počet dní v roku v súvislosti so zadaným dátumom";
+        Text[ hungarian ] = "A beírt dátum évében levő napok számát adja vissza";
+        Text[ slovenian ] = "Vrne število dni v letu glede na vnešeni datum";
     };
 
 /*-=======================================================================*/
@@ -929,7 +981,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "SemainesDansAnn�e";
         Text[ spanish ] = "SemanasEnA�o";
         Text[ italian ] = "SettimaneAnno";
-        Text[ danish ] = "Uger�r";
+        Text[ danish ] = "UgerI�r";
         Text[ swedish ] = "VeckorPer�r";
         Text[ polish ] = "Tygodnie w roku";
         Text[ portuguese_brazilian ] = "SemanasNoAno";
@@ -949,6 +1001,8 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "WochenImJahr";
         Text[ hindi ] = "WeeksInYear";
         Text[ slovak ] = "TýždneVRoku";
+        Text[ hungarian ] = "WeeksInYear";
+        Text[ slovenian ] = "TednovVLetu";
     };
     String DFA_WEEKSINYEAR_DESC // Description
     {
@@ -961,7 +1015,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ french ] = "Renvoie le nombre de semaines dans l'ann�e en relation avec la date indiqu�e.";
         Text[ spanish ] = "Devuelve el n�mero de semanas del a�o en relaci�n a una fecha";
         Text[ italian ] = "Restituisce il numero delle settimane dell'anno per una determinata data";
-        Text[ danish ] = "Bestemmer antallet af dage i en m�ned til en dato";
+        Text[ danish ] = "Returnerer antal dage i den angivne m�ned";
         Text[ swedish ] = "Best�mmer antalet veckor p� �ret till ett datum";
         Text[ polish ] = "Zwraca liczb� tygodni w roku w odniesieniu do podanej daty";
         Text[ portuguese_brazilian ] = "Retorna o n�mero de semanas no ano para uma determinada data";
@@ -981,9 +1035,15 @@ Resource RID_SC_ADDIN_DFA
         Text[ hebrew ] = "Bestimmt die Anzahl an Wochen im Jahr zu einem Datum";
         Text[ hindi ] = "प्रविष्ट किया हुआ दिनांक के अनुसार वर्ष में रहनेवाला सप्ताह को वापस करता है";
         Text[ slovak ] = "Vráti počet týždňov v roku v súvislosti so zadaným dátumom";
+        Text[ hungarian ] = "A megadott dátum évében levő hetek számát adja vissza";
+        Text[ slovenian ] = "Vrne število tednov v letu glede na vnešeni datum";
     };
 
 };
+
+
+
+
 
 
 
