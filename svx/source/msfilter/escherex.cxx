@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-17 18:14:04 $
+ *  last change: $Author: sj $ $Date: 2001-01-22 18:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,12 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XGRAPHICS_HPP_
 #include <com/sun/star/awt/XGraphics.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
+#include <com/sun/star/drawing/ColorMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
+#include <com/sun/star/text/GraphicCrop.hpp>
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
@@ -681,9 +687,119 @@ void EscherPropertyContainer::CreateLineProperties(
     }
 }
 
+void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+                                                            sal_uInt32 nBlibId, sal_Bool bCreateCroppingAttributes )
+{
+    ::com::sun::star::uno::Any aAny;
+
+    sal_uInt32 nPicFlags = 0;
+    ::com::sun::star::drawing::ColorMode eColorMode( ::com::sun::star::drawing::ColorMode_STANDARD );
+    sal_Int16 nLuminance = 0;
+    sal_Int16 nContrast = 0;
+    sal_Int16 nRed = 0;
+    sal_Int16 nGreen = 0;
+    sal_Int16 nBlue = 0;
+    double fGamma = 1.0;
+    sal_Int16 nTransparency = 0;
+
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicColorMode" ) ) ) )
+        aAny >>= eColorMode;
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustLuminance" ) ) ) )
+        aAny >>= nLuminance;
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustContrast" ) ) ) )
+        aAny >>= nContrast;
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustRed" ) ) ) )
+        aAny >>= nRed;
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustGreen" ) ) ) )
+        aAny >>= nGreen;
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustBlue" ) ) ) )
+        aAny >>= nBlue;
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Gamma" ) ) ) )
+        aAny >>= fGamma;
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Transparency" ) ) ) )
+        aAny >>= nTransparency;
+
+    if ( ( eColorMode == ::com::sun::star::drawing::ColorMode_WATERMARK )
+            && ( nLuminance || nContrast ) )
+    {
+        eColorMode = ::com::sun::star::drawing::ColorMode_STANDARD;
+        nLuminance += 5000;
+        if ( nLuminance > 10000 )
+            nLuminance = 10000;
+        nContrast -= 7000;
+        if ( nContrast < 10000 )
+            nContrast = 10000;
+    }
+    nContrast *= 327;
+    nLuminance *= 327;
+    switch ( eColorMode )
+    {
+        case ::com::sun::star::drawing::ColorMode_GREYS :
+            nPicFlags |= 0x40004;
+        break;
+        case ::com::sun::star::drawing::ColorMode_MONO :
+            nPicFlags |= 0x60006;
+        break;
+        case ::com::sun::star::drawing::ColorMode_WATERMARK :
+        {
+            nContrast = 0x4ccd;
+            nLuminance = 0x599a;
+        }
+        break;
+    }
+
+    if ( bCreateCroppingAttributes && pGraphicProvider )
+    {
+        Size    aPrefSize;
+        MapMode aPrefMapMode;
+        if ( pGraphicProvider->GetPrefSize( nBlibId, aPrefSize, aPrefMapMode ) )
+        {
+            Size aCropSize( Application::GetDefaultDevice()->LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM ) );
+            if ( aCropSize.Width() && aCropSize.Height() )
+            {
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicCrop" ) ) ) )
+                {
+                    ::com::sun::star::text::GraphicCrop aGraphCrop;
+                    if ( aAny >>= aGraphCrop )
+                    {
+                        if ( aGraphCrop.Left )
+                        {
+                            sal_uInt32 nLeft = ( aGraphCrop.Left * 65536 ) / aCropSize.Width();
+                            AddOpt( ESCHER_Prop_cropFromLeft, nLeft );
+                        }
+                        if ( aGraphCrop.Top )
+                        {
+                            sal_uInt32 nTop = ( aGraphCrop.Top * 65536 ) / aCropSize.Height();
+                            AddOpt( ESCHER_Prop_cropFromTop, nTop );
+                        }
+                        if ( aGraphCrop.Right )
+                        {
+                            sal_uInt32 nRight = ( aGraphCrop.Right * 65536 ) / aCropSize.Width();
+                            AddOpt( ESCHER_Prop_cropFromRight, nRight );
+                        }
+                        if ( aGraphCrop.Bottom )
+                        {
+                            sal_uInt32 nBottom = ( aGraphCrop.Bottom * 65536 ) / aCropSize.Height();
+                            AddOpt( ESCHER_Prop_cropFromBottom, nBottom );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if ( nContrast )
+        AddOpt( ESCHER_Prop_pictureContrast, nContrast );
+    if ( nLuminance )
+        AddOpt( ESCHER_Prop_pictureBrightness, nLuminance );
+    if ( nPicFlags )
+        AddOpt( ESCHER_Prop_pictureActive, nPicFlags );
+}
+
+
+
 sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-        const String& rSource, sal_Bool bFillBitmap, sal_Bool bOle )
+        const String& rSource, sal_Bool bFillBitmap, sal_Bool bCreateCroppingAttributes )
 {
     sal_Bool        bRetValue = sal_False;
 
@@ -853,9 +969,13 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                     nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pGraphicAttr );
                 if ( nBlibId )
                 {
-                    AddOpt( ( bFillBitmap )
-                        ? ESCHER_Prop_fillBlip
-                        : ESCHER_Prop_pib, nBlibId, sal_True );
+                    if ( bFillBitmap )
+                        AddOpt( ESCHER_Prop_fillBlip, nBlibId, sal_True );
+                    else
+                    {
+                        AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+                        ImplCreateGraphicAttributes( rXPropSet, nBlibId, bCreateCroppingAttributes );
+                    }
                     bRetValue = sal_True;
                 }
             }
@@ -1427,7 +1547,9 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
     mbIsEmpty       ( TRUE ),
     mnPictureOffset ( nPictureOffset ),
     mnRefCount      ( 1 ),
-    mnSizeExtra     ( 0 )
+    mnSizeExtra     ( 0 ),
+    maPrefSize      ( rObject.GetPrefSize() ),
+    maPrefMapMode   ( rObject.GetPrefMapMode() )
 {
     mbIsNativeGraphicPossible = ( pGraphicAttr == NULL );
     meBlibType = UNKNOWN;
@@ -1647,6 +1769,18 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                 mpBlibEntrys[ i ]->WriteBlibEntry( rSt, sal_True );
         }
     }
+}
+
+sal_Bool EscherGraphicProvider::GetPrefSize( const sal_uInt32 nBlibId, Size& rPrefSize, MapMode& rPrefMapMode )
+{
+    sal_Bool bInRange = nBlibId && ( ( nBlibId - 1 ) < mnBlibEntrys );
+    if ( bInRange )
+    {
+        EscherBlibEntry* pEntry = mpBlibEntrys[ nBlibId - 1 ];
+        rPrefSize = pEntry->maPrefSize;
+        rPrefMapMode = pEntry->maPrefMapMode;
+    }
+    return bInRange;
 }
 
 sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteString& rId,
