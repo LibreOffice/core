@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblcalc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 13:57:11 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 09:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,26 +137,19 @@ String SwTblField::GetCntnt(BOOL bName) const
 {
     if( bName )
     {
-        // suche die richtige Tabelle
-        String sFml;
-        const SwNode* pNode;
-        if( IsIntrnlName() && GetTyp()->GetDepends() &&
-            0 != ( pNode = GetNodeOfFormula() ))
-        {
-            const SwTableNode* pTblNd = pNode->FindTableNode();
-            ((SwTblField*)this)->PtrToBoxNm( &pTblNd->GetTable() );
-            sFml = GetPar2();
-        }
-        else
-            sFml = GetPar2();
         String aStr(GetTyp()->GetName());
         aStr += ' ';
-        aStr += sFml;
+
+        USHORT nOldSubType = nSubType;
+        SwTblField* pThis = (SwTblField*)this;
+        pThis->nSubType |= SUB_CMD;
+        aStr += Expand();
+        pThis->nSubType = nOldSubType;
+
         return aStr;
     }
     return Expand();
 }
-
 
 // suche den TextNode, in dem das Feld steht
 const SwNode* SwTblField::GetNodeOfFormula() const
@@ -206,7 +199,6 @@ String SwTblField::Expand() const
     return aStr;
 }
 
-
 USHORT SwTblField::GetSubType() const
 {
     return nSubType;
@@ -249,7 +241,11 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, const String& rProperty ) const
     BOOL bRet = TRUE;
     if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FORMULA)))
     {
-        rAny <<= rtl::OUString(SwTableFormula::GetFormula());
+        USHORT nOldSubType = nSubType;
+        SwTblField* pThis = (SwTblField*)this;
+        pThis->nSubType |= SUB_CMD;
+        rAny <<= rtl::OUString( Expand() );
+        pThis->nSubType = nOldSubType;
     }
     else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
     {
