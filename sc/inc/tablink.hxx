@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:31:39 $
+ *  last change: $Author: nn $ $Date: 2001-04-27 19:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,8 @@ public:
     ScDocShell*         GetDocShell()       { return pDocShell; }
     BOOL                IsError() const;
     String              GetTitle() const;
+
+    void                ReleaseDocRef();    // without calling DoClose
 
     static String       GetOptions( SfxMedium& rMedium );
     static void         GetFilterName( const String& rFileName,

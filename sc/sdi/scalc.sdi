@@ -3462,29 +3462,6 @@ SfxBoolItem TraceChangeMode FID_CHG_RECORD
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ProtectTraceChangeMode SID_CHG_PROTECT
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem CommentChange FID_CHG_COMMENT
 (SfxStringItem Comment FID_CHG_COMMENT)
 [

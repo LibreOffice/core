@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:48:21 $
+ *  last change: $Author: nn $ $Date: 2001-04-27 19:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include "markdata.hxx"
 #include "hints.hxx"
 #include "htmlimp.hxx"
+#include "linkarea.hxx"         // dialog
 
 #include "attrib.hxx"           // raus, wenn ResetAttrib am Dokument
 #include "patattr.hxx"          // raus, wenn ResetAttrib am Dokument
@@ -122,16 +123,19 @@ __EXPORT ScAreaLink::~ScAreaLink()
 
 BOOL __EXPORT ScAreaLink::Edit(Window* pParent)
 {
+    //  use own dialog instead of SvBaseLink::Edit...
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
     //  ein Optionen-Dialog kommt...
 
-    Window* pOldParent = Application::GetDefDialogParent();
-    if (pParent)
-        Application::SetDefDialogParent(pParent);
-
-    BOOL bRet = SvBaseLink::Edit(pParent);
-
-    Application::SetDefDialogParent(pOldParent);
+    BOOL bRet = FALSE;
+    ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pParent );
+    pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
+    if (pDlg->Execute() == RET_OK)
+    {
+        aOptions = pDlg->GetOptions();
+        bRet = Refresh( pDlg->GetURL(), pDlg->GetFilter(), pDlg->GetSource(), pDlg->GetRefresh() );
+    }
+    delete pDlg;
 
     return bRet;
 }
@@ -466,8 +470,9 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         if ( aOldRange.aEnd.Row() != aNewRange.aEnd.Row() )
             nPaintEndY = MAXROW;
 
-        pDocShell->PostPaint( aDestPos.Col(),aDestPos.Row(),nDestTab,
-                                nPaintEndX,nPaintEndY,nDestTab, PAINT_GRID );
+        if ( !pDocShell->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
+            pDocShell->PostPaint( aDestPos.Col(),aDestPos.Row(),nDestTab,
+                                    nPaintEndX,nPaintEndY,nDestTab, PAINT_GRID );
         aModificator.SetDocumentModified();
     }
     else

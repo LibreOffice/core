@@ -1,0 +1,158 @@
+/*************************************************************************
+ *
+ *  $RCSfile: linkarea.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: nn $ $Date: 2001-04-27 19:29:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "linkarea.hrc"
+
+ModalDialog RID_SCDLG_LINKAREA
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Size = MAP_APPFONT ( 274 , 190 ) ;
+    Text = "Externe Datenquelle" ;
+    Text [ ENGLISH ] = "External Data Source" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 218 , 8 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 218 , 25 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 218 , 49 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    FixedLine FL_LOCATION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 204 , 8 ) ;
+        Text = "~URL der externen Datenquelle" ;
+        Text [ ENGLISH ] = "External Data Source Location" ;
+    };
+    ComboBox CB_URL
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 174 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    PushButton BTN_BROWSE
+    {
+        Pos = MAP_APPFONT ( 190 , 14 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "..." ;
+    };
+    FixedText FT_HINT
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 192 , 26 ) ;
+        WordBreak = TRUE ;
+        Text = "(URL des Quelldokuments im lokalen Dateisystem oder im Internet)" ;
+        Text [ ENGLISH ] = "(Insert a local file location or an URL from a web site here)" ;
+    };
+    FixedText FT_RANGES
+    {
+        Pos = MAP_APPFONT ( 6 , 62 ) ;
+        Size = MAP_APPFONT ( 198 , 8 ) ;
+        Text = "~Verfügbare Tabellen/Bereiche" ;
+        Text [ ENGLISH ] = "Available Tables/Ranges" ;
+    };
+    MultiListBox LB_RANGES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Size = MAP_APPFONT ( 174 , 80 ) ;
+        AutoHScroll = TRUE ;
+    };
+    CheckBox BTN_RELOAD
+    {
+        Pos = MAP_APPFONT ( 12 , 168 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "~Aktualisierung alle" ;
+        Text [ ENGLISH ] = "Auto reload data every" ;
+    };
+    NumericField NF_DELAY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 113 , 166 ) ;
+        Size = MAP_APPFONT ( 32 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 99999 ;
+        Value = 60 ;
+    };
+    FixedText FT_SECONDS
+    {
+        Pos = MAP_APPFONT ( 149 , 168 ) ;
+        Size = MAP_APPFONT ( 59 , 8 ) ;
+        Text = "Sekunden" ;
+        Text [ ENGLISH ] = "seconds" ;
+    };
+};
+

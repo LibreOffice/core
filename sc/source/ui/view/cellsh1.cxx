@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-23 14:47:52 $
+ *  last change: $Author: nn $ $Date: 2001-04-27 19:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@
 #include "inputhdl.hxx"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
+#include "linkarea.hxx"
+#include "docfunc.hxx"
 
 #include "globstr.hrc"
 
@@ -1808,6 +1810,41 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pTabViewShell->SetConditionalFormat( pCndFmtItem->GetData() );
                     rReq.Done();
                 }
+            }
+            break;
+
+        case SID_EXTERNAL_SOURCE:
+            {
+                ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pTabViewShell->GetDialogParent() );
+                if (pDlg->Execute() == RET_OK)
+                {
+                    ScRange aLinkRange;
+                    BOOL bMove = FALSE;
+
+                    ScViewData* pViewData = GetViewData();
+                    ScMarkData& rMark = pViewData->GetMarkData();
+                    rMark.MarkToSimple();
+                    if ( rMark.IsMarked() )
+                    {
+                        rMark.GetMarkArea( aLinkRange );
+                        bMove = TRUE;                       // insert/delete cells to fit range
+                    }
+                    else
+                        aLinkRange = ScRange( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
+
+                    String aFile = pDlg->GetURL();
+                    String aFilter = pDlg->GetFilter();
+                    String aOptions = pDlg->GetOptions();
+                    String aSource = pDlg->GetSource();
+                    ULONG nRefresh = pDlg->GetRefresh();
+                    if ( aFile.Len() && aSource.Len() )         // filter may be empty
+                    {
+                        ScDocFunc aFunc(*pViewData->GetDocShell());
+                        aFunc.InsertAreaLink( aFile, aFilter, aOptions, aSource,
+                                                aLinkRange, nRefresh, bMove, FALSE );
+                    }
+                }
+                delete pDlg;
             }
             break;
 

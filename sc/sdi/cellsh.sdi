@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2001-04-23 11:43:56 $ $Revision: 1.4 $
+ // $Author: nn $ $Date: 2001-04-27 19:27:02 $ $Revision: 1.5 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -133,6 +133,7 @@ interface CellSelection : Selection
     SID_GET_CLPBRD_FORMAT_COUNT     [ ExecMethod = ExecuteEdit; ]
     SID_GET_CLPBRD_FORMAT_BY_IDX    [ ExecMethod = ExecuteEdit; ]
     SID_GET_CLPBRD_FORMAT_NAME      [ ExecMethod = ExecuteEdit; ]
+    SID_EXTERNAL_SOURCE [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_MERGE_ON    [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_MERGE_OFF   [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_OUTLINE_HIDE    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
@@ -377,6 +378,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/04/23 11:43:56  nn
+    slot for clipboard controller
+
     Revision 1.3  2001/03/26 19:18:57  nn
     transliteration menu functions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-20 18:53:41 $
+ *  last change: $Author: nn $ $Date: 2001-04-27 19:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,7 @@ void ScTabView::SelectionChanged()
 //  rBindings.Invalidate( FID_CONDITIONAL_FORMAT );
     rBindings.Invalidate( SID_OPENDLG_CONDFRMT );
     rBindings.Invalidate( FID_VALIDATION );
+    rBindings.Invalidate( SID_EXTERNAL_SOURCE );
 
     CellContentChanged();
 }

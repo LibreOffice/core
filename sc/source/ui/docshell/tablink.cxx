@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:28:55 $
+ *  last change: $Author: nn $ $Date: 2001-04-27 19:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,19 @@ ScDocumentLoader::~ScDocumentLoader()
         aRef->DoClose();
     else if ( pMedium )
         delete pMedium;
+}
+
+void ScDocumentLoader::ReleaseDocRef()
+{
+    if ( aRef.Is() )
+    {
+        //  release reference without calling DoClose - caller must
+        //  have another reference to the doc and call DoClose later
+
+        pDocShell = NULL;
+        pMedium = NULL;
+        aRef.Clear();
+    }
 }
 
 ScDocument* ScDocumentLoader::GetDocument()

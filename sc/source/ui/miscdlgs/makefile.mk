@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+#   last change: $Author: nn $ $Date: 2001-04-27 19:29:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ CXXFILES = \
     crnrdlg.cxx shtabdlg.cxx \
     instbdlg.cxx acredlin.cxx \
     highred.cxx simpref.cxx	\
-    redcom.cxx
+    redcom.cxx linkarea.cxx
 
 SLOFILES =  \
         $(SLO)$/delcldlg.obj $(SLO)$/inscldlg.obj \
@@ -111,11 +111,11 @@ SLOFILES =  \
     $(SLO)$/crnrdlg.obj $(SLO)$/shtabdlg.obj \
     $(SLO)$/instbdlg.obj $(SLO)$/acredlin.obj \
     $(SLO)$/highred.obj	 $(SLO)$/simpref.obj  \
-    $(SLO)$/redcom.obj	
+    $(SLO)$/redcom.obj $(SLO)$/linkarea.obj
 
 SRCFILES = \
     instbdlg.src acredlin.src \
-    highred.src
+    highred.src linkarea.src
 
 NOOPTFILES=\
     $(SLO)$/chartdlg.obj

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-04-25 14:00:39 $
+ *  last change: $Author: nn $ $Date: 2001-04-27 19:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,6 +449,7 @@
 #define SID_CHOOSE_DESIGN       (SC_VIEW_START + 82)
 #define SID_EURO_CONVERTER      (SC_VIEW_START + 83)
 #define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+#define SID_EXTERNAL_SOURCE     (SC_VIEW_START + 85)
 
 // Nachrichten -------------------------------------------------------------
 
@@ -1366,6 +1367,8 @@
 #define RID_SCDLG_DAPITYPE              (SC_DIALOGS_START + 129)
 #define RID_SCDLG_DAPISERVICE           (SC_DIALOGS_START + 130)
 #define RID_SCDLG_DAPIDATA              (SC_DIALOGS_START + 131)
+
+#define RID_SCDLG_LINKAREA              (SC_DIALOGS_START + 132)
 
 #define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
 
