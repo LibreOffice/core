@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:57:25 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,9 +225,19 @@ hidspecial HID_TAB_NAMEMATCHING_COLS_AVAIL              { HelpId = HID_TAB_NAMEM
 hidspecial HID_TAB_NAMEMATCHING_COLS_ASSIGN             { HelpId = HID_TAB_NAMEMATCHING_COLS_ASSIGN; };
 hidspecial HID_TAB_WIZ_COPYTABLE                        { HelpId = HID_TAB_WIZ_COPYTABLE; };
 hidspecial HID_TAB_WIZ_TABLENAME_EDIT                   { HelpId = HID_TAB_WIZ_TABLENAME_EDIT; };
+hidspecial HID_CTL_RELATIONTAB                          { HelpId = HID_CTL_RELATIONTAB; };
+hidspecial HID_TLB_RELATIONDESIGN                       { HelpId = HID_TLB_RELATIONDESIGN ; };
+hidspecial HID_RELATIONDIALOG_LEFTFIELDCELL             { HelpId = HID_RELATIONDIALOG_LEFTFIELDCELL ; };
+hidspecial HID_RELATIONDIALOG_RIGHTFIELDCELL            { HelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL ; };
+hidspecial HID_RELDLG_KEYFIELDS                         { HelpId = HID_RELDLG_KEYFIELDS ; };
+hidspecial HID_BROWSER_RELATION_DESIGN                  { HelpId = HID_BROWSER_RELATION_DESIGN ; };
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/02/23 14:57:25  oj
+ *  a lot more helpids
+ *
  *  Revision 1.16  2001/02/16 16:06:11  oj
  *  new helpid
  *
