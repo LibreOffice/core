@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-05-07 09:56:29 $
+ *  last change: $Author: as $ $Date: 2001-05-21 06:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
     #undef  ENABLE_REGISTRATIONDEBUG
     #undef  ENABLE_TARGETINGDEBUG
     #undef  ENABLE_PLUGINDEBUG
+    #undef  ENABLE_TIMEMEASURE
 #else
     // Enable log mechanism for assertion handling.
     #ifndef ENABLE_LOGMECHANISM
@@ -143,6 +144,14 @@
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_PLUGIN_HXX_
 #include <macros/debug/plugin.hxx>
+#endif
+
+//*****************************************************************************************************************
+//  special macros to measure times of some operations
+//*****************************************************************************************************************
+
+#ifndef __FRAMEWORK_MACROS_DEBUG_TIMEMEASURE_HXX_
+#include <macros/debug/timemeasure.hxx>
 #endif
 
 //*****************************************************************************************************************
