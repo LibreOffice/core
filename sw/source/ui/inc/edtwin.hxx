@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:16:02 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,19 @@
 #ifndef _EDTWIN_HXX
 #define _EDTWIN_HXX
 
-#ifndef _LINK_HXX //autogen
+#ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
-#ifndef _TIMER_HXX //autogen
+#ifndef _TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
-#ifndef _WINDOW_HXX //autogen
+#ifndef _WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
-#ifndef _SOT_EXCHANGE_HXX //autogen
-#include <sot/exchange.hxx>
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
 #endif
+
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
 #endif
@@ -98,7 +99,8 @@ struct  QuickHelpData;
     Beschreibung:   Eingabe-Fenster
  --------------------------------------------------------------------*/
 
-class SwEditWin: public Window
+class SwEditWin: public Window,
+                public DropTargetHelper, public DragSourceHelper
 {
 friend void     ScrollMDI(ViewShell* pVwSh, const SwRect&,
                           USHORT nRangeX, USHORT nRangeY);
@@ -228,8 +230,10 @@ protected:
 
     virtual void    Command( const CommandEvent& rCEvt );
 
-    virtual BOOL    Drop(const DropEvent& rEvt);
-    virtual BOOL    QueryDrop( DropEvent& rEvt);
+                                // Drag & Drop Interface
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
 public:
 
@@ -262,6 +266,7 @@ public:
     SwApplyTemplate* GetApplyTemplate() const { return pApplyTempl; }
 
     void            StartExecuteDrag();
+    void            DragFinished();
     USHORT          GetDropAction() const { return nDropAction; }
     ULONG           GetDropFormat() const { return nDropFormat; }
 

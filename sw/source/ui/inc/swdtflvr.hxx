@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:22:13 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,23 +103,22 @@ enum TransferBufferType
 
 class SwTransferable : public TransferableHelper
 {
-// new:
     SvEmbeddedObjectRef             aDocShellRef;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
+    ::so3::SvBaseLinkRef            refDdeLink;
 
-    SwWrtShell *pWrtShell;
-
-    TransferBufferType eBufferType;
+    SwWrtShell      *pWrtShell;
     SwDocFac        *pClpDocFac;
     Graphic         *pClpGraphic, *pClpBitmap, *pOrigGrf;
-    ::so3::SvBaseLinkRef    refDdeLink;
     INetBookmark    *pBkmk;     // URL und Beschreibung!
     ImageMap        *pImageMap;
     INetImage       *pTargetURL;
 
-    BOOL bIntern    :1; //D&D innerhalb des SW
-    BOOL bTblSel    :1; //D&D Tabellen oder Rahmenselektion
+    TransferBufferType eBufferType;
+
+    BOOL bOldIdle   :1; //D&D Idle flag from the viewsettings
+    BOOL bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy
     SvEmbeddedObject* FindOLEObj() const;
@@ -168,6 +167,11 @@ class SwTransferable : public TransferableHelper
     static int _PasteFileList( TransferableDataHelper& rData,
                             SwWrtShell& rSh, const Point* pPt, BOOL bMsg );
 
+    int PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, BOOL bMove );
+    int PrivatePaste( SwWrtShell& rShell );
+
+    void SetDataForDragAndDrop( const Point& rSttPos );
+
                                     // not available
                                     SwTransferable();
                                     SwTransferable( const SwTransferable& );
@@ -180,20 +184,21 @@ protected:
                                         void* pUserObject,
                                         sal_uInt32 nUserObjectId,
                                         const DATA_FLAVOR& rFlavor );
+    virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 
 public:
     SwTransferable( SwWrtShell& );
     virtual ~SwTransferable();
 
-    //Stellt das Document ein (Seitenraender, VisArea) und defaultet
-    //die RealSize.
+    // set properties on the document, like PageMargin, VisArea.
+    // And set real Size
     static void InitOle( SvEmbeddedObjectRef rRef, SwDoc& rDoc );
 
     // copy - methods and helper methods for the copy
     int  Cut();
     int  Copy( BOOL bIsCut = FALSE );
-    int  CalculateAndCopy();        //Spezialfall fuer Calculator
+    int  CalculateAndCopy();                // special for Calculator
     int  CopyGlossary( SwTextBlocks& rGlossary, const String& rStr );
 
     // remove the DDE-Link format promise
@@ -204,7 +209,8 @@ public:
     static int Paste( SwWrtShell&, TransferableDataHelper& );
     static int PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, USHORT nAction, ULONG nFormat,
-                          USHORT nDestination, BOOL bIsPasteFmt );
+                          USHORT nDestination, BOOL bIsPasteFmt,
+                          const Point* pDDPos = 0, sal_Int8 nDropAction = 0 );
 
     static BOOL IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
@@ -212,6 +218,11 @@ public:
     static int PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              ULONG nFormat );
 
+
+    // Interfaces for Drag & Drop
+    void StartDrag( Window* pWin, const Point& rPos );
+    SwWrtShell* GetShell()              { return pWrtShell; }
+    void SetCleanUp( BOOL bFlag )       { bCleanUp = bFlag; }
 };
 
 
