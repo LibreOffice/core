@@ -1,0 +1,42 @@
+    <node oor:name="MS Excel 4.0 Vorlage/Template" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>calc_MS_Excel_40_VorlageTemplate</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">Microsoft Excel 4.0 - Szablon</value>
+            <value xml:lang="hu">Microsoft Excel 4.0-sablon</value>
+            <value xml:lang="ja">Microsoft Excel 4.0 テンプレート</value>
+            <value xml:lang="es">Microsoft Excel 4.0 Plantilla</value>
+            <value xml:lang="tr">Microsoft Excel 4.0 Şablonu</value>
+            <value xml:lang="ru">Microsoft Excel 4.0 Шаблон</value>
+            <value xml:lang="th">Microsoft Excel 4.0 Template</value>
+            <value xml:lang="x-comment">Microsoft Excel 4.0 Vorlage</value>
+            <value xml:lang="ca">Microsoft Excel 4.0 Template</value>
+            <value xml:lang="el">MS Excel 4.0 Πρότυπο</value>
+            <value xml:lang="zh-CN">Microsoft Excel 4.0 模板</value>
+            <value xml:lang="pt">Microsoft Excel 4.0 Modelo</value>
+            <value xml:lang="cs">Šablona Microsoft Excel 4.0</value>
+            <value xml:lang="fr">Microsoft Excel 4.0 Modèle</value>
+            <value xml:lang="ar">MS Excel 4.0 قالب</value>
+            <value xml:lang="zh-TW">Microsoft Excel 4.0 範本</value>
+            <value xml:lang="sl">Microsoft Excel 4.0 Predloga</value>
+            <value xml:lang="fi">MS Excel 4.0 -mallipohja</value>
+            <value xml:lang="hi-IN">Microsoft Excel 4.0 Template</value>
+            <value xml:lang="en-US">Microsoft Excel 4.0 Template</value>
+            <value xml:lang="sk">Šablóna Microsoft Excel 4.0</value>
+            <value xml:lang="he">‮תבנית Microsoft Excel 4.0‬</value>
+            <value xml:lang="sv">Microsoft Excel 4.0 mall</value>
+            <value xml:lang="da">Microsoft Excel 4.0 skabelon</value>
+            <value xml:lang="de">Microsoft Excel 4.0 Vorlage</value>
+            <value xml:lang="ko">Microsoft Excel 4.0 서식 파일</value>
+            <value xml:lang="nl">Microsoft Excel 4.0 Sjabloon</value>
+            <value xml:lang="pt-BR">MS Excel 4.0 Vorlage</value>
+            <value xml:lang="it">Microsoft Excel 4.0 Modello</value>
+            <value xml:lang="x-translate">Microsoft Excel 4.0 Vorlage</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
+    </node>
