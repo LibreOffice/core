@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-05-22 12:36:59 $
+ *  last change: $Author: dbo $ $Date: 2002-10-21 15:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,11 +1240,11 @@ void SAL_CALL SimpleRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly
     reason.append( rURL );
     if( bReadOnly )
     {
-        reason.appendAscii( RTL_CONSTASCII_STRINGPARAM("for reading") );
+        reason.appendAscii( RTL_CONSTASCII_STRINGPARAM(" for reading") );
     }
     else
     {
-        reason.appendAscii( RTL_CONSTASCII_STRINGPARAM("for writing" ) );
+        reason.appendAscii( RTL_CONSTASCII_STRINGPARAM(" for writing" ) );
     }
     throw InvalidRegistryException( reason.makeStringAndClear() , Reference< XInterface >() );
 }
