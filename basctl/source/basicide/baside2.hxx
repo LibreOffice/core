@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:30:28 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,12 @@ class SvxSearchItem;
 #include <sfx2/stbmgr.hxx>
 #endif
 
-#ifndef _SVTREEBOX_HXX //autogen
-#include <svtools/svtreebx.hxx>
+#ifndef _SVTABBX_HXX //autogen
+#include <svtools/svtabbx.hxx>
+#endif
+
+#ifndef _HEADBAR_HXX
+#include <svtools/headbar.hxx>
 #endif
 
 #ifndef _SV_BUTTON_HXX //autogen
@@ -279,7 +283,7 @@ public:
 };
 
 
-class WatchTreeListBox : public SvTreeListBox
+class WatchTreeListBox : public SvHeaderTabListBox
 {
     String aEditingRes;
 
@@ -287,7 +291,8 @@ protected:
     virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
     virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
-    BOOL            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rVName, const String& rResult );
+    BOOL            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
+    SbxBase*        ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement );
 
 //  virtual DragDropMode    NotifyBeginDrag( SvLBoxEntry* );
 //  virtual BOOL    NotifyQueryDrop( SvLBoxEntry* );
@@ -303,7 +308,10 @@ public:
     WatchTreeListBox( Window* pParent, WinBits nWinBits );
     ~WatchTreeListBox();
 
-    void            UpdateWatches();
+    void            RequestingChilds( SvLBoxEntry * pParent );
+    void            UpdateWatches( bool bBasicStopped = false );
+
+    virtual void    SetTabs();
 };
 
 
@@ -315,6 +323,7 @@ private:
     ExtendedEdit        aXEdit;
     ImageButton         aRemoveWatchButton;
     WatchTreeListBox    aTreeListBox;
+    HeaderBar           aHeaderBar;
 
 protected:
     virtual void    Resize();
@@ -322,7 +331,9 @@ protected:
 
     DECL_LINK( ButtonHdl, ImageButton * );
     DECL_LINK( TreeListHdl, SvTreeListBox * );
+    DECL_LINK( implEndDragHdl, HeaderBar * );
     DECL_LINK( EditAccHdl, Accelerator * );
+
 
 public:
                     WatchWindow( Window* pParent );
@@ -330,7 +341,7 @@ public:
 
     void            AddWatch( const String& rVName );
     BOOL            RemoveSelectedWatch();
-    void            UpdateWatches();
+    void            UpdateWatches( bool bBasicStopped = false );
 
     WatchTreeListBox&   GetWatchTreeListBox() { return aTreeListBox; }
 };
