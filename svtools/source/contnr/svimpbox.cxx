@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:02:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,14 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, BOOL bForceNoSelect )
     {
         return;
     }
+
+    // if this cursor is not selectable, find first visible that is and use it
+    while( pEntry && pViewDataNewCur && !pViewDataNewCur->IsSelectable() )
+    {
+        pEntry = (SvLBoxEntry*)(pView->NextVisible( pEntry ));
+        pViewDataNewCur = pEntry ? pView->GetViewDataEntry(pEntry) : 0;
+    }
+
     SvLBoxEntry* pOldCursor = pCursor;
     if( pCursor && pEntry != pCursor )
     {
@@ -2292,7 +2300,13 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_UP:
             if( !IsEntryInView( pCursor ) )
                 MakeVisible( pCursor );
-            pNewCursor = (SvLBoxEntry*)(pView->PrevVisible( pCursor ));
+
+            pNewCursor = pCursor;
+            do
+            {
+                pNewCursor = (SvLBoxEntry*)(pView->PrevVisible( pNewCursor ));
+            } while( pNewCursor && !IsSelectable(pNewCursor) );
+
             if ( pNewCursor )
                 // new entry selected -> reset current tab position to first tab
                 nCurTabPos = FIRST_ENTRY_TAB;
@@ -2315,7 +2329,13 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_DOWN:
             if( !IsEntryInView( pCursor ) )
                 MakeVisible( pCursor );
-            pNewCursor = (SvLBoxEntry*)(pView->NextVisible( pCursor ));
+
+            pNewCursor = pCursor;
+            do
+            {
+                pNewCursor = (SvLBoxEntry*)(pView->NextVisible( pNewCursor ));
+            } while( pNewCursor && !IsSelectable(pNewCursor) );
+
             if ( pNewCursor )
                 // new entry selected -> reset current tab position to first tab
                 nCurTabPos = FIRST_ENTRY_TAB;
@@ -2425,6 +2445,13 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             if( !bMod1 )
             {
                 pNewCursor = (SvLBoxEntry*)(pView->PrevVisible( pCursor, nDelta ));
+
+                while( nDelta && pNewCursor && !IsSelectable(pNewCursor) )
+                {
+                    pNewCursor = (SvLBoxEntry*)(pView->NextVisible( pNewCursor ));
+                    nDelta--;
+                }
+
                 if( nDelta )
                 {
                     DBG_ASSERT(pNewCursor&&(ULONG)pNewCursor!=(ULONG)pCursor,"Cursor?")
@@ -2446,6 +2473,13 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             if( !bMod1 )
             {
                 pNewCursor= (SvLBoxEntry*)(pView->NextVisible( pCursor, nDelta ));
+
+                while( nDelta && pNewCursor && !IsSelectable(pNewCursor) )
+                {
+                    pNewCursor = (SvLBoxEntry*)(pView->PrevVisible( pNewCursor ));
+                    nDelta--;
+                }
+
                 if( nDelta )
                 {
                     DBG_ASSERT(pNewCursor&&(ULONG)pNewCursor!=(ULONG)pCursor,"Cursor?")
@@ -2623,6 +2657,12 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_HOME :
             pNewCursor = pView->GetModel()->First();
+
+            while( pNewCursor && !IsSelectable(pNewCursor) )
+            {
+                pNewCursor = (SvLBoxEntry*)(pView->NextVisible( pNewCursor ));
+            }
+
             if( pNewCursor && pNewCursor != pCursor )
             {
 //              SelAllDestrAnch( FALSE );
@@ -2637,6 +2677,12 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_END :
             pNewCursor = pView->GetModel()->Last();
+
+            while( pNewCursor && !IsSelectable(pNewCursor) )
+            {
+                pNewCursor = (SvLBoxEntry*)(pView->PrevVisible( pNewCursor ));
+            }
+
             if( pNewCursor && pNewCursor != pCursor)
             {
 //              SelAllDestrAnch( FALSE );
@@ -3585,5 +3631,20 @@ bool SvImpLBox::SetCurrentTabPos( USHORT _nNewPos )
     }
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+bool SvImpLBox::IsSelectable( const SvLBoxEntry* pEntry )
+{
+    if( pEntry )
+    {
+        SvViewDataEntry* pViewDataNewCur = pView->GetViewDataEntry(const_cast<SvLBoxEntry*>(pEntry));
+        return (pViewDataNewCur == 0) || pViewDataNewCur->IsSelectable();
+    }
+    else
+    {
+        return false;
+    }
 }
 
