@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 12:42:26 $
+ *  last change: $Author: mt $ $Date: 2001-02-15 08:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1639,16 +1639,6 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
 
     USHORT nCode = rKEvt.GetKeyCode().GetCode();
     // Auswertung fuer besondere Einstellungen....
-    if ( ( nCode == KEY_S ) && rKEvt.GetKeyCode().IsMod2() )
-    {
-        if ( !pEditEngine->GetSpeller().is() )
-//          pEditEngine->CreateSpeller( DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wini" ) ) ),
-//                                      DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wini" ) ) ) );
-        if ( pEditEngine->HasSpellErrors( LANGUAGE_GERMAN ) == EE_SPELL_OK )
-            InfoBox( 0, String( RTL_CONSTASCII_USTRINGPARAM( "Spell lohnt nicht!" ) ) ).Execute();
-        else
-            pEditView->StartSpeller( LANGUAGE_GERMAN );
-    }
     if ( ( nCode == KEY_A) && rKEvt.GetKeyCode().IsMod1() )
         pEditView->SetSelection( ESelection( 0, 0, 0xFFFF, 0xFFFF ) );
     else if ( ( nCode == KEY_R ) && rKEvt.GetKeyCode().IsMod2() )
