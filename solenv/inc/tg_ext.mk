@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-29 16:47:04 $
+#   last change: $Author: hjs $ $Date: 2002-02-08 14:42:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,12 @@ P_BUILD_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
 P_INSTALL_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
 P_INSTALL_TARGET_DIR=$(MISC)$/install
 
+.IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+NEW_PATCH_FILE_NAME:=$(TARFILE_NAME)
+.ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+NEW_PATCH_FILE_NAME:=$(PATCH_FILE_NAME)
+.ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+
 .IF "$(TAR_EXCLUDES)"!=""
 TAR_EXCLUDE_SWITCH=--exclude $(TAR_EXCLUDES)
 .ENDIF          # "$(TAR_EXCLUDES)"!=""
@@ -106,6 +112,11 @@ clean:
     +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) clean
     +$(RM) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     
+$(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
+    @+-$(RM) $@
+    @+echo $(assign UNPACKCMD := uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
+
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @+-$(RM) $@
     @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
@@ -229,13 +240,13 @@ $(T_ADDITIONAL_FILES) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
-    @+-$(RM) $(MISC)$/$(TARFILE_NAME).patch.tmp >& $(NULLDEV)
-    @+-$(RM) $(TARFILE_NAME).patch.bak >& $(NULLDEV)
+    @+-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).patch.tmp >& $(NULLDEV)
+    @+-$(RM) $(NEW_PATCH_FILE_NAME).patch.bak >& $(NULLDEV)
 #ignore returncode of 1 (indicates differences...)	
 # hard coded again to get the same directory level as before. quite ugly...
-    +-cd $(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(TARFILE_NAME).patch.tmp
-    @+-mv $(TARFILE_NAME).patch $(TARFILE_NAME).patch.bak >& $(NULLDEV)
-    @+-mv $(MISC)$/$(TARFILE_NAME).patch.tmp $(TARFILE_NAME).patch >& $(NULLDEV)
+    +-cd $(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).patch.tmp
+    @+-mv $(NEW_PATCH_FILE_NAME).patch $(NEW_PATCH_FILE_NAME).patch.bak >& $(NULLDEV)
+    @+-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).patch.tmp $(NEW_PATCH_FILE_NAME).patch >& $(NULLDEV)
     @+echo still some problems with win32 generated patches...
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
