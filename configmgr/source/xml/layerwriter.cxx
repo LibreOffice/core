@@ -2,9 +2,9 @@
 *
 *  $RCSfile: layerwriter.cxx,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: rt $ $Date: 2003-04-17 13:35:08 $
+*  last change: $Author: vg $ $Date: 2003-06-04 10:20:09 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -72,6 +72,8 @@
 #ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #endif
+#include <com/sun/star/configuration/backend/BackendAccessException.hpp>
+#include <com/sun/star/configuration/backend/ConnectionLostException.hpp>
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -81,6 +83,7 @@ namespace configmgr
     {
         // -----------------------------------------------------------------------------
         namespace uno       = ::com::sun::star::uno;
+        namespace io        = ::com::sun::star::io;
         namespace sax       = ::com::sun::star::xml::sax;
         // -----------------------------------------------------------------------------
 
@@ -111,6 +114,60 @@ namespace configmgr
                 OSL_ASSERT(TypeConverter::query(_xTCV).get() == _xTCV.get());
                 return static_cast< script::XTypeConverter * >(_xTCV.get());
             }
+        // -----------------------------------------------------------------------------
+            static
+            void translateSAXException( sax::SAXException & aSAXException,
+                                        backenduno::XLayerHandler * context)
+            {
+                OUString sMessage = aSAXException.Message;
+
+                uno::Any const & aWrappedException = aSAXException.WrappedException;
+                if (aWrappedException.hasValue())
+                {
+                    if (aWrappedException.getValueTypeClass() != uno::TypeClass_EXCEPTION)
+                        OSL_ENSURE(false, "ERROR: WrappedException is not an exception");
+
+                    else if (sMessage.getLength() == 0)
+                        sMessage = static_cast<uno::Exception const *>(aWrappedException.getValue())->Message;
+
+                    // assume that a SAXException with WrappedException indicates a storage access error
+                    throw backenduno::BackendAccessException(sMessage,context,aWrappedException);
+                }
+                else
+                {
+                    // assume that a SAXException without WrappedException indicates non-well-formed data
+                    throw backenduno::MalformedDataException(sMessage,context,uno::makeAny(aSAXException));
+                }
+            }
+        // -----------------------------------------------------------------------------
+            static inline uno::Type getIOExceptionType()
+            {
+                io::IOException const * const ioexception = 0;
+                return ::getCppuType(ioexception);
+            }
+            static inline uno::Type getNotConnectedExceptionType()
+            {
+                io::NotConnectedException const * const ncexception = 0;
+                return ::getCppuType(ncexception);
+            }
+            static
+            void translateIOException(uno::Any const & anIOException,
+                                      backenduno::XLayerHandler * context)
+            {
+                OSL_ASSERT(anIOException.isExtractableTo(getIOExceptionType()));
+                io::IOException const * pException = static_cast<io::IOException const *>(anIOException.getValue());
+                OUString sMessage = pException->Message;
+
+                if (anIOException.isExtractableTo(getNotConnectedExceptionType()))
+                {
+                    throw backenduno::ConnectionLostException(sMessage,context,anIOException);
+                }
+                else
+                {
+                    throw backenduno::BackendAccessException(sMessage,context,anIOException);
+                }
+            }
+        // -----------------------------------------------------------------------------
         }
         // -----------------------------------------------------------------------------
 
@@ -145,17 +202,24 @@ namespace configmgr
                    uno::RuntimeException)
         {
             checkInElement(false);
-            if (!m_bStartedDocument)
+            try
             {
-                uno::Reference< io::XOutputStream > aStream = this->getOutputStream(  );
-                aStream->closeOutput();
+                if (!m_bStartedDocument)
+                {
+                    uno::Reference< io::XOutputStream > aStream = this->getOutputStream(  );
+                    aStream->closeOutput();
+                }
+                else
+                {
+                    getWriteHandler()->endDocument();
+                    m_aFormatter.reset();
+                    m_bStartedDocument = false;
+                }
             }
-            else
-            {
-                getWriteHandler()->endDocument();
-                m_aFormatter.reset();
-                m_bStartedDocument = false;
-            }
+            catch (sax::SAXException & xe)                  { translateSAXException(xe,this); }
+            catch (io::NotConnectedException & ioe)         { translateIOException(uno::makeAny(ioe),this); }
+            catch (io::BufferSizeExceededException & ioe)   { translateIOException(uno::makeAny(ioe),this); }
+            catch (io::IOException & ioe)                   { translateIOException(uno::makeAny(ioe),this); }
         }
         // -----------------------------------------------------------------------------
 
@@ -163,19 +227,25 @@ namespace configmgr
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
-
-            if (!m_bStartedDocument)
+            try
             {
-                getWriteHandler()->startDocument();
-                m_bStartedDocument = true;
+                if (!m_bStartedDocument)
+                {
+                    getWriteHandler()->startDocument();
+                    m_bStartedDocument = true;
+                }
+                ElementInfo aInfo(aName, this->isInElement() ? ElementType::node : ElementType::layer);
+                aInfo.flags = aAttributes;
+                aInfo.op = bClear ? Operation::clear : Operation::modify;
+
+                m_aFormatter.prepareElement(aInfo);
+
+                this->startNode();
             }
-            ElementInfo aInfo(aName, this->isInElement() ? ElementType::node : ElementType::layer);
-            aInfo.flags = aAttributes;
-            aInfo.op = bClear ? Operation::clear : Operation::modify;
-
-            m_aFormatter.prepareElement(aInfo);
-
-            this->startNode();
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -185,13 +255,20 @@ namespace configmgr
         {
             checkInElement(true);
 
-            ElementInfo aInfo(aName, ElementType::node);
-            aInfo.flags = aAttributes;
-            aInfo.op = Operation::replace;
+            try
+            {
+                ElementInfo aInfo(aName, ElementType::node);
+                aInfo.flags = aAttributes;
+                aInfo.op = Operation::replace;
 
-            m_aFormatter.prepareElement(aInfo);
+                m_aFormatter.prepareElement(aInfo);
 
-            this->startNode();
+                this->startNode();
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -201,14 +278,21 @@ namespace configmgr
         {
             checkInElement(true);
 
-            ElementInfo aInfo(aName, ElementType::node);
-            aInfo.flags = aAttributes;
-            aInfo.op = Operation::replace;
+            try
+            {
+                ElementInfo aInfo(aName, ElementType::node);
+                aInfo.flags = aAttributes;
+                aInfo.op = Operation::replace;
 
-            m_aFormatter.prepareElement(aInfo);
-            m_aFormatter.addInstanceType(aTemplate.Name,aTemplate.Component);
+                m_aFormatter.prepareElement(aInfo);
+                m_aFormatter.addInstanceType(aTemplate.Name,aTemplate.Component);
 
-            this->startNode();
+                this->startNode();
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -217,7 +301,14 @@ namespace configmgr
                    uno::RuntimeException)
         {
             checkInElement(true);
-            this->endElement();
+            try
+            {
+                this->endElement();
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -227,15 +318,22 @@ namespace configmgr
         {
             checkInElement(true);
 
-            ElementInfo aInfo(aName, ElementType::node);
-            aInfo.flags = 0;
-            aInfo.op = Operation::remove;
+            try
+            {
+                ElementInfo aInfo(aName, ElementType::node);
+                aInfo.flags = 0;
+                aInfo.op = Operation::remove;
 
-            m_aFormatter.prepareElement(aInfo);
+                m_aFormatter.prepareElement(aInfo);
 
-            this->startNode();
-            this->endElement();
-        }
+                this->startNode();
+                this->endElement();
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
+       }
         // -----------------------------------------------------------------------------
 
         void SAL_CALL LayerWriter::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
@@ -244,15 +342,22 @@ namespace configmgr
         {
             checkInElement(true);
 
-            ElementInfo aInfo(aName, ElementType::property);
-            aInfo.flags = aAttributes;
-            aInfo.op = Operation::replace;
+            try
+            {
+                ElementInfo aInfo(aName, ElementType::property);
+                aInfo.flags = aAttributes;
+                aInfo.op = Operation::replace;
 
-            m_aFormatter.prepareElement(aInfo);
+                m_aFormatter.prepareElement(aInfo);
 
-            this->startProp(aType, true);
-            this->writeValue(uno::Any());
-            this->endElement();
+                this->startProp(aType, true);
+                this->writeValue(uno::Any());
+                this->endElement();
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -262,15 +367,22 @@ namespace configmgr
         {
             checkInElement(true);
 
-            ElementInfo aInfo(aName, ElementType::property);
-            aInfo.flags = aAttributes;
-            aInfo.op = Operation::replace;
+            try
+            {
+                ElementInfo aInfo(aName, ElementType::property);
+                aInfo.flags = aAttributes;
+                aInfo.op = Operation::replace;
 
-            m_aFormatter.prepareElement(aInfo);
+                m_aFormatter.prepareElement(aInfo);
 
-            this->startProp(aValue.getValueType(), true);
-            this->writeValue(aValue);
-            this->endElement();
+                this->startProp(aValue.getValueType(), true);
+                this->writeValue(aValue);
+                this->endElement();
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -280,13 +392,20 @@ namespace configmgr
         {
             checkInElement(true);
 
-            ElementInfo aInfo(aName, ElementType::property);
-            aInfo.flags = aAttributes;
-            aInfo.op = bClear ? Operation::modify : Operation::modify;
+            try
+            {
+                ElementInfo aInfo(aName, ElementType::property);
+                aInfo.flags = aAttributes;
+                aInfo.op = bClear ? Operation::modify : Operation::modify;
 
-            m_aFormatter.prepareElement(aInfo);
+                m_aFormatter.prepareElement(aInfo);
 
-            this->startProp(aType, aType.getTypeClass() != uno::TypeClass_VOID);
+                this->startProp(aType, aType.getTypeClass() != uno::TypeClass_VOID);
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -294,8 +413,15 @@ namespace configmgr
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
-            checkInElement(true,true);
-            this->endElement();
+            try
+            {
+                checkInElement(true,true);
+                this->endElement();
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -303,8 +429,15 @@ namespace configmgr
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
-            checkInElement(true,true);
-            this->writeValue(aValue);
+            try
+            {
+                checkInElement(true,true);
+                this->writeValue(aValue);
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
@@ -312,8 +445,15 @@ namespace configmgr
             throw (backenduno::MalformedDataException, lang::WrappedTargetException,
                    uno::RuntimeException)
         {
-            checkInElement(true,true);
-            this->writeValue(aValue,aLocale);
+            try
+            {
+                checkInElement(true,true);
+                this->writeValue(aValue,aLocale);
+            }
+            catch (sax::SAXException & xe)
+            {
+                translateSAXException(xe,this);
+            }
         }
         // -----------------------------------------------------------------------------
 
