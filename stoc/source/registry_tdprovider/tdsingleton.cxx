@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdsingleton.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 08:07:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include "base.hxx"
 #endif
 
+#include "com/sun/star/uno/RuntimeException.hpp"
+
 using namespace com::sun::star;
 
 namespace stoc_rdbtdp
@@ -93,18 +95,12 @@ void SingletonTypeDescriptionImpl::init() {
     }
     MutexGuard guard(getMutex());
     if (!_xInterfaceTD.is() && !_xServiceTD.is()) {
-        switch (base->getTypeClass()) {
-        case TypeClass_INTERFACE:
-            _xInterfaceTD = Reference< XInterfaceTypeDescription >(
-                base, UNO_QUERY_THROW);
-            break;
-
-        case TypeClass_SERVICE:
+        if (resolveTypedefs(base)->getTypeClass() == TypeClass_INTERFACE) {
+            _xInterfaceTD = base;
+        } else if (base->getTypeClass() == TypeClass_SERVICE) {
             _xServiceTD = Reference< XServiceTypeDescription >(
                 base, UNO_QUERY_THROW);
-            break;
-
-        default:
+        } else {
             throw RuntimeException(
                 OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -162,7 +158,7 @@ SingletonTypeDescriptionImpl::isInterfaceBased()
 
 //______________________________________________________________________________
 // virtual
-Reference< XInterfaceTypeDescription > SAL_CALL
+Reference< XTypeDescription > SAL_CALL
 SingletonTypeDescriptionImpl::getInterface()
     throw(::com::sun::star::uno::RuntimeException)
 {
