@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAccessibleCell.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:09:46 $ 
+'*  last change:$Date: 2003-06-11 16:27:20 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -74,7 +74,7 @@ option explicit
 ' REQUIRED VARIABLES for interface/service tests:
 
 Global accText As String
-
+Global readOnly as Boolean
 
 Sub CreateObj()
 
@@ -87,12 +87,13 @@ On Error Goto ErrHndl
     Dim xRoot As Object, xCell As Object
 
     oDoc = utils.createDocument("scalc",cObjectName)
-    oWin = utils.at_getCurrentWindow(oDoc)
-    xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TABLE_CELL,"B1")
     accText = "Testing object sc.ScAccessibleCell"
     xCell = oDoc.getSheets().getByIndex(0).getCellByPosition(1,0)
     xCell.setFormula(accText)
+    oWin = utils.at_getCurrentWindow(oDoc)
+    xRoot = utils.at_getAccessibleObject(oWin)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TABLE_CELL,"B1")
+    readOnly = true
 
 Exit Sub
 ErrHndl:
