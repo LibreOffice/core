@@ -3,4 +3,3 @@
 "FrameLoader";"com::sun::star::lang::XInitialization#optional";"initialize()"
 "FrameLoader";"com::sun::star::container::XNamed#optional";"getName()"
 "FrameLoader";"com::sun::star::container::XNamed#optional";"setName()"
-"FrameLoader";"com::sun::star::document::XExtendedFilterDetection";"detect()"
