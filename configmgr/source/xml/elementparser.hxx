@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:59:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,15 @@ namespace configmgr
             Logger mLogger;
         public:
             typedef uno::Reference< sax::XAttributeList > SaxAttributeList;
+
+            class BadValueType
+            {
+                OUString mMessage;
+            public:
+                BadValueType(OUString const & aMessage) : mMessage(aMessage) {}
+
+                OUString message() const { return mMessage.getStr(); }
+            };
         public:
             explicit
             ElementParser(Logger const & xLogger)
@@ -132,6 +141,7 @@ namespace configmgr
 
             /// retrieve element type and associated module name of a set,
             uno::Type getPropertyValueType(SaxAttributeList const& _xAttribs) const;
+                // throw( BadValueType )
 
             /// reads a value attribute from the attribute list
             bool isNull(SaxAttributeList const& _xAttribs) const;
