@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.147 $
+#   $Revision: 1.148 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-16 10:34:49 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:12:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -291,7 +291,6 @@ LNTFLAGS=
 LNTFLAGSGUI=
 LNTFLAGSCOM=
 
-MAKELANGDIR=
 # doesn't make sense
 #IDLSTATICOBJS=
 
@@ -606,6 +605,9 @@ common_build_zip=true
 .IF "$(no_common_build_sign_jar)"==""
 common_build_sign_jar=true
 .ENDIF			# "$(no_common_build_sign_jar)"==""
+.IF "$(no_common_build_srs)"==""
+common_build_srs=true
+.ENDIF			# "$(no_common_build_srs)"==""
 .ELSE			# "$(common_build)"!=""
 COMMON_OUTDIR=$(OUTPATH)
 .ENDIF			# "$(common_build)"!=""
@@ -661,9 +663,8 @@ MISCX=$(OUT)$/umisc
 MISC=$(OUT)$/umisc
 .ELSE
 MISC=$(OUT)$/misc
-# Misc-Pfad zur Erzeugung und Verwendung von lang/demo/compact etc.
-# abhaengigen .DEF, .MAP und .LNK Files
-MISCX=$(OUT)$/misc
+# pointing to misc in common output tree if exists
+COMMONMISC={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))}
 .ENDIF
 
 OUTCXX=$(OUT)$/cxx
@@ -789,45 +790,23 @@ INCDEPN+=$(INCLOCPRJ)
 .ENDIF
 
 # Resource-Pfad fuer .SRS
+
+.IF "$(common_build_srs)"!=""
+SRS=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))$/srs
+SRSX=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))$/srs
+.ELSE          # "$(common_build_srs)"!=""
 SRS=$(OUT)$/srs
 SRSX=$(OUT)$/srs
+.ENDIF          # "$(common_build_srs)"!=""
 
 # Resource-Pfad fuer .RC und .RES
 RES=$(OUT)$/res
 
-LDBIN=$(OUT)$/bin
-LDRES=$(OUT)$/res
-LDMISC=$(OUT)$/misc
-LDSRS=$(OUT)$/srs
-LDINCCOM=$(OUT)$/inc
-.IF "$(NO_REC_RES)"==""
-.IF "$(solarlang)" != "deut"
-# die "language" BaseDir Pfade, werden von MAKE...DIR in tg_dir.mk gebraucht
-LDBIN=$(OUT)$/bin
-LDRES=$(OUT)$/res$/$(solarlang)
-LDSRS=$(OUT)$/srs$/$(solarlang)
-LDMISC=$(OUT)$/misc$/$(solarlang)
-LDINC=$(OUT)$/inc$/$(solarlang)
-BIN=$(LDBIN)
-RES=$(LDRES)
-MISCX=$(LDMISC)
-SRSX=$(LDSRS)
-INCCOMX=$(LDINC)
-.ENDIF			# "$(solarlang)" != "deut"
-.ENDIF			# "$(NO_REC_RES)"==""
 
 # das normale MISC wird nicht an LDMISC angepasst, stattdessen MISCX
 
 .IF "$(make_xl)"!=""
 BIN=$(PRJ)$/$(OUTPATH).xl$/bin
-.ENDIF
-
-.IF "$(product)" == "demo"
-BIN=$(LDBIN)$/demo
-RES=$(LDRES)$/demo
-MISCX=$(LDMISC)$/demo
-SRSX=$(LDSRS)$/demo
-INCCOMX=$(LDINC)$/demo
 .ENDIF
 
 .IF "$(remote)"!=""
@@ -837,7 +816,6 @@ OBJ=$(OUT)$/obj$/remote
 RES=$(LDRES)$/remote
 RSLO=$(INPATH)$/slo$/remote
 ROBJ=$(INPATH)$/obj$/remote
-MISCX=$(LDMISC)$/remote
 MISC=$(OUT)$/misc$/remote
 #SRSX=$(SRSX)$/remote
 #INCCOMX=$(INCCOMX)$/remote
@@ -845,14 +823,6 @@ LB=$(OUT)$/lib$/remote
 SLB=$(OUT)$/slb$/remote
 REMOTEDEF=REMOTE_APPSERVER
 REMOTELIB=$(SOLARVERSION)$/$(INPATH)$/lib$/remote
-.ENDIF
-
-.IF "$(product)" == "compact"
-BIN=$(LDBIN)$/comp
-RES=$(LDRES)$/comp
-MISCX=$(LDMISC)$/comp
-SRSX=$(LDSRS)$/comp
-INCCOMX=$(LDINC)$/comp
 .ENDIF
 
 # damit gezielt Abhaengigkeiten auf s: angegeben werden koennen
@@ -887,8 +857,10 @@ SOLARXMLDIR=$(SOLARVERSION)$/$(INPATH)$/xml$(EXT_UPDMINOR)
 SOLARDOCDIR=$(SOLARVERSION)$/$(INPATH)$/doc$(EXT_UPDMINOR)
 SOLARPCKDIR=$(SOLARVERSION)$/$(INPATH)$/pck$(EXT_UPDMINOR)
 SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
+SOLARCOMMONRESDIR=$(SOLARVERSION)$/common$(PROEXT)$/res$(EXT_UPDMINOR)
 .IF "$(common_build)"==""
 SOLARCOMMONBINDIR=$(SOLARBINDIR)
+SOLARCOMMONRESDIR=$(SOLARRESDIR)
 .ENDIF
 
 
@@ -949,9 +921,11 @@ SCPDEFS+=-DOFFICEUPD=$(OFFICEUPD)
 SCPDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
-.IF "$(L10N_framework)"!=""
-SCPDEFS+=-DISO_CODE=$(L10N_framework)
-.ENDIF			# "$(L10N_framework)"!=""
+# disable for now
+# there will be a usefull replacement later
+#.IF "$(L10N_framework)"!=""
+#SCPDEFS+=-DISO_CODE=$(L10N_framework)
+#.ENDIF			# "$(L10N_framework)"!=""
 
 SCPDEFS+=-U$(COMID) -DCOMID=$(COMID) -DCOMNAME=$(COMNAME) -D_$(COMID)
 SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
