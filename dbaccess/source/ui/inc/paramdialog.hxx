@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 18:08:45 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 08:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ namespace dbaui
     protected:
         void Construct();
 
-        ::connectivity::OSQLParseNode* implPredicateTree(UniString& _rErrorMessage, const UniString& _rStatement, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField);
+        ::connectivity::OSQLParseNode* implPredicateTree(::rtl::OUString& _rErrorMessage, const UniString& _rStatement, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField);
 
     private:
         DECL_LINK(OnVisitedTimeout, Timer*);
@@ -181,6 +181,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/26 18:08:45  fs
+ *  initial checkin - parameter dialog
+ *
  *
  *  Revision 1.0 26.10.00 11:54:07  fs
  ************************************************************************/

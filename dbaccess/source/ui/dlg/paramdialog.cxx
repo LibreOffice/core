@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 18:06:51 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 08:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,20 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
@@ -111,7 +117,6 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::util;
     using namespace ::connectivity;
-    using namespace ::dbaccess;
 
     //==================================================================
     //= OParameterDialog
@@ -119,7 +124,7 @@ namespace dbaui
 
     //------------------------------------------------------------------------------
     #define INIT_MEMBERS()                                          \
-        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))               \
+        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))           \
         ,m_aNamesFrame  (this, ResId(GB_PARAMS))                    \
         ,m_aAllParams   (this, ResId(LB_ALLPARAMS))                 \
         ,m_aValueFrame  (this, ResId(GB_DATA))                      \
@@ -129,6 +134,9 @@ namespace dbaui
         ,m_aOKBtn       (this, ResId(BT_OK))                        \
         ,m_aCancelBtn   (this, ResId(BT_CANCEL))                    \
         ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)               \
+        ,m_bNeedErrorOnCurrent(sal_True)                            \
+        ,m_xConnection(_rConnNFormats)                              \
+        ,m_aParser(_rxORB)                                          \
 
 
     //------------------------------------------------------------------------------
@@ -137,8 +145,6 @@ namespace dbaui
             Window* pParent, const Reference< XIndexAccess > & rParamContainer,
             const Reference< XConnection > & _rConnNFormats, const Reference< XMultiServiceFactory >& _rxORB)
         INIT_MEMBERS()
-        ,m_bNeedErrorOnCurrent(sal_True)
-        ,m_xConnection(_rConnNFormats)
     {
         if (_rxORB.is())
             m_xFormatter = Reference< XNumberFormatter>(_rxORB->createInstance(
@@ -231,9 +237,9 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    OSQLParseNode* OParameterDialog::implPredicateTree(UniString& _rErrorMessage, const UniString& _rStatement, const Reference< XPropertySet > & _rxField)
+    OSQLParseNode* OParameterDialog::implPredicateTree(::rtl::OUString& _rErrorMessage, const UniString& _rStatement, const Reference< XPropertySet > & _rxField)
     {
-        XubString aErr;
+        ::rtl::OUString aErr;
         OSQLParseNode* pReturn = m_aParser.predicateTree(aErr, _rStatement, m_xFormatter, _rxField);
         _rErrorMessage = aErr;
         if (!pReturn)
@@ -275,18 +281,21 @@ namespace dbaui
         DBG_ASSERT(pSource == &m_aParam, "OParameterDialog::OnValueLoseFocus : invalid source !");
 
         // transform the current string according to the param field type
-        XubString sTransformedText(m_aParam.GetText());
+        ::rtl::OUString sTransformedText(m_aParam.GetText());
         Reference< XPropertySet >  xParamAsSet(*(Reference< XInterface > *)m_xParams->getByIndex(m_nCurrentlySelected).getValue(), UNO_QUERY);
         if (xParamAsSet.is())
         {
             if (m_xConnection.is() && m_xFormatter.is())
             {
-                UniString sError;
+                ::rtl::OUString sError;
                 OSQLParseNode* pParseNode = implPredicateTree(sError, sTransformedText, xParamAsSet);
                 if (pParseNode)
                 {
-                    sTransformedText.Erase();
-                    pParseNode->parseNodeToPredicateStr(sTransformedText, m_xConnection->getMetaData(), m_xFormatter, xParamAsSet, Application::GetAppInternational());
+                    sTransformedText = ::rtl::OUString();
+
+                    String sLanguage, sCountry;
+                    ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+                    pParseNode->parseNodeToPredicateStr(sTransformedText, m_xConnection->getMetaData(), m_xFormatter, xParamAsSet, Locale(sLanguage, sCountry, ::rtl::OUString()), '.');
                     m_aParam.SetText(sTransformedText);
                     delete pParseNode;
 
@@ -354,42 +363,40 @@ namespace dbaui
                 // write the parameters
                 try
                 {
-                    UniString sValue,sError;;
+                    String sValue;
+                    ::rtl::OUString sError;
                     International aAppInternational = Application::GetAppInternational();
                     PropertyValue* pValues = m_aFinalValues.getArray();
                     for (sal_Int32 i = 0, nCount = m_xParams->getCount(); i<nCount; ++i, ++pValues)
                     {
                         Reference< XPropertySet >  xParamAsSet(*(Reference< XInterface > *)m_xParams->getByIndex(i).getValue(), UNO_QUERY);
 
-                        if (m_xConnection.is() && m_xFormatter.is())
+                        sValue = ::comphelper::getString(pValues->Value).getStr();
+                        // a little problem : if the field was a text field the OnValueLoseFocus added two
+                        // '-characters to the text. If we would give this to predicateTree this would add
+                        // two  additional '-characters which we don't want. So check the field format.
+                        // FS - 06.01.00 - 71532
+                        sal_Bool bValidQuotedText = (sValue.Len() >= 2) && (sValue.GetChar(0) == '\'') && (sValue.GetChar(sValue.Len() - 1) == '\'');
+                            // again : as OnValueLoseFocus always did a conversion on the value text, bValidQuotedText == sal_True
+                            // implies that we have a text field, as no other field values will be formatted with
+                            // the quote characters
+                        if (bValidQuotedText)
+                            sValue = sValue.Copy(1, sValue.Len() - 2);
+
+                        sError = ::rtl::OUString();
+                        OSQLParseNode* pParseNode = implPredicateTree(sError, sValue, xParamAsSet);
+                        if (pParseNode)
                         {
-                            sValue = ::comphelper::getString(pValues->Value).getStr();
-                            // a little problem : if the field was a text field the OnValueLoseFocus added two
-                            // '-characters to the text. If we would give this to predicateTree this would add
-                            // two  additional '-characters which we don't want. So check the field format.
-                            // FS - 06.01.00 - 71532
-                            sal_Bool bValidQuotedText = (sValue.Len() >= 2) && (sValue.GetChar(0) == '\'') && (sValue.GetChar(sValue.Len() - 1) == '\'');
-                                // again : as OnValueLoseFocus always did a conversion on the value text, bValidQuotedText == sal_True
-                                // implies that we have a text field, as no other field values will be formatted with
-                                // the quote characters
-                            if (bValidQuotedText)
-                                sValue = sValue.Copy(1, sValue.Len() - 2);
-
-                            sError.Erase();
-                            OSQLParseNode* pParseNode = implPredicateTree(sError, sValue, xParamAsSet);
-                            if (pParseNode)
+                            OSQLParseNode* pNearlyPure = pParseNode->getByRule(OSQLParseNode::odbc_fct_spec);
+                            if (pNearlyPure)
                             {
-                                OSQLParseNode* pNearlyPure = pParseNode->getByRule(OSQLParseNode::odbc_fct_spec);
-                                if (pNearlyPure)
-                                {
-                                    if ((pNearlyPure->count() >= 2) && (SQL_NODE_STRING == pNearlyPure->getChild(1)->getNodeType()))
-                                        pValues->Value <<= ::rtl::OUString(pNearlyPure->getChild(1)->getTokenValue());
-                                }
-                                else if ((pParseNode->count() >= 3) && (SQL_NODE_STRING == pParseNode->getChild(2)->getNodeType()))
-                                    pValues->Value <<= ::rtl::OUString(pParseNode->getChild(2)->getTokenValue());
-
-                                delete pParseNode;
+                                if ((pNearlyPure->count() >= 2) && (SQL_NODE_STRING == pNearlyPure->getChild(1)->getNodeType()))
+                                    pValues->Value <<= ::rtl::OUString(pNearlyPure->getChild(1)->getTokenValue());
                             }
+                            else if ((pParseNode->count() >= 3) && (SQL_NODE_STRING == pParseNode->getChild(2)->getNodeType()))
+                                pValues->Value <<= ::rtl::OUString(pParseNode->getChild(2)->getTokenValue());
+
+                            delete pParseNode;
                         }
                     }
                 }
@@ -535,6 +542,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/26 18:06:51  fs
+ *  initial checkin - parameter dialog
+ *
  *
  *  Revision 1.0 26.10.00 11:56:41  fs
  ************************************************************************/
