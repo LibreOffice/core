@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:08:52 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 09:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ protected:
 
     void refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys);
     void refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys);
+
 
     DECLARE_CTY_PROPERTY(ODBTable_PROP,OTable_Base)
 public:
