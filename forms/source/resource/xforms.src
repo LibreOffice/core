@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xforms.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:47:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,4 +254,10 @@ String RID_STR_XFORMS_PATTERN_DOESNT_MATCH
 {
     Text [ de ] = "Die Zeichenkette '$1' entspricht nicht dem geforderten regulären Ausdruck '$2'.";
     Text [ en-US ] = "The string '$1' does not match the required regular expression '$2'.";
+};
+
+String RID_STR_XFORMS_BINDING_UI_NAME
+{
+    Text [ de ] = "Bindung" ;
+    Text [ en-US ] = "Binding" ;
 };
