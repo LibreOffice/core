@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 16:04:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2251,7 +2251,7 @@ void StatementCommand::Translate()
         {
             pRet->GenReturn ( RET_Value, aSmartMethodId, String() );
             GetTTSettings()->pTranslateWin->EnableTranslation();
-            ErrorBox err = ErrorBox( GetTTSettings()->pTranslateWin, TTProperties::GetSvtResId( TT_NO_CONTROL ));
+            ErrorBox err( GetTTSettings()->pTranslateWin, TTProperties::GetSvtResId( TT_NO_CONTROL ));
             err.Execute();
             GetTTSettings()->bToTop = TRUE;
         }
