@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:00 $
+ *  last change: $Author: tl $ $Date: 2002-10-16 11:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _FCHRFMT_HXX
+#include <fchrfmt.hxx>
+#endif
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>
 #endif
 #ifndef _DOCSTYLE_HXX
 #include <docstyle.hxx>
@@ -155,7 +161,8 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
         lcl_setPageDesc( pDoc, aValue, aSet );
         pDoc->SetDefault(aSet.Get(RES_PAGEDESC));
     }
-    else if (RES_PARATR_DROP == pMap->nWID && MID_DROPCAP_CHAR_STYLE_NAME == pMap->nMemberId)
+    else if ((RES_PARATR_DROP == pMap->nWID && MID_DROPCAP_CHAR_STYLE_NAME == pMap->nMemberId) ||
+             (RES_TXTATR_CHARFMT == pMap->nWID))
     {
         OUString uStyle;
         if(aValue >>= uStyle)
@@ -165,16 +172,27 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
             SwDocStyleSheet* pStyle =
                 (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
             SwFmtDrop* pDrop = 0;
+            SwFmtCharFmt *pCharFmt = 0;
             if(pStyle)
             {
                 SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pStyle );
-                pDrop = (SwFmtDrop*)rItem.Clone();   // because rItem ist const...
-                pDrop->SetCharFmt(aStyle.GetCharFmt());
+                if (RES_PARATR_DROP == pMap->nWID)
+                {
+                    pDrop = (SwFmtDrop*)rItem.Clone();   // because rItem ist const...
+                    pDrop->SetCharFmt(aStyle.GetCharFmt());
+                    pDoc->SetDefault(*pDrop);
+                }
+                else // RES_TXTATR_CHARFMT == pMap->nWID
+                {
+                    pCharFmt = (SwFmtCharFmt*)rItem.Clone();   // because rItem ist const...
+                    pCharFmt->SetCharFmt(aStyle.GetCharFmt());
+                    pDoc->SetDefault(*pCharFmt);
+                }
             }
             else
                 throw lang::IllegalArgumentException();
-            pDoc->SetDefault(*pDrop);
             delete pDrop;
+            delete pCharFmt;
         }
         else
             throw lang::IllegalArgumentException();
