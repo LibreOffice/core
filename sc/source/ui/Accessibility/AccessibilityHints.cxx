@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityHints.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:36:00 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,23 +71,40 @@ using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1(ScAccGridViewChangeHint, SfxHint);
+TYPEINIT1(ScAccGridWinFocusLostHint, SfxHint);
 
 // -----------------------------------------------------------------------
-//      ScAccGridViewChangeHint - focus changed form the old grid win to the new one (in split or freeze mode)
+//      ScAccGridWinFocusLostHint - the current window lost its focus (to another application, view or document)
 // -----------------------------------------------------------------------
 
-ScAccGridViewChangeHint::ScAccGridViewChangeHint(ScSplitPos eOld, ScSplitPos eNew,
-        const uno::Reference< uno::XInterface >& xOld,
-        const uno::Reference< uno::XInterface >& xNew )
+ScAccGridWinFocusLostHint::ScAccGridWinFocusLostHint(ScSplitPos eOld,
+        const uno::Reference< uno::XInterface >& xOld )
     :
     eOldGridWin(eOld),
+    xOldAccessible(xOld)
+{
+}
+
+ScAccGridWinFocusLostHint::~ScAccGridWinFocusLostHint()
+{
+}
+
+// -----------------------------------------------------------------------
+
+TYPEINIT1(ScAccGridWinFocusGotHint, SfxHint);
+
+// -----------------------------------------------------------------------
+//      ScAccGridWinFocusGotHint - the window got the focus (from another application, view or document)
+// -----------------------------------------------------------------------
+
+ScAccGridWinFocusGotHint::ScAccGridWinFocusGotHint(ScSplitPos eNew,
+        const uno::Reference< uno::XInterface >& xNew )
+    :
     eNewGridWin(eNew),
-    xOldAccessible(xOld),
     xNewAccessible(xNew)
 {
 }
 
-ScAccGridViewChangeHint::~ScAccGridViewChangeHint()
+ScAccGridWinFocusGotHint::~ScAccGridWinFocusGotHint()
 {
 }

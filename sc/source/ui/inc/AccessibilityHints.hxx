@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityHints.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 14:59:00 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,29 +85,36 @@
 #define SC_HINT_ACC_LEAVEEDITMODE   SC_HINT_ACC_SIMPLE_START + 5
 #define SC_HINT_ACC_MAKEDRAWLAYER   SC_HINT_ACC_SIMPLE_START + 6
 
-// ---------------------------------------------------------------------------
-
-class ScAccGridViewChangeHint : public SfxHint
+class ScAccGridWinFocusLostHint : public SfxHint
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 xOldAccessible;
+    ScSplitPos  eOldGridWin;
+public:
+                TYPEINFO();
+                ScAccGridWinFocusLostHint( ScSplitPos eOldGridWin,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
+                ~ScAccGridWinFocusLostHint();
+
+    ScSplitPos  GetOldGridWin() const { return eOldGridWin; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                GetOldAccessible() const { return xOldAccessible; }
+};
+
+class ScAccGridWinFocusGotHint : public SfxHint
+{
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 xNewAccessible;
-    ScSplitPos  eOldGridWin;
     ScSplitPos  eNewGridWin;
 public:
                 TYPEINFO();
-                ScAccGridViewChangeHint( ScSplitPos eOldGridWin, ScSplitPos eNewGridWin,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld,
+                ScAccGridWinFocusGotHint( ScSplitPos eNewGridWin,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
-                ~ScAccGridViewChangeHint();
+                ~ScAccGridWinFocusGotHint();
 
-    ScSplitPos  GetOldGridWin() const { return eOldGridWin; }
     ScSplitPos  GetNewGridWin() const { return eNewGridWin; }
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                GetOldAccessible() const { return xOldAccessible; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                GetNewAccessible() const { return xOldAccessible; }
+                GetNewAccessible() const { return xNewAccessible; }
 };
 
 #endif
