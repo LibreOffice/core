@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:55 $
+#   last change: $Author: kr $ $Date: 2000-11-23 15:40:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,9 +71,6 @@ TARGET  := test_com_sun_star_lib_uno_environments_java
 
 # Files --------------------------------------------------------
 
-
-GENJAVAFILES= \
-    $(MISC)$/java$/com$/sun$/star$/uno$/XInterface.java
 
 
 JAVACLASSFILES= \

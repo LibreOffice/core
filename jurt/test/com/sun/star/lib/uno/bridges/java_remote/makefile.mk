@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:55 $
+#   last change: $Author: kr $ $Date: 2000-11-23 15:39:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,9 +72,6 @@ TARGET  := test_com_sun_star_lib_uno_bridges_java_remote
 
 # Files --------------------------------------------------------
 
-
-GENJAVAFILES= \
-    $(MISC)$/java$/com$/sun$/star$/bridge$/XBridge.java
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/TestInterface.class				\
