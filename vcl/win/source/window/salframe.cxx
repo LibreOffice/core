@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ssa $ $Date: 2002-01-17 16:11:18 $
+ *  last change: $Author: ssa $ $Date: 2002-02-01 08:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
 
     UpdateFrameGeometry( hWnd, pFrame );
 
-    if( pFrame->maFrameData.mnShowState = SW_SHOWMAXIMIZED )
+    if( pFrame->maFrameData.mnShowState == SW_SHOWMAXIMIZED )
     {
         // #96084 set a useful internal window size because
         // the window will not be maximized (and the size updated) before show()
@@ -2293,6 +2293,15 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
         BYTE    nBlue   = (BYTE)(((USHORT)aColor1.GetBlue()  + (USHORT)aColor2.GetBlue())/2);
         aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
     }
+
+    // High contrast
+    HIGHCONTRAST hc;
+    hc.cbSize = sizeof( HIGHCONTRAST );
+    if( SystemParametersInfo( SPI_GETHIGHCONTRAST, hc.cbSize, &hc, 0) && (hc.dwFlags & HCF_HIGHCONTRASTON) )
+        aStyleSettings.SetHighContrastMode( 1 );
+    else
+        aStyleSettings.SetHighContrastMode( 0 );
+
 
     // Query Fonts
     Font    aMenuFont = aStyleSettings.GetMenuFont();
