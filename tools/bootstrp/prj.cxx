@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-14 12:50:19 $
+ *  last change: $Author: nf $ $Date: 2001-02-14 16:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,7 +898,6 @@ void Star::InsertToken ( char *yytext )
                             InsertSolarList( sItem );
                         }
                     }
-
                 }
                 break;
     }
