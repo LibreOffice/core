@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,62 +174,6 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
         aScriptType.Remove( 0, USHRT_MAX );
     }
 
-#ifdef DEBUG
-    static BOOL bTestCJK = FALSE;
-    if( bTestCJK )
-    {
-        const String& rTxt = rTxtNode.GetTxt();
-        xub_StrLen nCnt = 0;
-        USHORT nScript = ScriptType::LATIN;
-        for( xub_StrLen nI = 0; nI < rTxt.Len(); ++nI )
-        {
-            USHORT nNxt = nScript;
-            const xub_Unicode aChar = rTxt.GetChar( nI );
-            if( 'A' <= aChar && aChar <= 'Z' )
-                nNxt = ScriptType::LATIN;
-            else if( 'a' <= aChar && aChar <= 'z' )
-                nNxt = ScriptType::ASIAN;
-            else if( '0' <= aChar && aChar <= '9' )
-                nNxt = ScriptType::COMPLEX;
-            if( nNxt != nScript )
-            {
-                aScriptChg.Insert( nI, nCnt );
-                aScriptType.Insert( nScript, nCnt++ );
-                BYTE nTmp = 4;
-                switch ( nScript ) {
-                    case ScriptType::ASIAN :
-                        if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;
-                    case ScriptType::COMPLEX :
-                        if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL; break;
-                    default:
-                        if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;
-                }
-                if( nTmp < 4 )
-                {
-                    pFnt->ChkMagic( pShell, nTmp );
-                    pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
-                }
-                nScript = nNxt;
-            }
-        }
-        aScriptChg.Insert( nI, nCnt );
-        aScriptType.Insert( nScript, nCnt++ );
-        BYTE nTmp = 4;
-        switch ( nScript ) {
-            case ScriptType::ASIAN :
-                if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;
-            case ScriptType::COMPLEX :
-                if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL; break;
-            default:
-                if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;
-        }
-        if( nTmp < 4 )
-        {
-            pFnt->ChkMagic( pShell, nTmp );
-            pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
-        }
-    }
-    else
     if( pBreakIt->xBreak.is() )
     {
         const String& rTxt = rTxtNode.GetTxt();
@@ -268,11 +212,11 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
         } while( TRUE );
     }
     else
-#endif
     {
         pFnt->ChkMagic( pShell, SW_LATIN );
         pFnt->GetMagic( aMagicNo[ SW_LATIN ], aFntIdx[ SW_LATIN ], SW_LATIN );
     }
+
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;
     SwDoc* pDoc = rTxtNode.GetDoc();
 

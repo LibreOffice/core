@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,11 +422,7 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
         nScr = SW_CJK;
     else if( nScript == ScriptType::COMPLEX )
         nScr = SW_CTL;
-#ifdef DEBUG
-    static BOOL bAct = FALSE;
-    if( bAct )
-        pFnt->SetActual( nScr );
-#endif
+    pFnt->SetActual( nScr );
     if( pRedln )
         nChgCnt += pRedln->Seek( *pFnt, nNewPos, nPos );
     nPos = nNewPos;
