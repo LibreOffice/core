@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:11:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,9 +544,15 @@
 #define STR_NO_MACRO                384
 #define STR_LONG_ERR_NO_MACRO       385
 
-#define STR_UNDO_TAB_RTL            386
+#define STR_SCATTR_PAGE_SCALETO         386
+#define STR_SCATTR_PAGE_SCALE_WIDTH     387
+#define STR_SCATTR_PAGE_SCALE_HEIGHT    388
+#define STR_SCATTR_PAGE_SCALE_PAGES     389
+#define STR_SCATTR_PAGE_SCALE_AUTO      390
 
-#define STR_COUNT                   386
+#define STR_UNDO_TAB_RTL            391
+
+#define STR_COUNT                   391
 
 
 
