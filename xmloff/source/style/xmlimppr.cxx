@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-23 09:37:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-11 10:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,99 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
         return FALSE;
 }
 
+
+sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
+            const vector< XMLPropertyState >& aProperties,
+            const Reference< XPropertySet > rPropSet ) const
+{
+    sal_Bool bSet = sal_False;
+
+    // get property set info
+    Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
+
+    // check for multi-property set
+    Reference<XMultiPropertySet> xMultiPropSet( rPropSet, UNO_QUERY );
+    if ( xMultiPropSet.is() )
+    {
+        // Try XMultiPropertySet. If that fails, try the regular route.
+        bSet = _FillMultiPropertySet( aProperties, xMultiPropSet,
+                                      xInfo, maPropMapper );
+        if ( !bSet )
+            bSet = _FillPropertySet( aProperties, rPropSet,
+                                     xInfo, maPropMapper );
+    }
+    else
+        bSet = _FillPropertySet( aProperties, rPropSet, xInfo, maPropMapper );
+
+    return bSet;
+}
+
+sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
+    const vector<XMLPropertyState> & rProperties,
+    const Reference<XPropertySet> & rPropSet,
+    const Reference<XPropertySetInfo> & rPropSetInfo,
+    const UniReference<XMLPropertySetMapper> & rPropMapper,
+    sal_Int16 nSearchForContextId,
+    sal_Int32* pFoundAtIndex )
+{
+    DBG_ASSERT( rPropSet.is(), "need an XPropertySet" );
+    DBG_ASSERT( rPropSetInfo.is(), "need an XPropertySetInfo" );
+
+    // preliminaries
+    sal_Bool bSet = sal_False;
+    sal_Int32 nCount = rProperties.size();
+
+    // iterate over property states that we want to set
+    for( sal_Int32 i=0; i < nCount; i++ )
+    {
+        const XMLPropertyState& rProp = rProperties[i];
+        sal_Int32 nIdx = rProp.mnIndex;
+
+        // disregard property state if it has an invalid index
+        if( -1 == nIdx )
+            continue;
+
+        const OUString& rPropName = rPropMapper->GetEntryAPIName( nIdx );
+        const sal_Int32 nPropFlags = rPropMapper->GetEntryFlags( nIdx );
+
+        if ( ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) &&
+               ( 0 == ( nPropFlags & ~MID_FLAG_NO_PROPERTY ) )   ) ||
+             rPropSetInfo->hasPropertyByName( rPropName ) )
+        {
+            // try setting the property
+            try
+            {
+                rPropSet->setPropertyValue( rPropName, rProp.maValue );
+                bSet = sal_True;
+            }
+            catch(...)
+            {
+#ifndef PRODUCT
+                ByteString aError("Exception caught while setting property '");
+                aError += ByteString( String( rPropName),
+                                      RTL_TEXTENCODING_ASCII_US );
+                aError += ByteString("'; style may not be imported correctly.");
+                DBG_ERROR( aError.GetBuffer() );
+#endif
+            }
+        }
+        else
+        {
+            // maybe it's out search context id?
+            if( (pFoundAtIndex != NULL) &&
+                (nSearchForContextId != -1) &&
+                (nSearchForContextId == rPropMapper->GetEntryContextId(nIdx)))
+            {
+                *pFoundAtIndex = i;
+            }
+        }
+    }
+
+    return bSet;
+}
+
+
+
 typedef pair<const OUString*, const Any* > PropertyPair;
 typedef vector<PropertyPair> PropertyPairs;
 
@@ -337,108 +430,92 @@ struct PropertyPairLessFunctor :
     }
 };
 
-sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
-            const vector< XMLPropertyState >& aProperties,
-            const Reference<
-                    XPropertySet > rPropSet ) const
+sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
+    const vector<XMLPropertyState> & rProperties,
+    const Reference<XMultiPropertySet> & rMultiPropSet,
+    const Reference<XPropertySetInfo> & rPropSetInfo,
+    const UniReference<XMLPropertySetMapper> & rPropMapper,
+    sal_Int16 nSearchForContextId,
+    sal_Int32* pFoundAtIndex )
 {
-    // preliminaries
-    sal_Bool bSet = sal_False;
-    Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
-    sal_Int32 nCount = aProperties.size();
+    DBG_ASSERT( rMultiPropSet.is(), "Need multi property set. ");
+    DBG_ASSERT( rPropSetInfo.is(), "Need property set info." );
 
-    // check for support of XMultiPropertySet. If we have an
-    // XMultiProperySet, build up the sequences for names and values,
-    // leaving out all those property map entries that the current
-    // implementation does not support. If we do not have an
-    // XMultiPropertySet, set the properties manually.
+    sal_Bool bSuccessful = sal_False;
+    sal_Int32 nCount = rProperties.size();
 
-    Reference<XMultiPropertySet> xMultiPropSet( rPropSet, UNO_QUERY );
-    PropertyPairs* pPropertyPairs = NULL;
-    if ( xMultiPropSet.is() )
-    {
-        // reserve enough room to avoid reallocation
-        pPropertyPairs = new PropertyPairs();
-        pPropertyPairs->reserve( nCount );
-    }
+    // property pairs structure stores names + values of properties to be set.
+    PropertyPairs aPropertyPairs;
+    aPropertyPairs.reserve( nCount );
 
     // iterate over property states that we want to set
     for( sal_Int32 i=0; i < nCount; i++ )
     {
-        const XMLPropertyState& rProp = aProperties[i];
+        const XMLPropertyState& rProp = rProperties[i];
         sal_Int32 nIdx = rProp.mnIndex;
 
         // disregard property state if it has an invalid index
         if( -1 == nIdx )
             continue;
 
-        const OUString& rPropName = maPropMapper->GetEntryAPIName( nIdx );
-        const sal_Int32 nPropFlags = maPropMapper->GetEntryFlags( nIdx );
+        const OUString& rPropName = rPropMapper->GetEntryAPIName( nIdx );
+        const sal_Int32 nPropFlags = rPropMapper->GetEntryFlags( nIdx );
 
         if ( ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) &&
                ( 0 == ( nPropFlags & ~MID_FLAG_NO_PROPERTY ) )   ) ||
-             xInfo->hasPropertyByName( rPropName ) )
+             rPropSetInfo->hasPropertyByName( rPropName ) )
         {
-            // save property for XMultiPropertySet or set directly
-            if ( xMultiPropSet.is() )
+            // save property into property pair structure
+            PropertyPair aPair( &rPropName, &rProp.maValue );
+            aPropertyPairs.push_back( aPair );
+        }
+        else
+        {
+            // maybe it's out search context id?
+            if( (pFoundAtIndex != NULL) &&
+                (nSearchForContextId != -1) &&
+                (nSearchForContextId == rPropMapper->GetEntryContextId(nIdx)))
             {
-                PropertyPair aPair( &rPropName, &rProp.maValue );
-                pPropertyPairs->push_back( aPair );
-            }
-            else
-            {
-                try
-                {
-                    rPropSet->setPropertyValue( rPropName, rProp.maValue );
-                    bSet = sal_True;
-                }
-                catch(...)
-                {
-                    DBG_ERROR("Exception caught; style may not be imported correctly.");
-                }
+                *pFoundAtIndex = i;
             }
         }
     }
 
-    // For the XMultiPropertySet, we now need to construct the sequences
-    // and actually set the values. If we don't have an XMultiPropertySet,
-    // all the work has already been done above.
-    if ( xMultiPropSet.is() )
+    // We now need to construct the sequences and actually the set
+    // values.
+
+    // sort the property pairs
+    sort( aPropertyPairs.begin(), aPropertyPairs.end(),
+          PropertyPairLessFunctor());
+
+    // create sequences
+    Sequence<OUString> aNames( aPropertyPairs.size() );
+    OUString* pNamesArray = aNames.getArray();
+    Sequence<Any> aValues( aPropertyPairs.size() );
+    Any* pValuesArray = aValues.getArray();
+
+    // copy values into sequences
+    i = 0;
+    for( PropertyPairs::iterator aIter = aPropertyPairs.begin();
+         aIter != aPropertyPairs.end();
+         aIter++ )
     {
-        // sort the property pairs
-        sort( pPropertyPairs->begin(), pPropertyPairs->end(),
-              PropertyPairLessFunctor());
-
-        // create sequences
-        Sequence<OUString> aNames( pPropertyPairs->size() );
-        OUString* pNamesArray = aNames.getArray();
-        Sequence<Any> aValues(pPropertyPairs->size() );
-        Any* pValuesArray = aValues.getArray();
-
-        // copy values into sequences
-        sal_Int32 i = 0;
-        for( PropertyPairs::iterator aIter = pPropertyPairs->begin();
-             aIter != pPropertyPairs->end();
-             aIter++)
-        {
-            pNamesArray[i] = *(aIter->first);
-            pValuesArray[i++] = *(aIter->second);
-        }
-
-        // and, finally, set the values
-        try
-        {
-            xMultiPropSet->setPropertyValues( aNames, aValues );
-        }
-        catch ( ... )
-        {
-            DBG_ERROR("Exception caught; style may not be imported correctly.");
-        }
-
-        delete pPropertyPairs;
+        pNamesArray[i] = *(aIter->first);
+        pValuesArray[i++] = *(aIter->second);
     }
 
-    return bSet;
+    // and, finally, try to set the values
+    try
+    {
+        rMultiPropSet->setPropertyValues( aNames, aValues );
+        bSuccessful = sal_True;
+    }
+    catch ( ... )
+    {
+        DBG_ERROR("Exception caught; style may not be imported correctly.");
+    }
+
+    return bSuccessful;
 }
 
 void SvXMLImportPropertyMapper::finished(
