@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:16:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ String STR_DATABASE_NOT_OPENED
     Text[ czech ] = "Databázi není možné otevřít.";
     Text[ hebrew ] = "Datenbank konnte nicht geöffnet werden.";
     Text[ hindi ] = "लेखासंचय को नहीं खोल सकते है ।";
+    Text[ slovak ] = "Databázu nemožno otvoriť.";
 };
 String STR_NO_DRIVERS
 {
@@ -129,6 +130,7 @@ String STR_NO_DRIVERS
     Text[ czech ] = "Nejsou instalovány ovladače databáze.";
     Text[ hebrew ] = "Keine Datenbanktreiber installiert.";
     Text[ hindi ] = "कोई लेखासंचय ड्इवरों को प्रतिष्ठापित नहीं किया ।";
+    Text[ slovak ] = "Nie sú nainštalované ovládače databázy.";
 };
 String STR_BTN_NEW_DOC
 {
@@ -162,6 +164,7 @@ String STR_BTN_NEW_DOC
     Text[ czech ] = "Nový dokument";
     Text[ hebrew ] = "‮מסמך חדש‬";
     Text[ hindi ] = "~नया लेखपत्र";
+    Text[ slovak ] = "~Nový dokument";
 };
 
 String STR_BTN_NEWDOC
@@ -195,6 +198,7 @@ String STR_BTN_NEWDOC
     Text[ czech ] = "Nový dok.";
     Text[ hebrew ] = "~Neues Dok.";
     Text[ hindi ] = "~नया लेखपत्र";
+    Text[ slovak ] = "~Nový dok.";
 };
 
 String STR_SENDER_TOKENS
@@ -225,7 +229,10 @@ String STR_SENDER_TOKENS
     Text[ czech ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ hebrew ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
     Text[ hindi ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ slovak ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
 };
+
+
 
 
 
