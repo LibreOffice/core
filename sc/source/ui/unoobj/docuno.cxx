@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:13:27 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,11 +1438,10 @@ sal_Bool SAL_CALL ScModelObj::supportsService( const rtl::OUString& rServiceName
 uno::Sequence<rtl::OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(3);
+    uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
     pArray[0] = rtl::OUString::createFromAscii( SCMODELOBJ_SERVICE );
     pArray[1] = rtl::OUString::createFromAscii( SCDOCSETTINGS_SERVICE );
-    pArray[2] = rtl::OUString::createFromAscii( SCDOC_SERVICE );
     return aRet;
 }
 
