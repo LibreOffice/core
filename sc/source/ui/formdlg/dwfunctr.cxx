@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-26 08:12:14 $
+ *  last change: $Author: sab $ $Date: 2002-11-26 15:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ void ScFunctionDockWin::DoEnter(BOOL bOk) //@@ ???
             if(nArgs>0)
             {
                 aFirstArgStr = *(pDesc->aDefArgNames[0]);
-                aFirstArgStr.EraseAllChars();
+                aFirstArgStr.EraseLeadingAndTrailingChars();
                 aFirstArgStr.SearchAndReplaceAll(' ', '_');
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS )
@@ -967,6 +967,7 @@ void ScFunctionDockWin::DoEnter(BOOL bOk) //@@ ???
                     {
                         aArgStr += aArgSep;
                         String sTmp(*(pDesc->aDefArgNames[nArg]));
+                        sTmp.EraseLeadingAndTrailingChars();
                         sTmp.SearchAndReplaceAll(' ', '_');
                         aArgStr += sTmp;
                     }
