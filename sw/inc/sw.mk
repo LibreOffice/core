@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2000-09-28 13:02:59 $
+#   last change: $Author: rt $ $Date: 2001-02-08 14:55:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ CDEFS+=-DNUM_RELSPACE
 # PCHs werden nur in den ..._1st Verzeichnissen aufgenommen
 EXCDEPN=segdefs.hxx
 EXCDEPNPCH=core_pch.hxx;filt_pch.hxx;ui_pch.hxx
-MKDEPFLAGS+=-E:$(EXCDEPN);$(EXCDEPNPCH)
+#MKDEPFLAGS+=-E:$(EXCDEPN);$(EXCDEPNPCH)
 
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 CDEFS+=-DSBASIC
