@@ -12,4 +12,4 @@ wz      wizards\source\webwizard                                nmake           
 wz      wizards\source\depot                                    nmake           -       all     wz_depot NULL
 wz      wizards\source\standard                                 nmake           -       all     wz_standard NULL
 wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz NULL
-wz      wizards\com\sun\star\wizards\common                     nmake           -       all     wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\common                     nmake           -       all     wz_commonwiz wz_reportwiz NULL
