@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:46:27 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,7 +1000,7 @@ public:
     WW8_FC WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode = 0,
         WW8_CP* pNextPieceCp = 0, bool* pTestFlag = 0) const;
 
-    USHORT WW8ReadString( SvStream& rStrm, String& rStr, WW8_CP nAktStartCp,
+    xub_StrLen WW8ReadString(SvStream& rStrm, String& rStr, WW8_CP nAktStartCp,
         long nTotalLen, rtl_TextEncoding eEnc ) const;
 
     static DateTime WW8DTTM2DateTime(long lDTTM);
