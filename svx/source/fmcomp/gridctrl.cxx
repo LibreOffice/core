@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-22 09:44:02 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 08:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,16 +663,22 @@ sal_Bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
                 bAvailable = m_nCurrentPos > 0;
                 break;
             case NavigationBar::RECORD_NEXT:
-                bAvailable = m_nCurrentPos < (pParent->GetRowCount() - 1);
-                if (!bAvailable && pParent->GetOptions() & DbGridControl::OPT_INSERT)
-                    bAvailable = (m_nCurrentPos == (pParent->GetRowCount() - 2)) && pParent->IsModified();
+                if(pParent->m_bRecordCountFinal)
+                {
+                    bAvailable = m_nCurrentPos < (pParent->GetRowCount() - 1);
+                    if (!bAvailable && pParent->GetOptions() & DbGridControl::OPT_INSERT)
+                        bAvailable = (m_nCurrentPos == (pParent->GetRowCount() - 2)) && pParent->IsModified();
+                }
                 break;
             case NavigationBar::RECORD_LAST:
-                if (pParent->GetOptions() & DbGridControl::OPT_INSERT)
-                    bAvailable = pParent->IsCurrentAppending() ? pParent->GetRowCount() > 1 :
-                                 m_nCurrentPos != (pParent->GetRowCount() - 2);
-                else
-                    bAvailable = m_nCurrentPos != (pParent->GetRowCount() - 1);
+                if(pParent->m_bRecordCountFinal)
+                {
+                    if (pParent->GetOptions() & DbGridControl::OPT_INSERT)
+                        bAvailable = pParent->IsCurrentAppending() ? pParent->GetRowCount() > 1 :
+                                     m_nCurrentPos != (pParent->GetRowCount() - 2);
+                    else
+                        bAvailable = m_nCurrentPos != (pParent->GetRowCount() - 1);
+                }
                 break;
             case NavigationBar::RECORD_NEW:
                 bAvailable = (pParent->GetOptions() & DbGridControl::OPT_INSERT) && pParent->GetRowCount() && m_nCurrentPos < (pParent->GetRowCount() - 1);
@@ -2087,6 +2093,12 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow, sal_Bool bForceInsertIfNewRow)
             return sal_False;
         }
     }
+    catch(com::sun::star::sdbc::SQLException& )
+    {
+        DBG_ERROR("DbGridControl::SetCurrent : catched an exception !");
+        EndCursorAction();
+        return sal_False;
+    }
     catch(...)
     {
         DBG_ERROR("DbGridControl::SetCurrent : catched an exception !");
@@ -2448,8 +2460,9 @@ void DbGridControl::MoveToNext()
                 MoveToPosition(GetCurRow() + 1);
             }
         }
-        catch(::com::sun::star::sdbc::SQLException &e)
+        catch(::com::sun::star::sdbc::SQLException &)
         {
+            DBG_ERROR("DbGridControl::MoveToNext: SQLException catched");
         }
 
         if(!bOk)
