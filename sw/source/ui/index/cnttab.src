@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:28:39 $
+ *  last change: $Author: rt $ $Date: 2002-12-09 09:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,7 +1577,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Uwzglêd~nij wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Case sensitive";
         Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹";
-        Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„";
+        Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ì êµ¬ë¶„";
         Text[ chinese_simplified ] = "åŒºåˆ†å­—æ¯å¤§å°å†™";
         Text[ chinese_traditional ] = "å€åˆ†å­—æ¯å¤§å°å¯«";
         Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
@@ -4844,7 +4844,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ polish ] = "Dok³adnie";
             Text[ portuguese_brazilian ] = "Match case";
             Text[ japanese ] = "æ–‡å­—åŒºåˆ¥";
-            Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„";
+            Text[ korean ] = "ìì„¸íˆ êµ¬ë¶„";
             Text[ chinese_simplified ] = "ç²¾ç¡®";
             Text[ chinese_traditional ] = "ç²¾ç¢º";
             Text[ arabic ] = "ãØÇÈŞÉ ÍÇáÉ ÇáÃÍÑİ";
