@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-06 09:13:31 $
+ *  last change: $Author: aw $ $Date: 2002-05-06 15:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,31 +810,83 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     // and feed character to object
     if(!bReturn)
     {
-        const SdrMarkList& rMarkList = pView->GetMarkList();
-
-        if(!pView->IsTextEdit() && 1 == rMarkList.GetMarkCount())
+        if(!pView->IsTextEdit() && pViewShell)
         {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            const SdrMarkList& rMarkList = pView->GetMarkList();
 
-            if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
+            if(1 == rMarkList.GetMarkCount())
             {
-                // #98533# use common IsSimpleCharInput from
-                // the EditEngine.
-                sal_Bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
+                SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
 
-                if(bPrintable)
+                if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
                 {
-                    // try to activate textedit mode for the selected object
-                    SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
+                    // #98533# use common IsSimpleCharInput from
+                    // the EditEngine.
+                    sal_Bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
 
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                        SID_ATTR_CHAR,
-                        SFX_CALLMODE_ASYNCHRON,
-                        &aInputString,
-                        0L);
+                    if(bPrintable)
+                    {
+                        // try to activate textedit mode for the selected object
+                        SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
 
-                    // consumed
-                    bReturn = TRUE;
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                            SID_ATTR_CHAR,
+                            SFX_CALLMODE_ASYNCHRON,
+                            &aInputString,
+                            0L);
+
+                        // consumed
+                        bReturn = TRUE;
+                    }
+                }
+            }
+            else
+            {
+                // #99039# test if there is a title object there. If yes, try to
+                // set it to edit mode and start typing...
+                if(pViewShell->ISA(SdDrawViewShell) && EditEngine::IsSimpleCharInput(rKEvt))
+                {
+                    SdDrawViewShell* pDrawViewShell = (SdDrawViewShell*)pViewShell;
+                    SdPage* pActualPage = pDrawViewShell->GetActualPage();
+                    SdrTextObj* pCandidate = 0L;
+
+                    if(pActualPage)
+                    {
+                        SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
+
+                        while(aIter.IsMore() && !pCandidate)
+                        {
+                            SdrObject* pObj = aIter.Next();
+
+                            if(pObj && pObj->ISA(SdrTextObj))
+                            {
+                                sal_uInt32 nInv(pObj->GetObjInventor());
+                                sal_uInt16 nKnd(pObj->GetObjIdentifier());
+
+                                if(SdrInventor == nInv && OBJ_TITLETEXT == nKnd)
+                                {
+                                    pCandidate = (SdrTextObj*)pObj;
+                                }
+                            }
+                        }
+                    }
+
+                    // when candidate found and candidate is untouched, start editing text...
+                    if(pCandidate && pCandidate->IsEmptyPresObj())
+                    {
+                        pView->UnMarkAll();
+                        pView->MarkObj(pCandidate, pView->GetPageViewPvNum(0));
+                        SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
+
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                            SID_ATTR_CHAR,
+                            SFX_CALLMODE_ASYNCHRON,
+                            &aInputString,
+                            0L);
+
+                        // consumed
+                        bReturn = TRUE;
+                    }
                 }
             }
         }
