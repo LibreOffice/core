@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tl $ $Date: 2000-12-04 14:11:05 $
+#   last change: $Author: tl $ $Date: 2001-03-28 11:23:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ IDLFILES=\
     SpellChecker.idl\
     SpellFailure.idl\
     Thesaurus.idl\
+    XAvailableLocales.idl\
     XDictionary.idl\
     XDictionary1.idl\
     XDictionaryEntry.idl\
