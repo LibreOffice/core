@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-13 14:40:05 $
+ *  last change: $Author: kz $ $Date: 2002-09-17 13:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4753,7 +4753,7 @@ SfxSlotInfo FN_NEW_HTML_DOC
     SlotName[ dutch ] = "HTLM-document maken";
     SlotName[ french ] = "Créer un document HTML";
     SlotName[ spanish ] = "Crear documento HTML";
-    SlotName[ italian ] = "Crea nuovo documento HTML";
+    SlotName[ italian ] = "Crea documento HTML";
     SlotName[ danish ] = "Opret HTML-dokument";
     SlotName[ swedish ] = "Skapa HTML-dokument";
     SlotName[ polish ] = "Utwórz dokument HTML";
