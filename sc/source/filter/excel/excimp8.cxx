@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-22 11:46:27 $
+ *  last change: $Author: gt $ $Date: 2001-03-28 13:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1219,6 +1219,7 @@ void XclImpTabIdBuffer::Append( UINT16 nTabId )
         UINT16List::Append( nTabId );
 }
 
+
 void XclImpTabIdBuffer::Fill( XclImpStream& rStrm, UINT16 nCount )
 {
     Clear();
@@ -1229,6 +1230,7 @@ void XclImpTabIdBuffer::Fill( XclImpStream& rStrm, UINT16 nCount )
         Append( nTabId );
     }
 }
+
 
 UINT16 XclImpTabIdBuffer::GetIndex( UINT16 nTabId, UINT16 nMaxTabId ) const
 {
@@ -1243,6 +1245,59 @@ UINT16 XclImpTabIdBuffer::GetIndex( UINT16 nTabId, UINT16 nMaxTabId ) const
     }
     return 0;
 }
+
+
+
+
+struct DVData
+{
+    ULONG               nHandle;
+
+    UINT16              nCol1;
+    UINT16              nCol2;
+    UINT16              nRow1;
+    UINT16              nRow2;
+};
+
+
+
+
+DVList::~DVList()
+{
+    for( DVData* p = ( DVData* ) List::First() ; p ; p = ( DVData* ) List::Next() )
+        delete p;
+}
+
+
+void DVList::Add( DVData* p )
+{
+    List::Insert( p, LIST_APPEND );
+}
+
+
+void DVList::Reset( void )
+{
+    for( DVData* p = ( DVData* ) List::First() ; p ; p = ( DVData* ) List::Next() )
+        delete p;
+
+    List::Clear();
+}
+
+
+void DVList::Apply( ScDocument& rDoc, UINT16 nTab )
+{
+    for( DVData* p = ( DVData* ) List::First() ; p ; p = ( DVData* ) List::Next() )
+    {
+        ScPatternAttr   aPat( rDoc.GetPool() );
+        aPat.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, p->nHandle ) );
+
+        if( p->nRow2 > MAXROW )
+            p->nRow2 = MAXROW;
+
+        rDoc.ApplyPatternAreaTab( p->nCol1, p->nRow1, p->nCol2, p->nRow2, nTab, aPat );
+    }
+}
+
 
 
 
@@ -1274,6 +1329,8 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
     pActCondForm = NULL;
     pCondFormList = NULL;
 
+    pDVList = NULL;
+
     pExcRoot->pRootStorage = pStorage;
 
     pExcRoot->pAddInNameTranslator = new XclAddInNameTranslator;
@@ -1292,6 +1349,9 @@ ImportExcel8::~ImportExcel8()
 
     if( pCondFormList )
         delete pCondFormList;
+
+    if( pDVList )
+        delete pDVList;
 }
 
 
@@ -1798,9 +1858,10 @@ static sal_Bool lcl_ImportBackgroundGraphic( XclImpStream& rIn, Graphic& rGraphi
         && ( aBackground.nBitsPerPixel == 24 )
         && ( aBackground.nPlanes == 1 ) )
     {
+        sal_Bool                bAlignment = FALSE;
         sal_uInt32              nWidth = aBackground.nWidth;
         sal_uInt32              nHeight = aBackground.nHeight;
-        sal_uInt16              nPadding = aBackground.nWidth % 4;
+        sal_uInt16              nPadding = nWidth % 4;
 
         if( rIn.GetRecLeft() == nHeight * (nWidth * 3 + nPadding) )
         {
@@ -2121,35 +2182,94 @@ void ImportExcel8::Dv( void )
     // vals
     if( aIn.GetRecLeft() > 8 )
     {
-        aIn.Ignore( aIn.GetRecLeft() - 8 );
+        DVData*             p = new DVData;
 
-        UINT16  nR1, nR2, nC1, nC2;
+        const ScTokenArray* pFrmla1 = NULL;
+        const ScTokenArray* pFrmla2 = NULL;
+        ScTokenArray*       pHelp = NULL;
 
-        aIn >> nR1 >> nR2 >> nC1 >> nC2;
+        UINT16              nLen;
 
-        for( UINT16 nC = nC1 ; nC <= nC2 ; nC++ )
-            for( UINT16 nR = nR1 ; nR <= nR2 ; nR++ )
+        aIn >> nLen;
+        aIn.Ignore( 2 );
+        if( nLen )
+        {
+            pFormConv->Reset();
+            pFormConv->Convert( pFrmla1, nLen, FT_RangeName );
+        }
+
+        aIn >> nLen;
+        aIn.Ignore( 2 );
+        if( nLen )
+        {
+            if( pFrmla1 )
             {
-                ScValidationMode    eValMode = ( ScValidationMode ) ( nFlags & 0x00000007 );
-                                                // StarCalc matches Excel in lower 3 bits!
-                ScConditionMode     eMode;
-                switch( ( nFlags >> 20 )  & 0x00000007 )
-                {
-                    case 0x00:  eMode = SC_COND_BETWEEN;    break;
-                    case 0x01:  eMode = SC_COND_NOTBETWEEN; break;
-                    case 0x02:  eMode = SC_COND_EQUAL;      break;
-                    case 0x03:  eMode = SC_COND_NOTEQUAL;   break;
-                    case 0x04:  eMode = SC_COND_GREATER;    break;
-                    case 0x05:  eMode = SC_COND_LESS;       break;
-                    case 0x06:  eMode = SC_COND_EQGREATER;  break;
-                    case 0x07:  eMode = SC_COND_EQLESS;     break;
-                }
-                String              aDummy;
-                aDummy.AssignAscii( "1" );
-                ScValidationData    aValidData( eValMode, eMode, aDummy, aDummy, pD, ScAddress( nC, nR, nTab ) );
-
-                ULONG               nHandle = pD->AddValidationEntry( aValidData );
+                // copy unique ScTokenArry from formula converter!
+                pHelp = pFrmla1->Clone();
+                pFrmla1 = ( const ScTokenArray* ) pHelp;
             }
+
+            pFormConv->Reset();
+            pFormConv->Convert( pFrmla2, nLen, FT_RangeName );
+        }
+
+        aIn.Ignore( 2 );
+
+        aIn >> p->nRow1 >> p->nRow2 >> p->nCol1 >> p->nCol2;
+
+        ScValidationMode    eValMode;// = ( ScValidationMode ) ( nFlags & 0x00000007 );
+        switch( nFlags & 0x00000007 )
+        {
+            case 0: eValMode = SC_VALID_ANY;            break;
+            case 1: eValMode = SC_VALID_WHOLE;          break;
+            case 2: eValMode = SC_VALID_DECIMAL;        break;
+            case 3: eValMode = SC_VALID_LIST;           break;
+            case 4: eValMode = SC_VALID_DATE;           break;
+            case 5: eValMode = SC_VALID_TIME;           break;
+            case 6: eValMode = SC_VALID_TEXTLEN;        break;
+            case 7: eValMode = SC_VALID_CUSTOM;         break;
+        }
+
+        ScConditionMode     eMode;
+        switch( ( nFlags >> 20 )  & 0x00000007 )
+        {
+            case 0x00:  eMode = SC_COND_BETWEEN;    break;
+            case 0x01:  eMode = SC_COND_NOTBETWEEN; break;
+            case 0x02:  eMode = SC_COND_EQUAL;      break;
+            case 0x03:  eMode = SC_COND_NOTEQUAL;   break;
+            case 0x04:  eMode = SC_COND_GREATER;    break;
+            case 0x05:  eMode = SC_COND_LESS;       break;
+            case 0x06:  eMode = SC_COND_EQGREATER;  break;
+            case 0x07:  eMode = SC_COND_EQLESS;     break;
+        }
+
+        ScValidationData    aValidData( eValMode, eMode, pFrmla1, pFrmla2, pD, ScAddress( p->nCol1, p->nRow1, nTab ) );
+
+        if( /*( nFlags & 0x00040000 ) ||*/ aPromptTitle.Len() || aPromptMessage.Len() )
+            // ignore flag so behavior is similar to Excel
+            aValidData.SetInput( aPromptTitle, aPromptMessage );
+
+        if( /*( nFlags & 0x00080000 ) ||*/ aErrorTitle.Len() || aErrorMessage.Len() )
+        {
+            // ignore flag so behavior is similar to Excel
+
+            ScValidErrorStyle   eErrStyle = ScValidErrorStyle( ( nFlags >> 4 ) & 0x03 );
+
+            if( eErrStyle > SC_VALERR_INFO )
+                eErrStyle = SC_VALERR_STOP;
+
+            aValidData.SetError( aErrorTitle, aErrorMessage, eErrStyle );
+        }
+
+        p->nHandle = pD->AddValidationEntry( aValidData );
+
+        if( !pDVList )
+            pDVList = new DVList;
+
+        pDVList->Add( p );
+
+        if( pHelp )
+            delete pHelp;
     }
 }
 
@@ -2418,6 +2538,12 @@ void ImportExcel8::EndSheet( void )
     pActCondForm = NULL;
 
     ImportExcel::EndSheet();
+
+    if( pDVList )
+    {
+        pDVList->Apply( *pD, nTab );
+        pDVList->Reset();
+    }
 }
 
 

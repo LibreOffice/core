@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-01 17:24:45 $
+ *  last change: $Author: gt $ $Date: 2001-03-28 13:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #endif
 
 class ScPatternAttr;
+class ScTokenArray;
 
 enum ScValidationMode
 {
@@ -115,6 +116,9 @@ public:
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
                                 BOOL bCompileEnglish = FALSE, BOOL bCompileXML = FALSE );
+            ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
+                                const ScTokenArray* pArr1, const ScTokenArray* pArr2,
+                                ScDocument* pDocument, const ScAddress& rPos );
             ScValidationData( const ScValidationData& r );
             ScValidationData( ScDocument* pDocument, const ScValidationData& r );
             ScValidationData( SvStream& rStream, ScMultipleReadHeader& rHdr,

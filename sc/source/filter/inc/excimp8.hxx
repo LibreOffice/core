@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-22 11:46:46 $
+ *  last change: $Author: gt $ $Date: 2001-03-28 13:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,12 +452,18 @@ class ExcCondFormList : protected List
         void                    Apply( void );
 };
 
+
+
+
 struct ExcStreamNode
 {
     sal_uInt32      nPos;
     sal_uInt32      nSize;
     ExcStreamNode*  pPrev;
 };
+
+
+
 
 class ExcStreamConsumer
 {
@@ -480,6 +486,8 @@ class ExcStreamConsumer
 };
 
 
+
+
 class XclImpTabIdBuffer : protected UINT16List
 {
 private:
@@ -488,6 +496,25 @@ public:
     void                        Fill( XclImpStream& rStrm, UINT16 nCount );
     UINT16                      GetIndex( UINT16 nTabId, UINT16 nMaxTabId = 0xFFFF ) const;
 };
+
+
+
+
+struct DVData;
+
+
+class DVList : protected List
+{
+private:
+public:
+    virtual                     ~DVList();
+
+    void                        Add( DVData* );
+    void                        Reset( void );
+    void                        Apply( ScDocument&, UINT16 nTabNum );
+};
+
+
 
 
 class ImportExcel8 : public ImportExcel
@@ -520,6 +547,8 @@ class ImportExcel8 : public ImportExcel
 
         ExcCondForm*            pActCondForm;
         ExcCondFormList*        pCondFormList;
+
+        DVList*                 pDVList;
 
         BOOL                    bHasBasic;
 

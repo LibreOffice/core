@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-16 17:56:25 $
+ *  last change: $Author: gt $ $Date: 2001-03-28 13:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,17 @@ ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOpe
                             ScDocument* pDocument, const ScAddress& rPos,
                             BOOL bCompileEnglish, BOOL bCompileXML ) :
     ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, bCompileEnglish, bCompileXML ),
+    nKey( 0 ),
+    eDataMode( eMode )
+{
+    bShowInput = bShowError = FALSE;
+    eErrorStyle = SC_VALERR_STOP;
+}
+
+ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
+                            const ScTokenArray* pArr1, const ScTokenArray* pArr2,
+                            ScDocument* pDocument, const ScAddress& rPos ) :
+    ScConditionEntry( eOper, pArr1, pArr2, pDocument, rPos ),
     nKey( 0 ),
     eDataMode( eMode )
 {
