@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:18:36 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,3 +235,40 @@ String STR_CLOSEDOC_ANDRETURN
     Text[ hungarian ] = "~BezÃ¡rÃ¡s Ã©s visszatÃ©rÃ©s";
     Text[ slovenian ] = "~Zapri & se vrni na";
 };
+
+String STR_SAVECOPYDOC
+{
+    Text = "Kopie Speichern ~unter..." ;
+    Text [ ENGLISH ] = "Save Copy ~as" ;
+    Text [ english_us ] = "Save Copy ~as..." ;
+    Text [ italian ] = "Salva copia con ~nome..." ;
+    Text [ spanish ] = "Guardar copia ~como..." ;
+    Text [ french ] = "Enregistrer la copie ~sous..." ;
+    Text [ dutch ] = "~Kopie opslaan als..." ;
+    Text [ swedish ] = "Spara kopia som..." ;
+    Text [ danish ] = "Gem kopi som..." ;
+    Text [ portuguese_brazilian ] = "Salvar ~cópia como..." ;
+    Text [ portuguese ] = "Guardar ~cópia como..." ;
+    Text[ chinese_simplified ] = "å¤ä»¶å¦å­˜ä¸º(~A)...";
+    Text[ russian ] = "Ñîõğàíèòü êîïèş êàê...";
+    Text[ polish ] = "Zapi~sz kopiê jako...";
+    Text[ japanese ] = "ã‚³ãƒ”ãƒ¼ã«åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜(~A)...";
+    Text[ chinese_traditional ] = "è¤‡è£½ä»¶å¦å­˜æ–°æª”(~A)...";
+    Text[ arabic ] = "ÍİÙ ÇáäÓÎÉ ÈÇÓã...";
+    Text[ dutch ] = "~Kopie opslaan als...";
+    Text[ chinese_simplified ] = "å¤ä»¶å¦å­˜ä¸º(~A)...";
+    Text[ greek ] = "ÁğïèŞêåõóç áíôéãñÜöïõ ùò...";
+    Text[ korean ] = "ë³µì‚¬ë¥¼ ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥(~A)...";
+    Text[ turkish ] = "Kopyasını farklı  ka~ydet...";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desa-ho en còpia ~com a...";
+    Text[ finnish ] = "Tallenna ~kopio nimellä...";
+    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸ªà¸³à¹€à¸™à¸²à¹€~à¸›à¹‡à¸™...";
+    Text[ czech ] = "UloÅ¾it kopii jako...";
+    Text[ hebrew ] = "â€®×©××™×¨×ª ×¢×•×ª×§ ×‘×©×...â€¬";
+    Text[ hindi ] = "~à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹ à¤œà¥ˆà¤¸à¥‡...";
+    Text[ slovak ] = "UloÅ¾iÅ¥ kÃ³piu ~ako...";
+    Text[ hungarian ] = "MÃ¡sol~at mentÃ©se mÃ¡skÃ©nt...";
+    Text[ slovenian ] = "Shrani kopijo ~kot...";
+};
+
