@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 09:57:29 $
+ *  last change: $Author: mib $ $Date: 2001-03-28 09:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,7 @@ sal_Bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const An
     return bRet;
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLIsTransparentPropHdl
@@ -629,6 +630,99 @@ sal_Bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& 
     return bRet;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLColorAutoPropHdl
+//
+
+XMLColorAutoPropHdl::XMLColorAutoPropHdl()
+{
+    // Nothing to do
+}
+
+XMLColorAutoPropHdl::~XMLColorAutoPropHdl()
+{
+    // Nothing to do
+}
+
+sal_Bool XMLColorAutoPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    // This is a multi property: the value might be set to AUTO_COLOR
+    // already by the XMLIsAutoColorPropHdl!
+    sal_Int32 nColor;
+    if( !(rValue >>= nColor) || -1 != nColor )
+    {
+        Color aColor;
+        bRet = rUnitConverter.convertColor( aColor, rStrImpValue );
+        if( bRet )
+            rValue <<= (sal_Int32)( aColor.GetColor() );
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLColorAutoPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    sal_Int32 nColor;
+    if( (rValue >>= nColor) && -1 != nColor )
+    {
+        Color aColor( nColor );
+        OUStringBuffer aOut;
+        rUnitConverter.convertColor( aOut, aColor );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLIsAutoColorPropHdl
+//
+
+XMLIsAutoColorPropHdl::XMLIsAutoColorPropHdl()
+{
+}
+
+XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl()
+{
+    // Nothing to do
+}
+
+sal_Bool XMLIsAutoColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bValue;
+
+    // An auto color overrides any other color set!
+    sal_Bool bRet = rUnitConverter.convertBool( bValue, rStrImpValue );
+    if( bRet && bValue )
+        rValue <<= (sal_Int32)-1;
+
+    return sal_True;
+}
+
+sal_Bool XMLIsAutoColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 nColor;
+
+    if( (rValue >>= nColor) && -1 == nColor )
+    {
+        OUStringBuffer aOut;
+        rUnitConverter.convertBool( aOut, sal_True );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //

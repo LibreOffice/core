@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:16 $
+ *  last change: $Author: mib $ $Date: 2001-03-28 09:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,6 +607,7 @@ XML_CONSTASCII_ACTION( sXML_ellipse , "ellipse" );
 XML_CONSTASCII_ACTION( sXML_email, "email" );
 XML_CONSTASCII_ACTION( sXML_embed, "embed" );
 XML_CONSTASCII_ACTION( sXML_embedded_visible_area, "embedded-visible-area" );
+XML_CONSTASCII_ACTION( sXML_embossed, "embossed" );
 XML_CONSTASCII_ACTION( sXML_emissive_color, "emissive-color" );
 XML_CONSTASCII_ACTION( sXML_empty, "empty");
 XML_CONSTASCII_ACTION( sXML_enabled, "enabled" );
@@ -628,6 +629,7 @@ XML_CONSTASCII_ACTION( sXML_endnote_body, "endnote-body" );
 XML_CONSTASCII_ACTION( sXML_endnote_citation, "endnote-citation" );
 XML_CONSTASCII_ACTION( sXML_endnote_ref, "endnote-ref" );
 XML_CONSTASCII_ACTION( sXML_endnotes_configuration, "endnotes-configuration");
+XML_CONSTASCII_ACTION( sXML_engraved, "engraved" );
 XML_CONSTASCII_ACTION( sXML_eq, "eq");
 XML_CONSTASCII_ACTION( sXML_equal_author, "equal-author");
 XML_CONSTASCII_ACTION( sXML_equal_comment, "equal-comment");
@@ -722,6 +724,7 @@ XML_CONSTASCII_ACTION( sXML_font_name_complex, "font-name-complex" );
 XML_CONSTASCII_ACTION( sXML_font_pitch, "font-pitch" );
 XML_CONSTASCII_ACTION( sXML_font_pitch_asian, "font-pitch-asian" );
 XML_CONSTASCII_ACTION( sXML_font_pitch_complex, "font-pitch-complex" );
+XML_CONSTASCII_ACTION( sXML_font_relief, "font-relief" );
 XML_CONSTASCII_ACTION( sXML_font_size, "font-size" );
 XML_CONSTASCII_ACTION( sXML_font_size_asian, "font-size-asian" );
 XML_CONSTASCII_ACTION( sXML_font_size_complex, "font-size-complex" );
@@ -1639,6 +1642,9 @@ XML_CONSTASCII_ACTION( sXML_text_indent, "text-indent" );
 XML_CONSTASCII_ACTION( sXML_text_input, "text-input" );
 XML_CONSTASCII_ACTION( sXML_text_outline, "text-outline" );
 XML_CONSTASCII_ACTION( sXML_text_position, "text-position" );
+XML_CONSTASCII_ACTION( sXML_text_rotation_angle, "text-rotation-angle" );
+XML_CONSTASCII_ACTION( sXML_text_rotation_scale, "text-rotation-scale" );
+XML_CONSTASCII_ACTION( sXML_text_scale, "text-scale" );
 XML_CONSTASCII_ACTION( sXML_text_shadow, "text-shadow" );
 XML_CONSTASCII_ACTION( sXML_text_style, "text-style" );
 XML_CONSTASCII_ACTION( sXML_text_transform, "text-transform" );
@@ -1728,6 +1734,7 @@ XML_CONSTASCII_ACTION( sXML_use_other_objects, "use-other-objects" );
 XML_CONSTASCII_ACTION( sXML_use_spreadsheet_objects, "use-spreadsheet-objects" );
 XML_CONSTASCII_ACTION( sXML_use_styles, "use-styles" );
 XML_CONSTASCII_ACTION( sXML_use_tables, "use-tables" );
+XML_CONSTASCII_ACTION( sXML_use_window_font_color, "use-window-font-color" );
 XML_CONSTASCII_ACTION( sXML_used_hierarchy, "used-hierarchy");
 XML_CONSTASCII_ACTION( sXML_user_defined, "user-defined" );
 XML_CONSTASCII_ACTION( sXML_user_field_decl, "user-field-decl" );

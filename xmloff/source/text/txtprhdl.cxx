@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-23 16:30:35 $
+ *  last change: $Author: mib $ $Date: 2001-03-28 09:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_DROPCAPFORMAT_HPP_
 #include <com/sun/star/style/DropCapFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_FONTRELIEF_HPP_
+#include <com/sun/star/text/FontRelief.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -266,6 +269,14 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_RubyAdjust_Enum[] =
     { sXML_right,               RubyAdjust_RIGHT },
     { sXML_distribute_letter,   RubyAdjust_BLOCK },
     { sXML_distribute_space,    RubyAdjust_INDENT_BLOCK },
+    { 0, 0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_FontRelief_Enum[] =
+{
+    { sXML_none,                FontRelief::NONE        },
+    { sXML_engraved,            FontRelief::ENGRAVED    },
+    { sXML_embossed,            FontRelief::EMBOSSED    },
     { 0, 0 }
 };
 
@@ -1172,6 +1183,72 @@ sal_Bool XMLTextSyncWidthHeightPropHdl_Impl::exportXML(
 XMLTextSyncWidthHeightPropHdl_Impl::~XMLTextSyncWidthHeightPropHdl_Impl()
 {
 }
+
+// ---------------------------------------------------------------------------
+
+class XMLTextRotationAnglePropHdl_Impl : public XMLPropertyHandler
+{
+
+public:
+    XMLTextRotationAnglePropHdl_Impl()  {}
+    virtual ~XMLTextRotationAnglePropHdl_Impl();
+
+    virtual sal_Bool importXML(
+            const ::rtl::OUString& rStrImpValue,
+            ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML(
+            ::rtl::OUString& rStrExpValue,
+            const ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+sal_Bool XMLTextRotationAnglePropHdl_Impl::importXML(
+        const OUString& rStrImpValue,
+           Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int32 nValue;
+    sal_Bool bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
+    if( bRet )
+    {
+        nValue = (nValue % 360 );
+        if( nValue < 0 )
+            nValue = 360 + nValue;
+        sal_Int16 nAngle;
+        if( nValue < 45 || nValue > 315 )
+            nAngle = 0;
+        else if( nValue < 180 )
+            nAngle = 900;
+        else /* if nValalue <= 315 ) */
+            nAngle = 2700;
+        rValue <<= nAngle;
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLTextRotationAnglePropHdl_Impl::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int16 nAngle;
+    sal_Bool bRet = ( rValue >>= nAngle );
+    if( bRet )
+    {
+        OUStringBuffer aOut;
+        rUnitConverter.convertNumber( aOut, nAngle / 10 );
+        rStrExpValue = aOut.makeStringAndClear();
+    }
+    OSL_ENSURE( bRet, "illegal rotation angle" );
+
+    return bRet;
+}
+
+XMLTextRotationAnglePropHdl_Impl::~XMLTextRotationAnglePropHdl_Impl()
+{
+}
 // ---------------------------------------------------------------------------
 class XMLTextPropertyHandlerFactory_Impl
 {
@@ -1303,6 +1380,16 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     case XML_TYPE_TEXT_RUBY_ADJUST:
         pHdl = new XMLConstantsPropertyHandler( pXML_RubyAdjust_Enum, 0 );
         break;
+    case XML_TYPE_TEXT_FONT_RELIEF:
+        pHdl = new XMLConstantsPropertyHandler( pXML_FontRelief_Enum, 0 );
+        break;
+    case XML_TYPE_TEXT_ROTATION_ANGLE:
+        pHdl = new XMLTextRotationAnglePropHdl_Impl;
+        break;
+    case XML_TYPE_TEXT_ROTATION_SCALE:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_fixed ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_line_height ) ) );
     }
 
     return pHdl;

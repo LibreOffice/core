@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 13:37:58 $
+ *  last change: $Author: mib $ $Date: 2001-03-28 09:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharCaseMap",     FO,     font_variant,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     M_E( "CharCaseMap",     FO,     text_transform,     XML_TYPE_TEXT_CASEMAP,  0 ),
     // RES_CHRATR_COLOR
-    M_ED( "CharColor",      FO,     color,              XML_TYPE_COLOR, 0 ),
+    M_ED( "CharColor",      FO,     color,              XML_TYPE_COLORAUTO|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_ED( "CharColor",      STYLE,  use_window_font_color,  XML_TYPE_ISAUTOCOLOR|MID_FLAG_MERGE_PROPERTY,   0 ),
     // RES_CHRATR_CONTOUR
     M_E( "CharContoured",   STYLE,  text_outline,       XML_TYPE_BOOL,  0 ),
     // RES_CHRATR_CROSSEDOUT
@@ -178,13 +179,19 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharPostureComplex",      STYLE,      font_style_complex,         XML_TYPE_TEXT_POSTURE, 0 ),
     // RES_CHRATR_CTL_WEIGHT
     M_E( "CharWeightComplex",       STYLE,      font_weight_complex,        XML_TYPE_TEXT_WEIGHT, 0 ),
-    // RES_CHRATR_WRITING_DIRECTION
+    // RES_CHRATR_ROTATE
+    M_E( "CharRotation",            STYLE,      text_rotation_angle,        XML_TYPE_TEXT_ROTATION_ANGLE, 0 ),
+    M_E( "CharRotationIsFitToLine", STYLE,      text_rotation_scale,        XML_TYPE_TEXT_ROTATION_SCALE, 0 ),
     // RES_CHRATR_EMPHASIS_MARK
     M_E( "CharEmphasis",            STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
     // RES_CHRATR_TWO_LINES
     M_E( "CharCombineIsOn",         STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
     M_E( "CharCombinePrefix",       STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
-    M_E( "CharCombineSuffic",       STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    M_E( "CharCombineSuffix",       STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    // RES_CHRATR_SCALEW
+    M_E( "CharScaleWidth",          STYLE,      text_scale,                 XML_TYPE_PERCENT16, 0 ),
+    //RES_CHRATR_RELIEF
+    M_E( "CharRelief",              STYLE,      font_relief,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
     // RES_TXTATR_INETFMT
     // TODO
     // RES_TXTATR_REFMARK
@@ -347,7 +354,8 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharCaseMap",     FO,     font_variant,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     M_E( "CharCaseMap",     FO,     text_transform,     XML_TYPE_TEXT_CASEMAP,  0 ),
     // RES_CHRATR_COLOR
-    M_ED( "CharColor",      FO,     color,              XML_TYPE_COLOR, 0 ),
+    M_ED( "CharColor",      FO,     color,              XML_TYPE_COLORAUTO|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_ED( "CharColor",      STYLE,  use_window_font_color,  XML_TYPE_ISAUTOCOLOR|MID_FLAG_MERGE_PROPERTY,   0 ),
     // RES_CHRATR_CONTOUR
     M_E( "CharContoured",   STYLE,  text_outline,       XML_TYPE_BOOL,  0 ),
     // RES_CHRATR_CROSSEDOUT
@@ -434,16 +442,21 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharPostureComplex",      STYLE,      font_style_complex,         XML_TYPE_TEXT_POSTURE, 0 ),
     // RES_CHRATR_CTL_WEIGHT
     M_E( "CharWeightComplex",       STYLE,      font_weight_complex,        XML_TYPE_TEXT_WEIGHT, 0 ),
-    // RES_CHRATR_WRITING_DIRECTION
+    // RES_CHRATR_ROTATE
+    M_E( "CharRotation",            STYLE,      text_rotation_angle,        XML_TYPE_TEXT_ROTATION_ANGLE, 0 ),
+    M_E( "CharRotationIsFitToLine", STYLE,      text_rotation_scale,        XML_TYPE_TEXT_ROTATION_SCALE, 0 ),
     // RES_CHRATR_EMPHASIS_MARK
     M_E( "CharEmphasis",            STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
     // RES_CHRATR_TWO_LINES
     M_E( "CharCombineIsOn",         STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "CharCombinePrefix",       STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
     M_E( "CharCombineSuffix",       STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
-
+    // RES_CHRATR_SCALEW
+    M_E( "CharScaleWidth",          STYLE,      text_scale,                 XML_TYPE_PERCENT16, 0 ),
     // combined characters field, does not correspond to a property
     M_E( "",                        STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE_CHARACTERS|MID_FLAG_NO_PROPERTY, CTF_COMBINED_CHARACTERS_FIELD ),
+    //RES_CHRATR_RELIEF
+    M_E( "CharRelief",              STYLE,      font_relief,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
 
     // RES_TXTATR_INETFMT
     // TODO

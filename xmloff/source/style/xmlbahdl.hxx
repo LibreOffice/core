@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 09:57:29 $
+ *  last change: $Author: mib $ $Date: 2001-03-28 09:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,33 @@ public:
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
+
+/**
+    PropertyHandler for the XML-data-type: XML_TYPE_COLORAUTO
+*/
+class XMLColorAutoPropHdl : public XMLPropertyHandler
+{
+public:
+    XMLColorAutoPropHdl();
+    virtual ~XMLColorAutoPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+/**
+    PropertyHandler for the XML-data-type: XML_TYPE_COLORISAUTO
+*/
+class XMLIsAutoColorPropHdl : public XMLPropertyHandler
+{
+public:
+    XMLIsAutoColorPropHdl();
+    virtual ~XMLIsAutoColorPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
 
 /**
     PropertyHandler for properties that cannot make use of importXML
