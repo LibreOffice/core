@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+#   last change: $Author: dv $ $Date: 2000-12-01 11:05:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SRCFILES = \
-        doc.src new.src doctdlg.src docvor.src
+        doc.src new.src doctdlg.src docvor.src doctempl.src
 
 SLOFILES =	\
         $(SLO)$/docfile.obj \
