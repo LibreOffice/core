@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 09:46:18 $
+ *  last change: $Author: jl $ $Date: 2001-10-23 08:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ namespace osl
 */
 extern "C" inline void SAL_CALL threadFunc( void* param);
 
+/** The Thread class is a c++ wrapper for the C thread API.
+ */
 class Thread
 {
     Thread( const Thread& );
@@ -105,11 +107,24 @@ public:
 
     Thread(): m_hThread(0){}
 
+    /** Destroyes the thread.
+
+        @see osl_destroyThread
+    */
     virtual  ~Thread()
     {
         osl_destroyThread( m_hThread);
     }
+    /** Creates a thread.
 
+        In order to create a thread one has to supply a class that inherits this Thread class
+        and one has to provide an implementations for the run function. When create is called
+        then the run function is executed.
+
+        @see osl_createThread
+        @see osl_createSuspendedThread
+
+     */
     sal_Bool SAL_CALL create()
     {
         OSL_ASSERT(m_hThread == 0); // only one running thread per instance
@@ -123,6 +138,12 @@ public:
         return m_hThread != 0;
     }
 
+    /** Creates a thread that is suspended.
+
+        To run the thread one has to call resume.
+
+        @see osl_createSuspendedThread
+    */
     sal_Bool SAL_CALL createSuspended()
     {
         OSL_ASSERT(m_hThread == 0); // only one running thread per instance
@@ -133,67 +154,117 @@ public:
         return m_hThread != 0;
     }
 
+    /** Suspends the thread.
+
+        @see osl_suspendThread
+    */
     virtual void SAL_CALL suspend()
     {
         osl_suspendThread(m_hThread);
     }
 
+    /** Puts the thread in a running state if it is currently suspended.
+
+        @see osl_resumeThread
+    */
     virtual void SAL_CALL resume()
     {
         osl_resumeThread(m_hThread);
     }
 
+    /** Terminates the thread.
+
+        @see osl_terminateThread
+    */
     virtual void SAL_CALL terminate()
     {
         osl_terminateThread(m_hThread);
     }
 
+    /**
+
+       @see osl_joinWithThread
+    */
     virtual void SAL_CALL join()
     {
         osl_joinWithThread(m_hThread);
     }
 
+    /** Determines if this thread is running or not.
+        @return true, if thread is running, false otherwise.
+        @see osl_isThreadRunning
+    */
     sal_Bool SAL_CALL isRunning()
     {
         return m_hThread != 0 && osl_isThreadRunning(m_hThread);
     }
 
+    /** Sets the priority of this thread.
+
+        @see osl_setThreadPriority
+    */
     void SAL_CALL setPriority( oslThreadPriority Priority)
     {
         osl_setThreadPriority(m_hThread, Priority);
     }
 
+    /** Returns the priority of this thread.
+
+        @see osl_getThreadPriority
+    */
     oslThreadPriority SAL_CALL getPriority()
     {
         return osl_getThreadPriority(m_hThread);
     }
+    /** Returns the identifier this thread.
 
+        @see osl_getThreadIdentifier
+    */
     oslThreadIdentifier SAL_CALL getIdentifier() const
     {
         return osl_getThreadIdentifier(m_hThread);
     }
 
+    /** Returns the identifier of the current thread.
+
+        @see osl_getThreadIdentifier
+    */
     static oslThreadIdentifier SAL_CALL getCurrentIdentifier()
     {
         return osl_getThreadIdentifier(0);
     }
 
+    /** Blocks the current thread for the specified amount of time.
+
+        @see osl_waitThread
+    */
     static void SAL_CALL wait(const TimeValue& Delay)
     {
         osl_waitThread(&Delay);
     }
 
+    /** Has the operating system to run another thread and put this thread into
+        suspended state until it is being scheduled again.
+
+        @see osl_yieldThread
+    */
     static void SAL_CALL yield()
     {
         osl_yieldThread();
     }
 
+    /**
 
+       @see osl_scheduleThread
+    */
     virtual sal_Bool SAL_CALL schedule()
     {
         return osl_scheduleThread(m_hThread);
     }
 
+    /** Extractor (or cast operator) for the thread handle.
+
+     */
     SAL_CALL operator oslThread() const
     {
         return m_hThread;
@@ -206,8 +277,20 @@ protected:
     */
     friend void SAL_CALL threadFunc( void* param);
 
+    /** The run function is run automatically after create has been called.
+
+        run has to be provided by the class that inherits the Thread class.
+        Put all code that has to be performed by the thread into this function.
+
+     */
     virtual void SAL_CALL run() = 0;
 
+    /** Notifies the instance of this class that the termination of this
+        thread is imminent.
+
+        In order to process this notification one has to override this
+        function.
+    */
     virtual void SAL_CALL onTerminated()
     {
     }
@@ -228,13 +311,19 @@ class ThreadData
     ThreadData( const ThreadData& );
     ThreadData& operator= (const ThreadData& );
 public:
-     /// Create a thread specific local data key
+     /** Create a thread specific local data key.
+
+        @see osl_createThreadKey
+    */
     ThreadData( oslThreadKeyCallbackFunction pCallback= 0 )
     {
         m_hKey = osl_createThreadKey( pCallback );
     }
 
-    /// Destroy a thread specific local data key
+    /** Destroy a thread specific local data key.
+
+        @see osl_destroyThreadKey
+    */
     ~ThreadData()
     {
            osl_destroyThreadKey(m_hKey);
@@ -242,6 +331,7 @@ public:
 
     /** Set the data associated with the data key.
         @returns True if operation was successfull
+        @see osl_setThreadKeyData
     */
     sal_Bool SAL_CALL setData(void *pData)
     {
@@ -250,13 +340,16 @@ public:
 
     /** Get the data associated with the data key.
         @returns The data asscoitaed with the data key or
-        NULL if no data was set
+        NULL if no data was set.
+        @see osl_getThreadKeyData
     */
     void* SAL_CALL getData()
     {
            return osl_getThreadKeyData(m_hKey);
     }
 
+    /** Extractor (or cast operator) for the key handle.
+     */
     operator oslThreadKey() const
     {
         return m_hKey;
