@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 19:59:51 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
-        Delta = 59 ;
+        Delta = 73 ;
     };
     Window WND_FIELD
     {
@@ -298,6 +298,24 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ de ] = "~Gesamtergebnis-Zeilen" ;
         Text [ en-US ] = "~Total rows" ;
         Text [ x-comment ] = " ";
+    };
+    CheckBox BTN_FILTER
+    {
+        Pos = MAP_APPFONT ( 12 , 247 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ de ] = "Fil~ter hinzufügen" ;
+        Text [ en-US ] = "~Add filter" ;
+    };
+    CheckBox BTN_DRILLDOWN
+    {
+        Pos = MAP_APPFONT ( 142 , 247 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ de ] = "Drilldo~wn zu Details zulassen" ;
+        Text [ en-US ] = "Ena~ble drill to details" ;
     };
     String PIVOTSTR_SUM
     {
