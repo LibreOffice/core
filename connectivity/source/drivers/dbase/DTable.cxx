@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 07:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,16 +159,30 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 void ODbaseTable::readHeader()
 {
+    sal_Bool bError = sal_False;
     m_pFileStream->RefreshBuffer(); // sicherstellen, dass die Kopfinformationen tatsaechlich neu gelesen werden
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-    BYTE nType;
+    BYTE nType=0;
     (*m_pFileStream) >> nType;
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
     m_pFileStream->Read((char*)(&m_aHeader.db_aedat), 3*sizeof(BYTE));
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
     (*m_pFileStream) >> m_aHeader.db_anz;
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
     (*m_pFileStream) >> m_aHeader.db_kopf;
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
     (*m_pFileStream) >> m_aHeader.db_slng;
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
     m_pFileStream->Read((char*)(&m_aHeader.db_frei), 20*sizeof(BYTE));
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
 
     if (m_aHeader.db_anz  < 0 ||
         m_aHeader.db_kopf <= 0 ||
@@ -176,10 +190,7 @@ void ODbaseTable::readHeader()
         ((m_aHeader.db_kopf - 1) / 32 - 1) <= 0) // anzahl felder
     {
         // no dbase file
-        ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file '");
-        sMessage += getEntry();
-        sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
-        throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+        throwInvalidDbaseFormat();
     }
     else
     {
@@ -200,11 +211,7 @@ void ODbaseTable::readHeader()
                 break;
             default:
             {
-                // no dbase file
-                ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file ");
-                sMessage += getEntry();
-                sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
-                throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+                throwInvalidDbaseFormat();
             }
         }
     }
@@ -1937,4 +1944,12 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
     }
 }
 // -----------------------------------------------------------------------------
-
+void ODbaseTable::throwInvalidDbaseFormat()
+{
+    // no dbase file
+    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file '");
+    sMessage += getEntry();
+    sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
+    throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+}
+// -----------------------------------------------------------------------------
