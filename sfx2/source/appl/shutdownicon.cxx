@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-12 16:45:02 $
+ *  last change: $Author: hro $ $Date: 2001-11-19 11:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,14 +232,26 @@ void ShutdownIcon::FileOpen()
                     if ( xPickerControls.is() )
                     {
 
+                        sal_Bool    bReadOnly = sal_False;
+
                         aArgs[0].Name  = OUString::createFromAscii( "ReadOnly" );
                         aArgs[0].Value = xPickerControls->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
+                        aArgs[0].Value >>= bReadOnly;
+
+                        OUString    aFilterName;
 
                         aArgs[1].Name  = OUString::createFromAscii( "FilterName" );
                         aArgs[1].Value = xPickerControls->getValue( CommonFilePickerElementIds::LISTBOX_FILTER, ControlActions::GET_SELECTED_ITEM );
+                        aArgs[1].Value >>= aFilterName;
 
                         aArgs[2].Name  = OUString::createFromAscii( "Version" );
-                        aArgs[2].Value = xPickerControls->getValue( CommonFilePickerElementIds::LISTBOX_FILTER, ControlActions::GET_SELECTED_ITEM );
+
+                        sal_Int32   iVersion = -1;
+                        sal_uInt16  uVersion = (sal_uInt16)-1;
+
+                        xPickerControls->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION, ControlActions::GET_SELECTED_ITEM_INDEX ) >>= iVersion;
+                        uVersion = (sal_uInt16)iVersion;
+                        aArgs[2].Value <<= uVersion;
                     }
 
                     if ( 1 == nFiles )
