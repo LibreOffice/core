@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetectionexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:58:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
 {
     try
     {
-        const OUString sOorNode             ( RTL_CONSTASCII_USTRINGPARAM ( "oor:node" ) );
+        const OUString sComponentData       ( RTL_CONSTASCII_USTRINGPARAM ( "oor:component-data" ) );
         const OUString sNode                ( RTL_CONSTASCII_USTRINGPARAM ( "node" ) );
         const OUString sName                ( RTL_CONSTASCII_USTRINGPARAM ( "oor:name" ) );
         const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
@@ -157,7 +157,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
 
         xHandler->startDocument();
         xHandler->ignorableWhitespace ( sWhiteSpace );
-        xHandler->startElement( sOorNode, xAttrList );
+        xHandler->startElement( sComponentData, xAttrList );
 
         // export types
         {
@@ -262,7 +262,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
 
         // finish
         xHandler->ignorableWhitespace ( sWhiteSpace );
-        xHandler->endElement( sOorNode );
+        xHandler->endElement( sComponentData );
         xHandler->endDocument();
     }
     catch( Exception& )
