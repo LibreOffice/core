@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 07:38:10 $
+ *  last change: $Author: mtg $ $Date: 2001-04-23 11:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2096,7 +2096,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             sal_Bool bAuto = *(sal_Bool*)aValue.getValue();
 
             if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
-                pDrawDoc->SetOpenInDesignMode( bAuto );
+                pDrawDoc->SetAutoControlFocus( bAuto );
             else if (bAuto)
             {
                 // if setting to true, and we don't have an
@@ -2105,7 +2105,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // SdrModel and we are leaving the default at false,
                 // we don't need to make an SdrModel and can do nothing
                 pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->MakeDrawModel() );
-                pDrawDoc->SetOpenInDesignMode ( bAuto );
+                pDrawDoc->SetAutoControlFocus ( bAuto );
             }
         }
         break;
