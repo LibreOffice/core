@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:17:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@ namespace DOM
     void SAL_CALL CAttr::setValue(const OUString& value)
         throw (DOMException)
     {
+        // remember old value (for mutation event)
+        OUString sOldValue = getValue();
+
         OString o1 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar* xValue = (xmlChar*)o1.getStr();
         // xmlChar* xName = OUStringToOString(m_aAttrPtr->name, RTL_TEXTENCODING_UTF8).getStr();
@@ -160,6 +163,19 @@ namespace DOM
                 m_aNodePtr->last = tmp;
             tmp = tmp->next;
         }
+
+        // dispatch DOM events to signal change in attribute value
+        // dispatch DomAttrModified + DOMSubtreeModified
+        OUString sEventName( RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified") );
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+        Reference< XMutationEvent > event(docevent->createEvent(sEventName),
+                                          UNO_QUERY);
+        event->initMutationEvent(
+                sEventName, sal_True, sal_False,
+                Reference<XNode>( static_cast<XAttr*>( this ) ),
+                sOldValue, value, getName(), AttrChangeType_MODIFICATION );
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+
         xmlFree(buffer);
     }
 
