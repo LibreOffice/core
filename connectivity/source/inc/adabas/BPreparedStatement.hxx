@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BPreparedStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ namespace connectivity
         {
         protected:
             virtual odbc::OResultSet* createResulSet();
+            virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
+            virtual void setResultSetType(sal_Int32 _par0)          ;
+            virtual void setUsingBookmarks(sal_Bool _bUseBookmark)  ;
         public:
             OAdabasPreparedStatement( OAdabasConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql)
                 : ::connectivity::odbc::OPreparedStatement( _pConnection,_TypeInfo,sql){}

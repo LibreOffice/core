@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 11:04:50 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,6 +783,32 @@ void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
                      sal_Int32 &_rValue,
+                     const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+{
+    SQLSMALLINT nValueLen;
+    _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
+    OTools::ThrowException(_pConnection,
+        (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
+        _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
+}
+// -------------------------------------------------------------------------
+void OTools::GetInfo(OConnection* _pConnection,
+                     SQLHANDLE _aConnectionHandle,
+                     SQLUSMALLINT _nInfo,
+                     SQLUINTEGER &_rValue,
+                     const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+{
+    SQLSMALLINT nValueLen;
+    _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
+    OTools::ThrowException(_pConnection,
+        (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
+        _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
+}
+// -------------------------------------------------------------------------
+void OTools::GetInfo(OConnection* _pConnection,
+                     SQLHANDLE _aConnectionHandle,
+                     SQLUSMALLINT _nInfo,
+                     SQLUSMALLINT &_rValue,
                      const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;

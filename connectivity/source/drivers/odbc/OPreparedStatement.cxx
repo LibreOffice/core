@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,26 +940,33 @@ void OPreparedStatement::FreeParams()
 // -------------------------------------------------------------------------
 void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
-    switch(nHandle)
+    try
     {
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-            if(!isPrepared())
-                setResultSetConcurrency(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_RESULTSETTYPE:
-            if(!isPrepared())
-                setResultSetType(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-            if(!isPrepared())
-                setFetchDirection(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_USEBOOKMARKS:
-            if(!isPrepared())
-                setUsingBookmarks(comphelper::getBOOL(rValue));
-            break;
-        default:
-            OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);
+        switch(nHandle)
+        {
+            case PROPERTY_ID_RESULTSETCONCURRENCY:
+                if(!isPrepared())
+                    setResultSetConcurrency(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_RESULTSETTYPE:
+                if(!isPrepared())
+                    setResultSetType(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_FETCHDIRECTION:
+                if(!isPrepared())
+                    setFetchDirection(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_USEBOOKMARKS:
+                if(!isPrepared())
+                    setUsingBookmarks(comphelper::getBOOL(rValue));
+                break;
+            default:
+                OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);
+        }
+    }
+    catch(const SQLException& e)
+    {
+        //  throw Exception(e.Message,*this);
     }
 }
 // -----------------------------------------------------------------------------

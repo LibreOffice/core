@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:13:20 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
 
-    sal_Int32 nValueLen = 0;
+    SQLUINTEGER nValueLen = 0;
     OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,*(Reference< XInterface >*)this);
 
     SQLINTEGER nCurType = 0;
@@ -368,11 +368,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
-#if SUPD > 631
                 columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
-#else
-                columnName.equalsIgnoreCase(xMeta->getColumnName(i)))
-#endif
             break;
     return i;
 }
@@ -1185,35 +1181,35 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
     return aRet;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OResultSet::getResultSetConcurrency() const throw( SQLException,  RuntimeException)
+sal_Int32 OResultSet::getResultSetConcurrency() const
 {
-    sal_uInt32 nValue;
+    sal_uInt32 nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CONCURRENCY,&nValue,SQL_IS_UINTEGER,0);
     return nValue;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OResultSet::getResultSetType() const throw( SQLException,  RuntimeException)
+sal_Int32 OResultSet::getResultSetType() const
 {
-    sal_uInt32 nValue;
+    sal_uInt32 nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SENSITIVITY,&nValue,SQL_IS_UINTEGER,0);
     return nValue;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OResultSet::getFetchDirection() const throw( SQLException,  RuntimeException)
+sal_Int32 OResultSet::getFetchDirection() const
 {
-    sal_uInt32 nValue;
+    sal_uInt32 nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nValue,SQL_IS_UINTEGER,0);
     return nValue;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OResultSet::getFetchSize() const throw( SQLException,  RuntimeException)
+sal_Int32 OResultSet::getFetchSize() const
 {
-    sal_uInt32 nValue;
+    sal_uInt32 nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,&nValue,SQL_IS_UINTEGER,0);
     return nValue;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString OResultSet::getCursorName() const throw( SQLException,  RuntimeException)
+::rtl::OUString OResultSet::getCursorName() const
 {
     SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
@@ -1221,29 +1217,36 @@ sal_Int32 OResultSet::getFetchSize() const throw( SQLException,  RuntimeExceptio
     return ::rtl::OUString::createFromAscii((const char*)pName);
 }
 // -------------------------------------------------------------------------
-sal_Bool  OResultSet::isBookmarkable() const throw( SQLException,  RuntimeException)
+sal_Bool  OResultSet::isBookmarkable() const
 {
     if(!m_aConnectionHandle)
         return sal_False;
 
-    sal_uInt32 nValue;
+    sal_uInt32 nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nValue,SQL_IS_UINTEGER,0);
 
     sal_Int32 nAttr = 0;
-    switch(nValue)
+    try
     {
-    case SQL_CURSOR_FORWARD_ONLY:
+        switch(nValue)
+        {
+        case SQL_CURSOR_FORWARD_ONLY:
+            return sal_False;
+            break;
+        case SQL_CURSOR_STATIC:
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_STATIC_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
+            break;
+        case SQL_CURSOR_KEYSET_DRIVEN:
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_KEYSET_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
+            break;
+        case SQL_CURSOR_DYNAMIC:
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
+            break;
+        }
+    }
+    catch(Exception&)
+    {
         return sal_False;
-        break;
-    case SQL_CURSOR_STATIC:
-        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_STATIC_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
-        break;
-    case SQL_CURSOR_KEYSET_DRIVEN:
-        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_KEYSET_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
-        break;
-    case SQL_CURSOR_DYNAMIC:
-        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nAttr,*(Reference< XInterface >*)this);
-        break;
     }
     sal_uInt32 nUseBookmark = SQL_UB_OFF;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nUseBookmark,SQL_IS_UINTEGER,NULL);
@@ -1251,12 +1254,12 @@ sal_Bool  OResultSet::isBookmarkable() const throw( SQLException,  RuntimeExcept
     return (nUseBookmark != SQL_UB_OFF) && (nAttr & SQL_CA1_BOOKMARK) == SQL_CA1_BOOKMARK;
 }
 //------------------------------------------------------------------------------
-void OResultSet::setFetchDirection(sal_Int32 _par0) throw( SQLException,  RuntimeException)
+void OResultSet::setFetchDirection(sal_Int32 _par0)
 {
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
-void OResultSet::setFetchSize(sal_Int32 _par0) throw( SQLException,  RuntimeException)
+void OResultSet::setFetchSize(sal_Int32 _par0)
 {
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
     delete m_pRowStatusArray;
@@ -1377,7 +1380,8 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
 
     for (; pColumn < pColumnEnd; ++nColumn, ++pColumn)
     {
-        switch (pColumn->getTypeKind())
+        sal_Int32 nType = pColumn->getTypeKind();
+        switch (nType)
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -1397,6 +1401,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 break;
             case DataType::LONGVARBINARY:
                 *pColumn = getBytes(nColumn);
+                pColumn->setTypeKind(nType);
                 break;
             case DataType::DATE:
                 *pColumn = getDate(nColumn);
@@ -1425,6 +1430,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
             case DataType::BINARY:
             case DataType::VARBINARY:
                 *pColumn = getBytes(nColumn);
+                pColumn->setTypeKind(nType);
                 break;
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,5 +87,19 @@ OResultSet* OAdabasStatement::createResulSet()
     return new OAdabasResultSet(m_aStatementHandle,this);
 }
 // -----------------------------------------------------------------------------
+void OAdabasStatement::setUsingBookmarks(sal_Bool _bUseBookmark)
+{
+    // adabas doesn't support bookmarks
+}
+// -----------------------------------------------------------------------------
+void OAdabasStatement::setResultSetConcurrency(sal_Int32 _par0)
+{
+}
+// -----------------------------------------------------------------------------
+void OAdabasStatement::setResultSetType(sal_Int32 _par0)
+{
+}
+// -----------------------------------------------------------------------------
+
 
 

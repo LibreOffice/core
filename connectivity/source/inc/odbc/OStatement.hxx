@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:14:43 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,25 +147,27 @@ namespace connectivity
             //using OStatement_BASE::rBHelper;
         protected:
 
-            sal_Int32 getQueryTimeOut()             const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getMaxFieldSize()             const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getMaxRows()                  const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getResultSetConcurrency()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getResultSetType()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getFetchDirection()           const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getFetchSize()                const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            ::rtl::OUString getCursorName()         const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Bool isUsingBookmarks()             const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getQueryTimeOut()         const;
+            sal_Int32 getMaxFieldSize()         const;
+            sal_Int32 getMaxRows()              const;
+            sal_Int32 getResultSetConcurrency() const;
+            sal_Int32 getResultSetType()        const;
+            sal_Int32 getFetchDirection()       const;
+            sal_Int32 getFetchSize()            const;
+            ::rtl::OUString getCursorName()     const;
+            sal_Bool isUsingBookmarks()         const;
+            sal_Int32 getStmtOption (short fOption) const;
 
-            void setQueryTimeOut(sal_Int32 _par0)               throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setMaxFieldSize(sal_Int32 _par0)               throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setMaxRows(sal_Int32 _par0)                    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setResultSetType(sal_Int32 _par0)              throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setFetchDirection(sal_Int32 _par0)             throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setFetchSize(sal_Int32 _par0)                  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setResultSetConcurrency(sal_Int32 _par0)       throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setCursorName(const ::rtl::OUString &_par0)    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void setUsingBookmarks(sal_Bool _bUseBookmark)      throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void setQueryTimeOut(sal_Int32 _par0)           ;
+            void setMaxFieldSize(sal_Int32 _par0)           ;
+            void setMaxRows(sal_Int32 _par0)                ;
+            void setFetchDirection(sal_Int32 _par0)         ;
+            void setFetchSize(sal_Int32 _par0)              ;
+            void setCursorName(const ::rtl::OUString &_par0);
+
+            virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
+            virtual void setResultSetType(sal_Int32 _par0)          ;
+            virtual void setUsingBookmarks(sal_Bool _bUseBookmark)  ;
 
             void reset () throw( ::com::sun::star::sdbc::SQLException);
             void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
@@ -185,7 +187,7 @@ namespace connectivity
             virtual OResultSet* createResulSet();
 
             sal_Int32 getRowCount () throw( ::com::sun::star::sdbc::SQLException);
-            sal_Int32 getStmtOption (short fOption) const throw( ::com::sun::star::sdbc::SQLException);
+
 
             void disposeResultSet();
 

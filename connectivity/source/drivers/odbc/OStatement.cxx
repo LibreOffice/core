@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:13:20 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,20 +460,11 @@ Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) thro
 // Invoke SQLGetStmtOption with the given option.
 //--------------------------------------------------------------------
 
-sal_Int32 OStatement_Base::getStmtOption (short fOption) const throw( SQLException)
+sal_Int32 OStatement_Base::getStmtOption (short fOption) const
 {
     sal_Int32   result = 0;
-
-    // Reset last warning message
-
-    //  clearWarnings();
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    try {
-        N3SQLGetStmtAttr(m_aStatementHandle, fOption,&result,SQL_IS_INTEGER,NULL);
-    }
-    catch (SQLException&)
-    {
-    }
+    N3SQLGetStmtAttr(m_aStatementHandle, fOption,&result,SQL_IS_INTEGER,NULL);
     return result;
 }
 // -------------------------------------------------------------------------
@@ -691,17 +682,17 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 }
 // -------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getQueryTimeOut() const  throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getQueryTimeOut() const
 {
     return getStmtOption(SQL_ATTR_QUERY_TIMEOUT);
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getMaxRows() const throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getMaxRows() const
 {
     return getStmtOption(SQL_ATTR_MAX_ROWS);
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getResultSetConcurrency() const throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getResultSetConcurrency() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue;
@@ -713,7 +704,7 @@ sal_Int32 OStatement_Base::getResultSetConcurrency() const throw(SQLException, R
     return nValue;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getResultSetType() const throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getResultSetType() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = SQL_CURSOR_FORWARD_ONLY;
@@ -736,7 +727,7 @@ sal_Int32 OStatement_Base::getResultSetType() const throw(SQLException, RuntimeE
     return nValue;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getFetchDirection() const throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getFetchDirection() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = 0;
@@ -755,7 +746,7 @@ sal_Int32 OStatement_Base::getFetchDirection() const throw(SQLException, Runtime
     return nValue;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getFetchSize() const throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getFetchSize() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue;
@@ -764,12 +755,12 @@ sal_Int32 OStatement_Base::getFetchSize() const throw(SQLException, RuntimeExcep
     return nValue;
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStatement_Base::getMaxFieldSize() const throw(SQLException, RuntimeException)
+sal_Int32 OStatement_Base::getMaxFieldSize() const
 {
     return getStmtOption(SQL_ATTR_MAX_LENGTH);
 }
 //------------------------------------------------------------------------------
-::rtl::OUString OStatement_Base::getCursorName() const throw(SQLException, RuntimeException)
+::rtl::OUString OStatement_Base::getCursorName() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLCHAR pName[258];
@@ -779,39 +770,20 @@ sal_Int32 OStatement_Base::getMaxFieldSize() const throw(SQLException, RuntimeEx
     return ::rtl::OUString::createFromAscii((const char*)pName);
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setQueryTimeOut(sal_Int32 seconds) throw(SQLException, RuntimeException)
+void OStatement_Base::setQueryTimeOut(sal_Int32 seconds)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_QUERY_TIMEOUT,(SQLPOINTER)seconds,SQL_IS_UINTEGER);
-#ifdef DEBUG
-    DEBUG_THROW
-#endif
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setMaxRows(sal_Int32 _par0)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_MAX_ROWS, (SQLPOINTER)_par0,SQL_IS_UINTEGER);
-#ifdef DEBUG
-    DEBUG_THROW
-#endif
-
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     SQLINTEGER nSet;
     if(_par0 == ResultSetConcurrency::READ_ONLY)
         nSet = SQL_CONCUR_READ_ONLY;
@@ -819,15 +791,12 @@ void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLExceptio
         nSet = SQL_CONCUR_VALUES;
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CONCURRENCY,(SQLPOINTER)nSet,SQL_IS_UINTEGER));
+    N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CONCURRENCY,(SQLPOINTER)nSet,SQL_IS_UINTEGER);
 
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setResultSetType(sal_Int32 _par0)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_ROW_BIND_TYPE,(SQLPOINTER)SQL_BIND_BY_COLUMN,SQL_IS_UINTEGER);
@@ -840,34 +809,25 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, Runt
             break;
         case ResultSetType::SCROLL_INSENSITIVE:
             nSet =  SQL_INSENSITIVE;
-            THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)SQL_CURSOR_KEYSET_DRIVEN,SQL_IS_UINTEGER));
+            N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)SQL_CURSOR_KEYSET_DRIVEN,SQL_IS_UINTEGER);
             break;
         case ResultSetType::SCROLL_SENSITIVE:
             nSet = SQL_CURSOR_DYNAMIC;
             if(N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)nSet,SQL_IS_UINTEGER) != SQL_SUCCESS)
             {
                 nSet = SQL_CURSOR_KEYSET_DRIVEN;
-                THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)nSet,SQL_IS_UINTEGER));
+                N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)nSet,SQL_IS_UINTEGER);
             }
             nSet =  SQL_SENSITIVE;
             break;
     }
 
 
-    if(nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_SENSITIVITY,(SQLPOINTER)nSet,SQL_IS_UINTEGER) != SQL_SUCCESS)
-    {
-    }
-#ifdef DEBUG
-    DEBUG_THROW
-#endif
+    N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_SENSITIVITY,(SQLPOINTER)nSet,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setFetchDirection(sal_Int32 _par0)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int32 nCursType = 0;
     SQLRETURN nRetCode  = SQL_SUCCESS;
@@ -881,78 +841,45 @@ void OStatement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, Run
         nCursType = SQL_SCROLLABLE;
         nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SCROLLABLE,(SQLPOINTER)nCursType,SQL_IS_UINTEGER);
     }
-#ifdef DEBUG
-    DEBUG_THROW
-#endif
-
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setFetchSize(sal_Int32 _par0)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
 
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
 
-#ifdef DEBUG
-    DEBUG_THROW
-#endif
-
     delete m_pRowStatusArray;
     m_pRowStatusArray = new SQLUSMALLINT[_par0];
     nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
-#ifdef DEBUG
-    DEBUG_THROW
-#endif
-
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setMaxFieldSize(sal_Int32 _par0)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_MAX_LENGTH,(SQLPOINTER)_par0,SQL_IS_UINTEGER));
+    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_MAX_LENGTH,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setCursorName(const ::rtl::OUString &_par0)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     ::rtl::OString aName(::rtl::OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
-    THROW_SQL(N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),(SQLSMALLINT)aName.getLength()));
+    N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),(SQLSMALLINT)aName.getLength());
 }
 // -------------------------------------------------------------------------
-sal_Bool OStatement_Base::isUsingBookmarks() const throw(SQLException, RuntimeException)
+sal_Bool OStatement_Base::isUsingBookmarks() const
 {
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = SQL_UB_OFF;
     SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
-    //  THROW_SQL(nRet);
     return nValue != SQL_UB_OFF;
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark) throw(SQLException, RuntimeException)
+void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = _bUseBookmark ? SQL_UB_VARIABLE : SQL_UB_OFF;
     SQLRETURN nRet = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,(SQLPOINTER)nValue,SQL_IS_UINTEGER);
-    THROW_SQL(nRet);
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
@@ -988,83 +915,97 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bConverted = sal_False;
-    switch(nHandle)
+    try
     {
-        case PROPERTY_ID_QUERYTIMEOUT:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
-            break;
+        switch(nHandle)
+        {
+            case PROPERTY_ID_QUERYTIMEOUT:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
+                break;
 
-        case PROPERTY_ID_MAXFIELDSIZE:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
-            break;
+            case PROPERTY_ID_MAXFIELDSIZE:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
+                break;
 
-        case PROPERTY_ID_MAXROWS:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxRows());
-            break;
+            case PROPERTY_ID_MAXROWS:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxRows());
+                break;
 
-        case PROPERTY_ID_CURSORNAME:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
-            break;
+            case PROPERTY_ID_CURSORNAME:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
+                break;
 
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
-            break;
+            case PROPERTY_ID_RESULTSETCONCURRENCY:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
+                break;
 
-        case PROPERTY_ID_RESULTSETTYPE:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
-            break;
+            case PROPERTY_ID_RESULTSETTYPE:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
+                break;
 
-        case PROPERTY_ID_FETCHDIRECTION:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
-            break;
+            case PROPERTY_ID_FETCHDIRECTION:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
+                break;
 
-        case PROPERTY_ID_FETCHSIZE:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
-            break;
+            case PROPERTY_ID_FETCHSIZE:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
+                break;
 
-        case PROPERTY_ID_USEBOOKMARKS:
-            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, isUsingBookmarks());
-            break;
+            case PROPERTY_ID_USEBOOKMARKS:
+                bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, isUsingBookmarks());
+                break;
 
-        default:
-            ;
+            default:
+                ;
+        }
+    }
+    catch(const SQLException&)
+    {
+        //  throw Exception(e.Message,*this);
     }
     return bConverted;
 }
 // -------------------------------------------------------------------------
 void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
-    switch(nHandle)
+    try
     {
-        case PROPERTY_ID_QUERYTIMEOUT:
-            setQueryTimeOut(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_MAXFIELDSIZE:
-            setMaxFieldSize(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_MAXROWS:
-            setMaxRows(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_CURSORNAME:
-            setCursorName(comphelper::getString(rValue));
-            break;
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-            setResultSetConcurrency(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_RESULTSETTYPE:
-            setResultSetType(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-            setFetchDirection(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_FETCHSIZE:
-            setFetchSize(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_USEBOOKMARKS:
-            setUsingBookmarks(comphelper::getBOOL(rValue));
-            break;
-        default:
-            ;
+        switch(nHandle)
+        {
+            case PROPERTY_ID_QUERYTIMEOUT:
+                setQueryTimeOut(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_MAXFIELDSIZE:
+                setMaxFieldSize(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_MAXROWS:
+                setMaxRows(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_CURSORNAME:
+                setCursorName(comphelper::getString(rValue));
+                break;
+            case PROPERTY_ID_RESULTSETCONCURRENCY:
+                setResultSetConcurrency(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_RESULTSETTYPE:
+                setResultSetType(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_FETCHDIRECTION:
+                setFetchDirection(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_FETCHSIZE:
+                setFetchSize(comphelper::getINT32(rValue));
+                break;
+            case PROPERTY_ID_USEBOOKMARKS:
+                setUsingBookmarks(comphelper::getBOOL(rValue));
+                break;
+            default:
+                ;
+        }
+    }
+    catch(const SQLException& )
+    {
+        //  throw Exception(e.Message,*this);
     }
 }
 // -------------------------------------------------------------------------

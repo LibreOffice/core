@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 11:05:34 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,18 @@ namespace connectivity
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 sal_Int32 &_rValue,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            static void GetInfo(OConnection* _pConnection,
+                                SQLHANDLE _aConnectionHandle,
+                                SQLUSMALLINT _nInfo,
+                                SQLUSMALLINT &_rValue,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            static void GetInfo(OConnection* _pConnection,
+                                SQLHANDLE _aConnectionHandle,
+                                SQLUSMALLINT _nInfo,
+                                SQLUINTEGER &_rValue,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             static void GetInfo(OConnection* _pConnection,
