@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@
 #include <vcl/svapp.hxx>
 #endif
 
+
+#include "unofill.hxx"
 
 #include "unoapi.hxx"
 
