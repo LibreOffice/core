@@ -9,3 +9,4 @@ so	soltools\cpp							nmake	-	all	so_cpp__ so_mkdep NULL
 so	soltools\javadep						nmake	-	all	so_jvdep so_mkdep NULL
 so	soltools\support						nmake	-	all	so_supp so_mkdep NULL
 so	soltools\giparser						nmake	-	all	so_gip so_supp NULL
+so	soltools\adjustvisibility				nmake	-	u	so_adjvis NULL
