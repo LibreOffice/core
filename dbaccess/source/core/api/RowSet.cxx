@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-13 11:12:59 $
+ *  last change: $Author: oj $ $Date: 2002-08-22 10:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1374,12 +1374,13 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 
     ResettableMutexGuard aGuard( m_aMutex );
 
-
     // create and fill a composer
     Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(this, m_xServiceManager);
 
     // we have to set this here again because getCurrentSettingsComposer can force a setpropertyvalue
-    m_bOwnConnection        = sal_True;
+
+    // OJ: why? When the ActiveConnection is set again, m_bOwnConnection should be true
+    //  m_bOwnConnection = sal_True;
     try
     {
         freeResources();
