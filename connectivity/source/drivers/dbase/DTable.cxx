@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 10:54:46 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 13:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,13 +1020,25 @@ BOOL ODbaseTable::CreateImpl()
         aURL.setExtension(String::CreateFromAscii("dbt"));                      // extension for memo file
         Content aMemo1Content(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
 
-        if (aMemo1Content.isDocument())
+        sal_Bool bMemoAlreadyExists = sal_False;
+        try
+        {
+            bMemoAlreadyExists = aMemo1Content.isDocument();
+        }
+        catch(Exception&) // a execption is thrown when no file exists
+        {
+        }
+        if (bMemoAlreadyExists)
         {
             //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,MEMO,aFile.GetFull());
             aURL.setExtension(aExt);      // kill dbf file
             Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
             aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
-            return sal_False;
+
+            ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The memo file '");
+            sMessage += aName;
+            sMessage += ::rtl::OUString::createFromAscii(" already exists.");
+            throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
         }
         if (!CreateMemoFile(aURL))
         {
@@ -1462,7 +1474,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
 //  }
 //  else
 //  {
-        aStr = ByteString(aVariable.getString().getStr(), getConnection()->getTextEncoding());
+        aStr = ByteString(String(aVariable.getString()), getConnection()->getTextEncoding());
         nSize = aStr.Len();
     //  }
 
@@ -1858,7 +1870,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 }   break;
             }
         }
-        catch ( ... )
+        catch ( Exception& )
         {
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid value for column: ");
             sMsg += aColName;
