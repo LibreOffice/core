@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-13 06:50:09 $
+ *  last change: $Author: cd $ $Date: 2001-06-25 16:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1154,21 +1154,37 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     }
                     else if ( aINetProtocol == INET_PROT_FILE )
                     {
-                        ::rtl::OUString aSysPathFileName;
-                        ::osl::FileBase::RC nError = ::osl::FileBase::getSystemPathFromFileURL( aURL.Complete, aSysPathFileName );
-                        if ( nError == ::osl::FileBase::E_None )
+                        String          aReferer;
+                        SfxApplication* pApp = SFX_APP();
+
+                        SFX_REQUEST_ARG( rReq, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
+                        if ( pRefererItem )
+                            aReferer = pRefererItem->GetValue();
+
+                        // security => we have to check the url before executing!
+                        if ( pApp->IsSecureURL( aObj, &aReferer ) )
                         {
-                            try
+                            ::rtl::OUString aSysPathFileName;
+                            ::osl::FileBase::RC nError = ::osl::FileBase::getSystemPathFromFileURL( aURL.Complete, aSysPathFileName );
+                            if ( nError == ::osl::FileBase::E_None )
                             {
-                                // give os this file
-                                xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                                try
+                                {
+                                    // give os this file
+                                    xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                                }
+                                catch ( ::com::sun::star::lang::IllegalArgumentException& )
+                                {
+                                }
+                                catch ( ::com::sun::star::system::SystemShellExecuteException& )
+                                {
+                                }
                             }
-                            catch ( ::com::sun::star::lang::IllegalArgumentException& )
-                            {
-                            }
-                            catch ( ::com::sun::star::system::SystemShellExecuteException& )
-                            {
-                            }
+                        }
+                        else
+                        {
+                            SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL.Complete );
+                            ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
                         }
 
                         return;
