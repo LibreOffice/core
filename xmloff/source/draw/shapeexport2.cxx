@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:35:39 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,7 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
         SvXMLElementExport aPGR(rExport, XML_NAMESPACE_DRAW, sXML_g, sal_True, sal_True);
 
         ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
 
         // write members
         exportShapes( xShapes, nFeatures, pRefPoint );
@@ -611,6 +612,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_text_box, sal_True, sal_True);
 
         ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
         if(!bIsEmptyPresObj)
             ImpExportText( xShape );
     }
@@ -642,6 +644,7 @@ void XMLShapeExport::ImpExportRectangleShape(
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_rect, sal_True, sal_True);
 
         ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
         ImpExportText( xShape );
     }
 }
@@ -749,6 +752,7 @@ void XMLShapeExport::ImpExportLineShape(
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_line, sal_True, sal_True);
 
         ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
         ImpExportText( xShape );
     }
 }
@@ -803,6 +807,7 @@ void XMLShapeExport::ImpExportEllipseShape(
             SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_circle, sal_True, sal_True);
 
             ImpExportEvents( xShape );
+            ImpExportGluePoints( xShape );
             ImpExportText( xShape );
         }
         else
@@ -811,6 +816,7 @@ void XMLShapeExport::ImpExportEllipseShape(
             SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_ellipse, sal_True, sal_True);
 
             ImpExportEvents( xShape );
+            ImpExportGluePoints( xShape );
             ImpExportText( xShape );
         }
     }
@@ -888,6 +894,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                 SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_path, sal_True, sal_True);
 
                 ImpExportEvents( xShape );
+                ImpExportGluePoints( xShape );
                 ImpExportText( xShape );
             }
         }
@@ -918,6 +925,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                         bClosed ? sXML_polygon : sXML_polyline , sal_True, sal_True);
 
                     ImpExportEvents( xShape );
+                    ImpExportGluePoints( xShape );
                     ImpExportText( xShape );
                 }
                 else
@@ -947,6 +955,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_path, sal_True, sal_True);
 
                     ImpExportEvents( xShape );
+                    ImpExportGluePoints( xShape );
                     ImpExportText( xShape );
                 }
             }
@@ -1003,6 +1012,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         // write graphic object
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_image, sal_True, sal_True);
         ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
         ImpExportText( xShape );
 
         // image map
@@ -1202,6 +1212,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndShape")) );
     if( aAny >>= xTempShape )
     {
+
         sal_Int32 nShapeId = rExport.GetShapeExport()->getShapeId( xTempShape );
         rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_end_shape, OUString::valueOf( nShapeId ));
 
@@ -1220,6 +1231,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_connector, sal_True, sal_True);
 
     ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
     ImpExportText( xShape );
 }
 
@@ -1290,6 +1302,7 @@ void XMLShapeExport::ImpExportMeasureShape(
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_measure, sal_True, sal_True);
 
     ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
 
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
     if( xText.is() )
@@ -1350,6 +1363,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, pElem, sal_False, sal_True );
 
         ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
     }
 }
 
@@ -1415,6 +1429,7 @@ void XMLShapeExport::ImpExportCaptionShape(
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_caption, sal_True, sal_True);
 
         ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
         ImpExportText( xShape );
     }
 }

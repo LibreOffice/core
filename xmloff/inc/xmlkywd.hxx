@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:20:52 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2010,4 +2010,6 @@ XML_CONSTASCII_ACTION( sXML_data_source_has_labels, "data-source-has-labels" );
 XML_CONSTASCII_ACTION( sXML_play, "play" );
 XML_CONSTASCII_ACTION( sXML_handout_master, "handout-master" );
 
+XML_CONSTASCII_ACTION( sXML_escape_direction, "escape-direction" );
+XML_CONSTASCII_ACTION( sXML_glue_point, "glue-point" );
 #endif

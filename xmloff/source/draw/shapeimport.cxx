@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-18 08:40:43 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,9 +242,16 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
 
     // Styles or AutoStyles context?
     if(mpStylesContext)
+    {
+        mpStylesContext->Clear();
         mpStylesContext->ReleaseRef();
+    }
+
     if(mpAutoStylesContext)
+    {
+        mpAutoStylesContext->Clear();
         mpAutoStylesContext->ReleaseRef();
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////

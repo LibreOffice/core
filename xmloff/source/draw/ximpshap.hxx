@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-14 11:35:10 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _XIMPSHAPE_HXX
 #define _XIMPSHAPE_HXX
 
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
 #endif
@@ -106,6 +110,8 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxCursor;
     com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxOldCursor;
     com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList> mxAttrList;
+    com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > mxGluePoints;
+
     rtl::OUString               maDrawStyleName;
     rtl::OUString               maPresentationClass;
     rtl::OUString               maShapeName;
@@ -130,6 +136,7 @@ protected:
     SvXMLImport& GetImport() { return SvXMLImportContext::GetImport(); }
     const SvXMLImport& GetImport() const { return SvXMLImportContext::GetImport(); }
 
+    void addGluePoint( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 public:
     TYPEINFO();
 

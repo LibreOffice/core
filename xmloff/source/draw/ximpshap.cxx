@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,26 @@
 #pragma hdrstop
 
 #include <tools/debug.hxx>
+
+#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
+#include <com/sun/star/drawing/GluePoint2.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_ALIGNMENT_HPP_
+#include <com/sun/star/drawing/Alignment.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_ESCAPEDIRECTION_HPP_
+#include <com/sun/star/drawing/EscapeDirection.hpp>
+#endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -166,6 +186,9 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
+extern SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[];
+extern SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[];
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -222,6 +245,10 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
     {
         pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
+    else if( nPrefix == XML_NAMESPACE_DRAW && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_glue_point ) ) )
+    {
+        addGluePoint( xAttrList );
+    }
     else
     {
         // create text cursor on demand
@@ -254,6 +281,89 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
     return pContext;
 }
 
+void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+{
+    // get the glue points container for this shape if its not already there
+    if( !mxGluePoints.is() )
+    {
+        uno::Reference< drawing::XGluePointsSupplier > xSupplier( mxShape, uno::UNO_QUERY );
+        if( !xSupplier.is() )
+            return;
+
+        mxGluePoints = xSupplier->getGluePoints();
+
+        if( !mxGluePoints.is() )
+            return;
+    }
+
+    drawing::GluePoint2 aGluePoint;
+    aGluePoint.IsUserDefined = sal_True;
+    aGluePoint.Position.X = 0;
+    aGluePoint.Position.Y = 0;
+    aGluePoint.Escape = drawing::EscapeDirection_SMART;
+    aGluePoint.PositionAlignment = drawing::Alignment_CENTER;
+    aGluePoint.IsRelative = sal_True;
+
+    sal_Int32 nId = -1;
+
+    // read attributes for the 3DScene
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        const OUString sValue( xAttrList->getValueByIndex( i ) );
+
+        if( nPrefix == XML_NAMESPACE_SVG )
+        {
+            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_x ) ) )
+            {
+                GetImport().GetMM100UnitConverter().convertMeasure(aGluePoint.Position.X, sValue);
+            }
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_y ) ) )
+            {
+                GetImport().GetMM100UnitConverter().convertMeasure(aGluePoint.Position.Y, sValue);
+            }
+        }
+        else if( nPrefix == XML_NAMESPACE_DRAW )
+        {
+            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_id ) ) )
+            {
+                nId = sValue.toInt32();
+            }
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_align ) ) )
+            {
+                USHORT eKind;
+                if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueAlignment_EnumMap ) )
+                {
+                    aGluePoint.PositionAlignment = (drawing::Alignment)eKind;
+                    aGluePoint.IsRelative = sal_False;
+                }
+            }
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_escape_direction ) ) )
+            {
+                USHORT eKind;
+                if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueEscapeDirection_EnumMap ) )
+                {
+                    aGluePoint.Escape = (drawing::EscapeDirection)eKind;
+                }
+            }
+        }
+    }
+
+    if( nId != -1 )
+    {
+        try
+        {
+            mxGluePoints->insertByIndex( nId, uno::makeAny( aGluePoint ) );
+        }
+        catch( uno::Exception& )
+        {
+            DBG_ERROR( "exception during setting of glue points!");
+        }
+    }
+}
 //////////////////////////////////////////////////////////////////////////////
 
 void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)

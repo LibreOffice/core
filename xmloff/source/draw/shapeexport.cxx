@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:13:43 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,3 +862,92 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 }
 
 ///////////////////////////////////////////////////////////////////////
+
+#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
+#include <com/sun/star/drawing/GluePoint2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_ALIGNMENT_HPP_
+#include <com/sun/star/drawing/Alignment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_ESCAPEDIRECTION_HPP_
+#include <com/sun/star/drawing/EscapeDirection.hpp>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+#include "xmlnmspe.hxx"
+
+SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[] =
+{
+    { sXML_top_left,    drawing::Alignment_TOP_LEFT },
+    { sXML_top,         drawing::Alignment_TOP },
+    { sXML_top_right,   drawing::Alignment_TOP_RIGHT },
+    { sXML_left,        drawing::Alignment_LEFT },
+    { sXML_center,      drawing::Alignment_CENTER },
+    { sXML_right,       drawing::Alignment_RIGHT },
+    { sXML_bottom_left, drawing::Alignment_BOTTOM_LEFT },
+    { sXML_bottom,      drawing::Alignment_BOTTOM },
+    { sXML_bottom_right,drawing::Alignment_BOTTOM_RIGHT },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[] =
+{
+    { sXML_auto,        drawing::EscapeDirection_SMART },
+    { sXML_left,        drawing::EscapeDirection_LEFT },
+    { sXML_right,       drawing::EscapeDirection_RIGHT },
+    { sXML_up,          drawing::EscapeDirection_UP },
+    { sXML_down,        drawing::EscapeDirection_DOWN },
+    { sXML_horizontal,  drawing::EscapeDirection_HORIZONTAL },
+    { sXML_vertical,    drawing::EscapeDirection_VERTICAL },
+    { NULL, 0 }
+};
+
+/** exports all user defined glue points */
+void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape >& xShape )
+{
+    uno::Reference< drawing::XGluePointsSupplier > xSupplier( xShape, uno::UNO_QUERY );
+    if( !xSupplier.is() )
+        return;
+
+    uno::Reference< container::XIndexContainer > xGluePoints( xSupplier->getGluePoints() );
+    if( !xGluePoints.is() )
+        return;
+
+    drawing::GluePoint2 aGluePoint;
+
+    const sal_Int32 nCount = xGluePoints->getCount();
+    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        if( (xGluePoints->getByIndex( nIndex ) >>= aGluePoint) && aGluePoint.IsUserDefined )
+        {
+            // export only user defined glue points
+
+            const OUString sId( OUString::valueOf( nIndex ) );
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
+
+            rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.X);
+            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_x, msBuffer.makeStringAndClear());
+
+            rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.Y);
+            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_y, msBuffer.makeStringAndClear());
+
+            if( !aGluePoint.IsRelative )
+            {
+                SvXMLUnitConverter::convertEnum( msBuffer, aGluePoint.PositionAlignment, aXML_GlueAlignment_EnumMap );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_align, msBuffer.makeStringAndClear() );
+            }
+
+            if( aGluePoint.Escape != drawing::EscapeDirection_SMART )
+            {
+                SvXMLUnitConverter::convertEnum( msBuffer, aGluePoint.Escape, aXML_GlueEscapeDirection_EnumMap );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_escape_direction, msBuffer.makeStringAndClear() );
+            }
+
+            SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_DRAW, sXML_glue_point, sal_True, sal_True);
+        }
+    }
+}
