@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:26:50 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
 #include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_SCRIPTFRAMEWORKERRORTYPE_HPP_
+#include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
+#endif
+
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
 #endif
@@ -108,12 +112,15 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 
+#include <util/util.hxx>
+#include <util/MiscUtils.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::script;
-
+using namespace ::sf_misc;
 
 //.........................................................................
 namespace basprov
@@ -169,13 +176,9 @@ namespace basprov
         ,m_xLibContainerApp( 0 )
         ,m_xLibContainerDoc( 0 )
         ,m_xContext( xContext )
-        ,m_xScriptingContext( 0 )
         ,m_bIsAppScriptCtx( true )
         ,m_bIsUserCtx(true)
     {
-        // TODO
-        if ( !m_pAppBasicManager )
-            m_pAppBasicManager = SFX_APP()->GetBasicManager();
     }
 
     // -----------------------------------------------------------------------------
@@ -227,32 +230,16 @@ namespace basprov
         {
             // Provider has been created with application context for user
             // or share
-            ::rtl::OUString sTmp;
-            aArguments[0] >>= sTmp;
-            Any aAny = m_xContext->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) );
-            Reference< util::XMacroExpander > xME;
-            aAny >>= xME;
-            ::rtl::OUString base = ::rtl::OUString::createFromAscii(
-                 SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
-            ::rtl::OUString user = ::rtl::OUString::createFromAscii( "::UserInstallation}/user"  );
-            ::rtl::OUString share = ::rtl::OUString::createFromAscii( "::BaseInstallation}/share" );
-            ::rtl::OUString userDirString = xME->expandMacros( base.concat( user ) );
-            if ( !sTmp.equals( userDirString ) )
-            {
-                m_bIsUserCtx = false;
-            }
-        }
+            aArguments[0] >>= m_sScriptingContext;
 
-        else if ( aArguments.getLength() == 1 && aArguments[0].getValueType() ==  ::getCppuType(  ( const Reference< beans::XPropertySet >* ) NULL ))
-        {
-            // Provider has been created with document context
-            aArguments[0] >>= m_xScriptingContext;
+            ::rtl::OUString sUser = OUSTR("user");
+            ::rtl::OUString sShare = OUSTR("share");
+            ::rtl::OUString sDoc = OUSTR("vnd.sun.star.tdoc");
 
-            if ( m_xScriptingContext.is() )
+            if ( m_sScriptingContext.indexOf( sDoc  ) == 0 )
             {
-                Reference< frame::XModel > xModel;
+                Reference< frame::XModel > xModel = MiscUtils::tDocUrlToModel(  m_sScriptingContext );
                 // TODO: use ScriptingContantsPool for SCRIPTING_DOC_REF
-                m_xScriptingContext->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SCRIPTING_DOC_REF" ) ) ) >>= xModel;
 
                 if ( xModel.is() )
                 {
@@ -262,11 +249,17 @@ namespace basprov
                         {
                             m_pDocBasicManager = pObjShell->GetBasicManager();
                             m_xLibContainerDoc = Reference< script::XLibraryContainer >( pObjShell->GetBasicContainer(), UNO_QUERY );
+
                             break;
                         }
                     }
-            m_bIsAppScriptCtx = sal_False;
                 }
+                m_bIsAppScriptCtx = false;
+             }
+
+            else if ( !m_sScriptingContext.equals( sUser ) )
+            {
+                m_bIsUserCtx = false;
             }
             else
             {
@@ -279,12 +272,16 @@ namespace basprov
         }
         else
         {
-            /*
+
             throw RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: incorrect number of arguments!" ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: incorrect argument type " )  ).concat(  aArguments[0].getValueType().getTypeName() ),
                 Reference< XInterface >() );
-            */
+
         }
+
+        // TODO
+        if ( !m_pAppBasicManager )
+            m_pAppBasicManager = SFX_APP()->GetBasicManager();
 
         if ( !m_xLibContainerApp.is() )
             m_xLibContainerApp = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
@@ -296,7 +293,7 @@ namespace basprov
     // -----------------------------------------------------------------------------
 
     Reference < provider::XScript > BasicProviderImpl::getScript( const ::rtl::OUString& scriptURI )
-        throw (IllegalArgumentException, RuntimeException)
+        throw ( provider::ScriptFrameworkErrorException, RuntimeException)
     {
         // TODO
 
@@ -310,9 +307,10 @@ namespace basprov
 
         if ( !xFac.is() )
         {
-            throw RuntimeException(
-                ::rtl::OUString::createFromAscii( "BasicProviderImpl::getScript(), could not instatiate UriReferenceFactory." ),
-                Reference< XInterface >() );
+            throw provider::ScriptFrameworkErrorException(
+                OUSTR( "Failed to instantiate  UriReferenceFactory" ), Reference< XInterface >(),
+                scriptURI, OUSTR("Basic"),
+                provider::ScriptFrameworkErrorType::UNKNOWN );
         }
 
         Reference<  uri::XUriReference > uriRef(
@@ -323,9 +321,11 @@ namespace basprov
         if ( !uriRef.is() || !sfUri.is() )
         {
             ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "BasicProviderImpl::getScript: failed to parse URI: " );
-            errorMsg.concat( scriptURI );
-            throw IllegalArgumentException( errorMsg,
-                Reference< XInterface >(), 1 );
+            errorMsg = errorMsg.concat( scriptURI );
+            throw provider::ScriptFrameworkErrorException(
+                errorMsg, Reference< XInterface >(),
+                scriptURI, OUSTR("Basic"),
+                provider::ScriptFrameworkErrorType::UNKNOWN );
         }
 
 
@@ -379,9 +379,7 @@ namespace basprov
                         {
                             SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxCLASS_METHOD ) );
                             if ( pMethod )
-                            {
-                                xScript = static_cast< provider::XScript* >( new BasicScriptImpl( pMethod ) );
-                            }
+                                xScript = static_cast< provider::XScript* >( new BasicScriptImpl( aDescription, pMethod ) );
                         }
                     }
                 }
@@ -390,9 +388,10 @@ namespace basprov
 
         if ( !xScript.is() )
         {
-            throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::getScript: no script!" ) ),
-                Reference< XInterface >(), 1 );
+            throw provider::ScriptFrameworkErrorException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::getScript: no script!" ) ), Reference< XInterface >(),
+                scriptURI, OUSTR("Basic"),
+                provider::ScriptFrameworkErrorType::UNKNOWN );
         }
 
         return xScript;
@@ -475,18 +474,18 @@ namespace basprov
 
                     if ( m_bIsUserCtx && ( isLibLink == sal_False ) )
                     {
-                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_xScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
                         continue;
                     }
                     if ( !m_bIsUserCtx && ( isLibLink == sal_True ) )
                     {
-                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_xScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
                         continue;
                     }
                 }
                 else
                 {
-                    pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_xScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                    pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
                 }
             }
             if ( i != childsFound )
