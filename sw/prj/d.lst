@@ -1,5 +1,6 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\sw
-touch: ..\%__SRC%\misc\sw.hid %_DEST%\bin%_EXT%\sw.hid
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\inc\swdll.hxx %_DEST%\inc%_EXT%\sw\swdll.hxx
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\%__SRC%\bin\soffice.pdb %_DEST%\bin%_EXT%\soffice.pdb
