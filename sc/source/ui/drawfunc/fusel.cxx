@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:09:13 $
+ *  last change: $Author: nn $ $Date: 2001-12-12 21:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,11 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                 }
 
+                //  Is another object being edited in this view?
+                //  (Editing is ended in MarkListHasChanged - test before UnmarkAll)
+                SfxInPlaceClient* pClient = pViewShell->GetIPClient();
+                BOOL bWasOleActive = ( pClient && pClient->IsInPlaceActive() );
+
                 //  Markieren
 
                 if ( !rMEvt.IsShift() )
@@ -222,7 +227,13 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     //********************************************************
                     if (pView->IsMarkedHit(aMDPos))
                     {
-                        aDragTimer.Start();
+                        //  #95834# Don't start drag timer if inplace editing of an OLE object
+                        //  was just ended with this mouse click - the view will be moved
+                        //  (different tool bars) and the object that was clicked on would
+                        //  be moved unintentionally.
+                        if ( !bWasOleActive )
+                            aDragTimer.Start();
+
                         pHdl=pView->HitHandle(aMDPos, *pWindow);
                         pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
                         bReturn = TRUE;
