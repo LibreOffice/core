@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 09:06:31 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 17:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,10 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
 
 
    ; private
+   vnd-sun-star-hier-url = "VND.SUN.STAR.HIER:" *("/" *pchar)
+
+
+   ; private
    vim-url = "VIM://" +vimc [":" *vimc] ["/" [("INBOX" message) / ("NEWSGROUPS" ["/" [+vimc message]])]]
    message = ["/" [+vimc [":" +DIGIT "." +DIGIT "." +DIGIT]]]
    vimc = ("=" HEXDIG HEXDIG) / ALPHA / DIGIT
@@ -370,8 +374,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false },
         { "vnd.sun.star.wfs", "vnd.sun.star.wfs://", 0, true, false, false,
           false, true, false, true, false },
-        { 0, 0, 0, false, false, false, false, false, false, false,
-          false },
+        { "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, false, false, false,
+          false, false, false, true, false },
         { "vim", "vim://", 0, true, true, false, true, false, false, true,
           false },
         { ".uno", ".uno:", 0, false, false, false, false, false, false,
@@ -457,25 +461,26 @@ enum
     pX = INetURLObject::PART_UNO_PARAM_VALUE,
     pY = INetURLObject::PART_UNAMBIGUOUS
 };
+
 static sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-/* */   pY,
-/* ! */ pC+pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* " */ pU+pV+pY,
-/* # */ pU,
-/* $ */ pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* % */ pU,
-/* & */ pA+pB+pC+pD+pE+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pR+pS+pT+pU+pV+pW+pX,
-/* ' */ pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* ( */ pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* ) */ pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* * */ pA+pB+pC+pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* + */ pA+pB+pC+pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX,
-/* , */ pA+pB+pC+pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW,
-/* - */ pA+pB+pC+pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* . */ pA+pB+pC+pD+pE+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* / */ pA+pB+pC+pH+pJ+pL+pM+pP+pQ+pR+pT+pU+pV+pX,
+/*   */                                                                         pY,
+/* ! */       pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* " */                                                             pU+pV      +pY,
+/* # */                                                             pU,
+/* $ */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* % */                                                             pU,
+/* & */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP   +pR+pS+pT+pU+pV+pW+pX,
+/* ' */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* ( */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* ) */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* * */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* + */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX,
+/* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW,
+/* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* / */ pA+pB+pC+pH+pJ                  +pL+pM      +pP+pQ+pR   +pT+pU+pV   +pX,
 /* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
@@ -486,13 +491,13 @@ static sal_uInt32 const aMustEncodeMap[128]
 /* 7 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* 8 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* 9 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* : */ pB+pC+pH+pI+pJ+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX,
-/* ; */ pC+pD+pI+pJ+pK+pL+pM+pO+pP+pQ+pR+pT+pU+pW,
-/* < */ pC+pO+pP+pU+pV+pY,
-/* = */ pA+pB+pC+pD+pE+pH+pI+pJ+pK+pL+pM+pN+pR+pS+pT+pU+pV+pW,
-/* > */ pC+pO+pP+pU+pV+pY,
-/* ? */ pC+pL+pT+pU+pW+pX,
-/* @ */ pC+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* : */    pB+pC            +pH+pI+pJ   +pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX,
+/* ; */       pC+pD            +pI+pJ+pK+pL+pM   +pO+pP+pQ+pR   +pT+pU   +pW,
+/* < */       pC                                 +pO+pP            +pU+pV      +pY,
+/* = */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN         +pR+pS+pT+pU+pV+pW,
+/* > */       pC                                 +pO+pP            +pU+pV      +pY,
+/* ? */       pC                        +pL                     +pT+pU   +pW+pX,
+/* @ */       pC            +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* A */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* B */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* C */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
@@ -519,12 +524,12 @@ static sal_uInt32 const aMustEncodeMap[128]
 /* X */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* Y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* Z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* [ */ pL+pU+pV+pX,
-/* \ */ pB+pU+pV+pY,
-/* ] */ pL+pU+pV+pX,
-/* ^ */ pU+pV+pY,
-/* _ */ pA+pB+pC+pD+pE +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* ` */ +pU+pV+pY,
+/* [ */                                  pL                        +pU+pV   +pX,
+/* \ */    pB                                                      +pU+pV      +pY,
+/* ] */                                  pL                        +pU+pV   +pX,
+/* ^ */                                                             pU+pV      +pY,
+/* _ */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* ` */                                                             pU+pV      +pY,
 /* a */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* b */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* c */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
@@ -551,11 +556,11 @@ static sal_uInt32 const aMustEncodeMap[128]
 /* x */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
 /* z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* { */ +pU+pV+pY,
-/* | */ pB+pC+pN+pT+pU+pV+pY,
-/* } */ +pU+pV+pY,
-/* ~ */ pA+pB+pC+pD+pE+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* */   0 };
+/* { */                                                             pU+pV      +pY,
+/* | */    pB+pC                              +pN               +pT+pU+pV      +pY,
+/* } */                                                             pU+pV      +pY,
+/* ~ */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+        0 };
 
 inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
 {
@@ -1855,6 +1860,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               PrefixInfo::INTERNAL },
             { "vnd.sun.star.help:", 0, INET_PROT_VND_SUN_STAR_HELP,
               PrefixInfo::OFFICIAL },
+            { "vnd.sun.star.hier:", 0, INET_PROT_VND_SUN_STAR_HIER,
+              PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.wfs:", 0, INET_PROT_VND_SUN_STAR_WFS,
@@ -2296,6 +2303,28 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                            PART_URIC, cEscapePrefix, eCharset, true);
             }
+            break;
+
+        case INET_PROT_VND_SUN_STAR_HIER:
+            if (pPos < pEnd && *pPos != '/')
+            {
+                setInvalid();
+                return false;
+            }
+            while (pPos < pEnd && *pPos != nFragmentDelimiter)
+            {
+                EscapeType eEscapeType;
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                             cEscapePrefix, eMechanism,
+                                             eCharset, eEscapeType);
+                if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
+                    aTheSynPath += '/';
+                else
+                    appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
+                               PART_PCHAR, cEscapePrefix, eCharset, false);
+            }
+            if (aTheSynPath.Len() == 0)
+                aTheSynPath = '/';
             break;
 
         case INET_PROT_VIM:
