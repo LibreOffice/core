@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refltype.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: jsc $ $Date: 2000-10-09 11:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 15:18:42  hr
+    initial import
+
     Revision 1.19  2000/09/17 12:30:32  willem.vandorp
     OpenOffice header added.
 
@@ -136,6 +139,13 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+
+enum RTTypeSource
+{
+    RT_UNO_IDL,
+    RT_CORBA_IDL,
+    RT_JAVA,
+};
 
 enum RTTypeClass
 {

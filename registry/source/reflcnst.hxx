@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflcnst.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: jsc $ $Date: 2000-10-09 11:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,17 +79,23 @@ extern const sal_uInt16 majorVersion;
 #define OFFSET_SIZE                 (OFFSET_MAGIC + sizeof(magic))
 #define OFFSET_MINOR_VERSION        (OFFSET_SIZE + sizeof(sal_uInt32))
 #define OFFSET_MAJOR_VERSION        (OFFSET_MINOR_VERSION + sizeof(minorVersion))
-#define OFFSET_TYPE_CLASS           (OFFSET_MAJOR_VERSION + sizeof(majorVersion))
+#define OFFSET_N_ENTRIES            (OFFSET_MAJOR_VERSION + sizeof(sal_uInt16))
+#define OFFSET_TYPE_SOURCE          (OFFSET_N_ENTRIES + sizeof(sal_uInt16))
+#define OFFSET_TYPE_CLASS           (OFFSET_TYPE_SOURCE + sizeof(sal_uInt16))
 #define OFFSET_THIS_TYPE            (OFFSET_TYPE_CLASS + sizeof(sal_uInt16))
 #define OFFSET_SUPER_TYPE           (OFFSET_THIS_TYPE + sizeof(sal_uInt16))
 #define OFFSET_UIK                  (OFFSET_SUPER_TYPE + sizeof(sal_uInt16))
 #define OFFSET_DOKU                 (OFFSET_UIK + sizeof(sal_uInt16))
 #define OFFSET_FILENAME             (OFFSET_DOKU + sizeof(sal_uInt16))
-#define OFFSET_CP_SIZE              (OFFSET_FILENAME + sizeof(sal_uInt16))
+
+#define OFFSET_N_SUPERTYPES         (OFFSET_FILENAME + sizeof(sal_uInt16))
+#define OFFSET_SUPERTYPES           (OFFSET_N_SUPERTYPES + sizeof(sal_uInt16))
+
+#define OFFSET_CP_SIZE              (OFFSET_SUPERTYPES + sizeof(sal_uInt16))
 #define OFFSET_CP                   (OFFSET_CP_SIZE + sizeof(sal_uInt16))
 
 #define CP_OFFSET_ENTRY_SIZE        0
-#define CP_OFFSET_ENTRY_TAG         (CP_OFFSET_ENTRY_SIZE + sizeof(sal_uInt16))
+#define CP_OFFSET_ENTRY_TAG         (CP_OFFSET_ENTRY_SIZE + sizeof(sal_uInt32))
 #define CP_OFFSET_ENTRY_DATA        (CP_OFFSET_ENTRY_TAG + sizeof(sal_uInt16))
 #define CP_OFFSET_ENTRY_UIK1        CP_OFFSET_ENTRY_DATA
 #define CP_OFFSET_ENTRY_UIK2        (CP_OFFSET_ENTRY_UIK1 + sizeof(sal_uInt32))
@@ -103,12 +109,12 @@ extern const sal_uInt16 majorVersion;
 #define FIELD_OFFSET_VALUE          (FIELD_OFFSET_TYPE + sizeof(sal_uInt16))
 #define FIELD_OFFSET_DOKU           (FIELD_OFFSET_VALUE + sizeof(sal_uInt16))
 #define FIELD_OFFSET_FILENAME       (FIELD_OFFSET_DOKU + sizeof(sal_uInt16))
-#define FIELD_ENTRY_SIZE            (FIELD_OFFSET_FILENAME + sizeof(sal_uInt16))
+//#define FIELD_ENTRY_SIZE          (FIELD_OFFSET_FILENAME + sizeof(sal_uInt16))
 
 #define PARAM_OFFSET_TYPE           0
 #define PARAM_OFFSET_MODE           (PARAM_OFFSET_TYPE + sizeof(sal_uInt16))
 #define PARAM_OFFSET_NAME           (PARAM_OFFSET_MODE + sizeof(sal_uInt16))
-#define PARAM_ENTRY_SIZE            (PARAM_OFFSET_NAME + sizeof(sal_uInt16))
+//#define PARAM_ENTRY_SIZE          (PARAM_OFFSET_NAME + sizeof(sal_uInt16))
 
 #define METHOD_OFFSET_SIZE          0
 #define METHOD_OFFSET_MODE          (METHOD_OFFSET_SIZE + sizeof(sal_uInt16))
@@ -116,13 +122,13 @@ extern const sal_uInt16 majorVersion;
 #define METHOD_OFFSET_RETURN        (METHOD_OFFSET_NAME + sizeof(sal_uInt16))
 #define METHOD_OFFSET_DOKU          (METHOD_OFFSET_RETURN + sizeof(sal_uInt16))
 #define METHOD_OFFSET_PARAM_COUNT   (METHOD_OFFSET_DOKU + sizeof(sal_uInt16))
-#define METHOD_OFFSET_PARAM(i)      (METHOD_OFFSET_PARAM_COUNT + sizeof(sal_uInt16) + (i * PARAM_ENTRY_SIZE))
+//#define METHOD_OFFSET_PARAM(i)        (METHOD_OFFSET_PARAM_COUNT + sizeof(sal_uInt16) + (i * PARAM_ENTRY_SIZE))
 
 #define REFERENCE_OFFSET_TYPE       0
 #define REFERENCE_OFFSET_NAME       (REFERENCE_OFFSET_TYPE + sizeof(sal_uInt16))
 #define REFERENCE_OFFSET_DOKU       (REFERENCE_OFFSET_NAME + sizeof(sal_uInt16))
 #define REFERENCE_OFFSET_ACCESS     (REFERENCE_OFFSET_DOKU + sizeof(sal_uInt16))
-#define REFERENCE_ENTRY_SIZE        (REFERENCE_OFFSET_ACCESS + sizeof(sal_uInt16))
+//#define REFERENCE_ENTRY_SIZE      (REFERENCE_OFFSET_ACCESS + sizeof(sal_uInt16))
 
 enum CPInfoTag
 {

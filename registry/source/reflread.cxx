@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: jsc $ $Date: 2000-10-09 11:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,14 +309,12 @@ sal_uInt32 ConstantPool::parseIndex()
 
         for (int i = 0; i < m_numOfEntries; i++)
         {
-            m_pIndex[i] = (sal_Int32) offset;
+            m_pIndex[i] = offset;
 
-            offset += readUINT16(offset);
+            offset += readUINT32(offset);
 
-            if (
-                ((CPInfoTag) readUINT16(m_pIndex[i] + CP_OFFSET_ENTRY_TAG)) ==
-                CP_TAG_CONST_STRING
-               )
+            if ( ((CPInfoTag) readUINT16(m_pIndex[i] + CP_OFFSET_ENTRY_TAG)) ==
+                 CP_TAG_CONST_STRING )
             {
                 numOfStrings++;
             }
@@ -564,6 +562,8 @@ class FieldList : public BlopObject
 public:
 
     sal_uInt16      m_numOfEntries;
+    sal_uInt16      m_numOfFieldEntries;
+    sal_uInt8       m_FIELD_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
     FieldList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
@@ -571,6 +571,15 @@ public:
         , m_numOfEntries(numEntries)
         , m_pCP(pCP)
     {
+        if ( m_numOfEntries > 0 )
+        {
+            m_numOfFieldEntries = readUINT16(0);
+            m_FIELD_ENTRY_SIZE = m_numOfFieldEntries * sizeof(sal_uInt16);
+        } else
+        {
+            m_numOfFieldEntries = 0;
+            m_FIELD_ENTRY_SIZE = 0;
+        }
     }
 
     sal_uInt32 parseIndex();
@@ -585,16 +594,16 @@ public:
 
 sal_uInt32 FieldList::parseIndex()
 {
-    return (m_numOfEntries * (sizeof(sal_uInt16) * 6));
+    return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_FIELD_ENTRY_SIZE));
 }
 
 const sal_Char* FieldList::getFieldName(sal_uInt16 index)
 {
     const sal_Char* aName = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aName = m_pCP->readUTF8NameConstant(readUINT16((index * FIELD_ENTRY_SIZE) + FIELD_OFFSET_NAME));
+        aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_NAME));
     }
 
     return aName;
@@ -604,9 +613,9 @@ const sal_Char* FieldList::getFieldType(sal_uInt16 index)
 {
     const sal_Char* aName = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aName = m_pCP->readUTF8NameConstant(readUINT16((index * FIELD_ENTRY_SIZE) + FIELD_OFFSET_TYPE));
+        aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_TYPE));
     }
 
     return aName;
@@ -616,9 +625,9 @@ RTFieldAccess FieldList::getFieldAccess(sal_uInt16 index)
 {
     RTFieldAccess aAccess;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aAccess = (RTFieldAccess) readUINT16((index * FIELD_ENTRY_SIZE) + FIELD_OFFSET_ACCESS);
+        aAccess = (RTFieldAccess) readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_ACCESS);
     }
 
     return aAccess;
@@ -628,9 +637,9 @@ RTValueType FieldList::getFieldConstValue(sal_uInt16 index, RTConstValueUnion* v
 {
     RTValueType ret = RT_TYPE_NONE;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        sal_uInt16 cpIndex = readUINT16((index * FIELD_ENTRY_SIZE) + FIELD_OFFSET_VALUE);
+        sal_uInt16 cpIndex = readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_VALUE);
 
         switch (m_pCP->readTag(cpIndex))
         {
@@ -690,9 +699,9 @@ const sal_Char* FieldList::getFieldDoku(sal_uInt16 index)
 {
     const sal_Char* aDoku = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aDoku = m_pCP->readUTF8NameConstant(readUINT16((index * FIELD_ENTRY_SIZE) + FIELD_OFFSET_DOKU));
+        aDoku = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_DOKU));
     }
 
     return aDoku;
@@ -702,9 +711,9 @@ const sal_Char* FieldList::getFieldFileName(sal_uInt16 index)
 {
     const sal_Char* aFileName = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aFileName = m_pCP->readUTF8NameConstant(readUINT16((index * FIELD_ENTRY_SIZE) + FIELD_OFFSET_FILENAME));
+        aFileName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_FILENAME));
     }
 
     return aFileName;
@@ -720,7 +729,9 @@ class ReferenceList : public BlopObject
 {
 public:
 
-    sal_uInt16              m_numOfEntries;
+    sal_uInt16      m_numOfEntries;
+    sal_uInt16      m_numOfReferenceEntries;
+    sal_uInt8       m_REFERENCE_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
     ReferenceList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
@@ -728,6 +739,15 @@ public:
         , m_numOfEntries(numEntries)
         , m_pCP(pCP)
     {
+        if ( m_numOfEntries > 0 )
+        {
+            m_numOfReferenceEntries = readUINT16(0);
+            m_REFERENCE_ENTRY_SIZE = m_numOfReferenceEntries * sizeof(sal_uInt16);
+        } else
+        {
+            m_numOfReferenceEntries = 0;
+            m_REFERENCE_ENTRY_SIZE = 0;
+        }
     }
 
     sal_uInt32 parseIndex();
@@ -740,16 +760,16 @@ public:
 
 sal_uInt32 ReferenceList::parseIndex()
 {
-    return (m_numOfEntries * (sizeof(sal_uInt16) * 4));
+    return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_REFERENCE_ENTRY_SIZE));
 }
 
 const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index)
 {
     const sal_Char* aName = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aName = m_pCP->readUTF8NameConstant(readUINT16((index * REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_NAME));
+        aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_NAME));
     }
 
     return aName;
@@ -759,9 +779,9 @@ RTReferenceType ReferenceList::getReferenceType(sal_uInt16 index)
 {
     RTReferenceType refType;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        refType = (RTReferenceType) readUINT16((index * REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_TYPE);
+        refType = (RTReferenceType) readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_TYPE);
     }
 
     return refType;
@@ -771,9 +791,9 @@ const sal_Char* ReferenceList::getReferenceDoku(sal_uInt16 index)
 {
     const sal_Char* aDoku = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aDoku = m_pCP->readUTF8NameConstant(readUINT16((index * REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_DOKU));
+        aDoku = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_DOKU));
     }
 
     return aDoku;
@@ -783,9 +803,9 @@ RTFieldAccess ReferenceList::getReferenceAccess(sal_uInt16 index)
 {
     RTFieldAccess aAccess;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aAccess = (RTFieldAccess) readUINT16((index * REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_ACCESS);
+        aAccess = (RTFieldAccess) readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_ACCESS);
     }
 
     return aAccess;
@@ -801,8 +821,11 @@ class MethodList : public BlopObject
 {
 public:
 
-    sal_uInt16              m_numOfEntries;
-    sal_uInt32*             m_pIndex;
+    sal_uInt16      m_numOfEntries;
+    sal_uInt16      m_numOfMethodEntries;
+    sal_uInt16      m_numOfParamEntries;
+    sal_uInt8       m_PARAM_ENTRY_SIZE;
+    sal_uInt32*     m_pIndex;
     ConstantPool*   m_pCP;
 
     MethodList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
@@ -811,6 +834,17 @@ public:
         , m_pIndex(NULL)
         , m_pCP(pCP)
     {
+        if ( m_numOfEntries > 0 )
+        {
+            m_numOfMethodEntries = readUINT16(0);
+            m_numOfParamEntries = readUINT16(sizeof(sal_uInt16));
+            m_PARAM_ENTRY_SIZE = m_numOfParamEntries * sizeof(sal_uInt16);
+        } else
+        {
+            m_numOfMethodEntries = 0;
+            m_numOfParamEntries = 0;
+            m_PARAM_ENTRY_SIZE = 0;
+        }
     }
 
     ~MethodList();
@@ -827,11 +861,19 @@ public:
     const sal_Char* getMethodReturnType(sal_uInt16 index);
     RTMethodMode    getMethodMode(sal_uInt16 index);
     const sal_Char* getMethodDoku(sal_uInt16 index);
+
+private:
+    sal_uInt8 calcMethodParamIndex( const sal_uInt8 index );
 };
 
 MethodList::~MethodList()
 {
     if (m_pIndex) delete[] m_pIndex;
+}
+
+sal_uInt8 MethodList::calcMethodParamIndex( const sal_uInt8 index )
+{
+    return (METHOD_OFFSET_PARAM_COUNT + sizeof(sal_uInt16) + (index * m_PARAM_ENTRY_SIZE));
 }
 
 sal_uInt32 MethodList::parseIndex()
@@ -846,6 +888,7 @@ sal_uInt32 MethodList::parseIndex()
 
     if (m_numOfEntries)
     {
+        offset = 2 * sizeof(sal_uInt16);
         m_pIndex = new sal_uInt32[m_numOfEntries];
 
         for (int i = 0; i < m_numOfEntries; i++)
@@ -863,7 +906,7 @@ const sal_Char* MethodList::getMethodName(sal_uInt16 index)
 {
     const sal_Char* aName = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
         aName = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_NAME));
     }
@@ -875,7 +918,7 @@ sal_uInt16 MethodList::getMethodParamCount(sal_uInt16 index)
 {
     sal_uInt16 aCount = 0;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
         aCount = readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT);
     }
@@ -887,12 +930,14 @@ const sal_Char* MethodList::getMethodParamType(sal_uInt16 index, sal_uInt16 para
 {
     const sal_Char* aName = NULL;
 
-    if ((index <= m_numOfEntries) && (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
+    if ((m_numOfEntries > 0) &&
+        (index <= m_numOfEntries) &&
+        (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
     {
         aName = m_pCP->readUTF8NameConstant(
             readUINT16(
                 m_pIndex[index] +
-                METHOD_OFFSET_PARAM(paramIndex) +
+                calcMethodParamIndex(paramIndex) +
                 PARAM_OFFSET_TYPE));
     }
 
@@ -903,12 +948,14 @@ const sal_Char* MethodList::getMethodParamName(sal_uInt16 index, sal_uInt16 para
 {
     const sal_Char* aName = NULL;
 
-    if ((index <= m_numOfEntries) && (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
+    if ((m_numOfEntries > 0) &&
+        (index <= m_numOfEntries) &&
+        (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
     {
         aName = m_pCP->readUTF8NameConstant(
             readUINT16(
                 m_pIndex[index] +
-                METHOD_OFFSET_PARAM(paramIndex) +
+                calcMethodParamIndex(paramIndex) +
                 PARAM_OFFSET_NAME));
     }
 
@@ -919,11 +966,13 @@ RTParamMode MethodList::getMethodParamMode(sal_uInt16 index, sal_uInt16 paramInd
 {
     RTParamMode aMode = RT_PARAM_INVALID;
 
-    if ((index <= m_numOfEntries) && (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
+    if ((m_numOfEntries > 0) &&
+        (index <= m_numOfEntries) &&
+        (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
     {
         aMode = (RTParamMode) readUINT16(
                 m_pIndex[index] +
-                METHOD_OFFSET_PARAM(paramIndex) +
+                calcMethodParamIndex(paramIndex) +
                 PARAM_OFFSET_MODE);
     }
 
@@ -934,9 +983,9 @@ sal_uInt16 MethodList::getMethodExcCount(sal_uInt16 index)
 {
     sal_uInt16 aCount = 0;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aCount = readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)));
+        aCount = readUINT16(m_pIndex[index] + calcMethodParamIndex(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)));
     }
 
     return aCount;
@@ -946,9 +995,9 @@ const sal_Char* MethodList::getMethodExcType(sal_uInt16 index, sal_uInt16 excInd
 {
     const sal_Char* aName = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        sal_uInt32 excOffset = m_pIndex[index] + METHOD_OFFSET_PARAM(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT));
+        sal_uInt32 excOffset = m_pIndex[index] + calcMethodParamIndex(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT));
 
         if (excIndex <= readUINT16(excOffset))
         {
@@ -967,7 +1016,7 @@ const sal_Char* MethodList::getMethodReturnType(sal_uInt16 index)
 {
     const sal_Char* aName = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
         aName = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_RETURN));
     }
@@ -979,7 +1028,7 @@ RTMethodMode MethodList::getMethodMode(sal_uInt16 index)
 {
     RTMethodMode aMode = RT_MODE_INVALID;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
         aMode = (RTMethodMode) readUINT16(m_pIndex[index] + METHOD_OFFSET_MODE);
     }
@@ -991,7 +1040,7 @@ const sal_Char* MethodList::getMethodDoku(sal_uInt16 index)
 {
     const sal_Char* aDoku = NULL;
 
-    if (index <= m_numOfEntries)
+    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
         aDoku = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_DOKU));
     }
@@ -1015,6 +1064,8 @@ public:
     MethodList*     m_pMethods;
     ReferenceList*  m_pReferences;
     sal_uInt32      m_refCount;
+    sal_uInt16      m_nSuperTypes;
+    sal_uInt16      m_offset_SUPERTYPES;
 
     TypeRegistryEntry(const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer)
         : BlopObject(buffer, len, copyBuffer)
@@ -1023,12 +1074,14 @@ public:
         , m_pMethods(NULL)
         , m_pReferences(NULL)
         , m_refCount(1)
+        , m_nSuperTypes(0)
+        , m_offset_SUPERTYPES(0)
     {
     }
 
     ~TypeRegistryEntry();
 
-    void init() const;
+    void init();
 
 };
 
@@ -1041,7 +1094,7 @@ TypeRegistryEntry::~TypeRegistryEntry()
 }
 
 
-void TypeRegistryEntry::init() const
+void TypeRegistryEntry::init()
 {
 #ifdef OS2
     TypeRegistryEntry* _This = (TypeRegistryEntry*)(this);
@@ -1055,19 +1108,31 @@ void TypeRegistryEntry::init() const
         _This->m_pCP = NULL;
     }
 
-    _This->m_pCP = new ConstantPool(m_pBuffer + OFFSET_CP, readUINT16(OFFSET_CP_SIZE));
+    sal_uInt16 entrySize = sizeof(sal_uInt16);
+    sal_uInt16 nHeaderEntries = readUINT16(OFFSET_N_ENTRIES);
+    sal_uInt16 offset_N_SUPERTYPES = OFFSET_N_ENTRIES + entrySize + (nHeaderEntries * entrySize);
+    m_offset_SUPERTYPES = offset_N_SUPERTYPES + entrySize;
+    m_nSuperTypes = readUINT16(offset_N_SUPERTYPES);
 
-    sal_uInt32 offset = OFFSET_CP + _This->m_pCP->parseIndex();
+    sal_uInt16 offset_CP_SIZE = m_offset_SUPERTYPES + (m_nSuperTypes * entrySize);
+    sal_uInt16 offset_CP = offset_CP_SIZE + entrySize;
 
-    _This->m_pFields = new FieldList(m_pBuffer + offset + sizeof(sal_uInt16), readUINT16(offset), _This->m_pCP);
+    _This->m_pCP = new ConstantPool(m_pBuffer + offset_CP, readUINT16(offset_CP_SIZE));
+
+    sal_uInt32 offset = offset_CP + _This->m_pCP->parseIndex();
+
+    _This->m_pFields = new FieldList(m_pBuffer + offset + entrySize,
+                                     readUINT16(offset), _This->m_pCP);
 
     offset += sizeof(sal_uInt16) + _This->m_pFields->parseIndex();
 
-    _This->m_pMethods = new MethodList(m_pBuffer + offset + sizeof(sal_uInt16), readUINT16(offset), _This->m_pCP);
+    _This->m_pMethods = new MethodList(m_pBuffer + offset + entrySize,
+                                       readUINT16(offset), _This->m_pCP);
 
     offset += sizeof(sal_uInt16) + _This->m_pMethods->parseIndex();
 
-    _This->m_pReferences = new ReferenceList(m_pBuffer + offset + sizeof(sal_uInt16), readUINT16(offset), _This->m_pCP);
+    _This->m_pReferences = new ReferenceList(m_pBuffer + offset + entrySize,
+                                             readUINT16(offset), _This->m_pCP);
 
     offset += sizeof(sal_uInt16) + _This->m_pReferences->parseIndex();
 }
@@ -1175,7 +1240,13 @@ static void TYPEREG_CALLTYPE getSuperTypeName(TypeReaderImpl hEntry, rtl_uString
 
     if (pEntry->m_pCP == NULL) pEntry->init();
 
-    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_SUPER_TYPE));
+    if (pEntry->m_nSuperTypes == 0)
+    {
+        rtl_uString_new(pSuperTypeName);
+        return;
+    }
+
+    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES )); //+ (index * sizeof(sal_uInt16))));
     if ( pTmp )
         rtl_string2UString( pSuperTypeName, pTmp, rtl_str_getLength(pTmp), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: jsc $ $Date: 2000-10-09 11:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,40 +83,49 @@ ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
 #define BLOP_OFFSET_SIZE        (BLOP_OFFSET_MAGIC + sizeof(sal_uInt32))
 #define BLOP_OFFSET_MINOR       (BLOP_OFFSET_SIZE + sizeof(sal_uInt32))
 #define BLOP_OFFSET_MAJOR       (BLOP_OFFSET_MINOR + sizeof(sal_uInt16))
-#define BLOP_OFFSET_TYPE_CLASS  (BLOP_OFFSET_MAJOR + sizeof(sal_uInt16))
+#define BLOP_OFFSET_N_ENTRIES   (BLOP_OFFSET_MAJOR + sizeof(sal_uInt16))
+#define BLOP_OFFSET_TYPE_SOURCE (BLOP_OFFSET_N_ENTRIES + sizeof(sal_uInt16))
+#define BLOP_OFFSET_TYPE_CLASS  (BLOP_OFFSET_TYPE_SOURCE + sizeof(sal_uInt16))
 #define BLOP_OFFSET_THIS        (BLOP_OFFSET_TYPE_CLASS + sizeof(sal_uInt16))
-#define BLOP_OFFSET_SUPER       (BLOP_OFFSET_THIS + sizeof(sal_uInt16))
-#define BLOP_OFFSET_UIK         (BLOP_OFFSET_SUPER + sizeof(sal_uInt16))
+//#define BLOP_OFFSET_SUPER       (BLOP_OFFSET_THIS + sizeof(sal_uInt16))
+#define BLOP_OFFSET_UIK         (BLOP_OFFSET_THIS + sizeof(sal_uInt16))
 #define BLOP_OFFSET_DOKU        (BLOP_OFFSET_UIK + sizeof(sal_uInt16))
 #define BLOP_OFFSET_FILENAME    (BLOP_OFFSET_DOKU + sizeof(sal_uInt16))
-#define BLOP_HEADER_SIZE        (BLOP_OFFSET_FILENAME + sizeof(sal_uInt16))
+//#define BLOP_HEADER_SIZE        (BLOP_OFFSET_FILENAME + sizeof(sal_uInt16))
+#define BLOP_HEADER_N_ENTRIES   6
 
+#define BLOP_OFFSET_N_SUPERTYPES    0
+#define BLOP_OFFSET_SUPERTYPES      (BLOP_OFFSET_N_SUPERTYPES + sizeof(sal_uInt16))
 
-#define BLOP_FIELD_ENTRY_ACCESS 0
+#define BLOP_FIELD_ENTRY_ACCESS     0
 #define BLOP_FIELD_ENTRY_NAME       (BLOP_FIELD_ENTRY_ACCESS + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_TYPE       (BLOP_FIELD_ENTRY_NAME + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_VALUE      (BLOP_FIELD_ENTRY_TYPE + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_DOKU       (BLOP_FIELD_ENTRY_VALUE + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_FILENAME   (BLOP_FIELD_ENTRY_DOKU + sizeof(sal_uInt16))
-#define BLOP_FIELD_ENTRY_SIZE       (BLOP_FIELD_ENTRY_FILENAME + sizeof(sal_uInt16))
+//#define BLOP_FIELD_ENTRY_SIZE       (BLOP_FIELD_ENTRY_FILENAME + sizeof(sal_uInt16))
+#define BLOP_FIELD_N_ENTRIES        6
 
 #define BLOP_METHOD_SIZE        0
 #define BLOP_METHOD_MODE        (BLOP_METHOD_SIZE + sizeof(sal_uInt16))
 #define BLOP_METHOD_NAME        (BLOP_METHOD_MODE + sizeof(sal_uInt16))
 #define BLOP_METHOD_RETURN      (BLOP_METHOD_NAME + sizeof(sal_uInt16))
 #define BLOP_METHOD_DOKU        (BLOP_METHOD_RETURN + sizeof(sal_uInt16))
-#define BLOP_METHOD_HEADER_SIZE (BLOP_METHOD_DOKU + sizeof(sal_uInt16))
+//#define BLOP_METHOD_HEADER_SIZE (BLOP_METHOD_DOKU + sizeof(sal_uInt16))
+#define BLOP_METHOD_N_ENTRIES   5
 
 #define BLOP_PARAM_TYPE         0
 #define BLOP_PARAM_MODE         (BLOP_PARAM_TYPE + sizeof(sal_uInt16))
 #define BLOP_PARAM_NAME         (BLOP_PARAM_MODE + sizeof(sal_uInt16))
-#define BLOP_PARAM_ENTRY_SIZE   (BLOP_PARAM_NAME + sizeof(sal_uInt16))
+//#define BLOP_PARAM_ENTRY_SIZE   (BLOP_PARAM_NAME + sizeof(sal_uInt16))
+#define BLOP_PARAM_N_ENTRIES    3
 
 #define BLOP_REFERENCE_TYPE         0
 #define BLOP_REFERENCE_NAME         (BLOP_REFERENCE_TYPE + sizeof(sal_uInt16))
 #define BLOP_REFERENCE_DOKU         (BLOP_REFERENCE_NAME + sizeof(sal_uInt16))
 #define BLOP_REFERENCE_ACCESS       (BLOP_REFERENCE_DOKU + sizeof(sal_uInt16))
-#define BLOP_REFERENCE_ENTRY_SIZE   (BLOP_REFERENCE_ACCESS + sizeof(sal_uInt16))
+//#define BLOP_REFERENCE_ENTRY_SIZE   (BLOP_REFERENCE_ACCESS + sizeof(sal_uInt16))
+#define BLOP_REFERENCE_N_ENTRIES    4
 
 sal_uInt32 UINT16StringLen(const sal_uInt8* wstring)
 {
@@ -278,22 +287,11 @@ struct CPInfo
     union
     {
         const sal_Char*     aUtf8;
-        RTUik*          aUik;
+        RTUik*              aUik;
         RTConstValueUnion   aConst;
-/*      sal_Bool            aBool;
-        sal_uInt8           aByte;
-        sal_Int16           aShort;
-        sal_uInt16          aUShort;
-        sal_Int32           aLong;
-        sal_uInt32          aULong;
-//      INT64           aHyper;
-//      UINT64          aUHyper;
-        float           aFloat;
-        double          aDouble;
-        const sal_Unicode*  aString;*/
     } m_value;
 
-    sal_uInt16          m_index;
+    sal_uInt16      m_index;
     struct CPInfo*  m_next;
 
     CPInfo(CPInfoTag tag, struct CPInfo* prev);
@@ -317,7 +315,7 @@ CPInfo::CPInfo(CPInfoTag tag, struct CPInfo* prev)
 
 sal_uInt32 CPInfo::getBlopSize()
 {
-    sal_uInt32 size = sizeof(sal_uInt16) /* size */ + sizeof(sal_uInt16) /* tag */;
+    sal_uInt32 size = sizeof(sal_uInt32) /* size */ + sizeof(sal_uInt16) /* tag */;
 
     switch (m_tag)
     {
@@ -372,7 +370,7 @@ sal_uInt32 CPInfo::toBlop(sal_uInt8* buffer, sal_uInt32 maxLen)
 {
     sal_uInt8* buff = buffer;
 
-    buff += writeUINT16(buff, (sal_uInt16) getBlopSize());
+    buff += writeUINT32(buff, getBlopSize());
     buff += writeUINT16(buff, (sal_uInt16) m_tag);
 
     switch (m_tag)
@@ -745,9 +743,11 @@ class TypeWriter
 public:
 
     sal_uInt32          m_refCount;
+    RTTypeSource        m_typeSource;
     RTTypeClass         m_typeClass;
     OString             m_typeName;
-    OString             m_superTypeName;
+    sal_uInt16          m_nSuperTypes;
+    OString*            m_superTypeNames;
     RTUik*              m_pUik;
     OString             m_doku;
     OString             m_fileName;
@@ -761,7 +761,8 @@ public:
     sal_uInt8*          m_blop;
     sal_uInt32          m_blopSize;
 
-    TypeWriter(RTTypeClass      RTTypeClass,
+    TypeWriter(RTTypeSource     RTTypeSource,
+               RTTypeClass      RTTypeClass,
                const OString&   typeName,
                const OString&   superTypeName,
                sal_uInt16       FieldCount,
@@ -773,16 +774,18 @@ public:
     void createBlop();
 };
 
-TypeWriter::TypeWriter(RTTypeClass      RTTypeClass,
+TypeWriter::TypeWriter(RTTypeSource     RTTypeSource,
+                       RTTypeClass      RTTypeClass,
                        const OString&   typeName,
                        const OString&   superTypeName,
                        sal_uInt16       fieldCount,
                        sal_uInt16       methodCount,
                        sal_uInt16       referenceCount)
     : m_refCount(1)
+    , m_typeSource(RTTypeSource)
     , m_typeClass(RTTypeClass)
      , m_typeName(typeName)
-    , m_superTypeName(superTypeName)
+    , m_nSuperTypes(superTypeName.getLength() > 0 ? 1 : 0)
     , m_fieldCount(fieldCount)
     , m_methodCount(methodCount)
     , m_referenceCount(referenceCount)
@@ -790,6 +793,15 @@ TypeWriter::TypeWriter(RTTypeClass      RTTypeClass,
     , m_blopSize(0)
     , m_pUik(NULL)
 {
+    if (m_nSuperTypes > 0)
+    {
+        m_superTypeNames = new OString[m_nSuperTypes];
+        m_superTypeNames[0] = superTypeName;
+    } else
+    {
+        m_superTypeNames = NULL;
+    }
+
     if (m_fieldCount)
         m_fields = new FieldEntry[fieldCount];
 
@@ -802,6 +814,9 @@ TypeWriter::TypeWriter(RTTypeClass      RTTypeClass,
 
 TypeWriter::~TypeWriter()
 {
+    if (m_superTypeNames)
+        delete[] m_superTypeNames;
+
     if (m_blop)
         delete[] m_blop;
 
@@ -833,26 +848,43 @@ void TypeWriter::createBlop()
         delete[] m_blop;
 
     CPInfo  root(CP_TAG_INVALID, NULL);
-    sal_uInt16  cpIndexThisName = 0;
-    sal_uInt16  cpIndexSuperName = 0;
-    sal_uInt16  cpIndexUik = 0;
-    sal_uInt16  cpIndexDoku = 0;
-    sal_uInt16  cpIndexFileName = 0;
+    sal_uInt32  cpIndexThisName = 0;
+    sal_uInt32* cpIndexSuperNames = NULL;
+    sal_uInt32  cpIndexUik = 0;
+    sal_uInt32  cpIndexDoku = 0;
+    sal_uInt32  cpIndexFileName = 0;
     CPInfo* pInfo = NULL;
 
-    m_blopSize = BLOP_HEADER_SIZE;
+    sal_uInt16  entrySize = sizeof(sal_uInt16);
+    sal_uInt32  blopHeaderEntrySize = BLOP_OFFSET_N_ENTRIES + entrySize + (BLOP_HEADER_N_ENTRIES * entrySize);
+    sal_uInt32  blopFieldEntrySize = BLOP_FIELD_N_ENTRIES * entrySize;
+    sal_uInt32  blopMethodEntrySize = BLOP_METHOD_N_ENTRIES * entrySize;
+    sal_uInt32  blopParamEntrySize = BLOP_PARAM_N_ENTRIES * entrySize;
+    sal_uInt32  blopReferenceEntrySize = BLOP_REFERENCE_N_ENTRIES * entrySize;
+
+    m_blopSize = blopHeaderEntrySize;
 
     // create CP entry for this name
     pInfo = new CPInfo(CP_TAG_UTF8_NAME, &root);
     pInfo->m_value.aUtf8 = m_typeName.getStr();
     cpIndexThisName = pInfo->m_index;
 
-    // create CP entry for super name
-    if (m_superTypeName.getLength())
+    // nSuperTypes
+    m_blopSize += entrySize;
+
+    // create CP entry for super names
+    if (m_nSuperTypes)
     {
-        pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
-        pInfo->m_value.aUtf8 = m_superTypeName.getStr();
-        cpIndexSuperName = pInfo->m_index;
+        m_blopSize += m_nSuperTypes * entrySize;
+
+        cpIndexSuperNames = new sal_uInt32[m_nSuperTypes];
+
+        for (sal_uInt32 i=0; i < m_nSuperTypes; i++)
+        {
+            pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
+            pInfo->m_value.aUtf8 = m_superTypeNames[i].getStr();
+            cpIndexSuperNames[i] = pInfo->m_index;
+        }
     }
 
     // create CP entry for uik
@@ -880,8 +912,7 @@ void TypeWriter::createBlop()
     }
 
     // fields blop
-
-    m_blopSize += sizeof(sal_uInt16); // fieldCount
+    m_blopSize += sizeof(sal_uInt16); // fieldCount + nFieldEntries
 
     if (m_fieldCount)
     {
@@ -891,12 +922,15 @@ void TypeWriter::createBlop()
         sal_uInt16 cpIndexDoku = 0;
         sal_uInt16 cpIndexFileName = 0;
 
-        blopFieldsSize = m_fieldCount * BLOP_FIELD_ENTRY_SIZE;
+        // nFieldEntries + n fields
+        blopFieldsSize = sizeof(sal_uInt16) + (m_fieldCount * blopFieldEntrySize);
 
         m_blopSize += blopFieldsSize;
 
         pBlopFields = new sal_uInt8[blopFieldsSize];
         pBuffer = pBlopFields;
+
+        pBuffer += writeUINT16(pBuffer, BLOP_FIELD_N_ENTRIES);
 
         for (i = 0; i < m_fieldCount; i++)
         {
@@ -951,26 +985,26 @@ void TypeWriter::createBlop()
     }
 
     // methods blop
-
     m_blopSize += sizeof(sal_uInt16); // methodCount
 
     if (m_methodCount)
     {
         sal_uInt16* pMethodEntrySize = new sal_uInt16[m_methodCount];
-        sal_uInt16  cpIndexName = 0;
-        sal_uInt16  cpIndexReturn = 0;
-        sal_uInt16  cpIndexDoku = 0;
+        sal_uInt32  cpIndexName = 0;
+        sal_uInt32  cpIndexReturn = 0;
+        sal_uInt32  cpIndexDoku = 0;
 
-        blopMethodsSize = 0;
+        // nMethodEntries + nParamEntries
+        blopMethodsSize = (2 * sizeof(sal_uInt16));
 
         for (i = 0; i < m_methodCount; i++)
         {
             pMethodEntrySize[i] =
-                BLOP_METHOD_HEADER_SIZE +                               // header
-                sizeof(sal_uInt16) +                                        // parameterCount
-                (m_methods[i].m_paramCount * BLOP_PARAM_ENTRY_SIZE) +   // exceptions
-                sizeof(sal_uInt16) +                                        // exceptionCount
-                (m_methods[i].m_excCount * sizeof(sal_uInt16));             // exceptions
+                blopMethodEntrySize +                                   // header
+                sizeof(sal_uInt16) +                                    // parameterCount
+                (m_methods[i].m_paramCount * blopParamEntrySize) +      // exceptions
+                sizeof(sal_uInt16) +                                    // exceptionCount
+                (m_methods[i].m_excCount * sizeof(sal_uInt16));         // exceptions
 
             blopMethodsSize += pMethodEntrySize[i];
         }
@@ -980,6 +1014,9 @@ void TypeWriter::createBlop()
         m_blopSize += blopMethodsSize;
 
         pBuffer = pBlopMethods;
+
+        pBuffer += writeUINT16(pBuffer, BLOP_METHOD_N_ENTRIES);
+        pBuffer += writeUINT16(pBuffer, BLOP_PARAM_N_ENTRIES );
 
         for (i = 0; i < m_methodCount; i++)
         {
@@ -1060,20 +1097,22 @@ void TypeWriter::createBlop()
     }
 
     // reference blop
-
-    m_blopSize += sizeof(sal_uInt16); // referenceCount
+    m_blopSize += entrySize; // referenceCount
 
     if (m_referenceCount)
     {
-        sal_uInt16 cpIndexName = 0;
-        sal_uInt16 cpIndexDoku = 0;
+        sal_uInt32 cpIndexName = 0;
+        sal_uInt32 cpIndexDoku = 0;
 
-        blopReferenceSize = m_referenceCount * BLOP_REFERENCE_ENTRY_SIZE;
+        // nReferenceEntries + n references
+        blopReferenceSize = entrySize + (m_referenceCount * blopReferenceEntrySize);
 
         m_blopSize += blopReferenceSize;
 
         pBlopReferences = new sal_uInt8[blopReferenceSize];
         pBuffer = pBlopReferences;
+
+        pBuffer += writeUINT16(pBuffer, BLOP_REFERENCE_N_ENTRIES);
 
         for (i = 0; i < m_referenceCount; i++)
         {
@@ -1103,7 +1142,7 @@ void TypeWriter::createBlop()
     }
 
 
-    // CP infos blop-laenge holen
+    // get CP infos blop-length
     pInfo = root.m_next;
     sal_uInt32 cpBlopSize = 0;
     sal_uInt16 cpCount = 0;
@@ -1128,12 +1167,26 @@ void TypeWriter::createBlop()
     pBuffer += writeUINT32(pBuffer, m_blopSize);
     pBuffer += writeUINT16(pBuffer, minorVersion);
     pBuffer += writeUINT16(pBuffer, majorVersion);
+    pBuffer += writeUINT16(pBuffer, BLOP_HEADER_N_ENTRIES);
+
+    pBuffer += writeUINT16(pBuffer, (sal_uInt16)m_typeSource);
     pBuffer += writeUINT16(pBuffer, (sal_uInt16)m_typeClass);
     pBuffer += writeUINT16(pBuffer, cpIndexThisName);
-    pBuffer += writeUINT16(pBuffer, cpIndexSuperName);
     pBuffer += writeUINT16(pBuffer, cpIndexUik);
     pBuffer += writeUINT16(pBuffer, cpIndexDoku);
     pBuffer += writeUINT16(pBuffer, cpIndexFileName);
+
+    // write supertypes
+    pBuffer += writeUINT16(pBuffer, m_nSuperTypes);
+    if (m_nSuperTypes)
+    {
+        for (sal_uInt32 i=0; i < m_nSuperTypes; i++)
+        {
+            pBuffer += writeUINT16(pBuffer, cpIndexSuperNames[i]);
+        }
+        delete[] cpIndexSuperNames;
+    }
+
     pBuffer += writeUINT16(pBuffer, cpCount);
 
     // write and delete CP infos
@@ -1197,7 +1250,8 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(RTTypeClass  RTTypeClass,
     rtl_uString2String( &rTypeName.pData, typeName->buffer, typeName->length, RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
     rtl_uString2String( &rSuperTypeName.pData, superTypeName->buffer, superTypeName->length, RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-    return new TypeWriter(RTTypeClass,
+    return new TypeWriter(RT_UNO_IDL,
+                          RTTypeClass,
                           rTypeName,
                           rSuperTypeName,
                           FieldCount,
