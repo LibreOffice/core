@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.124 $
+#   $Revision: 1.125 $
 #
-#   last change: $Author: vg $ $Date: 2004-11-01 15:32:15 $
+#   last change: $Author: vg $ $Date: 2004-11-04 16:28:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.124 $ ';
+    $id_str = ' $Revision: 1.125 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -197,7 +197,7 @@
     };
 
     $StandDir = &get_stand_dir();
-#    &provide_consistency if (defined $ENV{CWS_WORK_STAMP} && defined($log));
+    provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($log));
 
     $deliver_commando = $ENV{DELIVER};
     $deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
