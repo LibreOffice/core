@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2utf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:32:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,12 +299,14 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
             }
         }
     }
-    else if( 0xFE == pSource[0] && 0xFF == pSource[1] ) {
+    else if( 0xFE == static_cast<unsigned char> (pSource[0]) &&
+             0xFF == static_cast<unsigned char> (pSource[1]) ) {
         // UTF-16 big endian
         // conversion is done so that encoding information can be easily extracted
         m_sEncoding = "utf-16";
     }
-    else if( 0xFF == pSource[0] && 0xFE == pSource[1] ) {
+    else if( 0xFF == static_cast<unsigned char> (pSource[0]) &&
+             0xFE == static_cast<unsigned char> (pSource[1]) ) {
         // UTF-16 little endian
         // conversion is done so that encoding information can be easily extracted
         m_sEncoding = "utf-16";
@@ -340,7 +342,9 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         // UCS-4 little endian
         m_sEncoding = "ucs-4";
     }
-    else if( 0x4c == pSource[0] && 0x6f == pSource[1]  && 0xa7 == pSource[2] && 0x94 == pSource[3] ) {
+    else if( 0x4c == pSource[0] && 0x6f == pSource[1]  &&
+             0xa7 == static_cast<unsigned char> (pSource[2]) &&
+             0x94 == static_cast<unsigned char> (pSource[3]) ) {
         // EBCDIC
         bReturn = sal_False;   // must be extended
     }
