@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cessentl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:44:54 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,8 @@ CeEssentials::~CeEssentials()
 bool
 CodeEntity::IsVisible() const
 {
-    // KORR:   Improve the whole handling of internal and visibility.
-
-    if (bIsVisible)
-        bIsVisible = NOT static_cast< const info::CodeInfo& >(Info()).IsInternal();
-    return bIsVisible;
+    // KORR_FUTURE:   Improve the whole handling of internal and visibility.
+    return bIsVisible && NOT Info().IsInternal();
 }
 
 
