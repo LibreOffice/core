@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-29 10:42:24 $
+ *  last change: $Author: jp $ $Date: 2001-10-31 14:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,7 +945,10 @@ int SwTransferable::Copy( BOOL bIsCut )
 
 #ifdef DDE_AVAILABLE
         // beim Cut hat DDE-Link keinen Sinn!!
-        if( !bIsCut && bDDELink )
+        SwDocShell* pDShell;
+        if( !bIsCut && bDDELink &&
+            0 != ( pDShell = pWrtShell->GetDoc()->GetDocShell()) &&
+            SFX_CREATE_MODE_STANDARD == pDShell->GetCreateMode() )
         {
             AddFormat( SOT_FORMATSTR_ID_LINK );
             refDdeLink = new SwTrnsfrDdeLink( *this, *pWrtShell );
