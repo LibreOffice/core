@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:09:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 13:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,8 @@
 #ifndef _PSPRINT_HELPER_HXX_
 #define _PSPRINT_HELPER_HXX_
 
-#ifndef __SGI_STL_HASH_MAP
-#include <hash_map>
-#endif
 #include <list>
+#include <hash_map>
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
