@@ -127,7 +127,7 @@ sub copy_install_sets_to_ship
     print "... copy installation set from " . $destdir . " to " . $localshipinstalldir . "\n";
     installer::systemactions::copy_complete_directory($destdir, $localshipinstalldir);
 
-    if (( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::javafilespath eq "" ))
+    if (( ! $installer::globals::iswindowsbuild ) && ( $installer::globals::addjavainstaller ))
     {
         # Setting Unix rights for Java starter ("setup")
         my $localcall = "chmod 775 $localshipinstalldir/setup \>\/dev\/null 2\>\&1";
@@ -369,6 +369,9 @@ sub analyze_and_save_logfile
 {
     my ($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number) = @_;
 
+    my $is_success = 1;
+    my $finalinstalldir = "";
+
     print "... checking log file " . $loggingdir . $installer::globals::logfilename . "\n";
 
     my $contains_error = installer::control::check_logfile(\@installer::globals::logfileinfo);
@@ -379,6 +382,9 @@ sub analyze_and_save_logfile
     {
         my $errordir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_witherror");
         if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
+        $is_success = 0;
+
+        $finalinstalldir = $errordir;
     }
     else
     {
@@ -393,6 +399,8 @@ sub analyze_and_save_logfile
         {
             $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "");
         }
+
+        $finalinstalldir = $destdir;
     }
 
     # Saving the logfile in the log file directory and additionally in a log directory in the install directory
@@ -405,6 +413,8 @@ sub analyze_and_save_logfile
 
     # Saving the checksumfile in a checksum directory in the install directory
     # installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
+
+    return ($is_success, $finalinstalldir);
 }
 
 ###############################################################
@@ -465,5 +475,100 @@ sub get_language_specific_include_pathes
     return \@patharray;
 }
 
+
+##############################################################
+# Collecting all items with a defined flag
+##############################################################
+
+sub collect_all_items_with_special_flag
+{
+    my ($itemsref, $flag) = @_;
+
+    my @allitems = ();
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $oneitem = ${$itemsref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
+
+        if ( $styles =~ /\b$flag\b/ )
+        {
+            push( @allitems, $oneitem );
+        }
+    }
+
+    return \@allitems;
+}
+
+###########################################################
+# Mechanism for simple installation without packing
+###########################################################
+
+sub install_simple ($$$$)
+{
+    my ($packagename, $directoriesarray, $filesarray, $linksarray) = @_;
+
+    print "... installing module $packagename ...\n";
+
+    my $destdir = $installer::globals::destdir;
+    my @lines = ();
+
+    print "DestDir: $destdir \n";
+    print "Rootpath: $installer::globals::rootpath \n";
+
+    `mkdir -p $destdir` if $destdir ne "";
+    `mkdir -p $destdir$installer::globals::rootpath`;
+
+    # Create Directories
+    for ( my $i = 0; $i <= $#{$directoriesarray}; $i++ )
+    {
+        my $onedir = ${$directoriesarray}[$i];
+        my $dir = "";
+
+        if ( $onedir->{'Dir'} ) { $dir = $onedir->{'Dir'}; }
+
+        if ((!($dir =~ /\bPREDEFINED_/ )) || ( $dir =~ /\bPREDEFINED_PROGDIR\b/ ))
+        {
+            # printf "mkdir $destdir$onedir->{'HostName'}\n";
+            mkdir $destdir . $onedir->{'HostName'};
+            push @lines, "%dir " . $onedir->{'HostName'} . "\n";
+        }
+    }
+
+    for ( my $i = 0; $i <= $#{$filesarray}; $i++ )
+    {
+        my $onefile = ${$filesarray}[$i];
+        my $unixrights = $onefile->{'UnixRights'};
+        my $destination = $onefile->{'destination'};
+        my $sourcepath = $onefile->{'sourcepath'};
+
+        # printf "mv $sourcepath $destdir$destination\n";
+        `cp -af '$sourcepath' '$destdir$destination'`;
+        `chmod $unixrights '$destdir$destination'`;
+        push @lines, "$destination\n";
+    }
+
+    for ( my $i = 0; $i <= $#{$linksarray}; $i++ )
+    {
+        my $onelink = ${$linksarray}[$i];
+        my $destination = $onelink->{'destination'};
+        my $destinationfile = $onelink->{'destinationfile'};
+
+        # print "link $destinationfile -> $destdir$destination\n";
+        `ln -sf '$destinationfile' '$destdir$destination'`;
+        push @lines, "$destination\n";
+    }
+
+    if ( $destdir ne "" )
+    {
+        my $filelist;
+        my $fname = $installer::globals::destdir . "/$packagename";
+        open ($filelist, ">$fname") || die "Can't open $fname: $!";
+        print $filelist @lines;
+        close ($filelist);
+    }
+
+}
 
 1;
