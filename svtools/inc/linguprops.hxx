@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linguprops.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 15:34:06 $
+ *  last change: $Author: tl $ $Date: 2001-05-08 12:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,8 @@
 #define UPN_HYPH_MIN_TRAILING               "HyphMinTrailing"
 #define UPN_HYPH_MIN_WORD_LENGTH            "HyphMinWordLength"
 
-// UNO property names for OtherLingu (foreign Linguistik)
-#define UPN_IS_STANDARD_HYPHENATOR          "IsStandardHyphenator"
-#define UPN_IS_STANDARD_SPELL_CHECKER       "IsStandardSpellChecker"
-#define UPN_IS_STANDARD_THESAURUS           "IsStandardThesaurus"
-#define UPN_OTHER_LINGU_INDEX               "OtherLinguIndex"
-
 // UNO property names for Lingu
-// (those not covered by the SpellChecker, Hyphenator and OtherLingu
+// (those not covered by the SpellChecker and Hyphenator
 // properties and more likely to be used in other modules only)
 #define UPN_DEFAULT_LANGUAGE                "DefaultLanguage"
 #define UPN_DEFAULT_LOCALE                  "DefaultLocale"
@@ -118,10 +112,6 @@
 #define UPH_IS_HYPH_AUTO                    14
 #define UPH_IS_HYPH_SPECIAL                 15
 #define UPH_IS_WRAP_REVERSE                 16
-#define UPH_IS_STANDARD_HYPHENATOR          17
-#define UPH_IS_STANDARD_SPELL_CHECKER       18
-#define UPH_IS_STANDARD_THESAURUS           19
-#define UPH_OTHER_LINGU_INDEX               20
 #define UPH_DEFAULT_LANGUAGE                21
 #define UPH_DEFAULT_LOCALE_CJK              22
 #define UPH_DEFAULT_LOCALE_CTL              23
