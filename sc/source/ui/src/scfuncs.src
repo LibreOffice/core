@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 16:11:55 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3451,7 +3451,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Früheres Datum für die Tagesdifferenz." ;
             Text [ english ] = "The start date for calculating the difference in days." ;
             Text [ norwegian ] = "Früheres Datum für die Tagesdifferenz." ;
-            Text [ italian ] = "sono le due date che delimitano il periodo di cui si desidera conoscere il numero di giorni." ;
+            Text [ italian ] = "Data meno recente per la differenza di giorni." ;
             Text [ portuguese_brazilian ] = "Älteres Datum für die Tagesdifferenz." ;
             Text [ portuguese ] = "É a data mais antiga para o cálculo do número de dias." ;
             Text [ finnish ] = "Früheres Datum für die Tagesdifferenz." ;
@@ -3515,7 +3515,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Späteres Datum für die Tagesdifferenz." ;
             Text [ english ] = "The end date for calculating the difference in days." ;
             Text [ norwegian ] = "Späteres Datum für die Tagesdifferenz." ;
-            Text [ italian ] = "sono le due date che delimitano il periodo di cui si desidera conoscere il numero di giorni." ;
+            Text [ italian ] = "Data più recente per la differenza di giorni." ;
             Text [ portuguese_brazilian ] = "Jüngeres Datum für die Tagesdifferenz." ;
             Text [ portuguese ] = "É a data mais recente para o cálculo do número de dias." ;
             Text [ finnish ] = "Späteres Datum für die Tagesdifferenz." ;
@@ -3579,7 +3579,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Art der Differenzbildung. Art = 0 heißt US-Methode (NASD), Art = 1 heißt europäische Methode." ;
             Text [ english ] = "is a logical value that specifies whether the European or US method should be used in the calculation" ;
             Text [ norwegian ] = "Art der Differenzbildung. Art = 0 heißt US-Methode (NASD), Art = 1 heißt europäische Methode." ;
-            Text [ italian ] = "Modo di calcolo della differenza Modo=1 per il metodo americano (NASD), Modo=0 per il metodo europeo" ;
+            Text [ italian ] = "Modo di calcolo della differenza Modo=0 per il metodo americano (NASD), Modo=1 per il metodo europeo" ;
             Text [ portuguese_brazilian ] = "Art der Differenzbildung. Art = 1 heißt US-Methode (NASD), Art = 0 heißt europäische Methode." ;
             Text [ portuguese ] = "Método de cálculo de diferenças. Modo = 0 para o método americano (NASD); Modo = 1 para o método europeu." ;
             Text [ finnish ] = "Art der Differenzbildung. Art = 0 heißt US-Methode (NASD), Art = 1 heißt europäische Methode." ;
@@ -9649,7 +9649,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "FA" ;
             Text [ dutch ] = "FA" ;
             Text [ spanish ] = "Factor" ;
-            Text [ english_us ] = "factor" ;
+            Text [ english_us ] = "Factor" ;
             Text[ chinese_simplified ] = "factor";
             Text[ russian ] = "Êîýôôèöèåíò";
             Text[ polish ] = "Czynnik";
@@ -10442,7 +10442,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "FA" ;
             Text [ dutch ] = "FA" ;
             Text [ spanish ] = "factor" ;
-            Text [ english_us ] = "factor" ;
+            Text [ english_us ] = "Factor" ;
             Text[ chinese_simplified ] = "factor";
             Text[ russian ] = "Êîýôôèöèåíò";
             Text[ polish ] = "Czynnik";
@@ -42486,7 +42486,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "New_text";
             Text[ dutch ] = "Nieuwe tekst";
             Text[ chinese_simplified ] = "new_text";
-            Text[ greek ] = "ÍÝï_êåßìåíï";
+            Text[ greek ] = "Êåßìåíï áíôéêáôÜóôáóçò";
             Text[ korean ] = "»õ ÅØ½ºÆ®";
             Text[ turkish ] = "Yeni metin";
             Text[ language_user1 ] = " ";
@@ -43809,7 +43809,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "New_text";
             Text[ dutch ] = "Vervangende tekst";
             Text[ chinese_simplified ] = "new_text";
-            Text[ greek ] = "ÍÝï_êåßìåíï";
+            Text[ greek ] = "Êåßìåíï áíôéêáôÜóôáóçò";
             Text[ korean ] = "»õ ÅØ½ºÆ®";
             Text[ turkish ] = "Yeni metin";
             Text[ language_user1 ] = " ";
