@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tra $ $Date: 2001-12-11 08:17:17 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 07:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,11 +299,11 @@ void SfxMailModel_Impl::MakeValueList( AddressList_Impl* pList, String& rValueLi
     }
 }
 
-sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
+SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
 {
-    sal_Bool bRet = sal_False;
-    SfxViewFrame* pTopViewFrm = mpBindings->GetDispatcher_Impl()->GetFrame()->GetTopViewFrame();
-    SfxObjectShellRef xDocShell = pTopViewFrm->GetObjectShell();
+    SaveResult          eRet = SAVE_CANCELLED;
+    SfxViewFrame*       pTopViewFrm = mpBindings->GetDispatcher_Impl()->GetFrame()->GetTopViewFrame();
+    SfxObjectShellRef   xDocShell = pTopViewFrm->GetObjectShell();
 
     // save the document
     if ( xDocShell.Is() && xDocShell->GetMedium() )
@@ -322,7 +322,7 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
             SfxFilterMatcher aFilterMatcher( xDocShell->GetFactory().GetFilterContainer() );
             pFilter = aFilterMatcher.GetDefaultFilter();
         }
-//#if 0
+
         // create temp file name with leading chars and extension
         sal_Bool    bHasName = xDocShell->HasName();
         String      aLeadingStr;
@@ -364,16 +364,13 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
         SfxStringItem aFileName( SID_FILE_NAME, rFileName );
         SfxBoolItem aPicklist( SID_PICKLIST, FALSE );
         SfxBoolItem aSaveTo( SID_SAVETO, TRUE );
-//#endif
+
         SfxStringItem* pFilterName = NULL;
         if ( pFilter && bHasFilter )
             pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() );
-//      pDisp->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON,
-//                      pFilterName, 0L );
-        pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
-                        pFilterName, 0L );
-
-//        rFileName = xDocShell->GetMedium()->GetName();
+        const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
+                                                                        pFilterName, 0L );
+        BOOL bRet = pRet ? pRet->GetValue() : FALSE;
 
         delete pFilterName;
         if ( pFilter )
@@ -390,9 +387,99 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
             xDocShell->SetModified( FALSE );
         if ( !bOldDidDangerousSave )
             xDocShell->Get_Impl()->bDidDangerousSave = sal_False;
-        bRet = sal_True;
+        eRet = bRet ? SAVE_SUCCESSFULL : SAVE_ERROR;
     }
-    return bRet;
+
+    return eRet;
+}
+
+SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName, String& rType )
+{
+    SaveResult eRet = SAVE_CANCELLED;
+    SfxViewFrame* pTopViewFrm = mpBindings->GetDispatcher_Impl()->GetFrame()->GetTopViewFrame();
+    SfxObjectShellRef xDocShell = pTopViewFrm->GetObjectShell();
+
+    // save the document
+    if ( xDocShell.Is() && xDocShell->GetMedium() )
+    {
+        // save old settings
+        BOOL bOldDidDangerousSave = xDocShell->Get_Impl()->bDidDangerousSave;
+        BOOL bModified = xDocShell->IsModified();
+        // prepare for mail export
+        SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
+        pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
+
+        // Get PDF Filter from container
+        SfxFactoryFilterContainer* pFilterContainer = xDocShell->GetFactory().GetFilterContainer();
+        if ( pFilterContainer )
+        {
+            String aPDFExtension = String::CreateFromAscii( ".pdf" );
+
+            const SfxFilter*    pFilter     = pFilterContainer->GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
+            sal_Bool            bHasFilter  = pFilter ? sal_True : sal_False;
+
+            // create temp file name with leading chars and extension
+            sal_Bool    bHasName = xDocShell->HasName();
+            String      aLeadingStr;
+            String*     pExt = NULL;
+
+            if ( !bHasName )
+                aLeadingStr = String( DEFINE_CONST_UNICODE("noname") );
+            else
+            {
+                INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
+                String aName;
+                if ( aFileObj.hasExtension() )
+                {
+                    pExt = new String( aPDFExtension );
+                    aFileObj.removeExtension();
+                    aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                    aLeadingStr += String::CreateFromAscii( "_" );
+                }
+                else
+                {
+                    aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                    aLeadingStr += String::CreateFromAscii( "_" );
+                }
+            }
+
+            if ( pFilter && !pExt )
+            {
+                pExt = new String( pFilter->GetWildcard()().GetToken(0) );
+                // erase the '*' from the extension (e.g. "*.sdw")
+                pExt->Erase( 0, 1 );
+            }
+
+            ::utl::TempFile aTempFile( aLeadingStr, pExt );
+            delete pExt;
+
+            rFileName = aTempFile.GetURL();
+
+            // save document to temp file
+            SfxStringItem aFileName( SID_FILE_NAME, rFileName );
+            const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute( SID_EXPORTDOCASPDF, SFX_CALLMODE_SYNCHRON, &aFileName, 0L );
+            BOOL bRet = pRet ? pRet->GetValue() : FALSE;
+            eRet = bRet ? SAVE_SUCCESSFULL : SAVE_CANCELLED;
+
+            if ( pFilter )
+            {
+                // detect content type and expand with the file name
+                rType = pFilter->GetMimeType();
+                rType += DEFINE_CONST_UNICODE("; name =\"");
+                INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
+                rType += aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                rType += '\"';
+            }
+
+            // restore old settings
+            if ( !bModified && xDocShell->IsEnableSetModified() )
+                xDocShell->SetModified( FALSE );
+            if ( !bOldDidDangerousSave )
+                xDocShell->Get_Impl()->bDidDangerousSave = sal_False;
+        }
+    }
+
+    return eRet;
 }
 
 IMPL_LINK_INLINE_START( SfxMailModel_Impl, DoneHdl, void*, EMPTYARG )
@@ -465,12 +552,19 @@ void SfxMailModel_Impl::AddAddress( const String& rAddress, AddressRole eRole )
     }
 }
 
-sal_Bool SfxMailModel_Impl::Send()
+SfxMailModel_Impl::SendMailResult SfxMailModel_Impl::Send( MailDocType eMailDocType )
 {
-    sal_Bool bSend = sal_False;
+    SaveResult      eSaveResult;
+    SendMailResult  eResult = SEND_MAIL_ERROR;
     String aFileName, aContentType;
 
-    if ( SaveDocument( aFileName, aContentType ) )
+    sal_Bool bSuccessfull = sal_False;
+    if ( eMailDocType == TYPE_SELF )
+        eSaveResult = SaveDocument( aFileName, aContentType );
+    else
+        eSaveResult = SaveDocAsPDF( aFileName, aContentType );
+
+    if ( eSaveResult == SAVE_SUCCESSFULL )
     {
         SfxFrame* pViewFrm = mpBindings->GetDispatcher_Impl()->GetFrame()->GetFrame();
         Reference < XPluginInstance > xPlugin;
@@ -587,7 +681,7 @@ sal_Bool SfxMailModel_Impl::Send()
             {
                 Sequence < PropertyValue > aArgs;
                 xDisp->dispatch( aTargetURL, aArgs );
-                bSend = sal_True;
+                eResult = SEND_MAIL_OK;
             }
         }
         else
@@ -615,7 +709,7 @@ sal_Bool SfxMailModel_Impl::Send()
                     if ( !xSimpleMailClient.is() )
                     {
                         // no mail client support => message box!
-                        return sal_False;
+                        return SEND_MAIL_ERROR;
                     }
 
                     // we have a simple mail client
@@ -697,14 +791,16 @@ sal_Bool SfxMailModel_Impl::Send()
                         pMailSendThread->create();
 
                         // Return always true as the real error handling occurss in the OMailSendThread-implementation!
-                        bSend = sal_True;
+                        eResult = SEND_MAIL_OK;
                     }
                 }
             }
         }
     }
+    else if ( eSaveResult == SAVE_CANCELLED )
+        eResult = SEND_MAIL_CANCELLED;
 
-    return bSend;
+    return eResult;
 }
 
 // functions -------------------------------------------------------------
