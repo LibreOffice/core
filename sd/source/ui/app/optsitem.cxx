@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-17 16:53:04 $
+ *  last change: $Author: dl $ $Date: 2000-11-20 16:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,8 +272,8 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, ULONG& rCount ) c
         "Display/Contour",
         "Display/Guide",
         "Display/Helpline",
-        "Other/MeasureUnit",
-        "Other/TabStop"
+        "Other/MeasureUnit/Metric",
+        "Other/TabStop/Metric"
     };
 
     rCount = 7;
