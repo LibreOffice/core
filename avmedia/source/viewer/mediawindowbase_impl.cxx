@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediawindowbase_impl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 15:55:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_MEDIA_XMANAGER_HPP_
 #include <com/sun/star/media/XManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HDL_
+#include <com/sun/star/lang/XComponent.hdl>
 #endif
 
 #define MEDIA_TIMER_TIMEOUT 100
@@ -221,15 +224,17 @@ void MediaWindowBaseImpl::setPlayerWindow( const uno::Reference< media::XPlayerW
 void MediaWindowBaseImpl::cleanUp()
 {
     if( mxPlayer.is() )
+    {
         mxPlayer->stop();
 
-    if( mxPlayerWindow.is() )
-    {
-        mxPlayerWindow->setVisible( false );
-        mxPlayerWindow.clear();
+        uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
+
+        if( xComponent.is() )
+            xComponent->dispose();
+
+        mxPlayer.clear();
     }
 
-    mxPlayer.clear();
     mpMediaWindow = NULL;
 }
 
