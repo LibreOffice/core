@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:42:17 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ class XclImpXFBuffer;
 class XclImpXFIndexBuffer;
 class XclImpPageSettings;
 class _ScRangeListTabs;
-class XclImpTabIdBuffer;
+class XclImpTabInfo;
 class XclImpNameBuffer;
 class XclImpLinkManager;
 class XclImpObjectManager;
@@ -97,7 +97,7 @@ struct XclImpRootData : public XclRootData
     typedef ::std::auto_ptr< XclImpXFBuffer >           XclImpXFBufferPtr;
     typedef ::std::auto_ptr< XclImpXFIndexBuffer >      XclImpXFIndexBufferPtr;
     typedef ::std::auto_ptr< XclImpPageSettings >       XclImpPageSettingsPtr;
-    typedef ::std::auto_ptr< XclImpTabIdBuffer >        XclImpTabIdBufferPtr;
+    typedef ::std::auto_ptr< XclImpTabInfo >            XclImpTabInfoPtr;
     typedef ::std::auto_ptr< XclImpNameBuffer >         XclImpNameBufferPtr;
     typedef ::std::auto_ptr< XclImpLinkManager >        XclImpLinkManagerPtr;
     typedef ::std::auto_ptr< XclImpObjectManager >      XclImpObjectManagerPtr;
@@ -114,7 +114,7 @@ struct XclImpRootData : public XclRootData
 
     XclImpPageSettingsPtr       mpPageSettings;     /// Page settings for current sheet.
 
-    XclImpTabIdBufferPtr        mpTabIdBuffer;      /// Sheet creation order list.
+    XclImpTabInfoPtr            mpTabInfo;          /// Sheet creation order list.
     XclImpNameBufferPtr         mpNameBuffer;       /// Internal defined names.
     XclImpLinkManagerPtr        mpLinkManager;      /// Manager for internal/external links.
 
@@ -167,7 +167,7 @@ public:
     _ScRangeListTabs&           GetTitleAreaBuffer() const;
 
     /** Returns the buffer that contains the sheet creation order. */
-    XclImpTabIdBuffer&          GetTabIdBuffer() const;
+    XclImpTabInfo&              GetTabInfo() const;
     /** Returns the buffer that contains internal defined names. */
     XclImpNameBuffer&           GetNameBuffer() const;
     /** Returns the link manager. */

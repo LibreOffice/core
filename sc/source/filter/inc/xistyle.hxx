@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:42:27 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,9 +431,9 @@ public:
         @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
         the number format of the XF. */
     void                        ApplyPattern(
-                                    sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
-                                    sal_uInt16 nLastCol, sal_uInt16 nLastRow,
-                                    sal_uInt16 nTab,
+                                    USHORT nScCol1, USHORT nScRow1,
+                                    USHORT nScCol2, USHORT nScRow2,
+                                    USHORT nScTab,
                                     sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
 
 private:
@@ -503,9 +503,9 @@ public:
         @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
         the number format of the XF. */
     void                        ApplyPattern(
-                                    sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
-                                    sal_uInt16 nLastCol, sal_uInt16 nLastRow,
-                                    sal_uInt16 nTab, sal_uInt16 nXFIndex,
+                                    USHORT nScCol1, USHORT nScRow1,
+                                    USHORT nScCol2, USHORT nScRow2,
+                                    USHORT nScTab, sal_uInt16 nXFIndex,
                                     sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
 
 private:
@@ -521,39 +521,39 @@ class XclImpXFIndex
     DECL_FIXEDMEMPOOL_NEWDEL( XclImpXFIndex )
 
 public:
-    sal_uInt16                  mnFirstRow;     /// The first row of an equal-formatted range.
-    sal_uInt16                  mnLastRow;      /// The last row of an equal-formatted range.
+    USHORT                      mnScRow1;       /// The first row of an equal-formatted range.
+    USHORT                      mnScRow2;       /// The last row of an equal-formatted range.
     sal_uInt32                  mnEncXF;        /// Encoded XF index (contains additional information).
 
-    inline explicit             XclImpXFIndex( sal_uInt16 nRow, sal_uInt32 nEncXFIndex );
-    inline explicit             XclImpXFIndex( sal_uInt16 nFRow, sal_uInt16 nLRow, sal_uInt32 nEncXFIndex );
+    inline explicit             XclImpXFIndex( USHORT nScRow, sal_uInt32 nEncXFIndex );
+    inline explicit             XclImpXFIndex( USHORT nFirstScRow, USHORT nLastScRow, sal_uInt32 nEncXFIndex );
 
-    /** Returns true, if nRow is contained in own row range. */
-    inline bool                 Contains( sal_uInt16 nRow ) const;
+    /** Returns true, if nScRow is contained in own row range. */
+    inline bool                 Contains( USHORT nScRow ) const;
 
     /** Returns true, if the range has been expanded. */
-    bool                        Expand( sal_uInt16 nRow, sal_uInt32 nEncXFIndex );
+    bool                        Expand( USHORT nScRow, sal_uInt32 nEncXFIndex );
     /** Returns true, if the range has been expanded. */
     bool                        Expand( const XclImpXFIndex& rNextStyle );
 };
 
-inline XclImpXFIndex::XclImpXFIndex( sal_uInt16 nRow, sal_uInt32 nEncXFIndex ) :
-    mnFirstRow( nRow ),
-    mnLastRow( nRow ),
+inline XclImpXFIndex::XclImpXFIndex( USHORT nScRow, sal_uInt32 nEncXFIndex ) :
+    mnScRow1( nScRow ),
+    mnScRow2( nScRow ),
     mnEncXF( nEncXFIndex )
 {
 }
 
-inline XclImpXFIndex::XclImpXFIndex( sal_uInt16 nFRow, sal_uInt16 nLRow, sal_uInt32 nEncXFIndex ) :
-    mnFirstRow( nFRow ),
-    mnLastRow( nLRow ),
+inline XclImpXFIndex::XclImpXFIndex( USHORT nFirstScRow, USHORT nLastScRow, sal_uInt32 nEncXFIndex ) :
+    mnScRow1( nFirstScRow ),
+    mnScRow2( nLastScRow ),
     mnEncXF( nEncXFIndex )
 {
 }
 
-inline bool XclImpXFIndex::Contains( sal_uInt16 nRow ) const
+inline bool XclImpXFIndex::Contains( USHORT nScRow ) const
 {
-    return (mnFirstRow <= nRow) && (nRow <= mnLastRow);
+    return (mnScRow1 <= nScRow) && (nScRow <= mnScRow2);
 }
 
 
@@ -574,16 +574,16 @@ public:
     void                        SetDefaultXF( sal_uInt32 nEncXFIndex );
 
     /** Inserts a new (encoded) XF index (first try to expand the last range). */
-    void                        SetXF( sal_uInt16 nRow, sal_uInt32 nEncXFIndex );
+    void                        SetXF( USHORT nScRow, sal_uInt32 nEncXFIndex );
 
 private:
-    /** Finds the previous and next row range from row position nRow.
+    /** Finds the previous and next row range from row position nScRow.
         @descr  If an XF still exists, it is contained in rpPrevStyle. */
     void                        Find(
                                     XclImpXFIndex*& rpPrevStyle,
                                     XclImpXFIndex*& rpNextStyle,
                                     sal_uInt32& rnNextIndex,
-                                    sal_uInt16 nRow ) const;
+                                    USHORT nScRow ) const;
 
     /** Tries to concatenate a range with its predecessor.
         @descr  The ranges must have the same XF index and must not have a gap.
@@ -605,22 +605,20 @@ public:
     virtual                     ~XclImpXFIndexBuffer();
 
     /** Inserts a new XF index. */
-    void                        SetXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex );
+    void                        SetXF( USHORT nScCol, USHORT nRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for blank cells. */
-    void                        SetBlankXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex );
+    void                        SetBlankXF( USHORT nScCol, USHORT nScRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for boolean cells. */
-    void                        SetBoolXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex );
+    void                        SetBoolXF( USHORT nScCol, USHORT nScRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for all cells in a row. */
-    void                        SetRowDefXF( sal_uInt16 nRow, sal_uInt16 nXFIndex );
+    void                        SetRowDefXF( USHORT nScRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for all cells in a column. */
-    void                        SetColumnDefXF( sal_uInt16 nCol, sal_uInt16 nXFIndex );
+    void                        SetColumnDefXF( USHORT nScCol, sal_uInt16 nXFIndex );
 
     /** Inserts the first cell of a merged cell range. */
-    void                        SetMerge( sal_uInt16 nCol, sal_uInt16 nRow );
+    void                        SetMerge( USHORT nScCol, USHORT nScRow );
     /** Inserts a complete merged cell range. */
-    void                        SetMerge(
-                                    sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
-                                    sal_uInt16 nLastCol, sal_uInt16 nLastRow );
+    void                        SetMerge( USHORT nScCol1, USHORT nScRow1, USHORT nScCol2, USHORT nScRow2 );
 
     /** Applies styles and cell merging to the current sheet in the document. */
     void                        Apply();
@@ -646,7 +644,7 @@ private:
 
     /** Inserts a new XF index for the specified cell type. */
     void                        SetXF(
-                                    sal_uInt16 nCol, sal_uInt16 nRow,
+                                    USHORT nScCol, USHORT nScRow,
                                     sal_uInt16 nXFIndex, XclImpXFInsertMode eMode );
 
     /** Copies border of the last cell of the range to the first cell to keep it visible
@@ -654,14 +652,12 @@ private:
         @param nLine
         BOX_LINE_RIGHT = copy most-right border of top row;
         BOX_LINE_BOTTOM = copy most-bottom border of first column. */
-    void                        SetBorderLine( const ScRange& rRange, sal_uInt16 nTab, sal_uInt16 nLine );
+    void                        SetBorderLine( const ScRange& rRange, USHORT nScTab, USHORT nLine );
 
 private:
     typedef ::std::auto_ptr< XclImpXFIndexColumn > XclImpXFIndexColumnPtr;
 
     XclImpXFIndexColumnPtr*     mppColumns;     /// Array of pointers to column XF index buffers.
-    sal_uInt32                  mnUsedCount;    /// Column width of formatted columns (last used + 1).
-
     ScRangeList                 maMergeList;    /// List of merged cell ranges.
 };
 
