@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-04 15:21:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
@@ -97,40 +99,94 @@
 
 #include "misc.hxx"
 #include "fuzoom.hxx"
+#ifndef SD_FU_DISPLAY_ORDER_HXX
 #include "fudspord.hxx"
+#endif
+#ifndef SD_FU_SLIDE_PARAMETERS_HXX
 #include "fuslprms.hxx"
+#endif
+#ifndef SD_FU_TRANSFORM_HXX
 #include "futransf.hxx"
+#endif
+#ifndef SD_FU_LINE_HXX
 #include "fuline.hxx"
+#endif
+#ifndef SD_FU_AREA_HXX
 #include "fuarea.hxx"
+#endif
+#ifndef SD_FU_CHAR_HXX
 #include "fuchar.hxx"
+#endif
+#ifndef SD_FU_PARAGRAPH_HXX
 #include "fuparagr.hxx"
+#endif
+#ifndef SD_FU_BULLET_HXX
 #include "fubullet.hxx"
+#endif
+#ifndef SD_FU_TEMPLATE_HXX
 #include "futempl.hxx"
+#endif
+#ifndef SD_FU_INSERT_HXX
 #include "fuinsert.hxx"
+#endif
+#ifndef SD_FU_PRESENTATION_LAYOUT_HXX
 #include "fuprlout.hxx"
+#endif
+#ifndef SD_FU_PRESENTATION_TEMPLATES_HXX
 #include "fuprtmpl.hxx"
+#endif
+#ifndef SD_FU_PAGE_HXX
 #include "fupage.hxx"
+#endif
+#ifndef SD_FU_OBJECT_ANIMATION_PARAMETERS_HXX
 #include "fuoaprms.hxx"
-#include "sdresid.hxx"
+#endif
+#ifndef SD_FU_COPY_HXX
 #include "fucopy.hxx"
+#endif
+#ifndef SD_FU_LINE_END_HXX
 #include "fulinend.hxx"
+#endif
+#ifndef SD_FU_SNAP_LINE_HXX
 #include "fusnapln.hxx"
+#endif
+#ifndef SD_FU_OUTLINE_BULLET_HXX
 #include "fuolbull.hxx"
+#endif
+#ifndef SD_FU_INSERT_FILE_HXX
 #include "fuinsfil.hxx"
+#endif
+#ifndef SD_FU_LINK_HXX
 #include "fulink.hxx"
+#endif
+#ifndef SD_FU_THESAURUS_HXX
 #include "futhes.hxx"
+#endif
+#ifndef SD_FU_TEXT_ATTR_DLG_HXX
 #include "futxtatt.hxx"
+#endif
+#ifndef SD_FU_MEASURE_DLG_HXX
 #include "fumeasur.hxx"
+#endif
+#ifndef SD_FU_CONNECTION_DLG_HXX
 #include "fuconnct.hxx"
+#endif
+#ifndef SD_FU_MORPH_HXX
 #include "fumorph.hxx"
+#endif
+#ifndef SD_FU_VECTORIZE_HXX
 #include "fuvect.hxx"
-#include "sdwindow.hxx"
+#endif
+#include "sdresid.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "drviewsh.hxx"
+#endif
 #include "zoomlist.hxx"
-#include "drawview.hxx"
 
-
+namespace sd {
 
 /*************************************************************************
 |*
@@ -138,27 +194,27 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
+void DrawViewShell::FuTemp01(SfxRequest& rReq)
 {
     switch(rReq.GetSlot())
     {
         case SID_ATTRIBUTES_LINE:  // BASIC
         {
-            pFuActual = new FuLine( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuLine( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_ATTRIBUTES_AREA:  // BASIC
         {
-            pFuActual = new FuArea( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuArea( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_ATTR_TRANSFORM:
         {
-            pFuActual = new FuTransform( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuTransform( this, pWindow, pDrView, GetDoc(), rReq );
             Invalidate(SID_RULER_OBJECT);
             Cancel();
         }
@@ -166,49 +222,49 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_CHAR_DLG:  // BASIC
         {
-            pFuActual = new FuChar( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuChar( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_PARA_DLG:
         {
-            pFuActual = new FuParagraph( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuParagraph( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_OUTLINE_BULLET:
         {
-            pFuActual = new FuOutlineBullet( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuOutlineBullet( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_BULLET:
         {
-            pFuActual = new FuBullet( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuBullet( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_PRESENTATION_LAYOUT:
         {
-            pFuActual = new FuPresentationLayout(this, pWindow, pDrView, pDoc, rReq);
+            pFuActual = new FuPresentationLayout(this, pWindow, pDrView, GetDoc(), rReq);
             Cancel();
         }
         break;
 
 //        case SID_MODEL:
 //        {
-//            pFuActual = new FuTemplate( this, pWindow, pDrView, pDoc, rReq );
+//            pFuActual = new FuTemplate( this, pWindow, pDrView, GetDoc(), rReq );
 //            Cancel();
 //        }
 //        break;
 
         case SID_PASTE2:
         {
-            pFuActual = new FuInsertClipboard( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuInsertClipboard( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
             rReq.Ignore ();
         }
@@ -216,7 +272,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_INSERT_GRAPHIC:
         {
-            pFuActual = new FuInsertGraphic( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuInsertGraphic( this, pWindow, pDrView, GetDoc(), rReq );
 
             Cancel();
             rReq.Ignore ();
@@ -238,7 +294,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERT_DIAGRAM:
         case SID_ATTR_TABLE:
         {
-            pFuActual = new FuInsertOLE( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuInsertOLE( this, pWindow, pDrView, GetDoc(), rReq );
 
             Cancel();
             rReq.Ignore ();
@@ -260,7 +316,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
                     pDrView->EndTextEdit();
                 }
 
-                pFuActual = new FuCopy( this, pWindow, pDrView, pDoc, rReq );
+                pFuActual = new FuCopy( this, pWindow, pDrView, GetDoc(), rReq );
             }
             Cancel();
             rReq.Ignore ();
@@ -269,7 +325,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_INSERTFILE:  // BASIC
         {
-            pFuActual = new FuInsertFile( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuInsertFile( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
             rReq.Done ();
 
@@ -279,7 +335,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_PAGESETUP:  // BASIC ??
         {
-            pFuActual = new FuPage( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuPage( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
             rReq.Ignore (); // es werden eigenstaendige macros generiert !!
         }
@@ -289,7 +345,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_ZOOM_PANNING:
         {
             bZoomOnPage = FALSE;
-            pFuActual = new FuZoom(this, pWindow, pDrView, pDoc, rReq);
+            pFuActual = new FuZoom(this, pWindow, pDrView, GetDoc(), rReq);
             // Beendet sich selbst, kein Cancel() notwendig!
             Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Ignore ();
@@ -299,7 +355,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_BEFORE_OBJ:
         case SID_BEHIND_OBJ:
         {
-            pFuActual = new FuDisplayOrder(this, pWindow, pDrView, pDoc, rReq);
+            pFuActual = new FuDisplayOrder(this, pWindow, pDrView, GetDoc(), rReq);
             Invalidate( SID_POSITION );
             rReq.Ignore ();
             // Beendet sich selbst, kein Cancel() notwendig!
@@ -317,21 +373,21 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_DIA:
         {
-            pFuActual =new FuSlideParameters( this, pWindow, pDrView, pDoc, rReq);
+            pFuActual =new FuSlideParameters( this, pWindow, pDrView, GetDoc(), rReq);
             Cancel();
         }
         break;
 
         case SID_ANIMATION_EFFECTS:
         {
-            pFuActual =new FuObjectAnimationParameters( this, pWindow, pDrView, pDoc, rReq);
+            pFuActual =new FuObjectAnimationParameters( this, pWindow, pDrView, GetDoc(), rReq);
             Cancel();
         }
         break;
 
         case SID_LINEEND_POLYGON:
         {
-            pFuActual = new FuLineEnd( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuLineEnd( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
@@ -341,14 +397,14 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
             aMousePos = Point(-1,-1);
         case SID_SET_SNAPITEM:
         {
-            pFuActual = new FuSnapLine(this, pWindow, pDrView, pDoc, rReq);
+            pFuActual = new FuSnapLine(this, pWindow, pDrView, GetDoc(), rReq);
             Cancel();
         }
         break;
 
         case SID_MANAGE_LINKS:
         {
-            pFuActual = new FuLink( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuLink( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
             rReq.Ignore ();
         }
@@ -356,7 +412,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_THESAURUS:
         {
-            pFuActual = new FuThesaurus( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuThesaurus( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
             rReq.Ignore ();
         }
@@ -364,7 +420,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TEXTATTR_DLG:
         {
-            pFuActual = new FuTextAttrDlg( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuTextAttrDlg( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
             rReq.Ignore ();
         }
@@ -372,7 +428,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_MEASURE_DLG:
         {
-            pFuActual = new FuMeasureDlg( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuMeasureDlg( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
             rReq.Ignore ();
         }
@@ -380,7 +436,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_CONNECTION_DLG:
         {
-            pFuActual = new FuConnectionDlg( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuConnectionDlg( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
             rReq.Done();
         }
@@ -468,14 +524,14 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_POLYGON_MORPHING:
         {
-            pFuActual = new FuMorph( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuMorph( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_VECTORIZE:
         {
-            pFuActual = new FuVectorize( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuVectorize( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
@@ -497,7 +553,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject )
+void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject )
 {
     if( mxScannerManager.is() )
     {
@@ -592,3 +648,5 @@ void SdDrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& r
     rBindings.Invalidate( SID_TWAIN_SELECT );
     rBindings.Invalidate( SID_TWAIN_TRANSFER );
 }
+
+} // end of namespace sd
