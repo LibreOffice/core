@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:45:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,9 @@ public:
     /** Reads a HORIZONTALPAGEBREAKS or VERTICALPAGEBREAKS record. */
     void                ReadPageBreaks( XclImpStream& rStrm );
     /** Reads a PRINTHEADERS record. */
-    void                ReadPrintheaders( XclImpStream& rStrm );
+    void                ReadPrintHeaders( XclImpStream& rStrm );
     /** Reads a PRINTGRIDLINES record. */
-    void                ReadPrintgridlines( XclImpStream& rStrm );
+    void                ReadPrintGridLines( XclImpStream& rStrm );
     /** Reads a BITMAP record and creates the SvxBrushItem. */
     void                ReadBitmap( XclImpStream& rStrm );
 
