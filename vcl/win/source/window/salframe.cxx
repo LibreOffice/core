@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:17:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3035,6 +3035,12 @@ SalFrame::SalPointerState WinSalFrame::GetPointerState()
 
     aState.maPos = Point( pt.x - maGeometry.nX, pt.y - maGeometry.nY );
     return aState;
+}
+
+// -----------------------------------------------------------------------
+
+void WinSalFrame::SetBackgroundBitmap( SalBitmap* )
+{
 }
 
 // -----------------------------------------------------------------------
