@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 08:52:22 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 14:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 
 #include "AccessibleSpreadsheet.hxx"
 
+#ifndef _SVTOOLS_ACCESSIBLE_STATE_SET_HXX
+#include <svtools/AccessibleStateSet.hxx>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
@@ -74,7 +77,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
+#include <com/sun/star/util/XProtectable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #endif
@@ -110,23 +115,24 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleSpreadsheet::getAccessibleStateSet (void)
     throw (uno::RuntimeException)
 {
-/*  SvAccessibleStateSet* pStateSet = new SvAccessibleStateSet();
-//  if (IsDefunc())
+    uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
+    uno::Reference<XAccessibleStateSet> xParentStates = xParentContext->getAccessibleStateSet();
+    SvAccessibleStateSet* pStateSet = new SvAccessibleStateSet();
+    if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
-//  if (!IsSheetProtected())
+    if (IsEditable(xParentStates))
         pStateSet->AddState(AccessibleStateType::EDITABLE);
     pStateSet->AddState(AccessibleStateType::ENABLED);
     pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
-    pStateSet->AddState(AccessibleStateType::OPAQUE)
+    pStateSet->AddState(AccessibleStateType::OPAQUE);
     pStateSet->AddState(AccessibleStateType::SELECTABLE);
-//  if (IsCompleteSheetSelected)
+    if (IsCompleteSheetSelected(xParentStates))
         pStateSet->AddState(AccessibleStateType::SELECTED);
-//  if (IsShowing())
+    if (IsShowing(xParentStates))
         pStateSet->AddState(AccessibleStateType::SHOWING);
-//  if (IsVisible())
+    if (IsVisible(xParentStates))
         pStateSet->AddState(AccessibleStateType::VISIBLE);
-    return pStateSet;*/
-    return uno::Reference<XAccessibleStateSet>();
+    return pStateSet;
 }
 
     //=====  XServiceInfo  ====================================================
@@ -153,5 +159,61 @@ table::CellRangeAddress
     }
 
     return aRangeAddress;
+}
+
+table::CellRangeAddress
+    ScAccessibleSpreadsheet::getRange(
+    const uno::Reference<sheet::XSpreadsheet>& rxSheet)
+{
+    table::CellRangeAddress aRangeAddress;
+    if (rxSheet.is())
+    {
+        uno::Reference<sheet::XCellRangeAddressable> xCellRangeAddressable(
+            rxSheet, uno::UNO_QUERY);
+        if (xCellRangeAddressable.is())
+            aRangeAddress = xCellRangeAddressable->getRangeAddress();
+    }
+
+    return aRangeAddress;
+}
+
+sal_Bool ScAccessibleSpreadsheet::IsDefunc(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    return !mxSheet.is() && !rxParentStates->contains(AccessibleStateType::DEFUNC);
+}
+
+sal_Bool ScAccessibleSpreadsheet::IsEditable(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    sal_Bool bProtected(sal_False);
+    uno::Reference<util::XProtectable> xProtectable (mxSheet, uno::UNO_QUERY);
+    if (xProtectable.is())
+        bProtected = xProtectable->isProtected();
+    if (!bProtected)
+        bProtected = !rxParentStates->contains(AccessibleStateType::ENABLED);
+    return bProtected;
+}
+
+sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    return sal_False;
+}
+
+sal_Bool ScAccessibleSpreadsheet::IsShowing(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    return rxParentStates->contains(AccessibleStateType::SHOWING);
+}
+
+sal_Bool ScAccessibleSpreadsheet::IsVisible(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    table::CellRangeAddress aViewCellRange = getRange(mxSheetView);
+    table::CellRangeAddress aSheetCellRange = getRange(mxSheet);
+
+    return (aViewCellRange.Sheet == aSheetCellRange.Sheet) &&
+        rxParentStates->contains(AccessibleStateType::VISIBLE);
 }
 
