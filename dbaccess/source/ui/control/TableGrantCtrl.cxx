@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:54:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void OTableGrantControl::Resize()
 }
 
 //------------------------------------------------------------------------------
-long OTableGrantControl::PreParentNotify(NotifyEvent& rNEvt)
+long OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     if (rNEvt.GetType() == EVENT_LOSEFOCUS)
@@ -234,7 +234,7 @@ long OTableGrantControl::PreParentNotify(NotifyEvent& rNEvt)
             Application::RemoveUserEvent(m_nDeActivateEvent);
         m_nDeActivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchActivate));
     }
-    return EditBrowseBox::PreParentNotify(rNEvt);
+    return EditBrowseBox::PreNotify(rNEvt);
 }
 
 //------------------------------------------------------------------------------
