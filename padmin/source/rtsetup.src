@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:10:56 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 20:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1226,7 +1226,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ japanese ] = "PDF ｺﾝﾊﾞｰﾀでのｺﾏﾝﾄﾞ行は次のように実行されます: ﾄﾞｷｭﾒﾝﾄを印刷するたびに、ｺﾏﾝﾄﾞ行で \"(TMP)\" は一時ﾌｧｲﾙで、\"(OUTFILE)\" は作成される PDF ﾌｧｲﾙに置換されます。ｺﾏﾝﾄﾞ行に \"(TMP)\" があると、PostScript ｺｰﾄﾞはﾌｧｲﾙに読み込まれます。そうでない場合は、標準回路の入力、つまりﾊﾟｲﾌﾟﾗｲﾝ処理が行われます。";
         Text[ korean ] = "PDF 컨버터의 명령행은 다음과 같이 실행됩니다: 매번 문서 인쇄시, 임시 파일에 의해서는 \"(TMP)\", 생성되어야 하는 PDF 파일에 의해서는 \"(OUTFILE)\"로 대체됩니다. 명령행에 \"(TMP)\"가 나타나면 PostScript 코드가 파일에 제공되고, 그 외의 경우에는 기본 입력을 통해 제공됩니다 (파이프로서).";
         Text[ chinese_simplified ] = "PDF 转换器的命令处理方式如下：列印每个文档时指令行之中分别用一个暂时文件来替代 \"(TMP)\" 和用一个目标 PDF 文件名称来替代 \"(OUTFILE)\" 。如果 \"(TMP)\" 已经存在于命令行之中，PostScript 代码就会输入成一个文件，否则就会当作标准输入(当作pipe)。";
-        Text[ chinese_traditional ] = "PDF 轉換器的指令處理方式如下：列印每個文件時指令行之中分別用一個暫時檔案來替代 \"(TMP)\" 和用一個目標 PDF 檔案名稱來替代 \"(OUTFILE)\" 。如果 \"(TMP)\" 已經存在於指令行之中，PostScript 代碼就會輸入成一個檔案，否則會當作標準輸入(當作pipe)。";
+        Text[ chinese_traditional ] = "PDF 轉換器的指令處理方式如下：列印每個文件時指令行之中分別用一個暫時檔案來替代(TMP)和用一個目標 PDF 檔案名稱來替代(OUTFILE)。如果(TMP)已經存在於指令行之中，PostScript 代碼就會輸入成一個檔案，否則會當作標準輸入(當作pipe)。";
         Text[ turkish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ arabic ] = "���� ����� ��� ����� �� ������ PDF ������: �� �� ��� ��� ���� ����� ����ϡ ��� ��� ������� \"(TMP)\" ���� ���� � \"(OUTFILE)\" ���� PDF ������ ������. ��� ���� \"(TMP)\" �� ��� ������ѡ ��� ����� ����� PostScript  �� ��ݡ ���� ��� ��ߡ ��� ������� ������ ����� (��� ���� �� Pipe).";
         Text[ finnish ] = "Die Kommandozeile bei PDF-Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine tempor�re Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei �bergeben, andernfalls �ber die Standardeingabe (d.h. als Pipe).";
@@ -1276,7 +1276,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ japanese ] = "Fax 機のｺﾏﾝﾄﾞ行は次のように実行されます:  Fax 送信するたびに、ｺﾏﾝﾄﾞ行の \"(TMP)\" は一時ﾌｧｲﾙで、\"(PHONE)\" はﾌｧｯｸｽ番号で置換されます。\"(TMP)\" がｺﾏﾝﾄﾞ行にあると、PostScript ｺｰﾄﾞはﾌｧｲﾙに読み込まれます。そうでなければ標準回路の入力、つまりﾊﾟｲﾌﾟﾗｲﾝ処理が行われます。";
         Text[ korean ] = "팩스 기기의 명령행은 다음과 같이 실행됩니다: 매번 팩스 송신시, 임시 파일에 의해서는 \"(TMP)\", 팩스 번호에 의해서는 \"(PHONE)\"으로 대체됩니다. 명령행에 \"(TMP)\"가 나타나면 PostScript 코드가 파일에 제공되고, 그 외의 경우에는 기본 입력을 통해 제공됩니다 (파이프로서).";
         Text[ chinese_simplified ] = "传真机单项命令的处理方式如下：寄发传真时通过命令输入行用一个暂时文件替代\"(TMP)\" ，用传真号码替代 \"(PHONE)\" 。如果命令行含有 \"(TMP)\" ，PostScript 源代码就会转换成一个文件，否则就会当作标准输入(当作pipe)。";
-        Text[ chinese_traditional ] = "傳真机單項指令的處理方式如下：寄發傳真時通過指令行用一個暫時檔案替代\"(TMP)\" ，用傳真號碼替代 \"(PHONE)\" 。如果指令行含有 \"(TMP)\" ，PostScript 源代碼就會轉換成一個檔案，否則就會當作標準輸入(當作pipe)。";
+        Text[ chinese_traditional ] = "傳真机單項指令的處理方式如下：寄發傳真時通過指令行用一個暫時檔案替代(TMP)，用傳真號碼替代 (PHONE)。如果指令行含有(TMP)，PostScript 源代碼就會轉換成一個檔案，否則就會當作標準輸入(當作pipe)。";
         Text[ turkish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ arabic ] = "���� ����� ��� ����� �� ����� ������ ������: �� �� ��� ��� ���� ����� ����� ���ӡ ��� ��� ������� \"(TMP)\" ���� ���� � \"(PHONE)\" ���� ������. ��� ���� \"(TMP)\" �� ��� ������ѡ ��� ����� �����PostScript  �� ��ݡ ���� ��� ��ߡ ��� ������� ������ ����� (��� ���� �� Pipe).";
         Text[ finnish ] = "Die Kommandozeile bei Faxger�ten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine tempor�re Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei �bergeben, andernfalls �ber die Standardeingabe (d.h. als Pipe).";
@@ -1528,6 +1528,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ finnish ] = "Please enter the fax number.";
     Text[ catalan ] = "Indique el n�mero de fax";
 };
+
 
 
 
