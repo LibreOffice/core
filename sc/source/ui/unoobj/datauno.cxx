@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-11 07:54:27 $
+ *  last change: $Author: sab $ $Date: 2002-10-21 13:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1833,6 +1833,9 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
                 pDoc->RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
                                      aRange.aEnd.Col(), aRange.aStart.Row(),
                                      aRange.aStart.Tab(), SC_MF_AUTO );
+            ScRange aPaintRange(aRange.aStart, aRange.aEnd);
+            aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
+            pDocShell->PostPaint(aPaintRange, PAINT_GRID);
         }
         else if (aString.EqualsAscii( SC_UNONAME_USEFLTCRT ))
         {
