@@ -31,52 +31,53 @@ Dim oCharStyles as Object
 	On Local Error Goto 0
 
 	&apos; Open a new document where all the texts are inserted
-	oLogDocument = StarDesktop.LoadComponentFromURL( &quot;private:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs())
-	oLogText = oLogDocument.Text
+	oLogDocument = CreateNewDocument(&quot;swriter&quot;)
+	If Not IsNull(oLogDocument) Then
+		oLogText = oLogDocument.Text
 
-	&apos; create and define the character styles of the Log-document
-	oCharStyles = oLogDocument.StyleFamilies.GetByName(&quot;CharacterStyles&quot;)
-	oLogHeaderStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oCharStyles.InsertbyName(&quot;Log Header&quot;, oLogHeaderStyle)
+		&apos; create and define the character styles of the Log-document
+		oCharStyles = oLogDocument.StyleFamilies.GetByName(&quot;CharacterStyles&quot;)
+		oLogHeaderStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
+		oCharStyles.InsertbyName(&quot;Log Header&quot;, oLogHeaderStyle)
 
-	oLogHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
-	oLogBodyTextStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oCharStyles.InsertbyName(&quot;Log Body&quot;, oLogBodyTextStyle)
+		oLogHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
+		oLogBodyTextStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
+		oCharStyles.InsertbyName(&quot;Log Body&quot;, oLogBodyTextStyle)
 
-	&apos; Insert the title of the activated document as a hyperlink
-	oHyperCursor = oLogText.createTextCursor()
-	oHyperCursor.CharWeight = com.sun.star.awt.FontWeight.BOLD
-	oHyperCursor.gotoStart(False)
-	oHyperCursor.HyperLinkURL = oDocument.URL
-	oHyperCursor.HyperLinkTarget = oDocument.URL
-	If oDocument.DocumentInfo.Title &lt;&gt; &quot;&quot; Then
-		oHyperCursor.HyperlinkName = oDocument.DocumentInfo.Title
+		&apos; Insert the title of the activated document as a hyperlink
+		oHyperCursor = oLogText.createTextCursor()
+		oHyperCursor.CharWeight = com.sun.star.awt.FontWeight.BOLD
+		oHyperCursor.gotoStart(False)
+		oHyperCursor.HyperLinkURL = oDocument.URL
+		oHyperCursor.HyperLinkTarget = oDocument.URL
+		If oDocument.DocumentInfo.Title &lt;&gt; &quot;&quot; Then
+			oHyperCursor.HyperlinkName = oDocument.DocumentInfo.Title
+		End If
+		oLogText.insertString(oHyperCursor, oDocument.DocumentInfo.Title, False)
+		oLogText.insertControlCharacter(oHyperCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
+
+		oLogCursor = oLogText.createTextCursor()
+		oLogCursor.GotoEnd(False)
+		&apos; &quot;Switch off&quot; the Hyperlink - Properties
+		oLogCursor.SetPropertyToDefault(&quot;HyperLinkURL&quot;)
+		oLogCursor.SetPropertyToDefault(&quot;HyperLinkTarget&quot;)
+		oLogCursor.SetPropertyToDefault(&quot;HyperLinkName&quot;)
+		LogIndex = 0
+
+		&apos; Get the Properties of the document Info
+		GetDocumentInfo()
+
+		Select Case sDocType
+			Case &quot;swriter&quot;
+				GetWriterStrings()
+			Case &quot;scalc&quot;
+				GetCalcStrings()
+			Case &quot;sdraw&quot;
+				GetDrawStrings()
+			Case Else
+				Msgbox(&quot;This macro only works with a Writer, Calc or Draw/Impress document.&quot;, 16, GetProductName())
+		End Select
 	End If
-	oLogText.insertString(oHyperCursor, oDocument.DocumentInfo.Title, False)
-	oLogText.insertControlCharacter(oHyperCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
-
-	oLogCursor = oLogText.createTextCursor()
-	oLogCursor.GotoEnd(False)
-	&apos; &quot;Switch off&quot; the Hyperlink - Properties
-	oLogCursor.SetPropertyToDefault(&quot;HyperLinkURL&quot;)
-	oLogCursor.SetPropertyToDefault(&quot;HyperLinkTarget&quot;)
-	oLogCursor.SetPropertyToDefault(&quot;HyperLinkName&quot;)
-	LogIndex = 0
-
-	&apos; Get the Properties of the document Info
-	GetDocumentInfo()
-
-	Select Case sDocType
-		Case &quot;swriter&quot;
-			GetWriterStrings()
-		Case &quot;scalc&quot;
-			GetCalcStrings()
-		Case &quot;sdraw&quot;
-			GetDrawStrings()
-		Case Else
-			Msgbox(&quot;This macro only works with a Writer, Calc or Draw/Impress document.&quot;, 16, GetProductName())
-	End Select
-
 End Sub
 
 
