@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 17:55:56 $
+ *  last change: $Author: mib $ $Date: 2002-03-05 08:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getAccessibleIndexInParent (void)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference < XAccessibleContext > xAcc( xParent, UNO_QUERY );
+    Reference < XAccessibleContext > xAcc( xParent->getAccessibleContext() );
     Reference < XAccessible > xThis( this );
     sal_Int32 nCount = xAcc->getAccessibleChildCount();
 
