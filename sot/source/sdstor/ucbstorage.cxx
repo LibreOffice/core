@@ -118,11 +118,12 @@ public:
 
     UCBStorageElementList_Impl  m_aChildrenList;
 
-                                UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL );
+                                UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL, BOOL );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, BOOL );
     void                        Init();
     BOOL                        Commit();
     BOOL                        Revert();
+    BOOL                        Insert( ::ucb::Content *pContent );
 };
 
 SV_DECL_IMPL_REF( UCBStorage_Impl );
@@ -498,11 +499,11 @@ UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
     StorageBase::nMode = pImp->m_nMode;
 }
 
-UCBStorage::UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect )
+UCBStorage::UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
-    pImp = new UCBStorage_Impl( rName, nMode, this, bDirect );
+    pImp = new UCBStorage_Impl( rName, nMode, this, bDirect, bIsRoot );
     pImp->AddRef();
     pImp->Init();
     StorageBase::nMode = pImp->m_nMode;
@@ -525,14 +526,14 @@ UCBStorage::~UCBStorage()
     pImp->ReleaseRef();
 }
 
-UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect )
+UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot )
     : m_pAntiImpl( pStorage )
     , m_pTempFile( NULL )
     , m_pContent( NULL )
     , m_pSource( NULL )
     , m_pStream( NULL )
     , m_nMode( nMode )
-    , m_bIsRoot( TRUE )
+    , m_bIsRoot( bIsRoot )
     , m_bDirect( bDirect )
 {
     String aName( rName );
@@ -540,13 +541,21 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     {
         // no name = temporary name!
         // we need the package part of the URL !
+        DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
         m_pTempFile = new ::utl::TempFile;
         aName = m_pTempFile->GetURL();
     }
 
-    String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
-    aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
-    m_aURL = aTemp;
+    if ( m_bIsRoot )
+    {
+        String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
+        aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
+        m_aURL = aTemp;
+    }
+    else
+    {
+        m_aURL = rName;
+    }
 }
 
 UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL bDirect )
@@ -649,6 +658,20 @@ UCBStorage_Impl::~UCBStorage_Impl()
     delete m_pTempFile;
 }
 
+BOOL UCBStorage_Impl::Insert( ::ucb::Content *pContent )
+{
+    Sequence < ::rtl::OUString > aNames(1);
+    Sequence < Any > aValues(1);
+    ::rtl::OUString* pNames = aNames.getArray();
+    pNames[0] = ::rtl::OUString::createFromAscii("Title");
+    Any* pValues = aValues.getArray();
+    pValues[0] <<= ::rtl::OUString( m_aName );
+    DELETEZ( m_pContent );
+    m_pContent = new ::ucb::Content;
+    ::rtl::OUString aType = ::rtl::OUString::createFromAscii( "application/package-folder" );
+    return pContent->insertNewContent( aType, aNames, aValues, *m_pContent );
+}
+
 BOOL UCBStorage_Impl::Commit()
 {
     UCBStorageElement_Impl* pElement = m_aChildrenList.First();
@@ -693,7 +716,10 @@ BOOL UCBStorage_Impl::Commit()
                     }
 
                     if ( pElement->m_xStorage.Is() )
-                        bRet = pElement->m_xStorage->Commit();
+                    {
+                        if ( pElement->m_bIsInserted && pElement->m_xStorage->Insert( m_pContent ) )
+                            bRet = pElement->m_xStorage->Commit();
+                    }
                     else if ( pElement->m_xStream.Is() )
                         bRet = pElement->m_xStream->Commit();
                 }
@@ -1201,7 +1227,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
                 String aName( pImp->m_aURL );
                 aName += '/';
                 aName += pElement->m_aOriginalName;
-                UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect );
+                UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect, FALSE );
                 pElement->m_xStorage = pStorage->pImp;
                 return pStorage;
             }
@@ -1219,7 +1245,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         aName += '/';
         aName += pElement->m_aOriginalName;  //  ???
         pElement->m_bIsStorage = pElement->m_bIsFolder = TRUE;
-        UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect );
+        UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, FALSE );
         pStorage->pImp->m_bIsRoot = FALSE;
 
         // if name has been changed before creating the stream: set name!
