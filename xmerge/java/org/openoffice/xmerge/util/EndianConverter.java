@@ -109,6 +109,33 @@ public class EndianConverter {
         return leInt;
     }
 
+    /**
+     * <p>Converts a <code>double</code> to a Little Endian representation
+     * of a float in IEEE-754 format.
+     *
+     * <p>An array with more than eight elements can be used, but only the first
+     * eight elements will be read.</p>
+     *
+     * @param   value <code>double</code> containing the value to be converted
+     *
+     * @return   <code>byte</code> array containing the LE representation of a IEEE-754 float
+     */
+    public static byte[] writeDouble(double value) {
+
+        long myDouble = Double.doubleToLongBits(value);
+        byte[] leDouble = new byte[8];
+
+        leDouble[0] = (byte) (myDouble >>> 0);
+        leDouble[1] = (byte) (myDouble >>> 8);
+        leDouble[2] = (byte) (myDouble >>> 16);
+        leDouble[3] = (byte) (myDouble >>> 24);
+        leDouble[4] = (byte) (myDouble >>> 32);
+        leDouble[5] = (byte) (myDouble >>> 40);
+        leDouble[6] = (byte) (myDouble >>> 48);
+        leDouble[7] = (byte) (myDouble >>> 56);
+
+        return leDouble;
+    }
 
     /**
      * <p>Convert a Little Endian representation of a short to a Java
