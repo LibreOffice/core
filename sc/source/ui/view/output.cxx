@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:06:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,15 +525,15 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
             {
                 //  Seitenumbrueche auch in ausgeblendeten suchen
                 nFlags = 0;
-                SCROW nRow = nYplus1;
-                while (nRow <= MAXROW)
+                ScCompressedArrayIterator< SCROW, BYTE > aIter(
+                        pDoc->GetRowFlagsArray( nTab), nYplus1, MAXROW);
+                do
                 {
-                    BYTE nDocFl = pDoc->GetRowFlags( nRow, nTab );
+                    BYTE nDocFl = *aIter;
                     nFlags = nDocFl & ( CR_PAGEBREAK | CR_MANUALBREAK );
                     if ( nFlags || !(nDocFl & CR_HIDDEN) )
                         break;
-                    ++nRow;
-                }
+                } while (aIter.NextRange());
 
                 if (nFlags != nOldFlags)
                 {
@@ -2421,8 +2421,7 @@ void ScOutputData::DrawClipMarks()
                         for (SCCOL i=1; i<nCountX; i++)
                             nOutWidth += (long) ( pDoc->GetColWidth(nOverX+i,nTab) * nPPTX );
                         SCROW nCountY = pMerge->GetRowMerge();
-                        for (SCROW j=1; j<nCountY; j++)
-                            nOutHeight += (long) ( pDoc->GetRowHeight(nOverY+j,nTab) * nPPTY );
+                        nOutHeight += (long) pDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, nPPTY);
 
                         if ( bLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
@@ -2443,8 +2442,7 @@ void ScOutputData::DrawClipMarks()
                             for (SCCOL i=1; i<nCountX; i++)
                                 nOutWidth += (long) ( pDoc->GetColWidth(nOverX+i,nTab) * nPPTX );
                             SCROW nCountY = pMerge->GetRowMerge();
-                            for (SCROW j=1; j<nCountY; j++)
-                                nOutHeight += (long) ( pDoc->GetRowHeight(nOverY+j,nTab) * nPPTY );
+                            nOutHeight += (long) pDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, nPPTY);
                         }
 
                         long nStartPosX = nPosX;
