@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxscoi.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:48:04 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:39:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ CFLAGSCXX= -mpentium
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX=-mpentium -fguiding-decls -frtti
+CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 CFLAGSOBJGUIST=-fPIC
 CFLAGSOBJCUIST=-fPIC
