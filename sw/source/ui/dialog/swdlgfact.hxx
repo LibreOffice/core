@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdlgfact.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 15:10:05 $
+ *  last change: $Author: os $ $Date: 2004-05-13 12:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ class SwFldDlg;
 class SwRenameXNamedDlg;
 class SwModalRedlineAcceptDlg;
 class SwTOXMark;
+class SwWordCountDialog;
 
 #include "itabenum.hxx"
 
@@ -116,6 +117,12 @@ USHORT Class::Execute()                             \
 //CHINA001 virtual void SetLabel(const rtl::OUString& rMake, const rtl::OUString& rType);
 //CHINA001 virtual sal_Bool GetLabel(SwLabItem& rItem);
 //CHINA001 }
+
+class AbstractSwWordCountDialog_Impl : public AbstractSwWordCountDialog
+{
+    DECL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl,SwWordCountDialog);
+    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
+};
 
 //add for SwInsertAbstractDlg begin
 class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
@@ -446,6 +453,7 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 public:
     //CHINA001 AbstractSwSaveLabelDlg*          CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, const ResId& rResId );
 
+    virtual AbstractSwWordCountDialog* CreateSwWordCountDialog(Window* pParent);
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg( Window* pParent,const ResId& rResId ); //CHINA001 add for SwInsertAbstractDlg
     virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet,const ResId& rResId   );//CHINA001 add for  SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdlgfact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 15:10:18 $
+ *  last change: $Author: os $ $Date: 2004-05-13 12:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <regionsw.hrc> //CHINA001
 #include <fmtui.hrc> //CHINA001
 
+#include <wordcountdialog.hxx>
 #include "abstract.hxx" // add for SwInsertAbstractDlg
 #include "addrdlg.hxx" // add for SwAddrDlg
 #include "ascfldlg.hxx" // add for SwAsciiFilterDlg
@@ -138,6 +139,7 @@
 #include <optpage.hxx> //add for OptPage
 #include <swuiidxmrk.hxx> //add for SwIndexMarkDlg, SwAuthMarkDlg, SwIndexMarkModalDlg, SwAuthMarkModalDlg
 
+IMPL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);//CHINA001 add for SwInsertAbstractDlg
 IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl); //CHINA001 add for SwAddrDlg, SwDropCapsDlg ,SwBackgroundDlg, SwNumFmtDlg SwBorderDlg SwWrapDlg, SwFldEditDlg
 IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl); //CHINA001 add for SwAsciiFilterDlg
@@ -200,6 +202,11 @@ String AbstractTabDialog_Impl::GetText() const
 }
 
 //add for AbstractTabDialog_Impl end
+
+void    AbstractSwWordCountDialog_Impl::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
+{
+    pDlg->SetValues(rCurrent, rDoc);
+}
 
 //add for SwInsertAbstractDlg begin
 BYTE AbstractSwInsertAbstractDlg_Impl::GetLevel() const
@@ -616,6 +623,12 @@ Window* AbstractAuthMarkFloatDlg_Impl::GetWindow()
 // AbstractAuthMarkFloatDlg_Impl end
 
 //-------------- SwAbstractDialogFactory implementation--------------
+
+AbstractSwWordCountDialog* CreateSwWordCountDialog(Window* pParent)
+{
+    SwWordCountDialog* pDlg = new SwWordCountDialog( pParent );
+    return new AbstractSwWordCountDialog_Impl( pDlg );
+}
 
 //add for SwInsertAbstractDlg begin
 AbstractSwInsertAbstractDlg * SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg( Window* pParent,

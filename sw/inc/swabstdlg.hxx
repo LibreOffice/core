@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 15:09:22 $
+ *  last change: $Author: os $ $Date: 2004-05-13 12:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ class SwTableFUNC;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
 class SwTOXMark;
+struct SwDocStat;
 
 #include <cnttab.hxx> //add for struct CurTOXType
 
@@ -250,6 +251,12 @@ class AbstractInsertSectionTabDialog : public VclAbstractDialog  //add for SwIns
 {
 public:
     virtual void     SetSection(const SwSection& rSect) = 0;
+};
+
+class AbstractSwWordCountDialog : public VclAbstractDialog
+{
+public:
+    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
 };
 
 class AbstractSwInsertAbstractDlg : public VclAbstractDialog    //CHINA001 add for SwInsertAbstractDlg
@@ -371,6 +378,7 @@ public:
     static SwAbstractDialogFactory*     Create();
 //CHINA001  virtual AbstractSwSaveLabelDlg*             CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, const ResId& rResId ) = 0;
 
+    virtual AbstractSwWordCountDialog* CreateSwWordCountDialog( Window* pWindow ) = 0;
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, const ResId& rResId ) = 0; //CHINA001 add for SwInsertAbstractDlg
     virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet,const ResId& rResId   ) = 0; //CHINA001 add for SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
