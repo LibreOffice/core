@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actctrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:56:31 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 11:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     Beschreibung:   numerische Eingabe
  --------------------------------------------------------------------*/
 
-class NumEditAction: public NumericField
+class SW_DLLPUBLIC NumEditAction: public NumericField
 {
     Link aActionLink;
 
