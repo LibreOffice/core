@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:01:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ ModalDialog RID_SANE_DIALOG
         Text = "Geräte-\n~information" ;
         Text [ English ] = "Device ~info" ;
         Text [ english_us ] = "About\n Dev~ice" ;
-        Text [ portuguese_brazilian ] = "Gerõteinformation" ;
+        Text [ portuguese_brazilian ] = "Ger?einformation" ;
         Text [ swedish ] = "Apparat\n~information" ;
         Text [ danish ] = "Information\n om enheden" ;
         Text [ italian ] = "Informazione\napparecchiatura" ;
@@ -354,7 +354,7 @@ ModalDialog RID_SANE_DIALOG
         Text = "Verwendetes ~Gerät:" ;
         Text [ English ] = "~Scanning device:" ;
         Text [ english_us ] = "Device used:" ;
-        Text [ portuguese_brazilian ] = "Verwendetes Gerõt:" ;
+        Text [ portuguese_brazilian ] = "Verwendetes Ger?:" ;
         Text [ swedish ] = "A~nvänd enhet:" ;
         Text [ danish ] = "Brugt enhed:" ;
         Text [ italian ] = "Apparecchiatura usata:" ;
@@ -391,7 +391,7 @@ ModalDialog RID_SANE_DIALOG
         Text = "Auflösung [~DPI]" ;
         Text [ English ] = "Resolution [~DPI]:" ;
         Text [ english_us ] = "Resolution [~DPI]" ;
-        Text [ portuguese_brazilian ] = "Aufl÷sung [DPI]:" ;
+        Text [ portuguese_brazilian ] = "Aufl?ung [DPI]:" ;
         Text [ swedish ] = "Upplösning [~DPI]:" ;
         Text [ danish ] = "Opløsning [~DPI]:" ;
         Text [ italian ] = "Risoluzione [~DPI]:" ;
@@ -401,7 +401,7 @@ ModalDialog RID_SANE_DIALOG
         Text [ portuguese ] = "Resolução [~DPI]:" ;
         Text[ chinese_simplified ] = "·Ö±æÂÊ[~DPI]";
         Text[ russian ] = "Ğàçğåøåíèå [DPI]:";
-        Text[ polish ] = "Rozdzielczoœæ [~DPI]:";
+        Text[ polish ] = "Rozdzielczo?æ [~DPI]:";
         Text[ japanese ] = "‰ğ‘œ“x [~DPI]";
         Text[ greek ] = "ÁíÜëõóç [~DPI]:";
         Text[ korean ] = "ÇØ»óµµ [~DPI]:";
@@ -585,7 +585,7 @@ ModalDialog RID_SANE_DIALOG
         Text [ portuguese ] = "Definir" ;
         Text[ chinese_simplified ] = "Éè¶¨";
         Text[ russian ] = "Óñòàíîâèòü";
-        Text[ polish ] = "OsadŸ";
+        Text[ polish ] = "Osad?";
         Text[ japanese ] = "İ’è";
         Text[ chinese_traditional ] = "³]©w";
         Text[ arabic ] = "ÊÚííä";
@@ -633,7 +633,7 @@ String RID_SANE_DEVICEINFO_TXT
     Text = "Gerät: %s\nHersteller: %s\nModell: %s\nTyp: %s" ;
     Text [ English ] = "Device: %s\nVendor: %s\nModel: %s\nType: %s" ;
     Text [ english_us ] = "Device: %s\nVendor: %s\nModel: %s\nType: %s" ;
-    Text [ portuguese_brazilian ] = "Gerõt: %s\nHersteller: %s\nModell: %s\nTyp: %s" ;
+    Text [ portuguese_brazilian ] = "Ger?: %s\nHersteller: %s\nModell: %s\nTyp: %s" ;
     Text [ swedish ] = "Enhet: %s\nTillverkare: %s\nModell: %s\nTyp: %s" ;
     Text [ danish ] = "Enhed: %s\nForhandler: %s\nModel: %s\nType: %s" ;
     Text [ italian ] = "Apparecchiatura: %s\nProduttore: %s\nModello: %s\nTipo: %s" ;
@@ -661,7 +661,7 @@ String RID_SANE_SCANERROR_TXT
     Text [ English ] = "An error occured during scanning." ;
     Text [ portuguese ] = "Surgiu um erro durante a digitalização." ;
     Text [ english_us ] = "An error occurred while scanning." ;
-    Text [ portuguese_brazilian ] = "Wõhrend des Scans ist ein Fehler aufgetreten." ;
+    Text [ portuguese_brazilian ] = "W?rend des Scans ist ein Fehler aufgetreten." ;
     Text [ swedish ] = "Ett fel uppstod när Du skannade." ;
     Text [ danish ] = "Der opstod en fejl under scanning." ;
     Text [ italian ] = "Durante la scansione si è verificato un errore." ;
@@ -688,7 +688,7 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text [ English ] = "The device does not offer a preview option. Therefore the preview will be acquired by a normal scan which can consume considerable time." ;
     Text [ portuguese ] = "O aparelho não oferece a possibilidade da previsualização. Por esta razão, será usada uma digitalização normal como previsualização. Isto poderá levar algum tempo." ;
     Text [ english_us ] = "The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time." ;
-    Text [ portuguese_brazilian ] = "Das Gerõt ist nicht auf die Erzeugung einer Vorschau eingerichtet. Statt dessen wird als Vorschau ein normaler Scan verwendet. Dieser kann deutlich lõnger dauern." ;
+    Text [ portuguese_brazilian ] = "Das Ger? ist nicht auf die Erzeugung einer Vorschau eingerichtet. Statt dessen wird als Vorschau ein normaler Scan verwendet. Dieser kann deutlich l?ger dauern." ;
     Text [ swedish ] = "Enheten är inte inställd för att skapa en förhandsvisning. I stället används en vanlig skanning som förhandsvisning. Detta kan ta betydligt längre tid." ;
     Text [ danish ] = "Enheden er ikke indstillet til at kunne oprette eksempler. Istedet bruges et almindelig scan som eksempel. Dette kan komme til at vare betydelig længere tid." ;
     Text [ italian ] = "L'apparecchiatura non è impostata per la creazione di un'anteprima. Al suo posto viene usata come anteprima una normale scansione. Ciò può richiedere molto più tempo." ;
@@ -696,14 +696,14 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text [ french ] = "Le périphérique utilisé ne permet pas de créer un aperçu. Il permet uniquement une digitalisation normale en guise d'aperçu, ce qui peut durer nettement plus longtemps." ;
     Text [ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren." ;
     Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÀÀ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨É¨Ãè·½Ê½Ô¤ÀÀ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
-    Text[ russian ] = "Óñòğîéñòâî íå íàñòğîåíî íà ñîçäàíèå ïğåäâàğèòåëüíîãî ïğîñìîòğà. Âìåñòî ıòîãî èñïîëüçóåòñÿ â êà÷åñòâå ïğåäâàğèòåëüíîãî ïğîñìîòğà îáû÷íîå ñêàíèğîâàíèå. İòîò ïğîöåññ ïğîäëèòñÿ çíà÷èòåëüíî äîëüøå.";
+    Text[ russian ] = "Óñòğîéñòâî íå íàñòğîåíî íà ñîçäàíèå ïğåäâàğèòåëüíîãî ïğîñìîòğà. Âìåñòî ıòîãî èñïîëüçóåòñÿ â êà÷åñòâå ïğåäâàğèòåëüíîãî ïğîñìîòğà îáû÷íîå";
     Text[ polish ] = "To urz¹dzenie nie mo¿e utworzyæ podgl¹du. Zamiast tego zostanie zastosowany jako podgl¹d normalny tryb przegl¹du. To mo¿e trochê d³u¿ej potrwaæ.";
     Text[ japanese ] = "‚±‚ÌÃŞÊŞ²½‚ÍÌßÚËŞ­°‚Ìì¬‚É‚Í“K‚µ‚Ä‚¢‚Ü‚¹‚ñB‚©‚í‚è‚ÉÌßÚËŞ­°‚Æ‚µ‚Ä•’Ê‚Ì½·¬İ‚ªg—p‚³‚ê‚Ü‚·‚ªŠÔ‚ª­‚µ‚©‚©‚è‚Ü‚·B";
     Text[ chinese_traditional ] = "³o­Ó³]³Æ¨S¦³³]©w¹wµø¥\\¯à¡C¦]¦¹±Ä¥Î´¶³qªº±½´y¤è¦¡¹wµø·|»İ­n¸ûªøªº®É¶¡¡C";
     Text[ arabic ] = "ÇáÌåÇÒ ÛíÑ ãõÚÏ áÅäÔÇÁ ãÚÇíäÉ. ÈÏáÇğ ãä åĞÇ¡ Óæİ íÊã ÇÓÊÎÏÇã ãÓÍ ÚÇÏí ßãÚÇíäÉ. íãßä Ãä íÓÊÛÑŞ Ğáß İÊÑÉ ÃØæá ÈßËíÑ.";
     Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
     Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÀÀ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨É¨Ãè·½Ê½Ô¤ÀÀ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
-    Text[ greek ] = "Ç óõóêåõŞ äåí İ÷åé ñõèìéóôåß ãéá ôçí åìöÜíéóç ğñïåğéóêüğçóçò. Áíôß áõôïı ÷ñçóéìïğïéåßôáé ìéá êáíïíéêŞ óÜñùóç. Ç äéáäéêáóßá áõôŞ ìğïñåß íá áñãŞóåé ğåñéóóüôåñï.";
+    Text[ greek ] = "Ç óõóêåõŞ äåí İ÷åé ñõèìéóôåß ãéá ôçí åìöÜíéóç ğñïåğéóêüğçóçò. Áíôß áõôïı ÷ñçóéìïğïéåßôáé ìéá êáíïíéêŞ óÜñùóç. Ç äéáäéêáóßá áõôŞ ìğïñåß íá ?";
     Text[ korean ] = "ÀåÄ¡´Â ¹Ì¸®º¸±â ¿É¼ÇÀ» Á¦°øÇÏÁö ¾Ê½À´Ï´Ù. ±× ´ë½Å ÀÏ¹İ ½ºÄµÀÌ ¹Ì¸®º¸±â·Î ÀÌ¿ëµÉ °ÍÀÔ´Ï´Ù. ÀÌ ½ºÄµÀº ½Ã°£ÀÌ ÈÎ¾À ´õ ¿À·¡ °É¸± ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Cihaz önizleme işlevine desteklemiyor. Bunun yerine önizleme olarak normal bir tarama görüntüsü kullanılacak. Bu işlem daha fazla zaman alabilir.";
     Text[ catalan ] = "El dispositivo no está preparado para ofrecer opción de previsualización. En lugar de esta se utilizará un escaneado normal, que puede tardar considerablemente más.";
