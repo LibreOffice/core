@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-29 09:25:18 $
+ *  last change: $Author: th $ $Date: 2001-06-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,12 +836,12 @@ static char const aImplSubsOutline[] = "monotypeoldstyleboldoutline;imprint;impr
 static char const aImplSubsBroadway[] = "broadway;mtbroadway;latinwide;falstaff;impact";
 static char const aImplSubsSheffield[] = "sheffield;conga;centurygothic;copperlategothic;felixtitling";
 static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed";
-static char const aImplSubsSansUnicode[] = "andalewtui;arialunicodems;lucidaunicode";
-static char const aImplSubsJPGothic[] = "msgothic;mspgothic;andalewtui";
-static char const aImplSubsJPMincho[] = "msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;andalewtui";
-static char const aImplSubsZH[] = "simsun;nsimsun;simhei;andalewtui";
-static char const aImplSubsTW[] = "mingliu;pmingliu;andalewtui";
-static char const aImplSubsKR[] = "batang;batangche;gulim;gulimche;dotum;dotumche;gungsuh;gungsuhche;myeomjo;andalewtui";
+static char const aImplSubsSansUnicode[] = "andalesansui;arialunicodems;lucidaunicode";
+static char const aImplSubsJPGothic[] = "msgothic;mspgothic;andalesansui";
+static char const aImplSubsJPMincho[] = "msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;andalesansui";
+static char const aImplSubsZH[] = "simsun;nsimsun;simhei;andalesansui";
+static char const aImplSubsTW[] = "mingliu;pmingliu;andalesansui";
+static char const aImplSubsKR[] = "batang;batangche;gulim;gulimche;dotum;dotumche;gungsuh;gungsuhche;myeomjo;andalesansui";
 
 // -----------------------------------------------------------------------
 
@@ -863,6 +863,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
 {   "algerian",             aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
 {   "almanac",              aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "andalesans",           aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "andalesansui",         aImplSubsSansUnicode, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "andalewtui",           aImplSubsSansUnicode, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
 {   "arial",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
 {   "arialnarrow",          aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
 {   "arialunicode",         aImplSubsSansUnicode,aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD | IMPL_FONT_ATTR_FULL },
@@ -1158,7 +1160,7 @@ static BOOL ImplFontSubstitute( XubString& rFontName,
 
 // =======================================================================
 
-static char const aImplDefSansUnicode[] = "Andale WT UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma";
+static char const aImplDefSansUnicode[] = "Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma";
 static char const aImplDefSansUI[] = "Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif";
 static char const aImplDefSans[] = "Albany;Arial;Helvetica;Lucida;Helmet;SansSerif";
 static char const aImplDefSerif[] = "Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;Serif";
