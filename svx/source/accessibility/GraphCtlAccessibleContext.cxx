@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-19 13:02:50 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include "ShapeTypeHandler.hxx"
+#endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
+#include "AccessibleShapeInfo.hxx"
 #endif
 #ifndef _SVXGRAPHACCESSIBLECONTEXT_HXX
 #include "GraphCtlAccessibleContext.hxx"
@@ -226,7 +229,8 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
             Reference< XShape > xShape( Reference< XShape >::query( (const_cast<SdrObject*>(pObj))->getUnoShape() ) );
 
             // Create accessible object that corresponds to the descriptor's shape.
-            AccessibleShape* pAcc = ShapeTypeHandler::Instance().CreateAccessibleObject( xShape,    mxParent, maTreeInfo);
+            AccessibleShape* pAcc = ShapeTypeHandler::Instance().CreateAccessibleObject(
+                AccessibleShapeInfo (xShape,mxParent), maTreeInfo);
             xAccessibleShape = pAcc;
             pAcc->acquire();
             mxShapes[pObj] = pAcc;
