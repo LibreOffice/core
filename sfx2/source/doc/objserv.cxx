@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:34:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     GetMedium()->GetItemSet()->Put( *pInteractionHandlerItem );
                 }
                 // ========================================================================================================
+
+                SFX_REQUEST_ARG( rReq, pPasswordItem, SfxStringItem, SID_PASSWORD, FALSE );
+                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD, FALSE );
+                if ( pOldPasswordItem && !pPasswordItem )
+                    rReq.AppendItem( SfxStringItem( SID_PASSWORD, String() ) );
 
                 uno::Sequence< beans::PropertyValue > aDispatchArgs;
                 if ( rReq.GetArgs() )
