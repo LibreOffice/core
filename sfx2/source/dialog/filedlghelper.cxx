@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 09:02:13 $
+ *  last change: $Author: fs $ $Date: 2001-09-18 14:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,13 @@
  ************************************************************************/
 
 
+#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
 
+#ifndef _LIST_
 #include <list>
+#endif
 
 #ifndef  _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -108,12 +112,17 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERGROUPMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _FILEDLGHELPER_HXX
 #include "filedlghelper.hxx"
+#endif
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -122,13 +131,25 @@
 #include <vcl/help.hxx>
 #endif
 
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _VOS_THREAD_HXX_
 #include <vos/thread.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
+#endif
 
+#ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
+#endif
 
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -180,10 +201,18 @@
 #include <passwd.hxx>
 #endif
 
+#ifndef _SFX_SFXRESID_HXX
 #include "sfxresid.hxx"
+#endif
+#ifndef _SFXSIDS_HRC
 #include "sfxsids.hrc"
+#endif
+#ifndef _SFX_EXPLORER_HRC
 #include "explorer.hrc"
+#endif
+#ifndef _SFX_FILEDLGHELPER_HRC
 #include "filedlghelper.hrc"
+#endif
 
 //-----------------------------------------------------------------------------
 
@@ -191,6 +220,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 using namespace ::cppu;
 
@@ -205,19 +235,6 @@ namespace sfx2 {
 
 String EncodeSpaces_Impl( const String& rSource );
 String DecodeSpaces_Impl( const String& rSource );
-
-// struct FilterEntry_Impl -----------------------------------------------
-
-struct FilterEntry_Impl
-{
-    OUString            maTitle;
-    OUString            maFilter;
-
-    FilterEntry_Impl( const OUString& rTitle, const OUString& rFilter ) :
-        maTitle( rTitle ), maFilter( rFilter ) {}
-};
-
-typedef std::list < FilterEntry_Impl > FilterList;
 
 // ------------------------------------------------------------------------
 class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
@@ -474,7 +491,10 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
                     TimeOutHdl_Impl( NULL );
                 }
             }
-            catch( IllegalArgumentException ){}
+            catch( Exception )
+            {
+                DBG_ERRORFILE( "FileDialogHelper_Impl::controlStateChanged: caught an exception!" );
+            }
         }
     }
 }
@@ -1281,7 +1301,7 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     // when in file open mode, we have to check, wether there is a filter named <ALL>
     if ( WB_OPEN == ( nFlags & WB_OPEN ) )
     {
-        for ( const SfxFilter* pFilter = pDef; pFilter; pFilter = aIter.Next() )
+        for ( const SfxFilter* pFilter = pDef; pFilter && !bHasAll; pFilter = aIter.Next() )
         {
             OUString aUIName( pFilter->GetUIName() );
             if ( aUIName == aAllFilterName )
@@ -1298,9 +1318,11 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
             }
             catch( IllegalArgumentException )
             {
+#ifdef DBG_UTIL
                 ByteString aMsg( "Could not append Filter" );
                 aMsg += ByteString( String( aAllFilterName ), RTL_TEXTENCODING_UTF8 );
                 DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
             }
         }
     }
@@ -1315,14 +1337,37 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
             xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
             if ( !maSelectFilter.getLength() )
                 maSelectFilter = aUIName;
+
         }
         catch( IllegalArgumentException )
         {
+#ifdef DBG_UTIL
             ByteString aMsg( "Could not append Filter" );
             aMsg += ByteString( String( aUIName ), RTL_TEXTENCODING_UTF8 );
             DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
         }
     }
+
+#ifdef FS_PRIV_DEBUG
+    Reference< XFilterGroupManager > xFilterGroups( xFltMgr, UNO_QUERY );
+    if ( xFilterGroups.is() )
+    {
+        Sequence< StringPair > aFilters(2);
+
+        aFilters[0].First   = ::rtl::OUString::createFromAscii( "testing *.txt" );
+        aFilters[0].Second  = ::rtl::OUString::createFromAscii( "*.txt" );
+        aFilters[1].First   = ::rtl::OUString::createFromAscii( "testing *.sdw" );
+        aFilters[1].Second  = ::rtl::OUString::createFromAscii( "*.sdw" );
+        xFilterGroups->appendFilterGroup( ::rtl::OUString::createFromAscii( "Textdokumente" ), aFilters );
+
+        aFilters[0].First   = ::rtl::OUString::createFromAscii( "just a test - Calc 5.x" );
+        aFilters[0].Second  = ::rtl::OUString::createFromAscii( "*.sdc" );
+        aFilters[1].First   = ::rtl::OUString::createFromAscii( "still a test - Calc 6.0" );
+        aFilters[1].Second  = ::rtl::OUString::createFromAscii( "*.sxc" );
+        xFilterGroups->appendFilterGroup( ::rtl::OUString::createFromAscii( "Tabellendkumente" ), aFilters );
+    }
+#endif
 }
 
 // ------------------------------------------------------------------------
@@ -1343,9 +1388,11 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
     }
     catch( IllegalArgumentException )
     {
+#ifdef DBG_UTIL
         ByteString aMsg( "Could not append Filter" );
         aMsg += ByteString( String( rFilterName ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
 }
 
@@ -1367,16 +1414,17 @@ void FileDialogHelper_Impl::addGraphicFilter()
     for ( i = 0; i < nCount; i++ )
     {
         j = 0;
+        String sWildcard;
         while( TRUE )
         {
-            String aWildcard( mpGraphicFilter->GetImportWildcard( i, j++ ) );
-            if ( !aWildcard.Len() )
+            sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
+            if ( !sWildcard.Len() )
                 break;
-            if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
+            if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
             {
                 if ( aExtensions.Len() )
                     aExtensions += sal_Unicode(';');
-                aExtensions += aWildcard;
+                aExtensions += sWildcard;
             }
         }
     }
@@ -1404,16 +1452,17 @@ void FileDialogHelper_Impl::addGraphicFilter()
         String aName = mpGraphicFilter->GetImportFormatName( i );
         String aExtensions;
         j = 0;
+        String sWildcard;
         while( TRUE )
         {
-            String aWildcard( mpGraphicFilter->GetImportWildcard( i, j++ ) );
-            if ( !aWildcard.Len() )
+            sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
+            if ( !sWildcard.Len() )
                 break;
-            if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
+            if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
             {
                 if ( aExtensions.Len() )
                     aExtensions += sal_Unicode(';');
-                aExtensions += aWildcard;
+                aExtensions += sWildcard;
             }
         }
         try
