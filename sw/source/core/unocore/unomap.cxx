@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:52:45 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1900,6 +1900,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_FALSE_CONTENT),  FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_IS_CONDITION_TRUE) ,  FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_TRUE_CONTENT) ,  FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aConditionedTxtFieldPropMap;
@@ -1912,6 +1913,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CONTENT) ,       FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_IS_HIDDEN) ,     FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aHiddenTxtFieldPropMap;
