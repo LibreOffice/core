@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 09:57:47 $
+ *  last change: $Author: os $ $Date: 2002-07-05 12:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,16 +315,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_ENDNOTE:
         {
             String aStr;
-            BOOL bSpecial = FALSE;
             SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , sal_False );
             SFX_REQUEST_ARG( rReq, pCharset, SfxInt16Item, FN_PARAM_2 , sal_False );
             SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot , sal_False );
             if ( pItem )
                 aStr = pItem->GetValue();
-
+            BOOL bFont = pFont && pFont->GetValue().Len();
             rWrtSh.StartUndo( UIUNDO_INSERT_FOOTNOTE );
-            rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bSpecial );
-            if ( pFont )
+            rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bFont );
+            if ( bFont )
             {
                 rWrtSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE );
                 SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
@@ -335,9 +334,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                     //pCharset ? (CharSet) pCharset->GetValue() : RTL_TEXTENCODING_DONTKNOW );
                 rWrtSh.SetAttr( aSet, SETATTR_DONTEXPAND );
                 rWrtSh.ResetSelect(0, FALSE);
+                rWrtSh.EndSelect();
                 rWrtSh.GotoFtnTxt();
             }
-
             rWrtSh.EndUndo( UIUNDO_INSERT_FOOTNOTE );
             rReq.Done();
         }
