@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-31 09:33:43 $
+ *  last change: $Author: oj $ $Date: 2002-07-16 08:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1704,29 +1704,30 @@ String RID_STR_FORM_FILTERED
 };
 String RID_STR_FIELDSELECTION
 {
-    Text = "Feldauswahl:" ;
-    Text [ English ] = "Fieldselection:" ;
-    Text [ portuguese ] = "Selecção de campos:" ;
-    Text [ english_us ] = "Field selection:" ;
-    Text [ portuguese_brazilian ] = "Feldauswahl:" ;
-    Text [ swedish ] = "Fälturval:" ;
-    Text [ danish ] = "Feltudvalg:" ;
-    Text [ italian ] = "Scelta campo:" ;
-    Text [ spanish ] = "Selección de campo:" ;
-    Text [ french ] = "Sélection de champ :" ;
-    Text [ dutch ] = "Veld selecteren:" ;
-    Text[ chinese_simplified ] = "é€‰æ‹©å­—æ®µï¼š";
-    Text[ russian ] = "Âûáîğ ïîëÿ:";
-    Text[ polish ] = "Wybór pola:";
-    Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®é¸æŠ:";
-    Text[ chinese_traditional ] = "é¸æ“‡æ¬„ä½ï¼š";
-    Text[ greek ] = "ÅğéëïãŞ ğåäßïõ:";
-    Text[ korean ] = "í•„ë“œ ì„ íƒ:";
-    Text[ arabic ] = "ÇÎÊíÇÑ ÇáÍŞá:";
-    Text[ turkish ] = "Alan seçimi:";
+    Text = "Feld hinzufügen:";
+    Text [ english ] =  "Add Field:";
+    Text[ english_us ] = "Add Field:";
+    Text[ portuguese ] = "Adicionar campo:";
+    Text[ russian ] = "Äîáàâèòü ïîëå:";
+    Text[ greek ] = "ĞñïóèŞêç ğåäßïõ";
+    Text[ dutch ] = "Veld toevoegen:";
+    Text[ french ] = "Ajouter un champ:";
+    Text[ spanish ] = "Añadir campo:";
+    Text[ finnish ] = "Lisää kenttä";
+    Text[ italian ] = "Aggiungi campo:";
+    Text[ danish ] = "Tilføj felt";
+    Text[ swedish ] = "Lägg till fält:";
+    Text[ polish ] = "Dodaj pole:";
+    Text[ portuguese_brazilian ] = "Add Field";
+    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®è¿½åŠ :";
+    Text[ korean ] = "í•„ë“œ ì‚½ì…";
+    Text[ chinese_simplified ] = "æ–°å¢å­—æ®µ:";
+    Text[ chinese_traditional ] = "æ–°å¢æ¬„ä½:";
+    Text[ turkish ] = "Alan ekle";
+    Text[ arabic ] = "ÅÖÇİÉ ÍŞá";
+    Text[ catalan ] = "Añadir campo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selección de campo:";
-    Text[ finnish ] = "Kenttävalinta:";
+    Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
 };
 String RID_STR_FIELDNULL
 {
