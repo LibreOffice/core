@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2002-09-30 15:24:02 $
+ *  last change: $Author: rt $ $Date: 2002-10-04 10:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
