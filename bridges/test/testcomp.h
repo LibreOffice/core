@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomp.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,10 @@ public:
 
 public:
     // XInterface
-    Any SAL_CALL queryInterface( const com::sun::star::uno::Type & aType);
-    void        SAL_CALL acquire()                       { OWeakObject::acquire(); }
-    void        SAL_CALL release()                       { OWeakObject::release(); }
+    Any SAL_CALL queryInterface( const com::sun::star::uno::Type & aType)
+        throw (com::sun::star::uno::RuntimeException);
+    void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
+    void SAL_CALL release() throw () { OWeakObject::release(); }
 
 public:
     virtual void SAL_CALL setIn( const ::com::sun::star::uno::Reference< ::test::XCallMe >& callback ) throw(::com::sun::star::uno::RuntimeException);
@@ -114,9 +115,10 @@ public:
 
 public:
     // XInterface
-    Any SAL_CALL queryInterface( const com::sun::star::uno::Type & aType);
-    void        SAL_CALL acquire()                       { OWeakObject::acquire(); }
-    void        SAL_CALL release()                       { OWeakObject::release(); }
+    Any SAL_CALL queryInterface( const com::sun::star::uno::Type & aType)
+        throw (com::sun::star::uno::RuntimeException);
+    void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
+    void SAL_CALL release() throw () { OWeakObject::release(); }
 public:
     // XCallMe
     virtual void SAL_CALL call( const ::rtl::OUString& s, sal_Int32 nToDo )
@@ -150,9 +152,10 @@ public:
 
 public:
     // XInterface
-    Any         SAL_CALL queryInterface( const  com::sun::star::uno::Type & aType );
-    void        SAL_CALL acquire()                       { OWeakObject::acquire(); }
-    void        SAL_CALL release()                       { OWeakObject::release(); }
+    Any SAL_CALL queryInterface( const  com::sun::star::uno::Type & aType )
+        throw (com::sun::star::uno::RuntimeException);
+    void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
+    void SAL_CALL release() throw () { OWeakObject::release(); }
 public:
     virtual ::com::sun::star::uno::Reference< ::test::XCallMe > SAL_CALL createCallMe(  )
         throw(::com::sun::star::uno::RuntimeException);
@@ -196,9 +199,10 @@ public:
     ~OInstanceProvider(){ printf( "instance provider dies\n" );}
 public:
     // XInterface
-    Any         SAL_CALL queryInterface( const Type & aType);
-    void        SAL_CALL acquire()                       { OWeakObject::acquire(); }
-    void        SAL_CALL release()                       { OWeakObject::release(); }
+    Any SAL_CALL queryInterface( const Type & aType)
+        throw (com::sun::star::uno::RuntimeException);
+    void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
+    void SAL_CALL release() throw () { OWeakObject::release(); }
 
 public:
     // XConnectCallback
