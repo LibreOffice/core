@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:03:17 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,12 +404,6 @@ SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
     ((OutputDevice&)rOut).SetLayoutMode( bChgToRTL ?
                                          TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
                                          TEXT_LAYOUT_COMPLEX_DISABLED );
-}
-
-SwScriptInfo* SwTxtFrm::GetScriptInfo()
-{
-    SwParaPortion* pPara = GetPara();
-    return pPara ? &pPara->GetScriptInfo() : 0;
 }
 
 #endif
@@ -2330,3 +2324,15 @@ void SwTxtFrm::VisitPortions( SwPortionHandler& rPH ) const
 
     rPH.Finish();
 }
+
+
+/*************************************************************************
+ *                      SwTxtFrm::GetScriptInfo()
+ *************************************************************************/
+
+SwScriptInfo* SwTxtFrm::GetScriptInfo()
+{
+    SwParaPortion* pPara = GetPara();
+    return pPara ? &pPara->GetScriptInfo() : 0;
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:21:45 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 14:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,8 @@ public:
     // visit all portions for Accessibility
     void VisitPortions( SwPortionHandler& rPH ) const;
 
+    // returns the script info stored at the paraportion
+    SwScriptInfo* GetScriptInfo();
 
 #ifdef VERTICAL_LAYOUT
     // Swaps width and height of the text frame
@@ -517,8 +519,6 @@ public:
     // RTL to LTR layout.
     void SwitchRTLtoLTR( Point& rPoint ) const;
 
-    // returns the script info stored at the paraportion
-    SwScriptInfo* GetScriptInfo();
 #endif
 
 };
