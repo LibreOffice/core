@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCsvRuler.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $
+ *  last change: $Author: vg $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ public class ScAccessibleCsvRuler extends TestCase {
 
         lThread = new loadThread(SOF, args);
         lThread.start();
+        shortWait();
 
     }
 
