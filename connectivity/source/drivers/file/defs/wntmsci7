@@ -2550,3 +2550,6 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?acquire@OStatement@file@connectivity@@WBJA@AAXXZ
 ?queryInterface@OStatement@file@connectivity@@WBJA@AA?AVAny@uno@star@sun@com@@ABVType@5678@@Z
 ?release@OStatement@file@connectivity@@WBJA@AAXXZ
+??1?$Reference@VXContentProvider@ucb@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?getURL@OConnection@file@connectivity@@QBE?AVString@@XZ
+?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx1407524172@@YAEABVString@@0@Z
