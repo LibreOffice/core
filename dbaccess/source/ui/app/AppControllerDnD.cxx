@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:32:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,11 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
-#include <com/sun/star/sdbc/XParameters.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
@@ -95,29 +95,14 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_XBOOKMARKSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XBookmarksSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
-#include <com/sun/star/sdbc/XColumnLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -218,32 +203,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef DBAUI_TOKENWRITER_HXX
-#include "TokenWriter.hxx"
-#endif
 #ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
-#include "WCopyTable.hxx"
-#endif
-#ifndef DBAUI_WIZARD_CPAGE_HXX
-#include "WCPage.hxx"
-#endif
-#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
-#include "WExtendPages.hxx"
-#endif
-#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
-#include "WNameMatch.hxx"
-#endif
-#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
-#include "WColumnSelect.hxx"
-#endif
-#ifndef DBAUI_RTFREADER_HXX
-#include "RtfReader.hxx"
-#endif
-#ifndef DBAUI_HTMLREADER_HXX
-#include "HtmlReader.hxx"
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
@@ -288,329 +249,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::util;
 
-    // -----------------------------------------------------------------------------
-#define FILL_PARAM(type,method)                         \
-{                                                   \
-    type nValue = xRow->g##method(i);               \
-    if ( !xRow->wasNull() )                         \
-        xParameter->s##method(nPos,nValue);         \
-    else                                            \
-        xParameter->setNull(nPos,aColumnTypes[i]);  \
-}
-// -----------------------------------------------------------------------------
-namespace
-{
-void insertRows(const Reference<XResultSet>& xSrcRs,
-                const ODatabaseExport::TPositions& _rvColumns,
-                const Reference<XPropertySet>& _xDestTable,
-                const Reference<XDatabaseMetaData>& _xMetaData,
-                sal_Bool bIsAutoIncrement,
-                const Sequence<Any>& _aSelection,
-                sal_Bool _bBookmarkSelection,
-                Window* _pParent
-                ) throw(SQLException, RuntimeException)
-{
-    Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xSrcRs,UNO_QUERY);
-    Reference<XRow> xRow(xSrcRs,UNO_QUERY);
-    Reference< XRowLocate > xRowLocate( xSrcRs, UNO_QUERY );
-    sal_Bool bUseSelection  = _aSelection.getLength() > 0;
-
-    if ( !xRow.is() || ( bUseSelection && _bBookmarkSelection && !xRowLocate.is() ) )
-    {
-        DBG_ERROR( "insertRows: bad arguments!" );
-        return;
-    }
-
-    ::rtl::OUString aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
-    ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(_xMetaData,_xDestTable,sal_True,::dbtools::eInDataManipulation);
-
-    aSql += sComposedTableName;
-    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( "));
-    // set values and column names
-    ::rtl::OUString aValues(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
-    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
-    static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
-
-    ::rtl::OUString aQuote;
-    if ( _xMetaData.is() )
-        aQuote = _xMetaData->getIdentifierQuoteString();
-
-    Reference<XColumnsSupplier> xColsSup(_xDestTable,UNO_QUERY);
-    OSL_ENSURE(xColsSup.is(),"OApplicationController::insertRows: No columnsSupplier!");
-    if(!xColsSup.is())
-        return;
-
-    // we a vector which all types
-    Reference< XResultSetMetaData> xMeta = xSrcMetaSup->getMetaData();
-    sal_Int32 nCount = xMeta->getColumnCount();
-    ::std::vector<sal_Int32> aColumnTypes;
-    aColumnTypes.reserve(nCount+1);
-    aColumnTypes.push_back(-1); // just to avoid a everytime i-1 call
-
-    for(sal_Int32 k=1;k <= nCount;++k)
-        aColumnTypes.push_back(xMeta->getColumnType(k));
-
-    // create sql string and set column types
-    Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
-    Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-    const ::rtl::OUString* pBegin = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-    ::std::vector< ::rtl::OUString> aInsertList;
-    aInsertList.resize(aSeq.getLength()+1);
-    sal_Int32 i = 0;
-    for(sal_uInt32 j=0; j < aInsertList.size() ;++i,++j)
-    {
-        ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
-        if ( _rvColumns.end() != aFind && aFind->second != CONTAINER_ENTRY_NOTFOUND && aFind->first != CONTAINER_ENTRY_NOTFOUND )
-        {
-            aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pBegin+i));
-        }
-    }
-
-    i = 1;
-    // create the sql string
-    for (::std::vector< ::rtl::OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertList.end(); ++aInsertIter)
-    {
-        if ( aInsertIter->getLength() )
-        {
-            aSql += *aInsertIter;
-            aSql += aComma;
-            aValues += aPara;
-        }
-    }
-
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-    aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-
-    aSql += aValues;
-    // now create,fill and execute the prepared statement
-    Reference< XPreparedStatement > xPrep(_xMetaData->getConnection()->prepareStatement(aSql));
-    Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-
-
-    sal_Int32 nRowCount = 0;
-    const Any* pSelBegin    = _aSelection.getConstArray();
-    const Any* pSelEnd      = pSelBegin + _aSelection.getLength();
-    sal_Bool bNext = sal_True;
-    sal_Bool bAlreadyAsked = sal_False;
-    do // loop as long as there are more rows or the selection ends
-    {
-        if ( bUseSelection )
-        {
-            if ( pSelBegin != pSelEnd )
-            {
-                if ( _bBookmarkSelection )
-                {
-                    xRowLocate->moveToBookmark( *pSelBegin );
-                }
-                else
-                {
-                    sal_Int32 nPos = 0;
-                    *pSelBegin >>= nPos;
-                    bNext = xSrcRs->absolute( nPos );
-                }
-                ++pSelBegin;
-            }
-            else
-                bNext = sal_False;
-        }
-        else
-            bNext = xSrcRs->next();
-        if ( bNext )
-        {
-            ++nRowCount;
-            sal_Bool bInsertAutoIncrement = sal_True;
-            ODatabaseExport::TPositions::const_iterator aPosIter = _rvColumns.begin();
-            SQLExceptionInfo aInfo;
-            try
-            {
-                for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter)
-                {
-                    sal_Int32 nPos = aPosIter->first;
-                    if ( nPos == CONTAINER_ENTRY_NOTFOUND )
-                    {
-                        ++i; // otherwise we don't get the correct value when only the 2nd source column was selected
-                        continue;
-                    }
-                    if ( bIsAutoIncrement && bInsertAutoIncrement )
-                    {
-                        xParameter->setInt(1,nRowCount);
-                        bInsertAutoIncrement = sal_False;
-                        continue;
-                    }
-                    // we have to check here against 1 because the parameters are 1 based
-                    OSL_ENSURE( i >= 1 && i < (sal_Int32)aColumnTypes.size(),"Index out of range for column types!");
-                    switch(aColumnTypes[i])
-                    {
-                        case DataType::CHAR:
-                        case DataType::VARCHAR:
-                        case DataType::LONGVARCHAR:
-                            FILL_PARAM( ::rtl::OUString, etString)
-                            break;
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
-                        case DataType::DOUBLE:
-                        case DataType::REAL:
-                            FILL_PARAM( double, etDouble)
-                            break;
-                        case DataType::BIGINT:
-                            FILL_PARAM( sal_Int64, etLong)
-                            break;
-                        case DataType::FLOAT:
-                            FILL_PARAM( float, etFloat)
-                            break;
-                        case DataType::LONGVARBINARY:
-                        case DataType::BINARY:
-                        case DataType::VARBINARY:
-                            FILL_PARAM( Sequence< sal_Int8 >, etBytes)
-                            break;
-                        case DataType::DATE:
-                            FILL_PARAM( ::com::sun::star::util::Date, etDate)
-                            break;
-                        case DataType::TIME:
-                            FILL_PARAM( ::com::sun::star::util::Time, etTime)
-                            break;
-                        case DataType::TIMESTAMP:
-                            FILL_PARAM( ::com::sun::star::util::DateTime, etTimestamp)
-                            break;
-                        case DataType::BIT:
-                            FILL_PARAM( sal_Bool, etBoolean)
-                            break;
-                        case DataType::TINYINT:
-                            FILL_PARAM( sal_Int8, etByte)
-                            break;
-                        case DataType::SMALLINT:
-                            FILL_PARAM( sal_Int16, etShort)
-                            break;
-                        case DataType::INTEGER:
-                            FILL_PARAM( sal_Int32, etInt)
-                            break;
-                        default:
-                            OSL_ENSURE(0,"Unknown type");
-                    }
-                    ++i;
-                }
-                xPrep->executeUpdate();
-            }
-            catch(SQLContext& e) { aInfo = e; }
-            catch(SQLWarning& e) { aInfo = e; }
-            catch(SQLException& e) { aInfo = e; }
-
-            if ( aInfo.isValid() && !bAlreadyAsked )
-            {
-                String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURED_WHILE_COPYING));
-                String sTitle = String(ModuleRes(STR_STAT_WARNING));
-                OSQLMessageBox aDlg(_pParent,sTitle,sAskIfContinue,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
-                if ( aDlg.Execute() == RET_YES )
-                    bAlreadyAsked = sal_True;
-                else
-                {
-                    SQLException e;
-                    switch( aInfo.getType() )
-                    {
-                        case SQLExceptionInfo::SQL_EXCEPTION:
-                            throw *(const SQLException*)aInfo;
-                            break;
-                        case SQLExceptionInfo::SQL_WARNING:
-                            throw *(const SQLWarning*)aInfo;
-                            break;
-                        case SQLExceptionInfo::SQL_CONTEXT:
-                            throw *(const SQLContext*)aInfo;
-                            break;
-                    }
-                }
-            }
-        }
-    }
-    while( bNext );
-}
-// -----------------------------------------------------------------------------
-Reference<XResultSet> createResultSet(  OApplicationController* _pBrowser,sal_Bool bDispose,
-                                        sal_Int32 _nCommandType,Reference<XConnection>& _xSrcConnection,
-                                        const Reference<XPropertySet>& xSourceObject,
-                                        Reference<XStatement> &xStmt,Reference<XPreparedStatement> &xPrepStmt)
-{
-    Reference<XResultSet> xSrcRs;
-    ::rtl::OUString sSql;
-    if(_nCommandType == CommandType::TABLE)
-    {
-        sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
-        // we need to create the sql stmt with column names
-        // otherwise it is possible that names don't match
-        ::rtl::OUString sQuote = _xSrcConnection->getMetaData()->getIdentifierQuoteString();
-        static ::rtl::OUString sComma = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-
-        Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
-        OSL_ENSURE(xSrcColsSup.is(),"No source columns!");
-        Reference<XNameAccess> xNameAccess = xSrcColsSup->getColumns();
-        Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-        const ::rtl::OUString* pBegin = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-        for(;pBegin != pEnd;++pBegin)
-        {
-            sSql += ::dbtools::quoteName( sQuote,*pBegin);
-            sSql += sComma;
-        }
-        sSql = sSql.replaceAt(sSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FROM "));
-        sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(_xSrcConnection,PROPERTY_USECATALOGINSELECT,sal_True);
-        sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(_xSrcConnection,PROPERTY_USESCHEMAINSELECT,sal_True);
-        ::rtl::OUString sComposedName = ::dbtools::composeTableName(_xSrcConnection->getMetaData(),xSourceObject,sal_True,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
-        sSql += sComposedName;
-        xStmt = _xSrcConnection->createStatement();
-        if( xStmt.is() )
-            xSrcRs = xStmt->executeQuery(sSql);
-    }
-    else
-    {
-        xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
-        xPrepStmt = _xSrcConnection->prepareStatement(sSql);
-        if( xPrepStmt.is() )
-        {
-            // look if we have to fill in some parameters
-            // create and fill a composer
-            Reference< XMultiServiceFactory > xFactory( _xSrcConnection, UNO_QUERY );
-            Reference< XSingleSelectQueryComposer > xComposer;
-            if ( xFactory.is() )
-                xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
-            if ( xComposer.is() )
-            {
-                try
-                {
-                    xComposer->setQuery(sSql);
-                    Reference< XInteractionHandler > xHandler(_pBrowser->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.InteractionHandler"))), UNO_QUERY);
-                    ::dbtools::askForParameters(xComposer,Reference<XParameters>(xPrepStmt,UNO_QUERY),_xSrcConnection,xHandler);
-                    xSrcRs = xPrepStmt->executeQuery();
-                }
-                catch(SQLContext&)
-                {
-                    if(bDispose)
-                        ::comphelper::disposeComponent(_xSrcConnection);
-                    throw;
-                }
-                catch(SQLWarning&)
-                {
-                    if(bDispose)
-                        ::comphelper::disposeComponent(_xSrcConnection);
-                    throw;
-                }
-                catch(SQLException&)
-                {
-                    if(bDispose)
-                        ::comphelper::disposeComponent(_xSrcConnection);
-                    throw;
-                }
-                catch (Exception&)
-                {
-                }
-            }
-        }
-    }
-    return xSrcRs;
-}
-}
 // -----------------------------------------------------------------------------
 void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>& _rList)
 {
@@ -851,7 +491,7 @@ Reference<XConnection> OApplicationController::getActiveConnection() const
     return xConnection;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::ensureConnection(Reference<XConnection>& _xConnection,sal_Bool _bCreate)
+bool OApplicationController::ensureConnection(Reference<XConnection>& _xConnection,sal_Bool _bCreate)
 {
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -873,6 +513,7 @@ void OApplicationController::ensureConnection(Reference<XConnection>& _xConnecti
 //          getContainer()->clearSelection();
     }
     _xConnection = aFind->second;
+    return _xConnection.is();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationController::isDataSourceReadOnly() const
@@ -990,6 +631,8 @@ void OApplicationController::impl_initialize( const Sequence< Any >& aArguments 
         }
     }
 
+    Reference<XModifiable> xModi(m_xDataSource,UNO_QUERY);
+    m_bCurrentlyModified = (xModi.is() && xModi->isModified());
     sal_Bool bNew = sal_False;
     Reference<XModel> xModel(m_xDataSource,UNO_QUERY);
     if ( bInteractive && xModel.is() && !xModel->getURL().getLength() && getView() )
@@ -1129,11 +772,11 @@ TransferableHelper* OApplicationController::copyObject()
 
                 if ( eType == E_TABLE )
                 {
-                    pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection), getORB());
+                    pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection,getORB()), getORB());
                 }
                 else
                 {
-                    pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection), getORB());
+                    pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection,getORB()), getORB());
                 }
 
             }
@@ -1318,286 +961,6 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::pasteTable( SotFormatStringId _nFormatId,const TransferableDataHelper& _rTransData )
-{
-    if ( _nFormatId == SOT_FORMATSTR_ID_DBACCESS_TABLE || _nFormatId == SOT_FORMATSTR_ID_DBACCESS_QUERY )
-    {
-        if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(_rTransData.GetDataFlavorExVector()) )
-            pasteTable( ODataAccessObjectTransferable::extractObjectDescriptor(_rTransData) );
-    }
-    else if ( _rTransData.HasFormat(_nFormatId) )
-    {
-        try
-        {
-
-            DropDescriptor aTrans;
-            if ( _nFormatId != SOT_FORMAT_RTF )
-                const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(_rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,aTrans.aHtmlRtfStorage);
-            else
-                const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
-
-            aTrans.nType            = E_TABLE;
-            aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId || SOT_FORMATSTR_ID_HTML_SIMPLE == _nFormatId;
-            if ( !copyTagTable(aTrans,sal_False) )
-                showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
-        }
-        catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-        catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-        catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-        catch(Exception& )
-        {
-            OSL_ENSURE(sal_False, "OApplicationController::pasteTable: caught a generic exception!");
-        }
-    }
-    else
-        showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
-}
-// -----------------------------------------------------------------------------
-void OApplicationController::pasteTable( const TransferableDataHelper& _rTransData )
-{
-    if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE) || _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
-        pasteTable( SOT_FORMATSTR_ID_DBACCESS_TABLE,_rTransData);
-    else if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) )
-        pasteTable( SOT_FORMATSTR_ID_HTML,_rTransData);
-    else if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE) )
-        pasteTable( SOT_FORMATSTR_ID_HTML_SIMPLE,_rTransData);
-    else if ( _rTransData.HasFormat(SOT_FORMAT_RTF) )
-        pasteTable( SOT_FORMAT_RTF,_rTransData);
-}
-// -----------------------------------------------------------------------------
-void OApplicationController::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData )
-{
-    Reference<XConnection> xSrcConnection;
-    Reference<XResultSet>   xSrcRs;         // the source resultset may be empty
-    Sequence< Any > aSelection;
-    sal_Bool bBookmarkSelection;
-    ::rtl::OUString sCommand,
-        sSrcDataSourceName = _rPasteData.getDataSource();
-
-    _rPasteData[daCommand]          >>= sCommand;
-    if ( _rPasteData.has(daConnection) )
-        _rPasteData[daConnection]   >>= xSrcConnection;
-    if ( _rPasteData.has(daSelection) )
-        _rPasteData[daSelection]    >>= aSelection;
-    if ( _rPasteData.has(daBookmarkSelection) )
-        _rPasteData[daBookmarkSelection]    >>= bBookmarkSelection;
-    if ( _rPasteData.has(daCursor) )
-        _rPasteData[daCursor]       >>= xSrcRs;
-
-    // paste into the tables
-    sal_Int32 nCommandType = CommandType::COMMAND;
-    if ( _rPasteData.has(daCommandType) )
-        _rPasteData[daCommandType] >>= nCommandType;
-
-    insertTable( nCommandType
-                ,xSrcConnection
-                ,xSrcRs
-                ,aSelection
-                ,bBookmarkSelection
-                ,sCommand
-                ,sSrcDataSourceName);
-}
-// -----------------------------------------------------------------------------
-void OApplicationController::insertTable(sal_Int32 _nCommandType
-                                        ,const Reference<XConnection>& _xSrcConnection
-                                        ,const Reference<XResultSet>&   _xSrcRs         // the source resultset may be empty
-                                        ,const Sequence< Any >& _aSelection
-                                        ,sal_Bool _bBookmarkSelection
-                                        ,const ::rtl::OUString& _sCommand
-                                        ,const ::rtl::OUString& _sSrcDataSourceName)
-{
-    try
-    {
-        if ( CommandType::QUERY == _nCommandType || CommandType::TABLE == _nCommandType )
-        {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-            ::osl::MutexGuard aGuard(m_aMutex);
-
-            ::rtl::OUString sDataSourceName = getDatabaseName();
-
-            // first get the dest connection
-            Reference<XConnection> xDestConnection,xSrcConnection;   // supports the service sdb::connection
-            ensureConnection(xDestConnection);
-            if ( !xDestConnection.is() )
-                return;
-
-            xSrcConnection = _xSrcConnection;
-            Reference<XResultSet> xSrcRs = _xSrcRs;
-
-
-            // get the source connection
-            sal_Bool bDispose = sal_False;
-            if ( _sSrcDataSourceName == sDataSourceName )
-                xSrcConnection = xDestConnection;
-            else if ( !xSrcConnection.is() )
-            {
-                Reference< XEventListener> xEvt(static_cast< ::cppu::OWeakObject*>(this), UNO_QUERY);
-                showError(::dbaui::createConnection(m_xDataSource,getORB(),xEvt,xSrcConnection));
-                bDispose = sal_True;
-            }
-            Reference<XNameAccess> xNameAccess;
-            sal_Bool bTable = sal_True;
-            switch(_nCommandType)
-            {
-                case CommandType::TABLE:
-                    {
-                        // only for tables
-                        Reference<XTablesSupplier> xSup(xSrcConnection,UNO_QUERY);
-                        if(xSup.is())
-                            xNameAccess = xSup->getTables();
-                    }
-                    break;
-                case CommandType::QUERY:
-                    {
-                        Reference<XQueriesSupplier> xSup(xSrcConnection,UNO_QUERY);
-                        if ( xSup.is() )
-                            xNameAccess = xSup->getQueries();
-                        bTable = sal_False;
-                    }
-                    break;
-            }
-
-            // check if this name really exists in the name access
-            if ( xNameAccess.is() && xNameAccess->hasByName( _sCommand ) )
-            {
-                Reference<XPropertySet> xSourceObject(xNameAccess->getByName( _sCommand ),UNO_QUERY);
-
-                sal_Bool bIsView = sal_False;
-                if ( bTable ) // we only have to check if this table has as type VIEW
-                {
-                    static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
-                    bIsView = ::comphelper::getString(xSourceObject->getPropertyValue(PROPERTY_TYPE)) == sVIEW;
-                }
-
-                OCopyTableWizard aWizard(getView(),
-                                            xSourceObject,
-                                            xSrcConnection,
-                                            xDestConnection,
-                                            getNumberFormatter(xDestConnection),
-                                            getORB());
-                aWizard.fillTypeInfo();
-                aWizard.loadData();
-                OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, bIsView,OCopyTableWizard::WIZARD_DEF_DATA);
-                OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
-                OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
-                OWizNormalExtend*   pPage4 = new OWizNormalExtend(&aWizard);
-
-                aWizard.AddWizardPage(pPage1);
-                aWizard.AddWizardPage(pPage2);
-                aWizard.AddWizardPage(pPage3);
-                aWizard.AddWizardPage(pPage4);
-                aWizard.ActivatePage();
-
-                if (aWizard.Execute() == RET_OK)
-                {
-                    WaitObject aWO(getView());
-                    Reference<XPropertySet> xTable;
-                    switch(aWizard.getCreateStyle())
-                    {
-                        case OCopyTableWizard::WIZARD_DEF:
-                        case OCopyTableWizard::WIZARD_DEF_DATA:
-                            {
-                                xTable = aWizard.createTable();
-                                if(!xTable.is())
-                                    break;
-                                if(OCopyTableWizard::WIZARD_DEF == aWizard.getCreateStyle())
-                                    break;
-                            } // run through
-                        case OCopyTableWizard::WIZARD_APPEND_DATA:
-                            {
-
-                                if(!xTable.is())
-                                    xTable = aWizard.createTable();
-                                if(!xTable.is())
-                                    break;
-
-                                Reference<XStatement> xStmt; // needed to hold a reference to the statement
-                                Reference<XPreparedStatement> xPrepStmt;// needed to hold a reference to the statement
-
-                                ODatabaseExport::TPositions aColumnMapping = aWizard.GetColumnPositions();
-                                // create the sql stmt
-                                if ( !xSrcRs.is() ) // if not already exists
-                                    xSrcRs = createResultSet(this,
-                                                            bDispose,
-                                                            _nCommandType,
-                                                            xSrcConnection,
-                                                            xSourceObject,
-                                                            xStmt,
-                                                            xPrepStmt);
-                                else
-                                {
-                                    // here I use the ResultSet directly so I have to adjust
-                                    // the column mapping given by the wizard, because the resultset could use
-                                    // another order of the columns
-                                    Reference< XColumnLocate> xLocate(xSrcRs,UNO_QUERY);
-                                    Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
-                                    OSL_ENSURE(xSrcColsSup.is(),"No source columns!");
-                                    Reference<XNameAccess> xNameAccess = xSrcColsSup->getColumns();
-                                    Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-                                    const ::rtl::OUString* pBegin = aSeq.getConstArray();
-                                    const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-
-                                    ODatabaseExport::TPositions aNewColMapping;
-                                    aNewColMapping.resize( aColumnMapping.size() ,ODatabaseExport::TPositions::value_type(CONTAINER_ENTRY_NOTFOUND,CONTAINER_ENTRY_NOTFOUND) );
-
-                                    for(sal_Int32 k = 0;pBegin != pEnd;++pBegin,++k)
-                                    {
-                                        sal_Int32 nColPos = xLocate->findColumn(*pBegin) -1;
-                                        if ( nColPos >= 0 )
-                                            //  aNewColMapping[k] = aColumnMapping[nColPos];
-                                            aNewColMapping[nColPos] = aColumnMapping[k];
-                                    }
-                                    aColumnMapping = aNewColMapping;
-                                    // position the resultset before the first row
-                                    if ( !xSrcRs->isBeforeFirst() )
-                                        xSrcRs->beforeFirst();
-                                }
-                                // now insert the rows into the new table
-                                // we couldn't use the rowset here because it could happen that we haven't a primary key
-                                insertRows( xSrcRs,
-                                            aColumnMapping,
-                                            xTable,
-                                            xDestConnection->getMetaData(),
-                                            aWizard.isAutoincrementEnabled(),
-                                            _aSelection,
-                                            _bBookmarkSelection,
-                                            getView());
-                            }
-                            break;
-                        case OCopyTableWizard::WIZARD_DEF_VIEW:
-                            xTable = aWizard.createView();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                switch(_nCommandType)
-                {
-                    case CommandType::TABLE:
-                        break;
-                    case CommandType::QUERY:
-                        break;
-                }
-                showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
-            }
-            if ( bDispose )
-                ::comphelper::disposeComponent(xSrcConnection);
-        }
-        else
-            DBG_ERROR("OApplicationController::pasteTable: invalid call (no supported format found)!");
-    }
-    catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-    catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-    catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-    catch(Exception& )
-    {
-        OSL_ENSURE(sal_False, "OApplicationController::pasteTable: caught a generic exception!");
-    }
-}
-// -----------------------------------------------------------------------------
 Reference<XNameContainer> OApplicationController::getQueryDefintions() const
 {
     Reference<XQueryDefinitionsSupplier> xSet(m_xDataSource,UNO_QUERY);
@@ -1627,16 +990,10 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationController::isTableFormat()  const
 {
-    sal_Bool bTableFormat   =   getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
-                ||  getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
-                ||  getViewClipboard().HasFormat(SOT_FORMAT_RTF)
-                ||  getViewClipboard().HasFormat(SOT_FORMATSTR_ID_HTML)
-                ||  getViewClipboard().HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
-
-    return bTableFormat;
+    return m_aTableCopyHelper.isTableFormat(getViewClipboard());
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::copyTagTable(DropDescriptor& _rDesc, sal_Bool _bCheck)
+sal_Bool OApplicationController::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck)
 {
     // first get the dest connection
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -1646,20 +1003,7 @@ sal_Bool OApplicationController::copyTagTable(DropDescriptor& _rDesc, sal_Bool _
     if ( !xDestConnection.is() )
         return sal_False;
 
-    Reference<XEventListener> xEvt;
-    ODatabaseImportExport* pImport = NULL;
-    if ( _rDesc.bHtml )
-        pImport = new OHTMLImportExport(xDestConnection,getNumberFormatter(xDestConnection),getORB());
-    else
-        pImport = new ORTFImportExport(xDestConnection,getNumberFormatter(xDestConnection),getORB());
-
-    xEvt = pImport;
-    SvStream* pStream = (SvStream*)(SotStorageStream*)_rDesc.aHtmlRtfStorage;
-    if ( _bCheck )
-        pImport->enableCheckOnly();
-
-    pImport->setStream(pStream);
-    return pImport->Read();
+    return m_aTableCopyHelper.copyTagTable(_rDesc, _bCheck,xDestConnection);
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnAsyncDrop, void*, NOTINTERESTEDIN )
@@ -1671,19 +1015,10 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, NOTINTERESTEDIN )
 
     if ( m_aAsyncDrop.nType == E_TABLE )
     {
-        if ( m_aAsyncDrop.aHtmlRtfStorage.Is() )
-        {
-            copyTagTable(m_aAsyncDrop,sal_False);
-            m_aAsyncDrop.aHtmlRtfStorage = NULL;
-            // we now have to delete the temp file created in executeDrop
-            INetURLObject aURL;
-            aURL.SetURL(m_aAsyncDrop.aUrl);
-            ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
-        }
-        else if ( !m_aAsyncDrop.bError )
-            pasteTable(m_aAsyncDrop.aDroppedData);
-        else
-            showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+        Reference<XConnection> xDestConnection;  // supports the service sdb::connection
+        ensureConnection( xDestConnection);
+        if ( xDestConnection.is() )
+            m_aTableCopyHelper.asyncCopyTagTable(m_aAsyncDrop,getDatabaseName(),xDestConnection);
     }
     else
     {
