@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReferenceFieldPart.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com { module sun { module star { module text {
     reference text fields.
 
 */
-constants ReferenceFieldPart
+published constants ReferenceFieldPart
 {
     //-------------------------------------------------------------------------
     /** The page number is displayed using arabic numbers.
