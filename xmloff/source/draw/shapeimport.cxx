@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-01 11:44:09 $
+ *  last change: $Author: cl $ $Date: 2001-08-15 10:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,37 +1023,44 @@ void XMLShapeImportHelper::popGroupAndSort()
     if( mpImpl->mpSortContext == NULL )
         return;
 
-    // sort shapes
-    list<ZOrderHint>& rZList = mpImpl->mpSortContext->maZOrderList;
-    if( !rZList.empty() )
+    try
     {
-        // only do something if we have shapes to sort
-        list<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
-
-        // sort z ordered shapes
-        rZList.sort();
-
-        // this is the current index, all shapes before that
-        // index are finished
-        sal_Int32 nIndex = 0;
-        while( !rZList.empty() )
+        // sort shapes
+        list<ZOrderHint>& rZList = mpImpl->mpSortContext->maZOrderList;
+        if( !rZList.empty() )
         {
-            list<ZOrderHint>::iterator aIter( rZList.begin() );
+            // only do something if we have shapes to sort
+            list<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
 
-            while( nIndex < (*aIter).nShould && !rUnsortedList.empty() )
+            // sort z ordered shapes
+            rZList.sort();
+
+            // this is the current index, all shapes before that
+            // index are finished
+            sal_Int32 nIndex = 0;
+            while( !rZList.empty() )
             {
-                ZOrderHint aGapHint( *rUnsortedList.begin() );
-                rUnsortedList.pop_front();
+                list<ZOrderHint>::iterator aIter( rZList.begin() );
 
-                mpImpl->mpSortContext->moveShape( aGapHint.nIs, nIndex++ );
+                while( nIndex < (*aIter).nShould && !rUnsortedList.empty() )
+                {
+                    ZOrderHint aGapHint( *rUnsortedList.begin() );
+                    rUnsortedList.pop_front();
+
+                    mpImpl->mpSortContext->moveShape( aGapHint.nIs, nIndex++ );
+                }
+
+                if( (*aIter).nIs != nIndex )
+                    mpImpl->mpSortContext->moveShape( (*aIter).nIs, nIndex );
+
+                rZList.pop_front();
+                nIndex++;
             }
-
-            if( (*aIter).nIs != nIndex )
-                mpImpl->mpSortContext->moveShape( (*aIter).nIs, nIndex );
-
-            rZList.pop_front();
-            nIndex++;
         }
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERROR("exception while sorting shapes, sorting failed!");
     }
 
     // put parent on top and delete current context, were done
