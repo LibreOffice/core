@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:47:49 $
+ *  last change: $Author: rt $ $Date: 2000-11-09 13:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ polish ] = "Przy ram~ce obiektu";
         Text[ japanese ] = "µΜήΌήªΈΔg‚Ι(~F)";
         Text[ chinese_traditional ] = "ª«¥σ®Ψ(~F)";
-        Text[ arabic ] = "έν ΕΨΗΡ ΗαίΗΖδ";
+        Text[ arabic ] = "έν ίΗΟΡ ΗαίΗΖδ";
         Text[ greek ] = "Στο πλαίσιο αντικειμένου";
         Text[ korean ] = "°³ΓΌ Ζ²(~F)";
         Text[ turkish ] = "Nesne ηerηevesinde";
