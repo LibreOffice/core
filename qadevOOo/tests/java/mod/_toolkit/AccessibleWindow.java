@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleWindow.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 20:41:10 $
+ *  last change:$Date: 2004-11-02 12:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ public class AccessibleWindow extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
