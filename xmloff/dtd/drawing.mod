@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.12 2000-11-26 19:54:15 cl Exp $
+	$Id: drawing.mod,v 1.13 2000-11-29 11:41:58 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -65,6 +65,7 @@
 <!ENTITY % shapeId "CDATA" >
 <!ENTITY % draw-text "(text:p|text:unordered-list|text:ordered-list)*">
 <!ENTITY % zindex "draw:z-index %nonNegativeInteger; #IMPLIED">
+<!ENTITY % distance "CDATA">
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -142,7 +143,7 @@
 <!ATTLIST draw:ellipse %draw-end-position; >
 
 <!ELEMENT draw:connector %draw-text;>
-<!ATTLIST draw:connector draw:type draw:type (standard|lines|line|curve) "standard">
+<!ATTLIST draw:connector draw:type (standard|lines|line|curve) "standard">
 <!ATTLIST draw:connector draw:line-skew CDATA #IMPLIED>
 <!ATTLIST draw:connector %draw-style-name;>
 <!ATTLIST draw:connector svg:x1 %coordinate; #REQUIRED>
@@ -229,13 +230,22 @@
 <!ATTLIST draw:transparency draw:border %percentage; #IMPLIED>
 
 <!ELEMENT draw:marker EMPTY>
-<!ATTLIST draw:marker draw:name %styleName; #IMPLIED>
+<!ATTLIST draw:marker draw:name %styleName; #REQUIRED>
 <!ATTLIST draw:marker %draw-viewbox; >
 <!ATTLIST draw:marker svg:d %pathData; #REQUIRED>
 
+<!ELEMENT draw:stroke-dash EMPTY>
+<!ATTLIST draw:stroke-dash draw:name %styleName; #REQUIRED>
+<!ATTLIST draw:stroke-dash draw:style (rect|round) #IMPLIED>
+<!ATTLIST draw:stroke-dash draw:dots1 %integer; #IMPLIED>
+<!ATTLIST draw:stroke-dash draw:dots1-length %length; #IMPLIED>
+<!ATTLIST draw:stroke-dash draw:dots2 %integer; #IMPLIED>
+<!ATTLIST draw:stroke-dash draw:dots2-length %length; #IMPLIED>
+<!ATTLIST draw:stroke-dash draw:distance %length; #IMPLIED>
+
 <!-- stroke attributes -->
 <!ATTLIST style:properties draw:stroke (none|dash|solid) #IMPLIED>
-<!ATTLIST style:properties svg:stroke-dasharray CDATA #IMPLIED>
+<!ATTLIST style:properties draw:stroke-dash CDATA #IMPLIED>
 <!ATTLIST style:properties svg:stroke-width %length; #IMPLIED>
 <!ATTLIST style:properties svg:stroke-color %color; #IMPLIED>
 <!ATTLIST style:properties draw:marker-start %styleName; #IMPLIED>
@@ -281,8 +291,8 @@
 <!ATTLIST style:properties draw:shadow-transparency CDATA #IMPLIED>
 
 <!-- connector attributes -->
-<!ATTLIST style:properties draw:end-line-spacing-horizontal %distance; #IMPLIED>
-<!ATTLIST style:properties draw:end-line-spacing-vertical %distance; #IMPLIED>
+<!ATTLIST style:properties draw:start-line-spacing-horizontal %distance; #IMPLIED>
+<!ATTLIST style:properties draw:start-line-spacing-vertical %distance; #IMPLIED>
 <!ATTLIST style:properties draw:end-line-spacing-horizontal %distance; #IMPLIED>
 <!ATTLIST style:properties draw:end-line-spacing-vertical %distance; #IMPLIED>
 
@@ -294,7 +304,7 @@
 <!ATTLIST style:properties draw:end-guide %distance; #IMPLIED>
 <!ATTLIST style:properties draw:placing (below|atop) #IMPLIED>
 <!ATTLIST style:properties draw:parallel %boolean; #IMPLIED>
-<!ATTLIST style:properties draw:text-position-vertical (left|center|right|auto) #IMPLIED
+<!ATTLIST style:properties draw:text-position-vertical (left|center|right|auto) #IMPLIED>
 <!ATTLIST style:properties draw:text-position-horizontal (top|center|bottom|auto) #IMPLIED>
 
 <!-- Drawing page -->
