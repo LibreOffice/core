@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-29 11:51:10 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 15:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,70 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     catch( io::IOException& r )
     {
         nRet = ERR_SWG_READ_ERROR;
+    }
+
+    // import autotext events
+    if ((NULL != pStorage) && IsBlockMode())
+    {
+        OUString sStreamName(RTL_CONSTASCII_USTRINGPARAM(
+            "AutoTextEvents.xml"));
+        OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.office.sax.importer.AutoTextEventReader"));
+
+        // prepare ParserInputSrouce
+        xml::sax::InputSource aEventsParserInput;
+        aEventsParserInput.sSystemId = rName;
+
+        // open stream (and set parser input)
+        SvStorageStreamRef xEventsStream;
+        xEventsStream = pStorage->OpenStream( sStreamName,
+                                             STREAM_READ | STREAM_NOCREATE );
+        xEventsStream->SetBufferSize( 16*1024 );
+        aEventsParserInput.aInputStream =
+            new utl::OInputStreamWrapper( *xEventsStream );
+
+        // get parser
+        Reference< xml::sax::XParser > xEventsParser(
+            xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            UNO_QUERY );
+        ASSERT( xEventsParser.is(),
+                "Can't create parser" );
+        if( !xEventsParser.is() )
+            return ERR_SWG_READ_ERROR;
+
+        // get filter
+        Sequence < Any > aArgs( 0 );
+        Reference< xml::sax::XDocumentHandler > xEventsFilter(
+            xServiceFactory->createInstance(sServiceName), UNO_QUERY );
+        ASSERT( xEventsFilter.is(),
+                "Can't instantiate auto text events reader." );
+        if( !xEventsFilter.is() )
+            return ERR_SWG_READ_ERROR;
+
+        // connect parser and filter
+        xEventsParser->setDocumentHandler( xEventsFilter );
+
+        // connect model and filter
+        Reference < XImporter > xEventsImporter( xEventsFilter, UNO_QUERY );
+        xEventsImporter->setTargetDocument( xModelComp );
+
+        try
+        {
+            xEventsParser->parseStream( aEventsParserInput );
+        }
+        catch( xml::sax::SAXParseException& r )
+        {
+            nRet = ERR_SWG_READ_ERROR;
+        }
+        catch( xml::sax::SAXException& r )
+        {
+            nRet = ERR_SWG_READ_ERROR;
+        }
+        catch( io::IOException& r )
+        {
+            nRet = ERR_SWG_READ_ERROR;
+        }
     }
 
     if( pGraphicHelper )

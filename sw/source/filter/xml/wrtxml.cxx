@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 15:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,54 @@ sal_uInt32 SwXMLWriter::_Write()
     if( xDocStream.Is() )
         xDocStream->Commit();
 
+    // export auto text events (needs package + model)
+    if ( bBlock && (NULL != pStg) )
+    {
+        Reference< io::XOutputStream > xATEOut;
+        SvStorageStreamRef xATEDocStream;
+
+        // open stream, etc.
+        OUString sATEName(
+            RTL_CONSTASCII_USTRINGPARAM( "AutoTextEvents.xml" ) );
+        xATEDocStream = pStg->OpenStream( sATEName,
+                                  STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+        xATEDocStream->SetBufferSize( 16*1024 );
+        xATEOut = new utl::OOutputStreamWrapper( *xATEDocStream );
+
+        // get XML writer
+        Reference< io::XActiveDataSource > xATEWriter(
+            xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+            UNO_QUERY );
+        ASSERT( xATEWriter.is(), "can't instantiate XML writer" );
+        if(!xATEWriter.is())
+            return ERR_SWG_WRITE_ERROR;
+
+        // connect XML writer to output stream
+        xATEWriter->setOutputStream( xATEOut );
+
+        // get filter
+        Reference< xml::sax::XDocumentHandler > xATEHandler(xATEWriter,UNO_QUERY);
+        Sequence < Any > aArgs( 1 );
+        aArgs[0] <<= xATEHandler;
+        Reference< document::XExporter > xATEExporter(
+            xServiceFactory->createInstanceWithArguments(
+                OUString::createFromAscii("com.sun.star.office.sax.exporter.AutoTextEventWriter"), aArgs ), UNO_QUERY );
+        ASSERT( xATEExporter.is(),
+                "XMLReader::Read: can't instantiate auto text event Writer" );
+        if( !xATEExporter.is() )
+            return ERR_SWG_WRITE_ERROR;
+
+        // connect model and filter (same model, different filter)
+        xATEExporter->setSourceDocument( xModelComp );
+
+        Reference < XFilter > xATEFilter( xATEExporter, UNO_QUERY );
+        xATEFilter->filter( aProps );
+
+        if( xATEDocStream.Is() )
+            xATEDocStream->Commit();
+    }
+
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = 0;
@@ -285,11 +333,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.14 2001-01-26 11:22:48 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.15 2001-02-06 15:41:55 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/01/26 11:22:48  mib
+      ole objects continued
+
       Revision 1.13  2001/01/22 12:31:45  mib
       block mode
 
