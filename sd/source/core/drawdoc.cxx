@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:28:07 $
+ *  last change: $Author: dl $ $Date: 2001-03-02 14:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,22 +311,22 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         if ( xProp.is() )
         {
             uno::Any aAny;
-            sal_Int16 nValue;
+            lang::Locale aLocale;
 
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_DEFLOCALE ) );
-            aAny >>= nValue;
-            SetLanguage( (LanguageType) nValue, EE_CHAR_LANGUAGE );
+            aAny >>= aLocale;
+            SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE );
 
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_CJKLOCALE ) );
-            aAny >>= nValue;
-            SetLanguage( (LanguageType) nValue, EE_CHAR_LANGUAGE_CJK );
+            aAny >>= aLocale;
+            SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE_CJK );
 
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_CTLLOCALE ) );
-            aAny >>= nValue;
-            SetLanguage( (LanguageType) nValue, EE_CHAR_LANGUAGE_CTL );
+            aAny >>= aLocale;
+            SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE_CTL );
 
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ) );
