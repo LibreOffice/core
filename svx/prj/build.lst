@@ -8,6 +8,8 @@ sx	svx\unx\res								get		-	all	sx_ures NULL
 sx	svx\source\inc							get		-	all	sx_sinc NULL
 sx	svx\mac\inc								get		-	all	sx_minc NULL
 sx	svx\sdi									nmake	-	all	sx_sdi NULL
+sx	svx\source\src							nmake	-	all	sx_src NULL
+sx	svx\source\intro						nmake	-	all	sx_intro NULL
 sx	svx\source\items						nmake	-	all	sx_items sx_sdi NULL
 sx	svx\source\xoutdev						nmake	-	all	sx_xout sx_items NULL
 sx	svx\source\editeng						nmake	-	all	sx_eeng NULL
@@ -34,4 +36,4 @@ sx	svx\source\gallery2						nmake	-	all	sx_gall NULL
 sx	svx\source\msfilter						nmake	-	all	sx_msfilt NULL
 sx	svx\source\xml							nmake	-	all	sx_xml NULL
 sx	svx\source\accessibility				nmake	-	all	sx_accessibility NULL
-sx	svx\util								nmake	-	all	sx_util sx_3deng sx_dlg sx_draw sx_properties sx_contact sx_mixer sx_event sx_animation sx_eeng sx_fmcmp sx_form sx_gall sx_items sx_link sx_mnuc sx_msfilt sx_opt sx_outl sx_rtf sx_sdi sx_stbc sx_tbxc sx_undrw sx_unedt sx_xml sx_xout sx_accessibility NULL
+sx	svx\util								nmake	-	all	sx_util sx_3deng sx_dlg sx_draw sx_properties sx_contact sx_mixer sx_event sx_animation sx_eeng sx_fmcmp sx_form sx_gall sx_items sx_link sx_mnuc sx_msfilt sx_opt sx_outl sx_rtf sx_sdi sx_stbc sx_tbxc sx_undrw sx_unedt sx_xml sx_xout sx_accessibility sx_intro sx_src NULL
