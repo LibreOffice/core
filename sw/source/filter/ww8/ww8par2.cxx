@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-11 12:51:28 $
+ *  last change: $Author: cmc $ $Date: 2002-10-30 11:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1791,12 +1791,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
 
         nRows++;
         pActBand->nRows++;
-#if 0
-        WW8_CP nMyStartCp=nStartCp;
-        if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nTable))
-            if (SwWW8ImplReader::ParseTabPos(&aTabPos,pPap))
-                pTabPos = &aTabPos;
-#endif
+
         //Seek our pap to its next block of properties
         WW8PLCFxDesc aRes;
         aRes.pMemPos = 0;
@@ -1810,26 +1805,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         pPap->GetSprms(&aRes);
         pPap->SetDirty(false);
 
-#if 1
-        WW8_CP nMyStartCp=nStartCp;
-        if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nTable))
-            if (SwWW8ImplReader::ParseTabPos(&aTabPos, pPap))
-                pTabPos = &aTabPos;
-
-        aRes.pMemPos = 0;
-        aRes.nStartPos = nStartCp;
-
-        if (!(pPap->SeekPos(aRes.nStartPos)))
-        {
-            aRes.nEndPos = LONG_MAX;
-            pPap->SetDirty(true);
-        }
-        pPap->GetSprms(&aRes);
-        pPap->SetDirty(false);
-#endif
-
-        nStartCp = aRes.nEndPos;
-
+        //Are we at the end of available properties
         if (
             (pPap->Where() == LONG_MAX) ||
             (
@@ -1841,13 +1817,33 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
             break;
         }
 
-
+        //Are we still in a table cell
         pParams = pPap->HasSprm(pIo->TabCellSprm(pIo->nTable));
         const BYTE *pLevel = pPap->HasSprm(0x6649);
         // InTable
         if (!pParams || (1 != *pParams) || (pLevel && (*pLevel <= pIo->nTable)))
             break;
 
+        //Get the end of row new table positioning data
+        WW8_CP nMyStartCp=nStartCp;
+        if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nTable))
+            if (SwWW8ImplReader::ParseTabPos(&aTabPos, pPap))
+                pTabPos = &aTabPos;
+
+        //Move back to this cell
+        aRes.pMemPos = 0;
+        aRes.nStartPos = nStartCp;
+
+        if (!(pPap->SeekPos(aRes.nStartPos)))
+        {
+            aRes.nEndPos = LONG_MAX;
+            pPap->SetDirty(true);
+        }
+        pPap->GetSprms(&aRes);
+        pPap->SetDirty(false);
+
+        //Does this row match up with the last row closely enough to be
+        //considered part of the same table
         bool bStartApo, bStopApo;
         WW8FlyPara *rpNowStyleApo=0;
         pIo->TestApo(bStartApo, bStopApo, rpNowStyleApo, true, false, pTabPos);
@@ -1860,6 +1856,8 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         */
         if (bStartApo || bStopApo)
             break;
+
+        nStartCp = aRes.nEndPos;
     }
     while( 1 );
 
