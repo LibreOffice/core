@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-13 06:23:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 {
     MutexGuard guard(getBridgeMutex());
     XInterface * xIntRoot = (OWeakObject *)this;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     acquire(); // make sure we don't delete us twice because of Reference
     OSL_ASSERT( Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY).get() == xIntRoot );
 #endif
