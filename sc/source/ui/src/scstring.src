@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:03:19 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3633,7 +3633,7 @@ String STR_ACC_FOOTER_NAME
     Text[ polish ] = "Footer";
     Text[ portuguese_brazilian ] = "Footer";
     Text[ japanese ] = "フッタ";
-    Text[ korean ] = "바닥글";
+    Text[ korean ] = "페이지 %1의 바닥글";
     Text[ chinese_simplified ] = "页脚";
     Text[ chinese_traditional ] = "頁尾";
     Text[ turkish ] = "Footer";
@@ -3818,7 +3818,7 @@ String STR_ACC_DATAPILOT_SEL_DESCR
 {
     Text = "Hier sind die Felder aufgelistet, die Sie in einen der drei anderen Bereiche bewegen k�nnen.";
     Text[ english ] = "List the fields that you can drag to one of the other three areas.";
-    Text[ language_user1 ] = "EM Oct 2002: (not \"range\") In the datapilot dialog, description of controls";
+    Text[ language_user1 ] = "EM O; EM Oct 2002: (not \"range\") In the datapilot dialog, description of controls";
     Text[ english_us ] = "Lists the fields that you can drag to one of the other three areas.";
     Text[ portuguese ] = "List the fields that you can drag to one of the other three areas.";
     Text[ russian ] = "List the fields that you can drag to one of the other three areas.";
