@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:14:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1628,39 +1628,34 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
         if(pMedium && pMedium->IsStorage())
         {
             SfxItemSet * pSet = pMedium->GetItemSet();
-//          const SfxPoolItem *pItem = 0;
-//          if( pSet->GetItemState(SID_PASSWORD, TRUE, &pItem) == SFX_ITEM_SET )
-//          {
-//              String aPass( ((const SfxStringItem*)pItem)->GetValue());
-            SvStorage* pStorage = pMedium->GetStorage();
-            if(pStorage)
+          const SfxPoolItem *pItem = 0;
+          if( pSet->GetItemState(SID_PASSWORD, TRUE, &pItem) == SFX_ITEM_SET )
+          {
+            //TODO/MBA: testing
+            String aPass( ((const SfxStringItem*)pItem)->GetValue());
+            if(aPass.Len() == 0)
+                return;
+
+            PasswordEntry* pEntry = m_aPasswordList.First();
+            while(pEntry)
             {
+                if(pEntry->m_aPath == rPath)
+                    break;
 
-                String aPass( pStorage->GetKey(), RTL_TEXTENCODING_ASCII_US );
+                pEntry = m_aPasswordList.Next();
 
-                if(aPass.Len() == 0)
-                    return;
-
-                PasswordEntry* pEntry = m_aPasswordList.First();
-                while(pEntry)
-                {
-                    if(pEntry->m_aPath == rPath)
-                        break;
-
-                    pEntry = m_aPasswordList.Next();
-
-                }
-
-                if(pEntry == NULL)
-                {
-                    pEntry = new PasswordEntry();
-                    pEntry->m_aPath = rPath;
-                    m_aPasswordList.Insert( pEntry );
-                }
-
-                if(pEntry)
-                    pEntry->m_aPassword = aPass;
             }
+
+            if(pEntry == NULL)
+            {
+                pEntry = new PasswordEntry();
+                pEntry->m_aPath = rPath;
+                m_aPasswordList.Insert( pEntry );
+            }
+
+            if(pEntry)
+                pEntry->m_aPassword = aPass;
+          }
         }
     }
 }
