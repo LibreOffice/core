@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-12 10:42:10 $
+ *  last change: $Author: oj $ $Date: 2001-02-13 15:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@
 
 
 #include <algorithm>
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 
 
 using namespace connectivity;
@@ -1929,25 +1933,20 @@ BOOL OResultSet::OpenImpl()
             {
                 (*aIter)->getPropertyValue(PROPERTY_REALNAME) >>= sSelectColumnRealName;
                 if (aCase(sTableColumnName, sSelectColumnRealName))
-                    break;
-            }
-            sal_Bool bBind = aIter != m_xColumns->end();
-                // TRUE -> found the table column within the select columns
+                {
+                    sal_Int32 nSelectColumnPos = aIter - m_xColumns->begin() + 1;
+                        // the getXXX methods are 1-based ...
+                    sal_Int32 nTableColumnPos = i + 1;
+                        // get first table column is the bookmark column ...
+                    m_aColMapping[nSelectColumnPos] = nTableColumnPos;
 
-            if (bBind)
-            {
-                sal_Int32 nSelectColumnPos = aIter - m_xColumns->begin() + 1;
-                    // the getXXX methods are 1-based ...
-                sal_Int32 nTableColumnPos = i + 1;
-                    // get first table column is the bookmark column ...
-                m_aColMapping[nSelectColumnPos] = nTableColumnPos;
+                    aRowIter->setBound(sal_True);
+                    sal_Int32 nType = DataType::OTHER;
+                    if (xTableColumn.is())
+                        xTableColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
+                    aRowIter->setTypeKind(nType);
+                }
             }
-
-            aRowIter->setBound(bBind);
-            sal_Int32 nType = DataType::OTHER;
-            if (xTableColumn.is())
-                xTableColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
-            aRowIter->setTypeKind(nType);
         }
         catch (Exception&)
         {
@@ -2126,12 +2125,12 @@ BOOL OResultSet::OpenImpl()
                             Reference<XPropertySet> xColProp;
                             if(nOrderbyColumnNumber[0] < xIndexes->getCount())
                             {
-                                xIndexes->getByIndex(nOrderbyColumnNumber[0]) >>= xColProp;
+                                ::cppu::extractInterface(xColProp,xIndexes->getByIndex(nOrderbyColumnNumber[0]));
                                 // iterate through the indexes to find the matching column
                                 for(sal_Int32 i=0;i<xIndexes->getCount();++i)
                                 {
                                     Reference<XColumnsSupplier> xIndex;
-                                    xIndexes->getByIndex(i) >>= xIndex;
+                                    ::cppu::extractInterface(xIndex,xIndexes->getByIndex(i));
                                     Reference<XNameAccess> xIndexCols = xIndex->getColumns();
                                     if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(PROPERTY_NAME))))
                                     {
@@ -2598,7 +2597,7 @@ void OResultSet::ParseAssignValues(const ::std::vector< String>& aColumnNameList
     {
         // Parameter hinzufuegen, Typ ... entsprechend der Column, der der Wert zugewiesen wird
         Reference<XPropertySet> xCol;
-        m_xColNames->getByName(aColumnName) >>= xCol;
+        ::cppu::extractInterface(xCol,m_xColNames->getByName(aColumnName));
         sal_Int32 nParameter = -1;
         if(m_xParamColumns.isValid())
         {
@@ -2624,7 +2623,7 @@ void OResultSet::SetAssignValue(const String& aColumnName,
                                    UINT32 nParameter)
 {
     Reference<XPropertySet> xCol;
-    m_xColNames->getByName(aColumnName) >>= xCol;
+    ::cppu::extractInterface(xCol,m_xColNames->getByName(aColumnName));
     sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY)->findColumn(aColumnName);
     // Kommt diese Column ueberhaupt in der Datei vor?
 
@@ -2729,7 +2728,7 @@ UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XPro
     // Parameter-Column aufsetzen:
     sal_Int32 eType = DataType::VARCHAR;
     UINT32 nPrecision = 255;
-    UINT16 nScale = 0;
+    sal_Int32 nScale = 0;
     sal_Int32 nNullable = ColumnValue::NULLABLE;
 
     if (_xCol.is())
@@ -2781,7 +2780,7 @@ void OResultSet::describeParameter()
 
             m_aSQLIterator.getColumnRange(pParseNode,aColName,aTabName);
             Reference<XPropertySet> xCol;
-            xTable->getColumns()->getByName(aColName) >>= xCol;
+            ::cppu::extractInterface(xCol,xTable->getColumns()->getByName(aColName));
             m_xParamColumns->push_back(xCol);
         }
     }
