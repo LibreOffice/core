@@ -16953,3 +16953,7 @@ _real@8@3ffd820c49ba5e354000
 ?setString@SvxUnoTextCursor@@WCM@AAXABVOUString@rtl@@@Z
 ??0?$Sequence@V?$Reference@VXControlModel@awt@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
 ??0BaseReference@uno@star@sun@com@@IAE@PAVXInterface@1234@W4__UnoReference_NoAcquire@1234@@Z
+?SetScriptAttr@SvxRTFParser@@IAEXGAAVSfxItemSet@@AAVSfxPoolItem@@@Z
+?FillWithMimeAndSelectBest@SvxTextEncodingBox@@QAEXXZ
+??0HomogenMatrixLine3@drawing@star@sun@com@@QAE@XZ
+?s_pType_com_sun_star_drawing_HomogenMatrix3@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBUHomogenMatrix3@drawing@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
