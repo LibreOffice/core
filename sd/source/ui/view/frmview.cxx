@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 16:27:23 $
+ *  last change: $Author: ka $ $Date: 2002-04-05 11:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,9 +536,9 @@ void FrameView::Update(SdOptions* pOptions)
     if (pOptions)
     {
         bRuler = pOptions->IsRulerVisible();
-        SetGridVisible( pOptions->GetGridVisible() );
+        SetGridVisible( pOptions->IsGridVisible() );
         SetSnapAngle( pOptions->GetAngle() );
-        SetGridSnap( pOptions->GetUseGridSnap() );
+        SetGridSnap( pOptions->IsUseGridSnap() );
         SetBordSnap( pOptions->IsSnapBorder()  );
         SetHlplSnap( pOptions->IsSnapHelplines() );
         SetOFrmSnap( pOptions->IsSnapFrame() );
