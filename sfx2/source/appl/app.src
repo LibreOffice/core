@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:53:17 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 21:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message[ dutch ] = "Document is reeds geladen en geactiveerd.";
     Message[ chinese_simplified ] = "ÒΡΎ­Χ°ΘλΥβΈφΞΔΌώ²Ά΄¦ΣΪΚΉΣΓΧ΄Μ¬΅£";
     Message[ greek ] = "Το έγγραφο είχε ήδη φορτωθεί και ενεργοποιήθηκε.";
-    Message[ korean ] = "Ή®Ό­°΅ ΐΜΉΜ Ώ­·ΑΐΦ½ΐ΄Ο΄Ω.";
+    Message[ korean ] = "Ή®Ό­΄Β΅΅·ΞµεµΗΎϊ°ν΅΅Θ°ΌΊΘ­µΗΎϊ½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "Belge zaten yόklό ve aηύk.";
     Message[ language_user1 ] = " ";
 };
@@ -118,7 +118,7 @@ ErrorBox RID_CANTLOADDOC_DLG
     Message[ dutch ] = "Het document kan niet worden geopend.";
     Message[ chinese_simplified ] = "Ξή·¨Χ°ΘλΥβΈφΞΔµµ΅£";
     Message[ greek ] = "Δεν είναι δυνατόν να ανοιχθεί το έγγραφο.";
-    Message[ korean ] = "Ή®Ό­Έ¦ Ώ­ Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Message[ korean ] = "Ή®Ό­Έ¦ ·ΞµεΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "Belge yόklenemiyor.";
     Message[ language_user1 ] = " ";
 };
@@ -149,7 +149,7 @@ ErrorBox MSG_ERR_READ_CFG
     Message[ dutch ] = "Fout bij het lezen van het configuratiebestand.";
     Message[ chinese_simplified ] = "ΤΪ¶ΑΘ΅ΕδΦΓΞΔΌώΚ±·ΆΙϊ΄νΞσ΅£";
     Message[ greek ] = "Σφάλμα κατά την ανάγνωση του αρχείου διαμόρφωσης";
-    Message[ korean ] = "±ΈΌΊ ΖΔΐΟ ΐΠ±β Ώΐ·ω.";
+    Message[ korean ] = "±ΈΌΊ ΖΔΐΟ ΐΠ±β½ΓΏ΅ Ώΐ·ω.";
     Message[ turkish ] = "Konfigόrasyon dosyasύ okunurken hata oluώtu.";
     Message[ language_user1 ] = " ";
 };
@@ -180,7 +180,7 @@ ErrorBox MSG_ERR_WRITE_CFG
     Message[ dutch ] = "Fout bij het schrijven van het configuratiebestand.";
     Message[ chinese_simplified ] = "ΤΪΠ΄ΘλΕδΦΓΞΔΌώΚ±·Ά³φ΄νΞσ΅£";
     Message[ greek ] = "Σφάλμα κατά την εγγραφή του αρχείου διαμόρφωσης.";
-    Message[ korean ] = "±ΈΌΊ ΖΔΐΟ Ύ²±β Ώΐ·ω.";
+    Message[ korean ] = "±ΈΌΊ ΖΔΐΟ Ύ²±β½ΓΏ΅΅΅Ώΐ·ω.";
     Message[ turkish ] = "Konfigόrasyon dosyasύna yazύlύrken hata oluώtu.";
     Message[ language_user1 ] = " ";
 };
@@ -273,7 +273,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message[ dutch ] = "Verkeerde versie van configuratiebestand.";
     Message[ chinese_simplified ] = "ΕδΦΓΞΔΌώ°ζ±Ύ΄νΞσ΅£";
     Message[ greek ] = "Λάθος έκδοση του αρχείο διαμόρφωσης.";
-    Message[ korean ] = "±ΈΌΊ ΖΔΐΟΐΜ ΐίΈψµΘ ΉφΑ―ΐ» ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω.";
+    Message[ korean ] = "±ΈΌΊ ΖΔΐΟΐΗ ΉφΐόΐΜ΅΅Ζ²Έ³΄Ο΄Ω.";
     Message[ turkish ] = "Konfigόrasyon dosyasύnύn sόrόmό yanlύώ.";
     Message[ language_user1 ] = " ";
 };
@@ -304,7 +304,7 @@ ErrorBox MSG_ERR_WRITE_SBL
     Message[ dutch ] = "Fout bij het schrijven van de BASIC-bibliotheek in\n'@'.";
     Message[ chinese_simplified ] = "BASIC ΏβΤΪΠ΄Θλ\n'@' Κ±·ΆΙϊ΄νΞσ΅£";
     Message[ greek ] = "Σφάλμα κατά την εγγραφή της βιβλιοθήκης BASIC στο\n'@'.";
-    Message[ korean ] = "BASIC ¶σΐΜΊκ·―Έ®\n'@'Ώ΅ ±β·Ο Ώΐ·ω .";
+    Message[ korean ] = "BASIC ¶σΐΜΊκ·―Έ®\n'@'Ώ΅ Ύ²±β½ΓΏ΅ Ώΐ·ω .";
     Message[ turkish ] = "BASIC kitaplύπύ, \n'@' iηine kaydedilirken hata oluώtu.";
     Message[ language_user1 ] = " ";
 };
@@ -333,7 +333,7 @@ ErrorBox MSG_SIGNAL
     Message[ dutch ] = "Er is een onverwachte programmafout opgetreden!\nU kunt nu op eigen risico proberen,\nalle geopende documenten op te slaan!\n\nWilt u proberen uw werk op te slaan voordat de applicatie wordt beλindigd?";
     Message[ chinese_simplified ] = "·ΆΙϊΑΛÒ»ΈφÒβΝβµΔ³ΜΠς΄νΞσ£΅\nΔϊΟΦΤΪΏΙÒΤ³ΆΚΤ±£΄ζΛωΣΠ±»΄ςΏªµΔΞΔΌώ£΅\nΔϊÒªΤΪΉΨ±ΥΥβΈφΣ¦ΣΓ³ΜΠςΦ®Η°±£΄ζΛωΣΠµΔΞΔΌώΒπ£Ώ";
     Message[ greek ] = "Παρουσιάστηκε μη αναμενόμενο σφάλμα εφαρμογής!\n\nΘέλετε να γίνει επιχείρηση (με δική σας ευθύνη) να αποθηκευτούν όλα τα ανοιχτά έγγραφα πριν τερματιστεί η εφαρμογή;";
-    Message[ korean ] = "ΏΉ±βΔ΅ ΎΚΐΊ ΐΐΏλ ΗΑ·Ξ±Χ·¥ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.\n\nΑφ±έ ΐ§Ηθΐ» Ή«Έ¨Ύ²°ν Έπµη Ώ­Έ° Ή®Ό­ΐΗ ΐϊΐεΐ» ½ΓµµΗΨ ΊΌ Όφ ΐΦ½ΐ΄Ο΄Ω. ΐΐΏλ ΗΑ·Ξ±Χ·¥ΐ» ΑΎ·αΗΟ±β ΐόΏ΅ ΐΫΎχΗΡ °ΝΐΗ ΐϊΐεΐ» ½ΓµµΗΨ ΊΈ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "ΏΉ±βΔ΅ ΎΚΐΊ ΐΐΏλΗΑ·Ξ±Χ·¥ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.\n\nΑφ±έ »ηΏλΐΪΐΗ΅΅Γ¥ΐΣΗΟΏ΅΅΅Ώ­Έ° Έπµη΅΅Ή®Ό­ΐΗ ΐϊΐεΐ» ½ΓµµΗΨ ΊΌ Όφ ΐΦ½ΐ΄Ο΄Ω. ΐΐΏλΗΑ·Ξ±Χ·¥ΐ» ΑΎ·αΗΟ±β ΐόΏ΅ ΐΫΎχΗΡ °ΝΐΗ ΐϊΐεΐ» ½ΓµµΗΨ ΊΈ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Beklenmeyen bir program hatasύ oluώtu!\nήu an aηύk olan tόm belgeleri\nkaydetmeyi deneyebilirsiniz!\n\nUygulama kapatύlmadan φnce belgeleriniz kaydedilmeye ηalύώύlsύn mύ?";
     Message[ language_user1 ] = " ";
 };
@@ -431,7 +431,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
     Message[ chinese_simplified ] = "ΥζΚΗ·Η³£±§ΗΈ£¬ΔϊµΔ²ΩΧχÒύ·ΆΑΛÒ»ΈφΞή·¨ΕΕ³ύµΔ΄νΞσ΅£\nΔϊΈΥ²ΕΠήΈΔΉύµΔΞΔΌώÒΡΎ­±»±£΄ζ΅£\nΤΪΟΒÒ»΄ΞΖτ¶―³ΜΠςΚ±ΊάΏΙΔάΦΨΠΒ»ΦΈ΄ΥβΠ©ΞΔΌώ΅£";
     Message[ greek ] = "Παρουσιάστηκε κάποιο ανεπανόρθωτο σφάλμα.\n\nΌλα τα τροποποιημένα αρχεία αποθηκεύτηκαν\nώστε να είναι δυνατή (πιθανότατα) η επαναφορά τους\nμε την επόμενη εκκίνηση του προγράμματος.";
-    Message[ korean ] = "Α¦°ΕΗÒ Όφ Ύψ΄Β Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.\n\n ΗΟΑφΈΈ Ί―°ζµΘ  Έπµη ΖΔΐΟΐΊ \nΐϊΐεµΗΎϊΐΈΉΗ·Ξ,  ΄Ωΐ½ \nΗΑ·Ξ±Χ·¥ ½ΓΐΫ½ΓΏ΅΄Β ΊΉΏψµΙ Όφ ΐΦΐ» °ΝΐΤ΄Ο΄Ω.";
+    Message[ korean ] = "Α¦°ΕΗÒ Όφ Ύψ΄Β Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.\n\n ΗΟΑφΈΈ Ί―°ζµΘ  Έπµη ΖΔΐΟΐΊ \nΐϊΐεµΗΎϊΐΈΉΗ·Ξ,  ΄Ωΐ½ \nΗΑ·Ξ±Χ·¥ ½ΓΐΫ½ΓΏ΅΄Β ΊΉ±ΈµΙ Όφ ΐΦΐ» °ΝΐΤ΄Ο΄Ω.";
     Message[ turkish ] = "Dόzeltilemeyen bir hata oluώtu.\n\nDeπiώtirilen tόm dosyalar\nkaydedildi ve muhtemelen uygulama yeniden baώlatύldύπύnda\nkurtarύlabilecek.";
     Message[ language_user1 ] = " ";
 };
@@ -460,7 +460,7 @@ WarningBox RID_WARN_POST_MAILTO
     Message[ dutch ] = "Een formulier moet per e-mail gestuurd worden.\nDaardoor wordt uw e-mail adres door de ontvanger bekend.";
     Message[ chinese_simplified ] = "Σ¦ΈΓ½θΦϊµηΧΣΣΚΌώΌΔ·Ά±νµ¥΅£\nΥβΡωΔϊµΔµηΧΣΣΚΌώµΨΦ·Ò²ΎΝ΄«µέΈψΑΛΚΥΌώΘΛ΅£";
     Message[ greek ] = "Πρόκειται να αποσταλλεί μια φόρμα μέσω e-mail.\nΠροσέξτε ότι σε αυτή τη περίπτωση γνωστοποιείται η διεύθυνση σας στον παραλήπτη";
-    Message[ korean ] = "Ύη½ΔΐΊ ΐόΐΪΏμΖνΐΈ·Ξ ΊΈ³»Αϊ°Ν ΐΤ΄Ο΄Ω .\n Αο Ήή΄Β »η¶χΏ΅°Τ ΄η½ΕΐΗ ΐόΐΪΏμΖν ΑΦΌÒ°΅ ΊΈΏ© Αϊ°Ν ΐΤ΄Ο΄Ω.";
+    Message[ korean ] = "Ύη½ΔΐΊ  E-Mail·Ξ ΊΈ³»Αϊ°Ν ΐΤ΄Ο΄Ω .\n Αο Ήή΄Β »η¶χΏ΅°Τ ±ΝΗΟΐΗ £Ε£­£ν£α£ι£μ ΑΦΌÒ°΅ ΎΛ·ΑΑφ°ΤµΛ΄Ο΄Ω.";
     Message[ turkish ] = "E-posta ile form gφnderilecek.\nBu ώekilde alύcύ e-posta adresinizi de gφrecektir.";
     Message[ language_user1 ] = " ";
 };
@@ -514,7 +514,7 @@ String STR_RECOVER_QUERY
     Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
     Text[ chinese_simplified ] = "ΔϊÒªΠήΈ΄ΥβΈφΞΔΌώ \"$1\" Βπ£Ώ";
     Text[ greek ] = "Να γίνει επαναφορά του αρχείου \"$1\";";
-    Text[ korean ] = "ΖΔΐΟ \"$1\"ΐ» ΊΉ±ΈΗΨΎί ΗΥ΄Ο±ξ?";
+    Text[ korean ] = "ΖΔΐΟ \"$1\"ΐ»£¨Έ¦£© ΊΉ±ΈΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "\"$1\" dosyasύ geri getirilsin mi?";
     Text[ language_user1 ] = " ";
 };
@@ -735,14 +735,14 @@ String GID_MATH
     Text [ dutch ] = "Math" ;
     Text [ spanish ] = "Math" ;
     Text [ english_us ] = "Math" ;
-    Text[ chinese_simplified ] = "ΚύΡ§";
+    Text[ chinese_simplified ] = "Math";
     Text[ russian ] = "Math";
     Text[ polish ] = "Math";
     Text[ japanese ] = "”w";
     Text[ chinese_traditional ] = "ΌΖΎΗ";
     Text[ arabic ] = "Math";
     Text[ dutch ] = "Math";
-    Text[ chinese_simplified ] = "ΚύΡ§";
+    Text[ chinese_simplified ] = "Math";
     Text[ greek ] = "Math";
     Text[ korean ] = "Math";
     Text[ turkish ] = "Math";
@@ -825,7 +825,7 @@ String GID_FORMAT
     Text[ dutch ] = "Formaat";
     Text[ chinese_simplified ] = "ΈρΚ½";
     Text[ greek ] = "Μορφή";
-    Text[ korean ] = "Ό­½Δ";
+    Text[ korean ] = "ΖχΈΛ";
     Text[ turkish ] = "Format";
     Text[ language_user1 ] = " ";
 };
@@ -960,7 +960,7 @@ String GID_TABLE
     Text[ dutch ] = "Tabel";
     Text[ chinese_simplified ] = "±νΈρ";
     Text[ greek ] = "Πίνακας";
-    Text[ korean ] = "ΕΧΐΜΊν";
+    Text[ korean ] = "Η¥";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
 };
@@ -1086,14 +1086,14 @@ String GID_CHART
     Text [ danish ] = "Diagram" ;
     Text [ portuguese ] = "Chart" ;
     Text [ portuguese_brazilian ] = "Chart" ;
-    Text[ chinese_simplified ] = "ΝΌ±ν";
+    Text[ chinese_simplified ] = "Chart";
     Text[ russian ] = "Δθΰγπΰμμΰ";
     Text[ polish ] = "Wykres";
     Text[ japanese ] = "ΈήΧΜ";
     Text[ chinese_traditional ] = "ΉΟªν";
     Text[ arabic ] = "ΡΣγ ΘνΗδν";
     Text[ dutch ] = "Chart";
-    Text[ chinese_simplified ] = "ΝΌ±ν";
+    Text[ chinese_simplified ] = "Chart";
     Text[ greek ] = "Διάγραμμα";
     Text[ korean ] = "ΒχΖ®";
     Text[ turkish ] = "ήema";
@@ -1378,7 +1378,7 @@ TabDialog SID_OPTIONS
                 Text[ dutch ] = "Spellingcontrole";
                 Text[ chinese_simplified ] = "Ζ΄Π΄Όμ²ι";
                 Text[ greek ] = "Ορθογραφικός έλεγχος";
-                Text[ korean ] = "ΈΒΓγΉύ";
+                Text[ korean ] = "ΈΒΓγΉύ°Λ»η";
                 Text[ turkish ] = "Yazύm denetimi";
                 Text[ language_user1 ] = " ";
             };
@@ -1422,8 +1422,8 @@ InfoBox MSG_CANT_QUIT
     Message[ dutch ] = "De applicatie kan op dit moment niet worden beλindigd.\nWacht tot alle drukopdrachten en/of\nOLE-activiteiten zijn beλindigd en \nsluit alle dialogen.";
     Message[ chinese_simplified ] = "ΟΦΤΪΞή·¨½αΚψΥβΈφΣ¦ΣΓ³ΜΠς΅£\nΗλΔϊΙΤµΘΦ±µ½³ΜΠςΝκ³ΙΛωΣΠ΄ςΣ΅ΘΞΞρ»ςOLEΌ¤»ξΧ΄Μ¬½αΚψ£¬\nΘ»ΊσΤΩΉΨ±ΥΛωΣΠ¶Τ»°Ώς΅£";
     Message[ greek ] = "Προς το παρόν είναι αδύνατον να τερματιστεί αυτή η εφαρμογή.\nΠαρακαλώ περιμένετε μέχρι να εκτελεστούν όλες οι εργασίες εκτύπωσης και/ή\nοι ενέργειες του OLE και κλείστε όλους τους διαλόγους.";
-    Message[ korean ] = "ΐΐΏλ ΗΑ·Ξ±Χ·¥ΐ» Ηφΐη ΑΎ·αΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.\nΐΞΌβ ΐΫΎχΐΜ ΈπµΞ ³΅³― ¶§±ξΑφ ±ΧΈ®°ν/¶Η΄Β \nOLE°΅ Θ°ΌΊΘ­µΙ ¶§±ξΑφ ±β΄Ω·Θ΄Ω°΅ Έπµη ΄λΘ­»σΐΪΈ¦ ΄έΐΈ½Κ½ΓΏΐ.";
-    Message[ turkish ] = "ήu an uygulamadan ηύkύlamύyor.\nTόm yazdύrma iώlerinin ve/veya\nOLE iώlemlerinin bitmesini bekleyip tόm diyaloglarύ kapatύnύz.";
+    Message[ korean ] = "ΐΐΏλΗΑ·Ξ±Χ·¥ΐ» Ηφΐη ΑΎ·αΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.\nΐΞΌβ ΐΫΎχΐΜ ΈπµΞ ³΅³― ¶§±ξΑφ ±ΧΈ®°ν/¶Η΄Β \nOLE°΅ Θ°ΌΊΘ­µΙ ¶§±ξΑφ ±β΄Ω·Θ΄Ω°΅ Έπµη ΄λΘ­»σΐΪΈ¦ ΄έΐΈ½Κ½ΓΏΐ.";
+    Message[ turkish ] = "ήu an uygulamadan ηύkύlamύyor.\nTόm yazdύrma iώlerinin ve/veya\nOLE iώlemlerinin bitmesini bekleyip tόm pencereleri kapatύn.";
     Message[ language_user1 ] = " ";
 };
 
@@ -1453,7 +1453,7 @@ QueryBox MSG_IS_SERVER
     Message[ dutch ] = "Deze toepassing is nog actief als object- of afdrukserver.\nToch afsluiten ?";
     Message[ chinese_simplified ] = "ΥβΈφΣ¦ΣΓ³ΜΠςΧχΞª¶ΤΟσ»ς΄ςΣ΅·ώΞρΖχ»Ή΄¦ΣΪΌ¤»ξΧ΄Μ¬΅£\nΔϊ»ΉΚΗÒªΉΨ±ΥΛό?";
     Message[ greek ] = "Η εφαρμογή είναι ακόμη ενεργή ως διακομιστής αντικειμένου ή εκτύπωσης.\nΘέλετε να τερματιστεί;";
-    Message[ korean ] = "°³ΓΌ¶Η΄Β ΗΑΈ°ΕΝ Ό­Ήφ·ΞΌ­ ΐΜ ΐΐΏλΗΑ·Ξ±Χ·¥ΐΊ Θ°ΌΊΘ­µΗΎξ ΐΦ½ΐ΄Ο΄Ω.\n»θΑ¦ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "°³ΓΌ¶Η΄Β ΗΑΈ°ΕΝ Ό­Ήφ·ΞΌ­ ΐΜ ΐΐΏλΗΑ·Ξ±Χ·¥ΐΊ Θ°ΌΊΘ­µΗΎξ ΐΦ½ΐ΄Ο΄Ω.\n±Χ·΅µµ΅΅΄έΐΈ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Uygulama ώu an nesne ya da yazdύrma sunucusu olarak ηalύώύyor.\nYine de kapatύlsύn mύ?";
     Message[ language_user1 ] = " ";
 };
@@ -1480,7 +1480,7 @@ String STR_NODOUBLE
     Text[ dutch ] = "%PRODUCTNAME kan maar ιιn keer tegelijk worden gestart.";
     Text[ chinese_simplified ] = "Ξή·¨Ν¬Κ±¶ΰ΄ΞΖτ¶― %PRODUCTNAME ΅£";
     Text[ greek ] = "Η διαδικασία εκκίνησης του %PRODUCTNAME δεν μπορεί να πραγματοποιηθεί περισσότερες από μια φορά.";
-    Text[ korean ] = "%PRODUCTNAME΄Β ΗΡΉψΐΜ»σ ½ΓΐΫµΗΑφ ΈψΗΥ΄Ο΄Ω .";
+    Text[ korean ] = "%PRODUCTNAMEΐΊ£¨΄Β£© ΗΡΉψ΅΅ΐΜ»σ ½ΓΐΫµΗΑφ ΎΚ½ΐ΄Ο΄Ω .";
     Text[ turkish ] = "%PRODUCTNAME iηin birden fazla oturum aηύlamaz.";
     Text[ language_user1 ] = " ";
 };
@@ -1534,7 +1534,7 @@ String STR_NOMODUL
     Text[ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is.";
     Text[ chinese_simplified ] = "ΘηΉϋ%PRODUCTNAME Desktop΄¦ΣΪΌ¤»ξΧ΄Μ¬\n£¬Σ¦ΣΓ³ΜΠςµΔΔ£Ώι²»ΔάΉ»µ±ΧχΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠ΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να εκτελεστούν οι λειτουργικές μονάδες εφαρμογών\nόταν είναι ενεργοποιημένο το StarDesktop.";
-    Text[ korean ] = "%PRODUCTNAME ΉΩΕΑΘ­ΈιΐΜ Θ°ΌΊΘ­µΗΎξ ΐΦΐΈΈι.\n ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΊ ΐΐΏλΗΑ·Ξ±Χ·¥ \n·ΞΌ­ ½ΓΐΫµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "StarDesktopΐΜ Θ°ΌΊΘ­µΗΎξ ΐΦΐΈΈι.\n ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΊ ΐΐΏλΗΑ·Ξ±Χ·¥ \n·ΞΌ­ ½ΓΐΫµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Uygulama modόlleri, %PRODUCTNAME masaόstό etkinken uygulama olarak\nηalύώtύrύlamaz.";
     Text[ language_user1 ] = " ";
 };
@@ -1561,7 +1561,7 @@ String STR_NOOFFICE
     Text[ dutch ] = "%PRODUCTNAME Desktop kan niet worden gestart\nals een %PRODUCTNAME Writer applicatiemodule als\napplicatie werd gestart.";
     Text[ chinese_simplified ] = "ΤΪ%PRODUCTNAME WriterΣ¦ΣΓ³ΜΠςΔ£Ώι±»µ±Χχ\nΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠΚ±Ξή·¨Ζτ¶―%PRODUCTNAME Desktop ΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να εκκινήσει το %PRODUCTNAME Desktop\nαν εκκίνησε η λειτουργική μονάδα της εφαρμογής\n του %PRODUCTNAME Writer ως εφαρνογή.";
-    Text[ korean ] = "StarWriter  ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΜ \nΐΐΏλΗΑ·Ξ±Χ·¥ΐΈ·Ξ ½ΓΐΫµΗΎϊΐΈΈι, StarDesktopΐΊ ½ΓΐΫµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "StarWriter  ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΜ \nΐΐΏλΗΑ·Ξ±Χ·¥ΐΈ·ΞΌ­ ½ΓΐΫµΗΎϊΐΈΈι, StarDesktopΐΊ ½ΓΐΫµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "%PRODUCTNAME masaόstό, %PRODUCTNAME Writer uygulama modulό\nuygulama olarak ηalύώtύrύlmύώsa baώlatύlamaz.";
     Text[ language_user1 ] = " ";
 };
@@ -1676,7 +1676,7 @@ String STR_RESEXCEPTION
     TEXT[ dutch ] = "Er ontbreken belangrijke programmaonderdelen. Controleer of de installatie juist is doorgevoerd.";
     TEXT[ chinese_simplified ] = "Γ»ΣΠΥÒµ½±ΨÒªµΔ³ΜΠς²ΏΌώ΅£ΗλΌμ²ιΔϊµΔ°²Χ°΅£";
     TEXT[ greek ] = "Δεν βρέθηκαν ορισμένα σημαντικά τμήματα του προγράμματος. Παρακαλώ ελέγξτε την εγκατάστασή σας.";
-    TEXT[ korean ] = "»η¶σΑψ ΖΔΐΟΐΜ ΐΦ½ΐ΄Ο΄Ω. Ό³Α¤ΐ» Θ®ΐΞΗΟ½Κ½ΓΏΐ.";
+    TEXT[ korean ] = "ΑίΏδΗΡ΅΅ΗΑ·Ξ±Χ·¥ΊΞΊΠΐ»΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω. Ό³Α¤ΐ» °Λ»ηΗΟ½Κ½ΓΏΐ.";
     TEXT[ turkish ] = "Φnemli program φπeleri bulunamadύ. Kurulumunuzu kontrol edin.";
     TEXT[ language_user1 ] = " ";
 };
@@ -1703,7 +1703,7 @@ String STR_DOUBLEEXCEPTION
     TEXT[ dutch ] = "Tijdens het opslaan van alarmgegevens is nog een systeemfout opgetreden.\nDe gegevens werden evtl. niet compleet opgeslagen.";
     TEXT[ chinese_simplified ] = "ΤΪΠήΈ΄΄ζΕΜΚ±·ΆΙϊΑΛÒ»Έφ΄νΞσ΅£\nΚύΎέ΄ζΕΜΊάΣΠΏΙΔά²»ΝκΥϋ΅£";
     TEXT[ greek ] = "Κατά την αποθήκευση ασφαλείας των δεδομένων εμφανίστηκε και άλλο σφάλμα συστήματος.\nΠιθανών να μην ολοκληρώθηκε η αποθήκευση ασφαλείας.";
-    TEXT[ korean ] = "ΊΉ±ΈΈ¦ ΐϊΐεΗΟ΄Β µΏΎΘ ΄ΩΈ¥ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.\nΎΖΈ¶µµ, µ¥ΐΜΕΝ°΅ ΏΟΐόΘχ ΐϊΐεµΗΑφ ΎΚΎÒΐ» °ΝΐΤ΄Ο΄Ω.";
+    TEXT[ korean ] = "ΎΛ¶χµ¥ΐΜΕΝ ΐϊΐε½ΓΏ΅ ΄ΩΈ¥ ½Γ½ΊΕΫΏΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.\n µ¥ΐΜΕΝ°΅ ΏΟΐόΘχ ΐϊΐεµΗΑφ ΎΚΎÒΐ»΅΅Όφ΅΅ΐΦ½ΐ΄Ο΄Ω.";
     TEXT[ turkish ] = "Alarm verileri kaydύ sύrasύnda baώka bir sistem hatasύ oluώtu.\nVeriler tam olarak kaydedilmemiώ olabilir.";
     TEXT[ language_user1 ] = " ";
 };
@@ -1759,7 +1759,7 @@ ErrorBox MSG_ERR_SOINIT
     Message[ dutch ] = "Fout bij de initialisatie van het objectsysteem.";
     Message[ chinese_simplified ] = "ΤΪ³υΚΌ»―¶ΤΟσΟµΝ³Κ±·ΆΙϊ΄νΞσ΅£";
     Message[ greek ] = "Σφάλμα κατά την αρχικοποίηση του συστήματος αντικειμένων.";
-    Message[ korean ] = "°΄ΓΌ ½Γ½ΊΕΫ ΓΚ±βΘ­  Ώΐ·ω.";
+    Message[ korean ] = "°³ΓΌ ½Γ½ΊΕΫ ΓΚ±βΘ­½ΓΏ΅  Ώΐ·ω.";
     Message[ turkish ] = "Nesne sistemi baώlatύlύrken hata oluώtu.";
     Message[ language_user1 ] = " ";
 };
@@ -1788,7 +1788,7 @@ String MSG_IOERR_FILE_NOT_FOUND
     Text[ dutch ] = "Bestand $(FILE) bestaat niet.";
     Text[ chinese_simplified ] = "ΞΔΌώ$(FILE)²»΄ζΤΪ΅£";
     Text[ greek ] = "Το αρχείο $(FILE) δεν υπάρχει.";
-    Text[ korean ] = "ΖΔΐΟ $(FILE) °΅ ΑΈΐηΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΖΔΐΟ $(FILE)ΐΊ£¨΄Β£© ΑΈΐηΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "$(FILE) dosyasύ mevcut deπil.";
     Text[ language_user1 ] = " ";
 };
@@ -1846,7 +1846,7 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend \nomdat er teveel bestanden gelijktijdig geopend zijn.\nSluit enkele bestanden en probeert u het opnieuw.";
     Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΞΔΌώ$(FILE) £¬\nÒςΞªÒΡΎ­΄ςΏªΑΛΜ«¶ΰµΔΞΔΌώ΅£\nΗλΉΨ±ΥÒ»Π©ΞΔΌώ£¬Θ»ΊσΤΪΦΨΠΒ³ΆΚΤ΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να ανοιχθεί το αρχείο $(FILE),\nεπειδή έχουν ανοιχτεί πάρα πολλά αρχεία ταυτόχρονα.\nΠαρακαλώ κλείστε μερικά από αυτά τα αρχεία και ξαναπροσπαθήστε.";
-    Text[ korean ] = "Ηφΐη ³ΚΉ« ΈΉΐΊ ΖΔΐΟΐΜ Ώ­·Α ΐΦ±β ¶§Ή®Ώ΅ \nΖΔΐΟ$(FILE)ΐ» Ώ­Αφ ΈψΗί½ΐ΄Ο΄Ω. \nΈξ °΅Αφ ΖΔΐΟΐ» ΄έ°ν »υ·Ξ ½ΓµµΗΟ½Κ½ΓΏΐ.";
+    Text[ korean ] = "Ηφΐη ³ΚΉ« ΈΉΐΊ ΖΔΐΟΐΜ Ώ­·Α ΐΦ±β ¶§Ή®Ώ΅ \nΖΔΐΟ$(FILE)ΐ» Ώ­Αφ ΈψΗί½ΐ΄Ο΄Ω. \nΐΟΊΞ ΖΔΐΟΐ» ΄έ°ν »υ·Ξ ½ΓµµΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "$(FILE) dosyasύ, ώu an ηok fazla dosya aηύk olduπu\niηin aηύlamύyor.\nBirkaη dosyayύ kapatύp yeniden deneyin.";
     Text[ language_user1 ] = " ";
 };
@@ -1875,7 +1875,7 @@ String MSG_IOERR_ACCESS_DENIED
     Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend omdat toegangsrechten ontbreken.";
     Text[ chinese_simplified ] = "ÒςΞªΓ»ΣΠ¶ΑΘ΅Θ¨ΐϋ¶ψ·¨¶ΑΘ΅ΞΔΌώ$(FILE)΅£";
     Text[ greek ] = "Η πρόσβαση στο αρχείο $(FILE) δεν ήταν δυνατή, λόγω έλλειψης δικαιωμάτων πρόσβασης.";
-    Text[ korean ] = "ΑΆ±Ω ±ΗΗΡΐΗ ΊΞΑ·ΐΈ·Ξ ΖΔΐΟ $(FILE) ΐΜ Ώ­Έ®Αφ ΎΚ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΑΆ±Ω ±ΗΗΡΐΜ΅΅ΎψΎξΌ­ ΖΔΐΟ $(FILE)ΐ» Ώ­Αφ ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "$(FILE) dosyasύ, eriώim haklarύnύn olmamasύ nedeniyle aηύlamadύ.";
     Text[ language_user1 ] = " ";
 };
@@ -1904,7 +1904,7 @@ String MSG_IOERR_INVALID_ACCESS
     Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend.";
     Text[ chinese_simplified ] = "Ξή·¨¶ΑΘ΅ΞΔΌώ $(FILE) ΅£";
     Text[ greek ] = "Δεν είναι δυνατή η πρόσβαση στο αρχείο $(FILE).";
-    Text[ korean ] = "ΖΔΐΟ $(FILE) Ώ΅ ΑΆ±ΩµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΖΔΐΟ $(FILE) Ώ΅ ΑΆ±ΩΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "$(FILE) dosyasύna eriώilemedi.";
     Text[ language_user1 ] = " ";
 };
@@ -1962,7 +1962,7 @@ String MSG_IOERR_CANNOT_MAKE
     Text[ dutch ] = "Bestand $(FILE) kon niet worden gemaakt.";
     Text[ chinese_simplified ] = "Ξή·¨½¨ΑΆΞΔΌώ $(FILE)΅£";
     Text[ greek ] = "Δεν ήταν δυνατόν να δημιουργηθεί το αρχείο $(FILE).";
-    Text[ korean ] = "ΖΔΐΟ $(FILE) °΅ ΈΈµιΎξΑφΑφ ΎΚ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΖΔΐΟ $(FILE) ΐ»£¨Έ¦£©ΈΈµιΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "$(FILE) dosyasύ oluώturulamadύ.";
     Text[ language_user1 ] = " ";
 };
@@ -1991,7 +1991,7 @@ String MSG_IOERR_SHARING
     Text[ dutch ] = "Fout bij gelijktijdige toegang tot $(FILE).";
     Text[ chinese_simplified ] = "ΤΪΝ¬Κ±¶ΑΘ΅ΞΔΌώ $(FILE) Κ±·ΆΙϊ΄νΞσ΅£";
     Text[ greek ] = "Σφάλμα κατά την κοινή πρόσβαση στο αρχείο $(FILE).";
-    Text[ korean ] = "$(FILE)Ώ΅ °ψΐ― ΑΆ±ΩΏ΅ΐΗΗΡ Ώΐ·ω .";
+    Text[ korean ] = "$(FILE)Ώ΅ °ψΐ― ΑΆ±Ω½ΓΏ΅ Ώΐ·ω .";
     Text[ turkish ] = "$(FILE) dosyasύna paylaώύlan eriώimde hata oluώtu.";
     Text[ language_user1 ] = " ";
 };
@@ -2039,7 +2039,7 @@ String MSG_IOERR_GENERAL
     Text[ dutch ] = "Algemene in-/uitvoerfout bij toegang op $(FILE).";
     Text[ chinese_simplified ] = "ΤΪ¶ΑΘ΅$(FILE)Κ±·ΆΙϊÒ»ΈφÒ»°γµΔΚδΘλ/Κδ³φ΄νΞσ΅£";
     Text[ greek ] = "Γενικό σφάλμα εισαγωγής/εξαγωγής κατά την πρόσβαση στο $(FILE).";
-    Text[ korean ] = "ΖΔΐΟ $(FILE) ΑΆ±Ω ΐΟΉέ ΐΤΓβ·Β Ώΐ·ω .";
+    Text[ korean ] = "ΖΔΐΟ $(FILE)Ώ΅ ΑΆ±Ω½ΓΏ΅ ΐΟΉέ ΐΤ£―Γβ·Β Ώΐ·ω .";
     Text[ turkish ] = "$(FILE) dosyasύna eriώimde genel girdi/ηύktύ hatasύ oluώtu..";
     Text[ language_user1 ] = " ";
 };
@@ -2241,7 +2241,7 @@ String STR_EVENT_CLOSEAPP
     Text[ dutch ] = "Programma beλindigen";
     Text[ chinese_simplified ] = "½αΚψ³ΜΠς";
     Text[ greek ] = "Τερματισμός προγράμματος";
-    Text[ korean ] = "ΐΐΏλΗΑ·Ξ±Χ·¥ ΄έ±β";
+    Text[ korean ] = "ΐΐΏλΗΑ·Ξ±Χ·¥ ³΅";
     Text[ turkish ] = "Programdan ηύkύώ";
     Text[ language_user1 ] = " ";
 };
@@ -2576,7 +2576,7 @@ String STR_ERR_NOTEMPLATE
     Text[ dutch ] = "De geselecteerde sjabloon heeft een verkeerd formaat";
     Text[ chinese_simplified ] = "ΡωΚ½ΈρΚ½΄νΞσ΅£";
     Text[ greek ] = "Το πρότυπο έχει λάθος μορφή";
-    Text[ korean ] = "Ό±ΕΓµΘ ΕΫΗΓΈ΄ΐΊ Ζ²Έ°  Ό­½Δΐ» °΅Αφ°ν ΐΦ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΕΫΗΓΈ΄ΐΊ ΖχΈΛΐΜ΅΅Ζ²Έ³΄Ο΄Ω";
     Text[ turkish ] = "Seηilen ώablonun formatύ yanlύώ";
     Text[ language_user1 ] = " ";
 };
@@ -2603,7 +2603,7 @@ String STR_ERR_NOFILE
     Text[ dutch ] = "Het bestand $ kan niet worden geopend.";
     Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΞΔΌώ $ ΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να ανοιχθεί το αρχείο $.";
-    Text[ korean ] = "ΖΔΐΟ $Έ¦ Ώ­Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΖΔΐΟ $ΐ»£¨Έ¦£© Ώ­Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "$ dosyasύ aηύlamύyor.";
     Text[ language_user1 ] = " ";
 };
@@ -2685,7 +2685,7 @@ String STR_EXTHELPSTATUS
     Text[ dutch ] = "Kies een optie of klik om een onderwerp te kiezen.";
     Text[ chinese_simplified ] = "ΗλΔϊΡ΅Τρ»ςΥί°΄»χÒ»ΈφΓόΑξ£¬Ρ΅ΤρÒ»ΈφΦχΜβ΅£";
     Text[ greek ] = "Επιλέξτε μια εντολή ή κάντε κλικ για την επιλογή ενός θέματος.";
-    Text[ korean ] = "Έν·ΙΎξΈ¦ Ό±ΕΓΗΟ°Ε³ª Ό±ΕΓµΘ ΑΦΑ¦Έ¦ Ε¬Έ―ΗΟ½Κ½ΓΏΐ.";
+    Text[ korean ] = "Έν·ΙΎξΈ¦ Ό±ΕΓΗΟ°Ε³ª ΑΦΑ¦Έ¦΅΅Ό±ΕΓΗΟ±βΐ§ΗΨ΅΅Ε¬Έ―ΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Bir komut seηin ya da bir konu seηmek iηin tύklayύn.";
     Text[ language_user1 ] = " ";
 };
@@ -2795,7 +2795,7 @@ String RID_STR_NOAUTOSTARTHELPAGENT
     Text[ dutch ] = "Bij 'XX' niet automatisch starten";
     Text[ chinese_simplified ] = "ΤΪ 'XX' Κ±²»ΧΤ¶―ΤΛΠΠ΅£";
     Text[ greek ] = "Όχι αυτόματη εκκίνηση στο 'XX'";
-    Text[ korean ] = "'XX'Ώ΅Ό­ ΐΪµΏ ½ΓΐΫΐΜ ΎΘµΛ΄Ο΄Ω.";
+    Text[ korean ] = "'XX'Ώ΅Ό­΄Β ΐΪµΏ ½ΓΐΫ΅΅ΎΚΐ½.";
     Text[ turkish ] = "'XX' olduπunda otomatik baώlatma yapύlmasύn";
     Text[ language_user1 ] = " ";
 };
@@ -2822,7 +2822,7 @@ String RID_STR_NOWELCOMESCREEN
     Text[ dutch ] = "Tips niet meer weergeven";
     Text[ chinese_simplified ] = "²»ΤΩΟΤΚΎΜαΚΎ";
     Text[ greek ] = "Να μην εμφανιστούν άλλες συμβουλές";
-    Text[ korean ] = "Α¶Ύπΐ» Η¥½ΓΗΟΑφ ΎΚΐ½";
+    Text[ korean ] = "Α¶Ύπΐ» ΄υΐΜ»σ΅΅Η¥½ΓΗΟΑφ ΎΚΐ½";
     Text[ turkish ] = "Φneri gφrόntόleme";
     Text[ language_user1 ] = " ";
 };
@@ -2931,7 +2931,7 @@ String RID_STR_HLPFILENOTEXIST
     Text[ dutch ] = "Bij dit onderwerp werd geen Help geοnstalleerd.";
     Text[ chinese_simplified ] = "Γ»ΣΠ°²Χ°ΣΠΉΨΥβΈφΦχΜβµΔ°οΦϊΞΔΌώ΅£";
     Text[ greek ] = "Δεν έχει γίνει εγκατάσταση της βοήθειας για αυτό το θέμα.";
-    Text[ korean ] = "ΐΜ ΑΦΑ¦ΐΗ µµΏςΈ» ΖΔΐΟΐΜ Ό³Δ΅µΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΐΜ ΑΦΑ¦Ώ΅΅΅΄λΗΡ µµΏςΈ»ΐΜ Ό³Δ΅µΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Bu konu ile ilgili yardύm kurulmadύ.";
     Text[ language_user1 ] = " ";
 };
@@ -2958,7 +2958,7 @@ String RID_STR_HLPAPPNOTSTARTED
     Text[ dutch ] = "De Help-applicatie kon niet worden opgestart";
     Text[ chinese_simplified ] = "Ξή·¨Ζτ¶―°οΦϊΣ¦ΣΓ³ΜΠς΅£";
     Text[ greek ] = "Δεν ήταν δυνατόν να εκκινήσει η εφαρμογή βοήθειας";
-    Text[ korean ] = "µµΏςΈ» ½Γ½ΊΕΫΐΜ ½ΓΐΫµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "µµΏςΈ» ΐΐΏλΗΑ·Ξ±Χ·¥ΐ»΅΅½ΓΐΫΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Yardύm uygulamasύ baώlatύlamadύ";
     Text[ language_user1 ] = " ";
 };
@@ -3298,7 +3298,7 @@ String RID_PLUGIN
     Text[ dutch ] = "PlugIn-activering";
     Text[ chinese_simplified ] = "Ό¤»ξ Plug-In";
     Text[ greek ] = "Ενεργοποίηση συνδεόμενης υπομονάδας";
-    Text[ korean ] = "ΗΓ·―±Χ ΐΞ °΅΄Ι";
+    Text[ korean ] = "ΗΓ·―±Χ ΐΞ Θ°ΌΊΘ­";
     Text[ turkish ] = "Plug-In'leri etkinleώtir";
     Text[ language_user1 ] = " ";
 };
@@ -3325,7 +3325,7 @@ String STR_EDITOBJECT
     Text[ dutch ] = "~Bewerken";
     Text[ chinese_simplified ] = "±ΰΌ­(~E)";
     Text[ greek ] = "~Επεξεργασία";
-    Text[ korean ] = "ΖνΑύ(~E)";
+    Text[ korean ] = "ΖνΑύ";
     Text[ turkish ] = "~Dόzenle";
     Text[ language_user1 ] = " ";
 };
@@ -3352,7 +3352,7 @@ String STR_OPENOBJECT
     Text[ dutch ] = "~Openen";
     Text[ chinese_simplified ] = "΄ςΏª(~O)";
     Text[ greek ] = "Άνοιγμα";
-    Text[ korean ] = "Ώ­±β(~O)";
+    Text[ korean ] = "Ώ­±β";
     Text[ turkish ] = "~Aη";
     Text[ language_user1 ] = " ";
 };
@@ -3374,7 +3374,7 @@ String STR_CORRUPT_INSTALLATION
     Text[ polish ] = "WaΏne czκci programu nie mog³y zostaζ prawid³owo zainstalowane.\nProszκ uruchomiζ program instalacyjny uΏywajΉc opcji / repair";
     Text[ portuguese_brazilian ] = "Important program components could not be initialized correctly. Please start the setup program with the option /repair.";
     Text[ japanese ] = "‘εΨ‚ΘΜίΫΈήΧΡ‚Μ•”•ª‚ª³ν‚Ι‰ϊ‰»‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B\nΎ―Δ±―Μί‚πµΜίΌ®έ/C•‚ΕJn‚µ‚Δ‰Ί‚³‚ΆB";
-    Text[ korean ] = "ΗΑ·Ξ±Χ·¥ΐΗ ΑίΏδ ΊΞΊΠΐ» Α¦΄λ·Ξ ΓΚ±βΘ­ΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω. \nΏΙΌΗ/ΊΉ±Έ·Ξ Setupΐ» ½ΓΐΫΗΟ½Κ½ΓΏΐ.";
+    Text[ korean ] = "ΗΑ·Ξ±Χ·¥ΐΗ ΑίΏδ ΊΞΊΠΐ» Α¦΄λ·Ξ ΓΚ±βΘ­ΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω. \nΏΙΌΗ/ΌφΈ®·Ξ Setupΐ» ½ΓΐΫΗΟ½Κ½ΓΏΐ.";
     Text[ chinese_simplified ] = "Ξή·¨ΥύΘ·³υΚΌ»―ΦΨÒªµΔ³Μ²ΏΌώ΅£\nΗλΔϊΖτ¶―°²Χ°³ΜΠς£¬Φ΄ΠΠΡ΅ΟξΠή²Ή΅£";
     Text[ chinese_traditional ] = "µLªk¥ΏΪΜªμ©l¤Ζ­«­nªΊµ{¦΅³΅¥σ΅C½Π±z±Ò°Κ¦wΈΛµ{¦΅΅A°υ¦ζ­ΧΞ`Ώο¶µ΅C";
     Text[ arabic ] = "ΚΪΠΡ ΚΛΘνΚ ΘΪΦ ΪδΗΥΡ ΗαΘΡδΗγΜ ΗαεΗγΙ ΘΤία ΥΝνΝ.\nΗαΡΜΗΑ ΘΟΑ ΘΡδΗγΜ ΗαΕΪΟΗΟ ΘΗαΞνΗΡ /repair.";
@@ -3541,7 +3541,7 @@ String STR_KEY_DATABASE_PATH
     Text[ chinese_simplified ] = "²ιΡ―ΚύΎέΏβ";
     Text[ russian ] = "Ηΰοπξρϋ αΰηϋ δΰννϋυ";
     Text[ polish ] = "Kwerendy bazy danych";
-    Text[ japanese ] = "Γή°ΐΝή°½Έ΄Ψ°";
+    Text[ japanese ] = "Γή°ΐΝή°½Έ΄Ψ";
     Text[ chinese_traditional ] = "¬dΈίΈκ®Ζ®w";
     Text[ arabic ] = "ΗΣΚΪαΗγΗΚ ήΗΪΟΙ ΗαΘνΗδΗΚ";
     Text[ dutch ] = "Database query's";
@@ -3831,7 +3831,7 @@ String STR_KEY_STORAGE_DIR
     Text [ portuguese ] = "Memσria de mensagens" ;
     Text [ english_us ] = "Message Storage" ;
     Text [ portuguese_brazilian ] = "Nachrichtenspeicher" ;
-    Text [ swedish ] = "Meddelandelager" ;
+    Text [ swedish ] = "Meddelandeminne" ;
     Text [ danish ] = "Meddelelseslager" ;
     Text [ italian ] = "Memoria messaggi" ;
     Text [ spanish ] = "Memoria de mensajes" ;
@@ -3877,7 +3877,7 @@ String STR_KEY_AUTOPILOT_DIR
     Text[ dutch ] = "AutoPiloot";
     Text[ chinese_simplified ] = "ΧΤ¶―ΞΔΌώΦϊΐν";
     Text[ greek ] = "ΑυτοΠιλότοι";
-    Text[ korean ] = "ΐΪµΏ ΖΔΐΟ·µ";
+    Text[ korean ] = "ΐΪµΏΖΔΐΟ·µ";
     Text[ turkish ] = "Otopilot";
     Text[ language_user1 ] = " ";
 };
@@ -4041,7 +4041,7 @@ String STR_KEY_AUTOCORRECT_DIR
     Text[ polish ] = "Autokorekta";
     Text[ portuguese_brazilian ] = "AutoCorrect";
     Text[ japanese ] = "µ°ΔΊΪΈΔ";
-    Text[ korean ] = "ΐΪµΏ °νΔ§";
+    Text[ korean ] = "ΐΪµΏ°νΔ§";
     Text[ chinese_simplified ] = "ΧΤ¶―ΈόΥύ";
     Text[ chinese_traditional ] = "¦Ϋ°Κ§σ¥Ώ";
     Text[ arabic ] = "ΚΥΝνΝ ΚαήΗΖν";
