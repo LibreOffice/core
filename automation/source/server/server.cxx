@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:48:31 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
         m_bInsideExecutionLoop = FALSE;
     }
 
-    StatementList::nWindowWaitUId = 0;  // Warten rücksetzen, da handler sowieso verlassen wird
+    StatementList::aWindowWaitUId = SmartId();  // Warten rücksetzen, da handler sowieso verlassen wird
 
 /*    if( StatementList::pFirst && !StatementList::bReadingCommands )
          // Abfrage nötig, da andere CommandHdl aktiv sein können oder
