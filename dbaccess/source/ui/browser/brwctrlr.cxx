@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:39:11 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,6 @@ using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::svt;
-using namespace ::svx;
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
