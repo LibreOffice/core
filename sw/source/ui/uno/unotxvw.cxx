@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 13:08:24 $
+ *  last change: $Author: os $ $Date: 2002-02-05 14:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace rtl;
-using comphelper::HelperBaseNoState;
 
 SV_IMPL_PTRARR( SelectionChangeListenerArr, XSelectionChangeListenerPtr );
 
@@ -287,8 +286,8 @@ void SwXTextView::Invalidate()
 {
     if(pxViewSettings)
     {
-         HelperBaseNoState *pSettings = static_cast < HelperBaseNoState * > ( pxViewSettings->get() );
-        static_cast < SwXViewSettings* > ( pSettings )->Invalidate();
+        XPropertySet* pSettings = pxViewSettings->get();
+        ((SwXViewSettings*)pSettings )->Invalidate();
         DELETEZ(pxViewSettings);
     }
     if(pxTextViewCursor)
@@ -870,7 +869,7 @@ Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw( uno:
         if(!pxViewSettings)
         {
             ((SwXTextView*)this)->pxViewSettings = new Reference< beans::XPropertySet > ;
-            *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( sal_False, pView ) );
+            *pxViewSettings = new SwXViewSettings( sal_False, pView );
         }
     }
     else
