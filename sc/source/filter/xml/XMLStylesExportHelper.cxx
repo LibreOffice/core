@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-12-06 19:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,12 +839,13 @@ void ScFormatRangeStyles::AddNewTable(const sal_Int16 nTable)
         }
 }
 
-sal_Int32 ScFormatRangeStyles::AddStyleName(rtl::OUString* pString, const sal_Bool bIsAutoStyle)
+sal_Bool ScFormatRangeStyles::AddStyleName(rtl::OUString* rpString, sal_Int32& rIndex, const sal_Bool bIsAutoStyle)
 {
     if (bIsAutoStyle)
     {
-        aAutoStyleNames.push_back(pString);
-        return aAutoStyleNames.size() - 1;
+        aAutoStyleNames.push_back(rpString);
+        rIndex = aAutoStyleNames.size() - 1;
+        return sal_True;
     }
     else
     {
@@ -853,17 +854,21 @@ sal_Int32 ScFormatRangeStyles::AddStyleName(rtl::OUString* pString, const sal_Bo
         sal_Int32 i = nCount - 1;
         while ((i >= 0) && (!bFound))
         {
-            if (aStyleNames.at(i)->equals(*pString))
+            if (aStyleNames.at(i)->equals(*rpString))
                 bFound = sal_True;
             else
                 i--;
         }
         if (bFound)
-            return i;
+        {
+            rIndex = i;
+            return sal_False;
+        }
         else
         {
-            aStyleNames.push_back(pString);
-            return aStyleNames.size() - 1;
+            aStyleNames.push_back(rpString);
+            rIndex = aStyleNames.size() - 1;
+            return sal_True;
         }
     }
 }

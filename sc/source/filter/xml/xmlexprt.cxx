@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-04 18:27:14 $
+ *  last change: $Author: sab $ $Date: 2001-12-06 19:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,12 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                                                             aSize = xShape->getSize();
                                                                         }
                                                                         else
+                                                                        {
+                                                                            awt::Point aAnchorPoint(xShape->getPosition());
                                                                             xShapeProp->getPropertyValue( sCaptionPoint ) >>= aPoint;
+                                                                            aPoint.X += aAnchorPoint.X;
+                                                                            aPoint.Y += aAnchorPoint.Y;
+                                                                        }
                                                                         Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
                                                                         ScRange aRange = pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle);
                                                                         ScMyShape aMyShape;
@@ -1706,7 +1711,8 @@ void ScXMLExport::_ExportAutoStyles()
                                                         if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates))
                                                         {
                                                             rtl::OUString* pTemp = new rtl::OUString(sName);
-                                                            nIndex = pCellStyles->AddStyleName(pTemp);
+                                                            if (!pCellStyles->AddStyleName(pTemp, nIndex))
+                                                                delete pTemp;
                                                         }
                                                         else
                                                             nIndex = pCellStyles->GetIndexOfStyleName(sName, SC_SCELLPREFIX, bIsAutoStyle);
@@ -1725,7 +1731,12 @@ void ScXMLExport::_ExportAutoStyles()
                                                     else
                                                     {
                                                         rtl::OUString* pTemp = new rtl::OUString(sStyleName);
-                                                        sal_Int32 nIndex = pCellStyles->AddStyleName(pTemp, sal_False);
+                                                        sal_Int32 nIndex(0);
+                                                        if (!pCellStyles->AddStyleName(pTemp, nIndex, sal_False))
+                                                        {
+                                                            delete pTemp;
+                                                            pTemp = NULL;
+                                                        }
                                                         uno::Sequence<table::CellRangeAddress> aAddresses = xCellRanges->getRangeAddresses();
                                                         table::CellRangeAddress* pAddresses = aAddresses.getArray();
                                                         sal_Bool bGetMerge(sal_True);
