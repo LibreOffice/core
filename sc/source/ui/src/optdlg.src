@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:56:30 $
+ *  last change: $Author: dr $ $Date: 2002-07-16 13:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2881,7 +2881,7 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 12 , 166 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text = "~Überschreibwarnung beim Eingfügen von Daten anzeigen" ;
+        Text = "~Überschreibwarnung beim Einfügen von Daten anzeigen" ;
         Text[ english ] = "Show overwrite ~warning when pasting data" ;
         Text[ english_us ] = "Show overwrite ~warning when pasting data";
     };
