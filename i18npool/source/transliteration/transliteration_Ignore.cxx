@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2002-08-27 12:11:25 $
+ *  last change: $Author: khong $ $Date: 2002-09-16 16:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos
     offset.realloc( nCount );
     sal_Int32 *p = offset.getArray();
     sal_Int32 position = startPos;
+    sal_Int32 count = 0;
 
     // Translation
     while (nCount -- > 0) {
@@ -182,12 +183,14 @@ transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos
         if (c != 0xffff) {
         *dst ++ = c;
         *p ++ = position;
+        count++;
         }
         position ++;
     }
     *dst = (sal_Unicode) 0;
 
-    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    offset.realloc(count);
+    return OUString( newStr->buffer, count); // defined in rtl/usrting. The reference count is increased from 0 to 1.
 }
 
 
@@ -205,6 +208,7 @@ transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos
     offset.realloc( nCount );
     sal_Int32 *p = offset.getArray();
     sal_Int32 position = startPos;
+    sal_Int32 count = 0;
 
     // Translation
     while (nCount -- > 0) {
@@ -213,12 +217,14 @@ transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos
         if (c != 0xffff) {
         *dst ++ = c;
         *p ++ = position;
+        count++;
         }
         position ++;
     }
     *dst = (sal_Unicode) 0;
 
-    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    offset.realloc(count);
+    return OUString( newStr->buffer, count ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
 }
 
 } } } }
