@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-07 18:45:37 $
+ *  last change: $Author: ssa $ $Date: 2002-12-05 09:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,8 +534,8 @@ void Dialog::StateChanged( StateChangedType nType )
         if ( Application::IsAutoMnemonicEnabled() )
             ImplWindowAutoMnemonic( this );
 
-        if ( IsDefaultPos() && !mbFrame )
-            ImplCenterDialog();
+        //if ( IsDefaultPos() && !mbFrame )
+        //    ImplCenterDialog();
         if ( !HasChildPathFocus() || HasFocus() )
             GrabFocusToFirstControl();
         if ( !(GetStyle() & WB_CLOSEABLE) )
