@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-09 14:49:03 $
+ *  last change: $Author: sb $ $Date: 2002-07-15 09:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,6 +710,7 @@ void EditorWindow::CreateEditEngine()
 
     Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
     aFont.SetTransparent( FALSE );
+    aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor());
     Size aFontSize( 0, 10 );    // Points
 
     aFont.SetSize( aFontSize );
@@ -800,6 +801,17 @@ void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
         {
             SetBackground(Wallpaper(aColor));
             Invalidate();
+        }
+        if (pEditEngine != 0)
+        {
+            aColor = GetSettings().GetStyleSettings().GetFieldTextColor();
+            if (aColor != rDCEvt.GetOldSettings()->
+                GetStyleSettings().GetFieldTextColor())
+            {
+                Font aFont(pEditEngine->GetFont());
+                aFont.SetColor(aColor);
+                pEditEngine->SetFont(aFont);
+            }
         }
     }
 }
