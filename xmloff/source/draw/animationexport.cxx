@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:10:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,12 +491,12 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
                 { XML_EIGHTBLADE,           TransitionSubType::EIGHTBLADE },
                 { XML_ONEBLADE,             TransitionSubType::ONEBLADE },
                 { XML_ACROSS,               TransitionSubType::ACROSS },
+                { XML_TOPLEFTVERTICAL,      TransitionSubType::TOPLEFTVERTICAL },
                 { XML_COMBHORIZONTAL,       TransitionSubType::COMBHORIZONTAL },
                 { XML_COMBVERTICAL,         TransitionSubType::COMBVERTICAL },
                 { XML_IN,                   TransitionSubType::IN },
                 { XML_OUT,                  TransitionSubType::OUT },
                 { XML_ROTATEIN,             TransitionSubType::ROTATEIN },
-                { XML_ROTATEOUT,            TransitionSubType::ROTATEOUT },
                 { XML_ROTATEOUT,            TransitionSubType::ROTATEOUT },
                 { XML_FROMTOPLEFT,          TransitionSubType::FROMTOPLEFT },
                 { XML_FROMTOPRIGHT,         TransitionSubType::FROMTOPRIGHT },
@@ -737,7 +737,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
             sal_Int32 nElement;
             for( nElement = 0; nElement < nLength; nElement++, pValue++ )
             {
-                if( IsXMLToken( pValue->Name, XML_MASTER ) )
+                if( IsXMLToken( pValue->Name, XML_MASTER_ELEMENT ) )
                 {
                     Reference< XInterface > xMaster;
                     pValue->Value >>= xMaster;
