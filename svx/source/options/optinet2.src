@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:04:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1738,6 +1738,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hungarian ] = "%PRODUCTNAME Basic-program";
         Text[ slovenian ] = "%PRODUCTNAME Basic skript";
     };
+    FixedImage FI_EXECMACRO
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X - 1, GB_SCRIPT_EXEC_Y + 14 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     FixedText FT_EXEC_MACRO
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 13 ) ;
@@ -1959,6 +1965,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         < "Vedno" ; > ;
     };
     };
+    FixedImage FI_CONFIRM
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 59, GB_SCRIPT_EXEC_Y + 28 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     CheckBox CB_CONFIRM
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 66 , GB_SCRIPT_EXEC_Y + 27 ) ;
@@ -1993,6 +2005,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hungarian ] = "Máshonnan származó dokumentumok esetén mege~rősítés kell";
         Text[ slovenian ] = "P~otrdi v primeru vira iz drugega dokumenta";
     };
+    FixedImage FI_WARNING
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 59 , GB_SCRIPT_EXEC_Y + 41 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     CheckBox CB_WARNING
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 66 , GB_SCRIPT_EXEC_Y + 40 ) ;
@@ -2026,6 +2044,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ slovak ] = "Zobraziť ~varovanie pred spustením";
         Text[ hungarian ] = "~Futtatás előtti figyelmeztetés megjelenítése";
         Text[ slovenian ] = "Pred zagonom prikaži ~opozorilo";
+    };
+    FixedImage FI_SCRIPTEXEC
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X -1 , GB_SCRIPT_EXEC_Y + 56 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_PATH_LIST
     {
@@ -2248,6 +2272,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ slovak ] = "Hyperlinky";
         Text[ hungarian ] = "Hiperhivatkozás";
         Text[ slovenian ] = "Hiperpovezave";
+    };
+    FixedImage FI_HYPERLINKS
+    {
+        Pos = MAP_APPFONT ( 5, FL_HYPERLINKS_Y + 13 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_HYPERLINKS
     {
@@ -2497,6 +2527,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hungarian ] = "Java";
         Text[ slovenian ] = "Java";
     };
+    FixedImage FI_JAVAENABLE
+    {
+        Pos = MAP_APPFONT ( 5 , GB_JAVA_Y + 12 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     CheckBox CB_J_ENABLE
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 11 ) ;
@@ -2532,6 +2568,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hungarian ] = "~Engedélyezés";
         Text[ slovenian ] = "~Omogoči";
     };
+    FixedImage FI_JAVASECURITY
+    {
+        Pos = MAP_APPFONT ( 59, GB_JAVA_Y + 12 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     CheckBox CB_J_SECURITY
     {
         Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 11 ) ;
@@ -2566,6 +2608,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ slovak ] = "Bezpečno~stné kontroly";
         Text[ hungarian ] = "~Biztonsági ellenőrzések";
         Text[ slovenian ] = "Preverjanje ~varnosti";
+    };
+    FixedImage FI_NETACCESS
+    {
+        Pos = MAP_APPFONT ( 5 , GB_JAVA_Y + 27 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_NETACCESS
     {
@@ -2789,6 +2837,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         < "Gostitelj" ; > ;
     };
     };
+    FixedImage FI_CLASSPATH
+    {
+        Pos = MAP_APPFONT ( 5, GB_JAVA_Y + 42 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     FixedText FT_CLASSPATH
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 41 ) ;
@@ -2904,6 +2958,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hungarian ] = "En~gedélyezés";
         Text[ slovenian ] = "O~mogoči";
     };
+    FixedImage FI_EXECPLUG
+    {
+        Pos = MAP_APPFONT ( 190 , GB_JAVA_Y + 12 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     CheckBox CB_EXECUTE_PLUGINS
     {
         Pos = MAP_APPFONT ( 197 , GB_JAVA_Y + 11 ) ;
@@ -2938,6 +2998,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ slovak ] = "Zásuvné moduly";
         Text[ hungarian ] = "Bővítőmodulok";
         Text[ slovenian ] = "Vtičnike";
+    };
+    FixedImage FI_EXEAPPLETS
+    {
+        Pos = MAP_APPFONT ( 190 , GB_JAVA_Y + 25 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     CheckBox CB_EXECUTE_APPLETS
     {
@@ -3114,6 +3180,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         DefButton = TRUE;
     };
 };
+
 
  // ******************************************************************* EOF
 
