@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 12:13:13 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 12:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     // TriState der ::com::sun::star::form::CheckBox abschalten
     m_pVisibleCell->GetBox().EnableTriState( sal_False );
 
-    Font aTitleFont = System::GetStandardFont(STDFONT_SWISS);
+    Font aTitleFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE,Window::GetSettings().GetLanguage(),DEFAULTFONT_FLAGS_ONLYONE);
     aTitleFont.SetSize(Size(0, 6));
     SetTitleFont(aTitleFont);
 
