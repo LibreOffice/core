@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propacc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 11:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,11 @@ INT32 SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 void SbPropertyValues::setPropertyValue(
                     const OUString& aPropertyName,
                     const Any& aValue)
+                    throw (::com::sun::star::beans::UnknownPropertyException,
+                    ::com::sun::star::beans::PropertyVetoException,
+                    ::com::sun::star::lang::IllegalArgumentException,
+                    ::com::sun::star::lang::WrappedTargetException,
+                    ::com::sun::star::uno::RuntimeException)
 {
     USHORT nIndex = GetIndex_Impl( aPropertyName );
     PropertyValue *pPropVal = _aPropVals.GetObject(nIndex);
@@ -172,7 +177,10 @@ void SbPropertyValues::setPropertyValue(
 //----------------------------------------------------------------------------
 
 Any SbPropertyValues::getPropertyValue(
-                    const OUString& aPropertyName) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+                    const OUString& aPropertyName)
+                    throw(::com::sun::star::beans::UnknownPropertyException,
+                    ::com::sun::star::lang::WrappedTargetException,
+                    ::com::sun::star::uno::RuntimeException)
 {
     USHORT nIndex = GetIndex_Impl( aPropertyName );
     if ( nIndex != USHRT_MAX )
@@ -185,6 +193,7 @@ Any SbPropertyValues::getPropertyValue(
 void SbPropertyValues::addPropertyChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
+                    throw ()
 {
 }
 
@@ -193,6 +202,7 @@ void SbPropertyValues::addPropertyChangeListener(
 void SbPropertyValues::removePropertyChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
+                    throw ()
 {
 }
 
@@ -201,6 +211,7 @@ void SbPropertyValues::removePropertyChangeListener(
 void SbPropertyValues::addVetoableChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
+                    throw()
 {
 }
 
@@ -209,12 +220,13 @@ void SbPropertyValues::addVetoableChangeListener(
 void SbPropertyValues::removeVetoableChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
+                    throw()
 {
 }
 
 //----------------------------------------------------------------------------
 
-Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void)
+Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException)
 {
     Sequence<PropertyValue> aRet( _aPropVals.Count());
     for ( USHORT n = 0; n < _aPropVals.Count(); ++n )
@@ -225,6 +237,11 @@ Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void)
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )
+                     throw (::com::sun::star::beans::UnknownPropertyException,
+                     ::com::sun::star::beans::PropertyVetoException,
+                     ::com::sun::star::lang::IllegalArgumentException,
+                     ::com::sun::star::lang::WrappedTargetException,
+                     ::com::sun::star::uno::RuntimeException)
 {
     if ( _aPropVals.Count() )
         throw PropertyExistException();
@@ -254,7 +271,7 @@ INT32 PropertySetInfoImpl::GetIndex_Impl( const OUString &rPropName ) const
     return pP ? ( (pP-_aProps.getConstArray()) / sizeof(pP) ) : -1;
 }
 
-Sequence< Property > PropertySetInfoImpl::getProperties(void)
+Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
 {
     return _aProps;
 }
@@ -351,7 +368,7 @@ void SbPropertyContainer::removeProperty(const OUString& Name)
 
 //----------------------------------------------------------------------------
 // XPropertySetInfo
-Sequence< Property > SbPropertyContainer::getProperties(void)
+Sequence< Property > SbPropertyContainer::getProperties(void) throw ()
 {
     return aImpl.getProperties();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propacc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 11:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,27 +117,36 @@ public:
         getPropertySetInfo(void) throw( NS_UNO::RuntimeException );
     virtual void SAL_CALL   setPropertyValue(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Any& aValue);
+                                const NS_UNO::Any& aValue)
+                                throw (::com::sun::star::beans::UnknownPropertyException,
+                                ::com::sun::star::beans::PropertyVetoException,
+                                ::com::sun::star::lang::IllegalArgumentException,
+                                ::com::sun::star::lang::WrappedTargetException,
+                                ::com::sun::star::uno::RuntimeException);
     virtual NS_UNO::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
         throw(  NS_BEANS::UnknownPropertyException,
                 NS_LANG::WrappedTargetException,
                 NS_UNO::RuntimeException);
     virtual void SAL_CALL   addPropertyChangeListener(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Reference< NS_BEANS::XPropertyChangeListener >& );
+                                const NS_UNO::Reference< NS_BEANS::XPropertyChangeListener >& )
+                                throw ();
     virtual void SAL_CALL   removePropertyChangeListener(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Reference< NS_BEANS::XPropertyChangeListener >& );
+                                const NS_UNO::Reference< NS_BEANS::XPropertyChangeListener >& )
+                                throw ();
     virtual void SAL_CALL   addVetoableChangeListener(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Reference< NS_BEANS::XVetoableChangeListener >& );
+                                const NS_UNO::Reference< NS_BEANS::XVetoableChangeListener >& )
+                                throw ();
     virtual void SAL_CALL   removeVetoableChangeListener(
                                 const ::rtl::OUString& aPropertyName,
-                                const NS_UNO::Reference< NS_BEANS::XVetoableChangeListener >& );
+                                const NS_UNO::Reference< NS_BEANS::XVetoableChangeListener >& )
+                                throw ();
 
     // XPropertyAccess
-    virtual NS_UNO::Sequence< NS_BEANS::PropertyValue > SAL_CALL getPropertyValues(void);
-    virtual void SAL_CALL setPropertyValues(const NS_UNO::Sequence< NS_BEANS::PropertyValue >& PropertyValues_);
+    virtual NS_UNO::Sequence< NS_BEANS::PropertyValue > SAL_CALL getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValues(const NS_UNO::Sequence< NS_BEANS::PropertyValue >& PropertyValues_) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
 
 //==========================================================================
@@ -159,7 +168,7 @@ public:
     PropertySetInfoImpl( NS_UNO::Sequence< NS_BEANS::Property >& rProps );
 
     // XPropertySetInfo
-    NS_UNO::Sequence< NS_BEANS::Property > SAL_CALL getProperties(void);
+    NS_UNO::Sequence< NS_BEANS::Property > SAL_CALL getProperties(void) throw ();
     NS_BEANS::Property SAL_CALL getPropertyByName(const ::rtl::OUString& Name)
         throw( NS_UNO::RuntimeException );
     sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& Name)
@@ -206,7 +215,7 @@ public:
         throw( NS_BEANS::UnknownPropertyException, NS_UNO::RuntimeException );
 
     // XPropertySetInfo
-    virtual NS_UNO::Sequence< NS_BEANS::Property > SAL_CALL getProperties(void);
+    virtual NS_UNO::Sequence< NS_BEANS::Property > SAL_CALL getProperties(void) throw();
     virtual NS_BEANS::Property SAL_CALL getPropertyByName(const ::rtl::OUString& Name)
         throw( NS_UNO::RuntimeException );
     virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& Name)
