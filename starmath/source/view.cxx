@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 07:37:28 $
+ *  last change: $Author: tl $ $Date: 2001-08-31 14:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,8 +501,8 @@ void SmEditController::StateChanged(USHORT nSID, SfxItemState eState, const SfxP
 SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings, SfxChildWindow *pChildWindow,
                                Window *pParent) :
     SfxDockingWindow(pBindings, pChildWindow, pParent, SmResId(RID_CMDBOXWINDOW)),
-    aEdit(this),
-    aController(aEdit, SID_TEXT, *pBindings)
+    aEdit       (*this),
+    aController (aEdit, SID_TEXT, *pBindings)
 {
     Hide ();
     aGrabTimer.SetTimeout (1000);
@@ -514,6 +514,17 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings, SfxChildWindow *pChildWin
 SmCmdBoxWindow::~SmCmdBoxWindow ()
 {
     aGrabTimer.Stop ();
+}
+
+
+SmViewShell * SmCmdBoxWindow::GetView()
+{
+    SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
+#ifdef DEBUG
+    SfxViewShell *pActiveView = SmGetActiveView();
+    DBG_ASSERT( !pActiveView  ||  pActiveView == pView , "view mismatch" );
+#endif
+    return PTR_CAST(SmViewShell, pView);
 }
 
 

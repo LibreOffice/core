@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 10:52:21 $
+ *  last change: $Author: tl $ $Date: 2001-08-31 14:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ class ScrollBar;
 class ScrollBarBox;
 class DataChangedEvent;
 class Menu;
+class SmCmdBoxWindow;
 
 /**************************************************************************/
 
@@ -93,6 +94,7 @@ class Menu;
 
 class SmEditWindow : public Window, public DropTargetHelper
 {
+    SmCmdBoxWindow &rCmdBox;
     EditView       *pEditView;
     ScrollBar      *pHScrollBar,
                    *pVScrollBar;
@@ -133,7 +135,7 @@ class SmEditWindow : public Window, public DropTargetHelper
     SfxItemPool *   GetEditEngineItemPool();
 
 public:
-    SmEditWindow( Window *pParent );
+    SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin );
     ~SmEditWindow();
 
     // Window

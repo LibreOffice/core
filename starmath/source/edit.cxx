@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-29 10:57:10 $
+ *  last change: $Author: tl $ $Date: 2001-08-31 14:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,9 +146,10 @@ void SmGetLeftSelectionPart(const ESelection aSel,
 
 ////////////////////////////////////////
 
-SmEditWindow::SmEditWindow( Window* pParent ) :
-    Window              (pParent),
-    DropTargetHelper( this ),
+SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
+    Window              (&rMyCmdBoxWin),
+    DropTargetHelper    ( this ),
+    rCmdBox             (rMyCmdBoxWin),
     pEditView           (0),
     pHScrollBar         (0),
     pVScrollBar         (0),
@@ -190,7 +191,7 @@ SmEditWindow::~SmEditWindow()
 
 SmDocShell * SmEditWindow::GetDoc()
 {
-    SmViewShell *pView = SmGetActiveView();
+    SmViewShell *pView = rCmdBox.GetView();
     return pView ? pView->GetDoc() : 0;
 }
 
@@ -223,9 +224,8 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
     SetPointFont( GetSettings().GetStyleSettings().GetAppFont() );
 
-    SmDocShell *pDoc = GetDoc();
-    EditEngine  *pEditEngine = pDoc ? &pDoc->GetEditEngine() : 0;
-    SfxItemPool *pEditEngineItemPool = pDoc ? &pDoc->GetEditEngineItemPool() : 0;
+    EditEngine  *pEditEngine = GetEditEngine();
+    SfxItemPool *pEditEngineItemPool = GetEditEngineItemPool();
 
     if (pEditEngine && pEditEngineItemPool)
     {
@@ -271,7 +271,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, pTimer)
     ESelection  aNewSelection   (GetSelection());
 
     if (!aNewSelection.IsEqual(aOldSelection))
-    {   SmViewShell *pView = SmGetActiveView();
+    {   SmViewShell *pView = rCmdBox.GetView();
 
         if (pView)
         {
@@ -359,7 +359,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
 
 IMPL_LINK_INLINE_START( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
 {
-    SmViewShell *pViewSh = SmGetActiveView();
+    SmViewShell *pViewSh = rCmdBox.GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTCOMMAND, SFX_CALLMODE_STANDARD,
@@ -389,8 +389,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     }
     else
     {
-        SmViewShell *pView = SmGetActiveView();
-        SmDocShell *pDocShell = pView ? pView->GetDoc() : 0;
+        SmDocShell *pDocShell = GetDoc();
         if (pDocShell)
             pDocShell->SetModified( TRUE );
 
@@ -860,7 +859,7 @@ void SmEditWindow::Flush()
     if (pEditEngine  &&  pEditEngine->IsModified())
     {
         pEditEngine->ClearModifyFlag();
-        SmViewShell *pViewSh = SmGetActiveView();
+        SmViewShell *pViewSh = rCmdBox.GetView();
         if (pViewSh)
             pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                     SID_TEXT, SFX_CALLMODE_STANDARD,

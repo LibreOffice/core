@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-01 10:33:41 $
+ *  last change: $Author: tl $ $Date: 2001-08-31 14:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ public:
     void AdjustPosition();
 
     SmEditWindow *GetEditWindow() { return (&aEdit); }
+    SmViewShell  *GetView();
 
     void ShowWindows ();
 
@@ -210,7 +211,6 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
 
     void Grab ();
-
 };
 
 /**************************************************************************/
