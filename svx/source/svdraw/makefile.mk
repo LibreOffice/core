@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 14:42:59 $
+#   last change: $Author: obo $ $Date: 2004-08-12 09:05:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,7 +140,8 @@ SLOFILES=\
          $(SLO)$/svdvmark.obj        \
          $(SLO)$/svdxcgv.obj		 \
          $(SLO)$/clonelist.obj		 \
-         $(SLO)$/svdoashp.obj
+         $(SLO)$/svdoashp.obj		 \
+         $(SLO)$/svdomedia.obj		 
 
 EXCEPTIONSFILES= \
          $(SLO)$/svdhdl.obj          \
