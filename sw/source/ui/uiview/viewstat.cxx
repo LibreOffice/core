@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-24 17:20:05 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 17:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,20 +351,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
                 else
                 {
-                    SfxItemPool &rPool = GetPool();
-                    SfxItemSet aCoreSet(rPool, RES_CHRATR_LANGUAGE,
-                                               RES_CHRATR_LANGUAGE);
-                    rSh.GetAttr(aCoreSet);
-
-                    const SfxPoolItem* pItem = 0;
-                    SfxItemState eState = aCoreSet.GetItemState(
-                            RES_CHRATR_LANGUAGE, sal_False, &pItem);
-
-                    LanguageType nLang = LANGUAGE_NONE;
-                    if( SFX_ITEM_DEFAULT == eState )  // provide default if not found
-                        pItem = &rPool.GetDefaultItem(RES_CHRATR_LANGUAGE);
-                    if( eState >= SFX_ITEM_DEFAULT )
-                        nLang = ((SvxLanguageItem* )pItem)->GetLanguage();
+                    LanguageType nLang = rSh.GetCurLang();
 
                     // disable "Thesaurus" (menu entry and key shortcut) if the
                     // language is not supported (by default it is enabled)

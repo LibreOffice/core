@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-14 18:32:27 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 17:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,11 +1355,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), FALSE, &pItem);
 
     //  Sprache immer von Cursorposition besorgen
-    SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_LANGUAGE,
-                                        RES_CHRATR_LANGUAGE );
-    rSh.GetAttr( aSet );
-    LanguageType eLang = ((const SvxLanguageItem&)aSet.Get(
-                        RES_CHRATR_LANGUAGE )).GetLanguage();
+    LanguageType eLang = rSh.GetCurLang();
     SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
     ULONG nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
     USHORT nFmtType = 0, nOffset = 0;
@@ -1405,7 +1401,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
 
     if( NUMBERFORMAT_ENTRY_NOT_FOUND != nNumberFormat )
     {
-        SfxItemSet aBoxSet( *aSet.GetPool(), RES_BOXATR_FORMAT, RES_BOXATR_FORMAT );
+        SfxItemSet aBoxSet( GetPool(), RES_BOXATR_FORMAT, RES_BOXATR_FORMAT );
         aBoxSet.Put( SwTblBoxNumFormat( nNumberFormat ));
         rSh.SetTblBoxFormulaAttrs( aBoxSet );
     }
@@ -1414,6 +1410,9 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/14 18:32:27  jp
+    use moduleoptions
+
     Revision 1.2  2000/10/06 13:36:37  jp
     should changes: don't use IniManager
 

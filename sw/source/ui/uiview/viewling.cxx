@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:05:50 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 17:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,12 +580,7 @@ void SwView::StartThesaurus()
 
     // Sprache rausholen
     //
-    SfxItemSet aSet(pShell->GetPool(), RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE);
-    pWrtShell->GetAttr(aSet);
-
-    const SvxLanguageItem& rLang = (const SvxLanguageItem&)aSet.Get(
-                                            RES_CHRATR_LANGUAGE );
-    LanguageType eLang = rLang.GetLanguage();
+    LanguageType eLang = pWrtShell->GetCurLang();
     if ( ( eLang == LANGUAGE_SYSTEM ) &&
          ( ((eLang=SvxLocaleToLanguage( GetAppLocaleData().getLocale() ))==LANGUAGE_SYSTEM )
          && ( ( eLang=::GetSystemLanguage() ) == LANGUAGE_SYSTEM ) ) )
