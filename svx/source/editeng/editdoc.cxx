@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-21 12:02:04 $
+ *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <langitem.hxx>
 #include <emphitem.hxx>
 #include <charscaleitem.hxx>
+#include <charreliefitem.hxx>
 
 #include <editdoc.hxx>
 #include <editdbg.hxx>
@@ -244,7 +245,7 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_2LINES_DUMMY
+        { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_ROTATION_DUMMY
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
@@ -344,6 +345,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         case EE_CHAR_EMPHASISMARK:
         {
             pNew = new EditCharAttribEmphasisMark( (const SvxEmphasisMarkItem&)rNew, nS, nE );
+        }
+        break;
+        case EE_CHAR_RELIEF:
+        {
+            pNew = new EditCharAttribRelief( (const SvxCharReliefItem&)rNew, nS, nE );
         }
         break;
         case EE_CHAR_STRIKEOUT:
@@ -1219,68 +1225,48 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
     rFont.SetAlign( ALIGN_BASELINE );
     rFont.SetTransparent( TRUE );
 
-    if ( bSearchInParent )
-    {
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SFX_ITEM_ON ) )
         rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( EE_CHAR_LANGUAGE )).GetLanguage() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON ) )
         rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON ) )
+    {
         const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO );
         rFont.SetName( rFontItem.GetFamilyName() );
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
+    }
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) == SFX_ITEM_ON ) )
         rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() ) );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WEIGHT ) == SFX_ITEM_ON ) )
         rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( EE_CHAR_WEIGHT )).GetWeight() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON ) )
         rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetUnderline() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_ON ) )
         rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ITALIC ) == SFX_ITEM_ON ) )
         rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( EE_CHAR_ITALIC )).GetPosture() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SFX_ITEM_ON ) )
         rFont.SetOutline( ((const SvxContourItem&)rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_SHADOW ) == SFX_ITEM_ON ) )
         rFont.SetShadow( ((const SvxShadowedItem&)rSet.Get( EE_CHAR_SHADOW )).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ESCAPEMENT ) == SFX_ITEM_ON ) )
+    {
         rFont.SetEscapement( ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetEsc() );
         rFont.SetPropr( ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetProp() );
+    }
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SFX_ITEM_ON ) )
         rFont.SetKerning( ((const SvxAutoKernItem&)rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_KERNING ) == SFX_ITEM_ON ) )
         rFont.SetFixKerning( ((const SvxKerningItem&)rSet.Get( EE_CHAR_KERNING )).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WLM ) == SFX_ITEM_ON ) )
         rFont.SetWordLineMode( ((const SvxWordLineModeItem&)rSet.Get( EE_CHAR_WLM )).GetValue() );
-    }
-    else
-    {
-        if ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SFX_ITEM_ON )
-            rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( EE_CHAR_LANGUAGE )).GetLanguage() );
-        if ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON )
-            rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
-        if ( rSet.GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
-        {
-            const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO );
-            rFont.SetName( rFontItem.GetFamilyName() );
-            rFont.SetFamily( rFontItem.GetFamily() );
-            rFont.SetPitch( rFontItem.GetPitch() );
-            rFont.SetCharSet( rFontItem.GetCharSet() );
-        }
-        if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) == SFX_ITEM_ON )
-            rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() ) );
-        if ( rSet.GetItemState( EE_CHAR_WEIGHT ) == SFX_ITEM_ON )
-            rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( EE_CHAR_WEIGHT )).GetWeight() );
-        if ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON )
-            rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetUnderline() );
-        if ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_ON )
-            rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
-        if ( rSet.GetItemState( EE_CHAR_ITALIC ) == SFX_ITEM_ON )
-            rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( EE_CHAR_ITALIC )).GetPosture() );
-        if ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SFX_ITEM_ON )
-            rFont.SetOutline( ((const SvxContourItem&)rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
-        if ( rSet.GetItemState( EE_CHAR_SHADOW ) == SFX_ITEM_ON )
-            rFont.SetShadow( ((const SvxShadowedItem&)rSet.Get( EE_CHAR_SHADOW )).GetValue() );
-        if ( rSet.GetItemState( EE_CHAR_ESCAPEMENT ) == SFX_ITEM_ON )
-        {
-            rFont.SetEscapement( ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetEsc() );
-            rFont.SetPropr( ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetProp() );
-        }
-        if ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SFX_ITEM_ON )
-            rFont.SetKerning( ((const SvxAutoKernItem&)rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() );
-        if ( rSet.GetItemState( EE_CHAR_KERNING ) == SFX_ITEM_ON )
-            rFont.SetFixKerning( ((const SvxKerningItem&)rSet.Get( EE_CHAR_KERNING )).GetValue() );
-        if ( rSet.GetItemState( EE_CHAR_WLM ) == SFX_ITEM_ON )
-            rFont.SetWordLineMode( ((const SvxWordLineModeItem&)rSet.Get( EE_CHAR_WLM )).GetValue() );
-    }
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_EMPHASISMARK ) == SFX_ITEM_ON ) )
+        rFont.SetEmphasisMark( ((const SvxEmphasisMarkItem&)rSet.Get( EE_CHAR_EMPHASISMARK )).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SFX_ITEM_ON ) )
+        rFont.SetRelief( (FontRelief)((const SvxCharReliefItem&)rSet.Get( EE_CHAR_RELIEF )).GetValue() );
+
     // Ob ich jetzt den ganzen Font vergleiche, oder vor jeder Aenderung
     // pruefe, ob der Wert sich aendert, bleibt sich relativ gleich.
     // So ggf ein MakeUniqFont im Font mehr, dafuer bei Aenderung schnellerer

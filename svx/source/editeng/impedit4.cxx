@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 13:13:53 $
+ *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@
 #include "ulspitem.hxx"
 #include "wghtitem.hxx"
 #include "langitem.hxx"
+#include <charreliefitem.hxx>
+#include <emphitem.hxx>
 
 #include <rtl/tencinfo.h>
 
@@ -855,6 +857,26 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             rOutput << sRTF_OUTL;
             if ( ((const SvxContourItem&)rItem).GetValue() == 0 )
                 rOutput << '0';
+        }
+        break;
+        case EE_CHAR_RELIEF:
+        {
+            USHORT nRelief = ((const SvxCharReliefItem&)rItem).GetValue();
+            if ( nRelief == RELIEF_EMBOSSED )
+                rOutput << sRTF_EMBO;
+            if ( nRelief == RELIEF_ENGRAVED )
+                rOutput << sRTF_IMPR;
+        }
+        break;
+        case EE_CHAR_EMPHASISMARK:
+        {
+            USHORT nMark = ((const SvxEmphasisMarkItem&)rItem).GetValue();
+            if ( nMark == EMPHASISMARK_NONE )
+                rOutput << sRTF_ACCNONE;
+            if ( nMark == EMPHASISMARK_SIDE_DOTS )
+                rOutput << sRTF_ACCCOMMA;
+            else
+                rOutput << sRTF_ACCDOT;
         }
         break;
         case EE_CHAR_SHADOW:

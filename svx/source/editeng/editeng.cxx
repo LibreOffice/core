@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-23 08:33:52 $
+ *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,9 @@
 #include "brshitem.hxx"
 #include "cscoitem.hxx"
 #include "langitem.hxx"
+#include <emphitem.hxx>
 #include <charscaleitem.hxx>
+#include <charreliefitem.hxx>
 
 
 #ifndef _SV_SYSTEM_HXX
@@ -2206,6 +2208,8 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxAutoKernItem( rFont.IsKerning(), EE_CHAR_PAIRKERNING ) );
     rSet.Put( SvxKerningItem( rFont.GetFixKerning(), EE_CHAR_KERNING ) );
     rSet.Put( SvxWordLineModeItem( rFont.IsWordLineMode(), EE_CHAR_WLM ) );
+    rSet.Put( SvxEmphasisMarkItem( rFont.GetEmphasisMark(), EE_CHAR_EMPHASISMARK ) );
+    rSet.Put( SvxCharReliefItem( rFont.GetRelief(), EE_CHAR_RELIEF ) );
 }
 
 Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet )

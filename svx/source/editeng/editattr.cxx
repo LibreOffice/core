@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
+ *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <langitem.hxx>
 #include <emphitem.hxx>
 #include <charscaleitem.hxx>
+#include <charreliefitem.hxx>
 
 
 #include <editattr.hxx>
@@ -447,4 +448,18 @@ EditCharAttribEmphasisMark::EditCharAttribEmphasisMark( const SvxEmphasisMarkIte
 void EditCharAttribEmphasisMark::SetFont( SvxFont& rFont, OutputDevice* )
 {
     rFont.SetEmphasisMark( ((const SvxEmphasisMarkItem*)GetItem())->GetEmphasisMark() );
+}
+
+// -------------------------------------------------------------------------
+// class EditCharAttribRelief
+// -------------------------------------------------------------------------
+EditCharAttribRelief::EditCharAttribRelief( const SvxCharReliefItem& rAttr, USHORT nStart, USHORT nEnd )
+    : EditCharAttrib( rAttr, nStart, nEnd )
+{
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_RELIEF, "Not a relief attribute!" );
+}
+
+void EditCharAttribRelief::SetFont( SvxFont& rFont, OutputDevice* )
+{
+    rFont.SetRelief( (FontRelief)((const SvxCharReliefItem*)GetItem())->GetValue() );
 }

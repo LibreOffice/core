@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
+ *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #include <numitem.hxx>
 #include <langitem.hxx>
 #include <charscaleitem.hxx>
+#include <charreliefitem.hxx>
 
 #include <forbiddencharacterstable.hxx>
 
@@ -176,7 +177,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[37] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
         ppDefItems[38] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
         ppDefItems[39] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK );
-        ppDefItems[40] = new SfxVoidItem( EE_CHAR_2LINES_DUMMY );
+        ppDefItems[40] = new SvxCharReliefItem( RELIEF_NONE, EE_CHAR_RELIEF );
         ppDefItems[41] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
         ppDefItems[42] = new SfxVoidItem( EE_CHAR_ROTATION_DUMMY );
 

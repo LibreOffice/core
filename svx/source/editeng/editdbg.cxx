@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-23 08:33:08 $
+ *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <emphitem.hxx>
 #include <numitem.hxx>
 #include <charscaleitem.hxx>
+#include <charreliefitem.hxx>
 
 #include <impedit.hxx>
 #include <editeng.hxx>
@@ -137,9 +138,9 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
                     }
                     else
                     {
-                        aDebStr += "Char='";
-                        aDebStr += pFmt->GetBulletChar();
-                        aDebStr += "'";
+                        aDebStr += "Char=[";
+                        aDebStr += ByteString::CreateFromInt32( pFmt->GetBulletChar() );
+                        aDebStr += "]";
                     }
                     aDebStr += ") ";
                 }
@@ -249,6 +250,10 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_CHAR_EMPHASISMARK:
             aDebStr += "FontUnderline=";
             aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxEmphasisMarkItem&)rItem).GetEmphasisMark() );
+        break;
+        case EE_CHAR_RELIEF:
+            aDebStr += "FontRelief=";
+            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxCharReliefItem&)rItem).GetValue() );
         break;
         case EE_CHAR_STRIKEOUT:
             aDebStr += "FontStrikeout=";
