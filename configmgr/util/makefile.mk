@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: dg $ $Date: 2001-09-05 14:20:31 $
+#   last change: $Author: jb $ $Date: 2001-09-28 13:31:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,8 +85,9 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(OSLLIB)					\
-    $(SALLIB)	\
-    $(UNOTOOLSLIB)	\
+    $(SALHELPERLIB)				\
+    $(SALLIB)					\
+    $(UNOTOOLSLIB)				\
     $(CPPRTLLIB)
 
 #	$(ZLIB3RDLIB) \
@@ -98,8 +99,8 @@ SHL1LIBS=	$(SLB)$/registry.lib	\
             $(SLB)$/session.lib		\
             $(SLB)$/misc.lib		\
             $(SLB)$/xml.lib			\
-            $(SLB)$/treemgr.lib			\
-            $(SLB)$/api2.lib			\
+            $(SLB)$/treemgr.lib		\
+            $(SLB)$/api2.lib		\
             $(SLB)$/api.lib			\
             $(SLB)$/cm.lib
 
@@ -124,19 +125,20 @@ SHL2STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(OSLLIB)					\
-    $(SALLIB)	\
-    $(UNOTOOLSLIB)	\
+    $(SALHELPERLIB)				\
+    $(SALLIB)					\
+    $(UNOTOOLSLIB)				\
     $(CPPRTLLIB)
 
 SHL2DEPN=
 SHL2IMPLIB=	i$(SHL2TARGET)
 SHL2LIBS=	$(SLB)$/registry.lib	\
             $(SLB)$/treecache.lib	\
-            $(SLB)$/sxl_session.lib		\
+            $(SLB)$/sxl_session.lib	\
             $(SLB)$/misc.lib		\
             $(SLB)$/xml.lib			\
-            $(SLB)$/treemgr.lib			\
-            $(SLB)$/api2.lib			\
+            $(SLB)$/treemgr.lib		\
+            $(SLB)$/api2.lib		\
             $(SLB)$/api.lib			\
             $(SLB)$/cm.lib
 
