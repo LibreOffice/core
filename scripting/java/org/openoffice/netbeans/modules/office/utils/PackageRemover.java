@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageRemover.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:39 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-06 18:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,12 @@ public class PackageRemover {
 
         String line;
         while ((line = in.readLine()) != null) {
-            if (line.startsWith("package") && line.indexOf(ParcelZipper.CONTENTS_DIRNAME) != -1) {
-                // got package declaration, do not write it
-                continue;
+            if (line.startsWith("package")) {
+                String newDeclaration = evaluate(line);
+                if (newDeclaration != null) {
+                    out.write(newDeclaration, 0, newDeclaration.length());
+                    out.newLine();
+                }
             }
             else {
                 out.write(line, 0, line.length());
@@ -106,6 +109,19 @@ public class PackageRemover {
         }
         else
             tmp.renameTo(source);
+    }
+
+    public static String evaluate(String line) {
+
+        int idx = line.indexOf(ParcelZipper.CONTENTS_DIRNAME);
+        if (idx == -1)
+            return line;
+
+        idx = idx + ParcelZipper.CONTENTS_DIRNAME.length();
+        if (line.charAt(idx) == '.')
+            return "package " + line.substring(idx + 1);;
+
+        return null;
     }
 
     public static void main(String[] args) {
