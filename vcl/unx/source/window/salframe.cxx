@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
+ *  last change: $Author: cp $ $Date: 2001-08-29 16:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@
 #endif
 
 #include <svapp.hxx>
+
+#ifndef _SV_SALBMP_HXX
+#include <salbmp.hxx>
+#endif
 
 #ifndef _SAL_I18N_INPUTCONTEXT_HXX
 #include <i18n_ic.hxx>
@@ -1159,6 +1163,51 @@ BOOL SalFrame::GetWindowState( SalFrameState* pState )
 SalBitmap*
 SalFrame::SnapShot()
 {
+    Display* pDisplay = _GetXDisplay();
+
+    // make sure the frame has been reparented and all paint timer have been
+    // expired
+    maFrameData.maResizeTimer.Stop();
+    if (   maFrameData.maResizeBuffer.GetWidth()  != 0
+        || maFrameData.maResizeBuffer.GetHeight() != 0)
+    {
+        maFrameData.HandleResizeTimer (&maFrameData.maResizeTimer);
+    }
+
+    do
+    {
+        XSync(pDisplay, False);
+        Application::Reschedule ();
+    }
+    while (XPending(pDisplay));
+    usleep (50000);
+    do
+    {
+        XSync(pDisplay, False);
+        Application::Reschedule ();
+    }
+    while (XPending(pDisplay));
+
+    // get the most outer window, usually the window manager decoration
+    Drawable hWindow = None;
+    if (maFrameData.IsOverrideRedirect())
+        hWindow = _GetDrawable();
+    else
+    if (hPresentationWindow != None)
+        hWindow = hPresentationWindow;
+    else
+        hWindow = maFrameData.hStackingWindow_;
+
+    // query the contents of the window
+    if (hWindow != None)
+    {
+        SalBitmap *pBmp = new SalBitmap;
+        if (pBmp->SnapShot (pDisplay, hWindow))
+            return pBmp;
+        else
+            delete pBmp;
+    }
+
     return NULL;
 }
 
