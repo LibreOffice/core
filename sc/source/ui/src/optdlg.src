@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 19:08:30 $
+ *  last change: $Author: os $ $Date: 2001-05-16 06:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1297,7 +1297,7 @@ TabPage RID_SCPAGE_CONTENT
     FixedLine GB_DISPLAY
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Anzeigen" ;
         Text [ ENGLISH ] = "Display" ;
         Text [ norwegian ] = "Display" ;
@@ -1326,7 +1326,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_FORMULA
     {
         Pos = MAP_APPFONT ( 136 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Formeln" ;
         Text [ ENGLISH ] = "~Formulas" ;
         Text [ norwegian ] = "~Formulas" ;
@@ -1355,7 +1355,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_NIL
     {
         Pos = MAP_APPFONT ( 136 , 27 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Nullwerte" ;
         Text [ ENGLISH ] = "~Null values" ;
         Text [ norwegian ] = "~Null values" ;
@@ -1384,7 +1384,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_ANNOT
     {
         Pos = MAP_APPFONT ( 136 , 40 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Not~izanzeiger" ;
         Text [ ENGLISH ] = "Note Tag~s" ;
         Text [ norwegian ] = "Note Tag~s" ;
@@ -1413,7 +1413,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_VALUE
     {
         Pos = MAP_APPFONT ( 136 , 53 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Werte her~vorheben" ;
         Text [ ENGLISH ] = "Syntax highlighting" ;
         Text [ norwegian ] = "Syntax highlighting" ;
@@ -1442,7 +1442,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_ANCHOR
     {
         Pos = MAP_APPFONT ( 136 , 66 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Anker" ;
         Text [ ENGLISH ] = "Anchor" ;
         Text [ dutch ] = "~Anker" ;
@@ -1470,7 +1470,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_CLIP
     {
         Pos = MAP_APPFONT ( 136 , 79 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Text¸berlauf" ;
         Text [ ENGLISH ] = "~Text overflow" ;
         Text [ english_us ] = "Te~xt overflow" ;
@@ -1498,7 +1498,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_RFIND
     {
         Pos = MAP_APPFONT ( 136 , 92 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Referenzen farbig anzeigen" ;
         Text [ ENGLISH ] = "Show colored references" ;
         Text [ english_us ] = "Sho~w references in color" ;
@@ -1662,7 +1662,7 @@ TabPage RID_SCPAGE_CONTENT
     FixedLine GB_WINDOW
     {
         Pos = MAP_APPFONT ( 130 , 108 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Fenster" ;
         Text [ ENGLISH ] = "Window" ;
         Text [ norwegian ] = "Window" ;
@@ -1778,7 +1778,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_TBLREG
     {
         Pos = MAP_APPFONT ( 136 , 158) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Tabellen~register" ;
         Text [ ENGLISH ] = "Table ~registers" ;
         Text [ norwegian ] = "Table ~registers" ;
@@ -1807,7 +1807,7 @@ TabPage RID_SCPAGE_CONTENT
     CheckBox CB_OUTLINE
     {
         Pos = MAP_APPFONT ( 136 , 171) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Glieder~ungssymbole" ;
         Text [ ENGLISH ] = "O~utliner" ;
         Text [ norwegian ] = "O~utliner" ;
@@ -2253,7 +2253,7 @@ TabPage RID_SCPAGE_LAYOUT
     FixedLine GB_LINK
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Aktualisierung" ;
         Text [ English ] = "Update" ;
         Text[ english_us ] = "Updating";
@@ -2281,29 +2281,9 @@ TabPage RID_SCPAGE_LAYOUT
     FixedText FT_UPDATE_LINKS
     {
         Pos = MAP_APPFONT ( 136 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Verkn¸pfungen beim ÷ffnen aktualisieren" ;
-        Text [ English ] = "Update links while opening" ;
-        Text[ english_us ] = "Update links when loading";
-        Text[ portuguese ] = "Actualizar ligaÁıes ao carregar";
-        Text[ russian ] = "Œ·ÌÓ‚ÎˇÚ¸ ÒÒ˚ÎÍË ÔË Á‡„ÛÁÍÂ";
-        Text[ greek ] = "≈ÌÁÏ›Ò˘ÛÁ Ù˘Ì ÛıÌ‰›ÛÂ˘Ì Í·Ù‹ ÙÁ ˆ¸ÒÙ˘ÛÁ";
-        Text[ dutch ] = "Verbindingen bij het laden actualiseren";
-        Text[ french ] = "Actualiser les liens lors du chargement";
-        Text[ spanish ] = "Actualizar vÌnculos al cargar";
-        Text[ finnish ] = "Verkn¸pfungen beim Laden aktualisieren";
-        Text[ italian ] = "Aggiorna collegamenti durante il caricamento";
-        Text[ danish ] = "Opdater kÊder under indlÊsning";
-        Text[ swedish ] = "Uppdatera l‰nkar n‰r dokument ˆppnas";
-        Text[ polish ] = "Aktualizuj ≥πcza w trakcie otwierania";
-        Text[ portuguese_brazilian ] = "Refresh links";
-        Text[ japanese ] = "ƒﬁ∑≠“›ƒì«Ç›çûÇ›éûÇ…ÿ›∏ÇÃçXêV";
-        Text[ korean ] = "∑ŒµÂ Ω√ø°°°ø¨∞· ∞ªΩ≈";
-        Text[ chinese_simplified ] = "‘⁄◊∞»Î ±∏¸–¬¡¥Ω”";
-        Text[ chinese_traditional ] = "∏¸§JÆ…ßÛ∑s±∂Æ|";
-        Text[ turkish ] = "Y¸klerken balant˝lar˝ g¸ncelle";
-        Text[ arabic ] = " ÕœÌÀ «·«— »«ÿ«  ⁄‰œ «· Õ„Ì·";
-        Text[ catalan ] = "Actualizar vÌnculos al cargar";
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text = "Verkn¸pfungen beim Laden aktualisieren" ;
+        Text [ English ] = "Update links when loading" ;
     };
     RadioButton RB_ALWAYS
     {
