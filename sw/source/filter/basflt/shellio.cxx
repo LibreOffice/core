@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:49:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,12 +1030,15 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     SwPaM * pPam;
 
     SwDoc *pDoc = 0L;
+    SvEmbeddedObjectRef* pRefForDocSh = 0;
 
     if ( pShell && !bWriteAll && pShell->IsTableMode() )
     {
         bWriteAll = TRUE;
         pDoc = new SwDoc;
         pDoc->AddLink();
+        pRefForDocSh = new SvEmbeddedObjectRef();
+        pDoc->SetRefForDocShell( pRefForDocSh );
 
         // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der Breite
         // von der Originalen an und kopiere die selectierten Boxen.
@@ -1164,6 +1167,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 
     if ( pDoc )
     {
+        delete pRefForDocSh;
         if ( !pDoc->RemoveLink() )
             delete pDoc;
         bWriteAll = FALSE;
