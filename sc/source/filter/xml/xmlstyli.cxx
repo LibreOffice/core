@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 14:05:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-03 11:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,9 @@
 #define SC_NUMBERFORMAT "NumberFormat"
 #define SC_CONDITIONALFORMAT "ConditionalFormat"
 #define XML_LINE_LEFT 0
-#define XML_LINE_RIGHT 0
-#define XML_LINE_TOP 0
-#define XML_LINE_BOTTOM 0
+#define XML_LINE_RIGHT 1
+#define XML_LINE_TOP 2
+#define XML_LINE_BOTTOM 3
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
