@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:05:57 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ private:
 };
 
 AnimationPageList::AnimationPageList( SdDrawDocument* pDoc )
-: mpDoc( pDoc ), mnCurrentPageIndex(0), mnStartPageNumber(0)
+        : mnStartPageNumber(0), mpDoc( pDoc ), mnCurrentPageIndex(0)
 {
     mnPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
 }
@@ -343,11 +343,11 @@ SlideshowImpl::SlideshowImpl(
     ::sd::View* pView,
     SdDrawDocument* pDoc )
 :   SlideshowImpl_base( m_aMutex ),
+    mxModel(pDoc->getUnoModel(),UNO_QUERY_THROW),
     mpView(pView),
     mpViewShell(pViewSh),
     mpDocSh(pDoc->GetDocSh()),
     mpDoc(pDoc),
-    mxModel(pDoc->getUnoModel(),UNO_QUERY_THROW),
     mpShowWindow(0),
     mpTimeButton(0),
     mpSaveOptions( new SvtSaveOptions ),
@@ -471,7 +471,6 @@ bool SlideshowImpl::startPreview(
             nPropertyCount++;
 
         Sequence< beans::PropertyValue > aProperties(nPropertyCount);
-        beans::PropertyValue* p = aProperties.getArray();
         aProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AutomaticAdvancement") );
         aProperties[0].Value = uno::makeAny( (double)1.0 ); // one second timeout
 
@@ -717,7 +716,6 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         bRet = startShowImpl( aSlides, aRootNodes,
                               Sequence<beans::PropertyValue>(
                                   &aProperties[0], aProperties.size() ) );
-
     }
     catch( Exception& e )
     {
@@ -1337,6 +1335,7 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
             DBG_ERROR("sd::SlideshowImpl::click(), exception caught!" );
         }
     }
+    break;
 
     case ClickAction_DOCUMENT:
     {
@@ -1422,8 +1421,7 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
 sal_Int32 SlideshowImpl::getPageNumberForBookmark( const OUString& rStrBookmark )
 {
     BOOL bIsMasterPage;
-    OUString aBookmark( rStrBookmark );
-    aBookmark = getUiNameFromPageApiNameImpl( aBookmark );
+    OUString aBookmark = getUiNameFromPageApiNameImpl( rStrBookmark );
     USHORT nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
     SdrObject* pObj = NULL;
 
@@ -1769,7 +1767,7 @@ void SlideshowImpl::createPageList( bool bAll, bool bStartWithActualPage, const 
         {
             sal_Int32 nFirstPage = 0;
 
-            // normale Präsentation
+            // normale Praesentation
             if( !bAll )
             {
                 if( rPresPage.Len() )
