@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-10-09 12:22:20 $
+ *  last change: $Author: os $ $Date: 2001-12-19 09:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,7 +939,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     SetOutputSizePixel( Size( nWishWidth, nZoomOutInit));
     Size aTmpParentSize(((SfxDockingWindow*)pParent)->GetSizePixel());
     if(aTmpParentSize.Width() < aMinSize.Width() ||
-        aTmpParentSize.Height() < aMinSize.Height())
+        aTmpParentSize.Height() < aMinSize.Height() &&
+            ((SfxDockingWindow*)pParent)->GetFloatingWindow() &&
+                !((SfxDockingWindow*)pParent)->GetFloatingWindow()->IsRollUp())
         ((SfxDockingWindow*)pParent)->SetOutputSizePixel(aMinSize);
 
     aContentTree.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
