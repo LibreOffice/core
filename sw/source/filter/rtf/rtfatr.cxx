@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-13 19:44:57 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1873,7 +1873,6 @@ static Writer& OutRTF_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
 }
 
 
-
 static Writer& OutRTF_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
@@ -1976,6 +1975,22 @@ static Writer& OutRTF_SwCharRelief( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+
+static Writer& OutRTF_SwChrBckgrnd( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    const SvxBrushItem& rBack = (const SvxBrushItem&)rHt;
+    if( !rBack.GetColor().GetTransparency() )
+    {
+        ByteString sOut( sRTF_CHCBPAT );
+        sOut += ByteString::CreateFromInt32(
+                            rRTFWrt.GetId( rBack.GetColor() ));
+
+        rRTFWrt.bOutFmtAttr = TRUE;
+        rWrt.Strm() << sOut.GetBuffer();
+    }
+    return rWrt;
+}
 
 static Writer& OutRTF_SwShadowed( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3531,7 +3546,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_BLINK */              0, // Neu: Blinkender Text
 /* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
 /* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
-/* RES_CHRATR_BACKGROUND */         0, // Neu: Zeichenhintergrund
+/* RES_CHRATR_BACKGROUND */         OutRTF_SwChrBckgrnd, // Neu: Zeichenhintergrund
 /* RES_CHRATR_CJK_FONT */           OutRTF_SwFont,
 /* RES_CHRATR_CJK_FONTSIZE */       OutRTF_SwSize,
 /* RES_CHRATR_CJK_LANGUAGE */       OutRTF_SwLanguage,
@@ -3660,11 +3675,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.15 2001-03-13 19:44:57 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.16 2001-03-27 21:34:45 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/03/13 19:44:57  jp
+      Bug #84868#: CTOR RTFEndPosLst - start position is also needed
+
       Revision 1.14  2001/03/12 16:18:29  jp
       export relief item
 
