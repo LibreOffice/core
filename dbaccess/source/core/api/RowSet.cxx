@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:00:22 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
@@ -157,8 +154,8 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
-#include "querycomposer.hxx"
+#ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
+#include "SingleSelectQueryComposer.hxx"
 #endif
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #include "tablecontainer.hxx"
@@ -329,6 +326,8 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_ACTIVECOMMAND,        PROPERTY_ID_ACTIVECOMMAND,          nRBT,                           &m_aActiveCommand,      ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_IGNORERESULT,         PROPERTY_ID_IGNORERESULT,           PropertyAttribute::BOUND,       &m_bIgnoreResult,       ::getBooleanCppuType());
     registerProperty(PROPERTY_FILTER,               PROPERTY_ID_FILTER,                 PropertyAttribute::BOUND,       &m_aFilter,             ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_HAVING_CLAUSE,        PROPERTY_ID_HAVING_CLAUSE,          PropertyAttribute::BOUND,       &m_aHavingClause,       ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_GROUP_BY,             PROPERTY_ID_GROUP_BY,               PropertyAttribute::BOUND,       &m_aGroupBy,            ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_APPLYFILTER,          PROPERTY_ID_APPLYFILTER,            PropertyAttribute::BOUND,       &m_bApplyFilter,        ::getBooleanCppuType());
     registerProperty(PROPERTY_ORDER,                PROPERTY_ID_ORDER,                  PropertyAttribute::BOUND,       &m_aOrder,              ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_PRIVILEGES,           PROPERTY_ID_PRIVILEGES,             nRT,                            &m_nPrivileges,         ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
@@ -464,6 +463,8 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
                 fireRowcount();
             }
             break;
+        case PROPERTY_ID_HAVING_CLAUSE:
+        case PROPERTY_ID_GROUP_BY:
         case PROPERTY_ID_FILTER:
             m_bCreateStatement = sal_True;
             break;
@@ -1637,7 +1638,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     if(m_aUpdateTableName.getLength())
                         composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False,::dbtools::eInDataManipulation);
 
-                    m_pCache = new ORowSetCache(xRs,m_xComposer,m_xServiceManager,m_aParameterRow,aComposedTableName,m_bModified,m_bNew);
+                    m_pCache = new ORowSetCache(xRs,m_xAnalyzer,m_xServiceManager,m_aParameterRow,aComposedTableName,m_bModified,m_bNew);
                     m_pCache->setMaxRowSize(m_nFetchSize);
                     m_aCurrentRow   = m_pCache->createIterator();
                     m_aOldRow = m_pCache->registerOldRow();
@@ -2166,43 +2167,53 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
     rtl::OUString aFilterStatement = rQuery;
     if (bEscapeProcessing)
     {
-        Reference< XSQLQueryComposerFactory >  xFactory(m_xActiveConnection, UNO_QUERY);
+        Reference< XMultiServiceFactory >  xFactory(m_xActiveConnection, UNO_QUERY);
         if (xFactory.is())
         {
             try
             {
-                m_xComposer = xFactory->createQueryComposer();
+                m_xComposer.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+                m_xAnalyzer.set(m_xComposer,UNO_QUERY);
             }
             catch (Exception&)
             {
                 m_xComposer = NULL;
+                m_xAnalyzer = NULL;
             }
         }
         if(!m_xComposer.is()) // no composer so we create one
         {
-            OQueryComposer* pComposer = new OQueryComposer(_rxRetTables,m_xActiveConnection,m_xServiceManager);
+            OSingleSelectQueryComposer* pComposer = new OSingleSelectQueryComposer(_rxRetTables,m_xActiveConnection,m_xServiceManager);
             m_xComposer = pComposer;
+            m_xAnalyzer.set(m_xComposer,UNO_QUERY);
         }
-        if(m_xComposer.is())
+        if ( m_xComposer.is() )
         {
-            m_xComposer->setQuery(rQuery);
+            m_xAnalyzer->setQuery(rQuery);
 
-            if (m_aFilter.getLength() && m_bApplyFilter)
-                m_xComposer->setFilter(m_aFilter);
+            if ( m_bApplyFilter )
+            {
+                if ( m_aFilter.getLength() )
+                    m_xComposer->setFilter(m_aFilter);
+                if ( m_aHavingClause.getLength() )
+                    m_xComposer->setHavingClause(m_aHavingClause);
+                if ( m_aGroupBy.getLength() )
+                    m_xComposer->setGroup(m_aGroupBy);
+            }
 
             if ( m_bIgnoreResult )
             {   // append a "0=1" filter
                 // don't simply overwrite an existent filter, this would lead to problems if this existent
                 // filter contains paramters (since a keyset may add parameters itself)
                 // 2003-12-12 - #23418# - fs@openoffice.org
-                m_xComposer->setQuery( m_xComposer->getComposedQuery( ) );
+                m_xAnalyzer->setQuery( m_xAnalyzer->getQuery( ) );
                 m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
             }
 
             if (m_aOrder.getLength())
                 m_xComposer->setOrder(m_aOrder);
 
-            aFilterStatement = m_xComposer->getComposedQuery();
+            aFilterStatement = m_xAnalyzer->getQuery();
             if(!m_xColumns.is())
             {
                 Reference<XColumnsSupplier> xCols(m_xComposer,UNO_QUERY);
