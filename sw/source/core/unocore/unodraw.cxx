@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-04-16 15:23:56 $
+ *  last change: $Author: ama $ $Date: 2001-05-04 13:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,8 @@ void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape) throw
     vos::OGuard  aGuard(Application::GetSolarMutex());
     if(!pDoc)
         throw uno::RuntimeException();
-    GetSvxPage()->remove(xShape);
+    Reference<lang::XComponent> xComp(xShape, UNO_QUERY);
+    xComp->dispose();
 }
 /* -----------------17.02.99 10:38-------------------
  *
