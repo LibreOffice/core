@@ -182,6 +182,7 @@ Dim oUcb as object
 			oRefModel.Text = ConvertFromUrl(sPath)
 		End If
 	End If
+	oFolderDialog.Cancel()
 End Sub
 
 
@@ -214,6 +215,7 @@ Dim oUcb as object
 			oRefModel.Text = ConvertFromUrl(sPath)
 		End If
 	End If
+	oFileDialog.Dispose()
 End Sub
 
 
