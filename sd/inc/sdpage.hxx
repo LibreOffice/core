@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:47:07 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,10 +177,8 @@ public:
 
     virtual void       NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND,
                                        const SdrInsertReason* pReason=NULL);
-#ifndef SVX_LIGHT
     virtual SdrObject* NbcRemoveObject(ULONG nObjNum);
     virtual SdrObject* RemoveObject(ULONG nObjNum);
-#endif
 
     virtual void SetLinkData(const String& rLinkName, const String& rLinkData);
 
@@ -239,10 +237,10 @@ public:
 #ifndef SVX_LIGHT
     void            ConnectLink();
     void            DisconnectLink();
-#endif
 
     void    ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
                          BOOL bScaleAllObj);
+#endif
 
     const String&   GetName();
     String          GetRealName() const { return aPageName; };

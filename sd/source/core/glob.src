@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:28:48 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,3 +1971,30 @@ String STR_PRESOBJ_IMAGE
     Text[ language_user1 ] = " ";
 };
 #endif
+
+String STR_POOLSHEET_ARROW
+{
+    Text = "Pfeil" ;
+    Text [ ENGLISH ] = "Arrow" ;
+    Text [ norwegian ] = "Arrow" ;
+    Text [ italian ] = "Freccia" ;
+    Text [ portuguese_brazilian ] = "Arrow" ;
+    Text [ portuguese ] = "Seta" ;
+    Text [ french ] = "Flèche" ;
+    Text [ dutch ] = "Pijl" ;
+    Text [ spanish ] = "Flecha" ;
+    Text [ danish ] = "Pil" ;
+    Text [ swedish ] = "Pil" ;
+    Text [ finnish ] = "Arrow" ;
+    Text [ english_us ] = "Arrow" ;
+    Text[ chinese_simplified ] = "¼ýÍ·";
+    Text[ russian ] = "Ñòðåëêà";
+    Text[ polish ] = "Strza³ka";
+    Text[ japanese ] = "–îˆó";
+    Text[ chinese_traditional ] = "½bÀY";
+    Text[ arabic ] = "Óåã";
+    Text[ greek ] = "ÂÝëïò";
+    Text[ korean ] = "È­»ìÇ¥";
+    Text[ turkish ] = "Ok";
+    Text[ language_user1 ] = " ";
+};

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-24 13:06:10 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 #endif
     pDeletedPresObjList(NULL),
     nFileFormatVersion(SDIOCOMPAT_VERSIONDONTKNOW),
+    pDocStor(NULL),
     pCustomShowList(NULL),
     eLanguage( LANGUAGE_SYSTEM ),
     eLanguageCJK( LANGUAGE_SYSTEM ),
@@ -1270,7 +1271,6 @@ void __EXPORT SdDrawDocument::SetChanged(FASTBOOL bFlag)
 
 void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 {
-#ifndef SVX_LIGHT
     if (eMode == NEW_DOC)
     {
         // Neues Dokument:
@@ -1281,9 +1281,8 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         ((SdStyleSheetPool*)pStyleSheetPool)->CreatePseudosIfNecessary();
     }
     else if (eMode == DOC_LOADED)
-#endif // !SVX_LIGHT
     {
-        // Dokument wurde geladen:
+            // Dokument wurde geladen:
 
 #ifndef SVX_LIGHT
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )

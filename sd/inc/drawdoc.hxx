@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-20 09:46:45 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
+#endif
 
 #ifdef SVX_LIGHT
 #define SdOutliner Outliner
@@ -144,20 +147,20 @@ class SdDrawDocument;
 class SdDrawDocShell
 {
 private:
-    SvStream* pStream;
+    SotStorage* pStorage;
     Printer* pPrinter;
     SdDrawDocument* mpDoc;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
 
 public:
-    SdDrawDocShell( SvStream* pS ) : pPrinter(NULL), pStream( pS ) {}
+    SdDrawDocShell( SotStorage* pS ) : pPrinter(NULL), pStorage( pS ) {}
     ~SdDrawDocShell() { delete pPrinter; }
 
     virtual void SetPrinter( Printer* pPrntr ) { pPrinter = pPrntr; }
     virtual Printer* GetPrinter( BOOL bCreate ) { if( pPrinter == NULL && bCreate ) pPrinter = new Printer(); return pPrinter; }
 
-    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const { return pStream; }
+    virtual SotStorage* GetStorage() const { return pStorage; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel();
 
@@ -226,6 +229,10 @@ private:
     DocumentType      eDocType;
     UINT16            nFileFormatVersion;
 
+    SotStorage*             pDocStor;
+    SotStorageRef           xPictureStorage;
+    SotStorageStreamRef     xDocStream;
+
     void  UpdatePageObjectsInNotes(USHORT nStartPos);
     DECL_LINK(NotifyUndoActionHdl, SfxUndoAction*);
     DECL_LINK(WorkStartupHdl, Timer*);
@@ -281,7 +288,9 @@ public:
     void     InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
     void     DeletePage(USHORT nPgNum);
     SdrPage* RemovePage(USHORT nPgNum);
+#ifndef SVX_LIGHT
     void     RemoveUnnessesaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
+#endif
     void     SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
                            SdDrawDocument* pSourceDoc, BOOL bMaster, BOOL bCheckMasters);
 
@@ -382,7 +391,8 @@ public:
 
     virtual void SetChanged(FASTBOOL bFlag = TRUE);
     void NbcSetChanged(FASTBOOL bFlag = TRUE) { bChanged = bFlag; }
-    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
+    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo);
+    virtual void HandsOff();
 
     void SetTextDefaults() const;
 

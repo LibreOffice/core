@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-12 16:02:32 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1122,6 +1122,7 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
 #ifndef SVX_LIGHT
     if( pDocSh )
         pDocSh->SetWaitCursor( TRUE );
+#endif
 
     BOOL bChanged = IsChanged();        // merken
 
@@ -1152,6 +1153,7 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
 
     SetChanged(bChanged || FALSE);
 
+#ifndef SVX_LIGHT
     if( pDocSh )
         pDocSh->SetWaitCursor( FALSE );
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-28 11:55:47 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,6 @@ SdDrawDocShell::SdDrawDocShell(SfxObjectCreateMode eMode,
 //  pStbMgr( NULL ),
     bSdDataObj(bDataObject),
     bOwnPrinter(FALSE),
-    pDocStor(NULL),
     eDocType(eDocumentType)
 {
 //    pDoc = new SdDrawDocument(eDocType, this);
@@ -248,7 +247,6 @@ SdDrawDocShell::SdDrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
 //  pStbMgr( NULL ),
     bSdDataObj(bDataObject),
     bOwnPrinter(FALSE),
-    pDocStor(NULL),
     eDocType(eDocumentType)
 {
     Construct();
@@ -502,99 +500,6 @@ void SdDrawDocShell::ApplySlotFilter() const
         pFrame->GetBindings().InvalidateAll(TRUE);
 }
 
-
-/*************************************************************************
-|*
-|* Document-Stream herausgeben (fuer load-on-demand Graphiken)
-|*
-\************************************************************************/
-
-SvStream* SdDrawDocShell::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
-{
-    SvStorage*  pStor = GetMedium()->GetStorage();
-    SvStream*   pRet = NULL;
-
-    if( pStor )
-    {
-        if( rStreamInfo.maUserData.Len() &&
-            ( rStreamInfo.maUserData.GetToken( 0, ':' ) ==
-              String( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package" ) ) ) )
-        {
-            const String aPicturePath( rStreamInfo.maUserData.GetToken( 1, ':' ) );
-
-            // graphic from picture stream in picture storage in XML package
-            if( aPicturePath.GetTokenCount( '/' ) == 2 )
-            {
-                const String aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
-
-                if( !xPictureStorage.Is() )
-                {
-                    const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
-
-                    if( pStor->IsContained( aPictureStorageName ) &&
-                        pStor->IsStorage( aPictureStorageName )  )
-                    {
-                        xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ );
-                    }
-                }
-
-                if( xPictureStorage.Is() &&
-                    xPictureStorage->IsContained( aPictureStreamName ) &&
-                    xPictureStorage->IsStream( aPictureStreamName ) )
-                {
-                    pRet = xPictureStorage->OpenStream( aPictureStreamName, STREAM_READ );
-
-                    if( pRet )
-                    {
-                        pRet->SetVersion( xPictureStorage->GetVersion() );
-                        pRet->SetKey( xPictureStorage->GetKey() );
-                    }
-                }
-            }
-
-            rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
-        }
-        else
-        {
-            // graphic from plain binary document stream
-            if( !pDocStor )
-            {
-                if( pStor->IsStream( pStarDrawDoc ) )
-                {
-                    BOOL bOK = pStor->Rename(pStarDrawDoc, pStarDrawDoc3);
-                    DBG_ASSERT(bOK, "Umbenennung des Streams gescheitert");
-                }
-
-                xDocStream =  pStor->OpenStream( pStarDrawDoc3, STREAM_READ );
-                xDocStream->SetVersion( pStor->GetVersion() );
-                xDocStream->SetKey( pStor->GetKey() );
-                pDocStor = pStor;
-            }
-
-            pRet = xDocStream;
-            rStreamInfo.mbDeleteAfterUse = FALSE;
-        }
-    }
-
-#ifdef DEBUG
-    if( pRet )
-    {
-        // try to get some information from stream
-        const ULONG nStartPos = pRet->Tell();
-        const ULONG nEndPos = pRet->Seek( STREAM_SEEK_TO_END );
-        const ULONG nStmLen = nEndPos - nStartPos;
-        sal_uChar   aTestByte;
-
-        // try to read one byte
-        if( nStmLen )
-            *pRet >> aTestByte;
-
-        pRet->Seek( nStartPos );
-    }
-#endif
-
-    return pRet;
-}
 
 void SdDrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-20 09:45:44 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,8 +701,12 @@ BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
 void SdDrawDocShell::HandsOff()
 {
     SfxInPlaceObject::HandsOff();
-    xPictureStorage = SvStorageRef();
-    pDocStor = NULL;
+
+#ifndef SVX_LIGHT
+    // forward to document
+    if( pDoc )
+        pDoc->HandsOff();
+#endif
 }
 
 /*************************************************************************

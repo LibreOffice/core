@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:48:30 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,6 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::SetPresentationLayout(const String& rLayoutName,
                                    BOOL bReplaceStyleSheets,
                                    BOOL bSetMasterPage,
@@ -309,7 +308,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
         delete (StyleReplaceData*) aReplList.GetObject(i);
     }
 }
-#endif // !SVX_LIGHT
+
 
 /*************************************************************************
 |*

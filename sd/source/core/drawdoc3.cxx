@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:18:30 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #endif
 #endif // !SVX_LIGHT
 
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+
 #include <svtools/style.hxx>
 #include <svx/linkmgr.hxx>
 #ifndef _SVDPAGV_HXX //autogen
@@ -88,8 +92,8 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
@@ -140,6 +144,9 @@
 #endif
 #endif // !SVX_LIGHT
 
+#ifdef SVX_LIGHT
+#include "glob.hxx"
+#endif
 
 
 #define POOL_BUFFER_SIZE        (USHORT)32768
@@ -1253,16 +1260,108 @@ List* SdDrawDocument::GetCustomShowList(BOOL bCreate)
 |*
 \************************************************************************/
 
-SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
+SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
 {
-    SvStream* pStream = NULL;
+#ifdef SVX_LIGHT
+    SotStorage* pStor = pDocSh ? pDocSh->GetStorage() : NULL;
+#else
+    SotStorage* pStor = pDocSh ? pDocSh->GetMedium()->GetStorage() : NULL;
+#endif
+    SvStream*   pRet = NULL;
 
-    if (pDocSh)
+    if( pStor )
     {
-        pStream = ((SdDrawDocShell*) pDocSh)->GetDocumentStream(rStreamInfo);
+        if( rStreamInfo.maUserData.Len() &&
+            ( rStreamInfo.maUserData.GetToken( 0, ':' ) ==
+              String( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package" ) ) ) )
+        {
+            const String aPicturePath( rStreamInfo.maUserData.GetToken( 1, ':' ) );
+
+            // graphic from picture stream in picture storage in XML package
+            if( aPicturePath.GetTokenCount( '/' ) == 2 )
+            {
+                const String aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
+
+                if( !xPictureStorage.Is() )
+                {
+                    const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
+
+                    if( pStor->IsContained( aPictureStorageName ) &&
+                        pStor->IsStorage( aPictureStorageName )  )
+                    {
+                        xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ );
+                    }
+                }
+
+                if( xPictureStorage.Is() &&
+                    xPictureStorage->IsContained( aPictureStreamName ) &&
+                    xPictureStorage->IsStream( aPictureStreamName ) )
+                {
+                    pRet = xPictureStorage->OpenSotStream( aPictureStreamName, STREAM_READ );
+
+                    if( pRet )
+                    {
+                        pRet->SetVersion( xPictureStorage->GetVersion() );
+                        pRet->SetKey( xPictureStorage->GetKey() );
+                    }
+                }
+            }
+
+            rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
+        }
+        else
+        {
+            // graphic from plain binary document stream
+            if( !pDocStor )
+            {
+                if( pStor->IsStream( pStarDrawDoc ) )
+                {
+                    BOOL bOK = pStor->Rename(pStarDrawDoc, pStarDrawDoc3);
+                    DBG_ASSERT(bOK, "Umbenennung des Streams gescheitert");
+                }
+
+                xDocStream =  pStor->OpenSotStream( pStarDrawDoc3, STREAM_READ );
+                xDocStream->SetVersion( pStor->GetVersion() );
+                xDocStream->SetKey( pStor->GetKey() );
+                pDocStor = pStor;
+            }
+
+            pRet = xDocStream;
+            rStreamInfo.mbDeleteAfterUse = FALSE;
+        }
     }
 
-    return pStream;
+#ifdef DEBUG
+    if( pRet )
+    {
+        // try to get some information from stream
+        const ULONG nStartPos = pRet->Tell();
+        const ULONG nEndPos = pRet->Seek( STREAM_SEEK_TO_END );
+        const ULONG nStmLen = nEndPos - nStartPos;
+        sal_uChar   aTestByte;
+
+        // try to read one byte
+        if( nStmLen )
+            *pRet >> aTestByte;
+
+        pRet->Seek( nStartPos );
+    }
+#endif
+
+    return pRet;
+}
+
+
+/*************************************************************************
+|*
+|* Release doc stream, if no longer valid
+|*
+\************************************************************************/
+
+void SdDrawDocument::HandsOff()
+{
+    xPictureStorage = SotStorageRef();
+    pDocStor = NULL;
 }
 
 
@@ -1428,18 +1527,19 @@ void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnl
 |* Ist rLayoutName leer, so wird die erste MasterPage genommen
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                    const String& rLayoutName,
                                    SdDrawDocument* pSourceDoc,
                                    BOOL bMaster,
                                    BOOL bCheckMasters)
 {
+#ifndef SVX_LIGHT
     if( pDocSh )
         pDocSh->SetWaitCursor( TRUE );
 
     SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
+#endif
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);
     SdPage* pNotes          = (SdPage*) GetPage(pSelectedPage->GetPageNum()+1);
@@ -1535,11 +1635,14 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                         BOOL bTest = pMySheet->SetName(pHisSheet->GetName());
                         DBG_ASSERT(bTest, "StyleSheet-Umbenennung fehlgeschlagen");
                         pMySheet->GetItemSet().ClearItem(0);  // alle loeschen
+
+#ifndef SVX_LIGHT
                         StyleSheetUndoAction* pUndoChStyle = new StyleSheetUndoAction(this,
                                                                  pMySheet, &pHisSheet->GetItemSet());
                         pUndoMgr->AddUndoAction(pUndoChStyle);
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
                         pMySheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+#endif
                     }
                     else
                     {
@@ -1610,11 +1713,13 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 
             if (pCreatedStyles->Count() > 0)
             {
+#ifndef SVX_LIGHT
                 // UndoAction fuer das Erzeugen und Einfuegen vorn StyleSheets
                 // auf den UndoManager legen
                 SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(
                                                               this, pCreatedStyles, TRUE);
                 pUndoMgr->AddUndoAction(pMovStyles);
+#endif
             }
             else
             {
@@ -1694,11 +1799,13 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         {
             AutoLayout eAutoLayout = pPage->GetAutoLayout();
 
+        #ifndef SVX_LIGHT
             SdPresentationLayoutUndoAction * pPLUndoAction =
                 new SdPresentationLayoutUndoAction
                     (this, aOldLayoutName, aLayoutName,
                      eAutoLayout, eAutoLayout, FALSE, pPage);
             pUndoMgr->AddUndoAction(pPLUndoAction);
+        #endif
             pPage->SetPresentationLayout(aLayoutName);
             pPage->SetAutoLayout(eAutoLayout, TRUE);
 
@@ -1717,7 +1824,9 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                   pOldMaster->GetUppBorder(),
                                   pOldMaster->GetRgtBorder(),
                                   pOldMaster->GetLwrBorder());
+#ifndef SVX_LIGHT
             pMaster->ScaleObjects(aSize, aBorderRect, TRUE);
+#endif
             pMaster->SetSize(aSize);
             pMaster->SetBorder(pOldMaster->GetLftBorder(),
                                pOldMaster->GetUppBorder(),
@@ -1731,7 +1840,9 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                        pOldNotesMaster->GetUppBorder(),
                                        pOldNotesMaster->GetRgtBorder(),
                                        pOldNotesMaster->GetLwrBorder());
+#ifndef SVX_LIGHT
             pNotesMaster->ScaleObjects(aSize, aNotesBorderRect, TRUE);
+#endif
             pNotesMaster->SetSize(aSize);
             pNotesMaster->SetBorder(pOldNotesMaster->GetLftBorder(),
                                     pOldNotesMaster->GetUppBorder(),
@@ -1790,9 +1901,11 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         \********************************************************************/
         ((SdStyleSheetPool*) pStyleSheetPool)->CreateLayoutStyleSheets(aName);
         List* pCreatedStyles = ((SdStyleSheetPool*) pStyleSheetPool)->CreateLayoutSheetList(aName);
+#ifndef SVX_LIGHT
         SdMoveStyleSheetsUndoAction* pMovStyles =
             new SdMoveStyleSheetsUndoAction(this, pCreatedStyles, TRUE);
         pUndoMgr->AddUndoAction(pMovStyles);
+#endif
 
         /*********************************************************************
         |* Neue MasterPages erzeugen und ins Dokument eintragen
@@ -1856,12 +1969,14 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             AutoLayout eNewAutoLayout =
                 pPage->GetPageKind() == PK_STANDARD ? AUTOLAYOUT_NONE : AUTOLAYOUT_NOTES;
 
+#ifndef SVX_LIGHT
             SdPresentationLayoutUndoAction * pPLUndoAction =
                 new SdPresentationLayoutUndoAction
                         (this, aOldLayoutName, aName,
                          eOldAutoLayout, eNewAutoLayout, TRUE,
                          pPage);
             pUndoMgr->AddUndoAction(pPLUndoAction);
+#endif
 
             pPage->SetPresentationLayout(aName);
             pPage->SetAutoLayout(eNewAutoLayout, TRUE);
@@ -1873,6 +1988,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         delete pPageList;
     }
 
+#ifndef SVX_LIGHT
     /*********************************************************************
     |* falls die alten Masterpages nicht mehr benoetigt werden,
     |* muessen sie und die entsprechenden Praesentationsvorlagen
@@ -1893,8 +2009,8 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 
     if( pDocSh )
         pDocSh->SetWaitCursor( FALSE );
-}
 #endif // !SVX_LIGHT
+}
 
 
 

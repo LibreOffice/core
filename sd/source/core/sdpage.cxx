@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:48:30 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,6 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::CreateTitleAndLayout(BOOL bInit)
 {
     SdPage* pMasterPage = this;
@@ -999,7 +998,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit)
         }
     }
 }
-#endif // !SVX_LIGHT
+
 
 /*************************************************************************
 |*
@@ -1117,7 +1116,6 @@ Rectangle SdPage::GetLayoutRect() const
 void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
 {
     eAutoLayout = eLayout;
-#ifndef SVX_LIGHT
     bOwnArrangement = TRUE;
 
     CreateTitleAndLayout(bInit);
@@ -1841,7 +1839,6 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
     aPresObjList = aObjList;
 
     bOwnArrangement = FALSE;
-#endif // !SVX_LIGHT
 }
 
 /*************************************************************************
@@ -1878,9 +1875,9 @@ void SdPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason*
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 SdrObject* SdPage::RemoveObject(ULONG nObjNum)
 {
+#ifndef SVX_LIGHT
     SdrObject* pObj = FmFormPage::RemoveObject(nObjNum);
 
     if (pObj && pObj->GetUserCall()!=this &&
@@ -1892,10 +1889,12 @@ SdrObject* SdPage::RemoveObject(ULONG nObjNum)
     }
 
     ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
+#else
+    SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
+#endif // !SVX_LIGHT
 
     return(pObj);
 }
-#endif // !SVX_LIGHT
 
 
 /*************************************************************************
@@ -1904,9 +1903,9 @@ SdrObject* SdPage::RemoveObject(ULONG nObjNum)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 SdrObject* SdPage::NbcRemoveObject(ULONG nObjNum)
 {
+#ifndef SVX_LIGHT
     SdrObject* pObj = FmFormPage::NbcRemoveObject(nObjNum);
 
     if (pObj && pObj->GetUserCall()!=this &&
@@ -1918,10 +1917,12 @@ SdrObject* SdPage::NbcRemoveObject(ULONG nObjNum)
     }
 
     ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
+#else
+    SdrObject* pObj = SdrPage::NbcRemoveObject(nObjNum);
+#endif // !SVX_LIGHT
 
     return(pObj);
 }
-#endif // !SVX_LIGHT
 
 
 /*************************************************************************
@@ -2398,7 +2399,6 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical,
                             Rectangle aRect, BOOL bInit, List& rObjList)
 {
@@ -2520,7 +2520,9 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     aPresObjList.Remove(pSubtitle);
                     RemoveObject( pObj->GetOrdNum() );
                     ReplaceObject( pObj, pSubtitle->GetOrdNum() );
+#ifndef SVX_LIGHT
                     ( (SdDrawDocument*) pModel)->RemoveObject( pSubtitle, this );
+#endif
                     delete pSubtitle;
                 }
             }
@@ -2571,7 +2573,9 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     aPresObjList.Remove(pOutlineObj);
                     RemoveObject( pObj->GetOrdNum() );
                     ReplaceObject( pObj, pOutlineObj->GetOrdNum() );
+#ifndef SVX_LIGHT
                     ( (SdDrawDocument*) pModel)->RemoveObject( pOutlineObj, this );
+#endif
                     delete pOutlineObj;
                 }
             }
@@ -2580,7 +2584,6 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
 
     return(bIncrement);
 }
-#endif // !SVX_LIGHT
 
 
 /*************************************************************************

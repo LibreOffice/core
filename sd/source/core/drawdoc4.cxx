@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-21 16:24:40 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,6 @@ using namespace ::com::sun::star::linguistic2;
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::CreateLayoutTemplates()
 {
     SdStyleSheetPool* pStyleSheetPool = (SdStyleSheetPool*)GetStyleSheetPool();
@@ -272,8 +271,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     SfxItemPool* pPool = rISet.GetPool();
 
     String   aNullStr;
-
-    Bitmap   aNullBmp(SdResId(BMP_PRESOBJ_OBJECT));   // irgendeine
 
     XPolygon aNullPol;
     Color    aNullCol(RGB_Color(COL_BLACK));
@@ -302,7 +299,13 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     rISet.Put(XFillGradientItem(pPool,aNullGrad));
     rISet.Put(XFillHatchItem(pPool,aNullHatch));
+#ifndef SVX_LIGHT
+    Bitmap   aNullBmp(SdResId(BMP_PRESOBJ_OBJECT));   // irgendeine
     rISet.Put(XFillBitmapItem(pPool,aNullBmp));
+#else
+    // leave it empty to avoid resource usage
+    rISet.Put(XFillBitmapItem());
+#endif
 
                     // Schattenattribute (Drawing Engine)
     rISet.Put(SdrShadowItem(FALSE));
@@ -382,7 +385,11 @@ void SdDrawDocument::CreateLayoutTemplates()
     aArrow[1]=Point(200,400);                      //    \    /
     aArrow[2]=Point(0,400);                        //     \  /
     aArrow[3]=Point(100,0);                        //      \/1,0
+#ifdef SVX_LIGHT
+    pISet->Put(XLineStartItem(SdResId(STR_POOLSHEET_ARROW),aArrow));
+#else
     pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
+#endif
 
     pISet->Put(XLineStartWidthItem(700));
     pISet->Put(XLineEndWidthItem(300));         // wollte Kohse das wirklich?
@@ -600,9 +607,18 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxFontHeightItem(423));         // 12 pt
 
+#ifdef SVX_LIGHT
+    // avoid SVX resources
+    pISet->Put(XLineStartItem(SdResId(STR_POOLSHEET_ARROW),aArrow));
+#else
     pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
+#endif
     pISet->Put(XLineStartWidthItem(200));
+#ifdef SVX_LIGHT
+    pISet->Put(XLineEndItem(SdResId(STR_POOLSHEET_ARROW),aArrow));
+#else
     pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
+#endif
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(XLINE_SOLID));
 
@@ -624,7 +640,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     String aPrefix = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
     pStyleSheetPool->CreateLayoutStyleSheets(aPrefix);
 }
-#endif // !SVX_LIGHT
 
 
 /*************************************************************************
