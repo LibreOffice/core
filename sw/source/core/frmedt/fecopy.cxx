@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-09 14:50:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,7 +1094,21 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
             //find out if the clipboard document starts with a table
             bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
             SwPosition aInsertPosition( rInsPos );
-            pClpDoc->Copy( aCpyPam, rInsPos );
+
+            {
+                SwNodeIndex aIndexBefore(rInsPos.nNode);
+                aIndexBefore--;
+
+                pClpDoc->Copy( aCpyPam, rInsPos );
+
+                {
+                    aIndexBefore++;
+                    SwPaM aPaM(SwPosition(aIndexBefore, 0), rInsPos);
+
+                    GetDoc()->MakeUniqueNumRules(aPaM);
+                }
+            }
+
             SaveTblBoxCntnt( &rInsPos );
             if(bIncludingPageFrames && bStartWithTable)
             {
