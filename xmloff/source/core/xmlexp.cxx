@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-19 13:41:31 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 13:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,8 +640,6 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
 
 void SvXMLExport::exportPageMaster()
 {
-    GetPageExport()->collectAutoStyles( sal_True );
-
     const UniReference< XMLPropertySetMapper > aPageMasterMapperRef = GetPageExport()->GetPageMasterPropSetMapper();
     XMLPageMasterExportPropMapper* pPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(aPageMasterMapperRef);
     GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER,
