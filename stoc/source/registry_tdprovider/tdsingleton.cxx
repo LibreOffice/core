@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdsingleton.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-13 16:01:21 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ SingletonTypeDescriptionImpl::getService()
         }
         OSL_ENSURE( (*pServiceTD).is(), "### no type description for service!" );
 
-        ClearableMutexGuard aGuard( _aMutex );
+        ClearableMutexGuard aGuard( getMutex() );
         if ( _pServiceTD )
         {
             aGuard.clear();
