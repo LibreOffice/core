@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:22:05 $
+ *  last change: $Author: os $ $Date: 2002-06-26 11:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,11 @@ interface BaseText : Selection
         StateMethod = NoState ;
     ]
     FN_TO_FOOTER // status(final|play)
+    [
+        ExecMethod = ExecMoveMisc ;
+        StateMethod = NoState ;
+    ]
+    FN_TO_FOOTNOTE_AREA
     [
         ExecMethod = ExecMoveMisc ;
         StateMethod = NoState ;

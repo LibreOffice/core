@@ -9294,5 +9294,28 @@ SwRegisterItem RegisterTrue SID_ATTR_PARA_REGISTER
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem JumpToFootnoteArea FN_TO_FOOTNOTE_AREA
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
 
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_NAVIGATOR;
+]
 
