@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dbo $ $Date: 2002-06-14 12:51:31 $
+#   last change: $Author: jl $ $Date: 2002-07-18 13:40:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,8 @@ UNOIDLDBFILES= \
     $(UCR)$/csscorba.db \
     $(UCR)$/cssiop.db \
     $(UCR)$/cssiiop.db \
-    $(UCR)$/cssgiop.db 
+    $(UCR)$/cssgiop.db \
+    $(UCR)$/csstask.db
 
 # --- Targets ------------------------------------------------------
 
