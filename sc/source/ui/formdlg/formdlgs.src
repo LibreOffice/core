@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:06:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ czech ] = "Použít funkci";
         QuickHelpText[ hebrew ] = "Funktion übernehmen";
         QuickHelpText[ hindi ] = "फंक्शन् लागू करो";
+        QuickHelpText[ slovak ] = "Použiť funkciu";
     };
     ListBox LB_CATEGORY
     {
@@ -572,6 +573,22 @@ TabPage RID_SCTAB_FUNCTION
             < "टेक्स्ट्" ; Default ; > ;
             < "में जोड़ो" ; Default ; > ;
         };
+    StringList [ slovak ] =
+    {
+         < "Naposledy použité" ; Default ; > ;
+        < "Všetko" ; Default ; > ;
+        < "Databáza" ; Default ; > ;
+        < "Dátum&Čas" ; Default ; > ;
+        < "Finančné" ; Default ; > ;
+        < "Informačné" ; Default ; > ;
+        < "Logické" ; Default ; > ;
+        < "Matematické" ; Default ; > ;
+        < "Pole" ; Default ; > ;
+        < "Štatistické" ; Default ; > ;
+        < "Zošit" ; Default ; > ;
+        < "Text" ; Default ; > ;
+        < "Prídavok" ; Default ; > ;
+    };
     };
     ListBox LB_FUNCTION
     {
@@ -611,6 +628,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Kategória";
     };
     FixedText FT_FUNCTION
     {
@@ -643,6 +661,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ czech ] = "Funkce";
         Text[ hebrew ] = "‮פונקציה‬";
         Text[ hindi ] = "~फ़ंक्शन्";
+        Text[ slovak ] = "~Funkcia";
     };
 };
 TabPage RID_SCTAB_STRUCT
@@ -689,6 +708,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ czech ] = "Struktura";
         Text[ hebrew ] = "‮מבנה‬";
         Text[ hindi ] = "~बनावट";
+        Text[ slovak ] = "Štruktú~ra";
     };
     Image BMP_STR_CLOSE
     {
@@ -758,6 +778,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ czech ] = "=?";
         Text[ hebrew ] = "=?";
         Text[ hindi ] = "=?";
+        Text[ slovak ] = "=?";
     };
     String STR_STRUCT_ERR2
     {
@@ -787,6 +808,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ czech ] = "Chyba";
         Text[ hebrew ] = "‮שגיאה‬";
         Text[ hindi ] = "गलती";
+        Text[ slovak ] = "Chyba";
     };
 };
 ModelessDialog RID_SCDLG_FORMULA
@@ -833,6 +855,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ czech ] = "Funkce";
                 Text[ hebrew ] = "‮פונקציות‬";
                 Text[ hindi ] = "फ़ंक्शन्स";
+                Text[ slovak ] = "Funkcie";
             };
             PageItem
             {
@@ -863,6 +886,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ czech ] = "Struktura";
                 Text[ hebrew ] = "‮מבנה‬";
                 Text[ hindi ] = "बनावट";
+                Text[ slovak ] = "Štruktúra";
             };
         };
     };
@@ -926,6 +950,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ czech ] = "Vzorec";
         Text[ hebrew ] = "‮נוסחה‬";
         Text[ hindi ] = "सू~त्र";
+        Text[ slovak ] = "Vz~orec";
     };
     Control ED_FORMULA
     {
@@ -966,6 +991,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ czech ] = "Výsledek funkce";
         Text[ hebrew ] = "‮תוצאה של פונקציה‬";
         Text[ hindi ] = "फ़ंक्शन्स का नतीजा";
+        Text[ slovak ] = "Výsledok funkcie";
     };
     Window WND_RESULT
     {
@@ -1005,6 +1031,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ czech ] = "Výsledek";
         Text[ hebrew ] = "‮תוצאה‬";
         Text[ hindi ] = "नतीजा";
+        Text[ slovak ] = "Výsledok";
     };
     Window WND_FORMULA_RESULT
     {
@@ -1045,6 +1072,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ czech ] = "Pole";
         Text[ hebrew ] = "‮מערך‬";
         Text[ hindi ] = "श्रेणी";
+        Text[ slovak ] = "Pole";
     };
     Edit ED_REF
     {
@@ -1083,6 +1111,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ czech ] = "Maximalizovat";
         QuickHelpText[ hebrew ] = "Vergrößern";
         QuickHelpText[ hindi ] = "बड़ा करो";
+        QuickHelpText[ slovak ] = "Maximalizovať";
     };
      //
     HelpButton BTN_HELP
@@ -1130,6 +1159,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ czech ] = "<< Zpět";
         Text[ hebrew ] = "‮<< הקודם‬";
         Text[ hindi ] = "<< ~पीछे";
+        Text[ slovak ] = "<< ~Späť";
     };
     PushButton BTN_FORWARD
     {
@@ -1163,6 +1193,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ czech ] = "Další >>";
         Text[ hebrew ] = "‮הבא >>‬";
         Text[ hindi ] = "~आगे >>";
+        Text[ slovak ] = "Ď~alší >>";
     };
     OKButton BTN_END
     {
@@ -1201,6 +1232,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ czech ] = "Průvodce: funkce";
         Text[ hebrew ] = "‮טייס אוטומטי: פונקציות‬";
         Text[ hindi ] = "ओटोपैलट्: फ़ंक्शन्स";
+        Text[ slovak ] = "Sprievodca: Funkcie";
     };
     String STR_TITLE2
     {
@@ -1231,8 +1263,11 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ czech ] = "Průvodce Funkce - ";
         Text[ hebrew ] = "‮טייס אוטומטי: פונקציות‬";
         Text[ hindi ] = "ओटोपैलट्: फ़ंक्शन्स  -";
+        Text[ slovak ] = "Sprievodca: Funkcie  -";
     };
 };
+
+
 
 
 
