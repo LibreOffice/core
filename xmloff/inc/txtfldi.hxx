@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,12 +525,17 @@ class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
     const ::rtl::OUString sPropertyDatabaseName;
     const ::rtl::OUString sPropertyTableName;
     const ::rtl::OUString sPropertyDataCommandType;
+    const ::rtl::OUString sPropertyIsVisible;
 
     ::rtl::OUString sDatabaseName;
     ::rtl::OUString sTableName;
 
     sal_Int32 nCommandType;
     sal_Bool bCommandTypeOK;
+
+    sal_Bool bDisplay;
+    bool bDisplayOK;
+    bool bUseDisplay;
 
 protected:
     sal_Bool bDatabaseOK;
@@ -541,7 +546,8 @@ protected:
                                   XMLTextImportHelper& rHlp,
                                   const sal_Char* pServiceName,
                                   sal_uInt16 nPrfx,
-                                  const ::rtl::OUString& sLocalName);
+                                  const ::rtl::OUString& sLocalName,
+                                  bool bUseDisplay );
 
 public:
 
