@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmservs.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:18:00 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(FM_SUN_CONTROL_GRIDCONTROL,"com.sun.star.form.control.GridControl");
 
     IMPLEMENT_CONSTASCII_USTRING(FM_NUMBER_FORMATTER,"com.sun.star.util.NumberFormatter");
-    IMPLEMENT_CONSTASCII_USTRING(FM_FORM_CONTROLLER,"com.sun.star.form.controller.FormController");
+    IMPLEMENT_CONSTASCII_USTRING(FM_FORM_CONTROLLER,"com.sun.star.form.FormController");
     IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_CONNECTION,"com.sun.star.sdb.Connection");
     IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_INTERACTION_HANDLER,"com.sun.star.sdb.InteractionHandler");
 }   // namespace svxform
