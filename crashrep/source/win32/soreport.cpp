@@ -103,7 +103,7 @@ static FILE *_tmpfile(void)
 
             if ( IsValidHandle( hFile ) )
             {
-                int fd = _open_osfhandle( (intptr_t)hFile, 0 );
+                int fd = _open_osfhandle( (int)hFile, 0 );
 
                 fp = _fdopen( fd, "w+b" );
             }
@@ -430,7 +430,11 @@ string GetFileDirectory( const string& rFilePath )
 {
     string aDir = rFilePath;
     size_t pos = aDir.rfind( '\\' );
-    aDir.erase( pos + 1 );
+
+    if ( string::npos != pos )
+        aDir.erase( pos + 1 );
+    else
+        aDir = "";
 
     return aDir;
 }
@@ -442,7 +446,10 @@ string GetFileName( const string& rFilePath )
     string aName = rFilePath;
     size_t pos = aName.rfind( '\\' );
 
-    return aName.substr( pos + 1 );
+    if ( string::npos != pos )
+        return aName.substr( pos + 1 );
+    else
+        return aName;
 }
 
 //***************************************************************************
@@ -1252,7 +1259,7 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
 
 static bool WriteStackFile( FILE *fout, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
 {
-    BOOL    fSuccess = FALSE;
+    bool    fSuccess = false;
 
     if ( fout && dwProcessId && pExceptionPointers )
     {
@@ -1285,7 +1292,7 @@ static bool WriteStackFile( FILE *fout, DWORD dwProcessId, PEXCEPTION_POINTERS p
             frame.AddrFrame.Offset = aContextRecord.Ebp;
             frame.AddrFrame.Mode = AddrModeFlat;
 
-            bool bSuccess;
+            BOOL bSuccess;
             int frameNum = 0;
 
             SymInitialize( hProcess, NULL, TRUE );
@@ -1294,7 +1301,7 @@ static bool WriteStackFile( FILE *fout, DWORD dwProcessId, PEXCEPTION_POINTERS p
 
             do
             {
-                fSuccess = TRUE;
+                fSuccess = true;
 
                 bSuccess = StackWalk( IMAGE_FILE_MACHINE_I386,
                     hProcess,
@@ -1791,7 +1798,7 @@ static bool ReadBootstrapParams()
 
     if ( GetPrivateProfileString(
         TEXT("ErrorReport"),
-        TEXT("Port"),
+        TEXT("ErrorReportPort"),
         TEXT("80"),
         szReportPort, elementsof(szReportPort),
         szModuleName
@@ -1806,7 +1813,7 @@ static bool ReadBootstrapParams()
 
     if ( GetPrivateProfileString(
         TEXT("ErrorReport"),
-        TEXT("Server"),
+        TEXT("ErrorReportServer"),
         TEXT(""),
         szReportServer, elementsof(szReportServer),
         szModuleName
@@ -2108,32 +2115,32 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
                     TCHAR *lpHttpStart = _tcsstr( tszProxyServers, TEXT("http=") );
 
                     if ( lpHttpStart )
-                    {
-                        char    szHTTPProxyServer[1024] = "";
-
                         lpHttpStart += 5;
-                        TCHAR *lpHttpEnd = _tcschr( lpHttpStart, ';' );
+                    else
+                        lpHttpStart = tszProxyServers;
 
-                        if ( lpHttpEnd )
-                            *lpHttpEnd = 0;
-                        WideCharToMultiByte( CP_ACP, 0, lpHttpStart, -1, szHTTPProxyServer, sizeof(szHTTPProxyServer), NULL, NULL );
+                    TCHAR *lpHttpEnd = _tcschr( lpHttpStart, ';' );
 
-                        char *lpColon = strchr( szHTTPProxyServer, ':' );
+                    if ( lpHttpEnd )
+                        *lpHttpEnd = 0;
 
-                        if ( lpColon )
-                        {
-                            char *endptr = NULL;
+                    char    szHTTPProxyServer[1024] = "";
+                    WideCharToMultiByte( CP_ACP, 0, lpHttpStart, -1, szHTTPProxyServer, sizeof(szHTTPProxyServer), NULL, NULL );
 
-                            *lpColon = 0;
-                            strcpy( szProxyServer, szHTTPProxyServer );
-                            uProxyPort = (unsigned short)strtoul( lpColon + 1, &endptr, 10 );
-                        }
-                        else
-                        {
-                            strcpy( szProxyServer, szHTTPProxyServer );
-                            uProxyPort = 8080;
-                        }
+                    char *lpColon = strchr( szHTTPProxyServer, ':' );
+
+                    if ( lpColon )
+                    {
+                        char *endptr = NULL;
+
+                        *lpColon = 0;
+                        uProxyPort = (unsigned short)strtoul( lpColon + 1, &endptr, 10 );
                     }
+                    else
+                        uProxyPort = 8080;
+
+                    strcpy( szProxyServer, szHTTPProxyServer );
+
                 }
             }
         }
