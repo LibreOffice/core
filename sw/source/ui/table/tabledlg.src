@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:03:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,7 @@ TabPage TP_FORMAT_TABLE
         Text[ japanese ] = "δΈ­ε¤®(~C)";
         Text[ chinese_traditional ] = "η½®δΈ­(~C)";
         Text[ arabic ] = "ΚζΣνΨ";
-        Text[ greek ] = "Κεντραρισμένα";
+        Text[ greek ] = "Στο κέντρο";
         Text[ korean ] = "κ°€μ΄λ°(~C)";
         Text[ turkish ] = "~Ortalama";
         Text[ language_user1 ] = " ";
@@ -682,7 +682,7 @@ TabPage TP_FORMAT_TABLE
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "ε°ι½";
         Text[ arabic ] = "γΝΗΠΗΙ";
-        Text[ greek ] = "Στοίχιση";
+        Text[ greek ] = "Ευθυγράμμιση";
         Text[ korean ] = "λ§μ¶¤";
         Text[ turkish ] = "Hizalama";
         Text[ catalan ] = "Alineament";
@@ -715,7 +715,7 @@ TabPage TP_FORMAT_TABLE
         Text[ japanese ] = "ι–“ι”";
         Text[ chinese_traditional ] = "ι–“ι”";
         Text[ arabic ] = "ΗαΚΘΗΪΟ";
-        Text[ greek ] = "Aποστάσεις";
+        Text[ greek ] = "Απόσταση";
         Text[ korean ] = "κ°„κ²©";
         Text[ turkish ] = "Boώluk";
         Text[ language_user1 ] = " ";
@@ -983,16 +983,16 @@ TabPage TP_FORMAT_TABLE
         Text[ danish ] = "~Tekstretning";
         Text[ swedish ] = "Te~xtriktning";
         Text[ polish ] = "Text ~direction";
-        Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘";
-        Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥";
-        Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘";
-        Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘";
+        Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘(~D)";
+        Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥(~D)";
+        Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘(~D)";
+        Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘(~D)";
         Text[ turkish ] = "Metin yφnό";
         Text[ arabic ] = "Text ~direction";
         Text[ czech ] = "SmΔ›r textu";
         Text[ hebrew ] = "β€®Χ›Χ™Χ•Χ•Χ ΧΧ§Χ΅Χβ€¬";
         Text[ catalan ] = "Text ~direction";
-        Text[ portuguese_brazilian ] = "Text ~direction";
+        Text[ portuguese_brazilian ] = "Orientaηγo do texto";
         Text[ thai ] = "Text ~direction";
         Text[ hindi ] = "Text ~direction";
         Text[ slovak ] = "S~mer textu";
@@ -1030,9 +1030,9 @@ TabPage TP_FORMAT_TABLE
     };
     StringList [ language_user1 ] =
     {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des όbergeordneten Objektes verwenden" ; 4; > ;
+         < "; Links nach rechts" ; 0; > ;
+        < "; Rechts nach links" ; 1; > ;
+        < "; Einstellungen des όbergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ korean ] =
     {
@@ -1150,9 +1150,9 @@ TabPage TP_FORMAT_TABLE
     };
     StringList [ portuguese_brazilian ] =
     {
-         < "Left-to-right" ; 0; > ;
-        < "Right-to-left" ; 1; > ;
-        < "Use superordinate object settings" ; 4; > ;
+         < "Da esquerda para a direita" ; 0; > ;
+        < "Da direita para a esquerda" ; 1; > ;
+        < "Usar as propriedades do objeto superior" ; 4; > ;
     };
     StringList [ thai ] =
     {
@@ -1702,7 +1702,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ japanese ] = "εΎ(~A)";
         Text[ chinese_traditional ] = "δΉ‹εΎ(~A)";
         Text[ arabic ] = "ΘΪΟ";
-        Text[ greek ] = "μετά από";
+        Text[ greek ] = "Μετά από";
         Text[ korean ] = "λ’¤(~A)";
         Text[ turkish ] = "~Sonra";
         Text[ language_user1 ] = " ";
@@ -1742,7 +1742,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ greek ] = "με πρότυπο σελίδας";
         Text[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ ν¬ν•¨(~Y)";
         Text[ turkish ] = "Sayfa dόzeni ile";
-        Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+        Text[ language_user1 ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         Text[ catalan ] = "Amb est~il de pΰgina";
         Text[ thai ] = "ΰΈ”ΰΉ‰ΰΈ§ΰΈΆΰΈ¥ΰΈ±ΰΈ~ΰΈ©ΰΈ“ΰΈ°ΰΈ«ΰΈ™ΰΉ‰ΰΈ²";
         Text[ czech ] = "Se stylem strΓ΅nky";
@@ -2072,6 +2072,7 @@ InfoBox MSG_WRONG_TABLENAME
     Message[ hindi ] = "ΰ¤Έΰ¤Ύΰ¤°ΰ¤£ΰ¥€ ΰ¤¨ΰ¤Ύΰ¤® ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤…ΰ¤‚ΰ¤¤ΰ¤° ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤°ΰ¤Ήΰ¤¨ΰ¤Ύ ΰ¤ΰ¤Ύΰ¤Ήΰ¤Ώΰ¤ ΰ¥¤";
     Message[ slovak ] = "NΓ΅zov tabuΔΎky nesmie obsahovaΕ¥ medzery.";
 };
+
 
 
 
