@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-26 13:29:52 $
+ *  last change: $Author: sj $ $Date: 2002-05-30 13:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5259,7 +5259,6 @@ Rectangle SvxMSDffAutoShape::GetTextRect() const
     Point aTopLeft( GetPoint( pTextRectData[ nIndex ].nPairA, sal_True ) );
     Point aBottomRight( GetPoint( pTextRectData[ nIndex ].nPairB, sal_True ) );
     Rectangle aRect( aTopLeft, aBottomRight );
-
     aRect.Move( aSnapRect.Left(), aSnapRect.Top() );
     if ( bFlipH )
     {
@@ -5742,11 +5741,6 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
     }
     if ( pRet )
     {
-        if ( nFix16Angle )
-        {
-            double a = nFix16Angle * nPi180;
-            pRet->NbcRotate( aSnapRect.Center(), nFix16Angle, sin( a ), cos( a ) );
-        }
         if ( bSetAutoShapeAdjustItem )
         {
             if ( pRet->ISA( SdrObjGroup ) || pRet->ISA( SdrPathObj ) )
