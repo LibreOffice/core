@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:17:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,7 @@ class ImportExcel8 : public ImportExcel
         ExcScenarioList         aScenList;
 
         BOOL                    bObjSection;
-
         BOOL                    bHasBasic;
-
         BOOL                    bFirstScl;          // only one Scl-Record has to be read per chart!
 
         void                    RecString( void );              // 0x07
@@ -169,7 +167,6 @@ private:
     ScQueryParam                aParam;
     SCSIZE                      nFirstEmpty;
     BOOL                        bActive;
-    BOOL                        bHasDropDown;
     BOOL                        bHasConflict;
     BOOL                        bCriteria;
     BOOL                        bAutoOrAdvanced;
@@ -188,12 +185,12 @@ public:
                                     const ScRange& rRange,
                                     const String& rName );
 
+    inline bool                 IsActive() const    { return bActive; }
     inline SCTAB                Tab() const         { return aParam.nTab; }
     inline SCCOL                StartCol() const    { return aParam.nCol1; }
     inline SCROW                StartRow() const    { return aParam.nRow1; }
     inline SCCOL                EndCol() const      { return aParam.nCol2; }
     inline SCROW                EndRow() const      { return aParam.nRow2; }
-    BOOL                        HasDropDown( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     void                        ReadAutoFilter( XclImpStream& rStrm );
 
@@ -229,7 +226,6 @@ public:
     void                        Apply();
 
     XclImpAutoFilterData*       GetByTab( SCTAB nTab );
-    BOOL                        HasDropDown( SCCOL nCol, SCROW nRow, SCTAB nTab );
     inline void                 IncrementActiveAF() { nAFActiveCount++; }
     inline BOOL                 UseUnNamed() { return nAFActiveCount == 1; }
 };
