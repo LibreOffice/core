@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:59:41 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ chinese_simplified ] = "»­ÀÈÖ÷Ìâ'ÏîÄ¿±àºÅ'ÄÚÃ»ÓĞÍ¼ĞÎ¡£";
         Text[ russian ] = "Â òåìå ãàëåğåè 'Ìàğêåğû' ğèñóíêîâ íå èìååòñÿ.";
         Text[ polish ] = "Nie znaleziono grafik w temacie galerii 'Wypunktowanie'.";
-        Text[ japanese ] = "·Ş¬×Ø°Ã°Ï'‰Óğ‘‚«‹L†'‚Ì’†‚É¸Ş×Ì¨¸½‚Í‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "·Ş¬×Ø¥Ã°Ï‚Ìu‰Óğ‘‚«¼İÎŞÙv‚É‚Í¸Ş×Ì¨¯¸‚Í‚ ‚è‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "µe´Y¥DÃD'¶µ¥Ø½s¸¹'¤º¨S¦³¹Ï¤ù¡C";
         Text[ arabic ] = "áÇ ÊæÌÏ ÃíÉ ÕæÑ İí ãæÖæÚ ÇáÌÇáíÑí 'Bullets'.";
         Text[ greek ] = "Äåí õğÜñ÷ïõí ãñáöéêÜ óôç ãêáëåñß ìå èİìá 'êïõêßäåò'.";
@@ -1838,7 +1838,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp  'Bullets'.";
         Text[ french ] = "Il n'existe pas d'image pour le thème 'Bullets' dans la Gallery..";
         Text[ spanish ] = "No existen imágenes en el tema 'Viñetas' de la Gallery.";
-        Text[ italian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
+        Text[ italian ] = "La cartella 'Bullets' della Gallery è vuota.";
         Text[ danish ] = "Der findes ingen grafik i Gallery-emnet 'Punkttegn'.";
         Text[ swedish ] = "Det finns ingen grafik i Gallery-temat 'Bullets'.";
         Text[ polish ] = "Brak grafik w temacie Galerii 'Znaki wypunktowania'.";
