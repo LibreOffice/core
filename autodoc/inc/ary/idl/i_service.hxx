@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_service.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
     // BASE CLASSES
 #include <ary/idl/i_ce.hxx>
     // COMPONENTS
+#include <ary/idl/i_comrela.hxx>
     // PARAMETERS
 #include <ary/stdconstiter.hxx>
 #include <ary/idl/ik_service.hxx>
@@ -95,25 +96,20 @@ namespace ifc_service
 class Service : public CodeEntity
 {
   public:
-    enum E_ClassId { class_id = 2003 };
+    enum E_ClassId { class_id = 2003 };     // See reposy.cxx
 
     // LIFECYCLE
                         Service(
                             const String &      i_sName,
                             Ce_id               i_nOwner );
                         ~Service();
-#if ENABLE_UDM
-    static void         SetupUdmTraits_(
-                            udm::struct_traits<Service> &
-                                                o_rTraits );
-#endif // ENABLE_UDM
 
     // INQUIRY
     void                Get_SupportedInterfaces(
-                            Dyn_StdConstIterator<CommentedReference> &
+                            Dyn_StdConstIterator<CommentedRelation> &
                                                 o_rResult ) const;
     void                Get_IncludedServices(
-                            Dyn_StdConstIterator<CommentedReference> &
+                            Dyn_StdConstIterator<CommentedRelation> &
                                                 o_rResult ) const;
 
     // ACCESS
@@ -139,16 +135,16 @@ class Service : public CodeEntity
     virtual E_SightLevel    inq_SightLevel() const;
 
     // Locals
-    typedef std::vector< CommentedReference >  ReferenceList;
-    typedef std::vector<Ce_id>  PropertyList;
+    typedef std::vector< CommentedRelation >    RelationList;
+    typedef std::vector<Ce_id>                  PropertyList;
     friend struct ifc_service::attr;
 
     // DATA
     String              sName;
     Ce_id               nOwner;
 
-    ReferenceList       aIncludedServices;
-    ReferenceList       aSupportedInterfaces;
+    RelationList        aIncludedServices;
+    RelationList        aSupportedInterfaces;
     PropertyList        aProperties;
 };
 
@@ -164,14 +160,12 @@ Service::Add_Property( Ce_id i_nProperty )
 inline void
 Service::AddRef_IncludedService( Type_id                     i_nService,
                                  DYN info::CodeInformation * pass_dpDocu )
-    { aIncludedServices.push_back(
-        ReferenceList::value_type(i_nService,pass_dpDocu) ); }
+    { aIncludedServices.push_back( CommentedRelation(i_nService, pass_dpDocu) ); }
 
 inline void
 Service::AddRef_SupportedInterface( Type_id                     i_nInterface,
                                     DYN info::CodeInformation * pass_dpDocu )
-    { aSupportedInterfaces.push_back(
-        ReferenceList::value_type(i_nInterface,pass_dpDocu) ); }
+    { aSupportedInterfaces.push_back( CommentedRelation(i_nInterface, pass_dpDocu) ); }
 
 
 

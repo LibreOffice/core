@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_property.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ class Property : public CodeEntity
             readonly = 1,
             bound = 2,
             constrained = 4,
-            maybeambigious = 8,
+            maybeambiguous = 8,
             maybedefault = 16,
             maybevoid = 32,
             removable = 64,
@@ -114,8 +114,8 @@ class Property : public CodeEntity
         bool                IsBound() const     { return (nFlags & UINT32(bound)) != 0; }
         bool                IsConstrained() const
                                                 { return (nFlags & UINT32(constrained)) != 0; }
-        bool                IsMayBeAmbigious() const
-                                                { return (nFlags & UINT32(maybeambigious)) != 0; }
+        bool                IsMayBeAmbiguous() const
+                                                { return (nFlags & UINT32(maybeambiguous)) != 0; }
         bool                IsMayBeDefault() const
                                                 { return (nFlags & UINT32(maybedefault)) != 0; }
         bool                IsMayBeVoid() const { return (nFlags & UINT32(maybevoid)) != 0; }
