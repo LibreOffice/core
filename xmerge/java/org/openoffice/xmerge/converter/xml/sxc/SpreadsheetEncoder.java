@@ -138,5 +138,13 @@ public abstract class SpreadsheetEncoder {
      *                        widths.
      */
     public abstract void setColumnWidths(IntArrayList columnWidths) throws IOException;
+
+    /**
+     *  Set the width of the columns in the WorkBook.
+     *
+     *  @param  columnWidths  An <code>IntArrayList</code> of column
+     *                        widths.
+     */
+    public abstract void setNameDefinition(NameDefinition nd) throws IOException;
 }
 

@@ -57,6 +57,7 @@ package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.ConvertData;
@@ -82,6 +83,12 @@ public abstract class SpreadsheetDecoder {
      */
     public abstract int getNumberOfSheets();
 
+    /**
+     *  Returns an Enumeration to a Vector of <code>NameDefinition</code>.
+     *
+     *  @return  The number of sheets in the WorkBook.
+     */
+    public abstract Enumeration getNameDefinitions();
 
     /**
      *  Returns the number of populated rows in the current WorkSheet.
