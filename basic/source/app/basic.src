@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 17:07:38 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,7 +807,7 @@ QueryBox IDS_ASKSAVEERROR {
     MESSAGE = "Fehler beim Speichern der Dateien! Trotzdem ausführen?";
     MESSAGE [ english_us ] = "Error saving files! Run anyway?";
     BUTTONS = WB_YES_NO;
-    MESSAGE[ portuguese ] = "Ocorreu um erro ao guardar os ficheiros!Mesmo assim, executar?";
+    MESSAGE[ portuguese ] = "Ocorreu um erro ao guardar os ficheiros! Mesmo assim, executar?";
     MESSAGE[ russian ] = "Error saving files! Run anyway?";
     MESSAGE[ greek ] = "Error saving files! Run anyway?";
     MESSAGE[ dutch ] = "Fout bij opslaan van bestanden! Toch uitvoeren?";
@@ -823,7 +823,7 @@ QueryBox IDS_ASKSAVEERROR {
     MESSAGE[ chinese_simplified ] = "Error saving files! Run anyway?";
     MESSAGE[ chinese_traditional ] = "Error saving files! Run anyway?";
     MESSAGE[ arabic ] = "Error saving files! Run anyway?";
-    Title[ portuguese ] = "StarBasic";
+    Title[ portuguese ] = "StarBasic!";
     Title[ russian ] = "StarBasic";
     Title[ greek ] = "StarBasic";
     Title[ dutch ] = "StarBasic";
