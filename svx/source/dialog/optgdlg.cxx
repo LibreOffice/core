@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-06 11:36:47 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 14:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,7 +711,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
-    if ( aAAPointLimit.GetValue() != aAAPointLimit.GetSavedValue() )
+    if ( aAAPointLimit.GetValue() != aAAPointLimit.GetSavedValue().ToInt32() )
     {
         rSet.Put( SfxUInt16Item( SID_OPT_FONT_ANTIALIASING_MINPIXELS, aAAPointLimit.GetValue() ) );
         bModified = TRUE;
