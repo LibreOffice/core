@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
+ *  last change: $Author: fme $ $Date: 2002-01-18 09:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,9 +741,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             const SwTwips nOfst = GetLeftMargin() - nGridOrigin;
             const SwTwips nTmpWidth = rInf.Width() + nOfst;
 
-            USHORT i = 0;
-            while ( nTmpWidth >= i * nGridWidth )
-                ++i;
+            const USHORT i = nTmpWidth / nGridWidth + 1;
 
             const long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
             if ( nNewWidth > 0 )

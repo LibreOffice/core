@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-16 12:29:32 $
+ *  last change: $Author: fme $ $Date: 2002-01-18 09:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,15 +609,14 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             const SwTwips nOfst = rInf.X() + GetLeftMargin() - nGridOrigin;
             if ( nOfst )
             {
-                USHORT i = 0;
-                while ( nOfst > i * nGridWidth )
-                    ++i;
-
+                const USHORT i = ( nOfst > 0 ) ?
+                                 ( ( nOfst - 1 ) / nGridWidth + 1 ) :
+                                 0;
                 const SwTwips nKernWidth = i * nGridWidth - nOfst;
                 const SwTwips nRestWidth = rInf.Width() - rInf.X();
+
                 if ( nKernWidth <= nRestWidth )
                     pGridKernPortion->Width( (USHORT)nKernWidth );
-//                pGridKernPortion->Width( (USHORT)(Min( nKernWidth, nRestWidth )) );
             }
 
             if ( pGridKernPortion != pPor )
@@ -755,10 +754,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                     pTmpPor = pTmpPor->GetPortion();
                 }
 
-                USHORT i = 1;
-                while ( nSumWidth > i * nGridWidth )
-                    ++i;
-
+                const USHORT i = nSumWidth ?
+                                 ( nSumWidth - 1 ) / nGridWidth + 1 :
+                                 1;
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = Min( (SwTwips)(nTmpWidth - nSumWidth),
                                                 nRestWidth );
