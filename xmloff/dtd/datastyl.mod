@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.3 2000-10-24 11:21:33 mib Exp $
+   $Id: datastyl.mod,v 1.4 2000-11-01 19:47:17 nn Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -62,9 +62,10 @@
 <!ELEMENT number:scientific-number EMPTY>
 <!ELEMENT number:fraction EMPTY>
 
-<!ENTITY % currency-symbol-and-text "number:currency-symbol,number:text?">
+<!ENTITY % currency-symbol-and-text "(number:currency-symbol,number:text?)">
 <!ENTITY % number-and-text "(number:number,number:text?)">
-<!ENTITY % currency-style-content "( (number:text,(%number-and-text;,(number:text?,%currency-symbol-and-text;)?)?) | (%number-and-text;,(number:text?,%currency-symbol-and-text;)?) | (%currency-symbol-and-text;,%number-and-text;?) )">
+<!ENTITY % currency-symbol-and-number "( (%number-and-text;,%currency-symbol-and-text;?) | (%currency-symbol-and-text;,%number-and-text;?) )">
+<!ENTITY % currency-style-content "( number:text?, %currency-symbol-and-number;? )">
 
 <!ELEMENT number:currency-style ( style:properties?, %currency-style-content;, style:map* )>
 <!ELEMENT number:currency-symbol (#PCDATA)>
