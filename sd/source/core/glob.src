@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:53:34 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,6 +557,12 @@ String STR_GRAFOBJECTBARSHELL
 {
     Text [ de ] = "Grafikmodus" ;
     Text [ en-US ] = "Graphics mode" ;
+};
+
+String STR_MEDIAOBJECTBARSHELL
+{
+    Text [ de ] = "Medienwiedergabe" ;
+    Text [ en-US ] = "Media Playback" ;
 };
 
 String STR_POWERPOINT_IMPORT
