@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-luna.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:18:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,11 @@
 #include <saldata.hxx>
 #endif
 
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
+#include <osl/module.h>
+
 #include "uxtheme.h"
 #include "tmschema.h"
 
@@ -107,7 +112,7 @@ private:
     DrawThemeText_Proc_T                    lpfnDrawThemeText;
     GetThemePartSize_Proc_T                 lpfnGetThemePartSize;
 
-    HMODULE mhModule;
+    oslModule mhModule;
 
 public:
     VisualStylesAPI();
@@ -126,19 +131,38 @@ static VisualStylesAPI vsAPI;
 
 VisualStylesAPI::VisualStylesAPI()
 {
-    mhModule = LoadLibraryA("uxtheme.dll");
+    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "uxtheme.dll" ) );
+    mhModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
 
-    lpfnOpenThemeData = (OpenThemeData_Proc_T) GetProcAddress( mhModule, "OpenThemeData" );
-    lpfnCloseThemeData = (CloseThemeData_Proc_T) GetProcAddress( mhModule, "CloseThemeData" );
-    lpfnGetThemeBackgroundContentRect = (GetThemeBackgroundContentRect_Proc_T) GetProcAddress( mhModule, "GetThemeBackgroundContentRect" );
-    lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T) GetProcAddress( mhModule, "DrawThemeBackground" );
-    lpfnDrawThemeText = (DrawThemeText_Proc_T) GetProcAddress( mhModule, "DrawThemeText" );
-    lpfnGetThemePartSize = (GetThemePartSize_Proc_T) GetProcAddress( mhModule, "GetThemePartSize" );
+    if ( mhModule )
+    {
+        OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "OpenThemeData" ) );
+        lpfnOpenThemeData = (OpenThemeData_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
+        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "CloseThemeData" ) );
+        lpfnCloseThemeData = (CloseThemeData_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
+        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "GetThemeBackgroundContentRect" ) );
+        lpfnGetThemeBackgroundContentRect = (GetThemeBackgroundContentRect_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
+        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawThemeBackground" ) );
+        lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
+        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawThemeText" ) );
+        lpfnDrawThemeText = (DrawThemeText_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
+        queryFuncName = OUString( RTL_CONSTASCII_USTRINGPARAM( "GetThemePartSize" ) );
+        lpfnGetThemePartSize = (GetThemePartSize_Proc_T) osl_getSymbol( mhModule, queryFuncName.pData );
+    }
+    else
+    {
+        lpfnOpenThemeData = NULL;
+        lpfnCloseThemeData = NULL;
+        lpfnGetThemeBackgroundContentRect = NULL;
+        lpfnDrawThemeBackground = NULL;
+        lpfnDrawThemeText = NULL;
+        lpfnGetThemePartSize = NULL;
+    }
 }
 VisualStylesAPI::~VisualStylesAPI()
 {
     if( mhModule )
-        FreeLibrary( mhModule );
+        osl_unloadModule( mhModule );
 }
 HTHEME VisualStylesAPI::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )
 {
