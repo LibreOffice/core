@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdministrationProvider.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ service AdministrationProvider
  <p>Some parameters that are commonly supported are described for service
  <type>ConfigurationProvider</type>.
  </p>
- <p>One notable difference exists for parameter <code>"locale"</code>. For a
+ <p>One notable difference exists for parameter <code>"Locale"</code>. For a
  <type>ConfigurationProvider</type> the default behavior usually is to select
  the locale set up for the user. But this service by default gets data for all
  locales for which data is present. Locale-dependent values in this case are
