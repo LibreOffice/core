@@ -17,6 +17,8 @@ public class PathSelection {
     public String sDefaultName = "";
     public String sDefaultFilter = "";
 
+    public boolean usedPathPicker = false;
+
     public XPathSelectionListener xAction;
     public XTextComponent xSaveTextBox;
 
@@ -77,6 +79,7 @@ public class PathSelection {
                             //TODO: write code for picking a folder for saving
                             break;
                         case DialogTypes.FILE :
+                            usedPathPicker = true;
                             SystemDialog myFilePickerDialog = SystemDialog.createStoreDialog(xMSF);
                             myFilePickerDialog.callStoreDialog(sDefaultDirectory, sDefaultName, sDefaultFilter);
                             String sStorePath = myFilePickerDialog.sStorePath;
