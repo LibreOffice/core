@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:10:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1600,26 +1600,6 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
         SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
         pCNd->ChgFmtColl( pFmt );
 
-        // --> FME 2005-01-12 #i39855# Move numbering update code from
-        // to SwDoc::SetTxtFmtColl() to lcl_SetTxtFmtColl()
-        SwDoc& rDoc = *pCNd->GetDoc();
-        const SfxPoolItem* pItem = NULL;
-        const SwNumRule * pRule = NULL;
-
-        if ( pFmt->GetOutlineLevel() < NO_NUMLEVEL )
-            pRule = rDoc.GetOutlineNumRule();
-        else if ( SFX_ITEM_SET ==
-                  pFmt->GetAttrSet().GetItemState(RES_PARATR_NUMRULE, TRUE, &pItem))
-            pRule = rDoc.FindNumRulePtr(reinterpret_cast<const SwNumRuleItem *>
-                    (pItem)->GetValue());
-
-        if (pRule)
-        {
-            SwPaM aPam(*pCNd);
-            rDoc.SetNumRule(aPam, *pRule);
-        }
-        // <--
-
         pPara->nWhich++;
     }
     return TRUE;
@@ -2394,9 +2374,6 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
     }
 
     rFmt.SetAttr(rSet);
-
-    if (SFX_ITEM_SET == rSet.GetItemState(RES_PARATR_NUMRULE, FALSE, NULL))
-        SetNumRuleFromColl(rFmt);
 }
 
 void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
