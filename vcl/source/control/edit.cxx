@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-16 16:51:10 $
+ *  last change: $Author: pl $ $Date: 2002-11-08 10:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,12 +1131,15 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
         {
             datatransfer::DataFlavor aFlavor;
             SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
-            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+            try
             {
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
                 ::rtl::OUString aText;
                 aData >>= aText;
                 ReplaceSelected( aText );
+            }
+            catch( const ::com::sun::star::uno::Exception& )
+            {
             }
         }
     }
