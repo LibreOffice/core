@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:31:33 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace pcr
                 TabControl                  m_aTabControl;
                 IPropertyLineListener*      m_pListener;
                 sal_uInt16                  m_nNextId;
+                Link                        m_aPageActivationHandler;
 
     protected:
                 virtual void                Resize();
@@ -127,8 +128,12 @@ namespace pcr
                 virtual void                SetSelectedEntry(sal_uInt16 nPos);
                 virtual sal_uInt16          GetSelectedEntry();
 
+        void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
+
     protected:
         DECL_LINK(OnPageDeactivate, TabControl*);
+        DECL_LINK(OnPageActivate, TabControl*);
     };
 
 //............................................................................
@@ -140,6 +145,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:31:33  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 11:50:25  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pcrstrings.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:30:51 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ namespace pcr
     // properties
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULTCONTROL,         "DefaultControl" );
     PCR_CONSTASCII_STRING( PROPERTY_INTROSPECTEDOBJECT,     "IntrospectedObject" );
-    PCR_CONSTASCII_STRING( PROPERTY_TITLEPROPOSAL,          "TitleProposal" );
+    PCR_CONSTASCII_STRING( PROPERTY_CURRENTPAGE,            "CurrentPage" );
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_FORMCONTROLLER,          "com.sun.star.form.controller.FormController" );
@@ -88,6 +88,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:30:51  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 14:17:16  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:26:24 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace pcr
     //========================================================================
     class OPropertyBrowserView : public Window
     {
-        friend class OPropertyBrowserController;
+//      friend class OPropertyBrowserController;
 
         OPropertyBrowserController*     m_pActiveController;
 
@@ -95,6 +95,7 @@ namespace pcr
 
         OPropertyEditor*        m_pPropBox;
         sal_uInt16              m_nActivePage;
+        Link                    m_aPageActivationHandler;
 
     protected:
         virtual void Resize();
@@ -121,6 +122,12 @@ namespace pcr
         // page handling
         sal_uInt16  getActivaPage() const { return m_nActivePage; }
         void        activatePage(sal_uInt16 _nPage);
+
+        void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
+
+    protected:
+        DECL_LINK(OnPageActivation, void*);
     };
 
 
@@ -133,6 +140,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:26:24  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 11:01:16  fs
  ************************************************************************/

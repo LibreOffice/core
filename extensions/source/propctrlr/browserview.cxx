@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ namespace pcr
 
         m_pPropBox = new OPropertyEditor( this );
         m_pPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
+        m_pPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
 
         m_pPropBox->Show();
     }
@@ -115,12 +116,21 @@ namespace pcr
         DBG_CTOR(OPropertyBrowserView,NULL);
 
         m_pPropBox = new OPropertyEditor( this );
-
         m_pPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
+        m_pPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
 
         Size aSize = GetOutputSizePixel();
         m_pPropBox->SetPosSizePixel(Point(0,0), aSize);
         m_pPropBox->Show();
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK(OPropertyBrowserView, OnPageActivation, void*, EMPTYARG)
+    {
+        m_nActivePage = m_pPropBox->GetCurPage();
+        if (m_aPageActivationHandler.IsSet())
+            m_aPageActivationHandler.Call(NULL);
+        return 0L;
     }
 
     //------------------------------------------------------------------------
@@ -174,6 +184,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/18 14:45:10  rt
+ *  #65293# semicolon removed
+ *
  *  Revision 1.1  2001/01/12 11:26:10  fs
  *  initial checkin - outsourced the form property browser
  *
