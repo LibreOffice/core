@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: aw $ $Date: 2000-09-25 14:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,6 +1182,11 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
     }
     if ( pNewObj )
     {
+        // #78478# due to DLs changes in Outliner the object needs
+        // a model to get an outliner for later calls to
+        // pNewObj->SetOutlinerParaObject(pPara) (see below).
+        pNewObj->SetModel(rOldObj.GetModel());
+
         Size aSize;
         Rectangle aSnap = pNewObj->GetSnapRect();
 
