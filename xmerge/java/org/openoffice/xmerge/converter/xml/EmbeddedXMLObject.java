@@ -317,7 +317,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
 
             settingsNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
             settingsNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
-                                        new String(objName + "/content.xml"));
+                                        new String(objName + "/settings.xml"));
 
             root.appendChild(settingsNode);
         }
