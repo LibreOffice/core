@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 08:38:30 $
+ *  last change: $Author: thb $ $Date: 2002-04-22 16:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ void SAL_CALL
     else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("VisibleArea")))
     {
         OSL_TRACE ("    visible area changed");
-        if (mpChildreManager != NULL)
+        if (mpChildrenManager != NULL)
             mpChildrenManager->ViewForwarderChanged (
                 IAccessibleViewForwarderListener::VISIBLE_AREA,
                 &maViewForwarder);
