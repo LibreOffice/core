@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:08:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1569,7 +1569,6 @@ void SwTableShell::GetFrmBorderState(SfxItemSet &rSet)
     aCoreSet.Put( aBoxInfo );
     GetShell().GetTabBorders( aCoreSet );
     rSet.Put( aCoreSet );
-    rSet.Put(SfxUInt16Item(SID_ATTR_BORDER, FALSE));    // Rahmencontroller: letzte Zeile ausklappen
 }
 
 /*--------------------------------------------------------------------
