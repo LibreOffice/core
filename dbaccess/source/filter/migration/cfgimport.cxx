@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-06 09:37:26 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,17 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
@@ -102,9 +108,6 @@
 #endif
 #ifndef DBACCESS_SHARED_CFGSTRINGS_HRC
 #include "cfgstrings.hrc"
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
 #endif
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
@@ -142,6 +145,9 @@
 #ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
+#include <com/sun/star/configuration/backend/XLayer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
 #include <com/sun/star/frame/XLoadable.hpp>
 #endif
@@ -172,6 +178,23 @@ extern "C" void SAL_CALL createRegistryInfo_OCfgImport( )
 {
     static ::dbacfg::OMultiInstanceAutoRegistration< ::dbacfg::OCfgImport > aAutoRegistration;
 }
+
+#define DATASOURCES             1
+#define DATASOURCE              2
+#define DATASOURCESETTINGS      3
+#define TABLES                  4
+#define QUERIES                 5
+#define BOOKMARKS               6
+#define DATASOURCESETTING       7
+#define BOOKMARK                8
+#define QUERY                   9
+#define TABLE                   10
+#define DATASETTINGS            11
+#define COLUMNS                 12
+#define COLUMN                  13
+#define NO_PROP                 14
+#define LOGINTIMEOUT            15
+
 //--------------------------------------------------------------------------
 using namespace dbacfg;
 // {
@@ -184,14 +207,12 @@ using namespace dbacfg;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::configuration::backend;
     using namespace ::utl;
     using namespace ::comphelper;
 
-    void convertObjects(const OConfigurationNode& _rObjects,const Reference< XNameAccess >& _xParentContainer,sal_Bool _bQuery,const Reference< XMultiServiceFactory >& _xORB);
-    void convertLinks(const OConfigurationNode& _rObjects,const Reference< XPropertySet >& _xDataSource,const Reference< XMultiServiceFactory >& _xORB);
-    void convertColumns(const OConfigurationNode& _rColumns,const Reference<XPropertySet>& _xObject);
-    void convertDataSettings(const OConfigurationNode& _rObject,const Reference<XPropertySet>& _xObject);
-    void setProperty(const ::rtl::OUString& _sPropertyName, const ::rtl::OUString& _sConfigName,const Reference<XPropertySet>& _xProp,const OConfigurationNode& _aNode);
     void LoadTableWindows(const Reference< XObjectInputStream>& _rxIn,Sequence<PropertyValue>& _rViewProps);
     void LoadTableWindowData(const Reference<XObjectInputStream>& _rxIn,PropertyValue* _pValue);
     void LoadTableFields(const Reference< XObjectInputStream>& _rxIn,Sequence<PropertyValue>& _rViewProps);
@@ -203,6 +224,7 @@ using namespace dbacfg;
 
 OCfgImport::OCfgImport( const Reference< XMultiServiceFactory >& _rxMSF )
     :m_xORB( _rxMSF )
+    ,m_bPropertyMayBeVoid(sal_True)
 {
 }
 
@@ -217,317 +239,31 @@ IMPLEMENT_SERVICE_INFO1_STATIC( OCfgImport, "com.sun.star.comp.sdb.DataSourceMig
 // XInitialization
 void SAL_CALL OCfgImport::initialize( const Sequence< Any >& _aArguments ) throw(Exception, RuntimeException)
 {
-    const Any* pBegin = _aArguments.getConstArray();
-    const Any* pEnd = pBegin + _aArguments.getLength();
-    PropertyValue aValue;;
-    for(;pBegin != pEnd;++pBegin)
+    const Any* pIter = _aArguments.getConstArray();
+    const Any* pEnd = pIter + _aArguments.getLength();
+    Sequence<NamedValue> aOldConfigValues;
+    NamedValue aValue;
+    for(;pIter != pEnd;++pIter)
     {
-        *pBegin >>= aValue;
-        if ( aValue.Name.equalsAscii("Parent") )
+        *pIter >>= aValue;
+        if ( aValue.Name.equalsAscii("OldConfiguration") && (aValue.Value >>= aOldConfigValues) )
         {
-        }
-    }
-    convert();
-}
-// -----------------------------------------------------------------------------
-void OCfgImport::convert()
-{
-    // the config node where all pooling relevant info are stored under
-    OConfigurationTreeRoot aDSNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_xORB, CFG_DATASOURCEPATH, -1, OConfigurationTreeRoot::CM_READONLY);
-
-    SvtPathOptions aPathOptions;
-    const String& rsWorkPath = aPathOptions.GetWorkPath();
-
-    ::rtl::OUString sExtension;
-    static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-    const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
-    OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
-    if ( pFilter )
-    {
-        String aRet = pFilter->GetDefaultExtension();
-        while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND );
-        sExtension = aRet;
-    }
-    // then look for which of them settings are stored in the configuration
-    Sequence< ::rtl::OUString > aDS = aDSNamesRoot.getNodeNames();
-    const ::rtl::OUString* pDSIter = aDS.getConstArray();
-    const ::rtl::OUString* pDSEnd = pDSIter + aDS.getLength();
-    for (;pDSIter != pDSEnd; ++pDSIter)
-    {
-        ::rtl::OUString sFileName;
-        try
-        {
-            Reference<XPropertySet> xDataSource(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument"))),UNO_QUERY);
-            Reference< XModel > xModel(xDataSource,UNO_QUERY);
-            if ( !xModel.is() )
-                break;
-
-            INetURLObject aURL(rsWorkPath,INetURLObject::WAS_ENCODED);
-            aURL.insertName(*pDSIter,false,INetURLObject::LAST_SEGMENT,true,INetURLObject::ENCODE_ALL);
-            aURL.setExtension(sExtension);
-
-            sFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
-
-            sal_Int32 i = 0;
-            // create unique name
-            while ( UCBContentHelper::IsDocument(sFileName) )
+            const NamedValue* pIter = aOldConfigValues.getConstArray();
+            const NamedValue* pEnd    = pIter + aOldConfigValues.getLength();
+            for(;pIter != pEnd;++pIter)
             {
-                sFileName = *pDSIter + ::rtl::OUString::valueOf(++i);
-                aURL.setName(sFileName,INetURLObject::LAST_SEGMENT,true,INetURLObject::ENCODE_ALL);
-                aURL.setExtension(sExtension);
-                sFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
-            }
-
-            xModel->attachResource(sFileName,Sequence<PropertyValue>());
-
-            OConfigurationNode aDataSource = aDSNamesRoot.openNode(*pDSIter);
-
-            setProperty(PROPERTY_URL,CONFIGKEY_DBLINK_CONNECTURL,xDataSource,aDataSource);
-            setProperty(PROPERTY_USER,CONFIGKEY_DBLINK_USER,xDataSource,aDataSource);
-            setProperty(PROPERTY_TABLEFILTER,CONFIGKEY_DBLINK_TABLEFILTER,xDataSource,aDataSource);
-            setProperty(PROPERTY_TABLETYPEFILTER,CONFIGKEY_DBLINK_TABLETYEFILTER,xDataSource,aDataSource);
-            setProperty(PROPERTY_ISPASSWORDREQUIRED,CONFIGKEY_DBLINK_PASSWORDREQUIRED,xDataSource,aDataSource);
-            setProperty(PROPERTY_SUPPRESSVERSIONCL,CONFIGKEY_DBLINK_SUPPRESSVERSIONCL,xDataSource,aDataSource);
-
-            // convert layout information
-            Any aValue(aDataSource.getNodeValue(CONFIGKEY_LAYOUTINFORMATION));
-            if ( aValue.hasValue() )
-            {
-                Sequence< sal_Int8 > aInputSequence;
-                aValue >>= aInputSequence;
-                if ( aInputSequence.getLength() )
+                if ( pIter->Name.equalsAscii("org.openoffice.Office.DataAccess") )
                 {
-                    Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
-                    Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
-                    Reference< XInputStream> xMarkInStream = Reference< XInputStream >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
-                    Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
-                    Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
-                    OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
-                    xInDataSource->setInputStream(xMarkInStream);
-
-                    Sequence< PropertyValue > aLayout;
-                    LoadTableWindows(xInStream,aLayout);
-                    xDataSource->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aLayout));
+                    pIter->Value >>= m_xLayer;
+                    break;
                 }
             }
-
-            // the property sequence in Info
-            OConfigurationNode aInfoNode = aDataSource.openNode(CONFIGKEY_DBLINK_INFO);
-            if ( aInfoNode.isValid() )
-            {
-                Sequence< ::rtl::OUString > aNodeNames = aInfoNode.getNodeNames();
-                Sequence< PropertyValue > aInfo(aNodeNames.getLength());
-                PropertyValue* pInfos = aInfo.getArray();
-
-                for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray() + aNodeNames.getLength() - 1;
-                        pNodeNames >= aNodeNames.getConstArray();
-                        --pNodeNames, ++pInfos
-                    )
-                {
-                    OConfigurationNode aItemSubNode = aInfoNode.openNode(*pNodeNames);
-                    pInfos->Name = *pNodeNames;
-                    pInfos->Value = aItemSubNode.getNodeValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")));
-                }
-                xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
-            }
-
-            Reference<XQueryDefinitionsSupplier> xQueriesSupplier(xDataSource,UNO_QUERY);
-            Reference<XNameAccess> xQueries(xQueriesSupplier->getQueryDefinitions(),UNO_QUERY);
-            convertObjects(aDataSource.openNode(CONFIGKEY_DBLINK_QUERYDOCUMENTS),xQueries,sal_True,m_xORB);
-
-            Reference<XTablesSupplier> xTablesSupplier(xDataSource,UNO_QUERY);
-            Reference<XNameAccess> xTables(xTablesSupplier->getTables(),UNO_QUERY);
-            convertObjects(aDataSource.openNode(CONFIGKEY_DBLINK_TABLES),xTables,sal_False,m_xORB);
-
-            convertLinks(aDataSource.openNode(CONFIGKEY_DBLINK_BOOKMARKS),xDataSource,m_xORB);
-
-            Reference<XStorable> xStr(xModel,UNO_QUERY);
-            if ( xStr.is() )
-                xStr->store();
-            // register the new datbase document
-
-            // create unique name
-            Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-            if ( xDatabaseContext.is() )
-            {
-                i = 0;
-                ::rtl::OUString sName = *pDSIter;
-                while ( xDatabaseContext->hasByName(sName) )
-                {
-                    sName = *pDSIter + ::rtl::OUString::valueOf(++i);
-                }
-                Reference< XNamingService>(xDatabaseContext,UNO_QUERY)->registerObject(sName,xModel);
-            }
-            xDataSource = NULL;
-            ::comphelper::disposeComponent(xModel);
-        }
-        catch(Exception)
-        {
-            OSL_ENSURE(0,"Exception: convert");
-            UCBContentHelper::Kill(sFileName);
+            break;
         }
     }
 }
 // -----------------------------------------------------------------------------
-void convertObjects(const OConfigurationNode& _rObjects,const Reference< XNameAccess >& _xParentContainer,sal_Bool _bQuery,const Reference< XMultiServiceFactory >& _xORB)
-{
-    Reference<XNameContainer> xNameContainer(_xParentContainer,UNO_QUERY);
-    if ( xNameContainer.is() )
-    {
-        // then look for which of them settings are stored in the configuration
-        Sequence< ::rtl::OUString > aNames = _rObjects.getNodeNames();
-        const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
-        for (;pIter != pEnd; ++pIter)
-        {
-            try
-            {
-                Sequence< Any > aArguments(1);
-                PropertyValue aValue;
-                // set as folder
-                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
-                aValue.Value <<= *pIter;
-                aArguments[0] <<= aValue;
-                Reference<XPropertySet> xProp(_xORB->createInstanceWithArguments(_bQuery ? SERVICE_SDB_COMMAND_DEFINITION : SERVICE_SDB_TABLEDEFINITION,aArguments ),UNO_QUERY);
 
-                OConfigurationNode aObject = _rObjects.openNode(*pIter);
-
-                if ( _bQuery )
-                {
-                    setProperty(PROPERTY_COMMAND,CONFIGKEY_QRYDESCR_COMMAND,xProp,aObject);
-                    setProperty(PROPERTY_USE_ESCAPE_PROCESSING,CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING,xProp,aObject);
-                    setProperty(PROPERTY_UPDATE_TABLENAME,CONFIGKEY_QRYDESCR_UPDATE_TABLENAME,xProp,aObject);
-                    setProperty(PROPERTY_UPDATE_SCHEMANAME,CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME,xProp,aObject);
-                    setProperty(PROPERTY_UPDATE_CATALOGNAME,CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME,xProp,aObject);
-
-                    // convert layout information
-                    Any aValue(aObject.getNodeValue(CONFIGKEY_LAYOUTINFORMATION));
-                    if ( aValue.hasValue() )
-                    {
-                        Sequence< sal_Int8 > aInputSequence;
-                        aValue >>= aInputSequence;
-                        if ( aInputSequence.getLength() )
-                        {
-                            Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
-                            Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
-                            Reference< XInputStream> xMarkInStream = Reference< XInputStream >(_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
-                            Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
-                            Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
-                            OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
-                            xInDataSource->setInputStream(xMarkInStream);
-
-                            Sequence< PropertyValue > aLayout;
-                            LoadTableFields(xInStream,aLayout);
-
-                            xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aLayout));
-                        }
-                    }
-                }
-
-                convertDataSettings(aObject,xProp);
-                convertColumns(aObject.openNode( CONFIGKEY_QRYDESCR_COLUMNS ), xProp);
-
-                xNameContainer->insertByName(*pIter,makeAny(xProp));
-            }
-            catch(Exception&)
-            {
-                OSL_ENSURE(0,"Exception: convertObjects");
-            }
-        }
-    }
-}
-// -----------------------------------------------------------------------------
-void convertColumns(const OConfigurationNode& _rColumns,const Reference<XPropertySet>& _xObject)
-{
-    Reference<XColumnsSupplier> xSupplier(_xObject,UNO_QUERY);
-    if ( xSupplier.is() )
-    {
-        Reference<XDataDescriptorFactory> xFact(xSupplier->getColumns(),UNO_QUERY);
-
-        Reference<XPropertySet> xProp = xFact.is() ? xFact->createDataDescriptor() : Reference<XPropertySet>();
-        if ( !xProp.is() )
-            return;
-        // then look for which of them settings are stored in the configuration
-        Sequence< ::rtl::OUString > aNames = _rColumns.getNodeNames();
-        const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
-        for (;pIter != pEnd; ++pIter)
-        {
-            try
-            {
-                // the name of the driver in this round
-                OConfigurationNode aColumn = _rColumns.openNode(*pIter);
-                xProp->setPropertyValue(PROPERTY_NAME,makeAny(*pIter));
-
-                setProperty(PROPERTY_ALIGN,CONFIGKEY_COLUMN_ALIGNMENT,xProp,aColumn);
-                setProperty(PROPERTY_WIDTH,CONFIGKEY_COLUMN_WIDTH,xProp,aColumn);
-                setProperty(PROPERTY_RELATIVEPOSITION,CONFIGKEY_COLUMN_RELPOSITION,xProp,aColumn);
-                setProperty(PROPERTY_HIDDEN,CONFIGKEY_COLUMN_HIDDEN,xProp,aColumn);
-                setProperty(PROPERTY_HELPTEXT,CONFIGKEY_COLUMN_HELPTEXT,xProp,aColumn);
-                setProperty(PROPERTY_CONTROLDEFAULT,CONFIGKEY_COLUMN_CONTROLDEFAULT,xProp,aColumn);
-                setProperty(PROPERTY_NUMBERFORMAT,CONFIGKEY_COLUMN_NUMBERFORMAT,xProp,aColumn);
-            }
-            catch(Exception)
-            {
-                OSL_ENSURE(0,"Exception: convertColumns");
-            }
-        }
-        Reference<XAppend> xAppend(xFact,UNO_QUERY);
-        if ( xAppend.is() )
-        {
-            xAppend->appendByDescriptor(xProp);
-        }
-    }
-}
-// -----------------------------------------------------------------------------
-void convertDataSettings(const OConfigurationNode& _rObject,const Reference<XPropertySet>& _xObject)
-{
-    // data settings
-    OConfigurationNode aSettingsNode = _rObject.openNode(CONFIGKEY_SETTINGS);
-    if ( aSettingsNode.isValid() )
-    {
-        setProperty(PROPERTY_FILTER,CONFIGKEY_DEFSET_FILTER,_xObject,aSettingsNode);
-        setProperty(PROPERTY_ORDER,CONFIGKEY_DEFSET_ORDER,_xObject,aSettingsNode);
-        setProperty(PROPERTY_APPLYFILTER,CONFIGKEY_DEFSET_APPLYFILTER,_xObject,aSettingsNode);
-        setProperty(PROPERTY_ROW_HEIGHT,CONFIGKEY_DEFSET_ROW_HEIGHT,_xObject,aSettingsNode);
-        setProperty(PROPERTY_TEXTCOLOR,CONFIGKEY_DEFSET_TEXTCOLOR,_xObject,aSettingsNode);
-        setProperty(PROPERTY_TEXTLINECOLOR,CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR,_xObject,aSettingsNode);
-        setProperty(PROPERTY_TEXTEMPHASIS,CONFIGKEY_DEFSET_FONT_CHARACTEREMPHASIS,_xObject,aSettingsNode);
-        setProperty(PROPERTY_TEXTRELIEF,CONFIGKEY_DEFSET_FONT_CHARACTERRELIEF,_xObject,aSettingsNode);
-            // font
-        setProperty(PROPERTY_FONTHEIGHT,CONFIGKEY_DEFSET_FONT_HEIGHT,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTWIDTH,CONFIGKEY_DEFSET_FONT_WIDTH,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTSTYLENAME,CONFIGKEY_DEFSET_FONT_STYLENAME,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTFAMILY,CONFIGKEY_DEFSET_FONT_FAMILY,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTCHARSET,CONFIGKEY_DEFSET_FONT_CHARSET,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTPITCH,CONFIGKEY_DEFSET_FONT_PITCH,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTCHARWIDTH,CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTWEIGHT,CONFIGKEY_DEFSET_FONT_WEIGHT,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTUNDERLINE,CONFIGKEY_DEFSET_FONT_UNDERLINE,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTSTRIKEOUT,CONFIGKEY_DEFSET_FONT_STRIKEOUT,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTORIENTATION,CONFIGKEY_DEFSET_FONT_ORIENTATION,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTKERNING,CONFIGKEY_DEFSET_FONT_KERNING,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTWORDLINEMODE,CONFIGKEY_DEFSET_FONT_WORDLINEMODE,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTTYPE,CONFIGKEY_DEFSET_FONT_TYPE,_xObject,aSettingsNode);
-        setProperty(PROPERTY_FONTSLANT,CONFIGKEY_DEFSET_FONT_SLANT,_xObject,aSettingsNode);
-    }
-}
-// -----------------------------------------------------------------------------
-void setProperty(const ::rtl::OUString& _sPropertyName, const ::rtl::OUString& _sConfigName,const Reference<XPropertySet>& _xProp,const OConfigurationNode& _aNode)
-{
-    try
-    {
-        Any aValue(_aNode.getNodeValue(_sConfigName));
-        if ( aValue.hasValue() )
-            _xProp->setPropertyValue(_sPropertyName,aValue);
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"Property could not be set!");
-    }
-}
-// -----------------------------------------------------------------------------
 void LoadTableWindows(const Reference< XObjectInputStream>& _rxIn,Sequence<PropertyValue>& _rViewProps)
 {
     try
@@ -719,73 +455,6 @@ void LoadTableFieldDesc(const Reference< XObjectInputStream>& _rxIn,PropertyValu
     _rProperty.Value <<= aFieldDesc;
 }
 // -----------------------------------------------------------------------------
-void convertLinks(const OConfigurationNode& _rObjects,const Reference< XPropertySet >& _xDataSource,const Reference< XMultiServiceFactory >& _xORB)
-{
-    // then look for which of them settings are stored in the configuration
-    Sequence< ::rtl::OUString > aNames = _rObjects.getNodeNames();
-    const ::rtl::OUString* pIter = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pIter + aNames.getLength();
-    for (;pIter != pEnd; ++pIter)
-    {
-        try
-        {
-            OConfigurationNode aObject = _rObjects.openNode(*pIter);
-            ::rtl::OUString sDocumentLocation;
-            aObject.getNodeValue(CONFIGKEY_DBLINK_DOCUMENTLOCATION) >>= sDocumentLocation;
-            if ( !UCBContentHelper::IsDocument(sDocumentLocation) )
-                continue;
-
-            sal_Bool bForm = sal_True;
-            bForm = !isDocumentReport(_xORB,sDocumentLocation);
-            Reference<XNameAccess> xNames;
-            if ( bForm )
-            {
-                Reference<XFormDocumentsSupplier> xSup(_xDataSource,UNO_QUERY);
-                if ( xSup.is() )
-                    xNames = xSup->getFormDocuments();
-            }
-            else
-            {
-                Reference<XReportDocumentsSupplier> xSup(_xDataSource,UNO_QUERY);
-                if ( xSup.is() )
-                    xNames = xSup->getReportDocuments();
-            }
-
-            if ( xNames.is() && pIter->getLength() )
-            {
-                ::rtl::OUString sServiceName = SERVICE_SDB_DOCUMENTDEFINITION;
-                Sequence< Any > aArguments(3);
-                PropertyValue aValue;
-                // set as folder
-                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
-                aValue.Value <<= *pIter;
-                aArguments[0] <<= aValue;
-                //parent
-                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
-                aValue.Value <<= xNames;
-                aArguments[1] <<= aValue;
-
-                aValue.Name = PROPERTY_URL;
-                aValue.Value <<= sDocumentLocation;
-                aArguments[2] <<= aValue;
-
-                Reference<XMultiServiceFactory> xORB(xNames,UNO_QUERY);
-                if ( xORB.is() )
-                {
-                    Reference<XInterface> xComponent = xORB->createInstanceWithArguments(SERVICE_SDB_DOCUMENTDEFINITION,aArguments);
-                    Reference<XNameContainer> xNameContainer(xNames,UNO_QUERY);
-                    if ( xNameContainer.is() )
-                        xNameContainer->insertByName(*pIter,makeAny(xComponent));
-                }
-            }
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(0,"convertLinks: Exception catched!");
-        }
-    }
-}
-// -----------------------------------------------------------------------------
 void closeDocument(const Reference< XModel >& _xDocument)
 {
     Reference< XCloseable > xCloseable( _xDocument, UNO_QUERY );
@@ -920,6 +589,644 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
     }
     return bReport;
 }
+// -----------------------------------------------------------------------------
+void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
+{
+    SvtPathOptions aPathOptions;
+    const String& rsWorkPath = aPathOptions.GetWorkPath();
+
+    ::rtl::OUString sExtension;
+    static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
+    const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+    OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
+    if ( pFilter )
+    {
+        String aRet = pFilter->GetDefaultExtension();
+        while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND );
+        sExtension = aRet;
+    }
+    // then look for which of them settings are stored in the configuration
+    ::rtl::OUString sFileName;
+    try
+    {
+        m_xCurrentDS.set(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument"))),UNO_QUERY);
+        Reference< XModel > xModel(m_xCurrentDS,UNO_QUERY);
+        if ( !xModel.is() )
+            return;
+
+        INetURLObject aURL(rsWorkPath,INetURLObject::WAS_ENCODED);
+        aURL.insertName(_sName,false,INetURLObject::LAST_SEGMENT,true,INetURLObject::ENCODE_ALL);
+        aURL.setExtension(sExtension);
+
+        sFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+
+        sal_Int32 i = 0;
+        // create unique name
+        while ( UCBContentHelper::IsDocument(sFileName) )
+        {
+            sFileName = _sName + ::rtl::OUString::valueOf(++i);
+            aURL.setName(sFileName,INetURLObject::LAST_SEGMENT,true,INetURLObject::ENCODE_ALL);
+            aURL.setExtension(sExtension);
+            sFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+        }
+
+        xModel->attachResource(sFileName,Sequence<PropertyValue>());
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception: convert");
+        UCBContentHelper::Kill(sFileName);
+    }
+}
+// -----------------------------------------------------------------------------
+void OCfgImport::createObject(sal_Bool _bQuery ,const ::rtl::OUString& _sName)
+{
+    if ( !m_xCurrentObject.is() )
+    {
+        Sequence< Any > aArguments(1);
+        PropertyValue aValue;
+        // set as folder
+        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+        aValue.Value <<= _sName;
+        aArguments[0] <<= aValue;
+        m_xCurrentObject.set(m_xORB->createInstanceWithArguments(_bQuery ? SERVICE_SDB_COMMAND_DEFINITION : SERVICE_SDB_TABLEDEFINITION ,aArguments ),UNO_QUERY);
+    }
+}
+// -----------------------------------------------------------------------------
+void OCfgImport::setProperties()
+{
+    if ( m_aValues.getLength() )
+    {
+        OSL_ENSURE(m_aProperties.getLength() == m_aValues.getLength(),"Count is not equal!");
+        try
+        {
+            Reference< XMultiPropertySet >  xFormMultiSet;
+            if ( m_xCurrentColumn.is() )
+                xFormMultiSet.set(m_xCurrentColumn,UNO_QUERY);
+            else if ( m_xCurrentObject.is() )
+                xFormMultiSet.set(m_xCurrentObject,UNO_QUERY);
+            else if ( m_xCurrentDS.is() )
+                xFormMultiSet.set(m_xCurrentDS,UNO_QUERY);
+
+            if ( xFormMultiSet.is() )
+                xFormMultiSet->setPropertyValues(m_aProperties, m_aValues);
+        }
+        catch(const Exception& e)
+        {
+            throw WrappedTargetException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property could not be set.")),*this,makeAny(e));
+        }
+        m_aValues = Sequence< Any>();
+        m_aProperties = Sequence< ::rtl::OUString>();
+    }
+}
+// -----------------------------------------------------------------------------
+Any SAL_CALL OCfgImport::execute( const Sequence< NamedValue >& Arguments ) throw (IllegalArgumentException, Exception, RuntimeException)
+{
+    m_xLayer->readData(this);
+    return Any();
+}
+// -----------------------------------------------------------------------------
+// XLayerHandler
+void SAL_CALL OCfgImport::startLayer()
+    throw(WrappedTargetException)
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL OCfgImport::endLayer()
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL OCfgImport::overrideNode(
+        const ::rtl::OUString& aName,
+        sal_Int16 aAttributes,
+        sal_Bool bClear)
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+    addOrReplaceNode(aName,aAttributes);
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL OCfgImport::addOrReplaceNode(
+        const ::rtl::OUString& aName,
+        sal_Int16 aAttributes)
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+    if ( !m_aStack.empty() )
+    {
+        switch(m_aStack.top().second)
+        {
+            case DATASOURCES:
+                m_sCurrentDataSourceName = aName;
+                if ( m_sCurrentDataSourceName.equalsAscii("Bibliography") )
+                {
+                    Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+                    if ( xDatabaseContext.is() && xDatabaseContext->hasByName(m_sCurrentDataSourceName) )
+                        m_xCurrentDS.set(xDatabaseContext->getByName(m_sCurrentDataSourceName),UNO_QUERY);
+                }
+                if ( !m_xCurrentDS.is() )
+                    createDataSource(m_sCurrentDataSourceName);
+
+                m_aStack.push(TElementStack::value_type(aName,DATASOURCE));
+                break;
+            case DATASOURCESETTINGS:
+                {
+                    PropertyValue aValue;
+                    aValue.Name = aName;
+                    m_aDataSourceSettings.push_back(aValue);
+                    m_aStack.push(TElementStack::value_type(aName,DATASOURCESETTING));
+                }
+                break;
+            case TABLES:
+                m_aStack.push(TElementStack::value_type(aName,TABLE));
+                createObject(sal_False,aName);
+                break;
+            case QUERIES:
+                m_aStack.push(TElementStack::value_type(aName,QUERY));
+                createObject(sal_True,aName);
+                break;
+            case COLUMNS:
+                if ( !m_xCurrentColumn.is() )
+                {
+                    Reference<XColumnsSupplier> xSupplier(m_xCurrentObject,UNO_QUERY);
+                    if ( xSupplier.is() )
+                    {
+                        Reference<XDataDescriptorFactory> xFact(xSupplier->getColumns(),UNO_QUERY);
+
+                        m_xCurrentColumn = ( xFact.is() ? xFact->createDataDescriptor() : Reference<XPropertySet>());
+                        if ( m_xCurrentColumn.is() )
+                            m_xCurrentColumn->setPropertyValue(PROPERTY_NAME,makeAny(aName));
+                    }
+                }
+                m_aStack.push(TElementStack::value_type(aName,COLUMN));
+                break;
+            case BOOKMARKS:
+                m_aStack.push(TElementStack::value_type(aName,BOOKMARK));
+                break;
+        }
+    }
+    /*if ( aName.equalsAscii("org.openoffice.Office.DataAccess") )
+        m_aStack.push(TElementStack::value_type(aName,0));
+    else*/
+    if ( aName.equalsAscii("DataSources") )
+        m_aStack.push(TElementStack::value_type(aName,DATASOURCES));
+    else if ( aName.equalsAscii("DataSourceSettings") )
+        m_aStack.push(TElementStack::value_type(aName,DATASOURCESETTINGS));
+    else if ( aName.equalsAscii("Tables") )
+        m_aStack.push(TElementStack::value_type(aName,TABLES));
+    else if ( aName.equalsAscii("Queries") )
+        m_aStack.push(TElementStack::value_type(aName,QUERIES));
+    else if ( aName == CONFIGKEY_DBLINK_BOOKMARKS )
+        m_aStack.push(TElementStack::value_type(aName,BOOKMARKS));
+    else if ( aName == CONFIGKEY_SETTINGS )
+        m_aStack.push(TElementStack::value_type(aName,DATASETTINGS));
+    else if ( aName.equalsAscii("Font") )
+        m_aStack.push(TElementStack::value_type(aName,DATASETTINGS));
+    else if ( aName == CONFIGKEY_QRYDESCR_COLUMNS )
+        m_aStack.push(TElementStack::value_type(aName,COLUMNS));
+    else if ( aName.equalsAscii("Font") )
+        m_aStack.push(TElementStack::value_type(aName,DATASETTINGS));
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  OCfgImport::addOrReplaceNodeFromTemplate(
+        const ::rtl::OUString& aName,
+        const TemplateIdentifier& aTemplate,
+        sal_Int16 aAttributes )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  OCfgImport::endNode()
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+    if ( !m_aStack.empty() )
+    {
+        switch(m_aStack.top().second)
+        {
+            case DATASOURCE:
+                {
+                    setProperties();
+                    Reference<XStorable> xStr(m_xCurrentDS,UNO_QUERY);
+                    if ( xStr.is() )
+                    {
+                        xStr->store();
+                        xStr = NULL;
+                    }
+                    // register the new datbase document
+
+                    if ( !m_sCurrentDataSourceName.equalsAscii("Bibliography") )
+                    {
+                        // create unique name
+                        Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+                        if ( xDatabaseContext.is() )
+                        {
+                            sal_Int32 i = 0;
+                            ::rtl::OUString sName;
+                            sName = m_sCurrentDataSourceName;
+                            while ( xDatabaseContext->hasByName(sName) )
+                            {
+                                sName = m_sCurrentDataSourceName + ::rtl::OUString::valueOf(++i);
+                            }
+                            Reference< XNamingService>(xDatabaseContext,UNO_QUERY)->registerObject(sName,m_xCurrentDS);
+                        }
+                    }
+                    ::comphelper::disposeComponent(m_xCurrentDS);
+                }
+                break;
+            case DATASOURCESETTINGS:
+                OSL_ENSURE(m_xCurrentDS.is(),"Data Source is NULL!");
+                {
+                    PropertyValue* pSettings = m_aDataSourceSettings.empty() ? NULL : &m_aDataSourceSettings[0];
+                    m_xCurrentDS->setPropertyValue(PROPERTY_INFO,makeAny(Sequence< PropertyValue >(pSettings, m_aDataSourceSettings.size())));
+                }
+                break;
+            case TABLE:
+                {
+                    setProperties();
+                    Reference<XTablesSupplier> xSupplier(m_xCurrentDS,UNO_QUERY);
+                    Reference<XNameContainer> xTables(xSupplier->getTables(),UNO_QUERY);
+                    ::rtl::OUString sName;
+                    m_xCurrentObject->getPropertyValue(PROPERTY_NAME) >>= sName;
+                    xTables->insertByName(sName,makeAny(m_xCurrentObject));
+                    m_xCurrentObject = NULL;
+                }
+                break;
+            case QUERY:
+                {
+                    setProperties();
+                    Reference<XQueryDefinitionsSupplier> xQueriesSupplier(m_xCurrentDS,UNO_QUERY);
+                    Reference<XNameContainer> xQueries(xQueriesSupplier->getQueryDefinitions(),UNO_QUERY);
+                    xQueries->insertByName(m_aStack.top().first,makeAny(m_xCurrentObject));
+                    m_xCurrentObject = NULL;
+                }
+                break;
+            case BOOKMARK:
+                try
+                {
+                    if ( !UCBContentHelper::IsDocument(m_sDocumentLocation) )
+                        return;
+
+                    sal_Bool bForm = sal_True;
+                    bForm = !isDocumentReport(m_xORB,m_sDocumentLocation);
+                    Reference<XNameAccess> xNames;
+                    if ( bForm )
+                    {
+                        Reference<XFormDocumentsSupplier> xSup(m_xCurrentDS,UNO_QUERY);
+                        if ( xSup.is() )
+                            xNames = xSup->getFormDocuments();
+                    }
+                    else
+                    {
+                        Reference<XReportDocumentsSupplier> xSup(m_xCurrentDS,UNO_QUERY);
+                        if ( xSup.is() )
+                            xNames = xSup->getReportDocuments();
+                    }
+
+                    if ( xNames.is() && m_sBookmarkName.getLength() )
+                    {
+                        ::rtl::OUString sServiceName = SERVICE_SDB_DOCUMENTDEFINITION;
+                        Sequence< Any > aArguments(3);
+                        PropertyValue aValue;
+                        // set as folder
+                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+                        aValue.Value <<= m_sBookmarkName;
+                        aArguments[0] <<= aValue;
+                        //parent
+                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
+                        aValue.Value <<= xNames;
+                        aArguments[1] <<= aValue;
+
+                        aValue.Name = PROPERTY_URL;
+                        aValue.Value <<= m_sDocumentLocation;
+                        aArguments[2] <<= aValue;
+
+                        Reference<XMultiServiceFactory> xORB(xNames,UNO_QUERY);
+                        if ( xORB.is() )
+                        {
+                            Reference<XInterface> xComponent = xORB->createInstanceWithArguments(SERVICE_SDB_DOCUMENTDEFINITION,aArguments);
+                            Reference<XNameContainer> xNameContainer(xNames,UNO_QUERY);
+                            if ( xNameContainer.is() )
+                                xNameContainer->insertByName(m_sBookmarkName,makeAny(xComponent));
+                        }
+                    }
+                }
+                catch(Exception&)
+                {
+                    OSL_ENSURE(0,"convertLinks: Exception catched!");
+                }
+                m_sBookmarkName = ::rtl::OUString();
+                m_sDocumentLocation = ::rtl::OUString();
+                break;
+            case COLUMN:
+                if ( m_xCurrentColumn.is() )
+                {
+                    setProperties();
+                    Reference<XColumnsSupplier> xSupplier(m_xCurrentObject,UNO_QUERY);
+                    Reference<XAppend> xAppend(xSupplier->getColumns(),UNO_QUERY);
+                    if ( xAppend.is() )
+                        xAppend->appendByDescriptor(m_xCurrentColumn);
+                    m_xCurrentColumn = NULL;
+                }
+                break;
+        }
+
+        m_aStack.pop();
+    }
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  OCfgImport::dropNode(
+        const ::rtl::OUString& aName )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  OCfgImport::overrideProperty(
+        const ::rtl::OUString& aName,
+        sal_Int16 aAttributes,
+        const Type& aType,
+        sal_Bool bClear )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+    m_bPropertyMayBeVoid = sal_True;
+    if ( !m_aStack.empty() )
+    {
+        switch(m_aStack.top().second)
+        {
+            case DATASOURCE:
+                {
+                    m_bPropertyMayBeVoid = sal_False;
+                    ::rtl::OUString sProp;
+                    if ( aName == CONFIGKEY_DBLINK_CONNECTURL )
+                        sProp = PROPERTY_URL;
+                    else if ( aName == CONFIGKEY_DBLINK_USER )
+                        sProp = PROPERTY_USER;
+                    else if ( aName == CONFIGKEY_DBLINK_TABLEFILTER )
+                        sProp = PROPERTY_TABLEFILTER;
+                    else if ( aName == CONFIGKEY_DBLINK_TABLETYEFILTER )
+                        sProp = PROPERTY_TABLETYPEFILTER;
+                    else if ( aName == CONFIGKEY_DBLINK_PASSWORDREQUIRED )
+                        sProp = PROPERTY_ISPASSWORDREQUIRED;
+                    else if ( aName == CONFIGKEY_DBLINK_SUPPRESSVERSIONCL )
+                        sProp = PROPERTY_SUPPRESSVERSIONCL;
+                    else if ( aName == CONFIGKEY_LAYOUTINFORMATION )
+                        sProp = PROPERTY_LAYOUTINFORMATION;
+
+                    if ( sProp.getLength() )
+                    {
+                        sal_Int32 nPos = m_aProperties.getLength();
+                        m_aProperties.realloc(nPos+1);
+                        m_aProperties[nPos] = sProp;
+                    }
+                    else if ( aName == CONFIGKEY_DBLINK_LOGINTIMEOUT )
+                        m_aStack.push(TElementStack::value_type(aName,LOGINTIMEOUT));
+                    else
+                        m_aStack.push(TElementStack::value_type(aName,NO_PROP));
+                }
+                break;
+            case QUERY:
+                {
+                    m_bPropertyMayBeVoid = sal_False;
+                    ::rtl::OUString sProp;
+                    if ( aName == CONFIGKEY_QRYDESCR_COMMAND )
+                        sProp = PROPERTY_COMMAND;
+                    else if ( aName == CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING )
+                        sProp = PROPERTY_USE_ESCAPE_PROCESSING;
+                    else if ( aName == CONFIGKEY_QRYDESCR_UPDATE_TABLENAME )
+                        sProp = PROPERTY_UPDATE_TABLENAME;
+                    else if ( aName == CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME )
+                        sProp = PROPERTY_UPDATE_SCHEMANAME;
+                    else if ( aName == CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME )
+                        sProp = PROPERTY_UPDATE_CATALOGNAME;
+                    else if ( aName == CONFIGKEY_LAYOUTINFORMATION )
+                        sProp = PROPERTY_LAYOUTINFORMATION;
+
+                    if ( sProp.getLength() )
+                    {
+                        sal_Int32 nPos = m_aProperties.getLength();
+                        m_aProperties.realloc(nPos+1);
+                        m_aProperties[nPos] = sProp;
+                    }
+                    else
+                        m_aStack.push(TElementStack::value_type(aName,NO_PROP));
+                }
+                break;
+            case DATASETTINGS:
+                {
+                    m_bPropertyMayBeVoid = sal_False;
+                    ::rtl::OUString sProp;
+                    if (      aName == CONFIGKEY_DEFSET_FILTER ) sProp = PROPERTY_FILTER;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_NAME ) sProp = PROPERTY_FONTNAME;
+                    else if ( aName == CONFIGKEY_DEFSET_ORDER ) sProp = PROPERTY_ORDER;
+                    else if ( aName == CONFIGKEY_DEFSET_APPLYFILTER ) sProp = PROPERTY_APPLYFILTER;
+                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_ROW_HEIGHT) ) sProp = PROPERTY_ROW_HEIGHT;
+                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_TEXTCOLOR) ) sProp = PROPERTY_TEXTCOLOR;
+                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR) ) sProp = PROPERTY_TEXTLINECOLOR;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_CHARACTEREMPHASIS ) sProp = PROPERTY_TEXTEMPHASIS;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_CHARACTERRELIEF ) sProp = PROPERTY_TEXTRELIEF;
+                        // font
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_HEIGHT ) sProp = PROPERTY_FONTHEIGHT;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_WIDTH ) sProp = PROPERTY_FONTWIDTH;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_STYLENAME ) sProp = PROPERTY_FONTSTYLENAME;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_FAMILY ) sProp = PROPERTY_FONTFAMILY;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_CHARSET ) sProp = PROPERTY_FONTCHARSET;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_PITCH ) sProp = PROPERTY_FONTPITCH;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH ) sProp = PROPERTY_FONTCHARWIDTH;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_WEIGHT ) sProp = PROPERTY_FONTWEIGHT;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_UNDERLINE ) sProp = PROPERTY_FONTUNDERLINE;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_STRIKEOUT ) sProp = PROPERTY_FONTSTRIKEOUT;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_ORIENTATION ) sProp = PROPERTY_FONTORIENTATION;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_KERNING ) sProp = PROPERTY_FONTKERNING;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_WORDLINEMODE ) sProp = PROPERTY_FONTWORDLINEMODE;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_TYPE ) sProp = PROPERTY_FONTTYPE;
+                    else if ( aName == CONFIGKEY_DEFSET_FONT_SLANT ) sProp = PROPERTY_FONTSLANT;
+
+                    if ( sProp.getLength() )
+                    {
+                        sal_Int32 nPos = m_aProperties.getLength();
+                        m_aProperties.realloc(nPos+1);
+                        m_aProperties[nPos] = sProp;
+                    }
+                    else
+                        m_aStack.push(TElementStack::value_type(aName,NO_PROP));
+                }
+                break;
+            case COLUMN:
+                {
+                    ::rtl::OUString sProp;
+                    m_bPropertyMayBeVoid = sal_False;
+                    if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_ALIGNMENT) ) sProp = PROPERTY_ALIGN;
+                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_WIDTH) ) sProp = PROPERTY_WIDTH;
+                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_RELPOSITION) ) sProp = PROPERTY_RELATIVEPOSITION;
+                    else if ( aName == CONFIGKEY_COLUMN_HIDDEN ) sProp = PROPERTY_HIDDEN;
+                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_HELPTEXT) ) sProp = PROPERTY_HELPTEXT;
+                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_CONTROLDEFAULT) ) sProp = PROPERTY_CONTROLDEFAULT;
+                    else if ( m_bPropertyMayBeVoid = (aName == CONFIGKEY_COLUMN_NUMBERFORMAT) ) sProp = PROPERTY_NUMBERFORMAT;
+
+
+                    if ( sProp.getLength() )
+                    {
+                        sal_Int32 nPos = m_aProperties.getLength();
+                        m_aProperties.realloc(nPos+1);
+                        m_aProperties[nPos] = sProp;
+                    }
+                    else
+                        m_aStack.push(TElementStack::value_type(aName,NO_PROP));
+                }
+                break;
+            case BOOKMARK:
+                break;
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  OCfgImport::setPropertyValue(
+        const Any& aValue )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+    if ( !m_aStack.empty() )
+    {
+        switch(m_aStack.top().second)
+        {
+            case LOGINTIMEOUT:
+                {
+                    Reference< ::com::sun::star::sdbc::XDataSource> xDataSource(m_xCurrentDS,UNO_QUERY);
+                    sal_Int32 nTimeOut = 0;
+                    aValue >>= nTimeOut;
+                    if ( xDataSource.is() && nTimeOut >= 0 )
+                        xDataSource->setLoginTimeout(nTimeOut);
+                    m_aStack.pop();
+                }
+                break;
+            case DATASOURCESETTING:
+                OSL_ENSURE(!m_aDataSourceSettings.empty(),"Settings are emtpy!");
+                if ( aValue.hasValue() )
+                    m_aDataSourceSettings.rbegin()->Value = aValue;
+                else
+                    m_aDataSourceSettings.pop_back();
+                break;
+            case BOOKMARK:
+                aValue >>= m_sDocumentLocation;
+                break;
+            case NO_PROP:
+                m_aStack.pop();
+                break;
+            default:
+                OSL_ENSURE(m_aProperties.getLength(),"Properties are zero!");
+                if ( m_aProperties.getLength() )
+                {
+                    if ( m_aProperties[m_aProperties.getLength()-1] != PROPERTY_LAYOUTINFORMATION )
+                    {
+                        if ( !m_bPropertyMayBeVoid && !aValue.hasValue() )
+                        {
+                            m_aProperties.realloc(m_aProperties.getLength()-1);
+                        }
+                        else
+                        {
+                            sal_Int32 nPos = m_aValues.getLength();
+                            m_aValues.realloc(nPos+1);
+                            m_aValues[nPos] = aValue;
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Sequence< sal_Int8 > aInputSequence;
+                            aValue >>= aInputSequence;
+                            sal_Int32 nPos = m_aValues.getLength();
+                            m_aValues.realloc(nPos+1);
+                            Sequence< PropertyValue > aLayout;
+                            if ( aInputSequence.getLength() )
+                            {
+                                Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
+                                Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
+                                Reference< XInputStream> xMarkInStream = Reference< XInputStream >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
+                                Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
+                                Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
+                                OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
+                                xInDataSource->setInputStream(xMarkInStream);
+
+                                if ( DATASOURCE == m_aStack.top().second )
+                                    LoadTableWindows(xInStream,aLayout);
+                                else if ( QUERY == m_aStack.top().second )
+                                    LoadTableFields(xInStream,aLayout);
+                            }
+                            m_aValues[nPos] <<= aLayout;
+                        }
+                        catch(const Exception& e)
+                        {
+                            throw WrappedTargetException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property could not be set.")),*this,makeAny(e));
+                        }
+                    }
+                }
+                break;
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL OCfgImport::setPropertyValueForLocale(
+        const Any& aValue,
+        const ::rtl::OUString& aLocale )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  OCfgImport::endProperty()
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  OCfgImport::addProperty(
+        const rtl::OUString& aName,
+        sal_Int16 aAttributes,
+        const Type& aType )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL  OCfgImport::addPropertyWithValue(
+        const rtl::OUString& aName,
+        sal_Int16 aAttributes,
+        const Any& aValue )
+    throw(
+        MalformedDataException,
+        WrappedTargetException )
+{
+}
+// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // }// dbacfg
 // -----------------------------------------------------------------------------
