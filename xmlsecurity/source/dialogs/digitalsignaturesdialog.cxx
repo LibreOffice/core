@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:51:52 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #ifndef _COM_SUN_STAR_PACKAGES_WRONGPASSWORDEXCEPTION_HPP_
 #include <com/sun/star/packages/WrongPasswordException.hpp>
@@ -97,6 +98,42 @@ using namespace ::com::sun::star::security;
 #endif
 
 using namespace ::com::sun::star;
+
+sal_Bool HandleStreamAsXML_Impl( const uno::Reference < embed::XStorage >& rxStore, const rtl::OUString& rURI )
+{
+    sal_Bool bResult = sal_False;
+
+    try
+    {
+        sal_Int32 nSepPos = rURI.indexOf( '/' );
+        if ( nSepPos == -1 )
+        {
+            uno::Reference< io::XStream > xStream;
+            xStream = rxStore->cloneStreamElement( rURI );
+            if ( !xStream.is() )
+                throw uno::RuntimeException();
+
+            ::rtl::OUString aMediaType;
+            sal_Bool bEncrypted = sal_False;
+            uno::Reference< beans::XPropertySet > xProps( xStream, uno::UNO_QUERY_THROW );
+            xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= aMediaType;
+            xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEncrypted" ) ) ) >>= bEncrypted;
+            bResult = ( aMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/xml" ) ) ) && !bEncrypted );
+        }
+        else
+        {
+            rtl::OUString aStoreName = rURI.copy( 0, nSepPos );
+            rtl::OUString aElement = rURI.copy( nSepPos+1 );
+            uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );
+            bResult = HandleStreamAsXML_Impl( xSubStore, aElement );
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    return bResult;
+}
 
 DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Reference< lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly )
     :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
@@ -248,26 +285,13 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             for ( sal_Int32 n = 0; n < nElements; n++ )
             {
                 bool bBinaryMode = true;
-                bool bEncrypted = false;
                 sal_Int32 nSep = aElements[n].lastIndexOf( '.' );
                 if ( nSep != (-1) )
                 {
                     ::rtl::OUString aExt = aElements[n].copy( nSep+1 );
                     if ( aExt.equalsIgnoreAsciiCase( aXMLExt ) )
                     {
-                        bBinaryMode = false;
-                        // if it's encrypted, we will get a packages::WrongPasswordException and must use binary mode.
-                        try
-                        {
-                            maSignatureHelper.GetUriBinding()->getUriBinding( aElements[n] );
-                        }
-                        catch (packages::WrongPasswordException)
-                        {
-                            bBinaryMode = true;
-                            // opening encrypted stream soesn't work, so don't sign ecncrypted docs in EA
-                            ErrorBox( this, WB_OK, String( RTL_CONSTASCII_USTRINGPARAM( "This version does not support signing of encrypted documents right now." ) ) ).Execute();
-                            return -1;
-                        }
+                        bBinaryMode = !HandleStreamAsXML_Impl( mxStore, aElements[n] );
                     }
                 }
                 maSignatureHelper.AddForSigning( nSecurityId, aElements[n], aElements[n], bBinaryMode );
