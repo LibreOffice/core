@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-23 00:08:10 $
+ *  last change: $Author: obo $ $Date: 2001-11-27 23:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,10 +251,10 @@ String sNextButton
     Text[ danish ] = "~N�ste >>";
     Text[ polish ] = "Dalej >>";
     Text[ portuguese_brazilian ] = "C~ontinue >>";
-    Text[ japanese ] = "次へ(~O) >>";
-    Text[ korean ] = "다음 (~O) >>";
-    Text[ chinese_simplified ] = "继续   (~O) >>";
-    Text[ chinese_traditional ] = "繼續   (~O) >>";
+    Text[ japanese ] = "次へ(~X) >>";
+    Text[ korean ] = "다음 (~X)>>";
+    Text[ chinese_simplified ] = "继续(~X) >>";
+    Text[ chinese_traditional ] = "繼續(~X) >>";
     Text[ arabic ] = "~������ >>";
     Text[ turkish ] = "�l~eri >>";
     Text[ catalan ] = "C~ontinue >>";
@@ -2165,6 +2165,7 @@ String sSumMSDrawTemplates
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat PowerPoint-mallipohjat tuodaan:";
 };
+
 
 
 
