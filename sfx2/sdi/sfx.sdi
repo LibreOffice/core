@@ -8225,6 +8225,31 @@ SfxVoidItem InsertLabels FN_LABEL
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem NewXForms FN_XFORMS_INIT
+( SfxFrameItem Frame SID_DOCFRAME )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem AutoPilotPresentations SID_SD_AUTOPILOT
 ( SfxFrameItem Frame SID_DOCFRAME )
 [
