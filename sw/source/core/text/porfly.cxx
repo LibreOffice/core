@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 11:16:57 $
+ *  last change: $Author: fme $ $Date: 2001-12-17 12:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,11 +421,14 @@ const SwFrmFmt *SwFlyCntPortion::GetFrmFmt() const
 void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
                                long nLnAscent, long nLnDescent, long nFlyAsc,
                                long nFlyDesc, sal_uInt8 nFlags )
+{
+    // Note: rBase is an absolute value
+    SWAP_IF_SWAPPED( (&rFrm ) )
 #else
 void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     long nLnDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags )
-#endif
 {
+#endif
     Point aBase( rBase );
     const SwFrmFmt* pFmt = GetFrmFmt();
     const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
@@ -452,7 +455,11 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
 
 #ifdef VERTICAL_LAYOUT
     if ( rFrm.IsVertical() )
+    {
+        // seems to be easier to do it all the horizontal way
         rFrm.SwitchVerticalToHorizontal( aBoundRect );
+        rFrm.SwitchVerticalToHorizontal( aBase );
+    }
 #endif
 
     if( nFlags & SETBASE_ULSPACE )
@@ -588,10 +595,28 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
             // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
             pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );
         }
+#ifdef VERTICAL_LAYOUT
+        if ( rFrm.IsVertical() )
+            rFrm.SwitchHorizontalToVertical( aBase );
+#endif
     }
     else
     {
+
+#ifdef VERTICAL_LAYOUT
+        Point aRelAttr;
+        if ( rFrm.IsVertical() )
+        {
+            rFrm.SwitchHorizontalToVertical( aBase );
+            aRelAttr = Point( -nRelPos, 0 );
+            aRelPos = Point( -aRelPos.Y(), aRelPos.X() );
+        }
+        else
+            aRelAttr = Point( 0, nRelPos );
+#else
         Point aRelAttr( 0, nRelPos );
+#endif
+
         if ( !(nFlags & SETBASE_QUICK) && (aBase != GetFlyFrm()->GetRefPoint() ||
                          aRelAttr != GetFlyFrm()->GetCurRelPos()) )
         {
@@ -632,6 +657,10 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         Height( 1 );
         nAscent = 0;
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( ( &rFrm ) )
+#endif
 }
 
 /*************************************************************************
