@@ -1,0 +1,255 @@
+/*************************************************************************
+ *
+ *  $RCSfile: macrosecurity.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: gt $ $Date: 2004-07-16 06:27:47 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+
+TabDialog RID_XMLSECTP_MACROSEC
+{
+    // HelpID = HID_XMLSECTP_MACROSEC
+    Size = MAP_APPFONT( TD_WIDTH, TD_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = TRUE;
+    Moveable = TRUE;
+    SVLook = TRUE;
+
+    Text = "Makro Sicherheit";
+    Text [ en-US ] = "Macro Security";
+    TabControl 1
+    {
+        Pos = MAP_APPFONT( TD_SP_INNERBORDER_LEFT, TD_SP_INNERBORDER_TOP );
+        Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT+RIDDER_HEIGHT );
+        SVLook = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_SECLEVEL;
+                Text = "Sicherheitseinstufung";
+                Text [ en-US ] = "Security Level";
+            };
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_TRUSTSOURCES;
+                Text = "Vertrauenswürdige Quellen";
+                Text [ en-US ] = "Trusted Sources";
+            };
+        };
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT( MS_COL_H, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( MS_COL_F, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( MS_COL_D, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+    PushButton BTN_RESET
+    {
+        Pos = MAP_APPFONT( MS_COL_B, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text = "Zurücksetzen";
+        Text [ en-US ] = "Reset";
+    };
+};
+
+TabPage RID_XMLSECTP_SECLEVEL
+{
+//  HelpId = HID_XMLSECTP_SECLEVEL;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    FixedLine FL_SECLEVEL
+    {
+        Pos = MAP_APPFONT( SL_COL_0, SL_ROW_0 );
+        Size = MAP_APPFONT( SL_COL_3-SL_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text = "Sicherheitseinstufung";
+        Text [ en-US ] = "Security Level";
+    };
+    RadioButton RB_VERYHIGH
+    {
+        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_1 );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 2*RSC_CD_RADIOBUTTON_HEIGHT );
+        WordBreak = TRUE;
+        Text = "Sehr hoch. Nur Makros aus vertrauenswürdigen Dateiquellen werden ausgeführt. Alle anderen Makros, unabhängig ob signiert oder nicht, werden nicht ausgeführt.";
+        Text [ en-US ] = "Very high. Only macros from trusted file locations are allowed to run. All other macros, regardless if signed or not, are disabled.";
+    };
+    RadioButton RB_HIGH
+    {
+        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_2 );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 2*RSC_CD_RADIOBUTTON_HEIGHT );
+        WordBreak = TRUE;
+        Text = "Hoch. Nur signierte Makros aus vertrauenswürdigen Quellen werden ausgeführt. Nicht signierte Makros werden nicht ausgeführt.";
+        Text [ en-US ] = "High. Only signed macros from trusted sources are allowed to run. Unsigned macros are disabled.";
+    };
+    RadioButton RB_MEDIUM
+    {
+        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_3 );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 2*RSC_CD_RADIOBUTTON_HEIGHT );
+        WordBreak = TRUE;
+        Text = "Mittel. Manuelles Akzeptieren vor dem Ausführen von nicht vertrauenswürdigen Makros.";
+        Text [ en-US ] = "Medium. Manual confirmation before executing macros from untrusted sources.";
+    };
+    RadioButton RB_LOW
+    {
+        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_4 );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, 3*RSC_CD_RADIOBUTTON_HEIGHT );
+        WordBreak = TRUE;
+        Text = "Niedrig (nicht empfehlenswert). Alle Makros werden ohne Nachfrage ausgeführt. Diese Einstellung sollte nur benutzt werden, wenn sichergestellt werden kann, dass nur sichere Dokumente geladen werden.";
+        Text [ en-US ] = "Low (not recommended). Macros are being executed without any confirmation. Use this setting only if it is guaranteed that all documents beeing opened are save.";
+    };
+};
+
+TabPage RID_XMLSECTP_TRUSTSOURCES
+{
+//  HelpId = HID_XMLSECTP_TRUSTSOURCES;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    FixedLine FL_TRUSTCERT
+    {
+        Pos = MAP_APPFONT( TS_COL_0, TS_ROW_0 );
+        Size = MAP_APPFONT( TS_COL_7-TS_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text = "Vertrauenswürdige Quellen";
+        Text [ en-US ] = "Trusted Sources";
+    };
+    Control LB_TRUSTCERT
+    {
+        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_1 );
+        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, TS_ROW_2-TS_ROW_1 );
+        SVLook = TRUE;
+        Border = TRUE;
+    };
+    String STR_HEADERBAR
+    {
+        Text = "Issued to\tIssued by\tExpiration Date";
+        Text [ en-US ] = "Issued to\tIssued by\tExpiration Date";
+    };
+    PushButton PB_ADD_TRUSTCERT
+    {
+        Pos = MAP_APPFONT( TS_COL_2, TS_ROW_3 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text = "Hinzufügen...";
+        Text [ en-US ] = "Add...";
+    };
+    PushButton PB_VIEW_TRUSTCERT
+    {
+        Pos = MAP_APPFONT( TS_COL_4, TS_ROW_3 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text = "Zeigen...";
+        Text [ en-US ] = "View...";
+    };
+    PushButton PB_REMOVE_TRUSTCERT
+    {
+        Pos = MAP_APPFONT( TS_COL_6, TS_ROW_3 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text = "Entfernen";
+        Text [ en-US ] = "Remove";
+    };
+    FixedLine FL_TRUSTFILELOC
+    {
+        Pos = MAP_APPFONT( TS_COL_0, TS_ROW_5 );
+        Size = MAP_APPFONT( TS_COL_7-TS_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text = "Sichere Dateiquellen";
+        Text [ en-US ] = "Trusted file locations";
+    };
+    FixedText FI_TRUSTFILELOC
+    {
+        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_6 );
+        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, 2*RSC_CD_FIXEDLINE_HEIGHT );
+        WordBreak = TRUE;
+        Text = "Vertrauenswürdige Dateiquellen werden nur benutzt, wenn die Sicherheitseinstellungen auf sehr hoch eingestellt sind. Dann werden nur Dokumentmakros aus den folgenden Quellen ausgeführt.";
+        Text [ en-US ] = "Trusted file locations are used only, if the security level is set to very high. Then document macros are beeing executed only, if loaded from one of the following sources.";
+    };
+    ListBox LB_TRUSTFILELOC
+    {
+        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_7 );
+        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, TS_ROW_8-TS_ROW_7 );
+        SVLook = TRUE;
+        Border = TRUE;
+        VScroll = TRUE;
+        Sort = TRUE;
+    };
+    PushButton FL_ADD_TRUSTFILELOC
+    {
+        Pos = MAP_APPFONT( TS_COL_4, TS_ROW_9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text = "Hinzufügen...";
+        Text [ en-US ] = "Add...";
+    };
+    PushButton FL_REMOVE_TRUSTFILELOC
+    {
+        Pos = MAP_APPFONT( TS_COL_6, TS_ROW_9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text = "Entfernen";
+        Text [ en-US ] = "Remove";
+    };
+};
+
