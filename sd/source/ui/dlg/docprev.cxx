@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:37:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,18 +121,6 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
     mnShowPage = nShowPage;
 
     updateViewSettings();
-}
-
-IMPL_LINK( SdDocPreviewWin, PaintProc, SdrPaintProcRec *, pRecord )
-{
-    SdrObject* pObj = pRecord->pObj;
-    if( pObj->GetPage() && pObj->GetPage()->checkVisibility( pRecord, false ) )
-    {
-        // #i29486# use DoPaintObject instead of SingleObjectPainter in PaintProc recalls
-        pObj->DoPaintObject( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
-    }
-
-    return 0;
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
@@ -389,12 +377,14 @@ void SdDocPreviewWin::updateViewSettings()
         aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
         aVDev.SetRelativeMapMode( aVMap );
         aVDev.IntersectClipRegion( aClipRect );
-        const Link aPaintProcLink( LINK(this, SdDocPreviewWin, PaintProc ) );
+
+        // Use new StandardCheckVisisbilityRedirector
+        StandardCheckVisisbilityRedirector aRedirector;
 
         for (USHORT i=0; i<pView->GetPageViewCount(); i++)
         {
             SdrPageView* pPV=pView->GetPageViewPvNum(i);
-            pPV->InitRedraw(&aVDev,Region( Rectangle( Point(), aNewSize ) ),0,&aPaintProcLink );
+            pPV->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), 0, &aRedirector);
         }
 
         aVDev.Pop();
