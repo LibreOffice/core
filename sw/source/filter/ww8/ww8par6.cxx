@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:29:44 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <stdlib.h>
@@ -2167,7 +2166,71 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             break;
     }
 
-    if (rWW.bBorderLines)
+    // --> OD 2004-12-06 #i36649# - adjustments for certain horizontal alignments
+    // Note: These special adjustments found by an investigation of documents
+    //       containing frames with different left/right border distances and
+    //       distances to text. The outcome is some how strange.
+    // Note: These adjustments causes wrong horizontal positions for frames,
+    //       which are aligned inside|outside to page|margin on even pages,
+    //       the left and right border distances are different.
+    // determine left border distance
+    INT16 nLeBorderMgn( 0L );
+    {
+        INT16 nTemp = rWW.brc[WW8_LEFT].DetermineBorderProperties(rWW.bVer67,
+            &nLeBorderMgn);
+        nLeBorderMgn += nTemp;
+    }
+    // determine right border distance
+    INT16 nRiBorderMgn( 0L );
+    {
+        INT16 nTemp = rWW.brc[WW8_RIGHT].DetermineBorderProperties(rWW.bVer67,
+            &nRiBorderMgn);
+        nRiBorderMgn += nTemp;
+    }
+    if ( eHAlign == HORI_LEFT && eHRel == REL_PG_FRAME )
+    {
+        // convert 'left to page' to
+        // 'from left -<width>-<2*left border distance>-<right wrap distance>
+        // to page text area'
+        eHAlign = HORI_NONE;
+        eHRel = REL_PG_PRTAREA;
+        nXPos = -nWidth - (2*nLeBorderMgn) - rWW.nRiMgn;
+        // re-set left wrap distance
+        nLeMgn = rWW.nLeMgn;
+    }
+    else if ( eHAlign == HORI_RIGHT && eHRel == REL_PG_FRAME )
+    {
+        // convert 'right to page' to
+        // 'from left <right border distance-left border distance>+<left wrap distance>
+        // to right page border'
+        eHAlign = HORI_NONE;
+        eHRel = REL_PG_RIGHT;
+        nXPos = ( nRiBorderMgn - nLeBorderMgn ) + rWW.nLeMgn;
+        // re-set right wrap distance
+        nRiMgn = rWW.nRiMgn;
+    }
+    else if ( eHAlign == HORI_LEFT && eHRel == REL_PG_PRTAREA )
+    {
+        // convert 'left to margin' to
+        // 'from left -<left border distance> to page text area'
+        eHAlign = HORI_NONE;
+        eHRel = REL_PG_PRTAREA;
+        nXPos = -nLeBorderMgn;
+        // re-set left wrap distance
+        nLeMgn = rWW.nLeMgn;
+    }
+    else if ( eHAlign == HORI_RIGHT && eHRel == REL_PG_PRTAREA )
+    {
+        // convert 'right to margin' to
+        // 'from left -<width>-<left border distance> to right page border'
+        eHAlign = HORI_NONE;
+        eHRel = REL_PG_RIGHT;
+        nXPos = -nWidth - nLeBorderMgn;
+        // re-set right wrap distance
+        nRiMgn = rWW.nRiMgn;
+    }
+    else if (rWW.bBorderLines)
+    // <--
     {
         /*
         #i582#
@@ -2214,6 +2277,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
         Reader::ResetFrmFmtAttrs(*this);    // Abstand/Umrandung raus
                                             // Position
     Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
+
 /*Below can all go when we have from left in rtl mode*/
     long nXPos = pFS->nXPos;
     SwRelationOrient eHRel = pFS->eHRel;
@@ -2227,16 +2291,9 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 
     if (pFS->nUpMgn || pFS->nLoMgn)
         Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn));
-#if 0
-    //This is only a hack: #110876#
-    if ((rReader.bIsHeader || rReader.bIsFooter))
-        Put(SwFmtSurround(SURROUND_THROUGHT));
-    else
-        Put(SwFmtSurround(pFS->eSurround));
-#else
+
     //we no longer need to hack around the header/footer problems
     Put(SwFmtSurround(pFS->eSurround));
-#endif
 
     short aSizeArray[5]={0};
     rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
