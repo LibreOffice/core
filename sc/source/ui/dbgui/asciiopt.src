@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:08:23 $
+ *  last change: $Author: dr $ $Date: 2002-01-10 13:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,8 +306,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     FixedText FT_TEXTSEP
     {
-        Pos = MAP_APPFONT ( 164 , 114 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 156 , 114 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Te~xttrenner" ;
         Text [ ENGLISH ] = "Text Separator" ;
         Text [ DANISH ] = "Tekstseparator" ;
@@ -642,7 +642,7 @@ ModalDialog RID_SCDLG_ASCII
     CheckBox CB_ASONCE
     {
         Pos = MAP_APPFONT ( 20 , 114 ) ;
-        Size = MAP_APPFONT ( 138 , 10 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
         Text = "Fel~dtrenner zusammenfassen" ;
         Text [ ENGLISH ] = "Treat delimiters as one" ;
         TabStop = TRUE ;
