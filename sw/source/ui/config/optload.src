@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:12:23 $
+ *  last change: $Author: kz $ $Date: 2001-12-04 18:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ norwegian ] = "Standard tabulatoravstand" ;
         Text [ finnish ] = "Sarkainkeskeytykset" ;
         Group = TRUE ;
-        Text[ chinese_traditional ] = "θ£½θ΅¨η¬¦ι–“ι”";
+        Text[ chinese_traditional ] = "ε®δ½ιµι–“ι”";
         Text[ arabic ] = "ΪαΗγΗΚ ΗαΜΟζαΙ";
         Text[ greek ] = "Απο~στάσεις στηλοθετών";
         Text[ korean ] = "νƒ­ κ±°λ¦¬";
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
