@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:18:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4805,7 +4805,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     // if the mapmode is distorted we need to adjust for that also
     if( m_aCurrentPDFState.m_aMapMode.GetScaleX() != m_aCurrentPDFState.m_aMapMode.GetScaleY() )
     {
-        fXScale *= (double)(m_aCurrentPDFState.m_aMapMode.GetScaleX() / m_aCurrentPDFState.m_aMapMode.GetScaleY());
+        fXScale *= double(m_aCurrentPDFState.m_aMapMode.GetScaleX()) / double(m_aCurrentPDFState.m_aMapMode.GetScaleY());
     }
 
     int nAngle = m_aCurrentPDFState.m_aFont.GetOrientation();
@@ -7108,6 +7108,12 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, c
     OStringBuffer aLine( 80 );
     updateGraphicsState();
 
+    // #i40055# sanity check
+    if( ! (rTargetArea.GetWidth() && rTargetArea.GetHeight() ) )
+        return;
+    if( ! (rSizePixel.Width() && rSizePixel.Height()) )
+        return;
+
     SvMemoryStream* pStream = new SvMemoryStream;
     rDCTData.Seek( 0 );
     *pStream << rDCTData;
@@ -7206,6 +7212,10 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
 {
     MARK( "drawBitmap (Bitmap)" );
 
+    // #i40055# sanity check
+    if( ! (rDestSize.Width() && rDestSize.Height()) )
+        return;
+
     const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( rBitmap ) );
     drawBitmap( rDestPoint, rDestSize, rEmit, Color( COL_TRANSPARENT ) );
 }
@@ -7214,6 +7224,10 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
 {
     MARK( "drawBitmap (BitmapEx)" );
 
+    // #i40055# sanity check
+    if( ! (rDestSize.Width() && rDestSize.Height()) )
+        return;
+
     const BitmapEmit& rEmit = createBitmapEmit( rBitmap );
     drawBitmap( rDestPoint, rDestSize, rEmit, Color( COL_TRANSPARENT ) );
 }
@@ -7221,6 +7235,10 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
 void PDFWriterImpl::drawMask( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Color& rFillColor )
 {
     MARK( "drawMask" );
+
+    // #i40055# sanity check
+    if( ! (rDestSize.Width() && rDestSize.Height()) )
+        return;
 
     Bitmap aBitmap( rBitmap );
     if( aBitmap.GetBitCount() > 1 )
@@ -7669,7 +7687,7 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
                            m_aMapMode,
                            getReferenceDevice(),
                            Point() );
-    m_aGraphicsStack.front().m_aClipRegion.Move( nX, nY );
+    m_aGraphicsStack.front().m_aClipRegion.Move( aPoint.X(), aPoint.Y() );
 }
 
 bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
