@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-09 13:31:40 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 09:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ const sal_Char __FAR_DATA SwRTFWriter::sNewLine[] = "\015\012";
 
 
 
-SV_DECL_VARARR( RTFColorTbl, Color, 5, 2 )
+SV_DECL_VARARR( RTFColorTbl, Color, 5, 8 )
 SV_IMPL_VARARR( RTFColorTbl, Color )
 
 
@@ -231,7 +231,7 @@ ULONG SwRTFWriter::WriteStream()
     bAutoAttrSet = bOutListNumTxt = bOutLeftHeadFoot = bIgnoreNextPgBreak =
         FALSE;
 
-    nFontHeight = 0;
+    pCurEndPosLst = 0;
     nBkmkTabPos = USHRT_MAX;
     pAktPageDesc = 0;
     pAttrSet = 0;
@@ -818,15 +818,9 @@ void SwRTFWriter::OutRTFColorTab()
     {
         const Color& rCol = (*pColTbl)[ n ];
         Strm() << sRTF_RED;
-#ifdef VCL
         OutULong( rCol.GetRed() ) << sRTF_GREEN;
         OutULong( rCol.GetGreen() ) << sRTF_BLUE;
         OutULong( rCol.GetBlue() ) << ';';
-#else
-        OutULong( ( rCol.GetRed() & 0xff00 ) >> 8 ) << sRTF_GREEN;
-        OutULong( ( rCol.GetGreen() & 0xff00 ) >> 8 ) << sRTF_BLUE;
-        OutULong( ( rCol.GetBlue() & 0xff00 ) >> 8 ) << ';';
-#endif
     }
     Strm() << '}';
 }
@@ -881,6 +875,7 @@ void SwRTFWriter::OutRTFFontTab()
         _OutFont( *this, *pFont, n++ );
 
     PutNumFmtFontsInAttrPool();
+    PutCJKandCTLFontsInAttrPool();
 
     USHORT nMaxItem = rPool.GetItemCount( RES_CHRATR_FONT );
     for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
@@ -1370,8 +1365,7 @@ RTFSaveData::RTFSaveData( SwRTFWriter& rWriter, ULONG nStt, ULONG nEnd )
     : rWrt( rWriter ),
     pOldPam( rWrt.pCurPam ), pOldEnd( rWrt.GetEndPaM() ),
     pOldFlyFmt( rWrt.pFlyFmt ), pOldPageDesc( rWrt.pAktPageDesc ),
-    pOldAttrSet( rWrt.pAttrSet )
-
+    pOldAttrSet( rWrt.GetAttrSet() )
 {
     bOldWriteAll = rWrt.bWriteAll;
     bOldOutTable = rWrt.bOutTable;
@@ -1391,7 +1385,7 @@ RTFSaveData::RTFSaveData( SwRTFWriter& rWriter, ULONG nStt, ULONG nEnd )
     rWrt.bWriteAll = TRUE;
     rWrt.bOutTable = FALSE;
     rWrt.bOutPageAttr = FALSE;
-    rWrt.pAttrSet = 0;
+    rWrt.SetAttrSet( 0 );
     rWrt.bAutoAttrSet = FALSE;
     rWrt.bOutSection = FALSE;
 }
@@ -1407,7 +1401,7 @@ RTFSaveData::~RTFSaveData()
     rWrt.bOutTable = bOldOutTable;
     rWrt.pFlyFmt = pOldFlyFmt;
     rWrt.pAktPageDesc = pOldPageDesc;
-    rWrt.pAttrSet = pOldAttrSet;
+    rWrt.SetAttrSet( pOldAttrSet );
     rWrt.bAutoAttrSet = bOldAutoAttrSet;
     rWrt.bOutPageAttr = bOldOutPageAttr;
     rWrt.bOutSection = bOldOutSection;
@@ -1424,11 +1418,14 @@ void GetRTFWriter( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.2 2000-10-09 13:31:40 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.3 2000-11-16 09:57:36 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/09 13:31:40  jp
+      Bug #78626#: _OutFont - dontknow is a valid value
+
       Revision 1.1.1.1  2000/09/18 17:14:56  hr
       initial import
 

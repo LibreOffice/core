@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 12:27:20 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 09:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,14 @@
 
 #pragma hdrstop
 
-#include <fltini.hxx>
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
+#include <com/sun/star/text/ScriptType.hdl>
+#endif
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -175,6 +178,12 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
+#ifndef _SVX_WRLMITEM_HXX
+#include <svx/wrlmitem.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX
+#include <svx/emphitem.hxx>
+#endif
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
 #endif
@@ -264,9 +273,6 @@
 #ifndef _RTF_HXX
 #include <rtf.hxx>          // fuer SwPictureType
 #endif
-#ifndef _WRTTXATR_HXX
-#include <wrttxatr.hxx>     // fuer EndPosList (zwischenspeicher fuer TextAttr.=
-#endif
 #ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
 #endif
@@ -309,6 +315,13 @@
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _FLTINI_HXX
+#include <fltini.hxx>
+#endif
+
 
 
 /*
@@ -509,35 +522,326 @@ void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
  *      Ende sortiert und dann erst ausgegeben werden.
  */
 
-class RTFEndPosLst : public EndPosLst
+SV_DECL_PTRARR( SfxPoolItems, SfxPoolItem*, 4, 4 )
+
+class SttEndPos
 {
+    // falls mehrere Attribute den gleichen Bereich umspannen, sammeln
+    SfxPoolItems aArr;
+    xub_StrLen nStart, nEnd;
+
+    SttEndPos( const SttEndPos & rSEPos );
+
 public:
-    RTFEndPosLst() {}
-    void OutAttrs( Writer& rWrt, xub_StrLen nStrPos );
-    void EndAttrs( SwRTFWriter& rWrt, xub_StrLen nStrPos );
+    SttEndPos( const SfxPoolItem& rAttr, xub_StrLen nStt, xub_StrLen nEnd );
+    ~SttEndPos();
+
+    xub_StrLen  GetStart() const            { return nStart; }
+    xub_StrLen  GetEnd() const              { return nEnd; }
+
+    const SfxPoolItems& GetAttrs() const    { return aArr; }
+    void AddAttr( const SfxPoolItem& rAttr );
+    BOOL HasScriptChange() const;
 };
 
-void RTFEndPosLst::OutAttrs( Writer& rWrt, xub_StrLen nStrPos )
+
+SV_DECL_PTRARR_DEL( _EndPosLst, SttEndPos*, 5, 5 )
+SV_IMPL_PTRARR( _EndPosLst, SttEndPos* )
+
+class RTFEndPosLst : private _EndPosLst
+{
+    const SwTxtNode& rNode;
+    SwRTFWriter& rWrt;
+    RTFEndPosLst* pOldPosLst;
+    xub_StrLen nCurPos;
+    USHORT nCurScript;
+public:
+    _EndPosLst::Count;
+    _EndPosLst::operator[];
+    _EndPosLst::DeleteAndDestroy;
+
+    RTFEndPosLst( SwRTFWriter& rWrt, const SwTxtNode& rNd );
+    ~RTFEndPosLst();
+
+    USHORT GetCurScript() const         { return nCurScript; }
+    BOOL MatchScriptToId( USHORT nId ) const;
+    int Insert( const SfxPoolItem& rAttr, xub_StrLen nStt, xub_StrLen nEnd );
+
+    void OutAttrs( xub_StrLen nStrPos );
+    void EndAttrs( xub_StrLen nStrPos );
+    void OutScriptChange( xub_StrLen nStrPos );
+
+    const SfxPoolItem* HasItem( USHORT nWhich ) const;
+    const SfxPoolItem& GetItem( USHORT nWhich ) const;
+    void OutFontAttrs( USHORT nScript );
+};
+
+
+SttEndPos::SttEndPos( const SfxPoolItem& rAttr,
+                        xub_StrLen nStt, xub_StrLen nEd )
+    : nStart( nStt ), nEnd( nEd )
+{
+    AddAttr( rAttr );
+}
+
+SttEndPos::~SttEndPos()
+{
+    for( USHORT n = 0, nEnd = aArr.Count(); n < nEnd; ++n )
+        if( RES_FLTRATTR_BEGIN <= aArr[ n ]->Which() )
+            delete aArr[ n ];
+}
+
+BOOL SttEndPos::HasScriptChange() const
+{
+    for( USHORT n = 0, nEnd = aArr.Count(); n < nEnd; ++n )
+        if( RES_FLTR_SCRIPTTYPE == aArr[ n ]->Which() )
+            return TRUE;
+    return FALSE;
+}
+
+void SttEndPos::AddAttr( const SfxPoolItem& rAttr )
+{
+    const SfxPoolItem* pI = &rAttr;
+    USHORT n = aArr.Count();
+    switch( rAttr.Which() )
+    {
+    case RES_FLTR_SCRIPTTYPE:
+        {
+            while( n )
+                switch( aArr[ --n ]->Which() )
+                {
+                case RES_CHRATR_FONT:
+                case RES_CHRATR_FONTSIZE:
+                case RES_CHRATR_LANGUAGE:
+                case RES_CHRATR_POSTURE:
+                case RES_CHRATR_WEIGHT:
+                case RES_CHRATR_CJK_FONT:
+                case RES_CHRATR_CJK_FONTSIZE:
+                case RES_CHRATR_CJK_LANGUAGE:
+                case RES_CHRATR_CJK_POSTURE:
+                case RES_CHRATR_CJK_WEIGHT:
+                case RES_CHRATR_CTL_FONT:
+                case RES_CHRATR_CTL_FONTSIZE:
+                case RES_CHRATR_CTL_LANGUAGE:
+                case RES_CHRATR_CTL_POSTURE:
+                case RES_CHRATR_CTL_WEIGHT:
+                    aArr.Remove( n, 1 );
+                    break;
+                }
+        }
+        break;
+    case RES_CHRATR_FONT:
+    case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_LANGUAGE:
+    case RES_CHRATR_POSTURE:
+    case RES_CHRATR_WEIGHT:
+    case RES_CHRATR_CJK_FONT:
+    case RES_CHRATR_CJK_FONTSIZE:
+    case RES_CHRATR_CJK_LANGUAGE:
+    case RES_CHRATR_CJK_POSTURE:
+    case RES_CHRATR_CJK_WEIGHT:
+    case RES_CHRATR_CTL_FONT:
+    case RES_CHRATR_CTL_FONTSIZE:
+    case RES_CHRATR_CTL_LANGUAGE:
+    case RES_CHRATR_CTL_POSTURE:
+    case RES_CHRATR_CTL_WEIGHT:
+        while( n )
+            if( RES_FLTR_SCRIPTTYPE == aArr[ --n ]->Which() )
+            {
+                pI = 0;
+                break;
+            }
+        break;
+    }
+    if( pI )
+        aArr.Insert( pI, aArr.Count() );
+}
+
+RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd )
+    : rNode( rNd ), rWrt( rWriter ), nCurPos( -1 )
+{
+    pOldPosLst = rWrt.pCurEndPosLst;
+    rWrt.pCurEndPosLst = this;
+
+    // JP 15.11.00: first default to latin - this must be change, if it
+    //              clear how we handle empty paragraphs
+    nCurScript = ::com::sun::star::text::ScriptType::LATIN;
+
+    // search the script changes and add this positions as a Item into
+    // the attribute list
+    if( pBreakIt->xBreak.is() )
+    {
+        const String& rTxt = rNode.GetTxt();
+        xub_StrLen nChg = 0, nLen = rTxt.Len(), nSttPos = 0;
+
+        while( nChg < nLen )
+        {
+            USHORT nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+            nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+               switch( nScript )
+            {
+            case ::com::sun::star::text::ScriptType::LATIN:
+            case ::com::sun::star::text::ScriptType::ASIAN:
+            case ::com::sun::star::text::ScriptType::COMPLEX:
+                if( nSttPos != nChg )
+                {
+                    SfxPoolItem* pAttr = new
+                        SfxInt16Item( RES_FLTR_SCRIPTTYPE, nScript );
+                    Insert( *pAttr, nSttPos, nChg );
+                    nSttPos = nChg;
+                }
+                break;
+            }
+        }
+    }
+}
+
+RTFEndPosLst::~RTFEndPosLst()
+{
+    rWrt.pCurEndPosLst = pOldPosLst;
+}
+
+int RTFEndPosLst::Insert( const SfxPoolItem& rAttr, xub_StrLen nStt,
+                            xub_StrLen nEnd )
+{
+    if( nStt == nEnd )
+        return FALSE;
+
+    USHORT nPos;
+    for( nPos = 0; nPos < Count(); ++nPos )
+    {
+        SttEndPos* pTmp = GetObject( nPos );
+        if( pTmp->GetStart() == nStt && pTmp->GetEnd() == nEnd )
+        {
+            pTmp->AddAttr( rAttr );
+            return FALSE;       // schon vorhanden
+        }
+        if( nEnd < pTmp->GetEnd() )
+        {
+            SttEndPos* pNew = new SttEndPos( rAttr, nStt, nEnd );
+            _EndPosLst::C40_INSERT( SttEndPos, pNew, nPos );
+            return TRUE;
+        }
+    }
+
+    SttEndPos* pNew = new SttEndPos( rAttr, nStt, nEnd );
+    _EndPosLst::C40_INSERT( SttEndPos, pNew, nPos );
+    return TRUE;
+}
+
+void RTFEndPosLst::OutScriptChange( xub_StrLen nStrPos )
 {
     SttEndPos* pStt;
+    for( USHORT n = 0, nEnd = Count(); n < nEnd; ++n )
+        if( nStrPos == (pStt = GetObject( n ))->GetStart())
+        {
+            if( pStt->HasScriptChange() )
+                OutAttrs( nStrPos );
+            break;
+        }
+}
+
+void RTFEndPosLst::OutAttrs( xub_StrLen nStrPos )
+{
+    SttEndPos* pStt;
+    nCurPos = nStrPos;
     for( USHORT n = Count(); n ;  )
         if( nStrPos == (pStt = (*this)[ --n ])->GetStart() )
         {
             rWrt.Strm() << '{';
             for( USHORT i = 0; i < pStt->GetAttrs().Count(); ++i )
-                Out( aRTFAttrFnTab, pStt->GetAttrs()[i]->GetAttr(), rWrt );
+            {
+                const SfxPoolItem* pItem = pStt->GetAttrs()[i];
+                if( RES_FLTR_SCRIPTTYPE == pItem->Which() )
+                    OutFontAttrs( ((SfxUInt16Item*)pItem)->GetValue() );
+                else
+                    Out( aRTFAttrFnTab, *pItem, rWrt );
+            }
         }
+
+    nCurPos = -1;
 }
 
-void RTFEndPosLst::EndAttrs( SwRTFWriter& rWrt, xub_StrLen nStrPos )
+void RTFEndPosLst::OutFontAttrs( USHORT nScript )
+{
+    // script change, write the correct attributes:
+    // start first with the Fontname
+
+    rWrt.bOutFmtAttr = TRUE;
+    nCurScript = nScript;
+
+    USHORT nLatin = rWrt.GetId( (SvxFontItem&)GetItem( RES_CHRATR_FONT )),
+            nAsian = rWrt.GetId( (SvxFontItem&)GetItem( RES_CHRATR_CJK_FONT )),
+            nCmplx = rWrt.GetId( (SvxFontItem&)GetItem( RES_CHRATR_CTL_FONT ));
+
+    static const USHORT aLatinIds[] =  {
+            RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
+            RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CJK_WEIGHT,
+            0
+        },
+        aAsianIds[] =  {
+            RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
+            RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CJK_WEIGHT,
+            0
+        },
+        aCmplxIds[] =  {
+            RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
+            RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CJK_WEIGHT,
+            0
+        };
+    const USHORT* pIdArr = aLatinIds;
+
+    // size/weight/posture optional
+    switch( nScript )
+    {
+    case ::com::sun::star::text::ScriptType::LATIN:
+        rWrt.Strm() << sRTF_RTLCH << sRTF_AF;
+        rWrt.OutULong( nCmplx );
+        rWrt.Strm() << sRTF_LTRCH << sRTF_DBCH << sRTF_AF;
+        rWrt.OutULong( nAsian ) << sRTF_HICH << sRTF_AF;
+        rWrt.OutULong( nLatin ) << sRTF_LOCH << sRTF_F;
+        rWrt.OutULong( nLatin );
+        break;
+    case ::com::sun::star::text::ScriptType::ASIAN:
+        rWrt.Strm() << sRTF_RTLCH << sRTF_AF;
+        rWrt.OutULong( nCmplx );
+        rWrt.Strm() << sRTF_LTRCH << sRTF_LOCH << sRTF_AF;
+        rWrt.OutULong( nLatin ) << sRTF_HICH << sRTF_AF;
+        rWrt.OutULong( nLatin ) << sRTF_DBCH << sRTF_F;
+        rWrt.OutULong( nAsian );
+        pIdArr = aAsianIds;
+        break;
+
+    case ::com::sun::star::text::ScriptType::COMPLEX:
+        rWrt.Strm() << sRTF_LTRCH << sRTF_DBCH << sRTF_AF;
+        rWrt.OutULong( nAsian ) << sRTF_LOCH << sRTF_AF;
+        rWrt.OutULong( nLatin ) << sRTF_HICH << sRTF_AF;
+        rWrt.OutULong( nLatin );
+        rWrt.Strm() << sRTF_RTLCH << sRTF_F;
+        rWrt.OutULong( nCmplx );
+        pIdArr = aCmplxIds;
+        break;
+    }
+
+    FnAttrOut pOut;
+    const SfxPoolItem* pItem;
+    for( ; *pIdArr; ++pIdArr )
+    {
+        if( 0 != (pItem = HasItem( *pIdArr )) &&
+            0 != ( pOut = aRTFAttrFnTab[ *pIdArr - RES_CHRATR_BEGIN] ))
+            (*pOut)( rWrt, *pItem );
+    }
+}
+
+void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
 {
     SttEndPos* pSEPos;
-    while( 0 != Count() && 0 != (pSEPos = (*this)[ 0 ]) &&
-            ( STRING_MAXLEN == nStrPos || nStrPos == pSEPos->GetEnd() ))
+    while( 0 != Count() && 0 != (pSEPos = GetObject( 0 )) &&
+        ( STRING_MAXLEN == nStrPos || nStrPos == pSEPos->GetEnd() ))
     {
         rWrt.Strm() << '}';
 
-        const _SwpTxtHts& rAttrs = pSEPos->GetAttrs();
+        const SfxPoolItems& rAttrs = pSEPos->GetAttrs();
         for( USHORT nAttr = rAttrs.Count(); nAttr; )
             if( RES_TXTATR_INETFMT == rAttrs[ --nAttr ]->Which() )
             {
@@ -547,18 +851,94 @@ void RTFEndPosLst::EndAttrs( SwRTFWriter& rWrt, xub_StrLen nStrPos )
                 rWrt.Strm() << "}}";
             }
 
-        rWrt.nFontHeight = pSEPos->GetFontSize();
-        Remove();
+        DeleteAndDestroy( 0, 1 );
     }
-
 }
 
-static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
+BOOL RTFEndPosLst::MatchScriptToId( USHORT nWhich ) const
+{
+    BOOL bRet = FALSE;
+    switch( nWhich )
+    {
+    case RES_CHRATR_FONT:
+    case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_LANGUAGE:
+    case RES_CHRATR_POSTURE:
+    case RES_CHRATR_WEIGHT:
+        bRet = nCurScript == ::com::sun::star::text::ScriptType::LATIN;
+        break;
+    case RES_CHRATR_CJK_FONT:
+    case RES_CHRATR_CJK_FONTSIZE:
+    case RES_CHRATR_CJK_LANGUAGE:
+    case RES_CHRATR_CJK_POSTURE:
+    case RES_CHRATR_CJK_WEIGHT:
+        bRet = nCurScript == ::com::sun::star::text::ScriptType::ASIAN;
+        break;
+    case RES_CHRATR_CTL_FONT:
+    case RES_CHRATR_CTL_FONTSIZE:
+    case RES_CHRATR_CTL_LANGUAGE:
+    case RES_CHRATR_CTL_POSTURE:
+    case RES_CHRATR_CTL_WEIGHT:
+        bRet = nCurScript == ::com::sun::star::text::ScriptType::COMPLEX;
+        break;
+    }
+    return bRet;
+}
+
+const SfxPoolItem& RTFEndPosLst::GetItem( USHORT nWhich ) const
+{
+    const SfxPoolItem* pItem = HasItem( nWhich );
+    if( !pItem )
+        pItem = &rNode.GetSwAttrSet().GetPool()->GetDefaultItem( nWhich );
+    return *pItem;
+}
+
+const SfxPoolItem* RTFEndPosLst::HasItem( USHORT nWhich ) const
+{
+    const SfxPoolItem* pItem;
+    if( RES_TXTATR_END > nWhich )
+    {
+        // it's a character/text attribute so look into the item array
+        for( USHORT n = Count(); n; )
+        {
+            SttEndPos* pTmp = GetObject( --n );
+            for( USHORT i = pTmp->GetAttrs().Count(); i; )
+            {
+                pItem = pTmp->GetAttrs()[ --i ];
+                if( pItem->Which() == nWhich )
+                    return pItem;
+
+                // look into the charfmt?
+                if( RES_TXTATR_CHARFMT == pItem->Which() &&
+                    ((SwFmtCharFmt*) pItem)->GetCharFmt() &&
+                    SFX_ITEM_SET == ((SwFmtCharFmt*) pItem)->GetCharFmt()->
+                        GetItemState( nWhich, TRUE, &pItem ))
+                    return pItem;
+            }
+        }
+    }
+
+    if( SFX_ITEM_SET != rNode.GetSwAttrSet().GetItemState(
+                                nWhich, TRUE, &pItem ))
+        pItem = 0;
+    return pItem;
+}
+
+const SfxPoolItem& SwRTFWriter::GetItem( USHORT nWhich ) const
+{
+    if( pCurEndPosLst )
+        return pCurEndPosLst->GetItem( nWhich );
+    if( pAttrSet )
+        return pAttrSet->Get( nWhich );
+
+    return pDoc->GetAttrPool().GetDefaultItem( nWhich );
+}
+
+static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {
     SwTxtNode * pNd = &((SwTxtNode&)rNode);
     SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
-    RTFEndPosLst aEndPosLst;
-    SttEndPos* pNewStt;
+    RTFEndPosLst aEndPosLst( rRTFWrt, *pNd );
     USHORT nAttrPos = 0;
     xub_StrLen nStrPos = rRTFWrt.pCurPam->GetPoint()->nContent.GetIndex();
 
@@ -567,14 +947,14 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
     if( rRTFWrt.pCurPam->GetPoint()->nNode == rRTFWrt.pCurPam->GetMark()->nNode )
         nEnde = Min( nEnde, rRTFWrt.pCurPam->GetMark()->nContent.GetIndex() );
 
-    int bNewFmts = rRTFWrt.pAttrSet != &pNd->GetSwAttrSet();
+    int bNewFmts = rRTFWrt.GetAttrSet() != &pNd->GetSwAttrSet();
     if( bNewFmts )
     {
         // harte Attributierung am Node und am Vorgaenger ?
         const SfxItemSet* pNdSet = pNd->GetpSwAttrSet();
-        if( pNdSet && rRTFWrt.pAttrSet && rRTFWrt.bAutoAttrSet &&
-            pNdSet->GetParent() == rRTFWrt.pAttrSet->GetParent() &&
-            pNdSet->Count() == rRTFWrt.pAttrSet->Count() )
+        if( pNdSet && rRTFWrt.GetAttrSet() && rRTFWrt.bAutoAttrSet &&
+            pNdSet->GetParent() == rRTFWrt.GetAttrSet()->GetParent() &&
+            pNdSet->Count() == rRTFWrt.GetAttrSet()->Count() )
         {
             // die beiden Parents sind gleich, dann teste doch mal die
             // Attribute im Set
@@ -582,7 +962,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
             int bEqual = TRUE;
             if( pNdSet->Count() )
             {
-                SfxItemIter aIter( *rRTFWrt.pAttrSet );
+                SfxItemIter aIter( *rRTFWrt.GetAttrSet() );
                 const SfxPoolItem *pItem, *pCurr = aIter.GetCurItem();
                 while( TRUE )
                 {
@@ -601,12 +981,9 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
             if( bEqual )
                 bNewFmts = FALSE;
         }
-        rRTFWrt.pAttrSet = &pNd->GetSwAttrSet();
+        rRTFWrt.SetAttrSet( &pNd->GetSwAttrSet() );
         rRTFWrt.bAutoAttrSet = 0 != pNdSet;
     }
-
-    // bestimme die aktuelle FontSize aus den Formaten
-    rRTFWrt.nFontHeight = (USHORT)rRTFWrt.pAttrSet->GetSize().GetHeight();
 
     // Flag zuruecksetzen, damit nach der Ausgabe der Collection
     // getestet werden kann, ob noch ein Blank auszugeben ist
@@ -701,9 +1078,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
                     if( nHtStt < nStrPos ) nHtStt = nStrPos;
                     if( nHtEnd >= nEnde ) nHtEnd = nEnde;
                 }
-                pNewStt = new SttEndPos( pHt, nHtStt, nHtEnd, rRTFWrt.nFontHeight );
-
-                aEndPosLst.Insert( pNewStt );
+                aEndPosLst.Insert( pHt->GetAttr(), nHtStt, nHtEnd );
                 continue;
                 // aber nicht ausgeben, das erfolgt spaeter !!
             }
@@ -713,7 +1088,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
             *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
 
         // dann gebe mal alle gesammelten Attribute von der String-Pos aus
-        aEndPosLst.OutAttrs( rRTFWrt, nStrPos );
+        aEndPosLst.OutAttrs( nStrPos );
 
         rRTFWrt.bTxtAttr = FALSE;
     }
@@ -738,7 +1113,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
     for( ; nStrPos <= nEnde; nStrPos++ )
     {
         if( nStrPos != nEnde && aEndPosLst.Count() )
-            aEndPosLst.EndAttrs( rRTFWrt, nStrPos );
+            aEndPosLst.EndAttrs( nStrPos );
 
         // versuche nach ungefaehr 255 Zeichen eine neue Zeile zu beginnen
         if( nChrCnt != ( nStrPos & 0xff00 ))
@@ -747,20 +1122,20 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
             nChrCnt = nStrPos & 0xff00;
         }
 
+        rRTFWrt.bTxtAttr = TRUE;
+        rRTFWrt.bOutFmtAttr = FALSE;
+
         if( nAttrPos < nCntAttr && *pHt->GetStart() == nStrPos
             && nStrPos != nEnde )
         {
-            rRTFWrt.bTxtAttr = TRUE;
-            rRTFWrt.bOutFmtAttr = FALSE;
             do {
                 BOOL bEmpty = FALSE;
                 if( pHt->GetEnd() )
                 {
                     if( FALSE == (bEmpty = *pHt->GetEnd() == nStrPos) )
                     {
-                        pNewStt = new SttEndPos( pHt, nStrPos, *pHt->GetEnd(),
-                                                rRTFWrt.nFontHeight );
-                        aEndPosLst.Insert( pNewStt );
+                        aEndPosLst.Insert( pHt->GetAttr(), nStrPos,
+                                            *pHt->GetEnd() );
                         continue;
                     }
                     rRTFWrt.Strm() << '{';
@@ -775,12 +1150,15 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
                 *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
 
             // dann gebe mal alle gesammelten Attribute von der String-Pos aus
-            aEndPosLst.OutAttrs( rRTFWrt, nStrPos );
+            aEndPosLst.OutAttrs( nStrPos );
 
-            if( rRTFWrt.bOutFmtAttr )
-                rRTFWrt.Strm() << ' ';
-            rRTFWrt.bTxtAttr = FALSE;
         }
+        else
+            aEndPosLst.OutScriptChange( nStrPos );
+
+        if( rRTFWrt.bOutFmtAttr )
+            rRTFWrt.Strm() << ' ';
+        rRTFWrt.bTxtAttr = FALSE;
 
         rRTFWrt.OutBookmarks( nStrPos );
 
@@ -791,7 +1169,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode & rNode )
 
     // noch eine schliesende Klammer da ??
     if( aEndPosLst.Count() )
-        aEndPosLst.EndAttrs( rRTFWrt, USHRT_MAX );
+        aEndPosLst.EndAttrs( USHRT_MAX );
 
     // wenn bis zum Ende vom Node, dann auch das AbsatzEnde ausgeben
     if( rRTFWrt.pCurPam->GetMark()->nNode.GetIndex() ==
@@ -1275,25 +1653,36 @@ static Writer& OutRTF_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
      * Tabelle im RTF-Dokument referenziert.
      */
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
-    rRTFWrt.bOutFmtAttr = TRUE;
 
-    rWrt.Strm() << sRTF_F;
-    rWrt.OutULong( rRTFWrt.GetId( (const SvxFontItem&)rHt ) );
+    if( !rRTFWrt.bTxtAttr ||
+        ( rRTFWrt.GetEndPosLst() &&
+        rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
+    {
+        rRTFWrt.bOutFmtAttr = TRUE;
+        rWrt.Strm() << sRTF_F;
+        rWrt.OutULong( rRTFWrt.GetId( (const SvxFontItem&)rHt ) );
+    }
     return rWrt;
 }
 
 static Writer& OutRTF_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
-    const FontItalic nPosture = ((const SvxPostureItem&)rHt).GetPosture();
-    int bTxtOut = rRTFWrt.bTxtAttr && ITALIC_NONE == nPosture;
-    if( ITALIC_NORMAL == nPosture || bTxtOut )
+
+    if( !rRTFWrt.bTxtAttr ||
+        ( rRTFWrt.GetEndPosLst() &&
+        rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
     {
-        rRTFWrt.bOutFmtAttr = TRUE;
-        rWrt.Strm() << sRTF_I;
+        const FontItalic nPosture = ((const SvxPostureItem&)rHt).GetPosture();
+        int bTxtOut = rRTFWrt.bTxtAttr && ITALIC_NONE == nPosture;
+        if( ITALIC_NORMAL == nPosture || bTxtOut )
+        {
+            rRTFWrt.bOutFmtAttr = TRUE;
+            rWrt.Strm() << sRTF_I;
+        }
+        if( bTxtOut )
+            rWrt.Strm() << '0';     // wieder abschalten
     }
-    if( bTxtOut )
-        rWrt.Strm() << '0';     // wieder abschalten
     return rWrt;
 }
 
@@ -1302,18 +1691,38 @@ static Writer& OutRTF_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
-    const FontWeight nBold = ((const SvxWeightItem&)rHt).GetWeight();
-    int bTxtOut = rRTFWrt.bTxtAttr && WEIGHT_NORMAL == nBold;
-    if( WEIGHT_BOLD == nBold || bTxtOut )
+    if( !rRTFWrt.bTxtAttr ||
+        ( rRTFWrt.GetEndPosLst() &&
+        rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
     {
-        rRTFWrt.bOutFmtAttr = TRUE;
-        rWrt.Strm() << sRTF_B;
+        const FontWeight nBold = ((const SvxWeightItem&)rHt).GetWeight();
+        int bTxtOut = rRTFWrt.bTxtAttr && WEIGHT_NORMAL == nBold;
+        if( WEIGHT_BOLD == nBold || bTxtOut )
+        {
+            rRTFWrt.bOutFmtAttr = TRUE;
+            rWrt.Strm() << sRTF_B;
+        }
+        if( bTxtOut )
+            rWrt.Strm() <<  '0';
     }
-    if( bTxtOut )
-        rWrt.Strm() <<  '0';
     return rWrt;
 }
 
+static Writer& OutRTF_SwEmphasisMark( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    const sal_Char* pStr;
+    switch( ((const SvxEmphasisMarkItem&)rHt).GetEmphasisMark())
+    {
+    case EMPHASISMARK_NONE:         pStr = sRTF_ACCNONE;    break;
+    case EMPHASISMARK_SIDE_DOTS:    pStr = sRTF_ACCCOMMA;   break;
+    default:                        pStr = sRTF_ACCDOT;     break;
+    }
+
+    rRTFWrt.bOutFmtAttr = TRUE;
+    rWrt.Strm() << pStr;
+    return rWrt;
+}
 
 static Writer& OutRTF_SwShadowed( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -1434,8 +1843,15 @@ static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( pStr )
     {
-        ((SwRTFWriter&)rWrt).Strm() << pStr;
-        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
+        SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+
+        if( UNDERLINE_SINGLE == ((const SvxUnderlineItem&)rHt).GetUnderline()
+            && ((SvxWordLineModeItem&)rRTFWrt.GetItem(
+                RES_CHRATR_WORDLINEMODE )).GetValue() )
+            pStr = sRTF_ULW;
+
+        rRTFWrt.Strm() << pStr;
+        rRTFWrt.bOutFmtAttr = TRUE;
     }
     return rWrt;
 }
@@ -1445,9 +1861,16 @@ static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
-    rRTFWrt.bOutFmtAttr = TRUE;
-    rWrt.Strm() << sRTF_LANG;
-    rWrt.OutULong( ((const SvxLanguageItem&)rHt).GetLanguage() );
+    if( !rRTFWrt.bTxtAttr ||
+        ( rRTFWrt.GetEndPosLst() &&
+        rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
+    {
+
+        rRTFWrt.bOutFmtAttr = TRUE;
+        const sal_Char* p = RES_CHRATR_CJK_LANGUAGE ? sRTF_LANGFE : sRTF_LANG;
+        rWrt.Strm() << p;
+        rWrt.OutULong( ((const SvxLanguageItem&)rHt).GetLanguage() );
+    }
     return rWrt;
 }
 
@@ -1459,11 +1882,8 @@ static Writer& OutRTF_SwEscapement( Writer& rWrt, const SfxPoolItem& rHt )
     const SvxEscapementItem& rEsc = (const SvxEscapementItem&)rHt;
     const char * pUpDn;
 
-    SwTwips nH;
-    if( !rRTFWrt.bTxtAttr )
-        nH = rRTFWrt.nFontHeight;
-    else
-        nH = rRTFWrt.pAttrSet->GetSize().GetHeight();
+    SwTwips nH = ((SvxFontHeightItem&)rRTFWrt.GetItem(
+                                RES_CHRATR_FONTSIZE )).GetHeight();
 
     if( 0 < rEsc.GetEsc() )
         pUpDn = sRTF_UP;
@@ -1511,13 +1931,15 @@ static Writer& OutRTF_SwEscapement( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwSize( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
-    rRTFWrt.bOutFmtAttr = TRUE;
+    if( !rRTFWrt.bTxtAttr ||
+        ( rRTFWrt.GetEndPosLst() &&
+        rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
+    {
+        rRTFWrt.bOutFmtAttr = TRUE;
 
-    USHORT nSize = (USHORT)((const SvxFontHeightItem&)rHt).GetHeight();
-    rWrt.Strm() << sRTF_FS;
-    rWrt.OutULong( nSize / 10 );
-    if( rRTFWrt.bTxtAttr )
-        rRTFWrt.nFontHeight = nSize;
+        rWrt.Strm() << sRTF_FS;
+        rWrt.OutULong( ((const SvxFontHeightItem&)rHt).GetHeight() / 10 );
+    }
     return rWrt;
 }
 
@@ -2729,7 +3151,7 @@ static Writer& OutRTF_SwTabStop( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
     const SvxTabStopItem & rTStops = (const SvxTabStopItem&)rHt;
-    long nOffset = rRTFWrt.pAttrSet->GetLRSpace().GetTxtLeft();
+    long nOffset = ((SvxLRSpaceItem&)rRTFWrt.GetItem( RES_LR_SPACE )).GetTxtLeft();
     for( USHORT n = 0; n < rTStops.Count(); n++ )
     {
         const SvxTabStop & rTS = rTStops[ n ];
@@ -2850,18 +3272,18 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
 /* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
 /* RES_CHRATR_BACKGROUND */         0, // Neu: Zeichenhintergrund
-/* RES_CHRATR_CJK_FONT */           0,
-/* RES_CHRATR_CJK_FONTSIZE */       0,
-/* RES_CHRATR_CJK_LANGUAGE */       0,
-/* RES_CHRATR_CJK_POSTURE */        0,
-/* RES_CHRATR_CJK_WEIGHT */         0,
-/* RES_CHRATR_CTL_FONT */           0,
-/* RES_CHRATR_CTL_FONTSIZE */       0,
-/* RES_CHRATR_CTL_LANGUAGE */       0,
-/* RES_CHRATR_CTL_POSTURE */        0,
-/* RES_CHRATR_CTL_WEIGHT */         0,
+/* RES_CHRATR_CJK_FONT */           OutRTF_SwFont,
+/* RES_CHRATR_CJK_FONTSIZE */       OutRTF_SwSize,
+/* RES_CHRATR_CJK_LANGUAGE */       OutRTF_SwLanguage,
+/* RES_CHRATR_CJK_POSTURE */        OutRTF_SwPosture,
+/* RES_CHRATR_CJK_WEIGHT */         OutRTF_SwWeight,
+/* RES_CHRATR_CTL_FONT */           OutRTF_SwFont,
+/* RES_CHRATR_CTL_FONTSIZE */       OutRTF_SwSize,
+/* RES_CHRATR_CTL_LANGUAGE */       OutRTF_SwLanguage,
+/* RES_CHRATR_CTL_POSTURE */        OutRTF_SwPosture,
+/* RES_CHRATR_CTL_WEIGHT */         OutRTF_SwWeight,
 /* RES_CHRATR_WRITING_DIRECTION */  0,
-/* RES_CHRATR_DUMMY2 */             0,
+/* RES_CHRATR_EMPHASIS_MARK */      OutRTF_SwEmphasisMark,
 /* RES_CHRATR_DUMMY3 */             0,
 /* RES_CHRATR_DUMMY4 */             0,
 /* RES_CHRATR_DUMMY5 */             0,
@@ -2969,11 +3391,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.4 2000-11-13 12:27:20 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.5 2000-11-16 09:57:35 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/13 12:27:20  jp
+      token definition changed
+
       Revision 1.3  2000/11/01 19:25:51  jp
       export of mail graphics removed
 

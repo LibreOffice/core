@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 09:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ class SwNumRule;
 class SwNumRuleTbl;
 class SwNodeNum;
 class DateTime;
+class RTFEndPosLst;
 
 extern SwAttrFnTab aRTFAttrFnTab;
 extern SwNodeFnTab aRTFNodeFnTab;
@@ -101,9 +102,16 @@ extern SwNodeFnTab aRTFNodeFnTab;
 
 class SwRTFWriter : public Writer
 {
+    friend class RTFEndPosLst;
+
     SvPtrarr* pFontRemoveLst;
     RTFColorTbl* pColTbl;
     SwPosFlyFrms* pFlyPos;          // Pointer auf die aktuelle "FlyFrmTabelle"
+    RTFEndPosLst* pCurEndPosLst;
+    const SfxItemSet* pAttrSet;     // akt. Format/Collection vom Node
+                                    // fuer den Zugriff auf einige Attribute
+                                    // z.B. Font-Size, LR-Space,..
+
     USHORT nAktFlyPos;              // Index auf das naechste "FlyFrmFmt"
 
     void OutRTFColorTab();
@@ -123,11 +131,7 @@ public:
     SwFlyFrmFmt* pFlyFmt;               // liegt der Node in einem FlyFrame,
                                         // ist das Format gesetzt, sonst 0
     const SwPageDesc* pAktPageDesc;     // aktuell gesetzter PageDesc.
-    const SwAttrSet* pAttrSet;      // akt. Format/Collection vom Node
-                                    // fuer den Zugriff auf einige Attribute
-                                    // z.B. Font-Size, LR-Space,..
     USHORT nBkmkTabPos;             // akt. Position in der Bookmark-Tabelle
-    USHORT nFontHeight;             // akt. Hoehe vom Font
 
 #if defined(MAC) || defined(UNX)
     static const sal_Char sNewLine;                 // nur \012 oder \015
@@ -189,6 +193,14 @@ public:
     // fuer RTFSaveData
     SwPaM* GetEndPaM()              { return pOrigPam; }
     void SetEndPaM( SwPaM* pPam )   { pOrigPam = pPam; }
+
+    const SfxPoolItem& GetItem( USHORT nWhich ) const;
+
+    const SfxItemSet* GetAttrSet() const    { return pAttrSet; }
+    void SetAttrSet( const SfxItemSet* p )  { pAttrSet = p; }
+
+    const RTFEndPosLst* GetEndPosLst() const { return pCurEndPosLst; }
+
 };
 
 
@@ -203,15 +215,15 @@ struct RTFSaveData
 {
     SwRTFWriter& rWrt;
     SwPaM* pOldPam, *pOldEnd;
+    SwFlyFrmFmt* pOldFlyFmt;
+    const SwPageDesc* pOldPageDesc;
+    const SfxItemSet* pOldAttrSet;          // akt. Attribute vom Node
+
     BOOL bOldWriteAll : 1;
     BOOL bOldOutTable : 1;
     BOOL bOldOutPageAttr : 1;
     BOOL bOldAutoAttrSet : 1;
     BOOL bOldOutSection : 1;
-
-    SwFlyFrmFmt* pOldFlyFmt;
-    const SwPageDesc* pOldPageDesc;
-    const SwAttrSet* pOldAttrSet;           // akt. Attribute vom Node
 
     RTFSaveData( SwRTFWriter&, ULONG nStt, ULONG nEnd );
     ~RTFSaveData();
