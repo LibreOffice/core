@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:02:49 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,7 +860,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text = "Q~uellenformat" ;
         Text [ ENGLISH ] = "So~urce format" ;
         Text [ english_us ] = "So~urce format" ;
-        Text[ portuguese ] = "So~urce format";
+        Text[ portuguese ] = "Formato da fonte";
         Text[ russian ] = "Èñõîäíûé ôîğìàò";
         Text[ greek ] = "So~urce format";
         Text[ dutch ] = "So~urce format";
@@ -899,7 +899,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText [ italian ] = "Aggiungi" ;
         QuickHelpText [ portuguese_brazilian ] = "Acrescentar" ;
         QuickHelpText [ portuguese ] = "Adicionar" ;
-        QuickHelpText [ finnish ] = "Lisää!" ;
+        QuickHelpText [ finnish ] = "Lisää" ;
         QuickHelpText [ danish ] = "Tilføj" ;
         QuickHelpText [ french ] = "Ajouter" ;
         QuickHelpText [ swedish ] = "Lägg till" ;
@@ -909,13 +909,13 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
          // ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen
          // ### ACHTUNG: Neuer Text in Resource? Neues Zahlenformat hinzufügen : Neues Zahlenformat hinzuf³gen
         QuickHelpText[ russian ] = "Äîáàâèòü";
-        QuickHelpText[ polish ] = "Dodaj!";
-        QuickHelpText[ japanese ] = "’Ç‰Á!";
+        QuickHelpText[ polish ] = "Dodaj";
+        QuickHelpText[ japanese ] = "’Ç‰Á";
         QuickHelpText[ chinese_simplified ] = "ĞÂÔö";
         QuickHelpText[ chinese_traditional ] = "¼W¥[";
         QuickHelpText[ arabic ] = "ÅÖÇİÉ";
         QuickHelpText[ greek ] = "ĞñïóèŞêç";
-        QuickHelpText[ korean ] = "Ãß°¡!";
+        QuickHelpText[ korean ] = "Ãß°¡";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -934,7 +934,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText [ italian ] = "Rimuovi" ;
         QuickHelpText [ portuguese_brazilian ] = "Remover" ;
         QuickHelpText [ portuguese ] = "Remover" ;
-        QuickHelpText [ finnish ] = "Poista!" ;
+        QuickHelpText [ finnish ] = "Poista" ;
         QuickHelpText [ danish ] = "Fjern" ;
         QuickHelpText [ french ] = "Supprimer" ;
         QuickHelpText [ swedish ] = "Ta bort" ;
@@ -943,13 +943,13 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText [ english_us ] = "Remove" ;
          // ### ACHTUNG: Neuer Text in Resource? Zahlenformat löschen : Zahlenformat l÷schen
         QuickHelpText[ russian ] = "Óáğàòü";
-        QuickHelpText[ polish ] = "Usuñ!";
-        QuickHelpText[ japanese ] = "íœ!";
+        QuickHelpText[ polish ] = "Usuñ";
+        QuickHelpText[ japanese ] = "íœ";
         QuickHelpText[ chinese_simplified ] = "É¾³ı";
         QuickHelpText[ chinese_traditional ] = "§R°£";
         QuickHelpText[ arabic ] = "ÅÒÇáÉ";
         QuickHelpText[ greek ] = "ÄéáãñáöŞ";
-        QuickHelpText[ korean ] = "Á¦°Å!";
+        QuickHelpText[ korean ] = "Á¦°Å";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -974,19 +974,19 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText [ dutch ] = "Commentaar wijzigen" ;
         QuickHelpText [ portuguese ] = "Edita comentário" ;
         QuickHelpText[ russian ] = "Èçìåíèòü êîììåíòàğèé";
-        QuickHelpText[ polish ] = "Zmieñ komentarz!";
-        QuickHelpText[ japanese ] = "ºÒİÄ‚Ì•ÏX!";
+        QuickHelpText[ polish ] = "Zmieñ komentarz";
+        QuickHelpText[ japanese ] = "ºÒİÄ‚Ì•ÏX";
         QuickHelpText[ chinese_simplified ] = "±à¼­ÆÀÓï";
         QuickHelpText[ chinese_traditional ] = "ÅÜ§óµû»y";
         QuickHelpText[ arabic ] = "ÊÛííÑ ÇáÊÚáíŞ";
         QuickHelpText[ greek ] = "Åğåîåñãáóßá ó÷ïëßïõ";
-        QuickHelpText[ korean ] = "ÁÖ¼® ÆíÁı!";
+        QuickHelpText[ korean ] = "ÁÖ¼® ÆíÁı";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Kommentar ändern";
         QuickHelpText[ catalan ] = "Modificar comentario";
-        QuickHelpText[ finnish ] = "Muokkaa huomautusta!";
+        QuickHelpText[ finnish ] = "Muokkaa huomautusta";
     };
     ImageList IL_ICON
     {
@@ -1041,6 +1041,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ catalan ] = "Formato numérico";
 };
  // ********************************************************************** EOF
+
 
 
 
