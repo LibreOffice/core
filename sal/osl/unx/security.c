@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:45:22 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,9 +958,22 @@ sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirector
     /* if current user, check also environment for HOME */
     if (getuid() == pSecImpl->m_pPasswd.pw_uid)
     {
-        sal_Char *pStr;
+        sal_Char *pStr = NULL;
 #ifdef SOLARIS
-        pStr = getpwuid(getuid())->pw_dir;
+        char    buffer[8192];
+
+        struct passwd pwd;
+        struct passwd *ppwd;
+
+#ifdef _POSIX_PTHREAD_SEMANTICS
+        if ( 0 != getpwuid_r(getuid(), &pwd, buffer, sizeof(buffer), &ppwd ) )
+            ppwd = NULL;
+#else
+        ppwd = getpwuid_r(getuid(), &pwd, buffer, sizeof(buffer) );
+#endif
+
+        if ( ppwd )
+            pStr = ppwd->pw_dir;
 #else
         pStr = getenv("HOME");
 #endif
