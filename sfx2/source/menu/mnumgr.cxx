@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 08:47:59 $
+ *  last change: $Author: hr $ $Date: 2001-10-11 15:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,7 +1224,8 @@ MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
     MenuBar *pSVMenu = NULL;
     try
     {
-        ::framework::MenuConfiguration aConfig( ::comphelper::getProcessServiceFactory() );
+        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
+        ::framework::MenuConfiguration aConfig( aXMultiServiceFactory );
         pSVMenu = aConfig.CreateMenuBarFromConfiguration( xInputStream );
     }
     catch ( ::com::sun::star::lang::WrappedTargetException&  )
@@ -1241,7 +1242,8 @@ BOOL SfxMenuBarManager::StoreMenuBar( SvStream& rStream, MenuBar* pMenuBar )
     com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOut( pHelper );
     try
     {
-        framework::MenuConfiguration aCfg( ::comphelper::getProcessServiceFactory() );
+        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
+        framework::MenuConfiguration aCfg( aXMultiServiceFactory );
         aCfg.StoreMenuBar( pMenuBar, xOut );
     }
     catch ( ::com::sun::star::lang::WrappedTargetException&  )
