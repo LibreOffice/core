@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentResultSet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:45 $
+ *  last change: $Author: kso $ $Date: 2001-01-23 11:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,9 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A <type>Content</type> is a service that provides access to data of a
-    folder content provided by an implementation of the service
-    <type>ContentProvider</type>.
+/** A <type>ContentResultSet</type> provides access to the children of a
+    folder content. It can be understand as a table containing a row for
+    each child. The table columns may contain property values.
 */
 service ContentResultSet
 {
