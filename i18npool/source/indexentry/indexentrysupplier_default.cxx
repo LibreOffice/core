@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 08:22:03 $
+ *  last change: $Author: khong $ $Date: 2002-09-27 06:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,15 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Unicode::compareIndexEntry(
     sal_Int16 result = compareIndexKey( IndexEntry1, PhoneticEntry1, rLocale1,
                         IndexEntry2, PhoneticEntry2, rLocale2);
     if (result == 0)
-        return collator->compareString( getEntry(IndexEntry1, PhoneticEntry1, rLocale1),
+        result = collator->compareString( getEntry(IndexEntry1, PhoneticEntry1, rLocale1),
                         getEntry(IndexEntry2, PhoneticEntry2, rLocale2));
+
+    // equivalent of phonetic entries does not mean equivalent of index entries.
+    // we have to continue comparing index entry here.
+    if (result == 0 && usePhonetic && rLocale1 == rLocale2 &&
+        (PhoneticEntry1.getLength() > 0 || PhoneticEntry2.getLength() > 0))
+        return collator->compareString(IndexEntry1, IndexEntry2);
+
     return result;
 }
 
