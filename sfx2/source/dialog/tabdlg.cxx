@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 15:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,7 +915,7 @@ IMPL_LINK( SfxTabDialog, OkHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-BOOL SfxTabDialog::OK_Impl()
+BOOL SfxTabDialog::PrepareLeaveCurrentPage()
 {
     SfxTabPage* pPage =
         (SfxTabPage*)aTabCtrl.GetTabPage( aTabCtrl.GetCurPageId() );
