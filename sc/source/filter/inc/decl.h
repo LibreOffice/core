@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decl.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <tools/string.hxx>
 #endif
 
-enum WKTYP { eWK_UNKNOWN = -2, eWK_1 = 0, eWK_2, eWK3, eWK4, eWK_Error };
+enum WKTYP { eWK_UNKNOWN = -2, eWK_1 = 0, eWK_2, eWK3, eWK4, eWK_Error, eWK123 };
 typedef void ( BEARBFKT )( void );
 typedef sal_Char STRING16[ 16 ];
 typedef sal_Char STRING14[ 14 ];
