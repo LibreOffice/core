@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 10:44:15 $
+ *  last change: $Author: os $ $Date: 2002-11-06 10:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,6 +585,8 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     // falls kein RadioButton geclickt wurde,
     // muss trotzdem geputtet werden
     bCheck |= TRUE;
+    // set the selection into the position Edit
+    aTabBox.SetSelection(Selection(0, aTabBox.GetText().Len()));
     return 0;
 }
 
