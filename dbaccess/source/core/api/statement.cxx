@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,4 +546,6 @@ Reference< XConnection > OStatement::getConnection(void) throw( SQLException, Ru
 {
     return Reference< XConnection > (m_xParent, UNO_QUERY);
 }
+// -----------------------------------------------------------------------------
+
 

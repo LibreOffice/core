@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,17 +461,17 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
     Type aAlterType = getCppuType( (Reference<XAlterTable>*)0);
 
     Sequence< Type > aTypes(OTable_Base::getTypes());
-    Sequence< Type > aRet(aTypes.getLength()-2);
+    ::std::vector<Type> aOwnTypes;
+    aOwnTypes.reserve(aTypes.getLength());
 
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
-    for(sal_Int32 i=0;pBegin != pEnd ;++pBegin)
+    for(;pBegin != pEnd ;++pBegin)
     {
         if(*pBegin != aRenameType && *pBegin != aAlterType)
-        {
-            aRet.getArray()[i++] = *pBegin;
-        }
+            aOwnTypes.push_back(*pBegin);
     }
+    Sequence< Type > aRet(aOwnTypes.begin(),aOwnTypes.size());
     return ::comphelper::concatSequences(aRet,OConfigurationFlushable::getTypes());
 }
 // -----------------------------------------------------------------------------
