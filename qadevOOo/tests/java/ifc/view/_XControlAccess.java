@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XControlAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:32:41 $
+ *  last change:$Date: 2003-12-11 11:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageSupplier;
+import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
@@ -114,10 +115,19 @@ public class _XControlAccess extends MultiMethodTest {
                 throw new StatusException
                     (Status.failed("NO 'DOCUMENT' ObjRelation!"));
             }
+            Boolean isSheet = (Boolean) tEnv.getObjRelation("XControlAccess.isSheet");
+            XDrawPage oDP = null;
+            if (isSheet != null) {
+                XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
+                UnoRuntime.queryInterface(XDrawPagesSupplier.class, oDoc);
+                oDP = (XDrawPage) UnoRuntime.queryInterface(XDrawPage.class, oDPS.getDrawPages().getByIndex(0));
+            } else {
+
 
             XDrawPageSupplier oDPS = (XDrawPageSupplier)
                 UnoRuntime.queryInterface(XDrawPageSupplier.class, oDoc);
-            XDrawPage oDP = oDPS.getDrawPage();
+            oDP = oDPS.getDrawPage();
+            }
             XShapes shapes = (XShapes) UnoRuntime.queryInterface
                 (XShapes.class, oDP);
             XShape button = FormTools.createControlShape
@@ -133,6 +143,12 @@ public class _XControlAccess extends MultiMethodTest {
 
             bResult &= oControl != null;
         } catch (com.sun.star.container.NoSuchElementException e) {
+            log.println("Exception occured calling the method: " + e);
+            bResult = false;
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Exception occured calling the method: " + e);
+            bResult = false;
+        } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception occured calling the method: " + e);
             bResult = false;
         }
