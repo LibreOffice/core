@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-09-16 15:23:00 $
+ *  last change: $Author: bustamam $ $Date: 2001-12-14 16:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #include <numberformatcode.hxx>
 #include <defaultnumberingprovider.hxx>
 #include <indexentrysupplier.hxx>
+#include <indexentrysupplier_CJK.hxx>
+#include <indexentrysupplier_Euro.hxx>
 
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
@@ -119,6 +121,13 @@ IMPL_CREATEINSTANCE_MSF( NumberFormatCodeMapper )
 IMPL_CREATEINSTANCE( LocaleData )
 IMPL_CREATEINSTANCE_MSF( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_CN_pinyin )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_CN_radical )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_CN_stroke )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_zhuyin )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_radical )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_stroke )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ko_KR_dict )
 
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
@@ -137,6 +146,51 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.IndexEntrySupplier",
         "com.sun.star.i18n.IndexEntrySupplier",
         &IndexEntrySupplier_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_pinyin",
+        "com.sun.star.i18n.zh_CN_pinyin_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_CN_pinyin_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_radical",
+        "com.sun.star.i18n.zh_CN_radical_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_CN_radical_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_stroke",
+        "com.sun.star.i18n.zh_CN_stroke_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_CN_stroke_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_pinyin",
+        "com.sun.star.i18n.zh_SG_pinyin_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_CN_pinyin_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_radical",
+        "com.sun.star.i18n.zh_SG_radical_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_CN_radical_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_stroke",
+        "com.sun.star.i18n.zh_SG_stroke_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_CN_stroke_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
+        "com.sun.star.i18n.zh_HK_radical_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_TW_radical_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
+        "com.sun.star.i18n.zh_HK_stroke_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_TW_stroke_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
+        "com.sun.star.i18n.zh_MO_radical_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_TW_radical_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
+        "com.sun.star.i18n.zh_MO_stroke_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_TW_stroke_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_zhuyin",
+        "com.sun.star.i18n.zh_TW_zhuyin_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_TW_zhuyin_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_pinyin",
+        "com.sun.star.i18n.zh_TW_pinyin_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_CN_pinyin_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
+        "com.sun.star.i18n.zh_TW_radical_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_TW_radical_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
+        "com.sun.star.i18n.zh_TW_stroke_IndexEntrySupplier",
+        &IndexEntrySupplier_zh_TW_stroke_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ko_KR_dict",
+        "com.sun.star.i18n.ko_KR_dict_IndexEntrySupplier",
+        &IndexEntrySupplier_ko_KR_dict_CreateInstance },
 
 // add here new services !!
     { 0, 0, 0 }

@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2001-09-16 15:23:00 $
+#*  last change: $Author: bustamam $ $Date: 2001-12-14 16:26:11 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -75,8 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
-            $(SLO)$/localedata.obj \
-            $(SLO)$/indexentrysupplier.obj
+            $(SLO)$/localedata.obj
 
 
 # --- Targets ------------------------------------------------------

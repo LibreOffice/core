@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.4 $
+#*  $Revision: 1.5 $
 #*
-#*  last change: $Author: er $ $Date: 2001-11-23 15:00:27 $
+#*  last change: $Author: bustamam $ $Date: 2001-12-14 16:26:11 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -97,7 +97,8 @@ LIB3TARGET= $(SLB)$/$(TARGET).lib
 LIB3FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/registerservices.lib		\
         $(SLB)$/numberformatcode.lib		\
-        $(SLB)$/localedata.lib
+        $(SLB)$/localedata.lib			\
+        $(SLB)$/indexentry.lib
 
 SHL3TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
 SHL3IMPLIB= i$(TARGET)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-11-12 16:12:06 $
+ *  last change: $Author: bustamam $ $Date: 2001-12-14 16:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 #endif
 
 //  ----------------------------------------------------
-//  class BreakIterator
+//  class IndexEntrySupplier
 //  ----------------------------------------------------
 class IndexEntrySupplier : public cppu::WeakImplHelper2
 <
@@ -85,26 +85,31 @@ class IndexEntrySupplier : public cppu::WeakImplHelper2
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::lang::XMultiServiceFactory > xMSF;
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::i18n::XCharacterClassification > xCC;
+    ::rtl::OUString aServiceName;
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xMSF;
+    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XIndexEntrySupplier > xIES;
+
+protected:
+    sal_Char *implementationName;
 
 public:
     IndexEntrySupplier( const ::com::sun::star::uno::Reference <
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxMSF );
-    virtual ~IndexEntrySupplier();
+            ::com::sun::star::lang::XMultiServiceFactory >& rxMSF )
+                : xMSF( rxMSF ) {
+        implementationName = "com.sun.star.i18n.IndexEntrySupplier";
+    };
+    ~IndexEntrySupplier() {};
 
     // Methods
     virtual ::rtl::OUString SAL_CALL
         getIndexCharacter( const ::rtl::OUString& IndexEntry,
-                           const ::com::sun::star::lang::Locale& aLocale,
-                           const ::rtl::OUString& SortAlgorithm )
-                            throw (::com::sun::star::uno::RuntimeException);
+                   const ::com::sun::star::lang::Locale& aLocale,
+                   const ::rtl::OUString& SortAlgorithm )
+                   throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL
         getIndexFollowPageWord( sal_Bool MorePages,
-                            const ::com::sun::star::lang::Locale& aLocale )
-                            throw (::com::sun::star::uno::RuntimeException);
+                    const ::com::sun::star::lang::Locale& aLocale )
+                    throw (::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void)
