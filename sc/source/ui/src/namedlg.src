@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:49:38 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 21:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: kz $
- //     $Date: 2001-08-24 10:49:38 $
- // $Revision: 1.21 $
+ //     $Date: 2001-08-29 21:38:52 $
+ // $Revision: 1.22 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ ModelessDialog RID_SCDLG_NAMES
     Text [ italian ] = "Definisci nomi" ;
     Text [ portuguese_brazilian ] = "Definir Nomes" ;
     Text [ portuguese ] = "Definir nomes" ;
-    Text [ finnish ] = "Määritä nimet" ;
+    Text [ finnish ] = "M??rit? nimet" ;
     Text [ danish ] = "Definer navne" ;
     Text [ french ] = "Définir des noms" ;
     Text [ swedish ] = "Definiera namn" ;
@@ -122,7 +122,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lisää" ;
+        Text [ finnish ] = "~Lis??" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "~Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
@@ -274,7 +274,7 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     MoreButton BTN_MORE
     {
@@ -442,7 +442,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lisää" ;
+        Text [ finnish ] = "~Lis??" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "~Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
@@ -529,6 +529,7 @@ ModelessDialog RID_SCDLG_NAMES
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir nombres";
 };
+
 
 
 
