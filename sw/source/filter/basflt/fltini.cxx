@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:00:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
         for( USHORT n = 0; n < rRuleTbl.Count(); ++n )
             if( USHRT_MAX == aNumRuleTbl.GetPos( ( pRule = rRuleTbl[ n ] )))
                 // war noch nicht vorhanden, also neu
-                pNumRuleTbl->Insert( pRule, pRuleTbl->Count() );
+                pNumRuleTbl->Insert( pRule, pNumRuleTbl->Count() );
 
         aNumRuleTbl.Remove( 0, aNumRuleTbl.Count() );
 
