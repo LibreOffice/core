@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
+#   last change: $Author: dbo $ $Date: 2002-12-02 12:41:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES = \
     $(SLO)$/xml_impctx.obj		\
     $(SLO)$/xml_element.obj		\
-    $(SLO)$/xml_byteseq.obj
+    $(SLO)$/xml_byteseq.obj		\
+    $(SLO)$/dynload.obj
 
 # --- Targets ------------------------------------------------------
 
