@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
+ *  last change: $Author: hro $ $Date: 2001-06-19 08:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
 */
 sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security);
 
-/** Free the security handle, created by osl_loginUser.
+/** Free the security handle, created by osl_loginUser or osl_getCurrentSecurity.
     @param Security [in] the security handle.
     @see osl_loginUser
 */
