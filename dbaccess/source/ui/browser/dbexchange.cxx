@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 15:47:17 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 12:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ namespace dbaui
             // build the descriptor string
             m_sCompatibleObjectDescription += sDatasourceName;
             m_sCompatibleObjectDescription += sSeparator;
-            m_sCompatibleObjectDescription += bTreatAsStatement ? String() : sObjectName;
+            m_sCompatibleObjectDescription += bTreatAsStatement ? ::rtl::OUString() : sObjectName;
             m_sCompatibleObjectDescription += sSeparator;
             switch (m_nObjectType)
             {
@@ -162,7 +162,7 @@ namespace dbaui
                     break;
             }
             m_sCompatibleObjectDescription += sSeparator;
-            m_sCompatibleObjectDescription += bTreatAsStatement ? sObjectName : String();
+            m_sCompatibleObjectDescription += bTreatAsStatement ? sObjectName : ::rtl::OUString();
             m_sCompatibleObjectDescription += sSeparator;
         }
 
