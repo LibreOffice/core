@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-26 11:39:55 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,11 @@ TabPage RID_SVXPAGE_HEADER
         Text [ dutch ] = "~Koptekst inschakelen" ;
         Text [ spanish ] = "~Activar encabezamiento" ;
         Text [ english_us ] = "Hea~der on" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾Ò³Ã¼(~H)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾Ò³Ã¼(~D)";
         Text[ russian ] = "Âêë. âåğõíåãî êîëîíòèòóëà";
         Text[ polish ] = "~W³¹cz nag³ówek";
-        Text[ japanese ] = "Í¯ÀŞ‚ğ•t‚¯‚é(~H)";
-        Text[ chinese_traditional ] = "Åã¥Ü­¶­º(~H)";
+        Text[ japanese ] = "Í¯ÀŞ‚ğ•t‚¯‚é(~D)";
+        Text[ chinese_traditional ] = "Åã¥Ü­¶­º(~D)";
         Text[ arabic ] = "ÅÙåÇÑ ÑÃÓ ÇáÕİÍÉ";
         Text[ greek ] = "Åíåñãïğïßçóç êåöáëßäáò";
         Text[ korean ] = "¸Ó¸®±Û »ğÀÔ(~D)";
@@ -356,7 +356,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ swedish ] = "Sidhuvud" ;
         Text [ dutch ] = "Koptekst" ;
         Text [ spanish ] = "Encabezamiento" ;
-        Text [ english_us ] = "Headers" ;
+        Text [ english_us ] = "Header" ;
         Text[ chinese_simplified ] = "Ò³Ã¼";
         Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
         Text[ polish ] = "Nag³ówek";
@@ -479,7 +479,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ chinese_simplified ] = "ÏÔÊ¾Ò³½Å(~F)";
         Text[ russian ] = "Âêë. íèæíèé êîëîíòèòóë";
         Text[ polish ] = "W³¹cz stopkê";
-        Text[ japanese ] = "Ì¯À‚ğ•t‚¯‚é(~‚e)";
+        Text[ japanese ] = "Ì¯À‚ğ•t‚¯‚é(~F)";
         Text[ chinese_traditional ] = "Åã¥Ü­¶§À(~F)";
         Text[ arabic ] = "ÅÙåÇÑ ÊĞííá ÇáÕİÍÉ";
         Text[ greek ] = "Åíåñãïğïßçóç õğïóİëéäï";
@@ -836,12 +836,12 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message [ swedish ] = "Deaktivering av sidhuvud eller sidfot raderar innehållet. \nVill Du radera innehållet?" ;
     Message [ dutch ] = "Als u de kop- of voettekst uitschakelt, wordt de inhoud ervan verwijderd.\nWeet u zeker dat u deze tekst wilt verwijderen?" ;
     Message [ spanish ] = "Al desactivar el encabezamiento o pie de página se eliminará su contenido.\n¿Desea eliminarlo?" ;
-    Message [ english_us ] = "Removing headers or footers deletes the contents.\nAre you sure you want to delete this text?" ;
+    Message [ english_us ] = "Removing headers or footers deletes the contents.\nDo you want to delete this text?" ;
     Message[ chinese_simplified ] = "²»Ê¹ÓÃÒ³Ã¼»òÒ³½Å¾Í»áÉ¾³ıµ±Ç°ÏÖ´æµÄÎÄ×Ö¡£\nÄúÒªÉ¾³ıÕâĞ©ÎÄ×ÖÂğ£¿";
     Message[ russian ] = "Îòêëş÷åíèå êîëîíòèòóëîâ âûçîâåò óäàëåíèå èìåşùåãîñÿ òåêñòà.\nÂû õîòèòå óäàëèòü ñîäåğæèìîå?";
     Message[ polish ] = "Wy³¹czenie stopki i nag³ówka spowoduje usuniêcie istniej¹cego tekstu. \nChcesz skasowaæ ten tekst?";
     Message[ japanese ] = "Í¯ÀŞ‚Ü‚½‚ÍÌ¯À‚ğŠO‚·‚ÆŠY“–•”•ª‚Ì“à—e‚àíœ‚³‚ê‚Ü‚·B\níœ‚µ‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
-    Message[ chinese_traditional ] = "Ãö³¬­¶­º©Î­¶§À´N·|§R°£·í«e²{¦sªº¤å¦r¡C\n±z­n§R°£³o¨Ç¤å¦r¡H";
+    Message[ chinese_traditional ] = "¤£±Ä¥Î­¶­º©Î­¶§À´N·|§R°£·í«eªº¤å¦r¡C\n­n§R°£³o¨Ç¤å¦r¡H";
     Message[ arabic ] = "ÅÎİÇÁ ÑÃÓ/ ÊĞííá ÇáÕİÍÉ Óæİ íÄÏí Åáì ÍĞİ ÇáäÕ ÇáãæÌæÏ İíå.\nåá ÊÑíÏ ÈÇáİÚá ÍĞİ åĞÇ ÇáäÕ¿";
     Message[ greek ] = "Ìå ôçí áğåíåñãïğïßçóç ôçò êåöáëßäáò Ş ôçò õğïêåöáëßäáò äéáãñÜöåôáé ôï õğÜñ÷ïí êåßìåíï. Èİëåôå íá \näéáãñáöåß ôï ğåñéå÷üìåíï;";
     Message[ korean ] = "¸Ó¸®±ÛÀÌ³ª ¹Ù´Ú±ÛÀ» ¾ø¾Ö¸é ±âÁ¸ÀÇ ÅØ½ºÆ®°¡ »èÁ¦µË´Ï´Ù. \n³»¿ëÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
