@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-04 12:31:46 $
+ *  last change: $Author: ka $ $Date: 2001-10-18 13:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/new.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -77,6 +78,7 @@
 #include "svdograf.hxx"
 #include "fmpage.hxx"
 #include "codec.hxx"
+#include "unomodel.hxx"
 #include "fmmodel.hxx"
 #include "fmview.hxx"
 #include "galmisc.hxx"
@@ -88,6 +90,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
 
 // --------------
 // - Namespaces -
@@ -96,6 +101,8 @@
 using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ucb;
 
 // ------------
@@ -1117,11 +1124,18 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
 
             if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xModelStm ) )
             {
-                FmFormModel aModel;
+                FmFormModel                 aModel;
+                Reference< XInputStream >   xInputStream( new utl::OInputStreamWrapper( *xModelStm ) );
 
+                aModel.GetItemPool().SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
                 aModel.GetItemPool().FreezeIdRanges();
+                aModel.SetStreamingSdrModel( TRUE );
 
-                if( SGASvDrawImport( *xModelStm, aModel ) )
+                xModelStm->Seek( 0 );
+                bRet = SvxDrawingLayerImport( &aModel, xInputStream );
+                aModel.SetStreamingSdrModel( FALSE );
+
+                if( bRet )
                     bRet = InsertModel( aModel, nInsertPos );
             }
         }
