@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:30:46 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -372,13 +371,14 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     return xChild;
 }
 
+// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
 void SwAccessibleSelectionHelper::deselectAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int32 nChildIndex )
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
     // return sal_False     // we can't deselect
-    if( nSelectedChildIndex < 0 ||
-        nSelectedChildIndex >= getSelectedAccessibleChildCount() )
+    if( nChildIndex < 0 ||
+        nChildIndex >= rContext.GetChildCount() )
         throwIndexOutOfBoundsException();
 }
