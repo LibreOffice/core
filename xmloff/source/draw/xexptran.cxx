@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 17:48:59 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 15:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,11 +145,9 @@ double Imp_GetNumberChar(const UniString& rStr, xub_StrLen& rPos, const xub_StrL
     BOOL bSignIsNumber = TRUE, BOOL bPointIsNumber = FALSE)
 {
     UniString aNumberStr;
-    sal_Int32 nNum(0L);
     sal_Bool bFirstSign(TRUE);
-    sal_Bool bNegative(FALSE);
 
-    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignIsNumber && bFirstSign, !bPointIsNumber))
+    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignIsNumber && bFirstSign, TRUE))
     {
         aNumberStr.Append(rStr.GetChar(rPos++));
         bFirstSign = FALSE;
@@ -157,36 +155,9 @@ double Imp_GetNumberChar(const UniString& rStr, xub_StrLen& rPos, const xub_StrL
 
     if(aNumberStr.Len())
     {
-        if(sal_Unicode('-') == aNumberStr.GetChar(0))
-            bNegative = TRUE;
-
-        rConv.convertNumber(nNum, OUString(aNumberStr));
-        if(bNegative)
-            nNum = -nNum;
-        fRetval = (double)nNum;
+        rConv.convertNumber(fRetval, aNumberStr);
     }
 
-    if(rPos < nLen && bPointIsNumber && sal_Unicode('.') == rStr.GetChar(rPos))
-    {
-        UniString aPostStr;
-        rPos++;
-
-        while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, FALSE, bPointIsNumber))
-            aPostStr.Append(rStr.GetChar(rPos++));
-
-        aPostStr.EraseTrailingChars(sal_Unicode('0'));
-
-        xub_StrLen nStrLen(aPostStr.Len());
-        if(nStrLen)
-        {
-            nNum = 0L;
-            rConv.convertNumber(nNum, OUString(aPostStr));
-            fRetval += (double)nNum / pow(10.0, (double)nStrLen);
-        }
-    }
-
-    if(bNegative)
-        return -fRetval;
     return fRetval;
 }
 
@@ -194,37 +165,26 @@ sal_Int32 Imp_GetNumberChar(const UniString& rStr, xub_StrLen& rPos, const xub_S
     const SvXMLUnitConverter& rConv, sal_Int32 nRetval,
     BOOL bSignIsNumber = TRUE, BOOL bPointIsNumber = FALSE)
 {
-    return (sal_Int32)Imp_GetNumberChar(rStr,rPos, nLen, rConv,
-        (double)nRetval, bSignIsNumber, bPointIsNumber);
+    UniString aNumberStr;
+    sal_Bool bFirstSign(TRUE);
+
+    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignIsNumber && bFirstSign, FALSE))
+    {
+        aNumberStr.Append(rStr.GetChar(rPos++));
+        bFirstSign = FALSE;
+    }
+
+    if(aNumberStr.Len())
+        rConv.convertNumber(nRetval, aNumberStr);
+
+    return nRetval;
 }
 
 void Imp_PutNumberChar(UniString& rStr, const SvXMLUnitConverter& rConv, double fValue)
 {
-    sal_Bool bNegative(FALSE);
-
-    if(fValue < 0.0)
-    {
-        bNegative = TRUE;
-        fValue = -fValue;
-        rStr += sal_Unicode('-');
-    }
-
-    double fNum;
-    double fFrac = modf(fValue, &fNum);
-    sal_Int32 nNum(fNum);
     OUStringBuffer sStringBuffer;
-
-    rConv.convertNumber(sStringBuffer, nNum);
+    rConv.convertNumber(sStringBuffer, fValue);
     rStr += UniString(sStringBuffer.makeStringAndClear());
-
-    if(fFrac != 0.0)
-    {
-        rStr += sal_Unicode('.');
-        nNum = sal_Int32(fFrac * 1000000001.0);
-        rConv.convertNumber(sStringBuffer, nNum);
-        rStr += UniString(sStringBuffer.makeStringAndClear());
-        rStr.EraseTrailingChars(sal_Unicode('0'));
-    }
 }
 
 void Imp_PutNumberChar(UniString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)

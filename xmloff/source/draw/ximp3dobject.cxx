@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dobject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-01 13:14:07 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 15:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@ void SdXML3DObjectContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 {
     if(xShape.is() && mxShapes.is())
     {
+        // set shape local
+        mxShape = xShape;
+
         // add new shape to parent
         mxShapes->add( xShape );
     }
@@ -327,49 +330,36 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"))), uno::UNO_QUERY);
         if(xShape.is())
         {
-            // set shape local
-            mxShape = xShape;
-
-            // call parent
+            // add, set style and properties from base shape
+            AddShape(xShape);
+            SetStyle();
             SdXML3DObjectContext::StartElement(xAttrList);
 
+            // set local parameters on shape
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is())
             {
                 // set parameters
-                if(mbMinEdgeUsed)
-                {
-                    drawing::Position3D aPosition3D;
+                drawing::Position3D aPosition3D;
+                drawing::Direction3D aDirection3D;
 
-                    aPosition3D.PositionX = maMinEdge.X();
-                    aPosition3D.PositionY = maMinEdge.Y();
-                    aPosition3D.PositionZ = maMinEdge.Z();
+                // convert from min, max to size to be set
+                maMaxEdge = maMaxEdge - maMinEdge;
 
-                    uno::Any aAny;
-                    aAny <<= aPosition3D;
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")), aAny);
-                }
+                aPosition3D.PositionX = maMinEdge.X();
+                aPosition3D.PositionY = maMinEdge.Y();
+                aPosition3D.PositionZ = maMinEdge.Z();
 
-                if(mbMaxEdgeUsed)
-                {
-                    drawing::Direction3D aDirection3D;
+                aDirection3D.DirectionX = maMaxEdge.X();
+                aDirection3D.DirectionY = maMaxEdge.Y();
+                aDirection3D.DirectionZ = maMaxEdge.Z();
 
-                    // convert from min, max to size to be set
-                    maMaxEdge = maMaxEdge - maMinEdge;
-
-                    aDirection3D.DirectionX = maMaxEdge.X();
-                    aDirection3D.DirectionY = maMaxEdge.Y();
-                    aDirection3D.DirectionZ = maMaxEdge.Z();
-
-                    uno::Any aAny;
-                    aAny <<= aDirection3D;
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")), aAny);
-                }
+                uno::Any aAny;
+                aAny <<= aPosition3D;
+                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")), aAny);
+                aAny <<= aDirection3D;
+                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")), aAny);
             }
-
-            // add, set style and properties from base shape
-            AddShape(xShape);
-            SetStyle();
         }
     }
 }
@@ -456,46 +446,33 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DSphereObject"))), uno::UNO_QUERY);
         if(xShape.is())
         {
-            // set shape local
-            mxShape = xShape;
-
-            // call parent
+            // add, set style and properties from base shape
+            AddShape(xShape);
+            SetStyle();
             SdXML3DObjectContext::StartElement(xAttrList);
 
+            // set local parameters on shape
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is())
             {
                 // set parameters
-                if(mbCenterUsed)
-                {
-                    drawing::Position3D aPosition3D;
+                drawing::Position3D aPosition3D;
+                drawing::Direction3D aDirection3D;
 
-                    aPosition3D.PositionX = maCenter.X();
-                    aPosition3D.PositionY = maCenter.Y();
-                    aPosition3D.PositionZ = maCenter.Z();
+                aPosition3D.PositionX = maCenter.X();
+                aPosition3D.PositionY = maCenter.Y();
+                aPosition3D.PositionZ = maCenter.Z();
 
-                    uno::Any aAny;
-                    aAny <<= aPosition3D;
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")), aAny);
-                }
+                aDirection3D.DirectionX = maSize.X();
+                aDirection3D.DirectionY = maSize.Y();
+                aDirection3D.DirectionZ = maSize.Z();
 
-                if(mbSizeUsed)
-                {
-                    drawing::Direction3D aDirection3D;
-
-                    aDirection3D.DirectionX = maSize.X();
-                    aDirection3D.DirectionY = maSize.Y();
-                    aDirection3D.DirectionZ = maSize.Z();
-
-                    uno::Any aAny;
-                    aAny <<= aDirection3D;
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")), aAny);
-                }
+                uno::Any aAny;
+                aAny <<= aPosition3D;
+                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")), aAny);
+                aAny <<= aDirection3D;
+                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")), aAny);
             }
-
-            // add, set style and properties from base shape
-            AddShape(xShape);
-            SetStyle();
         }
     }
 }
@@ -661,15 +638,10 @@ void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"))), uno::UNO_QUERY);
         if(xShape.is())
         {
-            // set shape local
-            mxShape = xShape;
-
-            // call parent
-            SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
-
             // add, set style and properties from base shape
             AddShape(xShape);
             SetStyle();
+            SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
         }
     }
 }
@@ -715,15 +687,10 @@ void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::s
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"))), uno::UNO_QUERY);
         if(xShape.is())
         {
-            // set shape local
-            mxShape = xShape;
-
-            // call parent
-            SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
-
             // add, set style and properties from base shape
             AddShape(xShape);
             SetStyle();
+            SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
         }
     }
 }

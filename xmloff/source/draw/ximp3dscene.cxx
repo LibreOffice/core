@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-30 18:06:00 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 15:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,43 +340,6 @@ void SdXML3DSceneShapeContext::EndElement()
                     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")), aAny);
                 }
 
-                // CameraGeometry
-                if(mbVRPUsed || mbVPNUsed || mbVUPUsed)
-                {
-                    drawing::CameraGeometry aCamGeo;
-
-                    if(!(mbVRPUsed && mbVPNUsed && mbVUPUsed))
-                    {
-                        // get old value and change
-                        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
-                        aAny >>= aCamGeo;
-                    }
-
-                    if(mbVRPUsed)
-                    {
-                        aCamGeo.vrp.PositionX = maVRP.X();
-                        aCamGeo.vrp.PositionY = maVRP.Y();
-                        aCamGeo.vrp.PositionZ = maVRP.Z();
-                    }
-
-                    if(mbVPNUsed)
-                    {
-                        aCamGeo.vpn.DirectionX = maVPN.X();
-                        aCamGeo.vpn.DirectionY = maVPN.Y();
-                        aCamGeo.vpn.DirectionZ = maVPN.Z();
-                    }
-
-                    if(mbVUPUsed)
-                    {
-                        aCamGeo.vup.DirectionX = maVUP.X();
-                        aCamGeo.vup.DirectionY = maVUP.Y();
-                        aCamGeo.vup.DirectionZ = maVUP.Z();
-                    }
-
-                    aAny <<= aCamGeo;
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")), aAny);
-                }
-
                 // projection "D3DScenePerspective" drawing::ProjectionMode
                 aAny <<= mxPrjMode;
                 xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")), aAny);
@@ -485,6 +448,20 @@ void SdXML3DSceneShapeContext::EndElement()
                         }
                     }
                 }
+
+                // CameraGeometry and camera settings
+                drawing::CameraGeometry aCamGeo;
+                aCamGeo.vrp.PositionX = maVRP.X();
+                aCamGeo.vrp.PositionY = maVRP.Y();
+                aCamGeo.vrp.PositionZ = maVRP.Z();
+                aCamGeo.vpn.DirectionX = maVPN.X();
+                aCamGeo.vpn.DirectionY = maVPN.Y();
+                aCamGeo.vpn.DirectionZ = maVPN.Z();
+                aCamGeo.vup.DirectionX = maVUP.X();
+                aCamGeo.vup.DirectionY = maVUP.Y();
+                aCamGeo.vup.DirectionZ = maVUP.Z();
+                aAny <<= aCamGeo;
+                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")), aAny);
             }
 
             // call parent
