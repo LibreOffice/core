@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-23 10:00:39 $
+ *  last change: $Author: bm $ $Date: 2001-10-24 15:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@
 #include <comphelper/extract.hxx>
 #endif
 
+#include <list>
+
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #endif
@@ -173,6 +175,13 @@ using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace com::sun::star::uno;
 
+struct SchXMLDataPointStruct
+{
+    ::rtl::OUString maStyleName;
+    sal_Int32       mnRepeat;
+
+    SchXMLDataPointStruct() : mnRepeat( 1 ) {}
+};
 
 // ========================================
 // class SchXMLExportHelper
@@ -1091,6 +1100,15 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     sal_Bool bWrite = sal_False;
     sal_Int32 nAttachedAxis;
 
+    uno::Sequence< uno::Sequence< sal_Int32 > > aDataPointSeq;
+    if( xPropSet.is())
+    {
+        uno::Any aAny = xPropSet->getPropertyValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AttributedDataPoints" )));
+        aAny >>= aDataPointSeq;
+        DBG_ASSERT( mnSeriesCount == aDataPointSeq.getLength(), "DataPointSequence has wrong size" );
+    }
+
     for( sal_Int32 nSeries = mnDomainAxes; nSeries < mnSeriesCount; nSeries++ )
     {
         nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
@@ -1232,6 +1250,10 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         // Note: if only the nth data-point has autostyles there is an element
         // without style and repeat="n-1" attribute written in advance.
 
+        // the sequence aDataPointSeq contains indices of data-points that
+        // do have own attributes.  This increases the performance substantially.
+
+#if 0
         sal_Int32 nRepeated = 1;
         if( mxExpPropMapper.is())
         {
@@ -1341,6 +1363,148 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, sal_True, sal_True );
             }
         }
+#else
+        // more performant version for #93600#
+        if( mxExpPropMapper.is())
+        {
+            uno::Sequence< sal_Int32 > aPtSeq = aDataPointSeq[ nSeries ];
+            sal_Int32 nSize = aPtSeq.getLength();
+            DBG_ASSERT( nSize <= mnSeriesLength, "Too many point attributes" );
+
+            const sal_Int32 * pPoints = aPtSeq.getConstArray();
+            sal_Int32 nElement;
+            sal_Int32 nRepeat;
+
+            if( bExportContent )
+            {
+                ::std::list< SchXMLDataPointStruct > aDataPointList;
+
+                sal_Int32 nLastIndex = -1;
+                sal_Int32 nCurrIndex;
+
+                // collect elements
+                for( nElement = 0; nElement < nSize; ++nElement )
+                {
+                    aPropertyStates.clear();
+                    nCurrIndex = pPoints[ nElement ];
+
+                    // write leading empty data points
+                    if( nCurrIndex - nLastIndex > 1 )
+                    {
+                        SchXMLDataPointStruct aPoint;
+                        aPoint.mnRepeat = nCurrIndex - nLastIndex - 1;
+                        aDataPointList.push_back( aPoint );
+                    }
+
+                    // get property states
+                    try
+                    {
+                        xPropSet = xDiagram->getDataPointProperties( nCurrIndex, nSeries );
+                    }
+                    catch( uno::Exception aEx )
+                    {
+                        DBG_ERROR1( "Exception caught during Export of data point: %s",
+                                    OUStringToOString( aEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    }
+                    if( xPropSet.is())
+                    {
+                        aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                        if( aPropertyStates.size() > 0 )
+                        {
+                            // write data-point with style
+                            DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
+
+                            SchXMLDataPointStruct aPoint;
+                            aPoint.maStyleName = maAutoStyleNameQueue.front();
+                            maAutoStyleNameQueue.pop();
+
+                            aDataPointList.push_back( aPoint );
+                            nLastIndex = nCurrIndex;
+                            continue;
+                        }
+                    }
+
+                    // if we get here the property states are empty
+                    SchXMLDataPointStruct aPoint;
+                    aDataPointList.push_back( aPoint );
+
+                    nLastIndex = nCurrIndex;
+                }
+                // final empty elements
+                nRepeat = mnSeriesLength - nLastIndex - 1;
+                if( nRepeat > 0 )
+                {
+                    SchXMLDataPointStruct aPoint;
+                    aPoint.mnRepeat = nRepeat;
+                    aDataPointList.push_back( aPoint );
+                }
+
+                // write elements (merge equal ones)
+                ::std::list< SchXMLDataPointStruct >::iterator aIter = aDataPointList.begin();
+                SchXMLDataPointStruct aPoint;
+                SchXMLDataPointStruct aLastPoint;
+
+                // initialize so that it doesn't matter if
+                // the element is counted in the first iteration
+                aLastPoint.mnRepeat = 0;
+
+                for( ; aIter != aDataPointList.end(); ++aIter )
+                {
+                    aPoint = (*aIter);
+
+                    if( aPoint.maStyleName == aLastPoint.maStyleName )
+                        aPoint.mnRepeat += aLastPoint.mnRepeat;
+                    else if( aLastPoint.mnRepeat > 0 )
+                    {
+                        // write last element
+                        if( aLastPoint.maStyleName.getLength() )
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
+
+                        if( aLastPoint.mnRepeat > 1 )
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
+                                                   ::rtl::OUString::valueOf( (sal_Int64)( aLastPoint.mnRepeat ) ));
+
+                        SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, sal_True, sal_True );
+                    }
+                    aLastPoint = aPoint;
+                }
+                // write last element if it hasn't been written in last iteration
+                if( aPoint.maStyleName == aLastPoint.maStyleName )
+                {
+                    if( aLastPoint.maStyleName.getLength() )
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
+
+                    if( aLastPoint.mnRepeat > 1 )
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
+                                               ::rtl::OUString::valueOf( (sal_Int64)( aLastPoint.mnRepeat ) ));
+
+                    SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, sal_True, sal_True );
+                }
+            }
+            else
+            {
+                // collect autostyles
+                for( nElement = 0; nElement < nSize; ++nElement )
+                {
+                    try
+                    {
+                        xPropSet = xDiagram->getDataPointProperties( pPoints[ nElement ], nSeries );
+                    }
+                    catch( uno::Exception aEx )
+                    {
+                        DBG_ERROR1( "Exception caught during Export of data point: %s",
+                                    OUStringToOString( aEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    }
+                    if( xPropSet.is())
+                    {
+                        aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                        if( aPropertyStates.size() > 0 )
+                            CollectAutoStyle( aPropertyStates );
+                    }
+                }
+            }
+        }
+#endif
 
         // close series element
         if( pSeries )
