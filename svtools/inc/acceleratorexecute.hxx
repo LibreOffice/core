@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:10:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,22 +109,6 @@
 namespace svt
 {
 
-#ifdef css
-    #error "Who define css? I need it as namespace alias."
-#else
-    // Please dont use any namespace alias inside exported header.
-    // This define can be undefined at the end of this file!!!
-    #define css ::com::sun::star
-#endif
-
-#ifdef dcss
-    #error "Who define dcss? I need it as namespace alias."
-#else
-    // Please dont use any namespace alias inside exported header.
-    // This define can be undefined at the end of this file!!!
-    #define dcss ::drafts::com::sun::star
-#endif
-
 //===============================================
 // definitions
 
@@ -171,18 +155,18 @@ class AcceleratorExecute : private TMutexInit
     private:
 
         /** TODO document me */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
 
         /** TODO document me */
-        css::uno::Reference< css::util::XURLTransformer > m_xURLParser;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLParser;
 
         /** TODO document me */
-        css::uno::Reference< css::frame::XDispatchProvider > m_xDispatcher;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xDispatcher;
 
         /** TODO document me */
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xGlobalCfg;
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xModuleCfg;
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xDocCfg;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalCfg;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleCfg;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xDocCfg;
 
         /** TODO document me */
         TCommandQueue m_lCommandQueue;
@@ -248,8 +232,8 @@ class AcceleratorExecute : private TMutexInit
                     is used only. Further the global Desktop instance is
                     used for dispatch.
          */
-        virtual void init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
-                          const css::uno::Reference< css::frame::XFrame >&              xEnv );
+        virtual void init(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&              xEnv );
 
         //---------------------------------------
         /** @short  trigger this accelerator.
@@ -268,25 +252,25 @@ class AcceleratorExecute : private TMutexInit
                     of the corresponding execute. Because its done asynchronous!
          */
         virtual sal_Bool execute(const KeyCode&            aKey);
-        virtual sal_Bool execute(const css::awt::KeyEvent& aKey);
+        virtual sal_Bool execute(const ::com::sun::star::awt::KeyEvent& aKey);
 
         //---------------------------------------
         /** TODO document me */
-        static css::awt::KeyEvent st_VCLKey2AWTKey(const KeyCode&            aKey);
-        static KeyCode            st_AWTKey2VCLKey(const css::awt::KeyEvent& aKey);
+        static ::com::sun::star::awt::KeyEvent st_VCLKey2AWTKey(const KeyCode&            aKey);
+        static KeyCode            st_AWTKey2VCLKey(const ::com::sun::star::awt::KeyEvent& aKey);
 
         //---------------------------------------
         /** TODO document me */
-        static css::uno::Reference< dcss::ui::XAcceleratorConfiguration > st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        static ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > st_openGlobalConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
 
         //---------------------------------------
         /** TODO document me */
-        static css::uno::Reference< dcss::ui::XAcceleratorConfiguration > st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
-                                                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame);
+        static ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > st_openModuleConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR ,
+                                                                                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&              xFrame);
 
         //---------------------------------------
         /** TODO document me */
-        static css::uno::Reference< dcss::ui::XAcceleratorConfiguration > st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel);
+        static ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > st_openDocConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 
     //-------------------------------------------
     // internal
@@ -302,19 +286,16 @@ class AcceleratorExecute : private TMutexInit
 
         //---------------------------------------
         /** TODO document me */
-        ::rtl::OUString impl_ts_findCommand(const css::awt::KeyEvent& aKey);
+        ::rtl::OUString impl_ts_findCommand(const ::com::sun::star::awt::KeyEvent& aKey);
 
         //---------------------------------------
         /** TODO document me */
-        css::uno::Reference< css::util::XURLTransformer > impl_ts_getURLParser();
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > impl_ts_getURLParser();
 
         //---------------------------------------
         /** TODO document me */
         DECL_LINK(impl_ts_asyncCallback, void*);
 };
-
-#undef  css
-#undef dcss
 
 } // namespace svt
 
