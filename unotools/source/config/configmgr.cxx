@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 12:46:37 $
+ *  last change: $Author: os $ $Date: 2000-09-26 09:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,5 +264,48 @@ void    ConfigManager::RemoveConfigManager()
 rtl::OUString ConfigManager::GetConfigBaseURL()
 {
     return C2U(cConfigBaseURL);
+}
+/* -----------------------------25.09.00 16:34--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
+{
+    Any aRet;
+    OUString sPath = C2U(cConfigBaseURL);
+    switch(eProp)
+    {
+        case INSTALLPATH:   sPath += C2U("UserProfile/Office"); break;
+        case LOCALE:            sPath += C2U("UserProfile/International"); break;
+        case OFFICEINSTALL: sPath += C2U("Office.Common/Path"); break;
+    }
+    Sequence< Any > aArgs(1);
+    aArgs[0] <<= sPath;
+    Reference< XMultiServiceFactory > xCfgProvider = GetConfigManager()->GetConfigurationProvider();
+    Reference< XInterface > xIFace;
+    try
+    {
+        xIFace = xCfgProvider->createInstanceWithArguments(
+                C2U(cAccessSrvc),
+                aArgs);
+
+    }
+    catch(Exception&){}
+    Reference<XHierarchicalNameAccess> xHierarchyAccess(xIFace, UNO_QUERY);
+    if(xHierarchyAccess.is())
+    {
+        OUString sProperty;
+        switch(eProp)
+        {
+            case INSTALLPATH:   sProperty = C2U("InstallPath"); break;
+            case LOCALE:        sProperty = C2U("Locale"); break;
+            case OFFICEINSTALL: sProperty = C2U("OfficeInstall"); break;
+        }
+        try
+        {
+            aRet = xHierarchyAccess->getByHierarchicalName(sProperty);
+        }
+        catch(Exception&) {}
+    }
+    return aRet;
 }
 

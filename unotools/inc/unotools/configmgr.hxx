@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 12:40:13 $
+ *  last change: $Author: os $ $Date: 2000-09-26 09:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
 #endif
@@ -108,6 +111,16 @@ namespace utl
             static ConfigManager*           GetConfigManager();
             static void                     RemoveConfigManager();
             static rtl::OUString            GetConfigBaseURL();
+
+            enum ConfigProperty
+            {
+                INSTALLPATH,
+                LOCALE,
+                OFFICEINSTALL
+            };
+            //direct readonly access to some special configuration elements
+            static com::sun::star::uno::Any GetDirectConfigProperty(ConfigProperty eProp);
+
     };
 }//namespace utl
 #endif //_UTL_CONFIGMGR_HXX_
