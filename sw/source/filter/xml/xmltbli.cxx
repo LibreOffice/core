@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-23 15:48:37 $
+ *  last change: $Author: dvo $ $Date: 2001-05-03 16:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,13 @@ static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROW },
     { XML_NAMESPACE_OFFICE, sXML_dde_source,
             XML_TOK_OFFICE_DDE_SOURCE },
+
+    // There are slight differences between <table:table-columns> and
+    // <table:table-columns-groups>. However, none of these are
+    // supported in Writer (they are Calc-only features), so we
+    // support column groups by simply using the <table:table-columns>
+    // token for column groups, too.
+    { XML_NAMESPACE_TABLE, sXML_table_column_group,     XML_TOK_TABLE_COLS },
 
     XML_TOKEN_MAP_END
 };
