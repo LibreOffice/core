@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 11:22:38 $
+ *  last change: $Author: os $ $Date: 2002-05-08 12:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,52 +429,50 @@ void SwTbxAutoTextCtrl::DelPopup()
 /*-----------------19.02.97 10.52-------------------
     Navigations-Popup
 --------------------------------------------------*/
+// determine the order of the toolbox items
+static USHORT __READONLY_DATA aNavigationInsertIds[ NAVI_ENTRIES ] =
+{
+    // -- first line
+    NID_TBL,
+    NID_FRM,
+    NID_GRF,
+    NID_OLE,
+    NID_PGE,
+    NID_OUTL,
+    NID_MARK,
+    NID_DRW,
+    NID_CTRL,
+    NID_PREV,
+    // -- second line
+    NID_REG,
+    NID_BKM,
+    NID_SEL,
+    NID_FTN,
+    NID_POSTIT,
+    NID_SRCH_REP,
+    NID_INDEX_ENTRY,
+    NID_TABLE_FORMULA,
+    NID_TABLE_FORMULA_ERROR,
+    NID_NEXT
+};
 
 SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
-                                const ResId &rId,
                                 SfxBindings & rBnd)
-    : SfxPopupWindow(nId, rId, rBnd),
+    : SfxPopupWindow(nId, SW_RES(RID_SCROLL_NAVIGATION_WIN), rBnd),
     aToolBox(this, 0),
     aSeparator(this, ResId(FL_SEP)),
     aInfoField(this, ResId(FI_INFO)),
     aIList(ResId(IL_VALUES)),
-    rResId(rId),
+    aIListH(ResId(ILH_VALUES)),
     nFwdId(FN_START_OF_NEXT_PAGE),
     nBackId(FN_START_OF_PREV_PAGE)
 {
     aToolBox.SetHelpId(HID_NAVI_VS);
-    // determine the order of the toolbox items
-    static USHORT __READONLY_DATA aInsert[ NAVI_ENTRIES ] =
-    {
-        // -- first line
-        NID_TBL,
-        NID_FRM,
-        NID_GRF,
-        NID_OLE,
-        NID_PGE,
-        NID_OUTL,
-        NID_MARK,
-        NID_DRW,
-        NID_CTRL,
-        NID_PREV,
-        // -- second line
-        NID_REG,
-        NID_BKM,
-        NID_SEL,
-        NID_FTN,
-        NID_POSTIT,
-        NID_SRCH_REP,
-        NID_INDEX_ENTRY,
-        NID_TABLE_FORMULA,
-        NID_TABLE_FORMULA_ERROR,
-        NID_NEXT
-    };
-
     aToolBox.SetLineCount( 2 );
     aToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
     for(USHORT i = 0; i < NID_COUNT; i++)
     {
-        USHORT nId = aInsert[i];
+        USHORT nId = aNavigationInsertIds[i];
         String sText;
         ToolBoxItemBits  nTbxBits = 0;
         if((NID_PREV != nId) && (NID_NEXT != nId))
@@ -484,8 +482,9 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
             sText = String(ResId(nResStr));
             nTbxBits = TIB_CHECKABLE;
         }
-        aToolBox.InsertItem(nId, aIList.GetImage(nId), sText, nTbxBits);
+        aToolBox.InsertItem(nId, sText, nTbxBits);
     }
+    ApplyImageList();
     aToolBox.InsertBreak(NID_COUNT/2);
     // don't call it before!
     FreeResource();
@@ -527,13 +526,37 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
 SwScrollNaviPopup::~SwScrollNaviPopup()
 {
 }
+/* -----------------------------08.05.2002 14:00------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImageList();
+
+    Window::DataChanged( rDCEvt );
+}
+/* -----------------------------08.05.2002 14:02------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwScrollNaviPopup::ApplyImageList()
+{
+    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
+        aIListH : aIList;
+    for(USHORT i = 0; i < NID_COUNT; i++)
+    {
+        USHORT nId = aNavigationInsertIds[i];
+        aToolBox.SetItemImage(nId, rImgLst.GetImage(nId));
+    }
+}
 /*-----------------19.02.97 13.58-------------------
 
 --------------------------------------------------*/
 
 SfxPopupWindow* SwScrollNaviPopup::Clone() const
 {
-    return new SwScrollNaviPopup(GetId(), rResId, ( SfxBindings & ) GetBindings());
+    return new SwScrollNaviPopup(GetId(), ( SfxBindings & ) GetBindings());
 }
 
 /*-----------------19.02.97 14.10-------------------
@@ -612,7 +635,6 @@ void SwNaviImageButton::MouseButtonDown( const MouseEvent& rMEvt )
         rBind.ENTERREGISTRATIONS();
         pPopup = new
             SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
-                            SW_RES(RID_SCROLL_NAVIGATION_WIN),
                             rBind);
         rBind.LEAVEREGISTRATIONS();
         Point aPos = OutputToScreenPixel(Point(0,0));

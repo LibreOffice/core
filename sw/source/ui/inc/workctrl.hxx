@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-04-05 13:25:52 $
+ *  last change: $Author: os $ $Date: 2002-05-08 12:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,18 +176,20 @@ class SwScrollNaviPopup : public SfxPopupWindow
     FixedLine       aSeparator;
     FixedInfo       aInfoField;
     ImageList       aIList;
-    const ResId&    rResId;
+    ImageList       aIListH;
 
     String          sQuickHelp[2 * NID_COUNT];
 
     USHORT          nFwdId;
     USHORT          nBackId;
 
+    void            ApplyImageList();
     protected:
         DECL_LINK(SelectHdl, ToolBox*);
+        virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
     public:
-        SwScrollNaviPopup( USHORT nId, const ResId &rId, SfxBindings & );
+        SwScrollNaviPopup( USHORT nId, SfxBindings & );
         ~SwScrollNaviPopup();
 
     static String           GetQuickHelpText(BOOL bNext);
