@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+#   last change: $Author: iha $ $Date: 2003-11-04 13:16:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,8 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- export library -------------------------------------------------
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
-SLOFILES =  $(SLO)$/TransformationHelper.obj \
+SLOFILES =  $(SLO)$/Clipping.obj \
+            $(SLO)$/TransformationHelper.obj \
             $(SLO)$/CategoryPositionHelper.obj \
             $(SLO)$/VSeriesPlotter.obj \
             $(SLO)$/BarChart.obj \
