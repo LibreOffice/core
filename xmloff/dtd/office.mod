@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.40 2001-05-28 13:19:14 cl Exp $
+	$Id: office.mod,v 1.41 2001-06-12 17:44:15 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -77,7 +77,7 @@
 <!ATTLIST office:document xmlns:dc		CDATA #FIXED "&nDC;">
 
 <!ATTLIST office:document office:class
-						  (text|online-text|
+						  (text|text-global|
 						   drawing|presentation|
 						   spreadsheet|chart) #REQUIRED>
 
@@ -104,11 +104,6 @@
 <!ATTLIST office:document-styles xmlns:svg		CDATA #FIXED "&nSVG;">
 <!ATTLIST office:document-styles xmlns:dc		CDATA #FIXED "&nDC;">
 
-<!ATTLIST office:document-styles office:class
-						  (text|online-text|
-						   drawing|presentation|
-						   spreadsheet|chart) #REQUIRED>
-
 <!ATTLIST office:document-styles office:version	%string; #IMPLIED>
 
 <!-- document-content -->
@@ -134,7 +129,7 @@
 <!ATTLIST office:document-content xmlns:dc		CDATA #FIXED "&nDC;">
 
 <!ATTLIST office:document-content office:class
-						  (text|online-text|
+						  (text|text-global|
 						   drawing|presentation|
 						   spreadsheet|chart) #REQUIRED>
 
@@ -158,11 +153,6 @@
 <!ATTLIST office:document-meta xmlns:svg		CDATA #FIXED "&nSVG;">
 <!ATTLIST office:document-meta xmlns:dc		CDATA #FIXED "&nDC;">
 
-<!ATTLIST office:document-meta office:class
-						  (text|online-text|
-						   drawing|presentation|
-						   spreadsheet|chart) #REQUIRED>
-
 <!ATTLIST office:document-meta office:version	%string; #IMPLIED>
 
 <!ELEMENT office:document-settings (office:settings) >
@@ -170,10 +160,6 @@
 <!ATTLIST office:document-settings xmlns:xlink	CDATA #FIXED "&nXLink;">
 <!ATTLIST office:document-settings xmlns:config	CDATA #FIXED "&nConfig;">
 
-<!ATTLIST office:document-settings office:class
-						  (text|online-text|
-						   drawing|presentation|
-						   spreadsheet|chart) #REQUIRED>
 <!ATTLIST office:document-settings office:version	%string; #IMPLIED>
 
 <!ENTITY % meta "(meta:generator?,
