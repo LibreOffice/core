@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 10:12:08 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#if defined(IRIX)
+#include <ctime>
+#endif
 #include <sys/time.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
 
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
 #include <osl/module.h>
 #endif
@@ -229,10 +232,16 @@ extern "C" { int gethostname(char*,int); }
 
 #include <X11/Xatom.h>
 #ifndef SOLARIS
-#ifdef X86
+#if defined(X86) || defined(MACOSX)
 #include <X11/extensions/Xinerama.h>
 #endif
 #endif
+
+#ifdef HAVE_LIBSN
+#  define SN_API_NOT_YET_FROZEN
+#  include <libsn/sn.h>
+#endif
+
 #include <postx.h>
 
 #include <salunx.h>
@@ -375,7 +384,7 @@ inline const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
 
 inline double Hypothenuse( long w, long h )
-{ return sqrt( (w*w)+(h*h) ); }
+{ return sqrt( (double)((w*w)+(h*h)) ); }
 
 inline int ColorDiff( int r, int g, int b )
 { return (r*r)+(g*g)+(b*b); }
@@ -706,6 +715,31 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+#ifdef HAVE_LIBSN
+extern "C" {
+    static void
+    SnErrorTrapPush( SnDisplay *display,
+             Display   *xdisplay )
+    {
+        SalXLib *pXLib = GetSalData()->GetLib();
+    if (pXLib)
+             pXLib->PushErrorTrap();
+    }
+
+    static void
+    SnErrorTrapPop( SnDisplay *display,
+            Display   *xdisplay )
+    {
+        SalXLib *pXLib = GetSalData()->GetLib();
+
+    XSync( xdisplay, False ); // flush error queue
+
+    if (pXLib)
+             pXLib->PopErrorTrap();
+    }
+}
+#endif /* HAVE_LIBSN */
+
 SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
         pDisp_( display ),
         mpFallbackFactory ( NULL ),
@@ -736,6 +770,16 @@ SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
 
     sal_GetVisualInfo( pDisp_, XVisualIDFromVisual( pVisual ), aXVI );
     Init( aColMap, &aXVI );
+
+#ifdef HAVE_LIBSN
+    m_pSnDisplay = sn_display_new( display, SnErrorTrapPush, SnErrorTrapPop );
+    m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, nScreen_ );
+#  ifdef DBG_UTIL
+    if( !m_pSnLauncheeContext )
+         fprintf( stderr, "Failed to get launch feedback info from "
+          "DESKTOP_LAUNCH_ID/DESKTOP_LAUNCH_WINDOW\n" );
+#  endif /* DBG_UTIL */
+#endif /* HAVE_LIBSN */
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -791,6 +835,12 @@ SalDisplay::~SalDisplay( )
         delete mpKbdExtension;
         XCloseDisplay( pDisp_ );
     }
+
+#ifdef HAVE_LIBSN
+    if( m_pSnLauncheeContext )
+        sn_launchee_context_unref( m_pSnLauncheeContext );
+    sn_display_unref( m_pSnDisplay );
+#endif /* HAVE_LIBSN */
 
     pDisp_  = (Display*)ILLEGAL_POINTER;
 
@@ -1136,7 +1186,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
             sscanf( pProperties, "%li", &nProperties_ );
         else
         {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX || defined MACOSX
             nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
             // Server Bugs & Properties
@@ -1165,7 +1215,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 #ifdef ARM32 // ??? Server! nicht Client ???
                 nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
 #endif
-#if defined LINUX || defined FREEBSD
+#if defined LINUX || defined FREEBSD || defined MACOSX
                 // otherwm and olwm are a kind of default, which are not detected
                 // carefully. if we are running linux (i.e. not netbsd) on an xfree
                 // display, fvwm is most probable the wm to choose, confusing with mwm
@@ -2552,6 +2602,18 @@ void SalDisplay::Yield( BOOL bWait )
 
         // note: alternate input is dispatched by XtAppNextEvent
         XNextEvent( pDisp_, &aEvent.event_ );
+
+#ifdef HAVE_LIBSN
+        if( m_pSnLauncheeContext )
+            {
+            sn_launchee_context_complete( m_pSnLauncheeContext );
+            sn_launchee_context_unref( m_pSnLauncheeContext );
+            m_pSnLauncheeContext = NULL;
+        }
+
+        if( sn_display_process_event( m_pSnDisplay, &aEvent.event_ ) )
+            return;
+#endif /* HAVE_LIBSN */
     }
 
     nStateOfYield_ = 0;
@@ -2967,7 +3029,7 @@ void SalDisplay::GetScreenFontResolution( long& rDPIX, long& rDPIY ) const
 
 void SalDisplay::InitXinerama()
 {
-#ifdef SOLARIS
+#if defined( SOLARIS )
     // do this load on call for benefit of Solaris < 8
     rtl::OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libXext.so" ) );
     rtl::OUString aSymb1( RTL_CONSTASCII_USTRINGPARAM( "XineramaGetState" ) );
@@ -3005,7 +3067,7 @@ void SalDisplay::InitXinerama()
     }
     osl_unloadModule( hModule );
 #else
-#ifdef X86
+#if defined( X86 ) || defined( MACOSX )
     if( XineramaIsActive( pDisp_ ) )
     {
         int nFramebuffers = 1;
