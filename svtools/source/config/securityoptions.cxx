@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-18 17:42:13 $
+ *  last change: $Author: mba $ $Date: 2001-08-28 13:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,65 +426,48 @@ void SvtSecurityOptions_Impl::SetExecutePlugins( sal_Bool bSet )
 sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
                                                 const   OUString&   sReferer) const
 {
-    // Set defult return value to "NO" ...
-    // If anything goes wrong at follow operations - it's better to say "THIS URL ISN'T SECURE!"! - I think so.
-    // Implement follow code to change these state to true only ...
-    // All cases which will return false too are "ignored" ...
+    //  Scripting always allowed
+    if( m_eBasicMode == eALWAYS_EXECUTE )
+        return sal_True;
+
     sal_Bool bState = sal_False;
 
-    //  1)  Scripting completly impossible?
-    //      Don't check these state ... because we have set ouer return value to FALSE ...
-    //      See begin of method for further informations.
+    // Check for uncritical protocols first
+    // All protocols different from "macro..." and "slot..." are secure per definition and must not be checked.
+    // "macro://#..." means AppBasic macros that are considered safe
+    INetURLObject   aURL        ( sURL );
+    INetProtocol    aProtocol   = aURL.GetProtocol();
 
-    //  2)  Scripting always allowed!
-    //      Set return value to TRUE.
-    if( m_eBasicMode == eALWAYS_EXECUTE )
+    // All other URLs must checked in combination with referer and internal information about security
+    if ( aProtocol != INET_PROT_MACRO && aProtocol !=  INET_PROT_SLOT ||
+         aURL.GetMainURL().CompareIgnoreCaseToAscii( "macro://#", 9 )  ==  COMPARE_EQUAL )
     {
+        // security check only for "macro" ( without app basic ) or "slot" protocols
         bState = sal_True;
     }
-    else
-    //  3)  Scripting allowed if URL in list!
-    if( m_eBasicMode == eFROM_LIST )
+    else if( m_eBasicMode == eFROM_LIST )
     {
-        // Check for uncritical protocols first!
-        // All protocols different from "macro..." and "slot..." are secure per definition and must not be checked.
-        // There exist two exceptions - "macro://#..." and "slot:5500"!
-        INetURLObject   aURL        ( sURL );
-        INetProtocol    aProtocol   = aURL.GetProtocol();
-        if  (
-                (
-                    ( aProtocol !=  INET_PROT_MACRO )   &&
-                    ( aProtocol !=  INET_PROT_SLOT  )
-                )   ||
-                ( aURL.GetMainURL().CompareIgnoreCaseToAscii( "macro://#", 9 )  ==  COMPARE_EQUAL   )   ||
-                ( aURL.GetMainURL().CompareIgnoreCaseToAscii( "slot:5500"    )  ==  COMPARE_EQUAL   )
-            )
+        //  check list of allowed URL patterns
+        // Trusted referer given?
+        // NO  => bState will be false per default
+        // YES => search for it in our internal url list
+        if( sReferer.getLength() > 0 )
         {
-            bState = sal_True;
-        }
-        // All other URLs must checked in combination with referer and internal informations about security!
-        else
-        {
-            // Trusted referer given?
-            // NO  => bState will be false per default!
-            // YES => Search it in ouer internal url list.
-            if( sReferer.getLength() > 0 )
+            // Search in internal list ...
+            sal_uInt32 nCount = m_seqSecureURLs.getLength();
+            for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
             {
-                // Search in internal list ...
-                sal_uInt32 nCount = m_seqSecureURLs.getLength();
-                for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
+                OUString sCheckURL = m_seqSecureURLs[nItem];
+                sCheckURL += OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                if( WildCard( sCheckURL ).Matches( sReferer ) == sal_True )
                 {
-                    OUString sCheckURL = m_seqSecureURLs[nItem];
-                    sCheckURL += OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
-                    if( WildCard( sCheckURL ).Matches( sReferer ) == sal_True )
-                    {
-                        bState = sal_True;
-                        break;
-                    }
+                    bState = sal_True;
+                    break;
                 }
             }
         }
     }
+
     // Return result of operation.
     return bState;
 }
