@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:47:07 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ int main( int argc, char * argv[])
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "rtl/uri.hxx"
 #include "sal/types.h"
 #include "uno/current_context.hxx"
 #include "uno/environment.h"
@@ -699,7 +700,7 @@ void getJavaPropsFromSafetySettings(stoc_javavm::JVM * pjvm,
     xConfRegistry_simple->close();
 }
 
-const rtl::Bootstrap & getBootstrapHandle()
+static const rtl::Bootstrap & getBootstrapHandle()
 {
     static rtl::Bootstrap *pBootstrap = 0;
     if( !pBootstrap )
@@ -725,93 +726,41 @@ const rtl::Bootstrap & getBootstrapHandle()
     return *pBootstrap;
 }
 
-rtl::OUString retrieveComponentClassPath( const sal_Char *pVariableName )
+static ::rtl::OUString retrieveClassPath( ::rtl::OUString const & macro )
 {
-    // java_classpath file is encoded as ASCII
-
-    rtl::OUString ret;
-    rtl::OUStringBuffer buf( 128 );
-    buf.appendAscii( "$" ).appendAscii( pVariableName );
-    rtl::OUString path( buf.makeStringAndClear() );
-
-    const rtl::Bootstrap & handle = getBootstrapHandle();
-    rtl_bootstrap_expandMacros_from_handle( *(void**)&handle , &(path.pData) );
-    if( path.getLength() )
+    ::rtl::OUString classpath( macro );
+    getBootstrapHandle().expandMacrosFrom( classpath );
+    ::rtl::OUStringBuffer buf;
+    sal_Int32 index = 0;
+    do
     {
-        buf.append( path ).appendAscii( "/java_classpath" );
-
-        rtl::OUString fileName( buf.makeStringAndClear() );
-        sal_Char * p = 0;
-
-        osl::DirectoryItem item;
-        if( osl::DirectoryItem::E_None == osl::DirectoryItem::get( fileName , item ) )
+        ::rtl::OUString token( classpath.getToken( 0, ' ', index ).trim() );
+        if (token.getLength())
         {
-            osl::FileStatus status ( osl_FileStatus_Mask_FileSize );
-            if( osl::FileBase::E_None == item.getFileStatus( status ) )
+            if (token.matchIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") ))
             {
-                sal_Int64 nSize = status.getFileSize();
-                if( nSize )
-                {
-                    sal_Char * p = (sal_Char * ) rtl_allocateMemory( (sal_uInt32)nSize +1 );
-                    if( p )
-                    {
-                        osl::File file( fileName );
-                        if( osl::File::E_None == file.open( OpenFlag_Read ) )
-                        {
-                            sal_uInt64 nRead;
-                            if( osl::File::E_None == file.read( p , (sal_uInt64)nSize , nRead )
-                                && (sal_uInt64)nSize == nRead )
-                            {
-                                buf = rtl::OUStringBuffer( 1024 );
+                token = ::rtl::Uri::decode(
+                    token.copy( sizeof ("vnd.sun.star.expand:") -1 ),
+                    rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+                getBootstrapHandle().expandMacrosFrom( token );
+            }
 
-                                sal_Int32 nIndex = 0;
-                                sal_Bool bPrepend = sal_False;
-                                while( nIndex < nSize )
-                                {
-                                    while( nIndex < nSize && p[nIndex] == ' ' ) nIndex ++;
-                                    sal_Int32 nStart = nIndex;
-                                    while( nIndex < nSize && p[nIndex] != ' ' ) nIndex ++;
-                                    rtl::OUString relativeUrl( &(p[nStart]), nIndex-nStart, RTL_TEXTENCODING_ASCII_US);
-                                    relativeUrl = relativeUrl.trim();
-                                    if (0 < relativeUrl.getLength())
-                                    {
-                                        rtl::OUString fileurlElement;
-                                        rtl::OUString systemPathElement;
-
-                                        OSL_VERIFY(
-                                            osl_File_E_None ==
-                                            osl_getAbsoluteFileURL(
-                                                path.pData, relativeUrl.pData,
-                                                &fileurlElement.pData ) );
-                                        OSL_VERIFY(
-                                            osl_File_E_None ==
-                                            osl_getSystemPathFromFileURL(
-                                                fileurlElement.pData,
-                                                &systemPathElement.pData ) );
-                                        if( systemPathElement.getLength() )
-                                        {
-                                            if( bPrepend )
-                                                buf.appendAscii( CLASSPATH_DELIMETER );
-                                            else
-                                                bPrepend = sal_True;
-                                            buf.append( systemPathElement );
-                                        }
-                                    }
-                                }
-                                ret = buf.makeStringAndClear();
-                            }
-                        }
-                        rtl_freeMemory( p );
-                    }
-                }
+            ::rtl::OUString systemPathElement;
+            oslFileError rc = osl_getSystemPathFromFileURL(
+                token.pData, &systemPathElement.pData );
+            OSL_ASSERT( rc == osl_File_E_None );
+            if (rc == osl_File_E_None && systemPathElement.getLength() > 0)
+            {
+                if (buf.getLength() > 0)
+                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+                                         CLASSPATH_DELIMETER) );
+                buf.append( systemPathElement );
             }
         }
     }
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "JavaVM: classpath retrieved from $%s: %s\n", pVariableName,
-             rtl::OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr());
-#endif
-    return ret;
+    while (index >= 0);
+    return buf.makeStringAndClear();
 }
 
 static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
@@ -908,8 +857,13 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
         OSL_TRACE("javavm.cxx: couldn't get safety settings because of >%s<", message.getStr());
 #endif
     }
-    jvm.addSystemClasspath( retrieveComponentClassPath( "UNO_SHARED_PACKAGES_CACHE" ) );
-    jvm.addUserClasspath( retrieveComponentClassPath( "UNO_USER_PACKAGES_CACHE" ) );
+
+    jvm.addSystemClasspath(
+        retrieveClassPath(
+            OUSTR("${$PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}") ) );
+    jvm.addSystemClasspath(
+        retrieveClassPath(
+            OUSTR("${$PKG_UserUnoFile:UNO_JAVA_CLASSPATH}") ) );
 
 //For a non product office we use the flag -ea
 // we cannot use -Xcheck:jni, because this prevents debugging (j2re1.4.1_01, netbeans 3.4)
