@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:10:40 $
+ *  last change: $Author: rt $ $Date: 2001-08-24 13:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,6 +596,7 @@ ModalDialog DLG_COLOR
     Text[ catalan ] = "Color";
     Text[ finnish ] = "Väri";
 };
+
 
 
 
