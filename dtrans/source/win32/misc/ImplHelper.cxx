@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 14:48:25 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
