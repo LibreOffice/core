@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:48:57 $
+ *  last change: $Author: os $ $Date: 2000-12-20 13:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,10 +136,22 @@ Any SwXRedlinePortion::queryInterface( const uno::Type& rType ) throw(RuntimeExc
 {
     Any aRet = SwXTextPortion::queryInterface(rType);
     if(!aRet.hasValue() &&
-        !IsCollapsed() &&
-            rType == ::getCppuType((Reference<XEnumerationAccess>*)0))
+        IsCollapsed())
     {
         aRet = SwXText::queryInterface(rType);
+        if(!aRet.hasValue())
+        {
+            if(rType == ::getCppuType((Reference<XEnumerationAccess>*)0))
+            {
+                Reference<XEnumerationAccess> xTmp = this;
+                aRet <<= xTmp;
+            }
+            else if(rType == ::getCppuType((Reference<XElementAccess>*)0))
+            {
+                Reference<XElementAccess> xTmp = this;
+                aRet <<= xTmp;
+            }
+        }
     }
     return aRet;
 }
@@ -148,15 +160,18 @@ Any SwXRedlinePortion::queryInterface( const uno::Type& rType ) throw(RuntimeExc
   -----------------------------------------------------------------------*/
 Sequence< Type > SwXRedlinePortion::getTypes(  ) throw(RuntimeException)
 {
-    Sequence< uno::Type > aRet = SwXTextPortion::getTypes();
+    uno::Sequence< uno::Type > aTypes = SwXTextPortion::getTypes();
     if(!IsCollapsed())
-    {
-        sal_Int32 nLength = aRet.getLength();
-        aRet.realloc(nLength + 2);
-        aRet.getArray()[nLength] = ::getCppuType((Reference<XEnumerationAccess>*)0);
-        aRet.getArray()[nLength + 1] = ::getCppuType((Reference<XText>*)0);
-    }
-    return aRet;
+        return aTypes;
+    uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
+    long nIndex = aTypes.getLength();
+    aTypes.realloc(aTypes.getLength() + aTextTypes.getLength() + 1);
+    uno::Type* pTypes = aTypes.getArray();
+    const uno::Type* pTextTypes = aTextTypes.getConstArray();
+    for(int i = 0; i < aTextTypes.getLength(); i++)
+        pTypes[nIndex++] = pTextTypes[i];
+    pTypes[nIndex++] = ::getCppuType((Reference<XEnumerationAccess>*)0);
+    return aTypes;
 }
 /*-- 19.12.00 11:37:25---------------------------------------------------
 
@@ -171,8 +186,9 @@ Reference< XEnumeration >  SwXRedlinePortion::createEnumeration(void) throw( Run
     SwNodeIndex* pNodeIndex = pRedline->GetContentIdx();
     if(pNodeIndex)
     {
-        SwPosition aPos(*pNodeIndex);
-        xRet = new SwXParagraphEnumeration(this, aPos, CURSOR_REDLINE);
+        SwPaM aPam(*pNodeIndex);
+        aPam.Move(fnMoveForward, fnGoNode);
+        xRet = new SwXParagraphEnumeration(this, *aPam.Start(), CURSOR_REDLINE);
     }
     return xRet;
 }
