@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:22:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 06:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,17 +110,14 @@
 #include "zforlist.hxx"
 #include "numhead.hxx"
 
-struct GregorianInit
-{
-    const ::rtl::OUString* operator()()
-    {
-        static ::rtl::OUString sGregorian
-            (RTL_CONSTASCII_USTRINGPARAM("gregorian"));
-        return &sGregorian;
+namespace {
+struct Gregorian
+    : public rtl::StaticWithInit<const ::rtl::OUString, Gregorian> {
+    const ::rtl::OUString operator () () {
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gregorian"));
     }
 };
-
-namespace { struct Gregorian : public rtl::Static<const ::rtl::OUString, Gregorian, GregorianInit> {}; }
+}
 
 const double _D_MAX_U_LONG_ = (double) 0xffffffff;      // 4294967295.0
 const double _D_MAX_LONG_   = (double) 0x7fffffff;      // 2147483647.0
