@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 09:46:16 $
+#   last change: $Author: kz $ $Date: 2004-08-31 12:35:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
-        doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src
+        doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src secmacrowarnings.src
 
 SLOFILES =	\
         $(SLO)$/docfile.obj \
@@ -90,6 +90,7 @@ SLOFILES =	\
         $(SLO)$/objserv.obj \
         $(SLO)$/objitem.obj \
         $(SLO)$/clientsh.obj \
+        $(SLO)$/storagehelper.obj \
         $(SLO)$/docfac.obj \
         $(SLO)$/docfilt.obj \
         $(SLO)$/doctempl.obj \
@@ -101,7 +102,8 @@ SLOFILES =	\
         $(SLO)$/sfxbasemodel.obj \
         $(SLO)$/commitlistener.obj \
         $(SLO)$/graphhelp.obj \
-        $(SLO)$/xmlversion.obj
+        $(SLO)$/xmlversion.obj \
+        $(SLO)$/secmacrowarnings.obj 
 
 EXCEPTIONSFILES=$(SLO)$/objuno.obj \
                 $(SLO)$/objcont.obj \
@@ -113,8 +115,10 @@ EXCEPTIONSFILES=$(SLO)$/objuno.obj \
         $(SLO)$/commitlistener.obj \
         $(SLO)$/objxtor.obj \
         $(SLO)$/objstor.obj \
+        $(SLO)$/storagehelper.obj \
         $(SLO)$/graphhelp.obj \
-        $(SLO)$/xmlversion.obj
+        $(SLO)$/xmlversion.obj \
+        $(SLO)$/secmacrowarnings.obj
 
 # --- Tagets -------------------------------------------------------
 
