@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fapihelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:03:13 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
 #endif
@@ -82,7 +80,7 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SFXSTRITEM_HXX //SfxStringItem
+#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
 #ifndef _SFXITEMSET_HXX
@@ -92,31 +90,17 @@
 #include <sfx2/sfxsids.hrc>
 #endif
 
-
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::TypeClass_BOOLEAN;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::task::XInteractionRequest;
-
-// Set properties =============================================================
-
-void setPropAny( const Reference< XPropertySet >& xProp, const OUString& rName, const Any& rAny )
-{
-    DBG_ASSERT( xProp.is(), "setPropAny - invalid PropertySet" );
-    try
-    {
-        Reference< XPropertySetInfo > xInfo = xProp->getPropertySetInfo();
-        if( xInfo.is() && xInfo->hasPropertyByName( rName ) )
-            xProp->setPropertyValue( rName, rAny );
-    }
-    catch( Exception& )
-    {
-    }
-}
 
 // Get properties =============================================================
 
@@ -147,8 +131,10 @@ String ScfApiHelper::QueryPasswordForMedium( SfxMedium& rMedium )
     const SfxItemSet* pSet = rMedium.GetItemSet();
     const SfxPoolItem *pPasswordItem;
 
-    if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pPasswordItem))
-        aPassw = ((const SfxStringItem *)pPasswordItem)->GetValue();
+    if( pSet && (SFX_ITEM_SET == pSet->GetItemState( SID_PASSWORD, TRUE, &pPasswordItem )) )
+    {
+        aPassw = static_cast< const SfxStringItem* >( pPasswordItem )->GetValue();
+    }
     else
     {
         try
@@ -175,77 +161,148 @@ String ScfApiHelper::QueryPasswordForMedium( SfxMedium& rMedium )
     return aPassw;
 }
 
+// Property sets ==============================================================
 
-// MultiPropertySets ==========================================================
+void ScfPropertySet::Set( Reference< XPropertySet > xPropSet )
+{
+    mxPropSet = xPropSet;
+    mxMultiPropSet.set( mxPropSet, UNO_QUERY );
+}
 
-ScfMultiPSHelper::ScfMultiPSHelper( const sal_Char** ppPropNames, sal_Int32 nPropCount ) :
+// Get properties -------------------------------------------------------------
+
+bool ScfPropertySet::GetAnyProperty( Any& rValue, const OUString& rPropName ) const
+{
+    bool bHasValue = false;
+    try
+    {
+        if( mxPropSet.is() )
+        {
+            rValue = mxPropSet->getPropertyValue( rPropName );
+            bHasValue = true;
+        }
+    }
+    catch( Exception& )
+    {
+    }
+    return bHasValue;
+}
+
+bool ScfPropertySet::GetBoolProperty( bool& rbValue, const ::rtl::OUString& rPropName ) const
+{
+    Any aAny;
+    bool bRet = GetAnyProperty( aAny, rPropName ) && (aAny.getValueTypeClass() == TypeClass_BOOLEAN);
+    if( bRet )
+        rbValue = *static_cast< const sal_Bool* >( aAny.getValue() );
+    return bRet;
+}
+
+bool ScfPropertySet::GetStringProperty( String& rValue, const OUString& rPropName ) const
+{
+    OUString aOUString;
+    bool bRet = GetProperty( aOUString, rPropName );
+    if( bRet )
+        rValue = aOUString;
+    return bRet;
+}
+
+bool ScfPropertySet::GetColorProperty( Color& rColor, const ::rtl::OUString& rPropName ) const
+{
+    sal_Int32 nApiColor;
+    bool bRet = GetProperty( nApiColor, rPropName );
+    if( bRet )
+        rColor.SetColor( static_cast< ColorData >( nApiColor ) );
+    return bRet;
+}
+
+void ScfPropertySet::GetProperties( Sequence< Any >& rValues, const Sequence< OUString >& rPropNames ) const
+{
+    try
+    {
+        if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
+        {
+            rValues = mxMultiPropSet->getPropertyValues( rPropNames );
+        }
+        else if( mxPropSet.is() )
+        {
+            sal_Int32 nLen = rPropNames.getLength();
+            const OUString* pPropName = rPropNames.getConstArray();
+            const OUString* pPropNameEnd = pPropName + nLen;
+            rValues.realloc( nLen );
+            Any* pValue = rValues.getArray();
+            for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
+                *pValue = mxPropSet->getPropertyValue( *pPropName );
+        }
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+// Set properties -------------------------------------------------------------
+
+void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValue )
+{
+    try
+    {
+        if( mxPropSet.is() )
+            mxPropSet->setPropertyValue( rPropName, rValue );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, const Sequence< Any >& rValues )
+{
+    DBG_ASSERT( rPropNames.getLength() == rValues.getLength(), "ScfPropertySet::SetProperties - length of sequences different" );
+    try
+    {
+        if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
+        {
+            mxMultiPropSet->setPropertyValues( rPropNames, rValues );
+        }
+        else if( mxPropSet.is() )
+        {
+            const OUString* pPropName = rPropNames.getConstArray();
+            const OUString* pPropNameEnd = pPropName + rPropNames.getLength();
+            const Any* pValue = rValues.getConstArray();
+            for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
+                mxPropSet->setPropertyValue( *pPropName, *pValue );
+        }
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+// ============================================================================
+
+ScfPropSetHelper::ScfPropSetHelper( const sal_Char** ppcPropNames, sal_Int32 nPropCount ) :
     maNameSeq( nPropCount ),
     maValueSeq( nPropCount )
 {
-    DBG_ASSERT( nPropCount > 0, "ScfMultiPSHelper::ScfMultiPSHelper - invalid sequence size" );
-    DBG_ASSERT( ppPropNames && *ppPropNames, "ScfMultiPSHelper::ScfMultiPSHelper - no strings found" );
+    DBG_ASSERT( nPropCount > 0, "ScfPropSetHelper::ScfPropSetHelper - invalid sequence size" );
+    DBG_ASSERT( ppcPropNames && *ppcPropNames, "ScfPropSetHelper::ScfPropSetHelper - no strings found" );
 
-    const sal_Char** ppCurrName = ppPropNames;
+    const sal_Char** ppCurrName = ppcPropNames;
     for( sal_Int32 nIndex = 0; nIndex < nPropCount; ++nIndex, ++ppCurrName )
     {
         maNameSeq[ nIndex ] = OUString::createFromAscii( *ppCurrName );
-        DBG_ASSERT( !nIndex || maNameSeq[ nIndex - 1 ] < maNameSeq[ nIndex ],
-            "ScfMultiPSHelper::ScfMultiPSHelper - names MUST be ordered alphabetically" );
+        DBG_ASSERT( !nIndex || (maNameSeq[ nIndex - 1 ] < maNameSeq[ nIndex ]),
+            "ScfPropSetHelper::ScfPropSetHelper - names MUST be ordered alphabetically" );
     }
 }
 
-bool ScfMultiPSHelper::getPropertyValues(
-        const XMultiPropertySetRef& xMultiPS,
-        const XPropertySetRef& xPropSet )
+void ScfPropSetHelper::ReadFromPropertySet( const ScfPropertySet& rPropSet )
 {
-    bool bSuccess = false;
-    try
-    {
-        if( xMultiPS.is() )         // first try the XMultiPropertySet
-        {
-            maValueSeq = xMultiPS->getPropertyValues( maNameSeq );
-            bSuccess = true;
-        }
-        else if( xPropSet.is() )    // then try the XPropertySet
-        {
-            sal_Int32 nLen = maNameSeq.getLength();
-            for( sal_Int32 nIndex = 0; nIndex < nLen; ++nIndex )
-                maValueSeq[ nIndex ] = xPropSet->getPropertyValue( maNameSeq[ nIndex ] );
-            bSuccess = true;
-        }
-    }
-    catch( Exception& )
-    {
-    }
-    return bSuccess;
+    rPropSet.GetProperties( maValueSeq, maNameSeq );
 }
 
-bool ScfMultiPSHelper::setPropertyValues(
-        const XMultiPropertySetRef& xMultiPS,
-        const XPropertySetRef& xPropSet )
+void ScfPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 {
-    bool bSuccess = false;
-    try
-    {
-        if( xMultiPS.is() )         // first try the XMultiPropertySet
-        {
-            xMultiPS->setPropertyValues( maNameSeq, maValueSeq );
-            bSuccess = true;
-        }
-        else if( xPropSet.is() )    // then try the XPropertySet
-        {
-            sal_Int32 nLen = maNameSeq.getLength();
-            for( sal_Int32 nIndex = 0; nIndex < nLen; ++nIndex )
-                xPropSet->setPropertyValue( maNameSeq[ nIndex ], maValueSeq[ nIndex ] );
-            bSuccess = true;
-        }
-    }
-    catch( Exception& )
-    {
-    }
-    return bSuccess;
+    rPropSet.SetProperties( maNameSeq, maValueSeq );
 }
-
 
 // ============================================================================
 
