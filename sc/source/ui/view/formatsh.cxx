@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:36:21 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 20:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include <svx/bolnitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/scripttypeitem.hxx>
 
 #include "formatsh.hxx"
 #include "sc.hrc"
@@ -986,61 +987,51 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
         {
             case SID_ATTR_CHAR_WEIGHT:
             {
-                FontWeight      eWeight;
-
-                if( pSet )
-                {
-                    const SvxWeightItem& rWeight = (const SvxWeightItem&)pSet->Get( ATTR_FONT_WEIGHT );
-
-                    if( rWeight.ISA(SvxWeightItem) )
-                    {
-                        pTabViewShell->ApplyAttr( rWeight );
-                        pNewSet->Put( rWeight,rWeight.Which() );
-                    }
-                }
+                BYTE nScript = pTabViewShell->GetSelectionScriptType();
+                SfxItemPool& rPool = GetPool();
+                SvxScriptSetItem aSetItem( nSlot, rPool );
+                if ( pSet )
+                    aSetItem.PutItemForScriptType( nScript, pSet->Get( ATTR_FONT_WEIGHT ) );
                 else
                 {
-                    SvxWeightItem aWeightItem( (const SvxWeightItem&)
-                                               pAttrs->GetItem( ATTR_FONT_WEIGHT ) );
+                    //  toggle manually
 
-                    eWeight = (WEIGHT_BOLD == aWeightItem.GetWeight())
-                                ? WEIGHT_NORMAL
-                                : WEIGHT_BOLD;
+                    FontWeight eWeight = WEIGHT_BOLD;
+                    SvxScriptSetItem aOldSetItem( nSlot, rPool );
+                    aOldSetItem.GetItemSet().Put( pAttrs->GetItemSet(), FALSE );
+                    const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
+                    if ( pCore && ((const SvxWeightItem*)pCore)->GetWeight() == WEIGHT_BOLD )
+                        eWeight = WEIGHT_NORMAL;
 
-                    aWeightItem.SetWeight( eWeight );
-                    pTabViewShell->ApplyAttr( aWeightItem );
-                    pNewSet->Put( aWeightItem, aWeightItem.Which() );
+                    aSetItem.PutItemForScriptType( nScript, SvxWeightItem( eWeight ) );
                 }
+                pTabViewShell->ApplyUserItemSet( aSetItem.GetItemSet() );
+                pNewSet->Put( aSetItem.GetItemSet(), FALSE );
             }
             break;
 
             case SID_ATTR_CHAR_POSTURE:
             {
-                FontItalic      eItalic;
-
-                if( pSet )
-                {
-                    const SvxPostureItem& rPosture = (const SvxPostureItem&)pSet->Get( ATTR_FONT_POSTURE );
-
-                    if( rPosture.ISA(SvxPostureItem) )
-                    {
-                        pTabViewShell->ApplyAttr( rPosture );
-                        pNewSet->Put( rPosture,rPosture.Which() );
-                    }
-                }
+                BYTE nScript = pTabViewShell->GetSelectionScriptType();
+                SfxItemPool& rPool = GetPool();
+                SvxScriptSetItem aSetItem( nSlot, rPool );
+                if ( pSet )
+                    aSetItem.PutItemForScriptType( nScript, pSet->Get( ATTR_FONT_POSTURE ) );
                 else
                 {
-                    SvxPostureItem  aPosture( (const SvxPostureItem&)
-                                              pAttrs->GetItem( ATTR_FONT_POSTURE ) );
+                    //  toggle manually
 
-                    eItalic = (ITALIC_NORMAL == aPosture.GetPosture())
-                                ? ITALIC_NONE
-                                : ITALIC_NORMAL;
+                    FontItalic eItalic = ITALIC_NORMAL;
+                    SvxScriptSetItem aOldSetItem( nSlot, rPool );
+                    aOldSetItem.GetItemSet().Put( pAttrs->GetItemSet(), FALSE );
+                    const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
+                    if ( pCore && ((const SvxPostureItem*)pCore)->GetPosture() == ITALIC_NORMAL )
+                        eItalic = ITALIC_NONE;
 
-                    aPosture.SetPosture( eItalic );
-                    pTabViewShell->ApplyAttr( aPosture );
-                    pNewSet->Put( aPosture,aPosture.Which() );
+                    aSetItem.PutItemForScriptType( nScript, SvxPostureItem( eItalic ) );
                 }
+                pTabViewShell->ApplyUserItemSet( aSetItem.GetItemSet() );
+                pNewSet->Put( aSetItem.GetItemSet(), FALSE );
             }
             break;
 
@@ -1284,12 +1275,27 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
         switch ( nSlot )
         {
             case SID_ATTR_ALIGN_LINEBREAK:
-            case SID_ATTR_CHAR_FONT:
-            case SID_ATTR_CHAR_FONTHEIGHT:
             case SID_ATTR_CHAR_COLOR:
                 pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot ) ) );
                 rBindings.Invalidate( nSlot );
                 rBindings.Update( nSlot );
+                break;
+
+            case SID_ATTR_CHAR_FONT:
+            case SID_ATTR_CHAR_FONTHEIGHT:
+                {
+                    BYTE nScript = pTabViewShell->GetSelectionScriptType();
+
+                    SfxItemPool& rPool = GetPool();
+                    SvxScriptSetItem aSetItem( nSlot, rPool );
+                    USHORT nWhich = rPool.GetWhich( nSlot );
+                    aSetItem.PutItemForScriptType( nScript, pNewAttrs->Get( nWhich ) );
+
+                    pTabViewShell->ApplyUserItemSet( aSetItem.GetItemSet() );
+
+                    rBindings.Invalidate( nSlot );
+                    rBindings.Update( nSlot );
+                }
                 break;
 
             case SID_FRAME_LINESTYLE:
@@ -1466,6 +1472,19 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 
     rSet.Put( rAttrSet, FALSE );
 
+    //  choose font info according to selection script type
+    BYTE nScript = 0;       // GetSelectionScriptType never returns 0
+    if ( rSet.GetItemState( ATTR_FONT ) != SFX_ITEM_UNKNOWN )
+    {
+        if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
+        ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT, nScript );
+    }
+    if ( rSet.GetItemState( ATTR_FONT_HEIGHT ) != SFX_ITEM_UNKNOWN )
+    {
+        if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
+        ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT_HEIGHT, nScript );
+    }
+
     while ( nWhich )
     {
         switch(nWhich)
@@ -1510,6 +1529,19 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
     rSet.Put( rAttrSet, FALSE ); // ItemStates mitkopieren
+
+    //  choose font info according to selection script type
+    BYTE nScript = 0;       // GetSelectionScriptType never returns 0
+    if ( rSet.GetItemState( ATTR_FONT_WEIGHT ) != SFX_ITEM_UNKNOWN )
+    {
+        if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
+        ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT_WEIGHT, nScript );
+    }
+    if ( rSet.GetItemState( ATTR_FONT_POSTURE ) != SFX_ITEM_UNKNOWN )
+    {
+        if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
+        ScViewUtil::PutItemScript( rSet, rAttrSet, ATTR_FONT_POSTURE, nScript );
+    }
 
     SfxItemState eState;
 //  const SfxPoolItem* pItem;

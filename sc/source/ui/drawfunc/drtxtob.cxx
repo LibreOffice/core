@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 12:04:04 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 20:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@
 #include <svx/lspcitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/postitem.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <svx/shdditem.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/textanim.hxx>
@@ -619,15 +620,17 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 {
     SdrView*            pView = pViewData->GetScDrawView();
     const SfxItemSet*   pArgs = rReq.GetArgs();
+    USHORT              nSlot = rReq.GetSlot();
 
-    if ( !pArgs )
+    BOOL bArgsInReq = ( pArgs != NULL );
+    if ( !bArgsInReq )
     {
         SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
         pView->GetAttributes(aEditAttr);
         SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
         BOOL        bDone = TRUE;
 
-        switch ( rReq.GetSlot() )
+        switch ( nSlot )
         {
             case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
             {
@@ -778,7 +781,27 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
     if ( pArgs )
     {
-        pView->SetAttributes( *pArgs );
+        if ( bArgsInReq &&
+            ( nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_ATTR_CHAR_FONTHEIGHT ||
+              nSlot == SID_ATTR_CHAR_WEIGHT || nSlot == SID_ATTR_CHAR_POSTURE ) )
+        {
+            // font items from toolbox controller have to be applied for the right script type
+
+            USHORT nScript = pView->GetScriptType();
+
+            SfxItemPool& rPool = GetPool();
+            SvxScriptSetItem aSetItem( nSlot, rPool );
+            USHORT nWhich = rPool.GetWhich( nSlot );
+            aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
+
+            pView->SetAttributes( aSetItem.GetItemSet() );
+        }
+        else
+        {
+            // use args directly
+
+            pView->SetAttributes( *pArgs );
+        }
         pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
     }
 }
@@ -806,6 +829,19 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     //  direkte Attribute
 
     rDestSet.Put( aAttrSet );
+
+    //  choose font info according to selection script type
+
+    USHORT nScript = pView->GetScriptType();
+
+    if ( rDestSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_FONTINFO, nScript );
+    if ( rDestSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_FONTHEIGHT, nScript );
+    if ( rDestSet.GetItemState( EE_CHAR_WEIGHT ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_WEIGHT, nScript );
+    if ( rDestSet.GetItemState( EE_CHAR_ITALIC ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_ITALIC, nScript );
 
     //  Ausrichtung
 

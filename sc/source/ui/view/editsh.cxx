@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:36:21 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 20:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <svx/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/postitem.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <svx/shdditem.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/udlnitem.hxx>
@@ -579,6 +580,22 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
     {
         case SID_ATTR_CHAR_FONTHEIGHT:
         case SID_ATTR_CHAR_FONT:
+            {
+                if (pArgs)
+                {
+                    USHORT nScript = pEditView->GetSelectedScriptType();
+                    if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+
+                    SfxItemPool& rPool = GetPool();
+                    SvxScriptSetItem aSetItem( nSlot, rPool );
+                    USHORT nWhich = rPool.GetWhich( nSlot );
+                    aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
+
+                    aSet.Put( aSetItem.GetItemSet(), FALSE );
+                }
+            }
+            break;
+
         case SID_ATTR_CHAR_COLOR:
             {
                 if (pArgs)
@@ -593,18 +610,44 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_WEIGHT:
             {
-                BOOL bOld = ((const SvxWeightItem&)pEditView->GetAttribs().
-                                Get(EE_CHAR_WEIGHT)).GetValue() > WEIGHT_NORMAL;
-                aSet.Put( SvxWeightItem( bOld ? WEIGHT_NORMAL : WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
+                USHORT nScript = pEditView->GetSelectedScriptType();
+                if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                SfxItemPool& rPool = GetPool();
+
+                BOOL bOld = FALSE;
+                SvxScriptSetItem aOldSetItem( nSlot, rPool );
+                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), FALSE );
+                const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
+                if ( pCore && ((const SvxWeightItem*)pCore)->GetWeight() > WEIGHT_NORMAL )
+                    bOld = TRUE;
+
+                SvxScriptSetItem aSetItem( nSlot, rPool );
+                aSetItem.PutItemForScriptType( nScript,
+                            SvxWeightItem( bOld ? WEIGHT_NORMAL : WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
+                aSet.Put( aSetItem.GetItemSet(), FALSE );
+
                 rBindings.Invalidate( nSlot );
             }
             break;
 
         case SID_ATTR_CHAR_POSTURE:
             {
-                BOOL bOld = ((const SvxPostureItem&)pEditView->GetAttribs().
-                                Get(EE_CHAR_ITALIC)).GetValue() != ITALIC_NONE;
-                aSet.Put( SvxPostureItem( bOld ? ITALIC_NONE : ITALIC_NORMAL, EE_CHAR_ITALIC ) );
+                USHORT nScript = pEditView->GetSelectedScriptType();
+                if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                SfxItemPool& rPool = GetPool();
+
+                BOOL bOld = FALSE;
+                SvxScriptSetItem aOldSetItem( nSlot, rPool );
+                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), FALSE );
+                const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
+                if ( pCore && ((const SvxPostureItem*)pCore)->GetValue() != ITALIC_NONE )
+                    bOld = TRUE;
+
+                SvxScriptSetItem aSetItem( nSlot, rPool );
+                aSetItem.PutItemForScriptType( nScript,
+                            SvxPostureItem( bOld ? ITALIC_NONE : ITALIC_NORMAL, EE_CHAR_ITALIC ) );
+                aSet.Put( aSetItem.GetItemSet(), FALSE );
+
                 rBindings.Invalidate( nSlot );
             }
             break;
@@ -714,6 +757,20 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
 {
     SfxItemSet aAttribs = pEditView->GetAttribs();
     rSet.Put( aAttribs );
+
+    //  choose font info according to selection script type
+
+    USHORT nScript = pEditView->GetSelectedScriptType();
+    if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+
+    if ( rSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTINFO, nScript );
+    if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTHEIGHT, nScript );
+    if ( rSet.GetItemState( EE_CHAR_WEIGHT ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_WEIGHT, nScript );
+    if ( rSet.GetItemState( EE_CHAR_ITALIC ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_ITALIC, nScript );
 
     //  Unterstreichung
 
