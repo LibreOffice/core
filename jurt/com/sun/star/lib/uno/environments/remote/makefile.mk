@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,14 +70,6 @@ TARGET  = com_sun_star_lib_uno_environments_remote
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-GENJAVAFILES= 																\
-    $(MISC)$/java$/com$/sun$/star$/bridge$/XInstanceProvider.java			\
-    $(MISC)$/java$/com$/sun$/star$/container$/NoSuchElementException.java	\
-    $(MISC)$/java$/com$/sun$/star$/corba$/giop$/ReplyStatusType_1_2.java	\
-    $(MISC)$/java$/com$/sun$/star$/uno$/Exception.java						\
-    $(MISC)$/java$/com$/sun$/star$/uno$/RuntimeException.java				\
-    $(MISC)$/java$/com$/sun$/star$/uno$/XInterface.java
 
 JAVACLASSFILES= 										\
     $(CLASSDIR)$/$(PACKAGE)$/IMarshal.class				\

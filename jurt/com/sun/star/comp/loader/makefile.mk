@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,27 +70,6 @@ TARGET  = com_sun_star_comp_loader
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-GENJAVAFILES = 																			\
-    $(MISC)$/java$/com$/sun$/star$/lang$/IllegalArgumentException.java					\
-    $(MISC)$/java$/com$/sun$/star$/lang$/ServiceNotRegisteredException.java				\
-    $(MISC)$/java$/com$/sun$/star$/lang$/WrappedTargetException.java					\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XInitialization.java							\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XMultiServiceFactory.java						\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XServiceInfo.java								\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XSingleServiceFactory.java						\
-    $(MISC)$/java$/com$/sun$/star$/loader$/CannotActivateFactoryException.java        	\
-    $(MISC)$/java$/com$/sun$/star$/loader$/XImplementationLoader.java                 	\
-    $(MISC)$/java$/com$/sun$/star$/registry$/XRegistryKey.java                        	\
-    $(MISC)$/java$/com$/sun$/star$/registry$/RegistryValueType.java                   	\
-    $(MISC)$/java$/com$/sun$/star$/registry$/RegistryKeyType.java                     	\
-    $(MISC)$/java$/com$/sun$/star$/registry$/XSimpleRegistry.java                     	\
-    $(MISC)$/java$/com$/sun$/star$/registry$/InvalidRegistryException.java            	\
-    $(MISC)$/java$/com$/sun$/star$/registry$/InvalidValueException.java               	\
-    $(MISC)$/java$/com$/sun$/star$/registry$/MergeConflictException.java                \
-    $(MISC)$/java$/com$/sun$/star$/registry$/CannotRegisterImplementationException.java	\
-    $(MISC)$/java$/com$/sun$/star$/uno$/Exception.java									\
-    $(MISC)$/java$/com$/sun$/star$/uno$/RuntimeException.java
 
 JAVACLASSFILES=												\
     $(CLASSDIR)$/$(PACKAGE)$/FactoryHelper.class			\

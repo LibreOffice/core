@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,12 +70,6 @@ TARGET  = com_sun_star_comp_urlresolver
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # Files --------------------------------------------------------
-
-
-GENJAVAFILES = 															\
-    $(MISC)$/java$/com$/sun$/star$/bridge$/BridgeExistsException.java	\
-    $(MISC)$/java$/com$/sun$/star$/bridge$/XUnoUrlResolver.java
-    
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/UrlResolver.class

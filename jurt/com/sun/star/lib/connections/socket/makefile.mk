@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,16 +70,6 @@ TARGET  = com_sun_star_connections_socket
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-GENJAVAFILES= 																	\
-    $(MISC)$/java$/com$/sun$/star$/connection$/AlreadyAcceptingException.java	\
-    $(MISC)$/java$/com$/sun$/star$/connection$/ConnectionSetupException.java	\
-    $(MISC)$/java$/com$/sun$/star$/connection$/NoConnectException.java			\
-    $(MISC)$/java$/com$/sun$/star$/connection$/XAcceptor.java					\
-    $(MISC)$/java$/com$/sun$/star$/connection$/XConnection.java					\
-    $(MISC)$/java$/com$/sun$/star$/connection$/XConnector.java					\
-    $(MISC)$/java$/com$/sun$/star$/connection$/XConnectionBroadcaster.java		\
-    $(MISC)$/java$/com$/sun$/star$/io$/XStreamListener.java
 
 JAVACLASSFILES= 									\
     $(CLASSDIR)$/$(PACKAGE)$/socketAcceptor.class	\

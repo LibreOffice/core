@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2000-10-09 07:31:48 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,19 +70,6 @@ TARGET  = com_sun_star_comp_bridgefactory
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-GENJAVAFILES = 																\
-    $(MISC)$/java$/com$/sun$/star$/uno$/XInterface.java						\
-    $(MISC)$/java$/com$/sun$/star$/bridge$/BridgeExistsException.java		\
-    $(MISC)$/java$/com$/sun$/star$/bridge$/XBridgeFactory.java				\
-    $(MISC)$/java$/com$/sun$/star$/bridge$/XBridge.java						\
-    $(MISC)$/java$/com$/sun$/star$/bridge$/XInstanceProvider.java			\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XEventListener.java			\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XComponent.java			\
-    $(MISC)$/java$/com$/sun$/star$/container$/NoSuchElementException.java	\
-    $(MISC)$/java$/com$/sun$/star$/uno$/Exception.java						\
-    $(MISC)$/java$/com$/sun$/star$/io$/IOException.java						\
-    $(MISC)$/java$/com$/sun$/star$/connection$/XConnection.java
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/BridgeFactory.class

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:54 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,27 +71,16 @@ TARGET  = com_sun_star_uno
 
 # --- Files --------------------------------------------------------
 
-GENJAVAFILES = 											\
-    $(MISC)$/java$/$(PACKAGE)$/Exception.java			\
-    $(MISC)$/java$/$(PACKAGE)$/RuntimeException.java	\
-    $(MISC)$/java$/$(PACKAGE)$/TypeClass.java			\
-    $(MISC)$/java$/$(PACKAGE)$/Uik.java					\
-    $(MISC)$/java$/$(PACKAGE)$/XInterface.java
-
 JAVACLASSFILES= 											\
-    $(CLASSDIR)$/$(PACKAGE)$/Any.class						\
     $(CLASSDIR)$/$(PACKAGE)$/Ascii.class					\
     $(CLASSDIR)$/$(PACKAGE)$/AsciiString.class				\
     $(CLASSDIR)$/$(PACKAGE)$/BridgeTurner.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/Enum.class						\
     $(CLASSDIR)$/$(PACKAGE)$/IBridge.class					\
     $(CLASSDIR)$/$(PACKAGE)$/IEnvironment.class				\
     $(CLASSDIR)$/$(PACKAGE)$/IQueryInterface.class			\
     $(CLASSDIR)$/$(PACKAGE)$/Mapping.class					\
     $(CLASSDIR)$/$(PACKAGE)$/MappingException.class 		\
     $(CLASSDIR)$/$(PACKAGE)$/MappingWrapper.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/Type.class						\
-    $(CLASSDIR)$/$(PACKAGE)$/Union.class					\
     $(CLASSDIR)$/$(PACKAGE)$/UnoRuntime.class
 
 # --- Targets ------------------------------------------------------

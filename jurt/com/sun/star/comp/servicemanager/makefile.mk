@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,19 +70,6 @@ TARGET  = com_sun_star_comp_servicemanager
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-GENJAVAFILES = 																	\
-    $(MISC)$/java$/com$/sun$/star$/container$/ElementExistException.java		\
-    $(MISC)$/java$/com$/sun$/star$/container$/NoSuchElementException.java		\
-    $(MISC)$/java$/com$/sun$/star$/container$/XSet.java							\
-    $(MISC)$/java$/com$/sun$/star$/container$/XContentEnumerationAccess.java	\
-    $(MISC)$/java$/com$/sun$/star$/container$/XEnumeration.java					\
-    $(MISC)$/java$/com$/sun$/star$/container$/XEnumerationAccess.java			\
-    $(MISC)$/java$/com$/sun$/star$/container$/XElementAccess.java				\
-    $(MISC)$/java$/com$/sun$/star$/lang$/EventObject.java						\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XEventListener.java					\
-    $(MISC)$/java$/com$/sun$/star$/lang$/NoSuchMethodException.java				\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XComponent.java
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/ServiceManager.class

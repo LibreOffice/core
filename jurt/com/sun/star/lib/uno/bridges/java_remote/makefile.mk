@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,13 +70,6 @@ TARGET  = com_sun_star_lib_uno_bridges_java_remote
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-GENJAVAFILES= 													\
-    $(MISC)$/java$/com$/sun$/star$/bridge$/XBridge.java			\
-    $(MISC)$/java$/com$/sun$/star$/connection$/XConnection.java	\
-    $(MISC)$/java$/com$/sun$/star$/lang/XComponent.java			\
-    $(MISC)$/java$/com$/sun$/star$/io$/IOException.java			\
-    $(MISC)$/java$/com$/sun$/star$/uno$/XInterface.java					
 
 JAVACLASSFILES= 													\
     $(CLASSDIR)$/$(PACKAGE)$/XConnectionInputStream_Adapter.class	\

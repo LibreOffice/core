@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,19 +70,6 @@ TARGET  = com_sun_star_lib_uno_protocols_urp
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-GENJAVAFILES= \
-    $(MISC)$/java$/com$/sun$/star$/lang$/EventObject.java 				\
-    $(MISC)$/java$/com$/sun$/star$/lang$/XEventListener.java 			\
-    $(MISC)$/java$/com$/sun$/star$/uno$/TypeClass.java					\
-    $(MISC)$/java$/com$/sun$/star$/beans$/XPropertySet.java				\
-    $(MISC)$/java$/com$/sun$/star$/beans$/XPropertySetInfo.java			\
-    $(MISC)$/java$/com$/sun$/star$/beans$/UnknownPropertyException.java	\
-    $(MISC)$/java$/com$/sun$/star$/beans$/PropertyVetoException.java 	\
-    $(MISC)$/java$/com$/sun$/star$/beans$/XPropertyChangeListener.java 	\
-    $(MISC)$/java$/com$/sun$/star$/beans$/XVetoableChangeListener.java 	\
-    $(MISC)$/java$/com$/sun$/star$/beans$/Property.java 				\
-    $(MISC)$/java$/com$/sun$/star$/beans$/PropertyChangeEvent.java
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/urp.class	   		\
