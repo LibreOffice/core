@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-15 14:30:43 $
+#   last change: $Author: hjs $ $Date: 2001-06-15 17:51:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,11 @@ INCLUDE!:=$(shell echo $(INCLUDE:s/\stl//) | sed "s/[ \t]*-I/;/g" )
 PACKAGE_DIR=build$/$(ROUT)
 P_CONFIGURE_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(CONFIGURE_DIR)
 P_BUILD_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
+
+.IF "$(ADDITIONAL_FILES)"!=""
 P_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
+T_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i)
+.ENDIF			# "$(ADDITIONAL_FILES)"!=""
 
 
 ALLTAR : \
@@ -108,17 +112,17 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/$(TARFILE_NAME).tar
     +cd $(PACKAGE_DIR) && tar -xvf ../../$(ROUT)$/misc$/$(TARFILE_NAME).tar && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+echo make writeable...
 .IF "$(GUI)"=="WNT"
-    @+cd $(PACKAGE_DIR) && attrib /s -r && $(TOUCH) $(UNTAR_FLAG_FILE)
+    @+cd $(PACKAGE_DIR) && attrib /s -r && $(TOUCH) $(UNTAR_FLAG_FILE) >& $(NULLDEV)
 .ELSE			# "$(GUI)"=="WNT"
     @+cd $(PACKAGE_DIR) && chmod -R +w * && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ENDIF			# "$(GUI)"=="WNT"
     
 #patch
-$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES)
 .IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
     +cd $(PACKAGE_DIR) && echo no patch needed...
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
-    +cd $(PACKAGE_DIR) && ($(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p 2) && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && ($(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p2) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
@@ -166,14 +170,21 @@ $(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).tar
 
 .IF "$(P_ADDITIONAL_FILES)"!=""
 $(P_ADDITIONAL_FILES) : $(MISC)$/$(TARFILE_ROOTDIR)
-    +-touch $@
+#	+-touch $@
+    +-echo dummy > $@
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
+
+.IF "$(T_ADDITIONAL_FILES)"!=""
+$(T_ADDITIONAL_FILES) : $(PACKAGE_DIR)
+#	+-touch $@
+    +-echo dummy > $@
+.ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
     @+-$(RM) $(MISC)$/$(TARFILE_NAME).patch.tmp >& $(NULLDEV)
     @+-$(RM) $(TARFILE_NAME).patch.bak >& $(NULLDEV)
 #ignore returncode of 1 (indicates differences...)	
-    +-diff -rc $(MISC)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) | $(GREP) -v "diff -rc" | $(GREP) -v "Only in" | $(GREP) -v "Common sub" > $(MISC)$/$(TARFILE_NAME).patch.tmp
+    +-diff -rc $(MISC)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > $(MISC)$/$(TARFILE_NAME).patch.tmp
     @+-mv $(TARFILE_NAME).patch $(TARFILE_NAME).patch.bak >& $(NULLDEV)
     @+-mv $(MISC)$/$(TARFILE_NAME).patch.tmp $(TARFILE_NAME).patch >& $(NULLDEV)
     @+echo still some problems with win32 generated patches...
