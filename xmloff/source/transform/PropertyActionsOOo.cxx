@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:20:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,9 +378,10 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT_Y, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_DRAW, XML_TRANSPARENCY, XML_ATACTION_RENAME_NEG_PERCENT,
-                XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
-                                                 XML_OPACITY), 0 },
+
+    // #i25616#
+    { XML_NAMESPACE_DRAW, XML_TRANSPARENCY, XML_PTACTION_TRANSPARENCY, NO_PARAMS },
+
     { XML_NAMESPACE_DRAW, XML_TRANSPARENCY_NAME,
                 XML_ATACTION_RENAME_ENCODE_STYLE_NAME_REF,
                 XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
