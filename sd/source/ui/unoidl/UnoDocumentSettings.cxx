@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-06 10:37:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,8 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
-    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE
+    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
+    HANDLE_PRINTER_INDEPENDENT_LAYOUT
 };
 
 #define MID_PRINTER 1
@@ -292,6 +293,7 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      &::getCppuType((sal_Int16*)0),          0,  0 },
             { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,&::getCppuType((const sal_Int16*)0), 0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -819,6 +821,23 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 }
             }
             break;
+
+            case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
+            {
+                // Just propagate the new printer independent layout mode to
+                // the document and determine it really differs from the old
+                // one.
+                sal_Int16 nOldValue = pDoc->GetPrinterIndependentLayout ();
+                sal_Int16 nValue;
+                if (*pValues >>= nValue)
+                {
+                    pDoc->SetPrinterIndependentLayout (nValue);
+                    bChanged = (nValue != nOldValue);
+                    bOk = sal_True;
+                }
+            }
+            break;
+
             default:
                 throw UnknownPropertyException();
 
@@ -1063,6 +1082,13 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             {
                 SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
                 *pValue <<= (sal_Bool)rInfo.IsQueryLoadTemplate();
+            }
+            break;
+
+            case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
+            {
+                sal_Int16 nPrinterIndependentLayout = pDoc->GetPrinterIndependentLayout();
+                *pValue <<= nPrinterIndependentLayout;
             }
             break;
 
