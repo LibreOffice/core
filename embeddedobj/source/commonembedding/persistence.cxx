@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2004-10-08 11:15:44 $
+ *  last change: $Author: mav $ $Date: 2004-10-13 18:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,9 +440,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     aArgs[2].Value <<= m_bReadOnly;
     aArgs[3].Name = ::rtl::OUString::createFromAscii( "FilterName" );
     aArgs[3].Value <<= aFilterName;
+
+    uno::Reference< io::XInputStream > xTempInpStream;
     if ( !xDoc.is() )
     {
-        uno::Reference< io::XInputStream > xTempInpStream = createTempInpStreamFromStor( xStorage, m_xFactory );
+        xTempInpStream = createTempInpStreamFromStor( xStorage, m_xFactory );
         if ( !xTempInpStream.is() )
             throw uno::RuntimeException();
 
