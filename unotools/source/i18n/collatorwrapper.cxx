@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorwrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-02 17:27:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-05 16:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ CollatorWrapper::loadCollatorAlgorithmWithEndUserOption (
     try
     {
         if (mxInternationalCollator.is())
-            return mxInternationalCollator->loadCollatorAlgorithmWithEndUserOption (
+            mxInternationalCollator->loadCollatorAlgorithmWithEndUserOption (
                                                         rAlgorithm, rLocale, rOption);
     }
     catch (uno::RuntimeException& rRuntimeException)
