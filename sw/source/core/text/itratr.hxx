@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:54:02 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ public:
     sal_Bool IsSymbol( const xub_StrLen nPos );
 
     // Fuehrt ChgPhysFnt aus, wenn Seek() sal_True zurueckliefert.
-    sal_Bool SeekAndChg( const xub_StrLen nPos, OutputDevice *pOut );
-    sal_Bool SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFont = sal_False );
+    sal_Bool SeekAndChg( const xub_StrLen nPos, OutputDevice* pOut );
+    sal_Bool SeekStartAndChg( OutputDevice* pOut, const sal_Bool bParaFont = sal_False );
 
     // Gibt es ueberhaupt Attributwechsel ?
     inline sal_Bool HasHints() const { return 0 != pHints; }
