@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-14 21:40:02 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 09:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2129,46 +2129,6 @@ ToolBox RID_FULLSCREENTOOLBOX
         ToolBoxItem
         {
             Identifier = SID_WIN_FULLSCREEN ;
-        };
-    };
-};
-
-String RID_RECORDINGTOOLBOX
-{
-    Text = "" ;
-    /*
-    Text = "Makro Aufzeichnung";
-    Text [ENGLISH] = "Macro Recorder";
-    Text [english_us] = "Macro Recorder";
-*/
-};
-
-ToolBox RID_RECORDINGTOOLBOX
-{
-    HelpId = HID_RECORDINGTOOLBOX ;
-    ButtonType = BUTTON_SYMBOL ;
-    LineSpacing = TRUE ;
-    Border = TRUE ;
-    Scroll = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = FALSE ;
-    Zoomable = TRUE ;
-    Customize = FALSE ;
-    FloatingMode = TRUE ;
-    Hide = TRUE ;
-    _FloatingPosMapMode = MAP_APPFONT ;
-    _FloatingPosX = -50 ;
-    _FloatingPosY = -70 ;
-    FloatingLines = 1 ;
-    HideWhenDeactivate = TRUE ;
-    Align = BOXALIGN_TOP ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_RECORDMACRO ;
         };
     };
 };
