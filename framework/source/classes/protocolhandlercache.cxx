@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocolhandlercache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:24:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ PatternHash::iterator PatternHash::findPatternKey( const ::rtl::OUString& sURL )
 HandlerHash* HandlerCache::m_pHandler  = NULL;
 PatternHash* HandlerCache::m_pPattern  = NULL;
 sal_Int32    HandlerCache::m_nRefCount = 0   ;
+HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
 
 //_________________________________________________________________________________________________________________
 
@@ -168,9 +169,9 @@ HandlerCache::HandlerCache()
         {
             m_pHandler = new HandlerHash();
             m_pPattern = new PatternHash();
-
-            HandlerCFGAccess aConfig(PACKAGENAME_PROTOCOLHANDLER);
-            aConfig.read(&m_pHandler,&m_pPattern);
+            m_pConfig  = new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER);
+            m_pConfig->read(&m_pHandler,&m_pPattern);
+            m_pConfig->setCache(this);
         }
 
         ++m_nRefCount;
@@ -193,13 +194,16 @@ HandlerCache::~HandlerCache()
 
         if( m_nRefCount==1)
         {
+            m_pConfig->setCache(NULL);
             m_pHandler->free();
             m_pPattern->free();
 
+            delete m_pConfig;
             delete m_pHandler;
             delete m_pPattern;
-            m_pHandler=NULL;
-            m_pPattern=NULL;
+            m_pConfig = NULL;
+            m_pHandler= NULL;
+            m_pPattern= NULL;
         }
 
         --m_nRefCount;
@@ -259,6 +263,27 @@ sal_Bool HandlerCache::exists( const ::rtl::OUString& sURL ) const
 }
 
 //_________________________________________________________________________________________________________________
+void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
+{
+    // SAFE ->
+    WriteGuard aWriteLock( LockHelper::getGlobalLock() );
+
+    HandlerHash* pOldHandler = m_pHandler;
+    PatternHash* pOldPattern = m_pPattern;
+
+    m_pHandler = pHandler;
+    m_pPattern = pPattern;
+
+    pOldHandler->free();
+    pOldPattern->free();
+    delete pOldHandler;
+    delete pOldPattern;
+
+    aWriteLock.unlock();
+    // <- SAFE
+}
+
+//_________________________________________________________________________________________________________________
 
 /**
     @short      dtor of the config access class
@@ -273,6 +298,9 @@ sal_Bool HandlerCache::exists( const ::rtl::OUString& sURL ) const
 HandlerCFGAccess::HandlerCFGAccess( const ::rtl::OUString& sPackage )
     : ConfigItem( sPackage )
 {
+    css::uno::Sequence< ::rtl::OUString > lListenPathes(1);
+    lListenPathes[0] = SETNAME_HANDLER;
+    EnableNotification(lListenPathes);
 }
 
 //_________________________________________________________________________________________________________________
@@ -345,6 +373,22 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
         // ínsert the handler info into the normal handler cache
         (**ppHandler)[lNames[nSource]] = aHandler;
         ++nSource;
+    }
+}
+
+//_________________________________________________________________________________________________________________
+void HandlerCFGAccess::Notify(const css::uno::Sequence< rtl::OUString >& lPropertyNames)
+{
+    HandlerHash* pHandler = new HandlerHash;
+    PatternHash* pPattern = new PatternHash;
+
+    read(&pHandler, &pPattern);
+    if (m_pCache)
+        m_pCache->takeOver(pHandler, pPattern);
+    else
+    {
+        delete pHandler;
+        delete pPattern;
     }
 }
 

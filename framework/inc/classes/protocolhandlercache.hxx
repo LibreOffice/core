@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocolhandlercache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:17:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
 
     @modified       30.04.2002 11:19, as96863
 */
+
+class HandlerCFGAccess;
 class HandlerCache
 {
     /* member */
@@ -183,6 +185,8 @@ class HandlerCache
         static HandlerHash* m_pHandler;
         /// maps URL pattern to handler names
         static PatternHash* m_pPattern;
+        /// informs about config updates
+        static HandlerCFGAccess* m_pConfig;
         /// ref count to construct/destruct internal member lists on demand by using singleton mechanism
         static sal_Int32 m_nRefCount;
 
@@ -195,6 +199,8 @@ class HandlerCache
         sal_Bool search( const ::rtl::OUString& sURL, ProtocolHandler* pReturn ) const;
         sal_Bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
         sal_Bool exists( const ::rtl::OUString& sURL ) const;
+
+        void takeOver(HandlerHash* pHandler, PatternHash* pPattern);
 };
 
 //_________________________________________________________________________________________________________________
@@ -217,11 +223,17 @@ class HandlerCache
 */
 class HandlerCFGAccess : public ::utl::ConfigItem
 {
+    private:
+        HandlerCache* m_pCache;
+
     /* interface */
     public:
                  HandlerCFGAccess( const ::rtl::OUString& sPackage  );
         void     read            (       HandlerHash**    ppHandler ,
                                          PatternHash**    ppPattern );
+
+        void setCache(HandlerCache* pCache) {m_pCache = pCache;};
+        virtual void Notify(const css::uno::Sequence< rtl::OUString >& lPropertyNames);
 };
 
 } // namespace framework
