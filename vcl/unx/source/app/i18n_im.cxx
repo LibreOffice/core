@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:27:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@
 
 #ifndef _SAL_I18N_STATUS_HXX
 #include <i18n_status.hxx>
+#endif
+
+#ifdef MACOSX
+#include <osl/process.h>
+#include <tools/string.hxx>
 #endif
 
 using namespace vcl;
@@ -223,6 +228,7 @@ static char*
 SetSystemLocale( const char* p_inlocale )
 {
     char *p_outlocale;
+
     if ( (p_outlocale = setlocale(LC_ALL, p_inlocale)) == NULL )
     {
         fprintf( stderr,
