@@ -13,6 +13,12 @@ common
 	}
 	reset
 	{
+        *o
+        *r
+        *s
+        *o:
+        *r:
+        *s:
 		*mkout
 		*deliver
 		cvsmodules
@@ -20,6 +26,7 @@ common
 		__mgrdir
         rsc_once
         *zipdep
+        AWK
 		BIG_GOODIES
 		BIG_SVX
 		BIG_TOOLS
@@ -54,6 +61,7 @@ common
 		DMAKE_INC
 		DMAKE
 		DYNAMIC_CRT
+		ENABLE_CRASHDUMP
 		ENABLEUNICODE
 		GCRINC
 		GCRLIB
