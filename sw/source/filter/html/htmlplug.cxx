@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:48:09 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,12 @@
  *
  *
  ************************************************************************/
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 
 #pragma hdrstop
@@ -75,24 +81,13 @@
 #ifndef _FRMHTML_HXX //autogen
 #include <sfx2/frmhtml.hxx>
 #endif
-#ifndef _FRAMEOBJ_HXX //autogen
-#include <sfx2/frameobj.hxx>
-#endif
 #ifndef _FRMHTMLW_HXX //autogen
 #include <sfx2/frmhtmlw.hxx>
 #endif
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _APPLET_HXX //autogen
-#include <so3/applet.hxx>
-#endif
-#ifndef _PLUGIN_HXX //autogen
-#include <so3/plugin.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
 #endif
@@ -129,7 +124,7 @@
 #include <frmfmt.hxx>
 #endif
 
-
+#include <svtools/ownlist.hxx>
 #include "pam.hxx"
 #include "doc.hxx"
 #include "ndtxt.hxx"
@@ -140,6 +135,17 @@
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "swcss1.hxx"
+
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#include <comphelper/embeddedobjectcontainer.hxx>
+#include <sot/clsids.hxx>
+
+using namespace com::sun::star;
 
 #define HTML_DFLT_EMBED_WIDTH ((MM50*5)/2)
 #define HTML_DFLT_EMBED_HEIGHT ((MM50*5)/2)
@@ -484,19 +490,27 @@ void SwHTMLParser::InsertEmbed()
         return;
 
     // das Plugin anlegen
-    SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
-    SvFactory *pPlugInFactory = (SvFactory*) SvPlugInObject::ClassFactory();
-    SvPlugInObjectRef pPlugin =
-        &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
+    comphelper::EmbeddedObjectContainer aCnt;
+    ::rtl::OUString aObjName;
+    uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aObjName );
+    svt::EmbeddedObjectRef::TryRunningState( xObj );
+    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+    if ( xSet.is() )
+    {
+        if( bHasURL )
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                uno::makeAny( ::rtl::OUString( aURL ) ) );
+        if( bHasType )
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
+                uno::makeAny( ::rtl::OUString( aType ) ) );
 
-    pPlugin->EnableSetModified( FALSE );
-    pPlugin->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
-    if( bHasURL )
-        pPlugin->SetURL( aURLObj );
-    if( bHasType )
-        pPlugin->SetMimeType( aType );
-    pPlugin->SetCommandList( aCmdLst );
-    pPlugin->EnableSetModified( TRUE );
+        uno::Sequence < beans::PropertyValue > aProps;
+        aCmdLst.FillSequence( aProps );
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), uno::makeAny( aProps ) );
+
+        // TODO/LATER: EnableSetModified?!
+        //pPlugin->EnableSetModified( TRUE );
+    }
 
     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
@@ -525,7 +539,7 @@ void SwHTMLParser::InsertEmbed()
     SetSpace( aSpace, aItemSet, aPropInfo, aFrmSet );
 
     // und in das Dok einfuegen
-    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, pPlugin, &aFrmSet );
+    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, xObj, &aFrmSet );
 
     // Namen am FrmFmt setzen
     if( aName.Len() )
@@ -932,13 +946,48 @@ void SwHTMLParser::InsertFloatingFrame()
     SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, pOptions );
 
     // den Floating-Frame anlegen
-    SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-    SfxFrameObjectRef pFrame = new SfxFrameObject();
-    pFrame->DoInitNew( pStor );
+    comphelper::EmbeddedObjectContainer aCnt;
+    ::rtl::OUString aObjName;
+    uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aObjName );
 
-    pFrame->EnableSetModified( FALSE );
-    pFrame->SetFrameDescriptor( &aFrameDesc );
-    pFrame->EnableSetModified( TRUE );
+    //pFrame->EnableSetModified( FALSE );
+    try
+    {
+        // TODO/MBA: testing
+        uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+        ::rtl::OUString aName = aFrameDesc.GetName();
+        ScrollingMode eScroll = aFrameDesc.GetScrollingMode();
+        sal_Bool bHasBorder = aFrameDesc.HasFrameBorder();
+        Size aMargin = aFrameDesc.GetMargin();
+
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), uno::makeAny( ::rtl::OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), uno::makeAny( aName ) );
+
+        if ( eScroll == ScrollingAuto )
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                uno::makeAny( sal_True ) );
+        else
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
+
+        //if ( aFrmDescr.IsFrameBorderSet() )
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                uno::makeAny( bHasBorder ) );
+        /*else
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                uno::makeAny( sal_True ) );*/
+
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+            uno::makeAny( sal_Int32( aMargin.Width() ) ) );
+
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+            uno::makeAny( sal_Int32( aMargin.Height() ) ) );
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    //pFrame->EnableSetModified( TRUE );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
@@ -961,7 +1010,7 @@ void SwHTMLParser::InsertFloatingFrame()
     SetSpace( aSpace, aItemSet, aPropInfo, aFrmSet );
 
     // und in das Dok einfuegen
-    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, pFrame, &aFrmSet );
+    SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam, xObj, &aFrmSet );
 
     // den alternativen Namen setzen
     SwNoTxtNode *pNoTxtNd =
@@ -1066,27 +1115,22 @@ USHORT SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 
     SwHTMLFrmType eType = HTML_FRMTYPE_OLE;
 
-    SvPlugInObjectRef pPlugin( rObj.GetOleRef() );
-    if( pPlugin.Is() )
+    uno::Reference < embed::XClassifiedObject > xClass ( rObj.GetOleRef(), uno::UNO_QUERY );
+    SvGlobalName aClass( xClass->getClassID() );
+    if( aClass == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         eType = HTML_FRMTYPE_PLUGIN;
     }
-    else
+    else if( aClass == SvGlobalName( SO3_IFRAME_CLASSID ) )
     {
-        SfxFrameObjectRef pFrame( rObj.GetOleRef() );
-        if( pFrame.Is() )
-        {
-            eType = HTML_FRMTYPE_IFRAME;
-        }
-#ifdef SOLAR_JAVA
-        else
-        {
-            SvAppletObjectRef pApplet( rObj.GetOleRef() );
-            if( pApplet.Is() )
-                eType = HTML_FRMTYPE_APPLET;
-        }
-#endif
+        eType = HTML_FRMTYPE_IFRAME;
     }
+#ifdef SOLAR_JAVA
+    else if( aClass == SvGlobalName( SO3_APPLET_CLASSID ) )
+    {
+        eType = HTML_FRMTYPE_APPLET;
+    }
+#endif
 
     return eType;
 }
@@ -1105,23 +1149,14 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
 
     SwOLEObj &rObj = pOLENd->GetOLEObj();
-    SvPlugInObjectRef pPlugin( rObj.GetOleRef() );
-#ifdef SOLAR_JAVA
-    SvAppletObjectRef pApplet( rObj.GetOleRef() );
-#endif
-    SfxFrameObjectRef pFrame( rObj.GetOleRef() );
+
+    uno::Reference < embed::XEmbeddedObject > xObj( rObj.GetOleRef() );
+    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
     BOOL bHiddenEmbed = FALSE;
 
-    ASSERT( !pFrame.Is() || rHTMLWrt.IsHTMLMode(HTMLMODE_FLOAT_FRAME),
-            "Floating-Frame wird exportiert, aber Modus ist nicht aktiviert" );
-
-    if( !pPlugin.Is() &&
-#ifdef SOLAR_JAVA
-        !pApplet.Is() &&
-#endif
-        !pFrame.Is() )
+    if( !xSet.is() )
     {
-        ASSERT( pPlugin.Is(), "unbekanntes Inplace-Object" );
+        DBG_ERROR("Unknown Object" );
         return rWrt;
     }
 
@@ -1135,18 +1170,21 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     if( rFrmFmt.GetName().Len() )
         rHTMLWrt.OutImplicitMark( rFrmFmt.GetName(),
                                   pMarkToOLE );
-
+    uno::Any aAny;
+    SvGlobalName aGlobName( xObj->getClassID() );
     ByteString sOut('<');
-    if( pPlugin.Is() )
+    if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // erstmal das Plug-spezifische
         sOut += sHTML_embed;
 
+        ::rtl::OUString aStr;
         String aURL;
-        if( pPlugin->GetURL() != NULL )
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginURL" ) );
+        if( (aAny >>= aStr) && aStr.getLength() )
         {
             aURL = INetURLObject::AbsToRel(
-                      pPlugin->GetURL()->GetMainURL( INetURLObject::NO_DECODE ),
+                      aStr,
                       INetURLObject::WAS_ENCODED,
                       INetURLObject::DECODE_UNAMBIGUOUS);
         }
@@ -1159,8 +1197,9 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             sOut = '\"';
         }
 
-        const String& aType = pPlugin->GetMimeType();
-        if( aType.Len() )
+        ::rtl::OUString aType;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType" ) );
+        if( (aAny >>= aType) && aType.getLength() )
         {
             ((sOut += ' ') += sHTML_O_type) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
@@ -1182,21 +1221,21 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                 : HTML_FRMOPTS_EMBED;
         }
     }
-#ifdef SOLAR_JAVA
-    else if( pApplet.Is() )
+    else if( aGlobName == SvGlobalName( SO3_APPLET_CLASSID ) )
     {
         // oder das Applet-Spezifische
 
         sOut += sHTML_applet;
 
         // CODEBASE
-        const XubString& rURL = pApplet->GetCodeBase();
-        if( rURL.Len() )
+        ::rtl::OUString aCd;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase" ) );
+        if( (aAny >>= aCd) && aCd.getLength() )
         {
 #if OSL_DEBUG_LEVEL > 1
             String sTmp( INetURLObject::GetBaseURL() );
 #endif
-            String sCodeBase( INetURLObject::AbsToRel(rURL,
+            String sCodeBase( INetURLObject::AbsToRel(aCd,
                                     INetURLObject::WAS_ENCODED,
                                     INetURLObject::DECODE_UNAMBIGUOUS) );
             if( sCodeBase.Len() )
@@ -1209,28 +1248,35 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         // CODE
+        ::rtl::OUString aClass;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCode" ) );
+        aAny >>= aClass;
         ((sOut += ' ') += sHTML_O_code) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), pApplet->GetClass(), rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = '\"';
 
         // NAME
-        const String &rName = pApplet->GetName();
-        if( rName.Len() )
+        ::rtl::OUString aAppletName;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletName" ) );
+        aAny >>= aAppletName;
+        if( aAppletName.getLength() )
         {
             ((sOut += ' ') += sHTML_O_name) += "=\"";
             rWrt.Strm() << sOut.GetBuffer();
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
 
-        if( pApplet->IsMayScript() )
+        sal_Bool bScript = sal_False;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript" ) );
+        aAny >>= bScript;
+        if( bScript )
             (sOut += ' ') += sHTML_O_mayscript;
 
         nFrmOpts = bInCntnr ? HTML_FRMOPTS_APPLET_CNTNR
                             : HTML_FRMOPTS_APPLET;
     }
-#endif
     else
     {
         // oder das Flating-Frame spezifische
@@ -1239,8 +1285,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         rWrt.Strm() << sOut.GetBuffer();
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(),
-                                        pFrame->GetFrameDescriptor(),
-                                        FALSE, 0, rHTMLWrt.eDestEnc,
+                                        xSet,
+                                        rHTMLWrt.eDestEnc,
                                         &rHTMLWrt.aNonConvertableCharacters );
         sOut.Erase();
 
@@ -1258,18 +1304,22 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmOpts );
 
-#ifdef SOLAR_JAVA
-    if( pApplet.Is() )
+    if( aGlobName == SvGlobalName( SO3_APPLET_CLASSID ) )
     {
         // fuer Applets die Parameter als eigene Tags ausgeben
         // und ein </APPLET> schreiben
 
-        const SvCommandList& rCommands = pApplet->GetCommandList();
+        uno::Sequence < beans::PropertyValue > aProps;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands" ) );
+        aAny >>= aProps;
+
+        SvCommandList aCommands;
+        aCommands.FillFromSequence( aProps );
         SvULongs aParams;
-        ULONG i = rCommands.Count();
+        ULONG i = aCommands.Count();
         while( i > 0 )
         {
-            const SvCommand& rCommand = rCommands[ --i ];
+            const SvCommand& rCommand = aCommands[ --i ];
             const String& rName = rCommand.GetCommand();
             USHORT nType = SwApplet_Impl::GetOptionType( rName, TRUE );
             if( SWHTML_OPTTYPE_TAG == nType )
@@ -1293,7 +1343,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         USHORT ii = aParams.Count();
         while( ii > 0  )
         {
-            const SvCommand& rCommand = rCommands[ aParams[--ii] ];
+            const SvCommand& rCommand = aCommands[ aParams[--ii] ];
             const String& rName = rCommand.GetCommand();
             const String& rValue = rCommand.GetArgument();
             rHTMLWrt.OutNewLine();
@@ -1307,20 +1357,24 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
-        if( rCommands.Count() )
+        if( aCommands.Count() )
             rHTMLWrt.OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_applet, FALSE );
     }
     else
-#endif
-    if( pPlugin.Is() )
+    if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // fuer Plugins die Paramater als Optionen schreiben
 
-        const SvCommandList& rCommands = pPlugin->GetCommandList();
-        for( ULONG i=0; i<rCommands.Count(); i++ )
+        uno::Sequence < beans::PropertyValue > aProps;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands" ) );
+        aAny >>= aProps;
+
+        SvCommandList aCommands;
+        aCommands.FillFromSequence( aProps );
+        for( ULONG i=0; i<aCommands.Count(); i++ )
         {
-            const SvCommand& rCommand = rCommands[ i ];
+            const SvCommand& rCommand = aCommands[ i ];
             const String& rName = rCommand.GetCommand();
 
             if( SwApplet_Impl::GetOptionType( rName, FALSE ) == SWHTML_OPTTYPE_TAG )
@@ -1363,11 +1417,12 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
 
     // Inhalt des Nodes als Grafik speichern
-    SvEmbeddedObjectRef xRef( pOLENd->GetOLEObj().GetOleRef() );
-    GDIMetaFile aPic;
-    if( xRef.Is() && xRef->GetGDIMetaFile( aPic ).GetActionCount() )
+    //uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
+    //GDIMetaFile aPic;
+    //if( xObj.is() && xRef->GetGDIMetaFile( aPic ).GetActionCount() )
     {
-        Graphic aGrf( aPic );
+        //Graphic aGrf( aPic );
+        Graphic aGrf( *pOLENd->GetGraphic() );
         String aGrfNm;
         const String* pTempFileName = rHTMLWrt.GetOrigFileName();
         if(pTempFileName)
