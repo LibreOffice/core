@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:13:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1854,10 +1854,13 @@ int lcl_CheckForm( const SwForm& rForm, BYTE nLvl, String& rText )
     int nRet = 4;
     rText.Erase();
 
-    SwFormTokenEnumerator aIter( rForm.CreateTokenEnumerator( nLvl ));
+    // #i21237#
+    SwFormTokens aPattern = rForm.GetPattern(nLvl);
+    SwFormTokens::iterator aIt = aPattern.begin();
     bool bPgNumFnd = false;
     FormTokenType eTType;
-    while( TOKEN_END != ( eTType = aIter.GetNextTokenType() ) && !bPgNumFnd )
+    // #i21237#
+    while( TOKEN_END != ( eTType = (++aIt)->eTokenType ) && !bPgNumFnd )
     {
         switch( eTType )
         {
@@ -1870,7 +1873,7 @@ int lcl_CheckForm( const SwForm& rForm, BYTE nLvl, String& rText )
             break;
         case TOKEN_TEXT:
             nRet = 3;
-            rText = aIter.GetCurToken().sText.Copy( 0, 5 );
+            rText = aIt->sText.Copy( 0, 5 ); // #i21237#
             break;
 
         case TOKEN_LINK_START:
@@ -1893,9 +1896,13 @@ bool lcl_IsHyperlinked(const SwForm& rForm, USHORT nTOXLvl)
 {
     for (USHORT nI = 1; nI < nTOXLvl; ++nI)
     {
-        SwFormTokenEnumerator aIter( rForm.CreateTokenEnumerator(nI));
+        // #i21237#
+        SwFormTokens aPattern = rForm.GetPattern(nI);
+        SwFormTokens::iterator aIt = aPattern.begin();
+
         FormTokenType eTType;
-        while (TOKEN_END != (eTType = aIter.GetNextTokenType()))
+        // #i21237#
+        while (TOKEN_END != (eTType = (++aIt)->eTokenType))
         {
             switch (eTType)
             {
@@ -2031,16 +2038,18 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                     if( nLvl != nMinLvl )
                     {
                         // collect this templates into the \t otion
-                        for( n = rColls.Count(); n; )
-                            if( MAXLEVEL > (nLvl = ( pColl =
-                                    rColls[ --n ] )->GetOutlineLevel() ) &&
-                                nMinLvl <= nLvl )
+                        for( n = rColls.Count(); n;)
+                        {
+                            pColl = rColls[--n];
+                            nLvl =  pColl->GetOutlineLevel();
+                            if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
                             {
                                 if( sTOption.Len() )
                                     sTOption += ';';
                                 (( sTOption += pColl->GetName() ) += ';' )
                                         += String::CreateFromInt32( nLvl + 1 );
                             }
+                        }
                     }
                 }
 
