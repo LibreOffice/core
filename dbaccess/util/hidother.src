@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:53:41 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 09:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,9 +183,15 @@ hidspecial HID_DSADMIN_QUERIES_NEW                      { HelpId = HID_DSADMIN_Q
 hidspecial HID_DSADMIN_QUERIES_EDIT                     { HelpId = HID_DSADMIN_QUERIES_EDIT; };
 hidspecial HID_DSADMIN_QUERIES_DELETE                   { HelpId = HID_DSADMIN_QUERIES_DELETE; };
 
+hidspecial HID_SQLERROR_EXCHAIN_ERRORS                  { HelpId = HID_SQLERROR_EXCHAIN_ERRORS; };
+hidspecial HID_DBACCESS_START                           { HelpId = HID_DBACCESS_START; };
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/02/05 09:53:41  oj
+ *  new ids
+ *
  *  Revision 1.12  2001/01/26 06:56:39  fs
  *  some new help ids for the query administration
  *
