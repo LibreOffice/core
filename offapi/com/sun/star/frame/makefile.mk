@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 16:57:02 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:56:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ IDLFILES=\
     Task.idl\
     TemplateAccess.idl\
     TerminationVetoException.idl\
+    TransientDocumentsDocumentContentFactory.idl \
     WindowArrange.idl\
     XBrowseHistoryRegistry.idl\
     XComponentLoader.idl\
@@ -147,6 +148,7 @@ IDLFILES=\
     XTask.idl\
     XTasksSupplier.idl\
     XTerminateListener.idl\
+    XTransientDocumentsDocumentContentFactory.idl\
     XUrlList.idl\
     XWindowArranger.idl
 
