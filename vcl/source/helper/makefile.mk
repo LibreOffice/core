@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:58:14 $
+#   last change: $Author: vg $ $Date: 2003-04-11 17:29:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,12 +81,6 @@ SLOFILES=\
 
 .IF "$(remote)" == ""
 SLOFILES+=$(SLO)$/xconnection.obj
-.ENDIF
-
-.IF "$(GUI)" == "UNX"
-SLOFILES+=\
-    $(SLO)$/ppdparser.obj	\
-    $(SLO)$/strhelper.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
