@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:39:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,5 +543,6 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text[ catalan ] = "Currently used memory";
     Text[ finnish ] = "Zur Zeit verbrauchter Speicherplatz";
 };
+
 
 
