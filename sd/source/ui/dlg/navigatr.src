@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 00:45:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 18:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,72 +94,18 @@ Window FLT_NAVIGATOR
                 AutoCheck = TRUE ;
                 Identifier = TBI_LIVE ;
                 HelpId = HID_SD_NAVIGATOR_TBI_LIVE ;
-                Text = "Livemodus" ;
-                Text [ ENGLISH ] = "Live mode" ;
-                Text [ english_us ] = "Live Mode" ;
-                Text [ italian ] = "Modo live" ;
-                Text [ spanish ] = "Modo en vivo" ;
-                Text [ french ] = "Mode Live" ;
-                Text [ dutch ] = "Livemodus" ;
-                Text [ danish ] = "Livetilstand" ;
-                Text [ portuguese_brazilian ] = "Modo Ao Vivo" ;
-                Text [ portuguese ] = "Ao vivo" ;
-                Text [ swedish ] = "Liveläge" ;
-                Text[ chinese_simplified ] = "å®å†µæ¨¡å¼";
-                Text[ russian ] = "Ğåæèì èíòåğàêòèâíîãî ğåäàêòèğîâàíèÿ";
-                Text[ polish ] = "Tryb na ¿ywo";
-                Text[ japanese ] = "ãƒ©ã‚¤ãƒ–ãƒ¢ãƒ¼ãƒ‰";
-                Text[ chinese_traditional ] = "å¯¦æ³æ¨¡å¼";
-                Text[ arabic ] = "ÇáæÖÚ ÇáãÈÇÔÑ";
-                Text[ greek ] = "ÊáôÜóôáóç æùíôáíŞò óıíäåóçò";
-                Text[ korean ] = "ë¼ì´ë¸Œ ëª¨ë“œ";
-                Text[ turkish ] = "\"Canlı sunu\" kipi";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Mode en viu";
-                Text[ finnish ] = "Muokkaa esitettäessä";
-                Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸–à¹ˆà¸²à¸¢à¸—à¸­à¸”à¸ªà¸”";
-                Text[ czech ] = "Å½ivÃ¡ prezentace";
-                Text[ hebrew ] = "Livemodus";
-                Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¥à¤¯à¤•à¥à¤· à¤ªà¥à¤°à¤•à¤¾à¤°";
-                Text[ slovak ] = "Å½ivÃ¡ prezentÃ¡cia";
-                Text[ hungarian ] = "Ã‰lÅ‘ mÃ³d";
-                Text[ slovenian ] = "NaÄin v Å¾ivo";
+                Text [ de ] = "Livemodus" ;
+                Text [ en-US ] = "Live Mode" ;
+                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 AutoCheck = TRUE ;
                 Identifier = TBI_PEN ;
                 HelpId = HID_SD_NAVIGATOR_TBI_PEN ;
-                Text = "Stift" ;
-                Text [ ENGLISH ] = "Pen" ;
-                Text [ dutch ] = "Pen" ;
-                Text [ english_us ] = "Pointer" ;
-                Text [ italian ] = "Pennarello" ;
-                Text [ spanish ] = "Pluma" ;
-                Text [ french ] = "Crayon" ;
-                Text [ danish ] = "Pen" ;
-                Text [ portuguese_brazilian ] = "Ponteiro" ;
-                Text [ portuguese ] = "Ponteiro" ;
-                Text [ swedish ] = "Penna" ;
-                Text[ chinese_simplified ] = "ç¬”";
-                Text[ russian ] = "Êàğàíäàø";
-                Text[ polish ] = "WskaŸnik";
-                Text[ japanese ] = "ãƒšãƒ³";
-                Text[ chinese_traditional ] = "ç•«ç­†";
-                Text[ arabic ] = "Şáã";
-                Text[ greek ] = "Ğİíá";
-                Text[ korean ] = "í¬ì¸í„°";
-                Text[ turkish ] = "Kalem";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Punter";
-                Text[ finnish ] = "Osoitin";
-                Text[ thai ] = "à¸•à¸±à¸§à¸Šà¸µà¹‰";
-                Text[ czech ] = "UkazovÃ¡tko";
-                Text[ hebrew ] = "Stift";
-                Text[ hindi ] = "à¤¸à¥‚à¤šà¤• à¤¡à¤¨à¥à¤¡à¤¾";
-                Text[ slovak ] = "UkazovateÄ¾";
-                Text[ hungarian ] = "MutatÃ³";
-                Text[ slovenian ] = "Kazalec";
+                Text [ de ] = "Stift" ;
+                Text [ en-US ] = "Pointer" ;
+                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -170,72 +116,18 @@ Window FLT_NAVIGATOR
                 Identifier = TBI_FIRST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_FIRST ;
                  //Symbol = IMAGEBUTTON_FIRST ;
-                Text = "Erste Seite" ;
-                Text [ ENGLISH ] = "First page" ;
-                Text [ english_us ] = "First Slide" ;
-                Text [ italian ] = "Prima pagina" ;
-                Text [ spanish ] = "Primera diapositiva" ;
-                Text [ french ] = "Première page" ;
-                Text [ dutch ] = "Eerste pagina" ;
-                Text [ danish ] = "Første dias" ;
-                Text [ portuguese_brazilian ] = "Primeiro Slide" ;
-                Text [ portuguese ] = "Primeira página" ;
-                Text [ swedish ] = "Första sidan" ;
-                Text[ chinese_simplified ] = "é¦–é¡µ";
-                Text[ russian ] = "Ïåğâûé ñëàéä";
-                Text[ polish ] = "Pierwszy slajd";
-                Text[ japanese ] = "æœ€åˆã®ãƒšãƒ¼ã‚¸";
-                Text[ chinese_traditional ] = "é¦–é ";
-                Text[ arabic ] = "ÇáÕİÍÉ ÇáÃæáì";
-                Text[ greek ] = "Ğñşôç äéáöÜíåéá";
-                Text[ korean ] = "ì²«ë²ˆì§¸ ìŠ¬ë¼ì´ë“œ";
-                Text[ turkish ] = "İlk slayt";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Primera diapositiva";
-                Text[ finnish ] = "Ensimmäinen dia";
-                Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸­à¸±à¸™à¹à¸£à¸";
-                Text[ czech ] = "PrvnÃ­ snÃ­mek";
-                Text[ hebrew ] = "Erste Seite";
-                Text[ hindi ] = "à¤ªà¤¹à¤¿à¤²à¤¾ à¤¸à¥à¤²à¤‡à¤¡";
-                Text[ slovak ] = "PrvÃ½ snÃ­mok";
-                Text[ hungarian ] = "ElsÅ‘ dia";
-                Text[ slovenian ] = "Prvi diapozitiv";
+                Text [ de ] = "Erste Seite" ;
+                Text [ en-US ] = "First Slide" ;
+                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_PREVIOUS ;
                 HelpId = HID_SD_NAVIGATOR_TBI_PREV ;
                  //Symbol = IMAGEBUTTON_PREV ;
-                Text = "vorherige Seite" ;
-                Text [ ENGLISH ] = "Previous page" ;
-                Text [ dutch ] = "Vorige pagina" ;
-                Text [ english_us ] = "Previous Slide" ;
-                Text [ italian ] = "pagina precedente" ;
-                Text [ spanish ] = "Diapositiva anterior" ;
-                Text [ french ] = "Page précédente" ;
-                Text [ danish ] = "Forrige dias" ;
-                Text [ portuguese_brazilian ] = "Slide Anterior" ;
-                Text [ portuguese ] = "Página anterior" ;
-                Text [ swedish ] = "Föregående sida" ;
-                Text[ chinese_simplified ] = "ä¸Šä¸€é¡µ";
-                Text[ russian ] = "Ïğåäûäóùèé ñëàéä";
-                Text[ polish ] = "Poprzedni slajd";
-                Text[ japanese ] = "å‰ã®ãƒšãƒ¼ã‚¸";
-                Text[ chinese_traditional ] = "ä¸Šä¸€é ";
-                Text[ arabic ] = "ÇáÕİÍÉ ÇáÓÇÈŞÉ";
-                Text[ greek ] = "Ğñïçãïıìåíç äéáöÜíåéá";
-                Text[ korean ] = "ì´ì „ ìŠ¬ë¼ì´ë“œ";
-                Text[ turkish ] = "Önceki slayt";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Diapositiva anterior";
-                Text[ finnish ] = "Edellinen dia";
-                Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸­à¸±à¸™à¸à¹ˆà¸­à¸™";
-                Text[ czech ] = "PÅ™edchozÃ­ snÃ­mek";
-                Text[ hebrew ] = "vorherige Seite";
-                Text[ hindi ] = "à¤ªà¤¿à¤›à¤²à¤¾ à¤¸à¥à¤²à¤‡à¤¡";
-                Text[ slovak ] = "PredchÃ¡dzajÃºci snÃ­mok";
-                Text[ hungarian ] = "ElÅ‘zÅ‘ dia";
-                Text[ slovenian ] = "PrejÅ¡nji diapozitiv";
+                Text [ de ] = "vorherige Seite" ;
+                Text [ en-US ] = "Previous Slide" ;
+                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -243,73 +135,19 @@ Window FLT_NAVIGATOR
                 HelpId = HID_SD_NAVIGATOR_TBI_NEXT ;
                  //Symbol = IMAGEBUTTON_NEXT ;
                 /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
-                Text = "Nächste Seite" ;
-                Text [ ENGLISH ] = "Next page" ;
+                Text [ de ] = "Nächste Seite" ;
                 /* ### ACHTUNG: Neuer Text in Resource? Zur nächsten Seite springen : Zur nõchsten Seite springen */
-                Text [ dutch ] = "Volgende pagina" ;
-                Text [ english_us ] = "Next Slide" ;
-                Text [ italian ] = "Pagina successiva" ;
-                Text [ spanish ] = "Diapositiva siguiente" ;
-                Text [ french ] = "Page suivante" ;
-                Text [ danish ] = "Næste dias" ;
-                Text [ portuguese_brazilian ] = "Próximo Slide" ;
-                Text [ portuguese ] = "Página seguinte" ;
-                Text [ swedish ] = "Nästa sida" ;
-                Text[ chinese_simplified ] = "ä¸‹ä¸€é¡µ";
-                Text[ russian ] = "Ñëåäóşùèé ñëàéä";
-                Text[ polish ] = "Nastêpny slajd";
-                Text[ japanese ] = "æ¬¡ã®ãƒšãƒ¼ã‚¸";
-                Text[ chinese_traditional ] = "ä¸‹ä¸€é ";
-                Text[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
-                Text[ greek ] = "Åğüìåíç äéáöÜíåéá";
-                Text[ korean ] = "ë‹¤ìŒ ìŠ¬ë¼ì´ë“œ";
-                Text[ turkish ] = "Sonraki sayfa";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pàgina següent";
-                Text[ finnish ] = "Seuraava dia";
-                Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸–à¸±à¸”à¹„à¸›";
-                Text[ czech ] = "DalÅ¡Ã­ snÃ­mek";
-                Text[ hebrew ] = "NÃ¤chste Seite";
-                Text[ hindi ] = "à¤…à¤—à¤²à¤¾ à¤¸à¥à¤²à¤‡à¤¡";
-                Text[ slovak ] = "NasledujÃºci snÃ­mok";
-                Text[ hungarian ] = "KÃ¶vetkezÅ‘ dia";
-                Text[ slovenian ] = "Naslednji diapozitiv";
+                Text [ en-US ] = "Next Slide" ;
+                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_LAST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_LAST ;
                  //Symbol = IMAGEBUTTON_LAST ;
-                Text = "Letzte Seite" ;
-                Text [ ENGLISH ] = "Last page" ;
-                Text [ dutch ] = "Laatste pagina" ;
-                Text [ english_us ] = "Last Slide" ;
-                Text [ italian ] = "Ultima pagina" ;
-                Text [ spanish ] = "Última diapositiva" ;
-                Text [ french ] = "Dernière page" ;
-                Text [ danish ] = "Sidste dias" ;
-                Text [ portuguese_brazilian ] = "Último Slide" ;
-                Text [ portuguese ] = "Última página" ;
-                Text [ swedish ] = "Sista sidan" ;
-                Text[ chinese_simplified ] = "æœ€åä¸€é¡µ";
-                Text[ russian ] = "Ïîñëåäíèé ñëàéä";
-                Text[ polish ] = "Ostatni slajd";
-                Text[ japanese ] = "æœ€å¾Œã®ãƒšãƒ¼ã‚¸";
-                Text[ chinese_traditional ] = "æœ€å¾Œä¸€é ";
-                Text[ arabic ] = "ÇáÕİÍÉ ÇáÃÎíÑÉ";
-                Text[ greek ] = "Ôåëåõôáßá äéáöÜíåéá";
-                Text[ korean ] = "ë§ˆì§€ë§‰ ìŠ¬ë¼ì´ë“œ";
-                Text[ turkish ] = "Son slayt";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Última pàgina";
-                Text[ finnish ] = "Viimeinen dia";
-                Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸­à¸±à¸™à¸ªà¸¸à¸”à¸—à¹‰à¸²à¸¢";
-                Text[ czech ] = "PoslednÃ­ snÃ­mek";
-                Text[ hebrew ] = "Letzte Seite";
-                Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤¸à¥à¤²à¤‡à¤¡";
-                Text[ slovak ] = "PoslednÃ½ snÃ­mok";
-                Text[ hungarian ] = "UtolsÃ³ dia";
-                Text[ slovenian ] = "Zadnji diapozitiv";
+                Text [ de ] = "Letzte Seite" ;
+                Text [ en-US ] = "Last Slide" ;
+                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -321,37 +159,10 @@ Window FLT_NAVIGATOR
                 HelpId = HID_SD_NAVIGATOR_TBI_DRAGTYPE ;
                 DropDown = TRUE ;
                  //Left = FALSE;
-                Text = "Dragmodus" ;
-                Text [ English ] = "Drag Mode" ;
+                Text [ de ] = "Dragmodus" ;
                 /* ### ACHTUNG: Neuer Text in Resource? Modus für Drag & Drop auswählen : Modus f³r Drag & Drop auswõhlen */
-                Text [ english_us ] = "Drag Mode" ;
-                Text [ italian ] = "Modo drag" ;
-                Text [ spanish ] = "Modo Arrastrar" ;
-                Text [ french ] = "Mode Glisser" ;
-                Text [ dutch ] = "Sleepmodus" ;
-                Text [ danish ] = "Træktilstand" ;
-                Text [ portuguese_brazilian ] = "Modo Arrastar" ;
-                Text [ portuguese ] = "Modo Arrastar" ;
-                Text [ swedish ] = "Draläge" ;
-                Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
-                Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
-                Text[ polish ] = "Tryb przeci¹gania";
-                Text[ japanese ] = "ãƒ‰ãƒ©ãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰";
-                Text[ chinese_traditional ] = "æ‹–æ›³æ¨¡å¼";
-                Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
-                Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
-                Text[ korean ] = "ëŒê¸° ëª¨ë“œ";
-                Text[ turkish ] = "Sürükleme kipi";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Mode d'arrossegament";
-                Text[ finnish ] = "Vetotila";
-                Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸¥à¸²à¸";
-                Text[ czech ] = "ReÅ¾im pÅ™etÃ¡hnutÃ­";
-                Text[ hebrew ] = "Dragmodus";
-                Text[ hindi ] = "à¤–à¥€à¤‚à¤šà¤¨à¥‡ à¤•à¤¾ à¤ªà¥à¤°à¤•à¤¾à¤°";
-                Text[ slovak ] = "SpÃ´sob pretiahnutia";
-                Text[ hungarian ] = "BeszÃºrÃ¡s mÃ³dja";
-                Text[ slovenian ] = "VleÄni naÄin";
+                Text [ en-US ] = "Drag Mode" ;
+                Text [ x-comment ] = " ";
             };
         };
     };
@@ -363,40 +174,13 @@ Window FLT_NAVIGATOR
         Size = MAP_APPFONT ( 6 + BUTTON_WIDTH * BUTTON_COUNT , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        QuickHelpText = "Dokumente" ;
-        QuickHelpText [ ENGLISH ] = "Documents" ;
-        QuickHelpText [ dutch ] = "Documenten" ;
-        QuickHelpText [ english_us ] = "Documents" ;
-        QuickHelpText [ italian ] = "Documenti" ;
-        QuickHelpText [ spanish ] = "Documentos" ;
-        QuickHelpText [ french ] = "Documents" ;
-        QuickHelpText [ danish ] = "Dokumenter" ;
-        QuickHelpText [ portuguese ] = "Documentos" ;
-        QuickHelpText [ portuguese_brazilian ] = "Documentos" ;
+        QuickHelpText [ de ] = "Dokumente" ;
+        QuickHelpText [ en-US ] = "Documents" ;
         /* ### ACHTUNG: Neuer Text in Resource? Geöffnete Dokumente : Ge÷ffnete Dokumente */
-        QuickHelpText [ swedish ] = "Dokument" ;
-    QuickHelpText[ russian ] = "Äîêóìåíòû";
-        QuickHelpText[ polish ] = "Dokumenty";
-        QuickHelpText[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-        QuickHelpText[ chinese_simplified ] = "æ–‡æ¡£";
-        QuickHelpText[ chinese_traditional ] = "æ–‡ä»¶";
-        QuickHelpText[ arabic ] = "ãÓÊäÏÇÊ";
-        QuickHelpText[ greek ] = "¸ããñáöá";
-        QuickHelpText[ korean ] = "ë¬¸ì„œ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Dokumente";
-        QuickHelpText[ catalan ] = "Documents";
-        QuickHelpText[ finnish ] = "Asiakirjat";
-        QuickHelpText[ thai ] = "Documents";
-        QuickHelpText[ czech ] = "Dokumenty";
-        QuickHelpText[ hebrew ] = "â€®××¡××›×™×â€¬";
-        QuickHelpText[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°";
-        QuickHelpText[ slovak ] = "Dokumenty";
-        QuickHelpText[ hungarian ] = "Dokumentumok";
-        QuickHelpText[ slovenian ] = "Dokumenti";
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
 
     #define NAVIGATR_IDLIST \
