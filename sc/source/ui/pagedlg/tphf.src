@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-16 22:53:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ PushButton RID_SCBTN_HFEDIT
     Text [ italian ] = "Modifica..." ;
     Text [ portuguese_brazilian ] = "Edi~tar..." ;
     Text [ portuguese ] = "Edi~tar..." ;
-    Text [ finnish ] = "~Muokkaa" ;
+    Text [ finnish ] = "~Muuta..." ;
     Text [ danish ] = "Rediger..." ;
     Text [ french ] = "…~diter..." ;
     Text [ swedish ] = "Redige~ra..." ;
@@ -86,11 +86,15 @@ PushButton RID_SCBTN_HFEDIT
     Text[ chinese_traditional ] = "Á∑®ËºØ(~E)...";
     Text[ arabic ] = " Õ—Ì—...";
     Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·...";
-    Text[ korean ] = "Ìé∏Ïßë.(~E)...";
+    Text[ korean ] = "Ìé∏Ïßë(~E)...";
     Text[ turkish ] = "~D¸zenle...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Editar...";
+    Text[ catalan ] = "~Edita...";
+    Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç...";
 };
+
+
+
 
 
 

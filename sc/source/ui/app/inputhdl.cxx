@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-04 18:53:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <svx/algitem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/brshitem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
@@ -1549,7 +1549,7 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
                     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
                     if ( aBackCol.GetTransparency() > 0 ||
                             Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                        aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+                        aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
                     pEngine->SetBackgroundColor( aBackCol );
 
                     //  Ausrichtung
@@ -2030,7 +2030,21 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     BOOL bSpellErrors = !bFormulaMode && pEngine->HasOnlineSpellErrors();
     if ( bSpellErrors )
     {
-        //  Test, ob Zahl, dann Fehler ignorieren
+        //  #i3820# If the spell checker flags numerical input as error,
+        //  it still has to be treated as number, not EditEngine object.
+
+        if ( pLastPattern && pActiveViewSh )
+        {
+            ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
+            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+            // without conditional format, as in ScColumn::SetString
+            ULONG nFormat = pLastPattern->GetNumberFormat( pFormatter );
+            double nVal;
+            if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
+            {
+                bSpellErrors = FALSE;       // ignore the spelling errors
+            }
+        }
     }
 
     //  After RemoveAdjust, the EditView must not be repainted (has wrong font size etc).
@@ -2647,12 +2661,17 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
                         if (pTableView)
                         {
                             pTableView->GetEditEngine()->SetText( aStrLoP );
-                            pTableView->SetSelection( ESelection(0,0, 0,0) );
+                            if ( aStrLoP.Len() )
+                                pTableView->SetSelection( ESelection(0,0, 0,0) );   // before the '%'
+
+                            // don't call SetSelection if the string is empty anyway,
+                            // to avoid breaking the bInitial handling in ScViewData::EditGrowY
                         }
                         if (pTopView)
                         {
                             pTopView->GetEditEngine()->SetText( aStrLoP );
-                            pTopView->SetSelection( ESelection(0,0, 0,0) );
+                            if ( aStrLoP.Len() )
+                                pTopView->SetSelection( ESelection(0,0, 0,0) );     // before the '%'
                         }
                     }
                 SyncViews();

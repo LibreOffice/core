@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 09:54:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,11 @@ BOOL __EXPORT FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
 BOOL __EXPORT FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
-    DoModifiers( rMEvt );
+    //  #106438# evaluate modifiers only if in a drawing layer action
+    //  (don't interfere with keyboard shortcut handling)
+    if (pView->IsAction())
+        DoModifiers( rMEvt );
+
     return FALSE;
 }
 
@@ -544,45 +548,49 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                         if(0L == pHdl)
                         {
-                            // #90129# restrict movement to WorkArea
-                            const Rectangle& rWorkArea = pView->GetWorkArea();
-
-                            if(!rWorkArea.IsEmpty())
+                            // #107086# only take action when move is allowed
+                            if(pView->IsMoveAllowed())
                             {
-                                Rectangle aMarkRect(pView->GetMarkedObjRect());
-                                aMarkRect.Move(nX, nY);
+                                // #90129# restrict movement to WorkArea
+                                const Rectangle& rWorkArea = pView->GetWorkArea();
 
-                                if(!aMarkRect.IsInside(rWorkArea))
+                                if(!rWorkArea.IsEmpty())
                                 {
-                                    if(aMarkRect.Left() < rWorkArea.Left())
-                                    {
-                                        nX += rWorkArea.Left() - aMarkRect.Left();
-                                    }
+                                    Rectangle aMarkRect(pView->GetMarkedObjRect());
+                                    aMarkRect.Move(nX, nY);
 
-                                    if(aMarkRect.Right() > rWorkArea.Right())
+                                    if(!aMarkRect.IsInside(rWorkArea))
                                     {
-                                        nX -= aMarkRect.Right() - rWorkArea.Right();
-                                    }
+                                        if(aMarkRect.Left() < rWorkArea.Left())
+                                        {
+                                            nX += rWorkArea.Left() - aMarkRect.Left();
+                                        }
 
-                                    if(aMarkRect.Top() < rWorkArea.Top())
-                                    {
-                                        nY += rWorkArea.Top() - aMarkRect.Top();
-                                    }
+                                        if(aMarkRect.Right() > rWorkArea.Right())
+                                        {
+                                            nX -= aMarkRect.Right() - rWorkArea.Right();
+                                        }
 
-                                    if(aMarkRect.Bottom() > rWorkArea.Bottom())
-                                    {
-                                        nY -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                                        if(aMarkRect.Top() < rWorkArea.Top())
+                                        {
+                                            nY += rWorkArea.Top() - aMarkRect.Top();
+                                        }
+
+                                        if(aMarkRect.Bottom() > rWorkArea.Bottom())
+                                        {
+                                            nY -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                                        }
                                     }
                                 }
+
+                                // now move the selected draw objects
+                                pView->MoveAllMarked(Size(nX, nY));
+
+                                // #97016# II
+                                pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
+
+                                bReturn = TRUE;
                             }
-
-                            // now move the selected draw objects
-                            pView->MoveAllMarked(Size(nX, nY));
-
-                            // #97016# II
-                            pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
-
-                            bReturn = TRUE;
                         }
                         else
                         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-20 10:07:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <sfx2/topfrm.hxx>
 #include <svtools/ptitem.hxx>
 #include <svtools/stritem.hxx>
+#include <tools/urlobj.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/fonttype.hxx>
@@ -249,6 +250,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 BOOL bUnmark = FALSE;
                 if ( pReqArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
                     bUnmark = ((const SfxBoolItem*)pItem)->GetValue();
+
+                if ( nSlot == SID_JUMPTOMARK )
+                {
+                    //  #106586# URL has to be decoded for escaped characters (%20)
+                    aAddress = INetURLObject::decode( aAddress, INET_HEX_ESCAPE,
+                                               INetURLObject::DECODE_WITH_CHARSET,
+                                            RTL_TEXTENCODING_UTF8 );
+                }
 
                 BOOL bFound = FALSE;
                 ScViewData* pViewData = GetViewData();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-05 14:52:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editview.hxx>
 #include <svx/fhgtitem.hxx>
@@ -514,8 +514,8 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
         aOutputData.SetFmtDevice( pFmtDev );
     }
 
-    const svx::ColorConfig& rColorCfg = pScMod->GetColorConfig();
-    Color aGridColor( rColorCfg.GetColorValue( svx::CALCGRID, FALSE ).nColor );
+    const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
+    Color aGridColor( rColorCfg.GetColorValue( svtools::CALCGRID, FALSE ).nColor );
     if ( aGridColor.GetColor() == COL_TRANSPARENT )
     {
         //  use view options' grid color only if color config has "automatic" color
@@ -749,7 +749,7 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
             }
         }
 
-        Color aRefColor( rColorCfg.GetColorValue(svx::CALCREFERENCE).nColor );
+        Color aRefColor( rColorCfg.GetColorValue(svtools::CALCREFERENCE).nColor );
         aOutputData.DrawRefMark( pViewData->GetRefStartX(), pViewData->GetRefStartY(),
                                  pViewData->GetRefEndX(), pViewData->GetRefEndY(),
                                  aRefColor, FALSE );
@@ -787,7 +787,7 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
     if ( nX2==MAXCOL || nY2==MAXROW )
     {
         Rectangle aPixRect = Rectangle( Point(), GetOutputSizePixel() );
-        SetFillColor( rColorCfg.GetColorValue(svx::APPBACKGROUND).nColor );
+        SetFillColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
         SetLineColor();
         if ( nX2==MAXCOL )
         {
@@ -858,9 +858,9 @@ void ScGridWindow::DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT n
         ScDocument* pDoc = pViewData->GetDocument();
         USHORT nTab = pViewData->GetTabNo();
         Size aWinSize = GetOutputSizePixel();
-        const svx::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-        Color aManual( rColorCfg.GetColorValue(svx::CALCPAGEBREAKMANUAL).nColor );
-        Color aAutomatic( rColorCfg.GetColorValue(svx::CALCPAGEBREAK).nColor );
+        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+        Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
+        Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
 
         String aPageText = ScGlobal::GetRscString( STR_PAGE );
         if ( nPageScript == 0 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-24 17:17:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/macrconf.hxx>
 #include <svx/langitem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <svtools/whiter.hxx>
 #include <offmgr/app.hxx>
@@ -148,7 +148,7 @@ static USHORT nIdleCount = 0;
 
 SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
 {
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_CLIENT,
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER,
                                 ScResId(RID_OBJECTBAR_APP) );
     SFX_STATUSBAR_REGISTRATION( ScResId(SCCFG_STATUSBAR) );     // nur ID wichtig
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
@@ -244,12 +244,12 @@ void ScModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             //  (if the detective colors haven't been used yet, there's nothing to update)
             if ( ScDetectiveFunc::IsColorsInitialized() )
             {
-                const svx::ColorConfig& rColors = GetColorConfig();
+                const svtools::ColorConfig& rColors = GetColorConfig();
                 BOOL bArrows =
-                    ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svx::CALCDETECTIVE).nColor ||
-                      ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svx::CALCDETECTIVEERROR).nColor );
+                    ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
+                      ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
                 BOOL bComments =
-                    ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svx::CALCNOTESBACKGROUND).nColor );
+                    ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
                 if ( bArrows || bComments )
                 {
                     ScDetectiveFunc::InitializeColors();        // get the new colors
@@ -914,11 +914,11 @@ ScNavipiCfg& ScModule::GetNavipiCfg()
     return *pNavipiCfg;
 }
 
-svx::ColorConfig& ScModule::GetColorConfig()
+svtools::ColorConfig& ScModule::GetColorConfig()
 {
     if ( !pColorConfig )
     {
-        pColorConfig = new svx::ColorConfig;
+        pColorConfig = new svtools::ColorConfig;
         StartListening(*pColorConfig);
     }
 
@@ -2097,8 +2097,8 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
                 break;
             }
 
-            svx::ColorConfigEntry eEntry =
-                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svx::LINKSVISITED : svx::LINKS;
+            svtools::ColorConfigEntry eEntry =
+                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
             pInfo->SetTxtColor( GetColorConfig().GetColorValue(eEntry).nColor );
         }
         else

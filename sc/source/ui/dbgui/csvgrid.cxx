@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-22 10:35:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 
 #include <algorithm>
 
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef _SFXSMPLHINT_HXX
 #include <svtools/smplhint.hxx>
@@ -147,6 +147,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
 
     maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 
+    EnableRTL( false ); // #107812# RTL
     InitColors();
     InitFonts();
     ImplClearSplits();
@@ -168,7 +169,7 @@ void ScCsvGrid::UpdateLayoutData()
     Execute( CSVCMD_SETCHARWIDTH, GetTextWidth( String( 'X' ) ) );
     Execute( CSVCMD_SETLINEHEIGHT, GetTextHeight() + 1 );
     SetFont( maHeaderFont );
-    Execute( CSVCMD_SETOFFSETY, GetTextHeight() + 1 );
+    Execute( CSVCMD_SETHDRHEIGHT, GetTextHeight() + 1 );
     UpdateOffsetX();
     EnableRepaint();
 }
@@ -179,7 +180,7 @@ void ScCsvGrid::UpdateOffsetX()
     sal_Int32 nDigits = 2;
     while( nLastLine /= 10 ) ++nDigits;
     nDigits = Max( nDigits, 3L );
-    Execute( CSVCMD_SETOFFSETX, GetTextWidth( String( '0' ) ) * nDigits );
+    Execute( CSVCMD_SETHDRWIDTH, GetTextWidth( String( '0' ) ) * nDigits );
 }
 
 void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
@@ -256,10 +257,10 @@ sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
 
 void ScCsvGrid::InitColors()
 {
-    maBackColor = Color( mrColorConfig.GetColorValue( ::svx::DOCCOLOR ).nColor );
-    maGridColor = Color( mrColorConfig.GetColorValue( ::svx::CALCGRID ).nColor );
-    maGridPBColor = Color( mrColorConfig.GetColorValue( ::svx::CALCPAGEBREAK ).nColor );
-    maAppBackColor = Color( mrColorConfig.GetColorValue( ::svx::APPBACKGROUND ).nColor );
+    maBackColor = Color( mrColorConfig.GetColorValue( ::svtools::DOCCOLOR ).nColor );
+    maGridColor = Color( mrColorConfig.GetColorValue( ::svtools::CALCGRID ).nColor );
+    maGridPBColor = Color( mrColorConfig.GetColorValue( ::svtools::CALCPAGEBREAK ).nColor );
+    maAppBackColor = Color( mrColorConfig.GetColorValue( ::svtools::APPBACKGROUND ).nColor );
 
     const StyleSettings& rSett = GetSettings().GetStyleSettings();
     maTextColor = rSett.GetButtonTextColor();
@@ -471,8 +472,9 @@ sal_Int32 ScCsvGrid::GetColumnX( sal_uInt32 nColIndex ) const
 
 sal_uInt32 ScCsvGrid::GetColumnFromX( sal_Int32 nX ) const
 {
-    sal_Int32 nPos = (nX - GetOffsetX()) / GetCharWidth() + GetFirstVisPos();
-    return (nPos >= GetFirstVisPos()) ? GetColumnFromPos( nPos ) : CSV_COLUMN_INVALID;
+    sal_Int32 nPos = (nX - GetFirstX()) / GetCharWidth() + GetFirstVisPos();
+    return ((GetFirstVisPos() <= nPos) && (nPos <= GetLastVisPos())) ?
+        GetColumnFromPos( nPos ) : CSV_COLUMN_INVALID;
 }
 
 sal_uInt32 ScCsvGrid::GetColumnFromPos( sal_Int32 nPos ) const
@@ -889,9 +891,9 @@ void ScCsvGrid::MouseButtonDown( const MouseEvent& rMEvt )
 
     if( rMEvt.IsLeft() )
     {
-        if( aPos.X() < GetOffsetX() )
+        if( (GetFirstX() > aPos.X()) || (aPos.X() > GetLastX()) )   // in header column
         {
-            if( aPos.Y() <= GetOffsetY() )
+            if( aPos.Y() <= GetHdrHeight() )
                 SelectAll();
         }
         else if( IsValidColumn( nColIx ) )
@@ -912,7 +914,7 @@ void ScCsvGrid::Tracking( const TrackingEvent& rTEvt )
         DisableRepaint();
         const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
 
-        sal_Int32 nPos = (rMEvt.GetPosPixel().X() - GetOffsetX()) / GetCharWidth() + GetFirstVisPos();
+        sal_Int32 nPos = (rMEvt.GetPosPixel().X() - GetFirstX()) / GetCharWidth() + GetFirstVisPos();
         // on mouse tracking: keep position valid
         nPos = Max( Min( nPos, GetPosCount() - 1L ), 0L );
         Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
@@ -991,7 +993,7 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
             {
                 Point aPos( rCEvt.GetMousePosPixel() );
                 sal_uInt32 nColIx = GetColumnFromX( aPos.X() );
-                if( IsValidColumn( nColIx ) && (aPos.X() >= GetOffsetX()) )
+                if( IsValidColumn( nColIx ) && (GetFirstX() <= aPos.X()) && (aPos.X() <= GetLastX()) )
                 {
                     if( !IsSelected( nColIx ) )
                         DoSelectAction( nColIx, 0 );    // focus & select
@@ -1003,7 +1005,7 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
                 sal_uInt32 nColIx = GetFocusColumn();
                 if( !IsSelected( nColIx ) )
                     Select( nColIx );
-                sal_Int32 nX1 = Max( GetColumnX( nColIx ), GetOffsetX() );
+                sal_Int32 nX1 = Max( GetColumnX( nColIx ), GetFirstX() );
                 sal_Int32 nX2 = Min( GetColumnX( nColIx + 1 ), GetWidth() );
                 ExecutePopup( Point( (nX1 + nX2) / 2, GetHeight() / 2 ) );
             }
@@ -1079,18 +1081,19 @@ EditEngine* ScCsvGrid::GetEditEngine()
 void ScCsvGrid::ImplSetColumnClipRegion( OutputDevice& rOutDev, sal_uInt32 nColIndex )
 {
     rOutDev.SetClipRegion( Region( Rectangle(
-        Max( GetColumnX( nColIndex ), GetOffsetX() ) + 1, 0,
-        GetColumnX( nColIndex + 1 ), GetHeight() - 1 ) ) );
+        Max( GetColumnX( nColIndex ), GetFirstX() ) + 1, 0,
+        Min( GetColumnX( nColIndex + 1 ), GetLastX() ), GetHeight() - 1 ) ) );
 }
 
 void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColIndex, Color aFillColor )
 {
     sal_Int32 nX1 = GetColumnX( nColIndex ) + 1;
     sal_Int32 nX2 = GetColumnX( nColIndex + 1 );
+    sal_Int32 nHdrHt = GetHdrHeight();
 
     rOutDev.SetLineColor();
     rOutDev.SetFillColor( aFillColor );
-    rOutDev.DrawRect( Rectangle( nX1, 0, nX2, GetOffsetY() ) );
+    rOutDev.DrawRect( Rectangle( nX1, 0, nX2, nHdrHt ) );
 
     rOutDev.SetFont( maHeaderFont );
     rOutDev.SetTextColor( maTextColor );
@@ -1098,8 +1101,8 @@ void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColInde
     rOutDev.DrawText( Point( nX1 + 1, 0 ), GetColumnTypeName( nColIndex ) );
 
     rOutDev.SetLineColor( maHeaderGridColor );
-    rOutDev.DrawLine( Point( nX1, GetOffsetY() ), Point( nX2, GetOffsetY() ) );
-    rOutDev.DrawLine( Point( nX2, 0 ), Point( nX2, GetOffsetY() ) );
+    rOutDev.DrawLine( Point( nX1, nHdrHt ), Point( nX2, nHdrHt ) );
+    rOutDev.DrawLine( Point( nX2, 0 ), Point( nX2, nHdrHt ) );
 }
 
 void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
@@ -1133,9 +1136,9 @@ void ScCsvGrid::ImplDrawFirstLineSep( bool bSet )
     if( IsVisibleLine( mnFirstImpLine ) && (mnFirstImpLine != GetFirstVisLine() ) )
     {
         sal_Int32 nY = GetY( mnFirstImpLine );
-        sal_Int32 nX = GetColumnX( GetLastVisColumn() + 1 );
+        sal_Int32 nX = Min( GetColumnX( GetLastVisColumn() + 1 ), GetLastX() );
         maBackgrDev.SetLineColor( bSet ? maGridPBColor : maGridColor );
-        maBackgrDev.DrawLine( Point( GetOffsetX() + 1, nY ), Point( nX, nY ) );
+        maBackgrDev.DrawLine( Point( GetFirstX() + 1, nY ), Point( nX, nY ) );
     }
 }
 
@@ -1149,15 +1152,16 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     sal_Int32 nX1 = GetColumnX( nColIndex ) + 1;
     sal_Int32 nX2 = GetColumnX( nColIndex + 1 );
     sal_Int32 nY2 = GetY( GetLastVisLine() + 1 );
+    sal_Int32 nHdrHt = GetHdrHeight();
 
     // grid
     maBackgrDev.SetLineColor();
     maBackgrDev.SetFillColor( maBackColor );
-    Rectangle aRect( nX1, GetOffsetY(), nX2, nY2 );
+    Rectangle aRect( nX1, nHdrHt, nX2, nY2 );
     maBackgrDev.DrawRect( aRect );
     maBackgrDev.SetLineColor( maGridColor );
     maBackgrDev.DrawGrid( aRect, Size( 1, GetLineHeight() ), GRID_HORZLINES );
-    maBackgrDev.DrawLine( Point( nX2, GetOffsetY() ), Point( nX2, nY2 ) );
+    maBackgrDev.DrawLine( Point( nX2, nHdrHt ), Point( nX2, nY2 ) );
     ImplDrawFirstLineSep( true );
 
     // cell texts
@@ -1180,7 +1184,8 @@ void ScCsvGrid::ImplDrawRowHeaders()
 {
     maBackgrDev.SetLineColor();
     maBackgrDev.SetFillColor( maAppBackColor );
-    Rectangle aRect( 0, 0, GetOffsetX(), GetHeight() - 1 );
+    Point aPoint( GetHdrX(), 0 );
+    Rectangle aRect( aPoint, Size( GetHdrWidth() + 1, GetHeight() ) );
     maBackgrDev.DrawRect( aRect );
 
     maBackgrDev.SetFillColor( maHeaderBackColor );
@@ -1195,14 +1200,20 @@ void ScCsvGrid::ImplDrawRowHeaders()
     for( sal_Int32 nLine = GetFirstVisLine(); nLine <= nLastLine; ++nLine )
     {
         String aText( String::CreateFromInt32( nLine + 1 ) );
-        sal_Int32 nX = (GetOffsetX() - maBackgrDev.GetTextWidth( aText )) / 2;
+        sal_Int32 nX = GetHdrX() + (GetHdrWidth() - maBackgrDev.GetTextWidth( aText )) / 2;
         maBackgrDev.DrawText( Point( nX, GetY( nLine ) ), aText );
     }
 
     // grid
     maBackgrDev.SetLineColor( maHeaderGridColor );
-    maBackgrDev.DrawLine( aRect.TopRight(), aRect.BottomRight() );
-    aRect.Top() = GetOffsetY();
+    if( IsRTL() )
+    {
+        maBackgrDev.DrawLine( Point( 0, 0 ), Point( 0, GetHeight() - 1 ) );
+        maBackgrDev.DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+    }
+    else
+        maBackgrDev.DrawLine( aRect.TopRight(), aRect.BottomRight() );
+    aRect.Top() = GetHdrHeight();
     maBackgrDev.DrawGrid( aRect, Size( 1, GetLineHeight() ), GRID_HORZLINES );
 }
 
@@ -1210,7 +1221,8 @@ void ScCsvGrid::ImplDrawBackgrDev()
 {
     maBackgrDev.SetLineColor();
     maBackgrDev.SetFillColor( maAppBackColor );
-    maBackgrDev.DrawRect( Rectangle( Point( GetOffsetX() + 1, 0 ), maWinSize ) );
+    maBackgrDev.DrawRect( Rectangle(
+        Point( GetFirstX() + 1, 0 ), Size( GetWidth() - GetHdrWidth(), GetHeight() ) ) );
 
     sal_uInt32 nLastCol = GetLastVisColumn();
     for( sal_uInt32 nColIx = GetFirstVisColumn(); nColIx <= nLastCol; ++nColIx )
@@ -1231,7 +1243,7 @@ void ScCsvGrid::ImplDrawColumnSelection( sal_uInt32 nColIndex )
         sal_Int32 nX2 = GetColumnX( nColIndex + 1 );
 
         // header
-        Rectangle aRect( nX1, 0, nX2, GetOffsetY() );
+        Rectangle aRect( nX1, 0, nX2, GetHdrHeight() );
         maGridDev.SetLineColor();
         if( maHeaderBackColor.IsDark() )
             // redraw with light gray background in dark mode
@@ -1244,7 +1256,7 @@ void ScCsvGrid::ImplDrawColumnSelection( sal_uInt32 nColIndex )
         }
 
         // column selection
-        aRect = Rectangle( nX1, GetOffsetY() + 1, nX2, GetY( GetLastVisLine() + 1 ) - 1 );
+        aRect = Rectangle( nX1, GetHdrHeight() + 1, nX2, GetY( GetLastVisLine() + 1 ) - 1 );
         ImplInvertRect( maGridDev, aRect );
     }
 
@@ -1282,30 +1294,37 @@ void ScCsvGrid::ImplDrawHorzScrolled( sal_Int32 nOldPos )
     sal_uInt32 nFirstColIx, nLastColIx;
     if( nPos < nOldPos )
     {
-        aSrc = Point( GetOffsetX() + 1, 0 );
-        aDest = Point( GetOffsetX() + GetCharWidth() * (nOldPos - nPos) + 1, 0 );
+        aSrc = Point( GetFirstX() + 1, 0 );
+        aDest = Point( GetFirstX() + GetCharWidth() * (nOldPos - nPos) + 1, 0 );
         nFirstColIx = GetColumnFromPos( nPos );
         nLastColIx = GetColumnFromPos( nOldPos );
     }
     else
     {
-        aSrc = Point( GetOffsetX() + GetCharWidth() * (nPos - nOldPos) + 1, 0 );
-        aDest = Point( GetOffsetX() + 1, 0 );
+        aSrc = Point( GetFirstX() + GetCharWidth() * (nPos - nOldPos) + 1, 0 );
+        aDest = Point( GetFirstX() + 1, 0 );
         nFirstColIx = GetColumnFromPos( Min( nOldPos + GetVisPosCount(), GetPosCount() ) - 1 );
         nLastColIx = GetColumnFromPos( Min( nPos + GetVisPosCount(), GetPosCount() ) - 1 );
     }
 
     ImplInvertCursor( GetRulerCursorPos() + (nPos - nOldPos) );
+    Rectangle aRectangle( GetFirstX(), 0, GetLastX(), GetHeight() - 1 );
+    Region aClipReg( aRectangle );
+    maBackgrDev.SetClipRegion( aClipReg );
     maBackgrDev.CopyArea( aDest, aSrc, maWinSize );
+    maBackgrDev.SetClipRegion();
+    maGridDev.SetClipRegion( aClipReg );
     maGridDev.CopyArea( aDest, aSrc, maWinSize );
+    maGridDev.SetClipRegion();
     ImplInvertCursor( GetRulerCursorPos() );
+
     for( sal_uInt32 nColIx = nFirstColIx; nColIx <= nLastColIx; ++nColIx )
         ImplDrawColumn( nColIx );
 
     sal_Int32 nLastX = GetX( GetPosCount() ) + 1;
-    if( nLastX < GetWidth() )
+    if( nLastX <= GetLastX() )
     {
-        Rectangle aRect( nLastX, 0, GetWidth() - 1, GetHeight() - 1 );
+        Rectangle aRect( nLastX, 0, GetLastX(), GetHeight() - 1 );
         maBackgrDev.SetLineColor();
         maBackgrDev.SetFillColor( maAppBackColor );
         maBackgrDev.DrawRect( aRect );
@@ -1320,9 +1339,9 @@ void ScCsvGrid::ImplInvertCursor( sal_Int32 nPos )
     if( IsVisibleSplitPos( nPos ) )
     {
         sal_Int32 nX = GetX( nPos ) - 1;
-        Rectangle aRect( Point( nX, 0 ), Size( 3, GetOffsetY() ) );
+        Rectangle aRect( Point( nX, 0 ), Size( 3, GetHdrHeight() ) );
         ImplInvertRect( maGridDev, aRect );
-        aRect.Top() = GetOffsetY() + 1;
+        aRect.Top() = GetHdrHeight() + 1;
         aRect.Bottom() = GetY( GetLastVisLine() + 1 );
         ImplInvertRect( maGridDev, aRect );
     }
@@ -1332,8 +1351,8 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
 {
     if( HasFocus() && IsVisibleColumn( nColIndex ) )
     {
-        sal_Int32 nX1 = Max( GetColumnX( nColIndex ), GetOffsetX() ) + 1;
-        sal_Int32 nX2 = Min( GetColumnX( nColIndex + 1 ), GetWidth() ) - 1;
+        sal_Int32 nX1 = Max( GetColumnX( nColIndex ), GetFirstX() ) + 1;
+        sal_Int32 nX2 = Min( GetColumnX( nColIndex + 1 ) - 1L, GetLastX() );
         sal_Int32 nY2 = Min( GetY( GetLastVisLine() + 1 ), GetHeight() ) - 1;
         InvertTracking( Rectangle( nX1, 0, nX2, nY2 ), SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
     }

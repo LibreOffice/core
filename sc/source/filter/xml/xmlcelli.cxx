@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 12:08:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,6 @@
 #endif
 #ifndef _DATE_HXX
 #include <tools/date.hxx>
-#endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>

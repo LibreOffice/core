@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

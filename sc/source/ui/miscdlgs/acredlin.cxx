@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-28 15:31:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,8 @@ void __EXPORT ScAcceptChgDlg::Init()
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
     if ( pViewSettings!=NULL )
         aChangeViewSet = *pViewSettings;
+    // adjust TimeField for filter tabpage
+    aChangeViewSet.AdjustDateMode( *pDoc );
 
     pTPFilter->CheckDate(aChangeViewSet.HasDate());
     pTPFilter->SetFirstDate(aChangeViewSet.GetTheFirstDateTime());
@@ -1192,7 +1194,7 @@ void ScAcceptChgDlg::RejectFiltered()
         {
             if(IsValidAction(pScChangeAction))
             {
-                pChanges->Accept((ScChangeAction*)pScChangeAction);
+                pChanges->Reject((ScChangeAction*)pScChangeAction);
             }
         }
         pScChangeAction=pScChangeAction->GetPrev();

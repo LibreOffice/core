@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 11:42:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ ModelessDialog RID_SCDLG_FILTER
     };
     StringList [ korean ] =
     {
-            < "ì™€" ; Default ; > ;
+            < "ì™€(ê³¼)" ; Default ; > ;
         < "ë˜ëŠ”" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -444,7 +444,7 @@ ModelessDialog RID_SCDLG_FILTER
     };
     StringList [ korean ] =
     {
-            < "ì™€" ; Default ; > ;
+            < "ì™€(ê³¼)" ; Default ; > ;
         < "ë˜ëŠ”" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -1549,7 +1549,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ french ] = "Caractère ~générique" ;
         Text [ swedish ] = "~Reguljärt uttryck" ;
         Text [ dutch ] = "~Gangbare uitdrukking" ;
-        Text [ spanish ] = "~Expresión corriente" ;
+        Text [ spanish ] = "~Expresión regular" ;
         Text [ english_us ] = "Regular ~expression" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¸¸è§„è¡¨è¾¾(~E)";
@@ -1578,20 +1578,20 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ portuguese ] = "A área ~contém cabeçalhos de colunas" ;
         Text [ finnish ] = "~Alue sisältää sarakeotsikot" ;
         Text [ danish ] = "Område indholder kolonneoverskrifter" ;
-        Text [ french ] = "La plage contient des en-têtes de colonne" ;
-        Text [ swedish ] = "Område ~innehåller kolumnhuvuden" ;
+        Text [ french ] = "La plage contient des étiquettes de colonne." ;
+        Text [ swedish ] = "Område ~innehåller kolumnetiketter" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
-        Text [ spanish ] = "Área contiene títulos de ~columnas" ;
+        Text [ spanish ] = "El área contiene los títulos de ~columnas" ;
         Text [ english_us ] = "Range contains ~column labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡é¢˜(~C)";
         Text[ russian ] = "Îáëàñòü ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~C)";
-        Text[ chinese_traditional ] = "å€åŸŸåŒ…å«æ¬„æ¨™é¡Œ(~C)";
+        Text[ chinese_traditional ] = "ç¯„åœåŒ…å«æ¬„æ¨™ç±¤(~C)";
         Text[ arabic ] = "ÇáãäØŞÉ ÊÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "ì—´ ë¨¸ë¦¬ê¸€ í¬í•¨(~C)";
+        Text[ korean ] = "ë²”ìœ„ì— ì—´ ë ˆì´ë¸”ì„ í¬í•¨(~C)";
         Text[ turkish ] = "Aralık, ~sütun başlıkları içeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L'àrea conté capçaleres de ~columna";
@@ -1623,7 +1623,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "ä¸ç”¢ç”Ÿå‚™ä»½(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
-        Text[ korean ] = "ì¤‘ë³µ í—ˆìš© ì•ˆë¨(~N)";
+        Text[ korean ] = "ë³µì œ ì—†ìŒ(~N)";
         Text[ turkish ] = "Aynı sonuçları ~ayıkla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sense ~duplicats";
@@ -1674,7 +1674,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ swedish ] = "~Behåll filterkriterier" ;
         Text [ danish ] = "Persistent" ;
         Text [ italian ] = "Mantieni criteri" ;
-        Text [ spanish ] = "~Persistente" ;
+        Text [ spanish ] = "~Conservar los criterios de filtrado" ;
         Text [ french ] = "Conserver les critères de filtre" ;
         Text [ dutch ] = "~Persistent" ;
         Text [ portuguese ] = "~Manter critérios" ;
@@ -1787,7 +1787,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ french ] = "factice" ;
         Text [ swedish ] = "dummy" ;
         Text [ dutch ] = "dummy" ;
-        Text [ spanish ] = "Comodín" ;
+        Text [ spanish ] = "Texto ejemplo" ;
         Text [ english_us ] = "dummy" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "æ ·æœ¬";
@@ -1828,7 +1828,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "è³‡æ–™å€åŸŸï¼š";
         Text[ arabic ] = "äØÇŞ ÇáÈíÇäÇÊ:";
         Text[ greek ] = "Ğåñéï÷Ş äåäïìİíùí:";
-        Text[ korean ] = "ë°ì´í„° ì˜ì—­:";
+        Text[ korean ] = "ë°ì´í„° ë²”ìœ„:";
         Text[ turkish ] = "Veri aralığı:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea de dades:";
@@ -1915,7 +1915,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ spanish ] = "Leer los criterios del ~filtro en" ;
         Text [ english_us ] = "Read ~filter criteria from" ;
         Text[ chinese_simplified ] = "ç­›é€‰æ¡ä»¶æ¥è‡ª(~F)";
-        Text[ russian ] = "Óñëîâèÿ ôèëüòğà èç";
+        Text[ russian ] = "Êğèòåğèè ôèëüòğà";
         Text[ polish ] = "Kryteria filtrowania znajduj¹ siê w";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿æ¡ä»¶ã«ã™ã‚‹ç¯„å›²(~F)";
         Text[ chinese_traditional ] = "ç¯©é¸æ¢ä»¶ä¾†è‡ª(~F)";
@@ -2021,7 +2021,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ french ] = "Caractère ~générique" ;
         Text [ swedish ] = "~Reguljärt uttryck" ;
         Text [ dutch ] = "~Gangbare uitdrukking" ;
-        Text [ spanish ] = "~Expresión corriente" ;
+        Text [ spanish ] = "~Expresión regular" ;
         Text [ english_us ] = "Regular ~expressions" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¸¸è§„è¡¨è¾¾(~E)";
@@ -2050,20 +2050,20 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ portuguese ] = "Contém ~cabeçalhos para colunas" ;
         Text [ finnish ] = "~Sisältää sarakeotsikot" ;
         Text [ danish ] = "Indeholder kolonneoverskrifter" ;
-        Text [ french ] = "La plage contient des en-têtes de colonne" ;
-        Text [ swedish ] = "Område ~innehåller kolumnhuvuden" ;
+        Text [ french ] = "La plage contient des étiquettes de colonne." ;
+        Text [ swedish ] = "Område ~innehåller kolumnetiketter" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
-        Text [ spanish ] = "El área contiene títulos de ~columnas" ;
+        Text [ spanish ] = "El área contiene los títulos de ~columnas" ;
         Text [ english_us ] = "Range c~ontains column labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡é¢˜(~O)";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~O)";
-        Text[ chinese_traditional ] = "å€åŸŸåŒ…å«æ¬„æ¨™é¡Œ(~O)";
+        Text[ chinese_traditional ] = "ç¯„åœåŒ…å«æ¬„æ¨™ç±¤(~O)";
         Text[ arabic ] = "ÇáãäØŞÉ ÊÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "ì—´ ë¨¸ë¦¬ê¸€ í¬í•¨(~O)";
+        Text[ korean ] = "ë²”ìœ„ì— ì—´ ë ˆì´ë¸”ì„ í¬í•¨(~O)";
         Text[ turkish ] = "Aralık, ~sütun başlıkları içeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~nté capçaleres de columna";
@@ -2095,7 +2095,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "ä¸ç”¢ç”Ÿå‚™ä»½(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
-        Text[ korean ] = "ì¤‘ë³µ í—ˆìš© ì•ˆë¨(~N)";
+        Text[ korean ] = "ë³µì œ ì—†ìŒ(~N)";
         Text[ turkish ] = "Aynı sonuçları ~ayıkla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sense ~duplicats";
@@ -2146,7 +2146,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ swedish ] = "~Behåll filterkriterier" ;
         Text [ danish ] = "Persistent" ;
         Text [ italian ] = "Mantieni criteri" ;
-        Text [ spanish ] = "~Persistente" ;
+        Text [ spanish ] = "~Conservar los criterios de filtrado" ;
         Text [ french ] = "Conserver les critères de filtre" ;
         Text [ dutch ] = "~Persistent" ;
         Text [ portuguese ] = "~Manter critérios" ;
@@ -2259,7 +2259,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ french ] = "factice" ;
         Text [ swedish ] = "dummy" ;
         Text [ dutch ] = "dummy" ;
-        Text [ spanish ] = "Comodín" ;
+        Text [ spanish ] = "Texto ejemplo" ;
         Text [ english_us ] = "dummy" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "æ ·æœ¬";
@@ -2300,7 +2300,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "è³‡æ–™å€åŸŸï¼š";
         Text[ arabic ] = "äØÇŞ ÇáÈíÇäÇÊ:";
         Text[ greek ] = "Ğåñéï÷Ş äåäïìİíùí:";
-        Text[ korean ] = "ë°ì´í„° ì˜ì—­:";
+        Text[ korean ] = "ë°ì´í„° ë²”ìœ„:";
         Text[ turkish ] = "Veri aralığı:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea de dades:";
@@ -2598,7 +2598,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     };
     StringList [ korean ] =
     {
-            < "ì™€" ; Default ; > ;
+            < "ì™€(ê³¼)" ; Default ; > ;
         < "ë˜ëŠ”" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -2731,7 +2731,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     };
     StringList [ korean ] =
     {
-            < "ì™€" ; Default ; > ;
+            < "ì™€(ê³¼)" ; Default ; > ;
         < "ë˜ëŠ”" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -3575,7 +3575,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ french ] = "Caractère ~générique" ;
         Text [ swedish ] = "~Reguljärt uttryck" ;
         Text [ dutch ] = "~Gangbare uitdrukking" ;
-        Text [ spanish ] = "~Expresión corriente" ;
+        Text [ spanish ] = "~Expresión regular" ;
         Text [ english_us ] = "~Regular expression" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¸¸è§„è¡¨è¾¾(~R)";
@@ -3585,7 +3585,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "å¸¸è¦è¡¨é”(~R)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
         Text[ greek ] = "ÊáíïíéêŞ ğá~ñÜóôáóç";
-        Text[ korean ] = "ì¼ë°˜ì  í‘œí˜„(~R)";
+        Text[ korean ] = "ì •ê·œì‹(~R)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Expressió ~habitual";
@@ -3617,7 +3617,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "ä¸ç”¢ç”Ÿå‚™ä»½(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
-        Text[ korean ] = "ì¤‘ë³µ í—ˆìš© ì•ˆë¨(~N)";
+        Text[ korean ] = "ë³µì œ ì—†ìŒ(~N)";
         Text[ turkish ] = "Aynı sonuçları ~ayıkla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sense ~duplicats";
@@ -3670,7 +3670,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ french ] = "factice" ;
         Text [ swedish ] = "dummy" ;
         Text [ dutch ] = "dummy" ;
-        Text [ spanish ] = "Comodín" ;
+        Text [ spanish ] = "Texto ejemplo" ;
         Text [ english_us ] = "dummy" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "æ ·æœ¬";
@@ -3711,7 +3711,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "è³‡æ–™å€åŸŸï¼š";
         Text[ arabic ] = "äØÇŞ ÇáÈíÇäÇÊ:";
         Text[ greek ] = "Ğåñéï÷Ş äåäïìİíùí:";
-        Text[ korean ] = "ë°ì´í„° ì˜ì—­:";
+        Text[ korean ] = "ë°ì´í„° ë²”ìœ„:";
         Text[ turkish ] = "Veri aralığı:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea de dades:";
@@ -3757,4 +3757,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ catalan ] = "Filtre";
     Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
 };
+
+
+
+
+
 

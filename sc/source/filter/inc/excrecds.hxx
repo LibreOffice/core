@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:41:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,34 +354,6 @@ public:
 };
 
 
-//--------------------------------------------------------- class ExcDummy_XF -
-// Ersatz fuer Default XF Records
-
-class ExcDummy_XF : public ExcDummyRec
-{
-private:
-    static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
-public:
-    virtual ULONG           GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
-};
-
-
-//------------------------------------------------------ class ExcDummy_Style -
-// Ersatz fuer Default Style Records
-
-class ExcDummy_Style : public ExcDummyRec
-{
-private:
-    static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
-public:
-    virtual ULONG           GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
-};
-
-
 //------------------------------------------------------ class ExcBundlesheet -
 
 class ExcBundlesheetBase : public ExcRecord
@@ -493,8 +465,7 @@ protected:
                                 const ScAddress rPos,
                                 const ScPatternAttr* pAttr,
                                 RootData& rRootData,
-                                const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND,
-                                BOOL bForceAltNumForm = FALSE );
+                                const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND );
 
     virtual void            SaveCont( XclExpStream& rStrm );
     virtual void            SaveDiff( XclExpStream& rStrm );
@@ -697,6 +668,21 @@ public:
     virtual UINT16          GetNum( void ) const;
 };
 
+/*----------------------------------------------------------------------*/
+
+class ExcFmlaResultStr : public XclExpRecord
+{
+private:
+    XclExpString maResultText;
+
+public:
+
+    ExcFmlaResultStr(const XclExpString &aFmlaText);
+    virtual ~ExcFmlaResultStr();
+
+private:
+    virtual void                WriteBody( XclExpStream& rStrm );
+};
 
 //---------------------------------------------------------- class ExcFormula -
 
@@ -706,6 +692,7 @@ private:
     sal_Char*               pData;
     UINT16                  nFormLen;
     BOOL                    bShrdFmla;
+    ScFormulaCell*          pFCell;
 
     virtual void            SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
     virtual ULONG           GetDiffLen( void ) const;
@@ -716,12 +703,13 @@ public:
                                 const ScPatternAttr *pAttr,
                                 RootData& rRootData,
                                 const ULONG nAltNumForm,
-                                BOOL bForceAltNumForm,
                                 const ScTokenArray& rCode,
                                 ExcArray** ppArray = NULL,
                                 ScMatrixMode eMM = MM_NONE,
                                 ExcShrdFmla** ppShrdFmla = NULL,
-                                ExcArrays* pShrdFmlas = NULL );
+                                ExcArrays* pShrdFmlas = NULL,
+                                ScFormulaCell* pFCell = NULL,
+                                ExcFmlaResultStr **pFormulaResult = NULL);
                             ~ExcFormula();
 
     inline const ScAddress& GetPosition() const { return aPos; }    // from ExcCell
@@ -729,6 +717,8 @@ public:
     void                    SetTableOp( USHORT nCol, USHORT nRow ); // for TableOp export
 
     virtual UINT16          GetNum( void ) const;
+
+    static  BYTE ScErrorCodeToExc(UINT16 nErrorCode);
 };
 
 
@@ -838,6 +828,7 @@ private:
     void                    SetName( const String& rRangeName );
     void                    SetUniqueName( const String& rRangeName );
     BOOL                    SetBuiltInName( const String& rName, UINT8 nKey );
+    BOOL                    IsBuiltInAFName( const String& rName, UINT8 nKey );
 
     virtual void            SaveCont( XclExpStream& rStrm );
 
@@ -1076,75 +1067,12 @@ private:
 
 public:
                             ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nXF, RootData&, ExcEOutline& rOutline );
-    void                    SetWidth( UINT16 nWidth, double fColScale );
 
                             // if expandable, delete rpExp and set to NULL
     void                    Expand( ExcColinfo*& rpExp );
 
     virtual UINT16          GetNum( void ) const;
     virtual ULONG           GetLen( void ) const;
-};
-
-
-//--------------------------------------------------------------- class ExcXf -
-
-class ExcXf : public ExcRecord, protected XclExpRoot
-{
-protected:
-    UINT16                  nIfnt;
-    UINT16                  nIfmt;
-
-    UINT16                  nOffs8;
-
-    UINT32                  nIcvForeSer;
-    UINT32                  nIcvBackSer;
-    UINT16                  nFls;
-
-    UINT32                  nIcvTopSer;
-    UINT32                  nIcvBotSer;
-    UINT32                  nIcvLftSer;
-    UINT32                  nIcvRigSer;
-
-    UINT16                  nDgTop;
-    UINT16                  nDgBottom;
-    UINT16                  nDgLeft;
-    UINT16                  nDgRight;
-
-    XclHorAlign             eAlc;
-    XclVerAlign             eAlcV;
-    XclTextOrient           eOri;
-    BOOL                    bFWrap;
-    BOOL                    bFSxButton;
-
-    BOOL                    bStyle;
-
-    BOOL                    bAtrNum;
-    BOOL                    bAtrFnt;
-    BOOL                    bAtrAlc;
-    BOOL                    bAtrBdr;
-    BOOL                    bAtrPat;
-    BOOL                    bAtrProt;
-
-#ifdef DBG_UTIL
-    static UINT16           nObjCnt;
-#endif
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            ExcXf( const XclExpRoot& rRoot,
-                                    UINT16 nFont, UINT16 nForm, const ScPatternAttr*, BOOL& rbLineBreak,
-                                    BOOL bStyle = FALSE );
-                                // rbLineBreak = TRUE erzwingt Wrap,
-                                // return von rbLineBreak enthaelt immer tatsaechliches Wrap
-#ifdef DBG_UTIL
-    virtual                 ~ExcXf();
-#endif
-
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
-
-    static void             ScToExcBorderLine( XclExpPalette& rPalette, const SvxBorderLine*, UINT32& rIcvSer, UINT16& rDg );
 };
 
 
@@ -1247,68 +1175,6 @@ public:
 
     virtual UINT16          GetNum( void ) const;
     virtual ULONG           GetLen( void ) const;
-};
-
-
-//------------------------------------------------------------ class UsedList -
-
-class UsedList : public List, public ExcEmptyRec
-{
-private:
-protected:
-    UINT16                  nBaseIndex;
-
-public:
-    inline                  UsedList() {}
-
-    inline void             SetBaseIndex( UINT16 nNewVal ) { nBaseIndex = nNewVal; }
-
-    virtual void            Save( XclExpStream& rStrm );
-};
-
-
-//-------------------------------------------------------- class UsedAttrList -
-// a list of ENTRY structs
-
-class UsedAttrList : public UsedList, ExcRoot
-{
-private:
-    struct ENTRY
-    {
-        const ScPatternAttr*    pPattAttr;
-        ExcXf*              pXfRec;
-        BOOL                bLineBreak;
-        ULONG               nAltNumForm;
-
-        inline              ENTRY() : nAltNumForm( NUMBERFORMAT_ENTRY_NOT_FOUND ), pXfRec( NULL ) {}
-        inline              ~ENTRY() { if( pXfRec ) delete pXfRec; }
-
-        inline BOOL         Equal( const ScPatternAttr* p, const ULONG n ) const
-                            {
-                                return pPattAttr == p && nAltNumForm == n;
-                            }
-    };
-
-    inline ENTRY*           _First()    { return (ENTRY*) List::First(); }
-    inline ENTRY*           _Next()     { return (ENTRY*) List::Next(); }
-
-    XclExpFontBuffer&       rFntLst;
-    XclExpNumFmtBuffer&     rFrmLst;
-
-    void                    AddNewXF( const ScPatternAttr* pAttr,
-                                const BOOL bStyle, const BOOL bExplLineBreak,
-                                const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND,
-                                BOOL bForceAltNumForm = FALSE );
-
-public:
-                            UsedAttrList( RootData* pRD );
-    virtual                 ~UsedAttrList();
-    UINT16                  Find( const ScPatternAttr* pSearch, const BOOL bStyle = FALSE,
-                                    const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND,
-                                    BOOL bForceAltNumForm = FALSE );
-    UINT16                  FindWithLineBreak( const ScPatternAttr* pSearch );
-
-    virtual void            Save( XclExpStream& rStrm );    // overloaded to get ExcRecord from ENTRY
 };
 
 
@@ -1683,6 +1549,7 @@ public:
     virtual UINT16          GetNum() const;
     virtual ULONG           GetLen() const;
 };
+
 
 
 //--------------------------- class XclExpTableOp, class XclExpTableOpManager -

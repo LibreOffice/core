@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-15 14:35:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/zforlist.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
@@ -536,25 +536,77 @@ void ScConditionEntry::CompileXML()
              TRUE, FALSE, TRUE );
 }
 
+void lcl_CondUpdateInsertTab( ScTokenArray& rCode, USHORT nInsTab, USHORT nPosTab, BOOL& rChanged )
+{
+    //  Insert table: only update absolute table references.
+    //  (Similar to ScCompiler::UpdateInsertTab with bIsName=TRUE, result is the same as for named ranges)
+    //  For deleting, ScCompiler::UpdateDeleteTab is used because of the handling of invalid references.
+
+    rCode.Reset();
+    ScToken* p = rCode.GetNextReference();
+    while( p )
+    {
+        SingleRefData& rRef1 = p->GetSingleRef();
+        if ( !rRef1.IsTabRel() && nInsTab <= rRef1.nTab )
+        {
+            rRef1.nTab += 1;
+            rRef1.nRelTab = rRef1.nTab - nPosTab;
+            rChanged = TRUE;
+        }
+        if( p->GetType() == svDoubleRef )
+        {
+            SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+            if ( !rRef2.IsTabRel() && nInsTab <= rRef2.nTab )
+            {
+                rRef2.nTab += 1;
+                rRef2.nRelTab = rRef2.nTab - nPosTab;
+                rChanged = TRUE;
+            }
+        }
+        p = rCode.GetNextReference();
+    }
+}
+
 void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, short nDx, short nDy, short nDz )
 {
+    BOOL bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz == 1 );
+    BOOL bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz == -1 );
+
     BOOL bChanged1 = FALSE;
     BOOL bChanged2 = FALSE;
 
     if (pFormula1)
     {
-        ScCompiler aComp( pDoc, aSrcPos, *pFormula1 );
-        aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged1);
+        if ( bInsertTab )
+            lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged1 );
+        else
+        {
+            ScCompiler aComp( pDoc, aSrcPos, *pFormula1 );
+            if ( bDeleteTab )
+                aComp.UpdateDeleteTab( rRange.aStart.Tab(), FALSE, TRUE, bChanged1 );
+            else
+                aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged1 );
+        }
+
         if (bChanged1)
-            DELETEZ(pFCell1);       // wird bei IsValid wieder angelegt
+            DELETEZ(pFCell1);       // is created again in IsValid
     }
     if (pFormula2)
     {
-        ScCompiler aComp( pDoc, aSrcPos, *pFormula2 );
-        aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged2);
+        if ( bInsertTab )
+            lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged2 );
+        else
+        {
+            ScCompiler aComp( pDoc, aSrcPos, *pFormula2 );
+            if ( bDeleteTab )
+                aComp.UpdateDeleteTab( rRange.aStart.Tab(), FALSE, TRUE, bChanged2 );
+            else
+                aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged2 );
+        }
+
         if (bChanged2)
-            DELETEZ(pFCell2);       // wird bei IsValid wieder angelegt
+            DELETEZ(pFCell2);       // is created again in IsValid
     }
 }
 
@@ -729,7 +781,7 @@ BOOL ScConditionEntry::IsValid( double nArg ) const
             double nTemp = nComp1; nComp1 = nComp2; nComp2 = nTemp;
         }
 
-    //  Alle Grenzfaelle muessen per SolarMath::ApproxEqual getestet werden!
+    //  Alle Grenzfaelle muessen per ::rtl::math::approxEqual getestet werden!
 
     BOOL bValid = FALSE;
     switch (eOp)
@@ -737,33 +789,33 @@ BOOL ScConditionEntry::IsValid( double nArg ) const
         case SC_COND_NONE:
             break;                  // immer FALSE;
         case SC_COND_EQUAL:
-            bValid = SolarMath::ApproxEqual( nArg, nComp1 );
+            bValid = ::rtl::math::approxEqual( nArg, nComp1 );
             break;
         case SC_COND_NOTEQUAL:
-            bValid = !SolarMath::ApproxEqual( nArg, nComp1 );
+            bValid = !::rtl::math::approxEqual( nArg, nComp1 );
             break;
         case SC_COND_GREATER:
-            bValid = ( nArg > nComp1 ) && !SolarMath::ApproxEqual( nArg, nComp1 );
+            bValid = ( nArg > nComp1 ) && !::rtl::math::approxEqual( nArg, nComp1 );
             break;
         case SC_COND_EQGREATER:
-            bValid = ( nArg >= nComp1 ) || SolarMath::ApproxEqual( nArg, nComp1 );
+            bValid = ( nArg >= nComp1 ) || ::rtl::math::approxEqual( nArg, nComp1 );
             break;
         case SC_COND_LESS:
-            bValid = ( nArg < nComp1 ) && !SolarMath::ApproxEqual( nArg, nComp1 );
+            bValid = ( nArg < nComp1 ) && !::rtl::math::approxEqual( nArg, nComp1 );
             break;
         case SC_COND_EQLESS:
-            bValid = ( nArg <= nComp1 ) || SolarMath::ApproxEqual( nArg, nComp1 );
+            bValid = ( nArg <= nComp1 ) || ::rtl::math::approxEqual( nArg, nComp1 );
             break;
         case SC_COND_BETWEEN:
             bValid = ( nArg >= nComp1 && nArg <= nComp2 ) ||
-                     SolarMath::ApproxEqual( nArg, nComp1 ) || SolarMath::ApproxEqual( nArg, nComp2 );
+                     ::rtl::math::approxEqual( nArg, nComp1 ) || ::rtl::math::approxEqual( nArg, nComp2 );
             break;
         case SC_COND_NOTBETWEEN:
             bValid = ( nArg < nComp1 || nArg > nComp2 ) &&
-                     !SolarMath::ApproxEqual( nArg, nComp1 ) && !SolarMath::ApproxEqual( nArg, nComp2 );
+                     !::rtl::math::approxEqual( nArg, nComp1 ) && !::rtl::math::approxEqual( nArg, nComp2 );
             break;
         case SC_COND_DIRECT:
-            bValid = !SolarMath::ApproxEqual( nComp1, 0.0 );
+            bValid = !::rtl::math::approxEqual( nComp1, 0.0 );
             break;
         default:
             DBG_ERROR("unbekannte Operation bei ScConditionEntry");
@@ -777,7 +829,7 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
     //  Interpret muss schon gerufen sein
 
     if ( eOp == SC_COND_DIRECT )                // Formel ist unabhaengig vom Inhalt
-        return !SolarMath::ApproxEqual( nVal1, 0.0 );
+        return !::rtl::math::approxEqual( nVal1, 0.0 );
 
     //  Wenn Bedingung Zahl enthaelt, immer FALSE, ausser bei "ungleich"
 

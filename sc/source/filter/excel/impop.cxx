@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,10 +237,6 @@ ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rBa
 
     // options from configuration
     ScFilterOptions aFilterOpt;
-
-    pExcRoot->fColScale = aFilterOpt.GetExcelColScale();
-    if( pExcRoot->fColScale <= 0.0 )
-        pExcRoot->fColScale = 1.0;
 
     pExcRoot->fRowScale = aFilterOpt.GetExcelRowScale();
     if( pExcRoot->fRowScale <= 0.0 )
@@ -497,11 +493,15 @@ void ImportExcel::Row25( void )
 void ImportExcel::Bof2( void )
 {
     sal_uInt16 nSubType;
+#if SC_XCL_USEDECR
     maStrm.UseDecryption( false );
+#endif
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
     SetBiff( xlBiff2 );
+#if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
+#endif
 
     pExcRoot->eHauptDateiTyp = Biff2;
     if( nSubType == 0x0010 )        // Worksheet?
@@ -563,7 +563,7 @@ void ImportExcel::Externsheet( void )
     bool bSameWorkBook;
     aIn.AppendByteString( aEncodedUrl, false );
     XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSameWorkBook, *pExcRoot->pIR, aEncodedUrl );
-    ScfTools::ConvertName( aTabName );
+    ScfTools::ConvertToScSheetName( aTabName );
     pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
 }
 
@@ -584,7 +584,7 @@ void ImportExcel::Name25( void )
 
         // Namen einlesen
         String aName( aIn.ReadRawByteString( nLenName ) );
-        ScfTools::ConvertName( aName );
+        ScfTools::ConvertToScDefinedName( aName );
 
         pFormConv->Reset();
         if( nAttr0 & 0x02 )
@@ -626,13 +626,18 @@ void ImportExcel::Name25( void )
         sal_Char        cFirstNameChar = ( sal_Char ) aName.GetChar( 0 );
         const BOOL      bPrintArea = bBuildIn && ( cFirstNameChar == EXC_BUILTIN_PRINTAREA );
         const BOOL      bPrintTitles = bBuildIn && ( cFirstNameChar == EXC_BUILTIN_PRINTTITLES );
+        RangeType       eNameType = RT_ABSAREA;
+
+        if(bPrintArea)
+            eNameType = RT_PRINTAREA;
+
 
         if( bBuildIn )
         {// Build-in name
             XclTools::GetBuiltInName( aName, cFirstNameChar, nSheet );
         }
         else
-            ScfTools::ConvertName( aName );
+            ScfTools::ConvertToScDefinedName( aName );
 
         pFormConv->Reset();
         if( nOpt & (EXC_NAME_VB | EXC_NAME_BIG) )
@@ -658,7 +663,7 @@ void ImportExcel::Name25( void )
             pExcRoot->pRNameBuff->Store( aName, NULL, nSheet );
         else
             // ohne hidden
-            pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, bPrintArea );
+            pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, eNameType);
     }// ----------------------------------------- Ende fuer Biff5
 }
 
@@ -821,7 +826,7 @@ void ImportExcel::Externname25( void )
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name
-        ScfTools::ConvertName( aName );
+        ScfTools::ConvertToScDefinedName( aName );
         pExcRoot->pExtNameBuff->AddName( aName );
     }
     else if( nOpt & 0x0010 )
@@ -845,7 +850,8 @@ void ImportExcel::Colwidth( void )
     if( nColLast > MAXCOL )
         nColLast = MAXCOL;
 
-    pColRowBuff->SetWidthRange( nColFirst, nColLast, CalcColWidth( nColWidth ) );
+    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
+    pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
 }
 
 
@@ -932,6 +938,7 @@ void ImportExcel::DocProtect( void )
 
 BOOL ImportExcel::Filepass( void )
 {
+#if SC_XCL_USEDECR
     if( pExcRoot->eHauptDateiTyp <= Biff5 )
     {
         aIn.UseDecryption( false );
@@ -958,6 +965,7 @@ BOOL ImportExcel::Filepass( void )
         return !bValid;
     }
     else
+#endif
         // POST: return = TRUE, wenn Password <> 0
         return aIn.ReaduInt32() != 0;
 }
@@ -1003,10 +1011,16 @@ void ImportExcel::Ixfe( void )
 
 void ImportExcel::DefColWidth( void )
 {
-    UINT16  nWidth;
-    aIn >> nWidth;
+    // stored as entire characters -> convert to 1/256 of characters (as in COLINFO)
+    double fDefWidth = 256.0 * maStrm.ReaduInt16();
 
-    pColRowBuff->SetDefWidth( CalcColWidth( (UINT16) ( (double)nWidth * 292.5 ) ) );
+    // #i3006# additional space for default width - Excel adds space depending on font size
+    long nFontHt = GetFontBuffer().GetAppFontData().mnHeight;
+    fDefWidth += 40960.0 / ::std::max( nFontHt - 15L, 60L ) + 50.0;
+    fDefWidth = ::std::min( fDefWidth, 65535.0 );
+
+    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( static_cast< sal_uInt16 >( fDefWidth ), GetCharWidth() );
+    pColRowBuff->SetDefWidth( nScWidth );
 }
 
 
@@ -1034,7 +1048,8 @@ void ImportExcel::Colinfo( void )
     if( nOpt & EXC_COL_HIDDEN ) // Cols hidden?
         pColRowBuff->HideColRange( nColFirst, nColLast );
 
-    pColRowBuff->SetWidthRange( nColFirst, nColLast, CalcColWidth( nColWidth ) );
+    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
+    pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
     pColRowBuff->SetDefaultXF( nColFirst, nColLast, nXF );
 }
 
@@ -1112,7 +1127,7 @@ void ImportExcel::Boundsheet( void )
         nGrbit = 0x0000;
 
     String aName( aIn.ReadByteString( FALSE ) );
-    ScfTools::ConvertName( aName );
+    ScfTools::ConvertToScSheetName( aName );
 
     *pExcRoot->pTabNameBuff << aName;
 
@@ -1199,10 +1214,8 @@ void ImportExcel::Palette( void )
 
 void ImportExcel::Standardwidth( void )
 {
-    UINT16  nWidth;
-    aIn >> nWidth;
-
-    pColRowBuff->SetDefWidth( CalcColWidth( nWidth ), TRUE );
+    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
+    pColRowBuff->SetDefWidth( nScWidth, TRUE );
 }
 
 
@@ -1634,11 +1647,15 @@ void ImportExcel::Row34( void )
 void ImportExcel::Bof3( void )
 {
     sal_uInt16 nSubType;
+#if SC_XCL_USEDECR
     maStrm.UseDecryption( false );
+#endif
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
     SetBiff( xlBiff3 );
+#if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
+#endif
 
     DBG_ASSERT( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
     pExcRoot->eHauptDateiTyp = Biff3;
@@ -1685,7 +1702,7 @@ void ImportExcel::Name34( void )
     }
     else
     {
-        ScfTools::ConvertName( aName );
+        ScfTools::ConvertToScDefinedName( aName );
 
         bPrintArea = bPrintTitles = bBuildIn = FALSE;
     }
@@ -1725,7 +1742,7 @@ void ImportExcel::Array34( void )
     BYTE                    nFirstCol, nLastCol;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-    aIn.Ignore( 6 );
+    aIn.Ignore( (pExcRoot->eHauptDateiTyp >= Biff5) ? 6 : 2 );
     aIn >> nFormLen;
 
     if( nLastRow <= MAXROW && nLastCol <= MAXCOL )
@@ -1864,11 +1881,15 @@ void ImportExcel::Window2_5( void )
 void ImportExcel::Bof4( void )
 {
     sal_uInt16 nSubType;
+#if SC_XCL_USEDECR
     maStrm.UseDecryption( false );
+#endif
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
     SetBiff( xlBiff4 );
+#if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
+#endif
 
     pExcRoot->eHauptDateiTyp = Biff4;
     if( nSubType == 0x0010 )        // Sheet?
@@ -1894,10 +1915,14 @@ void ImportExcel::Bof5( void )
     BiffTyp     eHaupt = Biff5;
     BiffTyp     eDatei;
 
+#if SC_XCL_USEDECR
     maStrm.UseDecryption( false );
+#endif
     maStrm >> nVers >> nSubType;
     SetBiff( (nVers == 0x0600) ? xlBiff8 : xlBiff5 );
+#if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
+#endif
 
     switch( nSubType )
     {
@@ -1961,6 +1986,21 @@ void ImportExcel::EndSheet( void )
 
     if( pExcRoot->eHauptDateiTyp < Biff8 )
         pExcRoot->pExtNameBuff->Reset();
+
+    // no or empty HEADER record
+    if( !bHasHeader )
+    {
+        SvxSetItem aHeaderSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_HEADERSET ) );
+        aHeaderSetItem.GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, sal_False ) );
+        pStyleSheetItemSet->Put( aHeaderSetItem );
+    }
+    // no or empty FOOTER record
+    if( !bHasFooter )
+    {
+        SvxSetItem aFooterSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_FOOTERSET ) );
+        aFooterSetItem.GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, sal_False ) );
+        pStyleSheetItemSet->Put( aFooterSetItem );
+    }
 }
 
 
@@ -1975,7 +2015,7 @@ void ImportExcel::NeueTabelle( void )
 
     ScStyleSheetPool* pStyleShPool = pD->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSh = pStyleShPool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
-    pStyleSheetItemSet = pStyleSh ? &pStyleSh->GetItemSet() :
+    pExcRoot->pStyleSheetItemSet = pStyleSheetItemSet = pStyleSh ? &pStyleSh->GetItemSet() :
         &pStyleShPool->Make( aStyleName, SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_USERDEF ).GetItemSet();
 
     pExcRoot->bDefaultPage = TRUE;
@@ -2160,7 +2200,6 @@ void ImportExcel::PostDocLoad( void )
         }
     }
 
-    pExcRoot->pExtDocOpt->fColScale = pExcRoot->fColScale;
     pD->SetExtDocOptions( pExcRoot->pExtDocOpt );
     pExcRoot->pExtDocOpt = NULL;
 
@@ -2230,21 +2269,6 @@ void ImportExcel::PostDocLoad( void )
             }
         }
     }
-
-    // no or empty HEADER record
-    if( !bHasHeader )
-    {
-        SvxSetItem aHeaderSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_HEADERSET ) );
-        aHeaderSetItem.GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, sal_False ) );
-        pStyleSheetItemSet->Put( aHeaderSetItem );
-    }
-    // no or empty FOOTER record
-    if( !bHasFooter )
-    {
-        SvxSetItem aFooterSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_FOOTERSET ) );
-        aFooterSetItem.GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, sal_False ) );
-        pStyleSheetItemSet->Put( aFooterSetItem );
-    }
 }
 
 
@@ -2274,22 +2298,6 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
     }
     else
         bTabTruncated = TRUE;
-}
-
-
-UINT16 ImportExcel::CalcColWidth( const UINT16 n )
-{
-    double      f = ( double ) n;
-
-    f *= pExcRoot->fColScale;
-    f *= 23.0;
-    f -= 90.0;
-    f *= 25.0 / 1328.0;
-
-    if( f < 0.0 )
-        f = 0.0;
-
-    return ( UINT16 ) f;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-21 17:48:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,10 +140,13 @@ public:
     PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, long nFieldIndex );
     void                    NotifyMouseButtonUp  ( const Point& rAt );
     PointerStyle            NotifyMouseMove      ( const Point& rAt );
-    void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bActive );
+    void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bGotFocus );
     void                    NotifyMoveField      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, long nFieldIndex );
     BOOL                    NotifyMoveSlider     ( USHORT nKeyCode );   // return TRUE, if position changed
+
+protected:
+    virtual void            Deactivate();
 
 private:
     FixedLine               aFlLayout;

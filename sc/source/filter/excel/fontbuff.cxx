@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:16:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

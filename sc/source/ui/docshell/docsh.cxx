@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 15:45:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,8 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
         aPoolStm->SetVersion(pStor->GetVersion());
         aPoolStm->SetSize(0);
         bRet = aDocument.SavePool( *aPoolStm );
+        if ( aPoolStm->GetErrorCode() && !pStor->GetErrorCode() )
+            pStor->SetError(aPoolStm->GetErrorCode());
     }
     else
     {
@@ -1428,11 +1430,11 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     USHORT nOldNumberFormatInt = rStream.GetNumberFormatInt();
     ByteString aStrDelimEncoded;    // only used if not Unicode
     UniString aStrDelimDecoded;     // only used if context encoding
-    BOOL bContextEncoding;
+    BOOL bContextOrNotAsciiEncoding;
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
         rStream.StartWritingUnicodeText();
-        bContextEncoding = FALSE;
+        bContextOrNotAsciiEncoding = FALSE;
     }
     else
     {
@@ -1441,12 +1443,14 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         aInfo.StructSize = sizeof(aInfo);
         if ( rtl_getTextEncodingInfo( eCharSet, &aInfo ) )
         {
-            bContextEncoding = ((aInfo.Flags & RTL_TEXTENCODING_INFO_CONTEXT) != 0);
-            if ( bContextEncoding )
+            bContextOrNotAsciiEncoding =
+                (((aInfo.Flags & RTL_TEXTENCODING_INFO_CONTEXT) != 0) ||
+                 ((aInfo.Flags & RTL_TEXTENCODING_INFO_ASCII) == 0));
+            if ( bContextOrNotAsciiEncoding )
                 aStrDelimDecoded = String( aStrDelimEncoded, eCharSet );
         }
         else
-            bContextEncoding = FALSE;
+            bContextOrNotAsciiEncoding = FALSE;
     }
 
     USHORT nStartCol = 0;
@@ -1655,7 +1659,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     // have to convert forth and back and forth again. Same for
                     // UTF-7 since it is a context sensitive encoding too.
 
-                    if ( bContextEncoding )
+                    if ( bContextOrNotAsciiEncoding )
                     {
                         // to byte encoding
                         ByteString aStrEnc( aString, eCharSet );
@@ -1750,7 +1754,9 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    DoEnterHandler();                                   // nicht abgeschlossene Zelle beenden
+    //  #i6500# don't call DoEnterHandler here (doesn't work with AutoSave),
+    //  it's already in ExecuteSave (as for Save and SaveAs)
+
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
     if (eShellMode == SFX_CREATE_MODE_STANDARD)
@@ -2276,6 +2282,7 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
             SetDocumentModifiedPending( FALSE );
             aDocument.InvalidateStyleSheetUsage();
             aDocument.InvalidateTableArea();
+            aDocument.InvalidateLastTableOpParams();
             aDocument.Broadcast( SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS, NULL );
             if ( aDocument.IsForcedFormulaPending() && aDocument.GetAutoCalc() )
                 aDocument.CalcFormulaTree( TRUE );

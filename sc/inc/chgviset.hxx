@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgviset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-20 10:26:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ enum ScChgsDateMode{    SCDM_DATE_BEFORE=0,SCDM_DATE_SINCE=1,SCDM_DATE_EQUAL=2,
 namespace utl {
     class TextSearch;
 }
+
+class ScDocument;
 
 class ScChangeViewSettings
 {
@@ -172,6 +174,9 @@ public:
     void                Store( SvStream& rStream ) const;
 
     ScChangeViewSettings&   operator=   ( const ScChangeViewSettings& r );
+
+                        /// Adjust dates according to selected DateMode
+    void                AdjustDateMode( const ScDocument& rDoc );
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class ScPreviewShell: public SfxViewShell
     Window*         pCorner;
 
     String          aSourceData;            // ViewData
+    BYTE            nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
 
     SfxBroadcaster* pAccessibilityBroadcaster;
@@ -150,6 +151,7 @@ public:
     void            FillFieldData( ScHeaderFieldData& rData );
 
     const String&   GetSourceData() const   { return aSourceData; }
+    BYTE            GetSourceDesignMode() const { return nSourceDesignMode; }
 
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                          const SfxHint& rHint, const TypeId& rHintType );
@@ -168,6 +170,7 @@ public:
 
     const ScPreviewLocationData& GetLocationData();
     ScDocument*     GetDocument();
+    ScPreview*      GetPreview() { return pPreview; }
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:08:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
         Text [ french ] = "~Disposition" ; \
         Text [ swedish ] = "~Placering" ; \
         Text [ dutch ] = "~Positie" ; \
-        Text [ spanish ] = "~Posición" ; \
+        Text [ spanish ] = "~Disposición" ; \
         Text [ english_us ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
@@ -119,18 +119,19 @@
                     Text [ french ] = "V~ers l'avant" ; \
                     Text [ swedish ] = "Flytta l~ängre fram" ; \
                     Text [ dutch ] = "Naar ~voren" ; \
-                    Text [ spanish ] = "Traer más a~delante" ; \
+                    Text [ spanish ] = "Traer a~delante" ; \
                     Text [ english_us ] = "Bring ~Forward" ; \
-                    Text[ chinese_simplified ] = "ÉÏÒÆÒ»²ã(~F)";\
+                    Text[ chinese_simplified ] = "ä¸Šç§»ä¸€å±‚(~F)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~âïåğåä";\
                     Text[ polish ] = "~Wysuñ do przodu";\
-                    Text[ japanese ] = "‘O–Ê‚ÖˆÚ“®(~F)";\
+                    Text[ japanese ] = "å‰é¢ã¸ç§»å‹•(~F)";\
                     Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";\
-                    Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~F)";\
-                    Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";\
+                    Text[ korean ] = "ì•ìœ¼ë¡œ ì´ë™(~F)";\
+                    Text[ chinese_traditional ] = "ä¸Šç§»ä¸€å±¤(~F)";\
                     Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";\
                     Text[ turkish ] = "~Bir öne getir";\
-                    Text[ catalan ] = "Traer más a~delante";\
+                    Text[ catalan ] = "Porta al ~davant";\
+                    Text[ thai ] = "à¸™à¸³~à¸ªà¹ˆà¸‡à¸•à¹ˆà¸­";\
                 };\
                 MenuItem\
                 {\
@@ -148,18 +149,19 @@
                     Text [ french ] = "~Vers l'arrière" ; \
                     Text [ swedish ] = "Flytta lä~ngre bak" ; \
                     Text [ dutch ] = "Naar ~achteren" ; \
-                    Text [ spanish ] = "Enviar hacia a~trás" ; \
+                    Text [ spanish ] = "Enviar a~trás" ; \
                     Text [ english_us ] = "Send Back~ward" ; \
-                    Text[ chinese_simplified ] = "ÏÂÒÆÒ»²ã(~W)";\
+                    Text[ chinese_simplified ] = "ä¸‹ç§»ä¸€å±‚(~W)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~íàçàä";\
                     Text[ polish ] = "Przesuñ do ty³u";\
-                    Text[ japanese ] = "”w–Ê‚ÉˆÚ“®(~W)";\
+                    Text[ japanese ] = "èƒŒé¢ã«ç§»å‹•(~W)";\
                     Text[ greek ] = "~ÌåôáöïñÜ ğßóù";\
-                    Text[ korean ] = "µÚ·Î º¸³»±â(~W)";\
-                    Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";\
+                    Text[ korean ] = "ë’¤ë¡œ ì´ë™(~W)";\
+                    Text[ chinese_traditional ] = "ä¸‹ç§»ä¸€å±¤(~W)";\
                     Text[ arabic ] = "ÅÑÓÇá ÎáİÇğ";\
                     Text[ turkish ] = "Bir alta gönder";\
-                    Text[ catalan ] = "Enviar hacia a~trás";\
+                    Text[ catalan ] = "Envia cap ~enrere";\
+                    Text[ thai ] = "à¸ªà¹ˆà¸‡~à¸à¸¥à¸±à¸š";\
                 };\
                 MenuItem\
                 {\
@@ -176,16 +178,17 @@
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "ÅÅĞò(~A)";\
-        Text[ russian ] = "Ğ~àñïîëîæåíèå";\
+        Text[ chinese_simplified ] = "æ’åº(~A)";\
+        Text[ russian ] = "Ğ~àñïîëîæèòü";\
         Text[ polish ] = "~Rozmieszczenie";\
-        Text[ japanese ] = "®—ñ(~A)";\
+        Text[ japanese ] = "æ•´åˆ—(~A)";\
         Text[ greek ] = "ÄéÜô~áîç";\
-        Text[ korean ] = "Á¤·Ä(~A)";\
-        Text[ chinese_traditional ] = "±Æ§Ç(~A)";\
+        Text[ korean ] = "ë°°ì¹˜(~A)";\
+        Text[ chinese_traditional ] = "æ’åº(~A)";\
         Text[ arabic ] = "ÊÑÊíÈ~";\
         Text[ turkish ] = "Düzen";\
-        Text[ catalan ] = "~Posición";\
+        Text[ catalan ] = "~Organitza";\
+        Text[ thai ] = "~à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡";\
     };
 
 #define MN_ANCHORSUB \
@@ -197,7 +200,7 @@
         Text [ ENGLISH ] = "Anchor" ; \
         Text [ english_us ] = "An~chor" ; \
         Text [ italian ] = "Anco~raggio" ; \
-        Text [ spanish ] = "~Anclaje" ; \
+        Text [ spanish ] = "~Ancla" ; \
         Text [ french ] = "~Ancrage" ; \
         Text [ dutch ] = "~Verankering" ; \
         SubMenu = Menu\
@@ -219,17 +222,18 @@
                     Text [ danish ] = "Til ~siden" ; \
                     Text [ portuguese_brazilian ] = "An der ~Seite" ; \
                     Text [ portuguese ] = "~Na página" ; \
-                    Text[ chinese_simplified ] = "ÔÚÒ³ÃæÉÏ(~A)";\
+                    Text[ chinese_simplified ] = "åœ¨é¡µé¢ä¸Š(~A)";\
                     Text[ russian ] = "~Ê ñòğàíèöå";\
                     Text[ polish ] = "~Na stronie";\
-                    Text[ japanese ] = "Íß°¼Ş‚É(~A)";\
+                    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã«(~A)";\
                     Text[ greek ] = "~Óôç óåëßäá";\
-                    Text[ korean ] = "ÆäÀÌÁö¿¡¼­(~A)";\
-                    Text[ chinese_traditional ] = "¦b­¶­±¤W(~A)";\
+                    Text[ korean ] = "í˜ì´ì§€ì—(~A)";\
+                    Text[ chinese_traditional ] = "åœ¨é é¢ä¸Š(~A)";\
                     Text[ arabic ] = "Úáì ÇáÕİÍÉ";\
                     Text[ turkish ] = "Sayfa";\
-                    Text[ catalan ] = "A la ~página";\
+                    Text[ catalan ] = "A la ~pàgina";\
                     Text[ finnish ] = "Sivul~le";\
+                    Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¸«~à¸™à¹‰à¸²";\
                 };\
                 MenuItem\
                 {\
@@ -246,17 +250,18 @@
                     Text [ danish ] = "Til cellen" ; \
                     Text [ portuguese ] = "~Na célula" ; \
                     Text [ portuguese_brazilian ] = "An der ~Zelle" ; \
-                    Text[ chinese_simplified ] = "ÔÚµ¥Ôª¸ñÉÏ(~C)";\
+                    Text[ chinese_simplified ] = "åœ¨å•å…ƒæ ¼ä¸Š(~C)";\
                     Text[ russian ] = "Ê ÿ÷åéêå";\
                     Text[ polish ] = "Przy komórce";\
-                    Text[ japanese ] = "¾Ù‚É(~C)";\
+                    Text[ japanese ] = "ã‚»ãƒ«ã«(~C)";\
                     Text[ greek ] = "Óôï ~êåëß";\
-                    Text[ korean ] = "¼¿ ¿¡¼­(~C)";\
-                    Text[ chinese_traditional ] = "¦bÀx¦s®æ¤W(~C)";\
+                    Text[ korean ] = "ì…€ì—ì„œ(~C)";\
+                    Text[ chinese_traditional ] = "åœ¨å„²å­˜æ ¼ä¸Š(~C)";\
                     Text[ arabic ] = "Úáì ÇáÎáíÉ";\
                     Text[ turkish ] = "Hücre";\
-                    Text[ catalan ] = "A la ~celda";\
+                    Text[ catalan ] = "A la ~cel.la";\
                     Text[ finnish ] = "So~luun";\
+                    Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¹€~à¸‹à¸¥à¸¥à¹Œ";\
                 };\
             };\
         };\
@@ -264,17 +269,18 @@
         Text [ danish ] = "~Forankring" ; \
         Text [ portuguese ] = "~Âncora" ; \
         Text [ portuguese_brazilian ] = "~Verankerung" ; \
-        Text[ chinese_simplified ] = "Ëø¶¨(~C)";\
-        Text[ russian ] = "~Ïğèâÿçêà";\
+        Text[ chinese_simplified ] = "é”å®š(~C)";\
+        Text[ russian ] = "~ßêîğü";\
         Text[ polish ] = "~Zakotwiczenie";\
-        Text[ japanese ] = "±İ¶°(~C)";\
+        Text[ japanese ] = "ã‚¢ãƒ³ã‚«ãƒ¼(~C)";\
         Text[ greek ] = "Áãêıñ~ùóç";\
-        Text[ korean ] = "°íÁ¤(~C)";\
-        Text[ chinese_traditional ] = "Âê©w(~C)";\
+        Text[ korean ] = "ê¸°ì¤€ ìœ„ì¹˜(~C)";\
+        Text[ chinese_traditional ] = "é–å®š(~C)";\
         Text[ arabic ] = "~ÅÑÓÇÁ";\
         Text[ turkish ] = "~Sabitleyici";\
-        Text[ catalan ] = "~Anclaje";\
+        Text[ catalan ] = "An~cora";\
         Text[ finnish ] = "Ank~kuri";\
+        Text[ thai ] = "à¸ª~à¸¡à¸­";\
     };
 
 #define MN_ALIGNSUB \
@@ -288,7 +294,7 @@
         Text [ italian ] = "~Allineamento" ; \
         Text [ portuguese_brazilian ] = "Ali~nhamento" ; \
         Text [ portuguese ] = "Ali~nhamento" ; \
-        Text [ finnish ] = "~Tasaus" ; \
+        Text [ finnish ] = "T~asaus" ; \
         Text [ danish ] = "~Justering" ; \
         Text [ french ] = "~Alignement" ; \
         Text [ swedish ] = "Juste~ring" ; \
@@ -329,16 +335,17 @@
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "¶ÔÆë(~L)";\
+        Text[ chinese_simplified ] = "å¯¹é½(~L)";\
         Text[ russian ] = "~Âûğàâíèâàíèå";\
         Text[ polish ] = "~Wyrównanie";\
-        Text[ japanese ] = "”z’u(~L)";\
+        Text[ japanese ] = "é…ç½®(~L)";\
         Text[ greek ] = "Ó~ôïß÷éóç";\
-        Text[ korean ] = "¸ÂÃã(~L)";\
-        Text[ chinese_traditional ] = "¹ï»ô(~L)";\
+        Text[ korean ] = "ë§ì¶¤(~L)";\
+        Text[ chinese_traditional ] = "å°é½Š(~L)";\
         Text[ arabic ] = "~ãÍÇĞÇÉ";\
         Text[ turkish ] = "Hi~zalama";\
-        Text[ catalan ] = "Ali~neación";\
+        Text[ catalan ] = "A~lineació";\
+        Text[ thai ] = "à¸ˆà¸±~à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";\
     };
 
 
@@ -360,20 +367,21 @@ String RID_OBJECTBAR_DRAWFORM
     Text [ italian ] = "Barra dei campi di controllo" ;
     Text [ spanish ] = "Barra de campos de control" ;
     Text [ french ] = "Barre de contrôles" ;
-    Text [ dutch ] = "Controlebalk" ;
-    Text[ chinese_simplified ] = "¿ØÖÆÀ¸";
+    Text [ dutch ] = "Controleveldbalk" ;
+    Text[ chinese_simplified ] = "æ§åˆ¶æ ";
     Text[ russian ] = "Ïàíåëü ıëåìåíòîâ óïğàâëåíèÿ";
     Text[ polish ] = "Pasek formantów";
-    Text[ japanese ] = "ºİÄÛ°ÙÂ°ÙÊŞ°";
-    Text[ chinese_traditional ] = "±±¨î¶µ¦C";
+    Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ„ãƒ¼ãƒ«ãƒãƒ¼";
+    Text[ chinese_traditional ] = "æ§åˆ¶é …åˆ—";
     Text[ arabic ] = "ÔÑíØ ÚäÇÕÑ ÇáÊÍßã";
-    Text[ dutch ] = "Controlebalk";
-    Text[ chinese_simplified ] = "¿ØÖÆÀ¸";
+    Text[ dutch ] = "Controleveldbalk";
+    Text[ chinese_simplified ] = "æ§åˆ¶æ ";
     Text[ greek ] = "ÃñáììŞ ğåäßùí åëİã÷ïõ";
-    Text[ korean ] = "ÄÁÆ®·Ñ µµ±¸¸ğÀ½";
+    Text[ korean ] = "ì»¨íŠ¸ë¡¤ ë„êµ¬ ëª¨ìŒ";
     Text[ turkish ] = "Komut alanı çubuğu";
-    Text[ catalan ] = "Barra de campos de control";
-    Text[ finnish ] = "Ohjaintyökalurivi";
+    Text[ catalan ] = "Barra d'eines Controls";
+    Text[ finnish ] = "Ohjausobjektityökalurivi";
+    Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡à¹à¸–à¸šà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
 };
 
 ToolBox RID_OBJECTBAR_DRAWFORM
@@ -531,7 +539,7 @@ String RID_POPUP_DRAWFORM
     Text [ ENGLISH ] = "Toolbar for form objects" ;
     Text[ english_us ] = "Popup menu for form objects";
                 Text[ portuguese ] = "Menu instantâneo para objectos de formulário";
-                Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ îáúåêòîâ ôîğìóëÿğà";
+                Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ îáúåêòîâ ôîğìû";
                 Text[ dutch ] = "Popup-menu voor formulierobjecten";
                 Text[ french ] = "Menu Pop-up pour les objets de formulaire";
                 Text[ spanish ] = "Menú emergente para objetos de formulario";
@@ -540,17 +548,18 @@ String RID_POPUP_DRAWFORM
                 Text[ swedish ] = "Popup-meny för formulärobjekt";
                 Text[ polish ] = "Menu podrêczne dla obiektów formularzy";
                 Text[ portuguese_brazilian ] = "Toolbar for form objects";
-                Text[ japanese ] = "Ì«°ÑµÌŞ¼Şª¸Ä‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-                Text[ chinese_simplified ] = "±íµ¥¶ÔÏóµÄµ¯³öÊ½²Ëµ¥";
-                Text[ chinese_traditional ] = "ªí®æª«¥óªº§ÖÅã¥\\¯àªí";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+                Text[ chinese_simplified ] = "è¡¨å•å¯¹è±¡çš„å¼¹å‡ºå¼èœå•";
+                Text[ chinese_traditional ] = "è¡¨æ ¼ç‰©ä»¶çš„å¿«é¡¯åŠŸèƒ½è¡¨";
                 Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áßÇÆäÇÊ ÇáÇÓÊãÇÑÉ";
                 Text[ dutch ] = "Popup-menu voor formulierobjecten";
-    Text[ chinese_simplified ] = "±íµ¥¶ÔÏóµÄµ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "è¡¨å•å¯¹è±¡çš„å¼¹å‡ºå¼èœå•";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá áíôéêåßìåíá öüñìáò";
-    Text[ korean ] = "¾ç½Ä°³Ã¼ÀÇ ÆË¾÷ ¸Ş´º";
+    Text[ korean ] = "ì–‘ì‹ ê°œì²´ì˜ íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Form nesneleri için popup mönü";
-    Text[ catalan ] = "Menú emergente para objetos de formulario";
+    Text[ catalan ] = "Menú emergent per a objectes de formulari";
     Text[ finnish ] = "Lomakeobjektien ponnahdusvalikko";
+    Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™à¸ªà¸³à¸«à¸£à¸±à¸šà¸§à¸±à¸•à¸–à¸¸à¸Ÿà¸­à¸£à¹Œà¸¡";
 };
  //
  //     Popup-Menue fuer (Uno-) Controls
@@ -575,6 +584,19 @@ Menu RID_POPUP_DRAWFORM
         ITEM_GROUP_MENU
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

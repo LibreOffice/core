@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-11-27 21:29:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,8 @@ void ScColumn::DeleteRange( USHORT nStartIndex, USHORT nEndIndex, USHORT nDelFla
         pOldCell->ForgetBroadcaster();
         pOldCell->Delete();
     }
-    delete ppDelCells;
+
+    delete[] ppDelCells;
 }
 
 

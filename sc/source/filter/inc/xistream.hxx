@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ Input stream class for Excel import
 
 // Decryption =================================================================
 
+#define SC_XCL_USEDECR 0
+
+#if SC_XCL_USEDECR
 /** Base class for BIFF stream decryption. */
 class XclImpDecrypter : ScfNoCopy
 {
@@ -146,6 +149,7 @@ public:
         @return  Count of bytes really read. */
     virtual sal_uInt32          ReadDecrypt( SvStream& rStrm, void* pData, sal_uInt32 nBytes );
 };
+#endif
 
 
 // ============================================================================
@@ -231,14 +235,18 @@ class XclImpRoot;
 class XclImpStream
 {
 private:
+#if SC_XCL_USEDECR
     typedef ::std::auto_ptr< XclImpDecrypter >  XclImpDecrypterPtr;
+#endif
     typedef ScfDelStack< XclImpStreamPos >      XclImpStreamPosStack;
 
 private:
     SvStream&                   mrStrm;         /// Reference to the system input stream.
     const XclImpRoot&           mrRoot;         /// Filter root data.
 
+#if SC_XCL_USEDECR
     XclImpDecrypterPtr          mpDecrypter;    /// Provides methods to decrypt data.
+#endif
 
     XclImpStreamPos             maFirstRec;     /// Start position of current record.
     XclImpStreamPosStack        maPosStack;     /// Stack for record positions.
@@ -260,7 +268,9 @@ private:
     sal_uInt32                  mnRecLeft;      /// Count of bytes left in current record.
 
     bool                        mbCont;         /// Automatic CONTINUE lookup on/off.
+#if SC_XCL_USEDECR
     bool                        mbUseDecr;      /// Usage of decryption.
+#endif
     bool                        mbValidRec;     /// Read state: false = no record available.
     bool                        mbValid;        /// Read state: false = record overread.
     bool                        mbWarnings;     /// Enable/disable assertions.
@@ -296,11 +306,13 @@ public:
         @param bWarnMode  false = no overread assertions. */
     inline void                 SetWarningMode( bool bWarnMode ) { mbWarnings = bWarnMode; }
 
+#if SC_XCL_USEDECR
     /** Enables decryption of record contents for the rest of the stream.
         @descr  Stream takes ownership of the decrypter object. */
     void                        EnableDecryption( XclImpDecrypter* pDecrypter );
     /** Switches usage of current decryption algorithm on/off. */
     void                        UseDecryption( bool bUse );
+#endif
 
     /** Pushes current position on user position stack.
         @descr  This stack is emptied at every start of a new record. */
@@ -452,8 +464,10 @@ public:
     inline sal_uInt32           GetStreamSize() const { return mnStreamSize; }
 
 private:
+#if SC_XCL_USEDECR
     /** Initializes the key/stream offset of the decrypter. */
     inline void                 SetDecrypterOffset( sal_uInt16 nRecSize );
+#endif
 
     /** Reads and decrypts a sal_Int8 value. */
     void                        ReadAtom( sal_Int8& rnValue );
@@ -605,11 +619,13 @@ inline void XclImpStream::IgnoreByteString( bool b16BitLen )
 
 // ----------------------------------------------------------------------------
 
+#if SC_XCL_USEDECR
 inline void XclImpStream::SetDecrypterOffset( sal_uInt16 nRecSize )
 {
     if( mpDecrypter.get() )
         mpDecrypter->SetOffset( nRecSize );
 }
+#endif
 
 
 // ============================================================================

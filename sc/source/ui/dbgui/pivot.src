@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:41:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,18 +219,18 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ russian ] = "Selection area";
         Text[ greek ] = "Selection area";
         Text[ dutch ] = "Selection area";
-        Text[ french ] = "Selection area";
-        Text[ spanish ] = "Selection area";
+        Text[ french ] = "Zone de sιlection";
+        Text[ spanish ] = "Αrea de selecciσn";
         Text[ finnish ] = "Selection area";
-        Text[ italian ] = "Selection area";
+        Text[ italian ] = "Area di selezione";
         Text[ danish ] = "Selection area";
-        Text[ swedish ] = "Selection area";
+        Text[ swedish ] = "Markeringsomrεde";
         Text[ polish ] = "Selection area";
         Text[ portuguese_brazilian ] = "Selection area";
-        Text[ japanese ] = "Selection area";
-        Text[ korean ] = "Selection area";
-        Text[ chinese_simplified ] = "Selection area";
-        Text[ chinese_traditional ] = "Selection area";
+        Text[ japanese ] = "ιΈζη―„ε›²";
+        Text[ korean ] = "μμ—­ μ„ νƒ";
+        Text[ chinese_simplified ] = "ι€‰ζ‹©εΊε";
+        Text[ chinese_traditional ] = "ιΈε–ε€ε";
         Text[ turkish ] = "Selection area";
         Text[ arabic ] = "Selection area";
         Text[ catalan ] = "Selection area";
@@ -334,7 +334,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ greek ] = "Remove";
         Text[ dutch ] = "Remove";
         Text[ french ] = "Supprimer";
-        Text[ spanish ] = "Eliminar";
+        Text[ spanish ] = "Borrar";
         Text[ finnish ] = "Remove";
         Text[ italian ] = "Deinstallazione";
         Text[ danish ] = "Remove";
@@ -342,7 +342,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ polish ] = "Remove";
         Text[ portuguese_brazilian ] = "Remove";
         Text[ japanese ] = "ε‰ι™¤";
-        Text[ korean ] = "μ‚­μ ";
+        Text[ korean ] = "μ κ±°";
         Text[ chinese_simplified ] = "η§»ι™¤";
         Text[ chinese_traditional ] = "η§»ι™¤";
         Text[ turkish ] = "Remove";
@@ -517,7 +517,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text = "Leerzeilen ~ignorieren" ;
         Text [ ENGLISH ] = "~Ignore empty rows" ;
         Text [ norwegian ] = "~Ignorer tomme rader " ;
-        Text [ italian ] = "~Ignorare le righe vuote" ;
+        Text [ italian ] = "~Ignora le righe vuote" ;
         Text [ portuguese_brazilian ] = "~Ignorar fileiras vazias" ;
         Text [ portuguese ] = "~Ignorar linhas vazias" ;
         Text [ finnish ] = "~Ohita tyhjδt rivit" ;
@@ -549,7 +549,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text = "~Kategorieerkennung" ;
         Text [ ENGLISH ] = "~Detect Categories" ;
         Text [ norwegian ] = "~Finn Kategorier " ;
-        Text [ italian ] = "~Individuare categorie" ;
+        Text [ italian ] = "~Individua categorie" ;
         Text [ portuguese_brazilian ] = "~Detectar Categorias" ;
         Text [ portuguese ] = "~Indicar categorias" ;
         Text [ finnish ] = "~Tunnista luokat" ;
@@ -627,7 +627,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_traditional ] = "ηΈ½θ¨η„ε—(~T)";
         Text[ arabic ] = "Υέζέ ΗαγΜγζΪ";
         Text[ greek ] = "Συνολικό άθροισμα γραμμών";
-        Text[ korean ] = "λª¨λ“  ν–‰(~T)";
+        Text[ korean ] = "ν–‰ ν•©κ³„(~T)";
         Text[ turkish ] = "Satύr t~oplamύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Total de files";
@@ -712,7 +712,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_traditional ] = "εΉ³ε‡ε€Ό - ";
         Text[ arabic ] = "ά Average";
         Text[ greek ] = "Μέση τιμή - ";
-        Text[ korean ] = "μλ―Έ- ";
+        Text[ korean ] = "ν‰κ· κ°’ -  ";
         Text[ turkish ] = "Ortalama - ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mitjana - ";
@@ -927,7 +927,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ french ] = "VarP - " ;
         Text [ swedish ] = "VariansP - " ;
         Text [ dutch ] = "Varianties -" ;
-        Text [ spanish ] = "Var2 -  " ;
+        Text [ spanish ] = "VarP - " ;
         Text [ english_us ] = "VarP - " ;
         Text[ chinese_simplified ] = "ζ–Ήε·® - ";
         Text[ russian ] = "Νερμεωεννΰÿ δθροεπρθÿ -  ";
@@ -944,4 +944,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Text[ thai ] = "ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡";
 };
+
+
+
+
+
 

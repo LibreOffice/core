@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-27 16:30:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 #include <svtools/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <math.h>
 
 
@@ -526,7 +526,7 @@ BOOL ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) c
         case SC_VALID_TIME:
             bOk = bIsVal;
             if ( bOk && eDataMode == SC_VALID_WHOLE )
-                bOk = SolarMath::ApproxEqual( nVal, floor(nVal+0.5) );      // ganze Zahlen
+                bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // ganze Zahlen
             if ( bOk )
                 bOk = IsCellValid( pCell, rPos );
             break;

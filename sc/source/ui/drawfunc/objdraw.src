@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:25:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
         Text[ chinese_traditional ] = "Ê®ôÊ∫ñ(~D)";\
         Text[ arabic ] = "~ﬁÌ«”Ì";\
         Text[ greek ] = "~–ÒÔÂÈÎÔ„ﬁ";\
-        Text[ korean ] = "ÌëúÏ§Ä(~D)";\
+        Text[ korean ] = "Í∏∞Î≥∏Í∞í(~D)";\
         Text[ turkish ] = "Standar~t";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Per ~defecte";\
@@ -217,7 +217,7 @@
         Text[ chinese_traditional ] = "Ê®£Âºè(~S)";\
         Text[ arabic ] = "‰„ÿ";\
         Text[ greek ] = "”Ùı~Î";\
-        Text[ korean ] = "Ïú†Ìòï(~S)";\
+        Text[ korean ] = "Ïä§ÌÉÄÏùº(~S)";\
         Text[ turkish ] = "Bi~Áim";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "E~stil";\
@@ -434,7 +434,7 @@
         Text[ chinese_traditional ] = "ÂàóÈñìÈöî(~L)";\
         Text[ arabic ] = " »«⁄œ «·√”ÿ—";\
         Text[ greek ] = "ƒÈ‹ÛÙÈ~˜Ô";\
-        Text[ korean ] = "Ìñâ Í∞ÑÍ≤©(~L)";\
+        Text[ korean ] = "Ï§Ñ Í∞ÑÍ≤©(~L)";\
         Text[ turkish ] = "~Sat˝r aral˝˝";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Inter~lineat";\
@@ -509,7 +509,7 @@
         Text[ chinese_traditional ] = "Âéü‰ª∂Â§ßÂ∞è(~O)";\
         Text[ arabic ] = "«·ÕÃ„ «·√’·Ì";\
         Text[ greek ] = "¡Ò˜ÈÍ¸ Ï›~„ÂËÔÚ";\
-        Text[ korean ] = "Í∏∞Î≥∏ ÌÅ¨Í∏∞(~O)";\
+        Text[ korean ] = "ÏõêÎûò ÌÅ¨Í∏∞(~O)";\
         Text[ turkish ] = "GerÁek ~boyut";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Mida ~original";\
@@ -525,7 +525,7 @@
         Text [ ENGLISH ] = "~Name Object..." ; \
         Text[ english_us ] = "~Name Object...";\
         Text[ portuguese ] = "~Name Object...";\
-        Text[ russian ] = "~Œ·˙ÂÍÚ ËÏÂÌË...";\
+        Text[ russian ] = "~»Ïˇ Ó·˙ÂÍÚ‡...";\
         Text[ greek ] = "~Name Object...";\
         Text[ dutch ] = "Na~am geven aan object...";\
         Text[ french ] = "~Nommer l'objet...";\
@@ -537,7 +537,7 @@
         Text[ polish ] = "~Name Object...";\
         Text[ portuguese_brazilian ] = "~Name Object...";\
         Text[ japanese ] = "„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„Å´ÂêçÂâç„Çí‰ªò„Åë„Çã...";\
-        Text[ korean ] = "Í∞úÏ≤¥ Î™ÖÏπ≠(N)...";\
+        Text[ korean ] = "Í∞úÏ≤¥ Ïù¥Î¶Ñ ÏßÄÏ†ï(~N)...";\
         Text[ chinese_simplified ] = "ÂëΩÂêçÂØπË±°...";\
         Text[ chinese_traditional ] = "ÂëΩÂêçÁâ©‰ª∂...";\
         Text[ turkish ] = "~Name Object...";\
@@ -583,7 +583,7 @@
                     Text [ french ] = "¿ la ~verticale" ; \
                     Text [ swedish ] = "~Vertikalt" ; \
                     Text [ dutch ] = "~Verticaal" ; \
-                    Text [ spanish ] = "~Vertical" ; \
+                    Text [ spanish ] = "~Verticalmente" ; \
                     Text [ english_us ] = "~Vertically" ; \
                     Text[ chinese_simplified ] = "ÂûÇÁõ¥ÊñπÂêë(~V)";\
                     Text[ russian ] = "~œÓ ‚ÂÚËÍ‡ÎË";\
@@ -660,7 +660,7 @@
         Text [ french ] = "~Disposition" ; \
         Text [ swedish ] = "Pl~acering" ; \
         Text [ dutch ] = "~Positie" ; \
-        Text [ spanish ] = "PosiciÛn" ; \
+        Text [ spanish ] = "~DisposiciÛn" ; \
         Text [ english_us ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
@@ -695,7 +695,7 @@
                     Text[ chinese_traditional ] = "‰∏äÁßª‰∏ÄÂ±§(~F)";\
                     Text[ arabic ] = "≈Õ÷«— √„«„«";\
                     Text[ greek ] = "Ã~ÂÙ·ˆÔÒ‹ ›Ì· ÂﬂÂ‰Ô ÂÏÒ¸Ú";\
-                    Text[ korean ] = "ÏïûÏúºÎ°ú Í∞ÄÏ†∏Ïò§Í∏∞(~F)";\
+                    Text[ korean ] = "ÏïûÏúºÎ°ú Ïù¥Îèô(~F)";\
                     Text[ turkish ] = "B~ir ˆne getir";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "Porta al ~davant";\
@@ -726,7 +726,7 @@
                     Text[ chinese_traditional ] = "‰∏ãÁßª‰∏ÄÂ±§(~W)";\
                     Text[ arabic ] = "≈—”«· Œ·›«";\
                     Text[ greek ] = "~ÃÂÙ·ˆÔÒ‹ ﬂÛ˘";\
-                    Text[ korean ] = "Îí§Î°ú Î≥¥ÎÇ¥Í∏∞(~W)";\
+                    Text[ korean ] = "Îí§Î°ú Ïù¥Îèô(~W)";\
                     Text[ turkish ] = "Bir  ~geri gˆnder";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "En~via cap enrere";\
@@ -754,7 +754,7 @@
         Text[ chinese_traditional ] = "ÊéíÂ∫è(~A)";\
         Text[ arabic ] = " — Ì»~";\
         Text[ greek ] = "ƒÈ‹Ù~·ÓÁ";\
-        Text[ korean ] = "Î∞∞Ïó¥(~A)";\
+        Text[ korean ] = "Î∞∞Ïπò(~A)";\
         Text[ turkish ] = "~S˝ralama";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Organitza";\
@@ -770,7 +770,7 @@
         Text [ ENGLISH ] = "Anchor" ; \
         Text [ english_us ] = "An~chor" ; \
         Text [ italian ] = "Anco~raggio" ; \
-        Text [ spanish ] = "~Anclaje" ; \
+        Text [ spanish ] = "~Ancla" ; \
         Text [ french ] = "~Ancrage" ; \
         Text [ dutch ] = "~Verankering" ; \
         SubMenu = Menu\
@@ -799,7 +799,7 @@
                     Text[ chinese_traditional ] = "Âú®È†ÅÈù¢‰∏ä(~A)";\
                     Text[ arabic ] = "⁄·Ï «·~’›Õ…";\
                     Text[ greek ] = "~”ÙÁ ÛÂÎﬂ‰·";\
-                    Text[ korean ] = "ÌéòÏù¥ÏßÄÏóêÏÑú(~A)";\
+                    Text[ korean ] = "ÌéòÏù¥ÏßÄÏóê(~A)";\
                     Text[ turkish ] = "Sayfa~da";\
                     Text[ language_user1 ] = " ";\
                     Text[ catalan ] = "A la p~‡gina";\
@@ -848,7 +848,7 @@
         Text[ chinese_traditional ] = "ÈéñÂÆö(~C)";\
         Text[ arabic ] = "~≈—”«¡";\
         Text[ greek ] = "¡„Í˝Ò~˘ÛÁ";\
-        Text[ korean ] = "ÏúÑÏπò Í≥†Ï†ï(~C)";\
+        Text[ korean ] = "Í∏∞Ï§Ä ÏúÑÏπò(~C)";\
         Text[ turkish ] = "Sa~bitleyici";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "An~cora";\
@@ -1308,6 +1308,326 @@ ToolBox RID_TEXT_TOOLBOX
             HelpID = SID_PARA_DLG ;
         };
     };
+    ItemList[arabic] =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONT ;
+            HelpId = SID_ATTR_CHAR_FONT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
+            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT ;
+            HelpId = SID_ATTR_CHAR_WEIGHT ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE ;
+            HelpId = SID_ATTR_CHAR_POSTURE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE ;
+            HelpId = SID_ATTR_CHAR_UNDERLINE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ULINE_VAL_DOUBLE;
+            HelpId = SID_ULINE_VAL_DOUBLE;
+            AutoCheck = TRUE ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_COLOR ;
+            HelpId = SID_ATTR_CHAR_COLOR ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNRIGHT ;
+            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERHOR ;
+            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNLEFT ;
+            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBLOCK ;
+            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUPER_SCRIPT ;
+            HelpID = SID_SET_SUPER_SCRIPT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUB_SCRIPT ;
+            HelpID = SID_SET_SUB_SCRIPT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_CHAR_DLG ;
+            HelpID = SID_CHAR_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARA_DLG ;
+            HelpID = SID_PARA_DLG ;
+        };
+    };
+    ItemList[hebrew] =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONT ;
+            HelpId = SID_ATTR_CHAR_FONT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
+            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT ;
+            HelpId = SID_ATTR_CHAR_WEIGHT ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE ;
+            HelpId = SID_ATTR_CHAR_POSTURE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE ;
+            HelpId = SID_ATTR_CHAR_UNDERLINE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ULINE_VAL_DOUBLE;
+            HelpId = SID_ULINE_VAL_DOUBLE;
+            AutoCheck = TRUE ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_COLOR ;
+            HelpId = SID_ATTR_CHAR_COLOR ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNRIGHT ;
+            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERHOR ;
+            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNLEFT ;
+            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBLOCK ;
+            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUPER_SCRIPT ;
+            HelpID = SID_SET_SUPER_SCRIPT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUB_SCRIPT ;
+            HelpID = SID_SET_SUB_SCRIPT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_CHAR_DLG ;
+            HelpID = SID_CHAR_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARA_DLG ;
+            HelpID = SID_PARA_DLG ;
+        };
+    };
 };
  //
  // Graphics toolbox
@@ -1329,7 +1649,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ polish ] = "Pasek obiektÛw graficznych";
     Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
     Text[ japanese ] = "Âõ≥„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„Éê„Éº";
-    Text[ korean ] = "Í∑∏ÎûòÌîΩ Í∞úÏ≤¥ Î™®Ïùå";
+    Text[ korean ] = "Í∑∏Î¶º Í∞úÏ≤¥ Î™®Ïùå";
     Text[ chinese_simplified ] = "ÂõæÂΩ¢ÂØπË±°Ê†è";
     Text[ chinese_traditional ] = "ÂúñÂΩ¢Áâ©‰ª∂Âàó";
     Text[ turkish ] = "Toolbar for graphic objects";
@@ -1753,7 +2073,7 @@ Menu RID_POPUP_CHART
                                                 Text[ chinese_traditional ] = "‰øÆÊîπË≥áÊñôÂçÄÂüü(~M)...";
                                                 Text[ arabic ] = "... ⁄œÌ· ‰ÿ«ﬁ «·»Ì«‰« ";
                                                 Text[ greek ] = "¡ÎÎ·„ﬁ ÂÒÈÔ˜ﬁÚ ~‰Â‰ÔÏ›Ì˘Ì...";
-            Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÏòÅÏó≠ ÏàòÏ†ï(~M)...";
+            Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ Î≤îÏúÑ ÏàòÏ†ï(~M)...";
             Text[ turkish ] = "~Veri alan˝n˝ dei˛tir...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Modifica l'‡rea de dades...";
@@ -1828,4 +2148,9 @@ Menu RID_POPUP_DRAWTEXT
         };
     };
 };
+
+
+
+
+
 

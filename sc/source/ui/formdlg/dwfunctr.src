@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 07:27:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,13 +210,13 @@ DockingWindow FID_FUNCTION_BOX
             < "Viimeksi k‰ytetty" ; Default ; > ;
             < "Kaikki" ; Default ; > ;
             < "Tietokanta" ; Default ; > ;
-            < "P‰iv‰m‰‰r‰&Aika" ; Default ; > ;
+            < "P‰iv‰m‰‰r‰ ja aika" ; Default ; > ;
             < "Rahoitus" ; Default ; > ;
             < "Tiedot" ; Default ; > ;
             < "Looginen" ; Default ; > ;
             < "Matemaattinen" ; Default ; > ;
-            < "Matriisi" ; Default ; > ;
-            < "Tilastolliset" ; Default ; > ;
+            < "Taulukko" ; Default ; > ;
+            < "Tilastollinen" ; Default ; > ;
             < "Laskentataulukko" ; Default ; > ;
             < "Teksti" ; Default ; > ;
             < "Lis‰osa" ; Default ; > ;
@@ -250,8 +250,8 @@ DockingWindow FID_FUNCTION_BOX
             < "Logique" ; Default ; > ;
             < "MathÈmatique" ; Default ; > ;
             < "Matrice" ; Default ; > ;
-            < "Statistique" ; Default ; > ;
-            < "Classeur" ; Default ; > ;
+            < "Statistiques" ; Default ; > ;
+            < "Feuille de calcul" ; Default ; > ;
             < "Texte" ; Default ; > ;
             < "Add-in" ; Default ; > ;
              //         < "DÈfini par l'utilisateur"; Default; >;
@@ -278,11 +278,11 @@ DockingWindow FID_FUNCTION_BOX
             < "Als laatste gebruikt" ; Default ; > ;
             < "Alle" ; Default ; > ;
             < "Database" ; Default ; > ;
-            < "Datum&Tijd" ; Default ; > ;
+            < "Datum & tijd" ; Default ; > ;
             < "Financieel" ; Default ; > ;
             < "Informatie" ; Default ; > ;
             < "Logisch" ; Default ; > ;
-            < "Wiskundig" ; Default ; > ;
+            < "Wiskunde" ; Default ; > ;
             < "Matrix" ; Default ; > ;
             < "Statistiek" ; Default ; > ;
             < "Werkblad" ; Default ; > ;
@@ -295,11 +295,11 @@ DockingWindow FID_FUNCTION_BOX
             < "⁄ltima utilizaciÛn" ; Default ; > ;
             < "Todas" ; Default ; > ;
             < "Base de datos" ; Default ; > ;
-            < "Fecha&Hora" ; Default ; > ;
+            < "Fecha y hora" ; Default ; > ;
             < "Finanzas" ; Default ; > ;
             < "InformaciÛn" ; Default ; > ;
             < "LÛgico" ; Default ; > ;
-            < "Matem·ticas" ; Default ; > ;
+            < "Matem·tico" ; Default ; > ;
             < "Matriz" ; Default ; > ;
             < "EstadÌstica" ; Default ; > ;
             < "Hoja de c·lculo" ; Default ; > ;
@@ -325,7 +325,7 @@ DockingWindow FID_FUNCTION_BOX
     };
     StringList [ russian ] =
     {
-            < "œËÏÂÌÂÌÓ ÔÓÒÎÂ‰ÌËÏ" ; Default ; > ;
+            < "»ÒÔÓÎ¸ÁÓ‚‡ÌÓ ÔÓÒÎÂ‰ÌËÏ" ; Default ; > ;
         < "¬ÒÂ" ; Default ; > ;
         < "¡‡Á‡ ‰‡ÌÌ˚ı" ; Default ; > ;
         < "ƒ‡Ú‡ Ë ‚ÂÏˇ" ; Default ; > ;
@@ -333,11 +333,11 @@ DockingWindow FID_FUNCTION_BOX
         < "»ÌÙÓÏ‡ˆËˇ" ; Default ; > ;
         < "ÀÓ„Ë˜ÂÒÍËÂ" ; Default ; > ;
         < "Ã‡ÚÂÏ‡ÚË˜ÂÒÍËÂ" ; Default ; > ;
-        < "Ã‡ÚËˆ‡" ; Default ; > ;
+        < "Ã‡ÒÒË‚" ; Default ; > ;
         < "—Ú‡ÚËÒÚË˜ÂÒÍËÂ" ; Default ; > ;
-        < "“‡·ÎËˆ‡" ; Default ; > ;
-        < "“ÂÍÒÚ" ; Default ; > ;
-        < "ƒÓÔÓÎÌËÚÂÎ¸ÌÓ (Add-in)" ; Default ; > ;
+        < "›ÎÂÍÚÓÌÌ‡ˇ Ú‡·ÎËˆ‡" ; Default ; > ;
+        < "“ÂÍÒÚÓ‚˚Â" ; Default ; > ;
+        < "œÓ‰ÍÎ˛˜‡ÂÏ˚È ÏÓ‰ÛÎ¸" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -408,11 +408,11 @@ DockingWindow FID_FUNCTION_BOX
             < "Als laatste gebruikt" ; Default ; > ;
         < "Alle" ; Default ; > ;
         < "Database" ; Default ; > ;
-        < "Datum&Tijd" ; Default ; > ;
+        < "Datum & tijd" ; Default ; > ;
         < "Financieel" ; Default ; > ;
         < "Informatie" ; Default ; > ;
         < "Logisch" ; Default ; > ;
-        < "Wiskundig" ; Default ; > ;
+        < "Wiskunde" ; Default ; > ;
         < "Matrix" ; Default ; > ;
         < "Statistiek" ; Default ; > ;
         < "Werkblad" ; Default ; > ;
@@ -453,10 +453,10 @@ DockingWindow FID_FUNCTION_BOX
     };
     StringList [ korean ] =
     {
-            < "ÎßàÏßÄÎßâÏúºÎ°ú ÏÇ¨Ïö©Îêú" ; Default ; > ;
-        < "Ï†ÑÏ≤¥" ; Default ; > ;
+            < "Í∞ÄÏû• ÏµúÍ∑ºÏóê ÏÇ¨Ïö©Îêú ÏÑúÏãù" ; Default ; > ;
+        < "Î™®Îëê" ; Default ; > ;
         < "Îç∞Ïù¥ÌÑ∞Î≤†Ïù¥Ïä§" ; Default ; > ;
-        < "ÎÇ†Ïßú&ÏãúÍ∞Ñ" ; Default ; > ;
+        < "ÎÇ†Ïßú Î∞è ÏãúÍ∞Ñ" ; Default ; > ;
         < "ÌöåÍ≥Ñ" ; Default ; > ;
         < "Ï†ïÎ≥¥" ; Default ; > ;
         < "ÎÖºÎ¶¨Ï†Å" ; Default ; > ;
@@ -465,7 +465,7 @@ DockingWindow FID_FUNCTION_BOX
         < "ÌÜµÍ≥Ñ" ; Default ; > ;
         < "Ïä§ÌîÑÎ†àÎìúÏãúÌä∏" ; Default ; > ;
         < "ÌÖçÏä§Ìä∏" ; Default ; > ;
-        < "Ï∂îÍ∞Ä" ; Default ; > ;
+        < "Add-in" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -626,10 +626,25 @@ DockingWindow FID_FUNCTION_BOX
     Text[ turkish ] = "Fonksiyon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funcions";
-    Text[ finnish ] = "Toiminnot";
+    Text[ finnish ] = "Funktiot";
     Text[ thai ] = "‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

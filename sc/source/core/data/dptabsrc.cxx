@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/debug.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <svtools/itemprop.hxx>
 
 #include "dptabsrc.hxx"
@@ -1802,10 +1802,10 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                             double fLastVal = rStrings[nFirstString-1]->GetValue();
 
                             long nFirstYear = pSource->GetData()->GetDatePart(
-                                        (long)SolarMath::ApproxFloor( fFirstVal ),
+                                        (long)::rtl::math::approxFloor( fFirstVal ),
                                         nHier, nLev );
                             long nLastYear = pSource->GetData()->GetDatePart(
-                                        (long)SolarMath::ApproxFloor( fLastVal ),
+                                        (long)::rtl::math::approxFloor( fLastVal ),
                                         nHier, nLev );
 
                             nMbrCount = nLastYear + 1 - nFirstYear;
@@ -1962,7 +1962,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                     const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
                     double fFirstVal = rStrings[0]->GetValue();
                     long nFirstYear = pSource->GetData()->GetDatePart(
-                                        (long)SolarMath::ApproxFloor( fFirstVal ),
+                                        (long)::rtl::math::approxFloor( fFirstVal ),
                                         nHier, nLev );
 
                     nVal = nFirstYear + nIndex;
@@ -2034,7 +2034,7 @@ BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
     if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) && r.bHasValue )
     {
         long nComp = pSource->GetData()->GetDatePart(
-                                        (long)SolarMath::ApproxFloor( r.fValue ),
+                                        (long)::rtl::math::approxFloor( r.fValue ),
                                         nHier, nLev );
 
         //  fValue is converted from integer, so simple comparison works

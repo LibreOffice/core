@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-19 15:05:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ private:
     ScEditEngineDefaulter*  pEditEngine;            // erst bei Bedarf angelegt
     EditView*   pEditView;
     ScAccessibleEditLineTextData* pAccTextData;
+    BOOL        bIsRTL;
     BOOL        bIsInsertMode;
     BOOL        bFormulaMode;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-10 17:24:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include "scitems.hxx"
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/svxfont.hxx>
@@ -255,6 +255,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
         nScrH += pRowInfo[nArrY].nHeight;
 
     bTabProtected = pDoc->IsTabProtected( nTab );
+    nTabTextDirection = pDoc->GetEditTextDirection( nTab );
 }
 
 ScOutputData::~ScOutputData()
@@ -351,9 +352,9 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
 
     if ( eType == OUTTYPE_WINDOW )
     {
-        const svx::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-        aPageColor.SetColor( rColorCfg.GetColorValue(svx::CALCPAGEBREAKAUTOMATIC).nColor );
-        aManualColor.SetColor( rColorCfg.GetColorValue(svx::CALCPAGEBREAKMANUAL).nColor );
+        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+        aPageColor.SetColor( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor );
+        aManualColor.SetColor( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
     }
     else
     {
@@ -795,7 +796,7 @@ void ScOutputData::DrawBackground()
     ScModule* pScMod = SC_MOD();
 
     // used only if bSolidBackground is set (only for ScGridWindow):
-    Color aBgColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+    Color aBgColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
 
     Rectangle aRect;
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
@@ -929,7 +930,7 @@ void ScOutputData::DrawShadow()
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
-        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
     long nPosY = nScrY;
     for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
@@ -1031,7 +1032,7 @@ void ScOutputData::DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBot
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
-        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
     long nPosY = nScrY - pRowInfo[0].nHeight;
     for (USHORT nArrY=0; nArrY<nArrCount; nArrY++)
@@ -1146,7 +1147,7 @@ void ScOutputData::DrawClear()
     long nOneY = aOnePixel.Height();
 
     // (called only for ScGridWindow)
-    Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+    Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
 
     if (bMetaFile)
         nOneX = nOneY = 0;
@@ -1292,8 +1293,45 @@ inline void FinishOldRect( OutputDevice* pDev, Rectangle& rOldRect, BOOL& rOldVa
 
 void ScOutputData::DrawFrame()
 {
+    ULONG nOldDrawMode = pDev->GetDrawMode();
+
+    Color aSingleColor;
+    BOOL bUseSingleColor = FALSE;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
+
+    //  #107519# if a Calc OLE object is embedded in Draw/Impress, the VCL DrawMode is used
+    //  for display mode / B&W printing. The VCL DrawMode handling doesn't work for lines
+    //  that are drawn with DrawRect, so if the line/background bits are set, the DrawMode
+    //  must be reset and the border colors handled here.
+    //  (Similar to fix for #72796# in SdrObject::ImpDrawLineGeometry)
+
+    if ( ( nOldDrawMode & DRAWMODE_WHITEFILL ) && ( nOldDrawMode & DRAWMODE_BLACKLINE ) )
+    {
+        pDev->SetDrawMode( nOldDrawMode & (~DRAWMODE_WHITEFILL) );
+        aSingleColor.SetColor( COL_BLACK );
+        bUseSingleColor = TRUE;
+    }
+    else if ( ( nOldDrawMode & DRAWMODE_SETTINGSFILL ) && ( nOldDrawMode & DRAWMODE_SETTINGSLINE ) )
+    {
+        pDev->SetDrawMode( nOldDrawMode & (~DRAWMODE_SETTINGSFILL) );
+        aSingleColor = rStyleSettings.GetWindowTextColor();     // same as used in VCL for DRAWMODE_SETTINGSLINE
+        bUseSingleColor = TRUE;
+    }
+    else if ( bCellContrast )
+    {
+        aSingleColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+        bUseSingleColor = TRUE;
+    }
+
     if (bAnyRotated)
-        DrawRotatedFrame();     // loescht die Linien, die hier weggelassen werden muessen
+    {
+        const Color* pForceColor = NULL;
+        if ( bUseSingleColor )
+            pForceColor = &aSingleColor;
+        DrawRotatedFrame( pForceColor );        // removes the lines that must not be painted here
+    }
 
     USHORT nArrY;
     USHORT nArrX;
@@ -1345,13 +1383,6 @@ void ScOutputData::DrawFrame()
     BOOL bOldValid2 = FALSE;                            // zweite Linien
     Rectangle aOldRect2;
 
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
-    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
-    Color aAutoTextColor;
-    if ( bCellContrast )
-        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
-
     pDev->SetLineColor();
     pDev->SetFillColor( aOldCol );
 
@@ -1397,8 +1428,8 @@ void ScOutputData::DrawFrame()
                         if ( pDrawLine != pOldLine )
                         {
                             Color aColor( pDrawLine->GetColor() );
-                            if ( bCellContrast )
-                                aColor = aAutoTextColor;
+                            if ( bUseSingleColor )
+                                aColor = aSingleColor;
                             if ( aColor != aOldCol )
                             {
                                 FinishOldRect( pDev, aOldRect, bOldValid );
@@ -1533,8 +1564,8 @@ void ScOutputData::DrawFrame()
                         if ( pDrawLine != pOldLine )
                         {
                             Color aColor( pDrawLine->GetColor() );
-                            if ( bCellContrast )
-                                aColor = aAutoTextColor;
+                            if ( bUseSingleColor )
+                                aColor = aSingleColor;
                             if ( aColor != aOldCol )
                             {
                                 FinishOldRect( pDev, aOldRect, bOldValid );
@@ -1645,6 +1676,8 @@ void ScOutputData::DrawFrame()
 
     FinishOldRect( pDev, aOldRect, bOldValid );
     FinishOldRect( pDev, aOldRect2, bOldValid2 );
+
+    pDev->SetDrawMode(nOldDrawMode);
 }
 
 //  -------------------------------------------------------------------------
@@ -1874,7 +1907,7 @@ void lcl_VertLine( OutputDevice* pDev, const Point& rTop, const Point& rBottom,
     }
 }
 
-void ScOutputData::DrawRotatedFrame()
+void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
 {
     //! nRotMax speichern
     USHORT nRotMax = nX2;
@@ -1891,13 +1924,7 @@ void ScOutputData::DrawRotatedFrame()
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
 
-    Color aAutoTextColor;
-    const Color* pForceColor = NULL;
-    if ( bCellContrast )
-    {
-        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
-        pForceColor = &aAutoTextColor;
-    }
+    //  color (pForceColor) is determined externally, including DrawMode changes
 
     Rectangle aClipRect( Point(nScrX, nScrY), Size(nScrW, nScrH) );
     if (bMetaFile)
@@ -2613,7 +2640,7 @@ void ScOutputData::DrawNoteMarks()
 
                         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                         if ( bUseStyleColor && rStyleSettings.GetHighContrastMode() )
-                            pDev->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+                            pDev->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
                         else
                             pDev->SetFillColor(COL_LIGHTRED);
 
@@ -2714,7 +2741,7 @@ void ScOutputData::DrawClipMarks()
         //  use DrawMode to change the arrow's outline color
         pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE );
         //  use text color also for the fill color
-        aArrowFillCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+        aArrowFillCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
     }
 
     Rectangle aCellRect;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-10 17:24:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/fmview.hxx>
 #include <svx/sizeitem.hxx>
 #include <sfx2/bindings.hxx>
@@ -140,6 +140,7 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     nTabStart( 0 ),
     nDisplayStart( 0 )
 {
+    SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW ); //#106611#
     SetBackground();
 
     SetHelpId( HID_SC_WIN_PREVIEW );
@@ -351,8 +352,8 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     BOOL bValidPage = ( nPageNo < nTotalPages );
 
     ScModule* pScMod = SC_MOD();
-    const svx::ColorConfig& rColorCfg = pScMod->GetColorConfig();
-    Color aBackColor( rColorCfg.GetColorValue(svx::APPBACKGROUND).nColor );
+    const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
+    Color aBackColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
 
     if ( bDoPrint && ( aOffset.X() < 0 || aOffset.Y() < 0 ) && bValidPage )
     {
@@ -442,7 +443,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         if ( bValidPage )
         {
-            Color aBorderColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+            Color aBorderColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
             //  draw border
 
@@ -505,7 +506,28 @@ void __EXPORT ScPreview::Command( const CommandEvent& rCEvt )
 
 void __EXPORT ScPreview::KeyInput( const KeyEvent& rKEvt )
 {
-    if (!pViewShell->KeyInput(rKEvt))
+    //  The + and - keys can't be configured as accelerator entries, so they must be handled directly
+    //  (in ScPreview, not ScPreviewShell -> only if the preview window has the focus)
+
+    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    USHORT nKey = rKeyCode.GetCode();
+    BOOL bHandled = FALSE;
+    if(!rKeyCode.GetModifier())
+    {
+        USHORT nSlot = 0;
+        switch(nKey)
+        {
+            case KEY_ADD:      nSlot = SID_PREVIEW_ZOOMIN;  break;
+            case KEY_SUBTRACT: nSlot = SID_PREVIEW_ZOOMOUT; break;
+        }
+        if(nSlot)
+        {
+            bHandled = TRUE;
+            pViewShell->GetViewFrame()->GetDispatcher()->Execute( nSlot, SFX_CALLMODE_ASYNCHRON );
+        }
+    }
+
+    if ( !bHandled && !pViewShell->KeyInput(rKEvt) )
         Window::KeyInput(rKEvt);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,14 +169,14 @@ BOOL NameBuffer::Find( const sal_Char* pRefName, UINT16& rIndex )
 
 
 
-void RangeNameBuffer::Store( ByteString& r, const ScTokenArray* p, UINT16 n, const BOOL b )
+void RangeNameBuffer::Store( ByteString& r, const ScTokenArray* p, UINT16 n, const RangeType t)
 {
     String aTmpStr( r, *pExcRoot->pCharset );
-    Store( aTmpStr, p, n, b );
+    Store( aTmpStr, p, n, t );
 }
 
 
-void RangeNameBuffer::Store( String& rName, const ScTokenArray* pDef, UINT16 nAltSheet, const BOOL bPrintarea )
+void RangeNameBuffer::Store( String& rName, const ScTokenArray* pDef, UINT16 nAltSheet, const RangeType eNameType)
 {
     if( pDef )
     {
@@ -196,8 +196,12 @@ void RangeNameBuffer::Store( String& rName, const ScTokenArray* pDef, UINT16 nAl
         pData->GuessPosition();
         pData->SetIndex( ( UINT16 ) Count() );
 
-        if( bPrintarea )
-            pData->AddType( RT_PRINTAREA );
+        if( eNameType == RT_PRINTAREA )
+            pData->AddType( eNameType );
+        else if( eNameType == RT_CRITERIA )
+            pData->SetType( eNameType );
+        else if( eNameType == RT_NAME )
+            pData->SetType( eNameType );
 
         pExcRoot->pScRangeName->Insert( pData );
 

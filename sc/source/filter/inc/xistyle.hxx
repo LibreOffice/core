@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ and a container for XF indexes for every used cell in a sheet.
 
 /** Stores the default colors for the current BIFF version and the contents of
     a PALETTE record. */
-class XclImpPalette : public XclDefaultPalette
+class XclImpPalette : public XclDefaultPalette, protected XclImpRoot
 {
 private:
     typedef ::std::vector< ColorData > ColorDataVec;
@@ -108,6 +108,9 @@ private:
 
 public:
     explicit                    XclImpPalette( const XclImpRoot& rRoot );
+
+    /** Activates the default colors for the current BIFF version. */
+    void                        OnChangeBiff();
 
     /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
         @descr  First looks for a color read from file, then looks for a default color.
@@ -164,12 +167,11 @@ public:
     inline const XclFontData&   GetFontData() const { return maData; }
     /** Returns true, if the font contains superscript or subscript. */
     inline bool                 HasEscapement() const { return maData.meEscapem != xlEscNone; }
+    /** Returns the width of the '0' character on current printer (twips). */
+    long                        GetCharWidth() const;
 
     /** Reads a FONT record for all BIFF versions. */
     void                        ReadFont( XclImpStream& rStrm );
-
-    /** Calculates a column scaling factor using the current printer settings. */
-    double                      CalcColumnScale() const;
 
     /** Fills all font properties to the item set.
         @param rItemSet  The destination item set.
@@ -217,13 +219,16 @@ class XclImpFontBuffer : protected XclImpRoot, ScfNoCopy
 {
 private:
     ScfDelList< XclImpFont >    maFontList;     /// List of all FONT records in the Excel file.
+    XclFontData                 maAppFont;      /// Application font (for column width).
 
 public:
-    inline explicit             XclImpFontBuffer( const XclImpRoot& rRoot ) : XclImpRoot( rRoot ) {}
+    explicit                    XclImpFontBuffer( const XclImpRoot& rRoot );
 
     /** Returns the object that stores all contents of a FONT record. */
     inline const XclImpFont*    GetFont( sal_uInt16 nFontIndex ) const
                                     { return maFontList.GetObject( nFontIndex ); }
+    /** Returns the application font data of this file, needed i.e. for column width. */
+    inline const XclFontData&   GetAppFontData() const { return maAppFont; }
 
     /** Reads a FONT record. */
     void                        ReadFont( XclImpStream& rStrm );
@@ -246,7 +251,7 @@ class XclImpNumFmtBuffer : protected XclImpRoot, ScfNoCopy
 {
 private:
     ScfUInt32Vec                maKeyVec;       /// Array of SvNumberFomatter format keys.
-    sal_uInt32                  mnDefault;      /// Key for default format.
+    sal_uInt32                  mnStdFmt;       /// Key for standard number format.
 
 public:
     explicit                    XclImpNumFmtBuffer( const XclImpRoot& rRoot );
@@ -269,40 +274,66 @@ private:
 
 // XF, STYLE record - Cell formatting =========================================
 
-struct XclImpXFBorder;
-struct XclImpXFArea;
+/** Contains color and line style for each cell border line. */
+struct XclImpXFBorder
+{
+    sal_uInt16                  mnLeftColor;    /// Index to color for left line.
+    sal_uInt16                  mnRightColor;   /// Index to color for right line.
+    sal_uInt16                  mnTopColor;     /// Index to color for top line.
+    sal_uInt16                  mnBottomColor;  /// Index to color for bottom line.
+    sal_uInt8                   mnLeftLine;     /// Style of left line.
+    sal_uInt8                   mnRightLine;    /// Style of right line.
+    sal_uInt8                   mnTopLine;      /// Style of top line.
+    sal_uInt8                   mnBottomLine;   /// Style of bottom line.
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Contains background colors and pattern. */
+struct XclImpXFArea
+{
+    sal_uInt16                  mnForeColor;    /// Index to foreground color.
+    sal_uInt16                  mnBackColor;    /// Index to background color.
+    sal_uInt8                   mnPattern;      /// Fill pattern.
+};
+
+
+// ----------------------------------------------------------------------------
+
 class SvxBorderLine;
 
-/** Contains all data of a XF record and an ScPatternAttr (SetItem). */
+/** Contains all data of a XF record and a Calc item set. */
 class XclImpXF : protected XclImpRoot, ScfNoCopy
 {
 private:
     typedef ::std::auto_ptr< ScPatternAttr >    ScPatternAttrPtr;
-    typedef ::std::auto_ptr< XclImpXFBorder >   XclImpXFBorderPtr;
-    typedef ::std::auto_ptr< XclImpXFArea >     XclImpXFAreaPtr;
 
-    ScPatternAttrPtr            mpPattern;          /// Calc SetItem.
-    XclImpXFBorderPtr           mpBorder;           /// Border line style.
-    XclImpXFAreaPtr             mpArea;             /// Background area style.
+    mutable ScPatternAttrPtr    mpPattern;          /// Calc item set.
 
+    XclImpXFBorder              maBorder;           /// Border line style.
+    XclImpXFArea                maArea;             /// Background area style.
     XclHorAlign                 meHorAlign;         /// Horizontal alignment.
     XclVerAlign                 meVerAlign;         /// Vertical alignment.
-    XclTextWrap                 meWrap;             /// Automatic line break.
     XclTextOrient               meOrient;           /// Text orientation.
     XclTextDirection            meTextDir;          /// CTL text direction.
+
+    sal_uInt16                  mnParent;           /// Index to parent style XF.
+    sal_uInt32                  mnNumFmt;           /// Id for value format.
+    sal_uInt16                  mnFont;             /// Index to font record.
+    sal_uInt16                  mnIndent;           /// Text indent.
     sal_uInt8                   mnRotation;         /// Rotation angle.
 
-    sal_uInt32                  mnValFormat;        /// Id for value format.
-    sal_uInt16                  mnIndent;           /// Text indent.
-    sal_uInt16                  mnFont;             /// Index to font record.
-    sal_uInt16                  mnParent;           /// Index to parent style XF.
-
-    bool                        mbCellXF;           /// true = cell XF, sal_False = style XF.
+    bool                        mbCellXF;           /// true = cell XF, false = style XF.
     bool                        mbLocked;           /// true = cell is locked.
     bool                        mbHidden;           /// true = formulas are hidden.
-    bool                        mbFontValid;        /// mnFont != parent->mnFont?
-    bool                        mbFmtValid;         /// mnValFormat != parent->mnValFormat?
-    bool                        mbProtValid;        /// mbLocked != parent->mbLocked or mbHidden != parent->mbHidden?
+    bool                        mbWrapped;          /// true = automatic line break.
+    bool                        mbProtUsed;         /// true = locked/hidden flags used.
+    bool                        mbFontUsed;         /// true = font index used.
+    bool                        mbFmtUsed;          /// true = number format used.
+    bool                        mbAlignUsed;        /// true = alignment used.
+    bool                        mbBorderUsed;       /// true = border data used.
+    bool                        mbAreaUsed;         /// true = area data used.
 
 public:
     explicit                    XclImpXF( const XclImpRoot& rRoot );
@@ -311,9 +342,9 @@ public:
     /** Reads an XF record. */
     void                        ReadXF( XclImpStream& rStrm );
 
-    /** Creates a Calc SetItem containing an item set with all cell properties.
-        @return  A read-only reference to the SetItem stored internally. */
-    const ScPatternAttr&        GetPattern();
+    /** Creates a Calc item set containing an item set with all cell properties.
+        @return  A read-only reference to the item set stored internally. */
+    const ScPatternAttr&        GetPattern() const;
 
     inline bool                 IsCellXF() const    { return mbCellXF; }
     inline bool                 IsStyleXF() const   { return !IsCellXF(); }
@@ -322,34 +353,27 @@ public:
     inline XclVerAlign          GetVerAlign() const { return meVerAlign; }
     inline sal_uInt16           GetFont() const     { return mnFont; }
 
-    /** Inserts Excel border line styles into the item set. */
+    /** Inserts the border line styles into the item set. */
     static void                 SetBorder(
-                                    SfxItemSet& rItemSet, const XclImpPalette& rPalette,
-                                    sal_uInt8 nXclLeftLine,     sal_uInt16 nXclLeftColor,
-                                    sal_uInt8 nXclRightLine,    sal_uInt16 nXclRightColor,
-                                    sal_uInt8 nXclTopLine,      sal_uInt16 nXclTopColor,
-                                    sal_uInt8 nXclBottomLine,   sal_uInt16 nXclBottomColor );
+                                    SfxItemSet& rItemSet,
+                                    const XclImpPalette& rPalette,
+                                    const XclImpXFBorder& rBorder );
 
-    /** Inserts an Excel area style into the item set. */
+    /** Inserts the area style into the item set. */
     static void                 SetArea(
-                                    SfxItemSet& rItemSet, const XclImpPalette& rPalette,
-                                    sal_uInt8 nXclPattern,
-                                    sal_uInt16 nXclForeColor, sal_uInt16 nXclBackColor );
+                                    SfxItemSet& rItemSet,
+                                    const XclImpPalette& rPalette,
+                                    const XclImpXFArea& rArea );
 
 private:
-    /** Creates and returns the border data struct. */
-    XclImpXFBorder&             GetBorder();
-    /** Creates and returns the area data struct. */
-    XclImpXFArea&               GetArea();
-
     void                        ReadXF2( XclImpStream& rStrm );
     void                        ReadXF3( XclImpStream& rStrm );
     void                        ReadXF4( XclImpStream& rStrm );
     void                        ReadXF5( XclImpStream& rStrm );
     void                        ReadXF8( XclImpStream& rStrm );
 
-    /** Creates a new border line item. */
-    static SvxBorderLine*       CreateBorderItem(
+    /** Creates a new border line struct from passed line style. */
+    static SvxBorderLine*       CreateBorderLine(
                                     const XclImpPalette& rPalette,
                                     sal_uInt8 nXclLine, sal_uInt16 nXclColor );
 };
@@ -363,7 +387,7 @@ class XclImpXFBuffer : protected XclImpRoot, ScfNoCopy
 {
 private:
     ScfDelList< XclImpXF >      maXFList;       /// List of contents of all XF record.
-    ScPatternAttr               maDefPattern;   /// This SetItem is used if no other could be found or created.
+    ScPatternAttr               maDefPattern;   /// Used if no styles could be found or created.
 
 public:
     explicit                    XclImpXFBuffer( const XclImpRoot& rRoot );
@@ -373,9 +397,9 @@ public:
     /** Reads a STYLE record. */
     void                        ReadStyle( XclImpStream& rStrm );
 
-    /** Creates a SetItem with all properties stored in the XF record.
-        @return  A read-only reference to the SetItem stored internally. */
-    const ScPatternAttr&        GetPattern( sal_uInt32 nXFIndex );
+    /** Creates a item set with all properties stored in the XF record.
+        @return  A read-only reference to the item set stored internally. */
+    const ScPatternAttr&        GetPattern( sal_uInt32 nXFIndex ) const;
 
     /** Returns the object that stores all contents of an XF record. */
     inline const XclImpXF*      GetXF( sal_uInt32 nXFIndex ) const

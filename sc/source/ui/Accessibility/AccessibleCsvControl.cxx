@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-15 09:34:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,8 @@
 #ifndef SC_SCMOD_HXX
 #include "scmod.hxx"
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 using ::rtl::OUString;
@@ -615,8 +615,8 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const AwtPoint& rPoint
     ScUnoGuard aGuard;
     ensureAlive();
     ScCsvRuler& rRuler = implGetRuler();
-    Point aPos( implGetRelPos( VCLPoint( rPoint ) ) );
-    return ::std::min( ::std::max( rRuler.GetPosFromX( aPos.X() ), 0L ), rRuler.GetPosCount() );
+    // #107054# use object's coordinate system
+    return ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), 0L ), rRuler.GetPosCount() );
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getSelectedText() throw( RuntimeException )
@@ -1002,9 +1002,11 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAt( const Aw
         ensureAlive();
 
         const ScCsvGrid& rGrid = implGetGrid();
-        // #102679#; use >= instead of >, because the offset is the size and not the point
-        sal_Int32 nColumn = (rPoint.X >= rGrid.GetOffsetX()) ? lcl_GetApiColumn( rGrid.GetColumnFromX( rPoint.X ) ) : 0;
-        sal_Int32 nRow = (rPoint.Y >= rGrid.GetOffsetY()) ? (rGrid.GetLineFromY( rPoint.Y ) - rGrid.GetFirstVisLine() + 1) : 0;
+        // #102679#; use <= instead of <, because the offset is the size and not the point
+        sal_Int32 nColumn = ((rGrid.GetFirstX() <= rPoint.X) && (rPoint.X <= rGrid.GetLastX())) ?
+            lcl_GetApiColumn( rGrid.GetColumnFromX( rPoint.X ) ) : 0;
+        sal_Int32 nRow = (rPoint.Y >= rGrid.GetHdrHeight()) ?
+            (rGrid.GetLineFromY( rPoint.Y ) - rGrid.GetFirstVisLine() + 1) : 0;
         xRet = implCreateCellObj( nRow, nColumn );
     }
     return xRet;
@@ -1023,7 +1025,7 @@ throw (RuntimeException)
 {
     ScUnoGuard aGuard;
     ensureAlive();
-    return SC_MOD()->GetColorConfig().GetColorValue( ::svx::DOCCOLOR ).nColor;
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -1571,7 +1573,7 @@ throw (RuntimeException)
 {
     ScUnoGuard aGuard;
     ensureAlive();
-    return SC_MOD()->GetColorConfig().GetColorValue( ::svx::DOCCOLOR ).nColor;
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
 
 // XAccessibleContext -----------------------------------------------------
@@ -1707,7 +1709,7 @@ Point ScAccessibleCsvCell::implGetRealPos() const
 {
     ScCsvGrid& rGrid = implGetGrid();
     return Point(
-        (mnColumn == CSV_COLUMN_HEADER) ? 0 : rGrid.GetColumnX( mnColumn ),
+        (mnColumn == CSV_COLUMN_HEADER) ? rGrid.GetHdrX() : rGrid.GetColumnX( mnColumn ),
         (mnLine == CSV_LINE_HEADER) ? 0 : rGrid.GetY( mnLine ) );
 }
 
@@ -1721,8 +1723,8 @@ Size ScAccessibleCsvCell::implGetRealSize() const
 {
     ScCsvGrid& rGrid = implGetGrid();
     return Size(
-        (mnColumn == CSV_COLUMN_HEADER) ? rGrid.GetOffsetX() : implCalcPixelWidth(rGrid.GetColumnWidth( mnColumn )),
-        (mnLine == CSV_LINE_HEADER) ? rGrid.GetOffsetY() : rGrid.GetLineHeight() );
+        (mnColumn == CSV_COLUMN_HEADER) ? rGrid.GetHdrWidth() : implCalcPixelWidth( rGrid.GetColumnWidth( mnColumn ) ),
+        (mnLine == CSV_LINE_HEADER) ? rGrid.GetHdrHeight() : rGrid.GetLineHeight() );
 }
 
 Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
@@ -1730,9 +1732,12 @@ Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
     ScCsvGrid& rGrid = implGetGrid();
     Rectangle aClipRect( Point( 0, 0 ), rGrid.GetSizePixel() );
     if( mnColumn != CSV_COLUMN_HEADER )
-        aClipRect.Left() = rGrid.GetOffsetX();
+    {
+        aClipRect.Left() = rGrid.GetFirstX();
+        aClipRect.Right() = rGrid.GetLastX();
+    }
     if( mnLine != CSV_LINE_HEADER )
-         aClipRect.Top() = rGrid.GetOffsetY();
+         aClipRect.Top() = rGrid.GetHdrHeight();
 
     Rectangle aRect( implGetRealPos(), implGetRealSize() );
     aRect.Intersection( aClipRect );

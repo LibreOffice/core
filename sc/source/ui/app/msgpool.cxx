@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ __EXPORT ScMessagePool::~ScMessagePool()
     SetSecondaryPool( NULL );       // before deleting defaults (accesses defaults)
 
     for ( USHORT i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
-        SetRef( *ppPoolDefaults[i], 0 );
+        SetRefCount( *ppPoolDefaults[i], 0 );
 
     delete[] ppPoolDefaults;
 

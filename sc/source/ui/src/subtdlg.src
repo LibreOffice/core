@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:42:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,19 +80,20 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ dutch ] = "Groepen";
         Text[ french ] = "Groupes";
         Text[ spanish ] = "Grupos";
-        Text[ finnish ] = "Groups";
+        Text[ finnish ] = "Ryhmät";
         Text[ italian ] = "Gruppi";
-        Text[ danish ] = "Groups";
+        Text[ danish ] = "Grupper";
         Text[ swedish ] = "Grupper";
         Text[ polish ] = "Grupy";
         Text[ portuguese_brazilian ] = "Groups";
-        Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ";
+        Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—";
         Text[ korean ] = "ê·¸ë£¹";
         Text[ chinese_simplified ] = "å°ç»„";
         Text[ chinese_traditional ] = "ç¾¤çµ„";
         Text[ turkish ] = "Groups";
         Text[ arabic ] = "Groups";
-        Text[ catalan ] = "Groups";
+        Text[ catalan ] = "Grups";
+        Text[ thai ] = "à¸à¸¥à¸¸à¹ˆà¸¡";
     };
     CheckBox BTN_PAGEBREAK
     {
@@ -101,10 +102,10 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "Neue Seite bei Gru~ppenwechsel" ;
         Text [ ENGLISH ] = "Pagebreak for each grou~p" ;
         Text [ NORWEGIAN ] = "Sideskift for hver grupp~e" ;
-        Text [ DANISH ] = "Sideskift mellem grupper" ;
+        Text [ DANISH ] = "Sid~eskift mellem grupper" ;
         Text [ ENGLISH_US ] = "~Page break between groups" ;
         Text [ SPANISH ] = "~Nueva página entre grupos" ;
-        Text [ FINNISH ] = "~Sivunvaihto ryhmien välillä" ;
+        Text [ FINNISH ] = "S~ivunvaihto ryhmien välillä" ;
         Text [ FRENCH ] = "Saut de page entre les grou~pes" ;
         Text [ ITALIAN ] = "Interruzione di pagina ~per ogni cambio di gruppo" ;
         Text [ DUTCH ] = "~Nieuwe pagina voor elke groep" ;
@@ -113,16 +114,17 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ PORTUGUESE ] = "Nova página para cada grupo" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å°ç»„ä¹‹é—´æ¢é¡µ(~P)";
-        Text[ russian ] = "Ğàçğûâ ñòğàíèöû ìåæäó ãğóïïàìè";
+        Text[ russian ] = "Ğàçğûâ ñòğàíè~öû ìåæäó ãğóïïàìè";
         Text[ polish ] = "Nowa strona przy podziale grup";
-        Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿã”ã¨ã«æ”¹ï¾ï¾Ÿï½°ï½¼ï¾(~P)";
+        Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—ã”ã¨ã«æ”¹ãƒšãƒ¼ã‚¸(~P)";
         Text[ chinese_traditional ] = "ç¾¤çµ„ä¹‹é–“æ›é (~P)";
         Text[ arabic ] = "ÕİÍÉ ÌÏíÏÉ ÚäÏ ÊÛííÑ ÇáãÌãæÚÉ";
         Text[ greek ] = "Íİá óåëßäá ìå êÜèå áëëáãŞ ïìÜäáò";
-        Text[ korean ] = "ê·¸ë£¹ ë³€ê²½ì‹œì— ìƒˆ í˜ì´ì§€(~P)";
+        Text[ korean ] = "ê·¸ë£¹ ì‚¬ì´ì—ì„œ í˜ì´ì§€ ë‚˜ëˆ„ê¸°(~P)";
         Text[ turkish ] = "~Her grup için yeni sayfa başlat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nueva página entre grupos";
+        Text[ catalan ] = "Salt de ~pàgina entre grups";
+        Text[ thai ] = "à¸•à¸±à¸§à¹à¸šà¹ˆà¸‡~à¸«à¸™à¹‰à¸²à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡à¸à¸¥à¸¸à¹ˆà¸¡";
     };
     CheckBox BTN_CASE
     {
@@ -136,7 +138,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ ENGLISH_US ] = "~Case sensitive" ;
         Text [ SPANISH ] = "~Mayúsculas/minúsculas" ;
         Text [ FINNISH ] = "~Kirjainkoon erottelu" ;
-        Text [ FRENCH ] = "~Respecter la casse" ;
+        Text [ FRENCH ] = "Respecter la casse" ;
         Text [ ITALIAN ] = "~Maiuscole/minuscole" ;
         Text [ DUTCH ] = "~Hoofdletters/kleine letters belangrijk" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Sens?vel a mai sculas/min sculas" ;
@@ -144,16 +146,17 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ PORTUGUESE ] = "~Maiúsculas/Minúsculas" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒºåˆ†å­—æ¯å¤§å°å†™(~C)";
-        Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
+        Text[ russian ] = "Ó÷èòûâàòü ğå~ãèñòğ";
         Text[ polish ] = "U~wzglêdnij wielkie i ma³e litery";
-        Text[ japanese ] = "å¤§æ–‡å­—/å°æ–‡å­—ã‚’åŒºåˆ¥(~C)";
+        Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~C)";
         Text[ chinese_traditional ] = "å€åˆ†å­—æ¯å¤§å°å¯«(~C)";
         Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
         Text[ greek ] = "Óõìöùíßá ğåæşí-êåöáëáßùí";
-        Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„(~C)";
+        Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ì êµ¬ë¶„(~C)";
         Text[ turkish ] = "~Büyük/küçük harf duyarlı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Mayúsculas/minúsculas";
+        Text[ catalan ] = "Distingeix entre majús~cules i minúscules";
+        Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸";
     };
     CheckBox BTN_SORT
     {
@@ -176,14 +179,15 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ chinese_simplified ] = "åŒºåŸŸå…ˆæŒ‰ç…§å°ç»„æ’åº(~S)";
         Text[ russian ] = "Ñîğòèğîâàòü îáëàñòü ñíà÷àëà ïî ãğóïïàì";
         Text[ polish ] = "Przesortuj wczeœniej o~bszar wed³ug grup";
-        Text[ japanese ] = "ç¯„å›²ã‚’ã‚ã‚‰ã‹ã˜ã‚ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿåˆ¥ã«ä¸¦ã¹ã‚‹(~S)";
+        Text[ japanese ] = "ç¯„å›²ã‚’ã‚ã‚‰ã‹ã˜ã‚ã‚°ãƒ«ãƒ¼ãƒ—åˆ¥ã«ä¸¦ã¹ã‚‹(~S)";
         Text[ chinese_traditional ] = "å€åŸŸå…ˆæŒ‰ç…§ç¾¤çµ„æ’åº(~S)";
         Text[ arabic ] = "İÑÒ ÇáäØÇŞ ŞÈá Ğáß ÍÓÈ ÇáãÌãæÚÇÊ";
         Text[ greek ] = "Íá ãßíåé ğñéí ôáîéíüìç~óç ôçò ğåñéï÷Şò êáôÜ ïìÜäåò";
-        Text[ korean ] = "ê·¸ë£¹ì— ë”°ë¼ ë²”ìœ„ë¥¼ ì‚¬ì „ì— ì •ë ¬(~S)";
+        Text[ korean ] = "ê·¸ë£¹ë³„ë¡œ ì˜ì—­ì„ ìš°ì„  ì •ë ¬(~S)";
         Text[ turkish ] = "Bölümü önce gruplara göre ~sırala";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ordenar primero e~l área por grupos";
+        Text[ catalan ] = "Preordena l'àrea segons els grup~s";
+        Text[ thai ] = "à¹€~à¸£à¸µà¸¢à¸‡à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸à¹ˆà¸­à¸™à¸•à¸²à¸¡à¸à¸¥à¸¸à¹ˆà¸¡";
     };
     CheckBox BTN_FORMATS
     {
@@ -205,7 +209,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ PORTUGUESE ] = "Incluir ~formatos" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒ…å«æ ¼å¼(~N)";
-        Text[ russian ] = "Âêëş÷àÿ ôîğìàòû";
+        Text[ russian ] = "Âêëş÷àÿ ~ôîğìàòû";
         Text[ polish ] = "Uwzglêdnij f~ormaty";
         Text[ japanese ] = "æ›¸å¼ã‚’å«ã‚€(~N)";
         Text[ chinese_traditional ] = "åŒ…å«æ ¼å¼(~N)";
@@ -214,7 +218,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "ì„œì‹ í¬í•¨(~N)";
         Text[ turkish ] = "~Formatlamayı da dikkate al";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Incluir formatos";
+        Text[ catalan ] = "I~nclou els formats";
+        Text[ thai ] = "à¸£~à¸§à¸¡à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     CheckBox BTN_USERDEF
     {
@@ -228,8 +233,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SPANISH ] = "~Orden de clasificación definido por el usuario" ;
         Text [ FINNISH ] = "M~ukautettu lajittelujärjestys" ;
         Text [ FRENCH ] = "Ordre de tri ~utilisateur" ;
-        Text [ ITALIAN ] = "Sequenza d'ordine ~definita dall'utente" ;
-        Text [ DUTCH ] = "~Gebruikergedefinieerde sorteervolgorde" ;
+        Text [ ITALIAN ] = "Sequenza d'ordine definita dall'~utente" ;
+        Text [ DUTCH ] = "~Door gebruiker gedefinieerde sorteervolgorde" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Preced?ncia de ordena??o definida pelo usu?rio" ;
         Text [ SWEDISH ] = "A~nvändardefinierad sorteringsordning" ;
         Text [ PORTUGUESE ] = "Ordem de classificação definida pelo ~utilizador" ;
@@ -241,10 +246,11 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ chinese_traditional ] = "ä½¿ç”¨è€…è‡ªè¨‚æ’åºè¦å‰‡(~U)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
         Text[ greek ] = "ÓåéñÜ ôáîéíüìçóçò ïñéæüìåíç áğü ôïí ÷ñŞóôç";
-        Text[ korean ] = "ì‚¬ìš©ìê°€ ì •ì˜í•œ  ì •ë ¬ ìˆœì„œ(~U)";
+        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ì •ë ¬ ìˆœì„œ(~U)";
         Text[ turkish ] = "~Kullanıcı tanımlı sıralama düzeni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Orden de clasificación definido por el usuario";
+        Text[ catalan ] = "Tip~us d'ordenació personalitzat";
+        Text[ thai ] = "à¸à¸³~à¸«à¸™à¸”à¸à¸²à¸£à¹€à¸£à¸µà¸¢à¸‡à¸¥à¸³à¸”à¸±à¸šà¹€à¸­à¸‡";
     };
     ListBox LB_USERDEF
     {
@@ -265,7 +271,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ ENGLISH_US ] = "~Ascending" ;
         Text [ SPANISH ] = "~Ascendente" ;
         Text [ FINNISH ] = "~Nouseva" ;
-        Text [ FRENCH ] = "~Croissant" ;
+        Text [ FRENCH ] = "Croissant" ;
         Text [ ITALIAN ] = "Crescente" ;
         Text [ DUTCH ] = "~Oplopend" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Ascendente" ;
@@ -282,7 +288,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ(~A)";
         Text[ turkish ] = "A~rtan düzende";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ascendente";
+        Text[ catalan ] = "~Ascendent";
+        Text[ thai ] = "à¸ˆà¸²à¸~à¸™à¹‰à¸­à¸¢à¹„à¸›à¸«à¸²à¸¡à¸²à¸";
     };
     RadioButton BTN_DESCENDING
     {
@@ -291,11 +298,11 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "Abs~teigend" ;
         Text [ ENGLISH ] = "~Descending" ;
         Text [ NORWEGIAN ] = "~Synkende" ;
-        Text [ DANISH ] = "Faldende" ;
+        Text [ DANISH ] = "Fal~dende" ;
         Text [ ENGLISH_US ] = "D~escending" ;
         Text [ SPANISH ] = "~Descendente" ;
         Text [ FINNISH ] = "L~askeva" ;
-        Text [ FRENCH ] = "~Décroissant" ;
+        Text [ FRENCH ] = "Décroissant" ;
         Text [ ITALIAN ] = "Decrescente" ;
         Text [ DUTCH ] = "~Aflopend" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Descendente" ;
@@ -312,7 +319,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ(~E)";
         Text[ turkish ] = "A~zalan düzende";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Descendente";
+        Text[ catalan ] = "D~escendent";
+        Text[ thai ] = "à¸ˆà¸²à¸à¸¡à¸²~à¸à¹„à¸›à¸«à¸²à¸™à¹‰à¸­à¸¢";
     };
     FixedLine FL_SORT
     {
@@ -341,7 +349,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "ì •ë ¬";
         Text[ turkish ] = "Sıralama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ordenar";
+        Text[ catalan ] = "Ordre";
+        Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡";
     };
 };
 
@@ -361,7 +370,7 @@ TabPage RID_SUBTBASE
         Text = "~Gruppieren nach" ;
         Text [ ENGLISH ] = "~Group by" ;
         Text [ norwegian ] = "~Gruppe ved " ;
-        Text [ italian ] = "~Raggruppa per" ;
+        Text [ italian ] = "Ra~ggruppa per" ;
         Text [ portuguese_brazilian ] = "~Agrupar por" ;
         Text [ portuguese ] = "~Agrupar por" ;
         Text [ finnish ] = "~Ryhmittele" ;
@@ -374,14 +383,15 @@ TabPage RID_SUBTBASE
         Text[ chinese_simplified ] = "åˆ†ç»„æŒ‰ç…§(~G)";
         Text[ russian ] = "Ãğóïïèğîâàòü ïî";
         Text[ polish ] = "Grupuj wed³ug";
-        Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿã®åŸºæº–(~G)";
+        Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—ã®åŸºæº–(~G)";
         Text[ chinese_traditional ] = "ä¾ç¾¤çµ„(~G)";
         Text[ arabic ] = "ÊÌãíÚ ÍÓÈ";
         Text[ greek ] = "Ïìáäïğïßçóç êáôÜ";
-        Text[ korean ] = "ì—ì˜í•œ ê·¸ë£¹(~G)";
+        Text[ korean ] = "ê·¸ë£¹ ê¸°ì¤€(~G)";
         Text[ turkish ] = "~Gruplama esası";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Agrupar por";
+        Text[ catalan ] = "~Agrupa per";
+        Text[ thai ] = "~à¸ˆà¸±à¸”à¸à¸¥à¸¸à¹ˆà¸¡à¹‚à¸”à¸¢";
     };
     ListBox LB_GROUP
     {
@@ -411,16 +421,17 @@ TabPage RID_SUBTBASE
         Text [ spanish ] = "~Calcular subtotales para" ;
         Text [ english_us ] = "~Calculate subtotals for" ;
         Text[ chinese_simplified ] = "åˆ†ç±»æ±‡æ€»è®¡ç®—(~C)";
-        Text[ russian ] = "Âû÷èñëèòü ïğîìåæóòî÷íûå èòîãè äëÿ";
+        Text[ russian ] = "Âû÷èñëèòü ïğîìå~æóòî÷íûå èòîãè äëÿ";
         Text[ polish ] = "Oblicz sumy poœrednie dla";
         Text[ japanese ] = "å°è¨ˆã‚’è¨ˆç®—ã™ã‚‹åˆ—(~C)";
         Text[ chinese_traditional ] = "å°è¨ˆç”¨æ–¼(~C)";
         Text[ arabic ] = "ÍÓÇÈ ÇáãÌÇãíÚ ÇáİÑÚíÉ áÜ";
         Text[ greek ] = "Õğïëïãéóìüò ìåñéêşí áèñïéóìÜ~ôùí ãéá";
-        Text[ korean ] = "ì— ëŒ€í•œ ì†Œê³„ ê³„ì‚°(~C)";
+        Text[ korean ] = "ë¶€ë¶„í•© ê³„ì‚°í•˜ëŠ” ì—´(~C)";
         Text[ turkish ] = "~Ara toplamları hesaplanacak sütun(lar)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Calcular subtotales para";
+        Text[ catalan ] = "~Calcula els subtotals per a";
+        Text[ thai ] = "~à¸„à¸³à¸™à¸§à¸“à¸œà¸¥à¸£à¸§à¸¡à¸¢à¹ˆà¸­à¸¢à¸ªà¸³à¸«à¸£à¸±à¸š";
     };
     Control WND_COLUMNS
     {
@@ -445,19 +456,20 @@ TabPage RID_SUBTBASE
         Text [ french ] = "~Fonction" ;
         Text [ swedish ] = "~Beräkningsregler" ;
         Text [ dutch ] = "~Functie" ;
-        Text [ spanish ] = "~Usar función" ;
+        Text [ spanish ] = "Usar función" ;
         Text [ english_us ] = "Use ~function" ;
         Text[ chinese_simplified ] = "è®¡ç®—è§„åˆ™(~F)";
-        Text[ russian ] = "Èíñòğóêöèÿ ïî âû÷èñëåíèÿì";
+        Text[ russian ] = "Èñïîëüçîâàòü ôóíêöèş";
         Text[ polish ] = "Instrukcja obliczania";
         Text[ japanese ] = "è¨ˆç®—æ–¹æ³•(~F)";
         Text[ chinese_traditional ] = "è¨ˆç®—è¦å‰‡(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
-        Text[ korean ] = "ê³„ì‚° ê·œì¹™(~F)";
+        Text[ korean ] = "í•¨ìˆ˜ ì‚¬ìš©(~F)";
         Text[ turkish ] = "K~ullanılacak fonksiyon";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Usar función";
+        Text[ catalan ] = "Utilitza la ~funció";
+        Text[ thai ] = "à¹ƒà¸Šà¹‰~à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
     };
     ListBox LB_FUNCTIONS
     {
@@ -553,15 +565,15 @@ TabPage RID_SUBTBASE
         };
         StringList [ finnish ] =
         {
-            < "Sum" ; Default ; > ;
-            < "Lukumäärä" ; Default ; > ;
+            < "Summa" ; Default ; > ;
+            < "LASKE" ; Default ; > ;
             < "Keskiarvo" ; Default ; > ;
-            < "Enint" ; Default ; > ;
-            < "Väh" ; Default ; > ;
-            < "Tuote" ; Default ; > ;
-            < "Lukumäärä (vain numerot)" ; Default ; > ;
-            < "StDev (vakiopoikkeama, Otos)" ; Default ; > ;
-            < "StDevP (vakiopoikkeama, populaatio)" ; Default ; > ;
+            < "MAKS" ; Default ; > ;
+            < "MIN" ; Default ; > ;
+            < "Tulo" ; Default ; > ;
+            < "LASKE (vain luvut)" ; Default ; > ;
+            < "KESKIHAJONTA (otos)" ; Default ; > ;
+            < "KESKIHAJONTAP (populaatio)" ; Default ; > ;
             < "Var (Otos)" ; Default ; > ;
             < "VarP (populaatio)" ; Default ; > ;
         };
@@ -632,8 +644,8 @@ TabPage RID_SUBTBASE
             < "Cantidad (sólo números)" ; Default ; > ;
             < "DesvEst (Muestra)" ; Default ; > ;
             < "DesvEstP (Población)" ; Default ; > ;
-            < "Varianza (Muestra)" ; Default ; > ;
-            < "VarP (Población)" ; Default ; > ;
+            < "Variancia (muestra)" ; Default ; > ;
+            < "VarP (población)" ; Default ; > ;
         };
         StringList [ english_us ] =
         {
@@ -750,7 +762,7 @@ TabPage RID_SUBTBASE
     StringList [ korean ] =
     {
             < "í•©ê³„" ; Default ; > ;
-        < "ìˆ˜" ; Default ; > ;
+        < "ê°’" ; Default ; > ;
         < "í‰ê· " ; Default ; > ;
         < "ìµœëŒ€" ; Default ; > ;
         < "ìµœì†Œ" ; Default ; > ;
@@ -792,16 +804,30 @@ TabPage RID_SUBTBASE
     StringList [ catalan ] =
     {
             < "Suma" ; Default ; > ;
-        < "Cantidad" ; Default ; > ;
-        < "Promedio" ; Default ; > ;
-        < "Máx." ; Default ; > ;
-        < "Mín." ; Default ; > ;
-        < "Producto" ; Default ; > ;
-        < "Cantidad (solo números)" ; Default ; > ;
-        < "DesvEst (Muestra)" ; Default ; > ;
-        < "DesvEstP (Población)" ; Default ; > ;
-        < "Varianza (Muestra)" ; Default ; > ;
-        < "VarP (Población)" ; Default ; > ;
+        < "Compta" ; Default ; > ;
+        < "Mitjana" ; Default ; > ;
+        < "Màx" ; Default ; > ;
+        < "Mín" ; Default ; > ;
+        < "Producte" ; Default ; > ;
+        < "Compta (només números)" ; Default ; > ;
+        < "StDev (mostra)" ; Default ; > ;
+        < "StDevP (població)" ; Default ; > ;
+        < "Var (mostra)" ; Default ; > ;
+        < "VarP (població)" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¸œà¸¥à¸£à¸§à¸¡" ; Default ; > ;
+        < "à¸™à¸±à¸š" ; Default ; > ;
+        < "à¹€à¸‰à¸¥à¸µà¹ˆà¸¢" ; Default ; > ;
+        < "à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
+        < "à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
+        < "à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œ" ; Default ; > ;
+        < "à¸™à¸±à¸š (à¸•à¸±à¸§à¹€à¸¥à¸‚à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§)" ; Default ; > ;
+        < "StDev (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
+        < "StDevP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
+        < "Var (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
+        < "VarP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
     };
     };
 };
@@ -866,16 +892,17 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ spanish ] = "Grupo 1" ;
                 Text [ english_us ] = "1st Group" ;
                 Text[ chinese_simplified ] = "ç¬¬ä¸€ç»„";
-                Text[ russian ] = "1-àÿ ãğóïïà";
+                Text[ russian ] = "1-ÿ ãğóïïà";
                 Text[ polish ] = "1 grupa";
-                Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ 1";
+                Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ— 1";
                 Text[ chinese_traditional ] = "ç¬¬ä¸€çµ„";
                 Text[ arabic ] = "ÇáãÌãæÚÉ ÇáÃæáì";
                 Text[ greek ] = "1ç ÏìÜäá";
-                Text[ korean ] = "1ë²ˆì§¸ ê·¸ë£¹";
+                Text[ korean ] = "ê·¸ë£¹ 1";
                 Text[ turkish ] = "1. Grup";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Grupo 1";
+                Text[ catalan ] = "1r grup";
+                Text[ thai ] = "à¸à¸¥à¸¸à¹ˆà¸¡à¹à¸£à¸";
             };
             PageItem
             {
@@ -894,16 +921,17 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ spanish ] = "Grupo 2" ;
                 Text [ english_us ] = "2nd Group" ;
                 Text[ chinese_simplified ] = "ç¬¬äºŒç»„";
-                Text[ russian ] = "2-àÿ ãğóïïà";
+                Text[ russian ] = "2-ÿ ãğóïïà";
                 Text[ polish ] = "2 grupa";
-                Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ 2";
+                Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ— 2";
                 Text[ chinese_traditional ] = "ç¬¬äºŒçµ„";
                 Text[ arabic ] = "ÇáãÌãæÚÉ ÇáËÇäíÉ";
                 Text[ greek ] = "2ç. ÏìÜäá";
-                Text[ korean ] = "2ë²ˆì§¸ ê·¸ë£¹";
+                Text[ korean ] = "ê·¸ë£¹ 2";
                 Text[ turkish ] = "2. Grup";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Grupo 2";
+                Text[ catalan ] = "2n grup";
+                Text[ thai ] = "à¸à¸¥à¸¸à¹ˆà¸¡à¸—à¸µà¹ˆà¸ªà¸­à¸‡";
             };
             PageItem
             {
@@ -922,16 +950,17 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ spanish ] = "Grupo 3" ;
                 Text [ english_us ] = "3rd Group" ;
                 Text[ chinese_simplified ] = "ç¬¬ä¸‰ç»„";
-                Text[ russian ] = "3-üÿ ãğóïïà";
+                Text[ russian ] = "3-ÿ ãğóïïà";
                 Text[ polish ] = "3 grupa";
-                Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ 3";
+                Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ— 3";
                 Text[ chinese_traditional ] = "ç¬¬ä¸‰çµ„";
                 Text[ arabic ] = "ÇáãÌãæÚÉ ÇáËÇáËÉ";
                 Text[ greek ] = "3ç ÏìÜäá";
-                Text[ korean ] = "3ë²ˆì§¸ ê·¸ë£¹";
+                Text[ korean ] = "ê·¸ë£¹ 3";
                 Text[ turkish ] = "3. Grup";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Grupo 3";
+                Text[ catalan ] = "3r grup";
+                Text[ thai ] = "à¸à¸¥à¸¸à¹ˆà¸¡à¸—à¸µà¹ˆà¸ªà¸²à¸¡";
             };
             PageItem
             {
@@ -952,14 +981,15 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ chinese_simplified ] = "é€‰é¡¹";
                 Text[ russian ] = "Ïàğàìåòğû";
                 Text[ polish ] = "Opcje";
-                Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+                Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
                 Text[ chinese_traditional ] = "é¸é …";
                 Text[ arabic ] = "ÇáÎíÇÑÇÊ";
                 Text[ greek ] = "Åğéëïãİò";
                 Text[ korean ] = "ì˜µì…˜";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Opciones";
+                Text[ catalan ] = "Opcions";
+                Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
             };
         };
     };
@@ -976,10 +1006,10 @@ TabDialog RID_SCDLG_SUBTOTALS
         Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
@@ -992,7 +1022,8 @@ TabDialog RID_SCDLG_SUBTOTALS
         Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     Text[ chinese_simplified ] = "åˆ†ç±»æ±‡æ€»";
     Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
@@ -1001,11 +1032,18 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ chinese_traditional ] = "å°è¨ˆ";
     Text[ arabic ] = "ÇáãÌÇãíÚ ÇáİÑÚíÉ";
     Text[ greek ] = "ÌåñéêÜ áèñïßóìáôá";
-    Text[ korean ] = "ì†Œê³„";
+    Text[ korean ] = "ë¶€ë¶„í•©";
     Text[ turkish ] = "Ara toplamlar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subtotales";
+    Text[ catalan ] = "Subtotals";
+    Text[ thai ] = "à¸œà¸¥à¸£à¸§à¸¡à¸¢à¹ˆà¸­à¸¢";
 };
+
+
+
+
+
+
 
 
 

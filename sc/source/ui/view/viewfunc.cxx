@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2002-11-28 16:15:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,30 +154,17 @@ void ScViewFunc::StartFormatArea()
     if ( !SC_MOD()->GetInputOptions().GetExtendFormat() )
         return;
 
-    USHORT nTab = GetViewData()->GetTabNo();
-    ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), nTab );
-    BOOL bOk = TRUE;
-
-    ScMarkData& rMark = GetViewData()->GetMarkData();
-    if ( rMark.IsMultiMarked() )
-        rMark.MarkToSimple();
-    if ( rMark.IsMultiMarked() )
+    //  start only with single cell (marked or cursor position)
+    ScRange aMarkRange;
+    BOOL bOk = GetViewData()->GetSimpleArea( aMarkRange );
+    if ( bOk && aMarkRange.aStart != aMarkRange.aEnd )
         bOk = FALSE;
-    else if ( rMark.IsMarked() )
-    {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
-        if ( aMarkRange.aStart == aMarkRange.aEnd )
-            aPos = aMarkRange.aStart;
-        else
-            bOk = FALSE;
-    }
 
     if (bOk)
     {
         bFormatValid = TRUE;
-        aFormatSource = aPos;
-        aFormatArea = ScRange( aPos );
+        aFormatSource = aMarkRange.aStart;
+        aFormatArea = ScRange( aFormatSource );
     }
     else
         bFormatValid = FALSE;       // keinen alten Bereich behalten
@@ -1091,8 +1078,8 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         // wenn neue Items Default-Items sind, so muessen die
         // alten Items geputtet werden:
 
-        BOOL bDefNewOuter = ( SFX_ITEMS_STATICDEFAULT == pNewOuter->GetRef() );
-        BOOL bDefNewInner = ( SFX_ITEMS_STATICDEFAULT == pNewInner->GetRef() );
+        BOOL bDefNewOuter = ( SFX_ITEMS_STATICDEFAULT == pNewOuter->GetKind() );
+        BOOL bDefNewInner = ( SFX_ITEMS_STATICDEFAULT == pNewInner->GetKind() );
 
         ApplyPatternLines( aNewAttrs,
                            bDefNewOuter ? pOldOuter : pNewOuter,
@@ -1730,7 +1717,8 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
             bSimple = TRUE;
     }
 
-    rMark.SetMarking(FALSE);        // fuer MarkToMulti
+    rMark.SetMarking(FALSE);        // for MarkToMulti
+    rMark.MarkToSimple();           // before bMulti test below
 
     DBG_ASSERT( rMark.IsMarked() || rMark.IsMultiMarked() || bSimple, "was denn loeschen ???" )
 

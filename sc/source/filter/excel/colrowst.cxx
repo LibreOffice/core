@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:07:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,6 @@ ScExtDocOptions::ScExtDocOptions( void )
     pCodenames = NULL;
     bChanged = TRUE;
 
-    fColScale = 0.0;
     SetWinProtection(false);
 }
 
@@ -577,8 +576,6 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
         pCodenames = new CodenameList( *rCpy.pCodenames );
 
     bChanged = rCpy.bChanged;
-
-    fColScale = rCpy.fColScale;
 
     return *this;
 }

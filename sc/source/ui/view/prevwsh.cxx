@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-21 19:10:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #include <svx/sizeitem.hxx>
 #include <svx/srchitem.hxx>
+#include <svx/svdview.hxx>
 #include <svx/zoom.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -174,6 +175,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
     SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( rWin.pDocShell ),
     aSourceData( rWin.aSourceData ),
+    nSourceDesignMode( rWin.nSourceDesignMode ),
     pAccessibilityBroadcaster( NULL )
 {
     Construct( &pViewFrame->GetWindow() );
@@ -183,6 +185,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 Window *pParent ) :
     SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
+    nSourceDesignMode( SC_FORCEMODE_NONE ),
     pAccessibilityBroadcaster( NULL )
 {
     Construct( pParent );
@@ -192,6 +195,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
+    nSourceDesignMode( SC_FORCEMODE_NONE ),
     pAccessibilityBroadcaster( NULL )
 {
     Construct( &pViewFrame->GetWindow() );
@@ -202,9 +206,16 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         //! store live ScViewData instead, and update on ScTablesHint?
         //! or completely forget aSourceData on ScTablesHint?
 
-        ScViewData* pData = ((ScTabViewShell*)pOldSh)->GetViewData();
+        ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
+        ScViewData* pData = pTabViewShell->GetViewData();
         pData->WriteUserData( aSourceData );
         InitStartTable( pData->GetTabNo() );
+
+        //  #106334# also have to store the TabView's DesignMode state
+        //  (only if draw view exists)
+        SdrView* pDrawView = pTabViewShell->GetSdrView();
+        if ( pDrawView )
+            nSourceDesignMode = pDrawView->IsDesignMode();
     }
 }
 

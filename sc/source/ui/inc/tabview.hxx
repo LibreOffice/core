@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-28 14:58:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ struct ChartSelectionInfo;
 class SdrHdlList;
 
 #define SPLIT_HANDLE_SIZE   3
+#define SC_FORCEMODE_NONE   0xff
 
 // ---------------------------------------------------------------------------
 //      Hilfs - Fenster
@@ -235,7 +236,7 @@ protected:
     void            DrawEnableAnim(BOOL bSet);
     void            DrawShowMarkHdl(BOOL bShow);
 
-    void            MakeDrawView();
+    void            MakeDrawView( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
 
     void            HideNoteMarker();
 

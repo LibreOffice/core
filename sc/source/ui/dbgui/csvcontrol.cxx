@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 12:59:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #ifndef _SC_ACCESSIBLECSVCONTROL_HXX
 #include "AccessibleCsvControl.hxx"
@@ -85,16 +88,17 @@ ScCsvLayoutData::ScCsvLayoutData() :
     mnPosCount( 1 ),
     mnPosOffset( 0 ),
     mnWinWidth( 1 ),
-    mnOffsetX( 0 ),
+    mnHdrWidth( 0 ),
     mnCharWidth( 1 ),
     mnLineCount( 1 ),
     mnLineOffset( 0 ),
     mnWinHeight( 1 ),
-    mnOffsetY( 0 ),
+    mnHdrHeight( 0 ),
     mnLineHeight( 1 ),
     mnPosCursor( CSV_POS_INVALID ),
     mnColCursor( 0 ),
-    mnNoRepaint( 0 )
+    mnNoRepaint( 0 ),
+    mbAppRTL( !!Application::GetSettings().GetLayoutRTL() )
 {
 }
 
@@ -103,11 +107,11 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
     ScCsvDiff nRet = CSV_DIFF_EQUAL;
     if( mnPosCount != rData.mnPosCount )        nRet |= CSV_DIFF_POSCOUNT;
     if( mnPosOffset != rData.mnPosOffset )      nRet |= CSV_DIFF_POSOFFSET;
-    if( mnOffsetX != rData.mnOffsetX )          nRet |= CSV_DIFF_OFFSETX;
+    if( mnHdrWidth != rData.mnHdrWidth )        nRet |= CSV_DIFF_HDRWIDTH;
     if( mnCharWidth != rData.mnCharWidth )      nRet |= CSV_DIFF_CHARWIDTH;
     if( mnLineCount != rData.mnLineCount )      nRet |= CSV_DIFF_LINECOUNT;
     if( mnLineOffset != rData.mnLineOffset )    nRet |= CSV_DIFF_LINEOFFSET;
-    if( mnOffsetY != rData.mnOffsetY )          nRet |= CSV_DIFF_OFFSETY;
+    if( mnHdrHeight != rData.mnHdrHeight )      nRet |= CSV_DIFF_HDRHEIGHT;
     if( mnLineHeight != rData.mnLineHeight )    nRet |= CSV_DIFF_LINEHEIGHT;
     if( mnPosCursor != rData.mnPosCursor )      nRet |= CSV_DIFF_RULERCURSOR;
     if( mnColCursor != rData.mnColCursor )      nRet |= CSV_DIFF_GRIDCURSOR;
@@ -241,7 +245,7 @@ void ScCsvControl::Execute( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPa
 
 sal_Int32 ScCsvControl::GetVisPosCount() const
 {
-    return (mrData.mnWinWidth - GetOffsetX()) / GetCharWidth() + 1;
+    return (mrData.mnWinWidth - GetHdrWidth()) / GetCharWidth();
 }
 
 sal_Int32 ScCsvControl::GetMaxPosOffset() const
@@ -259,19 +263,34 @@ bool ScCsvControl::IsVisibleSplitPos( sal_Int32 nPos ) const
     return IsValidSplitPos( nPos ) && (GetFirstVisPos() <= nPos) && (nPos <= GetLastVisPos());
 }
 
+sal_Int32 ScCsvControl::GetHdrX() const
+{
+    return IsRTL() ? (mrData.mnWinWidth - GetHdrWidth()) : 0;
+}
+
+sal_Int32 ScCsvControl::GetFirstX() const
+{
+    return IsRTL() ? 0 : GetHdrWidth();
+}
+
+sal_Int32 ScCsvControl::GetLastX() const
+{
+    return mrData.mnWinWidth - (IsRTL() ? GetHdrWidth() : 0) - 1;
+}
+
 sal_Int32 ScCsvControl::GetX( sal_Int32 nPos ) const
 {
-    return GetOffsetX() + (nPos - GetFirstVisPos()) * GetCharWidth();
+    return GetFirstX() + (nPos - GetFirstVisPos()) * GetCharWidth();
 }
 
 sal_Int32 ScCsvControl::GetPosFromX( sal_Int32 nX ) const
 {
-    return (nX - GetOffsetX() + GetCharWidth() / 2) / GetCharWidth() + GetFirstVisPos();
+    return (nX - GetFirstX() + GetCharWidth() / 2) / GetCharWidth() + GetFirstVisPos();
 }
 
 sal_Int32 ScCsvControl::GetVisLineCount() const
 {
-    return (mrData.mnWinHeight - GetOffsetY() - 2) / GetLineHeight() + 1;
+    return (mrData.mnWinHeight - GetHdrHeight() - 2) / GetLineHeight() + 1;
 }
 
 sal_Int32 ScCsvControl::GetLastVisLine() const
@@ -296,12 +315,12 @@ bool ScCsvControl::IsVisibleLine( sal_Int32 nLine ) const
 
 sal_Int32 ScCsvControl::GetY( sal_Int32 nLine ) const
 {
-    return GetOffsetY() + (nLine - GetFirstVisLine()) * GetLineHeight();
+    return GetHdrHeight() + (nLine - GetFirstVisLine()) * GetLineHeight();
 }
 
 sal_Int32 ScCsvControl::GetLineFromY( sal_Int32 nY ) const
 {
-    return (nY - GetOffsetY()) / GetLineHeight() + GetFirstVisLine();
+    return (nY - GetHdrHeight()) / GetLineHeight() + GetFirstVisLine();
 }
 
 

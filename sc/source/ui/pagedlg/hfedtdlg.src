@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:35:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     Text [ french ] = "En-tκte/Pied de page" ; \
     Text [ swedish ] = "Sidhuvud/sidfot" ; \
     Text [ dutch ] = "Kop-/voettekst" ; \
-    Text [ spanish ] = "Encabezam./Pie de pαgina" ; \
+    Text [ spanish ] = "Encabezamientos y pies de pαgina" ; \
     Text [ english_us ] = "Headers/Footers" ; \
     Text[ chinese_simplified ] = "ι΅µη‰/ι΅µθ„";   \
     Text[ russian ] = "Βεπυνθι/Νθζνθι κξλξνςθςσλϋ"; \
@@ -160,7 +160,7 @@
     Text [ french ] = "En-tκte (droit)" ; \
     Text [ swedish ] = "Sidhuvud (hφger)" ; \
     Text [ dutch ] = "Koptekst (rechts)" ; \
-    Text [ spanish ] = "Encabezam. (der.)" ; \
+    Text [ spanish ] = "Encabezamiento (der.)" ; \
     Text [ english_us ] = "Header (right)" ; \
     Text[ chinese_simplified ] = "ι΅µη‰(ε³)"; \
     Text[ russian ] = "Βεπυνθι κξλξνςθςσλ (ροπΰβΰ)";    \
@@ -189,7 +189,7 @@
     Text [ french ] = "En-tκte (ΰ gauche)" ; \
     Text [ swedish ] = "Sidhuvud (vδnster)" ; \
     Text [ dutch ] = "Koptekst (links)" ; \
-    Text [ spanish ] = "Encabezam. (izq.)" ; \
+    Text [ spanish ] = "Encabezamiento (izq.)" ; \
     Text [ english_us ] = "Header (left)" ; \
     Text[ chinese_simplified ] = "ι΅µη‰(ε·¦)"; \
     Text[ russian ] = "Βεπυνθι κξλξνςθςσλ (ρλεβΰ)"; \
@@ -337,7 +337,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text [ portuguese ] = "Rodapι" ;
     Text [ finnish ] = "Alatunnisteet" ;
     Text [ danish ] = "Sidefψdder" ;
-    Text [ french ] = "Pieds de pages" ;
+    Text [ french ] = "Pieds de page" ;
     Text [ swedish ] = "Sidfφtter" ;
     Text [ dutch ] = "Voetteksten" ;
     Text [ spanish ] = "Pies de pαgina" ;
@@ -1133,7 +1133,7 @@ TabPage RID_HFBASE
         QuickHelpText[ dutch ] = "Pagina's";
         QuickHelpText[ chinese_simplified ] = "ι΅µζ•°";
         QuickHelpText[ greek ] = "Σελίδες";
-        QuickHelpText[ korean ] = "νμ΄μ§€λ“¤";
+        QuickHelpText[ korean ] = "νμ΄μ§€";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seiten";
         QuickHelpText[ catalan ] = "Pΰgines";
@@ -1253,7 +1253,7 @@ TabPage RID_HFBASE
         Text [ french ] = "Utilisez les boutons pour modifier la police ou pour insιrer des champs tels que la date, l'heure, etc." ;
         Text [ swedish ] = "Anvδnd kommandoknapparna fφr att δndra teckensnitt eller infoga fδltkommandon som datum, klockslag etc." ;
         Text [ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen." ;
-        Text [ spanish ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc." ;
+        Text [ spanish ] = "Utilice los botones para modificar la fuente o para insertar ordenes como fecha, hora, etc." ;
         Text [ english_us ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
         Text[ chinese_simplified ] = "θ―·η‚Ήε‡»ζ‰ι’®οΌζ›΄ζ”Ήε­—δ½“ζ–ζ’ε…¥ζ—¥ζοΌζ—¶ι—΄η­‰εΊεζ‡δ»¤γ€‚";
         Text[ russian ] = "Θροξλόησιςε κνξοκθ δλÿ θημενενθÿ ψπθτςΰ θλθ δλÿ βρςΰβκθ ςΰκθυ κξμΰνδ οξλÿ, κΰκ δΰςΰ, βπεμÿ θ ς.δ.";
@@ -1264,7 +1264,7 @@ TabPage RID_HFBASE
         Text[ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen.";
         Text[ chinese_simplified ] = "θ―·η‚Ήε‡»ζ‰ι’®οΌζ›΄ζ”Ήε­—δ½“ζ–ζ’ε…¥ζ—¥ζοΌζ—¶ι—΄η­‰εΊεζ‡δ»¤γ€‚";
         Text[ greek ] = "Χρησιμοποιήστε τα πεδία εντολής για να αλλάξετε την γραμματοσειρά ή για να εισάγετε πεδία εντολών, όπως π.χ. ημερομηνία, ώρα, κτλ.";
-        Text[ korean ] = "κΈ€κΌ΄μ„ λ³€κ²½ν•κ±°λ‚ λ‚ μ§, μ‹κ°„λ“±μ ν•„λ“ λª…λ Ήμ–΄λ¥Ό μ‚½μ…ν•κΈ° μ„ν•΄μ„λ” λ²„νΌμ„ μ‚¬μ©ν•μ‹­μ‹μ¤.";
+        Text[ korean ] = "κΈ€κΌ΄μ„ λ³€κ²½ν•κ±°λ‚ λ‚ μ§, μ‹κ°„λ“±μ ν•„λ“λ¥Ό μ‚½μ…ν•κΈ° μ„ν•΄μ„ λ²„νΌμ„ μ‚¬μ©ν•μ‹­μ‹μ¤.";
         Text[ turkish ] = "Yazύtipini deπiώtirmek ya da tarih, saat gibi alan komutlarύ eklemek iηin dόπmeleri kullanύnύz.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Utilitzeu els botons per canviar el tipus de lletra o bι inserir ordres de camp com ara la data, l'hora, etc.";
@@ -1296,7 +1296,7 @@ TabPage RID_HFBASE
         Text[ dutch ] = "Tip";
         Text[ chinese_simplified ] = "ζη¤Ί";
         Text[ greek ] = "Συμβουλή";
-        Text[ korean ] = "μ£Ό";
+        Text[ korean ] = "μ°Έκ³ ";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nota";
@@ -1421,6 +1421,11 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
 
 
 

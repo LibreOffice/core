@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:15:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

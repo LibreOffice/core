@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2002-04-15 11:08:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #include "scmod.hxx"        // SC_MOD
 #include "inputopt.hxx"     // GetExpandRefs
 #include "patattr.hxx"
+#include "hints.hxx"
 
 #include "globstr.hrc"
 
@@ -2643,10 +2644,24 @@ void __EXPORT ScChangeTrack::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     rSet.GetPool()->GetWhich( SID_ATTR_ADDRESS ),
                     TRUE, &pItem ) == SFX_ITEM_SET )
             {
+                USHORT nOldCount = aUserCollection.GetCount();
+
                 String aStr( ((SvxAddressItem*)pItem)->GetFirstName() );
                 aStr += ' ';
                 aStr += ((SvxAddressItem*)pItem)->GetName();
                 SetUser( aStr );
+
+                if ( aUserCollection.GetCount() != nOldCount )
+                {
+                    //  New user in collection -> have to repaint because
+                    //  colors may be different now (#106697#).
+                    //  (Has to be done in the Notify handler, to be sure
+                    //  the user collection has already been updated)
+
+                    SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
+                    if (pDocSh)
+                        pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB), PAINT_GRID ) );
+                }
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defltuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-13 16:24:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,6 @@
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "docoptio.hxx"
-
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
-#endif
 
 using namespace ::com::sun::star;
 

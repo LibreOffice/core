@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-30 14:04:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #define _ZFORLIST_DECLARE_TABLE
 #include <svtools/stritem.hxx>
 #include <svtools/zformat.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
+#endif
 #include <svx/boxitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/numinf.hxx>
@@ -109,7 +112,7 @@
 #include <svx/brshitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/scripttypeitem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/shaditem.hxx>
 
 #include "formatsh.hxx"
@@ -726,7 +729,18 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 Window* pParent = Application::GetDefDialogParent();
                 if ( !pParent || !pParent->IsDialog() )
-                    pParent = pTabViewShell->GetDialogParent();
+                {
+                    //  #107256# GetDefDialogParent currently doesn't return the window
+                    //  that was set with SetDefDialogParent (but dynamically finds the
+                    //  topmost parent of the focus window), so IsDialog above is FALSE
+                    //  even if called from the style catalog.
+                    //  -> Use NULL if a modal dialog is open, to enable the Dialog's
+                    //  default parent handling.
+                    if ( Application::IsInModalMode() )
+                        pParent = NULL;
+                    else
+                        pParent = pTabViewShell->GetDialogParent();
+                }
 
                 pTabViewShell->SetInFormatDialog(TRUE);
 
@@ -1589,7 +1603,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             {
                 Color aColor;
                 if ( nTrans == 255 )
-                    aColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+                    aColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
                 else
                     aColor = rBrushItem.GetColor();
                 rSet.Put( SvxColorItem( aColor, SID_BACKGROUND_COLOR ) );
@@ -1993,6 +2007,10 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
             eBidiDir = EE_HTEXTDIR_L2R;
     }
 
+    SvtLanguageOptions  aLangOpt;
+    BOOL bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
+    BOOL bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
     while( nWhich )
@@ -2000,28 +2018,35 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
         switch( nWhich )
         {
             case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
-                if( bVertDontCare )
-                    rSet.InvalidateItem( nWhich );
-                else
-                    rSet.Put( SfxBoolItem( nWhich, bLeftRight ) );
-            break;
             case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-                if( bVertDontCare )
-                    rSet.InvalidateItem( nWhich );
+                if ( bDisableVerticalText )
+                    rSet.DisableItem( nWhich );
                 else
-                    rSet.Put( SfxBoolItem( nWhich, bTopBottom ) );
+                {
+                    if( bVertDontCare )
+                        rSet.InvalidateItem( nWhich );
+                    else if ( nWhich == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
+                        rSet.Put( SfxBoolItem( nWhich, bLeftRight ) );
+                    else
+                        rSet.Put( SfxBoolItem( nWhich, bTopBottom ) );
+                }
             break;
 
             case SID_ATTR_PARA_LEFT_TO_RIGHT:
             case SID_ATTR_PARA_RIGHT_TO_LEFT:
-                if ( bTopBottom )
+                if ( bDisableCTLFont )
                     rSet.DisableItem( nWhich );
-                else if ( bBidiDontCare )
-                    rSet.InvalidateItem( nWhich );
-                else if ( nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT )
-                    rSet.Put( SfxBoolItem( nWhich, eBidiDir == EE_HTEXTDIR_L2R ) );
                 else
-                    rSet.Put( SfxBoolItem( nWhich, eBidiDir == EE_HTEXTDIR_R2L ) );
+                {
+                    if ( bTopBottom )
+                        rSet.DisableItem( nWhich );
+                    else if ( bBidiDontCare )
+                        rSet.InvalidateItem( nWhich );
+                    else if ( nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT )
+                        rSet.Put( SfxBoolItem( nWhich, eBidiDir == EE_HTEXTDIR_L2R ) );
+                    else
+                        rSet.Put( SfxBoolItem( nWhich, eBidiDir == EE_HTEXTDIR_R2L ) );
+                }
         }
         nWhich = aIter.NextWhich();
     }

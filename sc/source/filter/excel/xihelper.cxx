@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,7 @@ void XclImpHFConverter::ParseString( const String& rHFString )
     } eState = xlPSText;
 
     const sal_Unicode* pChar = rHFString.GetBuffer();
+    const sal_Unicode* pNull = pChar + rHFString.Len(); // pointer to teminating null char
     while( *pChar )
     {
         switch( eState )
@@ -365,8 +366,19 @@ void XclImpHFConverter::ParseString( const String& rHFString )
                     case 'N':   InsertField( SvxFieldItem( SvxPagesField() ) );     break;  // page count
                     case 'D':   InsertField( SvxFieldItem( SvxDateField() ) );      break;  // date
                     case 'T':   InsertField( SvxFieldItem( SvxTimeField() ) );      break;  // time
-                    case 'F':   InsertField( SvxFieldItem( SvxExtFileField() ) );   break;  // file
                     case 'A':   InsertField( SvxFieldItem( SvxTableField() ) );     break;  // table name
+
+                    case 'Z':           // file path
+                        InsertField( SvxFieldItem( SvxExtFileField() ) );   // convert to full name
+                        if( (pNull - pChar >= 2) && (*(pChar + 1) == '&') && (*(pChar + 2) == 'F') )
+                        {
+                            // &Z&F found - ignore the &F part
+                            pChar += 2;
+                        }
+                    break;
+                    case 'F':           // file name
+                        InsertField( SvxFieldItem( SvxExtFileField( EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ) ) );
+                    break;
 
                     case 'U':           // underline
                         SetAttribs();
@@ -616,7 +628,7 @@ void XclImpUrlHelper::DecodeUrl(
                             rUrl.Append( '\\' );
                         else    // control character in raw name -> DDE link
                         {
-                            rUrl.Append( '|' );
+                            rUrl.Append( EXC_DDE_DELIM );
                             eState = xlUrlRaw;
                         }
                     break;

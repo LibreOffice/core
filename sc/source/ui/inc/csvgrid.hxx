@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 15:36:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 
 // ----------------------------------------------------------------------------
 
-namespace svx { class ColorConfig; }
+namespace svtools { class ColorConfig; }
 class EditEngine;
 class ScEditEngineDefaulter;
 class ScAsciiOptions;
@@ -148,7 +148,7 @@ private:
     VirtualDevice               maGridDev;          /// Data grid with selection and cursor.
     PopupMenu                   maPopup;            /// Popup menu for column types.
 
-    ::svx::ColorConfig&         mrColorConfig;      /// Application color configuration.
+    ::svtools::ColorConfig&         mrColorConfig;      /// Application color configuration.
     Color                       maBackColor;        /// Cell background color.
     Color                       maGridColor;        /// Table grid color.
     Color                       maGridPBColor;      /// Grid color for "first imported line" delimiter.

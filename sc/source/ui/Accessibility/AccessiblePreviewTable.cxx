@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-15 09:34:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,11 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sa
     else
         throw lang::IndexOutOfBoundsException();*/
 
+    ScUnoGuard aGuard;
+    FillTableInfo();
+    if ( nRow < 0 || (mpTableInfo && nRow >= mpTableInfo->GetRows()) )
+        throw lang::IndexOutOfBoundsException();
+
     return rtl::OUString();
 }
 
@@ -267,6 +272,11 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription(
     }
     else
         throw lang::IndexOutOfBoundsException();*/
+
+    ScUnoGuard aGuard;
+    FillTableInfo();
+    if ( nColumn < 0 || (mpTableInfo && nColumn >= mpTableInfo->GetCols()) )
+        throw lang::IndexOutOfBoundsException();
 
     return rtl::OUString();
 }
@@ -367,6 +377,12 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleRowSelected( sal_Int32 n
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     //  in the page preview, there is no selection
+
+    ScUnoGuard aGuard;
+    FillTableInfo();
+    if ( nRow < 0 || (mpTableInfo && nRow >= mpTableInfo->GetRows()) )
+        throw lang::IndexOutOfBoundsException();
+
     return sal_False;
 }
 
@@ -374,6 +390,12 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleColumnSelected( sal_Int3
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     //  in the page preview, there is no selection
+
+    ScUnoGuard aGuard;
+    FillTableInfo();
+    if ( nColumn < 0 || (mpTableInfo && nColumn >= mpTableInfo->GetCols()) )
+        throw lang::IndexOutOfBoundsException();
+
     return sal_False;
 }
 
@@ -397,9 +419,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCe
         ScAddress aCellPos( rColInfo.nDocIndex, rRowInfo.nDocIndex, mpTableInfo->GetTab() );
         if ( rColInfo.bIsHeader || rRowInfo.bIsHeader )
         {
-            Rectangle aPosition( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
             ScAccessiblePreviewHeaderCell* pHeaderCell = new ScAccessiblePreviewHeaderCell( this, mpViewShell, aCellPos,
-                                        rRowInfo.bIsHeader, rColInfo.bIsHeader, nNewIndex, aPosition );
+                                        rRowInfo.bIsHeader, rColInfo.bIsHeader, nNewIndex );
             xRet = pHeaderCell;
             pHeaderCell->Init();
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:09:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "ftools.hxx"
 #endif
 
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
+#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
@@ -79,6 +82,9 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+#ifndef SC_COMPILER_HXX
+#include "compiler.hxx"
 #endif
 
 
@@ -225,39 +231,44 @@ void ScfTools::EraseQuotes( String& rString, sal_Unicode cQuote )
 
 // *** conversion of names *** ------------------------------------------------
 
-void ScfTools::ConvertName( String& rName, bool bCheckPeriod )
+void ScfTools::ConvertToScSheetName( String& rName )
 {
-    if( !rName.Len() ) return;
-
-    const sal_Unicode cUnderSc = '_';
-    const sal_Unicode cBlank = ' ';
-    const sal_Unicode cPoint = '.';
-
-    String aNewTable;
-    bool bSpace = false;
-
-    for( const sal_Unicode* pChar = rName.GetBuffer(); *pChar; pChar++ )
+    for( xub_StrLen nPos = 0, nLen = rName.Len(); nPos < nLen; ++nPos )
     {
-        if( !(ScGlobal::pCharClass->isLetterNumeric( rName, pChar - rName.GetBuffer() ) ||
-            (*pChar == cUnderSc) || (*pChar == cBlank) || (bCheckPeriod && (*pChar == cPoint))) )
-        {
-            aNewTable += cUnderSc;
-            bSpace = false;
-        }
-        else if( *pChar == cBlank )
-        {
-            if( bSpace )
-                aNewTable += cUnderSc;
-            else
-                bSpace = true;
-        }
-        else
-        {
-            aNewTable += *pChar;
-            bSpace = false;
-        }
+        sal_Unicode cChar = rName.GetChar( nPos );
+        bool bSpace = (cChar == ' ');
+        if( (!ScGlobal::pCharClass->isLetterNumeric( rName, nPos ) && !bSpace) || (!nPos && bSpace) )
+            rName.SetChar( nPos, '_' );
     }
-    rName = aNewTable;
+}
+
+void ScfTools::ConvertToScDefinedName( String& rName )
+{
+    xub_StrLen nLen = rName.Len();
+    if( nLen && !ScCompiler::IsCharWordChar( rName.GetChar( 0 ) ) )
+        rName.SetChar( 0, '_' );
+    for( xub_StrLen nPos = 1; nPos < nLen; ++nPos )
+        if( !ScCompiler::IsWordChar( rName.GetChar( nPos ) ) )
+            rName.SetChar( nPos, '_' );
+}
+
+
+// *** streams and storages *** -----------------------------------------------
+
+const SvStorageStreamRef ScfTools::OpenStorageStreamRead( SvStorage* pStorage, const String& rStrmName )
+{
+    SvStorageStreamRef xStrm;
+    if( pStorage && pStorage->IsContained( rStrmName ) && pStorage->IsStream( rStrmName ) )
+        xStrm = pStorage->OpenStream( rStrmName, STREAM_READ | STREAM_SHARE_DENYALL );
+    return xStrm;
+}
+
+const SvStorageStreamRef ScfTools::OpenStorageStreamWrite( SvStorage* pStorage, const String& rStrmName )
+{
+    SvStorageStreamRef xStrm;
+    if( pStorage )
+        xStrm = pStorage->OpenStream( rStrmName/*, STREAM_READWRITE | STREAM_TRUNC*/ );
+    return xStrm;
 }
 
 
@@ -316,36 +327,66 @@ void ScfTools::AppendCString( SvStream& rStrm, String& rString, CharSet eSrc )
 
 // *** HTML table names <-> named range names *** -----------------------------
 
-const String ScfTools::maHTMLDoc( RTL_CONSTASCII_USTRINGPARAM( "HTML_all" ) );
-const String ScfTools::maHTMLTables( RTL_CONSTASCII_USTRINGPARAM( "HTML_tables" ) );
-const String ScfTools::maHTMLTableIndex( RTL_CONSTASCII_USTRINGPARAM( "HTML_" ) );
-const String ScfTools::maHTMLTableName( RTL_CONSTASCII_USTRINGPARAM( "HTML__" ) );
+const String& ScfTools::GetHTMLDocName()
+{
+    static const String saHTMLDoc( RTL_CONSTASCII_USTRINGPARAM( "HTML_all" ) );
+    return saHTMLDoc;
+}
+
+const String& ScfTools::GetHTMLTablesName()
+{
+    static const String saHTMLTables( RTL_CONSTASCII_USTRINGPARAM( "HTML_tables" ) );
+    return saHTMLTables;
+}
+
+const String& ScfTools::GetHTMLIndexPrefix()
+{
+    static const String saHTMLIndexPrefix( RTL_CONSTASCII_USTRINGPARAM( "HTML_" ) );
+    return saHTMLIndexPrefix;
+
+}
+
+const String& ScfTools::GetHTMLNamePrefix()
+{
+    static const String saHTMLNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "HTML__" ) );
+    return saHTMLNamePrefix;
+}
 
 String ScfTools::GetNameFromHTMLIndex( sal_uInt32 nIndex )
 {
-    String aName( maHTMLTableIndex );
+    String aName( GetHTMLIndexPrefix() );
     aName += String::CreateFromInt32( static_cast< sal_Int32 >( nIndex ) );
     return aName;
 }
 
 String ScfTools::GetNameFromHTMLName( const String& rTabName )
 {
-    String aName( maHTMLTableName );
+    String aName( GetHTMLNamePrefix() );
     aName += rTabName;
     return aName;
+}
+
+bool ScfTools::IsHTMLDocName( const String& rSource )
+{
+    return rSource.EqualsIgnoreCaseAscii( GetHTMLDocName() ) == TRUE;
+}
+
+bool ScfTools::IsHTMLTablesName( const String& rSource )
+{
+    return rSource.EqualsIgnoreCaseAscii( GetHTMLTablesName() ) == TRUE;
 }
 
 bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
 {
     rName.Erase();
-    if( rSource.EqualsIgnoreCaseAscii( maHTMLTableName, 0, maHTMLTableName.Len() ) )
+    if( rSource.EqualsIgnoreCaseAscii( GetHTMLNamePrefix(), 0, GetHTMLNamePrefix().Len() ) )
     {
-        rName = rSource.Copy( maHTMLTableName.Len() );
+        rName = rSource.Copy( GetHTMLNamePrefix().Len() );
         AddQuotes( rName );
     }
-    else if( rSource.EqualsIgnoreCaseAscii( maHTMLTableIndex, 0, maHTMLTableIndex.Len() ) )
+    else if( rSource.EqualsIgnoreCaseAscii( GetHTMLIndexPrefix(), 0, GetHTMLIndexPrefix().Len() ) )
     {
-        String aIndex( rSource.Copy( maHTMLTableIndex.Len() ) );
+        String aIndex( rSource.Copy( GetHTMLIndexPrefix().Len() ) );
         if( CharClass::isAsciiNumeric( aIndex ) && (aIndex.ToInt32() > 0) )
             rName = aIndex;
     }

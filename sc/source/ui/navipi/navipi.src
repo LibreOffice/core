@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:34:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ dutch ] = "Gegevensbereik";
                 Text[ chinese_simplified ] = "ζ•°ζ®εΊε";
                 Text[ greek ] = "Περιοχή δεδομένων";
-                Text[ korean ] = "λ°μ΄ν„° μμ—­";
+                Text[ korean ] = "λ°μ΄ν„° λ²”μ„";
                 Text[ turkish ] = "Veri alanύ";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "ΐrea de dades";
@@ -439,14 +439,14 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ dutch ] = "Inhoud" ;
                 Text [ english_us ] = "Contents" ;
                 Text [ italian ] = "Contenuti" ;
-                Text [ spanish ] = "Contenidos" ;
+                Text [ spanish ] = "Contenido" ;
                 Text [ french ] = "Contenu" ;
                 Text [ swedish ] = "Innehεll" ;
                 Text [ danish ] = "Indhold" ;
                 Text [ portuguese ] = "Conteϊdos" ;
                 Text [ portuguese_brazilian ] = "Inhalte" ;
                 Text[ chinese_simplified ] = "ε†…ε®Ή";
-                Text[ russian ] = "Ρξδεπζθμξε";
+                Text[ russian ] = "Ροθρξκ";
                 Text[ polish ] = "Zawartoci";
                 Text[ japanese ] = "ε†…ε®Ή";
                 Text[ chinese_traditional ] = "ε…§ε®Ή";
@@ -477,7 +477,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ portuguese ] = "Comutar" ;
                 Text [ portuguese_brazilian ] = "Umschalten" ;
                 Text[ chinese_simplified ] = "ε‡ζΆ";
-                Text[ russian ] = "Οεπεκλώχθςό";
+                Text[ russian ] = "Οπεδρςΰβλενθε";
                 Text[ polish ] = "Prze³Ήcz";
                 Text[ japanese ] = "ε‡γ‚ζ›Ώγ";
                 Text[ chinese_traditional ] = "ε‡ζ›";
@@ -784,7 +784,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ dutch ] = "Opmerkingen";
         Text[ chinese_simplified ] = "ζ³¨θ§£";
         Text[ greek ] = "Σχόλιο";
-        Text[ korean ] = "μ£Όμ„";
+        Text[ korean ] = "μ„¤λª…";
         Text[ turkish ] = "Aηύklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentari";
@@ -875,7 +875,7 @@ String SCSTR_CONTENT_ROOT
     TEXT [ English ] = "Contents" ;
     Text [ english_us ] = "Contents" ;
     Text [ italian ] = "Contenuti" ;
-    Text [ spanish ] = "Contenidos" ;
+    Text [ spanish ] = "Contenido" ;
     Text [ french ] = "Contenu" ;
     Text [ dutch ] = "Inhoud" ;
     Text [ swedish ] = "Innehεll" ;
@@ -949,7 +949,7 @@ String SCSTR_CONTENT_RANGENAME
     Text[ dutch ] = "Bereiknamen";
     Text[ chinese_simplified ] = "εΊεεη§°";
     Text[ greek ] = "Ονόματα περιοχών";
-    Text[ korean ] = "μμ—­ μ΄λ¦„";
+    Text[ korean ] = "λ²”μ„ μ΄λ¦„";
     Text[ turkish ] = "Alan adlarύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Noms d'ΰrea";
@@ -978,7 +978,7 @@ String SCSTR_CONTENT_DBAREA
     Text[ dutch ] = "Databasebereiken";
     Text[ chinese_simplified ] = "ζ•°ζ®εΊ“εΊε";
     Text[ greek ] = "Πεδία βάσης δεδομένων";
-    Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ μμ—­";
+    Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ λ²”μ„";
     Text[ turkish ] = "Veritabanύ alanlarύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ΐrees de la base de dades";
@@ -1007,7 +1007,7 @@ String SCSTR_CONTENT_GRAPHIC
     Text[ dutch ] = "Afbeeldingen";
     Text[ chinese_simplified ] = "ε›Ύε½Ά";
     Text[ greek ] = "Γραφικά";
-    Text[ korean ] = "κ·Έλν”½";
+    Text[ korean ] = "κ·Έλ¦Ό";
     Text[ turkish ] = "Grafikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Grΰfics";
@@ -1094,7 +1094,7 @@ String SCSTR_CONTENT_AREALINK
     Text[ dutch ] = "Gekoppelde bereiken";
     Text[ chinese_simplified ] = "ι“Ύζ¥η„εΊε";
     Text[ greek ] = "Συνδεδεμένες περιοχές";
-    Text[ korean ] = "λ§ν¬λ μμ—­";
+    Text[ korean ] = "μ—°κ²°λ μμ—­";
     Text[ turkish ] = "Baπlantύlύ alanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ΐrees enllaηades";
@@ -1156,7 +1156,7 @@ Menu RID_POPUP_DROPMODE
             Text[ dutch ] = "Als Hyperlink invoegen";
             Text[ chinese_simplified ] = "ε½“δ½θ¶…ι“Ύζ¥ζ’ε…¥";
             Text[ greek ] = "Εισαγωγή ως υπερ-σύνδεση";
-            Text[ korean ] = "ν•μ΄νΌλ§ν¬ μ‚½μ…";
+            Text[ korean ] = "ν•μ΄νΌλ§ν¬λ΅ μ‚½μ…";
             Text[ turkish ] = "Hyperlink olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insereix com a hiperenllaη";
@@ -1187,7 +1187,7 @@ Menu RID_POPUP_DROPMODE
             Text[ dutch ] = "Als koppeling invoegen";
             Text[ chinese_simplified ] = "ε½“δ½ι“Ύζ¥ζ’ε…¥";
             Text[ greek ] = "Εισαγωγή ως σύνδεση";
-            Text[ korean ] = "μ—°κ²°λ΅ μ‚½μ…";
+            Text[ korean ] = "λ§ν¬λ΅ μ‚½μ…";
             Text[ turkish ] = "Baπlantύ olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insereix com a enllaη";
@@ -1243,7 +1243,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text [ swedish ] = "Radera" ;
             Text [ danish ] = "Slet" ;
             Text [ italian ] = "Elimina" ;
-            Text [ spanish ] = "Eliminar" ;
+            Text [ spanish ] = "Borrar" ;
             Text [ french ] = "Supprimer" ;
             Text [ dutch ] = "Wissen" ;
             Text[ chinese_simplified ] = "ε ι™¤";
@@ -1286,7 +1286,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ dutch ] = "Eigenschappen...";
             Text[ chinese_simplified ] = "ε±ζ€§...";
             Text[ greek ] = "Ιδιότητες...";
-            Text[ korean ] = "νΉμ„±...";
+            Text[ korean ] = "λ“±λ΅ μ •λ³΄...";
             Text[ turkish ] = "Φzellikler...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Propietats...";
@@ -1295,6 +1295,11 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
+
+
+
+
+
 
 
 

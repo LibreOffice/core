@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-25 15:20:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 
 //------------------------------------------------------------------------
 
+#include <so3/outplace.hxx>
+#include <svtools/globalnameitem.hxx>
 #include <sfx2/frameobj.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/stritem.hxx>
@@ -308,13 +310,34 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
     }
     else    // SID_INSERT_OBJECT
     {
-        SvInsertOleObjectDialog aDlg;
-        aDlg.SetHelpId(nSlot);
-        SvObjectServerList aServerLst;
-        aDlg.FillObjectServerList(&aServerLst);
-        aServerLst.Remove( *ScDocShell::ClassFactory() );   // Starcalc nicht anzeigen
-        aIPObj = aDlg.Execute(pWin, aStor, &aServerLst );
-        bIsFromFile = !aDlg.IsCreateNew();
+        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+        if ( pNameItem )
+        {
+            SvGlobalName aName = pNameItem->GetValue();
+            const SotFactory* pFact = SvFactory::Find( aName );
+            if ( pFact )
+            {
+                SvStorageRef aStor = new SvStorage( String() );
+                aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aName,aStor );
+            }
+            else
+            {
+                SvStorageRef aStor = new SvStorage( FALSE, String() );
+                String aFileName;
+                BOOL bOk;
+                aIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, aName, aFileName );
+            }
+        }
+        else
+        {
+            SvInsertOleObjectDialog aDlg;
+            aDlg.SetHelpId(nSlot);
+            SvObjectServerList aServerLst;
+            aDlg.FillObjectServerList(&aServerLst);
+            aServerLst.Remove( *ScDocShell::ClassFactory() );   // Starcalc nicht anzeigen
+            aIPObj = aDlg.Execute(pWin, aStor, &aServerLst );
+            bIsFromFile = !aDlg.IsCreateNew();
+        }
     }
 
     //  SvInsertObjectDialog (alles in einem Dialog) wird nicht mehr benutzt
@@ -326,7 +349,10 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
         SvEmbeddedInfoObject* pInfoObj = pViewSh->GetViewFrame()->GetObjectShell()->
                                             InsertObject(aIPObj, String());
         if ( !pInfoObj )
+        {
             pViewSh->ErrorMessage( STR_ERR_INSERTOBJ );
+            rReq.Ignore();
+        }
         else
         {
             String aName = pInfoObj->GetObjName();
@@ -394,8 +420,12 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
                     pSkipPaintObj = NULL;
                 }
             }
+
+            rReq.Done();
         }
     }
+    else
+        rReq.Ignore();
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class XclImpXFBuffer;
 class XclImpXFIndexBuffer;
 class XclImpTabIdBuffer;
 class XclImpLinkManager;
+class XclImpObjectManager;
 class XclImpWebQueryBuffer;
 
 /** Stores global buffers and data needed for Excel import filter. */
@@ -92,6 +93,7 @@ struct XclImpRootData : public XclRootData
     typedef ::std::auto_ptr< XclImpXFIndexBuffer >  XclImpXFIndexBufferPtr;
     typedef ::std::auto_ptr< XclImpTabIdBuffer >    XclImpTabIdBufferPtr;
     typedef ::std::auto_ptr< XclImpLinkManager >    XclImpLinkManagerPtr;
+    typedef ::std::auto_ptr< XclImpObjectManager >  XclImpObjectManagerPtr;
     typedef ::std::auto_ptr< XclImpWebQueryBuffer > XclImpWebQueryBufferPtr;
 
     XclImpSstPtr                mpSst;              /// The shared string table.
@@ -105,10 +107,8 @@ struct XclImpRootData : public XclRootData
     XclImpTabIdBufferPtr        mpTabIdBuffer;      /// Sheet creation order list.
     XclImpLinkManagerPtr        mpLinkManager;      /// Manager for internal/external links.
 
+    XclImpObjectManagerPtr      mpObjManager;       /// All drawing objects.
     XclImpWebQueryBufferPtr     mpWebQBuffer;       /// All web queries.
-
-    ScfUInt32Vec                maIgnoreObj;        /// ID's of objects to ignore.
-    bool                        mbIgnoreObjSorted;  /// Vector of ignored objects sorted?
 
     explicit                    XclImpRootData(
                                     XclBiff eBiff,
@@ -132,6 +132,9 @@ public:
 
     XclImpRoot&                 operator=( const XclImpRoot& rRoot );
 
+    /** Returns this root instance - for code readability in derived classes. */
+    inline const XclImpRoot&    GetRoot() const { return *this; }
+
     /** Returns the shared string table. */
     XclImpSst&                  GetSst() const;
 
@@ -151,6 +154,8 @@ public:
     /** Returns the link manager. */
     XclImpLinkManager&          GetLinkManager() const;
 
+    /** Returns the drawing object manager. */
+    XclImpObjectManager&        GetObjectManager() const;
     /** Returns the web query buffer. */
     XclImpWebQueryBuffer&       GetWebQueryBuffer() const;
 
@@ -163,11 +168,6 @@ public:
     /** Checks and eventually crops the cell ranges to valid Calc dimensions.
         @descr  See XclRoot::CheckCellRangeList for details. */
     void                        CheckCellRangeList( ScRangeList& rRanges ) const;
-
-    /** Sets the object with ID nObjId to be ignored on import. */
-    void                        SetIgnoreObject( sal_uInt32 nObjId );
-    /** Returns true, if the object with ID nObjId will be ignored. */
-    bool                        IsIgnoreObject( sal_uInt32 nObjId ) const;
 
 protected:
     explicit                    XclImpRoot( XclImpRootData& rImpRootData );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 17:26:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 //------------------------------------------------------------------------
 
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 
 #include <stdio.h>
 
@@ -79,6 +79,9 @@
 #include "global.hxx"
 #include "progress.hxx"
 
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
 
 FltError ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const CharSet eNach, UINT32 nDifOption )
@@ -94,42 +97,53 @@ FltError ScExportDif( SvStream& rStream, ScDocument* pDoc,
 }
 
 
-void lcl_EscapeQuotes( ByteString& rString )
-{
-    //  Quotes in (quoted) strings have to be escaped (duplicated)
-    //  (at least Excel and Quattro do it that way)
-
-    //  This has to be done after converting the string to 8-bit characters,
-    //  because different characters (typographic quotes) might get converted
-    //  into quote characters.
-
-    xub_StrLen nPos = 0;
-    while( ( nPos = rString.Search( (sal_Char)'"', nPos ) ) != STRING_NOTFOUND )
-    {
-        rString.Insert( (sal_Char)'"', nPos );
-        nPos += 2;
-    }
-}
-
-
 FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
-    const ScRange&rRange, const CharSet eNach, UINT32 nDifOption )
+    const ScRange&rRange, const CharSet eCharSet, UINT32 nDifOption )
 {
     DBG_ASSERT( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range unsortiert!" );
     DBG_ASSERTWARNING( rRange.aStart.Tab() == rRange.aEnd.Tab(),
         "ScExportDif(): nur eine Tabelle bidde!" );
 
+    const CharSet eStreamCharSet = rOut.GetStreamCharSet();
+    if ( eStreamCharSet != eCharSet )
+        rOut.SetStreamCharSet( eCharSet );
+
+    sal_Unicode cStrDelim('"');
+    ByteString aStrDelimEncoded;    // only used if not Unicode
+    UniString aStrDelimDecoded;     // only used if context encoding
+    BOOL bContextOrNotAsciiEncoding;
+    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+    {
+        rOut.StartWritingUnicodeText();
+        bContextOrNotAsciiEncoding = FALSE;
+    }
+    else
+    {
+        aStrDelimEncoded = ByteString( cStrDelim, eCharSet );
+        rtl_TextEncodingInfo aInfo;
+        aInfo.StructSize = sizeof(aInfo);
+        if ( rtl_getTextEncodingInfo( eCharSet, &aInfo ) )
+        {
+            bContextOrNotAsciiEncoding =
+                (((aInfo.Flags & RTL_TEXTENCODING_INFO_CONTEXT) != 0) ||
+                 ((aInfo.Flags & RTL_TEXTENCODING_INFO_ASCII) == 0));
+            if ( bContextOrNotAsciiEncoding )
+                aStrDelimDecoded = String( aStrDelimEncoded, eCharSet );
+        }
+        else
+            bContextOrNotAsciiEncoding = FALSE;
+    }
+
     const sal_Char*     p2DoubleQuotes_LF = "\"\"\n";
     const sal_Char*     pSpecDataType_LF = "-1,0\n";
     const sal_Char*     pEmptyData = "1,0\n\"\"\n";
-    const sal_Char*     pStringData = "1,0\n\"";
+    const sal_Char*     pStringData = "1,0\n";
     const sal_Char*     pNumData = "0,";
     const sal_Char*     pNumDataERROR = "0,0\nERROR\n";
 
     FltError            eRet = eERR_OK;
-    ByteString          aTmp;
-    ByteString          aOS;
-    String              aUniString;
+    String              aOS;
+    String              aString;
     UINT16              nEndCol = rRange.aEnd.Col();
     UINT16              nEndRow = rRange.aEnd.Row();
     UINT16              nNumCols = nEndCol - rRange.aStart.Col() + 1;
@@ -140,7 +154,7 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
 
     const BOOL          bPlain = ( nDifOption == SC_DIFOPT_PLAIN );
 
-    ScProgress          aPrgrsBar( NULL, ScGlobal::GetRscString( STR_LOAD_DOC ), nNumRows );
+    ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScGlobal::GetRscString( STR_LOAD_DOC ), nNumRows );
 
     aPrgrsBar.SetState( 0 );
 
@@ -148,41 +162,47 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
     DBG_ASSERT( pDoc->HasTable( nTab ), "*ScExportDif(): Tabelle nicht vorhanden!" );
 
     aOS = pKeyTABLE;
-    aOS += "\n0,1\n\"";
+    aOS.AppendAscii( "\n0,1\n\"" );
 
-    pDoc->GetName( nTab, aUniString );
-    aOS += ByteString( aUniString, eNach );
-    aOS += "\"\n";
-    rOut.Write( aOS.GetBuffer(), aOS.Len() );
+    pDoc->GetName( nTab, aString );
+    aOS += aString;
+    aOS.AppendAscii( "\"\n" );
+    rOut.WriteUnicodeOrByteText( aOS );
 
     // VECTORS
     aOS = pKeyVECTORS;
-    aOS += "\n0,";
-    aOS += ByteString::CreateFromInt32( nNumCols );
-    aOS += '\n';
-    aOS += p2DoubleQuotes_LF;
-    rOut.Write( aOS.GetBuffer(), aOS.Len() );
+    aOS.AppendAscii( "\n0," );
+    aOS += String::CreateFromInt32( nNumCols );
+    aOS += sal_Unicode('\n');
+    aOS.AppendAscii( p2DoubleQuotes_LF );
+    rOut.WriteUnicodeOrByteText( aOS );
 
     // TUPLES
     aOS = pKeyTUPLES;
-    aOS += "\n0,";
-    aOS += ByteString::CreateFromInt32( nNumRows );
-    aOS += '\n';
-    aOS += p2DoubleQuotes_LF;
-    rOut.Write( aOS.GetBuffer(), aOS.Len() );
+    aOS.AppendAscii( "\n0," );
+    aOS += String::CreateFromInt32( nNumRows );
+    aOS += sal_Unicode('\n');
+    aOS.AppendAscii( p2DoubleQuotes_LF );
+    rOut.WriteUnicodeOrByteText( aOS );
 
     // DATA
-    rOut << pKeyDATA << "\n0,0\n" << p2DoubleQuotes_LF;
+    aOS = pKeyDATA;
+    aOS.AppendAscii( "\n0,0\n" );
+    aOS.AppendAscii( p2DoubleQuotes_LF );
+    rOut.WriteUnicodeOrByteText( aOS );
 
     UINT16              nColCnt, nRowCnt;
     ScBaseCell*         pAkt;
-    const sal_Char*     pOutString;
 
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {
-        rOut << pSpecDataType_LF << pKeyBOT << '\n';
+        aOS.AssignAscii( pSpecDataType_LF );
+        aOS += pKeyBOT;
+        aOS += sal_Unicode('\n');
+        rOut.WriteUnicodeOrByteText( aOS );
         for( nColCnt = rRange.aStart.Col() ; nColCnt <= nEndCol ; nColCnt++ )
         {
+            bool bWriteStringData = false;
             pDoc->GetCell( nColCnt, nRowCnt, nTab, pAkt );
             if( pAkt )
             {
@@ -190,89 +210,138 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 {
                     case CELLTYPE_NONE:
                     case CELLTYPE_NOTE:
-                        pOutString = pEmptyData;
+                        aOS.AssignAscii( pEmptyData );
                         break;
                     case CELLTYPE_VALUE:
-                        aOS = pNumData;
+                        aOS.AssignAscii( pNumData );
                         if( bPlain )
                         {
                             fVal = ( ( ScValueCell * ) pAkt )->GetValue();
-                            aUniString.Erase();
-                            SolarMath::DoubleToString( aUniString, fVal, 'G', 14, '.', TRUE );
-                            aOS += ByteString( aUniString, eNach );
+                            aOS += String( ::rtl::math::doubleToUString(
+                                        fVal, rtl_math_StringFormat_G, 14, '.',
+                                        TRUE));
                         }
                         else
                         {
-                            pDoc->GetInputString( nColCnt, nRowCnt, nTab, aUniString );
-                            aOS += ByteString( aUniString, eNach );
+                            pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
+                            aOS += aString;
                         }
-                        aOS += "\nV\n";
-                        pOutString = aOS.GetBuffer();
+                        aOS.AppendAscii( "\nV\n" );
                         break;
                     case CELLTYPE_EDIT:
-                        aOS = pStringData;
-                        ( ( ScEditCell* ) pAkt )->GetString( aUniString );
-                        aTmp = ByteString( aUniString, eNach );
-                        lcl_EscapeQuotes( aTmp );
-                        aOS += aTmp;
-                        aOS += "\"\n";
-                        pOutString = aOS.GetBuffer();
+                        ( ( ScEditCell* ) pAkt )->GetString( aString );
+                        bWriteStringData = true;
                         break;
                     case CELLTYPE_STRING:
-                        aOS = pStringData;
-                        ( ( ScStringCell* ) pAkt )->GetString( aUniString );
-                        aTmp = ByteString( aUniString, eNach );
-                        lcl_EscapeQuotes( aTmp );
-                        aOS += aTmp;
-                        aOS += "\"\n";
-                        pOutString = aOS.GetBuffer();
+                        ( ( ScStringCell* ) pAkt )->GetString( aString );
+                        bWriteStringData = true;
                         break;
                     case CELLTYPE_FORMULA:
                         if ( ((ScFormulaCell*)pAkt)->GetErrCode() )
-                            pOutString = pNumDataERROR;
+                            aOS.AssignAscii( pNumDataERROR );
                         else if( pAkt->HasValueData() )
                         {
-                            aOS = pNumData;
+                            aOS.AssignAscii( pNumData );
                             if( bPlain )
                             {
                                 fVal = ( ( ScFormulaCell * ) pAkt )->GetValue();
-                                aUniString.Erase();
-                                SolarMath::DoubleToString( aUniString, fVal, 'G', 14, '.', TRUE );
-                                aOS += ByteString( aUniString, eNach );
+                                aOS += String( ::rtl::math::doubleToUString(
+                                            fVal, rtl_math_StringFormat_G, 14,
+                                            '.', TRUE));
                             }
                             else
                             {
-                                pDoc->GetInputString( nColCnt, nRowCnt, nTab, aUniString );
-                                aOS += ByteString( aUniString, eNach );
+                                pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
+                                aOS += aString;
                             }
-                            aOS += "\nV\n";
-                            pOutString = aOS.GetBuffer();
+                            aOS.AppendAscii( "\nV\n" );
                         }
                         else if( pAkt->HasStringData() )
                         {
-                            aOS = pStringData;
-                            ( ( ScFormulaCell * ) pAkt )->GetString( aUniString );
-                            aTmp = ByteString( aUniString, eNach );
-                            lcl_EscapeQuotes( aTmp );
-                            aOS += aTmp;
-                            aOS += "\"\n";
-                            pOutString = aOS.GetBuffer();
+                            ( ( ScFormulaCell * ) pAkt )->GetString( aString );
+                            bWriteStringData = true;
                         }
                         else
-                            pOutString = pNumDataERROR;
+                            aOS.AssignAscii( pNumDataERROR );
 
                         break;
                 }
             }
             else
-                pOutString = pEmptyData;
+                aOS.AssignAscii( pEmptyData );
 
-            rOut << pOutString;
+            if ( !bWriteStringData )
+                rOut.WriteUnicodeOrByteText( aOS );
+            else
+            {
+                // for an explanation why this complicated, see
+                // sc/source/ui/docsh.cxx:ScDocShell::AsciiSave()
+                // In fact we should create a common method if this would be
+                // needed just one more time..
+                aOS.AssignAscii( pStringData );
+                rOut.WriteUnicodeOrByteText( aOS, eCharSet );
+                if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+                {
+                    xub_StrLen nPos = aString.Search( cStrDelim );
+                    while ( nPos != STRING_NOTFOUND )
+                    {
+                        aString.Insert( cStrDelim, nPos );
+                        nPos = aString.Search( cStrDelim, nPos+2 );
+                    }
+                    rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
+                    rOut.WriteUnicodeText( aString );
+                    rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
+                }
+                else if ( bContextOrNotAsciiEncoding )
+                {
+                    // to byte encoding
+                    ByteString aStrEnc( aString, eCharSet );
+                    // back to Unicode
+                    UniString aStrDec( aStrEnc, eCharSet );
+                    // search on re-decoded string
+                    xub_StrLen nPos = aStrDec.Search( aStrDelimDecoded );
+                    while ( nPos != STRING_NOTFOUND )
+                    {
+                        aStrDec.Insert( aStrDelimDecoded, nPos );
+                        nPos = aStrDec.Search( aStrDelimDecoded,
+                                nPos+1+aStrDelimDecoded.Len() );
+                    }
+                    // write byte re-encoded
+                    rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
+                    rOut.WriteUnicodeOrByteText( aStrDec, eCharSet );
+                    rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
+                }
+                else
+                {
+                    ByteString aStrEnc( aString, eCharSet );
+                    // search on encoded string
+                    xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
+                    while ( nPos != STRING_NOTFOUND )
+                    {
+                        aStrEnc.Insert( aStrDelimEncoded, nPos );
+                        nPos = aStrEnc.Search( aStrDelimEncoded,
+                                nPos+1+aStrDelimEncoded.Len() );
+                    }
+                    // write byte encoded
+                    rOut.Write( aStrDelimEncoded.GetBuffer(),
+                            aStrDelimEncoded.Len() );
+                    rOut.Write( aStrEnc.GetBuffer(), aStrEnc.Len() );
+                    rOut.Write( aStrDelimEncoded.GetBuffer(),
+                            aStrDelimEncoded.Len() );
+                }
+                rOut.WriteUniOrByteChar( '\n', eCharSet );
+            }
         }
         aPrgrsBar.SetState( nRowCnt );
     }
 
-    rOut << pSpecDataType_LF << pKeyEOD << '\n';
+    aOS.AssignAscii( pSpecDataType_LF );
+    aOS += pKeyEOD;
+    aOS += sal_Unicode('\n');
+    rOut.WriteUnicodeOrByteText( aOS );
+
+    // restore original value
+    rOut.SetStreamCharSet( eStreamCharSet );
 
     return eRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refdata.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:22:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ struct SingleRefData        // Single reference (one address) into the sheet
     inline  BOOL IsRowDeleted() const       { return Flags.bRowDeleted; }
     inline  void SetTabDeleted( BOOL bVal ) { Flags.bTabDeleted = (bVal ? TRUE : FALSE ); }
     inline  BOOL IsTabDeleted() const       { return Flags.bTabDeleted; }
+    inline  BOOL IsDeleted() const          { return IsColDeleted() || IsRowDeleted() || IsTabDeleted(); }
 
     inline  void SetFlag3D( BOOL bVal ) { Flags.bFlag3D = (bVal ? TRUE : FALSE ); }
     inline  BOOL IsFlag3D() const       { return Flags.bFlag3D; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2002-07-09 13:11:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,12 +1315,13 @@ ScChartPositionMap::ScChartPositionMap( USHORT nChartCols, USHORT nChartRows,
 
 ScChartPositionMap::~ScChartPositionMap()
 {
-    USHORT j;
-    for ( j=0; j < nCount; j++ )
+    for ( ULONG nIndex=0; nIndex < nCount; nIndex++ )
     {
-        delete ppData[j];
+        delete ppData[nIndex];
     }
     delete [] ppData;
+
+    USHORT j;
     for ( j=0; j < nColCount; j++ )
     {
         delete ppColHeader[j];

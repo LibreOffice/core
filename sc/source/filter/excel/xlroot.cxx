@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,14 +111,21 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rB
     meLang( ScGlobal::eLnge ),
     maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
     maXclMaxPos( EXC_MAXCOL_BIFF2, EXC_MAXROW_BIFF2, EXC_MAXTAB_BIFF2 ),
+    mnCharWidth( 110 ),
     mnScTab( 0 ),
     mbTruncated( false ),
     mpRDP( new RootData )//!
 {
+#ifdef DBG_UTIL
+    mnObjCnt = 0;
+#endif
 }
 
 XclRootData::~XclRootData()
 {
+#ifdef DBG_UTIL
+    DBG_ASSERT( mnObjCnt == 0, "XclRootData::~XclRootData - wrong object count" );
+#endif
 }
 
 
@@ -128,20 +135,30 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData ),
     mpRD( rRootData.mpRDP.get() )//!
 {
+#ifdef DBG_UTIL
+    ++mrData.mnObjCnt;
+#endif
 }
 
 XclRoot::XclRoot( const XclRoot& rRoot ) :
     mrData( rRoot.mrData ),
     mpRD( rRoot.mpRD )//!
 {
+#ifdef DBG_UTIL
+    ++mrData.mnObjCnt;
+#endif
 }
 
 XclRoot::~XclRoot()
 {
+#ifdef DBG_UTIL
+    --mrData.mnObjCnt;
+#endif
 }
 
 XclRoot& XclRoot::operator=( const XclRoot& rRoot )
 {
+    // allowed for assignment in derived classes - but test if the same root data is used
     DBG_ASSERT( &mrData == &rRoot.mrData, "XclRoot::operator= - incompatible root data" );
     return *this;
 }
@@ -185,6 +202,11 @@ SvNumberFormatter& XclRoot::GetFormatter() const
 ScRangeName& XclRoot::GetNamedRanges() const
 {
     return *GetDoc().GetRangeName();
+}
+
+SvStorage* XclRoot::GetRootStorage() const
+{
+    return mpRD->pRootStorage;
 }
 
 ScEditEngineDefaulter& XclRoot::GetEditEngine() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: markarr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-01-18 16:58:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,8 +384,7 @@ void ScMarkArray::MoveTo(USHORT nStartRow, USHORT nEndRow, ScMarkArray& rMarkArr
 
 void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
 {
-    if (rDestMarkArray.pData)
-        delete rDestMarkArray.pData;
+    delete[] rDestMarkArray.pData;
 
     if (pData)
     {

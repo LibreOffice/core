@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:41:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 /** An enumeration for all Excel file format types (BIFF types). */
 enum XclBiff
 {
-    xlBiff2,                    /// MS Excel 2.1
+    xlBiff2 = 0,                /// MS Excel 2.1
     xlBiff3,                    /// MS Excel 3.x
     xlBiff4,                    /// MS Excel 4.x
     xlBiff5,                    /// MS Excel 5.x
@@ -117,14 +117,12 @@ enum XclBoolError
 class XclImpStream;
 class XclExpStream;
 
-/** This struct stores a GUID (class ID) and supports reading, writing and
-    comparison. */
+/** This struct stores a GUID (class ID) and supports reading, writing and comparison. */
 struct XclGuid
 {
-    sal_uInt8                   mpData[ 16 ];
+    sal_uInt8                   mpData[ 16 ];   /// Stores GUID always in little endian.
 
     explicit                    XclGuid();
-                                XclGuid( const XclGuid& rSrc );
     explicit                    XclGuid(
                                     sal_uInt32 nData1,
                                     sal_uInt16 nData2, sal_uInt16 nData3,
@@ -132,8 +130,6 @@ struct XclGuid
                                     sal_uInt8 nData43, sal_uInt8 nData44,
                                     sal_uInt8 nData45, sal_uInt8 nData46,
                                     sal_uInt8 nData47, sal_uInt8 nData48 );
-
-    XclGuid&                    operator=( const XclGuid& rSrc );
 };
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 );
@@ -172,9 +168,9 @@ public:
     static bool                 GetRKFromDouble( sal_Int32& rnRKValue, double fValue );
 
     /** Calculates an angle (in 1/100 of degrees) from an Excel angle value. */
-    static sal_Int32            GetScRotation( sal_uInt16 nExcRot );
+    static sal_Int32            GetScRotation( sal_uInt16 nXclRot );
     /** Calculates the Excel angle value from an angle in 1/100 of degrees. */
-    static sal_uInt16           GetExcRotation( sal_Int32 nScRot );
+    static sal_uInt8            GetXclRotation( sal_Int32 nScRot );
 
     /** Gets a translated error code or Boolean value from Excel error codes.
         @param rfDblValue  Returns 0.0 for error codes or the value of a Boolean (0.0 or 1.0).
@@ -191,6 +187,13 @@ public:
     static sal_uInt16           GetTwipsFromInch( double fInches );
     /** Returns the length in inches calculated from a length in twips. */
     static double               GetInchFromTwips( sal_uInt16 nTwips );
+
+    /** Returns the Calc column width (twips) for the passed Excel width.
+        @param nScCharWidth  Width of the '0' character in Calc (twips). */
+    static sal_uInt16           GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
+    /** Returns the Excel column width for the passed Calc width (twips).
+        @param nScCharWidth  Width of the '0' character in Calc (twips). */
+    static sal_uInt16           GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth );
 
 // built-in names -------------------------------------------------------------
 

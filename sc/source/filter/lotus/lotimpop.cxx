@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:21:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

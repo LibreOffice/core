@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-30 15:59:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
 #include <vcl/poly.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include "scresid.hxx"
 #include "sc.hrc"
@@ -116,7 +116,8 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
 {
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
     // is also not mirrored
-    EnableRTL ( FALSE );
+    // #107811# mirror the vertical window for correct border drawing
+    EnableRTL ( bVertical );
 
     aNormFont = GetFont();
     aNormFont.SetTransparent( TRUE );       //! WEIGHT_NORMAL hart setzen ???
@@ -338,7 +339,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
     if ( nLineEnd < nPEnd )
     {
-        SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svx::APPBACKGROUND).nColor );
+        SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor );
         if ( bVertical )
             aFillRect = Rectangle( 0, nLineEnd+1, nBarSize-1, nPEnd );
         else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:28:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,13 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                 break;
         }
         nStreamPosUnicode = pDatStream->Tell();
+
+        //  #107455# If the file content isn't unicode, ReadUniStringLine
+        //  may try to seek beyond the file's end and cause a CANTSEEK error
+        //  (depending on the stream type). The error code has to be cleared,
+        //  or further read operations (including non-unicode) will fail.
+        if ( pDatStream->GetError() == ERRCODE_IO_CANTSEEK )
+            pDatStream->ResetError();
     }
 
     aNfRow.SetModifyHdl( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
@@ -796,6 +803,9 @@ void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
                 *pPtrRowPos++ = pDatStream->Tell();
             }
             nStreamPosUnicode = pDatStream->Tell();
+
+            if ( pDatStream->GetError() == ERRCODE_IO_CANTSEEK )    // #107455# reset seek error
+                pDatStream->ResetError();
         }
         else
         {
@@ -842,6 +852,9 @@ void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
             }
         }
         nStreamPosUnicode = pDatStream->Tell();
+
+        if ( pDatStream->GetError() == ERRCODE_IO_CANTSEEK )    // #107455# reset seek error
+            pDatStream->ResetError();
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 15:18:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,13 +178,14 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 struct ScAccessibleShapeData
 {
-    ScAccessibleShapeData() : pAccShape(NULL), pRelationCell(NULL), bSelected(sal_False) {}
+    ScAccessibleShapeData() : pAccShape(NULL), pRelationCell(NULL), bSelected(sal_False), bSelectable(sal_True) {}
     ~ScAccessibleShapeData();
     mutable accessibility::AccessibleShape* pAccShape;
     mutable ScAddress*          pRelationCell; // if it is NULL this shape is anchored on the table
 //    SdrObject*                  pShape;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
     mutable sal_Bool            bSelected;
+    sal_Bool                    bSelectable;
 };
 
 ScAccessibleShapeData::~ScAccessibleShapeData()
@@ -298,7 +299,7 @@ struct SelectShape
     SelectShape(uno::Reference<drawing::XShapes>& xTemp) : xShapes(xTemp) {}
     void operator() (const ScAccessibleShapeData* pAccShapeData) const
     {
-        if (pAccShapeData)
+        if (pAccShapeData && pAccShapeData->bSelectable)
         {
             pAccShapeData->bSelected = sal_True;
             if (pAccShapeData->pAccShape)
@@ -591,10 +592,10 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(const ScAccessibleShapeData*
             pData->pAccShape->acquire();
             pData->pAccShape->Init();
             if (pData->bSelected)
-            {
                 pData->pAccShape->SetState(AccessibleStateType::SELECTED);
-                pData->pAccShape->SetRelationSet(GetRelationSet(pData));
-            }
+            if (!pData->bSelectable)
+                pData->pAccShape->ResetState(AccessibleStateType::SELECTABLE);
+            pData->pAccShape->SetRelationSet(GetRelationSet(pData));
         }
     }
     return pData->pAccShape;
@@ -747,7 +748,7 @@ void ScChildrenShapes::Select(sal_Int32 nIndex)
         return;
 
     uno::Reference<drawing::XShape> xShape;
-    if (!IsSelected(nIndex, xShape))
+    if (!IsSelected(nIndex, xShape) && maZOrderedShapes[nIndex]->bSelectable)
     {
         uno::Reference<drawing::XShapes> xShapes;
         xSelectionSupplier->getSelection() >>= xShapes;
@@ -1191,6 +1192,21 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
         pShape->xShape = xShape;
         SortedShapes::iterator aNewItr = maZOrderedShapes.insert(aFindItr, pShape);
         SetAnchor(xShape, pShape);
+
+        uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
+        if (xShapeProp.is())
+        {
+            uno::Any aPropAny = xShapeProp->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(  "LayerID" )));
+            sal_Int16 nLayerID;
+            if( aPropAny >>= nLayerID )
+            {
+                if( nLayerID == SC_LAYER_INTERN )
+                    pShape->bSelectable = sal_False;
+                else
+                    pShape->bSelectable = sal_True;
+            }
+        }
+
 
         if (!xSelectionSupplier.is())
             throw uno::RuntimeException();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fprogressbar.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:09:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,11 @@
 
 // ============================================================================
 
+const sal_Int32 SCF_INVALID_SEG = -1;
+
+
+// ============================================================================
+
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( sal_uInt32 nSize ) :
     mpProgress( NULL ),
     mnSize( nSize ),
@@ -95,40 +100,41 @@ ScfProgressBar::ScfProgressSegment::~ScfProgressSegment()
 
 // ============================================================================
 
-ScfProgressBar::ScfProgressBar( const String& rText ) :
-    maText( rText ),
-    mpSysProgress( NULL ),
-    mpParentProgress( NULL ),
-    mpParentSegment( NULL ),
-    mpCurrSegment( NULL ),
-    mnTotalSize( 0 ),
-    mnTotalPos( 0 ),
-    mnUnitSize( 0 ),
-    mnNextUnitPos( 0 ),
-    mbInProgress( false )
+ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const String& rText ) :
+    maText( rText )
 {
+    Init( pDocShell );
 }
 
-ScfProgressBar::ScfProgressBar( ScfProgressBar* pParProgress, ScfProgressSegment* pParSegment ) :
-    mpSysProgress( NULL ),
-    mpParentProgress( pParProgress ),
-    mpParentSegment( pParSegment ),
-    mpCurrSegment( NULL ),
-    mnTotalSize( 0 ),
-    mnTotalPos( 0 ),
-    mnUnitSize( 0 ),
-    mnNextUnitPos( 0 ),
-    mbInProgress( false )
+ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
+    maText( ScGlobal::GetRscString( nResId ) )
 {
+    Init( pDocShell );
+}
+
+ScfProgressBar::ScfProgressBar( ScfProgressBar& rParProgress, ScfProgressSegment* pParSegment )
+{
+    Init( rParProgress.mpDocShell );
+    mpParentProgress = &rParProgress;
+    mpParentSegment = pParSegment;
 }
 
 ScfProgressBar::~ScfProgressBar()
 {
 }
 
-ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_uInt32 nSegment ) const
+void ScfProgressBar::Init( SfxObjectShell* pDocShell )
 {
-    if( nSegment == ~0UL )
+    mpDocShell = pDocShell;
+    mpParentProgress = NULL;
+    mpParentSegment = mpCurrSegment = NULL;
+    mnTotalSize = mnTotalPos = mnUnitSize = mnNextUnitPos = 0;
+    mbInProgress = false;
+}
+
+ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegment ) const
+{
+    if( nSegment < 0 )
         return NULL;
     DBG_ASSERT( maSegments.GetObject( nSegment ), "ScfProgressBar::GetSegment - invalid segment index" );
     return maSegments.GetObject( nSegment );
@@ -143,7 +149,7 @@ void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
         if( mpParentProgress && mpParentSegment )
             mpParentProgress->SetCurrSegment( mpParentSegment );
         else if( !mpSysProgress.get() && mnTotalSize )
-            mpSysProgress.reset( new ScProgress( NULL, maText, mnTotalSize ) );
+            mpSysProgress.reset( new ScProgress( mpDocShell, maText, mnTotalSize ) );
 
         if( !mbInProgress && mpCurrSegment && mnTotalSize )
         {
@@ -181,26 +187,31 @@ void ScfProgressBar::IncreaseProgressBar( sal_uInt32 nDelta )
     mnTotalPos = nNewPos;
 }
 
-sal_uInt32 ScfProgressBar::AddSegment( sal_uInt32 nSize )
+sal_Int32 ScfProgressBar::AddSegment( sal_uInt32 nSize )
 {
     DBG_ASSERT( !mbInProgress, "ScfProgressBar::AddSegment - already in progress mode" );
     if( !nSize )
-        return ~0UL;
+        return SCF_INVALID_SEG;
 
     maSegments.Append( new ScfProgressSegment( nSize ) );
     mnTotalSize += nSize;
     return maSegments.Count() - 1;
 }
 
-ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_uInt32 nSegment )
+ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_Int32 nSegment )
 {
     ScfProgressSegment* pSegment = GetSegment( nSegment );
-    if( pSegment && !pSegment->mpProgress.get() )
-        pSegment->mpProgress.reset( new ScfProgressBar( this, pSegment ) );
-    return pSegment ? *pSegment->mpProgress : *this;
+    DBG_ASSERT( !pSegment || !pSegment->mnPos, "ScfProgressBar::GetSegmentProgressBar - segment already started" );
+    if( pSegment && !pSegment->mnPos )
+    {
+        if( !pSegment->mpProgress.get() )
+            pSegment->mpProgress.reset( new ScfProgressBar( *this, pSegment ) );
+        return *pSegment->mpProgress;
+    }
+    return *this;
 }
 
-void ScfProgressBar::ActivateSegment( sal_uInt32 nSegment )
+void ScfProgressBar::ActivateSegment( sal_Int32 nSegment )
 {
     DBG_ASSERT( mnTotalSize, "ScfProgressBar::ActivateSegment - progress range is zero" );
     if( mnTotalSize )
@@ -212,6 +223,7 @@ void ScfProgressBar::Progress( sal_uInt32 nPos )
     DBG_ASSERT( mbInProgress && mpCurrSegment, "ScfProgressBar::Progress - no segment started" );
     if( mpCurrSegment )
     {
+        DBG_ASSERT( !mpCurrSegment->mpProgress.get(), "ScfProgressBar::Progress - contains sub progress" );
         DBG_ASSERT( mpCurrSegment->mnPos <= nPos, "ScfProgressBar::Progress - delta pos < 0" );
         DBG_ASSERT( nPos <= mpCurrSegment->mnSize, "ScfProgressBar::Progress - segment overflow" );
         if( (mpCurrSegment->mnPos < nPos) && (nPos <= mpCurrSegment->mnSize) )
@@ -225,6 +237,59 @@ void ScfProgressBar::Progress( sal_uInt32 nPos )
 void ScfProgressBar::Progress()
 {
     Progress( mpCurrSegment ? (mpCurrSegment->mnPos + 1) : 0 );
+}
+
+
+// ============================================================================
+
+ScfSimpleProgressBar::ScfSimpleProgressBar( sal_uInt32 nSize, SfxObjectShell* pDocShell, const String& rText ) :
+    maProgress( pDocShell, rText )
+{
+    Init( nSize );
+}
+
+ScfSimpleProgressBar::ScfSimpleProgressBar( sal_uInt32 nSize, SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
+    maProgress( pDocShell, nResId )
+{
+    Init( nSize );
+}
+
+void ScfSimpleProgressBar::Init( sal_uInt32 nSize )
+{
+    sal_Int32 nSegment = maProgress.AddSegment( nSize );
+    if( nSegment >= 0 )
+        maProgress.ActivateSegment( nSegment );
+}
+
+
+// ============================================================================
+
+ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText ) :
+    mrStrm( rStrm )
+{
+    Init( pDocShell, rText );
+}
+
+ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
+    mrStrm( rStrm )
+{
+    Init( pDocShell, ScGlobal::GetRscString( nResId ) );
+}
+
+void ScfStreamProgressBar::Progress()
+{
+    mpProgress->Progress( mrStrm.Tell() );
+}
+
+void ScfStreamProgressBar::Init( SfxObjectShell* pDocShell, const String& rText )
+{
+    sal_uInt32 nPos = mrStrm.Tell();
+    mrStrm.Seek( STREAM_SEEK_TO_END );
+    sal_uInt32 nSize = mrStrm.Tell();
+    mrStrm.Seek( nPos );
+
+    mpProgress.reset( new ScfSimpleProgressBar( nSize, pDocShell, rText ) );
+    Progress();
 }
 
 

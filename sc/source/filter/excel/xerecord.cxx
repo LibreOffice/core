@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,12 @@ void XclExpRecordBase::Save( XclExpStream& rStrm )
 {
 }
 
+void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, sal_uInt32 nCount )
+{
+    for( sal_uInt32 nIndex = 0; nIndex < nCount; ++nIndex )
+        Save( rStrm );
+}
+
 
 // ----------------------------------------------------------------------------
 
@@ -93,6 +99,12 @@ XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_uInt32 nRecSize ) :
 
 XclExpRecord::~XclExpRecord()
 {
+}
+
+void XclExpRecord::SetRecHeader( sal_uInt16 nRecId, sal_uInt32 nRecSize )
+{
+    SetRecId( nRecId );
+    SetRecSize( nRecSize );
 }
 
 void XclExpRecord::WriteBody( XclExpStream& rStrm )
@@ -113,6 +125,26 @@ void XclExpRecord::Save( XclExpStream& rStrm )
 void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
 {
     rStrm << static_cast< sal_uInt16 >( mbValue ? 1 : 0 );
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, sal_uInt32 nRecSize ) :
+    XclExpRecord( nRecId )
+{
+    SetData( pRecData, nRecSize );
+}
+
+void XclExpDummyRecord::SetData( const void* pRecData, sal_uInt32 nRecSize )
+{
+    mpData = pRecData;
+    SetRecSize( pRecData ? nRecSize : 0 );
+}
+
+void XclExpDummyRecord::WriteBody( XclExpStream& rStrm )
+{
+    rStrm.Write( mpData, GetRecSize() );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-19 09:17:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,17 @@ class ScXMLExport : public SvXMLExport
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
     const rtl::OUString         sLayerID;
     const rtl::OUString         sCaptionShape;
+    rtl::OUString               sAttrName;
+    rtl::OUString               sAttrStyleName;
+    rtl::OUString               sAttrColumnsRepeated;
+    rtl::OUString               sAttrFormula;
+    rtl::OUString               sAttrStringValue;
+    rtl::OUString               sElemCell;
+    rtl::OUString               sElemCoveredCell;
+    rtl::OUString               sElemCol;
+    rtl::OUString               sElemRow;
+    rtl::OUString               sElemTab;
+    rtl::OUString               sElemP;
     sal_Int32                   nOpenRow;
     sal_uInt16                  nCurrentTable;
     sal_Bool                    bHasRowHeader : 1;

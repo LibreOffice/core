@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-23 14:13:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/algitem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/editview.hxx>
 #include <svx/editstat.hxx>
 #include <svx/escpitem.hxx>
@@ -795,8 +795,8 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                     break;
             }
 
-            svx::ColorConfigEntry eEntry =
-                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svx::LINKSVISITED : svx::LINKS;
+            svtools::ColorConfigEntry eEntry =
+                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
             rTxtColor = new Color( SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor );
         }
         else

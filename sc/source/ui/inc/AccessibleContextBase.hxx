@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-04 15:39:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,8 +397,8 @@ private:
     */
     ::rtl::OUString msName;
 
-    /// List of property change listeners.
-    cppu::OInterfaceContainerHelper* mpEventListeners;
+    /// client id in the AccessibleEventNotifier queue
+    sal_uInt32 mnClientId;
 
     /** This is the role of this object.
     */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2002-12-08 17:13:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 
 #include <math.h>
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>    // SOMA_FPSIGNAL_JUMP
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #ifndef SC_COMPILER_HXX
@@ -115,10 +115,6 @@ class SvNumberFormatter;
     };
 #endif
 
-#ifndef _TABOPLIST_DECLARED
-#define _TABOPLIST_DECLARED
-DECLARE_LIST (TabOpList, USHORT*);
-#endif
 
 struct ScCompare
 {
@@ -175,13 +171,7 @@ class ScInterpreter
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
-#if SOMA_FPSIGNAL_JUMP
-    static jmp_buf* pJumpBuf;           // fuer die mySignal-Funktion
-    static ScLibSignalFunc pSignalFunc; // signal() Wrapper der App
-#endif
     static USHORT nGlobalError;         // globale Fehlervariable
-    static ULONG nInterpCount;          // Zaehlt aktuelle Interpreteraufrufe
-    static TabOpList aTableOpList;      // Liste von Ref-Arrays fuer Mehrfachoperat.
 #if SC_SPEW_ENABLED
     static ScSpew theSpew;
 #endif
@@ -211,9 +201,6 @@ private:
     StackVar    eResult;
 
     USHORT      nGlobError;             // lokale Kopie
-#if SOMA_FPSIGNAL_JUMP
-    jmp_buf*    pLocalJumpBuf;          // lokale Kopie
-#endif
     const ScToken* pCur;                // aktuelles Token
     String      aTempStr;               // fuer GetString()
     ScTokenStack* pStackObj;            // enthaelt den Stack
@@ -223,7 +210,6 @@ private:
     USHORT      sp;                     // der Stackpointer
     USHORT      maxsp;                  // der maximale StackPointer
     double**    ppGlobSortArray;        // Pointer auf Array zum Sortieren
-    USHORT*     pTableOp;               // der lokale Pointer auf das aktuelle TableOp
     ScMatrix**  ppTempMatArray;         // Array fuer temporaere Matrizen
     USHORT      nMatCount;              // dazugehoeriger Zaehler
     BOOL        bMatDel;                // und Kontrollvariable
@@ -433,7 +419,15 @@ void ScLookup();
 void ScHLookup();
 void ScVLookup();
 void ScSubTotal();
-BOOL GetDBParams(USHORT& rTab, ScQueryParam& rParam);
+
+// If upon call rMissingField==TRUE then the database field parameter may be
+// missing (Xcl DCOUNT() syntax), or may be faked as missing by having the
+// value 0.0 or being exactly the entire database range reference (old SO
+// compatibility). If this was the case then rMissingField is set to TRUE upon
+// return. If rMissingField==FALSE upon call all "missing cases" are considered
+// to be an error.
+BOOL GetDBParams( USHORT& rTab, ScQueryParam& rParam, BOOL& rMissingField );
+
 void DBIterator( ScIterFunc );
 void ScDBSum();
 void ScDBCount();
@@ -501,7 +495,7 @@ void ScEven();
 void ScOdd();
 void ScCeil();
 void ScFloor();
-void RoundNumber( SolarMathRoundingMode eMode );
+void RoundNumber( rtl_math_RoundingMode eMode );
 void ScRound();
 void ScRoundUp();
 void ScRoundDown();
@@ -704,7 +698,6 @@ public:
             { if (nError && !nGlobalError) nGlobalError = nError; }
 
     static USHORT GetError() { return nGlobalError; }
-    static void MySigFunc(int sig);
 
     const     String& GetStringResult() { return aResult; }
     double    GetNumResult()            { return nResult; }

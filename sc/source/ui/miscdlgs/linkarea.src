@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:38:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ polish ] = "Adres URL zewn�trznego �r�d�a danych";
         Text[ portuguese_brazilian ] = "External Data Source Location";
         Text[ japanese ] = "外部データソースの URL(~E)";
-        Text[ korean ] = "외부 데이터 소스의 URL(~E)";
+        Text[ korean ] = "외부 데이터 원본의 URL(~E)";
         Text[ chinese_simplified ] = "外部数据源的 URL(~E)";
         Text[ chinese_traditional ] = "外部資料源的 URL(~E)";
         Text[ turkish ] = "External Data Source Location";
@@ -147,7 +147,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ polish ] = "(Adres URL dokumentu �r�d�owego w lokalnym systemie plik�w lub w Internecie)";
         Text[ portuguese_brazilian ] = "(Insert a local file location or an URL from a web site here)";
         Text[ japanese ] = "(ローカルのファイルシステム、あるいはインターネットにあるソースドキュメントの URL)";
-        Text[ korean ] = "(로컬 파일 시스템 또는 웹사이트 내 소스 문서의 URL)";
+        Text[ korean ] = "(로컬 파일 시스템 또는 웹사이트 내 원본 문서의 URL)";
         Text[ chinese_simplified ] = "(本机文件系统或国际互联网之中源文本的 URL)";
         Text[ chinese_traditional ] = "(本機檔案系統或 internet 之中源文件的 URL)";
         Text[ turkish ] = "(Insert a local file location or an URL from a web site here)";
@@ -175,7 +175,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ polish ] = "Dost�pne tabele/obszary";
         Text[ portuguese_brazilian ] = "Available Tables/Ranges";
         Text[ japanese ] = "使用できる表と範囲(~A)";
-        Text[ korean ] = "사용 가능한 시트/범위(~A)";
+        Text[ korean ] = "사용 가능한 표/범위(~A)";
         Text[ chinese_simplified ] = "现有的表格/区域(~A)";
         Text[ chinese_traditional ] = "現有的表格或區域(~A)";
         Text[ turkish ] = "Available Tables/Ranges";
@@ -212,7 +212,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ polish ] = "Aktualizuj co";
         Text[ portuguese_brazilian ] = "Auto reload data every";
         Text[ japanese ] = "次の時間間隔で更新(~U)";
-        Text[ korean ] = "모두 업데이트(~U)";
+        Text[ korean ] = "업데이트 시간 간격(~U)";
         Text[ chinese_simplified ] = "更新时间间隔为每(~U)";
         Text[ chinese_traditional ] = "更新時間間隔為每(~U)";
         Text[ turkish ] = "Auto reload data every";
@@ -282,6 +282,11 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ finnish ] = "Ulkoiset tiedot";
     Text[ thai ] = "แหล่งข้อมูลภายนอก";
 };
+
+
+
+
+
 
 
 

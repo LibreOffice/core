@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-18 12:29:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ public:
                                         { return pEditView[eWhich]; }
 
     void            EditGrowX();
-    void            EditGrowY();
+    void            EditGrowY( BOOL bInitial = FALSE );
 
     USHORT          GetEditViewCol() const          { return nEditCol; }
     USHORT          GetEditViewRow() const          { return nEditRow; }

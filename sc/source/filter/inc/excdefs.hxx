@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:20:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,6 @@
 // Supbooks, ExcETabNumBuffer =================================================
 
 #define EXC_TABBUF_INVALID          0xFFFF
-
-// Style info =================================================================
-
-#define EXC_ROT_STACKED             0xFF
-
 
 // (0x001C) NOTE ==============================================================
 

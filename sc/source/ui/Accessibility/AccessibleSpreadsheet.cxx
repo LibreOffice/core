@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-15 09:34:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,8 @@
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 #include <algorithm>
@@ -345,7 +345,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     else if (rHint.ISA( ScUpdateRefHint ))
     {
         const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-        if (rRef.GetMode() == URM_INSDEL)
+        if (rRef.GetMode() == URM_INSDEL && rRef.GetDz() == 0) //#107250# test whether table is inserted or deleted
         {
             if (((rRef.GetRange().aStart.Col() == maRange.aStart.Col()) &&
                 (rRef.GetRange().aEnd.Col() == maRange.aEnd.Col())) ||
@@ -592,7 +592,7 @@ sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    return SC_MOD()->GetColorConfig().GetColorValue( ::svx::DOCCOLOR ).nColor;
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
 
     //=====  XAccessibleContext  ==============================================
@@ -700,7 +700,9 @@ sal_Int32 SAL_CALL
         if (!mpMarkedRanges)
         {
             mpMarkedRanges = new ScRangeList();
-            mpViewShell->GetViewData()->GetMarkData().FillRangeListWithMarks(mpMarkedRanges, sal_False);
+            ScMarkData aMarkData(mpViewShell->GetViewData()->GetMarkData());
+            aMarkData.MarkToMulti();
+            aMarkData.FillRangeListWithMarks(mpMarkedRanges, sal_False);
         }
         // is possible, because there shouldn't be overlapped ranges in it
         if (mpMarkedRanges)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:52:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "å€åŸŸ";
         Text[ arabic ] = "ÇáäØÇŞ";
         Text[ greek ] = "Ğåñéï÷Ş";
-        Text[ korean ] = "ì˜ì—­";
+        Text[ korean ] = "ë²”ìœ„";
         Text[ turkish ] = "Aralık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea";
@@ -159,8 +159,8 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ portuguese ] = "Contém ~cabeçalhos das colunas" ;
         Text [ finnish ] = "Sisältää sarakeotsikot" ;
         Text [ danish ] = "indeholder kolonneoverskrifter" ;
-        Text [ french ] = "En-têtes de ~colonnes inclus" ;
-        Text [ swedish ] = "innehåller ~kolumnhuvuden" ;
+        Text [ french ] = "Contient des étiquettes de colonne" ;
+        Text [ swedish ] = "Innehåller ~kolumnetiketter" ;
         Text [ dutch ] = "~bevat kolomkoppen" ;
         Text [ spanish ] = "Contiene títulos de ~columnas" ;
         Text [ english_us ] = "Contains ~column labels" ;
@@ -168,10 +168,10 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "zawiera nag³ówki kolumn";
         Text[ japanese ] = "åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~C)";
-        Text[ chinese_traditional ] = "åŒ…å«æ¬„æ¨™é¡Œ(~C)";
+        Text[ chinese_traditional ] = "åŒ…å«æ¬„æ¨™ç±¤(~C)";
         Text[ arabic ] = "íÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "ì—´ ë¨¸ë¦¬ê¸€ í¬í•¨(~C)";
+        Text[ korean ] = "ì—´ ë ˆì´ë¸” í¬í•¨(~C)";
         Text[ turkish ] = "Sütun başlıkları ~içeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conté capçaleres de ~columna";
@@ -186,21 +186,21 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ ENGLISH ] = "contains row headers" ;
         Text [ english_us ] = "Contains ~row labels" ;
         Text [ dutch ] = "~bevat rijkoppen" ;
-        Text [ swedish ] = "innehåller r~adhuvuden" ;
+        Text [ swedish ] = "Innehåller r~adetiketter" ;
         Text [ danish ] = "indeholder rækkeoverskrifter" ;
         Text [ italian ] = "Include intestazioni righe" ;
         Text [ spanish ] = "Contiene títulos de ~filas" ;
-        Text [ french ] = "En-têtes de ~lignes inclus" ;
+        Text [ french ] = "Contient des étiquettes de ligne" ;
         Text [ portuguese ] = "Contém ~cabeçalhos das linhas" ;
         Text [ portuguese_brazilian ] = "enth?lt ~Zeilenk?fe" ;
         Text[ chinese_simplified ] = "åŒ…å«è¡Œæ ‡é¢˜(~R)";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòğîê";
         Text[ polish ] = "zawiera nag³ówki wierszy";
         Text[ japanese ] = "è¡Œã®é …ç›®æ¬„ã‚’å«ã‚€(~R)";
-        Text[ chinese_traditional ] = "åŒ…å«åˆ—æ¨™é¡Œ(~R)";
+        Text[ chinese_traditional ] = "åŒ…å«åˆ—æ¨™ç±¤(~R)";
         Text[ arabic ] = "íÊÖãä ÑÄæÓ Õİæİ";
         Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò ãñáììşí";
-        Text[ korean ] = "í–‰ ë¨¸ë¦¬ê¸€ í¬í•¨(~R)";
+        Text[ korean ] = "í–‰ ë ˆì´ë¸” í¬í•¨(~R)";
         Text[ turkish ] = "Satır başlıkları  i~çeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conté capçaleres de ~fila";
@@ -229,7 +229,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "ç”¨æ–¼è³‡æ–™å€åŸŸ(~D)";
         Text[ arabic ] = "áäØÇŞ ÇáÈíÇäÇÊ";
         Text[ greek ] = "ãéá ğåñéï÷Ş ~äåäïìİíùí";
-        Text[ korean ] = "ì •ì˜ë  ì˜ì—­ ì„¤ì •(~D)";
+        Text[ korean ] = "ë°ì´í„° ë²”ìœ„(~D)";
         Text[ turkish ] = "Veri aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per a l'àrea de dades";
@@ -332,7 +332,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
@@ -370,11 +370,13 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ chinese_traditional ] = "å®šç¾©æ¨™é¡Œå€åŸŸ";
     Text[ arabic ] = "ÊÚÑíİ äØÇŞ ÇáÚäæäÉ";
     Text[ greek ] = "Ïñéóìüò ğåñéï÷Şò åğéãñáöŞò";
-    Text[ korean ] = "ë¼ë²¨ ì˜ì—­ ì •ì˜";
+    Text[ korean ] = "ë ˆì´ë¸” ë²”ìœ„ ì§€ì •";
     Text[ turkish ] = "Başlık aralığını belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Defineix l'àrea de l'etiqueta";
     Text[ finnish ] = "Määritä selitealue";
     Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸Šà¹ˆà¸§à¸‡à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
 };
+
+
 

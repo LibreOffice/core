@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,8 +348,6 @@
 #include <tools/urlobj.hxx>
 #include <svx/colritem.hxx>
 #include <vcl/wrkwin.hxx>
-#include <fltprgrs.hxx>
-#include <excsst.hxx>
 #include <excimp8.hxx>
 #include <excscen.hxx>
 #include <com/sun/star/frame/XFrameActionListener.hpp>

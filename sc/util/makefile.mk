@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: dr $ $Date: 2002-11-21 12:23:15 $
+#   last change: $Author: hr $ $Date: 2003-03-26 18:07:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,10 +66,12 @@ PRJNAME=SC
 TARGET=scalc3
 #LIBTARGET=NO
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  svpre.mk
+.INCLUDE :  connectivity/version.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
@@ -217,7 +219,6 @@ LIB5OBJFILES=$(OBJ)$/sclib.obj
 
 .IF "$(depend)" == ""
 ALL:	\
-    $(SRS)$/hidother.hid\
     $(MISC)$/linkinc.ls \
     ALLTAR	\
        ea
@@ -344,18 +345,6 @@ $(MISCX)$/$(SHL1TARGET).flt:
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
 
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)"=="WNT"
-.IF "$(BUILD_SOSL)"==""
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-    @+echo NO HIDS !!!!
-.ENDIF
-.ELSE
-    @echo nix
-.ENDIF
 
 ea:
 .IF "$(GUI)" == "OS2"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-21 11:28:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,13 @@ void ScDocShell::PostPaint( USHORT nStartCol, USHORT nStartRow, USHORT nStartTab
     if (nExtFlags & SC_PF_TESTMERGE)
         aDocument.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nStartTab );
 
-    if ( nStartCol != 0 || nEndCol != MAXCOL )      // gedreht -> ganze Zeilen
+    if ( nStartCol != 0 || nEndCol != MAXCOL )
     {
+        //  If rotated text is involved, repaint the entire rows.
+        //  #i9731# If there's right-to-left text to the left of the area,
+        //  the displacement for clipping of that text may change.
         if ( aDocument.HasAttrib( 0,nStartRow,nStartTab,
-                                    MAXCOL,nEndRow,nEndTab, HASATTR_ROTATE ) )
+                                    MAXCOL,nEndRow,nEndTab, HASATTR_ROTATE | HASATTR_RTL ) )
         {
             nStartCol = 0;
             nEndCol = MAXCOL;
@@ -489,7 +492,15 @@ USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
     {
         SfxPrinter* pOldPrinter = aDocument.GetPrinter();
         if (pOldPrinter)
+        {
             pOldPrinter->SetJobSetup( pNewPrinter->GetJobSetup() );
+
+            //  #i6706# Call SetPrinter with the old printer again, so the drawing layer
+            //  RefDevice is set (calling ReformatAllTextObjects and rebuilding charts),
+            //  because the JobSetup (printer device settings) may affect text layout.
+            aDocument.SetPrinter( pOldPrinter );
+            CalcOutputFactor();                         // also with the new settings
+        }
     }
 
     if (nDiffFlags & SFX_PRINTER_OPTIONS)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:37:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,8 +254,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
             < "Cantidad (sólo números)" ; Default ; > ;
             < "DesvEst (Muestra)" ; Default ; > ;
             < "DesvEstP (Población)" ; Default ; > ;
-            < "Varianza (Muestra)" ; Default ; > ;
-            < "VarP (Población)" ; Default ; > ;
+            < "Variancia (muestra)" ; Default ; > ;
+            < "VarP (población)" ; Default ; > ;
         };
         StringList [ english_us ] =
         {
@@ -373,7 +373,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
             < "í•©ê³„" ; Default ; > ;
         < "ê°’" ; Default ; > ;
-        < "í‰ê· " ; Default ; > ;
+        < "í‰ê· ê°’" ; Default ; > ;
         < "ìµœëŒ€" ; Default ; > ;
         < "ìµœì†Œ" ; Default ; > ;
         < "ê³±" ; Default ; > ;
@@ -564,7 +564,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "è¨ˆç®—è¦å‰‡(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
-        Text[ korean ] = "ê¸°ëŠ¥(~F)";
+        Text[ korean ] = "í•¨ìˆ˜(~F)";
         Text[ turkish ] = "Fonksi~yon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Funció";
@@ -594,7 +594,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "åˆä½µè¨ˆç®—å€åŸŸ(~C)";
         Text[ arabic ] = "äØÇŞÇÊ ÇáÏãÌ";
         Text[ greek ] = "Ğå~ñéï÷İò åíïğïßçóçò";
-        Text[ korean ] = "í†µí•© ì˜ì—­(~C)";
+        Text[ korean ] = "í†µí•© ë²”ìœ„(~C)";
         Text[ turkish ] = "Bir~leştirme aralıkları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrees de ~consolidació";
@@ -624,7 +624,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "æºè³‡æ–™å€åŸŸ(~S)";
         Text[ arabic ] = "äØÇŞ ÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Ğåñéï÷Ş ğñïİëåõóçò äåäïìİíùí";
-        Text[ korean ] = "ì†ŒìŠ¤ ë°ì´í„° ì˜ì—­(~S)";
+        Text[ korean ] = "ì›ë³¸ ë°ì´í„° ë²”ìœ„(~S)";
         Text[ turkish ] = "Kaynak veri a~ralıkları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ont de l'àrea de dades";
@@ -654,7 +654,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "è¤‡è£½çµæœåˆ°(~T)";
         Text[ arabic ] = "äÓÎ ÇáäÊÇÆÌ Åáì";
         Text[ greek ] = "ÅìöÜíéóç áğïôåëåóìÜôùí áğü";
-        Text[ korean ] = "ê²°ê³¼ë¥¼ ë³µì‚¬í•˜ëŠ” ìœ„ì¹˜(~T)";
+        Text[ korean ] = "ê²°ê³¼ ë³µì‚¬ ìœ„ì¹˜(~T)";
         Text[ turkish ] = "Sonuc~un gösterileceği yer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~pia els resultats a";
@@ -672,20 +672,20 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ portuguese ] = "Legenda para ~linhas" ;
         Text [ finnish ] = "~Riviselitteet" ;
         Text [ danish ] = "Rækkeetiketter" ;
-        Text [ french ] = "É~tiquette de ligne" ;
-        Text [ swedish ] = "Ra~detikett" ;
+        Text [ french ] = "Étiquettes de ligne" ;
+        Text [ swedish ] = "Ra~detiketter" ;
         Text [ dutch ] = "~Rijkoppen" ;
         Text [ spanish ] = "Títulos ~de fila" ;
         Text [ english_us ] = "~Row labels" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "è¡Œæ•°æ®æ ‡å¿—(~R)";
+        Text[ chinese_simplified ] = "è¡Œæ ‡é¢˜(~R)";
         Text[ russian ] = "Ïîäïèñè ñòğîê";
         Text[ polish ] = "Etykiety wierszy";
-        Text[ japanese ] = "å·¦ç«¯åˆ—(~R)";
-        Text[ chinese_traditional ] = "åˆ—æ¨™é¡Œ(~R)";
+        Text[ japanese ] = "è¡Œã®é …ç›®æ¬„(~R)";
+        Text[ chinese_traditional ] = "åˆ—æ¨™ç±¤(~R)";
         Text[ arabic ] = "ÚäÇæíä ÇáÕİæİ";
         Text[ greek ] = "ÅğéãñáöŞ ãñáììŞò";
-        Text[ korean ] = "ì²« í–‰(~R)";
+        Text[ korean ] = "í–‰ ë ˆì´ë¸”(~R)";
         Text[ turkish ] = "Sa~tır etiketleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eti~quetes de fila";
@@ -703,20 +703,20 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ portuguese ] = "~Cabeçalhos de colunas" ;
         Text [ finnish ] = "~Sarakeotsikot" ;
         Text [ danish ] = "Kolonneoverskrifter" ;
-        Text [ french ] = "En-têtes de colonne" ;
-        Text [ swedish ] = "Kolum~nhuvuden" ;
+        Text [ french ] = "Étiquettes de colonne" ;
+        Text [ swedish ] = "Kolum~netiketter" ;
         Text [ dutch ] = "~Kolomkoppen" ;
-        Text [ spanish ] = "Títulos de ~columna" ;
+        Text [ spanish ] = "~Títulos de columna" ;
         Text [ english_us ] = "C~olumn labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ—æ ‡é¢˜(~O)";
         Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Nag³ówki kolumn";
-        Text[ japanese ] = "ä¸Šç«¯è¡Œ(~O)";
-        Text[ chinese_traditional ] = "æ¬„æ¨™é¡Œ(~O)";
+        Text[ japanese ] = "åˆ—ã®é …ç›®æ¬„(~O)";
+        Text[ chinese_traditional ] = "æ¬„æ¨™ç±¤(~O)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÚãÏÉ";
         Text[ greek ] = "Êåöáëßäåò óôçëşí";
-        Text[ korean ] = "ì™¼ìª½ ì²« ì—´(~O)";
+        Text[ korean ] = "ì—´ ë ˆì´ë¸”(~O)";
         Text[ turkish ] = "S~ütun başlıkları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Capçaleres de c~olumna";
@@ -812,7 +812,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "å’Œæºè³‡æ–™é€£çµ(~L)";
         Text[ arabic ] = "ÑÈØ ÈÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Óıíäåóç ìå äåäïìİíá ğñïİëåõóçò";
-        Text[ korean ] = "ì†ŒìŠ¤ ë°ì´í„°ì— ì—°ê²°(~L)";
+        Text[ korean ] = "ì›ë³¸ ë°ì´í„°ì— ì—°ê²°(~L)";
         Text[ turkish ] = "Kaynak verilerine ~bağla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En~llaç a la font de dades";
@@ -860,7 +860,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "R~adera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
@@ -920,4 +920,9 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Text[ catalan ] = "Consolida";
     Text[ thai ] = "à¸£à¸§à¸šà¸£à¸§à¸¡";
 };
+
+
+
+
+
 

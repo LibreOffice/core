@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-13 09:35:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,8 +543,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 if( pScSh->GetTitle() == aDocName )
                                 {
                                     nDoc = i;
-                                    nTableCount = pScSh->GetDocument()->GetTableCount();
-                                    bDoIt = TRUE;
+                                    ScDocument* pDestDoc = pScSh->GetDocument();
+                                    nTableCount = pDestDoc->GetTableCount();
+                                    bDoIt = pDestDoc->IsDocEditable();
                                     break;
                                 }
 
@@ -588,7 +589,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             ScDocShell* pSh = ScDocShell::GetShellByNum( nDoc );
                             if (pSh)
+                            {
                                 aDocName = pSh->GetTitle();
+                                if ( !pSh->GetDocument()->IsDocEditable() )
+                                {
+                                    ErrorMessage(STR_READONLYERR);
+                                    bDoIt = FALSE;
+                                }
+                            }
                         }
                         rReq.AppendItem( SfxStringItem( FID_TAB_MOVE, aDocName ) );
                         //  Tabelle ist 1-basiert, wenn nicht APPEND

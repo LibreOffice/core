@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:38:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,13 +232,16 @@ ScUndoEnterData::ScUndoEnterData( ScDocShell* pNewDocShell,
 __EXPORT ScUndoEnterData::~ScUndoEnterData()
 {
     ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+
     for (USHORT i=0; i<nCount; i++)
         if (ppOldCells[i])
             ppOldCells[i]->Delete();
-    delete ppOldCells;
-    delete pHasFormat;
-    delete pOldFormats;
-    delete pTabs;
+    delete[] ppOldCells;
+
+    delete[] pHasFormat;
+    delete[] pOldFormats;
+    delete[] pTabs;
+
     delete pNewEditData;
 }
 

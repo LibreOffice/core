@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-22 10:35:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mnPosCursorLast( 1 )
 {
+    EnableRTL( false ); // #107812# RTL
     InitColors();
     InitSizeData();
     maBackgrDev.SetFont( GetFont() );
@@ -137,10 +138,10 @@ void ScCsvRuler::InitSizeData()
 
     mnSplitSize = (GetCharWidth() * 3 / 5) | 1; // make an odd number
 
-    sal_Int32 nActiveWidth = Min( GetWidth() - GetOffsetX(), GetPosCount() * GetCharWidth() );
+    sal_Int32 nActiveWidth = Min( GetWidth() - GetHdrWidth(), GetPosCount() * GetCharWidth() );
     sal_Int32 nActiveHeight = GetTextHeight();
 
-    maActiveRect.SetPos( Point( GetOffsetX(), (GetHeight() - nActiveHeight - 1) / 2 ) );
+    maActiveRect.SetPos( Point( GetFirstX(), (GetHeight() - nActiveHeight - 1) / 2 ) );
     maActiveRect.SetSize( Size( nActiveWidth, nActiveHeight ) );
 
     maBackgrDev.SetOutputSizePixel( maWinSize );
@@ -511,8 +512,8 @@ void ScCsvRuler::ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth )
     maBackgrDev.DrawRect( aRect );
 
     aRect = maActiveRect;
-    aRect.Left() = Max( GetOffsetX(), nPosX );
-    aRect.Right() = Min( GetX( GetPosCount() ), nPosX + nWidth - 1L );
+    aRect.Left() = Max( GetFirstX(), nPosX );
+    aRect.Right() = Min( Min( GetX( GetPosCount() ), GetLastX() ), nPosX + nWidth - 1L );
     if( aRect.Left() <= aRect.Right() )
     {
         maBackgrDev.SetFillColor( maActiveColor );
@@ -534,7 +535,7 @@ void ScCsvRuler::ImplDrawBackgrDev()
     sal_Int32 nPos;
 
     sal_Int32 nFirstPos = Max( GetPosFromX( 0 ) - 1L, 0L );
-    sal_Int32 nLastPos = GetLastVisPos();
+    sal_Int32 nLastPos = GetPosFromX( GetWidth() );
     sal_Int32 nY = (maActiveRect.Top() + maActiveRect.Bottom()) / 2;
     for( nPos = nFirstPos; nPos <= nLastPos; ++nPos )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:47:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,12 +156,10 @@ void ScDLL::Init()
     // the ScModule must be created
     ScModuleDummy **ppShlPtr = (ScModuleDummy**) GetAppData(SHL_CALC);
     SvFactory *pFact = (SvFactory*)(*ppShlPtr)->pScDocShellFactory;
-    ScLibSignalFunc pFunc = (*ppShlPtr)->pSignalFunc;
     delete (*ppShlPtr);
     ScModule* pMod = new ScModule((SfxObjectFactory*)pFact);
     (*ppShlPtr) = pMod;
     (*ppShlPtr)->pScDocShellFactory = pFact;
-    (*ppShlPtr)->pSignalFunc = pFunc;
 
     ScGlobal::Init();       // erst wenn der ResManager initialisiert ist
                             //  erst nach ScGlobal::Init duerfen die App-Optionen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-10 17:23:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <svx/brshitem.hxx>
 #include <svx/charreliefitem.hxx>
 #include <svx/cntritem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/crsditem.hxx>
 #include <svx/emphitem.hxx>
@@ -424,7 +424,7 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
                     aBackColor = *pBackConfigColor;
                 }
                 else
-                    aBackColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+                    aBackColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
             }
 
             //  get system text color for comparison
@@ -437,7 +437,7 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
                 aSysTextColor = *pTextConfigColor;
             }
             else
-                aSysTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+                aSysTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
             //  select the resulting color
             if ( aBackColor.IsDark() && aSysTextColor.IsDark() )

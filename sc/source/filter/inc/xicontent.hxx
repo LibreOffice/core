@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ class XclImpValidation : ScfNoInstance
 {
 public:
     /** Reads a DVAL record and sets marks the dropdown arrow control to be ignored. */
-    static void                 ReadDval( XclImpStream& rStrm, XclImpRoot& rRoot );
+    static void                 ReadDval( XclImpStream& rStrm );
     /** Reads a DV record and inserts validation data into the document. */
     static void                 ReadDv( XclImpStream& rStrm, ExcelToSc& rFmlaConv );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:05:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,6 @@ class XclImpAutoFilterBuffer;
 
 class XclImpWebQueryBuffer;
 
-class FilterProgressBar;
-
 
 
 class ExcCondForm : private ExcRoot, private XclImpRoot
@@ -151,9 +149,6 @@ class ExcCondFormList : protected List
 class ImportExcel8 : public ImportExcel
 {
     protected:
-        XclImpObjectManager     aObjManager;
-        BOOL                    bObjSection;
-
         ExcScenarioList         aScenList;
 
         XclImpPivotTableList    aPivotTabList;
@@ -164,6 +159,8 @@ class ImportExcel8 : public ImportExcel
         ExcCondFormList*        pCondFormList;
 
         XclImpAutoFilterBuffer* pAutoFilterBuffer;  // ranges for autofilter and advanced filter
+
+        BOOL                    bObjSection;
 
         BOOL                    bHasBasic;
 
@@ -225,9 +222,7 @@ class ImportExcel8 : public ImportExcel
         virtual void            EndAllChartObjects( void );     // -> excobj.cxx
         virtual void            PostDocLoad( void );
 
-        virtual FltError        ReadChart8( ScfProgressBar&, const BOOL bOwnTab );
-        void                    CreateTmpCtrlStorage( void );
-                                    // if possible generate a SvxMSConvertOCXControls compatibel storage
+        virtual FltError        ReadChart8( ScfSimpleProgressBar&, const BOOL bOwnTab );
 
     public:
                                 ImportExcel8(
@@ -256,10 +251,15 @@ private:
     BOOL                        bActive;
     BOOL                        bHasDropDown;
     BOOL                        bHasConflict;
+    BOOL                        bCriteria;
+    BOOL                        bAutoOrAdvanced;
+    ScRange                     aCriteriaRange;
+    String                      aFilterName;
 
     void                        CreateFromDouble( String& rStr, double fVal );
     void                        SetCellAttribs();
     void                        InsertQueryParam();
+    void                        AmendAFName(const BOOL bUseUnNamed);
 
 protected:
 public:
@@ -280,13 +280,18 @@ public:
     inline void                 Activate()          { bActive = TRUE; }
     void                        SetAdvancedRange( const ScRange* pRange );
     void                        SetExtractPos( const ScAddress& rAddr );
-    void                        Apply();
+    inline void                 SetAutoOrAdvanced()  { bAutoOrAdvanced = TRUE; }
+    void                        Apply( const BOOL bUseUnNamed = FALSE );
+    void                        CreateScDBData( const BOOL bUseUnNamed );
+    void                        EnableRemoveFilter();
 };
 
 
 class XclImpAutoFilterBuffer : private List
 {
 private:
+    UINT16                      nAFActiveCount;
+
     inline XclImpAutoFilterData* _First()   { return (XclImpAutoFilterData*) List::First(); }
     inline XclImpAutoFilterData* _Next()    { return (XclImpAutoFilterData*) List::Next(); }
 
@@ -294,6 +299,7 @@ private:
                                     { List::Insert( pData, LIST_APPEND ); }
 protected:
 public:
+                                XclImpAutoFilterBuffer();
     virtual                     ~XclImpAutoFilterBuffer();
 
     void                        Insert( RootData* pRoot, const ScRange& rRange,
@@ -304,6 +310,8 @@ public:
 
     XclImpAutoFilterData*       GetByTab( UINT16 nTab );
     BOOL                        HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab );
+    inline void                 IncrementActiveAF() { nAFActiveCount++; }
+    inline BOOL                 UseUnNamed() { return nAFActiveCount == 1; }
 };
 
 

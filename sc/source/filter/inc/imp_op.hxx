@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:03:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,6 @@ protected:
     virtual void            SetTextCell( const UINT16 nCol, const UINT16 nRow,
                                         String& rUnconvertedText, const UINT16 nXF );
                                             // Achtung: rUnconvertedText wird moeglicherweise veraendert
-    UINT16                  CalcColWidth( const UINT16 nExcColWidth );
 
     /** Sets a margin item into an item set.
         @param rItemSet  The destination item set.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-29 13:46:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,15 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include "eetext.hxx"
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <svx/adjitem.hxx>
 #include <svx/editview.hxx>
 #include <svx/editstat.hxx>
+#include <svx/frmdiritem.hxx>
+#include <svx/lspcitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
@@ -738,6 +742,10 @@ ScTextWnd::ScTextWnd( Window* pParent )
         bFormulaMode ( FALSE ),
         bInputMode   ( FALSE )
 {
+    EnableRTL( FALSE );     // #106269# EditEngine can't be used with VCL EnableRTL
+
+    bIsRTL = GetSettings().GetLayoutRTL();
+
     //  #79096# always use application font, so a font with cjk chars can be installed
     Font aAppFont = GetFont();
     aTextFont = aAppFont;
@@ -781,8 +789,17 @@ void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
                     - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
 //      if (nDiff<2) nDiff=2;       // mind. 1 Pixel
 
-        //! Clipping am rechten Rand?
-        DrawText( PixelToLogic( Point( TEXT_STARTPOS, nDiff/2 ) ), aString );
+        long nStartPos = TEXT_STARTPOS;
+        if ( bIsRTL )
+        {
+            //  right-align
+            nStartPos += GetOutputSizePixel().Width() - 2*TEXT_STARTPOS -
+                        LogicToPixel( Size( GetTextWidth( aString ), 0 ) ).Width();
+
+            //  LayoutMode isn't changed as long as ModifyRTLDefaults doesn't include SvxFrameDirectionItem
+        }
+
+        DrawText( PixelToLogic( Point( nStartPos, nDiff/2 ) ), aString );
     }
 }
 
@@ -799,7 +816,7 @@ void __EXPORT ScTextWnd::Resize()
                         // passt sonst nicht zur normalen Textausgabe
 #endif
 
-        aSize.Width() -= 4;
+        aSize.Width() -= 2 * TEXT_STARTPOS - 1;
 
         pEditView->SetOutputArea(
             PixelToLogic( Rectangle( Point( TEXT_STARTPOS, (nDiff > 0) ? nDiff/2 : 1 ),
@@ -988,6 +1005,31 @@ void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
     rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CTL );
 }
 
+void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
+{
+    rSet.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+
+    //  always using rtl writing direction would break formulas
+    //rSet.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+
+    //  PaperSize width is limited to USHRT_MAX in RTL mode (because of EditEngine's
+    //  USHORT values in EditLine), so the text may be wrapped and line spacing must be
+    //  increased to not see the beginning of the next line.
+    SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES, EE_PARA_SBL );
+    aItem.SetPropLineSpace( 200 );
+    rSet.Put( aItem );
+}
+
+void lcl_ModifyRTLVisArea( EditView* pEditView )
+{
+    Rectangle aVisArea = pEditView->GetVisArea();
+    Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
+    long nDiff = aPaper.Width() - aVisArea.Right();
+    aVisArea.Left()  += nDiff;
+    aVisArea.Right() += nDiff;
+    pEditView->SetVisArea(aVisArea);
+}
+
 void ScTextWnd::StartEditEngine()
 {
     //  #31147# Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
@@ -1010,7 +1052,7 @@ void ScTextWnd::StartEditEngine()
         pEditEngine = pNew;
 
         pEditEngine->SetUpdateMode( FALSE );
-        pEditEngine->SetPaperSize( Size( THESIZE, 300 ) );          //!!! size
+        pEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
         pEditEngine->SetWordDelimiters(
                         ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
 
@@ -1022,6 +1064,8 @@ void ScTextWnd::StartEditEngine()
             lcl_ExtendEditFontAttribs( *pSet );
             // turn off script spacing to match DrawText output
             pSet->Put( SvxScriptSpaceItem( FALSE, EE_PARA_ASIANCJKSPACING ) );
+            if ( bIsRTL )
+                lcl_ModifyRTLDefaults( *pSet );
             pEditEngine->SetDefaults( pSet );
         }
 
@@ -1052,10 +1096,24 @@ void ScTextWnd::StartEditEngine()
 
         Resize();
 
+        if ( bIsRTL )
+            lcl_ModifyRTLVisArea( pEditView );
+
         pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
 
         if (pAccTextData)
             pAccTextData->StartEdit();
+
+        //  as long as EditEngine and DrawText sometimes differ for CTL text,
+        //  repaint now to have the EditEngine's version visible
+        SfxObjectShell* pObjSh = SfxObjectShell::Current();
+        if ( pObjSh && pObjSh->ISA(ScDocShell) )
+        {
+            ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();    // any document
+            BYTE nScript = pDoc->GetStringScriptType( aString );
+            if ( nScript & SCRIPTTYPE_COMPLEX )
+                Invalidate();
+        }
     }
 
     SC_MOD()->SetInputMode( SC_INPUT_TOP );
@@ -1126,19 +1184,26 @@ void ScTextWnd::SetTextString( const String& rNewString )
 
         if (!pEditEngine)
         {
-            //  test if CTL script type is involved
-            BYTE nOldScript = 0;
-            BYTE nNewScript = 0;
-            SfxObjectShell* pObjSh = SfxObjectShell::Current();
-            if ( pObjSh && pObjSh->ISA(ScDocShell) )
+            BOOL bPaintAll;
+            if ( bIsRTL )
+                bPaintAll = TRUE;
+            else
             {
-                //  any document can be used (used only for its break iterator)
-                ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
-                nOldScript = pDoc->GetStringScriptType( aString );
-                nNewScript = pDoc->GetStringScriptType( rNewString );
+                //  test if CTL script type is involved
+                BYTE nOldScript = 0;
+                BYTE nNewScript = 0;
+                SfxObjectShell* pObjSh = SfxObjectShell::Current();
+                if ( pObjSh && pObjSh->ISA(ScDocShell) )
+                {
+                    //  any document can be used (used only for its break iterator)
+                    ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
+                    nOldScript = pDoc->GetStringScriptType( aString );
+                    nNewScript = pDoc->GetStringScriptType( rNewString );
+                }
+                bPaintAll = ( nOldScript & SCRIPTTYPE_COMPLEX ) || ( nNewScript & SCRIPTTYPE_COMPLEX );
             }
 
-            if ( ( nOldScript & SCRIPTTYPE_COMPLEX ) || ( nNewScript & SCRIPTTYPE_COMPLEX ) )
+            if ( bPaintAll )
             {
                 // if CTL is involved, the whole text has to be redrawn
                 Invalidate();
@@ -1224,11 +1289,13 @@ void ScTextWnd::MakeDialogEditView()
 
     pEditEngine->SetUpdateMode( FALSE );
     pEditEngine->SetWordDelimiters( pEditEngine->GetWordDelimiters() += '=' );
-    pEditEngine->SetPaperSize( Size( THESIZE, 300 ) );
+    pEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
 
     SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
     pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
     lcl_ExtendEditFontAttribs( *pSet );
+    if ( bIsRTL )
+        lcl_ModifyRTLDefaults( *pSet );
     pEditEngine->SetDefaults( pSet );
     pEditEngine->SetUpdateMode( TRUE );
 
@@ -1237,12 +1304,17 @@ void ScTextWnd::MakeDialogEditView()
 
     Resize();
 
+    if ( bIsRTL )
+        lcl_ModifyRTLVisArea( pEditView );
+
     if (pAccTextData)
         pAccTextData->StartEdit();
 }
 
 void ScTextWnd::ImplInitSettings()
 {
+    bIsRTL = GetSettings().GetLayoutRTL();
+
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     Color aBgColor= rStyleSettings.GetWindowColor();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:10:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,8 @@ class ScTokenArray
                             // nVal kann auch kombinierte Bits enthalten,
                             // aber nur ein exklusives Bit darf gesetzt sein!
 
+    BOOL                    ImplGetReference( ScRange& rRange, BOOL bValidOnly ) const;
+
 public:
     ScTokenArray();
     ScTokenArray( const ScTokenArray& );    // Zuweisung mit Referenzen auf Tokens
@@ -364,7 +366,8 @@ public:
     BOOL    HasOpCodeRPN( OpCode ) const;
     BOOL    HasName() const;        // token of type svIndex
     BOOL    HasNameOrColRowName() const;    // token of type svIndex or opcode ocColRowName
-    BOOL    IsReference( ScRange& rRange ) const;       // exactly and only one range
+    BOOL    IsReference( ScRange& rRange ) const;       // exactly and only one range (valid or deleted)
+    BOOL    IsValidReference( ScRange& rRange ) const;  // exactly and only one valid range (no #REF!s)
     BOOL    GetTableOpRefs(                             // exactly and only one multiple operation
                 ScAddress& rFormula,
                 ScAddress& rColFirstPos, ScAddress& rColRelPos,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2003-03-10 11:15:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                 XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        aName, sal_True, sal_True );
+                                      aName, sal_True, sal_True );
             if (sCenter.getLength() && !sLeft.getLength() && !sRight.getLength())
                 exportHeaderFooterContent( xCenter, sal_False, sal_False );
             else
@@ -145,19 +145,19 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
                 {
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_LEFT, sal_True, sal_True );
-                     exportHeaderFooterContent( xLeft, sal_False, sal_False );
+                    exportHeaderFooterContent( xLeft, sal_False, sal_False );
                 }
                 if (sCenter.getLength())
                 {
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_CENTER, sal_True, sal_True );
-                     exportHeaderFooterContent( xCenter, sal_False, sal_False );
+                    exportHeaderFooterContent( xCenter, sal_False, sal_False );
                 }
                 if (sRight.getLength())
                 {
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_RIGHT, sal_True, sal_True );
-                     exportHeaderFooterContent( xRight, sal_False, sal_False );
+                    exportHeaderFooterContent( xRight, sal_False, sal_False );
                 }
             }
         }

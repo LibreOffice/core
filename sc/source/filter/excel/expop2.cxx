@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:16:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,17 +134,6 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
     pExcRoot->fRowScale = aFilterOpt.GetExcelRowScale();
     if( pExcRoot->fRowScale <= 0.0 )
         pExcRoot->fRowScale = 1.0;
-
-    double fColScale = pExcRoot->pExtDocOpt->fColScale;
-    if( fColScale <= 0.0 )
-    {
-        fColScale = aFilterOpt.GetExcelColScale();
-        if( fColScale <= 0.0 )
-            fColScale = 1.0;
-
-        fColScale *= 1.027027027027;    // adjustment for export of calc documents
-    }
-    pExcRoot->fColScale = fColScale;
 
     pExcDoc = new ExcDocument( *this );
 }

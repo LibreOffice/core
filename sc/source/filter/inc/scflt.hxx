@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 17:44:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,7 +732,7 @@ public:
 };
 
 
-class FilterProgressBar;
+class ScfStreamProgressBar;
 
 // Import-Klasse
 class Sc10Import
@@ -752,7 +752,7 @@ class Sc10Import
     INT16                   TabCount;
     USHORT                  nShowTab;
     ScViewOptions           aSc30ViewOpt;
-    FilterProgressBar*      pPrgrsBar;
+    ScfStreamProgressBar*   pPrgrsBar;
 
 public:
                               Sc10Import( SvStream& rStr, ScDocument* pDocument );

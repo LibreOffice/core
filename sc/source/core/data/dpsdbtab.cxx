@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:26:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ void lcl_FillItemData( ScDPItemData& rData,
         if (!pImpl->pFormatter)
             pImpl->pFormatter = new SvNumberFormatter( pImpl->xServiceManager, ScGlobal::eLnge );
 
-        ULONG nIndex = pImpl->pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
+        ULONG nIndex = pImpl->pFormatter->GetStandardFormat( nNumType, ScGlobal::eLnge );
         pImpl->pFormatter->GetInputLineString( rData.fValue, nIndex, rData.aString );
     }
 }

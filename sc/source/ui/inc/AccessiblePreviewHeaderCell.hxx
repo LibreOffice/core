@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:45:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #endif
 
 class ScPreviewShell;
+class ScPreviewTableInfo;
 class accessibility::AccessibleTextHelper;
 
 typedef cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleValue>
@@ -98,7 +99,7 @@ public:
                                 ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
                             const ScAddress& rCellPos, sal_Bool bIsColHdr, sal_Bool bIsRowHdr,
-                            sal_Int32 nIndex, const Rectangle& rPosition );
+                            sal_Int32 nIndex );
 
 protected:
     virtual ~ScAccessiblePreviewHeaderCell();
@@ -179,13 +180,14 @@ private:
     ScAddress           maCellPos;
     sal_Bool            mbColumnHeader;
     sal_Bool            mbRowHeader;
-    Rectangle           maPosition;
+    mutable ScPreviewTableInfo* mpTableInfo;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
     void CreateTextHelper();
+    void    FillTableInfo() const;
 };
 
 

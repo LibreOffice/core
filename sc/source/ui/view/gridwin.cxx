@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-12 19:23:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,25 @@ void __EXPORT ScFilterListBox::SelectHdl()
     }
 }
 
+// use a System floating window for the above filter listbox
+class ScFilterFloatingWindow : public FloatingWindow
+{
+public:
+    ScFilterFloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
+    // required for System FloatingWindows that will not process KeyInput by themselves
+    virtual Window* GetPreferredKeyInputWindow();
+};
+
+ScFilterFloatingWindow::ScFilterFloatingWindow( Window* pParent, WinBits nStyle ) :
+    FloatingWindow( pParent, nStyle|WB_SYSTEMWINDOW ) // make it a system floater
+    {}
+
+Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
+{
+    // redirect keyinput in the child window
+    return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD) : NULL;    // will be the FilterBox
+}
+
 #ifdef AUTOFILTER_POPUP
 
 //==================================================================
@@ -515,7 +534,7 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     //  Die ListBox direkt unter der schwarzen Linie auf dem Zellgitter
     //  (wenn die Linie verdeckt wird, sieht es komisch aus...)
 
-    pFilterFloat = new FloatingWindow( this, WinBits(WB_BORDER) );      // nicht resizable etc.
+    pFilterFloat = new ScFilterFloatingWindow( this, WinBits(WB_BORDER) );      // nicht resizable etc.
     pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
     pFilterBox = new ScFilterListBox( pFilterFloat, this, nCol, nRow, SC_FILTERBOX_SCENARIO );
 
@@ -588,7 +607,7 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     }
 
     pFilterFloat->SetOutputSizePixel( aSize );
-    pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN );
+    pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS );
 
     pFilterBox->SetUpdateMode(TRUE);
     pFilterBox->GrabFocus();
@@ -648,7 +667,7 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
     aPos.X() -= 1;
     aPos.Y() += nSizeY - 1;
 
-    pFilterFloat = new FloatingWindow( this, WinBits(WB_BORDER) );      // nicht resizable etc.
+    pFilterFloat = new ScFilterFloatingWindow( this, WinBits(WB_BORDER) );      // nicht resizable etc.
     pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
     pFilterBox = new ScFilterListBox( pFilterFloat, this, nCol, nRow,
                         bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER );
@@ -687,13 +706,46 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
         pDoc->GetString( nCol, nRow, nTab, aString );
         pFilterBox->SetText( aString );
 
-        //  Standard-Eintraege
-        pFilterBox->InsertEntry( String( ScResId( SCSTR_ALL ) ) );
-        pFilterBox->InsertEntry( String( ScResId( SCSTR_STDFILTER ) ) );
-        pFilterBox->InsertEntry( String( ScResId( SCSTR_TOP10FILTER ) ) );
+        long nMaxText = 0;
 
-        //  Liste fuellen
+        //  default entries
+        static const USHORT nDefIDs[] = { SCSTR_ALL, SCSTR_STDFILTER, SCSTR_TOP10FILTER };
+        const USHORT nDefCount = sizeof(nDefIDs) / sizeof(USHORT);
+        for (i=0; i<nDefCount; i++)
+        {
+            String aEntry( (ScResId) nDefIDs[i] );
+            pFilterBox->InsertEntry( aEntry );
+            long nTextWidth = pFilterBox->GetTextWidth( aEntry );
+            if ( nTextWidth > nMaxText )
+                nMaxText = nTextWidth;
+        }
+
+        //  get list entries
         pDoc->GetFilterEntries( nCol, nRow, nTab, aStrings );
+
+        //  check widths of numerical entries (string entries are not included)
+        //  so all numbers are completely visible
+        USHORT nCount = aStrings.GetCount();
+        for (i=0; i<nCount; i++)
+        {
+            TypedStrData* pData = aStrings[i];
+            if ( !pData->IsStrData() )              // only numerical entries
+            {
+                long nTextWidth = pFilterBox->GetTextWidth( pData->GetString() );
+                if ( nTextWidth > nMaxText )
+                    nMaxText = nTextWidth;
+            }
+        }
+
+        //  add scrollbar width if needed (string entries are counted here)
+        //  (scrollbar is shown if the box is exactly full?)
+        if ( nCount + nDefCount >= SC_FILTERLISTBOX_LINES )
+            nMaxText += GetSettings().GetStyleSettings().GetScrollBarSize();
+
+        nMaxText += 4;              // for borders
+
+        if ( nMaxText > nSizeX )
+            nSizeX = nMaxText;      // just modify width - starting position is unchanged
     }
 
     if (!bEmpty)
@@ -714,7 +766,7 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
         pFilterBox->SetUpdateMode(FALSE);
 
         pFilterFloat->SetOutputSizePixel( aSize );
-        pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN );
+        pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS);
 
         //  Listbox fuellen
         USHORT nCount = aStrings.GetCount();

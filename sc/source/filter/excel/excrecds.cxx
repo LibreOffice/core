@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include <string.h>
 
 #include "global.hxx"
+#include "globstr.hrc"
 #include "docpool.hxx"
 #include "patattr.hxx"
 #include "cell.hxx"
@@ -176,64 +177,6 @@ const BYTE      ExcDummy_041::pMyData[] = {
 };
 const ULONG ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
 
-//--------------------------------------------------------- class ExcDummy_XF -
-const BYTE      ExcDummy_XF::pMyData[] = {
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0x00,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x01, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x01, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x02, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x02, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0xf4,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x20, 0x00,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x05, 0x00, 0x2b, 0x00, 0xf5, 0xff, 0x20, 0xf8,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x05, 0x00, 0x29, 0x00, 0xf5, 0xff, 0x20, 0xf8,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x05, 0x00, 0x09, 0x00, 0xf5, 0xff, 0x20, 0xf8,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x05, 0x00, 0x2c, 0x00, 0xf5, 0xff, 0x20, 0xf8,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xe0, 0x00, 0x10, 0x00, 0x05, 0x00, 0x2a, 0x00, 0xf5, 0xff, 0x20, 0xf8,
-    0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-const ULONG ExcDummy_XF::nMyLen = sizeof( ExcDummy_XF::pMyData );
-
-//------------------------------------------------------ class ExcDummy_Style -
-const BYTE      ExcDummy_Style::pMyData[] = {
-    0x93, 0x02, 0x04, 0x00, 0x10, 0x80, 0x03, 0xff,
-    0x93, 0x02, 0x04, 0x00, 0x11, 0x80, 0x06, 0xff,
-    0x93, 0x02, 0x04, 0x00, 0x12, 0x80, 0x05, 0xff,
-    0x93, 0x02, 0x04, 0x00, 0x00, 0x80, 0x00, 0xff,
-    0x93, 0x02, 0x04, 0x00, 0x13, 0x80, 0x04, 0xff,
-    0x93, 0x02, 0x04, 0x00, 0x14, 0x80, 0x07, 0xff
-};
-const ULONG ExcDummy_Style::nMyLen = sizeof( ExcDummy_Style::pMyData );
-
 //-------------------------------------------------------- class ExcDummy_02a -
 const BYTE      ExcDummy_02a::pMyData[] = {
     0x0d, 0x00, 0x02, 0x00, 0x01, 0x00,                     // CALCMODE
@@ -258,14 +201,6 @@ const BYTE      ExcDummy_02c::pMyData[] = {
     0x8c, 0x00, 0x04, 0x00, 0x31, 0x00, 0x31, 0x00          // COUNTRY
 };
 const ULONG ExcDummy_02c::nMyLen = sizeof( ExcDummy_02c::pMyData );
-
-
-//---------------------------------------------------------
-
-
-#ifdef DBG_UTIL
-UINT16          ExcXf::nObjCnt = 0;
-#endif
 
 
 //----------------------------------------------------------- class ExcRecord -
@@ -525,35 +460,6 @@ UINT16 Exc1904::GetNum( void ) const
 
 
 
-//--------------------------------------------------------- class ExcDummy_XF -
-
-ULONG ExcDummy_XF::GetLen( void ) const
-{
-    return nMyLen;
-}
-
-
-const BYTE* ExcDummy_XF::GetData( void ) const
-{
-    return pMyData;
-}
-
-
-
-//------------------------------------------------------ class ExcDummy_Style -
-
-ULONG ExcDummy_Style::GetLen( void ) const
-{
-    return nMyLen;
-}
-
-
-const BYTE* ExcDummy_Style::GetData( void ) const
-{
-    return pMyData;
-}
-
-
 //------------------------------------------------------ class ExcBundlesheet -
 
 ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, UINT16 nTab ) :
@@ -700,19 +606,17 @@ ExcCell::ExcCell(
         const ScAddress rPos,
         const ScPatternAttr* pAttr,
         RootData& rRootData,
-        const ULONG nAltNumForm,
-        BOOL bForceAltNumForm ) :
+        const ULONG nAltNumForm ) :
     aPos( rPos )
 {
     if( pPrgrsBar )
         pPrgrsBar->SetState( GetCellCount() );
     IncCellCount();
 
-    DBG_ASSERT( rRootData.pXFRecs, "ExcCell::ExcCell - missing XF record list" );
     DBG_ASSERT( rRootData.pCellMerging, "ExcCell::ExcCell - missing cell merging list" );
 
     if( !rRootData.pCellMerging->FindMergeBaseXF( aPos, nXF ) )
-        nXF = rRootData.pXFRecs->Find( pAttr, FALSE, nAltNumForm, bForceAltNumForm );
+        nXF = rRootData.pER->GetXFBuffer().Insert( pAttr, nAltNumForm );
 
 #ifdef DBG_UTIL
     _nRefCount++;
@@ -799,7 +703,7 @@ ExcBoolerr::ExcBoolerr(
         UINT8 nValP,
         BOOL bIsError ) :
     // #73420# force to "no number format" if boolean value
-    ExcCell( rPos, pAttr, rRootData, (bIsError ? NUMBERFORMAT_ENTRY_NOT_FOUND : 0), !bIsError ),
+    ExcCell( rPos, pAttr, rRootData, bIsError ? NUMBERFORMAT_ENTRY_NOT_FOUND : 0 ),
     nVal( bIsError ? nValP : (nValP != 0) ),
     bError( bIsError != 0 )
 {
@@ -868,7 +772,7 @@ ExcRKMulRK* ExcRKMulRK::Extend(
         ExcRKMulRKEntry* pNewCont = new ExcRKMulRKEntry;
 
         if( !rRootData.pCellMerging->FindMergeBaseXF( rPos, pNewCont->nXF ) )
-            pNewCont->nXF = rRootData.pXFRecs->Find( pAttr );
+            pNewCont->nXF = rRootData.pER->GetXFBuffer().Insert( pAttr );
         pNewCont->nVal = nVal;
         List::Insert( pNewCont, LIST_APPEND );
         return NULL;
@@ -1143,7 +1047,7 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
         }
 
         // XF mit Umbruch auswaehlen?
-        rExcCell.SetXF( nParCnt <= 1 ? rRoot.pXFRecs->Find( pAttr ) : rRoot.pXFRecs->FindWithLineBreak( pAttr ) );
+        rExcCell.SetXF( rRoot.pER->GetXFBuffer().Insert( pAttr, nParCnt > 1 ) );
     }
     else
     {
@@ -1232,13 +1136,16 @@ ExcFormula::ExcFormula(
         const ScPatternAttr* pAttr,
         RootData& rRootData,
         const ULONG nAltNumForm,
-        BOOL bForceAltNumForm,
         const ScTokenArray& rTokArray,
         ExcArray** ppArray,
         ScMatrixMode eMM,
         ExcShrdFmla** ppShrdFmla,
-        ExcArrays* pShrdFmlas ) :
-    ExcCell( rPos, pAttr, rRootData, nAltNumForm, bForceAltNumForm )
+        ExcArrays* pShrdFmlas,
+        ScFormulaCell* pFormulaCell,
+        ExcFmlaResultStr** pFormulaResult) :
+    ExcCell( rPos, pAttr, rRootData, nAltNumForm ) ,
+    pFCell(pFormulaCell)
+
 {
     bShrdFmla = FALSE;
     EC_Codetype     eCodeType;
@@ -1314,6 +1221,30 @@ ExcFormula::ExcFormula(
 
     delete pExcUPN;
 
+    if(pFCell && (pFCell->GetFormatType() == NUMBERFORMAT_TEXT))
+    {
+        String sText;
+        pFCell->GetString(sText);
+        XclExpString aFormulaText;
+        if ( rRootData.eDateiTyp < Biff8 )
+        {
+            aFormulaText.AssignByte(sText,*rRootData.pCharset);
+            *pFormulaResult = new ExcFmlaResultStr(aFormulaText);
+        }
+        else if(sText.Len())
+        {
+            aFormulaText.Assign(sText);
+            *pFormulaResult = new ExcFmlaResultStr(aFormulaText);
+        }
+        else
+            *pFormulaResult = NULL;
+    }
+    else
+    {
+        *pFormulaResult = NULL;
+    }
+
+
 /*  if( ppShrdFmla && aExcUPN.GetShrdFmla( pData, nFormLen ) )
     {   // shared formula ref only
         if( aExcUPN.IsFirstShrdFmla() )
@@ -1358,12 +1289,68 @@ void ExcFormula::SetTableOp( USHORT nCol, USHORT nRow )
     ShortToSVBT16( (UINT16) nCol, (BYTE*) &pData[ 3 ] );
 }
 
-
 void ExcFormula::SaveDiff( XclExpStream& rStrm )
 {//                         grbit               chn
     UINT16      nGrBit = bShrdFmla? 0x000B : 0x0003;
-    rStrm   << ( double ) 0.0 << nGrBit  << ( UINT32 ) 0x00000000
-            << nFormLen;
+    double fVal = 0.0;
+    UINT16 nErrorCode = 0;
+    String sText;
+
+
+    if(pFCell)
+    {
+        switch(pFCell->GetFormatType())
+        {
+            case NUMBERFORMAT_NUMBER:
+                if(!(nErrorCode = pFCell->GetErrCode()))
+                {
+                    fVal =  pFCell->GetValue();
+                    rStrm << fVal;
+                }
+                else
+                {
+                    BYTE nByte = ScErrorCodeToExc(nErrorCode);
+                    rStrm << (UINT8)0x02
+                          << (UINT8)0
+                          << (UINT8)nByte
+                          << (UINT16)0 << (UINT8)0
+                          << (UINT16)0xFFFF;
+                }
+                break;
+
+            case NUMBERFORMAT_TEXT:
+                pFCell->GetString(sText);
+                if(sText.Len())
+                     rStrm << (UINT8)0x00 << (UINT32)0 << (UINT8)0 << (UINT16)0xFFFF;
+                else
+                {
+                    if ( rStrm.GetRoot().GetBiff() < xlBiff8 )
+                         rStrm << (UINT8)0x00 << (UINT32)0 << (UINT8)0 << (UINT16)0xFFFF;
+                    else
+                    {
+                        // empty formula result cells are represented by 0x03 in Biff8
+                        rStrm << (UINT8)0x03 << (UINT32)0 << (UINT8)0 << (UINT16)0xFFFF;
+                    }
+                }
+                break;
+
+            case NUMBERFORMAT_LOGICAL:
+                fVal =  pFCell->GetValue();
+                rStrm << (UINT8)0x01
+                      << (UINT8)0
+                      << (UINT8)((fVal != 0) ? 0x01 : 0x00)
+                      << (UINT16)0 << (UINT8)0
+                      << (UINT16)0xFFFF;
+                break;
+
+            default:
+                rStrm << fVal;
+                break;
+        }
+    }
+
+    rStrm << nGrBit << (UINT32)0x00000000 << nFormLen;
+
     rStrm.Write( pData, nFormLen );
 }
 
@@ -1379,6 +1366,33 @@ ULONG ExcFormula::GetDiffLen( void ) const
     return 16 + nFormLen;
 }
 
+BYTE ExcFormula::ScErrorCodeToExc(UINT16 nErrorCode)
+{
+    BYTE nRetVal;
+
+    switch(nErrorCode)
+    {
+        case errIllegalFPOperation:     //503 to #DIV/0
+            nRetVal = 0x07;
+            break;
+        case errNoValue :               //519 to #VALUE (wrong argument or operand)
+            nRetVal = 0x0F;
+            break;
+        case errNoCode:                 //521 to #NULL
+            nRetVal = 0x00;
+            break;
+        case errNoRef:                  //524 to #REF(cell referral not valid)
+            nRetVal = 0x17;
+            break;
+        case errNoName:                 //525 to #NAME (does not recognise text)
+            nRetVal = 0x1D;
+            break;
+        default:
+            nRetVal = 0x0F;             // all others to #VALUE
+            break;
+    }
+    return nRetVal;
+}
 
 
 //---------------------------------------------------- class ExcBlankMulblank -
@@ -1432,7 +1446,7 @@ void ExcBlankMulblank::AddEntries(
     DBG_ASSERT( rPos.Col() + nCount <= MAXCOL + 1, "ExcBlankMulblank::AddEntries - column overflow" );
 
     ScAddress   aCurrPos( rPos );
-    UINT16      nCellXF = rRootData.pXFRecs->Find( pAttr );
+    UINT16      nCellXF = rRootData.pER->GetXFBuffer().Insert( pAttr );
     sal_uInt16  nTmpCount = nCount;
 
     while( nTmpCount )
@@ -1577,7 +1591,20 @@ void ExcNameListEntry::SetCode( const ExcUPN& rUPN )
 
 void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
+    if(rStrm.GetRoot().GetBiff() < xlBiff8)
+    {
+        rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
+            << (UINT8)  0x00                // chKey (keyboard shortcut)
+            << (UINT8)  0x01                // cch (string len)
+            << nFormLen                     // cce (formula len)
+            << nTabNum                      // set ixals = itab
+            << nTabNum                      // itab (table index, 1-based)
+            << (UINT32) 0x00000000          // cch
+            << nBuiltInKey;                 // string
+    }
+    else
+    {
+        rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
             << (UINT8)  0x00                // chKey (keyboard shortcut)
             << (UINT8)  0x01                // cch (string len)
             << nFormLen                     // cce (formula len)
@@ -1586,6 +1613,7 @@ void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
             << (UINT32) 0x00000000          // cch
             << (UINT8)  0x00                // string grbit
             << nBuiltInKey;                 // string
+    }
     rStrm.Write( pData, nFormLen );
 }
 
@@ -1665,6 +1693,10 @@ ExcName::ExcName( RootData& rRootData, ScDBData* pArea ) :
 
     String aRangeName;
     pArea->GetName( aRangeName );
+
+    if( IsBuiltInAFName( aRangeName, EXC_BUILTIN_AUTOFILTER ))
+        return;
+
     SetUniqueName( aRangeName );
 
     ScRange aRange;
@@ -1740,6 +1772,16 @@ BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
     return FALSE;
 }
 
+BOOL ExcName::IsBuiltInAFName( const String& rName, UINT8 nKey )
+{
+    if( XclTools::IsBuiltInName( nTabNum, rName, nKey ) ||
+        (rName == ScGlobal::GetRscString( STR_DB_NONAME )))
+    {
+        bDummy = TRUE;
+        return TRUE;
+    }
+    return FALSE;
+}
 
 void ExcName::SaveCont( XclExpStream& rStrm )
 {
@@ -1893,8 +1935,15 @@ ExcNameList::ExcNameList( RootData& rRootData ) :
         DBG_ASSERT( pData, "ExcNameList::ExcNameList - missing db area" );
 
         ExcName* pExcName = new ExcName( rRootData, pData );
-        nExpIx = Append( pExcName );
-        pData->SetExportIndex( nExpIx );
+        if( pExcName->IsDummy() )
+        {
+            delete pExcName;
+        }
+        else
+        {
+            nExpIx = Append( pExcName );
+            pData->SetExportIndex( nExpIx );
+        }
     }
 
     maNextInsVec.resize( nScTabCount, Count() );
@@ -2092,7 +2141,7 @@ void ExcEGuts::SaveCont( XclExpStream& rStrm )
     rStrm   << (UINT16)(nRowLevel ? (12 * nRowLevel + 17) : 0)
             << (UINT16)(nColLevel ? (12 * nColLevel + 17) : 0)
             << (UINT16)(nRowLevel + (nRowLevel ? 1 : 0))
-            << (UINT16)(nColLevel + (nRowLevel ? 1 : 0));
+            << (UINT16)(nColLevel + (nColLevel ? 1 : 0));
 }
 
 
@@ -2279,7 +2328,7 @@ ExcColinfo::ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nNewXF, RootData& rRoot
 
     nXF = nNewXF;
 
-    SetWidth( rDoc.GetColWidth( nCol, nTab ), rRoot.fColScale );
+    nColWidth = XclTools::GetXclColumnWidth( rDoc.GetColWidth( nCol, nTab ), rRoot.pER->GetCharWidth() );
 
     BYTE nColFlags = rDoc.GetColFlags( nCol, nTab );
     nOptions = 0x0000;
@@ -2292,18 +2341,6 @@ ExcColinfo::ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nNewXF, RootData& rRoot
     nOptions |= EXC_COL_LEVELFLAGS( rOutline.GetLevel() );
     if( rOutline.IsCollapsed() )
         nOptions |= EXC_COL_COLLAPSED;
-}
-
-
-void ExcColinfo::SetWidth( UINT16 nWidth, double fColScale )
-{
-    double  f = nWidth;
-    f *= 1328.0 / 25.0;
-    f += 90.0;
-    f *= 1.0 / 23.0;
-    f /= fColScale;
-
-    nColWidth = (UINT16) f;
 }
 
 
@@ -2336,226 +2373,6 @@ UINT16 ExcColinfo::GetNum( void ) const
 ULONG ExcColinfo::GetLen( void ) const
 {
     return 11;
-}
-
-
-
-//--------------------------------------------------------------- class ExcXf -
-
-ExcXf::ExcXf( const XclExpRoot& rRoot, UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& rbWrap, BOOL bSt ) :
-    XclExpRoot( rRoot ),
-    bStyle( bSt )
-{
-#ifdef DBG_UTIL
-    nObjCnt++;
-#endif
-
-    bAtrNum = bAtrFnt = bAtrAlc = bAtrBdr = bAtrPat = bAtrProt = !bSt;  // always TRUE for cell xfs
-
-    nIfnt = nFont;
-    nIfmt = nForm;
-
-    if( pPattAttr )
-    {
-        nOffs8 = 0x0000;
-        const ScProtectionAttr& rProtAttr = (const ScProtectionAttr&) pPattAttr->GetItem( ATTR_PROTECTION );
-        if( rProtAttr.GetProtection() )
-            nOffs8 |= EXC_XF_LOCKED;
-        if( rProtAttr.GetHideFormula() || rProtAttr.GetHideCell() )
-            nOffs8 |= EXC_XF_HIDDEN;
-
-        switch( ( SvxCellHorJustify )
-            ((const SvxHorJustifyItem&)pPattAttr->GetItem( ATTR_HOR_JUSTIFY )).GetValue() )
-        {
-            case SVX_HOR_JUSTIFY_STANDARD:  eAlc = xlHAlignGeneral; break;
-            case SVX_HOR_JUSTIFY_LEFT:      eAlc = xlHAlignLeft;    break;
-            case SVX_HOR_JUSTIFY_CENTER:    eAlc = xlHAlignCenter;  break;
-            case SVX_HOR_JUSTIFY_RIGHT:     eAlc = xlHAlignRight;   break;
-            case SVX_HOR_JUSTIFY_BLOCK:     eAlc = xlHAlignJustify; break;
-            case SVX_HOR_JUSTIFY_REPEAT:    eAlc = xlHAlignFill;    break;
-            default:
-                DBG_ERROR( "ExcXf::ExcXf(): ATTR_HOR_JUSTIFY unbekannt!" );
-                eAlc = xlHAlignGeneral;
-        }
-
-        switch( ( SvxCellVerJustify )
-            ((const SvxVerJustifyItem&)pPattAttr->GetItem( ATTR_VER_JUSTIFY )).GetValue() )
-        {
-            case SVX_VER_JUSTIFY_STANDARD:  eAlcV = xlVAlignBottom; break;
-            case SVX_VER_JUSTIFY_TOP:       eAlcV = xlVAlignTop;    break;
-            case SVX_VER_JUSTIFY_CENTER:    eAlcV = xlVAlignCenter; break;
-            case SVX_VER_JUSTIFY_BOTTOM:    eAlcV = xlVAlignBottom; break;
-            default:
-                DBG_ERROR( "ExcXf::ExcXf(): ATTR_VER_JUSTIFY unbekannt!" );
-                eAlcV = xlVAlignBottom;
-        }
-
-        switch( ( SvxCellOrientation )
-            ((const SvxOrientationItem&)pPattAttr->GetItem( ATTR_ORIENTATION )).GetValue() )
-        {
-            case SVX_ORIENTATION_STANDARD:  eOri = xlTextOrientNoRot;       break;
-            case SVX_ORIENTATION_TOPBOTTOM: eOri = xlTextOrient90cw;        break;
-            case SVX_ORIENTATION_BOTTOMTOP: eOri = xlTextOrient90ccw;       break;
-            case SVX_ORIENTATION_STACKED:   eOri = xlTextOrientTopBottom;   break;
-            default:
-                DBG_ERROR( "ExcXf::ExcXf(): ATTR_ORIENTATION unbekannt!" );
-                eOri = xlTextOrientNoRot;
-        }
-
-        bFWrap = rbWrap ||
-            ( ( BOOL ) ((const SfxBoolItem&)pPattAttr->GetItem( ATTR_LINEBREAK )).GetValue() );
-
-        // fore-/background
-        const SvxBrushItem&     rBrushItem = ( const SvxBrushItem& ) pPattAttr->GetItem( ATTR_BACKGROUND );
-        Color                   aCol = rBrushItem.GetColor();
-
-        nFls = aCol.GetTransparency()? 0x0000 : 0x0001;
-
-        nIcvForeSer = GetPalette().InsertColor( aCol, xlColorCellArea );
-        nIcvBackSer = GetPalette().InsertColor( Color( COL_BLACK ), xlColorCellArea );
-
-        // Umrandung
-        const SvxBoxItem&   rBox = ((const SvxBoxItem&)pPattAttr->GetItem( ATTR_BORDER ));
-
-        ScToExcBorderLine( GetPalette(), rBox.GetTop(), nIcvTopSer, nDgTop );
-        ScToExcBorderLine( GetPalette(), rBox.GetLeft(), nIcvLftSer, nDgLeft );
-        ScToExcBorderLine( GetPalette(), rBox.GetBottom(), nIcvBotSer, nDgBottom );
-        ScToExcBorderLine( GetPalette(), rBox.GetRight(), nIcvRigSer, nDgRight );
-
-        if( bSt )
-        {
-            static const USHORT pFntChkWichs[] =
-            {
-                ATTR_FONT_HEIGHT,
-                ATTR_FONT_WEIGHT,
-                ATTR_FONT_POSTURE,
-                ATTR_FONT_UNDERLINE,
-                ATTR_FONT_CROSSEDOUT,
-                ATTR_FONT_CONTOUR,
-                ATTR_FONT_SHADOWED,
-                ATTR_FONT_COLOR,
-                ATTR_FONT_LANGUAGE,
-                0
-            };
-
-            const SfxItemSet& rSet = pPattAttr->GetItemSet();
-
-            bAtrNum = rSet.GetItemState( ATTR_VALUE_FORMAT, FALSE ) == SFX_ITEM_SET;
-            bAtrFnt = pPattAttr->HasItemsSet( pFntChkWichs );
-            bAtrAlc =   ( rSet.GetItemState( ATTR_HOR_JUSTIFY, FALSE ) == SFX_ITEM_SET ) ||
-                        ( rSet.GetItemState( ATTR_VER_JUSTIFY, FALSE ) == SFX_ITEM_SET ) ||
-                        ( rSet.GetItemState( ATTR_LINEBREAK, FALSE ) == SFX_ITEM_SET );
-            bAtrBdr = rSet.GetItemState( ATTR_BORDER, FALSE ) == SFX_ITEM_SET;
-            bAtrPat = rSet.GetItemState( ATTR_BACKGROUND, FALSE ) == SFX_ITEM_SET;
-            bAtrProt = rSet.GetItemState( ATTR_PROTECTION, FALSE ) == SFX_ITEM_SET;
-        }
-    }
-    else
-    {
-        nOffs8 = EXC_XF_LOCKED;
-        eAlc = xlHAlignGeneral;
-        eAlcV = xlVAlignBottom;
-        eOri = xlTextOrientNoRot;
-        bFWrap = FALSE;
-        nFls = 0x0000;
-        nIcvBackSer = GetPalette().InsertIndex( 65 );
-        nIcvForeSer = GetPalette().InsertIndex( 64 );
-        nIcvTopSer = nIcvBotSer = nIcvLftSer = nIcvRigSer = 0;
-        nDgTop = nDgLeft = nDgBottom = nDgRight = 0;
-    }
-
-    rbWrap = bFWrap;
-
-    bFSxButton = FALSE;     //  XF Record attached PivotTable Button
-}
-
-
-#ifdef DBG_UTIL
-ExcXf::~ExcXf()
-{
-    nObjCnt--;
-}
-#endif
-
-
-void ExcXf::ScToExcBorderLine( XclExpPalette& rPalette, const SvxBorderLine* pLine, UINT32& rIcvSer, UINT16& rDg )
-{
-    if( !pLine )
-    {
-        rIcvSer = rPalette.InsertIndex( 0 );
-        rDg = 0;
-        return;
-    }
-
-    rIcvSer = rPalette.InsertColor( pLine->GetColor(), xlColorCellBorder );
-
-    if( pLine->GetDistance() )
-        // doppelte Linien
-        rDg = 6;
-    else
-    {// einfache Linien
-        UINT16 nOut = pLine->GetOutWidth();
-
-        if( nOut <= DEF_LINE_WIDTH_1 )
-            rDg = 1;
-        else if( nOut <= DEF_LINE_WIDTH_2 )
-            rDg = 2;
-        else
-            rDg = 5;
-    }
-}
-
-
-void ExcXf::SaveCont( XclExpStream& rStrm )
-{
-    UINT16  nTmp;
-
-    rStrm << nIfnt << nIfmt                             // Offs 4 + 6
-        << nOffs8;                                      // Offs 8
-
-    nTmp = ( UINT16 ) eAlc;                             // Offs 10
-    nTmp |= 0x0800;     // locked
-    if( bFWrap )
-        nTmp += 0x0008;
-    nTmp += ( ( UINT16 ) eAlcV ) << 4;
-    nTmp += ( ( UINT16 ) eOri ) << 8;
-    rStrm << nTmp;
-
-    UINT16 nForeInd, nBackInd;
-    GetPalette().GetMixedColors( nForeInd, nBackInd, nFls, nIcvForeSer, nIcvBackSer );
-    nTmp = nForeInd;                                    // Offs 12
-    nTmp |= nBackInd << 7;
-
-    if ( bFSxButton )
-        nTmp |= 0x2000;
-    rStrm << nTmp;
-
-    nTmp = nFls;                                        // Offs 14
-    nTmp += nDgBottom << 6;
-    nTmp |= GetPalette().GetColorIndex( nIcvBotSer ) << 9;
-    rStrm << nTmp;
-
-    nTmp = nDgTop;                                      // Offs 16
-    nTmp += nDgLeft << 3;
-    nTmp += nDgRight << 6;
-    nTmp |= GetPalette().GetColorIndex( nIcvTopSer ) << 9;
-    rStrm << nTmp;
-
-    nTmp = GetPalette().GetColorIndex( nIcvLftSer );     // Offs 18
-    nTmp |= GetPalette().GetColorIndex( nIcvRigSer ) << 7;
-    rStrm << nTmp;
-}
-
-
-UINT16 ExcXf::GetNum( void ) const
-{
-    return 0x00E0;
-}
-
-
-ULONG ExcXf::GetLen( void ) const
-{
-    return 16;
 }
 
 
@@ -2608,7 +2425,7 @@ ExcExternsheet::ExcExternsheet( RootData* pExcRoot, const UINT16 nNewTabNum ) : 
 
 void ExcExternsheet::SaveCont( XclExpStream& rStrm )
 {
-    rStrm << ( UINT8 ) Min( (xub_StrLen)(aTabName.Len() + 1), (xub_StrLen) 255 ) << ( UINT8 ) 0x03;
+    rStrm << ( UINT8 ) Min( (xub_StrLen)(aTabName.Len() ), (xub_StrLen) 255 ) << ( UINT8 ) 0x03;
     rStrm.WriteByteStringBuffer(
         ByteString( aTabName, *pExcRoot->pCharset ), 254 );     // max 254 chars (leading 0x03!)
 }
@@ -2719,133 +2536,6 @@ ULONG ExcSelection::GetLen( void ) const
 {
     return 15;
 }
-
-
-//------------------------------------------------------------ class UsedList -
-
-void UsedList::Save( XclExpStream& rStrm )
-{
-    for( ExcRecord* pExcRec = (ExcRecord*) First(); pExcRec; pExcRec = (ExcRecord*) Next() )
-        pExcRec->Save( rStrm );
-}
-
-
-
-//-------------------------------------------------------- class UsedAttrList -
-
-UsedAttrList::UsedAttrList( RootData* pRD ) :
-    ExcRoot( pRD ),
-    rFntLst( pRD->pER->GetFontBuffer() ),
-    rFrmLst( pRD->pER->GetNumFmtBuffer() )
-{
-}
-
-
-UsedAttrList::~UsedAttrList()
-{
-    for( ENTRY* pEntry = _First(); pEntry; pEntry = _Next() )
-        delete pEntry;
-}
-
-
-void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, const BOOL bExplLineBreak,
-                                const ULONG nAltNumForm, BOOL bForceAltNumForm )
-{
-    // Aufbauen der Excel-Daten
-    ENTRY*          pData = new ENTRY;
-    pData->pPattAttr = pAttr;
-    pData->bLineBreak = bExplLineBreak;
-    pData->nAltNumForm = nAltNumForm;
-    List::Insert( pData, LIST_APPEND );
-
-    // Font-Daten
-    UINT16          nFontIndex;
-
-    // Format-Daten
-    ULONG           nScForm;
-
-    if( pAttr )
-    {
-        nFontIndex = rFntLst.Insert( *pAttr );
-
-        if ( bForceAltNumForm )
-            nScForm = nAltNumForm;
-        else
-        {
-            nScForm = (( SfxUInt32Item& ) pAttr->GetItem( ATTR_VALUE_FORMAT )).GetValue();
-
-            if( nAltNumForm != NUMBERFORMAT_ENTRY_NOT_FOUND &&
-                    ( nScForm % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
-                nScForm = nAltNumForm;
-        }
-    }
-    else
-    {
-        nScForm = nAltNumForm;
-        nFontIndex = 0;
-    }
-
-    UINT16          nFormatIndex = rFrmLst.Insert( nScForm );
-
-    if ( pExcRoot->eDateiTyp < Biff8 )
-        pData->pXfRec = new ExcXf( *pExcRoot->pER, nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
-    else
-        pData->pXfRec = new ExcXf8( *pExcRoot->pER, nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
-}
-
-
-UINT16 UsedAttrList::Find( const ScPatternAttr* pAttr, const BOOL bStyle,
-        const UINT32 nAltNumForm, BOOL bForceAltNumForm )
-{
-    if( !pAttr && nAltNumForm == NUMBERFORMAT_ENTRY_NOT_FOUND )
-        return 15;      // default XF
-
-    DBG_ASSERT( nBaseIndex, "*UsedAttrList::Find(): leer == nichtleer?" );
-
-    UINT16          nC = nBaseIndex;
-    for( ENTRY* pCurr = _First(); pCurr; pCurr = _Next() )
-    {
-        if( pCurr->Equal( pAttr, nAltNumForm ) )
-            return nC;
-        nC++;
-    }
-
-    // neuen ausdenken
-
-    AddNewXF( pAttr, bStyle, FALSE, nAltNumForm, bForceAltNumForm );
-
-    return nC;
-}
-
-
-UINT16 UsedAttrList::FindWithLineBreak( const ScPatternAttr* pAttr )
-{
-    DBG_ASSERT( nBaseIndex,
-        "*UsedAttrList::FindWithLineBreak(): leer == nichtleer?" );
-
-    UINT16          nC = nBaseIndex;
-    for( ENTRY* pCurr = _First(); pCurr; pCurr = _Next() )
-    {
-        if( pCurr->pPattAttr == pAttr && pCurr->bLineBreak )
-            return nC;
-        nC++;
-    }
-
-    // neuen ausdenken
-
-    AddNewXF( pAttr, FALSE, TRUE );
-
-    return nC;
-}
-
-
-void UsedAttrList::Save( XclExpStream& rStrm )
-{
-    for( ENTRY* pEntry = _First(); pEntry; pEntry = _Next() )
-        if( pEntry->pXfRec )
-            pEntry->pXfRec->Save( rStrm );
-}
-
 
 
 // XclExpWsbool ===============================================================
@@ -3861,6 +3551,24 @@ ULONG ExcShrdFmla::GetLen() const
     return 10 + nFormLen;
 }
 
+//-----------------------------------------------------------------
+
+void ExcFmlaResultStr::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << maResultText;
+}
+
+
+ExcFmlaResultStr::ExcFmlaResultStr(const XclExpString& aFmlaText) :
+    XclExpRecord( EXC_ID_STRING ),
+    maResultText(aFmlaText)
+{
+}
+
+
+ExcFmlaResultStr::~ExcFmlaResultStr()
+{
+}
 
 
 //--------------------------- class XclExpTableOp, class XclExpTableOpManager -

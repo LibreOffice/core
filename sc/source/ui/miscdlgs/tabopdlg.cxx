@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:44:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
     else if( (pCtrl == (Control*)&aEdColCell) || (pCtrl == (Control*)&aRBColCell) )
         pEdActive = &aEdColCell;
     else
-        pEdActive == NULL;
+        pEdActive = NULL;
 
     if( pEdActive )
         pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );

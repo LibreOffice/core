@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-07 18:11:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,8 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 
 __EXPORT ScDrawLayer::~ScDrawLayer()
 {
+    Broadcast(SdrHint(HINT_MODELCLEARED));
+
     Clear();
 
     delete pUndoGroup;

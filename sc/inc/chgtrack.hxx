@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2002-04-15 11:06:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,6 +1255,8 @@ public:
                                     }
             ULONG               GetLastSavedActionNumber() const
                                     { return nMarkLastSaved; }
+            void                SetLastSavedActionNumber(ULONG nNew)
+                                    { nMarkLastSaved = nNew; }
             ScChangeAction*     GetLastSaved() const
                                     { return aTable.Get( nMarkLastSaved ); }
         ScChangeActionContent** GetContentSlots() const { return ppContentSlots; }

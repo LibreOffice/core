@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:21:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,7 +601,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ComplRefData& rCRD )
     static UINT16       nDouble = 0;
 
     String              aScName( rOrgName );
-    ScfTools::ConvertName( aScName );
+    ScfTools::ConvertToScDefinedName( aScName );
 
     register ENTRY*     pInsert = new ENTRY( rOrgName, aScName, rCRD );
 

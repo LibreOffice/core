@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-04 10:08:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

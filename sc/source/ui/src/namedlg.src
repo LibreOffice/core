@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:12:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   namedlg.src  $
- //   $Author: kz $
- //     $Date: 2001-11-16 23:12:37 $
- // $Revision: 1.23 $
+ //   $Author: hr $
+ //     $Date: 2003-03-26 18:06:28 $
+ // $Revision: 1.24 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ ModelessDialog RID_SCDLG_NAMES
     Text [ italian ] = "Definisci nomi" ;
     Text [ portuguese_brazilian ] = "Definir Nomes" ;
     Text [ portuguese ] = "Definir nomes" ;
-    Text [ finnish ] = "M??rit? nimet" ;
+    Text [ finnish ] = "Määritä nimet" ;
     Text [ danish ] = "Definer navne" ;
     Text [ french ] = "Définir des noms" ;
     Text [ swedish ] = "Definiera namn" ;
@@ -122,9 +122,9 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lis??" ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
         Text [ dutch ] = "Toe~voegen" ;
         Text [ spanish ] = "~Añadir" ;
@@ -141,7 +141,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Añadir";
+        Text[ catalan ] = "~Afegeix";
+        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
     };
     PushButton BTN_REMOVE
     {
@@ -156,10 +157,10 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
@@ -172,7 +173,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     FixedLine FL_NAME
     {
@@ -201,7 +203,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ korean ] = "ì´ë¦„";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre";
+        Text[ catalan ] = "Nom";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
     };
     ComboBox ED_NAME
     {
@@ -221,24 +224,25 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Riferito a" ;
         Text [ portuguese_brazilian ] = "Remente a" ;
         Text [ portuguese ] = "Refere-se a" ;
-        Text [ finnish ] = "Viittauskohde" ;
-        Text [ danish ] = "Henviser til" ;
+        Text [ finnish ] = "Liitoskohde" ;
+        Text [ danish ] = "Tildelt til" ;
         Text [ french ] = "Assigné à" ;
         Text [ swedish ] = "Refererar till" ;
         Text [ dutch ] = "Toegevoegd aan" ;
         Text [ spanish ] = "Asignado a" ;
         Text [ english_us ] = "Assigned to" ;
         Text[ chinese_simplified ] = "æŒ‡å®šç»™";
-        Text[ russian ] = "Ññûëêà íà";
+        Text[ russian ] = "Íàçíà÷åí íà";
         Text[ polish ] = "Odnosi siê do";
         Text[ japanese ] = "ä½ç½®";
         Text[ chinese_traditional ] = "æŒ‡å®šåˆ°";
         Text[ arabic ] = "íäÓÈ Åáì";
         Text[ greek ] = "Áíôéóôïé÷åß óå";
-        Text[ korean ] = "ì— í• ë‹¹";
+        Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Ait olduğu aralık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Asignado a";
+        Text[ catalan ] = "Fa referència a";
+        Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸–à¸¶à¸‡";
     };
     Edit ED_ASSIGN
     {
@@ -273,8 +277,9 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText[ korean ] = "ì¶•ì†Œ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista!";
+        QuickHelpText[ catalan ] = "Redueix";
+        QuickHelpText[ finnish ] = "Kutista";
+        QuickHelpText[ thai ] = "Shrink";
     };
     MoreButton BTN_MORE
     {
@@ -308,10 +313,11 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ chinese_traditional ] = "å€åŸŸé¡å‹";
         Text[ arabic ] = "äæÚ ÇáäØÇŞ";
         Text[ greek ] = "Ôığïò ğåñéï÷Şò";
-        Text[ korean ] = "êµ¬ì—­ ì¢…ë¥˜";
+        Text[ korean ] = "ì˜ì—­ ì¢…ë¥˜";
         Text[ turkish ] = "Aralık türü";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo de área";
+        Text[ catalan ] = "Tipus d'àrea";
+        Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
     };
     CheckBox BTN_PRINTAREA
     {
@@ -341,7 +347,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ korean ] = "ì¸ì‡„ ë²”ìœ„(~P)";
         Text[ turkish ] = "Yazdırma a~ralığı";
         Text[ language_user1 ] = "RB: zu finden in: Format - Druckbereich - Bearbeiten... - -";
-        Text[ catalan ] = "Área de ~impresión";
+        Text[ catalan ] = "Àrea d'im~pressió";
+        Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£~à¸à¸´à¸¡à¸à¹Œ";
     };
     CheckBox BTN_CRITERIA
     {
@@ -353,7 +360,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "~Filtro" ;
         Text [ portuguese_brazilian ] = "~Filtro" ;
         Text [ portuguese ] = "~Filtro" ;
-        Text [ finnish ] = "~Suodatin" ;
+        Text [ finnish ] = "~Suodatus" ;
         Text [ danish ] = "Filter" ;
         Text [ french ] = "~Filtre" ;
         Text [ swedish ] = "Fil~ter" ;
@@ -364,14 +371,15 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ chinese_simplified ] = "ç­›é€‰(~F)";
         Text[ russian ] = "Ôèëüòğ";
         Text[ polish ] = "Filtr";
-        Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€(~F)";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿(~F)";
         Text[ chinese_traditional ] = "ç¯©é¸(~F)";
         Text[ arabic ] = "ÇáİáÊÑ";
         Text[ greek ] = "Ößëôñï";
         Text[ korean ] = "í•„í„°(~F)";
         Text[ turkish ] = "Fil~tre";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fi~ltro";
+        Text[ catalan ] = "~Filtre";
+        Text[ thai ] = "~à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
     };
     CheckBox BTN_ROWHEADER
     {
@@ -388,20 +396,21 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ french ] = "~Ligne à répéter" ;
         Text [ swedish ] = "Upprepn~ingsrad" ;
         Text [ dutch ] = "~Rij herhalen" ;
-        Text [ spanish ] = "Fil~a a repetir" ;
+        Text [ spanish ] = "Fil~a que repetir" ;
         Text [ english_us ] = "Repeat ~row" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "é‡å¤çš„è¡Œ(~R)";
-        Text[ russian ] = "Ïîâòîğ ñòğîêè";
+        Text[ russian ] = "Ïîâòîğèòü ñòğîêó";
         Text[ polish ] = "Wiersz powtórzony";
         Text[ japanese ] = "ç¹°ã‚Šè¿”ã™è¡Œ(~R)";
         Text[ chinese_traditional ] = "é‡è¤‡çš„åˆ—(~R)";
         Text[ arabic ] = "ÇáÕİ ÇáãßÑÑ";
         Text[ greek ] = "Åğáíáëáìâáíüìåí~ç ãñáììŞ";
-        Text[ korean ] = "ë°˜ë³µí–‰(~R)";
+        Text[ korean ] = "ë°˜ë³µ í–‰(~R)";
         Text[ turkish ] = "Y~inelenen satır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fil~a a repetir";
+        Text[ catalan ] = "Repeteix la ~fila";
+        Text[ thai ] = "à¸—à¸³à¹~à¸–à¸§à¸‹à¹‰à¸³";
     };
     CheckBox BTN_COLHEADER
     {
@@ -418,20 +427,21 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ french ] = "~Colonne à répéter" ;
         Text [ swedish ] = "~Upprepningskolumn" ;
         Text [ dutch ] = "~Kolom herhalen" ;
-        Text [ spanish ] = "Columna a r~epetir" ;
+        Text [ spanish ] = "Columna que r~epetir" ;
         Text [ english_us ] = "Repeat ~column" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "é‡å¤çš„åˆ—(~C)";
-        Text[ russian ] = "Ïîâòîğ ñòîëáöà";
+        Text[ russian ] = "Ïîâòîğèòü ñòîëáåö";
         Text[ polish ] = "Kolumna powtórzona";
         Text[ japanese ] = "ç¹°ã‚Šè¿”ã™åˆ—(~C)";
         Text[ chinese_traditional ] = "é‡è¤‡çš„æ¬„(~C)";
         Text[ arabic ] = "ÇáÚãæÏ ÇáãßÑÑ";
         Text[ greek ] = "Åğáíáëáì~âáíüìåíç óôŞëç";
-        Text[ korean ] = "ë°˜ë³µì—´(~C)";
+        Text[ korean ] = "ë°˜ë³µ ì—´(~C)";
         Text[ turkish ] = "~Yinelenen sütun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Columna a r~epetir";
+        Text[ catalan ] = "Repeteix la ~columna";
+        Text[ thai ] = "à¸—à¸³~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸‹à¹‰à¸³";
     };
     String STR_ADD
     {
@@ -442,9 +452,9 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lis??" ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
         Text [ dutch ] = "Toe~voegen" ;
         Text [ spanish ] = "~Añadir" ;
@@ -459,7 +469,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Añadir";
+        Text[ catalan ] = "~Afegeix";
+        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
     };
     String STR_MODIFY
     {
@@ -470,9 +481,9 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Modifica" ;
         Text [ portuguese_brazilian ] = "Modif~icar" ;
         Text [ portuguese ] = "~Modificar" ;
-        Text [ finnish ] = "~Muokkaa" ;
+        Text [ finnish ] = "~Muuta" ;
         Text [ danish ] = "Modificer" ;
-        Text [ french ] = "~Modifier" ;
+        Text [ french ] = "Modifier" ;
         Text [ swedish ] = "Än~dra" ;
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "~Modificar" ;
@@ -484,10 +495,11 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ chinese_traditional ] = "è®Šæ›´(~I)";
         Text[ arabic ] = "ÊÚÏíá";
         Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "ìˆ˜ì •(~I)";
+        Text[ korean ] = "ë³€ê²½(~I)";
         Text[ turkish ] = "~Değiştir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar";
+        Text[ catalan ] = "Mod~ifica";
+        Text[ thai ] = "à¸”à¸±à¸”à¹~à¸›à¸¥à¸‡";
     };
     String STR_INVALIDSYMBOL
     {
@@ -512,23 +524,32 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ chinese_traditional ] = "ç„¡æ•ˆçš„è¡¨è¿°å¼";
         Text[ arabic ] = "ÊÚÈíÑ ÛíÑ ÕÇáÍ";
         Text[ greek ] = "Ìç İãêõñç İêöñáóç";
-        Text[ korean ] = "ìœ íš¨í•˜ì§€ ì•Šì€ í‘œí˜„";
+        Text[ korean ] = "ì˜ëª»ëœ ì‹";
         Text[ turkish ] = "Geçersiz terim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Expresión no válida";
+        Text[ catalan ] = "L'expressió no és vàlida";
+        Text[ thai ] = "à¸™à¸´à¸à¸ˆà¸™à¹Œà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
     };
     Text[ chinese_simplified ] = "å®šä¹‰åç§°";
-    Text[ russian ] = "Ïğèñâîèòü èìÿ";
+    Text[ russian ] = "Îïğåäåëèòü èìåíà";
     Text[ polish ] = "Definiowanie nazw";
     Text[ japanese ] = "åå‰ã®æŒ‡å®š";
     Text[ chinese_traditional ] = "å®šç¾©åç¨±";
     Text[ arabic ] = "ÊÍÏíÏ ÇáÃÓãÇÁ";
     Text[ greek ] = "Ïñéóìüò ïíïìÜôùí";
-    Text[ korean ] = "ì´ë¦„ ì •ì˜";
+    Text[ korean ] = "ì´ë¦„ ì§€ì •";
     Text[ turkish ] = "Ad tanımla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Definir nombres";
+    Text[ catalan ] = "Defineix els noms";
+    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸Šà¸·à¹ˆà¸­";
 };
+
+
+
+
+
+
+
 
 
 

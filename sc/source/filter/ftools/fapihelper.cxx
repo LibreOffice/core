@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fapihelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:09:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,10 @@ bool getPropAny( Any& rAny, const Reference< XPropertySet >& rxProp, const OUStr
     {
         Reference< XPropertySetInfo > xInfo = rxProp->getPropertySetInfo();
         if( xInfo.is() && xInfo->hasPropertyByName( rName ) )
+        {
             rAny = rxProp->getPropertyValue( rName );
-        bSuccess = true;
+            bSuccess = true;
+        }
     }
     catch( Exception& )
     {

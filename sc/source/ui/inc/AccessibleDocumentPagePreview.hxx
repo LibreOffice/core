@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:22:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,10 +161,12 @@ protected:
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+public: // needed in ScShapeChilds
     /// Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
+protected:
     /// Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-15 11:36:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,7 +725,8 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); i++)
     {
-        if (sFormula[i] == '\'' && !bInDoubleQuotationMarks)
+        if (sFormula[i] == '\'' && !bInDoubleQuotationMarks &&
+            chPrevious != '\\')
             bInQuotationMarks = !bInQuotationMarks;
         else if (sFormula[i] == '"' && !bInQuotationMarks)
             bInDoubleQuotationMarks = !bInDoubleQuotationMarks;
@@ -741,6 +742,8 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
                 sBuffer.append(sFormula[i]);
         chPrevious = sFormula[i];
     }
+
+    DBG_ASSERT(nCountBraces == 0, "there are some braces still open");
     sFormula = sBuffer.makeStringAndClear();
 }
 

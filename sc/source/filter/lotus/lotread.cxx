@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-18 12:28:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,11 @@
 #include "scerrors.hxx"
 #include "root.hxx"
 #include "lotimpop.hxx"
-#include "fltprgrs.hxx"
 #include "lotattr.hxx"
+
+#ifndef SC_FPROGRESSBAR_HXX
+#include "fprogressbar.hxx"
+#endif
 
 
 class ScFormulaCell;
@@ -106,7 +109,7 @@ FltError ImportLotus::Read()
     pIn->Seek( nNextRec );
 
     // Progressbar starten
-    FilterProgressBar aPrgrsBar( *pIn );
+    ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
 
     while( eAkt != S_END )
     {
@@ -292,7 +295,7 @@ FltError ImportLotus::Read( SvStream& rIn )
     pIn->Seek( nNextRec );
 
     // Progressbar starten
-    FilterProgressBar aPrgrsBar( *pIn );
+    ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
 
     while( bRead )
     {

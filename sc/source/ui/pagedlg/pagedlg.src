@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 09:54:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ chinese_traditional ] = "ε—ε°η―„ε";
         Text[ arabic ] = "δΨΗή ΗαΨΘΗΪΙ";
         Text[ greek ] = "Περιοχή εκτύπωσης";
-        Text[ korean ] = "μΈμ‡„ μμ—­";
+        Text[ korean ] = "μΈμ‡„ λ²”μ„";
         Text[ turkish ] = "Yazdύrma aralύπύ";
         Text[ catalan ] = "ΐrea d'impressiσ";
         Text[ thai ] = "ΰΈΰΉΰΈ§ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈΰΈ΄ΰΈ΅ΰΈΰΉ";
@@ -518,7 +518,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ NORWEGIAN ] = "Columns to repeat at left" ;
         Text [ DANISH ] = "Gentagelses~kolonne" ;
         Text [ ENGLISH_US ] = "Columns to repeat" ;
-        Text [ SPANISH ] = "~Columna a repetir" ;
+        Text [ SPANISH ] = "~Columna que repetir" ;
         Text [ FINNISH ] = "Toista sarake" ;
         Text [ FRENCH ] = "~Colonne ΰ rιpιter" ;
         Text [ ITALIAN ] = "Colonna da ripetere" ;
@@ -716,7 +716,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ chinese_traditional ] = "η·¨θΌ―ε—ε°η―„ε";
     Text[ arabic ] = "ΚΝΡνΡ δΨΗήΗΚ ΗαΨΘΗΪΙ";
     Text[ greek ] = "Επεξεργασία περιοχών εκτύπωσης";
-    Text[ korean ] = "μΈμ‡„ μμ—­ νΈμ§‘";
+    Text[ korean ] = "μΈμ‡„ λ²”μ„ νΈμ§‘";
     Text[ turkish ] = "Yazdύrma aralύklarύnύ dόzenle";
     Text[ catalan ] = "Edita les ΰrees d'impressiσ";
     Text[ finnish ] = "Muuta tulostusalueita";
@@ -754,7 +754,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "ζ¬„ε’ε—ζ¨™ι΅(~C)";
         Text[ arabic ] = "ΡΔζΣ ΗαΓΣΨΡ ζΗαΓΪγΟΙ";
         Text[ greek ] = "Κεφαλίδες γραμμών/στηλών";
-        Text[ korean ] = "ν–‰κ³Ό μ—΄ λ¨Έλ¦¬κΈ€(~C)";
+        Text[ korean ] = "μ—΄ λ¨Έλ¦¬κΈ€/ν–‰ λ¨Έλ¦¬κΈ€(~C)";
         Text[ turkish ] = "Satύr ve sόtun ~baώlύklarύ";
         Text[ catalan ] = "Capηaleres de ~columnes i files";
         Text[ thai ] = "ΰΈªΰΉΰΈ§ΰΈ™ΰΈ«ΰΈ±ΰΈ§~ΰΈ„ΰΈ­ΰΈ¥ΰΈ±ΰΈ΅ΰΈ™ΰΉΰΉΰΈ¥ΰΈ°ΰΉΰΈ–ΰΈ§";
@@ -784,7 +784,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "ε·¥δ½θ΅¨η¶²ζ Ό(~G)";
         Text[ arabic ] = "ΤΘίΙ ΗαΜΟζα";
         Text[ greek ] = "Πλέ~γμα πίνακα";
-        Text[ korean ] = "λκΈμ„ (~G)";
+        Text[ korean ] = "ν‘μ λκΈμ„ (~G)";
         Text[ turkish ] = "~Kύlavuz ηizgiler";
         Text[ catalan ] = "~Graella";
         Text[ thai ] = "ΰΉ€~ΰΈªΰΉ‰ΰΈ™ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
@@ -838,13 +838,13 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH_US ] = "~Objects/graphics" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ε―Ήθ±΅/ε›Ύε½Ά(~O)";
-        Text[ russian ] = "Βνεδπεννϋε/γπΰτθχερκθε ξαϊεκςϋ";
+        Text[ russian ] = "Βνεδπεννϋε/γπΰ~τθχερκθε ξαϊεκςϋ";
         Text[ polish ] = "Obiekty/~Grafiki";
         Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ¨ε›³(~O)";
         Text[ chinese_traditional ] = "η‰©δ»¶/ε–ε½Ά(~O)";
         Text[ arabic ] = "ίΗΖδΗΚ/ΥζΡ";
         Text[ greek ] = "Αντικείμενα/Γραφικά";
-        Text[ korean ] = "κ°μ²΄/κ·Έλν”½(~O)";
+        Text[ korean ] = "κ°μ²΄/κ·Έλ¦Ό(~O)";
         Text[ turkish ] = "~Nesne/grafikler";
         Text[ catalan ] = "~Objectes/grΰfics";
         Text[ thai ] = "~ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈ/ΰΈΰΈ£ΰΈ²ΰΈΰΈ΄ΰΈ„";
@@ -898,7 +898,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH_US ] = "~Drawing objects" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "η»ε›Ύε―Ήθ±΅(~D)";
-        Text[ russian ] = "Πθρσνκθ";
+        Text[ russian ] = "Πθρ~σνκθ";
         Text[ polish ] = "Obiekty g~raficzne";
         Text[ japanese ] = "ε›³ε½Άζη”»γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ(~D)";
         Text[ chinese_traditional ] = "ηΉªε–η‰©δ»¶(~D)";
@@ -1032,7 +1032,7 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text = "Von Lin~ks-nach-rechts, dann nach unten" ;
+        Text = "Von lin~ks nach rechts, dann nach unten" ;
         Text [ ENGLISH ] = "Left to rig~ht, then to bottom" ;
         Text [ norwegian ] = "Left to rig~ht" ;
         Text [ italian ] = "Da sinistra a d~estra, poi in basso" ;
@@ -1040,7 +1040,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese ] = "Da esquerda para a di~reita, depois para baixo" ;
         Text [ finnish ] = "~Vasemmalta oikealle, sitten alas" ;
         Text [ danish ] = "Fra ~venstre mod hψjre, derefter nedad" ;
-        Text [ french ] = "De gauche ΰ dro~ite, puis vers le bas" ;
+        Text [ french ] = "De gauche ΰ droite, puis vers le bas" ;
         Text [ swedish ] = "Frεn vδnster till hφg~er, sedan nedεt" ;
         Text [ dutch ] = "Van ~links naar rechts, dan naar beneden" ;
         Text [ spanish ] = "De ~izquierda a derecha, despuιs hacia abajo" ;
@@ -1054,7 +1054,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ arabic ] = "γδ ΗανΣΗΡ Εαμ Ηανγνδ";
         Text[ language_user1 ] = "Μήκος; - - - -";
         Text[ greek ] = "Από αριστερά προς τα δεξιά, στη συνέχεια προς τα ~κάτω";
-        Text[ korean ] = "μ™Όμª½μ—μ„ μ¤λ¥Έμª½μΌλ΅, κ·Έ ν›„μ— μ•„λλ΅";
+        Text[ korean ] = "μ™Όμª½μ—μ„ μ¤λ¥Έμª½μΌλ΅, κ·Έ λ‹¤μ μ•„λλ΅";
         Text[ turkish ] = "S~oldan saπa";
         Text[ catalan ] = "D'~esquerra a dreta";
         Text[ thai ] = "ΰΈ‹ΰΉ‰ΰΈ²~ΰΈΆΰΉ„ΰΈ›ΰΈ‚ΰΈ§ΰΈ²";
@@ -1103,7 +1103,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ english_us ] = "First ~page number" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "η¬¬δΈ€δΈªι΅µη (~P)";
-        Text[ russian ] = "Νξμεπ οεπβξι ρςπΰνθφϋ";
+        Text[ russian ] = "Ή οεπβξι ρςπΰνθφϋ";
         Text[ polish ] = "Pierwszy nu~mer strony";
         Text[ japanese ] = "ζ€εγ®γƒγƒΌγ‚Έη•ªε·(~P)";
         Text[ chinese_traditional ] = "η¬¬δΈ€ε€‹ι ηΆΌ(~P)";
@@ -1262,22 +1262,13 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "ι΅―η¤Ίζ―”δΎ‹";
         Text[ arabic ] = "ΗαγήνΗΣ";
         Text[ greek ] = "Κλίμακα";
-        Text[ korean ] = "λ°°μ¨";
+        Text[ korean ] = "λ°°μ¨ μ΅°μ •";
         Text[ turkish ] = "Φlηek";
         Text[ catalan ] = "Escala";
         Text[ finnish ] = "Skaalaa";
         Text[ thai ] = "ΰΈªΰΉ€ΰΈΰΈ¥";
     };
 };
-
-
-
-
-
-
-
-
-
 
 
 

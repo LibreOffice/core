@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 10:02:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,7 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText[ arabic ] = "0 corresponds to 12/30/1899";
         QuickHelpText[ italian ] = "Il valore 0 corrisponde a 30/12/1899";
         Text[ greek ] = "30/12/1899 (~ĞñïåğéëïãŞ)";
-        Text[ korean ] = "1899/12/30 (í‘œì¤€)(~U)";
+        Text[ korean ] = "1899/12/30 (ê¸°ë³¸ê°’)(~U)";
         QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôçí ôéìŞ 30/12/1899";
         QuickHelpText[ korean ] = "ê°’0ì€ 1899,12,30ì— ì¼ì¹˜";
         Text[ turkish ] = "30.12.1899 ( ~Standart )";
@@ -585,7 +585,7 @@ TabPage RID_SCPAGE_CALC
         Text[ chinese_traditional ] = "å°æ•¸é»ä½æ•¸(~D)";
         Text[ arabic ] = "ÇáãäÇÒá ÇáÚÔÑíÉ";
         Text[ greek ] = "ÄåêáäéêÜ øçößá";
-        Text[ korean ] = "ì†Œìˆ˜ì  ì´í•˜ ìë¦¬(~D)";
+        Text[ korean ] = "ì†Œìˆ˜ì  ì´í•˜ ìë¦¿ìˆ˜(~D)";
         Text[ turkish ] = "~Ondalık hane";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre de ~decimals";
@@ -667,7 +667,7 @@ TabPage RID_SCPAGE_CALC
         Text [ ENGLISH ] = "Search cri~terias = and <> must match entire cells" ;
         Text [ english_us ] = "Search criteria = and <> must apply to ~whole cells" ;
         Text [ italian ] = "I criteri di ricerca  = ed <> devono riferirsi a celle intere" ;
-        Text [ spanish ] = "Criterios de ~búsqueda = y <> deben coincidir con celdas completas" ;
+        Text [ spanish ] = "Los criterios de ~búsqueda = y <> deben referirse a celdas completas" ;
         Text [ french ] = "Critères de recherche = et <> doivent correspondre à des lignes entières" ;
         Text [ dutch ] = "~Zoekcriteria = en <> moeten op hele cellen toepasbaar zijn" ;
         Text [ swedish ] = "Sö~kkriterier = och <> måste matcha hela celler" ;
@@ -704,13 +704,13 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "Enable regular expressions in formulas" ;
         Text [ portuguese ] = "Permitir expressões regulares em ~fórmulas" ;
         Text[ chinese_simplified ] = "å…è®¸å…¬å¼å«æœ‰å¸¸è§„è¡¨è¾¾å¼(~E)";
-        Text[ russian ] = "Ïîçâîëèòü ğåãóëÿğíûå âûğàæåíèÿ â ôîğìóëàõ";
+        Text[ russian ] = "Ïîçâîëèòü ğåãóëÿğíûå ~âûğàæåíèÿ â ôîğìóëàõ";
         Text[ polish ] = "Dopuœæ w formu³ach wyra¿enia regularne";
         Text[ japanese ] = "æ•°å¼ã§æ­£è¦è¡¨ç¾ã‚’ä½¿ã†(~E)";
         Text[ chinese_traditional ] = "å…è¨±å…¬å¼å«æœ‰å¸¸è¦è¡¨é”å¼(~E)";
         Text[ arabic ] = "Enable regular expressions in formulas";
         Text[ greek ] = "Enable regular expressions in formulas";
-        Text[ korean ] = "ì–‘ì‹ì—ì„œ ì •ê·œì‹ í™œì„±í™”(~E)";
+        Text[ korean ] = "ìˆ˜ì‹ì—ì„œ ì •ê·œì‹ í™œì„±í™”(~E)";
         Text[ turkish ] = "Enable regular expressions in formulas";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Ot~a säännölliset lausekkeet käyttöön kaavoissa";
@@ -739,7 +739,7 @@ TabPage RID_SCPAGE_CALC
         Text[ chinese_traditional ] = "è‡ªå‹•æœå°‹åˆ—/æ¬„æ¨™é¡Œ(~A)";
         Text[ arabic ] = "ÇáÈÍË Úä ÚäÇæíä ÇáÃÚãÏÉ æÇáÕİæİ ÊáŞÇÆíÇğ";
         Text[ greek ] = "Áõôüìáôç áíáæŞôçóç åğéãñáöşí óôçëşí/ãñáììşí";
-        Text[ korean ] = "ì—´ê³¼ í–‰ì˜ ë¼ë²¨ ìë™ ì°¾ê¸°(~A)";
+        Text[ korean ] = "ì—´ ë° í–‰ì˜ ë ˆì´ë¸”ì„ ìë™ìœ¼ë¡œ ì°¾ê¸°(~A)";
         Text[ turkish ] = "Sütun/satır başlıklarını otomatik olarak ara";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Hae sarakkeiden ja rivien selitteet automaattisesti ";
@@ -951,7 +951,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
@@ -1037,7 +1037,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ french ] = "Êtes-vous sûr de vouloir supprimer l'entrée\n#\n ?" ;
         Text [ swedish ] = "Skall posten\n#\nraderas?" ;
         Text [ dutch ] = "Wilt u \n#\nverwijderen?" ;
-        Text [ spanish ] = "¿Desea eliminar la entrada\n\n#\\?" ;
+        Text [ spanish ] = "¿Desea borrar la entrada\n\n#\\?" ;
         Text [ english_us ] = "Should the entry\n#\nbe deleted?" ;
         Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤è¿™ä¸ªæ¡ç›®\n#ï¼Ÿ";
         Text[ russian ] = "Óäàëèòü ıëåìåíò\n#\n?";
@@ -1099,7 +1099,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ chinese_traditional ] = "æ¸…å–®å¾";
         Text[ arabic ] = "ŞÇÆãÉ ãä";
         Text[ greek ] = "Ëßóôá áğü";
-        Text[ korean ] = "ë¡œë¶€í„°ì˜ ëª©ë¡";
+        Text[ korean ] = "ëª©ë¡ ì¶œì²˜";
         Text[ turkish ] = "Liste kaynağı";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Luettelo";
@@ -1120,13 +1120,13 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "Zellen ohne einfachen Text wurden ignoriert." ;
         Text [ portuguese ] = "As células sem texto foram ignoradas." ;
         Text[ chinese_simplified ] = "å¿½ç•¥ä¸å«æ–‡å­—çš„å•å…ƒæ ¼ã€‚";
-        Text[ russian ] = "ß÷åéêè áåç îáû÷íîãî òåêñòà ïğîïóùåíû.";
+        Text[ russian ] = "ß÷åéêè áåç òåêñòà ïğîïóùåíû.";
         Text[ polish ] = "Komórki bez tekstu zosta³y zignorowane.";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®ãªã„ã‚»ãƒ«ã¯ç„¡è¦–ã•ã‚Œã¾ã—ãŸã€‚";
         Text[ chinese_traditional ] = "å¿½ç•¥ä¸å«æ–‡å­—çš„å„²å­˜æ ¼ã€‚";
         Text[ arabic ] = "Êã ÊÌÇåá ÇáÎáÇíÇ ÇáÊí áÇ ÊÍÊæí Úáì äÕ ÈÓíØ.";
         Text[ greek ] = "Ôá êåëéÜ ÷ùñßò áğëü êåßìåíï İ÷ïõí ğáñáâëåèåß.";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ ì—†ëŠ” ì…€ ë¬´ì‹œ";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ ì—†ëŠ” ì…€ì€ ë¬´ì‹œë©ë‹ˆë‹¤.";
         Text[ turkish ] = "Metinsiz hücreler yok sayıldı.";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Tekstittömät solut ohitettiin.";
@@ -1260,7 +1260,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ dutch ] = "~Pagina-einde" ;
         Text [ portuguese ] = "~Quebras de página" ;
         Text[ chinese_simplified ] = "æ¢é¡µ(~P)";
-        Text[ russian ] = "Ğàçğûâû ñòğàíèöû";
+        Text[ russian ] = "Ğàçğ~ûâû ñòğàíèöû";
         Text[ polish ] = "Podzia³y ~strony";
         Text[ japanese ] = "æ”¹ãƒšãƒ¼ã‚¸(~P)";
         Text[ chinese_traditional ] = "æ›é (~P)";
@@ -1281,7 +1281,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ ENGLISH ] = "Guides ~while moving" ;
         Text[ english_us ] = "Guides ~while moving";
         Text[ portuguese ] = "Guias durante o movimento";
-        Text[ russian ] = "Íàïğàâëÿşùèå ïğè ïåğåìåùåíèè";
+        Text[ russian ] = "Íàïğàâëÿşùèå ~ïğè ïåğåìåùåíèè";
         Text[ greek ] = "Âïçèçô~éêİò ãñáììİò êáôÜ ôç ìåôáêßíçóç";
         Text[ dutch ] = "H~ulplijnen tijdens de beweging";
         Text[ french ] = "Repères lors du déplacement";
@@ -1292,7 +1292,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ polish ] = "Linie pomocnicze podczas przesuwania";
         Text[ portuguese_brazilian ] = "Guides while moving";
         Text[ japanese ] = "ç§»å‹•æ™‚ã®è£œåŠ©ç·š(~W)";
-        Text[ korean ] = "ì´ë™ì‹œì— ì•ˆë‚´ì„ (~W)";
+        Text[ korean ] = "ì´ë™ì‹œ ì•ˆë‚´ì„ (~W)";
         Text[ chinese_simplified ] = "ç§»åŠ¨æ—¶æ˜¾ç¤ºè¾…åŠ©çº¿(~W)";
         Text[ chinese_traditional ] = "ç§»å‹•æ™‚é¡¯ç¤ºè¼”åŠ©ç·š(~W)";
         Text[ turkish ] = "Guides while moving";
@@ -1466,7 +1466,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese ] = "~Indicador de anotações" ;
         Text [ finnish ] = "Huomautusilmaisin" ;
         Text [ danish ] = "Note~indikator" ;
-        Text [ french ] = "Indicateur de ~notes" ;
+        Text [ french ] = "Indicateur de ~note" ;
         Text [ swedish ] = "Ante~ckningsmarkör" ;
         Text [ dutch ] = "Aantekeningenwij~zer" ;
         Text [ spanish ] = "I~ndicador de notas" ;
@@ -1655,7 +1655,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_traditional ] = "ç‰©ä»¶åŠåœ–å½¢(~J)";
         Text[ arabic ] = "ßÇÆäÇÊ/ÕæÑ";
         Text[ greek ] = "Áíôéêåßìåíá/~ÃñáöéêÜ";
-        Text[ korean ] = "ëŒ€ìƒ/ê·¸ë˜í”½(~J)";
+        Text[ korean ] = "ê°œì²´/ê·¸ë¦¼(~J)";
         Text[ turkish ] = "~Nesne/grafik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ob~jectes/Gràfics";
@@ -1795,7 +1795,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_traditional ] = "æ¬„æ¨™é¡Œå’Œåˆ—æ¨™é¡Œ(~M)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÓØÑ æÇáÃÚãÏÉ";
         Text[ greek ] = "~Êåöáëßäåò ãñáììşí/óôçëşí";
-        Text[ korean ] = "í–‰ê³¼ ì—´ ë¨¸ë¦¬ê¸€(~M)";
+        Text[ korean ] = "í–‰ ë¨¸ë¦¬ê¸€/ì—´ ë¨¸ë¦¬ê¸€(~M)";
         Text[ turkish ] = "Sa~tır ve sütun başlıkları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Capçaleres de colu~mnes/files";
@@ -1825,7 +1825,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_traditional ] = "æ°´å¹³å¼æ²è»¸(~Z)";
         Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÃİŞíÇğ";
         Text[ greek ] = "Ïñéæüíôéá ãñáììŞ êıëéó~çò";
-        Text[ korean ] = "ìˆ˜í‰ ìŠ¤í¬ë¡¤(~Z)";
+        Text[ korean ] = "ìˆ˜í‰ ìŠ¤í¬ë¡¤ ë§‰ëŒ€(~Z)";
         Text[ turkish ] = "~Yatay kaydırma çubuğu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Barra de desplaçament horit~zontal";
@@ -1855,7 +1855,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_traditional ] = "å‚ç›´å¼æ²è»¸(~V)";
         Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
         Text[ greek ] = "Êáôáêüñõöç ãñáììŞ êı~ëéóçò";
-        Text[ korean ] = "ìˆ˜ì§ ìŠ¤í¬ë¡¤(~V)";
+        Text[ korean ] = "ìˆ˜ì§ ìŠ¤í¬ë¡¤ ë§‰ëŒ€(~V)";
         Text[ turkish ] = "~Dikey kaydırma çubuğu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Barra de desplaçament ~vertical";
@@ -1915,7 +1915,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_traditional ] = "å¤§ç¶±åœ–ç¤º(~O)";
         Text[ arabic ] = "ÑãæÒ ÇáÊŞÓíã";
         Text[ greek ] = "Óıìâïëá äéÜñèñùóçò";
-        Text[ korean ] = "ì•„ì›ƒíŠ¸ë¼ì¸ ê¸°í˜¸(~O)";
+        Text[ korean ] = "ê°œìš” ê¸°í˜¸(~O)";
         Text[ turkish ] = "A~nahat simgesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Símbols del c~ontorn";
@@ -2322,7 +2322,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ polish ] = "Tabulator";
         Text[ portuguese_brazilian ] = "Tab stops";
         Text[ japanese ] = "ã‚¿ãƒ–é–“éš”(~T)";
-        Text[ korean ] = "íƒ­(~T)";
+        Text[ korean ] = "íƒ­ ê°„ê²©(~T)";
         Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦(~T)";
         Text[ chinese_traditional ] = "å®šä½éµ(~T)";
         Text[ turkish ] = "Tab stops";
@@ -2487,7 +2487,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ spanish ] = "~Nunca";
         Text[ english_us ] = "~Never";
         Text[ chinese_simplified ] = "æ°¸è¿œä¸(~N)";
-        Text[ russian ] = "Íèêîãäà";
+        Text[ russian ] = "Íè~êîãäà";
         Text[ polish ] = "Nigdy";
         Text[ japanese ] = "ã—ãªã„(~N)";
         Text[ chinese_traditional ] = "æ°¸ä¸(~N)";
@@ -2692,7 +2692,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     StringList [ korean ] =
     {
-            < "ì•„ë˜" ; Default ; > ;
+            < "ì•„ë˜ë¡œ" ; Default ; > ;
         < "ì˜¤ë¥¸ìª½" ; Default ; > ;
         < "ìœ„" ; Default ; > ;
         < "ì™¼ìª½" ; Default ; > ;
@@ -2772,20 +2772,20 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ swedish ] = "Utöka ~formatering" ;
         Text [ danish ] = "~Udvid formatering" ;
         Text [ italian ] = "~Espandi formattazione" ;
-        Text [ spanish ] = "Extender ~formato" ;
+        Text [ spanish ] = "Expandir ~formato" ;
         Text [ french ] = "Expansion du ~formatage" ;
         Text [ dutch ] = "~Opmaakbereik uitbreiden" ;
         Text [ portuguese_brazilian ] = "Formatierung ausdehnen" ;
         Text [ portuguese ] = "Expandir ~formatação" ;
         Text[ chinese_simplified ] = "å¥—ç”¨å‰ä¸€ä¸ªå•å…ƒæ ¼æ ¼å¼(~F)";
-        Text[ russian ] = "Ğàñòÿíóòü ôîğìàòèğîâàíèå";
+        Text[ russian ] = "Ğàñòÿíóòü ~ôîğìàòèğîâàíèå";
         Text[ polish ] = "Rozszerz formatowanie";
         Text[ japanese ] = "æ›¸å¼ã®æ‹¡å¼µ(~F)";
         Text[ chinese_traditional ] = "æ¡ç”¨å‰ä¸€å€‹å„²å­˜æ ¼çš„æ ¼å¼(~F)";
         Text[ arabic ] = "ÊæÓíÚ ÇáÊäÓíŞ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Åğİêô~áóç ôçò ìïñöïğïßçóçò";
-        Text[ korean ] = "ì„œì‹ ì—°ì¥(~F)";
+        Text[ korean ] = "ì„œì‹ í™•ì¥(~F)";
         Text[ turkish ] = "~Formatlamayı genişlet";
         Text[ finnish ] = "Laajenna m~uotoilua";
         Text[ catalan ] = "Expandeix el ~formatatge";
@@ -2813,7 +2813,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ chinese_traditional ] = "æ“´å±•é¡¯ç¤ºæ’å…¥çš„åˆ—æ¬„åƒç…§(~R)";
         Text[ arabic ] = "ÊæÓíÚ ÇáãÑÇÌÚ ÚäÏ ÅÏÑÇÌ ÃÚãÏÉ Ãæ Õİæİ";
         Text[ greek ] = "Åğİêôáóç ôùí áíáöï~ñşí êáôÜ ôçí åéóáãùãŞ ôùí óôçëşí/ãñáììşí";
-        Text[ korean ] = "í–‰ê³¼ ì—´ ì‚½ì…ì‹œ í…Œë‘ë¦¬ë¡œ ì°¸ì¡° í™•ì¥(~R)";
+        Text[ korean ] = "í–‰ê³¼ ì—´ì„ ì‚½ì…í•  ë•Œ í…Œë‘ë¦¬ë¡œ ì°¸ì¡°ë¥¼ í™•ì¥(~R)";
         Text[ turkish ] = "Yeni sütun/satır eklendiğinde refera~nsları kenarlardan genişlet";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Laajenna ~viitteitä, jos uusia rivejä tai sarakkeita lisätään";
@@ -2869,7 +2869,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ polish ] = "Do sformatowania tekstu u¿yj parametrów drukarki";
         Text[ portuguese_brazilian ] = "Use printer metrics for text formatting";
         Text[ japanese ] = "æ–‡æ›¸æ›¸å¼è¨­å®šã®å°åˆ·ç¯„å›²ã‚’ä½¿ç”¨";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ ì„œì‹ ì§€ì •ì—ì„œ í”„ë¦°í„° ë©”íŠ¸ë¦­ ì‚¬ìš©";
+        Text[ korean ] = "ë¬¸ì„œ ì„œì‹ ì„¤ì •ì—ì„œ í”„ë¦°í„° ë©”íŠ¸ë¦­ ì‚¬ìš©";
         Text[ chinese_simplified ] = "æ–‡å­—æ ¼å¼åŒ–é‡‡ç”¨æ‰“å°ç‰ˆå¼";
         Text[ chinese_traditional ] = "æ–‡å­—æ ¼å¼åŒ–æ¡ç”¨åˆ—å°ç‰ˆå¼";
         Text[ turkish ] = "Use printer metrics for text formatting";
@@ -2896,7 +2896,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ swedish ] = "Visa ~varning för att skriva över när data klistras in";
         Text[ polish ] = "Show overwrite ~warning when pasting data";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚’æŒ¿å…¥ã™ã‚‹éš›ã€ãƒ‡ãƒ¼ã‚¿ä¸Šæ›¸ãã®ç¢ºèªã‚’ã™ã‚‹";
-        Text[ korean ] = "ë°ì´í„°ë¥¼ ë¶™ì—¬ë„£ì„ ë•Œ ê²¹ì³ì“°ê¸° ê²½ê³  í‘œì‹œ";
+        Text[ korean ] = "ë°ì´í„°ë¥¼ ë¶™ì—¬ë„£ê¸°í•  ë•Œ ê²¹ì³ì“°ê¸° ê²½ê³  í‘œì‹œ";
         Text[ chinese_simplified ] = "ç²˜è´´æ•°æ®æ—¶æ˜¾ç¤ºæ”¹å†™è­¦å‘Š";
         Text[ chinese_traditional ] = "è²¼ä¸Šè³‡æ–™æ™‚é¡¯ç¤ºè¦†å¯«è­¦å‘Š";
         Text[ turkish ] = "Show overwrite ~warning when pasting data";
@@ -2953,7 +2953,7 @@ TabPage RID_SCPAGE_PRINT
         Text [ ENGLISH ] = "~Suppress output of empty pages" ;
         Text[ english_us ] = "~Suppress output of empty pages";
         Text[ portuguese ] = "~Não imprimir páginas vazias";
-        Text[ russian ] = "~Ïîäàâëÿòü âûâîä ïóñòûõ ñòğàíèö";
+        Text[ russian ] = "Ïî~äàâëÿòü âûâîä ïóñòûõ ñòğàíèö";
         Text[ greek ] = "~Suppress output of empty pages";
         Text[ dutch ] = "~Weergave van lege pagina's onderdrukken";
         Text[ french ] = "Ignorer les pages vides pour l'impression";
@@ -2965,7 +2965,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ polish ] = "~Nie drukuj pustych stron";
         Text[ portuguese_brazilian ] = "~Suppress output of empty pages";
         Text[ japanese ] = "ç©ºç™½ã®ãƒšãƒ¼ã‚¸ã‚’å‡ºåŠ›ã—ãªã„(~S)";
-        Text[ korean ] = "ë¹ˆ í˜ì´ì§€ ì¶œë ¥ ì•ˆí•¨(~S)";
+        Text[ korean ] = "ë¹ˆ í˜ì´ì§€ëŠ” ì¶œë ¥í•˜ì§€ ì•ŠìŒ(~S)";
         Text[ chinese_simplified ] = "ä¸æ‰“å°ç©ºç™½é¡µé¢(~S)";
         Text[ chinese_traditional ] = "ä¸åˆ—å°ç©ºç™½é é¢(~S)";
         Text[ turkish ] = "~Suppress output of empty pages";
@@ -3030,6 +3030,11 @@ TabPage RID_SCPAGE_PRINT
         Text[ thai ] = "~à¸à¸´à¸¡à¸à¹Œà¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
     };
 };
+
+
+
+
+
 
 
 

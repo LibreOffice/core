@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:53:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "條件 ~1";
         Text[ arabic ] = "����� 1";
         Text[ greek ] = "������� ~1";
-        Text[ korean ] = "전제 조건 1";
+        Text[ korean ] = "조건 1";
         Text[ turkish ] = "Ko�ul 1";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condici� 1";
@@ -431,10 +431,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "미만" ; Default ; > ;
         < "초과" ; Default ; > ;
         < "이하" ; Default ; > ;
-        < "이상" ; Default ; > ;
+        < "다음 값 이상" ; Default ; > ;
         < "지정한 조건과 다름" ; Default ; > ;
         < "다음 사이임" ; Default ; > ;
-        < "다음 사이가 아님" ; Default ; > ;
+        < "다음 값 사이에 없음" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -553,7 +553,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "和";
         Text[ arabic ] = "�";
         Text[ greek ] = "���";
-        Text[ korean ] = "와";
+        Text[ korean ] = "및";
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "i";
@@ -665,7 +665,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "條件 ~2";
         Text[ arabic ] = "����� 2";
         Text[ greek ] = "������� ~2";
-        Text[ korean ] = "전제 조건 2";
+        Text[ korean ] = "조건 2";
         Text[ turkish ] = "Ko�ul 2";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condici� 2";
@@ -1002,10 +1002,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "미만" ; Default ; > ;
         < "초과" ; Default ; > ;
         < "이하" ; Default ; > ;
-        < "크거나 지정한 조건과 같음" ; Default ; > ;
+        < "다음 값 이상" ; Default ; > ;
         < "지정한 조건과 다름" ; Default ; > ;
         < "다음 날짜 사이" ; Default ; > ;
-        < "지정한 값 이외" ; Default ; > ;
+        < "다음 값 사이에 없음" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1124,7 +1124,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "和";
         Text[ arabic ] = "�";
         Text[ greek ] = "���";
-        Text[ korean ] = "와";
+        Text[ korean ] = "및";
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "i";
@@ -1236,7 +1236,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "條件 ~3";
         Text[ arabic ] = "����� 3";
         Text[ greek ] = "������� ~3";
-        Text[ korean ] = "전제 조건 3";
+        Text[ korean ] = "조건 3";
         Text[ turkish ] = "Ko�ul 3";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condici� 3";
@@ -1573,10 +1573,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "미만" ; Default ; > ;
         < "초과" ; Default ; > ;
         < "이하" ; Default ; > ;
-        < "크거나 지정한 조건과 같음" ; Default ; > ;
+        < "다음 값 이상" ; Default ; > ;
         < "지정한 조건과 다름" ; Default ; > ;
         < "다음 날짜 사이" ; Default ; > ;
-        < "지정한 범위 이외" ; Default ; > ;
+        < "다음 값 사이에 없음" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1695,7 +1695,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "和";
         Text[ arabic ] = "�";
         Text[ greek ] = "���";
-        Text[ korean ] = "와";
+        Text[ korean ] = "및";
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "i";
@@ -1800,7 +1800,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Text [ english_us ] = "Conditional Formatting" ;
     Text [ italian ] = "Formattazione condizionata" ;
-    Text [ spanish ] = "Formateado condicionado" ;
+    Text [ spanish ] = "Formateado condicional" ;
     Text [ french ] = "Formatage conditionnel" ;
     Text [ dutch ] = "Conditionele opmaak" ;
     Text [ swedish ] = "Villkorlig formatering" ;
@@ -1814,13 +1814,18 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ chinese_traditional ] = "有條件的格式";
     Text[ arabic ] = "����� �����";
     Text[ greek ] = "����������� ��� �����";
-    Text[ korean ] = "조건적 서식 지정";
+    Text[ korean ] = "조건부 서식";
     Text[ turkish ] = "Ko�ullu formatlama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formatatge condicional";
     Text[ finnish ] = "Ehdollinen muotoilu";
     Text[ thai ] = "จัดรูปแบบเงื่อนไข";
 };
+
+
+
+
+
 
 
 

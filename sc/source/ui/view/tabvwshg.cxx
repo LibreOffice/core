@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-02 14:28:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@ using namespace com::sun::star;
 #include "document.hxx"
 #include "drawview.hxx"
 #include "globstr.hrc"
+#ifndef _SV_SOUND_HXX
+#include <vcl/sound.hxx>
+#endif
 
 //------------------------------------------------------------------------
 
@@ -134,9 +137,13 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     form::FormButtonType eButtonType = form::FormButtonType_URL;
     aAny <<= eButtonType;
     xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "ButtonType" ), aAny );
-    // #105638# OJ
-    aAny <<= sal_True;
-    xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aAny );
+
+    if ( Sound::IsSoundFile( rURL ) )
+    {
+        // #105638# OJ
+        aAny <<= sal_True;
+        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aAny );
+    }
 
     Point aPos;
     if (pInsPos)

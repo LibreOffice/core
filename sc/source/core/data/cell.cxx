@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:18:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,7 +918,7 @@ void ScFormulaCell::Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 
     rHdr.StartEntry();
 
-    if ( bIsValue && !pCode->GetError() && !SOMA_FINITE( nErgValue ) )
+    if ( bIsValue && !pCode->GetError() && !::rtl::math::isFinite( nErgValue ) )
     {
         DBG_ERRORFILE( msgDbgInfinity );
         pCode->SetError( errIllegalFPOperation );
@@ -1187,7 +1187,7 @@ void ScFormulaCell::CalcAfterLoad()
     // gespeichert werden, woraufhin spaeter im NumberFormatter die BLC Lib
     // bei einem fabs(-NAN) abstuerzt (#32739#)
     // hier fuer alle Systeme ausbuegeln, damit da auch Err503 steht
-    if ( bIsValue && !SOMA_FINITE( nErgValue ) )
+    if ( bIsValue && !::rtl::math::isFinite( nErgValue ) )
     {
         DBG_ERRORFILE("Formelzelle INFINITY !!! Woher kommt das Dokument?");
         nErgValue = 0.0;
@@ -1456,7 +1456,7 @@ void ScFormulaCell::Interpret()
           && !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 #ifndef PRODUCT
-        if ( bIsValue && !pCode->GetError() && !SOMA_FINITE( nErgValue ) )
+        if ( bIsValue && !pCode->GetError() && !::rtl::math::isFinite( nErgValue ) )
         {
             DBG_ERRORFILE( msgDbgInfinity );
             nErgValue = 0.0;
@@ -1515,7 +1515,11 @@ void __EXPORT ScFormulaCell::SFX_NOTIFY( SfxBroadcaster& rBC,
             if ( p->GetId() & SC_HINT_TABLEOPDIRTY )
             {
                 bForceTrack = !bTableOpDirty;
-                bTableOpDirty = TRUE;
+                if ( !bTableOpDirty )
+                {
+                    pDocument->AddTableOpFormulaCell( this );
+                    bTableOpDirty = TRUE;
+                }
             }
             else
             {
@@ -1570,7 +1574,11 @@ void ScFormulaCell::SetTableOpDirty()
         {
             if ( !bTableOpDirty || !pDocument->IsInFormulaTree( this ) )
             {
-                bTableOpDirty = TRUE;
+                if ( !bTableOpDirty )
+                {
+                    pDocument->AddTableOpFormulaCell( this );
+                    bTableOpDirty = TRUE;
+                }
                 pDocument->AppendToFormulaTrack( this );
                 pDocument->TrackFormulas( SC_HINT_TABLEOPDIRTY );
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 18:28:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

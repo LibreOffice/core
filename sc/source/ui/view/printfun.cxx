@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-10 17:25:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <svx/adjitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
 #include <svx/fmview.hxx>
 #include <svx/lrspitem.hxx>
@@ -1171,7 +1171,45 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                         //  is duplicated into a bigger one for better performance)
 
                         GraphicObject aObject( *pGraphic );
-                        aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0) );
+
+                        if( pOut->GetPDFWriter() &&
+                            (aObject.GetType() == GRAPHIC_BITMAP || aObject.GetType() == GRAPHIC_DEFAULT) )
+                        {
+                            // #104004# For PDF export, every draw
+                            // operation for bitmaps takes a noticeable
+                            // amount of place (~50 characters). Thus,
+                            // optimize between tile bitmap size and
+                            // number of drawing operations here.
+                            //
+                            //                  A_out
+                            // n_chars = k1 *  ---------- + k2 * A_bitmap
+                            //                  A_bitmap
+                            //
+                            // minimum n_chars is obtained for (derive for
+                            // A_bitmap, set to 0, take positive
+                            // solution):
+                            //                   k1
+                            // A_bitmap = Sqrt( ---- A_out )
+                            //                   k2
+                            //
+                            // where k1 is the number of chars per draw
+                            // operation, and k2 is the number of chars
+                            // per bitmap pixel. This is approximately 50
+                            // and 7 for current PDF writer, respectively.
+                            //
+                            const double    k1( 50 );
+                            const double    k2( 7 );
+                            const Size      aSize( rOrg.GetSize() );
+                            const double    Abitmap( k1/k2 * aSize.Width()*aSize.Height() );
+
+                            aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0),
+                                               NULL, GRFMGR_DRAW_STANDARD,
+                                               ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
+                        }
+                        else
+                        {
+                            aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0) );
+                        }
 
                         bDraw = FALSE;
 //                      bRetouche = FALSE;
@@ -1264,7 +1302,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if ( pShadow && pShadow->GetLocation() != SVX_SHADOW_NONE )
     {
         if ( bCellContrast )
-            pDev->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+            pDev->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
         else
             pDev->SetFillColor(pShadow->GetColor());
         pDev->SetLineColor();
@@ -1557,16 +1595,20 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
 
     Color aGridColor( COL_BLACK );
     if ( bUseStyleColor )
-        aGridColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+        aGridColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
     aOutputData.SetGridColor( aGridColor );
 
-    if ( !pPrinter && !bIsRender )      // when rendering (PDF), don't use printer
+    if ( !pPrinter )
     {
         OutputDevice* pRefDev = pDoc->GetPrinter();     // auch fuer Preview den Drucker nehmen
         Fraction aPrintFrac( nZoom, 100 );              // ohne nManualZoom
         //  MapMode, wie er beim Drucken herauskommen wuerde:
         pRefDev->SetMapMode( MapMode( MAP_100TH_MM, Point(), aPrintFrac, aPrintFrac ) );
-        aOutputData.SetRefDevice( pRefDev );
+
+        //  when rendering (PDF), don't use printer as ref device, but printer's MapMode
+        //  has to be set anyway, as charts still use it (#106409#)
+        if ( !bIsRender )
+            aOutputData.SetRefDevice( pRefDev );
     }
 
 //  aOutputData.SetMetaFileMode(TRUE);
@@ -1925,7 +1967,7 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 
         Color aBackgroundColor( COL_WHITE );
         if ( bUseStyleColor )
-            aBackgroundColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+            aBackgroundColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
 
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor();
@@ -1988,7 +2030,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
 
         Color aBackgroundColor( COL_WHITE );
         if ( bUseStyleColor )
-            aBackgroundColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+            aBackgroundColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
 
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor();
@@ -2207,7 +2249,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
 
     Color aGridColor( COL_BLACK );
     if ( bUseStyleColor )
-        aGridColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+        aGridColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
     if (aTableParam.bHeaders)
     {
@@ -2484,7 +2526,7 @@ void ScPrintFunc::InitModes()               // aus nZoom etc. die MapModes setze
     Fraction aZoomFract( nEffZoom,10000 );
     Fraction aHorFract = aZoomFract;
 
-    if (!pPrinter)                                          // Massstab anpassen fuer Preview
+    if ( !pPrinter && !bIsRender )                          // adjust scale for preview
     {
         double nFact = pDocShell->GetOutputFactor();
         aHorFract = Fraction( (long)( nEffZoom / nFact ), 10000 );
@@ -2510,26 +2552,19 @@ void ScPrintFunc::ApplyPrintSettings()
         //
 
         Size aEnumSize = aPageSize;
-        if ( bLandscape )
-        {
-            long nTemp = aEnumSize.Width();
-            aEnumSize.Width() = aEnumSize.Height();
-            aEnumSize.Height() = nTemp;
-        }
-        Paper ePaper = SvxPaperInfo::GetSvPaper( aEnumSize, MAP_TWIP, TRUE );
         USHORT nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
-        pPrinter->SetPaper( ePaper );
-        if ( PAPER_USER == ePaper )
-        {
-            MapMode aPrinterMode = pPrinter->GetMapMode();
-            MapMode aLocalMode( MAP_TWIP );
-            pPrinter->SetMapMode( aLocalMode );
-            pPrinter->SetPaperSizeUser( aEnumSize );
-            pPrinter->SetMapMode( aPrinterMode );
-        }
-        pPrinter->SetPaperBin( nPaperBin );
         pPrinter->SetOrientation( bLandscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT );
+
+        MapMode aPrinterMode = pPrinter->GetMapMode();
+        MapMode aLocalMode( MAP_TWIP );
+        pPrinter->SetMapMode( aLocalMode );
+
+        // Let VCL decide which printer paper should be used for printing
+        pPrinter->SetPaperSizeUser( aEnumSize );
+        pPrinter->SetMapMode( aPrinterMode );
+
+        pPrinter->SetPaperBin( nPaperBin );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-26 08:44:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/whiter.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
+#endif
 #include <vcl/msgbox.hxx>
 
 #include "sc.hrc"
@@ -856,6 +859,9 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         return;
     }
 
+    SvtLanguageOptions  aLangOpt;
+    BOOL bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
+    BOOL bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
     SdrView* pView = pViewData->GetScDrawView();
     SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());
@@ -963,12 +969,20 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     else
         bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
 
-    rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
-    rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
+    if ( bDisableVerticalText )
+    {
+        rDestSet.DisableItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
+        rDestSet.DisableItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
+    }
+    else
+    {
+        rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
+        rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
+    }
 
     //  left-to-right or right-to-left
 
-    if ( !bLeftToRight )
+    if ( !bLeftToRight || bDisableCTLFont )
     {
         //  disabled if vertical
         rDestSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );

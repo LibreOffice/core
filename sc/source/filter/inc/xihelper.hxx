@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,8 +168,10 @@ struct XclFontData;
     &N                      page count
     &D                      current date
     &T                      current time
-    &F                      file name without path (converted to full file name)
     &A                      table name
+    &F                      file name without path (see also &Z&F)
+    &Z                      file path without file name (converted to full file name, see also &Z&F)
+    &Z&F                    file path and name
     &U                      underlining on/off
     &E                      double underlining on/off
     &S                      strikeout characters on/off
@@ -179,7 +181,6 @@ struct XclFontData;
     &fontheight             set font height in points ('fontheight' is a decimal value)
 
     Known but unsupported control sequences:
-    &Z                      file path without file name
     &G                      picture
  */
 class XclImpHFConverter : protected XclImpRoot, ScfNoCopy

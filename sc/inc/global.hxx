@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2002-11-12 18:28:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,7 @@ inline BOOL ValidColRowTab(USHORT nCol, USHORT nRow, USHORT nTab)
 #define HASATTR_CONDITIONAL     512
 #define HASATTR_ROTATE          1024
 #define HASATTR_NOTOVERLAPPED   2048
+#define HASATTR_RTL             4096
 
 #define HASATTR_PAINTEXT        ( HASATTR_LINES | HASATTR_SHADOW | HASATTR_CONDITIONAL )
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-04 15:39:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -127,7 +130,7 @@ ScAccessibleContextBase::ScAccessibleContextBase(
     ScAccessibleContextBaseWeakImpl(m_aMutex),
     maRole(aRole),
     mxParent(rxParent),
-    mpEventListeners(NULL)
+    mnClientId(0)
 {
     DBG_CTOR(ScAccessibleContextBase, NULL);
 }
@@ -169,15 +172,11 @@ void SAL_CALL ScAccessibleContextBase::disposing()
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xOwnContext(this);
 
-    if (mpEventListeners)
+    if ( mnClientId )
     {
-        lang::EventObject aEvent;
-        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-        if (mpEventListeners)
-        {
-            mpEventListeners->disposeAndClear(aEvent);
-            DELETEZ( mpEventListeners );
-        }
+        sal_Int32 nTemClientId(mnClientId);
+        mnClientId =  0;
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nTemClientId, *this );
     }
 
     if (mxParent.is())
@@ -496,9 +495,9 @@ void SAL_CALL
         IsObjectValid();
         if (!IsDefunc())
         {
-            if (!mpEventListeners)
-                mpEventListeners = new cppu::OInterfaceContainerHelper(m_aMutex);
-            mpEventListeners->addInterface(xListener);
+            if (!mnClientId)
+                mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
+            comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
         }
     }
 }
@@ -511,8 +510,19 @@ void SAL_CALL
     if (xListener.is())
     {
         ScUnoGuard aGuard;
-        if (!IsDefunc() && mpEventListeners)
-            mpEventListeners->removeInterface(xListener);
+        if (!IsDefunc() && mnClientId)
+        {
+            sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
+            if ( !nListenerCount )
+            {
+                // no listeners anymore
+                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+                // and at least to us not firing any events anymore, in case somebody calls
+                // NotifyAccessibleEvent, again
+                comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+                mnClientId = 0;
+            }
+        }
     }
 }
 
@@ -616,38 +626,8 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent) const
 {
-    if (mpEventListeners)
-    {
-        //  Call all listeners.
-        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpEventListeners->getElements();
-        sal_uInt32 nLength(aListeners.getLength());
-        if (nLength)
-        {
-            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
-            if (pInterfaces)
-            {
-                sal_uInt32 i(0);
-                while (i < nLength)
-                {
-                    try
-                    {
-                        while(i < nLength)
-                        {
-                            static_cast< XAccessibleEventListener* >(pInterfaces->get())->notifyEvent(rEvent);
-                            ++pInterfaces;
-                            ++i;
-                        }
-                    }
-                    catch(uno::RuntimeException&)
-                    {
-//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
-                        ++pInterfaces;
-                        ++i;
-                    }
-                }
-            }
-        }
-    }
+    if (mnClientId)
+        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
 }
 
 void ScAccessibleContextBase::ChangeName()

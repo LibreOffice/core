@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:00:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef _SC_BRDCST_HXX
 #include "brdcst.hxx"
+#endif
+
+#ifndef SC_TABOPPARAMS_HXX
+#include "tabopparams.hxx"
 #endif
 
 class KeyEvent;
@@ -407,6 +411,11 @@ private:
 
     Timer               aTrackTimer;
 
+public:
+    ScTabOpList         aTableOpList;                   // list of ScInterpreterTableOpParams currently in use
+    ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
+private:
+
     LanguageType        eLanguage;                      // default language
     LanguageType        eCjkLanguage;                   // default language for asian text
     LanguageType        eCtlLanguage;                   // default language for complex text
@@ -478,6 +487,8 @@ private:
     BOOL                bPastingDrawFromOtherDoc;
 
     BYTE                nInDdeLinkUpdate;   // originating DDE links (stacked bool)
+
+    BOOL                bInUnoBroadcast;
 
     mutable BOOL        bStyleSheetUsageInvalid;
 
@@ -1534,6 +1545,9 @@ public:
                                 if ( nInterpreterTableOpLevel )
                                     nInterpreterTableOpLevel--;
                             }
+                        // add a formula to be remembered for TableOp broadcasts
+    void                AddTableOpFormulaCell( ScFormulaCell* );
+    void                InvalidateLastTableOpParams() { aLastTableOpParams.bValid = FALSE; }
     BOOL                IsInDtorClear() const { return bInDtorClear; }
     void                SetExpandRefs( BOOL bVal ) { bExpandRefs = bVal; }
     BOOL                IsExpandRefs() { return bExpandRefs; }

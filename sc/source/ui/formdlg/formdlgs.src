@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-27 16:34:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,8 +272,8 @@ TabPage RID_SCTAB_FUNCTION
             < "Logique" ; Default ; > ;
             < "Math�matique" ; Default ; > ;
             < "Matrice" ; Default ; > ;
-            < "Statistique" ; Default ; > ;
-            < "Classeur" ; Default ; > ;
+            < "Statistiques" ; Default ; > ;
+            < "Feuille de calcul" ; Default ; > ;
             < "Texte" ; Default ; > ;
             < "Add-in" ; Default ; > ;
              //         < "D�fini par l'utilisateur"; Default; >;
@@ -317,11 +317,11 @@ TabPage RID_SCTAB_FUNCTION
             < "�ltima utilizaci�n" ; Default ; > ;
             < "Todas" ; Default ; > ;
             < "Base de datos" ; Default ; > ;
-            < "Fecha&Hora" ; Default ; > ;
+            < "Fecha y hora" ; Default ; > ;
             < "Finanzas" ; Default ; > ;
             < "Informaci�n" ; Default ; > ;
             < "L�gico" ; Default ; > ;
-            < "Matem�tica" ; Default ; > ;
+            < "Matem�tico" ; Default ; > ;
             < "Matriz" ; Default ; > ;
             < "Estad�stica" ; Default ; > ;
             < "Hoja de c�lculo" ; Default ; > ;
@@ -443,10 +443,10 @@ TabPage RID_SCTAB_FUNCTION
     };
     StringList [ korean ] =
     {
-            < "마지막으로 사용된" ; Default ; > ;
+            < "가장 최근에 사용된 서식" ; Default ; > ;
         < "모두" ; Default ; > ;
         < "데이터베이스" ; Default ; > ;
-        < "날짜&시간" ; Default ; > ;
+        < "날짜 및 시간" ; Default ; > ;
         < "회계" ; Default ; > ;
         < "정보" ; Default ; > ;
         < "논리적" ; Default ; > ;
@@ -455,7 +455,7 @@ TabPage RID_SCTAB_FUNCTION
         < "통계" ; Default ; > ;
         < "스프레드시트" ; Default ; > ;
         < "텍스트" ; Default ; > ;
-        < "추가" ; Default ; > ;
+        < "Add-in" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -872,7 +872,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ swedish ] = "Delresultat" ;
         Text [ danish ] = "Delresultat" ;
         Text [ italian ] = "Subtotale" ;
-        Text [ spanish ] = "Subtotal" ;
+        Text [ spanish ] = "Resultado parcial" ;
         Text [ french ] = "R�sultat partiel" ;
         Text [ dutch ] = "Tussenresultaat" ;
         Text [ portuguese ] = "Resultado de fun��o" ;
@@ -1092,16 +1092,16 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ french ] = "AutoPilote de fonctions" ;
         Text [ swedish ] = "Funktionsautopilot" ;
         Text [ dutch ] = "Functie-AutoPiloot" ;
-        Text [ spanish ] = "AutoPiloto de funciones" ;
+        Text [ spanish ] = "Piloto autom�tico de funciones" ;
         Text [ english_us ] = "AutoPilot: Functions" ;
-        Text[ chinese_simplified ] = "函数自动助理";
+        Text[ chinese_simplified ] = "自动文件助理：函数";
         Text[ russian ] = "������: �������";
         Text[ polish ] = "AutoPilot funkcji";
         Text[ japanese ] = "関数オートパイロット";
         Text[ chinese_traditional ] = "函數自動助理";
         Text[ arabic ] = "������ ����� �������";
         Text[ greek ] = "AutoPilot ����������";
-        Text[ korean ] = "자동 파일럿 기능";
+        Text[ korean ] = "자동 파일럿: 기능";
         Text[ turkish ] = "Fonksiyon oto pilotu";
         Text[ catalan ] = "AutoPilot: Funcions";
         Text[ thai ] = "ฟังก์ชั่นนำร่องอัตโนมัติ";
@@ -1119,9 +1119,9 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ french ] = "AutoPilote de fonctions -" ;
         Text [ swedish ] = "Funktionsautopilot  -  " ;
         Text [ dutch ] = "Functie-AutoPiloot -" ;
-        Text [ spanish ] = "AutoPiloto de funciones  - " ;
+        Text [ spanish ] = "Piloto autom�tico: Funciones  - " ;
         Text [ english_us ] = "AutoPilot: Functions  -" ;
-        Text[ chinese_simplified ] = "函数自动助理  -";
+        Text[ chinese_simplified ] = "自动文件助理：函数 -";
         Text[ russian ] = "������: �������  -";
         Text[ polish ] = "AutoPilot funkcji  -";
         Text[ japanese ] = "関数オートパイロット-";
@@ -1134,4 +1134,9 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ thai ] = "ฟังก์ชั่นนำร่องอัตโนมัติ  -";
     };
 };
+
+
+
+
+
 

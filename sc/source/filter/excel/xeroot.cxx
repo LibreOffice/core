@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include "xecontent.hxx"
 #endif
 
+#include <patattr.hxx>
 
 // Global data ================================================================
 
@@ -101,11 +102,12 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     XclRoot( rExpRootData ),
     mrExpData( rExpRootData )
 {
-    mrExpData.mpPalette.reset( new XclExpPalette( *this ) );
-    mrExpData.mpFontBuffer.reset( new XclExpFontBuffer( *this ) );
-    mrExpData.mpNumFmtBuffer.reset( new XclExpNumFmtBuffer( *this ) );
+    mrExpData.mpPalette.reset( new XclExpPalette( GetRoot() ) );
+    mrExpData.mpFontBuffer.reset( new XclExpFontBuffer( GetRoot() ) );
+    mrExpData.mpNumFmtBuffer.reset( new XclExpNumFmtBuffer( GetRoot() ) );
+    mrExpData.mpXFBuffer.reset( new XclExpXFBuffer( GetRoot() ) );
     mrExpData.mpTabIdBuffer.reset( new XclExpTabIdBuffer( GetDoc() ) );
-    mrExpData.mpLinkManager.reset( new XclExpLinkManager( *this ) );
+    mrExpData.mpLinkManager.reset( new XclExpLinkManager( GetRoot() ) );
 }
 
 XclExpRoot::XclExpRoot( const XclExpRoot& rRoot ) :
@@ -123,9 +125,9 @@ XclExpRoot& XclExpRoot::operator=( const XclExpRoot& rRoot )
 void XclExpRoot::SetBiff( XclBiff eBiff )
 {
     XclRoot::SetBiff( eBiff );
-    GetPalette().SetBiff( eBiff );
-    GetFontBuffer().SetBiff( eBiff );
-    GetNumFmtBuffer().SetBiff( eBiff );
+    GetPalette().OnChangeBiff();
+    GetFontBuffer().OnChangeBiff();
+    GetNumFmtBuffer().OnChangeBiff();
 }
 
 XclExpSst& XclExpRoot::GetSst() const
@@ -148,6 +150,11 @@ XclExpFontBuffer& XclExpRoot::GetFontBuffer() const
 XclExpNumFmtBuffer& XclExpRoot::GetNumFmtBuffer() const
 {
     return *mrExpData.mpNumFmtBuffer;
+}
+
+XclExpXFBuffer& XclExpRoot::GetXFBuffer() const
+{
+    return *mrExpData.mpXFBuffer;
 }
 
 XclExpTabIdBuffer& XclExpRoot::GetTabIdBuffer() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-18 13:59:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,15 @@ private:
     ScViewData&                 mrViewData;         /// View data containing the document.
     ScSplitPos                  meWhich;            /// Which area in split window.
     bool                        mbHoriz;            /// true = Horizontal orientation.
+    bool                        mbAppRTL;           /// true = Application in RTL display mode.
+    bool                        mbMirrorHdr;        /// true = Header at end of the window (bottom or right).
 
     ImageList*                  mpSymbols;          /// Symbols for buttons.
     Color                       maLineColor;        /// Line color for expanded groups.
-    sal_Int32                   mnHeaderSize;       /// Width or height of header area.
+    sal_Int32                   mnHeaderSize;       /// Size of the header area in entry direction.
+    sal_Int32                   mnHeaderPos;        /// Position of the header area in entry direction.
+    sal_Int32                   mnMainFirstPos;     /// First position of main area in entry direction.
+    sal_Int32                   mnMainLastPos;      /// Last position of main area in entry direction.
 
     sal_uInt16                  mnMTLevel;          /// Mouse tracking: Level of active button.
     sal_uInt16                  mnMTEntry;          /// Mouse tracking: Entry index of active button.
@@ -194,12 +199,23 @@ private:
     /** Collapses the specified entry (does nothing with header entries). */
     void                        DoCollapse( sal_uInt16 nLevel, sal_uInt16 nEntry ) const;
 
+    /** Returns true, if the focused button is visible in the window. */
+    bool                        IsFocusButtonVisible() const;
+
     /** Calculates index of next/previous focus button in the current level (no paint).
+        @param bFindVisible  true = repeats until a visible button has been found.
         @return  true = focus wrapped from end to start or vice versa. */
-    bool                        ImplMoveFocusByEntry( bool bForward );
+    bool                        ImplMoveFocusByEntry( bool bForward, bool bFindVisible );
     /** Calculates position of focus button in next/previous level (no paint).
         @return  true = focus wrapped from end to start or vice versa. */
     bool                        ImplMoveFocusByLevel( bool bForward );
+    /** Calculates position of focus button in tab order.
+        @param bFindVisible  true = repeats until a visible button has been found.
+        @return  true = focus wrapped from end to start or vice versa. */
+    bool                        ImplMoveFocusByTabOrder( bool bForward, bool bFindVisible );
+
+    /** If the focused entry is invisible, tries to move to visible position. */
+    void                        ImplMoveFocusToVisible( bool bForward );
 
     /** Focuses next/previous button in the current level. */
     void                        MoveFocusByEntry( bool bForward );

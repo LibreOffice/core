@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 12:59:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ void ScCsvTableBox::Init()
     mbFixedMode = false;
     mnFixedWidth = 1;
 
+    maHScroll.EnableRTL( false ); // #107812# RTL
     maHScroll.SetLineSize( 1 );
     maVScroll.SetLineSize( 1 );
 
@@ -236,7 +237,7 @@ void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
         if( nPos - CSV_SCROLL_DIST + 1 <= GetFirstVisPos() )
             Execute( CSVCMD_SETPOSOFFSET, nPos - CSV_SCROLL_DIST );
         else if( nPos + CSV_SCROLL_DIST >= GetLastVisPos() )
-            Execute( CSVCMD_SETPOSOFFSET, nPos - GetVisPosCount() + CSV_SCROLL_DIST + 1 );
+            Execute( CSVCMD_SETPOSOFFSET, nPos - GetVisPosCount() + CSV_SCROLL_DIST );
     }
 }
 
@@ -412,8 +413,8 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
         case CSVCMD_SETPOSOFFSET:
             ImplSetPosOffset( nParam1 );
         break;
-        case CSVCMD_SETOFFSETX:
-            maData.mnOffsetX = Max( nParam1, 0L );
+        case CSVCMD_SETHDRWIDTH:
+            maData.mnHdrWidth = Max( nParam1, 0L );
             ImplSetPosOffset( GetFirstVisPos() );
         break;
         case CSVCMD_SETCHARWIDTH:
@@ -427,8 +428,8 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
         case CSVCMD_SETLINEOFFSET:
             ImplSetLineOffset( nParam1 );
         break;
-        case CSVCMD_SETOFFSETY:
-            maData.mnOffsetY = Max( nParam1, 0L );
+        case CSVCMD_SETHDRHEIGHT:
+            maData.mnHdrHeight = Max( nParam1, 0L );
             ImplSetLineOffset( GetFirstVisLine() );
         break;
         case CSVCMD_SETLINEHEIGHT:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:27:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ Menu RID_POPUP_CELLS
             Text[ chinese_traditional ] = "æ¨™æº–(~D)";
             Text[ arabic ] = "ÇİÊÑÇÖí~";
             Text[ greek ] = "~ĞñïåğéëïãŞ";
-            Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
+            Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
             Text[ turkish ] = "~Standart";
             Text[ catalan ] = "Per ~defecte";
             Text[ finnish ] = "~Palauta oletustyyli";
@@ -155,7 +155,7 @@ Menu RID_POPUP_CELLS
             Text[ chinese_traditional ] = "å„²å­˜æ ¼æ ¼å¼åŒ–(~F)...";
             Text[ arabic ] = "...ÊäÓíŞ ÇáÎáÇíÇ";
             Text[ greek ] = "Ìïñöï~ğïßçóç êåëéşí...";
-            Text[ korean ] = "ì…€ ì„œì‹ ì§€ì •(~F)...";
+            Text[ korean ] = "ì…€ ì„œì‹ ì„¤ì •(~F)...";
             Text[ turkish ] = "Hücreleri formatla...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Formata les cel.les...";
@@ -209,7 +209,7 @@ Menu RID_POPUP_CELLS
             Text [ french ] = "Suppr~imer des cellules..." ;
             Text [ swedish ] = "Radera ce~ller..." ;
             Text [ dutch ] = "Cellen ~wissen..." ;
-            Text [ spanish ] = "~Eliminar celdas..." ;
+            Text [ spanish ] = "~Borrar celdas..." ;
             Text [ english_us ] = "De~lete Cells..." ;
             Text[ chinese_simplified ] = "åˆ é™¤å•å…ƒæ ¼(~L)...";
             Text[ russian ] = "Óäàëèòü ÿ÷åéêè...";
@@ -239,7 +239,7 @@ Menu RID_POPUP_CELLS
             Text [ french ] = "Supprimer du ~contenu..." ;
             Text [ swedish ] = "Ra~dera innehåll..." ;
             Text [ dutch ] = "In~houd wissen..." ;
-            Text [ spanish ] = "Eliminar contenidos..." ;
+            Text [ spanish ] = "~Borrar contenido..." ;
             Text [ english_us ] = "Delete C~ontents..." ;
             Text[ chinese_simplified ] = "åˆ é™¤å†…å®¹(~O)...";
             Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
@@ -469,7 +469,7 @@ String RID_POPUP_TAB
     Text[ chinese_traditional ] = "å·¥ä½œè¡¨å·¥å…·åˆ—çš„å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áÔÑíØ ÌÏæá";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ãñáììŞ ğßíáêá";
-    Text[ korean ] = "ì‹œíŠ¸ í‘œì‹œì¤„ íŒì—…ë©”ë‰´";
+    Text[ korean ] = "ì‹œíŠ¸ í‘œì‹œì¤„ íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Tablo çubuğu için popup mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergent de la barra del full";
@@ -525,7 +525,7 @@ Menu RID_POPUP_TAB
             Text [ french ] = "~Supprimer la feuille..." ;
             Text [ swedish ] = "~Radera tabell..." ;
             Text [ dutch ] = "~Wissen..." ;
-            Text [ spanish ] = "Eli~minar hoja..." ;
+            Text [ spanish ] = "~Borrar hoja..." ;
             Text [ english_us ] = "~Delete Sheet..." ;
             Text[ chinese_simplified ] = "åˆ é™¤å·¥ä½œè¡¨(~D)...";
             Text[ russian ] = "Óäàëèòü...";
@@ -582,7 +582,7 @@ Menu RID_POPUP_TAB
             Text [ portuguese ] = "~Mover/Copiar..." ;
             Text [ finnish ] = "~Siirrä/kopioi..." ;
             Text [ danish ] = "Flyt/kopier..." ;
-            Text [ french ] = "~Déplacer/Copier la feuille..." ;
+            Text [ french ] = "~Déplacer/copier la feuille..." ;
             Text [ swedish ] = "~Flytta/kopiera tabell..." ;
             Text [ dutch ] = "~Verplaatsen/kopiëren..." ;
             Text [ spanish ] = "~Desplazar/copiar hoja..." ;
@@ -720,7 +720,7 @@ Menu RID_POPUP_PIVOT
             Text[ chinese_traditional ] = "æ›´æ–°(~R)";
             Text[ arabic ] = "ÊÍÏíË";
             Text[ greek ] = "Å~íçìİñùóç";
-            Text[ korean ] = "ì—…ë°ì´íŠ¸(~R)";
+            Text[ korean ] = "ìƒˆë¡œ ê³ ì¹¨(~R)";
             Text[ turkish ] = "Güncelle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Refresca";
@@ -757,7 +757,7 @@ Menu RID_POPUP_PIVOT
             Text [ french ] = "~Supprimer" ;
             Text [ swedish ] = "~Radera" ;
             Text [ dutch ] = "~Wissen" ;
-            Text [ spanish ] = "~Eliminar" ;
+            Text [ spanish ] = "~Borrar" ;
             Text [ english_us ] = "~Delete" ;
             Text[ chinese_simplified ] = "åˆ é™¤(~D)";
             Text[ russian ] = "Óäàëèòü";
@@ -788,7 +788,7 @@ String RID_POPUP_PREVIEW
     Text [ french ] = "Menu Pop-up pour l'aperçu de page" ;
     Text [ swedish ] = "Popupmeny för sidförhandsvisning" ;
     Text [ dutch ] = "PopUp-menu voor paginavoorbeeld" ;
-    Text [ spanish ] = "Menú para la previsualización" ;
+    Text [ spanish ] = "Menú de la vista preliminar" ;
     Text [ english_us ] = "Page Preview pop-up menu" ;
     Text[ chinese_simplified ] = "é¡µé¢é¢„è§ˆå¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş ïğåäâàğèòåëüíîãî ïğîñìîòğà ñòğàíèöû";
@@ -797,7 +797,7 @@ String RID_POPUP_PREVIEW
     Text[ chinese_traditional ] = "é é¢æª¢è¦–å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áãÚÇíäÉ ÇáÕİÍÉ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ğñïåğéóêüğçóçò óåëßäáò";
-    Text[ korean ] = "í˜ì´ì§€ ë¯¸ë¦¬ë³´ê¸° íŒì—… ë©”ë‰´";
+    Text[ korean ] = "í˜ì´ì§€ ë¯¸ë¦¬ ë³´ê¸° íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Sayfa önizlemesi için popup mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergent de la vista preliminar";
@@ -892,7 +892,7 @@ Menu RID_POPUP_PREVIEW
             Text[ chinese_traditional ] = "é é¢ç‰ˆå¼(~G)...";
             Text[ arabic ] = "ÊÎØíØ ÇáÕİÍÉ...";
             Text[ greek ] = "ÄéÜô~áîç óåëßäáò...";
-            Text[ korean ] = "í˜ì´ì§€ ë ˆì´ì•„ì›ƒ(~G)...";
+            Text[ korean ] = "í˜ì´ì§€ ëª¨ì–‘(~G)...";
             Text[ turkish ] = "Sayfa düzeni...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Disseny de pà~gina...";
@@ -940,18 +940,18 @@ Menu RID_POPUP_PREVIEW
             Text[ russian ] = "Close Pre~view";
             Text[ greek ] = "Close Pre~view";
             Text[ dutch ] = "Close Pre~view";
-            Text[ french ] = "Close Pre~view";
-            Text[ spanish ] = "Close Pre~view";
+            Text[ french ] = "Fermer l'~aperçu";
+            Text[ spanish ] = "Cerrar ~previsualización";
             Text[ finnish ] = "Close Pre~view";
-            Text[ italian ] = "Close Pre~view";
+            Text[ italian ] = "Chiudi anteprima";
             Text[ danish ] = "Close Pre~view";
-            Text[ swedish ] = "Close Pre~view";
+            Text[ swedish ] = "Stäng förh~andsvisning";
             Text[ polish ] = "Close Pre~view";
             Text[ portuguese_brazilian ] = "Close Pre~view";
-            Text[ japanese ] = "Close Pre~view";
-            Text[ korean ] = "Close Pre~view";
-            Text[ chinese_simplified ] = "Close Pre~view";
-            Text[ chinese_traditional ] = "Close Pre~view";
+            Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’é–‰ã˜ã‚‹(~V)";
+            Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸° ë‹«ê¸°";
+            Text[ chinese_simplified ] = "å…³é—­é¢„è§ˆ(~V)";
+            Text[ chinese_traditional ] = "é—œé–‰é è¦½(~V)";
             Text[ turkish ] = "Close Pre~view";
             Text[ arabic ] = "Close Pre~view";
             Text[ catalan ] = "Close Pre~view";
@@ -1015,7 +1015,7 @@ Menu RID_POPUP_EDIT
             Text[ chinese_traditional ] = "æ¨™æº–(~D)";
             Text[ arabic ] = "~ŞíÇÓí";
             Text[ greek ] = "~ĞñïåğéëïãŞ";
-            Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
+            Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
             Text[ turkish ] = "~Standart";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Per ~defecte";
@@ -1142,7 +1142,7 @@ Menu RID_POPUP_EDIT
                         Text[ chinese_traditional ] = "ä¸Šæ¨™(~U)";
                         Text[ arabic ] = "ãÑÊİÚ";
                         Text[ greek ] = "Åêèİô~çò";
-                        Text[ korean ] = "ìœ— ì²¨ì(~U)";
+                        Text[ korean ] = "ìœ„ ì²¨ì(~U)";
                         Text[ turkish ] = "Üst simge";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Superíndex";
@@ -1297,7 +1297,7 @@ Menu RID_POPUP_AUDIT
             Text [ french ] = "~Supprimer le repérage des antécédents" ;
             Text [ swedish ] = "Ta bort spår till öv~erordnade" ;
             Text [ dutch ] = "Spoor naar voorganger v~erwijderen" ;
-            Text [ spanish ] = "~Eliminar rastro a precedente" ;
+            Text [ spanish ] = "~Borrar rastro de precedentes" ;
             Text [ english_us ] = "~Remove Precedent" ;
             Text[ chinese_simplified ] = "åˆ é™¤å‘å‰çš„è¿½è¸ªç®­å¤´(~R)";
             Text[ russian ] = "Óäàëèòü ñòğåëêè ê âëèÿşùèì ÿ÷åéêàì";
@@ -1357,7 +1357,7 @@ Menu RID_POPUP_AUDIT
             Text [ french ] = "S~upprimer le repérage des dépendants" ;
             Text [ swedish ] = "Ta bort spår till un~derordnade" ;
             Text [ dutch ] = "Spoor naar opvolger ve~rwijderen" ;
-            Text [ spanish ] = "~Eliminar rastro a dependiente" ;
+            Text [ spanish ] = "~Borrar rastro a dependiente" ;
             Text [ english_us ] = "Remove Dependent" ;
             Text[ chinese_simplified ] = "åˆ é™¤å‘åçš„è¿½è¸ªç®­å¤´";
             Text[ russian ] = "Óäàëèòü ñòğåëêè ê çàâèñèìûì ÿ÷åéêàì";
@@ -1387,7 +1387,7 @@ Menu RID_POPUP_AUDIT
             Text [ french ] = "Su~pprimer tous les repères" ;
             Text [ swedish ] = "Ta bort ~alla spår" ;
             Text [ dutch ] = "~Alle sporen verwijderen" ;
-            Text [ spanish ] = "Eliminar ~todos los rastros" ;
+            Text [ spanish ] = "Borrar rastro de los d~ependientes" ;
             Text [ english_us ] = "Remove ~All Traces" ;
             Text[ chinese_simplified ] = "åˆ é™¤å…¨éƒ¨çš„è¿½è¸ªç®­å¤´(~A)";
             Text[ russian ] = "Óäàëèòü âñå ñòğåëêè";
@@ -1488,7 +1488,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "æ¨™æº–(~D)";
             Text[ arabic ] = "~ŞíÇÓí";
             Text[ greek ] = "~ĞñïåğéëïãŞ";
-            Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
+            Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
             Text[ turkish ] = "~Standart";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Per ~defecte";
@@ -1522,7 +1522,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "å„²å­˜æ ¼æ ¼å¼åŒ–(~F)...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÎáÇíÇ...";
             Text[ greek ] = "Ìïñöï~ğïßçóç êåëéşí...";
-            Text[ korean ] = "ì…€ ì„œì‹ ì§€ì •(~F)...";
+            Text[ korean ] = "ì…€ ì„œì‹ ì„¤ì •(~F)...";
             Text[ turkish ] = "Hücreleri formatla...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Formata les cel.les...";
@@ -1553,7 +1553,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "æ’å…¥æ›åˆ—(~R)";
             Text[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÓØÑ";
             Text[ greek ] = "~ÅéóáãùãŞ áëëáãŞò ãñáììŞò";
-            Text[ korean ] = "ë‹¨ë½ ì‚½ì…(~R)";
+            Text[ korean ] = "í–‰ ë‚˜ëˆ„ê¸° ì‚½ì…(~R)";
             Text[ turkish ] = "Satır sonu ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insereix un salt de fi~la";
@@ -1582,7 +1582,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "æ’å…¥æ›æ¬„(~C)";
             Text[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÚãÏÉ";
             Text[ greek ] = "ÅéóáãùãŞ áëëáãŞò ó~ôŞëçò";
-            Text[ korean ] = "ì—´ ì‚½ì…(~C)";
+            Text[ korean ] = "ì—´ ë‚˜ëˆ„ê¸° ì‚½ì…(~C)";
             Text[ turkish ] = "Sütun sonu ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insereix un salt de ~columna";
@@ -1600,7 +1600,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ swedish ] = "Radera alla ~manuella brytningar" ;
             Text [ danish ] = "Slet alle manuelle skift" ;
             Text [ italian ] = "Elimina interruzioni manuali" ;
-            Text [ spanish ] = "Eliminar todos los saltos ~manuales" ;
+            Text [ spanish ] = "Borrar todos los saltos ~manuales" ;
             Text [ french ] = "Supprimer tous les sauts ~manuels" ;
             Text [ dutch ] = "Alle handmatige ~einden wissen" ;
             Text [ portuguese ] = "Remover todas as quebras ~manuais" ;
@@ -1640,7 +1640,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "é‡è¨­é¡¯ç¤ºæ¯”ä¾‹";
             Text[ arabic ] = "ÅÒÇáÉ ÇáãŞíÇÓ";
             Text[ greek ] = "ÊáôÜñãçóç ~êëßìáêáò";
-            Text[ korean ] = "ë°°ìœ¨ í•´ì œ";
+            Text[ korean ] = "ì¶•ì†Œ/í™•ëŒ€ ì›ë˜ëŒ€ë¡œ";
             Text[ turkish ] = "Ölçeklendirmeyi kaldır";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Reinicia l'escala";
@@ -1672,7 +1672,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "è¨­å®šåˆ—å°ç¯„åœ";
             Text[ arabic ] = "ÊÚííä äØÇŞ ÇáØÈÇÚÉ";
             Text[ greek ] = "~Ïñéóìüò ğåñéï÷Şò åêôığùóçò";
-            Text[ korean ] = "ì¸ì‡„ ì˜ì—­ ì •ì˜";
+            Text[ korean ] = "ì¸ì‡„ ë²”ìœ„ ì§€ì •";
             Text[ turkish ] = "Yazdırma aralığını tanımla";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Defineix l'àrea d'impressió";
@@ -1701,7 +1701,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "æ–°å¢åˆ—å°ç¯„åœ";
             Text[ arabic ] = "ÅÖÇİÉ äØÇŞ ØÈÇÚÉ";
             Text[ greek ] = "ĞñïóèŞêç ğåñéï~÷Şò åêôığùóçò";
-            Text[ korean ] = "ì¸ì‡„ ì˜ì—­ ì¶”ê°€";
+            Text[ korean ] = "ì¸ì‡„ ë²”ìœ„ ì¶”ê°€";
             Text[ turkish ] = "Yazdırma aralığını ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Afegeix una àrea d'impressió";
@@ -1730,7 +1730,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "é‡è¨­åˆ—å°ç¯„åœ";
             Text[ arabic ] = "ÅáÛÇÁ äØÇŞ ÇáØÈÇÚÉ";
             Text[ greek ] = "Ê~áôÜñãçóç ğåñéï÷Şò åêôığùóçò";
-            Text[ korean ] = "ì¸ì‡„ ì˜ì—­ ì‹¤í–‰ì·¨ì†Œ";
+            Text[ korean ] = "ì¸ì‡„ ë²”ìœ„ ì‹¤í–‰ ì·¨ì†Œ";
             Text[ turkish ] = "Yazdırma aralığını kaldır";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Desfés l'àrea d'impressió";
@@ -1803,5 +1803,10 @@ Menu RID_POPUP_PAGEBREAK
         };
     };
 };
+
+
+
+
+
 
 

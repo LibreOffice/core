@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2002-09-27 17:18:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,7 +1026,7 @@ BOOL ScTokenArray::HasNameOrColRowName() const
     return FALSE;
 }
 
-BOOL ScTokenArray::IsReference( ScRange& rRange ) const
+BOOL ScTokenArray::ImplGetReference( ScRange& rRange, BOOL bValidOnly ) const
 {
     BOOL bIs = FALSE;
     if ( pCode && nLen == 1 )
@@ -1038,7 +1038,7 @@ BOOL ScTokenArray::IsReference( ScRange& rRange ) const
             {
                 const SingleRefData& rRef = ((const ScSingleRefToken*)pToken)->GetSingleRef();
                 rRange.aStart = rRange.aEnd = ScAddress( rRef.nCol, rRef.nRow, rRef.nTab );
-                bIs = TRUE;
+                bIs = !bValidOnly || !rRef.IsDeleted();
             }
             else if ( pToken->GetType() == svDoubleRef )
             {
@@ -1047,11 +1047,21 @@ BOOL ScTokenArray::IsReference( ScRange& rRange ) const
                 const SingleRefData& rRef2 = rCompl.Ref2;
                 rRange.aStart = ScAddress( rRef1.nCol, rRef1.nRow, rRef1.nTab );
                 rRange.aEnd   = ScAddress( rRef2.nCol, rRef2.nRow, rRef2.nTab );
-                bIs = TRUE;
+                bIs = !bValidOnly || (!rRef1.IsDeleted() && !rRef2.IsDeleted());
             }
         }
     }
     return bIs;
+}
+
+BOOL ScTokenArray::IsReference( ScRange& rRange ) const
+{
+    return ImplGetReference( rRange, FALSE );
+}
+
+BOOL ScTokenArray::IsValidReference( ScRange& rRange ) const
+{
+    return ImplGetReference( rRange, TRUE );
 }
 
 inline void lcl_GetAddress( ScAddress& rAddress, const ScToken& rToken )
@@ -1499,7 +1509,7 @@ ScToken* ScTokenArray::Add( ScToken* t )
 {
     if( !pCode )
         pCode = new ScToken*[ MAXCODE ];
-    if( nLen < MAXCODE )
+    if( nLen < MAXCODE-1 )
     {
         pCode[ nLen++ ] = t;
         if( t->GetOpCode() == ocPush
@@ -1511,6 +1521,12 @@ ScToken* ScTokenArray::Add( ScToken* t )
     else
     {
         t->Delete();
+        if ( nLen == MAXCODE-1 )
+        {
+            t = new ScByteToken( ocStop );
+            pCode[ nLen++ ] = t;
+            t->IncRef();
+        }
         return NULL;
     }
 }

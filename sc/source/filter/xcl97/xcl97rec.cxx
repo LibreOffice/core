@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-13 12:06:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,12 @@
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
 #endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
 
-#ifndef _TOOLS_SOLMATH_HXX      // DoubleToString()
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _ZFORMAT_HXX            // SvNumberformat
 #include <svtools/zformat.hxx>
@@ -108,6 +111,9 @@
 #include "xcl97esc.hxx"
 #include "excupn.hxx"
 
+#ifndef SC_FAPIHELPER_HXX
+#include "fapihelper.hxx"
+#endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
 #endif
@@ -144,6 +150,12 @@
 #include "scextopt.hxx"
 #include "docoptio.hxx"
 #include "patattr.hxx"
+
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::drawing::XShape;
+
 
 //___________________________________________________________________
 
@@ -377,14 +389,15 @@ void XclObjList::Save( XclExpStream& rStrm )
 
 // --- class XclObj --------------------------------------------------
 
-XclObj::XclObj( ObjType eType, RootData& rRoot )
+XclObj::XclObj( ObjType eType, RootData& rRoot, bool bOwnEscher )
             :
             pClientTextbox( NULL ),
             pTxo( NULL ),
             eObjType( eType ),
             nObjId(0),
             nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
-            bFirstOnSheet( rRoot.pObjRecs->Count() == 0 )
+            bFirstOnSheet( rRoot.pObjRecs->Count() == 0 ),
+            mbOwnEscher( bOwnEscher )
 {
     //! first object continues the first MSODRAWING record
     if ( bFirstOnSheet )
@@ -493,9 +506,9 @@ ULONG XclObj::GetLen() const
 
 // --- class XclObjComment -------------------------------------------
 
-XclObjComment::XclObjComment( RootData& rRoot, const ScAddress& rPos, const String& rStr )
+XclObjComment::XclObjComment( RootData& rRoot, const ScAddress& rPos, const String& rStr, bool bVisible )
             :
-            XclObj( otComment, rRoot )
+            XclObj( otComment, rRoot, true )
 {
     nGrbit = 0;     // all off: AutoLine, AutoFill, Printable, Locked
     XclEscherEx* pEx = pMsodrawing->GetEscherEx();
@@ -510,7 +523,9 @@ XclObjComment::XclObjComment( RootData& rRoot, const ScAddress& rPos, const Stri
     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );      // bool field
     aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x00000000 );
     aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 );     // bool field
-    aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0002 );              // bool field
+    sal_uInt32 nFlags = 0x000A0000;
+    ::set_flag( nFlags, 2UL, !bVisible );
+    aPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
     XclEscherClientAnchor( rRoot.pDoc, rPos ).WriteData( *pEx );
@@ -576,7 +591,7 @@ ULONG XclObjComment::GetLen() const
 // --- class XclObjDropDown ------------------------------------------
 
 XclObjDropDown::XclObjDropDown( RootData& rRoot, const ScAddress& rPos, BOOL bFilt ) :
-        XclObj( otComboBox, rRoot ),
+        XclObj( otComboBox, rRoot, true ),
         bIsFiltered( bFilt )
 {
     SetLocked( TRUE );
@@ -875,6 +890,106 @@ ULONG XclObjOle::GetLen() const
 }
 
 
+// ----------------------------------------------------------------------------
+
+#if EXC_INCL_EXP_OCX
+
+XclExpObjControl::XclExpObjControl(
+        const XclRoot& rRoot,
+        const Reference< XShape >& rxShape,
+        const String& rClassName,
+        sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
+    XclObj( otPicture, *rRoot.mpRD, true ),
+    maClassName( rClassName ),
+    mnStrmStart( nStrmStart ),
+    mnStrmSize( nStrmSize )
+{
+    SetAutoLine( FALSE );
+
+    XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
+    rEscherEx.OpenContainer( ESCHER_SpContainer );
+    rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE );
+    Rectangle aDummyRect;
+    EscherPropertyContainer aPropOpt( rEscherEx, rEscherEx.QueryPicStream(), aDummyRect );
+    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape,    0x00080008 );   // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_lineColor,         0x08000040 );
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash,   0x00080000 );   // bool field
+
+    Reference< XPropertySet > xShapePS( rxShape, UNO_QUERY );
+    if( xShapePS.is() )
+    {
+        // meta file
+        if( aPropOpt.CreateGraphicProperties( xShapePS, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+        {
+            sal_uInt32 nBlipId;
+            if( aPropOpt.GetOpt( ESCHER_Prop_pib, nBlipId ) )
+                aPropOpt.AddOpt( ESCHER_Prop_pictureId, nBlipId );
+        }
+
+        // name of the control
+        ::rtl::OUString aCtrlName;
+        //! TODO - this does not work - property is empty
+        if( ::getPropValue( aCtrlName, xShapePS, PROPNAME( "Name" ) ) && aCtrlName.getLength() )
+        {
+            XclExpString aCtrlNameEx( aCtrlName, EXC_STR_FORCEUNICODE );
+            sal_uInt32 nBufferSize = aCtrlNameEx.GetBufferSize() + 2;   // plus trailing zero
+            sal_uInt8* pBuffer = new sal_uInt8[ nBufferSize ];
+            aCtrlNameEx.WriteBuffer( pBuffer );
+            pBuffer[ nBufferSize - 2 ] = pBuffer[ nBufferSize - 1 ] = 0;
+            // aPropOpt takes ownership of pBuffer
+            aPropOpt.AddOpt( ESCHER_Prop_wzName, TRUE, nBufferSize, pBuffer, nBufferSize );
+        }
+    }
+
+    aPropOpt.Commit( rEscherEx.GetStream() );
+
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
+        XclEscherClientAnchor( *rRoot.mpRD, *pSdrObj ).WriteData( rEscherEx );
+    rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
+    rEscherEx.CloseContainer();  // ESCHER_SpContainer
+
+    pMsodrawing->UpdateStopPos();
+}
+
+void XclExpObjControl::SaveCont( XclExpStream& rStrm )
+{
+    // ftCmo
+    XclObj::SaveCont( rStrm );
+    // ftCf (clipboard format)
+    rStrm << sal_uInt16( ftCf ) << sal_uInt16( 2 ) << sal_uInt16( 2 );
+    // ftPioGrbit
+    rStrm << sal_uInt16( ftPioGrbit ) << sal_uInt16( 2 ) << sal_uInt16( 0x0031 );
+
+    // ftPictFmla
+    XclExpString aClass( maClassName );
+    sal_uInt16 nClassNameSize = static_cast< sal_uInt16 >( aClass.GetSize() );
+    sal_uInt16 nClassNamePad = nClassNameSize & 1;
+    sal_uInt16 nFirstPartSize = 12 + nClassNameSize + nClassNamePad;
+    sal_uInt16 nPictFmlaSize = nFirstPartSize + 18;
+
+    rStrm   << sal_uInt16( ftPictFmla ) << sal_uInt16( nPictFmlaSize )
+            << sal_uInt16( nFirstPartSize )             // size of first part
+            << sal_uInt16( 5 )                          // formula size
+            << sal_uInt32( 0 )                          // unknown ID
+            << sal_uInt8( 0x02 ) << sal_uInt32( 0 )     // tTbl token with unknown ID
+            << sal_uInt8( 3 )                           // pad to word
+            << aClass;                                  // "Forms.***.1"
+    rStrm.WriteZeroBytes( nClassNamePad );              // pad to word
+    rStrm   << mnStrmStart                              // start in 'Ctls' stream
+            << mnStrmSize                               // size in 'Ctls' stream
+            << sal_uInt32( 0 ) << sal_uInt32( 0 );      // unknown
+
+    // ftEnd
+    rStrm << sal_uInt16( ftEnd ) << sal_uInt16( 0 );
+}
+
+sal_uInt32 XclExpObjControl::GetLen() const
+{
+    return 0;       // calculated by XclExpStream
+}
+
+#endif
+
 // --- class XclObjAny -------------------------------------------
 
 XclObjAny::XclObjAny( RootData& rRoot )
@@ -925,81 +1040,50 @@ ULONG XclObjAny::GetLen() const
 
 
 
-// --- class XclNoteList ----------------------------------------------
+// ----------------------------------------------------------------------------
 
-XclNoteList::XclNoteList()
+XclExpNote::XclExpNote(
+        const XclExpRoot& rRoot, const ScAddress& rPos,
+        const ScPostIt* pScNote, const String& rAddText ) :
+    XclExpRecord( EXC_ID_NOTE ),
+    maPos( rPos ),
+    mnObjId( 0 ),
+    mbVisible( pScNote && pScNote->IsShown() )
 {
-}
+    String aNoteText;
 
-
-XclNoteList::~XclNoteList()
-{
-    for ( XclNote* p = First(); p; p = Next() )
+    // read strings from note object, if present
+    if( pScNote )
     {
-        delete p;
+        aNoteText = pScNote->GetText();
+        maAuthor.Assign( pScNote->GetAuthor() );
     }
-}
 
-
-void XclNoteList::Add( XclNote* pNote )
-{
-    // limitation on 64kB is done in XclObjList,
-    // more notes get no ID and will not save themselfs
-    Insert( pNote, LIST_APPEND );
-}
-
-
-void XclNoteList::Save( XclExpStream& rStrm )
-{
-    for ( XclNote* p = First(); p; p = Next() )
+    // append additional text
+    if( rAddText.Len() )
     {
-        p->Save( rStrm );
+        if( aNoteText.Len() )
+            aNoteText.Append( EXC_NEWLINE ).Append( EXC_NEWLINE );
+        aNoteText.Append( rAddText );
     }
+
+    // create the Escher object
+    mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( *rRoot.mpRD, maPos, aNoteText, mbVisible ) );
+
+    SetRecSize( 9 + maAuthor.GetSize() );
 }
 
-
-
-// --- class XclNote -------------------------------------------------
-
-XclNote::XclNote( RootData& rRoot, const ScAddress& rPos, const String& rNoteText, const String& rNoteAuthor ) :
-    aAuthor( rNoteAuthor ),
-    aPos( rPos ),
-    nGrbit(0)
+void XclExpNote::Save( XclExpStream& rStrm )
 {
-    XclObjComment* pObj = new XclObjComment( rRoot, rPos, rNoteText );
-    nObjId = rRoot.pObjRecs->Add( pObj );
+    if( mnObjId )
+        XclExpRecord::Save( rStrm );
 }
 
-
-XclNote::~XclNote()
+void XclExpNote::WriteBody( XclExpStream& rStrm )
 {
-}
-
-
-void XclNote::SaveCont( XclExpStream& rStrm )
-{
-    rStrm   << (UINT16) aPos.Row() << (UINT16) aPos.Col() << nGrbit << nObjId
-            << aAuthor
-            << UINT8(0);      // pad byte goes here (always)
-}
-
-
-void XclNote::Save( XclExpStream& rStrm )
-{
-    if ( nObjId )
-        ExcRecord::Save( rStrm );
-}
-
-
-UINT16 XclNote::GetNum() const
-{
-    return 0x001C;
-}
-
-
-ULONG XclNote::GetLen() const
-{
-    return nObjId ? 9 + aAuthor.GetSize() : 0;
+    sal_uInt16 nFlags = mbVisible ? EXC_NOTE_VISIBLE : 0;
+    rStrm   << (sal_uInt16) maPos.Row() << (sal_uInt16) maPos.Col()
+            << nFlags << mnObjId << maAuthor << sal_uInt8( 0 );
 }
 
 
@@ -1074,15 +1158,14 @@ ExcLabelSst::ExcLabelSst(
 ExcLabelSst::ExcLabelSst(
         const ScAddress& rPos,
         const ScPatternAttr* pAttr,
-        RootData& rRoot,
+        RootData& rRootData,
         const ScEditCell& rEdCell ) :
-    ExcCell( rPos, pAttr, rRoot )
+    ExcCell( rPos, pAttr, rRootData )
 {
-    XclExpString* pStr = XclExpStringHelper::CreateString( *rRoot.pER, rEdCell, pAttr );
-    UsedAttrList& rXFBuffer = *rRoot.pXFRecs;
-    const ScPatternAttr& rAttr = pAttr ? *pAttr : *rRoot.pER->GetDoc().GetDefPattern();
-    SetXF( pStr->IsWrapped() ? rXFBuffer.FindWithLineBreak( &rAttr ) : rXFBuffer.Find( &rAttr ) );
-    nIsst = rRoot.pER->GetSst().Insert( pStr );
+    const XclExpRoot& rRoot = *rRootData.pER;
+    XclExpString* pString = XclExpStringHelper::CreateString( rRoot, rEdCell, pAttr );
+    SetXF( rRoot.GetXFBuffer().Insert( pAttr, pString->IsWrapped() ) );
+    nIsst = rRoot.GetSst().Insert( pString );
 }
 
 
@@ -1106,113 +1189,6 @@ UINT16 ExcLabelSst::GetNum() const
 ULONG ExcLabelSst::GetDiffLen() const
 {
     return 4;
-}
-
-
-
-// --- class ExcXf8 --------------------------------------------------
-
-ExcXf8::ExcXf8( const XclExpRoot& rRoot, UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr,
-                BOOL& rbLineBreak, BOOL bSt ) :
-        ExcXf( rRoot, nFont, nForm, pPattAttr, rbLineBreak, bSt ),
-        eTextDir( xlTextDirContext ),
-        nTrot( 0 ),
-        nCIndent( 0 ),
-        bFShrinkToFit( FALSE ),
-        bFMergeCell( FALSE ),
-        nGrbitDiag( 0 ),
-        nIcvDiagSer( 0 ),
-        nDgDiag( 0 )
-{
-    if( eOri == xlTextOrientTopBottom )
-        nTrot = 0x00FF;
-    else if( eOri != xlTextOrientNoRot )    // see #i4378
-        nTrot = (eOri == xlTextOrient90ccw) ? 90 : 180;
-    else if( pPattAttr )
-        nTrot = XclTools::GetExcRotation( ((const SfxInt32Item&) pPattAttr->GetItem( ATTR_ROTATE_VALUE )).GetValue() );
-
-    if( pPattAttr )
-    {
-        nCIndent = (UINT16)((const SfxUInt16Item&) pPattAttr->GetItem( ATTR_INDENT )).GetValue();
-        nCIndent += 100;
-        nCIndent /= 200;
-        if( nCIndent > 15 )
-            nCIndent = 15;
-
-        switch( (SvxFrameDirection)((const SvxFrameDirectionItem&)pPattAttr->GetItem( ATTR_WRITINGDIR )).GetValue() )
-        {
-            case FRMDIR_ENVIRONMENT:    eTextDir = xlTextDirContext;    break;
-            case FRMDIR_HORI_LEFT_TOP:  eTextDir = xlTextDirLTR;        break;
-            case FRMDIR_HORI_RIGHT_TOP: eTextDir = xlTextDirRTL;        break;
-            default:                    DBG_ERRORFILE( "ExcXf8::ExcXf8 - unknown CTL text direction" );
-        }
-    }
-}
-
-
-void ExcXf8::SaveCont( XclExpStream& rStrm )
-{
-    register UINT16 nTmp;
-    register UINT32 nTmp32;
-
-    rStrm << nIfnt << nIfmt                             // Offs 4 + 6
-        << nOffs8;                                      // Offs 8
-
-    nTmp = ( UINT16 ) eAlc;                             // Offs 10
-    if( bFWrap )
-        nTmp |= 0x0008;
-    nTmp |= ( ( UINT16 ) eAlcV ) << 4;
-    nTmp |= nTrot << 8;
-    rStrm << nTmp;
-
-    nTmp = nCIndent;                                    // Offs 12
-    if( bFShrinkToFit )
-        nTmp |= 0x0010;
-    if( bFMergeCell )
-        nTmp |= 0x0020;
-    nTmp |= ((UINT16)eTextDir) << 6;
-    // Bit 9-8 reserved, Bit 15-10 fAtr... alle 0 (keine Parent Styles)
-    rStrm << nTmp;
-
-    nTmp = nDgLeft;                                     // Offs 14
-    nTmp |= nDgRight << 4;
-    nTmp |= nDgTop << 8;
-    nTmp |= nDgBottom << 12;
-    rStrm << nTmp;
-
-    nTmp = GetPalette().GetColorIndex( nIcvLftSer );       // Offs 16
-    nTmp |= GetPalette().GetColorIndex( nIcvRigSer ) << 7;
-    nTmp |= nGrbitDiag << 14;
-    rStrm << nTmp;
-
-    nTmp32 = GetPalette().GetColorIndex( nIcvTopSer );   // Offs 18
-    nTmp32 |= (UINT32) GetPalette().GetColorIndex( nIcvBotSer ) << 7;
-    nTmp32 |= (UINT32) GetPalette().GetColorIndex( nIcvDiagSer ) << 14;
-    nTmp32 |= (UINT32) nDgDiag << 21;
-
-    UINT16 nForeInd, nBackInd;
-    GetPalette().GetMixedColors( nForeInd, nBackInd, nFls, nIcvForeSer, nIcvBackSer );
-
-    nTmp32 |= (UINT32) nFls << 26;
-    rStrm << nTmp32;
-
-    nTmp = nForeInd | (nBackInd << 7);                  // Offs 22
-
-    if( bFSxButton )
-        nTmp |= 0x4000;
-    rStrm << nTmp;
-}
-
-
-UINT16 ExcXf8::GetNum() const
-{
-    return 0x00E0;
-}
-
-
-ULONG ExcXf8::GetLen() const
-{
-    return 20;
 }
 
 
@@ -1422,25 +1398,24 @@ XclCondFormat::XclCondFormat( const ScConditionalFormat& _rCF, ScRangeList* _pRL
     {
         pCFE = _rCF.GetEntry( n );
         if( pCFE )
-            List::Insert( new XclCf( *rER.pER, *pCFE ), LIST_APPEND );
+            Append( new XclCf( *rER.pER, *pCFE ) );
     }
 }
 
 
 XclCondFormat::~XclCondFormat()
 {
-    if( pRL )
-        delete pRL;
+    delete pRL;
 }
 
 
 void XclCondFormat::WriteCondfmt( XclExpStream& rStrm )
 {
-    DBG_ASSERT( List::Count() < 65536, "XclCondFormat::SaveCont - to much CFs!" );
+    DBG_ASSERT( Count() < 65536, "XclCondFormat::SaveCont - to much CFs!" );
 
     rStrm.StartRecord( 0x01B0, 0 );     // real size calculated by XclExpStream
 
-    rStrm << (UINT16) List::Count() << (UINT16) 0x0000;
+    rStrm << (UINT16) Count() << (UINT16) 0x0001;
 
     ULONG               nMinMaxPos = rStrm.GetStreamPos();
     UINT16              nRowFirst = 0xFFFF;
@@ -1491,7 +1466,7 @@ void XclCondFormat::Save( XclExpStream& rStrm )
     WriteCondfmt( rStrm );
 
     // write list of CF records
-    for( XclCf* pCf = _First(); pCf; pCf = _Next() )
+    for( XclCf* pCf = First(); pCf; pCf = Next() )
         pCf->Save( rStrm );
 }
 
@@ -1596,28 +1571,11 @@ XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
 
         // border data
         if( bHasLine )
-        {
-            const SvxBoxItem&   rBox = ((const SvxBoxItem&)aAttr.GetItem( ATTR_BORDER ));
-            UINT16              nDgTop, nDgBottom, nDgLeft, nDgRight;
-
-            ExcXf::ScToExcBorderLine( rPal, rBox.GetTop(), nIcvTopSer, nDgTop );
-            ExcXf::ScToExcBorderLine( rPal, rBox.GetBottom(), nIcvBotSer, nDgBottom );
-            ExcXf::ScToExcBorderLine( rPal, rBox.GetLeft(), nIcvLftSer, nDgLeft );
-            ExcXf::ScToExcBorderLine( rPal, rBox.GetRight(), nIcvRigSer, nDgRight );
-
-            nLineData1 = (UINT8)((nDgLeft & 0x0F) | (nDgRight << 4));
-            nLineData2 = (UINT8)((nDgTop & 0x0F) | (nDgBottom << 4));
-        }
+            XclExpXF::GetBorder( maBorder, rPal, aAttr );
 
         // background / foreground data
         if( bHasPattern )
-        {
-            const SvxBrushItem& rBrushItem = (const SvxBrushItem&)aAttr.GetItem( ATTR_BACKGROUND );
-            Color aColor( rBrushItem.GetColor() );
-            nPatt = aColor.GetTransparency() ? 0x0000 : 0x0001;
-            nIcvForeSer = rPal.InsertColor( aColor, xlColorCellArea );
-            nIcvBackSer = rPal.InsertColor( Color( COL_BLACK ), xlColorCellArea );
-        }
+            XclExpXF::GetArea( maArea, rPal, aAttr );
     }
 
     ScTokenArray*   pScTokArry1 = r.CreateTokenArry( 0 );
@@ -1699,22 +1657,26 @@ void XclCf::SaveCont( XclExpStream& rStrm )
         }
         if( bHasLine )
         {
-            UINT16 nLineData3, nLineData4;
-            nLineData3 = rPal.GetColorIndex( nIcvLftSer ) & 0x007F;
-            nLineData3 |= (rPal.GetColorIndex( nIcvRigSer ) & 0x007F) << 7;
-            nLineData4 = rPal.GetColorIndex( nIcvTopSer ) & 0x007F;
-            nLineData4 |= (rPal.GetColorIndex( nIcvBotSer ) & 0x007F) << 7;
+            sal_uInt8 nLineData1, nLineData2;
+            sal_uInt16 nLineData3, nLineData4;
+            nLineData1 = (UINT8)((maBorder.mnLeftLine & 0x0F) | (maBorder.mnRightLine << 4));
+            nLineData2 = (UINT8)((maBorder.mnTopLine & 0x0F) | (maBorder.mnBottomLine << 4));
+            nLineData3 = rPal.GetColorIndex( maBorder.mnLeftColorId ) & 0x007F;
+            nLineData3 |= (rPal.GetColorIndex( maBorder.mnRightColorId ) & 0x007F) << 7;
+            nLineData4 = rPal.GetColorIndex( maBorder.mnTopColorId ) & 0x007F;
+            nLineData4 |= (rPal.GetColorIndex( maBorder.mnBottomColorId ) & 0x007F) << 7;
 
             rStrm   << nLineData1 << nLineData2 << nLineData3 << nLineData4
                     << (UINT16)0xBA00;
         }
         if( bHasPattern )
         {
-            UINT16  nForeInd, nBackInd;
-            rPal.GetMixedColors( nForeInd, nBackInd, nPatt, nIcvForeSer, nIcvBackSer );
+            sal_uInt16 nXclForeIx, nXclBackIx;
+            sal_uInt8 nPattern = maArea.mnPattern;
+            rPal.GetMixedColors( nXclForeIx, nXclBackIx, nPattern, maArea.mnForeColorId, maArea.mnBackColorId );
 
-            UINT8   nPattData1 = (nPatt == 1) ? 0 : (UINT8) nPatt;
-            UINT16  nPattData2 = ((nForeInd & 0x007F ) << 7) | (nBackInd & 0x007F);
+            UINT8   nPattData1 = (nPattern == EXC_PATT_SOLID) ? 0 : nPattern;
+            UINT16  nPattData2 = ((nXclForeIx & 0x007F ) << 7) | (nXclBackIx & 0x007F);
 
             rStrm << (UINT8)0 << nPattData1 << nPattData2;
         }
@@ -1939,9 +1901,11 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
                 if( rDoc.HasValueData( nCol, nRow, nTab ) )
                 {
                     rDoc.GetValue( nCol, nRow, nTab, fVal );
-                    sText.Erase();
-                    SolarMath::DoubleToString( sText, fVal, 'A', INT_MAX,
-                        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE );
+                    sText = ::rtl::math::doubleToUString( fVal,
+                            rtl_math_StringFormat_Automatic,
+                            rtl_math_DecimalPlaces_Max,
+                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+                            TRUE );
                 }
                 else
                     rDoc.GetString( nCol, nRow, nTab, sText );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,12 @@
 #include <memory>
 
 
-class SvStream;
-
-
 // Global static helpers ======================================================
 
-/** Returns the size of a STATIC data array. */
+/** Expands to the size of a STATIC data array. */
 #define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
+/** Expands to a pointer behind the last element of a STATIC data array (like STL end()). */
+#define STATIC_TABLE_END( array )   ((array)+STATIC_TABLE_SIZE(array))
 
 
 // Read from bitfields --------------------------------------------------------
@@ -130,8 +129,8 @@ inline void set_flag( Type& rnBitField, Type nMask, bool bSet = true )
 template< typename Type, typename InsertType >
 void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal_uInt8 nBitCount )
 {
-    Type nMask = ((1UL << nBitCount) - 1);
-    Type nNewValue = static_cast< Type >( nValue ) & nMask;
+    sal_uInt32 nMask = ((1UL << nBitCount) - 1);
+    Type nNewValue = static_cast< Type >( nValue & nMask );
     (rnBitField &= ~(nMask << nStartBit)) |= (nNewValue << nStartBit);
 }
 
@@ -196,15 +195,13 @@ class ScfNoInstance : private ScfNoCopy {};
 
 // ============================================================================
 
+class SvStorage;
+class SvStorageStreamRef;
+class SvStream;
+
 /** Contains static methods used anywhere in the filters. */
 class ScfTools : ScfNoInstance
 {
-private:
-    static const String         maHTMLDoc;          /// Built-in name for an HTML document.
-    static const String         maHTMLTables;       /// Built-in name for all HTML tables.
-    static const String         maHTMLTableIndex;   /// Built-in prefix for an HTML table index.
-    static const String         maHTMLTableName;    /// Built-in prefix for an HTML table name.
-
 public:
 
 // *** common methods ***
@@ -232,22 +229,35 @@ public:
 
 // *** conversion of names ***
 
-    /** Converts an Excel name to a valid Calc name.
-        @param bKeepPeriod  false = '.' will be converted to '_'; true = '.' leaves unmodified. */
-    static void                 ConvertName( String& rName, bool bKeepPeriod = false );
+    /** Converts an external name to a valid Calc sheet name.
+        @descr  Sheet names in Calc may contain letters, digits, underscores, and spaces
+        (space characters are not allowed at first position). */
+    static void                 ConvertToScSheetName( String& rName );
+    /** Converts an external name to a valid Calc defined name or database range name.
+        @descr  Defined names in Calc may contain letters, digits (*), underscores, periods (*),
+        colons (*), question marks, and dollar signs.
+        (*) = not allowed at first position. */
+    static void                 ConvertToScDefinedName( String& rName );
+
+// *** streams and storages ***
+
+    /** Tries to open the stream with the specified name in the passed storage (read-only). */
+    static const SvStorageStreamRef OpenStorageStreamRead( SvStorage* pStorage, const String& rStrmName );
+    /** Tries to create or open a stream with the specified name in the passed storage (read/write). */
+    static const SvStorageStreamRef OpenStorageStreamWrite( SvStorage* pStorage, const String& rStrmName );
 
 // *** byte string import operations ***
 
     /** Reads and returns a zero terminted byte string. */
     static ByteString           ReadCString( SvStream& rStrm );
     /** Reads and returns a zero terminted byte string. */
-    static inline String        ReadCString( SvStream& rStrm, CharSet eSrc )
+    inline static String        ReadCString( SvStream& rStrm, CharSet eSrc )
                                     { return String( ReadCString( rStrm ), eSrc ); }
 
     /** Reads and returns a zero terminted byte string and decreases a stream counter. */
     static ByteString           ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft );
     /** Reads and returns a zero terminted byte string and decreases a stream counter. */
-    static inline String        ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft, CharSet eSrc )
+    inline static String        ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft, CharSet eSrc )
                                     { return String( ReadCString( rStrm, rnBytesLeft ), eSrc ); }
 
     /** Appends a zero terminted byte string. */
@@ -258,25 +268,29 @@ public:
 // *** HTML table names <-> named range names ***
 
     /** Returns the built-in range name for an HTML document. */
-    static inline const String& GetHTMLDocName() { return maHTMLDoc; }
+    static const String&        GetHTMLDocName();
     /** Returns the built-in range name for all HTML tables. */
-    static inline const String& GetHTMLTablesName() { return maHTMLTables; }
+    static const String&        GetHTMLTablesName();
     /** Returns the built-in range name for an HTML table, specified by table index. */
     static String               GetNameFromHTMLIndex( sal_uInt32 nIndex );
     /** Returns the built-in range name for an HTML table, specified by table name. */
     static String               GetNameFromHTMLName( const String& rTabName );
 
     /** Returns true, if rSource is the built-in range name for an HTML document. */
-    static inline bool          IsHTMLDocName( const String& rSource )
-                                    { return rSource.EqualsIgnoreCaseAscii( maHTMLDoc ) == TRUE; }
+    static bool                 IsHTMLDocName( const String& rSource );
     /** Returns true, if rSource is the built-in range name for all HTML tables. */
-    static inline bool          IsHTMLTablesName( const String& rSource )
-                                    { return rSource.EqualsIgnoreCaseAscii( maHTMLTables ) == TRUE; }
+    static bool                 IsHTMLTablesName( const String& rSource );
     /** Converts a built-in range name to an HTML table name.
         @param rSource  The string to be determined.
         @param rName  The HTML table name.
         @return  true, if conversion was successful. */
     static bool                 GetHTMLNameFromName( const String& rSource, String& rName );
+
+private:
+    /** Returns the prefix for table index names. */
+    static const String&        GetHTMLIndexPrefix();
+    /** Returns the prefix for table names. */
+    static const String&        GetHTMLNamePrefix();
 };
 
 

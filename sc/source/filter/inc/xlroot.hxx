@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ struct XclRootData
     LanguageType                meLang;         /// Document language.
     ScAddress                   maScMaxPos;     /// Highest Calc cell position.
     ScAddress                   maXclMaxPos;    /// Highest Excel cell position.
+    long                        mnCharWidth;    /// Width of '0' in default font (twips).
     sal_uInt16                  mnScTab;        /// Current Calc sheet index.
     bool                        mbTruncated;    /// Flag for the table truncated warning box.
 
@@ -103,6 +104,10 @@ struct XclRootData
     XclAddInNameTranslatorPtr   mpAddInNames;   /// Translates Excel/Calc add-in function names.
 
     ::std::auto_ptr< RootData > mpRDP;//!
+
+#ifdef DBG_UTIL
+    sal_Int32                   mnObjCnt;       /// Object counter for mem leak tests.
+#endif
 
     explicit                    XclRootData(
                                     XclBiff eBiff,
@@ -120,8 +125,10 @@ class ScModelObj;
 class SfxPrinter;
 class SvNumberFormatter;
 class ScRangeName;
+class SvStorage;
 
-/** Access to global data from other classes. */
+/** Access to global data for a filter object (imported or exported document)
+    from other classes. */
 class XclRoot
 {
 private:
@@ -135,6 +142,8 @@ public:
 
     RootData*                   mpRD;//!
 
+    /** Returns this root instance - for code readability in derived classes. */
+    inline const XclRoot&       GetRoot() const { return *this; }
     /** Returns the current BIFF version of the importer/exporter. */
     inline XclBiff              GetBiff() const { return mrData.meBiff; }
     /** Returns the document language. */
@@ -150,9 +159,13 @@ public:
     inline const String&        GetBasePath() const { return mrData.maBasePath; }
     /** Returns the character set to import/export byte strings. */
     inline CharSet              GetCharSet() const { return mrData.meCharSet; }
+    /** Returns the width of the '0' character (default font) for the current printer (twips). */
+    inline long                 GetCharWidth() const { return mrData.mnCharWidth; }
 
     /** Returns the destination document (import) or source document (export). */
     inline ScDocument&          GetDoc() const { return mrData.mrDoc; }
+    /** Returns pointer to the destination document (import) or source document (export). */
+    inline ScDocument*          GetDocPtr() const { return &mrData.mrDoc; }
     /** Returns the object shell of the Calc document. May be NULL (i.e. import from clipboard). */
     SfxObjectShell*             GetDocShell() const;
     /** Returns the object model of the Calc document. */
@@ -163,6 +176,10 @@ public:
     SvNumberFormatter&          GetFormatter() const;
     /** Returns the defined names container of the Calc document. */
     ScRangeName&                GetNamedRanges() const;
+
+    /** Returns the OLE2 root storage of the imported/exported file.
+        @return  Pointer to root storage or 0, if the file is a simple stream. */
+    SvStorage*                  GetRootStorage() const;
 
     /** Returns the edit engine for import/export of rich strings etc. */
     ScEditEngineDefaulter&      GetEditEngine() const;
@@ -186,6 +203,8 @@ protected:
     inline void                 SetLanguage( LanguageType eLang ) { mrData.meLang = eLang; }
     /** Sets the character set to import/export byte strings. */
     inline void                 SetCharSet( CharSet eCharSet ) { mrData.meCharSet = eCharSet; }
+    /** Sets the width of the '0' character (default font) for the current printer (twips). */
+    inline void                 SetCharWidth( long nCharWidth ) { mrData.mnCharWidth = nCharWidth; }
     /** Increases the current Calc sheet index by 1. */
     inline void                 IncScTab() { ++mrData.mnScTab; }
 

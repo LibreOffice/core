@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:07:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@
 #include <svx/flditem.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svxmsbas.hxx>
-#include <svx/unoapi.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -106,7 +105,7 @@
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -128,7 +127,13 @@
 #include "markdata.hxx"
 #include "rangenam.hxx"
 #include "docoptio.hxx"
+#ifndef SC_DETFUNC_HXX
+#include "detfunc.hxx"
+#endif
 
+#ifndef SC_XLOCX_HXX
+#include "xlocx.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
@@ -138,11 +143,9 @@
 
 #include "excimp8.hxx"
 #include "excform.hxx"
-#include "fltprgrs.hxx"
 #include "flttools.hxx"
 #include "scextopt.hxx"
 #include "stlpool.hxx"
-#include "scmsocximexp.hxx"
 
 using namespace com::sun::star;
 
@@ -274,9 +277,10 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
                 default:    nPosF = 0;      nPosL = 0;      nPosP = 0;
             }
 
-            SfxItemSet&         rStyleItemSet = rDoc.GetStyleSheetPool()->Make(
-                                                    aStyle, SFX_STYLE_FAMILY_PARA,
-                                                    SFXSTYLEBIT_USERDEF ).GetItemSet();
+            SfxStyleSheetBase* pStyleSheet = rDoc.GetStyleSheetPool()->Find( aStyle, SFX_STYLE_FAMILY_PARA );
+            SfxItemSet& rStyleItemSet = pStyleSheet ? pStyleSheet->GetItemSet() :
+                rDoc.GetStyleSheetPool()->Make( aStyle, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_USERDEF ).GetItemSet();
+            rStyleItemSet.ClearItem();
 
             const XclImpPalette& rPalette = GetPalette();
 
@@ -340,42 +344,40 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
 
             if( nPosL )     // line
             {
-                UINT8           nLineH, nLineV;
-                UINT16          nColH, nColV;
+                sal_uInt16 nLine, nColor1, nColor2;
                 rIn.Seek( nPosL );
+                rIn >> nLine >> nColor1 >> nColor2;
 
-                rIn >> nLineV >> nLineH >> nColV >> nColH;
-
-                UINT8           nLineL = nLineV & 0x0F;
-                UINT16          nColL = nColV & 0x007F;
-                UINT8           nLineR = nLineV >> 4;
-                UINT16          nColR = ( nColV >> 7 ) & 0x007F;
-                UINT8           nLineT = nLineH & 0x0F;
-                UINT16          nColT = nColH & 0x007F;
-                UINT8           nLineB = nLineH >> 4;
-                UINT16          nColB = ( nColH >> 7 ) & 0x007F;
-
-                XclImpXF::SetBorder( rStyleItemSet, rPalette,
-                    nLineL, nColL, nLineR, nColR, nLineT, nColT, nLineB, nColB );
+                XclImpXFBorder aBorder;
+                ::extract_value( aBorder.mnLeftLine,    nLine,    0, 4 );
+                ::extract_value( aBorder.mnRightLine,   nLine,    4, 4 );
+                ::extract_value( aBorder.mnTopLine,     nLine,    8, 4 );
+                ::extract_value( aBorder.mnBottomLine,  nLine,   12, 4 );
+                ::extract_value( aBorder.mnLeftColor,   nColor1,  0, 7 );
+                ::extract_value( aBorder.mnRightColor,  nColor1,  7, 7 );
+                ::extract_value( aBorder.mnTopColor,    nColor2,  0, 7 );
+                ::extract_value( aBorder.mnBottomColor, nColor2,  7, 7 );
+                XclImpXF::SetBorder( rStyleItemSet, rPalette, aBorder );
             }
 
             if( nPosP )     // pattern (fill)
             {
-                UINT16          nPatt;
-                UINT16          nCol;
-
+                sal_uInt16 nPattern, nColor;
                 rIn.Seek( nPosP );
-                rIn >> nPatt >> nCol;
+                rIn >> nPattern >> nColor;
 
-                UINT8           nF = nCol & 0x007F;
-                UINT8           nB = ( nCol >> 7 ) & 0x007F;
-                UINT8           nP = (UINT8)((nPatt >> 10) & 0x003F);
-                if( nP <= 1 )
+                XclImpXFArea aArea;
+                ::extract_value( aArea.mnForeColor, nColor,    0, 7 );
+                ::extract_value( aArea.mnBackColor, nColor,    7, 7 );
+                ::extract_value( aArea.mnPattern,   nPattern, 10, 6 );
+                if( (aArea.mnPattern == EXC_PATT_NONE) || (aArea.mnPattern == EXC_PATT_SOLID) )
                 {
-                    nP = nB; nB = nF; nF = nP; nP = 1;
+                    // overwrite a cell style with "no fill"
+                    // EXC_PATT_SOLID forces creation of a brush item in SetArea()
+                    ::std::swap( aArea.mnForeColor, aArea.mnBackColor );
+                    aArea.mnPattern = EXC_PATT_SOLID;
                 }
-
-                XclImpXF::SetArea( rStyleItemSet, rPalette, nP, nF, nB );
+                XclImpXF::SetArea( rStyleItemSet, rPalette, aArea );
             }
 
             // convert formulas
@@ -448,7 +450,7 @@ void ExcCondForm::Apply( void )
             if( nR2 > MAXROW )
                 nR2 = MAXROW;
 
-            GetDoc().ApplyPatternAreaTab( nC1, nR1, nC2, nR2, GetScTab(), aPat );
+            GetDoc().ApplyPatternAreaTab( nC1, nR1, nC2, nR2, p->aStart.Tab(), aPat );
 
             p = pRangeList->Next();
         }
@@ -484,8 +486,7 @@ void ExcCondFormList::Apply( void )
 
 
 ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, const String& rBasePath, SvStorage* pPivotCache ) :
-    ImportExcel( rStream, pDoc, rBasePath ),
-    aObjManager( *pExcRoot )
+    ImportExcel( rStream, pDoc, rBasePath )
 {
     delete pFormConv;
 
@@ -597,20 +598,30 @@ void ImportExcel8::Horizontalpagebreaks( void )
 
 void ImportExcel8::Note( void )
 {
-    UINT16  nCol, nRow, nId;
+    UINT16  nCol, nRow, nFlags, nId;
 
-    aIn >> nRow >> nCol;
-    aIn.Ignore( 2 );
-    aIn >> nId;
+    aIn >> nRow >> nCol >> nFlags >> nId;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
         if( nId )
         {
-            const XclImpEscherNote* pObj = aObjManager.GetObjNote( nId, GetScTab() );
+            const XclImpEscherNote* pObj = GetObjectManager().GetObjNote( nId, GetScTab() );
             const String* pText = pObj ? pObj->GetText() : NULL;
             if( pText )
-                pD->SetNote( nCol, nRow, GetScTab(), ScPostIt( *pText ) );
+            {
+                bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
+                ScPostIt aNote( *pText );
+                aNote.SetShown( bVisible );
+                GetDoc().SetNote( nCol, nRow, GetScTab(), aNote );
+                if( bVisible )
+                    {
+                        ScDocument *pDoc = GetDocPtr();
+                        ScDetectiveFunc( pDoc, GetScTab() ).ShowComment( nCol, nRow, TRUE );
+
+                   // ScDetectiveFunc( GetDocPtr(), GetScTab() ).ShowComment( nCol, nRow, TRUE );
+                    }
+            }
         }
     }
     else
@@ -623,7 +634,7 @@ void ImportExcel8::Note( void )
 void ImportExcel8::Cont( void )
 {
     if( bObjSection )
-        aObjManager.ReadMsodrawing( aIn );
+        GetObjectManager().ReadMsodrawing( aIn );
 }
 
 
@@ -648,14 +659,14 @@ void ImportExcel8::Dconref( void )
         aTabName = aUrl;
         aUrl.Erase();
     }
-    ScfTools::ConvertName( aTabName );
+    ScfTools::ConvertToScSheetName( aTabName );
     pCurrPivotCache->SetSource( nC1, nR1, nC2, nR2, aUrl, aTabName, bSelf );
 }
 
 
 void ImportExcel8::Obj()
 {
-    aObjManager.ReadObj( aIn );
+    GetObjectManager().ReadObj( maStrm );
 }
 
 
@@ -669,7 +680,7 @@ void ImportExcel8::Boundsheet( void )
 
     String aName( aIn.ReadUniString( nLen ) );
 
-    ScfTools::ConvertName( aName );
+    ScfTools::ConvertToScSheetName( aName );
     *pExcRoot->pTabNameBuff << aName;
 
     if( nBdshtTab > 0 )
@@ -730,19 +741,19 @@ void ImportExcel8::Cellmerging( void )
 
 void ImportExcel8::Msodrawinggroup( void )
 {
-    aObjManager.ReadMsodrawinggroup( aIn );
+    GetObjectManager().ReadMsodrawinggroup( maStrm );
 }
 
 
 void ImportExcel8::Msodrawing( void )
 {
-    aObjManager.ReadMsodrawing( aIn );
+    GetObjectManager().ReadMsodrawing( maStrm );
 }
 
 
 void ImportExcel8::Msodrawingselection( void )
 {
-    aObjManager.ReadMsodrawingselection( aIn );
+    GetObjectManager().ReadMsodrawingselection( maStrm );
 }
 
 void ImportExcel8::Condfmt( void )
@@ -842,7 +853,7 @@ void ImportExcel8::Label( void )
 
 void ImportExcel8::Txo( void )
 {
-    aObjManager.ReadTxo( aIn );
+    GetObjectManager().ReadTxo( maStrm );
 }
 
 
@@ -923,11 +934,18 @@ void ImportExcel8::Name( void )
     const BOOL          bExtract = bBuiltIn && ( cFirstChar == EXC_BUILTIN_EXTRACT );
     BOOL                bAppendTabNum = FALSE;
     BOOL                bSkip = FALSE;
+    RangeType           eNameType = RT_ABSAREA;
 
     if( bBuiltIn )
         XclTools::GetBuiltInName( aName, cFirstChar, nSheet );
     else
-        ScfTools::ConvertName( aName );
+        ScfTools::ConvertToScDefinedName( aName );
+
+    if(bPrintArea)
+        eNameType = RT_PRINTAREA;
+    if(bCriteria)
+        eNameType = RT_CRITERIA;
+
 
     pFormConv->Reset();
     if( nOpt & (EXC_NAME_VB | EXC_NAME_PROC | EXC_NAME_BIG) )
@@ -962,7 +980,12 @@ void ImportExcel8::Name( void )
                 else if( bCriteria )
                     pAutoFilterBuffer->AddAdvancedRange( aRange );
                 else if( bExtract )
-                    pAutoFilterBuffer->AddExtractPos( aRange );
+                {
+                    if( pErgebnis->IsValidReference( aRange ) )
+                        pAutoFilterBuffer->AddExtractPos( aRange );
+                    else
+                        eNameType = RT_NAME;
+                }
             }
         }
     }
@@ -973,7 +996,7 @@ void ImportExcel8::Name( void )
         pExcRoot->pRNameBuff->Store( aName, NULL, nSheet );
     else
         // ohne hidden
-        pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, bPrintArea );
+        pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, eNameType );
 }
 
 
@@ -997,27 +1020,17 @@ void ImportExcel8::PostDocLoad( void )
         pCondFormList->Apply();
     if( pAutoFilterBuffer )
         pAutoFilterBuffer->Apply();
-    GetWebQueryBuffer().Apply();
+    GetWebQueryBuffer().Apply();    //! test if extant
 
     UINT32 nChartCnt = 0;
-    SfxObjectShell* pShell = pD->GetDocumentShell();
 
-    if( aObjManager.HasEscherStream() )
+    SfxObjectShell* pShell = GetDocShell();
+    XclImpObjectManager& rObjManager = GetObjectManager();
+
+    if( pShell && rObjManager.HasEscherStream() )
     {
-        Biff8MSDffManager*      pDffMan = new Biff8MSDffManager( *pExcRoot, aObjManager,
+        Biff8MSDffManager*      pDffMan = new Biff8MSDffManager( *pExcRoot, rObjManager,
                                             0, 0, pD->GetDrawLayer(), 1440 );
-
-        const String            aStrName( _STRING( "Ctls" ) );
-        SvStorage&              rStrg = *pExcRoot->pRootStorage;
-        const BOOL              bHasCtrls = rStrg.IsContained( aStrName ) && rStrg.IsStream( aStrName );
-        ScMSConvertControls*    pCtrlConv;
-        SvStorageStreamRef      xStStream;
-
-        if( bHasCtrls && pShell )
-        {
-            pCtrlConv = new ScMSConvertControls( pShell );
-            xStStream = pExcRoot->pRootStorage->OpenStream( aStrName, STREAM_READ | STREAM_SHARE_DENYALL );
-        }
 
         const XclImpAnchorData*         pAnch;
         const SvxMSDffShapeInfos*       pShpInf = pDffMan->GetShapeInfos();
@@ -1045,6 +1058,8 @@ void ImportExcel8::PostDocLoad( void )
                     nOLEImpFlags |= OLE_POWERPOINT_2_STARIMPRESS;
             }
 
+            XclImpOcxConverter aOcxConverter( *this );
+
             for( n = 0 ; n < nMax ; n++ )
             {
                 p = pShpInf->GetObject( ( UINT16 ) n );
@@ -1052,7 +1067,7 @@ void ImportExcel8::PostDocLoad( void )
 
                 nShapeId = p->nShapeId;
 
-                XclImpEscherObj* pObj = aObjManager.GetObjFromStream( p->nFilePos );
+                XclImpEscherObj* pObj = rObjManager.GetObjFromStream( p->nFilePos );
                 if( pObj && !pObj->GetSdrObj() )
                 {
                     pMSDffImportData = new SvxMSDffImportData;
@@ -1060,7 +1075,7 @@ void ImportExcel8::PostDocLoad( void )
 
                     if( pObj->GetSdrObj() )
                     {
-                        pAnch = aObjManager.GetAnchorData( p->nFilePos );
+                        pAnch = rObjManager.GetAnchorData( p->nFilePos );
 
                         // *** find all objects to ignore ***
                         bIgnoreObj = false;
@@ -1074,7 +1089,7 @@ void ImportExcel8::PostDocLoad( void )
                         }
                         // other objects
                         if( !bIgnoreObj )
-                            bIgnoreObj = IsIgnoreObject( pObj->GetId() );
+                            bIgnoreObj = rObjManager.IsIgnoreObject( pObj->GetId() );
 
                         if( bIgnoreObj )
                             pObj->SetSdrObj( NULL );      // delete SdrObject
@@ -1086,17 +1101,7 @@ void ImportExcel8::PostDocLoad( void )
                                     ((XclImpEscherOle*)pObj)->CreateSdrOle( *pDffMan, nOLEImpFlags );
                                 break;
                                 case otCtrl:
-                                    if( bHasCtrls )
-                                    {
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                                                xShapeRef = GetXShapeForSdrObject( ( SdrObject* ) pObj->GetSdrObj() );
-                                        if( pCtrlConv->ReadOCXExcelKludgeStream( xStStream, &xShapeRef, TRUE ) )
-                                        {
-                                            SdrObject*  pNewObj = GetSdrObjectFromXShape( xShapeRef );
-                                            if( pNewObj )
-                                                pObj->SetSdrObj( pNewObj );
-                                        }
-                                    }
+                                    aOcxConverter.ReadControl( static_cast< XclImpEscherOle& >( *pObj ) );
                                 break;
                             }
                         }
@@ -1106,25 +1111,11 @@ void ImportExcel8::PostDocLoad( void )
             }
         }
 
-        if( bHasCtrls )
-            delete pCtrlConv;
-
         delete pDffMan;
     }
 
-    aObjManager.Apply();
+    rObjManager.Apply();
 
-    // controls
-/*
-    ScMSConvertControls     aCtrlConverter( pShell );
-    String                  aStrName( String::CreateFromAscii( "Ctls" ) );
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >*  pShapeRef = NULL;
-
-    SvStorageStreamRef      xStStream = pExcRoot->pRootStorage->OpenStream(
-                                aStrName, STREAM_READ | STREAM_SHARE_DENYALL );
-    aCtrlConverter.ReadOCXExcelKludgeStream( xStStream, pShapeRef, TRUE );
-                                                                // BOOL bFloatingCtrl
-*/
     ImportExcel::PostDocLoad();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
@@ -1173,45 +1164,6 @@ void ImportExcel8::PostDocLoad( void )
     aPivotTabList.Apply();
 }
 
-
-
-void ImportExcel8::CreateTmpCtrlStorage( void )
-{
-//  if( pExcRoot->pCtrlStorage )
-    if( pExcRoot->xCtrlStorage.Is() )
-        return;     // already done
-
-    SvStorageStream*    pContrIn = pExcRoot->pRootStorage->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
-    if( pContrIn )
-    {
-        SvStorageRef    xStrg( new SvStorage( new SvMemoryStream(), TRUE ) );
-        pExcRoot->xCtrlStorage = SvStorageRef( new SvStorage( new SvMemoryStream(), TRUE ) );
-//      SvStorage*      pStrg = new SvStorage( new SvMemoryStream(), TRUE );
-
-//      SvStorageStreamRef  xTemp = pStrg->OpenStream( _STRINGCONST( "contents" ) );
-        SvStorageStreamRef  xTemp = xStrg->OpenStream( _STRINGCONST( "contents" ) );
-        if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
-        {
-            pContrIn->Seek( 16 );   // no need for class id at this point
-            *xTemp << *pContrIn;
-
-        SvGlobalName    aName( 0xD7053240, 0xCE69, 0x11CD, 0xA7, 0x77,
-                                    0x00, 0xDD, 0x01, 0x14, 0x3C, 0x57 );
-        UINT32              nClip = SotExchange::RegisterFormatName( _STRING( "Embedded Object" ) );
-//      pStrg->SetClass( aName, nClip, _STRING( "Microsoft Forms 2.0 CommandButton" ) );
-        xStrg->SetClass( aName, nClip, _STRING( "Microsoft Forms 2.0 CommandButton" ) );
-
-        pExcRoot->xCtrlStorage = xStrg;
-        }
-/*      else
-        {
-            delete pStrg;
-            pStrg = NULL;
-        }*/
-
-//      pExcRoot->pCtrlStorage = pStrg;
-    }
-}
 
 
 void ImportExcel8::EndAllChartObjects( void )
@@ -1335,6 +1287,17 @@ void ImportExcel8::SXVdex( void )
 
 void ImportExcel8::FilterMode( void )
 {
+    // The FilterMode record exists: if either the AutoFilter
+    // record exists or an Advanced Filter is saved and stored
+    // in the sheet. Thus if the FilterMode records only exists
+    // then the latter is true..
+    if( !pAutoFilterBuffer ) return;
+
+    pAutoFilterBuffer->IncrementActiveAF();
+
+    XclImpAutoFilterData* pData = pAutoFilterBuffer->GetByTab( GetScTab() );
+    if( pData )
+        pData->SetAutoOrAdvanced();
 }
 
 void ImportExcel8::AutoFilterInfo( void )
@@ -1362,10 +1325,14 @@ void ImportExcel8::AutoFilter( void )
 
 XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRange, const String& rName ) :
         ExcRoot( pRoot ),
+        pCurrDBData(NULL),
         nFirstEmpty( 0 ),
         bActive( FALSE ),
         bHasDropDown( FALSE ),
-        bHasConflict( FALSE )
+        bHasConflict( FALSE ),
+        bCriteria( FALSE ),
+        bAutoOrAdvanced(FALSE),
+        aFilterName(rName)
 {
     aParam.nCol1 = rRange.aStart.Col();
     aParam.nRow1 = rRange.aStart.Row();
@@ -1373,21 +1340,18 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
     aParam.nCol2 = rRange.aEnd.Col();
     aParam.nRow2 = rRange.aEnd.Row();
 
-    ScDBCollection& rColl = *pRoot->pDoc->GetDBCollection();
+    // Excel defaults to always in place regardless
+    // of whether an extract record exists. The user
+    // must choose to explicity set the Copy To in the UI.
+    aParam.bInplace = TRUE;
 
-    pCurrDBData = rColl.GetDBAtArea( Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
-    if( !pCurrDBData )
-    {
-        pCurrDBData = new ScDBData( rName, Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
-        if( pCurrDBData )
-            rColl.Insert( pCurrDBData );
-    }
 }
 
 void XclImpAutoFilterData::CreateFromDouble( String& rStr, double fVal )
 {
-    SolarMath::DoubleToString( rStr, fVal, 'A', INT_MAX,
-        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE );
+    rStr += String( ::rtl::math::doubleToUString( fVal,
+                rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE));
 }
 
 void XclImpAutoFilterData::SetCellAttribs()
@@ -1563,8 +1527,13 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
 
 void XclImpAutoFilterData::SetAdvancedRange( const ScRange* pRange )
 {
-    if( pCurrDBData )
-        pCurrDBData->SetAdvancedQuerySource( pRange );
+    if (pRange)
+    {
+        aCriteriaRange = *pRange;
+        bCriteria = TRUE;
+    }
+    else
+        bCriteria = FALSE;
 }
 
 void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
@@ -1572,12 +1541,14 @@ void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
     aParam.nDestCol = rAddr.Col();
     aParam.nDestRow = rAddr.Row();
     aParam.nDestTab = rAddr.Tab();
-    aParam.bInplace = FALSE;
     aParam.bDestPers = TRUE;
+
 }
 
-void XclImpAutoFilterData::Apply()
+void XclImpAutoFilterData::Apply( const BOOL bUseUnNamed )
 {
+    CreateScDBData(bUseUnNamed);
+
     if( bActive )
     {
         InsertQueryParam();
@@ -1593,8 +1564,68 @@ void XclImpAutoFilterData::Apply()
     }
 }
 
+void XclImpAutoFilterData::CreateScDBData( const BOOL bUseUnNamed )
+{
 
+    // Create the ScDBData() object if the AutoFilter is activated
+    // or if we need to create the Advanced Filter.
+    if( bActive || bCriteria)
+    {
+        ScDBCollection& rColl = *pExcRoot->pDoc->GetDBCollection();
+        pCurrDBData = rColl.GetDBAtArea( Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
+        if( !pCurrDBData )
+        {
+            AmendAFName(bUseUnNamed);
 
+            pCurrDBData = new ScDBData( aFilterName, Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
+
+            if( pCurrDBData )
+            {
+                if(bCriteria)
+                {
+                    EnableRemoveFilter();
+
+                    pCurrDBData->SetQueryParam( aParam );
+                    pCurrDBData->SetAdvancedQuerySource(&aCriteriaRange);
+                }
+                else
+                    pCurrDBData->SetAdvancedQuerySource(NULL);
+                rColl.Insert( pCurrDBData );
+            }
+        }
+    }
+
+}
+
+void XclImpAutoFilterData::EnableRemoveFilter()
+{
+    // only if this is a saved Advanced filter
+    if( !bActive && bAutoOrAdvanced )
+    {
+        ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
+        aEntry.bDoQuery = TRUE;
+        ++nFirstEmpty;
+    }
+
+    // TBD: force the automatic activation of the
+    // "Remove Filter" by setting a virtual mouse click
+    // inside the advanced range
+}
+
+void XclImpAutoFilterData::AmendAFName(const BOOL bUseUnNamed)
+{
+    // If-and-only-if we have one AF filter then
+    // use the Calc "unnamed" range name. Calc
+    // only supports one in total while Excel
+    // supports one per sheet.
+    if( bUseUnNamed && bAutoOrAdvanced )
+        aFilterName = ScGlobal::GetRscString(STR_DB_NONAME);
+}
+
+XclImpAutoFilterBuffer::XclImpAutoFilterBuffer() :
+    nAFActiveCount( 0 )
+{
+}
 
 XclImpAutoFilterBuffer::~XclImpAutoFilterBuffer()
 {
@@ -1626,7 +1657,7 @@ void XclImpAutoFilterBuffer::AddExtractPos( const ScRange& rRange )
 void XclImpAutoFilterBuffer::Apply()
 {
     for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
-        pData->Apply();
+        pData->Apply(UseUnNamed());
 }
 
 XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( UINT16 nTab )

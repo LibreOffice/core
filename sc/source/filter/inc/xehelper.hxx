@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,8 +316,10 @@ class EditEngine;
     &N                      page count
     &D                      current date
     &T                      current time
-    &F                      file name without path (converted to full file name)
     &A                      table name
+    &F                      file name without path
+    &Z                      file path without file name
+    &Z&F                    file path and name
     &U                      underlining on/off
     &E                      double underlining on/off
     &S                      strikeout characters on/off
@@ -327,7 +329,6 @@ class EditEngine;
     Known but unsupported control sequences:
     &X                      superscript on/off
     &Y                      subscript on/off
-    &Z                      file path without file name
     &G                      picture
  */
 class XclExpHFConverter : protected XclExpRoot, ScfNoCopy

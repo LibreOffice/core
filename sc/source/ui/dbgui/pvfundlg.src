@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:01:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,16 +86,16 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "~Nessuna" ;
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
-        Text [ finnish ] = "~Ei mit??n" ;
+        Text [ finnish ] = "~Ei mitään" ;
         Text [ danish ] = "Ingen" ;
-        Text [ french ] = "~Aucun(e)" ;
+        Text [ french ] = "Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
         Text [ dutch ] = "~Geen" ;
         Text [ spanish ] = "~Ningún" ;
         Text [ english_us ] = "~None" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ— (~N)";
-        Text[ russian ] = "áåç";
+        Text[ russian ] = "Íåò";
         Text[ polish ] = "Brak";
         Text[ japanese ] = "ãªã—(~N)";
         Text[ chinese_traditional ] = "ç„¡(~N)";
@@ -104,7 +104,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "ì—†ìŒ(~N)";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ningún";
+        Text[ catalan ] = "~Cap";
+        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µ";
     };
     RadioButton BTN_AUTO
     {
@@ -113,13 +114,13 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "~Auto" ;
         Text [ norwegian ] = "~Auto" ;
-        Text [ italian ] = "~Automatico" ;
+        Text [ italian ] = "Automatico" ;
         Text [ portuguese_brazilian ] = "~Auto" ;
         Text [ portuguese ] = "~Automaticamente" ;
         Text [ finnish ] = "~Automaattinen" ;
         Text [ danish ] = "Automatisk" ;
-        Text [ french ] = "~Automatique" ;
-        Text [ swedish ] = "~Automatisk" ;
+        Text [ french ] = "Automatique" ;
+        Text [ swedish ] = "~Automatiskt" ;
         Text [ dutch ] = "~Automatisch" ;
         Text [ spanish ] = "~Automático" ;
         Text [ english_us ] = "~Automatic" ;
@@ -134,7 +135,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "ìë™(~A)";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Automático";
+        Text[ catalan ] = "~Automàtic";
+        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     RadioButton BTN_USER
     {
@@ -146,9 +148,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "Definito dall'utente" ;
         Text [ portuguese_brazilian ] = "~Definido pelo usu?rio" ;
         Text [ portuguese ] = "Definido pelo ~utilizador" ;
-        Text [ finnish ] = "~K?ytt?j?n m??ritt?m?t" ;
+        Text [ finnish ] = "~Käyttäjän määrittämät" ;
         Text [ danish ] = "Brugerdefineret" ;
-        Text [ french ] = "Défini par l'~utilisateur" ;
+        Text [ french ] = "Défini par l'utilisateur" ;
         Text [ swedish ] = "~Användardefinierade" ;
         Text [ dutch ] = "Ge~bruikergedefinieerd" ;
         Text [ spanish ] = "Definido por el ~usuario" ;
@@ -157,14 +159,15 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_simplified ] = "ä½¿ç”¨è€…è‡ªè®¾(~U)";
         Text[ russian ] = "Îïğåäåëÿåìûé ïîëüçîâàòåëåì";
         Text[ polish ] = "Ustawienia indywidualne";
-        Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°å®šç¾©(~U)";
+        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©(~U)";
         Text[ chinese_traditional ] = "ä½¿ç”¨è€…è‡ªè¨‚(~U)";
         Text[ arabic ] = "ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";
         Text[ greek ] = "Ïñéæüìåíï áğü ôïí ÷ñŞóôç";
         Text[ korean ] = "ì‚¬ìš©ì ì •ì˜(~U)";
         Text[ turkish ] = "~Kullanıcı tanımlı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Definido por el ~usuario";
+        Text[ catalan ] = "Definit per l'~usuari";
+        Text[ thai ] = "à¸£à¸°à¸šà¸¸~à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
     };
     MultiListBox LB_FUNC
     {
@@ -262,15 +265,15 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         };
         StringList [ finnish ] =
         {
-            < "Sum" ; Default ; > ;
-            < "Lukum??r?" ; Default ; > ;
+            < "Summa" ; Default ; > ;
+            < "LASKE" ; Default ; > ;
             < "Keskiarvo" ; Default ; > ;
-            < "Enint" ; Default ; > ;
-            < "V?h" ; Default ; > ;
-            < "Tuote" ; Default ; > ;
-            < "M??r? (vain numerot)" ; Default ; > ;
-            < "StDev (vakiopoikkeama, Otos)" ; Default ; > ;
-            < "StDevP (vakiopoikkeama, populaatio)" ; Default ; > ;
+            < "MAKS" ; Default ; > ;
+            < "MIN" ; Default ; > ;
+            < "Tulo" ; Default ; > ;
+            < "LASKE (vain luvut)" ; Default ; > ;
+            < "KESKIHAJONTA (otos)" ; Default ; > ;
+            < "KESKIHAJONTA (populaatio)" ; Default ; > ;
             < "Var (Otos)" ; Default ; > ;
             < "VarP (populaatio)" ; Default ; > ;
         };
@@ -341,8 +344,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
             < "Cantidad2 (solo números)" ; Default ; > ;
             < "DesvEst (Muestra)" ; Default ; > ;
             < "DesvEstP (Población)" ; Default ; > ;
-            < "Varianza (Muestra)" ; Default ; > ;
-            < "Varianzas (Población)" ; Default ; > ;
+            < "Variancia (muestra)" ; Default ; > ;
+            < "VarP (población)" ; Default ; > ;
         };
         StringList [ english_us ] =
         {
@@ -381,7 +384,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Ìàêñèìóì" ; Default ; > ;
         < "Ìèíèìóì" ; Default ; > ;
         < "Ïğîèçâåäåíèå" ; Default ; > ;
-        < "Êîëè÷åñòâî (òîëüêî ÷èñåë)" ; Default ; > ;
+        < "Êîëè÷åñòâî (òîëüêî ÷èñëà)" ; Default ; > ;
         < "Ñìåùåííîå îòêëîíåíèå (Îáğàçåö)" ; Default ; > ;
         < "Íåñìåùåííîå îòêëîíåíèå (Ñîâîêóïíîñòü)" ; Default ; > ;
         < "Ñìåùåííàÿ äèñïåğñèÿ (Îáğàçåö)" ; Default ; > ;
@@ -460,16 +463,16 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ korean ] =
     {
             < "í•©ê³„" ; Default ; > ;
-        < "ìˆ˜" ; Default ; > ;
-        < "í‰ê· " ; Default ; > ;
+        < "ê°’" ; Default ; > ;
+        < "í‰ê· ê°’" ; Default ; > ;
         < "ìµœëŒ€" ; Default ; > ;
         < "ìµœì†Œ" ; Default ; > ;
         < "ê³±" ; Default ; > ;
-        < "ìˆ˜ (ìˆ«ìë§Œ)" ; Default ; > ;
-        < "StDev (ìƒ˜í”Œ)" ; Default ; > ;
-        < "ï¼³tDevP (ëª¨ì§‘ë‹¨)" ; Default ; > ;
-        < "ë¶„ì‚° (ìƒ˜í”Œ)" ; Default ; > ;
-        < "ë¶„ì‚° (ëª¨ì§‘ë‹¨)" ; Default ; > ;
+        < "ê°’(ìˆ«ìë§Œ)" ; Default ; > ;
+        < "StDev(ìƒ˜í”Œ)" ; Default ; > ;
+        < "ï¼³tDevP(ëª¨ì§‘ë‹¨)" ; Default ; > ;
+        < "ë¶„ì‚°(ìƒ˜í”Œ)" ; Default ; > ;
+        < "ë¶„ì‚°(ëª¨ì§‘ë‹¨)" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -502,16 +505,30 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ catalan ] =
     {
             < "Suma" ; Default ; > ;
-        < "Cantidad" ; Default ; > ;
-        < "Promedio" ; Default ; > ;
-        < "Máx" ; Default ; > ;
-        < "Mín" ; Default ; > ;
-        < "Producto" ; Default ; > ;
-        < "Cantidad2 (solo números)" ; Default ; > ;
-        < "DesvEst (Muestra)" ; Default ; > ;
-        < "DesvEstP (Población)" ; Default ; > ;
-        < "Varianza (Muestra)" ; Default ; > ;
-        < "Varianzas (Población)" ; Default ; > ;
+        < "Compta" ; Default ; > ;
+        < "Mitjana" ; Default ; > ;
+        < "Màx." ; Default ; > ;
+        < "Mín." ; Default ; > ;
+        < "Producte" ; Default ; > ;
+        < "Compta (només els números)" ; Default ; > ;
+        < "StDev (mostra)" ; Default ; > ;
+        < "StDevP (població)" ; Default ; > ;
+        < "Var (mostra)" ; Default ; > ;
+        < "VarP (població)" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¸œà¸¥à¸£à¸§à¸¡" ; Default ; > ;
+        < "à¸™à¸±à¸š" ; Default ; > ;
+        < "à¹€à¸‰à¸¥à¸µà¹ˆà¸¢" ; Default ; > ;
+        < "à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
+        < "à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
+        < "à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œ" ; Default ; > ;
+        < "à¸™à¸±à¸š (à¸•à¸±à¸§à¹€à¸¥à¸‚à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™)" ; Default ; > ;
+        < "StDev (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
+        < "StDevP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
+        < "Var (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
+        < "VarP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
     };
     };
     FixedLine FL_FUNC
@@ -538,15 +555,16 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ swedish ] = "Visa objekt utan data";
         Text[ polish ] = "Poka¿ elementy bez danych";
         Text[ portuguese_brazilian ] = "Show elements without data";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ã®ãªã„è¦ç´ ã‚’è¡¨ç¤ºã™ã‚‹(~E)";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®ãªã„è¦ç´ ã‚’è¡¨ç¤ºã™ã‚‹(~E)";
         Text[ korean ] = "ë°ì´í„° ì—†ì´ ìš”ì†Œ ë³´ê¸°(~E)";
         Text[ chinese_simplified ] = "æ˜¾ç¤ºä¸å«æ•°æ®çš„æ¡ç›®(~E)";
         Text[ chinese_traditional ] = "é¡¯ç¤ºç„¡æ•¸æ“šçš„å–®å…ƒ(~E)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÚäÇÕÑ ÈÏæä ÈíÇäÇÊ";
         Text[ turkish ] = "~Ögeleri veriler olmadan görüntüle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Mostrar elementos sin datos";
-        Text[ finnish ] = "N?yt? ~elementit ilman tietoja";
+        Text[ catalan ] = "Mostra els ~elements sense dades";
+        Text[ finnish ] = "Näytä ~elementit ilman tietoja";
+        Text[ thai ] = "à¹à¸ªà¸”à¸‡~à¸­à¸‡à¸„à¹Œà¸›à¸£à¸°à¸à¸­à¸šà¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     FixedText FT_NAMELABEL
     {
@@ -575,7 +593,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "ì´ë¦„:";
         Text[ turkish ] = "Ad:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre:";
+        Text[ catalan ] = "Nom:";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­:";
     };
     FixedText FT_NAME
     {
@@ -609,7 +628,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "Subtotali" ;
         Text [ portuguese_brazilian ] = "Sub Totais" ;
         Text [ portuguese ] = "Subtotais" ;
-        Text [ finnish ] = "V?lisummat" ;
+        Text [ finnish ] = "Välisummat" ;
         Text [ danish ] = "Subtotaler" ;
         Text [ french ] = "Sous-totaux" ;
         Text [ swedish ] = "Delresultat" ;
@@ -623,10 +642,11 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_traditional ] = "å°è¨ˆ";
         Text[ arabic ] = "Subtotals";
         Text[ greek ] = "ÌåñéêÜ áèñïßóìáôá";
-        Text[ korean ] = "ì†Œê³„";
+        Text[ korean ] = "ë¶€ë¶„í•©";
         Text[ turkish ] = "Ara toplam";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Subtotales";
+        Text[ catalan ] = "Subtotals";
+        Text[ thai ] = "à¸œà¸¥à¸£à¸§à¸¡à¸¢à¹ˆà¸­à¸¢";
     };
     String STR_DATAFUNC
     {
@@ -650,10 +670,11 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_traditional ] = "å‡½æ•¸";
         Text[ arabic ] = "Function";
         Text[ greek ] = "ÓõíÜñôçóç";
-        Text[ korean ] = "í•¨ìˆ˜";
+        Text[ korean ] = "ê³„ì‚° ë°©ë²•";
         Text[ turkish ] = "Fonksiyon";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Función";
+        Text[ catalan ] = "Funció";
+        Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
     };
     Text [ spanish ] = "Campo de datos" ;
     Text [ french ] = "Champ de données" ;
@@ -663,16 +684,24 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ chinese_simplified ] = "æ•°æ®å­—æ®µ";
     Text[ russian ] = "Ïîëå äàííûõ";
     Text[ polish ] = "Pole danych";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾Œï½¨ï½°ï¾™ï¾„ï¾";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
     Text[ chinese_traditional ] = "è³‡æ–™æ¬„ä½";
     Text[ arabic ] = "ÍŞá ÈíÇäÇÊ";
     Text[ greek ] = "Ğåäßï äåäïìİíùí";
     Text[ korean ] = "ë°ì´í„° í•„ë“œ";
     Text[ turkish ] = "Veri alanı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Campo de datos";
-    Text[ finnish ] = "Tietokentt?";
+    Text[ catalan ] = "Camp de dades";
+    Text[ finnish ] = "Tietokenttä";
+    Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸‚à¸­à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+
+
+
+
+
+
 
 
 

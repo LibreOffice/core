@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:15:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1857,7 +1857,7 @@ DefTokenId ExcelToSc::IndexToToken( UINT16 nIndex )
         ocNoName,           // XlfScenarioGet
         ocNoName,           // XlfOptionsListsGet
         ocISPMT,            // XlfIspmt
-        ocGetDiffDate,      // XlfDatedif
+        ocNoName,           // XlfDatedif
         ocNoName,           // XlfDatestring
         ocNoName,           // XlfNumberstring
         ocRoman,            // XlfRoman
@@ -2270,7 +2270,7 @@ BYTE ExcelToSc::IndexToAnzahl( UINT16 nIndex )
         0,      // XlfScenarioGet
         0,      // XlfOptionsListsGet
         4,      // XlfIspmt
-        0,      // XlfDatedif
+        3,      // XlfDatedif
         0,      // XlfDatestring
         0,      // XlfNumberstring
         1,      // XlfRoman
@@ -2380,6 +2380,11 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
             rSRD.nRelCol = rSRD.nCol - aEingPos.Col();
         if ( rSRD.IsRowRel() )
             rSRD.nRelRow = rSRD.nRow - aEingPos.Row();
+
+        // T A B
+        // #i10184# abs needed if rel in shared formula for ScCompiler UpdateNameReference
+        if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
+            rSRD.nTab = pExcRoot->pIR->GetScTab() + rSRD.nRelTab;
     }
 }
 

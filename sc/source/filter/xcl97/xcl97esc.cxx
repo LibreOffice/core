@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-12 13:14:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _SVDOOLE2_HXX //autogen wg. SdrOle2Obj
 #include <svx/svdoole2.hxx>
 #endif
+#ifndef _SVX_FMGLOB_HXX
+#include <svx/fmglob.hxx>
+#endif
 #ifndef _IPOBJ_HXX //autogen wg. SvInPlaceObject
 #include <so3/ipobj.hxx>
 #endif
@@ -113,6 +116,9 @@
 XclEscherEx::XclEscherEx( SvStream& rStrm, UINT32 nDrawings, RootData& rRoot )
         :
         EscherEx( rStrm, nDrawings ),
+#if EXC_INCL_EXP_OCX
+        aOcxConverter( *rRoot.pER ),
+#endif
         rRootData( rRoot ),
         pPicTempFile( NULL ),
         pPicStrm( NULL ),
@@ -218,30 +224,41 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
         pCurrXclObj = new XclObjAny( rRootData );   // just what is it?!?
     else
     {
-        switch ( pObj->GetObjIdentifier() )
+        pCurrXclObj = NULL;
+        sal_uInt16 nObjType = pObj->GetObjIdentifier();
+
+        if( nObjType == OBJ_OLE2 )
         {
-            case OBJ_OLE2 :
+            //! not-const because GetObjRef may load the OLE object
+            SvInPlaceObjectRef xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
+            if ( xObj.Is() )
             {
-                //! not-const because GetObjRef may load the OLE object
-                SvInPlaceObjectRef xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
-                if ( xObj.Is() )
-                {
-                    SvGlobalName aObjClsId( *xObj->GetSvFactory() );
-                    if ( SchModuleDummy::HasID( aObjClsId ) )
-                    {   // yes, it's a chart diagram
-                        rRootData.pObjRecs->Add( new XclObjChart( rRootData, rShape ) );
-                        pCurrXclObj = NULL;     // no metafile or whatsoever
-                    }
-                    else    // metafile and OLE object
-                        pCurrXclObj = new XclObjOle( rRootData, *pObj );
+                SvGlobalName aObjClsId( *xObj->GetSvFactory() );
+                if ( SchModuleDummy::HasID( aObjClsId ) )
+                {   // yes, it's a chart diagram
+                    rRootData.pObjRecs->Add( new XclObjChart( rRootData, rShape ) );
+                    pCurrXclObj = NULL;     // no metafile or whatsoever
                 }
-                else    // just a metafile
-                    pCurrXclObj = new XclObjAny( rRootData );
+                else    // metafile and OLE object
+                    pCurrXclObj = new XclObjOle( rRootData, *pObj );
             }
-            break;
-            default:
+            else    // just a metafile
                 pCurrXclObj = new XclObjAny( rRootData );
         }
+        else if( nObjType == OBJ_CAPTION )  // #107540# ignore permanent note shapes
+        {
+            pCurrXclObj = NULL;
+        }
+#if EXC_INCL_EXP_OCX
+        else if( nObjType >= OBJ_FM_CONTROL )
+        {
+            pCurrXclObj = aOcxConverter.CreateObjRec( rShape );
+            if( !pCurrXclObj )
+                pCurrXclObj = new XclObjAny( rRootData );   // just a metafile
+        }
+#endif
+        else
+            pCurrXclObj = new XclObjAny( rRootData );   // just a metafile
     }
     if ( pCurrXclObj )
     {
@@ -295,31 +312,42 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
 
 void XclEscherEx::EndShape( UINT16 nShapeType, UINT32 nShapeID )
 {
-    if ( !nShapeID && pCurrXclObj )
-    {   // shape not written
-        XclObj* p = (XclObj*) rRootData.pObjRecs->Last();
-        DBG_ASSERT( p == pCurrXclObj, "XclEscherEx::EndShape: what object?" );
-        if ( p == pCurrXclObj )
-        {
-            rRootData.pObjRecs->Remove();
-            delete pCurrXclObj;
-            pCurrXclObj = NULL;
-        }
-    }
-    if ( pCurrXclObj )
+    // own escher data created? -> never delete such objects
+    bool bOwnEscher = pCurrXclObj && pCurrXclObj->IsOwnEscher();
+
+    // post process the current object - not for objects with own escher data
+    if( pCurrXclObj && !bOwnEscher )
     {
-        if ( pCurrAppData->IsStackedGroup() )
-            pCurrXclObj->SetEscherShapeTypeGroup();
-        else
+        // escher data of last shape not written? -> delete it from object list
+        if( nShapeID == 0 )
         {
-            pCurrXclObj->SetEscherShapeType( nShapeType );
-            pCurrXclObj->UpdateStopPos();
+            XclObj* pLastObj = static_cast< XclObj* >( rRootData.pObjRecs->Last() );
+            DBG_ASSERT( pLastObj == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
+            if ( pLastObj == pCurrXclObj )
+            {
+                rRootData.pObjRecs->Remove();
+                DELETEZ( pCurrXclObj );
+            }
+        }
+
+        if( pCurrXclObj )
+        {
+            // set shape type
+            if ( pCurrAppData->IsStackedGroup() )
+                pCurrXclObj->SetEscherShapeTypeGroup();
+            else
+            {
+                pCurrXclObj->SetEscherShapeType( nShapeType );
+                pCurrXclObj->UpdateStopPos();
+            }
         }
     }
+
+    // get next object from stack
     DeleteCurrAppData();
-    pCurrAppData = (XclEscherHostAppData*) aStack.Pop();
-    pCurrXclObj = (XclObj*) aStack.Pop();
-    if ( nAdditionalText == 3 )
+    pCurrAppData = static_cast< XclEscherHostAppData* >( aStack.Pop() );
+    pCurrXclObj = static_cast< XclObj* >( aStack.Pop() );
+    if( nAdditionalText == 3 )
         nAdditionalText = 0;
 }
 

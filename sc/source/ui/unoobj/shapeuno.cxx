@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-27 18:22:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,13 +396,19 @@ beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const rtl::OUString&
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-
-    //! mix own and aggregated properties
+    String aNameString = aPropertyName;
 
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
-    uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
-    if ( xAggState.is() )
-        eRet = xAggState->getPropertyState( aPropertyName );
+    if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    {
+        // ImageMap is always "direct"
+    }
+    else
+    {
+        uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
+        if ( xAggState.is() )
+            eRet = xAggState->getPropertyState( aPropertyName );
+    }
 
     return eRet;
 }
@@ -427,12 +433,31 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    String aNameString = aPropertyName;
 
-    //! mix own and aggregated properties
-
-    uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
-    if ( xAggState.is() )
-        xAggState->setPropertyToDefault( aPropertyName );
+    if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    {
+        SdrObject* pObj = GetSdrObject();
+        if ( pObj )
+        {
+            ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo(pObj);
+            if( pIMapInfo )
+            {
+                ImageMap aEmpty;
+                pIMapInfo->SetImageMap( aEmpty );   // replace with empty image map
+            }
+            else
+            {
+                // nothing to do (no need to insert user data for an empty map)
+            }
+        }
+    }
+    else
+    {
+        uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
+        if ( xAggState.is() )
+            xAggState->setPropertyToDefault( aPropertyName );
+    }
 }
 
 uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const rtl::OUString& aPropertyName )
@@ -440,13 +465,21 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const rtl::OUString& aProperty
                                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-
-    //! mix own and aggregated properties
+    String aNameString = aPropertyName;
 
     uno::Any aAny;
-    uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
-    if ( xAggState.is() )
-        aAny = xAggState->getPropertyDefault( aPropertyName );
+    if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    {
+        //  default: empty ImageMap
+        uno::Reference< uno::XInterface > xImageMap = SvUnoImageMap_createInstance( GetSupportedMacroItems() );
+        aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
+    }
+    else
+    {
+        uno::Reference<beans::XPropertyState> xAggState = lcl_GetPropertyState(mxShapeAgg);
+        if ( xAggState.is() )
+            aAny = xAggState->getPropertyDefault( aPropertyName );
+    }
 
     return aAny;
 }

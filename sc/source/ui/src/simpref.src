@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:20:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   simpref.src  $
- //   $Author: kz $
- //     $Date: 2001-07-14 20:20:25 $
- // $Revision: 1.10 $
+ //   $Author: hr $
+ //     $Date: 2003-03-26 18:06:32 $
+ // $Revision: 1.11 $
  //  $Logfile:   T:/sc/source/ui/src/simpref.srv  $
  //----------------------------------------------------------------------------
 
@@ -98,17 +98,18 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         Text [ dutch ] = "Bereik" ;
         Text [ spanish ] = "Área" ;
         Text [ english_us ] = "Area" ;
-        Text[ chinese_simplified ] = "ÇøÓò";
-        Text[ russian ] = "Îáëàñòü";
+        Text[ chinese_simplified ] = "åŒºåŸŸ";
+        Text[ russian ] = "Äèàïàçîí";
         Text[ polish ] = "Obszar";
-        Text[ japanese ] = "”ÍˆÍ";
-        Text[ chinese_traditional ] = "°Ï°ì";
+        Text[ japanese ] = "ç¯„å›²";
+        Text[ chinese_traditional ] = "å€åŸŸ";
         Text[ arabic ] = "ÇáäØÇŞ";
         Text[ greek ] = "Ğåñéï÷Ş";
-        Text[ korean ] = "¿µ¿ª";
+        Text[ korean ] = "ì˜ì—­";
         Text[ turkish ] = "Bölüm";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Área";
+        Text[ catalan ] = "Àrea";
+        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
     };
     Edit ED_ASSIGN
     {
@@ -136,16 +137,17 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "k¬";
-        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
-        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ japanese ] = "ç¸®å°";
+        QuickHelpText[ chinese_simplified ] = "ç¼©å°";
+        QuickHelpText[ chinese_traditional ] = "ç¸®å°";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò";
+        QuickHelpText[ korean ] = "ì¶•ì†Œ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
+        QuickHelpText[ thai ] = "Shrink";
     };
     OKButton BTN_OK
     {
@@ -166,6 +168,15 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 

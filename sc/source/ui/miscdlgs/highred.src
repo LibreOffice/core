@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-16 22:50:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,21 +85,22 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text [ danish ] = "Vis ændringerne i regnearket" ;
         Text [ italian ] = "Mostra modifiche nella tabella" ;
         Text [ spanish ] = "~Mostrar las modificaciones en la hoja" ;
-        Text [ french ] = "~Afficher les modifications dans la feuille de calcul" ;
+        Text [ french ] = "Afficher les modifications dans la feuille de calcul" ;
         Text [ dutch ] = "W~ijzigingen op het werkblad weergeven." ;
         Text [ portuguese ] = "Mostrar modificações na folha de cálculo" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤ºå·¥ä½œè¡¨å†…çš„æ›´æ”¹å†…å®¹(~S)";
-        Text[ russian ] = "Ïîêàçàòü èçìåíåíèÿ â ëèñòå";
+        Text[ russian ] = "Ïîêàçàòü èçìåíåíèÿ â ıëåêòğîííîé òàáëèöå";
         Text[ polish ] = "Poka¿ zmiany w tabeli";
         Text[ japanese ] = "è¡¨å†…ã®å¤‰æ›´ç®‡æ‰€ã‚’è¡¨ç¤º(~S)";
         Text[ chinese_traditional ] = "é¡¯ç¤ºå·¥ä½œè¡¨å…§çš„è®Šæ›´(~S)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ İí ÇáÌÏæá";
         Text[ greek ] = "ÅìöÜíéóç áëëáãşí ğßíáêá";
-        Text[ korean ] = "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ì— ë³€ê²½ì‚¬í•­ ë³´ì´ê¸°(~S)";
+        Text[ korean ] = "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ì— ë³€ê²½ ì‚¬í•­ í‘œì‹œ(~S)";
         Text[ turkish ] = "~Tablodaki değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Mostrar las modificaciones en la hoja";
-        Text[ finnish ] = "~N?yt? muutokset laskentataulukossa";
+        Text[ catalan ] = "~Mostra els canvis al full de càlcul";
+        Text[ finnish ] = "~Näytä muutokset laskentataulukossa";
+        Text[ thai ] = "à¹~à¸ªà¸”à¸‡à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¹ƒà¸™à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“";
     };
     FixedLine FL_FILTER
     {
@@ -114,19 +115,20 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ dutch ] = "Filterinstellingen";
         Text[ french ] = "Paramètres de filtre";
         Text[ spanish ] = "Configuración de filtros";
-        Text[ finnish ] = "Filter options";
+        Text[ finnish ] = "Suodatusasetukset";
         Text[ italian ] = "Impostazioni filtro";
-        Text[ danish ] = "Filter options";
+        Text[ danish ] = "Filterindstillinger";
         Text[ swedish ] = "Filterinställningar";
         Text[ polish ] = "Ustawienia filtra";
         Text[ portuguese_brazilian ] = "Filter options";
-        Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€ã®è¨­å®š";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿ã®è¨­å®š";
         Text[ korean ] = "í•„í„° ì˜µì…˜";
         Text[ chinese_simplified ] = "é€‰é¡¹è®¾å®š";
         Text[ chinese_traditional ] = "è¨­å®šç¯©é¸";
         Text[ turkish ] = "Filter options";
         Text[ arabic ] = "Filter options";
-        Text[ catalan ] = "Filter options";
+        Text[ catalan ] = "Opcions del filtre";
+        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
     };
     CheckBox CB_HIGHLIGHT_ACCEPT
     {
@@ -137,10 +139,10 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         TabStop = TRUE ;
         Text [ english_us ] = "Show ~accepted changes" ;
         Text [ portuguese_brazilian ] = "A~kzeptierte ?nderungen anzeigen" ;
-        Text [ swedish ] = "Visa a~ccepterade ändringar" ;
+        Text [ swedish ] = "Visa acc~epterade ändringar" ;
         Text [ danish ] = "Vis accepterede ændringer" ;
-        Text [ italian ] = "Mostra i cambiamenti a~ccettati" ;
-        Text [ spanish ] = "~Mostrar las modificaciones aceptadas" ;
+        Text [ italian ] = "Mostra le modifiche a~ccettate" ;
+        Text [ spanish ] = "Mostrar las modificaciones aceptadas" ;
         Text [ french ] = "Afficher les modifications acceptées" ;
         Text [ dutch ] = "Geac~cepteerde wijzigingen weergeven" ;
         Text [ portuguese ] = "Mostrar mo~dificações aceites" ;
@@ -151,11 +153,12 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "é¡¯ç¤ºæ¥å—çš„è®Šæ›´(~A)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãŞÈæáÉ";
         Text[ greek ] = "ÅìöÜíéóç áğïäå÷ïìİíùí áëëáãşí";
-        Text[ korean ] = "ì ìš©ëœ ë³€ê²½ ë³´ì´ê¸°(~A)";
+        Text[ korean ] = "ì ìš©ëœ ë³€ê²½ í‘œì‹œ(~A)";
         Text[ turkish ] = "~Kabul edilen değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Mostrar las modificaciones aceptadas";
-        Text[ finnish ] = "~N?yt? hyv?ksytyt muutokset";
+        Text[ catalan ] = "Mostra els canvis ~acceptats";
+        Text[ finnish ] = "Näytä hyväksytyt muutokset";
+        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸—à¸µà¹ˆ~à¸¢à¸­à¸¡à¸£à¸±à¸šà¹„à¸”à¹‰";
     };
     CheckBox CB_HIGHLIGHT_REJECT
     {
@@ -166,25 +169,26 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         TabStop = TRUE ;
         Text [ english_us ] = "Show ~rejected changes" ;
         Text [ portuguese_brazilian ] = "A~bgelehnte ?nderungen anzeigen" ;
-        Text [ swedish ] = "Visa ~ej accepterade ändringar" ;
-        Text [ danish ] = "Vis forkastede ændringer" ;
-        Text [ italian ] = "Mostra i cambiamenti accettati" ;
-        Text [ spanish ] = "~Mostrar las modificaciones rechazadas" ;
-        Text [ french ] = "Afficher les modifications ~refusées" ;
+        Text [ swedish ] = "Visa i~gnorerade ändringar" ;
+        Text [ danish ] = "Vis for~kastede ændringer" ;
+        Text [ italian ] = "Mostra le modifiche ri~fiutate" ;
+        Text [ spanish ] = "Mostrar las modificaciones rechazadas" ;
+        Text [ french ] = "Afficher les modifications refusées" ;
         Text [ dutch ] = "Niet-ge~accepteerde wijzigingen weergeven" ;
         Text [ portuguese ] = "Mostrar modificações ~rejeitadas" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤ºæ‹’ç»çš„æ›´æ”¹å†…å®¹(~R)";
         Text[ russian ] = "Ïîêàçàòü îòêëîíåííûå èçìåíåíèÿ";
         Text[ polish ] = "Poka¿ odrzucone zmiany";
         Text[ japanese ] = "ç ´æ£„ã—ãŸå¤‰æ›´ç®‡æ‰€ã‚’è¡¨ç¤º(~R)";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºå·²æ‹’çµ•çš„è®Šæ›´å†…å®¹(~R)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºå·²æ‹’çµ•çš„è®Šæ›´å…§å®¹(~R)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãÑİæÖÉ";
         Text[ greek ] = "ĞñïâïëŞ áğïññéğôİùí áëëáãşí";
-        Text[ korean ] = "ê±°ë¶€ëœ ë³€ê²½ì‚¬í•­ í‘œì‹œ(~R)";
+        Text[ korean ] = "ê±°ë¶€ëœ ë³€ê²½ í‘œì‹œ(~R)";
         Text[ turkish ] = "~Reddedilen değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Mostrar las modificaciones rechazadas";
-        Text[ finnish ] = "~Näytä hylätyt muutokset";
+        Text[ catalan ] = "Mostra els canvis ~rebutjats";
+        Text[ finnish ] = "Näytä hylätyt muutokset";
+        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸—à¸µà¹ˆ~à¸›à¸à¸´à¹€à¸ªà¸˜";
     };
     OKButton BTN_OK
     {
@@ -241,8 +245,9 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern/Vergrößern";
-        QuickHelpText[ catalan ] = "Reducir/Aumentar";
-        QuickHelpText[ finnish ] = "Pienenn?/suurenna!";
+        QuickHelpText[ catalan ] = "Redueix/Augmenta";
+        QuickHelpText[ finnish ] = "Pienennä/suurenna";
+        QuickHelpText[ thai ] = "Minimize/Maximize";
     };
     Text [ english_us ] = "Show Changes" ;
     Text [ portuguese_brazilian ] = "?nderungen anzeigen" ;
@@ -260,12 +265,19 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ chinese_traditional ] = "é¡¯ç¤ºè®Šæ›´";
     Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ";
     Text[ greek ] = "ÅìöÜíéóç áëëáãşí";
-    Text[ korean ] = "ë³€ê²½ ë³´ì´ê¸°";
+    Text[ korean ] = "ë³€ê²½ í‘œì‹œ";
     Text[ turkish ] = "Değişiklikleri görüntüle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mostrar modificaciones";
-    Text[ finnish ] = "N?yt? muutokset";
+    Text[ catalan ] = "Mostra els canvis";
+    Text[ finnish ] = "Näytä muutokset";
+    Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡";
 };
+
+
+
+
+
+
 
 
 

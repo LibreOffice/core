@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeseq.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-10 18:46:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #pragma hdrstop
 
 #include <svtools/zforlist.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <tools/debug.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
@@ -83,8 +83,8 @@ using namespace com::sun::star;
 
 long lcl_DoubleToLong( double fVal )
 {
-    double fInt = (fVal >= 0.0) ? SolarMath::ApproxFloor( fVal ) :
-                                  SolarMath::ApproxCeil( fVal );
+    double fInt = (fVal >= 0.0) ? ::rtl::math::approxFloor( fVal ) :
+                                  ::rtl::math::approxCeil( fVal );
     if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
         return (long)fInt;
     else

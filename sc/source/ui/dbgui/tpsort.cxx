@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-03 16:43:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,15 +712,8 @@ void ScTabPageSortOptions::Init()
 
     //  get available languages
 
+    aLbLanguage.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, FALSE );
     aLbLanguage.InsertLanguage( LANGUAGE_SYSTEM );
-    uno::Sequence<lang::Locale> xLoc = LocaleDataWrapper::getInstalledLocaleNames();
-    sal_Int32 nCount = xLoc.getLength();
-    for ( sal_Int32 i=0; i<nCount; i++ )
-    {
-        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[i].Language,
-            xLoc[i].Country );
-        aLbLanguage.InsertLanguage( eLang );
-    }
 }
 
 //------------------------------------------------------------------------

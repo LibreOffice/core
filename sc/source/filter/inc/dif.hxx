@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dif.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,15 +86,17 @@ class SvNumberFormatter;
 class ScDocument;
 class ScPatternAttr;
 
-extern const sal_Char*  pKeyTABLE;
-extern const sal_Char*  pKeyVECTORS;
-extern const sal_Char*  pKeyTUPLES;
-extern const sal_Char*  pKeyDATA;
-extern const sal_Char*  pKeyBOT;
-extern const sal_Char*  pKeyEOD;
-extern const sal_Char*  pKeyTRUE;
-extern const sal_Char*  pKeyFALSE;
-extern const sal_Char*  pKeyNA;
+extern const sal_Unicode pKeyTABLE[];
+extern const sal_Unicode pKeyVECTORS[];
+extern const sal_Unicode pKeyTUPLES[];
+extern const sal_Unicode pKeyDATA[];
+extern const sal_Unicode pKeyBOT[];
+extern const sal_Unicode pKeyEOD[];
+extern const sal_Unicode pKeyTRUE[];
+extern const sal_Unicode pKeyFALSE[];
+extern const sal_Unicode pKeyNA[];
+extern const sal_Unicode pKeyV[];
+extern const sal_Unicode pKey1_0[];
 
 
 enum TOPIC
@@ -112,7 +114,7 @@ enum DATASET { D_BOT, D_EOD, D_NUMERIC, D_STRING, D_UNKNOWN, D_SYNT_ERROR };
 class DifParser
 {
 public:
-    ByteString          aData;
+    String              aData;
     double              fVal;
     UINT32              nVector;
     UINT32              nVal;
@@ -122,31 +124,10 @@ private:
     SvNumberFormatter*  pNumFormatter;
     SvStream&           rIn;
     BOOL                bPlain;
-#if __ALIGNMENT4 == 1
-    static UINT32       nBOT;
-    static UINT32       nEOD;
-    static UINT32       n1_0;
-    static UINT16       nV;
-#else
-    static sal_Char     cBOT_0;
-    static sal_Char     cEOD_0;
-    static sal_Char     c1_0_0;
-    static sal_Char     cBOT_1;
-    static sal_Char     cEOD_1;
-    static sal_Char     c1_0_1;
-    static sal_Char     cBOT_2;
-    static sal_Char     cEOD_2;
-    static sal_Char     c1_0_2;
-    static sal_Char     cBOT_3;
-    static sal_Char     cEOD_3;
-    static sal_Char     c1_0_3;
-    static sal_Char     cV_0;
-    static sal_Char     cV_1;
-#endif
 
-    static inline BOOL  IsBOT( const sal_Char* pRef );
-    static inline BOOL  IsEOD( const sal_Char* pRef );
-    static inline BOOL  Is1_0( const sal_Char* pRef );
+    static inline BOOL  IsBOT( const sal_Unicode* pRef );
+    static inline BOOL  IsEOD( const sal_Unicode* pRef );
+    static inline BOOL  Is1_0( const sal_Unicode* pRef );
 public:
                         DifParser( SvStream&, const UINT32 nOption, ScDocument&, CharSet );
 
@@ -154,75 +135,59 @@ public:
 
     DATASET             GetNextDataset( void );
 
-    const sal_Char*     ScanIntVal( const sal_Char* pStart, UINT32& rRet );
-    BOOL                ScanFloatVal( const sal_Char* pStart );
+    const sal_Unicode*  ScanIntVal( const sal_Unicode* pStart, UINT32& rRet );
+    BOOL                ScanFloatVal( const sal_Unicode* pStart );
 
-    inline BOOL         IsNumber( const sal_Char cChar );
-    inline BOOL         IsNumberEnding( const sal_Char cChar );
+    inline BOOL         IsNumber( const sal_Unicode cChar );
+    inline BOOL         IsNumberEnding( const sal_Unicode cChar );
 
-    static inline BOOL  IsV( const sal_Char* pRef );
+    static inline BOOL  IsV( const sal_Unicode* pRef );
 
     inline BOOL         IsPlain( void ) const;
 };
 
 
-inline BOOL DifParser::IsBOT( const sal_Char* pRef )
+inline BOOL DifParser::IsBOT( const sal_Unicode* pRef )
 {
-#if __ALIGNMENT4 == 1
-    return ( nBOT == *( ( UINT32* ) pRef ) );
-#else
-    return  (   pRef[ 0 ] == cBOT_0 &&
-                pRef[ 1 ] == cBOT_1 &&
-                pRef[ 2 ] == cBOT_2 &&
-                pRef[ 3 ] == cBOT_3 );
-#endif
+    return  (   pRef[ 0 ] == pKeyBOT[0] &&
+                pRef[ 1 ] == pKeyBOT[1] &&
+                pRef[ 2 ] == pKeyBOT[2] &&
+                pRef[ 3 ] == pKeyBOT[3] );
 }
 
 
-inline BOOL DifParser::IsEOD( const sal_Char* pRef )
+inline BOOL DifParser::IsEOD( const sal_Unicode* pRef )
 {
-#if __ALIGNMENT4 == 1
-    return ( nEOD == *( ( UINT32* ) pRef ) );
-#else
-    return  (   pRef[ 0 ] == cEOD_0 &&
-                pRef[ 1 ] == cEOD_1 &&
-                pRef[ 2 ] == cEOD_2 &&
-                pRef[ 3 ] == cEOD_3 );
-#endif
+    return  (   pRef[ 0 ] == pKeyEOD[0] &&
+                pRef[ 1 ] == pKeyEOD[1] &&
+                pRef[ 2 ] == pKeyEOD[2] &&
+                pRef[ 3 ] == pKeyEOD[3] );
 }
 
 
-inline BOOL DifParser::Is1_0( const sal_Char* pRef )
+inline BOOL DifParser::Is1_0( const sal_Unicode* pRef )
 {
-#if __ALIGNMENT4 == 1
-    return ( n1_0 == *( ( UINT32* ) pRef ) );
-#else
-    return  (   pRef[ 0 ] == c1_0_0 &&
-                pRef[ 1 ] == c1_0_1 &&
-                pRef[ 2 ] == c1_0_2 &&
-                pRef[ 3 ] == c1_0_3 );
-#endif
+    return  (   pRef[ 0 ] == pKey1_0[0] &&
+                pRef[ 1 ] == pKey1_0[1] &&
+                pRef[ 2 ] == pKey1_0[2] &&
+                pRef[ 3 ] == pKey1_0[3] );
 }
 
 
-inline BOOL DifParser::IsV( const sal_Char* pRef )
+inline BOOL DifParser::IsV( const sal_Unicode* pRef )
 {
-#if __ALIGNMENT4 == 1
-    return ( nV == *( ( UINT16 * ) pRef ) );
-#else
-    return  (   pRef[ 0 ] == cV_0 &&
-                pRef[ 1 ] == cV_1   );
-#endif
+    return  (   pRef[ 0 ] == pKeyV[0] &&
+                pRef[ 1 ] == pKeyV[1]   );
 }
 
 
-inline BOOL DifParser::IsNumber( const sal_Char cChar )
+inline BOOL DifParser::IsNumber( const sal_Unicode cChar )
 {
     return ( cChar >= '0' && cChar <= '9' );
 }
 
 
-inline BOOL DifParser::IsNumberEnding( const sal_Char cChar )
+inline BOOL DifParser::IsNumberEnding( const sal_Unicode cChar )
 {
     return ( cChar == 0x00 );
 }

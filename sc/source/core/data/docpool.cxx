@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:57:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 #include "sc.hrc"           // Slot-IDs
 
 
-#define SC_MAX_POOLREF      (SFX_ITEMS_MAXREF - 39)
+#define SC_MAX_POOLREF      (SFX_ITEMS_OLD_MAXREF - 39)
 #define SC_SAFE_POOLREF     (SC_MAX_POOLREF + 20)
 
 // STATIC DATA -----------------------------------------------------------
@@ -394,7 +394,7 @@ __EXPORT ScDocumentPool::~ScDocumentPool()
 
     for ( USHORT i=0; i < ATTR_ENDINDEX-ATTR_STARTINDEX+1; i++ )
     {
-        SetRef( *ppPoolDefaults[i], 0 );
+        SetRefCount( *ppPoolDefaults[i], 0 );
         delete ppPoolDefaults[i];
     }
 
@@ -590,13 +590,13 @@ void __EXPORT ScDocumentPool::Remove( const SfxPoolItem& rItem )
 {
     if ( rItem.Which() == ATTR_PATTERN )                // nur Pattern ist special
     {
-        USHORT nRef = rItem.GetRef();
-        if ( nRef >= SC_MAX_POOLREF && nRef <= SFX_ITEMS_MAXREF )
+        ULONG nRef = rItem.GetRefCount();
+        if ( nRef >= (ULONG) SC_MAX_POOLREF && nRef <= (ULONG) SFX_ITEMS_OLD_MAXREF )
         {
-            if ( nRef != SC_SAFE_POOLREF )
+            if ( nRef != (ULONG) SC_SAFE_POOLREF )
             {
                 DBG_ERROR("Wer fummelt da an meinen Ref-Counts herum");
-                SetRef( (SfxPoolItem&)rItem, SC_SAFE_POOLREF );
+                SetRefCount( (SfxPoolItem&)rItem, (ULONG) SC_SAFE_POOLREF );
             }
             return;                 // nicht herunterzaehlen
         }
@@ -606,15 +606,14 @@ void __EXPORT ScDocumentPool::Remove( const SfxPoolItem& rItem )
 
 void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )   // static
 {
-    USHORT nRef = rItem.GetRef();
-    if ( nRef >= SC_MAX_POOLREF && nRef <= SFX_ITEMS_MAXREF )
+    ULONG nRef = rItem.GetRefCount();
+    if ( nRef >= (ULONG) SC_MAX_POOLREF && nRef <= (ULONG) SFX_ITEMS_OLD_MAXREF )
     {
         // beim Apply vom Cache wird evtl. um 2 hochgezaehlt (auf MAX+1 oder SAFE+2),
         // heruntergezaehlt wird nur einzeln (in LoadCompleted)
-        DBG_ASSERT( nRef<=SC_MAX_POOLREF+1 || (nRef>=SC_SAFE_POOLREF-1 && nRef<=SC_SAFE_POOLREF+2),
-                    "ScDocumentPool::CheckRef" );
-
-        SetRef( (SfxPoolItem&)rItem, SC_SAFE_POOLREF );
+        DBG_ASSERT( nRef<=(ULONG)SC_MAX_POOLREF+1 || (nRef>=(ULONG)SC_SAFE_POOLREF-1 && nRef<=(ULONG)SC_SAFE_POOLREF+2),
+                "ScDocumentPool::CheckRef" );
+        SetRefCount( (SfxPoolItem&)rItem, (ULONG) SC_SAFE_POOLREF );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:41:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,7 @@ class XclExpUserBViewList;
 class XclExpCellMerging;
 
 class ExcNameList;
-class UsedAttrList;
 class XclObjList;
-class XclNoteList;
 class XclEscher;
 class XclPivotCacheList;
 class SfxStyleSheet;
@@ -119,7 +117,6 @@ class XclExpRoot;
 struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 {
     SvStorage*          pRootStorage;           // THE storage
-    double              fColScale;              // Skalierungs-Faktoren fuer
     double              fRowScale;              //  Spaltenbreiten / Zeilenhoehen
     ScDocument*         pDoc;
     ScRangeName*        pScRangeName;
@@ -144,9 +141,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     SvStorage*              pPivotCacheStorage;
     XclImpPivotCacheList*   pImpPivotCacheList;     // pivot caches for import
 
-    SvStorageRef        xCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
-//  SvStorage*          pCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
-
     UINT32              nCondRangeCnt;
     UINT16              nLastCond;
     String              GetCondFormStyleName( const UINT16 nCondCnt );  // -> exctools.cxx
@@ -158,13 +152,11 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     ExcNameList*        pNameList;
     ScRangeName*        pScNameList;        // stores range names and DB ranges
-    UsedAttrList*       pXFRecs;
     ExcExternDup*       pExtSheetCntAndRecs;
     UINT16              nColMax;
     UINT16              nRowMax;
     // Biff8
     XclObjList*         pObjRecs;
-    XclNoteList*        pNoteRecs;
     String              sAddNoteText;       // text to append at current note (multiple hyperlinks)
     XclEscher*          pEscher;
 

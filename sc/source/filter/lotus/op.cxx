@@ -2,9 +2,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 17:47:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 //------------------------------------------------------------------------
 
 #include <tools/solar.h>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -150,7 +150,7 @@ void OP_Number( SvStream& r, UINT16 n )
 
     r >> nFormat >> nCol >> nRow >> fValue;
 
-    fValue = SolarMath::Round( fValue, 15 );
+    fValue = ::rtl::math::round( fValue, 15 );
     ScValueCell*    pZelle = new ScValueCell( fValue );
     pDoc->PutCell( nCol, nRow, nTab, pZelle, ( BOOL ) TRUE );
 
@@ -275,7 +275,7 @@ void OP_NamedRange( SvStream& r, UINT16 n )
 
     String              aTmp( pAnsi, pLotusRoot->eCharsetQ );
 
-    ScfTools::ConvertName( aTmp );
+    ScfTools::ConvertToScDefinedName( aTmp );
 
     pLotusRoot->pRangeNames->Append( pRange, aTmp );
 }
@@ -313,7 +313,7 @@ void OP_SymphNamedRange( SvStream& r, UINT16 n )
     DosToSystem( pAnsi );
 
     String      aTmp( pAnsi, pLotusRoot->eCharsetQ );
-    ScfTools::ConvertName( aTmp );
+    ScfTools::ConvertToScDefinedName( aTmp );
 
     pLotusRoot->pRangeNames->Append( pRange, aTmp );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ class XclImpExtName
 {
 private:
     String                      maName;             /// The name of the external name.
+    String                      maAddInName;        /// The converted Calc add-in function name.
     sal_uInt32                  mnStorageId;        /// Storage ID for OLE object storages.
     XclImpExtNameType           meType;             /// Type of the external name.
 
@@ -137,6 +138,7 @@ public:
 
     inline XclImpExtNameType    GetType() const         { return meType; }
     inline const String&        GetName() const         { return maName; }
+    inline const String&        GetAddInName() const    { return maAddInName; }
     inline sal_uInt32           GetStorageId() const    { return mnStorageId; }
 };
 
@@ -210,6 +212,7 @@ private:
     String                      maUrl;              /// URL of the external document.
     sal_uInt16                  mnCurrExcTab;       /// Current Excel sheet index of external cells.
     bool                        mbSelf;             /// true = internal 3D references.
+    bool                        mbAddIn;            /// true = Add-in function names.
 
 public:
     /** Reads the SUPBOOK record from stream. */
@@ -229,6 +232,8 @@ public:
 
     /** Returns true, if this SUPBOOK contains internal 3D references. */
     inline bool                 IsSelf() const { return mbSelf; }
+    /** Returns true, if this SUPBOOK contains add-in function names. */
+    inline bool                 IsAddIn() const { return mbAddIn; }
 
     /** Returns the URL of the external document. */
     inline const String&        GetUrl() const { return maUrl; }

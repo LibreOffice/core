@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-22 17:13:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,15 +316,6 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
         Time aFirstTime( aFilterCtr.GetFirstTime() );
         Date aLastDate( aFilterCtr.GetLastDate() );
         Time aLastTime( aFilterCtr.GetLastTime() );
-        switch ( eMode )
-        {   // korrespondiert mit ScViewUtil::IsActionShown
-            case SCDM_DATE_EQUAL :
-            case SCDM_DATE_NOTEQUAL :
-                aFirstTime.SetTime( 0 );
-                aLastDate = aFirstDate;
-                aLastTime.SetTime( 23595999 );
-            break;
-        }
         aChangeViewSet.SetTheFirstDateTime( DateTime( aFirstDate, aFirstTime ) );
         aChangeViewSet.SetTheLastDateTime( DateTime( aLastDate, aLastTime ) );
         aChangeViewSet.SetHasAuthor(aFilterCtr.IsAuthor());
@@ -337,6 +328,7 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
         ScRangeList aRangeList;
         aRangeList.Parse(aFilterCtr.GetRange(), pDoc);
         aChangeViewSet.SetTheRangeList(aRangeList);
+        aChangeViewSet.AdjustDateMode( *pDoc );
         pDoc->SetChangeViewSettings(aChangeViewSet);
         pViewData->GetDocShell()->PostPaintGridAll();
         Close();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 18:26:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #include <ctype.h>
 #include <stdio.h>
@@ -2229,8 +2229,18 @@ void ScCompiler::PutCode( ScRawToken* p )
 
 void ScCompiler::PutCode( ScToken* p )
 {
-    if( pc >= MAXCODE )
+    if( pc >= MAXCODE-1 )
+    {
+        if ( pc == MAXCODE-1 )
+        {
+            p = new ScByteToken( ocStop );
+            *pCode++ = p;
+            ++pc;
+            p->IncRef();
+        }
         SetError(errCodeOverflow);
+        return;
+    }
     if( pArr->GetError() && !bCompileForFAP )
         return;
     *pCode++ = p; pc++;
@@ -3614,21 +3624,22 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
     {
         case svDouble:
         {
-            String aStr;
             if ( pSymbolTable == pSymbolTableEnglish )
             {   // Don't go via number formatter, slows down XML export
                 // significantly because on every formula the number formatter
                 // has to switch to/from English/native language.
-                SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
-                    '.', TRUE );
+                ::rtl::math::doubleToUStringBuffer( rBuffer, t->GetDouble(),
+                        rtl_math_StringFormat_Automatic,
+                        rtl_math_DecimalPlaces_Max, '.', TRUE );
             }
             else
             {
-                SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
-                    ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
-                    TRUE );
+                ::rtl::math::doubleToUStringBuffer( rBuffer, t->GetDouble(),
+                        rtl_math_StringFormat_Automatic,
+                        rtl_math_DecimalPlaces_Max,
+                        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+                        TRUE );
             }
-            rBuffer.append(aStr);
         }
         break;
         case svString:

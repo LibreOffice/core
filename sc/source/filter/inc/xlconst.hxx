@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,15 +145,25 @@ const sal_Int32 EXC_POINTS_PER_INCH         = 72;
 const sal_Int32 EXC_TWIPS_PER_INCH          = EXC_POINTS_PER_INCH * 20;
 
 
+// Line styles ----------------------------------------------------------------
+
+const sal_uInt8 EXC_LINE_NONE               = 0x00;
+const sal_uInt8 EXC_LINE_THIN               = 0x01;
+const sal_uInt8 EXC_LINE_MEDIUM             = 0x02;
+const sal_uInt8 EXC_LINE_THICK              = 0x05;
+const sal_uInt8 EXC_LINE_DOUBLE             = 0x06;
+const sal_uInt8 EXC_LINE_HAIR               = 0x07;
+
+
 // Background patterns --------------------------------------------------------
 
-const sal_uInt16 EXC_PATT_NONE              = 0x0000;
-const sal_uInt16 EXC_PATT_SOLID             = 0x0001;
-const sal_uInt16 EXC_PATT_50_PERC           = 0x0002;
-const sal_uInt16 EXC_PATT_75_PERC           = 0x0003;
-const sal_uInt16 EXC_PATT_25_PERC           = 0x0004;
-const sal_uInt16 EXC_PATT_12_5_PERC         = 0x0011;
-const sal_uInt16 EXC_PATT_6_25_PERC         = 0x0012;
+const sal_uInt8 EXC_PATT_NONE               = 0x00;
+const sal_uInt8 EXC_PATT_SOLID              = 0x01;
+const sal_uInt8 EXC_PATT_50_PERC            = 0x02;
+const sal_uInt8 EXC_PATT_75_PERC            = 0x03;
+const sal_uInt8 EXC_PATT_25_PERC            = 0x04;
+const sal_uInt8 EXC_PATT_12_5_PERC          = 0x11;
+const sal_uInt8 EXC_PATT_6_25_PERC          = 0x12;
 
 
 // Miscellaneous ---------------------------------------------------------------
@@ -163,6 +173,11 @@ const sal_Unicode   EXC_NEWLINE             = EXC_NEWLINE_CHAR;
 
 
 // Records (ordered by lowest record ID) ======================================
+
+// (0x0007, 0x0207) STRING ----------------------------------------------------
+
+const sal_uInt16 EXC_ID_STRING              = 0x0207;
+
 
 // (0x0014, 0x0015) HEADER, FOOTER --------------------------------------------
 
@@ -209,6 +224,12 @@ const sal_Unicode EXC_BUILTIN_UNKNOWN           = 0x000E;
 
 const sal_uInt16 EXC_ID_VERTPAGEBREAKS      = 0x001A;
 const sal_uInt16 EXC_ID_HORPAGEBREAKS       = 0x001B;
+
+
+// (0x001C) NOTE --------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_NOTE                = 0x001C;
+const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
 
 
 // (0x001E, 0x041E) FORMAT ----------------------------------------------------
@@ -300,26 +321,43 @@ const sal_uInt8 EXC_FONTCSET_SYMBOL         = 0x02;
 const sal_uInt16 EXC_FONT_AUTOCOLOR         = 0x7FFF;
 
 
-// (0x0043, 0x00E0) XF --------------------------------------------------------
+// (0x0043, 0x0243, 0x0443, 0x00E0) XF ----------------------------------------
+
+const sal_uInt16 EXC_ID2_XF                 = 0x0043;
+const sal_uInt16 EXC_ID3_XF                 = 0x0243;
+const sal_uInt16 EXC_ID4_XF                 = 0x0443;
+const sal_uInt16 EXC_ID_XF                  = 0x00E0;
+
+const sal_uInt16 EXC_XF_OFFSET              = 21;       /// Index to first user defined record.
+const sal_uInt32 EXC_XF_MAXCOUNT            = 4029;     /// Maximum number of user defined records.
+const sal_uInt16 EXC_XF_DEFAULTSTYLE        = 0;        /// Excel index to cefault style XF.
+const sal_uInt16 EXC_XF_DEFAULTCELL         = 15;       /// Excel index to cefault cell XF.
 
 const sal_uInt16 EXC_XF_LOCKED              = 0x0001;
 const sal_uInt16 EXC_XF_HIDDEN              = 0x0002;
 const sal_uInt16 EXC_XF_STYLE               = 0x0004;
+const sal_uInt16 EXC_XF_STYLEPARENT         = 0x0FFF;   /// Syles don't have a parent.
+const sal_uInt16 EXC_XF_WRAPPED             = 0x0008;   /// Automatic line break.
 
-const sal_uInt16 EXC_XF_DIFF_VALFMT         = 0x0400;
-const sal_uInt16 EXC_XF_DIFF_FONT           = 0x0800;
-const sal_uInt16 EXC_XF_DIFF_ALIGN          = 0x1000;
-const sal_uInt16 EXC_XF_DIFF_BORDER         = 0x2000;
-const sal_uInt16 EXC_XF_DIFF_AREA           = 0x4000;
-const sal_uInt16 EXC_XF_DIFF_PROT           = 0x8000;
+const sal_uInt8 EXC_XF_DIFF_VALFMT          = 0x01;
+const sal_uInt8 EXC_XF_DIFF_FONT            = 0x02;
+const sal_uInt8 EXC_XF_DIFF_ALIGN           = 0x04;
+const sal_uInt8 EXC_XF_DIFF_BORDER          = 0x08;
+const sal_uInt8 EXC_XF_DIFF_AREA            = 0x10;
+const sal_uInt8 EXC_XF_DIFF_PROT            = 0x20;
 
 const sal_uInt8 EXC_XF2_VALFMT_MASK         = 0x3F;
 const sal_uInt8 EXC_XF2_LOCKED              = 0x40;
 const sal_uInt8 EXC_XF2_HIDDEN              = 0x80;
+const sal_uInt8 EXC_XF2_LEFTLINE            = 0x08;
+const sal_uInt8 EXC_XF2_RIGHTLINE           = 0x10;
+const sal_uInt8 EXC_XF2_TOPLINE             = 0x20;
+const sal_uInt8 EXC_XF2_BOTTOMLINE          = 0x40;
 const sal_uInt8 EXC_XF2_BACKGROUND          = 0x80;
 
 const sal_uInt16 EXC_XF8_SHRINKTOFIT        = 0x0010;
 const sal_uInt16 EXC_XF8_MERGE              = 0x0020;
+const sal_uInt8 EXC_XF8_STACKED             = 0xFF;     /// Special rotation angle.
 
 
 // (0x0059, 0x005A) XCT, CRN --------------------------------------------------
@@ -362,12 +400,6 @@ const sal_uInt16 EXC_COLOR_OFFSET8          = 8;
 
 const sal_uInt16 EXC_COLOR_BIFF2_BLACK      = 0;
 const sal_uInt16 EXC_COLOR_BIFF2_WHITE      = 1;
-
-
-// (0x0093) STYLE -------------------------------------------------------------
-
-const sal_uInt16 EXC_STYLE_BUILTIN          = 0x8000;
-const sal_uInt16 EXC_STYLE_MASK             = 0x0FFF;
 
 
 // (0x00E9) BITMAP ------------------------------------------------------------
@@ -457,6 +489,13 @@ const sal_uInt32 EXC_HLINK_DESCR            = 0x00000014;   /// Description.
 const sal_uInt32 EXC_HLINK_MARK             = 0x00000008;   /// Text mark.
 const sal_uInt32 EXC_HLINK_FRAME            = 0x00000080;   /// Target frame.
 const sal_uInt32 EXC_HLINK_UNC              = 0x00000100;   /// UNC path.
+
+
+// (0x0293) STYLE -------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_STYLE               = 0x0293;
+const sal_uInt16 EXC_STYLE_BUILTIN          = 0x8000;
+const sal_uInt16 EXC_STYLE_MASK             = 0x0FFF;
 
 
 // web queries ================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 07:18:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/sdshitm.hxx>
@@ -1927,10 +1927,10 @@ void ScDetectiveFunc::InitializeColors()
 {
     // may be called several times to update colors from configuration
 
-    const svx::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-    nArrowColor   = rColorCfg.GetColorValue(svx::CALCDETECTIVE).nColor;
-    nErrorColor   = rColorCfg.GetColorValue(svx::CALCDETECTIVEERROR).nColor;
-    nCommentColor = rColorCfg.GetColorValue(svx::CALCNOTESBACKGROUND).nColor;
+    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    nArrowColor   = rColorCfg.GetColorValue(svtools::CALCDETECTIVE).nColor;
+    nErrorColor   = rColorCfg.GetColorValue(svtools::CALCDETECTIVEERROR).nColor;
+    nCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
 
     bColorsInitialized = TRUE;
 }

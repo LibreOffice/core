@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 #include "otlnbuff.hxx"
-#include "fltprgrs.hxx"
 #include "excrecds.hxx"
 #include "xcl97rec.hxx"
 
@@ -124,7 +123,7 @@ String RootData::GetCondFormStyleName( const UINT16 n )
 
 RootData::RootData( void )
 {
-    fColScale = fRowScale = 1.0;
+    fRowScale = 1.0;
     pDoc = NULL;
     pScRangeName = NULL;
 
@@ -153,12 +152,10 @@ RootData::RootData( void )
     pCellMerging = NULL;
     pNameList = NULL;
     pScNameList = NULL;
-    pXFRecs = NULL;
     pExtSheetCntAndRecs = NULL;
     nRowMax = 0;
 
     pObjRecs = NULL;
-    pNoteRecs = NULL;
     pEscher = NULL;
 
     pPivotCacheList = NULL;
@@ -423,82 +420,6 @@ void OutlineBuffer::Reset( ScOutlineArray *pOArray )
 }
 
 
-
-
-INT32   FilterProgressBar::nInstances = 0;
-
-
-FilterProgressBar::FilterProgressBar( SvStream& rStream ) : pStr( &rStream ), pXIStr( NULL )
-{
-    ULONG   nOldPos = rStream.Tell();
-    rStream.Seek( STREAM_SEEK_TO_END );
-    ULONG   nStrmLen = rStream.Tell();
-    rStream.Seek( nOldPos );
-    Init( nOldPos, nStrmLen, STR_LOAD_DOC );
-}
-
-
-FilterProgressBar::FilterProgressBar( XclImpStream& rStream ) : pStr( NULL ), pXIStr( &rStream )
-{
-    Init( rStream.Tell(), rStream.GetStreamSize(), STR_LOAD_DOC );
-}
-
-
-FilterProgressBar::FilterProgressBar( UINT32 nObjCount ) : pStr( NULL ), pXIStr( NULL )
-{
-    Init( 0, nObjCount, STR_PROGRESS_CALCULATING );
-}
-
-
-FilterProgressBar::~FilterProgressBar()
-{
-    nInstances--;
-
-    if( pPrgrs )
-        delete pPrgrs;
-}
-
-
-void FilterProgressBar::Init( ULONG nStartPos, ULONG nSize, USHORT nResStr )
-{
-    nInstances++;
-
-    nCnt = 0;
-
-    if( nInstances == 1 )
-    {
-        nUnitSize = (nSize < 128) ? 1 : (nSize / 128);
-        nNextUnit = 0;
-        pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( nResStr ), nSize );
-        pPrgrs->SetState( nStartPos );
-    }
-    else
-        pPrgrs = NULL;
-}
-
-
-void FilterProgressBar::Progress( void )
-{
-    if( pPrgrs )
-    {
-        UINT32      nNewState;
-        if( pStr )
-            nNewState = pStr->Tell();
-        else if( pXIStr )
-            nNewState = pXIStr->Tell();
-        else
-        {
-            nCnt++;
-            nNewState = nCnt;
-        }
-
-        if( nNewState >= nNextUnit )
-        {
-            pPrgrs->SetState( nNewState );
-            nNextUnit += nUnitSize;
-        }
-    }
-}
 
 
 //___________________________________________________________________

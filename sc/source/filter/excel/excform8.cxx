@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 15:17:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
 
                             pExcRoot->pDoc->CreateDdeLink( aAppl, aExtDoc, pExtName->GetName() );
                         }
+                        else if( (pExtName->GetType() == xlExtName) && pSupbook->IsAddIn() )
+                            aStack << aPool.Store( ocNoName, pExtName->GetAddInName() );
                         else
                             aStack << aPool.Store( ocNoName, pExtName->GetName() );
                     }
@@ -1229,6 +1231,11 @@ void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, con
             rSRD.nRelRow = (INT16) nRow - aEingPos.Row();
         else
             rSRD.nRow = nRow;
+
+        // T A B
+        // #i10184# abs needed if rel in shared formula for ScCompiler UpdateNameReference
+        if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
+            rSRD.nTab = pExcRoot->pIR->GetScTab() + rSRD.nRelTab;
     }
 }
 

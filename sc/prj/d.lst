@@ -1,12 +1,4 @@
-mkdir: %_DEST%\odk%_EXT%
-mkdir: %_DEST%\odk%_EXT%\inc
-mkdir: %_DEST%\odk%_EXT%\lib
-mkdir: %_DEST%\odk%_EXT%\src
-mkdir: %_DEST%\odk%_EXT%\pck
 ..\inc\sc.lst %_DEST%\inc%_EXT%\sc.lst
-..\%__SRC%\inc\scinter.h %_DEST%\odk\inc%_EXT%\scinter.h
-..\%__SRC%\lib\scinter.lib %_DEST%\odk\lib%_EXT%\scinter.lib
-..\%__SRC%\misc\scinter.c %_DEST%\odk\src%_EXT%\scinter.c
 ..\%__SRC%\bin\scalc3.exe %_DEST%\bin%_EXT%\scalc3.exe
 ..\%__SRC%\bin\*.sym %_DEST%\bin%_EXT%\*.sym
 ..\%__SRC%\bin\scalc3.pdb %_DEST%\bin%_EXT%\scalc3.pdb
@@ -27,9 +19,7 @@ touch: ..\%__SRC%\misc\sc.hid %_DEST%\bin%_EXT%\sc.hid
 ..\inc\sc.hrc %_DEST%\inc%_EXT%\sc.hrc
 mkdir: %_DEST%\inc\%_EXT%\sc
 hedabu: ..\inc\scdll.hxx %_DEST%\inc%_EXT%\sc\scdll.hxx
-mkdir: %_DEST%\ucr%_EXT%\sc
-..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\sc\*.ucr
-..\xml\*.xml %_DEST%\xml\*.xml
+..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib

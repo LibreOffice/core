@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-18 14:00:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,13 @@
 #include "ui_pch.hxx"
 #endif
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_TASKPANELIST_HXX
 #include <vcl/taskpanelist.hxx>
+#endif
+
 #include "olinewin.hxx"
 #include "olinetab.hxx"
 #include "document.hxx"
@@ -91,47 +97,49 @@ ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eMode, ScViewDa
     mrViewData( *pViewData ),
     meWhich( eWhich ),
     mbHoriz( eMode == SC_OUTLINE_HOR ),
+    mbAppRTL( !!Application::GetSettings().GetLayoutRTL() ),
     mpSymbols( NULL ),
     maLineColor( COL_BLACK ),
     mnHeaderSize( 0 ),
+    mnHeaderPos( 0 ),
+    mnMainFirstPos( 0 ),
+    mnMainLastPos( 0 ),
     mbMTActive( false ),
     mbMTPressed( false ),
     mnFocusLevel( 0 ),
     mnFocusEntry( SC_OL_HEADERENTRY ),
     mbDontDrawFocus( false )
 {
+    EnableRTL( !mbHoriz ); // #107809# do not mirror (horizontal) column outline window
+    mbMirrorHdr = mbHoriz && mbAppRTL;
+
     InitSettings();
     maFocusRect.SetEmpty();
+    SetHeaderSize( 0 );
 
     // insert the window into task pane list for "F6 cycling"
-    SystemWindow* pSysWin = GetSystemWindow();
-    if( pSysWin )
-    {
-        TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList();
-        if( pTaskPaneList )
+    if( SystemWindow* pSysWin = GetSystemWindow() )
+        if( TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList() )
             pTaskPaneList->AddWindow( this );
-    }
 }
 
 ScOutlineWindow::~ScOutlineWindow()
 {
     // remove the window from task pane list
-    SystemWindow* pSysWin = GetSystemWindow();
-    if( pSysWin )
-    {
-        TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList();
-        if( pTaskPaneList )
+    if( SystemWindow* pSysWin = GetSystemWindow() )
+        if( TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList() )
             pTaskPaneList->RemoveWindow( this );
-    }
 }
 
 void ScOutlineWindow::SetHeaderSize( sal_Int32 nNewSize )
 {
-    if ( nNewSize != mnHeaderSize )
-    {
-        mnHeaderSize = nNewSize;
+    bool bNew = (nNewSize != mnHeaderSize);
+    mnHeaderSize = nNewSize;
+    mnHeaderPos = mbMirrorHdr ? (GetOutputSizeEntry() - mnHeaderSize) : 0;
+    mnMainFirstPos = mbMirrorHdr ? 0 : mnHeaderSize;
+    mnMainLastPos = GetOutputSizeEntry() - (mbMirrorHdr ? mnHeaderSize : 0) - 1;
+    if ( bNew )
         Invalidate();
-    }
 }
 
 sal_Int32 ScOutlineWindow::GetDepthSize() const
@@ -147,35 +155,29 @@ void ScOutlineWindow::ScrollPixel( sal_Int32 nDiff )
     HideFocus();
     mbDontDrawFocus = true;
 
-    if ( mnHeaderSize > 0 )
+    sal_Int32 nStart = mnMainFirstPos;
+    sal_Int32 nEnd = mnMainLastPos;
+
+    sal_Int32 nInvStart, nInvEnd;
+    if (nDiff < 0)
     {
-        sal_Int32 nStart = mnHeaderSize;
-        sal_Int32 nEnd = GetOutputSizeEntry() - 1;
-
-        sal_Int32 nInvStart, nInvEnd;
-        if (nDiff < 0)
-        {
-            nStart -= nDiff;
-            nInvStart = nEnd + nDiff;
-            nInvEnd = nEnd;
-        }
-        else
-        {
-            nEnd -= nDiff;
-            nInvStart = nStart;
-            nInvEnd = nStart + nDiff;
-        }
-
-        ScrollRel( nDiff, nStart, nEnd );
-        Invalidate( GetRectangle( 0, nInvStart, GetOutputSizeLevel() - 1, nInvEnd ) );
-        Update();
+        nStart -= nDiff;
+        nInvStart = nEnd + nDiff;
+        nInvEnd = nEnd;
     }
     else
-        ScrollRel( nDiff );
+    {
+        nEnd -= nDiff;
+        nInvStart = nStart;
+        nInvEnd = nStart + nDiff;
+    }
+
+    ScrollRel( nDiff, nStart, nEnd );
+    Invalidate( GetRectangle( 0, nInvStart, GetOutputSizeLevel() - 1, nInvEnd ) );
+    Update();
 
     // if focus becomes invisible, move it to next visible button
-    if ( !IsButtonVisible( mnFocusLevel, mnFocusEntry ) )
-        ImplMoveFocusByEntry( nDiff < 0 );
+    ImplMoveFocusToVisible( nDiff < 0 );
 
     mbDontDrawFocus = false;
     ShowFocus();
@@ -206,7 +208,7 @@ void ScOutlineWindow::InitSettings()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground( rStyleSettings.GetFaceColor() );
     maLineColor = rStyleSettings.GetButtonTextColor();
-    mpSymbols = ScGlobal::GetOutlineSymbols( GetBackground().GetColor().IsDark() );
+    mpSymbols = ScGlobal::GetOutlineSymbols( !!GetBackground().GetColor().IsDark() );
     Invalidate();
 }
 
@@ -310,12 +312,12 @@ sal_Int32 ScOutlineWindow::GetColRowPos( sal_uInt16 nColRowIndex ) const
     sal_Int32 nDocPos = mbHoriz ?
         mrViewData.GetScrPos( nColRowIndex, 0, meWhich, TRUE ).X() :
         mrViewData.GetScrPos( 0, nColRowIndex, meWhich, TRUE ).Y();
-    return mnHeaderSize + nDocPos;
+    return mnMainFirstPos + nDocPos;
 }
 
 sal_Int32 ScOutlineWindow::GetHeaderEntryPos() const
 {
-    return (mnHeaderSize - SC_OL_BITMAPSIZE) / 2;
+    return mnHeaderPos + (mnHeaderSize - SC_OL_BITMAPSIZE) / 2;
 }
 
 bool ScOutlineWindow::GetEntryPos(
@@ -360,8 +362,8 @@ bool ScOutlineWindow::GetEntryPos(
     }
 
     // restrict rnStartPos...rnEndPos to valid area
-    rnStartPos = Max( rnStartPos, mnHeaderSize );
-    rnEndPos = Max( rnEndPos, mnHeaderSize );
+    rnStartPos = Max( rnStartPos, mnMainFirstPos );
+    rnEndPos = Max( rnEndPos, mnMainFirstPos );
 
     // --- all rows filtered? ---
 
@@ -397,7 +399,7 @@ bool ScOutlineWindow::IsButtonVisible( sal_uInt16 nLevel, sal_uInt16 nEntry ) co
 {
     bool bRet = false;
     if ( nEntry == SC_OL_HEADERENTRY )
-        bRet = (nLevel < GetLevelCount());
+        bRet = (mnHeaderSize > 0) && (nLevel < GetLevelCount());
     else
     {
         const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
@@ -529,7 +531,8 @@ void ScOutlineWindow::DoCollapse( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
 void ScOutlineWindow::Resize()
 {
     Window::Resize();
-    if ( !IsButtonVisible( mnFocusLevel, mnFocusEntry ) )
+    SetHeaderSize( mnHeaderSize );  // recalculates header/group positions
+    if ( !IsFocusButtonVisible() )
     {
         HideFocus();
         ShowFocus();    // calculates valid position
@@ -552,7 +555,9 @@ void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ScOutlineWindow::SetEntryAreaClipRegion()
 {
-    SetClipRegion( Rectangle( GetPoint( 0, mnHeaderSize ), GetOutputSizePixel() ) );
+    SetClipRegion( Rectangle(
+        GetPoint( 0, mnMainFirstPos ),
+        GetPoint( GetOutputSizeLevel() - 1, mnMainLastPos ) ) );
 }
 
 void ScOutlineWindow::DrawLineRel(
@@ -602,20 +607,22 @@ void ScOutlineWindow::ShowFocus()
     if ( HasFocus() )
     {
         // first move to a visible position
-        if ( !IsButtonVisible( mnFocusLevel, mnFocusEntry ) )
-            ImplMoveFocusByEntry( true );
+        ImplMoveFocusToVisible( true );
 
-        Point aPos;
-        if ( GetImagePos( mnFocusLevel, mnFocusEntry, aPos ) )
+        if ( IsFocusButtonVisible() )
         {
-            aPos += Point( 1, 1 );
-            maFocusRect = Rectangle( aPos, Size( SC_OL_BITMAPSIZE - 2, SC_OL_BITMAPSIZE - 2 ) );
-            bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
-            if ( bClip )
-                SetEntryAreaClipRegion();
-            InvertTracking( maFocusRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
-            if ( bClip )
-                SetClipRegion();
+            Point aPos;
+            if ( GetImagePos( mnFocusLevel, mnFocusEntry, aPos ) )
+            {
+                aPos += Point( 1, 1 );
+                maFocusRect = Rectangle( aPos, Size( SC_OL_BITMAPSIZE - 2, SC_OL_BITMAPSIZE - 2 ) );
+                bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
+                if ( bClip )
+                    SetEntryAreaClipRegion();
+                InvertTracking( maFocusRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+                if ( bClip )
+                    SetClipRegion();
+            }
         }
     }
 }
@@ -657,7 +664,8 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
             DrawImageRel( GetLevelPos( nLevel ), nEntryPos, nLevel + 1 );
 
         SetLineColor( maLineColor );
-        DrawLineRel( 0, mnHeaderSize - 1, nLevelEnd, mnHeaderSize - 1 );
+        sal_Int32 nLinePos = mnHeaderPos + (mbMirrorHdr ? 0 : (mnHeaderSize - 1));
+        DrawLineRel( 0, nLinePos, nLevelEnd, nLinePos );
     }
 
     // --- draw lines & collapse/expand images ---
@@ -763,7 +771,12 @@ bool lcl_RotateValue( sal_uInt16& rnValue, sal_uInt16 nMin, sal_uInt16 nMax, boo
     return bWrap;
 }
 
-bool ScOutlineWindow::ImplMoveFocusByEntry( bool bForward )
+bool ScOutlineWindow::IsFocusButtonVisible() const
+{
+    return IsButtonVisible( mnFocusLevel, mnFocusEntry );
+}
+
+bool ScOutlineWindow::ImplMoveFocusByEntry( bool bForward, bool bFindVisible )
 {
     const ScOutlineArray* pArray = GetOutlineArray();
     if ( !pArray )
@@ -771,24 +784,31 @@ bool ScOutlineWindow::ImplMoveFocusByEntry( bool bForward )
 
     bool bWrapped = false;
     sal_uInt16 nEntryCount = pArray->GetCount( mnFocusLevel );
+    sal_uInt16 nOldEntry = mnFocusEntry;
 
     do
     {
         if ( mnFocusEntry == SC_OL_HEADERENTRY )
         {
+            // move from header to first or last entry
             if ( nEntryCount > 0 )
-                mnFocusEntry = bForward ? 0 : nEntryCount - 1;
-            if ( !nEntryCount || !bForward )
+                mnFocusEntry = bForward ? 0 : (nEntryCount - 1);
+            /*  wrapped, if forward from right header to first entry,
+                or if backward from left header to last entry */
+            if ( !nEntryCount || (bForward == mbMirrorHdr) )
                 bWrapped = true;
         }
         else if ( lcl_RotateValue( mnFocusEntry, 0, nEntryCount - 1, bForward ) )
         {
+            // lcl_RotateValue returns true -> wrapped the entry range -> move to header
             mnFocusEntry = SC_OL_HEADERENTRY;
-            if ( bForward )
+            /*  wrapped, if forward from last entry to left header,
+                or if backward from first entry to right header */
+            if ( bForward != mbMirrorHdr )
                 bWrapped = true;
         }
     }
-    while ( !IsButtonVisible( mnFocusLevel, mnFocusEntry ) );
+    while ( bFindVisible && !IsFocusButtonVisible() && (nOldEntry != mnFocusEntry) );
 
     return bWrapped;
 }
@@ -822,13 +842,13 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
             {
                 // next level -> find first child entry
                 nNewLevel = mnFocusLevel + 1;
-                bFound = pArray->GetEntryIndexInRange( nNewLevel, nStart, nEnd, nNewEntry );
+                bFound = !!pArray->GetEntryIndexInRange( nNewLevel, nStart, nEnd, nNewEntry );
             }
             else if ( !bForward && (mnFocusLevel > 0) )
             {
                 // previous level -> find parent entry
                 nNewLevel = mnFocusLevel - 1;
-                bFound = pArray->GetEntryIndex( nNewLevel, nStart, nNewEntry );
+                bFound = !!pArray->GetEntryIndex( nNewLevel, nStart, nNewEntry );
             }
 
             if ( bFound && IsButtonVisible( nNewLevel, nNewEntry ) )
@@ -842,10 +862,45 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
     return bWrapped;
 }
 
+bool ScOutlineWindow::ImplMoveFocusByTabOrder( bool bForward, bool bFindVisible )
+{
+    bool bRet = false;
+    sal_uInt16 nOldLevel = mnFocusLevel;
+    sal_uInt16 nOldEntry = mnFocusEntry;
+
+    do
+    {
+        /*  one level up, if backward from left header,
+            or one level down, if forward from right header */
+        if ( (bForward == mbMirrorHdr) && (mnFocusEntry == SC_OL_HEADERENTRY) )
+            bRet |= ImplMoveFocusByLevel( bForward );
+        // move to next/previous entry
+        bool bWrapInLevel = ImplMoveFocusByEntry( bForward, false );
+        bRet |= bWrapInLevel;
+        /*  one level up, if wrapped backward to right header,
+            or one level down, if wrapped forward to right header */
+        if ( (bForward != mbMirrorHdr) && bWrapInLevel )
+            bRet |= ImplMoveFocusByLevel( bForward );
+    }
+    while ( bFindVisible && !IsFocusButtonVisible() && ((nOldLevel != mnFocusLevel) || (nOldEntry != mnFocusEntry)) );
+
+    return bRet;
+}
+
+void ScOutlineWindow::ImplMoveFocusToVisible( bool bForward )
+{
+    // first try to find an entry in the same level
+    if ( !IsFocusButtonVisible() )
+        ImplMoveFocusByEntry( bForward, true );
+    // then try to find any other entry
+    if ( !IsFocusButtonVisible() )
+        ImplMoveFocusByTabOrder( bForward, true );
+}
+
 void ScOutlineWindow::MoveFocusByEntry( bool bForward )
 {
     HideFocus();
-    ImplMoveFocusByEntry( bForward );
+    ImplMoveFocusByEntry( bForward, true );
     ShowFocus();
 }
 
@@ -859,13 +914,7 @@ void ScOutlineWindow::MoveFocusByLevel( bool bForward )
 void ScOutlineWindow::MoveFocusByTabOrder( bool bForward )
 {
     HideFocus();
-
-    if ( !bForward && (mnFocusEntry == SC_OL_HEADERENTRY) )
-        ImplMoveFocusByLevel( false );
-    bool bWrap = ImplMoveFocusByEntry( bForward );
-    if ( bForward && bWrap )
-        ImplMoveFocusByLevel( true );
-
+    ImplMoveFocusByTabOrder( bForward, true );
     ShowFocus();
 }
 
@@ -963,6 +1012,10 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
     sal_uInt16 nCode = rKCode.GetCode();
     bool bUpDownKey = (nCode == KEY_UP) || (nCode == KEY_DOWN);
     bool bLeftRightKey = (nCode == KEY_LEFT) || (nCode == KEY_RIGHT);
+
+    // revert wrong cursor direction (left/right) in RTL windows
+    if( bLeftRightKey && mbAppRTL && IsRTLEnabled() )
+        nCode = (nCode == KEY_LEFT) ? KEY_RIGHT : KEY_LEFT;
 
     // TAB key
     if ( (nCode == KEY_TAB) && (bNoMod || bShift) )

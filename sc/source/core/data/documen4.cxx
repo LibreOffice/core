@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-03 13:43:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,8 +502,8 @@ double ScDocument::RoundValueAsShown( double fVal, ULONG nFormat )
         }
         else
             nPrecision = (short)GetDocOptions().GetStdPrecision();
-        double fRound = SolarMath::Round( fVal, nPrecision );
-        if ( SolarMath::ApproxEqual( fVal, fRound ) )
+        double fRound = ::rtl::math::round( fVal, nPrecision );
+        if ( ::rtl::math::approxEqual( fVal, fRound ) )
             return fVal;        // durch Rundung hoechstens Fehler
         else
             return fRound;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 13:00:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,21 +155,21 @@ enum ScMoveMode
 /** Flags for comparison of old and new control layout data. */
 typedef sal_uInt32 ScCsvDiff;
 
-const ScCsvDiff CSV_DIFF_EQUAL         = 0x00000000;
-const ScCsvDiff CSV_DIFF_POSCOUNT      = 0x00000001;
-const ScCsvDiff CSV_DIFF_POSOFFSET     = 0x00000002;
-const ScCsvDiff CSV_DIFF_OFFSETX       = 0x00000004;
-const ScCsvDiff CSV_DIFF_CHARWIDTH     = 0x00000008;
-const ScCsvDiff CSV_DIFF_LINECOUNT     = 0x00000010;
-const ScCsvDiff CSV_DIFF_LINEOFFSET    = 0x00000020;
-const ScCsvDiff CSV_DIFF_OFFSETY       = 0x00000040;
-const ScCsvDiff CSV_DIFF_LINEHEIGHT    = 0x00000080;
-const ScCsvDiff CSV_DIFF_RULERCURSOR   = 0x00000100;
-const ScCsvDiff CSV_DIFF_GRIDCURSOR    = 0x00000200;
+const ScCsvDiff CSV_DIFF_EQUAL          = 0x00000000;
+const ScCsvDiff CSV_DIFF_POSCOUNT       = 0x00000001;
+const ScCsvDiff CSV_DIFF_POSOFFSET      = 0x00000002;
+const ScCsvDiff CSV_DIFF_HDRWIDTH       = 0x00000004;
+const ScCsvDiff CSV_DIFF_CHARWIDTH      = 0x00000008;
+const ScCsvDiff CSV_DIFF_LINECOUNT      = 0x00000010;
+const ScCsvDiff CSV_DIFF_LINEOFFSET     = 0x00000020;
+const ScCsvDiff CSV_DIFF_HDRHEIGHT      = 0x00000040;
+const ScCsvDiff CSV_DIFF_LINEHEIGHT     = 0x00000080;
+const ScCsvDiff CSV_DIFF_RULERCURSOR    = 0x00000100;
+const ScCsvDiff CSV_DIFF_GRIDCURSOR     = 0x00000200;
 
-const ScCsvDiff CSV_DIFF_HORIZONTAL    = CSV_DIFF_POSCOUNT | CSV_DIFF_POSOFFSET | CSV_DIFF_OFFSETX | CSV_DIFF_CHARWIDTH;
-const ScCsvDiff CSV_DIFF_VERTICAL      = CSV_DIFF_LINECOUNT | CSV_DIFF_LINEOFFSET | CSV_DIFF_OFFSETY | CSV_DIFF_LINEHEIGHT;
-const ScCsvDiff CSV_DIFF_CURSOR        = CSV_DIFF_RULERCURSOR | CSV_DIFF_GRIDCURSOR;
+const ScCsvDiff CSV_DIFF_HORIZONTAL     = CSV_DIFF_POSCOUNT | CSV_DIFF_POSOFFSET | CSV_DIFF_HDRWIDTH | CSV_DIFF_CHARWIDTH;
+const ScCsvDiff CSV_DIFF_VERTICAL       = CSV_DIFF_LINECOUNT | CSV_DIFF_LINEOFFSET | CSV_DIFF_HDRHEIGHT | CSV_DIFF_LINEHEIGHT;
+const ScCsvDiff CSV_DIFF_CURSOR         = CSV_DIFF_RULERCURSOR | CSV_DIFF_GRIDCURSOR;
 
 
 // ----------------------------------------------------------------------------
@@ -183,7 +183,7 @@ struct ScCsvLayoutData
     sal_Int32                   mnPosOffset;        /// Horizontal scroll offset.
 
     sal_Int32                   mnWinWidth;         /// Width of ruler and data grid.
-    sal_Int32                   mnOffsetX;          /// X coordinate of first visible position.
+    sal_Int32                   mnHdrWidth;         /// Width of the header column.
     sal_Int32                   mnCharWidth;        /// Pixel width of one character.
 
     // vertical settings
@@ -191,14 +191,15 @@ struct ScCsvLayoutData
     sal_Int32                   mnLineOffset;       /// Index of first visible line (0-based).
 
     sal_Int32                   mnWinHeight;        /// Height of entire data grid (incl. header).
-    sal_Int32                   mnOffsetY;          /// Y coordinate of first visible line.
-    sal_Int32                   mnLineHeight;       /// Height of one line.
+    sal_Int32                   mnHdrHeight;        /// Height of the header line.
+    sal_Int32                   mnLineHeight;       /// Height of a data line.
 
     // cursor settings
     sal_Int32                   mnPosCursor;        /// Position of ruler cursor.
     sal_Int32                   mnColCursor;        /// Position of grid column cursor.
 
     mutable sal_Int32           mnNoRepaint;        /// >0 = no repaint.
+    bool                        mbAppRTL;           /// true = application in RTL mode.
 
     explicit                    ScCsvLayoutData();
 
@@ -234,13 +235,13 @@ enum ScCsvCmdType
     // modify horizontal dimensions
     CSVCMD_SETPOSCOUNT,         /// Change position/column count. [character count]
     CSVCMD_SETPOSOFFSET,        /// Change position offset (scroll pos). [position]
-    CSVCMD_SETOFFSETX,          /// Change X coordinate of first visible position. [X in pixel]
+    CSVCMD_SETHDRWIDTH,         /// Change width of the header column. [width in pixel]
     CSVCMD_SETCHARWIDTH,        /// Change character pixel width. [width in pixel]
 
     // modify vertical dimensions
     CSVCMD_SETLINECOUNT,        /// Change number of data lines. [line count]
     CSVCMD_SETLINEOFFSET,       /// Change first visible line. [line index]
-    CSVCMD_SETOFFSETY,          /// Change Y coordinate of first visible line. [Y in pixel]
+    CSVCMD_SETHDRHEIGHT,        /// Change height of top header line. [height in pixel]
     CSVCMD_SETLINEHEIGHT,       /// Change data line pixel height. [height in pixel}
 
     // cursors/positions
@@ -379,6 +380,8 @@ public:
 
     /** Returns a reference to the current layout data. */
     inline const ScCsvLayoutData& GetLayoutData() const { return mrData; }
+    /** Returns true, if the Right-to-Left layout mode is active. */
+    inline bool                 IsRTL() const { return mrData.mbAppRTL; }
 
     /** Returns the number of available positions. */
     inline sal_Int32            GetPosCount() const { return mrData.mnPosCount; }
@@ -396,10 +399,16 @@ public:
     /** Returns true, if nPos is an allowed AND visible split position. */
     bool                        IsVisibleSplitPos( sal_Int32 nPos ) const;
 
-    /** Returns X coordinate of first visible position. */
-    inline sal_Int32            GetOffsetX() const { return mrData.mnOffsetX; }
+    /** Returns the width of the header column. */
+    inline sal_Int32            GetHdrWidth() const { return mrData.mnHdrWidth; }
     /** Returns the width of one character column. */
     inline sal_Int32            GetCharWidth() const { return mrData.mnCharWidth; }
+    /** Returns the start position of the header column. */
+    sal_Int32                   GetHdrX() const;
+    /** Returns the X position of the first pixel of the data area. */
+    sal_Int32                   GetFirstX() const;
+    /** Returns the X position of the last pixel of the data area. */
+    sal_Int32                   GetLastX() const;
     /** Returns output X coordinate of the specified position. */
     sal_Int32                   GetX( sal_Int32 nPos ) const;
     /** Returns position from output coordinate. */
@@ -421,8 +430,8 @@ public:
     /** Returns true, if nLine is a valid and visible line index. */
     bool                        IsVisibleLine( sal_Int32 nLine ) const;
 
-    /** Returns Y coordinate of first visible line. */
-    inline sal_Int32            GetOffsetY() const { return mrData.mnOffsetY; }
+    /** Returns the height of the header line. */
+    inline sal_Int32            GetHdrHeight() const { return mrData.mnHdrHeight; }
     /** Returns the height of one line. */
     inline sal_Int32            GetLineHeight() const { return mrData.mnLineHeight; }
     /** Returns output Y coordinate of the specified line. */

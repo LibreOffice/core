@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 17:52:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,12 @@
 #include "scfobj.hxx"
 #include "docoptio.hxx"
 #include "viewopti.hxx"
-#include "fltprgrs.hxx"
 #include "globstr.hrc"
 #include "ftools.hxx"
+
+#ifndef SC_FPROGRESSBAR_HXX
+#include "fprogressbar.hxx"
+#endif
 
 
 using namespace com::sun::star;
@@ -1070,7 +1073,7 @@ Sc10Import::~Sc10Import()
 
 ULONG Sc10Import::Import()
 {
-    pPrgrsBar = new FilterProgressBar( rStream );
+    pPrgrsBar = new ScfStreamProgressBar( rStream, pDoc->GetDocumentShell() );
 
     ScDocOptions aOpt = pDoc->GetDocOptions();
     aOpt.SetDate( 1, 1, 1900 );
@@ -1079,19 +1082,19 @@ ULONG Sc10Import::Import()
     pDoc->GetFormatTable()->ChangeNullDate( 1, 1, 1900 );
 
     LoadFileHeader();                           pPrgrsBar->Progress();
-    if (!nError) { LoadFileInfo();          pPrgrsBar->Progress(); }
-    if (!nError) { LoadEditStateInfo();     pPrgrsBar->Progress(); }
+    if (!nError) { LoadFileInfo();              pPrgrsBar->Progress(); }
+    if (!nError) { LoadEditStateInfo();         pPrgrsBar->Progress(); }
     if (!nError) { LoadProtect();               pPrgrsBar->Progress(); }
-    if (!nError) { LoadViewColRowBar();     pPrgrsBar->Progress(); }
+    if (!nError) { LoadViewColRowBar();         pPrgrsBar->Progress(); }
     if (!nError) { LoadScrZoom();               pPrgrsBar->Progress(); }
     if (!nError) { LoadPalette();               pPrgrsBar->Progress(); }
     if (!nError) { LoadFontCollection();        pPrgrsBar->Progress(); }
     if (!nError) { LoadNameCollection();        pPrgrsBar->Progress(); }
-    if (!nError) { LoadPatternCollection(); pPrgrsBar->Progress(); }
+    if (!nError) { LoadPatternCollection();     pPrgrsBar->Progress(); }
     if (!nError) { LoadDataBaseCollection();    pPrgrsBar->Progress(); }
     if (!nError) { LoadTables();                pPrgrsBar->Progress(); }
     if (!nError) { LoadObjects();               pPrgrsBar->Progress(); }
-    if (!nError) { ImportNameCollection();  pPrgrsBar->Progress(); }
+    if (!nError) { ImportNameCollection();      pPrgrsBar->Progress(); }
     pDoc->SetViewOptions( aSc30ViewOpt );
 
 #ifdef DBG_UTIL

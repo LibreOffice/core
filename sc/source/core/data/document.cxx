@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:08:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/boxitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/editeng.hxx>
 #include <sfx2/app.hxx>
@@ -208,6 +209,8 @@ BOOL ScDocument::GetTable( const String& rName, USHORT& rTab ) const
 
 BOOL ScDocument::ValidTabName( const String& rName ) const
 {
+    /*  If changed, ScfTools::ConvertToScSheetName (sc/source/filter/ftools/ftools.cxx)
+        needs to be changed too. */
     using namespace ::com::sun::star::i18n;
     sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
         KParseTokens::ASC_UNDERSCORE;
@@ -2234,6 +2237,24 @@ void ScDocument::SetTableOpDirty( const ScRange& rRange )
 }
 
 
+void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
+{
+    ScInterpreterTableOpParams* p = aTableOpList.Last();
+    if ( p && p->bCollectNotifications )
+    {
+        if ( p->bRefresh )
+        {   // refresh pointers only
+            p->aNotifiedFormulaCells.push_back( pCell );
+        }
+        else
+        {   // init both, address and pointer
+            p->aNotifiedFormulaCells.push_back( pCell );
+            p->aNotifiedFormulaPos.push_back( pCell->aPos );
+        }
+    }
+}
+
+
 void ScDocument::CalcAll()
 {
     BOOL bOldAutoCalc = GetAutoCalc();
@@ -3074,7 +3095,29 @@ BOOL ScDocument::HasAttrib( USHORT nCol1, USHORT nRow1, USHORT nTab1,
                 break;
             }
         if (!bAnyItem)
-            nMask &= ~ATTR_ROTATE_VALUE;
+            nMask &= ~HASATTR_ROTATE;
+    }
+
+    if ( nMask & HASATTR_RTL )
+    {
+        //  first check if right-to left is in the pool at all
+        //  (the same item is used in cell and page format)
+
+        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+
+        BOOL bHasRtl = FALSE;
+        USHORT nDirCount = pPool->GetItemCount( ATTR_WRITINGDIR );
+        for (USHORT nItem=0; nItem<nDirCount; nItem++)
+        {
+            const SfxPoolItem* pItem = pPool->GetItem( ATTR_WRITINGDIR, nItem );
+            if ( pItem && ((const SvxFrameDirectionItem*)pItem)->GetValue() == FRMDIR_HORI_RIGHT_TOP )
+            {
+                bHasRtl = TRUE;
+                break;
+            }
+        }
+        if (!bHasRtl)
+            nMask &= ~HASATTR_RTL;
     }
 
     if (!nMask)
@@ -3083,7 +3126,15 @@ BOOL ScDocument::HasAttrib( USHORT nCol1, USHORT nRow1, USHORT nTab1,
     BOOL bFound = FALSE;
     for (USHORT i=nTab1; i<=nTab2 && !bFound; i++)
         if (pTab[i])
+        {
+            if ( nMask & HASATTR_RTL )
+            {
+                if ( GetEditTextDirection(i) == EE_HTEXTDIR_R2L )       // sheet default
+                    bFound = TRUE;
+            }
+
             bFound |= pTab[i]->HasAttrib( nCol1, nRow1, nCol2, nRow2, nMask );
+        }
 
     return bFound;
 }

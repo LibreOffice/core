@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:41:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,11 @@ protected:
         UINT16              nGrbit;
         BOOL                bFirstOnSheet;
 
-                                XclObj( ObjType eObjType, RootData& rRoot );
+        bool                    mbOwnEscher;    /// true = Escher part created on the fly.
+
+    /** @param bOwnEscher  If set to true, this object will create its escher data.
+        See SetOwnEscher() for details. */
+    explicit                    XclObj( ObjType eObjType, RootData& rRoot, bool bOwnEscher = false );
 
                                 // overwritten for writing MSODRAWING record
     virtual void                SaveCont( XclExpStream& rStrm );
@@ -251,6 +255,17 @@ public:
                                 // set corresponding ObjType
             void                SetEscherShapeType( UINT16 nType );
     inline  void                SetEscherShapeTypeGroup() { eObjType = otGroup; }
+
+    /** If set to true, this object has created its own escher data. This causes the
+        function EscherEx::EndShape() to not post process this object. This is used
+        i.e. for form controls. They are not handled in the svx base code, so the
+        XclExpObjControl c'tor creates the escher data itself. The svx base code does
+        not receive the correct shape ID after the EscherEx::StartShape() call, which
+        would result in deleting the object in EscherEx::EndShape(). */
+    inline void                 SetOwnEscher( bool bOwnEscher = true ) { mbOwnEscher = bOwnEscher; }
+    /** Returns true, if the object has created the escher data itself.
+        See SetOwnEscher() for details. */
+    inline bool                 IsOwnEscher() const { return mbOwnEscher; }
 
                                 //! actually writes ESCHER_ClientTextbox
             void                SetText( RootData& rRoot, const SdrTextObj& rObj );
@@ -282,7 +297,7 @@ private:
 
 public:
                                 XclObjComment( RootData& rRoot,
-                                    const ScAddress& rPos, const String& rStr );
+                                    const ScAddress& rPos, const String& rStr, bool bVisible );
     virtual                     ~XclObjComment();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -356,6 +371,34 @@ public:
 };
 
 
+// ----------------------------------------------------------------------------
+
+#if EXC_INCL_EXP_OCX
+
+/** Represents an OBJ record for a form control. */
+class XclExpObjControl : public XclObj
+{
+private:
+    String                      maClassName;        /// Class name of the control.
+    sal_uInt32                  mnStrmStart;        /// Start position in 'Ctls' stream.
+    sal_uInt32                  mnStrmSize;         /// Size in 'Ctls' stream.
+
+public:
+                                XclExpObjControl(
+                                    const XclRoot& rRoot,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::drawing::XShape >& rxShape,
+                                    const String& rClassName,
+                                    sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
+
+    virtual sal_uInt32          GetLen() const;
+
+private:
+    virtual void                SaveCont( XclExpStream& rStrm );
+};
+
+#endif
+
 // --- class XclObjAny -----------------------------------------------
 
 class XclObjAny : public XclObj
@@ -372,48 +415,45 @@ public:
 };
 
 
-// --- class XclNoteList ---------------------------------------------
+// ============================================================================
 
-class XclNote;
-
-class XclNoteList : public List, public ExcEmptyRec
+/** Represents a NOTE record containing the author and the note object ID.
+    @descr  Creates the note Escher object internally. */
+class XclExpNote : public XclExpRecord
 {
 private:
+    XclExpString                maAuthor;       /// Name of the author.
+    ScAddress                   maPos;          /// Cell address of the note.
+    sal_uInt16                  mnObjId;        /// Escher object ID.
+    bool                        mbVisible;      /// true = permanently visible.
+
 public:
-                                XclNoteList();
-    virtual                     ~XclNoteList();
+    /** Constructs a NOTE record from the passed note object and/or the text.
+        @descr  The additional text will be separated from the note text with an empty line.
+        Creates the Escher object containing the drawing information and the note text.
+        @param rPos  The Calc cell address of the note.
+        @param pScNote  The Calc note object.
+        @param rAddText  Additional text appended to the note text. */
+    explicit                    XclExpNote(
+                                    const XclExpRoot& rRoot,
+                                    const ScAddress& rPos,
+                                    const ScPostIt* pScNote,
+                                    const String& rAddText );
 
-            XclNote*            First() { return (XclNote*) List::First(); }
-            XclNote*            Next()  { return (XclNote*) List::Next(); }
-
-            void                Add( XclNote* );
-
+    /** Writes the NOTE record, if the respective Escher object is present. */
     virtual void                Save( XclExpStream& rStrm );
-};
 
-
-// --- class XclNote -------------------------------------------------
-
-class XclNote : public ExcRecord
-{
 private:
-        XclExpUniString     aAuthor;
-        ScAddress           aPos;
-        UINT16              nGrbit;
-        UINT16              nObjId;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            XclNote( RootData& rD, const ScAddress& rPos,
-                                const String& rNoteText, const String& rNoteAuthor );
-    virtual                 ~XclNote();
-
-    virtual void            Save( XclExpStream& rStrm );
-
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+    /** Writes the body of the NOTE record. */
+    virtual void                WriteBody( XclExpStream& rStrm );
 };
+
+
+/** A list of NOTE record objects. */
+typedef XclExpRecordList< XclExpNote > XclExpNoteList;
+
+
+// ============================================================================
 
 
 // --- class ExcBof8_Base --------------------------------------------
@@ -487,34 +527,6 @@ public:
     virtual                     ~ExcLabelSst();
 
     virtual UINT16              GetNum() const;
-};
-
-
-// --- class ExcXf8 --------------------------------------------------
-
-class ExcXf8 : public ExcXf
-{
-private:
-        XclTextDirection    eTextDir;
-        UINT16              nTrot;
-        UINT16              nCIndent;
-
-        UINT16              nGrbitDiag;
-        UINT32              nIcvDiagSer;
-        UINT16              nDgDiag;
-
-        BOOL                bFShrinkToFit;
-        BOOL                bFMergeCell;
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                ExcXf8( const XclExpRoot& rRoot, UINT16 nFont, UINT16 nForm,
-                                    const ScPatternAttr* pPattAttr,
-                                    BOOL& rbLineBreak, BOOL bStyle = FALSE );
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
 };
 
 
@@ -609,7 +621,7 @@ class ScRangeList;
 struct RootData;
 class XclCf;
 
-class XclCondFormat : public ExcEmptyRec, protected List
+class XclCondFormat : public ExcEmptyRec, protected ScfDelList< XclCf >
 {
 // writes multiple cf _and_ condfmt records!
 private:
@@ -617,9 +629,6 @@ private:
     ScRangeList*                pRL;
     UINT16                      nTabNum;
     ULONG                       nComplLen;
-
-    inline XclCf*               _First()    { return (XclCf*) List::First(); }
-    inline XclCf*               _Next()     { return (XclCf*) List::Next(); }
 
     void                        WriteCondfmt( XclExpStream& rStrm );
 
@@ -661,17 +670,10 @@ private:
     UINT32                      nIcvTextSer;
 
     BOOL                        bHasLine;
-    UINT8                       nLineData1;
-    UINT8                       nLineData2;
-    UINT32                      nIcvTopSer;
-    UINT32                      nIcvBotSer;
-    UINT32                      nIcvLftSer;
-    UINT32                      nIcvRigSer;
+    XclExpXFBorder              maBorder;
 
     BOOL                        bHasPattern;
-    UINT16                      nPatt;
-    UINT32                      nIcvForeSer;
-    UINT32                      nIcvBackSer;
+    XclExpXFArea                maArea;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 

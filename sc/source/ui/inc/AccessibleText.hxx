@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 16:47:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class ScPreviewViewForwarder;
 class ScEditViewForwarder;
 class ScPreviewShell;
 class EditTextObject;
+class ScCsvViewForwarder;
 
 
 // ============================================================================
@@ -359,7 +360,7 @@ class ScAccessibleCsvTextData : public ScAccessibleTextData
 {
 private:
     typedef ::std::auto_ptr< SvxTextForwarder > TextForwarderPtr;
-    typedef ::std::auto_ptr< SvxViewForwarder > ViewForwarderPtr;
+    typedef ::std::auto_ptr< ScCsvViewForwarder > ViewForwarderPtr;
 
     Window*                     mpWindow;
     EditEngine*                 mpEditEngine;

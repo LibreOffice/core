@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 17:57:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class StarBASIC;
 
 #include <tools/list.hxx>
 #include <tools/string.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/zforlist.hxx>
 #define _SVSTDARR_ULONGS
@@ -507,7 +507,9 @@ BOOL ScImportExport::ImportStream( SvStream& rStrm, ULONG nFmt )
     }
     if ( nFmt == SOT_FORMATSTR_ID_HTML_SIMPLE )
     {
-        if( HTML2Doc( rStrm ) )
+        MSE40HTMLClipFormatObj aMSE40ClpObj;                // needed to skip the header data
+        SvStream* pHTML = aMSE40ClpObj.IsValid( rStrm );
+        if ( pHTML && HTML2Doc( *pHTML ) )
             return TRUE;
     }
 
@@ -1351,8 +1353,9 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                                     pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aText );
                                 else
                                 {
-                                    int nErr;
-                                    double fVal = SolarMath::StringToDouble( p, cGrpSep, cDecSep, nErr );
+                                    double fVal = rtl_math_uStringToDouble( p,
+                                            aLine.GetBuffer() + aLine.Len(),
+                                            cDecSep, cGrpSep, NULL, NULL );
                                     pDoc->SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
                                 }
                             }
@@ -1499,8 +1502,9 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                 hasvalue:
                     pDoc->GetValue( nCol, nRow, aRange.aStart.Tab(), nVal );
 
-                    aValStr.Erase();
-                    SolarMath::DoubleToString( aValStr, nVal, 'A', INT_MAX, '.', TRUE );
+                    aValStr = ::rtl::math::doubleToUString( nVal,
+                            rtl_math_StringFormat_Automatic,
+                            rtl_math_DecimalPlaces_Max, '.', TRUE );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
                     aBufStr += String::CreateFromInt32( c );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-10 17:24:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,13 @@
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/brshitem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/forbiddencharacterstable.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/scripttypeitem.hxx>
@@ -178,6 +179,8 @@ public:
 
     BOOL    HasCondHeight() const   { return pCondSet && SFX_ITEM_SET ==
                                         pCondSet->GetItemState( ATTR_FONT_HEIGHT, TRUE ); }
+
+    BOOL    IsRightToLeftAttr() const;
 };
 
 //==================================================================
@@ -205,9 +208,9 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     bCellContrast = pOutput->bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    const svx::ColorConfig& rColorConfig = pScMod->GetColorConfig();
-    aBackConfigColor.SetColor( rColorConfig.GetColorValue(svx::DOCCOLOR).nColor );
-    aTextConfigColor.SetColor( rColorConfig.GetColorValue(svx::FONTCOLOR).nColor );
+    const svtools::ColorConfig& rColorConfig = pScMod->GetColorConfig();
+    aBackConfigColor.SetColor( rColorConfig.GetColorValue(svtools::DOCCOLOR).nColor );
+    aTextConfigColor.SetColor( rColorConfig.GetColorValue(svtools::FONTCOLOR).nColor );
 }
 
 ScDrawStringsVars::~ScDrawStringsVars()
@@ -533,6 +536,14 @@ void ScDrawStringsVars::SetHashText()
         aTextSize = pRefDevice->LogicToPixel( aTextSize );
 
     pLastCell = NULL;       // derselbe Text kann in der naechsten Zelle wieder passen
+}
+
+BOOL ScDrawStringsVars::IsRightToLeftAttr() const
+{
+    SvxFrameDirection eCellDir = (SvxFrameDirection)((const SvxFrameDirectionItem&)
+                                    pPattern->GetItem( ATTR_WRITINGDIR, pCondSet )).GetValue();
+    return ( eCellDir == FRMDIR_HORI_RIGHT_TOP ||
+            ( eCellDir == FRMDIR_ENVIRONMENT && pOutput->nTabTextDirection == EE_HTEXTDIR_R2L ) );
 }
 
 //==================================================================
@@ -864,6 +875,59 @@ void ScOutputData::GetVisibleCell( USHORT nCol, USHORT nRow, USHORT nTab, ScBase
         rpCell = NULL;
 }
 
+BOOL ScOutputData::IsAvailable( USHORT nX, USHORT nY )
+{
+    //  apply the same logic here as in DrawStrings/DrawEdit:
+    //  Stop at non-empty or merged or overlapped cell,
+    //  where a note is empty as well as a cell that's hidden by protection settings
+
+    const ScBaseCell* pCell = pDoc->GetCell( ScAddress( nX, nY, nTab ) );
+    if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE && !IsEmptyCellText( NULL, nX, nY ) )
+    {
+        return FALSE;
+    }
+
+    const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
+    if ( ((const ScMergeAttr&)pPattern->GetItem(ATTR_MERGE)).IsMerged() ||
+         ((const ScMergeFlagAttr&)pPattern->GetItem(ATTR_MERGE_FLAG)).IsOverlapped() )
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+long ScOutputData::GetAvailableWidth( USHORT nX, USHORT nY, long nNeeded )
+{
+    //  get the pixel width that's available for the cell's text,
+    //  including cells outside of the current screen area
+
+    long nAvailable = (long) ( pDoc->GetColWidth( nX, nTab ) * nPPTX );     // cell itself
+
+    const ScMergeAttr* pMerge = (const ScMergeAttr*)pDoc->GetAttr( nX, nY, nTab, ATTR_MERGE );
+    if ( pMerge->IsMerged() )
+    {
+        //  for merged cells, allow only the merged area
+        USHORT nCount = pMerge->GetColMerge();
+        for (USHORT nAdd=1; nAdd<nCount; nAdd++)
+            nAvailable += (long) ( pDoc->GetColWidth( nX + nAdd, nTab ) * nPPTX );
+    }
+    else
+    {
+        //  look for empty cells into which the text can be extended
+        while ( nAvailable < nNeeded && nX < MAXCOL && IsAvailable( nX+1, nY ) )
+        {
+            ++nX;
+            nAvailable += (long) ( pDoc->GetColWidth( nX, nTab ) * nPPTX );
+        }
+    }
+
+    if ( bMarkClipped && nAvailable < nNeeded )
+        nAvailable -= (long)( SC_CLIPMARK_SIZE * nPPTX );
+
+    return nAvailable;
+}
+
 void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 {
     DBG_ASSERT( pDev == pRefDevice ||
@@ -908,6 +972,9 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
                 CellInfo*   pInfo = &pThisRowInfo->pCellInfo[nX+1];
                 BOOL bEmpty = pInfo->bEmptyCellText;
+
+                USHORT nCellX = nX;                 // position where the cell really starts
+                USHORT nCellY = nY;
 
                 //
                 //  Teil von zusammengefasster Zelle ?
@@ -968,6 +1035,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                 nOutHeight = (long) (pDoc->GetRowHeight( nOverY, nTab ) * nPPTY);
 
                                 bMergeOver = TRUE;
+                                nCellX = nOverX;
+                                nCellY = nOverY;
                             }
                             else                            // Edit-Zelle
                             {
@@ -1056,6 +1125,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                         {
                                             bLeftOver = TRUE;
                                         }
+
+                                        nCellX = nTempX;
                                     }
                                 }
                             }
@@ -1091,7 +1162,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     Color aFontColor = ((const SvxColorItem&)pInfo->pPatternAttr->
                                             GetItem( ATTR_FONT_COLOR )).GetValue();
                     if ( ( aFontColor == COL_AUTO || bForceAutoColor ) && bUseStyleColor )
-                        aFontColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
+                        aFontColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
                     pDev->DrawPixel( aPos, aFontColor );
                     bEmpty = TRUE;
                 }
@@ -1593,6 +1664,20 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                         nJustPosY++;    // Passt sonst nicht zur EditEngine
 #endif
 
+                        BOOL bMoveClipped = bHClip && aVars.IsRightToLeftAttr();
+                        if ( bMoveClipped )
+                        {
+                            //  #i9731# if long text is clipped, and the cell is formatted as rtl,
+                            //  move the start position so the right end is visible
+
+                            long nNeeded = aVars.GetTextSize().Width() +
+                                        (long) ( aVars.GetLeftTotal() * nPPTX ) +
+                                        (long) ( aVars.GetMargin()->GetRightMargin() * nPPTX );
+                            long nAvailable = GetAvailableWidth( nCellX, nCellY, nNeeded );
+                            if ( nAvailable < nNeeded )
+                                nJustPosX -= nNeeded - nAvailable;      // move the start position
+                        }
+
                         Point aDrawTextPos( nJustPosX, nJustPosY );
                         if ( bPixelToLogic )
                         {
@@ -1717,7 +1802,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
     ScModule* pScMod = SC_MOD();
-    sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor;
+    sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -2567,6 +2652,35 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     }
                                 }
 
+                                BOOL bMoveClipped = FALSE;
+                                if ( bExtend )
+                                {
+                                    SvxFrameDirection eCellDir = (SvxFrameDirection)((const SvxFrameDirectionItem&)
+                                            pPattern->GetItem( ATTR_WRITINGDIR, pCondSet )).GetValue();
+                                    bMoveClipped = ( eCellDir == FRMDIR_HORI_RIGHT_TOP ||
+                                        ( eCellDir == FRMDIR_ENVIRONMENT && nTabTextDirection == EE_HTEXTDIR_R2L ) );
+                                }
+                                if ( bMoveClipped )
+                                {
+                                    //  #i9731# if long text is clipped, and the cell is formatted as rtl,
+                                    //  move the start position so the right end is visible
+
+                                    long nNeeded = bPixelToLogic ?
+                                            pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() :
+                                            nEngineWidth;
+                                    nNeeded += (long) ( (pMargin->GetLeftMargin() + nIndent) * nPPTX ) +
+                                               (long) ( pMargin->GetRightMargin() * nPPTX );
+
+                                    long nAvailable = GetAvailableWidth( nX, nY, nNeeded );
+                                    if ( nAvailable < nNeeded )
+                                    {
+                                        long nDiff = nNeeded - nAvailable;
+                                        aLogicStart.X() -= bPixelToLogic ?
+                                                pRefDevice->PixelToLogic(Size(nDiff,0)).Width() :
+                                                nDiff;
+                                    }
+                                }
+
                                 if ( bSimClip && !nOriVal && !bAsianVertical )
                                 {
                                     //  kein hartes Clipping, aber nur die betroffenen
@@ -2624,7 +2738,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
     ScModule* pScMod = SC_MOD();
-    sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor;
+    sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 10:03:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ english_us ] = "~Ascending" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å‘ä¸Š(~A)";
-        Text[ russian ] = "Ïî âîçğàñòàíèş";
+        Text[ russian ] = "Ïî âî~çğàñòàíèş";
         Text[ polish ] = "Rosn¹co";
         Text[ japanese ] = "æ˜‡é †(~A)";
         Text[ chinese_traditional ] = "å‘ä¸Š(~A)";
@@ -193,7 +193,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ english_us ] = "A~scending" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å‘ä¸Š(~S)";
-        Text[ russian ] = "Ïî âîçğàñòàíèş";
+        Text[ russian ] = "Ïî âîçğàñ~òàíèş";
         Text[ polish ] = "Rosn¹co";
         Text[ japanese ] = "æ˜‡é †(~S)";
         Text[ chinese_traditional ] = "å‘ä¸Š(~S)";
@@ -416,24 +416,24 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text = "Bereich ~enthält Spaltenbeschriftungen" ;
         Text [ ENGLISH ] = "Source with ~column headers" ;
         Text [ norwegian ] = "Kilde med  ~kolonne topptekst" ;
-        Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
+        Text [ italian ] = "L'area ~contiene intestazioni di colonna" ;
         Text [ portuguese_brazilian ] = "Fonte com ~cabe?alhos de colunas" ;
         Text [ portuguese ] = "Área contém ~cabeçalhos de colunas" ;
         Text [ finnish ] = "Alue sisältää sarake~otsikkoja" ;
         Text [ danish ] = "Området indeholder kolonneoverskrifter" ;
-        Text [ french ] = "La plage contient des en-têtes de colonne" ;
-        Text [ swedish ] = "Område innehåller ~kolumnhuvuden" ;
+        Text [ french ] = "La plage contient des étiquettes de colonne." ;
+        Text [ swedish ] = "Område innehåller ~kolumnetiketter" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
-        Text [ spanish ] = "Area contiene encabezamientos de ~columnas" ;
+        Text [ spanish ] = "El área contiene los títulos de las ~columnas" ;
         Text [ english_us ] = "Range contains column la~bels" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰åˆ—æ ‡ç­¾(~H)";
+        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰åˆ—æ ‡é¢˜(~H)";
         Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ â îáëàñòè";
         Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~H)";
-        Text[ chinese_traditional ] = "å€åŸŸå«æœ‰æ¬„æ¨™é¡Œ(~H)";
+        Text[ chinese_traditional ] = "ç¯„åœå«æœ‰æ¬„æ¨™ç±¤(~H)";
         Text[ arabic ] = "ÊÊÖãä ÇáãäØŞÉ ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ç ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "ì—´ ë¨¸ë¦¬ê¸€ í¬í•¨(~H)";
+        Text[ korean ] = "ì—´ ë ˆì´ë¸” í¬í•¨(~H)";
         Text[ turkish ] = "Bölüm ~sütun başlıkları içeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L'àrea conté ca~pçaleres de columnes";
@@ -449,19 +449,19 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ portuguese ] = "Área contém ~cabeçalhos de linhas" ;
         Text [ finnish ] = "Alue sisältää ~riviotsikoita" ;
         Text [ danish ] = "Området indeholder rækkeoverskrifter" ;
-        Text [ french ] = "La plage contient des en-têtes de ~lignes" ;
-        Text [ swedish ] = "Område innehåller radh~uvuden" ;
+        Text [ french ] = "La plage contient des étiquettes de ligne." ;
+        Text [ swedish ] = "Område innehåller ~radetiketter" ;
         Text [ dutch ] = "Bereik bevat ~rijkoppen" ;
-        Text [ spanish ] = "Área contiene títulos de ~filas" ;
+        Text [ spanish ] = "El área contiene los títulos de las ~filas" ;
         Text [ english_us ] = "Range contains ~row labels" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰è¡Œæ ‡ç­¾(~R)";
+        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰è¡Œæ ‡é¢˜(~R)";
         Text[ russian ] = "Çàãîëîâêè ñòğîê â îáëàñòè";
         Text[ polish ] = "Obszar zawiera nag³ówki wierszy";
         Text[ japanese ] = "ç¯„å›²ã«è¡Œã®é …ç›®æ¬„ã‚’å«ã‚€(~R)";
-        Text[ chinese_traditional ] = "å€åŸŸå«æœ‰åˆ—æ¨™é¡Œ(~R)";
+        Text[ chinese_traditional ] = "ç¯„åœå«æœ‰åˆ—æ¨™ç±¤(~R)";
         Text[ arabic ] = "ÊÊÖãä ÇáãäØŞÉ ÑÄæÓ Õİæİ";
         Text[ greek ] = "Ç ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò ãñáììşí";
-        Text[ korean ] = "ë²”ìœ„ì—ëŠ” í–‰ ë¨¸ë¦¬ê¸€ í¬í•¨.(~R)";
+        Text[ korean ] = "ë²”ìœ„ì— í–‰ ë ˆì´ë¸”ì´ í¬í•¨(~R)";
         Text[ turkish ] = "Bölüm sa~tır başlıkları içeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L'àrea conté capçaleres de fil~es";
@@ -486,7 +486,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ english_us ] = "Include ~formats" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒ…å«æ ¼å¼(~F)";
-        Text[ russian ] = "Âêëş÷àÿ ôîğìàòû";
+        Text[ russian ] = "Âêëş÷àÿ ~ôîğìàòû";
         Text[ polish ] = "Uwzglêdnij formaty";
         Text[ japanese ] = "æ›¸å¼ã‚’å«ã‚€(~F)";
         Text[ chinese_traditional ] = "åŒ…å«æ ¼å¼(~F)";
@@ -517,13 +517,13 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ english_us ] = "~Copy sort results to:" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¤åˆ¶æ’åºç»“æœåˆ°(~C)";
-        Text[ russian ] = "Âûäàâàòü ğåçóëüòàòû ñîğòèğîâêè â";
+        Text[ russian ] = "Âûäàâàòü ğå~çóëüòàòû ñîğòèğîâêè â";
         Text[ polish ] = "Kopiuj rezultat sortowania do";
         Text[ japanese ] = "ä¸¦ã¹æ›¿ãˆçµæœã®è²¼ã‚Šä»˜ã‘å…ˆ(~C)";
         Text[ chinese_traditional ] = "è¤‡è£½æ’åºçµæœåˆ°(~C)";
         Text[ arabic ] = "äÓÎ äÊíÌÉ ÇáİÑÒ Åáì";
         Text[ greek ] = "ÁíôéãñáöŞ áğïôåëåóìÜôùí ôáîéíüìçóçò óôï";
-        Text[ korean ] = "ë‹¤ìŒìœ¼ë¡œ ê²°ê³¼ ë³µì‚¬(~C)";
+        Text[ korean ] = "ì •ë ¬ ê²°ê³¼ë¥¼ ë‹¤ìŒ ìœ„ì¹˜ë¡œ ë³µì‚¬(~C)";
         Text[ turkish ] = "Sıralama sonuçlarının kopyalanacağı ~yer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Copia els resultats de l'ordenació a:";
@@ -713,7 +713,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "å¾ä¸Šå‘ä¸‹(æ’åºåˆ—) (~T)";
         Text[ arabic ] = "ãä ÃÚáì Åáì ÃÓİá (İÑÒ ÇáÕİæİ)";
         Text[ greek ] = "Áğü ğÜíù ğñ~ïò ôá êÜôù (ôáîéíüìçóç ãñáììşí)";
-        Text[ korean ] = "ìœ„ ì—ì„œ ì•„ë˜ë¡œ (í–‰ ì •ë ¬)(~T)";
+        Text[ korean ] = "ìœ„ì—ì„œ ì•„ë˜ë¡œ(í–‰ ì •ë ¬)(~T)";
         Text[ turkish ] = "~Yukarıdan aşağı (satırları sırala)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "De dal~t a baix (ordena les files)";
@@ -731,8 +731,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ portuguese ] = "Da ~esquerda para a direita (ordenar colunas)" ;
         Text [ finnish ] = "~Vasemmalta oikealle (sarakkeiden lajittelu)" ;
         Text [ danish ] = "Fra venstre til højre (sorter kolonner)" ;
-        Text [ french ] = "De gauche à droite (tri de colonnes)" ;
-        Text [ swedish ] = "Från vänster til~l höger (sortera kolumner)" ;
+        Text [ french ] = "De gauche à droite (trier les colonnes)" ;
+        Text [ swedish ] = "Från vänster till höger (sortera kolumner)" ;
         Text [ dutch ] = "Van ~links naar rechts (kolommen sorteren)" ;
         Text [ spanish ] = "De ~izquierda a derecha (ordenar columnas)" ;
         Text [ english_us ] = "L~eft to right (sort columns)" ;
@@ -741,10 +741,10 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ russian ] = "Ñëåâà íàïğàâî (ñîğòèğîâêà ñòîëáöîâ)";
         Text[ polish ] = "Sortuj kolumny od lewej do prawej";
         Text[ japanese ] = "å·¦ã‹ã‚‰å³ã¸(åˆ—ã®ä¸¦ã¹æ›¿ãˆ)(~E)";
-        Text[ chinese_traditional ] = "å¾å·¦å‘å³(æ¬„æ’åº)(~E)";
+        Text[ chinese_traditional ] = "å¾å·¦å‘å³(æ’åºæ¬„)(~E)";
         Text[ arabic ] = "ãä ÇáíÓÇÑ Åáì Çáíãíä (İÑÒ ÇáÃÚãÏÉ)";
         Text[ greek ] = "Áğü áñéóôåñÜ ğñïò äåîéÜ (Ôáîéíüìçóç óôçëşí)";
-        Text[ korean ] = "ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ (ì—´ ì •ë ¬)(~E)";
+        Text[ korean ] = "ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ(ì—´ ì •ë ¬)(~E)";
         Text[ turkish ] = "S~oldan sağa (sütunları sırala)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "D'es~querra a dreta (ordena les columnes)";
@@ -908,4 +908,6 @@ TabDialog RID_SCDLG_SORT
     Text[ catalan ] = "Ordena";
     Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡";
 };
+
+
 

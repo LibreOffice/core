@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,17 @@
 #include "compiler.hxx"
 #include "scerrors.hxx"
 
-#include "fltprgrs.hxx"
 #include "root.hxx"
 #include "lotrange.hxx"
 #include "optab.h"
 #include "scmem.h"
 #include "decl.h"
 #include "tool.h"
+
+#ifndef SC_FPROGRESSBAR_HXX
+#include "fprogressbar.hxx"
+#endif
+
 
 // Konstanten ------------------------------------------------------------
 const UINT16        nBOF = 0x0000;
@@ -144,7 +148,7 @@ FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, CharSet 
     InitPage(); // Seitenformat initialisieren (nur Tab 0!)
 
     // Progressbar starten
-    FilterProgressBar   aPrgrsBar( aStream );
+    ScfStreamProgressBar aPrgrsBar( aStream, pDocument->GetDocumentShell() );
 
     // Datei-Typ ermitteln
     eTyp = ScanVersion( aStream );

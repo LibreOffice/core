@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-27 16:36:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5099,7 +5099,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ chinese_simplified ] = "DPRODUCT";
         Text[ russian ] = "¡ƒœ–Œ»«¬≈ƒ";
         Text[ polish ] = "BD.ILOCZYN";
-        Text[ japanese ] = "DPRODUKT";
+        Text[ japanese ] = "DPRODUCT";
         Text[ chinese_traditional ] = "DPRODUCT";
         Text[ arabic ] = "DPRODUCT";
         Text[ dutch ] = "DBPRODUKT";
@@ -5845,7 +5845,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ french ] = "CHERCHE" ;
         Text [ swedish ] = "S÷K" ;
         Text [ dutch ] = "VIND.SPEC" ;
-        Text [ spanish ] = "HALLAR" ;
+        Text [ spanish ] = "BUSCAR" ;
         Text [ english_us ] = "SEARCH" ;
         Text[ chinese_simplified ] = "SEARCH";
         Text[ russian ] = "œŒ»— ";
@@ -7825,7 +7825,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ french ] = "NO.SEMAINE" ;
         Text [ swedish ] = "VECKONR" ;
         Text [ dutch ] = "KALENDERWEEK" ;
-        Text [ spanish ] = "SEM.DEL.A—O" ;
+        Text [ spanish ] = "NUM.SEMANA" ;
         Text [ english_us ] = "WEEKNUM" ;
         Text[ chinese_simplified ] = "WEEKNUM";
         Text[ russian ] = " ¿À≈Õƒ.Õ≈ƒ≈Àﬂ";
@@ -8395,6 +8395,11 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
 };
+
+
+
+
+
 
 
 

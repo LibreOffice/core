@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 14:57:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange&
     DBG_ASSERT( nDrawRanges < SC_PREVIEW_MAXRANGES, "too many ranges" );
     if ( nDrawRanges < SC_PREVIEW_MAXRANGES )
     {
-        aDrawRectangle[nDrawRanges] = rRect;
+        aDrawRectangle[nDrawRanges] = aPixelRect;
         aDrawMapMode[nDrawRanges] = rDrawMap;
             if (bRepCol)
                 if (bRepRow)

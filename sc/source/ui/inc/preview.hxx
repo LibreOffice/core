@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-02 14:34:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,8 @@ public:
 
     DECL_STATIC_LINK( ScPreview, InvalidateHdl, void* );
     static void StaticInvalidate();
+
+    FmFormView* GetDrawView() { return pDrawView; }
 };
 
 

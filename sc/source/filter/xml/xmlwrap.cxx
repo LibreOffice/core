@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 12:08:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #endif
 
 #ifndef _XMLEOHLP_HXX
@@ -357,6 +360,15 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 #endif
             nReturn = SCERR_IMPORT_FORMAT;
         }
+    }
+    catch( packages::zip::ZipIOException& r )
+    {
+#ifdef DBG_UTIL
+        ByteString aError( "Zip exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        nReturn = ERRCODE_IO_BROKENPACKAGE;
     }
     catch( io::IOException& r )
     {

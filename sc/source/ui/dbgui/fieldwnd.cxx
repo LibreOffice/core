@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-21 17:48:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ ScDPFieldWindow::ScDPFieldWindow(
     eType( eFieldType ),
     nFieldCount( 0 ),
     nFieldSelected( 0 ),
+    mbAppRTL( !!Application::GetSettings().GetLayoutRTL() ),
     pAccessible( NULL )
 {
     Init();
@@ -167,6 +168,7 @@ void ScDPFieldWindow::GetStyleSettings()
     aFaceColor = rStyleSet.GetFaceColor();
     aWinColor = rStyleSet.GetWindowColor();
     aTextColor = rStyleSet.GetButtonTextColor();
+    aWinTextColor = rStyleSet.GetWindowTextColor();
 }
 
 //-------------------------------------------------------------------
@@ -247,11 +249,14 @@ void ScDPFieldWindow::DrawBackground( OutputDevice& rDev )
     }
     else
     {
-        rDev.SetLineColor( aTextColor );
+        rDev.SetLineColor( aWinTextColor );
         rDev.SetFillColor( aWinColor );
         rDev.DrawRect( Rectangle( aPos0, aSize ) );
-        rDev.SetTextColor( aTextColor );
+        rDev.SetTextColor( aWinTextColor );
+        BOOL bOldRTL = rDev.IsRTLEnabled();
+        rDev.EnableRTL( false );
         rDev.DrawCtrlText( aTextPos, GetText() );
+        rDev.EnableRTL( bOldRTL );
     }
 }
 
@@ -262,6 +267,8 @@ void ScDPFieldWindow::DrawField(
         BOOL bSelected )
 {
     VirtualDevice aVirDev( rDev );
+    aVirDev.EnableRTL( true );
+
     Size aDevSize( rRect.GetSize() );
     long    nWidth       = aDevSize.Width();
     long    nHeight      = aDevSize.Height();
@@ -274,19 +281,21 @@ void ScDPFieldWindow::DrawField(
     aVirDev.SetOutputSizePixel( aDevSize );
     aVirDev.SetFont( rDev.GetFont() );
     DecorationView aDecoView( &aVirDev );
-    aDecoView.DrawButton( Rectangle( Point(), aDevSize ), bSelected ? BUTTON_DRAW_DEFAULT : 0 );
+    aDecoView.DrawButton( Rectangle( Point( 0, 0 ), aDevSize ), bSelected ? BUTTON_DRAW_DEFAULT : 0 );
     aVirDev.SetTextColor( aTextColor );
-    aVirDev.DrawText( aLabelPos, rText );                   // text
-    rDev.DrawBitmap( rRect.TopLeft(), aVirDev.GetBitmap( Point(), aDevSize ) );
+    aVirDev.EnableRTL( false );
+    aVirDev.DrawText( aLabelPos, rText );
+    rDev.DrawBitmap( rRect.TopLeft(), aVirDev.GetBitmap( Point( 0, 0 ), aDevSize ) );
 }
 
 void ScDPFieldWindow::Redraw()
 {
     VirtualDevice   aVirDev;
+    aVirDev.EnableRTL( true );
+
     Point           aPos0;
     Size            aSize( GetSizePixel() );
     Font            aFont( GetFont() );         // Font vom Window
-
     aFont.SetTransparent( TRUE );
     aVirDev.SetFont( aFont );
     aVirDev.SetOutputSizePixel( aSize );
@@ -512,6 +521,10 @@ void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     USHORT nCode = rKeyCode.GetCode();
     BOOL bKeyEvaluated = FALSE;
+
+    // revert wrong cursor direction (left/right) in RTL windows
+    if( ((nCode == KEY_LEFT) || (nCode == KEY_RIGHT)) && mbAppRTL && IsRTLEnabled() )
+        nCode = (nCode == KEY_LEFT) ? KEY_RIGHT : KEY_LEFT;
 
     if( rKeyCode.IsMod1() && (eType != TYPE_SELECT) )
     {

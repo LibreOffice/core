@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 20:25:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 //------------------------------------------------------------------------
@@ -179,7 +179,7 @@ void ScMatrix::Store(SvStream& rStream) const
         rStream << (USHORT) 1;
         rStream << (BYTE) CELLTYPE_VALUE;
         double fVal;
-        SolarMath::SetNAN( fVal, FALSE );
+        ::rtl::math::setNan( &fVal );
         rStream << fVal;
         return;
     }

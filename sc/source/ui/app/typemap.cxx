@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-12 13:51:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@
 #include <svx/charreliefitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svtools/ilstitem.hxx>
+#include <svtools/globalnameitem.hxx>
 
 #include "attrib.hxx"
 

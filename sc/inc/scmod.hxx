@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-24 17:17:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ class SfxErrorHandler;
 class SvxErrorHandler;
 class SvtAccessibilityOptions;
 
-namespace svx { class ColorConfig; }
+namespace svtools { class ColorConfig; }
 
 class ScRange;
 class ScDocument;
@@ -169,7 +169,7 @@ class ScModule: public ScModuleDummy, public SfxListener
     ScInputCfg*         pInputCfg;
     ScPrintCfg*         pPrintCfg;
     ScNavipiCfg*        pNavipiCfg;
-    svx::ColorConfig*   pColorConfig;
+    svtools::ColorConfig*   pColorConfig;
     SvtAccessibilityOptions* pAccessOptions;
     SfxErrorHandler*    pErrorHdl;
     SvxErrorHandler*    pSvxErrorHdl;
@@ -248,7 +248,7 @@ public:
     static BOOL         HasThesaurusLanguage( USHORT nLang );
 
     ScNavipiCfg&        GetNavipiCfg();
-    svx::ColorConfig&   GetColorConfig();
+    svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions& GetAccessOptions();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );

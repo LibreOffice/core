@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-04 14:18:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@
 #endif
 
 
+#include "XclImpObjects.hxx"
 #include "excform.hxx"
 
 
@@ -183,6 +184,7 @@ void XclImpBitmap::ReadBitmap( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
     DBG_ASSERT( rRoot.mpRD->pStyleSheetItemSet, "XclImpBitmap::ReadBitmap - no itemset" );
+    if( !rRoot.mpRD->pStyleSheetItemSet ) return;
     SfxItemSet& rItemSet = *rRoot.mpRD->pStyleSheetItemSet;
 
     sal_uInt32 nID;
@@ -475,15 +477,16 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
 
 // Data Validation ============================================================
 
-void XclImpValidation::ReadDval( XclImpStream& rStrm, XclImpRoot& rRoot )
+void XclImpValidation::ReadDval( XclImpStream& rStrm )
 {
+    const XclImpRoot& rRoot = rStrm.GetRoot();
     DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
 
     sal_uInt32 nObjId;
     rStrm.Ignore( 10 );
     rStrm >> nObjId;
     if( nObjId != EXC_DVAL_NOOBJ )
-        rRoot.SetIgnoreObject( nObjId );
+        rRoot.GetObjectManager().SetIgnoreObject( nObjId );
 }
 
 void XclImpValidation::ReadDv( XclImpStream& rStrm, ExcelToSc& rFmlaConv )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-06 08:53:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@
 #include "sc.hrc"           // SID_LINK
 #include "hints.hxx"
 #include "dpobject.hxx"
+#include "unoguard.hxx"
 
 using namespace com::sun::star;
 
@@ -748,15 +749,53 @@ void ScDocument::AddUnoObject( SfxListener& rObject )
 void ScDocument::RemoveUnoObject( SfxListener& rObject )
 {
     if (pUnoBroadcaster)
+    {
         rObject.EndListening( *pUnoBroadcaster );
+
+        if ( bInUnoBroadcast )
+        {
+            //  #107294# Broadcasts from ScDocument::BroadcastUno are the only way that
+            //  uno object methods are called without holding a reference.
+            //
+            //  If RemoveUnoObject is called from an object dtor in the finalizer thread
+            //  while the main thread is calling BroadcastUno, the dtor thread must wait
+            //  (or the object's Notify might try to access a deleted object).
+            //  The SolarMutex can't be locked here because if a component is called from
+            //  a VCL event, the main thread has the SolarMutex locked all the time.
+            //
+            //  This check is done after calling EndListening, so a later BroadcastUno call
+            //  won't touch this object.
+
+            vos::IMutex& rSolarMutex = Application::GetSolarMutex();
+            if ( rSolarMutex.tryToAcquire() )
+            {
+                //  BroadcastUno is always called with the SolarMutex locked, so if it
+                //  can be acquired, this is within the same thread (should not happen)
+                DBG_ERRORFILE( "RemoveUnoObject called from BroadcastUno" );
+                rSolarMutex.release();
+            }
+            else
+            {
+                //  let the thread that called BroadcastUno continue
+                while ( bInUnoBroadcast )
+                {
+                    vos::OThread::yield();
+                }
+            }
+        }
+    }
     else
-        DBG_ERROR("kein Uno-Broadcaster??!?");
+        DBG_ERROR("No Uno broadcaster");
 }
 
 void ScDocument::BroadcastUno( const SfxHint &rHint )
 {
     if (pUnoBroadcaster)
+    {
+        bInUnoBroadcast = TRUE;
         pUnoBroadcaster->Broadcast( rHint );
+        bInUnoBroadcast = FALSE;
+    }
 }
 
 void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,

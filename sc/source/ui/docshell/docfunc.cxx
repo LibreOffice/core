@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:33:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,6 +789,10 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
     rDocShell.PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
     aModificator.SetDocumentModified();
 
+    // #107160# notify input handler here the same way as in PutCell
+    if (bApi)
+        NotifyInputHandler( rPos );
+
     return TRUE;
 }
 
@@ -839,21 +843,28 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
 
     // #103934#; notify editline and cell in edit mode
     if (bApi)
+        NotifyInputHandler( rPos );
+
+    return TRUE;
+}
+
+void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
+{
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    if ( pViewSh && pViewSh->GetViewData()->GetDocShell() == &rDocShell )
     {
-        ScViewData* pViewData = rDocShell.GetViewData();
-        if (pViewData && pViewData->GetCurPos() == rPos && SC_MOD()->GetInputHdl())
+        ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+        if ( pInputHdl )
         {
-            sal_Bool bIsEditMode(SC_MOD()->GetInputHdl()->IsEditMode());
+            sal_Bool bIsEditMode(pInputHdl->IsEditMode());
 
             // set modified if in editmode, because so the string is not set in the InputWindow like in the cell
             // (the cell shows the same like the InputWindow)
             if (bIsEditMode)
-                SC_MOD()->GetInputHdl()->SetModified();
-            pViewData->UpdateInputHandler(FALSE, !bIsEditMode);
+                pInputHdl->SetModified();
+            pViewSh->UpdateInputHandler(FALSE, !bIsEditMode);
         }
     }
-
-    return TRUE;
 }
 
         struct ScMyRememberItem

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,36 +124,6 @@ void ScTemplateDlg::ToggleApplyTemplate()
 
 
 // STATIC DATA -----------------------------------------------------------
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2000/09/17 14:08:54  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.6  2000/08/31 16:38:18  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.5  1995/01/30 21:25:46  MO
-    + Dtor implementiert
-
-
-      Rev 1.4   30 Jan 1995 22:25:46   MO
-   + Dtor implementiert
-
-      Rev 1.3   17 Jan 1995 17:02:22   TRI
-   Pragmas zur Segmentierung eingebaut
-
-      Rev 1.2   06 Dec 1994 11:26:22   MO
-   SfxTemplateDlg -> SfxTemplateDialog
-
-      Rev 1.1   09 Nov 1994 19:54:18   NN
-   SfxTemplateDlg Konstruktor angepasst
-
-      Rev 1.0   08 Nov 1994 16:42:30   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 #pragma SEG_EOFMODULE
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-11 12:35:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,7 @@
 #define SC_UNONAME_CONTHDR          "ContainsHeader"
 #define SC_UNONAME_MAXFLD           "MaxFieldCount"
 #define SC_UNONAME_ORIENT           "Orientation"
+#define SC_UNONAME_SORTCOLUMNS      "SortColumns"
 #define SC_UNONAME_SORTFLD          "SortFields"
 #define SC_UNONAME_SORTASC          "SortAscending"
 #define SC_UNONAME_ENUSLIST         "EnableUserSortList"
@@ -271,6 +272,7 @@
 #define SC_UNONAME_AUTOFLT          "AutoFilter"
 #define SC_UNONAME_FLTCRT           "FilterCriteriaSource"
 #define SC_UNONAME_USEFLTCRT        "UseFilterCriteriaSource"
+#define SC_UNONAME_ENABSORT         "EnableSort"
 
 //  text fields
 #define SC_UNONAME_ANCTYPE          "AnchorType"

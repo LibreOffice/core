@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:14:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,14 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ english_us ] = "Chan~ges" ;
         Text [ portuguese_brazilian ] = "~?nderungen" ;
         Text [ swedish ] = "~Ändringar" ;
-        Text [ danish ] = "Ændringer" ;
+        Text [ danish ] = "~Ændringer" ;
         Text [ italian ] = "~Modifica" ;
         Text [ spanish ] = "~Modificaciones" ;
         Text [ french ] = "~Modifications" ;
         Text [ dutch ] = "~Wijzigingen" ;
         Text [ portuguese ] = "~Modificações" ;
         Text[ chinese_simplified ] = "æ›´æ”¹(~G)";
-        Text[ russian ] = "Èñïğàâëåíèÿ";
+        Text[ russian ] = "Èçìåíåíèÿ";
         Text[ polish ] = "Zmiany";
         Text[ japanese ] = "å¤‰æ›´(~G)";
         Text[ chinese_traditional ] = "è®Šæ›´(~G)";
@@ -93,8 +93,9 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "ë³€ê²½(~G)";
         Text[ turkish ] = "~Değişiklikler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificaciones";
+        Text[ catalan ] = "Can~vis";
         Text[ finnish ] = "Muu~tokset";
+        Text[ thai ] = "à¹€à¸›~à¸¥à¸µà¹ˆà¸¢à¸™";
     };
     FixedText FT_REMOVE
     {
@@ -108,9 +109,9 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ swedish ] = "~Raderingar" ;
         Text [ danish ] = "Sletninger" ;
         Text [ italian ] = "~Elimina" ;
-        Text [ spanish ] = "~Eliminaciones" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ french ] = "~Suppressions" ;
-        Text [ dutch ] = "~Verwijderingen" ;
+        Text [ dutch ] = "V~erwijderingen" ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëåíèÿ";
         Text[ polish ] = "Usuniêcia";
@@ -121,8 +122,9 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Silinenler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminaciones";
+        Text[ catalan ] = "~Supressions";
         Text[ finnish ] = "~Poistot";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     FixedText FT_INSERT
     {
@@ -135,7 +137,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ portuguese_brazilian ] = "~Einf?ungen" ;
         Text [ swedish ] = "~Infogningar" ;
         Text [ danish ] = "Indsættelser" ;
-        Text [ italian ] = "~Inserisci" ;
+        Text [ italian ] = "Inserisci" ;
         Text [ spanish ] = "~Inserciones" ;
         Text [ french ] = "~Insertions" ;
         Text [ dutch ] = "~Invoegingen" ;
@@ -149,8 +151,9 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "ì‚½ì…(~I)";
         Text[ turkish ] = "~Eklemeler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Inserciones";
-        Text[ finnish ] = "~Lis?ykset";
+        Text[ catalan ] = "~Insercions";
+        Text[ finnish ] = "~Lisäykset";
+        Text[ thai ] = "à¹~à¸—à¸£à¸";
     };
     FixedText FT_MOVE
     {
@@ -165,10 +168,10 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ danish ] = "Flytninger" ;
         Text [ italian ] = "~Sposta" ;
         Text [ spanish ] = "~Desplazamientos" ;
-        Text [ french ] = "~Déplacements" ;
-        Text [ dutch ] = "~Verplaatsingen" ;
+        Text [ french ] = "Déplacements" ;
+        Text [ dutch ] = "Ver~plaatsingen" ;
         Text[ chinese_simplified ] = "ç§»åŠ¨(~M)";
-        Text[ russian ] = "Cìåùåíèÿ";
+        Text[ russian ] = "Ïåğåìåùåííûå ıëåìåíòû";
         Text[ polish ] = "Przesuniêcia";
         Text[ japanese ] = "ç§»å‹•(~M)";
         Text[ chinese_traditional ] = "ç§»å‹•(~M)";
@@ -177,8 +180,9 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "ì´ë™(~M)";
         Text[ turkish ] = "~Taşınan girişler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Desplazamientos";
-        Text[ finnish ] = "~Siirretyt merkinn?t";
+        Text[ catalan ] = "Entrades ~mogudes";
+        Text[ finnish ] = "~Siirretyt merkinnät";
+        Text[ thai ] = "~à¸¢à¹‰à¸²à¸¢à¸£à¸²à¸¢à¸à¸²à¸£";
     };
     FixedLine GB_COLORCHGS
     {
@@ -190,7 +194,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ english_us ] = "Colors for changes" ;
         Text [ portuguese_brazilian ] = "Farbgebung f? ?nderungen" ;
         Text [ swedish ] = "Färggivning för ändringar" ;
-        Text [ danish ] = "Farver for ændringer" ;
+        Text [ danish ] = "Farve til markering af ændringer" ;
         Text [ italian ] = "Colori per i comandi" ;
         Text [ spanish ] = "Colores para las modificaciones" ;
         Text [ french ] = "Couleurs pour les modifications" ;
@@ -205,8 +209,9 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "ë³€ê²½ ìƒ‰ìƒ";
         Text[ turkish ] = "Değişiklikleri gösteren renkler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Colores para las modificaciones";
+        Text[ catalan ] = "Colors per als canvis";
         Text[ finnish ] = "Muutosten värit";
+        Text[ thai ] = "à¸ªà¸µà¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™";
     };
     ListBox CLB_CONTENT
     {
@@ -246,23 +251,32 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ swedish ] = "Efter författare" ;
         Text [ danish ] = "Efter forfatter" ;
         Text [ italian ] = "per autore" ;
-        Text [ spanish ] = "Según autor" ;
+        Text [ spanish ] = "Por autor" ;
         Text [ french ] = "Par auteur" ;
         Text [ dutch ] = "Naar auteur" ;
         Text[ chinese_simplified ] = "ä¾ä½œè€…è®¾å®š";
         Text[ russian ] = "Ïî àâòîğó";
         Text[ polish ] = "Wed³ug autora";
-        Text[ japanese ] = "ä½œæˆè€…ã¹ã¤";
+        Text[ japanese ] = "ä½œæˆè€…åˆ¥";
         Text[ chinese_traditional ] = "ä¾ä½œè€…è¨­å®š";
         Text[ arabic ] = "ÍÓÈ ÇáãÄáİ";
         Text[ greek ] = "ÊáôÜ óõíôÜêôç";
-        Text[ korean ] = "ì‘ì„±ì";
+        Text[ korean ] = "ì‘ì„±ì ì„¤ì •";
         Text[ turkish ] = "Yazana göre";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Según autor";
-        Text[ finnish ] = "Laatija";
+        Text[ catalan ] = "Per l'autor";
+        Text[ finnish ] = "Tekijä";
+        Text[ thai ] = "à¹‚à¸”à¸¢à¸œà¸¹à¹‰à¹à¸•à¹ˆà¸‡";
     };
 };
+
+
+
+
+
+
+
+
 
 
 

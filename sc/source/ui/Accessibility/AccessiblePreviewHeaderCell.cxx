@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-27 14:21:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -111,15 +114,15 @@ ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const ::com::sun::
                                 ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
                             const ScAddress& rCellPos, sal_Bool bIsColHdr, sal_Bool bIsRowHdr,
-                            sal_Int32 nIndex, const Rectangle& rPosition ) :
+                            sal_Int32 nIndex ) :
     ScAccessibleContextBase( rxParent, AccessibleRole::TABLE_CELL ),
     mpViewShell( pViewShell ),
     maCellPos( rCellPos ),
     mbColumnHeader( bIsColHdr ),
     mbRowHeader( bIsRowHdr ),
     mnIndex( nIndex ),
-    maPosition( rPosition ),
-    mpTextHelper( NULL )
+    mpTextHelper( NULL ),
+    mpTableInfo( NULL )
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);
@@ -140,6 +143,9 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
         mpViewShell = NULL;
     }
 
+       if (mpTableInfo)
+        DELETEZ (mpTableInfo);
+
     ScAccessibleContextBase::disposing();
 }
 
@@ -151,10 +157,16 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         ULONG nId = rRef.GetId();
-        if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        if (nId == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpTextHelper)
                 mpTextHelper->UpdateChildren();
+        }
+        else if ( nId == SFX_HINT_DATACHANGED )
+        {
+            //  column / row layout may change with any document change,
+            //  so it must be invalidated
+            DELETEZ( mpTableInfo );
         }
     }
 
@@ -186,27 +198,48 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::release()
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue() throw (uno::RuntimeException)
 {
-    //  column or row headers don't have a value
-    return uno::Any();
+     ScUnoGuard aGuard;
+    IsObjectValid();
+
+    double fValue(0.0);
+    if (mbColumnHeader)
+        fValue = maCellPos.Col();
+    else
+        fValue = maCellPos.Row();
+
+    uno::Any aAny;
+    aAny <<= fValue;
+    return aAny;
 }
 
 sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& aNumber )
                                                                 throw (uno::RuntimeException)
 {
-    //  column or row headers don't have a value
+    //  it is not possible to set a value
     return sal_False;
 }
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue() throw (uno::RuntimeException)
 {
-    //  column or row headers don't have a value
-    return uno::Any();
+     ScUnoGuard aGuard;
+    IsObjectValid();
+
+    double fValue(0.0);
+    if (mbColumnHeader)
+        fValue = MAXCOL;
+    else
+        fValue = MAXROW;
+    uno::Any aAny;
+    aAny <<= fValue;
+    return aAny;
 }
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue() throw (uno::RuntimeException)
 {
-    //  column or row headers don't have a value
-    return uno::Any();
+    double fValue(0.0);
+    uno::Any aAny;
+    aAny <<= fValue;
+    return aAny;
 }
 
 //=====  XAccessibleComponent  ============================================
@@ -341,7 +374,18 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
 {
-    Rectangle aCellRect(GetBoundingBox());
+    Rectangle aCellRect;
+
+    FillTableInfo();
+
+    if (mpTableInfo)
+    {
+        const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[maCellPos.Col()];
+        const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[maCellPos.Row()];
+
+        aCellRect = Rectangle( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
+    }
+
     if (mpViewShell)
     {
         Window* pWindow = mpViewShell->GetWindow();
@@ -357,7 +401,29 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const throw (u
 
 Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const throw (uno::RuntimeException)
 {
-    return maPosition;
+    FillTableInfo();
+
+    if (mpTableInfo)
+    {
+        const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[maCellPos.Col()];
+        const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[maCellPos.Row()];
+
+        Rectangle aCellRect( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
+        uno::Reference<XAccessible> xAccParent = const_cast<ScAccessiblePreviewHeaderCell*>(this)->getAccessibleParent();
+        if (xAccParent.is())
+        {
+            uno::Reference<XAccessibleContext> xAccParentContext = xAccParent->getAccessibleContext();
+            uno::Reference<XAccessibleComponent> xAccParentComp (xAccParentContext, uno::UNO_QUERY);
+            if (xAccParentComp.is())
+            {
+                Rectangle aParentRect (VCLRectangle(xAccParentComp->getBounds()));
+                aCellRect.setX(aCellRect.getX() - aParentRect.getX());
+                aCellRect.setY(aCellRect.getY() - aParentRect.getY());
+            }
+        }
+        return aCellRect;
+    }
+    return Rectangle();
 }
 
 rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription() throw(uno::RuntimeException)
@@ -409,5 +475,21 @@ void ScAccessiblePreviewHeaderCell::CreateTextHelper()
 
         mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
         mpTextHelper->SetEventSource(this);
+    }
+}
+
+void ScAccessiblePreviewHeaderCell::FillTableInfo() const
+{
+    if ( mpViewShell && !mpTableInfo )
+    {
+        Size aOutputSize;
+        Window* pWindow = mpViewShell->GetWindow();
+        if ( pWindow )
+            aOutputSize = pWindow->GetOutputSizePixel();
+        Point aPoint;
+        Rectangle aVisRect( aPoint, aOutputSize );
+
+        mpTableInfo = new ScPreviewTableInfo;
+        mpViewShell->GetLocationData().GetTableInfo( aVisRect, *mpTableInfo );
     }
 }

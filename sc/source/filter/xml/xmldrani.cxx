@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:02:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,14 +470,14 @@ void ScXMLDatabaseRangeContext::EndElement()
                                     xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_USEREGEX)), aTemp);
                                     aTemp <<= aFilterOutputPosition;
                                     xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)), aTemp);
-                                    if (bFilterConditionSourceRange)
-                                    {
-                                        ScRange aAdvSource;
-                                        ScUnoConversion::FillScRange( aAdvSource, aFilterConditionSourceRangeAddress );
-                                        pDBData->SetAdvancedQuerySource(&aAdvSource);
-                                    }
                                 }
                                 xSheetFilterDescriptor->setFilterFields(aFilterFields);
+                                if (bFilterConditionSourceRange)
+                                {
+                                    ScRange aAdvSource;
+                                    ScUnoConversion::FillScRange( aAdvSource, aFilterConditionSourceRangeAddress );
+                                    pDBData->SetAdvancedQuerySource(&aAdvSource);
+                                }
                             }
                             if (bContainsSubTotal)
                             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 // Color data =================================================================
 
 /** Stores all default colors for a specific BIFF version. */
-class XclDefaultPalette : ScfNoCopy
+class XclDefaultPalette
 {
 private:
     const ColorData*            mpColorTable;       /// The table with RGB values.
@@ -83,7 +83,7 @@ public:
     explicit                    XclDefaultPalette( XclBiff eBiff = xlBiffUnknown );
 
     /** Activates the default colors for the passed BIFF version. */
-    void                        SetBiff( XclBiff eBiff );
+    void                        SetDefaultColors( XclBiff eBiff );
 
     /** Returns the color count in the current palette. */
     inline sal_uInt32           GetColorCount() const { return mnTableSize; }
@@ -110,7 +110,7 @@ inline Color XclDefaultPalette::GetDefColor( sal_uInt16 nXclIndex, ColorData nDe
 }
 
 
-// Font Data ==================================================================
+// Font data ==================================================================
 
 /** Text underline style. */
 enum XclUnderline
@@ -172,7 +172,7 @@ enum XclHorAlign
     xlHAlignFill                    = 0x04,
     xlHAlignJustify                 = 0x05,
     xlHAlignCenterAcrSel            = 0x06,
-    xlHAlignParent                  = 0xFF
+    xlHAlignDistrib                 = 0x07
 };
 
 /** Vertical alignment of cell contents. */
@@ -182,8 +182,7 @@ enum XclVerAlign
     xlVAlignCenter                  = 0x01,
     xlVAlignBottom                  = 0x02,
     xlVAlignJustify                 = 0x03,
-    xlVAlignDistrib                 = 0x04,
-    xlVAlignParent                  = 0xFF
+    xlVAlignDistrib                 = 0x04
 };
 
 /** Text orientation. */
@@ -193,16 +192,7 @@ enum XclTextOrient
     xlTextOrientTopBottom           = 0x01,
     xlTextOrient90ccw               = 0x02,
     xlTextOrient90cw                = 0x03,
-    xlTextOrientRot                 = 0x04,
-    xlTextOrientParent              = 0xFF
-};
-
-/** Text wrap (automatic line break). */
-enum XclTextWrap
-{
-    xlTextWrapNo                    = 0x00,
-    xlTextWrapYes                   = 0x01,
-    xlTextWrapParent                = 0xFF
+    xlTextOrientRot                 = 0x04
 };
 
 /** CTL text direction. */
@@ -210,8 +200,7 @@ enum XclTextDirection
 {
     xlTextDirContext                = 0x00,
     xlTextDirLTR                    = 0x01,
-    xlTextDirRTL                    = 0x02,
-    xlTextDirParent                 = 0xFF
+    xlTextDirRTL                    = 0x02
 };
 
 

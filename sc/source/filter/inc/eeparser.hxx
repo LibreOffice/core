@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeparser.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,13 +120,21 @@ struct ScEEParseEntry
     USHORT              nOffset;        // HTML PixelOffset
     USHORT              nWidth;         // HTML PixelWidth
     BOOL                bHasGraphic;    // HTML any image loaded
+    bool                bEntirePara;    // TRUE = use entire paragraph, false = use selection
 
                         ScEEParseEntry( SfxItemPool* pPool ) :
                             aItemSet( *pPool ), pValStr( NULL ),
                             pNumStr( NULL ), pName( NULL ), pImageList( NULL ),
                             nCol((USHORT)~0), nRow((USHORT)~0), nTab(0),
                             nColOverlap(1), nRowOverlap(1),
-                            nOffset(0), nWidth(0), bHasGraphic(FALSE)
+                            nOffset(0), nWidth(0), bHasGraphic(FALSE), bEntirePara(true)
+                            {}
+                        ScEEParseEntry( const SfxItemSet& rItemSet ) :
+                            aItemSet( rItemSet ), pValStr( NULL ),
+                            pNumStr( NULL ), pName( NULL ), pImageList( NULL ),
+                            nCol((USHORT)~0), nRow((USHORT)~0), nTab(0),
+                            nColOverlap(1), nRowOverlap(1),
+                            nOffset(0), nWidth(0), bHasGraphic(FALSE), bEntirePara(true)
                             {}
                         ~ScEEParseEntry()
                             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

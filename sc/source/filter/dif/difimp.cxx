@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-10-31 19:15:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 #include "dif.hxx"
 #include "filter.hxx"
-#include "fltprgrs.hxx"
+#include "fprogressbar.hxx"
 #include "flttools.hxx"
 #include "scerrors.hxx"
 #include "document.hxx"
@@ -83,51 +83,25 @@
 #include "attrib.hxx"
 
 
-const sal_Char*     pKeyTABLE = "TABLE";
-const sal_Char*     pKeyVECTORS = "VECTORS";
-const sal_Char*     pKeyTUPLES = "TUPLES";
-const sal_Char*     pKeyDATA = "DATA";
-const sal_Char*     pKeyBOT = "BOT";
-const sal_Char*     pKeyEOD = "EOD";
-const sal_Char*     pKeyERROR = "ERROR";
-const sal_Char*     pKeyTRUE = "TRUE";
-const sal_Char*     pKeyFALSE = "FALSE";
-const sal_Char*     pKeyNA = "NA";
-
-
-#if __ALIGNMENT4 == 1
-UINT32              DifParser::nBOT = *( ( UINT32* ) pKeyBOT );
-UINT32              DifParser::nEOD = *( ( UINT32* ) pKeyEOD );
-UINT32              DifParser::n1_0 = *( ( UINT32* ) "1,0" );
-#else
-sal_Char            DifParser::cBOT_0 = 'B';
-sal_Char            DifParser::cBOT_1 = 'O';
-sal_Char            DifParser::cBOT_2 = 'T';
-sal_Char            DifParser::cBOT_3 = 0x00;
-sal_Char            DifParser::cEOD_0 = 'E';
-sal_Char            DifParser::cEOD_1 = 'O';
-sal_Char            DifParser::cEOD_2 = 'D';
-sal_Char            DifParser::cEOD_3 = 0x00;
-sal_Char            DifParser::c1_0_0 = '1';
-sal_Char            DifParser::c1_0_1 = ',';
-sal_Char            DifParser::c1_0_2 = '0';
-sal_Char            DifParser::c1_0_3 = 0x00;
-#endif
-
-#if __ALIGNMENT2 == 1
-UINT16              DifParser::nV = *( ( UINT16* ) "V" );
-#else
-sal_Char            DifParser::cV_0 = 'V';
-sal_Char            DifParser::cV_1 = 0x00;
-#endif
-
-
+const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
+const sal_Unicode pKeyVECTORS[] = { 'V', 'E', 'C', 'T', 'O', 'R', 'S', 0 };
+const sal_Unicode pKeyTUPLES[]  = { 'T', 'U', 'P', 'L', 'E', 'S', 0 };
+const sal_Unicode pKeyDATA[]    = { 'D', 'A', 'T', 'A', 0 };
+const sal_Unicode pKeyBOT[]     = { 'B', 'O', 'T', 0 };
+const sal_Unicode pKeyEOD[]     = { 'E', 'O', 'D', 0 };
+const sal_Unicode pKeyERROR[]   = { 'E', 'R', 'R', 'O', 'R', 0 };
+const sal_Unicode pKeyTRUE[]    = { 'T', 'R', 'U', 'E', 0 };
+const sal_Unicode pKeyFALSE[]   = { 'F', 'A', 'L', 'S', 'E', 0 };
+const sal_Unicode pKeyNA[]      = { 'N', 'A', 0 };
+const sal_Unicode pKeyV[]       = { 'V', 0 };
+const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 
 
 FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         const CharSet eVon, UINT32 nDifOption )
 {
     DifParser   aDifParser( rIn, nDifOption, *pDoc, eVon );
+
     const BOOL  bPlain = aDifParser.IsPlain();
 
     UINT16      nBaseTab = rInsPos.Tab();
@@ -136,7 +110,7 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
     BOOL        bSyntErrWarn = FALSE;
     BOOL        bOverflowWarn = FALSE;
 
-    ByteString& rData = aDifParser.aData;
+    String&     rData = aDifParser.aData;
     BOOL        bData = FALSE;
 
     UINT16      nNumCols = 0;
@@ -144,7 +118,7 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
 
     rIn.Seek( 0 );
 
-    FilterProgressBar   aPrgrsBar( rIn );
+    ScfStreamProgressBar aPrgrsBar( rIn, pDoc->GetDocumentShell() );
 
     while( eTopic != T_DATA && eTopic != T_END )
     {
@@ -161,7 +135,7 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                 if( aDifParser.nVector != 0 || aDifParser.nVal != 1 )
                     bSyntErrWarn = TRUE;
                 if( bData )
-                    pDoc->RenameTab( nBaseTab, String( rData, eVon ) );
+                    pDoc->RenameTab( nBaseTab, rData );
             }
                 break;
             case T_VECTORS:
@@ -261,13 +235,13 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                                     aDifParser.nNumFormat );
                         }
                         else if( rData == pKeyNA || rData == pKeyERROR  )
-                            pCell = new ScStringCell( String( rData, eVon ) );
+                            pCell = new ScStringCell( rData );
                         else
                         {
-                            ByteString  aTmp( "#IND: " );
+                            String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#IND: " ));
                             aTmp += rData;
-                            aTmp += '?';
-                            pCell = new ScStringCell( String( aTmp, eVon ) );
+                            aTmp += sal_Unicode('?');
+                            pCell = new ScStringCell( aTmp );
                         }
 
                         pDoc->PutCell( nColCnt, nRowCnt, nBaseTab, pCell, ( BOOL ) TRUE );
@@ -286,7 +260,7 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         if( rData.Len() > 0 )
                         {
                             pDoc->PutCell( nColCnt, nRowCnt, nBaseTab,
-                                ScBaseCell::CreateTextCell( String( rData, eVon ), pDoc ), ( BOOL ) TRUE );
+                                ScBaseCell::CreateTextCell( rData, pDoc ), ( BOOL ) TRUE );
                         }
                     }
                     else
@@ -326,6 +300,14 @@ DifParser::DifParser( SvStream& rNewIn, const UINT32 nOption, ScDocument& rDoc, 
     rIn( rNewIn )
 {
     eCharSet = e;
+    if ( rIn.GetStreamCharSet() != eCharSet )
+    {
+        DBG_ERRORFILE( "CharSet passed overrides and modifies StreamCharSet" );
+        rIn.SetStreamCharSet( eCharSet );
+    }
+    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+        rIn.StartReadingUnicodeText();
+
     bPlain = ( nOption == SC_DIFOPT_PLAIN );
 
     if( bPlain )
@@ -339,22 +321,33 @@ TOPIC DifParser::GetNextTopic( void )
 {
     enum STATE { S_VectorVal, S_Data, S_END, S_START, S_UNKNOWN, S_ERROR_L2 };
 
-    static const sal_Char*  ppKeys[] =
+    static const sal_Unicode pKeyLABEL[]        = { 'L', 'A', 'B', 'E', 'L', 0 };
+    static const sal_Unicode pKeyCOMMENT[]      = { 'C', 'O', 'M', 'M', 'E', 'N', 'T', 0 };
+    static const sal_Unicode pKeySIZE[]         = { 'S', 'I', 'Z', 'E', 0 };
+    static const sal_Unicode pKeyPERIODICITY[]  = { 'P', 'E', 'R', 'I', 'O', 'D', 'I', 'C', 'I', 'T', 'Y', 0 };
+    static const sal_Unicode pKeyMAJORSTART[]   = { 'M', 'A', 'J', 'O', 'R', 'S', 'T', 'A', 'R', 'T', 0 };
+    static const sal_Unicode pKeyMINORSTART[]   = { 'M', 'I', 'N', 'O', 'R', 'S', 'T', 'A', 'R', 'T', 0 };
+    static const sal_Unicode pKeyTRUELENGTH[]   = { 'T', 'R', 'U', 'E', 'L', 'E', 'N', 'G', 'T', 'H', 0 };
+    static const sal_Unicode pKeyUINITS[]       = { 'U', 'I', 'N', 'I', 'T', 'S', 0 };
+    static const sal_Unicode pKeyDISPLAYUNITS[] = { 'D', 'I', 'S', 'P', 'L', 'A', 'Y', 'U', 'N', 'I', 'T', 'S', 0 };
+    static const sal_Unicode pKeyUNKNOWN[]      = { 0 };
+
+    static const sal_Unicode*   ppKeys[] =
     {
         pKeyTABLE,              // 0
         pKeyVECTORS,
         pKeyTUPLES,
         pKeyDATA,
-        "LABEL",
-        "COMMENT",              // 5
-        "SIZE",
-        "PERIODICITY",
-        "MAJORSTART",
-        "MINORSTART",
-        "TRUELENGTH",           // 10
-        "UINITS",
-        "DISPLAYUNITS",
-        ""                      // 13
+        pKeyLABEL,
+        pKeyCOMMENT,            // 5
+        pKeySIZE,
+        pKeyPERIODICITY,
+        pKeyMAJORSTART,
+        pKeyMINORSTART,
+        pKeyTRUELENGTH,         // 10
+        pKeyUINITS,
+        pKeyDISPLAYUNITS,
+        pKeyUNKNOWN             // 13
     };
 
     static const TOPIC      pTopics[] =
@@ -377,7 +370,7 @@ TOPIC DifParser::GetNextTopic( void )
 
     STATE                   eS = S_START;
     BOOL                    bValOverflow = FALSE;
-    ByteString              aLine;
+    String                  aLine;
 
     nVector = 0;
     nVal = 0;
@@ -385,7 +378,7 @@ TOPIC DifParser::GetNextTopic( void )
 
     while( eS != S_END )
     {
-        if( !rIn.ReadLine( aLine ) )
+        if( !rIn.ReadUniOrByteStringLine( aLine ) )
         {
             eS = S_END;
             eRet = T_END;
@@ -395,7 +388,7 @@ TOPIC DifParser::GetNextTopic( void )
         {
             case S_START:
             {
-                const sal_Char* pRef;
+                const sal_Unicode*  pRef;
                 UINT16          nCnt = 0;
                 BOOL            bSearch = TRUE;
 
@@ -425,7 +418,7 @@ TOPIC DifParser::GetNextTopic( void )
                 break;
             case S_VectorVal:
             {
-                const sal_Char*     pCur = aLine.GetBuffer();
+                const sal_Unicode*      pCur = aLine.GetBuffer();
 
                 pCur = ScanIntVal( pCur, nVector );
 
@@ -455,10 +448,10 @@ TOPIC DifParser::GetNextTopic( void )
 #endif
             case S_UNKNOWN:
                 // 2 Zeilen ueberlesen
-                rIn.ReadLine( aLine );
+                rIn.ReadUniOrByteStringLine( aLine );
             case S_ERROR_L2:                // Fehler in Line 2 aufgetreten
                 // eine Zeile ueberlesen
-                rIn.ReadLine( aLine );
+                rIn.ReadUniOrByteStringLine( aLine );
                 eS = S_END;
                 break;
 #ifdef DBG_UTIL
@@ -472,15 +465,16 @@ TOPIC DifParser::GetNextTopic( void )
 }
 
 
-void lcl_DeEscapeQuotesDif( ByteString& rString )
+void lcl_DeEscapeQuotesDif( String& rString )
 {
     //  Special handling for DIF import: Escaped (duplicated) quotes are resolved.
     //  Single quote characters are left in place because older versions didn't
     //  escape quotes in strings (and Excel doesn't when using the clipboard).
     //  The quotes around the string are removed before this function is called.
 
+    static const sal_Unicode aDQ[] = { '"', '"', 0 };
     xub_StrLen nPos = 0;
-    while ( (nPos = rString.Search( "\"\"", nPos )) != STRING_NOTFOUND )
+    while ( (nPos = rString.Search( aDQ, nPos )) != STRING_NOTFOUND )
     {
         rString.Erase( nPos, 1 );
         ++nPos;
@@ -491,10 +485,10 @@ void lcl_DeEscapeQuotesDif( ByteString& rString )
 DATASET DifParser::GetNextDataset( void )
 {
     DATASET             eRet = D_UNKNOWN;
-    ByteString          aLine;
-    const sal_Char*     pAkt;
+    String              aLine;
+    const sal_Unicode*      pAkt;
 
-    rIn.ReadLine( aLine );
+    rIn.ReadUniOrByteStringLine( aLine );
 
     pAkt = aLine.GetBuffer();
 
@@ -505,7 +499,7 @@ DATASET DifParser::GetNextDataset( void )
 
             if( Is1_0( pAkt ) )
             {
-                rIn.ReadLine( aLine );
+                rIn.ReadUniOrByteStringLine( aLine );
                 if( IsBOT( aLine.GetBuffer() ) )
                     eRet = D_BOT;
                 else if( IsEOD( aLine.GetBuffer() ) )
@@ -527,7 +521,7 @@ DATASET DifParser::GetNextDataset( void )
                 else
                 {   // ...und zur Strafe mit'm Numberformatter...
                     DBG_ASSERT( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
-                    String          aTestVal( pAkt, eCharSet );
+                    String          aTestVal( pAkt );
                     ULONG           nFormat = 0;
                     double          fTmpVal;
                     if( pNumFormatter->IsNumberFormat( aTestVal, nFormat, fTmpVal ) )
@@ -539,14 +533,14 @@ DATASET DifParser::GetNextDataset( void )
                     else
                         eRet = D_SYNT_ERROR;
                 }
-                rIn.ReadLine( aData );
+                rIn.ReadUniOrByteStringLine( aData );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell
-                    ByteString aTmp( "#ERR: " );
+                    String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#ERR: " ));
                     aTmp += pAkt;
-                    aTmp += " (";
+                    aTmp.AppendAscii( " (" );
                     aTmp += aData;
-                    aTmp += ')';
+                    aTmp += sal_Unicode(')');
                     aData = aTmp;
                     eRet = D_STRING;
                 }
@@ -555,7 +549,7 @@ DATASET DifParser::GetNextDataset( void )
         case '1':                   // String Data
             if( Is1_0( aLine.GetBuffer() ) )
             {
-                rIn.ReadLine( aLine );
+                rIn.ReadUniOrByteStringLine( aLine );
                 DBG_ASSERT( aLine.Len() >= 2,
                     "*DifParser::GetNextTopic(): Text ist zu kurz (mind. \"\")!" );
                 aData = aLine.Copy( 1, aLine.Len() - 2 );
@@ -566,7 +560,7 @@ DATASET DifParser::GetNextDataset( void )
     }
 
     if( eRet == D_UNKNOWN )
-        rIn.ReadLine( aLine );
+        rIn.ReadUniOrByteStringLine( aLine );
 
     if( rIn.IsEof() )
         eRet = D_EOD;
@@ -575,9 +569,9 @@ DATASET DifParser::GetNextDataset( void )
 }
 
 
-const sal_Char* DifParser::ScanIntVal( const sal_Char* pStart, UINT32& rRet )
+const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, UINT32& rRet )
 {
-    sal_Char        cAkt = *pStart;
+    sal_Unicode     cAkt = *pStart;
 
     if( IsNumber( cAkt ) )
         rRet = ( UINT32 ) ( cAkt - '0' );
@@ -600,7 +594,7 @@ const sal_Char* DifParser::ScanIntVal( const sal_Char* pStart, UINT32& rRet )
 }
 
 
-BOOL DifParser::ScanFloatVal( const sal_Char* pStart )
+BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
     {
     double                  fNewVal = 0.0;
     BOOL                    bNeg = FALSE;
@@ -610,7 +604,7 @@ BOOL DifParser::ScanFloatVal( const sal_Char* pStart )
     BOOL                    bExpOverflow = FALSE;
     static const UINT16     nExpLimit = 4096;   // ACHTUNG: muss genauer ermittelt werden!
 
-    sal_Char                cAkt;
+    sal_Unicode             cAkt;
     BOOL                    bRet = FALSE;
 
     enum STATE { S_FIRST, S_PRE, S_POST, S_EXP_FIRST, S_EXP, S_END, S_FINDEND };

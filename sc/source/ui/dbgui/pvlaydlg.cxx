@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-20 08:56:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,12 +917,16 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, long nFieldIndex )
 
 //----------------------------------------------------------------------------
 
-void ScDPLayoutDlg::NotifyFieldFocus( ScDPFieldType eType, BOOL bActive )
+void ScDPLayoutDlg::NotifyFieldFocus( ScDPFieldType eType, BOOL bGotFocus )
 {
-    BOOL bEnable = bActive && (eType != TYPE_SELECT);
+    /*  Enable Remove/Options buttons on GetFocus in field window.
+        #107616# Enable them also, if dialog is deactivated (click into document).
+        The !IsActive() condition handles the case that a LoseFocus event of a
+        field window would follow the Deactivate event of this dialog. */
+    BOOL bEnable = (bGotFocus || !IsActive()) && (eType != TYPE_SELECT);
     aBtnRemove.Enable( bEnable );
     aBtnOptions.Enable( bEnable );
-    if( bActive )
+    if( bGotFocus )
         eLastActiveType = eType;
 }
 
@@ -968,6 +972,17 @@ BOOL ScDPLayoutDlg::NotifyMoveSlider( USHORT nKeyCode )
         case KEY_RIGHT: aSlider.DoScrollAction( SCROLL_LINEDOWN );  break;
     }
     return nOldPos != aSlider.GetThumbPos();
+}
+
+//----------------------------------------------------------------------------
+
+void ScDPLayoutDlg::Deactivate()
+{
+    /*  #107616# If the dialog has been deactivated (click into document), the LoseFocus
+        event from field window disables Remove/Options buttons. Re-enable them here by
+        simulating a GetFocus event. Event order of LoseFocus and Deactivate is not important.
+        The last event will enable the buttons in both cases (see NotifyFieldFocus). */
+    NotifyFieldFocus( eLastActiveType, TRUE );
 }
 
 //----------------------------------------------------------------------------

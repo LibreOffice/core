@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2002-11-12 18:27:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@
 #include "interpre.hxx"
 #include "strload.hxx"
 #include "docpool.hxx"
-#include "scdll.hxx"        // ScLibSignalFunc
 #include "unitconv.hxx"
 #include "globstr.hrc"
 #include "scfuncs.hrc"
@@ -650,9 +649,6 @@ void ScGlobal::Init()
 
     UpdatePPT(NULL);
     ScCompiler::Init();
-#if SOMA_FPSIGNAL_JUMP
-    ScInterpreter::pSignalFunc = SC_DLL()->GetSignalFunc();
-#endif
     srand( (unsigned) time( NULL ) );       // Random Seed Init fuer Interpreter
 
     InitAddIns();
@@ -744,7 +740,6 @@ void ScGlobal::Clear()
     DELETEZ(pStarCalcFunctionList);     // vor ResMgr zerstoeren!
     DELETEZ(pStarCalcFunctionMgr);
     ScCompiler::DeInit();
-    ScInterpreter::aTableOpList.Clear();
     ScInterpreter::GlobalExit();            // statischen Stack loeschen
 
     DELETEZ(pEmptyBrushItem);

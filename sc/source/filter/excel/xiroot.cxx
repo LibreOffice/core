@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
 #pragma hdrstop
 
 // ============================================================================
@@ -81,12 +80,13 @@
 #include "xicontent.hxx"
 #endif
 
+#include "XclImpObjects.hxx"
+
 
 // Global data ================================================================
 
 XclImpRootData::XclImpRootData( XclBiff eBiff, ScDocument& rDocument, const String& rBasePath, CharSet eCharSet ) :
-    XclRootData( eBiff, rDocument, rBasePath, eCharSet ),
-    mbIgnoreObjSorted( false )
+    XclRootData( eBiff, rDocument, rBasePath, eCharSet )
 {
 }
 
@@ -101,13 +101,13 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),
     mrImpData( rImpRootData )
 {
-    mrImpData.mpPalette.reset( new XclImpPalette( *this ) );
-    mrImpData.mpFontBuffer.reset( new XclImpFontBuffer( *this ) );
-    mrImpData.mpNumFmtBuffer.reset( new XclImpNumFmtBuffer( *this ) );
-    mrImpData.mpXFBuffer.reset( new XclImpXFBuffer( *this ) );
-    mrImpData.mpXFIndexBuffer.reset( new XclImpXFIndexBuffer( *this ) );
+    mrImpData.mpPalette.reset( new XclImpPalette( GetRoot() ) );
+    mrImpData.mpFontBuffer.reset( new XclImpFontBuffer( GetRoot() ) );
+    mrImpData.mpNumFmtBuffer.reset( new XclImpNumFmtBuffer( GetRoot() ) );
+    mrImpData.mpXFBuffer.reset( new XclImpXFBuffer( GetRoot() ) );
+    mrImpData.mpXFIndexBuffer.reset( new XclImpXFIndexBuffer( GetRoot() ) );
     mrImpData.mpTabIdBuffer.reset( new XclImpTabIdBuffer );
-    mrImpData.mpLinkManager.reset( new XclImpLinkManager( *this ) );
+    mrImpData.mpLinkManager.reset( new XclImpLinkManager( GetRoot() ) );
 }
 
 XclImpRoot::XclImpRoot( const XclImpRoot& rRoot ) :
@@ -125,13 +125,13 @@ XclImpRoot& XclImpRoot::operator=( const XclImpRoot& rRoot )
 void XclImpRoot::SetBiff( XclBiff eBiff )
 {
     XclRoot::SetBiff( eBiff );
-    GetPalette().SetBiff( eBiff );
+    GetPalette().OnChangeBiff();
 }
 
 XclImpSst& XclImpRoot::GetSst() const
 {
     if( !mrImpData.mpSst.get() )
-        mrImpData.mpSst.reset( new XclImpSst( *this ) );
+        mrImpData.mpSst.reset( new XclImpSst( GetRoot() ) );
     return *mrImpData.mpSst;
 }
 
@@ -170,10 +170,17 @@ XclImpLinkManager& XclImpRoot::GetLinkManager() const
     return *mrImpData.mpLinkManager;
 }
 
+XclImpObjectManager& XclImpRoot::GetObjectManager() const
+{
+    if( !mrImpData.mpObjManager.get() )
+        mrImpData.mpObjManager.reset( new XclImpObjectManager( GetRoot() ) );
+    return *mrImpData.mpObjManager;
+}
+
 XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
 {
     if( !mrImpData.mpWebQBuffer.get() )
-        mrImpData.mpWebQBuffer.reset( new XclImpWebQueryBuffer( *this ) );
+        mrImpData.mpWebQBuffer.reset( new XclImpWebQueryBuffer( GetRoot() ) );
     return *mrImpData.mpWebQBuffer;
 }
 
@@ -190,22 +197,6 @@ bool XclImpRoot::CheckCellRange( ScRange& rRange ) const
 void XclImpRoot::CheckCellRangeList( ScRangeList& rRanges ) const
 {
     XclRoot::CheckCellRangeList( rRanges, GetScMaxPos() );
-}
-
-void XclImpRoot::SetIgnoreObject( sal_uInt32 nObjId )
-{
-    mrImpData.maIgnoreObj.push_back( nObjId );
-    mrImpData.mbIgnoreObjSorted = false;
-}
-
-bool XclImpRoot::IsIgnoreObject( sal_uInt32 nObjId ) const
-{
-    if( !mrImpData.mbIgnoreObjSorted )
-    {
-        ::std::sort( mrImpData.maIgnoreObj.begin(), mrImpData.maIgnoreObj.end() );
-        mrImpData.mbIgnoreObjSorted = true;
-    }
-    return ::std::binary_search( mrImpData.maIgnoreObj.begin(), mrImpData.maIgnoreObj.end(), nObjId );
 }
 
 

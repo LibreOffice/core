@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,8 +640,8 @@ void ScInterpreter::ScMatValue()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        USHORT nR = (USHORT) SolarMath::ApproxFloor(GetDouble());       // 0 bis nAnz - 1
-        USHORT nC = (USHORT) SolarMath::ApproxFloor(GetDouble());       // 0 bis nAnz - 1
+        USHORT nR = (USHORT) ::rtl::math::approxFloor(GetDouble());     // 0 bis nAnz - 1
+        USHORT nC = (USHORT) ::rtl::math::approxFloor(GetDouble());     // 0 bis nAnz - 1
         switch (GetStackType())
         {
             case svSingleRef :
@@ -741,7 +741,7 @@ void ScInterpreter::ScEMat()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        ULONG nDim = (ULONG) SolarMath::ApproxFloor(GetDouble());
+        ULONG nDim = (ULONG) ::rtl::math::approxFloor(GetDouble());
         if ( nDim * nDim > ScMatrix::GetElementsMax() || nDim == 0)
             SetIllegalArgument();
         else
@@ -1351,7 +1351,7 @@ ScMatrix* ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
             for (j = 0; j < nMinR; j++)
             {
                 if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
-                    pResMat->PutDouble( SolarMath::ApproxAdd( pMat1->GetDouble(i,j),
+                    pResMat->PutDouble( ::rtl::math::approxAdd( pMat1->GetDouble(i,j),
                                        pMat2->GetDouble(i,j)), i, j);
                 else
                     pResMat->PutString(ScGlobal::GetRscString(
@@ -1385,7 +1385,7 @@ ScMatrix* ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
             for (j = 0; j < nMinR; j++)
             {
                 if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
-                    pResMat->PutDouble( SolarMath::ApproxSub( pMat1->GetDouble(i,j),
+                    pResMat->PutDouble( ::rtl::math::approxSub( pMat1->GetDouble(i,j),
                                        pMat2->GetDouble(i,j)), i, j);
                 else
                     pResMat->PutString(ScGlobal::GetRscString(
@@ -1650,7 +1650,7 @@ void ScInterpreter::ScAdd()
             for ( ULONG i = 0; i < nCount; i++ )
             {
                 if (pMat->IsValue(i))
-                    pResMat->PutDouble( SolarMath::ApproxAdd( pMat->GetDouble(i), fVal), i);
+                    pResMat->PutDouble( ::rtl::math::approxAdd( pMat->GetDouble(i), fVal), i);
                 else
                     pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
             }
@@ -1661,7 +1661,7 @@ void ScInterpreter::ScAdd()
             SetNoValue();
     }
     else
-        PushDouble( SolarMath::ApproxAdd( fVal1, fVal2 ) );
+        PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
     if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY )
     {
         nFuncFmtType = nFmtCurrencyType;
@@ -1849,7 +1849,7 @@ void ScInterpreter::ScSub()
             if (bFlag)
             {   for ( ULONG i = 0; i < nCount; i++ )
                 {   if (pMat->IsValue(i))
-                        pResMat->PutDouble( SolarMath::ApproxSub( fVal, pMat->GetDouble(i)), i);
+                        pResMat->PutDouble( ::rtl::math::approxSub( fVal, pMat->GetDouble(i)), i);
                     else
                         pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
                 }
@@ -1857,7 +1857,7 @@ void ScInterpreter::ScSub()
             else
             {   for ( ULONG i = 0; i < nCount; i++ )
                 {   if (pMat->IsValue(i))
-                        pResMat->PutDouble( SolarMath::ApproxSub( pMat->GetDouble(i), fVal), i);
+                        pResMat->PutDouble( ::rtl::math::approxSub( pMat->GetDouble(i), fVal), i);
                     else
                         pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
                 }
@@ -1869,7 +1869,7 @@ void ScInterpreter::ScSub()
             SetNoValue();
     }
     else
-        PushDouble( SolarMath::ApproxSub( fVal1, fVal2 ) );
+        PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
     if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY )
     {
         nFuncFmtType = nFmtCurrencyType;

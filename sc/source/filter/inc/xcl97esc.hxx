@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-12 11:50:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <tools/stack.hxx>
 #endif
 
+#ifndef SC_XLOCX_HXX
+#include "xlocx.hxx"
+#endif
+
 namespace utl { class TempFile; }
 
 // --- class XclEscherEx ---------------------------------------------
@@ -89,6 +93,9 @@ class XclEscherEx : public EscherEx
 private:
         List                aOffsetMap;
         Stack               aStack;
+#if EXC_INCL_EXP_OCX
+        XclExpOcxConverter  aOcxConverter;      /// Export of form controls.
+#endif
         RootData&           rRootData;
         utl::TempFile*      pPicTempFile;
         SvStream*           pPicStrm;

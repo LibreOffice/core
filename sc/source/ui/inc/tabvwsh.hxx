@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-18 12:29:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ private:
 
 
 private:
-    void    Construct();
+    void    Construct( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
 
     void            SetMySubShell( SfxShell* pShell );
     SfxShell*       GetMySubShell() const;

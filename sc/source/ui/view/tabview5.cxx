@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-17 09:43:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ __EXPORT ScTabView::~ScTabView()
     delete pTabControl;
 }
 
-void ScTabView::MakeDrawView()
+void ScTabView::MakeDrawView( BYTE nForceDesignMode )
 {
     if (!pDrawView)
     {
@@ -258,6 +258,11 @@ void ScTabView::MakeDrawView()
         SfxRequest aSfxRequest(SID_OBJECT_SELECT, 0,aViewData.GetViewShell()->GetPool());
         SetDrawFuncPtr(new FuSelection( aViewData.GetViewShell(), GetActiveWin(), pDrawView,
                                         pLayer,aSfxRequest));
+
+        //  #106334# used when switching back from page preview: restore saved design mode state
+        //  (otherwise, keep the default from the draw view ctor)
+        if ( nForceDesignMode != SC_FORCEMODE_NONE )
+            pDrawView->SetDesignMode( (BOOL)nForceDesignMode );
 
         //  an der FormShell anmelden
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();

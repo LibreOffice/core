@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:32:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "~Spatie";
         Text[ chinese_simplified ] = "ç©ºæ ¼(~P)";
         Text[ greek ] = "Êåíü";
-        Text[ korean ] = "ê°„ê²©(~P)";
+        Text[ korean ] = "ê³µë°±(~P)";
         Text[ turkish ] = "B~oþluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~pai";
@@ -611,7 +611,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "Vel~dscheidingstekens samenvatten";
         Text[ chinese_simplified ] = "åŽ‹ç¼©æ˜¾ç¤º(~D)";
         Text[ greek ] = "Óýíïøç äéá÷ùñéóôéêþí ðåäßùí";
-        Text[ korean ] = "í•„ë“œ êµ¬ë¶„ ê¸°í˜¸ ìš”ì•½(~D)";
+        Text[ korean ] = "í•„ë“œ êµ¬ë¶„ ê¸°í˜¸ ë³‘í•©(~D)";
         Text[ turkish ] = "Ay~ýrma iþaretlerini özetle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fusiona els ~delimitadors";
@@ -634,6 +634,11 @@ ModalDialog RID_SCDLG_ASCII
     Text[ finnish ] = "Tekstin tuonti";
     Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
+
+
+
+
+
 
 
 

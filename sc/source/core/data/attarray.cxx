@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:08:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/shaditem.hxx>
 #include <svtools/poolcach.hxx>
 
@@ -1314,6 +1315,13 @@ BOOL ScAttrArray::HasAttrib( USHORT nRow1, USHORT nRow2, USHORT nMask ) const
             if ( nMask & HASATTR_SHADOW_DOWN )
                 if ( eLoc == SVX_SHADOW_BOTTOMLEFT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
                     bFound = TRUE;
+        }
+        if ( nMask & HASATTR_RTL )
+        {
+            const SvxFrameDirectionItem& rDirection =
+                    (const SvxFrameDirectionItem&) pPattern->GetItem( ATTR_WRITINGDIR );
+            if ( rDirection.GetValue() == FRMDIR_HORI_RIGHT_TOP )
+                bFound = TRUE;
         }
     }
 

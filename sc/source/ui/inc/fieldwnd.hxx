@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-05 07:55:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,12 @@ private:
     ScDPFieldType           eType;          /// Type of this area.
     Color                   aFaceColor;     /// Color for dialog background.
     Color                   aWinColor;      /// Color for window background.
-    Color                   aTextColor;     /// Color for text output.
+    Color                   aTextColor;     /// Color for text in buttons.
+    Color                   aWinTextColor;  /// Color for text in field windows.
     long                    nFieldSize;     /// Maximum count of fields.
     long                    nFieldCount;    /// Count of existing fields.
     long                    nFieldSelected; /// Currently selected field.
+    bool                    mbAppRTL;       /// true = Application in RTL display mode.
 
     com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible;
     ScAccessibleDataPilotControl* pAccessible;

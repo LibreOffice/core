@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2002-11-27 21:40:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
 #include <svtools/zforlist.hxx>
 #include <unotools/charclass.hxx>
@@ -1007,26 +1007,26 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
             switch (rEntry.eOp)
             {
                 case SC_EQUAL :
-                    bOk = SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                    bOk = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     break;
                 case SC_LESS :
-                    bOk = (nCellVal < rEntry.nVal) && !SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal < rEntry.nVal) && !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     break;
                 case SC_GREATER :
-                    bOk = (nCellVal > rEntry.nVal) && !SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal > rEntry.nVal) && !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     break;
                 case SC_LESS_EQUAL :
-                    bOk = (nCellVal < rEntry.nVal) || SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal < rEntry.nVal) || ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     if ( bOk && pbTestEqualCondition )
-                        bTestEqual = SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                        bTestEqual = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     break;
                 case SC_GREATER_EQUAL :
-                    bOk = (nCellVal > rEntry.nVal) || SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                    bOk = (nCellVal > rEntry.nVal) || ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     if ( bOk && pbTestEqualCondition )
-                        bTestEqual = SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                        bTestEqual = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     break;
                 case SC_NOT_EQUAL :
-                    bOk = !SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                    bOk = !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     break;
             }
         }

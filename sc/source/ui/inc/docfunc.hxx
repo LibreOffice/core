@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-22 13:29:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ private:
                                     USHORT nPosX, USHORT nPosY, USHORT nTab,
                                     USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                                     BOOL& rCancel, BOOL bApi );
+    void            NotifyInputHandler( const ScAddress& rPos );
 
 public:
                     ScDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-04 18:55:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/brshitem.hxx>
-#include <svx/colorcfg.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/editview.hxx>
 #include <svx/editstat.hxx>
 #include <svx/outliner.hxx>
@@ -82,7 +82,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/system.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 
 #include "viewdata.hxx"
 #include "docoptio.hxx"
@@ -122,6 +122,9 @@
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
+
+#define SC_GROWY_SMALL_EXTRA    100
+#define SC_GROWY_BIG_EXTRA      200
 
 #define TAG_TABBARWIDTH "tw:"
 
@@ -973,7 +976,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         pNewEngine->SetStatusEventHdl( LINK( this, ScViewData, EditEngineHdl ) );
 
-        EditGrowY();        // an alten Text anpassen
+        EditGrowY( TRUE );      // adjust to existing text content
         EditGrowX();
 
         Point aDocPos = pEditView[eWhich]->GetWindowPosTopLeft(0);
@@ -995,7 +998,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     if ( aBackCol.GetTransparency() > 0 ||
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+        aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 
@@ -1090,7 +1093,7 @@ void ScViewData::EditGrowX()
     }
 }
 
-void ScViewData::EditGrowY()
+void ScViewData::EditGrowY( BOOL bInitial )
 {
     ScSplitPos eWhich = GetActivePart();
     ScVSplitPos eVWhich = WhichV(eWhich);
@@ -1119,9 +1122,26 @@ void ScViewData::EditGrowY()
     long        nOldBottom = aArea.Bottom();
     long        nTextHeight = pEngine->GetTextHeight();
 
+    //  #106635# When editing a formula in a cell with optimal height, allow a larger portion
+    //  to be clipped before extending to following rows, to avoid obscuring cells for
+    //  reference input (next row is likely to be useful in formulas).
+    long nAllowedExtra = SC_GROWY_SMALL_EXTRA;
+    if ( nEditEndRow == nEditRow && !( pDoc->GetRowFlags( nEditRow, nTabNo ) & CR_MANUALSIZE ) &&
+            pEngine->GetParagraphCount() <= 1 )
+    {
+        //  If the (only) paragraph starts with a '=', it's a formula.
+        //  If this is the initial call and the text is empty, allow the larger value, too,
+        //  because this occurs in the normal progress of editing a formula.
+        //  Subsequent calls with empty text might involve changed attributes (including
+        //  font height), so they are treated like normal text.
+        String aText = pEngine->GetText( (USHORT) 0 );
+        if ( ( aText.Len() == 0 && bInitial ) || aText.GetChar(0) == (sal_Unicode)'=' )
+            nAllowedExtra = SC_GROWY_BIG_EXTRA;
+    }
+
     BOOL bChanged = FALSE;
     BOOL bMaxReached = FALSE;
-    while (aArea.GetHeight() + 100 < nTextHeight && nEditEndRow < nBottom && !bMaxReached)
+    while (aArea.GetHeight() + nAllowedExtra < nTextHeight && nEditEndRow < nBottom && !bMaxReached)
     {
         ++nEditEndRow;
         ScDocument* pDoc = GetDocument();
@@ -1135,6 +1155,7 @@ void ScViewData::EditGrowY()
         }
 
         bChanged = TRUE;
+        nAllowedExtra = SC_GROWY_SMALL_EXTRA;   // larger value is only for first row
     }
 
     if (bChanged)
@@ -1878,7 +1899,7 @@ void ScViewData::CalcPPT()
                 //  if one column is smaller than the column count,
                 //  rounding errors are likely to add up to a whole column.
 
-                double fRounded = SolarMath::ApproxFloor( fOriginal + 0.5 );
+                double fRounded = ::rtl::math::approxFloor( fOriginal + 0.5 );
                 if ( fRounded > 0.0 )
                 {
                     double fScale = fRounded / fOriginal + 1E-6;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,13 +116,6 @@ public:
 
 //-------------------------------------------------------------------------
 
-#ifdef WNT
-typedef void ( __cdecl * ScSigCatchFunc )( int );
-#else
-typedef void ( * ScSigCatchFunc )( int );
-#endif
-typedef ScSigCatchFunc ( * ScLibSignalFunc )( int, ScSigCatchFunc );
-
 class ScModuleDummy: public SfxModule
 
 /*  [Description]
@@ -137,16 +130,13 @@ public:
                     // SvFactory name convention:
                     // 'p' + SfxObjectShell-subclass + 'Factory'
     SotFactory*     pScDocShellFactory;
-    ScLibSignalFunc pSignalFunc;
 
                     ScModuleDummy( ResMgr *pResMgr, BOOL bDummy, SfxObjectFactory* pFact )
                     :   SfxModule(pResMgr, bDummy, pFact, NULL),
-                        pScDocShellFactory(pFact), pSignalFunc(0)
+                        pScDocShellFactory(pFact)
                     {}
 
     virtual SfxModule* Load();
-
-    ScLibSignalFunc GetSignalFunc() { return pSignalFunc; }
 
     static SvGlobalName GetID(USHORT nFileFormat);
     static USHORT       HasID(const SvGlobalName& rName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 
 // ============================================================================
 
+#if SC_XCL_USEDECR
 XclImpDecrypter::~XclImpDecrypter()
 {
 }
@@ -222,6 +223,7 @@ sal_uInt32 XclImpBiff8Decrypter::ReadDecrypt( SvStream& rStrm, void* pData, sal_
 {
     return rStrm.Read( pData, nBytes );
 }
+#endif
 
 
 // ============================================================================
@@ -279,7 +281,9 @@ XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bCo
     mnRecSize( 0 ),
     mnRecLeft( 0 ),
     mbCont( bContHandling ),
+#if SC_XCL_USEDECR
     mbUseDecr( false ),
+#endif
     mbValidRec( false ),
     mbValid( false ),
     mbWarnings( true )
@@ -300,7 +304,9 @@ bool XclImpStream::GetNextRecord( sal_uInt16& rnRecId, sal_uInt16& rnRecSize )
     if( bRet )
     {
         mrStrm >> rnRecId >> rnRecSize;  // read direct
+#if SC_XCL_USEDECR
         SetDecrypterOffset( rnRecSize );
+#endif
     }
     else
         rnRecId = rnRecSize = 0;
@@ -359,6 +365,7 @@ void XclImpStream::InitializeRecord( bool bContHandling, sal_uInt16 nAltContId )
     }
 }
 
+#if SC_XCL_USEDECR
 void XclImpStream::EnableDecryption( XclImpDecrypter* pDecrypter )
 {
     mpDecrypter.reset( pDecrypter );
@@ -370,6 +377,7 @@ void XclImpStream::UseDecryption( bool bUse )
 {
     mbUseDecr = (mpDecrypter.get() && mpDecrypter->IsValid()) ? bUse : false;
 }
+#endif
 
 bool XclImpStream::GetContinue()
 {
@@ -455,7 +463,9 @@ void XclImpStream::SeekGlobalPosition()
         mnComplRecSize = mnCurrRecSize;
         mbHasComplRec = !mbCont;
         mbValidRec = mbValid = mbGlobValidRec;
+#if SC_XCL_USEDECR
         SetDecrypterOffset( mnRecSize );
+#endif
     }
 }
 
@@ -477,24 +487,29 @@ sal_uInt32 XclImpStream::GetRecSize()
 
 void XclImpStream::ReadAtom( sal_Int8& rnValue )
 {
+#if SC_XCL_USEDECR
     if( mbUseDecr )
         mpDecrypter->ReadDecrypt( mrStrm, &rnValue, 1 );
     else
+#endif
         mrStrm >> rnValue;
     --mnRecLeft;
 }
 
 void XclImpStream::ReadAtom( sal_uInt8& rnValue )
 {
+#if SC_XCL_USEDECR
     if( mbUseDecr )
         mpDecrypter->ReadDecrypt( mrStrm, &rnValue, 1 );
     else
+#endif
         mrStrm >> rnValue;
     --mnRecLeft;
 }
 
 void XclImpStream::ReadAtom( sal_Int16& rnValue )
 {
+#if SC_XCL_USEDECR
     if( mbUseDecr )
     {
         SVBT16 pBuffer;
@@ -502,12 +517,14 @@ void XclImpStream::ReadAtom( sal_Int16& rnValue )
         rnValue = static_cast< sal_Int16 >( SVBT16ToShort( pBuffer ) );
     }
     else
+#endif
         mrStrm >> rnValue;
     mnRecLeft -= 2;
 }
 
 void XclImpStream::ReadAtom( sal_uInt16& rnValue )
 {
+#if SC_XCL_USEDECR
     if( mbUseDecr )
     {
         SVBT16 pBuffer;
@@ -515,12 +532,14 @@ void XclImpStream::ReadAtom( sal_uInt16& rnValue )
         rnValue = SVBT16ToShort( pBuffer );
     }
     else
+#endif
         mrStrm >> rnValue;
     mnRecLeft -= 2;
 }
 
 void XclImpStream::ReadAtom( sal_Int32& rnValue )
 {
+#if SC_XCL_USEDECR
     if( mbUseDecr )
     {
         SVBT32 pBuffer;
@@ -528,12 +547,14 @@ void XclImpStream::ReadAtom( sal_Int32& rnValue )
         rnValue = static_cast< sal_Int32 >( SVBT32ToLong( pBuffer ) );
     }
     else
+#endif
         mrStrm >> rnValue;
     mnRecLeft -= 4;
 }
 
 void XclImpStream::ReadAtom( sal_uInt32& rnValue )
 {
+#if SC_XCL_USEDECR
     if( mbUseDecr )
     {
         SVBT32 pBuffer;
@@ -541,12 +562,14 @@ void XclImpStream::ReadAtom( sal_uInt32& rnValue )
         rnValue = SVBT32ToLong( pBuffer );
     }
     else
+#endif
         mrStrm >> rnValue;
     mnRecLeft -= 4;
 }
 
 void XclImpStream::ReadAtom( float& rfValue )
 {
+#if SC_XCL_USEDECR
     if( mbUseDecr )
     {
         SVBT32 pBuffer;
@@ -555,12 +578,14 @@ void XclImpStream::ReadAtom( float& rfValue )
         memcpy( &rfValue, &nValue, 4 );
     }
     else
+#endif
         mrStrm >> rfValue;
     mnRecLeft -= 4;
 }
 
 void XclImpStream::ReadAtom( double& rfValue )
 {
+#if SC_XCL_USEDECR
     if( mbUseDecr )
     {
         SVBT64 pBuffer;
@@ -568,14 +593,19 @@ void XclImpStream::ReadAtom( double& rfValue )
         rfValue = SVBT64ToDouble( pBuffer );
     }
     else
+#endif
         mrStrm >> rfValue;
     mnRecLeft -= 8;
 }
 
 sal_uInt32 XclImpStream::ReadData( void* pData, sal_uInt32 nBytes )
 {
+#if SC_XCL_USEDECR
     sal_uInt32 nRet = mbUseDecr ?
         mpDecrypter->ReadDecrypt( mrStrm, pData, nBytes ) : mrStrm.Read( pData, nBytes );
+#else
+    sal_uInt32 nRet = mrStrm.Read( pData, nBytes );
+#endif
     mnRecLeft -= nRet;
     return nRet;
 }

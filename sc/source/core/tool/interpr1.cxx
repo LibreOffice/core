@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: er $ $Date: 2002-12-08 17:12:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void ScInterpreter::ScChoseJump()
 {
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
-    double nJumpIndex = SolarMath::ApproxFloor( GetDouble() );
+    double nJumpIndex = ::rtl::math::approxFloor( GetDouble() );
     if ((nJumpIndex >= 1) && (nJumpIndex < nJumpCount))
         aCode.Jump( pJump[ (short) nJumpIndex ], pJump[ nJumpCount ] );
     else
@@ -185,7 +185,7 @@ short ScInterpreter::CompareFunc( const ScCompare& rComp )
             ;       // leere Zelle == leere Zelle, nRes 0
         else if( rComp.bVal[ 1 ] )
         {
-            if ( !SolarMath::ApproxEqual( rComp.nVal[ 1 ], 0.0 ) )
+            if ( !::rtl::math::approxEqual( rComp.nVal[ 1 ], 0.0 ) )
             {
                 if ( rComp.nVal[ 1 ] < 0.0 )
                     nRes = 1;       // leere Zelle > -x
@@ -205,7 +205,7 @@ short ScInterpreter::CompareFunc( const ScCompare& rComp )
     {
         if( rComp.bVal[ 0 ] )
         {
-            if ( !SolarMath::ApproxEqual( rComp.nVal[ 0 ], 0.0 ) )
+            if ( !::rtl::math::approxEqual( rComp.nVal[ 0 ], 0.0 ) )
             {
                 if ( rComp.nVal[ 0 ] < 0.0 )
                     nRes = -1;      // -x < leere Zelle
@@ -225,7 +225,7 @@ short ScInterpreter::CompareFunc( const ScCompare& rComp )
     {
         if( rComp.bVal[ 1 ] )
         {
-            if ( !SolarMath::ApproxEqual( rComp.nVal[ 0 ], rComp.nVal[ 1 ] ) )
+            if ( !::rtl::math::approxEqual( rComp.nVal[ 0 ], rComp.nVal[ 1 ] ) )
             {
                 if( rComp.nVal[ 0 ] - rComp.nVal[ 1 ] < 0 )
                     nRes = -1;
@@ -859,25 +859,25 @@ void ScInterpreter::ScRad()
 
 void ScInterpreter::ScSin()
 {
-    PushDouble(SolarMath::Sin(GetDouble()));
+    PushDouble(::rtl::math::sin(GetDouble()));
 }
 
 
 void ScInterpreter::ScCos()
 {
-    PushDouble(SolarMath::Cos(GetDouble()));
+    PushDouble(::rtl::math::cos(GetDouble()));
 }
 
 
 void ScInterpreter::ScTan()
 {
-    PushDouble(SolarMath::Tan(GetDouble()));
+    PushDouble(::rtl::math::tan(GetDouble()));
 }
 
 
 void ScInterpreter::ScCot()
 {
-    PushDouble(1.0 / SolarMath::Tan(GetDouble()));
+    PushDouble(1.0 / ::rtl::math::tan(GetDouble()));
 }
 
 
@@ -1641,7 +1641,7 @@ short ScInterpreter::IsEven()
             SetIllegalParameter();
     }
     if (nRes)
-        nRes = ( fmod( SolarMath::ApproxFloor( fabs( fVal ) ), 2.0 ) < 0.5 );
+        nRes = ( fmod( ::rtl::math::approxFloor( fabs( fVal ) ), 2.0 ) < 0.5 );
     return nRes;
 }
 
@@ -2334,8 +2334,8 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
     }
     switch( eFunc )
     {
-        case ifSUM:     fRes = SolarMath::ApproxAdd( fRes, fMem ); break;
-        case ifAVERAGE: fRes = SolarMath::ApproxAdd( fRes, fMem ) / nCount; break;
+        case ifSUM:     fRes = ::rtl::math::approxAdd( fRes, fMem ); break;
+        case ifAVERAGE: fRes = ::rtl::math::approxAdd( fRes, fMem ) / nCount; break;
         case ifCOUNT2:
         case ifCOUNT:   fRes  = nCount; break;
         case ifPRODUCT: if ( !nCount ) fRes = 0.0; break;
@@ -2479,7 +2479,7 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 SetError(errIllegalParameter);
         }
     }
-    rVal = SolarMath::ApproxSub( fSumSqr, fSum*fSum/rValCount );
+    rVal = ::rtl::math::approxSub( fSumSqr, fSum*fSum/rValCount );
 }
 
 
@@ -3309,7 +3309,7 @@ void ScInterpreter::ScSumIf()
                     }
                 } while ( aCellIter.GetNext() );
             }
-            PushDouble( SolarMath::ApproxAdd( fSum, fMem ) );
+            PushDouble( ::rtl::math::approxAdd( fSum, fMem ) );
         }
         else
             SetIllegalParameter();
@@ -3685,7 +3685,7 @@ void ScInterpreter::ScHLookup()
             bSorted = GetBool();
         else
             bSorted = TRUE;
-        double fIndex = SolarMath::ApproxFloor( GetDouble() ) - 1.0;
+        double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
         ScMatrix* pMat = NULL;
         USHORT nC, nR;
         USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
@@ -3939,7 +3939,7 @@ void ScInterpreter::ScVLookup()
             bSorted = GetBool();
         else
             bSorted = TRUE;
-        double fIndex = SolarMath::ApproxFloor( GetDouble() ) - 1.0;
+        double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
         ScMatrix* pMat = NULL;
         USHORT nC, nR;
         USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
@@ -4192,7 +4192,7 @@ void ScInterpreter::ScSubTotal()
         // Wir muessen den 1. Parameter tief aus dem Stack herausfischen!
         const ScToken* p = pStack[ sp - nParamCount ];
         PushTempToken( *p );
-        int nFunc = (int) SolarMath::ApproxFloor( GetDouble() );
+        int nFunc = (int) ::rtl::math::approxFloor( GetDouble() );
         if( nFunc < 1 || nFunc > 11 )
             SetIllegalParameter();
         else
@@ -4227,9 +4227,16 @@ void ScInterpreter::ScSubTotal()
 #endif
 
 
-BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
+BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam,
+        BOOL& rMissingField )
 {
     BOOL bRet = FALSE;
+    BOOL bAllowMissingField = FALSE;
+    if ( rMissingField )
+    {
+        bAllowMissingField = TRUE;
+        rMissingField = FALSE;
+    }
     if ( GetByte() == 3 )
     {
 
@@ -4239,10 +4246,14 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
         BOOL    bByVal = TRUE;
         double  nVal;
         String  aStr;
+        ScRange aMissingRange;
+        BOOL bRangeFake = FALSE;
         switch (GetStackType())
         {
             case svDouble :
-                nVal = GetDouble();
+                nVal = ::rtl::math::approxFloor( GetDouble() );
+                if ( bAllowMissingField && nVal == 0.0 )
+                    rMissingField = TRUE;   // fake missing parameter
                 break;
             case svString :
                 bByVal = FALSE;
@@ -4262,17 +4273,56 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
                     }
                 }
                 break;
+            case svDoubleRef :
+                if ( bAllowMissingField )
+                {   // fake missing parameter for old SO compatibility
+                    bRangeFake = TRUE;
+                    PopDoubleRef( aMissingRange );
+                }
+                else
+                {
+                    PopError();
+                    SetError( errIllegalParameter );
+                }
+                break;
+            case svMissing :
+                PopError();
+                if ( bAllowMissingField )
+                    rMissingField = TRUE;
+                else
+                    SetError( errIllegalParameter );
+                break;
+            default:
+                PopError();
+                SetError( errIllegalParameter );
         }
 
         USHORT nDBCol1, nDBRow1, nDBTab1, nDBCol2, nDBRow2, nDBTab2;
         PopDoubleRef(nDBCol1, nDBRow1, nDBTab1, nDBCol2, nDBRow2, nDBTab2);
 
+        if ( nGlobalError == 0 && bRangeFake )
+        {
+            // range parameter must match entire database range
+            if ( aMissingRange == ScRange( nDBCol1, nDBRow1, nDBTab1, nDBCol2,
+                        nDBRow2, nDBTab2) )
+                rMissingField = TRUE;
+            else
+                SetError( errIllegalParameter );
+        }
+
         if (nGlobalError == 0)
         {
             USHORT  nField = nDBCol1;
             BOOL    bFound = TRUE;
-            if (bByVal)
-                nField = Min(nDBCol2, (USHORT)(nDBCol1 + (USHORT)SolarMath::ApproxFloor(nVal) - 1));
+            if ( rMissingField )
+                ;   // special case
+            else if ( bByVal )
+            {
+                if ( nVal <= 0 || nVal > (nDBCol2 - nDBCol1 + 1) )
+                    bFound = FALSE;
+                else
+                    nField = Min(nDBCol2, (USHORT)(nDBCol1 + (USHORT)nVal - 1));
+            }
             else
             {
                 bFound = FALSE;
@@ -4303,6 +4353,12 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
                 rParam.bDuplicate = TRUE;
                 if (pDok->CreateQueryParam(nQCol1, nQRow1, nQCol2, nQRow2, nQTab1, rParam))
                 {
+                    // An allowed missing field parameter sets the result field
+                    // to any of the query fields, just to be able to return
+                    // some cell from the iterator.
+                    if ( rMissingField )
+                        nField = rParam.GetEntry(0).nField;
+
                     rParam.nCol1 = nField;
                     rParam.nCol2 = nField;
                     rTab = nDBTab1;
@@ -4336,9 +4392,10 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     double nErg = 0.0;
     double fMem = 0.0;
     BOOL bNull = TRUE;
-    long nCount = 0;
+    ULONG nCount = 0;
     ScQueryParam aQueryParam;
-    if (GetDBParams(nTab1, aQueryParam))
+    BOOL bMissingField = FALSE;
+    if ( GetDBParams( nTab1, aQueryParam, bMissingField) )
     {
         double nVal;
         USHORT nErr;
@@ -4381,8 +4438,8 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     switch( eFunc )
     {
         case ifCOUNT:   nErg = nCount; break;
-        case ifSUM:     nErg = SolarMath::ApproxAdd( nErg, fMem ); break;
-        case ifAVERAGE: nErg = (nCount ? SolarMath::ApproxAdd( nErg, fMem ) / nCount : 0); break;
+        case ifSUM:     nErg = ::rtl::math::approxAdd( nErg, fMem ); break;
+        case ifAVERAGE: nErg = ::rtl::math::approxAdd( nErg, fMem ) / nCount; break;
     }
     PushDouble( nErg );
 }
@@ -4396,7 +4453,49 @@ void ScInterpreter::ScDBSum()
 
 void ScInterpreter::ScDBCount()
 {
-    DBIterator( ifCOUNT );
+    USHORT nTab;
+    ScQueryParam aQueryParam;
+    BOOL bMissingField = TRUE;
+    if ( GetDBParams( nTab, aQueryParam, bMissingField) )
+    {
+        ULONG nCount = 0;
+        if ( bMissingField )
+        {   // count all matching records
+            // TODO: currently the QueryIterators only return cell pointers of
+            // existing cells, so if a query matches an empty cell there's
+            // nothing returned, and therefor not counted!
+            // Since this has ever been the case and this code here only came
+            // into existance to fix #i6899 and it never worked before we'll
+            // have to live with it until we reimplement the iterators to also
+            // return empty cells, which would mean to adapt all callers of
+            // iterators.
+            ScQueryCellIterator aCellIter( pDok, nTab, aQueryParam);
+            if ( aCellIter.GetFirst() )
+            {
+                do
+                {
+                    nCount++;
+                } while ( aCellIter.GetNext() );
+            }
+        }
+        else
+        {   // count only matching records with a value in the "result" field
+            double nVal;
+            USHORT nErr = 0;
+            ScQueryValueIterator aValIter( pDok, nTab, aQueryParam);
+            if ( aValIter.GetFirst( nVal, nErr) && !nErr )
+            {
+                do
+                {
+                    nCount++;
+                } while ( aValIter.GetNext( nVal, nErr) && !nErr );
+            }
+            SetError( nErr );
+        }
+        PushDouble( nCount );
+    }
+    else
+        SetIllegalParameter();
 }
 
 
@@ -4404,7 +4503,8 @@ void ScInterpreter::ScDBCount2()
 {
     USHORT nTab;
     ScQueryParam aQueryParam;
-    if (GetDBParams(nTab, aQueryParam))
+    BOOL bMissingField = FALSE;
+    if (GetDBParams( nTab, aQueryParam, bMissingField))
     {
         ULONG nCount = 0;
         ScQueryCellIterator aCellIter(pDok, nTab, aQueryParam);
@@ -4453,7 +4553,8 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     double fSumSqr = 0.0;
     USHORT nTab;
     ScQueryParam aQueryParam;
-    if (GetDBParams(nTab, aQueryParam))
+    BOOL bMissingField = FALSE;
+    if (GetDBParams( nTab, aQueryParam, bMissingField))
     {
         double fVal;
         USHORT nErr;
@@ -4472,7 +4573,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     }
     else
         SetIllegalParameter();
-    rVal = SolarMath::ApproxSub( fSumSqr, fSum*fSum/rValCount );
+    rVal = ::rtl::math::approxSub( fSumSqr, fSum*fSum/rValCount );
 }
 
 
@@ -4550,9 +4651,9 @@ void ScInterpreter::ScAdress()
         if (nParamCount == 4)
             sTabStr = GetString();
         if (nParamCount >= 3)
-            nAbs = (USHORT) SolarMath::ApproxFloor(GetDouble());
-        USHORT nCol = (USHORT) SolarMath::ApproxFloor(GetDouble());
-        USHORT nRow = (USHORT) SolarMath::ApproxFloor(GetDouble());
+            nAbs = (USHORT) ::rtl::math::approxFloor(GetDouble());
+        USHORT nCol = (USHORT) ::rtl::math::approxFloor(GetDouble());
+        USHORT nRow = (USHORT) ::rtl::math::approxFloor(GetDouble());
         if (nCol < 1 || nCol > MAXCOL + 1 || nRow < 1 || nRow > MAXROW + 1)
         {
             SetIllegalParameter();
@@ -4594,11 +4695,11 @@ void ScInterpreter::ScOffset()
     {
         short nColNew, nRowNew, nColPlus, nRowPlus;
         if (nParamCount == 5)
-            nColNew = (short) SolarMath::ApproxFloor(GetDouble());
+            nColNew = (short) ::rtl::math::approxFloor(GetDouble());
         if (nParamCount >= 4)
-            nRowNew = (short) SolarMath::ApproxFloor(GetDouble());
-        nColPlus = (short) SolarMath::ApproxFloor(GetDouble());
-        nRowPlus = (short) SolarMath::ApproxFloor(GetDouble());
+            nRowNew = (short) ::rtl::math::approxFloor(GetDouble());
+        nColPlus = (short) ::rtl::math::approxFloor(GetDouble());
+        nRowPlus = (short) ::rtl::math::approxFloor(GetDouble());
         USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
         if ( (nParamCount == 5 && nColNew == 0)
           || (nParamCount >= 4 && nRowNew == 0) )
@@ -4664,15 +4765,15 @@ void ScInterpreter::ScIndex()
         short nBereich, nMaxAnz, nCount;
         USHORT nCol, nRow;
         if (nParamCount == 4)
-            nBereich = (short) SolarMath::ApproxFloor(GetDouble());
+            nBereich = (short) ::rtl::math::approxFloor(GetDouble());
         else
             nBereich = 1;
         if (nParamCount >= 3)
-            nCol = (USHORT) SolarMath::ApproxFloor(GetDouble());
+            nCol = (USHORT) ::rtl::math::approxFloor(GetDouble());
         else
             nCol = 0;
         if (nParamCount >= 2)
-            nRow = (USHORT) SolarMath::ApproxFloor(GetDouble());
+            nRow = (USHORT) ::rtl::math::approxFloor(GetDouble());
         else
             nRow = 0;
         if (GetStackType() == svByte)                   // vorher MultiSelektion?
@@ -4875,7 +4976,7 @@ void ScInterpreter::ScCurrency()
         double fDec;
         if (nParamCount == 2)
         {
-            fDec = SolarMath::ApproxFloor(GetDouble());
+            fDec = ::rtl::math::approxFloor(GetDouble());
             if (fDec < -15.0 || fDec > 15.0)
             {
                 SetIllegalArgument();
@@ -4961,7 +5062,7 @@ void ScInterpreter::ScFixed()
             bThousand = TRUE;
         if (nParamCount >= 2)
         {
-            fDec = SolarMath::ApproxFloor(GetDouble());
+            fDec = ::rtl::math::approxFloor(GetDouble());
             if (fDec < -15.0 || fDec > 15.0)
             {
                 SetIllegalArgument();
@@ -5051,7 +5152,7 @@ void ScInterpreter::ScLeft()
         xub_StrLen n;
         if (nParamCount == 2)
         {
-            double nVal = SolarMath::ApproxFloor(GetDouble());
+            double nVal = ::rtl::math::approxFloor(GetDouble());
             if ( nVal < 0.0 || nVal > STRING_MAXLEN )
             {
                 SetIllegalParameter();
@@ -5077,7 +5178,7 @@ void ScInterpreter::ScRight()
         xub_StrLen n;
         if (nParamCount == 2)
         {
-            double nVal = SolarMath::ApproxFloor(GetDouble());
+            double nVal = ::rtl::math::approxFloor(GetDouble());
             if ( nVal < 0.0 || nVal > STRING_MAXLEN )
             {
                 SetIllegalParameter();
@@ -5104,7 +5205,7 @@ void ScInterpreter::ScSearch()
     {
         if (nParamCount == 3)
         {
-            fAnz = SolarMath::ApproxFloor(GetDouble());
+            fAnz = ::rtl::math::approxFloor(GetDouble());
             if (fAnz > double(STRING_MAXLEN))
             {
                 SetIllegalParameter();
@@ -5140,8 +5241,8 @@ void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double fAnz    = SolarMath::ApproxFloor(GetDouble());
-        double fAnfang = SolarMath::ApproxFloor(GetDouble());
+        double fAnz    = ::rtl::math::approxFloor(GetDouble());
+        double fAnfang = ::rtl::math::approxFloor(GetDouble());
         const String& rStr = GetString();
         if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
             SetIllegalParameter();
@@ -5184,7 +5285,7 @@ void ScInterpreter::ScSubstitute()
         xub_StrLen nAnz;
         if (nParamCount == 4)
         {
-            double fAnz = SolarMath::ApproxFloor(GetDouble());
+            double fAnz = ::rtl::math::approxFloor(GetDouble());
             if( fAnz < 1 || fAnz > STRING_MAXLEN )
             {
                 SetIllegalParameter();
@@ -5234,7 +5335,7 @@ void ScInterpreter::ScRept()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fAnz = SolarMath::ApproxFloor(GetDouble());
+        double fAnz = ::rtl::math::approxFloor(GetDouble());
         String aStr( GetString() );
         if ( fAnz < 0.0 )
             SetIllegalParameter();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:16:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,6 @@
 #include "editutil.hxx"
 
 #include "imp_op.hxx"
-#include "fltprgrs.hxx"
-#include "scmsocximexp.hxx"
 
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
@@ -544,16 +542,3 @@ void ImportExcel::EndAllChartObjects( void )
 #ifdef WNT
 #pragma optimize("",on)
 #endif
-
-
-
-
-using namespace ::com::sun::star;
-
-BOOL ScMSConvertControls::InsertControl(
-    const uno::Reference< form::XFormComponent >& rFComp,
-    const awt::Size& rSize,
-    uno::Reference< drawing::XShape >* pShape,BOOL bFloatingCtrl )
-{
-    return FALSE;
-}

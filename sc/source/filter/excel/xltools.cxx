@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,6 @@
 #include <svx/editstat.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
 #endif
@@ -110,13 +106,6 @@
 #endif
 
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-
-
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::frame::XModel;
-
-
 // GUID import/export =========================================================
 
 XclGuid::XclGuid()
@@ -124,16 +113,12 @@ XclGuid::XclGuid()
     memset( mpData, 0, 16 );
 }
 
-XclGuid::XclGuid( const XclGuid& rSrc )
-{
-    operator=( rSrc );
-}
-
 XclGuid::XclGuid(
         sal_uInt32 nData1, sal_uInt16 nData2, sal_uInt16 nData3,
         sal_uInt8 nData41, sal_uInt8 nData42, sal_uInt8 nData43, sal_uInt8 nData44,
         sal_uInt8 nData45, sal_uInt8 nData46, sal_uInt8 nData47, sal_uInt8 nData48 )
 {
+    // convert to little endian -> makes streaming easy
     LongToSVBT32( nData1, mpData );
     ShortToSVBT16( nData2, mpData + 4 );
     ShortToSVBT16( nData3, mpData + 6 );
@@ -147,12 +132,6 @@ XclGuid::XclGuid(
     mpData[ 15 ] = nData48;
 }
 
-XclGuid& XclGuid::operator=( const XclGuid& rSrc )
-{
-    memcpy( mpData, rSrc.mpData, 16 );
-    return *this;
-}
-
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
     return memcmp( rCmp1.mpData, rCmp2.mpData, 16 ) == 0;
@@ -160,13 +139,13 @@ bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
 {
-    rStrm.Read( rGuid.mpData, 16 );
+    rStrm.Read( rGuid.mpData, 16 );     // mpData always in little endian
     return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid )
 {
-    rStrm.Write( rGuid.mpData, 16 );
+    rStrm.Write( rGuid.mpData, 16 );    // mpData already in little endian
     return rStrm;
 }
 
@@ -238,24 +217,24 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
 }
 
 
-sal_Int32 XclTools::GetScRotation( sal_uInt16 nExcRot )
+sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot )
 {
-    if( nExcRot > 180 )
+    if( nXclRot > 180 )
         return 27000;
-    return static_cast< sal_Int32 >( 100 * ((nExcRot > 90) ? 450 - nExcRot : nExcRot) );
+    return static_cast< sal_Int32 >( 100 * ((nXclRot > 90) ? 450 - nXclRot : nXclRot) );
 }
 
-sal_uInt16 XclTools::GetExcRotation( sal_Int32 nScRot )
+sal_uInt8 XclTools::GetXclRotation( sal_Int32 nScRot )
 {
-    sal_Int32 nExcRot = nScRot / 100;
-    if( (0 <= nExcRot) && (nExcRot <= 90) )
-        return static_cast< sal_uInt16 >( nExcRot );
-    if( nExcRot < 180 )
-        return static_cast< sal_uInt16 >( 270 - nExcRot );
-    if( nExcRot < 270 )
-        return static_cast< sal_uInt16 >( nExcRot - 180 );
-    if( nExcRot < 360 )
-        return static_cast< sal_uInt16 >( 450 - nExcRot );
+    sal_Int32 nXclRot = nScRot / 100;
+    if( (0 <= nXclRot) && (nXclRot <= 90) )
+        return static_cast< sal_uInt8 >( nXclRot );
+    if( nXclRot < 180 )
+        return static_cast< sal_uInt8 >( 270 - nXclRot );
+    if( nXclRot < 270 )
+        return static_cast< sal_uInt8 >( nXclRot - 180 );
+    if( nXclRot < 360 )
+        return static_cast< sal_uInt8 >( 450 - nXclRot );
     return 0;
 }
 
@@ -313,6 +292,19 @@ sal_uInt16 XclTools::GetTwipsFromInch( double fInches )
 double XclTools::GetInchFromTwips( sal_uInt16 nTwips )
 {
     return static_cast< double >( nTwips ) / EXC_TWIPS_PER_INCH;
+}
+
+
+sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
+{
+    double fScWidth = static_cast< double >( nXclWidth ) / 256.0 * nScCharWidth + 0.5;
+    return static_cast< sal_uInt16 >( ::std::min( fScWidth, 65535.0 ) );
+}
+
+sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
+{
+    double fXclWidth = static_cast< double >( nScWidth ) * 256.0 / nScCharWidth + 0.5;
+    return static_cast< sal_uInt16 >( ::std::min( fXclWidth, 65535.0 ) );
 }
 
 
@@ -422,7 +414,7 @@ bool XclTools::GetScLanguage( LanguageType& reScLang, sal_uInt16 nXclCountry )
 {
     const XclLanguageEntry* pLast = pLanguages + STATIC_TABLE_SIZE( pLanguages );
     const XclLanguageEntry* pResult = ::std::lower_bound( pLanguages, pLast, nXclCountry, XclLanguageEntrySWO() );
-    if( pResult != pLast )
+    if( (pResult != pLast) && (pResult->mnXclCountry == nXclCountry) )
     {
         reScLang = pResult->meLanguage;
         return true;

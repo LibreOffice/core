@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-03-15 21:31:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,45 +152,45 @@ void ScInterpreter::ScGetActTime()
 void ScInterpreter::ScGetYear()
 {
     Date aDate = *(pFormatter->GetNullDate());
-    aDate += (long) SolarMath::ApproxFloor(GetDouble());
+    aDate += (long) ::rtl::math::approxFloor(GetDouble());
     PushDouble( (double) aDate.GetYear() );
 }
 
 void ScInterpreter::ScGetMonth()
 {
     Date aDate = *(pFormatter->GetNullDate());
-    aDate += (long) SolarMath::ApproxFloor(GetDouble());
+    aDate += (long) ::rtl::math::approxFloor(GetDouble());
     PushDouble( (double) aDate.GetMonth() );
 }
 
 void ScInterpreter::ScGetDay()
 {
     Date aDate = *(pFormatter->GetNullDate());
-    aDate += (long)SolarMath::ApproxFloor(GetDouble());
+    aDate += (long)::rtl::math::approxFloor(GetDouble());
     PushDouble((double) aDate.GetDay());
 }
 
 void ScInterpreter::ScGetMin()
 {
     double fTime = GetDouble();
-    fTime -= SolarMath::ApproxFloor(fTime);     // Datumsanteil weg
-    long nVal = (long)SolarMath::ApproxFloor(fTime*D_TIMEFACTOR+0.5) % 3600;
+    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    long nVal = (long)::rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5) % 3600;
     PushDouble( (double) (nVal/60) );
 }
 
 void ScInterpreter::ScGetSec()
 {
     double fTime = GetDouble();
-    fTime -= SolarMath::ApproxFloor(fTime);     // Datumsanteil weg
-    long nVal = (long)SolarMath::ApproxFloor(fTime*D_TIMEFACTOR+0.5) % 60;
+    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    long nVal = (long)::rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5) % 60;
     PushDouble( (double) nVal );
 }
 
 void ScInterpreter::ScGetHour()
 {
     double fTime = GetDouble();
-    fTime -= SolarMath::ApproxFloor(fTime);     // Datumsanteil weg
-    long nVal = (long)SolarMath::ApproxFloor(fTime*D_TIMEFACTOR+0.5) / 3600;
+    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    long nVal = (long)::rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5) / 3600;
     PushDouble((double) nVal);
 }
 
@@ -218,12 +218,12 @@ void ScInterpreter::ScGetDayOfWeek()
     {
         short nFlag;
         if (nParamCount == 2)
-            nFlag = (short) SolarMath::ApproxFloor(GetDouble());
+            nFlag = (short) ::rtl::math::approxFloor(GetDouble());
         else
             nFlag = 1;
 
         Date aDate = *(pFormatter->GetNullDate());
-        aDate += (long)SolarMath::ApproxFloor(GetDouble());
+        aDate += (long)::rtl::math::approxFloor(GetDouble());
         int nVal = (int) aDate.GetDayOfWeek();
         if (nFlag == 1)
         {
@@ -242,10 +242,10 @@ void ScInterpreter::ScGetWeekOfYear()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        short nFlag = (short) SolarMath::ApproxFloor(GetDouble());
+        short nFlag = (short) ::rtl::math::approxFloor(GetDouble());
 
         Date aDate = *(pFormatter->GetNullDate());
-        aDate += (long)SolarMath::ApproxFloor(GetDouble());
+        aDate += (long)::rtl::math::approxFloor(GetDouble());
         PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
     }
 }
@@ -256,7 +256,7 @@ void ScInterpreter::ScEasterSunday()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         INT16 nDay, nMonth, nYear;
-        nYear = (INT16) SolarMath::ApproxFloor( GetDouble() );
+        nYear = (INT16) ::rtl::math::approxFloor( GetDouble() );
         if ( nYear < 100 )
             nYear = pFormatter->ExpandTwoDigitYear( nYear );
         // don't worry, be happy :)
@@ -285,9 +285,9 @@ void ScInterpreter::ScGetDate()
     nFuncFmtType = NUMBERFORMAT_DATE;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        INT16 nDay   = (INT16) SolarMath::ApproxFloor(GetDouble());
-        INT16 nMonth = (INT16) SolarMath::ApproxFloor(GetDouble());
-        INT16 nYear  = (INT16) SolarMath::ApproxFloor(GetDouble());
+        INT16 nDay   = (INT16) ::rtl::math::approxFloor(GetDouble());
+        INT16 nMonth = (INT16) ::rtl::math::approxFloor(GetDouble());
+        INT16 nYear  = (INT16) ::rtl::math::approxFloor(GetDouble());
         if (nYear < 0)
             SetIllegalParameter();
         else
@@ -344,9 +344,9 @@ void ScInterpreter::ScGetDiffDate360()
             else
                 fSign = 1.0;
             Date aDate1 = *(pFormatter->GetNullDate());
-            aDate1 += (long) SolarMath::ApproxFloor(nDate1);
+            aDate1 += (long) ::rtl::math::approxFloor(nDate1);
             Date aDate2 = *(pFormatter->GetNullDate());
-            aDate2 += (long) SolarMath::ApproxFloor(nDate2);
+            aDate2 += (long) ::rtl::math::approxFloor(nDate2);
             if (aDate1.GetDay() == 31)
                 aDate1 -= (ULONG) 1;
             else if (!bFlag)
@@ -418,25 +418,25 @@ void ScInterpreter::ScAbs()
 
 void ScInterpreter::ScInt()
 {
-    PushDouble(SolarMath::ApproxFloor(GetDouble()));
+    PushDouble(::rtl::math::approxFloor(GetDouble()));
 }
 
 
-void ScInterpreter::RoundNumber( SolarMathRoundingMode eMode )
+void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
 {
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
         double fVal = 0.0;
         if (nParamCount == 1)
-            fVal = SolarMath::Round( GetDouble(), 0, eMode );
+            fVal = ::rtl::math::round( GetDouble(), 0, eMode );
         else
         {
-            INT32 nDec = (INT32) SolarMath::ApproxFloor(GetDouble());
+            INT32 nDec = (INT32) ::rtl::math::approxFloor(GetDouble());
             if( nDec < -20 || nDec > 20 )
                 SetIllegalArgument();
             else
-                fVal = SolarMath::Round( GetDouble(), (short)nDec, eMode );
+                fVal = ::rtl::math::round( GetDouble(), (short)nDec, eMode );
         }
         PushDouble(fVal);
     }
@@ -444,17 +444,17 @@ void ScInterpreter::RoundNumber( SolarMathRoundingMode eMode )
 
 void ScInterpreter::ScRound()
 {
-    RoundNumber( SolarMathRoundCorrected );
+    RoundNumber( rtl_math_RoundingMode_Corrected );
 }
 
 void ScInterpreter::ScRoundDown()
 {
-    RoundNumber( SolarMathRoundDown );
+    RoundNumber( rtl_math_RoundingMode_Down );
 }
 
 void ScInterpreter::ScRoundUp()
 {
-    RoundNumber( SolarMathRoundUp );
+    RoundNumber( rtl_math_RoundingMode_Up );
 }
 
 void ScInterpreter::ScCeil()
@@ -472,9 +472,9 @@ void ScInterpreter::ScCeil()
         else
         {
             if ( !bAbs && fVal < 0.0 )
-                PushDouble(SolarMath::ApproxFloor(fVal/fDec) * fDec);
+                PushDouble(::rtl::math::approxFloor(fVal/fDec) * fDec);
             else
-                PushDouble(SolarMath::ApproxCeil(fVal/fDec) * fDec);
+                PushDouble(::rtl::math::approxCeil(fVal/fDec) * fDec);
         }
     }
 }
@@ -494,9 +494,9 @@ void ScInterpreter::ScFloor()
         else
         {
             if ( !bAbs && fVal < 0.0 )
-                PushDouble(SolarMath::ApproxCeil(fVal/fDec) * fDec);
+                PushDouble(::rtl::math::approxCeil(fVal/fDec) * fDec);
             else
-                PushDouble(SolarMath::ApproxFloor(fVal/fDec) * fDec);
+                PushDouble(::rtl::math::approxFloor(fVal/fDec) * fDec);
         }
     }
 }
@@ -505,9 +505,9 @@ void ScInterpreter::ScEven()
 {
     double fVal = GetDouble();
     if (fVal < 0.0)
-        PushDouble(SolarMath::ApproxFloor(fVal/2.0) * 2.0);
+        PushDouble(::rtl::math::approxFloor(fVal/2.0) * 2.0);
     else
-        PushDouble(SolarMath::ApproxCeil(fVal/2.0) * 2.0);
+        PushDouble(::rtl::math::approxCeil(fVal/2.0) * 2.0);
 }
 
 void ScInterpreter::ScOdd()
@@ -515,13 +515,13 @@ void ScInterpreter::ScOdd()
     double fVal = GetDouble();
     if (fVal >= 0.0)
     {
-        fVal = SolarMath::ApproxCeil(fVal);
+        fVal = ::rtl::math::approxCeil(fVal);
         if (fmod(fVal, 2.0) == 0.0)
             fVal += 1.0;
     }
     else
     {
-        fVal = SolarMath::ApproxFloor(fVal);
+        fVal = ::rtl::math::approxFloor(fVal);
         if (fmod(fVal, 2.0) == 0.0)
             fVal -= 1.0;
     }
@@ -886,7 +886,7 @@ void ScInterpreter::ScGDA2()
     if (nParamCount == 4)
         nMonate = 12.0;
     else
-        nMonate = SolarMath::ApproxFloor(GetDouble());
+        nMonate = ::rtl::math::approxFloor(GetDouble());
     double nPeriode = GetDouble();
     double nDauer = GetDouble();
     double nRest = GetDouble();
@@ -898,17 +898,17 @@ void ScInterpreter::ScGDA2()
         return;
     }
     double nAbRate = 1.0 - pow(nRest / nWert, 1.0 / nDauer);
-    nAbRate = SolarMath::ApproxFloor((nAbRate * 1000.0) + 0.5) / 1000.0;
+    nAbRate = ::rtl::math::approxFloor((nAbRate * 1000.0) + 0.5) / 1000.0;
     double nErsteAbRate = nWert * nAbRate * nMonate / 12.0;
     double nGda2;
-    if (SolarMath::ApproxFloor(nPeriode) == 1)
+    if (::rtl::math::approxFloor(nPeriode) == 1)
         nGda2 = nErsteAbRate;
     else
     {
         double nSummAbRate = nErsteAbRate;
         double nMin = nDauer;
         if (nMin > nPeriode) nMin = nPeriode;
-        USHORT iMax = (USHORT)SolarMath::ApproxFloor(nMin);
+        USHORT iMax = (USHORT)::rtl::math::approxFloor(nMin);
         for (USHORT i = 2; i <= iMax; i++)
         {
             nGda2 = (nWert - nSummAbRate) * nAbRate;
@@ -925,7 +925,7 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
                              double fDauer1,double fPeriode,double fFaktor)
 {
     double fVdb=0;
-    double fIntEnd   = SolarMath::ApproxCeil(fPeriode);
+    double fIntEnd   = ::rtl::math::approxCeil(fPeriode);
     ULONG nLoopEnd   = (ULONG) fIntEnd;
 
     double fTerm, fLia;
@@ -1002,8 +1002,8 @@ void ScInterpreter::ScVDB()
             SetIllegalParameter();
         else
         {
-            double fIntStart = SolarMath::ApproxFloor(fAnfang);
-            double fIntEnd   = SolarMath::ApproxCeil(fEnde);
+            double fIntStart = ::rtl::math::approxFloor(fAnfang);
+            double fIntEnd   = ::rtl::math::approxCeil(fEnde);
             ULONG nLoopStart = (ULONG) fIntStart;
             ULONG nLoopEnd   = (ULONG) fIntEnd;
 
@@ -1030,11 +1030,11 @@ void ScInterpreter::ScVDB()
                 double fPart;
 
                 //@Die Frage aller Fragen: "Ist das hier richtig"
-                if(!SolarMath::ApproxEqual(fAnfang,SolarMath::ApproxFloor(fAnfang)))
+                if(!::rtl::math::approxEqual(fAnfang,::rtl::math::approxFloor(fAnfang)))
                 {
                     if(fFaktor>1)
                     {
-                        if(fAnfang>fDauer/2 || SolarMath::ApproxEqual(fAnfang,fDauer/2))
+                        if(fAnfang>fDauer/2 || ::rtl::math::approxEqual(fAnfang,fDauer/2))
                         {
                             fPart=fAnfang-fDauer/2;
                             fAnfang=fDauer/2;
@@ -1318,8 +1318,8 @@ void ScInterpreter::ScKumZinsZ()
     {
         double fZins, fZzr, fBw, fAnfang, fEnde, fF, fRmz, fZinsZ;
         fF      = GetDouble();
-        fEnde   = SolarMath::ApproxFloor(GetDouble());
-        fAnfang = SolarMath::ApproxFloor(GetDouble());
+        fEnde   = ::rtl::math::approxFloor(GetDouble());
+        fAnfang = ::rtl::math::approxFloor(GetDouble());
         fBw     = GetDouble();
         fZzr    = GetDouble();
         fZins   = GetDouble();
@@ -1358,8 +1358,8 @@ void ScInterpreter::ScKumKapZ()
     {
         double fZins, fZzr, fBw, fAnfang, fEnde, fF, fRmz, fKapZ;
         fF      = GetDouble();
-        fEnde   = SolarMath::ApproxFloor(GetDouble());
-        fAnfang = SolarMath::ApproxFloor(GetDouble());
+        fEnde   = ::rtl::math::approxFloor(GetDouble());
+        fAnfang = ::rtl::math::approxFloor(GetDouble());
         fBw     = GetDouble();
         fZzr    = GetDouble();
         fZins   = GetDouble();
@@ -1403,7 +1403,7 @@ void ScInterpreter::ScEffektiv()
             SetIllegalParameter();
         else
         {
-            fPerioden = SolarMath::ApproxFloor(fPerioden);
+            fPerioden = ::rtl::math::approxFloor(fPerioden);
             PushDouble(pow(1.0 + fNominal/fPerioden, fPerioden) - 1.0);
         }
     }
@@ -1420,7 +1420,7 @@ void ScInterpreter::ScNominal()
             SetIllegalParameter();
         else
         {
-            fPerioden = SolarMath::ApproxFloor(fPerioden);
+            fPerioden = ::rtl::math::approxFloor(fPerioden);
             PushDouble( (pow(fEffektiv + 1.0, 1.0 / fPerioden) - 1.0) * fPerioden );
         }
     }
@@ -1432,7 +1432,7 @@ void ScInterpreter::ScMod()
     {
         double nVal2 = GetDouble();
         double nVal1 = GetDouble();
-        PushDouble(nVal1 - (SolarMath::ApproxFloor(nVal1 / nVal2) * nVal2));
+        PushDouble(nVal1 - (::rtl::math::approxFloor(nVal1 / nVal2) * nVal2));
     }
 }
 
@@ -1534,7 +1534,7 @@ void ScInterpreter::ScBackSolver()
                         xn = xn - (fn / fs);
                     }
                 }
-                double nX = SolarMath::ApproxFloor((nBestX / nDelta) + 0.5) * nDelta;
+                double nX = ::rtl::math::approxFloor((nBestX / nDelta) + 0.5) * nDelta;
                 if ( bRet )
                 {
                     pValue->SetValue( nX );
@@ -1761,7 +1761,7 @@ void ScInterpreter::ScDde()
     {
         BYTE nMode = SC_DDE_DEFAULT;
         if (nParamCount == 4)
-            nMode = (BYTE) SolarMath::ApproxFloor(GetDouble());
+            nMode = (BYTE) ::rtl::math::approxFloor(GetDouble());
         String aItem  = GetString();
         String aTopic = GetString();
         String aAppl  = GetString();
@@ -1867,7 +1867,7 @@ void ScInterpreter::ScBase()
         xub_StrLen nMinLen;
         if ( nParamCount == 3 )
         {
-            double fLen = SolarMath::ApproxFloor( GetDouble() );
+            double fLen = ::rtl::math::approxFloor( GetDouble() );
             if ( 1.0 <= fLen && fLen < STRING_MAXLEN )
                 nMinLen = (xub_StrLen) fLen;
             else if ( fLen == 0.0 )
@@ -1877,8 +1877,8 @@ void ScInterpreter::ScBase()
         }
         else
             nMinLen = 1;
-        double fBase = SolarMath::ApproxFloor( GetDouble() );
-        double fVal = SolarMath::ApproxFloor( GetDouble() );
+        double fBase = ::rtl::math::approxFloor( GetDouble() );
+        double fVal = ::rtl::math::approxFloor( GetDouble() );
         double fChars = ((fVal > 0.0 && fBase > 0.0) ?
             (ceil( log( fVal ) / log( fBase ) ) + 2.0) :
             2.0);
@@ -1914,21 +1914,21 @@ void ScInterpreter::ScBase()
                 while ( fVal && p > pBuf )
                 {
 //! mit fmod Rundungsfehler ab 2**48
-//                  double fDig = SolarMath::ApproxFloor( fmod( fVal, fBase ) );
+//                  double fDig = ::rtl::math::approxFloor( fmod( fVal, fBase ) );
 // so ist es etwas besser
-                    double fInt = SolarMath::ApproxFloor( fVal / fBase );
+                    double fInt = ::rtl::math::approxFloor( fVal / fBase );
                     double fMult = fInt * fBase;
 #ifdef DEBUG
                     // #53943# =BASIS(1e308;36) => GPF mit
-                    // nDig = (size_t) SolarMath::ApproxFloor( fVal - fMult );
+                    // nDig = (size_t) ::rtl::math::approxFloor( fVal - fMult );
                     // trotz vorheriger Pruefung ob fVal >= fMult
                     double fDebug1 = fVal - fMult;
                     // fVal    := 7,5975311883090e+290
                     // fMult   := 7,5975311883090e+290
                     // fDebug1 := 1,3848924157003e+275  <- RoundOff-Error
-                    // fVal != fMult, aber: SolarMath::ApproxEqual( fVal, fMult ) == TRUE
-                    double fDebug2 = SolarMath::ApproxSub( fVal, fMult );
-                    // und SolarMath::ApproxSub( fVal, fMult ) == 0
+                    // fVal != fMult, aber: ::rtl::math::approxEqual( fVal, fMult ) == TRUE
+                    double fDebug2 = ::rtl::math::approxSub( fVal, fMult );
+                    // und ::rtl::math::approxSub( fVal, fMult ) == 0
                     double fDebug3 = ( fInt ? fVal / fInt : 0.0 );
                     // Nach dem strange fDebug1 und fVal < fMult  ist eigentlich
                     // fDebug2 == fBase, trotzdem wird das mit einem Vergleich
@@ -1942,7 +1942,7 @@ void ScInterpreter::ScBase()
                     }
                     else
                     {
-                        double fDig = SolarMath::ApproxFloor( SolarMath::ApproxSub( fVal, fMult ) );
+                        double fDig = ::rtl::math::approxFloor( ::rtl::math::approxSub( fVal, fMult ) );
                         if ( bDirt )
                         {
                             bDirt = FALSE;
@@ -1983,7 +1983,7 @@ void ScInterpreter::ScDecimal()
 {   // Text, Base
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fBase = SolarMath::ApproxFloor( GetDouble() );
+        double fBase = ::rtl::math::approxFloor( GetDouble() );
         String aStr( GetString() );
         if ( !nGlobalError && 2 <= fBase && fBase <= 36 )
         {
@@ -2064,8 +2064,8 @@ void ScInterpreter::ScRoman()
     BYTE nParamCount = GetByte();
     if( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        double fMode = (nParamCount == 2) ? SolarMath::ApproxFloor( GetDouble() ) : 0.0;
-        double fVal = SolarMath::ApproxFloor( GetDouble() );
+        double fMode = (nParamCount == 2) ? ::rtl::math::approxFloor( GetDouble() ) : 0.0;
+        double fVal = ::rtl::math::approxFloor( GetDouble() );
         if( nGlobalError )
             SetIllegalParameter();
         else if( (fMode >= 0.0) && (fMode < 5.0) && (fVal >= 0.0) && (fVal < 4000.0) )

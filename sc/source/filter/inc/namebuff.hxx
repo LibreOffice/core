@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #ifndef _ROOT_HXX
 #include "root.hxx"
 #endif
+
+#include "rangenam.hxx"
 
 class ScDocument;
 class ScTokenArray;
@@ -218,9 +220,9 @@ public:
     inline                  RangeNameBuffer( RootData* p );
                                             // Name, Definition
     void                    Store( ByteString&, const ScTokenArray*,
-                                UINT16 nAltSheet = 0, const BOOL bPrintarea = FALSE );
+                                UINT16 nAltSheet = 0, const RangeType eNameType = RT_ABSAREA );
     void                    Store( String&, const ScTokenArray*,
-                                UINT16 nAltSheet = 0, const BOOL bPrintarea = FALSE );
+                                UINT16 nAltSheet = 0, const RangeType eNameType = RT_ABSAREA );
     inline UINT16           operator[]( UINT16 nExcInd ) const;
     inline UINT16           GetPos( void ) const;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:17:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,10 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const ScRange& rRange, BOOL bCalc
         aPageSize = pDefaultDev->LogicToPixel(
             SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 ), MapMode( MAP_TWIP ) );
     }
-    pParser = new ScHTMLParser( pEngine, aPageSize, pDocP, bCalcWidthHeight );
+    if( bCalcWidthHeight )
+        pParser = new ScHTMLLayoutParser( pEngine, aPageSize, pDocP );
+    else
+        pParser = new ScHTMLQueryParser( pEngine, pDocP );
 }
 
 
@@ -167,12 +170,12 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor );
 
     const ScHTMLParser* pParser = GetParser();
-    ScHTMLTableDataTable* pHTMLTables = pParser->GetHTMLTables();
-    if( !pHTMLTables )
+    const ScHTMLTable* pGlobTable = pParser->GetGlobalTable();
+    if( !pGlobTable )
         return;
 
     // set cell borders for HTML table cells
-    pHTMLTables->SetCellBorders( pDoc, aRange.aStart );
+    pGlobTable->ApplyCellBorders( pDoc, aRange.aStart );
 
     // correct cell borders for merged cells
     for ( ScEEParseEntry* pEntry = pParser->First(); pEntry; pEntry = pParser->Next() )
@@ -209,10 +212,8 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     // create ranges for HTML tables
      // 1 - entire document
     ScRange aNewRange( aRange.aStart );
-    USHORT nColDim, nRowDim;
-    pParser->GetDimensions( nColDim, nRowDim );
-    aNewRange.aEnd.IncCol( nColDim - 1 );
-    aNewRange.aEnd.IncRow( nRowDim - 1 );
+    aNewRange.aEnd.IncCol( pGlobTable->GetDocSize( tdCol ) - 1 );
+    aNewRange.aEnd.IncRow( pGlobTable->GetDocSize( tdRow ) - 1 );
     InsertRangeName( pDoc, ScfTools::GetHTMLDocName(), aNewRange );
 
     // 2 - all tables
@@ -223,14 +224,14 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     short nRowDiff = (short)aRange.aStart.Row();
     short nTabDiff = (short)aRange.aStart.Tab();
 
-    ScHTMLTableData* pTable = NULL;
-    ULONG nTab = 0;
-    while( pTable = pHTMLTables->GetTable( ++nTab ) )
+    ScHTMLTable* pTable = NULL;
+    ScHTMLTableId nTableId = SC_HTML_GLOBAL_TABLE;
+    while( pTable = pGlobTable->FindNestedTable( ++nTableId ) )
     {
-        pTable->GetRange( aNewRange );
+        pTable->GetDocRange( aNewRange );
         aNewRange.Move( nColDiff, nRowDiff, nTabDiff );
         // insert table number as name
-        InsertRangeName( pDoc, ScfTools::GetNameFromHTMLIndex( nTab ), aNewRange );
+        InsertRangeName( pDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
         // insert table id as name
         if( pTable->GetTableName().Len() )
         {

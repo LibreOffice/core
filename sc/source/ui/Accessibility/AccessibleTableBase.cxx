@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:01:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,10 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("Here should be a implementation to fill the description");
+
+    if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
+        throw lang::IndexOutOfBoundsException();
+
     //setAccessibleRowDescription(nRow, xAccessible); // to remember the created Description
     return rtl::OUString();
 }
@@ -177,6 +181,10 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("Here should be a implementation to fill the description");
+
+    if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
+        throw lang::IndexOutOfBoundsException();
+
     //setAccessibleColumnDescription(nColumn, xAccessible); // to remember the created Description
     return rtl::OUString();
 }
@@ -244,6 +252,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
     DBG_ERROR("Here should be a implementation to fill the row headers");
+
     //CommitChange
     return xAccessibleTable;
 }
@@ -253,6 +262,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
     DBG_ERROR("Here should be a implementation to fill the column headers");
+
     //CommitChange
     return xAccessibleTable;
 }

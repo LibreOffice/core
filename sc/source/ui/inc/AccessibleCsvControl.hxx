@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-05 07:56:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ public:
     /** Returns the count of characters. */
     virtual sal_Int32 SAL_CALL getCharacterCount() throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Returns the character index at the specified screen coordinate. */
+    /** Returns the character index at the specified coordinate (object's coordinate system). */
     virtual sal_Int32 SAL_CALL getIndexAtPoint( const AwtPoint& rPoint )
         throw( ::com::sun::star::uno::RuntimeException );
 

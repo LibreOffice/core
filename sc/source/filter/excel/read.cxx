@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:07:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,9 +148,8 @@ FltError ImportExcel::Read( void )
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
-    ::std::auto_ptr< ScfProgressBar > pProgress( new ScfProgressBar( ScGlobal::GetRscString( STR_LOAD_DOC ) ) );
-    sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamSize() );
-    pProgress->ActivateSegment( nStreamSeg );
+    ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
+        aIn.GetStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
     while( eAkt != Z_Ende )
     {
@@ -1015,8 +1014,6 @@ FltError ImportExcel8::Read( void )
     }
 #endif
 
-    CreateTmpCtrlStorage();
-
     UINT16              nOpcode;            // aktueller Opcode
     UINT16              nBofLevel = 0;
 
@@ -1042,9 +1039,8 @@ FltError ImportExcel8::Read( void )
     DBG_ASSERT( &aIn != NULL,
         "-ImportExcel8::Read(): Kein Stream - wie dass?!" );
 
-    ::std::auto_ptr< ScfProgressBar > pProgress( new ScfProgressBar( ScGlobal::GetRscString( STR_LOAD_DOC ) ) );
-    sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamSize() );
-    pProgress->ActivateSegment( nStreamSeg );
+    ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
+        aIn.GetStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
     bObjSection = FALSE;
 
@@ -1197,7 +1193,7 @@ FltError ImportExcel8::Read( void )
                             NeueTabelle();
                             if( pExcRoot->eDateiTyp == Biff8C )
                             {
-                                if( bWithDrawLayer && aObjManager.IsCurrObjChart() )
+                                if( bWithDrawLayer && GetObjectManager().IsCurrObjChart() )
                                     ReadChart8( *pProgress, FALSE );    // zunaechst Return vergessen
                                 else
                                 {// Stream-Teil mit Chart ueberlesen
@@ -1256,7 +1252,7 @@ FltError ImportExcel8::Read( void )
 
                         case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );           break;
                         case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm );   break;
-                        case EXC_ID_DVAL:           XclImpValidation::ReadDval( maStrm, *this );    break;
+                        case EXC_ID_DVAL:           XclImpValidation::ReadDval( maStrm );           break;
                         case EXC_ID_DV:             XclImpValidation::ReadDv( maStrm, *pFormConv ); break;
 
                         case EXC_ID_QSI:            GetWebQueryBuffer().ReadQsi( maStrm );          break;
@@ -1299,7 +1295,7 @@ FltError ImportExcel8::Read( void )
                         {
                             Bof5();
                             if( pExcRoot->eDateiTyp == Biff8C && bWithDrawLayer &&
-                                aObjManager.IsCurrObjChart() )
+                                GetObjectManager().IsCurrObjChart() )
                                 ReadChart8( *pProgress, FALSE );    // zunaechst Return vergessen
                             else
                             {
@@ -1359,7 +1355,7 @@ FltError ImportExcel8::Read( void )
                         Bof5();
                         NeueTabelle();
 
-                        aObjManager.InsertDummyObj();
+                        GetObjectManager().InsertDummyObj();
 
                         switch( pExcRoot->eDateiTyp )
                         {
@@ -1372,7 +1368,7 @@ FltError ImportExcel8::Read( void )
                                 aIn.StoreGlobalPosition();
                                 break;
                             case Biff8C:
-                                aObjManager.SetNewCurrObjChart();
+                                GetObjectManager().SetNewCurrObjChart();
                                 pExcRoot->bChartTab = TRUE;
                                 ReadChart8( *pProgress, TRUE );
                                 pExcRoot->bChartTab = FALSE;
@@ -1500,7 +1496,7 @@ FltError ImportExcel8::Read( void )
 
 //___________________________________________________________________
 
-FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab )
+FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL bOwnTab )
 {
     bFirstScl   = TRUE;
 
@@ -1508,7 +1504,7 @@ FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab
     BOOL        bLoop;
     UINT16      nOpcode;            // current opcode
 
-    XclImpChart* pChart = aObjManager.GetCurrChartData();
+    XclImpChart* pChart = GetObjectManager().GetCurrChartData();
     if( !pChart )
     {
         bLoop = TRUE;
@@ -1554,11 +1550,11 @@ FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab
             case 0x100D:    pChart->ReadSeriestext( aIn );                      break;  // SERIESTEXT
             case 0x1014:    pChart->ReadChartformat();                          break;  // CHARTFORMAT
             case 0x1015:    pChart->ReadLegend( aIn );                          break;  // LEGEND
-            case 0x1017:    pChart = aObjManager.ReplaceChartData( aIn, ctBar );    break;  // BAR
-            case 0x1018:    pChart = aObjManager.ReplaceChartData( aIn, ctLine );   break;  // LINE
-            case 0x1019:    pChart = aObjManager.ReplaceChartData( aIn, ctPie );    break;  // PIE
-            case 0x101A:    pChart = aObjManager.ReplaceChartData( aIn, ctArea );   break;  // AREA
-            case 0x101B:    pChart = aObjManager.ReplaceChartData( aIn, ctScatter );break;  // SCATTER
+            case 0x1017:    pChart = GetObjectManager().ReplaceChartData( aIn, ctBar );    break;  // BAR
+            case 0x1018:    pChart = GetObjectManager().ReplaceChartData( aIn, ctLine );   break;  // LINE
+            case 0x1019:    pChart = GetObjectManager().ReplaceChartData( aIn, ctPie );    break;  // PIE
+            case 0x101A:    pChart = GetObjectManager().ReplaceChartData( aIn, ctArea );   break;  // AREA
+            case 0x101B:    pChart = GetObjectManager().ReplaceChartData( aIn, ctScatter );break;  // SCATTER
             case 0x101C:    pChart->ReadChartline( aIn );                       break;  // CHARTLINE
             case 0x101D:    pChart->ReadAxis( aIn );                            break;  // AXIS
             case 0x101E:    pChart->ReadTick( aIn );                            break;  // TICK
@@ -1576,8 +1572,8 @@ FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab
             case 0x103A:    pChart->Read3D( aIn );                              break;  // 3D
             case 0x103C:    pChart->ReadPicf( aIn );                            break;  // PICF
             case 0x103D:    pChart->ReadDropbar( aIn );                         break;  // DROPBAR
-            case 0x103E:    pChart = aObjManager.ReplaceChartData( aIn, ctNet );    break;  // RADAR
-            case 0x103F:    pChart = aObjManager.ReplaceChartData( aIn, ctSurface );break;  // SURFACE
+            case 0x103E:    pChart = GetObjectManager().ReplaceChartData( aIn, ctNet );    break;  // RADAR
+            case 0x103F:    pChart = GetObjectManager().ReplaceChartData( aIn, ctSurface );break;  // SURFACE
             case 0x1041:    pChart->ReadAxisparent( aIn );                      break;  // AXISPARENT
             case 0x1045:    pChart->ReadSertocrt( aIn );                        break;  // SERTOCRT
             case 0x1046:    pChart->ReadAxesused( aIn );                        break;  // AXESUSED

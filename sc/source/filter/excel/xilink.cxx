@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,8 @@ XclImpExtName::XclImpExtName( XclImpStream& rStrm )
     if( ::get_flag( nFlags, EXC_EXTN_BUILTIN ) || !::get_flag( nFlags, EXC_EXTN_OLE_OR_DDE ) )
     {
         meType = xlExtName;
-        ScfTools::ConvertName( maName, true );  // also a point is a valid char for func names!
-        maName = rStrm.GetRoot().GetAddInNames().GetScName( maName );
+        maAddInName = rStrm.GetRoot().GetAddInNames().GetScName( maName );
+        ScfTools::ConvertToScDefinedName( maName );
     }
     else
         meType = ::get_flagvalue( nFlags, EXC_EXTN_OLE, xlExtOLE, xlExtDDE );
@@ -205,14 +205,17 @@ void XclImpSupbookTab::CreateTable( ScDocument& rDoc, const String& rUrl )
 
 XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     mnCurrExcTab( EXC_TAB_INVALID ),
-    mbSelf( false )
+    mbSelf( false ),
+    mbAddIn( false )
 {
     sal_uInt16 nTabCnt;
     rStrm >> nTabCnt;
 
     if( rStrm.GetRecLeft() == 2 )
     {
-        mbSelf = (rStrm.ReaduInt16() == EXC_SUPB_SELF);
+        sal_uInt16 nType = rStrm.ReaduInt16();
+        mbSelf = (nType == EXC_SUPB_SELF);
+        mbAddIn = (nType == EXC_SUPB_ADDIN);
         return;
     }
 
@@ -242,7 +245,7 @@ void XclImpSupbook::ReadUrl( XclImpStream& rStrm, String& rUrl, bool& rbSelf )
 void XclImpSupbook::ReadTabName( XclImpStream& rStrm, String& rTabName )
 {
     rStrm.AppendUniString( rTabName );
-    ScfTools::ConvertName( rTabName );
+    ScfTools::ConvertToScSheetName( rTabName );
 }
 
 void XclImpSupbook::ReadXct( XclImpStream& rStrm )
@@ -277,9 +280,7 @@ const XclImpExtName* XclImpSupbook::GetExtName( sal_uInt16 nXclIndex ) const
 
 bool XclImpSupbook::GetLink( String& rApplic, String& rDoc ) const
 {
-    // first backslash is application name delimiter
-    // (created by XclImpUrlDecoder::DecodeUrl())
-    xub_StrLen nPos = maUrl.Search( '\\' );
+    xub_StrLen nPos = maUrl.Search( EXC_DDE_DELIM );
     if( mbSelf || !maUrl.Len() || (nPos == STRING_NOTFOUND) )
         return false;
     rApplic = maUrl.Copy( 0, nPos );

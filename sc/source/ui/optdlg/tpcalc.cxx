@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 16:02:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
 
-#ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -182,12 +182,11 @@ SfxTabPage* __EXPORT ScTpCalcOptions::Create( Window* pParent, const SfxItemSet&
 void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& rCoreAttrs )
 {
     USHORT  d,m,y;
-    String  aStrBuf;
 
     *pLocalOptions  = *pOldOptions;
 
-    SolarMath::DoubleToString( aStrBuf, pLocalOptions->GetIterEps(),
-        'G', 6, aDecSep.GetChar(0), TRUE );
+    String aStrBuf( ::rtl::math::doubleToUString( pLocalOptions->GetIterEps(),
+                rtl_math_StringFormat_G, 6, aDecSep.GetChar(0), TRUE));
 
     aBtnCase   .Check( !pLocalOptions->IsIgnoreCase() );
     aBtnCalc   .Check( pLocalOptions->IsCalcAsShown() );
@@ -267,13 +266,14 @@ BOOL ScTpCalcOptions::GetEps( double& rEps )
 {
     String aStr( aEdEps.GetText() );
     aStr.EraseTrailingChars( ' ' );
-    int nErrno;
-    const sal_Unicode* pEnd;
-    rEps = SolarMath::StringToDouble( aStr.GetBuffer(),
-        ScGlobal::pLocaleData->getNumThousandSep().GetChar(0),
+    rtl_math_ConversionStatus eStatus;
+    sal_Unicode const * pBegin = aStr.GetBuffer();
+    sal_Unicode const * pEnd;
+    rEps = rtl_math_uStringToDouble( pBegin, pBegin + aStr.Len(),
         ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
-        nErrno, &pEnd );
-    BOOL bOk = ( nErrno == 0 && *pEnd == '\0' && rEps > 0.0 );
+        ScGlobal::pLocaleData->getNumThousandSep().GetChar(0),
+        &eStatus, &pEnd );
+    BOOL bOk = ( eStatus == rtl_math_ConversionStatus_Ok && *pEnd == '\0' && rEps > 0.0 );
 
     if ( bOk )
         pLocalOptions->SetIterEps( rEps );

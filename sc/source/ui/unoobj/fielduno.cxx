@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 08:52:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,8 +984,8 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(INT32 Index) const
             else if ( pData->ISA( SvxTableField ) )   nFieldType = SC_SERVICE_SHEETFIELD;
         }
 
-        ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
-        return new ScHeaderFieldObj( pContentObj, nPart, nType, aSelection );
+        ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
+        return new ScHeaderFieldObj( pContentObj, nPart, nFieldType, aSelection );
     }
     return NULL;
 }

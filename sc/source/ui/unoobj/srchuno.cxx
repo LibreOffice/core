@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ ScCellSearchObj::ScCellSearchObj() :
     //  Defaults:
     pSearchItem->SetWordOnly(FALSE);
     pSearchItem->SetExact(FALSE);
+    pSearchItem->SetMatchFullHalfWidthForms(FALSE);
+    pSearchItem->SetUseAsianOptions(FALSE);     // or all asian bits would have to be handled
     pSearchItem->SetBackward(FALSE);
     pSearchItem->SetSelection(FALSE);
     pSearchItem->SetRegExp(FALSE);

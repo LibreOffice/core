@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-01-18 16:25:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
+
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #include <unotools/textsearch.hxx>
 
@@ -711,6 +713,15 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
             //  SearchParam no longer needed - SearchOptions contains all settings
             com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::pLocale;
+
+            //  #107259# reflect UseAsianOptions flag in SearchOptions
+            //  (use only ignore case and width if asian options are disabled).
+            //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
+            if ( !rSearchItem.IsUseAsianOptions() )
+                aSearchOptions.transliterateFlags &=
+                    ( com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
+                      com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
+
             pSearchText = new utl::TextSearch( aSearchOptions );
 
             if (nCommand == SVX_SEARCHCMD_FIND)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-11-12 18:24:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ ULONG ScEEImport::Read( SvStream& rStream )
 
 void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
 {
-    ScProgress* pProgress = new ScProgress( NULL,
+    ScProgress* pProgress = new ScProgress( pDoc->GetDocumentShell(),
         ScGlobal::GetRscString( STR_LOAD_DOC ), pParser->Count() );
     ULONG nProgress = 0;
 
@@ -369,7 +369,16 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                 }
                 else
                 {
-                    String aStr( pEngine->GetText( pE->aSel.nStartPara ) );
+                    String aStr;
+                    if( pE->bEntirePara )
+                    {
+                        aStr = pEngine->GetText( pE->aSel.nStartPara );
+                    }
+                    else
+                    {
+                        aStr = pEngine->GetText( pE->aSel );
+                        aStr.EraseLeadingAndTrailingChars();
+                    }
                     const sal_Unicode cDecSepEng = '.';
                     const sal_Unicode cThoSepEng = ',';
                     if ( cDecSep != cDecSepEng
@@ -411,6 +420,12 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                             }
                         }
                     }
+
+                    //  #105460#, #i4180# String cells can't contain tabs or linebreaks
+                    //  -> replace with spaces
+                    aStr.SearchAndReplaceAll( (sal_Unicode)'\t', (sal_Unicode)' ' );
+                    aStr.SearchAndReplaceAll( (sal_Unicode)'\n', (sal_Unicode)' ' );
+
                     pDoc->SetString( nCol, nRow, nTab, aStr );
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-11 14:13:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include <svtools/aeitem.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/moduleoptions.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
+#endif
 #include <sfx2/dispatch.hxx>
 
 #include "tabvwsh.hxx"
@@ -434,6 +437,11 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
                          nPutId != SID_DRAW_CAPTION_VERTICAL )
                         nPutId = USHRT_MAX;
                     SfxAllEnumItem aItem( nWhich, nPutId );
+                    if ( !SvtLanguageOptions().IsVerticalTextEnabled() )
+                    {
+                        aItem.DisableValue( SID_DRAW_TEXT_VERTICAL );
+                        aItem.DisableValue( SID_DRAW_CAPTION_VERTICAL );
+                    }
                     rSet.Put( aItem );
                 }
                 break;

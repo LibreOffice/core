@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-21 13:56:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef SC_SCATTR_HXX
 #include "attrib.hxx"
 #endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 using namespace com::sun::star;
 
@@ -110,6 +113,7 @@ const SfxItemPropertyMap* lcl_GetSubTotalPropertyMap()
     {
         {MAP_CHAR_LEN(SC_UNONAME_BINDFMT),  0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_CASE),     0,  &getBooleanCppuType(),       0},
+        {MAP_CHAR_LEN(SC_UNONAME_ENABSORT), 0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_ENUSLIST), 0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_FORMATS),  0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_INSBRK),   0,  &getBooleanCppuType(),       0},
@@ -327,7 +331,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
 
 long ScSortDescriptor::GetPropertyCount()
 {
-    return 12;      // TableSortDescriptor and SheetSortDescriptor
+    return 13;      // TableSortDescriptor and SheetSortDescriptor
 }
 
 void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScSortParam& rParam )
@@ -367,38 +371,41 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_ORIENT );
     pArray[0].Value <<= eOrient;
 
-    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_CONTHDR );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, rParam.bHasHeader );
+    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SORTCOLUMNS );
+    pArray[1].Value = ::cppu::bool2any(!rParam.bByRow);
 
-    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_MAXFLD );
-    pArray[2].Value <<= (sal_Int32) MAXSORT;
+    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_CONTHDR );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, rParam.bHasHeader );
 
-    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNONAME_SORTFLD );
-    pArray[3].Value <<= aFields;
+    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNONAME_MAXFLD );
+    pArray[3].Value <<= (sal_Int32) MAXSORT;
 
-    pArray[4].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISCASE );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[4].Value, rParam.bCaseSens );
+    pArray[4].Name = rtl::OUString::createFromAscii( SC_UNONAME_SORTFLD );
+    pArray[4].Value <<= aFields;
 
-    pArray[5].Name = rtl::OUString::createFromAscii( SC_UNONAME_BINDFMT );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[5].Value, rParam.bIncludePattern );
+    pArray[5].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISCASE );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[5].Value, rParam.bCaseSens );
 
-    pArray[6].Name = rtl::OUString::createFromAscii( SC_UNONAME_COPYOUT );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[6].Value, !rParam.bInplace );
+    pArray[6].Name = rtl::OUString::createFromAscii( SC_UNONAME_BINDFMT );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[6].Value, rParam.bIncludePattern );
 
-    pArray[7].Name = rtl::OUString::createFromAscii( SC_UNONAME_OUTPOS );
-    pArray[7].Value <<= aOutPos;
+    pArray[7].Name = rtl::OUString::createFromAscii( SC_UNONAME_COPYOUT );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[7].Value, !rParam.bInplace );
 
-    pArray[8].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISULIST );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[8].Value, rParam.bUserDef );
+    pArray[8].Name = rtl::OUString::createFromAscii( SC_UNONAME_OUTPOS );
+    pArray[8].Value <<= aOutPos;
 
-    pArray[9].Name = rtl::OUString::createFromAscii( SC_UNONAME_UINDEX );
-    pArray[9].Value <<= (sal_Int32) rParam.nUserIndex;
+    pArray[9].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISULIST );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[9].Value, rParam.bUserDef );
 
-    pArray[10].Name = rtl::OUString::createFromAscii( SC_UNONAME_COLLLOC );
-    pArray[10].Value <<= rParam.aCollatorLocale;
+    pArray[10].Name = rtl::OUString::createFromAscii( SC_UNONAME_UINDEX );
+    pArray[10].Value <<= (sal_Int32) rParam.nUserIndex;
 
-    pArray[11].Name = rtl::OUString::createFromAscii( SC_UNONAME_COLLALG );
-    pArray[11].Value <<= rtl::OUString( rParam.aCollatorAlgorithm );
+    pArray[11].Name = rtl::OUString::createFromAscii( SC_UNONAME_COLLLOC );
+    pArray[11].Value <<= rParam.aCollatorLocale;
+
+    pArray[12].Name = rtl::OUString::createFromAscii( SC_UNONAME_COLLALG );
+    pArray[12].Value <<= rtl::OUString( rParam.aCollatorAlgorithm );
 }
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
@@ -416,6 +423,10 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             table::TableOrientation eOrient = (table::TableOrientation)
                                 ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
             rParam.bByRow = ( eOrient != table::TableOrientation_COLUMNS );
+        }
+        else if (aPropName.EqualsAscii( SC_UNONAME_SORTCOLUMNS ))
+        {
+            rParam.bByRow = !::cppu::any2bool(rProp.Value);
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_CONTHDR ))
             rParam.bHasHeader = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
@@ -756,6 +767,8 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
         aParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if (aString.EqualsAscii( SC_UNONAME_FORMATS ) || aString.EqualsAscii( SC_UNONAME_BINDFMT ))
         aParam.bIncludePattern = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+    else if (aString.EqualsAscii( SC_UNONAME_ENABSORT ))
+        aParam.bDoSort = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if (aString.EqualsAscii( SC_UNONAME_SORTASC ))
         aParam.bAscending = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if (aString.EqualsAscii( SC_UNONAME_INSBRK ))
@@ -797,6 +810,8 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const rtl::OUStrin
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bCaseSens );
     else if (aString.EqualsAscii( SC_UNONAME_FORMATS ) || aString.EqualsAscii( SC_UNONAME_BINDFMT ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bIncludePattern );
+    else if (aString.EqualsAscii( SC_UNONAME_ENABSORT ))
+        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bDoSort );
     else if (aString.EqualsAscii( SC_UNONAME_SORTASC ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bAscending );
     else if (aString.EqualsAscii( SC_UNONAME_INSBRK ))

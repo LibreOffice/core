@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-09-06 13:36:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ double ScInterpreter::gauss(double x)
     double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
 
     double xAbs = fabs(x);
-    USHORT xShort = (USHORT)SolarMath::ApproxFloor(xAbs);
+    USHORT xShort = (USHORT)::rtl::math::approxFloor(xAbs);
     double nVal = 0.0;
     if (xShort == 0)
         nVal = taylor(t0, 11, (xAbs * xAbs)) * xAbs;
@@ -285,7 +285,7 @@ double ScInterpreter::gaussinv(double x)
 
 double ScInterpreter::Fakultaet(double x)
 {
-    x = SolarMath::ApproxFloor(x);
+    x = ::rtl::math::approxFloor(x);
     if (x < 0.0)
         return 0.0;
     else if (x == 0.0)
@@ -311,7 +311,7 @@ double ScInterpreter::Fakultaet(double x)
 double ScInterpreter::BinomKoeff(double n, double k)
 {
     double nVal = 0.0;
-    k = SolarMath::ApproxFloor(k);
+    k = ::rtl::math::approxFloor(k);
     if (n < k)
         nVal = 0.0;
     else if (k == 0.0)
@@ -377,7 +377,7 @@ double ScInterpreter::GetGamma(double x)
     double G = GammaHelp(x, bReflect);
     G = pow(x+5.5,x+0.5)*G/exp(x+5.5);
     if (bReflect)
-        G = F_PI*x/(G*SolarMath::Sin(F_PI*x));
+        G = F_PI*x/(G*::rtl::math::sin(F_PI*x));
     return G;
 }
 
@@ -387,7 +387,7 @@ double ScInterpreter::GetLogGamma(double x)
     double G = GammaHelp(x, bReflect);
     G = (x+0.5)*log(x+5.5)+log(G)-(x+5.5);
     if (bReflect)
-        G = log(F_PI*x)-G-log(SolarMath::Sin(F_PI*x));
+        G = log(F_PI*x)-G-log(::rtl::math::sin(F_PI*x));
     return G;
 }
 
@@ -615,8 +615,8 @@ void ScInterpreter::ScKombin()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double k = SolarMath::ApproxFloor(GetDouble());
-        double n = SolarMath::ApproxFloor(GetDouble());
+        double k = ::rtl::math::approxFloor(GetDouble());
+        double n = ::rtl::math::approxFloor(GetDouble());
         if (k < 0.0 || n < 0.0 || k > n)
             SetIllegalArgument();
         else
@@ -628,8 +628,8 @@ void ScInterpreter::ScKombin2()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double k = SolarMath::ApproxFloor(GetDouble());
-        double n = SolarMath::ApproxFloor(GetDouble());
+        double k = ::rtl::math::approxFloor(GetDouble());
+        double n = ::rtl::math::approxFloor(GetDouble());
         if (k < 0.0 || n < 0.0 || k > n)
             SetIllegalArgument();
         else
@@ -641,8 +641,8 @@ void ScInterpreter::ScVariationen()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double k = SolarMath::ApproxFloor(GetDouble());
-        double n = SolarMath::ApproxFloor(GetDouble());
+        double k = ::rtl::math::approxFloor(GetDouble());
+        double n = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || k < 0.0 || k > n)
             SetIllegalArgument();
         else if (k == 0.0)
@@ -661,8 +661,8 @@ void ScInterpreter::ScVariationen2()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double k = SolarMath::ApproxFloor(GetDouble());
-        double n = SolarMath::ApproxFloor(GetDouble());
+        double k = ::rtl::math::approxFloor(GetDouble());
+        double n = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || k < 0.0 || k > n)
             SetIllegalArgument();
         else
@@ -677,9 +677,9 @@ void ScInterpreter::ScB()
         return ;
     if (nParamCount == 3)
     {
-        double x = SolarMath::ApproxFloor(GetDouble());
+        double x = ::rtl::math::approxFloor(GetDouble());
         double p = GetDouble();
-        double n = SolarMath::ApproxFloor(GetDouble());
+        double n = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
             SetIllegalArgument();
         else
@@ -797,8 +797,8 @@ void ScInterpreter::ScBinomDist()
     {
         double kum    = GetDouble();                    // 0 oder 1
         double p      = GetDouble();                    // p
-        double n      = SolarMath::ApproxFloor(GetDouble());                // n
-        double x      = SolarMath::ApproxFloor(GetDouble());                // x
+        double n      = ::rtl::math::approxFloor(GetDouble());              // n
+        double x      = ::rtl::math::approxFloor(GetDouble());              // x
         double fFactor, q, fSum;
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
             SetIllegalArgument();
@@ -877,7 +877,7 @@ void ScInterpreter::ScCritBinom()
     {
         double alpha  = GetDouble();                    // alpha
         double p      = GetDouble();                    // p
-        double n      = SolarMath::ApproxFloor(GetDouble());
+        double n      = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || alpha <= 0.0 || alpha >= 1.0 || p < 0.0 || p > 1.0)
             SetIllegalArgument();
         else
@@ -1000,8 +1000,8 @@ void ScInterpreter::ScTDist()
 {
     if ( !MustHaveParamCount( GetByte(), 3 ) )
         return;
-    double fFlag = SolarMath::ApproxFloor(GetDouble());
-    double fDF   = SolarMath::ApproxFloor(GetDouble());
+    double fFlag = ::rtl::math::approxFloor(GetDouble());
+    double fDF   = ::rtl::math::approxFloor(GetDouble());
     double T     = GetDouble();
     if (fDF < 1.0 || T < 0.0 || (fFlag != 1.0 && fFlag != 2.0) )
     {
@@ -1019,8 +1019,8 @@ void ScInterpreter::ScFDist()
 {
     if ( !MustHaveParamCount( GetByte(), 3 ) )
         return;
-    double fF2 = SolarMath::ApproxFloor(GetDouble());
-    double fF1 = SolarMath::ApproxFloor(GetDouble());
+    double fF2 = ::rtl::math::approxFloor(GetDouble());
+    double fF1 = ::rtl::math::approxFloor(GetDouble());
     double fF  = GetDouble();
     if (fF < 0.0 || fF1 < 1.0 || fF2 < 1.0 || fF1 >= 1.0E10 || fF2 >= 1.0E10)
     {
@@ -1034,7 +1034,7 @@ void ScInterpreter::ScChiDist()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    double fDF  = SolarMath::ApproxFloor(GetDouble());
+    double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fChi = GetDouble();
     if (fDF < 1.0 || fDF >= 1.0E5 || fChi < 0.0 )
     {
@@ -1068,7 +1068,7 @@ void ScInterpreter::ScPoissonDist()
     {
         double kum    = GetDouble();                    // 0 oder 1
         double lambda = GetDouble();                    // Mittelwert
-        double x      = SolarMath::ApproxFloor(GetDouble());                // x
+        double x      = ::rtl::math::approxFloor(GetDouble());              // x
         if (lambda < 0.0 || x < 0.0)
             SetIllegalArgument();
         else if (kum == 0.0)                            // Dichte
@@ -1103,10 +1103,10 @@ void ScInterpreter::ScHypGeomDist()
 {
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        double N = SolarMath::ApproxFloor(GetDouble());
-        double M = SolarMath::ApproxFloor(GetDouble());
-        double n = SolarMath::ApproxFloor(GetDouble());
-        double x = SolarMath::ApproxFloor(GetDouble());
+        double N = ::rtl::math::approxFloor(GetDouble());
+        double M = ::rtl::math::approxFloor(GetDouble());
+        double n = ::rtl::math::approxFloor(GetDouble());
+        double x = ::rtl::math::approxFloor(GetDouble());
 
         if( (x < 0.0) || (n < x) || (M < x) || (N < n) || (N < M) || (x < n - N + M) )
         {
@@ -1311,7 +1311,7 @@ void ScInterpreter::ScTInv()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    double fDF  = SolarMath::ApproxFloor(GetDouble());
+    double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fP = GetDouble();
     if (fDF < 1.0 || fDF >= 1.0E5 || fP <= 0.0 || fP > 1.0 )
     {
@@ -1343,8 +1343,8 @@ void ScInterpreter::ScFInv()
 {
     if ( !MustHaveParamCount( GetByte(), 3 ) )
         return;
-    double fF2 = SolarMath::ApproxFloor(GetDouble());
-    double fF1 = SolarMath::ApproxFloor(GetDouble());
+    double fF2 = ::rtl::math::approxFloor(GetDouble());
+    double fF1 = ::rtl::math::approxFloor(GetDouble());
     double fP  = GetDouble();
     if (fP <= 0.0 || fF1 < 1.0 || fF2 < 1.0 || fF1 >= 1.0E10 || fF2 >= 1.0E10 || fP > 1.0)
     {
@@ -1376,7 +1376,7 @@ void ScInterpreter::ScChiInv()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    double fDF  = SolarMath::ApproxFloor(GetDouble());
+    double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fP = GetDouble();
     if (fDF < 1.0 || fDF >= 1.0E5 || fP <= 0.0 || fP > 1.0 )
     {
@@ -1398,7 +1398,7 @@ void ScInterpreter::ScConfidence()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double n     = SolarMath::ApproxFloor(GetDouble());
+        double n     = ::rtl::math::approxFloor(GetDouble());
         double sigma = GetDouble();
         double alpha = GetDouble();
         if (sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1.0)
@@ -1522,8 +1522,8 @@ void ScInterpreter::ScTTest()
 {
     if ( !MustHaveParamCount( GetByte(), 4 ) )
         return;
-    double fTyp = SolarMath::ApproxFloor(GetDouble());
-    double fAnz = SolarMath::ApproxFloor(GetDouble());
+    double fTyp = ::rtl::math::approxFloor(GetDouble());
+    double fAnz = ::rtl::math::approxFloor(GetDouble());
     if (fAnz != 1.0 && fAnz != 2.0)
     {
         SetIllegalArgument();
@@ -1678,8 +1678,8 @@ void ScInterpreter::ScTTest()
         }
         fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
-// s.u. fF = SolarMath::ApproxFloor(1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)/(fCount2-1.0)));
-//      fF = SolarMath::ApproxFloor((fS1+fS2)*(fS1+fS2)/(fS1*fS1/(fCount1-1.0) + fS2*fS2/(fCount2-1.0)));
+// s.u. fF = ::rtl::math::approxFloor(1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)/(fCount2-1.0)));
+//      fF = ::rtl::math::approxFloor((fS1+fS2)*(fS1+fS2)/(fS1*fS1/(fCount1-1.0) + fS2*fS2/(fCount2-1.0)));
 
         //  GetTDist wird mit GetBetaDist berechnet und kommt auch mit nicht ganzzahligen
         //  Freiheitsgraden klar. Dann stimmt das Ergebnis auch mit Excel ueberein (#52406#):
@@ -2469,8 +2469,8 @@ void ScInterpreter::ScPercentile()
             PushDouble(pSArray[0]);
         else
         {
-            ULONG nIndex = (ULONG)SolarMath::ApproxFloor(alpha*(nSize-1));
-            double fDiff = alpha*(nSize-1) - SolarMath::ApproxFloor(alpha*(nSize-1));
+            ULONG nIndex = (ULONG)::rtl::math::approxFloor(alpha*(nSize-1));
+            double fDiff = alpha*(nSize-1) - ::rtl::math::approxFloor(alpha*(nSize-1));
             DBG_ASSERT(nIndex >= 0 && nIndex < nSize, "ScPercentile: falscher Index (1)");
             if (fDiff == 0.0)
                 PushDouble(pSArray[nIndex]);
@@ -2496,7 +2496,7 @@ void ScInterpreter::ScQuartile()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
-    double fFlag = SolarMath::ApproxFloor(GetDouble());
+    double fFlag = ::rtl::math::approxFloor(GetDouble());
     if (fFlag < 0.0 || fFlag > 4.0)
     {
         SetIllegalArgument();
@@ -2522,8 +2522,8 @@ void ScInterpreter::ScQuartile()
                 PushDouble(pSArray[0]);
             else if (fFlag == 1.0)
             {
-                ULONG nIndex = (ULONG)SolarMath::ApproxFloor(0.25*(nSize-1));
-                double fDiff = 0.25*(nSize-1) - SolarMath::ApproxFloor(0.25*(nSize-1));
+                ULONG nIndex = (ULONG)::rtl::math::approxFloor(0.25*(nSize-1));
+                double fDiff = 0.25*(nSize-1) - ::rtl::math::approxFloor(0.25*(nSize-1));
                 DBG_ASSERT(nIndex >= 0 && nIndex < nSize, "ScQuartile: falscher Index (1)");
                 if (fDiff == 0.0)
                     PushDouble(pSArray[nIndex]);
@@ -2543,8 +2543,8 @@ void ScInterpreter::ScQuartile()
             }
             else if (fFlag == 3.0)
             {
-                ULONG nIndex = (ULONG)SolarMath::ApproxFloor(0.75*(nSize-1));
-                double fDiff = 0.75*(nSize-1) - SolarMath::ApproxFloor(0.75*(nSize-1));
+                ULONG nIndex = (ULONG)::rtl::math::approxFloor(0.75*(nSize-1));
+                double fDiff = 0.75*(nSize-1) - ::rtl::math::approxFloor(0.75*(nSize-1));
                 DBG_ASSERT(nIndex >= 0 && nIndex < nSize, "ScQuartile: falscher Index (3)");
                 if (fDiff == 0.0)
                     PushDouble(pSArray[nIndex]);
@@ -2631,7 +2631,7 @@ void ScInterpreter::ScLarge()
         return;
     double* pSortArray = NULL;
     ULONG nSize = 0;
-    ULONG k = (ULONG) SolarMath::ApproxFloor(GetDouble());
+    ULONG k = (ULONG) ::rtl::math::approxFloor(GetDouble());
     if (k <= 0)
     {
         SetIllegalArgument();
@@ -2681,7 +2681,7 @@ void ScInterpreter::ScSmall()
         return;
     double* pSortArray = NULL;
     ULONG nSize = 0;
-    ULONG k = (ULONG) SolarMath::ApproxFloor(GetDouble());
+    ULONG k = (ULONG) ::rtl::math::approxFloor(GetDouble());
     if (k <= 0)
     {
         SetIllegalArgument();
@@ -2734,7 +2734,7 @@ void ScInterpreter::ScPercentrank()
     double fPrec;
     if (nParamCount == 3)
     {
-        fPrec = SolarMath::ApproxFloor(GetDouble());
+        fPrec = ::rtl::math::approxFloor(GetDouble());
         if (fPrec < 1.0)
         {
             SetIllegalArgument();
@@ -2833,7 +2833,7 @@ void ScInterpreter::ScTrimMean()
 #else
         double* pSArray = pSortArray;
 #endif
-        ULONG nIndex = (ULONG) SolarMath::ApproxFloor(alpha*(double)nSize);
+        ULONG nIndex = (ULONG) ::rtl::math::approxFloor(alpha*(double)nSize);
         if (nIndex % 2 != 0)
             nIndex--;
         nIndex /= 2;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,10 @@ XclDefaultPalette::XclDefaultPalette( XclBiff eBiff ) :
     mnIndexOffset( 0 )
 {
     if( eBiff != xlBiffUnknown )
-        SetBiff( eBiff );
+        SetDefaultColors( eBiff );
 }
 
-void XclDefaultPalette::SetBiff( XclBiff eBiff )
+void XclDefaultPalette::SetDefaultColors( XclBiff eBiff )
 {
     switch( eBiff )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:33:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

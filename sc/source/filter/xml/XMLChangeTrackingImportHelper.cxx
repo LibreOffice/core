@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2002-04-15 11:04:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,6 +899,9 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         }
         if (aProtect.getLength())
             pTrack->SetProtection(aProtect);
+
+        if ( pTrack->GetLast() )
+            pTrack->SetLastSavedActionNumber(pTrack->GetLast()->GetActionNumber());
 
         pDoc->SetChangeTrack(pTrack);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:49:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,7 @@
 
 //------------------------------------------------------------------------
 
+#include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdetc.hxx>
 
@@ -328,7 +329,9 @@ SdrOutliner* FuText::MakeOutliner()
     //  Die EditEngine benutzt beim RTF Export (Clipboard / Drag&Drop)
     //  den MapMode des RefDevices, um die Fontgroesse zu setzen
 
-    OutputDevice* pRef = pOutl->GetRefDevice();         // das sollte der Drucker sein
+    //  #i10426# The ref device isn't set to the EditEngine before BegTextEdit now,
+    //  so the device must be taken from the model here.
+    OutputDevice* pRef = pDrDoc->GetRefDevice();
     if (pRef && pRef != pWindow)
         pRef->SetMapMode( MapMode(MAP_100TH_MM) );
 

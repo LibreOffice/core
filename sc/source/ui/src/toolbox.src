@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:37:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2002-11-27 16:37:24 $ $Revision: 1.47 $
+ // $Author: hr $ $Date: 2003-03-26 18:06:34 $ $Revision: 1.48 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -180,7 +180,7 @@ String SCSTR_QHELP_INPUTWND
     Text[ chinese_traditional ] = "Ëº∏ÂÖ•Ê¨Ñ";
     Text[ arabic ] = "”ÿ— «·≈œŒ«·";
     Text[ greek ] = "√Ò·ÏÏﬁ ÂÈÛ·„˘„ﬁÚ";
-    Text[ korean ] = "ÏûÖÎ†•Ìñâ";
+    Text[ korean ] = "ÏûÖÎ†•Ï§Ñ";
     Text[ turkish ] = "Giri˛ sat˝r˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "LÌnia d'entrada";
@@ -200,16 +200,16 @@ String SCSTR_QHELP_BTNCALC
     Text [ french ] = "AutoPilote de fonctions" ;
     Text [ swedish ] = "Funktionsautopilot" ;
     Text [ dutch ] = "Functie-AutoPiloot" ;
-    Text [ spanish ] = "AutoPiloto de funciones" ;
+    Text [ spanish ] = "Piloto autom·tico de funciones" ;
     Text [ english_us ] = "AutoPilot: Functions" ;
-    Text[ chinese_simplified ] = "ÂáΩÊï∞Ëá™Âä®Âä©ÁêÜ";
+    Text[ chinese_simplified ] = "Ëá™Âä®Êñá‰ª∂Âä©ÁêÜÔºöÂáΩÊï∞";
     Text[ russian ] = "Ã‡ÒÚÂ: ‘ÛÌÍˆËË";
     Text[ polish ] = "AutoPilot funkcji";
     Text[ japanese ] = "Èñ¢Êï∞„Ç™„Éº„Éà„Éë„Ç§„É≠„ÉÉ„Éà";
     Text[ chinese_traditional ] = "ÂáΩÊï∏Ëá™ÂãïÂä©ÁêÜ";
     Text[ arabic ] = "«·„—‘œ «·¬·Ì ··œ«·« ";
     Text[ greek ] = "Function Autopilot";
-    Text[ korean ] = "ÏûêÎèô ÌååÏùºÎüø Í∏∞Îä•";
+    Text[ korean ] = "ÏûêÎèô ÌååÏùºÎüø: Í∏∞Îä•";
     Text[ turkish ] = "Fonksyon OtoPilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot: funcions";
@@ -227,7 +227,7 @@ String SCSTR_QHELP_BTNOK
     Text [ portuguese ] = "Aceitar" ;
     Text [ finnish ] = "Hyv‰ksy" ;
     Text [ danish ] = "Accepter" ;
-    Text [ french ] = "Appliquer" ;
+    Text [ french ] = "Accepter" ;
     Text [ swedish ] = "÷verta" ;
     Text [ dutch ] = "Accepteren" ;
     Text [ spanish ] = "Aplicar" ;
@@ -326,380 +326,12 @@ String SCSTR_QHELP_BTNEQUAL
     Text[ chinese_traditional ] = "ÂáΩÊï∏";
     Text[ arabic ] = "«·œ«·…";
     Text[ greek ] = "”ıÌ‹ÒÙÁÛÁ";
-    Text[ korean ] = "Ìï®Ïàò";
+    Text[ korean ] = "ÏàòÏãù Î™®Ïùå";
     Text[ turkish ] = "›˛lev";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "FunciÛ";
     Text[ thai ] = "‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
 };
-
- //-----------------------------------------------------------------------------
- //                         Applikations-Toolbar
- //-----------------------------------------------------------------------------
-
-String RID_OBJECTBAR_APP
-{
-    Text = "Funktionsleiste" ;
-    Text [ english ] = "Function Bar" ;
-    Text [ norwegian ] = "Function Bar" ;
-    Text [ italian ] = "Barra delle funzioni" ;
-    Text [ portuguese_brazilian ] = "Barra de Fun??s" ;
-    Text [ portuguese ] = "Barra de funÁıes" ;
-    Text [ finnish ] = "Toimintorivi" ;
-    Text [ danish ] = "Funktionslinje" ;
-    Text [ french ] = "Barre de fonctions" ;
-    Text [ swedish ] = "Funktionslist" ;
-    Text [ dutch ] = "Werkbalk" ;
-    Text [ spanish ] = "Barra de funciones" ;
-    Text [ english_us ] = "Function Bar" ;
-    Text[ chinese_simplified ] = "ÂäüËÉΩÊ†è";
-    Text[ russian ] = "œ‡ÌÂÎ¸ ÙÛÌÍˆËÈ";
-    Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "„Éï„Ç°„É≥„ÇØ„Ç∑„Éß„É≥„Éê„Éº";
-    Text[ chinese_traditional ] = "Â∑•ÂÖ∑Âàó";
-    Text[ arabic ] = "‘—Ìÿ «·„Â«„";
-    Text[ greek ] = "√Ò·ÏÏﬁ ÎÂÈÙÔıÒ„È˛Ì";
-    Text[ korean ] = "Ìï®Ïàò Î™®Ïùå";
-    Text[ turkish ] = "›˛lev Áubuu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de funcions";
-    Text[ thai ] = "‡πÅ‡∏ñ‡∏ö‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
-};
-
-ToolBox RID_OBJECTBAR_APP
-{
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Customize = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    LineSpacing = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    MenuStrings = TRUE ;
-    Scroll = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_NEWDOCDIRECT ;
-            HelpID = SID_NEWDOCDIRECT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_OPENDOC ;
-            HelpID = SID_OPENDOC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SAVEDOC ;
-            HelpID = SID_SAVEDOC ;
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_PRINTDOCDIRECT
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_CUT ;
-            HelpID = SID_CUT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_COPY ;
-            HelpID = SID_COPY ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PASTE ;
-            HelpID = SID_PASTE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_UNDO ;
-            HelpID = SID_UNDO ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_REDO ;
-            HelpID = SID_REDO ;
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_INSERT_FRAME
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_INSERT_GRAPHIC
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_IMPORT_DATA ;
-            HelpId = SID_IMPORT_DATA ;
-        };
-        ToolBoxItem
-        {
-             // mit Aufziehen des Zielbereichs
-            ITEM_TOOLBAR_DRAW_CHART
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_INSERT_DRAW
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_GALLERY ;
-            HelpID = SID_GALLERY ;
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_CHOOSE_CONTROLS
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_STYLE_DESIGNER ;
-            HelpId = SID_STYLE_DESIGNER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_AUTOFORMAT ;
-            HelpID = SID_AUTOFORMAT ;
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_SORT_ASCENDING
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_SORT_DESCENDING
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_AUTO_FILTER
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_OUTLINE_MAKE
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_OUTLINE_REMOVE
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_NAVIGATOR ;
-            HelpId = SID_SC_NAVIGATOR ;
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTENDEDHELP ;
-            HelpID = SID_EXTENDEDHELP ;
-        };
-    };
-};
-
- //-----------------------------------------------------------------------------
- // PlugIn-Toolbar
- // (mit Aenderungen aus RID_OBJECTBAR_APP kopiert)
- // nicht Closeable / Customize
- //-----------------------------------------------------------------------------
-
-String RID_PLUGINTOOLBOX
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Funktionsleiste f¸r PlugIns : Funktionsleiste f≥r PlugIns */
-    Text = "Funktionsleiste f¸r PlugIns" ;
-    Text [ english ] = "PlugIn Function Bar" ;
-    Text [ dutch ] = "Werkbalk voor plugins" ;
-    Text [ english_us ] = "Function Bar for Plug-ins" ;
-    Text [ italian ] = "Barra delle funzioni per PlugIn" ;
-    Text [ spanish ] = "Barra de funciones para Plug-ins" ;
-    Text [ french ] = "Barre de fonctions Plug-ins" ;
-    Text [ swedish ] = "Funktionslist fˆr plug-ins" ;
-    Text [ danish ] = "Funktionslinje for PlugIns" ;
-    Text [ portuguese ] = "Barra para Plugins" ;
-    Text [ portuguese_brazilian ] = "Funktionsleiste f? PlugIns" ;
-    Text[ chinese_simplified ] = "Áî®‰∫é Plug-ins ÁöÑÂäüËÉΩÊ†è";
-    Text[ russian ] = "œ‡ÌÂÎ¸ ÙÛÌÍˆËÈ ÔÓ‰ÍÎ˛˜‡ÂÏ˚ı ÏÓ‰ÛÎÂÈ";
-    Text[ polish ] = "Pasek funkcji wtyczek plug-in";
-    Text[ japanese ] = "„Éó„É©„Ç∞„Ç§„É≥„ÅÆ„Éï„Ç°„É≥„ÇØ„Ç∑„Éß„É≥„Éê„Éº";
-    Text[ chinese_traditional ] = "ÈÅ©Áî®Êñº Plug-ins ÁöÑÂ∑•ÂÖ∑Âàó";
-    Text[ arabic ] = "‘—Ìÿ ÊŸÌ›… Plug-Ins";
-    Text[ greek ] = "√Ò·ÏÏﬁ ÎÂÈÙÔıÒ„È˛Ì „È· ÛıÌ‰Â¸ÏÂÌÂÚ ıÔÏÔÌ‹‰ÂÚ";
-    Text[ korean ] = "ÌîåÎü¨Í∑∏Ïù∏Ïùò Í∏∞Îä• Î™®Ïùå";
-    Text[ turkish ] = "PlugIn i˛lev Áubuu";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Lis‰osien toimintorivi";
-    Text[ catalan ] = "Barra de funcions per als connectors";
-    Text[ thai ] = "‡πÅ‡∏ñ‡∏ö‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö‡∏õ‡∏•‡∏±‡πä‡∏Å‡∏≠‡∏¥‡∏ô";
-};
-
-ToolBox RID_PLUGINTOOLBOX
-{
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-     // Closeable = TRUE;                   // hier nicht !
-    Zoomable = TRUE ;
-     // Customize = TRUE;                   // hier nicht !
-    HideWhenDeactivate = TRUE ;
-    LineSpacing = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    MenuStrings = TRUE ;
-    Scroll = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_SAVEDOC ;
-            HelpID = SID_SAVEDOC ;
-        };
-        ToolBoxItem
-        {
-            ITEM_FILE_SAVEASDOC
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_MAIL_SENDDOC ;
-            HelpID = SID_MAIL_SENDDOC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DOCINFO ;
-            HelpID = SID_DOCINFO ;
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_PRINTDOCDIRECT
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_CUT ;
-            HelpID = SID_CUT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_COPY ;
-            HelpID = SID_COPY ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PASTE ;
-            HelpID = SID_PASTE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_UNDO ;
-            HelpID = SID_UNDO ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_REDO ;
-            HelpID = SID_REDO ;
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_INSERT_FRAME
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_INSERT_GRAPHIC
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_SPELLING
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_INSERT_DRAW
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_GALLERY ;
-            HelpID = SID_GALLERY ;
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_CHOOSE_CONTROLS
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_STYLE_DESIGNER ;
-            HelpId = SID_STYLE_DESIGNER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_AUTOFORMAT ;
-            HelpID = SID_AUTOFORMAT ;
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_SORT_ASCENDING
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_SORT_DESCENDING
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_AUTO_FILTER
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_OUTLINE_MAKE
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_OUTLINE_REMOVE
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_NAVIGATOR ;
-            HelpID = SID_NAVIGATOR ;
-        };
-         //--------------------------------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //--------------------------------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_SCOPTIONS ;
-            HelpId = SID_SCOPTIONS ;
-        };
-    };
-};
-
 
 String RID_OBJECTBAR_FORMAT
 {
@@ -993,6 +625,502 @@ ToolBox RID_OBJECTBAR_FORMAT
             Hide=TRUE;
         };
     };
+    ItemList[arabic] =
+    {
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_TEMPLATE_APPLY
+            Hide=TRUE;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONT ;
+            HelpID = SID_ATTR_CHAR_FONT ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
+            HelpID = SID_ATTR_CHAR_FONTHEIGHT ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT ;
+            HelpID = SID_ATTR_CHAR_WEIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE ;
+            HelpID = SID_ATTR_CHAR_POSTURE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE ;
+            HelpID = SID_ATTR_CHAR_UNDERLINE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ULINE_VAL_DOUBLE;
+            HelpId = SID_ULINE_VAL_DOUBLE;
+            Hide=TRUE;
+        };
+
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_CHAR_COLOR
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNRIGHT ;
+            HelpId = SID_ALIGNRIGHT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERHOR ;
+            HelpId = SID_ALIGNCENTERHOR ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNLEFT ;
+            HelpId = SID_ALIGNLEFT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBLOCK ;
+            HelpId = SID_ALIGNBLOCK ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            Hide=TRUE;
+        };
+        //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_CURRENCY ;
+            HelpId = SID_NUMBER_CURRENCY ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_PERCENT ;
+            HelpId = SID_NUMBER_PERCENT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_DATE;
+            HelpId = SID_NUMBER_DATE ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_SCIENTIFIC ;
+            HelpId = SID_NUMBER_SCIENTIFIC;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_STANDARD ;
+            HelpId = SID_NUMBER_STANDARD ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_INCDEC ;
+            HelpId = SID_NUMBER_INCDEC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_DECDEC ;
+            HelpId = SID_NUMBER_DECDEC ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_DEC_INDENT ;
+            HelpId = SID_DEC_INDENT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_INC_INDENT ;
+            HelpId = SID_INC_INDENT ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+         // Border: nur noch einfach
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_BORDER
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_LINESTYLE;
+            HelpId = SID_FRAME_LINESTYLE;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_LINECOLOR;
+            HelpId = SID_FRAME_LINECOLOR;
+            Hide=TRUE;
+        };
+         // Hintergrund: nur noch einfach
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_BACKGROUND_COLOR
+        };
+
+        //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNTOP ;
+            HelpId = SID_ALIGNTOP ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERVER ;
+            HelpId = SID_ALIGNCENTERVER ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBOTTOM ;
+            HelpId = SID_ALIGNBOTTOM ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = FID_INS_ROW;
+            HelpId = FID_INS_ROW;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FID_INS_COLUMN;
+            HelpId = FID_INS_COLUMN;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DEL_ROWS;
+            HelpId = SID_DEL_ROWS;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DEL_COLS;
+            HelpId = SID_DEL_COLS;
+            Hide=TRUE;
+        };
+    };
+    ItemList[hebrew] =
+    {
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_TEMPLATE_APPLY
+            Hide=TRUE;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONT ;
+            HelpID = SID_ATTR_CHAR_FONT ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
+            HelpID = SID_ATTR_CHAR_FONTHEIGHT ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT ;
+            HelpID = SID_ATTR_CHAR_WEIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE ;
+            HelpID = SID_ATTR_CHAR_POSTURE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE ;
+            HelpID = SID_ATTR_CHAR_UNDERLINE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ULINE_VAL_DOUBLE;
+            HelpId = SID_ULINE_VAL_DOUBLE;
+            Hide=TRUE;
+        };
+
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_CHAR_COLOR
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNRIGHT ;
+            HelpId = SID_ALIGNRIGHT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERHOR ;
+            HelpId = SID_ALIGNCENTERHOR ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNLEFT ;
+            HelpId = SID_ALIGNLEFT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBLOCK ;
+            HelpId = SID_ALIGNBLOCK ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            Hide=TRUE;
+        };
+        //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_CURRENCY ;
+            HelpId = SID_NUMBER_CURRENCY ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_PERCENT ;
+            HelpId = SID_NUMBER_PERCENT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_DATE;
+            HelpId = SID_NUMBER_DATE ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_SCIENTIFIC ;
+            HelpId = SID_NUMBER_SCIENTIFIC;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_STANDARD ;
+            HelpId = SID_NUMBER_STANDARD ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_INCDEC ;
+            HelpId = SID_NUMBER_INCDEC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NUMBER_DECDEC ;
+            HelpId = SID_NUMBER_DECDEC ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_DEC_INDENT ;
+            HelpId = SID_DEC_INDENT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_INC_INDENT ;
+            HelpId = SID_INC_INDENT ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+         // Border: nur noch einfach
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_BORDER
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_LINESTYLE;
+            HelpId = SID_FRAME_LINESTYLE;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_LINECOLOR;
+            HelpId = SID_FRAME_LINECOLOR;
+            Hide=TRUE;
+        };
+         // Hintergrund: nur noch einfach
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_BACKGROUND_COLOR
+        };
+
+        //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNTOP ;
+            HelpId = SID_ALIGNTOP ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERVER ;
+            HelpId = SID_ALIGNCENTERVER ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBOTTOM ;
+            HelpId = SID_ALIGNBOTTOM ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = FID_INS_ROW;
+            HelpId = FID_INS_ROW;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FID_INS_COLUMN;
+            HelpId = FID_INS_COLUMN;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DEL_ROWS;
+            HelpId = SID_DEL_ROWS;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DEL_COLS;
+            HelpId = SID_DEL_COLS;
+            Hide=TRUE;
+        };
+    };
     Scroll = TRUE ;
 };
 
@@ -1018,7 +1146,7 @@ String RID_OBJECTBAR_PREVIEW
     Text[ chinese_traditional ] = "È†ÅÈù¢Ê™¢Ë¶ñÁâ©‰ª∂Âàó";
     Text[ arabic ] = "‘—Ìÿ ﬂ«∆‰«  „⁄«Ì‰… «·’›Õ…";
     Text[ greek ] = "√Ò·ÏÏﬁ ·ÌÙÈÍÂÈÏ›Ì˘Ì ÒÔÂÈÛÍ¸ÁÛÁÚ ÛÂÎﬂ‰·Ú";
-    Text[ korean ] = "ÌéòÏù¥ÏßÄ ÎØ∏Î¶¨Î≥¥Í∏∞ Í∞úÏ≤¥ Î™®Ïùå";
+    Text[ korean ] = "ÌéòÏù¥ÏßÄ Î≥¥Í∏∞ Í∞úÏ≤¥ Î™®Ïùå";
     Text[ turkish ] = "Sayfa ˆnizleme nesne Áubuu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de la visualitzaciÛ de p‡gina";
@@ -1733,9 +1861,10 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_EURO_CONVERTER;\
         SID_ATTR_GRAF_CROP;\
         SID_ENABLE_HYPHENATION;         /* 26087    */  \
+        SID_ATTR_ZOOM; \
     };                                                  \
     IdCount = {                                         \
-        167;                                            \
+        168;                                            \
     };
 
 
@@ -1877,6 +2006,116 @@ ImageList RID_OFFICEIMAGELIST_LCH
     MaskColor = SC_HC_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
+String RID_OBJECTBAR_APP
+{
+    TEXT = "Funktionsleiste" ;
+    TEXT [ english ] = "Function bar" ;
+    Text [ dutch ] = "Werkbalk" ;
+    Text [ english_us ] = "Function Bar" ;
+    Text [ italian ] = "Barra delle funzioni" ;
+    Text [ spanish ] = "Barra de funciones" ;
+    Text [ french ] = "Barre de fonctions" ;
+    Text [ swedish ] = "Funktionslist" ;
+    Text [ danish ] = "Funktionslinje" ;
+    Text [ portuguese_brazilian ] = "Funktionsleiste" ;
+    Text [ portuguese ] = "Barra de funÁıes" ;
+    Text[ chinese_simplified ] = "ÂäüËÉΩÊ†è";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ÙÛÌÍˆËÈ";
+    Text[ polish ] = "Pasek funkcji";
+    Text[ japanese ] = "„Éï„Ç°„É≥„ÇØ„Ç∑„Éß„É≥„Éê„Éº";
+    Text[ chinese_traditional ] = "Â∑•ÂÖ∑Âàó";
+    Text[ arabic ] = "‘—Ìÿ «·„Â«„";
+    Text[ dutch ] = "Werkbalk";
+    Text[ chinese_simplified ] = "ÂäüËÉΩÊ†è";
+    Text[ greek ] = "√Ò·ÏÏﬁ ÎÂÈÙÔıÒ„È˛Ì";
+    Text[ korean ] = "Ìï®Ïàò Î™®Ïùå";
+    Text[ turkish ] = "›˛lev Áubuu";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de funcions";
+    Text[ finnish ] = "Toimintorivi";
+    Text[ thai ] = "‡πÅ‡∏ñ‡∏ö‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
+};
+
+ToolBox RID_OBJECTBAR_APP
+{
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_SAVEASDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_EDITDOC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_MAIL_SENDDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DIRECTEXPORTDOCASPDF ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_COPY ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NAVIGATOR ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_ZOOM ;
+        };
+    };
+    Scroll = TRUE ;
+};
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-27 14:21:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ ScAccessibleCell::ScAccessibleCell(
     meSplitPos(eSplitPos),
     mpAccDoc(pAccDoc)
 {
+    if (pViewShell)
+        pViewShell->AddAccessibilityObject(*this);
 }
 
 ScAccessibleCell::~ScAccessibleCell()
@@ -173,6 +175,13 @@ void SAL_CALL ScAccessibleCell::disposing()
     ScUnoGuard aGuard;
     // #100593# dispose in AccessibleStaticTextBase
     Dispose();
+
+    if (mpViewShell)
+    {
+        mpViewShell->RemoveAccessibilityObject(*this);
+        mpViewShell = NULL;
+    }
+    mpAccDoc = NULL;
 
     ScAccessibleCellBase::disposing();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2002-11-28 16:14:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,6 +582,8 @@ void ScRangeData::MakeValidName( String& rName )        // static
 
 BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
 {
+    /*  If changed, ScfTools::ConvertToScDefinedName (sc/source/filter/ftools/ftools.cxx)
+        needs to be changed too. */
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rName.Len();
     if ( !nLen || !ScCompiler::IsCharWordChar( rName.GetChar(nPos++) ) )

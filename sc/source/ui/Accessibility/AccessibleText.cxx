@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-11 09:56:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@ public:
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+
+    void                SetInvalid();
 };
 
 ScViewForwarder::ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell)
@@ -207,6 +209,10 @@ Point ScViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
     return Point();
 }
 
+void ScViewForwarder::SetInvalid()
+{
+    mpViewShell = NULL;
+}
 
 // ============================================================================
 
@@ -221,6 +227,8 @@ public:
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+
+    void                SetInvalid();
 };
 
 ScEditObjectViewForwarder::ScEditObjectViewForwarder(Window* pWindow)
@@ -272,6 +280,10 @@ Point ScEditObjectViewForwarder::PixelToLogic( const Point& rPoint, const MapMod
     return Point();
 }
 
+void ScEditObjectViewForwarder::SetInvalid()
+{
+    mpWindow = NULL;
+}
 
 // ============================================================================
 
@@ -288,6 +300,8 @@ public:
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+
+    void                SetInvalid();
 
     Rectangle GetVisRect() const;
     void FillTableInfo() const;
@@ -356,6 +370,11 @@ Point ScPreviewViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& 
     else
         DBG_ERROR("this ViewForwarder is not valid");
     return Point();
+}
+
+void ScPreviewViewForwarder::SetInvalid()
+{
+    mpViewShell = NULL;
 }
 
 Rectangle ScPreviewViewForwarder::GetVisRect() const
@@ -600,6 +619,8 @@ public:
     virtual sal_Bool    Paste();
 
     void                GrabFocus();
+
+    void                SetInvalid();
 };
 
 ScEditViewForwarder::ScEditViewForwarder(EditView* pEditView, Window* pWin)
@@ -724,6 +745,11 @@ void ScEditViewForwarder::GrabFocus()
 {
 }
 
+void ScEditViewForwarder::SetInvalid()
+{
+    mpWindow = NULL;
+    mpEditView = NULL;
+}
 
 // ============================================================================
 
@@ -758,6 +784,10 @@ void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
+            if (mpViewForwarder)
+                mpViewForwarder->SetInvalid();
+            if (mpEditViewForwarder)
+                mpEditViewForwarder->SetInvalid();
         }
     }
     ScAccessibleCellBaseTextData::Notify(rBC, rHint);
@@ -942,6 +972,10 @@ void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint&
             mpEditView = NULL;
             mpEditEngine = NULL;
             DELETEZ(mpForwarder);
+            if (mpViewForwarder)
+                mpViewForwarder->SetInvalid();
+            if (mpEditViewForwarder)
+                mpEditViewForwarder->SetInvalid();
         }
     }
     ScAccessibleTextData::Notify(rBC, rHint);
@@ -1204,6 +1238,8 @@ void ScAccessiblePreviewCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
+            if (mpViewForwarder)
+                mpViewForwarder->SetInvalid();
         }
     }
     ScAccessibleCellBaseTextData::Notify(rBC, rHint);
@@ -1295,6 +1331,8 @@ void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const S
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
+            if (mpViewForwarder)
+                mpViewForwarder->SetInvalid();
         }
     }
     ScAccessibleCellBaseTextData::Notify(rBC, rHint);
@@ -1439,6 +1477,8 @@ void ScAccessibleHeaderTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHi
         {
             mpViewShell = NULL;// invalid now
             mpDocSh = NULL;
+            if (mpViewForwarder)
+                mpViewForwarder->SetInvalid();
         }
     }
 }
@@ -1554,6 +1594,8 @@ void ScAccessibleNoteTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
         {
             mpViewShell = NULL;// invalid now
             mpDocSh = NULL;
+            if (mpViewForwarder)
+                mpViewForwarder->SetInvalid();
         }
     }
 }
@@ -1638,6 +1680,8 @@ public:
     virtual Rectangle           GetVisArea() const;
     virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+
+    void                        SetInvalid();
 };
 
 ScCsvViewForwarder::ScCsvViewForwarder( Window* pWindow, const Rectangle& rBoundBox ) :
@@ -1668,6 +1712,10 @@ Point ScCsvViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMap
     return mpWindow->PixelToLogic( rPoint, rMapMode );
 }
 
+void ScCsvViewForwarder::SetInvalid()
+{
+    mpWindow = NULL;
+}
 
 // ----------------------------------------------------------------------------
 
@@ -1695,8 +1743,8 @@ void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         {
             mpWindow = NULL;
             mpEditEngine = NULL;
-            mpTextForwarder.reset( NULL );
-            mpViewForwarder.reset( NULL );
+            if (mpViewForwarder.get())
+                mpViewForwarder->SetInvalid();
         }
     }
     ScAccessibleTextData::Notify( rBC, rHint );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-04 11:22:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #endif
 #include <svtools/zforlist.hxx>
 #include <vcl/keycodes.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
 
@@ -321,7 +321,7 @@ void ScTable::FillAnalyse( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow
                     {
                         nVal2 = ((ScValueCell*)pCell)->GetValue();
                         double nDiff = nVal2 - nVal1;
-                        if ( !SolarMath::ApproxEqual( nDiff, rInc ) )
+                        if ( !::rtl::math::approxEqual( nDiff, rInc ) )
                             bVal = FALSE;
                         nVal1 = nVal2;
                     }
@@ -383,7 +383,7 @@ void ScTable::FillAnalyse( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow
                             if ( nFlag1 == nFlag2 )
                             {
                                 double nDiff = (double)nVal2 - (double)nVal1;
-                                if ( !SolarMath::ApproxEqual( nDiff, rInc ) )
+                                if ( !::rtl::math::approxEqual( nDiff, rInc ) )
                                     bVal = FALSE;
                                 nVal1 = nVal2;
                             }

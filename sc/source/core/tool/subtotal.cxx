@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtotal.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-23 15:15:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,6 @@
 #include "subtotal.hxx"
 #include "interpre.hxx"
 
-#include "scdll.hxx"        // ScLibSignalFunc
-
 // STATIC DATA -----------------------------------------------------------
 
 jmp_buf SubTotal::aGlobalJumpBuf;
@@ -126,118 +124,54 @@ void SubTotal::UpdateNoVal()
 
 void SubTotal::Update( double nVal )
 {
-    SOMA_FPCONTROL();       // FP-Exceptions ein-/ausschalten
-#if SOMA_FPSIGNAL_JUMP
-    ScSigCatchFunc pOldSigFunc = (ScInterpreter::pSignalFunc)( SC_SIGFPE, ScInterpreter::MySigFunc );
-    jmp_buf* pSaveBuf = ScInterpreter::pJumpBuf;
-    ScInterpreter::pJumpBuf = &aGlobalJumpBuf;
-    if (setjmp(aGlobalJumpBuf))
-    {
-        if (nProgress == 0)
-        {
-            bSumOk = FALSE;
-            bProductOk = FALSE;
-            bSumSqrOk = FALSE;
-        }
-        else if (nProgress == 1)
-        {
-            bProductOk = FALSE;
-            bSumSqrOk = FALSE;
-        }
-        else
-        {
-            bSumSqrOk = FALSE;
-            DBG_ASSERT(nProgress == 2,"subtotal.cxx: Update(1)");
-        }
-    }
-    else
-#endif  // SOMA_FPSIGNAL_JUMP
-    {
-        nCount++;
-        nCount2++;
-        if (nVal > nMax) nMax = nVal;
-        if (nVal < nMin) nMin = nVal;
-        nProgress = 0;
-        if (bSumOk) nSum += nVal;
-        nProgress = 1;
-        if (bProductOk) nProduct *= nVal;
-        nProgress = 2;
-        if (bSumSqrOk) nSumSqr += nVal*nVal;
-    }
-#if !SOMA_FPSIGNAL_JUMP
-    if (!SOMA_FINITE(nSum))
+    SAL_MATH_FPEXCEPTIONS_OFF();
+    nCount++;
+    nCount2++;
+    if (nVal > nMax) nMax = nVal;
+    if (nVal < nMin) nMin = nVal;
+    nProgress = 0;
+    if (bSumOk) nSum += nVal;
+    nProgress = 1;
+    if (bProductOk) nProduct *= nVal;
+    nProgress = 2;
+    if (bSumSqrOk) nSumSqr += nVal*nVal;
+    if (!::rtl::math::isFinite(nSum))
         bSumOk = FALSE;
-    if (!SOMA_FINITE(nProduct))
+    if (!::rtl::math::isFinite(nProduct))
         bProductOk = FALSE;
-    if (!SOMA_FINITE(nSumSqr))
+    if (!::rtl::math::isFinite(nSumSqr))
         bSumSqrOk = FALSE;
-#else   // SOMA_FPSIGNAL_JUMP
-    ScInterpreter::pJumpBuf = pSaveBuf;
-    (ScInterpreter::pSignalFunc)( SC_SIGFPE, pOldSigFunc );
-#endif
 }
 
 
 void SubTotal::Update( const SubTotal& rVal )
 {
-    SOMA_FPCONTROL();       // FP-Exceptions ein-/ausschalten
-#if SOMA_FPSIGNAL_JUMP
-    ScSigCatchFunc pOldSigFunc = (ScInterpreter::pSignalFunc)( SC_SIGFPE, ScInterpreter::MySigFunc );
-    jmp_buf* pSaveBuf = ScInterpreter::pJumpBuf;
-    ScInterpreter::pJumpBuf = &aGlobalJumpBuf;
-    if (setjmp(aGlobalJumpBuf))
-    {
-        if (nProgress == 0)
-        {
-            bSumOk = FALSE;
-            bProductOk = FALSE;
-            bSumSqrOk = FALSE;
-        }
-        else if (nProgress == 1)
-        {
-            bProductOk = FALSE;
-            bSumSqrOk = FALSE;
-        }
-        else
-        {
-            DBG_ASSERT(nProgress == 2,"subtotal.cxx: Update(2)");
-            bSumSqrOk = FALSE;
-        }
-    }
+    SAL_MATH_FPEXCEPTIONS_OFF();
+    nCount  += rVal.nCount;
+    nCount2 += rVal.nCount2;
+    if (rVal.nMax > nMax) nMax = rVal.nMax;
+    if (rVal.nMin < nMin) nMin = rVal.nMin;
+    nProgress = 0;
+    if (rVal.bSumOk && bSumOk)
+        nSum += rVal.nSum;
     else
-#endif  // SOMA_FPSIGNAL_JUMP
-    {
-        nCount  += rVal.nCount;
-        nCount2 += rVal.nCount2;
-        if (rVal.nMax > nMax) nMax = rVal.nMax;
-        if (rVal.nMin < nMin) nMin = rVal.nMin;
-        nProgress = 0;
-        if (rVal.bSumOk && bSumOk)
-            nSum += rVal.nSum;
-        else
-            bSumOk = FALSE;
-        nProgress = 1;
-        if (rVal.bProductOk && bProductOk)
-            nProduct *= rVal.nProduct;
-        else
-            bProductOk = FALSE;
-        nProgress = 2;
-        if (rVal.bSumSqrOk && bSumSqrOk)
-            nSumSqr += rVal.nSumSqr;
-        else
-            bSumSqrOk = FALSE;
-    }
-#if !SOMA_FPSIGNAL_JUMP
-    if (!SOMA_FINITE(nSum))
         bSumOk = FALSE;
-    if (!SOMA_FINITE(nProduct))
+    nProgress = 1;
+    if (rVal.bProductOk && bProductOk)
+        nProduct *= rVal.nProduct;
+    else
         bProductOk = FALSE;
-    if (!SOMA_FINITE(nSumSqr))
+    nProgress = 2;
+    if (rVal.bSumSqrOk && bSumSqrOk)
+        nSumSqr += rVal.nSumSqr;
+    else
         bSumSqrOk = FALSE;
-#else // SOMA_FPSIGNAL_JUMP
-    ScInterpreter::pJumpBuf = pSaveBuf;
-    (ScInterpreter::pSignalFunc)( SC_SIGFPE, pOldSigFunc );
-#endif
+    if (!::rtl::math::isFinite(nSum))
+        bSumOk = FALSE;
+    if (!::rtl::math::isFinite(nProduct))
+        bProductOk = FALSE;
+    if (!::rtl::math::isFinite(nSumSqr))
+        bSumSqrOk = FALSE;
 }
 
 
@@ -344,12 +278,9 @@ double SubTotal::Result( USHORT nFunction ) const
 BOOL SubTotal::SafePlus(double& fVal1, double fVal2)
 {
     BOOL bOk = TRUE;
-    SOMA_FPCONTROL();       // FP-Exceptions ein-/ausschalten
-#if SOMA_FPSIGNAL_JUMP
-    ScSigCatchFunc pOldSigFunc = (ScInterpreter::pSignalFunc)( SC_SIGFPE, ScInterpreter::MySigFunc );
-    jmp_buf* pSaveBuf = ScInterpreter::pJumpBuf;
-    ScInterpreter::pJumpBuf = &aGlobalJumpBuf;
-    if (setjmp(aGlobalJumpBuf))
+    SAL_MATH_FPEXCEPTIONS_OFF();
+    fVal1 += fVal2;
+    if (!::rtl::math::isFinite(fVal1))
     {
         bOk = FALSE;
         if (fVal2 > 0.0)
@@ -357,22 +288,6 @@ BOOL SubTotal::SafePlus(double& fVal1, double fVal2)
         else
             fVal1 = -DBL_MAX;
     }
-    else
-#endif  // SOMA_FPSIGNAL_JUMP
-        fVal1 += fVal2;
-#if !SOMA_FPSIGNAL_JUMP
-    if (!SOMA_FINITE(fVal1))
-    {
-        bOk = FALSE;
-        if (fVal2 > 0.0)
-            fVal1 = DBL_MAX;
-        else
-            fVal1 = -DBL_MAX;
-    }
-#else // SOMA_FPSIGNAL_JUMP
-    ScInterpreter::pJumpBuf = pSaveBuf;
-    (ScInterpreter::pSignalFunc)( SC_SIGFPE, pOldSigFunc );
-#endif
     return bOk;
 }
 
@@ -380,29 +295,13 @@ BOOL SubTotal::SafePlus(double& fVal1, double fVal2)
 BOOL SubTotal::SafeMult(double& fVal1, double fVal2)
 {
     BOOL bOk = TRUE;
-    SOMA_FPCONTROL();       // FP-Exceptions ein-/ausschalten
-#if SOMA_FPSIGNAL_JUMP
-    ScSigCatchFunc pOldSigFunc = (ScInterpreter::pSignalFunc)( SC_SIGFPE, ScInterpreter::MySigFunc );
-    jmp_buf* pSaveBuf = ScInterpreter::pJumpBuf;
-    ScInterpreter::pJumpBuf = &aGlobalJumpBuf;
-    if (setjmp(aGlobalJumpBuf))
+    SAL_MATH_FPEXCEPTIONS_OFF();
+    fVal1 *= fVal2;
+    if (!::rtl::math::isFinite(fVal1))
     {
         bOk = FALSE;
         fVal1 = DBL_MAX;
     }
-    else
-#endif  // SOMA_FPSIGNAL_JUMP
-        fVal1 *= fVal2;
-#if !SOMA_FPSIGNAL_JUMP
-    if (!SOMA_FINITE(fVal1))
-    {
-        bOk = FALSE;
-        fVal1 = DBL_MAX;
-    }
-#else // SOMA_FPSIGNAL_JUMP
-    ScInterpreter::pJumpBuf = pSaveBuf;
-    (ScInterpreter::pSignalFunc)( SC_SIGFPE, pOldSigFunc );
-#endif
     return bOk;
 }
 
@@ -410,28 +309,12 @@ BOOL SubTotal::SafeMult(double& fVal1, double fVal2)
 BOOL SubTotal::SafeDiv(double& fVal1, double fVal2)
 {
     BOOL bOk = TRUE;
-    SOMA_FPCONTROL();       // FP-Exceptions ein-/ausschalten
-#if SOMA_FPSIGNAL_JUMP
-    ScSigCatchFunc pOldSigFunc = (ScInterpreter::pSignalFunc)( SC_SIGFPE, ScInterpreter::MySigFunc );
-    jmp_buf* pSaveBuf = ScInterpreter::pJumpBuf;
-    ScInterpreter::pJumpBuf = &aGlobalJumpBuf;
-    if (setjmp(aGlobalJumpBuf))
+    SAL_MATH_FPEXCEPTIONS_OFF();
+    fVal1 /= fVal2;
+    if (!::rtl::math::isFinite(fVal1))
     {
         bOk = FALSE;
         fVal1 = DBL_MAX;
     }
-    else
-#endif  // SOMA_FPSIGNAL_JUMP
-        fVal1 /= fVal2;
-#if !SOMA_FPSIGNAL_JUMP
-    if (!SOMA_FINITE(fVal1))
-    {
-        bOk = FALSE;
-        fVal1 = DBL_MAX;
-    }
-#else   // SOMA_FPSIGNAL_JUMP
-    ScInterpreter::pJumpBuf = pSaveBuf;
-    (ScInterpreter::pSignalFunc)( SC_SIGFPE, pOldSigFunc );
-#endif
     return bOk;
 }

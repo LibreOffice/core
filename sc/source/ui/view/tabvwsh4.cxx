@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-12 19:04:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1504,7 +1504,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::Construct()
+void ScTabViewShell::Construct( BYTE nForceDesignMode )
 {
     SfxApplication* pSfxApp  = SFX_APP();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -1582,7 +1582,7 @@ void ScTabViewShell::Construct()
             //  DrawView darf nicht im TabView - ctor angelegt werden,
             //  wenn die ViewShell noch nicht kostruiert ist...
     if (pDoc->GetDrawLayer())
-        MakeDrawView();
+        MakeDrawView( nForceDesignMode );
     ViewOptionsHasChanged(FALSE);   // legt auch evtl. DrawView an
 
     SetUndoManager( pDocSh->GetUndoManager() );
@@ -1706,7 +1706,21 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 
-    Construct();
+    //  if switching back from print preview,
+    //  restore the view settings that were active when creating the preview
+    //  #89897# ReadUserData must not happen from ctor, because the view's edit window
+    //  has to be shown by the sfx. ReadUserData is deferred until the first Activate call.
+    //  #106334# old DesignMode state from form layer must be restored, too
+
+    BYTE nForceDesignMode = SC_FORCEMODE_NONE;
+    if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
+    {
+        ScPreviewShell* pPreviewShell = ((ScPreviewShell*)pOldSh);
+        aPendingUserData = pPreviewShell->GetSourceData();      // used in Activate
+        nForceDesignMode = pPreviewShell->GetSourceDesignMode();
+    }
+
+    Construct( nForceDesignMode );
 
     if ( GetViewData()->GetDocShell()->IsPreview() )
     {
@@ -1725,14 +1739,6 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );
 
     SetCurSubShell(OST_Cell);
-
-    //  if switching back from print preview,
-    //  restore the view settings that were active when creating the preview
-    //  #89897# ReadUserData must not happen from ctor, because the view's edit window
-    //  has to be shown by the sfx. ReadUserData is deferred until the first Activate call.
-
-    if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
-        aPendingUserData = ((ScPreviewShell*)pOldSh)->GetSourceData();      // used in Activate
 }
 
 #undef __INIT_ScTabViewShell

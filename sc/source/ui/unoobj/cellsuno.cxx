@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-31 11:23:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,10 +1421,13 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
 
 ScCellRangesBase::~ScCellRangesBase()
 {
-    ForgetCurrentAttrs();
+    //  #107294# call RemoveUnoObject first, so no notification can happen
+    //  during ForgetCurrentAttrs
 
     if (pDocShell)
         pDocShell->GetDocument()->RemoveUnoObject(*this);
+
+    ForgetCurrentAttrs();
 
     delete pValueListener;
 

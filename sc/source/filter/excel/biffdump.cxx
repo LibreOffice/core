@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-09 13:43:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
@@ -93,14 +93,16 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
+
+#ifndef SC_FPROGRESSBAR_HXX
+#include "fprogressbar.hxx"
+#endif
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
 #endif
+
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
-#endif
-#ifndef _FLTPRGRS_HXX
-#include "fltprgrs.hxx"
 #endif
 #ifndef _IMP_OP_HXX
 #include "imp_op.hxx"
@@ -258,8 +260,7 @@ static void __AddPureBin( ByteString& r, UINT32 nVal )
 inline static void __AddDec( ByteString& r, UINT32 n )
 {
     sal_Char    p[ 32 ];
-    sprintf( p, "%u", n );
-
+    sprintf( p, "%u", n );  // #100211# - checked
     r += p;
 }
 
@@ -279,13 +280,17 @@ inline static void __AddDec( ByteString& r, UINT8 n )
 inline static void __AddDec( ByteString& r, INT32 n )
 {
     sal_Char    p[ 32 ];
-    sprintf( p, "%d", n );
-
+    sprintf( p, "%d", n );  // #100211# - checked
     r += p;
 }
 
 
 inline static void __AddDec( ByteString& r, INT16 n )
+{
+    __AddDec( r, ( INT32 ) n );
+}
+
+inline static void __AddDec( ByteString& r, INT8 n )
 {
     __AddDec( r, ( INT32 ) n );
 }
@@ -313,9 +318,7 @@ inline static void __AddDec1616( ByteString& r, UINT32 n )
 
 static void __AddDouble( ByteString& r, const double f )
 {
-    String aStr;
-    SolarMath::DoubleToString( aStr, f, 'G', 15, '.', TRUE );
-    r += ByteString( aStr, RTL_TEXTENCODING_ASCII_US );
+    r += ByteString( ::rtl::math::doubleToString( f, rtl_math_StringFormat_G, 15, '.', TRUE ) );
 }
 
 
@@ -642,8 +645,8 @@ DUMP_ERR::~DUMP_ERR()
 #define PreDump(LEN)            {rIn.PushPosition();ContDump(LEN);rIn.PopPosition();}
 #define ADDCELLHEAD()           {UINT16 nR,nC,nX;rIn>>nR>>nC>>nX;__AddCellHead(t,nC,nR,nX);}
 #define STARTFLAG()             {ADDTEXT( "flags (" ); __AddHex( t, __nFlags ); ADDTEXT( "):" );}
-#define ADDFLAG(mask,text)      {if( __nFlags & mask ) t += text;}
-#define ADDRESERVED(mask)       ADDFLAG(mask," !RESERVED!")
+#define ADDFLAG(mask,text)      {if( __nFlags & mask ) t.Append( ' ' ).Append( text );}
+#define ADDRESERVED(mask)       ADDFLAG(mask,"!RESERVED!")
 
 
 UINT16 Biff8RecDumper::DumpXF( XclImpStream& rIn, const sal_Char* pPre )
@@ -910,7 +913,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
         case 0x005D:        // OBJ
         case 0x00EC:        // MSODRAWING
         case 0x01B6:        // TXO
-            pIn->InitializeRecord( FALSE );
+            pIn->InitializeRecord( false );
         break;
         default:
             pIn->InitializeRecord( bReadContRecs );
@@ -1027,9 +1030,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     ADDTEXT( "   " );
                     STARTFLAG();
-                    ADDFLAG( 0x01, " fAlwaysCalc" );
-                    ADDFLAG( 0x02, " fCalcOnLoad" );
-                    ADDFLAG( 0x08, " fShrFmla" );
+                    ADDFLAG( 0x01, "fAlwaysCalc" );
+                    ADDFLAG( 0x02, "fCalcOnLoad" );
+                    ADDFLAG( 0x08, "fShrFmla" );
                 }
                 PRINT();
                 LINESTART();
@@ -1085,13 +1088,13 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn >> __nFlags >> n8 >> nNameText >> nNameDef >> n16 >> n16 >> n8 >> n8 >> n8 >> n8;
                 LINESTART();
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fHidden" );
-                ADDFLAG( 0x0002, " fFunc" );
-                ADDFLAG( 0x0004, " fVBProc" );
-                ADDFLAG( 0x0008, " fProc" );
-                ADDFLAG( 0x0010, " fCalcExp" );
-                ADDFLAG( 0x0020, " fBuiltIn" );
-                ADDFLAG( 0x1000, " fBig" );
+                ADDFLAG( 0x0001, "fHidden" );
+                ADDFLAG( 0x0002, "fFunc" );
+                ADDFLAG( 0x0004, "fVBProc" );
+                ADDFLAG( 0x0008, "fProc" );
+                ADDFLAG( 0x0010, "fCalcExp" );
+                ADDFLAG( 0x0020, "fBuiltIn" );
+                ADDFLAG( 0x1000, "fBig" );
                 ADDRESERVED( 0xE000 );
                 ADDTEXT( "   Fn grp index: " );
                 __AddDec( t, (UINT16)((__nFlags & 0x0FC0) >> 6) );
@@ -1192,10 +1195,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "/20pt   " );
                 rIn >> __nFlags;
                 STARTFLAG();
-                ADDFLAG( 0x0002, " fItalic" );
-                ADDFLAG( 0x0008, " fStrikeout" );
-                ADDFLAG( 0x0010, " fOutline" );
-                ADDFLAG( 0x0020, " fShadow" );
+                ADDFLAG( 0x0002, "fItalic" );
+                ADDFLAG( 0x0008, "fStrikeout" );
+                ADDFLAG( 0x0010, "fOutline" );
+                ADDFLAG( 0x0020, "fShadow" );
                 ADDRESERVED( 0xFFC5 );
                 PRINT();
                 LINESTART();
@@ -1236,7 +1239,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fReadOnlyRec" );
+                    ADDFLAG( 0x0001, "fReadOnlyRec" );
                     PRINT();
                 }
                 DumpValidPassword( rIn, pPre );
@@ -1260,10 +1263,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn >> __nFlags;
                 LINESTART();
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fHidden" );
+                ADDFLAG( 0x0001, "fHidden" );
                 ADDTEXT( " outlnlev=" );
                 __AddDec( t, (UINT16)((__nFlags & 0x0700) >> 8) );
-                ADDFLAG( 0x1000, " fCollapsed" );
+                ADDFLAG( 0x1000, "fCollapsed" );
                 ADDRESERVED( 0xE8FE );
                 PRINT();
                 LINESTART();
@@ -1304,22 +1307,22 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 STARTFLAG();
                 if( __nFlags & 0x00F1 )
                 {
-                    ADDFLAG( 0x0001, " fShowAutoBreaks" );
-                    ADDFLAG( 0x0010, " fDialog" );
-                    ADDFLAG( 0x0020, " fApplyStyles" );
-                    ADDFLAG( 0x0040, " fRowSumsBelow" );
-                    ADDFLAG( 0x0080, " fColSumsBelow" );
+                    ADDFLAG( 0x0001, "fShowAutoBreaks" );
+                    ADDFLAG( 0x0010, "fDialog" );
+                    ADDFLAG( 0x0020, "fApplyStyles" );
+                    ADDFLAG( 0x0040, "fRowSumsBelow" );
+                    ADDFLAG( 0x0080, "fColSumsBelow" );
                     PRINT();
                     LINESTART();
                 }
                 if( __nFlags & (0xCD00 | 0x320E) )
                 {
                     ADDTEXT( "   " );
-                    ADDFLAG( 0x0100, " fFitToPage" );
-                    ADDFLAG( 0x0400, " fDispRowGuts" );
-                    ADDFLAG( 0x0800, " fDispColGuts" );
-                    ADDFLAG( 0x4000, " fAee" );
-                    ADDFLAG( 0x8000, " fAfe" );
+                    ADDFLAG( 0x0100, "fFitToPage" );
+                    ADDFLAG( 0x0400, "fDispRowGuts" );
+                    ADDFLAG( 0x0800, "fDispColGuts" );
+                    ADDFLAG( 0x4000, "fAee" );
+                    ADDFLAG( 0x8000, "fAfe" );
                     ADDRESERVED( 0x320E );
                     PRINT();
                 }
@@ -1370,12 +1373,12 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDDEC( 2 );
                 rIn >> __nFlags;
                 STARTFLAG();
-                ADDFLAG( 0x0003, " fJoin" );
-                ADDFLAG( 0x0004, " fSimpleEq1" );
-                ADDFLAG( 0x0008, " fSimpleEq2" );
-                ADDFLAG( 0x0010, " fTop10" );
-                ADDFLAG( 0x0020, " fTop" );
-                ADDFLAG( 0x0040, " fPercent" );
+                ADDFLAG( 0x0003, "fJoin" );
+                ADDFLAG( 0x0004, "fSimpleEq1" );
+                ADDFLAG( 0x0008, "fSimpleEq2" );
+                ADDFLAG( 0x0010, "fTop10" );
+                ADDFLAG( 0x0020, "fTop" );
+                ADDFLAG( 0x0040, "fPercent" );
                 PRINT();
                 LINESTART();
                 if( __nFlags & 0x0003 )
@@ -1487,14 +1490,14 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 rIn >> __nFlags;
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fLeftRight" );
-                ADDFLAG( 0x0002, " fPortrait" );
-                ADDFLAG( 0x0004, " fNoPrintSettings" );
-                ADDFLAG( 0x0008, " fMonochrom" );
-                ADDFLAG( 0x0010, " fDraft" );
-                ADDFLAG( 0x0020, " fNotes" );
-                ADDFLAG( 0x0040, " fNoOrientation" );
-                ADDFLAG( 0x0080, " fCustomNumber" );
+                ADDFLAG( 0x0001, "fLeftRight" );
+                ADDFLAG( 0x0002, "fPortrait" );
+                ADDFLAG( 0x0004, "fNoPrintSettings" );
+                ADDFLAG( 0x0008, "fMonochrom" );
+                ADDFLAG( 0x0010, "fDraft" );
+                ADDFLAG( 0x0020, "fNotes" );
+                ADDFLAG( 0x0040, "fNoOrientation" );
+                ADDFLAG( 0x0080, "fCustomNumber" );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "Print res: " );           ADDDEC( 2 );
@@ -1575,15 +1578,15 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fRowGrand" );
-                    ADDFLAG( 0x0002, " fColGrand" );
-                    ADDFLAG( 0x0008, " fAutoFormat" );
-                    ADDFLAG( 0x0010, " fWidthHeightAuto" );
-                    ADDFLAG( 0x0020, " fFontAuto" );
-                    ADDFLAG( 0x0040, " fAlignAuto" );
-                    ADDFLAG( 0x0080, " fBorderAuto" );
-                    ADDFLAG( 0x0100, " fPatternAuto" );
-                    ADDFLAG( 0x0200, " fNumberAuto" );
+                    ADDFLAG( 0x0001, "fRowGrand" );
+                    ADDFLAG( 0x0002, "fColGrand" );
+                    ADDFLAG( 0x0008, "fAutoFormat" );
+                    ADDFLAG( 0x0010, "fWidthHeightAuto" );
+                    ADDFLAG( 0x0020, "fFontAuto" );
+                    ADDFLAG( 0x0040, "fAlignAuto" );
+                    ADDFLAG( 0x0080, "fBorderAuto" );
+                    ADDFLAG( 0x0100, "fPatternAuto" );
+                    ADDFLAG( 0x0200, "fNumberAuto" );
                     PRINT();
                 }
                 LINESTART();
@@ -1617,10 +1620,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "):" );
                 if( __nFlags )
                 {
-                    ADDFLAG( 0x0001, " row" );
-                    ADDFLAG( 0x0002, " col" );
-                    ADDFLAG( 0x0004, " page" );
-                    ADDFLAG( 0x0008, " data" );
+                    ADDFLAG( 0x0001, "row" );
+                    ADDFLAG( 0x0002, "col" );
+                    ADDFLAG( 0x0004, "page" );
+                    ADDFLAG( 0x0008, "data" );
                 }
                 else
                     ADDTEXT( " no axis" );
@@ -1634,18 +1637,18 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "):" );
                 if( __nFlags )
                 {
-                    ADDFLAG( 0x0001, " Default" );
-                    ADDFLAG( 0x0002, " Sum" );
-                    ADDFLAG( 0x0004, " Counta" );
-                    ADDFLAG( 0x0008, " Average" );
-                    ADDFLAG( 0x0010, " Max" );
-                    ADDFLAG( 0x0020, " Min" );
-                    ADDFLAG( 0x0040, " Product" );
-                    ADDFLAG( 0x0080, " Count" );
-                    ADDFLAG( 0x0100, " Stdev" );
-                    ADDFLAG( 0x0200, " Stddevp" );
-                    ADDFLAG( 0x0400, " Var" );
-                    ADDFLAG( 0x0800, " Varp" );
+                    ADDFLAG( 0x0001, "Default" );
+                    ADDFLAG( 0x0002, "Sum" );
+                    ADDFLAG( 0x0004, "Counta" );
+                    ADDFLAG( 0x0008, "Average" );
+                    ADDFLAG( 0x0010, "Max" );
+                    ADDFLAG( 0x0020, "Min" );
+                    ADDFLAG( 0x0040, "Product" );
+                    ADDFLAG( 0x0080, "Count" );
+                    ADDFLAG( 0x0100, "Stdev" );
+                    ADDFLAG( 0x0200, "Stddevp" );
+                    ADDFLAG( 0x0400, "Var" );
+                    ADDFLAG( 0x0800, "Varp" );
                 }
                 else
                     ADDTEXT( " none" );
@@ -1700,10 +1703,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x01, " fHidden" );
-                    ADDFLAG( 0x02, " fHideDetail" );
-                    ADDFLAG( 0x04, " fFormula" );
-                    ADDFLAG( 0x08, " fMissing" );
+                    ADDFLAG( 0x01, "fHidden" );
+                    ADDFLAG( 0x02, "fHideDetail" );
+                    ADDFLAG( 0x04, "fFormula" );
+                    ADDFLAG( 0x08, "fMissing" );
                     PRINT();
                 }
                 LINESTART();
@@ -1771,13 +1774,13 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     LINESTART();
                     ADDTEXT( pInd );
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fMultiDataName" );
-                    ADDFLAG( 0x0200, " fSub" );
-                    ADDFLAG( 0x0400, " fBlock" );
-                    ADDFLAG( 0x0800, " fGrand" );
-                    ADDFLAG( 0x1000, " fMultiDataOnAxis" );
-                    ADDFLAG( 0x2000, " fBlankLine" );       // undocumented
-                    ADDFLAG( 0x4000, " fHideDetail" );      // undocumented
+                    ADDFLAG( 0x0001, "fMultiDataName" );
+                    ADDFLAG( 0x0200, "fSub" );
+                    ADDFLAG( 0x0400, "fBlock" );
+                    ADDFLAG( 0x0800, "fGrand" );
+                    ADDFLAG( 0x1000, "fMultiDataOnAxis" );
+                    ADDFLAG( 0x2000, "fBlankLine" );        // undocumented
+                    ADDFLAG( 0x4000, "fHideDetail" );       // undocumented
                     ADDRESERVED( 0x8000 );
                     PRINT();
                     LINESTART();
@@ -1966,9 +1969,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDTEXT( pPre );
                     rIn >> __nFlags;
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fInIndexList" );
-                    ADDFLAG( 0x0002, " fNotInList" );
-                    ADDFLAG( 0x0200, " fLongIndex" );
+                    ADDFLAG( 0x0001, "fInIndexList" );
+                    ADDFLAG( 0x0002, "fNotInList" );
+                    ADDFLAG( 0x0200, "fLongIndex" );
                     ADDTEXT( "   data type: " );
                     __nFlags &= 0x0DFC;
                     switch( __nFlags )
@@ -2189,33 +2192,33 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 STARTFLAG();
                 if( __nFlags & 0x009F )
                 {
-                    ADDFLAG( 0x0001, " fShowAllItems" );
-                    ADDFLAG( 0x0002, " fDragToRow" );
-                    ADDFLAG( 0x0004, " fDragToColumn" );
-                    ADDFLAG( 0x0008, " fDragToPage" );
-                    ADDFLAG( 0x0010, " fDragToHide" );
-                    ADDFLAG( 0x0080, " fServerBased" );
+                    ADDFLAG( 0x0001, "fShowAllItems" );
+                    ADDFLAG( 0x0002, "fDragToRow" );
+                    ADDFLAG( 0x0004, "fDragToColumn" );
+                    ADDFLAG( 0x0008, "fDragToPage" );
+                    ADDFLAG( 0x0010, "fDragToHide" );
+                    ADDFLAG( 0x0080, "fServerBased" );
                     PRINT();
                     LINESTART();
                 }
                 if( __nFlags & 0xBF00 )
                 {
                     ADDTEXT( "   " );
-                    ADDFLAG( 0x0200, " fAutoSort" );
-                    ADDFLAG( 0x0400, " fAscendSort" );
-                    ADDFLAG( 0x0800, " fAutoShow" );
-                    ADDFLAG( 0x1000, " fAscendShow" );
-                    ADDFLAG( 0x2000, " fCalculatedField" );
+                    ADDFLAG( 0x0200, "fAutoSort" );
+                    ADDFLAG( 0x0400, "fAscendSort" );
+                    ADDFLAG( 0x0800, "fAutoShow" );
+                    ADDFLAG( 0x1000, "fAscendShow" );
+                    ADDFLAG( 0x2000, "fCalculatedField" );
                     PRINT();
                     LINESTART();
                 }
                 if( __nFlags & 0x00FF4000 )
                 {
                     ADDTEXT( "   " );                               // Layout flags:
-                    ADDFLAG( 0x00004000, " fLONewPage" );           // undocumented
-                    ADDFLAG( 0x00200000, " fLOReport" );            // undocumented
-                    ADDFLAG( 0x00400000, " fLOBlankLine" );         // undocumented
-                    ADDFLAG( 0x00800000, " fLOSubTotalTop" );       // undocumented
+                    ADDFLAG( 0x00004000, "fLONewPage" );            // undocumented
+                    ADDFLAG( 0x00200000, "fLOReport" );         // undocumented
+                    ADDFLAG( 0x00400000, "fLOBlankLine" );          // undocumented
+                    ADDFLAG( 0x00800000, "fLOSubTotalTop" );        // undocumented
                     PRINT();
                     LINESTART();
                 }
@@ -2308,7 +2311,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 UINT16 __nFlags = Read2( rIn );
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fAuto" );
+                ADDFLAG( 0x0001, "fAuto" );
                 ADDRESERVED( 0xFFFE );
                 UINT16 nCol1, nRow1, nCol2, nRow2;
                 rIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
@@ -2634,15 +2637,15 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 UINT16 __nFlags = Read2( rIn );
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fDsplFormulaBar" );
-                ADDFLAG( 0x0002, " fDsplStatus" );
-                ADDFLAG( 0x0004, " fNoteOff" );
-                ADDFLAG( 0x0008, " fDsplHScroll" );
-                ADDFLAG( 0x0010, " fDsplVScroll" );
-                ADDFLAG( 0x0020, " fBotAdornment" );
-                ADDFLAG( 0x0040, " fZoom" );
-                ADDFLAG( 0x0080, " fShowPlaceHld" );
-                ADDFLAG( 0x0100, " fHideAll" );
+                ADDFLAG( 0x0001, "fDsplFormulaBar" );
+                ADDFLAG( 0x0002, "fDsplStatus" );
+                ADDFLAG( 0x0004, "fNoteOff" );
+                ADDFLAG( 0x0008, "fDsplHScroll" );
+                ADDFLAG( 0x0010, "fDsplVScroll" );
+                ADDFLAG( 0x0020, "fBotAdornment" );
+                ADDFLAG( 0x0040, "fZoom" );
+                ADDFLAG( 0x0080, "fShowPlaceHld" );
+                ADDFLAG( 0x0100, "fHideAll" );
                 if( !(__nFlags && 0x0180) )
                     ADDTEXT( " fShowAll" );
                 PRINT();
@@ -2676,40 +2679,40 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 STARTFLAG();
                 if( __nFlags & 0x000000FF )
                 {
-                    ADDFLAG( 0x00000001, " fShowPgBrk" );
-                    ADDFLAG( 0x00000002, " fDsplForml" );
-                    ADDFLAG( 0x00000004, " fDsplGrid" );
-                    ADDFLAG( 0x00000008, " fDsplRCHead" );
-                    ADDFLAG( 0x00000010, " fDsplGuts" );
-                    ADDFLAG( 0x00000020, " fDsplZeros" );
-                    ADDFLAG( 0x00000040, " fPrintHorC" );
-                    ADDFLAG( 0x00000080, " fPrintVerC" );
+                    ADDFLAG( 0x00000001, "fShowPgBrk" );
+                    ADDFLAG( 0x00000002, "fDsplForml" );
+                    ADDFLAG( 0x00000004, "fDsplGrid" );
+                    ADDFLAG( 0x00000008, "fDsplRCHead" );
+                    ADDFLAG( 0x00000010, "fDsplGuts" );
+                    ADDFLAG( 0x00000020, "fDsplZeros" );
+                    ADDFLAG( 0x00000040, "fPrintHorC" );
+                    ADDFLAG( 0x00000080, "fPrintVerC" );
                     PRINT();
                     LINESTART();
                 }
                 if( __nFlags & 0x00007F00 )
                 {
                     ADDTEXT( "   " );
-                    ADDFLAG( 0x00000100, " fPrintRCHead" );
-                    ADDFLAG( 0x00000200, " fPrintGrid" );
-                    ADDFLAG( 0x00000400, " fFitToPage" );
-                    ADDFLAG( 0x00000800, " fPrintArea" );
-                    ADDFLAG( 0x00001000, " fOnePrintArea" );
-                    ADDFLAG( 0x00002000, " fFilter" );
-                    ADDFLAG( 0x00004000, " fAutoFilter" );
+                    ADDFLAG( 0x00000100, "fPrintRCHead" );
+                    ADDFLAG( 0x00000200, "fPrintGrid" );
+                    ADDFLAG( 0x00000400, "fFitToPage" );
+                    ADDFLAG( 0x00000800, "fPrintArea" );
+                    ADDFLAG( 0x00001000, "fOnePrintArea" );
+                    ADDFLAG( 0x00002000, "fFilter" );
+                    ADDFLAG( 0x00004000, "fAutoFilter" );
                     PRINT();
                     LINESTART();
                 }
                 if( __nFlags & 0xFFF80000 )
                 {
                     ADDTEXT( "   " );
-                    ADDFLAG( 0x00020000, " fSplitV" );
-                    ADDFLAG( 0x00040000, " fSplitH" );
-                    ADDFLAG( 0x00180000, " fHiddenRow" );
-                    ADDFLAG( 0x00200000, " fHiddenCol" );
-                    ADDFLAG( 0x01000000, " fChartSize" );
-                    ADDFLAG( 0x02000000, " fFilterUnique" );
-                    ADDFLAG( 0x04000000, " fLayoutView" );
+                    ADDFLAG( 0x00020000, "fSplitV" );
+                    ADDFLAG( 0x00040000, "fSplitH" );
+                    ADDFLAG( 0x00180000, "fHiddenRow" );
+                    ADDFLAG( 0x00200000, "fHiddenCol" );
+                    ADDFLAG( 0x01000000, "fChartSize" );
+                    ADDFLAG( 0x02000000, "fFilterUnique" );
+                    ADDFLAG( 0x04000000, "fLayoutView" );
                     ADDRESERVED( 0xF8C18000 );
                     PRINT();
                     LINESTART();
@@ -2741,12 +2744,12 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 rIn >> __nFlags;
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fTitles" );
-                ADDFLAG( 0x0002, " fRowNums" );
-                ADDFLAG( 0x0004, " fDisRefr" );
-                ADDFLAG( 0x0080, " fFill" );
-                ADDFLAG( 0x0100, " fAutoFmt" );
-                ADDFLAG( 0x0400, " fDisEdit" );
+                ADDFLAG( 0x0001, "fTitles" );
+                ADDFLAG( 0x0002, "fRowNums" );
+                ADDFLAG( 0x0004, "fDisRefr" );
+                ADDFLAG( 0x0080, "fFill" );
+                ADDFLAG( 0x0100, "fAutoFmt" );
+                ADDFLAG( 0x0400, "fDisEdit" );
                 ADDRESERVED( 0xFA78 );
                 PRINT();
                 LINESTART();
@@ -2809,7 +2812,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn >> __nFlags;
                 ADDTEXT( "   " );
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fToughRecalc" );
+                ADDFLAG( 0x0001, "fToughRecalc" );
                 ADDRESERVED( 0xFFFE );
                 PRINT();
                 LINESTART();
@@ -3017,9 +3020,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 __AddPureBin( t, __nFlags );
                 ADDTEXT( ")" );
                 ADDTEXT( "):" );
-                ADDFLAG( 0x0001, " fWnClosed" );
-                ADDFLAG( 0x0002, " fWnPinned" );
-                ADDFLAG( 0x0004, " fCached" );
+                ADDFLAG( 0x0001, "fWnClosed" );
+                ADDFLAG( 0x0002, "fWnPinned" );
+                ADDFLAG( 0x0004, "fCached" );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "input window: " );
@@ -3051,11 +3054,11 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 if( __nFlags )
                 {
                     ADDTEXT( "  " );
-                    ADDFLAG( 0x00000080, " fStrLookup" );
-                    ADDFLAG( 0x00000100, " fAllowBlank" );
-                    ADDFLAG( 0x00000200, " fSuppressCombo" );
-                    ADDFLAG( 0x00040000, " fShowInputMsg" );
-                    ADDFLAG( 0x00080000, " fShowErrorMsg" );
+                    ADDFLAG( 0x00000080, "fStrLookup" );
+                    ADDFLAG( 0x00000100, "fAllowBlank" );
+                    ADDFLAG( 0x00000200, "fSuppressCombo" );
+                    ADDFLAG( 0x00040000, "fShowInputMsg" );
+                    ADDFLAG( 0x00080000, "fShowErrorMsg" );
                 }
                 PRINT();
                 LINESTART();
@@ -3170,12 +3173,12 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 UINT32 __nFlags = Read4( rIn );
                 LINESTART();
                 STARTFLAG();
-                ADDFLAG( 0x00000001, " fBody" );
-                ADDFLAG( 0x00000002, " fAbs" );
-                ADDFLAG( 0x00000014, " fDescr" );
-                ADDFLAG( 0x00000008, " fMark" );
-                ADDFLAG( 0x00000080, " fFrame" );
-                ADDFLAG( 0x00000100, " fUNC" );
+                ADDFLAG( 0x00000001, "fBody" );
+                ADDFLAG( 0x00000002, "fAbs" );
+                ADDFLAG( 0x00000014, "fDescr" );
+                ADDFLAG( 0x00000008, "fMark" );
+                ADDFLAG( 0x00000080, "fFrame" );
+                ADDFLAG( 0x00000100, "fUNC" );
                 ADDRESERVED( 0xFFFFFE60 );
                 PRINT();
 
@@ -3347,10 +3350,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 STARTFLAG();
                 ADDTEXT( " outlnlev=" );
                 __AddDec( t, (UINT16)(__nFlags & 0x0007) );
-                ADDFLAG( 0x0010, " fCollapsed" );
-                ADDFLAG( 0x0020, " fRowHeightZero" );
-                ADDFLAG( 0x0040, " fUnsynced" );
-                ADDFLAG( 0x0080, " fGhostDirty" );
+                ADDFLAG( 0x0010, "fCollapsed" );
+                ADDFLAG( 0x0020, "fRowHeightZero" );
+                ADDFLAG( 0x0040, "fUnsynced" );
+                ADDFLAG( 0x0080, "fGhostDirty" );
                 ADDRESERVED( 0xFF08 );
                 PRINT();
                 UINT16 nXF;
@@ -3359,8 +3362,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "ix to XF: "  );       __AddDec( t, (UINT16)(nXF & 0x0FFF) );
                 ADDTEXT( "   add. flags(" );    __AddHex( t, nXF );
                 ADDTEXT( "):" );
-                ADDFLAG( 0x1000, " fExAsc" );
-                ADDFLAG( 0x2000, " fExDsc" );
+                ADDFLAG( 0x1000, "fExAsc" );
+                ADDFLAG( 0x2000, "fExDsc" );
                 ADDRESERVED( 0xC000 );
                 PRINT();
             }
@@ -3378,8 +3381,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 PRINT();
                 LINESTART();
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fAlwaysCalc" );
-                ADDFLAG( 0x0002, " fCalcOnLoad" );
+                ADDFLAG( 0x0001, "fAlwaysCalc" );
+                ADDFLAG( 0x0002, "fCalcOnLoad" );
                 ADDRESERVED( 0xFFFC );
                 PRINT();
                 LINESTART();
@@ -3399,10 +3402,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 ADDTEXT( "default row " );
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fUnsynced" );
-                ADDFLAG( 0x0002, " fRowHtZero" );
-                ADDFLAG( 0x0004, " fExAsc" );
-                ADDFLAG( 0x0008, " fExDsc" );
+                ADDFLAG( 0x0001, "fUnsynced" );
+                ADDFLAG( 0x0002, "fRowHtZero" );
+                ADDFLAG( 0x0004, "fExAsc" );
+                ADDFLAG( 0x0008, "fExDsc" );
                 ADDRESERVED( 0xFFF0 );
                 PRINT();
                 LINESTART();
@@ -3466,17 +3469,17 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 rIn >> __nFlags;
                 STARTFLAG();
-                ADDFLAG( 0x0001, " fImportPRE" );
-                ADDFLAG( 0x0002, " fIgnoreSep" );
-                ADDFLAG( 0x0004, " fUseSetting" );
-                ADDFLAG( 0x0010, " fIgnoreDate" );
-                ADDFLAG( 0x0020, " fWhatIsIt?" );
+                ADDFLAG( 0x0001, "fImportPRE" );
+                ADDFLAG( 0x0002, "fIgnoreSep" );
+                ADDFLAG( 0x0004, "fUseSetting" );
+                ADDFLAG( 0x0010, "fIgnoreDate" );
+                ADDFLAG( 0x0020, "fWhatIsIt?" );
                 ADDRESERVED( 0xFFC8 );
                 PRINT();
                 LINESTART();
                 rIn >> __nFlags;
                 STARTFLAG();
-                ADDFLAG( 0x0002, " fTables" );
+                ADDFLAG( 0x0002, "fTables" );
                 ADDRESERVED( 0xFFFD );
                 PRINT();
                 LINESTART();
@@ -3558,14 +3561,14 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 STARTFLAG();
                 if( __nFlags )
                 {
-                    ADDFLAG( 0x00000001, " fWin" );
-                    ADDFLAG( 0x00000002, " fRisc" );
-                    ADDFLAG( 0x00000004, " fBeta" );
-                    ADDFLAG( 0x00000008, " fWinAny" );
-                    ADDFLAG( 0x00000010, " fMacAny" );
-                    ADDFLAG( 0x00000020, " fBetaAny" );
-                    ADDFLAG( 0x00000100, " fRiscAny" );
-                    ADDFLAG( 0xFFFFE0C0, " fXxxxxxx" );
+                    ADDFLAG( 0x00000001, "fWin" );
+                    ADDFLAG( 0x00000002, "fRisc" );
+                    ADDFLAG( 0x00000004, "fBeta" );
+                    ADDFLAG( 0x00000008, "fWinAny" );
+                    ADDFLAG( 0x00000010, "fMacAny" );
+                    ADDFLAG( 0x00000020, "fBetaAny" );
+                    ADDFLAG( 0x00000100, "fRiscAny" );
+                    ADDRESERVED( 0xFFFFE0C0 );
                 }
                 PRINT();
 
@@ -3659,8 +3662,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fAuto" );
-                    ADDFLAG( 0x0004, " fDrawTick" );
+                    ADDFLAG( 0x0001, "fAuto" );
+                    ADDFLAG( 0x0004, "fDrawTick" );
                     PRINT();
                 }
                 LINESTART();
@@ -3700,9 +3703,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fAuto" );
-                    ADDFLAG( 0x0010, " fNoBackg" );
-                    ADDFLAG( 0x0020, " fNoFore" );
+                    ADDFLAG( 0x0001, "fAuto" );
+                    ADDFLAG( 0x0010, "fNoBackg" );
+                    ADDFLAG( 0x0020, "fNoFore" );
                     ADDRESERVED( 0xFFCE );
                     PRINT();
                 }
@@ -3735,8 +3738,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x01, " fAuto" );
-                    ADDFLAG( 0x02, " fInvertNeg" );
+                    ADDFLAG( 0x01, "fAuto" );
+                    ADDFLAG( 0x02, "fInvertNeg" );
                     PRINT();
                 }
             }
@@ -3768,7 +3771,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fVaried" );
+                    ADDFLAG( 0x0001, "fVaried" );
                     PRINT();
                 }
                 LINESTART();
@@ -3819,12 +3822,12 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x01, " fAutoPosition" );
-                    ADDFLAG( 0x02, " fAutoSeries" );
-                    ADDFLAG( 0x04, " fAutoPosX" );
-                    ADDFLAG( 0x08, " fAutoPosY" );
-                    ADDFLAG( 0x10, " fVert" );
-                    ADDFLAG( 0x20, " fWasDataTable" );
+                    ADDFLAG( 0x01, "fAutoPosition" );
+                    ADDFLAG( 0x02, "fAutoSeries" );
+                    ADDFLAG( 0x04, "fAutoPosX" );
+                    ADDFLAG( 0x08, "fAutoPosY" );
+                    ADDFLAG( 0x10, "fVert" );
+                    ADDFLAG( 0x20, "fWasDataTable" );
                     PRINT();
                 }
             }
@@ -3845,10 +3848,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fTranspose" );
-                    ADDFLAG( 0x0002, " fStacked" );
-                    ADDFLAG( 0x0004, " f100" );
-                    ADDFLAG( 0x0008, " fHasShadow" );
+                    ADDFLAG( 0x0001, "fTranspose" );
+                    ADDFLAG( 0x0002, "fStacked" );
+                    ADDFLAG( 0x0004, "f100" );
+                    ADDFLAG( 0x0008, "fHasShadow" );
                     PRINT();
                 }
             }
@@ -3938,9 +3941,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fAutoCol" );
-                    ADDFLAG( 0x0002, " fAutoBack" );
-                    ADDFLAG( 0x0020, " fAutoRot" );
+                    ADDFLAG( 0x0001, "fAutoCol" );
+                    ADDFLAG( 0x0002, "fAutoBack" );
+                    ADDFLAG( 0x0020, "fAutoRot" );
                     PRINT();
                 }
                 LINESTART();
@@ -3969,14 +3972,14 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fAutoMin" );
-                    ADDFLAG( 0x0002, " fAutoMax" );
-                    ADDFLAG( 0x0004, " fAutoMajor" );
-                    ADDFLAG( 0x0008, " fAutoMinor" );
-                    ADDFLAG( 0x0010, " fAutoCross" );
-                    ADDFLAG( 0x0020, " fLogScale" );
-                    ADDFLAG( 0x0040, " fReverse" );
-                    ADDFLAG( 0x0080, " fMaxCross" );
+                    ADDFLAG( 0x0001, "fAutoMin" );
+                    ADDFLAG( 0x0002, "fAutoMax" );
+                    ADDFLAG( 0x0004, "fAutoMajor" );
+                    ADDFLAG( 0x0008, "fAutoMinor" );
+                    ADDFLAG( 0x0010, "fAutoCross" );
+                    ADDFLAG( 0x0020, "fLogScale" );
+                    ADDFLAG( 0x0040, "fReverse" );
+                    ADDFLAG( 0x0080, "fMaxCross" );
                     PRINT();
                 }
             }
@@ -3998,9 +4001,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fBetween" );
-                    ADDFLAG( 0x0002, " fMaxCross" );
-                    ADDFLAG( 0x0004, " fReverse" );
+                    ADDFLAG( 0x0001, "fBetween" );
+                    ADDFLAG( 0x0002, "fMaxCross" );
+                    ADDFLAG( 0x0004, "fReverse" );
                     PRINT();
                 }
             }
@@ -4092,18 +4095,18 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fAutoColor" );
-                    ADDFLAG( 0x0002, " fShowKey" );
-                    ADDFLAG( 0x0004, " fShowValue" );
-                    ADDFLAG( 0x0008, " fVert" );
-                    ADDFLAG( 0x0010, " fAutoText" );
-                    ADDFLAG( 0x0020, " fGenerated" );
-                    ADDFLAG( 0x0040, " fDeleted" );
-                    ADDFLAG( 0x0080, " fAutoMode" );
-                    ADDFLAG( 0x0800, " fShLabPct" );
-                    ADDFLAG( 0x1000, " fShowPct" );
-                    ADDFLAG( 0x2000, " fShowBubbleSizes" );
-                    ADDFLAG( 0x4000, " fShowLabel" );
+                    ADDFLAG( 0x0001, "fAutoColor" );
+                    ADDFLAG( 0x0002, "fShowKey" );
+                    ADDFLAG( 0x0004, "fShowValue" );
+                    ADDFLAG( 0x0008, "fVert" );
+                    ADDFLAG( 0x0010, "fAutoText" );
+                    ADDFLAG( 0x0020, "fGenerated" );
+                    ADDFLAG( 0x0040, "fDeleted" );
+                    ADDFLAG( 0x0080, "fAutoMode" );
+                    ADDFLAG( 0x0800, "fShLabPct" );
+                    ADDFLAG( 0x1000, "fShowPct" );
+                    ADDFLAG( 0x2000, "fShowBubbleSizes" );
+                    ADDFLAG( 0x4000, "fShowLabel" );
                     PRINT();
                 }
                 LINESTART();
@@ -4171,8 +4174,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x01, " fAutoSize" );
-                    ADDFLAG( 0x02, " fAutoPosition" );
+                    ADDFLAG( 0x01, "fAutoSize" );
+                    ADDFLAG( 0x02, "fAutoPosition" );
                     PRINT();
                 }
             }
@@ -4310,7 +4313,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x01, " fCustomIfmt" );
+                    ADDFLAG( 0x01, "fCustomIfmt" );
                     PRINT();
                 }
                 LINESTART();
@@ -4410,14 +4413,14 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     STARTFLAG();
-                    ADDFLAG( 0x0001, " fAutiMin" );
-                    ADDFLAG( 0x0002, " fAutoMax" );
-                    ADDFLAG( 0x0004, " fAutoMajor" );
-                    ADDFLAG( 0x0008, " fAutoMinor" );
-                    ADDFLAG( 0x0010, " fDateAxis" );
-                    ADDFLAG( 0x0020, " fAutoBase" );
-                    ADDFLAG( 0x0040, " fAutoCross" );
-                    ADDFLAG( 0x0080, " fAutoDate" );
+                    ADDFLAG( 0x0001, "fAutoMin" );
+                    ADDFLAG( 0x0002, "fAutoMax" );
+                    ADDFLAG( 0x0004, "fAutoMajor" );
+                    ADDFLAG( 0x0008, "fAutoMinor" );
+                    ADDFLAG( 0x0010, "fDateAxis" );
+                    ADDFLAG( 0x0020, "fAutoBase" );
+                    ADDFLAG( 0x0040, "fAutoCross" );
+                    ADDFLAG( 0x0080, "fAutoDate" );
                     PRINT();
                 }
             }
@@ -4911,9 +4914,9 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
                             {
                                 ADDTEXT( "   " );
                                 STARTFLAG();
-                                ADDFLAG( 0x0008, " fAsSymbol" );
-                                ADDFLAG( 0x0002, " fLinked" );
-                                ADDFLAG( 0x0001, " f1???" );
+                                ADDFLAG( 0x0008, "fAsSymbol" );
+                                ADDFLAG( 0x0002, "fLinked" );
+                                ADDFLAG( 0x0001, "f1???" );
                             }
                         }
                         break;
@@ -4924,12 +4927,12 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
                             rIn >> nFmlaLen;
                             if ( sizeof(nFmlaLen) + nFmlaLen == nL )
                             {
-                                ADDTEXT( "linked\n    OLE stream: LNK........ (ID in EXTERNNAME of SUPBOOK)\n    XTI: " );
-                                IGNORE(7);
-                                ADDHEX(2);
-                                ADDTEXT( "   Externname: " );
-                                ADDHEX(2);
-                                IGNORE(3);      // MAY be right
+                                ADDTEXT( "linked\n    OLE stream: LNK??? (from EXTERNNAME)   " );
+                                rIn >> nFmlaLen;
+                                ADDTEXT( "    unknown=" ); ADDHEX( 4 );
+                                PRINT();
+                                t.Erase();
+                                FormulaDump( nFmlaLen, FT_CellFormula );
                             }
                             else
                             {
@@ -4945,22 +4948,20 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
                                 ADDTEXT( '\n' );
                                 if ( nBytesLeft < 4 )
                                     ADDTEXT( "    >> ByteString OVERRUN <<\n" );
-                                else if ( nBytesLeft == 5 )
-                                {
-                                    ADDTEXT( "    pad byte " );
-                                    ADDHEX(1);
-                                    ADDTEXT( '\n' );
-                                }
-                                else if ( nBytesLeft == 4 )
-                                    ADDTEXT( "    no pad byte\n" );
-                                else
-                                    ADDTEXT( "    oops.. bytes left?!?\n" );
 
-                                ADDTEXT( "    OLE stream: MBD" );
                                 rIn.Seek( nPos1 + sizeof(nFmlaLen) + nFmlaLen );
-                                UINT32 nOleId;
-                                rIn >> nOleId;
-                                __AddPureHex( t, nOleId );
+                                if( rIn.GetRecLeft() == 4 )
+                                {
+                                    ADDTEXT( "    OLE storage name: MBD" );
+                                    __AddPureHex( t, rIn.ReaduInt32() );
+                                }
+                                else
+                                {
+                                    ADDTEXT( "    Ctls stream data: start=" );
+                                    ADDHEX( 4 );
+                                    ADDTEXT( "   size=" );
+                                    ADDHEX( 4 );
+                                }
                             }
                         }
                         break;
@@ -5027,12 +5028,10 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
 }
 
 
-#undef  ADDFLAG
 #undef  LINESTART
 #undef  IGNORE
 #undef  ADDHEX
 #undef  ADDDEC
-#undef  ADDTEXT
 #undef  ADDCOLROW
 #undef  PRINT
 #undef  PreDump
@@ -5206,409 +5205,396 @@ void Biff8RecDumper::ContDumpStream( SvStream& rStrm, const ULONG nL )
 struct XclDumpFunc
 {
     const sal_Char*             pName;          /// Name of the function.
-    sal_uInt16                  nIndex;         /// Excel built-in function index.
     sal_uInt16                  nParam;         /// Parameter count for fixed functions.
 };
 
 const XclDumpFunc pFuncData[] =
 {
-    { "COUNT",            0,    0 },
-    { "IF",               1,    0 },
-    { "ISNA",             2,    1 },
-    { "ISERROR",          3,    1 },
-    { "SUM",              4,    0 },
-    { "AVERAGE",          5,    0 },
-    { "MIN",              6,    0 },
-    { "MAX",              7,    0 },
-    { "ROW",              8,    0 },
-    { "COLUMN",           9,    0 },
-    { "NA",               10,   0 },
-    { "NPV",              11,   0 },
-    { "STDEV",            12,   0 },
-    { "DOLLAR",           13,   0 },
-    { "FIXED",            14,   0 },
-    { "SIN",              15,   1 },
-    { "COS",              16,   1 },
-    { "TAN",              17,   1 },
-    { "ATAN",             18,   1 },
-    { "PI",               19,   0 },
-    { "SQRT",             20,   1 },
-    { "EXP",              21,   1 },
-    { "LN",               22,   1 },
-    { "LOG10",            23,   1 },
-    { "ABS",              24,   1 },
-    { "INT",              25,   1 },
-    { "SIGN",             26,   1 },
-    { "ROUND",            27,   2 },
-    { "LOOKUP",           28,   0 },
-    { "INDEX",            29,   0 },
-    { "REPT",             30,   2 },
-    { "MID",              31,   3 },
-    { "LEN",              32,   1 },
-    { "VALUE",            33,   1 },
-    { "TRUE",             34,   0 },
-    { "FALSE",            35,   0 },
-    { "AND",              36,   0 },
-    { "OR",               37,   0 },
-    { "NOT",              38,   1 },
-    { "MOD",              39,   2 },
-    { "DCOUNT",           40,   3 },
-    { "DSUM",             41,   3 },
-    { "DAVERAGE",         42,   3 },
-    { "DMIN",             43,   3 },
-    { "DMAX",             44,   3 },
-    { "DSTDEV",           45,   3 },
-    { "VAR",              46,   0 },
-    { "DVAR",             47,   3 },
-    { "TEXT",             48,   2 },
-    { "LINEST",           49,   0 },
-    { "TREND",            50,   0 },
-    { "LOGEST",           51,   0 },
-    { "GROWTH",           52,   0 },
-    { "GOTO",             53 },         // macro/internal
-    { "HALT",             54 },         // macro/internal
-    { "RETURN",           55 },         // macro/internal
-    { "PV",               56,   0 },
-    { "FV",               57,   0 },
-    { "NPER",             58,   0 },
-    { "PMT",              59,   0 },
-    { "RATE",             60,   0 },
-    { "MIRR",             61,   3 },
-    { "IRR",              62,   0 },
-    { "RAND",             63,   0 },
-    { "MATCH",            64,   0 },
-    { "DATE",             65,   3 },
-    { "TIME",             66,   3 },
-    { "DAY",              67,   1 },
-    { "MONTH",            68,   1 },
-    { "YEAR",             69,   1 },
-    { "WEEKDAY",          70,   0 },
-    { "HOUR",             71,   1 },
-    { "MINUTE",           72,   1 },
-    { "SECOND",           73,   1 },
-    { "NOW",              74,   0 },
-    { "AREAS",            75,   1 },
-    { "ROWS",             76,   1 },
-    { "COLUMNS",          77,   1 },
-    { "OFFSET",           78,   0 },
-    { "ABSREF",           79 },         // macro/internal
-    { "RELREF",           80 },         // macro/internal
-    { "ARGUMENT",         81 },         // macro/internal
-    { "SEARCH",           82,   0 },
-    { "TRANSPOSE",        83,   1 },
-    { "ERROR",            84 },         // macro/internal
-    { "STEP",             85 },         // macro/internal
-    { "TYPE",             86,   1 },
-    { "ECHO",             87 },         // macro/internal
-    { "SET.NAME",         88 },         // macro/internal
-    { "CALLER",           89 },         // macro/internal
-    { "DEREF",            90 },         // macro/internal
-    { "WINDOWS",          91 },         // macro/internal
-    { "SERIES",           92 },         // macro/internal
-    { "DOCUMENTS",        93 },         // macro/internal
-    { "ACTIVE.CELL",      94 },         // macro/internal
-    { "SELECTION",        95 },         // macro/internal
-    { "RESULT",           96 },         // macro/internal
-    { "ATAN2",            97,   2 },
-    { "ASIN",             98,   1 },
-    { "ACOS",             99,   1 },
-    { "CHOSE",            100,  0 },
-    { "HLOOKUP",          101,  0 },
-    { "VLOOKUP",          102,  0 },
-    { "LINKS",            103 },        // macro/internal
-    { "INPUT",            104 },        // macro/internal
-    { "ISREF",            105,  1 },
-    { "GET.FORMULA",      106 },        // macro/internal
-    { "GET.NAME",         107 },        // macro/internal
-    { "SET.VALUE",        108,  2 },    // macro/internal
-    { "LOG",              109,  0 },
-    { "EXEC",             110 },        // macro/internal
-    { "CHAR",             111,  1 },
-    { "LOWER",            112,  1 },
-    { "UPPER",            113,  1 },
-    { "PROPER",           114,  1 },
-    { "LEFT",             115,  0 },
-    { "RIGHT",            116,  0 },
-    { "EXACT",            117,  2 },
-    { "TRIM",             118,  1 },
-    { "REPLACE",          119,  4 },
-    { "SUBSTITUTE",       120,  0 },
-    { "CODE",             121,  1 },
-    { "NAMES",            122 },        // macro/internal
-    { "DIRECTORY",        123 },        // macro/internal
-    { "FIND",             124,  0 },
-    { "CELL",             125,  0 },
-    { "ISERR",            126,  1 },
-    { "ISTEXT",           127,  1 },
-    { "ISNUMBER",         128,  1 },
-    { "ISBLANK",          129,  1 },
-    { "T",                130,  1 },
-    { "N",                131,  1 },
-    { "FOPEN",            132 },        // macro/internal
-    { "FCLOSE",           133 },        // macro/internal
-    { "FSIZE",            134 },        // macro/internal
-    { "FREADLN",          135 },        // macro/internal
-    { "FREAD",            136 },        // macro/internal
-    { "FWRITELN",         137 },        // macro/internal
-    { "FWRITE",           138 },        // macro/internal
-    { "FPOS",             139 },        // macro/internal
-    { "DATEVALUE",        140,  1 },
-    { "TIMEVALUE",        141,  1 },
-    { "SLN",              142,  3 },
-    { "SYD",              143,  4 },
-    { "DDB",              144,  0 },
-    { "GET.DEF",          145 },        // macro/internal
-    { "REFTEXT",          146 },        // macro/internal
-    { "TEXTREF",          147 },        // macro/internal
-    { "INDIRECT",         148,  0 },
-    { "REGISTER",         149 },        // macro/internal
-    { "CALL",             150 },        // macro/internal
-    { "ADD.BAR",          151 },        // macro/internal
-    { "ADD.MENU",         152 },        // macro/internal
-    { "ADD.COMMAND",      153 },        // macro/internal
-    { "ENABLE.COMMAND",   154 },        // macro/internal
-    { "CHECK.COMMAND",    155 },        // macro/internal
-    { "RENAME.COMMAND",   156 },        // macro/internal
-    { "SHOW.BAR",         157 },        // macro/internal
-    { "DELETE.MENU",      158 },        // macro/internal
-    { "DELETE.COMMAND",   159 },        // macro/internal
-    { "GET.CHART.ITEM",   160 },        // macro/internal
-    { "DIALOG.BOX",       161 },        // macro/internal
-    { "CLEAN",            162,  1 },
-    { "MDETERM",          163,  1 },
-    { "MINVERSE",         164,  1 },
-    { "MMULT",            165,  2 },
-    { "FILES",            166 },        // macro/internal
-    { "IPMT",             167,  0 },
-    { "PPMT",             168,  0 },
-    { "COUNTA",           169,  0 },
-    { "CANCEL.KEY",       170 },        // macro/internal
-    { "FOR",              171 },        // macro/internal
-    { "WHILE",            172 },        // macro/internal
-    { "BREAK",            173 },        // macro/internal
-    { "NEXT",             174 },        // macro/internal
-    { "INITIATE",         175 },        // macro/internal
-    { "REQUEST",          176 },        // macro/internal
-    { "POKE",             177 },        // macro/internal
-    { "EXECUTE",          178 },        // macro/internal
-    { "TERMINATE",        179 },        // macro/internal
-    { "RESTART",          180 },        // macro/internal
-    { "HELP",             181 },        // macro/internal
-    { "GET.BAR",          182 },        // macro/internal
-    { "PRODUCT",          183,  0 },
-    { "FACT",             184,  1 },
-    { "GET.CELL",         185 },        // macro/internal
-    { "GET.WORKSPACE",    186 },        // macro/internal
-    { "GET.WINDOW",       187 },        // macro/internal
-    { "GET.DOCUMENT",     188 },        // macro/internal
-    { "DPRODUCT",         189,  3 },
-    { "ISNONTEXT",        190,  1 },
-    { "GET.NOTE",         191 },        // macro/internal
-    { "NOTE",             192 },        // macro/internal
-    { "STDEVP",           193,  0 },
-    { "VARP",             194,  0 },
-    { "DSTDDEVP",         195,  3 },
-    { "DVARP",            196,  3 },
-    { "TRUNC",            197,  0 },
-    { "ISLOGICAL",        198,  1 },
-    { "DBCOUNTA",         199,  3 },
-    { "DELETE.BAR",       200 },        // macro/internal
-    { "UNREGISTER",       201 },        // macro/internal
-    { "202",              202 },        // not used
-    { "203",              203 },        // not used
-    { "USDOLLAR",         204 },        // macro/internal
-    { "FINDB",            205 },        // macro/internal
-    { "SEARCHB",          206 },        // macro/internal
-    { "REPLACEB",         207 },        // macro/internal
-    { "LEFTB",            208 },        // macro/internal
-    { "RIGHTB",           209 },        // macro/internal
-    { "MIDB",             210 },        // macro/internal
-    { "LENB",             211 },        // macro/internal
-    { "ROUNDUP",          212,  2 },
-    { "ROUNDDOWN",        213,  2 },
-    { "ASC",              214 },        // macro/internal
-    { "DBSC",             215 },        // macro/internal
-    { "RANK",             216,  0 },
-    { "217",              217 },        // not used
-    { "218",              218 },        // not used
-    { "ADDRESS",          219,  0 },
-    { "DAYS360",          220,  0 },
-    { "TODAY",            221,  0 },
-    { "VDB",              222,  0 },
-    { "ELSE",             223 },        // macro/internal
-    { "ELSE.IF",          224 },        // macro/internal
-    { "END.IF",           225 },        // macro/internal
-    { "FOR.CELL",         226 },        // macro/internal
-    { "MEDIAN",           227,  0 },
-    { "SUMPRODUCT",       228,  0 },
-    { "SINH",             229,  1 },
-    { "COSH",             230,  1 },
-    { "TANH",             231,  1 },
-    { "ASINH",            232,  1 },
-    { "ACOSH",            233,  1 },
-    { "ATANH",            234,  1 },
-    { "DGET",             235,  3 },
-    { "CREATE.OBJECT",    236 },        // macro/internal
-    { "VOLATILE",         237 },        // macro/internal
-    { "LAST.ERROR",       238 },        // macro/internal
-    { "CUSTOM.UNDO",      239 },        // macro/internal
-    { "CUSTOM.REPEAT",    240 },        // macro/internal
-    { "FORMULA.CONVERT",  241 },        // macro/internal
-    { "GET.LINK.INFO",    242 },        // macro/internal
-    { "TEXT.BOX",         243 },        // macro/internal
-    { "INFO",             244 },        // macro/internal
-    { "GROUP",            245 },        // macro/internal
-    { "GET.OBJECT",       246 },        // macro/internal
-    { "DB",               247,  0 },
-    { "PAUSE",            248 },        // macro/internal
-    { "249",              249 },        // not used
-    { "250",              250 },        // not used
-    { "RESUME",           251 },        // macro/internal
-    { "FREQUENCY",        252,  2 },
-    { "ADD.TOOLBAR",      253 },        // macro/internal
-    { "DELETE.TOOLBAR",   254 },        // macro/internal
-    { "EXTERNCALL",       255 },        // macro/internal
-    { "RESET.TOOLBAR",    256 },        // macro/internal
-    { "EVALUATE",         257 },        // macro/internal
-    { "GET.TOOLBAR",      258 },        // macro/internal
-    { "GET.TOOL",         259 },        // macro/internal
-    { "SPELLING.CHECK",   260 },        // macro/internal
-    { "ERROR.TYPE",       261,  1 },
-    { "APP.TITLE",        262 },        // macro/internal
-    { "WINDOW.TITLE",     263 },        // macro/internal
-    { "SAVE.TOOLBAR",     264 },        // macro/internal
-    { "ENABLE.TOOL",      265 },        // macro/internal
-    { "PRESS.TOOL",       266 },        // macro/internal
-    { "REGISTER.ID",      267 },        // macro/internal
-    { "GET.WORKBOOK",     268 },        // macro/internal
-    { "AVEDEV",           269,  0 },
-    { "BETADIST",         270,  0 },
-    { "GAMMALN",          271,  1 },
-    { "BETAINV",          272,  0 },
-    { "BINOMDIST",        273,  4 },
-    { "CHIDIST",          274,  2 },
-    { "CHIINV",           275,  2 },
-    { "COMBIN",           276,  2 },
-    { "CONFIDENCE",       277,  3 },
-    { "CRITBINOM",        278,  3 },
-    { "EVEN",             279,  1 },
-    { "EXPONDIST",        280,  3 },
-    { "FDIST",            281,  3 },
-    { "FINV",             282,  3 },
-    { "FISHER",           283,  1 },
-    { "FISHERINV",        284,  1 },
-    { "FLOOR",            285,  2 },
-    { "GAMMADIST",        286,  4 },
-    { "GAMMAINV",         287,  3 },
-    { "CEILING",          288,  2 },
-    { "HYPGEOMDIST",      289,  4 },
-    { "LOGNORMDIST",      290,  3 },
-    { "LOGINV",           291,  3 },
-    { "NEGBINOMDIST",     292,  3 },
-    { "NORMDIST",         293,  4 },
-    { "NORMSDIST",        294,  1 },
-    { "NORMINV",          295,  3 },
-    { "NORMSINV",         296,  1 },
-    { "STANDARDIZE",      297,  3 },
-    { "ODD",              298,  1 },
-    { "PERMUT",           299,  2 },
-    { "POISSON",          300,  3 },
-    { "TDIST",            301,  3 },
-    { "WEIBULL",          302,  4 },
-    { "SUMXMY2",          303,  2 },
-    { "SUMX2MY2",         304,  2 },
-    { "SUMX2PY2",         305,  2 },
-    { "CHITEST",          306,  2 },
-    { "CORREL",           307,  2 },
-    { "COVAR",            308,  2 },
-    { "FORECAST",         309,  3 },
-    { "FTEST",            310,  2 },
-    { "INTERCEPT",        311,  2 },
-    { "PEARSON",          312,  2 },
-    { "RSQ",              313,  2 },
-    { "STEYX",            314,  2 },
-    { "SLOPE",            315,  2 },
-    { "TTEST",            316,  4 },
-    { "PROB",             317,  0 },
-    { "DEVSQ",            318,  0 },
-    { "GEOMEAN",          319,  0 },
-    { "HARMEAN",          320,  0 },
-    { "SUMSQ",            321,  0 },
-    { "KURT",             322,  0 },
-    { "SKEW",             323,  0 },
-    { "ZTEST",            324,  0 },
-    { "LARGE",            325,  2 },
-    { "SMALL",            326,  2 },
-    { "QUARTILE",         327,  2 },
-    { "PERCENTILE",       328,  2 },
-    { "PERCENTRANK",      329,  0 },
-    { "MODE",             330,  0 },
-    { "TRIMMEAN",         331,  2 },
-    { "TINV",             332,  2 },
-    { "333",              333 },        // not used
-    { "MOVIE.COMMAND",    334 },        // macro/internal
-    { "GET.MOVIE",        335 },        // macro/internal
-    { "CONCATENATE",      336,  0 },
-    { "POWER",            337,  2 },
-    { "PIVOT.ADD.DATA",   338 },        // macro/internal
-    { "GET.PIVOT.TABLE",  339 },        // macro/internal
-    { "GET.PIVOT.FIELD",  340 },        // macro/internal
-    { "GET.PIVOT.ITEM",   341 },        // macro/internal
-    { "RADIANS",          342,  1 },
-    { "DEGREES",          343,  1 },
-    { "SUBTOTAL",         344,  0 },
-    { "SUMIF",            345,  0 },
-    { "COUNTIF",          346,  2 },
-    { "COUNTBLANK",       347,  1 },
-    { "SCENARIO.GET",     348 },        // macro/internal
-    { "OPTIONS.LISTS.GET",349 },        // macro/internal
-    { "ISPMT",            350,  4 },
-    { "DATEDIF",          351 },        // macro/internal
-    { "DATESTRING",       352 },        // macro/internal
-    { "NUMBERSTRING",     353 },        // macro/internal
-    { "ROMAN",            354,  0 },
-    { "OPEN.DIALOG",      355 },        // macro/internal
-    { "SAVE.DIALOG",      356 },        // macro/internal
-    { "VIEW.GET",         357 },        // macro/internal
-    { "GETPIVOTDATA",     358,  0 },
-    { "HYPERLINK",        359,  2 },
-    { "PHONETIC",         360 },        // macro/internal
-    { "AVERAGEA",         361,  0 },
-    { "MAXA",             362,  0 },
-    { "MINA",             363,  0 },
-    { "STDEVPA",          364,  0 },
-    { "VARPA",            365,  0 },
-    { "STDEVA",           366,  0 },
-    { "VARA",             367,  0 },
-    { "BAHTTEXT",         368,  1 },
-    { "THAIDAYOFWEEK",    369 },        // macro/internal
-    { "THAIDIGIT",        370 },        // macro/internal
-    { "THAIMONTHOFYEAR",  371 },        // macro/internal
-    { "THAINUMSOUND",     372 },        // macro/internal
-    { "THAINUMSTRING",    373 },        // macro/internal
-    { "THAISTRINGLENGTH", 374 },        // macro/internal
-    { "ISTHAIDIGIT",      375 },        // macro/internal
-    { "ROUNDBAHTDOWN",    376 },        // macro/internal
-    { "ROUNDBAHTUP",      377 },        // macro/internal
-    { "THAIYEAR",         378 },        // macro/internal
-    { "RTD",              379 }         // macro/internal
+/*  0*/ { "COUNT",                  0 },
+        { "IF",                     0 },
+        { "ISNA",                   1 },
+        { "ISERROR",                1 },
+        { "SUM",                    0 },
+/*  5*/ { "AVERAGE",                0 },
+        { "MIN",                    0 },
+        { "MAX",                    0 },
+        { "ROW",                    0 },
+        { "COLUMN",                 0 },
+/* 10*/ { "NA",                     0 },
+        { "NPV",                    0 },
+        { "STDEV",                  0 },
+        { "DOLLAR",                 0 },
+        { "FIXED",                  0 },
+/* 15*/ { "SIN",                    1 },
+        { "COS",                    1 },
+        { "TAN",                    1 },
+        { "ATAN",                   1 },
+        { "PI",                     0 },
+/* 20*/ { "SQRT",                   1 },
+        { "EXP",                    1 },
+        { "LN",                     1 },
+        { "LOG10",                  1 },
+        { "ABS",                    1 },
+/* 25*/ { "INT",                    1 },
+        { "SIGN",                   1 },
+        { "ROUND",                  2 },
+        { "LOOKUP",                 0 },
+        { "INDEX",                  0 },
+/* 30*/ { "REPT",                   2 },
+        { "MID",                    3 },
+        { "LEN",                    1 },
+        { "VALUE",                  1 },
+        { "TRUE",                   0 },
+/* 35*/ { "FALSE",                  0 },
+        { "AND",                    0 },
+        { "OR",                     0 },
+        { "NOT",                    1 },
+        { "MOD",                    2 },
+/* 40*/ { "DCOUNT",                 3 },
+        { "DSUM",                   3 },
+        { "DAVERAGE",               3 },
+        { "DMIN",                   3 },
+        { "DMAX",                   3 },
+/* 45*/ { "DSTDEV",                 3 },
+        { "VAR",                    0 },
+        { "DVAR",                   3 },
+        { "TEXT",                   2 },
+        { "LINEST",                 0 },
+/* 50*/ { "TREND",                  0 },
+        { "LOGEST",                 0 },
+        { "GROWTH",                 0 },
+        { "GOTO" },                         // macro/internal
+        { "HALT" },                         // macro/internal
+/* 55*/ { "RETURN" },                       // macro/internal
+        { "PV",                     0 },
+        { "FV",                     0 },
+        { "NPER",                   0 },
+        { "PMT",                    0 },
+/* 60*/ { "RATE",                   0 },
+        { "MIRR",                   3 },
+        { "IRR",                    0 },
+        { "RAND",                   0 },
+        { "MATCH",                  0 },
+/* 65*/ { "DATE",                   3 },
+        { "TIME",                   3 },
+        { "DAY",                    1 },
+        { "MONTH",                  1 },
+        { "YEAR",                   1 },
+/* 70*/ { "WEEKDAY",                0 },
+        { "HOUR",                   1 },
+        { "MINUTE",                 1 },
+        { "SECOND",                 1 },
+        { "NOW",                    0 },
+/* 75*/ { "AREAS",                  1 },
+        { "ROWS",                   1 },
+        { "COLUMNS",                1 },
+        { "OFFSET",                 0 },
+        { "ABSREF" },                       // macro/internal
+/* 80*/ { "RELREF" },                       // macro/internal
+        { "ARGUMENT" },                     // macro/internal
+        { "SEARCH",                 0 },
+        { "TRANSPOSE",              1 },
+        { "ERROR" },                        // macro/internal
+/* 85*/ { "STEP" },                         // macro/internal
+        { "TYPE",                   1 },
+        { "ECHO" },                         // macro/internal
+        { "SET.NAME" },                     // macro/internal
+        { "CALLER" },                       // macro/internal
+/* 90*/ { "DEREF" },                        // macro/internal
+        { "WINDOWS" },                      // macro/internal
+        { "SERIES" },                       // macro/internal
+        { "DOCUMENTS" },                    // macro/internal
+        { "ACTIVE.CELL" },                  // macro/internal
+/* 95*/ { "SELECTION" },                    // macro/internal
+        { "RESULT" },                       // macro/internal
+        { "ATAN2",                  2 },
+        { "ASIN",                   1 },
+        { "ACOS",                   1 },
+/*100*/ { "CHOSE",                  0 },
+        { "HLOOKUP",                0 },
+        { "VLOOKUP",                0 },
+        { "LINKS" },                        // macro/internal
+        { "INPUT" },                        // macro/internal
+/*105*/ { "ISREF",                  1 },
+        { "GET.FORMULA" },                  // macro/internal
+        { "GET.NAME" },                     // macro/internal
+        { "SET.VALUE",  2 },                // macro/internal
+        { "LOG",                    0 },
+/*110*/ { "EXEC" },                         // macro/internal
+        { "CHAR",                   1 },
+        { "LOWER",                  1 },
+        { "UPPER",                  1 },
+        { "PROPER",                 1 },
+/*115*/ { "LEFT",                   0 },
+        { "RIGHT",                  0 },
+        { "EXACT",                  2 },
+        { "TRIM",                   1 },
+        { "REPLACE",                4 },
+/*120*/ { "SUBSTITUTE",             0 },
+        { "CODE",                   1 },
+        { "NAMES" },                        // macro/internal
+        { "DIRECTORY" },                    // macro/internal
+        { "FIND",                   0 },
+/*125*/ { "CELL",                   0 },
+        { "ISERR",                  1 },
+        { "ISTEXT",                 1 },
+        { "ISNUMBER",               1 },
+        { "ISBLANK",                1 },
+/*130*/ { "T",                      1 },
+        { "N",                      1 },
+        { "FOPEN" },                        // macro/internal
+        { "FCLOSE" },                       // macro/internal
+        { "FSIZE" },                        // macro/internal
+/*135*/ { "FREADLN" },                      // macro/internal
+        { "FREAD" },                        // macro/internal
+        { "FWRITELN" },                     // macro/internal
+        { "FWRITE" },                       // macro/internal
+        { "FPOS" },                         // macro/internal
+/*140*/ { "DATEVALUE",              1 },
+        { "TIMEVALUE",              1 },
+        { "SLN",                    3 },
+        { "SYD",                    4 },
+        { "DDB",                    0 },
+/*145*/ { "GET.DEF" },                      // macro/internal
+        { "REFTEXT" },                      // macro/internal
+        { "TEXTREF" },                      // macro/internal
+        { "INDIRECT",               0 },
+        { "REGISTER" },                     // macro/internal
+/*150*/ { "CALL" },                         // macro/internal
+        { "ADD.BAR" },                      // macro/internal
+        { "ADD.MENU" },                     // macro/internal
+        { "ADD.COMMAND" },                  // macro/internal
+        { "ENABLE.COMMAND" },               // macro/internal
+/*155*/ { "CHECK.COMMAND" },                // macro/internal
+        { "RENAME.COMMAND" },               // macro/internal
+        { "SHOW.BAR" },                     // macro/internal
+        { "DELETE.MENU" },                  // macro/internal
+        { "DELETE.COMMAND" },               // macro/internal
+/*160*/ { "GET.CHART.ITEM" },               // macro/internal
+        { "DIALOG.BOX" },                   // macro/internal
+        { "CLEAN",                  1 },
+        { "MDETERM",                1 },
+        { "MINVERSE",               1 },
+/*165*/ { "MMULT",                  2 },
+        { "FILES" },                        // macro/internal
+        { "IPMT",                   0 },
+        { "PPMT",                   0 },
+        { "COUNTA",                 0 },
+/*170*/ { "CANCEL.KEY" },                   // macro/internal
+        { "FOR" },                          // macro/internal
+        { "WHILE" },                        // macro/internal
+        { "BREAK" },                        // macro/internal
+        { "NEXT" },                         // macro/internal
+/*175*/ { "INITIATE" },                     // macro/internal
+        { "REQUEST" },                      // macro/internal
+        { "POKE" },                         // macro/internal
+        { "EXECUTE" },                      // macro/internal
+        { "TERMINATE" },                    // macro/internal
+/*180*/ { "RESTART" },                      // macro/internal
+        { "HELP" },                         // macro/internal
+        { "GET.BAR" },                      // macro/internal
+        { "PRODUCT",                0 },
+        { "FACT",                   1 },
+/*185*/ { "GET.CELL" },                     // macro/internal
+        { "GET.WORKSPACE" },                // macro/internal
+        { "GET.WINDOW" },                   // macro/internal
+        { "GET.DOCUMENT" },                 // macro/internal
+        { "DPRODUCT",               3 },
+/*190*/ { "ISNONTEXT",              1 },
+        { "GET.NOTE" },                     // macro/internal
+        { "NOTE" },                         // macro/internal
+        { "STDEVP",                 0 },
+        { "VARP",                   0 },
+/*195*/ { "DSTDDEVP",               3 },
+        { "DVARP",                  3 },
+        { "TRUNC",                  0 },
+        { "ISLOGICAL",              1 },
+        { "DBCOUNTA",               3 },
+/*200*/ { "DELETE.BAR" },                   // macro/internal
+        { "UNREGISTER" },                   // macro/internal
+        { "202" },                          // not used
+        { "203" },                          // not used
+        { "USDOLLAR" },                     // macro/internal
+/*205*/ { "FINDB" },                        // macro/internal
+        { "SEARCHB" },                      // macro/internal
+        { "REPLACEB" },                     // macro/internal
+        { "LEFTB" },                        // macro/internal
+        { "RIGHTB" },                       // macro/internal
+/*210*/ { "MIDB" },                         // macro/internal
+        { "LENB" },                         // macro/internal
+        { "ROUNDUP",                2 },
+        { "ROUNDDOWN",              2 },
+        { "ASC" },                          // macro/internal
+/*215*/ { "DBSC" },                         // macro/internal
+        { "RANK",                   0 },
+        { "217" },                          // not used
+        { "218" },                          // not used
+        { "ADDRESS",                0 },
+/*220*/ { "DAYS360",                0 },
+        { "TODAY",                  0 },
+        { "VDB",                    0 },
+        { "ELSE" },                         // macro/internal
+        { "ELSE.IF" },                      // macro/internal
+/*225*/ { "END.IF" },                       // macro/internal
+        { "FOR.CELL" },                     // macro/internal
+        { "MEDIAN",                 0 },
+        { "SUMPRODUCT",             0 },
+        { "SINH",                   1 },
+/*230*/ { "COSH",                   1 },
+        { "TANH",                   1 },
+        { "ASINH",                  1 },
+        { "ACOSH",                  1 },
+        { "ATANH",                  1 },
+/*235*/ { "DGET",                   3 },
+        { "CREATE.OBJECT" },                // macro/internal
+        { "VOLATILE" },                     // macro/internal
+        { "LAST.ERROR" },                   // macro/internal
+        { "CUSTOM.UNDO" },                  // macro/internal
+/*240*/ { "CUSTOM.REPEAT" },                // macro/internal
+        { "FORMULA.CONVERT" },              // macro/internal
+        { "GET.LINK.INFO" },                // macro/internal
+        { "TEXT.BOX" },                     // macro/internal
+        { "INFO" },                         // macro/internal
+/*245*/ { "GROUP" },                        // macro/internal
+        { "GET.OBJECT" },                   // macro/internal
+        { "DB",                     0 },
+        { "PAUSE" },                        // macro/internal
+        { "249" },                          // not used
+/*250*/ { "250" },                          // not used
+        { "RESUME" },                       // macro/internal
+        { "FREQUENCY",              2 },
+        { "ADD.TOOLBAR" },                  // macro/internal
+        { "DELETE.TOOLBAR" },               // macro/internal
+/*255*/ { "EXTERN.CALL" },                  // macro/internal
+        { "RESET.TOOLBAR" },                // macro/internal
+        { "EVALUATE" },                     // macro/internal
+        { "GET.TOOLBAR" },                  // macro/internal
+        { "GET.TOOL" },                     // macro/internal
+/*260*/ { "SPELLING.CHECK" },               // macro/internal
+        { "ERROR.TYPE",             1 },
+        { "APP.TITLE" },                    // macro/internal
+        { "WINDOW.TITLE" },                 // macro/internal
+        { "SAVE.TOOLBAR" },                 // macro/internal
+/*265*/ { "ENABLE.TOOL" },                  // macro/internal
+        { "PRESS.TOOL" },                   // macro/internal
+        { "REGISTER.ID" },                  // macro/internal
+        { "GET.WORKBOOK" },                 // macro/internal
+        { "AVEDEV",                 0 },
+/*270*/ { "BETADIST",               0 },
+        { "GAMMALN",                1 },
+        { "BETAINV",                0 },
+        { "BINOMDIST",              4 },
+        { "CHIDIST",                2 },
+/*275*/ { "CHIINV",                 2 },
+        { "COMBIN",                 2 },
+        { "CONFIDENCE",             3 },
+        { "CRITBINOM",              3 },
+        { "EVEN",                   1 },
+/*280*/ { "EXPONDIST",              3 },
+        { "FDIST",                  3 },
+        { "FINV",                   3 },
+        { "FISHER",                 1 },
+        { "FISHERINV",              1 },
+/*285*/ { "FLOOR",                  2 },
+        { "GAMMADIST",              4 },
+        { "GAMMAINV",               3 },
+        { "CEILING",                2 },
+        { "HYPGEOMDIST",            4 },
+/*290*/ { "LOGNORMDIST",            3 },
+        { "LOGINV",                 3 },
+        { "NEGBINOMDIST",           3 },
+        { "NORMDIST",               4 },
+        { "NORMSDIST",              1 },
+/*295*/ { "NORMINV",                3 },
+        { "NORMSINV",               1 },
+        { "STANDARDIZE",            3 },
+        { "ODD",                    1 },
+        { "PERMUT",                 2 },
+/*300*/ { "POISSON",                3 },
+        { "TDIST",                  3 },
+        { "WEIBULL",                4 },
+        { "SUMXMY2",                2 },
+        { "SUMX2MY2",               2 },
+/*305*/ { "SUMX2PY2",               2 },
+        { "CHITEST",                2 },
+        { "CORREL",                 2 },
+        { "COVAR",                  2 },
+        { "FORECAST",               3 },
+/*310*/ { "FTEST",                  2 },
+        { "INTERCEPT",              2 },
+        { "PEARSON",                2 },
+        { "RSQ",                    2 },
+        { "STEYX",                  2 },
+/*315*/ { "SLOPE",                  2 },
+        { "TTEST",                  4 },
+        { "PROB",                   0 },
+        { "DEVSQ",                  0 },
+        { "GEOMEAN",                0 },
+/*320*/ { "HARMEAN",                0 },
+        { "SUMSQ",                  0 },
+        { "KURT",                   0 },
+        { "SKEW",                   0 },
+        { "ZTEST",                  0 },
+/*325*/ { "LARGE",                  2 },
+        { "SMALL",                  2 },
+        { "QUARTILE",               2 },
+        { "PERCENTILE",             2 },
+        { "PERCENTRANK",            0 },
+/*330*/ { "MODE",                   0 },
+        { "TRIMMEAN",               2 },
+        { "TINV",                   2 },
+        { "333" },                          // not used
+        { "MOVIE.COMMAND" },                // macro/internal
+/*335*/ { "GET.MOVIE" },                    // macro/internal
+        { "CONCATENATE",            0 },
+        { "POWER",                  2 },
+        { "PIVOT.ADD.DATA" },               // macro/internal
+        { "GET.PIVOT.TABLE" },              // macro/internal
+/*340*/ { "GET.PIVOT.FIELD" },              // macro/internal
+        { "GET.PIVOT.ITEM" },               // macro/internal
+        { "RADIANS",                1 },
+        { "DEGREES",                1 },
+        { "SUBTOTAL",               0 },
+/*345*/ { "SUMIF",                  0 },
+        { "COUNTIF",                2 },
+        { "COUNTBLANK",             1 },
+        { "SCENARIO.GET" },                 // macro/internal
+        { "OPTIONS.LISTS.GET" },            // macro/internal
+/*350*/ { "ISPMT",                  4 },
+        { "DATEDIF" },                      // macro/internal
+        { "DATESTRING" },                   // macro/internal
+        { "NUMBERSTRING" },                 // macro/internal
+        { "ROMAN",                  0 },
+/*355*/ { "OPEN.DIALOG" },                  // macro/internal
+        { "SAVE.DIALOG" },                  // macro/internal
+        { "VIEW.GET" },                     // macro/internal
+        { "GETPIVOTDATA",           0 },
+        { "HYPERLINK",              2 },
+/*360*/ { "PHONETIC" },                     // macro/internal
+        { "AVERAGEA",               0 },
+        { "MAXA",                   0 },
+        { "MINA",                   0 },
+        { "STDEVPA",                0 },
+/*365*/ { "VARPA",                  0 },
+        { "STDEVA",                 0 },
+        { "VARA",                   0 },
+        { "BAHTTEXT",               1 },
+        { "THAIDAYOFWEEK" },                // macro/internal
+/*370*/ { "THAIDIGIT" },                    // macro/internal
+        { "THAIMONTHOFYEAR" },              // macro/internal
+        { "THAINUMSOUND" },                 // macro/internal
+        { "THAINUMSTRING" },                // macro/internal
+        { "THAISTRINGLENGTH" },             // macro/internal
+/*375*/ { "ISTHAIDIGIT" },                  // macro/internal
+        { "ROUNDBAHTDOWN" },                // macro/internal
+        { "ROUNDBAHTUP" },                  // macro/internal
+        { "THAIYEAR" },                     // macro/internal
+        { "RTD" }                           // macro/internal
 };
 
 const XclDumpFunc* lcl_GetFuncData( sal_uInt16 nIndex )
 {
-    const XclDumpFunc* pFirst = pFuncData;
-    const XclDumpFunc* pLast = pFuncData + sizeof( pFuncData ) / sizeof( XclDumpFunc ) - 1;
-    while( pFirst <= pLast )
-    {
-        const XclDumpFunc* pCurr = pFirst + (pLast - pFirst) / 2;
-        if( pCurr->nIndex > nIndex )
-            pLast = pCurr - 1;
-        else if( pCurr->nIndex < nIndex )
-            pFirst = pCurr + 1;
-        else
-            return pCurr;
-    }
-    return NULL;
+    return (nIndex < STATIC_TABLE_SIZE( pFuncData )) ? (pFuncData + nIndex) : NULL;
 }
 
 
@@ -5985,7 +5971,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             break;
             case 0x1D: // Boolean                               [315 266]
                 STARTTOKEN( "Bool" );
-                aOperand += pIn->ReaduInt8() ? "FALSE" : "TRUE";
+                aOperand += pIn->ReaduInt8() ? "TRUE" : "FALSE";
                 t += aOperand;
                 aStack.PushOperand( aOperand );
             break;
@@ -6246,26 +6232,438 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 }
 
 
-void Biff8RecDumper::ControlsDump( SvStream& rIn )
+
+
+/** Import from bytestream. */
+SvStream& operator>>( SvStream& rStrm, XclGuid& rGuid )
 {
-    if( !pDumpStream )
-        return;
+    rStrm.Read( rGuid.mpData, 16 );
+    return rStrm;
+}
 
-    rIn.Seek( STREAM_SEEK_TO_END );
-    ULONG nLen = rIn.Tell();
-    rIn.Seek( STREAM_SEEK_TO_BEGIN );
+/** Output as text. */
+SvStream& operator<<( SvStream& rStrm, const XclGuid& rGuid )
+{
+    ByteString aOut;
+    __AddPureHex( aOut, SVBT32ToLong( rGuid.mpData ) );
+    aOut.Append( '-' );
+    __AddPureHex( aOut, SVBT16ToShort( rGuid.mpData + 4 ) );
+    aOut.Append( '-' );
+    __AddPureHex( aOut, SVBT16ToShort( rGuid.mpData + 6 ) );
+    aOut.Append( '-' );
+    __AddPureHex( aOut, rGuid.mpData[ 8 ] );
+    __AddPureHex( aOut, rGuid.mpData[ 9 ] );
+    aOut.Append( '-' );
+    __AddPureHex( aOut, rGuid.mpData[ 10 ] );
+    __AddPureHex( aOut, rGuid.mpData[ 11 ] );
+    __AddPureHex( aOut, rGuid.mpData[ 12 ] );
+    __AddPureHex( aOut, rGuid.mpData[ 13 ] );
+    __AddPureHex( aOut, rGuid.mpData[ 14 ] );
+    __AddPureHex( aOut, rGuid.mpData[ 15 ] );
+    return rStrm << aOut.GetBuffer();
+}
 
-    if( nLen == ~0UL )
-        return;
+// *** yet some other ugly macros for the specials of form control dumping ***
 
-    *pDumpStream << "### start Ctls stream ###\n";
-    while( nLen )
+// align the instream
+#define EXC_CTRLDUMP_ALIGN_INSTRM( val ) rInStrm.Seek( (rInStrm.Tell()+(val)-1) & ~((val)-1) )
+// push the string to outstream
+#define EXC_CTRLDUMP_PRINT() { if( t.Len() ) { rOutStrm << t.GetBuffer() << '\n'; t.Erase(); } }
+#define EXC_CTRLDUMP_PRINTC() { if( t.Len() > 60 ) EXC_CTRLDUMP_PRINT(); }
+
+// implementation, don't use
+#define IMPL_EXC_CTRLDUMP_VALUE( type, func, text ) { EXC_CTRLDUMP_ALIGN_INSTRM( sizeof( type ) ); type n; rInStrm >> n; t += "  " text "="; func( t, n ); EXC_CTRLDUMP_PRINTC(); }
+#define IMPL_EXC_CTRLDUMP_VAR( var, mask, func, text ) { EXC_CTRLDUMP_ALIGN_INSTRM( sizeof( var ) ); rInStrm >> var; var &= (mask); t += "  " text "="; func( t, var ); EXC_CTRLDUMP_PRINTC(); }
+
+// read a value from stream
+#define EXC_CTRLDUMP_HEX4( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt32, __AddHex, text )
+#define EXC_CTRLDUMP_DEC4( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int32,  __AddDec, text )
+#define EXC_CTRLDUMP_HEX2( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt16, __AddHex, text )
+#define EXC_CTRLDUMP_DEC2( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int16,  __AddDec, text )
+#define EXC_CTRLDUMP_HEX1( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt8,  __AddHex, text )
+#define EXC_CTRLDUMP_DEC1( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int8,   __AddDec, text )
+// read a value from stream into existing variable
+#define EXC_CTRLDUMP_HEXVAR( var, text ) IMPL_EXC_CTRLDUMP_VAR( var, ~0, __AddHex, text )
+#define EXC_CTRLDUMP_DECVAR( var, text ) IMPL_EXC_CTRLDUMP_VAR( var, ~0, __AddDec, text )
+#define EXC_CTRLDUMP_HEXVARMASK( var, mask, text ) IMPL_EXC_CTRLDUMP_VAR( var, mask, __AddHex, text )
+#define EXC_CTRLDUMP_DECVARMASK( var, mask, text ) IMPL_EXC_CTRLDUMP_VAR( var, mask, __AddDec, text )
+// read a string
+#define EXC_CTRLDUMP_STRING( var, text )                    \
+if( var )                                                   \
+{                                                           \
+    EXC_CTRLDUMP_ALIGN_INSTRM( 4 );                         \
+    if( var > 128 ) var = 128;                              \
+    sal_Char* p = new sal_Char[ var + 1 ];                  \
+    rInStrm.Read( p, var ); p[ var ] = '\0';                \
+    t.Append( "  " text "='" ).Append( p ).Append( '\'' );  \
+    delete [] p;                                            \
+    EXC_CTRLDUMP_PRINTC();                                  \
+}
+// read flag fields
+#define EXC_CTRLDUMP_STARTFLAG( text ) { EXC_CTRLDUMP_ALIGN_INSTRM( 4 ); rInStrm >> __nFlags; t += "  " text "="; __AddHex( t, __nFlags ); }
+#define EXC_CTRLDUMP_ADDFLAG( flag, text ) { if( __nFlags & (flag) ) t += " -" text; EXC_CTRLDUMP_PRINTC(); }
+#define EXC_CTRLDUMP_ENDFLAG( reserved ) EXC_CTRLDUMP_ADDFLAG( reserved, "!unknown!" )
+// read coordinates
+#define EXC_CTRLDUMP_COORD( text ) { EXC_CTRLDUMP_ALIGN_INSTRM( 4 ); EXC_CTRLDUMP_DEC2( text "-x" ); EXC_CTRLDUMP_DEC2( "y" ); }
+#define EXC_CTRLDUMP_SIZE() { EXC_CTRLDUMP_DEC4( "width" ); EXC_CTRLDUMP_DEC4( "height" ); }
+
+// *** macros end ***
+
+void Biff8RecDumper::ControlsDump( SvStream& rInStrm )
+{
+    static const XclGuid aPushButtonGuid(   0xD7053240, 0xCE69, 0x11CD, 0xA7, 0x77, 0x00, 0xDD, 0x01, 0x14, 0x3C, 0x57 );
+    static const XclGuid aToggleButtonGuid( 0x8BD21D60, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
+    static const XclGuid aCheckBoxGuid(     0x8BD21D40, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
+    static const XclGuid aRadioButtonGuid(  0x8BD21D50, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
+    static const XclGuid aLabelGuid(        0x978C9E23, 0xD4B0, 0x11CE, 0xBF, 0x2D, 0x00, 0xAA, 0x00, 0x3F, 0x40, 0xD0 );
+    static const XclGuid aEditGuid(         0x8BD21D10, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
+    static const XclGuid aListBoxGuid(      0x8BD21D20, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
+    static const XclGuid aComboBoxGuid(     0x8BD21D30, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 );
+    static const XclGuid aSpinGuid(         0x79176FB0, 0xB7F2, 0x11CE, 0x97, 0xEF, 0x00, 0xAA, 0x00, 0x6D, 0x27, 0x76 );
+    static const XclGuid aScrollBarGuid(    0xDFD181E0, 0x5E2F, 0x11CE, 0xA4, 0x49, 0x00, 0xAA, 0x00, 0x4A, 0x80, 0x3D );
+
+    if( !pDumpStream ) return;
+    rInStrm.Seek( STREAM_SEEK_TO_END );
+    sal_uInt32 nInSize = rInStrm.Tell();
+    rInStrm.Seek( STREAM_SEEK_TO_BEGIN );
+    if( nInSize == ~0UL ) return;
+
+    SvStream& rOutStrm = *pDumpStream;
+    rOutStrm << "\n\n\n-- Ctls stream dump --\n";
+
+    enum {
+        xlCtrlPushButton,
+        xlCtrlToggleButton,
+        xlCtrlCheckBox,
+        xlCtrlRadioButton,
+        xlCtrlLabel,
+        xlCtrlEdit,
+        xlCtrlListBox,
+        xlCtrlComboBox,
+        xlCtrlSpin,
+        xlCtrlScrollBar,
+        xlCtrlUnknown
+    } eCtrlType = xlCtrlUnknown;
+
+    while( rInStrm.Tell() < nInSize )
     {
-        UINT16  nPart = ( nLen >= 1024 )? 1024 : ( UINT16 ) nLen;
-        ContDumpStream( rIn, nPart );
-        nLen -= nPart;
+        ByteString t;           // "t" needed for macros
+        sal_uInt32 __nFlags;    // "__nFlags" needed for macros
+        sal_uInt16 nId, nSize;
+        sal_uInt32 nNextPos;
+
+        // stream position
+        __AddHex( t, rInStrm.Tell() );
+        rOutStrm << '\n' << t.GetBuffer() << ": ";
+
+        // control type
+        XclGuid aGuid;
+        rInStrm >> aGuid >> nId >> nSize;
+        nNextPos = rInStrm.Tell() + nSize;
+
+        if( aGuid == aPushButtonGuid )              eCtrlType = xlCtrlPushButton;
+        else if( aGuid == aToggleButtonGuid )       eCtrlType = xlCtrlToggleButton;
+        else if( aGuid == aCheckBoxGuid )           eCtrlType = xlCtrlCheckBox;
+        else if( aGuid == aRadioButtonGuid )        eCtrlType = xlCtrlRadioButton;
+        else if( aGuid == aLabelGuid )              eCtrlType = xlCtrlLabel;
+        else if( aGuid == aEditGuid )               eCtrlType = xlCtrlEdit;
+        else if( aGuid == aListBoxGuid )            eCtrlType = xlCtrlListBox;
+        else if( aGuid == aComboBoxGuid )           eCtrlType = xlCtrlComboBox;
+        else if( aGuid == aSpinGuid )               eCtrlType = xlCtrlSpin;
+        else if( aGuid == aScrollBarGuid )          eCtrlType = xlCtrlScrollBar;
+        else                                        eCtrlType = xlCtrlUnknown;
+
+        // write control type
+        rOutStrm << aGuid << " (";
+        switch( eCtrlType )
+        {
+            case xlCtrlPushButton:      rOutStrm << "PushButton";       break;
+            case xlCtrlToggleButton:    rOutStrm << "ToggleButton";     break;
+            case xlCtrlCheckBox:        rOutStrm << "CheckBox";         break;
+            case xlCtrlRadioButton:     rOutStrm << "RadioButton";      break;
+            case xlCtrlLabel:           rOutStrm << "Label";            break;
+            case xlCtrlEdit:            rOutStrm << "Edit";             break;
+            case xlCtrlListBox:         rOutStrm << "ListBox";          break;
+            case xlCtrlComboBox:        rOutStrm << "ComboBox";         break;
+            case xlCtrlSpin:            rOutStrm << "Spin";             break;
+            case xlCtrlScrollBar:       rOutStrm << "ScrollBar";        break;
+            default:                    rOutStrm << "*UNKNOWN*";
+        }
+        rOutStrm << ")\n";
+
+        // control data
+        t = "id="; __AddHex( t, nId ); t += "  size="; __AddHex( t, nSize );
+        rOutStrm << t.GetBuffer() << "   (control data)\n";
+        t.Erase();
+
+        switch( eCtrlType )
+        {
+            case xlCtrlPushButton:
+            {
+                sal_uInt32 nCaptionLen = 0;
+
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0001, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0004, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0008, "caption" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0010, "picpos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0080, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0100, "accel" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0400, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFA00 ); // 0x20 always(?)
+                sal_uInt32 nCtrlFlags = __nFlags;
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x0004 )
+                {
+                    EXC_CTRLDUMP_STARTFLAG( "option-flags" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "backstyle" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
+                    EXC_CTRLDUMP_ENDFLAG( 0xEF7FFFF1 );
+                }
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
+                if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_COORD( "picpos" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_HEX2( "mouseptr" );
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_HEX2( "pic-len" );
+                if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "accel" );
+                if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEX2( "icon-len" );
+                EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
+                EXC_CTRLDUMP_SIZE();
+            }
+            break;
+            case xlCtrlToggleButton:
+            case xlCtrlCheckBox:
+            case xlCtrlRadioButton:
+            case xlCtrlEdit:
+            case xlCtrlListBox:
+            case xlCtrlComboBox:
+            {
+                sal_uInt32 nCaptionLen = 0;
+                sal_uInt32 nValueLen = 0;
+                sal_uInt32 nGroupNameLen = 0;
+
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000001, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000004, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000008, "maxlen" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000010, "borderstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000020, "scrollbars" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000040, "style" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000080, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000200, "password" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000400, "listwidth" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000800, "boundcol" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00001000, "textcol" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00002000, "colcount" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00004000, "listrows" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00008000, "colwidth?" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00010000, "matchentry" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00020000, "liststyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00040000, "showdropbtn" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00100000, "dropbtnstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00200000, "multistate" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00400000, "value" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00800000, "caption" );
+                EXC_CTRLDUMP_ADDFLAG( 0x01000000, "pos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x02000000, "bordercolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x04000000, "specialeff" );
+                EXC_CTRLDUMP_ADDFLAG( 0x08000000, "icon" );
+                EXC_CTRLDUMP_ADDFLAG( 0x10000000, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x20000000, "accel" );
+                EXC_CTRLDUMP_ENDFLAG( 0x40080000 ); // 0x80000100 always set?
+                sal_uInt32 nCtrlFlags = __nFlags;
+
+                EXC_CTRLDUMP_STARTFLAG( "2nd-content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x00000001, "groupname" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFFFFE );
+                sal_uInt32 nCtrlFlags2 = __nFlags;
+
+                if( nCtrlFlags & 0x00000001 )
+                {
+                    EXC_CTRLDUMP_STARTFLAG( "option-flags" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "backstyle" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000400, "colheads" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000800, "intheight" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00001000, "matchreq" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00002000, "align" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00080000, "dragbehav" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00100000, "enterkeybehav" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00200000, "enterfieldbehav" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00400000, "tabkeybehav" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x04000000, "selmargin" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x08000000, "autowordsel" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x20000000, "hidesel" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x40000000, "autotab" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x80000000, "multiline" );
+                    EXC_CTRLDUMP_ENDFLAG( 0x0307C3F1 );
+                }
+                if( nCtrlFlags & 0x00000002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x00000004 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x00000008 ) EXC_CTRLDUMP_DEC4( "maxlen" );
+                if( nCtrlFlags & 0x00000010 ) EXC_CTRLDUMP_DEC1( "borderstyle" );
+                if( nCtrlFlags & 0x00000020 ) EXC_CTRLDUMP_DEC1( "scrollbars" );
+                if( nCtrlFlags & 0x00000040 ) EXC_CTRLDUMP_DEC1( "style" );
+                if( nCtrlFlags & 0x00000080 ) EXC_CTRLDUMP_DEC1( "mouseptr" );
+                if( nCtrlFlags & 0x00000200 ) EXC_CTRLDUMP_HEX1( "password" );
+                if( nCtrlFlags & 0x00000400 ) EXC_CTRLDUMP_DEC4( "listwidth" );
+                if( nCtrlFlags & 0x00000800 ) EXC_CTRLDUMP_DEC2( "boundcol" );
+                if( nCtrlFlags & 0x00001000 ) EXC_CTRLDUMP_DEC2( "textcol" );
+                if( nCtrlFlags & 0x00002000 ) EXC_CTRLDUMP_DEC2( "colcount" );
+                if( nCtrlFlags & 0x00004000 ) EXC_CTRLDUMP_DEC2( "listrows" );
+                if( nCtrlFlags & 0x00008000 ) EXC_CTRLDUMP_DEC2( "colwidth?" );
+                if( nCtrlFlags & 0x00010000 ) EXC_CTRLDUMP_DEC1( "matchentry" );
+                if( nCtrlFlags & 0x00020000 ) EXC_CTRLDUMP_DEC1( "liststyle" );
+                if( nCtrlFlags & 0x00040000 ) EXC_CTRLDUMP_DEC1( "showdropbtn" );
+                if( nCtrlFlags & 0x00100000 ) EXC_CTRLDUMP_DEC1( "dropbtnstyle" );
+                if( nCtrlFlags & 0x00200000 ) EXC_CTRLDUMP_DEC1( "multistate" );
+                if( nCtrlFlags & 0x00400000 ) EXC_CTRLDUMP_DECVARMASK( nValueLen, 0x7FFFFFFF, "value-len" );
+                if( nCtrlFlags & 0x00800000 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
+                if( nCtrlFlags & 0x01000000 ) EXC_CTRLDUMP_COORD( "pos" );
+                if( nCtrlFlags & 0x02000000 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
+                if( nCtrlFlags & 0x04000000 ) EXC_CTRLDUMP_DEC1( "specialeff" );
+                if( nCtrlFlags & 0x08000000 ) EXC_CTRLDUMP_DEC2( "icon-len" );
+                if( nCtrlFlags & 0x10000000 ) EXC_CTRLDUMP_DEC2( "pic-len" );
+                if( nCtrlFlags & 0x20000000 ) EXC_CTRLDUMP_HEX1( "accel" );
+                if( nCtrlFlags2 & 0x00000001 ) EXC_CTRLDUMP_DECVARMASK( nGroupNameLen, 0x7FFFFFFF, "groupname-len" );
+                EXC_CTRLDUMP_SIZE();
+                EXC_CTRLDUMP_STRING( nValueLen, "value" );
+                EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
+                EXC_CTRLDUMP_STRING( nGroupNameLen, "groupname" );
+            }
+            break;
+            case xlCtrlLabel:
+            {
+                sal_uInt32 nCaptionLen = 0;
+
+                EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0001, "forecolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0002, "backcolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0004, "option" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0008, "caption" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0010, "pos" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0040, "mouseptr" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0080, "bordercolor" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0100, "borderstyle" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0200, "specialeff" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0400, "pic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x0800, "accel" );
+                EXC_CTRLDUMP_ADDFLAG( 0x1000, "icon" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFFE020 );
+                sal_uInt32 nCtrlFlags = __nFlags;
+
+                if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_HEX4( "forecolor" );
+                if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_HEX4( "backcolor" );
+                if( nCtrlFlags & 0x0004 )
+                {
+                    EXC_CTRLDUMP_STARTFLAG( "option-flags" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000002, "enabled" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000004, "locked" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00000008, "backstyle" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x00800000, "wordwrap" );
+                    EXC_CTRLDUMP_ADDFLAG( 0x10000000, "autosize" );
+                    EXC_CTRLDUMP_ENDFLAG( 0xEF7FFFF1 );
+                }
+                if( nCtrlFlags & 0x0008 ) EXC_CTRLDUMP_DECVARMASK( nCaptionLen, 0x7FFFFFFF, "caption-len" );
+                if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_COORD( "pos" );
+                if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_HEX2( "mouseptr" );
+                if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_HEX4( "bordercolor" );
+                if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_HEX2( "borderstyle" );
+                if( nCtrlFlags & 0x0200 ) EXC_CTRLDUMP_HEX2( "specialleff" );
+                if( nCtrlFlags & 0x0400 ) EXC_CTRLDUMP_HEX2( "pic-len" );
+                if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_HEX2( "accel" );
+                if( nCtrlFlags & 0x1000 ) EXC_CTRLDUMP_HEX2( "icon-len" );
+                EXC_CTRLDUMP_STRING( nCaptionLen, "caption" );
+                EXC_CTRLDUMP_SIZE();
+            }
+            break;
+        }
+        EXC_CTRLDUMP_PRINT();
+
+        EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
+        if( rInStrm.Tell() < nNextPos )
+        {
+            rOutStrm << "  unknown data:";
+            ContDumpStream( rInStrm, nNextPos - rInStrm.Tell() );
+            rOutStrm << '\n';
+        }
+        rInStrm.Seek( nNextPos );
+
+        // font data
+        rInStrm >> nId >> nSize;
+        if( nId == 0x0200 )
+        {
+            nNextPos = rInStrm.Tell() + nSize;
+
+            t = "id="; __AddHex( t, nId ); t += "  size="; __AddHex( t, nSize );
+            rOutStrm << t.GetBuffer() << "   (font data)\n";
+            t.Erase();
+
+            EXC_CTRLDUMP_STARTFLAG( "content-flags" );
+            EXC_CTRLDUMP_ADDFLAG( 0x01, "fontname" );
+            EXC_CTRLDUMP_ADDFLAG( 0x02, "fontstyle" );
+            EXC_CTRLDUMP_ADDFLAG( 0x04, "fontsize" );
+            EXC_CTRLDUMP_ADDFLAG( 0x10, "language-id" );
+            EXC_CTRLDUMP_ADDFLAG( 0x40, "align" );
+            EXC_CTRLDUMP_ADDFLAG( 0x80, "fontweight" );
+            EXC_CTRLDUMP_ENDFLAG( 0xFFFFFF08 ); // 0x20 always set?
+            sal_uInt32 nCtrlFlags = __nFlags;
+            sal_uInt32 nFontLen = 0;
+
+            if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_DECVARMASK( nFontLen, 0x7FFFFFFF, "fontname-len" );
+            if( nCtrlFlags & 0x0002 )
+            {
+                EXC_CTRLDUMP_STARTFLAG( "fontstyle-flags" );
+                EXC_CTRLDUMP_ADDFLAG( 0x01, "bold" );
+                EXC_CTRLDUMP_ADDFLAG( 0x02, "italic" );
+                EXC_CTRLDUMP_ADDFLAG( 0x04, "underline" );
+                EXC_CTRLDUMP_ADDFLAG( 0x08, "strikeout" );
+                EXC_CTRLDUMP_ENDFLAG( 0xBFFFFFF0 ); // 0x40000000 always set?
+            }
+            if( nCtrlFlags & 0x0004 ) EXC_CTRLDUMP_DEC4( "fontsize" );
+            if( nCtrlFlags & 0x0010 ) EXC_CTRLDUMP_HEX2( "language-id" );
+            if( nCtrlFlags & 0x0040 )
+            {
+                EXC_CTRLDUMP_ALIGN_INSTRM( 2 );
+                sal_uInt16 nAlign; rInStrm >> nAlign;
+                t += "  align="; __AddDec( t, nAlign );
+                switch( nAlign )
+                {
+                    case 1: t += "=left";   break;
+                    case 2: t += "=right";  break;
+                    case 3: t += "=center"; break;
+                    default: t += "=!unknown!";
+                }
+                EXC_CTRLDUMP_PRINTC();
+            }
+            if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_DEC2( "fontweight" );
+            EXC_CTRLDUMP_STRING( nFontLen, "font" );
+            EXC_CTRLDUMP_PRINT();
+
+            EXC_CTRLDUMP_ALIGN_INSTRM( 4 );
+            if( rInStrm.Tell() < nNextPos )
+            {
+                rOutStrm << "  unknown data:";
+                ContDumpStream( rInStrm, nNextPos - rInStrm.Tell() );
+                rOutStrm << '\n';
+            }
+            rInStrm.Seek( nNextPos );
+        }
+        else
+            rInStrm.SeekRel( -4 );
     }
-    *pDumpStream << "\n### end Ctls stream ###\n";
+
+    rOutStrm << "\n-- end of stream --\n";
 }
 
 
@@ -7582,11 +7980,14 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         r.StoreGlobalPosition();
         r.SetWarningMode( bWarnings );
 
-        FilterProgressBar*  pPrgrsBar = new FilterProgressBar( r );
+        ::std::auto_ptr< ScfProgressBar > pProgress( new ScfProgressBar(
+            pExcRoot->pIR->GetDocShell(), String( RTL_CONSTASCII_USTRINGPARAM( "Dumper" ) ) ) );
+        sal_Int32 nStreamSeg = pProgress->AddSegment( r.GetStreamSize() );
+        pProgress->ActivateSegment( nStreamSeg );
 
         while( r.StartNextRecord() )
         {
-            pPrgrsBar->Progress();
+            pProgress->Progress( r.Tell() );
 
             if( HasModeDump( r.GetRecId() ) )
                 RecDump();
@@ -7595,7 +7996,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         *pDumpStream << '\n';
 
         pIn = NULL;
-        delete pPrgrsBar;
+        pProgress.reset();
 
         r.SeekGlobalPosition();
         r.SetWarningMode( TRUE );

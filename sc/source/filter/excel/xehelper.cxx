@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,10 +694,29 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                             aParaText.AppendAscii( "&D" );
                         else if( pFieldData->ISA( SvxTimeField ) || pFieldData->ISA( SvxExtTimeField ) )
                             aParaText.AppendAscii( "&T" );
-                        else if( pFieldData->ISA( SvxFileField ) || pFieldData->ISA( SvxExtFileField ) )
-                            aParaText.AppendAscii( "&F" );
                         else if( pFieldData->ISA( SvxTableField ) )
                             aParaText.AppendAscii( "&A" );
+                        else if( pFieldData->ISA( SvxFileField ) )  // title -> file name
+                            aParaText.AppendAscii( "&F" );
+                        else if( pFieldData->ISA( SvxExtFileField ) )
+                        {
+                            const SvxExtFileField* pFileField = static_cast< const SvxExtFileField* >( pFieldData );
+                            switch( pFileField->GetFormat() )
+                            {
+                                case SVXFILEFORMAT_NAME_EXT:
+                                case SVXFILEFORMAT_NAME:
+                                    aParaText.AppendAscii( "&F" );
+                                break;
+                                case SVXFILEFORMAT_PATH:
+                                    aParaText.AppendAscii( "&Z" );
+                                break;
+                                case SVXFILEFORMAT_FULLPATH:
+                                    aParaText.AppendAscii( "&Z&F" );
+                                break;
+                                default:
+                                    DBG_ERRORFILE( "XclExpHFConverter::AppendPortion - unknown file field" );
+                            }
+                        }
                     }
                 }
                 else

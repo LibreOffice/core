@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-27 15:08:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,11 +234,21 @@ SfxPrinter* ScDocument::GetPrinter()
 
 void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
 {
-    SfxPrinter* pOld = pPrinter;
-    pPrinter = pNewPrinter;
-    UpdateDrawPrinter();
-    delete pOld;
-    InvalidateTextWidth();
+    if ( pNewPrinter == pPrinter )
+    {
+        //  #i6706# SetPrinter is called with the same printer again if
+        //  the JobSetup has changed. In that case just call UpdateDrawPrinter
+        //  (SetRefDevice for drawing layer) because of changed text sizes.
+        UpdateDrawPrinter();
+    }
+    else
+    {
+        SfxPrinter* pOld = pPrinter;
+        pPrinter = pNewPrinter;
+        UpdateDrawPrinter();
+        delete pOld;
+    }
+    InvalidateTextWidth();      // in both cases
 }
 
 //------------------------------------------------------------------------

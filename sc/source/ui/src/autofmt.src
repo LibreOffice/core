@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:54:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text [ french ] = "AutoFormat" ;
     Text [ swedish ] = "Autoformat" ;
     Text [ dutch ] = "AutoOpmaak" ;
-    Text [ spanish ] = "AutoFormato" ;
+    Text [ spanish ] = "Formateado automático" ;
     Text [ english_us ] = "AutoFormat" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -101,10 +101,10 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "~Formato" ;
         Text [ portuguese ] = "Fo~rmato" ;
-        Text [ finnish ] = "~Muotoile" ;
-        Text [ danish ] = "Forma~ter" ;
+        Text [ finnish ] = "Muotoil~e" ;
+        Text [ danish ] = "Form~ater" ;
         Text [ french ] = "Forma~t" ;
-        Text [ swedish ] = "~Format" ;
+        Text [ swedish ] = "Form~at" ;
         Text [ dutch ] = "~Opmaak" ;
         Text [ spanish ] = "~Formato" ;
         Text [ english_us ] = "F~ormat" ;
@@ -118,7 +118,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ì„œì‹(~O)";
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Formato";
+        Text[ catalan ] = "~Format";
+        Text[ thai ] = "~à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     Window WND_PREVIEW
     {
@@ -147,16 +148,17 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "A~utoFit width and height" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "è°ƒæ•´å®½åº¦/é«˜åº¦(~U)";
-        Text[ russian ] = "Ïîäáîğ øèğèíû/âûñîòû";
+        Text[ russian ] = "Ïîäáîğ øèğèíû è âûñîòû";
         Text[ polish ] = "Dostosuj szerokoœæ/wysokoœæ";
         Text[ japanese ] = "å¹…ã¨é«˜ã•ã®èª¿æ•´(~U)";
         Text[ chinese_traditional ] = "èª¿æ•´å¯¬åº¦/é«˜åº¦(~U)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ æÇáÇÑÊİÇÚ";
         Text[ greek ] = "Ñıèìéóç ğëÜôïõò/ıøïõò";
-        Text[ korean ] = "ë„ˆë¹„ì™€ ë†’ì´ ì¡°ì ˆ(~U)";
+        Text[ korean ] = "ë„ˆë¹„ ë° ë†’ì´ ìë™ ë§ì¶¤(~U)";
         Text[ turkish ] = "Genişlik/yüksekliği ayarla";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ajustar anc~ho/alto";
+        Text[ catalan ] = "Aj~usta automàticament l'amplada i l'alçada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¹à¸¥à¸°à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸à¸­à¸”à¸µà¸­à¸±~à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     CheckBox BTN_BORDER
     {
@@ -174,7 +176,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ french ] = "~Bordure" ;
         Text [ swedish ] = "~Inramning" ;
         Text [ dutch ] = "~Omranding" ;
-        Text [ spanish ] = "~Borde" ;
+        Text [ spanish ] = "~Bordes" ;
         Text [ english_us ] = "~Borders" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "è¾¹æ¡†(~B)";
@@ -184,10 +186,11 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_traditional ] = "é‚Šæ¡†(~B)";
         Text[ arabic ] = "ÇáÍÏæÏ";
         Text[ greek ] = "Ğåñßãñáììá";
-        Text[ korean ] = "ì™¸ê³½ì„ (~B)";
+        Text[ korean ] = "í…Œë‘ë¦¬(~B)";
         Text[ turkish ] = "~Kenarlık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Borde";
+        Text[ catalan ] = "~Vores";
+        Text[ thai ] = "~à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
     };
     CheckBox BTN_FONT
     {
@@ -202,7 +205,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ portuguese ] = "~Tipo de letra" ;
         Text [ finnish ] = "~Fontti" ;
         Text [ danish ] = "Skrifttype" ;
-        Text [ french ] = "~Police" ;
+        Text [ french ] = "Police" ;
         Text [ swedish ] = "Tecken~snitt" ;
         Text [ dutch ] = "~Lettertype" ;
         Text [ spanish ] = "Fuen~te" ;
@@ -211,14 +214,15 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_simplified ] = "å­—ä½“(~O)";
         Text[ russian ] = "Øğèôò";
         Text[ polish ] = "Czcionka";
-        Text[ japanese ] = "ï¾Œï½«ï¾ï¾„ã®ç¨®é¡(~O)";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®ç¨®é¡(~O)";
         Text[ chinese_traditional ] = "å­—å‹(~O)";
         Text[ arabic ] = "äæÚ ÇáÎØ";
         Text[ greek ] = "ÃñáììáôïóåéñÜ";
         Text[ korean ] = "ê¸€ê¼´(~O)";
         Text[ turkish ] = "~Yazıtipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fuen~te";
+        Text[ catalan ] = "T~ipus de lletra";
+        Text[ thai ] = "à¸•à¸±à¸§~à¸­à¸±à¸à¸©à¸£";
     };
     CheckBox BTN_PATTERN
     {
@@ -240,7 +244,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "~Pattern" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å›¾æ¡ˆ(~P)";
-        Text[ russian ] = "~Óçîğ";
+        Text[ russian ] = "~Îğíàìåíò";
         Text[ polish ] = "Deseñ";
         Text[ japanese ] = "èƒŒæ™¯(~P)";
         Text[ chinese_traditional ] = "åœ–æ¡ˆ(~P)";
@@ -249,7 +253,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "íŒ¨í„´(~P)";
         Text[ turkish ] = "~Örnek";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modelo";
+        Text[ catalan ] = "~Patró";
+        Text[ thai ] = "~à¸¥à¸§à¸”à¸¥à¸²à¸¢";
     };
     CheckBox BTN_ALIGNMENT
     {
@@ -259,12 +264,12 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text = "~Ausrichtung" ;
         Text [ ENGLISH ] = "Orien~tation" ;
         Text [ norwegian ] = "Orien~tation" ;
-        Text [ italian ] = "Orien~tamento" ;
+        Text [ italian ] = "~Orientamento" ;
         Text [ portuguese_brazilian ] = "Orien~ta??o" ;
         Text [ portuguese ] = "~Alinhamento" ;
         Text [ finnish ] = "~Tasaus" ;
         Text [ danish ] = "Justering" ;
-        Text [ french ] = "~Alignement" ;
+        Text [ french ] = "Alignement" ;
         Text [ swedish ] = "~Justering" ;
         Text [ dutch ] = "~Positie" ;
         Text [ spanish ] = "A~lineación" ;
@@ -280,7 +285,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ë§ì¶¤(~T)";
         Text[ turkish ] = "~Hizalama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~lineación";
+        Text[ catalan ] = "A~lineació";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹~à¸«à¸™à¹ˆà¸‡";
     };
     CheckBox BTN_NUMFORMAT
     {
@@ -293,12 +299,12 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Formato ~numero" ;
         Text [ portuguese_brazilian ] = "~Formatodon?ero" ;
         Text [ portuguese ] = "~Formato numérico" ;
-        Text [ finnish ] = "~Numeromuoto" ;
+        Text [ finnish ] = "~Lukumuoto" ;
         Text [ danish ] = "Talformat" ;
         Text [ french ] = "~Format numérique" ;
         Text [ swedish ] = "Talf~ormat" ;
         Text [ dutch ] = "~Getalnotatie" ;
-        Text [ spanish ] = "~Formato de números" ;
+        Text [ spanish ] = "Formato nu~mérico" ;
         Text [ english_us ] = "~Number format" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ•°å­—æ ¼å¼(~N)";
@@ -308,10 +314,11 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_traditional ] = "æ•¸å­—æ ¼å¼(~N)";
         Text[ arabic ] = "ÊäÓíŞ ÇáÃÑŞÇã";
         Text[ greek ] = "ÌïñöŞ áñéèìşí";
-        Text[ korean ] = "ìˆ«ì í¬ë§·(~N)";
+        Text[ korean ] = "ìˆ«ì í‘œê¸° í˜•ì‹(~N)";
         Text[ turkish ] = "Sayı f~ormatı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Formato de números";
+        Text[ catalan ] = "Format dels ~nombres";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š~à¸•à¸±à¸§à¹€à¸¥à¸‚";
     };
     FixedLine FL_FORMATTING
     {
@@ -328,7 +335,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ danish ] = "Formatering" ;
         Text [ french ] = "Formatage" ;
         Text [ swedish ] = "Formatering" ;
-        Text [ dutch ] = "Opmaken" ;
+        Text [ dutch ] = "Opmaak" ;
         Text [ spanish ] = "Formato" ;
         Text [ english_us ] = "Formatting" ;
         Text[ chinese_simplified ] = "æ ¼å¼åŒ–";
@@ -338,10 +345,11 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_traditional ] = "æ ¼å¼åŒ–";
         Text[ arabic ] = "ÊäÓíŞ";
         Text[ greek ] = "Ìïñöïğïßçóç";
-        Text[ korean ] = "í¬ë§·íŒ…";
+        Text[ korean ] = "ì„œì‹ ì„¤ì •";
         Text[ turkish ] = "Formatlama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato";
+        Text[ catalan ] = "Format";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     OKButton BTN_OK
     {
@@ -375,7 +383,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "~Inserisci..." ;
         Text [ portuguese_brazilian ] = "~Add..." ;
         Text [ portuguese ] = "~Adicionar..." ;
-        Text [ finnish ] = "~Lis??..." ;
+        Text [ finnish ] = "~Lisää..." ;
         Text [ danish ] = "Tilføj..." ;
         Text [ french ] = "A~jouter..." ;
         Text [ swedish ] = "Lägg ti~ll..." ;
@@ -397,7 +405,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ì¶”ê°€(~A)...";
         Text[ turkish ] = "~Ekle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Añadir...";
+        Text[ catalan ] = "~Afegeix...";
+        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡...";
     };
     PushButton BTN_REMOVE
     {
@@ -412,10 +421,10 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
@@ -428,7 +437,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
+        Text[ thai ] = "~à¸¥à¸š";
     };
 
     PushButton BTN_RENAME
@@ -458,8 +468,9 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ì´ë¦„ ë°”ê¾¸ê¸°(~R)";
         Text[ turkish ] = "~Yeniden adlandır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cambiar ~nombre";
-        Text[ finnish ] = "~Nime? uudelleen";
+        Text[ catalan ] = "~Reanomena";
+        Text[ finnish ] = "~Nimeä uudelleen";
+        Text[ thai ] = "à¹€~à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
     };
 
     HelpButton BTN_HELP
@@ -479,24 +490,25 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Aggiungi formattazione automatica" ;
         Text [ portuguese_brazilian ] = "Acrescentar Formato autom?tico" ;
         Text [ portuguese ] = "Adicionar AutoFormato" ;
-        Text [ finnish ] = "Lis?? automaattinen muotoilu" ;
+        Text [ finnish ] = "Lisää automaattinen muotoilu" ;
         Text [ danish ] = "Tilføj AutoFormat" ;
         Text [ french ] = "Ajouter un AutoFormat" ;
         Text [ swedish ] = "Lägg till autoformat" ;
         Text [ dutch ] = "AutoOpmaak toevoegen" ;
-        Text [ spanish ] = "Añadir AutoFormato" ;
+        Text [ spanish ] = "Añadir Formateado automático" ;
         Text [ english_us ] = "Add AutoFormat" ;
         Text[ chinese_simplified ] = "æ–°å¢è‡ªåŠ¨æ ¼å¼";
         Text[ russian ] = "Äîáàâèòü àâòîôîğìàò";
         Text[ polish ] = "Dodaj Autoformat";
-        Text[ japanese ] = "ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„ã®è¿½åŠ ";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®è¿½åŠ ";
         Text[ chinese_traditional ] = "æ–°å¢è‡ªå‹•æ ¼å¼";
         Text[ arabic ] = "ÅÖÇİÉ ÊäÓíŞ ÊáŞÇÆí";
         Text[ greek ] = "ĞñïóèŞêç ÁõôïÌïñöŞò";
-        Text[ korean ] = "ìë™ì„œì‹ ì¶”ê°€";
+        Text[ korean ] = "ìë™ ì„œì‹ ì¶”ê°€";
         Text[ turkish ] = "Otomatik formatlama ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Añadir AutoFormato";
+        Text[ catalan ] = "Afegeix el formatatge automàtic";
+        Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
 
     String STR_RENAME_TITLE
@@ -509,21 +521,22 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ swedish ] = "Byt namn på autoformat" ;
         Text [ danish ] = "Omdøb AutoFormat" ;
         Text [ italian ] = "Rinomina formattazione automatica" ;
-        Text [ spanish ] = "Cambiar nombre del AutoFormato" ;
+        Text [ spanish ] = "Cambiar nombre del Formateado automático" ;
         Text [ french ] = "Renommer l'AutoFormat" ;
         Text [ dutch ] = "AutoOpmaak nieuwe naam geven" ;
         Text[ chinese_simplified ] = "é‡å‘½åè‡ªåŠ¨æ ¼å¼";
         Text[ russian ] = "Ïåğåèìåíîâàòü àâòîôîğìàò";
         Text[ polish ] = "Zmieñ nazwê Autoformatu";
-        Text[ japanese ] = "ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„ã®åå‰ã®å¤‰æ›´";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®åå‰ã®å¤‰æ›´";
         Text[ chinese_traditional ] = "é‡æ–°å‘½åè‡ªå‹•æ ¼å¼";
         Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
         Text[ greek ] = "Ìåôïíïìáóßá ÁõôïÌïñöŞò";
-        Text[ korean ] = "ìë™ì„œì‹ ì´ë¦„ ë°”ê¾¸ê¸°";
+        Text[ korean ] = "ìë™ ì„œì‹ ì´ë¦„ ë°”ê¾¸ê¸°";
         Text[ turkish ] = "Otom. formatlamayı yen. adlandır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cambiar nombre del AutoFormato";
-        Text[ finnish ] = "Nime? automaattinen muotoilu uudelleen";
+        Text[ catalan ] = "Reanomena el formatatge automàtic";
+        Text[ finnish ] = "Nimeä automaattinen muotoilu uudelleen";
+        Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
 
     String STR_ADD_LABEL
@@ -551,7 +564,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ì´ë¦„";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre";
+        Text[ catalan ] = "Nom";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
     };
     String STR_DEL_TITLE
     {
@@ -567,19 +581,20 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ french ] = "Supprimer l'AutoFormat" ;
         Text [ swedish ] = "Radera autoformat" ;
         Text [ dutch ] = "AutoOpmaak wissen" ;
-        Text [ spanish ] = "Eliminar AutoFormato" ;
+        Text [ spanish ] = "Borrar Formateado automático" ;
         Text [ english_us ] = "Delete AutoFormat" ;
         Text[ chinese_simplified ] = "åˆ é™¤è‡ªåŠ¨æ ¼å¼";
         Text[ russian ] = "Óäàëèòü àâòîôîğìàò";
         Text[ polish ] = "Usuñ Autoformat";
-        Text[ japanese ] = "ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„ã®å‰Šé™¤";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®å‰Šé™¤";
         Text[ chinese_traditional ] = "åˆªé™¤è‡ªå‹•æ ¼å¼";
         Text[ arabic ] = "ÍĞİ ÊäÓíŞ ÊáŞÇÆí";
         Text[ greek ] = "ÄéáãñáöŞ ÁõôïÌïñöŞò";
-        Text[ korean ] = "ìë™ì„œì‹ ì‚­ì œ";
+        Text[ korean ] = "ìë™ ì„œì‹ ì‚­ì œ";
         Text[ turkish ] = "Otomatik formatlamayı sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eliminar AutoFormato";
+        Text[ catalan ] = "Suprimeix el formatatge automàtic";
+        Text[ thai ] = "à¸¥à¸šà¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     String STR_DEL_MSG
     {
@@ -595,19 +610,20 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ french ] = "Confirmez-vous la suppression de l'AutoFormat # ?" ;
         Text [ swedish ] = "Skall autoformatet # verkligen raderas?" ;
         Text [ dutch ] = "Wilt u AutoOpmaak # werkelijk verwijderen?" ;
-        Text [ spanish ] = "¿Desea realmente eliminar el AutoFormato #?" ;
+        Text [ spanish ] = "¿Desea realmente borrar el Formateado automático #?" ;
         Text [ english_us ] = "Do you really want to delete the # AutoFomat?" ;
         Text[ chinese_simplified ] = "æ‚¨çœŸè¦åˆ é™¤è‡ªåŠ¨æ ¼å¼ # ?";
         Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü àâòîôîğìàò #?";
         Text[ polish ] = "Czy na pewno usun¹æ Autoformat #?";
-        Text[ japanese ] = "ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„ # ã‚’æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ # ã‚’æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
         Text[ chinese_traditional ] = "çœŸè¦åˆªé™¤è‡ªå‹•æ ¼å¼ # ?";
         Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí #¿";
         Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ç ÁõôïÌïñöŞ #;";
-        Text[ korean ] = "# ìë™ì„œì‹ì„ ì •ë§ë¡œ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+        Text[ korean ] = "# ìë™ ì„œì‹ì„ ì •ë§ë¡œ ì‚­ì œí•˜ê² ìŠµë‹ˆê¹Œ?";
         Text[ turkish ] = "Otomatik formatlama # gerçekten silinsin mi?";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "¿Desea realmente eliminar el AutoFormato #?";
+        Text[ catalan ] = "Segur que voleu suprimir el formatatge automàtic #?";
+        Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸š # à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
     };
     String STR_BTN_CLOSE
     {
@@ -620,7 +636,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ portuguese ] = "~Fechar" ;
         Text [ finnish ] = "~Sulje" ;
         Text [ danish ] = "Luk" ;
-        Text [ french ] = "~Fermer" ;
+        Text [ french ] = "Fermer" ;
         Text [ swedish ] = "Stä~ng" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ spanish ] = "~Cerrar" ;
@@ -635,7 +651,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "K~apat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     String STR_JAN
     {
@@ -662,7 +679,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "1ì›”";
         Text[ turkish ] = "Oca";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ene";
+        Text[ catalan ] = "Gen.";
+        Text[ thai ] = "à¸¡à¸à¸£à¸²à¸„à¸¡";
     };
     String STR_FEB
     {
@@ -689,7 +707,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "2ì›”";
         Text[ turkish ] = "Şub";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Feb";
+        Text[ catalan ] = "Feb.";
+        Text[ thai ] = "à¸à¸¸à¸¡à¸ à¸²à¸à¸±à¸™à¸˜à¹Œ";
     };
     String STR_MAR
     {
@@ -717,7 +736,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "3ì›”";
         Text[ turkish ] = "Mar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mar";
+        Text[ catalan ] = "Març";
+        Text[ thai ] = "à¸¡à¸µà¸™à¸²à¸„à¸¡";
     };
     String STR_NORTH
     {
@@ -744,7 +764,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ë¶ìª½";
         Text[ turkish ] = "Kuzey";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Norte";
+        Text[ catalan ] = "Nord";
+        Text[ thai ] = "à¹€à¸«à¸™à¸·à¸­";
     };
     String STR_MID
     {
@@ -756,7 +777,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ portuguese ] = "Centro" ;
         Text [ finnish ] = "Keski" ;
         Text [ danish ] = "Midte" ;
-        Text [ french ] = "Milieu" ;
+        Text [ french ] = "Centre" ;
         Text [ swedish ] = "Mitten" ;
         Text [ dutch ] = "Midden" ;
         Text [ spanish ] = "Centrado" ;
@@ -768,10 +789,11 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_traditional ] = "ä¸­";
         Text[ arabic ] = "ÇáæÓØ";
         Text[ greek ] = "Êİíôñï";
-        Text[ korean ] = "ì¤‘ê°„";
+        Text[ korean ] = "ê°€ìš´ë°";
         Text[ turkish ] = "Orta";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Centro";
+        Text[ catalan ] = "Mig";
+        Text[ thai ] = "à¸à¸¥à¸²à¸‡";
     };
     String STR_SOUTH
     {
@@ -782,7 +804,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Sud" ;
         Text [ portuguese_brazilian ] = "Sul" ;
         Text [ portuguese ] = "Sul" ;
-        Text [ finnish ] = "Etel?" ;
+        Text [ finnish ] = "Etelä" ;
         Text [ danish ] = "Syd" ;
         Text [ french ] = "Sud" ;
         Text [ swedish ] = "Söder" ;
@@ -799,7 +821,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "ë‚¨ìª½";
         Text[ turkish ] = "Güney";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sur";
+        Text[ catalan ] = "Sud";
+        Text[ thai ] = "à¹ƒà¸•à¹‰";
     };
     String STR_SUM
     {
@@ -809,7 +832,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ italian ] = "Somma" ;
         Text [ portuguese_brazilian ] = "Soma" ;
         Text [ portuguese ] = "Soma" ;
-        Text [ finnish ] = "Yhteens?" ;
+        Text [ finnish ] = "Yhteensä" ;
         Text [ danish ] = "Total" ;
         Text [ french ] = "Somme" ;
         Text [ swedish ] = "Summa" ;
@@ -826,20 +849,29 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ korean ] = "í•©ê³„";
         Text[ turkish ] = "Toplam";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Suma";
+        Text[ catalan ] = "Total";
+        Text[ thai ] = "à¸£à¸§à¸¡";
     };
     Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
     Text[ russian ] = "Àâòîôîğìàò";
     Text[ polish ] = "Autoformat";
-    Text[ japanese ] = "ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„";
+    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ";
     Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼";
     Text[ arabic ] = "ÇáÊäÓíŞ ÇáÊáŞÇÆí";
     Text[ greek ] = "ÁõôïÌïñöŞ";
-    Text[ korean ] = "ìë™ì„œì‹";
+    Text[ korean ] = "ìë™ ì„œì‹";
     Text[ turkish ] = "Otomatik formatlama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoFormato";
+    Text[ catalan ] = "Formatatge automàtic";
+    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-12 09:21:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 18:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ private:
     BOOL    bAnyRotated;        // intern
     BOOL    bAnyClipped;        // intern
     BOOL    bTabProtected;
+    BYTE    nTabTextDirection;  // EEHorizontalTextDirection values
 
                             // private Methoden
 
@@ -180,12 +181,17 @@ private:
     BOOL            IsEmptyCellText( RowInfo* pThisRowInfo, USHORT nX, USHORT nY );
     void            GetVisibleCell( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell*& rpCell );
 
+    BOOL            IsAvailable( USHORT nX, USHORT nY );
+    long            GetAvailableWidth( USHORT nX, USHORT nY, long nNeeded );
+
     void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
     void            SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );
 
     void            ConnectObject( const SvInPlaceObjectRef& rRef, SdrOle2Obj* pOleObj );
 
     double          GetStretch();
+
+    void            DrawRotatedFrame( const Color* pForceColor );       // pixel
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
@@ -232,7 +238,6 @@ public:
     void    DrawEdit(BOOL bPixelToLogic);
 
     void    FindRotated();
-    void    DrawRotatedFrame();                     // Pixel
     void    DrawRotated(BOOL bPixelToLogic);        // logisch
 
     void    DrawClear();
