@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mvsave.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 14:06:36 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 14:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ class SvNumberFormatter;
 class SvULongs;
 class SwBookmark;
 class SwDoc;
-class SwCrsrShell;
 class SwFmtAnchor;
 class SwFrmFmt;
 class SwIndex;
@@ -186,8 +185,7 @@ void PaMCorrAbs( const SwPaM& rRange,
                  const SwPosition& rNewPos );
 
     // Setzt alle PaMs im Bereich von [StartNode, EndNode] nach NewPos
-void PaMCorrAbs( SwCrsrShell *pShell,
-                 const SwNodeIndex &rStartNode,
+void PaMCorrAbs( const SwNodeIndex &rStartNode,
                  const SwNodeIndex &rEndNode,
                  const SwPosition &rNewPos );
 
