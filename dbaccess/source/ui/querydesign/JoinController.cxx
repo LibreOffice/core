@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:47:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,14 +349,14 @@ void OJoinController::removeConnectionData(OTableConnectionData* _pData)
     m_vTableConnectionData.erase( ::std::find(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData));
 }
 // -----------------------------------------------------------------------------
-void OJoinController::AddSupportedFeatures()
+void OJoinController::describeSupportedFeatures()
 {
-    OJoinController_BASE::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")]        = ID_BROWSER_REDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]        = ID_BROWSER_SAVEDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]        = ID_BROWSER_UNDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:AddTable")]    = ID_BROWSER_ADDTABLE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:EditDoc")]     = ID_BROWSER_EDITDOC;
+    OJoinController_BASE::describeSupportedFeatures();
+    implDescribeSupportedFeature( ".uno:Redo",      ID_BROWSER_REDO,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Save",      ID_BROWSER_SAVEDOC, CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:Undo",      ID_BROWSER_UNDO,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:AddTable",  ID_BROWSER_ADDTABLE,CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:EditDoc",   ID_BROWSER_EDITDOC, CommandGroup::EDIT );
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
