@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:44:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,6 +927,12 @@ bool SwTabFrm::Split( const SwTwips nCutPos )
     //
     bool bSplitRowAllowed = ((SwRowFrm*)pRow)->IsRowSplitAllowed();
 
+    //
+    // This flag indicates if we should try to change the split
+    // attribute in case the row is not allowed to split:
+    //
+    bool bChangeAttribute = true;
+
 #ifndef OD_FLYFRAMES_FINISHED
     //
     // Search for objects anchored at content inside pRow:
@@ -934,10 +940,25 @@ bool SwTabFrm::Split( const SwTwips nCutPos )
     bool bObjectsFound = false;
     if ( lcl_FindObjectsInRow( *(SwRowFrm*)pRow ) )
     {
-        bObjectsFound = true;
+        bChangeAttribute = false;
         bSplitRowAllowed = false;
     }
 #endif
+
+    // --> FME 2004-06-03 #i29438#
+    // We better avoid splitting of a row frame if we are inside a columned
+    // section which has a height of 0, because this is not growable and thus
+    // all kinds of unexpected things could happen.
+    bool bDoNotSplit = false;
+    const SwSectionFrm* pTmpSct = 0;
+    if ( IsInSct() &&
+         (pTmpSct = FindSctFrm())->Lower()->IsColumnFrm() &&
+          0 == (GetUpper()->Frm().*fnRect->fnGetHeight)()  )
+    {
+        bChangeAttribute = false;
+        bSplitRowAllowed = false;
+    }
+    // <--
 
     if ( nRowCount < nRepeat )
     {
@@ -962,27 +983,18 @@ bool SwTabFrm::Split( const SwTwips nCutPos )
         if ( !bSplitRowAllowed )
         {
 
-#ifndef OD_FLYFRAMES_FINISHED
-            if ( bObjectsFound )
+            if ( bChangeAttribute )
             {
-                // The first non-heading row does not fit to the page.
-                // It contains objects, therefore it is (currently) not splittable.
-                // We keep this row in this table:
-                pRow = pRow->GetNext();
+                // We try to change attributes:
+                ASSERT( false, "Weird layout! Row frame is to big but not allowed to split. I'll change the attributes now." )
+                lcl_ChangeSplitAttribute( *(SwRowFrm*)pRow );
+                bSplitRowAllowed = true;
             }
             else
             {
-#endif
-
-            // Change attributes:
-            ASSERT( false, "Weird layout! Row frame is too big but not allowed to split. I'll change the attributes now." )
-            lcl_ChangeSplitAttribute( *(SwRowFrm*)pRow );
-            bSplitRowAllowed = true;
-
-#ifndef OD_FLYFRAMES_FINISHED
+                // We keep this row in this table:
+                pRow = pRow->GetNext();
             }
-#endif
-
         }
 
         // Check if there are (first) rows inside this row,
@@ -1474,10 +1486,13 @@ void SwTabFrm::MakeAll()
     // This flag indicates that an error (e.g., oversized heading row)
     // occured during the split operation.
     bool bSplitError = false;
+
     // The beloved keep attribute
-    const BOOL bKeep = IsKeep( *pAttrs );
+    const bool bKeep = IsKeep( *pAttrs );
     // All rows should keep together
-    const BOOL bDontSplit = !IsFollow() && !GetFmt()->GetLayoutSplit().GetValue();
+    // OD 2004-05-25 #i21478# - don't split table, if it has to keep with next
+    const bool bDontSplit = !IsFollow() &&
+                            ( !GetFmt()->GetLayoutSplit().GetValue() || bKeep );
     // The number of repeated headlines
     const USHORT nRepeat = GetTable()->GetRowsToRepeat();
 
@@ -3901,7 +3916,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     // From now on, all operations are related to the table cell.
     SWREFRESHFN( this )
 
-    if ( !FindTabFrm()->IsRebuildLastLine() && VERT_NONE != rOri.GetVertOrient() )
+    SwPageFrm* pPg = 0;
+    if ( !FindTabFrm()->IsRebuildLastLine() && VERT_NONE != rOri.GetVertOrient() &&
+         !(pPg = FindPageFrm())->HasGrid() )
     {
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() )
         {
@@ -3911,7 +3928,6 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         }
         BOOL bVertDir = TRUE;
         //Keine Ausrichtung wenn Rahmen mit Umlauf in die Zelle ragen.
-        SwPageFrm *pPg = FindPageFrm();
         if ( pPg->GetSortedObjs() )
         {
             SwRect aRect( Prt() ); aRect += Frm().Pos();
