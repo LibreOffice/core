@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:43:30 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 23:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ italian ] = "Non è stato possibile determinare il contenuto di una casella combinata o di una casella di riepilogo.";
     Text[ danish ] = "Det var ikke muligt at bestemme indholdet for en kombinationsboks eller rulleliste.";
     Text[ swedish ] = "Innehållet i ett kombinationsfält eller en listruta kunde inte bestämmas.";
-    Text[ polish ] = "Nie mo¿na by³o ustaliæ zawarto?ci pola kombi lub pola listy.";
+    Text[ polish ] = "Nie mo¿na by³o ustaliæ zawartoœci pola kombi lub pola listy.";
     Text[ portuguese_brazilian ] = "ComboBox/ListBox : determine the list contents";
     Text[ japanese ] = "ºİÎŞÎŞ¯¸½‚Ü‚½‚ÍØ½ÄÎŞ¯¸½‚Ì“à—e‚ªŠm”F‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "ÄŞº¸¹Ú½º/¸ñ·Ï ÇÊµåÀÇ ³»¿ëÀ» Á¶»çÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
@@ -235,7 +235,7 @@ String RID_ERR_LOADING_FORM
     Text[ italian ] = "Non è stato possibile caricare i contenuti.";
     Text[ danish ] = "Det var ikke muligt at indlæse dataindholdet.";
     Text[ swedish ] = "Datainnehållet kunde inte laddas.";
-    Text[ polish ] = "Nie mo¿na by³o za³adowaæ zawarto?ci danych.";
+    Text[ polish ] = "Nie mo¿na by³o za³adowaæ zawartoœci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be loaded.";
     Text[ japanese ] = "ÃŞ°À“à—e‚ª“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» ·ÎµåÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
@@ -261,7 +261,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ italian ] = "Non è stato possibile aggiornare i contenuti.";
     Text[ danish ] = "Det var ikke muligt at opdatere dataindholdet.";
     Text[ swedish ] = "Datainnehållet kunde inte uppdateras.";
-    Text[ polish ] = "Nie mo¿na by³o zaktualizowaæ zawarto?ci danych.";
+    Text[ polish ] = "Nie mo¿na by³o zaktualizowaæ zawartoœci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be refreshed.";
     Text[ japanese ] = "ÃŞ°À“à—e‚ªXV‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» °»½ÅÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
@@ -377,3 +377,4 @@ String RID_STR_ERR_DELETERECORDS
     Text[ catalan ] = "Error al eliminar los registros de datos indicados.";
     Text[ finnish ] = "Virhe poistettaessa määritettyjä tietueita";
 };
+
