@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-15 22:41:49 $
+ *  last change: $Author: khong $ $Date: 2002-09-24 19:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
                 }
                 return notZero;
             } else if (str[begin] != NUMBER_ZERO) {
-                if (!(number->numberFlag & NUMBER_OMIT_ONE_CHECK(multiChar_index)) || str[begin] != NUMBER_ONE) {
+                if (!(number->numberFlag & (multiChar_index < 0 ? 0 : NUMBER_OMIT_ONE_CHECK(multiChar_index))) || str[begin] != NUMBER_ONE) {
                     dst[count] = numberChar[str[begin] - NUMBER_ZERO];
                     offset[count++] = begin + startPos;
                 }
