@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmds.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:34:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ extern const String C_opt_DevmanRoot("-dvgroot");
 //extern const String C_opt_Load("-load");
 //extern const String C_opt_Save("-save");
 
+extern const String C_opt_ExternNamespace("-extnsp");
+extern const String C_opt_ExternRoot("-extroot");
 
 
 
