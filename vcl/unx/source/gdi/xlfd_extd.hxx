@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:58:25 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@ class XlfdStorage;
 
 class ExtendedXlfd {
 
-    friend VirtualXlfd;
-    friend XlfdStorage;
+    friend class VirtualXlfd;
+    friend class XlfdStorage;
 
     public:
                              ExtendedXlfd();
