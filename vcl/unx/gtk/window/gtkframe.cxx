@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:20:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-03 19:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,10 @@
 #include <postx.h>
 
 #include <dlfcn.h>
-#include <soicon.hxx>
+#include <salbtype.hxx>
+#include <bitmapex.hxx>
+#include <impbmp.hxx>
+#include <svids.hrc>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
@@ -307,6 +310,8 @@ void GtkSalFrame::InitCommon()
         maGeometry.nLeftDecoration      = 0;
         maGeometry.nRightDecoration     = 0;
     }
+
+    SetIcon(1);
 }
 
 /*  Sadly gtk_window_set_accept_focus exists only since gtk 2.4
@@ -530,38 +535,113 @@ void GtkSalFrame::SetTitle( const String& rTitle )
         gtk_window_set_title( m_pWindow, rtl::OUStringToOString( rTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-void GtkSalFrame::SetIcon( USHORT nIcon )
+static inline BYTE *
+getRow( BitmapBuffer *pBuffer, ULONG nRow )
 {
-    if( m_nStyle & SAL_FRAME_STYLE_CHILD || ! m_pWindow )
-        return;
+    if( BMP_SCANLINE_ADJUSTMENT( pBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
+        return pBuffer->mpBits + nRow * pBuffer->mnScanlineSize;
+    else
+        return pBuffer->mpBits + ( pBuffer->mnHeight - nRow - 1 ) * pBuffer->mnScanlineSize;
+}
 
-    GList *pPixbufs = NULL;
+static GdkPixbuf *
+bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
+{
+    g_return_val_if_fail( pSalBitmap != NULL, NULL );
+    g_return_val_if_fail( pSalAlpha != NULL, NULL );
 
+    BitmapBuffer *pBitmap = pSalBitmap->AcquireBuffer( TRUE );
+    g_return_val_if_fail( pBitmap != NULL, NULL );
+    g_return_val_if_fail( pBitmap->mnBitCount == 24, NULL );
+
+    BitmapBuffer *pAlpha = pSalAlpha->AcquireBuffer( TRUE );
+    g_return_val_if_fail( pAlpha != NULL, NULL );
+    g_return_val_if_fail( pAlpha->mnBitCount == 8, NULL );
+
+    Size aSize = pSalBitmap->GetSize();
+    g_return_val_if_fail( pSalAlpha->GetSize() == aSize, NULL );
+
+    ULONG nX, nY;
+    guchar *pPixbufData = (guchar *)g_malloc (4 * aSize.Width() * aSize.Height() );
+    guchar *pDestData = pPixbufData;
+
+    for( nY = 0; nY < pBitmap->mnHeight; nY++ )
     {
-        VCL_CUSTOM_ICON_FN *pCustomIcon = 0;
-        char *pSymbol = g_strdup_printf ("%s%d", VCL_CUSTOM_ICON_BASE, nIcon );
-        void *pAppHdl = dlopen( NULL, RTLD_LAZY );
-        if ( ( pCustomIcon = ( VCL_CUSTOM_ICON_FN* ) dlsym( pAppHdl, pSymbol ) ) )
+        BYTE *pData = getRow( pBitmap, nY );
+        BYTE *pAlphaData = getRow( pAlpha, nY );
+
+        for( nX = 0; nX < pBitmap->mnWidth; nX++ )
         {
-            char **pIcons[4] = { NULL, NULL, NULL, NULL };
-            pCustomIcon( pIcons[0], pIcons[1], pIcons[2], pIcons[3] );
-            for( int i = 0; i < 4; i++)
+            if( pBitmap->mnFormat == BMP_FORMAT_24BIT_TC_BGR )
             {
-                if( pIcons[i] )
-                {
-                    GdkPixbuf *pPixbuf = gdk_pixbuf_new_from_xpm_data( (const char **) pIcons[i] );
-                    pPixbufs = g_list_prepend( pPixbufs, pPixbuf );
-                }
+                pDestData[2] = *pData++;
+                pDestData[1] = *pData++;
+                pDestData[0] = *pData++;
             }
+            else // BMP_FORMAT_24BIT_TC_RGB
+            {
+                pDestData[0] = *pData++;
+                pDestData[1] = *pData++;
+                pDestData[2] = *pData++;
+            }
+            pDestData += 3;
+            *pDestData++ = 255 - *pAlphaData++;
         }
-        g_free( pSymbol );
-        dlclose( pAppHdl );
     }
 
-    gtk_window_set_icon_list( m_pWindow, pPixbufs );
+    pSalBitmap->ReleaseBuffer( pBitmap, TRUE );
+    pSalAlpha->ReleaseBuffer( pAlpha, TRUE );
 
-    g_list_foreach( pPixbufs, (GFunc) g_object_unref, NULL );
-    g_list_free( pPixbufs );
+    return gdk_pixbuf_new_from_data( pPixbufData,
+                                     GDK_COLORSPACE_RGB, TRUE, 8,
+                                     aSize.Width(), aSize.Height(),
+                                     aSize.Width() * 4,
+                                     (GdkPixbufDestroyNotify) g_free,
+                                     NULL );
+}
+
+void GtkSalFrame::SetIcon( USHORT nIcon )
+{
+    if( (m_nStyle & (SAL_FRAME_STYLE_CHILD|SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_INTRO|SAL_FRAME_STYLE_OWNERDRAWDECORATION))
+        || ! m_pWindow )
+        return;
+
+    GdkPixbuf *pBuf;
+    GList *pIcons = NULL;
+
+    USHORT nOffsets[2] = { SV_ICON_SMALL_START, SV_ICON_LARGE_START };
+    USHORT nIndex;
+
+    // Use high contrast icons where appropriate
+    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    {
+        nOffsets[0] = SV_ICON_LARGE_HC_START;
+        nOffsets[1] = SV_ICON_SMALL_HC_START;
+    }
+
+    for( nIndex = 0; nIndex < sizeof(nOffsets)/ sizeof(USHORT); nIndex++ )
+    {
+        BitmapEx aIcon( ResId(nOffsets[nIndex] + nIcon, ImplGetResMgr()));
+
+        ImpBitmap *pIconImpBitmap = aIcon.ImplGetBitmapImpBitmap();
+        ImpBitmap *pIconImpMask   = aIcon.ImplGetMaskImpBitmap();
+
+        if( pIconImpBitmap && pIconImpMask )
+        {
+            SalBitmap *pIconBitmap =
+                pIconImpBitmap->ImplGetSalBitmap();
+            SalBitmap *pIconMask =
+                pIconImpMask->ImplGetSalBitmap();
+
+            if( ( pBuf = bitmapToPixbuf( pIconBitmap, pIconMask ) ) )
+                pIcons = g_list_prepend( pIcons, pBuf );
+        }
+    }
+
+    gtk_window_set_icon_list( m_pWindow, pIcons );
+
+    g_list_foreach( pIcons, (GFunc) g_object_unref, NULL );
+    g_list_free( pIcons );
 }
 
 void GtkSalFrame::SetMenu( SalMenu* pSalMenu )
