@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:46:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XLINKAGESUPPORT_HPP_
+#include <com/sun/star/embed/XLinkageSupport.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -375,7 +378,10 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
     OSL_ENSURE( rName.getLength(), "Added object doesn't have a name!");
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XEmbedPersist > xEmb( xObj, uno::UNO_QUERY );
-    OSL_ENSURE( !xEmb.is() || xAccess->hasByName(rName), "Added element not in storage!" );
+    uno::Reference < embed::XLinkageSupport > xLink( xEmb, uno::UNO_QUERY );
+    // if the object has a persistance and the object is not a link than it must have persistence entry in the storage
+    OSL_ENSURE( !( xEmb.is() && ( !xLink.is() || !xLink->isLink() ) ) || xAccess->hasByName(rName),
+                    "Added element not in storage!" );
 #endif
 
     // remember object - it needs to be in storage already
@@ -507,6 +513,14 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         {
             uno::Reference < io::XStream > xNewStream = pImpl->mxStorage->openStreamElement( rNewName, embed::ElementModes::READWRITE );
             ::comphelper::OStorageHelper::CopyInputToOutput( xStm, xNewStream->getOutputStream() );
+
+            // No mediatype is provided so the default for OLE objects value is used
+            // it is correct so for now, but what if somebody introduces a new stream based embedded object?
+            // Probably introducing of such an object must be restricted ( a storage must be used! ).
+            uno::Reference< beans::XPropertySet > xProps( xNewStream, uno::UNO_QUERY_THROW );
+            xProps->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                    uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) );
         }
         catch ( uno::Exception& )
         {
@@ -730,7 +744,10 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
 
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
-    OSL_ENSURE( !xPersist.is() || xAccess->hasByName(aName), "Removing element not present in storage!" );
+    uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
+    // if the object has a persistance and the object is not a link than it must have persistence entry in the storage
+    OSL_ENSURE( !( xPersist.is() && ( !xLink.is() || !xLink->isLink() ) ) || xAccess->hasByName(aName),
+                "Removing element not present in storage!" );
 #endif
 
     // try to close it if permitted
@@ -838,7 +855,14 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
         // now it's time to remove the storage from the container storage
         try
         {
-            if ( xPersist.is() )
+#if OSL_DEBUG_LEVEL > 1
+            uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
+            // if the object has a persistance and the object is not a link than it must have persistence entry in storage
+            OSL_ENSURE( xLink.is() && xLink->isLink() || pImpl->mxStorage->hasByName( aName ),
+                        "The object has no persistence entry in the storage!" );
+#endif
+
+            if ( xPersist.is() && pImpl->mxStorage->hasByName( aName ) )
                 pImpl->mxStorage->removeElement( aName );
         }
         catch ( uno::Exception& )
