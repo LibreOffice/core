@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,14 @@
 #ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
 
+using namespace connectivity;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -122,6 +122,7 @@ Reference< XPropertySet > OViews::createEmptyObject()
     OAdoView* pNew = new OAdoView(isCaseSensitive());
     return pNew;
 }
+
 // -------------------------------------------------------------------------
 // XAppend
 void SAL_CALL OViews::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
@@ -134,11 +135,11 @@ void SAL_CALL OViews::appendByDescriptor( const Reference< XPropertySet >& descr
         OAdoView* pView = (OAdoView*)xTunnel->getSomething(OAdoView:: getUnoTunnelImplementationId());
         if(pView)
         {
-            m_pCollection->Append(OLEString(getString(descriptor->getPropertyValue(PROPERTY_NAME))),(IDispatch *)pView->getImpl());
+            m_pCollection->Append(OLEString(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))),(IDispatch *)pView->getImpl());
             ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
         }
         else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

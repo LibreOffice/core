@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,6 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -197,8 +193,9 @@ void OAdabasTable::refreshKeys()
         refreshForgeinKeys(aVector);
     }
     if(m_pKeys)
-        delete m_pKeys;
-    m_pKeys     = new OKeys(this,m_aMutex,aVector);
+        m_pKeys->reFill(aVector);
+    else
+        m_pKeys = new OKeys(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshIndexes()
@@ -233,8 +230,9 @@ void OAdabasTable::refreshIndexes()
     }
 
     if(m_pIndexes)
-        delete m_pIndexes;
-    m_pIndexes  = new OIndexes(this,m_aMutex,aVector);
+        m_pIndexes->reFill(aVector);
+    else
+        m_pIndexes  = new OIndexes(this,m_aMutex,aVector);
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdabasTable::getUnoTunnelImplementationId()
@@ -277,31 +275,31 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
     for(sal_Int32 i=0;i<nCount;++i)
     {
         ::cppu::extractInterface(xProp,m_pColumns->getByIndex(i));
-        aSql += aQuote + getString(xProp->getPropertyValue(PROPERTY_NAME)) + aQuote
-                + getString(xProp->getPropertyValue(PROPERTY_TYPENAME));
+        aSql += aQuote + getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
+                + getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
 
         // add type definition
-        switch(getINT32(xProp->getPropertyValue(PROPERTY_TYPE)))
+        switch(getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
                 aSql += ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(getINT32(xProp->getPropertyValue(PROPERTY_TYPE)))
+                            + ::rtl::OUString::valueOf(getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
                             + ::rtl::OUString::createFromAscii(")");
                 break;
 
             case DataType::DECIMAL:
             case DataType::NUMERIC:
                 aSql += ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(getINT32(xProp->getPropertyValue(PROPERTY_TYPE)))
+                            + ::rtl::OUString::valueOf(getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
                             + ::rtl::OUString::createFromAscii(",")
-                            + ::rtl::OUString::valueOf(getINT32(xProp->getPropertyValue(PROPERTY_SCALE)))
+                            + ::rtl::OUString::valueOf(getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
                             + ::rtl::OUString::createFromAscii(")");
                 break;
         }
 
-        ::rtl::OUString aDefault = getString(xProp->getPropertyValue(PROPERTY_DEFAULTVALUE));
-                if(getINT32(xProp->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
+        ::rtl::OUString aDefault = getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
+                if(getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
         {
             aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
             if(aDefault.getLength())
@@ -321,7 +319,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
         ::cppu::extractInterface(xProp,m_pKeys->getByIndex(i));
                 Reference< XColumnsSupplier > xKey(xProp,UNO_QUERY);
                 Reference< ::com::sun::star::container::XIndexAccess > xCols(xKey->getColumns(),UNO_QUERY);
-        switch(getINT32(xProp->getPropertyValue(PROPERTY_TYPE)))
+        switch(getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
         {
                 case KeyType::PRIMARY:
             {
@@ -331,7 +329,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
                 for(sal_Int32 i=0;i<nCols;++i)
                 {
                     ::cppu::extractInterface(xProp,xCols->getByIndex(i));
-                    aSql += aQuote + getString(xProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
+                    aSql += aQuote + getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
                     aSql += aComma;
                 }
                 if(nCols)
@@ -345,7 +343,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
                 for(sal_Int32 i=0;i<nCols;++i)
                 {
                     ::cppu::extractInterface(xProp,xCols->getByIndex(i));
-                    aSql += aQuote + getString(xProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
+                    aSql += aQuote + getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
                     aSql += aComma;
                 }
                 if(nCols)
@@ -357,9 +355,9 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
                 if(nCols)
                 {
                     aSql += ::rtl::OUString::createFromAscii(" FOREIGN KEY( ");
-                    ::rtl::OUString aKeyName = getString(xProp->getPropertyValue(PROPERTY_NAME));
-                    ::rtl::OUString aRefTableName = getString(xProp->getPropertyValue(PROPERTY_REFERENCEDTABLE));
-                    sal_Int32 nDeleteRule = getINT32(xProp->getPropertyValue(PROPERTY_DELETERULE));
+                    ::rtl::OUString aKeyName = getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+                    ::rtl::OUString aRefTableName = getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
+                    sal_Int32 nDeleteRule = getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
                     if(aKeyName.getLength())
                     {
                         aSql += aQuote + aKeyName + aQuote;
@@ -369,7 +367,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
                     for(sal_Int32 i=0;i<nCols;++i)
                     {
                         ::cppu::extractInterface(xProp,xCols->getByIndex(i));
-                        aSql += aQuote + getString(xProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
+                        aSql += aQuote + getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
                         aSql += aComma;
                     }
                     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
@@ -456,7 +454,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 
     if(!isNew())
     {
-        if(getString(descriptor->getPropertyValue(PROPERTY_NAME)) != colName)
+        if(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) != colName)
             throw SQLException(::rtl::OUString::createFromAscii("Not supported by this driver!"),*this,::rtl::OUString::createFromAscii("S1000"),0,Any() );
 
         Reference< XStatement > xStmt = m_pConnection->createStatement();
@@ -469,22 +467,22 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
             m_pColumns->getByName(colName) >>= xProp;
             // first check the types
             sal_Int32 nOldType = 0,nNewType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE)      >>= nOldType;
-            descriptor->getPropertyValue(PROPERTY_TYPE) >>= nNewType;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))     >>= nOldType;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nNewType;
             if(nOldType != nNewType)
                 alterColumnType(nNewType,colName,descriptor);
 
             // second: check the "is nullable" value
             sal_Int32 nOldNullable = 0,nNewNullable = 0;
-            xProp->getPropertyValue(PROPERTY_ISNULLABLE)        >>= nOldNullable;
-            descriptor->getPropertyValue(PROPERTY_ISNULLABLE)   >>= nNewNullable;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
             if(nNewNullable != nOldNullable)
                 alterNotNullValue(nNewNullable,colName);
 
             // third: check the default values
             ::rtl::OUString sNewDefault,sOldDefault;
-            xProp->getPropertyValue(PROPERTY_DEFAULTVALUE)      >>= sOldDefault;
-            descriptor->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sNewDefault;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
             if(sOldDefault.getLength())
             {
@@ -533,14 +531,14 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
 
         Reference< XPropertySet > xOld;
     if(::cppu::extractInterface(xOld,m_pColumns->getByIndex(index)) && xOld.is())
-        alterColumnByName(getString(xOld->getPropertyValue(PROPERTY_NAME)),descriptor);
+        alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
 }
 
 // -------------------------------------------------------------------------
 ::rtl::OUString connectivity::adabas::getTypeString(const Reference< ::com::sun::star::beans::XPropertySet >& xColProp)
 {
     ::rtl::OUString aValue;
-    switch(getINT32(xColProp->getPropertyValue(PROPERTY_TYPE)))
+    switch(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
     {
         case DataType::BIT:
             aValue = ::rtl::OUString::createFromAscii("BOOLEAN");
@@ -628,23 +626,23 @@ void OAdabasTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rC
                     + ::rtl::OUString::createFromAscii(" COLUMN ")
                     + aQuote + _rColName + aQuote;
     aSql += ::rtl::OUString::createFromAscii(" ")
-            + getString(_xDescriptor->getPropertyValue(PROPERTY_TYPENAME));
+            + getString(_xDescriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
 
     switch(nNewType)
     {
         case DataType::CHAR:
         case DataType::VARCHAR:
             aSql += ::rtl::OUString::createFromAscii("(")
-                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(PROPERTY_TYPE)))
+                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
                         + ::rtl::OUString::createFromAscii(")");
             break;
 
         case DataType::DECIMAL:
         case DataType::NUMERIC:
             aSql += ::rtl::OUString::createFromAscii("(")
-                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(PROPERTY_TYPE)))
+                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
                         + ::rtl::OUString::createFromAscii(",")
-                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(PROPERTY_SCALE)))
+                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
                         + ::rtl::OUString::createFromAscii(")");
             break;
     }

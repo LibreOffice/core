@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,8 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 using namespace connectivity;

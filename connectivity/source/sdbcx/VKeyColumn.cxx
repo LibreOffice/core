@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 15:26:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,11 @@
 #ifndef _CONNECTIVITY_SDBCX_KEYCOLUMN_HXX_
 #include "connectivity/sdbcx/VKeyColumn.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
-using namespace connectivity::dbtools;
+using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -155,7 +154,7 @@ OKeyColumn::~OKeyColumn()
 void OKeyColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
-    registerProperty(PROPERTY_RELATEDCOLUMN,    PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 

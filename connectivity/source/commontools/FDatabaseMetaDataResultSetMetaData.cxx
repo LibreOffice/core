@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:26:10 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,8 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 
 using namespace connectivity;
-using namespace connectivity::dbtools;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbcx;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_ADO_ADOIMP_HXX_
 #include "ado/adoimp.hxx"
 #endif
@@ -79,6 +75,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #ifndef _CONNECTIVITY_DBASE_INDEX_HXX_
 #include "dbase/DIndex.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -92,11 +88,11 @@ Reference< XNamed > ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
     //  String aPath = pDir->GetName();
     //  aPath += _rName.getStr();
     ::rtl::OUString sFile = m_pTable->getConnection()->getURL();
-    sFile += STR_DELIMITER;
+    sFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sFile += _rName;
     sFile += ::rtl::OUString::createFromAscii(".ndx");
     if(!UCBContentHelper::Exists(sFile))
-        throw SQLException(::rtl::OUString::createFromAscii("Index file doesn't exists!"),*m_pTable,SQLSTATE_GENERAL,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Index file doesn't exists!"),*m_pTable,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 
     Reference< XNamed > xRet;
     SvStream* pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READ | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
@@ -115,7 +111,7 @@ Reference< XNamed > ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
         pIndex->openIndexFile();
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not open index file"),*m_pTable,SQLSTATE_GENERAL,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not open index file"),*m_pTable,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     return xRet;
 }
 // -------------------------------------------------------------------------
@@ -138,7 +134,7 @@ void SAL_CALL ODbaseIndexes::appendByDescriptor( const Reference< XPropertySet >
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:13:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,6 @@
 #endif
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -179,7 +175,7 @@ Reference< XPropertySet > OViews::createEmptyObject()
 void SAL_CALL OViews::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);
@@ -244,15 +240,15 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii("."),sSchema,sCommand;
 
-    descriptor->getPropertyValue(PROPERTY_SCHEMANAME) >>= sSchema;
+    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= sSchema;
     if(sSchema.getLength())
         aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
     else
-        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
+        descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),makeAny(sSchema = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
 
-    aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(PROPERTY_NAME)))
+    aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))))
                 + ::rtl::OUString::createFromAscii(" AS ");
-    descriptor->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
+    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
     aSql += sCommand;
 
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
@@ -265,7 +261,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     {
         ::rtl::OUString sName = sSchema;
         sName += aDot;
-        sName += getString(descriptor->getPropertyValue(PROPERTY_NAME));
+        sName += getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
         pTables->appendNew(sName);
     }
 }

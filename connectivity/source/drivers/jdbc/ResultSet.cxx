@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,6 @@
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE jdbc
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -110,19 +106,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-
-// define the properties of this lib
-// this file includes the properties for this dll
-namespace connectivity
-{
-    namespace jdbc
-    {
-#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
-#include "UStringDescription_Impl.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
-    }
-}
-
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;

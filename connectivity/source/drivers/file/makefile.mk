@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
+#   last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,10 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=file
 
+USE_LDUMP2=TRUE
+USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
+LDUMP=ldump2.exe
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
@@ -93,8 +96,52 @@ SLOFILES=\
     $(SLO)$/fcode.obj				\
     $(SLO)$/fcomp.obj
 
+.IF "$(OS)"=="MACOSX"
+#SHL1VERSIONMAP=$(TARGET).$(DLLPOSTFIX).map
+.ELSE      
+SHL1VERSIONMAP=$(TARGET).map
+.ENDIF
+# --- Library -----------------------------------
+SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1OBJS=$(SLOFILES)
+SHL1STDLIBS=\
+    $(CPPULIB)					\
+    $(CPPUHELPERLIB)			\
+    $(VOSLIB)					\
+    $(OSLLIB)					\
+    $(SVLLIB)					\
+    $(SVLIB)					\
+    $(TOOLSLIB)					\
+    $(SVTOOLLIB)				\
+    $(UCBHELPERLIB)				\
+    $(SALLIB)					\
+    $(DBTOOLSLIB)				\
+    $(UNOTOOLSLIB)				\
+    $(COMPHELPERLIB)
+
+SHL1DEPN=
+SHL1IMPLIB=	i$(TARGET)$(UPD)
+
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=	$(SHL1TARGET)
+DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
+            $(SLB)$/$(TARGET).lib
+DEFLIB1NAME=$(TARGET)
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
 
+
+# --- filter file ------------------------------
+
+.IF "$(depend)"==""
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo CLEAR_THE_FILE	> $@
+    @echo _TI				>>$@
+    @echo _real				>>$@
+.ENDIF
 

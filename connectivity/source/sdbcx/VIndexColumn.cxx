@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:28:45 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,11 @@
 #ifndef _CONNECTIVITY_SDBCX_INDEXCOLUMN_HXX_
 #include "connectivity/sdbcx/VIndexColumn.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
-using namespace connectivity::dbtools;
+using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -150,7 +149,7 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
 void OIndexColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
-    registerProperty(PROPERTY_ISASCENDING,  PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING), PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
 }
 // -----------------------------------------------------------------------------
 

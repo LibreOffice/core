@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:21 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE flat
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -283,16 +279,16 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
 
                     ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
                     OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
-                    aRow[5] = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
-                    aRow[6] = getString(xColumn->getPropertyValue(PROPERTY_TYPENAME));
-                    aRow[7] = getINT32(xColumn->getPropertyValue(PROPERTY_PRECISION));
-                    //  aRow[8] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    aRow[9] = getINT32(xColumn->getPropertyValue(PROPERTY_SCALE));
-                    aRow[11] = getINT32(xColumn->getPropertyValue(PROPERTY_ISNULLABLE));
-                    //  aRow[12] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    aRow[13] = getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE));
-                    //  aRow[14] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    //  aRow[15] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    aRow[5] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
+                    aRow[6] = getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
+                    aRow[7] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+                    //  aRow[8] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    aRow[9] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
+                    aRow[11] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
+                    //  aRow[12] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    aRow[13] = getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
+                    //  aRow[14] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    //  aRow[15] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
                     switch((sal_Int32)aRow[5])
                     {
                     case DataType::CHAR:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,6 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 using namespace connectivity::ado;
 using namespace connectivity;
 using namespace com::sun::star::uno;
@@ -135,7 +131,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
             ADOS::ThrowException(*m_pConnection->getConnection(),*this);
         }
         else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

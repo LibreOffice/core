@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,7 @@
 #ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
+
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -174,16 +171,16 @@ Reference< XPropertySet > OKeys::createEmptyObject()
 void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
     {
-        if(aName.getLength() || getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)) == KeyType::PRIMARY) // check if this isn't a primary key
+        if(aName.getLength() || getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == KeyType::PRIMARY) // check if this isn't a primary key
             throw ElementExistException(aName,*this);
     }
     if(!m_pTable->isNew())
     {
-        sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(PROPERTY_TYPE));
+        sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
@@ -208,16 +205,16 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
         {
             Reference< XPropertySet > xColProp;
             xColumns->getByIndex(i) >>= xColProp;
-            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
+            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                         +   ::rtl::OUString::createFromAscii(",");
         }
         aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
         if(nKeyType == KeyType::FOREIGN)
         {
-            sal_Int32 nDeleteRule   = getINT32(descriptor->getPropertyValue(PROPERTY_DELETERULE));
+            sal_Int32 nDeleteRule   = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
 
-            ::rtl::OUString aName,aSchema,aRefTable = getString(descriptor->getPropertyValue(PROPERTY_REFERENCEDTABLE));
+            ::rtl::OUString aName,aSchema,aRefTable = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
             sal_Int32 nLen = aRefTable.indexOf('.');
             aSchema = aRefTable.copy(0,nLen);
             aName   = aRefTable.copy(nLen+1);
@@ -229,7 +226,7 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
             {
                 Reference< XPropertySet > xColProp;
                 xColumns->getByIndex(i) >>= xColProp;
-                aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_RELATEDCOLUMN)) + aQuote
+                aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN))) + aQuote
                             +   ::rtl::OUString::createFromAscii(",");
             }
             aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
@@ -268,7 +265,7 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
                     ObjectMap::iterator aIter = m_aNameMap.find(sName);
                     if( aIter == m_aNameMap.end()) // this name wasn't inserted yet so it must be te new one
                     {
-                        descriptor->setPropertyValue(PROPERTY_NAME,makeAny(sName));
+                        descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sName));
                         break;
                     }
                 }
@@ -293,7 +290,7 @@ void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLE
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
         Reference<XPropertySet> xKey(aIter->second,UNO_QUERY);
-        sal_Int32 nKeyType      = getINT32(xKey->getPropertyValue(PROPERTY_TYPE));
+        sal_Int32 nKeyType      = getINT32(xKey->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
         aSql += aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
         if(nKeyType == KeyType::PRIMARY)

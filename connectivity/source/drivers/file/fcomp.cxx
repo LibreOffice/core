@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
+
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include "connectivity/sqlparse.hxx"
 #endif
@@ -76,10 +80,6 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE file
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 
 using namespace connectivity;
@@ -461,7 +461,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         {
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Column not found: ");
             sMsg += aColumnName;
-            throw SQLException(sMsg,NULL,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(sMsg,NULL,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
         try

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,17 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
 #endif
 #ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
 #include "connectivity/sdbcx/VDescriptor.hxx"
 #endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
 
-using namespace connectivity::dbtools;
+using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -139,8 +138,8 @@ void SAL_CALL OCatalog::disposing()
 Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OCatalog_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
+
 
     return const_cast<OCatalog*>(this)->m_pTables;
 }
@@ -149,8 +148,8 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException
 Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OCatalog_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
+
 
     return const_cast<OCatalog*>(this)->m_pViews;
 }
@@ -159,8 +158,8 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
 Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OCatalog_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
+
 
     return const_cast<OCatalog*>(this)->m_pUsers;
 }
@@ -169,8 +168,8 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
 Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OCatalog_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
+
 
     return const_cast<OCatalog*>(this)->m_pGroups;
 }
@@ -178,7 +177,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
 void ODescriptor::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : ::com::sun::star::beans::PropertyAttribute::READONLY;
-    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME), PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -------------------------------------------------------------------------
 ODescriptor::~ODescriptor()

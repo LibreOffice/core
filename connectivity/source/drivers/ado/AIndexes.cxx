@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,12 @@
 #ifndef _COM_SUN_STAR_SDBC_INDEXTYPE_HPP_
 #include <com/sun/star/sdbc/IndexType.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
+
+using namespace connectivity;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -118,10 +119,10 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
     {
         OAdoIndex* pIndex = (OAdoIndex*)xTunnel->getSomething(OAdoIndex:: getUnoTunnelImplementationId());
         if(pIndex)
-            m_pCollection->Append(OLEVariant(getString(descriptor->getPropertyValue(PROPERTY_NAME))),
+            m_pCollection->Append(OLEVariant(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))),
                                   OLEVariant(pIndex->getImpl()));
         else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,8 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
 using namespace connectivity;
@@ -74,16 +73,16 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 // -------------------------------------------------------------------------
 OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     _bCase)
-    : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(PROPERTY_NAME))
-                                ,   getString(_xColumn->getPropertyValue(PROPERTY_TYPENAME))
-                                ,   getString(_xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE))
-                                ,   getINT32(_xColumn->getPropertyValue(PROPERTY_ISNULLABLE))
-                                ,   getINT32(_xColumn->getPropertyValue(PROPERTY_PRECISION))
-                                ,   getINT32(_xColumn->getPropertyValue(PROPERTY_SCALE))
-                                ,   getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE))
-                                ,   getBOOL(_xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT))
+    : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
+                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
+                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)))
+                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
+                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
+                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
+                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
+                                ,   getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)))
                                 ,   sal_False
-                                ,   getBOOL(_xColumn->getPropertyValue(PROPERTY_ISCURRENCY))
+                                ,   getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))
                                 ,   _bCase
                                 )
     , m_bFunction(sal_False)
@@ -127,10 +126,10 @@ void OParseColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(PROPERTY_FUNCTION,             PROPERTY_ID_FUNCTION,           nAttrib,&m_bFunction,       ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
-    registerProperty(PROPERTY_TABLENAME,            PROPERTY_ID_TABLENAME,          nAttrib,&m_aTableName,      ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_REALNAME,             PROPERTY_ID_REALNAME,           nAttrib,&m_aRealName,       ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_DBASEPRECISIONCHANGED,    PROPERTY_ID_DBASEPRECISIONCHANGED,          nAttrib,&m_bDbasePrecisionChanged,      ::getCppuType(reinterpret_cast<sal_Bool*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION),                PROPERTY_ID_FUNCTION,           nAttrib,&m_bFunction,       ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME),           PROPERTY_ID_TABLENAME,          nAttrib,&m_aTableName,      ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME),                PROPERTY_ID_REALNAME,           nAttrib,&m_aRealName,       ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DBASEPRECISIONCHANGED),   PROPERTY_ID_DBASEPRECISIONCHANGED,          nAttrib,&m_bDbasePrecisionChanged,      ::getCppuType(reinterpret_cast<sal_Bool*>(NULL)));
 
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-10 14:30:43 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,6 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_DBASE_INDEX_HXX_
 #include "dbase/DIndex.hxx"
 #endif
@@ -99,7 +95,7 @@ ODbaseResultSet::ODbaseResultSet( OStatement_Base* pStmt,connectivity::OSQLParse
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(sal_True)
 {
-    registerProperty(PROPERTY_ISBOOKMARKABLE,         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODbaseResultSet::getImplementationName(  ) throw ( RuntimeException)

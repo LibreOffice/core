@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:45 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,8 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
 using namespace connectivity::sdbcx;
@@ -295,7 +294,7 @@ sal_Int32 SAL_CALL OCollection::findColumn( const ::rtl::OUString& columnName ) 
 {
     ObjectIter aIter = m_aNameMap.find(columnName);
     if(aIter == m_aNameMap.end())
-        throw SQLException(::rtl::OUString::createFromAscii("Unknown column name!"),*this,connectivity::dbtools::SQLSTATE_GENERAL,1000,makeAny(NoSuchElementException(columnName,*this)) );
+        throw SQLException(::rtl::OUString::createFromAscii("Unknown column name!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,makeAny(NoSuchElementException(columnName,*this)) );
 
     return m_aElements.size() - (m_aElements.end() - ::std::find(m_aElements.begin(),m_aElements.end(),aIter)) +1; // because cloumns start at one
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,23 +77,6 @@
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
-
-// define the properties of this lib
-// this file includes the properties for this dll
-namespace connectivity
-{
-    namespace adabas
-    {
-#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
-#include "UStringDescription_Impl.hxx"
-#endif
-    }
-}
-
 
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
@@ -126,7 +109,7 @@ Reference< XPropertySet > OUsers::createEmptyObject()
 void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);
@@ -134,9 +117,9 @@ void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descr
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE USER ");
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
-    aSql = aSql + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote
+    aSql = aSql + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                 + ::rtl::OUString::createFromAscii(" PASSWORD ")
-                + getString(descriptor->getPropertyValue(PROPERTY_PASSWORD));
+                + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)));
 
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     xStmt->execute(aSql);

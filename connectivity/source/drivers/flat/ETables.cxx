@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETables.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:21 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,6 @@
 //#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 //#include <com/sun/star/lang/XUnoTunnel.hpp>
 //#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE flat
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
@@ -131,7 +127,7 @@ void SAL_CALL OFlatTables::appendByDescriptor( const Reference< XPropertySet >& 
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CResultSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,21 +70,6 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE calc
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
-// define the properties of this lib
-// this file includes the properties for this dll
-namespace connectivity
-{
-    namespace calc
-    {
-#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
-#include "UStringDescription_Impl.hxx"
-#endif
-    }
-}
 
 using namespace connectivity::calc;
 using namespace connectivity::file;
@@ -101,7 +86,7 @@ OCalcResultSet::OCalcResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(sal_True)
 {
-    registerProperty(PROPERTY_ISBOOKMARKABLE,         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OCalcResultSet::getImplementationName(  ) throw ( RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 #endif
 #ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 
 using namespace connectivity::ado;
@@ -225,11 +221,12 @@ OUserExtend::OUserExtend(sal_Bool _bCase,   ADOUser* _pUser) : OAdoUser(_bCase,_
 OUserExtend::OUserExtend(sal_Bool _bCase, const ::rtl::OUString& _Name) : OAdoUser(_bCase,_Name)
 {
 }
+
 // -------------------------------------------------------------------------
 void OUserExtend::construct()
 {
     OUser_TYPEDEF::construct();
-    registerProperty(PROPERTY_PASSWORD, PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const

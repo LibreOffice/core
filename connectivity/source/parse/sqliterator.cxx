@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:54 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,16 +84,14 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
 #endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
 
 using namespace ::connectivity;
-using namespace ::connectivity::dbtools;
 using namespace ::dbtools;
 using namespace ::connectivity::parse;
 using namespace ::com::sun::star::uno;
@@ -1198,14 +1196,14 @@ void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,co
         if(xColumns->hasByName(*pBegin) && (xColumns->getByName(*pBegin) >>= xColumn) && xColumn.is())
         {
             OParseColumn* pColumn = new OParseColumn(aName
-                                                ,   getString(xColumn->getPropertyValue(PROPERTY_TYPENAME))
-                                                ,   getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE))
-                                                ,   getINT32(xColumn->getPropertyValue(PROPERTY_ISNULLABLE))
-                                                ,   getINT32(xColumn->getPropertyValue(PROPERTY_PRECISION))
-                                                ,   getINT32(xColumn->getPropertyValue(PROPERTY_SCALE))
-                                                ,   getINT32(xColumn->getPropertyValue(PROPERTY_TYPE))
-                                                ,   getBOOL(xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT))
-                                                ,   getBOOL(xColumn->getPropertyValue(PROPERTY_ISCURRENCY))
+                                                ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
+                                                ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)))
+                                                ,   getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
+                                                ,   getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
+                                                ,   getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
+                                                ,   getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
+                                                ,   getBOOL(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)))
+                                                ,   getBOOL(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))
                                                 ,   m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
 
             pColumn->setTableName(_rTableAlias);

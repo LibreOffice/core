@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,11 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
+
+using namespace connectivity;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -289,7 +290,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, cons
             m_aTable.get_Columns()->Append(OLEVariant(pColumn->getColumnImpl()));
         }
         else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by name!"),*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by name!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
 
     m_pColumns->refresh();
@@ -312,7 +313,7 @@ void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< X
             m_aTable.get_Columns()->Append(OLEVariant(pColumn->getColumnImpl()));
         }
         else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by index!"),*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
     m_pColumns->refresh();
 }

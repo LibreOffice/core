@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DCode.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:46:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,6 @@
 #ifndef _CONNECTIVITY_DBASE_INDEXITER_HXX_
 #include "dbase/DIndexIter.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 
 
 using namespace connectivity::dbase;
@@ -92,6 +88,7 @@ OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,
 {
     return new OFILEOperandAttr(_nPos,_xCol,_xIndexes);
 }
+
 //------------------------------------------------------------------
 OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
                                    const Reference< XPropertySet>& _xColumn,
@@ -114,15 +111,15 @@ OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
             {
                 Reference<XColumnsSupplier> xColsSup(xIndex,UNO_QUERY);
                 Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
-                _xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                _xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sName;
                 if(xNameAccess->hasByName(sName))
                 {
                     m_xIndex = xIndex;
                     break;
                 }
-                else if(xColInfo->hasPropertyByName(PROPERTY_REALNAME))
+                else if(xColInfo->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)))
                 {
-                    _xColumn->getPropertyValue(PROPERTY_REALNAME) >>= sName;
+                    _xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)) >>= sName;
                     if(xNameAccess->hasByName(sName))
                     {
                         m_xIndex = xIndex;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,6 @@
 #endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE flat
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
@@ -857,8 +853,8 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
         sal_Int32 nLen;
-        xColumn->getPropertyValue(PROPERTY_PRECISION) >>= nLen;
-        sal_Int32 nType = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
+        xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nLen;
+        sal_Int32 nType = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
         ByteString aStr(m_aCurrentLine.GetToken(i-1,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter()));
 
         if (aStr.Len() == 0)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,18 @@
 #ifndef _CONNECTIVITY_FILE_ORESULTSETMETADATA_HXX_
 #include "file/FResultSetMetaData.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE file
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_FILE_TABLE_HXX_
 #include "file/FTable.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
+
 using namespace connectivity;
+using namespace dbtools;
 using namespace connectivity::file;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -99,18 +100,18 @@ OResultSetMetaData::~OResultSetMetaData()
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
 
-    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_PRECISION));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
 
-    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_TYPE));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 }
 // -------------------------------------------------------------------------
 
@@ -123,7 +124,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
 
     return sal_False;
 }
@@ -132,7 +133,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 ::rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
 
     return ::rtl::OUString();
 }
@@ -141,16 +142,16 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
 
-    Any aName((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
-    return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
+    Any aName((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+    return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
 
     return m_aTableName;
 }
@@ -158,28 +159,28 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 ::rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    return getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_TYPENAME));
+        throwInvalidIndexException(*this);
+    return getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    return getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
+        throwInvalidIndexException(*this);
+    return getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
@@ -187,52 +188,52 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISCURRENCY));
+        throwInvalidIndexException(*this);
+    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)));
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
+        throwInvalidIndexException(*this);
+    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)));
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_PRECISION));
+        throwInvalidIndexException(*this);
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_SCALE));
+        throwInvalidIndexException(*this);
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISNULLABLE));
+        throwInvalidIndexException(*this);
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     return sal_True;
 }
 // -------------------------------------------------------------------------
@@ -240,9 +241,9 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQL
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
-        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
+        throwInvalidIndexException(*this);
+    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
+        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION))))
         return sal_True;
     return m_pTable->isReadOnly();
 }
@@ -251,9 +252,9 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLEx
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
-        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
+        throwInvalidIndexException(*this);
+    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
+        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION))))
         return sal_False;
     return !m_pTable->isReadOnly();
 ;
@@ -262,9 +263,9 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) t
 sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(column <= 0 || column > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
-    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
-        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
+        throwInvalidIndexException(*this);
+    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
+        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION))))
         return sal_False;
     return !m_pTable->isReadOnly();
 }

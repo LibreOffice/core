@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 11:38:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,11 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
+using namespace connectivity;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -140,7 +140,7 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
             ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
         }
         else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
 
     OCollection_TYPE::appendByDescriptor(descriptor);

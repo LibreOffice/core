@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 #endif
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 
 using namespace connectivity::adabas;
@@ -148,7 +144,7 @@ typedef connectivity::sdbcx::OUser  OUser_TYPEDEF;
 void OUserExtend::construct()
 {
     OUser_TYPEDEF::construct();
-    registerProperty(PROPERTY_PASSWORD, PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:29 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,21 +74,6 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE flat
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
-// define the properties of this lib
-// this file includes the properties for this dll
-namespace connectivity
-{
-    namespace flat
-    {
-#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
-#include "UStringDescription_Impl.hxx"
-#endif
-    }
-}
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
@@ -105,7 +90,7 @@ OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(sal_True)
 {
-    registerProperty(PROPERTY_ISBOOKMARKABLE,         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFlatResultSet::getImplementationName(  ) throw ( RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
 #endif
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
+#endif
 
 
 namespace connectivity
@@ -93,8 +96,12 @@ namespace connectivity
     {
     protected:
         ::osl::Mutex        m_aMutex;
+        static ::dbtools::OPropertyMap s_aPropertyNameMap;
         rtl_TextEncoding    m_nTextEncoding; // the encoding which is used for all text conversions
     public:
+
+        static ::dbtools::OPropertyMap& getPropMap();
+
         OMetaConnection() : OMetaConnection_BASE(m_aMutex) ,m_nTextEncoding(RTL_TEXTENCODING_MS_1252){}
 
         rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,10 +145,6 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE calc
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
@@ -874,13 +870,13 @@ sal_Bool OCalcTable::fetchRow( OValueRow _rRow, const OSQLColumns & _rCols,
         Reference< XPropertySet> xColumn = *aIter;
 
 //      ::rtl::OUString aName;
-//      xColumn->getPropertyValue(PROPERTY_NAME) >>= aName;
+//      xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
 
         sal_Int32 nType;
         if(_bUseTableDefs)
             nType = m_aTypes[i-1];
         else
-            xColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
+            xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 
         if ((*_rRow)[i].isBound())
             lcl_SetValue( (*_rRow)[i], m_xSheet, m_nStartCol, m_nStartRow, m_bHasHeaders,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:05:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,9 @@
 #ifndef _COM_SUN_STAR_SDB_SQLERROREVENT_HPP_
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
-
 using namespace comphelper;
 
 //.........................................................................
@@ -89,7 +87,7 @@ namespace dbtools
 {
 //.........................................................................
 
-    using namespace connectivity::dbtools;
+    using namespace connectivity;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
 
@@ -373,21 +371,26 @@ const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
     return pReturn;
 }
 using namespace ::com::sun::star::uno;
-//============================================================
-//= FunctionSequenceException
-//============================================================
-FunctionSequenceException::FunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)
-        :SQLException(ERRORMSG_SEQUENCE,
-                      _Context,
-                      SQLSTATE_SEQUENCE, 0,
-                      _Next){};
-
 //------------------------------------------------------------
-void throwFunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)
+void throwFunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
-    throw SQLException(ERRORMSG_SEQUENCE, _Context, SQLSTATE_SEQUENCE, 0, _Next);
+    throw SQLException(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE), _Context, OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000), 0, _Next);
 }
-
+// -----------------------------------------------------------------------------
+void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
+        const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
+{
+    static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("07009");
+    throw SQLException(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_INVALID_INDEX),_Context,sStatus,0,Any());
+}
+// -----------------------------------------------------------------------------
+void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
+    throw (::com::sun::star::sdbc::SQLException)
+{
+    static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("S1000");
+    throw ::com::sun::star::sdbc::SQLException(_rMsg, _rxSource, sStatus, 0, ::com::sun::star::uno::Any());
+}
+// -----------------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
@@ -396,6 +399,9 @@ void throwFunctionSequenceException(const Reference< XInterface >& _Context, con
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/04/19 07:05:17  fs
+ *  +throwFunctionSequenceException
+ *
  *  Revision 1.5  2001/03/21 13:37:07  jl
  *  OSL_ENSHURE replaced by OSL_ENSURE
  *

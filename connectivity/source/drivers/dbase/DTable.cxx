@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-11 06:13:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,6 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
@@ -719,7 +715,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
         Reference< XPropertySet> xColumn = *aIter;
 
         ::rtl::OUString aName;
-        xColumn->getPropertyValue(PROPERTY_NAME) >>= aName;
+        xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
         sal_Int32 nLen;
@@ -731,8 +727,8 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
         }
         else
         {
-            xColumn->getPropertyValue(PROPERTY_PRECISION)   >>= nLen;
-            xColumn->getPropertyValue(PROPERTY_TYPE)        >>= nType;
+            xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))  >>= nLen;
+            xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))       >>= nType;
         }
         switch(nType)
         {
@@ -741,7 +737,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
                 if(_bUseTableDefs)
                     nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,m_aScales[i-1]);
                 else
-                    nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xColumn->getPropertyValue(PROPERTY_SCALE)));
+                    nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
                 break;  // das Vorzeichen und das Komma
             case DataType::BIT:         nLen = 1; break;
             case DataType::LONGVARCHAR: nLen = 10; break;
@@ -1114,21 +1110,21 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
         char  cTyp;
 
-        xCol->getPropertyValue(PROPERTY_NAME) >>= aName;
+        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
 
         if (aName.getLength() > nMaxFieldLength)
         {
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
             sMsg += aName;
             sMsg += ::rtl::OUString::createFromAscii("!");
-            throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
         }
 
         ByteString aCol(aName.getStr(), getConnection()->getTextEncoding());
         (*m_pFileStream) << aCol.GetBuffer();
         m_pFileStream->Write(aBuffer, 11 - aCol.Len());
 
-        switch (getINT32(xCol->getPropertyValue(PROPERTY_TYPE)))
+        switch (getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -1159,7 +1155,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column type for column: ");
                     sMsg += aName;
                     sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
+                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
                 }
         }
 
@@ -1167,9 +1163,9 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         m_pFileStream->Write(aBuffer, 4);
 
         sal_Int32 nPrecision = 0;
-        xCol->getPropertyValue(PROPERTY_PRECISION) >>= nPrecision;
+        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nPrecision;
         sal_Int32 nScale = 0;
-        xCol->getPropertyValue(PROPERTY_SCALE) >>= nScale;
+        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
 
         switch(cTyp)
         {
@@ -1180,7 +1176,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid precision for column: ");
                     sMsg += aName;
                     sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
+                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
                 }
                 (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlänge
                 nRecLength += (USHORT)Min((ULONG)nPrecision, 255UL);
@@ -1195,10 +1191,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Precision is less than scale for column: ");
                     sMsg += aName;
                     sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
+                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
                     break;
                 }
-                if (getBOOL(xCol->getPropertyValue(PROPERTY_ISCURRENCY))) // Currency wird gesondert behandelt
+                if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
                 {
                     (*m_pFileStream) << (BYTE)10;          // Standard Laenge
                     (*m_pFileStream) << (BYTE)4;
@@ -1234,7 +1230,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column type for column: ");
                     sMsg += aName;
                     sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
+                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
                 }
         }
         m_pFileStream->Write(aBuffer, 14);
@@ -1437,7 +1433,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
         ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
         //  const SdbFILEColumn *pColumn = (const SdbFILEColumn *)(*aOriginalColumns)[i];
 
-        xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
+        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
         Reference<XPropertySet> xIndex = isUniqueByColumnName(aColName);
         if (xIndex.is())
         {
@@ -1452,7 +1448,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
             {
 //              Reference<XPropertySet> xFindCol;
 //              _xCols->getByIndex(nPos) >>= xFindCol;
-                if(aCase(getString((*aIter)->getPropertyValue(PROPERTY_REALNAME)),aColName))
+                if(aCase(getString((*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME))),aColName))
                     break;
             }
             if (aIter == _rCols.end())
@@ -1641,7 +1637,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(const ::rtl::OUString&
     for(sal_Int32 i=0;i<m_pIndexes->getCount();++i)
     {
         ::cppu::extractInterface(xIndex,m_pIndexes->getByIndex(i));
-        if(xIndex.is() && getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE)))
+        if(xIndex.is() && getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
         {
             Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY)->getColumns());
             if(xCols->hasByName(_rColName))
@@ -1687,7 +1683,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     for (i = 0; i < m_pColumns->getCount(); i++)
     {
         m_pColumns->getByIndex(i) >>= xCol;
-        xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
+        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
         //  const SdbFILEColumn *pColumn = (const SdbFILEColumn *)(*aOriginalColumns)[i];
         sal_Int32 nPos = 0;
@@ -1695,7 +1691,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         {
             Reference<XPropertySet> xFindCol;
             ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
-            if(aCase(getString(xFindCol->getPropertyValue(PROPERTY_NAME)),aColName))
+            if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
                 break;
         }
         if (nPos >= _xCols->getCount())
@@ -1721,7 +1717,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 {
                     // es existiert kein eindeutiger Wert
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Dupilcate value found!");
-                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
+                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
                 }
             }
         }
@@ -1732,17 +1728,17 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     for (i = 0; i < m_pColumns->getCount(); i++)
     {
         m_pColumns->getByIndex(i) >>= xCol;
-        xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
+        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
-        sal_Int32 nLen = getINT32(xCol->getPropertyValue(PROPERTY_PRECISION));
-        sal_Int32 nType = getINT32(xCol->getPropertyValue(PROPERTY_TYPE));
+        sal_Int32 nLen = getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+        sal_Int32 nType = getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
         switch (nType)
         {
             case DataType::DATE:        nLen = 8; break;
             case DataType::DECIMAL:
-                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xCol->getPropertyValue(PROPERTY_SCALE)));
+                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
                 break;  // das Vorzeichen und das Komma
             case DataType::BIT: nLen = 1; break;
             case DataType::LONGVARCHAR:nLen = 10; break;
@@ -1755,7 +1751,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         {
             Reference<XPropertySet> xFindCol;
             ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
-            if(aCase(getString(xFindCol->getPropertyValue(PROPERTY_NAME)),aColName))
+            if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
                 break;
         }
 
@@ -1824,8 +1820,8 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
                     double n = rRow[nPos];
 
-                    int nPrecision      = (int)getINT32(xCol->getPropertyValue(PROPERTY_PRECISION));
-                    int nScale          = (int)getINT32(xCol->getPropertyValue(PROPERTY_SCALE));
+                    int nPrecision      = (int)getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+                    int nScale          = (int)getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
                     // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
                     // sein koennte und muesste
 
@@ -1891,7 +1887,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid value for column: ");
             sMsg += aColName;
             sMsg += ::rtl::OUString::createFromAscii("!");
-            throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
         }
         // Und weiter ...
         nByteOffset += nLen;
@@ -1953,23 +1949,23 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
 //  // get the name
 //  ::rtl::OUString sOldName,sNewName;
-//  xOldColumn->getPropertyByName(PROPERTY_NAME) >>= sOldName;
-//  descriptor->getPropertyByName(PROPERTY_NAME) >>= sNewName;
+//  xOldColumn->getPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sOldName;
+//  descriptor->getPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sNewName;
 //
 //  // get the type
 //  sal_Int32 nOldType,nNewType;
-//  xOldColumn->getPropertyByName(PROPERTY_TYPE) >>= nOldType;
-//  descriptor->getPropertyByName(PROPERTY_TYPE) >>= nNewType;
+//  xOldColumn->getPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nOldType;
+//  descriptor->getPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nNewType;
 //
 //  // get the precision
 //  sal_Int32 nOldPrec,nNewPrec;
-//  xOldColumn->getPropertyByName(PROPERTY_PRECISION) >>= nOldPrec;
-//  descriptor->getPropertyByName(PROPERTY_PRECISION) >>= nNewPrec;
+//  xOldColumn->getPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nOldPrec;
+//  descriptor->getPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nNewPrec;
 //
 //  // get the scale
 //  sal_Int32 nOldScale,nNewScale;
-//  xOldColumn->getPropertyByName(PROPERTY_SCALE) >>= nOldScale;
-//  descriptor->getPropertyByName(PROPERTY_SCALE) >>= nNewScale;
+//  xOldColumn->getPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nOldScale;
+//  descriptor->getPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nNewScale;
 //
 //  // check if currency changed
 //  sal_Bool bOldCur,bNewCur;
@@ -1982,7 +1978,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
     ODbaseTable* pNewTable = new ODbaseTable(static_cast<ODbaseConnection*>(m_pConnection));
     Reference<XPropertySet> xHoldTable = pNewTable;
-    pNewTable->setPropertyValue(PROPERTY_NAME,makeAny(::rtl::OUString(sTempName)));
+    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
 
     // copy the structure
@@ -2069,7 +2065,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 
     ODbaseTable* pNewTable = new ODbaseTable(static_cast<ODbaseConnection*>(m_pConnection));
     Reference<XPropertySet> xHoldTable = pNewTable;
-    pNewTable->setPropertyValue(PROPERTY_NAME,makeAny(::rtl::OUString(sTempName)));
+    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
 
@@ -2113,7 +2109,7 @@ String ODbaseTable::createTempFile()
     String sName(m_Name);
     TempFile aTempFile(sName,&sExt,&sTempName);
     if(!aTempFile.IsValid())
-        throw SQLException(::rtl::OUString::createFromAscii("Error while alter table!"),NULL,SQLSTATE_GENERAL,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Error while alter table!"),NULL,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);

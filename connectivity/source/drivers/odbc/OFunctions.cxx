@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-21 09:54:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
 #include "odbc/OFunctions.hxx"
 #endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
 
 // Implib-Definitionen fuer ODBC-DLL/shared library:
 
@@ -77,8 +80,9 @@ sal_Bool connectivity::LoadLibrary_ADABAS(::rtl::OUString &_rPath)
     if (bLoaded)
         return sal_True;
 
-    char *pPath =getenv("DBROOT");
-    if(pPath)
+    rtl_uString* pPath = NULL;
+    ::rtl::OUString sTemp = ::rtl::OUString::createFromAscii("DBROOT");
+    if(osl_getEnvironment(sTemp.pData,&pPath) == osl_Process_E_None && pPath)
     {
 
 #if ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX)

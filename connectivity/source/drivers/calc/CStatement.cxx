@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CStatement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 
 using namespace connectivity::calc;
 using namespace connectivity::file;
+using namespace com::sun::star::uno;
 // -------------------------------------------------------------------------
 OResultSet* OCalcStatement::createResultSet()
 {

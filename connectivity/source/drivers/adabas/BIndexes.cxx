@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 #ifndef _COM_SUN_STAR_SDBC_INDEXTYPE_HPP_
 #include <com/sun/star/sdbc/IndexType.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -147,7 +143,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);
@@ -158,7 +154,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        if(getBOOL(descriptor->getPropertyValue(PROPERTY_ISUNIQUE)))
+        if(getBOOL(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
         aSql = aSql + ::rtl::OUString::createFromAscii("INDEX ");
 
@@ -177,8 +173,8 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
             for(sal_Int32 i=0;i<xColumns->getCount();++i)
             {
                 xColumns->getByIndex(i) >>= xColProp;
-                aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
-                aSql = aSql +   (getBOOL(xColProp->getPropertyValue(PROPERTY_ISASCENDING))
+                aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
+                aSql = aSql +   (getBOOL(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING)))
                                             ?
                                 ::rtl::OUString::createFromAscii(" ASC")
                                             :
@@ -199,7 +195,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
 
             xColumns->getByIndex(0) >>= xColProp;
 
-            aSql = aSql + aDot + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
+            aSql = aSql + aDot + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
         }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexColumns.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 13:23:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 #ifndef _CONNECTIVITY_SDBCX_INDEXCOLUMN_HXX_
 #include "connectivity/sdbcx/VIndexColumn.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 
 using namespace connectivity::dbase;
 using namespace connectivity;
@@ -97,12 +93,12 @@ Reference< XNamed > ODbaseIndexColumns::createObject(const ::rtl::OUString& _rNa
         return Reference< XNamed >();
 
     Reference< XNamed > xRet = new sdbcx::OIndexColumn(sal_True,_rName
-                                                    ,getString(xCol->getPropertyValue(PROPERTY_TYPENAME))
+                                                    ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
                                                     ,::rtl::OUString()
-                                                    ,getINT32(xCol->getPropertyValue(PROPERTY_ISNULLABLE))
-                                                    ,getINT32(xCol->getPropertyValue(PROPERTY_PRECISION))
-                                                    ,getINT32(xCol->getPropertyValue(PROPERTY_SCALE))
-                                                    ,getINT32(xCol->getPropertyValue(PROPERTY_TYPE))
+                                                    ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
+                                                    ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
+                                                    ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
+                                                    ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
                                                     ,sal_False
                                                     ,sal_False
                                                     ,sal_False

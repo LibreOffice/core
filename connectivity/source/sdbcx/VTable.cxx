@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,8 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
@@ -87,7 +86,6 @@
 
 
 // -------------------------------------------------------------------------
-using namespace connectivity::dbtools;
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
@@ -165,10 +163,10 @@ void OTable::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_DESCRIPTION,      PROPERTY_ID_DESCRIPTION,nAttrib,&m_Description, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_TYPE,             PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),     PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),     PROPERTY_ID_DESCRIPTION,nAttrib,&m_Description, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),                PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTable::acquire() throw(::com::sun::star::uno::RuntimeException)
@@ -223,8 +221,8 @@ void SAL_CALL OTable::disposing(void)
 Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
     if(!m_pColumns)
         refreshColumns();
@@ -237,8 +235,8 @@ Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
 Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
     if(!m_pKeys)
         refreshKeys();
@@ -262,8 +260,8 @@ cppu::IPropertyArrayHelper & OTable::getInfoHelper()
 Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
     return this;
 }
@@ -272,8 +270,8 @@ Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(Runtim
 Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
     if(!m_pIndexes)
         refreshIndexes();
@@ -285,8 +283,8 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
 void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
 }
 // -------------------------------------------------------------------------
@@ -294,16 +292,16 @@ void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLExceptio
 void SAL_CALL OTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OTableDescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+
 
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VGroup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,17 +74,12 @@
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGEOBJECT_HPP_
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
 
 
 // -------------------------------------------------------------------------
-using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
 using namespace connectivity;
 using namespace ::com::sun::star::sdbc;
@@ -151,8 +146,8 @@ void OGroup::disposing(void)
 Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OGroup_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
+
 
     return const_cast<OGroup*>(this)->m_pUsers;
 }
@@ -161,8 +156,8 @@ Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException)
 sal_Int32 SAL_CALL OGroup::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OGroup_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
+
 
     return 0;
 }
@@ -170,8 +165,8 @@ sal_Int32 SAL_CALL OGroup::getPrivileges( const ::rtl::OUString& objName, sal_In
 sal_Int32 SAL_CALL OGroup::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OGroup_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
+
 
     return 0;
 }
@@ -179,15 +174,15 @@ sal_Int32 SAL_CALL OGroup::getGrantablePrivileges( const ::rtl::OUString& objNam
 void SAL_CALL OGroup::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OGroup_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
+
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OGroup::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (OGroup_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
+
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)

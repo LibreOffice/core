@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-25 06:12:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,192 +107,68 @@ namespace connectivity
 
             WpADOConnection(const WpADOConnection& rhs){operator=(rhs);}
 
-            inline WpADOConnection& operator=(const WpADOConnection& rhs)
+             WpADOConnection& operator=(const WpADOConnection& rhs)
                 {WpOLEBase<ADOConnection>::operator=(rhs); return *this;}
 
             //////////////////////////////////////////////////////////////////////
 
-            inline ADOProperties* get_Properties() const
-            {
-                ADOProperties* pProps=NULL;
-                pInterface->get_Properties(&pProps);
-                return pProps;
-            }
+            ADOProperties* get_Properties() const;
 
-            inline rtl::OUString GetConnectionString() const
-            {
-                OLEString aBSTR;
-                pInterface->get_ConnectionString(&aBSTR);
-                return aBSTR;
-            }
+             rtl::OUString GetConnectionString() const;
 
-            inline sal_Bool PutConnectionString(const ::rtl::OUString &aCon) const
-            {
-                OLEString bstr(aCon);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_ConnectionString(bstr));
+             sal_Bool PutConnectionString(const ::rtl::OUString &aCon) const;
 
-                return bErg;
-            }
+             sal_Int32 GetCommandTimeout() const;
 
-            inline sal_Int32 GetCommandTimeout() const
-            {
-                sal_Int32 nRet=0;
-                pInterface->get_CommandTimeout(&nRet);
-                return nRet;
-            }
+             void PutCommandTimeout(sal_Int32 nRet);
 
-            inline void PutCommandTimeout(sal_Int32 nRet)
-            {
-                pInterface->put_CommandTimeout(nRet);
-            }
+             sal_Int32 GetConnectionTimeout() const ;
 
-            inline sal_Int32 GetConnectionTimeout() const
-            {
-                sal_Int32 nRet=0;
-                pInterface->get_ConnectionTimeout(&nRet);
-                return nRet;
-            }
+             void PutConnectionTimeout(sal_Int32 nRet);
 
-            inline void PutConnectionTimeout(sal_Int32 nRet)
-            {
-                pInterface->put_ConnectionTimeout(nRet);
-            }
+             sal_Bool Close( ) ;
 
-            inline sal_Bool Close( )
-            {
-                return (SUCCEEDED(pInterface->Close()));
-            }
+             sal_Bool Execute(const ::rtl::OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset);
 
-            inline sal_Bool Execute(const ::rtl::OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset)
-            {
-                OLEString sStr1(_CommandText);
-                sal_Bool bErg = SUCCEEDED(pInterface->Execute(sStr1,&RecordsAffected,Options,(_ADORecordset**)ppiRset));
-                return bErg;
-            }
+             sal_Bool BeginTrans();
 
-            inline sal_Bool BeginTrans()
-            {
-                sal_Int32 nIso=0;
-                return SUCCEEDED(pInterface->BeginTrans(&nIso));
-            }
+             sal_Bool CommitTrans( ) ;
 
-            inline sal_Bool CommitTrans( )
-            {
-                return SUCCEEDED(pInterface->CommitTrans());
-            }
+             sal_Bool RollbackTrans( );
 
-            inline sal_Bool RollbackTrans( )
-            {
-                return SUCCEEDED(pInterface->RollbackTrans());
-            }
+             sal_Bool Open(const ::rtl::OUString& ConnectionString, const ::rtl::OUString& UserID,const ::rtl::OUString& Password,long Options);
 
-            inline sal_Bool Open(const ::rtl::OUString& ConnectionString, const ::rtl::OUString& UserID,const ::rtl::OUString& Password,long Options)
-            {
-                OLEString sStr1(ConnectionString);
-                OLEString sStr2(UserID);
-                OLEString sStr3(Password);
-                sal_Bool bErg = SUCCEEDED(pInterface->Open(sStr1,sStr2,sStr3,Options));
-                return bErg;
-            }
+             sal_Bool GetErrors(ADOErrors** pErrors);
 
-            inline sal_Bool GetErrors(ADOErrors** pErrors)
-            {
-                return SUCCEEDED(pInterface->get_Errors(pErrors));
-            }
+             ::rtl::OUString GetDefaultDatabase() const;
 
-            inline ::rtl::OUString GetDefaultDatabase() const
-            {
-                OLEString aBSTR; pInterface->get_DefaultDatabase(&aBSTR);
-                return aBSTR;
-            }
+             sal_Bool PutDefaultDatabase(const ::rtl::OUString& _bstr);
 
-            inline sal_Bool PutDefaultDatabase(const ::rtl::OUString& _bstr)
-            {
-                OLEString bstr(_bstr);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_DefaultDatabase(bstr));
+             IsolationLevelEnum get_IsolationLevel() const ;
 
-                return bErg;
-            }
+             sal_Bool put_IsolationLevel(const IsolationLevelEnum& eNum) ;
 
-            inline IsolationLevelEnum get_IsolationLevel() const
-            {
-                IsolationLevelEnum eNum=adXactUnspecified;
-                pInterface->get_IsolationLevel(&eNum);
-                return eNum;
-            }
+             sal_Int32 get_Attributes() const;
 
-            inline sal_Bool put_IsolationLevel(const IsolationLevelEnum& eNum)
-            {
-                return SUCCEEDED(pInterface->put_IsolationLevel(eNum));
-            }
+             sal_Bool put_Attributes(sal_Int32 nRet);
 
-            inline sal_Int32 get_Attributes() const
-            {
-                sal_Int32 nRet=0;
-                pInterface->get_Attributes(&nRet);
-                return nRet;
-            }
+             CursorLocationEnum get_CursorLocation() const;
 
-            inline sal_Bool put_Attributes(sal_Int32 nRet)
-            {
-                return SUCCEEDED(pInterface->put_Attributes(nRet));
-            }
+             sal_Bool put_CursorLocation(const CursorLocationEnum &eNum) ;
 
-            inline CursorLocationEnum get_CursorLocation() const
-            {
-                CursorLocationEnum eNum=adUseNone;
-                pInterface->get_CursorLocation(&eNum);
-                return eNum;
-            }
+             ConnectModeEnum get_Mode() const;
 
-            inline sal_Bool put_CursorLocation(const CursorLocationEnum &eNum)
-            {
-                return SUCCEEDED(pInterface->put_CursorLocation(eNum));
-            }
+             sal_Bool put_Mode(const ConnectModeEnum &eNum) ;
 
-            inline ConnectModeEnum get_Mode() const
-            {
-                ConnectModeEnum eNum=adModeUnknown;
-                pInterface->get_Mode(&eNum);
-                return eNum;
-            }
+             ::rtl::OUString get_Provider() const;
 
-            inline sal_Bool put_Mode(const ConnectModeEnum &eNum)
-            {
+             sal_Bool put_Provider(const ::rtl::OUString& _bstr);
 
-                return SUCCEEDED(pInterface->put_Mode(eNum));
-            }
+             sal_Int32 get_State() const;
 
-            inline ::rtl::OUString get_Provider() const
-            {
-                OLEString aBSTR; pInterface->get_Provider(&aBSTR);
-                return aBSTR;
-            }
+             sal_Bool OpenSchema(SchemaEnum eNum,OLEVariant& Restrictions,OLEVariant& SchemaID,ADORecordset**pprset);
 
-            inline sal_Bool put_Provider(const ::rtl::OUString& _bstr)
-            {
-                OLEString bstr(_bstr);
-                return SUCCEEDED(pInterface->put_Provider(bstr));
-            }
-
-            inline sal_Int32 get_State() const
-            {
-                sal_Int32 nRet=0;
-                pInterface->get_State(&nRet);
-                return nRet;
-            }
-
-            inline sal_Bool OpenSchema(SchemaEnum eNum,OLEVariant& Restrictions,OLEVariant& SchemaID,ADORecordset**pprset)
-            {
-                return SUCCEEDED(pInterface->OpenSchema(eNum,Restrictions,SchemaID,pprset));
-            }
-
-            inline ::rtl::OUString get_Version() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Version(&aBSTR);
-                return aBSTR;
-            }
+             ::rtl::OUString get_Version() const;
         };
 
         //------------------------------------------------------------------------
@@ -306,153 +182,36 @@ namespace connectivity
 
             WpADOCommand(const WpADOCommand& rhs){operator=(rhs);}
 
-            inline WpADOCommand& operator=(const WpADOCommand& rhs)
+             WpADOCommand& operator=(const WpADOCommand& rhs)
             {
                 WpOLEBase<ADOCommand>::operator=(rhs); return *this;}
 
             //////////////////////////////////////////////////////////////////////
 
-            sal_Bool putref_ActiveConnection( WpADOConnection *pCon)
-            {
-                return SUCCEEDED(pInterface->putref_ActiveConnection(pCon->pInterface));
-            }
+            sal_Bool putref_ActiveConnection( WpADOConnection *pCon);
 
-            void put_ActiveConnection(/* [in] */ const OLEVariant& vConn)
-            {
-                pInterface->put_ActiveConnection(vConn);
-            }
+            void put_ActiveConnection(/* [in] */ const OLEVariant& vConn);
+             void Create();
+             sal_Int32 get_State() const;
+             ::rtl::OUString get_CommandText() const;
+             sal_Bool put_CommandText(const ::rtl::OUString &aCon) ;
+             sal_Int32 get_CommandTimeout() const;
+             void put_CommandTimeout(sal_Int32 nRet);
+             sal_Bool get_Prepared() const;
+             sal_Bool put_Prepared(VARIANT_BOOL bPrepared) const;
+             sal_Bool Execute(OLEVariant& RecordsAffected,OLEVariant& Parameters,long Options, ADORecordset** ppiRset);
+             ADOParameter* CreateParameter(const ::rtl::OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value);
 
-            inline void Create()
-            {
-                IClassFactory2* pIUnknown   = NULL;
-                IUnknown        *pOuter     = NULL;
-                HRESULT         hr;
-                hr = CoGetClassObject( ADOS::CLSID_ADOCOMMAND_21,
-                                      CLSCTX_INPROC_SERVER,
-                                      NULL,
-                                      IID_IClassFactory2,
-                                      (void**)&pIUnknown );
-
-                if( !FAILED( hr ) )
-                {
-                    pIUnknown->AddRef();
-                    ADOCommand* pCommand=NULL;
-
-                    hr = pIUnknown->CreateInstanceLic(  pOuter,
-                                                        NULL,
-                                                        ADOS::IID_ADOCOMMAND_21,
-                                                        ADOS::GetKeyStr(),
-                                                        (void**) &pCommand);
-
-                    if( !FAILED( hr ) )
-                    {
-                        pInterface = pCommand;
-                        pInterface->AddRef();
-                    }
-                    pIUnknown->Release();
-                }
-            }
-
-            inline sal_Int32 get_State() const
-            {
-                sal_Int32 nRet=0;
-                pInterface->get_State(&nRet);
-                return nRet;
-            }
-
-            inline ::rtl::OUString get_CommandText() const
-            {
-                OLEString aBSTR; pInterface->get_CommandText(&aBSTR);
-                return aBSTR;
-            }
-
-            inline sal_Bool put_CommandText(const ::rtl::OUString &aCon)
-            {
-                OLEString bstr(aCon);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_CommandText(bstr));
-
-                return bErg;
-            }
-
-            inline sal_Int32 get_CommandTimeout() const
-            {
-                sal_Int32 nRet=0;
-                pInterface->get_CommandTimeout(&nRet);
-                return nRet;
-            }
-
-            inline void put_CommandTimeout(sal_Int32 nRet)
-            {
-                pInterface->put_CommandTimeout(nRet);
-            }
-
-            inline sal_Bool get_Prepared() const
-            {
-                VARIANT_BOOL bPrepared = VARIANT_FALSE;
-                pInterface->get_Prepared(&bPrepared);
-                return bPrepared == VARIANT_TRUE;
-            }
-
-            inline sal_Bool put_Prepared(VARIANT_BOOL bPrepared) const
-            {
-                return SUCCEEDED(pInterface->put_Prepared(bPrepared));
-            }
-
-            inline sal_Bool Execute(OLEVariant& RecordsAffected,OLEVariant& Parameters,long Options, ADORecordset** ppiRset)
-            {
-                return SUCCEEDED(pInterface->Execute(&RecordsAffected,&Parameters,Options,ppiRset));
-            }
-
-            inline ADOParameter* CreateParameter(const ::rtl::OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
-            {
-                ADOParameter* pPara = NULL;
-                OLEString bstr(_bstr);
-                sal_Bool bErg = SUCCEEDED(pInterface->CreateParameter(bstr,Type,Direction,nSize,Value,&pPara));
-
-                return bErg ? pPara : NULL;
-            }
-
-            inline ADOParameters* get_Parameters() const
-            {
-                ADOParameters* pPara=NULL;
-                pInterface->get_Parameters(&pPara);
-                return pPara;
-            }
-
-            inline sal_Bool put_CommandType( /* [in] */ CommandTypeEnum lCmdType)
-            {
-                return SUCCEEDED(pInterface->put_CommandType(lCmdType));
-            }
-
-            inline CommandTypeEnum get_CommandType( ) const
-            {
-                CommandTypeEnum eNum=adCmdUnspecified;
-                pInterface->get_CommandType(&eNum);
-                return eNum;
-            }
-
+             ADOParameters* get_Parameters() const;
+             sal_Bool put_CommandType( /* [in] */ CommandTypeEnum lCmdType);
+             CommandTypeEnum get_CommandType( ) const ;
             // gibt den Namen des Feldes zur"ueck
-            inline ::rtl::OUString GetName() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            inline sal_Bool put_Name(const ::rtl::OUString& _Name)
-            {
-                OLEString bstr(_Name);
-                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
-
-                return bErg;
-            }
-            inline sal_Bool Cancel()
-            {
-                return SUCCEEDED(pInterface->Cancel());
-            }
+             ::rtl::OUString GetName() const ;
+             sal_Bool put_Name(const ::rtl::OUString& _Name);
+             sal_Bool Cancel();
         };
         //------------------------------------------------------------------------
-        class WpADOError:public WpOLEBase<ADOError>
+        class WpADOError : public WpOLEBase<ADOError>
         {
         public:
 
@@ -463,45 +222,18 @@ namespace connectivity
 
             WpADOError(const WpADOError& rhs){operator=(rhs);}
 
-            inline WpADOError& operator=(const WpADOError& rhs)
+             WpADOError& operator=(const WpADOError& rhs)
                 {WpOLEBase<ADOError>::operator=(rhs); return *this;}
 
             //////////////////////////////////////////////////////////////////////
 
-            inline ::rtl::OUString GetDescription() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Description(&aBSTR);
-                return aBSTR;
-            }
+             ::rtl::OUString GetDescription() const;
 
-            inline ::rtl::OUString GetSource() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Source(&aBSTR);
-                return aBSTR;
-            }
+             ::rtl::OUString GetSource() const ;
 
-            inline sal_Int32 GetNumber() const
-            {
-                sal_Int32 nErrNr=0;
-                pInterface->get_Number(&nErrNr);
-                return nErrNr;
-            }
-
-            inline ::rtl::OUString GetSQLState() const
-            {
-                OLEString aBSTR;
-                pInterface->get_SQLState(&aBSTR);
-                return aBSTR;
-            }
-
-            inline sal_Int32 GetNativeError() const
-            {
-                sal_Int32 nErrNr=0;
-                pInterface->get_NativeError(&nErrNr);
-                return nErrNr;
-            }
+             sal_Int32 GetNumber() const ;
+             ::rtl::OUString GetSQLState() const ;
+             sal_Int32 GetNativeError() const ;
         };
 
 
@@ -517,157 +249,41 @@ namespace connectivity
             WpADOField(ADOField* pInt=NULL):WpOLEBase<ADOField>(pInt){}
             WpADOField(const WpADOField& rhs){operator=(rhs);}
 
-            inline WpADOField& operator=(const WpADOField& rhs)
+             WpADOField& operator=(const WpADOField& rhs)
                 {WpOLEBase<ADOField>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
-            inline ADOProperties* get_Properties()
-            {
-                ADOProperties* pProps = NULL;
-                pInterface->get_Properties(&pProps);
-                return pProps;
-            }
-
-            inline sal_Int32 GetActualSize() const
-            {
-                sal_Int32 nActualSize=0;
-                pInterface->get_ActualSize(&nActualSize);
-                return nActualSize;
-            }
-
-            inline sal_Int32 GetAttributes() const
-            {
-                sal_Int32 eADOSFieldAttributes=0;
-                pInterface->get_Attributes(&eADOSFieldAttributes);
-                return eADOSFieldAttributes;
-            }
-
-            inline sal_Int32 GetStatus() const
-            {
-                sal_Int32 eADOSFieldAttributes=0;
-                //  pInterface->get_Status(&eADOSFieldAttributes);
-                return eADOSFieldAttributes;
-            }
-
-            inline sal_Int32 GetDefinedSize() const
-            {
-                sal_Int32 nDefinedSize=0;
-                pInterface->get_DefinedSize(&nDefinedSize);
-                return nDefinedSize;
-            }
-
+             ADOProperties* get_Properties();
+             sal_Int32 GetActualSize() const ;
+             sal_Int32 GetAttributes() const ;
+             sal_Int32 GetStatus() const      ;
+             sal_Int32 GetDefinedSize() const ;
             // gibt den Namen des Feldes zur"ueck
-            inline ::rtl::OUString GetName() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
+             ::rtl::OUString GetName() const ;
+             DataTypeEnum GetADOType() const  ;
+             void get_Value(OLEVariant& aValVar) const ;
+             OLEVariant get_Value() const;
+             sal_Bool PutValue(const OLEVariant& aVariant);
+             sal_Int32 GetPrecision() const ;
+             sal_Int32 GetNumericScale() const ;
+             sal_Bool AppendChunk(const OLEVariant& _Variant);
+             OLEVariant GetChunk(long Length) const;
+             void GetChunk(long Length,OLEVariant &aValVar) const;
+             OLEVariant GetOriginalValue() const;
+             void GetOriginalValue(OLEVariant &aValVar) const;
+             OLEVariant GetUnderlyingValue() const;
 
-            inline DataTypeEnum GetADOType() const
-            {
-                DataTypeEnum eType=adEmpty;
-                pInterface->get_Type(&eType);
-                return eType;
-            }
+             void GetUnderlyingValue(OLEVariant &aValVar) const;
 
-            inline void get_Value(OLEVariant& aValVar) const
-            {
-                aValVar.setEmpty();
-                pInterface->get_Value(&aValVar);
-            }
+             sal_Bool PutPrecision(sal_Int8 _prec);
 
-            inline OLEVariant get_Value() const
-            {
-                OLEVariant aValVar;
-                pInterface->get_Value(&aValVar);
-                return aValVar;
-            }
+             sal_Bool PutNumericScale(sal_Int8 _prec);
 
-            inline sal_Bool PutValue(const OLEVariant& aVariant)
-            {
-                return (SUCCEEDED(pInterface->put_Value(aVariant)));
-            }
+             void PutADOType(DataTypeEnum eType) ;
 
-            inline sal_Int32 GetPrecision() const
-            {
-                sal_uInt8 eType=0;
-                pInterface->get_Precision(&eType);
-                return eType;
-            }
+             sal_Bool PutDefinedSize(sal_Int32 _nDefSize);
 
-            inline sal_Int32 GetNumericScale() const
-            {
-                sal_uInt8 eType=0;
-                pInterface->get_NumericScale(&eType);
-                return eType;
-            }
-
-            inline sal_Bool AppendChunk(const OLEVariant& _Variant)
-            {
-                return (SUCCEEDED(pInterface->AppendChunk(_Variant)));
-            }
-
-            inline OLEVariant GetChunk(long Length) const
-            {
-                OLEVariant aValVar;
-                pInterface->GetChunk(Length,&aValVar);
-                return aValVar;
-            }
-
-            inline void GetChunk(long Length,OLEVariant &aValVar) const
-            {
-                pInterface->GetChunk(Length,&aValVar);
-            }
-
-            inline OLEVariant GetOriginalValue() const
-            {
-                OLEVariant aValVar;
-                pInterface->get_OriginalValue(&aValVar);
-                return aValVar;
-            }
-
-            inline void GetOriginalValue(OLEVariant &aValVar) const
-            {
-                pInterface->get_OriginalValue(&aValVar);
-            }
-
-            inline OLEVariant GetUnderlyingValue() const
-            {
-                OLEVariant aValVar;
-                pInterface->get_UnderlyingValue(&aValVar);
-                return aValVar;
-            }
-
-            inline void GetUnderlyingValue(OLEVariant &aValVar) const
-            {
-                pInterface->get_UnderlyingValue(&aValVar);
-            }
-
-            inline sal_Bool PutPrecision(sal_Int8 _prec)
-            {
-                return (SUCCEEDED(pInterface->put_Precision(_prec)));
-            }
-
-            inline sal_Bool PutNumericScale(sal_Int8 _prec)
-            {
-                return (SUCCEEDED(pInterface->put_NumericScale(_prec)));
-            }
-
-            inline void PutADOType(DataTypeEnum eType)
-            {
-                pInterface->put_Type(eType);
-            }
-
-            inline sal_Bool PutDefinedSize(sal_Int32 _nDefSize)
-            {
-                return (SUCCEEDED(pInterface->put_DefinedSize(_nDefSize)));
-            }
-
-            inline sal_Bool PutAttributes(sal_Int32 _nDefSize)
-            {
-                return (SUCCEEDED(pInterface->put_Attributes(_nDefSize)));
-            }
+             sal_Bool PutAttributes(sal_Int32 _nDefSize);
         };
 
 
@@ -682,56 +298,21 @@ namespace connectivity
             // diese rufen nur die Oberklasse
             WpADOProperty(ADOProperty* pInt):WpOLEBase<ADOProperty>(pInt){}
             WpADOProperty(const WpADOProperty& rhs){operator=(rhs);}
-            inline WpADOProperty& operator=(const WpADOProperty& rhs)
+             WpADOProperty& operator=(const WpADOProperty& rhs)
                 {WpOLEBase<ADOProperty>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
-            inline OLEVariant GetValue() const
-            {
-                OLEVariant aValVar;
-                pInterface->get_Value(&aValVar);
-                return aValVar;
-            }
-
-            inline void GetValue(OLEVariant &aValVar) const
-            {
-                pInterface->get_Value(&aValVar);
-            }
-
-            inline sal_Bool PutValue(const OLEVariant &aValVar)
-            {
-                return (SUCCEEDED(pInterface->put_Value(aValVar)));
-            }
-
-            inline ::rtl::OUString GetName() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            inline DataTypeEnum GetADOType() const
-            {
-                DataTypeEnum eType=adEmpty;
-                pInterface->get_Type(&eType);
-                return eType;
-            }
-
-            inline sal_Int32 GetAttributes() const
-            {
-                sal_Int32 eADOSFieldAttributes=0;
-                pInterface->get_Attributes(&eADOSFieldAttributes);
-                return eADOSFieldAttributes;
-            }
-
-            inline sal_Bool PutAttributes(sal_Int32 _nDefSize)
-            {
-                return (SUCCEEDED(pInterface->put_Attributes(_nDefSize)));
-            }
+             OLEVariant GetValue() const;
+             void GetValue(OLEVariant &aValVar) const;
+             sal_Bool PutValue(const OLEVariant &aValVar) ;
+             ::rtl::OUString GetName() const ;
+             DataTypeEnum GetADOType() const ;
+             sal_Int32 GetAttributes() const ;
+             sal_Bool PutAttributes(sal_Int32 _nDefSize);
         };
 
 
-        class WpADORecordset:public WpOLEBase<ADORecordset>
+        class WpADORecordset : public WpOLEBase<ADORecordset>
         {
 
         public:
@@ -739,7 +320,7 @@ namespace connectivity
             // diese rufen nur die Oberklasse
             WpADORecordset(ADORecordset* pInt=NULL):WpOLEBase<ADORecordset>(pInt){}
             WpADORecordset(const WpADORecordset& rhs){operator=(rhs);}
-            inline WpADORecordset& operator=(const WpADORecordset& rhs)
+             WpADORecordset& operator=(const WpADORecordset& rhs)
             {
                 WpOLEBase<ADORecordset>::operator=(rhs);
                 return *this;
@@ -750,230 +331,50 @@ namespace connectivity
                     //  Close();
             }
             //////////////////////////////////////////////////////////////////////
-            inline void Create()
-            {
-                IClassFactory2* pIUnknown   = NULL;
-                IUnknown        *pOuter     = NULL;
-                HRESULT         hr;
-                hr = CoGetClassObject( ADOS::CLSID_ADORECORDSET_21,
-                                      CLSCTX_INPROC_SERVER,
-                                      NULL,
-                                      IID_IClassFactory2,
-                                      (void**)&pIUnknown );
-
-                if( !FAILED( hr ) )
-                {
-                    pIUnknown->AddRef();
-
-                    ADORecordset *pRec = NULL;
-                    hr = pIUnknown->CreateInstanceLic(  pOuter,
-                                                        NULL,
-                                                        ADOS::IID_ADORECORDSET_21,
-                                                        ADOS::GetKeyStr(),
-                                                        (void**) &pRec);
-
-                    if( !FAILED( hr ) )
-                    {
-                        pInterface = pRec;
-                        pInterface->AddRef();
-                    }
-                    pIUnknown->Release();
-                }
-            }
-
-            inline sal_Bool Open(
+             void Create();
+             sal_Bool Open(
                     /* [optional][in] */ VARIANT Source,
                     /* [optional][in] */ VARIANT ActiveConnection,
                     /* [defaultvalue][in] */ CursorTypeEnum CursorType,
                     /* [defaultvalue][in] */ LockTypeEnum LockType,
-                    /* [defaultvalue][in] */ sal_Int32 Options)
-            {
-                return (SUCCEEDED(pInterface->Open(Source,ActiveConnection,CursorType,LockType,Options)));
-            }
+                    /* [defaultvalue][in] */ sal_Int32 Options);
+             LockTypeEnum GetLockType();
+             void Close();
+             sal_Bool Cancel() const;
+             sal_Int32 get_State( );
+             sal_Bool Supports( /* [in] */ CursorOptionEnum CursorOptions);
+            PositionEnum get_AbsolutePosition();
+             void GetDataSource(IUnknown** pIUnknown) const ;
+             void PutRefDataSource(IUnknown* pIUnknown);
+             void GetBookmark(VARIANT& var);
+             OLEVariant GetBookmark();
+            CompareEnum CompareBookmarks(const OLEVariant& left,const OLEVariant& right);
+             sal_Bool SetBookmark(const OLEVariant &pSafeAr);
+             ADOFields* GetFields() const;
+             sal_Bool Move(sal_Int32 nRows, VARIANT aBmk);
+             sal_Bool MoveNext();
+             sal_Bool MovePrevious();
+             sal_Bool MoveFirst();
+             sal_Bool MoveLast();
 
-
-            inline LockTypeEnum GetLockType()
-            {
-                LockTypeEnum eType=adLockUnspecified;
-                pInterface->get_LockType(&eType);
-                return eType;
-            }
-
-            inline void Close()
-            {
-                pInterface->Close();
-            }
-
-            inline sal_Bool Cancel() const
-            {
-                return (SUCCEEDED(pInterface->Cancel()));
-            }
-
-            inline sal_Int32 get_State( )
-            {
-                sal_Int32 nState = 0;
-                pInterface->get_State(&nState);
-                return nState;
-            }
-
-            inline sal_Bool Supports( /* [in] */ CursorOptionEnum CursorOptions)
-            {
-                VARIANT_BOOL bSupports=VARIANT_FALSE;
-                pInterface->Supports(CursorOptions,&bSupports);
-                return bSupports == VARIANT_TRUE;
-            }
-
-            PositionEnum get_AbsolutePosition()
-            {
-                PositionEnum aTemp=adPosUnknown;
-                pInterface->get_AbsolutePosition(&aTemp);
-                return aTemp;
-            }
-
-            inline void GetDataSource(IUnknown** pIUnknown) const
-            {
-                pInterface->get_DataSource(pIUnknown);
-            }
-
-            inline void PutRefDataSource(IUnknown* pIUnknown)
-            {
-                pInterface->putref_DataSource(pIUnknown);
-            }
-
-            inline void GetBookmark(VARIANT& var)
-            {
-                pInterface->get_Bookmark(&var);
-            }
-
-            inline OLEVariant GetBookmark()
-            {
-                OLEVariant var;
-                pInterface->get_Bookmark(&var);
-                return var;
-            }
-
-            CompareEnum CompareBookmarks(const OLEVariant& left,const OLEVariant& right)
-            {
-                CompareEnum eNum=adCompareNotComparable;
-                pInterface->CompareBookmarks(left,right,&eNum);
-                return eNum;
-            }
-
-            inline sal_Bool SetBookmark(const OLEVariant &pSafeAr)
-            {
-                return SUCCEEDED(pInterface->put_Bookmark(pSafeAr));
-            }
-
-
-            inline ADOFields* GetFields() const
-            {
-                ADOFields* pFields=NULL;
-                pInterface->get_Fields(&pFields);
-                return pFields;
-            }
-
-
-            inline sal_Bool Move(sal_Int32 nRows, VARIANT aBmk) {return SUCCEEDED(pInterface->Move(nRows, aBmk));}
-            inline sal_Bool MoveNext() {return SUCCEEDED(pInterface->MoveNext());}
-            inline sal_Bool MovePrevious() {return SUCCEEDED(pInterface->MovePrevious());}
-            inline sal_Bool MoveFirst() {return SUCCEEDED(pInterface->MoveFirst());}
-            inline sal_Bool MoveLast()  {return SUCCEEDED(pInterface->MoveLast());}
-
-            inline sal_Bool IsAtBOF() const
-            {
-                VARIANT_BOOL bIsAtBOF=VARIANT_FALSE;
-                pInterface->get_BOF(&bIsAtBOF);
-                return bIsAtBOF == VARIANT_TRUE;
-            }
-
-            inline sal_Bool IsAtEOF() const
-            {
-                VARIANT_BOOL bIsAtEOF=VARIANT_FALSE;
-                pInterface->get_EOF(&bIsAtEOF);
-                return bIsAtEOF == VARIANT_TRUE;
-            }
-
-            inline sal_Bool Delete(AffectEnum eNum)
-            {
-                return SUCCEEDED(pInterface->Delete(eNum));
-            }
-
-            inline sal_Bool AddNew(const OLEVariant &FieldList,const OLEVariant &Values)
-            {
-                return SUCCEEDED(pInterface->AddNew(FieldList,Values));
-            }
-
-            inline sal_Bool Update(const OLEVariant &FieldList,const OLEVariant &Values)
-            {
-                return SUCCEEDED(pInterface->Update(FieldList,Values));
-            }
-
-            inline sal_Bool CancelUpdate()
-            {
-                return SUCCEEDED(pInterface->CancelUpdate());
-            }
-
-            inline ADOProperties* get_Properties() const
-            {
-                ADOProperties* pProps=NULL;
-                pInterface->get_Properties(&pProps);
-                return pProps;
-            }
-
-            inline sal_Bool NextRecordset(OLEVariant& RecordsAffected,ADORecordset** ppiRset)
-            {
-                return SUCCEEDED(pInterface->NextRecordset(&RecordsAffected,ppiRset));
-            }
-
-            inline sal_Bool get_RecordCount(sal_Int32 &_nRet) const
-            {
-                return SUCCEEDED(pInterface->get_RecordCount(&_nRet));
-            }
-
-            inline sal_Bool get_MaxRecords(sal_Int32 &_nRet) const
-            {
-                return SUCCEEDED(pInterface->get_MaxRecords(&_nRet));
-            }
-
-            inline sal_Bool put_MaxRecords(sal_Int32 _nRet)
-            {
-                return SUCCEEDED(pInterface->put_MaxRecords(_nRet));
-            }
-
-            inline sal_Bool get_CursorType(CursorTypeEnum &_nRet) const
-            {
-                return SUCCEEDED(pInterface->get_CursorType(&_nRet));
-            }
-
-            inline sal_Bool put_CursorType(CursorTypeEnum _nRet)
-            {
-                return SUCCEEDED(pInterface->put_CursorType(_nRet));
-            }
-
-            inline sal_Bool get_LockType(LockTypeEnum &_nRet) const
-            {
-                return SUCCEEDED(pInterface->get_LockType(&_nRet));
-            }
-
-            inline sal_Bool put_LockType(LockTypeEnum _nRet)
-            {
-                return SUCCEEDED(pInterface->put_LockType(_nRet));
-            }
-
-            inline sal_Bool get_CacheSize(sal_Int32 &_nRet) const
-            {
-                return SUCCEEDED(pInterface->get_CacheSize(&_nRet));
-            }
-
-            inline sal_Bool put_CacheSize(sal_Int32 _nRet)
-            {
-                return SUCCEEDED(pInterface->put_CacheSize(_nRet));
-            }
-
-            inline sal_Bool UpdateBatch(AffectEnum AffectRecords)
-            {
-                return SUCCEEDED(pInterface->UpdateBatch(AffectRecords));
-            }
+             sal_Bool IsAtBOF() const;
+             sal_Bool IsAtEOF() const;
+             sal_Bool Delete(AffectEnum eNum);
+             sal_Bool AddNew(const OLEVariant &FieldList,const OLEVariant &Values);
+             sal_Bool Update(const OLEVariant &FieldList,const OLEVariant &Values);
+             sal_Bool CancelUpdate();
+             ADOProperties* get_Properties() const;
+             sal_Bool NextRecordset(OLEVariant& RecordsAffected,ADORecordset** ppiRset);
+             sal_Bool get_RecordCount(sal_Int32 &_nRet) const;
+             sal_Bool get_MaxRecords(sal_Int32 &_nRet) const;
+             sal_Bool put_MaxRecords(sal_Int32 _nRet);
+             sal_Bool get_CursorType(CursorTypeEnum &_nRet) const;
+             sal_Bool put_CursorType(CursorTypeEnum _nRet);
+             sal_Bool get_LockType(LockTypeEnum &_nRet) const;
+             sal_Bool put_LockType(LockTypeEnum _nRet);
+             sal_Bool get_CacheSize(sal_Int32 &_nRet) const;
+             sal_Bool put_CacheSize(sal_Int32 _nRet);
+             sal_Bool UpdateBatch(AffectEnum AffectRecords);
         };
 
         //------------------------------------------------------------------------
@@ -984,68 +385,19 @@ namespace connectivity
             // diese rufen nur die Oberklasse
             WpADOParameter(ADOParameter* pInt):WpOLEBase<ADOParameter>(pInt){}
             WpADOParameter(const WpADOParameter& rhs):WpOLEBase<ADOParameter>(rhs){}
-            inline WpADOParameter& operator=(const WpADOParameter& rhs)
+             WpADOParameter& operator=(const WpADOParameter& rhs)
                 {WpOLEBase<ADOParameter>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
-            inline ::rtl::OUString GetName() const
-            {
-                OLEString aBSTR;
-                pInterface->get_Name(&aBSTR);
-                return aBSTR;
-            }
-
-            inline DataTypeEnum GetADOType() const
-            {
-                DataTypeEnum eType=adEmpty;
-                pInterface->get_Type(&eType);
-                return eType;
-            }
-
-            inline sal_Int32 GetAttributes() const
-            {
-                sal_Int32 eADOSFieldAttributes=0;
-                pInterface->get_Attributes(&eADOSFieldAttributes);
-                return eADOSFieldAttributes;
-            }
-
-            inline sal_Int32 GetPrecision() const
-            {
-                sal_uInt8 eType=0;
-                pInterface->get_Precision(&eType);
-                return eType;
-            }
-
-            inline sal_Int32 GetNumericScale() const
-            {
-                sal_uInt8 eType=0;
-                pInterface->get_NumericScale(&eType);
-                return eType;
-            }
-
-            inline ParameterDirectionEnum get_Direction() const
-            {
-                ParameterDirectionEnum alParmDirection=adParamUnknown;
-                pInterface->get_Direction(&alParmDirection);
-                return alParmDirection;
-            }
-
-            inline void GetValue(OLEVariant& aValVar) const
-            {
-                pInterface->get_Value(&aValVar);
-            }
-
-            inline OLEVariant GetValue() const
-            {
-                OLEVariant aValVar;
-                pInterface->get_Value(&aValVar);
-                return aValVar;
-            }
-
-            inline sal_Bool PutValue(const OLEVariant& aVariant)
-            {
-                return (SUCCEEDED(pInterface->put_Value(aVariant)));
-            }
+             ::rtl::OUString GetName() const ;
+             DataTypeEnum GetADOType() const ;
+             sal_Int32 GetAttributes() const ;
+             sal_Int32 GetPrecision() const ;
+             sal_Int32 GetNumericScale() const ;
+             ParameterDirectionEnum get_Direction() const;
+             void GetValue(OLEVariant& aValVar) const ;
+             OLEVariant GetValue() const;
+             sal_Bool PutValue(const OLEVariant& aVariant);
         };
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 12:23:40 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     if(&_rRH == this)
         return *this;
 
-    if(m_eTypeKind != _rRH.m_eTypeKind)
+    if(m_eTypeKind != _rRH.m_eTypeKind || _rRH.m_bNull)
         free();
 
     m_bBound    = _rRH.m_bBound;
@@ -539,59 +539,62 @@ Any ORowSetValue::makeAny() const
 ::rtl::OUString ORowSetValue::getString( ) const
 {
     ::rtl::OUString aRet;
-    switch(getTypeKind())
+    if(!m_bNull)
     {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            aRet = m_aValue.m_pString;
-            break;
-        case DataType::LONGVARCHAR:
-            {
-                Sequence<sal_Int8> aSeq(getSequence());
-                if(aSeq.getLength())
-                    aRet = ::rtl::OUString(reinterpret_cast<sal_Unicode*>(aSeq.getArray()),aSeq.getLength()/sizeof(sal_Unicode));
-            }
-            break;
-        case DataType::DOUBLE:
-        case DataType::FLOAT:
-        case DataType::REAL:
-            aRet = ::rtl::OUString::valueOf((double)*this);
-            break;
-        case DataType::DATE:
-            aRet = connectivity::toDateString(*this);
-            break;
-        case DataType::TIME:
-            aRet = connectivity::toTimeString(*this);
-            break;
-        case DataType::TIMESTAMP:
-            aRet = connectivity::toDateTimeString(*this);
-            break;
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            {
-                aRet = ::rtl::OUString::createFromAscii("0x");
-                Sequence<sal_Int8> aSeq(getSequence());
-                const sal_Int8* pBegin  = aSeq.getConstArray();
-                const sal_Int8* pEnd    = pBegin + aSeq.getLength();
-                for(;pBegin != pEnd;++pBegin)
-                    aRet += ::rtl::OUString::valueOf((sal_Int32)*pBegin,16);
-            }
-            break;
-        case DataType::BIT:
-            aRet = ::rtl::OUString::valueOf((sal_Int32)(sal_Bool)*this);
-            break;
-        case DataType::TINYINT:
-            aRet = ::rtl::OUString::valueOf((sal_Int32)(sal_Int8)*this);
-            break;
-        case DataType::SMALLINT:
-            aRet = ::rtl::OUString::valueOf((sal_Int32)(sal_Int16)*this);
-            break;
-        case DataType::INTEGER:
-            aRet = ::rtl::OUString::valueOf((sal_Int32)*this);
-            break;
+        switch(getTypeKind())
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                aRet = m_aValue.m_pString;
+                break;
+            case DataType::LONGVARCHAR:
+                {
+                    Sequence<sal_Int8> aSeq(getSequence());
+                    if(aSeq.getLength())
+                        aRet = ::rtl::OUString(reinterpret_cast<sal_Unicode*>(aSeq.getArray()),aSeq.getLength()/sizeof(sal_Unicode));
+                }
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+                aRet = ::rtl::OUString::valueOf((double)*this);
+                break;
+            case DataType::DATE:
+                aRet = connectivity::toDateString(*this);
+                break;
+            case DataType::TIME:
+                aRet = connectivity::toTimeString(*this);
+                break;
+            case DataType::TIMESTAMP:
+                aRet = connectivity::toDateTimeString(*this);
+                break;
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                {
+                    aRet = ::rtl::OUString::createFromAscii("0x");
+                    Sequence<sal_Int8> aSeq(getSequence());
+                    const sal_Int8* pBegin  = aSeq.getConstArray();
+                    const sal_Int8* pEnd    = pBegin + aSeq.getLength();
+                    for(;pBegin != pEnd;++pBegin)
+                        aRet += ::rtl::OUString::valueOf((sal_Int32)*pBegin,16);
+                }
+                break;
+            case DataType::BIT:
+                aRet = ::rtl::OUString::valueOf((sal_Int32)(sal_Bool)*this);
+                break;
+            case DataType::TINYINT:
+                aRet = ::rtl::OUString::valueOf((sal_Int32)(sal_Int8)*this);
+                break;
+            case DataType::SMALLINT:
+                aRet = ::rtl::OUString::valueOf((sal_Int32)(sal_Int16)*this);
+                break;
+            case DataType::INTEGER:
+                aRet = ::rtl::OUString::valueOf((sal_Int32)*this);
+                break;
+        }
     }
     return aRet;
 }
@@ -601,42 +604,45 @@ sal_Bool ORowSetValue::getBool()    const
     OSL_ENSURE(m_bBound,"Value is not bound!");
 
     sal_Bool bRet = sal_False;
-    switch(getTypeKind())
+    if(!m_bNull)
     {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            bRet = ::rtl::OUString(m_aValue.m_pString).toInt32() != 0;
-            break;
-        case DataType::LONGVARCHAR:
-            bRet = getString().toInt32() != 0;
-            break;
-        case DataType::DOUBLE:
-        case DataType::FLOAT:
-        case DataType::REAL:
-            bRet = *(double*)m_aValue.m_pValue != 0.0;
-            break;
-        case DataType::DATE:
-        case DataType::TIME:
-        case DataType::TIMESTAMP:
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            OSL_ASSERT("getBool() for this type is not allowed!");
-            break;
-        case DataType::BIT:
-            bRet = m_aValue.m_bBool;
-            break;
-        case DataType::TINYINT:
-            bRet = m_aValue.m_nInt8  != 0;
-            break;
-        case DataType::SMALLINT:
-            bRet = m_aValue.m_nInt16 != 0;
-            break;
-        case DataType::INTEGER:
-            bRet = m_aValue.m_nInt32 != 0;
-            break;
+        switch(getTypeKind())
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                bRet = ::rtl::OUString(m_aValue.m_pString).toInt32() != 0;
+                break;
+            case DataType::LONGVARCHAR:
+                bRet = getString().toInt32() != 0;
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+                bRet = *(double*)m_aValue.m_pValue != 0.0;
+                break;
+            case DataType::DATE:
+            case DataType::TIME:
+            case DataType::TIMESTAMP:
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                OSL_ASSERT("getBool() for this type is not allowed!");
+                break;
+            case DataType::BIT:
+                bRet = m_aValue.m_bBool;
+                break;
+            case DataType::TINYINT:
+                bRet = m_aValue.m_nInt8  != 0;
+                break;
+            case DataType::SMALLINT:
+                bRet = m_aValue.m_nInt16 != 0;
+                break;
+            case DataType::INTEGER:
+                bRet = m_aValue.m_nInt32 != 0;
+                break;
+        }
     }
     return bRet;
 }
@@ -646,42 +652,45 @@ sal_Int8 ORowSetValue::getInt8()    const
     OSL_ENSURE(m_bBound,"Value is not bound!");
 
     sal_Int8 nRet = 0;
-    switch(getTypeKind())
+    if(!m_bNull)
     {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            nRet = sal_Int8(::rtl::OUString(m_aValue.m_pString).toInt32());
-            break;
-        case DataType::LONGVARCHAR:
-            nRet = sal_Int8(getString().toInt32());
-            break;
-        case DataType::DOUBLE:
-        case DataType::FLOAT:
-        case DataType::REAL:
-            nRet = sal_Int8(*(double*)m_aValue.m_pValue);
-            break;
-        case DataType::DATE:
-        case DataType::TIME:
-        case DataType::TIMESTAMP:
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            OSL_ASSERT("getInt8() for this type is not allowed!");
-            break;
-        case DataType::BIT:
-            nRet = m_aValue.m_bBool;
-            break;
-        case DataType::TINYINT:
-            nRet = m_aValue.m_nInt8;
-            break;
-        case DataType::SMALLINT:
-            nRet = sal_Int8(m_aValue.m_nInt16);
-            break;
-        case DataType::INTEGER:
-            nRet = sal_Int8(m_aValue.m_nInt32);
-            break;
+        switch(getTypeKind())
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                nRet = sal_Int8(::rtl::OUString(m_aValue.m_pString).toInt32());
+                break;
+            case DataType::LONGVARCHAR:
+                nRet = sal_Int8(getString().toInt32());
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+                nRet = sal_Int8(*(double*)m_aValue.m_pValue);
+                break;
+            case DataType::DATE:
+            case DataType::TIME:
+            case DataType::TIMESTAMP:
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                OSL_ASSERT("getInt8() for this type is not allowed!");
+                break;
+            case DataType::BIT:
+                nRet = m_aValue.m_bBool;
+                break;
+            case DataType::TINYINT:
+                nRet = m_aValue.m_nInt8;
+                break;
+            case DataType::SMALLINT:
+                nRet = sal_Int8(m_aValue.m_nInt16);
+                break;
+            case DataType::INTEGER:
+                nRet = sal_Int8(m_aValue.m_nInt32);
+                break;
+        }
     }
     return nRet;
 }
@@ -691,42 +700,45 @@ sal_Int16 ORowSetValue::getInt16()  const
     OSL_ENSURE(m_bBound,"Value is not bound!");
 
     sal_Int16 nRet = 0;
-    switch(getTypeKind())
+    if(!m_bNull)
     {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            nRet = sal_Int16(::rtl::OUString(m_aValue.m_pString).toInt32());
-            break;
-        case DataType::LONGVARCHAR:
-            nRet = sal_Int16(getString().toInt32());
-            break;
-        case DataType::DOUBLE:
-        case DataType::FLOAT:
-        case DataType::REAL:
-            nRet = sal_Int16(*(double*)m_aValue.m_pValue);
-            break;
-        case DataType::DATE:
-        case DataType::TIME:
-        case DataType::TIMESTAMP:
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            OSL_ASSERT("getInt16() for this type is not allowed!");
-            break;
-        case DataType::BIT:
-            nRet = m_aValue.m_bBool;
-            break;
-        case DataType::TINYINT:
-            nRet = m_aValue.m_nInt8;
-            break;
-        case DataType::SMALLINT:
-            nRet = m_aValue.m_nInt16;
-            break;
-        case DataType::INTEGER:
-            nRet = (sal_Int16)m_aValue.m_nInt32;
-            break;
+        switch(getTypeKind())
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                nRet = sal_Int16(::rtl::OUString(m_aValue.m_pString).toInt32());
+                break;
+            case DataType::LONGVARCHAR:
+                nRet = sal_Int16(getString().toInt32());
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+                nRet = sal_Int16(*(double*)m_aValue.m_pValue);
+                break;
+            case DataType::DATE:
+            case DataType::TIME:
+            case DataType::TIMESTAMP:
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                OSL_ASSERT("getInt16() for this type is not allowed!");
+                break;
+            case DataType::BIT:
+                nRet = m_aValue.m_bBool;
+                break;
+            case DataType::TINYINT:
+                nRet = m_aValue.m_nInt8;
+                break;
+            case DataType::SMALLINT:
+                nRet = m_aValue.m_nInt16;
+                break;
+            case DataType::INTEGER:
+                nRet = (sal_Int16)m_aValue.m_nInt32;
+                break;
+        }
     }
     return nRet;
 }
@@ -736,44 +748,47 @@ sal_Int32 ORowSetValue::getInt32()  const
     OSL_ENSURE(m_bBound,"Value is not bound!");
 
     sal_Int32 nRet = 0;
-    switch(getTypeKind())
+    if(!m_bNull)
     {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            nRet = ::rtl::OUString(m_aValue.m_pString).toInt32();
-            break;
-        case DataType::LONGVARCHAR:
-            nRet = getString().toInt32();
-            break;
-        case DataType::DOUBLE:
-        case DataType::FLOAT:
-        case DataType::REAL:
-            nRet = sal_Int32(*(double*)m_aValue.m_pValue);
-            break;
-        case DataType::DATE:
-            nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
-            break;
-        case DataType::TIME:
-        case DataType::TIMESTAMP:
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            OSL_ASSERT("getInt32() for this type is not allowed!");
-            break;
-        case DataType::BIT:
-            nRet = m_aValue.m_bBool;
-            break;
-        case DataType::TINYINT:
-            nRet = m_aValue.m_nInt8;
-            break;
-        case DataType::SMALLINT:
-            nRet = m_aValue.m_nInt16;
-            break;
-        case DataType::INTEGER:
-            nRet = m_aValue.m_nInt32;
-            break;
+        switch(getTypeKind())
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                nRet = ::rtl::OUString(m_aValue.m_pString).toInt32();
+                break;
+            case DataType::LONGVARCHAR:
+                nRet = getString().toInt32();
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+                nRet = sal_Int32(*(double*)m_aValue.m_pValue);
+                break;
+            case DataType::DATE:
+                nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                break;
+            case DataType::TIME:
+            case DataType::TIMESTAMP:
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                OSL_ASSERT("getInt32() for this type is not allowed!");
+                break;
+            case DataType::BIT:
+                nRet = m_aValue.m_bBool;
+                break;
+            case DataType::TINYINT:
+                nRet = m_aValue.m_nInt8;
+                break;
+            case DataType::SMALLINT:
+                nRet = m_aValue.m_nInt16;
+                break;
+            case DataType::INTEGER:
+                nRet = m_aValue.m_nInt32;
+                break;
+        }
     }
     return nRet;
 }
@@ -783,48 +798,51 @@ double ORowSetValue::getDouble()    const
     OSL_ENSURE(m_bBound,"Value is not bound!");
 
     double nRet = 0;
-    switch(getTypeKind())
+    if(!m_bNull)
     {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            nRet = ::rtl::OUString(m_aValue.m_pString).toDouble();
-            break;
-        case DataType::LONGVARCHAR:
-            nRet = getString().toDouble();
-            break;
-        case DataType::DOUBLE:
-        case DataType::FLOAT:
-        case DataType::REAL:
-            nRet = *(double*)m_aValue.m_pValue;
-            break;
-        case DataType::DATE:
-            nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
-            break;
-        case DataType::TIME:
-            nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Time*)m_aValue.m_pValue);
-            break;
-        case DataType::TIMESTAMP:
-            nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::DateTime*)m_aValue.m_pValue);
-            break;
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            OSL_ASSERT("getDouble() for this type is not allowed!");
-            break;
-        case DataType::BIT:
-            nRet = m_aValue.m_bBool;
-            break;
-        case DataType::TINYINT:
-            nRet = m_aValue.m_nInt8;
-            break;
-        case DataType::SMALLINT:
-            nRet = m_aValue.m_nInt16;
-            break;
-        case DataType::INTEGER:
-            nRet = m_aValue.m_nInt32;
-            break;
+        switch(getTypeKind())
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                nRet = ::rtl::OUString(m_aValue.m_pString).toDouble();
+                break;
+            case DataType::LONGVARCHAR:
+                nRet = getString().toDouble();
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+                nRet = *(double*)m_aValue.m_pValue;
+                break;
+            case DataType::DATE:
+                nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                break;
+            case DataType::TIME:
+                nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Time*)m_aValue.m_pValue);
+                break;
+            case DataType::TIMESTAMP:
+                nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::DateTime*)m_aValue.m_pValue);
+                break;
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                OSL_ASSERT("getDouble() for this type is not allowed!");
+                break;
+            case DataType::BIT:
+                nRet = m_aValue.m_bBool;
+                break;
+            case DataType::TINYINT:
+                nRet = m_aValue.m_nInt8;
+                break;
+            case DataType::SMALLINT:
+                nRet = m_aValue.m_nInt16;
+                break;
+            case DataType::INTEGER:
+                nRet = m_aValue.m_nInt32;
+                break;
+        }
     }
     return nRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-21 09:54:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
-ODBCDriver::ODBCDriver() : ODriver_BASE(m_aMutex),m_pDriverHandle(SQL_NULL_HANDLE)
+ODBCDriver::ODBCDriver()
+    : ODriver_BASE(m_aMutex)
+    ,m_pDriverHandle(SQL_NULL_HANDLE)
 {
 }
 // --------------------------------------------------------------------------------
@@ -101,10 +103,12 @@ rtl::OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeExceptio
 {
     return rtl::OUString::createFromAscii("com.sun.star.sdbc.ODBCDriver");
 }
+
+typedef Sequence< ::rtl::OUString > SS;
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+SS ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 1 );
+    SS aSNS( 1 );
     aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
     return aSNS;
 }
@@ -118,17 +122,17 @@ Sequence< ::rtl::OUString > ODBCDriver::getSupportedServiceNames_Static(  ) thro
 //------------------------------------------------------------------
 sal_Bool SAL_CALL ODBCDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    SS aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
+    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+        ;
 
-    return sal_False;
+    return pSupported != pEnd;
 }
 
 //------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+SS SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -149,7 +153,7 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const ::rtl::OUString& ur
     }
     OConnection* pCon = new OConnection(m_pDriverHandle,this);
     pCon->Construct(url,info);
-    Reference< XConnection > xCon = pCon;
+    Reference< XConnection > xCon = NULL;
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
@@ -158,11 +162,7 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const ::rtl::OUString& ur
 sal_Bool SAL_CALL ODBCDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    if(!url.compareTo(::rtl::OUString::createFromAscii("sdbc:odbc:"),10))
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:odbc:"),10));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
@@ -191,10 +191,7 @@ SQLHANDLE ODBCDriver::EnvironmentHandle(::rtl::OUString &_rPath)
         // Environment allozieren
 
         // ODBC-DLL jetzt laden:
-        if (!LoadLibrary_ODBC3(_rPath))
-            return SQL_NULL_HANDLE;
-
-        if (N3SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&h) != SQL_SUCCESS)
+        if (!LoadLibrary_ODBC3(_rPath) || N3SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&h) != SQL_SUCCESS)
             return SQL_NULL_HANDLE;
 
         // In globaler Struktur merken ...

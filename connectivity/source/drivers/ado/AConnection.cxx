@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:08 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #endif
 
+using namespace dbtools;
 using namespace connectivity::ado;
-using namespace connectivity::dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;

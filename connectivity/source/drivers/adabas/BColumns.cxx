@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,6 @@
 #ifndef _CONNECTIVITY_ADABAS_TABLE_HXX_
 #include "adabas/BTable.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 
 
 using namespace connectivity::adabas;
@@ -155,37 +151,37 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
 
         aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
         aSql = aSql + ::rtl::OUString::createFromAscii(" ADD ");
-        aSql = aSql + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote;
+        aSql = aSql + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
         aSql = aSql + ::rtl::OUString::createFromAscii(" ");
 
-                Any aTypeName = descriptor->getPropertyValue(PROPERTY_TYPENAME);
+        Any aTypeName = descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
         if(aTypeName.hasValue() && getString(aTypeName).getLength())
             aSql = aSql + getString(aTypeName);
         else
             aSql = aSql + getTypeString(descriptor) + ::rtl::OUString::createFromAscii(" ");
 
-        //  aSql = aSql + getString(descriptor->getPropertyValue(PROPERTY_TYPENAME));
+        //  aSql = aSql + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
 
-        switch(getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)))
+        switch(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
         {
-                        case DataType::CHAR:
-                        case DataType::VARCHAR:
+            case DataType::CHAR:
+            case DataType::VARCHAR:
                 aSql = aSql + ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION)))
+                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
                             + ::rtl::OUString::createFromAscii(")");
                 break;
 
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
                 aSql = aSql + ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION)))
+                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
                             + ::rtl::OUString::createFromAscii(",")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(PROPERTY_SCALE)))
+                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
                             + ::rtl::OUString::createFromAscii(")");
                 break;
         }
-        ::rtl::OUString aDefault = getString(descriptor->getPropertyValue(PROPERTY_DEFAULTVALUE));
-                if(getINT32(descriptor->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
+        ::rtl::OUString aDefault = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
+        if(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
         {
             aSql = aSql + ::rtl::OUString::createFromAscii(" NOT NULL");
             if(aDefault.getLength())
@@ -194,7 +190,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         else if(aDefault.getLength())
             aSql = aSql + ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
 
-                Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
     }
     OCollection_TYPE::appendByDescriptor(descriptor);
@@ -214,7 +210,7 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
         aSql = aSql + ::rtl::OUString::createFromAscii(" DROP ");
         aSql = aSql + aQuote + elementName + aQuote;
 
-                Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
     }
 
@@ -237,7 +233,7 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
         aSql = aSql + ::rtl::OUString::createFromAscii(" DROP ");
         aSql = aSql + aQuote + m_aElements[index]->first + aQuote;
 
-                Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
     }
     OCollection_TYPE::dropByIndex(index);

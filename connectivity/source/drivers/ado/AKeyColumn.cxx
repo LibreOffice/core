@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeyColumn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,11 @@ OKeyColumn::OKeyColumn(     const ::rtl::OUString& _ReferencedColumn,
 {
     construct();
 }
+
 // -------------------------------------------------------------------------
 void OKeyColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : starbeans::PropertyAttribute::READONLY;
-    registerProperty(PROPERTY_REFERENCEDCOLUMN, PROPERTY_ID_REFERENCEDCOLUMN,   nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDCOLUMN),    PROPERTY_ID_REFERENCEDCOLUMN,   nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 

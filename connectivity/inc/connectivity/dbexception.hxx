@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:04:21 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,29 +175,22 @@ public:
 //==================================================================================
 //= StandardExceptions
 //==================================================================================
-// please use throwFunctionSequenceException instead of this class. The UNO<->* bridges sometimes have
-// trouble wrapping exception classes which are not defined in IDLs.
-class FunctionSequenceException : public ::com::sun::star::sdbc::SQLException
-{
-public:
-    FunctionSequenceException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any());
-};
-
 //----------------------------------------------------------------------------------
 /** throw a function sequence exception
 */
 void throwFunctionSequenceException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any());
+        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()) throw ( ::com::sun::star::sdbc::SQLException );
+//----------------------------------------------------------------------------------
+/** throw a invalid index sqlexception
+*/
+void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
+        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()) throw ( ::com::sun::star::sdbc::SQLException );
 
 //----------------------------------------------------------------------------------
 /** throw a generic SQLException, i.e. one with an SQLState of S1000, an ErrorCode of 0 and no NextException
 */
-inline void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
-    throw (::com::sun::star::sdbc::SQLException)
-{
-    throw ::com::sun::star::sdbc::SQLException(_rMsg, _rxSource, ::rtl::OUString::createFromAscii("S1000"), 0, ::com::sun::star::uno::Any());
-}
+void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
+    throw (::com::sun::star::sdbc::SQLException);
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
@@ -208,6 +201,9 @@ inline void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/19 07:04:21  fs
+ *  +throwFunctionSequenceException
+ *
  *  Revision 1.3  2001/03/01 17:01:18  fs
  *  operator= for SQLExceptionInfo, new ctor for SQLExceptionIteratorHelper, new next method
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EPreparedStatement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:43:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
+using namespace ::com::sun::star::uno;
 // -------------------------------------------------------------------------
 OResultSet* OFlatPreparedStatement::createResultSet()
 {
@@ -75,3 +76,4 @@ OResultSet* OFlatPreparedStatement::createResultSet()
 }
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OFlatPreparedStatement,"com.sun.star.sdbc.driver.flat.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
+

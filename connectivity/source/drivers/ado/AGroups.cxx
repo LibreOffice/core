@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroups.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
+
 
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 
 
 // -------------------------------------------------------------------------
+using namespace connectivity;
 using namespace connectivity::ado;
 // -------------------------------------------------------------------------
 OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,6 @@ namespace connectivity
                             public  ::cppu::OPropertySetHelper,
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
-
         protected:
             ::std::vector<void*>                        m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,6 @@
 #ifndef _CONNECTIVITY_CALC_CATALOG_HXX_
 #include "calc/CCatalog.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE calc
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -145,7 +141,7 @@ void SAL_CALL OCalcTables::appendByDescriptor( const Reference< XPropertySet >& 
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-19 09:35:29 $
+#   last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,9 +63,13 @@
 PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
-TARGET=odbc
+TARGET=odbcbase
+TARGET2=odbc
 
+USE_LDUMP2=TRUE
+USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
+LDUMP=ldump2.exe
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
@@ -77,7 +81,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 
 # --- Files -------------------------------------
-
 SLOFILES=\
         $(SLO)$/OPreparedStatement.obj			\
         $(SLO)$/OStatement.obj					\
@@ -88,12 +91,13 @@ SLOFILES=\
         $(SLO)$/ODatabaseMetaData.obj			\
         $(SLO)$/ODriver.obj						\
         $(SLO)$/OFunctions.obj					\
-        $(SLO)$/oservices.obj					\
         $(SLO)$/OConnection.obj
 
-# --- Library -----------------------------------
+        
 
-SHL1TARGET=	$(ODBC_TARGET)$(ODBC_MAJOR)
+# --- ODBC BASE Library -----------------------------------
+
+SHL1TARGET=	$(ODBC2_TARGET)$(ODBC2_MAJOR)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
@@ -104,21 +108,59 @@ SHL1STDLIBS=\
     $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)
 
-.IF "$(COMPHELPERLIB)" == ""
-SHL1STDLIBS+= icomphelp2.lib
-.ENDIF
-
 SHL1DEPN=
-SHL1IMPLIB=	i$(ODBC_TARGET)
+SHL1IMPLIB=	i$(ODBC2_TARGET)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
+            $(SLB)$/$(TARGET).lib
+DEFLIB1NAME=$(TARGET)
+
+# --- ODBC Library -----------------------------------
+# --- Files -------------------------------------
+SLO2FILES=\
+        $(SLO)$/oservices.obj
+
+# --- ODBC Library -----------------------------------
+SHL2TARGET=	$(ODBC_TARGET)$(ODBC_MAJOR)
+SHL2OBJS=$(SLO2FILES)
+SHL2STDLIBS=\
+    $(CPPULIB)					\
+    $(CPPUHELPERLIB)			\
+    $(VOSLIB)					\
+    $(OSLLIB)					\
+    $(SALLIB)					\
+    $(DBTOOLSLIB)				\
+    $(ODBCBASELIB)				\
+    $(COMPHELPERLIB)
+
+.IF "$(ODBCBASELIB)" == ""
+SHL2STDLIBS+= iodbcbase.lib
+.ENDIF
+
+SHL2DEPN=
+SHL2IMPLIB=	i$(ODBC_TARGET)
+
+SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
+
+DEF2NAME=	$(SHL2TARGET)
+DEF2EXPORTFILE=	exports.dxp
 
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
 
+# --- filter file ------------------------------
+
+.IF "$(depend)"==""
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo CLEAR_THE_FILE	> $@
+    @echo _TI				>>$@
+    @echo _real				>>$@
+.ENDIF
 

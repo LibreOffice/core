@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:06:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace::osl;
 
+::dbtools::OPropertyMap OMetaConnection::s_aPropertyNameMap;
 //XUnoTunnel
 sal_Int64 SAL_CALL OMetaConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -94,5 +95,9 @@ Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 // -----------------------------------------------------------------------------
-
+::dbtools::OPropertyMap& OMetaConnection::getPropMap()
+{
+    return s_aPropertyNameMap;
+}
+// -----------------------------------------------------------------------------
 

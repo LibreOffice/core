@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
 #endif
@@ -78,8 +74,11 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
 #endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
 // -------------------------------------------------------------------------
-using namespace connectivity::dbtools;
+using namespace connectivity;
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace cppu;
@@ -189,10 +188,10 @@ void OIndex::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(PROPERTY_CATALOG,          PROPERTY_ID_CATALOG,            nAttrib,&m_Catalog,         ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_ISUNIQUE,         PROPERTY_ID_ISUNIQUE,           nAttrib,&m_IsUnique,            ::getBooleanCppuType());
-    registerProperty(PROPERTY_ISPRIMARYKEYINDEX,PROPERTY_ID_ISPRIMARYKEYINDEX,  nAttrib,&m_IsPrimaryKeyIndex,   ::getBooleanCppuType());
-    registerProperty(PROPERTY_ISCLUSTERED,      PROPERTY_ID_ISCLUSTERED,        nAttrib,&m_IsClustered,     ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOG),         PROPERTY_ID_CATALOG,            nAttrib,&m_Catalog,         ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE),            PROPERTY_ID_ISUNIQUE,           nAttrib,&m_IsUnique,            ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISPRIMARYKEYINDEX),PROPERTY_ID_ISPRIMARYKEYINDEX, nAttrib,&m_IsPrimaryKeyIndex,   ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCLUSTERED),     PROPERTY_ID_ISCLUSTERED,        nAttrib,&m_IsClustered,     ::getBooleanCppuType());
 }
 // -------------------------------------------------------------------------
 void OIndex::disposing(void)
@@ -208,8 +207,8 @@ void OIndex::disposing(void)
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumns(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (ODescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
+
 
     if(!m_pColumns)
         refreshColumns();
@@ -220,8 +219,8 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumn
 Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (ODescriptor_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
+
 
     return this;
 }

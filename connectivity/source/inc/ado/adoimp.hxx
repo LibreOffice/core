@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ namespace connectivity
             static const CLSID  CLSID_ADOVIEW_25;
             static const IID    IID_ADOVIEW_25;
 
-                        static void ThrowException(ADOConnection* _pAdoCon,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static void ThrowException(ADOConnection* _pAdoCon,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             static sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
             static DataTypeEnum MapJdbc2ADOType(sal_Int32 _nType);
         };
@@ -137,10 +137,10 @@ namespace connectivity
     m_pRecordSet->get_Fields(&pFields);             \
     WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);                   \
     if(Name <= 0 || Name > aFields.GetItemCount())  \
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any()); \
+        ::dbtools::throwInvalidIndexException(*this); \
     WpADOField aField(aFields.GetItem(Name-1));     \
     if(!aField.IsValid())                           \
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
 
 #endif //_CONNECTIVITY_ADO_ADOIMP_HXX_

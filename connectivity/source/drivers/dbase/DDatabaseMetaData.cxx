@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,6 @@
 #endif
 #ifndef _CONNECTIVITY_DBASE_INDEX_HXX_
 #include "dbase/DIndex.hxx"
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "FValue.hxx"
@@ -270,16 +266,16 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
                     ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
                     OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
-                    aRow[5] = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
-                    aRow[6] = getString(xColumn->getPropertyValue(PROPERTY_TYPENAME));
-                    aRow[7] = getINT32(xColumn->getPropertyValue(PROPERTY_PRECISION));
-                    //  aRow[8] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    aRow[9] = getINT32(xColumn->getPropertyValue(PROPERTY_SCALE));
-                    aRow[11] = getINT32(xColumn->getPropertyValue(PROPERTY_ISNULLABLE));
-                    //  aRow[12] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    aRow[13] = getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE));
-                    //  aRow[14] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    //  aRow[15] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    aRow[5] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
+                    aRow[6] = getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
+                    aRow[7] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+                    //  aRow[8] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    aRow[9] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
+                    aRow[11] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
+                    //  aRow[12] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    aRow[13] = getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
+                    //  aRow[14] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    //  aRow[15] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
                     switch((sal_Int32)aRow[5])
                     {
                     case DataType::CHAR:
@@ -405,9 +401,9 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         ::cppu::extractInterface(xIndex,xIndexes->getByName(*pBegin));
         OSL_ENSURE(xIndex.is(),"Indexes contains a column who isn't a fastpropertyset!");
 
-        if(unique && !getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE)))
+        if(unique && !getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             continue;
-        aRow[4] = getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE));
+        aRow[4] = getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE)));
         aRow[6] = *pBegin;
 
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xIndex,UNO_QUERY);

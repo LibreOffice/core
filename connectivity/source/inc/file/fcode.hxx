@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 12:23:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,6 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
-//#define CONNECTIVITY_PROPERTY_NAME_SPACE file
-//#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-//#include "propertyids.hxx"
-//#endif
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
 #endif

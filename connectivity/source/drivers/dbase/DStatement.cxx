@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DStatement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:29:39 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 
 using namespace connectivity::dbase;
 using namespace connectivity::file;
+using namespace com::sun::star::uno;
+
 // -------------------------------------------------------------------------
 OResultSet* ODbaseStatement::createResultSet()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 #ifndef _CONNECTIVITY_ODBC_ORESULTSETMETADATA_HXX_
 #include "odbc/OResultSetMetaData.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE odbc
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
@@ -91,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 using namespace connectivity;
@@ -147,8 +146,8 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -162,8 +161,8 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     // Close/clear our result set
     clearMyResultSet ();
@@ -187,11 +186,9 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    sal_Bool hasResultSet = sal_False;
-    SQLWarning  warning;
+
     sal_Bool needData = sal_False;
 
     // Reset warnings
@@ -242,11 +239,6 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     }
     catch (SQLWarning& ex)
     {
-
-        // Save pointer to warning and save with ResultSet
-        // object once it is created.
-
-        warning = ex;
     }
 
     // Now loop while more data is needed (i.e. a data-at-
@@ -278,19 +270,16 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     // the SQL statement that was executed.  Get the column
     // count, and if it is not zero, there is a result set.
 
-    if (getColumnCount () > 0)
-        hasResultSet = sal_True;
 
-
-    return hasResultSet;
+    return getColumnCount() > 0;
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     sal_Int32 numRows = -1;
 
     if(!isPrepared())
@@ -316,8 +305,8 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -329,8 +318,8 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::r
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     return (Reference< XConnection >)m_pConnection;
 }
 // -------------------------------------------------------------------------
@@ -338,8 +327,8 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     Reference< XResultSet > rs = NULL;
 
     if(!isPrepared())
@@ -363,8 +352,8 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     sal_Int32 value = 0;
 
@@ -378,7 +367,7 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
 }
 // -------------------------------------------------------------------------
 #define PREP_BIND_PARAM(_ty,_jt) \
-    bindParameter(          m_aStatementHandle,                     \
+    OTools::bindParameter(          m_aStatementHandle,                     \
                                 parameterIndex,                         \
                                 bindBuf,getLengthBuf(parameterIndex),   \
                                 _jt,                                    \
@@ -389,8 +378,8 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
 void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -398,7 +387,7 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
         // a 'permanent' buffer that the bridge will fill in with
         // the bound data in native format.
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf(parameterIndex, 4);
@@ -409,8 +398,8 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -419,7 +408,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
     // the bound data in native format.
 
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
 
@@ -433,8 +422,8 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& aVal ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -442,7 +431,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
     // a 'permanent' buffer that the bridge will fill in with
     // the bound data in native format.
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
 
@@ -455,8 +444,8 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
 void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const DateTime& aVal ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -464,7 +453,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
     // a 'permanent' buffer that the bridge will fill in with
     // the bound data in native format.
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
 
@@ -477,8 +466,8 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
 void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -486,7 +475,7 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     // a 'permanent' buffer that the bridge will fill in with
     // the bound data in native format.
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 8);
@@ -498,8 +487,8 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -507,7 +496,7 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
     // a 'permanent' buffer that the bridge will fill in with
     // the bound data in native format.
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 8);
@@ -518,8 +507,8 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
 void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -527,7 +516,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
     // a 'permanent' buffer that the bridge will fill in with
     // the bound data in native format.
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 4);
@@ -538,8 +527,8 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
 void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 aVal ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -548,7 +537,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 a
     // the bound data in native format.
 
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8 *bindBuf = allocBindBuf (parameterIndex, 8);
@@ -560,14 +549,14 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 a
 void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
     // Get the buffer needed for the length
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     sal_Int8* lenBuf = getLengthBuf (parameterIndex);
     *(SDWORD*)lenBuf = SQL_NULL_DATA;
@@ -601,8 +590,8 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if(!isPrepared())
         prepareStatement();
 }
@@ -611,8 +600,8 @@ void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Refer
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if(!isPrepared())
         prepareStatement();
 }
@@ -621,8 +610,8 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if(!isPrepared())
         prepareStatement();
 }
@@ -631,8 +620,8 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     if(!isPrepared())
         prepareStatement();
 }
@@ -640,9 +629,8 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
 
     if(!isPrepared())
         prepareStatement();
@@ -656,13 +644,9 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
             break;
 
         case DataType::VARCHAR:
-            setChar (parameterIndex, sqlType, 0, *(::rtl::OUString*) x.getValue());
-            break;
-
         case DataType::LONGVARCHAR:
             setChar (parameterIndex, sqlType, 0, *(::rtl::OUString*) x.getValue());
             break;
-
         case DataType::BIT:
             setBoolean (parameterIndex,*(sal_Bool*) x.getValue());
             break;
@@ -684,13 +668,9 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
             break;
 
         case DataType::REAL:
-            setFloat (parameterIndex, *(float*)x.getValue ());
-            break;
-
         case DataType::FLOAT:
             setFloat (parameterIndex, *(float*)x.getValue ());
             break;
-
         case DataType::DOUBLE:
             setDouble (parameterIndex,*(double*)x.getValue ());
             break;
@@ -743,8 +723,8 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     setNull(parameterIndex,sqlType);
 }
 // -------------------------------------------------------------------------
@@ -752,8 +732,8 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -764,8 +744,8 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -773,7 +753,7 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
     // a 'permanent' buffer that the bridge will fill in with
     // the bound data in native format.
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 4);
@@ -784,8 +764,8 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
 void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -804,8 +784,8 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -816,8 +796,8 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(!isPrepared())
         prepareStatement();
@@ -987,6 +967,13 @@ sal_Int32 OPreparedStatement::getParamLength (  sal_Int32 index)
 
 void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
 {
+    // Sanity check the parameter index
+    if ((index < 1) ||
+        (index > numParams))
+    {
+        return;
+    }
+
     // We'll transfer up to maxLen at a time
     sal_Int32   maxLen = MAX_PUT_DATA_LENGTH;
     sal_Int32   bufLen;
@@ -995,13 +982,6 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
     Sequence< sal_Int8 > buf(maxLen);
     sal_Bool    endOfStream = sal_False;
 
-    // Sanity check the parameter index
-    if ((index < 1) ||
-        (index > numParams))
-    {
-        return;
-    }
-
     // Get the information about the input stream
 
     Reference< XInputStream> inputStream =  boundParams[index - 1].getInputStream ();
@@ -1009,80 +989,82 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
     sal_Int32 inputStreamType = boundParams[index - 1].getStreamType ();
 
     // Loop while more data from the input stream
-
-    while (!endOfStream)
+    try
     {
 
-        // Read some data from the input stream
+        while (!endOfStream)
+        {
 
-        try {
+            // Read some data from the input stream
             bufLen = inputStream->readBytes(buf,maxLen);
-        }
-        catch (IOException& ex) {
 
-            // If an I/O exception was generated, turn
-            // it into a SQLException
+            // -1 as the number of bytes read indicates that
+            // there is no more data in the input stream
 
-            throw SQLException(ex.Message,*this,::rtl::OUString(),0,Any());
-        }
+            if (bufLen == -1)
+            {
 
-        // -1 as the number of bytes read indicates that
-        // there is no more data in the input stream
+                // Sanity check to ensure that all the data we said we
+                // had was read.  If not, raise an exception
 
-        if (bufLen == -1)
-        {
-
-            // Sanity check to ensure that all the data we said we
-            // had was read.  If not, raise an exception
-
-            if (inputStreamLen != 0) {
-                throw SQLException (::rtl::OUString::createFromAscii("End of InputStream reached before satisfying length specified when InputStream was set"),
-            *this,
-                    ::rtl::OUString(),0,Any());
+                if (inputStreamLen != 0)
+                {
+                    throw SQLException (::rtl::OUString::createFromAscii("End of InputStream reached before satisfying length specified when InputStream was set"),
+                    *this,
+                        ::rtl::OUString(),0,Any());
+                }
+                endOfStream = sal_True;
+                break;
             }
-            endOfStream = sal_True;
-            break;
+
+            // If we got more bytes than necessary, truncate
+            // the buffer by re-setting the buffer length.  Also,
+            // indicate that we don't need to read any more.
+
+            if (bufLen > inputStreamLen)
+            {
+                bufLen = inputStreamLen;
+                endOfStream = sal_True;
+            }
+
+            realLen = bufLen;
+
+            // For UNICODE streams, strip off the high sal_Int8 and set the
+            // number of actual bytes present.  It is assumed that
+            // there are 2 bytes present for every UNICODE character - if
+            // not, then that's not our problem
+
+            if (inputStreamType == OBoundParam::UNICODE)
+            {
+                realLen = bufLen / 2;
+
+                for (sal_Int32 ii = 0; ii < realLen; ii++)
+                    buf[ii] = buf[(ii * 2) + 1];
+            }
+
+            // Put the data
+            OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
+
+            N3SQLPutData (m_aStatementHandle, buf.getArray(), realLen);
+
+            // Decrement the number of bytes still needed
+
+            inputStreamLen -= bufLen;
+
+
+            // If there is no more data to be read, exit loop
+
+            if (inputStreamLen == 0)
+                endOfStream = sal_True;
         }
+    }
+    catch (const IOException& ex)
+    {
 
-        // If we got more bytes than necessary, truncate
-        // the buffer by re-setting the buffer length.  Also,
-        // indicate that we don't need to read any more.
+        // If an I/O exception was generated, turn
+        // it into a SQLException
 
-        if (bufLen > inputStreamLen)
-        {
-            bufLen = inputStreamLen;
-            endOfStream = sal_True;
-        }
-
-        realLen = bufLen;
-
-        // For UNICODE streams, strip off the high sal_Int8 and set the
-        // number of actual bytes present.  It is assumed that
-        // there are 2 bytes present for every UNICODE character - if
-        // not, then that's not our problem
-
-        if (inputStreamType == OBoundParam::UNICODE)
-        {
-            realLen = bufLen / 2;
-
-            for (sal_Int32 ii = 0; ii < realLen; ii++)
-                buf[ii] = buf[(ii * 2) + 1];
-        }
-
-        // Put the data
-        OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-
-        N3SQLPutData (m_aStatementHandle, buf.getArray(), realLen);
-
-        // Decrement the number of bytes still needed
-
-        inputStreamLen -= bufLen;
-
-
-        // If there is no more data to be read, exit loop
-
-        if (inputStreamLen == 0)
-            endOfStream = sal_True;
+        throw SQLException(ex.Message,*this,::rtl::OUString(),0,Any());
     }
 }
 // -------------------------------------------------------------------------
@@ -1095,14 +1077,13 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
 sal_Int32 OPreparedStatement::getPrecision ( sal_Int32 sqlType)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     sal_Int32 prec = -1;
-    OTypeInfo aInfo;
-    aInfo.nType = sqlType;
     if (m_aTypeInfo.size())
     {
+        OTypeInfo aInfo;
+        aInfo.nType = sqlType;
         TTypeInfoVector::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
         if(aIter != m_aTypeInfo.end())
             prec = (*aIter).nPrecision;
@@ -1124,7 +1105,7 @@ void OPreparedStatement::setStream (
     throw(SQLException)
 {
     if( !ParameterIndex || ParameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     // Get the buffer needed for the length
 
     sal_Int8* lenBuf = getLengthBuf(ParameterIndex);
@@ -1172,7 +1153,7 @@ void OPreparedStatement::setChar(sal_Int32 parameterIndex,
     //  ::rtl::OString x1(::rtl::OUStringToOString(x,getConnection()->getTextEncoding()));
 
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     sal_Int8* bindBuf = allocBindBuf (parameterIndex,x.getLength());
 
@@ -1214,14 +1195,14 @@ void OPreparedStatement::setBinary (sal_Int32 parameterIndex,sal_Int32 SQLtype,
     // a 'permanent' buffer that the bridge will fill in with
     // the bound data in native format.
     if( !parameterIndex || parameterIndex > numParams)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     sal_Int8* bindBuf = allocBindBuf (parameterIndex,x.getLength());
 
     // Get the buffer needed for the length
 
     //  sal_Int8* lenBuf = getLengthBuf (parameterIndex);
-    bindParameter< Sequence< sal_Int8 > >(          m_aStatementHandle,
+    OTools::bindParameter(          m_aStatementHandle,
                                 parameterIndex,
                                 bindBuf,getLengthBuf(parameterIndex),
                                 SQLtype,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:57:37 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,11 @@ namespace com { namespace sun { namespace star { namespace util {
     struct Date;
     struct DateTime;
     struct Time;
-}}}}
+}
+    namespace lang {
+        class DisposedException;
+    }
+}}}
 
 namespace connectivity
 {
@@ -192,6 +196,8 @@ namespace connectivity
                                         const ::rtl::OUString& _rProp,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
+
+    void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
 }
 
 //==================================================================================
@@ -214,13 +220,13 @@ namespace connectivity
     }   \
     sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
     {   \
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());  \
-        const ::rtl::OUString* pSupported = aSupported.getConstArray(); \
-        for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)    \
-            if (pSupported->equals(_rServiceName))  \
-                return sal_True;    \
-    \
-        return sal_False;   \
+        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());             \
+        const ::rtl::OUString* pSupported = aSupported.getConstArray();                 \
+        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();              \
+        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)   \
+            ;                                                                           \
+                                                                                        \
+        return pSupported != pEnd;                                                      \
     }   \
 
 //==================================================================================
