@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
+ *  last change: $Author: nn $ $Date: 2001-03-08 14:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,8 +1260,16 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 if ( !pDestObj->GetName().Len() )
                     pDestObj->SetName( pDoc->GetDPCollection()->CreateNewName() );
 
-                ScRange aNewOut = pDestObj->GetNewOutputRange();
-                if ( !lcl_BlockEditable( pDoc, aNewOut ) )
+                BOOL bOverflow = FALSE;
+                ScRange aNewOut = pDestObj->GetNewOutputRange( bOverflow );
+                if ( bOverflow )
+                {
+                    //  like with STR_PROTECTIONERR, use undo to reverse everything
+                    DBG_ASSERT( bRecord, "DataPilotUpdate: can't undo" );
+                    bUndoSelf = TRUE;
+                    nErrId = STR_PIVOT_ERROR;
+                }
+                else if ( !lcl_BlockEditable( pDoc, aNewOut ) )
                 {
                     //  destination area isn't editable
                     //! reverse everything done so far, don't proceed
