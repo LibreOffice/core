@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2001-12-04 15:53:37 $
+ *  last change: $Author: aw $ $Date: 2002-01-16 11:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,8 @@ IMPL_LINK( SdOutlineView, ParagraphInsertedHdl, Outliner *, pOutliner )
             nExample = nTarget - 1;
         }
 
-        BegUndo();
+        // #96090# added string to create no empty UNDO actions (in ListBox)
+        BegUndo( String( SdResId(STR_INSERTPAGE) ) );
 
         /**********************************************************************
         * Es wird stets zuerst eine Standardseite und dann eine
