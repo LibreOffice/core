@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:45:55 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,7 +1123,6 @@ const Matrix4D& E3dObject::GetFullTransform()
 
         bTfHasChanged = FALSE;
     }
-
     return aFullTfMatrix;
 }
 
@@ -1952,6 +1951,7 @@ E3dCompoundObject::E3dCompoundObject() : E3dObject()
     bBytesLeft = FALSE;
     bCreateE3dPolyObj = FALSE;
     bGeometryValid = FALSE;
+    bFullTfIsPositive = TRUE;
 }
 
 E3dCompoundObject::E3dCompoundObject(E3dDefaultAttributes& rDefault) : E3dObject()
@@ -2650,6 +2650,34 @@ void E3dCompoundObject::ReCreateGeometry(BOOL bCreateOldGeometry)
 
     // ... und neu erzeugen
     CreateGeometry();
+}
+
+void E3dCompoundObject::GetFullTransform(Matrix4D& rMatrix) const
+{
+    E3dObject::GetFullTransform( rMatrix );
+}
+const Matrix4D& E3dCompoundObject::GetFullTransform()
+{
+    if ( bTfHasChanged )
+    {
+        aFullTfMatrix = aTfMatrix;
+
+        if ( GetParentObj() )
+            aFullTfMatrix *= GetParentObj()->GetFullTransform();
+
+        bTfHasChanged = FALSE;
+
+        // THB: Temporary fix for SJ's flipping problem
+        // TODO: Clarify with AW
+        // Check whether matrix mirrors
+        const bool bIsPositive( aFullTfMatrix.Determinant() >= 0.0 );
+        if( bIsPositive != bFullTfIsPositive )
+        {
+            bGeometryValid = FALSE; // force geometry recreation, which then takes care of flipping
+            bFullTfIsPositive = bIsPositive;
+        }
+    }
+    return aFullTfMatrix;
 }
 
 /*************************************************************************
