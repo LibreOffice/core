@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconcs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:19:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,6 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
 {
     sal_Bool bAttributesAppliedFromGallery = sal_False;
 
-    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
         std::vector< rtl::OUString > aObjList;
@@ -396,13 +395,8 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
     }
     if ( !bAttributesAppliedFromGallery )
     {
-        const rtl::OUString sPredefinedType( RTL_CONSTASCII_USTRINGPARAM ( "PredefinedType" ) );
-        com::sun::star::beans::PropertyValue aPropVal;
-        aPropVal.Name = sPredefinedType;
-        aPropVal.Value <<= aCustomShape;
-        aGeometryItem.SetPropertyValue( aPropVal );
-        pObj->SetMergedItem( aGeometryItem );
         pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }
 
