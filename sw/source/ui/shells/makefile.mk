@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:42:44 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:57:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=shells
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,7 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         shells.src \
         pseudo.src
 
