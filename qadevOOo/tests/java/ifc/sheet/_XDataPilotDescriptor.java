@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDataPilotDescriptor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:29 $
+ *  last change:$Date: 2003-09-08 11:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNamed;
@@ -68,9 +72,6 @@ import com.sun.star.sheet.DataPilotFieldOrientation;
 import com.sun.star.sheet.XDataPilotDescriptor;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.sheet.XDataPilotDescriptor</code>
