@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-23 19:30:35 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
 
 class PageEntry;
 
@@ -88,7 +91,11 @@ public:
     PlaceWareExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF );
     ~PlaceWareExporter();
 
-    sal_Bool doExport( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc, ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream, const rtl::OUString& rURL, ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xHandler );
+    sal_Bool doExport( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc,
+                        ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream,
+                            const rtl::OUString& rURL,
+                                ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xHandler,
+                                ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator >& rxStatusIndicator );
 
 private:
     PageEntry* exportPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >&xDrawPage );
