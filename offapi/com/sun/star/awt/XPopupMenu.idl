@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPopupMenu.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,50 +77,43 @@ interface XWindowPeer;
 
 //=============================================================================
 
-// DocMerge from idl: interface com::sun::star::awt::XPopupMenu
 /** controls a popup menu.
  */
 interface XPopupMenu: XMenu
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPopupMenu::insertSeparator
     /** inserts a separator at the specified position.
      */
     [oneway] void insertSeparator( [in] short nPos );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPopupMenu::setDefaultItem
     /** sets the menu default item.
      */
     [oneway] void setDefaultItem( [in] short nItemId );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPopupMenu::getDefaultItem
     /** returns the menu default item.
      */
     short getDefaultItem();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPopupMenu::checkItem
-    /** set the state of the item to be checked or unchecked.
+    /** sets the state of the item to be checked or unchecked.
      */
     [oneway] void checkItem( [in] short nItemId,
              [in] boolean bCheck );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPopupMenu::isItemChecked
-    /** returns whether the item is checked or not checked.
+    /** returns whether the item is checked or unchecked.
      */
     boolean isItemChecked( [in] short nItemId );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPopupMenu::execute
     /** executes the popup menu and returns the selected item
         or <code>0</code>, if cancelled.
      */
