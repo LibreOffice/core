@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-18 13:28:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,6 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
     ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
     ,m_aStatement(NULL)
     ,m_xMetaData(NULL)
-    ,m_nRowPos(0)
     ,m_bBOF(sal_True)
 {
     construct();
@@ -268,11 +267,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
-
-
-    return m_nRowPos;
+    return 0;
 }
 // -------------------------------------------------------------------------
 
