@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:50:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include "strings.hrc"
 #include "glob.hrc"
-
 String STR_DRAW_TOOLBOX
 {
     Text [ de ] = "Zeichenwerkzeugleiste" ;
@@ -2546,32 +2545,10 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Präsentation" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Presentation" ;
 };
-String STR_IMPRESS_DOCUMENT_FULLTYPE_50
-{
-    Text [ de ] = "%PRODUCTNAME 5.0 Präsentation" ;
-    Text [ en-US ] = "%PRODUCTNAME 5.0 Presentation" ;
-};
-String STR_IMPRESS_DOCUMENT_FULLTYPE_40
-{
-    /* ### ACHTUNG: Neuer Text in Resource? StarOffice 4.0 Präsentation : StarOffice 4.0 Prõsentation */
-    Text [ de ] = "%PRODUCTNAME 4.0 Präsentation" ;
-    Text [ en-US ] = "%PRODUCTNAME 4.0 Presentation" ;
-};
-String STR_IMPRESS_DOCUMENT_FULLTYPE_31
-{
-    /* ### ACHTUNG: Neuer Text in Resource? StarOffice 3.0 Graphik / Präsentation : StarOffice 3.0 Graphik / Prõsentation */
-    Text [ de ] = "%PRODUCTNAME 3.0 Graphik / Präsentation" ;
-    Text [ en-US ] = "Graphics/presentation (%PRODUCTNAME 3.0)" ;
-};
 String STR_GRAPHIC_DOCUMENT
 {
     Text [ de ] = "Zeichnung" ;
     Text [ en-US ] = "Drawing" ;
-};
-String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
-{
-    Text [ de ] = "%PRODUCTNAME 5.0 Zeichnung" ;
-    Text [ en-US ] = "Drawing (%PRODUCTNAME 5.0)" ;
 };
 String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
 {
