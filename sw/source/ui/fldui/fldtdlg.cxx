@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:01:38 $
+ *  last change: $Author: os $ $Date: 2001-01-30 14:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,18 +442,21 @@ void SwFldDlg::ReInitTabPage(USHORT nPageId)
 
 void SwFldDlg::Activate()
 {
-    BOOL bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
-
-    const SwWrtShell& rSh = ::GetActiveView()->GetWrtShell();
-    GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
-                          !rSh.HasReadonlySel() );
-
-    ReInitTabPage(TP_FLD_VAR);
-
-    if (!bHtmlMode)
+    SwView* pView = ::GetActiveView();
+    if(pView)
     {
-        ReInitTabPage(TP_FLD_REF);
-        ReInitTabPage(TP_FLD_FUNC);
+        BOOL bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
+        const SwWrtShell& rSh = pView->GetWrtShell();
+        GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
+                              !rSh.HasReadonlySel() );
+
+        ReInitTabPage(TP_FLD_VAR);
+
+        if (!bHtmlMode)
+        {
+            ReInitTabPage(TP_FLD_REF);
+            ReInitTabPage(TP_FLD_FUNC);
+        }
     }
 }
 
@@ -484,6 +487,9 @@ void SwFldDlg::InsertHdl()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/01/18 14:01:38  jp
+    new Field/-Type: combined character
+
     Revision 1.1.1.1  2000/09/18 17:14:36  hr
     initial import
 
