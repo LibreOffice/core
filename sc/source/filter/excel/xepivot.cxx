@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:29:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCE_HPP_
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #endif
 
 #include <algorithm>
@@ -519,7 +522,7 @@ void XclExpPCField::InitNumGroupField( const ScDPObject& rDPObj, const ScDPNumGr
     {
         // special case: group by days with step count
         meFieldType = EXC_PCFIELD_DATEGROUP;
-        maNumGroupInfo.SetScDateType( SC_DP_DATE_DAYS );
+        maNumGroupInfo.SetScDateType( com::sun::star::sheet::DataPilotFieldGroupBy::DAYS );
         SetDateGroupLimit( rNumInfo, true );
     }
     else
