@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:21:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ QueryBox DLG_WRAP
     MESSAGE [ English ] = "Do you want to continue checking at the start of the document?" ;
     MESSAGE [ norwegian ] = "Do you want to continue checking at the start of the document?" ;
     MESSAGE [ italian ] = "Continuare a controllare dall'inizio del documento?" ;
-    MESSAGE [ portuguese_brazilian ] = "Deseja continuar a verificação no início do documento?" ;
+    MESSAGE [ portuguese_brazilian ] = "Deseja continuar a verifica??o no in?cio do documento?" ;
     MESSAGE [ portuguese ] = "Deseja continuar com a verificação no início do documento?" ;
     MESSAGE [ finnish ] = "Haluatko jatkaa tarkistusta asiakirjan alusta?" ;
     MESSAGE [ danish ] = "Vil du fortsætte kontrollen fra dokumentets start?" ;
@@ -178,7 +178,7 @@ QueryBox DLG_SPECIAL
     MESSAGE [ English ] = "Do you want check the special regions?" ;
     MESSAGE [ norwegian ] = "Do you want check the special regions?" ;
     MESSAGE [ italian ] = "Controllare le aree speciali?" ;
-    MESSAGE [ portuguese_brazilian ] = "Deseja verificar Regiões especiais?" ;
+    MESSAGE [ portuguese_brazilian ] = "Deseja verificar Regi?s especiais?" ;
     MESSAGE [ portuguese ] = "Deseja verificar as regiões especiais?" ;
     MESSAGE [ finnish ] = "Tarkistetaanko erityisalueet?" ;
     MESSAGE [ danish ] = "Vil du kontrollere særområderne?" ;
@@ -236,7 +236,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE [ English ] = "Check in Special regions is turned off, Proof anyway?" ;
     MESSAGE [ norwegian ] = "Check in Special regions is turned off, Proof anyway?" ;
     MESSAGE [ italian ] = "Il controllo delle aree speciali non è attivo, controllare lo stesso?" ;
-    MESSAGE [ portuguese_brazilian ] = "Verificação de Regiões especiais está desativada, Verificar assim mesmo?" ;
+    MESSAGE [ portuguese_brazilian ] = "Verifica??o de Regi?s especiais est? desativada, Verificar assim mesmo?" ;
     MESSAGE [ portuguese ] = "A verificação de zonas especiais está desactivada, mesmo assim prosseguir?" ;
     MESSAGE [ finnish ] = "Tarkista erityisalueet -toiminto on poistettu käytöstä. Tarkistetaanko kuitenkin?" ;
     MESSAGE [ danish ] = "Stavekontrol af særområder er slået fra, skal der kontrolleres alligevel?" ;
@@ -265,7 +265,7 @@ QueryBox MSG_SEARCH_END
     Message [ ENGLISH ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
     Message [ norwegian ] = "%PRODUCTNAME Writer har søkt til slutten av  dokumentet. Vil du fortsette fra begynnelsen?" ;
     Message [ italian ] = "%PRODUCTNAME Writer ha cercato fino alla fine del documento. Volete continuare dall'inizio del documento?" ;
-    Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou até o final do documento. Deseja continuar do início?" ;
+    Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou at? o final do documento. Deseja continuar do in?cio?" ;
     Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao fim do documento. Continuar a procura no início do documento?" ;
     Message [ finnish ] = "%PRODUCTNAME Writer on tehnyt haun asiakirjan loppuun asti. Haluatko jatkaa hakua alkuun?" ;
     Message [ danish ] = "%PRODUCTNAME Writer har søgt til slutningen af dokumentet. Vil du fortsætte søgningen fra dokumentets begyndelse?" ;
@@ -294,7 +294,7 @@ QueryBox MSG_SEARCH_START
     Message [ ENGLISH ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
     Message [ norwegian ] = "%PRODUCTNAME Writer har søkt til begynnelsen av dokumentet. Vil du fortsette fra slutten?" ;
     Message [ italian ] = "%PRODUCTNAME Writer ha cercato fino all'inizio del documento. Volete continuare dalla fine del documento?" ;
-    Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou até o início do documento. Deseja continuar no final?" ;
+    Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou at? o in?cio do documento. Deseja continuar no final?" ;
     Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao início do documento. Continuar a procura no fim do documento?" ;
     Message [ finnish ] = "%PRODUCTNAME Writer on tehnyt haun asiakirjan alkuun asti. Haluatko jatkaa hakua loppuun?" ;
     Message [ danish ] = "%PRODUCTNAME Writer har søgt til begyndelsen af dokumentet. Vil du fortsætte søgningen fra dokumentets slutning?" ;
@@ -320,7 +320,7 @@ InfoBox MSG_NO_MERGE_ENTRY
     MESSAGE = "Es konnte nichts zusammengeführt werden." ;
     MESSAGE [ English ] = "Could not merge document." ;
     Message [ english_us ] = "Could not merge documents." ;
-    Message [ portuguese_brazilian ] = "Es konnte nichts zusammengeführt werden." ;
+    Message [ portuguese_brazilian ] = "Es konnte nichts zusammengef?rt werden." ;
     Message [ swedish ] = "Inget kunde sammanföras." ;
     Message [ danish ] = "Det var ikke muligt at udføre fletning." ;
     Message [ italian ] = "Non è stato possibile unire alcunché." ;
@@ -347,7 +347,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ English ] = "Could not insert AutoText." ;
     MESSAGE [ norwegian ] = "Could not insert AutoText." ;
     MESSAGE [ italian ] = "Impossibile creare voce di glossario." ;
-    MESSAGE [ portuguese_brazilian ] = "Não pude inserir Texto Automático." ;
+    MESSAGE [ portuguese_brazilian ] = "N?o pude inserir Texto Autom?tico." ;
     MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
     MESSAGE [ finnish ] = "Automaattista tekstiä ei voitu luoda." ;
     MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTekst." ;
@@ -383,7 +383,7 @@ InfoBox MSG_ERR_SRCSTREAM
     Message [ portuguese ] = "É impossível carregar o texto-fonte." ;
     Message[ chinese_simplified ] = "ÎŞ·¨×°ÈëÔ´ÎÄ±¾¡£";
     Message[ russian ] = "Çàãğóçêà èñõîäíîãî òåêñòà íåâîçìîæíà.";
-    Message[ polish ] = "Nie mo¿na by³o za³adowaæ tekstu Ÿród³owego.";
+    Message[ polish ] = "Nie mo¿na by³o za³adowaæ tekstu ?ród³owego.";
     Message[ japanese ] = "¿°½Ã·½Ä‚ğ“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "µLªk¸ü¤J­ì©lÀÉ¡C";
     Message[ arabic ] = ".áÇ íãßä ÊÍãíá äÕ ÇáãÕÏÑ";
@@ -476,7 +476,7 @@ InfoBox MSG_NOT_FOUND
     Message [ ENGLISH ] = "Search pattern not found." ;
     Message [ norwegian ] = "Søkekriterier ikke funnet." ;
     Message [ italian ] = "Termine non trovato" ;
-    Message [ portuguese_brazilian ] = "Padrao de busca não encontrado." ;
+    Message [ portuguese_brazilian ] = "Padrao de busca n?o encontrado." ;
     Message [ portuguese ] = "Impossível encontrar expressão procurada." ;
     Message [ finnish ] = "Hakuavainta ei löytynyt." ;
     Message [ danish ] = "Søgningen gav intet resultat." ;
@@ -503,7 +503,7 @@ InfoBox MSG_INDEX_OVERFLOW
     Message [ ENGLISH ] = "Search pattern not found." ;
     Message [ norwegian ] = "Søkekriterier ikke funnet." ;
     Message [ italian ] = "Termine non trovato" ;
-    Message [ portuguese_brazilian ] = "Padrao de busca não encontrado." ;
+    Message [ portuguese_brazilian ] = "Padrao de busca n?o encontrado." ;
     Message [ portuguese ] = "localizado." ;
     Message [ finnish ] = "löytynyt." ;
     Message [ danish ] = "fundet." ;
@@ -539,7 +539,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message [ portuguese ] = "Fonte não especificada." ;
     Message[ chinese_simplified ] = "Ã»ÓĞÖ¸¶¨Ô´¡£";
     Message[ russian ] = "Èñòî÷íèê íå óêàçàí";
-    Message[ polish ] = "Nie okreœlono Ÿród³a.";
+    Message[ polish ] = "Nie okre?lono ?ród³a.";
     Message[ japanese ] = "¿°½‚ª’è‹`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "¨S¦³©w¸q¨Ó·½¡C";
     Message[ arabic ] = ".áã íÊã ÊÍÏíÏ ÇáãÕÏÑ";
@@ -556,7 +556,7 @@ String STR_NOGLOS1
     TEXT [ English ] = "AutoText for Short Name '" ;
     TEXT [ norwegian ] = "AutoText for Short Name '" ;
     TEXT [ italian ] = "Testo automatico per la sigla '" ;
-    TEXT [ portuguese_brazilian ] = "Texto Automático para Abreviação" ;
+    TEXT [ portuguese_brazilian ] = "Texto Autom?tico para Abrevia??o" ;
     TEXT [ portuguese ] = "AutoTexto para abreviatura '" ;
     TEXT [ finnish ] = "Automaattinen teksti pikavalinnalle '" ;
     TEXT [ danish ] = "AutoTekst til genvej '" ;
@@ -587,7 +587,7 @@ String STR_NOGLOS2
     TEXT [ English ] = "' not found." ;
     TEXT [ norwegian ] = "' not found." ;
     TEXT [ italian ] = "' non trovato." ;
-    TEXT [ portuguese_brazilian ] = "' não encontrado." ;
+    TEXT [ portuguese_brazilian ] = "' n?o encontrado." ;
     TEXT [ portuguese ] = "' não encontrado." ;
     TEXT [ finnish ] = "Kohdetta ' ei löydy." ;
     TEXT [ danish ] = "'blev ikke fundet." ;
@@ -667,7 +667,7 @@ String STR_EDIT_FOOTNOTE
     TEXT [ ENGLISH ] = "Edit footnote" ;
     TEXT [ norwegian ] = "Redigerer fotnote" ;
     TEXT [ italian ] = "Modifica nota a piè pagina" ;
-    TEXT [ portuguese_brazilian ] = "Editar nota de rodapé" ;
+    TEXT [ portuguese_brazilian ] = "Editar nota de rodap?" ;
     TEXT [ portuguese ] = "Editar nota de rodapé" ;
     TEXT [ finnish ] = "Muokkaa alaviitettä" ;
     TEXT [ danish ] = "Rediger fodnote" ;
@@ -694,7 +694,7 @@ String STR_NB_REPLACED
     Text [ ENGLISH ] = "Search pattern replaced XX times." ;
     Text [ norwegian ] = "Søkekriterier erstattet XX ganger." ;
     Text [ italian ] = "Testo sostituito XX volte" ;
-    Text [ portuguese_brazilian ] = "Padrao de busca substituído XX vezes." ;
+    Text [ portuguese_brazilian ] = "Padrao de busca substitu?do XX vezes." ;
     Text [ portuguese ] = "Expressão procurada substituída XX vezes." ;
     Text [ finnish ] = "Hakuavain korvattu XX kertaa." ;
     Text [ danish ] = "Søgeord erstattet XX gange." ;
@@ -756,7 +756,7 @@ String RID_SRCVIEW_TOOLBOX
     Text [ portuguese_brazilian ] = "Quelltext" ;
     Text[ chinese_simplified ] = "Ô´ÎÄ±¾";
     Text[ russian ] = "Èñõîäíûé òåêñò";
-    Text[ polish ] = "Tekst Ÿród³owy";
+    Text[ polish ] = "Tekst ?ród³owy";
     Text[ japanese ] = "¿°½Ã·½Ä";
     Text[ chinese_traditional ] = "­ì©lÀÉ";
     Text[ arabic ] = "äÕ ÇáãÕÏÑ";
@@ -966,7 +966,7 @@ String STR_SAVEAS_SRC
     Text [ english_us ] = "~Export source..." ;
     Text[ chinese_simplified ] = "Êä³öÔ´ÎÄ±¾(~E)...";
     Text[ russian ] = "İêñïîğò èñõîäíîãî òåêñòà...";
-    Text[ polish ] = "Eksportuj tekst Ÿród³owy...";
+    Text[ polish ] = "Eksportuj tekst ?ród³owy...";
     Text[ japanese ] = "¿°½Ã·½Ä‚ğ´¸½Îß°Ä‚·‚é(~E)...";
     Text[ chinese_traditional ] = "¿é¥X­ì©lÀÉ(~E)...";
     Text[ arabic ] = "ÊÕÏíÑ äÕ ÇáãÕÏÑ...";
@@ -992,7 +992,7 @@ String MN_SRCVIEW_POPUPMENU
     Text [ dutch ] = "HTML - brontekst" ;
     Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
     Text[ russian ] = "Èñõîäíûé òåêñò â ôîğìàòå HTML";
-    Text[ polish ] = "Tekst Ÿród³owy HTML";
+    Text[ polish ] = "Tekst ?ród³owy HTML";
     Text[ japanese ] = "HTML ¿°½Ã·½Ä";
     Text[ chinese_traditional ] = "HTML ­ì©lÀÉ";
     Text[ arabic ] = "äÕ ãÕÏÑ HTML";
@@ -1217,7 +1217,7 @@ Menu MN_SRCVIEW_POPUPMENU
             Text [ portuguese_brazilian ] = "HTML-Quelltext" ;
             Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
             Text[ russian ] = "Èñõîäíûé òåêñò â ôîğìàòå HTML";
-            Text[ polish ] = "Tekst Ÿród³owy HTML";
+            Text[ polish ] = "Tekst ?ród³owy HTML";
             Text[ japanese ] = "HTML ¿°½Ã·½Ä";
             Text[ chinese_traditional ] = "HTML ­ì©lÀÉ";
             Text[ arabic ] = "äÕ ãÕÏÑ HTML";
