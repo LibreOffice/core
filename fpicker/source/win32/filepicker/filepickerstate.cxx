@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:10:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,12 +186,9 @@ void SAL_CALL CNonExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_In
 Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
 {
     CValueControlCommandRequest value_request( aControlId, aControlAction );
-
     Any aAny;
 
-    OSL_ENSURE( m_FirstControlCommand, "invalid getValue request" );
-
-    if ( m_FirstControlCommand )
+    if (m_FirstControlCommand)
     {
         // pass the request along the command-chain
         std::auto_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &value_request ) );
