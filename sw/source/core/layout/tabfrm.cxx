@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-29 10:41:54 $
+ *  last change: $Author: ama $ $Date: 2001-08-30 14:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,7 +1344,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
 #ifdef VERTICAL_LAYOUT
     if( ( pDirection == pHeight ) == IsVertical() )
 #else
-    if( pDirection == pWidth ) )
+    if( pDirection == pWidth )
 #endif
         return 0;
 
