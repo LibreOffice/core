@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::linguistic;
+using namespace com::sun::star::linguistic2;
 
 
 EditSpellWrapper::EditSpellWrapper( Window* pWin,

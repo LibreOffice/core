@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:02:22 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,20 +78,20 @@
 #include <vcl/cursor.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLALTERNATIVES_HPP_
-#include <com/sun/star/linguistic/XSpellAlternatives.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
+#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_SPELLFAILURE_HPP_
-#include <com/sun/star/linguistic/SpellFailure.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_SPELLFAILURE_HPP_
+#include <com/sun/star/linguistic2/SpellFailure.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER_HPP_
-#include <com/sun/star/linguistic/XSpellChecker.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -379,8 +379,10 @@ private:
     sal_uInt16          nStretchY;
 
     sal_uInt16          nBigTextObjectStart;
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellChecker1 >    xSpeller;
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XHyphenator >       xHyphenator;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XSpellChecker1 >     xSpeller;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XHyphenator >        xHyphenator;
     SpellInfo*          pSpellInfo;
     LanguageType        eDefaultLanguage;   // aktuelle Sprache (des Wortes) wird immer
                                             // zusammen mit dem Wort fuer die neuen
@@ -739,10 +741,18 @@ public:
     EditView*           GetActiveView() const   { return pActiveView; }
     void                SetActiveView( EditView* pView );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellChecker1 > GetSpeller();
-    void                SetSpeller( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellChecker1 >  &xSpl ){ xSpeller = xSpl; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XHyphenator >       GetHyphenator() const { return xHyphenator; }
-    void                SetHyphenator( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XHyphenator >  &xHyph ){ xHyphenator = xHyph; }
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XSpellChecker1 >
+                        GetSpeller();
+    void                SetSpeller( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl )
+                            { xSpeller = xSpl; }
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XHyphenator >
+                        GetHyphenator() const { return xHyphenator; }
+    void                SetHyphenator( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::linguistic2::XHyphenator >  &xHyph )
+                            { xHyphenator = xHyph; }
     SpellInfo*          GetSpellInfo() const { return pSpellInfo; }
 
     void                SetLanguage( LanguageType eLang )   { eDefaultLanguage = eLang;}
@@ -753,7 +763,9 @@ public:
     EESpellState        Spell( EditView* pEditView, sal_Bool bMultipleDoc );
     EESpellState        HasSpellErrors();
     EESpellState        StartThesaurus( EditView* pEditView );
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellAlternatives >    ImpSpell( EditView* pEditView );
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XSpellAlternatives >
+                        ImpSpell( EditView* pEditView );
 
     sal_Bool            Search( const SvxSearchItem& rSearchItem, EditView* pView );
     sal_Bool            ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );

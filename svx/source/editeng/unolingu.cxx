@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 11:38:57 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYSUPPLIER_HPP_
-#include <com/sun/star/linguistic/XDictionarySupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
@@ -116,7 +113,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::linguistic2;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -186,6 +183,7 @@ public:
 void LinguMgrExitLstnr::AtExit()
 {
     // release references
+    LinguMgr::xLngSvcMgr    = 0;
     LinguMgr::xSpell        = 0;
     LinguMgr::xHyph         = 0;
     LinguMgr::xThes         = 0;
@@ -204,9 +202,11 @@ void LinguMgrExitLstnr::AtExit()
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 // static member initialization
 LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = 0;
 sal_Bool                        LinguMgr::bExiting      = sal_False;
+Reference< XLinguServiceManager >   LinguMgr::xLngSvcMgr    = 0;
 Reference< XSpellChecker1 >     LinguMgr::xSpell        = 0;
 Reference< XHyphenator >        LinguMgr::xHyph         = 0;
 Reference< XThesaurus >         LinguMgr::xThes         = 0;
@@ -214,6 +214,21 @@ Reference< XDictionaryList >    LinguMgr::xDicList      = 0;
 Reference< XPropertySet >       LinguMgr::xProp         = 0;
 Reference< XDictionary1 >       LinguMgr::xIgnoreAll    = 0;
 Reference< XDictionary1 >       LinguMgr::xChangeAll    = 0;
+
+
+static Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
+{
+    Reference< XLinguServiceManager > xRes;
+    Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
+    if (xMgr.is())
+    {
+        xRes = Reference< XLinguServiceManager > ( xMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM (
+                    "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
+    }
+    return xRes;
+}
+
 
 Reference< XSpellChecker1 > LinguMgr::GetSpellChecker()
 {
@@ -266,14 +281,13 @@ Reference< XSpellChecker1 > LinguMgr::GetSpell()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    if (xMgr.is())
+    if (!xLngSvcMgr.is())
+        xLngSvcMgr = GetLngSvcMgr_Impl();
+
+    if (xLngSvcMgr.is())
     {
-        xSpell = Reference< XSpellChecker1 > ( xMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.linguistic.SpellChecker1") ), UNO_QUERY );
-        if (xSpell.is())
-            xSpell->setDictionaryList( GetDictionaryList() );
+        xSpell = Reference< XSpellChecker1 > (
+                        xLngSvcMgr->getSpellChecker(), UNO_QUERY );
     }
     return xSpell;
 }
@@ -286,14 +300,12 @@ Reference< XHyphenator > LinguMgr::GetHyph()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    if (xMgr.is())
+    if (!xLngSvcMgr.is())
+        xLngSvcMgr = GetLngSvcMgr_Impl();
+
+    if (xLngSvcMgr.is())
     {
-        xHyph = Reference< XHyphenator > ( xMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.linguistic.Hyphenator1") ), UNO_QUERY );
-        if (xHyph.is())
-            xHyph->setDictionaryList( GetDictionaryList() );
+        xHyph = xLngSvcMgr->getHyphenator();
     }
     return xHyph;
 }
@@ -306,12 +318,12 @@ Reference< XThesaurus > LinguMgr::GetThes()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    if (xMgr.is())
+    if (!xLngSvcMgr.is())
+        xLngSvcMgr = GetLngSvcMgr_Impl();
+
+    if (xLngSvcMgr.is())
     {
-        xThes = Reference< XThesaurus > ( xMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.linguistic.Thesaurus") ), UNO_QUERY );
+        xThes = xLngSvcMgr->getThesaurus();
     }
     return xThes;
 }
@@ -329,7 +341,7 @@ Reference< XDictionaryList > LinguMgr::GetDicList()
     {
         xDicList = Reference< XDictionaryList > ( xMgr->createInstance(
                     OUString::createFromAscii(
-                        "com.sun.star.linguistic.DictionaryList") ), UNO_QUERY );
+                        "com.sun.star.linguistic2.DictionaryList") ), UNO_QUERY );
     }
     return xDicList;
 }
@@ -347,7 +359,7 @@ Reference< XPropertySet > LinguMgr::GetProp()
     {
         xProp = Reference< XPropertySet > ( xMgr->createInstance(
                     OUString::createFromAscii(
-                        "com.sun.star.linguistic.LinguProperties") ), UNO_QUERY );
+                        "com.sun.star.linguistic2.LinguProperties") ), UNO_QUERY );
     }
     return xProp;
 }
@@ -377,11 +389,11 @@ Reference< XDictionary1 > LinguMgr::GetChangeAll()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    Reference< XDictionarySupplier >  xSupplier( GetDictionaryList() , UNO_QUERY );
-    if (xSupplier.is())
+    Reference< XDictionaryList >  xDicList( GetDictionaryList() , UNO_QUERY );
+    if (xDicList.is())
     {
         xChangeAll = Reference< XDictionary1 > (
-                        xSupplier->createDictionary(
+                        xDicList->createDictionary(
                             OUString::createFromAscii("ChangeAllList"),
                             SvxCreateLocale( LANGUAGE_NONE ),
                             DictionaryType_NEGATIVE, String() ), UNO_QUERY );
@@ -412,20 +424,16 @@ Reference< XDictionary1 > LinguMgr::GetStandard()
     {
         Reference< XDictionary >  xTmp;
 
-        Reference< XDictionarySupplier >  xSupplier( xTmpDicList, UNO_QUERY );
-        if (xSupplier.is())
+        // try to create standard dictionary
+        try
         {
-            // try to create standard dictionary
-            try
-            {
-                xTmp =  xSupplier->createDictionary( aDicName,
-                            SvxCreateLocale( LANGUAGE_NONE ),
-                            DictionaryType_POSITIVE,
-                            SvxGetDictionaryURL( aDicName, sal_True ) );
-            }
-            catch(...)
-            {
-            }
+            xTmp =  xTmpDicList->createDictionary( aDicName,
+                        SvxCreateLocale( LANGUAGE_NONE ),
+                        DictionaryType_POSITIVE,
+                        SvxGetDictionaryURL( aDicName, sal_True ) );
+        }
+        catch(...)
+        {
         }
 
         // add new dictionary to list
@@ -485,7 +493,6 @@ Reference< XDictionary1 >  SvxGetChangeAllList()
 
 ///////////////////////////////////////////////////////////////////////////
 
-#ifdef TL_NOTYET
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATEDWORD_HPP_
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
@@ -548,7 +555,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
     }
     return aRes;
 }
-#endif //TL_NOTYET
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -663,8 +670,7 @@ sal_Bool SvxAddEntryToDic(
             aTmp = aTmp.copy( 0, nLen - 1 );
         }
     }
-    sal_Bool bAddOk = rxDic->add( aTmp, bIsNeg, rRplcTxt,
-                                  SvxCreateLocale( nRplcLang ) );
+    sal_Bool bAddOk = rxDic->add( aTmp, bIsNeg, rRplcTxt );
 
     sal_Int16 nRes = DIC_ERR_NONE;
     if (!bAddOk)

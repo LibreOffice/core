@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARY1_HPP_
-#include <com/sun/star/linguistic/XDictionary1.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARY1_HPP_
+#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #endif
 
 
@@ -131,7 +131,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::linguistic2;
 /*--------------------------------------------------------------------
  *  Beschreibung: Ctor, die Pruefreihenfolge wird festgelegt
  *
@@ -644,8 +644,7 @@ sal_Bool SvxSpellWrapper::FindSpellError()
         {
             if (IsAllRight() && xAllRightDic.is())
             {
-                xAllRightDic->add( xAlt->getWord(), sal_False,
-                            ::rtl::OUString(), LANGUAGE_NONE );
+                xAllRightDic->add( xAlt->getWord(), sal_False, ::rtl::OUString() );
             }
             else
             {
@@ -659,9 +658,8 @@ sal_Bool SvxSpellWrapper::FindSpellError()
                 if (xEntry.is())
                 {
                     // replace word without asking
-                    sal_Int16 nRplcLang = SvxLocaleToLanguage(
-                            xEntry->getReplacementLocale() );
-                    ReplaceAll( xEntry->getReplacementText(), nRplcLang );
+                    ReplaceAll( xEntry->getReplacementText(),
+                                SvxLocaleToLanguage( xAlt->getLocale() ) );
                 }
                 else
                     bSpell = sal_False;

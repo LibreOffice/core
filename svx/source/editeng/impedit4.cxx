@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-12 10:43:47 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,11 @@
 #ifndef _LINGU_LNGPROPS_HHX_
 #include <lingu/lngprops.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic/XThesaurus.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XMEANING_HPP_
-#include <com/sun/star/linguistic/XMeaning.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XMEANING_HPP_
+#include <com/sun/star/linguistic2/XMeaning.hpp>
 #endif
 
 #ifndef _TXTCMP_HXX //autogen
@@ -129,6 +129,9 @@
 #include <svtools/rtfkeywd.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::linguistic2;
 
 void lcl_MakeRTFString( XubString& rStr );
 
@@ -1458,7 +1461,7 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     return aDefaultLocale;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellChecker1 > ImpEditEngine::GetSpeller()
+Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
 {
 #ifndef SVX_LIGHT
     if ( !xSpeller.is() )
@@ -1531,10 +1534,10 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
 #endif
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
+Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 {
 #ifdef SVX_LIGHT
-    return uno::Reference< linguistic::XSpellAlternatives >();
+    return Reference< XSpellAlternatives >();
 #else
 
     DBG_ASSERT( xSpeller.is(), "Kein Speller gesetzt!" );
@@ -1548,7 +1551,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
         aCurSel.Max() = aCurSel.Min();
 
     String aWord;
-    uno::Reference< linguistic::XSpellAlternatives >  xSpellAlt;
+    Reference< XSpellAlternatives >  xSpellAlt;
     while (!xSpellAlt.is())
     {
 
@@ -1594,7 +1597,8 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
         }
 
         if ( aWord.Len() > 1 )
-            xSpellAlt = xSpeller->spell( aWord, eDefaultLanguage );
+            xSpellAlt = xSpeller->spell( aWord, eDefaultLanguage,
+                                         Sequence< PropertyValue >() );
 
         if ( bForward && !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::text::WordType::DICTIONARY_WORD );
@@ -1695,7 +1699,8 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                 {
                     sal_uInt16 nWStart = aSel.Min().GetIndex();
                     sal_uInt16 nWEnd= aSel.Max().GetIndex();
-                    if ( !xSpeller->isValid( aWord, eDefaultLanguage ) )
+                    if ( !xSpeller->isValid( aWord, eDefaultLanguage,
+                                             Sequence< PropertyValue >() ) )
                     {
                         // Pruefen, ob schon richtig markiert...
                         nWrongs++;
@@ -1838,7 +1843,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
     EditSelection aCurSel( aEditDoc.GetStartPaM() );
 
     String aWord;
-    uno::Reference< linguistic::XSpellAlternatives >  xSpellAlt;
+    Reference< XSpellAlternatives >  xSpellAlt;
     while ( !xSpellAlt.is() )
     {
         if ( ( aCurSel.Max().GetNode() == pLastNode ) &&
@@ -1850,7 +1855,8 @@ EESpellState ImpEditEngine::HasSpellErrors()
         aCurSel = SelectWord( aCurSel, ::com::sun::star::text::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
         if ( aWord.Len() > 1 )
-            xSpellAlt = xSpeller->spell( aWord, eDefaultLanguage );
+            xSpellAlt = xSpeller->spell( aWord, eDefaultLanguage,
+                                         Sequence< PropertyValue >() );
         aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::text::WordType::DICTIONARY_WORD );
     }
 #endif
@@ -1869,7 +1875,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         aCurSel = SelectWord( aCurSel, ::com::sun::star::text::WordType::DICTIONARY_WORD );
     String aWord( GetSelected( aCurSel ) );
 
-    uno::Reference< linguistic::XThesaurus > xThes( SvxGetThesaurus() );
+    Reference< XThesaurus > xThes( SvxGetThesaurus() );
     if (!xThes.is())
         return EE_SPELL_ERRORFOUND;
 

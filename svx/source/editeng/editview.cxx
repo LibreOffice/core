@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,17 @@
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARY1_HPP_
-#include <com/sun/star/linguistic/XDictionary1.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARY1_HPP_
+#include <com/sun/star/linguistic2/XDictionary1.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
+#include <com/sun/star/beans/PropertyValues.hdl>
 #endif
 
 using namespace rtl;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::linguistic;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::linguistic2;
 
 
 DBG_NAME( EditView );
@@ -944,7 +948,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         // Gibt es Replace-Vorschlaege?
         String aSelected( GetSelected() );
         Reference< XSpellAlternatives >  xSpellAlt =
-                xSpeller->spell( aSelected, PIMPEE->GetLanguage() );
+                xSpeller->spell( aSelected, PIMPEE->GetLanguage(),
+                                 Sequence< PropertyValue >() );
         Sequence< OUString > aAlt;
         if (xSpellAlt.is())
             aAlt = xSpellAlt->getAlternatives();
@@ -1024,7 +1029,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         {
             Reference< XDictionary1 >  xDic( pDic[nId - MN_DICTSTART], UNO_QUERY );
             if (xDic.is())
-                xDic->add( aSelected, sal_False, String(), LANGUAGE_NONE );
+                xDic->add( aSelected, sal_False, String() );
             aPaM.GetNode()->GetWrongList()->GetInvalidStart() = 0;
             PIMPEE->StartOnlineSpellTimer();
         }

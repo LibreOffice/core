@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,33 +78,31 @@
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYENTRY_HPP_
-#include <com/sun/star/linguistic/XDictionaryEntry.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYENTRY_HPP_
+#include <com/sun/star/linguistic2/XDictionaryEntry.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_DICTIONARYTYPE_HPP_
-#include <com/sun/star/linguistic/DictionaryType.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_DICTIONARYTYPE_HPP_
+#include <com/sun/star/linguistic2/DictionaryType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYENTRYSUPPLIER_HPP_
-#include <com/sun/star/linguistic/XDictionaryEntrySupplier.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_DICTIONARYEVENT_HPP_
+#include <com/sun/star/linguistic2/DictionaryEvent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYSUPPLIER_HPP_
-#include <com/sun/star/linguistic/XDictionarySupplier.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYEVENTLISTENER_HPP_
+#include <com/sun/star/linguistic2/XDictionaryEventListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_DICTIONARYEVENT_HPP_
-#include <com/sun/star/linguistic/DictionaryEvent.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_DICTIONARYEVENTFLAGS_HPP_
+#include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYEVENTLISTENER_HPP_
-#include <com/sun/star/linguistic/XDictionaryEventListener.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARY_HPP_
+#include <com/sun/star/linguistic2/XDictionary.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_DICEVENTFLAGS_HPP_
-#include <com/sun/star/linguistic/DicEventFlags.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARY1_HPP_
+#include <com/sun/star/linguistic2/XDictionary1.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARY_HPP_
-#include <com/sun/star/linguistic/XDictionary.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARY1_HPP_
-#include <com/sun/star/linguistic/XDictionary1.hpp>
-#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::linguistic2;
+
 
 inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiffX, short nDiffY )
 {
@@ -901,9 +899,9 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
             }
             else // Ignore
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XDictionary1 >  xDic( SvxGetIgnoreAllList(), ::com::sun::star::uno::UNO_QUERY );
+                Reference< XDictionary1 >  xDic( SvxGetIgnoreAllList(), UNO_QUERY );
                 if (xDic.is())
-                    xDic->add( aWord, sal_False, String(), LANGUAGE_NONE );
+                    xDic->add( aWord, sal_False, String() );
             }
             const EditDoc& rDoc = pEditEngine->pImpEditEngine->GetEditDoc();
             sal_uInt16 nNodes = rDoc.Count();

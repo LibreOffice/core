@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XMEANING_HPP_
-#include <com/sun/star/linguistic/XMeaning.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XMEANING_HPP_
+#include <com/sun/star/linguistic2/XMeaning.hpp>
 #endif
 
 
@@ -97,7 +97,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::linguistic2;
 
 #define S2U(s)                      StringToOUString(s, CHARSET_SYSTEM)
 #define U2S(s)                      OUStringToString(s, CHARSET_SYSTEM)
@@ -105,16 +105,16 @@ using namespace ::com::sun::star::linguistic;
 
 struct ThesDlg_Impl
 {
-    Reference< linguistic::XThesaurus >         xThesaurus;
+    Reference< XThesaurus > xThesaurus;
     OUString                aLookUpText;
     sal_Int16               nLookUpLanguage;
 
-    ThesDlg_Impl(Reference< linguistic::XThesaurus >  xThes);
+    ThesDlg_Impl( Reference< XThesaurus > & xThes );
     SfxErrorContext*    pErrContext;    // ErrorContext,
                                         // w"ahrend der Dialog oben ist
 };
 
-ThesDlg_Impl::ThesDlg_Impl(Reference< linguistic::XThesaurus >  xThes) :
+ThesDlg_Impl::ThesDlg_Impl(Reference< XThesaurus > & xThes) :
     xThesaurus  (xThes)
 {
     pErrContext = NULL;
@@ -133,7 +133,7 @@ private:
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
-    Reference< linguistic::XThesaurus >         xThesaurus;
+    Reference< XThesaurus >         xThesaurus;
     uno::Sequence< lang::Locale >   aSuppLang;      // supported languages
 
     DECL_LINK( DoubleClickHdl_Impl, ListBox * );
@@ -236,7 +236,7 @@ IMPL_LINK_INLINE_END( SvxThesaurusLanguageDlg_Impl, DoubleClickHdl_Impl, ListBox
 // -----------------------------------------------------------------------
 
 
-SvxThesaurusDialog::SvxThesaurusDialog( Window* pParent, Reference< linguistic::XThesaurus >  xThes,
+SvxThesaurusDialog::SvxThesaurusDialog( Window* pParent, Reference< XThesaurus >  xThes,
                                         const String &rWord, sal_Int16 nLanguage) :
 
     SvxStandardDialog( pParent, SVX_RES( RID_SVXDLG_THESAURUS ) ),
@@ -304,7 +304,7 @@ sal_uInt16 SvxThesaurusDialog::GetLanguage() const
 
 // -----------------------------------------------------------------------
 
-void SvxThesaurusDialog::UpdateMeaningBox_Impl( uno::Sequence< Reference< linguistic::XMeaning >  > *pMeaningSeq )
+void SvxThesaurusDialog::UpdateMeaningBox_Impl( uno::Sequence< Reference< XMeaning >  > *pMeaningSeq )
 {
     // create temporary meaning list if not supplied from somewhere else
     sal_Bool bTmpSeq = sal_False;
@@ -313,14 +313,14 @@ void SvxThesaurusDialog::UpdateMeaningBox_Impl( uno::Sequence< Reference< lingui
         bTmpSeq = sal_True;
         lang::Locale aLocale( SvxCreateLocale( pImpl->nLookUpLanguage ) );
         uno::Sequence< Reference< XMeaning > > aTmpMean = pImpl->xThesaurus
-                                    ->queryMeanings( pImpl->aLookUpText, aLocale );
-
+                    ->queryMeanings( pImpl->aLookUpText, aLocale,
+                                     Sequence< PropertyValue >() );
 
         pMeaningSeq = new Sequence< Reference< XMeaning >  > ( aTmpMean );
     }
 
     sal_Int32 nMeaningCount = pMeaningSeq ? pMeaningSeq->getLength() : 0;
-    const Reference< linguistic::XMeaning >  *pMeaning = pMeaningSeq ? pMeaningSeq->getConstArray() : NULL;
+    const Reference< XMeaning >  *pMeaning = pMeaningSeq ? pMeaningSeq->getConstArray() : NULL;
     aMeanLB.Clear();
     for ( sal_Int32 i = 0;  i < nMeaningCount;  ++i )
         aMeanLB.InsertEntry( pMeaning[i]->getMeaning() );
@@ -344,10 +344,11 @@ void SvxThesaurusDialog::UpdateSynonymBox_Impl()
     sal_uInt16 nPos = aMeanLB.GetSelectEntryPos();  // active meaning pos
     if (nPos != LISTBOX_ENTRY_NOTFOUND  &&  pImpl->xThesaurus.is())
     {
-        // get Reference< linguistic::XMeaning >  for selected meaning
+        // get Reference< XMeaning >  for selected meaning
         lang::Locale aLocale( SvxCreateLocale( pImpl->nLookUpLanguage ) );
-        Reference< linguistic::XMeaning >  xMeaning =
-            pImpl->xThesaurus->queryMeanings(pImpl->aLookUpText, aLocale )
+        Reference< XMeaning >  xMeaning =
+            pImpl->xThesaurus->queryMeanings(pImpl->aLookUpText, aLocale,
+                                             Sequence< PropertyValue >() )
                  .getConstArray()[ nPos ];
 
         uno::Sequence< OUString >   aSynonyms;
@@ -396,11 +397,12 @@ IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, pBtn )
     OUString aOldLookUpText = pImpl->aLookUpText;
     pImpl->aLookUpText = ::rtl::OUString( aText );
 
-    uno::Sequence< Reference< linguistic::XMeaning >  > aMeanings;
+    uno::Sequence< Reference< XMeaning >  > aMeanings;
     if (pImpl->xThesaurus.is())
         aMeanings = pImpl->xThesaurus->queryMeanings(
                             pImpl->aLookUpText,
-                            SvxCreateLocale( pImpl->nLookUpLanguage ) );
+                            SvxCreateLocale( pImpl->nLookUpLanguage ),
+                            Sequence< PropertyValue >() );
 
     LeaveWait();
     if ( aMeanings.getLength() == 0 )

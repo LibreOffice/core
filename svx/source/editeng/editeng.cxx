@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-17 15:58:53 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ using namespace ::com::sun::star::uno;
 //using namespace ::com::sun::star::lang;
 //using namespace ::com::sun::star::beans;
 //using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::linguistic2;
 
 
 

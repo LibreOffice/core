@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:02:22 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,11 @@
 
 #include <comphelper/processfactory.hxx>
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::linguistic2;
 
 SV_DECL_VARARR_SORT( SortedPositions, sal_uInt32, 16, 8 );
 SV_IMPL_VARARR_SORT( SortedPositions, sal_uInt32 );
@@ -1504,9 +1508,9 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
     sal_uInt16 nBreakPos = nMaxBreakPos;
 
-    uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
-    ::rtl::OUString aText( *pNode );
-    uno::Reference< linguistic::XHyphenator > xHyph;
+    Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
+    OUString aText( *pNode );
+    Reference< XHyphenator > xHyph;
     if ( bCanHyphenate )
         xHyph = GetHyphenator();
     text::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
@@ -1545,12 +1549,13 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         {
             DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
             sal_uInt16 nMinTrail = nWordEnd-nMaxBreakPos+1;     //+1: Vor dem angeknacksten Buchstaben
-            uno::Reference< linguistic::XHyphenatedWord > xHyphWord;
+            Reference< XHyphenatedWord > xHyphWord;
             if (xHyphenator.is())
-                xHyphWord = xHyphenator->hyphenate( aWord, GetLocale(), aWord.Len() - nMinTrail );
+                xHyphWord = xHyphenator->hyphenate( aWord, GetLocale(),
+                                aWord.Len() - nMinTrail, Sequence< PropertyValue >() );
             if (xHyphWord.is())
             {
-                sal_Bool bAlternate = xHyphWord->getAlternativeSpelling().is();
+                sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
                 sal_uInt16 nWordLen = 1 + xHyphWord->getHyphenPos();
 
                 if ( ( nWordLen >= 2 ) && ( (nWordStart+nWordLen) >= (pLine->GetStart() + 2 ) ) )
@@ -3398,15 +3403,15 @@ const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 }
 
 
-uno::Reference < text::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
+Reference < text::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
 {
     if ( !xBI.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
+        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
         if ( xI.is() )
         {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< text::XBreakIterator >*)0) );
+            Any x = xI->queryInterface( ::getCppuType((const Reference< text::XBreakIterator >*)0) );
             x >>= xBI;
         }
     }
