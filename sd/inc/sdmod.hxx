@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:18:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
 #endif
-
 #include <sfx2/module.hxx>
+#include <memory>
 
 class SdOptions;
 class BasicIDE;
@@ -101,6 +101,7 @@ class SdDrawDocument;
 
 namespace sd {
 class DrawDocShell;
+class SdGlobalResourceContainer;
 }
 
 // ----------------------
@@ -196,6 +197,9 @@ protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 private:
+    /** The resource container controls the lifetime of some singletons.
+    */
+    ::std::auto_ptr< ::sd::SdGlobalResourceContainer> mpResourceContainer;
 
     /** Create a new summary page.  When the document has been created in
         the kiosk mode with automatical transitions then this method adds
