@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-04 11:12:54 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 15:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,8 @@ void SAL_CALL remote_sendQueryInterface(
     uno_Environment *pEnvRemote,
     remote_Interface **ppRemoteI,
     rtl_uString *pOid ,
-    typelib_TypeDescriptionReference *pTypeRef
+    typelib_TypeDescriptionReference *pTypeRef,
+    uno_Any **ppException
     )
 {
     OSL_ASSERT( ppRemoteI );
@@ -181,8 +182,8 @@ void SAL_CALL remote_sendQueryInterface(
 
     ppArgs[0] = &pRef;
 
-    uno_Any anyException;
-    uno_Any *pAnyException = &anyException;
+//      uno_Any anyException;
+//      uno_Any *pAnyException = &anyException;
 
     // do the queryInterface
     pImpl->m_sendRequest(
@@ -192,16 +193,16 @@ void SAL_CALL remote_sendQueryInterface(
         pType,
         pReturn,
         ppArgs,
-        &pAnyException );
+        ppException );
 
 
     // now release everything
     typelib_typedescriptionreference_release( pRef );
     typelib_typedescription_release( (typelib_TypeDescription * ) pMemberType );
 
-    if( pAnyException )
+    if( *ppException )
     {
-        uno_any_destruct( pAnyException , 0 );
+        *ppRemoteI = 0;
     }
     else
     {
