@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 18:45:02 $
+ *  last change: $Author: obo $ $Date: 2001-12-19 18:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2659,7 +2659,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message[ chinese_simplified ] = "ж’¤ж¶€е‘Ѕд»¤еЉџиѓЅйњЂи¦Ѓеѕ€е¤љзљ„е†…е­гЂ‚\nи¦ЃеЏ–ж¶€ж’¤ж¶€е‘Ѕд»¤еЉџиѓЅпјџ";
     Message[ russian ] = "Этому действию необходимо для отмены слишком много памяти.\nВы хотите отключить отмену?";
     Message[ polish ] = "Cofniкcie tej akcji wymaga duїej iloњci pamiкci.\nCzy chcesz przerwaж cofniкcie?";
-    Message[ japanese ] = "гЃ“гЃ®дЅњжҐ­гЃЇпЅ¤е…ѓгЃ«ж€»гЃ™гЃџг‚ЃгЃ«йќћеёёгЃ«е¤љгЃЏгЃ®гѓ‡г‚Јг‚№г‚Їе®№й‡ЏгЃЊеї…и¦ЃгЃ§гЃ™гЂ‚\nгЂЊе…ѓгЃ«ж€»гЃ™гЂЌг‚’г‚Єгѓ•гЃ«гЃ—гЃѕгЃ™гЃ‹?";
+    Message[ japanese ] = "гЃ“гЃ®г‚ўг‚Їг‚·гѓ§гѓіг‚’е…ѓгЃ«ж€»гЃ™гЃ«гЃЇйќћеёёгЃ«гЃџгЃЏгЃ•г‚“гЃ®гѓ‡г‚Јг‚№г‚Їе®№й‡ЏгЃЊеї…и¦ЃгЃ§гЃ™гЂ‚\nе…ѓгЃ«ж€»гЃ™гЃ®г‚’г‚­гѓЈгѓіг‚»гѓ«гЃ—гЃѕгЃ™гЃ‹гЂ‚";
     Message[ chinese_traditional ] = "еѕ©еЋџеЉџиѓЅйњЂи¦Ѓеѕ€е¤љзљ„иЁж†¶й«”гЂ‚\nи¦Ѓй—њй–‰еѕ©еЋџеЉџиѓЅпјџ";
     Message[ arabic ] = "ЗбКСЗМЪ Ъд еРЗ ЗбЕМСЗБ нКШбИ РЗЯСЙ ЯИнСЙ МПЗр.\nеб КСнП ЕбЫЗБ ЗбКСЗМЪї";
     Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?";
@@ -2908,7 +2908,7 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ russian ] = "Вы сохранили большее количество данных в буфере обмена.\nДолжно ли содержимое буфера обмена быть доступным для других приложений?";
     MESSAGE[ polish ] = "W schowku zostaіy umieszczone wiкksze iloњci danych.\nCzy treњж tych danych ma zostaж udostкpniona innym aplikacjom?";
-    MESSAGE[ japanese ] = "г‚ЇгѓЄгѓѓгѓ—гѓњгѓјгѓ‰гЃ«е¤§й‡ЏгЃ®гѓ‡гѓјг‚їгЃЊдїќе­гЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚\nг‚ЇгѓЄгѓѓгѓ—гѓњгѓјгѓ‰гЃ®е†…е®№г‚’д»–гЃ®г‚ўгѓ—гѓЄг‚±гѓјг‚·гѓ§гѓігЃ«дЅїз”ЁгЃ—гЃѕгЃ™гЃ‹?";
+    MESSAGE[ japanese ] = "г‚ЇгѓЄгѓѓгѓ—гѓњгѓјгѓ‰гЃ«гЃЇгЃџгЃЏгЃ•г‚“гЃ®гѓ‡гѓјг‚їгЃЊдїќе­гЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚\nг‚ЇгѓЄгѓѓгѓ—гѓњгѓјгѓ‰гЃ®е†…е®№г‚’д»–гЃ®г‚ўгѓ—гѓЄг‚±гѓјг‚·гѓ§гѓігЃ«г‚‚дЅїз”ЁгЃ—гЃѕгЃ™гЃ‹гЂ‚";
     MESSAGE[ chinese_traditional ] = "ж‚Ёе·Із¶“е°‡дёЂеЂ‹ијѓе¤§зљ„иі‡ж–™и¤‡иЈЅе€°е‰ЄиІјз°їгЂ‚\nж‚Ёжѓіи¦Ѓи®“е…¶д»–зљ„ж‡‰з”ЁзЁ‹еєЏд№џиѓЅе¤ дЅїз”ЁйЂ™еЂ‹иі‡ж–™пјџ";
     MESSAGE[ arabic ] = "бЮП ЮгК ИНЭЩ ЯгнЗК ЯИнСЙ гд ЗбИнЗдЗК Эн ЗбНЗЭЩЙ.\nеб КСнП жЦЪ гНКжнЗК ЗбНЗЭЩЙ КНК КХСЭ КШИнЮЗК ГОСмї";
     MESSAGE[ dutch ] = "U hebt een groot aantal gegevens op het Klembord geplaatst.\nWilt u dat de inhoud van het Klembord beschikbaar blijft voor andere toepassingen?";
@@ -3196,6 +3196,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
