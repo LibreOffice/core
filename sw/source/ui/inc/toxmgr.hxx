@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-08 13:11:06 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,45 +324,6 @@ public:
     // Methoden fuer Verzeichnisse
     //
     BOOL    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = 0, const SfxItemSet* pSet = 0);
-
-#ifdef USE_OLD_INDEXES
-    void    InsertTOI(const USHORT nOptions = TOI_SAME_ENTRY|TOI_FF|TOI_CASE_SENSITIVE,
-                        const String* pTitel = 0,
-                        const SwForm* pForm  = 0,
-                        SwTOXBase** ppBase = 0 );
-
-    BOOL    UpdateTOI(const USHORT nOptions,
-                      const String* pTitel = 0,
-                      const SwForm* pForm = 0);
-
-
-    void    InsertTOC(const USHORT nContent = TOX_MARK | TOX_OUTLINELEVEL,
-                        int nLevel = MAXLEVEL,
-                        const String* pTitel = 0,
-                        const SwForm* pForm = 0,
-                        SwTOXBase** ppBase = 0);
-
-    BOOL    UpdateTOC(const USHORT nContent = TOX_MARK | TOX_OUTLINELEVEL,
-                      int nLevel = MAXLEVEL,
-                      const String* pTitel = 0,
-                      const SwForm* pForm = 0);
-
-    void    InsertTOU(const USHORT nContent = TOX_MARK,
-                        const String* pTOUName = 0,
-                        const String* pTemplateName = 0,
-                        int nLevel = MAXLEVEL,
-                        const String* pTitel = 0,
-                        const SwForm* pForm = 0,
-                        SwTOXBase** ppBase = 0);
-
-    BOOL    UpdateTOU(const USHORT nContent,
-                        const String* pTOUName = 0,
-                        const String* pTemplateName = 0,
-                        int nLevel = MAXLEVEL,
-                        const String* pTitel = 0,
-                        const SwForm* pForm = 0);
-
-#endif
 
     const SwTOXType*    GetTOXType(TOXTypes eTyp, USHORT nId) const;
     const SwTOXBase*    GetCurTOX();
