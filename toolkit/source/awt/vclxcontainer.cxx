@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxcontainer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: pb $ $Date: 2002-02-21 08:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
     ::vos::OGuard aGuard( GetMutex() );
 
     sal_uInt32 nCount = Components.getLength();
-    DBG_ASSERT( nCount == Tabs.getLength(), "setTabOrder: TabCount != ComponentCount" );
+    DBG_ASSERT( nCount == (sal_uInt32)Tabs.getLength(), "setTabOrder: TabCount != ComponentCount" );
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > * pComps = Components.getConstArray();
     const ::com::sun::star::uno::Any* pTabs = Tabs.getConstArray();
 
