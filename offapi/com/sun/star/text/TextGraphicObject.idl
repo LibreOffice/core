@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextGraphicObject.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 14:37:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 
 /** specifies a graphic which can be embedded in <type scope="com::sun::star::drawing">Text</type>.
  */
-service TextGraphicObject
+published service TextGraphicObject
 {
     /** contains the definition of interfaces and properties that are supported by text frames,
      graphic objects and embeddedobjects.
