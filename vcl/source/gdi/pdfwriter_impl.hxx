@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:54:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,9 @@ public:
         // page coordinates and appends the point to the buffer
         // if bNeg is true, the coordinates are inverted AFTER transformation
         // to page (useful for transformation matrices
-        void appendPoint( const Point& rPoint, rtl::OStringBuffer& rBuffer, bool bNeg = false );
+        // if pOutPoint is set it will be updated to the emitted point
+        // (in PDF map mode, that is 10th of point)
+        void appendPoint( const Point& rPoint, rtl::OStringBuffer& rBuffer, bool bNeg = false, Point* pOutPoint = NULL );
         // appends a rectangle
         void appendRect( const Rectangle& rRect, rtl::OStringBuffer& rBuffer );
         // converts a rectangle to 10th points page space
@@ -172,9 +174,11 @@ public:
         // converts a length (either vertical or horizontal; this
         // can be important if the source MapMode is not
         // symmetrical) to page length and appends it to the buffer
-        void appendMappedLength( sal_Int32 nLength, rtl::OStringBuffer& rBuffer, bool bVertical = true );
+        // if pOutLength is set it will be updated to the emitted length
+        // (in PDF map mode, that is 10th of point)
+        void appendMappedLength( sal_Int32 nLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL );
         // the same for double values
-        void appendMappedLength( double fLength, rtl::OStringBuffer& rBuffer, bool bVertical = true );
+        void appendMappedLength( double fLength, rtl::OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = NULL );
         // appends LineInfo
         void appendLineInfo( const LineInfo& rInfo, rtl::OStringBuffer& rBuffer );
         // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
@@ -434,6 +438,7 @@ private:
     bool writeGradientFunction( GradientEmit& rObject );
     /* creates a GradientEmit and returns its object number */
     sal_Int32 createGradient(  const Gradient& rGradient, const Size& rSize );
+
     /* writes all tilings */
     bool emitTilings();
     /* writes all gradient patterns */
