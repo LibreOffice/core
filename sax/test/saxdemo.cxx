@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxdemo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 17:32:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 
 #include <vos/dynload.hxx>
 #include <vos/diagnose.hxx>
-
-#include <assert.h>
-
 
 using namespace ::rtl;
 using namespace ::std;
