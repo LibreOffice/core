@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:53:01 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 09:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    return m_bEOF;
+    return m_nRowPos == sal_Int32(m_pFileSet->size());
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
@@ -558,7 +558,7 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    return m_bEOF;
+    return m_nRowPos == sal_Int32(m_pFileSet->size() - 1);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
