@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-11 16:19:31 $
+ *  last change: $Author: bc $ $Date: 2002-06-12 09:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,19 +838,22 @@ public class ReportWizard {
     }}
 
 
-    public static void insertSaveControls(int YPos, int Index, boolean bDoEnable, int TabIndex){
+    public static void insertSaveControls(int YPos, int Index, boolean bDoEnable, int TabIndex, int BaseHelpID){
     try{
+    String HIDString;
     InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblSaveAs_" + Integer.toString(Index+1),
                             new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                             new Object[] {new Boolean(bDoEnable), new Integer(8), new Integer(16), new Integer(YPos), new Integer(5), new Integer(130), sSaveAs});
 
+    HIDString = "HID:" + Integer.toString(BaseHelpID);
     xSaveTextBox[Index] = InsertTextField(xMSFDialogModel, xDlgNames, xDialogContainer, "txtSavePath_" + Integer.toString(Index+1), SOTXTSAVEPATH[Index],
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                            new Object[] {new Boolean(bDoEnable), new Integer(12), new Integer(16), new Integer(YPos + 10), new Integer(5), new Short((short)TabIndex), new Integer(222)});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+                            new Object[] {new Boolean(bDoEnable), new Integer(12), HIDString, new Integer(16), new Integer(YPos + 10), new Integer(5), new Short((short)TabIndex), new Integer(222)});
 
+    HIDString = "HID:" + Integer.toString(BaseHelpID+1);
     InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdSelectPath_" + Integer.toString(Index+1), SOCMDSELECTPATH[Index],
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step",  "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(bDoEnable), new Integer(14), new Integer(248), new Integer(YPos + 9), new Integer(5), new Short((short) (TabIndex + 1)), new Integer(16), "..."});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step",  "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(bDoEnable), new Integer(14), HIDString, new Integer(248), new Integer(YPos + 9), new Integer(5), new Short((short) (TabIndex + 1)), new Integer(16), "..."});
     }
     catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -890,24 +893,24 @@ public class ReportWizard {
     public static void fillFifthStep(){
     try{
     InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optCreateReportTemplate", SOOPTSAVEASTEMPLATE,
-                            new String[] {"Height", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-                            new Object[] {new Integer(8), sSaveAsTemplate, new Integer(6), new Integer(41), new Short((short) 1), new Integer(5), new Short((short) 40), new Integer(250)});
+                            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
+                            new Object[] {new Integer(8), "HID:34370", sSaveAsTemplate, new Integer(6), new Integer(41), new Short((short) 1), new Integer(5), new Short((short) 40), new Integer(250)});
 
     InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optCreateDocument", SOOPTSAVEASDOCUMENT,
-                            new String[] {"Height", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-                            new Object[] {new Integer(10), sSaveAsDocument, new Integer(6), new Integer(117), new Short((short) 0), new Integer(5), new Short((short) 41), new Integer(138)});
+                            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
+                            new Object[] {new Integer(10), "HID:34371", sSaveAsDocument, new Integer(6), new Integer(117), new Short((short) 0), new Integer(5), new Short((short) 41), new Integer(138)});
 
-    insertSaveControls(55, 0, true, 42);
+    insertSaveControls(55, 0, true, 42, 34372);
 
     InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optEditTemplate", SOOPTEDITTEMPLATE,
-                            new String[] {"Height", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-                            new Object[] {new Integer(10), sEditTemplate, new Integer(16), new Integer(84), new Short((short) 1), new Integer(5), new Short((short) 44), new Integer(138)});
+                            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
+                            new Object[] {new Integer(10), "HID:34374", sEditTemplate, new Integer(16), new Integer(84), new Short((short) 1), new Integer(5), new Short((short) 44), new Integer(138)});
 
     InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optUseTemplate", SOOPTUSEDOCUMENT,
-                            new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                            new Object[] {new Integer(10), sUseTemplate, new Integer(16), new Integer(95), new Integer(5), new Short((short) 45), new Integer(138)});
+                            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+                            new Object[] {new Integer(10), "HID:34375", sUseTemplate, new Integer(16), new Integer(95), new Integer(5), new Short((short) 45), new Integer(138)});
 
-    insertSaveControls(132, 1, false, 46);
+    insertSaveControls(132, 1, false, 46, 34376);
 
     chkTemplate = InsertControlModel("com.sun.star.awt.UnoControlCheckBoxModel", xMSFDialogModel, xDlgNames, "chkcreateLink",
                 new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
@@ -925,8 +928,8 @@ public class ReportWizard {
                             new Object[] {new Integer(8), new Integer(6), new Integer(40), new Integer(4), new Integer(200), sReportTitle});
 
         xTitleTextBox = InsertTextField(xMSFDialogModel, xDlgNames, xDialogContainer, "txtTitle", SOTXTTITLE,
-                            new String[] {"Height", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                            new Object[] {new Integer(12), new Integer(6), new Integer(50), new Integer(4), new Short((short)31), new Integer(258)});
+                            new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+                            new Object[] {new Integer(12), "HID:34362", new Integer(6), new Integer(50), new Integer(4), new Short((short)31), new Integer(258)});
 
         InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblContent",
                 new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
@@ -934,8 +937,8 @@ public class ReportWizard {
 
         ContentFiles = tools.getFolderTitles(xMSF, "cnt", CurReportDocument.ReportFolderName);
         xContentListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstContent", SOCONTENTLST,
-                    new String[] {"Height", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"},
-                            new Object[] {new Integer(58), new Integer(6), new Integer(80), new Integer(4), ContentFiles[1], new Short((short)32), new Integer(125)});
+                    new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"},
+                            new Object[] {new Integer(58), "HID:34363", new Integer(6), new Integer(80), new Integer(4), ContentFiles[1], new Short((short)32), new Integer(125)});
         short iSelPos = (short) tools.FieldInList(ContentFiles[0], CurReportDocument.ReportFolderName + "/cnt-default.stw");
         xContentListBox.selectItemPos(iSelPos, true);
 
@@ -945,8 +948,8 @@ public class ReportWizard {
 
         LayoutFiles = tools.getFolderTitles(xMSF,"stl", CurReportDocument.ReportFolderName);
         xLayoutListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstLayout", SOLAYOUTLST,
-                    new String[] {"Height", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"},
-                            new Object[] {new Integer(58), new Integer(140), new Integer(80), new Integer(4), LayoutFiles[1], new Short((short)33), new Integer(125)});
+                    new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"},
+                            new Object[] {new Integer(58), "HID:34364", new Integer(140), new Integer(80), new Integer(4), LayoutFiles[1], new Short((short)33), new Integer(125)});
         short iSelLayoutPos = (short) tools.FieldInList(LayoutFiles[0], CurReportDocument.ReportFolderName + "/stl-default.stw");
         xLayoutListBox.selectItemPos(iSelLayoutPos, true);
 
@@ -959,12 +962,12 @@ public class ReportWizard {
                             new Object[] {new Integer(8), new Integer(6), new Integer(149), new Integer(4), new Integer(74), sOrientationHeader});
 
         InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optLandscape", SOOPTLANDSCAPE,
-                            new String[] {"Height", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-                            new Object[] {new Integer(10), sOrientHorizontal, new Integer(12), new Integer(160), new Short((short) 1), new Integer(4), new Short((short)34), new Integer(100)});
+                            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
+                            new Object[] {new Integer(10), "HID:34365", sOrientHorizontal, new Integer(12), new Integer(160), new Short((short) 1), new Integer(4), new Short((short)34), new Integer(100)});
 
         InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optPortrait", SOOPTPORTRAIT,
-                            new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                            new Object[] {new Integer(10), sOrientVertical, new Integer(12), new Integer(173), new Integer(4), new Short((short)35), new Integer(100)});
+                            new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+                            new Object[] {new Integer(10), "HID:34366", sOrientVertical, new Integer(12), new Integer(173), new Integer(4), new Short((short)35), new Integer(100)});
         String sTemplatePath = tools.getOfficePath(xMSF, "Template","share") + "/wizard/bitmap/landscape.gif";
 
             InsertControlModel("com.sun.star.awt.UnoControlImageControlModel", xMSFDialogModel, xDlgNames, "imgOrientation",
@@ -1019,25 +1022,31 @@ public class ReportWizard {
     public static void fillThirdStep(){
     try{
     boolean bDoEnable;
+    String HIDString;
     int YPos = 40;
+    int BaseHelpID = 34321;
     for (int i = 0; i<4; i++){
         bDoEnable = (i == 0);
         InsertControlModel("com.sun.star.awt.UnoControlFixedLineModel", xMSFDialogModel, xDlgNames, "lblSort" + new Integer(i+1),
                 new String[] {"Enabled", "Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
                 new Object[] {new Boolean(bDoEnable), new Integer(8), sSortHeader[i], new Integer(0), new Integer(12), new Integer(YPos), new Integer(3), new Integer(252)});
 
+        HIDString = "HID:" + Integer.toString(BaseHelpID);
         xSortListBox[i] = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstSort" + new Integer(i+1).toString(), SOSORTLST[i],
-                           new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount", "Name"},
-                           new Object[] {new Boolean(bDoEnable), new Integer(12), new Integer(12), new Integer(YPos + 14), new Integer(3), new Short((short) (17+i*4)), new Integer(154), new Boolean(true), new Short("7"), "lstSort" + new Integer(i+1)});
+                new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount", "Name"},
+                new Object[] {new Boolean(bDoEnable), new Integer(12), HIDString,  new Integer(12), new Integer(YPos + 14), new Integer(3), new Short((short) (17+i*4)), new Integer(154), new Boolean(true), new Short("7"), "lstSort" + new Integer(i+1)});
 
+        HIDString = "HID:" + Integer.toString(BaseHelpID+1);
         InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optAscend" + Integer.toString(i+1), SOSORTASCENDOPT[i],
-                           new String[] {"Enabled", "Height", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"},
-                           new Object[] {new Boolean(bDoEnable), new Integer(10), sSortAscend[i], new Integer(186), new Integer(YPos+10), new Short((short) 1), new Integer(3), new Short((short) (18+i*4)), new String("ASC"), new Integer(65)});
+                new String[] {"Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"},
+                new Object[] {new Boolean(bDoEnable), new Integer(10), HIDString,  sSortAscend[i], new Integer(186), new Integer(YPos+10), new Short((short) 1), new Integer(3), new Short((short) (18+i*4)), new String("ASC"), new Integer(65)});
 
+        HIDString = "HID:" + Integer.toString(BaseHelpID+2);
         InsertRadioButton(xMSFDialogModel, xDlgNames, xDialogContainer, "optDescend" + Integer.toString(i+1), SOSORTDESCENDOPT[i],
-                           new String[] {"Enabled", "Height", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"},
-                           new Object[] {new Boolean(bDoEnable), new Integer(10), sSortDescend[i], new Integer(186), new Integer(YPos+24), new Short((short) 0), new Integer(3), new Short((short) (19+i*4)), new String("DESC"), new Integer(65)});
+                           new String[] {"Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"},
+                           new Object[] {new Boolean(bDoEnable), new Integer(10), HIDString, sSortDescend[i], new Integer(186), new Integer(YPos+24), new Short((short) 0), new Integer(3), new Short((short) (19+i*4)), new String("DESC"), new Integer(65)});
         YPos = YPos + 36;
+        BaseHelpID += 3;
     }
     }
     catch(Exception exception){
@@ -1071,21 +1080,21 @@ public class ReportWizard {
             new Object[] {new Integer(8), new Integer(6), new Integer(38), new Integer(2), new Integer(100), sOrganizeFields});
 
         xGroupListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstGroup", SOGROUPLST,
-                new String[] {"Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
-                        new Object[] {new Integer(125), new Integer(6), new Integer(49), new Integer(2), new Short((short) 11), new Integer(110), new Boolean(false)});
+                new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
+                        new Object[] {new Integer(125), "HID:34340", new Integer(6), new Integer(49), new Integer(2), new Short((short) 11), new Integer(110), new Boolean(false)});
 
         InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblSelGroups",
             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
             new Object[] {new Integer(8), new Integer(154), new Integer(38), new Integer(2), new Integer(100), sGroupings});
         xSelGroupListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstSelGroup", SOSELGROUPLST,
-                new String[] {"Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
-                        new Object[] {new Integer(125), new Integer(154), new Integer(49), new Integer(2), new Short((short) 12), new Integer(110), new Boolean(true)});
+                new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
+                        new Object[] {new Integer(125), "HID:34343", new Integer(154), new Integer(49), new Integer(2), new Short((short) 12), new Integer(110), new Boolean(true)});
         InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdGroupOut", SOCMDGROUPOUT,
-            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-            new Object[] {new Boolean(false), new Integer(14), new Integer(122), new Integer(93), new Integer(2), new Short((short) 13), new Integer(25),"->"});
+            new String[] {"Enabled", "HelpURL", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+            new Object[] {new Boolean(false), "HID:34341", new Integer(14), new Integer(122), new Integer(93), new Integer(2), new Short((short) 13), new Integer(25),"->"});
         InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdGroupIn", SOCMDGROUPIN,
-            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-            new Object[] {new Boolean(false), new Integer(14), new Integer(122), new Integer(115), new Integer(2), new Short((short) 14), new Integer(25), "<-"});
+            new String[] {"Enabled", "HelpURL", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+            new Object[] {new Boolean(false), "HID:34342", new Integer(14), new Integer(122), new Integer(115), new Integer(2), new Short((short) 14), new Integer(25), "<-"});
     }
     catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -1169,12 +1178,12 @@ public class ReportWizard {
 
     public static void executeDialog(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument){
     try{
-    XWindow xWindow = ( XWindow ) UnoRuntime.queryInterface( XWindow.class, objectDialog );
-        xWindow.setVisible( false );
+    XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, objectDialog);
+        xWindow.setVisible(false);
         xDialog = (XDialog) UnoRuntime.queryInterface( XDialog.class, objectDialog );
     Object objectToolkit = xMSF.createInstance("com.sun.star.awt.ExtToolkit");
-        XToolkit xToolkit = ( XToolkit ) UnoRuntime.queryInterface( XToolkit.class, objectToolkit );
-        xControl.createPeer( xToolkit, null );
+        XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface( XToolkit.class, objectToolkit );
+        xControl.createPeer(xToolkit, null);
     CurReportDocument.ProgressBar.end();
     short retvalue = xDialog.execute();
         switch (retvalue){
@@ -1208,40 +1217,40 @@ public class ReportWizard {
                             new String[] {"BackgroundColor", "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"},
                             new Object[] {new Integer(16777215), oFontDesc, new Integer(30), WizardHeaderText[0], new Boolean(true), new Integer(50), new Integer(0), new Integer(0), new Integer(220)});
     InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdCancel", SOCMDCANCEL,
-                            new String[] {"Height", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Integer(14), new Integer(6), new Integer(190), new Short((short)com.sun.star.awt.PushButtonType.CANCEL_value), new Integer(0), new Short((short) 60), new Integer(53), scmdCancel});
+                            new String[] {"Height", "HelpURL", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Integer(14), "HID:34321", new Integer(6), new Integer(190), new Short((short)com.sun.star.awt.PushButtonType.CANCEL_value), new Integer(0), new Short((short) 60), new Integer(53), scmdCancel});
 
     InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdHelp", SOCMDHELP,
                             new String[] {"Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
                             new Object[] {new Integer(14), new Integer(63), new Integer(190), new Integer(0), new Short((short) 61), new Integer(53), scmdHelp});
 
         InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdBack", SOCMDBACK,
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), new Integer(155), new Integer(190), new Integer(0), new Short((short) 62), new Integer(53), scmdBack});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34322", new Integer(155), new Integer(190), new Integer(0), new Short((short) 62), new Integer(53), scmdBack});
 
         InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdGoOn", SOCMDGOON,
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), new Integer(211), new Integer(190), new Integer(0), new Short((short) 63), new Integer(53), scmdGoOn});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34323", new Integer(211), new Integer(190), new Integer(0), new Short((short) 63), new Integer(53), scmdGoOn});
 
     InsertControlModel("com.sun.star.awt.UnoControlFixedLineModel", xMSFDialogModel, xDlgNames, "hlnCommandButtons",
                 new String[] {"Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
                 new Object[] {new Integer(2), "", new Integer(0), new Integer(6), new Integer(184), new Integer(0), new Integer(258)});
 
     InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdMoveSelected", SOCMDMOVESEL,
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), new Integer(122), new Integer(84), new Integer(1), new Short((short) 4), new Integer(25), "->"});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34334", new Integer(122), new Integer(84), new Integer(1), new Short((short) 4), new Integer(25), "->"});
 
         InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdMoveAll", SOCMDMOVEALL,
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), new Integer(122), new Integer(108), new Integer(1), new Short((short) 5), new Integer(25), "=>>"});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34335", new Integer(122), new Integer(108), new Integer(1), new Short((short) 5), new Integer(25), "=>>"});
 
     InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdRemoveSelected", SOCMDREMOVESEL,
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), new Integer(122), new Integer(131), new Integer(1), new Short((short) 6), new Integer(25), "<-"});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34336", new Integer(122), new Integer(131), new Integer(1), new Short((short) 6), new Integer(25), "<-"});
 
         InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdRemoveAll", SOCMDREMOVEALL,
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), new Integer(122), new Integer(157), new Integer(1), new Short((short) 7), new Integer(25), "<<="});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34337", new Integer(122), new Integer(157), new Integer(1), new Short((short) 7), new Integer(25), "<<="});
 
         InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblDatabases",
                             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
@@ -1265,17 +1274,17 @@ public class ReportWizard {
                             new Object[] {new Integer(16777215), new Short("0"), new Integer(30), sTemplatePath, new Integer(0), new Integer(0), new Boolean(false), new Integer(0), new Integer(50)});
 
         xDBListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstDatabases", SODBLST,
-                            new String[] {"Height", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width", "Dropdown","LineCount", "Name"},
-                            new Object[] {new Integer(12), new Integer(6), new Integer(49), new Integer(1), DBMetaData.getDatabaseNames(CurReportDocument), new Short((short) 1), new Integer(110), new Boolean(true), new Short("7"), "lstDatabases"});
+                            new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width", "Dropdown","LineCount", "Name"},
+                            new Object[] {new Integer(12), "HID:34330", new Integer(6), new Integer(49), new Integer(1), DBMetaData.getDatabaseNames(CurReportDocument), new Short((short) 1), new Integer(110), new Boolean(true), new Short("7"), "lstDatabases"});
     xTableListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstTables", SOTBLLST,
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount"},
-                            new Object[] {new Boolean(false), new Integer(12), new Integer(122), new Integer(49), new Integer(1), new Short((short) 2), new Integer(110), new Boolean(true), new Short("7")});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount"},
+                            new Object[] {new Boolean(false), new Integer(12), "HID:34331", new Integer(122), new Integer(49), new Integer(1), new Short((short) 2), new Integer(110), new Boolean(true), new Short("7")});
     xFieldsListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstFields", SOFLDSLST,
-                new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
-                            new Object[] {new Boolean(false), new Integer(96), new Integer(6), new Integer(79), new Integer(1), new Short((short) 3), new Integer(110), new Boolean(true)});
+                new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
+                            new Object[] {new Boolean(false), new Integer(96), "HID:34332", new Integer(6), new Integer(79), new Integer(1), new Short((short) 3), new Integer(110), new Boolean(true)});
     xSelFieldsListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstSelFields", SOSELFLDSLST,
-                            new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
-                            new Object[] {new Boolean(false), new Integer(96), new Integer(154), new Integer(79), new Integer(1), new Short((short) 8), new Integer(110), new Boolean(true)});
+                            new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
+                            new Object[] {new Boolean(false), new Integer(96), "HID:34333", new Integer(154), new Integer(79), new Integer(1), new Short((short) 8), new Integer(110), new Boolean(true)});
         }
         catch(Exception exception){
         exception.printStackTrace(System.out);
