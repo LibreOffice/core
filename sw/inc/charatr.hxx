@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:04:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 17:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,12 +108,8 @@ inline const SvxFontHeightItem         &SwAttrSet::GetCTLSize(BOOL bInP) const
     {   return (const SvxFontHeightItem&)Get( RES_CHRATR_CTL_FONTSIZE,bInP); }
 inline const SvxPropSizeItem     &SwAttrSet::GetPropSize(BOOL bInP) const
     {   return (const SvxPropSizeItem&)Get( RES_CHRATR_PROPORTIONALFONTSIZE,bInP); }
-
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SvxFontItem         &SwAttrSet::GetFont(BOOL bInP) const
     {   return (const SvxFontItem&)Get( RES_CHRATR_FONT,bInP); }
-#endif
 inline const SvxFontItem         &SwAttrSet::GetCJKFont(BOOL bInP) const
     {   return (const SvxFontItem&)Get( RES_CHRATR_CJK_FONT,bInP); }
 inline const SvxFontItem         &SwAttrSet::GetCTLFont(BOOL bInP) const
@@ -176,11 +172,8 @@ inline const SvxFontHeightItem             &SwFmt::GetSize(BOOL bInP) const
     {   return aSet.GetSize(bInP); }
 inline const SvxPropSizeItem         &SwFmt::GetPropSize(BOOL bInP) const
     {   return aSet.GetPropSize(bInP); }
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SvxFontItem             &SwFmt::GetFont(BOOL bInP) const
     {   return aSet.GetFont(bInP); }
-#endif
 inline const SvxFontItem         &SwFmt::GetCJKFont(BOOL bInP) const
     {   return aSet.GetCJKFont(bInP); }
 inline const SvxFontItem         &SwFmt::GetCTLFont(BOOL bInP) const
