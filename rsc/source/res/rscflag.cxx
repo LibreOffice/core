@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscflag.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, HASHID nConst ){
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscFlag::SetConst( const RSCINST & rInst, HASHID nConst, long nVal )
+ERRTYPE RscFlag::SetConst( const RSCINST & rInst, HASHID nConst, INT32 nVal )
 {
     USHORT i, nFlag;
 
