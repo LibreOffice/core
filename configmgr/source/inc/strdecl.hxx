@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strdecl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dg $ $Date: 2001-10-11 14:22:47 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 16:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ namespace configmgr
     DECLARE_CONSTASCII_USTRING(ATTR_LOCALIZE);
     DECLARE_CONSTASCII_USTRING(ATTR_NULLABLE);
     DECLARE_CONSTASCII_USTRING(ATTR_WRITABLE);
+    DECLARE_CONSTASCII_USTRING(ATTR_FINALIZE);
     DECLARE_CONSTASCII_USTRING(ATTR_STATE);
 
     // boolean constants

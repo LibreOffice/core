@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dg $ $Date: 2001-10-11 15:41:04 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 16:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(ATTR_LOCALIZE,     "cfg:localized");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_NULLABLE,     "cfg:nullable");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_WRITABLE,     "cfg:writable");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_FINALIZE,     "cfg:finalized");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_STATE,        "state");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_PACKAGE,      "cfg:package");
 
