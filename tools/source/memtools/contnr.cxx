@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contnr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:08 $
+ *  last change: $Author: mhu $ $Date: 2002-04-29 15:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ CBlock::CBlock( USHORT nInitSize, CBlock* _pPrev, CBlock* _pNext )
     nCount  = 0;
 
     // Datenpuffer anlegen
-    pNodes = (void**)new PVOID[nSize];
+    pNodes = new PVOID[nSize];
 }
 
 /*************************************************************************
@@ -164,7 +164,7 @@ CBlock::CBlock( USHORT _nSize, CBlock* _pPrev )
     nCount  = _nSize;
 
     // Datenpuffer anlegen und initialisieren
-    pNodes = (void**)new PVOID[nSize];
+    pNodes = new PVOID[nSize];
     memset( pNodes, 0, nSize*sizeof(PVOID) );
 }
 
@@ -189,7 +189,7 @@ CBlock::CBlock( const CBlock& r, CBlock* _pPrev )
     nCount  = r.nCount;
 
     // Datenpuffer anlegen und Daten kopieren
-    pNodes = (void**)new PVOID[nSize];
+    pNodes = new PVOID[nSize];
     memcpy( pNodes, r.pNodes, nCount*sizeof(PVOID) );
 }
 
@@ -208,7 +208,7 @@ inline CBlock::~CBlock()
     DBG_DTOR( CBlock, DbgCheckCBlock );
 
     // Daten loeschen
-    delete pNodes;
+    delete[] pNodes;
 }
 
 /*************************************************************************
@@ -231,7 +231,7 @@ void CBlock::Insert( void* p, USHORT nIndex, USHORT nReSize )
     {
         // Neue Daten anlegen
         nSize += nReSize;
-        void** pNewNodes = (void**)new PVOID[nSize];
+        void** pNewNodes = new PVOID[nSize];
 
         // Wird angehaengt
         if ( nCount == nIndex )
@@ -249,7 +249,7 @@ void CBlock::Insert( void* p, USHORT nIndex, USHORT nReSize )
         }
 
         // Alte Daten loeschen und neue setzen
-        delete pNodes;
+        delete[] pNodes;
         pNodes = pNewNodes;
     }
     else
@@ -343,9 +343,9 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
             // Den aktuellen Datenbereich auch halbieren
             if ( nSize != nNewSize )
             {
-                void** pNewNodes = (void**)new PVOID[nNewSize];
+                void** pNewNodes = new PVOID[nNewSize];
                 memcpy( pNewNodes, pNodes, nCount*sizeof(PVOID) );
-                delete pNodes;
+                delete[] pNodes;
                 pNodes = pNewNodes;
                 nSize = nNewSize;
             }
@@ -388,9 +388,9 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
             // Die zweite Haelfte in einen neuen Block kopieren
             if ( nSize != nNewSize )
             {
-                void** pNewNodes = (void**)new PVOID[nNewSize];
+                void** pNewNodes = new PVOID[nNewSize];
                 memcpy( pNewNodes, pNodes+nMiddle, nCount*sizeof(PVOID) );
-                delete pNodes;
+                delete[] pNodes;
                 pNodes = pNewNodes;
                 nSize = nNewSize;
             }
@@ -429,7 +429,7 @@ void* CBlock::Remove( USHORT nIndex, USHORT nReSize )
     {
         // Neue Daten anlegen
         nSize -= nReSize;
-        void** pNewNodes = (void**)new PVOID[nSize];
+        void** pNewNodes = new PVOID[nSize];
 
         // Wird letzter Eintrag geloescht
         if ( nIndex == nCount )
@@ -446,7 +446,7 @@ void* CBlock::Remove( USHORT nIndex, USHORT nReSize )
         }
 
         // Alte Daten loeschen und neue setzen
-        delete pNodes;
+        delete[] pNodes;
         pNodes = pNewNodes;
     }
     else
@@ -536,7 +536,7 @@ void CBlock::SetSize( USHORT nNewSize )
         // Altes Array loeschen und neue Werte setzen
         nSize  = nNewSize;
         nCount = nSize;
-        delete pNodes;
+        delete[] pNodes;
         pNodes = pNewNodes;
     }
 }
