@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-16 14:26:31 $
+ *  last change: $Author: os $ $Date: 2001-01-22 09:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,11 +272,11 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
             {
                 if ( pBasOpt->IsLoadPPointBasicCode() )
                     nFilterOptions |= 1;
-                if ( pBasOpt->IsMathType2StarMath() )
+                if ( pBasOpt->IsMathType2Math() )
                     nSvxMSDffOLEConvFlags |= OLE_MATHTYPE_2_STARMATH;
-                if ( pBasOpt->IsWinWord2StarWriter() )
+                if ( pBasOpt->IsWinWord2Writer() )
                     nSvxMSDffOLEConvFlags |= OLE_WINWORD_2_STARWRITER;
-                if ( pBasOpt->IsExcel2StarCalc() )
+                if ( pBasOpt->IsExcel2Calc() )
                     nSvxMSDffOLEConvFlags |= OLE_EXCEL_2_STARCALC;
             }
         }
