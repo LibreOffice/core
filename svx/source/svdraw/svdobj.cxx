@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:32:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,6 +1254,23 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// ObjectUser section
+
+void SdrObject::AddObjectUser(sdr::ObjectUser& rNewUser)
+{
+    maObjectUsers.push_back(&rNewUser);
+}
+
+void SdrObject::RemoveObjectUser(sdr::ObjectUser& rOldUser)
+{
+    const ::sdr::ObjectUserVector::iterator aFindResult = ::std::find(maObjectUsers.begin(), maObjectUsers.end(), &rOldUser);
+    if(aFindResult != maObjectUsers.end())
+    {
+        maObjectUsers.erase(aFindResult);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 // #110094# DrawContact section
 
 sdr::contact::ViewContact* SdrObject::CreateObjectSpecificViewContact()
@@ -1344,6 +1361,18 @@ SdrObject::SdrObject():
 
 SdrObject::~SdrObject()
 {
+    // tell all the registered ObjectUsers that the page is in destruction
+    for(::sdr::ObjectUserVector::iterator aIterator = maObjectUsers.begin(); aIterator != maObjectUsers.end(); aIterator++)
+    {
+        sdr::ObjectUser* pObjectUser = *aIterator;
+        DBG_ASSERT(pObjectUser, "SdrObject::~SdrObject: corrupt ObjectUser list (!)");
+        pObjectUser->ObjectInDestruction(*this);
+    }
+
+    // Clear the vector. This means that user do not need to call RemoveObjectUser()
+    // when they get called from ObjectInDestruction().
+    maObjectUsers.clear();
+
     uno::Reference< lang::XComponent > xShape( mxUnoShape, uno::UNO_QUERY );
     if( xShape.is() )
         xShape->dispose();
@@ -1774,27 +1803,6 @@ void SdrObject::SetChanged()
     }
 }
 
-// To be able to handle the old pPaintProc mechanism ATM this wrapper
-// is used. If pPaintProc is used, call it. Else, call the old ObjectPaint.
-// This method is to be used only from the new painting mechanisms in sdr::contact::
-// implementations.
-sal_Bool SdrObject::DoPaintObject_Wrapper(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-{
-    if(rInfoRec.pPaintProc)
-    {
-        // call the link
-        SdrPaintProcRec aRec((SdrObject*)this, rXOut, rInfoRec);
-        Link aLink(*rInfoRec.pPaintProc);
-        aLink.Call(&aRec);
-        return sal_True;
-    }
-    else
-    {
-        // call normal old object paint
-        return DoPaintObject(rXOut, rInfoRec);
-    }
-}
-
 sal_Bool SdrObject::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     Color aRedColor( COL_RED );
@@ -1809,15 +1817,6 @@ sal_Bool SdrObject::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec&
 // Tooling for painting a single object to a OutputDevice.
 sal_Bool SdrObject::SingleObjectPainter(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec)
 {
-    // To avoid recursive calls do not allow the SIngleObjectPainter to
-    // use a PaintProc itself.
-    const Link* pRememberedPaintProc = rInfoRec.pPaintProc;
-    if(pRememberedPaintProc)
-    {
-        // forget PaintProc
-        ((SdrPaintInfoRec&)rInfoRec).pPaintProc = 0L;
-    }
-
     sdr::contact::SdrObjectVector aObjectVector;
     aObjectVector.push_back(this);
 
@@ -1836,12 +1835,6 @@ sal_Bool SdrObject::SingleObjectPainter(ExtOutputDevice& rXOut, const SdrPaintIn
 
     // prepare delete
     aPainter.PrepareDelete();
-
-    if(pRememberedPaintProc)
-    {
-        // restore PaintProc
-        ((SdrPaintInfoRec&)rInfoRec).pPaintProc = pRememberedPaintProc;
-    }
 
     return sal_True;
 }
