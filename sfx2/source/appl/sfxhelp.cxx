@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-20 05:51:14 $
+ *  last change: $Author: pb $ $Date: 2000-12-20 16:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #include "sfxsids.hrc"
@@ -211,10 +214,13 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         if ( !xFrame.is() )
             // must be created on dispatch
             nFlag |= FrameSearchFlag::CREATE;
+        // encode the help URL because it is a parameter of another URL
+        String aEncodedURL = INetURLObject::encode(
+            aHelpURL, INetURLObject::PART_MAILTO, '%', INetURLObject::ENCODE_ALL );
         String aURL;
         aURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
-        aURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex,HELP_Session_Mode=context,HELP_Url=");
-        aURL += aHelpURL;
+        aURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex&HELP_Session_Mode=context&HELP_Url=");
+        aURL += aEncodedURL;
         aURL += '&';
         aURL += DEFINE_CONST_UNICODE("HELP_User=");
         aURL += aUser;
