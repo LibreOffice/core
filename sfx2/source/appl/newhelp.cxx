@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-10 14:45:00 $
+ *  last change: $Author: pb $ $Date: 2000-12-10 16:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,14 @@
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 #include <ucbhelper/content.hxx>
 
@@ -142,6 +148,11 @@ using namespace com::sun::star::ucb;
 #define PROPERTY_KEYWORDREF     ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordRef"))
 #define HELP_URL                ::rtl::OUString(DEFINE_CONST_UNICODE("vnd.sun.star.help://"))
 #define HELP_SEARCH_TAG         ::rtl::OUString(DEFINE_CONST_UNICODE("/?Query="))
+
+#define PARSE_URL( aURL ) \
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( \
+            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY ); \
+    xTrans->parseStrict( aURL ) \
 
 // class ContentTabPage_Impl ---------------------------------------------
 
@@ -343,8 +354,8 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
     aSearchFT   ( this, ResId( FT_SEARCH ) ),
     aSearchED   ( this, ResId( ED_SEARCH ) ),
     aOperatorBtn( this, ResId( PB_OPERATOR ) ),
-    aResultFT   ( this, ResId( FT_RESULT ) ),
-    aResultLB   ( this, ResId( LB_RESULT ) ),
+    aResultsFT  ( this, ResId( FT_RESULT ) ),
+    aResultsLB  ( this, ResId( LB_RESULT ) ),
     aPreviousCB ( this, ResId( CB_PREVIOUS ) ),
     aMatchCB    ( this, ResId( CB_MATCH ) ),
     aTitleCB    ( this, ResId( CB_TITLE ) )
@@ -354,17 +365,31 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
 
 //! aOperatorBtn.SetSymbol( SYMBOL_SPIN_RIGHT );
 
-    String aText = aResultFT.GetText();
+    String aText = aResultsFT.GetText();
     aText.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), DEFINE_CONST_UNICODE(" ") );
     aText.SearchAndReplace( DEFINE_CONST_UNICODE("%2"), DEFINE_CONST_UNICODE("0") );
-    aResultFT.SetText( aText );
+    aResultsFT.SetText( aText );
+    aResultsFT.Hide();
     aOperatorBtn.SetClickHdl( LINK( this, SearchTabPage_Impl, SearchHdl ) );
 
     aMinSize = GetSizePixel();
 }
 
+// -----------------------------------------------------------------------
+
+void SearchTabPage_Impl::ClearSearchResults()
+{
+    USHORT nCount = aResultsLB.GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
+        delete (String*)(ULONG)aResultsLB.GetEntryData(i);
+    aResultsLB.Clear();
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 {
+    ClearSearchResults();
     String aSearchURL( HELP_URL );
     aSearchURL += aFactory;
     aSearchURL += String( HELP_SEARCH_TAG );
@@ -376,12 +401,13 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
     for ( i = 0; i < nCount; ++i )
     {
         String aRow( pFacs[i] );
-        String aTitle, aType, aURL;
+        String aTitle, aType;
         xub_StrLen nIdx = 0;
         aTitle = aRow.GetToken( 0, '\t', nIdx );
         aType = aRow.GetToken( 0, '\t', nIdx );
-        aURL = aRow.GetToken( 0, '\t', nIdx );
-        aResultLB.InsertEntry( aTitle );
+        String* pURL = new String( aRow.GetToken( 0, '\t', nIdx ) );
+        USHORT nPos = aResultsLB.InsertEntry( aTitle );
+        aResultsLB.SetEntryData( nPos, (void*)(ULONG)pURL );
     }
     return 0;
 }
@@ -397,12 +423,12 @@ void SearchTabPage_Impl::Resize()
         Size aNewSize = aSearchFT.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
         aSearchFT.SetSizePixel( aNewSize );
-        aResultFT.SetSizePixel( aNewSize );
+        aResultsFT.SetSizePixel( aNewSize );
         aPreviousCB.SetSizePixel( aNewSize );
         aMatchCB.SetSizePixel( aNewSize );
         aTitleCB.SetSizePixel( aNewSize );
-        aNewSize.Height() = aResultLB.GetSizePixel().Height();
-        aResultLB.SetSizePixel( aNewSize );
+        aNewSize.Height() = aResultsLB.GetSizePixel().Height();
+        aResultsLB.SetSizePixel( aNewSize );
 
         aNewSize = aSearchED.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
@@ -419,11 +445,11 @@ void SearchTabPage_Impl::Resize()
         long nH = aPreviousCB.GetSizePixel().Height();
         nH *= 3;
         nH += ( aPnt.Y() * 5 / 2 );
-        aPnt = aResultLB.GetPosPixel();
-        Size aOldSize = aResultLB.GetSizePixel();
+        aPnt = aResultsLB.GetPosPixel();
+        Size aOldSize = aResultsLB.GetSizePixel();
         Size aNewSize = aOldSize;
         aNewSize.Height() = aSize.Height() - aPnt.Y() - nH;
-        aResultLB.SetSizePixel( aNewSize );
+        aResultsLB.SetSizePixel( aNewSize );
         long nDeltaH = aNewSize.Height() - aOldSize.Height();
         aPnt = aPreviousCB.GetPosPixel();
         aPnt.Y() += nDeltaH;
@@ -435,6 +461,13 @@ void SearchTabPage_Impl::Resize()
         aPnt.Y() += nDeltaH;
         aTitleCB.SetPosPixel( aPnt );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
+{
+    aResultsLB.SetDoubleClickHdl( rLink );
 }
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
@@ -614,6 +647,9 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
     if ( !pIPage )
         pIPage = new IndexTabPage_Impl( &aTabCtrl );
     pIPage->SetDoubleClickHdl( rLink );
+    if ( !pSPage )
+        pSPage = new SearchTabPage_Impl( &aTabCtrl );
+    pSPage->SetDoubleClickHdl( rLink );
 }
 
 // -----------------------------------------------------------------------
@@ -840,6 +876,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
                 aURL.Complete = HELP_URL;
                 aURL.Complete += pIndexWin->GetFactory();
                 aURL.Complete += DEFINE_CONST_UNICODE("/start");
+                PARSE_URL( aURL );
                 String aTarget( DEFINE_CONST_UNICODE("_self") );
                 Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
                 Reference < XDispatch > xDisp = xProv.is() ?
@@ -862,6 +899,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
                 aURL.Complete = DEFINE_CONST_UNICODE(".uno:Backward");
                 if ( TBI_FORWARD == nId )
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:Forward");
+                PARSE_URL( aURL );
                 pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
                 break;
             }
@@ -876,6 +914,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
                 {
                     URL aURL;
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:Print");
+                    PARSE_URL( aURL );
                     Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, String(), 0 );
                     if ( xDisp.is() )
                         xDisp->dispatch( aURL, Sequence < PropertyValue >() );
@@ -895,11 +934,18 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
     String* pData = (String*)(ULONG)pBox->GetEntryData( pBox->GetSelectEntryPos() );
     if ( pData )
     {
+        String aEntry( *pData );
+        INetURLObject aObj( aEntry );
+        if ( aObj.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
+        {
+            aEntry = HELP_URL;
+            aEntry += pIndexWin->GetFactory();
+            aEntry += '/';
+            aEntry += *pData;
+        }
         URL aURL;
-        aURL.Complete = HELP_URL;
-        aURL.Complete += pIndexWin->GetFactory();
-        aURL.Complete += ::rtl::OUString( '/' );
-        aURL.Complete += *pData;
+        aURL.Complete = aEntry;
+        PARSE_URL( aURL );
         Reference < XDispatch > xDisp = pHelpInterceptor->queryDispatch( aURL, String(), 0 );
         if ( xDisp.is() )
             xDisp->dispatch( aURL, Sequence < PropertyValue >() );

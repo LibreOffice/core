@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-10 14:24:07 $
+ *  last change: $Author: pb $ $Date: 2000-12-10 16:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,26 +123,29 @@ public:
 class SearchTabPage_Impl : public TabPage
 {
 private:
-    FixedText   aSearchFT;
-    ComboBox    aSearchED;
-    PushButton  aOperatorBtn;
-    FixedText   aResultFT;
-    ListBox     aResultLB;
-    CheckBox    aPreviousCB;
-    CheckBox    aMatchCB;
-    CheckBox    aTitleCB;
+    FixedText           aSearchFT;
+    ComboBox            aSearchED;
+    PushButton          aOperatorBtn;
+    FixedText           aResultsFT;
+    ListBox             aResultsLB;
+    CheckBox            aPreviousCB;
+    CheckBox            aMatchCB;
+    CheckBox            aTitleCB;
 
-    Size        aMinSize;
-    String      aFactory;
+    Size                aMinSize;
+    String              aFactory;
 
-    DECL_LINK(  SearchHdl, PushButton* );
+    void                ClearSearchResults();
+
+    DECL_LINK(          SearchHdl, PushButton* );
 
 public:
     SearchTabPage_Impl( Window* pParent );
 
-    virtual void    Resize();
+    virtual void        Resize();
 
-    void            SetFactory( const String& rFactory ) { aFactory = rFactory; }
+    void                SetDoubleClickHdl( const Link& rLink );
+    void                SetFactory( const String& rFactory ) { aFactory = rFactory; }
 };
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
