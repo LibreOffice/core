@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-27 11:34:50 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _SVX_COLRCTRL_HXX //autogen
 #include <svx/colrctrl.hxx>
+#endif
+#ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
+#include <svx/verttexttbxctrl.hxx>
 #endif
 #ifndef _SVX_DLG_HYPERLINK_HXX //autogen
 #include <offmgr/hyprlink.hxx>
@@ -230,6 +233,10 @@ void SdDLL::RegisterControllers()
     SvxGrafContrastToolBoxControl::RegisterControl( SID_ATTR_GRAF_CONTRAST, pMod );
     SvxGrafGammaToolBoxControl::RegisterControl( SID_ATTR_GRAF_GAMMA, pMod );
     SvxGrafTransparenceToolBoxControl::RegisterControl( SID_ATTR_GRAF_TRANSPARENCE, pMod );
+    SvxVertTextTbxCtrl::RegisterControl(SID_TEXTDIRECTION_TOP_TO_BOTTOM, pMod);
+    SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_CAPTION_VERTICAL, pMod);
+    SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_TEXT_VERTICAL, pMod);
+    SvxVertTextTbxCtrl::RegisterControl(SID_TEXT_FITTOSIZE_VERTICAL, pMod);
 
     // StatusBarControls registrieren
     SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pMod );
