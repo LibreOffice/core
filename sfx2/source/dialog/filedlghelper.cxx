@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-04 13:05:43 $
+ *  last change: $Author: thb $ $Date: 2001-10-08 11:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,7 +747,10 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
             Rectangle aSrcRect( 0, 0, nBmpWidth, nBmpHeight );
             Rectangle aDstRect( nMidX, nMidY, nMidX + nBmpWidth, nMidY + nBmpHeight );
 
-            Bitmap aScaledBmp( Size( nOutWidth, nOutHeight ), aBmp.GetBitCount() );
+            // #92765# Have to conserve bitmap palette. There is no method setting it explicitely,
+            // thus doing it this way. Performance penalty is low, as bitmap is refcounted.
+            Bitmap aScaledBmp( aBmp );
+            aScaledBmp.SetSizePixel( Size(nOutWidth, nOutHeight) );
             aScaledBmp.Erase( Color( COL_WHITE ) );
             aScaledBmp.CopyPixel( aDstRect, aSrcRect, &aBmp );
 
