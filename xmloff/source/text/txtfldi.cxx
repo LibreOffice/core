@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:31 $
+ *  last change: $Author: thb $ $Date: 2001-09-20 07:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2385,11 +2385,11 @@ void XMLFileNameImportContext::PrepareField(
     Reference<XPropertySetInfo> xPropertySetInfo(
         xPropertySet->getPropertySetInfo());
 
-//  if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
-//  {
-//      aAny <<= bFixed;
-//      xPropertySet->setPropertyValue(sPropertyFixed, aAny);
-//  }
+     if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
+     {
+         aAny <<= bFixed;
+         xPropertySet->setPropertyValue(sPropertyFixed, aAny);
+     }
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyFileFormat))
     {
