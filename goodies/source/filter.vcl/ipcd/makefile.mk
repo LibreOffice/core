@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sj $ $Date: 2001-05-28 17:46:09 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 15:46:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,9 +75,7 @@ PROJECTPCHSOURCE=eeng_pch
 
 .IF "$(VCL)" != ""
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Allgemein ----------------------------------------------------------
 
@@ -102,65 +100,21 @@ SHL1OBJS=       $(SLO)$/ipcd.obj
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1BASE=0x1c000000
 
-.IF "$(depend)" == ""
+.INCLUDE :  target.mk
 
-all:    ALLTAR
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(SHL1TARGET).def:\
-    makefile.mk \
-    $(MISC)$/$(SHL1TARGET).flt
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-.IF "$(COM)"!="WTC"
-    @echo LIBRARY     $(DLLNAME) INITINSTANCE TERMINSTANCE           >$@
-    @echo DESCRIPTION 'StarView Filter DLL'                         >>$@
-.IF "$(COM)" == "ZTC"
-    @echo STUB        'os2STUB.EXE'                                 >>$@
-.ENDIF
-    @echo PROTMODE                                                  >>$@
-    @echo CODE        LOADONCALL                                    >>$@
-    @echo DATA        PRELOAD MULTIPLE NONSHARED                    >>$@
-    @echo EXPORTS                                                   >>$@
-.IF "$(COM)"=="ICC"
-    @echo    GraphicImport                                         	>>$@
-.ELSE
-    @echo    _GraphicImport                                         >>$@
-.ENDIF
-.ELSE
-    @echo option DESCRIPTION 'StarView Filter DLL'                   >$@
-    @echo name $(BIN)$/$(SHL1TARGET)    			                    >>$@
-    @echo    GraphicImport_  >>temp.def
-    @gawk -f s:\util\exp.awk temp.def                               >>$@
-    @del temp.def
-.ENDIF
-.ENDIF
 
 .IF "$(GUI)"=="WNT"
 
 $(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
     @echo -------------------------------------------
     @echo DEF-File erstellen
-        @echo LIBRARY     $(DLLNAME)                   >$@
-        @echo DESCRIPTION 'Svx RTF DLL'                >>$@
-        @echo DATA                READ WRITE NONSHARED >>$@
-        @echo EXPORTS                                  >>$@
-        @echo     GraphicImport                        >>$@
+    @echo LIBRARY     $(DLLNAME)                   >$@
+    @echo DESCRIPTION 'Svx RTF DLL'                >>$@
+    @echo DATA                READ WRITE NONSHARED >>$@
+    @echo EXPORTS                                  >>$@
+    @echo     GraphicImport                        >>$@
 
 .ENDIF
-
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-
-
-.ENDIF
-
-.INCLUDE :  target.mk
 
 .ELSE
 dummy:
