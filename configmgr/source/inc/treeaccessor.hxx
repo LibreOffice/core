@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeaccessor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,10 @@ namespace configmgr
             Attributes getAttributes() const { return data().getAttributes(); }
             Name getName() const;
 
-            NodeAccess getRootNode() const { return NodeAccess(m_aAccessor,rootAddress(m_pBase)); }
+            NodeAccessRef getRootNode() const { return NodeAccessRef(&m_aAccessor,rootAddress(m_pBase)); }
 
             DataAddressType address() const { return m_pBase; }
-            Accessor        accessor() const { return m_aAccessor; }
+            Accessor const& accessor() const { return m_aAccessor; }
 
             DataType& data() const { return *static_cast<DataPointerType>(m_aAccessor.validate(m_pBase.m_pData)); }
             DataPointerType getDataPtr() const { return access(m_pBase,m_aAccessor); }
