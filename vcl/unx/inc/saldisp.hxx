@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:30:34 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 12:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@ class   SalBitmapList;
 #ifndef _SV_PTRSTYLE_HXX
 #include <ptrstyle.hxx>
 #endif
-
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   BitmapPalette;
 class   SalImage;
@@ -583,7 +585,7 @@ extern "C" {
 
 void    MarkWindowAsBadPositioned  ( unsigned int nWindow );
 void    MarkWindowAsGoodPositioned ( unsigned int nWindow );
-Bool WindowNeedGoodPosition     ( unsigned int nWindow );
+sal_Bool WindowNeedGoodPosition     ( unsigned int nWindow );
 
 } /* extern "C" */
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:30:58 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 12:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,9 @@ extern "C" { int gethostname(char*,int); }
 #include <postx.h>
 
 #include <salunx.h>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
@@ -1361,10 +1364,10 @@ MarkWindowAsGoodPositioned( unsigned int nWindow )
         nRefWindow = 0;
 }
 
-Boolean
+sal_Bool
 WindowNeedGoodPosition( unsigned int nWindow )
 {
-    return (Boolean) nWindow == nRefWindow;
+    return (sal_Bool) nWindow == nRefWindow;
 }
 
 // Sound
