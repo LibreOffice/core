@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:04:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,7 @@ BOOL SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) con
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
         {
-            sal_Bool bSet = GetType() == so3::LINKUPDATE_ALWAYS ? TRUE : FALSE;
+            sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? TRUE : FALSE;
             rVal.setValue(&bSet, ::getBooleanCppuType());
         }
         break;
@@ -412,7 +412,7 @@ BOOL SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) con
         DBG_ERROR("illegal property");
     }
     if( nPart )
-        rVal <<= OUString(GetCmd().GetToken(nPart-1, so3::cTokenSeperator));
+        rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
     return TRUE;
 }
 /* -----------------------------28.08.00 16:23--------------------------------
@@ -428,8 +428,8 @@ BOOL SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId )
     case FIELD_PROP_PAR4:      nPart = 2; break;
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
-        SetType( *(sal_Bool*)rVal.getValue() ? so3::LINKUPDATE_ALWAYS
-                                             : so3::LINKUPDATE_ONCALL );
+        SetType( *(sal_Bool*)rVal.getValue() ? sfx2::LINKUPDATE_ALWAYS
+                                             : sfx2::LINKUPDATE_ONCALL );
         break;
     default:
         DBG_ERROR("illegal property");
@@ -437,9 +437,9 @@ BOOL SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId )
     if( nPart )
     {
         String sTmp, sCmd( GetCmd() );
-        while(3 > sCmd.GetTokenCount(so3::cTokenSeperator))
-            sCmd += so3::cTokenSeperator;
-        sCmd.SetToken( nPart-1, so3::cTokenSeperator, ::GetString( rVal, sTmp ) );
+        while(3 > sCmd.GetTokenCount(sfx2::cTokenSeperator))
+            sCmd += sfx2::cTokenSeperator;
+        sCmd.SetToken( nPart-1, sfx2::cTokenSeperator, ::GetString( rVal, sTmp ) );
         SetCmd( sCmd );
     }
     return TRUE;
