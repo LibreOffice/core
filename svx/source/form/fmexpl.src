@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:26:42 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,6 +964,22 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hindi ] = "रचना किया हु~आ क्षेत्र";
             Text[ slovak ] = "Fo~rmátované pole";
         };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_SCROLLBAR ;
+            HelpID = SID_FM_CONVERTTO_SCROLLBAR ;
+            Text = "Bildlaufleiste" ;
+            Text [ english ] = "Scroll bar" ;
+            Text [ english_us ] = "Scroll bar";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_SPINBUTTON;
+            HelpID = SID_FM_CONVERTTO_SPINBUTTON;
+            Text = "Drehfeld" ;
+            Text [ english ] = "Spin Button" ;
+            Text [ english_us ] = "Spin Button";
+        };
     };
 };
 
@@ -998,8 +1014,10 @@ Menu RID_FMSHELL_CONVERSIONMENU
         RID_SVXIMG_FORMATTEDFIELD ; \
         RID_SVXIMG_DATE_N_TIME_FIELDS ; \
         RID_SVXIMG_FIELD ; \
+        RID_SVXIMG_SCROLLBAR; \
+        RID_SVXIMG_SPINBUTTON; \
     }; \
-    IdCount = 28
+    IdCount = 30
 
 ImageList RID_SVXIMGLIST_FMEXPL
 {
