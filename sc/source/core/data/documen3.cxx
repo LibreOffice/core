@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:22:05 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,14 +1477,12 @@ Rectangle ScDocument::GetEmbeddedRect() const                       // 1/100 mm
 
         for (i=0; i<aEmbedRange.aStart.Col(); i++)
             aRect.Left() += pTable->GetColWidth(i);
-        for (j=0; j<aEmbedRange.aStart.Row(); j++)
-            aRect.Top() += pTable->GetRowHeight(j);
+        aRect.Top() += pTable->GetRowHeight( 0, aEmbedRange.aStart.Row() - 1);
         aRect.Right() = aRect.Left();
         for (i=aEmbedRange.aStart.Col(); i<=aEmbedRange.aEnd.Col(); i++)
             aRect.Right() += pTable->GetColWidth(i);
         aRect.Bottom() = aRect.Top();
-        for (j=aEmbedRange.aStart.Row(); j<=aEmbedRange.aEnd.Row(); j++)
-            aRect.Bottom() += pTable->GetRowHeight(j);
+        aRect.Bottom() += pTable->GetRowHeight( aEmbedRange.aStart.Row(), aEmbedRange.aEnd.Row());
 
         aRect.Left()   = (long) ( aRect.Left()   * HMM_PER_TWIPS );
         aRect.Right()  = (long) ( aRect.Right()  * HMM_PER_TWIPS );
@@ -1562,34 +1560,46 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
     nTwips = (long) (aPosRect.Top() / HMM_PER_TWIPS);
 
     SCROW nY1 = 0;
+    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+            *(pTable->GetRowFlagsArray()), nY1, MAXROW, CR_HIDDEN, 0,
+            *(pTable->GetRowHeightArray()));
     bEnd = FALSE;
-    while (!bEnd)
+    while (!bEnd && aIter)
     {
-        nAdd = (long) pTable->GetRowHeight(nY1);
+        nY1 = aIter.GetPos();
+        nAdd = (long) *aIter;
         if (nSize+nAdd <= nTwips+1 && nY1<MAXROW)
         {
             nSize += nAdd;
             ++nY1;
+            ++aIter;
         }
         else
             bEnd = TRUE;
     }
+    if (!aIter)
+        nY1 = aIter.GetIterEnd();   // all hidden down to the bottom
 
     nTwips = (long) (aPosRect.Bottom() / HMM_PER_TWIPS);
 
     SCROW nY2 = nY1;
+    aIter.NewLimits( nY2, MAXROW);
     bEnd = FALSE;
-    while (!bEnd)
+    while (!bEnd && aIter)
     {
-        nAdd = (long) pTable->GetRowHeight(nY2);
+        nY2 = aIter.GetPos();
+        nAdd = (long) *aIter;
         if (nSize+nAdd < nTwips && nY2<MAXROW)
         {
             nSize += nAdd;
             ++nY2;
+            ++aIter;
         }
         else
             bEnd = TRUE;
     }
+    if (!aIter)
+        nY2 = aIter.GetIterEnd();   // all hidden down to the bottom
 
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
 }
@@ -1627,17 +1637,24 @@ void lcl_SnapVer( ScTable* pTable, long& rVal, SCROW& rStartRow )
     SCROW nRow = 0;
     long nTwips = (long) (rVal / HMM_PER_TWIPS);
     long nSnap = 0;
-    while ( nRow<MAXROW )
+    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+            *(pTable->GetRowFlagsArray()), nRow, MAXROW, CR_HIDDEN, 0,
+            *(pTable->GetRowHeightArray()));
+    while ( aIter )
     {
-        long nAdd = pTable->GetRowHeight(nRow);
+        nRow = aIter.GetPos();
+        long nAdd = *aIter;
         if ( nSnap + nAdd/2 < nTwips || nRow < rStartRow )
         {
             nSnap += nAdd;
             ++nRow;
+            ++aIter;
         }
         else
             break;
     }
+    if (!aIter)
+        nRow = MAXROW;  // all hidden down to the bottom
     rVal = (long) ( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;
 }
@@ -1789,16 +1806,14 @@ Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow,
 
     for (i=0; i<nStartCol; i++)
         aRect.Left() += GetColWidth(i,nTab);
-    for (j=0; j<nStartRow; j++)
-        aRect.Top() += FastGetRowHeight(j,nTab);
+    aRect.Top() += FastGetRowHeight( 0, nStartRow-1, nTab);
 
     aRect.Right()  = aRect.Left();
     aRect.Bottom() = aRect.Top();
 
     for (i=nStartCol; i<=nEndCol; i++)
         aRect.Right() += GetColWidth(i,nTab);
-    for (j=nStartRow; j<=nEndRow; j++)
-        aRect.Bottom() += FastGetRowHeight(j,nTab);
+    aRect.Bottom() += FastGetRowHeight( nStartRow, nEndRow, nTab);
 
     aRect.Left()    = (long)(aRect.Left()   * HMM_PER_TWIPS);
     aRect.Right()   = (long)(aRect.Right()  * HMM_PER_TWIPS);
