@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandcontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:48:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,36 +65,50 @@
 #ifndef _DBA_CORE_DEFINITIONCONTAINER_HXX_
 #include "definitioncontainer.hxx"
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
-
+typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XSingleServiceFactory > OCommandContainer_BASE;
 //==========================================================================
 //= OCommandContainer - collection of command descriptions
 //==========================================================================
 
-class OCommandContainer :public ODefinitionContainer
+class OCommandContainer : public ODefinitionContainer
+                         ,public OCommandContainer_BASE
 {
+    sal_Bool m_bTables;
 public:
     /** constructs the container.<BR>
-        @param      _rParent                the parent object which is used for ref counting
-        @param      _rMutex                 the parent's mutex object for access safety
     */
     OCommandContainer(
-        ::cppu::OWeakObject& _rParent,
-        ::osl::Mutex& _rMutex
+         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
+        ,const TContentPtr& _pImpl
+        ,sal_Bool _bTables = sal_True
         );
+
+    // ::com::sun::star::uno::XInterface
+    DECLARE_XINTERFACE( )
+// com::sun::star::lang::XTypeProvider
+    DECLARE_TYPEPROVIDER( );
+
+    // ::com::sun::star::lang::XSingleServiceFactory
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+protected:
     virtual ~OCommandContainer();
 
-protected:
+
 // ODefinitionContainer
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createObject(
-        const ::rtl::OUString& _rName,
-        const ::utl::OConfigurationNode& _rObjectNode
-    );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createObject();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(const ::rtl::OUString& _rName);
 };
 
 //........................................................................
