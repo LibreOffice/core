@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:36:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,6 +425,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
 void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
+                    XMLTokenEnum ePropToken,
                     sal_uInt16 nFlags ) const
 {
     SvUShorts aIndexArray;
@@ -441,7 +442,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
             rExport.IgnorableWhitespace();
         }
 
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_PROPERTIES,
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, ePropToken,
                                   sal_False, sal_False );
         exportElementItems( rExport, rUnitConverter,
                             rSet, nFlags, aIndexArray );
