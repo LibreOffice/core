@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 10:31:56 $
+#   last change: $Author: nf $ $Date: 2001-04-18 10:33:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-PRJ=.
+PRJ=..$/..
 
 TARGETTYPE=CUI
 TARGETTHREAD=ST
