@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 15:45:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@ namespace dbaccess
                             ,const connectivity::OSQLTable& _xTable
                             ,::rtl::OUString& _sCondition
                             ,::rtl::OUString& _sParameter
-                            ,::std::vector<sal_Bool>& _rSignedValues
                             ,::std::list< sal_Int32>& _rOrgValues);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
