@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventOASISTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:21:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,8 @@ bool ParseURL(
 void XMLEventOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
+    OSL_TRACE("XMLEventOASISTransformerContext::StartElement");
+
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_EVENT_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
