@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:31:50 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,11 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data oor:name="Compatibility" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="WriterCompatibilityVersion">
+        <prop oor:name="OOo11" oor:type="xs:string">
+            <value>StarOffice 6.0/7</value>
+        </prop>
+    </node>
     <node oor:name="AllFileFormats">
         <node oor:name="_default" oor:op="replace">
             <prop oor:name="Module">
@@ -70,10 +75,10 @@
                 <value>false</value>
             </prop>
             <prop oor:name="AddSpacing">
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="AddSpacingAtPages">
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="UseOurTabStopFormat">
                 <value>false</value>
@@ -85,12 +90,15 @@
                 <value>false</value>
             </prop>
             <prop oor:name="AddTableSpacing">
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="UseObjectPositioning">
                 <value>false</value>
             </prop>
             <prop oor:name="UseOurTextWrapping">
+                <value>false</value>
+            </prop>
+            <prop oor:name="ConsiderWrappingStyle">
                 <value>false</value>
             </prop>
         </node>
@@ -102,10 +110,10 @@
                 <value>false</value>
             </prop>
             <prop oor:name="AddSpacing">
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="AddSpacingAtPages">
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="UseOurTabStopFormat">
                 <value>false</value>
@@ -117,12 +125,15 @@
                 <value>false</value>
             </prop>
             <prop oor:name="AddTableSpacing">
-                <value>false</value>
+                <value>true</value>
             </prop>
             <prop oor:name="UseObjectPositioning">
                 <value>false</value>
             </prop>
             <prop oor:name="UseOurTextWrapping">
+                <value>false</value>
+            </prop>
+            <prop oor:name="ConsiderWrappingStyle">
                 <value>false</value>
             </prop>
         </node>
