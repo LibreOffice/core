@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlkywd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-22 14:14:38 $
+ *  last change: $Author: mib $ $Date: 2001-11-12 17:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_beta, "beta" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_bull, "bull" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_cap, "cap" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_chi, "chi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Chi, "Chi" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_circ, "circ" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_clubs, "clubs" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_cong, "cong" );
