@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:35:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,30 +451,36 @@ void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& e ) throw (R
 // XMouseListener implementation
 void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    if( !mpSlideShow->isInputFreezed() )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
 
-    // Change event source, to enable listeners to match event
-    // with view
-    WrappedMouseEvent aEvent;
-    aEvent.meType = WrappedMouseEvent::PRESSED;
-    aEvent.maEvent = e;
-    aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
+        // Change event source, to enable listeners to match event
+        // with view
+        WrappedMouseEvent aEvent;
+        aEvent.meType = WrappedMouseEvent::PRESSED;
+        aEvent.maEvent = e;
+        aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    mpMouseListeners->notify( aEvent );
+        mpMouseListeners->notify( aEvent );
+    }
 }
 
 void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    if( !mpSlideShow->isInputFreezed() )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
 
-    // Change event source, to enable listeners to match event
-    // with view
-    WrappedMouseEvent aEvent;
-    aEvent.meType = WrappedMouseEvent::RELEASED;
-    aEvent.maEvent = e;
-    aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
+        // Change event source, to enable listeners to match event
+        // with view
+        WrappedMouseEvent aEvent;
+        aEvent.meType = WrappedMouseEvent::RELEASED;
+        aEvent.maEvent = e;
+        aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    mpMouseListeners->notify( aEvent );
+        mpMouseListeners->notify( aEvent );
+    }
 }
 
 void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e ) throw (uno::RuntimeException)
