@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 10:56:39 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,11 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #endif
-#ifndef _SFX_PASSWD_HXX
-#include <sfx2/passwd.hxx>
+#ifndef _UCBHELPER_INTERATIONREQUEST_HXX
+#include <ucbhelper/interactionrequest.hxx>
+#endif
+#ifndef _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
+#include <ucbhelper/simpleauthenticationrequest.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -116,13 +119,94 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SFX_PASSWD_HXX
+#include <sfx2/passwd.hxx>
+#endif
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::task;
 using namespace dbaui;
+using namespace ucbhelper;
+using namespace comphelper;
+
+
+class OPasswordDialog : public ModalDialog
+{
+    FixedLine       aFLUser;
+    FixedText       aFTOldPassword;
+    Edit            aEDOldPassword;
+    FixedText       aFTPassword;
+    Edit            aEDPassword;
+    FixedText       aFTPasswordRepeat;
+    Edit            aEDPasswordRepeat;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
+
+
+    DECL_LINK( OKHdl_Impl, OKButton * );
+    DECL_LINK( ModifiedHdl, Edit * );
+
+public:
+    OPasswordDialog( Window* pParent,const String& _sUserName);
+
+    String          GetOldPassword() const { return aEDOldPassword.GetText(); }
+    String          GetNewPassword() const { return aEDPassword.GetText(); }
+};
+
+OPasswordDialog::OPasswordDialog(Window* _pParent,const String& _sUserName) :
+
+    ModalDialog( _pParent, ModuleRes( DLG_PASSWORD) ),
+
+    aFLUser             ( this, ResId( FL_USER ) ),
+    aFTOldPassword      ( this, ResId( FT_OLDPASSWORD ) ),
+    aEDOldPassword      ( this, ResId( ED_OLDPASSWORD ) ),
+    aFTPassword         ( this, ResId( FT_PASSWORD ) ),
+    aEDPassword         ( this, ResId( ED_PASSWORD ) ),
+    aFTPasswordRepeat   ( this, ResId( FT_PASSWORD_REPEAT ) ),
+    aEDPasswordRepeat   ( this, ResId( ED_PASSWORD_REPEAT ) ),
+    aOKBtn              ( this, ResId( BTN_PASSWORD_OK ) ),
+    aCancelBtn          ( this, ResId( BTN_PASSWORD_CANCEL ) ),
+    aHelpBtn            ( this, ResId( BTN_PASSWORD_HELP ) )
+{
+    // hide until a help is avalable
+    aHelpBtn.Hide();
+
+    FreeResource();
+    String sUser = aFLUser.GetText();
+    sUser.SearchAndReplaceAscii("$Name: not supported by cvs2svn $",_sUserName);
+    aFLUser.SetText(sUser);
+    aOKBtn.Disable();
+
+    aOKBtn.SetClickHdl( LINK( this, OPasswordDialog, OKHdl_Impl ) );
+    aEDOldPassword.SetModifyHdl( LINK( this, OPasswordDialog, ModifiedHdl ) );
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK( OPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+{
+    if( aEDPassword.GetText() == aEDPasswordRepeat.GetText() )
+        EndDialog( RET_OK );
+    else
+    {
+        String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
+        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
+        aErrorBox.Execute();
+        aEDPassword.SetText( String() );
+        aEDPasswordRepeat.SetText( String() );
+        aEDPassword.GrabFocus();
+    }
+    return 0;
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
+{
+    aOKBtn.Enable(pEdit->GetText().Len());
+    return 0;
+}
 
 DBG_NAME(OUserAdmin);
 //================================================================================
@@ -245,21 +329,24 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
         }
         else if(pButton == &m_PB_CHANGEPWD)
         {
-            String aName = GetUser();
+            String sName = GetUser();
 
-            SfxPasswordDialog aPwdDlg(this,&aName);
-            aPwdDlg.ShowExtras(SHOWEXTRAS_USER);
-            if(aPwdDlg.Execute())
+            if(m_xUsers->hasByName(sName))
             {
-                String sOldPwd = aPwdDlg.GetPassword();
-                SfxPasswordDialog aPwdDlg2(this,&aName);
-                aPwdDlg2.ShowExtras(SHOWEXTRAS_CONFIRM);
-                if(aPwdDlg2.Execute() && m_xUsers->hasByName(GetUser()))
+                Reference<XUser> xUser;
+                m_xUsers->getByName(sName) >>= xUser;
+                if(xUser.is())
                 {
-                    Reference<XUser> xUser;
-                    m_xUsers->getByName(GetUser()) >>= xUser;
-                    if(xUser.is())
-                        xUser->changePassword(sOldPwd.ToUpperAscii(),aPwdDlg.GetPassword().ToUpperAscii());
+                    ::rtl::OUString sNewPassword,sOldPassword;
+                    OPasswordDialog aDlg(this,sName);
+                    if(aDlg.Execute() == RET_OK)
+                    {
+                        sNewPassword = aDlg.GetNewPassword();
+                        sOldPassword = aDlg.GetOldPassword();
+
+                        if(sNewPassword.getLength())
+                            xUser->changePassword(sOldPassword,sNewPassword);
+                    }
                 }
             }
         }

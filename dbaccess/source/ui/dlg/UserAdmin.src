@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:53:15 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,5 +306,118 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message[ catalan ] = "Do you really want to delete the select user?";
 };
 
+#define EDIT_SIZE_X     50
+#define FT_SIZE_X       90
+#define WIN_X           220
+#define WIN_Y           72
 
+ModalDialog DLG_PASSWORD
+{
+    HelpId = HID_DLG_PASSWORD ;
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
+    Text = "Kennwort ‰ndern";
+    Text [ English ] = "Change password";
+
+    FixedLine FL_USER
+    {
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
+        Text = "Benutzer \"$Name: not supported by cvs2svn $\"" ;
+        Text [ English ] = "User \"$Name: not supported by cvs2svn $\"" ;
+    };
+
+    FixedText FT_OLDPASSWORD
+    {
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( FT_SIZE_X , 10 ) ;
+        Text = "Altes K~ennwort" ;
+        Text [ English ] = "old p~assword" ;
+    };
+    Edit ED_OLDPASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
+        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
+        PassWord = TRUE ;
+    };
+
+    FixedText FT_PASSWORD
+    {
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( FT_SIZE_X , 10 ) ;
+        Text = "~Kennwort" ;
+        Text [ English ] = " ~password" ;
+        Text[ english_us ] = " password";
+    };
+    Edit ED_PASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 34 ) ;
+        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
+        PassWord = TRUE ;
+    };
+    FixedText FT_PASSWORD_REPEAT
+    {
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( FT_SIZE_X , 10 ) ;
+        Text = "Kennwort ~best‰tigen" ;
+        Text [ English ] = "~Confirm  password" ;
+        Text[ english_us ] = "~Confirm  password";
+        Text[ portuguese ] = "~Confirm  password";
+    };
+    Edit ED_PASSWORD_REPEAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 51 ) ;
+        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
+        PassWord = TRUE ;
+    };
+
+    OKButton BTN_PASSWORD_OK
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_PASSWORD_CANCEL
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_PASSWORD_HELP
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+String STR_ERROR_PASSWORDS_NOT_IDENTICAL
+{
+    Text = "Die beiden Kennwˆrter stimmen nicht ¸berein, bitte noch einmal eingeben!" ;
+    Text [ English ] = "Passwords are different, please enter again!" ;
+    Text[ english_us ] = "The passwords do not match. Please enter the password again.";
+    Text[ portuguese ] = "Passwords are different, please enter again!";
+    Text[ russian ] = "œ‡ÓÎË ÌÂ ÒÓ‚Ô‡‰‡˛Ú. œÓ‚ÚÓËÚÂ ‚‚Ó‰.";
+    Text[ greek ] = "Passwords are different, please enter again!";
+    Text[ dutch ] = "Passwords are different, please enter again!";
+    Text[ french ] = "Les deux mots de passe sont diffÈrents. RÈpÈtez la saisie !";
+    Text[ spanish ] = "Passwords are different, please enter again!";
+    Text[ finnish ] = "Passwords are different, please enter again!";
+    Text[ italian ] = "Le due password non coincidono. Digitate di nuovo la password.";
+    Text[ danish ] = "Passwords are different, please enter again!";
+    Text[ swedish ] = "De bÂda lˆsenorden st‰mmer inte ˆverens, mata in lˆsenordet igen!";
+    Text[ polish ] = "Podane has≥a nie zgadzajπ siÍ! Naleøy wpisaÊ je ponownie.";
+    Text[ portuguese_brazilian ] = "Passwords are different, please enter again!";
+    Text[ japanese ] = "ì¸óÕÇµÇΩÇQÇ¬ÇÃ ﬂΩ‹∞ƒﬁÇÕàÍívÇµÇ‹ÇπÇÒÅBÇ‡Ç§àÍìxì¸óÕÇµÇ»Ç®ÇµÇƒÇ≠ÇæÇ≥Ç¢ÅB";
+    Text[ korean ] = "Passwords are different, please enter again!";
+    Text[ chinese_simplified ] = "’‚¡Ω∏ˆ√‹¬Î≤ª“ª÷¬£¨«Î÷ÿ–¬ ‰»Î√‹¬Î£°";
+    Text[ chinese_traditional ] = "≥o®‚≠”±KΩX§£§@≠P°AΩ–≠´∑søÈ§J°I";
+    Text[ turkish ] = "Passwords are different, please enter again!";
+    Text[ arabic ] = "Passwords are different, please enter again!";
+    Text[ catalan ] = "Passwords are different, please enter again!";
+};
 
