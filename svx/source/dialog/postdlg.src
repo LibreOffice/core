@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:19:19 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 15:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,17 +152,17 @@ ModalDialog RID_SVXDLG_POSTIT
     MultiLineEdit ED_EDIT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 13 , 38 ) ;
-        Size = MAP_APPFONT ( 115 , 64 ) ;
+        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Size = MAP_APPFONT ( 123 , 72 ) ;
         Left = TRUE ;
         VScroll = TRUE ;
         HScroll = TRUE ;
         IgnoreTab = TRUE ;
     };
-    GroupBox GB_POSTIT
+    FixedLine FL_POSTIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 129 , 107 ) ;
+        Size = MAP_APPFONT ( 129 , 8 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 15:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     aLastEditFT     ( this, ResId( FT_LASTEDIT ) ),
     aEditFT         ( this, ResId( FT_EDIT ) ),
     aEditED         ( this, ResId( ED_EDIT ) ),
-    aPostItGB       ( this, ResId( GB_POSTIT ) ),
+    aPostItFL       ( this, ResId( FL_POSTIT ) ),
     aOKBtn          ( this, ResId( BTN_POST_OK ) ),
     aCancelBtn      ( this, ResId( BTN_POST_CANCEL ) ),
     aPrevBtn        ( this, ResId( BTN_PREV ) ),
