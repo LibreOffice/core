@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:04:08 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,7 +772,8 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
     }
     aOwnTypes.push_back(::getCppuType( (const Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
 
-    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
+    const Type* pAttrs = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
+    return Sequence< Type >(pAttrs, aOwnTypes.size());
 }
 
 // -------------------------------------------------------------------------
