@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:32:58 $
+ *  last change: $Author: kz $ $Date: 2002-02-19 21:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1319,7 +1319,7 @@ String STR_HELP_DEFAULT_VALUE
     Text[ chinese_simplified ] = "иЇ·ењЁж­¤дёєиї™дёЄе­—ж®µиѕ“е…ҐдёЂдёЄй»и®¤еЂјгЂ‚\n\nе¦‚жћњж‚Ёд»ҐеђЋењЁиЎЁж јдё­иѕ“е…Ґж•°жЌ®пјЊжЇЏдёЄж–°зљ„ж•°жЌ®жќЎз›®дјљй‡‡з”Ёиї™дёЄж•°жЌ®ж јејЏгЂ‚иї™ж ·зљ„и®ѕе®љеЏЇд»Ґж»Ўи¶ід»Ґдё‹зљ„еЌ•е…ѓж јж јејЏзљ„и¦Ѓж±‚гЂ‚";
     Text[ russian ] = "Задайте значение по умолчанию для этого поля.\n\nЕсли Вы позже введете данные в таблицу, то для текущего поля в каждой новой записи будет использоваться данная строка символов. Поэтому она должна соответствовать формату ячеек, вводимому ниже.";
     Text[ polish ] = "Naleїy podaж wartoњж domyњln№ pola.\n\nW trakcie pуџniejszego wpisywania danych do tabeli, dany ci№g znakуw uїyty zostanie w kaїdym nowym rekordzie odnoњnie aktualnego pola. Format ci№gu znakуw powinien zgadzaж siк z podanym poniїej formatem komуrek.";
-    Text[ japanese ] = "гЃ“гЃ“гЃ«гѓ•г‚Јгѓјгѓ«гѓ‰гЃ®жЁ™жє–еЂ¤г‚’е…ҐеЉ›гЃ—гЃѕгЃ™гЂ‚\n\nгЃ‚гЃЁгЃ‹г‚‰гѓ‡гѓјг‚їг‚’гѓ†гѓјгѓ–гѓ«гЃ«е…ҐеЉ›гЃ™г‚‹гЃЁгЂЃзЏѕењЁгЃ®гѓ•г‚Јгѓјгѓ«гѓ‰гЃ®ж–‡е­—е€—гЃЊж–°гЃ—гЃ„гѓ¬г‚ігѓјгѓ‰гЃ«дЅїг‚Џг‚ЊгЃѕгЃ™гЂ‚дё‹ж–№гЃ§е…ҐеЉ›гЃ™г‚‹г‚»гѓ«гЃ®ж›ёејЏгЃЁеђ€г‚ЏгЃ›гЃ¦гЃЉгЃЌгЃѕгЃ™гЂ‚";
+    Text[ japanese ] = "гЃ“гЃ“гЃ«гѓ•г‚Јгѓјгѓ«гѓ‰гЃ®жЁ™жє–еЂ¤г‚’е…ҐеЉ›гЃ—гЃѕгЃ™гЂ‚\n\nгЃ“гЃ®жЁ™жє–еЂ¤гЃЇгЂЃгѓ‡гѓјг‚їг‚’гѓ†гѓјгѓ–гѓ«гЃ«е…ҐеЉ›гЃ™г‚‹гЃЁе¤‰ж›ґгЃ§гЃЌгЃѕгЃ™гЂ‚жЁ™жє–еЂ¤гЃЇгЂЃдё‹гЃ§жЊ‡е®љгЃ™г‚‹г‚»гѓ«гЃ®ж›ёејЏгЃ«еЇѕеїњгЃ—гЃ¦гЃ„г‚‹еї…и¦ЃгЃЊгЃ‚г‚ЉгЃѕгЃ™гЂ‚";
     Text[ chinese_traditional ] = "и«‹ж‚Ёз‚єйЂ™еЂ‹ж¬„дЅЌијёе…ҐдёЂеЂ‹й»иЄЌеЂјгЂ‚\n\nењЁйЂ™еЂ‹ж¬„дЅЌд№‹дё‹ијёе…Ґе…¶д»–иі‡ж–™ж™‚е°±жњѓи‡Єе‹•жЋЎз”ЁйЂ™еЂ‹е„Іе­ж јзљ„ж јејЏгЂ‚";
     Text[ arabic ] = "ЗбСМЗБ ЕПОЗб ЮнгЙ ЗЭКСЗЦнЙ беРЗ ЗбНЮб.\n\nЪдПгЗ КЮжг ИЕПОЗб ИнЗдЗК Эн ЗбМПжб Эн жЮК бЗНЮЎ УжЭ нКг ЗУКОПЗг УбУбЙ ЗбГНСЭ еРе Эн Яб УМб МПнП.беРЗ";
     Text[ dutch ] = "Geef hier een standaardwaarde voor het veld aan.\n\nAls u dan later gegevens invoert in de tabel dan wordt deze tekenreeks in iedere nieuwe record gebruikt voor het actuele veld en moet corresponderen met de hierna te definiлren celopmaak.";
@@ -2182,7 +2182,7 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
             Text[ greek ] = "Е~сгблеЯб";
             Text[ polish ] = "~Narzкdzia";
             Text[ japanese ] = "гѓ„гѓјгѓ«(~T)";
-            Text[ korean ] = "мµм…(~T)";
+            Text[ korean ] = "лЏ„кµ¬(~T)";
             Text[ chinese_simplified ] = "е·Ґе…·(~T)";
             Text[ chinese_traditional ] = "е·Ґе…·(~T)";
             Text[ arabic ] = "Г~ПжЗК";
