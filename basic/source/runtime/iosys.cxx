@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: ab $ $Date: 2001-11-28 12:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ BOOL hasUno( void )
             Reference< XContentProviderManager > xManager( xSMgr->createInstance( ::rtl::OUString::createFromAscii
                     ( "com.sun.star.ucb.UniversalContentBroker" ) ), UNO_QUERY );
 
-            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString::createFromAscii( "file" ) ).is() ) )
+            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString::createFromAscii( "file:///" ) ).is() ) )
             {
                 // No UCB
                 bRetVal = FALSE;
