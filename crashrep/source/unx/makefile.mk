@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 14:11:19 $
+#   last change: $Author: vg $ $Date: 2003-07-11 13:59:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ CFLAGS+=`pkg-config --cflags gtk+-2.0`
 
 SOLARLIB!:=$(SOLARLIB:s/jre/jnore/)
 
+$(OBJ)$/main.obj: $(INCCOM)$/_version.h
 OBJFILES=\
     $(OBJ)$/interface.obj            \
     $(OBJ)$/res.obj                  \
