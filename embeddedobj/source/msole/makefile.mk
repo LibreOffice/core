@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mav $ $Date: 2003-11-28 18:04:04 $
+#   last change: $Author: mav $ $Date: 2003-12-02 14:33:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ SHL1TARGET= $(TARGET)
 SHL1IMPLIB= i$(TARGET)
 
 SLOFILES =  \
+        $(SLO)$/graphconvert.obj\
         $(SLO)$/closepreventer.obj\
         $(SLO)$/oleregister.obj\
         $(SLO)$/xolefactory.obj\
@@ -94,6 +95,7 @@ SLOFILES =  \
 
 
 EXCEPTIONSFILES= \
+        $(SLO)$/graphconvert.obj\
         $(SLO)$/closepreventer.obj\
         $(SLO)$/oleregister.obj\
         $(SLO)$/xolefactory.obj\
@@ -111,6 +113,9 @@ SHL1STDLIBS=\
     $(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
+    $(TOOLSLIB)\
+    $(SVTOOLLIB)\
+    $(VCLLIB)\
     ole32.lib\
     gdi32.lib\
     uuid.lib\

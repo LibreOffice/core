@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-01 08:41:14 $
+ *  last change: $Author: mav $ $Date: 2003-12-02 14:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,17 @@
 #include "advisesink.hxx"
 #include "oleembobj.hxx"
 
-
 using namespace ::com::sun::star;
 
 #define     MAX_ENUM_ELE     20
 const sal_Int32 n_ConstBufferSize = 32000;
 
+sal_Bool ConvertBufferForFlavor( void* pBuf,
+                                 sal_uInt32 nBufSize,
+                                 const datatransfer::DataFlavor& aFlavor,
+                                 uno::Any& aResult );
 
+//----------------------------------------------
 uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
@@ -139,14 +143,95 @@ STDAPI StarObject_SwitchDisplayAspect(IUnknown *pObj, LPDWORD pdwCurAspect
 //----------------------------------------------
 sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium, const datatransfer::DataFlavor& aFlavor, uno::Any& aResult )
 {
-    // TODO: try to convert data from Medium format to specified Flavor format
-    return sal_False;
+    sal_Bool bAnyIsReady = sal_False;
+
+    // try to convert data from Medium format to specified Flavor format
+    if ( aFlavor.DataType == getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) )
+    {
+        // first the GDI-metafile must be generated
+
+        unsigned char* pBuf = NULL;
+        sal_uInt32 nBufSize = 0;
+
+        if ( aMedium.tymed == TYMED_MFPICT ) // Win Metafile
+        {
+            METAFILEPICT* pMF = (METAFILEPICT*)GlobalLock( aMedium.hMetaFilePict );
+            if ( pMF )
+            {
+                // TODO: probably in future mapmode must be used in conversion
+                nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, NULL );
+                pBuf = new unsigned char[nBufSize+22];
+                *((long*)pBuf) = 0x9ac6cdd7L;
+                *((short*)(pBuf+6)) = (SHORT) 0;
+                *((short*)(pBuf+8)) = (SHORT) 0;
+                *((short*)(pBuf+10)) = (SHORT) pMF->xExt;
+                *((short*)(pBuf+12)) = (SHORT) pMF->yExt;
+                *((short*)(pBuf+14)) = (USHORT) 2540;
+
+                if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
+                {
+                      if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"" ) )
+                    {
+                        aResult <<= uno::Sequence< sal_Int8 >( (sal_Int8*)pBuf, nBufSize + 22 );
+                        bAnyIsReady = sal_True;
+                    }
+                }
+
+                nBufSize += 22;
+                GlobalUnlock( aMedium.hMetaFilePict );
+            }
+        }
+        else if ( aMedium.tymed == TYMED_ENHMF ) // Enh Metafile
+        {
+            nBufSize = GetEnhMetaFileBits( aMedium.hEnhMetaFile, 0, NULL );
+            pBuf = new unsigned char[nBufSize];
+            if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
+            {
+                  if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"" ) )
+                {
+                    aResult <<= uno::Sequence< sal_Int8 >( (sal_Int8*)pBuf, nBufSize );
+                    bAnyIsReady = sal_True;
+                }
+            }
+        }
+        else if ( aMedium.tymed == TYMED_GDI ) // Bitmap
+        {
+            nBufSize = GetBitmapBits( aMedium.hBitmap, 0, NULL );
+            pBuf = new unsigned char[nBufSize];
+            if ( nBufSize && nBufSize == GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) )
+            {
+                  if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Bitmap\"" ) )
+                {
+                    aResult <<= uno::Sequence< sal_Int8 >( (sal_Int8*)pBuf, nBufSize );
+                    bAnyIsReady = sal_True;
+                }
+            }
+        }
+
+        if ( pBuf && !bAnyIsReady )
+            bAnyIsReady = ConvertBufferForFlavor( (void*)pBuf, nBufSize, aFlavor, aResult );
+
+        delete[] pBuf;
+    }
+
+    return bAnyIsReady;
 }
 
 //----------------------------------------------
 sal_Bool GraphicalFlavor( const datatransfer::DataFlavor& aFlavor )
 {
-    // TODO: just check that the requested flavour is one of supported graphical flavours
+    // Actually all the required graphical formats must be supported
+
+    if ( aFlavor.DataType == getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) )
+    {
+        // TODO: extend support for graphical formats
+        if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"" )
+          || aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"" )
+          || aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"" )
+          || aFlavor.MimeType.equalsAscii( "image/png" ) )
+            return sal_True;
+    }
+
     return sal_False;
 }
 
@@ -476,6 +561,7 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
     if ( !m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
+/*
     if ( !m_aDataFlavors.getLength() )
     {
         CComPtr< IDataObject > pDataObject;
@@ -506,6 +592,7 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
         }
         while( nNum == MAX_ENUM_ELE );
     }
+*/
 }
 
 //----------------------------------------------
