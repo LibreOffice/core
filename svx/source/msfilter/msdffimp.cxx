@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-29 13:02:12 $
+ *  last change: $Author: cmc $ $Date: 2001-06-12 09:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2862,29 +2862,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
     return pRet;
 }
 
-INT32 lcl_MapTextRotation(UINT32 nIn)
-{
-    INT32 nTextRotationAngle = 0;
-    MSO_TextFlow eTextFlow = (MSO_TextFlow)(nIn & 0xFFFF);
-    switch( eTextFlow )
-    {
-        case mso_txflBtoT:
-            nTextRotationAngle = 9000;
-        break;
-        case mso_txflTtoBA :
-        case mso_txflTtoBN :
-        case mso_txflVertN :
-            nTextRotationAngle = 27000;
-        break;
-        case mso_txflHorzN :
-        case mso_txflHorzA :
-        default :
-            nTextRotationAngle = 0;
-        break;
-    }
-    return nTextRotationAngle;
-}
-
 // PptSlidePersistEntry& rPersistEntry, SdPage* pPage
 SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                                        const Rectangle* pRect,
@@ -3110,26 +3087,6 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
                             || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
                         {
-                            /*
-                            ##957##
-                            For word the bound rect has width and height set
-                            as *after* rotation, so if we are to rotate undo
-                            the rotation for the boundrect.
-                            */
-                            if ( IsProperty( DFF_Prop_txflTextFlow ) )
-                            {
-                                if ( lcl_MapTextRotation(GetPropertyValue(
-                                        DFF_Prop_txflTextFlow)) )
-                                {
-                                    long nTemp = aBoundRect.Left();
-                                    aBoundRect.Left() = aBoundRect.Top();
-                                    aBoundRect.Top() = nTemp;
-
-                                    nTemp = aBoundRect.Right();
-                                    aBoundRect.Right() = aBoundRect.Bottom();
-                                    aBoundRect.Bottom() = nTemp;
-                                }
-                            }
                             pRet = new SdrRectObj( OBJ_TEXT, aBoundRect );
                         }
                     }
@@ -3415,30 +3372,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin, hier rausrechnen
             rTextRect.Bottom() -= nTextTop + nTextBottom;
-
-            INT32 nTextRotationAngle = 0;
-            if ( IsProperty( DFF_Prop_txflTextFlow ) )
-            {
-                nTextRotationAngle = lcl_MapTextRotation(
-                    GetPropertyValue(DFF_Prop_txflTextFlow));
-                if ( nTextRotationAngle )
-                {
-                    if ( rObjData.nSpFlags & SP_FFLIPV )
-                    {
-                        if ( nTextRotationAngle == 9000 )
-                            nTextRotationAngle = 27000;
-                        else if ( nTextRotationAngle == 27000 )
-                            nTextRotationAngle = 9000;
-                    }
-                    Point nCenter( rTextRect.Center() );
-                    long nDX = rTextRect.Right() - rTextRect.Left();
-                    long nDY = rTextRect.Bottom() - rTextRect.Top();
-                    rTextRect.Left()       = nCenter.X() - nDY/2;
-                    rTextRect.Top()        = nCenter.Y() - nDX/2;
-                    rTextRect.Right()      = rTextRect.Left() + nDY;
-                    rTextRect.Bottom()     = rTextRect.Top()  + nDX;
-                }
-            }
+            rTextRect.Right() -= nTextLeft + nTextRight;
 
             FASTBOOL bTextFrame =   (   ( pImpRec->eShapeType
                                             == mso_sptTextSimple )
@@ -3480,6 +3414,31 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if( !pObj )
                 ApplyAttributes( rSt, aSet, pTextObj );
+
+            INT32 nTextRotationAngle=0;
+            if ( IsProperty( DFF_Prop_txflTextFlow ) )
+            {
+                MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
+                    DFF_Prop_txflTextFlow) & 0xFFFF);
+                switch( eTextFlow )
+                {
+                    case mso_txflBtoT:
+                        pTextObj->SetVerticalWriting( sal_True );
+                        //We don't truly have this, but lets try anyway by
+                        //using vertical text and flipping it around.
+                        nTextRotationAngle = 18000;
+                    break;
+                    case mso_txflTtoBA :
+                    case mso_txflTtoBN :
+                    case mso_txflVertN :
+                        pTextObj->SetVerticalWriting( sal_True );
+                    break;
+                    case mso_txflHorzN :
+                    case mso_txflHorzA :
+                    default :
+                    break;
+                }
+            }
 
             if ( nTextRotationAngle )
             {
@@ -3574,6 +3533,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
             }
             aSet.Put( SdrTextMinFrameHeightItem( rTextRect.Bottom() - rTextRect.Top() ) );
+            aSet.Put( SdrTextMinFrameWidthItem( rTextRect.Right() - rTextRect.Left() ) );
 
             pTextObj->SetModel( pSdrModel );
             pTextObj->SetItemSet(aSet);
