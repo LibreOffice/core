@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 09:56:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,8 @@
 #ifndef SD_CLIENT_HXX
 #include "Client.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "unokywds.hxx"
 #ifndef SD_UNO_DRAW_VIEW_HXX
@@ -167,9 +167,6 @@ void DrawViewShell::ModelHasChanged()
     // Damit der Navigator auch einen aktuellen Status bekommt
     GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
 
-    // Damit das Effekte-Window die Reihenfolge updaten kann
-    UpdateEffectWindow();
-
     //Update3DWindow();
     SfxBoolItem aItem( SID_3D_STATE, TRUE );
     GetViewFrame()->GetDispatcher()->Execute(
@@ -187,7 +184,7 @@ void DrawViewShell::ModelHasChanged()
 
 void DrawViewShell::Resize (const Point &rPos, const Size &rSize)
 {
-    if (!pFuSlideShow || !pFuSlideShow->IsFullScreen())
+    if (!mpSlideShow || !mpSlideShow->isFullScreen())
     {
         ViewShell::Resize(rPos, rSize);
 
@@ -197,10 +194,10 @@ void DrawViewShell::Resize (const Point &rPos, const Size &rSize)
         }
     }
 
-    FuSlideShow* pSlideShow = ( pFuSlideShow ? pFuSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
+    sd::Slideshow* pSlideShow = ( mpSlideShow ? mpSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
 
-    if (pSlideShow != NULL)
-        pSlideShow->Resize( rSize );
+    if(mpSlideShow != NULL)
+        mpSlideShow->resize( rSize );
 }
 
 #if 0
@@ -213,7 +210,7 @@ void DrawViewShell::Resize (const Point &rPos, const Size &rSize)
 
 void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
 {
-    if (!pFuSlideShow || !pFuSlideShow->IsFullScreen())
+    if (!mpSlideShow || !mpSlideShow->isFullScreen())
     {
         ViewShell::OuterResizePixel(rPos, rSize);
 
@@ -223,10 +220,10 @@ void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
         }
     }
 
-    FuSlideShow* pSlideShow = ( pFuSlideShow ? pFuSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
+    sd::Slideshow* pSlideShow = ( mpSlideShow ? mpSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
 
-    if( pSlideShow && !pSlideShow->IsFullScreen())
-        pSlideShow->Resize( rSize );
+    if( pSlideShow && !pSlideShow->isFullScreen())
+        mpSlideShow->resize( rSize );
 }
 
 
@@ -239,7 +236,7 @@ void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
 
 void DrawViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
 {
-    if (!pFuSlideShow)
+    if (!mpSlideShow)
     {
         // Da die innere Groesse vorgegeben wird, ist ein Zoomen auf
         // Seitenbreite nicht erlaubt
@@ -259,7 +256,7 @@ void DrawViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
 
 void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
 {
-    if (!pFuSlideShow || !pFuSlideShow->IsFullScreen())
+    if (!mpSlideShow || !mpSlideShow->isFullScreen())
     {
         ViewShell::OuterResizePixel(rPos, rSize);
 
@@ -269,10 +266,10 @@ void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
         }
     }
 
-    FuSlideShow* pSlideShow = ( pFuSlideShow ? pFuSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
+    sd::Slideshow* pSlideShow = ( mpSlideShow ? mpSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
 
     if( pSlideShow )
-        pSlideShow->Resize( rSize );
+        pSlideShow->resize( rSize );
 }
 
 
@@ -576,13 +573,14 @@ void DrawViewShell::WriteFrameViewData()
         pFrameView->SetSelectedPage(0);
     else
     {
-        if ( ! ISA(PresentationViewShell))
-        {
-            if( pFuSlideShow && ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) )
-                pFrameView->SetSelectedPage( pFuSlideShow->GetCurrentPage() );
-            else
+//      if ( ! ISA(PresentationViewShell))
+//      {
+//          if( mpSlideShow && ( mpSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW ) )
+//              pFrameView->SetSelectedPage( (USHORT)((mpSlideShow->getCurrentPageNumber() << 1) + 1)  );
+//          else
+//
                 pFrameView->SetSelectedPage( aTabControl.GetCurPageId() - 1 );
-        }
+//      }
     }
 
     pFrameView->SetViewShEditMode(eEditMode, ePageKind);
