@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-22 16:34:07 $
+#   last change: $Author: kz $ $Date: 2004-05-20 21:26:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,6 +192,7 @@ SFXSRSLIST=\
         $(SRS)$/explorer.srs
 
 RESLIB1NAME=$(TARGET)
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(SFXSRSLIST)
 
 # --- Targets ------------------------------------------------------
