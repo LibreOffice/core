@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 14:35:42 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 13:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ public:
     BOOL            NewGroupDoc(String &rGroupName, const String& rTitle);
     BOOL            RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);
     BOOL            DelGroupDoc(const String &);
-    SwDocShellRef*  EditGroupDoc(const String &rGrpName, const String& rShortName, BOOL bShow = TRUE );
+    SwDocShellRef   EditGroupDoc(const String &rGrpName, const String& rShortName, BOOL bShow = TRUE );
     void            SaveGroupDoc(const String &rGrpName, const String& rLongName );
     void            UpdateGlosPath(BOOL bFull);
     void            ShowError();
