@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:25:33 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include "svdopath.hxx"
 #include "svdocirc.hxx"
 #include "svdocapt.hxx"
+#include "outlobj.hxx"
 #include "svdattr.hxx"
 #include "xattr.hxx"
 #include "svditext.hxx"
@@ -259,6 +260,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <frmdiritem.hxx>
+#endif
+#ifndef _SDTFCHIM_HXX
+#include <sdtfchim.hxx>
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
@@ -562,8 +566,6 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
     rIn.Read( cData, 64 );
 
     sal_uInt8   lfCharset, lfPitchAndFamily;
-
-    rAtom.fScaling = 1.0;
 
     rIn >> lfCharset
         >> rAtom.lfClipPrecision
@@ -1317,10 +1319,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             aSet.Put( SdrTextRightDistItem( nTextRight ) );
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
             aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+            aSet.Put( SdrTextFixedCellHeightItem( TRUE ) );
             pTObj->SetItemSet( aSet );
             pTObj->SetSnapRect( rTextRect );
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
-
             if ( pTObj )
             {
                 /* check if our new snaprect makes trouble,
@@ -2253,22 +2255,15 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 if ( mbTracing && !pFont->bAvailable )
                     mpTracer->Trace( rtl::OUString::createFromAscii( "sd1000" ), pFont->aName );
 
+#ifdef DBG_EXTRACTFONTMETRICS
+
                 SvxFont aTmpFont( aFont );
+
                 if ( !pVDev )
                     pVDev = new VirtualDevice;
                 aTmpFont.SetPhysFont( pVDev );
                 FontMetric aMetric( pVDev->GetFontMetric() );
-
                 sal_uInt16 nTxtHeight = (sal_uInt16)aMetric.GetAscent() + (sal_uInt16)aMetric.GetDescent();
-
-                if ( nTxtHeight )
-                {
-                    double fScaling = 120.0 / (double)nTxtHeight;
-                    if ( ( fScaling > 0.50 ) && ( fScaling < 1.5 ) )
-                        pFont->fScaling = fScaling;
-                }
-
-#ifdef DBG_EXTRACTFONTMETRICS
 
                 String  aFileURLStr;
                 if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aFileURLStr ) )
@@ -6200,7 +6195,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
             {
                 PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nFont );
                 if ( pAtom )
-                    nPropLineSpace = (sal_uInt8)((double)nVal2 * pAtom->fScaling + 0.5);
+                    nPropLineSpace = (sal_uInt8)nVal2;
             }
             aItem.SetPropLineSpace( nPropLineSpace );
             aItem.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
