@@ -491,11 +491,21 @@ sub set_classpath_for_install_sdk
     my ( $directory ) = @_;
 
     my $installsdk = "";
+    my $solarVersion = "";
+    my $inPath = "";
+    my $updMinorExt = "";
 
-    if ( $ENV{'ENV_ROOT'} ) { $installsdk = $ENV{'ENV_ROOT'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable \"ENV_ROOT\" not set!", "set_classpath_for_install_sdk"); }
+    if ( defined( $ENV{ 'SOLARVERSION' } ) ) { $solarVersion =  $ENV{'SOLARVERSION'}; }
+    else { installer::exiter::exit_program("ERROR: Environment variable \"SOLARVERSION\" not set!", "set_classpath_for_install_sdk"); }
 
-    $installsdk = $installsdk . $installer::globals::separator . "InstallSDK";
+    if ( defined( $ENV{ 'INPATH' } ) ) { $inPath =  $ENV{'INPATH'}; }
+    else { installer::exiter::exit_program("ERROR: Environment variable \"INPATH\" not set!", "set_classpath_for_install_sdk"); }
+
+    if ( defined( $ENV{ 'UPDMINOREXT' } ) ) { $updMinorExt =  $ENV{'UPDMINOREXT'}; }
+    else { installer::exiter::exit_program("ERROR: Environment variable \"UPDMINOREXT\" not set!", "set_classpath_for_install_sdk"); }
+
+    $installsdk = $solarVersion .  $installer::globals::separator . $inPath . $installer::globals::separator . "bin" . $updMinorExt;
+    $installsdk = $installsdk . $installer::globals::separator . "javainstaller";
 
     if ( $ENV{'INSTALLSDK_SOURCE'} ) { $installsdk = $ENV{'INSTALLSDK_SOURCE'}; }   # overriding the Install SDK with INSTALLSDK_SOURCE
 
@@ -506,10 +516,9 @@ sub set_classpath_for_install_sdk
 
     my @additional_classpath = ();
     push(@additional_classpath, "$installsdk\/classes");
-    push(@additional_classpath, "$installsdk\/classes\/setupsdk.jar");
+    push(@additional_classpath, "$installsdk\/installsdk.jar");
     push(@additional_classpath, "$installsdk\/classes\/parser.jar");
     push(@additional_classpath, "$installsdk\/classes\/jaxp.jar");
-    push(@additional_classpath, "$installsdk\/classes\/ldapjdk.jar");
     push(@additional_classpath, "$directory");
 
     my $newclasspathstring = "";
@@ -657,6 +666,7 @@ sub remove_languagepack_from_xmlfile
     # Component begins with "<component selected="true" name='module_languagepacks' componentVersion="${PRODUCTVERSION}">"
     # and ends with "</component>" (the second "</component>" !)
 
+    remove_component($xmlfile, "languagepack_DEFAULT");
     remove_component($xmlfile, "languagepack_ONELANGUAGE");
     remove_component($xmlfile, "module_languagepacks");
 }
@@ -717,6 +727,21 @@ sub duplicate_languagepack_in_xmlfile
         include_component_at_specific_line($xmlfile, $unitcopy, $startline);
         $startline = $startline + $#{$unitcopy} + 1;
     }
+
+    # adding the default language as language pack, too
+    $unit = remove_component($xmlfile, "languagepack_DEFAULT");
+    $startline = find_component_line($xmlfile, "module_languagepacks");
+    $startline = $startline + 1;
+
+    $onelanguage = $installer::globals::languageproducts[0];
+    $unitcopy = duplicate_component($unit);
+
+    # replacing string DEFAULT in the unit copy
+    for ( my $j = 0; $j <= $#{$unitcopy}; $j++ ) { ${$unitcopy}[$j] =~ s/DEFAULT/$onelanguage/g; }
+
+    # including the unitcopy into the xml file
+    include_component_at_specific_line($xmlfile, $unitcopy, $startline);
+    $startline = $startline + $#{$unitcopy} + 1;
 }
 
 #######################################################
