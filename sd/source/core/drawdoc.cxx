@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:41:38 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 10:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@
 #endif
 #include <unotools/charclass.hxx>
 #include <unotools/processfactory.hxx>
+#include <svtools/pathoptions.hxx>
 
 
 #include "drawdoc.hxx"
