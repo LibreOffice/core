@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:34:53 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 13:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,8 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
             sName += String(ModuleRes(STR_RELATIONDESIGN));
             xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
         }
+        if(m_vTableData.empty())
+            Execute(ID_BROWSER_ADDTABLE);
     }
     catch(SQLException&)
     {
