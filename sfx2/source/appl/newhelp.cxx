@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 13:04:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-17 09:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,9 +249,9 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/ucbhelper.hxx>
 
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
+#include <viewfrm.hxx>
+#include <objsh.hxx>
+#include <docfac.hxx>
 
 using namespace ::ucb;
 using namespace com::sun::star::ucb;
