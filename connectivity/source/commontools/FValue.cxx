@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 08:59:05 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,7 @@ sal_Bool operator==(const DateTime& _rLH,const DateTime& _rRH)
 }
 // -------------------------------------------------------------------------
 
-ORowSetValue::operator==(const ORowSetValue& _rRH) const
+sal_Bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
 {
     if(m_eTypeKind != _rRH.m_eTypeKind)
         return sal_False;
