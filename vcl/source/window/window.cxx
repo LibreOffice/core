@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-30 14:01:15 $
+ *  last change: $Author: tbe $ $Date: 2002-08-30 15:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4916,6 +4916,19 @@ long Window::Notify( NotifyEvent& rNEvt )
 // -----------------------------------------------------------------------
 
 void Window::ImplCallEventListeners( ULONG nEvent, void* pData )
+{
+    // The implementation was moved to CallEventListeners(),
+    // because derived classes in svtools must be able to
+    // call the event listeners and ImplCallEventListeners()
+    // is not exported.
+    // TODO: replace ImplCallEventListeners() by CallEventListeners() in vcl
+
+    CallEventListeners( nEvent, pData );
+}
+
+// -----------------------------------------------------------------------
+
+void Window::CallEventListeners( ULONG nEvent, void* pData )
 {
     VclWindowEvent aEvent( this, nEvent, pData );
 
