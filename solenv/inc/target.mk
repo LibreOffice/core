@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: mh $ $Date: 2000-11-10 09:08:55 $
+#   last change: $Author: hjs $ $Date: 2000-11-13 11:57:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -336,7 +336,7 @@ NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell $(FIND) $(JARDIR) -name $i) $(S
 .ENDIF			# "$(JARFILES)"!=""
 .IF "$(EXTRAJARFILES)"!=""
 .IF "$(LOCAL_SOLENV)"!=""
-NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(SOLARROOT)$/btools$/$i)
+NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(COMMON_BUILD_TOOLS)$/$i)
 .ELSE			# "$(LOCAL_SOLENV)"!=""
 NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(SOLARENV)$/bin$/$i)
 .ENDIF			# "$(LOCAL_SOLENV)"!=""
