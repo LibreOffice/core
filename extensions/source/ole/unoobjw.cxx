@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
+ *  last change: $Author: jl $ $Date: 2002-08-06 10:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,12 +642,7 @@ void SAL_CALL InterfaceOleWrapper_Impl::initialize( const Sequence< Any >& aArgu
         break;
     }
 
-    m_xExactName= Reference< XExactName> ( m_xOrigin, UNO_QUERY);
-    if( ! m_xExactName.is())
-    {
-        m_xExactName= Reference<XExactName>( m_xInvocation, UNO_QUERY);
-    }
-
+    m_xExactName= Reference<XExactName>( m_xInvocation, UNO_QUERY);
 }
 
 Reference< XInterface > InterfaceOleWrapper_Impl::createUnoWrapperInstance()
