@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-01 07:48:28 $
+ *  last change: $Author: ssa $ $Date: 2002-10-07 11:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,36 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         {
             xub_StrLen nIndex = 0;
             if ( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
-                aFont.SetName( aSearch.GetToken( 0, ';', nIndex ) );
+            {
+                //aFont.SetName( aSearch.GetToken( 0, ';', nIndex ) );
+                if( !pOutDev )
+                    pOutDev = (const OutputDevice *)ImplGetSVData()->mpDefaultWin;
+                if( !pOutDev )
+                    aFont.SetName( aSearch.GetToken( 0, ';', nIndex ) );
+                else
+                {
+                    aFont.SetName( aSearch );
+
+                    // convert to pixel height
+                    Size aSize = pOutDev->ImplLogicToDevicePixel( aFont.GetSize() );
+                    if ( !aSize.Height() )
+                    {
+                        // use default pixel height only when logical height is zero
+                        if ( aFont.GetSize().Height() )
+                            aSize.Height() = 1;
+                        else
+                            aSize.Height() = (12*pOutDev->mnDPIY)/72;
+                    }
+
+                    // use default width only when logical width is zero
+                    if( (0 == aSize.Width()) && (0 != aFont.GetSize().Width()) )
+                        aSize.Width() = 1;
+
+                    ImplFontEntry* pEntry = pOutDev->mpFontCache->Get( pOutDev->mpFontList, aFont, aSize );
+                    aFont.SetName( pEntry->maFontSelData.maName );
+                }
+
+            }
             else
                 aFont.SetName( aSearch );
         }
