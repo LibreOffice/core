@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapePropertySetContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-29 07:51:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,11 @@ XMLShapePropertySetContext::XMLShapePropertySetContext(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
                  const OUString& rLName,
                  const Reference< xml::sax::XAttributeList > & xAttrList,
+                 sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
                  const UniReference < SvXMLImportPropertyMapper > &rMap ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, rProps, rMap ),
+    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFam,
+                             rProps, rMap ),
     mnBulletIndex(-1)
 {
 }
