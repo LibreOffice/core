@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:33:12 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "è¼”åŠ©ç·š";
         Text[ turkish ] = "Visual aids";
         Text[ arabic ] = "ÎØæØ ãÓÇÚÏÉ";
-        Text[ finnish ] = "Ohjaimet";
+        Text[ finnish ] = "Apuviivat";
         Text[ catalan ] = "Ajudes visuals";
         Text[ thai ] = "à¸„à¸³à¹à¸™à¸°à¸™à¸³";
     };
@@ -119,9 +119,9 @@ TabPage TP_CONTENT_OPT
         Text [ ENGLISH ] = "Guides while moving" ;
         Text[ english_us ] = "Guides ~while moving";
         Text[ portuguese ] = "G~uias ao mover";
-        Text[ russian ] = "Íàïğàâëÿşùèå ëèíèè ïğè ïåğåìåùåíèè";
+        Text[ russian ] = "Íàïğàâëÿşùèå ïğè ïåğåìåùåíèè";
         Text[ greek ] = "Âïçèçôéêİò ãñáììİò êáôÜ ôçí ìåôáêßíç~óç";
-        Text[ dutch ] = "~Hulplijnen bij verplaatsen";
+        Text[ dutch ] = "Hulpli~jnen bij verplaatsen";
         Text[ french ] = "Repères lors du déplacement";
         Text[ spanish ] = "Guías al despla~zar";
         Text[ italian ] = "Linee guida durante lo spostamento";
@@ -135,7 +135,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "ç§»å‹•æ™‚é¡¯ç¤ºè¼”åŠ©ç·š(~W)";
         Text[ turkish ] = "Guides while moving";
         Text[ arabic ] = "ÎØæØ ãÓÇÚÏÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
-        Text[ finnish ] = "Ohjaimet ~siirrettäessä";
+        Text[ finnish ] = "Apuviivat siirrettäessä";
         Text[ catalan ] = "Guies ~en moure";
         Text[ thai ] = "à¸„à¸³à¹à¸™à¸°à¸™à¸³~à¸‚à¸“à¸°à¸¢à¹‰à¸²à¸¢";
     };
@@ -147,13 +147,13 @@ TabPage TP_CONTENT_OPT
         Text [ ENGLISH ] = "Simple control points" ;
         Text[ english_us ] = "Sim~ple handles";
         Text[ portuguese ] = "Guias ~simples";
-        Text[ russian ] = "Îáû÷íûå óçëû";
+        Text[ russian ] = "Îáû÷íûå óçëû èçìåíåíèÿ ãåîìåòğèè";
         Text[ greek ] = "ÁğëÜ óçìåßá åëİã÷ïõ";
         Text[ dutch ] = "~Eenvoudige handvatten";
         Text[ french ] = "Poignées simples";
         Text[ spanish ] = "Agarraderas sencillas";
         Text[ italian ] = "Maniglie semplici";
-        Text[ danish ] = "~Enkelte håndtag";
+        Text[ danish ] = "Enkelte h~åndtag";
         Text[ swedish ] = "~Enkla handtag";
         Text[ polish ] = "Proste uchwyty";
         Text[ portuguese_brazilian ] = "Simple control points";
@@ -163,7 +163,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "æ¨™æº–æ§é»(~P)";
         Text[ turkish ] = "Simple control points";
         Text[ arabic ] = "ãŞÇÈÖ ÈÓíØÉ";
-        Text[ finnish ] = "~Peruskahvat";
+        Text[ finnish ] = "Pienet kahvat";
         Text[ catalan ] = "Manetes sim~ples";
         Text[ thai ] = "à¸„à¸§à¸šà¸„à¸¸à¸¡à¸­à¸¢à¹ˆà¸²à¸‡à¸‡à¹ˆà¸²~à¸¢";
     };
@@ -175,7 +175,7 @@ TabPage TP_CONTENT_OPT
         Text [ ENGLISH ] = "Large control points" ;
         Text[ english_us ] = "Large handles";
         Text[ portuguese ] = "~Guias grandes";
-        Text[ russian ] = "Êğóïíûå óçëû";
+        Text[ russian ] = "Êğóïíûå óçëû èçìåíåíèÿ ãåîìåòğèè";
         Text[ greek ] = "ÌåãÜëá óçìåßá åëİã÷ïõ";
         Text[ dutch ] = "~Grote handvatten";
         Text[ french ] = "Grandes poignées";
@@ -234,7 +234,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Barra di scorrimento orizzontale" ;
         Text [ spanish ] = "Barra de desplazamiento horizontal" ;
         Text [ french ] = "Barre de défilement ~horizontale" ;
-        Text [ dutch ] = "H~orizontale beeldschuifbalk" ;
+        Text [ dutch ] = "Ho~rizontale beeldschuifbalk" ;
         Text [ swedish ] = "Horisontell r~ullningslist" ;
         Text [ danish ] = "Vandret rulle~panel" ;
         Text [ portuguese_brazilian ] = "Horizontale Bildla~ufleiste" ;
@@ -249,7 +249,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "ìˆ˜í‰ ìŠ¤í¬ë¡¤(~O)";
         Text[ turkish ] = "Yatay kaydırma ~çubuğu";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Vaakavierityspalkki";
+        Text[ finnish ] = "Vaakavierityspalkki";
         Text[ catalan ] = "Barra de desplaçament ~horitzontal";
         Text[ thai ] = "à¹à¸–à¸šà¹€à¸¥à¸·à¹ˆà¸­à¸™à¹à¸™à¸§à¸™~à¸­à¸™";
     };
@@ -263,7 +263,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Barra di scorrimento verticale" ;
         Text [ spanish ] = "Barra de desplazamiento ~vertical" ;
         Text [ french ] = "Barre de défilement ~verticale" ;
-        Text [ dutch ] = "~Verticale schuifbalk" ;
+        Text [ dutch ] = "Verticale beeldsch~uifbalk" ;
         Text [ swedish ] = "~Vertikal rullningslist" ;
         Text [ danish ] = "Lodret r~ullepanel" ;
         Text [ portuguese_brazilian ] = "~Vertikale Bildlaufleiste" ;
@@ -278,7 +278,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "ìˆ˜ì§ ìŠ¤í¬ë¡¤(~V)";
         Text[ turkish ] = "Di~key kaydırma çubuğu";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Pystyvierityspalkki";
+        Text[ finnish ] = "Pystyvierityspalkki";
         Text[ catalan ] = "Barra de desplaçament ~vertical";
         Text[ thai ] = "à¹à¸–à¸šà¹€à¸¥à¸·à¹ˆà¸­à¸™à¹à¸™à¸§~à¸•à¸±à¹‰à¸‡";
     };
@@ -319,7 +319,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Rig~hello orizzontale" ;
         Text [ portuguese_brazilian ] = "~R?gua horizontal" ;
         Text [ portuguese ] = "~Régua horizontal" ;
-        Text [ finnish ] = "~Vaakakohdistin" ;
+        Text [ finnish ] = "Vaakaviivain" ;
         Text [ danish ] = "~Vandret lineal" ;
         Text [ french ] = "Règle hori~zontale" ;
         Text [ swedish ] = "Hori~sontell linjal" ;
@@ -327,7 +327,7 @@ TabPage TP_CONTENT_OPT
         Text [ spanish ] = "Regla  h~orizontal" ;
         Text [ english_us ] = "Hori~zontal ruler" ;
         Text[ chinese_simplified ] = "æ°´å¹³æ ‡å°º(~Z)";
-        Text[ russian ] = "Ãîğèçîíòàëüíàÿ ëèíåéêà";
+        Text[ russian ] = "Ãîğèçîíò. ëèíåéêà";
         Text[ polish ] = "Linijka pozioma";
         Text[ japanese ] = "æ°´å¹³ãƒ«ãƒ¼ãƒ©(~Z)";
         Text[ chinese_traditional ] = "æ°´å¹³æ¨™å°º(~Z)";
@@ -355,7 +355,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Righello verticale" ;
         Text [ portuguese_brazilian ] = "~R?gua vertical" ;
         Text [ portuguese ] = "~Régua vertical" ;
-        Text [ finnish ] = "~Viivain pystytasossa" ;
+        Text [ finnish ] = "Viivain pystytasossa" ;
         Text [ danish ] = "Lod~ret lineal" ;
         Text [ french ] = "Règle verticale" ;
         Text [ swedish ] = "Vertik~al linjal" ;
@@ -363,7 +363,7 @@ TabPage TP_CONTENT_OPT
         Text [ spanish ] = "Regla vertical" ;
         Text [ english_us ] = "Verti~cal ruler" ;
         Text[ chinese_simplified ] = "å‚ç›´æ ‡å°º(~C)";
-        Text[ russian ] = "Âåğòèêàëüíàÿ ëèíåéêà";
+        Text[ russian ] = "Âåğòèê. ëèíåéêà";
         Text[ polish ] = "Linij~ka pionowa";
         Text[ japanese ] = "å‚ç›´ãƒ«ãƒ¼ãƒ©(~C)";
         Text[ chinese_traditional ] = "å‚ç›´å¼æ¨™å°º(~C)";
@@ -418,11 +418,11 @@ TabPage TP_CONTENT_OPT
         Text [ english_us ] = "S~mooth scroll" ;
         Text [ portuguese_brazilian ] = "~Weiches Scrollen" ;
         Text [ swedish ] = "M~juk rullning" ;
-        Text [ danish ] = "~Blød rulning" ;
+        Text [ danish ] = "Bl~ød rulning" ;
         Text [ italian ] = "Scorrimento dolce" ;
         Text [ spanish ] = "Desplazamiento ~suave" ;
         Text [ french ] = "Défilement doux" ;
-        Text [ dutch ] = "~Zacht scrollen" ;
+        Text [ dutch ] = "Zacht scr~ollen" ;
         Text [ portuguese ] = "~Mover suavemente" ;
         Text[ chinese_simplified ] = "å¹³æ»‘æ»šåŠ¨(~M)";
         Text[ russian ] = "Ìÿãêàÿ ïğîêğóòêà";
@@ -434,7 +434,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "ì†Œí”„íŠ¸ ìŠ¤í¬ë¡¤(~M)";
         Text[ turkish ] = "Yavaş kaydırma";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Tasainen vieritys";
+        Text[ finnish ] = "Tasainen vieritys";
         Text[ catalan ] = "Desplaçament ~suau";
         Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¹à¸šà¸šà¸£à¸²~à¸šà¸£à¸·à¹ˆà¸™";
     };
@@ -480,11 +480,11 @@ TabPage TP_CONTENT_OPT
         Text [ portuguese_brazilian ] = "Gra~phics and Objects" ;
         Text [ portuguese ] = "~Imagens e objectos" ;
         Text [ french ] = "Images et objets" ;
-        Text [ dutch ] = "~Afbeeldingen en objecten" ;
+        Text [ dutch ] = "A~fbeeldingen en objecten" ;
         Text [ spanish ] = "~Imágenes y objetos" ;
         Text [ danish ] = "Grafik og objekter" ;
         Text [ swedish ] = "~Grafik och objekt" ;
-        Text [ finnish ] = "~Kuvat ja objektit" ;
+        Text [ finnish ] = "Grafiikat ja objektit" ;
         Text [ english_us ] = "~Graphics and objects" ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -511,11 +511,11 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Tabelle " ;
         Text [ portuguese_brazilian ] = "~Tabelas " ;
         Text [ portuguese ] = "~Tabelas " ;
-        Text [ finnish ] = "~Taulukot" ;
-        Text [ danish ] = "Tabeller " ;
+        Text [ finnish ] = "Taulukot " ;
+        Text [ danish ] = "Ta~beller " ;
         Text [ french ] = "Tableaux " ;
         Text [ swedish ] = "Tabe~ller                  " ;
-        Text [ dutch ] = "~Tabellen           " ;
+        Text [ dutch ] = "T~abellen" ;
         Text [ spanish ] = "~Tablas                    " ;
         Text [ english_us ] = "~Tables " ;
         Text[ chinese_simplified ] = "è¡¨æ ¼(~T)";
@@ -544,9 +544,9 @@ TabPage TP_CONTENT_OPT
         Text [ french ] = "Dessins et champs de contrôle" ;
         Text [ dutch ] = "Tekeningen en ~controlevelden" ;
         Text [ spanish ] = "~Dibujos y campos de control" ;
-        Text [ danish ] = "Tegninger og kontrolelementer" ;
+        Text [ danish ] = "Tegninger og kontro~lelementer" ;
         Text [ swedish ] = "Teckningar och ~kontrollfält" ;
-        Text [ finnish ] = "~Piirrokset ja ohjausobjektit" ;
+        Text [ finnish ] = "Piirrokset ja ohjausobjektit" ;
         Text [ english_us ] = "Dra~wings and controls" ;
         Text[ chinese_simplified ] = "ç»˜å›¾å’Œæ§åˆ¶(~W)";
         Text[ russian ] = "Ğèñóíêè è ıëåìåíòû óïğàâëåíèÿ";
@@ -573,11 +573,11 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Nome di campo" ;
         Text [ spanish ] = "Nombres del campo" ;
         Text [ french ] = "Noms des champs" ;
-        Text [ dutch ] = "~Veldnaam" ;
+        Text [ dutch ] = "Veldnaa~m" ;
         Text [ portuguese_brazilian ] = "F~eldnamen" ;
         Text [ portuguese ] = "Nomes de ~campo" ;
         Text[ chinese_simplified ] = "å­—æ®µåç§°(~F)";
-        Text[ russian ] = "Èìåíà ïîëÿ";
+        Text[ russian ] = "Êîäû ïîëÿ";
         Text[ polish ] = "Nazwy pól";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å(~F)";
         Text[ chinese_traditional ] = "æ¬„ä½åç¨±(~F)";
@@ -586,7 +586,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "í•„ë“œ ì½”ë“œ(~F)";
         Text[ turkish ] = "Alan adları";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kenttäkoodit";
+        Text[ finnish ] = "Kenttäkoodit";
         Text[ catalan ] = "~Codis de camp";
         Text[ thai ] = "à¸£à¸«à¸±à¸ªà¹€~à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
@@ -602,7 +602,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "N~ote" ;
         Text [ spanish ] = "Notas" ;
         Text [ french ] = "Notes" ;
-        Text [ dutch ] = "Aa~ntekeningen" ;
+        Text [ dutch ] = "Aantekeningen" ;
         Text [ portuguese_brazilian ] = "N~otizen" ;
         Text [ portuguese ] = "Anotações" ;
         Text[ chinese_simplified ] = "å¤‡æ³¨(~N)";
@@ -615,7 +615,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "ë©”ëª¨(~N)";
         Text[ turkish ] = "Notlar";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Huomautukset";
+        Text[ finnish ] = "Huomautukset";
         Text[ catalan ] = "~Notes";
         Text[ thai ] = "~à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
     };
@@ -739,7 +739,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Immagini" ;
         Text [ portuguese_brazilian ] = "~Gr?ficos" ;
         Text [ portuguese ] = "~Imagens" ;
-        Text [ finnish ] = "~Kuvat" ;
+        Text [ finnish ] = "~Grafiikka" ;
         Text [ danish ] = "Grafik" ;
         Text [ french ] = "Images" ;
         Text [ swedish ] = "~Grafik" ;
@@ -749,7 +749,7 @@ TabPage TP_OPTPRINT_PAGE
         TabStop = TRUE ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "å›¾å½¢(~G)";
-        Text[ russian ] = "Ãğàôèêè";
+        Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
         Text[ polish ] = "Grafiki";
         Text[ japanese ] = "å›³(~G)";
         Text[ chinese_traditional ] = "åœ–å½¢(~G)";
@@ -771,8 +771,8 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Tabelle" ;
         Text [ portuguese_brazilian ] = "~Tabelas" ;
         Text [ portuguese ] = "~Tabelas" ;
-        Text [ finnish ] = "~Taulukot" ;
-        Text [ danish ] = "Tabeller" ;
+        Text [ finnish ] = "Ta~ulukot" ;
+        Text [ danish ] = "T~abeller" ;
         Text [ french ] = "Tableaux" ;
         Text [ swedish ] = "T~abeller" ;
         Text [ dutch ] = "~Tabellen" ;
@@ -801,8 +801,8 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Disegni" ;
         Text [ portuguese_brazilian ] = "~Drawings" ;
         Text [ portuguese ] = "~Desenhos" ;
-        Text [ finnish ] = "~Piirustukset" ;
-        Text [ danish ] = "Tegninger" ;
+        Text [ finnish ] = "Pii~rrokset" ;
+        Text [ danish ] = "Tegninge~r" ;
         Text [ french ] = "Dessins" ;
         Text [ swedish ] = "Te~ckningar" ;
         Text [ dutch ] = "T~ekeningen" ;
@@ -832,11 +832,11 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "Controles" ;
         Text [ portuguese ] = "Campos de controlo" ;
         Text [ english_us ] = "Control~s" ;
-        Text [ finnish ] = "~Ohjaimet" ;
+        Text [ finnish ] = "Oh~jausobjektit" ;
         Text [ danish ] = "Kontrolelementer" ;
         Text [ french ] = "~Champs de contrôle" ;
         Text [ swedish ] = "Kontroll~fält" ;
-        Text [ dutch ] = "Controle~velden" ;
+        Text [ dutch ] = "Co~ntrolevelden" ;
         Text [ spanish ] = "~Campos de control" ;
         Text[ chinese_simplified ] = "æ§åˆ¶(~S)";
         Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
@@ -896,7 +896,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "Sch~warz drucken" ;
         Text [ portuguese ] = "Imprimir ~preto" ;
         Text[ chinese_simplified ] = "æ‰“å°é»‘è‰²(~K)";
-        Text[ russian ] = "×åğíûì öâåòîì";
+        Text[ russian ] = "Ïå÷àòü ÷åğíûì";
         Text[ polish ] = "Drukuj na czarno";
         Text[ japanese ] = "ç™½é»’å°åˆ·(~K)";
         Text[ chinese_traditional ] = "åˆ—å°é»‘è‰²(~K)";
@@ -905,7 +905,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ korean ] = "í‘ìƒ‰ ì¸ì‡„(~K)";
         Text[ turkish ] = "Siyah/beyaz yazdır";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Tulosta mustana";
+        Text[ finnish ] = "Tulosta ~mustana";
         Text[ catalan ] = "Imprimeix en negr~e";
         Text[ thai ] = "Print blac~k";
     };
@@ -960,7 +960,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ danish ] = "Venstre sider" ;
         Text [ french ] = "Pages de ~gauche" ;
         Text [ swedish ] = "Vä~nstersidor" ;
-        Text [ dutch ] = "~Linker pagina's" ;
+        Text [ dutch ] = "~Linkerpagina's" ;
         Text [ spanish ] = "Páginas izquierdas" ;
         Text [ english_us ] = "~Left pages" ;
         TabStop = TRUE ;
@@ -988,11 +988,11 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Pagine destre" ;
         Text [ portuguese_brazilian ] = "~P?ginas direitas" ;
         Text [ portuguese ] = "~Páginas direitas" ;
-        Text [ finnish ] = "~Oikeat sivut" ;
-        Text [ danish ] = "Højre sider" ;
+        Text [ finnish ] = "Oikeat s~ivut" ;
+        Text [ danish ] = "Hø~jre sider" ;
         Text [ french ] = "Pages de droite" ;
         Text [ swedish ] = "Höge~rsidor" ;
-        Text [ dutch ] = "~Rechter pagina's" ;
+        Text [ dutch ] = "~Rechterpagina's" ;
         Text [ spanish ] = "Páginas derec~has" ;
         Text [ english_us ] = "~Right pages" ;
         Text[ chinese_simplified ] = "å³é¡µ(~R)";
@@ -1018,7 +1018,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "I~nvertito" ;
         Text [ portuguese_brazilian ] = "Re~vertido" ;
         Text [ portuguese ] = "~Inversão" ;
-        Text [ finnish ] = "~Käännetty" ;
+        Text [ finnish ] = "Käännetty" ;
         Text [ danish ] = "Omvendt" ;
         Text [ french ] = "Ordre in~versé" ;
         Text [ swedish ] = "O~mvänt" ;
@@ -1026,7 +1026,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ spanish ] = "In~vertido" ;
         Text [ english_us ] = "Re~versed" ;
         Text[ chinese_simplified ] = "åå‘(~V)";
-        Text[ russian ] = "Íàîáîğîò";
+        Text[ russian ] = "Î~áğàòíûé ïîğÿäîê";
         Text[ polish ] = "Odwrotnie";
         Text[ japanese ] = "å°åˆ·é †åºã‚’é€†ã«ã™ã‚‹(~V)";
         Text[ chinese_traditional ] = "åå‘(~V)";
@@ -1063,7 +1063,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ korean ] = "íŒœí”Œë ›(~U)";
         Text[ turkish ] = "Broşür";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Esite";
+        Text[ finnish ] = "Esite";
         Text[ catalan ] = "Full~ets";
         Text[ thai ] = "Broch~ure";
     };
@@ -1077,7 +1077,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Senza" ;
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
-        Text [ finnish ] = "~Ei mitään" ;
+        Text [ finnish ] = "Ei mitä~än" ;
         Text [ danish ] = "Ingen" ;
         Text [ french ] = "Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
@@ -1087,7 +1087,7 @@ TabPage TP_OPTPRINT_PAGE
         TabStop = TRUE ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "æ— (~N)";
-        Text[ russian ] = "~Áåç";
+        Text[ russian ] = "~Íåò";
         Text[ polish ] = "Brak";
         Text[ japanese ] = "ãªã—(~N)";
         Text[ chinese_traditional ] = "ç„¡(~N)";
@@ -1109,11 +1109,11 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Solo note" ;
         Text [ portuguese_brazilian ] = "~Observa??s apenas" ;
         Text [ portuguese ] = "~Só anotações" ;
-        Text [ finnish ] = "~Vain huomautukset" ;
+        Text [ finnish ] = "Vain ~huomautukset" ;
         Text [ danish ] = "Kun noter" ;
         Text [ french ] = "Notes uniquement" ;
         Text [ swedish ] = "~Endast anteckningar" ;
-        Text [ dutch ] = "A~lleen aantekeningen" ;
+        Text [ dutch ] = "~Alleen aantekeningen" ;
         Text [ spanish ] = "Sólo notas" ;
         Text [ english_us ] = "Notes ~only" ;
         Text[ chinese_simplified ] = "åªæ˜¯å¤‡æ³¨(~O)";
@@ -1139,7 +1139,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Fine documento" ;
         Text [ portuguese_brazilian ] = "Final do ~documento" ;
         Text [ portuguese ] = "Fim de ~documento" ;
-        Text [ finnish ] = "~Asiakirjan loppu" ;
+        Text [ finnish ] = "Asiakirjan ~loppu" ;
         Text [ danish ] = "Dokumentets slutn." ;
         Text [ french ] = "Fin du document" ;
         Text [ swedish ] = "~Dokumentslut" ;
@@ -1269,10 +1269,10 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Cr~ea singoli ordini di stampa" ;
         Text [ spanish ] = "Crear tareas individuales de impresión" ;
         Text [ french ] = "Travaux d'impression individuels" ;
-        Text [ dutch ] = "Af~zonderlijke afdrukjobs" ;
+        Text [ dutch ] = "Afzonderli~jke afdruktaken geven" ;
         Text [ portuguese ] = "C~riar tarefas de impressão individuais" ;
         Text[ chinese_simplified ] = "ç”Ÿæˆå•ä¸ªæ‰“å°ä»»åŠ¡(~I)";
-        Text[ russian ] = "Ñîçäàòü îòäåëüíûå çàäàíèÿ ïå÷àòè";
+        Text[ russian ] = "Ñîçäàòü îòäåëüíûå çàäàíèÿ ïğèíòåğà";
         Text[ polish ] = "Utwórz pojedyncze zadania wydruku";
         Text[ japanese ] = "å€‹åˆ¥å°åˆ·ã‚¸ãƒ§ãƒ–ã®ä½œæˆ(~I)";
         Text[ chinese_traditional ] = "ç”¢ç”Ÿå–®é …åˆ—å°ä½œæ¥­(~I)";
@@ -1326,7 +1326,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ portuguese ] = "Fa~x";
         Text[ russian ] = "Ôàêñ";
         Text[ greek ] = "Fa~x";
-        Text[ dutch ] = "~Fax";
+        Text[ dutch ] = "Fa~x";
         Text[ french ] = "Fa~x";
         Text[ spanish ] = "Fax";
         Text[ italian ] = "Fax";
@@ -1359,7 +1359,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[English] = "<None>" ;
         Text[ english_us ] = "<None>";
         Text[ portuguese ] = "<Nenhum(a)>";
-        Text[ russian ] = "<Áåç>";
+        Text[ russian ] = "<Íåò>";
         Text[ greek ] = "<Káíİíá>";
         Text[ dutch ] = "<Geen>";
         Text[ french ] = "<Aucun(e)>";
@@ -1444,7 +1444,7 @@ TabPage TP_STD_FONT
         Text[ korean ] = "í‘œì¤€(~F)";
         Text[ turkish ] = "~Standart";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Vakio";
+        Text[ finnish ] = "Oletus";
         Text[ catalan ] = "~Estàndard";
         Text[ thai ] = "~à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
     };
@@ -1458,7 +1458,7 @@ TabPage TP_STD_FONT
         Text [ italian ] = "Intestazione" ;
         Text [ portuguese_brazilian ] = "~T?tulo" ;
         Text [ portuguese ] = "~Título" ;
-        Text [ finnish ] = "~Otsikko" ;
+        Text [ finnish ] = "Ot~sikko" ;
         Text [ danish ] = "Overskrift" ;
         Text [ french ] = "Titre" ;
         Text [ swedish ] = "~Överskrift" ;
@@ -1618,7 +1618,7 @@ TabPage TP_STD_FONT
         Size = MAP_APPFONT ( 147 , 10 ) ;
         Text = "~Nur für das aktuelle Dokument" ;
         Text [ English ] = "Actual document only" ;
-        Text [ dutch ] = "~Alleen in het actuele document" ;
+        Text [ dutch ] = "~Alleen in het huidige document" ;
         Text [ english_us ] = "C~urrent document only" ;
         Text [ italian ] = "Solo per il documento corrente" ;
         Text [ spanish ] = "Sólo para el documento ~actual" ;
@@ -1666,7 +1666,7 @@ TabPage TP_STD_FONT
         Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
         Text[ turkish ] = "S~tandart";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Oletusarvo";
+        Text[ finnish ] = "~Oletus";
         Text[ catalan ] = "~Per defecte";
         Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
     };
@@ -1678,7 +1678,7 @@ TabPage TP_STD_FONT
         Text[ portuguese ] = "Asiático";
         Text[ russian ] = "Àçèàòñêèå";
         Text[ greek ] = "ÁóéÜôéêï";
-        Text[ dutch ] = "Asiatisch";
+        Text[ dutch ] = "Aziatisch";
         Text[ french ] = "Asiatique";
         Text[ spanish ] = "Asiático";
         Text[ finnish ] = "Aasialainen";
@@ -1702,12 +1702,12 @@ TabPage TP_STD_FONT
         Text [ English ] = "CTL" ;
         Text[ english_us ] = "CTL";
         Text[ portuguese ] = "CTL";
-        Text[ russian ] = "CTL";
+        Text[ russian ] = "Êîìïëåêñíûé ñêğèïò";
         Text[ greek ] = "CTL";
-        Text[ dutch ] = "CTL";
+        Text[ dutch ] = "Complexe scripts";
         Text[ french ] = "Scripts complexes";
         Text[ spanish ] = "CTL";
-        Text[ finnish ] = "CTL";
+        Text[ finnish ] = "Laajennettu tekstiasettelu";
         Text[ italian ] = "Script complessi";
         Text[ danish ] = "CTL";
         Text[ swedish ] = "CTL";
@@ -1781,7 +1781,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "æ¨™æº–";
         Text[ turkish ] = "Defaults";
         Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ finnish ] = "Oletusarvo";
+        Text[ finnish ] = "Oletus";
         Text[ catalan ] = "Per defecte";
         Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
     };
@@ -1795,7 +1795,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ italian ] = "Intestazione";
         Text[ portuguese_brazilian ] = "Header";
         Text[ portuguese ] = "~Título";
-        Text[ danish ] = "Over~skrift";
+        Text[ danish ] = "Ov~erskrift";
         Text[ french ] = "Titre";
         Text[ swedish ] = "Öve~rskrift";
         Text[ dutch ] = "~Kop";
@@ -1828,7 +1828,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ danish ] = "~Gentag på hver side";
         Text[ french ] = "Répéter sur chaque page";
         Text[ swedish ] = "U~pprepa på varje sida";
-        Text[ dutch ] = "Op elke pagina ~herhalen";
+        Text[ dutch ] = "O~p elke pagina herhalen";
         Text[ spanish ] = "Repetir en cada página";
         Text[ english_us ] = "Re~peat on each page";
         Text[ chinese_simplified ] = "åœ¨æ¯é¡µä¸Šé‡å¤æ˜¾ç¤º(~P)";
@@ -1885,7 +1885,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ italian ] = "Bordo";
         Text[ portuguese_brazilian ] = "Border";
         Text[ portuguese ] = "~Contornos";
-        Text[ danish ] = "~Ramme";
+        Text[ danish ] = "Ra~mme";
         Text[ french ] = "Bordure";
         Text[ swedish ] = "Inra~mning";
         Text[ dutch ] = "~Omranding";
@@ -1901,7 +1901,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "í…Œë‘ë¦¬(~O)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Kenarlık";
-        Text[ finnish ] = "~Reunus";
+        Text[ finnish ] = "Re~unus";
         Text[ catalan ] = "V~ora";
         Text[ thai ] = "à¹€à¸ªà¹‰~à¸™à¸‚à¸­à¸š";
     };
@@ -1936,7 +1936,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "í‘œì— ì…ë ¥";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Tablolara giriş";
-        Text[ finnish ] = "Taulukkojen syötöt";
+        Text[ finnish ] = "Taulukoiden syötöt";
         Text[ catalan ] = "Entrada en taules";
         Text[ thai ] = "à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¹ƒà¸ªà¹ˆà¹ƒà¸™à¸•à¸²à¸£à¸²à¸‡";
     };
@@ -1950,7 +1950,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ english_us ] = "Number recognition";
         Text[ portuguese ] = "R~econhecimento de números";
         Text[ russian ] = "Ğàñïîçíàâàíèå ÷èñåë";
-        Text[ dutch ] = "~Herkennen van getallen";
+        Text[ dutch ] = "G~etalherkening";
         Text[ french ] = "R~econnaissance des nombres";
         Text[ spanish ] = "Reconocimiento de números";
         Text[ italian ] = "Riconoscimento numeri";
@@ -1996,7 +1996,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "ìˆ«ì í˜•ì‹ ì¸ì‹";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Sayı formatı tanıma";
-        Text[ finnish ] = "Numeromuodon tunnistus";
+        Text[ finnish ] = "Lukumuodon tunnistus";
         Text[ catalan ] = "Reconeixement format ~numèric";
         Text[ thai ] = "à¸ˆà¸”à¸ˆà¸³à¸£à¸¹à¸›à¹à¸šà¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
     };
@@ -2014,7 +2014,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ french ] = "Alignement";
         Text[ spanish ] = "~Alineación";
         Text[ italian ] = "Allineamento";
-        Text[ danish ] = "Ju~stering";
+        Text[ danish ] = "~Justering";
         Text[ swedish ] = "~Justering";
         Text[ polish ] = "Wyrównanie";
         Text[ portuguese_brazilian ] = "Automatic alignment";
@@ -2038,7 +2038,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ English ] = "Keyboard handling" ;
         Text[ english_us ] = "Keyboard handling";
         Text[ portuguese ] = "Utilização do teclado";
-        Text[ russian ] = "Îáñëóæèâàíèå ñ êëàâèàòóğû";
+        Text[ russian ] = "Óïğàâëåíèå ñ êëàâèàòóğû";
         Text[ greek ] = "×åéñéóìüò ğëçêôñïëïãßïõ";
         Text[ dutch ] = "Bediening toetsenbord";
         Text[ french ] = "Utilisation du clavier";
@@ -2066,7 +2066,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ English ] = "Move cells" ;
         Text[ english_us ] = "Move cells";
         Text[ portuguese ] = "Mover células";
-        Text[ russian ] = "Ïåğåìåñòèòü ÿ÷åéêè";
+        Text[ russian ] = "Ïåğåìåñòèòü ÿ÷åéêó";
         Text[ greek ] = "Ìåôáêßíçóç êåëéşí";
         Text[ dutch ] = "Cellen verplaatsen";
         Text[ french ] = "Déplacement des cellules";
@@ -2095,7 +2095,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ english_us ] = "~Row" ;
         Text [ portuguese_brazilian ] = "~Zeile" ;
         Text [ swedish ] = "R~ad" ;
-        Text [ danish ] = "Række" ;
+        Text [ danish ] = "~Række" ;
         Text [ italian ] = "Riga" ;
         Text [ spanish ] = "~Fila" ;
         Text [ french ] = "Ligne" ;
@@ -2144,10 +2144,10 @@ TabPage TP_OPTTABLE_PAGE
         Text [ italian ] = "Colonna" ;
         Text [ spanish ] = "~Columna" ;
         Text [ french ] = "Colonne" ;
-        Text [ dutch ] = "~Kolom" ;
+        Text [ dutch ] = "Kolo~m" ;
         Text [ portuguese ] = "~Coluna" ;
         Text[ chinese_simplified ] = "åˆ—(~C)";
-        Text[ russian ] = "Êîëîíêà";
+        Text[ russian ] = "Ñòîëáåö";
         Text[ polish ] = "Kolumna";
         Text[ japanese ] = "åˆ—(~C)";
         Text[ chinese_traditional ] = "æ¬„(~C)";
@@ -2156,7 +2156,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "ë‹¨(~C)";
         Text[ turkish ] = "S~ütun";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Sarake";
+        Text[ finnish ] = "Sarake";
         Text[ catalan ] = "~Columna";
         Text[ thai ] = "~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
@@ -2263,9 +2263,9 @@ TabPage TP_OPTTABLE_PAGE
         Text [ italian ] = "Colonna" ;
         Text [ spanish ] = "C~olumna" ;
         Text [ french ] = "Colonne" ;
-        Text [ dutch ] = "K~olom" ;
+        Text [ dutch ] = "Ko~lom" ;
         Text[ chinese_simplified ] = "åˆ—(~M)";
-        Text[ russian ] = "Êîëîíêà";
+        Text[ russian ] = "Ñòîëáåö";
         Text[ polish ] = "Kolumna";
         Text[ japanese ] = "åˆ—(~M)";
         Text[ chinese_traditional ] = "æ¬„(~M)";
@@ -2274,7 +2274,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "ì—´(~M)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Sarake";
+        Text[ finnish ] = "Sarake";
         Text[ catalan ] = "Colu~mna";
         Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡~à¸™à¹Œ";
     };
@@ -2302,7 +2302,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ English ] = "Behaviour while moving" ;
         Text[ english_us ] = "Behavior of rows/columns";
         Text[ portuguese ] = "Comportamento durante deslocamento";
-        Text[ russian ] = "Ïîâåäåíèå âî âğåìÿ ïåğåìåùåíèÿ";
+        Text[ russian ] = "Ïîâåäåíèå ñòğîê/ñòîëáöîâ";
         Text[ greek ] = "ÓõìğåñéöïñÜ êáôÜ ôçí ìåôáêßíçóç";
         Text[ dutch ] = "Gedrag tijdens verplaatsing";
         Text[ french ] = "Comportement lors du déplacement";
@@ -2335,10 +2335,10 @@ TabPage TP_OPTTABLE_PAGE
         Text [ italian ] = "~Fisso" ;
         Text [ spanish ] = "Fi~jo" ;
         Text [ french ] = "~Fixe" ;
-        Text [ dutch ] = "Va~st" ;
+        Text [ dutch ] = "Vas~t" ;
         Text [ portuguese ] = "~Fixo" ;
         Text[ chinese_simplified ] = "å›ºå®š(~F)";
-        Text[ russian ] = "Ôèêñ.";
+        Text[ russian ] = "Ñäâèã îäíîé ÿ÷åéêè";
         Text[ polish ] = "Sta³y";
         Text[ japanese ] = "å›ºå®š(~F)";
         Text[ chinese_traditional ] = "å›ºå®š(~F)";
@@ -2361,9 +2361,9 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ english_us ] = "Changes affect the adjacent area only";
         Text[ portuguese ] = "As modificações afectam apenas a área adjacente";
-        Text[ russian ] = "Èçìåíåíèÿ ïîâëèÿşò òîëüêî íà íåïîñğåäñòâåííûõ ñîñåäåé";
+        Text[ russian ] = "Èçìåíåíèÿ ïîâëèÿşò òîëüêî íà ñìåæíûå îáëàñòè";
         Text[ greek ] = "Ïé áëëáãİò åğçñåÜæïõí ìüíï ôçí Üìåóá ãåéôïíéêŞ ğåñéï÷Ş";
-        Text[ dutch ] = "Veranderingen hebben alleen uitwerkingen op het aangrenzende bereik";
+        Text[ dutch ] = "Wijzigingen hebben alleen uitwerkingen op het aangrenzende bereik";
         Text[ french ] = "Modifications n'affectent que la plage adjacente";
         Text[ spanish ] = "Las modificaciones afectan sólo a la fila o columna contigua";
         Text[ finnish ] = "Muutokset vaikuttavat vain vierekkäiseen alueeseen";
@@ -2397,7 +2397,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ dutch ] = "V~ast, proportioneel" ;
         Text [ portuguese ] = "F~ixo, proporcional" ;
         Text[ chinese_simplified ] = "å›ºå®šæˆæ¯”ä¾‹(~X)";
-        Text[ russian ] = "Ôèêñ., ïğîïîğöèîíàëüí.";
+        Text[ russian ] = "Ïğîïîğöèîíàëüí. ñäâèã";
         Text[ polish ] = "Sta³y, p~roporcjonalny";
         Text[ japanese ] = "å›ºå®šæ¯”ä¾‹(~X)";
         Text[ chinese_traditional ] = "å›ºå®šæˆæ¯”ä¾‹(~X)";
@@ -2406,7 +2406,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "ê³ ì •ë¨,ë¹„ë¡€(~X)";
         Text[ turkish ] = "Sabi~t orantılı";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kiinteä, suhteellinen";
+        Text[ finnish ] = "Kiinteä, su~hteellinen";
         Text[ catalan ] = "Fi~xa, proporcional";
         Text[ thai ] = "à¸„~à¸‡à¸—à¸µà¹ˆ, à¸ªà¸±à¸”à¸ªà¹ˆà¸§à¸™";
     };
@@ -2422,7 +2422,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "As modificações afectam a tabela inteira";
         Text[ russian ] = "Èçìåíåíèÿ ïîâëèÿşò íà âñş òàáëèöó";
         Text[ greek ] = "Ïé áëëáãİò åğçñåÜæïõí ïëüêëçñï ôïí ğßíáêá";
-        Text[ dutch ] = "Veranderingen hebben alleen uitwerkingen op de hele tabel";
+        Text[ dutch ] = "Wijzigingen hebben alleen uitwerkingen op de hele tabel";
         Text[ french ] = "Modifications affectent la totalité du tableau";
         Text[ spanish ] = "Las modificaciones afectan a toda la tabla";
         Text[ finnish ] = "Muutokset vaikuttavat koko taulukkoon";
@@ -2453,10 +2453,10 @@ TabPage TP_OPTTABLE_PAGE
         Text [ italian ] = "~Variabile" ;
         Text [ spanish ] = "~Variable" ;
         Text [ french ] = "~Variable" ;
-        Text [ dutch ] = "~Variabel" ;
+        Text [ dutch ] = "Varia~bel" ;
         Text [ portuguese ] = "~Variável" ;
         Text[ chinese_simplified ] = "å¯å˜(~V)";
-        Text[ russian ] = "Èçì.";
+        Text[ russian ] = "Ñäâèã òàáëèöû";
         Text[ polish ] = "Zmie~nny";
         Text[ japanese ] = "ãƒ•ãƒ¬ãƒƒã‚¯ã‚¹(~V)";
         Text[ chinese_traditional ] = "å¯è®Š(~V)";
@@ -2481,7 +2481,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "As modificações afectam o tamanho da tabela";
         Text[ russian ] = "Èçìåíåíèÿ ïîâëèÿşò íà ğàçìåğ òàáëèöû";
         Text[ greek ] = "Ïé áëëáãİò åğçñåÜæïõí ôï ìİãåèïò ôïõ ğßíáêá";
-        Text[ dutch ] = "Veranderingen hebben uitwerkingen op de tabelgrootte";
+        Text[ dutch ] = "Wijzigingen hebben uitwerking op de tabelgrootte";
         Text[ french ] = "Modifications affectent la taille du tableau";
         Text[ spanish ] = "Las modificaciones afectan el tamaño de la tabla";
         Text[ finnish ] = "Muutokset vaikuttavat taulukon kokoon";
@@ -2551,7 +2551,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Fine paragrafo" ;
         Text [ portuguese_brazilian ] = "Finais de par?grafo" ;
         Text [ portuguese ] = "~Fim de parágrafo" ;
-        Text [ finnish ] = "~Kappaleen loppu" ;
+        Text [ finnish ] = "Kappaleen ~loppu" ;
         Text [ danish ] = "Afs~nitsslutning" ;
         Text [ french ] = "Fin de paragraphe" ;
         Text [ swedish ] = "Styck~etecken" ;
@@ -2583,7 +2583,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Sillabazione ~manuale" ;
         Text [ portuguese_brazilian ] = "H?fens soft" ;
         Text [ portuguese ] = "~Hífens opcionais" ;
-        Text [ finnish ] = "~Valinnaiset tavuviivat" ;
+        Text [ finnish ] = "~Mukautetut tavuviivat" ;
         Text [ danish ] = "~Brugerdefinerede separatorer" ;
         Text [ french ] = "Tirets ~utilisateur" ;
         Text [ swedish ] = "An~vändardefinierade bindestreck" ;
@@ -2613,7 +2613,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Spazi" ;
         Text [ portuguese_brazilian ] = "Espa?amentos" ;
         Text [ portuguese ] = "Espaços" ;
-        Text [ finnish ] = "~Välit" ;
+        Text [ finnish ] = "V~älit" ;
         Text [ danish ] = "Mellem~rum" ;
         Text [ french ] = "Espaces" ;
         Text [ swedish ] = "Bl~anksteg" ;
@@ -2643,15 +2643,15 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Spa~zio non divisibile" ;
         Text [ portuguese_brazilian ] = "Espa?os ininterruptos" ;
         Text [ portuguese ] = "Espaços p~rotegidos" ;
-        Text [ finnish ] = "~Sitovat välilyönnit" ;
+        Text [ finnish ] = "Sitovat välily~önnit" ;
         Text [ danish ] = "H~årde mellemrum" ;
         Text [ french ] = "Espaces insécables" ;
         Text [ swedish ] = "Fa~st mellanrum" ;
-        Text [ dutch ] = "~Beveiligde spatie" ;
+        Text [ dutch ] = "Ha~rde spaties" ;
         Text [ spanish ] = "Espacios proteg~idos" ;
         Text [ english_us ] = "Non-breaking s~paces" ;
         Text[ chinese_simplified ] = "å—ä¿æŠ¤çš„ç©ºæ ¼å­—ç¬¦(~P)";
-        Text[ russian ] = "Çàùèùåííûå ïğîáåëû";
+        Text[ russian ] = "Íåğàçáèâàşùèå ïğîáåëû";
         Text[ polish ] = "Spacje bez podzia³u";
         Text[ japanese ] = "ä¿è­·ã•ã‚ŒãŸã‚¹ãƒšãƒ¼ã‚¹(~P)";
         Text[ chinese_traditional ] = "å—ä¿è­·çš„ç©ºæ ¼å­—å…ƒ(~P)";
@@ -2674,14 +2674,14 @@ TabPage TP_OPTSHDWCRSR
         Text [ portuguese_brazilian ] = "~Tabula??s" ;
         Text [ portuguese ] = "~Tabulações" ;
         Text [ finnish ] = "Sarkaimet" ;
-        Text [ danish ] = "Ta~bulatorer" ;
+        Text [ danish ] = "Tabulator~er" ;
         Text [ french ] = "Tabulations" ;
         Text [ swedish ] = "Ta~bulatorer" ;
         Text [ dutch ] = "Tabsto~ps" ;
         Text [ spanish ] = "Tabulad~ores" ;
         Text [ english_us ] = "Ta~bs" ;
         Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
-        Text[ russian ] = "Òàáóëÿòîğû";
+        Text[ russian ] = "Òàáóëÿöèÿ";
         Text[ polish ] = "Tabulatory";
         Text[ japanese ] = "ã‚¿ãƒ–";
         Text[ chinese_traditional ] = "å®šä½éµ";
@@ -2703,7 +2703,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Interruzioni" ;
         Text [ portuguese_brazilian ] = "Interrup??s" ;
         Text [ portuguese ] = "Quebras" ;
-        Text [ finnish ] = "~Keskeytykset" ;
+        Text [ finnish ] = "Vaih~dot" ;
         Text [ danish ] = "Sides~kift" ;
         Text [ french ] = "~Sauts" ;
         Text [ swedish ] = "Br~ytningar" ;
@@ -2733,7 +2733,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Testo nascosto" ;
         Text [ portuguese_brazilian ] = "~Texto oculto" ;
         Text [ portuguese ] = "~Texto oculto" ;
-        Text [ finnish ] = "~Piilotettu teksti" ;
+        Text [ finnish ] = "Piilo~teksti" ;
         Text [ danish ] = "Skj~ult tekst" ;
         Text [ french ] = "Texte ~masqué" ;
         Text [ swedish ] = "Dold te~xt" ;
@@ -2762,11 +2762,11 @@ TabPage TP_OPTSHDWCRSR
         Text [ english_us ] = "Hidden p~aragraphs" ;
         Text [ portuguese_brazilian ] = "~Versteckte Abs?tze" ;
         Text [ swedish ] = "Dolda stycken" ;
-        Text [ danish ] = "S~kjulte afsnit" ;
+        Text [ danish ] = "Sk~julte afsnit" ;
         Text [ italian ] = "~Paragrafi nascosti" ;
         Text [ spanish ] = "Pá~rrafos ocultos" ;
         Text [ french ] = "Paragraphes masqués" ;
-        Text [ dutch ] = "Verborgen al~inea´s" ;
+        Text [ dutch ] = "Verborgen al~inea's" ;
         Text [ portuguese ] = "~Parágrafos ocultos" ;
         Text[ chinese_simplified ] = "éšå…¥çš„æ®µè½(~A)";
         Text[ russian ] = "Ñêğûòûå àáçàöû";
@@ -2778,7 +2778,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ greek ] = "Êñõ~öİò ğáñÜãñáöïé";
         Text[ korean ] = "ìˆ¨ê²¨ì§„ ë‹¨ë½(~A)";
         Text[ turkish ] = "Gizili paragraflar";
-        Text[ finnish ] = "~Piilotetut kappaleet";
+        Text[ finnish ] = "Piilotetut ~kappaleet";
         Text[ catalan ] = "Pa~ràgrafs ocults";
         Text[ thai ] = "à¸¢à¹ˆ~à¸­à¸«à¸™à¹‰à¸²à¸—à¸µà¹ˆà¸‹à¹ˆà¸­à¸™à¹„à¸§à¹‰";
     };
@@ -2833,7 +2833,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Cursore ~diretto" ;
         Text [ spanish ] = "Cursor directo" ;
         Text [ french ] = "Curseur direct" ;
-        Text [ dutch ] = "~Direct-cursor" ;
+        Text [ dutch ] = "Dire~ctcursor" ;
         Text[ chinese_simplified ] = "ç›´æ¥å®šä½å…‰æ ‡(~D)";
         Text[ russian ] = "Ñâîáîäíûé êóğñîğ";
         Text[ polish ] = "Kursor bezpoœredni";
@@ -2844,7 +2844,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ korean ] = "ë‹¤ì´ë ‰íŠ¸ ì»¤ì„œ(~D)";
         Text[ turkish ] = "Serbest imleç";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Suora kohdistin";
+        Text[ finnish ] = "Suora ko~hdistin";
         Text[ catalan ] = "~Cursor directe";
         Text[ thai ] = "à¹€à¸„à¸­à¸£à¹Œà¹€à¸‹à¸­à¸£à¹Œà¹‚~à¸”à¸¢à¸•à¸£à¸‡";
     };
@@ -2905,7 +2905,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ korean ] = "ë‹¨ë½ ë§ì¶¤(~G)";
         Text[ turkish ] = "Pa~ragraf hizalama";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kappaleen tasaus";
+        Text[ finnish ] = "K~appaleen tasaus";
         Text[ catalan ] = "~Alineament de paràgraf";
         Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸¢à¹ˆà¸­à¸«~à¸™à¹‰à¸²";
     };
@@ -2918,14 +2918,14 @@ TabPage TP_OPTSHDWCRSR
         Text [ english_us ] = "~Left paragraph margin" ;
         Text [ portuguese_brazilian ] = "linker Absatz~rand" ;
         Text [ swedish ] = "Vä~nster styckemarginal" ;
-        Text [ danish ] = "Ve~nstre margen" ;
+        Text [ danish ] = "~Venstre margen" ;
         Text [ italian ] = "Margine paragrafo sinistro" ;
         Text [ spanish ] = "~Margen izquierdo del párrafo" ;
         Text [ french ] = "Marge gauche du paragraphe" ;
-        Text [ dutch ] = "linker alinea~rand" ;
+        Text [ dutch ] = "~linkeralinearand" ;
         Text [ portuguese ] = "Margem e~squerda do parágrafo" ;
         Text[ chinese_simplified ] = "æ®µè½å·¦é—´éš”(~L)";
-        Text[ russian ] = "ëåâûé êğàé àáçàöà";
+        Text[ russian ] = "Ëåâûé êğàé àáçàöà";
         Text[ polish ] = "Lewy margines akapitu";
         Text[ japanese ] = "æ®µè½å·¦ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆ(~L)";
         Text[ chinese_traditional ] = "æ®µè½å·¦é–“éš”(~L)";
@@ -2934,7 +2934,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ korean ] = "ì¢Œì¸¡ ë‹¨ë½ì—¬ë°±(~L)";
         Text[ turkish ] = "Sol ~paragraf kenarı";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Vasen kappalemarginaali";
+        Text[ finnish ] = "Kappalee~n vasen reunus ";
         Text[ catalan ] = "~Marge esquerre del paràgraf";
         Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸‚à¸­à¸šà¸‚à¸­à¸‡à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸”à¹‰à¸²à¸™~à¸‹à¹‰à¸²à¸¢";
     };
@@ -2947,14 +2947,14 @@ TabPage TP_OPTSHDWCRSR
         Text [ english_us ] = "~Tabs" ;
         Text [ portuguese_brazilian ] = "~Tabulator" ;
         Text [ swedish ] = "Tabulat~or" ;
-        Text [ danish ] = "Tabulator" ;
+        Text [ danish ] = "Tabu~lator" ;
         Text [ italian ] = "Tabulazione" ;
         Text [ spanish ] = "~Tabulador" ;
         Text [ french ] = "Tabulation" ;
         Text [ dutch ] = "~Tabulator" ;
         Text [ portuguese ] = "~Tabulações" ;
         Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦(~T)";
-        Text[ russian ] = "Òàáóëÿòîğû";
+        Text[ russian ] = "Òàáóëÿöèÿ";
         Text[ polish ] = "Tabulator";
         Text[ japanese ] = "ã‚¿ãƒ–(~T)";
         Text[ chinese_traditional ] = "å®šä½éµ(~T)";
@@ -2976,14 +2976,14 @@ TabPage TP_OPTSHDWCRSR
         Text [ english_us ] = "Tabs a~nd spaces" ;
         Text [ portuguese_brazilian ] = "Tabulator und ~Leerzeichen" ;
         Text [ swedish ] = "Tabulator och blan~ksteg" ;
-        Text [ danish ] = "Tabulator og mellemrum" ;
+        Text [ danish ] = "Tabulat~or og mellemrum" ;
         Text [ italian ] = "Tabulazione e spazi" ;
         Text [ spanish ] = "Tabulador y ~espacios" ;
         Text [ french ] = "Tabulation et espaces" ;
-        Text [ dutch ] = "Tabulator en ~spaties" ;
+        Text [ dutch ] = "Tab~ulator en spaties" ;
         Text [ portuguese ] = "Tabulações e ~espaços" ;
         Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦å’Œç©ºæ ¼(~N)";
-        Text[ russian ] = "Òàáóëÿòîğû è ïğîáåëû";
+        Text[ russian ] = "Òàáóëÿöèè è ïğîáåëû";
         Text[ polish ] = "Tabulator i ~spacja";
         Text[ japanese ] = "ã‚¿ãƒ–ã¨ã‚¹ãƒšãƒ¼ã‚¹(~N)";
         Text[ chinese_traditional ] = "å®šä½éµå’Œç©ºæ ¼(~N)";
@@ -2992,7 +2992,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ korean ] = "íƒ­ê³¼ ê°„ê²©(~N)";
         Text[ turkish ] = "Sekmeler ve ~boşluklar";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Sarkaimet ja välit";
+        Text[ finnish ] = "Sarkaimet ~ja välit";
         Text[ catalan ] = "Pestanyes i~ espais";
         Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™à¹~à¸¥à¸°à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
     };
@@ -3036,7 +3036,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ portuguese ] = "~Permitir";
         Text[ russian ] = "Ğàçğåøèòü";
         Text[ greek ] = "Íá åğéôñáğåß";
-        Text[ dutch ] = "~Toestaan";
+        Text[ dutch ] = "T~oestaan";
         Text[ french ] = "Autoriser";
         Text[ spanish ] = "Permitir";
         Text[ italian ] = "Permetti";
@@ -3050,7 +3050,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_traditional ] = "å…è¨±";
         Text[ turkish ] = "İmlecin korumalı bölümlere girmesine izin ver";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇÓÊÎÏÇã";
-        Text[ finnish ] = "Ota käyttöön";
+        Text[ finnish ] = "Ota kä~yttöön";
         Text[ catalan ] = "Habilita";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "à¹€à¸›à¸´à¸”à¹ƒà¸Šà¹‰à¸‡à¸²à¸™";
