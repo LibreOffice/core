@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:44:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ Window FLT_NAVIGATOR
                 Text [ spanish ] = "Modo en vivo" ;
                 Text [ french ] = "Mode Live" ;
                 Text [ dutch ] = "Livemodus" ;
-                Text [ danish ] = "Livemodus" ;
+                Text [ danish ] = "Livetilstand" ;
                 Text [ portuguese_brazilian ] = "Modo Ao Vivo" ;
                 Text [ portuguese ] = "Ao vivo" ;
                 Text [ swedish ] = "Livel�ge" ;
@@ -122,6 +122,8 @@ Window FLT_NAVIGATOR
                 Text[ hebrew ] = "Livemodus";
                 Text[ hindi ] = "प्रत्यक्ष प्रकार";
                 Text[ slovak ] = "Živá prezentácia";
+                Text[ hungarian ] = "Élő mód";
+                Text[ slovenian ] = "Način v živo";
             };
             ToolBoxItem
             {
@@ -156,6 +158,8 @@ Window FLT_NAVIGATOR
                 Text[ hebrew ] = "Stift";
                 Text[ hindi ] = "सूचक डन्डा";
                 Text[ slovak ] = "Ukazovateľ";
+                Text[ hungarian ] = "Mutató";
+                Text[ slovenian ] = "Kazalec";
             };
             ToolBoxItem
             {
@@ -173,7 +177,7 @@ Window FLT_NAVIGATOR
                 Text [ spanish ] = "Primera diapositiva" ;
                 Text [ french ] = "Premi�re page" ;
                 Text [ dutch ] = "Eerste pagina" ;
-                Text [ danish ] = "F�rste side" ;
+                Text [ danish ] = "F�rste dias" ;
                 Text [ portuguese_brazilian ] = "Primeiro Slide" ;
                 Text [ portuguese ] = "Primeira p�gina" ;
                 Text [ swedish ] = "F�rsta sidan" ;
@@ -194,6 +198,8 @@ Window FLT_NAVIGATOR
                 Text[ hebrew ] = "Erste Seite";
                 Text[ hindi ] = "पहिला स्लइड";
                 Text[ slovak ] = "Prvý snímok";
+                Text[ hungarian ] = "Első dia";
+                Text[ slovenian ] = "Prvi diapozitiv";
             };
             ToolBoxItem
             {
@@ -207,7 +213,7 @@ Window FLT_NAVIGATOR
                 Text [ italian ] = "pagina precedente" ;
                 Text [ spanish ] = "Diapositiva anterior" ;
                 Text [ french ] = "Page pr�c�dente" ;
-                Text [ danish ] = "forrige side" ;
+                Text [ danish ] = "Forrige dias" ;
                 Text [ portuguese_brazilian ] = "Slide Anterior" ;
                 Text [ portuguese ] = "P�gina anterior" ;
                 Text [ swedish ] = "F�reg�ende sida" ;
@@ -228,6 +234,8 @@ Window FLT_NAVIGATOR
                 Text[ hebrew ] = "vorherige Seite";
                 Text[ hindi ] = "पिछला स्लइड";
                 Text[ slovak ] = "Predchádzajúci snímok";
+                Text[ hungarian ] = "Előző dia";
+                Text[ slovenian ] = "Prejšnji diapozitiv";
             };
             ToolBoxItem
             {
@@ -243,7 +251,7 @@ Window FLT_NAVIGATOR
                 Text [ italian ] = "Pagina successiva" ;
                 Text [ spanish ] = "Diapositiva siguiente" ;
                 Text [ french ] = "Page suivante" ;
-                Text [ danish ] = "N�ste side" ;
+                Text [ danish ] = "N�ste dias" ;
                 Text [ portuguese_brazilian ] = "Pr�ximo Slide" ;
                 Text [ portuguese ] = "P�gina seguinte" ;
                 Text [ swedish ] = "N�sta sida" ;
@@ -264,6 +272,8 @@ Window FLT_NAVIGATOR
                 Text[ hebrew ] = "Nächste Seite";
                 Text[ hindi ] = "अगला स्लइड";
                 Text[ slovak ] = "Nasledujúci snímok";
+                Text[ hungarian ] = "Következő dia";
+                Text[ slovenian ] = "Naslednji diapozitiv";
             };
             ToolBoxItem
             {
@@ -277,7 +287,7 @@ Window FLT_NAVIGATOR
                 Text [ italian ] = "Ultima pagina" ;
                 Text [ spanish ] = "�ltima diapositiva" ;
                 Text [ french ] = "Derni�re page" ;
-                Text [ danish ] = "Sidste side" ;
+                Text [ danish ] = "Sidste dias" ;
                 Text [ portuguese_brazilian ] = "�ltimo Slide" ;
                 Text [ portuguese ] = "�ltima p�gina" ;
                 Text [ swedish ] = "Sista sidan" ;
@@ -298,6 +308,8 @@ Window FLT_NAVIGATOR
                 Text[ hebrew ] = "Letzte Seite";
                 Text[ hindi ] = "अंतिम स्लइड";
                 Text[ slovak ] = "Posledný snímok";
+                Text[ hungarian ] = "Utolsó dia";
+                Text[ slovenian ] = "Zadnji diapozitiv";
             };
             ToolBoxItem
             {
@@ -317,7 +329,7 @@ Window FLT_NAVIGATOR
                 Text [ spanish ] = "Modo Arrastrar" ;
                 Text [ french ] = "Mode Glisser" ;
                 Text [ dutch ] = "Sleepmodus" ;
-                Text [ danish ] = "Tr�kmodus" ;
+                Text [ danish ] = "Tr�ktilstand" ;
                 Text [ portuguese_brazilian ] = "Modo Arrastar" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
                 Text [ swedish ] = "Dral�ge" ;
@@ -338,6 +350,8 @@ Window FLT_NAVIGATOR
                 Text[ hebrew ] = "Dragmodus";
                 Text[ hindi ] = "खींचने का प्रकार";
                 Text[ slovak ] = "Spôsob pretiahnutia";
+                Text[ hungarian ] = "Beszúrás módja";
+                Text[ slovenian ] = "Vlečni način";
             };
         };
     };
@@ -381,6 +395,8 @@ Window FLT_NAVIGATOR
         QuickHelpText[ hebrew ] = "‮מסמכים‬";
         QuickHelpText[ hindi ] = "लेखपत्र";
         QuickHelpText[ slovak ] = "Dokumenty";
+        QuickHelpText[ hungarian ] = "Dokumentumok";
+        QuickHelpText[ slovenian ] = "Dokumenti";
     };
 
     #define NAVIGATR_IDLIST \
@@ -413,6 +429,8 @@ Window FLT_NAVIGATOR
         NAVIGATR_IDLIST
     };
 };
+
+
 
 
 
