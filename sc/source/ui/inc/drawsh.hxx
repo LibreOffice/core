@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:33:58 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@ public:
 
     void    ExecuteHLink(SfxRequest& rReq);     // Hyperlink
     void    GetHLinkState(SfxItemSet& rSet);
+
+    void    ExecFormatPaintbrush(SfxRequest& rReq);
+    void    StateFormatPaintbrush(SfxItemSet& rSet);
 
     void    ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
     void    ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
