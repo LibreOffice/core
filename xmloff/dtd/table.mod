@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.38 2001-07-24 15:01:42 dvo Exp $
+	$Id: table.mod,v 1.39 2001-07-31 14:47:55 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -115,7 +115,7 @@
 	table:table %integer; #IMPLIED
 	table:multi-deletion-spanned %integer; #IMPLIED
 >
-<!ELEMENT table:cut-offs (table:insertion-cut-off | table:movement-cut-off+ | (table:insertion-cut-off, table:movement-cut-off+))>
+<!ELEMENT table:cut-offs (table:movement-cut-off+ | (table:insertion-cut-off, table:movement-cut-off*))>
 <!ELEMENT table:insertion-cut-off EMPTY>
 <!ATTLIST table:insertion-cut-off
 	table:id CDATA #REQUIRED
@@ -259,7 +259,7 @@
 	table:default-cell-style-name %styleName; #IMPLIED
 >
 
-<!ENTITY % text-wo-table "(text:h|text:p|text:ordered-list|text:unordered-list|%shapes;|chart:chart)*">
+<!ENTITY % text-wo-table "(text:h|text:p|text:ordered-list|text:unordered-list|%shapes;)*">
 <!ENTITY % cell-content "(table:cell-range-source?,office:annotation?,table:detective?,(table:sub-table|%text-wo-table;))">
 <!ELEMENT table:table-cell %cell-content;>
 <!ELEMENT table:covered-table-cell %cell-content;>

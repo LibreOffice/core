@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.42 2001-06-20 06:08:35 mib Exp $
+	$Id: office.mod,v 1.43 2001-07-31 14:47:55 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -221,7 +221,7 @@
 
 <!ENTITY % body "(office:forms?,(text:tracked-changes|table:tracked-changes)?,%text-decls;,table:calculation-settings?,table:content-validations?,table:label-ranges?,
 		(text:h|text:p|text:ordered-list|
-		text:unordered-list|table:table|chart:chart|draw:page|
+		text:unordered-list|table:table|draw:page|
 		draw:a|%shape;|text:section|text:table-of-content|
 		text:illustration-index|text:table-index|text:object-index|
 		text:user-index|text:alphabetical-index|text:bibliography|
