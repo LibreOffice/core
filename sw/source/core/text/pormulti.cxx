@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-12 08:40:25 $
+ *  last change: $Author: ama $ $Date: 2001-04-12 12:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,8 +691,7 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
                     nTmp = -short(nCalc);
                 else
                     nTmp = SHRT_MIN;
-                pCurr->CreateSpaceAdd();
-                pCurr->GetSpaceAdd().Insert( nTmp, 0 );
+                pCurr->CreateSpaceAdd( nTmp );
                 nLineDiff -= nCalc * ( nCharCnt - 1 );
             }
             if( nLineDiff > 1 )
@@ -720,8 +719,6 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
             pMarg = new SwMarginPortion( 0 );
             pMarg->AddPrtWidth( nRight );
             pCurr->FindLastPortion()->Append( pMarg );
-            if( pCurr->GetpSpaceAdd() )
-                pCurr->GetSpaceAdd().Insert( short(0), 0 );
         }
     }
     rInf.SetIdx( nOldIdx );

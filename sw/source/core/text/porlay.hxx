@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: ama $ $Date: 2001-04-12 12:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ public:
     inline SvUShorts* GetpKanaComp() const { return pKanaComp; }
     inline SvUShorts& GetKanaComp() { return *pKanaComp; }
 
-    void CreateSpaceAdd();
+    void CreateSpaceAdd( const short nInit = 0 );
 
 #ifndef PRODUCT
     void DebugPortions( SvStream &rOs, const XubString &rTxt,

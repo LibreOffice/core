@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: ama $ $Date: 2001-04-12 12:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,11 +230,10 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
  *                    SwLineLayout::CreateSpaceAdd()
  *************************************************************************/
 
-void SwLineLayout::CreateSpaceAdd()
+void SwLineLayout::CreateSpaceAdd( const short nInit )
 {
-    MSHORT nNull = 0;
     pSpaceAdd = new SvShorts;
-    pSpaceAdd->Insert( nNull, 0 );
+    pSpaceAdd->Insert( nInit, 0 );
 }
 
 /*************************************************************************
