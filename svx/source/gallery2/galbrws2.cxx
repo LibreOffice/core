@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-07 15:41:38 $
+ *  last change: $Author: ka $ $Date: 2002-03-13 16:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,8 +213,8 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
     const BOOL bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
 
-    pAddMenu->EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
-    pAddMenu->EnableItem( MN_ADD_LINK, bValidURL && SGA_OBJ_SVDRAW != eObjKind && SGA_OBJ_SOUND != eObjKind );
+    pAddMenu->EnableItem( MN_ADD, bValidURL );
+    pAddMenu->EnableItem( MN_ADD_LINK, bValidURL && SGA_OBJ_SVDRAW != eObjKind );
 
     EnableItem( MN_ADDMENU, pAddMenu->IsItemEnabled( MN_ADD ) || pAddMenu->IsItemEnabled( MN_ADD_LINK ) );
     EnableItem( MN_PREVIEW, bValidURL );
@@ -541,8 +541,8 @@ BOOL GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 
         const BOOL  bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
         BOOL        bPreview = bValidURL;
-        BOOL        bAdd = ( bValidURL && SGA_OBJ_SOUND != eObjKind );
-        BOOL        bAddLink = ( bValidURL && SGA_OBJ_SVDRAW != eObjKind && SGA_OBJ_SOUND != eObjKind );
+        BOOL        bAdd = bValidURL;
+        BOOL        bAddLink = ( bValidURL && SGA_OBJ_SVDRAW != eObjKind );
         BOOL        bDelete = FALSE;
         BOOL        bTitle = FALSE;
 
