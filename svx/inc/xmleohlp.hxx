@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // -----------------------------
 // - SvXMLEmbeddedObjectHelper -
 // -----------------------------
@@ -100,7 +104,7 @@ class SvGlobalName;
 struct OUStringLess;
 class OutputStorageWrapper_Impl;
 
-class SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImplHelper2<
+class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImplHelper2<
     ::com::sun::star::document::XEmbeddedObjectResolver,
     ::com::sun::star::container::XNameAccess >
 {
@@ -123,24 +127,24 @@ private:
     SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
     void*                       mpDummy2;
 
-    sal_Bool                    ImplGetStorageNames(
+    SVX_DLLPRIVATE sal_Bool                 ImplGetStorageNames(
                                     const ::rtl::OUString& rURLStr,
                                     ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjectStorageName,
                                     sal_Bool bInternalToExternal,
                                        sal_Bool *pGraphicRepl=0 ) const;
 
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
+    SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
                                     const ::rtl::OUString& rStorageName );
 
-    String                      ImplGetUniqueName( SfxObjectShell*, const sal_Char* p ) const;
-    sal_Bool                    ImplReadObject(
+    SVX_DLLPRIVATE String                      ImplGetUniqueName( SfxObjectShell*, const sal_Char* p ) const;
+    SVX_DLLPRIVATE sal_Bool                 ImplReadObject(
                                     const ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjName,
                                     const SvGlobalName *pClassId,
                                     SvStream* pTemp );
 
-    ::rtl::OUString             ImplInsertEmbeddedObjectURL(
+    SVX_DLLPRIVATE ::rtl::OUString              ImplInsertEmbeddedObjectURL(
                                     const ::rtl::OUString& rURLStr );
 
 protected:
