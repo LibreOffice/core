@@ -2,9 +2,9 @@
 *
 *  $RCSfile: binarycache.cxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: vg $ $Date: 2003-05-26 08:03:34 $
+*  last change: $Author: hr $ $Date: 2003-06-30 14:07:30 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -122,7 +122,12 @@ namespace configmgr
             if (!_rsURL.getLength())
                 return false;
 
-            OSL_ENSURE(isValidFileURL(_rsURL), "File URL is invalid");
+            if (!isValidFileURL(_rsURL))
+            {
+                OSL_TRACE("Binary cache: File URL %s is invalid.",
+                            rtl::OUStringToOString(_rsURL,RTL_TEXTENCODING_ASCII_US).getStr());
+                return false;
+            }
 
             rtl::OUString sBasePath = _rsURL;
             OSL_VERIFY(osl_Process_E_None == osl_getProcessWorkingDir(&sBasePath.pData));
