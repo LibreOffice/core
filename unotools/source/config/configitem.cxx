@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 14:52:14 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 15:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,8 +1200,8 @@ sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, 
             if (xSetNode.is())
             {
                 const sal_uInt32 nPrime = 65521;                            // a prime number
-                const sal_uInt32 nPrimeLess1 = nPrime - 1;
-                sal_uInt32 nEngendering     = (rand() % nPrimeLess1) + 1;   // the engendering of the field
+                const sal_uInt32 nPrimeLess2 = nPrime - 2;
+                sal_uInt32 nEngendering     = (rand() % nPrimeLess2) + 2;   // the engendering of the field
 
                 // the element which will loop through the field
                 sal_uInt32 nFieldElement = nEngendering;
