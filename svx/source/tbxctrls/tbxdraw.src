@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:35:47 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,22 +403,22 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Vertical Text" ;
                 Text[ english_us ] = "Vertical Text";
                 Text[ portuguese ] = "Vertical Text";
-                Text[ russian ] = "Vertical Text";
-                Text[ greek ] = "Vertical Text";
+                Text[ russian ] = "Βεπςθκΰλόνϋι ςεκρς";
+                Text[ greek ] = "Κατακόρυφο κείμενο";
                 Text[ dutch ] = "Vertical Text";
-                Text[ french ] = "Vertical Text";
-                Text[ spanish ] = "Vertical Text";
+                Text[ french ] = "Texte vertical";
+                Text[ spanish ] = "Texto vertical";
                 Text[ italian ] = "Vertical Text";
                 Text[ danish ] = "Vertical Text";
-                Text[ swedish ] = "Vertical Text";
-                Text[ polish ] = "Vertical Text";
+                Text[ swedish ] = "Vertikal text";
+                Text[ polish ] = "Pionowy tekst";
                 Text[ portuguese_brazilian ] = "Vertical Text";
-                Text[ japanese ] = "Vertical Text";
+                Text[ japanese ] = "c‘‚«Γ·½Δ";
                 Text[ korean ] = "Vertical Text";
-                Text[ chinese_simplified ] = "Vertical Text";
-                Text[ chinese_traditional ] = "Vertical Text";
+                Text[ chinese_simplified ] = "Φ±Κ½ΞΔΧΦ";
+                Text[ chinese_traditional ] = "ª½¦΅¤ε¦r";
                 Text[ turkish ] = "Vertical Text";
-                Text[ arabic ] = "Vertical Text";
+                Text[ arabic ] = "δΥ ΪγζΟν";
             };
             ToolBoxItem
             {
@@ -468,7 +468,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ chinese_simplified ] = "ΝΌΐύ";
                 Text[ russian ] = "Λεγενδΰ";
                 Text[ polish ] = "Legenda";
-                Text[ japanese ] = "‚«o‚µ";
+                Text[ japanese ] = "–}—α";
                 Text[ chinese_traditional ] = "ΉΟ¨Ò";
                 Text[ greek ] = "Επιγραφή";
                 Text[ korean ] = "Ήό·Κ";
@@ -485,22 +485,22 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ ENGLISH ] = "Vertical Caption" ;
                 Text[ english_us ] = "Vertical Caption";
                 Text[ portuguese ] = "Vertical Caption";
-                Text[ russian ] = "Vertical Caption";
-                Text[ greek ] = "Vertical Caption";
+                Text[ russian ] = "Βεπςθκΰλόνΰÿ λεγενδΰ";
+                Text[ greek ] = "Κατακόρυφο υπόμνημα";
                 Text[ dutch ] = "Vertical Caption";
-                Text[ french ] = "Vertical Caption";
-                Text[ spanish ] = "Vertical Caption";
+                Text[ french ] = "Lιgende verticale";
+                Text[ spanish ] = "Leyenda vertical";
                 Text[ italian ] = "Vertical Caption";
                 Text[ danish ] = "Vertical Caption";
-                Text[ swedish ] = "Vertical Caption";
-                Text[ polish ] = "Vertical Caption";
+                Text[ swedish ] = "Vertikal fφrklaring";
+                Text[ polish ] = "Pionowa legenda";
                 Text[ portuguese_brazilian ] = "Vertical Caption";
-                Text[ japanese ] = "Vertical Caption";
+                Text[ japanese ] = "c‘‚«—p–}—α";
                 Text[ korean ] = "Vertical Caption";
-                Text[ chinese_simplified ] = "Vertical Caption";
-                Text[ chinese_traditional ] = "Vertical Caption";
+                Text[ chinese_simplified ] = "Φ±Κ½ΝΌΐύ";
+                Text[ chinese_traditional ] = "ª½¦΅ΉΟ¨Ò";
                 Text[ turkish ] = "Vertical Caption";
-                Text[ arabic ] = "Vertical Caption";
+                Text[ arabic ] = "ΚΣγνΙ ΚζΦνΝνΙ ΪγζΟνΙ";
             };
         };
     };
