@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoRegister.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:10:03 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,14 +141,14 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
 {
     return pRegistryKey &&
     writeInfo (pRegistryKey,
-               ManifestReader::getImplementationName(),
-               ManifestReader::getSupportedServiceNames() ) &&
+               ManifestReader::static_getImplementationName(),
+               ManifestReader::static_getSupportedServiceNames() ) &&
     writeInfo (pRegistryKey,
-               ManifestWriter::getImplementationName(),
-               ManifestWriter::getSupportedServiceNames() ) &&
+               ManifestWriter::static_getImplementationName(),
+               ManifestWriter::static_getSupportedServiceNames() ) &&
     writeInfo (pRegistryKey,
-               ZipPackage::getImplementationName(),
-               ZipPackage::getSupportedServiceNames() );
+               ZipPackage::static_getImplementationName(),
+               ZipPackage::static_getSupportedServiceNames() );
 }
 
 
@@ -167,11 +167,11 @@ extern "C" void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
-    if (ManifestReader::getImplementationName().compareToAscii( pImplName ) == 0)
+    if (ManifestReader::static_getImplementationName().compareToAscii( pImplName ) == 0)
         xFactory = ManifestReader::createServiceFactory ( xSMgr );
-    else if (ManifestWriter::getImplementationName().compareToAscii( pImplName ) == 0)
+    else if (ManifestWriter::static_getImplementationName().compareToAscii( pImplName ) == 0)
         xFactory = ManifestWriter::createServiceFactory ( xSMgr );
-    else if (ZipPackage::getImplementationName().compareToAscii( pImplName ) == 0)
+    else if (ZipPackage::static_getImplementationName().compareToAscii( pImplName ) == 0)
         xFactory = ZipPackage::createServiceFactory ( xSMgr );
 
     if ( xFactory.is() )
