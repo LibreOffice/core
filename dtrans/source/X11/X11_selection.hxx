@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:25:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ namespace x11 {
             // m_aRequestedType is only valid while WaitingForResponse and WaitingFotData
             int                         m_nLastTimestamp;
             bool                        m_bHaveUTF16;
+            Atom                        m_aUTF8Type;
             bool                        m_bHaveCompound;
             bool                        m_bOwner;
             Window                      m_aLastOwner;
@@ -282,6 +283,8 @@ namespace x11 {
                           m_aRequestedType( None ),
                           m_nLastTimestamp( 0 ),
                           m_bHaveUTF16( false ),
+                          m_aUTF8Type( None ),
+                          m_bHaveCompound( false ),
                           m_bOwner( false ),
                           m_aLastOwner( None ),
                           m_pPixmap( NULL )
