@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tv $ $Date: 2002-05-16 13:14:09 $
+ *  last change: $Author: bc $ $Date: 2002-05-24 17:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,11 +182,12 @@ public class CallReportWizard {
         public ReportWizardImplementation(XMultiServiceFactory xmultiservicefactoryInitialization)
         {
             xmultiservicefactory = xmultiservicefactoryInitialization;
-                        this.execute();
+        this.execute();
+        System.err.println("ReportWizard wird gestartet!");
         }
 
 
-                public void setTitle( /*IN*/String Title ){}
+        public void setTitle( /*IN*/String Title ){}
             public String getTitle(  ) {
                     return "";
                 }
@@ -197,7 +198,9 @@ public class CallReportWizard {
             {
                XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
                //ConnectToOfficeDatabase(xcomponentloader);
-                             ReportWizard.startReportWizard(xmultiservicefactory);
+        System.err.println("ReportWizard wird gestartet!(2)");
+
+           ReportWizard.startReportWizard(xmultiservicefactory);
             }
             catch( Exception exception )
             {
