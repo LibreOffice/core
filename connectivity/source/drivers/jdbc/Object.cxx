@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:06:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,9 +170,11 @@ using namespace ::com::sun::star::lang;
 }
 // -----------------------------------------------------------------------------
 SDBThreadAttach::SDBThreadAttach()
- : m_aGuard(java_lang_Object::getVM())
+ : pEnv(NULL)
 {
-    pEnv = m_aGuard.getEnvironment();
+    m_aGuard = ::std::auto_ptr< jvmaccess::VirtualMachine::AttachGuard>(new jvmaccess::VirtualMachine::AttachGuard(java_lang_Object::getVM()) );
+    if ( m_aGuard.get() )
+        pEnv = m_aGuard->getEnvironment();
 }
 // -----------------------------------------------------------------------------
 SDBThreadAttach::~SDBThreadAttach()
@@ -323,6 +325,8 @@ void java_lang_Object::ThrowSQLException(JNIEnv * pEnv,const Reference< XInterfa
             delete pThrow;
             throw SQLException(aMsg,_rContext,::rtl::OUString(),-1,Any());
         }
+        else
+            pEnv->DeleteLocalRef( jThrow );
     }
 }
 
