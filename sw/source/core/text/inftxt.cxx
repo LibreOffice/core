@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
+ *  last change: $Author: fme $ $Date: 2001-10-12 07:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,6 +810,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         if ( ! aRect.HasArea() )
             return;
 
+#ifndef USE_SYMBOL_FONT_FOR_SPECIAL
 #ifndef PRODUCT
 #ifdef DEBUG
         if( IsOptDbg() )
@@ -817,6 +818,33 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 #endif
 #endif
         pOpt->PaintTab( pWin, aRect );
+#else
+        SwFont* pOldFnt = pFnt;
+        (SwFont*)pFnt = new SwFont( *pOldFnt );
+
+        pFnt->SetFamily( FAMILY_DONTKNOW, pOldFnt->GetActual() );
+        pFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
+                            pOldFnt->GetActual() );
+        pFnt->SetStyleName( aEmptyStr, pOldFnt->GetActual() );
+        pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pOldFnt->GetActual() );
+        pFnt->SetFixKerning( 0 );
+
+        const XubString aTmp( 0x2192 );
+        USHORT nWidth = GetTxtSize( aTmp ).Width();
+
+        // does the tab fit into the rectangle?
+        if ( nWidth < aRect.Width() )
+            return;
+
+        Point aOldPos( aPos );
+        ((SwTxtPaintInfo*)this)->SetPos(
+                Point( aPos.X() + ( aRect.Width() - nWidth ) / 2, aPos.Y() ) );
+
+        DrawText( aTmp, rPor );
+        delete pFnt;
+        (SwFont*)pFnt = pOldFnt;
+        ((SwTxtPaintInfo*)this)->SetPos( aOldPos );
+#endif
     }
 }
 

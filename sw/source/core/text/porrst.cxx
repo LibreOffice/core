@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-09 09:56:17 $
+ *  last change: $Author: fme $ $Date: 2001-10-12 07:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,29 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsLineBreak() )
     {
+#ifndef USE_SYMBOL_FONT_FOR_SPECIAL
         ((SwBreakPortion*)this)->CalcViewWidth( rInf );
         if( nViewWidth && nViewWidth <= nRestWidth )
             rInf.DrawLineBreak( *this );
+#else
+        SwFont* pOldFnt = (SwFont*)rInf.GetFont();
+        SwFont* pNewFnt = new SwFont( *pOldFnt );
+
+        pNewFnt->SetFamily( FAMILY_DONTKNOW, pOldFnt->GetActual() );
+        pNewFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
+                            pOldFnt->GetActual() );
+        pNewFnt->SetStyleName( aEmptyStr, pOldFnt->GetActual() );
+        pNewFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pOldFnt->GetActual() );
+        pNewFnt->SetFixKerning( 0 );
+        pNewFnt->SetVertical( 0 );
+
+        ((SwTxtPaintInfo&)rInf).SetFont( pNewFnt );
+        const XubString aTmp( 0x21B5 );
+        rInf.DrawText( aTmp, *this );
+        ((SwTxtPaintInfo&)rInf).SetFont( pOldFnt );
+
+        delete pNewFnt;
+#endif
     }
 }
 
