@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:42:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ private:
     TreeImpl&       m_rTree;
     NodeOffset      m_nParent;
     TreeDepth       m_nDepthLeft;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     bool m_bMemberCheck;
 #endif
 };
@@ -253,7 +253,7 @@ void TreeImplBuilder::addGroup(data::GroupNodeAccess const& _aTree)
 
             m_nParent = m_rTree.m_aNodes.size() + m_rTree.root_() - 1;
 
-        #ifdef _DEBUG
+        #if OSL_DEBUG_LEVEL > 0
             bool bSaveMemberCheck = m_bMemberCheck;
             m_bMemberCheck = false;
         #endif
