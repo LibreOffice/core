@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-20 13:55:18 $
+ *  last change: $Author: cl $ $Date: 2001-06-14 16:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,12 @@ SO2_DECL_REF(SvInPlaceObject)
 #endif
 #endif // SVX_LIGHT
 
+class SdrOle2ObjImpl
+{
+public:
+    GDIMetaFile*    pMetaFile;             // Metafile fuer GetMtf kopieren und merken
+    GraphicObject*  pGraphicObject;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -239,9 +245,11 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
 
 void SdrOle2Obj::Init()
 {
+    mpImpl = new SdrOle2ObjImpl;
     pModifyListener = NULL;
     pGraphic=NULL;
-    pMetaFile=NULL;
+    mpImpl->pMetaFile=NULL;
+    mpImpl->pGraphicObject=NULL;
 }
 
 SdrOle2Obj::~SdrOle2Obj()
@@ -268,8 +276,11 @@ SdrOle2Obj::~SdrOle2Obj()
     if(pGraphic!=NULL)
         delete pGraphic;
 
-    if(pMetaFile!=NULL)
-        delete pMetaFile;
+    if(mpImpl->pMetaFile!=NULL)
+        delete mpImpl->pMetaFile;
+
+    if(mpImpl->pGraphicObject!=NULL)
+        delete mpImpl->pGraphicObject;
 
 #ifndef SVX_LIGHT
     if(pModifyListener)
@@ -279,6 +290,7 @@ SdrOle2Obj::~SdrOle2Obj()
         pModifyListener = NULL;
     }
 #endif
+    delete mpImpl;
 }
 
 void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
@@ -287,10 +299,15 @@ void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
     {
         delete pGraphic;
         pGraphic = NULL;
+        delete mpImpl->pGraphicObject;
+        mpImpl->pGraphicObject = NULL;
     }
 
     if (pGrf!=NULL)
+    {
         pGraphic = new Graphic(*pGrf);
+        mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+    }
 
     if ( ppObjRef->Is() && pGrf )
         SendRepaintBroadcast();
@@ -656,8 +673,12 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
     if(((SdrOle2Obj&)rObj).pGraphic)
     {
         if(pGraphic)
+        {
             delete pGraphic;
+            delete mpImpl->pGraphicObject;
+        }
         pGraphic = new Graphic(*((SdrOle2Obj&)rObj).pGraphic);
+        mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
     }
 
     if (bModelOk) {
@@ -814,10 +835,10 @@ FASTBOOL SdrOle2Obj::HasGDIMetaFile() const
 const GDIMetaFile* SdrOle2Obj::GetGDIMetaFile() const
 {
 #ifndef SVX_LIGHT
-    if ( pMetaFile )
+    if( mpImpl->pMetaFile )
     {
-        delete ((SdrOle2Obj*)this)->pMetaFile;
-        ((SdrOle2Obj*)this)->pMetaFile = NULL;
+        delete ((SdrOle2Obj*)this)->mpImpl->pMetaFile;
+        ((SdrOle2Obj*)this)->mpImpl->pMetaFile = NULL;
     }
 
     GetObjRef();    // try to load inplace object
@@ -832,12 +853,12 @@ const GDIMetaFile* SdrOle2Obj::GetGDIMetaFile() const
             if (aSvData.GetData(&pMtf,TRANSFER_REFERENCE))
             {
                 // kopieren, weil *pMtf mit ~SvData zerstoert wird!
-                ((SdrOle2Obj*)this)->pMetaFile = new GDIMetaFile(*pMtf);
+                ((SdrOle2Obj*)this)->mpImpl->pMetaFile = new GDIMetaFile(*pMtf);
             }
         }
     }
 #endif // SVX_LIGHT
-    return pMetaFile;
+    return mpImpl->pMetaFile;
 }
 
 void SdrOle2Obj::WriteData(SvStream& rOut) const
@@ -865,10 +886,10 @@ void SdrOle2Obj::WriteData(SvStream& rOut) const
     {
         // set preview graphic (not for empty presentation objects)
         GetGDIMetaFile();
-        if( pMetaFile )
+        if( mpImpl->pMetaFile )
         {
-            Graphic* pGraph = new Graphic( *pMetaFile );
-            ( (SdrOle2Obj*) this )->SetGraphic( pGraph );
+            Graphic aNewGraphic( *mpImpl->pMetaFile );
+            ( (SdrOle2Obj*) this )->SetGraphic( &aNewGraphic );
         }
     }
 
@@ -909,9 +930,12 @@ void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
     BOOL bHasGraphic;
     rIn>>bHasGraphic;
-    if (bHasGraphic) {
-        if (pGraphic==NULL) pGraphic=new Graphic;
-        if (rHead.GetVersion()>=11)
+    if (bHasGraphic)
+    {
+        if(pGraphic==NULL)
+            pGraphic=new Graphic;
+
+        if(rHead.GetVersion()>=11)
         { // ab V11 eingepackt
             SdrDownCompat aGrafCompat(rIn,STREAM_READ);
 #ifdef DBG_UTIL
@@ -921,6 +945,11 @@ void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         }
         else
             rIn>>*pGraphic;
+
+        if( mpImpl->pGraphicObject )
+            delete mpImpl->pGraphicObject;
+
+        mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
     }
 }
 
