@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-07-02 10:50:55 $
+ *  last change: $Author: fme $ $Date: 2002-08-02 15:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,31 @@ BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
 }
 
 /*************************************************************************
+ *                      lcl_ConvertScript()
+ *
+ * Converts Script Type (SCRIPTTYPE_LATIN, SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX)
+ * to i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK)
+ *************************************************************************/
+
+USHORT lcl_ConvertScript( USHORT nScript )
+{
+    switch ( nScript )
+    {
+        case SCRIPTTYPE_ASIAN :
+            nScript = i18n::ScriptType::ASIAN;
+            break;
+        case SCRIPTTYPE_COMPLEX :
+            nScript = i18n::ScriptType::COMPLEX;
+            break;
+        default:
+            nScript = i18n::ScriptType::LATIN;
+            break;
+    }
+    return nScript;
+}
+
+
+/*************************************************************************
  *                      SwScriptInfo::InitScriptInfo()
  *
  * searches for script changes in rTxt and stores them
@@ -722,15 +747,17 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         if( nEnd > rTxt.Len() )
             nEnd = rTxt.Len();
 
-        nScript = (BYTE)GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
+        nScript = (BYTE)lcl_ConvertScript(
+                    GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) );
 
-        ASSERT( LATIN == nScript || ASIAN == nScript || COMPLEX == nScript,
-                "Wrong default language" );
+        ASSERT( i18n::ScriptType::LATIN == nScript ||
+                i18n::ScriptType::ASIAN == nScript ||
+                i18n::ScriptType::COMPLEX == nScript, "Wrong default language" );
 
         // map scripts to font indices, CTL font is always the last one
         const BYTE nScripts[3] = {
                  nScript - 1,
-                 LATIN == nScript ? 1 : 0,
+                 i18n::ScriptType::LATIN == nScript ? 1 : 0,
                  2 };
 
         xub_StrLen nOldChg = nChg;
@@ -915,9 +942,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( ((SwTxtNode*)&rNode), 0, nLastKashida,
+            SwScanner aScanner( ((SwTxtNode*)&rNode), NULL, nLastKashida,
                                 nChg, sal_False, sal_False );
-            LanguageType eActLang = LANGUAGE_GERMAN;
+            LanguageType eActLang = rNode.GetLang( nLastKashida );
 
             // the search has to be performed on a per word base
             while ( aScanner.NextWord( eActLang ) )
@@ -1014,6 +1041,24 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
 
                 if ( STRING_LEN != nKashidaPos )
                     aKashida.Insert( nKashidaPos, nCntKash++ );
+
+                // get next language in order to find next or previous word
+                xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
+
+                // first we have to skip some whitespace characters
+                while ( nNextBegin < rTxt.Len() &&
+                        ( 0x3000 == rTxt.GetChar( nNextBegin ) ||
+                          ' ' == rTxt.GetChar( nNextBegin ) ||
+                          '\t' == rTxt.GetChar( nNextBegin ) ||
+                          0x0a == rTxt.GetChar( nNextBegin ) ) )
+                {
+                    ++nNextBegin;
+                }
+
+                if ( nNextBegin < rTxt.Len() )
+                    eActLang = rNode.GetLang( nNextBegin );
+                else
+                    break;
             } // end of kashida search
         }
 #endif
@@ -1130,7 +1175,8 @@ BYTE SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
     }
 
     // the default is the application language script
-    return (BYTE)GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
+    return (BYTE)lcl_ConvertScript(
+                  GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) );
 }
 
 #ifdef BIDI
