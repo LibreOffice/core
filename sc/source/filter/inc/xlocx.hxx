@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:49:48 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ private:
                             const XclImpCtrlLinkHelper& rControl ) const;
 
 private:
-    SvStorageStreamRef  mxStrm;         /// The 'Ctls' strem.
+    SotStorageStreamRef  mxStrm;         /// The 'Ctls' strem.
 };
 
 // ----------------------------------------------------------------------------
@@ -177,7 +177,7 @@ private:
 
 private:
 #if EXC_EXP_OCX_CTRL
-    SvStorageStreamRef  mxStrm;         /// The 'Ctls' stream.
+    SotStorageStreamRef  mxStrm;         /// The 'Ctls' stream.
 #endif
 };
 
