@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 10:51:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star { namespace ucb {
     struct CommandInfo;
@@ -154,7 +157,7 @@ class ContentProviderImplHelper;
   * - complete XCommandInfo implementation
   *    -> protected method: getCommandInfo
   */
-class ContentImplHelper :
+class UCBHELPER_DLLPUBLIC ContentImplHelper :
                 public cppu::OWeakObject,
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::lang::XServiceInfo,
@@ -195,7 +198,7 @@ private:
       * @param xEnv is an environment to use for example, for interactions.
       * @return a sequence containing the property meta data.
       */
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
+    UCBHELPER_DLLPRIVATE virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
     getProperties( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) = 0;
 
@@ -206,7 +209,7 @@ private:
       * @param xEnv is an environment to use for example, for interactions.
       * @return a sequence containing the command meta data.
       */
-    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
+    UCBHELPER_DLLPRIVATE virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
     getCommands( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) = 0;
 
@@ -220,7 +223,7 @@ private:
       *         be returned. If your content has more than one parent you may
       *         return the URL of one "preferred" parent or an empty string.
       */
-    virtual ::rtl::OUString getParentURL() = 0;
+    UCBHELPER_DLLPRIVATE virtual ::rtl::OUString getParentURL() = 0;
 
 protected:
     /**
