@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.26 $
+*  $Revision: 1.27 $
 *
-*  last change: $Author: kz $ $Date: 2004-07-27 12:20:31 $
+*  last change: $Author: kz $ $Date: 2004-07-28 13:13:21 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1816,7 +1816,7 @@ File gid_File_Lib_Xml2
     Styles = (PACKED,SETUPZIP);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT2(libxml2,UNXSUFFIX));
+    Name = STRING(CONCAT3(libxml2,UNXSUFFIX,.2));
   #else
     Name = "libxml2.dll";
   #endif
