@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ norwegian ] = "~Numberformat" ;
         Text [ italian ] = "Formato ~numero" ;
         Text [ portuguese_brazilian ] = "~Formatodonúmero" ;
-        Text [ portuguese ] = "~Formato dos números" ;
+        Text [ portuguese ] = "~Formato numérico" ;
         Text [ finnish ] = "~Numeromuoto" ;
         Text [ danish ] = "Talformat" ;
         Text [ french ] = "~Format numérique" ;
