@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:01:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 void SAL_CALL UnoControlDialogModel::dispose(  ) throw(RuntimeException)
 {
-    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+    // ====================================================================
     // tell our listeners
     {
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -317,11 +317,11 @@ void SAL_CALL UnoControlDialogModel::dispose(  ) throw(RuntimeException)
         maChangeListeners.disposeAndClear( aDisposeEvent );
     }
 
-    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+    // ====================================================================
     // call the base class
     UnoControlModel::dispose();
 
-    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+    // ====================================================================
     // dispose our child models
     // for this, collect the models (we collect them from maModels, and this is modified when disposing children)
     ::std::vector< Reference< XControlModel > > aChildModels( maModels.size() );
