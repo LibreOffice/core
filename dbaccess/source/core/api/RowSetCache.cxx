@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-07 09:58:12 $
+ *  last change: $Author: oj $ $Date: 2001-12-19 15:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,7 +1323,6 @@ sal_Bool SAL_CALL ORowSetCache::previous(  ) throw(SQLException, RuntimeExceptio
             --m_nPosition;
             moveWindow();
             OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-            m_aMatrixIter = calcPosition();
 
             checkPositionFlags();
 
@@ -1333,7 +1332,10 @@ sal_Bool SAL_CALL ORowSetCache::previous(  ) throw(SQLException, RuntimeExceptio
                 m_aMatrixIter = m_pMatrix->end();
             }
             else
+            {
+                m_aMatrixIter = calcPosition();
                 bRet = (*m_aMatrixIter).isValid();
+            }
         }
     }
     return bRet;
