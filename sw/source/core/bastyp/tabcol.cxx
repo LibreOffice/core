@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:32:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,26 +64,42 @@
 
 #include "tabcol.hxx"
 
-SwTabCols::SwTabCols( USHORT nSize )
-    : SvLongs( (BYTE)nSize ),
-    aHidden( (BYTE)nSize ),
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>       // fuer Create-Methoden
+#endif
+
+
+SwTabCols::SwTabCols( USHORT nSize ) :
     nLeftMin( 0 ),
     nLeft( 0 ),
     nRight( 0 ),
-    nRightMax( 0 )
+    nRightMax( 0 ),
+    bLastRowAllowedToChange( true )
 {
+    if ( nSize )
+        aData.reserve( nSize );
 }
 
-SwTabCols::SwTabCols( const SwTabCols& rCpy )
-    : SvLongs( (BYTE)rCpy.Count(), 1 ),
-    aHidden( (BYTE)rCpy.Count(), 1 ),
+SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
+    aData( rCpy.GetData() ),
     nLeftMin( rCpy.GetLeftMin() ),
     nLeft( rCpy.GetLeft() ),
     nRight( rCpy.GetRight() ),
-    nRightMax( rCpy.GetRightMax() )
+    nRightMax( rCpy.GetRightMax() ),
+    bLastRowAllowedToChange( rCpy.IsLastRowAllowedToChange() )
 {
-    Insert( &rCpy, 0 );
-    aHidden.Insert( &rCpy.GetHidden(), 0 );
+#if OSL_DEBUG_LEVEL > 1
+    for ( USHORT i = 0; i < Count(); ++i )
+    {
+        SwTabColsEntry aEntry1 = aData[i];
+        SwTabColsEntry aEntry2 = rCpy.GetData()[i];
+        ASSERT( aEntry1.nPos == aEntry2.nPos &&
+                aEntry1.nMin == aEntry2.nMin &&
+                aEntry1.nMax == aEntry2.nMax &&
+                aEntry1.bHidden == aEntry2.bHidden,
+                "CopyContructor of SwTabColsEntries did not succeed!" )
+    }
+#endif
 }
 
 SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
@@ -92,12 +108,10 @@ SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
     nLeft    = rCpy.GetLeft();
     nRight   = rCpy.GetRight();
     nRightMax= rCpy.GetRightMax();
+    bLastRowAllowedToChange = rCpy.IsLastRowAllowedToChange();
 
     Remove( 0, Count() );
-    Insert( &rCpy, 0 );
-
-    aHidden.Remove( 0, aHidden.Count() );
-    aHidden.Insert( &rCpy.GetHidden(), 0 );
+    aData = rCpy.GetData();
 
     return *this;
 }
@@ -110,18 +124,52 @@ BOOL SwTabCols::operator==( const SwTabCols& rCmp ) const
            nLeft    == rCmp.GetLeft()    &&
            nRight   == rCmp.GetRight()   &&
            nRightMax== rCmp.GetRightMax()&&
+           bLastRowAllowedToChange== rCmp.IsLastRowAllowedToChange() &&
            Count()== rCmp.Count()) )
         return FALSE;
 
     for ( i = 0; i < Count(); ++i )
-        if ( operator[](i) != rCmp[i] )
+    {
+        SwTabColsEntry aEntry1 = aData[i];
+        SwTabColsEntry aEntry2 = rCmp.GetData()[i];
+        if ( aEntry1.nPos != aEntry2.nPos || aEntry1.bHidden != aEntry2.bHidden  )
             return FALSE;
-
-    for ( i = 0; i < aHidden.Count(); ++i )
-        if ( aHidden[i] != rCmp.IsHidden( i ) )
-            return FALSE;
+    }
 
     return TRUE;
 }
 
+void SwTabCols::Insert( long nValue, long nMin, long nMax, BOOL bValue, USHORT nPos )
+{
+    SwTabColsEntry aEntry;
+    aEntry.nPos = nValue;
+    aEntry.nMin = nMin;
+    aEntry.nMax = nMax;
+    aEntry.bHidden = bValue;
+    aData.insert( aData.begin() + nPos, aEntry );
+}
+
+void SwTabCols::Insert( long nValue, BOOL bValue, USHORT nPos )
+{
+    SwTabColsEntry aEntry;
+    aEntry.nPos = nValue;
+    aEntry.nMin = 0;
+    aEntry.nMax = LONG_MAX;
+    aEntry.bHidden = bValue;
+    aData.insert( aData.begin() + nPos, aEntry );
+
+#if OSL_DEBUG_LEVEL > 1
+    SwTabColsEntries::iterator aPos = aData.begin();
+    for ( ; aPos != aData.end(); ++aPos )
+    {
+        aEntry =(*aPos);
+    }
+#endif
+}
+
+void SwTabCols::Remove( USHORT nPos, USHORT nAnz )
+{
+    SwTabColsEntries::iterator aStart = aData.begin() + nPos;
+    aData.erase( aStart, aStart + nAnz );
+}
 
