@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-18 08:36:36 $
+ *  last change: $Author: ab $ $Date: 2002-12-12 16:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,6 +1240,11 @@ RTLFUNC(CreateUnoStruct)
 RTLFUNC(CreateUnoService)
 {
     RTL_Impl_CreateUnoService( pBasic, rPar, bWrite );
+}
+
+RTLFUNC(CreateUnoValue)
+{
+    RTL_Impl_CreateUnoValue( pBasic, rPar, bWrite );
 }
 
 

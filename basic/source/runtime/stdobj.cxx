@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-22 14:33:44 $
+ *  last change: $Author: ab $ $Date: 2002-12-12 16:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,13 +171,16 @@ static Methods aMethods[] = {
 { "CreateUnoListener",SbxOBJECT,   1 | _FUNCTION, RTLNAME( CreateUnoListener ) },
   { "prefix",  SbxSTRING },
   { "typename",  SbxSTRING },
-{ "CreateUnoService",SbxOBJECT,   1 | _FUNCTION, RTLNAME( CreateUnoService ) },
-  { "servicename",  SbxSTRING },
 { "CreateUnoDialog",SbxOBJECT,    2 | _FUNCTION, RTLNAME( CreateUnoDialog ) },
   { "dialoglibrary",SbxOBJECT },
   { "dialogname",   SbxSTRING },
+{ "CreateUnoService",SbxOBJECT,   1 | _FUNCTION, RTLNAME( CreateUnoService ) },
+  { "servicename",  SbxSTRING },
 { "CreateUnoStruct",SbxOBJECT,    1 | _FUNCTION, RTLNAME( CreateUnoStruct ) },
   { "classname",    SbxSTRING },
+{ "CreateUnoValue", SbxOBJECT,    2 | _FUNCTION, RTLNAME( CreateUnoValue ) },
+  { "type",         SbxSTRING },
+  { "value",        SbxVARIANT },
 { "CreatePropertySet",SbxOBJECT, 1 | _FUNCTION, RTLNAME( CreatePropertySet ) },
   { "values",  SbxARRAY },
 { "CSng",           SbxSINGLE,    1 | _FUNCTION, RTLNAME(CSng)              },
