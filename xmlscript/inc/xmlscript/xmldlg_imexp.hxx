@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_imexp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-26 09:51:50 $
+ *  last change: $Author: ab $ $Date: 2001-02-26 12:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@ SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
     throw (::com::sun::star::uno::Exception);
 
-};
-
 //==================================================================================================
 SAL_DLLEXPORT void SAL_CALL exportDialogModelToByteSequence(
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel,
@@ -104,6 +102,8 @@ SAL_DLLEXPORT void SAL_CALL importDialogModelFromByteSequence(
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Sequence< sal_Int8 > const& aSourceSequence )
     throw (::com::sun::star::uno::Exception);
+
+};
 
 #endif
 
