@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:31:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ class ODBExport : public SvXMLExport
 
     mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
+    Reference<XPropertySet>                         m_xDataSource;
 
     void                    exportDataSource();
     void                    exportLogin();
@@ -228,6 +229,8 @@ public:
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 };
 
 // -----------------------------------------------------------------------------
