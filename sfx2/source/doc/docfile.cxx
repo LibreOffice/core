@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-28 15:21:00 $
+ *  last change: $Author: mav $ $Date: 2002-08-30 10:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,7 +1006,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                 {
                     sal_Bool bForceUCB = ( bUCBStorage || UCBStorage::IsStorageFile( pInStream ) );
 
-                    CreateLocalTempFile();
+                    CreateTempFile();
                     aStorage = new SvStorage( bForceUCB, aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
                 }
                 else
@@ -2554,7 +2554,7 @@ sal_Bool SfxMedium::IsReadOnly()
 }
 
 //----------------------------------------------------------------
-void SfxMedium::CreateLocalTempFile()
+void SfxMedium::CreateTempFile()
 {
     if ( pImp->pTempFile )
         DELETEZ( pImp->pTempFile );
@@ -2604,90 +2604,12 @@ void SfxMedium::CreateLocalTempFile()
 }
 
 //----------------------------------------------------------------
-void SfxMedium::CreateTempFile()
-{
-    if ( pImp->pTempFile )
-        DELETEZ( pImp->pTempFile );
-
-    StreamMode nOpenMode = nStorOpenMode;
-    GetInStream();
-    BOOL bCopy = ( nStorOpenMode == nOpenMode && ! ( nOpenMode & STREAM_TRUNC ) );
-    nStorOpenMode = nOpenMode;
-    ResetError();
-
-    SFX_ITEMSET_ARG( GetItemSet(), pSegmentSize, SfxInt32Item, SID_SEGMENTSIZE, sal_False);
-    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_UNPACK, sal_False);
-    if ( pSegmentSize || pItem && pItem->GetValue() )
-    {
-        pImp->pTempFile = new ::utl::TempFile();
-    }
-    else
-    {
-        String          aParentName;
-        INetURLObject   aParent = GetURLObject();
-        if ( aParent.removeSegment() )
-            aParentName = aParent.GetMainURL( INetURLObject::NO_DECODE );
-        pImp->pTempFile = new ::utl::TempFile( &aParentName );
-    }
-
-    pImp->pTempFile->EnableKillingFile( sal_True );
-    aName = pImp->pTempFile->GetFileName();
-    if ( !aName.Len() )
-    {
-        SetError( ERRCODE_IO_CANTWRITE );
-        return;
-    }
-
-    if ( bCopy )
-    {
-        GetOutStream();
-        if ( pInStream && pOutStream )
-        {
-            char        *pBuf = new char [8192];
-            sal_uInt32   nErr = ERRCODE_NONE;
-
-            pInStream->Seek(0);
-            pOutStream->Seek(0);
-
-            while( !pInStream->IsEof() && nErr == ERRCODE_NONE )
-            {
-                sal_uInt32 nRead = pInStream->Read( pBuf, 8192 );
-                nErr = pInStream->GetError();
-                pOutStream->Write( pBuf, nRead );
-            }
-
-            delete pBuf;
-            CloseInStream();
-        }
-        CloseOutStream_Impl();
-    }
-    else
-        CloseInStream();
-
-    CloseStorage();
-}
-
-//----------------------------------------------------------------
 void SfxMedium::CreateTempFileNoCopy()
 {
     if ( pImp->pTempFile )
         delete pImp->pTempFile;
 
-    SFX_ITEMSET_ARG( GetItemSet(), pSegmentSize, SfxInt32Item, SID_SEGMENTSIZE, sal_False);
-    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_UNPACK, sal_False);
-    if ( pSegmentSize || pItem && pItem->GetValue() )
-    {
-        pImp->pTempFile = new ::utl::TempFile();
-    }
-    else
-    {
-        String          aParentName;
-        INetURLObject   aParent = GetURLObject();
-        if ( aParent.removeSegment() )
-            aParentName = aParent.GetMainURL( INetURLObject::NO_DECODE );
-        pImp->pTempFile = new ::utl::TempFile( &aParentName );
-    }
-
+    pImp->pTempFile = new ::utl::TempFile();
     pImp->pTempFile->EnableKillingFile( sal_True );
     aName = pImp->pTempFile->GetFileName();
     if ( !aName.Len() )
