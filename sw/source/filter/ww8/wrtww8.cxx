@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,7 @@ public:
 
 
 SV_IMPL_VARARR( WW8Bytes, BYTE )
+SV_IMPL_VARARR( SvInt32s, INT32 )
 SV_IMPL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr )
 
 typedef WW8_WrPc* WW8_WrPcPtr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,21 @@
 #include "filt_pch.hxx"
 #endif
 
-
 #pragma hdrstop
 
-#ifndef _HINTIDS_HXX
-#include <hintids.hxx>
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
+
+#ifndef _TOOLKIT_UNOHLP_HXX
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
@@ -149,8 +159,8 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
 
-#ifndef _SFXITEMITER_HXX //autogen
-#include <svtools/itemiter.hxx>
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
 #endif
 
 #ifndef _SVX_FONTITEM_HXX
@@ -159,8 +169,6 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-
-
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
 #endif
@@ -179,19 +187,8 @@
 #ifndef _SVX_POSTITEM_HXX
 #include <svx/postitem.hxx>
 #endif
-
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
-#include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX
-#include <vcl/outdev.hxx>
-#endif
-
-#ifndef _TOOLKIT_UNOHLP_HXX
-#include <toolkit/helper/vclunohelper.hxx>
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
 #endif
 
 #ifndef _ERRHDL_HXX //autogen
@@ -226,25 +223,15 @@
 #endif
 
 #ifndef _WW8PAR_HXX
-#include <ww8par.hxx>
+#include "ww8par.hxx"
 #endif
 #ifndef _WW8PAR2_HXX
-#include <ww8par2.hxx>  // wg. Listen-Attributen in Styles
+#include "ww8par2.hxx"  // wg. Listen-Attributen in Styles
 #endif
-
-#ifndef _MSOCXIMEX_HXX
-#include <svx/msocximex.hxx>
-#endif
-
-using namespace com::sun::star;
 
 #ifndef C2U
 #define C2U(s) rtl::OUString::createFromAscii(s)
 #endif
-
-//-----------------------------------------
-//            UNO-Controls
-//-----------------------------------------
 
 #define WW8_DFLT_EDIT_WIDTH 2750
 #define WW8_DFLT_EDIT_HEIGHT 500
@@ -254,6 +241,11 @@ using namespace com::sun::star;
 static sal_Char sWW8_form[] = "WW-Standard";
 static sal_Char sWW8_edit[] = "TextBox";
 static sal_Char sWW8_checkbox[] = "CheckBox";
+
+using namespace com::sun::star;
+//-----------------------------------------
+//            UNO-Controls
+//-----------------------------------------
 
 void SwWW8ImplReader::BuildInputField(sal_uInt16 nType)
 {
@@ -1645,32 +1637,33 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
 }
 
 void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
-                                              sal_uInt8   nActLevel,
-                                              sal_Bool   bSetAttr)
+    sal_uInt8 nActLevel, sal_Bool bSetAttr)
 {
-    // beachte: die Methode haengt die NumRule an den Text Node, falls bSetAttr
-    //          (dann muessen natuerlich vorher die Listen gelesen sein)
-    //                  stellt sie NUR den Level ein, im Vertrauen darauf, dass am STYLE
-    //                  eine NumRule haengt - dies wird NICHT ueberprueft !!!
+    // beachte: die Methode haengt die NumRule an den Text Node, falls
+    // bSetAttr (dann muessen natuerlich vorher die Listen gelesen sein)
+    // stellt sie NUR den Level ein, im Vertrauen darauf, dass am STYLE eine
+    // NumRule haengt - dies wird NICHT ueberprueft !!!
 
-    if( pLstManager ) // sind die Listendeklarationen gelesen?
+    if (pLstManager) // sind die Listendeklarationen gelesen?
     {
-        const SwNumRule* pRule
-            = bSetAttr ? pLstManager->GetNumRuleForActivation( nActLFO, nActLevel) : 0;
+        const SwNumRule* pRule = bSetAttr ?
+            pLstManager->GetNumRuleForActivation( nActLFO, nActLevel) : 0;
 
         if( pRule || !bSetAttr )
         {
             SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
             ASSERT( pTxtNode, "Kein Text-Node an PaM-Position" );
 
-            if( bSetAttr )
+            if (bSetAttr)
+            {
                 pTxtNode->SwCntntNode::SetAttr(SwNumRuleItem(pRule->GetName()));
 
-            SvxLRSpaceItem aLR( *(SvxLRSpaceItem*)GetFmtAttr( RES_LR_SPACE ));
-            if( 1 < aLR.GetTxtFirstLineOfst() )
-            {
-                aLR.SetTxtFirstLineOfst( 1 );
-                NewAttr( aLR );
+                SvxLRSpaceItem aLR(*(SvxLRSpaceItem*)GetFmtAttr(RES_LR_SPACE));
+                if( 1 < aLR.GetTxtFirstLineOfst() )
+                {
+                    aLR.SetTxtFirstLineOfst( 1 );
+                    pTxtNode->SwCntntNode::SetAttr(aLR);
+                }
             }
 
             pTxtNode->SetNumLSpace( bSetAttr );
@@ -1689,9 +1682,7 @@ void SwWW8ImplReader::RegisterNumFmt(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
         RegisterNumFmtOnTxtNode(nActLFO, nActLevel);
 }
 
-
-
-void SwWW8ImplReader::Read_ListLevel(sal_uInt16 , const sal_uInt8* pData,
+void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
     short nLen)
 {
     if( nLen < 0 )
@@ -1732,9 +1723,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16 , const sal_uInt8* pData,
     }
 }
 
-
-
-void SwWW8ImplReader::Read_LFOPosition(sal_uInt16 , const sal_uInt8* pData,
+void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
     short nLen)
 {
     if( nLen < 0 )

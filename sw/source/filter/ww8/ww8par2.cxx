@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,31 +65,26 @@
 
 #pragma hdrstop
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+#ifndef _SOLAR_H
 #include <tools/solar.h>
-#include "pam.hxx"              // fuer SwPam
-#include "doc.hxx"
-
-#ifndef _DOCARY_HXX
-#include "docary.hxx"
 #endif
 
-#include "ndtxt.hxx"            // class SwTxtNode
-#include "hintids.hxx"
-#include "paratr.hxx"           // SwNumRuleItem
-
-// Folgende sollten demnaechst ins Precompiled-Header-File
-#include "poolfmt.hxx"          // RES_POOLCOLL_STANDARD
-#include "swtable.hxx"          // class SwTableLines, ...
-#include "tblsel.hxx"           // class _SwSelBox
-#include "mdiexp.hxx"           // Progress
-
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
+#ifndef _SV_FONTTYPE_HXX
+#include <vcl/fonttype.hxx>
 #endif
+#ifndef _SV_FONT_HXX
+#include <vcl/font.hxx>
+#endif
+
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
 #endif
+
+#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+
 #ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
 #endif
@@ -117,44 +112,62 @@
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
 #endif
-#ifndef _FMTPDSC_HXX //autogen
+
+#ifndef _PAM_HXX
+#include <pam.hxx>              // fuer SwPam
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>            // class SwTxtNode
+#endif
+#ifndef _PARATR_HXX
+#include <paratr.hxx>           // SwNumRuleItem
+#endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>          // RES_POOLCOLL_STANDARD
+#endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>          // class SwTableLines, ...
+#endif
+#ifndef _TBLSEL_HXX
+#include <tblsel.hxx>           // class _SwSelBox
+#endif
+#ifndef _MDIEXP_HXX
+#include <mdiexp.hxx>
+#endif
+#ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
 #endif
-#ifndef _FRMFMT_HXX //autogen
+#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
-#ifndef _CHARFMT_HXX //autogen
+#ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifdef DEBUG
-#ifndef _SV_SOUND_HXX //autogen
- #include <vcl/sound.hxx>
-#endif
-#endif
-
-// Folgende bleiben hier
-#include "fltshell.hxx"         // fuer den Attribut Stack
-#include "ww8struc.hxx"         // struct TC
-#include "ww8par.hxx"
-#include "ww8par2.hxx"
-
-#ifndef _SV_FONTTYPE_HXX //autogen
-#include <vcl/fonttype.hxx>
-#endif
-#ifndef _SV_FONT_HXX //autogen
-#include <vcl/font.hxx>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
 
-//-----------------------------------------
-//              Tabellen
-//-----------------------------------------
+#ifndef _FLTSHELL_HXX
+#include <fltshell.hxx>         // fuer den Attribut Stack
+#endif
 
+#ifndef _WW8STRUC_HXX
+#include "ww8struc.hxx"         // struct TC
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
+#endif
+#ifndef _WW8PAR2_HXX
+#include "ww8par2.hxx"
+#endif
 
-#define MAX_COL 64  // WW6-Beschreibung: 32, WW6-UI: 31
-                                        // WW8-UI: 63!
+#define MAX_COL 64  // WW6-Beschreibung: 32, WW6-UI: 31 & WW8-UI: 63!
 
 class WW8SelBoxInfo: public SwSelBoxes_SAR
 {
@@ -443,11 +456,11 @@ static void SetBaseAnlv( SwNumFmt* pNum, WW8_ANLV* pAV )
                     eNumA[SVBT8ToByte( pAV->nfc ) ] : SVX_NUM_NUMBER_NONE);
 //  pNum->bInclUpperLevel = pAV->fPrev;
     pNum->SetIncludeUpperLevels( ( SVBT8ToByte( pAV->aBits1 ) & 0x4 ) >> 2 );
-    pNum->SetStart( (USHORT)SVBT16ToShort( pAV->iStartAt ) );
+    pNum->SetStart( SVBT16ToShort( pAV->iStartAt ) );
 //  pNum->eNumAdjust = eAdjA[pAV->jc];
     pNum->SetNumAdjust( eAdjA[SVBT8ToByte( pAV->aBits1 ) & 0x3] );
 
-    pNum->SetCharTextDistance( (USHORT)SVBT16ToShort( pAV->dxaSpace ) );
+    pNum->SetCharTextDistance( SVBT16ToShort( pAV->dxaSpace ) );
     INT16 nIndent = Abs((INT16)SVBT16ToShort( pAV->dxaIndent ));
     if( SVBT8ToByte( pAV->aBits1 ) & 0x08 ){    // fHang
         pNum->SetFirstLineOffset( -nIndent );

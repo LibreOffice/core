@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,9 @@
 #ifndef _SVX_PARAVERTALIGNITEM_HXX
 #include <svx/paravertalignitem.hxx>
 #endif
-
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
+#endif
 
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
@@ -311,6 +313,9 @@
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
 #endif
 
 #ifdef DEBUG
@@ -2253,6 +2258,21 @@ static Writer& OutWW8_SfxBoolItem( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutWW8_SvxParaGridItem(Writer& rWrt, const SfxPoolItem& rHt)
+{
+//  sprmPFUsePgsuSettings
+
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    //97+ only
+    if (!rWrtWW8.bWrtWW8)
+        return rWrt;
+
+    rWrtWW8.InsUInt16(0x2447);
+    const SvxParaGridItem& rAttr = (const SvxParaGridItem&)rHt;
+    rWrtWW8.pO->Insert( rAttr.GetValue(), rWrtWW8.pO->Count() );
+    return rWrt;
+}
+
 static Writer& OutWW8_SvxParaVertAlignItem( Writer& rWrt,
     const SfxPoolItem& rHt )
 {
@@ -2785,6 +2805,38 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutWW8_SwTextGrid( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    const SwTextGridItem& rItem = (const SwTextGridItem&)rHt;
+
+    if (rWrtWW8.bOutPageDescs && rWrtWW8.bWrtWW8)
+    {
+        UINT16 nGridType=0;
+        switch (rItem.GetGridType())
+        {
+            default:
+                ASSERT(0,"Unknown grid type");
+            case GRID_NONE:
+                nGridType = 0;
+                break;
+            case GRID_LINES_ONLY:
+                nGridType = 2;
+                break;
+            case GRID_LINES_CHARS:
+                nGridType = 1;
+                break;
+        }
+        rWrtWW8.InsUInt16(0x5032);
+        rWrtWW8.InsUInt16(nGridType);
+
+        UINT16 nHeight = rItem.GetBaseHeight() + rItem.GetRubyHeight();
+        rWrtWW8.InsUInt16(0x9031);
+        rWrtWW8.InsUInt16(nHeight);
+    }
+    return rWrt;
+}
+
 static Writer& OutWW8_SvxPaperBin( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
@@ -2815,6 +2867,7 @@ static Writer& OutWW8_SvxPaperBin( Writer& rWrt, const SfxPoolItem& rHt )
     }
     return rWrt;
 }
+
 
 static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3940,7 +3993,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_PARATR_HANGINGPUNCTUATION */ OutWW8_SfxBoolItem,
 /* RES_PARATR_FORBIDDEN_RULES */    OutWW8_SfxBoolItem,
 /* RES_PARATR_VERTALIGN */          OutWW8_SvxParaVertAlignItem,
-/* RES_PARATR_DUMMY3 */             0, // Dummy:
+/* RES_PARATR_SNAPTOGRID*/          OutWW8_SvxParaGridItem,
 /* RES_PARATR_DUMMY4 */             0, // Dummy:
 /* RES_PARATR_DUMMY5 */             0, // Dummy:
 /* RES_PARATR_DUMMY6 */             0, // Dummy:
@@ -3974,7 +4027,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_EDIT_IN_READONLY */          0,
 /* RES_LAYOUT_SPLIT */              0,
 /* RES_CHAIN */                     0,
-/* RES_FRMATR_DUMMY2 */             0, // Dummy:
+/* RES_TEXTGRID*/                   OutWW8_SwTextGrid,
 /* RES_LINENUMBER */                OutWW8_SwFmtLineNumber, // Line Numbering
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:

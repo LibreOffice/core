@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1544,10 +1544,10 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     }
 }
 
-USHORT SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
-    MSO_SPT eShapeType, USHORT &rThick)
+INT32 SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
+    MSO_SPT eShapeType, INT32 &rThick)
 {
-    USHORT nOutsideThick = 0;
+    INT32 nOutsideThick = 0;
     /*
     Beachte: im Gegensatz zu den Winword-ueblichen Tabellen- und
     Rahmen-Randbreiten-Angaben, bei denen jeweils aus der Staerke *einer*
@@ -1603,11 +1603,11 @@ USHORT SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
 //Returns the thickness of the line outside the frame, the logic of
 //words positioning of borders around floating objects is that of a
 //disturbed mind.
-USHORT SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
-    MSO_LineStyle eLineStyle, MSO_SPT eShapeType, USHORT &rLineThick,
+INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
+    MSO_LineStyle eLineStyle, MSO_SPT eShapeType, INT32 &rLineThick,
     SvxBoxItem& rBox )
 {
-    USHORT nOutsideThick = 0;
+    INT32 nOutsideThick = 0;
     if( !rLineThick )
         return nOutsideThick;
 
@@ -1616,7 +1616,7 @@ USHORT SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
 
     USHORT nIdx = USHRT_MAX;
 
-    USHORT nLineThick=rLineThick;
+    INT32 nLineThick=rLineThick;
     nOutsideThick = SwMSDffManager::GetEscherLineMatch(eLineStyle,
         eShapeType, rLineThick);
 
@@ -1766,7 +1766,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     // Rahmen-GROESSE benoetigt!
     SvxBoxItem aBox;
     // dashed oder solid wird zu solid
-    USHORT nLineThick = 0, nOutside=0;
+    INT32 nLineThick = 0, nOutside=0;
 
     // check if LineStyle is *really* set!
     const SfxPoolItem* pItem;
@@ -1778,8 +1778,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         // parameter given to us when calling the method...  :-)
         const Color aLineColor = WW8ITEMVALUE(rOldSet, XATTR_LINECOLOR,
             XLineColorItem);
-        nLineThick = (USHORT)(WW8ITEMVALUE(rOldSet, XATTR_LINEWIDTH,
-            XLineWidthItem));
+        nLineThick = WW8ITEMVALUE(rOldSet, XATTR_LINEWIDTH, XLineWidthItem);
 
         if( !nLineThick )
             nLineThick = 15; // WW-default: 0.75 pt
@@ -1966,8 +1965,8 @@ void SwWW8ImplReader::MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
     if( pRecord->nDxWrapDistLeft || pRecord->nDxWrapDistRight )
     {
         SvxLRSpaceItem aLR;
-        aLR.SetLeft(    (USHORT)pRecord->nDxWrapDistLeft );
-        aLR.SetRight(   (USHORT)pRecord->nDxWrapDistRight );
+        aLR.SetLeft(pRecord->nDxWrapDistLeft);
+        aLR.SetRight(pRecord->nDxWrapDistRight);
         pFlyFmt->SetAttr( aLR );
     }
     if( pRecord->nDyWrapDistTop || pRecord->nDyWrapDistBottom )

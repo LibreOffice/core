@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ BOOL WW8_WrPlcDrawObj::Append( SwWW8Writer& rWrt, WW8_CP nCp,
 }
 
 void WW8_WrPlcDrawObj::SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId,
-    USHORT nThick )
+    INT32 nThick )
 {
     const VoidPtr p = (void*)&rFmt;
     USHORT nPos = aCntnt.GetPos( p );
@@ -1055,17 +1055,14 @@ private:
     INT32 DrawModelToEmu( INT32 nVal ) const
         { return BigMulDiv( nVal, nEmuMul, nEmuDiv ); }
 
-    USHORT WriteTxtFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId,
-                                UINT32 nTxtBox );
-    USHORT WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId );
-    USHORT WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId );
-    void WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId );
-    USHORT WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
-        EscherPropertyContainer& rPropOpt );
-    void WriteGrfAttr( const SwNoTxtNode& rNd,
-        EscherPropertyContainer& rPropOpt );
-
-    USHORT WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId );
+    INT32 WriteFlyFrm(const SwFrmFmt& rFmt,UINT32 &rShapeId);
+    INT32 WriteTxtFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId,UINT32 nTxtBox);
+    INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId);
+    INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId);
+    INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt,MSO_SPT eShapeType,
+        EscherPropertyContainer& rPropOpt);
+    void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
+    void WriteOCXControl(const SwFrmFmt& rFmt,UINT32 nShapeId);
 
     virtual SvStream* QueryPicStream();
     virtual UINT32 QueryTextID( const uno::Reference< drawing::XShape>&,UINT32);
@@ -1183,10 +1180,10 @@ SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
         ULONG nShapeId=0;
         for( USHORT n = 0; n < aSortFmts.Count(); ++n )
         {
-            USHORT nBorderThick=0;
+            INT32 nBorderThick=0;
             const SwFrmFmt& rFmt = *(SwFrmFmt*)aSortFmts[ n ];
-            if( RES_FLYFRMFMT == rFmt.Which())
-                nBorderThick= WriteFlyFrm( rFmt, nShapeId );
+            if (RES_FLYFRMFMT == rFmt.Which())
+                nBorderThick = WriteFlyFrm( rFmt, nShapeId );
             else if (rFmt.FindRealSdrObject()->GetObjInventor() ==
                      FmFormInventor)
             {
@@ -1815,10 +1812,10 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
     aWinwordAnchoring.WriteData(*this);
 }
 
-USHORT SwEscherEx::WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId )
+INT32 SwEscherEx::WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId )
 {
     // check for textflyframe and if it is the first in a Chain
-    USHORT nBorderThick = 0;
+    INT32 nBorderThick = 0;
     const SwNodeIndex* pNdIdx = rFmt.GetCntnt().GetCntntIdx();
     if( pNdIdx )
     {
@@ -1884,10 +1881,10 @@ USHORT SwEscherEx::WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId )
     return nBorderThick;
 }
 
-USHORT SwEscherEx::WriteTxtFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId,
-                                    UINT32 nTxtBox )
+INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
+    UINT32 nTxtBox)
 {
-    USHORT nBorderThick=0;
+    INT32 nBorderThick=0;
     OpenContainer( ESCHER_SpContainer );
 
     AddShape( ESCHER_ShpInst_TextBox, 0xa00, nShapeId );
@@ -1914,9 +1911,9 @@ USHORT SwEscherEx::WriteTxtFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId,
     return nBorderThick;
 }
 
-USHORT SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
+INT32 SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
 {
-    USHORT nBorderThick=0;
+    INT32 nBorderThick=0;
     OpenContainer( ESCHER_SpContainer );
 
     AddShape( ESCHER_ShpInst_PictureFrame, 0xa00, nShapeId );
@@ -2028,9 +2025,9 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
     }
 }
 
-USHORT SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
+INT32 SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
 {
-    USHORT nBorderThick=0;
+    INT32 nBorderThick=0;
     SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
     const SvInPlaceObjectRef xObj( rOLENd.GetOLEObj().GetOleRef() );
@@ -2187,10 +2184,10 @@ void SwEscherEx::WriteGrfAttr( const SwNoTxtNode& rNd,
     // mirror ??
 }
 
-USHORT SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+INT32 SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
     EscherPropertyContainer& rPropOpt )
 {
-    USHORT nLineWidth=0;
+    INT32 nLineWidth=0;
     const SfxPoolItem* pItem;
     BOOL bFirstLine = TRUE;
     if( SFX_ITEM_SET == rFmt.GetItemState( RES_BOX, TRUE, &pItem ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,8 +343,6 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     void OutListTab();
     void OutOverrideListTab();
     void OutListNamesTab();
-
-
 public:
     const SwPageDesc* pAktPageDesc;
     WW8Fib* pFib;
@@ -629,6 +627,7 @@ public:
     USHORT GetPos( const VoidPtr& p ) const { return aCntnt.GetPos( p ); }
 };
 
+SV_DECL_VARARR( SvInt32s, INT32, 1, 1 )
 
 class WW8_WrPlcDrawObj      // PC for DrawObjects and Text-/OLE-/GRF-Boxes
 {
@@ -637,7 +636,7 @@ private:
     SvULongs aShapeIds;             // VARARR of ShapeIds for the SwFrmFmts
     SvPtrarr aCntnt;                // PTRARR of SwFrmFmt
     SvPtrarr aParentPos;            // PTRARR of Points
-    SvUShorts aThick;               // VARARR of Border Thicknesses
+    SvInt32s aThick;                // VARARR of Border Thicknesses
     BYTE nTTyp;
 
     //No copying
@@ -651,9 +650,9 @@ public:
     BOOL Append( SwWW8Writer&, WW8_CP nCp, const SwFrmFmt& rFmt,
         const Point& rNdTopLeft );
     const SvPtrarr& GetCntntArr() const { return aCntnt; }
-    void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, USHORT nThick );
+    void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, INT32 nThick );
     UINT32 GetShapeId( USHORT n ) const { return aShapeIds[ n ]; }
-    UINT32 GetShapeBorder( USHORT n ) const { return aThick[ n ]; }
+    INT32 GetShapeBorder( USHORT n ) const { return aThick[ n ]; }
 
 };
 

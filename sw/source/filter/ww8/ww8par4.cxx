@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,22 @@
 
 #pragma hdrstop
 
+#ifndef _SOLAR_H
 #include <tools/solar.h>
-
-#ifndef _HINTIDS_HXX
-#include <hintids.hxx>
 #endif
 
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
-#ifndef _FILTER_HXX
-#include <svtools/filter.hxx>
+
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
 #endif
+
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
 #endif
@@ -120,15 +124,6 @@
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Progress
 #endif
-#ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>          // __WW_NEEDS_COPY
-#endif
-#ifndef _WW8PAR_HXX
-#include <ww8par.hxx>
-#endif
-#ifndef _WW8PAR2_HXX
-#include <ww8par2.hxx>          // WWFlyPara::BoxUpWidth()
-#endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
@@ -138,9 +133,18 @@
 #ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
 #endif
+#ifndef _SHELLIO_HXX
+#include <shellio.hxx>
+#endif
 
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
-#include <com/sun/star/drawing/XShape.hpp>
+#ifndef _WW8SCAN_HXX
+#include "ww8scan.hxx"          // __WW_NEEDS_COPY
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
+#endif
+#ifndef _WW8PAR2_HXX
+#include "ww8par2.hxx"          // WWFlyPara::BoxUpWidth()
 #endif
 
 struct OLE_MFP

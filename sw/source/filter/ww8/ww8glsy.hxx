@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:12:31 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,8 @@
 #include <so3/svstor.hxx>
 #endif
 
-#ifndef _SHELLIO_HXX
-#include <shellio.hxx>
-#endif
-
 #ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>
+#include "ww8scan.hxx"
 #endif
 
 class SwTextBlocks;

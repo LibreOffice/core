@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,32 +65,31 @@
 
 #pragma hdrstop
 
-#ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
+
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
+
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
 #endif
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
-#ifndef _WW8GLSY_HXX
-#include <ww8glsy.hxx>
-#endif
-#ifndef _WW8PAR_HXX
-#include <ww8par.hxx>
-#endif
 #ifndef _NDTXT
 #include <ndtxt.hxx>
 #endif
 #include <pam.hxx>
-#ifndef SVTOOLS_URIHELPER_HXX
-#include <svtools/urihelper.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
+#ifndef _SHELLIO_HXX
+#include <shellio.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -108,6 +107,12 @@
 #include <docary.hxx>
 #endif
 
+#ifndef _WW8GLSY_HXX
+#include "ww8glsy.hxx"
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
+#endif
 
 WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm,BYTE nVersion,
     SvStorage *pStg) : rStrm(refStrm), xStg(pStg), nStrings( 0 )

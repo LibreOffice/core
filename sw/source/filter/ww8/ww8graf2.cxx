@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafByFlyFmt( SdrTextObj* pReplaceTextObj,
             }
             // altes Objekt raus aus Gruppen-Liste und neues rein
             // (dies tauscht es ebenfalls in der Drawing-Page aus)
-            pObjectList->ReplaceObject( pGrafObj, pReplaceTextObj->GetOrdNum() );
+            pObjectList->ReplaceObject(pGrafObj, pReplaceTextObj->GetOrdNum());
 
 
             /*
@@ -483,12 +483,8 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt( const WW8PicDesc& rPD,
 
     UINT32 nWidth = rPD.nWidth;
     UINT32 nHeight = rPD.nHeight;
-//  nWidth += pSFlyPara->nLeMgn + pSFlyPara->nRiMgn;
-//            + pSFlyPara->nLeLMgn + pSFlyPara->nRiLMgn;// bei bGrafApo ???
-//  nHeight += pSFlyPara->nUpMgn + pSFlyPara->nLoMgn;
-//            + pSFlyPara->nUpLMgn + pSFlyPara->nLoLMgn;// bei bGrafApo ???
 
-                        // Vertikale Verschiebung durch Zeilenabstand
+    // Vertikale Verschiebung durch Zeilenabstand
     INT32 nNetHeight = nHeight + rPD.nCT + rPD.nCB;
     if( pSFlyPara->nLineSpace && pSFlyPara->nLineSpace > nNetHeight )
         pSFlyPara->nYPos =
@@ -1083,7 +1079,7 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
     pFSPA->nXaRight     = SVBT32ToLong( pFSPAS->nXaRight );
     pFSPA->nYaBottom    = SVBT32ToLong( pFSPAS->nYaBottom );
 
-    USHORT nBits            = (USHORT)SVBT16ToShort( pFSPAS->aBits1 );
+    USHORT nBits        = SVBT16ToShort( pFSPAS->aBits1 );
 
     pFSPA->bHdr         = 0 !=  ( nBits & 0x0001 );
     pFSPA->nbx          =       ( nBits & 0x0006 ) >> 1;
@@ -1096,8 +1092,3 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
     pFSPA->nTxbx = SVBT32ToLong( pFSPAS->nTxbx );
 }
 #endif // defined __WW8_NEEDS_COPY
-
-
-
-
-

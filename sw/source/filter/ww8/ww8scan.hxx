@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #ifndef LONG_MAX
 #include <limits.h>
 #endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>        // UINTXX
 #endif
@@ -77,10 +78,12 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
+
 #ifndef WW8STRUC_HXX
-#include <ww8struc.hxx>         // FIB, STSHI, STD...
+#include "ww8struc.hxx"         // FIB, STSHI, STD...
 #endif
 
 #define APPEND_CONST_ASC(s) AppendAscii(RTL_CONSTASCII_STRINGPARAM(s))

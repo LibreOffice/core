@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 17:45:03 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,8 @@
 #define _WW8PAR2_HXX
 
 #ifndef SWTYPES_HXX
- #include "swtypes.hxx" // enum RndStdIds
+#include <swtypes.hxx>  // enum RndStdIds
 #endif
-
-
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
@@ -77,16 +75,14 @@
 #include <fmtsrnd.hxx>
 #endif
 
-class SwCharFmt;
-
-#ifndef WW8PAR_HXX
-#include <ww8par.hxx>   // WW8_BRC5
-#endif
-
 #ifndef WW8SCAN_HXX
-#include <ww8scan.hxx>  // class WW8Style
+#include "ww8scan.hxx"  // class WW8Style
+#endif
+#ifndef WW8PAR_HXX
+#include "ww8par.hxx"   // WW8_BRC5
 #endif
 
+class SwCharFmt;
 class WW8RStyle;
 
 class WW8DupProperties

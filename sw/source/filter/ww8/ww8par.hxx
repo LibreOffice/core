@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,46 +62,36 @@
 #ifndef _WW8PAR_HXX
 #define _WW8PAR_HXX
 
+#ifndef _STRING_HXX //autogen
+#include <tools/string.hxx>
+#endif
+
+#ifndef _MSDFFIMP_HXX
+#include <svx/msdffimp.hxx>
+#endif
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
+#endif
+
+#ifndef _FLTSHELL_HXX
+#include <fltshell.hxx>         // fuer den Attribut Stack
+#endif
+
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
 #ifndef __SGI_STL_MAP
 #include <map>
 #endif
-#ifndef _STRING_HXX //autogen
-#include <tools/string.hxx>
-#endif
-#ifndef _VCL_COLOR_HXX
-#include <vcl/color.hxx>
-#endif
-#ifndef _SV_FONTTYPE_HXX //autogen
-#include <vcl/fonttype.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
 
-#ifndef _FLTSHELL_HXX
-#include <fltshell.hxx>         // fuer den Attribut Stack
-#endif
 #ifndef _WW8STRUC_HXX
-#include <ww8struc.hxx>     // WW8_BRC ( Forward-Declaration mit anschliessender
-#endif                      // Benutzung von WW8_BRC[4] in Deklaration will der
-                            // doofe Os2Blci nicht )
+#include "ww8struc.hxx"     // WW8_BRC
+#endif
 #ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>  // WW8Fib
+#include "ww8scan.hxx"  // WW8Fib
 #endif
-
 #ifndef _WW8GLSY_HXX
-#include <ww8glsy.hxx>
-#endif
-
-#ifndef _MSDFFIMP_HXX
-#include <svx/msdffimp.hxx>
-#endif
-
-#ifndef _MSOCXIMEX_HXX
-#include <svx/msocximex.hxx>
+#include "ww8glsy.hxx"
 #endif
 
 class SvStringsDtor;
@@ -118,6 +108,7 @@ class SvxTabStopItem;
 class SwAttrSet;
 class SwNumRule;
 class SwFrmFmt;
+class Writer;
 
 class SwWW8StyInf;
 class WW8Fib;
@@ -158,7 +149,6 @@ class SvUShorts;
 class WW8ReaderSave;
 struct WW8PicDesc;
 class Graphic;
-//class String;
 class SwFieldType;
 class SvStorage;
 // alt: class SvStorageRef;
@@ -169,7 +159,6 @@ struct ESelection;
 class SfxItemSet;
 struct WW8PLCFxDesc;
 
-struct WW8ULSpaceData;
 class SdrAttrObj;
 struct WW8ULSpaceData;
 class _ReadFieldParams;
@@ -531,8 +520,8 @@ private:
     SwMSDffManager& operator=(const SwMSDffManager&);
 public:
     static UINT32 GetFilterFlags();
-    static USHORT GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
-        USHORT &rThick);
+    static INT32 GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
+        INT32 &rThick);
     SwMSDffManager( SwWW8ImplReader& rRdr );
     SwFrmFmt *GetLastOCXShapeFrm() const;
     SvStream *DisableFallbackStream();
@@ -787,6 +776,7 @@ friend class WW8FormulaControl;
                         BOOL   bFirst,
                         WW8ULSpaceData& rData );
     void SetPageULSpaceItems( SwFrmFmt &rFmt, WW8ULSpaceData& rData );
+    void SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep);
 
     void SetPageBorder( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
                         const WW8PLCFx_SEPX* pSep, USHORT nLIdx );
@@ -858,8 +848,8 @@ friend class WW8FormulaControl;
     BOOL SetFlyBordersShadow( SfxItemSet& rFlySet, const WW8_BRC pbrc[4],
         short *SizeArray=0 );
 
-    USHORT MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
-        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, USHORT &rLineWidth,
+    INT32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
+        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, INT32 &rLineWidth,
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
         MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist,
@@ -1086,6 +1076,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_Hyphenation(      USHORT, const BYTE* pData, short nLen );
     void Read_WidowControl(     USHORT, const BYTE* pData, short nLen );
     void Read_AlignFont(        USHORT, const BYTE* pData, short nLen );
+    void Read_UsePgsuSettings(  USHORT, const BYTE* pData, short nLen );
     void Read_KeepLines(        USHORT, const BYTE* pData, short nLen );
     void Read_KeepParas(        USHORT, const BYTE* pData, short nLen );
     void Read_BreakBefore(      USHORT, const BYTE* pData, short nLen );

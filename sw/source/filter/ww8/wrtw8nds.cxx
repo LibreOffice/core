@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
         aStr += String::CreateFromInt32(nHeight);
         aStr += '(';
         aStr += rRuby.GetText();
-        aStr.APPEND_CONST_ASC("),");
+        aStr.APPEND_CONST_ASC(");");
         rWrt.OutField( 0, 49, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
     }
     else
@@ -1401,8 +1401,10 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     if( pLayout && pLayout->IsExportable() )
         pTableWrt = new SwWriteTable( pLayout );
     else
-        pTableWrt = new SwWriteTable( rTbl.GetTabLines(), (USHORT)nPageSize,
-                                          (USHORT)nTblSz, FALSE );
+    {
+        pTableWrt = new SwWriteTable( rTbl.GetTabLines(), nPageSize,
+            (USHORT)nTblSz, FALSE );
+    }
 
     // WW6 / 8 can not have more then 31 / 64 cells
     const BYTE nMaxCols = rWW8Wrt.bWrtWW8 ? 64 : 31;

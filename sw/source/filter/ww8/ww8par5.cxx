@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,38 +68,37 @@
 #include <ctype.h>              // tolower
 #include <stdio.h>              // sscanf()
 
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+
+#ifndef _LINKMGR_HXX //autogen
+#include <so3/linkmgr.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 
-#include <tools/solar.h>
-#ifndef SVTOOLS_URIHELPER_HXX
-#include <svtools/urihelper.hxx>
-#endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
 #endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _LINKMGR_HXX //autogen
-#include <so3/linkmgr.hxx>
-#endif
-
-#ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
-#endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
-#include <unotools/charclass.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
-#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
 #ifndef _FMTFLD_HXX //autogen
@@ -141,20 +140,8 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
-#ifndef _FLTINI_HXX
-#include <fltini.hxx>           // ReadFilterFlags
-#endif
 #ifndef _SECTION_HXX
 #include <section.hxx>          // class SwSection
-#endif
-#ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>          // WW8FieldDesc
-#endif
-#ifndef _FLTSHELL_HXX
-#include <fltshell.hxx>         // fuer den Attribut Stack
-#endif
-#ifndef _WW8PAR_HXX
-#include <ww8par.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -204,6 +191,14 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+
+#ifndef _WW8SCAN_HXX
+#include "ww8scan.hxx"          // WW8FieldDesc
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
+#endif
+
 #define WWF_INVISIBLE 86            // Bit-Nummer fuer Invisible ( IniFlags )
 #define MAX_FIELDLEN 64000
 

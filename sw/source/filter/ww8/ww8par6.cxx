@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,12 @@
 #define _SVSTDARR_USHORTSSORT
 #include <svtools/svstdarr.hxx>
 #endif
-#ifndef _SFXITEMITER_HXX //autogen
+#ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
+#endif
+
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
 #endif
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -81,9 +85,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
 #ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
 #endif
@@ -198,16 +199,14 @@
 #ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
 #endif
-
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
 #endif
 #ifndef _SVX_PARAVERTALIGNITEM_HXX
 #include <svx/paravertalignitem.hxx>
 #endif
-
-#ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
 #endif
 
 #ifndef _FMTPDSC_HXX //autogen
@@ -224,9 +223,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _SHELLIO_HXX
-#include <shellio.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>         // class SwPageDesc
@@ -252,12 +248,6 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
-#ifndef _FLTSHELL_HXX
-#include <fltshell.hxx>         // fuer den Attribut Stack
-#endif
-#ifndef _FLTINI_HXX
-#include <fltini.hxx>
-#endif
 #ifndef _SECTION_HXX
 #include <section.hxx>
 #endif
@@ -273,11 +263,19 @@
 #ifndef _FMTFLCNT_HXX
 #include <fmtflcnt.hxx>
 #endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
+
+#ifndef _FLTINI_HXX
+#include <fltini.hxx>   //For CalculateFlySize
+#endif
+
 #ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>
+#include "ww8scan.hxx"
 #endif
 #ifndef _WW8PAR2_HXX
-#include <ww8par2.hxx>          // class WW8RStyle, class WwAnchorPara
+#include "ww8par2.hxx"          // class WW8RStyle, class WwAnchorPara
 #endif
 
 static ColorData __FAR_DATA eSwWW8ColA[] = {
@@ -403,6 +401,96 @@ void SwWW8ImplReader::RemoveCols( SwPageDesc& rPageDesc, SwFmtCol*& rpCol )
         rpCol = 0;
 }
 
+void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
+{
+    if (bVer67)
+        return;
+
+    SwTextGridItem aGrid;
+    SwTextGrid eType=GRID_NONE;
+    if (short nGridType = ReadULSprm( pSep, 0x5032, 0 ))
+    {
+        switch (nGridType)
+        {
+            case 0:
+                eType = GRID_NONE;
+                break;
+            default:
+                ASSERT(0,"Unknown grid type");
+            case 3:
+                //Text snaps to char grid, this doesn't make a lot of sense to
+                //me. This is closer than LINES_CHARS
+                eType = GRID_LINES_ONLY;
+                break;
+            case 1:
+                eType = GRID_LINES_CHARS;
+                break;
+            case 2:
+                eType = GRID_LINES_ONLY;
+                break;
+        }
+    }
+    aGrid.SetGridType(eType);
+
+    //sep.dyaLinePitch
+    short nLinePitch = ReadULSprm(pSep, 0x9031, 360);
+
+    SwTwips nTextareaHeight = rFmt.GetFrmSize().GetHeight();
+    const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)
+        rFmt.GetAttr(RES_UL_SPACE);
+    nTextareaHeight -= rUL.GetUpper();
+    nTextareaHeight -= rUL.GetLower();
+    aGrid.SetLines(nTextareaHeight/nLinePitch);
+
+    //It remains to be seen if a base height of 14points and a ruby height of
+    //4 points should allow 12point text with ruby of 4pt to fit in single
+    //line. I reckon it should (why not), but it doesn't at present :-(
+    //So right now this doesn't always work as I think it should
+
+    //This seems emperically correct, but might require some future tweaking.
+    short nRubyHeight = nLinePitch*2/9;
+    short nBaseHeight = nLinePitch-nRubyHeight;
+    aGrid.SetBaseHeight(nBaseHeight);
+    aGrid.SetRubyHeight(nRubyHeight);
+
+    //Get the size of word's default styles font
+    UINT32 nRubyWidth=240;
+    for (USHORT nI = 0; nI < pStyles->GetCount(); nI++ )
+    {
+        if (pCollA[nI].bValid && pCollA[nI].pFmt &&
+            pCollA[nI].GetWWStyleId() == 0)
+        {
+            const SvxFontHeightItem& rF = (const SvxFontHeightItem&)
+                pCollA[nI].pFmt->GetAttr(RES_CHRATR_CJK_FONTSIZE);
+            nRubyWidth = rF.GetHeight();
+            break;
+        }
+    }
+
+    //dxtCharSpace
+    if (const BYTE* pS = pSep->HasSprm(0x7030))
+    {
+        UINT32 nCharSpace = SVBT32ToLong(pS);
+        //main lives in top 20 bits, and is signed.
+        INT32 nMain = (nCharSpace & 0xFFFFF000);
+        nMain/=0x1000;
+        nRubyWidth += nMain*20;
+
+        int nFraction = (nCharSpace & 0x00000FFF);
+        nFraction = (nFraction*20)/0xFFF;
+        nRubyWidth += nFraction;
+    }
+
+    SwTwips nTextareaWidth = rFmt.GetFrmSize().GetWidth();
+    const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
+        rFmt.GetAttr(RES_LR_SPACE);
+    nTextareaWidth -= rLR.GetLeft();
+    nTextareaWidth -= rLR.GetRight();
+//    nothing I can do with this value at the moment I think
+//    aGrid.SetNoChars(nTextareaWidth/nRubyWidth);
+
+    rFmt.SetAttr(aGrid);
+}
 
 BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
     USHORT nNettoWidth, BOOL bTestOnly )
@@ -803,8 +891,7 @@ void SwWW8ImplReader::SetPageBorder(SwPageDesc *pPageDesc0,
                         // Left
                         if( aInnerDist.Left() < aLR.GetLeft() )
                         {
-                            aLR.SetLeft( (USHORT)(aLR.GetLeft()
-                                            - aInnerDist.Left() ) );
+                            aLR.SetLeft(aLR.GetLeft() - aInnerDist.Left());
                             aBox.SetDistance( (USHORT)aInnerDist.Left(),
                                                 BOX_LINE_LEFT );
                         }
@@ -817,8 +904,7 @@ void SwWW8ImplReader::SetPageBorder(SwPageDesc *pPageDesc0,
                         // Right
                         if( aInnerDist.Right() < aLR.GetRight() )
                         {
-                            aLR.SetRight( (USHORT)(aLR.GetRight()
-                                            - aInnerDist.Right() ) );
+                            aLR.SetRight(aLR.GetRight() - aInnerDist.Right());
                             aBox.SetDistance( (USHORT)aInnerDist.Right(),
                                                 BOX_LINE_RIGHT );
                         }
@@ -859,18 +945,18 @@ void SwWW8ImplReader::SetPageBorder(SwPageDesc *pPageDesc0,
                         pFmt->SetAttr( aUL );
                         pFmt->SetAttr( aBox );
                     }
-                    else                                    // distance from text
+                    else    // distance from text
                     {
                         // Left
                         aBox.SetDistance( (USHORT)aInnerDist.Left(),
                                             BOX_LINE_LEFT );
-                        aLR.SetLeft( Max((long)0, (long)(aLR.GetLeft()
-                                            - (USHORT)aInnerDist.Left() )));
+                        aLR.SetLeft( Max((long)0, aLR.GetLeft()
+                            - aInnerDist.Left() ));
                         // Right
                         aBox.SetDistance( (USHORT)aInnerDist.Right(),
                                             BOX_LINE_RIGHT );
-                        aLR.SetRight(Max((long)0, (long)(aLR.GetRight()
-                                            - (USHORT)aInnerDist.Right() )));
+                        aLR.SetRight(Max((long)0, aLR.GetRight()
+                            - aInnerDist.Right() ));
                         // Top
                         aBox.SetDistance( (USHORT)aInnerDist.Top(),
                                             BOX_LINE_TOP );
@@ -1476,6 +1562,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
         SetPage1( pPageDesc, rFmt0, pSep, nLIdx, TRUE );
 
         SetPageULSpaceItems( rFmt0, aULData );
+        SetDocumentGrid(rFmt0, pSep);
         SetPageBorder( 0, pPageDesc, pSep, nLIdx );
     }
     else
@@ -1570,8 +1657,10 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
         // und uebrige Einstellungen updaten
         // Vertikale Formatierung
         SetPageULSpaceItems( rFmt0, aULData0 );
+        SetDocumentGrid(rFmt0, pSep);
         // einzeln, da KF evtl. verschieden
         SetPageULSpaceItems( rFmt1, aULData1 );
+        SetDocumentGrid(rFmt1, pSep);
         SetPageBorder( pPageDesc, pPageDesc1, pSep, nLIdx );
     }
 
@@ -4524,12 +4613,18 @@ void SwWW8ImplReader::Read_WidowControl( USHORT, const BYTE* pData, short nLen )
     }
 }
 
+void SwWW8ImplReader::Read_UsePgsuSettings(USHORT,const BYTE* pData,short nLen)
+{
+    if( nLen <= 0 )
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_SNAPTOGRID);
+    else
+        NewAttr( SvxParaGridItem(*pData) );
+}
+
 void SwWW8ImplReader::Read_AlignFont( USHORT, const BYTE* pData, short nLen )
 {
     if( nLen <= 0 )
-    {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_VERTALIGN);
-    }
     else
     {
         sal_uInt16 nVal = SVBT16ToShort( pData );
@@ -4987,7 +5082,7 @@ SprmReadInfo aSprmReadTab[] = {
     0xC645, (FNReadRecord)0, //"sprmPNumRM" // pap.numrm;;variable length;
     0x6645, (FNReadRecord)0, //"sprmPHugePapx" // see below;fc in the data stream to locate the huge grpprl (see below);long;
     0x6646, (FNReadRecord)0, //"sprmPHugePapx" // see below;fc in the data stream to locate the huge grpprl (see below);long;
-    0x2447, (FNReadRecord)0, //"sprmPFUsePgsuSettings" // pap.fUsePgsuSettings;1 or 0;byte;
+    0x2447, &SwWW8ImplReader::Read_UsePgsuSettings, //"sprmPFUsePgsuSettings" // pap.fUsePgsuSettings;1 or 0;byte;
     0x2448, (FNReadRecord)0, //"sprmPFAdjustRight" // pap.fAdjustRight;1 or 0;byte;
     0x0800, &SwWW8ImplReader::Read_CFRMarkDel, //"sprmCFRMarkDel" // chp.fRMarkDel;1 or 0;bit;
     0x0801, &SwWW8ImplReader::Read_CFRMark,    //"sprmCFRMark" // chp.fRMark;1 or 0;bit;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,83 +65,71 @@
 
 #pragma hdrstop
 
-#define _SVSTDARR_STRINGSDTOR
-
 #ifndef _SOLAR_H
 #include <tools/solar.h>
+#endif
+
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_USHORTS
+#define _SVSTDARR_STRINGSDTOR
+#include <svtools/svstdarr.hxx>
+#endif
+
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
+
+#ifndef _SVSTOR_HXX //autogen
+#include <so3/svstor.hxx>
+#endif
+
+#ifndef _SFXDOCINF_HXX //autogen
+#include <sfx2/docinf.hxx>
+#endif
+
+#ifndef _OFA_FLTRCFG_HXX
+#include <offmgr/fltrcfg.hxx>
+#endif
+#ifndef _OFF_APP_HXX //autogen
+#include <offmgr/app.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
-#endif
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
 #ifndef _SVX_CSCOITEM_HXX //autogen
 #include <svx/cscoitem.hxx>
 #endif
-
 #ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
-
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
 #endif
 #ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
 #endif
-#ifndef _MSDFFIMP_HXX
-#include <svx/msdffimp.hxx>
-#endif
-
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
 #endif
-
 #ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
 #endif
-
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
 #endif
-
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
 #endif
-
-#ifdef DEBUG
-#   ifndef _SOUND_HXX //autogen
-#       include <vcl/sound.hxx>
-#   endif
-#endif
-
-#ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
-#endif
-#ifndef _OFA_FLTRCFG_HXX
-#include <offmgr/fltrcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
+#ifndef _MSDFFIMP_HXX
+#include <svx/msdffimp.hxx>
 #endif
 
 #ifndef _FMTFTN_HXX //autogen
@@ -179,12 +167,6 @@
 #endif
 #ifndef _FTNINFO_HXX //autogen
 #include <ftninfo.hxx>
-#endif
-#ifndef _WW8PAR2_HXX
-#include <ww8par2.hxx>          // class WW8RStyle, class WW8AnchorPara
-#endif
-#ifndef _WW8PAR_HXX
-#include <ww8par.hxx>
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>              // fuer SwPam
@@ -225,26 +207,12 @@
 #ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
 #endif
-#ifndef _FLTINI_HXX
-#include <fltini.hxx>
-#endif
 #ifndef _VIEWSH_HXX     // for the pagedescname from the ShellRes
 #include <viewsh.hxx>
 #endif
 #ifndef _SHELLRES_HXX   // for the pagedescname from the ShellRes
 #include <shellres.hxx>
 #endif
-
-#ifdef DEBUG
-#ifndef _DOCARY_HXX //autogen
-#include <docary.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
-#include <fmtanchr.hxx>
-#endif
-
-#endif
-
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Progress
 #endif
@@ -264,27 +232,25 @@
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #endif
-using namespace ::com::sun::star;
 
-//-----------------------------------------
-//              diverses
-//-----------------------------------------
+#ifndef _FLTINI_HXX
+#include <fltini.hxx>
+#endif
 
+#ifndef _WW8PAR2_HXX
+#include "ww8par2.hxx"          // class WW8RStyle, class WW8AnchorPara
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
+#endif
 
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
 
-
-
-
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
-    : SvxMSDffManager( *rRdr.pTableStream,
-                        rRdr.pWwFib->fcDggInfo,
-                        rRdr.pDataStream, 0, 0,
-                        COL_WHITE, 12 /* in Point */,
-                        rRdr.pStrm ),
-    rReader( rRdr )
+    : SvxMSDffManager( *rRdr.pTableStream, rRdr.pWwFib->fcDggInfo,
+    rRdr.pDataStream, 0, 0, COL_WHITE, 12 , rRdr.pStrm ), rReader( rRdr )
 {
     nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
 }
@@ -369,15 +335,15 @@ SwFrmFmt* SwMSDffManager::GetLastOCXShapeFrm() const
 
 void SwWW8ImplReader::Read_StyleCode( USHORT, const BYTE* pData, short nLen )
 {
-    if( nLen < 0 )
+    if (nLen < 0)
     {
         bCpxStyle = FALSE;
         return;
     }
-    INT16 nColl = SVBT16ToShort( pData );
-    if( (USHORT)nColl < nColls )
+    USHORT nColl = SVBT16ToShort(pData);
+    if (nColl < nColls)
     {
-        SetTxtFmtCollAndListLevel( *pPaM, pCollA[ nColl ] );
+        SetTxtFmtCollAndListLevel( *pPaM, pCollA[nColl] );
         bCpxStyle = TRUE;
     }
 }
@@ -727,6 +693,7 @@ void SwWW8ImplReader::ImportDop( BOOL bNewDoc )
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 {
+    using namespace ::com::sun::star;
     switch (rTypo.iLevelOfKinsoku)
     {
 #if 0   /*
@@ -751,8 +718,8 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
             i18n::ForbiddenCharacters aForbidden(rTypo.rgxchFPunct,
                 rTypo.rgxchLPunct);
             rDoc.SetForbiddenCharacters(rTypo.GetConvertedLang(),aForbidden);
-            //Obviously cannot set the standard level 1 for japanese, so bail out
-            //now while we can.
+            //Obviously cannot set the standard level 1 for japanese, so bail
+            //out now while we can.
             if (rTypo.GetConvertedLang() == LANGUAGE_JAPANESE)
                 return;
             }
@@ -2154,10 +2121,6 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pPageDesc = 0;
 
     nNfcPgn = nPgChpDelim = nPgChpLevel = 0;
-
-#ifdef DEBUG
-    Sound::Beep();
-#endif
 }
 
 void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
@@ -2831,11 +2794,6 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 
     if( !nErrRet )
         nErrRet = LoadDoc1( rPaM ,pGloss);
-
-#ifdef DEBUG
-    Sound::Beep();
-#endif
-
     return nErrRet;                 // return Errorcode
 }
 
