@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registrationhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-22 15:14:22 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ sal_Bool OModuleRegistration::writeComponentInfos(
             Reference< XRegistryKey >  xNewKey( _rxRootKey->createKey(aMainKeyName) );
 
             const OUString* pService = pServices->getConstArray();
-            for (sal_uInt32 j=0; j<pServices->getLength(); ++j, ++pService)
+            for (sal_Int32 j=0; j<pServices->getLength(); ++j, ++pService)
                 xNewKey->createKey(*pService);
         }
         catch(Exception&)
