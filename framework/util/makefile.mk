@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 17:01:49 $
+#   last change: $Author: kz $ $Date: 2004-01-28 14:42:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,17 +78,15 @@ GEN_HID_OTHER=      TRUE
 
 LIB1TARGET=     $(SLB)$/fwiobj.lib
 
-LIB1OBJFILES=   $(SLO)$/wildcard.obj                            \
-                $(SLO)$/argumentanalyzer.obj                    \
+LIB1OBJFILES=   \
                 $(SLO)$/converter.obj                           \
                 $(SLO)$/lockhelper.obj                          \
                 $(SLO)$/transactionmanager.obj                  \
-                $(SLO)$/filtercache.obj                         \
-                $(SLO)$/filtercachedata.obj                     \
                 $(SLO)$/protocolhandlercache.obj				\
                 $(SLO)$/networkdomain.obj                       \
                 $(SLO)$/configaccess.obj                        \
                 $(SLO)$/framelistanalyzer.obj
+
 
 # --- export library for sfx2 -------------------------------------------------
 
@@ -188,13 +186,8 @@ SHL3TARGET=		fwl$(UPD)$(DLLPOSTFIX)
 
 SHL3IMPLIB=		ifwl
 
-SHL3OBJS=       $(SLO)$/contenthandlerfactory.obj   \
-                $(SLO)$/detectorfactory.obj         \
-                $(SLO)$/filterfactory.obj			\
-                $(SLO)$/frameloaderfactory.obj		\
-                $(SLO)$/mediatypedetectionhelper.obj\
+SHL3OBJS=       $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/registertemp.obj			\
-                $(SLO)$/typedetection.obj			\
                 $(SLO)$/substitutepathvars.obj		\
                 $(SLO)$/pathsettings.obj
 
@@ -221,10 +214,9 @@ SHL4TARGET=		fwk$(UPD)$(DLLPOSTFIX)
 
 SHL4IMPLIB=		ifwk
 
-SHL4OBJS=       $(SLO)$/basedispatcher.obj          \
-                $(SLO)$/blankdispatcher.obj			\
-                $(SLO)$/createdispatcher.obj		\
+SHL4OBJS=       \
                 $(SLO)$/desktop.obj					\
+                $(SLO)$/loaddispatcher.obj          \
                 $(SLO)$/dispatchprovider.obj		\
                 $(SLO)$/documentproperties.obj		\
                 $(SLO)$/droptargetlistener.obj		\
@@ -238,10 +230,7 @@ SHL4OBJS=       $(SLO)$/basedispatcher.obj          \
                 $(SLO)$/ocomponentaccess.obj		\
                 $(SLO)$/ocomponentenumeration.obj	\
                 $(SLO)$/oframes.obj					\
-                $(SLO)$/opluginframedispatcher.obj	\
-                $(SLO)$/pluginframe.obj				\
                 $(SLO)$/registerservices.obj		\
-                $(SLO)$/selfdispatcher.obj			\
                 $(SLO)$/closedispatcher.obj         \
                 $(SLO)$/soundhandler.obj			\
                 $(SLO)$/statusindicator.obj			\
@@ -264,13 +253,17 @@ SHL4OBJS=       $(SLO)$/basedispatcher.obj          \
                 $(SLO)$/servicehandler.obj          \
                 $(SLO)$/stillinteraction.obj		\
                 $(SLO)$/restricteduiinteraction.obj \
-                $(SLO)$/loadeventlistener.obj		\
-                $(SLO)$/asyncloadthread.obj         \
-                $(SLO)$/componentloader.obj         \
                 $(SLO)$/persistentwindowstate.obj   \
                 $(SLO)$/colorlistener.obj           \
                 $(SLO)$/backingcomp.obj				\
-                $(SLO)$/dispatchhelper.obj
+                $(SLO)$/dispatchhelper.obj          \
+                $(SLO)$/mediadescriptor.obj         \
+                $(SLO)$/filter.obj                  \
+                $(SLO)$/frameloader.obj             \
+                $(SLO)$/contenthandler.obj          \
+                $(SLO)$/containerquery.obj          \
+                $(SLO)$/loadenv.obj                 \
+                $(SLO)$/targethelper.obj
 
 SHL4STDLIBS=	\
                 $(FWELIB)							\
@@ -294,30 +287,6 @@ SHL4DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 DEF4NAME=		$(SHL4TARGET)
 
 SHL4VERSIONMAP= exports.map
-
-# --- login service library ----------------------------------------------------
-
-SHL5TARGET=		lgd$(UPD)$(DLLPOSTFIX)
-
-SHL5IMPLIB=		ilgd
-
-SHL5OBJS=		$(SLO)$/registerlogindialog.obj		\
-                $(SLO)$/logindialog.obj
-
-SHL5STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(VOSLIB)							\
-                $(SALLIB)							\
-                $(SVLIB)							\
-                $(TOOLSLIB)                         \
-                $(FWILIB)
-
-SHL5DEF=		$(MISC)$/$(SHL5TARGET).def
-SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
-
-DEF5NAME=		$(SHL5TARGET)
-
-SHL5VERSIONMAP= exports.map
 
 # --- Targets -----------------------------------------------------------------
 
