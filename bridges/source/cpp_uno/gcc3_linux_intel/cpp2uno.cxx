@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:25:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <com/sun/star/uno/genfunc.hxx>
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 
