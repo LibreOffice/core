@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
+ *  last change: $Author: tl $ $Date: 2002-06-04 09:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,81 +827,47 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     pGlyphDev->Push(PUSH_FONT | PUSH_MAPMODE);
     Font aFnt(rDev.GetFont());
     aFnt.SetAlign(ALIGN_TOP);
+
+    // use scale factor when calling GetTextBoundRect to counter
+    // negative effects from antialiasing which may otherwise result
+    // in significant incorrect bounding rectangles for some charcters.
+    long nScaleFactor = 16;
+    Size aFntSize = aFnt.GetSize();
+    aFnt.SetSize( Size( aFntSize.Width() * nScaleFactor, aFntSize.Height() * nScaleFactor ) );
     pGlyphDev->SetFont(aFnt);
-    //! Da in der FontMetric die Weite immer != 0 ist (was fuer wide-Attribute
-    //! und skalierbare Klammern auch so benötigt wird) kann dies zu einer
-    //! Verzerrung der Proportionen im 'pGlyphDev' gegnüber dem 'rDev' kommen!
 
-    const BOOL  bOptimize = FALSE;
-    BOOL        bSuccess  = TRUE;
-    Point       aPoint;
-    Rectangle   aResult (aPoint, Size(rDev.GetTextWidth(rText), rDev.GetTextHeight())),
+    long nTextWidth = rDev.GetTextWidth(rText);
+    Rectangle   aResult (Point(), Size(nTextWidth, rDev.GetTextHeight())),
                 aTmp;
-    long        nDelta;
 
-    // setzen des linken Randes (dabei Leerzeichen erhalten!)
-    xub_Unicode  cChar = rText.GetChar(0);
-    if (cChar != xub_Unicode(' '))
+    BOOL bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText, 0, 0);
+    DBG_ASSERT( bSuccess, "GetTextBoundRect failed" );
+
+
+    if (!aTmp.IsEmpty())
     {
-        bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
-        if (!aTmp.IsEmpty())
+        aResult = Rectangle(aTmp.Left() / nScaleFactor, aTmp.Top() / nScaleFactor,
+                            aTmp.Right() / nScaleFactor, aTmp.Bottom() / nScaleFactor);
+        if (&rDev != pGlyphDev) /* only when rDev is a printer... */
         {
-            // linken Rand am 'rDev' ermitteln
-            // (wir nehmen den linken Rand bezüglich 'pGlyphDev' und skalieren
-            // ihn passen für 'rDev')
-            long nLeftSpace = aTmp.Left() * rDev.GetTextWidth(cChar)
-                                        / pGlyphDev->GetTextWidth(cChar);
-            aResult.Left() += nLeftSpace;
+            long nGDTextWidth  = pGlyphDev->GetTextWidth(rText);
+            if (nGDTextWidth != 0  &&
+                nTextWidth != nGDTextWidth)
+            {
+                aResult.Right() *= nTextWidth;
+                aResult.Right() /= nGDTextWidth / nScaleFactor;
+            }
         }
     }
-
-    // setzen des rechten Randes (dabei Leerzeichen erhalten!)
-    cChar = rText.GetChar(nLen - 1);
-    if (cChar != xub_Unicode(' '))
-    {
-        bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
-        if (!aTmp.IsEmpty())
-        {
-            // rechten Rand am 'rDev' ermitteln (analog wie beim linken Rand)
-            long nGlyphWidth = pGlyphDev->GetTextWidth(cChar),
-                 nRightSpace = (nGlyphWidth - 1 - aTmp.Right())
-                                    * rDev.GetTextWidth(cChar)
-                                    / nGlyphWidth;
-            aResult.Right() -= nRightSpace;
-        }
-    }
-
-    // oberen und unteren Rand bestimmen.
-    // Im Augenblick gehen wird davon aus, daß die Texthöhen an den beiden
-    // Devices im wesentlichen gleich sind und skalieren diese Ränder daher
-    // nicht um.
-    long  nTop    = aResult.Bottom() + 1,
-          nBottom = aResult.Top() - 1;
-    for (USHORT i = 0;  i < nLen;  i++)
-    {
-        cChar = rText.GetChar(i);
-        if (cChar != xub_Unicode(' '))
-        {
-            //! Anmerkung: Leerzeichen *können* leere Rechtecke ergeben, aber
-            //! der Returnwert sollte auch dann TRUE sein.
-            bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
-
-            if (!aTmp.IsEmpty()  &&  aTmp.Top() < nTop)
-                nTop = aTmp.Top();
-            if (!aTmp.IsEmpty()  &&  aTmp.Bottom() > nBottom)
-                nBottom = aTmp.Bottom();
-        }
-    }
-    aResult.Top()    = nTop;
-    aResult.Bottom() = nBottom;
 
     // move rectangle to match possibly different baselines
     // (because of different devices)
-    nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent();
+    long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() / nScaleFactor;
     aResult.Move(0, nDelta);
 
-    rRect = aResult;
     pGlyphDev->Pop();
+
+    rRect = aResult;
     return bSuccess;
 }
 
