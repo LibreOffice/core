@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProxy.java,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-09-10 10:44:32 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:04:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -118,7 +118,7 @@ public class ScriptProxy
      */
     public  Object invoke( Object[] args )
     throws IllegalAccessException, InvocationTargetException,
-                IllegalArgumentException, Exception
+                IllegalArgumentException
     {
         return m_method.invoke( m_targetObject, args );
     }
