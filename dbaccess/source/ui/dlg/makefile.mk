@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.26 $
+ #  $Revision: 1.27 $
  #
- #  last change: $Author: hr $ $Date: 2004-08-02 15:49:43 $
+ #  last change: $Author: rt $ $Date: 2004-09-08 16:29:55 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -67,6 +67,10 @@ TARGET=uidlg
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+
+.IF "$(SYSTEM_ODBC_HEADERS)" == "YES"
+CFLAGS+=-DSYSTEM_ODBC_HEADERS
+.ENDIF
 
 # --- Files -------------------------------------
 
