@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:32:35 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <math.h>
 
@@ -773,6 +774,8 @@ BOOL SvNumberFormatter::Load( SvStream& rStream )
                                 LANGUAGE_GERMAN, eSysLang, TRUE );
                     }
                 break;
+                case NF_CONVERT_NONE :
+                break;  // -Wall not handled.
             }
 
         }
@@ -1718,7 +1721,6 @@ ULONG SvNumberFormatter::TestNewString(const String& sFormatString,
     ChangeIntl(eLnge);                                  // ggfs. austauschen
     eLnge = ActLnge;
     ULONG nRes;
-    BOOL bCheck = FALSE;
     String sTmpString = sFormatString;
     SvNumberformat* pEntry = new SvNumberformat(sTmpString,
                                                 pFormatScanner,
@@ -2827,7 +2829,8 @@ SvULONGTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter& rTable)
         ClearMergeTable();
     else
         pMergeTable = new SvULONGTable;
-    ULONG nCLOffset, nOldKey, nOffset, nNewKey;
+    ULONG nCLOffset = 0;
+    ULONG nOldKey, nOffset, nNewKey;
     ULONG* pNewIndex;
     SvNumberformat* pNewEntry;
     SvNumberformat* pFormat = rTable.aFTable.First();
