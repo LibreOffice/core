@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:38:01 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 class XclImpStream;
 
-// ----------------------------------------------- class ColRowSettings --
+// ----------------------------------------------- class XclImpColRowSettings --
 
 #define ROWFLAG_USED        0x01
 #define ROWFLAG_DEFAULT     0x02
@@ -86,7 +86,7 @@ class XclImpStream;
 #define ROWFLAG_MAN         0x08
 
 
-class ColRowSettings : public ExcRoot
+class XclImpColRowSettings : public ExcRoot
 {
 private:
     // ACHTUNG: Col-/Row-Angaben in TWIPS
@@ -104,8 +104,8 @@ private:
     void                _SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
 
 public:
-                        ColRowSettings( RootData& rRootData );
-                        ~ColRowSettings();
+                        XclImpColRowSettings( RootData& rRootData );
+                        ~XclImpColRowSettings();
     void                Reset( void );
 
     void                SetDefaults( UINT16 nWidth, UINT16 nHeight );
@@ -134,7 +134,7 @@ public:
 
 
 
-inline void ColRowSettings::SetDefWidth( const UINT16 n, const BOOL b )
+inline void XclImpColRowSettings::SetDefWidth( const UINT16 n, const BOOL b )
 {
     if( b )
     {
@@ -146,20 +146,20 @@ inline void ColRowSettings::SetDefWidth( const UINT16 n, const BOOL b )
 }
 
 
-inline void ColRowSettings::SetDefHeight( const UINT16 n )
+inline void XclImpColRowSettings::SetDefHeight( const UINT16 n )
 {
     nDefHeight = n;
 }
 
 
-inline void ColRowSettings::SetWidth( const SCCOL nCol, const INT32 nNew )
+inline void XclImpColRowSettings::SetWidth( const SCCOL nCol, const INT32 nNew )
 {
     if( ValidCol(nCol) )
         pWidth[ nCol ] = nNew;
 }
 
 
-inline void ColRowSettings::SetHeight( const SCROW nRow, const UINT16 n )
+inline void XclImpColRowSettings::SetHeight( const SCROW nRow, const UINT16 n )
 {
     if( ValidRow(nRow) )
     {
@@ -179,14 +179,14 @@ inline void ColRowSettings::SetHeight( const SCROW nRow, const UINT16 n )
 }
 
 
-inline void ColRowSettings::HideCol( const SCCOL nCol )
+inline void XclImpColRowSettings::HideCol( const SCCOL nCol )
 {
     if( ValidCol(nCol) )
         pColHidden[ nCol ] = TRUE;
 }
 
 
-inline void ColRowSettings::HideRow( const SCROW nRow )
+inline void XclImpColRowSettings::HideRow( const SCROW nRow )
 {
     if( ValidRow(nRow) )
     {
@@ -198,7 +198,7 @@ inline void ColRowSettings::HideRow( const SCROW nRow )
 }
 
 
-inline void ColRowSettings::Used( const SCCOL nCol, const SCROW nRow )
+inline void XclImpColRowSettings::Used( const SCCOL nCol, const SCROW nRow )
 {
     if( ValidCol(nCol) && ValidRow(nRow) )
     {
@@ -210,7 +210,7 @@ inline void ColRowSettings::Used( const SCCOL nCol, const SCROW nRow )
 }
 
 
-inline void ColRowSettings::SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
+inline void XclImpColRowSettings::SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
 {
     if( ValidRow(nRow) )
         _SetRowSettings( nRow, nExcelHeight, nGrbit );
