@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-28 16:27:48 $
+ *  last change: $Author: sj $ $Date: 2001-09-06 14:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4306,7 +4306,8 @@ PPTParaSheet::PPTParaSheet( const PPTParaSheet& rSheet )
     *this = rSheet;
 }
 
-void PPTParaSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL bFirst, BOOL bSimpleText )
+void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool bMasterStyle,
+                    sal_uInt32 nLevel, sal_Bool bFirst, sal_Bool bSimpleText )
 {
     // Absatzattribute
     UINT16  nVal16;
@@ -4328,6 +4329,14 @@ void PPTParaSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
     {
         rIn >> nVal16;
 //      if ( nPMask & 2 )       // hard Attribute ?         #73712#
+        sal_Bool bFontPossible = ( maParaLevel[ nLevel ].mnBulletChar & 0xff00 ) == 0;
+        if ( !bFontPossible )   // #90437# if the bullet is a unicode character, symbol
+        {                       // fonts are not possible here and standard unicode is used
+            PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal16 );
+            if ( pFontEnityAtom && pFontEnityAtom->eCharSet != RTL_TEXTENCODING_SYMBOL )
+                bFontPossible = sal_True;
+        }
+        if ( bFontPossible )
             maParaLevel[ nLevel ].mnBulletFont = nVal16;
     }
     if ( nPMask & 0x0040 )
@@ -4555,8 +4564,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     UINT16 nShit;
                     rIn >> nShit;
                 }
-                mpParaSheet[ nInstance ]->Read( rIn, TRUE, nLev, bFirst, bSimpleText );
-                mpCharSheet[ nInstance ]->Read( rIn, TRUE, nLev, bFirst, bSimpleText );
+                mpParaSheet[ nInstance ]->Read( rManager, rIn, sal_True, nLev, bFirst, bSimpleText );
+                mpCharSheet[ nInstance ]->Read( rIn, sal_True, nLev, bFirst, bSimpleText );
                 bFirst = FALSE;
                 nLev++;
             }
@@ -4634,7 +4643,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                             mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev - 1 ];
                             mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev - 1 ];
                         }
-                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, TRUE, nLev, bFirst, FALSE );
+                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rManager, rIn, sal_True, nLev, bFirst, sal_False );
                         if ( !nLev )
                         {
                             // set paragraph defaults for instance 4 (TSS_TYPE_TEXT_IN_SHAPE)
