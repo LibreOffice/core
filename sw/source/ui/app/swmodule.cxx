@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:01:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,9 @@
 #ifndef _SYNCBTN_HXX
 #include <syncbtn.hxx>
 #endif
+#ifndef _SWMAILMERGECHILDWINDOW_HXX
+#include <mailmergechildwindow.hxx>
+#endif
 #ifndef _MODOPT_HXX //autogen
 #include <modcfg.hxx>
 #endif
@@ -621,6 +624,8 @@ void SwDLL::RegisterControls()
     SwInputChild::RegisterChildWindow( sal_False, pMod );
     SwRedlineAcceptChild::RegisterChildWindow( sal_False, pMod );
     SwSyncChildWin::RegisterChildWindow( sal_True, pMod );
+    SwMailMergeChildWindow::RegisterChildWindow( sal_False, pMod );
+//    SwSendMailChildWindow::RegisterChildWindow( sal_False, pMod );
     SwInsertIdxMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SwInsertAuthMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SvxRubyChildWindow::RegisterChildWindow( sal_False, pMod);
