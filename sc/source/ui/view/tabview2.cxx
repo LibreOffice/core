@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:06:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,11 +509,13 @@ BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
     }
 
     long nBlockY = 0;
-    SCROW nRow;
-    for (nRow=0; nRow<nFixPosY; nRow++)
+    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+            pDoc->GetRowFlagsArray( nTab), 0, nFixPosY-1, CR_HIDDEN, 0,
+            pDoc->GetRowHeightArray( nTab));
+    for ( ; aIter; ++aIter)
     {
         //  for frozen panes, add both parts
-        USHORT nRowTwips = pDoc->GetRowHeight( nRow, nTab );
+        USHORT nRowTwips = *aIter;
         if (nRowTwips)
         {
             nBlockY += (long)(nRowTwips * fScaleY);
@@ -521,9 +523,10 @@ BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
                 return FALSE;
         }
     }
-    for (nRow=nStartRow; nRow<=nEndRow; nRow++)
+    aIter.NewLimits( nStartRow, nEndRow);
+    for ( ; aIter; ++aIter)
     {
-        USHORT nRowTwips = pDoc->GetRowHeight( nRow, nTab );
+        USHORT nRowTwips = *aIter;
         if (nRowTwips)
         {
             nBlockY += (long)(nRowTwips * fScaleY);
@@ -690,9 +693,9 @@ USHORT ScTabView::CalcZoom( SvxZoomType eType, USHORT nOldZoom )
                             if ( eVMode == SC_SPLIT_FIX )
                             {
                                 aWinSize.Height() += nOtherHeight;
-                                for ( SCROW nRow = aViewData.GetPosY(SC_SPLIT_TOP);
-                                        nRow < aViewData.GetFixPosY(); nRow++ )
-                                    aPageSize.Height() += pDoc->GetRowHeight( nRow, nCurTab );
+                                aPageSize.Height() += pDoc->GetRowHeight(
+                                        aViewData.GetPosY(SC_SPLIT_TOP),
+                                        aViewData.GetFixPosY()-1, nCurTab);
                             }
                             else if ( nOtherHeight > aWinSize.Height() )
                                 aWinSize.Height() = nOtherHeight;
