@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:05:55 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ void SAL_CALL SchemaBuilder::addPropertyWithDefault( const OUString& aName, sal_
             m_aFactory.createLocalizedContainer(aName,aDefaultValue.getValueType(),aValueAttributes);
 
         std::auto_ptr<ValueNode> aPropertyValue =
-            m_aFactory.getNodeFactory().createValueNode(localehelper::getDefaultLocale(),aDefaultValue,aValueAttributes);
+            m_aFactory.getNodeFactory().createValueNode(localehelper::getDefaultLanguage(),aDefaultValue,aValueAttributes);
 
         aLocalizedProp->addChild( base_ptr(aPropertyValue) );
 
