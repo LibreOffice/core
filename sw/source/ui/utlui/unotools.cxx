@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:57:34 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,21 +399,16 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_BREAKS              )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_DRAWINGS             )), aTrueSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_FIELD_COMMANDS       )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_FOOTNOTE_BACKGROUND  )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_GRAPHICS             )), aTrueSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS    )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_TEXT          )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_RULER          )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_INDEX_MARK_BACKGROUND)), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_PARA_BREAKS          )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_PROTECTED_SPACES     )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_SOFT_HYPHENS         )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_SPACES               )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABLE_BOUNDARIES     )), aFalseSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABLES               )), aTrueSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABSTOPS             )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TEXT_BOUNDARIES      )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND)), aTrueSet);
             xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_RULER          )), aFalseSet);
 
             if(0 ==(nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
