@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: jp $ $Date: 2000-11-08 16:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,11 +623,20 @@ String& SvxRTFParser::GetTextToEndGroup( String& rStr )
         case '}':       --nOpenBrakets; break;
         case '{':
             {
-                // gleich herausfiltern
-                ReadUnknownData();
-                nToken = GetNextToken();
-                if( '}' != nToken )
-                    eState = SVPAR_ERROR;
+                if( RTF_IGNOREFLAG != GetNextToken() )
+                    nToken = SkipToken( -1 );
+                else if( RTF_UNKNOWNCONTROL != GetNextToken() )
+                    nToken = SkipToken( -2 );
+                else
+                {
+                    // gleich herausfiltern
+                    ReadUnknownData();
+                    nToken = GetNextToken();
+                    if( '}' != nToken )
+                        eState = SVPAR_ERROR;
+                    break;
+                }
+                ++nOpenBrakets;
             }
             break;
 
