@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+#   last change: $Author: oj $ $Date: 2001-05-16 13:07:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,6 @@ USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 LDUMP=ldump2.exe
-
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
@@ -141,7 +140,7 @@ SHL2STDLIBS=\
 SHL2STDLIBS+= iodbcbase.lib
 .ENDIF
 
-SHL2DEPN=
+SHL2DEPN=$(SHL1TARGETN)
 SHL2IMPLIB=	i$(ODBC_TARGET)
 
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
