@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:31:49 $
+ *  last change: $Author: lla $ $Date: 2001-01-17 15:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,11 @@ ValueChange::ValueChange(const ValueChange& _rChange)
             ,m_aAttributes(_rChange.getAttributes())
 {}
 
+// -----------------------------------------------------------------------------
+Change* ValueChange::clone() const
+{
+    return new ValueChange(*this);
+}
 // -------------------------------------------------------------------------
 namespace tree_changes_internal {
     inline void doAdjust(uno::Any& aActual, uno::Any const& aTarget)
@@ -204,6 +209,24 @@ AddNode::~AddNode()
 {
 }
 
+// -----------------------------------------------------------------------------
+AddNode::AddNode(const AddNode& _aObj)
+        : Change(_aObj), m_bReplacing(_aObj.m_bReplacing)
+{
+    m_pNewNode = _aObj.m_pNewNode ? _aObj.m_pNewNode->clone() : NULL;
+    m_pOldNode = _aObj.m_pOldNode ? _aObj.m_pOldNode->clone() : NULL;
+    if (_aObj.m_aOwnNewNode.get())
+        m_aOwnNewNode.reset(_aObj.m_aOwnNewNode.get()->clone());
+    if (_aObj.m_aOwnOldNode.get())
+        m_aOwnOldNode.reset(_aObj.m_aOwnOldNode.get()->clone());
+}
+
+// -----------------------------------------------------------------------------
+Change* AddNode::clone() const
+{
+    return new AddNode(*this);
+}
+
 //--------------------------------------------------------------------------
 void AddNode::expectReplacedNode(INode* pOldNode)
 {
@@ -237,6 +260,20 @@ RemoveNode::RemoveNode(OUString const& _rName)
 //--------------------------------------------------------------------------
 RemoveNode::~RemoveNode()
 {
+}
+// -----------------------------------------------------------------------------
+RemoveNode::RemoveNode(const RemoveNode& _aObj)
+        :Change(_aObj)
+{
+    m_pOldNode = _aObj.m_pOldNode ? _aObj.m_pOldNode->clone() : NULL;
+    if (_aObj.m_aOwnOldNode.get())
+        m_aOwnOldNode.reset(_aObj.m_aOwnOldNode.get()->clone());
+}
+
+// -----------------------------------------------------------------------------
+Change* RemoveNode::clone() const
+{
+    return new RemoveNode(*this);
 }
 //--------------------------------------------------------------------------
 

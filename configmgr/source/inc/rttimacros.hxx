@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rttimacros.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-15 07:14:58 $
+ *  last change: $Author: lla $ $Date: 2001-01-17 15:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
     {   \
         return  0 == strcmp(_pName, getStaticType());   \
     }   \
-    const sal_Char* getType() const { return #classname; }  \
+    virtual const sal_Char* getType() const { return #classname; }  \
     static const sal_Char* getStaticType() { return #classname; }
 
 #define RTTI(classname, baseclassname)  \

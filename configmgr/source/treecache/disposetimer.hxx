@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-15 16:14:03 $
+ *  last change: $Author: lla $ $Date: 2001-01-17 15:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@ namespace configmgr
 {
     class TreeManager;
 ////////////////////////////////////////////////////////////////////////////////
+/* OTreeDisposeScheduler:
+   does something special????
+*/
+
     class OTreeDisposeScheduler
     {
         typedef std::multimap< TimeStamp, vos::ORef< OOptions >, ltTimeStamp > Agenda;
@@ -187,6 +191,79 @@ namespace configmgr
         { return aBaseTime + aDelay; }
     };
 
+
+    // -----------------------------------------------------------------------------
+
+    // Write down the Cache, much less complex than caching Nodes
+    // (better control)
+    class OTreeCacheWriteScheduler
+    {
+        typedef std::vector<vos::ORef< OOptions > > CacheWriteList; // fire and forget!
+
+        class Timer : public vos::OTimer
+        {
+        public:
+            OTreeCacheWriteScheduler& rParent;
+
+            Timer(OTreeCacheWriteScheduler& _rParent) : rParent(_rParent) {};
+
+            // vos::OTimer
+            virtual void SAL_CALL onShot();
+        };
+        friend void Timer::onShot();
+    private:
+        mutable osl::Mutex  m_aMutex;
+        vos::ORef<Timer>    m_xTimer;
+        TreeManager&        m_rTreeManager;
+
+        CacheWriteList      m_aWriteList;
+        // TimeInterval m_aCleanupDelay;
+        TimeInterval m_aCleanupInterval;
+
+        bool                m_bSyncron;          // if true, write syncron only, no timer thread
+
+    public:
+    //-------- Construction and destruction -----------------------------------
+        explicit
+        OTreeCacheWriteScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay, bool _bSyncron)
+            : m_xTimer(0)
+            , m_rTreeManager(_rTreeManager)
+            , m_aCleanupInterval(_aCleanupDelay)
+            , m_bSyncron(_bSyncron)
+        {}
+        ~OTreeCacheWriteScheduler();
+
+    //-------- Delay and Interval ---------------------------------------------
+        /// retrieves the recurrance interval used for cleanup
+        TimeInterval const& getCleanupInterval() const
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            return m_aCleanupInterval;
+        }
+        /// calculate the time when to cleanup an pbject that became eligible at <var>aBaseTime</var>.
+        TimeStamp getCleanupTime(TimeStamp const& aBaseTime = TimeStamp::getCurrentTime())
+        {
+            return implGetCleanupTime(aBaseTime, getCleanupInterval());
+        }
+        static TimeStamp implGetCleanupTime(TimeStamp const& aBaseTime, TimeInterval const& aDelay)
+        {
+            return aBaseTime + aDelay;
+        }
+    //-------- Control of execution  ------------------------------------------
+        /// stop and discard pending activities for _xOptions
+        // void writeCache(vos::ORef< OOptions > const& _xOptions);
+        void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bSync = false);
+
+        /// stop and discard pending activities
+        void stopAndWriteCache();
+    private:
+        // vos::OTimer
+        void onTimerShot();
+
+        void runDisposer();
+        void implStartBefore(TimeStamp const& _aTime);
+
+    };
 ////////////////////////////////////////////////////////////////////////////////
 } // namespace configmgr
 

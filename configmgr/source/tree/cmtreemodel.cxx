@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2000-12-12 17:00:40 $
+ *  last change: $Author: lla $ $Date: 2001-01-17 15:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,32 @@ SubtreeChange::~SubtreeChange()
     }
 }
 
+// -----------------------------------------------------------------------------
+SubtreeChange::SubtreeChange(const SubtreeChange& _aObj)
+        :Change(_aObj),
+         m_sTemplateName(_aObj.m_sTemplateName),
+         m_aAttributes(_aObj.m_aAttributes)
+{
+    for(Children::const_iterator aIter = _aObj.m_aChanges.begin();
+        aIter != _aObj.m_aChanges.end();
+        ++aIter)
+    {
+        OSL_ASSERT(aIter->second);
+        Children::value_type aCopy(aIter->first, aIter->second->clone());
+        m_aChanges.insert(m_aChanges.end(), aCopy);
+    }
+}
+
+// -----------------------------------------------------------------------------
+Change* SubtreeChange::clone() const
+{
+    return new SubtreeChange(*this);
+}
 //--------------------------------------------------------------------------
 void SubtreeChange::addChange(std::auto_ptr<Change> aChange)
 {
     OUString aNodeName(aChange->getNodeName());
+    m_aChanges.find(aNodeName);
     OSL_ENSHURE(m_aChanges.end() == m_aChanges.find(aNodeName),
         "SubtreeChange::addChange : overwriting an existent change !");
     delete m_aChanges[aNodeName];

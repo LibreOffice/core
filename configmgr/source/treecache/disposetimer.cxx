@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-20 10:54:23 $
+ *  last change: $Author: lla $ $Date: 2001-01-17 15:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,13 +230,13 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
     osl::ClearableMutexGuard aGuard( m_rTreeManager.m_aTreeListMutex );
 
-    vos::ORef< OOptions > xTask = this->getTask( _aActualTime, aNextTime );
-    if (xTask.isValid())
+    vos::ORef< OOptions > xTaskOption = this->getTask( _aActualTime, aNextTime );
+    if (xTaskOption.isValid())
     {
         CFG_TRACE_INFO("Found cleanup task for user %s and locale %s",
-                        OUSTRING2ASCII(xTask->getUser()), OUSTRING2ASCII(xTask->getLocale()));
+                        OUSTRING2ASCII(xTaskOption->getUser()), OUSTRING2ASCII(xTaskOption->getLocale()));
 
-        if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(xTask,false))
+        if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(xTaskOption,false))
         {
             CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
 
@@ -258,7 +258,7 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
                 CFG_TRACE_INFO_NI("- Rescheduling current option set" );
 
-                aNextTime = this->implAddTask(xTask,aNextTaskTime);
+                aNextTime = this->implAddTask(xTaskOption,aNextTaskTime);
             }
 
             else if (pInfo->isEmpty())// may have been the last one - check that
@@ -268,7 +268,7 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                 // get rid of it - see TreeManager::disposeOne
                 std::auto_ptr<TreeInfo> pDisposeInfo(pInfo);
 
-                m_rTreeManager.m_aTreeList.erase(xTask);
+                m_rTreeManager.m_aTreeList.erase(xTaskOption);
 
                 // got it out of reachability - now dispose/notify without lock
 
@@ -294,14 +294,14 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                     if (aNodeList.getLength() > 0)
                     {
                         CFG_TRACE_INFO_NI("- Stoping notifications for  %d Nodes", int(aNodeList.getLength()) );
-                        m_rTreeManager.cancelNotify(aNodeList, xTask);
+                        m_rTreeManager.cancelNotify(aNodeList, xTaskOption);
                     }
 
                     uno::Sequence< OUString > aCloseList = TreeInfo::collectNodeIds(aDisposeList);
                     if (aCloseList.getLength() > 0)
                     {
                         CFG_TRACE_INFO_NI("- Closing %d NodeIds", int(aCloseList.getLength()) );
-                        m_rTreeManager.closeNodes(aCloseList,xTask);
+                        m_rTreeManager.closeNodes(aCloseList,xTaskOption);
                     }
                 }
                 CFG_TRACE_INFO_NI("- Now disposing %d module trees", int(aDisposeList.size()) );
@@ -373,5 +373,174 @@ TimeStamp OTreeDisposeScheduler::implAddTask(vos::ORef< OOptions > const& _xOpti
 }
 // -------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
 // =========================================================================
+OTreeCacheWriteScheduler::~OTreeCacheWriteScheduler()
+{
+    stopAndWriteCache();
+}
+
+void OTreeCacheWriteScheduler::stopAndWriteCache()
+{
+    osl::MutexGuard aOwnGuard( m_aMutex );
+
+    CFG_TRACE_INFO("Cancelling all cache writings, Stopping timer");
+
+    if (m_xTimer.isValid())
+    {
+        m_xTimer->stop(); // just to be sure
+        m_xTimer.unbind(); // just to be sure
+    }
+    runDisposer();
+}
+// -------------------------------------------------------------------------
+void OTreeCacheWriteScheduler::Timer::onShot()
+{
+    rParent.onTimerShot();
+}
+// -----------------------------------------------------------------------------
+void OTreeCacheWriteScheduler::onTimerShot()
+{
+    //m_aTimer.stop();
+
+    CFG_TRACE_INFO("Cleanup Timer invoked - executing dispose task");
+
+    try
+    {
+        runDisposer();
+    }
+
+    catch (uno::Exception& ue)
+    {
+        OSL_ENSURE(false, "ERROR: UNO Exception left a disposer");
+        ue;
+    }
+    catch (configuration::Exception& ce)
+    {
+        OSL_ENSURE(false, "ERROR: configuration::Exception left a disposer");
+        ce;
+    }
+    catch (...)
+    {
+        OSL_ENSURE(false, "ERROR: Unknown Exception left a disposer");
+    }
+
+    TimeStamp aNewTime = implGetCleanupTime(TimeStamp::getCurrentTime(), m_aCleanupInterval);
+
+    osl::MutexGuard aGuard(m_aMutex);
+    implStartBefore(aNewTime);
+}
+// -------------------------------------------------------------------------
+void OTreeCacheWriteScheduler::runDisposer()
+{
+    // Write Cache
+    CFG_TRACE_INFO("Starting lasy write");
+    osl::ClearableMutexGuard aGuard( m_rTreeManager.m_aUpdateMutex );
+
+    for (CacheWriteList::iterator it = m_aWriteList.begin();
+         it != m_aWriteList.end();
+         ++it)
+    {
+        vos::ORef< OOptions > xTaskOption = *it;
+        if (xTaskOption.isValid())
+        {
+            if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(xTaskOption,false))
+            {
+                CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
+
+                PendingList aList;
+                sal_Int32 nCount = pInfo->syncPending(xTaskOption, aList);
+                if (nCount > 0)
+                {
+                    CFG_TRACE_INFO_NI("write down %d pendings", nCount);
+                    for(PendingList::iterator it = aList.begin();
+                        it != aList.end();
+                        ++it)
+                    {
+                        rtl::OUString sName = it->first;
+                        auto_ptr<SubtreeChange> aSubtreeChange = it->second;
+                        ConfigurationName aName; // MUST be empty, we have the ptr to the root obj
+                        m_rTreeManager.sessionUpdate(xTaskOption, aName, aSubtreeChange);
+                    }
+                }
+            }
+        }
+        else
+        {
+            CFG_TRACE_WARNING_NI("runDisposer: TaskOption not valid");
+        }
+
+    }
+    m_aWriteList.clear();
+}
+
+// -----------------------------------------------------------------------------
+// should be called guarded only
+void OTreeCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
+{
+    // check if we were cleared
+    if (!m_aWriteList.empty())
+    {
+        if (m_xTimer.isEmpty())
+            m_xTimer = new Timer(*this);
+
+        if (!m_xTimer->isTicking())
+        {
+            m_xTimer->setAbsoluteTime(_aTime.getTimeValue());
+
+            if (!m_xTimer->isTicking())
+                m_xTimer->start();
+
+            OSL_ASSERT( m_xTimer->isTicking() );
+        }
+        CFG_TRACE_INFO_NI("- Cleanup timer running - next execution in %d seconds", int (m_xTimer->getRemainingTime().Seconds) );
+        CFG_TRACE_INFO_NI("- %d cleanup tasks are pending", int(m_aWriteList.size()) );
+    }
+    else
+    {
+        if (!m_xTimer.isEmpty())
+        {
+            m_xTimer->stop();
+            CFG_TRACE_INFO_NI("- Stopped timer - no more open cleanup tasks");
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+void OTreeCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bSync)
+{
+    OSL_ASSERT(_xOptions.isValid());
+    OSL_ENSURE(_xOptions->getLocale().getLength() >0, "ERROR: OTreeDisposeScheduler: cannot handle complete user scheduling");
+
+    osl::MutexGuard aGuard( m_aMutex );
+
+    CFG_TRACE_INFO("Scheduling cache write for user '%s' with locale '%s'",
+                    OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()));
+
+    CFG_TRACE_INFO_NI("- cache write will be started in about %d seconds", int(m_aCleanupInterval.getTimeValue().Seconds));
+
+    m_aWriteList.push_back(_xOptions);
+
+
+    if (_bSync || m_bSyncron)
+    {
+        // write now!
+        runDisposer();
+    }
+    else
+    {
+        // lasy writing
+        TimeStamp aNewTime = implGetCleanupTime(TimeStamp::getCurrentTime(), m_aCleanupInterval);
+        implStartBefore(aNewTime);
+    }
+}
+
 } // namespace

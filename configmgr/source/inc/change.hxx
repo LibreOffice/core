@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:14:33 $
+ *  last change: $Author: lla $ $Date: 2001-01-17 15:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ namespace configmgr
 
         // some kind of simple rtti
         RTTI_BASE(Change);
+        virtual Change* clone() const = 0;
 
     private:
         virtual Change* doGetChild(rtl::OUString const& ) const { return 0; }
@@ -164,9 +165,10 @@ namespace configmgr
     public:
         ValueChange(rtl::OUString const& _rName, uno::Any aNewValue, const configuration::Attributes& _rAttributes,
                     Mode aMode = changeValue, uno::Any aOldValue = uno::Any());
-        ValueChange(const ValueChange&);
         ValueChange(uno::Any aNewValue, ValueNode const& aOldValue);
         ValueChange(SetToDefault, ValueNode const& aOldValue);
+        ValueChange(const ValueChange&);
+        virtual Change* clone() const;
 
         uno::Any    getNewValue() const { return m_aValue; }
         uno::Any    getOldValue() const { return m_aOldValue; }
@@ -206,12 +208,13 @@ namespace configmgr
         bool                            m_bReplacing;
 
         // don't create CopyCTor automatically
-        AddNode(AddNode const&);
         void operator=(AddNode const&);
 
     public:
         AddNode(std::auto_ptr<INode> aNewNode_,rtl::OUString const& _rName);
         ~AddNode();
+        AddNode(AddNode const&);
+        virtual Change* clone() const;
 
         /// marks this as not merely adding a node but replacing another
         void setReplacing() { m_bReplacing = true; }
@@ -275,8 +278,11 @@ namespace configmgr
         std::auto_ptr<INode>            m_aOwnOldNode;
 
     public:
-        RemoveNode(rtl::OUString const& _rName) ;
-        ~RemoveNode() ;
+        RemoveNode(rtl::OUString const& _rName);
+        ~RemoveNode();
+        RemoveNode(const RemoveNode&);
+        virtual Change* clone() const;
+
         virtual void dispatch(ChangeTreeAction& anAction) const { anAction.handle(*this); }
         virtual void dispatch(ChangeTreeModification& anAction) { anAction.handle(*this); }
 
@@ -320,7 +326,6 @@ namespace configmgr
         configuration::Attributes   m_aAttributes;
 
         // don't create CopyCTor automatically
-        SubtreeChange(SubtreeChange&);
         void operator=(SubtreeChange&);
 
     public:
@@ -355,6 +360,9 @@ namespace configmgr
             ,m_aAttributes(_rChange.getAttributes()){}
 
         ~SubtreeChange();
+
+        SubtreeChange(const SubtreeChange&);
+        virtual Change* clone() const;
 
         void swap(SubtreeChange& aOther);
 
@@ -457,6 +465,7 @@ namespace configmgr
     //==========================================================================
     /** a specialized SubtreeChange, which, upon desctruction, does not delete the changes
         it holds
+
         <BR>
         This implies that when using this class, you have to beware of the lifetime of the involved objects
     */

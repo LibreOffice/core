@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-07 14:09:32 $
+ *  last change: $Author: lla $ $Date: 2001-01-17 15:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,7 +986,10 @@ namespace configmgr
                 }
             }
 
-            if( !aNewChange.resolveObjects(rFactory) )  OSL_TRACE("Cannot find affected elements of Change");
+            if( !aNewChange.resolveObjects(rFactory) )
+            {
+                OSL_TRACE("Cannot find affected elements of Change");
+            }
 
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-19 17:35:00 $
+ *  last change: $Author: lla $ $Date: 2001-01-17 15:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ namespace configmgr
                 // m_pTreeMgr->releaseSubtree(ssUserProfile, m_xDefaultOptions);
             }
         }
-        catch (container::NoSuchElementException&)
+        catch (uno::Exception&)
         {
             // could not read default locale
             // default locale is en-US
@@ -224,7 +224,7 @@ namespace configmgr
     // ITreeProvider /ITreeManager
     //-----------------------------------------------------------------------------
     ISubtree* OProviderImpl::requestSubtree( OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
-                                             sal_Int16 nMinLevels) throw (container::NoSuchElementException)
+                                             sal_Int16 nMinLevels) throw (uno::Exception)
     {
         return m_pTreeMgr->requestSubtree(aSubtreePath, _xOptions, nMinLevels);
     }
@@ -359,7 +359,7 @@ namespace configmgr
             OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
             pTree = requestSubtree(_rAccessor,_xOptions, sal_Int16(nMinLevels));
         }
-        catch(container::NoSuchElementException&e)
+        catch(uno::Exception&e)
         {
             sErrorMessage = e.Message;
         }
@@ -401,7 +401,7 @@ namespace configmgr
             OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
             pTree = requestSubtree(_rAccessor, _xOptions, sal_Int16(nMinLevels));
         }
-        catch(container::NoSuchElementException&e)
+        catch(uno::Exception &e)
         {
             sErrorMessage = e.Message;
         }
