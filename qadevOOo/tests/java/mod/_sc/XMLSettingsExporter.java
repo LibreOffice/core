@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSettingsExporter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:19:53 $
+ *  last change:$Date: 2004-01-05 19:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ public class XMLSettingsExporter extends TestCase {
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xCalcDoc " );
-        xSheetDoc.dispose();
+        util.DesktopTools.closeDoc(xSheetDoc);
     }
 
     /**
