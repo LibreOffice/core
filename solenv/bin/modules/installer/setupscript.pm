@@ -2,9 +2,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:30:16 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:17:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,7 @@
 
 package installer::setupscript;
 
+use installer::existence;
 use installer::exiter;
 use installer::globals;
 use installer::remover;
@@ -288,6 +289,35 @@ sub get_all_items_from_script
     }
 
     return \@allitemarray;
+}
+
+######################################################################
+# Collecting all folder at folderitems, that are predefined values
+# For example: PREDEFINED_AUTOSTART
+######################################################################
+
+sub add_predefined_folder
+{
+    my ( $folderitemref, $folderref ) = @_;
+
+    for ( my $i = 0; $i <= $#{$folderitemref}; $i++ )
+    {
+        my $folderitem = ${$folderitemref}[$i];
+        my $folderid = $folderitem->{'FolderID'};
+
+        if ( $folderid =~ /PREDEFINED_/ )
+        {
+            if (! installer::existence::exists_in_array_of_hashes("gid", $folderid, $folderref))
+            {
+                my %folder = ();
+                $folder{'ismultilingual'} = "0";
+                $folder{'Name'} = "";
+                $folder{'gid'} = $folderid;
+
+                push(@{$folderref}, \%folder);
+            }
+        }
+    }
 }
 
 #####################################################################################
