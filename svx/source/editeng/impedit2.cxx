@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 10:58:43 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 08:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,14 +96,6 @@
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
-
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
 #endif
 
 #ifndef _VCL_CMDEVT_H

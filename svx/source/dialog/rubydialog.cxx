@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-07-03 11:51:56 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 08:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,9 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     Link aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
     aScrollSB.SetScrollHdl( aScrLk );
     aScrollSB.SetEndScrollHdl( aScrLk );
+#ifndef TF_SVDATA
     aScrollSB.EnableDrag();
+#endif
 
     Link aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
     for(USHORT i = 0; i < 8; i++)

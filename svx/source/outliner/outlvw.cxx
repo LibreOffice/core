@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-21 13:03:30 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 08:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,10 @@
 #include <svtools/itemset.hxx>
 #endif
 
+#ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX //autogen
 #include <vcl/drag.hxx>
+#endif
 #endif
 
 #ifndef _EDITSTAT_HXX //autogen
@@ -478,6 +480,7 @@ BOOL __EXPORT OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
     return pEditView->MouseButtonUp( rMEvt );
 }
 
+#ifndef TF_SVDATA
 
 void OutlinerView::ImpDrag( const MouseEvent& rMEvt )
 {
@@ -553,6 +556,8 @@ void OutlinerView::ImpDrag( const MouseEvent& rMEvt )
     pHorTabArrDoc = 0;
     bInDragMode = FALSE;
 }
+
+#endif // TF_SVDATA
 
 void OutlinerView::ImpHideDDCursor()
 {
@@ -1055,6 +1060,7 @@ Point OutlinerView::ImpGetDocPos( const Point& rPosPixel )
     return aCurPosDoc;
 }
 
+#ifndef TF_SVDATA
 
 BOOL __EXPORT OutlinerView::QueryDrop( DropEvent& rDEvt )
 {
@@ -1099,7 +1105,6 @@ BOOL __EXPORT OutlinerView::QueryDrop( DropEvent& rDEvt )
     }
     return bRetVal;
 }
-
 
 BOOL __EXPORT OutlinerView::Drop( const DropEvent& rDEvt )
 {
@@ -1181,6 +1186,7 @@ BOOL __EXPORT OutlinerView::Drop( const DropEvent& rDEvt )
     return TRUE;
 }
 
+#endif // TF_SVDATA
 
 // MT 05/00: Wofuer dies ImpXXXScroll, sollte das nicht die EditEngine machen???
 
@@ -1531,11 +1537,13 @@ void OutlinerView::Command( const CommandEvent& rCEvt )
 
     if( ( rCEvt.GetCommand() == COMMAND_STARTDRAG ) && bBeginDragAtMove )
     {
+#ifndef TF_SVDATA
         // ImpDrag braucht Abstand von MouseButtonDown-Position
         Point aPos( pEditView->GetWindow()->GetPointerPosPixel() );
         aPos = pEditView->GetWindow()->ScreenToOutputPixel( aPos );
         MouseEvent aEvt( aPos );
         ImpDrag( aEvt );
+#endif
     }
     else
         pEditView->Command( rCEvt );

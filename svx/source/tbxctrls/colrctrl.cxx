@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-02 10:47:03 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 08:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,10 @@
 
 #include <tools/list.hxx>
 
+#ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX //autogen
 #include <vcl/drag.hxx>
+#endif
 #endif
 #ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-03 10:53:44 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 08:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,9 @@ SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN );
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
+#ifndef TF_SVDATA
     aVscrollSB.EnableDrag( TRUE );
+#endif
     // other settings like aVscroll depend on selected font => see SetFont
 
     bDrag = FALSE;
