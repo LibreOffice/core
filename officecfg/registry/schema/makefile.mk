@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-27 15:41:03 $
+#   last change: $Author: tpf $ $Date: 2002-08-02 14:08:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,33 +69,32 @@ TARGET=schema
 # --- Targets ------------------------------------------------------
 
 XCSFILES= \
+    org$/openoffice$/Inet.xcs \
     org$/openoffice$/Office$/Calc.xcs \
     org$/openoffice$/Office$/Chart.xcs \
+    org$/openoffice$/Office$/Commands.xcs \
     org$/openoffice$/Office$/Common.xcs \
-    org$/openoffice$/Office$/SFX.xcs \
     org$/openoffice$/Office$/DataAccess.xcs \
-    org$/openoffice$/Office$/Labels.xcs \
-    org$/openoffice$/Office$/Views.xcs \
-    org$/openoffice$/Office$/TypeDetection.xcs \
-    org$/openoffice$/Office$/ProtocolHandler.xcs \
     org$/openoffice$/Office$/Draw.xcs \
     org$/openoffice$/Office$/Impress.xcs \
     org$/openoffice$/Office$/Java.xcs \
     org$/openoffice$/Office$/Jobs.xcs \
+    org$/openoffice$/Office$/Labels.xcs \
     org$/openoffice$/Office$/Linguistic.xcs \
     org$/openoffice$/Office$/Math.xcs \
+    org$/openoffice$/Office$/ProtocolHandler.xcs \
+    org$/openoffice$/Office$/SFX.xcs \
+    org$/openoffice$/Office$/TypeDetection.xcs \
     org$/openoffice$/Office$/UI.xcs \
+    org$/openoffice$/Office$/Views.xcs \
     org$/openoffice$/Office$/Writer.xcs \
     org$/openoffice$/Office$/WriterWeb.xcs \
-    org$/openoffice$/Office$/Commands.xcs \
-    org$/openoffice$/Office$/ProtocolHandler.xcs \
+    org$/openoffice$/Setup.xcs \
+    org$/openoffice$/UserProfile.xcs
+    org$/openoffice$/VCL.xcs \
     org$/openoffice$/ucb$/Configuration.xcs \
     org$/openoffice$/ucb$/Hierarchy.xcs \
     org$/openoffice$/ucb$/Store.xcs \
-    org$/openoffice$/Setup.xcs \
-    org$/openoffice$/Inet.xcs \
-    org$/openoffice$/VCL.xcs \
-    org$/openoffice$/UserProfile.xcs
 
 # trans form component schemas into old xcd format
 XCDTRANSFORM=$(foreach,i,$(XCSFILES) $(MISC)$/xcdformat$/{$(subst,.xcs,.xcd $i)})
