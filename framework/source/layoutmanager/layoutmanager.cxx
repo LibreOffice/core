@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:34:29 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3563,7 +3563,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
             {
                 pToolBox = (ToolBox *)pWindow;
                 aToolbarName = pToolBox->GetSmartHelpId().GetStr();
-                if ( aToolbarName.getLength() > 0 )
+                if (( aToolbarName.getLength() > 0 ) && ( m_nLockCount == 0 ))
                     m_aAsyncLayoutTimer.Start();
             }
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -4835,8 +4835,14 @@ throw (RuntimeException)
     RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::unlock lockCount=%d", m_nLockCount );
 
     // conform to documentation: unlock with lock count == 0 means force a layout
+
+    WriteGuard aWriteLock( m_aLock );
     if ( bDoLayout )
-        doLayout();
+        m_aAsyncLayoutTimer.Stop();
+    aWriteLock.unlock();
+
+    if ( bDoLayout )
+        implts_doLayout( sal_True );
 }
 
 void SAL_CALL LayoutManager::doLayout()
@@ -6217,7 +6223,8 @@ throw( css::uno::RuntimeException )
             if ( aLink.IsSet() )
                 aLink.Call( &m_aAsyncLayoutTimer );
         }
-        m_aAsyncLayoutTimer.Start();
+        if ( m_nLockCount == 0 )
+            m_aAsyncLayoutTimer.Start();
     }
     else if ( m_xFrame.is() && aEvent.Source == m_xFrame->getContainerWindow() )
     {
