@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:14:03 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,8 @@
  *
  ************************************************************************/
 
-#define _SV_LSTBOX_CXX
-
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -1231,16 +1229,6 @@ void ListBox::UserDraw( const UserDrawEvent& )
 }
 
 // -----------------------------------------------------------------------
-
-#if SUPD < 593
-void ListBox::DrawEntry( const UserDrawEvent& rEvt, BOOL bDrawImage, BOOL bDrawText )
-{
-    if ( rEvt.GetDevice() == mpImplLB->GetMainWindow() )
-        mpImplLB->GetMainWindow()->DrawEntry( rEvt.GetItemId(), bDrawImage, bDrawText );
-    else if ( rEvt.GetDevice() == mpImplWin )
-        mpImplWin->DrawEntry( bDrawImage, bDrawText );
-}
-#endif
 
 void ListBox::DrawEntry( const UserDrawEvent& rEvt, BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImagePos )
 {
