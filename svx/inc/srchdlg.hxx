@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-21 13:23:36 $
+ *  last change: $Author: tl $ $Date: 2001-02-23 13:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _SFX_CHILDWIN_HXX //autogen
 #include <sfx2/childwin.hxx>
 #endif
+#ifndef _BASEDLGS_HXX
+#include <sfx2/basedlgs.hxx>
+#endif
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
@@ -111,6 +114,8 @@
 class SvxSearchItem;
 class MoreButton;
 class SfxStyleSheetBasePool;
+class SvxJSearchOptionsPage;
+
 struct SearchDlg_Impl;
 
 #ifndef NO_SVX_SEARCH
@@ -181,12 +186,16 @@ class SvxSearchDialog : public ModelessDialog
 {
     friend class SvxSearchController;
     friend class SvxSearchDialogWrapper;
+    friend class SvxJSearchOptionsDialog;
 
 public:
     SvxSearchDialog( Window* pParent, SfxBindings& rBind );
     ~SvxSearchDialog();
 
     virtual BOOL    Close();
+
+    // Window
+    virtual void    Activate();
 
     void            GetSearchItems( SfxItemSet& rSet );
     void            GetReplaceItems( SfxItemSet& rSet );
@@ -328,6 +337,35 @@ inline BOOL SvxSearchDialog::HasReplaceAttributes() const
     int bLen = aReplaceAttrText.GetText().Len();
     return ( aReplaceAttrText.IsEnabled() && bLen );
 }
+
+
+//////////////////////////////////////////////////////////////////////
+
+
+class SvxJSearchOptionsDialog : public SfxSingleTabDialog
+{
+    SvxSearchDialog        &rDialog;
+    SvxJSearchOptionsPage  *pPage;
+
+    // disallow copy-constructor and assignment-operator for now
+    SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & );
+    SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & );
+
+public:
+    SvxJSearchOptionsDialog( SvxSearchDialog &rParent,
+                            const SfxItemSet& rOptionsSet, USHORT nUniqueId );
+    virtual ~SvxJSearchOptionsDialog();
+
+    // Window
+    virtual void    Activate();
+
+    INT32           GetTransliterationFlags() const;
+    void            SetTransliterationFlags( INT32 nSettings );
+};
+
+
+//////////////////////////////////////////////////////////////////////
+
 
 #endif  // SV_NODIALOG
 #endif  // NO_SVX_SEARCH

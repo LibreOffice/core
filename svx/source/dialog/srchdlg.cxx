@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-21 13:27:46 $
+ *  last change: $Author: tl $ $Date: 2001-02-23 13:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,52 @@ void SearchAttrItemList::Remove( USHORT nPos, USHORT nLen )
     SrchAttrItemList::Remove( nPos, nLen );
 }
 
+
+// class SvxJSearchOptionsDialog -----------------------------------------
+
+
+SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
+            SvxSearchDialog &rParent,
+            const SfxItemSet& rOptionsSet, USHORT nUniqueId ) :
+    SfxSingleTabDialog  ( &rParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
+    rDialog             ( rParent )
+{
+    pPage = (SvxJSearchOptionsPage *)
+                    SvxJSearchOptionsPage::Create( this, rOptionsSet );
+    SetTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
+    pPage->EnableSaveOptions( FALSE );
+}
+
+
+SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
+{
+    // pPage will be implicitly destroyed by the
+    // SfxSingleTabDialog destructor
+}
+
+
+void SvxJSearchOptionsDialog::Activate()
+{
+    // apply changes of transliteration in configuration
+    SvxSearchItem *pItem = rDialog.pSearchItem;
+    DBG_ASSERT( pItem, "SearchItem missing" );
+    if (pItem)
+        pPage->SetTransliterationFlags( pItem->GetTransliterationFlags() );
+}
+
+
+INT32 SvxJSearchOptionsDialog::GetTransliterationFlags() const
+{
+    return pPage->GetTransliterationFlags();
+}
+
+
+void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
+{
+    pPage->SetTransliterationFlags( nSettings );
+}
+
+
 // class SvxSearchDialog -------------------------------------------------
 
 SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
@@ -533,6 +579,19 @@ void SvxSearchDialog::ApplyTransliterationFlags_Impl( INT32 nSettings )
     aMatchCaseCB            .Check( !bVal );
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
     aJapMatchFullHalfWidthCB.Check( !bVal );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxSearchDialog::Activate()
+{
+    // apply possible transliteration changes of the SvxSearchItem member
+    DBG_ASSERT( pSearchItem, "SearchItem missing" );
+    if (pSearchItem)
+    {
+        aMatchCaseCB            .Check( pSearchItem->GetExact() );
+        aJapMatchFullHalfWidthCB.Check( pSearchItem->IsMatchFullHalfWidthForms() );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1195,14 +1254,12 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     else if ( pBtn == &aJapOptionsBtn )
     {
         SfxItemSet aSet( SFX_APP()->GetPool() );
-        SfxSingleTabDialog aDlg( SfxSingleTabDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS ) );
-        SvxJSearchOptionsPage *pPage = (SvxJSearchOptionsPage *)
-                    SvxJSearchOptionsPage::Create( &aDlg, aSet );
-        aDlg.SetTabPage( pPage );   //! implicitly calls pPage->Reset(...)!
-        pPage->EnableSaveOptions( FALSE );
-        pPage->SetTransliterationFlags( GetTransliterationFlags() );
+        SvxJSearchOptionsDialog aDlg( *this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS );
+        pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
         aDlg.Execute();
-        ApplyTransliterationFlags_Impl( pPage->GetTransliterationFlags() );
+        INT32 nFlags = aDlg.GetTransliterationFlags();
+        pSearchItem->SetTransliterationFlags( nFlags );
+        ApplyTransliterationFlags_Impl( nFlags );
     }
 
     return 0;
