@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:18:56 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "FrameView.hxx"
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -80,14 +82,24 @@
 
 #include <vector>
 
-#include "frmview.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "optsitem.hxx"
-#include "drviewsh.hxx"
-#include "outlnvsh.hxx"
-#include "slidvish.hxx"
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_SLIDE_VIEW_SHELL_HXX
+#include "SlideViewShell.hxx"
+#endif
 #include "app.hxx"
 #include "sdresid.hxx"
 #include "pres.hxx"
@@ -98,6 +110,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 using namespace ::std;
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -124,7 +138,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
     if( NULL == pFrameView )
     {
-        SdDrawDocShell* pDocShell = pDrawDoc->GetDocSh();
+        DrawDocShell* pDocShell = pDrawDoc->GetDocSh();
 
         if ( pDocShell )
         {
@@ -132,32 +146,36 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
             * Das Dokument wurde geladen, ist eine FrameView vorhanden?
             **********************************************************************/
             ULONG nSdViewShellCount = 0;
-            SdViewShell* pViewSh = NULL;
+            ViewShellBase* pBase = NULL;
             SfxViewShell* pSfxViewSh = NULL;
             SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell,
                                                                  TYPE(SfxTopViewFrame));
 
             while (pSfxViewFrame)
             {
-                // Anzahl FrameViews ermitteln
+                // Count the FrameViews and remember the ty
                 pSfxViewSh = pSfxViewFrame->GetViewShell();
-                pViewSh = PTR_CAST( SdViewShell, pSfxViewSh );
+                pBase = PTR_CAST(ViewShellBase, pSfxViewSh );
 
-                if (pViewSh)
+                if (pBase != NULL)
                 {
                     nSdViewShellCount++;
 
-                    if (pViewSh->ISA(SdDrawViewShell))
+                    switch (pBase->GetSubShellManager().GetMainSubShellType())
                     {
-                        nPresViewShellId = SID_VIEWSHELL0;
-                    }
-                    else if (pViewSh->ISA(SdSlideViewShell))
-                    {
-                        nPresViewShellId = SID_VIEWSHELL1;
-                    }
-                    else if (pViewSh->ISA(SdOutlineViewShell))
-                    {
-                        nPresViewShellId = SID_VIEWSHELL2;
+                        case ViewShell::ST_IMPRESS:
+                        case ViewShell::ST_NOTES:
+                        case ViewShell::ST_HANDOUT:
+                            nPresViewShellId = SID_VIEWSHELL0;
+                            break;
+
+                        case ViewShell::ST_SLIDE:
+                            nPresViewShellId = SID_VIEWSHELL1;
+                            break;
+
+                        case ViewShell::ST_OUTLINE:
+                            nPresViewShellId = SID_VIEWSHELL2;
+                            break;
                     }
                 }
 
@@ -243,6 +261,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         bShowPreviewInMasterPageMode = pFrameView->IsShowPreviewInMasterPageMode() != 0;
         bShowPreviewInOutlineMode = pFrameView->IsShowPreviewInOutlineMode() != 0;
         nTabCtrlPercent = pFrameView->GetTabCtrlPercent();
+        SetPreviousViewShellType (pFrameView->GetPreviousViewShellType());
     }
     else
     {
@@ -275,6 +294,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         bShowPreviewInMasterPageMode = TRUE;
         bShowPreviewInOutlineMode = TRUE;
         nTabCtrlPercent = 0.0;
+        SetPreviousViewShellType (ViewShell::ST_NONE);
 
         // get default for design mode
         sal_Bool bInitDesignMode = pDrawDoc->GetOpenInDesignMode();
@@ -1394,3 +1414,36 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
         SetSnapGridWidth( aSnapGridWidthX, aSnapGridWidthY );
     }
 }
+
+
+
+
+void FrameView::SetPreviousViewShellType (ViewShell::ShellType eType)
+{
+    mePreviousViewShellType = eType;
+}
+
+
+
+
+ViewShell::ShellType FrameView::GetPreviousViewShellType (void) const
+{
+    return mePreviousViewShellType;
+}
+
+
+
+void FrameView::SetSelectedPage(USHORT nPage)
+{
+    nSelectedPage = nPage;
+}
+
+
+
+
+const USHORT FrameView::GetSelectedPage (void) const
+{
+    return nSelectedPage;
+}
+
+} // end of namespace sd
