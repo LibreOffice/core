@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-21 11:16:10 $
+ *  last change: $Author: tl $ $Date: 2002-04-24 13:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ protected:
     ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
     USHORT      nActiveCategory;
 
-    virtual BOOL Close();
+    virtual BOOL    Close();
+    virtual void    GetFocus();
 
     DECL_LINK( CategoryClickHdl, ToolBox* );
     DECL_LINK( CmdSelectHdl, ToolBox* );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-21 11:16:11 $
+ *  last change: $Author: tl $ $Date: 2002-04-24 13:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
     SfxFloatingWindow(pBindings, pChildWindow, pParent, SmResId(RID_TOOLBOXWINDOW)),
     aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1))
 {
+    // allow for cursor travelling between toolbox and sub-categories
+    SetStyle( GetStyle() | WB_DIALOGCONTROL );
+
     nActiveCategory = -1;
 
     SfxImageManager *pImgMan = pBindings->GetImageManager();
@@ -182,6 +185,12 @@ BOOL SmToolBoxWindow::Close()
     return TRUE;
 }
 
+void SmToolBoxWindow::GetFocus()
+{
+    // give focus to category toolbox
+    // (allow for cursor travelling when a category is selected with the mouse)
+    aToolBoxCat.GrabFocus();
+}
 
 void SmToolBoxWindow::SetCategory(USHORT nCategory)
 {
