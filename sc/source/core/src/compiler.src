@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:19:05 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3706,7 +3706,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "KOLOMMEN";
         Text[ chinese_simplified ] = "COLUMNS";
         Text[ greek ] = "COLUMNS";
-        Text[ korean ] = "COLUMNS";
+        Text[ korean ] = "¿­";
         Text[ turkish ] = "COLUMNS";
         Text[ language_user1 ] = " ";
     };
