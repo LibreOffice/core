@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-12-08 13:44:33 $
+ *  last change: $Author: er $ $Date: 2001-04-25 18:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #endif
 
+//! #85286# Hidden cols/rows result in splitted series ranges and there is
+//! no way in the current chart implementation to get the original range back.
+//! Therefore we ignore any hidden flags until the new chart data source and
+//! filters will be implemented.
+#undef CR_HIDDEN
+#define CR_HIDDEN 0
 
 // -----------------------------------------------------------------------
 
