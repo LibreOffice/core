@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:02:38 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,96 +250,48 @@ protected:
     virtual void RequestHelp( const HelpEvent& rHEvt );
 };
 
-// class SvxScriptingTabPage ---------------------------------------------
+// class SvxSecurityTabPage ---------------------------------------------
 
 class SvtJavaOptions;
 class SvtSecurityOptions;
 
-class SvxScriptingTabPage : public SfxTabPage
+class SvxSecurityTabPage : public SfxTabPage
 {
+public:
+    enum RedliningMode  { RL_NONE, RL_WRITER, RL_CALC };
 private:
-    // readonly ------------------------------------
-    sal_Bool bROConfirm;
-    sal_Bool bROWarning;
-    sal_Bool bROScriptExec;
-    sal_Bool bROExePlug;
-    sal_Bool bROExecMacro;
+    FixedLine           maSecOptionsFL;
+    FixedInfo           maSecOptionsFI;
+    CheckBox            maSaveOrSendDocsCB;
+    CheckBox            maSignDocsCB;
+    CheckBox            maPrintDocsCB;
+    CheckBox            maCreatePdfCB;
+    CheckBox            maRemovePersInfoCB;
+    CheckBox            maRecommPasswdCB;
 
-    sal_Bool bROJavaEnabled;
-    sal_Bool bROJavaSecurity;
-    sal_Bool bROJavaNetAccess;
-    sal_Bool bROJavaUserClassPath;
-    sal_Bool bROJavaExecuteApplets;
+    FixedLine           maMacroSecFL;
+    FixedInfo           maMacroSecFI;
+    PushButton          maMacroSecPB;
 
-    // Execute
+    FixedLine           maFilesharingFL;
+    CheckBox            maRecommReadOnlyCB;
+    CheckBox            maRecordChangesCB;
+    PushButton          maProtectRecordsPB;
 
-    FixedLine           aGrpScriptingStarBasic;
+    SvtSecurityOptions* mpSecOptions;
+    RedliningMode       meRedlingMode;
+    String              msProtectRecordsStr;
+    String              msUnprotectRecordsStr;
 
-    ReadOnlyImage       aExecMacroFI;
-    FixedText           aExecMacroFT;
-    ListBox             aExecMacroLB;
+    DECL_LINK(          AdvancedPBHdl, void* );
+    DECL_LINK(          MacroSecPBHdl, void* );
+    DECL_LINK(          RecordChangesCBHdl, void* );
+    DECL_LINK(          ProtectRecordsPBHdl, void* );
 
-    ReadOnlyImage       aConfirmFI;
-    CheckBox            aConfirmCB;
+    void                CheckRecordChangesState( void );
 
-    ReadOnlyImage       aWarningFI;
-    CheckBox            aWarningCB;
-
-    ReadOnlyImage       aScriptExecFI;
-    FixedText           aPathListFT;
-    // #98647# ------------------------------------
-    SvxScriptExecListBox aLbScriptExec;
-    PushButton          aBtnScriptExecDelete;
-    PushButton          aBtnScriptExecDefault;
-
-    FixedText           aNewPathFT;
-    Edit                aEdtScriptExec;
-    PushButton          aBtnScriptExecInsert;
-
-    FixedLine           aHyperlinksFL;
-    ReadOnlyImage       aHyperlinksFI;
-    FixedText           aHyperlinksFT;
-    ListBox             aHyperlinksLB;
-
-    FixedLine           aJavaFL;
-    ReadOnlyImage       aJavaEnableFI;
-    CheckBox            aJavaEnableCB;
-    ReadOnlyImage       aJavaSecurityFI;
-    CheckBox            aJavaSecurityCB;
-    ReadOnlyImage       aNetAccessFI;
-    FixedText           aNetAccessFT;
-    ListBox             aNetAccessLB;
-    FixedText           aClassPathFT;
-    ReadOnlyImage       aClassPathFI;
-    Edit                aClassPathED;
-    PushButton          aClassPathPB;
-
-    FixedLine           aSeparatorFL;
-
-    FixedLine           aExecuteGB;
-    ReadOnlyImage       aExePlugFI;
-    CheckBox            aExePlugCB;
-    ReadOnlyImage       aExecAppletsFI;
-    CheckBox            aExecAppletsCB;
-
-    Image               aLockImg;
-    Image               aLockHCImg;
-
-    SvtJavaOptions*     pJavaOptions;
-    SvtSecurityOptions* pSecurityOptions;
-#ifdef _SVX_OPTINET2_CXX
-    DECL_LINK( EditHdl_Impl, Edit* );
-    DECL_LINK( LBHdl_Impl, ListBox* );
-    DECL_LINK( BtnHdl_Impl, PushButton* );
-    DECL_LINK( RunHdl_Impl, ListBox* );
-    DECL_LINK( JavaEnableHdl_Impl, CheckBox* );
-    DECL_LINK( ClassPathHdl_Impl, PushButton* );
-
-    void                FillListBox_Impl();
-    void                EnableJava_Impl( BOOL bEnable, BOOL bOnlySecurity );
-#endif
-                SvxScriptingTabPage( Window* pParent, const SfxItemSet& rSet );
-    virtual     ~SvxScriptingTabPage();
+                SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet );
+    virtual     ~SvxSecurityTabPage();
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet );
