@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:33:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,21 @@
 #ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COMPHELPER_STORAGEHELPER_HXX
+#include <comphelper/storagehelper.hxx>
+#endif
+
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
 #endif
@@ -123,9 +135,6 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
 #endif
@@ -152,6 +161,7 @@
 #include <svtools/moduleoptions.hxx>
 #include <svtools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
+#include <tools/shl.hxx>
 
 #include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
@@ -182,9 +192,6 @@
 #include "new.hxx"
 #include "docinf.hxx"
 #include "templdlg.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "sfxtypes.hxx"
 #include "sfxbasic.hxx"
 #include "tabdlg.hxx"
@@ -194,8 +201,6 @@
 #include "app.hrc"
 #include "tbxcust.hxx"
 #include "passwd.hxx"
-#include "interno.hxx"
-#include "ipenv.hxx"
 #include "sfxresid.hxx"
 #include "arrdecl.hxx"
 #include "childwin.hxx"
@@ -217,6 +222,7 @@
 #include "dialogs.hrc"
 #include "sorgitm.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -236,163 +242,6 @@ long QuitAgain_Impl( void* pObj, void* pArg )
     return 0;
 }
 
-void SfxApplication::BasicLibExec_Impl( SfxRequest &rReq, BasicManager *pMgr )
-{
-    // Zuerst den LibName holen
-    BOOL bRet = FALSE;
-    USHORT nItemId = rReq.GetSlot();
-    SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nItemId == SID_ADD_LIBRARY ? SID_FILE_NAME : rReq.GetSlot(), FALSE );
-
-    String aFileName;   // F"ur AddLibrary
-    String aLibName;
-    if ( pNameItem )
-    {
-        if ( nItemId == SID_ADD_LIBRARY )
-        {
-            // Bei AddLibrary ist der LibName optional, er kann mit dem
-            // FileName identisch sein
-            INetURLObject aObj( pNameItem->GetValue(), INET_PROT_FILE );
-            aFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
-
-            // Nach optionalem LibName suchen
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LOAD_LIBRARY, FALSE );
-            if ( pItem )
-                aLibName = pItem->GetValue();
-            else
-                aLibName = aObj.GetBase();
-        }
-        else
-            aLibName = pNameItem->GetValue();
-    }
-
-    if ( aLibName.Len() )
-    {
-        // Die Library zum "ubergebenen Namen suchen
-        IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-        const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
-        USHORT nLibCount = pMgr->GetLibCount();
-        StarBASIC *pLib = NULL;
-        USHORT nLib;
-        for ( nLib = 0; nLib < nLibCount; ++nLib )
-        {
-            if ( COMPARE_EQUAL == pCollator->compareString( pMgr->GetLibName( nLib ), aLibName ) )
-            {
-                pLib = pMgr->GetLib( nLib );
-                break;
-            }
-        }
-
-        switch ( rReq.GetSlot() )
-        {
-            case SID_LOAD_LIBRARY:
-            {
-                // Wenn eine Library gefunden wurde, die noch nicht
-                // geladen ist
-                if( nLib<nLibCount && !pLib )
-                    bRet = pMgr->LoadLib( nLib );
-                break;
-            }
-
-            case SID_UNLOAD_LIBRARY:
-            {
-                // Wenn eine Library gefunden wurde, die geladen ist
-                if( pLib )
-                    bRet = pMgr->UnloadLib( nLib );
-                break;
-            }
-
-            case SID_REMOVE_LIBRARY:
-            {
-                // Wenn eine Library gefunden wurde
-                // Lib wird nur physikalisch gel"oscht, wenn sie im
-                // Storage des BasicMgr liegt
-                if ( nLib<nLibCount )
-                    bRet = pMgr->RemoveLib( nLib,
-                        !pMgr->IsReference(nLib) && !pMgr->IsExtern(nLib) );
-                break;
-            }
-
-            case SID_ADD_LIBRARY:
-            {
-                // Library laden
-                SvStorageRef aStor = new SvStorage( aFileName, STREAM_STD_READ );
-                if ( aStor->GetError() )
-                    break;
-
-                // Weitere Parameter: Art des Ladens der Library
-                // ( einbinden, per Referenz oder extern ) und Replace
-                BOOL bReplace = TRUE;
-                BOOL bReference = FALSE;
-                BOOL bExternal = FALSE;
-
-                SFX_REQUEST_ARG( rReq, pRefItem, SfxUInt16Item, SID_ADD_LIBRARY, FALSE );
-                if ( pRefItem )
-                {
-                    bReference = pRefItem->GetValue() == SFX_BASICLIB_ADDMODE_REFERENCE;
-                    bExternal = pRefItem->GetValue() == SFX_BASICLIB_ADDMODE_EXTERNAL;
-                    if ( pMgr != GetBasicManager() )
-                        bExternal = FALSE;
-                }
-
-                SFX_REQUEST_ARG( rReq, pReplaceItem, SfxBoolItem, SID_REMOVE_LIBRARY, FALSE );
-                if ( pReplaceItem )
-                    bReplace = pReplaceItem->GetValue();
-
-                if ( nLib<nLibCount )
-                {
-                    // Es gibt schon eine Library dieses Namens
-                    if ( bReplace && ( pMgr->GetLib( nLib ) == pMgr->GetStdLib() ) )
-                        // die Standard-Lib kann nicht ersetzt werden
-                        break;
-
-                    if ( bReplace )
-                        // Library soll eine vorhandene ersetzen
-                        pMgr->RemoveLib( nLib );
-
-                    else if ( bReference )
-                        // Referenz nicht moeglich, wenn Lib mit
-                        // Namen schon existiert, ausser bei Replace.
-                        break;
-                }
-
-                // Library einf"ugen
-                StarBASIC *pLib = pMgr->AddLib( *aStor, aLibName, bReference );
-                if ( pLib )
-                {
-                    nLib = pMgr->GetLibId( pLib );
-
-                    // Einf"ugen extern
-                    if ( bExternal )
-                    {
-                        INetURLObject aAppBasic( pMgr->GetStorageName(), INET_PROT_FILE );
-                        String aExt = aAppBasic.GetExtension();
-
-                        // Optionaler Parameter fuer Name der sbl-Datei
-                        String aDest;
-                        SFX_REQUEST_ARG( rReq, pDestItem, SfxStringItem, SID_DOCTITLE, FALSE );
-                        if ( pDestItem && pDestItem->GetValue().Len() )
-                            aDest = pDestItem->GetValue();
-                        else
-                        {
-                            INetURLObject aOld( aFileName, INET_PROT_FILE );
-                            aDest = aOld.GetName();
-                        }
-
-                        INetURLObject aNew( SvtPathOptions().GetBasicPath().GetToken( 0, ';' ), INET_PROT_FILE );
-                        aNew.SetExtension( aExt );
-                        pMgr->SetLibStorageName( nLib, aNew.GetFull() );
-                        SaveBasicManager();
-                    }
-
-                    bRet = TRUE;
-                }
-            }
-        }
-    }
-
-    rReq.SetReturnValue( SfxBoolItem( 0, bRet ) );
-}
-
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
@@ -404,17 +253,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_UPDATE_CONFIG, FALSE );
             if ( pItem )
                 GetConfigManager_Impl()->ReInitialize( pItem->GetValue() );
-            break;
-        }
-
-        case SID_LOAD_LIBRARY:
-        case SID_UNLOAD_LIBRARY:
-        case SID_REMOVE_LIBRARY:
-        case SID_ADD_LIBRARY:
-        {
-            // Diese Funktionen sind nur f"ur Aufrufe aus dem Basic gedacht
-            if ( IsInBasicCall() )
-                BasicLibExec_Impl( rReq, GetBasicManager() );
             break;
         }
 
@@ -798,19 +636,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     if ( pAppData_Impl->nDocModalMode )
                         rSet.DisableItem(nWhich);
                     else
-                    {
-                        SfxObjectShell *pDoc = pViewFrame ? pViewFrame->GetObjectShell() : 0;
-                        SfxInPlaceObject *pIPObj = pDoc ? pDoc->GetInPlaceObject() : 0;
-                        if (pIPObj && pIPObj->GetProtocol().IsEmbed() &&
-                            !pIPObj->GetClient()->Owner())
-                        {
-                            String aEntry(SfxResId(STR_EXITANDRETURN));
-                            aEntry += pIPObj->GetDocumentName();
-                            rSet.Put(SfxStringItem(nWhich, aEntry));
-                        }
-                        else
-                            rSet.Put(SfxStringItem(nWhich, String(SfxResId(STR_QUITAPP))));
-                    }
+                        rSet.Put(SfxStringItem(nWhich, String(SfxResId(STR_QUITAPP))));
                     break;
                 }
 
