@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,6 @@ using namespace ::com::sun::star::lang;
 
 // --------------------------------------------------------------------------------
 OFlatConnection::OFlatConnection(ODriver*   _pDriver) : OConnection(_pDriver)
-    ,m_bFixedLength(sal_False)
     ,m_bHeaderLine(sal_True)
     ,m_cFieldDelimiter(';')
     ,m_cStringDelimiter('"')
@@ -134,9 +133,7 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     const PropertyValue *pEnd    = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!pBegin->Name.compareToAscii("FixedLength"))
-            m_bFixedLength = cppu::any2bool(pBegin->Value);
-        else if(!pBegin->Name.compareToAscii("HeaderLine"))
+        if(!pBegin->Name.compareToAscii("HeaderLine"))
             m_bHeaderLine = cppu::any2bool(pBegin->Value);
         else if(!pBegin->Name.compareToAscii("FieldDelimiter"))
         {
