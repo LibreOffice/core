@@ -1,0 +1,252 @@
+/*************************************************************************
+ *
+ *  $RCSfile: preload.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: os $ $Date: 2001-11-14 13:18:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_PRELOAD_PRELOAD_HRC_
+#include "preload.hrc"
+#endif
+
+ModalDialog RID_DLG_OEMWIZARD
+{
+    Text = "Preload Konfiguration";
+    Text [ english_us ] = "Preload configuration";
+
+    OutputSize      = TRUE ;
+    SVLook          = TRUE ;
+    Moveable        = TRUE ;
+    Closeable       = TRUE ;
+    Hide            = TRUE;
+    PushButton PB_PREV
+    {
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "<< Zurück" ;
+        Text [ english_us ] = "<< Back" ;
+    };
+    PushButton PB_NEXT
+    {
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Weiter >>" ;
+        Text [ english_us ] = "Next >>" ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String ST_ACCEPT
+    {
+        Text = "Akzeptieren";
+        Text[English] = "Accept";
+    };
+    String ST_FINISH
+    {
+        Text = "Fertigstellen";
+        Text[English] = "Finish";
+    };
+};
+TabPage RID_TP_WELCOME
+{
+//    HelpId = ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text = "Willkommen" ;
+    Text [ ENGLISH ] = "Welcome" ;
+    FixedText FT_INFO
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text = "Willkommen" ;
+        Text [ ENGLISH ] = "Welcome" ;
+    };
+};
+TabPage RID_TP_LICENSE
+{
+//    HelpId = ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text = "Lizenzvertrag" ;
+    Text [ ENGLISH ] = "License Agreement" ;
+    FixedText FT_INFO1
+    {
+        WordBreak = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 20 ) ;
+        Text = "Bitte lesen Sie das folgende Lizenzabkommen. Mit der Bildlaufleiste können Sie den Rest des Lizenzabkommens sichtbar machen." ;
+        Text [ english_us ] = "Read the following License Agreement carefully. Use the scroll bar to view the entire text." ;
+        Text [ portuguese_brazilian ] = "Bitte lesen Sie das folgende Lizenzabkommen. Mit der Bildlaufleiste k?nen Sie den Rest des Lizenzabkommens sichtbar machen." ;
+        Text [ swedish ] = "Läs följande licensavtal. Med hjälp av rullningslisten kan du se resten av avtalet." ;
+        Text [ danish ] = "Læs venligst den følgende licensaftale. Ved hjælp af rullepanelet kan du se resten af licensaftalen." ;
+        Text [ italian ] = "Leggete il seguente contratto di licenza. Con la barra di scorrimento è possibile visualizzare il resto del contratto stesso." ;
+        Text [ spanish ] = "Por favor lea el siguiente acuerdo de licencia. Con la barra de desplazamiento podrá ver el resto del acuerdo." ;
+        Text [ french ] = "Veuillez lire le contrat de licence ci-dessous en utilisant la barre de défilement pour vous déplacer dans le texte." ;
+        Text [ dutch ] = "Lees a.u.b. de volgende licentieovereenkomst. Met de beeldschuifbalk  kunt u de rest ervan zichtbaar maken." ;
+        Text [ portuguese ] = "Leia o seguinte contrato de licença com atenção. Se usar a barra de deslocamento poderá visualizar o texto completo." ;
+        Text[ chinese_simplified ] = "è¯·é˜…è¯»ä»¥ä¸‹çš„è®¸å¯è¯åè®®ã€‚æ‚¨èƒ½å¤Ÿé€šè¿‡æŒ‰å‡»æ»šåŠ¨æ¡æ¥é˜…è¯»è®¸å¯è¯åè®®çš„å…¨éƒ¨å†…å®¹ã€‚";
+        Text[ russian ] = "Ïğî÷èòàéòå, ïîæàëóéñòà, ñëåäóşùåå ëèöåíçèîííîå ñîãëàøåíèå. Èñïîëüçóéòå ïîëîñó ïğîêğóòêè, ÷òîáû óâèäåòü îñòàëüíóş ÷àñòü òåêñòà.";
+        Text[ polish ] = "Prosimy przeczytaæ umowê licencyjn¹. Przesuniêcie paska przewijania obrazu pozwala przeczytaæ ukryt¹ czêœæ umowy licencyjnej.";
+        Text[ japanese ] = "æ¬¡ã®èªå¯å”å®šã‚’å¿…ãšãŠèª­ã¿ãã ã•ã„ã€‚ï½½ï½¸ï¾›ï½°ï¾™ï¾Šï¾ï½°ã‚’å‹•ã‹ã™ã¨ã€æ®‹ã‚Šã®æ–‡ç« ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚";
+        Text[ chinese_traditional ] = "è«‹é–±è®€ä»¥ä¸‹çš„è¨±å¯è­‰å”è­°ã€‚æ‚¨èƒ½å¤ æŒ‰ä¸€ä¸‹æ²è»¸ï¼Œé–±è®€è¨±å¯è­‰å”è­°çš„å…¨éƒ¨å…§å®¹ã€‚";
+        Text[ arabic ] = "ÇáÑÌÇÁ ŞÑÇÁÉ ÇÊİÇŞíÉ ÇáÊÑÎíÕ ÇáÊÇáíÉ. ÇÓÊÎÏã ÔÑíØ ÊÍÑíß ÇáÕİÍÉ áßí ÊÊãßä ãä ÑÄíÉ ÇáÌÒÁ ÇáãÊÈŞí ãä äÕ ÇáÇÊİÇŞíÉ.";
+        Text[ greek ] = "Ğáñáêáëş äéáâÜóôå ôçí áêüëïõèç 'Óõìöùíßá ¢äåéáò ×ñŞóçò'. ×ñçóéìïğïéŞóôå ôç ãñáììŞ êıëéóçò ãéá íá åìöáíéóôåß ïëüêëçñï ôï êåßìåíï.";
+        Text[ korean ] = "ë‹¤ìŒì˜ ë¼ì´ì„¼ìŠ¤ í˜‘ì •ì„ ì½ì–´ ë³´ì‹­ì‹œì˜¤. ìŠ¤í¬ë¡¤ ë°”ë¥¼ ì‚¬ìš©í•˜ë©´ ë¼ì´ì„¼ìŠ¤ í˜‘ì •ì˜ ë‚˜ë¨¸ì§€ë¥¼ ë³¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+        Text[ turkish ] = "Lütfen aşağıdaki lisans anlaşmasını dikkatle okuyun. Sayfa kaydırma çubuğunu kullanarak, lisans anlaşmasının tamamını görüntüleyebilirsiniz.";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Por favor lea el siguiente acuerdo de licencia. Con la barra de desplazamiento podrá ver el resto del acuerdo.";
+        Text[ finnish ] = "Lue seuraava lisenssisopimus huolellisesti. Voit vierittää tekstiä vierityspalkin avulla.";
+    };
+    MultiLineEdit ML_LICENSE
+    {
+        PosSize = MAP_APPFONT ( 6 , 23 , 248, 123 ) ;
+        Border = TRUE ;
+        VScroll = TRUE ;
+        ReadOnly = TRUE ;
+    };
+    FixedText FT_INFO2
+    {
+        WordBreak = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 152 ) ;
+        Size = MAP_APPFONT ( 148 , 27 ) ;
+        Text = "Akzeptieren Sie sämtliche Bedingungen im vorliegenden Lizenzabkommen, klicken Sie auf die Schaltfläche '%1'. Stimmen Sie den Bedingungen nicht zu klicken Sie auf '%2', die Installation wird dann abgebrochen." ;
+        Text [ english_us ] = "If you accept all terms of the license agreement, click '%1'. Otherwise, click '%2' to cancel the installation." ;
+        Text [ portuguese ] = "Clique no botão '%1' se concordar com os termos do contrato de licença. Se não os aceitar clique no botão '%2' e a instalação será cancelada." ;
+        Text [ portuguese_brazilian ] = "Akzeptieren Sie s?mtliche Bedingungen im vorliegenden Lizenzabkommen, klicken Sie auf die Schaltfl?che '%1'. Stimmen Sie den Bedingungen nicht zu klicken Sie auf '%2', die Installation wird dann abgebrochen." ;
+        Text [ swedish ] = "Om Du accepterar alla villkor i licensavtalet, klicka på '%1'. Om Du inte accepterar villkoren, klicka på '%2' för att avbryta installationen." ;
+        Text [ danish ] = "Hvis du accepterer alle betingelser i licensaftalen, klik på '%1' knappen. I modsat fald klik på '%2' for at afbryde installationen." ;
+        Text [ italian ] = "Se accettate tutte le condizioni del presente contratto di licenza cliccate su '%1'. Se non le accettate cliccate invece su '%2'. In questo modo l'installazione verrà interrotta." ;
+        Text [ spanish ] = "Si acepta las condiciones de este acuerdo de licencia, pulse sobre '%1'. En caso de no ser así pulse sobre '%2' para cancelar la instalación." ;
+        Text [ french ] = "Une fois votre lecture terminée, cliquez sur '%1' si vous acceptez tous les termes du contrat. Dans le cas contraire, cliquez sur '%2' pour interrompre l'installation." ;
+        Text [ dutch ] = "Accepteert u alle voorwaarden in deze licentieovereenkomst, klik dan op de knop '%1'. Gaat u niet accoord met de voorwaarden, klik dan op '%2', de installatie wordt dan gestopt." ;
+        Text[ chinese_simplified ] = "å¦‚æœæ‚¨åŒæ„æ¥å—è®¸å¯è¯åè®®ä¸­çš„å…¨éƒ¨æ¡æ¬¾ï¼Œè¯·æŒ‰å‡»\"%1\"ã€‚å¦‚æœä¸åŒæ„è®¸å¯è¯åè®®ä¸­çš„æ¡æ¬¾ï¼Œåˆ™æŒ‰å‡»\"%2\"ï¼Œä¸­æ–­å®‰è£…ã€‚";
+        Text[ russian ] = "Åñëè Âû ïğèíèìàåòå âñå óñëîâèÿ ëèöåíçèîííîãî ñîãëàøåíèÿ, òî íàæìèòå êíîïêó '%1'. Åñëè æå Âû íå ñîãëàñíû ñ ıòèìè óñëîâèÿìè, òî íàæìèòå '%2', è èíñòàëëÿöèÿ áóäåò ïğåêğàùåíà.";
+        Text[ polish ] = "Je¿eli warunki niniejszej umowy licencyjnej zostan¹ zaakceptowane, nale¿y klikn¹æ przycisk '%1'. W razie niezaakceptowania ich nale¿y klikn¹æ przycisk '%2'. Instalacja zostanie wówczas przerwana.";
+        Text[ japanese ] = "ä»¥ä¸Šã®èªå¯å”å®šã®ã™ã¹ã¦ã®æ¡ä»¶ã«åŒæ„ã™ã‚‹å ´åˆã¯ã€ï¼»%1ï¼½ã‚’ï½¸ï¾˜ï½¯ï½¸ã—ã¾ã™ã€‚æ¡ä»¶ã«åŒæ„ã—ãªã„å ´åˆã¯ã€ï¼»%2ï¼½ã‚’ï½¸ï¾˜ï½¯ï½¸ã—ã¦ï½²ï¾ï½½ï¾„ï½°ï¾™ã‚’ä¸­æ­¢ã—ã¾ã™ã€‚";
+        Text[ chinese_traditional ] = "è¦æ¥å—æ‰€æçš„è¨±å¯è­‰å”è­°çš„å…¨éƒ¨æ¢æ¬¾ï¼ŒæŒ‰ä¸€ä¸‹<%1>ã€‚è‹¥ä¸æ¥å—å…¨éƒ¨æ¢æ¬¾ï¼Œå°±æŒ‰ä¸€ä¸‹<%2>ï¼Œå–æ¶ˆå®‰è£ã€‚";
+        Text[ arabic ] = "ÅĞÇ ßäÊ ãæÇİŞÇğ Úáì ßÇİÉ ÔÑæØ ÇÊİÇŞíÉ ÇáÊÑÎíÕ åĞå¡ ÇäŞÑ İæŞ '%1'. ÃãÇ İí ÍÇáÉ ÑİÖß áåÇ¡ İÇäŞÑ İæŞ '%2'. İí åĞå ÇáÍÇáÉ Óæİ íÊã ŞØÚ ÚãáíÉ ÇáÊËÈíÊ.";
+        Text[ greek ] = "Áí áğïäİ÷åóôå üëïõò ôïõò üñïõò ôçò '¢äåéáò ÷ñŞóçò', åğéëİîôå ôï ğåäßï '%1'. ÄéáöïñåôéêÜ åğéëİîôå ôï ğåäßï '%2' ãéá íá áêõñùèåß ç åãêáôÜóôáóç.";
+        Text[ korean ] = "ì•ì˜ ë¼ì´ì„¼ìŠ¤ í˜‘ì •ì— ì–¸ê¸‰ëœ ì „ì²´ ì¡°ê±´ì— ë™ì˜í•˜ë©´ '%1' ë²„íŠ¼ì„ í´ë¦­í•˜ì‹­ì‹œì˜¤. ì¡°ê±´ì— ë™ì˜í•˜ì§€ ì•Šìœ¼ë©´ '%2'ì„(ë¥¼) í´ë¦­í•˜ì‹­ì‹œì˜¤. ê·¸ëŸ¬ë©´ ì„¤ì¹˜ê°€ ì¤‘ë‹¨ë©ë‹ˆë‹¤.";
+        Text[ turkish ] = "Lisans anlaşmasındaki tüm koşulları kabul ediyorsanız, '%1' düğmesini tıklayın. Koşulları kabul etmiyorsanız, '%2' düğmesini tıklayın. Bu durumda kurulum iptal edilecek.";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Si acepta las condiciones de este acuerdo de licencia, pulse sobre '%1'. En caso de no ser así pulse sobre '%2' para cancelar la instalación.";
+        Text[ finnish ] = "Jos hyväksyt kaikki lisenssisopimuksen ehdot, valitse %1. Muussa tapauksessa peruuta asennus valitsemalla %2.";
+    };
+};
+TabPage RID_TP_README
+{
+//    HelpId = ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text = "ReadMe" ;
+    Text [ ENGLISH ] = "ReadMe" ;
+    FixedText FT_INFO
+    {
+        WordBreak = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 20 ) ;
+        Text = "Dieser Text enthält zusätzliche und wichtige Informationen zu %1. Mit der Bildlaufleiste können Sie den Rest des Text sichtbar machen." ;
+        Text [ english_us ] = "This text contains additional information for %1. Use the scroll bar to display the entire text." ;
+        Text [ portuguese_brazilian ] = "Dieser Text enth?lt zus?tzliche und wichtige Informationen zu %1. Mit der Bildlaufleiste k?nen Sie den Rest des Text sichtbar machen." ;
+        Text [ swedish ] = "Den här texten innehåller mer och viktig information om %1. Med hjälp av rullningslisten kan du se resten av texten." ;
+        Text [ danish ] = "Denne tekst indeholder yderligere, vigtige informationer om %1. Ved hjælp af rullepanelet kan du se resten af teksten." ;
+        Text [ italian ] = "Questo testo contiene importanti informazioni su %1. Con la barra di scorrimento è possibile visualizzare l'intero testo." ;
+        Text [ spanish ] = "Este texto contiene información adicional e importante sobre %1. Con la barra de desplazamiento puede hacer visible el resto del texto." ;
+        Text [ french ] = "Ce texte contient des informations importantes sur %1. Pour vous déplacer dans le texte, utilisez la barre de défilement." ;
+        Text [ dutch ] = "Deze tekst bevat nog verdere belangrijke informatie over  %1. Met de beeldschuifbalk kunt u de rest van de tekst zichtbaar maken." ;
+        Text [ portuguese ] = "Este texto contém informações adicionais sobre o %1. Use a barra de deslocamento para visualizar o texto completo." ;
+        Text[ chinese_simplified ] = "ä»¥ä¸‹è¿™æ®µæ–‡å­—ä¸­å«æœ‰é™„åŠ çš„æœ‰å…³%1çš„é‡è¦ä¿¡æ¯ã€‚\næ‚¨å¯ä»¥é€šè¿‡ç§»åŠ¨æ»šåŠ¨æ¡æ¥é˜…è¯»å…¶ä¸‹åŠéƒ¨åˆ†ã€‚";
+        Text[ russian ] = "Â ıòîì òåêñòå ñîäåğæèòñÿ äîïîëíèòåëüíàÿ è âàæíàÿ èíôîğìàöèÿ ïî %1. Èñïîëüçóéòå ïîëîñó ïğîêğóòêè, ÷òîáû óâèäåòü îñòàëüíóş ÷àñòü òåêñòà.";
+        Text[ polish ] = "Tutaj znajduj¹ siê dodatkowe informacje o programie %1. Po przesuniêciu paska przewijania obrazu odkryta zostanie pozosta³a czêœæ tekstu.";
+        Text[ japanese ] = "ã“ã‚Œã¯ %1 ã«ã¤ã„ã¦ã®é‡è¦ãªè¿½åŠ æƒ…å ±ã§ã™ã€‚ï½½ï½¸ï¾›ï½°ï¾™ï¾Šï¾ï½°ã‚’å‹•ã‹ã™ã¨ã€æ®‹ã‚Šã®æ–‡ç« ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚";
+        Text[ chinese_traditional ] = "é€™æ®µæ–‡å­—å«æœ‰é™„åŠ çš„é—œæ–¼%1çš„é‡è¦è³‡è¨Šã€‚\næ‚¨èƒ½å¤ æŒ‰ä¸€ä¸‹æ²è»¸ï¹é–±è®€å…¶ä¸‹åŠéƒ¨ä»½ã€‚";
+        Text[ arabic ] = "íÍÊæí åĞÇ ÇáäÕ Úáì ãÚáæãÇÊ ÅÖÇİíÉ åÇãÉ ÈÎÕæÕ %1. ÇÓÊÎÏã ÔÑíØ ÊÍÑíß ÇáÕİÍÉ áÅÙåÇÑ ÇáÌÒÁ ÇáãÊÈŞí ãä ÇáäÕ.";
+        Text[ greek ] = "Ôï êåßìåíï áõôü ğåñéİ÷åé óçìáíôéêİò ğëçñïöïñßåò ãéá ôï %1. ×ñçóéìïğïéşíôáò ôçí ãñáììŞ êıëéóçò åìöáíßæåôáé ïëüêëçñï ôï êåßìåíï.";
+        Text[ korean ] = "ì´ í…ìŠ¤íŠ¸ëŠ” %1ì— ëŒ€í•œ ì¤‘ìš”í•œ ì¶”ê°€ ì •ë³´ì…ë‹ˆë‹¤.  ìŠ¤í¬ë¡¤ ë°”ë¥¼ ì‚¬ìš©í•˜ì—¬ ë‚˜ë¨¸ì§€ í…ìŠ¤íŠ¸ë¥¼ ë³¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+        Text[ turkish ] = "Bu metin %1 ile ilgili önemli ek bilgiler içeriyor. Sayfa kaydırma çubuğunu kullanarak, metnin devamını görüntüleyebilirsiniz.";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Este texto contiene información adicional e importante sobre %1. Con la barra de desplazamiento puede hacer visible el resto del texto.";
+        Text[ finnish ] = "Tässä tekstissä on lisätietoja kohteesta %1. Voit vierittää tekstiä vierityspalkin avulla.";
+    };
+    MultiLineEdit ML_README
+    {
+        PosSize = MAP_APPFONT ( 6 , 23 , 248, 156 ) ;
+        Border = TRUE ;
+        VScroll = TRUE ;
+        ReadOnly = TRUE ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
