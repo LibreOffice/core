@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:22:42 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ TabDialog DLG_ATTR
         Text[ czech ] = "Zpět";
         Text[ hebrew ] = "‮הקודם‬";
         Text[ hindi ] = "~पीछे";
+        Text[ slovak ] = "S~päť";
     };
     String TP_ATTR_CHAR
     {
@@ -173,6 +174,7 @@ TabDialog DLG_ATTR
         Text[ czech ] = "Písmo";
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "फ़ॉन्ट";
+        Text[ slovak ] = "Písmo";
     };
     String TP_ATTR_NUMBER
     {
@@ -203,6 +205,7 @@ TabDialog DLG_ATTR
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
     String TP_ATTR_ALIGN
     {
@@ -233,6 +236,7 @@ TabDialog DLG_ATTR
         Text[ czech ] = "Zarovnání";
         Text[ hebrew ] = "‮ישור‬";
         Text[ hindi ] = "पंक्तिकरण";
+        Text[ slovak ] = "Zarovnanie";
     };
     String ST_ROW
     {
@@ -262,6 +266,7 @@ TabDialog DLG_ATTR
         Text[ czech ] = "Formát tabulky";
         Text[ hebrew ] = "Tabellenformatierung";
         Text[ hindi ] = "सारणी रचना";
+        Text[ slovak ] = "Formát tabuľky";
     };
     Text[ chinese_simplified ] = "字段格式";
     Text[ russian ] = "������ ����";
@@ -277,7 +282,10 @@ TabDialog DLG_ATTR
     Text[ czech ] = "Formát pole";
     Text[ hebrew ] = "Feldformatierung";
     Text[ hindi ] = "क्षेत्र रचना";
+    Text[ slovak ] = "Formát poľa";
 };
+
+
 
 
 
