@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 13:44:50 $
+ *  last change: $Author: gt $ $Date: 2001-05-30 10:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4633,27 +4633,30 @@ BOOL ExcArray::AppendBy( const ExcArray& r )
 
     const UINT16    nNewRow = nLastRow + 1;
     const UINT16    nNewCol = nLastCol + 1;
+    const UINT16    nCol = r.nFirstCol;
+    const UINT16    nRow = r.nFirstRow;
 
-    if( nNewRow == r.nFirstRow && nFirstCol <= r.nFirstCol && nNewCol >= r.nFirstCol )
+    if( nNewRow == nRow && nFirstCol <= nCol && nNewCol >= nCol )
     {
         nLastRow = nNewRow;
 
-        if( nNewCol == r.nFirstCol )
+        if( nNewCol == nCol )
             nLastCol = ( UINT8 ) nNewCol;
 
         bRet = TRUE;
     }
-    else if( nNewCol == r.nFirstCol && nFirstRow <= r.nFirstRow && nNewRow >= r.nLastRow )
+    else if( nNewCol == nCol && nFirstRow <= nRow && nNewRow >= r.nLastRow )
     {
         nLastCol = ( UINT8 ) nNewCol;
 
-        if( nNewRow == r.nFirstRow )
+        if( nNewRow == nRow )
             nLastRow = nNewRow;
 
         bRet = TRUE;
     }
     else
-        bRet = FALSE;
+        bRet = nFirstRow <= nRow && nRow <= nLastRow && nFirstCol <= nCol && nCol <= nLastCol;
+                    // = TRUE, when r intersects this
 
     return bRet;
 }
