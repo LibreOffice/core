@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,61 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 if (pView->HasMarkedObj() && !rKEvt.GetKeyCode().IsMod1() &&
                     !pDocSh->IsReadOnly())
                 {
-                    if(rKEvt.GetKeyCode().IsMod2())
+                    // #97016# II
+                    const SdrHdlList& rHdlList = pView->GetHdlList();
+                    SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+                    // #109007#
+                    sal_Bool bIsMoveOfConnectedHandle(sal_False);
+                    sal_Bool bOldSuppress;
+                    SdrEdgeObj* pEdgeObj = 0L;
+
+                    if(pHdl && pHdl->GetObj() && pHdl->GetObj()->ISA(SdrEdgeObj) && 0 == pHdl->GetPolyNum())
+                    {
+                        pEdgeObj = (SdrEdgeObj*)pHdl->GetObj();
+
+                        if(0 == pHdl->GetPointNum())
+                        {
+                            if(pEdgeObj->GetConnection(sal_True).GetObject())
+                            {
+                                bIsMoveOfConnectedHandle = sal_True;
+                            }
+                        }
+                        if(1 == pHdl->GetPointNum())
+                        {
+                            if(pEdgeObj->GetConnection(sal_False).GetObject())
+                            {
+                                bIsMoveOfConnectedHandle = sal_True;
+                            }
+                        }
+                    }
+
+                    // #109007#
+                    if(pEdgeObj)
+                    {
+                        // Suppress default connects to inside object and object center
+                        bOldSuppress = pEdgeObj->GetSuppressDefaultConnect();
+                        pEdgeObj->SetSuppressDefaultConnect(sal_True);
+                    }
+
+                    // #109007#
+                    if(bIsMoveOfConnectedHandle)
+                    {
+                        sal_uInt16 nMarkHdSiz(pView->GetMarkHdlSizePixel());
+                        Size aHalfConSiz(nMarkHdSiz + 1, nMarkHdSiz + 1);
+                        aHalfConSiz = pWindow->PixelToLogic(aHalfConSiz);
+
+                        if(100 < aHalfConSiz.Width())
+                            nX *= aHalfConSiz.Width();
+                        else
+                            nX *= 100;
+
+                        if(100 < aHalfConSiz.Height())
+                            nY *= aHalfConSiz.Height();
+                        else
+                            nY *= 100;
+                    }
+                    else if(rKEvt.GetKeyCode().IsMod2())
                     {
                         // #97016# move in 1 pixel distance
                         Size aLogicSizeOnePixel = (pWindow) ? pWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
@@ -764,10 +818,6 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                         nX *= 100;
                         nY *= 100;
                     }
-
-                    // #97016# II
-                    const SdrHdlList& rHdlList = pView->GetHdlList();
-                    SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
                     if(0L == pHdl)
                     {
@@ -854,6 +904,13 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                             Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
                             pView->MakeVisible(aVisRect, *pWindow);
                         }
+                    }
+
+                    // #109007#
+                    if(pEdgeObj)
+                    {
+                        // Restore original suppress value
+                        pEdgeObj->SetSuppressDefaultConnect(bOldSuppress);
                     }
                 }
                 else
