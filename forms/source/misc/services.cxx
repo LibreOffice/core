@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-13 15:14:20 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 16:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,15 +368,21 @@ void ensureClassInfos()
     // ------------------------------------------------------------------------
     // - FixedText
     REGISTER_CLASS2(OFixedTextModel, FRM_COMPONENT_FIXEDTEXT, FRM_SUN_COMPONENT_FIXEDTEXT);
+    // - Hidden
+    REGISTER_CLASS3(OHiddenModel, FRM_COMPONENT_HIDDENCONTROL, FRM_SUN_COMPONENT_HIDDENCONTROL, FRM_COMPONENT_HIDDEN);
+    // - FileControl
+    REGISTER_CLASS2(OFileControlModel, FRM_COMPONENT_FILECONTROL, FRM_SUN_COMPONENT_FILECONTROL);
+    // - ImageButton
+    REGISTER_CLASS2(OImageButtonModel, FRM_COMPONENT_IMAGEBUTTON, FRM_SUN_COMPONENT_IMAGEBUTTON);
+    // - GridControl
+    REGISTER_CLASS3(OGridControlModel, FRM_COMPONENT_GRID /* compatibility */, FRM_COMPONENT_GRIDCONTROL, FRM_SUN_COMPONENT_GRIDCONTROL);
+    // - GroupBox
+    REGISTER_CLASS2(OGroupBoxModel, FRM_COMPONENT_GROUPBOX, FRM_SUN_COMPONENT_GROUPBOX);
 
     // - RadioButton
     REGISTER_CLASS2(ORadioButtonModel, FRM_COMPONENT_RADIOBUTTON, FRM_SUN_COMPONENT_RADIOBUTTON);
     // - CheckBox
     REGISTER_CLASS2(OCheckBoxModel, FRM_COMPONENT_CHECKBOX, FRM_SUN_COMPONENT_CHECKBOX);
-    // - Hidden
-    REGISTER_CLASS3(OHiddenModel, FRM_COMPONENT_HIDDENCONTROL, FRM_SUN_COMPONENT_HIDDENCONTROL, FRM_COMPONENT_HIDDEN);
-    // - GroupBox
-    REGISTER_CLASS2(OGroupBoxModel, FRM_COMPONENT_GROUPBOX, FRM_SUN_COMPONENT_GROUPBOX);
     // - ListBox
     REGISTER_CLASS2(OListBoxModel, FRM_COMPONENT_LISTBOX, FRM_SUN_COMPONENT_LISTBOX);
     // - ComboBox
@@ -395,8 +401,6 @@ void ensureClassInfos()
     REGISTER_CLASS2(OPatternModel, FRM_COMPONENT_PATTERNFIELD, FRM_SUN_COMPONENT_PATTERNFIELD);
     // - Button
     REGISTER_CLASS2(OButtonModel, FRM_COMPONENT_COMMANDBUTTON, FRM_SUN_COMPONENT_COMMANDBUTTON);
-    // - ImageButton
-    REGISTER_CLASS2(OImageButtonModel, FRM_COMPONENT_IMAGEBUTTON, FRM_SUN_COMPONENT_IMAGEBUTTON);
     // - ImageControl
     REGISTER_CLASS2(OImageControlModel, FRM_COMPONENT_IMAGECONTROL, FRM_SUN_COMPONENT_IMAGECONTROL);
 
@@ -409,14 +413,9 @@ void ensureClassInfos()
     aServices.realloc(2);
     aServices.getArray()[0] = frm::FRM_COMPONENT_FORMATTEDFIELD;
     aServices.getArray()[1] = frm::FRM_SUN_COMPONENT_FORMATTEDFIELD;
-    registerClassInfo(::rtl::OUString::createFromAscii("com.sun.star.form.") + ::rtl::OUString::createFromAscii("OFormattedFieldWrapper_ForcedFormatted"),
+    registerClassInfo(::rtl::OUString::createFromAscii("com.sun.star.comp.forms.") + ::rtl::OUString::createFromAscii("OFormattedFieldWrapper_ForcedFormatted"),
         aServices,
         frm::OFormattedFieldWrapper_CreateInstance_ForceFormatted);
-
-    // - FileControl
-    REGISTER_CLASS2(OFileControlModel, FRM_COMPONENT_FILECONTROL, FRM_SUN_COMPONENT_FILECONTROL);
-    // - GridControl
-    REGISTER_CLASS3(OGridControlModel, FRM_COMPONENT_GRID /* compatibility */, FRM_COMPONENT_GRIDCONTROL, FRM_SUN_COMPONENT_GRIDCONTROL);
 
     // ========================================================================
     // = Controls
