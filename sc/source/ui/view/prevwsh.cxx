@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: sab $ $Date: 2001-05-03 10:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,23 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
+#ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
+#include "ViewSettingsSequenceDefines.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 //  fuer Rad-Maus
 #define SC_DELTA_ZOOM   10
 
 #define SC_USERDATA_SEP ';'
+
+using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
@@ -769,6 +781,51 @@ void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL bBrowse)
             {
                 //  get the string in the parentheses
                 aSourceData = aTabStr.Copy( 1, nParPos - 1 );
+            }
+        }
+    }
+}
+
+void __EXPORT ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool bBrowse )
+{
+    rSeq.realloc(3);
+    beans::PropertyValue* pSeq = rSeq.getArray();
+    if(pSeq)
+    {
+        sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
+        pSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEWID));
+        rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEW)));
+        SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
+        pSeq[0].Value <<= sBuffer.makeStringAndClear();
+        pSeq[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ZOOMVALUE));
+        pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());
+        pSeq[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageNumber"));
+        pSeq[2].Value <<= pPreview->GetPageNo();
+    }
+}
+
+void __EXPORT ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool bBrowse )
+{
+    sal_Int32 nCount(rSeq.getLength());
+    if (nCount)
+    {
+        sal_Int32 nTemp;
+        const beans::PropertyValue* pSeq = rSeq.getConstArray();
+        if(pSeq)
+        {
+            for(sal_Int32 i = 0; i < nCount; i++, pSeq++)
+            {
+                rtl::OUString sName(pSeq->Name);
+                if(sName.compareToAscii(SC_ZOOMVALUE) == 0)
+                {
+                    if (pSeq->Value >>= nTemp)
+                        pPreview->SetZoom(sal_uInt16(nTemp));
+                }
+                else if (sName.compareToAscii("PageNumber") == 0)
+                {
+                    if (pSeq->Value >>= nTemp)
+                        pPreview->SetPageNo(nTemp);
+                }
             }
         }
     }
