@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:29:51 $
+#   last change: $Author: rt $ $Date: 2004-11-02 14:34:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,9 +74,10 @@ USE_JAVAVER:=TRUE
 .IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
 JAVADIR = $(OUT)$/misc$/java
-JARFILES = jurt.jar unoil.jar ridl.jar
+JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
     logging$/XAccessibleEventLog.java \
+    logging$/XAccessibleHypertextLog.java \
     logging$/XAccessibleTextLog.java \
     AbstractButton.java \
     AccessibleActionImpl.java \
@@ -89,6 +90,7 @@ JAVAFILES = \
     AccessibleObjectFactory.java \
     AccessibleRoleAdapter.java \
     AccessibleSelectionImpl.java \
+    AccessibleStateAdapter.java \
     AccessibleTextImpl.java \
     AccessibleValueImpl.java \
     Application.java \
