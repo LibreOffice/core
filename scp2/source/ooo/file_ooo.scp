@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.21 $
+*  $Revision: 1.22 $
 *
-*  last change: $Author: rt $ $Date: 2004-06-17 15:45:55 $
+*  last change: $Author: hjs $ $Date: 2004-06-28 16:34:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -260,6 +260,13 @@ File gid_File_Bin_Soffice
   #else
     Styles = (PACKED);
   #endif
+End
+
+File GID_FILE_EXE_MSFONTEXTRACT
+        BIN_FILE_BODY;
+        Dir             = gid_Dir_Program;
+        Name            = EXENAME(msfontextract);
+        Styles          = (PACKED);
 End
 
 #ifdef UNX
