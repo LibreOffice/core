@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-11 17:08:58 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,7 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
     {
         if (IsFldEdit())
         {
-            bSpecialFmt = GetCurField()->GetFormat() == ULONG_MAX || !GetCurField()->GetFormat();
+            bSpecialFmt = GetCurField()->GetFormat() == ULONG_MAX;
 
             if (!bSpecialFmt)
             {
@@ -1404,6 +1404,9 @@ void SwFldVarPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/07/11 17:08:58  jp
+    #89582#: look for the dropped content flag at ConditionEdit controls
+
     Revision 1.4  2001/07/05 18:41:36  jp
     changes for TF_DATA
 
