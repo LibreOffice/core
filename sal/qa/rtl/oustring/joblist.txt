@@ -1,0 +1,10 @@
+# JobFile for rtl_OUString
+# header source sal/inc/rtl/ustring.hxx
+
+rtl_OUString.valueOf.valueOf_double_001
+rtl_OUString.valueOf.valueOf_double_002
+rtl_OUString.valueOf.valueOf_double_003
+rtl_OUString.valueOf.valueOf_double_004
+rtl_OUString.valueOf.valueOf_double_005
+rtl_OUString.valueOf.valueOf_double_006
+rtl_OUString.valueOf.valueOf_double_007
