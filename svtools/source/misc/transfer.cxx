@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:47:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,7 @@ sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::su
     SvMemoryStream aMemStm( 8192, 8192 );
 
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    aMemStm << rIMap;
+    rIMap.Write( aMemStm, String() );
     maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
     return( maAny.hasValue() );
@@ -1686,7 +1686,7 @@ sal_Bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransf
 
     if( bRet )
     {
-        *xStm >> rIMap;
+        rIMap.Read( *xStm, String() );
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 
