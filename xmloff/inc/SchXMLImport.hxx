@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2001-12-17 10:22:10 $
+ *  last change: $Author: bm $ $Date: 2002-02-11 09:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,9 @@ public:
 
     // XServiceInfo ( : SvXMLExport )
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+
+    SvXMLImportContext* CreateStylesContext( const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
 #endif  // SCH_XMLIMPORT_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: bm $ $Date: 2001-12-17 10:22:10 $
+ *  last change: $Author: bm $ $Date: 2002-02-11 09:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,20 @@ SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const rtl::OUSt
     return pContext;
 }
 
+SvXMLImportContext* SchXMLImport::CreateStylesContext(
+    const ::rtl::OUString& rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLStylesContext* pStylesCtxt =
+        new SvXMLStylesContext( *(this), XML_NAMESPACE_OFFICE, rLocalName, xAttrList );
+
+    // set context at base class, so that all auto-style classes are imported
+    SetAutoStyles( pStylesCtxt );
+    maImportHelper.SetAutoStylesContext( pStylesCtxt );
+
+    return pStylesCtxt;
+}
+
 // export components ========================================
 
 // first version: everything comes from one storage
@@ -660,7 +674,6 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(cons
 {
     return (cppu::OWeakObject*)new SchXMLImport( IMPORT_META );
 }
-
 
 // XServiceInfo
 OUString SAL_CALL SchXMLImport::getImplementationName() throw( uno::RuntimeException )
