@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:42:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ czech ] = "Název";
         Text[ hebrew ] = "‮שם‬";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_DICTNAME
     {
@@ -172,6 +173,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
+        Text[ slovak ] = "~Jazyk";
     };
     ListBox LB_DICTLANG
     {
@@ -212,6 +214,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ czech ] = "Výjimka (-)";
         Text[ hebrew ] = "‮חריג (-)‬";
         Text[ hindi ] = "~अक्षेप (-)";
+        Text[ slovak ] = "~Výnimka (-)";
     };
     FixedLine GB_NEWDICT
     {
@@ -247,6 +250,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ czech ] = "Slovník";
         Text[ hebrew ] = "‮מילון‬";
         Text[ hindi ] = "शब्दकोश";
+        Text[ slovak ] = "Slovník";
     };
     OKButton BTN_NEWDICT_OK
     {
@@ -270,6 +274,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     Text[ czech ] = "Nový slovník";
     Text[ hebrew ] = "‮מילון חדש‬";
     Text[ hindi ] = "नया शब्दकोश";
+    Text[ slovak ] = "Nový slovník";
 };
 
  // RID_SFXDLG_EDITDICT ---------------------------------------------------
@@ -329,6 +334,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ czech ] = "Kniha";
         Text[ hebrew ] = "‮ספר‬";
         Text[ hindi ] = "~पुस्तक";
+        Text[ slovak ] = "~Kniha";
     };
     ListBox LB_ALLDICTS
     {
@@ -368,6 +374,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
+        Text[ slovak ] = "~Jazyk";
     };
     ListBox LB_DICTLANG
     {
@@ -415,6 +422,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ czech ] = "Slovo";
         Text[ hebrew ] = "‮מילה‬";
         Text[ hindi ] = "~शब्द";
+        Text[ slovak ] = "~Slovo";
     };
     Edit ED_WORD
     {
@@ -454,6 +462,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ czech ] = "Nahradit čím:";
         Text[ hebrew ] = "‮החלפה בידי:‬";
         Text[ hindi ] = "~से प्रतिस्थापित करो:";
+        Text[ slovak ] = "Nahradiť čí~m:";
     };
 
     Edit ED_REPLACE
@@ -496,6 +505,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ czech ] = "Nový";
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
+        Text[ slovak ] = "~Nový";
     };
     PushButton PB_DELETE_REPLACE
     {
@@ -529,6 +539,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मि~टाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     Control TLB_REPLACE
     {
@@ -568,6 +579,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ czech ] = "Nahradit";
         Text[ hebrew ] = "‮החלפה‬";
         Text[ hindi ] = "प्रतिस्थापित ~करो";
+        Text[ slovak ] = "Nah~radiť";
     };
 
 
@@ -613,6 +625,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     Text[ russian ] = "������ ������� ������������";
     Text[ polish ] = "Edytuj s�ownik niestandardowy";
@@ -628,6 +641,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text[ czech ] = "Upravit vlastní slovník";
     Text[ hebrew ] = "‮עריכת מילון מוגדר משתמש‬";
     Text[ hindi ] = "कस्टम् शब्दकोश का संपादन";
+    Text[ slovak ] = "Upraviť vlastný slovník";
 };
 
  // Strings ---------------------------------------------------------------
@@ -660,6 +674,7 @@ String RID_SVXSTR_OPT_DOUBLE_DICTS
     Text[ czech ] = "Dané jméno již existuje.\nProsím zadejte nové.";
     Text[ hebrew ] = "‮השם שצויין כבר קיים.\nנא להקליד שם אחר.‬";
     Text[ hindi ] = "निर्दिष्ट किया हुआ नाम पहिले से ही अस्तित्व में है ।\nकृपया एक नया नाम को प्रविष्ट कीजिए ।";
+    Text[ slovak ] = "Uvedené meno už existuje.\nProsím zadajte nové meno.";
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE
@@ -697,8 +712,11 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message[ czech ] = "Přejete si změnit slovník jazyka '%1'?";
     Message[ hebrew ] = "‮האם לשנות את שפת המילון ה '%1'?‬";
     Message[ hindi ] = "आप '%1' शब्दकोश भाषा को बदलना चाहते है?";
+    Message[ slovak ] = "Prajete si zmeniť slovník jazyka '%1'?";
 };
  // ********************************************************************** EOF
+
+
 
 
 
