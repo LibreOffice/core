@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 14:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,18 @@
     You can later on manually add or remove a provider via the
     <type scope="com::sun::star::container>XSet</type> interface.
 
+    @see com::sun::star::reflection::TypeDescriptionProvider
     @see com::sun::star::reflection::XTypeDescription
 */
 service TypeDescriptionManager
 {
-    /** Interface to retrieve type descriptions.
+    /** Interface to retrieve type descriptions:
+        <ul>
+        <li>names are given in dotted notation, e.g. "com.sun.star.uno.XInterface"</li>
+        <li>sequences are accessable via "[]element_name"</li>
+        <li>interface members are accessable via "interface_name::member_name"</li>
+        </ul>
+        The returned values are of interface type <type>XTypeDescription</type>.
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
     /** Interface to modify the set of
@@ -125,6 +132,9 @@ service TypeDescriptionManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2002/03/08 17:19:13  dbo
+    #96711# reviewed reflection API documentation
+
     Revision 1.6  2001/11/16 15:02:57  mi
     proofing by Richard Holt
 
