@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:54:06 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include <typeinfo>
 #include <vector>
+#include <map>
 
 #ifndef WW_TYPES
 #   include "types.hxx"
@@ -113,13 +114,31 @@ class SdrTextObj;
 class SwNumFmt;
 class SwTxtNode;
 class SwNoTxtNode;
+class SwFmtCharFmt;
+
+namespace sw
+{
+    namespace util
+    {
+        class ItemSort
+            : public std::binary_function<sal_uInt16, sal_uInt16, bool>
+        {
+        public:
+            bool operator()(sal_uInt16 nA, sal_uInt16 nB) const;
+        };
+    }
+}
 
 namespace sw
 {
     /// STL container of Paragraph Styles (SwTxtFmtColl)
     typedef std::vector<SwTxtFmtColl *> ParaStyles;
     /// STL iterator for ParaStyles
-    typedef std::vector<SwTxtFmtColl *>::iterator ParaStyleIter;
+    typedef ParaStyles::iterator ParaStyleIter;
+    /// STL container of SfxPoolItems (Attributes)
+    typedef std::map<sal_uInt16, const SfxPoolItem *, sw::util::ItemSort> PoolItems;
+    /// STL const iterator for ParaStyles
+    typedef PoolItems::const_iterator cPoolItemIter;
 
 
     /** Make exporting a Writer Frame easy
@@ -586,6 +605,55 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void SortByOutline(ParaStyles &rStyles);
+
+        /** Get the SfxPoolItems of a SfxItemSet
+
+            Writer's SfxPoolItems (attributes) are in one of those dreaded
+            macro based pre-STL containers. Give me an STL container of the
+            items instead.
+
+            @param rSet
+            The SfxItemSet to get the items from
+
+            @param rItems
+            The sw::PoolItems to put the items into
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems);
+
+        const SfxPoolItem *SearchPoolItems(const PoolItems &rItems,
+            sal_uInt16 eType);
+
+        template<class T> const T* HasItem(const sw::PoolItems &rItems,
+            sal_uInt16 eType)
+        {
+            return item_cast<T>(SearchPoolItems(rItems, eType));
+        }
+
+
+        /** Remove properties from an SfxItemSet which a SwFmtCharFmt overrides
+
+            Given an SfxItemSet and a SwFmtCharFmt remove from the rSet all the
+            properties which the SwFmtCharFmt would override. An SfxItemSet
+            contains attributes, and a SwFmtCharFmt is a "Character Style",
+            so if the SfxItemSet contains bold and so does the character style
+            then delete bold from the SfxItemSet
+
+            @param
+            rFmt the SwFmtCharFmt which describes the Character Style
+
+            @param
+            rSet the SfxItemSet from which we want to remove any properties
+            which the rFmt would override
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+
+            @see #i24291# for examples
+        */
+        void ClearOverridesFromSet(const SwFmtCharFmt &rFmt, SfxItemSet &rSet);
 
         /** Get the Floating elements in a SwDoc
 
