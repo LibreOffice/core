@@ -2,7 +2,7 @@
 -o sd.SdXCustomPresentationAccess
 -o sd.SdUnoOutlineView
 -o sd.SdUnoPresView
--o sd.AccessibleDrawDocumentView
+#i35935#-o sd.AccessibleDrawDocumentView
 -o sd.AccessibleOutlineView
 #i35935#-o sd.AccessibleSlideView
 -o sd.SdDocLinkTargets
