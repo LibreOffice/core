@@ -1,0 +1,742 @@
+/*************************************************************************
+ *
+ *  $RCSfile: autorecovery.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:29:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __FRAMEWORK_SERVICES_AUTORECOVERY_HXX_
+#define __FRAMEWORK_SERVICES_AUTORECOVERY_HXX_
+
+//_______________________________________________
+// own includes
+
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
+#include <macros/xinterface.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
+#include <macros/xtypeprovider.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
+#include <macros/xserviceinfo.hxx>
+#endif
+
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
+#ifndef __FRAMEWORK_STDTYPES_H_
+#include <stdtypes.h>
+#endif
+
+//_______________________________________________
+// interface includes
+
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
+#include <com/sun/star/uno/XInterface.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
+#include <com/sun/star/document/XEventListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESLISTENER_HPP_
+#include <com/sun/star/util/XChangesListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
+
+//_______________________________________________
+// other includes
+
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
+#endif
+
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
+
+#ifndef _VCL_EVNTPOST_HXX
+#include <vcl/evntpost.hxx>
+#endif
+
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
+#endif
+
+#ifndef _CPPUHELPER_PROPSHLP_HXX
+#include <cppuhelper/propshlp.hxx>
+#endif
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+
+//_______________________________________________
+// definition
+
+#ifndef css
+namespace css = ::com::sun::star;
+#endif
+
+namespace framework
+{
+
+//_______________________________________________
+/**
+    implements the functionality of AutoSave and AutoRecovery
+    of documents - including features of an EmergencySave in
+    case a GPF occures.
+ */
+class AutoRecovery  : public  css::lang::XTypeProvider
+                    , public  css::lang::XServiceInfo
+                    , public  css::frame::XDispatch
+                    , public  css::document::XEventListener         // => css.lang.XEventListener
+                    , public  css::util::XChangesListener           // => css.lang.XEventListener
+                    // attention! Must be the first base class to guarentee right initialize lock ...
+                    , private ThreadHelpBase
+                    , public  ::cppu::OBroadcastHelper
+                    , public  ::cppu::OPropertySetHelper            // => XPropertySet, XFastPropertySet, XMultiPropertySet
+                    , public  ::cppu::OWeakObject
+{
+    //___________________________________________
+    // types
+
+    public:
+
+        // TODO document me ... flag field!
+        enum EDocStates
+        {
+            /* TEMP STATES */
+
+            /// default state, if a document was new created or loaded
+            E_UNKNOWN = 0,
+            /// modified against the original file
+            E_MODIFIED = 1,
+            /// an active document can be postponed to be saved later.
+            E_POSTPONED = 2,
+            /// was already handled during one AutoSave/Recovery session.
+            E_HANDLED = 4,
+            /** an action was started (saving/loading) ... Can be interesting later if the process may be was interrupted by an exception. */
+            E_TRY_SAVE = 8,
+            E_TRY_LOAD_BACKUP = 16,
+            E_TRY_LOAD_ORIGINAL = 32,
+
+            /* FINAL STATES */
+
+            /// the Auto/Emergency saved document isnt useable any longer
+            E_DAMAGED = 64,
+            /// the Auto/Emergency saved document isnt realy up-to-date (some changes can be missing)
+            E_INCOMPLETE = 128,
+            /// the Auto/Emergency saved document was processed successfully
+            E_SUCCEDED = 512
+        };
+
+        // TODO document me
+        enum ETimerType
+        {
+            /** the timer shouldnt be used next time */
+            E_DONT_START_TIMER,
+            /** timer (was/must be) started with normal AutoSaveTimeIntervall */
+            E_NORMAL_AUTOSAVE_INTERVALL,
+            /** timer must be started with special short time intervall,
+                to poll for an user idle period */
+            E_POLL_FOR_USER_IDLE,
+            /** timer mst be started with a very(!) short time intervall,
+                to poll for the end of an user action, which does not allow saving documents in general */
+            E_POLL_TILL_AUTOSAVE_IS_ALLOWED,
+            /** dont start the timer - but calls the same action then before immediatly again! */
+            E_CALL_ME_BACK
+        };
+
+        // TODO document me ... flag field
+        // Emergency_Save and Recovery overwrites Auto_Save!
+        enum EJob
+        {
+            E_NO_JOB = 0,
+            E_AUTO_SAVE = 1,
+            E_EMERGENCY_SAVE = 2,
+            E_RECOVERY = 4,
+            E_FAILURE_SAVE = 8
+        };
+
+        //---------------------------------------
+        /** @short  combine different informations about one office document. */
+        struct TDocumentInfo
+        {
+            public:
+
+                //-------------------------------
+                TDocumentInfo()
+                    : DocumentState(E_UNKNOWN)
+                {}
+
+                //-------------------------------
+                /** @short  points to the document. */
+                css::uno::Reference< css::frame::XModel > Document;
+
+                //-------------------------------
+                /** @short  knows, if the document is realy modified since the last autosave,
+                            or  was postponed, because it was an active one etcpp...
+
+                    @descr  Because we have no CHANGE TRACKING mechanism, based on office document,
+                            we implements it by ourself. We listen for MODIFIED events
+                            of each document and update this state flag here.
+
+                            Further we postpone saving of active documents, e.g. if the user
+                            works currently on it. We wait for an idle period then ...
+                 */
+                sal_Int32 DocumentState;
+
+                //-------------------------------
+                /** TODO: document me */
+                ::rtl::OUString OrgURL;
+                ::rtl::OUString FactoryURL;
+                ::rtl::OUString TemplateURL;
+
+                ::rtl::OUString OldTempURL;
+                ::rtl::OUString NewTempURL;
+
+                ::rtl::OUString AppModule;      // e.g. com.sun.star.text.TextDocument - used to identify app module
+                ::rtl::OUString RealFilter;     // real filter, which was used at loading time
+                ::rtl::OUString DefaultFilter;  // supports saving of the default format without loosing data
+                ::rtl::OUString Extension;      // file extension of the default filter
+                ::rtl::OUString Title;          // can be used as "DisplayName" on every recovery UI!
+
+                sal_Int32 ID;
+        };
+
+        //---------------------------------------
+        /** @short  used to know every currently open document. */
+        typedef ::std::vector< TDocumentInfo > TDocumentList;
+
+    //___________________________________________
+    // member
+
+    private:
+
+        //---------------------------------------
+        /** @short  the global uno service manager.
+            @descr  Must be used to create own needed services.
+         */
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+
+        //---------------------------------------
+        /** @short  points to the underlying configuration.
+            @descr  This instance does not cache - it calls directly the
+                    configuration API!
+          */
+        css::uno::Reference< css::container::XNameAccess > m_xCFG;
+
+        //---------------------------------------
+        /** @short  holds the global event broadcaster alive,
+                    where we listen for new created documents.
+          */
+        css::uno::Reference< css::document::XEventBroadcaster > m_xNewDocBroadcaster;
+
+        //---------------------------------------
+        /** @short  specify the time intervall between two save actions.
+            @descr  Time is measured in [min].
+         */
+        sal_Int32 m_nAutoSaveTimeIntervall;
+
+        //---------------------------------------
+        /** @short  for an asynchronous operation we must know, if there is
+                    at least one running job (may be asynchronous!).
+         */
+        sal_Int32 m_eJob;
+
+        //---------------------------------------
+        /** @short  the timer, which is used to be informed about the next
+                    saving time ...
+         */
+        Timer m_aTimer;
+
+        //---------------------------------------
+        /** @short  make our dispatch asynchronous ... if required to do so! */
+        ::vcl::EventPoster m_aAsyncDispatcher;
+
+        //---------------------------------------
+        /** @short  indicates, which time period is currently used by the
+                    internal timer.
+         */
+        ETimerType m_eTimerType;
+
+        //---------------------------------------
+        /** @short  list of all documents, which must behandled by this AutoSave
+                    mechanism.
+         */
+        TDocumentList m_lDocuments;
+
+        //---------------------------------------
+        // TODO document me
+        sal_Int32 m_nIdPool;
+
+        //---------------------------------------
+        /** @short  contains all status listener registered at this instance.
+         */
+        ListenerHash m_lListener;
+
+        //---------------------------------------
+        /** @short  can be set from outside and is provided to
+                    our internal started operations.
+
+            @descr  Normaly we use the normal status indicator
+                    of the document windows to show a progress.
+                    But in case we are used by any special UI,
+                    it can provide its own status indicator object
+                    to us - so we use it instead of the normal one.
+         */
+        css::uno::WeakReference< css::task::XStatusIndicator > m_xProgress;
+
+        //---------------------------------------
+        /** TODO document me */
+        ::rtl::OUString m_sFailurePath;
+
+        //---------------------------------------
+        /** @short  special debug option to make testing faster.
+
+            @descr  We dont interpret the timer unit as [min] ...
+                    we use [ms] instead of that. Further we dont
+                    wait 10 s for user idle ...
+         */
+        #if OSL_DEBUG_LEVEL > 1
+        sal_Bool m_dbg_bMakeItFaster;
+        #endif
+
+    //___________________________________________
+    // interface
+
+    public:
+
+                 AutoRecovery(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        virtual ~AutoRecovery(                                                                   );
+
+        // XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XINTERFACE
+        DECLARE_XTYPEPROVIDER
+        DECLARE_XSERVICEINFO
+
+        //---------------------------------------
+        // css.frame.XDispatch
+        virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
+                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
+            throw(css::uno::RuntimeException);
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                const css::util::URL&                                     aURL     )
+            throw(css::uno::RuntimeException);
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                   const css::util::URL&                                     aURL     )
+            throw(css::uno::RuntimeException);
+
+        //---------------------------------------
+        // css.document.XEventListener
+        /** @short  informs about created/opened documents.
+
+            @descr  Every new opened/created document will be saved internaly
+                    so it can be checked if its modified. This modified state
+                    is used later to decide, if it must be saved or not.
+
+            @param  aEvent
+                    points to the new created/opened document.
+         */
+        virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
+            throw(css::uno::RuntimeException);
+
+        //---------------------------------------
+        // css.util.XChangesListener
+        virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent)
+            throw(css::uno::RuntimeException);
+
+        //---------------------------------------
+        // css.lang.XEventListener
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
+            throw(css::uno::RuntimeException);
+
+    //___________________________________________
+    // helper
+
+    protected:
+
+        //---------------------------------------
+        // OPropertySetHelper
+
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(      css::uno::Any& aConvertedValue,
+                                                                 css::uno::Any& aOldValue      ,
+                                                                 sal_Int32      nHandle        ,
+                                                           const css::uno::Any& aValue         )
+            throw(css::lang::IllegalArgumentException);
+
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
+                                                               const css::uno::Any& aValue )
+            throw(css::uno::Exception);
+
+        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& aValue ,
+                                                   sal_Int32      nHandle) const;
+
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+            throw(css::uno::RuntimeException);
+    //___________________________________________
+    // helper
+
+    private:
+
+        //---------------------------------------
+        /** @short  open the underlying configuration.
+
+            @descr  This method must be called everytimes
+                    a configuartion call is needed. Because
+                    method works together with the member
+                    m_xCFG, open it on demand and cache it
+                    afterwards.
+
+            @return [com.sun.star.container.XNameAccess]
+                    the configuration object
+
+            @throw  [com.sun.star.uno.RuntimeException]
+                    if config could not be opened successfully!
+
+            @threadsafe
+          */
+        css::uno::Reference< css::container::XNameAccess > implts_openConfig();
+
+        //---------------------------------------
+        /** @short  read the underlying configuration.
+
+            @descr  After that we know the initial state - means:
+                    - if AutoSave was enabled by the user
+                    - which time intervall has to be used
+                    - which recovery entries may already exists
+
+            @throw  [com.sun.star.uno.RuntimeException]
+                    if config could not be opened or readed successfully!
+
+            @threadsafe
+          */
+        void implts_readConfig();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_flushConfigItem(const TDocumentInfo& rInfo               ,
+                                          sal_Bool      bRemoveIt = sal_False);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_startListening();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_stopListening();
+
+        //---------------------------------------
+        /** @short  stops and may be(!) restarts the timer.
+
+            @descr  A running timer is stopped everytimes here.
+                    But starting depends from the different internal
+                    timer variables (e.g. AutoSaveEnabled, AutoSaveTimeIntervall,
+                    TimerType etcpp.)
+
+            @throw  [com.sun.star.uno.RuntimeException]
+                    if timer could not be stopped or started!
+
+            @threadsafe
+         */
+        void implts_actualizeTimer();
+
+        //---------------------------------------
+        /** @short  stop the timer.
+
+            @descr  Double calls will be ignored - means we do
+                    nothing here, if the timer is already disabled.
+
+            @throw  [com.sun.star.uno.RuntimeException]
+                    if timer could not be stopped!
+
+            @threadsafe
+         */
+        void implts_stopTimer();
+
+        //---------------------------------------
+        /** @short  callback of our internal timer.
+         */
+        DECL_LINK(implts_timerExpired, void*);
+
+        //---------------------------------------
+        /** @short  makes our dispatch() method asynchronous!
+         */
+        DECL_LINK(implts_asyncDispatch, void*);
+
+        //---------------------------------------
+        /** @short  implements the dispatch real. */
+        void implts_dispatch();
+
+        //---------------------------------------
+        /** @short  validate new detected document and add it into the internal
+                    document list.
+
+            @descr  This method should be called only, if its clear that a new
+                    document was opened/created during office runtime.
+                    This method checks, if its a top level document (means not an embedded one).
+                    Only such top level documents can be recognized by this auto save mechanism.
+
+            @param  xDocument
+                    the new document, which should be checked and registered.
+
+            @threadsafe
+         */
+        void implts_registerDocument(const css::uno::Reference< css::frame::XModel >& xDocument);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_toggleModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_markDocumentAsSaved(const css::uno::Reference< css::frame::XModel >& xDocument);
+
+        //---------------------------------------
+        /** @short  search a document inside given list.
+
+            @param  rList
+                    reference to a vector, which can contain such
+                    document.
+
+            @param  xDocument
+                    the document, which should be located inside the
+                    given list.
+
+            @return [TDocumentList::iterator]
+                    which points to the located document.
+                    If document does not exists - its set to
+                    rList.end()!
+         */
+        static TDocumentList::iterator impl_searchDocument(      TDocumentList&                             rList    ,
+                                                           const css::uno::Reference< css::frame::XModel >& xDocument);
+
+        //---------------------------------------
+        /** TODO document me */
+        void implts_hideAllDocs();
+
+        //---------------------------------------
+        /** @short  save all current opened documents to a specific
+                    backup directory.
+
+            @descr  Only realy changed documents will be saved here.
+
+                    Further this method returns a suggestion, if and how it should
+                    be called again. May be some documents was not saved yet
+                    and must wait for an user idle period ...
+
+            @return A suggestion, how the timer (if its not already disabled!)
+                    should be restarted to full fill the requirements.
+
+            @threadsafe
+         */
+        ETimerType implts_saveDocs();
+
+        //---------------------------------------
+        /** @short  save one of the current documents to a specific
+                    backup directory.
+
+            @descr  It:
+                    - defines a new(!) unique temp file name
+                    - save the new temp file
+                    - remove the old temp file
+                    - patch the given info struct
+                    - and return errors.
+
+                    It does not:
+                    - patch the configuration.
+
+                    Note further: It paches the info struct
+                    more then ones. E.g. the new temp URL is set
+                    before the file is saved. And the old URL is removed
+                    only if removing oft he old file was successfully.
+                    If this method returns without an exception - everything
+                    was OK. Otherwhise the info struct can be analyzed to
+                    get more information, e.g. when the problem occures.
+
+            @param  sBackupPath
+                    the base path for saving such temp files.
+
+            @param  rInfo
+                    points to an informations structure, where
+                    e.g. the document, its modified state, the count
+                    of autosave-retries etcpp. exists.
+                    Its used also to return the new temp file name
+                    and some other state values!
+
+            @threadsafe
+          */
+        void implts_saveOneDoc(const ::rtl::OUString& sBackupPath,
+                                     TDocumentInfo&   rInfo      );
+
+        //---------------------------------------
+        /** @short  recovery all documents, which was saved during
+                    a crash before.
+
+            @return A suggestion, how this method must be called back!
+
+            @threadsafe
+         */
+        ETimerType implts_openDocs();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_openOneDoc(const ::rtl::OUString&               sURL       ,
+                                     ::comphelper::MediaDescriptor& lDescriptor,
+                                     AutoRecovery::TDocumentInfo&   rInfo      );
+
+        //---------------------------------------
+        // TODO document me
+        void implts_generateNewTempURL(const ::rtl::OUString&               sBackupPath     ,
+                                             ::comphelper::MediaDescriptor& rMediaDescriptor,
+                                             TDocumentInfo&                 rInfo           );
+
+        //---------------------------------------
+        // TODO document me
+        void implts_removeTempFile(const ::rtl::OUString& sURL);
+
+        //---------------------------------------
+        /** @short  notifies all interested listener about the current state
+                    of the currently running operation.
+
+            @descr  Note: this method notifies all listener registered for "" as URL
+                    too. So we support listening for "ALL " changes.
+
+            @param  aEvent
+                    describe the event more in detail.
+
+            @threadsafe
+          */
+        void implts_informListener(const css::frame::FeatureStateEvent& aEvent);
+
+        //---------------------------------------
+        // TODO document me
+        css::frame::FeatureStateEvent implts_createFeatureStateEvent(const AutoRecovery::TDocumentInfo& rInfo);
+
+        //---------------------------------------
+
+        // TODO document me
+        void implts_resetHandleStates();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_specifyDefaultFilterAndExtension(TDocumentInfo& rInfo);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_specifyAppModuleAndFactoryURL(TDocumentInfo& rInfo);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_doFailureSave();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_copyFile(const ::rtl::OUString& sSource    ,
+                             const ::rtl::OUString& sTargetPath,
+                             const ::rtl::OUString& sTargetName);
+};
+
+
+} // namespace framework
+
+#endif // __FRAMEWORK_SERVICES_AUTORECOVERY_HXX_
