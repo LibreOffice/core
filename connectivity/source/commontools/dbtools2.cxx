@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:31:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
+#endif
+#include "connectivity/dbconversion.hxx"
+#ifndef _DBHELPER_DBCHARSET_HXX_
+#include <connectivity/dbcharset.hxx>
+#endif
+#ifndef _COMPHELPER_DATETIME_HXX_
+#include <comphelper/datetime.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -863,7 +870,39 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
     }
     return bIsEmbedded;
 }
+    // -----------------------------------------------------------------------------
+sal_Int32 DBTypeConversion::convertUnicodeString( const ::rtl::OUString& _rSource, ::rtl::OString& _rDest, rtl_TextEncoding _eEncoding ) SAL_THROW((com::sun::star::sdbc::SQLException))
+    {
+        if ( !rtl_convertUStringToString( &_rDest.pData, _rSource.getStr(), _rSource.getLength(),
+                _eEncoding,
+                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
+                RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |
+                RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE )
+           )
+        {
+            ::rtl::OUString sExplanation( RTL_CONSTASCII_USTRINGPARAM( "The string '" ) );
+            sExplanation += _rSource;
+            sExplanation += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "' cannot be converted using the encoding '" ) );
 
+            OCharsetMap aCharsets;
+            OCharsetMap::CharsetIterator aEncodingPos = aCharsets.find( _eEncoding );
+            OSL_ENSURE( aEncodingPos != aCharsets.end(), "ODbaseTable::UpdateBuffer: *which* encoding?" );
+            if ( aEncodingPos != aCharsets.end() )
+                sExplanation += (*aEncodingPos).getIanaName();
+            sExplanation += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "'." ) );
+
+            throw SQLException(
+                sExplanation,
+                NULL,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "22018" ) ),
+                22018,
+                Any()
+            );
+        }
+
+        return _rDest.getLength();
+    }
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
