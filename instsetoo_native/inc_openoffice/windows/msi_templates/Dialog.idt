@@ -1,34 +1,34 @@
 Dialog	HCentering	VCentering	Width	Height	Attributes	Title	Control_First	Control_Default	Control_Cancel
 s72	i2	i2	i2	i2	I4	L128	s50	S50	S50
 Dialog	Dialog
-AdminChangeFolder	50	50	374	266	3	[ProductName] - Install Wizard	Tail	OK	Cancel
-AdminNetworkLocation	50	50	374	266	3	[ProductName] - Install Wizard	InstallNow	InstallNow	Cancel
-AdminWelcome	50	50	374	266	3	[ProductName] - Install Wizard	Next	Next	Cancel
+AdminChangeFolder	50	50	374	266	3	[ProductName] - Installation Wizard	Tail	OK	Cancel
+AdminNetworkLocation	50	50	374	266	3	[ProductName] - Installation Wizard	InstallNow	InstallNow	Cancel
+AdminWelcome	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
 CancelSetup	50	50	260	85	3	[ProductName] [Setup]	No	No	No
-CustomerInformation	50	50	374	266	3	[ProductName] - Install Wizard	NameEdit	Next	Cancel
-CustomSetup	50	50	374	266	35	[ProductName] - Install Wizard	Tree	Next	Cancel
-CustomSetupTips	50	50	374	266	3	[ProductName] - Install Wizard	OK	OK	OK
-DatabaseFolder	50	50	374	266	3	[ProductName] - Install Wizard	Next	Next	Cancel
-DestinationFolder	50	50	374	266	3	[ProductName] - Install Wizard	Next	Next	Cancel
-DiskSpaceRequirements	50	50	374	266	3	[ProductName] - Install Wizard	OK	OK	OK
-FilesInUse	50	50	374	266	19	[ProductName] - Install Wizard	Retry	Retry	Exit
-FileTypeDialog	50	50	374	266	3	[ProductName] - Install Wizard	CheckBox1	Next	Cancel
-InstallChangeFolder	50	50	374	266	3	[ProductName] - Install Wizard	Tail	OK	Cancel
-InstallWelcome	50	50	374	266	3	[ProductName] - Install Wizard	Next	Next	Cancel
-LanguageSelection	50	50	374	266	3	[ProductName] - Install Wizard	Next	Next	Cancel
-LicenseAgreement	50	50	374	266	2	[ProductName] - Install Wizard	Agree	Next	Cancel
-MaintenanceType	50	50	374	266	3	[ProductName] - Install Wizard	RadioGroup	Next	Cancel
-MaintenanceWelcome	50	50	374	266	3	[ProductName] - Install Wizard	Next	Next	Cancel
-OutOfSpace	50	50	374	266	3	[ProductName] - Install Wizard	Resume	Resume	Resume
-PatchWelcome	50	50	374	266	3	[ProductName] Patch - Install Wizard	Next	Next	Cancel
-ReadyToInstall	50	50	374	266	35	[ProductName] - Install Wizard	InstallNow	InstallNow	Cancel
-ReadyToRemove	50	50	374	266	3	[ProductName] - Install Wizard	RemoveNow	RemoveNow	Cancel
-SetupCompleteError	50	50	374	266	3	[ProductName] - Install Wizard	Finish	Finish	Finish
-SetupCompleteSuccess	50	50	374	266	3	[ProductName] - Install Wizard	OK	OK	OK
+CustomerInformation	50	50	374	266	3	[ProductName] - Installation Wizard	NameEdit	Next	Cancel
+CustomSetup	50	50	374	266	35	[ProductName] - Installation Wizard	Tree	Next	Cancel
+CustomSetupTips	50	50	374	266	3	[ProductName] - Installation Wizard	OK	OK	OK
+DatabaseFolder	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
+DestinationFolder	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
+DiskSpaceRequirements	50	50	374	266	3	[ProductName] - Installation Wizard	OK	OK	OK
+FilesInUse	50	50	374	266	19	[ProductName] - Installation Wizard	Retry	Retry	Exit
+FileTypeDialog	50	50	374	266	3	[ProductName] - Installation Wizard	CheckBox1	Next	Cancel
+InstallChangeFolder	50	50	374	266	3	[ProductName] - Installation Wizard	Tail	OK	Cancel
+InstallWelcome	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
+LanguageSelection	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
+LicenseAgreement	50	50	374	266	2	[ProductName] - Installation Wizard	Agree	Next	Cancel
+MaintenanceType	50	50	374	266	3	[ProductName] - Installation Wizard	RadioGroup	Next	Cancel
+MaintenanceWelcome	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
+OutOfSpace	50	50	374	266	3	[ProductName] - Installation Wizard	Resume	Resume	Resume
+PatchWelcome	50	50	374	266	3	[ProductName] Patch - Installation Wizard	Next	Next	Cancel
+ReadyToInstall	50	50	374	266	35	[ProductName] - Installation Wizard	InstallNow	InstallNow	Cancel
+ReadyToRemove	50	50	374	266	3	[ProductName] - Installation Wizard	RemoveNow	RemoveNow	Cancel
+SetupCompleteError	50	50	374	266	3	[ProductName] - Installation Wizard	Finish	Finish	Finish
+SetupCompleteSuccess	50	50	374	266	3	[ProductName] - Installation Wizard	OK	OK	OK
 SetupError	50	10	270	110	65543	[ProductName] Installerinformationen	ErrorText	O	C
-SetupInitialization	50	50	374	266	5	[ProductName] - Install Wizard	Cancel	Cancel	Cancel
-SetupInterrupted	50	50	374	266	3	[ProductName] - Install Wizard	Finish	Finish	Finish
-SetupProgress	50	50	374	266	5	[ProductName] - Install Wizard	Cancel	Cancel	Cancel
-SetupResume	50	50	374	266	3	[ProductName] - Install Wizard	Next	Next	Cancel
-SetupType	50	50	374	266	3	[ProductName] - Install Wizard	RadioGroup	Next	Cancel
-SplashBitmap	50	50	374	266	3	[ProductName] - Install Wizard	Next	Next	Cancel
+SetupInitialization	50	50	374	266	5	[ProductName] - Installation Wizard	Cancel	Cancel	Cancel
+SetupInterrupted	50	50	374	266	3	[ProductName] - Installation Wizard	Finish	Finish	Finish
+SetupProgress	50	50	374	266	5	[ProductName] - Installation Wizard	Cancel	Cancel	Cancel
+SetupResume	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
+SetupType	50	50	374	266	3	[ProductName] - Installation Wizard	RadioGroup	Next	Cancel
+SplashBitmap	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
