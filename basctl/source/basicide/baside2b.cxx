@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-24 10:27:33 $
+ *  last change: $Author: pb $ $Date: 2001-10-25 08:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,17 +369,13 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
     // Sollte eigentlich mal aktiviert werden...
     if ( pEditEngine )
     {
-        /*
         if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
         {
             String aKeyword = GetWordAtCursor();
-            //SfxHelp::ShowHelp( aKeyword, TRUE );
+            Application::GetHelp()->Start( aKeyword, this );
             bDone = TRUE;
         }
-        else
-        */
-
-        if ( rHEvt.GetMode() & HELPMODE_QUICK )
+        else if ( rHEvt.GetMode() & HELPMODE_QUICK )
         {
             String aHelpText;
             Point aTopLeft;
