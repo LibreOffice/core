@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconnct.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:58:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-#include <svx/connect.hxx>
+//CHINA001 #include <svx/connect.hxx>
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -79,6 +79,8 @@
 #include "ViewShell.hxx"
 #endif
 #include "drawdoc.hxx"
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 namespace sd {
 
@@ -105,8 +107,14 @@ FuConnectionDlg::FuConnectionDlg (
 
     if( !pArgs )
     {
-        SvxConnectionDialog* pDlg = new SvxConnectionDialog( NULL, aNewAttr, pView );
-
+        //CHINA001 SvxConnectionDialog* pDlg = new SvxConnectionDialog( NULL, aNewAttr, pView );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+        AbstractSfxSingleTabDialog * pDlg = pFact->CreateSfxSingleTabDialog( NULL,
+                    aNewAttr,
+                    pView,
+                    ResId(RID_SVXPAGE_CONNECTION));
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         USHORT nResult = pDlg->Execute();
 
         switch( nResult )
