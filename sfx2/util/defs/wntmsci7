@@ -7159,3 +7159,5 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?set@?$Reference@VXEnumeration@container@star@sun@com@@@uno@star@sun@com@@QAAEPAVXEnumeration@container@345@@Z
 ?registerFactories@FileDialogHelper@sfx2@@SAXV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@@Z
 ?GetHelp@SfxHelp@@SAPAV1@XZ
+?getCppuType@@YAABVType@uno@star@sun@com@@PBUPropertyValue@beans@345@@Z
+?s_pType_com_sun_star_beans_PropertyState@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4PropertyState@beans@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
