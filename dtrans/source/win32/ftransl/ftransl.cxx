@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 06:55:06 $
+ *  last change: $Author: tra $ $Date: 2001-02-27 07:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #endif
 
 #ifndef _IMPLHELPER_HXX_
-#include "..\..\misc\ImplHelper.hxx"
+#include "..\misc\ImplHelper.hxx"
 #endif
 
 #include <shlobj.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 06:55:18 $
+ *  last change: $Author: tra $ $Date: 2001-02-27 07:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 #endif
 
 #ifndef _WINCLIP_HXX_
-#include "..\..\misc\WinClip.hxx"
+#include "..\misc\WinClip.hxx"
 #endif
 
 #include <vector>
