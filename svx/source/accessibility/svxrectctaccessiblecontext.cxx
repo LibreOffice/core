@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-12 10:02:49 $
+ *  last change: $Author: gt $ $Date: 2002-06-14 06:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,13 +1055,11 @@ Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlChildAccessibleContext::getA
     utl::AccessibleStateSetHelper*          pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if( IsAlive() )
-        pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
-    else
     {
         if( mbIsChecked )
         {
             pStateSetHelper->AddState( AccessibleStateType::CHECKED );
-            pStateSetHelper->AddState( AccessibleStateType::SELECTED );
+//          pStateSetHelper->AddState( AccessibleStateType::SELECTED );
         }
 
         pStateSetHelper->AddState( AccessibleStateType::ENABLED );
@@ -1070,6 +1068,8 @@ Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlChildAccessibleContext::getA
         pStateSetHelper->AddState( AccessibleStateType::SHOWING );
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
     }
+    else
+        pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
 
     return pStateSetHelper;
 }
@@ -1248,17 +1248,13 @@ void SvxRectCtlChildAccessibleContext::setStateChecked( sal_Bool bChecked )
 
         const Reference< XInterface >   xSource( *this );
 
-        Any                             aChecked;
-        Any                             aSelected;
-        Any                             aEmpty;
-        aChecked <<= AccessibleStateType::CHECKED;
-        aSelected <<= AccessibleStateType::SELECTED;
+        Any                             aOld;
+        Any                             aNew;
+        Any&                            rMod = bChecked? aNew : aOld;
 
-        CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_STATE_EVENT,
-                        bChecked? aEmpty : aChecked, bChecked? aChecked : aEmpty ) );
+        rMod <<= AccessibleStateType::CHECKED;
 
-        CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_STATE_EVENT,
-                        bChecked? aEmpty : aSelected, bChecked? aSelected : aEmpty ) );
+        CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_STATE_EVENT, aNew, aOld ) );
     }
 }
 
