@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulinend.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: cl $ $Date: 2002-10-17 16:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #endif
 
 
-
+#include "helpids.h"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "sdview.hxx"
@@ -170,6 +170,7 @@ FuLineEnd::FuLineEnd(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         }
 
         SvxNameDialog* pDlg = new SvxNameDialog( NULL, aName, aDesc );
+        pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
 
         if( pDlg->Execute() == RET_OK )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:46:36 $
+ *  last change: $Author: cl $ $Date: 2002-10-17 16:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 #pragma hdrstop
 
+#include "helpids.h"
 #include "docshell.hxx"
 #include "viewshel.hxx"
 #include "drawview.hxx"
@@ -512,6 +513,7 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
     {
         String aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
         SvxNameDialog* pDlg = new SvxNameDialog( pWin, rName, aDesc );
+        pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
         if( pViewShell->GetActualFunction() )
         {

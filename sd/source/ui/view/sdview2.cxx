@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 10:10:28 $
+ *  last change: $Author: cl $ $Date: 2002-10-17 16:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@
 #include "unoaprms.hxx"
 #include "drawview.hxx"
 #include "slidview.hxx"
+#include "helpids.h"
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -985,6 +986,7 @@ BOOL SdView::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT
                     String          aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
                     String          aDesc( SdResId( STR_DESC_NAMEGROUP ) );
                     SvxNameDialog*  pDlg = new SvxNameDialog( pViewSh->GetWindow(), *pNewName, aDesc );
+                    pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
 
                     bNameOK = FALSE;
                     pDlg->SetText( aTitle );

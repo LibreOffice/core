@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-24 09:14:01 $
+ *  last change: $Author: cl $ $Date: 2002-10-17 16:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,3 +223,7 @@
 #define HID_SD_UNDODELETEWARNING_CBX        (HID_SD_START + 126)
 
 #define HID_SD_PAGEOBJSTLB                  (HID_SD_START + 127)
+
+#define HID_SD_NAMEDIALOG_OBJECT            (HID_SD_START + 128)
+#define HID_SD_NAMEDIALOG_PAGE              (HID_SD_START + 129)
+#define HID_SD_NAMEDIALOG_LINEEND           (HID_SD_START + 130)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-12 12:00:45 $
+ *  last change: $Author: cl $ $Date: 2002-10-17 16:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-
+#include "helpids.h"
 #include "misc.hxx"
 #include "sdwindow.hxx"
 #include "imapinfo.hxx"
@@ -179,6 +179,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
                     aName = pObj->GetName();
 
                 SvxNameDialog* pDlg = new SvxNameDialog( NULL, aName, aDesc );
+                pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
 
                 pDlg->SetText( aTitle );
                 pDlg->SetCheckNameHdl( LINK( this, SdDrawViewShell, NameObjectHdl ) );
