@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ka $ $Date: 2001-02-13 12:08:24 $
+#   last change: $Author: rt $ $Date: 2003-09-16 14:34:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,9 +66,7 @@ TARGET=grf
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
