@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 09:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,6 +917,7 @@ sal_Bool OQueryDesignView::checkStatement()
 {
     // used for fields which aren't any longer in the statement
     OTableFields& rUnUsedFields = static_cast<OQueryController*>(getController())->getUnUsedFields();
+    OTableFields().swap( rUnUsedFields );
 
     // create the select columns
     sal_uInt32 nFieldcount = 0;
