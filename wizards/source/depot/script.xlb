@@ -14,4 +14,6 @@
  <library:element library:name="Lang_sv"/>
  <library:element library:name="Lang_zh"/>
  <library:element library:name="Lang_tw"/>
+ <library:element library:name="Lang_ko"/>
+ <library:element library:name="Lang_ja"/>
 </library:library>
