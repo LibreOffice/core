@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-09-12 09:39:07 $
+ *  last change: $Author: af $ $Date: 2002-09-12 09:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,10 +259,12 @@ Reference< XAccessibleContext > SAL_CALL SvxGraphCtrlAccessibleContext::getAcces
 
 sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::contains( const awt::Point& rPoint ) throw( RuntimeException )
 {
-    // no guard -> done in getBounds()
-    awt::Rectangle      aBounds( getBounds() );
-    return !((rPoint.X < aBounds.X) || (rPoint.X > (aBounds.X + aBounds.Width)) ||
-            (rPoint.Y < aBounds.Y) || (rPoint.Y > (aBounds.Y + aBounds.Height)));
+    // no guard -> done in getSize()
+    awt::Size aSize (getSize());
+    return (rPoint.X >= 0)
+        && (rPoint.X < aSize.Width)
+        && (rPoint.Y >= 0)
+        && (rPoint.Y < aSize.Height);
 }
 
 //-----------------------------------------------------------------------------
