@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
+ *  last change: $Author: dbo $ $Date: 2001-05-09 15:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
