@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-06 17:14:38 $
+ *  last change: $Author: sj $ $Date: 2001-11-13 11:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,9 +178,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
     Size    aFontSize( Size( 0, rFont.lfHeight ) );
 
-    aFont.SetName( UniString( (char*)rFont.lfFaceName, gsl_getSystemTextEncoding() ) );
     aFont.SetSize( aFontSize );
-
     CharSet eCharSet;
     switch ( rFont.lfCharSet )
     {
@@ -192,16 +190,23 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
             eCharSet = RTL_TEXTENCODING_SYMBOL;
         break;
 
+        case SHIFTJIS_CHARSET:
+            eCharSet = RTL_TEXTENCODING_SHIFT_JIS;
+        break;
+
+        case CHINESEBIG5_CHARSET:
+            eCharSet = RTL_TEXTENCODING_BIG5;
+        break;
+
         case OEM_CHARSET:
         case DEFAULT_CHARSET:
-        case SHIFTJIS_CHARSET:
         case HANGEUL_CHARSET:
-        case CHINESEBIG5_CHARSET:
         default:
             eCharSet = gsl_getSystemTextEncoding();
         break;
     }
     aFont.SetCharSet( eCharSet );
+    aFont.SetName( UniString( (char*)rFont.lfFaceName, eCharSet ) );
 
     FontFamily eFamily;
     switch ( rFont.lfPitchAndFamily & 0xf0 )
