@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket_decl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-24 10:49:53 $
+ *  last change: $Author: obo $ $Date: 2004-01-05 21:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,9 +215,9 @@ namespace osl
     protected:
         oslSocket m_handle;
     protected:
-        /** Creates a socket.
-            @param Family
+        /** Creates a socket. Note it's protected.
             @param Type
+            @param Family
             @param Protocol
         */
         inline Socket(oslSocketType Type,
@@ -277,12 +277,12 @@ namespace osl
         inline void SAL_CALL close();
 
         /** Retrieves the address of the local interface of this socket.
-            @return Addr [out] receives the address.
+            @param Addr [out] receives the address.
             @see osl_getLocalAddrOfSocket()
         */
         inline void SAL_CALL getLocalAddr( SocketAddr &Addr ) const;
 
-        /** Get the local port of the socket.
+        /** Get the local port of the socket. Usually used after bind().
             @return the port number or OSL_INVALID_PORT on errors.
         */
         inline sal_Int32    SAL_CALL getLocalPort() const;
@@ -344,7 +344,7 @@ namespace osl
             how the operation will block if the Socket has no pending OOB data.
 
             @return <code>sal_True</code> if OOB-request operations (recv with appropriate flags)
-            on the Socket will NOT block; <code>sal_True</code>if it would block or if
+            on the Socket will NOT block; <code>sal_False</code> if it would block or if
             an error occured.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
@@ -394,8 +394,9 @@ namespace osl
             <li><code>osl_Socket_OptionUseLoopback</code><br>
 
             <li><code>osl_Socket_OptionLinger</code><br>
-               (sal_Int32) Linger on close if unsent data is present.
-               0 = linger is off, > 0  = timeout in seconds.
+               (linger) Linger on close if unsent data is present.
+               linger has two members: l_onoff, l_linger
+               l_onoff = 0 is off, l_onoff > 0 and l_linger= timeout in seconds.
 
             <li><code>osl_Socket_OptionOOBinLine</code><br>
 
