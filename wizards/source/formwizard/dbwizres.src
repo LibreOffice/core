@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:54:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 21:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,10 +1323,10 @@ String RID_DB_FORM_WIZARD_START + 6
     Text[ russian ] = ": Âûáîğ òàáëèöû";
     Text[ dutch ] = ": tabel selecteren";
     Text[ french ] = " : Sélection de table";
-    Text[ spanish ] = ": Selección de tabla";
+    Text[ spanish ] = "Tabla o consulta";
     Text[ italian ] = ": Selezione tabella";
     Text[ danish ] = ": Tabeludvalg";
-    Text[ swedish ] = ": tabellurval";
+    Text[ swedish ] = "Tabeller eller sökningar";
     Text[ polish ] = ": Wybór tabeli";
     Text[ portuguese_brazilian ] = ": Tabellenauswahl";
     Text[ japanese ] = ": Ã°ÌŞÙ‚Ì‘I‘ğ";
@@ -1847,7 +1847,7 @@ String RID_DB_FORM_WIZARD_START + 25
     Text[ portuguese_brazilian ] = "Dokument ~ablegen";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğŠi”[";
     Text[ chinese_simplified ] = "´æÅÌÎÄµµ";
-    Text[ chinese_traditional ] = "«O¦s¤å¥ó(~A)";
+    Text[ chinese_traditional ] = "Àx¦s¤å¥ó(~A)";
     Text[ arabic ] = "~ÍİÙ ÇáãÓÊäÏ";
     Text[ dutch ] = "document ~opslaan";
     Text[ chinese_simplified ] = "´æÅÌÎÄµµ";
@@ -2025,11 +2025,11 @@ String RID_DB_FORM_WIZARD_START + 32
     Text[ greek ] = "Alignment";
     Text[ dutch ] = "Labels";
     Text[ french ] = "Étiquettes";
-    Text[ spanish ] = "Etiquetas";
+    Text[ spanish ] = "Orientación de los campos de etiquetas";
     Text[ finnish ] = "Alignment";
     Text[ italian ] = "Testo fisso";
     Text[ danish ] = "Alignment";
-    Text[ swedish ] = "Etiketter";
+    Text[ swedish ] = "Justering av etikettfält";
     Text[ polish ] = "Etykiety";
     Text[ portuguese_brazilian ] = "Alignment";
     Text[ japanese ] = "×ÍŞÙ‚ÌˆÊ’u";
@@ -2052,11 +2052,11 @@ String RID_DB_FORM_WIZARD_START + 33
     Text[ greek ] = "Align Labels on left Edge";
     Text[ dutch ] = "Labels op links uitlijnen";
     Text[ french ] = "Aligner les étiquettes à gauche";
-    Text[ spanish ] = "Ajustar a la izquierda los campos de etiquetas";
+    Text[ spanish ] = "Izquierda";
     Text[ finnish ] = "Align Labels on left Edge";
     Text[ italian ] = "Allinea il testo fisso a sinistra";
     Text[ danish ] = "Align Labels on left Edge";
-    Text[ swedish ] = "Vänsterjustera etikettfält";
+    Text[ swedish ] = "Vänsterjusterat";
     Text[ polish ] = "Wyrównaj pola etykiety do lewej";
     Text[ portuguese_brazilian ] = "Align Labels on left Edge";
     Text[ japanese ] = "×ÍŞÙÌ¨°ÙÄŞ‚ğ¶‘µ‚¦";
@@ -2079,11 +2079,11 @@ String RID_DB_FORM_WIZARD_START + 34
     Text[ greek ] = "Align Labels on right Edge";
     Text[ dutch ] = "Labels op rechts uitlijnen";
     Text[ french ] = "Aligner les étiquettes à droite";
-    Text[ spanish ] = "Ajustar a la derecha los campos de etiquetas";
+    Text[ spanish ] = "Derecha";
     Text[ finnish ] = "Align Labels on right Edge";
     Text[ italian ] = "Allinea il testo fisso a destra";
     Text[ danish ] = "Align Labels on right Edge";
-    Text[ swedish ] = "Högerjustera etikettfält";
+    Text[ swedish ] = "Högerjusterat";
     Text[ polish ] = "Wyrównaj pola etykiety do prawej";
     Text[ portuguese_brazilian ] = "Align Labels on right Edge";
     Text[ japanese ] = "×ÍŞÙÌ¨°ÙÄŞ‚ğ‰E‘µ‚¦";
@@ -2328,7 +2328,7 @@ String RID_DB_FORM_WIZARD_START + 47
     Text[ finnish ] = "Completion";
     Text[ italian ] = "Completamento";
     Text[ danish ] = "Completion";
-    Text[ swedish ] = "Completion";
+    Text[ swedish ] = "Färdigställa";
     Text[ polish ] = "Utwórz";
     Text[ portuguese_brazilian ] = "Completion";
     Text[ japanese ] = "Š®¬";
@@ -2345,7 +2345,7 @@ String RID_DB_FORM_WIZARD_START + 50
     Text = "Binärfeld-Darstellung";
     Text [ english ] = "Presentation of Binary Fields";
     Text [ english_us ] = "Display of binary fields";
-    Text[ language_user1 ] = "Groupbox";
+    Text[ language_user1 ] = "Überschrift einiger Dialog Controls";
     Text[ portuguese ] = "Mostrar campo binário";
     Text[ russian ] = "Ïğåäñòàâëåíèå áèíàğíîãî ïîëÿ";
     Text[ greek ] = "Presentation of Binary Fields";
@@ -2355,7 +2355,7 @@ String RID_DB_FORM_WIZARD_START + 50
     Text[ finnish ] = "Presentation of Binary Fields";
     Text[ italian ] = "Presentazione del campo binario";
     Text[ danish ] = "Presentation of Binary Fields";
-    Text[ swedish ] = "Presentation av binära fält";
+    Text[ swedish ] = "Visning av binära fält";
     Text[ polish ] = "Wygl¹d pola binarnego";
     Text[ portuguese_brazilian ] = "Presentation of Binary Fields";
     Text[ japanese ] = "2i–@Ì¨°ÙÄŞ‚Ì•\\¦";
@@ -2623,7 +2623,7 @@ String RID_DB_FORM_WIZARD_START + 71
     Text[ greek ] = "Writer 6.0 Template";
     Text[ dutch ] = "Writer 6.0 Sjabloon";
     Text[ french ] = "Writer 6.0 Modèle";
-    Text[ spanish ] = "Writer 6.0 Template";
+    Text[ spanish ] = "Writer 6.0 - Plantilla";
     Text[ finnish ] = "Writer 6.0 Template";
     Text[ italian ] = "Writer 6.0 Modello";
     Text[ danish ] = "Writer 6.0 Template";
@@ -6102,6 +6102,7 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ catalan ] = "No, I only wish to use the value for display purposes";
     Text[ finnish ] = "~Nein, ich möchte den Wert nur zum Anzeigen verwenden.";
 };
+
 
 
 
