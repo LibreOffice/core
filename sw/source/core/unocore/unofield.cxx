@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
+ *  last change: $Author: os $ $Date: 2001-11-21 13:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2377,7 +2377,7 @@ sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
     {
         rName.Erase( 0, RTL_CONSTASCII_LENGTH( "DataBase." ));
         USHORT nDotCount = rName.GetTokenCount('.');
-        if( 2 >= nDotCount )
+        if( 2 <= nDotCount )
         {
             rName.SearchAndReplace('.', DB_DELIM);
             rName.SetChar( rName.SearchBackward( '.' ), DB_DELIM );
