@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ String RID_STR_STANDARD
     Text [ ENGLISH ] = "Standard" ;
     Text [ portuguese ] = "Padr�o" ;
     Text [ english_us ] = "Default" ;
-    Text [ portuguese_brazilian ] = "Padr?o" ;
+    Text [ portuguese_brazilian ] = "Padr�o" ;
     Text [ swedish ] = "Standard" ;
     Text [ danish ] = "Standard" ;
     Text [ italian ] = "Standard" ;
@@ -84,11 +84,14 @@ String RID_STR_STANDARD
     Text[ greek ] = "����������";
     Text[ korean ] = "기본값";
     Text[ arabic ] = "�����";
-    Text[ turkish ] = "Standart";
+    Text[ turkish ] = "�ntan�ml�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Per defecte";
     Text[ finnish ] = "Oletus";
     Text[ thai ] = "ค่าเริ่มต้น";
+    Text[ czech ] = "Výchozí";
+    Text[ hebrew ] = "‮ברירת מחדל‬";
+    Text[ hindi ] = "अनुपस्थिति";
 };
 String RID_STR_PROPPAGE_DEFAULT
 {
@@ -96,7 +99,7 @@ String RID_STR_PROPPAGE_DEFAULT
     Text [ English ] = "Common" ;
     Text [ portuguese ] = "Geral" ;
     Text [ english_us ] = "General" ;
-    Text [ portuguese_brazilian ] = "Allgemein" ;
+    Text [ portuguese_brazilian ] = "Geral" ;
     Text [ swedish ] = "Allm�nt" ;
     Text [ danish ] = "Generelt" ;
     Text [ italian ] = "Generale" ;
@@ -116,6 +119,9 @@ String RID_STR_PROPPAGE_DEFAULT
     Text[ catalan ] = "General";
     Text[ finnish ] = "Yleiset";
     Text[ thai ] = "ทั่วไป";
+    Text[ czech ] = "Obecné";
+    Text[ hebrew ] = "‮כללי‬";
+    Text[ hindi ] = "सामान्य";
 };
 String RID_STR_PROPPAGE_DATA
 {
@@ -123,7 +129,7 @@ String RID_STR_PROPPAGE_DATA
     Text [ English ] = "Data" ;
     Text [ portuguese ] = "Dados" ;
     Text [ english_us ] = "Data" ;
-    Text [ portuguese_brazilian ] = "Daten" ;
+    Text [ portuguese_brazilian ] = "Dados" ;
     Text [ swedish ] = "Data" ;
     Text [ danish ] = "Data" ;
     Text [ italian ] = "Dati" ;
@@ -138,11 +144,14 @@ String RID_STR_PROPPAGE_DATA
     Text[ greek ] = "��������";
     Text[ korean ] = "데이터";
     Text[ arabic ] = "������";
-    Text[ turkish ] = "Veriler";
+    Text[ turkish ] = "Veri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Dades";
     Text[ finnish ] = "Tiedot";
     Text[ thai ] = "ข้อมูล";
+    Text[ czech ] = "Data";
+    Text[ hebrew ] = "Daten";
+    Text[ hindi ] = "ड़ॉटा";
 };
 String RID_STR_BOOL
 {
@@ -150,7 +159,7 @@ String RID_STR_BOOL
     Text [ English ] = "No;Yes" ;
     Text [ portuguese ] = "N�o;Sim" ;
     Text [ english_us ] = "No;Yes" ;
-    Text [ portuguese_brazilian ] = "Nein;Ja" ;
+    Text [ portuguese_brazilian ] = "N�o;Sim" ;
     Text [ swedish ] = "Nej;Ja" ;
     Text [ danish ] = "Nej;Ja" ;
     Text [ italian ] = "No;S�" ;
@@ -170,11 +179,26 @@ String RID_STR_BOOL
     Text[ catalan ] = "No;S�";
     Text[ finnish ] = "Ei;Kyll�";
     Text[ thai ] = "ไม่ใช่;ใช่";
+    Text[ czech ] = "Ne;Ano";
+    Text[ hebrew ] = "Nein;Ja";
+    Text[ hindi ] = "नहीं;हाँ";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18.2.1.26.3  2003/04/29 08:35:45  gh
+ *  final merge for Beta2
+ *
+ *  Revision 1.18.2.1.26.2  2003/04/16 18:53:50  gh
+ *  RESYNC: (1.18.2.1-1.19); FILE MERGED
+ *
+ *  Revision 1.18.2.1.26.1  2003/04/14 14:46:46  gh
+ *  merging all languages
+ *
+ *  Revision 1.19  2003/03/25 16:03:58  hr
+ *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+ *
  *  Revision 1.18.2.1  2003/02/22 16:38:34  hr
  *  INTEGRATION: CWS mergep (1.18.20); FILE MERGED
  *  2003/02/22 10:35:08 nf 1.18.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
@@ -243,6 +267,16 @@ String RID_STR_BOOL
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
+
+
+
+
+
+
+
+
+
+
 
 
 
