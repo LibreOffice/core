@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:36:41 $
+#   last change: $Author: hr $ $Date: 2004-05-10 14:23:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,14 +80,14 @@ UCPHIER_MAJOR=1
 
 SLOFILES=\
     $(SLO)$/hierarchyservices.obj		\
-    $(SLO)$/hierarchydata.obj		\
+    $(SLO)$/hierarchydata.obj           \
     $(SLO)$/hierarchyprovider.obj		\
     $(SLO)$/hierarchycontent.obj		\
     $(SLO)$/hierarchycontentcaps.obj	\
     $(SLO)$/hierarchydatasupplier.obj	\
-        $(SLO)$/dynamicresultset.obj            \
-        $(SLO)$/hierarchydatasource.obj         \
-        $(SLO)$/hierarchyuri.obj
+    $(SLO)$/dynamicresultset.obj        \
+    $(SLO)$/hierarchydatasource.obj     \
+    $(SLO)$/hierarchyuri.obj            
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
