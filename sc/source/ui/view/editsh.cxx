@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-23 14:13:30 $
+ *  last change: $Author: nn $ $Date: 2002-11-12 16:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ TYPEINIT1( ScEditShell, SfxShell );
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
 {
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_EDIT) );
+    SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_EDIT) );
 }
 
 

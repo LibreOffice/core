@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-23 14:52:12 $
+ *  last change: $Author: nn $ $Date: 2002-11-12 16:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,6 +1146,7 @@
 #define RID_BMP_REFBTN2_H       (SC_RESOURCE_START+56)
 #define RID_IMAGELIST_H_NAVCONT (SC_RESOURCE_START+57)
 #define RID_OUTLINEBITMAPS_H    (SC_RESOURCE_START+58)
+#define RID_OBJECTMENU_EDIT     (SC_RESOURCE_START+59)
 
 #define STR_START               (SC_RESOURCE_START+100)
 #define STR_ROWHEIGHT           (STR_START)
