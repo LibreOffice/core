@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextmodel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:13:36 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ namespace frm
                                     m_xReferenceDevice;
         ::com::sun::star::uno::Any  m_aTabStop;
         ::com::sun::star::uno::Any  m_aBackgroundColor;
+        ::com::sun::star::uno::Any  m_aBorderColor;
         ::rtl::OUString             m_sDefaultControl;
         ::rtl::OUString             m_sHelpText;
         ::rtl::OUString             m_sHelpURL;
@@ -159,6 +160,7 @@ namespace frm
         sal_Bool                    m_bPrintable;
         sal_Bool                    m_bReallyActAsRichText; // despite the class name, the RichTextControl later on
                                                             // will create "ordinary" text peers depending on this property
+        sal_Bool                    m_bHideInactiveSelection;
         // </properties>
 
         // <properties_for_awt_edit_compatibility>
