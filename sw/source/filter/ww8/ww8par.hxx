@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:36:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,6 @@ private:
     WW8TabDesc* mpTableDesc;
     int mnInTable;
     USHORT mnAktColl;
-    USHORT mnParaNumber;
     sal_Unicode mcSymbol;
     bool mbIgnoreText;
     bool mbSymbol;
@@ -490,6 +489,7 @@ private:
     bool mbPgSecBreak;
     bool mbWasParaEnd;
     bool mbHasBorder;
+    bool mbFirstPara;
 public:
     WW8ReaderSave(SwWW8ImplReader* pRdr, WW8_CP nStart=-1);
     void Restore(SwWW8ImplReader* pRdr);
@@ -937,6 +937,14 @@ private:
     */
     std::stack<rtl_TextEncoding> maFontSrcCharSets;
 
+    /*
+     Winword numbering gets imported as SwNumRules, there is a problem that
+     winword can have multiple outline numberings, only one gets chosen as
+     the writer outline numbering rule. The one that gets chosen is set here
+     as mpChosenOutlineNumRule
+    */
+    SwNumRule *mpChosenOutlineNumRule;
+
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
@@ -1018,7 +1026,6 @@ private:
     USHORT nProgress;           // %-Angabe fuer Progressbar
     USHORT nColls;              // Groesse des Arrays
     USHORT nAktColl;            // gemaess WW-Zaehlung
-    USHORT nParaNumber;         // paragraph number
     USHORT nDrawTxbx;           // Nummer der Textbox ( noetig ?? )
     USHORT nFldNum;             // laufende Nummer dafuer
     USHORT nLFOPosition;
@@ -1089,10 +1096,13 @@ private:
     bool bNoLnNumYet;       // no Line Numbering has been activated yet (we import
                             //     the very 1st Line Numbering and ignore the rest)
 
+    bool bFirstPara;        // first paragraph?
+
     bool bParaAutoBefore;
     bool bParaAutoAfter;
 
     bool bDropCap;
+    int nDropCap;
 
 //---------------------------------------------
 
@@ -1192,6 +1202,8 @@ private:
         WW8_FSPA *pF );
 
     bool IsDropCap();
+    bool IsListOrDropcap() { return (!pAktItemSet  || bDropCap); };
+
     WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
         const WW8_TablePos *pTabPos);
     bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
@@ -1310,7 +1322,6 @@ private:
     SdrObject* CreateContactObject(SwFrmFmt* pFlyFmt);
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, bool bOrgObjectWasReplace);
-    long GetSafePos(long nPos);
     bool MiserableRTLGraphicsHack(long &rLeft, long nWidth,
         SwHoriOrient eHoriOri, SwRelationOrient eHoriRel);
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
@@ -1378,6 +1389,10 @@ private:
 
     void SetOutLineStyles();
 
+    bool SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper);
+    bool SetUpperSpacing(SwPaM &pMyPam, int nSpace);
+    bool SetLowerSpacing(SwPaM &rMyPam, int nSpace);
+
     bool IsInlineEscherHack() const
         {return !maFieldStack.empty() ? maFieldStack.back().mnFieldId == 95 : false; };
 
@@ -1429,6 +1444,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_UL(               USHORT nId, const BYTE*, short nLen );
     void Read_ParaAutoBefore(USHORT , const BYTE *pData, short nLen);
     void Read_ParaAutoAfter(USHORT , const BYTE *pData, short nLen);
+    void Read_DontAddEqual(USHORT , const BYTE *pData, short nLen);
     void Read_LineSpace(        USHORT, const BYTE*, short nLen );
     void Read_Justify(USHORT, const BYTE*, short nLen);
     bool IsRightToLeft();
