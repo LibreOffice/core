@@ -2,9 +2,9 @@
  *
  *  $RCSfile: visobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:51:36 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     return aResult;
 }
 
-sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapMode( sal_Int64 nAspect )
+sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
@@ -134,46 +134,44 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapMode( sal_Int64 nAspect )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    sal_Int32 nResult = m_pDocHolder->GetMapMode( nAspect );
-    if ( !nResult )
+    sal_Int32 nResult = m_pDocHolder->GetMapUnit( nAspect );
+    if ( nResult < 0  )
         throw uno::Exception(); // TODO:
 
     return nResult;
 
 }
 
-
-#if 0
-// Probably will be removed!!!
-uno::Any SAL_CALL OCommonEmbeddedObject::getVisualCache( sal_Int64 nAspect )
-        throw ( uno::Exception,
+embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
+        throw ( lang::IllegalArgumentException,
+                embed::WrongStateException,
+                uno::Exception,
                 uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
+    // TODO: if object is in loaded state it should switch itself to the running state
     if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-    OSL_ENSURE( m_xDocument.is(), "Running or Active object has no model!\n" );
+    OSL_ENSURE( m_pDocHolder->GetComponent().is(), "Running or Active object has no component!\n" );
 
-    if ( m_xDocument.is() )
-    {
-        // TODO: return for the aspect of the document
-        uno::Reference< datatransfer::XTransferable > xTransferable( m_xDocument, uno::UNO_QUERY );
-        if ( xTransferable.is() )
-        {
-            datatransfer::DataFlavor aDataFlavor(
-                    ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"" ),
-                    ::rtl::OUString::createFromAscii( "Image EMF" ),
-                    ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+    // TODO: return for the aspect of the document
+    embed::VisualRepresentation aVisualRepresentation;
+    uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    if ( !xTransferable.is() )
+        throw uno::RuntimeException();
 
-            return xTransferable->getTransferData( aDataFlavor );
-        }
-    }
+    datatransfer::DataFlavor aDataFlavor(
+            ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
+            ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
+            ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
-    return uno::makeAny( uno::Sequence< sal_Int8 >() );
+    aVisualRepresentation.Data = xTransferable->getTransferData( aDataFlavor );
+    aVisualRepresentation.Flavor = aDataFlavor;
+
+    return aVisualRepresentation;
 }
-#endif
 
