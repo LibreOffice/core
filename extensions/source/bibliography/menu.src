@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:43:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ Menu RID_MAIN_MENU
                 Text[ czech ] = "Zavřít";
                         Text[ hebrew ] = "‮סגירה‬";
                         Text[ hindi ] = "~बन्द करो";
+                        Text[ slovak ] = "~Zavrieť";
                     };
             MenuItem
             {
@@ -192,6 +193,7 @@ Menu RID_MAIN_MENU
                         Text[ czech ] = "Odeslat";
                         Text[ hebrew ] = "‮שליחה‬";
                         Text[ hindi ] = "~भेजो";
+                        Text[ slovak ] = "O~doslať";
                     };
             MenuItem
             {
@@ -302,6 +304,7 @@ Menu RID_MAIN_MENU
                         Text[ czech ] = "Uspořádání sloupců...";
                         Text[ hebrew ] = "~Spaltenzuordnung...";
                         Text[ hindi ] = "~स्तंभ को क्रम में रखना...";
+                        Text[ slovak ] = "Usporia~danie stĺpcov...";
                     };
             MenuItem
             {
@@ -334,6 +337,7 @@ Menu RID_MAIN_MENU
                         Text[ czech ] = "Zdroj dat...";
                         Text[ hebrew ] = "~Datenquelle auswählen...";
                         Text[ hindi ] = "~ड़ॉटा मूल...";
+                        Text[ slovak ] = "Z~droj dát...";
                     };
             MenuItem
             {
@@ -366,6 +370,7 @@ Menu RID_MAIN_MENU
                         Text[ czech ] = "Smazat záznam";
                         Text[ hebrew ] = "~Datensatz löschen";
                         Text[ hindi ] = "Delete ~Record";
+                        Text[ slovak ] = "Zmazať ~záznam";
                     };
             };
         };
@@ -384,6 +389,7 @@ Menu RID_MAIN_MENU
             Text[ czech ] = "Ú~pravy";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
+            Text[ slovak ] = "Úp~ravy";
         };
         MenuItem
         {
@@ -427,6 +433,7 @@ Menu RID_MAIN_MENU
                         Text[ czech ] = "Záznam";
                         Text[ hebrew ] = "‮רשומה‬";
                         Text[ hindi ] = "~Record";
+                        Text[ slovak ] = "~Záznam";
                     };
 
                 };
@@ -456,6 +463,7 @@ Menu RID_MAIN_MENU
             Text[ czech ] = "Vložit";
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~Insert";
+            Text[ slovak ] = "Vlož~iť";
         };
     MenuItem
     {
@@ -509,6 +517,7 @@ Menu RID_MAIN_MENU
                         Text[ czech ] = "Filtr...";
                         Text[ hebrew ] = "‮סינון...‬";
                         Text[ hindi ] = "~फिल्टर...";
+                        Text[ slovak ] = "~Filter...";
                     };
              MenuItem
             {
@@ -541,11 +550,14 @@ Menu RID_MAIN_MENU
             Text[ czech ] = "Nástroje";
             Text[ hebrew ] = "‮כלים‬";
             Text[ hindi ] = "~औज़ार";
+            Text[ slovak ] = "Nás~troje";
         };
     ITEM_WINDOW_MENU
     ITEM_HELP_MENU
     };
 };
+
+
 
 
 
