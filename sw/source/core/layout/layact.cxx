@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: od $ $Date: 2002-10-17 14:10:00 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
+#ifndef _SFX_PROGRESS_HXX //autogen
+#include <sfx2/progress.hxx>
+#endif
+
 #include "swmodule.hxx"
 #include "fmtline.hxx"
 #include "tabfrm.hxx"
@@ -191,7 +195,10 @@ static void BreakPoint()
 #define RESCHEDULE \
     { \
         if ( IsReschedule() )  \
+        { \
+            if (pProgress) pProgress->Reschedule(); \
             ::RescheduleProgress( pImp->GetShell()->GetDoc()->GetDocShell() ); \
+        } \
     }
 
 inline ULONG Ticks()
@@ -534,7 +541,8 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     nCheckPageNum( USHRT_MAX ),
     nStartTicks( Ticks() ),
     nInputType( 0 ),
-    nEndPage( USHRT_MAX )
+    nEndPage( USHRT_MAX ),
+    pProgress(NULL)
 {
     bPaintExtraData = ::IsExtraData( pImp->GetShell()->GetDoc() );
     bPaint = bComplete = bWaitAllowed = bCheckPages = TRUE;
@@ -725,7 +733,7 @@ void SwLayAction::InternalAction()
     SwDoc* pDoc = pRoot->GetFmt()->GetDoc();
     BOOL bNoLoop = pPage ? SwLayouter::StartLoopControl( pDoc, pPage ) : NULL;
     USHORT nPercentPageNum = 0;
-    while ( (pPage && !IsInput()) || nCheckPageNum != USHRT_MAX )
+    while ( (pPage && !IsInterrupt()) || nCheckPageNum != USHRT_MAX )
     {
         if ( !pPage && nCheckPageNum != USHRT_MAX &&
              (!pPage || pPage->GetPhyPageNum() >= nCheckPageNum) )
@@ -778,7 +786,7 @@ void SwLayAction::InternalAction()
         {
             pRoot->DeleteEmptySct();
             XCHECKPAGE;
-            if ( !IsInput() &&
+            if ( !IsInterrupt() &&
                  (pRoot->IsSuperfluous() || pRoot->IsAssertFlyPages()) )
             {
                 if ( pRoot->IsAssertFlyPages() )
@@ -821,11 +829,11 @@ void SwLayAction::InternalAction()
             //Formatierung des Bodys etwas aendert wird die Body-Formatierung
             //unterbrochen und wieder bei den Flys angefangen.
 
-            while ( !IsInput() && !IsNextCycle() &&
+            while ( !IsInterrupt() && !IsNextCycle() &&
                     ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
             {
                 USHORT nLoop = 0; // Loop control
-                while ( !IsInput() && IS_INVAFLY && IS_FLYS )
+                while ( !IsInterrupt() && IS_INVAFLY && IS_FLYS )
                 {
                     XCHECKPAGE;
                     if ( pPage->IsInvalidFlyLayout() )
@@ -853,7 +861,7 @@ void SwLayAction::InternalAction()
                     pPage->ValidateFlyLayout();
                     pPage->ValidateFlyCntnt();
                 }
-                while ( !IsInput() && !IsNextCycle() && pPage->IsInvalid() &&
+                while ( !IsInterrupt() && !IsNextCycle() && pPage->IsInvalid() &&
                         (!IS_FLYS || (IS_FLYS && !IS_INVAFLY)) )
                 {
                     PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
@@ -892,7 +900,7 @@ void SwLayAction::InternalAction()
                 pPage->ValidateFlyLayout();
                 pPage->ValidateFlyCntnt();
             }
-            if ( !IsInput() )
+            if ( !IsInterrupt() )
             {
                 SetNextCycle( FALSE );
 
@@ -935,7 +943,7 @@ void SwLayAction::InternalAction()
             }
             CheckIdleEnd();
         }
-        if ( !pPage && !IsInput() &&
+        if ( !pPage && !IsInterrupt() &&
              (pRoot->IsSuperfluous() || pRoot->IsAssertFlyPages()) )
         {
             if ( pRoot->IsAssertFlyPages() )
@@ -960,7 +968,7 @@ void SwLayAction::InternalAction()
                 pPage = (SwPageFrm*)pPage->GetNext();
         }
     }
-    if ( IsInput() && pPage )
+    if ( IsInterrupt() && pPage )
     {
         //Wenn ein Input anliegt wollen wir keinen Inhalt mehr Formatieren,
         //Das Layout muessen wir aber schon in Ordnung bringen.
@@ -998,6 +1006,7 @@ void SwLayAction::InternalAction()
             }
             pPg = (SwPageFrm*)pPg->GetNext();
         }
+
     }
     pOptTab = 0;
     if( bNoLoop )
@@ -2035,7 +2044,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             if ( (!pTab || (pTab && !bInValid)) )
             {
                 CheckIdleEnd();
-                if ( IsInput() || (!bBrowse && pPage->IsInvalidLayout()) ||
+                if ( IsInterrupt() || (!bBrowse && pPage->IsInvalidLayout()) ||
                      (IS_FLYS && IS_INVAFLY) )
                     return FALSE;
             }
@@ -2111,7 +2120,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             if ( IsIdle() )
             {
                 CheckIdleEnd();
-                if ( IsInput() )
+                if ( IsInterrupt() )
                     return FALSE;
             }
             if ( bBrowse && !IsIdle() && !IsCalcLayout() && !IsComplete() &&
@@ -2134,7 +2143,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
         }
     }
     CheckWaitCrsr();
-    return !IsInput();
+    return !IsInterrupt();
 }
 /*************************************************************************
 |*
@@ -2331,13 +2340,13 @@ BOOL SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
         if ( bOneProcessed && !pFly->IsFlyInCntFrm() )
         {
             CheckIdleEnd();
-            if ( IsInput() )
+            if ( IsInterrupt() )
                 return FALSE;
         }
         pCntnt = pCntnt->GetNextCntntFrm();
     }
     CheckWaitCrsr();
-    return !IsInput();
+    return !IsInterrupt();
 }
 
 /*************************************************************************
@@ -2401,6 +2410,16 @@ BOOL SwLayAction::__FormatFlyCntnt( const SwCntntFrm *pCntnt )
         }
     }
     return bRet;
+}
+
+BOOL SwLayAction::IsStopPrt() const
+{
+    BOOL bResult = FALSE;
+
+    if (pImp != NULL && pProgress != NULL)
+        bResult = pImp->IsStopPrt();
+
+    return bResult;
 }
 
 /*************************************************************************
@@ -2810,7 +2829,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             } while ( pSh != pImp->GetShell() );
         }
 
-        if ( !aAction.IsInput() )
+        if ( !aAction.IsInterrupt() )
         {
             if( !FormatSpelling( FALSE ))
                 CollectAutoCmplWords( FALSE );
