@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.16 $
+ #  $Revision: 1.17 $
  #
- #  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
+ #  last change: $Author: fs $ $Date: 2001-05-29 10:02:53 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -97,6 +97,8 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/generalpage.obj	\
+        $(SLO)$/tablespage.obj	\
         $(SLO)$/missingdocdlg.obj	\
         $(SLO)$/doclinkdialog.obj	\
         $(SLO)$/AdabasStat.obj	\
@@ -122,7 +124,8 @@ SLOFILES=	\
         $(SLO)$/dbfindex.obj
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/missingdocdlg.obj	\
+        $(SLO)$/generalpage.obj	\
+        $(SLO)$/tablespage.obj	\
         $(SLO)$/doclinkdialog.obj	\
         $(SLO)$/AdabasStat.obj	\
         $(SLO)$/AdabasPage.obj	\
@@ -148,6 +151,9 @@ EXCEPTIONSFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.16  2001/05/23 14:16:42  oj
+ #	#87149# new helpids
+ #	
  #	Revision 1.15  2001/04/26 11:40:21  fs
  #	file is alive, again - added support for data source associated bookmarks
  #	
