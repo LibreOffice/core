@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2002-06-11 11:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,14 +185,33 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
+enum NamespaceStatus
+{
+    NS_ROOT,
+    NS_FREE,
+    NS_COM,
+    NS_COM_SUN,
+    NS_COM_SUN_STAR,
+    NS_UNO_CLASS
+};
+
 // Wrapper fuer eine Uno-Klasse
 class SbUnoClass: public SbxObject
 {
-    const Reference< XIdlClass > m_xClass;
+    const Reference< XIdlClass >    m_xClass;
+    NamespaceStatus                 meNamespaceStatus;
+
 public:
     TYPEINFO();
+    SbUnoClass( const String& aName, NamespaceStatus eNamespaceStatus )
+        : SbxObject( aName )
+        , meNamespaceStatus( eNamespaceStatus )
+    {}
     SbUnoClass( const String& aName, const Reference< XIdlClass >& xClass_ )
-        : SbxObject( aName ), m_xClass( xClass_ ) {}
+        : SbxObject( aName )
+        , m_xClass( xClass_ )
+        , meNamespaceStatus( NS_UNO_CLASS )
+    {}
     //~SbUnoClass();
 
     // Find ueberladen, um Elemente on Demand anzulegen

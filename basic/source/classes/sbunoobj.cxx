@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ab $ $Date: 2002-04-29 11:36:30 $
+ *  last change: $Author: ab $ $Date: 2002-06-11 11:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,11 @@ typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 static String ID_DBG_SUPPORTEDINTERFACES( RTL_CONSTASCII_USTRINGPARAM("Dbg_SupportedInterfaces") );
 static String ID_DBG_PROPERTIES( RTL_CONSTASCII_USTRINGPARAM("Dbg_Properties") );
 static String ID_DBG_METHODS( RTL_CONSTASCII_USTRINGPARAM("Dbg_Methods") );
+
+static String ID_NAMESPACES( RTL_CONSTASCII_USTRINGPARAM("Namespaces") );
+static String ID_NAMESPACE_COM( RTL_CONSTASCII_USTRINGPARAM("com") );
+static String ID_NAMESPACE_SUN( RTL_CONSTASCII_USTRINGPARAM("sun") );
+static String ID_NAMESPACE_STAR( RTL_CONSTASCII_USTRINGPARAM("star") );
 
 static String aIllegalArgumentExceptionName
     ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.IllegalArgumentException" ) );
@@ -2223,8 +2228,21 @@ SbxVariable* findUnoClass( const String& rName )
     // Klasse suchen
     Reference< XIdlClass > xClass = xCoreReflection->forName( rName );
 
-    // #72382 Klasse wird jetzt immer angelegt, da Module unbekannt sind
-    SbUnoClass* pUnoClass = new SbUnoClass( rName, xClass );
+    // #95264: Allow start only with explicit namespaces object or "com"
+    // OLD: #72382 Klasse wird jetzt immer angelegt, da Module unbekannt sind
+    SbUnoClass* pUnoClass = NULL;
+    if( xClass.is() )
+    {
+        pUnoClass = new SbUnoClass( rName, xClass );
+    }
+    else if( rName.EqualsIgnoreCaseAscii( ID_NAMESPACES ) )
+    {
+        pUnoClass = new SbUnoClass( rName, NS_ROOT );
+    }
+    else if( rName.EqualsIgnoreCaseAscii( ID_NAMESPACE_COM ) )
+    {
+        pUnoClass = new SbUnoClass( rName, NS_COM );
+    }
     return pUnoClass;
 }
 
@@ -2273,8 +2291,17 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
         {
             // Vollqualifizierten Namen erweitern
             String aNewName = GetName();
-            aNewName.AppendAscii( "." );
-            aNewName += rName;
+
+            // #95264: Special code for start with namespaces object
+            if( meNamespaceStatus == NS_ROOT )
+            {
+                aNewName = rName;
+            }
+            else
+            {
+                aNewName.AppendAscii( "." );
+                aNewName += rName;
+            }
 
             // CoreReflection holen
             Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
@@ -2317,11 +2344,37 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                 // Sonst wieder als Klasse annehmen
                 if( !pRes )
                 {
+                    SbUnoClass* pNewClass = NULL;
+                    if( meNamespaceStatus == NS_ROOT ||
+                        meNamespaceStatus == NS_FREE ||
+                        meNamespaceStatus == NS_COM_SUN_STAR )
+                    {
+                        pNewClass = new SbUnoClass( aNewName, NS_FREE );
+                    }
+                    else if( meNamespaceStatus == NS_COM )
+                    {
+                        if( rName.EqualsIgnoreCaseAscii( ID_NAMESPACE_SUN ) )
+                            pNewClass = new SbUnoClass( aNewName, NS_COM_SUN );
+                    }
+                    else if( meNamespaceStatus == NS_COM_SUN )
+                    {
+                        if( rName.EqualsIgnoreCaseAscii( ID_NAMESPACE_STAR ) )
+                            pNewClass = new SbUnoClass( aNewName, NS_COM_SUN_STAR );
+                    }
+
+                    if( pNewClass )
+                    {
+                        Reference< XIdlClass > xClass;
+                        pRes = new SbxVariable( SbxVARIANT );
+                        SbxObjectRef xWrapper = (SbxObject*)pNewClass;
+                        pRes->PutObject( xWrapper );
+                    }
+
                     // neue Klasse erzeugen
-                    Reference< XIdlClass > xClass;
-                    pRes = new SbxVariable( SbxVARIANT );
-                    SbxObjectRef xWrapper = (SbxObject*)new SbUnoClass( aNewName, xClass );
-                    pRes->PutObject( xWrapper );
+                    // Reference< XIdlClass > xClass;
+                    // pRes = new SbxVariable( SbxVARIANT );
+                    // SbxObjectRef xWrapper = (SbxObject*)new SbUnoClass( aNewName, xClass );
+                    // pRes->PutObject( xWrapper );
                 }
             }
         }
