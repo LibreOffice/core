@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:55:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 
 #include "oemjob.hxx"
 #include "evaluation.hxx"
+#include "firststart.hxx"
 
 
 using namespace rtl;
@@ -96,6 +97,7 @@ static const char* pServices[] =
 {
     SOEvaluation::serviceName,
     OEMPreloadJob::serviceName,
+    FirstStart::serviceName,
     NULL
 };
 
@@ -103,6 +105,7 @@ static const char* pImplementations[] =
 {
     SOEvaluation::implementationName,
     OEMPreloadJob::implementationName,
+    FirstStart::implementationName,
     NULL
 };
 
@@ -112,6 +115,7 @@ static const fProvider pInstanceProviders[] =
 {
     SOEvaluation::CreateInstance,
     OEMPreloadJob::CreateInstance,
+    FirstStart::CreateInstance,
     NULL
 };
 
@@ -120,6 +124,7 @@ static const char** pSupportedServices[] =
 {
     SOEvaluation::interfaces,
     OEMPreloadJob::interfaces,
+    FirstStart::interfaces,
     NULL
 };
 
