@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2xcd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:40:14 $
+ *  last change: $Author: as $ $Date: 2001-07-06 13:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
@@ -150,13 +154,12 @@ using namespace ::framework ;
                         - use own formated string for all non localized values
                         - seperate "Installed" flag for filters
                     4)  set right values for "Order" property of filters
-
-                draft)  i ) - support "HANDLER"             => #ifdef DRAFT_I
-                        ii) - recover old filter names      => #ifdef DRAFT_II
+                    5)  support for ContentHandler
+              draft 6)  reactivate old filter names
+          ??? draft 7)  split xml into standard/optional => use DRAFT_SPLIT_VERSION till this version is well known!
  */
+#define DRAFT_SPLIT_VERSION             7
 
-#define ARGUMENT_FILENAME_STANDARD      DECLARE_ASCII("-fis=")          // argument for file name of standard filters       <filename in system notation>
-#define ARGUMENT_FILENAME_ADDITIONAL    DECLARE_ASCII("-fia=")          // argument for file name of additional filters     <filename in system notation>
 #define ARGUMENT_PACKAGE_STANDARD       DECLARE_ASCII("-pas=")          // argument for package name of standard filters
 #define ARGUMENT_PACKAGE_ADDITIONAL     DECLARE_ASCII("-paa=")          // argument for package name of additional filters
 #define ARGUMENT_WRITEABLE              DECLARE_ASCII("-wri=")          // argument for "writeable"                         [true|false]
@@ -169,12 +172,16 @@ using namespace ::framework ;
 #define WRITEABLE_ON                    DECLARE_ASCII("true" )
 #define WRITEABLE_OFF                   DECLARE_ASCII("false")
 
-#define MINARGUMENTCOUNT                7                               // no optional arguments allowed yet!
+#define MINARGUMENTCOUNT                5                               // no optional arguments allowed yet!
 
 #define LISTFILE_STANDARDTYPES          "typelist_standard.txt"
 #define LISTFILE_ADDITIONALTYPES        "typelist_additional.txt"
 #define LISTFILE_STANDARDFILTER         "filterlist_standard.txt"
 #define LISTFILE_ADDITIONALFILTER       "filterlist_additional.txt"
+#define SCPFILE_STANDARD                "scp_standard.txt"
+#define SCPFILE_ADDITIONAL              "scp_additional.txt"
+
+#define CFG_PATH_SEPERATOR              DECLARE_ASCII("/")
 
 //_________________________________________________________________________________________________________________
 //  declarations
@@ -186,12 +193,14 @@ struct AppMember
         FilterCache*                pFilterCache                ; // pointer to configuration
         StringHash                  aOldFilterNamesHash         ; // converter tabel to restaurate old filter names
         EFilterPackage              ePackage                    ; // specify which package should be used => specify using of file name and buffer too!
-        ::rtl::OUString             sFileNameStandard           ; // file name of our standard filter cfg
-        ::rtl::OUString             sFileNameAdditional         ; // file name of our additional filter cfg
+//        ::rtl::OUString             sFileNameStandard           ; // file name of our standard filter cfg
+//        ::rtl::OUString             sFileNameAdditional         ; // file name of our additional filter cfg
         ::rtl::OUString             sPackageStandard            ; // package name of our standard filter cfg
         ::rtl::OUString             sPackageAdditional          ; // package name of our additional filter cfg
         ::rtl::OUStringBuffer       sBufferStandard             ; // buffer of our standard filter cfg
         ::rtl::OUStringBuffer       sBufferAdditional           ; // buffer of our standard filter cfg
+        ::rtl::OUStringBuffer       sNew2OldSCPStandard         ; // setup script to convert new to old filternames (standard filter)
+        ::rtl::OUStringBuffer       sNew2OldSCPAdditional       ; // setup script to convert new to old filternames (additional filter)
         ::rtl::OUStringBuffer       sStandardFilterList         ;
         ::rtl::OUStringBuffer       sAdditionalFilterList       ;
         ::rtl::OUStringBuffer       sStandardTypeList           ;
@@ -266,10 +275,13 @@ class XCDGenerator : public Application
                                                                             const   ::rtl::OUString&                        sFilterName                         ,
                                                                                     EFilterPackage&                         ePackage                            ,
                                                                                     sal_Int32&                              nOrder                              ); // classify filter as STANDARD or ADDITIONAL filter, set order of standard filter too
-        static ::rtl::OUString  impl_filterSpecialSigns                 (   const   ::rtl::OUString&                        sValue                              ); // encode strings for xml
+        static ::rtl::OUString  impl_encodeSpecialSigns                 (   const   ::rtl::OUString&                        sValue                              ); // encode strings for xml
         static sal_Unicode      impl_defineSeperator                    (   const   ::framework::StringList&                lList                               ); // search seperator for lists
         static void             impl_initFilterHashNew2Old              (           StringHash&                             aHash                               ); // initialize converter table to restaurate old filter names
         static void             impl_orderAlphabetical                  (           css::uno::Sequence< ::rtl::OUString >&  lList                               ); // sort stringlist of internal type-, filter- ... names in alphabetical order to generate xcd files everytime in the same way
+        static sal_Bool         impl_isUsAsciiAlphaDigit                (           sal_Unicode                             c                                   ,
+                                                                                    sal_Bool                                bDigitAllowed = sal_True            );
+        static ::rtl::OUString  impl_encodeSetName                      (   const   ::rtl::OUString&                        rSource                             );
 
     //*************************************************************************************************************
     private:
@@ -287,18 +299,21 @@ XCDGenerator gGenerator;
 void XCDGenerator::Main()
 {
     // Must be :-)
-    impl_printCopyright();
+//    impl_printCopyright();
 
     // Init global servicemanager and set it.
     // It's neccessary for other services ... e.g. configuration.
     ServiceManager aManager;
     ::comphelper::setProcessServiceFactory( aManager.getGlobalUNOServiceManager() );
+    ::utl::setProcessServiceFactory      ( aManager.getGlobalUNOServiceManager() );
+
+    ::rtl::OUString _s = impl_encodeSetName( DECLARE_ASCII("Q&A") );
 
     // Get optional commands from command line.
     impl_parseCommandLine( m_aData );
 
     // initialize converter table to match new to old filter names!
-    if( m_aData.nVersionOutput >= 3 )
+    if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
     {
         XCDGenerator::impl_initFilterHashNew2Old( m_aData.aOldFilterNamesHash );
     }
@@ -307,7 +322,7 @@ void XCDGenerator::Main()
     // Attention: Please use it for a full fat office installation only!!
     //            We need an installation with ALL filters.
     // Member m_pData is used in some impl-methods directly ...
-    m_aData.pFilterCache = new FilterCache( m_aData.nVersionInput );
+    m_aData.pFilterCache = new FilterCache( m_aData.nVersionInput, CONFIG_MODE_ALL_LOCALES );
 
     // Get some statistic informations of current filled filter cache ... (e.g. count of current activae filters)
     // because we need it to check if all filters are converted and written to disk.
@@ -399,7 +414,7 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
     while( nArgument<nCount )
     {
         aInfo.getCommandArg( nArgument, sArgument );
-
+/*OBSOLETE
         //_____________________________________________________________________________________________________
         // look for "-fis=..."
         if( sArgument.compareTo( ARGUMENT_FILENAME_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
@@ -416,6 +431,7 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
             ++nMinCount;
         }
         else
+*/
         //_____________________________________________________________________________________________________
         // look for "-pas=..."
         if( sArgument.compareTo( ARGUMENT_PACKAGE_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
@@ -501,7 +517,7 @@ void XCDGenerator::impl_generateXCD()
     m_aData.sBufferStandard.appendAscii     ( "\" cfg:package=\"org.openoffice.Office\" xml:lang=\"en-US\" xmlns:schema=\"http://openoffice.org/2000/registry/schema/description\" xmlns:default=\"http://openoffice.org/2000/registry/schema/default\" xmlns:cfg=\"http://openoffice.org/2000/registry/instance\">\n"     );
     m_aData.sBufferStandard.appendAscii     ( "\t<schema:templates>\n"                                                                                                                                                                                                                                                     );
 
-    if( m_aData.nVersionOutput >= 4 )
+    if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
     {
         m_aData.sBufferAdditional.appendAscii   ( "\n<!-- PLEASE DON'T CHANGE TEMPLATES OR FILE FORMAT BY HAND! USE \"XML2XCD.EXE\" TO DO THAT. THANKS. -->\n\n"                                                                                                                                                           );
         m_aData.sBufferAdditional.appendAscii   ( "<!DOCTYPE schema:component SYSTEM \"../../../../schema/schema.description.dtd\">\n"                                                                                                                                                                                     );
@@ -525,7 +541,8 @@ void XCDGenerator::impl_generateXCD()
 
     m_aData.sBufferStandard.appendAscii     ( "\t</schema:templates>\n"                     );
     m_aData.sBufferStandard.appendAscii     ( "<schema:schema cfg:localized=\"false\">\n"   );
-    if( m_aData.nVersionOutput >= 4 )
+
+    if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
     {
         m_aData.sBufferAdditional.appendAscii( "\t<schema:schema cfg:localized=\"false\">\n"   );
     }
@@ -542,20 +559,31 @@ void XCDGenerator::impl_generateXCD()
 
     m_aData.sBufferStandard.appendAscii     ( "\t</schema:schema>\n"  );
     m_aData.sBufferStandard.appendAscii     ( "</schema:component>\n" );
-    if( m_aData.nVersionOutput >= 4 )
+
+    if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
     {
         m_aData.sBufferAdditional.appendAscii ( "\t</schema:schema>\n"  );
         m_aData.sBufferAdditional.appendAscii ( "</schema:component>\n" );
     }
 
-    WRITE_LOGFILE( U2B(m_aData.sFileNameStandard  ), U2B(m_aData.sBufferStandard.makeStringAndClear()       ))
-    WRITE_LOGFILE( U2B(m_aData.sFileNameAdditional), U2B(m_aData.sBufferAdditional.makeStringAndClear()     ))
+    ::rtl::OUString sFileName  = m_aData.sPackageStandard   ;
+                    sFileName += DECLARE_ASCII(".xcd")      ;
 
-    WRITE_LOGFILE( LISTFILE_STANDARDFILTER         , U2B(m_aData.sStandardFilterList.makeStringAndClear()   ))
-    WRITE_LOGFILE( LISTFILE_ADDITIONALFILTER       , U2B(m_aData.sAdditionalFilterList.makeStringAndClear() ))
+    WRITE_LOGFILE( U2B( sFileName )         , U2B(m_aData.sBufferStandard.makeStringAndClear()       ))
+    WRITE_LOGFILE( LISTFILE_STANDARDFILTER  , U2B(m_aData.sStandardFilterList.makeStringAndClear()   ))
+    WRITE_LOGFILE( LISTFILE_STANDARDTYPES   , U2B(m_aData.sStandardTypeList.makeStringAndClear()     ))
+    WRITE_LOGFILE( SCPFILE_STANDARD         , U2B(m_aData.sNew2OldSCPStandard.makeStringAndClear()   ))
 
-    WRITE_LOGFILE( LISTFILE_STANDARDTYPES          , U2B(m_aData.sStandardTypeList.makeStringAndClear()     ))
-    WRITE_LOGFILE( LISTFILE_ADDITIONALTYPES        , U2B(m_aData.sAdditionalTypeList.makeStringAndClear()   ))
+    if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
+    {
+        sFileName  = m_aData.sPackageAdditional ;
+        sFileName += DECLARE_ASCII(".xcd")      ;
+
+        WRITE_LOGFILE( U2B(sFileName)           , U2B(m_aData.sBufferAdditional.makeStringAndClear()     ))
+        WRITE_LOGFILE( LISTFILE_ADDITIONALFILTER, U2B(m_aData.sAdditionalFilterList.makeStringAndClear() ))
+        WRITE_LOGFILE( LISTFILE_ADDITIONALTYPES , U2B(m_aData.sAdditionalTypeList.makeStringAndClear()   ))
+        WRITE_LOGFILE( SCPFILE_ADDITIONAL       , U2B(m_aData.sNew2OldSCPAdditional.makeStringAndClear() ))
+    }
 }
 
 //*****************************************************************************************************************
@@ -612,7 +640,7 @@ void XCDGenerator::impl_generateCopyright()
     m_aData.sBufferStandard.appendAscii( "   Contributor(s): _______________________________________\n"                );
     m_aData.sBufferStandard.appendAscii( "-->\n"                                                                       );
 
-    if( m_aData.nVersionOutput >= 4 )
+    if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
     {
         m_aData.sBufferAdditional.appendAscii( "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"                                );
         m_aData.sBufferAdditional.appendAscii( "<!-- The Contents of this file are made available subject to the terms of\n" );
@@ -814,17 +842,17 @@ void XCDGenerator::impl_generateFilterTemplate()
         m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
         m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:type-info>\n"                                                                                                                        );
         m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:value-names>\n"                                                                                                                    );
-        impl_generateFilterFlagTemplate( FILTERFLAGNAME_IMPORT            , FILTERFLAG_IMPORT                                                                             );
-        impl_generateFilterFlagTemplate( FILTERFLAGNAME_EXPORT            , FILTERFLAG_EXPORT                                                                             );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_IMPORT            , FILTERFLAG_IMPORT         , "mark filter for import"                                          );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_EXPORT            , FILTERFLAG_EXPORT         , "mark filter for export"                                          );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_TEMPLATE          , FILTERFLAG_TEMPLATE                                                                           );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_INTERNAL          , FILTERFLAG_INTERNAL                                                                           );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_TEMPLATEPATH      , FILTERFLAG_TEMPLATEPATH                                                                       );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_OWN               , FILTERFLAG_OWN                                                                                );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_ALIEN             , FILTERFLAG_ALIEN                                                                              );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_USESOPTIONS       , FILTERFLAG_USESOPTIONS                                                                        );
-        impl_generateFilterFlagTemplate( FILTERFLAGNAME_DEFAULT           , FILTERFLAG_DEFAULT                                                                            );
-        impl_generateFilterFlagTemplate( FILTERFLAGNAME_NOTINFILEDIALOG   , FILTERFLAG_NOTINFILEDIALOG                                                                    );
-        impl_generateFilterFlagTemplate( FILTERFLAGNAME_NOTINCHOOSER      , FILTERFLAG_NOTINCHOOSER                                                                       );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_DEFAULT           , FILTERFLAG_DEFAULT        , "most important filter, if more then ones available"              );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_NOTINFILEDIALOG   , FILTERFLAG_NOTINFILEDIALOG, "don't show it in file dialogs!"                                  );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_NOTINCHOOSER      , FILTERFLAG_NOTINCHOOSER   , "don't show it in chooser!"                                       );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_ASYNCHRON         , FILTERFLAG_ASYNCHRON                                                                          );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_NOTINSTALLED      , FILTERFLAG_NOTINSTALLED   , "set, if the filter is not installed, but available on CD"        );
         impl_generateFilterFlagTemplate( FILTERFLAGNAME_CONSULTSERVICE    , FILTERFLAG_CONSULTSERVICE , "set, if the filter is not installed and not available an CD"     );
@@ -951,6 +979,19 @@ void XCDGenerator::impl_generateLoaderTemplate()
 }
 
 //*****************************************************************************************************************
+void XCDGenerator::impl_generateContentHandlerTemplate()
+{
+    m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"ContentHandler\">\n"                                                            );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""           );
+    m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                     );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                            );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>List of types which could be handled by this service.</schema:description>\n"  );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                           );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                     );
+    m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                       );
+}
+
+//*****************************************************************************************************************
 void XCDGenerator::impl_generateTypeSet()
 {
     if( m_aData.pFilterCache->hasTypes() == sal_False )
@@ -958,7 +999,7 @@ void XCDGenerator::impl_generateTypeSet()
         // generate empty set!
         m_aData.sBufferStandard.appendAscii  ( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\"/>\n"                 );
 
-        if( m_aData.nVersionOutput >= 4 )
+        if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
         {
             m_aData.sBufferAdditional.appendAscii( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\" cfg:component=\""    );
             m_aData.sBufferAdditional.append     ( m_aData.sPackageStandard                                                         );
@@ -971,19 +1012,33 @@ void XCDGenerator::impl_generateTypeSet()
         // open set
         m_aData.sBufferStandard.appendAscii  ( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\">\n"                  );
 
-        if( m_aData.nVersionOutput >= 4 )
+        if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
         {
             m_aData.sBufferAdditional.appendAscii( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\" cfg:component=\""    );
             m_aData.sBufferAdditional.append     ( m_aData.sPackageStandard                                                         );
             m_aData.sBufferAdditional.appendAscii( "\">\n"                                                                          );
         }
 
-        css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllTypeNames();
-        sal_Int32                             nCount = lNames.getLength()                     ;
+        css::uno::Sequence< ::rtl::OUString > lNames    = m_aData.pFilterCache->getAllTypeNames();
+        css::uno::Sequence< ::rtl::OUString > lEncNames ( lNames )                               ;
+        sal_Int32                             nCount    = lNames.getLength()                     ;
+        sal_Int32                             nItem     = 0                                      ;
 
         XCDGenerator::impl_orderAlphabetical( lNames );
 
-        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+        {
+            ::rtl::OUString sName   ;
+            ::rtl::OUString sEncName;
+            for( nItem=0; nItem<nCount; ++nItem )
+            {
+                sName            = lNames[nItem]                      ;
+                //sEncName         = impl_encodeSpecialSigns( sName    );
+                lEncNames[nItem] = impl_encodeSetName     ( sName );
+            }
+        }
+
+        for( nItem=0; nItem<nCount; ++nItem )
         {
             ::rtl::OUString sName   = lNames[nItem]                         ;
             FileType        aItem   = m_aData.pFilterCache->getType( sName );
@@ -1010,50 +1065,70 @@ void XCDGenerator::impl_generateTypeSet()
                 // close set node
                 m_aData.sBufferStandard.appendAscii( "\t\t</default:group>\n" );
             }
-            else if( m_aData.nVersionOutput>=3 )
+            else if( m_aData.nVersionOutput >= 3 )
             {
-                ::rtl::OUStringBuffer* pBuffer;
+                ::rtl::OUString        sPath       = DECLARE_ASCII("org.openoffice.Office.");
+                ::rtl::OUStringBuffer* pXCDBuffer  = &(m_aData.sBufferStandard      );
+                ::rtl::OUStringBuffer* pSCPBuffer  = &(m_aData.sNew2OldSCPStandard  );
+                ::rtl::OUStringBuffer* pListBuffer = &(m_aData.sStandardTypeList    );
 
-                if( m_aData.nVersionOutput == 3 )
-                {
-                    pBuffer = &(m_aData.sBufferStandard);
-                }
-                if( m_aData.nVersionOutput == 4 )
+                if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
                 {
                     XCDGenerator::impl_classifyType( m_aData, sName, ePackage );
                     switch( ePackage )
                     {
-                        case E_STANDARD   :   {
-                                                pBuffer = &(m_aData.sBufferStandard);
-                                                m_aData.sStandardTypeList.append     ( sName );
-                                                m_aData.sStandardTypeList.appendAscii( "\n"  );
-                                              }
-                                              break;
-                        case E_ADDITIONAL :   {
-                                                pBuffer = &(m_aData.sBufferAdditional);
-                                                m_aData.sAdditionalTypeList.append     ( sName );
-                                                m_aData.sAdditionalTypeList.appendAscii( "\n"  );
-                                              }
-                                              break;
+                        case E_ADDITIONAL   :   {
+                                                    sPath      += m_aData.sPackageAdditional      ;
+                                                    pXCDBuffer  = &(m_aData.sBufferAdditional    );
+                                                    pSCPBuffer  = &(m_aData.sNew2OldSCPAdditional);
+                                                    pListBuffer = &(m_aData.sAdditionalTypeList  );
+                                                }
                     }
                 }
+                else
+                {
+                    sPath += m_aData.sPackageStandard;
+                }
+
+                sPath += CFG_PATH_SEPERATOR      ;
+                sPath += DECLARE_ASCII( "Types" );
+                sPath += CFG_PATH_SEPERATOR      ;
+
+                pListBuffer->append     ( sName );
+                pListBuffer->appendAscii( "\n"  );
+
+                if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+                {
+                    pSCPBuffer->appendAscii( "\""               );
+                    pSCPBuffer->append     ( sPath              );
+                    pSCPBuffer->append     ( lNames[nItem]      );
+                    pSCPBuffer->appendAscii( "\"\t\""           );
+                    pSCPBuffer->append     ( sPath              );
+                    pSCPBuffer->appendAscii( "Type[\""          );
+                    pSCPBuffer->append     ( lNames[nItem]      );
+                    pSCPBuffer->appendAscii( "\"]\"\n"          );
+
+                    sName       = lEncNames[nItem];
+                    aItem.sName = sName;
+                }
+
                 // open set entry by using name
-                pBuffer->appendAscii( "\t\t<default:group cfg:name=\""  );
-                pBuffer->append     ( sName                             );
-                pBuffer->appendAscii( "\">\n"                           );
+                pXCDBuffer->appendAscii( "\t\t<default:group cfg:name=\""  );
+                pXCDBuffer->append     ( sName                             );
+                pXCDBuffer->appendAscii( "\">\n"                           );
 
                 // write properties
-                impl_generateUINamesProperty( *pBuffer, SUBKEY_UINAME, aItem.lUINames                           );
-                impl_generateStringProperty ( *pBuffer, SUBKEY_DATA  , FilterCFGAccess::encodeTypeData( aItem ) );
+                impl_generateUINamesProperty( *pXCDBuffer, SUBKEY_UINAME, aItem.lUINames                           );
+                impl_generateStringProperty ( *pXCDBuffer, SUBKEY_DATA  , FilterCFGAccess::encodeTypeData( aItem ) );
 
                 // close set node
-                pBuffer->appendAscii( "\t\t</default:group>\n" );
+                pXCDBuffer->appendAscii( "\t\t</default:group>\n" );
             }
         }
 
         // close set
         m_aData.sBufferStandard.appendAscii( "\t</schema:set>\n" );
-        if( m_aData.nVersionOutput >= 4 )
+        if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
         {
             m_aData.sBufferAdditional.appendAscii( "\t</schema:set>\n" );
         }
@@ -1067,7 +1142,7 @@ void XCDGenerator::impl_generateFilterSet()
     {
         // write empty filter set.
         m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\"/>\n" );
-        if( m_aData.nVersionOutput >= 4 )
+        if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
         {
             m_aData.sBufferAdditional.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\" cfg:component=\""    );
             m_aData.sBufferAdditional.append     ( m_aData.sPackageStandard                                                             );
@@ -1078,23 +1153,40 @@ void XCDGenerator::impl_generateFilterSet()
     {
         // open set
         m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\">\n" );
-        if( m_aData.nVersionOutput >= 4 )
+        if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
         {
             m_aData.sBufferAdditional.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\" cfg:component=\""    );
             m_aData.sBufferAdditional.append     ( m_aData.sPackageStandard                                                             );
             m_aData.sBufferAdditional.appendAscii( "\">\n"                                                                              );
         }
 
-        css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllFilterNames();
-        sal_Int32                             nCount = lNames.getLength()                       ;
+        css::uno::Sequence< ::rtl::OUString > lNewNames = m_aData.pFilterCache->getAllFilterNames();
+        css::uno::Sequence< ::rtl::OUString > lOldNames ( lNewNames )                              ;
+        css::uno::Sequence< ::rtl::OUString > lEncNames ( lNewNames )                              ;
+        sal_Int32                             nCount    = lNewNames.getLength()                    ;
+        sal_Int32                             nItem     = 0                                        ;
 
-        XCDGenerator::impl_orderAlphabetical( lNames );
+        XCDGenerator::impl_orderAlphabetical( lNewNames );
 
-        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
         {
-            ::rtl::OUString sName = lNames[nItem]                                   ;
-            Filter          aItem = m_aData.pFilterCache->getFilter( lNames[nItem] );
-            EFilterPackage  ePackage                                                ;
+            ::rtl::OUString sNewName;
+            ::rtl::OUString sOldName;
+            for( nItem=0; nItem<nCount; ++nItem )
+            {
+                sNewName         = lNewNames[nItem]                   ;
+                sOldName         = impl_getOldFilterName  ( sNewName );
+                lOldNames[nItem] = sOldName                           ;
+                //sOldName         = impl_encodeSpecialSigns( sOldName );
+                lEncNames[nItem] = impl_encodeSetName     ( sOldName );
+            }
+        }
+
+        for( nItem=0; nItem<nCount; ++nItem )
+        {
+            ::rtl::OUString sName = lNewNames[nItem]                                    ;
+            Filter          aItem = m_aData.pFilterCache->getFilter( lNewNames[nItem] ) ;
+            EFilterPackage  ePackage                                                    ;
 
             ++m_aData.nWrittenFilters;
 
@@ -1125,65 +1217,72 @@ void XCDGenerator::impl_generateFilterSet()
             }
             else if( m_aData.nVersionOutput>=3 )
             {
-                ::rtl::OUStringBuffer* pBuffer;
+                ::rtl::OUString        sPath       = DECLARE_ASCII("org.openoffice.Office.");
+                ::rtl::OUStringBuffer* pXCDBuffer  = &(m_aData.sBufferStandard      );
+                ::rtl::OUStringBuffer* pSCPBuffer  = &(m_aData.sNew2OldSCPStandard  );
+                ::rtl::OUStringBuffer* pListBuffer = &(m_aData.sStandardFilterList  );
 
-                if( m_aData.nVersionOutput == 3 )
-                {
-                    pBuffer = &(m_aData.sBufferStandard);
-                }
-                if( m_aData.nVersionOutput == 4 )
+                if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
                 {
                     XCDGenerator::impl_classifyFilter( m_aData, sName, ePackage, aItem.nOrder );
                     switch( ePackage )
                     {
-                        case E_STANDARD   :   {
-                                                pBuffer = &(m_aData.sBufferStandard);
-                                                m_aData.sStandardFilterList.append      ( sName );
-                                                m_aData.sStandardFilterList.appendAscii ( "\n"  );
-                                              }
-                                              break;
-                        case E_ADDITIONAL :   {
-                                                pBuffer = &(m_aData.sBufferAdditional);
-                                                m_aData.sAdditionalFilterList.append     ( sName );
-                                                m_aData.sAdditionalFilterList.appendAscii( "\n"  );
-                                              }
-                                              break;
+                        case E_ADDITIONAL   :   {
+                                                    sPath      += m_aData.sPackageAdditional      ;
+                                                    pXCDBuffer  = &(m_aData.sBufferAdditional    );
+                                                    pSCPBuffer  = &(m_aData.sNew2OldSCPAdditional);
+                                                    pListBuffer = &(m_aData.sAdditionalFilterList);
+                                                }
                     }
                 }
+                else
+                {
+                    sPath += m_aData.sPackageStandard;
+                }
 
-                /*
-                ::rtl::OUString     sNewName;
-                ::rtl::OUString     sOldName;
+                sPath += CFG_PATH_SEPERATOR        ;
+                sPath += DECLARE_ASCII( "Filters" );
+                sPath += CFG_PATH_SEPERATOR        ;
 
-                sNewName = sName;
-                sOldName = impl_getOldFilterName  ( sNewName );
-                sOldName = impl_filterSpecialSigns( sOldName );
+                pListBuffer->append     ( sName );
+                pListBuffer->appendAscii( "\n"  );
 
-                Filter aItem = m_aData.pFilterCache->getFilter( sNewName );
-                //m_aData.sBufferStandard.append   ( FilterCFGAccess::encodeFilterName( sOldName )  );
-                */
+                if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+                {
+                    pSCPBuffer->appendAscii( "\""               );
+                    pSCPBuffer->append     ( sPath              );
+                    pSCPBuffer->append     ( lNewNames[nItem]   );
+                    pSCPBuffer->appendAscii( "\"\t\""           );
+                    pSCPBuffer->append     ( sPath              );
+                    pSCPBuffer->appendAscii( "Filter[\""        );
+                    pSCPBuffer->append     ( lOldNames[nItem]   );
+                    pSCPBuffer->appendAscii( "\"]\"\n"          );
+
+                    sName       = lEncNames[nItem];
+                    aItem.sName = sName;
+                }
 
                 // open set node by using name
-                pBuffer->appendAscii( "\t\t<default:group cfg:name=\"" );
-                pBuffer->append     ( sName                            );
-                pBuffer->appendAscii( "\">\n"                          );
+                pXCDBuffer->appendAscii( "\t\t<default:group cfg:name=\"" );
+                pXCDBuffer->append     ( sName                            );
+                pXCDBuffer->appendAscii( "\">\n"                          );
 
                 // write properties
                 // Attention:
                 // We generate "Installed=false" for all entries ... because it's the default for all filters.
                 // You must work with a full office installation and change this to "true" in generated XML file!!!
-                impl_generateBoolProperty   ( *pBuffer, SUBKEY_INSTALLED, sal_False                                  );
-                impl_generateUINamesProperty( *pBuffer, SUBKEY_UINAME   , aItem.lUINames                             );
-                impl_generateStringProperty ( *pBuffer, SUBKEY_DATA     , FilterCFGAccess::encodeFilterData( aItem ) );
+                impl_generateBoolProperty   ( *pXCDBuffer, SUBKEY_INSTALLED, sal_False                                  );
+                impl_generateUINamesProperty( *pXCDBuffer, SUBKEY_UINAME   , aItem.lUINames                             );
+                impl_generateStringProperty ( *pXCDBuffer, SUBKEY_DATA     , FilterCFGAccess::encodeFilterData( aItem ) );
 
                 // close set node
-                pBuffer->appendAscii( "\t\t</default:group>\n" );
+                pXCDBuffer->appendAscii( "\t\t</default:group>\n" );
             }
         }
 
         // close set
         m_aData.sBufferStandard.appendAscii( "\t</schema:set>\n" );
-        if( m_aData.nVersionOutput >= 4 )
+        if( m_aData.nVersionOutput >= DRAFT_SPLIT_VERSION )
         {
             m_aData.sBufferAdditional.appendAscii( "\t</schema:set>\n" );
         }
@@ -1203,15 +1302,45 @@ void XCDGenerator::impl_generateDetectorSet()
         // open set
         m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"DetectServices\" cfg:element-type=\"DetectService\">\n" );
 
-        css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllDetectorNames();
-        sal_Int32                             nCount = lNames.getLength()                         ;
+        css::uno::Sequence< ::rtl::OUString > lNames    = m_aData.pFilterCache->getAllDetectorNames();
+        css::uno::Sequence< ::rtl::OUString > lEncNames ( lNames )                                   ;
+        sal_Int32                             nCount    = lNames.getLength()                         ;
+        sal_Int32                             nItem     = 0                                          ;
 
         XCDGenerator::impl_orderAlphabetical( lNames );
 
-        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+        {
+            ::rtl::OUString sName   ;
+            ::rtl::OUString sEncName;
+            for( nItem=0; nItem<nCount; ++nItem )
+            {
+                sName            = lNames[nItem]                      ;
+                //sEncName         = impl_encodeSpecialSigns( sName    );
+                lEncNames[nItem] = impl_encodeSetName     ( sName );
+
+                m_aData.sNew2OldSCPStandard.appendAscii ( "org.openoffice.Office."  );
+                m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
+                m_aData.sNew2OldSCPStandard.append      ( sName                     );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\torg.openoffice.Office.");
+                m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "DetectService[\""        );
+                m_aData.sNew2OldSCPStandard.append      ( sName                     );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\"]\n"                   );
+            }
+        }
+
+        for( nItem=0; nItem<nCount; ++nItem )
         {
             ::rtl::OUString sName = lNames[nItem]                             ;
             Detector        aItem = m_aData.pFilterCache->getDetector( sName );
+
+            if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+            {
+                sName = lEncNames[nItem];
+            }
 
             ++m_aData.nWrittenDetectors;
 
@@ -1246,14 +1375,44 @@ void XCDGenerator::impl_generateLoaderSet()
         m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"FrameLoaders\" cfg:element-type=\"FrameLoader\">\n" );
 
         css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllLoaderNames();
+        css::uno::Sequence< ::rtl::OUString > lEncNames ( lNames )                              ;
         sal_Int32                             nCount = lNames.getLength()                       ;
+        sal_Int32                             nItem  = 0                                        ;
 
         XCDGenerator::impl_orderAlphabetical( lNames );
 
-        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+        {
+            ::rtl::OUString sName   ;
+            ::rtl::OUString sEncName;
+            for( nItem=0; nItem<nCount; ++nItem )
+            {
+                sName            = lNames[nItem]                      ;
+                //sEncName         = impl_encodeSpecialSigns( sName    );
+                lEncNames[nItem] = impl_encodeSetName     ( sName );
+
+                m_aData.sNew2OldSCPStandard.appendAscii ( "org.openoffice.Office."  );
+                m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
+                m_aData.sNew2OldSCPStandard.append      ( sName                     );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\torg.openoffice.Office.");
+                m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "FrameLoader[\""          );
+                m_aData.sNew2OldSCPStandard.append      ( sName                     );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\"]\n"                   );
+            }
+        }
+
+        for( nItem=0; nItem<nCount; ++nItem )
         {
             ::rtl::OUString sName = lNames[nItem]                           ;
             Loader          aItem = m_aData.pFilterCache->getLoader( sName );
+
+            if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+            {
+                sName = lEncNames[nItem];
+            }
 
             ++m_aData.nWrittenLoaders;
 
@@ -1300,19 +1459,6 @@ void XCDGenerator::impl_generateDefaults()
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateContentHandlerTemplate()
-{
-    m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"ContentHandler\">\n"                                                            );
-    m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""           );
-    m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                     );
-    m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                            );
-    m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>List of types which could be handled by this service.</schema:description>\n"  );
-    m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                           );
-    m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                     );
-    m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                       );
-}
-
-//*****************************************************************************************************************
 void XCDGenerator::impl_generateContentHandlerSet()
 {
     if( m_aData.pFilterCache->hasContentHandlers() == sal_False )
@@ -1326,14 +1472,44 @@ void XCDGenerator::impl_generateContentHandlerSet()
         m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"ContentHandlers\" cfg:element-type=\"ContentHandler\">\n" );
 
         css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllContentHandlerNames();
-        sal_Int32                             nCount = lNames.getLength()                               ;
+        css::uno::Sequence< ::rtl::OUString > lEncNames ( lNames )                              ;
+        sal_Int32                             nCount = lNames.getLength()                       ;
+        sal_Int32                             nItem  = 0                                        ;
 
         XCDGenerator::impl_orderAlphabetical( lNames );
 
-        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+        {
+            ::rtl::OUString sName   ;
+            ::rtl::OUString sEncName;
+            for( nItem=0; nItem<nCount; ++nItem )
+            {
+                sName            = lNames[nItem]                      ;
+                //sEncName         = impl_encodeSpecialSigns( sName    );
+                lEncNames[nItem] = impl_encodeSetName     ( sName );
+
+                m_aData.sNew2OldSCPStandard.appendAscii ( "org.openoffice.Office."  );
+                m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
+                m_aData.sNew2OldSCPStandard.append      ( sName                     );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\torg.openoffice.Office.");
+                m_aData.sNew2OldSCPStandard.append      ( m_aData.sPackageStandard  );
+                m_aData.sNew2OldSCPStandard.append      ( CFG_PATH_SEPERATOR        );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "ContentHandler[\""       );
+                m_aData.sNew2OldSCPStandard.append      ( sName                     );
+                m_aData.sNew2OldSCPStandard.appendAscii ( "\"]\n"                   );
+            }
+        }
+
+        for( nItem=0; nItem<nCount; ++nItem )
         {
             ::rtl::OUString sName = lNames[nItem]                                   ;
             ContentHandler  aItem = m_aData.pFilterCache->getContentHandler( sName );
+
+            if( m_aData.nVersionOutput == 6 && m_aData.nVersionInput < 6 )
+            {
+                sName = lEncNames[nItem];
+            }
 
             ++m_aData.nWrittenContentHandlers;
 
@@ -1394,7 +1570,7 @@ void XCDGenerator::impl_generateStringProperty(         ::rtl::OUStringBuffer& s
     if( sValue.getLength() > 0 )
     {
         sXCD.appendAscii( ">\n\t\t\t\t<default:data>"                       );
-        sXCD.append     ( XCDGenerator::impl_filterSpecialSigns( sValue )   );
+        sXCD.append     ( XCDGenerator::impl_encodeSpecialSigns( sValue )   );
         sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"       );
     }
     else
@@ -1456,7 +1632,7 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
     sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                                );
     sXCD.append     ( sName                                                             );
     sXCD.appendAscii( "\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""   );
-    sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""                       );
+    sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""               );
 
     if( lUINames.size() > 0 )
     {
@@ -1485,7 +1661,7 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
                 sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""                       );
                 sXCD.append     ( pUIName->first                                            );
                 sXCD.appendAscii( "\">"                                                     );
-                sXCD.append     ( XCDGenerator::impl_filterSpecialSigns( pUIName->second )  );
+                sXCD.append     ( XCDGenerator::impl_encodeSpecialSigns( pUIName->second )  );
                 sXCD.appendAscii( "</default:data>\n"                                       );
             }
         }
@@ -1495,7 +1671,7 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
             sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""                                                   );
             sXCD.appendAscii( "en-US"                                                                               );
             sXCD.appendAscii( "\">"                                                                                 );
-            sXCD.append     ( XCDGenerator::impl_filterSpecialSigns( lUINames.find(DECLARE_ASCII("en-US"))->second ));
+            sXCD.append     ( XCDGenerator::impl_encodeSpecialSigns( lUINames.find(DECLARE_ASCII("en-US"))->second ));
             sXCD.appendAscii( "</default:data>\n"                                                                   );
         }
         sXCD.appendAscii( "\t\t\t</default:value>\n" );
@@ -1507,7 +1683,7 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
 }
 
 //*****************************************************************************************************************
-::rtl::OUString XCDGenerator::impl_filterSpecialSigns( const ::rtl::OUString& sValue )
+::rtl::OUString XCDGenerator::impl_encodeSpecialSigns( const ::rtl::OUString& sValue )
 {
     ::rtl::OUStringBuffer  sSource     ( sValue );
     ::rtl::OUStringBuffer  sDestination( 10000  );
@@ -2167,5 +2343,134 @@ void XCDGenerator::impl_orderAlphabetical( css::uno::Sequence< ::rtl::OUString >
     {
         lList[nItem] = *pIterator;
         ++nItem;
+    }
+}
+
+//*****************************************************************************************************************
+class ModifiedUTF7Buffer
+{
+    rtl::OUStringBuffer & m_rBuffer;
+    sal_uInt32 m_nValue;
+    int m_nFilled;
+
+public:
+    ModifiedUTF7Buffer(rtl::OUStringBuffer * pTheBuffer):
+        m_rBuffer(*pTheBuffer), m_nFilled(0) {}
+
+    inline void write(sal_Unicode c);
+
+    void flush();
+};
+
+inline void ModifiedUTF7Buffer::write(sal_Unicode c)
+{
+    switch (m_nFilled)
+    {
+        case 0:
+            m_nValue = sal_uInt32(c) << 8;
+            m_nFilled = 2;
+            break;
+
+        case 1:
+            m_nValue |= sal_uInt32(c);
+            m_nFilled = 3;
+            flush();
+            break;
+
+        case 2:
+            m_nValue |= sal_uInt32(c) >> 8;
+            m_nFilled = 3;
+            flush();
+            m_nValue = (sal_uInt32(c) & 0xFF) << 16;
+            m_nFilled = 1;
+            break;
+    }
+}
+
+void ModifiedUTF7Buffer::flush()
+{
+    static sal_Unicode const aModifiedBase64[64]
+        = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '.' };
+    switch (m_nFilled)
+    {
+        case 1:
+            m_rBuffer.append(aModifiedBase64[m_nValue >> 18]);
+            m_rBuffer.append(aModifiedBase64[m_nValue >> 12 & 63]);
+            break;
+
+        case 2:
+            m_rBuffer.append(aModifiedBase64[m_nValue >> 18]);
+            m_rBuffer.append(aModifiedBase64[m_nValue >> 12 & 63]);
+            m_rBuffer.append(aModifiedBase64[m_nValue >> 6 & 63]);
+            break;
+
+        case 3:
+            m_rBuffer.append(aModifiedBase64[m_nValue >> 18]);
+            m_rBuffer.append(aModifiedBase64[m_nValue >> 12 & 63]);
+            m_rBuffer.append(aModifiedBase64[m_nValue >> 6 & 63]);
+            m_rBuffer.append(aModifiedBase64[m_nValue & 63]);
+            break;
+    }
+    m_nFilled = 0;
+    m_nValue = 0;
+}
+
+
+sal_Bool XCDGenerator::impl_isUsAsciiAlphaDigit(sal_Unicode c, sal_Bool bDigitAllowed)
+{
+    return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z'
+           || bDigitAllowed && c >= '0' && c <= '9';
+}
+
+::rtl::OUString XCDGenerator::impl_encodeSetName( const ::rtl::OUString& rSource )
+{
+    rtl::OUStringBuffer aTarget;
+
+    sal_Unicode const * pBegin = rSource.getStr();
+    sal_Unicode const * pEnd = pBegin + rSource.getLength();
+    sal_Unicode const * pCopyEnd = pBegin;
+    sal_Unicode const * p = pBegin;
+    while (p != pEnd)
+    {
+        sal_Unicode c = *p;
+        if (!impl_isUsAsciiAlphaDigit(c,p != pBegin))
+            switch (c)
+            {
+                case '-':
+                case '.':
+                    if (p != pBegin)
+                        break;
+                default:
+                    aTarget.append(pCopyEnd, p - pCopyEnd);
+                    aTarget.append(sal_Unicode('_'));
+                    ModifiedUTF7Buffer aBuffer(&aTarget);
+                    for (;;)
+                    {
+                        aBuffer.write(c);
+                        ++p;
+                        if (p == pEnd)
+                            break;
+                        c = *p;
+                        if (impl_isUsAsciiAlphaDigit(c) || c == '-' || c == '.')
+                            break;
+                    }
+                    aBuffer.flush();
+                    aTarget.append(sal_Unicode('_'));
+                    pCopyEnd = p;
+                    continue;
+            }
+        ++p;
+    }
+
+    if (pCopyEnd == pBegin)
+        return rSource;
+    else
+    {
+        aTarget.append(pCopyEnd, pEnd - pCopyEnd);
+        return aTarget.makeStringAndClear();
     }
 }

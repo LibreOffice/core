@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:37:29 $
+ *  last change: $Author: as $ $Date: 2001-07-06 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ class FilterCache   :   private ThreadHelpBase
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
-        FilterCache( sal_Int32 nVersion = DEFAULT_FILTERCACHE_VERSION );
+        FilterCache( sal_Int32 nVersion = DEFAULT_FILTERCACHE_VERSION,
+                     sal_Int16 nMode    = DEFAULT_FILTERCACHE_MODE   );
 
         /*-****************************************************************************************************//**
             @short      standard destructor to delete instance
@@ -493,6 +494,7 @@ class FilterCache   :   private ThreadHelpBase
         static sal_Int32        m_nRefCount ;
         static DataContainer*   m_pData     ;
         static sal_Int32        m_nVersion  ;
+        static sal_Int16        m_nMode     ;
 
 };      //  class FilterCache
 

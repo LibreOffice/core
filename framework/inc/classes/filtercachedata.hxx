@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:37:55 $
+ *  last change: $Author: as $ $Date: 2001-07-06 13:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,8 @@ namespace framework{
 #define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// seperator for own formated property strings of types and filters
 #define LIST_SEPERATOR                              sal_Unicode(';')                                                    /// seperator for own formated lists as part of our own formated type- or filter-string
 #define LOCALE_FALLBACK                             DECLARE_ASCII("en-US"                                           )   /// fallback, if configuration can't give us current set locale ...
-#define DEFAULT_FILTERCACHE_VERSION                 5                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
+#define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
+#define DEFAULT_FILTERCACHE_MODE                    CONFIG_MODE_DELAYED_UPDATE                                          /// ConfigItems could run in different modes: supported values are ... { CONFIG_MODE_IMMEDIATE_UPDATE, CONFIG_MODE_DELAYED_UPDATE, CONFIG_MODE_ALL_LOCALES }
 
 //*****************************************************************************************************************
 // We know some default values ...
@@ -164,6 +165,12 @@ namespace framework{
 #define SUBLIST_FRAMELOADERS                        DECLARE_ASCII("FrameLoaders"                                    )
 #define SUBLIST_CONTENTHANDLERS                     DECLARE_ASCII("ContentHandlers"                                 )
 #define SUBLIST_DEFAULTS                            DECLARE_ASCII("Defaults"                                        )
+
+#define TEMPLATE_TYPE                               DECLARE_ASCII("Type"                                            )
+#define TEMPLATE_FILTER                             DECLARE_ASCII("Filter"                                          )
+#define TEMPLATE_DETECTSERVICE                      DECLARE_ASCII("DetectService"                                   )
+#define TEMPLATE_FRAMELOADER                        DECLARE_ASCII("FrameLoader"                                     )
+#define TEMPLATE_CONTENTHANDLER                     DECLARE_ASCII("ContentHandler"                                  )
 
 //*****************************************************************************************************************
 // These defines declare all supported names of configuration key names.
@@ -235,11 +242,13 @@ namespace framework{
 #define SUBKEYCOUNT_TYPE_VERSION_3                  2
 #define SUBKEYCOUNT_TYPE_VERSION_4                  SUBKEYCOUNT_TYPE_VERSION_3
 #define SUBKEYCOUNT_TYPE_VERSION_5                  SUBKEYCOUNT_TYPE_VERSION_3
+#define SUBKEYCOUNT_TYPE_VERSION_6                  SUBKEYCOUNT_TYPE_VERSION_3
 #define SUBKEYCOUNT_FILTER_VERSION_1                9
 #define SUBKEYCOUNT_FILTER_VERSION_2                10
 #define SUBKEYCOUNT_FILTER_VERSION_3                3
 #define SUBKEYCOUNT_FILTER_VERSION_4                SUBKEYCOUNT_FILTER_VERSION_3
 #define SUBKEYCOUNT_FILTER_VERSION_5                SUBKEYCOUNT_FILTER_VERSION_3
+#define SUBKEYCOUNT_FILTER_VERSION_6                SUBKEYCOUNT_FILTER_VERSION_3
 #define SUBKEYCOUNT_DETECTOR                        1
 #define SUBKEYCOUNT_LOADER                          2
 #define SUBKEYCOUNT_CONTENTHANDLER                  1
@@ -830,6 +839,16 @@ class DataContainer
 // After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
 // After successfuly calling of write() all values of given data container are flushed to our configuration.
 //*****************************************************************************************************************
+
+enum ETemplateType
+{
+    E_TEMPLATE_TYPE              ,
+    E_TEMPLATE_FILTER            ,
+    E_TEMPLATE_DETECTSERVICE     ,
+    E_TEMPLATE_FRAMELOADER       ,
+    E_TEMPLATE_CONTENTHANDLER
+};
+
 #ifdef ENABLE_TIMEMEASURE
 //_________________________________________________________________________________________________________________
 class FilterCFGAccess   :   private DBGTimeMeasureBase // We need some informations about calling of baseclass "ConfigItem"! :-)
@@ -841,12 +860,15 @@ class FilterCFGAccess   :   public  ::utl::ConfigItem
 {
     public:
                                     FilterCFGAccess ( const ::rtl::OUString& sPath                                  ,
-                                                            sal_Int32        nVersion = DEFAULT_FILTERCACHE_VERSION ); // open configuration
+                                                            sal_Int32        nVersion = DEFAULT_FILTERCACHE_VERSION ,
+                                                            sal_Int16        nMode    = DEFAULT_FILTERCACHE_MODE    ); // open configuration
         virtual                     ~FilterCFGAccess(                                                               );
         void                        read            (       DataContainer&   rData                                  ); // read values from configuration into given struct
         void                        write           (       DataContainer&   rData                                  ); // write values from given struct to configuration
-        static   ::rtl::OUString    encodeFilterName( const ::rtl::OUString& sName                                  ); // encode "/" of filter names ... configuration couldn't handle it otherwise
-        static   ::rtl::OUString    decodeFilterName( const ::rtl::OUString& sName                                  ); // decode "/" of filter names ...
+        static   ::rtl::OUString    encodeSetName   ( const ::rtl::OUString& sName                                  ,
+                                                            ETemplateType    eType                                  ); // <name>            => <entry>["<name>"]
+        static   ::rtl::OUString    decodeSetName   ( const ::rtl::OUString& sName                                  ,
+                                                            ETemplateType    eType                                  ); // <entry>["<name>"] => <name>
         static   ::rtl::OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formated string of type properties
         static   void               decodeTypeData  ( const ::rtl::OUString& sData                                  ,
                                                             FileType&        aType                                  );
