@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:05:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include <xmluconv.hxx>
+#include "xmluconv.hxx"
 #endif
 
 using namespace com::sun::star;
@@ -140,8 +140,6 @@ public:
 
     static BOOL ParseISODateTimeString( const rtl::OUString& rString,
                                         util::DateTime& rDateTime );
-    static BOOL ParseISODurationString( const rtl::OUString& rString,
-                                        Time& rTime );
 };
 
 //-------------------------------------------------------------------------
@@ -329,90 +327,6 @@ sal_Bool SfxXMLMetaElementContext::ParseISODateTimeString(
     return bSuccess;
 }
 
-// static
-sal_Bool SfxXMLMetaElementContext::ParseISODurationString(
-                            const rtl::OUString& rString, Time& rTime )
-{
-    rtl::OUString aTrimmed = rString.trim().toAsciiUpperCase();
-    const sal_Unicode* pStr = aTrimmed.getStr();
-
-    if ( *(pStr++) != sal_Unicode('P') )            // duration must start with "P"
-        return sal_False;
-
-    sal_Bool bSuccess = TRUE;
-    sal_Bool bDone = sal_False;
-    sal_Bool bTimePart = sal_False;
-    sal_Int32 nDays  = 0;
-    sal_Int32 nHours = 0;
-    sal_Int32 nMins  = 0;
-    sal_Int32 nSecs  = 0;
-    sal_Int32 nTemp = 0;
-
-    while ( bSuccess && !bDone )
-    {
-        sal_Unicode c = *(pStr++);
-        if ( !c )                               // end
-            bDone = sal_True;
-        else if ( sal_Unicode('0') <= c && sal_Unicode('9') >= c )
-        {
-            if ( nTemp >= LONG_MAX / 10 )
-                bSuccess = sal_False;
-            else
-            {
-                nTemp *= 10;
-                nTemp += (c - sal_Unicode('0'));
-            }
-        }
-        else if ( bTimePart )
-        {
-            if ( c == sal_Unicode('H') )
-            {
-                nHours = nTemp;
-                nTemp = 0;
-            }
-            else if ( c == sal_Unicode('M') )
-            {
-                nMins = nTemp;
-                nTemp = 0;
-            }
-            else if ( c == sal_Unicode('S') )
-            {
-                nSecs = nTemp;
-                nTemp = 0;
-            }
-            else
-                bSuccess = sal_False;               // invalid characted
-        }
-        else
-        {
-            if ( c == sal_Unicode('T') )            // "T" starts time part
-                bTimePart = TRUE;
-            else if ( c == sal_Unicode('D') )
-            {
-                nDays = nTemp;
-                nTemp = 0;
-            }
-            else if ( c == sal_Unicode('Y') || c == sal_Unicode('M') )
-            {
-                //! how many days is a year or month?
-
-                DBG_ERROR("years or months in duration: not implemented");
-                bSuccess = sal_False;
-            }
-            else
-                bSuccess = sal_False;               // invalid characted
-        }
-    }
-
-    if ( bSuccess )
-    {
-        if ( nDays )
-            nHours += nDays * 24;               // add the days to the hours part
-        rTime = Time( nHours, nMins, nSecs );
-    }
-    return bSuccess;
-}
-
 //-------------------------------------------------------------------------
 
 SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -509,7 +423,7 @@ SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uI
                     case XML_TOK_META_RELOAD_DELAY:
                         {
                             Time aTime;
-                            if ( ParseISODurationString( sValue, aTime ) )
+                            if ( SvXMLUnitConverter::convertTimeDuration( sValue, aTime ) )
                             {
                                 sal_Int32 nSecs = aTime.GetMSFromTime() / 1000;
                                 aPropAny <<= nSecs;
@@ -691,7 +605,7 @@ void SfxXMLMetaElementContext::EndElement()
             break;
         case XML_TOK_META_EDITINGDURATION:
             //  property is a int32 with the Time::GetTime value
-            if ( ParseISODurationString( sContent, aTime ) )
+            if ( SvXMLUnitConverter::convertTimeDuration( sContent, aTime ) )
             {
                 aPropAny <<= (sal_Int32) aTime.GetTime();
                 xInfoProp->setPropertyValue( ::rtl::OUString::createFromAscii(PROP_EDITINGDURATION), aPropAny );
