@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-27 17:37:52 $
+ *  last change: $Author: bm $ $Date: 2000-11-29 14:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ private:
     rtl::OUString msAutoStyleName;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > getTitleShape();
+    void CreateGrid( ::rtl::OUString sAutoStyleName, sal_Bool bIsMajor );
 
 public:
     SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
