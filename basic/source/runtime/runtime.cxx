@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:36:46 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 07:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,6 +579,10 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             {
                 bByVal |= BOOL( ( p->eType & SbxBYREF ) == 0 );
                 t = (SbxDataType) ( p->eType & 0x0FFF );
+
+                if( !bByVal && t != SbxVARIANT &&
+                    (!v->IsFixed() || (SbxDataType)(v->GetType() & 0x0FFF ) != t) )
+                        bByVal = TRUE;
             }
             if( bByVal )
             {
