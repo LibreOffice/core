@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 14:45:09 $
+#   last change: $Author: hjs $ $Date: 2002-01-16 14:56:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -178,8 +178,10 @@ USE_SHL$(TNR)DEF=$(SHL$(TNR)DEF)
 USE_SHL$(TNR)DEF=
 SHL$(TNR)DEPN+:=$(SHL$(TNR)DEPNU)
 
+.IF "$(SHL$(TNR)VERSIONMAP)"==""
 # to activate vmaps remove "#"
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
+.ENDIF			# "$(SHL$(TNR)VERSIONMAP)"==""
 
 .IF "$(USE_SHL$(TNR)VERSIONMAP)"!=""
 
