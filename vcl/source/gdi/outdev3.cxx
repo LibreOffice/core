@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:50:07 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5144,7 +5144,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
         // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
         // because SetTextColor() is used for this.
         // #i28759# maTextColor might have been changed behind our back, commit then, too.
-        if ( ( aFont.GetColor() != COL_TRANSPARENT && !aFont.IsTransparent() ) &&
+        if ( aFont.GetColor() != COL_TRANSPARENT &&
              ( maFont.GetColor() != aFont.GetColor() || aFont.GetColor() != maTextColor ) )
         {
             maTextColor = aFont.GetColor();
