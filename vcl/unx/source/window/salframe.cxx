@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-06 12:08:14 $
+ *  last change: $Author: pl $ $Date: 2002-03-18 15:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,6 +962,18 @@ void SalFrame::Show( BOOL bVisible )
          */
         if( maFrameData.nShowState_ != SHOWSTATE_UNKNOWN )
             maFrameData.nShowState_ = SHOWSTATE_NORMAL;
+
+        /*
+         *  #98107# plugged windows don't necessarily get the
+         *  focus on show because the parent may already be mapped
+         *  and have the focus. So try to set the focus
+         *  to the child on Show(TRUE)
+         */
+        if( maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
+            XSetInputFocus( _GetXDisplay(),
+                            maFrameData.GetWindow(),
+                            RevertToParent,
+                            CurrentTime );
     }
     else
     {
