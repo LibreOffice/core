@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:42:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
+#include <com/sun/star/style/XStyle.hpp>
+#endif
 
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -125,6 +128,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle )
 {
+    OUString sName;
     Any aAny;
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
@@ -169,12 +173,22 @@ void XMLTextParagraphExport::exportStyleAttributes(
                 xPropState->getPropertyState( sPageDescName  ) )
         {
             aAny = xPropSet->getPropertyValue( sPageDescName );
-            OUString sName;
             aAny >>= sName;
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                      XML_MASTER_PAGE_NAME,
-                                      GetExport().EncodeStyleName( sName ) );
+            if( sName.getLength() > 0 )
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                          XML_MASTER_PAGE_NAME,
+                                          GetExport().EncodeStyleName( sName ) );
         }
+    }
+    sal_Int32 nOutlineLevel =
+        GetExport().GetTextParagraphExport()->GetHeadingLevel( rStyle->getName() );
+    if( nOutlineLevel != -1 )
+    {
+        OUStringBuffer sTmp;
+                    sTmp.append( (sal_Int32)nOutlineLevel+1L );
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                            XML_DEFAULT_OUTLINE_LEVEL,
+                            sTmp.makeStringAndClear() );
     }
 
     if( bProgress )
@@ -204,7 +218,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
         {
             Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
             if (xPropSet.is())
-                exportDefaultStyle( xPropSet, GetXMLToken(XML_PARAGRAPH), GetParaPropMapper());
+                exportDefaultStyle( xPropSet, GetXMLToken(XML_PARAGRAPH), GetParaDefaultPropMapper());
         }
     }
     exportStyleFamily( "ParagraphStyles", GetXMLToken(XML_PARAGRAPH), GetParaPropMapper(),
