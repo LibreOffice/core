@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:04:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,8 +610,8 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
 {
     ScViewData* pViewData = GetViewData();
     if ( pViewData->HasEditView( pViewData->GetActivePart() ) &&
-            nPosX >= pViewData->GetEditViewCol() && nPosX <= pViewData->GetEditEndCol() &&
-            nPosY >= pViewData->GetEditViewRow() && nPosY <= pViewData->GetEditEndRow() )
+            nPosX >= pViewData->GetEditStartCol() && nPosX <= pViewData->GetEditEndCol() &&
+            nPosY >= pViewData->GetEditStartRow() && nPosY <= pViewData->GetEditEndRow() )
     {
         //  in die gerade editierte Zelle einfuegen
 
