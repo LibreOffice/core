@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbaslnk.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:00:21 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,21 +69,27 @@
 class SwNode;
 class SwCntntNode;
 class SwNodeIndex;
+class ReReadThread;
+long GrfNodeChanged( void* pLink, void* pCaller );
 
 class SwBaseLink : public ::sfx2::SvBaseLink
 {
+    friend long GrfNodeChanged( void* pLink, void* pCaller );
+
     SwCntntNode* pCntntNode;
     BOOL bSwapIn : 1;
     BOOL bNoDataFlag : 1;
     BOOL bIgnoreDataChanged : 1;
+    ReReadThread* m_pReReadThread;
 
 protected:
-    SwBaseLink() {}
+    SwBaseLink(): m_pReReadThread(0) {}
 
     SwBaseLink( const String& rNm, USHORT nObjectType, ::sfx2::SvLinkSource* pObj,
                  SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
-        bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE )
+        bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE ),
+        m_pReReadThread(0)
     {}
 
 public:
@@ -91,7 +97,8 @@ public:
 
     SwBaseLink( USHORT nMode, USHORT nFormat, SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
-        bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE )
+        bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE ),
+        m_pReReadThread(0)
     {}
     virtual ~SwBaseLink();
 
@@ -106,7 +113,6 @@ public:
 
     // nur fuer Grafiken
     FASTBOOL SwapIn( BOOL bWaitForData = FALSE, BOOL bNativFormat = FALSE );
-
     FASTBOOL IsShowQuickDrawBmp() const;                // nur fuer Grafiken
 
     FASTBOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
