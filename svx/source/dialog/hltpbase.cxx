@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2002-07-16 12:51:46 $
+ *  last change: $Author: sj $ $Date: 2002-07-25 10:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,4 +711,51 @@ BOOL SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
     }
 
     return bRet;
+}
+
+/*************************************************************************
+|*
+|* try to detect the current protocol that is used in aStrURL
+|*
+|************************************************************************/
+
+INetProtocol SvxHyperlinkTabPageBase::ImplGetProtocol( const String& aStrURL, String& aStrScheme )
+{
+    INetURLObject aURL( aStrURL );
+    INetProtocol aProtocol = aURL.GetProtocol();
+
+    // #77696#
+    // our new INetUrlObject now has the ability
+    // to detect if an Url is valid or not :-(
+    if ( aProtocol == INET_PROT_NOT_VALID )
+    {
+        if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTP_SCHEME, 0, 7 ) )
+        {
+            aProtocol = INET_PROT_HTTP;
+            aStrScheme = String::CreateFromAscii( INET_HTTP_SCHEME );
+        }
+        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTPS_SCHEME, 0, 8 ) )
+        {
+            aProtocol = INET_PROT_HTTPS;
+            aStrScheme = String::CreateFromAscii( INET_HTTPS_SCHEME );
+        }
+        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_FTP_SCHEME, 0, 6 ) )
+        {
+            aProtocol = INET_PROT_FTP;
+            aStrScheme = String::CreateFromAscii( INET_FTP_SCHEME );
+        }
+        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_MAILTO_SCHEME, 0, 7 ) )
+        {
+            aProtocol = INET_PROT_MAILTO;
+            aStrScheme = String::CreateFromAscii( INET_MAILTO_SCHEME );
+        }
+        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_NEWS_SCHEME, 0, 5 ) )
+        {
+            aProtocol = INET_PROT_NEWS;
+            aStrScheme = String::CreateFromAscii( INET_NEWS_SCHEME );
+        }
+    }
+    else
+        aStrScheme = INetURLObject::GetScheme( aProtocol );
+    return aProtocol;
 }

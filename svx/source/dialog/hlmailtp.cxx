@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:31 $
+ *  last change: $Author: sj $ $Date: 2002-07-25 10:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,11 +143,8 @@ SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
 
 void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
 {
-    INetURLObject aURL ( aStrURL );
-    String aStrScheme, aStrSubject;
-
-    // Protocoll
-    INetProtocol eProtocol = aURL.GetProtocol ();
+    String aStrScheme;
+    INetProtocol eProtocol = ImplGetProtocol( aStrURL, aStrScheme );
     switch ( eProtocol )
     {
         case INET_PROT_MAILTO :
@@ -179,16 +176,14 @@ void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
 
     if ( aStrScheme != aEmptyStr )
     {
-        xub_StrLen nPos = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ).Search ( aStrScheme, 0 ) + aStrScheme.Len();
-        String aStrURLc ( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
-
+        String aStrURLc ( aStrURL );
         if ( eProtocol == INET_PROT_MAILTO )
         {
             // Find mail-subject
-            String aStrTmp ( aStrURLc );
+            String aStrSubject, aStrTmp ( aStrURLc );
 
             const sal_Char sSubject[] = "subject";
-            nPos = aStrTmp.ToLowerAscii().SearchAscii( sSubject, 0 );
+            xub_StrLen nPos = aStrTmp.ToLowerAscii().SearchAscii( sSubject, 0 );
             nPos = aStrTmp.Search( sal_Unicode( '=' ), nPos );
 
             if ( nPos != STRING_NOTFOUND )
@@ -226,38 +221,25 @@ void SvxHyperlinkMailTp::GetCurentItemData ( String& aStrURL, String& aStrName,
                                              String& aStrIntName, String& aStrFrame,
                                              SvxLinkInsertMode& eMode )
 {
-    String aStrScheme;
-    String aStrParam;
-
     const sal_Char sMailtoScheme[] = INET_MAILTO_SCHEME;
     const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
 
     // get data from dialog-controls
-    aStrURL = maCbbReceiver.GetText();
-
-    if ( maRbtMail.IsChecked() && aStrURL.SearchAscii( sMailtoScheme ) != 0 )
-    {
+    String aStrScheme, aText = maCbbReceiver.GetText();
+    if ( maRbtMail.IsChecked() && aText.SearchAscii( sMailtoScheme ) != 0 )
         aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_MAILTO_SCHEME ) );
-
-    } else if ( maRbtNews.IsChecked() && aStrURL.SearchAscii( sNewsScheme ) != 0 )
-    {
+    else if ( maRbtNews.IsChecked() && aText.SearchAscii( sNewsScheme ) != 0 )
         aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_NEWS_SCHEME ) );
-    }
-
+    aStrURL = aStrScheme;
+    aStrURL.Append( aText );
     if ( maRbtMail.IsChecked() )
     {
         if ( maEdSubject.GetText() != aEmptyStr )
         {
-            aStrParam = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "subject=" ) );
-            aStrParam += maEdSubject.GetText();
+            aStrURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "?subject=" ) ) );
+            aStrURL.Append( maEdSubject.GetText() );
         }
     }
-
-    UniString aStrTmp( aStrScheme );
-    aStrTmp.Append( aStrURL );
-    INetURLObject aURL ( aStrTmp );
-    aURL.SetParam (aStrParam);
-
     // get data from standard-fields
     aStrIntName = mpEdText->GetText();
     aStrName    = mpEdIndication->GetText();
@@ -265,10 +247,6 @@ void SvxHyperlinkMailTp::GetCurentItemData ( String& aStrURL, String& aStrName,
     eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
     if( IsHTMLDoc() )
         eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
-
-    if ( aStrURL != aEmptyStr )
-        aStrURL     = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-
     if ( aStrName == aEmptyStr )
         aStrName = aStrURL;
 }
@@ -400,23 +378,12 @@ void SvxHyperlinkMailTp::ChangeScheme ( String& aStrURL, String aStrNewScheme )
 {
     INetURLObject aURL ( aStrURL );
     String aStrScheme;
-
-    // set protocoll-radiobuttons
-    INetProtocol aProtocol = aURL.GetProtocol ();
-    switch ( aProtocol )
-    {
-        case INET_PROT_MAILTO :
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_MAILTO_SCHEME ) );
-            break;
-        case INET_PROT_NEWS :
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_NEWS_SCHEME ) );
-            break;
-    }
-
+    INetProtocol aProtocol = ImplGetProtocol( aStrURL, aStrScheme );
     if ( aStrScheme != aEmptyStr )
     {
+        String aStrTmp( aStrURL.Erase ( 0, aStrScheme.Len() ) );
         aStrURL = aStrNewScheme;
-        aStrURL += aStrURL.Erase ( 0, aStrScheme.Len() );
+        aStrURL += aStrTmp;
     }
 }
 

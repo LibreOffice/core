@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:30 $
+ *  last change: $Author: sj $ $Date: 2002-07-25 10:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,37 +167,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 
 SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
 {
-}
-
-static INetProtocol ImplGetProtocol( const String& aStrURL, String& aStrScheme )
-{
-    INetURLObject aURL( aStrURL );
-    INetProtocol aProtocol = aURL.GetProtocol();
-
-    // #77696#
-    // our new INetUrlObject now has the ability
-    // to detect if an Url is valid or not :-(
-    if ( aProtocol == INET_PROT_NOT_VALID )
-    {
-        if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTP_SCHEME, 0, 7 ) )
-        {
-            aProtocol = INET_PROT_HTTP;
-            aStrScheme = String( RTL_CONSTASCII_STRINGPARAM( sHTTPScheme ) );
-        }
-        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTPS_SCHEME, 0, 8 ) )
-        {
-            aProtocol = INET_PROT_HTTPS;
-            aStrScheme = String( RTL_CONSTASCII_STRINGPARAM( sHTTPSScheme ) );
-        }
-        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_FTP_SCHEME, 0, 6 ) )
-        {
-            aProtocol = INET_PROT_FTP;
-            aStrScheme = String( RTL_CONSTASCII_STRINGPARAM( sFTPScheme ) );
-        }
-    }
-    else
-        aStrScheme = INetURLObject::GetScheme( aProtocol );
-    return aProtocol;
 }
 
 /*************************************************************************
