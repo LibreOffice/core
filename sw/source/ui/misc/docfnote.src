@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ TabDialog DLG_DOC_FOOTNOTE
     Text[ chinese_traditional ] = "³]©wµωΈ}";
     Text[ arabic ] = "ΕΪΟΗΟ ΗαΝΗΤνΙ ΗαΣέανΙ";
     Text[ greek ] = "Ρυθμίσεις υποσημειώσεων";
-    Text[ korean ] = "°ΆΑΦ ΏΙΌΗ";
+    Text[ korean ] = "°ΆΑΦ Ό³Α¤";
     Text[ turkish ] = "Dipnot ayarlarύ";
     Text[ language_user1 ] = " ";
 };
@@ -184,7 +184,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¦Ϋ°Κ½sΈΉ";
         Text[ arabic ] = "ΚΡήνγ ΚαήΗΖν";
         Text[ greek ] = "Αυτόματη αρίθμηση";
-        Text[ korean ] = "ΐΪµΏ ΉψΘ£ ΈΕ±β±β";
+        Text[ korean ] = "ΐΪµΏ ΉψΘ£ΈΕ±β±β";
         Text[ turkish ] = "Otomatik numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -194,6 +194,24 @@ TabPage TP_FOOTNOTEOPTION
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Nu~mmerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
+        Text[ english_us ] = "Numbering";
+        Text[ portuguese ] = "Numbering";
+        Text[ russian ] = "Νσμεπΰφθÿ";
+        Text[ greek ] = "Αρίθ~μηση";
+        Text[ dutch ] = "Numbering";
+        Text[ french ] = "Numbering";
+        Text[ spanish ] = "Numbering";
+        Text[ italian ] = "Numbering";
+        Text[ danish ] = "Numbering";
+        Text[ swedish ] = "Nu~mrering";
+        Text[ polish ] = "Numeracja";
+        Text[ portuguese_brazilian ] = "Numbering";
+        Text[ japanese ] = "Numbering";
+        Text[ korean ] = "Numbering";
+        Text[ chinese_simplified ] = "Numbering";
+        Text[ chinese_traditional ] = "½sΈΉ";
+        Text[ turkish ] = "Numbering";
+        Text[ arabic ] = "ΗαΚΡήνγ";
     };
     ListBox LB_NUMVIEW
     {
@@ -227,7 +245,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
         Text[ arabic ] = "ΗαΘΟΑ Θά";
         Text[ greek ] = "Θέση εκκίνησης";
-        Text[ korean ] = "½ΓΐΫΗÒ °χ(~S)";
+        Text[ korean ] = "½ΓΐΫΗÒ °χ";
         Text[ turkish ] = "B~aώlangύη";
         Text[ language_user1 ] = " ";
     };
@@ -249,6 +267,24 @@ TabPage TP_FOOTNOTEOPTION
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "~Zδhlung" ;
         Text [ ENGLISH ] = "Counting" ;
+        Text[ english_us ] = "Counting";
+        Text[ portuguese ] = "Counting";
+        Text[ russian ] = "Ρχες";
+        Text[ greek ] = "Μέτρηση";
+        Text[ dutch ] = "Counting";
+        Text[ french ] = "Counting";
+        Text[ spanish ] = "Counting";
+        Text[ italian ] = "Counting";
+        Text[ danish ] = "Counting";
+        Text[ swedish ] = "Counting";
+        Text[ polish ] = "Counting";
+        Text[ portuguese_brazilian ] = "Counting";
+        Text[ japanese ] = "Counting";
+        Text[ korean ] = "Counting";
+        Text[ chinese_simplified ] = "Counting";
+        Text[ chinese_traditional ] = "­pΌΖ";
+        Text[ turkish ] = "Counting";
+        Text[ arabic ] = "Counting";
     };
     ListBox LB_NUMCOUNT
     {
@@ -381,7 +417,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     StringList [ korean ] =
     {
-            < "ΖδΐΜΑφ ΄η" ; > ;
+            < "ΒΚ ΄η" ; > ;
         < "ΐε Έ¶΄Ω" ; > ;
         < "Ή®Ό­ ΄η" ; > ;
     };
@@ -423,8 +459,8 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¤§«e(~F)";
         Text[ arabic ] = "ήΘα";
         Text[ greek ] = "Πριν από";
-        Text[ korean ] = "ΐΜΐό(~F)";
-        Text[ turkish ] = "Ba~ώύnda";
+        Text[ korean ] = "ΐΜΐό";
+        Text[ turkish ] = "Φn~όnde";
         Text[ language_user1 ] = " ";
     };
     Edit ED_PREFIX
@@ -461,7 +497,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¤§«α(~E)";
         Text[ arabic ] = "ΘΪΟ";
         Text[ greek ] = "Μετά από";
-        Text[ korean ] = "ΐΜΘΔ(~E)";
+        Text[ korean ] = "ΐΜΘΔ";
         Text[ turkish ] = "A~rkasύnda";
         Text[ language_user1 ] = " ";
     };
@@ -526,7 +562,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "­¶§ΐ(~O)";
         Text[ arabic ] = "δεΗνΙ ΗαΥέΝΙ";
         Text[ greek ] = "Τέλος σελίδας";
-        Text[ korean ] = "ΖδΐΜΑφ Έ¶ΑφΈ·(~E)";
+        Text[ korean ] = "ΒΚ Έ¶ΑφΈ·";
         Text[ turkish ] = "Sayfa so~nu";
         Text[ language_user1 ] = " ";
     };
@@ -554,8 +590,8 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¤ε¥σ§ΐΊέ(~D)";
         Text[ arabic ] = "δεΗνΙ ΗαγΣΚδΟ";
         Text[ greek ] = "Τέλος κειμένου";
-        Text[ korean ] = "Ή®Ό­ Έ¶ΑφΈ·(~D)";
-        Text[ turkish ] = "~Belge sonunda";
+        Text[ korean ] = "Ή®Ό­ ³΅(~D)";
+        Text[ turkish ] = "~Belge sonu";
         Text[ language_user1 ] = " ";
     };
     GroupBox GB_TEMPL
@@ -611,7 +647,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¬qΈ¨(~R)";
         Text[ arabic ] = "έήΡΙ";
         Text[ greek ] = "Παράγραφος";
-        Text[ korean ] = "΄ά¶τ(~R)";
+        Text[ korean ] = "΄ά¶τ";
         Text[ turkish ] = "~Paragraf";
         Text[ language_user1 ] = " ";
     };
@@ -650,7 +686,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "­¶(~P)";
         Text[ arabic ] = "ΗαΥέΝΙ";
         Text[ greek ] = "Σελίδα";
-        Text[ korean ] = "ΖδΐΜΑφ(~P)";
+        Text[ korean ] = "ΒΚ";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
     };
@@ -712,7 +748,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¤ε¦r°Ο°μ(~X)";
         Text[ arabic ] = "δΨΗή ΗαδΥ";
         Text[ greek ] = "Πεδίο κειμένου";
-        Text[ korean ] = "ΉΩ΄Ϊ±Ϋ ±βΘ£(~X)";
+        Text[ korean ] = "ΕΨ½ΊΖ®΅΅ΏµΏª(~X)";
         Text[ turkish ] = "Metin a~lanύ";
         Text[ language_user1 ] = " ";
     };
@@ -745,7 +781,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ russian ] = "Ξαλΰρςό ρνξρκθ";
         Text[ polish ] = "Obszar przyp. doln.";
         Text[ japanese ] = "‹r’”ΝΝ(~F)";
-        Text[ chinese_traditional ] = "µωΈ}°Ο°μ(~F)";
+        Text[ chinese_traditional ] = "µωΈ}½d³ς(~F)";
         Text[ arabic ] = "δΨΗή ΗαΝΗΤνΙ ΗαΣέανΙ";
         Text[ greek ] = "Πεδίο υποσημειώσεων";
         Text[ korean ] = "°ΆΑΦ ΏµΏª(~F)";
@@ -785,7 +821,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¦h­¶µωΈ}ªΊ΄£¥ά¤ε";
         Text[ arabic ] = "γαΗΝΩΙ Ϊαμ Τία ΝζΗΤν ΣέανΙ έν ΓίΛΡ γδ ΥέΝΙ";
         Text[ greek ] = "Κείμενο συμβουλής πολυσέλιδων υποσημειώσεων";
-        Text[ korean ] = "Ώ©·― ΖδΐΜΑφΐΗ ΉΩ΄Ϊ±ΫΏ΅ ΄λΗΡ Βό°ν";
+        Text[ korean ] = "Ώ©·― ΒΚΐΗ °ΆΑΦΏ΅ ΄λΗΡ Βό°ν";
         Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
         Text[ language_user1 ] = " ";
     };
@@ -814,7 +850,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¦bµωΈ}µ²§ΐ(~N)";
         Text[ arabic ] = "ΪδΟ δεΗνΙ ΗαΝΗΤνΙ ΗαΣέανΙ";
         Text[ greek ] = "Στο τέλος της υπ~οσημείωσης";
-        Text[ korean ] = "°ΆΑΦ ³΅";
+        Text[ korean ] = "°ΆΑΦ ³΅Ώ΅";
         Text[ turkish ] = "~Dipnot altύnda";
         Text[ language_user1 ] = " ";
     };
@@ -846,14 +882,14 @@ TabPage TP_FOOTNOTEOPTION
         Text [ english_us ] = "~Start of next page" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ΠψÒ³(~S)";
-        Text[ russian ] = "Νΰ ρλεδσώωει ρςπΰνθφε";
+        Text[ russian ] = "Ρλεδσώωΰÿ ρςπΰνθφΰ";
         Text[ polish ] = "Na nastepnej stronie";
         Text[ japanese ] = "‚ΜΝί°Όή(~S)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "±qΔς­¶¶}©l(~S)";
         Text[ arabic ] = "Ϊαμ ΗαΥέΝΙ ΗαΚΗανΙ";
         Text[ greek ] = "Στην ε~πόμενη σελίδα";
-        Text[ korean ] = "΄Ωΐ½ ΖδΐΜΑφΏ΅";
+        Text[ korean ] = "΄Ωΐ½ ΒΚΏ΅";
         Text[ turkish ] = "~Sonraki sayfada";
     };
     Edit ED_CONT_FROM
@@ -898,7 +934,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¦Ϋ°Κ½sΈΉ";
         Text[ arabic ] = "ΚΡήνγ ΚαήΗΖν";
         Text[ greek ] = "Αυτόματη αρίθμηση";
-        Text[ korean ] = "ΐΪµΏ ΉψΘ£ ΈΕ±β±β";
+        Text[ korean ] = "ΐΪµΏ ΉψΘ£ΈΕ±β±β";
         Text[ turkish ] = "Otomatik numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -908,6 +944,24 @@ TabPage TP_ENDNOTEOPTION
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Nu~mmerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
+        Text[ english_us ] = "Numbering";
+        Text[ portuguese ] = "Numbering";
+        Text[ russian ] = "Νσμεπΰφθÿ";
+        Text[ greek ] = "Αρίθμ~ηση";
+        Text[ dutch ] = "Numbering";
+        Text[ french ] = "Numbering";
+        Text[ spanish ] = "Numbering";
+        Text[ italian ] = "Numbering";
+        Text[ danish ] = "Numbering";
+        Text[ swedish ] = "Nu~mrering";
+        Text[ polish ] = "Numeracja";
+        Text[ portuguese_brazilian ] = "Numbering";
+        Text[ japanese ] = "Numbering";
+        Text[ korean ] = "Numbering";
+        Text[ chinese_simplified ] = "Numbering";
+        Text[ chinese_traditional ] = "½sΈΉ";
+        Text[ turkish ] = "Numbering";
+        Text[ arabic ] = "ΗαΚΡήνγ";
     };
     ListBox LB_NUMVIEW
     {
@@ -952,7 +1006,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
         Text[ arabic ] = "ΗαΘΟΑ Θά";
         Text[ greek ] = "Θέση εκκίνησης";
-        Text[ korean ] = "½ΓΐΫ(~S)";
+        Text[ korean ] = "½ΓΐΫΏ΅Ό­";
         Text[ turkish ] = "B~aώlangύη";
         Text[ language_user1 ] = " ";
     };
@@ -1007,8 +1061,8 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¤§«e(~F)";
         Text[ arabic ] = "ήΘα";
         Text[ greek ] = "Πριν από";
-        Text[ korean ] = "ΐΜΐό(~F)";
-        Text[ turkish ] = "Ba~ώύnda";
+        Text[ korean ] = "ΐΜΐό";
+        Text[ turkish ] = "Φnόnde";
         Text[ language_user1 ] = " ";
     };
     Edit ED_PREFIX
@@ -1045,7 +1099,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¤§«α(~E)";
         Text[ arabic ] = "ΘΪΟ";
         Text[ greek ] = "Πίσω από";
-        Text[ korean ] = "ΐΜΘΔ(~E)";
+        Text[ korean ] = "ΐΜΘΔ";
         Text[ turkish ] = "A~rkasύnda";
         Text[ language_user1 ] = " ";
     };
@@ -1090,7 +1144,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "­¶§ΐ(~O)";
         Text[ arabic ] = "δεΗνΙ ΗαΥέΝΙ";
         Text[ greek ] = "Τέλος σελίδας";
-        Text[ korean ] = "ΖδΐΜΑφ Έ¶ΑφΈ·(~O)";
+        Text[ korean ] = "ΒΚ Έ¶ΑφΈ·";
         Text[ turkish ] = "Sayfa so~nu";
         Text[ language_user1 ] = " ";
     };
@@ -1118,8 +1172,8 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¤ε¥σ§ΐΊέ(~D)";
         Text[ arabic ] = "δεΗνΙ ΗαγΣΚδΟ";
         Text[ greek ] = "Τέλος κειμένου";
-        Text[ korean ] = "Ή®Ό­ ³΅(~D)";
-        Text[ turkish ] = "~Belge sonunda";
+        Text[ korean ] = "Ή®Ό­ ³΅";
+        Text[ turkish ] = "~Belge sonu";
         Text[ language_user1 ] = " ";
     };
     GroupBox GB_TEMPL
@@ -1175,7 +1229,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¬qΈ¨(~R)";
         Text[ arabic ] = "έήΡΙ";
         Text[ greek ] = "Παράγραφος";
-        Text[ korean ] = "΄ά¶τ(~R)";
+        Text[ korean ] = "΄ά¶τ";
         Text[ turkish ] = "~Paragraf";
         Text[ language_user1 ] = " ";
     };
@@ -1214,7 +1268,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "­¶(~P)";
         Text[ arabic ] = "ΗαΥέΝΙ";
         Text[ greek ] = "Σελίδα";
-        Text[ korean ] = "ΖδΐΜΑφ(~P)";
+        Text[ korean ] = "ΒΚ";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
     };
@@ -1310,7 +1364,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "§ΐµω°Ο°μ(~E)";
         Text[ arabic ] = "δΨΗή ΗαΚΪανή ΗαΞΚΗγν";
         Text[ greek ] = "Περιοχή σημείωσης τέλους";
-        Text[ korean ] = "ΉΜΑΦ ±βΘ£(~E)";
+        Text[ korean ] = "ΉΜΑΦ ΏµΏª(~E)";
         Text[ turkish ] = "S~onnot alanύ";
     };
     ListBox LB_TEXT_CHARFMT
@@ -1347,7 +1401,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¦h­¶µωΈ}ªΊ΄£¥ά¤ε";
         Text[ arabic ] = "γαΗΝΩΙ Ϊαμ Τία ΝζΗΤν ΣέανΙ έν ΓίΛΡ γδ ΥέΝΙ";
         Text[ greek ] = "Κείμενο συμβουλής πολυσέλιδων υποσημειώσεων";
-        Text[ korean ] = "Ώ©·― ΖδΐΜΑφΐΗ ΉΩ΄Ϊ±ΫΏ΅ ΄λΗΡ Βό°ν";
+        Text[ korean ] = "Ώ©·― ΒΚΐΗ °ΆΑΦΏ΅ ΄λΗΡ Βό°ν";
         Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
         Text[ language_user1 ] = " ";
     };
@@ -1376,7 +1430,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "Δς­¶(~F)";
         Text[ arabic ] = "ΗαΥέΝΙ ΗαΚΗανΙ";
         Text[ greek ] = "Επόμενη σελίδα";
-        Text[ korean ] = "΄Ωΐ½ ΖδΐΜΑφ(~F)";
+        Text[ korean ] = "΄Ωΐ½ ΒΚ";
         Text[ turkish ] = "~Sonraki sayfa";
         Text[ language_user1 ] = " ";
     };
@@ -1415,7 +1469,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¶}©l(~S)";
         Text[ arabic ] = "ΗαΘΟΑ";
         Text[ greek ] = "Εκκίνηση";
-        Text[ korean ] = "½ΓΐΫ(~S)";
+        Text[ korean ] = "½ΓΐΫ";
         Text[ turkish ] = "~Baώlangύη";
     };
     Edit ED_CONT_FROM
