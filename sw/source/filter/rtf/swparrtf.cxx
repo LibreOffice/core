@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-24 09:13:21 $
+ *  last change: $Author: jp $ $Date: 2001-11-30 18:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,6 +605,7 @@ void SwRTFParser::NextToken( int nToken )
                             break;
     case RTF_SWG_PRTDATA:           ReadPrtData();              break;
     case RTF_FIELD:                 ReadField();                break;
+    case RTF_SHPPICT:
     case RTF_PICT:                  ReadBitmapData();           break;
 #ifdef READ_OLE_OBJECT
     case RTF_OBJECT:                ReadOLEData();              break;
@@ -628,6 +629,7 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_PNTEXT:
+    case RTF_NONSHPPICT:
         SkipGroup();
         break;
 

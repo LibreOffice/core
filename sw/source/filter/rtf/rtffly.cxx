@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-08 16:51:13 $
+ *  last change: $Author: jp $ $Date: 2001-11-30 18:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,13 +1376,29 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
         }
 */
         if( pPicType->nCropT )
-            aCrop.SetTop( pPicType->nCropT ), bChg = TRUE;
+        {
+            aCrop.SetTop( pPicType->nCropT );
+//          aSize.Height() -= pPicType->nCropT;
+            bChg = TRUE;
+        }
         if( pPicType->nCropB )
-            aCrop.SetBottom( pPicType->nCropB ), bChg = TRUE;
+        {
+            aCrop.SetBottom( pPicType->nCropB );
+//          aSize.Height() -= pPicType->nCropB;
+            bChg = TRUE;
+        }
         if( pPicType->nCropL )
-            aCrop.SetLeft( pPicType->nCropL ), bChg = TRUE;
+        {
+            aCrop.SetLeft( pPicType->nCropL );
+//          aSize.Width() -= pPicType->nCropL;
+            bChg = TRUE;
+        }
         if( pPicType->nCropR )
-            aCrop.SetRight( pPicType->nCropR ), bChg = TRUE;
+        {
+            aCrop.SetRight( pPicType->nCropR );
+//          aSize.Width() -= pPicType->nCropR;
+            bChg = TRUE;
+        }
 
         if( bChg )
         {
@@ -1412,7 +1428,7 @@ void SwRTFParser::GetPageSize( Size& rSize )
     }
 }
 
-void __EXPORT SwRTFParser::ReadBitmapData()
+void SwRTFParser::ReadBitmapData()
 {
     Graphic aGrf;
     SvxRTFPictureType aPicType;
@@ -1421,7 +1437,7 @@ void __EXPORT SwRTFParser::ReadBitmapData()
 }
 
 #ifdef READ_OLE_OBJECT
-void __EXPORT SwRTFParser::ReadOLEData()
+void SwRTFParser::ReadOLEData()
 {
     SvCacheStream aTmpFile( 0xA000 );
     Graphic aGrf;
