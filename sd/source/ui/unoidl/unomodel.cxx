@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:17:08 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,7 +580,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
                                     pPreviousStandardPage->GetUppBorder(),
                                     pPreviousStandardPage->GetRgtBorder(),
                                     pPreviousStandardPage->GetLwrBorder() );
-
+        pStandardPage->SetOrientation( pPreviousStandardPage->GetOrientation() );
         pStandardPage->SetName(aStandardPageName);
 
         // Seite hinter aktueller Seite einfuegen
@@ -616,6 +616,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
                                 pPreviousNotesPage->GetUppBorder(),
                                 pPreviousNotesPage->GetRgtBorder(),
                                 pPreviousNotesPage->GetLwrBorder() );
+        pNotesPage->SetOrientation( pPreviousNotesPage->GetOrientation() );
         pNotesPage->SetName(aNotesPageName);
         pNotesPage->SetPageKind(PK_NOTES);
 
@@ -644,7 +645,7 @@ void SdXImpressDocument::SetModified( sal_Bool bModified /* = sal_True */ ) thro
 }
 
 // XModel
-void SAL_CALL SdXImpressDocument::lockControllers(  )
+void SAL_CALL SdXImpressDocument    ::lockControllers(  )
     throw(uno::RuntimeException)
 {
     if( NULL == pDoc )
