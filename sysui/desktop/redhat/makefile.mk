@@ -72,15 +72,12 @@ TARGET=redhat
 
 # --- Files --------------------------------------------------------
 
-ICONPREFIX = $(UNIXFILENAME:s/.//)
+# GNOME does not like icon names with more than one '.'
+ICONPREFIX = $(UNIXFILENAME:s/.//g)
 
 LAUNCHERLIST = writer calc draw impress math base printeradmin
-LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
+LAUNCHERDEPN = $(foreach,i,$(LAUNCHERLIST) $(UNIXFILENAME)-$i.desktop)
 LAUNCHERDIR  = $(shell cd $(MISC)$/$(TARGET); pwd)
-
-LAUNCHERFLAGFILES = \
-    $(MISC)/$(TARGET)/usr/share/applications.flag \
-    $(MISC)/$(TARGET)/usr/share/applnk-$(TARGET)/Office.flag
 
 MIMELIST = \
     text \
@@ -155,10 +152,14 @@ KDEICONLIST = \
 
 .IF "$(RPM)"!=""
 
-RPMFLAGFILE = $(MISC)$/$(TARGET).flag 
+PKGNAME=$(shell sed -n -e 's/^Name: //p' $(TARGET)-menus.spec)
+RPMFILE=$(BIN)/noarch/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
 RPMDEPN = \
-    $(MISC)/$(TARGET)/usr/share/applications.flag \
-    $(MISC)/$(TARGET)/usr/share/applnk-$(TARGET)/Office.flag \
+    $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) \
+    $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
+    $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
+    $(MISC)/$(TARGET)/usr/share/applications/{$(LAUNCHERDEPN)} \
+    $(MISC)/$(TARGET)/usr/share/applnk-$(TARGET)/Office/{$(LAUNCHERDEPN)} \
     $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications \
     $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).keys \
     $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).mime \
@@ -178,25 +179,13 @@ ULFDIR = $(COMMONMISC)$/desktopshare
 
 .IF "$(RPM)"!=""
 
-ALLTAR : $(RPMFLAGFILE) 
+ALLTAR : $(RPMFILE) 
 
 # --- launcher ------------------------------------------------------
 
-#
-# Copy/patch the .desktop files to the output tree and 
-# merge-in the translations. 
-#
-$(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/launcher_name.ulf $(ULFDIR)/launcher_comment.ulf
-    @$(MKDIRHIER) $(@:db)
-    @echo Creating desktop entries ..
-    @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(ICONPREFIX)-" --category "X-Red-Hat-Base" $(LAUNCHERDEPN) $(@:db)
-    @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Name" $(ULFDIR)/launcher_name.ulf
-    @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/launcher_comment.ulf
-.IF "$(WITH_LIBSN)"=="YES"
-    @$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db)/$(UNIXFILENAME)-$i.desktop))
-.ENDIF
-    @touch $@
+%.desktop :
+    @$(MKDIRHIER) $(@:d)
+    @ln -s $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
 
 # --- icons --------------------------------------------------------
 
@@ -246,13 +235,28 @@ $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications : 
     @echo ---------------------------------
     @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
+# --- script ------------------------------------------------------
+
+$(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) : ../share/openoffice.sh
+    @$(MKDIRHIER) $(@:d)
+    @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
+
+$(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.sh
+    @$(MKDIRHIER) $(@:d)
+    @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
+
+$(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
+    @$(MKDIRHIER) $(@:d)
+    @touch $@
+
 # --- packaging ---------------------------------------------------
     
-$(RPMFLAGFILE) : $(RPMDEPN)
-    @cat $(@:b)-menus.spec | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/" -e "s/%ICONPREFIX/$(ICONPREFIX)/" -e "s/Version: .*/Version: $(PKGVERSION)/" -e "s/Release: .*/Release: $(PKGREV)/" > $(@:db)-menus.spec
-    @echo "%define _rpmdir $(RPMDIR)" >> $(@:db)-menus.spec
-    @$(RPM) -bb $(@:db)-menus.spec --buildroot $(LAUNCHERDIR) --target noarch
-    +-chmod g+w $(BIN)$/noarch
-    @touch $@
-    
+$(RPMFILE) : $(RPMDEPN) $(TARGET)-menus.spec
+    @$(MKDIRHIER) $(@:d)
+    @cat $(TARGET)-menus.spec | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" \
+        -e "s/%ICONPREFIX/$(ICONPREFIX)/" -e "s/Version: .*/Version: $(PKGVERSION)/" \
+        -e "s/Release: .*/Release: $(PKGREV)/" > $(MISC)/$(TARGET)-menus.spec
+    @echo "%define _rpmdir $(RPMDIR)" >> $(MISC)/$(TARGET)-menus.spec
+    @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec --buildroot $(LAUNCHERDIR) --target noarch
+
 .ENDIF
