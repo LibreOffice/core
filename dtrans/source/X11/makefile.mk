@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-13 06:22:44 $
+#   last change: $Author: hjs $ $Date: 2001-09-17 16:39:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..
 
 PRJNAME=dtrans
 TARGET=dtransX11
+TARGETTYPE=GUI
 
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
