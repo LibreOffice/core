@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 11:58:17 $
+ *  last change: $Author: tl $ $Date: 2002-10-16 12:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,9 @@ Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttri
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    INT32 nLen = GetAccessibleText_Impl().Len();
+    if (!(0 <= nIndex  &&  nIndex < nLen))
+        throw IndexOutOfBoundsException();
     return Sequence< beans::PropertyValue >();
 }
 
@@ -538,7 +541,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         if (!pDoc)
             throw RuntimeException();
         String aTxt( GetAccessibleText_Impl() );
-        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))
+        if (!(0 <= nIndex  &&  nIndex < aTxt.Len()))
             throw IndexOutOfBoundsException();
 
         const SmNode *pTree = pDoc->GetFormulaTree();
