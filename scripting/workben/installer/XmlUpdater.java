@@ -181,6 +181,7 @@ public class XmlUpdater extends Thread {
         String[] dirs = {
         "java" + File.separator + "Highlight",
         "java" + File.separator + "MemoryUsage",
+        "java" + File.separator + "EventHelper",
             "beanshell" + File.separator + "InteractiveBeanShell",
             "beanshell" + File.separator + "Highlight",
             "beanshell" + File.separator + "MemoryUsage"
@@ -195,6 +196,10 @@ public class XmlUpdater extends Thread {
             "java/MemoryUsage/MemoryUsage.class",
             "java/MemoryUsage/parcel-descriptor.xml",
             "java/MemoryUsage/ExampleSpreadSheet.sxc",
+            "java/EventHelper/parcel-descriptor.xml",
+            "java/EventHelper/EventHelper.java",
+            "java/EventHelper/EventHelper.class",
+            "java/EventHelper/EventHelper.jar",
             "beanshell/InteractiveBeanShell/parcel-descriptor.xml",
             "beanshell/InteractiveBeanShell/interactive.bsh",
             "beanshell/Highlight/parcel-descriptor.xml",
@@ -245,6 +250,11 @@ public class XmlUpdater extends Thread {
             onInstallComplete();
             return;
     }
+        if (!zd.extractEntry("bindingdialog/EventsBinding.xdl",starBasicPath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
         if (!zd.extractEntry("bindingdialog/HelpBinding.xdl",starBasicPath, statusLabel))
         {
             onInstallComplete();
@@ -280,6 +290,31 @@ public class XmlUpdater extends Thread {
             return;
     }
         if (!zd.extractEntry("bindingdialog/calckeybinding.xml",configPath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
+        if (!zd.extractEntry("bindingdialog/impressmenubar.xml",configPath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
+        if (!zd.extractEntry("bindingdialog/impresskeybinding.xml",configPath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
+        if (!zd.extractEntry("bindingdialog/drawmenubar.xml",configPath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
+        if (!zd.extractEntry("bindingdialog/drawkeybinding.xml",configPath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
+        if (!zd.extractEntry("bindingdialog/eventbindings.xml",configPath, statusLabel))
         {
             onInstallComplete();
             return;
