@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:19:57 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/smplhint.hxx>
+#include "attrib.hxx"
 
 #include "globstr.hrc"
 
@@ -187,7 +188,7 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                     pSet = new SfxItemSet( rPool,
                                            ATTR_BACKGROUND, ATTR_BACKGROUND,
                                            ATTR_BORDER, ATTR_SHADOW,
-                                           ATTR_LRSPACE, ATTR_PAGE_NULLVALS,
+                                           ATTR_LRSPACE, ATTR_PAGE_SCALETO,
                                            ATTR_WRITINGDIR, ATTR_WRITINGDIR,
                                            ATTR_USERDEF, ATTR_USERDEF,
                                            0 );
@@ -201,7 +202,6 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                     if ( pDoc && pDoc->IsLoadingDone() )
                     {
                         // Setzen von sinnvollen Default-Werten:
-                        //!!! const-Document wegcasten (im Ctor mal bei Gelegenheit aendern)
                         SfxPrinter*     pPrinter = pDoc->GetPrinter();
                         USHORT          nBinCount = pPrinter->GetPaperBinCount();
                         SvxPageItem     aPageItem( ATTR_PAGE );
@@ -264,6 +264,8 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                         rPool.SetPoolDefaultItem( aLRSpaceItem );
                         rPool.SetPoolDefaultItem( aULSpaceItem );
                         rPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALE, 100 ) );
+                        ScPageScaleToItem aScaleToItem;
+                        rPool.SetPoolDefaultItem( aScaleToItem );
                         rPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 0 ) );
                     }
                 }
