@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:31:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,12 +536,26 @@ IMPL_LINK(LayoutMenu, ClickHandler, ValueSet*, pValueSet)
 */
 void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 {
-    ViewShell* pViewShell = mrBase.GetMainViewShell();
-    if (pViewShell!=NULL && ! IsMainViewInMasterPageMode())
+    do
     {
+        // Filter out the cases where an assignment is not possible or does
+        // not make sense.
+
+        // The view shell in the center pane has to be present.
+        ViewShell* pViewShell = mrBase.GetMainViewShell();
+        if (pViewShell == NULL)
+            break;
+
+        // The view shell must not be in master page mode except for the
+        // handout view.
+        if (pViewShell->GetShellType() != ViewShell::ST_HANDOUT)
+            if (IsMainViewInMasterPageMode())
+                break;
+
         SfxRequest aRequest (CreateRequest(SID_MODIFYPAGE, aLayout));
         pViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
     }
+    while(false);
 }
 
 
