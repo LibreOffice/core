@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-21 09:54:58 $
+ *  last change: $Author: dv $ $Date: 2001-02-22 14:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,8 @@
 
 //--------------------------------------------------------------------------------------------------------
 
-#define EVENT_TYPE          "EventType"
-#define SCRIPT              "Script"
-#define STAR_BASIC          "StarBasic"
-#define JAVA_SCRIPT         "JavaScript"
+#define MACRO_PRFIX         "macro://"
+#define MACRO_POSTFIX       "()"
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -259,37 +257,68 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
     if ( aEventData >>= aProperties )
     {
         PROPERTYVALUE  *pValues     = aProperties.getArray();
-        sal_Bool        bGotType    = sal_False;
-        sal_Bool        bGotScript  = sal_False;
         OUSTRING        aType;
         OUSTRING        aScript;
+        OUSTRING        aLibrary;
+        OUSTRING        aMacroName;
 
         nCount = aProperties.getLength();
+
+        if ( !nCount )
+            return;
+
         nIndex = 0;
-        while ( ! ( bGotType && bGotScript ) && ( nIndex < nCount ) )
+        while ( nIndex < nCount )
         {
-            if ( pValues[ nIndex ].Name.compareToAscii( EVENT_TYPE ) == 0 )
+            if ( pValues[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
             {
-                bGotType = sal_True;
                 pValues[ nIndex ].Value >>= aType;
             }
-            else if ( pValues[ nIndex ].Name.compareToAscii( SCRIPT ) == 0 )
+            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
             {
-                bGotScript = sal_True;
                 pValues[ nIndex ].Value >>= aScript;
+            }
+            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            {
+                pValues[ nIndex ].Value >>= aLibrary;
+            }
+            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            {
+                pValues[ nIndex ].Value >>= aMacroName;
             }
             nIndex += 1;
         }
 
-        if ( ( aType.compareToAscii( STAR_BASIC ) == 0 ) &&
-             ( aScript.len() ) )
+        if ( aType.compareToAscii( STAR_BASIC ) == 0 )
         {
-            aGuard.clear();
-            ErrCode nErr;
-            if ( Warn_Impl() )
-                nErr = SfxMacroLoader::loadMacro( aScript );
-            else
-                nErr = 0;
+            if ( ! aScript.getLength() && aMacroName.getLength() )
+            {
+                aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
+
+                if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0
+                     && aLibrary.compareToAscii("StarDesktop") != 0 )
+                {
+                    aScript += OUSTRING('.');
+                }
+
+                aScript += OUSTRING('/');
+                aScript += aMacroName;
+                aScript += OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_POSTFIX ) );
+            }
+
+            if ( aScript.getLength() )
+            {
+                aGuard.clear();
+                ErrCode nErr;
+                if ( Warn_Impl() )
+                    nErr = SfxMacroLoader::loadMacro( aScript );
+                else
+                    nErr = 0;
+            }
+        }
+        else
+        {
+            DBG_ERRORFILE( "notifyEvent(): Unsupported event type" );
         }
     }
 }
@@ -342,70 +371,75 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( ANY aElement )
     if ( aElement >>= aProperties )
     {
         PROPERTYVALUE  *pValues     = aProperties.getArray();
-        sal_Bool        bGotType    = sal_False;
-        sal_Bool        bGotScript  = sal_False;
         OUSTRING        aType;
         OUSTRING        aScriptURL;
+        OUSTRING        aLibrary;
+        OUSTRING        aMacroName;
 
         long nCount = aProperties.getLength();
         long nIndex = 0;
 
-        while ( ! ( bGotType && bGotScript ) && ( nIndex < nCount ) )
+        if ( !nCount )
+            return pMacro;
+
+        while ( nIndex < nCount )
         {
-            if ( pValues[ nIndex ].Name.compareToAscii( EVENT_TYPE ) == 0 )
+            if ( pValues[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
             {
-                bGotType = sal_True;
                 pValues[ nIndex ].Value >>= aType;
             }
-            else if ( pValues[ nIndex ].Name.compareToAscii( SCRIPT ) == 0 )
+            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
             {
-                bGotScript = sal_True;
                 pValues[ nIndex ].Value >>= aScriptURL;
+            }
+            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            {
+                pValues[ nIndex ].Value >>= aLibrary;
+            }
+            else if ( pValues[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            {
+                pValues[ nIndex ].Value >>= aMacroName;
             }
             nIndex += 1;
         }
 
-        if ( bGotType && bGotScript )
+        // Get the type
+        ScriptType  eType( STARBASIC );
+
+        if ( aType.compareToAscii( STAR_BASIC ) == COMPARE_EQUAL )
+            eType = STARBASIC;
+        else if ( aType.compareToAscii( JAVA_SCRIPT ) == COMPARE_EQUAL )
+            eType = JAVASCRIPT;
+        else
+            DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
+
+        if ( ( eType == STARBASIC ) && ! aMacroName.getLength() && aScriptURL.getLength() )
         {
-            // Get the type
-            ScriptType  eType( STARBASIC );
-
-            if ( aType.compareToAscii( STAR_BASIC ) == COMPARE_EQUAL )
-                eType = STARBASIC;
-            else if ( aType.compareToAscii( JAVA_SCRIPT ) == COMPARE_EQUAL )
-                eType = JAVASCRIPT;
-            else
-                DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
-
-            // Get the LibName
-            String aScript( aScriptURL );
-            String aLibName;
-            String aMacroName;
-
-            sal_uInt16 nHashPos = aScript.Search( '/', 8 );
-            sal_uInt16 nArgsPos = aScript.Search( '(' );
+            sal_Int32 nHashPos = aScriptURL.indexOf( '/', 8 );
+            sal_Int32 nArgsPos = aScriptURL.indexOf( '(' );
 
             if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
             {
-                String aBasMgrName( INetURLObject::decode(aScript.Copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+                OUSTRING aBasMgrName( INetURLObject::decode( aScriptURL.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
 
-                if ( aBasMgrName.EqualsAscii(".") )
-                    aLibName = mpObjShell->GetTitle( SFX_TITLE_APINAME );
-                else if ( aBasMgrName.Len() )
-                    aLibName = aBasMgrName;
+                if ( aBasMgrName.compareToAscii(".") == 0 )
+                    aLibrary = mpObjShell->GetTitle( SFX_TITLE_APINAME );
+                else if ( aBasMgrName.getLength() )
+                    aLibrary = aBasMgrName;
                 else
-                    aLibName = SFX_APP()->GetName();
+                    aLibrary = SFX_APP()->GetName();
 
                 // Get the macro name
-                aMacroName = aScript.Copy( nHashPos+1, nArgsPos - nHashPos - 1 );
-
-                pMacro = new SvxMacro( aMacroName, aLibName, eType );
+                aMacroName = aScriptURL.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
             }
             else
             {
                 DBG_ERRORFILE( "ConvertToMacro: Unknown macro url format" );
             }
         }
+
+        if ( aMacroName.getLength() )
+            pMacro = new SvxMacro( aMacroName, aLibrary, eType );
     }
 
     return pMacro;
