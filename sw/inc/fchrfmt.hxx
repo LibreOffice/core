@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fchrfmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,21 @@ class SwFmtCharFmt: public SfxPoolItem, public SwClient
 {
     friend class SwTxtCharFmt;
     SwTxtCharFmt* pTxtAttr;     // mein TextAttribut
+
 public:
-    SwFmtCharFmt( SwCharFmt *pFmt );
+    SwFmtCharFmt() : pTxtAttr(0) {}
+
+    // single argument ctors shall be explicit.
+    explicit SwFmtCharFmt( SwCharFmt *pFmt );
+    virtual ~SwFmtCharFmt();
+
+    // @@@ public copy ctor, but no copy assignment?
     SwFmtCharFmt( const SwFmtCharFmt& rAttr );
-    ~SwFmtCharFmt();        // fuer SEXPORT
+private:
+    // @@@ public copy ctor, but no copy assignment?
+    SwFmtCharFmt & operator= (const SwFmtCharFmt &);
+public:
+
     TYPEINFO();
 
     // "pure virtual Methoden" vom SfxPoolItem
