@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-09 17:21:15 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¦b·ν«eªΊ¤u§@ªν¤§«e(~E)";
         Text[ arabic ] = "ήΘα ΗαΜΟζα ΗαΝΗαν";
         Text[ greek ] = "Πριν από τον ενεργό πίνακα";
-        Text[ korean ] = "Ηφΐη Η¥ ΎΥΏ΅";
+        Text[ korean ] = "Ηφΐη Η¥ ΎΥΏ΅(~E)";
         Text[ turkish ] = "Aηύk tablonun ~φnόne";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Delante de la hoja actual";
@@ -187,7 +187,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¦b·ν«eªΊ¤u§@ªν¤§«α(~A)";
         Text[ arabic ] = "ΘΪΟ ΗαΜΟζα ΗαΝΗαν";
         Text[ greek ] = "Μετά από τον ενεργό πίνακα";
-        Text[ korean ] = "Ηφΐη Η¥ µΪΏ΅";
+        Text[ korean ] = "Ηφΐη Η¥ µΪΏ΅(~A)";
         Text[ turkish ] = "Aηύk tablonun ~arkasύna";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Detrαs de la ~hoja actual";
@@ -239,11 +239,11 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_simplified ] = "ΠΒ½¨Ή¤Χχ±ν(~N)";
         Text[ russian ] = "Νξβϋι λθρς";
         Text[ polish ] = "Utwσrz ponownie";
-        Text[ japanese ] = "V‚µ‚­μ¬";
+        Text[ japanese ] = "V‚µ‚­μ¬(~N)";
         Text[ chinese_traditional ] = "·sΌW¤u§@ªν(~N)";
         Text[ arabic ] = "ΕδΤΗΑ γδ ΜΟνΟ";
         Text[ greek ] = "Δημιουργία";
-        Text[ korean ] = "»υ·Ξ ΈΈµι±β";
+        Text[ korean ] = "»υ·Ξ ΈΈµι±β(~N)";
         Text[ turkish ] = "~Yeni tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Crear una nueva";
@@ -271,7 +271,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "ΌΖ¥Ψ(~O)";
         Text[ arabic ] = "ΗαΪΟΟ";
         Text[ greek ] = "Αρι~θμός";
-        Text[ korean ] = "°³Όφ";
+        Text[ korean ] = "°³Όφ(~O)";
         Text[ turkish ] = "A~det";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nϊm. de hojas";
@@ -344,7 +344,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "±qΐΙ®Χ·sΌW(~F)";
         Text[ arabic ] = "ΕδΤΗΑ γδ Ηαγαέ";
         Text[ greek ] = "Δημιουργί~α από αρχείο";
-        Text[ korean ] = "£®£®ΖΔΐΟ·ΞΊΞΕΝ΅΅ΈΈµι±β";
+        Text[ korean ] = "£®£®ΖΔΐΟ·ΞΊΞΕΝ΅΅ΈΈµι±β(~F)";
         Text[ turkish ] = "~Dosyadan oluώtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~A partir de archivo";
@@ -380,7 +380,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "ΒsΔύ(~B)...";
         Text[ arabic ] = "ΗΣΚΪΡΗΦ...";
         Text[ greek ] = "Αναζήτηση...";
-        Text[ korean ] = "°Λ»φ...";
+        Text[ korean ] = "°Λ»φ(~B)...";
         Text[ turkish ] = "~Tara...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xaminar...";
@@ -409,7 +409,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "±¶®|(~K)";
         Text[ arabic ] = "ΡΘΨ";
         Text[ greek ] = "Σύνδεση";
-        Text[ korean ] = "ΈµΕ©";
+        Text[ korean ] = "ΈµΕ©(~K)";
         Text[ turkish ] = "Baπ~la";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vincular";
@@ -421,6 +421,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 192 , 8 ) ;
     };
 };
+
 
 
 
