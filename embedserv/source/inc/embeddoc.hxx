@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-28 16:31:27 $
+ *  last change: $Author: kz $ $Date: 2003-04-10 14:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _EMBEDDOC_HXX_
 #define _EMBEDDOC_HXX_
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#undef _DEBUG
+#endif
 
 #include "common.h"
 #include <oleidl.h>

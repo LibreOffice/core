@@ -2,9 +2,9 @@
  *
  *  $RCSfile: esdll.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:50:10 $
+ *  last change: $Author: kz $ $Date: 2003-04-10 14:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #define STRICT
 #define _WIN32_WINNT 0x0400
 #define _WIN32_DCOM
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#undef _DEBUG
+#endif
 
 #include <atlbase.h>
 CComModule _Module;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:49:20 $
+ *  last change: $Author: kz $ $Date: 2003-04-10 14:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _SERVPROV_HXX
 #define _SERVPROV_HXX
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#undef _DEBUG
+#endif
 
 #include "common.h"
 #include <oleidl.h>
