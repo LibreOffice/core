@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:06:21 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,19 @@
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
 #endif
 #ifndef _STG_HXX
 #include <sot/stg.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+
+#include <unotools/streamwrap.hxx>
 
 #include "svdfppt.hxx"
 #include "xpoly.hxx"
@@ -131,9 +135,6 @@
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <colritem.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <svstor.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <fhgtitem.hxx>
@@ -272,12 +273,6 @@
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <scripttypeitem.hxx>
-#endif
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
-#endif
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
 #endif
 #include <vcl/virdev.hxx>
 #include <algorithm>
@@ -2049,12 +2044,13 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                 }
             }
 #endif
+            //TODO/LATER: possible optimization - unpack on demand!
             if ( aZCodec.EndCompression() )
             {
                 Storage* pObjStor = new Storage( *pDest, TRUE );
                 if ( pObjStor )
                 {
-                    SvStorageRef xObjStor( new SvStorage( pObjStor ) );
+                    SotStorageRef xObjStor( new SotStorage( pObjStor ) );
                     if ( xObjStor.Is() && !xObjStor->GetError() )
                     {
                         if ( xObjStor->GetClassName() == SvGlobalName() )
@@ -2063,28 +2059,34 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                             xObjStor->SetClass( SvGlobalName( aId.n1, aId.n2, aId.n3, aId.n4, aId.n5, aId.n6, aId.n7, aId.n8, aId.n9, aId.n10, aId.n11 ),
                                 pObjStor->GetFormat(), pObjStor->GetUserName() );
                         }
-                        SvStorageStreamRef xSrcTst = xObjStor->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "\1Ole" ) ) );
+                        SotStorageStreamRef xSrcTst = xObjStor->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "\1Ole" ) ) );
                         if ( xSrcTst.Is() )
                         {
                             BYTE aTestA[ 10 ];
                             BOOL bGetItAsOle = ( sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
                             if ( !bGetItAsOle )
                             {   // maybe there is a contentsstream in here
-                                xSrcTst = xObjStor->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Contents" ) ), STREAM_READWRITE | STREAM_NOCREATE );
+                                xSrcTst = xObjStor->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Contents" ) ), STREAM_READWRITE | STREAM_NOCREATE );
                                 bGetItAsOle = ( xSrcTst.Is() && sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
                             }
                             if ( bGetItAsOle )
                             {
-                                if ( nSvxMSDffOLEConvFlags )
+                                ::rtl::OUString aNm;
+                                // if ( nSvxMSDffOLEConvFlags )
                                 {
-                                    SvStorageRef xDestStorage( pOe->pShell->GetStorage() );
-                                    SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
-                                                nSvxMSDffOLEConvFlags, *xObjStor,
-                                                *xDestStorage, rGraf ));
-                                    if( xIPObj.Is() )
+                                    uno::Reference < embed::XStorage > xDestStorage( pOe->pShell->GetStorage() );
+                                    uno::Reference < embed::XEmbeddedObject > xObj =
+                                        CheckForConvertToSOObj( nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf );
+                                    if( xObj.is() )
                                     {
-                                        String aNm( pOe->pShell->InsertObject( xIPObj, String() )->GetObjName() );
-                                        pRet = new SdrOle2Obj( xIPObj, aNm, rBoundRect, FALSE );
+                                        pOe->pShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
+
+                                        // TODO/LATER: get ViewAspect from MSDoc
+                                        svt::EmbeddedObjectRef aObj( xObj );
+
+                                        // TODO/LATER: need MediaType for Graphic
+                                        aObj.SetGraphic( rGraf, ::rtl::OUString() );
+                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, FALSE );
                                     }
                                 }
                                 if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
@@ -2096,26 +2098,33 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                                 }
                                 if ( !pRet )
                                 {
-                                    GDIMetaFile aMtf;
-                                    SvEmbeddedObject::MakeContentStream( xObjStor,
-                                                *lcl_GetMetaFileFromGrf_Impl( aGraphic, aMtf ) );
+                                    uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *pDest );
+                                    uno::Reference < embed::XEmbeddedObject > xObj =
+                                        pOe->pShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStream, aNm );
 
-                                    SvInPlaceObjectRef xInplaceObj( ((SvFactory*)SvInPlaceObject::
-                                                            ClassFactory())->CreateAndLoad( xObjStor ) );
-                                    if( xInplaceObj.Is() )
+                                    if ( xObj.is() )
                                     {
-
-                                        // VisArea am OutplaceObject setzen!!
+                                        // TODO/LATER: get ViewAspect from MSDoc
+                                        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                                        MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                                         Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
-                                            aGraphic.GetPrefMapMode(), MapMode( xInplaceObj->GetMapUnit() ) ) );
+                                            aGraphic.GetPrefMapMode(), MapMode( aMapUnit ) ) );
+
+                                        //TODO/LATER: keep on hacking?!
                                         // modifiziert wollen wir nicht werden
+                                        //xInplaceObj->EnableSetModified( FALSE );
+                                        awt::Size aSz;
+                                        aSz.Width = aSize.Width();
+                                        aSz.Height = aSize.Height();
+                                        xObj->setVisualAreaSize( nAspect, aSz );
+                                        //xInplaceObj->EnableSetModified( TRUE );
 
-                                        xInplaceObj->EnableSetModified( FALSE );
-                                        xInplaceObj->SetVisArea( Rectangle( Point(), aSize ) );
-                                        xInplaceObj->EnableSetModified( TRUE );
+                                        svt::EmbeddedObjectRef aObj( xObj, nAspect );
 
-                                        String aNm( pOe->pShell->InsertObject( xInplaceObj, String() )->GetObjName() );
-                                        pRet = new SdrOle2Obj( xInplaceObj, aNm, rBoundRect, FALSE );
+                                        // TODO/LATER: need MediaType for Graphic
+                                        aObj.SetGraphic( aGraphic, ::rtl::OUString() );
+
+                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, FALSE );
                                     }
                                 }
                             }
@@ -2187,16 +2196,16 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                         SvMemoryStream* pBas = ImportExOleObjStg( nPersistPtr, nOleId );
                         if ( pBas )
                         {
-                            SvStorageRef xSource( new SvStorage( pBas, TRUE ) );
-                            SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
+                            SotStorageRef xSource( new SotStorage( pBas, TRUE ) );
+                            SotStorageRef xDest( new SotStorage( new SvMemoryStream(), TRUE ) );
                             if ( xSource.Is() && xDest.Is() )
                             {
                                 // is this a visual basic storage ?
-                                SvStorageRef xSubStorage = xSource->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM( "VBA" ) ),
+                                SotStorageRef xSubStorage = xSource->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM( "VBA" ) ),
                                     STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL );
                                 if( xSubStorage.Is() && ( SVSTREAM_OK == xSubStorage->GetError() ) )
                                 {
-                                    SvStorageRef xMacros = xDest->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM( "MACROS" ) ) );
+                                    SotStorageRef xMacros = xDest->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM( "MACROS" ) ) );
                                     if ( xMacros.Is() )
                                     {
                                         SvStorageInfoList aList;
@@ -2216,16 +2225,16 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                             int nSuccess = aMSVBas.Import( String( RTL_CONSTASCII_USTRINGPARAM( "MACROS" ) ),
                                                     String( RTL_CONSTASCII_USTRINGPARAM( "VBA" ) ), TRUE, FALSE );
 
-                                            SvStorageRef xDoc( pShell->GetStorage() );
-                                            if ( xDoc.Is() && ( xDoc->GetError() == SVSTREAM_OK ) )
+                                            uno::Reference < embed::XStorage > xDoc( pShell->GetStorage() );
+                                            if ( xDoc.is() )
                                             {
-                                                SvStorageRef xVBA = xDoc->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Macros" ) ) );
+                                                SotStorageRef xVBA = SotStorage::OpenOLEStorage( xDoc, String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Macros" ) ) );
                                                 if ( xVBA.Is() && ( xVBA->GetError() == SVSTREAM_OK ) )
                                                 {
-                                                    SvStorageRef xSubVBA = xVBA->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Overhead" ) ) );
+                                                    SotStorageRef xSubVBA = xVBA->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Overhead" ) ) );
                                                     if ( xSubVBA.Is() && ( xSubVBA->GetError() == SVSTREAM_OK ) )
                                                     {
-                                                        SvStorageStreamRef xOriginal = xSubVBA->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Overhead2" ) ) );
+                                                        SotStorageStreamRef xOriginal = xSubVBA->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Overhead2" ) ) );
                                                         if ( xOriginal.Is() && ( xOriginal->GetError() == SVSTREAM_OK ) )
                                                         {
                                                             if ( nPersistPtr && ( nPersistPtr < nPersistPtrAnz ) )
@@ -4432,6 +4441,57 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     {
         mpCharSheet[ TSS_TYPE_QUARTERBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
         mpParaSheet[ TSS_TYPE_QUARTERBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+    }
+    if ( !bFoundTxMasterStyleAtom04 )
+    {   // try to locate the txMasterStyleAtom in the Environment
+        DffRecordHeader* pEnvHeader = rManager.aDocRecManager.GetRecordHeader( PPT_PST_Environment );
+        if ( pEnvHeader )
+        {
+            pEnvHeader->SeekToContent( rIn );
+            DffRecordHeader aTxMasterStyleHd;
+            while ( rIn.Tell() < pEnvHeader->GetRecEndFilePos() )
+            {
+                rIn >> aTxMasterStyleHd;
+                if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
+                {
+                    sal_uInt16 nLevelAnz;
+                    rIn >> nLevelAnz;
+
+                    sal_uInt16 nLev = 0;
+                    sal_Bool bFirst = sal_True;
+                    while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
+                    {
+                        if ( nLev )
+                        {
+                            mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev - 1 ];
+                            mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev - 1 ];
+                        }
+                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rManager, rIn, sal_True, nLev, bFirst );
+                        if ( !nLev )
+                        {
+                            // set paragraph defaults for instance 4 (TSS_TYPE_TEXT_IN_SHAPE)
+                            if ( rTxPFStyle.bValid )
+                            {
+                                PPTParaLevel& rParaLevel = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ 0 ];
+                                rParaLevel.mnAsianLineBreak = 0;
+                                if ( rTxPFStyle.bForbiddenRules )
+                                    rParaLevel.mnAsianLineBreak |= 1;
+                                if ( !rTxPFStyle.bLatinTextWrap )
+                                    rParaLevel.mnAsianLineBreak |= 2;
+                                if ( rTxPFStyle.bHangingPunctuation )
+                                    rParaLevel.mnAsianLineBreak |= 4;
+                            }
+                        }
+                        mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, sal_True, nLev, bFirst );
+                        bFirst = sal_False;
+                        nLev++;
+                    }
+                    break;
+                }
+                else
+                    aTxMasterStyleHd.SeekToEndOfRecord( rIn );
+            }
+        }
     }
     rIn.Seek( nOldFilePos );
 
