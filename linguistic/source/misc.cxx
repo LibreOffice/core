@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-23 14:45:12 $
+ *  last change: $Author: tl $ $Date: 2001-06-29 13:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,15 +468,28 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
 
 ///////////////////////////////////////////////////////////////////////////
 
-// TL_TODO:
-// replace this non performant implementations with better ones
-//
+
+static CharClass & lcl_GetCharClass()
+{
+    static CharClass aCC( CreateLocale( LANGUAGE_ENGLISH_US ) );
+    return aCC;
+}
+
+
+osl::Mutex & lcl_GetCharClassMutex()
+{
+    static osl::Mutex   aMutex;
+    return aMutex;
+}
+
 
 BOOL IsUpper( const String &rText, INT16 nLanguage )
 {
-    // european languages only...
-    sal_Int32 nFlags = CharClass( CreateLocale( nLanguage ) ).
-                getStringType( rText, 0, rText.Len() );
+    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+
+    CharClass &rCC = lcl_GetCharClass();
+    rCC.setLocale( CreateLocale( nLanguage ) );
+    sal_Int32 nFlags = rCC.getStringType( rText, 0, rText.Len() );
     return      (nFlags & KCharacterType::UPPER)
             && !(nFlags & KCharacterType::LOWER);
 }
@@ -484,9 +497,11 @@ BOOL IsUpper( const String &rText, INT16 nLanguage )
 
 BOOL IsLower( const String &rText, INT16 nLanguage )
 {
-    // european languages only...
-    sal_Int32 nFlags = CharClass( CreateLocale( nLanguage ) ).
-                getStringType( rText, 0, rText.Len() );
+    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+
+    CharClass &rCC = lcl_GetCharClass();
+    rCC.setLocale( CreateLocale( nLanguage ) );
+    sal_Int32 nFlags = rCC.getStringType( rText, 0, rText.Len() );
     return      (nFlags & KCharacterType::LOWER)
             && !(nFlags & KCharacterType::UPPER);
 }
@@ -494,19 +509,31 @@ BOOL IsLower( const String &rText, INT16 nLanguage )
 
 String ToLower( const String &rText, INT16 nLanguage )
 {
-    return CharClass( CreateLocale( nLanguage ) ).lower( rText );
+    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+
+    CharClass &rCC = lcl_GetCharClass();
+    rCC.setLocale( CreateLocale( nLanguage ) );
+    return rCC.lower( rText );
 }
 
 
 sal_Unicode ToLower( const sal_Unicode cChar, INT16 nLanguage )
 {
-    return CharClass( CreateLocale( nLanguage ) ).lower( cChar ).GetChar(0);
+    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+
+    CharClass &rCC = lcl_GetCharClass();
+    rCC.setLocale( CreateLocale( nLanguage ) );
+    return rCC.lower( cChar ).GetChar(0);
 }
 
 
 sal_Unicode ToUpper( const sal_Unicode cChar, INT16 nLanguage )
 {
-    return CharClass( CreateLocale( nLanguage ) ).upper( cChar ).GetChar(0);
+    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+
+    CharClass &rCC = lcl_GetCharClass();
+    rCC.setLocale( CreateLocale( nLanguage ) );
+    return rCC.upper( cChar ).GetChar(0);
 }
 
 
