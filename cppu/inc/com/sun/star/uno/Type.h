@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,13 +119,13 @@ class Type
 
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
 
     /** Default Constructor:
@@ -205,8 +205,7 @@ public:
         <br>
         @return name of the set type
     */
-    inline ::rtl::OUString SAL_CALL getTypeName() const SAL_THROW( () )
-        { return ::rtl::OUString( _pType->pTypeName ); }
+    inline ::rtl::OUString SAL_CALL getTypeName() const SAL_THROW( () );
 
     /** Obtains a full type description of set type.
         <br>
@@ -237,7 +236,7 @@ public:
         @return true if both types refer the same type, false otherwise
     */
     inline sal_Bool SAL_CALL operator == ( const Type & rType ) const SAL_THROW( () )
-        { return equals( rType ); }
+        { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Unequality operator:
         Compares two types.
         <br>
@@ -245,7 +244,7 @@ public:
         @return false if both types refer the same type, true otherwise
     */
     inline sal_Bool SAL_CALL operator != ( const Type & rType ) const SAL_THROW( () )
-        { return (! equals( rType )); }
+        { return (! ::typelib_typedescriptionreference_equals( _pType, rType._pType )); }
 };
 
 }

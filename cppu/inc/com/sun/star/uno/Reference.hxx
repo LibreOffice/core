@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,47 +85,120 @@ namespace uno
 {
 
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference() SAL_THROW( () )
-    : _pInterface( 0 )
+inline sal_Bool BaseReference::operator == ( XInterface * pInterface ) const SAL_THROW( () )
 {
+    if (_pInterface == pInterface)
+        return sal_True;
+    // only the query to XInterface must return the same pointer if they belong to same objects
+    Reference< XInterface > x1( _pInterface, UNO_QUERY );
+    Reference< XInterface > x2( pInterface, UNO_QUERY );
+    return (x1.get() == x2.get());
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( XInterface * pInterface ) SAL_THROW( () )
-    : _pInterface( pInterface )
+inline sal_Bool BaseReference::operator != ( XInterface * pInterface ) const SAL_THROW( () )
 {
-    if (_pInterface)
-        _pInterface->acquire();
+    return (! operator == ( pInterface ));
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( XInterface * pInterface, __sal_NoAcquire ) SAL_THROW( () )
-    : _pInterface( pInterface )
+inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const SAL_THROW( () )
 {
+    return operator == ( rRef.get() );
 }
 //__________________________________________________________________________________________________
-inline BaseReference::BaseReference( const BaseReference & rRef ) SAL_THROW( () )
-    : _pInterface( rRef._pInterface )
+inline sal_Bool BaseReference::operator != ( const BaseReference & rRef ) const SAL_THROW( () )
 {
-    if (_pInterface)
-        _pInterface->acquire();
+    return (! operator == ( rRef.get() ));
 }
+
+//##################################################################################################
+
 //__________________________________________________________________________________________________
-inline BaseReference::~BaseReference() SAL_THROW( () )
+template< class interface_type >
+inline interface_type * Reference< interface_type >::__query(
+    XInterface * pInterface ) SAL_THROW( (RuntimeException) )
+{
+    if (pInterface)
+    {
+        const Type & rType = ::getCppuType( (const Reference< interface_type > *)0 );
+        Any aRet( pInterface->queryInterface( rType ) );
+        if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
+        {
+            interface_type * pRet = * reinterpret_cast< interface_type ** >( aRet.pData );
+            * reinterpret_cast< interface_type ** >( aRet.pData ) = 0;
+            return pRet;
+        }
+    }
+    return 0;
+}
+
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::~Reference() SAL_THROW( () )
 {
     if (_pInterface)
         _pInterface->release();
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const SAL_THROW( () )
+template< class interface_type >
+inline Reference< interface_type >::Reference() SAL_THROW( () )
 {
-    if (_pInterface == rRef._pInterface)
-        return sal_True;
-    // only the query to XInterface must return the same pointer if they belong to same objects
-    Reference< XInterface > x1( _pInterface, UNO_QUERY );
-    Reference< XInterface > x2( rRef.get(), UNO_QUERY );
-    return (x1.get() == x2.get());
+    _pInterface = 0;
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::set( XInterface * pInterface ) SAL_THROW( () )
+template< class interface_type >
+inline Reference< interface_type >::Reference( const Reference< interface_type > & rRef ) SAL_THROW( () )
+{
+    _pInterface = rRef.get();
+    if (_pInterface)
+        _pInterface->acquire();
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::Reference( interface_type * pInterface ) SAL_THROW( () )
+{
+    _pInterface = pInterface;
+    if (_pInterface)
+        _pInterface->acquire();
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::Reference( interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () )
+{
+    _pInterface = pInterface;
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::Reference( interface_type * pInterface, __UnoReference_NoAcquire ) SAL_THROW( () )
+{
+    _pInterface = pInterface;
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::Reference( const BaseReference & rRef, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
+{
+    _pInterface = __query( rRef.get() );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::Reference( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
+{
+    _pInterface = __query( pInterface );
+}
+
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline void Reference< interface_type >::clear() SAL_THROW( () )
+{
+    if (_pInterface)
+    {
+        _pInterface->release();
+        _pInterface = 0;
+    }
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline sal_Bool Reference< interface_type >::set(
+    interface_type * pInterface ) SAL_THROW( () )
 {
     if (pInterface != _pInterface)
     {
@@ -138,7 +211,9 @@ inline sal_Bool BaseReference::set( XInterface * pInterface ) SAL_THROW( () )
     return (pInterface != 0);
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::set( XInterface * pInterface, __sal_NoAcquire ) SAL_THROW( () )
+template< class interface_type >
+inline sal_Bool Reference< interface_type >::set(
+    interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () )
 {
     if (_pInterface)
         _pInterface->release();
@@ -146,13 +221,33 @@ inline sal_Bool BaseReference::set( XInterface * pInterface, __sal_NoAcquire ) S
     return (pInterface != 0);
 }
 //__________________________________________________________________________________________________
-inline void BaseReference::clear() SAL_THROW( () )
+template< class interface_type >
+inline sal_Bool Reference< interface_type >::set(
+    interface_type * pInterface, __UnoReference_NoAcquire ) SAL_THROW( () )
 {
-    if (_pInterface)
-    {
-        _pInterface->release();
-        _pInterface = 0;
-    }
+    return set( pInterface, SAL_NO_ACQUIRE );
+}
+
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline sal_Bool Reference< interface_type >::set(
+    const Reference< interface_type > & rRef ) SAL_THROW( () )
+{
+    return set( rRef.get() );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline sal_Bool Reference< interface_type >::set(
+    XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
+{
+    return set( __query( pInterface ), SAL_NO_ACQUIRE );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline sal_Bool Reference< interface_type >::set(
+    const BaseReference & rRef, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
+{
+    return set( __query( rRef.get() ), SAL_NO_ACQUIRE );
 }
 
 //__________________________________________________________________________________________________
@@ -160,26 +255,31 @@ template< class interface_type >
 inline Reference< interface_type > & Reference< interface_type >::operator = (
     interface_type * pInterface ) SAL_THROW( () )
 {
-    BaseReference::set( pInterface );
+    set( pInterface );
     return *this;
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline XInterface * Reference< interface_type >::__query(
+inline Reference< interface_type > & Reference< interface_type >::operator = (
+    const Reference< interface_type > & rRef ) SAL_THROW( () )
+{
+    set( rRef.get() );
+    return *this;
+}
+
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type > Reference< interface_type >::query(
+    const BaseReference & rRef ) SAL_THROW( (RuntimeException) )
+{
+    return Reference< interface_type >( __query( rRef.get() ), SAL_NO_ACQUIRE );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type > Reference< interface_type >::query(
     XInterface * pInterface ) SAL_THROW( (RuntimeException) )
 {
-    if (pInterface)
-    {
-        const Type & rType = ::getCppuType( (const Reference< interface_type > *)0 );
-        Any aRet( pInterface->queryInterface( rType ) );
-        if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
-        {
-            XInterface * pRet = * reinterpret_cast< XInterface ** >( aRet.pData );
-            * reinterpret_cast< XInterface ** >( aRet.pData ) = 0;
-            return pRet;
-        }
-    }
-    return 0;
+    return Reference< interface_type >( __query( pInterface ), SAL_NO_ACQUIRE );
 }
 
 }

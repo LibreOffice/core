@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ namespace uno
 class RuntimeException;
 class XInterface;
 
-/** Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
+/** DEPRECATED: use SAL_NO_ACQUIRE
+    Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
     <br>
 */
 enum __UnoReference_NoAcquire
@@ -94,78 +95,19 @@ enum __UnoReference_NoAcquire
     UNO_REF_NO_ACQUIRE
 };
 
-/** Base reference class holding/ acquiring an interface.<br>
-    Constructors acquire an interface while the destructor releases it.
-    This class serves as a base class for all template reference classes and
+/** This base class serves as a base class for all template reference classes and
     has been introduced due to compiler problems with templated operators ==, =!.
     <br>
 */
 class BaseReference
 {
-    /** the interface pointer<br>
+protected:
+    /** the interface pointer
+        <br>
     */
     XInterface * _pInterface;
 
-protected:
-    /** Default Constructor:
-        Sets null reference.
-        <br>
-    */
-    inline BaseReference() SAL_THROW( () );
-    /** Constructor:
-        Sets given interface pointer.
-        <br>
-        @param pInterface an interface pointer
-    */
-    inline BaseReference( XInterface * pInterface ) SAL_THROW( () );
-    /** Constructor:
-        Sets reference to given interface pointer without acquiring it.
-        <br>
-        @param pInterface interface pointer
-        @param dummy SAL_NO_ACQUIRE to force obvious distinction to other constructors
-    */
-    inline BaseReference( XInterface * pInterface, __sal_NoAcquire ) SAL_THROW( () );
-    /** Copy constructor:
-        Copies interface reference.
-        <br>
-        @param rRef another reference
-    */
-    inline BaseReference( const BaseReference & rRef ) SAL_THROW( () );
-    /** Destructor:
-        Releases interface reference.
-        <br>
-    */
-    inline ~BaseReference() SAL_THROW( () );
-
-    /** Sets interface pointer. An interface already set will be released.
-        <br>
-        @param pInterface an interface pointer
-        @return true, if non-null interface was set
-    */
-    inline sal_Bool SAL_CALL set( XInterface * pInterface ) SAL_THROW( () );
-    /** Sets interface pointer without acquiring it.
-        An interface already set will be released.
-        <br>
-        @param pInterface an interface pointer
-    */
-    inline sal_Bool SAL_CALL set( XInterface * pInterface, __sal_NoAcquire ) SAL_THROW( () );
-
 public:
-    // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
-        { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
-        { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
-        { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
-        {}
-
-    /** Clears reference, i.e. releases interface.
-        Reference is null after clear() call.
-        <br>
-    */
-    inline void SAL_CALL clear() SAL_THROW( () );
     /** Gets interface pointer.
         This call does <b>not</b> acquire the interface.
         <br>
@@ -173,12 +115,29 @@ public:
     */
     inline XInterface * SAL_CALL get() const SAL_THROW( () )
         { return _pInterface; }
+
     /** Checks if reference is null.
         <br>
         @return true if reference acquires an interface, i.e. is not null
     */
     inline sal_Bool SAL_CALL is() const SAL_THROW( () )
         { return (_pInterface != 0); }
+
+    /** Equality operator: compares two interfaces<br>
+        Checks if both references are null or refer to the same object.
+        <br>
+        @param rRef another interface
+        @return true if both references are null or refer to the same object, false otherwise
+    */
+    inline sal_Bool SAL_CALL operator == ( XInterface * pInterface ) const SAL_THROW( () );
+    /** Unequality operator: compares two interfaces<br>
+        Checks if both references are null or refer to the same object.
+        <br>
+        @param rRef another interface
+        @return false if both references are null or refer to the same object, true otherwise
+    */
+    inline sal_Bool SAL_CALL operator != ( XInterface * pInterface ) const SAL_THROW( () );
+
     /** Equality operator: compares two interfaces<br>
         Checks if both references are null or refer to the same object.
         <br>
@@ -192,10 +151,9 @@ public:
         @param rRef another reference
         @return false if both references are null or refer to the same object, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const BaseReference & rRef ) const SAL_THROW( () )
-        { return (! operator == ( rRef )); }
+    inline sal_Bool SAL_CALL operator != ( const BaseReference & rRef ) const SAL_THROW( () );
 
-    // needed for stl container operations, though this makes no sense on pointers
+    // needed for some stl container operations, though this makes no sense on pointers
     inline sal_Bool SAL_CALL operator < ( const BaseReference & rRef ) const SAL_THROW( () )
         { return (_pInterface < rRef._pInterface); }
 };
@@ -229,60 +187,59 @@ class Reference : public BaseReference
         @param pInterface interface pointer
         @return interface of demanded type (may be null)
     */
-    inline static XInterface * SAL_CALL __query( XInterface * pInterface ) SAL_THROW( (RuntimeException) );
+    inline static interface_type * SAL_CALL __query( XInterface * pInterface ) SAL_THROW( (RuntimeException) );
+
 public:
     // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+    static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+    static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+    static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+    static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
+
+    /** Destructor:
+        Releases interface if set.
+        <br>
+    */
+    inline ~Reference() SAL_THROW( () );
 
     /** Default Constructor:
         Sets null reference.
         <br>
     */
-    inline Reference() SAL_THROW( () )
-        : BaseReference()
-        {}
+    inline Reference() SAL_THROW( () );
+
     /** Copy constructor:
         Copies interface reference.
         <br>
         @param rRef another reference
     */
-    inline Reference( const Reference< interface_type > & rRef ) SAL_THROW( () )
-        : BaseReference( rRef )
-        {}
+    inline Reference( const Reference< interface_type > & rRef ) SAL_THROW( () );
     /** Constructor:
         Sets given interface pointer.
         <br>
         @param pInterface an interface pointer
     */
-    inline Reference( interface_type * pInterface ) SAL_THROW( () )
-        : BaseReference( pInterface )
-        {}
+    inline Reference( interface_type * pInterface ) SAL_THROW( () );
 
-    /** Constructor:
-        Sets given interface pointer without acquiring it.
-        <br>
-        @param pInterface another reference
-        @param dummy UNO_REF_NO_ACQUIRE to force obvious distinction to other constructors
-    */
-    inline Reference( XInterface * pInterface, __UnoReference_NoAcquire ) SAL_THROW( () )
-        : BaseReference( pInterface, SAL_NO_ACQUIRE )
-        {}
     /** Constructor:
         Sets given interface pointer without acquiring it.
         <br>
         @param pInterface another reference
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to other constructors
     */
-    inline Reference( XInterface * pInterface, __sal_NoAcquire ) SAL_THROW( () )
-        : BaseReference( pInterface, SAL_NO_ACQUIRE )
-        {}
+    inline Reference( interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () );
+    /** DEPRECATED: use SAL_NO_ACQUIRE version
+        Constructor:
+        Sets given interface pointer without acquiring it.
+        <br>
+        @param pInterface another reference
+        @param dummy UNO_REF_NO_ACQUIRE to force obvious distinction to other constructors
+    */
+    inline Reference( interface_type * pInterface, __UnoReference_NoAcquire ) SAL_THROW( () );
 
     /** Constructor:
         Queries given interface for reference interface type (<b>interface_type</b>).
@@ -290,18 +247,76 @@ public:
         @param rRef another reference
         @param dummy UNO_QUERY or UNO_REF_QUERY to force obvious distinction to other constructors
     */
-    inline Reference( const BaseReference & rRef, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
-        : BaseReference( __query( rRef.get() ), SAL_NO_ACQUIRE )
-        {}
+    inline Reference( const BaseReference & rRef, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
     /** Constructor:
         Queries given interface for reference interface type (<b>interface_type</b>).
         <br>
         @param pInterface an interface pointer
         @param dummy UNO_QUERY to force obvious distinction to other constructors
     */
-    inline Reference( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
-        : BaseReference( __query( pInterface ), SAL_NO_ACQUIRE )
-        {}
+    inline Reference( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
+
+    /** Cast operator to Reference< XInterface >:
+        Reference objects are binary compatible and any interface must be derived
+        from com.sun.star.uno.XInterface.
+        This a useful direct cast possibility.
+        <br>
+    */
+    inline SAL_CALL operator const Reference< XInterface > & () const SAL_THROW( () )
+        { return * reinterpret_cast< const Reference< XInterface > * >( this ); }
+
+    /** Dereference operator:
+        Used to call interface methods.
+        <br>
+        @return <b>un</b>acquired interface pointer
+    */
+    inline interface_type * SAL_CALL operator -> () const SAL_THROW( () )
+        { return static_cast< interface_type * >( _pInterface ); }
+
+    /** Gets interface pointer.
+        This call does <b>not</b> acquire the interface.
+        <br>
+        @return <b>un</b>acquired interface pointer
+    */
+    inline interface_type * SAL_CALL get() const SAL_THROW( () )
+        { return static_cast< interface_type * >( _pInterface ); }
+
+    /** Clears reference, i.e. releases interface.
+        Reference is null after clear() call.
+        <br>
+    */
+    inline void SAL_CALL clear() SAL_THROW( () );
+
+    /** Sets the given interface.
+        An interface already set will be released.
+        <br>
+        @param rRef another reference
+        @return true, if non-null interface was set
+    */
+    inline sal_Bool SAL_CALL set( const Reference< interface_type > & rRef ) SAL_THROW( () );
+    /** Sets the given interface.
+        An interface already set will be released.
+        <br>
+        @param pInterface another interface
+        @return true, if non-null interface was set
+    */
+    inline sal_Bool SAL_CALL set( interface_type * pInterface ) SAL_THROW( () );
+
+    /** Sets interface pointer without acquiring it.
+        An interface already set will be released.
+        <br>
+        @param pInterface an interface pointer
+        @return true, if non-null interface was set
+    */
+    inline sal_Bool SAL_CALL set( interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () );
+    /** DEPRECATED: use SAL_NO_ACQUIRE version
+        Sets interface pointer without acquiring it.
+        An interface already set will be released.
+        <br>
+        @param pInterface an interface pointer
+        @return true, if non-null interface was set
+    */
+    inline sal_Bool SAL_CALL set( interface_type * pInterface, __UnoReference_NoAcquire ) SAL_THROW( () );
 
     /** Queries given interface for reference interface type (<b>interface_type</b>)
         and sets it.
@@ -310,8 +325,7 @@ public:
         @param pInterface an interface pointer
         @return true, if non-null interface was set
     */
-    inline sal_Bool SAL_CALL set( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
-        { return BaseReference::set( __query( pInterface ), SAL_NO_ACQUIRE ); }
+    inline sal_Bool SAL_CALL set( XInterface * pInterface, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
     /** Queries given interface for reference interface type (<b>interface_type</b>)
         and sets it.
         An interface already set will be released.
@@ -319,25 +333,7 @@ public:
         @param rRef another reference
         @return true, if non-null interface was set
     */
-    inline sal_Bool SAL_CALL set( const BaseReference & rRef, __UnoReference_Query ) SAL_THROW( (RuntimeException) )
-        { return BaseReference::set( __query( rRef.get() ), SAL_NO_ACQUIRE ); }
-
-    /** Sets the given interface.
-        An interface already set will be released.
-        <br>
-        @param rRef another reference
-        @return true, if non-null interface was set
-    */
-    inline sal_Bool SAL_CALL set( const Reference< interface_type > & rRef ) SAL_THROW( () )
-        { return BaseReference::set( rRef.get() ); }
-    /** Sets the given interface.
-        An interface already set will be released.
-        <br>
-        @param pInterface another interface
-        @return true, if non-null interface was set
-    */
-    inline sal_Bool SAL_CALL set( interface_type * pInterface ) SAL_THROW( () )
-        { return BaseReference::set( pInterface ); }
+    inline sal_Bool SAL_CALL set( const BaseReference & rRef, __UnoReference_Query ) SAL_THROW( (RuntimeException) );
 
     /** Assignment operator:
         Acquires given interface pointer and sets reference.
@@ -354,48 +350,20 @@ public:
         @param rRef an interface reference
         @return this reference
     */
-    inline Reference< interface_type > & SAL_CALL operator = ( const Reference< interface_type > & rRef ) SAL_THROW( () )
-        { return operator = ( rRef.get() ); }
+    inline Reference< interface_type > & SAL_CALL operator = ( const Reference< interface_type > & rRef ) SAL_THROW( () );
 
-    /** Queries given interface for type <b>interface_type</b>.
-        <br>
-        @param pInterface interface pointer
-        @return interface reference of demanded type (may be null)
-    */
-    inline static Reference< interface_type > SAL_CALL query( XInterface * pInterface ) SAL_THROW( (RuntimeException) )
-        { return Reference< interface_type >( __query( pInterface ), SAL_NO_ACQUIRE ); }
     /** Queries given interface reference for type <b>interface_type</b>.
         <br>
         @param rRef interface reference
         @return interface reference of demanded type (may be null)
     */
-    inline static Reference< interface_type > SAL_CALL query( const BaseReference & rRef ) SAL_THROW( (RuntimeException) )
-        { return Reference< interface_type >( __query( rRef.get() ), SAL_NO_ACQUIRE ); }
-
-    /** Cast operatory to Reference< XInterface >:
-        Reference objects are binary compatible and any interface must be derived
-        from com.sun.star.uno.XInterface.
-        This a useful direct cast possibility.
+    inline static Reference< interface_type > SAL_CALL query( const BaseReference & rRef ) SAL_THROW( (RuntimeException) );
+    /** Queries given interface for type <b>interface_type</b>.
         <br>
+        @param pInterface interface pointer
+        @return interface reference of demanded type (may be null)
     */
-    inline SAL_CALL operator const Reference< XInterface > & () const SAL_THROW( () )
-        { return * reinterpret_cast< const Reference< XInterface > * >( this ); }
-
-    /** Dereference operator:
-        Used to call interface methods.
-        <br>
-        @return <b>un</b>acquired interface pointer
-    */
-    inline interface_type * SAL_CALL operator -> () const SAL_THROW( () )
-        { return static_cast< interface_type * >( BaseReference::get() ); }
-
-    /** Gets interface pointer.
-        This call does <b>not</b> acquire the interface.
-        <br>
-        @return <b>un</b>acquired interface pointer
-    */
-    inline interface_type * SAL_CALL get() const SAL_THROW( () )
-        { return static_cast< interface_type * >( BaseReference::get() ); }
+    inline static Reference< interface_type > SAL_CALL query( XInterface * pInterface ) SAL_THROW( (RuntimeException) );
 };
 
 }

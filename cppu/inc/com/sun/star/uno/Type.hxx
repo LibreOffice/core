@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,11 @@ inline Type::Type( const Type & rType ) SAL_THROW( () )
     : _pType( rType._pType )
 {
     ::typelib_typedescriptionreference_acquire( _pType );
+}
+//__________________________________________________________________________________________________
+inline ::rtl::OUString Type::getTypeName() const SAL_THROW( () )
+{
+    return ::rtl::OUString( _pType->pTypeName );
 }
 //__________________________________________________________________________________________________
 inline Type & Type::operator = ( const Type & rType ) SAL_THROW( () )

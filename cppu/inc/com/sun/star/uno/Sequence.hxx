@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,6 @@
  ************************************************************************/
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #define _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-
-#ifndef _CPPU_MACROS_HXX_
-#include <cppu/macros.hxx>
-#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -134,14 +130,22 @@ template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len ) SAL_THROW( () )
 {
     const Type & rType = ::getCppuType( this );
-    ::uno_type_sequence_construct( &_pSequence, rType.getTypeLibType(), 0, len, cpp_acquire );
+    ::uno_type_sequence_construct(
+        &_pSequence, rType.getTypeLibType(), 0, len, cpp_acquire );
 }
 //__________________________________________________________________________________________________
 template< class E >
 inline Sequence< E >::~Sequence() SAL_THROW( () )
 {
     const Type & rType = ::getCppuType( this );
-    ::uno_type_destructData( this, rType.getTypeLibType(), cpp_release );
+    ::uno_type_destructData(
+        this, rType.getTypeLibType(), cpp_release );
+}
+//__________________________________________________________________________________________________
+template< class E >
+inline const Type & Sequence< E >::getElementType() const SAL_THROW( () )
+{
+    return ::getCppuType( (const ElementType *)0 );
 }
 //__________________________________________________________________________________________________
 template< class E >
@@ -166,6 +170,12 @@ inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const 
 }
 //__________________________________________________________________________________________________
 template< class E >
+inline sal_Bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const SAL_THROW( () )
+{
+    return (! operator == ( rSeq ));
+}
+//__________________________________________________________________________________________________
+template< class E >
 inline E * Sequence< E >::getArray() SAL_THROW( () )
 {
     const Type & rType = ::getCppuType( this );
@@ -178,14 +188,17 @@ template< class E >
 inline E & Sequence< E >::operator [] ( sal_Int32 nIndex ) SAL_THROW( () )
 {
     OSL_ENSURE( nIndex >= 0 && nIndex < getLength(), "### illegal index of sequence!" );
-    return getArray()[ nIndex ];
+    const Type & rType = ::getCppuType( this );
+    ::uno_type_sequence_reference2One(
+        &_pSequence, rType.getTypeLibType(), cpp_acquire, cpp_release );
+    return reinterpret_cast< E * >( _pSequence->elements )[ nIndex ];
 }
 //__________________________________________________________________________________________________
 template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const SAL_THROW( () )
 {
     OSL_ENSURE( nIndex >= 0 && nIndex < getLength(), "### illegal index of sequence!" );
-    return getConstArray()[ nIndex ];
+    return reinterpret_cast< const E * >( _pSequence->elements )[ nIndex ];
 }
 //__________________________________________________________________________________________________
 template< class E >

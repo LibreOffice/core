@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #define _COM_SUN_STAR_UNO_SEQUENCE_H_
 
-#ifndef _CPPU_MACROS_HXX_
-#include <cppu/macros.hxx>
-#endif
-
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
 #include <typelib/typedescription.h>
 #endif
@@ -115,13 +111,13 @@ class Sequence
 
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
 
     // static pointer to typelib type
@@ -181,8 +177,7 @@ public:
         <br>
         @return type of element
     */
-    inline const Type & getElementType() const SAL_THROW( () )
-        { return ::getCppuType( (const ElementType *)0 ); }
+    inline const Type & getElementType() const SAL_THROW( () );
 
     /** Gets length of sequence.
         <br>
@@ -247,8 +242,7 @@ public:
         @param rSeq another sequence of same type (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const Sequence< E > & rSeq ) const SAL_THROW( () )
-        { return (! operator == ( rSeq )); }
+    inline sal_Bool SAL_CALL operator != ( const Sequence< E > & rSeq ) const SAL_THROW( () );
 
     /** Reallocates sequence to new length.
         If the new length is smaller than the former, then upper elements

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:55 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #define _COM_SUN_STAR_UNO_ANY_H_
 
-#ifndef _CPPU_MACROS_HXX_
-#include <cppu/macros.hxx>
-#endif
-
 #ifndef _UNO_ANY2_H_
 #include <uno/any2.h>
 #endif
@@ -109,13 +105,13 @@ class Any : public uno_Any
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
 
     /** Default constructor:
@@ -189,7 +185,7 @@ public:
         @param a pointer to type description pointer
     */
     inline void SAL_CALL getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const SAL_THROW( () )
-        { ::typelib_typedescriptionreference_getDescription( ppTypeDescr, getValueTypeRef() ); }
+        { ::typelib_typedescriptionreference_getDescription( ppTypeDescr, pType ); }
 
     /** Gets the type class of the set value.
         <br>
@@ -202,15 +198,14 @@ public:
         <br>
         @return the type name of the set value
     */
-    inline ::rtl::OUString SAL_CALL getValueTypeName() const SAL_THROW( () )
-        { return ::rtl::OUString( pType->pTypeName ); }
+    inline ::rtl::OUString SAL_CALL getValueTypeName() const SAL_THROW( () );
 
     /** Tests if any contains a value.
         <br>
         @return true if any has a value, false otherwise
     */
     inline sal_Bool SAL_CALL hasValue() const SAL_THROW( () )
-        { return (TypeClass_VOID != getValueTypeClass()); }
+        { return (typelib_TypeClass_VOID != pType->eTypeClass); }
 
     /** Gets a pointer to the set value.
         <br>
@@ -262,8 +257,7 @@ public:
         @param rAny another any (right side)
         @return true if both any contains unequal values
     */
-    inline sal_Bool SAL_CALL operator != ( const Any & rAny ) const SAL_THROW( () )
-        { return (! operator == ( rAny )); }
+    inline sal_Bool SAL_CALL operator != ( const Any & rAny ) const SAL_THROW( () );
 };
 
 /** Template function to generically construct an any from a C++ value.
@@ -283,7 +277,7 @@ class Type;
     @param value source value (right side)
 */
 template< class C >
-inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const C & value ) SAL_THROW( () );
+inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () );
 /** Template binary >>= operator to assign a value from an any.<br>
     If the any does not contain a value that can be assigned <b>without</b>
     data loss, this operation will fail returning false.
@@ -293,7 +287,7 @@ inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const C &
     @return true if assignment was possible without data loss
 */
 template< class C >
-inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, C & value ) SAL_THROW( () );
+inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW( () );
 
 /** Template equality operator: compares set value of left side any to right side value.<br>
     The values need not be of equal type, e.g. a short integer is compared to
@@ -306,7 +300,7 @@ inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny,
     @return true if values are equal, false otherwise
 */
 template< class C >
-inline sal_Bool SAL_CALL operator == ( const ::com::sun::star::uno::Any & rAny, const C & value ) SAL_THROW( () );
+inline sal_Bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_THROW( () );
 /** Template unequality operator: compares set value of left side any to right side value.<br>
     The values need not be of equal type, e.g. a short integer is compared to
     a long integer.<br>
@@ -318,10 +312,7 @@ inline sal_Bool SAL_CALL operator == ( const ::com::sun::star::uno::Any & rAny, 
     @return true if values are unequal, false otherwise
 */
 template< class C >
-inline sal_Bool SAL_CALL operator != ( const ::com::sun::star::uno::Any & rAny, const C & value ) SAL_THROW( () )
-{
-    return (! operator == ( rAny, value ));
-}
+inline sal_Bool SAL_CALL operator != ( const Any & rAny, const C & value ) SAL_THROW( () );
 
 // additional specialized >>= and == operators
 // bool
