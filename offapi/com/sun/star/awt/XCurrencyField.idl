@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCurrencyField.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,128 +72,105 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XCurrencyField
-/** makes it possible to set the formatting and value for a currency field.
+/** gives access to the value and formatting of a currency field.
  */
 interface XCurrencyField: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XCurrencyField::setValue
-    /** sets the value to display in the currency field.
+    /** sets the value which is displayed in the currency field.
      */
     [oneway] void setValue( [in] double Value );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XCurrencyField::getValue
-    /** @returns
-                    the value which is currently displayed in the currency field.
+    /** returns the value which is currently displayed in the currency field.
      */
     double getValue();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XCurrencyField::setMin
-    /** sets the minimum value to accept by the user.
+    /** sets the minimum value that can be entered by the user.
      */
     [oneway] void setMin( [in] double Value );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XCurrencyField::getMin
-    /** @returns
-                    the currently set minimum value accepted by the user.
+    /** returns the currently set minimum value that can be entered by the
+        user.
      */
     double getMin();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XCurrencyField::setMax
-    /** sets the maximum value to accept by the user.
+    /** sets the maximum value that can be entered by the user.
      */
     [oneway] void setMax( [in] double Value );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XCurrencyField::getMax
-    /** @returns
-                    the currently set maximum value accepted by the user.
+    /** returns the currently set maximum value that can be entered by the
+        user.
      */
     double getMax();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XCurrencyField::setFirst
-    /** sets the first value to set on 'Pos1' key.
+    /** sets the first value to be set on POS1 key.
      */
     [oneway] void setFirst( [in] double Value );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XCurrencyField::getFirst
-    /** @returns
-                    the currently set first value which is set on 'Pos1' key.
+    /** returns the currently set first value which is set on POS1 key.
      */
     double getFirst();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XCurrencyField::setLast
-    /** sets the last value to set on 'End' key.
+    /** sets the last value to be set on END key.
      */
     [oneway] void setLast( [in] double Value );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XCurrencyField::getLast
-    /** @returns
-                    the currently set last value which is set on 'End' key.
+    /** returns the currently set last value which is set on END key.
      */
     double getLast();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XCurrencyField::setSpinSize
-    /** sets the increment value for the spin buttons.
+    /** sets the increment value for the spin button.
      */
     [oneway] void setSpinSize( [in] double Value );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XCurrencyField::getSpinSize
-    /** @returns
-                    the currently set increment value for the spin buttons.
+    /** returns the currently set increment value for the spin button.
      */
     double getSpinSize();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XCurrencyField::setDecimalDigits
     /** sets the number of decimals.
      */
     [oneway] void setDecimalDigits( [in] short nDigits );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XCurrencyField::getDecimalDigits
-    /** @returns
-                    the currently set number of decimals.
+    /** returns the currently set number of decimals.
      */
     short getDecimalDigits();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XCurrencyField::setStrictFormat
-    /** determines whether the format is checked even during editing.
+    /** determines if the format is checked during user input.
      */
     [oneway] void setStrictFormat( [in] boolean bStrict );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XCurrencyField::isStrictFormat
-    /** @returns
-                    whether the format is currently checked even during editing.
+    /** returns whether the format is currently checked during user input.
      */
     boolean isStrictFormat();
 
