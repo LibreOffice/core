@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:33:39 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ namespace xmloff
             case faMasterFields:    return "master-fields";
             case faNavigationMode:  return "navigation-mode";
             case faOrder:           return "order";
-            case faTabbingCycle:    return "tabbing-cycle";
+            case faTabbingCycle:    return "tab-cycle";
             default:
                 OSL_ENSURE(sal_False, "OAttributeMetaData::getFormAttributeName: invalid id!");
         }
@@ -340,6 +340,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/20 13:33:39  fs
+ *  #83970# +getOfficeFormsAttributeName(/-space)
+ *
  *  Revision 1.7  2001/03/20 08:02:29  fs
  *  #85114# #85115# corrected attributed names for encoding type and detail fields
  *
