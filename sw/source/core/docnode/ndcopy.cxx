@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:32:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,11 +346,6 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // in welchen Array steht ich denn Nodes, UndoNodes ??
     SwNodes& rNds = (SwNodes&)GetNodes();
 
-    if( pDoc->IsIdxInTbl( rIdx ) )
-        // zur Zeit keine Tabelle in Tabelle kopieren unterstuetzen
-        // (sprich: Text + Tabelle + Text )
-        return 0;
-
     {
         // nicht in Fussnoten kopieren !!
 /*
@@ -412,7 +407,15 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // dann kopiere erstmal den Inhalt der Tabelle, die Zuordnung der
     // Boxen/Lines und das anlegen der Frames erfolgt spaeter
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() );  // (wo stehe in denn nun ??)
+
+    // If there is a table in this table, the table format for the outer table
+    // does not seem to be used, because the table does not have any contents yet
+    // (see IsUsed). Therefore the inner table gets the same name as the outer table.
+    // We have to make sure that the table node of the SwTable is accessible, even
+    // without any content in aSortCntBoxes. #i26629#
+    rTbl.SetTableNode( pTblNd );
     rNds._Copy( aRg, aInsPos, FALSE );
+    rTbl.SetTableNode( 0 );
 
     // Sonderbehandlung fuer eine einzelne Box
     if( 1 == GetTable().GetTabSortBoxes().Count() )
