@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:21:37 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,7 +780,6 @@ void ScDrawLayer::Store( SvStream& rStream ) const
 {
     ScWriteHeader aHdr( rStream );
 
-//-/    const_cast<ScDrawLayer*>(this)->PrepareStore();     // non-const
     const_cast<ScDrawLayer*>(this)->PreSave();      // non-const
 
     {
@@ -853,7 +852,7 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
         {
                             //! Flags (ausgeblendet?) testen
 
-            Rectangle aObjRect = pObject->GetBoundRect();
+            Rectangle aObjRect = pObject->GetCurrentBoundRect();
             BOOL bFit = TRUE;
             if ( !bSetHor && ( aObjRect.Right() < nStartX || aObjRect.Left() > nEndX ) )
                 bFit = FALSE;
@@ -1314,7 +1313,7 @@ void ScDrawLayer::DeleteObjectsInArea( USHORT nTab, USHORT nCol1,USHORT nRow1,
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            Rectangle aObjRect = pObject->GetBoundRect();
+            Rectangle aObjRect = pObject->GetCurrentBoundRect();
             if ( aDelRect.IsInside( aObjRect ) )
                 ppObj[nDelCount++] = pObject;
 
@@ -1368,7 +1367,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                     SdrObject* pObject = aIter.Next();
                     while (pObject)
                     {
-                        Rectangle aObjRect = pObject->GetBoundRect();
+                        Rectangle aObjRect = pObject->GetCurrentBoundRect();
                         if ( aMarkBound.IsInside( aObjRect ) )
                         {
                             ScRange aRange = pDoc->GetRange( nTab, aObjRect );
@@ -1411,7 +1410,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, USHORT nTab, const Rectangle
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
-            Rectangle aObjRect = pOldObject->GetBoundRect();
+            Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
             if ( rRange.IsInside( aObjRect ) && pOldObject->GetLayer() != SC_LAYER_INTERN )
             {
                 if ( !pDestModel )
@@ -1538,7 +1537,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, cons
     SdrObject* pOldObject = aIter.Next();
     while (pOldObject)
     {
-        Rectangle aObjRect = pOldObject->GetBoundRect();
+        Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
         if ( rSourceRange.IsInside( aObjRect ) )
         {
             SdrObject* pNewObject = pOldObject->Clone( pDestPage, this );
@@ -1905,7 +1904,7 @@ void ScDrawLayer::SetGlobalDrawPersist(SvPersist* pPersist)         // static
     pGlobalDrawPersist = pPersist;
 }
 
-void __EXPORT ScDrawLayer::SetChanged( FASTBOOL bFlg /* =TRUE */ )
+void __EXPORT ScDrawLayer::SetChanged( sal_Bool bFlg /* = sal_True */ )
 {
     if ( bFlg && pDoc )
         pDoc->SetChartListenerCollectionNeedsUpdate( TRUE );
