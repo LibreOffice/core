@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:38:25 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ finnish ] = "~Enemmδn" ;
         Text [ danish ] = "Flere" ;
         Text [ french ] = "~Options" ;
-        Text [ swedish ] = "~Fler" ;
+        Text [ swedish ] = "F~ler" ;
         Text [ dutch ] = "~Overige" ;
         Text [ spanish ] = "~Opciones" ;
         Text [ english_us ] = "~More" ;
@@ -440,7 +440,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "Mudar ~nome" ;
         Text [ english_us ] = "~Rename" ;
         Text [ portuguese_brazilian ] = "Um~benennen" ;
-        Text [ swedish ] = "B~yt namn" ;
+        Text [ swedish ] = "~Byt namn" ;
         Text [ danish ] = "Omdψb" ;
         Text [ italian ] = "~Rinomina" ;
         Text [ spanish ] = "Cambiar ~nombre" ;
@@ -484,7 +484,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "µ°ΔΜ«°Ο―Δ‚Μ’Η‰Α";
         Text[ chinese_traditional ] = "·sΌW¦Ϋ°Κ®ζ¦΅";
         Text[ arabic ] = "ΕΦΗέΙ ΗαΚδΣνή ΗαΚαήΗΖν";
-        Text[ greek ] = "Προσθήκη ΑυτοΜορφοποίησης";
+        Text[ greek ] = "Προσθήκη ΑυτοΜορφής";
         Text[ korean ] = "ΐΪµΏ Ό­½Δ Γί°΅";
         Text[ turkish ] = "Otomatik formatύ ekle";
         Text[ language_user1 ] = " ";
@@ -536,7 +536,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "µ°ΔΜ«°Ο―Δ‚Μν";
         Text[ chinese_traditional ] = "§R°£¦Ϋ°Κ®ζ¦΅";
         Text[ arabic ] = "ΝΠέ ΗαΚδΣνή ΗαΚαήΗΖν";
-        Text[ greek ] = "Διαγραφή ΑυτοΜορφοποίησης";
+        Text[ greek ] = "Διαγραφή ΑυτοΜορφής";
         Text[ korean ] = "ΐΪµΏ Ό­½Δ »θΑ¦";
         Text[ turkish ] = "Otomatik formatύ sil";
         Text[ language_user1 ] = " ";
@@ -562,7 +562,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "Θ‰Ί‚Μµ°ΔΜ«°Ο―Δ‚Νν‚³‚κ‚ά‚·:";
         Text[ chinese_traditional ] = "§R°£¥H¤UªΊ¦Ϋ°Κ®ζ¦΅΅G";
         Text[ arabic ] = "Σζέ νΚγ ΝΠέ ΗαΚδΣνή ΗαΚαήΗΖν ΗαΚΗαν:";
-        Text[ greek ] = "Η εξής Αυτομορφοποίηση θα διαγραφεί:";
+        Text[ greek ] = "Η εξής ΑυτοΜορφή θα διαγραφεί:";
         Text[ korean ] = "΄Ωΐ½ΐΗ ΐΪµΏ Ό­½Δ ΗΧΈρΐΊ»θΑ¦µΙ °ΝΐΤ΄Ο΄Ω :";
         Text[ turkish ] = "Aώaπύdaki otomatik format silinecek:";
         Text[ language_user1 ] = " ";
@@ -586,7 +586,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "µ°ΔΜ«°Ο―Δ‚Μ–Ό‘O‚Μ•ΟX";
         Text[ chinese_traditional ] = "­«·s©R¦W¦Ϋ°Κ®ζ¦΅";
         Text[ arabic ] = "ΕΪΗΟΙ ΚΣγνΙ ΗαΚδΣνή ΗαΚαήΗΖν";
-        Text[ greek ] = "Μετονομασία ΑυτοΜορφοποίηση";
+        Text[ greek ] = "Μετονομασία ΑυτοΜορφής";
         Text[ korean ] = "ΐΪµΏ Ό­½Δ ΐΜΈ§ ΉΩ²Ω±β";
         Text[ turkish ] = "Otomatik formatύ yeniden adlandύr";
         Text[ language_user1 ] = " ";
@@ -811,7 +811,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "Indicou um nome incorrecto.\nO AutoFormato desejado nγo pode ser criado.\nTente de novo usando um nome diferente." ;
         Text [ finnish ] = "You entered an invalid name.\nThe desired AutoFormat could not be createdTry again using a different name." ;
         Text [ danish ] = "Du har indtastet et ugyldigt navn.\nDet var ikke muligt at oprette AutoFormatet.\nVζlg venligst et andet navn." ;
-        Text [ french ] = "Vous avez saisi un nom incorrect.\nL'AutoFormat n'a pas ou κtre ιffectuι.\nVeuillez indiquer un nom correct." ;
+        Text [ french ] = "Vous avez saisi un nom non valide.\nL'AutoFormat n'a pas ou κtre ιffectuι.\nIndiquez un autre nom." ;
         Text [ swedish ] = "Du har angett ett ogiltigt namn.\nAutoFormatet kunde inte skapas.\nVδlj ett annat namn." ;
         Text [ dutch ] = "U heeft een ongeldige naam vermeld.\nDe gewenste AutoOpmaak kon niet worden uitgevoerd.\nKies een andere naam." ;
         Text [ spanish ] = "Ha indicado un nombre no vαlido, \npor lo que no se pudo crear el AutoFormato.\nSeleccione otro nombre." ;
@@ -822,7 +822,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "•s“KΨ‚Θ–Ό‘O‚ª“ό—Ν‚³‚κ‚ά‚µ‚½B\n‚±‚Μµ°ΔΜ«°Ο―Δ‚Ε‚Νμ¬o—‚ά‚Ή‚ρB\n•Κ‚Μ–Ό‘O‚π‘I‘π‚µ‚Δ‰Ί‚³‚ΆB";
         Text[ chinese_traditional ] = "±zΏι¤J¤F¤@­ΣµL®ΔªΊ¦WΊΩ΅C\nµLªk«Ψ¥ί¦Ϋ°Κ®ζ¦΅΅C\n½ΠΏι¤J¤@­Σ¦³®Δ¦WΊΩ΅C";
         Text[ arabic ] = "αήΟ ήγΚ ΘΕΟΞΗα ΗΣγ ΫνΡ ΥΗαΝ.\nαεΠΗ ΚΪΠΡ ΕδΤΗΑ ΗαΚδΣνή ΗαΚαήΗΖν.\nΗαΡΜΗΑ ΗΞΚνΗΡ ΗΣγ ΓΞΡ.";
-        Text[ greek ] = "Έχετε εισάγει ένα μη έγκυρο όνομα.\nΗ ΑυτοΜορφοποίηση δεν ήταν δυνατόν να δημιουργηθεί.\nΕπιλέξτε ένα άλλο όνομα.";
+        Text[ greek ] = "Έχετε εισάγει ένα μη έγκυρο όνομα.\nΗ ΑυτοΜορφή δεν ήταν δυνατόν να δημιουργηθεί.\nΕπιλέξτε ένα άλλο όνομα.";
         Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΐΜΈ§ΐ» ΐΤ·ΒΗί½ΐ΄Ο΄Ω.\nΏδ±ΈµΘ ΐΪµΏ Ό­½ΔΐΊΈΈµιΎξ Αϊ ΌφΎψ½ΐ΄Ο΄Ω. \n΄ΩΈ¥ ΐΜΈ§ΐΈ·Ξ ΄Ω½Γ ½ΓµµΗΟ½Κ½ΓΏΐ..";
         Text[ turkish ] = "Geηersiz bir ad girdiniz.\nOtomatik format oluώturulamadύ.\nBaώka bir ad seηiniz.";
         Text[ language_user1 ] = " ";
@@ -833,7 +833,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text[ japanese ] = "µ°ΔΜ«°Ο―Δ";
     Text[ chinese_traditional ] = "¦Ϋ°Κ®ζ¦΅";
     Text[ arabic ] = "ΗαΚδΣνή ΗαΚαήΗΖν";
-    Text[ greek ] = "ΑυτοΜορφοποίηση";
+    Text[ greek ] = "ΑυτοΜορφή";
     Text[ korean ] = "ΐΪµΏ Ό­½Δ";
     Text[ turkish ] = "Otomatik format";
     Text[ language_user1 ] = " ";
