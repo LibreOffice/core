@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-06 09:12:19 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,11 +116,7 @@ private:
     PushButton              aNewLibButton;
     PushButton              aNewModButton;
 
-    //FixedText             aDescrTxt;
-    //ExtendedMultiLineEdit aDescrEdit;
-
     BOOL                bNewDelIsDel;
-    //BOOL              bAcceptDescription;
     BOOL                bForceStoreBasic;
 
     USHORT              nMode;
@@ -129,7 +125,6 @@ private:
     DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
     DECL_LINK( BasicSelectHdl, SvTreeListBox * );
     DECL_LINK( EditModifyHdl, Edit * );
-    //DECL_LINK( DescriptionModifyHdl, MultiLineEdit * );
     DECL_LINK( ButtonHdl, Button * );
 
     void                CheckButtons();
@@ -137,21 +132,16 @@ private:
     void                UpdateFields();
 
     void                EnableButton( Button& rButton, BOOL bEnable );
-    //DECL_LINK( EditGotFocusHdl, MultiLineEdit * );
-    //DECL_LINK( EditLoseFocusHdl, MultiLineEdit * );
-    //DECL_LINK( EditAccHdl, Accelerator * );
 
-    //void              SetInfo( SbxVariable* pVar );
     String              GetInfo( SbxVariable* pVar );
 
     void                StoreMacroDescription();
     void                RestoreMacroDescription();
 
 public:
-                        MacroChooser( Window* pParent, BOOL ScanBasics = TRUE );
+                        MacroChooser( Window* pParent, BOOL bCreateEntries = TRUE );
                         ~MacroChooser();
 
-    void                ScanBasic( BasicManager* pBasMgr, const String& rName );
     SbMethod*           GetMacro();
     void                DeleteMacro();
     SbMethod*           CreateMacro();
