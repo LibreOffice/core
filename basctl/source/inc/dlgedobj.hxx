@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:39:10 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,11 @@
 #endif
 
 #include <vector>
+#include <map>
+
+
+typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > IndexToNameMap;
+
 
 class DlgEdForm;
 
@@ -203,6 +208,9 @@ public:
     virtual void SetPropsFromRect();
 
     virtual void UpdateTabIndices();
+    virtual void UpdateTabOrder();
+    virtual void UpdateGroups();
+    virtual void UpdateTabOrderAndGroups();
 
     virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 };
