@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:40:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,3 +917,5 @@
 
 #define HID_FLD_DROPDOWN                            (HID_BASE + 2186 )
 #define HID_DLG_WORDCOUNT                           (HID_BASE + 2187 )
+
+#define HID_MEDIA_TOOLBOX                           (HID_BASE + 2188)
