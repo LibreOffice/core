@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 10:15:33 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,10 +281,10 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ language_user1 ] = " ";
         Text[ catalan ] = "ODBC";
     };
-    String STR_PAGETITLE_ADDRESSBOOK
+    String STR_PAGETITLE_LDAP
     {
-        Text = "Adressbuch" ;
-        Text [ english ] = "addressbook" ;
+        Text = "LDAP" ;
+        Text [ english ] = "LDAP" ;
     };
     String STR_PAGETITLE_ADABAS
     {
@@ -1465,13 +1465,13 @@ TabPage PAGE_ODBC
     };
 };
 //.........................................................................
-TabPage PAGE_ADDRESSBOOK
+TabPage PAGE_LDAP
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    HelpId = HID_DSADMIN_PAGE_ADDRESSBOOK;
+    HelpId = HID_DSADMIN_PAGE_LDAP;
 
     FixedText FT_USERNAME
     {
@@ -1543,39 +1543,58 @@ TabPage PAGE_ADDRESSBOOK
         Pos = MAP_APPFONT ( 4 , 34 ) ;
         Size = MAP_APPFONT ( 252 , 1 ) ;
     };
-    FixedText FT_ADDRESSBOOK
+    FixedText FT_HOSTNAME
     {
         Pos = MAP_APPFONT ( 6 , 40 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~Adressbuch" ;
-        Text [ english ] = "~Address book" ;
+        Text = "~Rechnername" ;
+        Text [ english ] = "~Hostname" ;
     };
-    ListBox LB_ADDRESSBOOK
+    Edit ET_HOSTNAME
     {
         TabStop = TRUE ;
-        DropDown = TRUE ;
-        CurPos = 0 ;
-        HelpId = HID_DSADMIN_LB_ADDRESSBOOK;
+        Border = TRUE ;
+        HelpId = HID_DSADMIN_LDAP_HOSTNAME;
 
         Pos = MAP_APPFONT ( 91 , 39 ) ;
-        Size = MAP_APPFONT ( 105 , 60 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
+    };
+    FixedText FT_BASEDN
+    {
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Base DN" ;
+        Text [ english ] = "~Base DN" ;
+    };
+    Edit ET_BASEDN
+    {
+        TabStop = TRUE ;
+        Border = TRUE ;
+        HelpId = HID_DSADMIN_LDAP_BASEDN;
 
-        StringList =
-        {
-            "System Adressbuch" ;
-            "LDAP" ;
-#if defined(WNT) || defined(WIN32)
-            "Outlook" ;
-#endif
-        };
-        StringList [ english ] =
-        {
-            "System address book" ;
-            "LDAP" ;
-#if defined(WNT) || defined(WIN32)
-            "Outlook" ;
-#endif
-        };
+        Pos = MAP_APPFONT ( 91 , 57 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
+    };
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 74 ) ;
+        Size = MAP_APPFONT ( 252 , 1 ) ;
+    };
+    FixedText FT_PORTNUMBER
+    {
+        Pos = MAP_APPFONT ( 6 , 79 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Portnummer" ;
+        Text [ english ] = "~Portnumber" ;
+    };
+    NumericField NF_PORTNUMBER
+    {
+        TabStop = TRUE ;
+        Border = TRUE ;
+        HelpId = HID_DSADMIN_LDAP_PORTNUMBER;
+
+        Pos = MAP_APPFONT ( 91 , 80 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
     };
 };
 //.........................................................................
@@ -2994,10 +3013,33 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
     Message[ arabic ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
     Message[ catalan ] = "For this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
 };
+String STR_ADDRESSBOOK_SYSTEM
+{
+    Text = "System Adressbuch";
+    Text [ english ] = "System addressbook";
+};
+String STR_ADDRESSBOOK_OUTLOOK
+{
+    Text = "MS Outlook";
+    Text [ english ] = "MS Outlook";
+};
+String STR_ADDRESSBOOK_MOZILLA
+{
+    Text = "Mozilla Adressbuch";
+    Text [ english ] = "Mozilla addressbook";
+};
+String STR_ADDRESSBOOK_LDAP
+{
+    Text = "LDAP Adressbuch";
+    Text [ english ] = "LDAP addressbook";
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.49  2001/05/29 10:15:33  fs
+ *  #86082# STR_UNSUPPORTED_DATASOURCE_TYPE
+ *
  *  Revision 1.48  2001/05/23 14:16:42  oj
  *  #87149# new helpids
  *

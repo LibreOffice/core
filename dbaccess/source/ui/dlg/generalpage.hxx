@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 09:59:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@ namespace dbaui
         void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
             { m_xORB = _rxORB; }
 
+        void enableConnectionURL() { m_aConnection.SetReadOnly(sal_False); }
+        void disableConnectionURL() { m_aConnection.SetReadOnly(); }
+
     protected:
         // SfxTabPage overridables
         virtual BOOL FillItemSet(SfxItemSet& _rCoreAttrs);
@@ -187,6 +190,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/29 09:59:32  fs
+ *  initial checkin - outsourced the class from commonpages
+ *
  *
  *  Revision 1.0 29.05.01 11:31:35  fs
  ************************************************************************/

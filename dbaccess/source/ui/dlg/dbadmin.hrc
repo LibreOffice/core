@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 10:15:33 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,14 @@
 #define FT_SPECIAL_MESSAGE      15
 #define FT_LOGINTIMEOUT         16
 #define FT_FILTER_EXPLANATION   17
-#define FT_ADDRESSBOOK          18
+#define FT_HOSTNAME             18
+#define FT_BASEDN               19
+#define FT_PORTNUMBER           20
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
 #define LB_CHARSET              3
 #define LB_TIMEOUT_UNIT         4
-#define LB_ADDRESSBOOK          5
 
 #define ET_CONNECTURL           1
 #define ET_DATASOURCENAME       2
@@ -97,6 +98,8 @@
 #define ET_OPTIONS              5
 #define ET_JDBCDRIVERCLASS      6
 #define ET_TIMEOUT_NUMBER       7
+#define ET_HOSTNAME             8
+#define ET_BASEDN               9
 
 #define PB_BROWSECONNECTION     1
 #define PB_INDICIES             2
@@ -132,6 +135,8 @@
 
 #define TLB_ACTIONS             1
 
+#define NF_PORTNUMBER           1
+
 
 //========================================================================
 // string ids (usually relative to other resources, that's why not necessarily unique)
@@ -156,8 +161,9 @@
 #define STR_PAGETITLE_QUERIES               18
 #define STR_PAGETITLE_ADABAS_STATISTIC      19
 #define STR_PAGETITLE_DOCUMENTS             20
-#define STR_PAGETITLE_ADDRESSBOOK           21
+#define STR_PAGETITLE_LDAP                  21
 #define STR_UNSUPPORTED_DATASOURCE_TYPE     22
+
 
 //========================================================================
 // menu item ids
@@ -170,6 +176,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/05/29 10:15:33  fs
+ *  #86082# STR_UNSUPPORTED_DATASOURCE_TYPE
+ *
  *  Revision 1.16  2001/05/23 14:16:42  oj
  *  #87149# new helpids
  *

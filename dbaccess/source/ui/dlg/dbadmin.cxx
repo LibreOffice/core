@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,10 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString::createFromAscii("ControlPassword")));
     // extra settings for odbc
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, ::rtl::OUString::createFromAscii("UseCatalog")));
+    // extra settings for a ldap address book
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_HOSTNAME, ::rtl::OUString::createFromAscii("Hostname")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, ::rtl::OUString::createFromAscii("BaseDN")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_PORTNUMBER, ::rtl::OUString::createFromAscii("Portnumber")));
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -1072,11 +1076,18 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_CONN_CTRLUSER, String());
     *pCounter++ = new SfxStringItem(DSID_CONN_CTRLPWD, String());
     *pCounter++ = new SfxBoolItem(DSID_USECATALOG, sal_False);
+    *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_HOSTNAME, String());
+    *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_BASEDN, String());
+    *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, 389);
+
 
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
+        {0,0},
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -1218,9 +1229,8 @@ IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
     }
     return 1L;
 }
-
-//-------------------------------------------------------------------------
-IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
+// -----------------------------------------------------------------------------
+void ODbAdminDialog::removeDetailPages()
 {
     // remove all current detail pages
     while (m_aCurrentDetailPages.size())
@@ -1228,48 +1238,92 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
         RemoveTabPage((USHORT)m_aCurrentDetailPages.top());
         m_aCurrentDetailPages.pop();
     }
-
+}
+// -----------------------------------------------------------------------------
+void ODbAdminDialog::addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc)
+{
+    // remove all current detail pages
+    removeDetailPages();
     // open our own resource block, as the page titles are strings local to this block
     OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
+    AddTabPage(_nPageId, String(ResId(_nTextId)), pCreateFunc, 0, sal_False, 1);
+    m_aCurrentDetailPages.push(_nPageId);
+}
+//-------------------------------------------------------------------------
+IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
+{
     // doe have to reset the "password required" flag to false? (in case the datasource does not support passwords)
     sal_Bool bResetPasswordRequired = sal_False;
+    CreateTabPage pCreateFunc;
+    USHORT nPageId = -1,nTextId;
+    _pTabPage->enableConnectionURL();
 
     // and insert the new ones
     switch (_pTabPage->GetSelectedType())
     {
         case DST_DBASE:
-            AddTabPage(PAGE_DBASE, String(ResId(STR_PAGETITLE_DBASE)), ODbaseDetailsPage::Create, 0, sal_False, 1);
-            m_aCurrentDetailPages.push(PAGE_DBASE);
+            nPageId     = PAGE_DBASE;
+            nTextId     = STR_PAGETITLE_DBASE;
+            pCreateFunc = ODbaseDetailsPage::Create;
+
             bResetPasswordRequired = sal_True;
             break;
         case DST_JDBC:
-            AddTabPage(PAGE_JDBC, String(ResId(STR_PAGETITLE_JDBC)), OJdbcDetailsPage::Create, 0, sal_False, 1);
-            m_aCurrentDetailPages.push(PAGE_JDBC);
+            nPageId     = PAGE_JDBC;
+            nTextId     = STR_PAGETITLE_JDBC;
+            pCreateFunc = OJdbcDetailsPage::Create;
             break;
         case DST_ADO:
-            AddTabPage(PAGE_ADO, String(ResId(STR_PAGETITLE_ADO)), OAdoDetailsPage::Create, 0, sal_False, 1);
-            m_aCurrentDetailPages.push(PAGE_ADO);
+            nPageId     = PAGE_ADO;
+            nTextId     = STR_PAGETITLE_ADO;
+            pCreateFunc = OAdoDetailsPage::Create;
             break;
         case DST_TEXT:
-            AddTabPage(PAGE_TEXT, String(ResId(STR_PAGETITLE_TEXT)), OTextDetailsPage::Create, 0, sal_False, 1);
-            m_aCurrentDetailPages.push(PAGE_TEXT);
+            nPageId     = PAGE_TEXT;
+            nTextId     = STR_PAGETITLE_TEXT;
+            pCreateFunc = OTextDetailsPage::Create;
             bResetPasswordRequired = sal_True;
             break;
         case DST_ODBC:
-            AddTabPage(PAGE_ODBC, String(ResId(STR_PAGETITLE_ODBC)), OOdbcDetailsPage::Create, 0, sal_False, 1);
-            m_aCurrentDetailPages.push(PAGE_ODBC);
-            break;
-        case DST_ADDRESSBOOK:
-            AddTabPage(PAGE_ADDRESSBOOK, String(ResId(STR_PAGETITLE_ADDRESSBOOK)), OAddressBookDetailsPage::Create, 0, sal_False, 1);
-            m_aCurrentDetailPages.push(PAGE_ADDRESSBOOK);
+            nPageId     = PAGE_ODBC;
+            nTextId     = STR_PAGETITLE_ODBC;
+            pCreateFunc = OOdbcDetailsPage::Create;
             break;
         case DST_ADABAS:
-            AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ResId(STR_PAGETITLE_ADABAS_STATISTIC)), OAdabasAdminSettings::Create, 0, sal_False, 1);
-            AddTabPage(PAGE_ADABAS, String(ResId(STR_PAGETITLE_ADABAS)), OAdabasDetailsPage::Create, 0, sal_False, 1);
-            m_aCurrentDetailPages.push(TAB_PAG_ADABAS_SETTINGS);
-            m_aCurrentDetailPages.push(PAGE_ADABAS);
+            nPageId     = PAGE_ADABAS;
+            nTextId     = STR_PAGETITLE_ADABAS;
+            pCreateFunc = OAdabasDetailsPage::Create;
+
+            // for adabas we have more than one page
+            {
+                // remove all current detail pages
+                removeDetailPages();
+                // open our own resource block, as the page titles are strings local to this block
+                OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
+                AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ResId(STR_PAGETITLE_ADABAS_STATISTIC)), OAdabasAdminSettings::Create, 0, sal_False, 1);
+                m_aCurrentDetailPages.push(TAB_PAG_ADABAS_SETTINGS);
+            }
             break;
+        case DST_ADDRESSBOOK:
+            removeDetailPages();
+            if(getDatasourceType(*GetExampleSet()) == DST_ADDRESSBOOK)
+            {
+                String sConnectionURL;
+                SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+                sConnectionURL = pUrlItem->GetValue();
+                if(String::CreateFromAscii("sdbc:address:ldap") == sConnectionURL)
+                    addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
+            }
+            _pTabPage->disableConnectionURL();
+            break;
+        default:
+            OSL_ENSURE(0,"Wrong DetailPage!");
+    }
+    if(nPageId != USHORT(-1))
+    {
+        addDetailPage(nPageId,nTextId,pCreateFunc);
+        m_aCurrentDetailPages.push(nPageId);
     }
 
     if (bResetPasswordRequired)
@@ -1693,7 +1747,20 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
         case DST_JDBC:          pRelevantItems = OJdbcDetailsPage::getDetailIds(); break;
         case DST_ADO:           pRelevantItems = OAdoDetailsPage::getDetailIds(); break;
         case DST_ODBC:          pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
-        case DST_ADDRESSBOOK:   pRelevantItems = OAddressBookDetailsPage::getDetailIds(); break;
+        case DST_ADDRESSBOOK:
+            {
+                String sConnectionURL;
+                SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+                sConnectionURL = pUrlItem->GetValue();
+                if(String::CreateFromAscii("sdbc:address:ldap") == sConnectionURL)
+                    pRelevantItems = OLDAPDetailsPage::getDetailIds();
+                else
+                {
+                    static sal_Int32 nRelevantIds[] = { 0 };
+                    pRelevantItems = nRelevantIds;
+                }
+                break;
+            }
         case DST_DBASE:         pRelevantItems = ODbaseDetailsPage::getDetailIds(); break;
         case DST_TEXT:          pRelevantItems = OTextDetailsPage::getDetailIds(); break;
         case DST_CALC:
@@ -2588,6 +2655,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.52  2001/05/29 10:18:26  fs
+ *  #86082# set the service factory on the general page
+ *
  *  Revision 1.51  2001/05/23 14:16:42  oj
  *  #87149# new helpids
  *

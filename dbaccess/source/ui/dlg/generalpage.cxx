@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 12:28:24 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,7 @@ namespace dbaui
             case DST_ADABAS:
             case DST_ODBC:
             case DST_CALC:
+            case DST_ADDRESSBOOK:
                 return sal_True;
         }
         return sal_False;
@@ -902,41 +903,59 @@ namespace dbaui
 
                 // collect the names of the installed databases
                 StringBag aInstalledDBs;
-
-                String sAdabasConfigDir,sAdabasWorkDir;
-                const char* pAdabasCfg = getenv("DBCONFIG");
-                const char* pAdabasWrk = getenv("DBWORK");
-                sal_Bool bOldFashion = sal_False;
-                if (pAdabasCfg && pAdabasWrk) // for our type of adabas this must apply
+                ::rtl::OUString sAdabasConfigDir,sAdabasWorkDir,sRootDir;
+                ::rtl::OUString sTemp = ::rtl::OUString::createFromAscii("DBWORK");
+                rtl_uString* pDbVar = NULL;
+                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
                 {
-                    sAdabasConfigDir.AssignAscii(pAdabasCfg);
-                    sAdabasWorkDir.AssignAscii(pAdabasWrk);
-                    bOldFashion = sal_True;
+                    sAdabasWorkDir = pDbVar;
+                    String sTemp;
+                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasWorkDir,sTemp);
+                    sAdabasWorkDir = sTemp;
+                    rtl_uString_release(pDbVar);
+                    pDbVar = NULL;
                 }
-                else // we have a normal adabas installation
-                {    // so we check the local database names in $DBROOT/config
-                    const char* pAdabasRoot = getenv("DBROOT");
-                    if (pAdabasRoot)
-                    {
-                        sAdabasConfigDir.AssignAscii(pAdabasRoot);
-                        sAdabasWorkDir.AssignAscii(pAdabasRoot);
-                    }
+                sTemp = ::rtl::OUString::createFromAscii("DBCONFIG");
+                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                {
+                    sAdabasConfigDir = pDbVar;
+                    String sTemp;
+                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasConfigDir,sTemp);
+                    sAdabasConfigDir = sTemp;
+                    rtl_uString_release(pDbVar);
+                    pDbVar = NULL;
+                }
+                sTemp = ::rtl::OUString::createFromAscii("DBROOT");
+                if(osl_getEnvironment(sTemp.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                {
+                    sRootDir = pDbVar;
+                    String sTemp;
+                    sal_Bool bOk = utl::LocalFileHelper::ConvertPhysicalNameToURL(sRootDir,sTemp);
+                    sRootDir = sTemp;
+                    rtl_uString_release(pDbVar);
+                    pDbVar = NULL;
                 }
 
-                if(sAdabasConfigDir.Len() && sAdabasWorkDir.Len())
+                sal_Bool bOldFashion = sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength();
+
+
+
+                if(!bOldFashion) // we have a normal adabas installation
+                {    // so we check the local database names in $DBROOT/config
+                    sAdabasConfigDir    = sRootDir;
+                    sAdabasWorkDir      = sRootDir;
+                }
+
+                if(sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength() && sRootDir.getLength())
                 {
 
                     aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
 
                     if(!aInstalledDBs.size() && bOldFashion)
                     {
-                        const char* pAdabasRoot = getenv("DBROOT");
-                        if (pAdabasRoot)
-                        {
-                            sAdabasConfigDir.AssignAscii(pAdabasRoot);
-                            sAdabasWorkDir.AssignAscii(pAdabasRoot);
-                            aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
-                        }
+                        sAdabasConfigDir    = sRootDir;
+                        sAdabasWorkDir      = sRootDir;
+                        aInstalledDBs       = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
                     }
 
                     ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, GetSelectedType());
@@ -983,6 +1002,47 @@ namespace dbaui
                         m_aConnection.SetTextNoPrefix(aSelector.GetSelected());
                         callModifiedHdl();
                     }
+                }
+            }
+            break;
+            case DST_ADDRESSBOOK:
+            {
+                static ::rtl::OUString sAddressBookTypes[]=
+                {
+                    ::rtl::OUString::createFromAscii("sdbc:address:outlook"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:outlookexp"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:ldap"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:mozilla")
+                };
+                static String sAddressBookTypesTrans[]=
+                {
+                    String(ModuleRes(STR_ADDRESSBOOK_OUTLOOK)),
+                    String(ModuleRes(STR_ADDRESSBOOK_SYSTEM)),
+                    String(ModuleRes(STR_ADDRESSBOOK_LDAP)),
+                    String(ModuleRes(STR_ADDRESSBOOK_MOZILLA))
+                };
+                StringBag aAddressBooks;
+                Reference< XDriverAccess> xManager(m_pAdminDialog->getORB()->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+                for(sal_Int32 i=0;i<sizeof(sAddressBookTypes)/sizeof(::rtl::OUString);++i)
+                {
+                    if(xManager->getDriverByURL(sAddressBookTypes[i]).is())
+                        aAddressBooks.insert(sAddressBookTypesTrans[i]);
+                }
+
+                ODatasourceSelectDialog aSelector(GetParent(), aAddressBooks, GetSelectedType());
+                if (RET_OK == aSelector.Execute())
+                {
+                    String sType = aSelector.GetSelected();
+                    sal_Int32 nPos=0;
+                    for(;nPos < sizeof(sAddressBookTypes)/sizeof(::rtl::OUString) && sType != sAddressBookTypesTrans[nPos];++nPos)
+                        ;
+                    m_aConnection.SetText(sAddressBookTypes[nPos]);
+                    if(nPos == 2)
+                        m_pAdminDialog->addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
+                    else
+                        m_pAdminDialog->removeDetailPages();
+
+                    callModifiedHdl();
                 }
             }
             break;
@@ -1103,6 +1163,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/05/29 12:28:24  fs
+ *  #87403# OnDatasourceTypeSelected: no check for IsTravelSelect anymore
+ *
  *  Revision 1.1  2001/05/29 09:59:25  fs
  *  initial checkin - outsourced the class from commonpages
  *
