@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:52:59 $
+ *  last change: $Author: sab $ $Date: 2000-12-15 14:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,40 +192,41 @@ void ScXMLTableColContext::EndElement()
     uno::Reference<sheet::XSpreadsheet> xSheet = rXMLImport.GetTables().GetCurrentXSheet();
     if(xSheet.is())
     {
-        uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
-        if (xColumnRowRange.is())
+        sal_Int32 nLastColumn(nCurrentColumn + nColCount - 1);
+        if (nLastColumn > MAXCOL)
+            nLastColumn = MAXCOL;
+        if (nCurrentColumn > MAXCOL)
+            nCurrentColumn = MAXCOL;
+        uno::Reference <table::XCellRange> xCellRange = xSheet->getCellRangeByPosition(nCurrentColumn, 0, nLastColumn, 0);
+        if (xCellRange.is())
         {
-            uno::Reference<table::XTableColumns> xTableColumns = xColumnRowRange->getColumns();
-            if (xTableColumns.is())
+            uno::Reference<table::XColumnRowRange> xColumnRowRange (xCellRange, uno::UNO_QUERY);
+            if (xColumnRowRange.is())
             {
-                for (sal_Int32 i = 0; i < nColCount; i++)
+                uno::Reference<table::XTableColumns> xTableColumns = xColumnRowRange->getColumns();
+                if (xTableColumns.is())
                 {
-                    uno::Any aColumn = xTableColumns->getByIndex(i + nCurrentColumn);
-                    uno::Reference<table::XCellRange> xTableColumn;
-                    if (aColumn >>= xTableColumn)
+                    uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumns, uno::UNO_QUERY);
+                    if (xColumnProperties.is())
                     {
-                        uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumn, uno::UNO_QUERY);
-                        if (xColumnProperties.is())
+                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
+                        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                            XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, sal_True);
+                        if (pStyle)
+                            pStyle->FillPropertySet(xColumnProperties);
+                        rtl::OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
+                        uno::Any aAny = xColumnProperties->getPropertyValue(sVisible);
+                        if (sVisibility.compareToAscii(sXML_visible) == 0)
                         {
-                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
-                            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, sal_True);
-                            if (pStyle)
-                            {
-                                pStyle->FillPropertySet(xColumnProperties);
-                            }
-                            uno::Any aAny = xColumnProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS)));
-                            if (sVisibility.compareToAscii(sXML_visible) == 0)
-                            {
-                                sal_Bool bValue = sal_True;
-                                aAny <<= bValue;
-                            }
-                            else
-                            {
-                                sal_Bool bValue = sal_False;
-                                aAny <<= bValue;
-                            }
+                            sal_Bool bValue = sal_True;
+                            aAny <<= bValue;
                         }
+                        else
+                        {
+                            sal_Bool bValue = sal_False;
+                            aAny <<= bValue;
+                        }
+                        xColumnProperties->setPropertyValue(sVisible, aAny);
                     }
                 }
             }
