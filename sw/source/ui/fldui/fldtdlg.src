@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:17:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ chinese_simplified ] = "ÎÄµµ";
                 Text[ russian ] = "Äîêóìåíò";
                 Text[ polish ] = "Dokument";
-                Text[ japanese ] = "•¶‘";
+                Text[ japanese ] = "ÄŞ·­ÒİÄ";
                 Text[ chinese_traditional ] = "¤å¥ó";
                 Text[ arabic ] = "ÇáãÓÊäÏ";
                 Text[ greek ] = "¸ããñáöï";
@@ -321,5 +321,6 @@ TabDialog DLG_FLD_INSERT
     Text[ catalan ] = "Campos";
     Text[ finnish ] = "Kentät";
 };
+
 
 
