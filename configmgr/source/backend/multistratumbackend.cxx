@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multistratumbackend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:55:03 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #ifndef CONFIGMGR_BACKEND_BACKENDSTRATALISTENER_HXX
 #include "backendstratalistener.hxx"
 #endif CONFIGMGR_BACKEND_BACKENDSTRATALISTENER_HXX
+
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -351,6 +355,7 @@ rtl::OUString SAL_CALL
     {
         return mOwnerEntity;
     }
+    return rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
@@ -371,6 +376,7 @@ rtl::OUString SAL_CALL
             return OUString();
         }
     }
+    return rtl::OUString();
 }
 //------------------------------------------------------------------------------
 
@@ -454,6 +460,7 @@ uno::Reference<backenduno::XSchema> SAL_CALL
     {
         return mSchemaSupplier->getComponentSchema(aComponent) ;
     }
+    return NULL;
 }
 //------------------------------------------------------------------------------
 
@@ -467,6 +474,7 @@ uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
     {
         return listLayers(aComponent, mOwnerEntity ) ;
     }
+    return NULL;
 }
 //------------------------------------------------------------------------------
 
@@ -481,6 +489,7 @@ uno::Reference<backenduno::XUpdateHandler> SAL_CALL
     {
         return getUpdateHandler(aComponent, mOwnerEntity) ;
     }
+    return NULL;
 }
 //------------------------------------------------------------------------------
 
@@ -502,6 +511,7 @@ uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
         }
         return searchSupportingStrata(nNumSupportedLayers,aEntity,aComponent);
     }
+    return NULL;
 }
 //------------------------------------------------------------------------------
 sal_Int32 MultiStratumBackend::findSupportingStratum(const rtl::OUString& aEntity)
@@ -713,6 +723,7 @@ uno::Reference<backenduno::XUpdateHandler> SAL_CALL
             return uno::Reference<backenduno::XUpdateHandler>(xHandler, uno::UNO_REF_QUERY_THROW) ;
         }
     }
+    return NULL;
 }
 // ---------------------------------------------------------------------------
 // ComponentHelper
@@ -865,6 +876,25 @@ void SAL_CALL MultiStratumBackend::removeChangesListener( const uno::Reference<b
         }
     }
 }
+//------------------------------------------------------------------------------
+void MultiStratumBackend::componentDataChanged(const backenduno::ComponentChangeEvent& aEvent)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+     try
+     {
+         notifyListeners( aEvent);
+
+     }
+     catch (uno::RuntimeException& ) { throw; }
+     catch (uno::Exception& e)
+     {
+            throw lang::WrappedTargetRuntimeException(e.Message, *this, uno::makeAny(e));
+     }
+}
+//------------------------------------------------------------------------------
+void MultiStratumBackend::disposing( lang::EventObject const & rSource )
+    throw (::com::sun::star::uno::RuntimeException)
+{}
 //------------------------------------------------------------------------------
 void MultiStratumBackend::notifyListeners(const backenduno::ComponentChangeEvent& aEvent)const
 {
