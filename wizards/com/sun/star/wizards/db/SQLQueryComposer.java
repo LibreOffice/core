@@ -2,9 +2,9 @@
 *
 *  $RCSfile: SQLQueryComposer.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:54:11 $
+*  last change: $Author: vg $ $Date: 2005-03-08 15:36:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -121,7 +121,6 @@ public class SQLQueryComposer {
         return true;
     }
 
-
     public void appendSelectClause(boolean _baddAliasFieldNames) throws SQLException {
         selectclause = "SELECT ";
         for (int i = 0; i < CurDBMetaData.FieldNames.length; i++) {
@@ -141,7 +140,6 @@ public class SQLQueryComposer {
         }
         selectclause = selectclause.substring(0, selectclause.length() - 2);
     }
-
 
     public String getAliasFieldNameClause(String _FieldName) {
         String FieldTitle = CurDBMetaData.getFieldTitle(_FieldName);
