@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-10 15:48:51 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 #include <tools/solar.h>
 #endif
 
-#include <string>
-#ifdef max
-#undef max
-#endif
 #include <algorithm>
 
 HACK( #define protected public )

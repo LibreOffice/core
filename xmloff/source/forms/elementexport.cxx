@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:03:11 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
 #include "XMLEventExport.hxx"
 #endif
+
+#include <algorithm>
 
 
 //.........................................................................
@@ -940,7 +942,7 @@ namespace xmloff
         sal_Int32 nItems = aItems.getLength();
         sal_Int32 nValues = aValues.getLength();
 
-        sal_Int16 nMaxLen = (sal_Int16)max(nItems, nValues);
+        sal_Int16 nMaxLen = (sal_Int16)std::max(nItems, nValues);
 
         for (sal_Int16 i=0; i<nMaxLen; ++i )
         {
@@ -1004,7 +1006,7 @@ namespace xmloff
                 nLastDefaultSelected = *(--aDefaultSelection.end());
 
             // the maximum element in both sets
-            sal_Int16 nLastReferredEntry = max(nLastSelected, nLastDefaultSelected);
+            sal_Int16 nLastReferredEntry = std::max(nLastSelected, nLastDefaultSelected);
             OSL_ENSURE(nLastReferredEntry >= nMaxLen, "OControlExport::exportListSourceAsElements: inconsistence!");
                 // if the maximum (selected or default selected) entry number is less than the maximum item count
                 // in both lists, the entry number should have been removed from the set
@@ -1536,6 +1538,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/07/04 14:03:11  mib
+ *  #89118#: Don't export xlink:href twice
+ *
  *  Revision 1.18  2001/06/25 13:32:38  fs
  *  #88691# TargetURL property value must be saved relative to own document
  *
