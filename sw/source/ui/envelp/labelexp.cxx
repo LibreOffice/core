@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-12-19 11:08:57 $
+ *  last change: $Author: os $ $Date: 2002-01-02 14:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,23 +192,26 @@ IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
     uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
     OUString uEntry(sEntry);
 
-    String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
-                                aAutoTextGroupLB.GetSelectEntryPos() ) );
-    uno::Any aGroup = _xAutoText->getByName(sGroup);
-    uno::Reference< text::XAutoTextGroup >  xGroup;
-    aGroup >>= xGroup;
-
-    if( sEntry.Len() && xGroup->hasByName( uEntry ) )
+    if(LISTBOX_ENTRY_NOTFOUND != aAutoTextGroupLB.GetSelectEntryPos())
     {
-        uno::Any aEntry(xGroup->getByName(uEntry));
-        uno::Reference< text::XAutoTextEntry >  xEntry;
-        aEntry >>= xEntry;
-        if(xEntry.is())
+        String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
+                                    aAutoTextGroupLB.GetSelectEntryPos() ) );
+        uno::Any aGroup = _xAutoText->getByName(sGroup);
+        uno::Reference< text::XAutoTextGroup >  xGroup;
+        aGroup >>= xGroup;
+
+        if( sEntry.Len() && xGroup->hasByName( uEntry ) )
         {
-            uno::Reference< text::XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
-            xEntry->applyTo(xRange);
+            uno::Any aEntry(xGroup->getByName(uEntry));
+            uno::Reference< text::XAutoTextEntry >  xEntry;
+            aEntry >>= xEntry;
+            if(xEntry.is())
+            {
+                uno::Reference< text::XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
+                xEntry->applyTo(xRange);
+            }
+            UpdateFields();
         }
-        UpdateFields();
     }
     return 0;
 }
