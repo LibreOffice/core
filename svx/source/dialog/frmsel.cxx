@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-02-04 14:04:05 $
+ *  last change: $Author: os $ $Date: 2002-02-06 10:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,601 @@
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <boxitem.hxx>
 #endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <unolingu.hxx>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ILLEGALACCESSIBLECOMPONENTSTATEEXCEPTION_HDL_
+#include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HDL_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HDL_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FOCUSCHANGEREASON_HPP_
+#include <com/sun/star/awt/FocusChangeReason.hpp>
+#endif
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
+#endif
 
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::rtl;
+
+// struct SvxFrameSelector_Impl ------------------------------------------------
+struct SvxFrameSelector_Impl
+{
+    SvxFrameSelectorType    eSel; // Selektor-Typ (Tabelle oder Absatz)
+
+    Color               aCurLineCol;  // aktuelle Linienfarbe
+    SvxLineStruct       aCurLineStyle;// aktueller LineStyle
+    Bitmap              aBackBmp;         // Hintergrund-Bitmap
+    Rectangle           aRectFrame;     // der Rahmen (Mitte der Linien)
+    Rectangle           aBoundingRect;// alle Linien umschliessender Rahmen
+    SvxFrameLine        aLeftLine;    // seine Linien
+    SvxFrameLine        aRightLine;
+    SvxFrameLine        aTopLine;
+    SvxFrameLine        aBottomLine;
+    SvxFrameLine        aHorLine;
+    SvxFrameLine        aVerLine;
+    Rectangle           aSpotLeft;      // Click-HotSpots auf der Bitmap
+    Rectangle           aSpotRight;
+    Rectangle           aSpotTop;
+    Rectangle           aSpotBottom;
+    Rectangle           aSpotHor;
+    Rectangle           aSpotVer;
+    BOOL                bIsDontCare;
+    SvxFrameSelectorAccessible_Impl*    pAccess;
+    uno::Reference< XAccessible >       xAccess;
+    SvxFrameSelectorAccessible_Impl*    pChildren[6];
+    uno::Reference< XAccessible >       xChildren[6];
+
+    SvxFrameSelector_Impl();
+    ~SvxFrameSelector_Impl();
+
+    uno::Reference< XAccessible >  GetChildAccessible(
+        SvxFrameSelector& rFrameSel, SvxFrameSelectorLine eWhich);
+};
+// class SvxFrameSelectorAccessible_Impl ------------------------------------------------
+
+class SvxFrameSelectorAccessible_Impl :
+    public ::cppu::WeakImplHelper4<
+                ::drafts::com::sun::star::accessibility::XAccessible,
+                ::drafts::com::sun::star::accessibility::XAccessibleContext,
+                ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+                ::com::sun::star::lang::XServiceInfo
+                >
+{
+    SvxFrameSelector*   pFrameSel;
+    ::osl::Mutex aFocusMutex;
+    ::osl::Mutex aPropertyMutex;
+
+    sal_Bool                bIsChild;
+    SvxFrameSelectorLine    eWhichChild;
+
+    ::cppu::OInterfaceContainerHelper aFocusListeners;
+    ::cppu::OInterfaceContainerHelper aPropertyListeners;
+
+    void IsValid() throw (::com::sun::star::uno::RuntimeException);
+public:
+    SvxFrameSelectorAccessible_Impl(SvxFrameSelector& rSelector, SvxFrameSelectorLine eWhichChild);
+    ~SvxFrameSelectorAccessible_Impl();
+
+    //XAccessible
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    //XAccessibleContext
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    //XAccessibleComponent
+    virtual sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    //XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    void    Invalidate();
+    void    NotifyFocusListeners(sal_Bool bGetFocus);
+};
+
+/*-- 04.02.2002 14:11:53---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SvxFrameSelectorAccessible_Impl::SvxFrameSelectorAccessible_Impl(
+        SvxFrameSelector& rSelector, SvxFrameSelectorLine eChild) :
+    pFrameSel(&rSelector),
+    aFocusListeners(aFocusMutex),
+    aPropertyListeners(aPropertyMutex),
+    bIsChild(eChild > 0),
+    eWhichChild(eChild)
+{
+}
+/*-- 04.02.2002 14:11:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SvxFrameSelectorAccessible_Impl::~SvxFrameSelectorAccessible_Impl()
+{
+}
+/*-- 04.02.2002 14:11:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< XAccessibleContext > SvxFrameSelectorAccessible_Impl::getAccessibleContext(  )
+    throw (uno::RuntimeException)
+{
+    return this;
+}
+/*-- 04.02.2002 14:11:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SvxFrameSelectorAccessible_Impl::getAccessibleChildCount(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return bIsChild ? 0 : pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE ? 6 : 4;
+}
+/*-- 04.02.2002 14:11:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< XAccessible > SvxFrameSelectorAccessible_Impl::getAccessibleChild( sal_Int32 i )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    uno::Reference< XAccessible > xRet;
+    switch(i)
+    {
+        case 0: xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_LEFT); break;
+        case 1: xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_RIGHT); break;
+        case 2: xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_TOP); break;
+        case 3: xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_BOTTOM); break;
+        case 4: if(pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE)
+                    xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_HOR);
+        break;
+        case 5: if(pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE)
+            xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_LEFT);
+        break;
+    }
+    if(!xRet.is())
+        throw uno::RuntimeException();
+    return xRet;
+}
+/*-- 04.02.2002 14:11:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< XAccessible > SvxFrameSelectorAccessible_Impl::getAccessibleParent(  )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return pFrameSel->GetParent()->GetAccessible( sal_True );
+}
+/*-- 04.02.2002 14:11:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SvxFrameSelectorAccessible_Impl::getAccessibleIndexInParent(  )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    Window* pTabPage = pFrameSel->GetParent();
+    USHORT nChildren = pTabPage->GetChildCount();
+    for(USHORT nIdx = 0; nIdx < nChildren; nIdx++)
+        if(pTabPage->GetChild( nIdx ) == pFrameSel)
+            break;
+    return nIdx;
+}
+/*-- 04.02.2002 14:11:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int16 SvxFrameSelectorAccessible_Impl::getAccessibleRole(  ) throw (uno::RuntimeException)
+{
+    return AccessibleRole::OPTIONPANE;
+}
+/*-- 04.02.2002 14:11:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString SvxFrameSelectorAccessible_Impl::getAccessibleDescription(  )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return pFrameSel->GetText();
+}
+/*-- 04.02.2002 14:11:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString SvxFrameSelectorAccessible_Impl::getAccessibleName(  )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return pFrameSel->GetText();
+}
+/*-- 04.02.2002 14:11:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< XAccessibleRelationSet > SvxFrameSelectorAccessible_Impl::getAccessibleRelationSet(  )
+    throw (uno::RuntimeException)
+{
+    DBG_WARNING("not implemented")
+    return uno::Reference< XAccessibleRelationSet > ();
+}
+/*-- 04.02.2002 14:11:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< XAccessibleStateSet > SvxFrameSelectorAccessible_Impl::getAccessibleStateSet(  )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
+    uno::Reference< XAccessibleStateSet > xRet = pStateSetHelper;
+
+    if(!pFrameSel)
+        pStateSetHelper->AddState(AccessibleStateType::DEFUNC);
+    else
+    {
+        const sal_Int16 aStandardStates[] =
+        {
+            AccessibleStateType::EDITABLE,
+            AccessibleStateType::FOCUSABLE,
+            AccessibleStateType::MULTISELECTABLE,
+            AccessibleStateType::SELECTABLE,
+            AccessibleStateType::SHOWING,
+            AccessibleStateType::VISIBLE,
+            AccessibleStateType::OPAQUE,
+            0};
+        sal_Int16 nState = 0;
+        while(aStandardStates[nState])
+        {
+            pStateSetHelper->AddState(aStandardStates[nState++]);
+        }
+        if(pFrameSel->IsEnabled())
+            pStateSetHelper->AddState(AccessibleStateType::ENABLED);
+
+        if(pFrameSel->HasFocus())
+        {
+            pStateSetHelper->AddState(AccessibleStateType::ACTIVE);
+            pStateSetHelper->AddState(AccessibleStateType::FOCUSED);
+            pStateSetHelper->AddState(AccessibleStateType::SELECTED);
+        };
+    }
+    return xRet;
+}
+/*-- 04.02.2002 14:11:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+lang::Locale SvxFrameSelectorAccessible_Impl::getLocale(  )
+    throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
+{
+    lang::Locale aRet;
+    SvxLanguageToLocale( aRet, Application::GetSettings().GetUILanguage() );
+    return aRet;
+}
+/*-- 04.02.2002 14:11:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvxFrameSelectorAccessible_Impl::addPropertyChangeListener(
+    const uno::Reference< beans::XPropertyChangeListener >& xListener )
+        throw (uno::RuntimeException)
+{
+    aPropertyListeners.addInterface( xListener );
+}
+/*-- 04.02.2002 14:11:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvxFrameSelectorAccessible_Impl::removePropertyChangeListener( const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    aPropertyListeners.removeInterface( xListener );
+}
+/*-- 04.02.2002 14:11:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SvxFrameSelectorAccessible_Impl::contains( const awt::Point& aPt )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    Point aPoint(aPt.X, aPt.Y);
+    //aPoint is relative to the frame selector
+    return pFrameSel->pImpl->aSpotLeft.IsInside( aPoint ) ||
+            pFrameSel->pImpl->aSpotRight.IsInside( aPoint ) ||
+            pFrameSel->pImpl->aSpotTop.IsInside( aPoint ) ||
+            pFrameSel->pImpl->aSpotBottom.IsInside( aPoint ) ||
+            (pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE &&
+                (pFrameSel->pImpl->aSpotHor.IsInside( aPoint ) ||
+                    pFrameSel->pImpl->aSpotVer.IsInside( aPoint ) ));
+}
+/*-- 04.02.2002 14:12:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< XAccessible > SvxFrameSelectorAccessible_Impl::getAccessibleAt(
+    const awt::Point& aPt )
+        throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    Point aPoint(aPt.X, aPt.Y);
+    uno::Reference< XAccessible > xRet;
+    //aPoint is relative to the frame selector
+    if(pFrameSel->pImpl->aSpotLeft.IsInside( aPoint ))
+        xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_LEFT);
+    else if(pFrameSel->pImpl->aSpotRight.IsInside( aPoint ))
+        xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_RIGHT);
+    else if(pFrameSel->pImpl->aSpotTop.IsInside( aPoint ))
+        xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_TOP);
+    else if(pFrameSel->pImpl->aSpotBottom.IsInside( aPoint ))
+        xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_BOTTOM);
+    else if(pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE)
+    {
+        if(pFrameSel->pImpl->aSpotHor.IsInside( aPoint ))
+            xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_HOR);
+        else if(pFrameSel->pImpl->aSpotVer.IsInside( aPoint ) )
+            xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_VER);
+    }
+    return xRet;
+}
+/*-- 04.02.2002 14:12:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+awt::Rectangle SvxFrameSelectorAccessible_Impl::getBounds(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    Size aSz = pFrameSel->GetSizePixel();
+    Point aPos = pFrameSel->GetPosPixel();
+    awt::Rectangle aRet;
+    aRet.X = aPos.X();
+    aRet.Y = aPos.Y();
+    aRet.Width = aSz.Width();
+    aRet.Height = aSz.Height();
+    return aRet;
+}
+/*-- 04.02.2002 14:12:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+awt::Point SvxFrameSelectorAccessible_Impl::getLocation(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    Point aPos = pFrameSel->GetPosPixel();
+    awt::Point aRet(aPos.X(), aPos.Y());
+    return aRet;
+}
+/*-- 04.02.2002 14:12:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+awt::Point SvxFrameSelectorAccessible_Impl::getLocationOnScreen(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    Point aPos = pFrameSel->GetPosPixel();
+    aPos = pFrameSel->OutputToAbsoluteScreenPixel( aPos );
+    awt::Point aRet(aPos.X(), aPos.Y());
+    return aRet;
+}
+/*-- 04.02.2002 14:12:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+awt::Size SvxFrameSelectorAccessible_Impl::getSize(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    Size aSz = pFrameSel->GetSizePixel();
+    awt::Size aRet(aSz.Width(), aSz.Height());
+    return awt::Size();
+}
+/*-- 04.02.2002 14:12:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SvxFrameSelectorAccessible_Impl::isShowing(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return sal_True;
+}
+/*-- 04.02.2002 14:12:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SvxFrameSelectorAccessible_Impl::isVisible(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return sal_True;
+}
+/*-- 04.02.2002 14:12:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SvxFrameSelectorAccessible_Impl::isFocusTraversable(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return sal_True;
+}
+/*-- 04.02.2002 14:12:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvxFrameSelectorAccessible_Impl::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
+{
+    aFocusListeners.addInterface( xListener );
+}
+/*-- 04.02.2002 14:12:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvxFrameSelectorAccessible_Impl::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
+{
+    aFocusListeners.removeInterface( xListener );
+}
+/*-- 04.02.2002 14:12:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvxFrameSelectorAccessible_Impl::grabFocus(  ) throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    pFrameSel->GrabFocus();
+}
+/*-- 04.02.2002 14:12:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SvxFrameSelectorAccessible_Impl::getAccessibleKeyBinding(  ) throw (uno::RuntimeException)
+{
+    DBG_WARNING("not implemented")
+    return uno::Any();
+}
+/*-- 04.02.2002 14:12:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString SvxFrameSelectorAccessible_Impl::getImplementationName(  ) throw (uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii("SvxFrameSelectorAccessible_Impl");
+}
+/*-- 04.02.2002 14:12:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+const sal_Char sAccessible[]          = "Accessible";
+const sal_Char sAccessibleContext[]   = "AccessibleContext";
+const sal_Char sAccessibleComponent[] = "AccessibleComponent";
+
+sal_Bool SvxFrameSelectorAccessible_Impl::supportsService( const ::rtl::OUString& rServiceName )
+    throw (uno::RuntimeException)
+{
+    return  rServiceName.equalsAsciiL( sAccessible         , sizeof(sAccessible         )-1 ) ||
+            rServiceName.equalsAsciiL( sAccessibleContext  , sizeof(sAccessibleContext  )-1 ) ||
+            rServiceName.equalsAsciiL( sAccessibleComponent, sizeof(sAccessibleComponent)-1 );
+}
+/*-- 04.02.2002 14:12:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< ::rtl::OUString > SvxFrameSelectorAccessible_Impl::getSupportedServiceNames(  )
+    throw (uno::RuntimeException)
+{
+    uno::Sequence< OUString > aRet(3);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessible         ) );
+    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleContext  ) );
+    pArray[2] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleComponent) );
+    return aRet;
+}
+/* -----------------------------04.02.2002 14:31------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFrameSelectorAccessible_Impl::IsValid() throw (uno::RuntimeException)
+{
+    if(!pFrameSel)
+        throw uno::RuntimeException();
+}
+/* -----------------------------04.02.2002 14:31------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SvxFrameSelectorAccessible_Impl::NotifyFocusListeners(sal_Bool bGetFocus)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    awt::FocusEvent aEvent;
+    aEvent.FocusFlags = 0;
+    if(bGetFocus)
+    {
+        USHORT nFocusFlags = pFrameSel->GetGetFocusFlags();
+        if(nFocusFlags&GETFOCUS_TAB)
+            aEvent.FocusFlags |= awt::FocusChangeReason::TAB;
+        if(nFocusFlags&GETFOCUS_CURSOR)
+            aEvent.FocusFlags |= awt::FocusChangeReason::CURSOR;
+        if(nFocusFlags&GETFOCUS_MNEMONIC)
+            aEvent.FocusFlags |= awt::FocusChangeReason::MNEMONIC;
+        if(nFocusFlags&GETFOCUS_FORWARD)
+            aEvent.FocusFlags |= awt::FocusChangeReason::FORWARD;
+        if(nFocusFlags&GETFOCUS_BACKWARD)
+            aEvent.FocusFlags |= awt::FocusChangeReason::BACKWARD;
+        if(nFocusFlags&GETFOCUS_AROUND)
+            aEvent.FocusFlags |= awt::FocusChangeReason::AROUND;
+        if(nFocusFlags&GETFOCUS_UNIQUEMNEMONIC)
+            aEvent.FocusFlags |= awt::FocusChangeReason::UNIQUEMNEMONIC;
+    //        if(nFocusFlags&GETFOCUS_INIT)
+    //            aEvent.FocusFlags |= FocusChangeReason::
+    }
+//    else
+    //how can I find the current focus window?
+//        aEvent.NextFocus = ;
+    aEvent.Temporary = sal_False;
+
+    uno::Reference < XAccessibleContext > xThis( this );
+    aEvent.Source = xThis;
+
+    ::cppu::OInterfaceIteratorHelper aIter( aFocusListeners );
+    while( aIter.hasMoreElements() )
+    {
+        uno::Reference < awt::XFocusListener > xListener( aIter.next(), uno::UNO_QUERY );
+        if(bGetFocus)
+            xListener->focusGained( aEvent );
+        else
+            xListener->focusLost( aEvent );
+    }
+}
+/* -----------------------------04.02.2002 16:16------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SvxFrameSelectorAccessible_Impl::Invalidate()
+{
+    pFrameSel = 0;
+    lang::EventObject aEvent;
+    uno::Reference < XAccessibleContext > xThis( this );
+    aEvent.Source = xThis;
+    aFocusListeners.disposeAndClear( aEvent );
+    aPropertyListeners.disposeAndClear( aEvent );
+}
 // class SvxFrameLine ----------------------------------------------------
 
 struct SvxLineStruct SvxFrameLine::NO_LINE           = { 0,0,0 };
@@ -171,37 +765,6 @@ void SvxFrameLine::SetState( SvxFrameLineState eState )
         aCoreStyle = NO_LINE;
     }
 }
-// class SvxFrameSelector_Impl ------------------------------------------------
-struct SvxFrameSelector_Impl
-{
-    SvxFrameSelectorType    eSel; // Selektor-Typ (Tabelle oder Absatz)
-
-    Color               aCurLineCol;  // aktuelle Linienfarbe
-    SvxLineStruct       aCurLineStyle;// aktueller LineStyle
-    Bitmap              aBackBmp;         // Hintergrund-Bitmap
-    Rectangle           aRectFrame;     // der Rahmen (Mitte der Linien)
-    Rectangle           aBoundingRect;// alle Linien umschliessender Rahmen
-    SvxFrameLine        aLeftLine;    // seine Linien
-    SvxFrameLine        aRightLine;
-    SvxFrameLine        aTopLine;
-    SvxFrameLine        aBottomLine;
-    SvxFrameLine        aHorLine;
-    SvxFrameLine        aVerLine;
-    Rectangle           aSpotLeft;      // Click-HotSpots auf der Bitmap
-    Rectangle           aSpotRight;
-    Rectangle           aSpotTop;
-    Rectangle           aSpotBottom;
-    Rectangle           aSpotHor;
-    Rectangle           aSpotVer;
-    BOOL                bIsDontCare;
-
-    SvxFrameSelector_Impl() :
-        eSel            ( SVX_FRMSELTYPE_PARAGRAPH ),
-        aCurLineStyle ( SvxFrameLine::NO_LINE ),
-        aCurLineCol   ( COL_BLACK ),
-        bIsDontCare     ( sal_False ){}
-};
-
 // class SvxFrameSelector ------------------------------------------------
 
 SvxFrameSelector::SvxFrameSelector( Window* pParent,
@@ -1308,6 +1871,8 @@ void SvxFrameSelector::KeyInput( const KeyEvent& rKEvt )
 void SvxFrameSelector::GetFocus()
 {
     Invalidate();
+    if(pImpl->xAccess.is())
+        pImpl->pAccess->NotifyFocusListeners(sal_True);
     Control::GetFocus();
 }
 /* -----------------------------01.02.2002 15:34------------------------------
@@ -1316,6 +1881,8 @@ void SvxFrameSelector::GetFocus()
 void SvxFrameSelector::LoseFocus()
 {
     Invalidate();
+    if(pImpl->xAccess.is())
+        pImpl->pAccess->NotifyFocusListeners(sal_True);
     Control::LoseFocus();
 }
 /* -----------------------------01.02.2002 16:54------------------------------
@@ -1336,5 +1903,52 @@ SvxFrameLine&       SvxFrameSelector::GetLine(SvxFrameSelectorLine eWhich)
         case SVX_FRMSELLINE_VER:        pRet = &pImpl->aVerLine;    break;
     }
     return *pRet;
+}
+/* -----------------------------04.02.2002 14:14------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Reference< XAccessible > SvxFrameSelector::CreateAccessible()
+{
+    if(!pImpl->xAccess.is())
+        pImpl->xAccess = pImpl->pAccess =
+            new SvxFrameSelectorAccessible_Impl(*this, SVX_FRMSELLINE_NONE);
+    return pImpl->xAccess;
+}
+/* -----------------------------05.02.2002 15:46------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxFrameSelector_Impl::SvxFrameSelector_Impl() :
+        eSel            ( SVX_FRMSELTYPE_PARAGRAPH ),
+        aCurLineStyle ( SvxFrameLine::NO_LINE ),
+        aCurLineCol   ( COL_BLACK ),
+        pAccess(0),
+        bIsDontCare     ( sal_False )
+{
+    for(sal_Int16 i = 0; i < 6; i++)
+        pChildren[i] = 0;
+}
+/* -----------------------------05.02.2002 15:47------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxFrameSelector_Impl::~SvxFrameSelector_Impl()
+{
+    if(pAccess)
+        pAccess->Invalidate();
+    for(sal_Int16 i = 0; i < 6; i++)
+        if(pChildren[i])
+            pChildren[i]->Invalidate();
+}
+/* -----------------------------05.02.2002 15:47------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Reference< XAccessible >
+    SvxFrameSelector_Impl::GetChildAccessible(
+        SvxFrameSelector& rFrmSel, SvxFrameSelectorLine eWhich)
+{
+    DBG_ASSERT(eWhich >= SVX_FRMSELLINE_LEFT && eWhich <= SVX_FRMSELLINE_VER, "wrong line type")
+    if(!pChildren[eWhich -1])
+        xChildren[eWhich -1] = pChildren[eWhich -1] =
+            new SvxFrameSelectorAccessible_Impl(rFrmSel, eWhich);
+    return pChildren[eWhich -1];
 }
 
