@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obr $ $Date: 2001-04-06 14:56:26 $
+#   last change: $Author: obr $ $Date: 2001-04-09 09:10:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ SLOFILES=   $(SLO)$/isocket.obj		\
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/isocket.obj		\
-            $(OBJ)$/omutex.obj      \
             $(OBJ)$/logmodule.obj      \
             $(OBJ)$/utility.obj
 #.ENDIF
