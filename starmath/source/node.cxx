@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-11 12:33:58 $
+ *  last change: $Author: cmc $ $Date: 2001-10-19 11:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2707,7 +2707,6 @@ void SmMathSymbolNode::CreateTextFromNode(String &rText)
 {
     String sStr;
     MathType::LookupChar(GetToken().cMathChar, sStr);
-    sStr.EraseLeadingAndTrailingChars();
     rText.Append(sStr);
 }
 
