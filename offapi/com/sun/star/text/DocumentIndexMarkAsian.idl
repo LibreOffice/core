@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndexMarkAsian.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:43 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
     For Asian languages the user can provide an additional string
     which is used for sorting. If the user does not provide these
     strings, they are not considered for sorting.
+
+    @since #107627#
  */
 service DocumentIndexMarkAsian
 {
