@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:09 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #endif
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
-#endif
-#ifndef SMDLL0_HXX //autogen
-#include <starmath/smdll0.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -543,7 +540,7 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, SvInPlaceObject *pObj,
     {
         USHORT nId = RES_POOLFRM_OLE;
 
-        FASTBOOL bMath = SmModuleDummy::HasID( *pObj->GetSvFactory() );
+        FASTBOOL bMath = SotExchange::IsMath( *pObj->GetSvFactory() );
         if ( bMath )
             nId = RES_POOLFRM_FORMEL;
 
