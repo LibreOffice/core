@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 
 namespace basegfx
 {
+    class B1IRange;
+
     class B1DRange
     {
         ::basegfx::BasicRange< double, DoubleTraits >   maRange;
@@ -93,6 +95,8 @@ namespace basegfx
         :   maRange(rRange.maRange)
         {
         }
+
+        explicit B1DRange( const B1IRange& rRange );
 
         bool isEmpty() const
         {
@@ -164,11 +168,22 @@ namespace basegfx
             maRange.expand(rRange.maRange);
         }
 
+        void intersect(const B1DRange& rRange)
+        {
+            maRange.intersect(rRange.maRange);
+        }
+
         void grow(double fValue)
         {
             maRange.grow(fValue);
         }
     };
+
+    /** Round double to nearest integer for 1D range
+
+        @return the nearest integer for this range
+    */
+    B1IRange fround(const B1DRange& rRange);
 } // end of namespace basegfx
 
 
