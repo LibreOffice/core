@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:53:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1983,7 +1983,7 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
   m_bSort( false )
 {
     // ToolBox.
-    m_pTool = new ToolBox( this, WB_SVLOOK | WB_BORDER  | WB_SCROLL );
+    m_pTool = new ToolBox( this, WB_3DLOOK | WB_BORDER  | WB_SCROLL );
 
     m_pTool->InsertItem ( MYWIN_ITEMID_CLEAR,
                           UniString::CreateFromAscii(
