@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:04:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,31 +730,33 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
         SCTAB nScTab = maExpSrcRange.aStart.Tab();
         if( (nScTab == maExpSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( nScTab ) )
         {
-            // CheckCellRange() restricts source range to valid Excel limits
-            if( CheckCellRange( maExpSrcRange ) )
+            // ValidateRange() restricts source range to valid Excel limits
+            if( GetAddressConverter().ValidateRange( maExpSrcRange, true ) )
             {
                 // #i22541# skip empty cell areas (performance)
-                SCCOL nFirstDocCol, nLastDocCol;
-                SCROW nFirstDocRow, nLastDocRow;
-                GetDoc().GetDataStart( nScTab, nFirstDocCol, nFirstDocRow );
-                GetDoc().GetPrintArea( nScTab, nLastDocCol, nLastDocRow, false );
-                SCCOL nFirstSrcCol = maExpSrcRange.aStart.Col(), nLastSrcCol = maExpSrcRange.aEnd.Col();
-                SCROW nFirstSrcRow = maExpSrcRange.aStart.Row(), nLastSrcRow = maExpSrcRange.aEnd.Row();
+                SCCOL nDocCol1, nDocCol2;
+                SCROW nDocRow1, nDocRow2;
+                GetDoc().GetDataStart( nScTab, nDocCol1, nDocRow1 );
+                GetDoc().GetPrintArea( nScTab, nDocCol2, nDocRow2, false );
+                SCCOL nSrcCol1 = maExpSrcRange.aStart.Col();
+                SCROW nSrcRow1 = maExpSrcRange.aStart.Row();
+                SCCOL nSrcCol2 = maExpSrcRange.aEnd.Col();
+                SCROW nSrcRow2 = maExpSrcRange.aEnd.Row();
 
                 // #i22541# do not store index list for too big ranges
-                if( 2 * (nLastDocRow - nFirstDocRow) < (maExpSrcRange.aEnd.Row() - maExpSrcRange.aStart.Row()) )
+                if( 2 * (nDocRow2 - nDocRow1) < (nSrcRow2 - nSrcRow1) )
                     ::set_flag( maPCInfo.mnFlags, EXC_SXDB_SAVEDATA, false );
 
                 // adjust row indexes, keep one row of empty area to surely have the empty cache item
-                if( nFirstSrcRow < nFirstDocRow )
-                    nFirstSrcRow = nFirstDocRow - 1;
-                if( nLastSrcRow > nLastDocRow )
-                    nLastSrcRow = nLastDocRow + 1;
+                if( nSrcRow1 < nDocRow1 )
+                    nSrcRow1 = nDocRow1 - 1;
+                if( nSrcRow2 > nDocRow2 )
+                    nSrcRow2 = nDocRow2 + 1;
 
-                maDocSrcRange.aStart.SetCol( ::std::max( nFirstDocCol, nFirstSrcCol ) );
-                maDocSrcRange.aStart.SetRow( nFirstSrcRow );
-                maDocSrcRange.aEnd.SetCol( ::std::min( nLastDocCol, nLastSrcCol ) );
-                maDocSrcRange.aEnd.SetRow( nLastSrcRow );
+                maDocSrcRange.aStart.SetCol( ::std::max( nDocCol1, nSrcCol1 ) );
+                maDocSrcRange.aStart.SetRow( nSrcRow1 );
+                maDocSrcRange.aEnd.SetCol( ::std::min( nDocCol2, nSrcCol2 ) );
+                maDocSrcRange.aEnd.SetRow( nSrcRow2 );
 
                 GetDoc().GetName( nScTab, maTabName );
                 maPCInfo.mnSrcRecs = static_cast< sal_uInt32 >( maExpSrcRange.aEnd.Row() - maExpSrcRange.aStart.Row() );
@@ -1270,15 +1272,17 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
     XclExpRoot( rRoot ),
     mrPCache( rPCache ),
     maDataOrientField( *this, EXC_SXIVD_DATA ),
-    maOutputRange( rDPObj.GetOutRange() ),
+    mnOutScTab( 0 ),
     mbValid( false ),
     mbFilterBtn( false )
 {
-    if( CheckCellRange( maOutputRange ) )
+    const ScRange& rOutScRange = rDPObj.GetOutRange();
+    if( GetAddressConverter().ConvertRange( maPTInfo.maOutXclRange, rOutScRange, true ) )
     {
         // DataPilot properties -----------------------------------------------
 
         // pivot table properties from DP object
+        mnOutScTab = rOutScRange.aStart.Tab();
         maPTInfo.maTableName = rDPObj.GetName();
         maPTInfo.maDataName = ScGlobal::GetRscString( STR_PIVOT_DATA );
         maPTInfo.mnCacheIdx = mrPCache.GetCacheIndex();
@@ -1321,11 +1325,6 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
 const XclExpPCField* XclExpPivotTable::GetCacheField( sal_uInt16 nCacheIdx ) const
 {
     return mrPCache.GetField( nCacheIdx );
-}
-
-SCTAB XclExpPivotTable::GetScTab() const
-{
-    return maOutputRange.aStart.Tab();
 }
 
 const XclExpPTField* XclExpPivotTable::GetField( sal_uInt16 nFieldIdx ) const
@@ -1485,32 +1484,34 @@ void XclExpPivotTable::Finalize()
     if( maPTInfo.mnDataAxis == EXC_SXVD_AXIS_NONE )
         maPTInfo.mnDataAxis = EXC_SXVD_AXIS_ROW;
 
-    // output range
-    maPTInfo.mnFirstRow = static_cast< sal_uInt16 >( maOutputRange.aStart.Row() );
-    maPTInfo.mnLastRow = static_cast< sal_uInt16 >( maOutputRange.aEnd.Row() );
-    maPTInfo.mnFirstCol = static_cast< sal_uInt16 >( maOutputRange.aStart.Col() );
-    maPTInfo.mnLastCol = static_cast< sal_uInt16 >( maOutputRange.aEnd.Col() );
+    // update output range (initialized in ctor)
+    sal_uInt16& rnXclCol1 = maPTInfo.maOutXclRange.maFirst.mnCol;
+    sal_uInt16& rnXclRow1 = maPTInfo.maOutXclRange.maFirst.mnRow;
+    sal_uInt16& rnXclCol2 = maPTInfo.maOutXclRange.maLast.mnCol;
+    sal_uInt16& rnXclRow2 = maPTInfo.maOutXclRange.maLast.mnRow;
     // exclude page fields from output range
-    maPTInfo.mnFirstRow += maPTInfo.mnPageFields;
+    rnXclRow1 += maPTInfo.mnPageFields;
     // exclude filter button from output range
     if( mbFilterBtn )
-        ++maPTInfo.mnFirstRow;
+        ++rnXclRow1;
     // exclude empty row between (filter button and/or page fields) and table
     if( mbFilterBtn || maPTInfo.mnPageFields )
-        ++maPTInfo.mnFirstRow;
+        ++rnXclRow1;
 
     // data area
-    maPTInfo.mnFirstDataRow = maPTInfo.mnFirstRow + maPTInfo.mnColFields + 1;
-    maPTInfo.mnFirstDataCol = maPTInfo.mnFirstCol + maPTInfo.mnRowFields;
+    sal_uInt16& rnDataXclCol = maPTInfo.maDataXclPos.mnCol;
+    sal_uInt16& rnDataXclRow = maPTInfo.maDataXclPos.mnRow;
+    rnDataXclCol = rnXclCol1 + maPTInfo.mnRowFields;
+    rnDataXclRow = rnXclRow1 + maPTInfo.mnColFields + 1;
     if( maDataFields.empty() )
-        ++maPTInfo.mnFirstDataRow;
-    maPTInfo.mnLastRow = ::std::max( maPTInfo.mnLastRow, maPTInfo.mnFirstDataRow );
-    maPTInfo.mnLastCol = ::std::max( maPTInfo.mnLastCol, maPTInfo.mnFirstDataCol );
-    maPTInfo.mnDataRows = maPTInfo.mnLastRow - maPTInfo.mnFirstDataRow + 1;
-    maPTInfo.mnDataCols = maPTInfo.mnLastCol - maPTInfo.mnFirstDataCol + 1;
+        ++rnDataXclRow;
+    rnXclCol2 = ::std::max( rnXclCol2, rnDataXclCol );
+    rnXclRow2 = ::std::max( rnXclRow2, rnDataXclRow );
+    maPTInfo.mnDataCols = rnXclCol2 - rnDataXclCol + 1;
+    maPTInfo.mnDataRows = rnXclRow2 - rnDataXclRow + 1;
 
     // first heading
-    maPTInfo.mnFirstHeadRow = maPTInfo.mnFirstRow + 1;
+    maPTInfo.mnFirstHeadRow = rnXclRow1 + 1;
 }
 
 // records ----------------------------------------------------------------
@@ -1541,8 +1542,8 @@ void XclExpPivotTable::WriteSxpi( XclExpStream& rStrm ) const
         rStrm.SetSliceSize( 6 );
         for( ScfUInt16Vec::const_iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
         {
-            const XclExpPTFieldRef xField = maFieldList.GetRecord( *aIt );
-            if( xField.get() )
+            XclExpPTFieldRef xField = maFieldList.GetRecord( *aIt );
+            if( xField.is() )
                 xField->WriteSxpiEntry( rStrm );
         }
         rStrm.EndRecord();
@@ -1553,8 +1554,8 @@ void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
 {
     for( XclPTDataFieldPosVec::const_iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
     {
-        const XclExpPTFieldRef xField = maFieldList.GetRecord( aIt->first );
-        if( xField.get() )
+        XclExpPTFieldRef xField = maFieldList.GetRecord( aIt->first );
+        if( xField.is() )
             xField->WriteSxdi( rStrm, aIt->second );
     }
 }
