@@ -70,8 +70,8 @@ TARGET=launcher
 ZIPFLAGS= -u -r
 
 ZIP1TARGET = kdeapp
-ZIP1LIST   = * .directory
-ZIP1DIR    = $(MISC)$/kde/share/applnk/OpenOffice.org
+ZIP1LIST   = share/applnk/*
+ZIP1DIR    = $(MISC)$/kde
 
 ZIP2TARGET = kdemime
 ZIP2LIST   = share/mimelnk/*
@@ -81,6 +81,22 @@ ZIP3TARGET = gnome2apps
 ZIP3LIST   = *.desktop
 ZIP3DIR    = $(MISC)$/gnome
 
+SCRIPTS= \
+    $(BIN)$/update-user-mime-data.sh \
+    $(BIN)$/update-redhat-user-menus.sh \
+    $(BIN)$/update-suse-user-menus.sh \
+    $(BIN)$/update-user-menus.sh \
+    $(BIN)$/functions.sh \
+    $(BIN)$/gnomeint.sh \
+    $(BIN)$/viewdoc.sh
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR: $(SCRIPTS)
+
+$(SCRIPTS) : $$(@:f)
+    +@rm -f $@ 2>/dev/null
+    +@cat $(@:f) | tr -d "\015" > $@
+    +@chmod 555 $@
