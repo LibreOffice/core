@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-23 11:37:19 $
+ *  last change: $Author: ka $ $Date: 2001-03-28 11:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,12 @@ void SdDrawDocShell::GetState(SfxItemSet &rSet)
                 }
 
                 rSet.Put(SfxUInt16Item(nWhich, nOpt));
+            }
+            break;
+
+            case SID_VERSION:
+            {
+                GetSlotState( SID_VERSION, SfxObjectShell::GetInterface(), &rSet );
             }
             break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: ka $ $Date: 2001-03-28 11:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,16 @@ void __EXPORT SdDrawDocShell::Execute( SfxRequest& rReq )
             SvxColorTableItem* pColItem = (SvxColorTableItem*) GetItem( SID_COLOR_TABLE );
             XColorTable* pTable = pColItem->GetColorTable();
             rReq.SetReturnValue( OfaPtrItem( SID_GET_COLORTABLE, pTable ) );
+        }
+        break;
+
+        case SID_VERSION:
+        {
+            const ULONG nOldSwapMode = pDoc->GetSwapGraphicsMode();
+
+            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
+            ExecuteSlot( rReq, SfxObjectShell::GetInterface() );
+            pDoc->SetSwapGraphicsMode( nOldSwapMode );
         }
         break;
 

@@ -5,8 +5,8 @@
 #*    Beschreibung      Basis fuer DocShell-IDL
 #*
 #*    Ersterstellung    SOH 04.04.97
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: ka $ $Date: 2001-03-28 11:54:46 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/sd/sdi/_docsh.sdv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/_docsh.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/_docsh.sdi,v 1.2 2001-03-28 11:54:46 ka Exp $
 
 *************************************************************************/
 
@@ -93,6 +93,11 @@ interface DrawDocument : OfficeDocument
     [
         ExecMethod = Execute;
     ]
+    SID_VERSION
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
 }
 
 /*************************************************************************
@@ -100,6 +105,9 @@ interface DrawDocument : OfficeDocument
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:48:29  hr
+      initial import
+
       Revision 1.8  1999/09/01 15:41:55  pw
       Pack & Go
 
