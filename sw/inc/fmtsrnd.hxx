@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtsrnd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <svtools/eitem.hxx>
 #endif
 
-class International;
+class IntlWrapper;
 
 //SwFmtSurround, wie soll sich der ---------------
 //  Dokumentinhalt unter dem Rahmen verhalten ---
@@ -107,7 +107,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const;
     virtual USHORT          GetVersion( USHORT nFFVer ) const;
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtlsplt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:50:20 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #ifndef _FORMAT_HXX //autogen
 #include <format.hxx>
 #endif
-class International;
+class IntlWrapper;
 
 class SwFmtLayoutSplit : public SfxBoolItem
 {
@@ -85,7 +85,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const;
     virtual USHORT           GetVersion( USHORT nFFVer ) const;
 
     virtual BOOL        importXML( const ::rtl::OUString& rValue,USHORT,

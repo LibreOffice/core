@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 12:04:46 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <svtools/intitem.hxx>
 #endif
 class SwNumRule;
-class International;
+class IntlWrapper;
 
 /*--------------------------------------------------------------------
     Beschreibung: Container fuer FootNote
@@ -88,7 +88,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const;
 
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

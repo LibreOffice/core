@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtruby.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-23 20:20:23 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const;
 
     virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;

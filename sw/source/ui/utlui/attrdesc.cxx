@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:30 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,13 @@
 
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
+#endif
+
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _FMTANCHR_HXX //autogen
@@ -169,7 +176,8 @@ static sal_Char __READONLY_DATA sKomma[] = ", ";
     if( Count() )
     {
         SfxItemIter aIter( *this );
-        const International& rInt = Application::GetAppInternational();
+        const IntlWrapper rInt( ::comphelper::getProcessServiceFactory(),
+            Application::GetAppInternational().GetLanguage() );
         while( TRUE )
         {
 #if SUPD>546
@@ -210,7 +218,7 @@ SfxItemPresentation SwFmtCharFmt::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -248,7 +256,7 @@ SfxItemPresentation SwFmtINetFmt::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -268,7 +276,7 @@ SfxItemPresentation SwFmtINetFmt::GetPresentation
 
 SfxItemPresentation SwFmtRuby::GetPresentation( SfxItemPresentation ePres,
                             SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-                            String &rText, const International* pIntl ) const
+                            String &rText, const IntlWrapper* pIntl ) const
 {
     switch ( ePres )
     {
@@ -296,7 +304,7 @@ SfxItemPresentation SwFmtDrop::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     rText.Erase();
@@ -339,7 +347,7 @@ SfxItemPresentation SwRegisterItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     XubString&          rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -369,7 +377,7 @@ SfxItemPresentation SwNumRuleItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     XubString&          rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -403,7 +411,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -463,7 +471,7 @@ SfxItemPresentation SwFmtHeader::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -492,7 +500,7 @@ SfxItemPresentation SwFmtFooter::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -518,7 +526,7 @@ SfxItemPresentation SwFmtSurround::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -576,7 +584,7 @@ SfxItemPresentation SwFmtVertOrient::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -635,7 +643,7 @@ SfxItemPresentation SwFmtHoriOrient::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -693,7 +701,7 @@ SfxItemPresentation SwFmtAnchor::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -732,7 +740,7 @@ SfxItemPresentation SwFmtPageDesc::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -763,7 +771,7 @@ SfxItemPresentation SwFmtCol::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -807,7 +815,7 @@ SfxItemPresentation SwFmtURL::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     rText.Erase();
@@ -850,7 +858,7 @@ SfxItemPresentation SwFmtEditInReadonly::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     rText.Erase();
@@ -877,7 +885,7 @@ SfxItemPresentation SwFmtLayoutSplit::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -902,7 +910,7 @@ SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -949,7 +957,7 @@ SfxItemPresentation SwFmtChain::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*        pIntl
+    const IntlWrapper*        pIntl
 )   const
 {
     switch ( ePres )
@@ -985,7 +993,7 @@ SfxItemPresentation SwFmtLineNumber::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*    pIntl
+    const IntlWrapper*    pIntl
 )   const
 {
     switch ( ePres )
@@ -1016,7 +1024,7 @@ SfxItemPresentation SwFmtLineNumber::GetPresentation
 
 SfxItemPresentation SwMirrorGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String& rText, const International* pIntl ) const
+    String& rText, const IntlWrapper* pIntl ) const
 {
     switch ( ePres )
     {
@@ -1051,7 +1059,7 @@ SfxItemPresentation SwMirrorGrf::GetPresentation(
 
 SfxItemPresentation SwRotationGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String &rText, const International* pIntl) const
+    String &rText, const IntlWrapper* pIntl) const
 {
     switch( ePres )
     {
@@ -1074,7 +1082,7 @@ SfxItemPresentation SwRotationGrf::GetPresentation(
 
 SfxItemPresentation SwLuminanceGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String &rText, const International* pIntl) const
+    String &rText, const IntlWrapper* pIntl) const
 {
     switch( ePres )
     {
@@ -1097,7 +1105,7 @@ SfxItemPresentation SwLuminanceGrf::GetPresentation(
 
 SfxItemPresentation SwContrastGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String &rText, const International* pIntl) const
+    String &rText, const IntlWrapper* pIntl) const
 {
     switch( ePres )
     {
@@ -1120,7 +1128,7 @@ SfxItemPresentation SwContrastGrf::GetPresentation(
 
 SfxItemPresentation SwChannelGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String &rText, const International* pIntl) const
+    String &rText, const IntlWrapper* pIntl) const
 {
     switch( ePres )
     {
@@ -1156,7 +1164,7 @@ SfxItemPresentation SwChannelGrf::GetPresentation(
 
 SfxItemPresentation SwGammaGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String &rText, const International* pIntl) const
+    String &rText, const IntlWrapper* pIntl) const
 {
     switch( ePres )
     {
@@ -1179,7 +1187,7 @@ SfxItemPresentation SwGammaGrf::GetPresentation(
 
 SfxItemPresentation SwInvertGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String &rText, const International* pIntl) const
+    String &rText, const IntlWrapper* pIntl) const
 {
     rText.Erase();
     switch( ePres )
@@ -1202,7 +1210,7 @@ SfxItemPresentation SwInvertGrf::GetPresentation(
 
 SfxItemPresentation SwTransparencyGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String &rText, const International* pIntl) const
+    String &rText, const IntlWrapper* pIntl) const
 {
     switch( ePres )
     {
@@ -1225,7 +1233,7 @@ SfxItemPresentation SwTransparencyGrf::GetPresentation(
 
 SfxItemPresentation SwDrawModeGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
-    String &rText, const International* pIntl) const
+    String &rText, const IntlWrapper* pIntl) const
 {
     rText.Erase();
     switch( ePres )
@@ -1257,6 +1265,9 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/02/23 12:45:30  os
+      Complete use of DefaultNumbering component
+
       Revision 1.3  2000/11/16 21:30:40  jp
       SwFmt2Lines moved to SVX and renamed
 

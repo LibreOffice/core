@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmthdft.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #endif
 
 class SwFrmFmt;
-class International;
+class IntlWrapper;
 
 
 //Kopfzeile, fuer Seitenformate
@@ -103,7 +103,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const;
 
     const SwFrmFmt *GetHeaderFmt() const { return (SwFrmFmt*)pRegisteredIn; }
           SwFrmFmt *GetHeaderFmt()       { return (SwFrmFmt*)pRegisteredIn; }
@@ -137,7 +137,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const;
 
     const SwFrmFmt *GetFooterFmt() const { return (SwFrmFmt*)pRegisteredIn; }
           SwFrmFmt *GetFooterFmt()       { return (SwFrmFmt*)pRegisteredIn; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-14 11:46:54 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const;
 
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;
@@ -182,7 +182,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const;
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE nMemberId = 0 ) const;
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal,
@@ -206,7 +206,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const;
 };
 
 class SwContrastGrf : public SfxInt16Item
@@ -223,7 +223,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const;
 };
 
 class SwChannelGrf : public SfxInt16Item
@@ -240,7 +240,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const;
 };
 
 class SwChannelRGrf : public SwChannelGrf
@@ -296,7 +296,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const;
 
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE nMemberId = 0 ) const;
@@ -322,7 +322,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const;
 };
 
 class SwTransparencyGrf : public SfxByteItem
@@ -339,7 +339,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const;
     virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;
     virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal,
@@ -363,7 +363,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
-                                    const International*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const;
 
     virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 ) const;

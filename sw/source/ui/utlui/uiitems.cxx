@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 12:04:46 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*    pIntl
+    const IntlWrapper*    pIntl
 )   const
 {
     switch ( ePres )
