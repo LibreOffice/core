@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:59:07 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 08:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@ namespace dbaui
         void clearDestColumns();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createTable();
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createView();
     };
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:23:44 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 08:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #endif
@@ -118,6 +121,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace ::dbaui;
@@ -887,6 +893,52 @@ void OCopyTableWizard::setColumnProperties(const Reference<XPropertySet>& _rxCol
         _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_pFieldDesc->GetDescription()));
     if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
         _rxColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,makeAny(_pFieldDesc->GetDefaultValue()));
+}
+// -----------------------------------------------------------------------------
+Reference< XPropertySet > OCopyTableWizard::createView()
+{
+    Reference<XViewsSupplier> xSup(m_xConnection,UNO_QUERY);
+    Reference< XNameAccess > xViews;
+    if(xSup.is())
+        xViews = xSup->getViews();
+    Reference<XDataDescriptorFactory> xFact(xViews,UNO_QUERY);
+    OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
+    if(!xFact.is())
+        return NULL;
+
+    m_xDestObject = xFact->createDataDescriptor();
+    ::rtl::OUString sCatalog,sSchema,sTable;
+    ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),
+                                        m_sName,
+                                        sCatalog,
+                                        sSchema,
+                                        sTable);
+
+    m_xDestObject->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
+    m_xDestObject->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
+    m_xDestObject->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
+
+    ::rtl::OUString sCommand = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+    ::rtl::OUString sComposedName;
+    ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,sComposedName,sal_True);
+    sCommand += sComposedName;
+    m_xDestObject->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
+
+    Reference<XAppend> xAppend(xViews,UNO_QUERY);
+    if(xAppend.is())
+        xAppend->appendByDescriptor(m_xDestObject);
+
+    m_xDestObject = NULL;
+    // we need to reget the view because after appending it it is no longer valid
+    // but this time it isn't a view object it is a table object with type "VIEW"
+    Reference<XTablesSupplier> xTabSup(m_xConnection,UNO_QUERY);
+    Reference< XNameAccess > xTables;
+    if(xSup.is())
+        xTables = xTabSup->getTables();
+    if(xTables.is() && xTables->hasByName(m_sName))
+        xTables->getByName(m_sName) >>= m_xDestObject;
+
+    return m_xDestObject;
 }
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createTable()

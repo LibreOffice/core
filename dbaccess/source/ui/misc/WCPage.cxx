@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:07:07 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 08:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
                 ::rtl::OUString sValue = xRow->getString(1);
                 if(!xRow->wasNull() && sValue.equalsIgnoreCase(sVIEW))
                 {
-                    m_bIsViewAllowed &= sal_True;
+                    m_bIsViewAllowed = m_bIsViewAllowed || sal_True;
                     break;
                 }
             }
@@ -187,8 +187,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
     m_edKeyName.Enable(sal_False);
     m_edKeyName.SetText(String::CreateFromAscii("ID"));
     sal_Int32 nMaxLen = xMetaData->getMaxColumnNameLength();
-    if(nMaxLen)
-        m_edKeyName.SetMaxTextLen(nMaxLen);
+    m_edKeyName.SetMaxTextLen(nMaxLen ? (xub_StrLen)nMaxLen : EDIT_NOLIMIT);
 
     FreeResource();
 
@@ -349,8 +348,7 @@ void OCopyTable::ActivatePage()
     //////////////////////////////////////////////////////////////////////////
     // Ist der Name zu lang?
     sal_Int32 nLen = m_pParent->m_xConnection->getMetaData()->getMaxTableNameLength();
-    if(nLen)
-        m_edTableName.SetMaxTextLen(nLen);
+    m_edTableName.SetMaxTextLen(nLen ? (xub_StrLen)nLen : EDIT_NOLIMIT);
     //m_pParent->EnableButton(OCopyTableWizard::WIZARD_FINISH,FALSE);
 
     //  if (m_pParent->m_xSourceDef.Is() && (m_pParent->m_xSourceDef->GetDatabase() == m_pParent->m_xDatabase))
@@ -368,8 +366,7 @@ void OCopyTable::Reset()
 
     sal_Int32 nLen = m_pParent->m_xConnection->getMetaData()->getMaxTableNameLength();
 
-    if(nLen)
-        m_edTableName.SetMaxTextLen(nLen);
+    m_edTableName.SetMaxTextLen(nLen ? (xub_StrLen)nLen : EDIT_NOLIMIT);
     String aTableName = m_pParent->m_sName;
 
     if(nLen && nLen < aTableName.Len())
