@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-28 10:58:56 $
+ *  last change: $Author: ama $ $Date: 2001-02-28 11:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@ protected:
     void SetDontMoveAttr( BOOL bFlag )      { bDontMoveAttr = bFlag; }
     void SetCharFmtAttr( BOOL bFlag )       { bCharFmtAttr = bFlag; }
     void SetOverlapAllowedAttr( BOOL bFlag ){ bOverlapAllowedAttr = bFlag; }
-    void SetRedlineAttr( BOOL bFlag )       { bRedlineAttr = bFlag; }
 
 public:
     virtual ~SwTxtAttr();
@@ -158,6 +157,7 @@ public:
     BOOL IsCharFmtAttr() const              { return bCharFmtAttr; }
     BOOL IsOverlapAllowedAttr() const       { return bOverlapAllowedAttr; }
     BOOL IsRedlineAttr() const              { return bRedlineAttr; }
+    void SetRedlineAttr( BOOL bFlag )       { bRedlineAttr = bFlag; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline USHORT Which() const { return GetAttr().Which(); }
@@ -463,6 +463,9 @@ inline const SvxCharRotateItem& SwTxtAttr::GetCharRotate() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/02/28 10:58:56  ama
+      New: RedlineAttr-flag
+
       Revision 1.7  2001/02/15 20:10:39  jp
       new character attribute: rotate and scalewidth
 
