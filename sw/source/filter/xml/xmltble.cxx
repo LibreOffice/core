@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:15:12 $
+ *  last change: $Author: mib $ $Date: 2001-01-29 11:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,6 +949,13 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     if( !pLines )
         return;
 
+    pTableLines->Remove( nInfoPos );
+    if( 0 == pTableLines->Count() )
+    {
+        delete pTableLines ;
+        pTableLines = 0;
+    }
+
     // pass 2: export columns
     const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
     sal_uInt16 nColumn = 0U;
@@ -1005,12 +1012,6 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
         }
     }
 
-    pTableLines->Remove( nInfoPos );
-    if( 0 == pTableLines->Count() )
-    {
-        delete pTableLines ;
-        pTableLines = 0;
-    }
     delete pLines;
 }
 
