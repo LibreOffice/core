@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 14:30:57 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 18:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] = "Sym
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PARENT_NUMBERING[] = "ParentNumbering";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_CHAR_STYLE_NAME[] = "CharStyleName";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_CHAR[] = "BulletChar";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_RELSIZE[] = "BulletRelSize";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHIC_BITMAP[] = "GraphicBitmap";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHIC_SIZE[] = "GraphicSize";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_VERT_ORIENT[] = "VertOrient";
@@ -193,7 +194,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     OUString sTextStyleName;
     sal_Int32 nSpaceBefore = 0, nMinLabelWidth = 0, nMinLabelDist = 0;
 
-    sal_Int16 nStartValue = 1, nDisplayLevels = 1;
+    sal_Int16 nStartValue = 1, nDisplayLevels = 1, nBullRelSize = 0;
 
     sal_Unicode cBullet = 0xf095;
     OUString sBulletFontName, sBulletFontStyleName ;
@@ -236,6 +237,10 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             rProp.Value >>= sValue;
             if( sValue.getLength() > 0 )
                 cBullet = (sal_Unicode)sValue[0];
+        }
+        else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_BULLET_RELSIZE, sizeof(XML_UNO_NAME_NRULE_BULLET_RELSIZE) ) )
+        {
+            rProp.Value >>= nBullRelSize;
         }
         else if( 0 == rProp.Name.compareToAscii( XML_UNO_NAME_NRULE_ADJUST, sizeof(XML_UNO_NAME_NRULE_ADJUST) ) )
         {
@@ -337,6 +342,15 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         sTmp.append( cBullet );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_bullet_char,
                       sTmp.makeStringAndClear() );
+
+        // text:bullet-relative-size="...%"
+        if( nBullRelSize )
+        {
+            GetExport().GetMM100UnitConverter().convertPercent( sTmp, nBullRelSize );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_bullet_relative_size,
+                          sTmp.makeStringAndClear() );
+        }
+
     }
     else if( NumberingType::BITMAP == eType )
     {
@@ -586,7 +600,8 @@ void SvxXMLNumRuleExport::Export( const OUString& rName,
     GetExport().CheckAttrList();
 
     // style:name="..."
-    GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rName );
+    if( rName.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rName );
 
     // text:consecutive-numbering="..."
     if( bContNumbering )
@@ -639,7 +654,8 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     GetExport().CheckAttrList();
 
     // style:name="..."
-    GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rName );
+    if( rName.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rName );
 
     // text:consecutive-numbering="..."
     sal_Bool bContNumbering = sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-21 11:53:16 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 18:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PARENT_NUMBERING[] =
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_CHAR_STYLE_NAME[] =
         "CharStyleName";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_CHAR[] ="BulletChar";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_RELSIZE[] = "BulletRelSize";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHIC_SIZE[] =
         "GraphicSize";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_VERT_ORIENT[] ="VertOrient";
@@ -181,6 +182,7 @@ enum SvxXMLTextListLevelStyleAttrTokens
     XML_TOK_TEXT_LEVEL_ATTR_LEVEL,
     XML_TOK_TEXT_LEVEL_ATTR_STYLE_NAME,
     XML_TOK_TEXT_LEVEL_ATTR_BULLET_CHAR,
+    XML_TOK_TEXT_LEVEL_ATTR_BULLET_RELSIZE,
     XML_TOK_TEXT_LEVEL_ATTR_HREF,
     XML_TOK_TEXT_LEVEL_ATTR_TYPE,
     XML_TOK_TEXT_LEVEL_ATTR_SHOW,
@@ -200,6 +202,7 @@ static __FAR_DATA SvXMLTokenMapEntry aLevelAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_level, XML_TOK_TEXT_LEVEL_ATTR_LEVEL },
     { XML_NAMESPACE_TEXT, sXML_style_name, XML_TOK_TEXT_LEVEL_ATTR_STYLE_NAME },
     { XML_NAMESPACE_TEXT, sXML_bullet_char, XML_TOK_TEXT_LEVEL_ATTR_BULLET_CHAR },
+    { XML_NAMESPACE_TEXT, sXML_bullet_relative_size, XML_TOK_TEXT_LEVEL_ATTR_BULLET_RELSIZE },
     { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_TEXT_LEVEL_ATTR_HREF },
     { XML_NAMESPACE_XLINK, sXML_type, XML_TOK_TEXT_LEVEL_ATTR_TYPE },
     { XML_NAMESPACE_XLINK, sXML_show, XML_TOK_TEXT_LEVEL_ATTR_SHOW },
@@ -244,6 +247,7 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     sal_Int16           eImageVertOrient;
 
     sal_Unicode         cBullet;
+    sal_Int16           nBullRelSize;
 
     sal_Bool            bBullet : 1;
     sal_Bool            bImage : 1;
@@ -304,6 +308,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
     eBulletFontPitch( PITCH_DONTKNOW ),
     eBulletFontEncoding( RTL_TEXTENCODING_DONTKNOW ),
     cBullet( 0 ),
+    nBullRelSize(0),
     bNum( sal_False ),
     bBullet( sal_False ),
     bImage( sal_False )
@@ -342,6 +347,13 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         case XML_TOK_TEXT_LEVEL_ATTR_BULLET_CHAR:
             if( rValue.getLength() > 0 )
                 cBullet = rValue[0];
+            break;
+        case XML_TOK_TEXT_LEVEL_ATTR_BULLET_RELSIZE:
+            {
+                sal_Int32 nTemp;
+                if(SvXMLUnitConverter::convertPercent( nTemp, rValue ) )
+                    nBullRelSize = (sal_Int16)nTemp;
+            }
             break;
         case XML_TOK_TEXT_LEVEL_ATTR_HREF:
             if( bImage )
@@ -424,6 +436,9 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     {
         eType = NumberingType::CHAR_SPECIAL;
         nCount = 10L;
+
+        if( nBullRelSize )
+            nCount++;
     }
     if( bImage && sImageURL.getLength() > 0L &&
         nImageWidth > 0L && nImageHeight > 0L )
@@ -504,6 +519,13 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             pProps[nPos].Name =
                     OUString::createFromAscii( XML_UNO_NAME_NRULE_BULLET_FONT );
             pProps[nPos++].Value <<= aFDesc;
+
+            if( nBullRelSize )
+            {
+                pProps[nPos].Name =
+                    OUString::createFromAscii( XML_UNO_NAME_NRULE_BULLET_RELSIZE );
+                pProps[nPos++].Value <<= nBullRelSize;
+            }
         }
 
         if( bImage )
