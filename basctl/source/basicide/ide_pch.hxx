@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ide_pch.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/genlink.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/tbxmgr.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/dinfdlg.hxx>
-#include <sfx2/stbmgr.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/progress.hxx>
 
