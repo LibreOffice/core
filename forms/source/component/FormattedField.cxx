@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:38:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ IMPL_LINK(OFormattedControl, OnKeyPressed, void*, EMPTYARG)
     InterfaceRef  xParent = xFComp->getParent();
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
-        xSubmit->submit( Reference<XControl> (), MouseEvent() );
+        xSubmit->submit( Reference<XControl> (), ::com::sun::star::awt::MouseEvent() );
     return 0L;
 }
 
