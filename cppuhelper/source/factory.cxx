@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 20:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-05-17 12:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,14 +544,17 @@ Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime(
     Reference< XComponentContext > const & xContext )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    if( !xModuleFactory.is() || !xModuleFactoryDepr.is() )
+    if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
     {
-        MutexGuard aGuard( aMutex );
-        if( !xModuleFactory.is() || !xModuleFactoryDepr.is() )
+        Reference< XInterface > x( createModuleFactory() );
+        if (x.is())
         {
-            Reference< XInterface > x( createModuleFactory() );
-            xModuleFactory.set( x, UNO_QUERY );
-            xModuleFactoryDepr.set( x, UNO_QUERY );
+            MutexGuard aGuard( aMutex );
+            if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
+            {
+                xModuleFactory.set( x, UNO_QUERY );
+                xModuleFactoryDepr.set( x, UNO_QUERY );
+            }
         }
     }
     if( xModuleFactory.is() )
@@ -570,18 +573,29 @@ Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArgume
     const Sequence<Any>& Arguments )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    if( !xModuleFactoryDepr.is() )
+    if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
     {
-        MutexGuard aGuard( aMutex );
-        if( !xModuleFactory.is() || !xModuleFactoryDepr.is() )
+        Reference< XInterface > x( createModuleFactory() );
+        if (x.is())
         {
-            Reference< XInterface > x( createModuleFactory() );
-            xModuleFactoryDepr.set( x, UNO_QUERY );
+            MutexGuard aGuard( aMutex );
+            if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
+            {
+                xModuleFactory.set( x, UNO_QUERY );
+                xModuleFactoryDepr.set( x, UNO_QUERY );
+            }
         }
     }
     if( xModuleFactoryDepr.is() )
     {
         return xModuleFactoryDepr->createInstanceWithArguments( Arguments );
+    }
+    else if( xModuleFactory.is() )
+    {
+#ifdef DEBUG
+        OSL_TRACE( "### no context ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!\n" );
+#endif
+        return xModuleFactory->createInstanceWithArgumentsAndContext( Arguments, Reference< XComponentContext >() );
     }
 
     return Reference<XInterface >();
@@ -592,14 +606,17 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
     Reference< XComponentContext > const & xContext )
     throw (Exception, RuntimeException)
 {
-    if( !xModuleFactory.is() || !xModuleFactoryDepr.is() )
+    if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
     {
-        MutexGuard aGuard( aMutex );
-        if( !xModuleFactory.is() || !xModuleFactoryDepr.is() )
+        Reference< XInterface > x( createModuleFactory() );
+        if (x.is())
         {
-            Reference< XInterface > x( createModuleFactory() );
-            xModuleFactory.set( x, UNO_QUERY );
-            xModuleFactoryDepr.set( x, UNO_QUERY );
+            MutexGuard aGuard( aMutex );
+            if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
+            {
+                xModuleFactory.set( x, UNO_QUERY );
+                xModuleFactoryDepr.set( x, UNO_QUERY );
+            }
         }
     }
     if( xModuleFactory.is() )
@@ -628,8 +645,6 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     Reference< XInterface > xFactory;
     try
     {
-        MutexGuard aGuard( aMutex );
-
         OUString aActivatorUrl;
         OUString aActivatorName;
         OUString aLocation;
