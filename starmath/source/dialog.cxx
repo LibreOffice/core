@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-16 10:58:40 $
+ *  last change: $Author: tl $ $Date: 2001-02-07 12:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _STARMATH_HRC
 #include "starmath.hrc"
 #endif
+
+#include "dialog.hrc"
+
 #ifndef _SMMOD_HXX
 #include "smmod.hxx"
 #endif
@@ -221,17 +224,17 @@ IMPL_LINK_INLINE_END( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, pButt
 
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &rOptions)
     : SfxTabPage(pParent, SmResId(RID_PRINTOPTIONPAGE), rOptions),
-    aGroupBox1      (this, ResId(1)),
-    aTitle          (this, ResId(1)),
-    aText           (this, ResId(2)),
-    aFrame          (this, ResId(3)),
-    aGroupBox3      (this, ResId(3)),
-    aNoRightSpaces  (this, ResId(4)),
-    aGroupBox2      (this, ResId(2)),
-    aSizeNormal     (this, ResId(1)),
-    aSizeScaled     (this, ResId(2)),
-    aSizeZoomed     (this, ResId(3)),
-    aZoom           (this, ResId(1))
+    aGroupBox1      (this, ResId( GB_PRINTOPTIONS )),
+    aTitle          (this, ResId( CB_TITLEROW )),
+    aText           (this, ResId( CB_EQUATION_TEXT )),
+    aFrame          (this, ResId( CB_FRAME )),
+    aGroupBox2      (this, ResId( GB_PRINT_FORMAT )),
+    aSizeNormal     (this, ResId( RB_ORIGINAL_SIZE )),
+    aSizeScaled     (this, ResId( RB_FIT_TO_PAGE )),
+    aSizeZoomed     (this, ResId( RB_ZOOM )),
+    aZoom           (this, ResId( MF_ZOOM )),
+    aGroupBox3      (this, ResId( GB_MISC_OPTIONS )),
+    aNoRightSpaces  (this, ResId( CB_IGNORE_SPACING ))
 {
     FreeResource();
 

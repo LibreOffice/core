@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-16 10:58:22 $
+ *  last change: $Author: tl $ $Date: 2001-02-07 12:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,13 +154,13 @@ class SmPrintOptionsTabPage : public SfxTabPage
     CheckBox        aTitle;
     CheckBox        aText;
     CheckBox        aFrame;
-    GroupBox        aGroupBox3;
-    CheckBox        aNoRightSpaces;
     GroupBox        aGroupBox2;
     RadioButton     aSizeNormal;
     RadioButton     aSizeScaled;
     RadioButton     aSizeZoomed;
     MetricField     aZoom;
+    GroupBox        aGroupBox3;
+    CheckBox        aNoRightSpaces;
 
     DECL_LINK(SizeButtonClickHdl, Button *);
 
