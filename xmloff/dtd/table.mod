@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.33 2001-04-25 08:45:16 dvo Exp $
+	$Id: table.mod,v 1.34 2001-05-07 11:45:00 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -157,7 +157,8 @@
 	table:end-row %integer; #IMPLIED
 	table:end-table %integer; #IMPLIED
 >
-<!ELEMENT table:change-track-table-cell (text:p*)
+<!ELEMENT table:change-track-table-cell (text:p*)>
+<!ATTLIST table:change-track-table-cell
 	table:cell-address %cell-address; #IMPLIED
 	table:matrix-covered (true | false) "false"
 	table:formula %string; #IMPLIED
@@ -256,7 +257,7 @@
 >
 
 <!ENTITY % text-wo-table "(text:h|text:p|text:ordered-list|text:unordered-list|%shapes;|chart:chart)*">
-<!ENTITY % cell-content "(table:cell-range-source?,office:annotation?,table:detective?,(table:subtable|%text-wo-table;))">
+<!ENTITY % cell-content "(table:cell-range-source?,office:annotation?,table:detective?,(table:sub-table|%text-wo-table;))">
 <!ELEMENT table:table-cell %cell-content;>
 <!ELEMENT table:covered-table-cell %cell-content;>
 <!ATTLIST table:table-cell
