@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 20:20:11 $
+ *  last change: $Author: tl $ $Date: 2001-09-26 09:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5861,7 +5861,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XSLASHY ;
                 HelpId = HID_SMA_XSLASHY ;
-                Text = "Quotientenmenge " ;
+                Text = "Quotientenmenge" ;
                 Text [ ENGLISH ] = "???" ;
                 Text [ english_us ] = "Quotient Set " ;
                 Text [ portuguese_brazilian ] = "Quotientenmenge " ;
@@ -5881,7 +5881,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ greek ] = "”˝ÌÔÎÔ ÁÎﬂÍÔı ";
                 Text[ korean ] = "ÏÉÅÏßëÌï© ";
                 Text[ turkish ] = "Bˆl¸m k¸mesi ";
-                Text[ language_user1 ] = " ";
+                Text[ language_user1 ] = "Bitte das Leerzeichen am Ende entfernen";
                 Text[ catalan ] = "Conjunto cociente ";
                 Text[ finnish ] = "Osam??r?joukko ";
             };
@@ -5889,7 +5889,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_ALEPH ;
                 HelpId = HID_SMA_ALEPH ;
-                Text = "aleph " ;
+                Text = "aleph" ;
                 Text [ ENGLISH ] = "aleph" ;
                             TEXT[ italian ] = "Aleph   ";
                 TEXT[ portuguese_brazilian ] = "aleph ";
@@ -5909,7 +5909,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ greek ] = "aleph ";
                 TEXT[ korean ] = "ÏïåÎ†àÌîÑ ";
                 TEXT[ turkish ] = "aleph ";
-                TEXT[ language_user1 ] = " ";
+                TEXT[ language_user1 ] = "Bitte das Leerzeichen am Ende entfernen";
                 TEXT[ catalan ] = "aleph ";
                 TEXT[ finnish ] = "Aleph ";
             };
@@ -8576,7 +8576,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_SLRDBRACKETX ;
                 HelpId = HID_SMA_SLRDBRACKETX ;
-                Text = "eckige Klammern (skalierbar)" ;
+                Text = "doppelte eckige Klammern (skalierbar)" ;
                 Text [ ENGLISH ] = "Double square brackets (scaleable)" ;
                 Text[ english_us ] = "Double Square Brackets (Scalable)";
                 Text[ portuguese ] = "ParÍnteses rectos (ajust·veis)";
@@ -10727,7 +10727,7 @@ String RID_ERR_LBRACEEXPECTED
     Text [ dutch ] = "'(' verwacht" ;
     Text [ english_us ] = "'(' expected" ;
     Text [ italian ] = "Atteso '('" ;
-    Text [ spanish ] = "Se requiere '(' " ;
+    Text [ spanish ] = "Se requiere '('" ;
     Text [ french ] = "'(' requis" ;
     Text [ swedish ] = "'(' fˆrv‰ntad" ;
     Text [ danish ] = "'(' forventes" ;
