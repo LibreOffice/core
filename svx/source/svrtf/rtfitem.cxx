@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-06 17:55:53 $
+ *  last change: $Author: jp $ $Date: 2001-02-16 10:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@
 #define ITEMID_ADJUST       0
 #define ITEMID_EMPHASISMARK 0
 #define ITEMID_TWOLINES     0
+#define ITEMID_CHARSCALE_W  0
+#define ITEMID_CHARROTATE   0
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
@@ -157,6 +159,8 @@
 #include "pmdlitem.hxx"
 #include "spltitem.hxx"
 #include "hyznitem.hxx"
+#include "charscaleitem.hxx"
+#include "charrotateitem.hxx"
 
 #ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
@@ -962,11 +966,38 @@ ATTR_SETEMPHASIS:
             case RTF_TWOINONE:
                 if( PLAINID->nTwoLines )
                 {
-                    sal_Unicode cStt = 0, cEnd = 0;
+                    sal_Unicode cStt, cEnd;
+                    switch ( nTokenValue )
+                    {
+                    case 1: cStt = '(', cEnd = ')'; break;
+                    case 2: cStt = '[', cEnd = ']'; break;
+                    case 3: cStt = '<', cEnd = '>'; break;
+                    case 4: cStt = '{', cEnd = '}'; break;
+                    default: cStt = 0, cEnd = 0; break;
+                    }
+
                     pSet->Put( SvxTwoLinesItem( TRUE, cStt, cEnd,
                                                        PLAINID->nTwoLines ));
                 }
                 break;
+
+            case RTF_CHARSCALEX :
+                if( PLAINID->nCharScaleX )
+                {
+                    pSet->Put( SvxCharScaleWidthItem( USHORT(nTokenValue),
+                                                       PLAINID->nCharScaleX ));
+                }
+                break;
+
+            case RTF_HORZVERT:
+                if( PLAINID->nHorzVert )
+                {
+                    // RTF knows only 90°
+                    pSet->Put( SvxCharRotateItem( 900, 1 == nTokenValue,
+                                                       PLAINID->nHorzVert ));
+                }
+                break;
+
 
 /*  */
 

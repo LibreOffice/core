@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-06 17:56:21 $
+ *  last change: $Author: jp $ $Date: 2001-02-16 10:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,8 @@ struct RTFPlainAttrMapIds
             nCTLWeight,
             nEmphasis,
             nTwoLines,
+            nCharScaleX,
+            nHorzVert,
             nRuby
             ;
     RTFPlainAttrMapIds( const SfxItemPool& rPool );
@@ -466,11 +468,14 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.3 2001-02-06 17:56:21 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.4 2001-02-16 10:28:22 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/02/06 17:56:21  jp
+      Bug #81999#: replace GetWhichId with SetScriptAttr - for asian/complex char.attributes
+
       Revision 1.2  2000/11/10 11:34:57  jp
       new Tokens for the CJK-Version
 
