@@ -29,13 +29,14 @@ public class Register{
                     p=rt.exec("chmod a+x " + progPath + "regsingleton");
                     exitcode=p.waitFor();
                     regCmd = progPath + "regsingleton " + path + "user" + File.separator + "uno_packages" + File.separator + "cache" + File.separator + "services.rdb " + singletonDefParams[i];
+                    p=rt.exec( regCmd, env );
                 }
                 else {
             // Windows
                     regCmd = quotedString( progPath + "regsingleton.exe" ) + " " + quotedString( path + "user" + File.separator + "uno_packages" + File.separator + "cache" + File.separator + "services.rdb" ) + " " + quotedString( singletonDefParams[i] );
 
+                    p=rt.exec( regCmd );
                 }
-                p=rt.exec( regCmd );
                 exitcode = p.waitFor();
                 if ( exitcode != 0 ){
                     System.out.println("Regsingleton cmd failed, cmd: " + regCmd );
