@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:34:28 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 08:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,14 @@ namespace svx
     //====================================================================
     //= ODataAccessObjectTransferable
     //====================================================================
+    ODataAccessObjectTransferable::ODataAccessObjectTransferable(
+            const ::rtl::OUString&  _rDatasource,
+            const sal_Int32         _nCommandType,
+            const ::rtl::OUString&  _rCommand
+        )
+    {
+        construct(_rDatasource,_nCommandType,_rCommand,NULL,(CommandType::COMMAND == _nCommandType),_rCommand);
+    }
     //--------------------------------------------------------------------
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(
                     const ::rtl::OUString&  _rDatasource,
@@ -412,51 +420,8 @@ namespace svx
                     const ::rtl::OUString&  _rCommand,
                     const Reference< XConnection >& _rxConnection)
     {
-        // build the descriptor (the property sequence)
-        m_aDescriptor[daDataSource]     <<= _rDatasource;
-        m_aDescriptor[daConnection]     <<= _rxConnection;
-        m_aDescriptor[daCommand]        <<= _rCommand;
-        m_aDescriptor[daCommandType]    <<= _nCommandType;
-
-        // extract the single values from the sequence
-        ::rtl::OUString sDatasourceName;
-        ::rtl::OUString sObjectName;
-        sal_Bool bEscapeProcessing = sal_True;
-        sDatasourceName = _rDatasource;
-        sObjectName = _rCommand;
-
-        // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
-
-        sal_Bool bTreatAsStatement = (CommandType::COMMAND == _nCommandType);
-            // statements are - in this old and ugly format - described as queries
-
-        const sal_Unicode       cSeparator = sal_Unicode(11);
-        const ::rtl::OUString   sSeparator(&cSeparator, 1);
-
-        const sal_Unicode       cTableMark = '1';
-        const sal_Unicode       cQueryMark = '0';
-
-        // build the descriptor string
-        m_sCompatibleObjectDescription += sDatasourceName;
-        m_sCompatibleObjectDescription += sSeparator;
-        m_sCompatibleObjectDescription += bTreatAsStatement ? ::rtl::OUString() : sObjectName;
-        m_sCompatibleObjectDescription += sSeparator;
-        switch (_nCommandType)
-        {
-            case CommandType::TABLE:
-                m_sCompatibleObjectDescription += ::rtl::OUString(&cTableMark, 1);
-                break;
-            case CommandType::QUERY:
-                m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
-                break;
-            case CommandType::COMMAND:
-                m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
-                // think of it as a query
-                break;
-        }
-        m_sCompatibleObjectDescription += sSeparator;
-        m_sCompatibleObjectDescription += bTreatAsStatement ? sObjectName : ::rtl::OUString();
-        m_sCompatibleObjectDescription += sSeparator;
+        OSL_ENSURE(_rxConnection.is(),"Wrong ctor used.!");
+        construct(_rDatasource,_nCommandType,_rCommand,_rxConnection,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
 
     // -----------------------------------------------------------------------------
@@ -479,13 +444,6 @@ namespace svx
             OSL_ENSURE(sal_False, "ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes !");
             return;
         }
-
-        m_aDescriptor[daDataSource]     <<= sDatasourceName;
-        m_aDescriptor[daCommandType]    <<= nObjectType;
-        m_aDescriptor[daCommand]        <<= sObjectName;
-
-         if ( xConnection.is() )     // #104474# OJ
-            m_aDescriptor[daConnection] <<= xConnection;
 
         sal_Bool bIsStatement = CommandType::COMMAND == nObjectType;
         String sObjectKind = (CommandType::TABLE == nObjectType) ? String('1') : String('0');
@@ -526,22 +484,11 @@ namespace svx
             return;
         }
 
-        // build the object description (as string)
-        const sal_Unicode       cSeparator(11);
-        const ::rtl::OUString   sSeparator(&cSeparator, 1);
-
-        m_sCompatibleObjectDescription = sDatasourceName;
-        m_sCompatibleObjectDescription  += sSeparator;
-        m_sCompatibleObjectDescription  += bIsStatement ? ::rtl::OUString() : sObjectName;
-        m_sCompatibleObjectDescription  += sSeparator;
-        m_sCompatibleObjectDescription  += sObjectKind;
-        m_sCompatibleObjectDescription  += sSeparator;
-        m_sCompatibleObjectDescription  +=
-                (CommandType::QUERY == nObjectType) && !bHasFilterOrSort
-                ? ::rtl::OUString()
-            : sCompleteStatement;
-            // compatibility says : always add the statement, but don't if it is a "pure" query
-        m_sCompatibleObjectDescription  += sSeparator;
+        construct(  sDatasourceName
+                    ,nObjectType
+                    ,sObjectName,xConnection
+                    ,!((CommandType::QUERY == nObjectType) && !bHasFilterOrSort)
+                    ,sCompleteStatement);
     }
 
     // -----------------------------------------------------------------------------
@@ -674,6 +621,61 @@ namespace svx
     {
         m_aDescriptor.clear();
     }
+    // -----------------------------------------------------------------------------
+    void ODataAccessObjectTransferable::construct(  const ::rtl::OUString&  _rDatasource,
+                                                    const sal_Int32         _nCommandType,
+                                                    const ::rtl::OUString&  _rCommand,
+                                                    const Reference< XConnection >& _rxConnection,
+                                                    sal_Bool _bAddCommand,
+                                                    const ::rtl::OUString& _sActiveCommand)
+    {
+        // build the descriptor (the property sequence)
+        m_aDescriptor[daDataSource]     <<= _rDatasource;
+        if ( _rxConnection.is() )
+            m_aDescriptor[daConnection]     <<= _rxConnection;
+        m_aDescriptor[daCommand]        <<= _rCommand;
+        m_aDescriptor[daCommandType]    <<= _nCommandType;
+
+        // extract the single values from the sequence
+        ::rtl::OUString sDatasourceName;
+        ::rtl::OUString sObjectName;
+        sal_Bool bEscapeProcessing = sal_True;
+        sDatasourceName = _rDatasource;
+        sObjectName = _rCommand;
+
+        // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
+
+        sal_Bool bTreatAsStatement = (CommandType::COMMAND == _nCommandType);
+            // statements are - in this old and ugly format - described as queries
+
+        const sal_Unicode       cSeparator = sal_Unicode(11);
+        const ::rtl::OUString   sSeparator(&cSeparator, 1);
+
+        const sal_Unicode       cTableMark = '1';
+        const sal_Unicode       cQueryMark = '0';
+
+        // build the descriptor string
+        m_sCompatibleObjectDescription += sDatasourceName;
+        m_sCompatibleObjectDescription += sSeparator;
+        m_sCompatibleObjectDescription += bTreatAsStatement ? ::rtl::OUString() : sObjectName;
+        m_sCompatibleObjectDescription += sSeparator;
+        switch (_nCommandType)
+        {
+            case CommandType::TABLE:
+                m_sCompatibleObjectDescription += ::rtl::OUString(&cTableMark, 1);
+                break;
+            case CommandType::QUERY:
+                m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
+                break;
+            case CommandType::COMMAND:
+                m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
+                // think of it as a query
+                break;
+        }
+        m_sCompatibleObjectDescription += sSeparator;
+        m_sCompatibleObjectDescription += _bAddCommand ? _sActiveCommand : ::rtl::OUString();
+        m_sCompatibleObjectDescription += sSeparator;
+    }
 
 
 //........................................................................
@@ -683,6 +685,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2002/10/25 08:34:28  oj
+ *  #104474# set connection at descriptor
+ *
  *  Revision 1.8  2001/08/08 09:25:12  fs
  *  #88849# OColumnTransferable: don't fake the to-be-dragged statement if the data source is no CommandType::COMMAND
  *
