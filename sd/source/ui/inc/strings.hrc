@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:17:16 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,20 +783,21 @@
 
 #define STR_UNDO_HANGULHANJACONVERSION                  (RID_APP_START+696)
 
-#define STR_LEFT_PANE_TITLE                             (RID_APP_START+697)
-#define STR_RIGHT_PANE_TITLE                            (RID_APP_START+698)
-#define STR_TASKPANEL_MASTER_PAGE_TITLE                 (RID_APP_START+699)
-#define STR_TASKPANEL_MASTER_PAGE_MENU_TITLE            (RID_APP_START+700)
-#define STR_TASKPANEL_MASTER_PAGE_MENU_LOCK             (RID_APP_START+701)
-#define STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK           (RID_APP_START+702)
-#define STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE        (RID_APP_START+703)
-#define STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE         (RID_APP_START+704)
-#define STR_TASKPANEL_ALL_MASTER_PAGES_TITLE            (RID_APP_START+705)
-#define STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION        (RID_APP_START+706)
-#define STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION    (RID_APP_START+707)
-#define STR_TASKPANEL_LAYOUT_MENU_TITLE                 (RID_APP_START+708)
-#define STR_TASKPANEL_MASTER_PAGE_MENU_CLOSE            (RID_APP_START+709)
-#define STR_RESTORE_DRAW_MODE                           (RID_APP_START+710)
+#define STR_LEFT_PANE_DRAW_TITLE                        (RID_APP_START+700)
+#define STR_LEFT_PANE_IMPRESS_TITLE                     (RID_APP_START+701)
+#define STR_RIGHT_PANE_TITLE                            (RID_APP_START+702)
+#define STR_TASKPANEL_MASTER_PAGE_TITLE                 (RID_APP_START+703)
+#define STR_TASKPANEL_MASTER_PAGE_MENU_TITLE            (RID_APP_START+704)
+#define STR_TASKPANEL_MASTER_PAGE_MENU_LOCK             (RID_APP_START+705)
+#define STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK           (RID_APP_START+706)
+#define STR_TASKPANEL_MASTER_PAGE_MENU_CLOSE            (RID_APP_START+707)
+#define STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE        (RID_APP_START+708)
+#define STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE         (RID_APP_START+709)
+#define STR_TASKPANEL_ALL_MASTER_PAGES_TITLE            (RID_APP_START+710)
+#define STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION        (RID_APP_START+711)
+#define STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION    (RID_APP_START+712)
+#define STR_TASKPANEL_LAYOUT_MENU_TITLE                 (RID_APP_START+713)
+#define STR_RESTORE_DRAW_MODE                           (RID_APP_START+714)
 
 /******************************************************************************
 * Ab (RID_APP_START+750 beginnen die Ids in glob.hrc!
