@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:07:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #include "xcl97rec.hxx"
 
+namespace com { namespace sun { namespace star {
+    namespace script { struct ScriptEventDescriptor; }
+} } }
+
 // ============================================================================
 
 class XclExpTokenArray;
@@ -92,8 +96,10 @@ protected:
     /** Returns the number of entries in the source range, or 0, if no source set. */
     inline sal_uInt16   GetSourceEntryCount() const { return mnEntryCount; }
 
-    /** Writes a sheet link formula with special style only valid in OBJ records. */
+    /** Writes a formula with special style only valid in OBJ records. */
     void                WriteFormula( XclExpStream& rStrm, const XclExpTokenArray& rTokArr ) const;
+    /** Writes a formula subrecord with special style only valid in OBJ records. */
+    void                WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclExpTokenArray& rTokArr ) const;
 
 private:
     XclExpTokenArrayRef mxCellLink;     /// Formula for linked cell.
@@ -140,16 +146,23 @@ public:
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XControlModel >& rxCtrlModel );
 
+    /** Sets the name of a macro attached to this control.
+        @return  true = The passed event descriptor was valid, macro name has been found. */
+    bool                SetMacroLink( const ::com::sun::star::script::ScriptEventDescriptor& rEvent );
+
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm );
 
-    /** Writes a sub structure containing a cell link, or nothing, if no link present. */
-    void                WriteCellLinkFmla( XclExpStream& rStrm, sal_uInt16 nSubRecId );
+    /** Writes an ftMacro subrecord containing a macro link, or nothing, if no macro present. */
+    void                WriteMacroSubRec( XclExpStream& rStrm );
+    /** Writes a subrecord containing a cell link, or nothing, if no link present. */
+    void                WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId );
     /** Writes the ftSbs sub structure containing scrollbar data. */
     void                WriteSbs( XclExpStream& rStrm );
 
 private:
     ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
+    XclExpTokenArrayRef mxMacroLink;    /// Token array containing a link to an attached macro.
     sal_Int32           mnHeight;       /// Height of the control.
     sal_uInt16          mnState;        /// Checked/unchecked state.
     sal_Int16           mnLineCount;    /// Combobox dropdown line count.
