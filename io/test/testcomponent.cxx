@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomponent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:59:08 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,13 +118,7 @@ int main (int argc, char **argv)
     {
         // Load dll for the tested component
         for( int n = 2 ; n <argc ; n ++ ) {
-#ifdef SAL_W32
             OUString aDllName = OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
-#else
-            OUString aDllName = OUString::createFromAscii("lib");
-            aDllName += OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
-            aDllName += OUString::createFromAscii(".so");
-#endif
             xReg->registerImplementation(
                 OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                 aDllName,
@@ -132,7 +126,6 @@ int main (int argc, char **argv)
         }
     }
     catch( Exception &e ) {
-        printf( "Couldn't reach dll %s\n" , szBuf );
         printf( "%s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
 
         exit(1);
