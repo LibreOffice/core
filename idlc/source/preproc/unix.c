@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unix.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:11:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ void
             dp[len] = '\0';
         }
         fp = (char *) newstring((uchar *) argv[optind], strlen(argv[optind]), 0);
-        if ((fd = open(fp, O_RDONLY)) <= 0)
+        if ((fd = open(fp, O_RDONLY)) < 0)
             error(FATAL, "Can't open input file %s", fp);
     }
 
