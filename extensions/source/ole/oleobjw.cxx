@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-13 15:26:06 $
+ *  last change: $Author: jl $ $Date: 2000-10-16 12:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1151,52 +1151,12 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
     return m_eJScript == NoJScript ? sal_False : sal_True;
 }
 
-// check for all changed parameter and create UNO out parameters
-//void IUnknownWrapper_Impl::processOutParameters(VARIANT* pOrgParams,
-//                               VARIANT* pResultParams,
-//                               sal_uInt32 n,
-//                               Sequence< sal_Int16 >& OutParamIndex,
-//                               Sequence< Any >& OutParam)
-//{
-//  for (sal_uInt32 i = 0; i < n; i++)
-//  {
-//      VARIANT* pOrgElement = &(pOrgParams[n - (i + 1)]);
-//      VARIANT* pResultElement = &(pResultParams[n - (i + 1)]);
-//      Any aOutParam;
-//
-//      // check for changes in element
-//      if (memcmp(pOrgElement, pResultElement, sizeof(VARIANT)) != 0)
-//      {
-//          // out parameters are only valid if the new type matches the original type
-//          if (V_VT(pOrgElement) == V_VT(pResultElement))
-//          {
-//              variantToAny(pResultElement, aOutParam);
-//          }
-//      }
-//
-//  //      if (aOutParam.getReflection() != Void_getReflection())
-//      if( aOutParam.getValueTypeClass() != TypeClass_VOID)
-//      {
-//          sal_uInt32 outParamCount = OutParam.getLength() + 1;
-//
-//          OutParam.realloc(outParamCount);
-//          OutParamIndex.realloc(outParamCount);
-//
-//          OutParam.getArray()[outParamCount - 1] = aOutParam;
-//          OutParamIndex.getArray()[outParamCount - 1] = i;
-//      }
-//  }
-//}
 
 
-// It would be desirable if every COM component could handle parameters of VT_BYREF be it
-// in or out parameter. But that is not the case. When calling an ATL component that
-// has a dual interface then note this:
-// - in parameter can be VT_BYREF
-// - in parameter of VARIANT: one can pass the exact type
-// - out parameter: one must pass the exact type
-// - out parameter of VARIANT: the referenced VARIANT must be VT_EMPTY
-// - inout - the same as out
+// The function ultimately calls IDispatch::Invoke on the wrapped COM object.
+// The COM object does not implement UNO Interfaces ( via IDispatch). This
+// is the case when the OleObjectFactory service has been used to create a
+// component.
 Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
                           const Sequence< Any >& Params,
                           Sequence< sal_Int16 >& OutParamIndex,
@@ -1332,7 +1292,12 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
                 if( m_seqCurrentParamTypes[i] & PARAMFLAG_FOUT)
                 {
                     OutParamIndex[outParamIndex]= i;
-                    variantToAny( &arRefArgs[dispparams.cArgs - i -1], OutParam[outParamIndex] );
+                    // variantToAny is called with the "reduce range" parameter set to sal_False.
+                    // That causes VT_I4 values not to be converted down to a "lower" type. That
+                    // feature exist for JScript only because it only uses VT_I4 for integer types.
+                    // If JScript objects are used then the function invokeWithDispIdUnoTlb is used
+                    // rather then this one.
+                    variantToAny( &arRefArgs[dispparams.cArgs - i -1], OutParam[outParamIndex], sal_False );
                     outParamIndex++;
                 }
             }
