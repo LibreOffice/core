@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-13 10:05:07 $
+ *  last change: $Author: mt $ $Date: 2002-06-14 08:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,30 +849,12 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             mpFrame->GetClientSize( mnOutWidth, mnOutHeight );
 
 #ifndef REMOTE_APPSERVER
-        static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
-        if( ( pEnv && *pEnv ) || Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+        if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
             // instanciate access bridge service
-            if(!pSVData->mxAccessBridge.is())
+            if( !pSVData->mxAccessBridge.is() )
             {
-                bool bDisable = false;
-                try
-                {
-                    Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
-
-                    if(xFactory.is())
-                    {
-                        pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >( xFactory->createInstance(
-                            OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ) ), UNO_QUERY );
-                        if( !pSVData->mxAccessBridge.is() )
-                            bDisable = true;
-                    }
-                }
-                catch(::com::sun::star::uno::Exception exception)
-                {
-                    bDisable = true;
-                }
-                if( bDisable )
+                if( !ImplInitAccessBridge() )
                 {
                     AllSettings aSettings = Application::GetSettings();
                     MiscSettings aMisc = aSettings.GetMiscSettings();
