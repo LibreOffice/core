@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-19 09:35:28 $
+#   last change: $Author: mh $ $Date: 2001-10-22 10:42:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,8 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE :  $(PRJ)$/version.mk
 
 
+.IF "$(SOLAR_JAVA)" != ""
+
 # --- Files -------------------------------------
 
 SLOFILES=\
@@ -139,6 +141,8 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
+
+.ENDIF # SOLAR_JAVA
 
 # --- Targets ----------------------------------
 
