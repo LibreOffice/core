@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-29 12:46:36 $
+ *  last change: $Author: os $ $Date: 2001-05-09 07:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,8 +821,20 @@ void SwXTextPortionEnumeration::CreatePortions()
                     if(!pUnoCrsr->GetCntntNode()->Len())
                     {
                         lcl_ExportBkmAndRedline(aBkmArr, aRedArr, 0, pUnoCrsr, xParent, aPortionArr);
-                        // der Absatz ist leer, also nur Portion erzeugen und raus
+                        // the paragraph is empty
                         xRef = new SwXTextPortion(*pUnoCrsr, xParent, ePortionType);
+                        // are there any frames?
+                        while(aFrameArr.Count())
+                        {
+                            SwDepend* pCurDepend = aFrameArr.GetObject(0);
+                            if(pCurDepend->GetRegisteredIn())
+                            {
+                                xRef = new SwXTextPortion(*pUnoCrsr, xParent,
+                                    *(SwFrmFmt*)pCurDepend->GetRegisteredIn());
+                            }
+                            delete pCurDepend;
+                            aFrameArr.Remove(0);
+                        }
                     }
                     else
                     {
