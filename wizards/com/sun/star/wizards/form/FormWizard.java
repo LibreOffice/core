@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:34:27 $
+ *  last change: $Author: kz $  $Date: 2004-11-26 20:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ public class FormWizard extends WizardDialog{
     String  FormName;
 
     public FormWizard(XMultiServiceFactory xMSF) {
-        super(xMSF, 42300);
+        super(xMSF, 34400);
         super.addResourceHandler("FormWizard", "dbw");
         Helper.setUnoPropertyValues(xDialogModel,
             new String[] { "Height","Moveable","Name","PositionX","PositionY","Step","TabIndex","Title","Width"},
@@ -213,8 +213,8 @@ public class FormWizard extends WizardDialog{
         curFormDocument.xProgressBar.setValue(20);
 
         insertLabel("lblBinaryHelpText",
-                         new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
-                          new Object[] { new Integer(28), sShowBinaryFields, new Integer(95), new Integer(154), new Integer(SOMAINPAGE),new Integer(210)});
+                         new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"},
+                          new Object[] { new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOMAINPAGE),new Integer(210)});
 
         curFormConfiguration = new FormConfiguration(this);
         curFormDocument.xProgressBar.setValue(30);
@@ -222,8 +222,8 @@ public class FormWizard extends WizardDialog{
         curSubFormFieldSelection = new CommandFieldSelection(this, curFormDocument.oSubFormDBMetaData, SOSUBFORMFIELDSPAGE, 92, slblFields, slblSelFields,  slblTables, true, 34431);
         curSubFormFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
         insertLabel("lblSubFormBinaryHelpText",
-            new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
-              new Object[] { new Integer(28), sShowBinaryFields, new Integer(95), new Integer(154), new Integer(SOSUBFORMFIELDSPAGE), new Integer(210)});
+            new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"},
+              new Object[] { new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOSUBFORMFIELDSPAGE), new Integer(210)});
 
         curFormDocument.xProgressBar.setValue(40);
 

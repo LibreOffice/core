@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIControlArranger.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:35:06 $
+ *  last change: $Author: kz $  $Date: 2004-11-26 20:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,8 @@ public class UIControlArranger {
           new Object[] {UIConsts.INTEGERS[10],"HID:34451",sAlignLeft, new Integer(107), new Integer(38), new Short((short)1), IControlStep, new Short(curtabindex++), new Integer(171)}
         );
         optAlignRight = CurUnoDialog.insertRadioButton("optAlignRight", SOALIGNMETHOD, this,
-          new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] {UIConsts.INTEGERS[10],"HID:34452",sAlignRight, new Integer(107), new Integer(50), IControlStep, new Short(curtabindex++), new Integer(171)}
+          new String[] {"Height", "HelpURL", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+          new Object[] {UIConsts.INTEGERS[10],"HID:34452",sAlignRight, Boolean.TRUE, new Integer(107), new Integer(50), IControlStep, new Short(curtabindex++), new Integer(171)}
         );
         sBitmapPath = FileAccess.getOfficePath(CurUnoDialog.xMSF, "Template","share") + "/wizard/bitmap";
 
