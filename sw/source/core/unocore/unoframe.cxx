@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:53:29 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2027,6 +2027,7 @@ void SwXFrame::ResetDescriptor()
 void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             throw( IllegalArgumentException, RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsDescriptor())
         throw RuntimeException();
     uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
