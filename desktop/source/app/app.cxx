@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-18 13:12:57 $
+ *  last change: $Author: dv $ $Date: 2002-03-27 13:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ static oslModule            aTestToolModule     = 0;
 char const INSTALLER_INITFILENAME[] = "initialize.ini";
 char const INSTALLMODE_STANDALONE[] = "STANDALONE";
 char const INSTALLMODE_NETWORK[]    = "NETWORK";
+char const INSTALLMODE_ALLUSERS[]   = "ALL_USERS";
 #ifndef BUILD_SOSL
 
 // include strings for copyright notice
@@ -764,7 +765,8 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
                 OUString aInstallMode( RTL_CONSTASCII_USTRINGPARAM( INSTALLMODE_STANDALONE ));
 
                 aInstallMode = utl::Bootstrap::getInstallMode( aInstallMode );
-                if ( aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_NETWORK ))
+                if ( aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_NETWORK ) ||
+                     aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_ALLUSERS ) )
                 {
                     // network installation => start setup without error message
                     OUString aParameters;
