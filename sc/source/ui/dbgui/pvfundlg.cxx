@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:30:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,6 +455,7 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     rLabelData.mbShowAll = maCbShowAll.IsChecked();
     rLabelData.maMembers = maLabelData.maMembers;
     rLabelData.maVisible = maLabelData.maVisible;
+    rLabelData.maShowDet = maLabelData.maShowDet;
     rLabelData.maSortInfo = maLabelData.maSortInfo;
     rLabelData.maLayoutInfo = maLabelData.maLayoutInfo;
     rLabelData.maShowInfo = maLabelData.maShowInfo;
@@ -730,7 +731,7 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
     if( pLBox == &maLbHierarchy )
     {
         mrDPObj.GetMembers( maLabelData.mnCol, maLbHierarchy.GetSelectEntryPos(),
-            maLabelData.maMembers, &maLabelData.maVisible );
+            maLabelData.maMembers, &maLabelData.maVisible, &maLabelData.maShowDet );
         InitHideListBox();
     }
     return 0;
