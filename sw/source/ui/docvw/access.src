@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:15:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ String STR_ACCESS_DOC_NAME
     Text[ czech ] = "Pohled na dokument";
     Text[ hebrew ] = "Dokument-Ansicht";
     Text[ hindi ] = "Document view";
+    Text[ slovak ] = "Pohľad na dokument";
 };
 String STR_ACCESS_DOC_DESC
 {
@@ -118,6 +119,7 @@ String STR_ACCESS_DOC_DESC
     Text[ czech ] = "Pohled na dokument";
     Text[ hebrew ] = "Dokument-Ansicht";
     Text[ hindi ] = "Document view";
+    Text[ slovak ] = "Pohľad na dokument";
 };
 String STR_ACCESS_PARAGRAPH_NAME
 {
@@ -147,6 +149,7 @@ String STR_ACCESS_PARAGRAPH_NAME
     Text[ czech ] = "Odstavec $(ARG1)";
     Text[ hebrew ] = "Absatz $(ARG1)";
     Text[ hindi ] = "Paragraph $(ARG1)";
+    Text[ slovak ] = "Odstavec $(ARG1)";
 };
 String STR_ACCESS_PARAGRAPH_DESC
 {
@@ -176,6 +179,7 @@ String STR_ACCESS_PARAGRAPH_DESC
     Text[ czech ] = "Odstavec: $(ARG1) ";
     Text[ hebrew ] = "Absatz: $(ARG1)";
     Text[ hindi ] = "Paragraph: $(ARG1) ";
+    Text[ slovak ] = "Odstavec: $(ARG1) ";
 };
 String STR_ACCESS_HEADING_NAME
 {
@@ -205,6 +209,7 @@ String STR_ACCESS_HEADING_NAME
     Text[ czech ] = "Nadpis $(ARG1)";
     Text[ hebrew ] = "Überschrift $(ARG1)";
     Text[ hindi ] = "Heading $(ARG1)";
+    Text[ slovak ] = "Nadpis $(ARG1)";
 };
 String STR_ACCESS_HEADING_DESC
 {
@@ -234,6 +239,7 @@ String STR_ACCESS_HEADING_DESC
     Text[ czech ] = "Nadpis: $(ARG1)";
     Text[ hebrew ] = "Überschrift: $(ARG1)";
     Text[ hindi ] = "Heading: $(ARG1)";
+    Text[ slovak ] = "Nadpis: $(ARG1)";
 };
 String STR_ACCESS_HEADING_WITH_NUM_DESC
 {
@@ -263,6 +269,7 @@ String STR_ACCESS_HEADING_WITH_NUM_DESC
     Text[ czech ] = "Číslo nadpisu $(ARG2): $(ARG1)";
     Text[ hebrew ] = "Überschrift Nummer $(ARG2): $(ARG1)";
     Text[ hindi ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ slovak ] = "Nadpis číslo $(ARG2): $(ARG1)";
 };
 String STR_ACCESS_HEADER_NAME
 {
@@ -292,6 +299,7 @@ String STR_ACCESS_HEADER_NAME
     Text[ czech ] = "Záhlaví $(ARG1)";
     Text[ hebrew ] = "Kopfzeile $(ARG1)";
     Text[ hindi ] = "Header $(ARG1)";
+    Text[ slovak ] = "Záhlavie $(ARG1)";
 };
 String STR_ACCESS_HEADER_DESC
 {
@@ -321,6 +329,7 @@ String STR_ACCESS_HEADER_DESC
     Text[ czech ] = "Záhlaví stránky $(ARG1)";
     Text[ hebrew ] = "Kopfzeile Seite $(ARG1)";
     Text[ hindi ] = "Header page $(ARG1)";
+    Text[ slovak ] = "Záhlavie stránky $(ARG1)";
 };
 String STR_ACCESS_FOOTER_NAME
 {
@@ -350,6 +359,7 @@ String STR_ACCESS_FOOTER_NAME
     Text[ czech ] = "Zápatí $(ARG1)";
     Text[ hebrew ] = "Fußzeile $(ARG1)";
     Text[ hindi ] = "Footer $(ARG1)";
+    Text[ slovak ] = "Zápätie $(ARG1)";
 };
 String STR_ACCESS_FOOTER_DESC
 {
@@ -379,6 +389,7 @@ String STR_ACCESS_FOOTER_DESC
     Text[ czech ] = "Zápatí stránky $(ARG1)";
     Text[ hebrew ] = "Fußzeile Seite $(ARG1)";
     Text[ hindi ] = "Footer page $(ARG1)";
+    Text[ slovak ] = "Zápätie stránky $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_NAME
 {
@@ -408,6 +419,7 @@ String STR_ACCESS_FOOTNOTE_NAME
     Text[ czech ] = "Poznámka pod čarou $(ARG1)";
     Text[ hebrew ] = "Fußnote $(ARG1)";
     Text[ hindi ] = "Footnote $(ARG1)";
+    Text[ slovak ] = "Poznámka pod čiarou $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_DESC
 {
@@ -437,6 +449,7 @@ String STR_ACCESS_FOOTNOTE_DESC
     Text[ czech ] = "Poznámka pod čarou $(ARG1)";
     Text[ hebrew ] = "Fußnote $(ARG1)";
     Text[ hindi ] = "Footnote $(ARG1)";
+    Text[ slovak ] = "Poznámka pod čiarou $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_NAME
 {
@@ -466,6 +479,7 @@ String STR_ACCESS_ENDNOTE_NAME
     Text[ czech ] = "Vysvětlivka $(ARG1)";
     Text[ hebrew ] = "Endnote $(ARG1)";
     Text[ hindi ] = "Endnote $(ARG1)";
+    Text[ slovak ] = "Vysvetlivka $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_DESC
 {
@@ -495,6 +509,7 @@ String STR_ACCESS_ENDNOTE_DESC
     Text[ czech ] = "Vysvětlivka $(ARG1)";
     Text[ hebrew ] = "Endnote $(ARG1)";
     Text[ hindi ] = "Endnote $(ARG1)";
+    Text[ slovak ] = "Vysvetlivka $(ARG1)";
 };
 String STR_ACCESS_TABLE_DESC
 {
@@ -524,6 +539,7 @@ String STR_ACCESS_TABLE_DESC
     Text[ czech ] = "$(ARG1) na stránce $(ARG2)";
     Text[ hebrew ] = "$(ARG1) auf Seite $(ARG2)";
     Text[ hindi ] = "$(ARG1) on page $(ARG2)";
+    Text[ slovak ] = "$(ARG1) na stránke $(ARG2)";
 };
 String STR_ACCESS_PAGE_NAME
 {
@@ -553,6 +569,7 @@ String STR_ACCESS_PAGE_NAME
     Text[ portuguese_brazilian ] = "Page $(ARG1)";
     Text[ thai ] = "Page $(ARG1)";
     Text[ hindi ] = "Page $(ARG1)";
+    Text[ slovak ] = "Stránka $(ARG1)";
 };
 String STR_ACCESS_PAGE_DESC
 {
@@ -582,7 +599,10 @@ String STR_ACCESS_PAGE_DESC
     Text[ portuguese_brazilian ] = "Page: $(ARG1)";
     Text[ thai ] = "Page: $(ARG1)";
     Text[ hindi ] = "Page: $(ARG1)";
+    Text[ slovak ] = "Stránka: $(ARG1)";
 };
+
+
 
 
 
