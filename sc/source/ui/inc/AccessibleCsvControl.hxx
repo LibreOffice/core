@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:59:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getSelectedAccessibleColumns()
         throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Returns true, if the specified row is selected. */
+    /** Returns true, if the specified row is selected. */
     virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow )
         throw( ::com::sun::star::uno::RuntimeException );
 
