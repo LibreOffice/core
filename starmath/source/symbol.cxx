@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:00:23 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,40 +201,6 @@ SmSym& SmSym::operator = (const SmSym& rSymbol)
     return *this;
 }
 
-SvStream& operator << (SvStream& rStream, const SmSym& rSymbol)
-{
-    rStream.WriteByteString( ExportString(rSymbol.Name) );
-    rStream << rSymbol.Face;
-
-    rtl_TextEncoding eEnc = rSymbol.Face.GetCharSet();
-    if (RTL_TEXTENCODING_DONTKNOW == eEnc)
-        eEnc = RTL_TEXTENCODING_SYMBOL;
-    rStream << ByteString::ConvertFromUnicode( rSymbol.Character, eEnc );
-
-    return rStream;
-}
-
-SvStream& operator >> (SvStream& rStream, SmSym& rSymbol)
-{
-    ByteString aByteStr;
-
-    rStream.ReadByteString( aByteStr );
-    rSymbol.Name = ImportString( aByteStr );
-    if (SF_Ident == SF_SM20IDENT)
-        ReadSM20Font(rStream, rSymbol.Face);
-    else
-        rStream >> rSymbol.Face;
-    sal_Char cTemp;
-    rStream >> cTemp;
-
-    rtl_TextEncoding eEnc = rSymbol.Face.GetCharSet();
-    if (RTL_TEXTENCODING_DONTKNOW == eEnc)
-        eEnc = RTL_TEXTENCODING_SYMBOL;
-    rSymbol.Character = ByteString::ConvertToUnicode( cTemp, eEnc );
-
-    return rStream;
-}
-
 /**************************************************************************/
 
 SmSymSet::SmSymSet() :
@@ -330,40 +296,6 @@ USHORT SmSymSet::GetSymbolPos(const String& rName)
             return (i);
 
     return SYMBOL_NONE;
-}
-
-SvStream& operator << (SvStream& rStream, const SmSymSet& rSymbolSet)
-{
-    rStream.WriteByteString(ExportString(rSymbolSet.Name));
-    rStream << rSymbolSet.GetCount();
-
-    for (int i = 0; i < rSymbolSet.GetCount(); i++)
-        rStream << rSymbolSet.GetSymbol(i);
-
-    return rStream;
-}
-
-
-SvStream& operator >> (SvStream& rStream, SmSymSet& rSymbolSet)
-{
-    USHORT      n;
-    SmSym     *pSymbol;
-    ByteString aByteStr;
-
-    rStream.ReadByteString( aByteStr );
-    rSymbolSet.Name = ImportString( aByteStr );
-    rStream >> n;
-
-    for (int i = 0; i < n; i++)
-    {
-        if ((pSymbol = new SmSym) == 0)
-            break;
-
-        rStream >> *pSymbol;
-        rSymbolSet.AddSymbol(pSymbol);
-    }
-
-    return rStream;
 }
 
 /**************************************************************************/
@@ -701,14 +633,6 @@ void SmSymSetManager::Save()
         rCfg.ReplaceSymbols( pSymbols, nSaveSymbolCnt );
         delete [] pSymbols;
     }
-}
-
-
-void ReadSM20SymSet(SvStream *pStream, SmSymSet *pSymbolSet)
-{
-    SF_Ident = SF_SM20IDENT;
-    *pStream >> *pSymbolSet;
-    SF_Ident = SF_IDENT;
 }
 
 
