@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 13:57:02 $
+ *  last change: $Author: lkovacs $ $Date: 2002-10-30 14:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
     Reference< XInterface > resolvedName;
     Reference< beans::XPropertySet > xPropSetScriptingContext;
+    scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+            scripting_constants::ScriptingConstantsPool::instance();
+
     OSL_TRACE( "ScriptNameResolverImpl::resolve: in resolve - start" );
 
     if ( sal_False == ( invocationCtx >>= xPropSetScriptingContext ) )
@@ -142,8 +145,6 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
     sal_Int32 docSid;
     try
     {
-        scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
-            scripting_constants::ScriptingConstantsPool::instance();
         any = xPropSetScriptingContext->getPropertyValue(
             scriptingConstantsPool.DOC_URI );
         OSL_TRACE( "ScriptNameResolverImpl::resolve: in resolve - got anyUri" );
@@ -203,23 +204,60 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             if ( ( resolvedName = resolveURIFromStorageID( *iter, scriptURI ) ).is() )
             {
                 OSL_TRACE( "found match in uri from storage %d", *iter );
+            xPropSetScriptingContext->setPropertyValue(
+                scriptingConstantsPool.RESOLVED_STORAGE_ID, makeAny(*iter) );
                 break;
             }
 
         }
-
+    catch ( beans::UnknownPropertyException & e )
+        {
+            OUString temp = OUSTR(
+                "ScriptNameResolverImpl::resolve : UnknownPropertyException" );
+            throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
+        }
+    catch ( beans::PropertyVetoException  & e )
+        {
+            OUString temp = OUSTR(
+                "ScriptNameResolverImpl::resolve : PropertyVetoException " );
+            throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
+        }
+    catch ( lang::IllegalArgumentException  & e )
+        {
+            OUString temp = OUSTR(
+                "ScriptNameResolverImpl::resolve : IllegalArgumentException " );
+            throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
+        }
+    catch ( lang::WrappedTargetException & e )
+        {
+        OUString temp = OUSTR(
+                "ScriptNameResolverImpl::resolve : WrappedTargetException " );
+            throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
+        }
         catch ( Exception & e )
         {
             OSL_TRACE( "Exception thrown by storage %d, failed to match uri: %s",
                 *iter,
                 ::rtl::OUStringToOString( e.Message,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        OUString temp = OUSTR(
+                "ScriptNameResolverImpl::resolve : unknown exception" );
+            throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
         }
 #ifdef _DEBUG
         catch ( ... )
         {
             OSL_TRACE( "unknown exception thrown by storage %d, failed to match uri",
                 *iter );
+        OUString temp = OUSTR(
+                "ScriptNameResolverImpl::resolve Unknown exception caught - RuntimeException rethrown" );
+            throw RuntimeException( temp,
+                                Reference< XInterface > () );
         }
 #endif
 
