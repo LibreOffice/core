@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2000-11-24 18:53:16 $
+ *  last change: $Author: th $ $Date: 2001-07-04 10:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,9 +1440,15 @@ void DbgDialogTest( Window* pWindow )
              (pChild->GetType() != WINDOW_GROUPBOX) )
         {
             XubString       aText = pChild->GetText();
+            XubString       aErrorText = aText;
             USHORT          nAccelPos;
             xub_Unicode     cAccel = 0;
-            if ( aText.Len() )
+            if ( aErrorText > 128 )
+            {
+                aErrorText.Erase( 128 );
+                aErrorText.AppendAscii( "..." );
+            }
+            if ( aText.Len() && (aText.Len() < 1024) )
             {
                 nAccelPos = aText.Search( '~' );
                 if ( nAccelPos != STRING_NOTFOUND )
@@ -1485,7 +1491,7 @@ void DbgDialogTest( Window* pWindow )
                     DbgOutTypef( DBG_OUT_ERROR,
                                  "%s should have a mnemonic char (~): %s",
                                  pClass,
-                                 ByteString( aText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                                 ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                 }
             }
 
@@ -1496,7 +1502,7 @@ void DbgDialogTest( Window* pWindow )
                 {
                     DbgOutTypef( DBG_OUT_ERROR,
                                  "FixedText greater than one line, but WordBreak is not set: %s",
-                                 ByteString( aText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                                 ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                 }
 
                 if ( (i+1 < nChildCount) && aText.Len() )
@@ -1525,13 +1531,13 @@ void DbgDialogTest( Window* pWindow )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "Labels befor Fields (Edit,ListBox,...) should have a mnemonic char (~): %s",
-                                         ByteString( aText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                                         ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                         }
                         if ( !pTempChild->IsEnabled() && pChild->IsEnabled() )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "Labels befor Fields (Edit,ListBox,...) should be disabled, when the field is disabled: %s",
-                                         ByteString( aText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                                         ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                         }
                     }
                 }
@@ -1540,11 +1546,7 @@ void DbgDialogTest( Window* pWindow )
             if ( pChild->GetType() == WINDOW_MULTILINEEDIT )
             {
                 if ( !(pChild->GetStyle() & WB_IGNORETAB) )
-                {
-                    DbgOutTypef( DBG_OUT_ERROR,
-                                 "MultiLineEdits in Dialogs should have the Style WB_IGNORETAB: %s",
-                                 ByteString( aText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-                }
+                    DbgError( "MultiLineEdits in Dialogs should have the Style WB_IGNORETAB" );
             }
 
             if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
@@ -1623,7 +1625,7 @@ void DbgDialogTest( Window* pWindow )
                 {
                     DbgOutTypef( DBG_OUT_ERROR,
                                  "No Max-Value is set: %s",
-                                 ByteString( aText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                                 ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                 }
 
                 if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
@@ -1666,7 +1668,7 @@ void DbgDialogTest( Window* pWindow )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "Possible wrong childorder for dialogcontrol: %s",
-                                         ByteString( aText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                                         ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                         }
                         aTabPos = aNewPos;
                     }
@@ -1678,7 +1680,7 @@ void DbgDialogTest( Window* pWindow )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "Window overlaps with sibling window: %s",
-                                         ByteString( aText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                                         ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                         }
                     }
                     pRectAry[i] = aChildRect;
