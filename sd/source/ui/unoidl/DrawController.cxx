@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:36:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-30 10:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,12 +191,13 @@ void SAL_CALL DrawController::dispose()
             mbDisposing = true;
 
             OPropertySetHelper::disposing();
-            OInterfaceContainerHelper* pListeners = getContainer(::getCppuType((Reference<view::XSelectionChangeListener>*)0));
-            if( pListeners )
-            {
-                lang::EventObject aEventObj;
-                pListeners->disposeAndClear(aEventObj);
-            }
+            //AF BroadcastHelper is not used anymore.  There is the BroadcastHelperOwner instead.
+//          OInterfaceContainerHelper* pListeners = getContainer(::getCppuType((Reference<view::XSelectionChangeListener>*)0));
+//          if( pListeners )
+//          {
+//              lang::EventObject aEventObj;
+//              pListeners->disposeAndClear(aEventObj);
+//          }
 
             SfxBaseController::dispose();
         }

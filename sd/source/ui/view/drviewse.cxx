@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:41:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-30 10:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1849,7 +1849,7 @@ void DrawViewShell::StopSlideShow (bool bCloseFrame)
         if( pDrView->IsTextEdit() )
             pDrView->EndTextEdit();
 
-        mpSlideShow->Deactivate();
+//        mpSlideShow->Deactivate();
         delete mpSlideShow;
         mpSlideShow = NULL;
 
