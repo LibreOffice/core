@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 19:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ namespace hierarchy_ucp
 
 struct HierarchyEntryData
 {
+    ::rtl::OUString aName;      // language independent name of the entry
+
     ::rtl::OUString aTitle;     // Title
     ::rtl::OUString aTargetURL; // Target URL ( links only )
 
@@ -102,6 +104,7 @@ struct HierarchyEntryData
 
 class HierarchyEntry
 {
+    ::rtl::OUString m_aName;
     ::rtl::OUString m_aPath;
     ::osl::Mutex    m_aMutex;
     ::com::sun::star::uno::Reference<

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasupplier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 19:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,9 @@ struct ResultListEntry
     Reference< XContentIdentifier > xId;
     Reference< XContent >           xContent;
     Reference< XRow >               xRow;
-        HierarchyEntryData      rData;
+    HierarchyEntryData              aData;
 
-    ResultListEntry( const HierarchyEntryData& rEntry ) : rData( rEntry ) {}
+    ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
 };
 
 //=========================================================================
@@ -211,8 +211,7 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += OUString::createFromAscii( "/" );
 
-        aId += HierarchyContentProvider::encodeSegment(
-                            m_pImpl->m_aResults[ nIndex ]->rData.aTitle );
+        aId += m_pImpl->m_aResults[ nIndex ]->aData.aName;
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
@@ -415,8 +414,8 @@ Reference< XRow > HierarchyResultSetDataSupplier::queryPropertyValues(
     {
         HierarchyContentProperties aData;
 
-        aData.aTitle       = m_pImpl->m_aResults[ nIndex ]->rData.aTitle;
-        aData.aTargetURL   = m_pImpl->m_aResults[ nIndex ]->rData.aTargetURL;
+        aData.aTitle       = m_pImpl->m_aResults[ nIndex ]->aData.aTitle;
+        aData.aTargetURL   = m_pImpl->m_aResults[ nIndex ]->aData.aTargetURL;
         aData.bIsDocument  = ( aData.aTargetURL.getLength() > 0 );
         aData.bIsFolder    = !aData.bIsDocument;
         aData.aContentType = aData.bIsFolder

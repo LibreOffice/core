@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 19:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1610,8 +1610,7 @@ void HierarchyContent::transfer( const TransferInfo& rInfo )
                                                 != aChildId.getLength() )
                     aChildId += OUString::createFromAscii( "/" );
 
-                aChildId += HierarchyContentProvider::encodeSegment(
-                                                        rResult.aTitle );
+                aChildId += rResult.aName;
 
                 Reference< XContentIdentifier > xChildId
                     = new ::ucb::ContentIdentifier( m_xSMgr, aChildId );

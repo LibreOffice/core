@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 19:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ struct HierarchyEntry::iterator_Impl
 {
     HierarchyEntryData                   entry;
     Reference< XHierarchicalNameAccess > dir;
+    Reference< XStringEscape >           esc;
     Sequence< OUString>                  names;
     sal_Int32                            pos;
 
@@ -144,6 +145,13 @@ HierarchyEntry::HierarchyEntry(
     // Note: do not init m_aPath in init list. createPathFromHierarchyURL
     //       needs m_xSMgr and m_aMutex.
     m_aPath = createPathFromHierarchyURL( rURL );
+
+    // Extract language independent name from URL.
+    sal_Int32 nPos = rURL.lastIndexOf( '/' );
+    if ( nPos > HIERARCHY_URL_SCHEME_LENGTH )
+        m_aName = rURL.copy( nPos + 1 );
+    else
+        VOS_ENSURE( sal_False, "HierarchyEntry - Invalid URL!" );
 }
 
 //=========================================================================
@@ -206,6 +214,8 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
                             "Got no TargetURL value!" );
                 return sal_False;
             }
+
+            rData.aName = m_aName;
             return sal_True;
         }
     }
@@ -908,8 +918,14 @@ sal_Bool HierarchyEntry::first( iterator& it )
                 VOS_ENSURE( xHierNameAccess.is(),
                             "HierarchyEntry::first - No hier. name access!" );
 
-                if ( xHierNameAccess.is() )
-                    it.m_pImpl->dir = xHierNameAccess;
+                Reference< XStringEscape > xEscaper(
+                                            xRootHierNameAccess, UNO_QUERY );
+
+                VOS_ENSURE( xEscaper.is(),
+                            "HierarchyEntry::first - No string escaper!" );
+
+                it.m_pImpl->dir = xHierNameAccess;
+                it.m_pImpl->esc = xEscaper;
             }
         }
         catch ( RuntimeException& )
@@ -1101,6 +1117,22 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             m_pImpl->dir->getByHierarchicalName( aTargetURL )
                 >>= m_pImpl->entry.aTargetURL;
 
+            // key may be encoded!
+            if ( m_pImpl->esc.is() )
+            {
+                 try
+                 {
+                    aKey = m_pImpl->esc->unescapeString( aKey );
+                }
+                catch ( IllegalArgumentException& )
+                {
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+
+            m_pImpl->entry.aName = aKey;
         }
         catch ( NoSuchElementException& )
         {
