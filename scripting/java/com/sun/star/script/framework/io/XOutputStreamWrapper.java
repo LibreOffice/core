@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XOutputStreamWrapper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:07:47 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,36 +66,9 @@ import com.sun.star.io.XStream;
 import com.sun.star.util.XModifiable;
 import com.sun.star.script.framework.log.*;
 
-import com.sun.star.embed.XStorage;
 
 public class XOutputStreamWrapper extends OutputStream {
-        XStream m_xStream;
         XOutputStream m_xOutputStream;
-        XStorageHelper helper;
-        public XOutputStreamWrapper( XStorageHelper helper, String streamName, int mode ) throws java.io.IOException
-        {
-            this.helper = helper;
-            XStorage streamParent = helper.getStorage();
-
-            try
-            {
-                m_xStream = streamParent.openStreamElement( streamName, mode );
-                m_xOutputStream = m_xStream.getOutputStream();
-            }
-            catch ( Exception e )
-            {
-                try
-                {
-                    helper.disposeObject();
-                }
-                catch ( Exception ignore )
-                {
-                }
-                throw new java.io.IOException( "Failed to open stream: " + streamName  + " exceptopn: " + e.toString() );
-            }
-
-
-        }
         public XOutputStreamWrapper(XOutputStream xOs ) {
             this.m_xOutputStream = xOs;
         }
@@ -181,37 +154,11 @@ public class XOutputStreamWrapper extends OutputStream {
             }
             try
             {
-                if ( m_xStream != null )
-                {
-                    XStorageHelper.disposeObject( m_xStream );
-                    helper.disposeObject( true );
-                    helper = null;
-                }
-                else
-                {
-                    m_xOutputStream.closeOutput();
-                }
+                m_xOutputStream.closeOutput();
             }
             catch ( com.sun.star.io.IOException ioe )
             {
-                LogUtils.DEBUG("XOutputstreamWrapper.close() Error disposing storage :" + ioe );
-                LogUtils.DEBUG( LogUtils.getTrace( ioe ) );
-                //throw new java.io.IOException(ioe.getMessage());
-            }
-            finally
-            {
-                if ( helper != null )
-                {
-                    try
-                    {
-                        helper.disposeObject();
-                        helper = null;
-                    }
-                    catch ( Exception e )
-                    {
-                    }
-                }
-
+                throw new java.io.IOException(ioe.getMessage());
             }
         }
 
