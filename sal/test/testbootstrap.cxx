@@ -14,7 +14,7 @@ int main( int argc, char *argv[] )
 {
     sal_Int32 nCount = rtl_getAppCommandArgCount();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stdout, "rtl-commandargs (%d) real args:%i ", nCount, argc);
     for( sal_Int32 i = 0 ; i < nCount ; i ++ )
     {
@@ -36,7 +36,7 @@ int main( int argc, char *argv[] )
     OUString iniName;
     Bootstrap::get(OUString(RTL_CONSTASCII_USTRINGPARAM("iniName")), iniName, OUString());
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
      if(iniName.getLength())
     {
         OString tmp_iniName = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
