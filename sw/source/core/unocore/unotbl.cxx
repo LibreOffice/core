@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 12:17:12 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,9 @@
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 #include <float.h> // for DBL_MIN
 
 using namespace ::com::sun::star;
@@ -337,7 +340,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
             const SwPageDesc* pDesc = 0;
             if(sPageStyle.Len())
             {
-                sPageStyle = SwXStyleFamilies::GetUIName(sPageStyle, SFX_STYLE_FAMILY_PAGE);
+                sPageStyle = SwStyleNameMapper::GetUIName(sPageStyle, GET_POOLID_PAGEDESC );
                 const SwPageDesc* pDesc = ::GetPageDescByName_Impl(*pFmt->GetDoc(), sPageStyle);
                 if(pDesc)
                 {
@@ -400,7 +403,7 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
                 const SwPageDesc* pDsc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
                 if(pDsc)
                 {
-                   sPDesc = SwXStyleFamilies::GetProgrammaticName(pDsc->GetName(), SFX_STYLE_FAMILY_PAGE);
+                   sPDesc = SwStyleNameMapper::GetProgName(pDsc->GetName(), GET_POOLID_PAGEDESC );
                 }
             }
             aRet <<= OUString(sPDesc);
@@ -2019,7 +2022,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         const SwPageDesc* pDesc = 0;
         if(sPageStyle.Len())
         {
-            sPageStyle = SwXStyleFamilies::GetUIName(sPageStyle, SFX_STYLE_FAMILY_PAGE);
+            sPageStyle = SwStyleNameMapper::GetUIName(sPageStyle, GET_POOLID_PAGEDESC );
             const SwPageDesc* pDesc = ::GetPageDescByName_Impl(rDoc, sPageStyle);
             if(pDesc)
             {
@@ -2990,7 +2993,6 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
         throw IllegalArgumentException();
     if(pFmt)
     {
-        lcl_FormatTable(pFmt);
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     _pMap, rPropertyName);
         if(!pMap)
@@ -3035,6 +3037,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                         //Tabellen ohne Layout (unsichtbare Header/Footer )
                         if(0 != aIter.First( TYPE( SwFrm )))
                         {
+                            lcl_FormatTable(pFmt);
                             SwTable* pTable = SwTable::FindTable( pFmt );
                             SwTableLines &rLines = pTable->GetTabLines();
 
@@ -3141,7 +3144,6 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        lcl_FormatTable(pFmt);
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     _pMap, rPropertyName);
         if(!pMap)
@@ -3173,6 +3175,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     //Tabellen ohne Layout (unsichtbare Header/Footer )
                     if(0 != aIter.First( TYPE( SwFrm )))
                     {
+                        lcl_FormatTable(pFmt);
                         SwTable* pTable = SwTable::FindTable( pFmt );
                         SwTableLines &rLines = pTable->GetTabLines();
 
@@ -3707,7 +3710,8 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        lcl_FormatTable(pFmt);
+        /* ASK OLIVER
+        lcl_FormatTable(pFmt);*/
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                     _pMap, rPropertyName);
         if(pMap)
@@ -3781,7 +3785,8 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        lcl_FormatTable(pFmt);
+        /* ASK OLIVER
+        lcl_FormatTable(pFmt);*/
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                     _pMap, rPropertyName);
         if(pMap)
