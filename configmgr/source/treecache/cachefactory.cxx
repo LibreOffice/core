@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachefactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 14:11:42 $
+ *  last change: $Author: jb $ $Date: 2002-06-12 16:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,37 +70,51 @@
 #ifndef CONFIGMGR_HEAPFACTORY_HXX
 #include "heapfactory.hxx"
 #endif
-#ifndef CONFIGMGR_BACKENDWRAP_HXX
-#include "backendwrap.hxx"
-#endif
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
-#include "options.hxx"
+#ifndef CONFIGMGR_BACKENDFACTORY_HXX_
+#include "backendfactory.hxx"
 #endif
 
 namespace configmgr
 {
 // -------------------------------------------------------------------------
 
-    rtl::Reference<TreeManager>
-        CacheFactory::createCacheManager(IConfigSession * _pSession,
-                                            TypeConverterRef const & _xTCV)
+    typedef rtl::Reference< backend::IMergedDataProvider > MergedBackendRef;
+// -------------------------------------------------------------------------
+
+    static
+    rtl::Reference<TreeManager> buildCacheManager(MergedBackendRef const & _xBackend)
     {
         rtl::Reference< TreeManager > xCache;
 
-        if (_pSession)
+        if (_xBackend.is())
         {
             memory::HeapManager & rHeap = memory::cacheHeap();
 
-            using namespace backend;
-            rtl::Reference< IMergedDataProvider > xBackend = wrapSession(*_pSession,_xTCV);
-
-            rtl::Reference< ICachedDataProvider > xLoader
-                = new CacheController(xBackend.get(),rHeap);
+            rtl::Reference< backend::ICachedDataProvider > xLoader
+                = new backend::CacheController(_xBackend.get(),rHeap);
 
             xCache.set( new TreeManager(xLoader.get(),rHeap) );
         }
 
         return xCache;
+    }
+// -------------------------------------------------------------------------
+
+    rtl::Reference<TreeManager>
+        CacheFactory::createCacheManager(ConnectionSettings const & _aSettings, CreationContext const & _xContext)
+    {
+        MergedBackendRef xBackend = backend::BackendFactory::instance().createBackend(_aSettings,_xContext);
+
+        return buildCacheManager(xBackend);
+    }
+// -------------------------------------------------------------------------
+
+    rtl::Reference<TreeManager>
+        CacheFactory::createCacheManager(IConfigSession * _pSession, TypeConverterRef const & _xTCV)
+    {
+        MergedBackendRef xBackend = backend::BackendFactory::instance().createSessionBackend(_pSession,_xTCV);
+
+        return buildCacheManager(xBackend);
     }
 // -------------------------------------------------------------------------
 
