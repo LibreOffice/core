@@ -7,9 +7,6 @@ svtools.AccessibleIconChoiceCtrl::com::sun::star::accessibility::XAccessibleSele
 ### 111661 ###
 svtools.AccessibleIconChoiceCtrlEntry::com::sun::star::accessibility::XAccessibleText
 
-### 113034 ###
-svtools.AccessibleTreeListBoxEntry::com::sun::star::accessibility::XAccessibleText
-
 ### no bug id yet ###
 svtools.AccessibleTabBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
 svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleEventBroadcaster
