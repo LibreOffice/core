@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-16 12:40:35 $
+ *  last change: $Author: obr $ $Date: 2001-10-25 14:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,8 +639,7 @@ const _pair _full_locale_list[] = {
     { "ja_JP.EUC",    RTL_TEXTENCODING_EUC_JP      },
     { "ko_KR.EUC",    RTL_TEXTENCODING_EUC_KR      },
     { "zh_CN.EUC",    RTL_TEXTENCODING_EUC_CN      },
-    { "zh_TW.EUC",    RTL_TEXTENCODING_EUC_TW      },
-    { NULL,           RTL_TEXTENCODING_DONTKNOW    }
+    { "zh_TW.EUC",    RTL_TEXTENCODING_EUC_TW      }
 };
 
 const _pair _locale_extension_list[] = {
@@ -666,8 +665,7 @@ const _pair _locale_extension_list[] = {
 #endif
     { "utf-7",        RTL_TEXTENCODING_UTF7        },
     { "utf-8",        RTL_TEXTENCODING_UTF8        },
-    { "utf-16",       RTL_TEXTENCODING_UNICODE     },
-    { NULL,           RTL_TEXTENCODING_DONTKNOW    }
+    { "utf-16",       RTL_TEXTENCODING_UNICODE     }
 };
 
 const _pair _iso_language_list[] = {
@@ -726,8 +724,7 @@ const _pair _iso_language_list[] = {
     { "ur",  RTL_TEXTENCODING_ISO_8859_6 },
     { "uz",  RTL_TEXTENCODING_ISO_8859_9 },
     { "vi",  RTL_TEXTENCODING_DONTKNOW },
-    { "zh",  RTL_TEXTENCODING_BIG5 },
-    { NULL,  RTL_TEXTENCODING_DONTKNOW    }
+    { "zh",  RTL_TEXTENCODING_BIG5 }
 };
 
 /*****************************************************************************/
