@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberingType.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:11:25 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 17:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,12 @@ constants NumberingType
      */
     const short CHARS_THAI = 32;
 
+    //-------------------------------------------------------------------------
+    /** Numbering in Hebrew alphabet letters
+
+        @since #i17516#
+     */
+    const short CHARS_HEBREW = 33;
 };
 
 //=============================================================================
