@@ -90,7 +90,7 @@ module com { module sun { module star { module auth {
     @since #107627#
  */
 
-service SSOManagerFactory
+published service SSOManagerFactory
 {
    /** supports the creation of <type>XSSOManager</type> instances which can
        subsequently be used to create security contexts.

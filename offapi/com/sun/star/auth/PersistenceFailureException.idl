@@ -67,7 +67,7 @@ module com { module sun { module star { module auth {
     @since #107627#
  */
 
-exception PersistenceFailureException : ::com::sun::star::uno::Exception
+published exception PersistenceFailureException : ::com::sun::star::uno::Exception
 {
 };
 
