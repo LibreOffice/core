@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implspritecanvas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:00:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
 #endif
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
@@ -79,7 +82,7 @@
 #include <cppcanvas/spritecanvas.hxx>
 #endif
 
-#include "implbitmapcanvas.hxx"
+#include <implbitmapcanvas.hxx>
 
 
 namespace cppcanvas
@@ -91,26 +94,56 @@ namespace cppcanvas
         public:
             ImplSpriteCanvas( const ::com::sun::star::uno::Reference<
                                   ::drafts::com::sun::star::rendering::XSpriteCanvas >& rCanvas );
+            ImplSpriteCanvas(const ImplSpriteCanvas&);
+
             virtual ~ImplSpriteCanvas();
 
-            virtual bool                    updateScreen() const;
+            virtual void                    setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
+
+            virtual bool                    updateScreen( bool bUpdateAll ) const;
 
             virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const;
             virtual SpriteSharedPtr         createClonedSprite( const SpriteSharedPtr& ) const;
 
-            virtual SpriteCanvasSharedPtr   cloneSpriteCanvas() const;
+            SpriteSharedPtr                 createSpriteFromBitmaps(
+                const ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::uno::Reference<
+                        ::drafts::com::sun::star::rendering::XBitmap > >&   animationBitmaps,
+                sal_Int8                                                    interpolationMode );
+
+            virtual CanvasSharedPtr         clone() const;
 
             virtual ::com::sun::star::uno::Reference<
                 ::drafts::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const;
 
-            // take compiler-provided default copy constructor
-            //ImplSpriteCanvas(const ImplSpriteCanvas&);
+            /** This class passes the view transformation
+                to child sprites
+
+                This helper class is necessary, because the
+                ImplSpriteCanvas object cannot hand out shared ptrs of
+                itself, but has somehow pass an object to child
+                sprites those can query for the canvas' view transform.
+             */
+            class TransformationArbiter
+            {
+            public:
+                TransformationArbiter();
+
+                void                        setTransformation( const ::basegfx::B2DHomMatrix& rViewTransform );
+                ::basegfx::B2DHomMatrix     getTransformation() const;
+
+            private:
+                ::basegfx::B2DHomMatrix     maTransformation;
+            };
+
+            typedef ::boost::shared_ptr< TransformationArbiter > TransformationArbiterSharedPtr;
 
         private:
             // default: disabled assignment
             ImplSpriteCanvas& operator=( const ImplSpriteCanvas& );
 
             const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSpriteCanvas >    mxSpriteCanvas;
+            TransformationArbiterSharedPtr                                                                  mpTransformArbiter;
         };
     }
 }
