@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctop.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ ERRTYPE RscTop::GetArrayEle
 ERRTYPE RscTop::GetValueEle
 (
     const RSCINST & rInst,
-    long lValue,
+    INT32 lValue,
     RscTop * pCreateClass,
     RSCINST * pGetInst
 )
@@ -503,7 +503,7 @@ USHORT  RscTop::GetCount( const RSCINST & rInst ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetNumber( const RSCINST & rInst, long lValue ){
+ERRTYPE RscTop::SetNumber( const RSCINST & rInst, INT32 lValue ){
     if( pSuperClass )
         return pSuperClass->
                     SetNumber( rInst, lValue );
@@ -537,7 +537,7 @@ ERRTYPE RscTop::SetBool( const RSCINST & rInst, BOOL bValue ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetConst( const RSCINST & rInst, HASHID nId, long nVal )
+ERRTYPE RscTop::SetConst( const RSCINST & rInst, HASHID nId, INT32 nVal )
 {
     if( pSuperClass )
         return pSuperClass->SetConst( rInst, nId, nVal );
@@ -588,7 +588,7 @@ ERRTYPE RscTop::SetString( const RSCINST & rInst, char * pStr ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::GetNumber( const RSCINST & rInst, long * pN ){
+ERRTYPE RscTop::GetNumber( const RSCINST & rInst, INT32 * pN ){
     if( pSuperClass )
         return pSuperClass->
                     GetNumber( rInst, pN );
