@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:39:58 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,13 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_DIA;                    \
         SID_HIDE_SLIDE;             \
         SID_CHOOSE_POLYGON;         \
+        SID_FM_REMOVE_FILTER_SORT;  \
+        SID_FM_SORTUP;              \
+        SID_FM_SORTDOWN;            \
+        SID_FM_ORDERCRIT;           \
+        SID_FM_FILTERCRIT;          \
+        SID_FM_AUTOFILTER;          \
+        SID_FM_REFRESH;             \
         SID_DEC_INDENT;             \
         SID_INC_INDENT;             \
         SID_INSERT_OBJECT;          \
@@ -361,6 +368,8 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_FM_RECORD_ABSOLUTE; \
         SID_FM_FORM_FILTERED; \
         SID_FM_FORMATTEDFIELD; \
+        SID_FM_SCROLLBAR; \
+        SID_FM_SPINBUTTON; \
         SID_FM_FILTER_START; \
         SID_FM_FILTER_NAVIGATOR; \
         SID_FM_FILTER_EXECUTE; \
@@ -404,7 +413,7 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_ADDONS;\
     };\
     IdCount = {\
-        290;\
+        299;\
     };
 
 #define OFFICE_ID_LIST\
