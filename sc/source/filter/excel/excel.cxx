@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:22:41 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,16 +125,12 @@ const sal_Char*                 pVBASubStorageName = "VBA";
 const sal_Char*                 pUserNamesStreamName = "User Names";
 const sal_Char*                 pRevLogStreamName = "Revision Log";
 
-String lcl_GetBasePath( const SfxMedium& rMedium )
+String lcl_GetDocUrl( const SfxMedium& rMedium )
 {
-    String aBasePath;
-    const SfxStringItem* pItem = (const SfxStringItem*) rMedium.GetItemSet()->GetItem( SID_FILE_NAME );
-    if( pItem )
-    {
-        aBasePath = pItem->GetValue();
-        aBasePath.Erase( aBasePath.SearchBackward( '/' ) + 1 );
-    }
-    return aBasePath;
+    String aDocUrl;
+    if( const SfxStringItem* pItem = (const SfxStringItem*) rMedium.GetItemSet()->GetItem( SID_FILE_NAME ) )
+        aDocUrl = pItem->GetValue();
+    return aDocUrl;
 }
 
 FltError ScImportExcel( SvStream& rStream, ScDocument* pDocument )
@@ -244,9 +240,9 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
                 ImportExcel* pFilter = NULL;
 
                 if( eBiffDetect == xlBiffDet5 )
-                    pFilter = new ImportExcel( *xStream, pDocument, lcl_GetBasePath( rMedium ) );
+                    pFilter = new ImportExcel( *xStream, pDocument, lcl_GetDocUrl( rMedium ) );
                 else if( eBiffDetect == xlBiffDet8 )
-                    pFilter = new ImportExcel8( pStorage, *xStream, pDocument, lcl_GetBasePath( rMedium ), pPivotCacheStorage );
+                    pFilter = new ImportExcel8( pStorage, *xStream, pDocument, lcl_GetDocUrl( rMedium ), pPivotCacheStorage );
 
                 if( pFilter )
                     eRet = pFilter->Read();
@@ -271,7 +267,7 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
             pStream->Seek( 0UL );
             pStream->SetBufferSize( 32768 );
 
-            ImportExcel aFilter( *pStream, pDocument, lcl_GetBasePath( rMedium ) );
+            ImportExcel aFilter( *pStream, pDocument, lcl_GetDocUrl( rMedium ) );
             eRet = aFilter.Read();
 
             pStream->SetBufferSize( 0 );
@@ -339,12 +335,12 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
 
             if ( bBiff8 )
             {
-                ExportBiff8     aFilter( *pStorage, *xStStream, xlBiff8, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bRelUrl );
+                ExportBiff8     aFilter( *pStorage, *xStStream, xlBiff8, pDocument, lcl_GetDocUrl( rOutMedium ), eNach, bRelUrl );
                 eRet = aFilter.Write();
             }
             else
             {
-                ExportBiff5     aFilter( *pStorage, *xStStream, xlBiff5, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bRelUrl );
+                ExportBiff5     aFilter( *pStorage, *xStStream, xlBiff5, pDocument, lcl_GetDocUrl( rOutMedium ), eNach, bRelUrl );
                 eRet = aFilter.Write();
             }
 
