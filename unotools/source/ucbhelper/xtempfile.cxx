@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 12:56:20 $
+ *  last change: $Author: mtg $ $Date: 2001-09-28 16:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,8 @@ void SAL_CALL XTempFile::seek( sal_Int64 nLocation )
 {
     MutexGuard aGuard( maMutex );
     checkConnected();
+    if ( nLocation < 0 || nLocation > getLength() )
+        throw IllegalArgumentException();
 
     mpStream->Seek((sal_uInt32) nLocation);
     checkError();
