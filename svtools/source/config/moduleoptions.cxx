@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:21:41 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         //  public interface
         //---------------------------------------------------------------------------------------------------------
         sal_Bool        IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
+        ::com::sun::star::uno::Sequence < ::rtl::OUString > GetAllServiceNames();
         ::rtl::OUString GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
         ::rtl::OUString GetFactoryShortName       (       SvtModuleOptions::EFactory    eFactory   ) const;
         ::rtl::OUString GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
@@ -573,6 +574,52 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
     }
 
     return bInstalled;
+}
+
+::com::sun::star::uno::Sequence < ::rtl::OUString > SvtModuleOptions_Impl::GetAllServiceNames()
+{
+    sal_uInt32 nCount=0;
+    if( m_lFactories[SvtModuleOptions::E_WRITER].getInstalled() )
+        nCount++;
+    if ( m_lFactories[SvtModuleOptions::E_WRITERWEB].getInstalled() )
+        nCount++;
+    if ( m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].getInstalled() )
+        nCount++;
+    if( m_lFactories[SvtModuleOptions::E_SCALC].getInstalled() )
+        nCount++;
+    if( m_lFactories[SvtModuleOptions::E_SDRAW].getInstalled() )
+        nCount++;
+    if( m_lFactories[SvtModuleOptions::E_SIMPRESS].getInstalled() )
+        nCount++;
+    if( m_lFactories[SvtModuleOptions::E_SCHART].getInstalled() )
+        nCount++;
+    if( m_lFactories[SvtModuleOptions::E_SMATH].getInstalled() )
+        nCount++;
+    if( m_lFactories[SvtModuleOptions::E_SBASIC].getInstalled() )
+        nCount++;
+
+    css::uno::Sequence < ::rtl::OUString > aRet( nCount );
+    sal_Int32 n=0;
+    if( m_lFactories[SvtModuleOptions::E_WRITER].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_WRITER].getFactory();
+    if ( m_lFactories[SvtModuleOptions::E_WRITERWEB].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_WRITERWEB].getFactory();
+    if ( m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].getFactory();
+    if( m_lFactories[SvtModuleOptions::E_SCALC].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_SCALC].getFactory();
+    if( m_lFactories[SvtModuleOptions::E_SDRAW].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_SDRAW].getFactory();
+    if( m_lFactories[SvtModuleOptions::E_SIMPRESS].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_SIMPRESS].getFactory();
+    if( m_lFactories[SvtModuleOptions::E_SCHART].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_SCHART].getFactory();
+    if( m_lFactories[SvtModuleOptions::E_SMATH].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_SMATH].getFactory();
+    if( m_lFactories[SvtModuleOptions::E_SBASIC].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_SBASIC].getFactory();
+
+    return aRet;
 }
 
 //*****************************************************************************************************************
@@ -1170,4 +1217,34 @@ sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
     return ::rtl::OUString();
 }
 
+::com::sun::star::uno::Sequence < ::rtl::OUString > SvtModuleOptions::GetAllServiceNames()
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->GetAllServiceNames();
+}
 
+::rtl::OUString SvtModuleOptions::GetDefaultModuleName()
+{
+    ::rtl::OUString aModule;
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITER);
+    else
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SCALC))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_CALC);
+    else
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDRAW))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_DRAW);
+    else
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_IMPRESS);
+    else
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SMATH))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_MATH);
+    else
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERGLOBAL);
+    else
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERWEB);
+    return aModule;
+}
