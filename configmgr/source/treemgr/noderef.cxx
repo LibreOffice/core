@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 11:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ bool Tree::hasChildren(NodeRef const& aNode) const
 {
     OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
+    if (aNode.m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
 
     if (this->isEmpty()) return false;
     if (!aNode.isValid()) return false;
@@ -413,7 +413,7 @@ bool Tree::hasChild(NodeRef const& aNode, Name const& aName) const
 {
     OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
+    if (aNode.m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
 
     if (this->isEmpty()) return false;
     if (!aNode.isValid()) return false;
@@ -427,7 +427,7 @@ NodeRef Tree::getChild(NodeRef const& aNode, Name const& aName) const
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     // OSL_PRECOND(this->hasChild(aNode,aName),"ERROR: Configuration: Invalid node request.");
-    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Requesting node beyond available depth" );
+    if (aNode.m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Requesting node beyond available depth" );
 
     NodeOffset nOffset  = m_pImpl ? m_pImpl->findChild(aNode.m_nPos, aName) : 0;
 
