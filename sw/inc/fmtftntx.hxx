@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtftntx.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:33:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 17:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,6 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 };
 
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtFtnAtTxtEnd &SwAttrSet::GetFtnAtTxtEnd(BOOL bInP) const
     { return (const SwFmtFtnAtTxtEnd&)Get( RES_FTN_AT_TXTEND, bInP); }
 inline const SwFmtEndAtTxtEnd &SwAttrSet::GetEndAtTxtEnd(BOOL bInP) const
@@ -179,7 +177,6 @@ inline const SwFmtFtnAtTxtEnd &SwFmt::GetFtnAtTxtEnd(BOOL bInP) const
     { return aSet.GetFtnAtTxtEnd(bInP); }
 inline const SwFmtEndAtTxtEnd &SwFmt::GetEndAtTxtEnd(BOOL bInP) const
     { return aSet.GetEndAtTxtEnd(bInP); }
-#endif
 
 #endif
 
