@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 09:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,12 +163,15 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
             ,m_xServiceFactory(_rxFactory)
             ,m_bReadOnly(sal_False) // we're created as service and have to allow the setting of properties
             ,m_bPasswordRequired(sal_False)
+            ,m_bSuppressVersionColumns(sal_True)
             ,m_aForms(*this, m_aMutex)
             ,m_aReports(*this, m_aMutex)
             ,m_aCommandDefinitions(*this, m_aMutex)
 {
     // some kind of default
     m_sConnectURL = ::rtl::OUString::createFromAscii("jdbc:");
+    m_aTableFilter.realloc(1);
+    m_aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
 }
 
 //--------------------------------------------------------------------------
@@ -185,6 +188,7 @@ ODatabaseSource::ODatabaseSource(
             ,m_xServiceFactory(_rxFactory)
             ,m_bReadOnly(sal_True)      // assume readonly for the moment, adjusted below
             ,m_bPasswordRequired(sal_False)
+            ,m_bSuppressVersionColumns(sal_True)
             ,m_aForms(*this, m_aMutex)
             ,m_aReports(*this, m_aMutex)
             ,m_aCommandDefinitions(*this, m_aMutex)
@@ -411,13 +415,14 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(10)
+    BEGIN_PROPERTY_HELPER(11)
         DECL_PROP0(INFO,                        Sequence< PropertyValue >);
         DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
         DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
         DECL_PROP1(NAME,                        ::rtl::OUString,            READONLY);
         DECL_PROP1_IFACE(NUMBERFORMATSSUPPLIER, XNumberFormatsSupplier,     READONLY);
         DECL_PROP2(PASSWORD,                    ::rtl::OUString,            BOUND, TRANSIENT);
+        DECL_PROP1_BOOL(SUPPRESSVERSIONCL,                                  BOUND);
         DECL_PROP1(TABLEFILTER,                 Sequence< ::rtl::OUString >,BOUND);
         DECL_PROP1(TABLETYPEFILTER,             Sequence< ::rtl::OUString >,BOUND);
         DECL_PROP0(URL,                         ::rtl::OUString);
@@ -455,6 +460,9 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
             break;
         case PROPERTY_ID_ISPASSWORDREQUIRED:
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bPasswordRequired);
+            break;
+        case PROPERTY_ID_SUPPRESSVERSIONCL:
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bSuppressVersionColumns);
             break;
         case PROPERTY_ID_URL:
         {
@@ -498,6 +506,9 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
         case PROPERTY_ID_ISPASSWORDREQUIRED:
             m_bPasswordRequired = any2bool(rValue);
             break;
+        case PROPERTY_ID_SUPPRESSVERSIONCL:
+            m_bSuppressVersionColumns = any2bool(rValue);
+            break;
         case PROPERTY_ID_URL:
             rValue >>= m_sConnectURL;
             break;
@@ -527,6 +538,9 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
             break;
         case PROPERTY_ID_ISPASSWORDREQUIRED:
             rValue = bool2any(m_bPasswordRequired);
+            break;
+        case PROPERTY_ID_SUPPRESSVERSIONCL:
+            rValue = bool2any(m_bSuppressVersionColumns);
             break;
         case PROPERTY_ID_ISREADONLY:
             rValue = bool2any(m_bReadOnly);
@@ -677,6 +691,7 @@ void ODatabaseSource::initializeFromConfiguration()
     m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_TABLETYEFILTER) >>= m_aTableTypeFilter;
     m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_LOGINTIMEOUT) >>= m_nLoginTimeout;
     m_bPasswordRequired = ::cppu::any2bool(m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_PASSWORDREQUIRED));
+    m_bSuppressVersionColumns = ::cppu::any2bool(m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_SUPPRESSVERSIONCL));
 
     // the property sequence in m_aInfo
     OConfigurationNode aInfoNode = m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_INFO);
@@ -723,7 +738,8 @@ void ODatabaseSource::flushToConfiguration()
     m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_TABLEFILTER, makeAny(m_aTableFilter));
     m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_TABLETYEFILTER, makeAny(m_aTableTypeFilter));
     m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_LOGINTIMEOUT, makeAny(m_nLoginTimeout));
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_PASSWORDREQUIRED, makeAny(m_bPasswordRequired));
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_PASSWORDREQUIRED, ::cppu::bool2any(m_bPasswordRequired));
+    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_SUPPRESSVERSIONCL, ::cppu::bool2any(m_bSuppressVersionColumns));
 
     // write the additional info tags
     // unfortunately, the same as always applies here: the configuration does not support different
