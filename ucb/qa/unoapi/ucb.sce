@@ -1,0 +1,11 @@
+-o ucb.UcbContentProviderProxyFactory
+-o ucb.UcbPropertiesManager
+-o ucb.UcbStore
+-o ucb.UniversalContentBroker
+-o ucpchelp.CHelpContentProvider
+-o ucpdav.WebDAVContentProvider
+-o ucpfile.FileProvider
+-o ucpftp.FTPContentProvider
+-o ucphier.HierarchyContentProvider
+-o ucphier.HierarchyDataSource
+-o ucppkg.PackageContentProvider
