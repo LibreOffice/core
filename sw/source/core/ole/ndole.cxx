@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-13 16:18:24 $
+ *  last change: $Author: jp $ $Date: 2001-12-12 14:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ using namespace com::sun::star::uno;
 class SwOLELRUCache : private SvPtrarr, private utl::ConfigItem
 {
     sal_uInt16 nLRU_InitSize;
-
+    sal_Bool bInUnload;
     com::sun::star::uno::Sequence< rtl::OUString > GetPropertyNames();
 
 public:
@@ -138,6 +138,7 @@ public:
     virtual void Commit();
     void Load();
 
+    void SetInUnload( BOOL bFlag )  { bInUnload = bFlag; }
     SvPtrarr::Count;
 
     void Insert( SwOLEObj& rObj );
@@ -554,6 +555,7 @@ BOOL SwOLEObj::RemovedFromLRU()
         {
             if( pDoc->IsPurgeOLE() )
             {
+                pOLELRU_Cache->SetInUnload( TRUE );
                 SvPersist* pO = *pOLERef;
 
                 if( pO->IsModified() && !pO->IsHandsOff() )
@@ -565,6 +567,8 @@ BOOL SwOLEObj::RemovedFromLRU()
                 pOLERef->Clear();
                 if( !p->Unload( pO ) )
                     *pOLERef = pO;
+
+                pOLELRU_Cache->SetInUnload( FALSE );
             }
             else
                 bRet = FALSE;
@@ -576,6 +580,7 @@ BOOL SwOLEObj::RemovedFromLRU()
 SwOLELRUCache::SwOLELRUCache()
     : SvPtrarr( 64, 16 ),
     utl::ConfigItem( OUString::createFromAscii( "Office.Common/Cache" )),
+    bInUnload( sal_False ),
     nLRU_InitSize( 20 )
 {
     EnableNotification( GetPropertyNames() );
@@ -614,15 +619,18 @@ void SwOLELRUCache::Load()
         if( 20 > nVal )
             nVal = 20;
 
-        USHORT nPos = SvPtrarr::Count();
-        if( nVal < nLRU_InitSize && nPos > nVal )
+        if( !bInUnload )
         {
-            // remove the last entries
-            while( nPos > nVal )
+            USHORT nPos = SvPtrarr::Count();
+            if( nVal < nLRU_InitSize && nPos > nVal )
             {
-                SwOLEObj* pObj = (SwOLEObj*) SvPtrarr::GetObject( --nPos );
-                if( pObj->RemovedFromLRU() )
-                    SvPtrarr::Remove( nPos );
+                // remove the last entries
+                while( nPos > nVal )
+                {
+                    SwOLEObj* pObj = (SwOLEObj*) SvPtrarr::GetObject( --nPos );
+                    if( pObj->RemovedFromLRU() )
+                        SvPtrarr::Remove( nPos );
+                }
             }
         }
         nLRU_InitSize = (USHORT)nVal;
@@ -631,30 +639,44 @@ void SwOLELRUCache::Load()
 
 void SwOLELRUCache::Insert( SwOLEObj& rObj )
 {
-    SwOLEObj* pObj = &rObj;
-    USHORT nPos = SvPtrarr::GetPos( pObj );
-    if( nPos )  // der auf der 0. Pos muss nicht verschoben werden!
+    if( !bInUnload )
     {
-        if( USHRT_MAX != nPos )
-            SvPtrarr::Remove( nPos );
-
-        SvPtrarr::Insert( pObj, 0 );
-
-        nPos = SvPtrarr::Count();
-        while( nPos > nLRU_InitSize )
+        SwOLEObj* pObj = &rObj;
+        USHORT nPos = SvPtrarr::GetPos( pObj );
+        if( nPos )  // der auf der 0. Pos muss nicht verschoben werden!
         {
-            pObj = (SwOLEObj*) SvPtrarr::GetObject( --nPos );
-            if( pObj->RemovedFromLRU() )
+            if( USHRT_MAX != nPos )
                 SvPtrarr::Remove( nPos );
+
+            SvPtrarr::Insert( pObj, 0 );
+
+            nPos = SvPtrarr::Count();
+            while( nPos > nLRU_InitSize )
+            {
+                pObj = (SwOLEObj*) SvPtrarr::GetObject( --nPos );
+                if( pObj->RemovedFromLRU() )
+                    SvPtrarr::Remove( nPos );
+            }
         }
     }
+#ifndef PRODUCT
+    else
+    {
+        SwOLEObj* pObj = &rObj;
+        USHORT nPos = SvPtrarr::GetPos( pObj );
+        ASSERT( USHRT_MAX != nPos, "Insert a new OLE object into a looked cache" );
+    }
+#endif
 }
 
 void SwOLELRUCache::Remove( SwOLEObj& rObj )
 {
-    USHORT nPos = SvPtrarr::GetPos( &rObj );
-    if( USHRT_MAX != nPos && rObj.RemovedFromLRU() )
-        SvPtrarr::Remove( nPos );
+    if( !bInUnload )
+    {
+        USHORT nPos = SvPtrarr::GetPos( &rObj );
+        if( USHRT_MAX != nPos && rObj.RemovedFromLRU() )
+            SvPtrarr::Remove( nPos );
+    }
 }
 
 
