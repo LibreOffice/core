@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: cl $ $Date: 2002-12-06 10:26:54 $
+#   last change: $Author: cl $ $Date: 2002-12-10 09:47:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ IDLFILES=\
     Alignment.idl\
     AppletShape.idl\
     Arrangement.idl\
+    Background.idl\
     BezierPoint.idl\
     BitmapMode.idl\
     BitmapTable.idl\
