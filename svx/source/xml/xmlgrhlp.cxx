@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
  *  last change: $Author: cl $
  *
@@ -762,7 +762,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& a
     ::osl::MutexGuard   aGuard( maMutex );
     const sal_Int32     nIndex = maGrfURLs.size();
 
-    maGrfURLs.push_back( ::_STL::make_pair( aURL, ::rtl::OUString() ) );
+    maGrfURLs.push_back( ::std::make_pair( aURL, ::rtl::OUString() ) );
     ImplInsertGraphicURL( aURL, nIndex );
 
     return maGrfURLs[ nIndex ].second;
