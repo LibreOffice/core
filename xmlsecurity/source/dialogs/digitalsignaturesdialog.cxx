@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:41:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -155,9 +157,16 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     ,maCancelBtn        ( this, ResId( BTN_CANCEL ) )
     ,maHelpBtn          ( this, ResId( BTN_HELP ) )
 {
-    static long nTabs[] = { 4, 0, 8*DS_LB_WIDTH/100, 36*DS_LB_WIDTH/100, 74*DS_LB_WIDTH/100 };
+    static long nTabs[] = { 4, 0, 6*DS_LB_WIDTH/100, 36*DS_LB_WIDTH/100, 74*DS_LB_WIDTH/100 };
     maSignaturesLB.SetTabs( &nTabs[ 0 ] );
     maSignaturesLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
+
+    if ( GetBackground().GetColor().IsDark() )
+    {
+        // high contrast mode needs other images
+        maSigsValidImg.SetImage( Image( ResId( IMG_STATE_VALID_HC ) ) );
+        maSigsInvalidImg.SetImage( Image( ResId( IMG_STATE_BROKEN_HC ) ) );
+    }
 
     FreeResource();
 
@@ -213,7 +222,10 @@ void DigitalSignaturesDialog::SetStorage( const com::sun::star::uno::Reference <
     maSignatureHelper.SetStorage( mxStore );
 }
 
-
+void DigitalSignaturesDialog::SetSignatureStream( const cssu::Reference < css::io::XStream >& rxStream )
+{
+    mxSignatureStream = rxStream;
+}
 
 short DigitalSignaturesDialog::Execute()
 {
@@ -226,9 +238,7 @@ short DigitalSignaturesDialog::Execute()
     // But for refreshing signature information, StartVerifySignatureHdl will be called after each add/remove
     mbVerifySignatures = false;
 
-    short nRet = Dialog::Execute();
-
-    return nRet;
+    return Dialog::Execute();
 }
 
 IMPL_LINK( DigitalSignaturesDialog, SignatureHighlightHdl, void*, EMPTYARG )
@@ -263,9 +273,14 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
 
         uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
         CertificateChooser aChooser( this, xSecEnv, maCurrentSignatureInformations );
-        if( aChooser.Execute() )
+        if ( aChooser.Execute() == RET_OK )
         {
             uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
+            if ( !xCert.is() )
+            {
+                DBG_ERRORFILE( "no certificate selected" );
+                return -1;
+            }
             rtl::OUString aCertSerial = bigIntegerToNumericString( xCert->getSerialNumber() );
             if ( !aCertSerial.getLength() )
             {
@@ -299,7 +314,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
 
             maSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
 
-            SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
+            SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream( embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE );
             uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
             uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
@@ -319,22 +334,12 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             sal_Int32 nStatus = maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
             if ( nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
             {
-                uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
-                xTrans->commit();
-
-                uno::Reference< embed::XTransactedObject > xTrans2( mxStore, uno::UNO_QUERY );
-                xTrans2->commit();
-
-                aStreamHelper.Clear();
-
                 mbSignaturesChanged = true;
 
                 // Can't simply remember current information, need parsing for getting full information :(
                 ImplGetSignatureInformations();
                 ImplFillSignaturesBox();
             }
-
-            aStreamHelper.Clear();
         }
     }
     catch (NoPasswordException&)
@@ -352,7 +357,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
         // Export all other signatures...
-        SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
+        SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream( embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE );
         uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
         uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
@@ -362,15 +367,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
 
         maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
 
-        uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
-        xTrans->commit();
-
-        uno::Reference< embed::XTransactedObject > xTrans2( mxStore, uno::UNO_QUERY );
-        xTrans2->commit();
-
         mbSignaturesChanged = true;
-
-        aStreamHelper.Clear();
 
         ImplFillSignaturesBox();
     }
@@ -390,7 +387,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecEnv = maSignatureHelper.GetSecurityEnvironment();
     uno::Reference< ::com::sun::star::security::XCertificate > xCert;
 
-    String aCN_Id( String::CreateFromAscii( "CN" ) );
     String aNullStr;
     int nInfos = maCurrentSignatureInformations.size();
     int nValidSigs = 0;
@@ -414,8 +410,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             String  aDateTimeStr;
             if( xCert.is() )
             {
-                aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
-                aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
+                aSubject = XmlSec::GetContentPart( xCert->getSubjectName() );
+                aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName );
                 // --> PB 2004-10-12 #i20172# String with date and time information
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
             }
@@ -457,7 +453,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     maSigsInvalidImg.Show( bShowInvalidState );
     maSigsInvalidFI.Show( bShowInvalidState );
 
-
     SignatureHighlightHdl( NULL );
 }
 
@@ -467,7 +462,7 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations()
 
     maSignatureHelper.StartMission();
 
-    SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, embed::ElementModes::READ, meSignatureMode );
+    SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream( embed::ElementModes::READ );
     if ( aStreamHelper.xSignatureStream.is() )
     {
         uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
@@ -476,8 +471,6 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations()
     maSignatureHelper.EndMission();
 
     maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
-
-    aStreamHelper.Clear();
 
     mbVerifySignatures = false;
 }
@@ -488,16 +481,42 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
     {
         USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
-        uno::Reference< dcss::security::XCertificate > xCert = maSignatureHelper.GetSecurityEnvironment()->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
-        // If we don't get it, create it from signature data:
-        if ( !xCert.is() )
-            xCert = maSignatureHelper.GetSecurityEnvironment()->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
-
-        DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
-
-        uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
-        CertificateViewer aViewer( this, xSecEnv, xCert );
-        aViewer.Execute();
+        // Use Certificate from doc, not from key store
+        uno::Reference< dcss::security::XCertificate > xCert = maSignatureHelper.GetSecurityEnvironment()->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+        DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
+        if ( xCert.is() )
+        {
+            CertificateViewer aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, FALSE );
+            aViewer.Execute();
+        }
     }
 }
+
+SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream( sal_Int32 nStreamOpenMode )
+{
+    SignatureStreamHelper aHelper;
+    if ( !mxSignatureStream.is() )
+    {
+        aHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, nStreamOpenMode, meSignatureMode );
+    }
+    else
+    {
+        aHelper.xSignatureStream = mxSignatureStream;
+        if ( nStreamOpenMode & embed::ElementModes::TRUNCATE )
+        {
+            css::uno::Reference < css::io::XTruncate > xTruncate( mxSignatureStream, uno::UNO_QUERY );
+            DBG_ASSERT( xTruncate.is(), "ImplOpenSignatureStream - Stream does not support xTruncate!" );
+            xTruncate->truncate();
+        }
+        else
+        {
+            css::uno::Reference < css::io::XSeekable > xSeek( mxSignatureStream, uno::UNO_QUERY );
+            DBG_ASSERT( xSeek.is(), "ImplOpenSignatureStream - Stream does not support xSeekable!" );
+            xSeek->seek( 0 );
+        }
+    }
+
+    return aHelper;
+}
+
