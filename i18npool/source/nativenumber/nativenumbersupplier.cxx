@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 16:48:28 $
+ *  last change: $Author: khong $ $Date: 2002-08-07 01:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,24 +339,6 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
     return OUString();
 }
 
-#define isLang(lang) rLocale.Language.equalsAsciiL(lang, 2)
-#define isCtry(ctry) rLocale.Country.equalsAsciiL(ctry, 2)
-
-static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
-{
-    sal_Char *aLocaleList[] = { "zh_CN", "zh_TW", "ja", "ko", "ar", "th", "hi" };
-    sal_Int16 nbOfLocale = sizeof(aLocaleList)/sizeof(aLocaleList[0]);
-
-    // return zh_TW for TW, HK and MO, return zh_CN for other zh locales.
-    if (isLang("zh")) return (isCtry("TW") || isCtry("HK") || isCtry("MO")) ? 1 : 0;
-
-    for (sal_Int16 i = 2; i < nbOfLocale; i++)
-        if (isLang(aLocaleList[i]))
-            return i;
-
-    return -1;
-}
-
 static Number natnum4[4] = {
         { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh], 0,
                 ExponentCount_CJK, MultiplierExponent_CJK },
@@ -417,12 +399,31 @@ static Number natnum10 = { NumberChar_Hangul_ko, MultiplierChar_CJK[Multiplier_H
 static Number natnum11 = { NumberChar_Hangul_ko, MultiplierChar_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ALL,
         ExponentCount_CJK, MultiplierExponent_CJK };
 
+static sal_Char *natnum1Locales[] = { "zh_CN", "zh_TW", "ja", "ko", "ar", "th", "hi", "or", "mr", "bn", "pa", "gu", "ta", "te", "kn", "ml"};
+static sal_Int16 nbOfLocale = sizeof(natnum1Locales)/sizeof(natnum1Locales[0]);
+
 static sal_Int16 natnum1[] = { NumberChar_Lower_zh, NumberChar_Lower_zh, NumberChar_Modern_ja, NumberChar_Lower_ko,
-                NumberChar_Indic_ar, NumberChar_th, NumberChar_Indic_hi };
+                NumberChar_Indic_ar, NumberChar_th, NumberChar_hi, NumberChar_or, NumberChar_mr, NumberChar_bn,
+        NumberChar_pa, NumberChar_gu, NumberChar_ta, NumberChar_te, NumberChar_kn, NumberChar_ml };
 static sal_Int16 sizeof_natnum1 = sizeof(natnum1)/sizeof(natnum1[0]);
 static sal_Int16 natnum2[] = { NumberChar_Upper_zh, NumberChar_Upper_zh_TW, NumberChar_Traditional_ja,
                 NumberChar_Upper_ko };
 static sal_Int16 sizeof_natnum2 = sizeof(natnum2)/sizeof(natnum2[0]);
+
+#define isLang(lang) rLocale.Language.equalsAsciiL(lang, 2)
+#define isCtry(ctry) rLocale.Country.equalsAsciiL(ctry, 2)
+
+static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
+{
+    // return zh_TW for TW, HK and MO, return zh_CN for other zh locales.
+    if (isLang("zh")) return (isCtry("TW") || isCtry("HK") || isCtry("MO")) ? 1 : 0;
+
+    for (sal_Int16 i = 2; i < nbOfLocale; i++)
+        if (isLang(natnum1Locales[i]))
+            return i;
+
+    return -1;
+}
 
 OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& aLocale,
                 sal_Int16 nNativeNumberMode) throw (RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-20 02:31:50 $
+ *  last change: $Author: khong $ $Date: 2002-08-07 01:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,9 +54,18 @@ static const sal_Int16 NumberChar_Upper_ko  = 8;
 static const sal_Int16 NumberChar_Hangul_ko     = 9;
 static const sal_Int16 NumberChar_Indic_ar  = 10;
 static const sal_Int16 NumberChar_EastIndic_ar  = 11;
-static const sal_Int16 NumberChar_Indic_hi  = 12;
+static const sal_Int16 NumberChar_hi        = 12;
 static const sal_Int16 NumberChar_th        = 13;
-static const sal_Int16 NumberChar_Count     = 14;
+static const sal_Int16 NumberChar_or        = 14;
+static const sal_Int16 NumberChar_mr        = 15;
+static const sal_Int16 NumberChar_bn        = 16;
+static const sal_Int16 NumberChar_pa        = 17;
+static const sal_Int16 NumberChar_gu        = 18;
+static const sal_Int16 NumberChar_ta        = 19;
+static const sal_Int16 NumberChar_te        = 20;
+static const sal_Int16 NumberChar_kn        = 21;
+static const sal_Int16 NumberChar_ml        = 22;
+static const sal_Int16 NumberChar_Count     = 23;
 
 static sal_Unicode NumberChar[][10] = {
 //  0   1   2   3   4   5   6   7   8   9
@@ -73,7 +82,16 @@ static sal_Unicode NumberChar[][10] = {
     { 0x0660, 0x0661, 0x0662, 0x0663, 0x0664, 0x0665, 0x0666, 0x0667, 0x0668, 0x0669 }, // Arabic Indic
     { 0x06F0, 0x06F1, 0x06F2, 0x06F3, 0x06F4, 0x06F5, 0x06F6, 0x06F7, 0x06F8, 0x06F9 }, // Est. Arabic Indic
     { 0x0966, 0x0967, 0x0968, 0x0969, 0x096A, 0x096B, 0x096C, 0x096D, 0x096E, 0x096F }, // Indic
-    { 0x0E50, 0x0E51, 0x0E52, 0x0E53, 0x0E54, 0x0E55, 0x0E56, 0x0E57, 0x0E58, 0x0E59 }  // Thai
+    { 0x0E50, 0x0E51, 0x0E52, 0x0E53, 0x0E54, 0x0E55, 0x0E56, 0x0E57, 0x0E58, 0x0E59 }, // Thai
+    { 0x0866, 0x0867, 0x0868, 0x0869, 0x086A, 0x086B, 0x086C, 0x086D, 0x086E, 0x086F }, // Oriya
+    { 0x0966, 0x0967, 0x0968, 0x0969, 0x096A, 0x096B, 0x096C, 0x096D, 0x096E, 0x096F }, // Marathi
+    { 0x09E6, 0x09E7, 0x09E8, 0x09E9, 0x09EA, 0x09EB, 0x09EC, 0x09ED, 0x09EE, 0x09EF }, // Bengali
+    { 0x0A66, 0x0A67, 0x0A68, 0x0A69, 0x0A6A, 0x0A6B, 0x0A6C, 0x0A6D, 0x0A6E, 0x0A6F }, // Punjabi
+    { 0x0AE6, 0x0AE7, 0x0AE8, 0x0AE9, 0x0AEA, 0x0AEB, 0x0AEC, 0x0AED, 0x0AEE, 0x0AEF }, // Gujarali
+    { 0x0030, 0x0BE7, 0x0BE8, 0x0BE9, 0x0BEA, 0x0BEB, 0x0BEC, 0x0BED, 0x0BEE, 0x0BEF }, // Tamil
+    { 0x0C66, 0x0C67, 0x0C68, 0x0C69, 0x0C6A, 0x0C6B, 0x0C6C, 0x0C6D, 0x0C6E, 0x0C6F }, // Telugu
+    { 0x0CE6, 0x0CE7, 0x0CE8, 0x0CE9, 0x0CEA, 0x0CEB, 0x0CEC, 0x0CED, 0x0CEE, 0x0CEF }, // Kannada
+    { 0x0DE6, 0x0DE7, 0x0DE8, 0x0DE9, 0x0DEA, 0x0DEB, 0x0DEC, 0x0DED, 0x0DEE, 0x0DEF }, // Malayalam
 };
 
 static sal_Unicode DecimalChar[] = {
@@ -90,7 +108,16 @@ static sal_Unicode DecimalChar[] = {
     0x066B, // Arabic Indic
     0x002E, // Est. Arabic Indic
     0x002E, // Indic
-    0x002E  // Thai
+    0x002E, // Thai
+    0x002E, // Oriya
+    0x002E, // Marathi
+    0x002E, // Bengali
+    0x002E, // Punjabi
+    0x002E, // Gujarali
+    0x002E, // Tamil
+    0x002E, // Telugu
+    0x002E, // Kannada
+    0x002E, // Malayalam
 };
 
 static sal_Unicode MinusChar[] = {
@@ -108,6 +135,15 @@ static sal_Unicode MinusChar[] = {
     0x002D, // Est. Arabic Indic
     0x002D, // Indic
     0x002D, // Thai
+    0x002D, // Oriya
+    0x002D, // Marathi
+    0x002D, // Bengali
+    0x002D, // Punjabi
+    0x002D, // Gujarali
+    0x002D, // Tamil
+    0x002D, // Telugu
+    0x002D, // Kannada
+    0x002D, // Malayalam
 };
 
 #define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
