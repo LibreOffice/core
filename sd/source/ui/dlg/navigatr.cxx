@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-23 09:37:03 $
+ *  last change: $Author: af $ $Date: 2002-11-14 17:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ SdNavigatorWin::SdNavigatorWin( Window* pParent,
     // ToolBox (Groesse anpassen funktioniert sowieso nicht!)
     Size aTbxSize( aToolbox.CalcWindowSizePixel() );
     aTbxSize.Width() = aSize.Width() - 6; //Rand
+    aTbxSize.Height() += 1;  // AF: Work arround for #105145#
     aToolbox.SetOutputSizePixel( aTbxSize );
     aToolbox.SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
     aToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
