@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-17 12:43:08 $
+ *  last change: $Author: dbo $ $Date: 2001-12-17 14:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,10 @@ inline ::com::sun::star::uno::Any AccessControl::doRestricted(
     {
         return m_xController->doRestricted( xAction, xRestriction );
     }
-    return ::com::sun::star::uno::Any();
+    else
+    {
+        return xAction->run();
+    }
 }
 //__________________________________________________________________________________________________
 inline ::com::sun::star::uno::Any AccessControl::doPrivileged(
@@ -211,7 +214,10 @@ inline ::com::sun::star::uno::Any AccessControl::doPrivileged(
     {
         return m_xController->doPrivileged( xAction, xRestriction );
     }
-    return ::com::sun::star::uno::Any();
+    else
+    {
+        return xAction->run();
+    }
 }
 //__________________________________________________________________________________________________
 inline ::com::sun::star::uno::Reference<
