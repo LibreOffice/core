@@ -2,9 +2,17 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.30 $
+<<<<<<< charmap.src
+ *  $Revision: 1.31 $
+=======
+ *  $Revision: 1.31 $
+>>>>>>> 1.30
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:26:17 $
+<<<<<<< charmap.src
+ *  last change: $Author: hdu $ $Date: 2001-08-15 07:40:19 $
+=======
+ *  last change: $Author: hdu $ $Date: 2001-08-15 07:40:19 $
+>>>>>>> 1.30
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +95,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     Text[ japanese ] = "ãLçÜÇ∆ì¡éÍï∂éö";
     Text[ chinese_traditional ] = "ØSÆÌ¶r§∏";
     Text[ arabic ] = "—„Ê“ Œ«’…";
-    Size = MAP_APPFONT ( 346 , 141 ) ;
+    Size = MAP_APPFONT ( 297 , 153 ) ;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Control CT_SHOWSET
@@ -95,13 +103,13 @@ ModalDialog RID_SVXDLG_CHARMAP
         HelpId = HID_CHARMAP_CTL_SHOWSET ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 24 ) ;
-        Size = MAP_APPFONT ( 278 , 95 ) ;
+        Size = MAP_APPFONT ( 230 , 112 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
     };
     FixedText FT_FONT
     {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Schrift" ;
         Text [ ENGLISH ] = "~Font" ;
@@ -132,15 +140,15 @@ ModalDialog RID_SVXDLG_CHARMAP
     };
     ListBox LB_FONT
     {
-        Pos = MAP_APPFONT ( 36 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 68 ) ;
+        Pos = MAP_APPFONT ( 35 , 6 ) ;
+        Size = MAP_APPFONT ( 80 , 58 ) ;
         Sort = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_SUBSET
     {
-        Pos = MAP_APPFONT ( 145 , 8 ) ;
+        Pos = MAP_APPFONT ( 120 , 7 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Subset" ;
@@ -167,15 +175,15 @@ ModalDialog RID_SVXDLG_CHARMAP
     };
     ListBox LB_SUBSET
     {
-        Pos = MAP_APPFONT ( 175 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 68 ) ;
+        Pos = MAP_APPFONT ( 149 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 68 ) ;
         Sort = FALSE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_SYMBOLE
     {
-        Pos = MAP_APPFONT ( 6 , 127 ) ;
+        Pos = MAP_APPFONT ( 6 , 139 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
         Left = TRUE ;
         Text= "Zeichen:";
@@ -201,48 +209,57 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ catalan ] = "Car·cter:";
         Text[ finnish ] = "Merkit:";
     };
+/*
+    Edit CT_SHOWTEXT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 53 , 120 ) ;
+        Size = MAP_APPFONT ( 230 , 18 ) ;
+        TabStop = TRUE ;
+    };
+*/
     Control CT_SHOWTEXT
     {
         HelpId = HID_CHARMAP_CTL_SHOWTEXT ;
-        Pos = MAP_APPFONT ( 53 , 121 ) ;
-        Size = MAP_APPFONT ( 284 , 18 ) ;
+        Pos = MAP_APPFONT ( 46 , 137 ) ;
+        Size = MAP_APPFONT ( 244 , 14 ) ;
         Group = TRUE ;
     };
     Control CT_SHOWCHAR
     {
         HelpId = HID_CHARMAP_CTL_SHOWCHAR ;
-        Pos = MAP_APPFONT ( 287 , 80 ) ;
-        Size = MAP_APPFONT ( 50 , 23 ) ;
+        Pos = MAP_APPFONT ( 241 , 79 ) ;
+        Size = MAP_APPFONT ( 50 , 44 ) ;
         Group = TRUE ;
     };
     FixedText FT_CHARCODE
     {
-        Pos = MAP_APPFONT ( 287 , 105 ) ;
+        Pos = MAP_APPFONT ( 241 , 126 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Center = TRUE ;
     };
     OKButton BTN_CHAR_OK
     {
-        Pos = MAP_APPFONT ( 287 , 6 ) ;
+        Pos = MAP_APPFONT ( 242 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CHAR_CANCEL
     {
-        Pos = MAP_APPFONT ( 287 , 23 ) ;
+        Pos = MAP_APPFONT ( 242 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_CHAR_HELP
     {
-        Pos = MAP_APPFONT ( 287 , 43 ) ;
+        Pos = MAP_APPFONT ( 242 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     PushButton BTN_DELETE
     {
-        Pos = MAP_APPFONT ( 287 , 63 ) ;
+        Pos = MAP_APPFONT ( 242 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text= "~Lˆschen";
         Text[ italian ] = "~Elimina";
@@ -617,7 +634,7 @@ String RID_SUBSETSTR_BASIC_ARABIC
         Text[ greek ] = "¡Ò·‚ÈÍ‹ ‚·ÛÈÍ‹";
         Text[ dutch ] = "Arabisch - basis";
         Text[ french ] = "Arabe de base";
-        Text[ spanish ] = "¡rabe b·sico";
+        Text[ spanish ] = "Arabe b·sico";
         Text[ italian ] = "Arabo di base";
         Text[ danish ] = "Basic Arabic";
         Text[ swedish ] = "Arabisk (standard)";
@@ -796,7 +813,7 @@ String RID_SUBSETSTR_TAMIL
         Text[ spanish ] = "Tamil";
         Text[ italian ] = "Tamil";
         Text[ danish ] = "Tamil";
-        Text[ swedish ] = "Tamil";
+        Text[ swedish ] = "Tamilsk";
         Text[ polish ] = "Tamilski";
         Text[ portuguese_brazilian ] = "Tamil";
         Text[ japanese ] = "¿–Ÿ";
@@ -2694,11 +2711,3 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
-
-
-
-
-
-
-
-
