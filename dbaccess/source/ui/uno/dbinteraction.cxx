@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 07:32:32 $
+ *  last change: $Author: fs $ $Date: 2000-10-26 18:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,17 @@
 #ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#endif
 #ifndef _SVTOOLS_LOGINDLG_HXX_
 #include <svtools/logindlg.hxx>
 #endif
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
+#endif
+#ifndef _DBAUI_PARAMDIALOG_HXX_
+#include "paramdialog.hxx"
 #endif
 
 //==========================================================================
@@ -112,8 +118,10 @@ namespace dbaui
 //.........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
+    using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::beans;
     using namespace ::dbtools;
 
     //=========================================================================
@@ -161,7 +169,55 @@ namespace dbaui
             return;
         }
 
+        ParametersRequest aParamRequest;
+        if (aRequest >>= aParamRequest)
+        {   // it's an authentification request
+            implHandle(aParamRequest, aContinuations);
+            return;
+        }
+
         DBG_ERROR("OInteractionHandler::handle: unsupported request type!");
+    }
+
+    //-------------------------------------------------------------------------
+    void OInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
+    {
+        sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
+        sal_Int32 nParamPos = getContinuation(SUPPLY_PARAMETERS, _rContinuations);
+
+        Reference< XInteractionSupplyParameters > xParamCallback;
+        if (-1 != nParamPos)
+            xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
+        DBG_ASSERT(xParamCallback.is(), "OInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
+
+        // determine the style of the dialog, dependent on the present continuation types
+        WinBits nDialogStyle = WB_OK | WB_DEF_OK;
+        if (-1 != nAbortPos)
+            nDialogStyle = WB_OK_CANCEL;
+
+        OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xORB);
+        sal_Int16 nResult = aDlg.Execute();
+        try
+        {
+            switch (nResult)
+            {
+                case RET_OK:
+                    if (xParamCallback.is())
+                    {
+                        xParamCallback->setParameters(aDlg.getValues());
+                        xParamCallback->select();
+                    }
+                    break;
+                default:
+                    if (-1 != nAbortPos)
+                        _rContinuations[nAbortPos]->select();
+                    break;
+            }
+        }
+        catch(RuntimeException&)
+        {
+            DBG_ERROR("OInteractionHandler::implHandle(ParametersRequest): caught a RuntimeException while calling the continuation callback!");
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -287,7 +343,7 @@ namespace dbaui
         DBG_ASSERT((-1 == nDisapprovePos) && (-1 == nAuthentPos), "OInteractionHandler::implHandle(SQLExceptionInfo): unsupported continuation type!");
             // "Retry" and "Authenticate" do not make sense if the request refered to an SQLException
 #endif
-        // determine the style of the dialog, dependent in the present continuation types
+        // determine the style of the dialog, dependent on the present continuation types
         WinBits nDialogStyle = WB_OK | WB_DEF_OK;
         if (-1 != nAbortPos)
             nDialogStyle = WB_OK_CANCEL;
@@ -318,7 +374,7 @@ namespace dbaui
         }
         catch(RuntimeException&)
         {
-            DBG_ERROR("OInteractionHandler::implHandle: caught a RuntimeException while calling the continuation callback!");
+            DBG_ERROR("OInteractionHandler::implHandle(SQLExceptionInfo): caught a RuntimeException while calling the continuation callback!");
         }
     }
 
@@ -350,6 +406,10 @@ namespace dbaui
                     if (Reference< XInteractionSupplyAuthentication >(*pContinuations, UNO_QUERY).is())
                         return i;
                     break;
+                case SUPPLY_PARAMETERS:
+                    if (Reference< XInteractionSupplyParameters >(*pContinuations, UNO_QUERY).is())
+                        return i;
+                    break;
             }
         }
 
@@ -364,6 +424,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/26 07:32:32  fs
+ *  special login request text, with interpreting the ServerName as data source name
+ *
  *  Revision 1.1  2000/10/25 12:59:42  fs
  *  initial checkin - InteractionHandler for common database related interaction requests
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 12:59:51 $
+ *  last change: $Author: fs $ $Date: 2000-10-26 18:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -140,6 +143,11 @@ namespace dbaui
                     const ::com::sun::star::ucb::AuthenticationRequest& _rAuthRequest,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
 
+        /// handle parameter requests
+        void    implHandle(
+                    const ::com::sun::star::sdb::ParametersRequest& _rParamRequest,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
+
         /// known continuation types
         enum Continuation
         {
@@ -147,7 +155,8 @@ namespace dbaui
             DISAPPROVE,
             RETRY,
             ABORT,
-            SUPPLY_AUTHENTICATION
+            SUPPLY_AUTHENTICATION,
+            SUPPLY_PARAMETERS
         };
         /** check if a given continuation sequence contains a given continuation type<p/>
             @return     the index within <arg>_rContinuations</arg> of the first occurence of a continuation
@@ -167,6 +176,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/25 12:59:51  fs
+ *  initial checkin - InteractionHandler for common database related interaction requests
+ *
  *
  *  Revision 1.0 25.10.00 10:18:27  fs
  ************************************************************************/
