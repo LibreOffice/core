@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:07:00 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3101,7 +3101,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
         aDir = INetURLObject( OStringToOUString( getDirectory( *dir_it ), aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         nDirID = *dir_it;
         INetURLObject aFDir( aDir );
-        ByteString aDirPath( aFDir.PathToFileName(), aEncoding );
+        ByteString aDirPath( String(aFDir.PathToFileName()), aEncoding );
         if( createPath( aDirPath ) )
         {
             aFDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "fonts.dir" ) ) );
@@ -3140,7 +3140,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
             if( pCallback && pCallback->isCanceled() )
                 break;
 
-            if( ! access( ByteString( aTo.PathToFileName(), aEncoding ).GetBuffer(), F_OK ) )
+            if( ! access( ByteString( String(aTo.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
             {
                 if( ! ( pCallback ? pCallback->queryOverwriteFile( aTo.PathToFileName() ) : false ) )
                     continue;
@@ -3148,24 +3148,24 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
             // look for afm if necessary
             OUString aAfmCopied;
             FileBase::RC nError;
-            if( aFrom.getExtension().EqualsIgnoreCaseAscii( "pfa" ) ||
-                aFrom.getExtension().EqualsIgnoreCaseAscii( "pfb" ) )
+            if( aFrom.getExtension().equalsIgnoreAsciiCaseAscii( "pfa" ) ||
+                aFrom.getExtension().equalsIgnoreAsciiCaseAscii( "pfb" ) )
             {
                 INetURLObject aFromAfm( aFrom );
-                aFromAfm.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
-                if( access( ByteString( aFromAfm.PathToFileName(), aEncoding ).GetBuffer(), F_OK ) )
+                aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
+                if( access( ByteString( String(aFromAfm.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
                 {
-                    aFromAfm.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "AFM" ) ) );
-                    if( access( ByteString( aFromAfm.PathToFileName(), aEncoding ).GetBuffer(), F_OK ) )
+                    aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AFM" ) ) );
+                    if( access( ByteString( String(aFromAfm.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
                     {
                         aFromAfm.removeSegment();
                         aFromAfm.Append( String( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
                         aFromAfm.Append( aTo.GetName() );
-                        aFromAfm.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
-                        if( access( ByteString( aFromAfm.PathToFileName(), aEncoding ).GetBuffer(), F_OK ) )
+                        aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
+                        if( access( ByteString( String(aFromAfm.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
                         {
-                            aFromAfm.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "AFM" ) ) );
-                            if( access( ByteString( aFromAfm.PathToFileName(), aEncoding ).GetBuffer(), F_OK ) )
+                            aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AFM" ) ) );
+                            if( access( ByteString( String(aFromAfm.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
                             {
                                 // give up
                                 if( pCallback )
@@ -3176,12 +3176,14 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                     }
                 }
                 INetURLObject aToAfm( aTo );
-                aToAfm.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
+                aToAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
                 OUString aFromPath, aToPath;
                 if( bLinkOnly )
                 {
-                    ByteString aFromPath( aFromAfm.PathToFileName(), aEncoding );
-                    ByteString aToPath( aToAfm.PathToFileName(), aEncoding );
+                    ByteString aFromPath( String(aFromAfm.PathToFileName()),
+                        aEncoding );
+                    ByteString aToPath( String(aToAfm.PathToFileName()),
+                        aEncoding );
                     nError = (FileBase::RC)symlink( aFromPath.GetBuffer(), aToPath.GetBuffer() );
                 }
                 else
@@ -3196,9 +3198,11 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
             }
             if( bLinkOnly )
             {
-                ByteString aFromPath( aFrom.PathToFileName(), aEncoding );
-                ByteString aToPath( aTo.PathToFileName(), aEncoding );
-                nError = (FileBase::RC)symlink( aFromPath.GetBuffer(), aToPath.GetBuffer() );
+                ByteString aFromPath( String(aFrom.PathToFileName()),
+                    aEncoding );
+                ByteString aToPath( String(aTo.PathToFileName()), aEncoding );
+                nError = (FileBase::RC)symlink( aFromPath.GetBuffer(),
+                    aToPath.GetBuffer() );
             }
             else
                 nError = File::copy( aFrom.GetMainURL(INetURLObject::DECODE_TO_IURI), aTo.GetMainURL(INetURLObject::DECODE_TO_IURI) );
@@ -3258,7 +3262,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                     m_aFonts[ m_nNextFontID++ ] = *it;
                     m_pFontCache->updateFontCacheEntry( *it, false );
 
-                    aLine = ByteString( aTo.GetName(), aEncoding );
+                    aLine = ByteString( String(aTo.GetName()), aEncoding );
                     aLine += ' ';
                     aLine += ByteString( getXLFD( *it ) );
 
@@ -3266,7 +3270,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                     if( (*it)->m_eType == fonttype::TrueType )
                         nTTCnumber = static_cast<TrueTypeFontFile*>(*it)->m_nCollectionEntry;
 
-                    ByteString aFile( aTo.GetName(), aEncoding );
+                    ByteString aFile( String(aTo.GetName()), aEncoding );
                     for( line_it = aLines.begin(); line_it != aLines.end(); ++line_it )
                     {
                         if( line_it->GetToken( 0, ' ' ).Equals( aFile ) )
@@ -3327,7 +3331,7 @@ bool PrintFontManager::checkImportPossible() const
         // there must be a writable fonts.dir in that directory
         aDir = INetURLObject( OStringToOUString( *dir_it, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         INetURLObject aFDir( aDir );
-        ByteString aDirPath( aFDir.PathToFileName(), aEncoding );
+        ByteString aDirPath( String(aFDir.PathToFileName()), aEncoding );
         if( createPath( aDirPath ) )
         {
             aFDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "fonts.dir" ) ) );
@@ -3571,7 +3575,7 @@ bool PrintFontManager::removeFonts( const ::std::list< fontID >& rFonts )
             INetURLObject aFontsDirPath( String( aFile, osl_getThreadTextEncoding() ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
             aFontsDirPath.CutName();
             aFontsDirPath.Append( String( RTL_CONSTASCII_USTRINGPARAM( "fonts.dir" ) ) );
-            ByteString aFontsDirSysPath( aFontsDirPath.PathToFileName(), osl_getThreadTextEncoding() );
+            ByteString aFontsDirSysPath( String(aFontsDirPath.PathToFileName()), osl_getThreadTextEncoding() );
             if( ! access( aFontsDirSysPath.GetBuffer(), R_OK | W_OK ) )
             {
                 SvFileStream aFontsDir( aFontsDirPath.PathToFileName(), STREAM_READ | STREAM_WRITE );
