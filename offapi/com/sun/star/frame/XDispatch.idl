@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatch.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module frame {
+module com {  module sun {  module star {  module frame {
 
 //=============================================================================
 
@@ -88,16 +88,9 @@
 /** serves state information of objects which can be connected to
     controllers (e.g. toolbox controllers).
 
-
-
     <p>Each state change is to be broadcast to all registered
     status listeners. The first notification should be performed
-    synchronously from
-
-
-
-
-    ;
+    synchronously from <member>XDispatch::addStatusListener</member>;
     if not, controllers may flicker. State listener must be aware of this
     synchronous notification.</p>
 
@@ -106,9 +99,11 @@
     whenever this state changes or the controller should reget the value
     for the URL to which it is connected. Additionally a context-switch-event
     is to be broadcast whenever the object may be out of scope
-    to force the state listener to requery the <type>XDispatch</type>.</p>@see      StatusEvent
-        @see        Frame
-        @see        View
+    to force the state listener to requery the <type>XDispatch</type>.</p>
+
+    @see        StatusEvent
+    @see        Frame
+    @see        View
  */
 [ uik(E2280122-33D6-11D1-AABE00A0-249D5590), ident( "XDispatch", 1.0 ) ]
 interface XDispatch: com::sun::star::uno::XInterface
@@ -118,19 +113,13 @@ interface XDispatch: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::frame::XDispatch::dispatch
     /** dispatches (executes) an URL asynchronously.
 
-
-
         <p>It is only allowed to dispatch URLs for which you get this
         <type>XDispatch</type>. Additional arguments "'#..." or "?...") are
         allowed.</p>
 
+        @example
 
-
-
-
-
-
-        @example <listing>
+        <listing>
         // some code for a click-handler of a hyperlink in a view
         XFrame xTargetFrame = m_xFrame-&amp;gt;findFrame(
         m_aHyperlink-&amp;gt;getTargetFrameName(), FRAME_SEARCH_STANDARD );
@@ -149,8 +138,6 @@ interface XDispatch: com::sun::star::uno::XInterface
     /** registers a listener of a controller for a specific URL
         to this object to receive status events.
 
-
-
         <p>It is only allowed to register for URLs for which you got this
         <type>XDispatch</type>. Additional arguments ("#..." or "?...") will be ignored.</p>@see Dispatch#removeStatusListener(XListener, URL)
      */
@@ -160,7 +147,9 @@ interface XDispatch: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::frame::XDispatch::removeStatusListener
-    /** unregisters a listener of a controller.@see Dispatch#addStatusListener(XListener, URL)
+    /** unregisters a listener of a controller.
+
+        @see Dispatch#addStatusListener(XListener, URL)
      */
     [oneway] void removeStatusListener( [in] com::sun::star::frame::XStatusListener xControl,
              [in] com::sun::star::util::URL aURL );
@@ -174,6 +163,9 @@ interface XDispatch: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:14  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:21  hjs
     initial import
 
