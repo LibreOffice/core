@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleAction.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2003-05-22 13:29:36 $
+ *  last change:$Date: 2003-09-08 10:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,9 @@
 
 package ifc.accessibility;
 
-import lib.MultiMethodTest;
 import com.sun.star.accessibility.XAccessibleAction;
 
 public class _XAccessibleAction extends lib.MultiMethodTest {
-
-     private static final String className =
-        "com.sun.star.accessibility.XAccessibleAction";
-
-    // temporary while accessibility package is in com.sun.star
-    protected String getTestedClassName() {
-        return className;
-    }
 
     public XAccessibleAction oObj = null;
     public int count = 0;
