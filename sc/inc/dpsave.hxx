@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:55:09 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,8 @@ private:
     USHORT      nRowGrandMode;
     USHORT      nIgnoreEmptyMode;
     USHORT      nRepeatEmptyMode;
+    BOOL        bFilterButton;      // not passed to DataPilotSource
+    BOOL        bDrillDown;         // not passed to DataPilotSource
 
 public:
                             ScDPSaveData();
@@ -229,6 +231,9 @@ public:
     ScDPSaveDimension*      GetExistingDimensionByName(const String& rName);
     ScDPSaveDimension*      GetNewDimensionByName(const String& rName);
 
+    ScDPSaveDimension*      GetInnermostDimension(USHORT nOrientation);
+    long                    GetDataDimensionCount() const;
+
     void                    SetPosition( ScDPSaveDimension* pDim, long nNew );
     void                    SetColumnGrand( BOOL bSet );
     BOOL                    GetColumnGrand() const { return BOOL(nColumnGrandMode); }
@@ -238,6 +243,11 @@ public:
     BOOL                    GetIgnoreEmptyRows() const { return BOOL(nIgnoreEmptyMode); }
     void                    SetRepeatIfEmpty( BOOL bSet );
     BOOL                    GetRepeatIfEmpty() const { return BOOL(nRepeatEmptyMode); }
+
+    void                    SetFilterButton( BOOL bSet );
+    BOOL                    GetFilterButton() const { return bFilterButton; }
+    void                    SetDrillDown( BOOL bSet );
+    BOOL                    GetDrillDown() const { return bDrillDown; }
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::sheet::XDimensionsSupplier>& xSource );
