@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 10:31:19 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,7 +913,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
     Rectangle aR( aOutArea );
     aR = pOutWin->LogicToPixel( aR );
     aR = pOutWin->PixelToLogic( aR );
-    DBG_ASSERT( aR == aOutArea, "OutArea vor Scroll nicht aligned" );
+    DBG_ASSERTWARNING( aR == aOutArea, "OutArea vor Scroll nicht aligned" );
 #endif
 
     Rectangle aNewVisArea( GetVisDocArea() );
