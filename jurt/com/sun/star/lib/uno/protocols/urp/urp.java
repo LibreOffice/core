@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 16:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:53 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-09-28 16:53:48 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -119,19 +119,27 @@ public class urp extends Protocol {
     private Type     _out_interface;
     private ThreadID _out_threadId;
 
+    private int       _message_count;
+    private boolean   _ignore_cache;
     private Marshal   _marshal;
     private Unmarshal _unmarshal;
 
-    static private final byte BIG_HEADER = (byte)0x80;
-    static private final byte REQUEST    = 0x40;
-    static private final byte INTERFACE  = 0x20;
-    static private final byte OID        = 0x10;
-    static private final byte THREADID   = 0x08;
-    static private final byte MID_USHORT = 0x04;
-    static private final byte ONEWAY     = 0x02;
+    static private final byte BIG_HEADER   = (byte)0x80;
+    // big header flags
+    static private final byte REQUEST      = 0x40;
+    static private final byte NEWTYPE      = 0x20;
+    static private final byte NEWOID       = 0x10;
+    static private final byte NEWTID       = 0x08;
+    static private final byte LONGMETHODID = 0x04;
+    static private final byte IGNORECACHE  = 0x02;
+    static private final byte MOREFLAGS    = 0x01;
 
-    static private final byte DIR_MID    = 0x40;
-    static private final byte EXCEPTION  = 0x20;
+    // MOREFLAGS flags
+    static private final byte MUSTREPLY    = (byte)0x80;
+    static private final byte SYNCHRONOUSE = (byte)0x40;
+
+    static private final byte DIR_MID      = 0x40;
+    static private final byte EXCEPTION    = 0x20;
 
 
 
@@ -184,7 +192,7 @@ public class urp extends Protocol {
     }
 
     private Object readReply(byte header, boolean exception[]) throws Exception {
-        if((header & THREADID) != 0) // new thread id ?
+        if((header & NEWTID) != 0) // new thread id ?
             _in_threadId = _unmarshal.readThreadID();
 
         // get the out signature and parameter array of the reply
@@ -264,25 +272,38 @@ public class urp extends Protocol {
 
         // read the method id
         int methodId = 0;
-        if((header & MID_USHORT) != 0) // usigned short ?
+        if((header & LONGMETHODID) != 0) // usigned short ?
             methodId = _unmarshal.readshort();
         else
             methodId = _unmarshal.readbyte();
 
-        if((header & INTERFACE) != 0)
+        if((header & NEWTYPE) != 0)
             _in_interface = _unmarshal.readType();
 
-        if((header & OID) != 0) // new oid?
+        if((header & NEWOID) != 0) // new oid?
             _in_oid = _unmarshal.readOid();
 
-        if((header & THREADID) != 0) // new thread id ?
+        if((header & NEWTID) != 0) // new thread id ?
             _in_threadId = _unmarshal.readThreadID();
 
+        _ignore_cache = ((header & IGNORECACHE) != 0); // do not use cache for this request?
+
         MMDesc mMDesc = getMMDesc(_in_interface.getDescription(), methodId);
+        boolean mustReply;
+
+        if((header & MOREFLAGS) != 0) {// is there an extended flags byte?
+            byte exFlags = _unmarshal.readbyte();
+
+            mustReply   = (exFlags & MUSTREPLY) != 0;
+            synchron[0] = (exFlags & SYNCHRONOUSE) != 0;
+        }
+        else {
+            // the typeinfo does not differentiate between MUSTREPLY and SYNCHRONOUSE
+            synchron[0] = mMDesc._methodTypeInfo != null ? !mMDesc._methodTypeInfo.isOneway() : true;
+            mustReply = synchron[0];
+        }
 
         operation[0] = mMDesc._name;
-
-        synchron[0] = (header & ONEWAY) == 0;
 
         param[0] = readParams(mMDesc);
 
@@ -312,11 +333,18 @@ public class urp extends Protocol {
     }
 
 
-    public void writeRequest(String oid, Type zInterface, String operation, ThreadID threadId, Object params[], Boolean synchron[]) throws Exception {
+    public void writeRequest(String oid,
+                             Type zInterface,
+                             String operation,
+                             ThreadID threadId,
+                             Object params[],
+                             Boolean synchron[],
+                             Boolean mustReply[]) throws Exception
+   {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeRequest:" + oid + " " + zInterface + " " + operation);
 
         ++ _requestsSend;
-
+        ++ _message_count;
         synchronized(_marshal) {
             MMDesc mMDesc = getMMDesc(zInterface.getDescription(), operation);
 
@@ -324,7 +352,7 @@ public class urp extends Protocol {
             boolean bigHeader = false;
 
             if(_out_oid == null || !oid.equals(_out_oid)) { // change the oid?
-                header |= OID;
+                header |= NEWOID;
 
                 _out_oid = oid;
                 bigHeader = true;
@@ -334,7 +362,7 @@ public class urp extends Protocol {
 
 
             if(_out_interface == null || !_out_interface.equals(zInterface)) { // change interface
-                header |= INTERFACE;
+                header |= NEWTYPE;
 
                 _out_interface = zInterface;
                 bigHeader = true;
@@ -343,7 +371,7 @@ public class urp extends Protocol {
                 zInterface = null;
 
             if(_out_threadId == null || !_out_threadId.equals(threadId)) { // change thread id
-                header |= THREADID;
+                header |= NEWTID;
 
                 _out_threadId = threadId;
 
@@ -352,10 +380,13 @@ public class urp extends Protocol {
             else
                 threadId = null;
 
+            boolean hasExFlags = false;
+
             // if the type of request is provided, test if it differs from declaration
             if(synchron[0] != null) {
                 if(mMDesc._methodTypeInfo != null && mMDesc._methodTypeInfo.isOneway() == synchron[0].booleanValue()) {
                     bigHeader = true;
+                    hasExFlags = true;
                 }
             }
             else if(mMDesc._methodTypeInfo != null) // if the request type is not provided, use the typeInfo if available
@@ -364,15 +395,37 @@ public class urp extends Protocol {
                 synchron[0] = new Boolean(true);
 
 
+            // if the type of request is provided, test if it differs from declaration
+            if(mustReply[0] != null) {
+                if(mMDesc._methodTypeInfo != null && mMDesc._methodTypeInfo.isOneway() == mustReply[0].booleanValue()) {
+                    bigHeader = true;
+                    hasExFlags = true;
+                }
+            }
+            else if(mMDesc._methodTypeInfo != null) // if the request type is not provided, use the typeInfo if available
+                mustReply[0] = new Boolean(!mMDesc._methodTypeInfo.isOneway());
+            else // if no request type provided and no typeInfo available fall back to synchron
+                mustReply[0] = new Boolean(true);
+
+
             if(bigHeader) { // something has changed, send big header
                 header |= BIG_HEADER; // big header
                 header |= REQUEST;
-                header |= synchron[0].booleanValue() ? 0 : ONEWAY;
+                header |= hasExFlags ? MOREFLAGS : 0;
 
                 if(mMDesc._index > 255)
-                    header |= MID_USHORT;
+                    header |= LONGMETHODID;
 
                 _marshal.writebyte(header);
+
+                if(hasExFlags) {// are there extended flags to write?
+                    byte exFlags = 0;
+
+                    exFlags |= synchron[0].booleanValue() ? SYNCHRONOUSE : 0;
+                    exFlags |= mustReply[0].booleanValue() ? MUSTREPLY : 0;
+
+                    _marshal.writebyte(exFlags);
+                }
 
                 // write the method id
                 if(mMDesc._index > 255)
@@ -435,7 +488,7 @@ public class urp extends Protocol {
             }
 
             if(_out_threadId == null || !_out_threadId.equals(threadId)) { // change thread id ?
-                header |= THREADID;
+                header |= NEWTID;
 
                 _out_threadId = threadId;
             }
@@ -459,28 +512,23 @@ public class urp extends Protocol {
 
 
     private byte []readBlock(DataInput dataInput) throws Exception {
-        int size = dataInput.readUnsignedByte();
-        if(size == 0xff)
-            size = dataInput.readInt();
+        int size = dataInput.readInt();
+        int message_count = dataInput.readInt();
 
         byte bytes[] = new byte[size];
 
         dataInput.readFully(bytes);
 
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readBlock:" + size);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readBlock: size:" + size + " message count:" + message_count);
 
         return bytes;
     }
 
-    private void writeBlock(DataOutput  dataOutput, byte bytes[]) throws Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeBlock:" + bytes.length);
+    private void writeBlock(DataOutput  dataOutput, byte bytes[], int message_count) throws Exception {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeBlock: size:" + bytes.length + " message_count:" + message_count);
 
-        if(bytes.length >= 255) {
-            dataOutput.writeByte((byte)0xff);
-            dataOutput.writeInt(bytes.length);
-        }
-        else
-            dataOutput.writeByte((byte)bytes.length);
+        dataOutput.writeInt(bytes.length);
+        dataOutput.writeInt(message_count);
 
         dataOutput.write(bytes);
     }
@@ -604,7 +652,8 @@ public class urp extends Protocol {
 
 
     public void flush(DataOutput  dataOutput) throws Exception {
-        writeBlock(dataOutput, _marshal.reset());
+        writeBlock(dataOutput, _marshal.reset(), _message_count);
+        _message_count = 0;
     }
 
     public IMarshal createMarshal() {
