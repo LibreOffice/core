@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:32:04 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2241,21 +2241,38 @@ ScDPMembers::~ScDPMembers()
     }
 }
 
-// very simple XNameAccess implementation using getCount/getByIndex
+// XNameAccess implementation using getCount/getByIndex
+
+sal_Int32 ScDPMembers::GetIndexFromName( const ::rtl::OUString& rName ) const
+{
+    if ( aHashMap.empty() )
+    {
+        // store the index for each name
+
+        sal_Int32 nCount = getCount();
+        for (sal_Int32 i=0; i<nCount; i++)
+            aHashMap[ getByIndex(i)->getName() ] = i;
+    }
+
+    ScDPMembersHashMap::const_iterator aIter = aHashMap.find( rName );
+    if ( aIter != aHashMap.end() )
+        return aIter->second;           // found index
+    else
+        return -1;                      // not found
+}
 
 uno::Any SAL_CALL ScDPMembers::getByName( const rtl::OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    long nCount = getCount();
-    for (long i=0; i<nCount; i++)
-        if ( getByIndex(i)->getName() == aName )
-        {
-            uno::Reference<container::XNamed> xNamed = getByIndex(i);
-            uno::Any aRet;
-            aRet <<= xNamed;
-            return aRet;
-        }
+    sal_Int32 nIndex = GetIndexFromName( aName );
+    if ( nIndex >= 0 )
+    {
+        uno::Reference<container::XNamed> xNamed = getByIndex(nIndex);
+        uno::Any aRet;
+        aRet <<= xNamed;
+        return aRet;
+    }
 
     throw container::NoSuchElementException();
     return uno::Any();
@@ -2273,11 +2290,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::
 
 sal_Bool SAL_CALL ScDPMembers::hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
 {
-    long nCount = getCount();
-    for (long i=0; i<nCount; i++)
-        if ( getByIndex(i)->getName() == aName )
-            return TRUE;
-    return FALSE;
+    return ( GetIndexFromName( aName ) >= 0 );
 }
 
 uno::Type SAL_CALL ScDPMembers::getElementType() throw(uno::RuntimeException)
