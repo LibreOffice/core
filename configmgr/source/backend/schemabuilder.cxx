@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-17 13:21:22 $
+ *  last change: $Author: jb $ $Date: 2002-07-04 08:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,8 @@ void SAL_CALL SchemaBuilder::endSchema(  )
 void SAL_CALL SchemaBuilder::importComponent( const OUString& aName )
     throw (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "Cross-componnet references are not yet supported");
+    OSL_TRACE("WARNING: Configuration schema parser: Cross-component references are not yet supported\n");
+    // OSL_ENSURE(false, "Cross-component references are not yet supported");
 }
 // -----------------------------------------------------------------------------
 
@@ -208,7 +209,7 @@ void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemp
     if (aTemplate.Component.getLength() == NULL)
         m_aContext.raiseIllegalArgumentException("Schema builder: Starting template without owning component",1);
 
-    if (m_aData.hasTemplate(aTemplate) == NULL)
+    if (m_aData.hasTemplate(aTemplate))
         m_aContext.raiseElementExistException("Schema builder: Template already exists",aTemplate.Name);
 
     OUString aName = m_aData.getTemplateAccessor(aTemplate);
@@ -231,7 +232,7 @@ void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTempla
     if (aTemplate.Component.getLength() == NULL)
         m_aContext.raiseIllegalArgumentException("Schema builder: Starting template without owning component",1);
 
-    if (m_aData.hasTemplate(aTemplate) == NULL)
+    if (m_aData.hasTemplate(aTemplate))
         m_aContext.raiseElementExistException("Schema builder: Template already exists",aTemplate.Name);
 
     OUString aName = m_aData.getTemplateAccessor(aTemplate);

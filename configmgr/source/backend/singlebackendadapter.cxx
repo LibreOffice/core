@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:28:57 $
+ *  last change: $Author: jb $ $Date: 2002-07-04 08:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ SAL_CALL SingleBackendAdapter::getUpdateHandler(const rtl::OUString& aComponent,
             uno::RuntimeException)
 {
     static const rtl::OUString kUpdateMerger(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.backend.UpdateMerger")) ;
+                "com.sun.star.configuration.backend.LayerUpdateMerger")) ;
     uno::Sequence<uno::Any> arguments(1) ;
 
     arguments [0] <<= mBackend->getUpdatableLayer(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-07 12:01:22 $
+ *  last change: $Author: jb $ $Date: 2002-07-04 08:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,8 +244,6 @@ void SAL_CALL
 
     if (!m_aBuilder.modifyProperty(aName,aAttributes,aAttributeMask,uno::Type()))
         raisePropChangedBeforeException("LayerUpdateHandler: Cannot start property modification - property has already been changed.");
-
-    OSL_VERIFY( m_aBuilder.finishProperty() );
 }
 // -----------------------------------------------------------------------------
 

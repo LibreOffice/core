@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-17 13:21:22 $
+ *  last change: $Author: jb $ $Date: 2002-07-04 08:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,10 +381,13 @@ ISubtree * DataBuilderContext::findNode(OUString const & _aName)
         CFG_THROW2( MalformedDataException, uno::RuntimeException )
 {
     INode * pResult = findChild(_aName);
-    if (pResult && !isNode(pResult))
-    {
+
+    if (!pResult)
+        return NULL;
+
+    if (!isNode(pResult))
         raiseMalformedDataException("Component Builder Context: Found an existing property, where an inner node was expected");
-    }
+
     OSL_ASSERT(pResult->ISA(ISubtree));
     return pResult->asISubtree();
 }

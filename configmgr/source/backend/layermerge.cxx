@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
+ *  last change: $Author: jb $ $Date: 2002-07-04 08:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,6 +757,70 @@ uno::Any LayerMergeHandler::Converter::convertValue(uno::Type const & _aTargetTy
     return uno::Any();
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+namespace
+{
+// -----------------------------------------------------------------------------
+    static inline bool isFinal(node::Attributes const& _aAttributes)
+    {
+        return _aAttributes.bFinalized || !_aAttributes.bWritable;
+    }
+    // --------------------------------- AttributeSetter ---------------------------------
+
+    class DefaultPromoter : NodeModification
+    {
+        node::State m_state;
+        bool        m_bPromoteFinalized;
+    public:
+        explicit
+        DefaultPromoter(bool _bPromoteFinalized = true)
+        : m_bPromoteFinalized(_bPromoteFinalized)
+        {}
+
+        void adjustAccess(INode& _rNode);
+
+        using NodeModification::applyToNode;
+    private:
+        void handle(ValueNode& _rValueNode);
+        void handle(ISubtree& _rSubtree);
+    };
+// -----------------------------------------------------------------------------
+
+    void DefaultPromoter::adjustAccess(INode& _rNode)
+    {
+        node::Attributes const aOldAttributes = _rNode.getAttributes();
+
+        if (m_bPromoteFinalized)
+            _rNode.modifyAccess(!isFinal(aOldAttributes),false);
+    }
+// -----------------------------------------------------------------------------
+
+    void DefaultPromoter::handle(ValueNode& _rValueNode)
+    {
+        _rValueNode.promoteToDefault();
+        adjustAccess(_rValueNode);
+    }
+// -----------------------------------------------------------------------------
+
+    void DefaultPromoter::handle(ISubtree& _rSubtree)
+    {
+        _rSubtree.markAsDefault();
+        this->applyToChildren(_rSubtree);
+        adjustAccess(_rSubtree);
+    }
+//--------------------------------------------------------------------------
+
+}
+// -----------------------------------------------------------------------------
+void promoteToDefault(MergedComponentData & _rTree)
+{
+    if (ISubtree * pTreeData = _rTree.getSchemaTree())
+        DefaultPromoter().applyToNode(*pTreeData);
+
+    else
+        OSL_ENSURE(false,"No Data to promote to default");
+
+}
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

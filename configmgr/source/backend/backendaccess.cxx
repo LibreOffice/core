@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:38:50 $
+ *  last change: $Author: jb $ $Date: 2002-07-04 08:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,14 @@ static NodeResult merge(
         const rtl::OUString& aLocale,
         const AbsolutePath& aRootPath)
 {
-    for (sal_Int32 i = 0 ; i < aNbLayers ; ++ i) {
-        //TODO Reactivate once the method is implemented
-        //promoteToDefault(aData) ;
-        aLayers [i]->readData(new LayerMergeHandler(aFactory, aData, aLocale)) ;
+    LayerMergeHandler * pMerger = new LayerMergeHandler(aFactory, aData, OUString());
+    uno::Reference<backenduno::XLayerHandler> xLayerMerger(pMerger);
+
+    for (sal_Int32 i = 0 ; i < aNbLayers ; ++ i)
+    {
+        promoteToDefault(aData) ;
+        aLayers [i]->readData(xLayerMerger) ;
+
         uno::Reference<backenduno::XCompositeLayer> compositeLayer(
                 aLayers [i], uno::UNO_QUERY) ;
 
@@ -137,9 +141,11 @@ static NodeResult merge(
             rtl::OUString bestLocale = findBestLocale(
                     compositeLayer->listSubLayerIds(), aLocale) ;
 
+            LayerMergeHandler * pLocaleMerger = new LayerMergeHandler(aFactory, aData, bestLocale);
+            uno::Reference<backenduno::XLayerHandler> xLocaleMerger(pLocaleMerger);
+
             if (bestLocale.getLength() > 0) {
-                compositeLayer->readSubLayerData(new LayerMergeHandler(
-                            aFactory, aData, aLocale), bestLocale) ;
+                compositeLayer->readSubLayerData(xLocaleMerger, bestLocale) ;
             }
         }
     }
@@ -159,7 +165,7 @@ NodeResult BackendAccess::getNodeData(const NodeRequest& aRequest,
     uno::Reference<backenduno::XSchema> schema ;
 
     getSchemaAndLayers(aRequest, schema, layers) ;
-    schema->readTemplates(schemaHandler) ;
+    schema->readSchema(schemaHandler) ;
     return merge(mFactory, schemaBuilder->result(), layers, layers.getLength(),
                  aRequest.getOptions().getLocale(), aRequest.getPath()) ;
 }
@@ -193,7 +199,7 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
     uno::Reference<backenduno::XSchema> schema ;
 
     getSchemaAndLayers(aRequest, schema, layers) ;
-    schema->readComponent(schemaHandler) ;
+    schema->readSchema(schemaHandler) ;
     return merge(mFactory, schemaBuilder->result(), layers,
                  layers.getLength() - 1, aRequest.getOptions().getLocale(),
                  aRequest.getPath()) ;
@@ -209,14 +215,22 @@ TemplateResult BackendAccess::getTemplateData(const TemplateRequest& aRequest)
     uno::Reference<backenduno::XSchemaHandler> handler = schemaBuilder ;
 
     schema->readTemplates(handler) ;
-    backenduno::TemplateIdentifier templateId ;
 
-    templateId.Name = aRequest.getTemplateName().toString() ;
-    templateId.Component = aRequest.getComponentName().toString() ;
-    TemplateInstance retCode(
-            schemaBuilder->result().extractTemplateNode(templateId),
-            aRequest.getTemplateName(), aRequest.getComponentName()) ;
+    TemplateInstance::Data aResultData;
+    if (aRequest.isComponentRequest())
+    {
+        aResultData.reset( schemaBuilder->result().extractTemplatesTree().release() );
+    }
+    else
+    {
+        backenduno::TemplateIdentifier templateId ;
+        templateId.Name = aRequest.getTemplateName().toString() ;
+        templateId.Component = aRequest.getComponentName().toString() ;
 
+        aResultData = schemaBuilder->result().extractTemplateNode(templateId);
+    }
+
+    TemplateInstance retCode(aResultData,aRequest.getTemplateName(), aRequest.getComponentName()) ;
     return TemplateResult(retCode) ;
 }
 //------------------------------------------------------------------------------
