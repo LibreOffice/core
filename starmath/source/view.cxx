@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:50:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@
 #include <svtools/transfer.hxx>
 #endif
 
+#include <sfx2/objface.hxx>
 
 #ifndef VIEW_HXX
 #include "view.hxx"
@@ -439,7 +440,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 {
     BOOL bCallBase = TRUE;
-    if ( !pViewShell->GetDoc()->IsInPlaceActive() )
+    if ( !pViewShell->GetViewFrame()->GetFrame()->IsInPlace() )
     {
         switch ( rCEvt.GetCommand() )
         {
@@ -839,42 +840,16 @@ void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
 
 void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
 {
-    //Ein bischen muessen wir schon raten was die Basisklasse tun wird.
-    //Die Scrollbars muessen einkalkuliert werden damit sie Aussen sitzen,
-    //denn genau dafuer steht ja das InnerResize
-    const Size aDocSz = aGraphic.LogicToPixel( GetDoc()->GetSize() );
-          Size aSize( rSize );
-
-    SvBorder aBorder;
-
-
-    if ( aSize.Width() < aDocSz.Width() )
+    Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
+    if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
     {
-        if ( 1 == (aDocSz.Width() - aSize.Width()) )
-        {
-            //Einen Pixel daneben, kann ja mal passieren.
-            aSize.Width() += 1;
-        }
-        else
-        {
-            aBorder.Bottom() = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
-            aSize.Height() += aBorder.Bottom();
-        }
+        Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_100TH_MM );
+        SfxViewShell::SetZoomFactor( Fraction( rSize.Width(),aObjSizePixel.Width() ),
+                        Fraction( rSize.Height(),aObjSizePixel.Height() ) );
     }
-    if ( aSize.Height() < aDocSz.Height() )
-    {
-        if ( 1 == (aDocSz.Height() - aSize.Height()) )
-        {
-            aSize.Height() += 1;
-        }
-        else
-        {
-            aBorder.Right() = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
-            aSize.Width() += aBorder.Right();
-        }
-    }
-    SetBorderPixel( aBorder );
-    GetGraphicWindow().SetPosSizePixel(rOfs, aSize);
+
+    SetBorderPixel( SvBorder() );
+    GetGraphicWindow().SetPosSizePixel(rOfs, rSize);
     GetGraphicWindow().SetTotalSize();
 }
 
@@ -1535,7 +1510,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_ATTR_ZOOM:
         {
-            if ( !GetDoc()->IsInPlaceActive() )
+            if ( !GetViewFrame()->GetFrame()->IsInPlace() )
             {
                 //CHINA001 SvxZoomDialog *pDlg = 0;
                 AbstractSvxZoomDialog *pDlg = 0;
@@ -1638,7 +1613,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_ZOOMIN:
         case SID_ZOOMOUT:
         case SID_FITINWINDOW:
-            if ( GetDoc()->IsInPlaceActive() )
+            if ( GetViewFrame()->GetFrame()->IsInPlace() )
                 rSet.DisableItem( nWh );
             break;
 
