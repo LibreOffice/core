@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-27 13:18:56 $
+ *  last change: $Author: kz $ $Date: 2002-02-28 17:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1890,7 +1890,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text[ chinese_traditional ] = "ι»θªε€Ό(~D)";
         Text[ arabic ] = "ήνγΙ ΗέΚΡΗΦνΙ";
         Text[ greek ] = "Προεπιλεγμένη τιμή";
-        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "~Standart deπer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor per ~defecte";
@@ -2014,7 +2014,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ chinese_traditional ] = "ι»θªε€Ό(~D)";
         Text[ arabic ] = "ήνγΙ ΗέΚΡΗΦνΙ";
         Text[ greek ] = "Προεπιλεγμένη τιμή";
-        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "~Standart deπer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor per ~defecte";
@@ -2139,7 +2139,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ chinese_traditional ] = "ι»θªε€Ό(~D)";
         Text[ arabic ] = "ήνγΙ ΗέΚΡΗΦνΙ";
         Text[ greek ] = "Προεπιλεγμένη τιμή";
-        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "~Standart deπer";
         Text[ catalan ] = "Valor per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
@@ -2261,7 +2261,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ chinese_traditional ] = "ι»θªε€Ό(~D)";
         Text[ arabic ] = "ήνγΙ ΗέΚΡΗΦνΙ";
         Text[ greek ] = "Προεπιλεγμένη τιμή";
-        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
         Text[ turkish ] = "~Standart deπer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor per ~defecte";
