@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-02 15:48:00 $
+ *  last change: $Author: mtg $ $Date: 2001-04-05 20:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,7 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
                         aAny <<= aSequence;
                         xBox->insertByIndex(nCount, aAny);
                     }
-                    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ForbiddenCharacterSequence" ) );
+                    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ForbiddenCharacters" ) );
                     pValue[nIndex++].Value <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 14:57:01 $
+ *  last change: $Author: mtg $ $Date: 2001-04-05 20:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,7 +847,7 @@ void SwXMLImport::SetConfigurationSettings(const uno::Sequence < PropertyValue >
 
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            if (pValue->Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ForbiddenCharacterSequence" ) ) )
+            if (pValue->Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ForbiddenCharacters" ) ) )
             {
                 Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
                 Reference < XText > xText = xTextDoc->getText();
