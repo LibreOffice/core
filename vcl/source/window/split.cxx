@@ -2,9 +2,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-18 15:08:17 $
+ *  last change: $Author: ssa $ $Date: 2002-07-19 15:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ void Splitter::ImplInitData()
     mbDragFull        = FALSE;
     mbKbdSplitting    = FALSE;
     mbInKeyEvent      = 0;
+    mnKeyboardStepSize = SPLITTER_DEFAULTSTEPSIZE;
 }
 
 // -----------------------------------------------------------------------
@@ -216,6 +217,20 @@ Splitter::~Splitter()
 {
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
     pTList->RemoveWindow( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Splitter::SetKeyboardStepSize( long nStepSize )
+{
+    mnKeyboardStepSize = nStepSize;
+}
+
+// -----------------------------------------------------------------------
+
+long Splitter::GetKeyboardStepSize() const
+{
+    return mnKeyboardStepSize;
 }
 
 // -----------------------------------------------------------------------
@@ -418,11 +433,21 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
 
         int maxiter = 500;  // avoid endless loop
         int delta=0;
+        int delta_step = mbHorzSplit  ? aSize.Width()/10 : aSize.Height()/10;
+
+        // use the specified step size if it was set
+        if( mnKeyboardStepSize != SPLITTER_DEFAULTSTEPSIZE )
+            delta_step = mnKeyboardStepSize;
+
         while( maxiter-- && aOldWindowPos == GetPosPixel() )
         {
             // inc/dec position until application performs changes
             // thus a single key press really moves the splitter
-            delta++;
+            if( aKeyCode.IsShift() )
+                delta++;
+            else
+                delta += delta_step;
+
             switch( nCode )
             {
             case KEY_LEFT:
