@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reader.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:17:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ void SAL_CALL typereg_reader_getDocumentation(
    out-of-memory condition occurs, a pointer to a null pointer is returned
 
    @since UDK 3.2.0
+   @deprecated
  */
 void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result)
     SAL_THROW_EXTERN_C();
@@ -288,6 +289,7 @@ void SAL_CALL typereg_reader_getFieldDocumentation(
    @param index a valid index into the range of fields of the given type reader
 
    @since UDK 3.2.0
+   @deprecated
  */
 void SAL_CALL typereg_reader_getFieldFileName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
