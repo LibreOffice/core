@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.20 $
-# Date:        $Date: 2004-09-08 12:26:43 $
+# Version:     $Revision: 1.21 $
+# Date:        $Date: 2004-09-08 15:24:19 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ use File::Basename;
 #
 my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
      $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $Solaris, $Linux, $FreeBSD, $NetBSD, $Tru64, $Irix, $Irix64, $Winnt, $Macosx, $MINGW,
-     $platform, $cygwinver, $machine_type, $empty, $no_stl, $no_gcc_include, 
+     $platform, $cygwinver, $machine_type, $empty, $no_ant, $no_stl, $no_gcc_include, 
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os);
 #
 #-------------------------------------------------
@@ -52,8 +52,8 @@ my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $commen
 my @LANGUAGES = ("ARAB", "CAT", "CHINSIM", "CHINTRAD", "CZECH", "DAN", "DTCH", "ENUS", "FREN", "GREEK", "HUNG", "ITAL",
 "JAPN", "KOREAN", "POL", "PORT", "PORTBR", "RUSS", "SLOVAK", "SLOVENIAN", "SPAN", "SWED", "TURK", "FINN", "ESTONIAN" ); 
 my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "ITIT", "RURU" );
-my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $PRODUCT, $PROFULLSWITCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
-     $common_build, $MK_UNROLL, $NO_REC_RES, $PROEXT, $SO3, $SOLAR_JAVA, 
+my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
+     $common_build, $MK_UNROLL, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
      $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $USE_NEWCHARSET, $USE_NEW_RSC, $VCL, 
      $TF_CFGDATA, $TF_SVDATA, $CC, $CXX,
      $USE_NAMESPACE, $BUILD_SOSL, $LOCAL_SOLENV, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
@@ -61,7 +61,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $PRODUCT, $PROFULLSWITCH, $BIG_
 #
 # Platform dependent constant values.
 my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $DLLSUFFIX, $GLIBC, $GUI, $GUIBASE, $GUIENV,
-      $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $PROSWITCH, $XPVERSION, $BOTH,
+      $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $XPVERSION, $BOTH,
       $DEMO_ENV, $DYNAMIC_CRT, $SET_EXCEPTIONS, $emergency, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD );
 #
@@ -87,8 +87,9 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL,
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $USE_NEW_SDK, $FRAME_HOME, 
      $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG, $ENABLE_STATIC_GTK,
-     $PYTHONPATH, $PYTHONHOME );
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $ENABLE_DEBUG, $ENABLE_STATIC_GTK,
+	 $PROEXT,
+     $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME );
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -128,15 +129,16 @@ $no_stl         = "NO_STLPORT4";    # possible argument
 $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
 $STLPORT4       = '@STLPORT4@';     # Location of STLport4
+$SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
 $MINGW          = '@WITH_MINGWIN@'; # use MinGW for Windows build
-$USE_GCC3       = '@USE_GCC3@';     # use gcc3 (only for unxlngi4 and unxfbsd5i at the moment)
 $CC             = '@CC@';           # C compiler
 $CXX            = '@CXX@';          # C++ compiler
 $EXCEPTIONS     = '@EXCEPTIONS@';   # Exception handling type
 $ENABLE_DEBUG   = '@ENABLE_DEBUG@';  # Enable a debug build
 $ENABLE_STATIC_GTK = '@ENABLE_STATIC_GTK@'; # Use static gtk libraries
 $WRAPCMD        = "";               # Wrapper (only for winnt)
-$GLIBC		= "";               # Whether the platform uses glibc
+$GLIBC          = "";               # Whether the platform uses glibc
+$PROEXT         = "@PROEXT@";
 
 #
 #--------------------------------------------------------------------
@@ -158,14 +160,6 @@ print ("Setting up the environment for building OpenOffice.org $newline");
 $platform = `uname`;       # probing the platform
 if ( $platform =~ m/CYGWIN/g )
 {   $platform = $Winnt;
-    $cygwinver = `uname -r`;
-    if ( $cygwinver =~ m/^1/g )
-    {   $cygwinver = "1";
-    }
-    else
-    {
- 	  $cygwinver = "b";
-    }
 }
 
 chomp( $platform );
@@ -189,8 +183,6 @@ chomp( $oldPATH );                  # cut off new line
 print "Setting platform independent values... ";
 # NB: Language options now set at 'ToFile' stage. 
 $NO_SRS_PATCH         = "true";
-$PRODUCT              = "full";
-$PROFULLSWITCH        = "product=full";
 $BIG_GOODIES          = "TRUE";
 $BMP_WRITES_FLAG      = "TRUE";
 $BUILD_SOSL_RELEASE   = "TRUE";
@@ -201,7 +193,6 @@ $common_build         = "";
 $MK_UNROLL            = "TRUE";
 $MULTITHREAD_OBJ      = "";
 $NO_REC_RES           = "TRUE";
-$PROEXT               = ".pro";
 $SO3                  = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
@@ -264,7 +255,6 @@ if ( $platform eq "$Solaris" )
    $GVERDIR        = $INPATH;
    $OS             = "SOLARIS";
    $PATH_SEPERATOR = $ps;
-   $PROSWITCH      = "-DPRODUCT";
 }
 elsif ( $platform eq "$NetBSD" ) 
 {
@@ -307,15 +297,8 @@ elsif ( $platform eq "$NetBSD" )
      exit 1;
    }
    #Conditional setting depending on gcc3:
-   if ($USE_GCC3 eq  "TRUE")
-   {
       $CVER           = "C300";
-      $OUTPATH        = $OUTPATH."2"
-   }
-   else
-   {
-      $CVER           = "C295";
-   }
+      $OUTPATH        = $OUTPATH."2";
    # General NetBSD settings:
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
@@ -328,7 +311,6 @@ elsif ( $platform eq "$NetBSD" )
       $GVERDIR        = $INPATH;
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
-      $PROSWITCH      = "-DPRODUCT";
       $XPVERSION      = "3"; 
 }
 elsif ( $platform eq "$FreeBSD" ) 
@@ -339,14 +321,7 @@ elsif ( $platform eq "$FreeBSD" )
       $COMPATH        = '@COMPATH@'; 
       $CPU            = "I";
       $CPUNAME        = "INTEL";
-      if ($USE_GCC3 eq  "TRUE")
-      {
-          $CVER       = "C300";
-      }
-      else
-      {
-          $CVER       = "C295";
-      }
+      $CVER           = "C300";
       $DLLSUFFIX      = "fi";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
@@ -357,7 +332,6 @@ elsif ( $platform eq "$FreeBSD" )
       $GVERDIR        = $INPATH;
       $OS             = "FREEBSD";
       $PATH_SEPERATOR = $ps;
-      $PROSWITCH      = "-DPRODUCT";
       $XPVERSION      = "3";
       $OSVERSION      = '@OSVERSION@';
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
@@ -446,21 +420,10 @@ elsif ( $platform eq "$Linux" )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
    }
    #Conditional setting depending on gcc3 (on x86):
-   if ($USE_GCC3 eq  "TRUE")
+   $CVER           = "C300";
+   if (($machine_type eq "i686") or ($machine_type eq "i586"))
    {
-      $CVER           = "C300";
-      if (($machine_type eq "i686") or ($machine_type eq "i586"))
-      {
         $OUTPATH      = "unxlngi4"
-      }
-   }
-   else
-   {
-      $CVER           = "C295";
-      if (($machine_type eq "i686") or ($machine_type eq "i586"))
-      {
-        $OUTPATH      = "unxlngi3"
-      }
    }
    # General Linux settings:
 
@@ -476,7 +439,6 @@ elsif ( $platform eq "$Linux" )
       $GVERDIR        = $INPATH;
       $OS             = "LINUX";
       $PATH_SEPERATOR = $ps;
-      $PROSWITCH      = "-DPRODUCT";
       $XPVERSION      = "3"; 
 }
 elsif ( $platform eq "$Tru64" ) 
@@ -498,7 +460,6 @@ elsif ( $platform eq "$Tru64" )
       $GVERDIR        = $INPATH;
       $OS             = "TRU64";
       $PATH_SEPERATOR = $ps;
-      $PROSWITCH      = "-DPRODUCT";
       $XPVERSION      = "3";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
@@ -511,11 +472,7 @@ elsif ( $platform eq "$Irix" || $platform eq "$Irix64" )
       if ($CC =~ "gcc" ) {
             $COM          = "GCC";
             $OUTPATH        = "unxirgm";
-            if ($USE_GCC3 eq  "TRUE") {
-              $CVER           = "C300";
-            } else {
-              $CVER           = "C295";
-            }
+            $CVER           = "C300";
       }
 	  else {
 	  	$COM            = "C730";
@@ -534,7 +491,6 @@ elsif ( $platform eq "$Irix" || $platform eq "$Irix64" )
       $GVERDIR        = $INPATH;
       $OS             = "IRIX";
       $PATH_SEPERATOR = $ps;
-      $PROSWITCH      = "-DPRODUCT";
       $XPVERSION      = "3";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."client";
@@ -620,14 +576,7 @@ elsif ( $platform eq "$Macosx" )
       $COMPATH        = '@COMPATH@'; 
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
-   if ($USE_GCC3 eq  "TRUE")
-   {
       $CVER           = "C300";
-   }
-   else
-   {
-      $CVER           = "C295";
-   }
       $DLLSUFFIX      = "mxp";
       $GUI            = "UNX";
       $GUIENV         = "sal";
@@ -637,7 +586,6 @@ elsif ( $platform eq "$Macosx" )
       $GVERDIR        = $INPATH;
       $OS             = "MACOSX";
       $PATH_SEPERATOR = $ps;
-      $PROSWITCH      = "-DPRODUCT";
       # GUIBASE is set below; may be "aqua" or "unx".
 }
 elsif ( $platform eq "AIX" )
@@ -670,7 +618,6 @@ elsif ( $platform eq "AIX" )
    $GVERDIR        = $INPATH;
    $OS             = "AIX";
    $PATH_SEPERATOR = $ps;
-   $PROSWITCH      = "-DPRODUCT";
    $XPVERSION      = "3"; 
 }
 else {
@@ -944,7 +891,6 @@ if ($platform eq "$Solaris")
                         $D."_REENTRANT".
                         $D."_POSIX_PTHREAD_SEMANTICS".
                         $D."SUPD=$UPD".
-                        $D."PRODUCT".
                         $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
 }
 elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||
@@ -968,7 +914,6 @@ elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||
     {  $SOLARDEF     .= $D."GLIBC=".$GLIBC;
     }
     $SOLARDEF        .= $D."SUPD=$UPD".
-                        $D."PRODUCT".
                         $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
 }
 elsif ($platform eq "$Macosx") {
@@ -1313,8 +1258,11 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
 }
 
-$PYTHONPATH           = '.'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ds.'lib-dynload';
-$PYTHONHOME           = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH';
+if ($SYSTEM_PYTHON eq "NO")
+{
+	$PYTHONPATH           = '.'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ds.'lib-dynload';
+	$PYTHONHOME           = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH';
+}
 
 #
 print "done\n";
@@ -1430,15 +1378,12 @@ ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "common_build",      $common_build,      "e" );
 ToFile( "NO_SRS_PATCH",      $NO_SRS_PATCH,      "e" );
-ToFile( "PRODUCT",           $PRODUCT,           "e" );
-ToFile( "PROFULLSWITCH",     $PROFULLSWITCH,     "e" );
 ToFile( "BIG_GOODIES",       $BIG_GOODIES,       "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
 ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
 ToFile( "MK_UNROLL",         $MK_UNROLL,         "e" );
 ToFile( "MULTITHREAD_OBJ",   $MULTITHREAD_OBJ,   "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
-ToFile( "PROEXT",            $PROEXT,            "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "TF_PACKAGES",       $TF_PACKAGES,       "e" );
@@ -1460,6 +1405,9 @@ ToFile( "TF_FILTER",         "TRUE",             "e" );
 if ($ENABLE_DEBUG eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }
+ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
+ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
+ToFile( "PROEXT",            $PROEXT,            "e" );
 ToFile( "ENABLE_STATIC_GTK", $ENABLE_STATIC_GTK, "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 # [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
@@ -1656,7 +1604,6 @@ ToFile( "GVERDIR",           $GVERDIR,           "e" );
 ToFile( "PATH_SEPERATOR",    $PATH_SEPERATOR,    "e" );
 ToFile( "XPVERSION",         $XPVERSION,         "e" );
 ToFile( "COMEX",             $COMEX,             "e" );
-ToFile( "PROSWITCH",         $PROSWITCH,         "e" );
 ToFile( "BOTH",              $BOTH,              "e" );
 ToFile( "CDPATHx",           $CDPATHx,           "e" );
 ToFile( "DEMO_ENV",          $DEMO_ENV,          "e" );
@@ -1725,6 +1672,7 @@ ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "CXX",               $CXX,               "e" );
+ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
 if ( $COM ne "MSC" ) {
   ToFile( "LINK",			 $CC,				 "e" );
 }
@@ -1747,6 +1695,35 @@ if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
 ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
+ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
+ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );
+ToFile( "PYTHON_LIBS",       "@PYTHON_LIBS@",      "e" );
+ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
+ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
+ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
+ToFile( "SYSTEM_JPEG",       "@SYSTEM_JPEG@",      "e" );
+ToFile( "SYSTEM_FREETYPE",   "@SYSTEM_FREETYPE@",  "e" );
+ToFile( "FREETYPE_CFLAGS",   "@FREETYPE_CFLAGS@",  "e" );
+ToFile( "FREETYPE_LIBS",     "@FREETYPE_LIBS@",    "e" );
+ToFile( "SYSTEM_LIBXML",     "@SYSTEM_LIBXML@",    "e" );
+ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );
+ToFile( "LIBXML_LIBS",       "@LIBXML_LIBS@",      "e" );
+ToFile( "SYSTEM_EXPAT",      "@SYSTEM_EXPAT@",     "e" );
+ToFile( "SYSTEM_DB3",        "@SYSTEM_DB3@",       "e" );
+ToFile( "SYSTEM_SABLOT",     "@SYSTEM_SABLOT@",    "e" );
+ToFile( "SABLOT_LIBS",       "@SABLOT_LIBS@",      "e" );
+ToFile( "SYSTEM_ODBC_HEADERS","@SYSTEM_ODBC_HEADERS@","e" );
+ToFile( "SYSTEM_CURL",       "@SYSTEM_CURL@",      "e" );
+ToFile( "CURL_CFLAGS",       "@CURL_CFLAGS@",      "e" );
+ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
+ToFile( "SYSTEM_NAS",        "@SYSTEM_NAS@",       "e" );
+ToFile( "NAS_INCLUDES",      "@NAS_INCLUDES@",     "e" );
+ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
+ToFile( "NEON_LIBS",         "@NEON_LIBS@",        "e" );
+ToFile( "NEON_CFLAGS",       "@NEON_CFLAGS@",      "e" );
+ToFile( "SYSTEM_MOZILLA",    "@SYSTEM_MOZILLA@",   "e" );
+ToFile( "MOZILLA_CFLAGS",    "@MOZILLA_CFLAGS@",   "e" );
+ToFile( "MOZILLA_LIBS",      "@MOZILLA_LIBS@",     "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
 ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@", "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
@@ -1789,12 +1766,15 @@ if (( $platform eq "$Winnt" ) and ( '@USE_SHELL@' eq "4nt" )) {
   ToFile( "GCCINSTLIB",        "gccinstlib.pl",    "e" );
 }
 ToFile( "USE_SHELL",         '@USE_SHELL@',         "e" );
-if ( $platform eq "$Winnt" ) {
-  ToFile( "PYTHONPATH",        $PYTHONPATH,        "j" );
-  ToFile( "PYTHONHOME",        $PYTHONHOME,        "j" );
-} else {
-  ToFile( "PYTHONPATH",        $PYTHONPATH,        "e" );
-  ToFile( "PYTHONHOME",        $PYTHONHOME,        "e" );
+if ($SYSTEM_PYTHON eq "NO")
+{
+  if ( $platform eq "$Winnt" ) {
+    ToFile( "PYTHONPATH",        $PYTHONPATH,        "j" );
+    ToFile( "PYTHONHOME",        $PYTHONHOME,        "j" );
+  } else {
+    ToFile( "PYTHONPATH",        $PYTHONPATH,        "e" );
+    ToFile( "PYTHONHOME",        $PYTHONHOME,        "e" );
+  }
 }
 #
 # Writing the aliases to file.
@@ -1813,8 +1793,10 @@ if ( $platform ne "$Winnt" )
 if ( $platform eq "$Winnt" and '@USE_SHELL@' eq "4nt" )
 {
   ToFile( "build the dmake executable.", $empty, "c");
-  ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe (cd \%SRC_ROOT\\dmake \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
+  ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe (cd \%SRC_ROOT\\dmake \^ set INCLUDE=\%COMPATH\\include \^ set LIB=\%COMPATH\\lib \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
   ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe ( mkdir /S \%SOLARENV\\\%OUTPATH\\bin \^ copy dmake\\dmake.exe \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe )", $empty, "x");
+  ToFile( "echo Warning! LIB and INCLUDE will be cleared!", $empty, "x");
+  ToFile( "unset INCLUDE LIB", $empty, "x");
   ToFile( "  ", $empty, "x");
 }
 # on Solaris and FreeBSD, set GNUCOPY and GNUPATCH
@@ -2223,16 +2205,6 @@ sub WinFormat
    $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;   # expand the variables twice!
    $variable =~ s/:+/:/g ;                 # remove multiple ;
 
-   if ( $cygwinver eq "b" )
-   {
-	   $variable =~ s/:/;/g;                   # Change path-separator
-	   $variable =~ s{//([c-z])/}{$1:\\}gi;    # drives from cgywin-b20 (just in case ...)
-	   $variable =~ s{/cygdrive/([c-z])/}{$1:\\}gi;  # more drives for cgywin-b20
-       $variable =~ s!([;]|\A|-[iIlL])/!$1$SYSTEMDRIVE/!g; # get back the hidden drives
-	   $variable =~ s!/!\\!g;                        # Rest is windows stuff 
-   }
-   else  # New cygwin
-   {
        $variable =~ s/:/;/g;
        # Search for posix path entry and replace with cygpath -w entry ( -d if filename contains space )
        if ( $variable =~ /^\s*-\w/ )
@@ -2291,7 +2263,6 @@ sub WinFormat
            $variable = join(';',@split_var);
        }
        $variable =~ s/\//\\/g; # Remaining \ come from e.g.: ../foo/baa
-   }
    return $variable;
 }
 #----------------------------------------------------------
