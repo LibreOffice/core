@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,8 +1315,7 @@ USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
 {
     //Tell the undocumented table hack that everything between here and
     //the last table position is nontable text
-    WW8_CP nPos = Fc2Cp(Strm().Tell());
-    if (nPos)
+    if (WW8_CP nPos = Fc2Cp(Strm().Tell()))
         pMagicTable->Append(nPos,0);
 
     // sprmPDxaFromText10

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,7 +1056,7 @@ long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
 
     // insert Section to get this Ft-/End-Note at the end of the section,
     // when there is no open section at the moment
-       if( bFtEdOk && pLastPgDeskIdx && !pNewSection)
+       if( bFtEdOk && pLastPgDeskIdx && !pAfterSection)
     {
         const SwNodeIndex aOrgLastPgDeskIdx( *pLastPgDeskIdx );
 
@@ -2352,6 +2352,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pTableDesc = 0;
     pNumRule = 0;
     pNumOlst = 0;
+    pAfterSection = 0;
     pNewSection    = 0;
     pNode_FLY_AT_CNTNT = 0;
     pDrawFmt = 0;
@@ -2932,18 +2933,21 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     {
         SwSectionFmt *pFmt = pNewSection->GetFmt();
         pFmt->SetAttr(SwFmtNoBalancedColumns(TRUE));
+    }
+    if (pAfterSection)
+    {
         if (bNew)
         {
             //See the setup at the beginning of this method for the necessary
             //node unlocking that makes deleting the final para a safe
             //operation
             pPaM->SetMark();
-            SwNodeIndex aPref(*pFmt->GetSectionNode()->EndOfSectionNode(), 1);
-            pPaM->GetPoint()->nNode = aPref;
+            pPaM->GetPoint()->nNode = *pAfterSection;
             pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
 
             rDoc.DeleteAndJoin(*pPaM);
         }
+        delete pAfterSection;
     }
     DELETEZ(pPaM);
     return nErrRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-08 12:48:47 $
+ *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,6 +700,7 @@ private:
 protected:
     USHORT Count() const { return aPos.Count(); }
     void Write( SvStream& rStrm );
+    WW8_CP Prev() const;
 public:
     WW8_WrPlc1( USHORT nStructSz );
     ~WW8_WrPlc1();

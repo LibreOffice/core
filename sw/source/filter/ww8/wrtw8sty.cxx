@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-09 13:35:32 $
+ *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1588,21 +1588,17 @@ void WW8_WrPlcSepx::WritePlcHdd( SwWW8Writer& rWrt ) const
 
 void SwWW8Writer::WriteKFTxt1( const SwFmtCntnt& rCntnt )
 {
-    SwNodePtr pNode;
+    const SwNodeIndex* pSttIdx = rCntnt.GetCntntIdx();
 
-    if( rCntnt.GetCntntIdx() )
-        pNode = pDoc->GetNodes()[ rCntnt.GetCntntIdx()->GetIndex()+1 ];
-    else
-        pNode = 0;
-
-    if( pNode )
+    if (pSttIdx)
     {
-        // Hole vom Node und vom letzten Node die Position in der Section
-        ULONG nStart = pNode->StartOfSectionIndex()+1;
-        ULONG nEnd = pNode->EndOfSectionIndex();
+        SwNodeIndex aIdx( *pSttIdx, 1 ),
+        aEnd( *pSttIdx->GetNode().EndOfSectionNode() );
+        ULONG nStart = aIdx.GetIndex();
+        ULONG nEnd = aEnd.GetIndex();
 
         // Bereich also gueltiger Node
-        if( nStart < nEnd )
+        if (nStart < nEnd)
         {
             BOOL bOldKF = bOutKF;
             bOutKF = TRUE;
@@ -1610,13 +1606,13 @@ void SwWW8Writer::WriteKFTxt1( const SwFmtCntnt& rCntnt )
             bOutKF = bOldKF;
         }
         else
-            pNode = 0;
+            pSttIdx = 0;
     }
 
-    if( !pNode )
+    if (!pSttIdx)
     {
         // es gibt keine Kopf-/Fusszeile, aber ein CR ist immer noch noetig
-        ASSERT( pNode, "K/F-Text nicht richtig da" );
+        ASSERT( pSttIdx, "K/F-Text nicht richtig da" );
         WriteStringAsPara( aEmptyStr ); // CR ans Ende ( sonst mault WW )
     }
 }

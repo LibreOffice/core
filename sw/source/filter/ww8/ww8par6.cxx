@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-11 15:30:12 $
+ *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,6 +1111,9 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols(SwPaM& rMyPaM,
     const SwSectionNode* pSectionNode = pNewSection->GetFmt()->GetSectionNode();
     ASSERT( pSectionNode, "Kein Inhalt vorbereitet." );
 
+    ASSERT( !pAfterSection, "pAfterSection not Null! why Recursion?");
+    pAfterSection = new SwNodeIndex( *pSectionNode->EndOfSectionNode(), 1 );
+
     rMyPaM.GetPoint()->nNode = pSectionNode->GetIndex()+1;
     rMyPaM.GetPoint()->nContent.Assign(rMyPaM.GetCntntNode(), 0);
 }
@@ -1118,7 +1121,7 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols(SwPaM& rMyPaM,
 BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
 {
     // Might we have to close a section first?
-    BOOL bSectionWasJustClosed = pNewSection && nTxtPos;
+    BOOL bSectionWasJustClosed = pAfterSection && nTxtPos;
     if( bSectionWasJustClosed )
     {
         // remove preceeding Node
@@ -1126,13 +1129,11 @@ BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
         if( 0 == pPaM->GetPoint()->nContent.GetIndex() )
             JoinNode( pPaM );
         // set PaM behind section
-        const SwSectionNode* pSectionNode = pNewSection->GetFmt()->
-            GetSectionNode();
-        SwNodeIndex aPref(*pSectionNode->EndOfSectionNode(), 1);
-        pPaM->GetPoint()->nNode = aPref;
+        pPaM->GetPoint()->nNode = *pAfterSection;
         pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
 
-        DELETEZ( pLastPgDeskIdx );
+        delete pAfterSection, pAfterSection=0;
+        delete pLastPgDeskIdx, pLastPgDeskIdx=0;
     }
     return bSectionWasJustClosed;
 }

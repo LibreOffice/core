@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-08 12:48:47 $
+ *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,6 +629,13 @@ WW8_WrPlc1::~WW8_WrPlc1()
     delete[] pData;
 }
 
+WW8_CP WW8_WrPlc1::Prev() const
+{
+    USHORT nLen = aPos.Count();
+    ASSERT(nLen,"Prev called on empty list");
+    return nLen ? aPos[nLen-1] : 0;
+}
+
 void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
 {
     ULONG nInsPos = aPos.Count() * nStructSiz;
@@ -736,8 +743,16 @@ BOOL WW8_WrMagicTable::Write( SwWW8Writer& rWrt )
 void WW8_WrMagicTable::Append( WW8_CP nCp, ULONG nData)
 {
     SVBT32 nLittle;
-    LongToSVBT32(nData,nLittle);
-    WW8_WrPlc1::Append(nCp, nLittle);
+    /*
+    Tell the undocumented table hack that everything between here and the last
+    table position is nontable text, don't do it if the previous position is
+    the same as this one, as that would be a region of 0 length
+    */
+    if ((!Count()) || (Prev() != nCp))
+    {
+        LongToSVBT32(nData,nLittle);
+        WW8_WrPlc1::Append(nCp, nLittle);
+    }
 }
 
 //--------------------------------------------------------------------------
