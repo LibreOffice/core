@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-19 15:09:20 $
+ *  last change: $Author: sb $ $Date: 2002-08-28 14:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,15 +128,14 @@ using namespace com::sun;
 
    ; RFC 1738, RFC 2396, RFC 2732, private
    login = [user [":" password] "@"] hostport
-   user = *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ";" / "=" / "_" / "~")
-   password = *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ";" / "=" / "_" / "~")
+   user = *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ";" / "=" / "_" / "~")
+   password = *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ";" / "=" / "_" / "~")
    hostport = host [":" port]
    host = incomplete-hostname / hostname / IPv4address / IPv6reference
    incomplete-hostname = *(domainlabel ".") domainlabel
    hostname = *(domainlabel ".") toplabel ["."]
-   domainlabel = alphadigit [*(alphadigit / "-") alphadigit]
-   toplabel = ALPHA [*(alphadigit / "-") alphadigit]
-   alphadigit = ALPHA / DIGIT
+   domainlabel = alphanum [*(alphanum / "-") alphanum]
+   toplabel = ALPHA [*(alphanum / "-") alphanum]
    IPv4address = 1*3DIGIT "." 1*3DIGIT "." 1*3DIGIT "." 1*3DIGIT
    IPv6reference = "[" hexpart [":" IPv4address] "]"
    hexpart = (hexseq ["::" [hexseq]]) / ("::" [hexseq])
@@ -162,18 +161,19 @@ using namespace com::sun;
    segment = *(pchar / ";")
 
 
-   ; RFC 1738, RFC 2396
-   file-url = "FILE://" [host / "LOCALHOST"] ["/" segment *("/" segment)]
+   ; RFC 1738, RFC 2396, <http://support.microsoft.com/default.aspx?scid=KB;EN-US;Q188997&>
+   file-url = "FILE://" [host / "LOCALHOST" / netbios-name] ["/" segment *("/" segment)]
    segment = *pchar
+   netbios-name = 1*{<alphanum / "!" / "#" / "$" / "%" / "&" / "'" / "(" / ")" / "-" / "." / "@" / "^" / "_" / "{" / "}" / "~"> using (escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "-" / "." / "@" / "_" / "~")}
 
 
    ; RFC 2368, RFC 2396
    mailto-url = "MAILTO:" [to] [headers]
-   to = {RFC 822 <#mailbox> using *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")}
+   to = {RFC 822 <#mailbox> using *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")}
    headers = "?" header *("&" header)
    header = hname "=" hvalue
-   hname = {RFC 822 <field-name> using *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")} / "BODY"
-   hvalue = {RFC 822 <field-body> using *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")}
+   hname = {RFC 822 <field-name> using *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")} / "BODY"
+   hvalue = {RFC 822 <field-body> using *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")}
 
 
    ; private (see RFC 1738, RFC 2396)
@@ -189,27 +189,27 @@ using namespace com::sun;
 
    ; private
    private-url = "PRIVATE:" path ["?" *uric]
-   path = *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
 
 
    ; private
-   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" name ["/" *(ALPHA / DIGIT)] ["?" *uric]
-   name = *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
+   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" name ["/" *alphanum] ["?" *uric]
+   name = *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
    https-url = "HTTPS://" hostport ["/" segment *("/" segment) ["?" *uric]]
-   segment = *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
+   segment = *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
    slot-url = "SLOT:" path ["?" *uric]
-   path = *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
 
 
    ; private
    macro-url = "MACRO:" path ["?" *uric]
-   path = *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
 
 
    ; private
@@ -218,9 +218,9 @@ using namespace com::sun;
 
    ; private (see RFC 2192)
    imap-url = "IMAP://" user [";AUTH=" auth] "@" hostport "/" segment *("/" segment) ["/;UID=" nz_number]
-   user = 1*{RFC 2060 <CHAR8> using (escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "=" / "_" / "~")}
-   auth = {RFC 2060 <atom> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "+" / "," / "-" / "." / "=" / "_" / "~")}
-   segment = *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / "=" / "@" / "_" / "~")
+   user = 1*{RFC 2060 <CHAR8> using (escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "=" / "_" / "~")}
+   auth = {RFC 2060 <atom> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "+" / "," / "-" / "." / "=" / "_" / "~")}
+   segment = *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / "=" / "@" / "_" / "~")
    nz_number = {RFC 2060 <nz_number> using *DIGIT}
 
 
@@ -231,10 +231,10 @@ using namespace com::sun;
    ; RFC 2397
    data-url = "DATA:" [mediatype] [";BASE64"] "," *uric
    mediatype = [type "/" subtype] *(";" attribute "=" value)
-   type = {RFC 2045 <type> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / ":" / "?" / "@" / "_" / "~")}
-   subtype = {RFC 2045 <subtype> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / ":" / "?" / "@" / "_" / "~")}
-   attribute = {RFC 2045 <subtype> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / ":" / "?" / "@" / "_" / "~")}
-   value = {RFC 2045 <subtype> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / ":" / "?" / "@" / "_" / "~")}
+   type = {RFC 2045 <type> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / ":" / "?" / "@" / "_" / "~")}
+   subtype = {RFC 2045 <subtype> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / ":" / "?" / "@" / "_" / "~")}
+   attribute = {RFC 2045 <subtype> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / ":" / "?" / "@" / "_" / "~")}
+   value = {RFC 2045 <subtype> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / ":" / "?" / "@" / "_" / "~")}
 
 
    ; RFC 2392, RFC 2396
@@ -243,7 +243,7 @@ using namespace com::sun;
 
    ; private
    out-url = "OUT:///~" name ["/" *uric]
-   name = *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "?" / "@" / "_" / "~"
+   name = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "?" / "@" / "_" / "~"
 
 
    ; prvate (see RFC 1738, RFC 2396)
@@ -253,12 +253,12 @@ using namespace com::sun;
 
    ; private
    vnd-sun-star-hier-url = "VND.SUN.STAR.HIER:" ["//"reg_name] *("/" *pchar)
-   reg_name = 1*(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
+   reg_name = 1*(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
    ; private
    vim-url = "VIM://" +vimc [":" *vimc] ["/" [("INBOX" message) / ("NEWSGROUPS" ["/" [+vimc message]])]]
    message = ["/" [+vimc [":" +DIGIT "." +DIGIT "." +DIGIT]]]
-   vimc = ("=" HEXDIG HEXDIG) / ALPHA / DIGIT
+   vimc = ("=" HEXDIG HEXDIG) / alphanum
 
 
    ; private
@@ -267,22 +267,22 @@ using namespace com::sun;
 
    ; private
    component-url = ".COMPONENT:" path ["?" *uric]
-   path = *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
+   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
 
 
    ; private
    vnd-sun-star-pkg-url = "VND.SUN.STAR.PKG://" reg_name *("/" *pchar)
-   reg_name = 1*(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
+   reg_name = 1*(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; RFC 2255
    ldap-url = "LDAP://" [hostport] ["/" [dn ["?" [attrdesct *("," attrdesc)] ["?" ["base" / "one" / "sub"] ["?" [filter] ["?" extension *("," extension)]]]]]]
-   dn = {RFC 2253 <distinguishedName> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
-   attrdesc = {RFC 2251 <AttributeDescription> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
-   filter = {RFC 2254 <filter> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
+   dn = {RFC 2253 <distinguishedName> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
+   attrdesc = {RFC 2251 <AttributeDescription> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
+   filter = {RFC 2254 <filter> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
    extension = ["!"] ["X-"] extoken ["=" exvalue]
-   extoken = {RFC 2252 <oid> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")}
-   exvalue = {RFC 2251 <LDAPString> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
+   extoken = {RFC 2252 <oid> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")}
+   exvalue = {RFC 2251 <LDAPString> using *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
 
 
    ; private
@@ -1282,6 +1282,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                 if (*p == ':')
                     pPort = p;
             }
+            bool bNetBiosName = false;
             switch (m_eScheme)
             {
                 case INET_PROT_FILE:
@@ -1291,6 +1292,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort,
                                                   "localhost"))
                         pHostPortBegin = pPort;
+                    bNetBiosName = true;
                     break;
 
                 case INET_PROT_LDAP:
@@ -1310,10 +1312,8 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     break;
             }
             UniString aSynHost;
-            if (pHostPortBegin != pPort
-                && (!parseHost(pHostPortBegin, pPort, bOctets, eMechanism,
-                               eCharset, aSynHost)
-                    || pHostPortBegin != pPort))
+            if (!parseHost(pHostPortBegin, pPort, bOctets, eMechanism, eCharset,
+                           bNetBiosName, &aSynHost))
             {
                 setInvalid();
                 return false;
@@ -2224,6 +2224,61 @@ bool INetURLObject::setPassword(UniString const & rThePassword, bool bOctets,
 
 //============================================================================
 // static
+bool INetURLObject::parseHost(sal_Unicode const * pBegin,
+                              sal_Unicode const * pEnd, bool bOctets,
+                              EncodeMechanism eMechanism,
+                              rtl_TextEncoding eCharset, bool bNetBiosName,
+                              UniString * pCanonic)
+{
+    OSL_ENSURE(pCanonic != 0, "Null pCanonic");
+    UniString aTheCanonic;
+    if (pBegin < pEnd)
+    {
+        sal_Unicode const * p = pBegin;
+        if ((!parseHost(p, pEnd, bOctets, eMechanism, eCharset, aTheCanonic)
+             || p != pEnd)
+            && bNetBiosName)
+        {
+            aTheCanonic.Erase();
+            while (pBegin < pEnd)
+            {
+                EscapeType eEscapeType;
+                sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, bOctets, '%',
+                                             eMechanism, eCharset, eEscapeType);
+                if (!INetMIME::isVisible(nUTF32))
+                    return false;
+                if (!INetMIME::isAlphanumeric(nUTF32))
+                    switch (nUTF32)
+                    {
+                    case '"':
+                    case '*':
+                    case '+':
+                    case ',':
+                    case '/':
+                    case ':':
+                    case ';':
+                    case '<':
+                    case '=':
+                    case '>':
+                    case '?':
+                    case '[':
+                    case '\\':
+                    case ']':
+                    case '`':
+                    case '|':
+                        return false;;
+                    }
+                appendUCS4(aTheCanonic, nUTF32, eEscapeType, bOctets, PART_URIC,
+                           '%', eCharset, true);
+            }
+        }
+    }
+    *pCanonic = aTheCanonic;
+    return true;
+}
+
+//============================================================================
+// static
 UniString INetURLObject::encodeHostPort(UniString const & rTheHostPort,
                                         bool bOctets,
                                         EncodeMechanism eMechanism,
@@ -2253,12 +2308,14 @@ bool INetURLObject::setHost(UniString const & rTheHost, bool bOctets,
     if (!getSchemeInfo().m_bHost)
         return false;
     UniString aSynHost(rTheHost);
+    bool bNetBiosName = false;
     switch (m_eScheme)
     {
         case INET_PROT_FILE:
         case INET_PROT_VND_SUN_STAR_WFS:
             if (aSynHost.EqualsIgnoreCaseAscii("localhost"))
                 aSynHost.Erase();
+            bNetBiosName = true;
             break;
 
         case INET_PROT_LDAP:
@@ -2271,14 +2328,9 @@ bool INetURLObject::setHost(UniString const & rTheHost, bool bOctets,
                 return false;
             break;
     }
-    if (aSynHost.Len() != 0)
-    {
-        sal_Unicode const * p = aSynHost.GetBuffer();
-        sal_Unicode const * pEnd = p + aSynHost.Len();
-        if (!parseHost(p, pEnd, bOctets, eMechanism, eCharset, aSynHost)
-            || p != pEnd)
-            return false;
-    }
+    if (!parseHost(aSynHost.GetBuffer(), aSynHost.GetBuffer() + aSynHost.Len(),
+                   bOctets, eMechanism, eCharset, bNetBiosName, &aSynHost))
+        return false;
     sal_Int32 nDelta = m_aHost.set(m_aAbsURIRef, aSynHost);
     m_aPort += nDelta;
     m_aPath += nDelta;
@@ -3670,12 +3722,14 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         if (getSchemeInfo().m_bHost)
         {
             UniString aSynHost(rTheHost);
+            bool bNetBiosName = false;
             switch (m_eScheme)
             {
                 case INET_PROT_FILE:
                 case INET_PROT_VND_SUN_STAR_WFS:
                     if (aSynHost.EqualsIgnoreCaseAscii("localhost"))
                         aSynHost.Erase();
+                    bNetBiosName = true;
                     break;
 
                 case INET_PROT_LDAP:
@@ -3694,16 +3748,12 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                     }
                     break;
             }
-            if (aSynHost.Len() != 0)
+            if (!parseHost(aSynHost.GetBuffer(),
+                           aSynHost.GetBuffer() + aSynHost.Len(), false,
+                           eMechanism, eCharset, bNetBiosName, &aSynHost))
             {
-                sal_Unicode const * p = aSynHost.GetBuffer();
-                sal_Unicode const * pEnd = p + aSynHost.Len();
-                if (!parseHost(p, pEnd, false, eMechanism, eCharset, aSynHost)
-                    || p != pEnd)
-                {
-                    setInvalid();
-                    return false;
-                }
+                setInvalid();
+                return false;
             }
             m_aHost.set(m_aAbsURIRef, aSynHost, m_aAbsURIRef.Len());
             if (nThePort != 0)
