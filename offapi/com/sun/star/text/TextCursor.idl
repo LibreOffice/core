@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextCursor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-05 18:10:41 $
+ *  last change: $Author: obo $ $Date: 2001-11-08 10:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #include <com/sun/star/beans/XPropertyState.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XMultiPropertyStates_idl__
+#include <com/sun/star/beans/XMultiPropertyStates.idl>
+#endif
+
 #ifndef __com_sun_star_document_XDocumentInsertable_idl__
 #include <com/sun/star/document/XDocumentInsertable.idl>
 #endif
@@ -156,6 +160,9 @@ service TextCursor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/05 18:10:41  mtg
+    #92662# admit that the TextCursor now supports XMultiPropertyStates
+
     Revision 1.6  2001/08/15 12:42:38  cl
     #81062# made the special cursor interfaces optional
 
