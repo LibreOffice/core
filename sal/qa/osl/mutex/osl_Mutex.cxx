@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Mutex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $  $Date: 2003-08-07 15:10:40 $
+ *  last change: $Author: rt $  $Date: 2003-09-08 13:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,15 +113,6 @@ namespace ThreadHelper
     }
 }
 
-/** print an Error that the thread is not shutdown properly.
-*/
-void termError( Thread *pThread, OString strThread = "")
-{
-    if ( pThread->isRunning( ) )
-        printf( "# error: %s not terminated.\n", strThread );
-}
-
-
 
 //------------------------------------------------------------------------
 // Beginning of the test cases for osl_Mutex class
@@ -145,7 +136,7 @@ public:
 
     ~IncreaseThread( )
     {
-        termError( this, "IncreaseThread" );
+        CPPUNIT_ASSERT_MESSAGE( "#IncreaseThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     struct resource *pResource;
@@ -173,7 +164,7 @@ public:
 
     ~DecreaseThread( )
     {
-        termError( this, "DecreaseThread" );
+        CPPUNIT_ASSERT_MESSAGE( "#DecreaseThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     struct resource *pResource;
@@ -211,7 +202,7 @@ public:
 
     ~PutThread( )
     {
-        termError( this, "PutThread" );
+        CPPUNIT_ASSERT_MESSAGE( "#PutThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     struct chain* pChain;
@@ -248,7 +239,7 @@ public:
 
     ~HoldThread( )
     {
-        termError( this, "HoldThread" );
+        CPPUNIT_ASSERT_MESSAGE( "#HoldThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
@@ -270,7 +261,7 @@ public:
 
     ~WaitThread( )
     {
-        termError( this, "WaitThread" );
+        CPPUNIT_ASSERT_MESSAGE( "#WaitThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
@@ -294,7 +285,7 @@ public:
 
     ~GlobalMutexThread( )
     {
-        termError( this, "GlobalMutexThread" );
+        CPPUNIT_ASSERT_MESSAGE( "#GlobalMutexThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     void SAL_CALL run( )
@@ -624,7 +615,7 @@ public:
 
     ~GuardThread( )
     {
-        termError( this, "GuardThread" );
+        CPPUNIT_ASSERT_MESSAGE( "#GuardThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
@@ -710,7 +701,7 @@ public:
 
     ~ClearGuardThread( )
     {
-        termError( this, "# ClearGuardThread" );
+        CPPUNIT_ASSERT_MESSAGE( "#ClearGuardThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
@@ -849,7 +840,7 @@ public:
 
     ~ResetGuardThread( )
     {
-        termError( this, "# ResettableGuard" );
+        CPPUNIT_ASSERT_MESSAGE( "#ResetGuardThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
