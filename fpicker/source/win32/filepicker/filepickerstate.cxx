@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2002-01-10 18:24:06 $
+ *  last change: $Author: tra $ $Date: 2002-07-29 11:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,16 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
 
         if ( result.get() )
         {
-            OSL_ENSURE( result->hasResult( ), "invalid getValue request" );
+            // #101753 must remove assertion else running into deadlock
+            // because getValue may be called asynchronously from main thread
+            // with locked SOLAR_MUTEX but we also need SOLAR_MUTEX in
+            // WinFileOpenDialog::onInitDone ... but we cannot dismiss the
+            // assertion dialog because at this point the FileOpen Dialog
+            // has aleady the focus but is not yet visible :-(
+            // The real cure is to remove the VCL/SOLAR_MUTEX dependency
+            // cause by the use of our resource manager and not being able to
+            // generate native windows resources
+            //OSL_ENSURE( result->hasResult( ), "invalid getValue request" );
 
             if ( result->hasResult( ) )
             {
