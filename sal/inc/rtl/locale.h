@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: th $ $Date: 2001-03-16 15:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,22 +62,18 @@
 #ifndef _RTL_LOCALE_H_
 #define _RTL_LOCALE_H_
 
-#ifndef _RTL_USTRING_
-#ifdef __BORLANDC__
-#include <rtl/wstring.>
-#else
-#include <rtl/ustring>
-#endif /*__BORLANDC__*/
-#endif /*_RTL_USTRING_*/
+#ifndef _RTL_USTRING_H
+#include <rtl/ustring.h>
+#endif /* _RTL_USTRING_H */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #ifdef SAL_W32
-#   pragma pack(push, 8)
+#pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(1)
+#pragma pack(1)
 #endif
 
 /**
@@ -103,13 +99,13 @@ typedef struct _rtl_Locale
     /**
      * The merged hash value of the Language, Country and Variant strings.
      */
-    sal_Int32           HashCode;
+    sal_Int32       HashCode;
 } rtl_Locale;
 
 #ifdef SAL_W32
-#   pragma pack(pop)
+#pragma pack(pop)
 #elif defined(SAL_OS2)
-#   pragma pack()
+#pragma pack()
 #endif
 
 /**
