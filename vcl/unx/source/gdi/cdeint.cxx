@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2001-03-07 18:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,19 +149,11 @@ CDEIntegrator::CDEIntegrator( SalFrame* pFrame ) :
         GlobalInit();
     nRefCount++;
 
-    // instanz daten initialisieren
-    maAppContext = pXtCreateApplicationContext();
-    pXtDisplayInitialize( maAppContext, mpDisplay,
-                          "OfficeCDEIntegrationShell",
-                          "OfficeCDEIntegrationShell",
-                          0, 0, &nDummyArgc, ppDummyArgv );
-    pXtAppSetFallbackResources( maAppContext, pFallbackRes );
-    maAppWidget  = pXtAppCreateShell( "OfficeCDEIntegrationShell",
-                                      "OfficeCDEIntegrationShell",
-                                      *pAppShellClass,
-                                      mpDisplay, 0, 0 );
-    pXtConfigureWidget( maAppWidget, 10, 10, 10, 10, 0 );
-    //pXtRealizeWidget( maAppWidget );
+    maAppWidget = pFrame->maFrameData.GetWidget();
+    SalDisplay *pDisp = pFrame->maFrameData.GetDisplay();
+    SalXLib    *pXlib = pDisp->GetXLib();
+    maAppContext = pXlib->GetAppContext ();
+
     pDtAppInitialize( maAppContext, mpDisplay, maAppWidget,
                       ppDummyArgv[ 0 ], "Office" );
 
@@ -170,9 +162,6 @@ CDEIntegrator::CDEIntegrator( SalFrame* pFrame ) :
 
 CDEIntegrator::~CDEIntegrator()
 {
-    if( maAppWidget )
-        pXtUnrealizeWidget( maAppWidget );
-
     nRefCount--;
     if( ! nRefCount )
         GlobalDeInit();
@@ -269,11 +258,6 @@ void CDEIntegrator::GlobalInit()
             (WidgetClass*)_LoadSymbol( pXmLib, "xmRowColumnWidgetClass" );
         pxmPushButtonWidgetClass =
             (WidgetClass*)_LoadSymbol( pXmLib, "xmPushButtonWidgetClass" );
-
-        pXtSetLanguageProc( NULL, NULL, NULL );
-        pMrmInitialize();
-         pXtToolkitInitialize();
-         XrmInitialize();
     }
     else
     {
