@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 14:00:39 $
+ *  last change: $Author: nn $ $Date: 2002-09-11 18:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <svx/editstat.hxx>
 #include <svx/outliner.hxx>
 #include <svx/unolingu.hxx>
+#include <svtools/accessibilityoptions.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/system.hxx>
@@ -964,9 +965,12 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     //      Hintergrundfarbe der Zelle
     Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
-    if ( aBackCol.GetTransparency() > 0 || IsSyntaxMode())
+    ScModule* pScMod = SC_MOD();
+    if ( aBackCol.GetTransparency() > 0 ||
+            ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+              pScMod->GetAccessOptions().GetIsForBorders() ) )
     {
-        aBackCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+        aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 

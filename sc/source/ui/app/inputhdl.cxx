@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:58:54 $
+ *  last change: $Author: nn $ $Date: 2002-09-11 18:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <offmgr/app.hxx>
+#include <svtools/accessibilityoptions.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/sound.hxx>
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
@@ -1529,8 +1530,11 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
 
                     Color aBackCol = ((const SvxBrushItem&)
                                     pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
-                    if ( aBackCol.GetTransparency() > 0 )
-                        aBackCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+                    ScModule* pScMod = SC_MOD();
+                    if ( aBackCol.GetTransparency() > 0 ||
+                            ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+                              pScMod->GetAccessOptions().GetIsForBorders() ) )
+                        aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
                     pEngine->SetBackgroundColor( aBackCol );
 
                     //  Ausrichtung

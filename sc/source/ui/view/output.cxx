@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-16 14:44:35 $
+ *  last change: $Author: nn $ $Date: 2002-09-11 18:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2654,7 +2654,7 @@ void ScOutputData::PrintNoteMarks( const List& rPosList )
 {
     Font aFont;
     ScAutoFontColorMode eColorMode = bUseStyleColor ?
-                                        ( bForceAutoColor ? SC_AUTOCOL_FORCE : SC_AUTOCOL_DISPLAY ) :
+                                        ( bForceAutoColor ? SC_AUTOCOL_IGNOREFONT : SC_AUTOCOL_DISPLAY ) :
                                         SC_AUTOCOL_PRINT;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont(aFont, eColorMode);
     aFont.SetSize( Size( 0, (long) ( 120 * nPPTY ) ) );         // 6 pt

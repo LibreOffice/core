@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 13:31:51 $
+ *  last change: $Author: nn $ $Date: 2002-09-11 18:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,10 @@ enum ScAutoFontColorMode
     SC_AUTOCOL_RAW,         // COL_AUTO is returned
     SC_AUTOCOL_BLACK,       // always use black
     SC_AUTOCOL_PRINT,       // black or white, depending on background
-    SC_AUTOCOL_DISPLAY,     // from style settings or white
-    SC_AUTOCOL_FORCE        // like SC_AUTOCOL_DISPLAY, but for all stored font colors
+    SC_AUTOCOL_DISPLAY,     // from style settings, or black/white if needed
+    SC_AUTOCOL_IGNOREFONT,  // like DISPLAY, but ignore stored font color (assume COL_AUTO)
+    SC_AUTOCOL_IGNOREBACK,  // like DISPLAY, but ignore stored background color (use configured color)
+    SC_AUTOCOL_IGNOREALL    // like DISPLAY, but ignore stored font and background colors
 };
 
 
@@ -128,7 +130,7 @@ public:
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
-                                        BYTE nScript = 0 ) const;
+                                        BYTE nScript = 0, const Color* pBackConfigColor = NULL ) const;
 
     void                    FillEditItemSet( SfxItemSet* pSet,
                                         const SfxItemSet* pCondSet = NULL ) const;

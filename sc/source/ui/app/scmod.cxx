@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-09 14:47:06 $
+ *  last change: $Author: nn $ $Date: 2002-09-11 18:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,10 @@ void ScModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     pViewSh->PaintTop();
                     pViewSh->PaintLeft();
                     pViewSh->PaintExtras();
+
+                    ScInputHandler* pHdl = pViewSh->GetInputHandler();
+                    if ( pHdl )
+                        pHdl->ForgetLastPattern();  // EditEngine BackgroundColor may change
                 }
                 else if ( pViewShell->ISA(ScPreviewShell) )
                 {

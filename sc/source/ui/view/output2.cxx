@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 14:00:36 $
+ *  last change: $Author: nn $ $Date: 2002-09-11 18:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/unolingu.hxx>
+#include <svtools/accessibilityoptions.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
@@ -138,6 +139,9 @@ class ScDrawStringsVars
     BOOL                bLineBreak;
 
     BOOL                bPixelToLogic;
+    BOOL                bCellContrast;
+
+    Color               aBackConfigColor;       // used for ScPatternAttr::GetFont calls
 
 public:
                 ScDrawStringsVars(ScOutputData* pData, BOOL bPTL);
@@ -194,6 +198,12 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     pLastCell   ( NULL )
 {
     pFormatter = pData->pDoc->GetFormatTable();
+
+    ScModule* pScMod = SC_MOD();
+    bCellContrast = pOutput->bUseStyleColor &&
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+            pScMod->GetAccessOptions().GetIsForBorders();
+    aBackConfigColor.SetColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
 }
 
 ScDrawStringsVars::~ScDrawStringsVars()
@@ -214,13 +224,21 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     //  Font
 
-    ScAutoFontColorMode eColorMode = pOutput->bUseStyleColor ?
-                                        ( pOutput->bForceAutoColor ? SC_AUTOCOL_FORCE : SC_AUTOCOL_DISPLAY ) :
-                                        SC_AUTOCOL_PRINT;
-    if ( bPixelToLogic )
-        pPattern->GetFont( aFont, eColorMode, pFmtDevice, NULL, pCondSet, nScript );
+    ScAutoFontColorMode eColorMode;
+    if ( pOutput->bUseStyleColor )
+    {
+        if ( pOutput->bForceAutoColor )
+            eColorMode = bCellContrast ? SC_AUTOCOL_IGNOREALL : SC_AUTOCOL_IGNOREFONT;
+        else
+            eColorMode = bCellContrast ? SC_AUTOCOL_IGNOREBACK : SC_AUTOCOL_DISPLAY;
+    }
     else
-        pPattern->GetFont( aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript );
+        eColorMode = SC_AUTOCOL_PRINT;
+
+    if ( bPixelToLogic )
+        pPattern->GetFont( aFont, eColorMode, pFmtDevice, NULL, pCondSet, nScript, &aBackConfigColor );
+    else
+        pPattern->GetFont( aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript, &aBackConfigColor );
     aFont.SetAlign(ALIGN_BASELINE);
 
     //  Orientierung
@@ -1639,6 +1657,12 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
+    ScModule* pScMod = SC_MOD();
+    sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor;
+    BOOL bCellContrast = bUseStyleColor &&
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+            pScMod->GetAccessOptions().GetIsForBorders();
+
     ScFieldEditEngine* pEngine = NULL;
     BOOL bHyphenatorSet = FALSE;
     const ScPatternAttr* pPattern;
@@ -1903,9 +1927,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 
                                 Color aBackCol = ((const SvxBrushItem&)
                                     pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor();
-                                if ( bUseStyleColor && aBackCol.GetTransparency() > 0 )
-                                    aBackCol.SetColor( SC_MOD()->GetColorConfig().
-                                                        GetColorValue(svx::DOCCOLOR).nColor );
+                                if ( bUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
+                                    aBackCol.SetColor( nConfBackColor );
                                 pEngine->SetBackgroundColor( aBackCol );
                             }
 
@@ -2488,6 +2511,12 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
+    ScModule* pScMod = SC_MOD();
+    sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor;
+    BOOL bCellContrast = bUseStyleColor &&
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+            pScMod->GetAccessOptions().GetIsForBorders();
+
     ScFieldEditEngine* pEngine = NULL;
     BOOL bHyphenatorSet = FALSE;
     const ScPatternAttr* pPattern;
@@ -2690,9 +2719,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
                                 Color aBackCol = ((const SvxBrushItem&)
                                     pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor();
-                                if ( bUseStyleColor && aBackCol.GetTransparency() > 0 )
-                                    aBackCol.SetColor( SC_MOD()->GetColorConfig().
-                                                        GetColorValue(svx::DOCCOLOR).nColor );
+                                if ( bUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
+                                    aBackCol.SetColor( nConfBackColor );
                                 pEngine->SetBackgroundColor( aBackCol );
                             }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:57:54 $
+ *  last change: $Author: nn $ $Date: 2002-09-11 18:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/brshitem.hxx>
 #include <svx/charreliefitem.hxx>
 #include <svx/cntritem.hxx>
+#include <svx/colorcfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/crsditem.hxx>
 #include <svx/emphitem.hxx>
@@ -104,6 +105,7 @@
 #include "globstr.hrc"
 #include "conditio.hxx"
 #include "validat.hxx"
+#include "scmod.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -114,11 +116,6 @@ ScDocument* ScPatternAttr::pDoc = NULL;
 //! move to some header file
 inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
 inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
-
-// -----------------------------------------------------------------------
-
-// threshold for automatic text color
-#define DARK_COLOR 154
 
 // -----------------------------------------------------------------------
 
@@ -230,7 +227,8 @@ SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT nItemVersion) 
 
 void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
                                 OutputDevice* pOutDev, const Fraction* pScale,
-                                const SfxItemSet* pCondSet, BYTE nScript ) const
+                                const SfxItemSet* pCondSet, BYTE nScript,
+                                const Color* pBackConfigColor ) const
 {
     //  Items auslesen
 
@@ -393,9 +391,10 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
         rFont.SetSize( Size( 0, (long) nFontHeight ) );
     }
 
-    //  Auszeichnungen
+    //  determine effective font color
 
-    if ( ( aColor.GetColor() == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW ) || eAutoMode == SC_AUTOCOL_FORCE )
+    if ( ( aColor.GetColor() == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW ) ||
+            eAutoMode == SC_AUTOCOL_IGNOREFONT || eAutoMode == SC_AUTOCOL_IGNOREALL )
     {
         if ( eAutoMode == SC_AUTOCOL_BLACK )
             aColor.SetColor( COL_BLACK );
@@ -413,24 +412,48 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
             else
                 aBackColor = ((const SvxBrushItem&)rMySet.Get( ATTR_BACKGROUND )).GetColor();
 
-            if ( aBackColor != COL_TRANSPARENT &&
-                aBackColor.GetRed() + aBackColor.GetGreen() + aBackColor.GetBlue() < DARK_COLOR )
+            //  if background color attribute is transparent, use window color for brightness comparisons
+            if ( aBackColor == COL_TRANSPARENT ||
+                    eAutoMode == SC_AUTOCOL_IGNOREBACK || eAutoMode == SC_AUTOCOL_IGNOREALL )
             {
-                //  use white if on dark background
+                if ( eAutoMode == SC_AUTOCOL_PRINT )
+                    aBackColor.SetColor( COL_WHITE );
+                else if ( pBackConfigColor )
+                {
+                    // pBackConfigColor can be used to avoid repeated lookup of the configured color
+                    aBackColor = *pBackConfigColor;
+                }
+                else
+                    aBackColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+            }
+
+            //  get system text color for comparison
+            Color aSysTextColor;
+            if ( eAutoMode == SC_AUTOCOL_PRINT )
+                aSysTextColor.SetColor( COL_BLACK );
+            else
+                aSysTextColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+
+            //  select the resulting color
+            if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
+            {
+                //  use white instead of dark on dark
                 aColor.SetColor( COL_WHITE );
             }
-            else if ( eAutoMode == SC_AUTOCOL_DISPLAY || eAutoMode == SC_AUTOCOL_FORCE )
+            else if ( aBackColor.IsBright() && aSysTextColor.IsBright() )
             {
-                //  use color from style settings for display
-                aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+                //  use black instead of bright on bright
+                aColor.SetColor( COL_BLACK );
             }
             else
             {
-                //  use black instead of settings color for printing
-                aColor.SetColor( COL_BLACK );
+                //  use aSysTextColor (black for SC_AUTOCOL_PRINT, from style settings otherwise)
+                aColor = aSysTextColor;
             }
         }
     }
+
+    //  set font effects
 
     if (rFont.GetWeight() != eWeight)
         rFont.SetWeight( eWeight );
