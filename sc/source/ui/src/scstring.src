@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 21:20:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2053,7 +2053,7 @@ String SCSTR_CLIP_STRING
     Text [ dutch ] = "Tekst zonder opmaak" ;
     Text [ spanish ] = "Texto no formateado" ;
     Text [ english_us ] = "Unformatted text" ;
-    Text[ chinese_simplified ] = "Î´¸ñÊ½µÄÎÄ±¾";
+    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ×Ö";
     Text[ russian ] = "Íåôîğìàòèğîâàííûé òåêñò";
     Text[ polish ] = "Tekst niesformatowany";
     Text[ japanese ] = "‘®İ’è‚³‚ê‚Ä‚È‚¢Ã·½Ä";
@@ -2488,7 +2488,7 @@ String SCSTR_CHAR_ATTRS
     Text [ swedish ] = "Teckenattribut" ;
     Text [ finnish ] = "Fonttimääritteet" ;
     Text [ english_us ] = "Font Attributes" ;
-    Text[ chinese_simplified ] = "×ÖÌåÊôĞÔ";
+    Text[ chinese_simplified ] = "×Ö·ûÊôĞÔ";
     Text[ russian ] = "Àòğèáóòû øğèôòà";
     Text[ polish ] = "Atrybuty czcionek";
     Text[ japanese ] = "•¶š‚Ì‘®«";
@@ -3053,7 +3053,7 @@ String SCSTR_GRFILTER_FILTERERROR
     Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ íå íàéäåí";
     Text[ polish ] = "Nie znaleziono filtrów graficznych";
     Text[ japanese ] = "‰æ‘œÌ¨ÙÀ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "¨S¦³§ä¨ì¹Ï§Î¹LÂo¾¹";
+    Text[ chinese_traditional ] = "¨S¦³§ä¨ì¹Ï§ÎÂà´«¾¹";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafische filter niet gevonden";
     Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
@@ -3111,12 +3111,13 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ japanese ] = "‰æ‘œÌ¨ÙÀ";
     Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ";
     Text[ chinese_simplified ] = "Í¼ĞÎ¹ıÂËÆ÷";
-    Text[ chinese_traditional ] = "¹Ï§Î¹LÂo¾¹";
+    Text[ chinese_traditional ] = "¹Ï§ÎÂà´«¾¹";
     Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
     Text[ turkish ] = "Grafik filtresi";
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
