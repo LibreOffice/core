@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:58:53 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ void SwWrtShell::Insert( const String &rStr )
     // characters from a different script type has to call CallChgLink.
 //    SwChgLinkFlag *pChgFlg = bCallIns ? new SwChgLinkFlag( *this ) : 0;
 
-    if( bHasSel )
+    if( bHasSel || ( !bIns && SelectHiddenRange() ) )
     {
             // nur hier klammern, da das normale Insert schon an der
             // Editshell geklammert ist
@@ -371,7 +371,8 @@ void SwWrtShell::Insert( const String &rStr )
         bStarted = TRUE;
         DelRight();
     }
-/*
+
+    /*
 JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
             naechste Zeichen.
     if( bHasSel && !bIns && 1 < rStr.Len() )
