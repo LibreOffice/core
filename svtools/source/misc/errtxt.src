@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:40:28 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "Chyba";
         Text[ hebrew ] = "‮שגיאה‬";
         Text[ hindi ] = "गलती";
+        Text[ slovak ] = "Chyba";
     };
     String ERRCTX_WARNING
     {
@@ -127,6 +128,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "Upozornění";
         Text[ hebrew ] = "‮אזהרה‬";
         Text[ hindi ] = "चेतावनी";
+        Text[ slovak ] = "Upozornenie";
     };
     String ERRCTX_SFX_LOADTEMPLATE
     {
@@ -159,6 +161,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při nahrávání šablony $(ARG1)";
         Text[ hebrew ] = "‮$(ERR) בטעינת תבנית $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) नमूने को लोड़ करने के समय $(ERR) ";
+        Text[ slovak ] = "$(ERR) pri nahrávaní šablóny $(ARG1)";
     };
     String ERRCTX_SFX_SAVEDOC
     {
@@ -190,6 +193,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při ukládání dokumentu $(ARG1)";
         Text[ hebrew ] = "‮$(ERR) בשמירת מסמך $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) लेखपत्र को संचित करने के समय $(ERR)";
+        Text[ slovak ] = "$(ERR) pri ukladaní dokumentu $(ARG1)";
     };
     String ERRCTX_SFX_SAVEASDOC
     {
@@ -221,6 +225,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při ukládání dokumentu $(ARG1)";
         Text[ hebrew ] = "‮$(ERR) בשמירת מסמך $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) लेखपत्र को संचित करने के समय $(ERR)";
+        Text[ slovak ] = "$(ERR) pri ukladaní dokumentu $(ARG1)";
     };
     String ERRCTX_SFX_DOCINFO
     {
@@ -252,6 +257,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při zobrazování informací o dokumentu $(ARG1)";
         Text[ hebrew ] = "‮$(ERR) בתצוגת פרטי מסמך $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) लेखपत्र केलिए लेखपत्र सूचना दिखाने के समय $(ERR)";
+        Text[ slovak ] = "$(ERR) pri zobrazovaní informácií o dokumente $(ARG1)";
     };
     String ERRCTX_SFX_DOCTEMPLATE
     {
@@ -284,6 +290,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při zápisu dokumentu $(ARG1) jako šablony";
         Text[ hebrew ] = "‮$(ERR) בכתיבת מסמך $(ARG1) בתור תבנית‬";
         Text[ hindi ] = "$(ARG1) लेखपत्र को नमूने के जैसे लिखने के समय $(ERR)   ";
+        Text[ slovak ] = "$(ERR) pri zápise dokumentu $(ARG1) ako šablóny";
     };
     String ERRCTX_SFX_MOVEORCOPYCONTENTS
     {
@@ -315,6 +322,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při kopírování nebo přesunu obsahu dokumentu";
         Text[ hebrew ] = "‮$(ERR) בעתקה או בהעברת תוכן המסמך‬";
         Text[ hindi ] = "लेखपत्र विषयों की प्रतिलिपि अथवा स्थान परिवर्तन करने के समय $(ERR) ";
+        Text[ slovak ] = "$(ERR) pri kopírovaní alebo presune obsahu dokumentu";
     };
     String ERRCTX_SFX_DOCMANAGER
     {
@@ -346,6 +354,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při spuštění správce dokumentů";
         Text[ hebrew ] = "‮$(ERR) בעת הפעלת מנהל המסמכים‬";
         Text[ hindi ] = "लेखपत्र प्रबन्धक को प्रारंभ करने के समय $(ERR) ";
+        Text[ slovak ] = "$(ERR) pri spúšťaní správcu dokumentov";
     };
     String ERRCTX_SFX_OPENDOC
     {
@@ -378,6 +387,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při nahrávání dokumentu $(ARG1)";
         Text[ hebrew ] = "‮$(ERR) בטעינת מסמך $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) लेखपत्र को लोड़ करने के समय $(ERR) ";
+        Text[ slovak ] = "$(ERR) pri nahrávaní dokumentu $(ARG1)";
     };
     String ERRCTX_SFX_NEWDOCDIRECT
     {
@@ -410,6 +420,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při vytváření dokumentu";
         Text[ hebrew ] = "‮$(ERR) ביצור מסמך חדש‬";
         Text[ hindi ] = "नया लेखपत्र उत्पन्न करने के समय $(ERR)  ";
+        Text[ slovak ] = "$(ERR) pri vytváraní dokumentu";
     };
     String ERRCTX_SFX_NEWDOC
     {
@@ -442,6 +453,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při vytváření dokumentu";
         Text[ hebrew ] = "‮$(ERR) ביצור מסמך חדש‬";
         Text[ hindi ] = "$(ERR) creating a new document";
+        Text[ slovak ] = "$(ERR) pri vytváraní dokumentu";
     };
     String ERRCTX_SFX_CREATEOBJSH
     {
@@ -473,6 +485,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "Chyba $(ERR) při expanzi položky";
         Text[ hebrew ] = "‮$(ERR) בעת פינוח ערך‬";
         Text[ hindi ] = "प्रविष्टि विस्तार करने के समय $(ERR) ";
+        Text[ slovak ] = "Chyba $(ERR) pri expanzii položky";
     };
     String ERRCTX_SFX_LOADBASIC
     {
@@ -504,6 +517,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při nahrávání BASICu z dokumentu $(ARG1)";
         Text[ hebrew ] = "‮$(ERR) בעת הפעלת קוד הבייסיק של מסמך $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) लेखपत्र का BASIC लोड़ करने के समय $(ERR) ";
+        Text[ slovak ] = "$(ERR) pri nahrávaní BASICu z dokumentu $(ARG1)";
     };
     String ERRCTX_SFX_SEARCHADDRESS
     {
@@ -533,6 +547,7 @@ Resource RID_ERRCTX
         Text[ czech ] = "$(ERR) při hledání adresy";
         Text[ hebrew ] = "‮$(ERR) בחיפוש כתובת‬";
         Text[ hindi ] = "$(ERR) searching for an address";
+        Text[ slovak ] = "$(ERR) pri hľadaní adresy";
     };
 };
 Resource RID_ERRHDL
@@ -572,6 +587,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Neexistující objekt";
         Text[ hebrew ] = "‮עצם לא קיים‬";
         Text[ hindi ] = "अस्तित्व-हीन वस्तु";
+        Text[ slovak ] = "Neexistujúci objekt";
     };
     String ERRCODE_CLASS_ALREADYEXISTS
     {
@@ -603,6 +619,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Objekt již existuje";
         Text[ hebrew ] = "‮עצם זה כבר קיים‬";
         Text[ hindi ] = "वस्तु पहिले से ही अस्तित्व में है";
+        Text[ slovak ] = "Objekt už existuje";
     };
     String ERRCODE_CLASS_ACCESS
     {
@@ -634,6 +651,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Objekt je nedostupný";
         Text[ hebrew ] = "‮עצם לא נגיש‬";
         Text[ hindi ] = "वस्तु प्राप्य नहीं है";
+        Text[ slovak ] = "Objekt je nedostupný";
     };
     String ERRCODE_CLASS_PATH
     {
@@ -665,6 +683,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nepřípustná cesta";
         Text[ hebrew ] = "‮מסלול ספריות בלתי חוקי‬";
         Text[ hindi ] = "Inadmissable path";
+        Text[ slovak ] = "Neprípustná cesta";
     };
     String ERRCODE_CLASS_LOCKING
     {
@@ -697,6 +716,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Problém s uzamčením";
         Text[ hebrew ] = "‮שגיאת נעילה‬";
         Text[ hindi ] = "Locking problem";
+        Text[ slovak ] = "Problém s uzamknutím";
     };
     String ERRCODE_CLASS_PARAMETER
     {
@@ -715,7 +735,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "������������ ��������";
         Text[ polish ] = "Nieprawid�owy parametr";
         Text[ japanese ] = "正しくないパラメータ";
-        Text[ chinese_traditional ] = "助變量無效";
+        Text[ chinese_traditional ] = "參數無效";
         Text[ arabic ] = "����� �����";
         Text[ dutch ] = "Foutieve parameter";
         Text[ chinese_simplified ] = "无效的参数";
@@ -728,6 +748,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Chybný parametr";
         Text[ hebrew ] = "‮פרמטר לא נכון‬";
         Text[ hindi ] = "Wrong parameter";
+        Text[ slovak ] = "Chybný parameter";
     };
     String ERRCODE_CLASS_SPACE
     {
@@ -759,6 +780,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Zdroj vyčerpán";
         Text[ hebrew ] = "‮המשאב אזל‬";
         Text[ hindi ] = "साधन खतम हुआ";
+        Text[ slovak ] = "Zdroj vyčerpaný";
     };
     String ERRCODE_CLASS_NOTSUPPORTED
     {
@@ -790,6 +812,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Činnost nepodporována";
         Text[ hebrew ] = "‮פעולה לא נתמכת‬";
         Text[ hindi ] = "कार्य असमर्थित";
+        Text[ slovak ] = "Nepodporovaná akcia";
     };
     String ERRCODE_CLASS_READ
     {
@@ -821,6 +844,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Chyba při čtení";
         Text[ hebrew ] = "‮שגיאה תוך כדי קריאה‬";
         Text[ hindi ] = "पढ़ने में गलती";
+        Text[ slovak ] = "Chyba pri čítaní";
     };
     String ERRCODE_CLASS_WRITE
     {
@@ -852,6 +876,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Chyba při zápisu";
         Text[ hebrew ] = "‮שגיאה תוך כדי כתיבה‬";
         Text[ hindi ] = "लिखने में गलती";
+        Text[ slovak ] = "Chyba pri zápise";
     };
     String ERRCODE_CLASS_UNKNOWN
     {
@@ -883,6 +908,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "neznámý";
         Text[ hebrew ] = "‮לא מוכר‬";
         Text[ hindi ] = "अज्ञात";
+        Text[ slovak ] = "neznámy";
     };
     String ERRCODE_CLASS_VERSION
     {
@@ -914,6 +940,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nekompatibilita verze";
         Text[ hebrew ] = "‮אי התאמה בגרסאות‬";
         Text[ hindi ] = "आवृत्ति विभिन्नता";
+        Text[ slovak ] = "Nekompatibilita verzie";
     };
     String ERRCODE_CLASS_GENERAL
     {
@@ -946,6 +973,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Obecná chyba";
         Text[ hebrew ] = "‮שגיאה ללא פירוט‬";
         Text[ hindi ] = "सामान्य गलती";
+        Text[ slovak ] = "Obecná chyba";
     };
     String ERRCODE_CLASS_FORMAT
     {
@@ -977,6 +1005,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nesprávný formát";
         Text[ hebrew ] = "‮צורת תוכן לא נכונה‬";
         Text[ hindi ] = "गलत रचना";
+        Text[ slovak ] = "Nesprávny formát";
     };
     String ERRCODE_CLASS_CREATE
     {
@@ -1008,6 +1037,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Chyba ve vytvoření objektu";
         Text[ hebrew ] = "‮שגיאה ביצירת עצם‬";
         Text[ hindi ] = "Error creating object";
+        Text[ slovak ] = "Chyba vo vytvorení­ objektu";
     };
     String ERRCODE_CLASS_SBX
     {
@@ -1039,6 +1069,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nepřípustná hodnota či datový typ";
         Text[ hebrew ] = "‮ערך או טיפוס בלתי חוקי‬";
         Text[ hindi ] = "Inadmissable value or data type";
+        Text[ slovak ] = "Neprípustná hodnota alebo dátový typ";
     };
     String ERRCODE_CLASS_RUNTIME
     {
@@ -1070,6 +1101,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "BASIC - chyba při běhu";
         Text[ hebrew ] = "‮שגיאה בזמן הפעלת הבייסיק‬";
         Text[ hindi ] = "BASIC रन-टइम गलती";
+        Text[ slovak ] = "BASIC chyba počas chodu";
     };
     String ERRCODE_CLASS_COMPILER
     {
@@ -1101,6 +1133,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "BASIC - chyba v syntaxi";
         Text[ hebrew ] = "‮שגיאת תחביר בייסיק‬";
         Text[ hindi ] = "BASIC सिन्टाक्स गलती";
+        Text[ slovak ] = "BASIC chyba v syntaxi";
     };
     String 1
     {
@@ -1133,6 +1166,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Obecná chyba";
         Text[ hebrew ] = "‮שגיאה ללא פירוט‬";
         Text[ hindi ] = "General Error";
+        Text[ slovak ] = "Obecná chyba";
     };
     String ERRCODE_IO_GENERAL
     {
@@ -1164,6 +1198,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Obecná chyba vstupu/výstupu";
         Text[ hebrew ] = "‮שגיאת קלט\\פלט ללא פירוט‬";
         Text[ hindi ] = "सामान्य इनपुट्/औटपुट् गलती";
+        Text[ slovak ] = "Všeobecná chyba vstupu/výstupu";
     };
     String ERRCODE_IO_MISPLACEDCHAR
     {
@@ -1196,6 +1231,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Neplatný název souboru";
         Text[ hebrew ] = "‮שם קובץ בלתי חוקי‬";
         Text[ hindi ] = "अमान्य फाइल नाम";
+        Text[ slovak ] = "Neplatný názov súboru";
     };
     String ERRCODE_IO_NOTEXISTS
     {
@@ -1227,6 +1263,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Neexistující soubor";
         Text[ hebrew ] = "‮קובץ לא קיים‬";
         Text[ hindi ] = "अस्तित्व-हीन फाइल";
+        Text[ slovak ] = "Neexistujúci súbor";
     };
     String ERRCODE_IO_ALREADYEXISTS
     {
@@ -1259,6 +1296,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Soubor již existuje";
         Text[ hebrew ] = "‮הקובץ כבר קיים‬";
         Text[ hindi ] = "फाइल पहिले से ही अस्तित्व में है";
+        Text[ slovak ] = "Súbor už existuje";
     };
     String ERRCODE_IO_NOTADIRECTORY
     {
@@ -1290,6 +1328,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Objekt není adresářem";
         Text[ hebrew ] = "‮העצם אינו ספריה‬";
         Text[ hindi ] = "वस्तु डैरक्टरी नही है";
+        Text[ slovak ] = "Objekt nie je adresárom";
     };
     String ERRCODE_IO_NOTAFILE
     {
@@ -1321,6 +1360,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Objekt není souborem";
         Text[ hebrew ] = "‮העצם אינו קובץ‬";
         Text[ hindi ] = "वस्तु फाइल नही है";
+        Text[ slovak ] = "Objekt nie je súborom";
     };
     String ERRCODE_IO_INVALIDDEVICE
     {
@@ -1352,6 +1392,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Zadané zařízení je neplatné";
         Text[ hebrew ] = "‮ההתקן שצוין אינו חוקי‬";
         Text[ hindi ] = "निर्दिष्ट की हुयी साधन अमान्य है";
+        Text[ slovak ] = "Uvedené zariadenie je neplatné";
     };
     String ERRCODE_IO_ACCESSDENIED
     {
@@ -1383,6 +1424,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze přistupovat k objektu kvůli\nnedostatečným uživatelským oprávněním";
         Text[ hebrew ] = "‮לא ניתן לגשת לעצם עקב חוסר הרשאות‬";
         Text[ hindi ] = "उपभोक्ता केलिए अपर्याप्त अधिकार के कारण\nवस्तु को प्राप्य नहीं कर सकते है";
+        Text[ slovak ] = "Nedá sa pristupovať k objektu kvôli\nnedostatočným používateľským právam";
     };
     String ERRCODE_IO_LOCKVIOLATION
     {
@@ -1414,6 +1456,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Porušení sdílení při přístupu k objektu";
         Text[ hebrew ] = "‮לא ניתן לגשת לעצם עקב שימוש בו על ידי תוכנית אחרת‬";
         Text[ hindi ] = "वस्तु को प्राप्य करने के समय हिस्से की उल्लंघन ";
+        Text[ slovak ] = "Porušenie zdielania pri prístupe k objektu";
     };
     String ERRCODE_IO_OUTOFSPACE
     {
@@ -1445,6 +1488,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Na zařízení již není místo";
         Text[ hebrew ] = "‮אין מקום פנוי על הכונן‬";
         Text[ hindi ] = "साधन में जगह की कमी";
+        Text[ slovak ] = "Na zariadení nie je miesto";
     };
     String ERRCODE_IO_ISWILDCARD
     {
@@ -1476,6 +1520,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Tuto operaci nelze spustit nad\nsoubory, které obsahují zástupné znaky";
         Text[ hebrew ] = "‮לא ניתן לבצע פעולה זו על שמות קבצים עם כוכביות‬";
         Text[ hindi ] = "This operation cannot be run on\nfiles containing wildcards";
+        Text[ slovak ] = "Táto operácia sa nedá vykonať so\nsúbormi, ktoré obsahujú zástupné znaky";
     };
     String ERRCODE_IO_NOTSUPPORTED
     {
@@ -1507,6 +1552,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Tato činnost není v tomto operačním systému podporována";
         Text[ hebrew ] = "‮פעולה זו אינה נתמכת על מערכת הפעלה הזו‬";
         Text[ hindi ] = "This operation is not supported on this operating system";
+        Text[ slovak ] = "Táto činnosť nie je v tomto operačnom systéme podporovaná";
     };
     String ERRCODE_IO_TOOMANYOPENFILES
     {
@@ -1538,6 +1584,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Existuje příliš mnoho otevřených souborů";
         Text[ hebrew ] = "‮יש יותר מידי קבצים פתוחים‬";
         Text[ hindi ] = "There are too many files open";
+        Text[ slovak ] = "Existuje priveľa otvorených súborov";
     };
     String ERRCODE_IO_CANTREAD
     {
@@ -1569,6 +1616,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Data nelze přečíst ze souboru";
         Text[ hebrew ] = "‮לא ניתן לקרוא נתונים מהקובץ‬";
         Text[ hindi ] = "Data could not be read from the file";
+        Text[ slovak ] = "Dáta sa nedajú načítať zo súboru";
     };
     String ERRCODE_IO_CANTWRITE
     {
@@ -1601,6 +1649,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Soubor nelze zapsat";
         Text[ hebrew ] = "‮לא ניתן לכתוב את הקובץ‬";
         Text[ hindi ] = "The file could not be written";
+        Text[ slovak ] = "Súbor sa nedá zapísať";
     };
     String ERRCODE_IO_OUTOFMEMORY
     {
@@ -1632,6 +1681,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Operaci nelze spustit kvůli nedostatku paměti.";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה עקב חוסר בזיכרון דינמי פנוי‬";
         Text[ hindi ] = "The operation could not be run due to insufficient memory.";
+        Text[ slovak ] = "Operácia nemôže byť spustená kvôli nedostatku pamäti.";
     };
     String ERRCODE_IO_CANTSEEK
     {
@@ -1663,6 +1713,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Operace seek nemůže být spuštěna";
         Text[ hebrew ] = "‮לא ניתן לבצע פעולת התמקמות (seek) בקובץ‬";
         Text[ hindi ] = "सीक कार्य को नहीं चला सकते है ।";
+        Text[ slovak ] = "Operácia posunu (seek) sa nedá vykonať";
     };
     String ERRCODE_IO_CANTTELL
     {
@@ -1694,6 +1745,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Operace tell nemůže být spuštěna";
         Text[ hebrew ] = "‮לא ניתן לבצע קריאת הסמן (tell) בקובץ‬";
         Text[ hindi ] = "टेल कार्य को नहीं चला सकते है ।";
+        Text[ slovak ] = "Operácia zistenia pozície (tell) sa nedá vykonať";
     };
     String ERRCODE_IO_WRONGVERSION
     {
@@ -1725,6 +1777,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nesprávná verze souboru";
         Text[ hebrew ] = "‮גרסאת הקובץ אינה נכונה‬";
         Text[ hindi ] = "गलत फाइल आवृत्ति";
+        Text[ slovak ] = "Nesprávna verzia súboru";
     };
     String ERRCODE_IO_WRONGFORMAT
     {
@@ -1756,6 +1809,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nesprávný formát souboru";
         Text[ hebrew ] = "‮צורת תוכן הקובץ אינה נכונה‬";
         Text[ hindi ] = "गलत फाइल रचना";
+        Text[ slovak ] = "Nesprávny formát súboru";
     };
     String ERRCODE_IO_INVALIDCHAR
     {
@@ -1787,6 +1841,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Název souboru obsahuje neplatné znaky";
         Text[ hebrew ] = "‮הקובץ מכיל תווים בלתי חוקיים‬";
         Text[ hindi ] = "The file name contains invalid characters";
+        Text[ slovak ] = "Názov súboru obsahuje neplatné znaky";
     };
     String ERRCODE_IO_UNKNOWN
     {
@@ -1818,6 +1873,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nastala neznámá I/O chyba";
         Text[ hebrew ] = "‮ ארעה שגיאת קלט\\פלט בלתי מוכרת‬";
         Text[ hindi ] = "An unknown I/O error has occurred";
+        Text[ slovak ] = "Nastala neznáma I/O chyba";
     };
     String ERRCODE_IO_INVALIDACCESS
     {
@@ -1849,6 +1905,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Byl proveden neplatný pokus o přístup k souboru";
         Text[ hebrew ] = "‮נסיון בלתי חוקי לגשת לקובץ‬";
         Text[ hindi ] = "An invalid attempt was made to access the file";
+        Text[ slovak ] = "Bol vykonaný neplatný pokus o prístup k súboru";
     };
     String ERRCODE_IO_CANTCREATE
     {
@@ -1880,6 +1937,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Soubor nelze vytvořit";
         Text[ hebrew ] = "‮לא ניתן ליצור את הקובץ‬";
         Text[ hindi ] = "फाइल को उत्पन्न नहीं कर सकते है";
+        Text[ slovak ] = "Súbor sa nedá vytvoriť";
     };
     String ERRCODE_IO_INVALIDPARAMETER
     {
@@ -1911,6 +1969,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Operace byla spuštěna s neplatným parametrem";
         Text[ hebrew ] = "‮הפעולה הופעלה עם פרמטר לא נכון‬";
         Text[ hindi ] = "The operation was started under an invalid parameter";
+        Text[ slovak ] = "Operácia bola spustená s neplatným parametrom";
     };
     String ERRCODE_IO_ABORT
     {
@@ -1942,6 +2001,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Operace se souborem byla přerušena";
         Text[ hebrew ] = "‮הפעולה על הקובץ בוטלה‬";
         Text[ hindi ] = "The operation on the file was aborted";
+        Text[ slovak ] = "Operácia so súborom bola prerušená";
     };
     String ERRCODE_IO_NOTEXISTSPATH
     {
@@ -1973,6 +2033,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Cesta k souboru neexistuje";
         Text[ hebrew ] = "‮מסלול הספריות אל הקובץ לא קיים‬";
         Text[ hindi ] = "Path to the file does not exist";
+        Text[ slovak ] = "Cesta k súboru neexistuje";
     };
     String ERRCODE_IO_RECURSIVE
     {
@@ -2004,6 +2065,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Objekt nelze kopírovat do sebe sama.";
         Text[ hebrew ] = "‮לא ניתן להעתיק עצם לתוך עצמו.‬";
         Text[ hindi ] = "An object cannot be copied into itself.";
+        Text[ slovak ] = "Objekt sa nedá kopírovať do seba samého.";
     };
     String ERRCODE_SFX_NOSTDTEMPLATE
     {
@@ -2035,6 +2097,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze otevřít výchozí šablonu.";
         Text[ hebrew ] = "‮לא ניתן לפתוח את תבנית ברירת המחדל‬";
         Text[ hindi ] = "The default template could not be opened";
+        Text[ slovak ] = "Východzia šablóna sa nedá otvoriť.";
     };
     String ERRCODE_SFX_TEMPLATENOTFOUND
     {
@@ -2066,6 +2129,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze nalézt zadanou šablonu.";
         Text[ hebrew ] = "‮לא ניתן לאתר את התבנית המבוקשת‬";
         Text[ hindi ] = "The specified template could not be found";
+        Text[ slovak ] = "Zadaná šablóna sa nedá nájsť.";
     };
     String ERRCODE_SFX_NOTATEMPLATE
     {
@@ -2097,6 +2161,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze použít daný soubor jako šablonu.";
         Text[ hebrew ] = "‮לא ניתן להשתמש בקובץ כתבנית‬";
         Text[ hindi ] = "फाइल को नमूने कि तरह उपयोग नहीं कर सकते है";
+        Text[ slovak ] = "Daný súbor sa nedá použiť ako šablóna.";
     };
     String ERRCODE_SFX_CANTREADDOCINFO
     {
@@ -2128,6 +2193,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze načíst informaci o dokumentu, protože\nneexistuje nebo její formát je neznámý.";
         Text[ hebrew ] = "‮לא ניתן לקראו פרטי המסמך מהקובץ כי\nצורת תוכן המסמך לא מוכרת או מידע אודות המסמך לא קיים.‬";
         Text[ hindi ] = "Document information could not be read from the file because\nthe document information format is unknown or because document information does not\nexist";
+        Text[ slovak ] = "Zo súboru sa nedá načítať informácia o dokumente pretože\nje formát informácie o dokumente neznámy alebo neexistuje";
     };
     String ERRCODE_SFX_ALREADYOPEN
     {
@@ -2159,6 +2225,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Tento dokument již byl otevřen k úpravám";
         Text[ hebrew ] = "‮מסמך זה כבר נפתח לעריכה.‬";
         Text[ hindi ] = "This document has already been opened for editing";
+        Text[ slovak ] = "Tento dokument už bol otvorený na úpravy";
     };
     String ERRCODE_SFX_WRONGPASSWORD
     {
@@ -2191,6 +2258,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Bylo zadáno chybné heslo";
         Text[ hebrew ] = "‮הסיסמה שגויה.‬";
         Text[ hindi ] = "The wrong password has been entered";
+        Text[ slovak ] = "Bolo zadané chybné heslo";
     };
     String ERRCODE_SFX_DOLOADFAILED
     {
@@ -2222,6 +2290,7 @@ Resource RID_ERRHDL
         TEXT[ czech ] = "Chyba při čtení souboru ";
         TEXT[ hebrew ] = "‮שגיאה בקריאת הקובץ ‬";
         TEXT[ hindi ] = "फाइल पढ़ने में गलती ";
+        TEXT[ slovak ] = "Chyba pri načítaní súboru ";
     };
     String ERRCODE_SFX_DOCUMENTREADONLY
     {
@@ -2253,6 +2322,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Dokument byl otevřen pouze pro čtení";
         Text[ hebrew ] = "‮המסמך נפתח לקריאה בלבד‬";
         Text[ hindi ] = "The document was opened as read-only";
+        Text[ slovak ] = "Dokument bol otvorený len na čítanie";
     };
     String ERRCODE_SFX_OLEGENERAL
     {
@@ -2285,6 +2355,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Obecná chyba OLE";
         Text[ hebrew ] = "‮שגיאת OLE לא מזוהה‬";
         Text[ hindi ] = "सामान्य OLE गलती";
+        Text[ slovak ] = "Všeobecná chyba OLE";
     };
     String ERRCODE_INET_NAME_RESOLVE
     {
@@ -2316,6 +2387,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Jméno počítače $(ARG1) není možné rozklíčovat";
         Text[ hebrew ] = "‮לא ניתן לתרגם שם מחשב $(ARG1) לכתובת אינטרנט‬";
         Text[ hindi ] = "The host name $(ARG1) could not be resolved";
+        Text[ slovak ] = "Meno počítača $(ARG1) sa nedá zistiť";
     };
     String ERRCODE_INET_CONNECT
     {
@@ -2347,6 +2419,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze vytvořit internetové spojení s $(ARG1)";
         Text[ hebrew ] = "‮לא ניתן להתחבר ל $(ARG1)‬";
         Text[ hindi ] = "Could not establish Internet connection to $(ARG1)";
+        Text[ slovak ] = "Nedalo sa nadviazať internetové spojenie s $(ARG1)";
     };
     String ERRCODE_INET_READ
     {
@@ -2379,6 +2452,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Chyba při čtení dat z Internetu.\nChybová zpráva ze serveru: $(ARG1)";
         Text[ hebrew ] = "‮ארעה שגיאה בעת קריאת נתונים מהאינטרנט\nהודעת השגיאה מהשרת היא: $(ARG1)‬";
         Text[ hindi ] = "Error reading data from the Internet\n.Server error message: $(ARG1)";
+        Text[ slovak ] = "Chyba pri čítaní dát z Internetu.\nChybová správa zo serveru: $(ARG1)";
     };
     String ERRCODE_INET_WRITE
     {
@@ -2411,6 +2485,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Chyba při přenosu dat na Internet.\nChybová zpráva ze serveru: $(ARG1)";
         Text[ hebrew ] = "‮ארעה שגיאה בעת העברת נתונים דרך האינטרנט\nהודעת השגיאה מהשרת היא: $(ARG1)‬";
         Text[ hindi ] = "Error transferring data to the Internet.\nServer error message: $(ARG1)";
+        Text[ slovak ] = "Chyba pri prenose dát na Internet.\nChybová správa zo serveru: $(ARG1)";
     };
     String ERRCODE_INET_GENERAL
     {
@@ -2442,6 +2517,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nastala obecná chyba Internetu";
         Text[ hebrew ] = "‮שגיאת אינטרנט ללא פירוט‬";
         Text[ hindi ] = "Gereral Internet error has occurred";
+        Text[ slovak ] = "Nastala všeobecná chyba Internetu";
     };
     String ERRCODE_INET_OFFLINE
     {
@@ -2473,6 +2549,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Požadovaná data z Internetu nejsou dostupná v cache a nelze je přenést, jelikož se nenacházíte v online režimu.";
         Text[ hebrew ] = "‮המידע המבוקש מהאינטרנט אינו נמצא בזכרון המטמון וגם לא ניתן להשיג מהאינטרנט כיוון שחיבור לרשת לא מופעל.‬";
         Text[ hindi ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated";
+        Text[ slovak ] = "Požadované dáta z Internetu nie sú dostupné v cache a nedajú sa preniesť, pretože nie ste v online režime.";
     };
     String ERRCODE_SFXMSG_STYLEREPLACE
     {
@@ -2506,6 +2583,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Má být styl $(ARG1) nahrazen?";
         Text[ hebrew ] = "‮האם להחליף את הסגנון של $(ARG1) ?‬";
         Text[ hindi ] = "Should the $(ARG1) Style be replaced?";
+        Text[ slovak ] = "Má byt štýl $(ARG1) nahradený?";
     };
     String ERRCODE_SFX_NOFILTER
     {
@@ -2538,6 +2616,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Filtr nebyl nalezen";
         Text[ hebrew ] = "‮מסנן לא נמצא‬";
         Text[ hindi ] = "A filter has not been found";
+        Text[ slovak ] = "Filter nebol nájdený";
     };
     String ERRCODE_SFX_NODOCRELOAD
     {
@@ -2573,6 +2652,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze určit originál.";
         Text[ hebrew ] = "‮לא ניתן לזהות את המקורי.‬";
         Text[ hindi ] = "The original could not be determined.";
+        Text[ slovak ] = "Nedá sa určiť originál.";
     };
     String ERRCODE_SFX_CANTCREATECONTENT
     {
@@ -2604,6 +2684,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze vytvořit obsah.";
         Text[ hebrew ] = "‮לא ניתן ליצור את התכנים.‬";
         Text[ hindi ] = "The contents could not be created.";
+        Text[ slovak ] = "Obsah sa nedá vytvoriť.";
     };
     String ERRCODE_SFX_CANTCREATELINK
     {
@@ -2635,6 +2716,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze vytvořit odkaz.";
         Text[ hebrew ] = "‮לא ניתן ליצור את הקשר.‬";
         Text[ hindi ] = "लिंक को उत्पन्न नहीं कर सकते है ।";
+        Text[ slovak ] = "Nedá sa vytvoriť odkaz.";
     };
     String ERRCODE_SFX_WRONGBMKFORMAT
     {
@@ -2666,6 +2748,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Formát odkazu je neplatný.";
         Text[ hebrew ] = "‮צורת הקשר אינה חוקית.‬";
         Text[ hindi ] = "The link format is invalid.";
+        Text[ slovak ] = "Formát odkazu je neplatný";
     };
     String ERRCODE_SFX_WRONGICONFILE
     {
@@ -2697,6 +2780,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Konfigurace pohledu s ikonami je neplatná.";
         Text[ hebrew ] = "‮התצורה של תצוגת הסמלים אינה חוקית.‬";
         Text[ hindi ] = "The configuration of the icon display is invalid.";
+        Text[ slovak ] = "Konfigurácia pohľadu s ikonami je neplatná.";
     };
     String ERRCODE_SFX_CANTWRITEICONFILE
     {
@@ -2728,6 +2812,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze uložit konfiguraci pohledu s ikonami.";
         Text[ hebrew ] = "‮לא ניתן לשמור את התצורה של תצוגת הסמלים.‬";
         Text[ hindi ] = "The configuration of the icon display can not be saved.";
+        Text[ slovak ] = "Nedá sa uložiť konfigurácia pohľadu s ikonami.";
     };
     String ERRCODE_SFX_CANTDELICONFILE
     {
@@ -2759,6 +2844,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze smazat konfiguraci pohledu s ikonami.";
         Text[ hebrew ] = "‮לא ניתן למחוק את התצורה של תצוגת הסמלים הגרפיים.‬";
         Text[ hindi ] = "अइकॉन् दिखाने का रूप-रेखा को नहीं मिटा सकते है ।";
+        Text[ slovak ] = "Nedá sa zmazať konfigurácia pohľadu s ikonami.";
     };
     String ERRCODE_SFX_CANTRENAMECONTENT
     {
@@ -2790,6 +2876,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Obsah nelze přejmenovat";
         Text[ hebrew ] = "‮לא ניתן לשנות את שם התכנים‬";
         Text[ hindi ] = "विषयों को नया नाम नहीं दे सकते है ";
+        Text[ slovak ] = "Obsah sa nedá premenovať";
     };
     String ERRCODE_SFX_INVALIDBMKPATH
     {
@@ -2821,6 +2908,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Složka záložek je neplatná.";
         Text[ hebrew ] = "‮תיקית הסמניות אינה חוקית‬";
         Text[ hindi ] = "The bookmark folder is invalid.";
+        Text[ slovak ] = "Adresár záložiek je neplatný";
     };
     String ERRCODE_SFX_CANTWRITEURLCFGFILE
     {
@@ -2852,6 +2940,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Konfiguraci lokálně ukládaných URL nebylo možné uložit";
         Text[ hebrew ] = "‮לא ניתן לשמור את תצורת ה-URLים לשמירה מקומית‬";
         Text[ hindi ] = "The configuration of the URLs to be saved locally could not be saved";
+        Text[ slovak ] = "Konfiguráciu lokálne ukladaných URL nebolo možné uložiť";
     };
     String ERRCODE_SFX_WRONGURLCFGFORMAT
     {
@@ -2883,6 +2972,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Konfigurační formát lokálně ukládaných URL je neplatný";
         Text[ hebrew ] = "‮התצורה של ה URL ים לשמירה מקומית אינה חוקית.‬";
         Text[ hindi ] = "The configuration format of the URLs to be saved locally is invalid";
+        Text[ slovak ] = "Konfiguračný formát lokálne ukladaných URL je neplatný";
     };
     String ERRCODE_SFX_NODOCUMENT
     {
@@ -2915,6 +3005,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Tuto akci nelze použít na dokument, který neexistuje";
         Text[ hebrew ] = "‮לא ניתן להפעיל פעולה זו על מסמך שלא קיים.‬";
         Text[ hindi ] = "This action cannot be applied to a document that does not exist";
+        Text[ slovak ] = "Táto akcia sa nedá použiť na dokument, ktorý neexistuje";
     };
     String ERRCODE_SFX_INVALIDLINK
     {
@@ -2946,6 +3037,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Odkaz ukazuje na neplatný cíl";
         Text[ hebrew ] = "‮הקישור מתיחס לעצם לא חוקי‬";
         Text[ hindi ] = "The link refers to an invalid target";
+        Text[ slovak ] = "Odkaz ukazuje na neplatný cieľ";
     };
     String ERRCODE_SFX_INVALIDTRASHPATH
     {
@@ -2977,6 +3069,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Cesta k odpadkovému koši je neplatná";
         Text[ hebrew ] = "‮המסלול לסל המחזור אינו חוקי‬";
         Text[ hindi ] = "The Recycle Bin path is invalid";
+        Text[ slovak ] = "Cesta k Odpadkovému košu je neplatná";
     };
     String ERRCODE_SFX_NOTRESTORABLE
     {
@@ -3008,6 +3101,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Nelze obnovit položku";
         Text[ hebrew ] = "‮לא ניתן לשחזר את הערך.‬";
         Text[ hindi ] = "प्रविष्टि को पूर्व अवस्था में नहीं पहुँचा सकते है";
+        Text[ slovak ] = "Položka sa nedá obnoviť";
     };
     String ERRCODE_IO_NAMETOOLONG
     {
@@ -3039,6 +3133,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Název souboru je neplatný pro cílový souborový systém.";
         Text[ hebrew ] = "‮שם הקובץ ארוך מידי למערכת היעד.‬";
         Text[ hindi ] = "The file name is too long for the target file system.";
+        Text[ slovak ] = "Názov súboru je neplatný pre cieľový súborový systém.";
     };
     String ERRCODE_SFX_CONSULTUSER
     {
@@ -3070,6 +3165,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Detaily pro spuštění funkce jsou nekompletní.";
         Text[ hebrew ] = "‮חסרים פרטים להפעלת פעולה זו.‬";
         Text[ hindi ] = "फंक्शन् चलाने केलिए विवरण अपूर्ण है ।";
+        Text[ slovak ] = "Detaily pre spustenie funkcie sú nekompletné.";
     };
     String ERRCODE_SFX_INVALIDSYNTAX
     {
@@ -3101,6 +3197,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Neplatná vstupní syntaxe.";
         Text[ hebrew ] = "‮תחביר לא חוקי.‬";
         Text[ hindi ] = "इनपुट् सिन्टाक्स अमान्य है ।";
+        Text[ slovak ] = "Neplatná vstupná syntax.";
     };
     String ERRCODE_SFX_CANTCREATEFOLDER
     {
@@ -3132,6 +3229,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Neplatná vstupní syntaxe.";
         Text[ hebrew ] = "‮תחביר לא חוקי.‬";
         Text[ hindi ] = "इनपुट् सिन्टाक्स अमान्य है ।";
+        Text[ slovak ] = "Neplatná vstupná syntax.";
     };
     String ERRCODE_SFX_CANTRENAMEFOLDER
     {
@@ -3164,6 +3262,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Neplatná vstupní syntaxe.";
         Text[ hebrew ] = "‮תחביר לא חוקי.‬";
         Text[ hindi ] = "इनपुट् सिन्टाक्स अमान्य है ।";
+        Text[ slovak ] = "Neplatná vstupná syntax.";
     };
     String ERRCODE_SFX_WRONG_CDF_FORMAT
     {
@@ -3195,6 +3294,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Dokument kanálu má neplatný formát.";
         Text[ hebrew ] = "‮צורת תוכן מסמך הערוץ אינה חוקית.‬";
         Text[ hindi ] = "चैनल लेखपत्र का रचना अमान्य है ।";
+        Text[ slovak ] = "Dokument kanálu má neplatný formát.";
     };
     String ERRCODE_SFX_EMPTY_SERVER
     {
@@ -3226,6 +3326,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Název serveru nesmí být prázdný";
         Text[ hebrew ] = "‮אסור לשרת להיות ריק מתוכן‬";
         Text[ hindi ] = "सर्वर खाली नहीं होना चाहिए";
+        Text[ slovak ] = "Názov serveru nesmie byť prázdny";
     };
     String ERRCODE_SFX_NO_ABOBOX
     {
@@ -3256,6 +3357,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Pro instalaci kanálu je vyžadována složka k odebírání.";
         Text[ hebrew ] = "‮נדרש קובץ מנוי על מנת להתקין ערוץ.‬";
         Text[ hindi ] = "A subscription folder is required to install a Channel.";
+        Text[ slovak ] = "Pre inštaláciu kanálu je vyžadovaný adresár k odoberaniu.";
     };
     String ERRCODE_IO_NOTSTORABLEINBINARYFORMAT
     {
@@ -3285,6 +3387,7 @@ Resource RID_ERRHDL
         Text[ portuguese_brazilian ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
         Text[ thai ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
         Text[ hindi ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ slovak ] = "Tento dokument obsahuje vlastnosti ktoré nemôžu byť uložené vo vybranom formáte.\nProsím uložte dokument vo formáte %PRODUCTNAME 6.0.";
     };
 #ifdef ERRCODE_IO_INVALIDLENGTH
     String ERRCODE_IO_INVALIDLENGTH
@@ -3317,6 +3420,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Neplatná délka dat.";
         Text[ hebrew ] = "‮אורך הנתונים אינו חוקי.‬";
         Text[ hindi ] = "अमान्य ड़ॉटा विस्तार ।";
+        Text[ slovak ] = "Neplatná dĺžka dát.";
     };
     String ERRCODE_IO_CURRENTDIR
     {
@@ -3327,7 +3431,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "N�o � poss�vel esta fun��o: o caminho cont�m o diret�rio atual." ;
         Text [ swedish ] = "Funktion om�jlig: S�kv�g inneh�ller aktuell katalog" ;
         Text [ danish ] = "Funktion ikke mulig: stien indeholder aktuelt bibliotek" ;
-        Text [ italian ] = "Funzione impossibile: il percorso contiene la cartella corrente" ;
+        Text [ italian ] = "Funzione impossibile: il percorso contiene la cartella attuale." ;
         Text [ spanish ] = "Funci�n imposible: La ruta contiene el directorio actual." ;
         Text [ french ] = "Impossible d'ex�cuter la fonction : le chemin indiqu� inclut le r�pertoire actif" ;
         Text [ dutch ] = "Functie niet mogelijk. Pad bevat huidige directory" ;
@@ -3348,6 +3452,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Funkce není možná: cesta obsahuje současný adresář.";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה כי המסלול כולל את הספריה הנוכחית.‬";
         Text[ hindi ] = "फ़ंक्शन् संभव नहीं है: मार्ग में वर्तमान डैरक्टरी सम्मिलित है । ";
+        Text[ slovak ] = "Funkcia nie je možná: cesta obsahuje súčasný adresár.";
     };
     String ERRCODE_IO_NOTSAMEDEVICE
     {
@@ -3379,6 +3484,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Funkce není možná: zařízení (mechanika) není identická.";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה כי הכוננים שונים.‬";
         Text[ hindi ] = "Function not possible: device (drive) not identical.";
+        Text[ slovak ] = "Funkcia nie je možná: zariadenie (mechanika) nie je identické.";
     };
     String ERRCODE_IO_DEVICENOTREADY
     {
@@ -3410,6 +3516,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Zařízení (mechanika) není připravené.";
         Text[ hebrew ] = "‮כונן לא מוכן.‬";
         Text[ hindi ] = "Device (drive) not ready.";
+        Text[ slovak ] = "Zariadenie (mechanika) nie je pripravené.";
     };
     String ERRCODE_IO_BADCRC
     {
@@ -3441,6 +3548,7 @@ Resource RID_ERRHDL
         Text[ czech ] = "Chybný kontrolní součet.";
         Text[ hebrew ] = "‮ספרת ביקורת שגויה‬";
         Text[ hindi ] = "Wrong check amount.";
+        Text[ slovak ] = "Chybný kontrolný súčet.";
     };
     String ERRCODE_IO_WRITEPROTECTED
     {
@@ -3472,11 +3580,14 @@ Resource RID_ERRHDL
         Text[ czech ] = "Funkce nemožná: zápis chráněn.";
         Text[ hebrew ] = "‮הפעולה אינה אפשרית עקב הגנה מפני כתיבה.‬";
         Text[ hindi ] = "Function not possible: write protected.";
+        Text[ slovak ] = "Funkcia nemožná: chránené proti zápisu.";
     };
 #endif
 };
 
 // eof ------------------------------------------------------------------------
+
+
 
 
 
