@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-27 11:07:20 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
@@ -295,8 +299,12 @@ sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< 
 void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-    if( xText.is() && xText->getString().getLength() )
-        rExport.GetTextParagraphExport()->exportText( xText );
+    if( xText.is() )
+    {
+        uno::Reference< container::XEnumerationAccess > xEnumAccess( xShape, uno::UNO_QUERY );
+        if( xEnumAccess.is() && xEnumAccess->hasElements() )
+            rExport.GetTextParagraphExport()->exportText( xText );
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -614,6 +622,30 @@ void XMLShapeExport::ImpExportTextBoxShape(
             case XmlShapeTypePresNotesShape:
             {
                 aStr = GetXMLToken(XML_PRESENTATION_NOTES);
+                bIsPresShape = TRUE;
+                break;
+            }
+            case XmlShapeTypePresHeaderShape:
+            {
+                aStr = GetXMLToken(XML_HEADER);
+                bIsPresShape = TRUE;
+                break;
+            }
+            case XmlShapeTypePresFooterShape:
+            {
+                aStr = GetXMLToken(XML_FOOTER);
+                bIsPresShape = TRUE;
+                break;
+            }
+            case XmlShapeTypePresSlideNumberShape:
+            {
+                aStr = GetXMLToken(XML_PAGE_NUMBER);
+                bIsPresShape = TRUE;
+                break;
+            }
+            case XmlShapeTypePresDateTimeShape:
+            {
+                aStr = GetXMLToken(XML_DATE_TIME);
                 bIsPresShape = TRUE;
                 break;
             }
