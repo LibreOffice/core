@@ -30,6 +30,12 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:DBAddTable" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Tabellen hinzufügen...</value>
+                    <value xml:lang="en-US">Add Tables...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DBIndexDesign" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">I~ndexentwurf...</value>
@@ -442,7 +448,7 @@
             </node>
             <node oor:name=".uno:DBNewFolder" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Ornder...</value>
+                    <value xml:lang="de">Ordner...</value>
                     <value xml:lang="en-US">Folder...</value>
                 </prop>
             </node>
