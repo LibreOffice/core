@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-17 11:27:58 $
+ *  last change: $Author: ama $ $Date: 2001-01-19 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,10 +1128,11 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     //2. Es gibt Rahmen mit Umlauf nur rechts bzw. nur links und diese sind
     //   rechts bzw. links ausgerichtet, diese geben ein Minimum fuer die
     //   Raender vor.
-    long nRightOffset = 0,
+    long nTmpRight = -1000000,
          nLeftOffset  = 0;
-    if( CalcFlyOffsets( nUpper, nLeftOffset, nRightOffset ) )
+    if( CalcFlyOffsets( nUpper, nLeftOffset, nTmpRight ) )
         bValidPrtArea = FALSE;
+    long nRightOffset = Max( 0L, nTmpRight );
 
     SwTwips nLower = pAttrs->CalcBottomLine();
 
@@ -1239,7 +1240,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                             nLeft = 0;
                         nLeft += nLeftOffset;
                     }
-                    nRight = Max( nMax - nLeft - nWish, nRightOffset );
+                    nRight = Max( nMax - nLeft - nWish, nTmpRight );
                 break;
             default:
                 ASSERT( FALSE, "Ungueltige orientation fuer Table." );
