@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:08:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,26 +121,6 @@ namespace sw
                 <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         sal_uInt8 rtl_TextEncodingToWinCharset(rtl_TextEncoding eTextEncoding);
-
-        /** Get the OOo rtl_TextEncoding equivalent to the closest
-            textencoding word will be using
-
-            Some of the eTextEncodings in writer will map to an encoding in
-            word which does not map back to the same encoding, so get the
-            encoding it would map back to
-
-            @param eTextEncoding
-                the OOo encoding to convert from
-
-            @return
-                the writer equivalent charset identifier
-
-            @author
-                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        rtl_TextEncoding rtl_TextEncodingToWinCharsetAndBack(
-            rtl_TextEncoding eTextEncoding);
-
 
         /** Import a MSWord XE field. Suitable for .doc and .rtf
 
