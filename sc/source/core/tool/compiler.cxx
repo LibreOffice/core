@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:51:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2970,7 +2970,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
 BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
                                      const ScRange& r,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     BOOL& rChanged)
+                                     BOOL& rChanged, BOOL bSharedFormula)
 {
     BOOL bRet = FALSE;                      // set if relative reference
     rChanged = FALSE;
@@ -2981,10 +2981,13 @@ BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
         SingleDoubleRefModifier aMod( *t );
         ComplRefData& rRef = aMod.Ref();
         if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
-                (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
-            ( t->GetType() == svSingleRef ||
-            (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
-                (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
+                (!rRef.Ref1.IsTabRel() || (bSharedFormula &&
+                                           !rRef.Ref1.IsFlag3D())) &&
+                (t->GetType() == svSingleRef || (!rRef.Ref2.IsColRel() &&
+                                                 !rRef.Ref2.IsRowRel() &&
+                                                 (!rRef.Ref2.IsTabRel() ||
+                                                  (bSharedFormula &&
+                                                   !rRef.Ref2.IsFlag3D())))))
         {
             if (ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
                                      r, nDx, nDy, nDz, rRef ) != UR_NOTHING )
