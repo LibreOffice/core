@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:11:21 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@
 
 #include <algorithm>
 #include <functional>
+
+#include <hatchwindowfactory.hxx>
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) \
@@ -290,6 +292,16 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" ) );
 
 
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                                        OHatchWindowFactory::impl_staticGetImplementationName() +
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString > rServices =
+                                                OHatchWindowFactory::impl_staticGetSupportedServiceNames();
+        for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
+            xNewKey->createKey( rServices.getConstArray()[ind] );
+
+
         // the product registration component
         ::svt::RegisterImplementation(
             xRegistryKey,
@@ -376,6 +388,14 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" );
             xFactory = ::cppu::createSingleFactory( xServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvFilterOptionsDialog_CreateInstance, aServiceNames );
+        }
+        else if ( ::rtl::OUString::createFromAscii( sImplementationName ).equals(
+                                                        OHatchWindowFactory::impl_staticGetImplementationName() ) )
+        {
+            xFactory= ::cppu::createOneInstanceFactory( xServiceManager,
+                                            OHatchWindowFactory::impl_staticGetImplementationName(),
+                                            OHatchWindowFactory::impl_staticCreateSelfInstance,
+                                            OHatchWindowFactory::impl_staticGetSupportedServiceNames() );
         }
         else
         {
