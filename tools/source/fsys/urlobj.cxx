@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:14:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,10 @@ guessFSysStyleByCounting(sal_Unicode const * pBegin,
                    INetURLObject::FSYS_DOS : INetURLObject::FSYS_MAC;
 }
 
-rtl::OUString parseScheme(sal_Unicode const ** begin, sal_Unicode const * end) {
+rtl::OUString parseScheme(
+    sal_Unicode const ** begin, sal_Unicode const * end,
+    sal_uInt32 fragmentDelimiter)
+{
     sal_Unicode const * p = *begin;
     if (p != end && INetMIME::isAlpha(*p)) {
         do {
@@ -717,8 +720,13 @@ rtl::OUString parseScheme(sal_Unicode const ** begin, sal_Unicode const * end) {
         } while (p != end
                  && (INetMIME::isAlphanumeric(*p) || *p == '+' || *p == '-'
                      || *p == '.'));
-        if (p != end && *p == ':') {
-            rtl::OUString scheme = rtl::OUString(*begin, p - *begin).toAsciiLowerCase();
+        // #i34835# To avoid problems with Windows file paths like "C:\foo",
+        // do not accept generic schemes that are only one character long:
+        if (end - p > 1 && p[0] == ':' && p[1] != fragmentDelimiter
+            && p - *begin >= 2)
+        {
+            rtl::OUString scheme(
+                rtl::OUString(*begin, p - *begin).toAsciiLowerCase());
             *begin = p + 1;
             return scheme;
         }
@@ -874,10 +882,8 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
         rtl::OUString aSynScheme;
         if (m_eScheme == INET_PROT_NOT_VALID) {
             sal_Unicode const * p = pPos;
-            aSynScheme = parseScheme(&p, pEnd);
-            // #i34835# To avoid problems with Windows file paths like "C:\foo", do not
-            // accept generic schemes that are only one character long:
-            if (aSynScheme.getLength() >= 2 && p != pEnd && *p != nFragmentDelimiter)
+            aSynScheme = parseScheme(&p, pEnd, nFragmentDelimiter);
+            if (aSynScheme.getLength() > 0)
             {
                 m_eScheme = INET_PROT_GENERIC;
                 pPos = p;
@@ -1486,6 +1492,11 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
 
     sal_Unicode const * pPrefixBegin = p;
     PrefixInfo const * pPrefix = getPrefix(pPrefixBegin, pEnd);
+    bool hasScheme = pPrefix != 0;
+    if (!hasScheme) {
+        pPrefixBegin = p;
+        hasScheme = parseScheme(&pPrefixBegin, pEnd, '#').getLength() > 0;
+    }
 
     sal_uInt32 nSegmentDelimiter = '/';
     sal_uInt32 nQueryDelimiter
@@ -1493,7 +1504,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
     sal_uInt32 nFragmentDelimiter = '#';
     Part ePart = PART_VISIBLE;
 
-    if (!pPrefix && bSmart)
+    if (!hasScheme && bSmart)
     {
         // If the input matches any of the following productions (for which
         // the appropriate style bit is set in eStyle), it is assumed to be an
@@ -1587,13 +1598,13 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
     if (pPrefix && pPrefix->m_eScheme == m_eScheme
         && getSchemeInfo().m_bHierarchical)
     {
-        pPrefix = 0;
+        hasScheme = false;
         while (p != pEnd && *p++ != ':');
     }
-    rWasAbsolute = pPrefix != 0;
+    rWasAbsolute = hasScheme;
 
     // Fast solution for non-relative URIs:
-    if (pPrefix)
+    if (hasScheme)
     {
         INetURLObject aNewURI(rTheRelURIRef, eMechanism, eCharset);
         if (aNewURI.HasError())
@@ -4151,7 +4162,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin,
                     nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
                                   + (nNumber & 15);
                     aTheCanonic.append(
-                        rtl::OUString::valueOf(sal_Int32(nNumber), 16));
+                        rtl::OUString::valueOf(sal_Int32(nNumber)));
                     aTheCanonic.append(sal_Unicode('.'));
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
