@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic_fat.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:22 $
+ *  last change:$Date: 2003-10-06 12:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,11 @@
 package base;
 
 import base.TestBase;
+import stats.OutProducerFactory;
 import lib.TestParameters;
 import lib.TestCase;
 import lib.TestEnvironment;
-import lib.DynamicClassLoader;
+import util.DynamicClassLoader;
 import share.DescEntry;
 import share.DescGetter;
 import share.LogWriter;
@@ -94,6 +95,7 @@ public class basic_fat implements TestBase{
     public boolean executeTest(TestParameters param) {
         DescGetter dg = new APIDescGetter();
         String job = (String) param.get("TestJob");
+        OfficeProvider office = null;
 
         //get Job-Descriptions
         System.out.print("Getting Descriptions for Job: "+job+" from ");
@@ -115,7 +117,7 @@ public class basic_fat implements TestBase{
                 continue;
             }
 
-            OfficeProvider office = new OfficeProvider();
+            office = new OfficeProvider();
             XMultiServiceFactory msf = (XMultiServiceFactory)
                                                 office.getManager(param);
             if (msf == null) return false;
@@ -186,8 +188,7 @@ public class basic_fat implements TestBase{
                 log.println("TestCase already gone");
             }
             sumIt.summarizeUp(entry);
-            LogWriter sumObj = (LogWriter) dcl.getInstance(
-                                            (String)param.get("OutProducer"));
+            LogWriter sumObj = OutProducerFactory.createOutProducer(param);
             sumObj.initialize(entry,true);
             sumObj.summary(entry);
         }
@@ -208,7 +209,10 @@ public class basic_fat implements TestBase{
         helper.ProcessHandler ph =
                             (helper.ProcessHandler) param.get("AppProvider");
 
-        if (ph != null) ph.kill();
+        if (ph != null) {
+            office.closeExistingOffice(param, true);
+//            ph.kill();
+        }
         return true;
     }
 }
