@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-03 09:12:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,6 @@ using namespace rtl;
 
 //////////////////////////////////////////////////////////////////////////////
 
-char __READONLY_DATA sXML_drawing[] = "drawing";
-char __READONLY_DATA sXML_impress[] = "presentation";
 char __READONLY_DATA sXML_content[] = "Content";
 
 // ----------------
@@ -243,7 +241,8 @@ BOOL SdXMLWrapper::Import()
                 xGrfContainer = pGraphicHelper;
             }
 
-            xParser->setDocumentHandler( new SdXMLImport( mxLocalModel, xGrfContainer,
+            uno::Reference< task::XStatusIndicator > xStatusIndicator; // for later use
+            xParser->setDocumentHandler( CreateSdXMLImport( mxLocalModel, xGrfContainer, xStatusIndicator,
                                                           bLoadDoc, nStyleFamilyMask,
                                                           mbShowProgress, IsDraw() ) );
 
@@ -258,13 +257,7 @@ BOOL SdXMLWrapper::Import()
             bRet = TRUE;
         }
     }
-    catch( xml::sax::SAXParseException )
-    {
-    }
-    catch( xml::sax::SAXException )
-    {
-    }
-    catch( io::IOException )
+    catch(...)
     {
     }
 
@@ -327,20 +320,14 @@ BOOL SdXMLWrapper::Export()
 
         try
         {
-            SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
-            SdXMLExport         aExp( mxLocalModel, mrMedium.GetName(), xHandler, pGraphicHelper, mbShowProgress, IsDraw() );
+            uno::Reference< task::XStatusIndicator > xStatusIndicator; // for later use
 
-            bRet = ( 0 == aExp.exportDoc( IsDraw() ? sXML_drawing : sXML_impress ) );
+            SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
+            bRet = ( 0 == SdXMLExportDoc( mxLocalModel, mrMedium.GetName(), xHandler, pGraphicHelper, xStatusIndicator, mbShowProgress, IsDraw() ) );
 
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
         }
-        catch( xml::sax::SAXParseException )
-        {
-        }
-        catch( xml::sax::SAXException )
-        {
-        }
-        catch( io::IOException )
+        catch(...)
         {
         }
     }
