@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:24:16 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,9 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_THREADSAFE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_HELPTEXT);
 DECLARE_CONSTASCII_USTRING(PROPERTY_DEFAULTSTATE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_SUPPRESSVERSIONCL);
+DECLARE_CONSTASCII_USTRING(PROPERTY_SHOWTREEVIEW);
+DECLARE_CONSTASCII_USTRING(PROPERTY_SHOWTREEVIEWBUTTON);
+DECLARE_CONSTASCII_USTRING(PROPERTY_CURRENTQUERY);
 
 //============================================================
 //= service names
