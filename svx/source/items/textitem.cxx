@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:43:56 $
+ *  last change: $Author: mt $ $Date: 2001-06-25 15:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #ifndef _TOOLS_SOLMATH_HXX
 #include <tools/solmath.hxx>
 #endif
+
+#include <eeitem.hxx>
 
 #pragma hdrstop
 
@@ -4251,8 +4253,40 @@ SfxPoolItem* SvxCharScaleWidthItem::Create( SvStream& rStrm, USHORT ) const
 {
     sal_uInt16 nVal;
     rStrm >> nVal;
-    return new SvxCharScaleWidthItem( nVal, Which() );
+    SvxCharScaleWidthItem* pItem = new SvxCharScaleWidthItem( nVal, Which() );
+
+    if ( Which() == EE_CHAR_FONTWIDTH )
+    {
+        // #87271#: Was a SvxFontWidthItem in 5.2
+        // USHORT nFixWidth, USHORT nPropWidth.
+        // nFixWidth has never been used...
+        rStrm >> nVal;
+        USHORT nTest;
+        rStrm >> nTest;
+        if ( nTest == 0x1234 )
+            pItem->SetValue( nVal );
+        else
+            rStrm.SeekRel( -2*(long)sizeof(sal_uInt16) );
+    }
+
+    return pItem;
 }
+
+SvStream& SvxCharScaleWidthItem::Store( SvStream& rStream, USHORT nVer ) const
+{
+    SvStream& rRet = SfxUInt16Item::Store( rStream, nVer );
+    if ( Which() == EE_CHAR_FONTWIDTH )
+    {
+        // see comment in Create()....
+        rRet.SeekRel( -1*(long)sizeof(USHORT) );
+        rRet << (USHORT)0;
+        rRet << GetValue();
+        // Really ugly, but not a problem for reading the doc in 5.2
+        rRet << (USHORT)0x1234;
+    }
+    return rRet;
+}
+
 
 USHORT SvxCharScaleWidthItem::GetVersion( USHORT nFFVer ) const
 {
