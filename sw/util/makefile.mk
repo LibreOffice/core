@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 10:49:06 $
+#   last change: $Author: obo $ $Date: 2004-09-14 11:57:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -234,6 +234,7 @@ LIB3TARGET = $(SLB)$/swui.lib
 
 LIB3OBJFILES = \
         $(SLO)$/swuiexp.obj     \
+    $(SLO)$/SwRewriter.obj \
         $(SLO)$/swdlgfact.obj	\
         $(SLO)$/addrdlg.obj \
         $(SLO)$/ascfldlg.obj \
