@@ -2,7 +2,7 @@
     shell SfxObjectShell
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: kz $ $Date: 2004-08-31 12:32:41 $ $Revision: 1.10 $
+    $Author: obo $ $Date: 2004-09-09 16:46:58 $ $Revision: 1.11 $
     $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
 =========================================================================*/
 
@@ -246,5 +246,10 @@ shell SfxObjectShell
     [
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
+    ]
+    SID_SIGNATURE
+    [
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
     ]
 } ;
