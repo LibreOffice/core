@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
+#endif
+#ifndef _SV_EVENT_HXX
+#include <event.hxx>
 #endif
 #ifndef _SV_CTRL_HXX
 #include <ctrl.hxx>

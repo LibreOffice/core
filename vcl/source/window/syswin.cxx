@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-04 16:58:18 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
+#endif
+#ifndef _SV_EVENT_HXX
+#include <event.hxx>
 #endif
 
 #include <unowrap.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #define _SV_IMGCTRL_CXX
 
+#ifndef _SV_EVENT_HXX
+#include <event.hxx>
+#endif
 #include <imgctrl.hxx>
 
 // -----------------------------------------------------------------------
