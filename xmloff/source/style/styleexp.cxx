@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 12:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void XMLStyleExport::exportStyleFamily(
     DBG_ASSERT( GetExport().GetModel().is(), "There is the model?" );
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(),
                                                        UNO_QUERY );
-    Reference< XNameContainer > xStyleCont;
+    Reference< XNameAccess > xStyleCont;
 
     Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
     if( xFamilies->hasByName( rFamily ) )
