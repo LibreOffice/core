@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 08:52:59 $
+ *  last change: $Author: jbu $ $Date: 2001-05-15 12:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
     rtl::OUString aFileName = maSpoolDirName + rtl::OUString::createFromAscii ("/")
         + rName + rExtension;
     rtl::OUString aUNCFileName;
-#ifdef
+#ifdef TF_FILEURL
     OSL_VERIFY( osl_File_E_None == osl::File::getFileURLFromSystemPath( aSubDir, aUNCSubDir ) );
 #else
     osl::File::normalizePath (aFileName, aUNCFileName);
