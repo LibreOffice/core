@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-04 10:49:49 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 11:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
         SwRect aRect;
         if( bCheck && aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
             return sal_False;
-        else if( OUTDEV_PRINTER != pSh->GetOut()->GetOutDevType() )
+        else if( OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
         {
             SwFont *pFnt;
             const SwTxtNode& rTxtNode = *GetTxtNode();
