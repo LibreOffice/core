@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-16 11:20:18 $
+ *  last change: $Author: ssa $ $Date: 2002-10-17 14:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3193,7 +3193,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         if ( bIgnoreCharMsg )
         {
             bIgnoreCharMsg = FALSE;
-            return 0;
+            return 1;   // #101635# if zero is returned here for WM_SYSCHAR (ALT+<key>) Windows will beep
+                        // becaus this 'hotkey' was not processed -> better return 1
         }
 
         // Backspace ignorieren wir als eigenstaendige Taste,
