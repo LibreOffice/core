@@ -33,16 +33,9 @@ if ( $main::operatingSystem eq "SunOS" )
 
 $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
 
-$main::OO_STLPORT_HOME = "";
-$main::OO_STLPORT_HOME_SUGGESTION = "";
-
 $main::OO_SDK_JAVA_HOME = "";
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
 $main::javaVersion = "1.4.1_01";
-
-$main::OO_SDK_ANT_HOME = "";
-$main::OO_SDK_ANT_HOME_SUGGESTION = searchprog("ant");
-$main::antVersion = "1.4";
 
 $main::SDK_AUTO_DEPLOYMENT = "";
 $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
@@ -72,7 +65,7 @@ while ( (! -d "$main::OO_SDK_HOME" ) ||
 while ( (! -d "$main::OFFICE_HOME" ) ||
         ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/program")) )
 {
-    print "Enter Office (OpenOffice.org 1.1, StarOffice 6.1, StarSuite 6.1, or higher) installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
+    print "Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
     $main::OFFICE_HOME = <STDIN>;
     chop($main::OFFICE_HOME);
     if ( $main::OFFICE_HOME eq "" )
@@ -183,6 +176,11 @@ while ( (!$main::correctVersion) &&
                     print "ftp://ftp.gnu.org/gnu/gcc/\n";
                 } else
                 {
+                    # special handling for newer gcc compilers (--version has different output)
+                    if ($testVersion =~ m#(([^\d.]+)([\d\.]+)(.*))# )
+                    {
+                        $testVersion = $3;
+                    }
                     $main::correctVersion = testVersion($main::cppVersion, $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName");
                     if ( !$main::correctVersion )
                     {
@@ -203,44 +201,6 @@ while ( (!$main::correctVersion) &&
     } else
     {
         # the C++ compiler is optional
-        $main::correctVersion = 1;
-    }
-}
-# prepare the stlport path
-$main::correctVersion = 0;
-while ( (!$main::correctVersion) &&
-         ((! -d "$main::OO_STLPORT_HOME" ) ||
-          ((-d "$main::OO_STLPORT_HOME") && (! -d "$main::OO_STLPORT_HOME/lib"))) )
-{
-    print "Enter STLPORT installation directory (optional) [$main::OO_STLPORT_HOME_SUGGESTION]: ";
-
-    $main::OO_STLPORT_HOME = <STDIN>;
-    chop($main::OO_STLPORT_HOME);
-    if ( $main::OO_STLPORT_HOME eq "" )
-    {
-        $main::OO_STLPORT_HOME = $main::OO_STLPORT_HOME_SUGGESTION;
-    }
-    if ( ! $main::OO_STLPORT_HOME eq "")
-    {
-        if ( (! -d "$main::OO_STLPORT_HOME") ||
-             ((-d "$main::OO_STLPORT_HOME") && (! -d "$main::OO_STLPORT_HOME/lib")) )
-        {
-            print "Error: Could not find directory '$main::OO_STLPORT_HOME'.\n";
-
-            if ( skipChoice("STLPort library") == 1 )
-            {
-                $main::correctVersion = 1;
-            }
-
-            $main::OO_STLPORT_HOME = "";
-        } else
-        {
-            #check version later
-            $main::correctVersion = 1;
-        }
-    } else
-    {
-        # STLPort is optional
         $main::correctVersion = 1;
     }
 }
@@ -276,55 +236,6 @@ while ( (!$main::correctVersion) &&
     }
 }
 
-# prepare the Ant path
-$main::correctVersion = 0;
-while ( (!$main::correctVersion) &&
-         ((! -d "$main::OO_SDK_ANT_HOME") ||
-          ((-d "$main::OO_SDK_ANT_HOME") && (! -e "$main::OO_SDK_ANT_HOME/bin/ant"))) )
-{
-    print "Enter ANT (1.4 or higher) installation directory (optional) [$main::OO_SDK_ANT_HOME_SUGGESTION]: ";
-
-    $main::OO_SDK_ANT_HOME = <STDIN>;
-    chop($main::OO_SDK_ANT_HOME);
-    if ( $main::OO_SDK_ANT_HOME eq "" )
-    {
-        $main::OO_SDK_ANT_HOME = $main::OO_SDK_ANT_HOME_SUGGESTION;
-    }
-    if ( ! $main::OO_SDK_ANT_HOME eq "" )
-    {
-        if ( (! -d "$main::OO_SDK_ANT_HOME") ||
-             ((-d "$main::OO_SDK_ANT_HOME") && (! -d "$main::OO_SDK_ANT_HOME/lib")) )
-        {
-            print "Error: Could not find directory '$main::OO_SDK_ANT_HOME'.\n";
-
-            if ( skipChoice("Ant build tools") == 1 )
-            {
-                $main::correctVersion = 1;
-            }
-
-            $main::OO_SDK_ANT_HOME = "";
-        } else
-        {
-            my $testVersion = `$main::OO_SDK_ANT_HOME/bin/ant -version | egrep "Ant version" | head -1 | sed -e 's#Ant version ##' | sed -e 's# .*##'`;
-
-            $main::correctVersion = testVersion($main::antVersion, $testVersion, "$main::OO_SDK_ANT_HOME/bin/ant");
-            if ( !$main::correctVersion )
-            {
-
-                if ( skipChoice("Ant build tools") == 1 )
-                {
-                    $main::correctVersion = 1;
-                }
-                $main::OO_SDK_ANT_HOME = "";
-            }
-        }
-    } else
-    {
-        # Ant is optional
-        $main::correctVersion = 1;
-    }
-}
-
 while ( $main::SDK_AUTO_DEPLOYMENT eq "" ||
      ((! $main::SDK_AUTO_DEPLOYMENT eq "YES") &&
       (! $main::SDK_AUTO_DEPLOYMENT eq "NO")) )
@@ -349,9 +260,7 @@ while ( <FILEIN> )
     $_ =~ s#\@OFFICE_HOME\@#$main::OFFICE_HOME#go;
     $_ =~ s#\@OO_SDK_MAKE_HOME\@#$main::OO_SDK_MAKE_HOME#go;
     $_ =~ s#\@OO_SDK_CPP_HOME\@#$main::OO_SDK_CPP_HOME#go;
-    $_ =~ s#\@OO_STLPORT_HOME\@#$main::OO_STLPORT_HOME#go;
     $_ =~ s#\@OO_SDK_JAVA_HOME\@#$main::OO_SDK_JAVA_HOME#go;
-    $_ =~ s#\@OO_SDK_ANT_HOME\@#$main::OO_SDK_ANT_HOME#go;
     $_ =~ s#\@SDK_AUTO_DEPLOYMENT\@#$main::SDK_AUTO_DEPLOYMENT#go;
 
     print FILEOUT $_;
@@ -417,7 +326,7 @@ sub testVersion
 
     for ($i=0; $i < $length; $i++ )
     {
-        if ( @testVersion->[0] < @mustBeVersion->[0] )
+        if ( @testVersion->[$i] < @mustBeVersion->[$i] )
         {
             print "The command '$toolName' has the version $tmpTestVersion.\n";
             print "The SDK requires at least the version $tmpMustBeVersion.\n";
