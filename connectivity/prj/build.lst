@@ -3,7 +3,7 @@ cn	connectivity							usr1	-	all	cn_mkout NULL
 cn	connectivity\source\types				nmake	-	all	cn_types NULL
 cn	connectivity\source\commontools			nmake	-	all	cn_cmtools NULL
 cn	connectivity\source\manager				nmake	-	all	cn_manager cn_types NULL
-cn	connectivity\source\cpool				nmake	-	all	cn_cpool cn_types NULL
+cn	connectivity\source\cpool				nmake	-	all	cn_cpool cn_dbtools cn_types NULL
 cn	connectivity\source\resource			nmake	-	all	cn_res NULL
 cn	connectivity\source\sdbcx				nmake	-	all	cn_sdbcx NULL
 cn	connectivity\source\drivers\ado			nmake	-	w	cn_ado cn_dbtools NULL
