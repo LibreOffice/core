@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:26:26 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 02:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String SAMPLES
     Text[English] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
     Text[ english_us ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
     Text[ portuguese ] = "Para poder usufruir de toda a funcionalidade deste exemplo, terá que criar um novo documento com base neste modelo.";
-    Text[ greek ] = "Ãéá íá ìğïñİóåôå íá ÷ñçóéìïğïéŞóåôå üëåò ôéò ëåéôïõñãßåò áõôïı ôïõ ğáñáäåßãìáôïò èá ğñİğåé íá äçìéïõñãŞóåôå İíá íİï İããñáöï âáóéóìİíï óå";
+    Text[ greek ] = "Ãéá íá ìğïñİóåôå íá ÷ñçóéìïğïéŞóåôå üëåò ôéò ëåéôïõñãßåò áõôïı ôïõ ğáñáäåßãìáôïò èá ğñİğåé íá äçìéïõñãŞóåôå İíá íİï İããñáöï âáóéóìİíï óå áõôü ôï ğñüôõğï.";
     Text[ dutch ] = "Om alle mogelijkheden van dit voorbeeld te kunnen gebruiken maakt u een nieuw document op basis van deze sjabloon.";
     Text[ french ] = "Afin de pouvoir profiter de l'entière fonctionnalité de cet exemple, il vous faut créer un nouveau document basé sur ce modèle.";
     Text[ spanish ] = "Para que esté disponible toda la funcionalidad de este ejemplo debe crear un nuevo documento basado en esta plantilla.";
@@ -194,10 +194,10 @@ String STYLES + 2
     Text[ swedish ] = "~Avbryt";
     Text[ polish ] = "Anuluj";
     Text[ portuguese_brazilian ] = "Cancel";
-    Text[ japanese ] = "·¬İ¾Ù";
-    Text[ korean ] = "Ãë¼Ò";
-    Text[ chinese_simplified ] = "È¡Ïû";
-    Text[ chinese_traditional ] = "¨ú®ø";
+    Text[ japanese ] = "·¬İ¾Ù(~C)";
+    Text[ korean ] = "Ãë¼Ò(~C)";
+    Text[ chinese_simplified ] = "È¡Ïû(~C)";
+    Text[ chinese_traditional ] = "¨ú®ø(~C)";
     Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
     Text[ turkish ] = "İptal";
     Text[ language_user1 ] = " ";
@@ -221,10 +221,10 @@ String STYLES + 3
     Text[ swedish ] = "~OK";
     Text[ polish ] = "OK";
     Text[ portuguese_brazilian ] = "OK";
-    Text[ japanese ] = "OK";
-    Text[ korean ] = "È®ÀÎ";
-    Text[ chinese_simplified ] = "È·¶¨";
-    Text[ chinese_traditional ] = "½T©w";
+    Text[ japanese ] = "~OK";
+    Text[ korean ] = "È®ÀÎ(~O)";
+    Text[ chinese_simplified ] = "È·¶¨(~O)";
+    Text[ chinese_traditional ] = "½T©w(~O)";
     Text[ arabic ] = "ÍÓäÇğ";
     Text[ turkish ] = "Tamam";
     Text[ language_user1 ] = " ";
@@ -394,7 +394,7 @@ String CorrespondenceNoTextmark+1
     Text[ polish ] = "Nie mo¿na by³o wstawiæ pól listu seryjnego.";
     Text[ portuguese_brazilian ] = "Mail Merge fields can not be included.";
     Text[ japanese ] = "·‚µ‚İˆóü‚ÌÌ¨°ÙÄŞ‚ğ‘}“ü‚Å‚«‚Ü‚¹‚ñB";
-    Text[ korean ] = "Æû ·¹ÅÍ ÇÊµå¸¦ »ğÀÔÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "Æû ·¹ÅÍ ÇÊµå¸¦ »ğÀÔÇÏÁö ¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨²åÈëÓÊ¼şºÏ²¢×Ö¶Î¡£";
     Text[ chinese_traditional ] = "µLªk´¡¤J¶l¥ó¦X¨ÖªºÄæ¦ì¡C";
     Text[ arabic ] = "áÇ íãßä ÅÖÇİÉ ÍŞæá ÎØÇÈ ãÓáÓá.";
@@ -446,7 +446,7 @@ String CorrespondenceDialog
     Text[ polish ] = "Odbiorca";
     Text[ portuguese_brazilian ] = "What do you want to write?";
     Text[ japanese ] = "ˆ¶æ";
-    Text[ korean ] = "¹«¾ùÀ» ¾²½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "¼ö½ÅÀÎ";
     Text[ chinese_simplified ] = "ÊÕ¼şÈË";
     Text[ chinese_traditional ] = "¦¬¥óªÌ";
     Text[ arabic ] = "ãÇĞÇ ÊÑíÏ Ãä ÊßÊÈ¿";
@@ -472,7 +472,7 @@ String CorrespondenceDialog+1
     Text[ polish ] = "Pojedynczy odbiorca";
     Text[ portuguese_brazilian ] = "Single letter";
     Text[ japanese ] = "‚P’Ê";
-    Text[ korean ] = "´ÜÀÏ ÆíÁö";
+    Text[ korean ] = "´ÜÀÏ ¼ö½ÅÀÎ";
     Text[ chinese_simplified ] = "µ¥Ò»ÊÕ¼şÈË";
     Text[ chinese_traditional ] = "³æ¤@¦¬¥óªÌ";
     Text[ arabic ] = "ÎØÇÈ ãİÑÏ";
@@ -499,7 +499,7 @@ String CorrespondenceDialog+2
     Text[ polish ] = "Kilku odbiorców (adresowa baza danych)";
     Text[ portuguese_brazilian ] = "Multiple letter";
     Text[ japanese ] = "•¡”(±ÄŞÚ½’ ÃŞ°ÀÍŞ°½)";
-    Text[ korean ] = "Æû ·¹ÅÍ";
+    Text[ korean ] = "¿©·¯ ¼ö½ÅÀÎ (ÁÖ¼Ò Å×ÀÌÅÍ º£ÀÌ½º)";
     Text[ chinese_simplified ] = "¶à¸öÊÕ¼şÈË(Í¨Ñ¶²¾Êı¾İ¿â)";
     Text[ chinese_traditional ] = "¦h­Ó¦¬¥óªÌ(¦a§}¸ê®Æ®w)";
     Text[ arabic ] = "ÎØÇÈ ãÓáÓá";
@@ -526,7 +526,7 @@ String CorrespondenceDialog+3
     Text[ polish ] = "Zastosowanie szablonu";
     Text[ portuguese_brazilian ] = "Use of this template";
     Text[ japanese ] = "ÃİÌßÚ°Ä‚ğg—p";
-    Text[ korean ] = "Use of this template";
+    Text[ korean ] = "ÀÌ ÅÛÇÃ¸´ÀÇ »ç¿ë";
     Text[ chinese_simplified ] = "Ê¹ÓÃÑùÊ½";
     Text[ chinese_traditional ] = "¨Ï¥Î¼Ë¦¡";
     Text[ turkish ] = "Use of this template";
@@ -554,7 +554,7 @@ String CorrespondenceFields
     Text[ polish ] = "Skasuj tekst pola przez zapisanie";
     Text[ portuguese_brazilian ] = "Click place holder and overwrite";
     Text[ japanese ] = "ÌßÚ°½Ì«ÙÀŞ‚ğ¸Ø¯¸‚µ‚Äã‘‚«‚·‚é";
-    Text[ korean ] = "Click place holder and overwrite";
+    Text[ korean ] = "ÇÃ·¹ÀÌ½ºÈ¦´õ¸¦ Å¬¸¯ÇÑ ÈÄ µ¤¾î¾²±â";
     Text[ chinese_simplified ] = "µã»÷ÕâÀï£¬¿ªÊ¼ÊäÈëÎÄ×Ö¡£";
     Text[ chinese_traditional ] = "«ö¤@¤U¡A¶}©l¿é¤J¤å¦r¡C";
     Text[ turkish ] = "Click place holder and overwrite";
@@ -581,7 +581,7 @@ String CorrespondenceFields+1
     Text[ polish ] = "Firma";
     Text[ portuguese_brazilian ] = "Company";
     Text[ japanese ] = "‰ïĞ–¼";
-    Text[ korean ] = "Company";
+    Text[ korean ] = "È¸»ç";
     Text[ chinese_simplified ] = "¹«Ë¾";
     Text[ chinese_traditional ] = "¤½¥q";
     Text[ turkish ] = "Company";
@@ -608,7 +608,7 @@ String CorrespondenceFields+2
     Text[ polish ] = "Dzia³";
     Text[ portuguese_brazilian ] = "Department";
     Text[ japanese ] = "•”";
-    Text[ korean ] = "Department";
+    Text[ korean ] = "ºÎ¼­";
     Text[ chinese_simplified ] = "²¿ÃÅ";
     Text[ chinese_traditional ] = "³¡ªù";
     Text[ turkish ] = "Department";
@@ -635,7 +635,7 @@ String CorrespondenceFields+3
     Text[ polish ] = "Imiê";
     Text[ portuguese_brazilian ] = "First Name";
     Text[ japanese ] = "–¼";
-    Text[ korean ] = "First Name";
+    Text[ korean ] = "ÀÌ¸§";
     Text[ chinese_simplified ] = "Ãû×Ö";
     Text[ chinese_traditional ] = "¦W¦r";
     Text[ turkish ] = "First Name";
@@ -662,7 +662,7 @@ String CorrespondenceFields+4
     Text[ polish ] = "Nazwisko";
     Text[ portuguese_brazilian ] = "Last Name";
     Text[ japanese ] = "©";
-    Text[ korean ] = "Last Name";
+    Text[ korean ] = "¼º";
     Text[ chinese_simplified ] = "ĞÕÊÏ";
     Text[ chinese_traditional ] = "©m¤ó";
     Text[ turkish ] = "Last Name";
@@ -689,7 +689,7 @@ String CorrespondenceFields+5
     Text[ polish ] = "Adres";
     Text[ portuguese_brazilian ] = "Address";
     Text[ japanese ] = "s’¬‘º–¼”Ô’n";
-    Text[ korean ] = "Address";
+    Text[ korean ] = "ÁÖ¼Ò";
     Text[ chinese_simplified ] = "½ÖµÀ";
     Text[ chinese_traditional ] = "µó¹D";
     Text[ turkish ] = "Address";
@@ -716,7 +716,7 @@ String CorrespondenceFields+6
     Text[ polish ] = "Kraj";
     Text[ portuguese_brazilian ] = "Country";
     Text[ japanese ] = "‘–¼";
-    Text[ korean ] = "Country";
+    Text[ korean ] = "±¹°¡";
     Text[ chinese_simplified ] = "¹ú¼Ò";
     Text[ chinese_traditional ] = "°ê®a";
     Text[ turkish ] = "Country";
@@ -744,7 +744,7 @@ String CorrespondenceFields+7
     Text[ polish ] = "Kod pocztowy";
     Text[ portuguese_brazilian ] = "Postal Code";
     Text[ japanese ] = "—X•Ö”Ô†";
-    Text[ korean ] = "Postal Code";
+    Text[ korean ] = "¿ìÆí¹øÈ£";
     Text[ chinese_simplified ] = "ÓÊÕş±àÂë";
     Text[ chinese_traditional ] = "¶l»¼°Ï¸¹";
     Text[ turkish ] = "Postal Code";
@@ -771,7 +771,7 @@ String CorrespondenceFields+8
     Text[ polish ] = "Miejscowoœæ";
     Text[ portuguese_brazilian ] = "City";
     Text[ japanese ] = "“s“¹•{Œ§–¼";
-    Text[ korean ] = "City";
+    Text[ korean ] = "µµ½Ã";
     Text[ chinese_simplified ] = "³ÇÊĞ";
     Text[ chinese_traditional ] = "«°¥«";
     Text[ turkish ] = "City";
@@ -798,7 +798,7 @@ String CorrespondenceFields+9
     Text[ polish ] = "Tytu³";
     Text[ portuguese_brazilian ] = "Title";
     Text[ japanese ] = "Œ¨‘‚«";
-    Text[ korean ] = "Title";
+    Text[ korean ] = "Á÷À§";
     Text[ chinese_simplified ] = "³Æºô";
     Text[ chinese_traditional ] = "ºÙ©I";
     Text[ turkish ] = "Title";
@@ -854,7 +854,7 @@ String CorrespondenceFields+11
     Text[ polish ] = "Zwrot grzecznoœciowy";
     Text[ portuguese_brazilian ] = "Form of Address";
     Text[ japanese ] = "ŒhÌ";
-    Text[ korean ] = "Form of Address";
+    Text[ korean ] = "ÁÖ¼Ò ¾ç½Ä";
     Text[ chinese_simplified ] = "ÊÕ¼şÈË³Æºô";
     Text[ chinese_traditional ] = "¦¬¥óªÌªººÙ©I";
     Text[ turkish ] = "Form of Address";
@@ -870,7 +870,7 @@ String CorrespondenceFields+12
     Text[ english_us ] = "Initials";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Initials";
-    Text[ russian ] = "Initials";
+    Text[ russian ] = "Ñîêğàùåíèå";
     Text[ greek ] = "Initials";
     Text[ dutch ] = "Initialen";
     Text[ french ] = "Initiales";
@@ -882,7 +882,7 @@ String CorrespondenceFields+12
     Text[ polish ] = "Inicja³y";
     Text[ portuguese_brazilian ] = "Initials";
     Text[ japanese ] = "²Æ¼¬Ù";
-    Text[ korean ] = "Initials";
+    Text[ korean ] = "¸Ó¸®±ÛÀÚ";
     Text[ chinese_simplified ] = "ËõĞ´";
     Text[ chinese_traditional ] = "ÁY¼g";
     Text[ turkish ] = "Initials";
@@ -910,7 +910,7 @@ String CorrespondenceFields+13
     Text[ polish ] = "Zwrot grzecznoœciowy";
     Text[ portuguese_brazilian ] = "Salutation";
     Text[ japanese ] = "ˆ¥A•¶";
-    Text[ korean ] = "Salutation";
+    Text[ korean ] = "ÀÎ»ç¸»";
     Text[ chinese_simplified ] = "ĞÅ¼ş¿ªÍ·³Æºô";
     Text[ chinese_traditional ] = "«H¨ç¶}ÀYºÙ©I";
     Text[ turkish ] = "Salutation";
@@ -938,7 +938,7 @@ String CorrespondenceFields+14
     Text[ polish ] = "Tel. (pryw.)";
     Text[ portuguese_brazilian ] = "Home Phone";
     Text[ japanese ] = "©‘î“d˜b";
-    Text[ korean ] = "Home Phone";
+    Text[ korean ] = "Áı ÀüÈ­";
     Text[ chinese_simplified ] = "Ë½ÈËµç»°";
     Text[ chinese_traditional ] = "¨p¤H¹q¸Ü";
     Text[ turkish ] = "Home Phone";
@@ -966,7 +966,7 @@ String CorrespondenceFields+15
     Text[ polish ] = "Tel. (s³u¿b.)";
     Text[ portuguese_brazilian ] = "Work Phone";
     Text[ japanese ] = "‰ïĞ“d˜b";
-    Text[ korean ] = "Work Phone";
+    Text[ korean ] = "Á÷Àå ÀüÈ­";
     Text[ chinese_simplified ] = "¹«Îñµç»°";
     Text[ chinese_traditional ] = "¤½°È¹q¸Ü";
     Text[ turkish ] = "Work Phone";
@@ -1078,7 +1078,7 @@ String CorrespondenceFields+19
     Text[ polish ] = "Notatka";
     Text[ portuguese_brazilian ] = "Notes";
     Text[ japanese ] = "ÒÓ";
-    Text[ korean ] = "Notes";
+    Text[ korean ] = "Âü°í";
     Text[ chinese_simplified ] = "±¸×¢";
     Text[ chinese_traditional ] = "³Æµù";
     Text[ turkish ] = "Notes";
@@ -1094,7 +1094,7 @@ String CorrespondenceFields+20
     Text[ english_us ] = "Alt. Field 1";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Alt. Field 1";
-    Text[ russian ] = "Alt. Field 1";
+    Text[ russian ] = "Ïîëå 1";
     Text[ greek ] = "Alt. Field 1";
     Text[ dutch ] = "Alt. veld 1";
     Text[ french ] = "Champ facultatif 1";
@@ -1106,7 +1106,7 @@ String CorrespondenceFields+20
     Text[ polish ] = "Pole 1";
     Text[ portuguese_brazilian ] = "Alt. Field 1";
     Text[ japanese ] = "—\\”õÌ¨°ÙÄŞ 1";
-    Text[ korean ] = "Alt. Field 1";
+    Text[ korean ] = "Alt. ÇÊµå 1";
     Text[ chinese_simplified ] = "Ô¤±¸À¸ 1";
     Text[ chinese_traditional ] = "¹w³ÆÄæ 1";
     Text[ turkish ] = "Alt. Field 1";
@@ -1122,7 +1122,7 @@ String CorrespondenceFields+21
     Text[ english_us ] = "Alt. Field 2";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Alt. Field 2";
-    Text[ russian ] = "Alt. Field 2";
+    Text[ russian ] = "Ïîëå 2";
     Text[ greek ] = "Alt. Field 2";
     Text[ dutch ] = "Alt. veld 2";
     Text[ french ] = "Champ facultatif 2";
@@ -1134,7 +1134,7 @@ String CorrespondenceFields+21
     Text[ polish ] = "Pole 2";
     Text[ portuguese_brazilian ] = "Alt. Field 2";
     Text[ japanese ] = "—\\”õÌ¨°ÙÄŞ 2";
-    Text[ korean ] = "Alt. Field 2";
+    Text[ korean ] = "Alt. ÇÊµå 2";
     Text[ chinese_simplified ] = "Ô¤±¸À¸ 2";
     Text[ chinese_traditional ] = "¹w³ÆÄæ 2";
     Text[ turkish ] = "Alt. Field 2";
@@ -1150,7 +1150,7 @@ String CorrespondenceFields+22
     Text[ english_us ] = "Alt. Field 3";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Alt. Field 3";
-    Text[ russian ] = "Alt. Field 3";
+    Text[ russian ] = "Ïîëå 3";
     Text[ greek ] = "Alt. Field 3";
     Text[ dutch ] = "Alt. veld 3";
     Text[ french ] = "Champ facultatif 3";
@@ -1162,7 +1162,7 @@ String CorrespondenceFields+22
     Text[ polish ] = "Pole 3";
     Text[ portuguese_brazilian ] = "Alt. Field 3";
     Text[ japanese ] = "—\\”õÌ¨°ÙÄŞ 3";
-    Text[ korean ] = "Alt. Field 3";
+    Text[ korean ] = "Alt. ÇÊµå 3";
     Text[ chinese_simplified ] = "Ô¤±¸À¸ 3";
     Text[ chinese_traditional ] = "¹w³ÆÄæ 3";
     Text[ turkish ] = "Alt. Field 3";
@@ -1178,7 +1178,7 @@ String CorrespondenceFields+23
     Text[ english_us ] = "Alt. Field 4";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Alt. Field 4";
-    Text[ russian ] = "Alt. Field 4";
+    Text[ russian ] = "Ïîëå 4";
     Text[ greek ] = "Alt. Field 4";
     Text[ dutch ] = "Alt. veld 4";
     Text[ french ] = "Champ facultatif 4";
@@ -1190,7 +1190,7 @@ String CorrespondenceFields+23
     Text[ polish ] = "Pole 4";
     Text[ portuguese_brazilian ] = "Alt. Field 4";
     Text[ japanese ] = "—\\”õÌ¨°ÙÄŞ 4";
-    Text[ korean ] = "Alt. Field 4";
+    Text[ korean ] = "Alt. ÇÊµå 4";
     Text[ chinese_simplified ] = "Ô¤±¸À¸ 4";
     Text[ chinese_traditional ] = "¹w³ÆÄæ 4";
     Text[ turkish ] = "Alt. Field 4";
@@ -1234,7 +1234,7 @@ String CorrespondenceFields+25
     Text[ english_us ] = "State";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "State";
-    Text[ russian ] = "State";
+    Text[ russian ] = "Îáëàñòü";
     Text[ greek ] = "State";
     Text[ dutch ] = "Regio";
     Text[ french ] = "État";
@@ -1246,7 +1246,7 @@ String CorrespondenceFields+25
     Text[ polish ] = "Województwo";
     Text[ portuguese_brazilian ] = "State";
     Text[ japanese ] = "B–¼";
-    Text[ korean ] = "State";
+    Text[ korean ] = "»óÅÂ";
     Text[ chinese_simplified ] = "Ê¡»òÖ±Ï½ÊĞ";
     Text[ chinese_traditional ] = "¬Ù";
     Text[ turkish ] = "State";
@@ -1274,7 +1274,7 @@ String CorrespondenceFields+26
     Text[ polish ] = "Tel. (s³u¿b.)";
     Text[ portuguese_brazilian ] = "Office Phone";
     Text[ japanese ] = "––±Š“d˜b";
-    Text[ korean ] = "Office Phone";
+    Text[ korean ] = "»ç¹«½Ç ÀüÈ­";
     Text[ chinese_simplified ] = "°ì¹«ÊÒµç»°";
     Text[ chinese_traditional ] = "¿ì¤½«Ç¹q¸Ü";
     Text[ turkish ] = "Office Phone";
@@ -1330,7 +1330,7 @@ String CorrespondenceFields+28
     Text[ polish ] = "Tel. komórkowy";
     Text[ portuguese_brazilian ] = "Mobile Phone";
     Text[ japanese ] = "Œg‘Ñ“d˜b";
-    Text[ korean ] = "Mobile Phone";
+    Text[ korean ] = "ÀÌµ¿ ÀüÈ­";
     Text[ chinese_simplified ] = "ÊÖ»ú";
     Text[ chinese_traditional ] = "¤â¾÷";
     Text[ turkish ] = "Mobile Phone";
@@ -1358,7 +1358,7 @@ String CorrespondenceFields+29
     Text[ polish ] = "Inne telefony";
     Text[ portuguese_brazilian ] = "Other Phone";
     Text[ japanese ] = "‚»‚Ì‘¼‚Ì“d˜b";
-    Text[ korean ] = "Other Phone";
+    Text[ korean ] = "±âÅ¸ ÀüÈ­";
     Text[ chinese_simplified ] = "ÆäËûµç»°";
     Text[ chinese_traditional ] = "¨ä¥L¹q¸Ü";
     Text[ turkish ] = "Other Phone";
@@ -1385,7 +1385,7 @@ String CorrespondenceFields+30
     Text[ polish ] = "URL kalendarza";
     Text[ portuguese_brazilian ] = "Calendar URL";
     Text[ japanese ] = "—\\’è•\\ URL";
-    Text[ korean ] = "Calendar URL";
+    Text[ korean ] = "Ä®·»´õ URL";
     Text[ chinese_simplified ] = "ÈÕÀú URL";
     Text[ chinese_traditional ] = "¦æ¨Æ¾ä URL";
     Text[ turkish ] = "Calendar URL";
@@ -1412,7 +1412,7 @@ String CorrespondenceFields+31
     Text[ polish ] = "Zaprosiæ";
     Text[ portuguese_brazilian ] = "Invite";
     Text[ japanese ] = "oÈˆË—Š";
-    Text[ korean ] = "Invite";
+    Text[ korean ] = "ÃÊÃ»";
     Text[ chinese_simplified ] = "ÑûÇë";
     Text[ chinese_traditional ] = "ÁÜ½Ğ";
     Text[ turkish ] = "Invite";
@@ -1448,6 +1448,7 @@ String TextField
     Text[ catalan ] = "¡El campo de datos de usuario no está definido!";
     Text[ finnish ] = "Benutzerdatenfeld ist nicht definiert!";
 };
+
 
 
 
