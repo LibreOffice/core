@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:32 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,6 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
@@ -111,6 +105,9 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include <connectivity/sdbcx/VCollection.hxx>
 #endif
+#ifndef DBA_CORE_WARNINGS_HXX
+#include "warnings.hxx"
+#endif
 
 
 #ifndef _DBASHARED_APITOOLS_HXX_
@@ -122,16 +119,6 @@ namespace dbaccess
 {
     typedef ::cppu::ImplHelper2< ::com::sun::star::util::XFlushable,
                                  ::com::sun::star::container::XContainerListener> OTableContainer_Base;
-
-    //==========================================================================
-    //= IWarningsContainer
-    //==========================================================================
-    class SAL_NO_VTABLE IWarningsContainer
-    {
-    public:
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning) = 0;
-        virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext) = 0;
-    };
 
     //==========================================================================
     //= OTableContainer
