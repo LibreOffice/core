@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: ka $ $Date: 2001-07-03 13:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SD_FUPOOR_HXX
 #define _SD_FUPOOR_HXX
 
+#ifndef _RTTI_HXX //autogen
+#include <tools/rtti.hxx>
+#endif
 #ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
