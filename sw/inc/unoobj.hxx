@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 17:35:59 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 20:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,10 +854,11 @@ class SwXTextSection : public cppu::WeakImplHelper6
     SfxItemPropertySet              aPropSet;
 
     BOOL                            m_bIsDescriptor;
+    BOOL                            m_bIndexHeader;
     String                          m_sName;
     SwTextSectionProperties_Impl*   pProps;
 public:
-    SwXTextSection(SwSectionFmt* pFmt = 0);
+    SwXTextSection(SwSectionFmt* pFmt = 0, BOOL bIndexHeader = FALSE);
     virtual ~SwXTextSection();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();

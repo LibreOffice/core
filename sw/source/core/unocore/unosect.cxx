@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 20:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,12 +206,13 @@ sal_Int64 SAL_CALL SwXTextSection::getSomething( const uno::Sequence< sal_Int8 >
 /*-- 10.12.98 14:47:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextSection::SwXTextSection(SwSectionFmt* pFmt) :
+SwXTextSection::SwXTextSection(SwSectionFmt* pFmt, BOOL bIndexHeader) :
         SwClient(pFmt),
         aLstnrCntnr( (text::XTextContent*)this),
         aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_SECTION)),
 //          _pMap(aSwMapProvider.getPropertyMap(PROPERTY_MAP_SECTION)),
         m_bIsDescriptor(pFmt == 0),
+        m_bIndexHeader(bIndexHeader),
         pProps(pFmt ? 0 : new SwTextSectionProperties_Impl)
 {
 
@@ -311,10 +312,42 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
         SwSection* pRet = 0;
         if(!m_sName.Len())
             m_sName =  C2S("TextSection");
-        SwSection aSect(pProps->bDDE ? DDE_LINK_SECTION :
+        SectionType eType =  pProps->bDDE ? DDE_LINK_SECTION :
             pProps->sLinkFileName.Len() || pProps->sSectionRegion.Len() ?  FILE_LINK_SECTION :
-                                                                CONTENT_SECTION,
-                                            pDoc->GetUniqueSectionName(&m_sName));
+                                                                CONTENT_SECTION;
+        // index header section?
+        if(m_bIndexHeader)
+        {
+            // caller wants an index header section, but will only
+            // give him one if a) we are inside an index, and b) said
+            // index doesn't yet have a header section.
+            const SwTOXBase* pBase = aPam.GetDoc()->GetCurTOX(
+                                                    *aPam.Start() );
+
+            // are we inside an index?
+            if (pBase)
+            {
+                // get all child sections
+                SwSections aSectionsArr;
+                ((SwTOXBaseSection*)pBase)->GetFmt()->
+                    GetChildSections(aSectionsArr);
+
+                // and search for current header section
+                sal_uInt16 nCount = aSectionsArr.Count();
+                sal_Bool bHeaderPresent = sal_False;
+                for(sal_uInt16 i = 0; i < nCount; i++)
+                {
+                    bHeaderPresent |=
+                        (aSectionsArr[i]->GetType() == TOX_HEADER_SECTION);
+                }
+                if (! bHeaderPresent)
+                {
+                    eType = TOX_HEADER_SECTION;
+                }
+            }
+        }
+
+        SwSection aSect(eType, pDoc->GetUniqueSectionName(&m_sName));
         aSect.SetCondition(pProps->sCondition);
         String sLinkName(pProps->sLinkFileName);
         sLinkName += cTokenSeperator;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-22 12:47:43 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 20:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,8 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.TextField.HiddenText", //SW_SERVICE_FIELDTYPE_HIDDEN_TEXT
         "com.sun.star.style.ConditionalParagraphStyle", //SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE
         "com.sun.star.text.NumberingRules",             //SW_SERVICE_NUMBERING_RULES
-        "com.sun.star.text.TextColumns"                 //SW_SERVICE_TEXT_COLUMNS
+        "com.sun.star.text.TextColumns",                //SW_SERVICE_TEXT_COLUMNS,
+        "com.sun.star.text.IndexHeaderSection"      //SW_SERVICE_INDEX_HEADER_SECTION
     };
 /******************************************************************
  * SwXServiceProvider
@@ -413,8 +414,9 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet =  (cppu::OWeakObject*)new SwXDocumentIndex(eType, *pDoc);
         }
         break;
+        case SW_SERVICE_INDEX_HEADER_SECTION :
         case SW_SERVICE_TEXT_SECTION :
-            xRet = (cppu::OWeakObject*)new SwXTextSection();
+            xRet = (cppu::OWeakObject*)new SwXTextSection( 0, SW_SERVICE_INDEX_HEADER_SECTION == nObjectType);
 
         break;
         case SW_SERVICE_REFERENCE_MARK :
