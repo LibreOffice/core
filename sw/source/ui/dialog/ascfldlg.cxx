@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:48:55 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,13 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
 
 #ifndef _RTL_TEXTENC_H //autogen wg. rtl_TextEncoding
 #include <rtl/textenc.h>
