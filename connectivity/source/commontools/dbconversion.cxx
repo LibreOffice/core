@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:48:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,8 +471,16 @@ Date DBTypeConversion::toDate(const ::rtl::OUString& _sSQLString)
 //-----------------------------------------------------------------------------
 DateTime DBTypeConversion::toDateTime(const ::rtl::OUString& _sSQLString)
 {
+    // This is very suspicious. Is there any documentation about the format of the string?
+    // Our assumption is that it's "YYYY-MM-DD HH:MM:SS", which makes sense, but how do we know?
+    // #i14997# - 2003-06-05 - fs@openoffice.org
+
+    // the date part
     Date aDate = toDate(_sSQLString);
-    Time aTime = toTime(_sSQLString);
+    Time aTime;
+    sal_Int32 nSeparation = _sSQLString.indexOf( ' ' );
+    if ( -1 != nSeparation )
+        aTime = toTime( _sSQLString.copy( nSeparation ) );
 
     return DateTime(0,aTime.Seconds,aTime.Minutes,aTime.Hours,aDate.Day,aDate.Month,aDate.Year);
 }
