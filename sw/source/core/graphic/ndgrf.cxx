@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:10:59 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,29 +153,49 @@
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #endif
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
 
 using namespace com::sun::star;
 
 // --------------------
 // SwGrfNode
 // --------------------
-SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
-                  const String& rGrfName, const String& rFltName,
-                  const Graphic* pGraphic,
-                  SwGrfFmtColl *pGrfColl,
-                  SwAttrSet* pAutoAttr )
+SwGrfNode::SwGrfNode(
+    const SwNodeIndex & rWhere,
+    const String& rGrfName, const String& rFltName,
+    const Graphic* pGraphic,
+    SwGrfFmtColl *pGrfColl,
+    SwAttrSet* pAutoAttr )
     : SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = FALSE;
+
     bGrafikArrived = TRUE;
-    ReRead( rGrfName, rFltName, pGraphic, 0, FALSE );
+    ReRead(rGrfName,rFltName, pGraphic, 0, FALSE);
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
-                          SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr )
+                      SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr )
     : SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj = rGrfObj;
@@ -192,9 +212,9 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
-                  const String& rGrfName, const String& rFltName,
-                  SwGrfFmtColl *pGrfColl,
-                  SwAttrSet* pAutoAttr )
+                      const String& rGrfName, const String& rFltName,
+                      SwGrfFmtColl *pGrfColl,
+                      SwAttrSet* pAutoAttr )
     : SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
@@ -219,13 +239,10 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     }
 }
 
-
-// erneutes Einlesen, falls Graphic nicht Ok ist. Die
-// aktuelle wird durch die neue ersetzt.
-
-BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
-                        const Graphic* pGraphic, const GraphicObject* pGrfObj,
-                        BOOL bNewGrf )
+BOOL SwGrfNode::ReRead(
+    const String& rGrfName, const String& rFltName,
+    const Graphic* pGraphic, const GraphicObject* pGrfObj,
+    BOOL bNewGrf )
 {
     BOOL bReadGrf = FALSE, bSetTwipSize = TRUE;
 
@@ -236,6 +253,7 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
     if( refLink.Is() )
     {
         ASSERT( !bInSwapIn, "ReRead: stehe noch im SwapIn" );
+
         if( rGrfName.Len() )
         {
             // Besonderheit: steht im FltNamen DDE, handelt es sich um eine
@@ -295,8 +313,10 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     Modify( &aMsgHint, &aMsgHint );
                 }
-                else
+                else {
+                    //TODO refLink->setInputStream(getInputStream());
                     ((SwBaseLink*)&refLink)->SwapIn();
+                }
             }
             bSetTwipSize = FALSE;
         }
@@ -358,6 +378,7 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
                 // der neue Kink nicht geladen werden konnte.
                 Graphic aGrf; aGrf.SetDefaultType();
                 aGrfObj.SetGraphic( aGrf, rGrfName );
+                //TODO refLink->setInputStream(getInputStream());
                 ((SwBaseLink*)&refLink)->SwapIn();
             }
         }
@@ -481,12 +502,14 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
     short nRet = 0;
     bInSwapIn = TRUE;
     SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
+
     if( pLink )
     {
         if( GRAPHIC_NONE == aGrfObj.GetType() ||
             GRAPHIC_DEFAULT == aGrfObj.GetType() )
         {
             // noch nicht geladener Link
+            //TODO pLink->setInputStream(getInputStream());
             if( pLink->SwapIn( bWaitForData ) )
                 nRet = -1;
             else if( GRAPHIC_DEFAULT == aGrfObj.GetType() )
@@ -497,9 +520,11 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
                 Modify( &aMsgHint, &aMsgHint );
             }
         }
-        else if( aGrfObj.IsSwappedOut() )
+        else if( aGrfObj.IsSwappedOut() ) {
             // nachzuladender Link
+            //TODO pLink->setInputStream(getInputStream());
             nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
+        }
         else
             nRet = 1;
     }
@@ -865,6 +890,7 @@ BOOL SwGrfNode::RestorePersistentData()
 void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
 {
     refLink = new SwBaseLink( sfx2::LINKUPDATE_ONCALL, FORMAT_GDIMETAFILE, this );
+
     SwDoc* pDoc = GetDoc();
     if( GetNodes().IsDocNodes() )
     {
@@ -903,6 +929,7 @@ void SwGrfNode::ReleaseLink()
         {
             bInSwapIn = TRUE;
             SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
+            //TODO pLink->setInputStream(getInputStream());
             pLink->SwapIn( TRUE, TRUE );
             bInSwapIn = FALSE;
         }
