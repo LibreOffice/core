@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:39:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ TabDialog TAB_OUTLINEBULLET
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Nummerierung/Aufzählung" ;
+    Text [ de ] = "Nummerierung/Aufzählung" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -76,204 +76,42 @@ TabDialog TAB_OUTLINEBULLET
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BULLET ;
-                Text = "Bullets" ;
-                Text [ ENGLISH ] = "Bullets" ;
-                Text [ english_us ] = "Bullets" ;
-                Text [ portuguese_brazilian ] = "Marcas" ;
-                Text [ swedish ] = "Punkter" ;
-                Text [ danish ] = "Punkttegn" ;
-                Text [ italian ] = "Punti" ;
-                Text [ spanish ] = "Viñetas" ;
-                Text [ french ] = "Puces" ;
-                Text [ dutch ] = "Opsommingstekens" ;
-                Text [ portuguese ] = "Marcas" ;
-                Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å·";
-                Text[ russian ] = "Ìàğêåğû";
-                Text[ polish ] = "Znaki wypunktowania";
-                Text[ japanese ] = "ç®‡æ¡æ›¸ã";
-                Text[ chinese_traditional ] = "é …ç›®ç¬¦è™Ÿ";
-                Text[ arabic ] = "ÚáÇãÇÊ ÇáÊÚÏÇÏ";
-                Text[ greek ] = "Êïõêßäåò";
-                Text[ korean ] = "ê¸€ë¨¸ë¦¬ ê¸°í˜¸";
-                Text[ turkish ] = "Madde işaretleri";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pics";
-                Text[ finnish ] = "Luettelomerkit";
-                Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
-                Text[ czech ] = "OdrÃ¡Å¾ky";
-                Text[ hebrew ] = "Bullets";
-                Text[ hindi ] = "à¤¬à¥à¤²à¥à¤²à¥‡à¤Ÿà¥à¤¸";
-                Text[ slovak ] = "OdrÃ¡Å¾ky";
-                Text[ hungarian ] = "FelsorolÃ¡sjel";
-                Text[ slovenian ] = "Oznake";
+                Text [ de ] = "Bullets" ;
+                Text [ en-US ] = "Bullets" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_SINGLE_NUM ;
-                Text = "Nummerierungsart" ;
-                Text [ ENGLISH ] = "Digits" ;
-                Text [ english_us ] = "Numbering type" ;
-                Text [ portuguese_brazilian ] = "Tipo de numeração" ;
-                Text [ swedish ] = "Numreringstyp" ;
-                Text [ danish ] = "Nummereringstype" ;
-                Text [ italian ] = "Tipo di numerazione" ;
-                Text [ spanish ] = "Tipo de numeración" ;
-                Text [ french ] = "Type de numérotation" ;
-                Text [ dutch ] = "Nummeringsstijl" ;
-                Text [ portuguese ] = "Tipo de numeração" ;
-                Text[ chinese_simplified ] = "ç¼–å·ç±»å‹";
-                Text[ russian ] = "Òèï íóìåğàöèè";
-                Text[ polish ] = "Typ numeracji";
-                Text[ japanese ] = "ç•ªå·ä»˜ã‘ã®ç¨®é¡";
-                Text[ chinese_traditional ] = "ç·¨è™Ÿé¡å‹";
-                Text[ language_user1 ] = "; MS Word, KeyID23276";
-                Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
-                Text[ greek ] = "Óôõë áñßèìçóçò";
-                Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ìœ í˜•";
-                Text[ turkish ] = "Numaralama türü";
-                Text[ catalan ] = "Tipus de numeració";
-                Text[ finnish ] = "Numerointityyppi";
-                Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
-                Text[ czech ] = "Typ ÄÃ­slovÃ¡nÃ­";
-                Text[ hebrew ] = "Nummerierungsart";
-                Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ à¤•à¤¾ à¤•à¥à¤°à¤®";
-                Text[ slovak ] = "Typ ÄÃ­slovania";
-                Text[ hungarian ] = "SzÃ¡mozÃ¡s tÃ­pusa";
-                Text[ slovenian ] = "Vrsta oÅ¡tevilÄevanja";
+                Text [ de ] = "Nummerierungsart" ;
+                Text [ en-US ] = "Numbering type" ;
+                Text [ x-comment ] = "; MS Word, KeyID23276";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BMP ;
-                Text = "Grafiken" ;
-                Text [ ENGLISH ] = "Images" ;
-                Text [ english_us ] = "Graphics" ;
-                Text [ portuguese_brazilian ] = "Figuras" ;
-                Text [ swedish ] = "Grafik" ;
-                Text [ danish ] = "Grafik" ;
-                Text [ italian ] = "Immagini" ;
-                Text [ spanish ] = "Imágenes" ;
-                Text [ french ] = "Images" ;
-                Text [ dutch ] = "Afbeeldingen" ;
-                Text [ portuguese ] = "Imagens" ;
-                Text[ chinese_simplified ] = "å›¾å½¢";
-                Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
-                Text[ polish ] = "Grafika";
-                Text[ japanese ] = "å›³";
-                Text[ chinese_traditional ] = "åœ–å½¢";
-                Text[ arabic ] = "ÕæÑ";
-                Text[ greek ] = "ÃñáöéêÜ";
-                Text[ korean ] = "ê·¸ë¦¼";
-                Text[ turkish ] = "Grafikler";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Imatges";
-                Text[ finnish ] = "Grafiikka";
-                Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
-                Text[ czech ] = "ObrÃ¡zky";
-                Text[ hebrew ] = "â€®×’×¨×¤×™×§×”â€¬";
-                Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤°";
-                Text[ slovak ] = "ObrÃ¡zky";
-                Text[ hungarian ] = "KÃ©p";
-                Text[ slovenian ] = "Grafika";
+                Text [ de ] = "Grafiken" ;
+                Text [ en-US ] = "Graphics" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_POSITION ;
-                Text = "Position" ;
-                Text [ ENGLISH ] = "Position" ;
-                Text [ english_us ] = "Position" ;
-                Text [ portuguese_brazilian ] = "Posição" ;
-                Text [ swedish ] = "Position" ;
-                Text [ danish ] = "Placering" ;
-                Text [ italian ] = "Posizione" ;
-                Text [ spanish ] = "Posición" ;
-                Text [ french ] = "Position" ;
-                Text [ dutch ] = "Positie" ;
-                Text [ portuguese ] = "Posição" ;
-                Text[ chinese_simplified ] = "ä½ç½®";
-                Text[ russian ] = "Ïîëîæåíèå";
-                Text[ polish ] = "Pozycja";
-                Text[ japanese ] = "ä½ç½®";
-                Text[ chinese_traditional ] = "ä½ç½®";
-                Text[ arabic ] = "ÇáãæÖÚ";
-                Text[ greek ] = "Èİóç";
-                Text[ korean ] = "ìœ„ì¹˜";
-                Text[ turkish ] = "Konum";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Posició";
-                Text[ finnish ] = "Sijainti";
-                Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-                Text[ czech ] = "UmÃ­stÄ›nÃ­";
-                Text[ hebrew ] = "â€®××™×§×•×â€¬";
-                Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-                Text[ slovak ] = "Umiestnenie";
-                Text[ hungarian ] = "PozÃ­ciÃ³";
-                Text[ slovenian ] = "PoloÅ¾aj";
+                Text [ de ] = "Position" ;
+                Text [ en-US ] = "Position" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_OPTIONS ;
-                Text = "Optionen" ;
-                Text [ ENGLISH ] = "Customize" ;
-                Text [ english_us ] = "Customize" ;
-                Text [ portuguese_brazilian ] = "Personalizar" ;
-                Text [ swedish ] = "Alternativ" ;
-                Text [ danish ] = "Tilpas" ;
-                Text [ italian ] = "Opzioni" ;
-                Text [ spanish ] = "Opciones" ;
-                Text [ french ] = "Options" ;
-                Text [ dutch ] = "Opties" ;
-                Text [ portuguese ] = "Opções" ;
-                Text[ chinese_simplified ] = "é€‰é¡¹";
-                Text[ russian ] = "Ïàğàìåòğû";
-                Text[ polish ] = "Dostosuj";
-                Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-                Text[ chinese_traditional ] = "é¸é …";
-                Text[ arabic ] = "ÎíÇÑÇÊ";
-                Text[ greek ] = "Åğéëïãİò";
-                Text[ korean ] = "ì˜µì…˜";
-                Text[ turkish ] = "Seçenekler";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Personalitza";
-                Text[ finnish ] = "Mukauta";
-                Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
-                Text[ czech ] = "PÅ™izpÅ¯sobit";
-                Text[ hebrew ] = "â€®×”×ª×××” ××™×©×™×ªâ€¬";
-                Text[ hindi ] = "à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹";
-                Text[ slovak ] = "PrispÃ´sobiÅ¥";
-                Text[ hungarian ] = "TestreszabÃ¡s";
-                Text[ slovenian ] = "Po meri";
+                Text [ de ] = "Optionen" ;
+                Text [ en-US ] = "Customize" ;
+                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ english ] = "Numbering/Bullets" ;
-    Text [ english_us ] = "Numbering/Bullets" ;
-    Text [ portuguese_brazilian ] = "Numeração / Marcas" ;
-    Text [ swedish ] = "Numrering/punktuppställning" ;
-    Text [ danish ] = "Nummerering/punktopstilling" ;
-    Text [ italian ] = "Elenchi puntati e numerati" ;
-    Text [ spanish ] = "Numeración y viñetas" ;
-    Text [ french ] = "Numérotation/Puces" ;
-    Text [ dutch ] = "Nummering/opsommingstekens" ;
-    Text [ portuguese ] = "Numeração & Marcas" ;
-    Text[ chinese_simplified ] = "ç¼–å·/é¡¹ç›®ç¬¦å·";
-    Text[ russian ] = "Íóìåğàöèÿ/ìàğêèğîâêà";
-    Text[ polish ] = "Numeracja/Wypunktowanie";
-    Text[ japanese ] = "ç®‡æ¡æ›¸ãã¨ç•ªå·ä»˜ã‘";
-    Text[ chinese_traditional ] = "ç·¨è™Ÿ/é …ç›®ç¬¦è™Ÿ";
-    Text[ arabic ] = "ÊÑŞíã/ÊÚÏÇÏ";
-    Text[ greek ] = "Áñßèìçóç/Êïõêßäåò";
-    Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°/ê¸€ë¨¸ë¦¬ ê¸°í˜¸";
-    Text[ turkish ] = "Numaralama/madde işaretleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Numeració/Vinyetes";
-    Text[ finnish ] = "Luettelomerkit ja numerointi";
-    Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚/à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
-    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­/odrÃ¡Å¾ky";
-    Text[ hebrew ] = "â€®×ª×‘×œ×™×˜×™×/××™×¡×¤×•×¨â€¬";
-    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾/à¤¬à¥à¤²à¥à¤²à¥‡à¤Ÿà¥à¤¸";
-    Text[ slovak ] = "ÄŒÃ­slovanie/odrÃ¡Å¾ky";
-    Text[ hungarian ] = "SzÃ¡mozÃ¡s Ã©s felsorolÃ¡s";
-    Text[ slovenian ] = "OÅ¡tevilÄevanje/oznaÄevanje";
+    Text [ en-US ] = "Numbering/Bullets" ;
+    Text [ x-comment ] = " ";
 };
 
 
