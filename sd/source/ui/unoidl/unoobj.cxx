@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-20 15:45:11 $
+ *  last change: $Author: cl $ $Date: 2001-07-11 13:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1155,7 +1155,12 @@ void SdXShape::SetPresObj( sal_Bool bPresObj ) throw()
 sal_Bool SdXShape::IsEmptyPresObj() const throw()
 {
     SdrObject* pObj = GetSdrObject();
-    return pObj && pObj->IsEmptyPresObj();
+    if( pObj == NULL || !pObj->IsEmptyPresObj() )
+        return sal_False;
+
+    // check if the object is in edit, than its temporarely not empty
+    SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
+    return (NULL == pTextObj) || ( NULL == pTextObj->GetEditOutlinerParaObject() );
 }
 
 /** sets/reset the empty status of a presentation object
