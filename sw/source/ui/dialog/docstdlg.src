@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:39:51 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ TabPage TP_DOC_STAT
         Text[ chinese_simplified ] = "Í¼ĞÎÊıÄ¿£º";
         Text[ russian ] = "Êîëè÷åñòâî ğèñóíêîâ:";
         Text[ polish ] = "Liczba grafik:";
-        Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì”:";
+        Text[ japanese ] = "}‚Ì”:";
         Text[ chinese_traditional ] = "¼Æ¥Ø ¹Ï§Î¡G";
         Text[ arabic ] = "ÚÏÏ ÇáÑÓæãÇÊ:";
         Text[ greek ] = "Áñéèìüò ãñáöéêşí:";
