@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
+ *  last change: $Author: mib $ $Date: 2002-10-10 08:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
 #include <com/sun/star/document/XImporter.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -79,6 +82,9 @@
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
 #include "XMLFilterServiceNames.h"
@@ -89,6 +95,8 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::xml::sax;
@@ -196,6 +204,7 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
     if( !rComp.is() || !sFilterService.getLength() )
         return sal_False;
 
+
     Sequence<Any> aArgs( 0 );
     Reference< XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -209,6 +218,7 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument( rComp );
 
+    xComp = rComp;  // keep ref to component only if there is a handler
     return sal_True;
 }
 
@@ -294,6 +304,25 @@ void XMLEmbeddedObjectImportContext::EndElement()
         xHandler->endElement( GetImport().GetNamespaceMap().GetQNameByKey(
                                     GetPrefix(), GetLocalName() ) );
         xHandler->endDocument();
+
+        // reset modifies state for the object since it has been imported
+        // completly and therfor hasn't been modified.
+        Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
+        if( xModifiable.is() )
+        {
+            try
+            {
+                xModifiable->setModified( sal_False );
+            }
+            catch( ::com::sun::star::beans::PropertyVetoException& e )
+            {
+                Sequence<OUString> aSeq( 0 );
+                GetImport().SetError( XMLERROR_FLAG_WARNING |
+                                  XMLERROR_API,
+                                  aSeq );
+            }
+        }
+
     }
 }
 
