@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:37:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,6 +453,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
     if (pMedium)
         aParserInput.sSystemId = OUString(pMedium->GetName());
 
+    if ( !xStorage.is() && pMedium )
+        xStorage = pMedium->GetStorage();
 
     // get parser
     uno::Reference<uno::XInterface> xXMLParser =
@@ -496,14 +498,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
         // Set base URI
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
-        ::rtl::OUString aBaseURL = OUString(INetURLObject::GetBaseURL());
-        if ( pMedium && pMedium->GetItemSet() )
-        {
-            const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
-                    pMedium->GetItemSet()->GetItem(SID_DOC_BASEURL) );
-            if ( pBaseURLItem )
-                aBaseURL = pBaseURLItem->GetValue();
-        }
+        ::rtl::OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : ::rtl::OUString();
         rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
@@ -680,6 +675,9 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     uno::Reference<io::XOutputStream> xOut;
     uno::Reference<io::XStream> xStream;
 
+    if ( !xStorage.is() && pMedium )
+        xStorage = pMedium->GetOutputStorage();
+
     if( xStorage.is() )
     {
         // #96807#; trunc stream before use, because it could be an existing stream
@@ -814,14 +812,8 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), aUsePrettyPrinting);
 
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
-        ::rtl::OUString aBaseURL = OUString(INetURLObject::GetBaseURL());
-        if ( pMedium && pMedium->GetItemSet() )
-        {
-            const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
-                    pMedium->GetItemSet()->GetItem(SID_DOC_BASEURL) );
-            if ( pBaseURLItem )
-                aBaseURL = pBaseURLItem->GetValue();
-        }
+        OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
+        ::rtl::OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : ::rtl::OUString();
         rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
