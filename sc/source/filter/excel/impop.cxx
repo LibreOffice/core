@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:47:38 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,7 @@
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
 #include <svx/flditem.hxx>
-#include <svx/lrspitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
 #include <svx/colritem.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/zforlist.hxx>
@@ -131,6 +127,15 @@
 #endif
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
+#endif
+#ifndef SC_XIPAGE_HXX
+#include "xipage.hxx"
+#endif
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
+#endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
 #endif
 
 #include "excimp8.hxx"
@@ -194,25 +199,13 @@ ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rDo
     ImportTyp( pDoc, RTL_TEXTENCODING_MS_1252 ),
     XclImpRoot( static_cast< XclImpRootData& >( *this ) ),
     maStrm( rSvStrm, *this ),
-    aIn( maStrm ),
-    bFitToPage( sal_False ),
-    bHasHeader( sal_False ),
-    bHasFooter( sal_False ),
-    bHasTopMargin (sal_False ),
-    bHasBottomMargin (sal_False ),
-    bHasLeftMargin (sal_False ),
-    bHasRightMargin (sal_False )
+    aIn( maStrm )
 {
     pChart = pUsedChartFirst = pUsedChartLast = NULL;
 
     nBdshtTab = 0;
     nFirstVisTab = 0xFFFF;
     nIxfeIndex = 0;     // zur Sicherheit auf 0
-
-    pPrintRanges = new _ScRangeListTabs;
-    pPrintTitles = new _ScRangeListTabs;
-
-    pStyleSheetItemSet = NULL;
 
     // Root-Daten fuellen - nach new's ohne Root als Parameter
     pExcRoot = mpRD;
@@ -223,7 +216,6 @@ ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rDo
     pExcRoot->eDateiTyp = pExcRoot->eHauptDateiTyp = BiffX;
     pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
     pExcRoot->pTabNameBuff = new NameBuffer( pExcRoot );        //&aTabNameBuff;
-    pExcRoot->pRNameBuff = new RangeNameBuffer( pExcRoot );     //&aRangeNameBuff;
     pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff = new ExtNameBuff ( pExcRoot );
     pExcRoot->pCharset = &eQuellChar;   // dto.
@@ -267,9 +259,6 @@ ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rDo
 
 ImportExcel::~ImportExcel( void )
 {
-    delete pPrintRanges;
-    delete pPrintTitles;
-
     GetDoc().SetSrcCharSet( GetCharSet() );
 
     delete pExtNameBuff;
@@ -312,7 +301,10 @@ void ImportExcel::Blank25( void )
         GetXFIndexBuffer().SetBlankXF( nCol, nRow, nXF );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -339,7 +331,10 @@ void ImportExcel::Integer( void )
         pColRowBuff->Used( nCol, nRow );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -372,7 +367,10 @@ void ImportExcel::Number25( void )
         pColRowBuff->Used( nCol, nRow );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -451,7 +449,10 @@ void ImportExcel::Boolerr25( void )
             GetXFIndexBuffer().SetBoolXF( nCol, nRow, nXF );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -548,26 +549,6 @@ BOOL ImportExcel::Password( void )
 }
 
 
-void ImportExcel::Header( void )
-{
-    if( aIn.GetRecLeft() )
-    {
-        GetHF( TRUE );
-        bHasHeader = sal_True;
-    }
-}
-
-
-void ImportExcel::Footer( void )
-{
-    if( aIn.GetRecLeft() )
-    {
-        GetHF( FALSE );
-        bHasFooter = sal_True;
-    }
-}
-
-
 void ImportExcel::Externsheet( void )
 {
     String aEncodedUrl, aUrl, aTabName;
@@ -579,128 +560,6 @@ void ImportExcel::Externsheet( void )
 }
 
 
-void ImportExcel::Name25( void )
-{
-    const ScTokenArray* pErgebnis;
-    UINT16              nLenDef;
-    BYTE                nLenName, nLen;
-
-    if( pExcRoot->eHauptDateiTyp == Biff2 )
-    {// --------------------------------------------------- Biff2
-        BYTE            nAttr0, nAttr1, nLenExpr;
-
-        aIn >> nAttr0 >> nAttr1;
-        aIn.Ignore( 1 );
-        aIn >> nLenName >> nLenExpr;
-
-        // Namen einlesen
-        String aName( aIn.ReadRawByteString( nLenName ) );
-        ScfTools::ConvertToScDefinedName( aName );
-
-        pFormConv->Reset();
-        if( nAttr0 & 0x02 )
-            pFormConv->GetDummy( pErgebnis );       // function or command?
-        else
-            pFormConv->Convert( pErgebnis, nLenExpr, FT_RangeName );    // ...or simple formula
-
-        pExcRoot->pRNameBuff->Store( aName, pErgebnis );
-
-        aIn.Ignore( 1 );    // cceDup ueberfluessig
-    }// ------------------------------------------Ende fuer Biff2
-    else
-    {// --------------------------------------------------- Biff5
-        UINT16          nOpt;
-        UINT16          nLenSeekRel = 0;
-        UINT16          nSheet;
-
-        aIn >> nOpt;
-        aIn.Ignore( 1 );
-        aIn >> nLenName >> nLenDef;
-        aIn.Ignore( 2 );
-        aIn >> nSheet
-            >> nLen;            // length of custom menu text
-        nLenSeekRel += nLen;
-        aIn >> nLen;            // length of description text
-        nLenSeekRel += nLen;
-        aIn >> nLen;            // length of help topic text
-        nLenSeekRel += nLen;
-        aIn >> nLen;            // length of status bar text
-        nLenSeekRel += nLen;
-
-        // Namen einlesen
-        String aName( aIn.ReadRawByteString( nLenName ) );
-        // jetzt steht Lesemarke an der Formel
-
-        const BOOL      bHidden = TRUEBOOL( nOpt & EXC_NAME_HIDDEN );
-        const BOOL      bBuildIn = TRUEBOOL( nOpt & EXC_NAME_BUILTIN );
-
-        sal_Char        cFirstNameChar = ( sal_Char ) aName.GetChar( 0 );
-        const BOOL      bPrintArea = bBuildIn && ( cFirstNameChar == EXC_BUILTIN_PRINTAREA );
-        const BOOL      bPrintTitles = bBuildIn && ( cFirstNameChar == EXC_BUILTIN_PRINTTITLES );
-        RangeType       eNameType = RT_ABSAREA;
-
-        if(bPrintArea)
-            eNameType = RT_PRINTAREA;
-
-
-        if( bBuildIn )
-            aName = XclTools::GetBuiltInName( cFirstNameChar, nSheet );
-        else
-            ScfTools::ConvertToScDefinedName( aName );
-
-        pFormConv->Reset();
-        if( nOpt & (EXC_NAME_VB | EXC_NAME_BIG) )
-            // function or command?
-            pFormConv->GetDummy( pErgebnis );
-        else if( bBuildIn )
-        {
-            aIn.PushPosition();
-
-            if( bPrintArea )
-                pFormConv->Convert( *pPrintRanges, nLenDef, FT_RangeName );
-            else if( bPrintTitles )
-                pFormConv->Convert( *pPrintTitles, nLenDef, FT_RangeName );
-
-            aIn.PopPosition();
-
-            pFormConv->Convert( pErgebnis, nLenDef, FT_RangeName );
-        }
-        else    // ...oder nur Formel
-            pFormConv->Convert( pErgebnis, nLenDef, FT_RangeName );
-
-        if( bHidden )
-            pExcRoot->pRNameBuff->Store( aName, NULL, nSheet );
-        else
-            // ohne hidden
-            pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, eNameType);
-    }// ----------------------------------------- Ende fuer Biff5
-}
-
-
-void ImportExcel::Verticalpagebreaks( void )
-{
-    UINT16 n = aIn.ReaduInt16();
-
-    while( n )
-    {
-        pColRowBuff->SetVertPagebreak( aIn.ReaduInt16() );
-        n--;
-    }
-}
-
-
-void ImportExcel::Horizontalpagebreaks( void )
-{
-    UINT16 n = aIn.ReaduInt16();
-
-    while( n )
-    {
-        pColRowBuff->SetHorizPagebreak( aIn.ReaduInt16() );
-        n--;
-    }
-}
-
-
 void ImportExcel::Note( void )
 {
     UINT16  nCol, nRow;
@@ -709,7 +568,10 @@ void ImportExcel::Note( void )
     if( nRow <= MAXROW && nCol <= MAXCOL )
         pD->SetNote( nCol, nRow, GetScTab(), aIn.ReadByteString( TRUE ) );
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -877,59 +739,6 @@ void ImportExcel::Defrowheight2( void )
 }
 
 
-void ImportExcel::Leftmargin( void )
-{
-    SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlLeftMargin );
-    bHasLeftMargin = sal_True;
-}
-
-
-void ImportExcel::Rightmargin( void )
-{
-    SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlRightMargin );
-    bHasRightMargin = sal_True;
-}
-
-
-void ImportExcel::Topmargin( void )
-{
-    SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlTopMargin );
-    bHasTopMargin = sal_True;
-}
-
-
-void ImportExcel::Bottommargin( void )
-{
-    SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlBottomMargin );
-    bHasBottomMargin = sal_True;
-}
-
-
-void ImportExcel::Printheaders( void )
-{
-    UINT16  nPrintHeaders;
-
-    aIn >> nPrintHeaders;
-
-    if( nPrintHeaders == 1 )
-        pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_HEADERS, TRUE ) );
-    else
-        pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_HEADERS, FALSE ) );
-}
-
-
-void ImportExcel::Prntgrdlns( void )
-{
-    UINT16  nPrintGrid;
-
-    aIn >> nPrintGrid;
-
-    if( nPrintGrid == 1 )
-        pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_GRID, TRUE ) );
-    else
-        pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_GRID, FALSE ) );
-}
-
 void ImportExcel::Protect( void )
 {
     if( aIn.ReaduInt16() )
@@ -1069,7 +878,10 @@ void ImportExcel::Rk( void )
         pColRowBuff->Used( nCol, nRow );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -1083,32 +895,7 @@ void ImportExcel::Wsbool( void )
     pRowOutlineBuff->SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_ROWBELOW ) );
     pColOutlineBuff->SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_COLBELOW ) );
 
-    bFitToPage = HasFlag( nFlags, EXC_WSBOOL_FITTOPAGE );
-}
-
-
-void ImportExcel::Gridset( void )
-{
-}
-
-
-void ImportExcel::Hcenter( void )
-{
-    DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::Hcenter(): kein StyleSheet - Schiet!" );
-    UINT16  nCenter;
-    aIn >> nCenter;
-    if( nCenter == 1 )
-        pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_HORCENTER, TRUE ) );
-}
-
-
-void ImportExcel::Vcenter( void )
-{
-    DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::Vcenter(): kein StyleSheet - Schiet!" );
-    UINT16  nCenter;
-    aIn >> nCenter;
-    if( nCenter == 1 )
-        pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_VERCENTER, TRUE )  );
+    GetPageSettings().SetFitToPages( ::get_flag( nFlags, EXC_WSBOOL_FITTOPAGE ) );
 }
 
 
@@ -1227,180 +1014,6 @@ void ImportExcel::Scl( void )
 }
 
 
-void ImportExcel::Setup( void )
-{
-    struct PAPER_SIZE
-    {
-        INT32       nH;
-        INT32       nW;
-    };
-    static const    nAnzSizes = 42;
-    static SvxPaper pSvxPS[ nAnzSizes ] =
-    {
-        SVX_PAPER_USER,     // undefined
-        SVX_PAPER_LETTER,   // Letter 8 1/2 x 11 in
-        SVX_PAPER_USER,     // Letter Small 8 1/2 x 11 in
-        SVX_PAPER_TABLOID,  // Tabloid 11 x 17 in
-        SVX_PAPER_USER,     // Ledger 17 x 11 in
-        SVX_PAPER_LEGAL,    // Legal 8 1/2 x 14 in
-        SVX_PAPER_USER,     // Statement 5 1/2 x 8 1/2 in
-        SVX_PAPER_USER,     // Executive 7 1/4 x 10 1/2 in
-        SVX_PAPER_A3,       // A3 297 x 420 mm
-        SVX_PAPER_A4,       // A4 210 x 297 mm
-        SVX_PAPER_USER,     // A4 Small 210 x 297 mm
-        SVX_PAPER_A5,       // A5 148 x 210 mm
-        SVX_PAPER_B4,       // B4 250 x 354
-        SVX_PAPER_B5,       // B5 182 x 257 mm
-        SVX_PAPER_USER,     // Folio 8 1/2 x 13 in
-        SVX_PAPER_USER,     // Quarto 215 x 275 mm
-        SVX_PAPER_USER,     // 10x14 in
-        SVX_PAPER_USER,     // 11x17 in
-        SVX_PAPER_USER,     // Note 8 1/2 x 11 in
-        SVX_PAPER_USER,     // Envelope #9 3 7/8 x 8 7/8
-        SVX_PAPER_USER,     // Envelope #10 4 1/8 x 9 1/2
-        SVX_PAPER_USER,     // Envelope #11 4 1/2 x 10 3/8
-        SVX_PAPER_USER,     // Envelope #12 4 \276 x 11
-        SVX_PAPER_USER,     // Envelope #14 5 x 11 1/2
-        SVX_PAPER_A4,       // C size sheet
-        SVX_PAPER_A4,       // D size sheet
-        SVX_PAPER_A4,       // E size sheet
-        SVX_PAPER_DL,       // Envelope DL 110 x 220mm
-        SVX_PAPER_C5,       // Envelope C5 162 x 229 mm
-        SVX_PAPER_USER,     // Envelope C3  324 x 458 mm
-        SVX_PAPER_C4,       // Envelope C4  229 x 324 mm
-        SVX_PAPER_C6,       // Envelope C6  114 x 162 mm
-        SVX_PAPER_C65,      // Envelope C65 114 x 229 mm
-        SVX_PAPER_B4,       // Envelope B4  250 x 353 mm
-        SVX_PAPER_B5,       // Envelope B5  176 x 250 mm
-        SVX_PAPER_B6,       // Envelope B6  176 x 125 mm
-        SVX_PAPER_USER,     // Envelope 110 x 230 mm
-        SVX_PAPER_USER,     // Envelope Monarch 3.875 x 7.5 in
-        SVX_PAPER_USER,     // 6 3/4 Envelope 3 5/8 x 6 1/2 in
-        SVX_PAPER_USER,     // US Std Fanfold 14 7/8 x 11 in
-        SVX_PAPER_USER,     // German Std Fanfold 8 1/2 x 12 in
-        SVX_PAPER_USER      // German Legal Fanfold 8 1/2 x 13 in
-    };
-    static const    PAPER_SIZE pPS[ nAnzSizes ] =
-    {
-    {(INT32)(0),(INT32)(0)},                                        // undefined
-    {(INT32)(TWIPS_PER_INCH*8.5),(INT32)(TWIPS_PER_INCH*11)},       // Letter 8 1/2 x 11 in
-    {(INT32)(TWIPS_PER_INCH*8.5),(INT32)(TWIPS_PER_INCH*11)},       // Letter Small 8 1/2 x 11 in
-    {(INT32)(TWIPS_PER_INCH*11),(INT32)(TWIPS_PER_INCH*17)},        // Tabloid 11 x 17 in
-    {(INT32)(TWIPS_PER_INCH*17),(INT32)(TWIPS_PER_INCH*11)},        // Ledger 17 x 11 in
-    {(INT32)(TWIPS_PER_INCH*8.5),(INT32)(TWIPS_PER_INCH*14)},       // Legal 8 1/2 x 14 in
-    {(INT32)(TWIPS_PER_INCH*5.5),(INT32)(TWIPS_PER_INCH*8.5)},      // Statement 5 1/2 x 8 1/2 in
-    {(INT32)(TWIPS_PER_INCH*7.25),(INT32)(TWIPS_PER_INCH*10.5)},    // Executive 7 1/4 x 10 1/2 in
-    {(INT32)(TWIPS_PER_CM*29.7),(INT32)(TWIPS_PER_CM*42.0)},        // A3 297 x 420 mm
-    {(INT32)(TWIPS_PER_CM*21.0),(INT32)(TWIPS_PER_CM*29.7)},        // A4 210 x 297 mm
-    {(INT32)(TWIPS_PER_CM*21.0),(INT32)(TWIPS_PER_CM*29.7)},        // A4 Small 210 x 297 mm
-    {(INT32)(TWIPS_PER_CM*14.8),(INT32)(TWIPS_PER_CM*21.0)},        // A5 148 x 210 mm
-    {(INT32)(TWIPS_PER_CM*25.0),(INT32)(TWIPS_PER_CM*35.4)},        // B4 250 x 354
-    {(INT32)(TWIPS_PER_CM*18.2),(INT32)(TWIPS_PER_CM*25.7)},        // B5 182 x 257 mm
-    {(INT32)(TWIPS_PER_INCH*8.5),(INT32)(TWIPS_PER_INCH*13)},       // Folio 8 1/2 x 13 in
-    {(INT32)(TWIPS_PER_CM*21.5),(INT32)(TWIPS_PER_CM*27.5)},        // Quarto 215 x 275 mm
-    {(INT32)(TWIPS_PER_INCH*10),(INT32)(TWIPS_PER_INCH*14)},        // 10x14 in
-    {(INT32)(TWIPS_PER_INCH*11),(INT32)(TWIPS_PER_INCH*17)},        // 11x17 in
-    {(INT32)(TWIPS_PER_INCH*8.5),(INT32)(TWIPS_PER_INCH*11)},       // Note 8 1/2 x 11 in
-    {(INT32)(TWIPS_PER_INCH*3.875),(INT32)(TWIPS_PER_INCH*8.875)},  // Envelope #9 3 7/8 x 8 7/8
-    {(INT32)(TWIPS_PER_INCH*4.125),(INT32)(TWIPS_PER_INCH*9.5)},    // Envelope #10 4 1/8 x 9 1/2
-    {(INT32)(TWIPS_PER_INCH*4.5),(INT32)(TWIPS_PER_INCH*10.375)},   // Envelope #11 4 1/2 x 10 3/8
-    {(INT32)(TWIPS_PER_INCH*4.03),(INT32)(TWIPS_PER_INCH*11)},      // Envelope #12 4 \276 x 11
-    {(INT32)(TWIPS_PER_INCH*14.5),(INT32)(TWIPS_PER_INCH*11.5)},    // Envelope #14 5 x 11 1/2
-    {(INT32)(0),(INT32)(0)},                                        // C size sheet
-    {(INT32)(0),(INT32)(0)},                                        // D size sheet
-    {(INT32)(0),(INT32)(0)},                                        // E size sheet
-    {(INT32)(TWIPS_PER_CM*11.0),(INT32)(TWIPS_PER_CM*22.0)},        // Envelope DL 110 x 220mm
-    {(INT32)(TWIPS_PER_CM*16.2),(INT32)(TWIPS_PER_CM*22.9)},        // Envelope C5 162 x 229 mm
-    {(INT32)(TWIPS_PER_CM*32.4),(INT32)(TWIPS_PER_CM*45.8)},        // Envelope C3  324 x 458 mm
-    {(INT32)(TWIPS_PER_CM*22.9),(INT32)(TWIPS_PER_CM*32.4)},        // Envelope C4  229 x 324 mm
-    {(INT32)(TWIPS_PER_CM*11.4),(INT32)(TWIPS_PER_CM*16.2)},        // Envelope C6  114 x 162 mm
-    {(INT32)(TWIPS_PER_CM*11.4),(INT32)(TWIPS_PER_CM*22.9)},        // Envelope C65 114 x 229 mm
-    {(INT32)(TWIPS_PER_CM*25.0),(INT32)(TWIPS_PER_CM*35.3)},        // Envelope B4  250 x 353 mm
-    {(INT32)(TWIPS_PER_CM*17.6),(INT32)(TWIPS_PER_CM*25.0)},        // Envelope B5  176 x 250 mm
-    {(INT32)(TWIPS_PER_CM*17.6),(INT32)(TWIPS_PER_CM*12.5)},        // Envelope B6  176 x 125 mm
-    {(INT32)(TWIPS_PER_CM*11.0),(INT32)(TWIPS_PER_CM*23.0)},        // Envelope 110 x 230 mm
-    {(INT32)(TWIPS_PER_INCH*3.875),(INT32)(TWIPS_PER_INCH*7.5)},    // Envelope Monarch 3.875 x 7.5 in
-    {(INT32)(TWIPS_PER_INCH*3.625),(INT32)(TWIPS_PER_INCH*6.5)},    // 6 3/4 Envelope 3 5/8 x 6 1/2 in
-    {(INT32)(TWIPS_PER_INCH*14.875),(INT32)(TWIPS_PER_INCH*11)},    // US Std Fanfold 14 7/8 x 11 in
-    {(INT32)(TWIPS_PER_INCH*8.5),(INT32)(TWIPS_PER_INCH*12)},       // German Std Fanfold 8 1/2 x 12 in
-    {(INT32)(TWIPS_PER_INCH*8.5),(INT32)(TWIPS_PER_INCH*13)}        // German Legal Fanfold 8 1/2 x 13 in
-    };
-
-
-    UINT16          nPaperSize, nScale, nStartPage, nFitWidth, nFitHeight, nOpt;
-
-    aIn >> nPaperSize >> nScale >> nStartPage >> nFitWidth >> nFitHeight >> nOpt;
-
-    SvxPageItem     aPageItem( ( const SvxPageItem& ) pStyleSheetItemSet->Get( ATTR_PAGE ) );
-
-    pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_TOPDOWN, !( nOpt & 0x0001 ) ) );
-
-    if( !( nOpt & 0x0004 ) )
-    {// fNoPls      (TRUE->ignore nPaperSize, nScale, nPrintRes,
-        //                  nVertRes, nCopies, fLandscape)
-        pExcRoot->bDefaultPage = FALSE;
-        BOOL    bLandscape = !TRUEBOOL( nOpt & 0x0002 );
-        aPageItem.SetLandscape( bLandscape );
-
-        Size        aSize;
-        if( nPaperSize >= nAnzSizes )
-            aSize = Size( 0, 0 );
-        else if( pSvxPS[ nPaperSize ] == SVX_PAPER_USER )
-            aSize = Size( pPS[ nPaperSize ].nH, pPS[ nPaperSize ].nW );
-        else
-            aSize = SvxPaperInfo::GetPaperSize( pSvxPS[ nPaperSize ] );
-
-        if( aSize.nA == 0 || aSize.nB == 0 )
-            // now try default from printer
-            aSize = SvxPaperInfo::GetPaperSize( pD->GetPrinter() );
-
-        if( bLandscape )
-        {
-            long    nTmp;
-            nTmp = aSize.nA;
-            aSize.nA = aSize.nB;
-            aSize.nB = nTmp;
-        }
-
-        pStyleSheetItemSet->Put( SvxSizeItem( ATTR_PAGE_SIZE, aSize ) );
-
-        // bFitToPage set in WSBOOL record. For now assuming that it always occurs before SETUP.
-        if( !bFitToPage || !nFitWidth || !nFitHeight )
-            pStyleSheetItemSet->Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
-    }
-
-    if( nOpt & 0x0020 )
-        // fNotes
-        pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_NOTES, TRUE ) );
-
-    // fUsePage
-    pStyleSheetItemSet->Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, ( nOpt & 0x0080 )? nStartPage : 0 ) );
-
-    pStyleSheetItemSet->Put( aPageItem );
-
-    // bFitToPage set in WSBOOL record. For now assuming that it always occurs before SETUP.
-    if( bFitToPage && nFitWidth && nFitHeight )
-        pStyleSheetItemSet->Put( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, nFitWidth * nFitHeight ) );
-}
-
-
-void ImportExcel::Setup5()
-{
-    Setup();
-    aIn.Seek( 16 );
-
-    // header margin
-    SvxSetItem aHeaderSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_HEADERSET ) );
-    SetMarginItem( aHeaderSetItem.GetItemSet(), aIn.ReadDouble(), xlBottomMargin );
-    pStyleSheetItemSet->Put( aHeaderSetItem );
-
-    // footer margin
-    SvxSetItem aFooterSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_FOOTERSET ) );
-    SetMarginItem( aFooterSetItem.GetItemSet(), aIn.ReadDouble(), xlTopMargin );
-    pStyleSheetItemSet->Put( aFooterSetItem );
-}
-
-
 void ImportExcel::Shrfmla( void )
 {
     UINT16              nFirstRow, nLastRow, nLenExpr;
@@ -1454,7 +1067,10 @@ void ImportExcel::Mulrk( void )
         DBG_ASSERT( aIn.GetRecLeft() == 2, "+ImportExcel::Mulrk(): Was'n das?!!!" );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -1481,7 +1097,10 @@ void ImportExcel::Mulblank( void )
         aIn >> nRow;    // nRow zum Testen von letzter Col missbraucht
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -1514,7 +1133,10 @@ void ImportExcel::Rstring( void )
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -1542,7 +1164,10 @@ void ImportExcel::Blank34( void )
         GetXFIndexBuffer().SetBlankXF( nCol, nRow, nXF );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -1565,7 +1190,10 @@ void ImportExcel::Number34( void )
         pColRowBuff->Used( nCol, nRow );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -1615,7 +1243,10 @@ void ImportExcel::Boolerr34( void )
             GetXFIndexBuffer().SetBoolXF( nCol, nRow, nXF );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -1674,67 +1305,6 @@ void ImportExcel::Bof3( void )
         pExcRoot->eDateiTyp = BiffX;
         pExcRoot->eHauptDateiTyp = BiffX;
     }
-}
-
-
-void ImportExcel::Name34( void )
-{
-    BYTE                nLenName;
-    UINT16              nAttr, nLenExpr;
-    const ScTokenArray* pErgebnis;
-    BOOL                bPrintArea;
-    BOOL                bPrintTitles;
-    BOOL                bBuildIn;
-
-    aIn >> nAttr;
-    aIn.Ignore( 1 );
-    aIn >> nLenName >> nLenExpr;
-
-    // Namen einlesen
-    String aName( aIn.ReadRawByteString( nLenName ) );
-    sal_Char cFirstNameChar = ( sal_Char ) aName.GetChar( 0 );
-
-    if( nLenName == 1 && cFirstNameChar < EXC_BUILTIN_UNKNOWN )
-    {// Build-in name (0x00 - 0x0D als erstes Zeichen)
-        bPrintArea = ( cFirstNameChar == EXC_BUILTIN_PRINTAREA );
-        bPrintTitles = ( cFirstNameChar == EXC_BUILTIN_PRINTTITLES );
-        bBuildIn = TRUE;
-
-        aName = XclTools::GetBuiltInName( cFirstNameChar );
-    }
-    else
-    {
-        ScfTools::ConvertToScDefinedName( aName );
-
-        bPrintArea = bPrintTitles = bBuildIn = FALSE;
-    }
-
-    const BOOL          bHidden = TRUEBOOL( nAttr & EXC_NAME_HIDDEN );
-
-    pFormConv->Reset();
-    if( nAttr & EXC_NAME_VB )
-        // function, command or name on macro sheet?
-        pFormConv->GetDummy( pErgebnis );
-    else
-    {
-        if( bBuildIn )
-        {
-            aIn.PushPosition();
-
-            if( bPrintArea )
-                pFormConv->Convert( *pPrintRanges, nLenExpr, FT_RangeName );
-            else if( bPrintTitles )
-                pFormConv->Convert( *pPrintTitles, nLenExpr, FT_RangeName );
-
-            aIn.PopPosition();
-        }
-        pFormConv->Convert( pErgebnis, nLenExpr, FT_RangeName );
-    }
-
-    if( bHidden ) // ohne hidden und complex
-        pExcRoot->pRNameBuff->Store( aName, NULL );
-    else
-        pExcRoot->pRNameBuff->Store( aName, pErgebnis, 0, bPrintArea );
 }
 
 
@@ -1841,7 +1411,10 @@ void ImportExcel::TableOp( void )
         }
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nLastRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -1876,6 +1449,7 @@ void ImportExcel::Window2_5( void )
         aOpts.SetOption( VOPT_NULLVALS, TRUEBOOL( nOpt & EXC_WIN2_SHOWZEROS ) );
         aOpts.SetOption( VOPT_OUTLINER, TRUEBOOL( nOpt & EXC_WIN2_OUTLINE ) );
         pD->SetViewOptions( aOpts );
+        GetTracer().TraceInvisibleGrid(TRUEBOOL( nOpt & EXC_WIN2_SHOWGRID ));
     }
 }
 
@@ -1971,49 +1545,10 @@ void ImportExcel::EndSheet( void )
 
     pExcRoot->pExtSheetBuff->Reset();
 
+    GetPageSettings().CreatePageStyle();
+
     if( pExcRoot->eHauptDateiTyp < Biff8 )
         pExcRoot->pExtNameBuff->Reset();
-
-    // no top(upper)/bottom(lower) MARGIN record
-    // note zero is a legitimate value
-    if( !bHasTopMargin || !bHasBottomMargin )
-    {
-        SvxULSpaceItem aItem( (const SvxULSpaceItem&) pStyleSheetItemSet->Get( ATTR_ULSPACE ));
-        sal_uInt16 nMarginULTwips = EXC_ULMARGIN_DEFAULT_TWIPS;
-        if( !bHasTopMargin )
-            aItem.SetUpperValue( nMarginULTwips );
-        if( !bHasBottomMargin )
-            aItem.SetLowerValue( nMarginULTwips );
-        pStyleSheetItemSet->Put( aItem );
-    }
-
-    // no left/right MARGIN record
-    // note zero is a legitimate value
-    if( !bHasLeftMargin || !bHasRightMargin )
-    {
-        SvxLRSpaceItem aItem( (const SvxLRSpaceItem&) pStyleSheetItemSet->Get( ATTR_LRSPACE ));
-        sal_uInt16 nMarginLRTwips = EXC_LRMARGIN_DEFAULT_TWIPS;
-        if( !bHasLeftMargin )
-            aItem.SetLeftValue( nMarginLRTwips );
-        if( !bHasRightMargin )
-            aItem.SetRightValue( nMarginLRTwips );
-        pStyleSheetItemSet->Put( aItem );
-    }
-
-    // no or empty HEADER record
-    if( !bHasHeader )
-    {
-        SvxSetItem aHeaderSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_HEADERSET ) );
-        aHeaderSetItem.GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, sal_False ) );
-        pStyleSheetItemSet->Put( aHeaderSetItem );
-    }
-    // no or empty FOOTER record
-    if( !bHasFooter )
-    {
-        SvxSetItem aFooterSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_FOOTERSET ) );
-        aFooterSetItem.GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, sal_False ) );
-        pStyleSheetItemSet->Put( aFooterSetItem );
-    }
 }
 
 
@@ -2022,24 +1557,6 @@ void ImportExcel::NeueTabelle( void )
     sal_uInt16 nTab = GetScTab();
     if( nTab > 0 && !pD->HasTable( nTab ) )
         pD->MakeTable( nTab );
-
-    // fuer neue Tabelle eigene Tabellenvorlage erzeugen
-    String      aStyleName( GetPageStyleName( nTab ) );
-
-    ScStyleSheetPool* pStyleShPool = pD->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSh = pStyleShPool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
-    pExcRoot->pStyleSheetItemSet = pStyleSheetItemSet = pStyleSh ? &pStyleSh->GetItemSet() :
-        &pStyleShPool->Make( aStyleName, SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_USERDEF ).GetItemSet();
-
-    pExcRoot->bDefaultPage = TRUE;
-
-    bFitToPage = sal_False;
-    bHasHeader = sal_False;
-    bHasFooter = sal_False;
-    bHasTopMargin    = sal_False;
-    bHasBottomMargin = sal_False;
-    bHasLeftMargin   = sal_False;
-    bHasRightMargin  = sal_False;
 
     pOutlineListBuffer->Append(new OutlineDataBuffer(*pExcRoot, nTab ));          //#94039# prevent empty rootdata
 
@@ -2052,74 +1569,6 @@ void ImportExcel::NeueTabelle( void )
 const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, double& rVal )
 {
     return pFormConv->GetBoolErr( XclTools::ErrorToEnum( rVal, bErrOrVal, nError ) );
-}
-
-
-void ImportExcel::GetHF( BOOL bHeader )
-{
-    String aExcHF;
-    GetHFString( aExcHF );
-
-    ::std::auto_ptr< ScPageHFItem > pHFItemLeft, pHFItemRight;
-    if( bHeader )
-    {
-        pHFItemLeft.reset( new ScPageHFItem( ATTR_PAGE_HEADERLEFT ) );
-        pHFItemRight.reset( new ScPageHFItem( ATTR_PAGE_HEADERRIGHT ) );
-    }
-    else
-    {
-        pHFItemLeft.reset( new ScPageHFItem( ATTR_PAGE_FOOTERLEFT ) );
-        pHFItemRight.reset( new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT ) );
-    }
-
-    XclImpHFConverter aHFConv( *this );
-    aHFConv.ParseString( aExcHF );
-    const EditTextObject* pTextObj = aHFConv.GetTextObject( xlHFLeft );
-    if( pTextObj )
-    {
-        pHFItemLeft->SetLeftArea( *pTextObj );
-        pHFItemRight->SetLeftArea( *pTextObj );
-    }
-    pTextObj = aHFConv.GetTextObject( xlHFCenter );
-    if( pTextObj )
-    {
-        pHFItemLeft->SetCenterArea( *pTextObj );
-        pHFItemRight->SetCenterArea( *pTextObj );
-    }
-    pTextObj = aHFConv.GetTextObject( xlHFRight );
-    if( pTextObj )
-    {
-        pHFItemLeft->SetRightArea( *pTextObj );
-        pHFItemRight->SetRightArea( *pTextObj );
-    }
-
-    DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::SetHF(): kein Set, keine Kopfer/Fusser!" );
-    pStyleSheetItemSet->Put( *pHFItemLeft );
-    pStyleSheetItemSet->Put( *pHFItemRight );
-}
-
-
-void ImportExcel::GetHFString( String& rStr )
-{
-    aIn.AppendByteString( rStr, FALSE );
-}
-
-
-String ImportExcel::GetPageStyleName( UINT16 nTab )
-{
-    String          aRet( RTL_CONSTASCII_USTRINGPARAM( "TAB_" ) );
-    const String*   pTabName = pExcRoot->pTabNameBuff->Get( nTab );
-
-    if( pTabName )
-        // wenn Name vorhanden
-        aRet += *pTabName;
-    else
-    {// kein Name vergeben -> Pech gehabt
-        aRet.AppendAscii( "TAB" );
-        aRet += String::CreateFromInt32( nTab );
-    }
-
-    return aRet;
 }
 
 
@@ -2242,19 +1691,19 @@ void ImportExcel::PostDocLoad( void )
     const UINT16        nLast = pD->GetTableCount();
     const ScRange*      p;
 
-    if( pPrintRanges->HasRanges() )
+    if( pExcRoot->pPrintRanges->HasRanges() )
     {
         UINT16          nPos;
 
         for( UINT16 n = 0 ; n < nLast ; n++ )
         {
-            p = pPrintRanges->First( n );
+            p = pExcRoot->pPrintRanges->First( n );
             if( p )
             {
-                DBG_ASSERT( pPrintRanges->GetActList(),
+                DBG_ASSERT( pExcRoot->pPrintRanges->GetActList(),
                             "-ImportExcel::PostDocLoad(): Imaginaere Tabelle gefunden!" );
 
-                pD->SetPrintRangeCount( n, ( UINT16 ) pPrintRanges->GetActList()->Count() );
+                pD->SetPrintRangeCount( n, ( UINT16 ) pExcRoot->pPrintRanges->GetActList()->Count() );
 
                 nPos = 0;
 
@@ -2263,20 +1712,21 @@ void ImportExcel::PostDocLoad( void )
                     pD->SetPrintRange( n, nPos, *p );
 
                     nPos++;
-                    p = pPrintRanges->Next();
+                    p = pExcRoot->pPrintRanges->Next();
                 }
             }
         }
+        GetTracer().TracePrintRange();
     }
 
-    if( pPrintTitles->HasRanges() )
+    if( pExcRoot->pPrintTitles->HasRanges() )
     {
         for( UINT16 n = 0 ; n < nLast ; n++ )
         {
-            p = pPrintTitles->First( n );
+            p = pExcRoot->pPrintTitles->First( n );
             if( p )
             {
-                DBG_ASSERT( pPrintTitles->GetActList(),
+                DBG_ASSERT( pExcRoot->pPrintTitles->GetActList(),
                     "-ImportExcel::PostDocLoad(): Imaginaere Tabelle gefunden!" );
 
                 BOOL    bRowVirgin = TRUE;
@@ -2296,7 +1746,7 @@ void ImportExcel::PostDocLoad( void )
                         bColVirgin = FALSE;
                     }
 
-                    p = pPrintTitles->Next();
+                    p = pExcRoot->pPrintTitles->Next();
                 }
             }
         }
@@ -2329,34 +1779,12 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
         GetXFIndexBuffer().SetXF( nC, nR, nXF );
     }
     else
+        {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nR, MAXROW);
+        }
 }
 
-
-void ImportExcel::SetMarginItem( SfxItemSet& rItemSet, double fMarginInch, XclMarginType eType )
-{
-    sal_uInt16 nMarginTwips = XclTools::GetTwipsFromInch( fMarginInch );
-    if( (eType == xlTopMargin) || (eType == xlBottomMargin) )
-    {
-        SvxULSpaceItem aItem( ATTR_ULSPACE );
-        aItem = (const SvxULSpaceItem&) rItemSet.Get( ATTR_ULSPACE );
-        if( eType == xlTopMargin )
-            aItem.SetUpperValue( nMarginTwips );
-        else
-            aItem.SetLowerValue( nMarginTwips );
-        rItemSet.Put( aItem );
-    }
-    else
-    {
-        SvxLRSpaceItem aItem( ATTR_LRSPACE );
-        aItem = (const SvxLRSpaceItem&) rItemSet.Get( ATTR_LRSPACE );
-        if( eType == xlRightMargin )
-            aItem.SetRightValue( nMarginTwips );
-        else
-            aItem.SetLeftValue( nMarginTwips );
-        rItemSet.Put( aItem );
-    }
-}
 
 OutlineDataBuffer::OutlineDataBuffer(RootData& rRootData, UINT16 nTabNo) :
     nTab (nTabNo)
