@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 15:48:30 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ spanish ] = "Бrea de datos" ;
                 Text [ english_us ] = "Data Range" ;
                 Text[ chinese_simplified ] = "ж•°жЌ®еЊєеџџ";
-                Text[ russian ] = "Область данных";
+                Text[ russian ] = "Диапазон данных";
                 Text[ polish ] = "Obszar danych";
                 Text[ japanese ] = "пѕѓпѕћпЅ°пѕЂзЇ„е›І";
                 Text[ chinese_traditional ] = "иі‡ж–™еЌЂеџџ";
@@ -1211,6 +1211,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
+
 
 
 
