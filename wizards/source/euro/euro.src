@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bc $ $Date: 2000-11-27 14:21:25 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ Text[ english_us ] = "Cell S&tyles";
     Text[ polish ] = "&Style komÛrki";
     Text[ portuguese_brazilian ] = "Cell&templates";
     Text[ japanese ] = "æŸ √›Ãﬂ⁄∞ƒ";
-    Text[ korean ] = "ºø∞˙ ≈€«√∏Æ∆Æ";
+    Text[ korean ] = "ºø∞˙ ≈€«√∏¥";
     Text[ chinese_simplified ] = "µ•‘™∏Ò—˘ Ω(~T)";
     Text[ chinese_traditional ] = "≥Ê§∏ÆÊºÀ¶°";
     Text[ arabic ] = "√‰„«ÿ «·Œ·«Ì«&";
@@ -421,7 +421,7 @@ Text[ english_us ] = "Select Cell Styles";
     Text[ polish ] = "Wybierz style komÛrki:";
     Text[ portuguese_brazilian ] = "Select Celltemplates";
     Text[ japanese ] = "æŸ √›Ãﬂ⁄∞ƒÇÃëIë";
-    Text[ korean ] = "ºø ≈€«√∏Æ∆Æ º±≈√";
+    Text[ korean ] = "ºø ≈€«√∏¥ º±≈√:";
     Text[ chinese_simplified ] = "—°‘Òµ•‘™∏Ò—˘ Ω£∫";
     Text[ chinese_traditional ] = "øÔæ‹≥Ê§∏ÆÊºÀ¶°°G";
     Text[ arabic ] = " ÕœÌœ √‰„«ÿ «·Œ·«Ì«:";
@@ -493,7 +493,7 @@ Text[ english_us ] = "Templates:";
     Text[ polish ] = "Style:";
     Text[ portuguese_brazilian ] = "Templates:";
     Text[ japanese ] = "√›Ãﬂ⁄∞ƒ:";
-    Text[ korean ] = "≈€«√∏Æ∆Æ:";
+    Text[ korean ] = "≈€«√∏¥:";
     Text[ chinese_simplified ] = "—˘ Ω£∫";
     Text[ chinese_traditional ] = "ºÀ¶°°G";
     Text[ arabic ] = "ﬁÊ«·»:";
@@ -527,26 +527,26 @@ Text[ english_us ] = "Extent";
 
 String STEP_AUTOPILOT + 1
 {
-Text = "&Einzelnes StarOffice Calc-Dokument";
+Text = "&Einzelnes %PRODUCTNAME Calc-Dokument";
 Text[English] = "&Single File";
-Text[ english_us ] = "&Single StarOffice Calc Document";
-    Text[ portuguese ] = "&Documento ˙nico do StarOffice Calc";
-    Text[ russian ] = "&Œ‰ËÌ ‰ÓÍÛÏÂÌÚ StarOffice Calc";
-    Text[ greek ] = "Ã&ÂÏÔÌ˘Ï›ÌÔ ›„„Ò·ˆÔ ÙÔı StarOffice Calc";
-    Text[ dutch ] = "&Een StarOffice Calc-document";
-    Text[ french ] = "&Document unique StarOffice Calc";
-    Text[ spanish ] = "&Un archivo de StarOffice Calc";
-    Text[ italian ] = "&Documento singolo StarOffice Calc";
-    Text[ danish ] = "&Enkelt StarOffice Calc-dokument";
-    Text[ swedish ] = "&Enskilt StarOffice Calc-dokument";
-    Text[ polish ] = "&Pojedynczy dokument StarOffice Calc";
+Text[ english_us ] = "&Single %PRODUCTNAME Calc Document";
+    Text[ portuguese ] = "&Documento ˙nico do %PRODUCTNAME Calc";
+    Text[ russian ] = "&Œ‰ËÌ ‰ÓÍÛÏÂÌÚ %PRODUCTNAME Calc";
+    Text[ greek ] = "Ã&ÂÏÔÌ˘Ï›ÌÔ ›„„Ò·ˆÔ ÙÔı %PRODUCTNAME Calc";
+    Text[ dutch ] = "&Een %PRODUCTNAME Calc-document";
+    Text[ french ] = "&Document unique %PRODUCTNAME Calc";
+    Text[ spanish ] = "&Un archivo de %PRODUCTNAME Calc";
+    Text[ italian ] = "&Documento singolo %PRODUCTNAME Calc";
+    Text[ danish ] = "&Enkelt %PRODUCTNAME Calc-dokument";
+    Text[ swedish ] = "&Enskilt %PRODUCTNAME Calc-dokument";
+    Text[ polish ] = "&Pojedynczy dokument %PRODUCTNAME Calc";
     Text[ portuguese_brazilian ] = "&Single File";
-    Text[ japanese ] = "å¬ÅXÇÃ StarOffice Calc ƒﬁ∑≠“›ƒ(&S)";
-    Text[ korean ] = "&∞≥∫∞¿˚¿ŒStarOffice Calc-πÆº≠";
-    Text[ chinese_simplified ] = "µ•∏ˆStarOffice CalcŒƒµµ(~S)";
-    Text[ chinese_traditional ] = "≥Ê≠” StarOffice Calc §Â•Û(&S)";
-    Text[ arabic ] = "&„·› StarOffice Calc ›—œÌ";
-    Text[ turkish ] = "&Tek StarOffice Calc belgesi";
+    Text[ japanese ] = "å¬ÅXÇÃ %PRODUCTNAME Calc ƒﬁ∑≠“›ƒ(&S)";
+    Text[ korean ] = "&∞≥∫∞¿˚¿Œ%PRODUCTNAME Calc-πÆº≠";
+    Text[ chinese_simplified ] = "µ•∏ˆ%PRODUCTNAME CalcŒƒµµ(~S)";
+    Text[ chinese_traditional ] = "≥Ê≠” %PRODUCTNAME Calc §Â•Û(&S)";
+    Text[ arabic ] = "&„·› %PRODUCTNAME Calc ›—œÌ";
+    Text[ turkish ] = "&Tek %PRODUCTNAME Calc belgesi";
 };
 
 String STEP_AUTOPILOT + 2
@@ -837,7 +837,7 @@ Text[ english_us ] = "Conversion of the currency units in the cell templates..."
     Text[ polish ] = "Konwersja jednostek waluty w stylach komÛrki...";
     Text[ portuguese_brazilian ] = "Converting the Currencyunits in the Celltemplates...";
     Text[ japanese ] = "í â›íPà ÇéüÇÃæŸΩ¿≤ŸÇ…ïœä∑...";
-    Text[ korean ] = "ºø ≈€«√∏Æ∆Æ≥ªø°º≠ ≈Î»≠ ¥‹¿ß ∫Ø»Ø...";
+    Text[ korean ] = "ºø ≈€«√∏¥¿« ≈Î»≠ ¥‹¿ß ∫Ø»Ø...";
     Text[ chinese_simplified ] = "µ•‘™∏Ò—˘ Ω÷–ªı±“µ•Œªµƒ◊™ªª...";
     Text[ chinese_traditional ] = "¬‡¥´≥Ê§∏ÆÊ™∫≥fπÙ≥Ê¶Ï...";
     Text[ arabic ] = " ÕÊÌ· ÊÕœ«  «·⁄„·… ›Ì √‰„«ÿ «·Œ·«Ì«...";
@@ -1321,9 +1321,26 @@ Text[ english_us ] = "Cancel";
 
  String MESSAGES + 19
 {
-Text = "Bitte w‰hlen Sie ein StarOffice Calc-Dokument zur Bearbeitung aus!";
+Text = "Bitte w‰hlen Sie ein %PRODUCTNAME Calc-Dokument zur Bearbeitung aus!";
 Text[English] = "Please choose a StarOffice Calc-document to work on!";
-Text[ english_us ] = "Please choose a StarOffice Calc-document to work on!";
+Text[ english_us ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ portuguese ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ russian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ greek ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ dutch ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ french ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ spanish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ italian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ danish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ swedish ] = "V‰lj ett %PRODUCTNAME Calc-dokument som du vill redigera!";
+    Text[ polish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ portuguese_brazilian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ japanese ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ korean ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ chinese_simplified ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ chinese_traditional ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ turkish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ arabic ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
 };
 
 
@@ -1332,6 +1349,23 @@ String MESSAGES + 20
 Text = "'<1>' ist kein Verzeichnis!";
 Text[English] = "<1> is not a directory!";
 Text[ english_us ] = "<1> is not a directory!";
+    Text[ portuguese ] = "<1> is not a directory!";
+    Text[ russian ] = "<1> is not a directory!";
+    Text[ greek ] = "<1> is not a directory!";
+    Text[ dutch ] = "<1> is not a directory!";
+    Text[ french ] = "<1> is not a directory!";
+    Text[ spanish ] = "<1> is not a directory!";
+    Text[ italian ] = "<1> is not a directory!";
+    Text[ danish ] = "<1> is not a directory!";
+    Text[ swedish ] = "<1> ‰r inte en katalog!";
+    Text[ polish ] = "<1> is not a directory!";
+    Text[ portuguese_brazilian ] = "<1> is not a directory!";
+    Text[ japanese ] = "<1> is not a directory!";
+    Text[ korean ] = "<1> is not a directory!";
+    Text[ chinese_simplified ] = "<1> is not a directory!";
+    Text[ chinese_traditional ] = "<1> is not a directory!";
+    Text[ turkish ] = "<1> is not a directory!";
+    Text[ arabic ] = "<1> is not a directory!";
 };
 
 
