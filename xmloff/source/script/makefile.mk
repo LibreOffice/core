@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
+#   last change: $Author: hbrinkm $ $Date: 2002-11-19 12:07:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,15 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/xmlscripte.obj \
-        $(SLO)$/xmlscripti.obj \
         $(SLO)$/XMLEventExport.obj \
         $(SLO)$/XMLEventImportHelper.obj \
         $(SLO)$/XMLEventsImportContext.obj \
+        $(SLO)$/XMLScriptContextFactory.obj \
+        $(SLO)$/XMLScriptExportHandler.obj \
         $(SLO)$/XMLStarBasicContextFactory.obj \
-        $(SLO)$/XMLStarBasicExportHandler.obj
+        $(SLO)$/XMLStarBasicExportHandler.obj \
+        $(SLO)$/xmlscripte.obj \
+        $(SLO)$/xmlscripti.obj 
 
 SVXLIGHTOBJFILES =	\
         $(OBJ)$/xmlscripti.obj \
