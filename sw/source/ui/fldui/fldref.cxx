@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:49 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 
 #pragma hdrstop
 
@@ -95,6 +99,9 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+
+// sw/inc/expfld.hxx
+SV_IMPL_PTRARR( _SwSeqFldList, _SeqFldLstElem* )
 
 #define REFFLDFLAG          0x4000
 #define REFFLDFLAG_BOOKMARK 0x4800
