@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:56:24 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SVX_KEEPITEM_HXX //autogen
+#include <svx/keepitem.hxx>
 #endif
 
 #ifndef _FMTANCHR_HXX //autogen
@@ -1426,16 +1429,26 @@ void CalcCntnt( SwLayoutFrm *pLay,
             // OD 14.03.2003 #i11760# - forbid format of follow, if requested.
             if ( bNoCalcFollow && pFrm->IsTxtFrm() )
                 static_cast<SwTxtFrm*>(pFrm)->ForbidFollowFormat();
+
             pFrm->Calc();
+
             // OD 14.03.2003 #i11760# - reset control flag for follow format.
             if ( pFrm->IsTxtFrm() )
             {
                 static_cast<SwTxtFrm*>(pFrm)->AllowFollowFormat();
             }
 
+            // #111937# The keep-attribute can cause the position
+            // of the prev to be invalid:
+            SwFrm* pTmpPrev = pFrm->FindPrev();
+            bool bPrevInvalid = pTmpPrev &&
+                               !pTmpPrev->GetValidPosFlag() &&
+                                pTmpPrev->GetAttrSet()->GetKeep().GetValue() &&
+                                pLay->IsAnLower( pTmpPrev );
+
             //Dumm aber wahr, die Flys muessen mitkalkuliert werden.
             BOOL bAgain = FALSE;
-            if ( pFrm->GetDrawObjs() && pLay->IsAnLower( pFrm ) )
+            if ( !bPrevInvalid && pFrm->GetDrawObjs() && pLay->IsAnLower( pFrm ) )
             {
                 USHORT nCnt = pFrm->GetDrawObjs()->Count();
                 for ( USHORT i = 0; i < nCnt; ++i )
@@ -1505,8 +1518,8 @@ void CalcCntnt( SwLayoutFrm *pLay,
                     ((SwTabFrm*)pFrm)->bLockBackMove = FALSE;
             }
 
-            pFrm = pFrm->FindNext();
-            if( pFrm && pFrm->IsSctFrm() && pSect )
+            pFrm = bPrevInvalid ? pTmpPrev : pFrm->FindNext();
+            if( !bPrevInvalid && pFrm && pFrm->IsSctFrm() && pSect )
             {
                 // Es koennen hier leere SectionFrms herumspuken
                 while( pFrm && pFrm->IsSctFrm() && !((SwSectionFrm*)pFrm)->GetSection() )
