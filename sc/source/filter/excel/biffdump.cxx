@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-07 13:58:20 $
+ *  last change: $Author: gt $ $Date: 2001-05-30 08:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3239,6 +3239,36 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDFLAG( 0x2000, " fExDsc" );
                     ADDRESERVED( 0xC000 );
                 }
+            }
+            break;
+            case 0x0221:
+            {
+                UINT16  nR1, nR2;
+                UINT8   nC1, nC2;
+                rIn >> nR1 >> nR2 >> nC1 >> nC2 >> __nFlags;
+                LINESTART();
+                ADDTEXT( "range: " );
+                ADDCOLROW( nC1, nR1 );
+                ADDTEXT( " - " );
+                ADDCOLROW( nC2, nR2 );
+                PRINT();
+                LINESTART();
+                STARTFLAG();
+                ADDFLAG( 0x0001, " fAlwaysCalc" );
+                ADDFLAG( 0x0002, " fCalcOnLoad" );
+                ADDFLAG( 0x0004, " fExAsc" );
+                ADDFLAG( 0x0008, " fExDsc" );
+                ADDRESERVED( 0xFFFC );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "chn = " );
+                ADDHEX( 4 );
+                UINT16  n;
+                rIn >> n;
+                ADDTEXT( "    cce = " );
+                __AddDec( t, n );
+                PRINT();
+                FormulaDump( n, FT_SharedFormula );
             }
             break;
             case 0x0225:        // DEFAULTROWHEIGHT - height & flags
