@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-15 13:03:27 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 10:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ enum BitmapAdjustment
 class SdDisplay : public Control
 {
 private:
-    BitmapEx*   pBitmapEx;
+    BitmapEx    aBitmapEx;
     Fraction    aScale;
 
 public:
@@ -133,8 +133,10 @@ public:
 
     virtual void Paint( const Rectangle& rRect );
 
-    void    SetBitmapEx( BitmapEx* pBmpEx ) { pBitmapEx = pBmpEx; }
+    void    SetBitmapEx( BitmapEx* pBmpEx );
     void    SetScale( const Fraction& rFrac );
+
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 //------------------------------------------------------------------------
@@ -218,6 +220,8 @@ public:
 
     void    AddObj( SdView& rView );
     void    CreateAnimObj( SdView& rView );
+
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 /*************************************************************************
