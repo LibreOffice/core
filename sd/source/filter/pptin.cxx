@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:46:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,6 +1177,30 @@ sal_Bool ImplSdPPTImport::Import()
             eAktPageKind = PPT_SLIDEPAGE;
             SdrPage* pPage = MakeBlancPage( FALSE );
             pSdrModel->InsertPage( pPage );
+
+            // #i37397#, trying to set the title master for the first page
+            sal_uInt16 nMaster, nMasterCount = pSdrModel->GetMasterPageCount();
+            SdPage* pFoundMaster = NULL;
+            for ( nMaster = 1; nMaster < nMasterCount; nMaster++ )
+            {
+                SdPage* pMaster = static_cast<SdPage*>( pSdrModel->GetMasterPage( nMaster ) );
+                if ( pMaster->GetPageKind() == PK_STANDARD )
+                {
+                    SetPageNum( nMaster, PPT_MASTERPAGE );
+                    if ( !pFoundMaster )
+                        pFoundMaster = pMaster;
+                    else if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
+                        pFoundMaster = pMaster;
+                    if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
+                        break;
+                }
+            }
+            if ( pFoundMaster )
+            {
+                ((SdPage*)pPage)->TRG_SetMasterPage( *((SdPage*)pFoundMaster) );
+                ((SdPage*)pPage)->SetLayoutName( ((SdPage*)pFoundMaster)->GetLayoutName() );
+            }
+            ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, TRUE, TRUE );
 
             eAktPageKind = PPT_NOTEPAGE;
             SdrPage* pNPage = MakeBlancPage( FALSE );
@@ -2663,7 +2687,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             case PPT_PLACEHOLDER_MASTERHEADER :         ePresKind = PRESOBJ_HEADER;     break;
         }
     }
-    switch ( pTextObj->GetInstance() )
+    switch ( pTextObj->GetDestinationInstance() )
     {
         case TSS_TYPE_PAGETITLE :
         case TSS_TYPE_TITLE :
