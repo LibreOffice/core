@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:44:45 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,11 @@
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
 #endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include <svtools/languageoptions.hxx>
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -796,7 +799,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case SID_ATTR_PARA_LEFT_TO_RIGHT :
             case SID_ATTR_PARA_RIGHT_TO_LEFT :
             {
-                if ( !SvtLanguageOptions().IsCTLFontEnabled() )
+                if ( !SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
                 {
                     rSet.DisableItem( nSlot );
                     nSlot = 0;
