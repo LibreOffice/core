@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibledialogwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:47:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,14 @@
 #include <dlgedobj.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -118,7 +118,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 DBG_NAME( AccessibleDialogWindow )
@@ -277,7 +277,7 @@ void AccessibleDialogWindow::UpdateFocused()
 
 void AccessibleDialogWindow::UpdateSelected()
 {
-    NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_SELECTION_EVENT, Any(), Any() );
+    NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
 
     for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
@@ -379,7 +379,7 @@ void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
         {
             Any aOldValue, aNewValue;
             aNewValue <<= xChild;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
         }
     }
 }
@@ -405,7 +405,7 @@ void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
         {
             Any aOldValue, aNewValue;
             aOldValue <<= xChild;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
             Reference< XComponent > xComponent( xChild, UNO_QUERY );
             if ( xComponent.is() )
@@ -488,54 +488,54 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
         case VCLEVENT_WINDOW_ENABLED:
         {
             aNewValue <<= AccessibleStateType::ENABLED;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_DISABLED:
         {
             aOldValue <<= AccessibleStateType::ENABLED;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_ACTIVATE:
         {
             aNewValue <<= AccessibleStateType::ACTIVE;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_DEACTIVATE:
         {
             aOldValue <<= AccessibleStateType::ACTIVE;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_GETFOCUS:
         {
             aNewValue <<= AccessibleStateType::FOCUSED;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_LOSEFOCUS:
         {
             aOldValue <<= AccessibleStateType::FOCUSED;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_SHOW:
         {
             aNewValue <<= AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_HIDE:
         {
             aOldValue <<= AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_RESIZE:
         {
-            NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::BOUNDRECT_CHANGED, aOldValue, aNewValue );
             UpdateChildren();
             UpdateBounds();
         }
@@ -748,7 +748,7 @@ sal_Bool AccessibleDialogWindow::supportsService( const ::rtl::OUString& rServic
 Sequence< ::rtl::OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.awt.AccessibleWindow" );
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleWindow" );
     return aNames;
 }
 
@@ -926,7 +926,7 @@ Locale AccessibleDialogWindow::getLocale(  ) throw (IllegalAccessibleComponentSt
 // XAccessibleComponent
 // -----------------------------------------------------------------------------
 
-Reference< XAccessible > AccessibleDialogWindow::getAccessibleAt( const awt::Point& rPoint ) throw (RuntimeException)
+Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -1177,7 +1177,7 @@ Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal
 
 // -----------------------------------------------------------------------------
 
-void AccessibleDialogWindow::deselectSelectedAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
