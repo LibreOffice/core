@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:38:15 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.Vector;
 
 
@@ -127,7 +130,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.31 $ $ $Date: 2003-08-07 14:38:15 $
+ * @version     $Revision: 1.32 $ $ $Date: 2003-08-13 17:22:30 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -310,9 +313,6 @@ public class java_remote_bridge
     protected MessageDispatcher _messageDispatcher;
     protected int               _life_count = 0;    // determines if this bridge is alife, which is controlled by acquire and release calls
 
-    protected Hashtable         _refHolders;        // holds descriptions for out mapped objects, so we can release
-                                                    // the outmapped objects when the bridge is to be disposed
-
     protected Vector            _listeners;
     protected Vector            _stableListeners;
 
@@ -341,73 +341,114 @@ public class java_remote_bridge
         return _iProtocol;
     }
 
+    // The ref holder stuff strongly holds objects mapped out via this bridge
+    // (the java_environment only holds them weakly).  When this bridge is
+    // disposed, all remaining ref holder entries are released.
 
-    // use a static class, it is smaller
-    private static class RefHolder {
-        Type  _type;
-        String _oid;
-        int    _mapCount;
-        Object _hardRef;
-            // keep a hard reference to the object, the java_environment will
-            // only hold it weakly
+    private static final class RefHolder {
+        public RefHolder(Type type, Object object) {
+            this.type = type;
+            this.object = object;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        public void acquire() {
+            ++count;
+        }
+
+        public boolean release() {
+            return --count == 0;
+        }
+
+        private final Type type;
+        private final Object object;
+        private int count = 1;
     }
 
+    private final HashMap refHolders = new HashMap();
+        // from OID (String) to LinkedList of RefHolder
+
     private boolean hasRefHolder(String oid, Type type) {
-        return _refHolders.containsKey(oid + type);
+        synchronized (refHolders) {
+            LinkedList l = (LinkedList) refHolders.get(oid);
+            if (l != null) {
+                for (Iterator i = l.iterator(); i.hasNext();) {
+                    RefHolder rh = (RefHolder) i.next();
+                    if (type.isSupertypeOf(rh.getType())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     final void addRefHolder(Object obj, Type type, String oid) {
-        acquire();
-
-        synchronized(_refHolders) {
-            RefHolder refHolder = (RefHolder)_refHolders.get(oid + type);
-
-            if(refHolder == null) {
-                refHolder = new RefHolder();
-                refHolder._type = type;
-                refHolder._oid = oid;
-                refHolder._hardRef = obj;
-
-                _refHolders.put(oid + type, refHolder);
+        synchronized (refHolders) {
+            LinkedList l = (LinkedList) refHolders.get(oid);
+            if (l == null) {
+                l = new LinkedList();
+                refHolders.put(oid, l);
             }
-            // assert refHolder._hardRef == obj;
-
-            ++ refHolder._mapCount;
+            boolean found = false;
+            for (Iterator i = l.iterator(); !found && i.hasNext();) {
+                RefHolder rh = (RefHolder) i.next();
+                if (rh.getType().equals(type)) {
+                    found = true;
+                    rh.acquire();
+                }
+            }
+            if (!found) {
+                l.add(new RefHolder(type, obj));
+            }
         }
+        acquire();
     }
 
     final void remRefHolder(Type type, String oid) {
-        synchronized(_refHolders) {
-            RefHolder refHolder = (RefHolder)_refHolders.get(oid + type);
-
-            if(refHolder != null) {
-                -- refHolder._mapCount;
-                if(refHolder._mapCount <= 0)
-                    _refHolders.remove(oid + type);
-
-                release();
+        synchronized (refHolders) {
+            LinkedList l = (LinkedList) refHolders.get(oid);
+            if (l != null) {
+                for (Iterator i = l.iterator(); i.hasNext();) {
+                    RefHolder rh = (RefHolder) i.next();
+                    if (rh.getType().equals(type)) {
+                        try {
+                            if (rh.release()) {
+                                l.remove(rh);
+                                if (l.isEmpty()) {
+                                    refHolders.remove(oid);
+                                }
+                            }
+                        } finally {
+                            release();
+                        }
+                        break;
+                    }
+                }
             }
-            else
-                System.err.println(getClass().getName() + ".remRefHolder - warning - unknown oid:" + oid + " " + type);
         }
     }
 
-
     final void freeHolders() {
-        if(DEBUG) System.err.println("#### " + getClass().getName() + ".freeHolders:" + _refHolders.size());
-
-        synchronized(_refHolders) {
-        Enumeration elements = _refHolders.elements();
-        while(elements.hasMoreElements()) {
-            RefHolder refHolder = (RefHolder)elements.nextElement();
-
-            while(refHolder._mapCount > 0) {
-                -- refHolder._mapCount;
-
-                _java_environment.revokeInterface(refHolder._oid, refHolder._type);
-                release();
+        synchronized (refHolders) {
+            for (Iterator i1 = refHolders.entrySet().iterator(); i1.hasNext();)
+            {
+                Map.Entry e = (Map.Entry) i1.next();
+                String oid = (String) e.getKey();
+                LinkedList l = (LinkedList) e.getValue();
+                for (Iterator i2 = l.iterator(); i2.hasNext();) {
+                    RefHolder rh = (RefHolder) i2.next();
+                    for (boolean done = false; !done;) {
+                        done = rh.release();
+                        _java_environment.revokeInterface(oid, rh.getType());
+                        release();
+                    }
+                }
             }
-        }
+            refHolders.clear();
         }
     }
 
@@ -520,7 +561,6 @@ public class java_remote_bridge
         || _outputStream     == null)
             throw new com.sun.star.lang.IllegalArgumentException(getClass().getName());
 
-        _refHolders       = new Hashtable();
         _listeners        = new Vector();
         _stableListeners  = new Vector();
 
@@ -592,12 +632,10 @@ public class java_remote_bridge
         if(object instanceof String)
             oid[0] = (String)object;
         else {
-            // TODO  I do not understand if this is correct.  Upon mapping an
-            // object out, its ref count should only be incremented if the
-            // object was not initially mapped in from the other end of this
-            // bridge.
-            _java_environment.registerInterface(object, oid, type);
-            addRefHolder(object, type, oid[0]);
+            object = _java_environment.registerInterface(object, oid, type);
+            if (!proxyFactory.isProxy(object)) {
+                addRefHolder(object, type, oid[0]);
+            }
         }
           if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceTo:" + object + " interface:" + type + " " + oid[0]);
 
@@ -618,13 +656,6 @@ public class java_remote_bridge
         // acquire, but before it is guaranteed that a pairing release will be
         // called eventually?
         acquire();
-        // TODO  The following code is not correct.  Assume that X2 is an
-        // interface type derived from X1, the local object o has been sent out
-        // with mapInterfaceTo(o,X2), and is now received back as
-        // mapInterfaceFrom(o,X1).  It should be detected that, since X1 is a
-        // base type of X2, (o,X1) is the local object o registered as (o,X2),
-        // and neither should a proxy be created, nor should a "release" be sent
-        // back:
         String oid = (String) oId;
         Object object = _java_environment.getRegisteredInterface(oid, type);
         if (object == null) {
