@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #if ! defined INCLUDED_JNI_INFO_H
 #define INCLUDED_JNI_INFO_H
 
@@ -78,24 +79,31 @@
 namespace jni_uno
 {
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 inline bool type_equals(
-    typelib_TypeDescriptionReference * type1, typelib_TypeDescriptionReference * type2 )
+    typelib_TypeDescriptionReference * type1,
+    typelib_TypeDescriptionReference * type2 )
 {
-    return ((type1 == type2) ||
-            ((type1->eTypeClass == type2->eTypeClass) &&
-             reinterpret_cast< ::rtl::OUString const * >( &type1->pTypeName )->equals(
-                 *reinterpret_cast< ::rtl::OUString const * >( &type2->pTypeName ) )));
+    if (type1 == type2)
+        return true;
+    ::rtl::OUString const & name1 =
+          *reinterpret_cast< ::rtl::OUString const * >( &type1->pTypeName );
+    ::rtl::OUString const & name2 =
+          *reinterpret_cast< ::rtl::OUString const * >( &type2->pTypeName );
+    return ((type1->eTypeClass == type2->eTypeClass) && name1.equals( name2 ));
 }
-//--------------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 inline bool is_XInterface( typelib_TypeDescriptionReference * type )
 {
     return ((typelib_TypeClass_INTERFACE == type->eTypeClass) &&
-            reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName )->equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ));
+            reinterpret_cast< ::rtl::OUString const * >(
+                &type->pTypeName )->equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "com.sun.star.uno.XInterface") ));
 }
 
-//==================================================================================================
+//==============================================================================
 struct JNI_type_info
 {
     JNI_type_info const *                       m_base;
@@ -108,9 +116,11 @@ protected:
         { jni_env->DeleteGlobalRef( m_class ); }
     inline ~JNI_type_info() {}
     JNI_type_info(
-        JNI_context const & jni, ::com::sun::star::uno::TypeDescription const & td );
+        JNI_context const & jni,
+        ::com::sun::star::uno::TypeDescription const & td );
 };
-//==================================================================================================
+
+//==============================================================================
 struct JNI_interface_type_info : public JNI_type_info
 {
     jobject                                     m_proxy_ctor; // proxy ctor
@@ -120,21 +130,25 @@ struct JNI_interface_type_info : public JNI_type_info
 
     virtual void destroy( JNIEnv * jni_env );
     JNI_interface_type_info(
-        JNI_context const & jni, ::com::sun::star::uno::TypeDescription const & td );
+        JNI_context const & jni,
+        ::com::sun::star::uno::TypeDescription const & td );
 };
-//==================================================================================================
+
+//==============================================================================
 struct JNI_compound_type_info : public JNI_type_info
 {
-    jmethodID                                   m_exc_ctor; // ctor( msg ) for exceptions
+    // ctor( msg ) for exceptions
+    jmethodID                                   m_exc_ctor;
     // sorted via typelib member index
     jfieldID *                                  m_fields;
 
     virtual void destroy( JNIEnv * jni_env );
     JNI_compound_type_info(
-        JNI_context const & jni, ::com::sun::star::uno::TypeDescription const & td );
+        JNI_context const & jni,
+        ::com::sun::star::uno::TypeDescription const & td );
 };
 
-//==================================================================================================
+//==============================================================================
 struct JNI_type_info_holder
 {
     JNI_type_info * m_info;
@@ -142,10 +156,11 @@ struct JNI_type_info_holder
         : m_info( 0 )
         {}
 };
-//==================================================================================================
-typedef ::std::hash_map< ::rtl::OUString, JNI_type_info_holder, ::rtl::OUStringHash > t_str2type;
 
-//==================================================================================================
+typedef ::std::hash_map<
+    ::rtl::OUString, JNI_type_info_holder, ::rtl::OUStringHash > t_str2type;
+
+//==============================================================================
 class JNI_info
 {
     mutable ::osl::Mutex        m_mutex;
@@ -231,11 +246,14 @@ public:
 
     //
     JNI_type_info const * get_type_info(
-        JNI_context const & jni, typelib_TypeDescription * type ) const;
+        JNI_context const & jni,
+        typelib_TypeDescription * type ) const;
     JNI_type_info const * get_type_info(
-        JNI_context const & jni, typelib_TypeDescriptionReference * type ) const;
+        JNI_context const & jni,
+        typelib_TypeDescriptionReference * type ) const;
     JNI_type_info const * get_type_info(
-        JNI_context const & jni, ::rtl::OUString const & uno_name ) const;
+        JNI_context const & jni,
+        ::rtl::OUString const & uno_name ) const;
     //
     inline static void append_sig(
         ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
@@ -254,13 +272,15 @@ private:
     JNI_info( JNIEnv * jni_env );
     inline ~JNI_info() {}
 };
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 inline void JNI_info::destroy( JNIEnv * jni_env )
 {
     destruct( jni_env );
     delete this;
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 inline void JNI_info::append_sig(
     ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
     bool use_Object_for_type_XInterface )
@@ -336,7 +356,8 @@ inline void JNI_info::append_sig(
         else
         {
             ::rtl::OUString const & uno_name =
-                  *reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName );
+                  *reinterpret_cast< ::rtl::OUString const * >(
+                      &type->pTypeName );
             buf->append( 'L' );
             buf->append(
                 ::rtl::OUStringToOString(
