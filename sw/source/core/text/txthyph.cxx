@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-26 14:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         ASSERT( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
 
         XubString  aAltTxt   = aAltSpell.aReplacement;
-        nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart();
+        nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart() - rGuess.FieldDiff();
         xub_StrLen nTmpLen = 0;
 
         // soft hyphen at alternative spelling position?
@@ -449,7 +449,8 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         pHyphPor->SetWhichPor( POR_HYPH );
 
         // values required for this
-        nPorEnd = xHyphWord->getHyphenPos() + 1 + rGuess.BreakStart();
+        nPorEnd = xHyphWord->getHyphenPos() + 1 + rGuess.BreakStart()
+                - rGuess.FieldDiff();
     }
 
     // portion end must be in front of us

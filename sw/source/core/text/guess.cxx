@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-20 13:08:45 $
+ *  last change: $Author: fme $ $Date: 2001-10-26 14:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
+#endif
+#ifndef _PORFLD_HXX
+#include <porfld.hxx>
 #endif
 
 using namespace ::rtl;
@@ -295,6 +298,49 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     }
     else if( pBreakIt->xBreak.is() )
     {
+        // New: We should have a look into the last portion, if it was a
+        // field portion. For this, we expand the text of the field portion
+        // into our string. If the line break position is inside of before
+        // the field portion, we trigger an underflow.
+
+        xub_StrLen nOldIdx = rInf.GetIdx();
+        sal_Char cFldChr = 0;
+
+#ifdef DEBUG
+        XubString aDebugString;
+#endif
+
+        // be careful: a field portion can be both: 0x01 (common field)
+        // or 0x02 (the follow of a footnode)
+        if ( rInf.GetLast() && rInf.GetLast()->InFldGrp() &&
+             ! rInf.GetLast()->IsFtnPortion() &&
+             rInf.GetIdx() > rInf.GetLineStart() &&
+             0x01 == ( cFldChr =
+                       rInf.GetTxt().GetChar( rInf.GetIdx() - 1 ) ) )
+        {
+            SwFldPortion* pFld = (SwFldPortion*)rInf.GetLast();
+            XubString aTxt;
+            pFld->GetExpTxt( rInf, aTxt );
+
+            if ( aTxt.Len() )
+            {
+                nFieldDiff = aTxt.Len() - 1;
+                nCutPos += nFieldDiff;
+                nHyphPos += nFieldDiff;
+
+#ifdef DEBUG
+                aDebugString = rInf.GetTxt();
+#endif
+
+                XubString& rOldTxt = (XubString&)rInf.GetTxt();
+                rOldTxt.Erase( rInf.GetIdx() - 1, 1 );
+                rOldTxt.Insert( aTxt, rInf.GetIdx() - 1 );
+                rInf.SetIdx( rInf.GetIdx() + nFieldDiff );
+            }
+            else
+                cFldChr = 0;
+        }
+
         LineBreakHyphenationOptions aHyphOpt;
         Reference< XHyphenator >  xHyph;
         if( bHyph )
@@ -308,7 +354,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // change at nCutPos. Otherwise LATIN punctuation would never
         // be allowed to be hanging punctuation.
         LanguageType aLang = bChgLocale ?
-                             rInf.GetTxtFrm()->GetTxtNode()->GetLang( nCutPos - 1 ) :
+                             rInf.GetTxtFrm()->GetTxtNode()->GetLang(
+                                    nCutPos - nFieldDiff - 1 ) :
                              rInf.GetFont()->GetLanguage();
         const ForbiddenCharacters aForbidden(
                 *rInf.GetTxtFrm()->GetNode()->GetDoc()->
@@ -327,8 +374,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // at the border between single line and multi line portion
         // we have to be carefull with footnote portions, they always come in
         // with an index 0
-        if ( nBreakPos < rInf.GetLineStart() &&
-             rInf.IsFirstMulti() &&
+        if ( nBreakPos < rInf.GetLineStart() && rInf.IsFirstMulti() &&
              ! rInf.IsFtnInside() )
             nBreakPos = rInf.GetLineStart();
 
@@ -386,8 +432,14 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
                 nBreakPos = rInf.GetIdx() - 1;
 
+            // Delete any blanks at the end of a line, but be careful:
+            // If a field has been expanded, we do not want to delete any
+            // blanks inside the field portion. This would cause an unwanted
+            // underflow
             xub_StrLen nX = nBreakPos;
-            while( nX > rInf.GetLineStart() && CH_BLANK == rInf.GetChar(--nX) )
+            while( nX > rInf.GetLineStart() &&
+                   ( 0x01 != cFldChr || nX > rInf.GetIdx() ) &&
+                   CH_BLANK == rInf.GetChar(--nX) )
                 nBreakPos = nX;
             if( nBreakPos > rInf.GetIdx() )
                 nPorLen = nBreakPos - rInf.GetIdx();
@@ -408,6 +460,36 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             ASSERT( !pHanging, "A hanging portion is hanging around" );
             pHanging = new SwHangingPortion( aTmpSize );
             nPorLen = nCutPos - rInf.GetIdx();
+        }
+
+        // If we expanded a field, we must repair the original string.
+        // In case we do not trigger an underflow, we correct the nBreakPos
+        // value, but we cannot correct the nBreakStart value:
+        // If we have found a hyphenation position, nBreakStart can lie before
+        // the field.
+        if ( 0x01 == cFldChr )
+        {
+            if ( nBreakPos < rInf.GetIdx() )
+                nBreakPos = nOldIdx - 1;
+            else
+            {
+                ASSERT( nBreakPos >= nFieldDiff, "I've got field trouble!" );
+                nBreakPos -= nFieldDiff;
+            }
+
+            ASSERT( nCutPos >= rInf.GetIdx() && nCutPos >= nFieldDiff,
+                    "I've got field trouble, part2!" );
+            nCutPos -= nFieldDiff;
+
+            XubString& rOldTxt = (XubString&)rInf.GetTxt();
+            rOldTxt.Erase( nOldIdx - 1, nFieldDiff + 1 );
+            rOldTxt.Insert( cFldChr, nOldIdx - 1 );
+            rInf.SetIdx( nOldIdx );
+
+#ifdef DEBUG
+            ASSERT( aDebugString == rInf.GetTxt(),
+                    "Somebody, somebody, somebody put something in my string" );
+#endif
         }
     }
 

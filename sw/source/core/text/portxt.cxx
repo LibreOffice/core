@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-20 13:08:45 $
+ *  last change: $Author: fme $ $Date: 2001-10-26 14:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,10 +294,14 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
                 Width( KSHORT(rInf.Width() - rInf.X()) );
 
             SetLen( aGuess.BreakPos() - rInf.GetIdx() );
-            if( aGuess.BreakPos() < aGuess.BreakStart() && !InFldGrp() )
+
+            ASSERT( aGuess.BreakStart() >= aGuess.FieldDiff(),
+                    "Trouble with expanded field portions during line break" );
+            const xub_StrLen nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
+            if( aGuess.BreakPos() < nRealStart && !InFldGrp() )
             {
                 SwHolePortion *pNew = new SwHolePortion( *this );
-                pNew->SetLen( aGuess.BreakStart() - aGuess.BreakPos() );
+                pNew->SetLen( nRealStart - aGuess.BreakPos() );
                 Insert( pNew );
             }
         }
