@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-22 14:36:20 $
+#   last change: $Author: obo $ $Date: 2004-11-16 11:15:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,9 +101,11 @@ UNOIDLDBFILES= \
     $(UCR)$/cssembed.db \
     $(UCR)$/cssfcontrol.db \
     $(UCR)$/cssform.db \
+    $(UCR)$/cssxforms.db \
     $(UCR)$/cssfcomp.db \
     $(UCR)$/cssfbinding.db \
     $(UCR)$/cssfvalidation.db \
+    $(UCR)$/cssfsubmission.db \
     $(UCR)$/cssformula.db \
     $(UCR)$/cssgraphic.db \
     $(UCR)$/cssinstallation.db \
@@ -156,6 +158,7 @@ UNOIDLDBFILES= \
     $(UCR)$/csssprovider.db \
     $(UCR)$/csssbrowse.db \
     $(UCR)$/cssgallery.db \
+    $(UCR)$/cssxsd.db \
     $(UCR)$/dcssframe.db \
     $(UCR)$/dcssform.db \
     $(UCR)$/dcssui.db \
