@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:30:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,11 @@
 #define SC_UNONAME_LEFTBORDER       "LeftBorder"
 #define SC_UNONAME_RIGHTBORDER      "RightBorder"
 #define SC_UNONAME_TOPBORDER        "TopBorder"
+
+#define SC_UNONAME_DIAGONAL_TLBR    "DiagonalTLBR"
+#define SC_UNONAME_DIAGONAL_BLTR    "DiagonalBLTR"
+
+#define SC_UNONAME_SHRINK_TO_FIT    "ShrinkToFit"
 
 #define SC_UNONAME_PISHANG          "ParaIsHangingPunctuation"
 #define SC_UNONAME_PISCHDIST        "ParaIsCharacterDistance"
