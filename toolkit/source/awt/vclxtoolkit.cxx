@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-21 11:41:31 $
+ *  last change: $Author: obr $ $Date: 2002-08-23 10:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,45 +1409,42 @@ void VCLXToolkit::callTopWindowListeners(
 long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                                   bool bPressed)
 {
-    ::Window * pWindow
-          = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
-    if (pWindow->IsTopWindow())
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+          aHandlers(m_aKeyHandlers.getElements());
+
+    if (aHandlers.hasElements())
     {
-        ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
-              aHandlers(m_aKeyHandlers.getElements());
-        if (aHandlers.hasElements())
+        ::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
+
+        // See implementation in vclxwindow.cxx for mapping between VCL and UNO AWT event
+        ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
+            static_cast< ::VclWindowEvent const * >(pEvent)->GetData());
+        ::css::awt::KeyEvent aAwtEvent(
+            static_cast< ::css::awt::XWindow * >(pWindow->GetWindowPeer()),
+            (pKeyEvent->GetKeyCode().IsShift()
+             ? ::css::awt::KeyModifier::SHIFT : 0)
+            | (pKeyEvent->GetKeyCode().IsMod1()
+               ? ::css::awt::KeyModifier::MOD1 : 0)
+            | (pKeyEvent->GetKeyCode().IsMod2()
+               ? ::css::awt::KeyModifier::MOD2 : 0),
+            pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
+            pKeyEvent->GetKeyCode().GetFunction());
+        for (::sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
         {
-            // See implementation in vclxwindow.cxx for mapping between VCL and
-            // UNO AWT event:
-            ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
-                static_cast< ::VclWindowEvent const * >(pEvent)->GetData());
-            ::css::awt::KeyEvent aAwtEvent(
-                static_cast< ::css::awt::XWindow * >(pWindow->GetWindowPeer()),
-                (pKeyEvent->GetKeyCode().IsShift()
-                 ? ::css::awt::KeyModifier::SHIFT : 0)
-                | (pKeyEvent->GetKeyCode().IsMod1()
-                   ? ::css::awt::KeyModifier::MOD1 : 0)
-                | (pKeyEvent->GetKeyCode().IsMod2()
-                   ? ::css::awt::KeyModifier::MOD2 : 0),
-                pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
-                pKeyEvent->GetKeyCode().GetFunction());
-            for (::sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
+            ::css::uno::Reference< ::dcss::awt::XKeyHandler > xHandler(
+                aHandlers[i], ::css::uno::UNO_QUERY);
+            try
             {
-                ::css::uno::Reference< ::dcss::awt::XKeyHandler > xHandler(
-                    aHandlers[i], ::css::uno::UNO_QUERY);
-                try
-                {
-                    if (!(bPressed ? xHandler->keyPressed(aAwtEvent)
-                          : xHandler->keyReleased(aAwtEvent)))
-                        return 1;
-                }
-                catch (::css::uno::RuntimeException & rEx)
-                {
-                    OSL_TRACE(
-                        "VCLXToolkit::callKeyHandlers: caught %s\n",
-                        ::rtl::OUStringToOString(
-                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
-                }
+                if ((bPressed ? xHandler->keyPressed(aAwtEvent)
+                      : xHandler->keyReleased(aAwtEvent)))
+                    return 1;
+            }
+            catch (::css::uno::RuntimeException & rEx)
+            {
+                OSL_TRACE(
+                    "VCLXToolkit::callKeyHandlers: caught %s\n",
+                    ::rtl::OUStringToOString(
+                       rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
     }
