@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:44:07 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,8 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
         ::osl::MutexGuard aGuard(m_aMutex);
         WaitObject aWO(getView());
 
-        Sequence< Any > aArgs(2);
+        Reference<XConnection> xConnection = getActiveConnection();
+        Sequence< Any > aArgs(xConnection.is() ? 3 : 2);
 
         Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
         if ( !xWindow.is() )
@@ -290,6 +291,10 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
         aArgs[1] <<= PropertyValue(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")), 0,
             makeAny(sInitialSelection), PropertyState_DIRECT_VALUE);
+        if ( xConnection.is() )
+            aArgs[2] <<= PropertyValue(
+                PROPERTY_ACTIVECONNECTION, 0,
+                makeAny(xConnection), PropertyState_DIRECT_VALUE);
 
         // create the dialog
         Reference< XExecutableDialog > xAdminDialog;
