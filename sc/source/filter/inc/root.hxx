@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:08:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,7 @@
 #include "excdefs.hxx"
 #endif
 
-class SotStorage;
-class SvNumberFormatter;
 class ScRangeName;
-class ScProgress;
 
 class NameBuffer;
 class RangeNameBufferWK3;
@@ -103,8 +100,6 @@ class XclExpUserBViewList;
 
 class XclObjList;
 class XclEscher;
-class SfxStyleSheet;
-class ExcRecordList;
 
 class XclImpRoot;
 class XclExpRoot;
@@ -113,21 +108,13 @@ class XclExpRoot;
 
 struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 {
-    double              fRowScale;              //  Spaltenbreiten / Zeilenhoehen
-    ScDocument*         pDoc;
-    ScRangeName*        pScRangeName;
-
-    String              aStandard;              // Schluessel fuer Exc-Standard-Format
     BiffTyp             eDateiTyp;              // feine Differenzierung
-    BiffTyp             eHauptDateiTyp;         // grobe Klassifizierung
     ExtSheetBuffer*     pExtSheetBuff;
     NameBuffer*         pTabNameBuff;
     ShrfmlaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
-    const CharSet*      pCharset;               // actual charset (im- / export!)
 
-    BOOL                bCellCut;               // bei Ueberlauf max. Cols / Rows
     BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
@@ -142,8 +129,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     // Biff8
     XclObjList*         pObjRecs;
     XclEscher*          pEscher;
-
-    BOOL                bWriteVBAStorage;
 
     XclImpRoot*         pIR;
     XclExpRoot*         pER;
@@ -182,80 +167,6 @@ struct LOTUS_ROOT
 };
 
 extern LOTUS_ROOT*      pLotusRoot; // -> Inkarn. in filter.cxx
-
-// ----------------------------------------------------------------------------
-
-/** List class for sal_uInt16 values.
-    @deprecated */
-class ScfUInt16List : protected List
-{
-public:
-    inline              ScfUInt16List() : List() {}
-    inline              ScfUInt16List( const ScfUInt16List& rCopy ) : List( rCopy ) {}
-
-    inline ScfUInt16List& operator=( const ScfUInt16List& rSource )
-                            { List::operator=( rSource ); return *this; }
-
-                        List::Clear;
-                        List::Count;
-    inline bool         Empty() const   { return List::Count() == 0; }
-
-    inline sal_uInt16   First() { return (sal_uInt16)(sal_uInt32) List::First(); }
-    inline sal_uInt16   Last()  { return (sal_uInt16)(sal_uInt32) List::Last(); }
-    inline sal_uInt16   Next()  { return (sal_uInt16)(sal_uInt32) List::Next(); }
-    inline sal_uInt16   Prev()  { return (sal_uInt16)(sal_uInt32) List::Prev(); }
-
-    inline sal_uInt16   GetValue( ULONG nIndex ) const
-                            { return (sal_uInt16)(sal_uInt32) List::GetObject( nIndex ); }
-    inline bool         Contains( sal_uInt16 nValue ) const
-                            { return List::GetPos( (void*)(sal_uInt32) nValue ) != LIST_ENTRY_NOTFOUND; }
-
-    inline void         Insert( sal_uInt16 nValue, ULONG nIndex )
-                            { List::Insert( (void*)(sal_uInt32) nValue, nIndex ); }
-    inline void         Append( sal_uInt16 nValue )
-                            { List::Insert( (void*)(sal_uInt32) nValue, LIST_APPEND ); }
-    inline sal_uInt16   Replace( sal_uInt16 nValue, ULONG nIndex )
-                            { return (sal_uInt16)(sal_uInt32) List::Replace( (void*)(sal_uInt32) nValue, nIndex ); }
-    inline sal_uInt16   Remove( ULONG nIndex )
-                            { return (sal_uInt16)(sal_uInt32) List::Remove( nIndex ); }
-};
-
-// ----------------------------------------------------------------------------
-
-/** List class for sal_uInt32 values.
-    @deprecated */
-class ScfUInt32List : protected List
-{
-public:
-    inline              ScfUInt32List() : List() {}
-    inline              ScfUInt32List( const ScfUInt32List& rCopy ) : List( rCopy ) {}
-
-    inline ScfUInt32List& operator=( const ScfUInt32List& rSource )
-                            { List::operator=( rSource ); return *this; }
-
-                        List::Clear;
-                        List::Count;
-    inline bool         Empty() const   { return List::Count() == 0; }
-
-    inline sal_uInt32   First() { return (sal_uInt32) List::First(); }
-    inline sal_uInt32   Last()  { return (sal_uInt32) List::Last(); }
-    inline sal_uInt32   Next()  { return (sal_uInt32) List::Next(); }
-    inline sal_uInt32   Prev()  { return (sal_uInt32) List::Prev(); }
-
-    inline sal_uInt32   GetValue( ULONG nIndex ) const
-                            { return (sal_uInt32) List::GetObject( nIndex ); }
-    inline bool         Contains( sal_uInt32 nValue ) const
-                            { return List::GetPos( (void*) nValue ) != LIST_ENTRY_NOTFOUND; }
-
-    inline void         Insert( sal_uInt32 nValue, ULONG nIndex )
-                            { List::Insert( (void*) nValue, nIndex ); }
-    inline void         Append( sal_uInt32 nValue )
-                            { List::Insert( (void*) nValue, LIST_APPEND ); }
-    inline sal_uInt32   Replace( sal_uInt32 nValue, ULONG nIndex )
-                            { return (sal_uInt32) List::Replace( (void*) nValue, nIndex ); }
-    inline sal_uInt32   Remove( sal_uInt32 nIndex )
-                            { return (sal_uInt32) List::Remove( nIndex ); }
-};
 
 // ----------------------------------------------------------------------------
 
