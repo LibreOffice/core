@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:13:58 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-
-#pragma hdrstop
 
 #include <ctype.h>
 
@@ -234,7 +231,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     xub_StrLen nTokenStt = rName.Search( sNm );
     sNm.ToLowerAscii();
 
-    for( int n = 0; n < sizeof( aFldNmArr ) / sizeof( aFldNmArr[0]); ++n )
+    for (size_t n = 0; n < sizeof(aFldNmArr) / sizeof(aFldNmArr[0]); ++n)
     {
         const sal_Char* pCmp = aFldNmArr[n].pFldNm;
         int nLen = *pCmp++;
