@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 12:30:21 $
+ *  last change: $Author: ama $ $Date: 2001-03-27 15:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2488,8 +2488,24 @@ void SwFlyFrmFmt::MakeFrms()
 
     case FLY_PAGE:
         {
-            const sal_uInt16 nPgNum = rAnch.GetPageNum();
+            sal_uInt16 nPgNum = rAnch.GetPageNum();
             SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetRootFrm()->Lower();
+            if( !nPgNum && rAnch.GetCntntAnchor() )
+            {
+                SwCntntNode *pCNd =
+                    rAnch.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
+                SwClientIter aIter( *pCNd );
+                do
+                {
+                    if( aIter()->ISA( SwFrm ) )
+                    {
+                        pPage = ((SwFrm*)aIter())->FindPageFrm();
+                        if( pPage )
+                            nPgNum = pPage->GetPhyPageNum();
+                        break;
+                    }
+                } while ( aIter++ );
+            }
             while ( pPage )
             {
                 if ( pPage->GetPhyPageNum() == nPgNum )
