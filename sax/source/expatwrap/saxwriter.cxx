@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-01 12:46:53 $
+ *  last change: $Author: dvo $ $Date: 2001-06-22 16:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,7 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
         p[m_seqStartElement.getLength()-1] = '>';
         writeSequence( m_seqStartElement );
         m_seqStartElement = Sequence< sal_Int8 > ();
+        m_bForceLineBreak = sal_False;
     }
     else {
         // only ascii chars allowed
