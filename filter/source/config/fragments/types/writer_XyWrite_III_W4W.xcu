@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>XyWrite III ( W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">XyWrite III</value>
+            <value>XyWrite III</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
