@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 
 #ifdef SOLARIS
 #include <alloca.h>
+#include <osl/module.h>
 #endif
 
 #ifdef __SunOS_5_5_1
@@ -227,6 +228,11 @@ extern "C" { int gethostname(char*,int); }
 #include <X11/keysym.h>
 
 #include <X11/Xatom.h>
+#ifndef SOLARIS
+#ifdef X86
+#include <X11/extensions/Xinerama.h>
+#endif
+#endif
 #include <postx.h>
 
 #include <salunx.h>
@@ -854,6 +860,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     mpFactory           = (AttributeProvider*)NULL;
     pCapture_           = NULL;
     pVisual_            = new SalVisual( pXVI );
+    m_bXinerama         = false;
     aSize_              = Size( DisplayWidth ( pDisp_, nScreen_ ),
                                 DisplayHeight( pDisp_, nScreen_ ) );
     aResolution_        =
@@ -896,9 +903,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         else
             pRootVisual_ = pVisual_;
 
-        // start session management
-        SessionManagerClient::open();
-
         // - - - - - - - - - - Reference Window/Default Drawable - -
         XSetWindowAttributes aXWAttributes;
         aXWAttributes.border_pixel      = 0;
@@ -913,24 +917,10 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
                                          CWBorderPixel|CWBackPixel|CWColormap,
                                          &aXWAttributes );
 
-        // set client leader and session id
-        const ByteString& rSessionID = SessionManagerClient::getSessionID();
+        // set client leader (session id gets set when session is started)
         if( hRefWindow_ )
         {
-            if( rSessionID.Len() )
-            {
-                XChangeProperty( pDisp_,
-                                 hRefWindow_,
-                                 XInternAtom( pDisp_, "SM_CLIENT_ID", False ),
-                                 XA_STRING,
-                                 8,
-                                 PropModeReplace,
-                                 (unsigned char*)rSessionID.GetBuffer(),
-                                 rSessionID.Len()
-                                 );
-            }
             // client leader must have WM_CLIENT_LEADER pointing to itself
-
             XChangeProperty( pDisp_,
                              hRefWindow_,
                              XInternAtom( pDisp_, "WM_CLIENT_LEADER", False ),
@@ -1278,6 +1268,8 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
             }
         }
     }
+
+    InitXinerama();
 
 #ifdef DBG_UTIL
     PrintInfo();
@@ -2874,8 +2866,6 @@ void SalDisplay::PrintInfo() const
                  GetEnv( "SAL_WM" ) );
         fprintf( stderr, "\t$SAL_SYNCHRONIZE  \t\"%s\"\n",
                  GetEnv( "SAL_SYNCHRONIZE" ) );
-        fprintf( stderr, "\t$XPPATH           \t\"%s\"\n",
-                 GetEnv( "XPPATH" ) );
 
         char sHostname[ 120 ];
         gethostname (sHostname, 120 );
@@ -2963,6 +2953,76 @@ void SalDisplay::GetScreenFontResolution( long& rDPIX, long& rDPIY ) const
         rDPIX = Divide( rDPIX * nThreshold, rDPIY );
         rDPIY = nThreshold;
     }
+}
+
+void SalDisplay::InitXinerama()
+{
+#ifdef SOLARIS
+    // do this load on call for benefit of Solaris < 8
+    rtl::OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libXext.so" ) );
+    rtl::OUString aSymb1( RTL_CONSTASCII_USTRINGPARAM( "XineramaGetState" ) );
+    rtl::OUString aSymb2( RTL_CONSTASCII_USTRINGPARAM( "XineramaGetInfo" ) );
+    oslModule hModule = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
+    if( hModule == NULL )
+        return;
+
+    Bool(*pXineramaGetState)(Display*, int) =
+        (Bool(*)(Display*,int))osl_getSymbol( hModule, aSymb1.pData );
+    Status(*pXineramaGetInfo)(Display*,int,XRectangle*,unsigned char*,int*) =
+        (Status(*)(Display*,int,XRectangle*,unsigned char*,int*))osl_getSymbol( hModule, aSymb2.pData );
+    if( ! (pXineramaGetState && pXineramaGetInfo ) )
+        return;
+
+    int nFramebuffers = 1;
+    if( pXineramaGetState( pDisp_, nScreen_ ) )
+    {
+        XRectangle pFramebuffers[16]; // MAXFRAMEBUFFERS in the original header
+        unsigned char hints[16];
+        int result = pXineramaGetInfo( pDisp_,
+                                       nScreen_,
+                                       pFramebuffers,
+                                       hints,
+                                       &nFramebuffers );
+        if( result > 0 && nFramebuffers > 1 )
+        {
+            m_bXinerama = true;
+            for( int i = 0; i < nFramebuffers; i++ )
+                m_aXineramaScreens.push_back( Rectangle( Point( pFramebuffers[i].x,
+                                                                pFramebuffers[i].y ),
+                                                         Size( pFramebuffers[i].width,
+                                                               pFramebuffers[i].height ) ) );
+        }
+    }
+    osl_unloadModule( hModule );
+#else
+#ifdef X86
+    if( XineramaIsActive( pDisp_ ) )
+    {
+        int nFramebuffers = 1;
+        XineramaScreenInfo* pScreens = XineramaQueryScreens( pDisp_, &nFramebuffers );
+        if( pScreens )
+        {
+            if( nFramebuffers > 1 )
+            {
+                m_bXinerama = true;
+                for( int i = 0; i < nFramebuffers; i++ )
+                    m_aXineramaScreens.push_back( Rectangle( Point( pScreens[i].x_org,
+                                                                    pScreens[i].y_org ),
+                                                             Size( pScreens[i].width,
+                                                                   pScreens[i].height ) ) );
+            }
+            XFree( pScreens );
+        }
+    }
+#endif
+#endif
+#ifdef DEBUG
+    if( m_bXinerama )
+    {
+        for( std::vector< Rectangle >::const_iterator it = m_aXineramaScreens.begin(); it != m_aXineramaScreens.end(); ++it )
+            fprintf( stderr, "Xinerama screen: %dx%d+%d+%d\n", it->GetWidth(), it->GetHeight(), it->Left(), it->Top() );
+    }
+#endif
 }
 
 // -=-= SalVisual -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
