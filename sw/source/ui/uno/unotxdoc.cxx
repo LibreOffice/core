@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-18 13:29:32 $
+ *  last change: $Author: os $ $Date: 2002-08-14 08:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #endif
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
 #endif
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
@@ -2763,15 +2769,10 @@ Any lcl_GetDisplayBitmap(String sLinkSuffix)
     if(USHRT_MAX != nImgId)
     {
         nImgId += 20000;
-        ImageList aEntryImages( SW_RES(IMG_NAVI_ENTRYBMP) );
+        BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+        ImageList aEntryImages( SW_RES(bHighContrast ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
-         Size aSize = rImage.GetSizePixel();
-
-        VirtualDevice aVDev;
-        aVDev.SetOutputSizePixel( aSize );
-        aVDev.DrawImage( Point(0,0), rImage );
-        Bitmap aBitmap = aVDev.GetBitmap( Point(0,0), aSize );
-
+        Bitmap aBitmap = rImage.GetBitmap();
         Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( aBitmap );
         aRet.setValue( &xBmp, ::getCppuType((Reference<awt::XBitmap>*)0) );
     }
