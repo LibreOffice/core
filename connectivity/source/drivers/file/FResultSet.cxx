@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-25 10:32:53 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 07:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2123,9 +2123,9 @@ BOOL OResultSet::OpenImpl()
                         {
                             xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
                             Reference<XPropertySet> xColProp;
-                            if(nOrderbyColumnNumber[0] < xNames->getCount())
+                            if(nOrderbyColumnNumber[0] < xIndexes->getCount())
                             {
-                                xNames->getByIndex(nOrderbyColumnNumber[0]) >>= xColProp;
+                                xIndexes->getByIndex(nOrderbyColumnNumber[0]) >>= xColProp;
                                 // iterate through the indexes to find the matching column
                                 for(sal_Int32 i=0;i<xIndexes->getCount();++i)
                                 {
@@ -2192,7 +2192,7 @@ BOOL OResultSet::OpenImpl()
                 OSL_ENSHURE(m_pFileSet,"Kein KeySet vorhanden! :-(");
     DISTINCT:   if(bDistinct && m_pFileSet)   // sicher ist sicher
                 {
-                    OValueRow aSearchRow;//(m_aRow);
+                    OValueRow aSearchRow = new OValueVector(m_aRow->size());
                     //  ODbRowRef aSearchRow = new ODbRow(*aFileRow); // nach dieser wird gesucht
                     //  const ODbRow &rSearchRow = *aSearchRow,
                         //  &rFileRow = *aFileRow;
@@ -2211,7 +2211,7 @@ BOOL OResultSet::OpenImpl()
                             if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
                             {
                                 ExecuteRow(OFileTable::FILE_BOOKMARK,nPos,TRUE,FALSE);
-                                aSearchRow = m_aRow;
+                                *aSearchRow = *m_aRow;
                                 // jetzt den Rest nach doppelten durchsuchen
                                 INT32 nKey;
                                 nPrev_i = j;
