@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:52:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,16 +664,15 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     // 5. prepare type information
     if( bOk )
     {
-        Sequence< PropertyValue > aValues(5);
-        int i=0;
+        Sequence< PropertyValue > aValues(4);
 
-        aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) );
-        aValues[i++].Value <<= pFilterEntry->maInterfaceName;
+        aValues[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) );
+        aValues[0].Value <<= pFilterEntry->maInterfaceName;
 /*
         aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
         aValues[i++].Value <<= pFilterEntry->maDocType;
 */
-        aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ClipboardFormat" ) );
+        aValues[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ClipboardFormat" ) );
         OUString aDocType;
         if( !pFilterEntry->maDocType.match( sDocTypePrefix ) )
         {
@@ -685,18 +684,23 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             aDocType = pFilterEntry->maDocType;
         }
         if (aDocType == sDocTypePrefix)
-            aValues[i++].Value <<= OUString();
+            aValues[1].Value <<= OUString();
         else
-            aValues[i++].Value <<= aDocType;
+            aValues[1].Value <<= aDocType;
 
-        aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentIconID" ) );
-        aValues[i++].Value <<= pFilterEntry->mnDocumentIconID;
+        aValues[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentIconID" ) );
+        aValues[2].Value <<= pFilterEntry->mnDocumentIconID;
 
-        aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
-        aValues[i++].Value <<= createExtensionsSequence( pFilterEntry->maExtension );
+        aValues[3].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
+        aValues[3].Value <<= createExtensionsSequence( pFilterEntry->maExtension );
 
-        aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DetectService" ) );
-            aValues[i++].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filters.XMLFilterDetect" ) );
+        // the detect service will only be registered, if a doctype/search token was specified
+        if (aDocType.getLength() > sDocTypePrefix.getLength())
+        {
+            aValues.realloc(5);
+            aValues[4].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DetectService" ) );
+            aValues[4].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filters.XMLFilterDetect" ) );
+        }
 
         // 6. insert new or replace existing type information
         if( mxTypeDetection.is() )
