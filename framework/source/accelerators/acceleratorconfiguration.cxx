@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:05:18 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,19 +157,19 @@ namespace framework
 DEFINE_XINTERFACE_6(AcceleratorConfiguration                               ,
                     OWeakObject                                            ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider             ),
-                    DIRECT_INTERFACE(dcss::ui::XAcceleratorConfiguration  ),
+                    DIRECT_INTERFACE(css::ui::XAcceleratorConfiguration  ),
                     DIRECT_INTERFACE(css::form::XReset                    ),
-                    DIRECT_INTERFACE(dcss::ui::XUIConfigurationPersistence),
-                    DIRECT_INTERFACE(dcss::ui::XUIConfigurationStorage    ),
-                    DIRECT_INTERFACE(dcss::ui::XUIConfiguration           ))
+                    DIRECT_INTERFACE(css::ui::XUIConfigurationPersistence),
+                    DIRECT_INTERFACE(css::ui::XUIConfigurationStorage    ),
+                    DIRECT_INTERFACE(css::ui::XUIConfiguration           ))
 
 DEFINE_XTYPEPROVIDER_6(AcceleratorConfiguration             ,
                        css::lang::XTypeProvider             ,
-                       dcss::ui::XAcceleratorConfiguration  ,
+                       css::ui::XAcceleratorConfiguration  ,
                        css::form::XReset                    ,
-                       dcss::ui::XUIConfigurationPersistence,
-                       dcss::ui::XUIConfigurationStorage    ,
-                       dcss::ui::XUIConfiguration           )
+                       css::ui::XUIConfigurationPersistence,
+                       css::ui::XUIConfigurationStorage    ,
+                       css::ui::XUIConfiguration           )
 
 //-----------------------------------------------
 AcceleratorConfiguration::AcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
@@ -477,14 +477,14 @@ void SAL_CALL AcceleratorConfiguration::setStorage(const css::uno::Reference< cs
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< dcss::ui::XUIConfigurationListener >& xListener)
+void SAL_CALL AcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("AcceleratorConfiguration::addConfigurationListener()", "TODO implement me")
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< dcss::ui::XUIConfigurationListener >& xListener)
+void SAL_CALL AcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("AcceleratorConfiguration::removeConfigurationListener()", "TODO implement me")
