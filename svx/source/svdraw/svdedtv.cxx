@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:48:25 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,13 +561,27 @@ void SdrEditView::CheckPossibilities()
                 const SdrMark* pM = aMark.GetMark(0);
                 const SdrObject* pObj = pM->GetObj();
 
+                // maybe group object, so get merged ItemSet
+                const SfxItemSet& rSet = pObj->GetMergedItemSet();
+                SfxItemState eState = rSet.GetItemState(XATTR_FILLSTYLE, FALSE);
 
-                XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetItem(XATTR_FILLSTYLE))).GetValue();
-
-                if(eFillStyle != XFILL_GRADIENT)
+                if(SFX_ITEM_DONTCARE != eState)
                 {
-                    bGradientAllowed = FALSE;
+                    // If state is not DONTCARE, test the item
+                    XFillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+
+                    if(eFillStyle != XFILL_GRADIENT)
+                    {
+                        bGradientAllowed = FALSE;
+                    }
                 }
+
+                //if(SFX_ITEM_DONTCARE == rSet.GetItemState(XATTR_FILLSTYLE, FALSE))
+                //XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetItem(XATTR_FILLSTYLE))).GetValue();
+                //if(eFillStyle != XFILL_GRADIENT)
+                //{
+                //  bGradientAllowed = FALSE;
+                //}
             }
 
             BOOL bNoMovRotFound=FALSE;
@@ -687,7 +701,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
     for (ULONG nm=0; nm<aMark.GetMarkCount(); nm++) {
         SdrMark* pM=aMark.GetMark(nm);
         SdrObject* pObj=pM->GetObj();
-        Rectangle aObjRect(pObj->GetBoundRect());
+        Rectangle aObjRect(pObj->GetCurrentBoundRect());
         aObjRect+=pM->GetPageView()->GetOffset(); // auf View-Koordinaten
         Rectangle aPgRect(pM->GetPageView()->GetPageRect());
         if (!aObjRect.IsOver(aPgRect)) {
@@ -844,8 +858,8 @@ BOOL SdrEditView::InsertObject(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions
         pObj->NbcSetLayer(nLayer);
     }
     if ((nOptions & SDRINSERT_SETDEFATTR)!=0) {
-        if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
-        pObj->SetItemSet(aDefaultAttr);
+        if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
+        pObj->SetMergedItemSet(aDefaultAttr);
     }
     if (!pObj->IsInserted()) {
         SdrInsertReason aReason(SDRREASON_VIEWCALL);
