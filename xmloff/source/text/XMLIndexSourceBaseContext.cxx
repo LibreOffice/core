@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
+const sal_Char sAPI_IsRelativeTabstops[] = "IsRelativeTabstops";
 
 static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 {
@@ -211,6 +212,9 @@ static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
     { XML_NAMESPACE_TEXT,
           sXML_caption_sequence_format,
           XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT },
+    { XML_NAMESPACE_TEXT,
+          sXML_comma_separated,
+          XML_TOK_INDEXSOURCE_COMMA_SEPARATED },
 
     XML_TOKEN_MAP_END
 };
@@ -229,7 +233,8 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
         bChapterIndex(sal_False),
         bRelativeTabs(sal_True),
         bUseLevelFormats(bLevelFormats),
-        sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromChapter))
+      sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromChapter)),
+      sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsRelativeTabstops))
 {
 }
 
@@ -292,8 +297,7 @@ void XMLIndexSourceBaseContext::EndElement()
     Any aAny;
 
     aAny.setValue(&bRelativeTabs, ::getBooleanCppuType());
-    // TODO: api lacking
-//  rIndexPropertySet->setPropertyValue(s..., aAny);
+    rIndexPropertySet->setPropertyValue(sIsRelativeTabstops, aAny);
 
     aAny.setValue(&bChapterIndex, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromChapter, aAny);

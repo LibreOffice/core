@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexAlphabeticalSourceContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
     const ::rtl::OUString sUseUpperCase;
     const ::rtl::OUString sUseDash;
     const ::rtl::OUString sUsePP;
+    const ::rtl::OUString sIsCommaSeparated;
 
     ::rtl::OUString sMainEntryStyleName;
     sal_Bool bMainEntryStyleNameOK;
@@ -102,6 +103,7 @@ class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
     sal_Bool bUpperCase;
     sal_Bool bCombineDash;
     sal_Bool bCombinePP;
+    sal_Bool bCommaSeparated;
 
 public:
 

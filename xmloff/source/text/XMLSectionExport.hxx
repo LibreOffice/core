@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,8 @@ class XMLSectionExport
     const ::rtl::OUString sUsePP;
     const ::rtl::OUString sUseUpperCase;
     const ::rtl::OUString sIsCommaSeparated;
+    const ::rtl::OUString sIsAutomaticUpdate;
+    const ::rtl::OUString sIsRelativeTabstops;
 
     const ::rtl::OUString sTableOfContent;
     const ::rtl::OUString sIllustrationIndex;

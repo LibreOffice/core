@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,9 @@ void XMLIndexTOCSourceContext::EndElement()
 
     aAny <<= (sal_Int16)nOutlineLevel;
     rIndexPropertySet->setPropertyValue(sLevel, aAny);
+
+    // process common attributes
+    XMLIndexSourceBaseContext::EndElement();
 }
 
 

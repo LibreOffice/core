@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceDDEImportContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class XMLSectionSourceDDEImportContext : public SvXMLImportContext
     const ::rtl::OUString sDdeCommandFile;
     const ::rtl::OUString sDdeCommandType;
     const ::rtl::OUString sDdeCommandElement;
+    const ::rtl::OUString sIsAutomaticUpdate;
 
 public:
 

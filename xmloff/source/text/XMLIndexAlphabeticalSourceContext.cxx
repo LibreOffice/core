@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexAlphabeticalSourceContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
         bUpperCase(sal_False),
         bCombineDash(sal_False),
         bCombinePP(sal_True),
+        bCommaSeparated(sal_False),
         sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_MainEntryCharacterStyleName)),
         sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM(
@@ -167,7 +168,8 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
         sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseKeyAsEntry)),
         sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseUpperCase)),
         sUseDash(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseDash)),
-        sUsePP(RTL_CONSTASCII_USTRINGPARAM(sAPI_UsePP))
+        sUsePP(RTL_CONSTASCII_USTRINGPARAM(sAPI_UsePP)),
+        sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
 {
 }
 
@@ -236,6 +238,13 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
             }
             break;
 
+        case XML_TOK_INDEXSOURCE_COMMA_SEPARATED:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bCommaSeparated = bTmp;
+            }
+            break;
+
         default:
             XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
             break;
@@ -273,6 +282,9 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
 
     aAny.setValue(&bCombinePP, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sUsePP, aAny);
+
+    aAny.setValue(&bCommaSeparated, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sIsCommaSeparated, aAny);
 
     XMLIndexSourceBaseContext::EndElement();
 }

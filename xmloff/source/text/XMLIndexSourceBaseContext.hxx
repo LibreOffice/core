@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@ enum IndexSourceParamEnum
     XML_TOK_INDEXSOURCE_COPY_OUTLINE_LEVELS,
     XML_TOK_INDEXSOURCE_USE_CAPTION,
     XML_TOK_INDEXSOURCE_SEQUENCE_NAME,
-    XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT
+    XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT,
+    XML_TOK_INDEXSOURCE_COMMA_SEPARATED
 };
 
 
@@ -117,6 +118,7 @@ enum IndexSourceParamEnum
 class XMLIndexSourceBaseContext : public SvXMLImportContext
 {
     const ::rtl::OUString sCreateFromChapter;
+    const ::rtl::OUString sIsRelativeTabstops;
 
     sal_Bool bUseLevelFormats;
 

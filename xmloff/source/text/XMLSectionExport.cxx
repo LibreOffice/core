@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,8 @@ XMLSectionExport::XMLSectionExport(
         sCreateFromTextFrames(RTL_CONSTASCII_USTRINGPARAM("CreateFromTextFrames")),
         sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM("UseLevelFromSource")),
         sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated")),
+        sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate")),
+        sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM("IsRelativeTabstops")),
         sTableOfContent(RTL_CONSTASCII_USTRINGPARAM(sXML_table_of_content)),
         sIllustrationIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_illustration_index)),
         sAlphabeticalIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_alphabetical_index)),
@@ -534,6 +536,13 @@ void XMLSectionExport::ExportRegularSectionStart(
             GetExport().AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_item,
                                      sItem);
 
+            aAny = xPropSet->getPropertyValue(sIsAutomaticUpdate);
+            if (*(sal_Bool*)aAny.getValue())
+            {
+                GetExport().AddAttributeASCII(XML_NAMESPACE_OFFICE,
+                                             sXML_automatic_update, sXML_true);
+            }
+
             SvXMLElementExport aElem(GetExport(),
                                      XML_NAMESPACE_OFFICE,
                                      sXML_dde_source,
@@ -798,7 +807,13 @@ void XMLSectionExport::ExportBaseIndexSource(
         }
 
         // tab-stops relative to margin?
-        // TODO: property fehlt?!
+        aAny = rPropertySet->getPropertyValue(sIsRelativeTabstops);
+        if (! *(sal_Bool*)aAny.getValue())
+        {
+            GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
+                                          sXML_relative_tab_stop_position,
+                                          sXML_false);
+        }
     }
 
     // the index source element (all indices)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceDDEImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -115,6 +119,8 @@ using namespace ::com::sun::star::text;
 const sal_Char sAPI_DDECommandFile[] = "DDECommandFile";
 const sal_Char sAPI_DDECommandType[] = "DDECommandType";
 const sal_Char sAPI_DDECommandElement[] = "DDECommandElement";
+const sal_Char sAPI_IsAutomaticUpdate[] = "IsAutomaticUpdate";
+
 
 TYPEINIT1(XMLSectionSourceDDEImportContext, SvXMLImportContext);
 
@@ -127,7 +133,8 @@ XMLSectionSourceDDEImportContext::XMLSectionSourceDDEImportContext(
         rSectionPropertySet(rSectPropSet),
         sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM(sAPI_DDECommandFile)),
         sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM(sAPI_DDECommandType)),
-        sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM(sAPI_DDECommandElement))
+       sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM(sAPI_DDECommandElement)),
+        sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsAutomaticUpdate))
 {
 }
 
@@ -139,15 +146,18 @@ enum XMLSectionSourceDDEToken
 {
     XML_TOK_SECTION_DDE_APPLICATION,
     XML_TOK_SECTION_DDE_TOPIC,
-    XML_TOK_SECTION_DDE_ITEM
+    XML_TOK_SECTION_DDE_ITEM,
+    XML_TOK_SECTION_IS_AUTOMATIC_UPDATE
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, sXML_dde_application,
-        XML_TOK_SECTION_DDE_APPLICATION },
+          XML_TOK_SECTION_DDE_APPLICATION },
     { XML_NAMESPACE_OFFICE, sXML_dde_topic, XML_TOK_SECTION_DDE_TOPIC },
     { XML_NAMESPACE_OFFICE, sXML_dde_item, XML_TOK_SECTION_DDE_ITEM },
+    { XML_NAMESPACE_OFFICE, sXML_automatic_update,
+          XML_TOK_SECTION_IS_AUTOMATIC_UPDATE },
     XML_TOKEN_MAP_END
 };
 
@@ -159,6 +169,7 @@ void XMLSectionSourceDDEImportContext::StartElement(
     OUString sApplication;
     OUString sTopic;
     OUString sItem;
+    sal_Bool bAutomaticUpdate = sal_False;
 
     sal_Int32 nLength = xAttrList->getLength();
     for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
@@ -179,6 +190,16 @@ void XMLSectionSourceDDEImportContext::StartElement(
             case XML_TOK_SECTION_DDE_ITEM:
                 sItem = xAttrList->getValueByIndex(nAttr);
                 break;
+            case XML_TOK_SECTION_IS_AUTOMATIC_UPDATE:
+            {
+                sal_Bool bTmp;
+                if (SvXMLUnitConverter::convertBool(
+                    bTmp, xAttrList->getValueByIndex(nAttr)))
+                {
+                    bAutomaticUpdate = bTmp;
+                }
+                break;
+            }
             default:
                 ; // ignore
                 break;
@@ -199,6 +220,9 @@ void XMLSectionSourceDDEImportContext::StartElement(
 
         aAny <<= sItem;
         rSectionPropertySet->setPropertyValue(sDdeCommandElement, aAny);
+
+        aAny.setValue(&bAutomaticUpdate, ::getBooleanCppuType());
+        rSectionPropertySet->setPropertyValue(sIsAutomaticUpdate, aAny);
     }
 }
 

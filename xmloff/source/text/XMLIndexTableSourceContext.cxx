@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTableSourceContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ XMLIndexTableSourceContext::XMLIndexTableSourceContext(
         sLabelDisplayType(RTL_CONSTASCII_USTRINGPARAM(sAPI_LabelDisplayType)),
         bSequenceOK(sal_False),
         bDisplayFormatOK(sal_False),
-        bUseCaption(sal_False)
+        bUseCaption(sal_True)
 {
 }
 
