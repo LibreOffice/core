@@ -26,7 +26,6 @@ public interface WWHID {
 
 //   step 1
     public static final int HID1_LST_SESSIONS           =  34200 + 7 ;
-    public static final int HID1_BTN_LOAD_SES           =  34200 + 8 ;
     public static final int HID1_BTN_DEL_SES            =  34200 + 9 ;
 
 //  step 2
@@ -100,7 +99,7 @@ public interface WWHID {
     public static final int HID7_TXT_ZIP                =  34200 + 65 ;
     public static final int HID7_BTN_ZIP                =  34200 + 66 ;
     public static final int HID7_CHK_PUBLISH_FTP        =  34200 + 67 ;
-    public static final int HID7_TXT_FTP                =  34200 + 68 ;
+    //public static final int   HID7_TXT_FTP                =  34200 + 68 ;
     public static final int HID7_BTN_FTP                =  34200 + 69 ;
     public static final int HID7_CHK_SAVE               =  34200 + 70 ;
     public static final int HID7_TXT_SAVE               =  34200 + 71 ;
