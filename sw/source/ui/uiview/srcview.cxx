@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 16:41:30 $
+ *  last change: $Author: os $ $Date: 2001-06-15 13:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,18 +75,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
@@ -244,7 +232,15 @@
 #ifndef _VIEW_HRC
 #include <view.hrc>
 #endif
-
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
 
 #define SwSrcView
 #define SearchSettings
@@ -258,8 +254,8 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::ui::dialogs;
 using namespace com::sun::star::i18n;
-using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
@@ -568,13 +564,13 @@ void SwSrcView::Execute(SfxRequest& rReq)
             if( xMgr.is() )
             {
                 Sequence <Any> aProps(1);
-                aProps.getArray()[0] <<= C2U("FileSave");
+                aProps.getArray()[0] <<= TemplateDescription::FILESAVE_SIMPLE;
                 xFP = Reference< XFilePicker >(
                         xMgr->createInstanceWithArguments(
-                            C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                            C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
                         UNO_QUERY );
             }
-            DBG_ERROR("how to set help ids at com.sun.star.ui.FilePicker")
+            DBG_ERROR("how to set help ids at com.sun.star.ui.dialogs.FilePicker")
         //    pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
             Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
@@ -584,7 +580,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
             if( RET_OK == xFP->execute())
             {
-                SfxMedium aMedium( xFP->getPath().getConstArray()[0],
+                SfxMedium aMedium( xFP->getFiles().getConstArray()[0],
                                     STREAM_WRITE | STREAM_SHARE_DENYNONE,
                                     FALSE );
 #ifdef USED

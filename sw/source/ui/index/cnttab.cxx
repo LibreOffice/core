@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:27:41 $
+ *  last change: $Author: os $ $Date: 2001-06-15 13:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,14 +142,17 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
@@ -264,7 +267,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui;
+using namespace com::sun::star::ui::dialogs;
 using namespace ::rtl;
 
 #define C2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
@@ -311,10 +314,11 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
     if( xMgr.is() )
     {
         Sequence <Any> aProps(1);
-        aProps.getArray()[0] <<= bOpen ? C2U("FileOpen") : C2U("FileSave");
+        aProps.getArray()[0] <<= bOpen ?
+            TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_SIMPLE;
         xFP = Reference< XFilePicker >(
                 xMgr->createInstanceWithArguments(
-                    C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
                 UNO_QUERY );
     }
 
@@ -336,7 +340,7 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
 
     if( xFP->execute() == RET_OK )
     {
-        sRet = xFP->getPath().getConstArray()[0];
+        sRet = xFP->getFiles().getConstArray()[0];
     }
     rLastSaveDir = sSaveDir;
     return sRet;

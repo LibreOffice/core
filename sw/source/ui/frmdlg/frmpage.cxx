@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:11:05 $
+ *  last change: $Author: os $ $Date: 2001-06-15 13:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,19 +179,22 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/FilePickerElementID.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::sfx2;
@@ -2324,7 +2327,7 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
     Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
     sal_Bool bTrue = sal_True;
     Any aVal(&bTrue, ::getBooleanCppuType());
-    xCtrlAcc->setValue( FilePickerElementID::CBX_INSERT_AS_LINK, aVal);
+    xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
 
     if ( pGrfDlg->Execute() == ERRCODE_NONE )
     {   // ausgewaehlten Filter merken
@@ -2591,10 +2594,10 @@ IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
     if( xMgr.is() )
     {
         Sequence <Any> aProps(1);
-        aProps.getArray()[0] <<= C2U("FileOpen");
+        aProps.getArray()[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         xFP = Reference< XFilePicker >(
                 xMgr->createInstanceWithArguments(
-                    C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
                 UNO_QUERY );
     }
     String sTemp(aURLED.GetText());
@@ -2602,7 +2605,7 @@ IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
         xFP->setDisplayDirectory(sTemp);
     if( xFP->execute() == RET_OK )
     {
-        aURLED.SetText( URIHelper::SmartRelToAbs( xFP->getPath().getConstArray()[0], FALSE,
+        aURLED.SetText( URIHelper::SmartRelToAbs( xFP->getFiles().getConstArray()[0], FALSE,
                                         INetURLObject::WAS_ENCODED,
                                         INetURLObject::DECODE_UNAMBIGUOUS));
     }
