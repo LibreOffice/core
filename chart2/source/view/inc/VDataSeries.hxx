@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 17:06:40 $
+ *  last change: $Author: iha $ $Date: 2003-11-15 08:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,11 @@ public:
 
     //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
-    double m_fMinX;
-    double m_fMaxX;
+    double m_fLogicMinX;
+    double m_fLogicMaxX;
+    //
+    //this is here for deep stacking:
+    double m_fLogicZPos;//from 0 to series count -1
     //
 
     rtl::OUString       getCID() const;
