@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:29:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 09:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3492,7 +3492,7 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop )
 
     OStringBuffer aLine;
     m_aPages.back().appendPoint( rStart, aLine );
-    aLine.append( "m " );
+    aLine.append( " m " );
     m_aPages.back().appendPoint( rStop, aLine );
     aLine.append( " l S\r\n" );
 
