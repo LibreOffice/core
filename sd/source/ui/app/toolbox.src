@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:57:35 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,7 +640,7 @@ String RID_DRAW_VIEWER_TOOLBOX
     Text[ russian ] = "������ �������";
     Text[ polish ] = "Pasek funkcji";
     Text[ japanese ] = "ファンクションバー（表示モード）";
-    Text[ chinese_traditional ] = "工具列(檢視模式)";
+    Text[ chinese_traditional ] = "功能列(檢視模式)";
     Text[ arabic ] = "���� ������";
     Text[ dutch ] = "Werkbalk";
     Text[ chinese_simplified ] = "功能栏(视图模式)";
@@ -654,6 +654,7 @@ String RID_DRAW_VIEWER_TOOLBOX
     Text[ czech ] = "Panel funkcí";
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फंक्शन् पट्टी";
+    Text[ slovak ] = "Panel funkcií (mód náhľadu)";
 };
 
 ToolBox RID_DRAW_VIEWER_TOOLBOX
@@ -757,7 +758,7 @@ String RID_GRAPHIC_VIEWER_TOOLBOX
     Text[ russian ] = "������ �������";
     Text[ polish ] = "Pasek funkcji";
     Text[ japanese ] = "ファンクションバー（表示モード）";
-    Text[ chinese_traditional ] = "工具列(檢視模式)";
+    Text[ chinese_traditional ] = "功能列(檢視模式)";
     Text[ arabic ] = "���� ������";
     Text[ dutch ] = "Werkbalk";
     Text[ chinese_simplified ] = "功能栏(视图模式)";
@@ -771,6 +772,7 @@ String RID_GRAPHIC_VIEWER_TOOLBOX
     Text[ czech ] = "Panel funkcí";
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फंक्शन् पट्टी";
+    Text[ slovak ] = "Panel funkcií (mód náhľadu)";
 };
 
 ToolBox RID_GRAPHIC_VIEWER_TOOLBOX
@@ -852,6 +854,8 @@ ToolBox RID_GRAPHIC_VIEWER_TOOLBOX
     };
     Scroll = TRUE ;
 };
+
+
 
 
 
