@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:34:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,9 @@ public:
     SvStorage *GetPackage() { return &xPackage; }
 
     void SetProgressValue( sal_Int32 nValue );
+
+    // initialize XForms
+    virtual void initXForms();
 };
 
 inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
