@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:05:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,16 @@ hidspecial HID_PROP_SPINVALUE_MAX               { HelpId = HID_PROP_SPINVALUE_MA
 hidspecial HID_PROP_DEFAULT_SPINVALUE           { HelpId = HID_PROP_DEFAULT_SPINVALUE; }
 hidspecial HID_PROP_SPININCREMENT               { HelpId = HID_PROP_SPININCREMENT; }
 hidspecial HID_PROP_REPEAT                      { HelpId = HID_PROP_REPEAT; }
+hidspecial UID_PROP_DLG_FONT_TYPE               { HelpId = UID_PROP_DLG_FONT_TYPE; }
+hidspecial UID_PROP_DLG_ATTR_TARGET_URL         { HelpId = UID_PROP_DLG_ATTR_TARGET_URL; }
+hidspecial UID_PROP_DLG_IMAGE_URL               { HelpId = UID_PROP_DLG_IMAGE_URL; }
+hidspecial UID_PROP_DLG_BACKGROUNDCOLOR         { HelpId = UID_PROP_DLG_BACKGROUNDCOLOR; }
+hidspecial UID_PROP_DLG_CONTROLLABEL            { HelpId = UID_PROP_DLG_CONTROLLABEL; }
+hidspecial UID_PROP_DLG_NUMBER_FORMAT           { HelpId = UID_PROP_DLG_NUMBER_FORMAT; }
+hidspecial UID_PROP_DLG_ATTR_DATASOURCE         { HelpId = UID_PROP_DLG_ATTR_DATASOURCE; }
+hidspecial UID_PROP_DLG_FILLCOLOR               { HelpId = UID_PROP_DLG_FILLCOLOR; }
+hidspecial UID_PROP_DLG_SYMBOLCOLOR             { HelpId = UID_PROP_DLG_SYMBOLCOLOR; }
+hidspecial UID_EVT_MACRODLG                     { HelpId = UID_EVT_MACRODLG; }
 hidspecial HID_PROP_WORDBREAK                   { HelpId = HID_PROP_WORDBREAK; }
 hidspecial HID_PROP_SHOW_SCROLLBARS             { HelpId = HID_PROP_SHOW_SCROLLBARS; }
 hidspecial HID_PROP_TABORDER_CONTROLS           { HelpId = HID_PROP_TABORDER_CONTROLS; }
@@ -181,8 +191,6 @@ hidspecial HID_PROP_SHOW_POSITION               { HelpId = HID_PROP_SHOW_POSITIO
 hidspecial HID_PROP_SHOW_NAVIGATION             { HelpId = HID_PROP_SHOW_NAVIGATION; }
 hidspecial HID_PROP_SHOW_RECORDACTIONS          { HelpId = HID_PROP_SHOW_RECORDACTIONS; }
 hidspecial HID_PROP_SHOW_FILTERSORT             { HelpId = HID_PROP_SHOW_FILTERSORT; }
-hidspecial HID_PROP_AUTOLINEBREAK               { HelpId = HID_PROP_AUTOLINEBREAK; }
-hidspecial HID_PROP_TEXTTYPE                    { HelpId = HID_PROP_TEXTTYPE; }
 
 hidspecial UID_PROP_DLG_FONT_TYPE               { HelpId = UID_PROP_DLG_FONT_TYPE; }
 hidspecial UID_PROP_DLG_IMAGE_URL               { HelpId = UID_PROP_DLG_IMAGE_URL; }
@@ -209,3 +217,73 @@ hidspecial UID_PROP_DLG_FILTER                  { HelpId = UID_PROP_DLG_FILTER; 
 hidspecial UID_PROP_DLG_ORDER                   { HelpId = UID_PROP_DLG_ORDER; }
 hidspecial UID_PROP_DLG_SELECTION               { HelpId = UID_PROP_DLG_SELECTION; }
 hidspecial UID_PROP_DLG_SYMBOLCOLOR             { HelpId = UID_PROP_DLG_SYMBOLCOLOR; }
+hidspecial UID_BRWEVT_APPROVEACTIONPERFORMED    { HelpId = UID_BRWEVT_APPROVEACTIONPERFORMED; }
+hidspecial UID_BRWEVT_ACTIONPERFORMED           { HelpId = UID_BRWEVT_ACTIONPERFORMED; }
+hidspecial UID_BRWEVT_CHANGED                   { HelpId = UID_BRWEVT_CHANGED; }
+hidspecial UID_BRWEVT_TEXTCHANGED               { HelpId = UID_BRWEVT_TEXTCHANGED; }
+hidspecial UID_BRWEVT_ITEMSTATECHANGED          { HelpId = UID_BRWEVT_ITEMSTATECHANGED; }
+hidspecial UID_BRWEVT_FOCUSGAINED               { HelpId = UID_BRWEVT_FOCUSGAINED; }
+hidspecial UID_BRWEVT_FOCUSLOST                 { HelpId = UID_BRWEVT_FOCUSLOST; }
+hidspecial UID_BRWEVT_KEYTYPED                  { HelpId = UID_BRWEVT_KEYTYPED; }
+hidspecial UID_BRWEVT_KEYUP                     { HelpId = UID_BRWEVT_KEYUP; }
+hidspecial UID_BRWEVT_MOUSEENTERED              { HelpId = UID_BRWEVT_MOUSEENTERED; }
+hidspecial UID_BRWEVT_MOUSEDRAGGED              { HelpId = UID_BRWEVT_MOUSEDRAGGED; }
+hidspecial UID_BRWEVT_MOUSEMOVED                { HelpId = UID_BRWEVT_MOUSEMOVED; }
+hidspecial UID_BRWEVT_MOUSEPRESSED              { HelpId = UID_BRWEVT_MOUSEPRESSED; }
+hidspecial UID_BRWEVT_MOUSERELEASED             { HelpId = UID_BRWEVT_MOUSERELEASED; }
+hidspecial UID_BRWEVT_MOUSEEXITED               { HelpId = UID_BRWEVT_MOUSEEXITED; }
+hidspecial UID_BRWEVT_APPROVERESETTED           { HelpId = UID_BRWEVT_APPROVERESETTED; }
+hidspecial UID_BRWEVT_RESETTED                  { HelpId = UID_BRWEVT_RESETTED; }
+hidspecial UID_BRWEVT_SUBMITTED                 { HelpId = UID_BRWEVT_SUBMITTED; }
+hidspecial UID_BRWEVT_BEFOREUPDATE              { HelpId = UID_BRWEVT_BEFOREUPDATE; }
+hidspecial UID_BRWEVT_AFTERUPDATE               { HelpId = UID_BRWEVT_AFTERUPDATE; }
+hidspecial UID_BRWEVT_LOADED                    { HelpId = UID_BRWEVT_LOADED; }
+hidspecial UID_BRWEVT_RELOADING                 { HelpId = UID_BRWEVT_RELOADING; }
+hidspecial UID_BRWEVT_RELOADED                  { HelpId = UID_BRWEVT_RELOADED; }
+hidspecial UID_BRWEVT_UNLOADING                 { HelpId = UID_BRWEVT_UNLOADING; }
+hidspecial UID_BRWEVT_UNLOADED                  { HelpId = UID_BRWEVT_UNLOADED; }
+hidspecial UID_BRWEVT_CONFIRMDELETE             { HelpId = UID_BRWEVT_CONFIRMDELETE; }
+hidspecial UID_BRWEVT_APPROVEROWCHANGE          { HelpId = UID_BRWEVT_APPROVEROWCHANGE; }
+hidspecial UID_BRWEVT_ROWCHANGE                 { HelpId = UID_BRWEVT_ROWCHANGE; }
+hidspecial UID_BRWEVT_POSITIONING               { HelpId = UID_BRWEVT_POSITIONING; }
+hidspecial UID_BRWEVT_POSITIONED                { HelpId = UID_BRWEVT_POSITIONED; }
+hidspecial UID_BRWEVT_APPROVEPARAMETER          { HelpId = UID_BRWEVT_APPROVEPARAMETER; }
+hidspecial UID_BRWEVT_ERROROCCURED              { HelpId = UID_BRWEVT_ERROROCCURED; }
+hidspecial UID_BRWEVT_ADJUSTMENTVALUECHANGED    { HelpId = UID_BRWEVT_ADJUSTMENTVALUECHANGED; }
+hidspecial HID_PROP_AUTOLINEBREAK               { HelpId = HID_PROP_AUTOLINEBREAK; }
+hidspecial HID_PROP_TEXTTYPE                    { HelpId = HID_PROP_TEXTTYPE; }
+hidspecial HID_PROP_LINEEND_FORMAT              { HelpId = HID_PROP_LINEEND_FORMAT; }
+
+hidspecial HID_EVT_ACTIONPERFORMED              { HelpId = HID_EVT_ACTIONPERFORMED; }
+hidspecial HID_EVT_AFTERUPDATE                  { HelpId = HID_EVT_AFTERUPDATE; }
+hidspecial HID_EVT_BEFOREUPDATE                 { HelpId = HID_EVT_BEFOREUPDATE; }
+hidspecial HID_EVT_CONFIRMDELETE                { HelpId = HID_EVT_CONFIRMDELETE; }
+hidspecial HID_EVT_ERROROCCURED                 { HelpId = HID_EVT_ERROROCCURED; }
+hidspecial HID_EVT_FOCUSGAINED                  { HelpId = HID_EVT_FOCUSGAINED; }
+hidspecial HID_EVT_FOCUSLOST                    { HelpId = HID_EVT_FOCUSLOST; }
+hidspecial HID_EVT_ITEMSTATECHANGED             { HelpId = HID_EVT_ITEMSTATECHANGED; }
+hidspecial HID_EVT_KEYTYPED                     { HelpId = HID_EVT_KEYTYPED; }
+hidspecial HID_EVT_LOADED                       { HelpId = HID_EVT_LOADED; }
+hidspecial HID_EVT_MOUSEDRAGGED                 { HelpId = HID_EVT_MOUSEDRAGGED; }
+hidspecial HID_EVT_MOUSEENTERED                 { HelpId = HID_EVT_MOUSEENTERED; }
+hidspecial HID_EVT_MOUSEEXITED                  { HelpId = HID_EVT_MOUSEEXITED; }
+hidspecial HID_EVT_MOUSEMOVED                   { HelpId = HID_EVT_MOUSEMOVED; }
+hidspecial HID_EVT_MOUSEPRESSED                 { HelpId = HID_EVT_MOUSEPRESSED; }
+hidspecial HID_EVT_MOUSERELEASED                { HelpId = HID_EVT_MOUSERELEASED; }
+hidspecial HID_EVT_POSITIONED                   { HelpId = HID_EVT_POSITIONED; }
+hidspecial HID_EVT_RESETTED                     { HelpId = HID_EVT_RESETTED; }
+hidspecial HID_EVT_SUBMITTED                    { HelpId = HID_EVT_SUBMITTED; }
+hidspecial HID_EVT_TEXTCHANGED                  { HelpId = HID_EVT_TEXTCHANGED; }
+hidspecial HID_EVT_UNLOADED                     { HelpId = HID_EVT_UNLOADED; }
+hidspecial HID_EVT_CHANGED                      { HelpId = HID_EVT_CHANGED; }
+hidspecial HID_EVT_APPROVEACTIONPERFORMED       { HelpId = HID_EVT_APPROVEACTIONPERFORMED; }
+hidspecial HID_EVT_APPROVERESETTED              { HelpId = HID_EVT_APPROVERESETTED; }
+hidspecial HID_EVT_KEYUP                        { HelpId = HID_EVT_KEYUP; }
+hidspecial HID_EVT_APPROVEPARAMETER             { HelpId = HID_EVT_APPROVEPARAMETER; }
+hidspecial HID_EVT_POSITIONING                  { HelpId = HID_EVT_POSITIONING; }
+hidspecial HID_EVT_RELOADED                     { HelpId = HID_EVT_RELOADED; }
+hidspecial HID_EVT_APPROVEROWCHANGE             { HelpId = HID_EVT_APPROVEROWCHANGE; }
+hidspecial HID_EVT_ROWCHANGE                    { HelpId = HID_EVT_ROWCHANGE; }
+hidspecial HID_EVT_RELOADING                    { HelpId = HID_EVT_RELOADING; }
+hidspecial HID_EVT_UNLOADING                    { HelpId = HID_EVT_UNLOADING; }
+hidspecial HID_EVT_ADJUSTMENTVALUECHANGED       { HelpId = HID_EVT_ADJUSTMENTVALUECHANGED; }
