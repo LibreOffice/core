@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-30 11:21:47 $
+ *  last change: $Author: ab $ $Date: 2000-12-06 16:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,8 @@ void OFileAccess::transferImpl( const OUString& rSource, const OUString& rDest, 
     // SfxContentHelper::Transfer_Impl
     INetURLObject aSourceObj( rSource, INET_PROT_FILE );
     INetURLObject aDestObj( rDest, INET_PROT_FILE );
-    String aName = aDestObj.getName();
+    String aName = aDestObj.getName( INetURLObject::LAST_SEGMENT, true,
+        INetURLObject::DECODE_WITH_CHARSET );
     aDestObj.removeSegment();
     aDestObj.setFinalSlash();
 
