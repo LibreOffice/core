@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 18:42:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,11 @@ String ScColBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
+BOOL ScColBar::IsLayoutRTL()        // overloaded only for columns
+{
+    return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+}
+
 //==================================================================
 
 ScRowBar::ScRowBar( Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
@@ -434,5 +439,9 @@ USHORT ScRowBar::GetHiddenCount( USHORT nEntryNo )
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
+BOOL ScRowBar::IsMirrored()         // overloaded only for rows
+{
+    return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+}
 
 
