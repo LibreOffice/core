@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoNumberingRules.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:06 $
+ *  last change:$Date: 2003-05-27 13:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ public class SvxUnoNumberingRules extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         log.println( "creating a drawdoc" );
-        xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+        xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
