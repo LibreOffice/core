@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:12:45 $
+ *  last change: $Author: rt $ $Date: 2005-02-28 09:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ SdPage* MasterPagesSelector::ProvideMasterPage (
         if (pMasterPage->GetModel() != &mrDocument)
         {
             pMasterPageInDocument = AddMasterPage (&mrDocument, pMasterPage, nInsertionIndex);
-            mrDocument.AddUndo(new SdrUndoNewPage(*pClonedMasterPage));
+            mrDocument.AddUndo(new SdrUndoNewPage(*pMasterPageInDocument));
         }
         else
             pMasterPageInDocument = pMasterPage;
