@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-04-11 14:00:02 $
+ *  last change: $Author: cyrillem $ $Date: 2002-08-01 07:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1574,7 +1574,21 @@ bool configmgr::splitPath(const OUString& _sPath, OUString& _rsParentPath, OUStr
     try
     {
         bool bAbsolute = Path::isAbsolutePath(_sPath);
-        Path::Rep aPath = bAbsolute ? AbsolutePath::parse(_sPath).rep() : RelativePath::parse(_sPath).rep();
+        Path::Rep aPath ;
+
+        if (bAbsolute)
+        {
+            AbsolutePath parsedPath = AbsolutePath::parse(_sPath) ;
+
+            aPath = parsedPath.rep() ;
+        }
+        else
+        {
+            RelativePath parsedPath = RelativePath::parse(_sPath) ;
+
+            aPath = parsedPath.rep() ;
+        }
+        //Path::Rep aPath = bAbsolute ? AbsolutePath::parse(_sPath).rep() : RelativePath::parse(_sPath).rep();
 
         OSL_ENSURE(!aPath.isEmpty(), "Trying to split an empty or root path");
         Path::Iterator aFirst = aPath.begin(), aLast = aPath.end();
