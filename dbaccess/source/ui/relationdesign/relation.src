@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:46:31 $
+ *  last change: $Author: rt $ $Date: 2001-07-17 20:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,26 +606,27 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text = "Wenn Sie diese Tabelle löschen werden alle zugehörigen Relationen ebenfalls gelöscht. Fortfahren?" ;
     Text [ ENGLISH ] = "When you delete this table all corresponding relations will be deleted as well. Continue?" ;
     Text[ english_us ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ portuguese ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ portuguese ] = "Se eliminar esta tabela serão também eliminadas todas as relações correspondentes. Continuar?";
     Text[ russian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ greek ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ dutch ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ french ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ spanish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ dutch ] = "Als u deze tabel wist worden alle bijbehorende verbindingen eveneens gewist. Wilt u doorgaan?";
+    Text[ french ] = "Supprimer cette table entraîne la suppression des relations associées. Continuer ?";
+    Text[ spanish ] = "Si elimina esta tabla se eliminarán también todas las relaciones correspondientes. ¿Desea continuar?";
     Text[ finnish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ italian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ danish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ swedish ] = "Om du raderar den här tabellen raderas även alla tillhörande relationer. Vill du fortsätta?";
     Text[ polish ] = "Wraz z tabel¹ usuniête zostan¹ wszystkie przynale¿ne relacje. Kontynuowaæ?";
     Text[ portuguese_brazilian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ japanese ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ japanese ] = "‚±‚ÌÃ°ÌŞÙ‚ğíœ‚·‚é‚ÆA‚±‚ê‚É‘®‚·‚é‚·‚×‚Ä‚ÌØÚ°¼®İ‚àíœ‚³‚ê‚Ä‚µ‚Ü‚·B‘±s‚µ‚Ü‚·‚©B";
     Text[ korean ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ chinese_simplified ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ chinese_simplified ] = "Èç¹ûÉ¾³ıÕâ¸ö±í¸ñ£¬¾Í»áÒ»Í¬É¾³ıËùÓĞµÄ´ÓÊô¹ØÏµ¡£Òª¼ÌĞø£¿";
     Text[ chinese_traditional ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ turkish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ catalan ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
 };
+
 
 
 
