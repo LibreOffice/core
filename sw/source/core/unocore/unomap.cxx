@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:51:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,6 +1171,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_TEXT_RANGE), FN_TEXT_RANGE,         CPPU_E2T(CPPUTYPE_REFTXTRANGE),         PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_OPAQUE), RES_OPAQUE,             CPPU_E2T(CPPUTYPE_BOOLEAN),            PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_POSITION), FN_ANCHOR_POSITION,    CPPU_E2T(CPPUTYPE_AWTPOINT),    PropertyAttribute::READONLY, 0},
+                    // OD 2004-05-04 #i26791#
+                    { SW_PROP_NMID(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), RES_FOLLOW_TEXT_FLOW,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aShapeMap_Impl;
