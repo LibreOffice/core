@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-30 11:47:58 $
+ *  last change: $Author: tra $ $Date: 2001-12-11 16:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@ CAsyncFilePickerEventNotifier::~CAsyncFilePickerEventNotifier( )
         m_hFilePickerNotifierThread, MAX_WAIT_SHUTDOWN );
 
     OSL_ENSURE( dwResult == WAIT_OBJECT_0, "filepicker event notifier thread could not terminate" );
+
+    if ( WAIT_TIMEOUT == dwResult )
+        TerminateThread( m_hFilePickerNotifierThread, 0 );
 
     CloseHandle( m_hFilePickerNotifierThread );
 }
