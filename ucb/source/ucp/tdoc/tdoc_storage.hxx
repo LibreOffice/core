@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_storage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:43:54 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,16 @@ namespace tdoc_ucp {
         ~StorageElementFactory();
 
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+        createTemporaryStorage()
+            throw ( com::sun::star::uno::Exception,
+                    com::sun::star::uno::RuntimeException );
+
+        com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
         createStorage( const rtl::OUString & rUri, StorageAccessMode eMode )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWTException,
+                    com::sun::star::embed::StorageWrappedTargetException,
                     com::sun::star::uno::RuntimeException );
 
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
@@ -106,7 +111,7 @@ namespace tdoc_ucp {
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWTException,
+                    com::sun::star::embed::StorageWrappedTargetException,
                     com::sun::star::packages::WrongPasswordException,
                     com::sun::star::uno::RuntimeException );
 
@@ -116,7 +121,7 @@ namespace tdoc_ucp {
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWTException,
+                    com::sun::star::embed::StorageWrappedTargetException,
                     com::sun::star::packages::WrongPasswordException,
                     com::sun::star::uno::RuntimeException );
     private:
@@ -130,7 +135,7 @@ namespace tdoc_ucp {
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWTException,
+                    com::sun::star::embed::StorageWrappedTargetException,
                     com::sun::star::uno::RuntimeException );
 
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
@@ -141,7 +146,7 @@ namespace tdoc_ucp {
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWTException,
+                    com::sun::star::embed::StorageWrappedTargetException,
                     com::sun::star::uno::RuntimeException );
 
         com::sun::star::uno::Reference< com::sun::star::io::XStream >
@@ -153,7 +158,7 @@ namespace tdoc_ucp {
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWTException,
+                    com::sun::star::embed::StorageWrappedTargetException,
                     com::sun::star::packages::WrongPasswordException,
                     com::sun::star::uno::RuntimeException );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_provider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:42:54 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,9 @@ ContentProvider::queryStorage( const rtl::OUString & rUri,
         {
             OSL_ENSURE( false, "Caught IOException!" );
         }
-        catch ( embed::StorageWTException const & )
+        catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught embed::StorageWTException!" );
+            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
         }
     }
     return uno::Reference< embed::XStorage >();
@@ -353,9 +353,9 @@ ContentProvider::queryInputStream( const rtl::OUString & rUri,
         {
             OSL_ENSURE( false, "Caught IOException!" );
         }
-        catch ( embed::StorageWTException const & )
+        catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught embed::StorageWTException!" );
+            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
         }
 /*
         catch ( packages::WrongPasswordException const & )
@@ -392,9 +392,9 @@ ContentProvider::queryOutputStream( const rtl::OUString & rUri,
         {
             OSL_ENSURE( false, "Caught IOException!" );
         }
-        catch ( embed::StorageWTException const & )
+        catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught embed::StorageWTException!" );
+            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
         }
 /*
         catch ( packages::WrongPasswordException const & )
@@ -457,9 +457,9 @@ bool ContentProvider::queryNamesOfChildren(
             {
                 OSL_ENSURE( false, "Caught IOException!" );
             }
-            catch ( embed::StorageWTException const & )
+            catch ( embed::StorageWrappedTargetException const & )
             {
-                OSL_ENSURE( false, "Caught embed::StorageWTException!" );
+                OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
             }
         }
     }
