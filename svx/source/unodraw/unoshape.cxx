@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:28:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,8 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef SVX_LIGHT
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
-#endif
 #endif
 #include <comphelper/extract.hxx>
 
@@ -114,13 +112,11 @@
 #include <rtl/memory.h>
 #include <so3/outplace.hxx>
 
-#ifndef SVX_LIGHT
 #ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
 #endif
 #ifndef _SVDOPAGE_HXX
 #include "svdopage.hxx"
@@ -1693,7 +1689,6 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case OWN_ATTR_CLSID:
         {
-#ifndef SVX_LIGHT
             OUString aCLSID;
             if( rVal >>= aCLSID )
             {
@@ -1772,7 +1767,6 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                     }
                 }
             }
-#endif
             break;
         }
         case OWN_ATTR_EDGE_START_OBJ:
@@ -1995,24 +1989,13 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         case OWN_ATTR_OLE_VISAREA:
         {
-#ifndef SVX_LIGHT
             awt::Rectangle aVisArea;
             if( (rVal >>= aVisArea) && pObj->ISA(SdrOle2Obj))
             {
-                SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
-                if( xInplace.Is() )
-                {
-                    Rectangle aTmpArea( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
-                    xInplace->SetVisArea( aTmpArea );
-
-                    if( !pModel->GetPersist()->IsEnableSetModified() )
-                        xInplace->SetModified(FALSE);
-
-                }
+                Rectangle aTmpArea( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
+                ((SdrOle2Obj*)pObj)->SetVisibleArea( aTmpArea );
                 return;
             }
-#endif
             break;
         }
         case XATTR_FILLBITMAP:
