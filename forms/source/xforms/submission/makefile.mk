@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-16 11:36:11 $
+#   last change: $Author: vg $ $Date: 2005-03-23 11:39:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ SLOFILES =	\
         $(SLO)$/serialization_urlencoded.obj \
         $(SLO)$/submission_post.obj \
         $(SLO)$/submission_put.obj \
-        $(SLO)$/submission_get.obj
+        $(SLO)$/submission_get.obj \
+        $(SLO)$/replace.obj
 
 # --- Tagets -------------------------------------------------------
 
