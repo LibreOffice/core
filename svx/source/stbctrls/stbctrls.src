@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 13:42:30 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ String RID_SVXSTR_INSERT_TEXT
     Text [ italian ] = "INS" ;
     Text [ portuguese_brazilian ] = "INSERIR" ;
     Text [ portuguese ] = "INSER" ;
-    Text [ finnish ] = "INSRT" ;
+    Text [ finnish ] = "LIS" ;
     Text [ danish ] = "IND" ;
     Text [ french ] = "INS" ;
     Text [ swedish ] = "INFGA" ;
@@ -82,7 +82,7 @@ String RID_SVXSTR_INSERT_TEXT
     Text [ spanish ] = "INSERT" ;
     Text [ english_us ] = "INSRT" ;
     Text[ chinese_simplified ] = "ÊèíÂÖ•";
-    Text[ russian ] = "¬—“¿¬ ";
+    Text[ russian ] = "¬—“";
     Text[ polish ] = "WSTAW";
     Text[ japanese ] = "ÊåøÂÖ•";
     Text[ chinese_traditional ] = "ÊèíÂÖ•";
@@ -105,7 +105,7 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text [ italian ] = "SSC" ;
     Text [ portuguese_brazilian ] = "SOBRE" ;
     Text [ portuguese ] = "SUB" ;
-    Text [ finnish ] = "OVER" ;
+    Text [ finnish ] = "KORV" ;
     Text [ danish ] = "OVR" ;
     Text [ french ] = "RFP" ;
     Text [ swedish ] = "÷VER" ;
@@ -113,7 +113,7 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text [ spanish ] = "SOBRE" ;
     Text [ english_us ] = "OVER" ;
     Text[ chinese_simplified ] = "ÊîπÂÜô";
-    Text[ russian ] = "«¿Ã≈Õ¿";
+    Text[ russian ] = "«¿Ã";
     Text[ polish ] = "KASUJ";
     Text[ japanese ] = "‰∏äÊõ∏„Åç";
     Text[ chinese_traditional ] = "Ë¶ÜÂØ´";
@@ -142,7 +142,7 @@ String RID_SVXSTR_SELMODE_STD
     Text [ french ] = "STD" ;
     Text [ dutch ] = "STD" ;
     Text[ chinese_simplified ] = "Ê†áÂáÜ";
-    Text[ russian ] = "—“¿Õ";
+    Text[ russian ] = "—“¿Õƒ";
     Text[ polish ] = "STD";
     Text[ japanese ] = "Ê®ôÊ∫ñ";
     Text[ chinese_traditional ] = "Ê®ôÊ∫ñ";
@@ -154,7 +154,7 @@ String RID_SVXSTR_SELMODE_STD
     Text[ turkish ] = "STD";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "STD";
-    Text[ finnish ] = "STD";
+    Text[ finnish ] = "NOR";
     Text[ thai ] = "‡∏°‡∏≤‡∏ï‡∏£‡∏ê‡∏≤‡∏ô";
 };
 String RID_SVXSTR_SELMODE_ER
@@ -166,7 +166,7 @@ String RID_SVXSTR_SELMODE_ER
     TEXT [ italian ] = "EST" ;
     TEXT [ portuguese_brazilian ] = "EXT" ;
     TEXT [ portuguese ] = "EXT" ;
-    TEXT [ finnish ] = "EXT" ;
+    TEXT [ finnish ] = "LAA" ;
     TEXT [ danish ] = "UDV" ;
     TEXT [ french ] = "EXT" ;
     TEXT [ swedish ] = "UTV" ;
@@ -197,7 +197,7 @@ String RID_SVXSTR_SELMODE_ERG
     TEXT [ italian ] = "AGG" ;
     TEXT [ portuguese_brazilian ] = "ACR" ;
     TEXT [ portuguese ] = "ADI" ;
-    TEXT [ finnish ] = "ADD" ;
+    TEXT [ finnish ] = "LIS" ;
     TEXT [ danish ] = "TLF" ;
     TEXT [ french ] = "AJT" ;
     TEXT [ swedish ] = "TLF" ;
@@ -539,7 +539,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ turkish ] = "Toplam";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Suma";
-            Text[ finnish ] = "Sum";
+            Text[ finnish ] = "Summa";
             Text[ thai ] = "‡∏ú‡∏•‡∏£‡∏ß‡∏°";
         };
         MenuItem
@@ -558,7 +558,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ portuguese ] = "Nenhuma" ;
             Text [ portuguese_brazilian ] = "Keine" ;
             Text[ chinese_simplified ] = "Êó†";
-            Text[ russian ] = "¡ÂÁ";
+            Text[ russian ] = "ÕÂÚ";
             Text[ polish ] = "Brak";
             Text[ japanese ] = "„Å™„Åó";
             Text[ chinese_traditional ] = "ÁÑ°";
