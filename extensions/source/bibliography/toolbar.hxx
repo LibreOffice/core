@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:13:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,6 @@ class BibToolBar:   public ToolBox
         void                    InitListener();
         virtual void            Select();
         virtual void            Click();
-        void                    SendDispatch(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs);
         long                    PreNotify( NotifyEvent& rNEvt );
         sal_Int16               GetCurrentSymbolSet();
 
@@ -244,6 +243,7 @@ class BibToolBar:   public ToolBox
                                             throw( ::com::sun::star::uno::RuntimeException );
 
         void    SetDatMan(BibDataManager& rDatMan) {pDatMan = &rDatMan;}
+        void    SendDispatch(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs);
 };
 
 
