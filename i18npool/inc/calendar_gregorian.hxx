@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-19 20:36:31 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ protected:
     Era *eraArray;
     icu::Calendar *body;
     NativeNumberSupplier aNatNum;
-    sal_Char* cCalendar;
+    const sal_Char* cCalendar;
     sal_uInt32 fieldSet;
     sal_Int16 fieldValue[CalendarFieldIndex::FIELD_COUNT];
     sal_Int16 fieldSetValue[CalendarFieldIndex::FIELD_COUNT];
