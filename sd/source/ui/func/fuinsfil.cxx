@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:45:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,12 +361,16 @@ FuInsertFile::FuInsertFile (
     else if( pFilter )
     {
         BOOL bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
-
         if( !bFound &&
             ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
               aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
               aFilterName.SearchAscii( "RTF" )  != STRING_NOTFOUND ||
               aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
+        {
+            bFound = TRUE;
+        }
+
+        if( bFound )
         {
             if( bDrawMode )
                 InsTextOrRTFinDrMode(pMedium);
@@ -375,6 +379,7 @@ FuInsertFile::FuInsertFile (
 
             bInserted = TRUE;
         }
+
     }
 
     delete pMedium;
