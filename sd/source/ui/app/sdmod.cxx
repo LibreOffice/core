@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:36:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
 #include <svx/svxids.hrc>
-#include <offmgr/ofaids.hrc>
 #include <svx/srchitem.hxx>
+#include <svx/svxerr.hxx>
 
 #pragma hdrstop
 
@@ -153,7 +153,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 \************************************************************************/
 
 SdModule::SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObjFact)
-:   SfxModule( SFX_APP()->CreateResManager("sd"), FALSE,
+:   SfxModule( SfxApplication::CreateResManager("sd"), FALSE,
                   pDrawObjFact, pGraphicObjFact, NULL ),
     bWaterCan(FALSE),
     pTransferClip(NULL),
@@ -168,7 +168,7 @@ SdModule::SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObj
     pSearchItem = new SvxSearchItem(ITEMID_SEARCH);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
-
+    SvxErrorHandler::Get();
     mpErrorHdl = new SfxErrorHandler( RID_SD_ERRHDL,
                                          ERRCODE_AREA_SD,
                                          ERRCODE_AREA_SD_END,
