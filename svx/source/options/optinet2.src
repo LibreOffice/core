@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:45:34 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ polish ] = "jest wpisem niedozwolonym w danym polu. NaleΏy podaζ wartoζ miκdzy 0 a 255.";
         Text[ japanese ] = "‚±‚ΜΜ¨°ΩΔή‚Ε‚Ν–³ψ‚Ε‚·B0 ` 255 ”ΝΝ‚Μ”’l‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = " ¬O³o­ΣΔζ¦μªΊµL®Δ±ψ¥Ψ΅M½ΠΏι¤J¤@­Σ¦b0©M255¤§¶΅ªΊΌΖ­Θ΅C";
-        Text[ arabic ] = "εζ ΕΟΞΗα ΫνΡ ΥΗαΝ αεΠΗ ΗαΝήα. ΗαΡΜΗΑ ΕΟΞΗα ήνγΙ ΚΚΡΗζΝ Θνδ 0 ζ 255.";
+        Text[ arabic ] = "εζ ΕΟΞΗα ΫνΡ ΥΗαΝ αεΠΗ ΗαΝήα. ΗαΡΜΗΑ ΕΟΞΗα ήνγΙ ΚΚΡΗζΝ γΗ Θνδ 0 ζ 255.";
         Text[ greek ] = "δεν είναι έγκυρη καταχώριση για αυτό το πεδίο. Παρακαλώ εισάγετε μια τιμή μεταξύ του 0 και 255.";
         Text[ korean ] = "ΐΜ ΗΚµεΏ΅ ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΗΧΈρΐΤ΄Ο΄Ω. 0°ϊ 255 »ηΐΜΐΗ °ªΐ» ΑφΑ¤ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "bu alan iηin geηerli bir deπer deπil. 0 ile 255 arasύnda bir deπer girin.";
@@ -712,7 +712,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ polish ] = "jest wpisem niedozwolonym w danym polu. NaleΏy wpisaζ wartoζ miκdzy 1 a 255 .";
         Text[ japanese ] = "‚±‚ΜΜ¨°ΩΔή‚Ε‚Ν–³ψ‚Ε‚·B1 ` 255 ”ΝΝ‚Μ”’l‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = " ¬O³o­ΣΔζ¦μªΊµL®Δ±ψ¥Ψ΅M½ΠΏι¤J¤@­Σ¦b1©M255¤§¶΅ªΊΌΖ­Θ΅C";
-        Text[ arabic ] = "εζ ΕΟΞΗα ΫνΡ ΥΗαΝ αεΠΗ ΗαΝήα. ΗαΡΜΗΑ ΕΟΞΗα ήνγΙ ΚΚΡΗζΝ Θνδ 1 ζ 255.";
+        Text[ arabic ] = "εζ ΕΟΞΗα ΫνΡ ΥΗαΝ αεΠΗ ΗαΝήα. ΗαΡΜΗΑ ΕΟΞΗα ήνγΙ ΚΚΡΗζΝ γΗ Θνδ 1 ζ 255.";
         Text[ greek ] = "δεν είναι έγκυρη καταχώριση για αυτό το πεδίο. Παρακαλώ εισάγετε μια τιμή μεταξύ του 1 και 255.";
         Text[ korean ] = "ΐΜ ΗΚµεΏ΅ ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΗΧΈρΐΤ΄Ο΄Ω. 1°ϊ 255 »ηΐΜΐΗ °ªΐ» ΑφΑ¤ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "bu alan iηin geηerli bir deπer deπil. 1 ile 255 arasύnda bir deπer girin";
@@ -1209,7 +1209,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ swedish ] = "Nytt";
         Text[ polish ] = "Nowy";
         Text[ portuguese_brazilian ] = "New";
-        Text[ japanese ] = "V‹Ki~Ej";
+        Text[ japanese ] = "V‹K(~E)";
         Text[ korean ] = "»υ·Ξ(~E)";
         Text[ chinese_simplified ] = "ΠΒ½¨(~E)";
         Text[ chinese_traditional ] = "·s«Ψ(~E)";
@@ -1343,7 +1343,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "Wykonaj skrypty %PRODUCTNAME Basic z";
         Text[ japanese ] = "%PRODUCTNAME Basic ½ΈΨΜίΔ‚Μΐsσ•β";
         Text[ chinese_traditional ] = "°υ¦ζ %PRODUCTNAME Basic ©R¥O½ZªΊ¦μΈm";
-        Text[ arabic ] = "ΚδένΠ %PRODUCTNAME Basic Scripts γδ";
+        Text[ arabic ] = "ΚδένΠ δΥζΥ ΘΡγΜνΙ %PRODUCTNAME Basic γδ";
         Text[ greek ] = "Εκτέλεση των δεσμών ενέργειας του %PRODUCTNAME Basic από";
         Text[ korean ] = "StarBasic-½ΊΕ©Έ³Ζ® ½ΗΗΰ";
         Text[ turkish ] = "%PRODUCTNAME Basic script'leri ώuradan yόrόt:";
@@ -1462,7 +1462,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "Skrypt %PRODUCTNAME Basic";
         Text[ japanese ] = "%PRODUCTNAME Basic ½ΈΨΜίΔ";
         Text[ chinese_traditional ] = "%PRODUCTNAME Basic ©R¥O½Z";
-        Text[ arabic ] = "%PRODUCTNAME Basic Script";
+        Text[ arabic ] = "%PRODUCTNAME Basic δΥ ΘΡγΜν";
         Text[ greek ] = "%PRODUCTNAME Basic Script";
         Text[ korean ] = "StarBasic-½ΊΕ©Έ³Ζ®";
         Text[ turkish ] = "%PRODUCTNAME Basic Script";
