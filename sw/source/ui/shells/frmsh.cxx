@@ -1,10 +1,10 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 09:03:06 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-08-30 08:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,52 +542,76 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             aMgr.SetAttrSet( *pOutSet );
 
                         const SwFrmFmt* pCurrFlyFmt = rSh.GetFlyFrmFmt();
-                        if(SFX_ITEM_SET == pOutSet->GetItemState(FN_PARAM_CHAIN_PREVIOUS, FALSE, &pItem))
+                        if(SFX_ITEM_SET ==
+                           pOutSet->GetItemState(FN_PARAM_CHAIN_PREVIOUS,
+                                                 FALSE, &pItem))
                         {
-                            String sPrevName = ((const SfxStringItem*)pItem)->GetValue();
+                            rSh.HideChainMarker();
+
+                            String sPrevName =
+                                ((const SfxStringItem*)pItem)->GetValue();
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
                             //needs cast - no non-const method available
-                            SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)rChain.GetPrev();
-                            if(pFlyFmt && pFlyFmt->GetName() != sPrevName)
+                            SwFlyFrmFmt* pFlyFmt =
+                                (SwFlyFrmFmt*)rChain.GetPrev();
+                            if(pFlyFmt)
                             {
-                                rSh.Unchain(*pFlyFmt);
-                                sPrevName.Erase();
+                                if (pFlyFmt->GetName() != sPrevName)
+                                {
+                                    rSh.Unchain(*pFlyFmt);
+                                }
+                                else
+                                    sPrevName.Erase();
                             }
+
                             if(sPrevName.Len())
                             {
                                 //needs cast - no non-const method available
-                                SwFrmFmt* pPrevFmt = (SwFrmFmt*)lcl_GetFrmFmtByName(rSh, sPrevName);
+                                SwFrmFmt* pPrevFmt = (SwFrmFmt*)
+                                    lcl_GetFrmFmtByName(rSh, sPrevName);
                                 DBG_ASSERT(pPrevFmt, "No frame found!")
                                 if(pPrevFmt)
                                 {
                                     rSh.Chain(*pPrevFmt, *pCurrFlyFmt);
                                 }
                             }
+                            rSh.SetChainMarker();
                         }
-                        if(SFX_ITEM_SET == pOutSet->GetItemState(FN_PARAM_CHAIN_NEXT, FALSE, &pItem))
+                        if(SFX_ITEM_SET ==
+                           pOutSet->GetItemState(FN_PARAM_CHAIN_NEXT, FALSE,
+                                                 &pItem))
                         {
-                            String sNextName = ((const SfxStringItem*)pItem)->GetValue();
+                            rSh.HideChainMarker();
+                            String sNextName =
+                                ((const SfxStringItem*)pItem)->GetValue();
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
                             //needs cast - no non-const method available
-                            SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)rChain.GetNext();
-                            if(pFlyFmt && pFlyFmt->GetName() != sNextName)
+                            SwFlyFrmFmt* pFlyFmt =
+                                (SwFlyFrmFmt*)rChain.GetNext();
+                            if(pFlyFmt)
                             {
-                                rSh.Unchain(*pFlyFmt);
-                                sNextName.Erase();
+                                if (pFlyFmt->GetName() != sNextName)
+                                {
+                                    rSh.Unchain(*((SwFlyFrmFmt*) pCurrFlyFmt));
+                                }
+                                else
+                                    sNextName.Erase();
                             }
+
                             if(sNextName.Len())
                             {
                                 //needs cast - no non-const method available
-                                SwFrmFmt* pNextFmt = (SwFrmFmt*)lcl_GetFrmFmtByName(rSh, sNextName);
+                                SwFrmFmt* pNextFmt = (SwFrmFmt*)
+                                    lcl_GetFrmFmtByName(rSh, sNextName);
                                 DBG_ASSERT(pNextFmt, "No frame found!")
                                 if(pNextFmt)
                                 {
-                                    rSh.Chain(*(SwFrmFmt*)pCurrFlyFmt, *pNextFmt);
+                                    rSh.Chain(*(SwFrmFmt*)
+                                              pCurrFlyFmt, *pNextFmt);
                                 }
                             }
+                            rSh.SetChainMarker();
                         }
-
-
                     }
                 }
                 else
