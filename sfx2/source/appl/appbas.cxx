@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:31:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,35 +524,6 @@ SbxVariable* SfxConstants_Impl::Find
 //=========================================================================
 sal_uInt16 SfxApplication::SaveBasicManager() const
 {
-    /* AB, 19.4.2001: No sbl files stored any more -> new library containers
-    // MT: #47347# AppBasicDir ist jetzt ein PATH!
-    // Ncht den vom BasicManager, falls inzwischen der Pfad geaendert wurde !?
-    // So wird natuerlich auch das erste Dir genommen, wenn der BasicManager
-    // vorher im zweiten gefunden wurde...
-    String aBasicPath( SvtPathOptions().GetBasicPath() );
-    INetURLObject aAppBasicObj( aBasicPath.GetToken(1) );
-    aAppBasicObj.insertName( Application::GetAppName() );
-    aAppBasicObj.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
-    String aAppBasicPath( aAppBasicObj.GetMainURL( INetURLObject::NO_DECODE ) );
-    SvStorageRef aStor = new SvStorage( aAppBasicPath );
-    if ( aStor->GetError() == 0 )
-    {
-        String aBaseURL = INetURLObject::GetBaseURL();
-        INetURLObject::SetBaseURL( aAppBasicObj.GetMainURL( INetURLObject::NO_DECODE ) );
-        pImp->pBasicMgr->Store( *aStor );
-        INetURLObject::SetBaseURL( aBaseURL );
-    }
-    if ( aStor->GetError() != 0 )
-    {
-        ErrorBox aBox(GetTopWindow(), SfxResId(MSG_ERR_WRITE_SBL));
-        String aMsg( SearchAndReplace( aBox.GetMessText(), 0x0040, aAppBasicPath ) ); // 40h = '@'
-        aBox.SetMessText( aMsg );
-        aBox.Execute();
-    }
-
-    return (sal_uInt16)aStor->GetError();
-    */
-
     return 0;
 }
 
