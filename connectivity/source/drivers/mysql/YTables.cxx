@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTables.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-28 10:27:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,11 +220,7 @@ void OTables::appendObject( const Reference< XPropertySet >& descriptor )
 // XDrop
 void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-
-    ObjectIter aIter = m_aElements[_nPos];
-    if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-        aIter->second = createObject(_sElementName);
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
     sal_Bool bIsNew = sal_False;
     if(xTunnel.is())
     {
