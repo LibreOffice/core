@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:30:42 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 09:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,7 +1273,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
             const StyleSettings& rS = GetVsh()->GetWin()->
                                       GetSettings().GetStyleSettings();
 
-            Color aCol( rS.GetWindowTextColor().GetColor() );
+            Color aCol( SwViewOption::GetFontColor().GetColor() );
             Color aOldColor( pOut->GetLineColor() );
 
             if ( 0 != ( bChgColor = aOldColor != aCol ) )
