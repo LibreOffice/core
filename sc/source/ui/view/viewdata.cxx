@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:31:17 $
+ *  last change: $Author: nn $ $Date: 2001-05-30 18:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,7 +1095,7 @@ void ScViewData::ResetEditView()
             {
                 pEngine = pEditView[i]->GetEditEngine();
                 pEngine->RemoveView(pEditView[i]);
-//              pEditView[i]->SetSelection(0,0,0,0);
+                pEditView[i]->SetOutputArea( Rectangle() );
             }
             bEditActive[i] = FALSE;
         }
