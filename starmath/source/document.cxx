@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-21 11:59:48 $
+ *  last change: $Author: tl $ $Date: 2001-12-14 09:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,77 +726,29 @@ BOOL SmDocShell::SetData( const String& rData )
     return TRUE;
 }
 
-void SmDocShell::Convert40To50Txt( String &rText )
-    // adapts the text 'aText' to be parsed from 4.0 version, to changes made
-    // in 5.0 version. (Namely that functions do not need arguments any more)
-    // Example: "2 over sin x" acts very different in 4.0 and 5.0
+void SmDocShell::ConvertText( String &rText, SmConvert eConv )
+    // adapts the text 'rText' that suits one office version to be
+    // usable in another office version.
+    // Example: "2 over sin x" acts very different in 4.0 and 5.0,
+    // and from 5.2 to 6.0 many symbol names were renamed.
 {
     if (pTree)
         delete pTree;
 
-    // parse in old 4.0 style and make changes for 5.0 style
-    BOOL  bVal = aInterpreter.IsConvert40To50();
-    aInterpreter.SetConvert40To50(TRUE);
-    pTree = aInterpreter.Parse(rText);
-    aInterpreter.SetConvert40To50(bVal);
+    SmConvert  eTmpConv = aInterpreter.GetConversion();
 
-    // get new to 5.0 version converted text
+    // parse in old style and make changes for new style
+    aInterpreter.SetConversion(eConv);
+    pTree = aInterpreter.Parse(rText);
+    // get to new version converted text
     rText = aInterpreter.GetText();
+
+    aInterpreter.SetConversion(eTmpConv);
 
     // clean up tree parsed in old style
     if (pTree)
     {   delete pTree;
         pTree = NULL;
-    }
-}
-
-
-void SmDocShell::Convert50To60Txt( String &rText )
-{
-    // change 50 symbol-names to their 60 equivalent
-    LanguageType nLang = Application::GetSettings().GetUILanguage();
-    SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
-    const ResStringArray *p50Names = rData.Get50NamesArray( nLang );
-    const ResStringArray *p60Names = rData.Get60NamesArray( nLang );
-    if (p50Names  &&  p60Names)
-    {
-        DBG_ASSERT( p50Names->Count() == p60Names->Count(),
-                "array length mismatch" );
-        USHORT nCount = p50Names->Count();
-        String aPreSym( RTL_CONSTASCII_STRINGPARAM("%") );
-        for (USHORT i = 0;  i < nCount;  ++i)
-        {
-            String a50Tmp( aPreSym );
-            String a60Tmp( aPreSym );
-            a50Tmp += p50Names->GetString(i);
-            a60Tmp += p60Names->GetString(i);
-            rText.SearchAndReplaceAll( a50Tmp, a60Tmp );
-        }
-    }
-}
-
-
-void SmDocShell::Convert60To50Txt( String &rText )
-{
-    // change 60 symbol-names to their 50 equivalent
-    LanguageType nLang = Application::GetSettings().GetUILanguage();
-    SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
-    const ResStringArray *p50Names = rData.Get50NamesArray( nLang );
-    const ResStringArray *p60Names = rData.Get60NamesArray( nLang );
-    if (p50Names  &&  p60Names)
-    {
-        DBG_ASSERT( p50Names->Count() == p60Names->Count(),
-                "array length mismatch" );
-        USHORT nCount = p60Names->Count();
-        String aPreSym( RTL_CONSTASCII_STRINGPARAM("%") );
-        for (USHORT i = 0;  i < nCount;  ++i)
-        {
-            String a50Tmp( aPreSym );
-            String a60Tmp( aPreSym );
-            a50Tmp += p50Names->GetString(i);
-            a60Tmp += p60Names->GetString(i);
-            rText.SearchAndReplaceAll( a60Tmp, a50Tmp );
-        }
     }
 }
 
@@ -916,9 +868,9 @@ BOOL SmDocShell::Load(SvStorage *pStor)
             {
                 long nVersion = pStor->GetVersion();
                 if ( nVersion <= SOFFICE_FILEFORMAT_40 )
-                    Convert40To50Txt( aText );
+                    ConvertText( aText, CONVERT_40_TO_50 );
                 if ( nVersion <= SOFFICE_FILEFORMAT_50 )
-                    Convert50To60Txt( aText );
+                    ConvertText( aText, CONVERT_50_TO_60 );
                 if (pTree)
                 {   delete pTree;
                     pTree = NULL;
@@ -971,9 +923,9 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
         if( bChkOldVersion )
         {
             if( SOFFICE_FILEFORMAT_40 >= pStor->GetVersion() )
-                Convert40To50Txt( aText );
+                ConvertText( aText, CONVERT_40_TO_50 );
             if( SOFFICE_FILEFORMAT_50 >= pStor->GetVersion() )
-                Convert50To60Txt( aText );
+                ConvertText( aText, CONVERT_50_TO_60 );
         }
 
         Parse();
@@ -995,7 +947,7 @@ void SmDocShell::ImplSave( SvStorageStreamRef xStrm )
 {
     String aTmp( aText );
     if (SOFFICE_FILEFORMAT_50 >= xStrm->GetVersion())
-        Convert60To50Txt( aTmp );
+        ConvertText( aTmp, CONVERT_60_TO_50 );
     ByteString exString( ExportString( aTmp ) );
 
     *xStrm  << SM304AIDENT << SM50VERSION

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-20 10:08:19 $
+ *  last change: $Author: tl $ $Date: 2001-12-14 09:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,7 +1036,7 @@ void SmParser::Align()
 
     if (TokenInGroup(TGALIGN))
     {
-        if (IsConvert40To50())
+        if (CONVERT_40_TO_50 == GetConversion())
             // encapsulate expression to be aligned in group braces
             // (here group-open brace)
         {   Insert('{', GetTokenIndex());
@@ -1063,7 +1063,7 @@ void SmParser::Align()
             NextToken();
 
             // allow for just one align statement in 5.0
-            if (!IsConvert40To50() && TokenInGroup(TGALIGN))
+            if (CONVERT_40_TO_50 != GetConversion() && TokenInGroup(TGALIGN))
             {   Error(PE_DOUBLE_ALIGN);
                 return;
             }
@@ -1099,7 +1099,7 @@ void SmParser::Line()
     }
 
     while (CurToken.eType != TEND  &&  CurToken.eType != TNEWLINE)
-    {   if (!IsConvert40To50())
+    {   if (CONVERT_40_TO_50 != GetConversion())
             Expression();
         else
             Align();
@@ -1507,7 +1507,7 @@ void SmParser::Term()
                 NodeStack.Push(pFirstNode);
             }
             else if (TokenInGroup(TGFUNCTION))
-            {   if (!IsConvert40To50())
+            {   if (CONVERT_40_TO_50 != GetConversion())
                 {   Function();
                 }
                 else    // encapsulate old 4.0 style parsing in braces
@@ -2270,24 +2270,62 @@ void SmParser::Matrix()
 
 void SmParser::Special()
 {
-    //
-    // conversion of symbol names for 6.0 (XML) fileformat
-    //
     BOOL bReplace = FALSE;
     String &rName = CurToken.aText;
     String aNewName;
-    if (IsImportSymbolNames())
+
+    if (CONVERT_NONE == GetConversion())
     {
-        const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
-        aNewName = rLSD.GetUiSymbolName( rName );
-        bReplace = TRUE;
+        // conversion of symbol names for 6.0 (XML) file format
+        // (name change on import / export.
+        // UI uses localized names XML file format does not.)
+        if (IsImportSymbolNames())
+        {
+            const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
+            aNewName = rLSD.GetUiSymbolName( rName );
+            bReplace = TRUE;
+        }
+        else if (IsExportSymbolNames())
+        {
+            const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
+            aNewName = rLSD.GetExportSymbolName( rName );
+            bReplace = TRUE;
+        }
     }
-    else if (IsExportSymbolNames())
+    else    // 5.0 <-> 6.0 formula text (symbol name) conversion
     {
-        const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
-        aNewName = rLSD.GetExportSymbolName( rName );
-        bReplace = TRUE;
+        LanguageType nLang = GetLanguage();
+        SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+        const ResStringArray *pFrom = 0;
+        const ResStringArray *pTo   = 0;
+        if (CONVERT_50_TO_60 == GetConversion())
+        {
+            pFrom = rData.Get50NamesArray( nLang );
+            pTo   = rData.Get60NamesArray( nLang );
+        }
+        else if (CONVERT_60_TO_50 == GetConversion())
+        {
+            pFrom = rData.Get60NamesArray( nLang );
+            pTo   = rData.Get50NamesArray( nLang );
+        }
+        if (pFrom  &&  pTo)
+        {
+            DBG_ASSERT( pFrom->Count() == pTo->Count(),
+                    "array length mismatch" );
+            USHORT nCount = pFrom->Count();
+            for (USHORT i = 0;  i < nCount;  ++i)
+            {
+                if (pFrom->GetString(i) == rName)
+                {
+                    aNewName = pTo->GetString(i);
+                    bReplace = TRUE;
+                }
+            }
+        }
+        else
+            DBG_ERROR( "unexpected conversion or data missing" );
     }
+
     if (bReplace  &&  aNewName.Len()  &&  rName != aNewName)
     {
         Replace( GetTokenIndex() + 1, rName.Len(), aNewName );
@@ -2328,7 +2366,9 @@ void SmParser::Error(SmParseError eError)
 
 SmParser::SmParser()
 {
-    bConvert40To50 = bImportSymNames = bExportSymNames = FALSE;
+    eConversion = CONVERT_NONE;
+    bImportSymNames = bExportSymNames = FALSE;
+    nLang = Application::GetSettings().GetUILanguage();
 }
 
 
@@ -2348,6 +2388,7 @@ BOOL SmParser::CheckSyntax(const String &rBuffer)
     OldErrorList = ErrDescList;
     ErrDescList.Clear();
 
+    SetLanguage( Application::GetSettings().GetUILanguage() );
     NextToken();
     Table();
 
@@ -2385,6 +2426,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
 
     NodeStack.Clear();
 
+    SetLanguage( Application::GetSettings().GetUILanguage() );
     NextToken();
     Table();
 

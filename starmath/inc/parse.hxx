@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-28 07:46:06 $
+ *  last change: $Author: tl $ $Date: 2001-12-14 09:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,17 @@ DECLARE_LIST(SmErrDescList, SmErrorDesc *);
 
 /**************************************************************************/
 
+// defines possible conversions of the formula text from the format of
+// one release to the one of another.
+enum SmConvert
+{
+    CONVERT_NONE,
+    CONVERT_40_TO_50,
+    CONVERT_50_TO_60,
+    CONVERT_60_TO_50
+};
+
+
 class SmParser
 {
     String          BufferString;
@@ -206,12 +217,13 @@ class SmParser
     SmNodeStack     NodeStack;
     SmErrDescList   ErrDescList;
     int             CurError;
+    LanguageType    nLang;
     xub_StrLen      BufferIndex,
                     nTokenIndex;
     USHORT          Row,
                     ColOff;
-    BOOL            bConvert40To50,
-                    bImportSymNames,
+    SmConvert       eConversion;
+    BOOL            bImportSymNames,
                     bExportSymNames;
 
     // declare copy-constructor and assignment-operator private
@@ -259,6 +271,9 @@ protected:
     void    GlyphSpecial();
     // end of grammar
 
+    LanguageType    GetLanguage() const { return nLang; }
+    void            SetLanguage( LanguageType nNewLang ) { nLang = nNewLang; }
+
     void    Error(SmParseError Error);
 
 public:
@@ -269,8 +284,8 @@ public:
 
     const String & GetText() const { return BufferString; };
 
-    BOOL         IsConvert40To50() const         { return bConvert40To50; }
-    void         SetConvert40To50(BOOL bConvert) { bConvert40To50 = bConvert; }
+    SmConvert    GetConversion() const              { return eConversion; }
+    void         SetConversion(SmConvert eConv)     { eConversion = eConv; }
 
     BOOL         IsImportSymbolNames() const        { return bImportSymNames; }
     void         SetImportSymbolNames(BOOL bVal)    { bImportSymNames = bVal; }
