@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 17:21:47 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 16:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,17 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr, 10, 10 )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing ), SwModify( 0 ),
-    bRemainInSection( TRUE )
+    bRemainInSection( TRUE ),
+    bSkipOverHiddenSections( TRUE ),
+    bSkipOverProtectSections( FALSE )
+
 {}
 
 SwUnoCrsr::SwUnoCrsr( SwUnoCrsr& rICrsr )
     : SwCursor( rICrsr ), SwModify( 0 ),
-    bRemainInSection( rICrsr.bRemainInSection )
+    bRemainInSection( rICrsr.bRemainInSection ),
+    bSkipOverHiddenSections( rICrsr.bSkipOverHiddenSections ),
+    bSkipOverProtectSections( rICrsr.bSkipOverProtectSections )
 {}
 
 SwUnoCrsr::~SwUnoCrsr()

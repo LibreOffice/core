@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 16:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,20 @@
 #ifndef _UNOCRSR_HXX
 #define _UNOCRSR_HXX
 
-#include "swcrsr.hxx"
-#include "calbck.hxx"
+#ifndef _SWCRSR_HXX
+#include <swcrsr.hxx>
+#endif
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
+#endif
 
 
 class SwUnoCrsr : public virtual SwCursor, public SwModify
 {
-    BOOL bRemainInSection;
+    BOOL bRemainInSection : 1;
+    BOOL bSkipOverHiddenSections : 1;
+    BOOL bSkipOverProtectSections : 1;
+
 public:
     SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing = 0 );
     SwUnoCrsr( SwUnoCrsr& );
@@ -85,6 +92,16 @@ public:
 
     BOOL IsRemainInSection() const          { return bRemainInSection; }
     void SetRemainInSection( BOOL bFlag )   { bRemainInSection = bFlag; }
+
+    BOOL IsSkipOverProtectSections() const
+                                    { return bSkipOverProtectSections; }
+    void SetSkipOverProtectSections( BOOL bFlag )
+                                    { bSkipOverProtectSections = bFlag; }
+
+    BOOL IskipOverHiddenSections() const
+                                    { return bSkipOverHiddenSections; }
+    void SetkipOverHiddenSections( BOOL bFlag )
+                                    { bSkipOverHiddenSections = bFlag; }
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 };

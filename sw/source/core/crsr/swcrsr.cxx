@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-09 11:42:03 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 16:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _SWCRSR_HXX
 #include <swcrsr.hxx>
+#endif
+#ifndef _UNOCRSR_HXX
+#include <unocrsr.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -267,6 +270,19 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
     SwDoc* pDoc = GetDoc();
     SwNodes& rNds = pDoc->GetNodes();
 
+    BOOL bSkipOverHiddenSections, bSkipOverProtectSections;
+    SwUnoCrsr* pUnoCrsr = *this;
+    if( pUnoCrsr )
+    {
+        bSkipOverHiddenSections = pUnoCrsr->IskipOverHiddenSections();
+        bSkipOverProtectSections = pUnoCrsr->IsSkipOverProtectSections();
+    }
+    else
+    {
+        bSkipOverHiddenSections = TRUE;
+        bSkipOverProtectSections = !IsReadOnlyAvailable();
+    }
+
     // Bereiche vom Nodes-Array ueberpruefen
     if( (SELOVER_CHECKNODESSECTION & eFlags) && pTblCrsr && HasMark() )
     {
@@ -288,9 +304,9 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
         // teste doch mal die neuen Sections:
         SwNodeIndex& rPtIdx = GetPoint()->nNode;
         const SwSectionNode* pSectNd = rPtIdx.GetNode().FindSectionNode();
-        BOOL bCrsrInReadOnly = IsReadOnlyAvailable();
-        if( pSectNd && (pSectNd->GetSection().IsHiddenFlag() ||
-            (!bCrsrInReadOnly && pSectNd->GetSection().IsProtectFlag() )))
+        if( pSectNd &&
+            ((bSkipOverHiddenSections && pSectNd->GetSection().IsHiddenFlag() ) ||
+             (bSkipOverProtectSections && pSectNd->GetSection().IsProtectFlag() )))
         {
             if( 0 == ( SELOVER_CHANGEPOS & eFlags ) )
             {
@@ -304,13 +320,13 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
             xub_StrLen nCntntPos = pSavePos->nCntnt;
             int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
             SwCntntNode* pCNd = bGoNxt
-                    ? rNds.GoNextSection( &rPtIdx, TRUE, !bCrsrInReadOnly )
-                    : rNds.GoPrevSection( &rPtIdx, TRUE, !bCrsrInReadOnly );
+                    ? rNds.GoNextSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections)
+                    : rNds.GoPrevSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections);
             if( !pCNd && ( SELOVER_ENABLEREVDIREKTION & eFlags ))
             {
                 bGoNxt = !bGoNxt;
-                pCNd = bGoNxt ? rNds.GoNextSection( &rPtIdx, TRUE, !bCrsrInReadOnly )
-                              : rNds.GoPrevSection( &rPtIdx, TRUE, !bCrsrInReadOnly );
+                pCNd = bGoNxt ? rNds.GoNextSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections)
+                              : rNds.GoPrevSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections);
             }
 
             int bIsValidPos = 0 != pCNd;
@@ -343,7 +359,7 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
         }
 
         // oder sollte eine geschuetzte Section innerhalb der Selektion liegen?
-        if( HasMark() && !bCrsrInReadOnly )
+        if( HasMark() && bSkipOverProtectSections)
         {
             ULONG nSttIdx = GetMark()->nNode.GetIndex(),
                   nEndIdx = GetPoint()->nNode.GetIndex();
