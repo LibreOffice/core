@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:39:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,150 +65,41 @@ ModalDialog DLG_FIELD_MODIFY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 138 , 154 ) ;
-    Text = "Feldbefehl bearbeiten" ;
-    Text [ ENGLISH ] = "Modify field" ;
+    Text [ de ] = "Feldbefehl bearbeiten" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedLine GRP_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "Feldtyp" ;
-        Text [ ENGLISH ] = "field type" ;
-        Text [ english_us ] = "Field type" ;
-        Text [ portuguese_brazilian ] = "Tipo de campo" ;
-        Text [ swedish ] = "Fälttyp" ;
-        Text [ danish ] = "Felttype" ;
-        Text [ italian ] = "Tipo di campo" ;
-        Text [ spanish ] = "Tipo de campo" ;
-        Text [ french ] = "Type de champ" ;
-        Text [ dutch ] = "Veldtype" ;
-        Text [ portuguese ] = "Tipo de campo" ;
-        Text[ chinese_simplified ] = "å­—æ®µç±»å‹";
-        Text[ russian ] = "Òèï ïîëÿ";
-        Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ç¨®é¡";
-        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹";
-        Text[ arabic ] = "äæÚ ÇáÍŞá";
-        Text[ greek ] = "Ôığïò ğåäßïõ";
-        Text[ korean ] = "í•„ë“œ ìœ í˜•";
-        Text[ turkish ] = "Alan türü";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipus de camp";
-        Text[ finnish ] = "Kenttätyyppi";
-        Text[ thai ] = "à¸Šà¸™à¸´à¸”à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Typ pole";
-        Text[ hebrew ] = "Feldtyp";
-        Text[ hindi ] = "Field type";
-        Text[ slovak ] = "Typ poÄ¾a";
-        Text[ hungarian ] = "MezÅ‘tÃ­pus";
-        Text[ slovenian ] = "Vrsta polja";
+        Text [ de ] = "Feldtyp" ;
+        Text [ en-US ] = "Field type" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RBT_FIX
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 64 , 10 ) ;
-        Text = "~fix" ;
-        Text [ ENGLISH ] = "~fix" ;
+        Text [ de ] = "~fix" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~fixo" ;
-        Text [ english_us ] = "~Fixed" ;
-        Text [ portuguese_brazilian ] = "~Fixo" ;
-        Text [ swedish ] = "~fast" ;
-        Text [ danish ] = "~Fast" ;
-        Text [ italian ] = "~Fisso" ;
-        Text [ spanish ] = "~fijo" ;
-        Text [ french ] = "~fixe" ;
-        Text [ dutch ] = "~vast" ;
-        Text[ chinese_simplified ] = "å›ºå®š(~F)";
-        Text[ russian ] = "~Ôèêñèğîâàííîå";
-        Text[ polish ] = "~Sta³y";
-        Text[ japanese ] = "å›ºå®š(~F)";
-        Text[ chinese_traditional ] = "å›ºå®š(~F)";
-        Text[ arabic ] = "ËÇÈÊ";
-        Text[ greek ] = "ÓôáèåñÜ";
-        Text[ korean ] = "ê³ ì •(~F)";
-        Text[ turkish ] = "Sabit";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fix";
-        Text[ finnish ] = "~Kiinteä";
-        Text[ thai ] = "~à¸„à¸‡à¸—à¸µà¹ˆ";
-        Text[ czech ] = "NemÄ›nnÃ½";
-        Text[ hebrew ] = "~fix";
-        Text[ hindi ] = "~à¤¸à¥à¤¥à¤¿à¤°";
-        Text[ slovak ] = "~NemennÃ½";
-        Text[ hungarian ] = "~RÃ¶gzÃ­tett";
-        Text[ slovenian ] = "~Fiksno";
+        Text [ en-US ] = "~Fixed" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RBT_VAR
     {
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 64 , 10 ) ;
-        Text = "~variabel" ;
-        Text [ ENGLISH ] = "~variable" ;
+        Text [ de ] = "~variabel" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~variável" ;
-        Text [ english_us ] = "~Variable" ;
-        Text [ portuguese_brazilian ] = "~Variável" ;
-        Text [ swedish ] = "~variabel" ;
-        Text [ danish ] = "~Variabel" ;
-        Text [ italian ] = "~Variabile" ;
-        Text [ spanish ] = "~variable" ;
-        Text [ french ] = "~variable" ;
-        Text [ dutch ] = "~variabel" ;
-        Text[ chinese_simplified ] = "å¯å˜(~V)";
-        Text[ russian ] = "~Èçìåíÿåìîå";
-        Text[ polish ] = "~Zmienny";
-        Text[ japanese ] = "è‡ªå‹•æ›´æ–°(~V)";
-        Text[ chinese_traditional ] = "å¯è®Š(~V)";
-        Text[ arabic ] = "ãÊÛíÑ";
-        Text[ greek ] = "ìåôáâëçôŞ";
-        Text[ korean ] = "ìœ ë™ì (~V)";
-        Text[ turkish ] = "Değişken";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Variable";
-        Text[ finnish ] = "~Muuttuja";
-        Text[ thai ] = "~à¸•à¸±à¸§à¹à¸›à¸£";
-        Text[ czech ] = "PromÄ›nnÃ½";
-        Text[ hebrew ] = "~variabel";
-        Text[ hindi ] = "~à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¥€";
-        Text[ slovak ] = "~PremennÃ½";
-        Text[ hungarian ] = "~VÃ¡ltozÃ³";
-        Text[ slovenian ] = "~Spremenljivo";
+        Text [ en-US ] = "~Variable" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_LANGUAGE
     {
         Pos = MAP_APPFONT ( 6 , 67 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "~Sprache" ;
-        Text [ ENGLISH ] = "~Language" ;
-        Text [ english_us ] = "~Language" ;
-        Text[ portuguese ] = "~Língua";
-        Text[ russian ] = "ßçûê";
-        Text[ greek ] = "Ãëşóóá";
-        Text[ dutch ] = "~Taal";
-        Text[ french ] = "Langue";
-        Text[ spanish ] = "~Idioma";
-        Text[ finnish ] = "K~ieli";
-        Text[ italian ] = "Lin~gua";
-        Text[ danish ] = "S~prog";
-        Text[ swedish ] = "~Språk";
-        Text[ polish ] = "Jêzyk";
-        Text[ portuguese_brazilian ] = "~Idioma";
-        Text[ japanese ] = "è¨€èª(~L)";
-        Text[ korean ] = "ì–¸ì–´(~L)";
-        Text[ chinese_simplified ] = "è¯­è¨€(~L)";
-        Text[ chinese_traditional ] = "èªè¨€(~L)";
-        Text[ turkish ] = "~Dil";
-        Text[ arabic ] = "ÇááÛÉ";
-        Text[ catalan ] = "~Idioma";
-        Text[ thai ] = "à¸ à¸²~à¸©à¸²";
-        Text[ czech ] = "Jazyk";
-        Text[ hebrew ] = "â€®×©×¤×”â€¬";
-        Text[ hindi ] = "~à¤­à¤¾à¤·à¤¾";
-        Text[ slovak ] = "~Jazyk";
-        Text[ hungarian ] = "~Nyelv";
-        Text[ slovenian ] = "~Jezik";
+        Text [ de ] = "~Sprache" ;
+        Text [ en-US ] = "~Language" ;
     };
 
     ListBox LB_LANGUAGE
@@ -231,36 +122,9 @@ ModalDialog DLG_FIELD_MODIFY
     {
         Pos = MAP_APPFONT ( 6 , 83 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "F~ormat" ;
-        Text [ ENGLISH ] = "F~ormat" ;
-        Text [ english_us ] = "F~ormat" ;
-        Text [ portuguese_brazilian ] = "Forma~to" ;
-        Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "~Format" ;
-        Text [ italian ] = "F~ormato" ;
-        Text [ spanish ] = "F~ormato" ;
-        Text [ french ] = "F~ormat" ;
-        Text [ dutch ] = "F~ormaat" ;
-        Text [ portuguese ] = "Forma~to" ;
-        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
-        Text[ russian ] = "Ôîğìàò";
-        Text[ polish ] = "~Format";
-        Text[ japanese ] = "æ›¸å¼(~O)";
-        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
-        Text[ arabic ] = "ÊäÓíŞ";
-        Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "ì„œì‹(~O)";
-        Text[ turkish ] = "Format";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ormat";
-        Text[ finnish ] = "Muotoil~e";
-        Text[ thai ] = "à¸£à¸¹~à¸›à¹à¸šà¸š";
-        Text[ czech ] = "FormÃ¡t";
-        Text[ hebrew ] = "F~ormat";
-        Text[ hindi ] = "~à¤°à¤šà¤¨à¤¾";
-        Text[ slovak ] = "F~ormÃ¡t";
-        Text[ hungarian ] = "F~ormÃ¡tum";
-        Text[ slovenian ] = "O~blika";
+        Text [ de ] = "F~ormat" ;
+        Text [ en-US ] = "F~ormat" ;
+        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -281,34 +145,8 @@ ModalDialog DLG_FIELD_MODIFY
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ english_us ] = "Edit Field" ;
-    Text [ portuguese_brazilian ] = "Editar Campo" ;
-    Text [ swedish ] = "Redigera fältkommando" ;
-    Text [ danish ] = "Rediger felt" ;
-    Text [ italian ] = "Modifica comando di campo" ;
-    Text [ spanish ] = "Editar campo" ;
-    Text [ french ] = "Édition de champ" ;
-    Text [ dutch ] = "Veldopdracht bewerken" ;
-    Text [ portuguese ] = "Editar campos" ;
-    Text[ chinese_simplified ] = "ç¼–è¾‘å­—æ®µæŒ‡ä»¤";
-    Text[ russian ] = "Ïğàâêà ïîëÿ";
-    Text[ polish ] = "Edytuj pole";
-    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚³ãƒãƒ³ãƒ‰ã®ç·¨é›†";
-    Text[ chinese_traditional ] = "ç·¨è¼¯æ¬„ä½æŒ‡ä»¤";
-    Text[ arabic ] = "ÊÍÑíÑ ÇáÍŞá";
-    Text[ greek ] = "Åğåîåñãáóßá åíôïëŞò ğåäßïõ";
-    Text[ korean ] = "í•„ë“œ í¸ì§‘";
-    Text[ turkish ] = "Alan öğesini düzenle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Edita el camp";
-    Text[ finnish ] = "Muokkaa kenttää";
-    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Upravit pole";
-    Text[ hebrew ] = "Feldbefehl bearbeiten";
-    Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤•à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-    Text[ slovak ] = "UpraviÅ¥ pole";
-    Text[ hungarian ] = "MezÅ‘ szerkesztÃ©se";
-    Text[ slovenian ] = "Urejanje polja";
+    Text [ en-US ] = "Edit Field" ;
+    Text [ x-comment ] = " ";
 };
 
 
