@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:01:45 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,20 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
                 //  #89897# read user data from print preview now, after ctor
                 DoReadUserData( aPendingUserData );
                 aPendingUserData.Erase();
+            }
+
+            // #116278# ReadExtOptions (view settings from Excel import) must also be done
+            // after the ctor, because of the potential calls to Window::Show.
+            // Even after the fix for #104887# (Window::Show no longer notifies the access
+            // bridge, it's done in ImplSetReallyVisible), there are problems if Window::Show
+            // is called during the ViewShell ctor and reschedules asynchronous calls
+            // (for example from the FmFormShell ctor).
+            ScExtDocOptions* pExtOpt = GetViewData()->GetDocument()->GetExtDocOptions();
+            if ( pExtOpt && pExtOpt->IsChanged() )
+            {
+                GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
+                SetTabNo( GetViewData()->GetTabNo(), TRUE );
+                pExtOpt->SetChanged( FALSE );
             }
         }
 
@@ -1791,14 +1805,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             pDocSh->ResetEmpty();           // #i6232# make sure this is done only once
         }
 
-        ScExtDocOptions* pExtOpt = pDoc->GetExtDocOptions();
-        if (pExtOpt)
-        {
-            GetViewData()->ReadExtOptions(*pExtOpt);        //  Excel-View Optionen
-            SetTabNo( GetViewData()->GetTabNo(), TRUE );
-            pExtOpt->SetChanged( FALSE );
-            //! alles von ReadUserData auch hier
-        }
+        // ReadExtOptions is now in Activate
 
         //  Link-Update nicht verschachteln
         if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_INTERNAL &&
