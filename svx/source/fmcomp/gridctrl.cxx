@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:19:45 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,10 +962,20 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
                 m_bIsNew = sal_False;
         }
 
-        if (!m_bIsNew && IsValid())
-            m_aBookmark = pCur->getBookmark();
-        else
+        try
+        {
+            if (!m_bIsNew && IsValid())
+                m_aBookmark = pCur->getBookmark();
+            else
+                m_aBookmark = Any();
+        }
+        catch(SQLException&)
+        {
+            OSL_ENSURE(0,"SQLException catched while getting the bookmark");
             m_aBookmark = Any();
+            m_eStatus = GRS_INVALID;
+            m_bIsNew = sal_False;
+        }
     }
     else
     {
