@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 06:02:34 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 09:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,6 @@
 #endif
 #ifndef _FILELIST_HXX //autogen
 #include <so3/filelist.hxx>
-#endif
-#ifndef _DRAG_HXX //autogen
-#include <vcl/drag.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -302,9 +299,9 @@ SwGlobalTree::~SwGlobalTree()
 /*-----------------12.06.97 09:38-------------------
 
 --------------------------------------------------*/
-BOOL     SwGlobalTree::Drop( const DropEvent& rEvt)
+sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    BOOL bRet = FALSE;
+    sal_Int8 nRet = DND_ACTION_NONE;
     SvLBoxEntry* pLast = (SvLBoxEntry*)LastVisible();
     if(pEmphasisEntry)
     {
@@ -316,91 +313,83 @@ BOOL     SwGlobalTree::Drop( const DropEvent& rEvt)
         ImplShowTargetEmphasis( pLast, FALSE);
     }
 
-
-    SvLBoxEntry* pDropEntry = bLastEntryEmphasis ? 0 : GetEntry(rEvt.GetPosPixel());
-    if(bIsInternalDrag)
+    SvLBoxEntry* pDropEntry = bLastEntryEmphasis ? 0 : GetEntry(rEvt.maPosPixel);
+    if( bIsInternalDrag )
     {
         SvLBoxEntry* pDummy = 0;
         ULONG nInsertionPos = LIST_APPEND;
-        NotifyMoving(pDropEntry, pDDSource, pDummy, nInsertionPos);
+        NotifyMoving( pDropEntry, pDDSource, pDummy, nInsertionPos );
     }
     else
     {
-        const USHORT nCount = DragServer::GetItemCount();
-        for ( USHORT i = 0; i < nCount; ++i )
+        TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
+
+        String sFileName;
+        const SwGlblDocContent* pCnt = pDropEntry ?
+                    (const SwGlblDocContent*)pDropEntry->GetUserData() :
+                            0;
+        if( aData.HasFormat( FORMAT_FILE_LIST ))
         {
-            String sFileName;
-            const SwGlblDocContent* pCnt = pDropEntry ?
-                        (const SwGlblDocContent*)pDropEntry->GetUserData() :
-                                0;
-            if(DragServer::HasFormat(i, FORMAT_FILE_LIST))
+            nRet = rEvt.mnAction;
+            SwGlblDocContents* pTempContents = new SwGlblDocContents;
+            int nAbsContPos = pDropEntry ?
+                                (int) GetModel()->GetAbsPos(pDropEntry):
+                                    - 1;
+            USHORT nEntryCount = (USHORT)GetEntryCount();
+
+            // Daten holen
+            FileList aFileList;
+            aData.GetFileList( FORMAT_FILE_LIST, aFileList );
+            for ( USHORT n = (USHORT)aFileList.Count(); n--; )
             {
-                bRet = TRUE;
-                SwGlblDocContents* pTempContents = new SwGlblDocContents;
-                int nAbsContPos = pDropEntry ?
-                                    (int) GetModel()->GetAbsPos(pDropEntry):
-                                        - 1;
-                USHORT nEntryCount = (USHORT)GetEntryCount();
-
-                // SvData basteln
-                SvData aData( FORMAT_FILE_LIST );
-                SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rEvt );
-                xDataObj->GetData( &aData );
-
-                // Daten holen
-                FileList aFileList;
-                FileList* pFileList = &aFileList;
-                aData.GetData( (SvDataCopyStream**)&pFileList, pFileList->Type() );
-                for ( USHORT n = (USHORT)aFileList.Count(); n--; )
+                sFileName = aFileList.GetFile(n);
+                InsertRegion(pCnt, &sFileName);
+                // nach dem Einfuegen muss die Liste der Contents neu
+                // geholt werden, um nicht auf einem alten Content zu
+                // arbeiten
+                if(n)
                 {
-                    sFileName = aFileList.GetFile(n);
-                    InsertRegion(pCnt, &sFileName);
-                    // nach dem Einfuegen muss die Liste der Contents neu
-                    // geholt werden, um nicht auf einem alten Content zu
-                    // arbeiten
-                    if(n)
+                    pActiveShell->GetGlobalDocContent(*pTempContents);
+                    // wenn das file erfolgreich eingefuegt wurde,
+                    // dann muss auch der naechste Content geholt werden
+                    if(nEntryCount < pTempContents->Count())
                     {
-                        pActiveShell->GetGlobalDocContent(*pTempContents);
-                        // wenn das file erfolgreich eingefuegt wurde,
-                        // dann muss auch der naechste Content geholt werden
-                        if(nEntryCount < pTempContents->Count())
-                        {
-                            nEntryCount++;
-                            nAbsContPos++;
-                            pCnt = pTempContents->GetObject(nAbsContPos);
-                        }
+                        nEntryCount++;
+                        nAbsContPos++;
+                        pCnt = pTempContents->GetObject(nAbsContPos);
                     }
                 }
-                delete pTempContents;
-                break;
-           }
-           else
-           {
-                String sFileName(SwNavigationPI::CreateDropFileName(i));
-                if(sFileName.Len())
-                {
-                    InsertRegion(pCnt, &sFileName);
-                    bRet = TRUE;
-                }
+            }
+            delete pTempContents;
+        }
+        else if( 0 != (sFileName =
+                        SwNavigationPI::CreateDropFileName( aData )).Len())
+        {
+            GraphicDescriptor aDesc( sFileName );
+            if( !aDesc.Detect() )   // keine Grafiken annehmen
+            {
+                nRet = rEvt.mnAction;
+                InsertRegion(pCnt, &sFileName);
             }
         }
     }
     bLastEntryEmphasis = FALSE;
-    return bRet;
+    return nRet;
 
 }
 /*-----------------12.06.97 09:38-------------------
 
 --------------------------------------------------*/
-BOOL     SwGlobalTree::QueryDrop( DropEvent& rEvt)
+sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    BOOL bRet = TRUE;
+    sal_Int8 nRet = rEvt.mnAction;
+
     //initiate scrolling
-    GetDropTarget(rEvt.GetPosPixel());
+    GetDropTarget( rEvt.maPosPixel );
     SvLBoxEntry* pLast = (SvLBoxEntry*)LastVisible();
-    if(rEvt.IsLeaveWindow())
+    if( rEvt.mbLeaving )
     {
-        if(pEmphasisEntry)
+        if( pEmphasisEntry )
         {
             ImplShowTargetEmphasis( Prev(pEmphasisEntry), FALSE );
             pEmphasisEntry = 0;
@@ -413,31 +402,23 @@ BOOL     SwGlobalTree::QueryDrop( DropEvent& rEvt)
     }
     else
     {
-        SvLBoxEntry* pDropEntry = GetEntry(rEvt.GetPosPixel());
+        SvLBoxEntry* pDropEntry = GetEntry( rEvt.maPosPixel );
         if(bIsInternalDrag)
         {
-            bRet = pDDSource != pDropEntry;
+            if( pDDSource != pDropEntry )
+                nRet = rEvt.mnAction;
         }
-        else
-        {
-            if (DragServer::HasFormat(0, FORMAT_FILE))
-            {
-                String aFileName = DragServer::PasteFile(0);
-                GraphicDescriptor aDesc(aFileName);
-                if (aDesc.Detect()) // keine Grafiken annehmen
-                    bRet = FALSE;
-                else
-                    bRet = TRUE;
-            }
-            else if ( DragServer::HasFormat(0, FORMAT_FILE_LIST) ||
-                 INetBookmark::DragServerHasFormat( 0 ) )
-            {
-                 bRet = TRUE;
-            }
-            else
-                bRet = FALSE;
-            rEvt.SetAction(DROP_LINK);
-        }
+        else if( IsDropFormatSupported( FORMAT_FILE ) ||
+                  IsDropFormatSupported( FORMAT_STRING ) ||
+                  IsDropFormatSupported( FORMAT_FILE_LIST ) ||
+                  IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
+                   IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK )||
+                   IsDropFormatSupported( SOT_FORMATSTR_ID_FILECONTENT ) ||
+                   IsDropFormatSupported( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) ||
+                   IsDropFormatSupported( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) ||
+                   IsDropFormatSupported( SOT_FORMATSTR_ID_FILENAME ))
+                nRet = DND_ACTION_LINK;
+
         if(pEmphasisEntry && pEmphasisEntry != pDropEntry)
             ImplShowTargetEmphasis( Prev(pEmphasisEntry), FALSE );
         else if(pLast && bLastEntryEmphasis  && pDropEntry)
@@ -445,16 +426,17 @@ BOOL     SwGlobalTree::QueryDrop( DropEvent& rEvt)
             ImplShowTargetEmphasis( pLast, FALSE);
             bLastEntryEmphasis = FALSE;
         }
+
         if(pDropEntry)
-            ImplShowTargetEmphasis( Prev(pDropEntry), bRet );
+            ImplShowTargetEmphasis( Prev(pDropEntry), DND_ACTION_NONE != nRet );
         else if(pLast)
         {
-            ImplShowTargetEmphasis( pLast, bRet );
+            ImplShowTargetEmphasis( pLast, DND_ACTION_NONE != nRet );
             bLastEntryEmphasis = TRUE;
         }
         pEmphasisEntry = pDropEntry;
     }
-    return bRet;
+    return nRet;
 }
 /*-----------------12.06.97 09:38-------------------
 
@@ -685,8 +667,10 @@ void     SwGlobalTree::DeselectHdl()
 /*-----------------17.06.97 13:11-------------------
 
 --------------------------------------------------*/
-DragDropMode     SwGlobalTree::NotifyBeginDrag( SvLBoxEntry* pEntry)
+DragDropMode SwGlobalTree::NotifyStartDrag( TransferDataContainer& ,
+                                                SvLBoxEntry* pEntry )
 {
+    bIsInternalDrag = TRUE;
     pDDSource = pEntry;
     return SV_DRAGDROP_CTRL_MOVE;
 }
@@ -732,24 +716,24 @@ BOOL     SwGlobalTree::NotifyCopying(  SvLBoxEntry*  pTarget,
 /*-----------------12.06.97 09:39-------------------
 
 --------------------------------------------------*/
-BOOL     SwGlobalTree::NotifyQueryDrop( SvLBoxEntry* pEntry)
+BOOL SwGlobalTree::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 {
     return pEntry != 0;
 }
 /*-----------------12.06.97 09:39-------------------
 
 --------------------------------------------------*/
-void     SwGlobalTree::BeginDrag( const Point& rPt)
+void SwGlobalTree::StartDrag( sal_Int8 nAction, const Point& rPt )
 {
-    bIsInternalDrag = TRUE;
-    if(GetSelectionCount() == 1)
-        SvTreeListBox::BeginDrag(rPt);
+    if( 1 == GetSelectionCount() )
+        SvTreeListBox::StartDrag( nAction, rPt );
 }
 /*-----------------12.06.97 09:39-------------------
 
 --------------------------------------------------*/
-void     SwGlobalTree::EndDrag()
+void SwGlobalTree::DragFinished( sal_Int8 nAction )
 {
+    SvTreeListBox::DragFinished( nAction );
     bIsInternalDrag = FALSE;
 }
 

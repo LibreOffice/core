@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 06:00:47 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 09:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,37 +70,37 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#ifndef _LIST_HXX //autogen
+#ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
-#endif
-#ifndef _URLBMK_HXX //autogen
+#ifndef _URLBMK_HXX
 #include <svtools/urlbmk.hxx>
 #endif
-#ifndef _SFXSTRITEM_HXX //autogen
+#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _FILTER_HXX //autogen
+#ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
-#ifndef _SFXEVENT_HXX //autogen
+#ifndef _FILELIST_HXX
+#include <sot/filelist.hxx>
+#endif
+#ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
 #endif
-#ifndef _SFXIMGMGR_HXX //autogen
+#ifndef _SFXIMGMGR_HXX
 #include <sfx2/imgmgr.hxx>
 #endif
-#ifndef _SFXDISPATCH_HXX //autogen
+#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SFXDOCKWIN_HXX //autogen
+#ifndef _SFXDOCKWIN_HXX
 #include <sfx2/dockwin.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX
@@ -583,7 +583,7 @@ SwNavHelpToolBox::SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId)
 /*-----------------19.06.97 09:09-------------------
 
 --------------------------------------------------*/
-void __EXPORT SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
+void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
 {
     if(rEvt.GetButtons() == MOUSE_LEFT &&
             FN_CREATE_NAVIGATION == GetItemId(rEvt.GetPosPixel()))
@@ -607,7 +607,7 @@ void __EXPORT SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
 /*-----------------19.06.97 10:12-------------------
 
 --------------------------------------------------*/
-void  __EXPORT  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
+void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
     USHORT nItemId = GetItemId(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
     if( FN_UP == nItemId || FN_DOWN == nItemId )
@@ -660,7 +660,7 @@ IMPL_LINK( SwNavigationPI, EditGetFocus, NumEditAction *, pEdit )
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-BOOL __EXPORT SwNavigationPI::Close()
+BOOL SwNavigationPI::Close()
 {
     SfxViewFrame* pVFrame = pCreateView->GetViewFrame();
     pVFrame->GetBindings().Invalidate(SID_NAVIGATOR);
@@ -793,7 +793,7 @@ void SwNavigationPI::_ZoomIn()
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-void __EXPORT SwNavigationPI::Resize()
+void SwNavigationPI::Resize()
 {
     Window* pParent = GetParent();
     FloatingWindow* pFloat =  ((DockingWindow*)pParent)->GetFloatingWindow();
@@ -991,7 +991,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-__EXPORT SwNavigationPI::~SwNavigationPI()
+SwNavigationPI::~SwNavigationPI()
 {
     if(IsGlobalDoc() && !IsGlobalMode())
     {
@@ -1020,7 +1020,7 @@ __EXPORT SwNavigationPI::~SwNavigationPI()
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-void __EXPORT SwNavigationPI::StateChanged( USHORT nSID, SfxItemState eState,
+void SwNavigationPI::StateChanged( USHORT nSID, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     if(nSID == SID_DOCFULLNAME)
@@ -1075,7 +1075,7 @@ ListBox& SwNavigationPI::GetTypeSelBox()
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-SfxChildAlignment __EXPORT SwNavigationPI::CheckAlignment
+SfxChildAlignment SwNavigationPI::CheckAlignment
     (
         SfxChildAlignment eActAlign,
         SfxChildAlignment eAlign
@@ -1127,7 +1127,7 @@ BOOL SwNavigationPI::IsInDrag() const
     Beschreibung:   Benachrichtigung bei geaenderter DocInfo
  --------------------------------------------------------------------*/
 
-void __EXPORT SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
+void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
     if(&rBrdc == pCreateView)
     {
@@ -1254,102 +1254,10 @@ void SwNavigationPI::UpdateListBox()
     aDocListBox.Enable( !bDisable );
     aDocListBox.SetUpdateMode(TRUE);
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-SwNavigationChild::SwNavigationChild( Window* pParent,
-                        USHORT nId,
-                        SfxBindings* pBindings,
-                        SfxChildWinInfo* pInfo ) :
-                        SfxChildWindowContext( nId )
-{
-    SwNavigationPI* pNavi  = new SwNavigationPI( pBindings, this, pParent );
-    SetWindow( pNavi );
-    pBindings->Invalidate(SID_NAVIGATOR);
-    String sExtra = pInfo->aExtraString;
-
-    SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
-
-    USHORT nRootType = pNaviConfig->GetRootType();
-    if( nRootType < CONTENT_TYPE_MAX )
-    {
-        pNavi->aContentTree.SetRootType(nRootType);
-        pNavi->aContentToolBox.CheckItem(FN_SHOW_ROOT, TRUE);
-    }
-    pNavi->aContentTree.SetOutlineLevel(pNaviConfig->GetOutlineLevel());
-    pNavi->SetRegionDropMode(pNaviConfig->GetRegionMode());
-
-
-    if(GetFloatingWindow() && pNaviConfig->IsSmall())
-    {
-        pNavi->_ZoomIn();
-    }
-
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-BOOL    __EXPORT SwNavigationPI::Drop( const DropEvent& )
-{
-    if(!aContentTree.IsInDrag())
-    {
-        String aFileName;
-
-        const USHORT nCount = DragServer::GetItemCount();
-
-        for ( USHORT i = 0; i < nCount; ++i )
-        {
-            aFileName = SwNavigationPI::CreateDropFileName(i);
-
-            if(aFileName.Len() &&
-                STRING_NOTFOUND == aFileName.Search('#')
-                    && (!sContentFileName.Len() || sContentFileName != aFileName ))
-            {
-                aFileName.EraseTrailingChars(char(0));
-                sContentFileName = aFileName;
-                if(pxObjectShell)
-                {
-                    aContentTree.SetHiddenShell( 0 );
-                    (*pxObjectShell)->DoClose();
-                    DELETEZ( pxObjectShell);
-                }
-                SfxStringItem aFileItem(SID_FILE_NAME, aFileName);
-                String sOptions = C2S("HRC");
-                SfxStringItem aOptionsItem(SID_OPTIONS,sOptions);
-                SfxLinkItem aLink(SID_DONELINK, LINK(this, SwNavigationPI, DoneLink));
-                GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(
-                    SID_OPENDOC, SFX_CALLMODE_ASYNCHRON,
-                    &aFileItem, &aOptionsItem, &aLink, 0L);
-            }
-        }
-    }
-    return TRUE;
-}
 
 /*-----------------16.06.97 15:05-------------------
 
 --------------------------------------------------*/
-String  SwNavigationPI::CreateDropFileName( USHORT nItem )
-{
-    INetBookmark aBkmk( aEmptyStr, aEmptyStr );
-    String aFileName;
-
-    if( aBkmk.PasteDragServer( nItem ) )
-        aFileName = aBkmk.GetURL();
-    else if(DragServer::HasFormat( nItem, FORMAT_FILE))
-        aFileName = DragServer::PasteFile( nItem );
-    else if( DragServer::HasFormat( nItem, SOT_FORMATSTR_ID_FILENAME ))
-    {
-        ULONG nLen = DragServer::GetDataLen( nItem, SOT_FORMATSTR_ID_FILENAME );
-        DragServer::PasteData( nItem, aFileName.AllocBuffer( nLen/2 ),
-                                nLen, SOT_FORMATSTR_ID_FILENAME );
-
-    }
-    return aFileName;
-}
 
 /*------------------------------------------------------------------------
     Beschreibung:
@@ -1377,38 +1285,92 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
     }
     return 0;
 }
+
+String SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
+{
+    String sFileName;
+    ULONG nFmt;
+    if( rData.HasFormat( nFmt = FORMAT_FILE_LIST ))
+    {
+        FileList aFileList;
+        rData.GetFileList( nFmt, aFileList );
+        sFileName = aFileList.GetFile( 0 );
+    }
+    else if( rData.HasFormat( nFmt = FORMAT_STRING ) ||
+              rData.HasFormat( nFmt = FORMAT_FILE ) ||
+             rData.HasFormat( nFmt = SOT_FORMATSTR_ID_FILENAME ))
+        rData.GetString( nFmt, sFileName );
+    else if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_SOLK ) ||
+                rData.HasFormat( nFmt = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK )||
+                rData.HasFormat( nFmt = SOT_FORMATSTR_ID_FILECONTENT ) ||
+                rData.HasFormat( nFmt = SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) ||
+                rData.HasFormat( nFmt = SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ))
+    {
+        INetBookmark aBkmk( aEmptyStr, aEmptyStr );
+        rData.GetINetBookmark( nFmt, aBkmk );
+        sFileName = aBkmk.GetURL();
+    }
+    if( sFileName.Len() )
+        sFileName = URIHelper::SmartRelToAbs( sFileName );
+    return sFileName;
+}
+
 /*------------------------------------------------------------------------
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-BOOL    __EXPORT SwNavigationPI::QueryDrop( DropEvent& rEvt )
+sal_Int8 SwNavigationPI::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    rEvt.SetAction(DROP_COPY);
-    if (!aContentTree.IsInDrag())
-    {
-        const SotDataObject& rData = *rEvt.GetData();
-        const SvDataTypeList& rTypeLst = rData.GetTypeList();
-
-        if( rTypeLst.Get( FORMAT_FILE ) )
-        {
-            String aFileName;
-            SvData aData( FORMAT_FILE, MEDIUM_ALL );
-            if( aData.GetData( aFileName ) )
-            {
-                GraphicDescriptor aDesc( aFileName );
-                if( aDesc.Detect() )    // keine Grafiken annehmen
-                    return FALSE;
-                return TRUE;
-            }
-            return FALSE;
-        }
-
-        if( rTypeLst.Get( FORMAT_STRING ) || INetBookmark::HasFormat( rData ))
-            return TRUE;
-    }
-
-    return FALSE;
+    return ( !aContentTree.IsInDrag() &&
+        ( aContentTree.IsDropFormatSupported( FORMAT_FILE ) ||
+          aContentTree.IsDropFormatSupported( FORMAT_STRING ) ||
+          aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
+           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK )||
+           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_FILECONTENT ) ||
+           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) ||
+           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) ||
+           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_FILENAME )))
+        ? DND_ACTION_COPY
+        : DND_ACTION_NONE;
 }
+
+sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
+    sal_Int8 nRet = DND_ACTION_NONE;
+    String sFileName;
+    if( !aContentTree.IsInDrag() &&
+        0 != (sFileName = SwNavigationPI::CreateDropFileName( aData )).Len() )
+    {
+        GraphicDescriptor aDesc( sFileName );
+        if( !aDesc.Detect() )   // keine Grafiken annehmen
+        {
+            if( STRING_NOTFOUND == sFileName.Search('#')
+                && (!sContentFileName.Len() || sContentFileName != sFileName ))
+            {
+                nRet = rEvt.mnAction;
+                sFileName.EraseTrailingChars( char(0) );
+                sContentFileName = sFileName;
+                if(pxObjectShell)
+                {
+                    aContentTree.SetHiddenShell( 0 );
+                    (*pxObjectShell)->DoClose();
+                    DELETEZ( pxObjectShell);
+                }
+                SfxStringItem aFileItem(SID_FILE_NAME, sFileName );
+                String sOptions = C2S("HRC");
+                SfxStringItem aOptionsItem( SID_OPTIONS, sOptions );
+                SfxLinkItem aLink( SID_DONELINK,
+                                    LINK( this, SwNavigationPI, DoneLink ) );
+                GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(
+                            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON,
+                            &aFileItem, &aOptionsItem, &aLink, 0L );
+            }
+        }
+    }
+    return nRet;
+}
+
 /*-----------------27.11.96 13.00-------------------
 
 --------------------------------------------------*/
@@ -1424,26 +1386,8 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
     else if(nRegionMode == REGION_MODE_EMBEDDED)
         nId = FN_DROP_REGION_COPY;
 
-    aContentToolBox.SetItemImage(FN_DROP_REGION,
-                aContentImageList.GetImage(nId));
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-BOOL    __EXPORT SwNavigationChild::Drop( const DropEvent& rEvt)
-{
-    return GetWindow()->Drop(rEvt);
-}
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-BOOL    __EXPORT SwNavigationChild::QueryDrop( DropEvent& rEvt)
-{
-    return GetWindow()->QueryDrop(rEvt);
+    aContentToolBox.SetItemImage( FN_DROP_REGION,
+                                    aContentImageList.GetImage(nId));
 }
 
 
@@ -1551,6 +1495,7 @@ IMPL_LINK( SwNavigationPI, PageEditModifyHdl, Edit*, EMPTYARG )
     aPageChgTimer.Start();
     return 0;
 }
+
 /* -----------------------------23.04.01 07:34--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1571,4 +1516,38 @@ SwView*  SwNavigationPI::GetCreateView() const
     }
     return pCreateView;
 }
+
+
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+SwNavigationChild::SwNavigationChild( Window* pParent,
+                        USHORT nId,
+                        SfxBindings* pBindings,
+                        SfxChildWinInfo* pInfo )
+    : SfxChildWindowContext( nId )
+{
+    SwNavigationPI* pNavi  = new SwNavigationPI( pBindings, this, pParent );
+    SetWindow( pNavi );
+    pBindings->Invalidate(SID_NAVIGATOR);
+    String sExtra = pInfo->aExtraString;
+
+    SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
+
+    USHORT nRootType = pNaviConfig->GetRootType();
+    if( nRootType < CONTENT_TYPE_MAX )
+    {
+        pNavi->aContentTree.SetRootType(nRootType);
+        pNavi->aContentToolBox.CheckItem(FN_SHOW_ROOT, TRUE);
+    }
+    pNavi->aContentTree.SetOutlineLevel(pNaviConfig->GetOutlineLevel());
+    pNavi->SetRegionDropMode(pNaviConfig->GetRegionMode());
+
+    if(GetFloatingWindow() && pNaviConfig->IsSmall())
+    {
+        pNavi->_ZoomIn();
+    }
+}
+
 

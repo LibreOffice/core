@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:30 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 09:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,44 +69,41 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
-#ifndef _DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
-#ifndef _URLBMK_HXX //autogen
+#ifndef _URLBMK_HXX
 #include <svtools/urlbmk.hxx>
 #endif
-#ifndef _URLOBJ_HXX //autogen
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _SFXDOCFILE_HXX //autogen
+#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SFXDISPATCH_HXX //autogen
+#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _CLIP_HXX //autogen
+#ifndef _CLIP_HXX
 #include <vcl/clip.hxx>
 #endif
-#ifndef _HELP_HXX //autogen
+#ifndef _HELP_HXX
 #include <vcl/help.hxx>
 #endif
-#ifndef _SOT_FORMATS_HXX //autogen
+#ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
-#ifndef _SV_SOUND_HXX //autogen
+#ifndef _SV_SOUND_HXX
 #include <vcl/sound.hxx>
 #endif
 
 #ifndef _UIITEMS_HXX
 #include <uiitems.hxx>
 #endif
-#ifndef _FMTINFMT_HXX //autogen
+#ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
 #endif
-#ifndef _TXTINET_HXX //autogen
+#ifndef _TXTINET_HXX
 #include <txtinet.hxx>
 #endif
-#ifndef _FMTFLD_HXX //autogen
+#ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
 #endif
 #ifndef _SWMODULE_HXX
@@ -943,56 +940,73 @@ SwContentTree::~SwContentTree()
 }
 
 /***************************************************************************
-    Beschreibung:   Drop wird im Navigator ausgefuehrt
+    Drag&Drop methods
 ***************************************************************************/
 
-
-sal_Bool     SwContentTree::Drop( const DropEvent& rEvt)
+void SwContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
-    if(bIsRoot)
+    if( !bIsRoot || nRootType != CONTENT_TYPE_OUTLINE )
     {
-        return SvTreeListBox::Drop(rEvt);
+        ReleaseMouse();
+
+        TransferDataContainer* pContainer = new TransferDataContainer;
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
+
+        sal_Int8 nDragMode = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
+        if( FillTransferData( *pContainer, nDragMode ))
+        {
+            SwContentTree::SetInDrag(sal_True);
+            pContainer->StartDrag( this, nDragMode, GetDragFinishedHdl() );
+        }
     }
     else
-        return bIsInDrag ? sal_False : GetParentWindow()->Drop(rEvt);
+        SvTreeListBox::StartDrag( nAction, rPosPixel );
+}
+
+void SwContentTree::DragFinished( sal_Int8 nAction )
+{
+    SvTreeListBox::DragFinished( nAction );
+    SwContentTree::SetInDrag(sal_False);
+    bIsInternalDrag = sal_False;
 }
 
 /***************************************************************************
     Beschreibung:   QueryDrop wird im Navigator ausgefuehrt
 ***************************************************************************/
-
-
-sal_Bool     SwContentTree::QueryDrop( DropEvent& rEvt)
+sal_Int8 SwContentTree::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    if(bIsRoot)
+    sal_Int8 nRet = DND_ACTION_NONE;
+    if( bIsRoot )
     {
-        return bIsOutlineMoveable && SvTreeListBox::QueryDrop(rEvt);
+        if( bIsOutlineMoveable )
+            nRet = SvTreeListBox::AcceptDrop( rEvt );
     }
-    else
-        return bIsInDrag ? sal_False : GetParentWindow()->QueryDrop(rEvt);
+    else if( !bIsInDrag )
+        nRet = GetParentWindow()->AcceptDrop( rEvt );
+    return nRet;
 }
+
+/***************************************************************************
+    Beschreibung:   Drop wird im Navigator ausgefuehrt
+***************************************************************************/
+sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    if( bIsRoot )
+        return SvTreeListBox::ExecuteDrop( rEvt );
+    return bIsInDrag ? DND_ACTION_NONE : GetParentWindow()->ExecuteDrop(rEvt);
+}
+
 
 /***************************************************************************
     Beschreibung:   Handler fuer Dragging und ContextMenu
 ***************************************************************************/
-
 
 void  SwContentTree::Command( const CommandEvent& rCEvt )
 {
     sal_Bool bParent = sal_False;
     switch( rCEvt.GetCommand() )
     {
-        case COMMAND_STARTDRAG:
-        {
-            if(!bIsRoot || nRootType != CONTENT_TYPE_OUTLINE)
-            {
-                ReleaseMouse();
-                StartExecuteDrag();
-            }
-            else
-                bParent = sal_True;
-        }
-        break;
         case COMMAND_CONTEXTMENU:
         {
             PopupMenu aPop;
@@ -1479,27 +1493,11 @@ void SwContentTree::Clear()
 }
 
 /***************************************************************************
-    Beschreibung:   Inhalt eintueten und abschicken
-***************************************************************************/
-
-
-void SwContentTree::StartExecuteDrag()
-{
-    DragServer::Clear();
-    nDragMode = DRAG_MOVEABLE|DRAG_COPYABLE|DRAG_LINKABLE;
-    if(!FillDragServer(nDragMode))
-        return;
-
-    Application::PostUserEvent( STATIC_LINK( this, SwContentTree, ExecDragHdl ) );
-
-}
-
-/***************************************************************************
     Beschreibung:
 ***************************************************************************/
 
-
-sal_Bool SwContentTree::FillDragServer(sal_uInt16& nDragMode)
+sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
+                                            sal_Int8& rDragMode )
 {
     SwWrtShell* pWrtShell = GetWrtShell();
     DBG_ASSERT(pWrtShell, "keine Shell!")
@@ -1550,7 +1548,7 @@ sal_Bool SwContentTree::FillDragServer(sal_uInt16& nDragMode)
             if(GetParentWindow()->GetRegionDropMode() != REGION_MODE_NONE)
                 break;
             else
-                nDragMode &= ~(DRAG_LINKABLE|DRAG_MOVEABLE);
+                rDragMode &= ~( DND_ACTION_MOVE | DND_ACTION_LINK );
         default:
             sEntry = GetEntryText(pEntry);
     }
@@ -1586,7 +1584,7 @@ sal_Bool SwContentTree::FillDragServer(sal_uInt16& nDragMode)
             else
             {
                 bRet = GetParentWindow()->GetRegionDropMode() == REGION_MODE_NONE;
-                nDragMode = DRAG_MOVEABLE;
+                rDragMode = DND_ACTION_MOVE;
             }
 
             const String& rToken = pCnt->GetParent()->GetTypeToken();
@@ -1600,25 +1598,26 @@ sal_Bool SwContentTree::FillDragServer(sal_uInt16& nDragMode)
         }
         else
             bRet = sal_True;
-        if(bRet)
+
+        if( bRet )
         {
-            DragServer::NewItem();
             //fuer Outlines muss in die Description der Ueberschrifttext mit der echten Nummer
             if(bOutline)
                 sEntry = sOutlineText;
+
             {
                 NaviContentBookmark aBmk( sUrl, sEntry,
                                     GetParentWindow()->GetRegionDropMode(),
                                     pDocShell);
-                aBmk.CopyDragServer();
+                aBmk.Copy( rTransfer );
             }
 
             // fuer fremde DocShells muss eine INetBookmark
             // dazugeliefert werden
-            if(pDocShell->HasName())
+            if( pDocShell->HasName() )
             {
-                INetBookmark aBmk( sUrl, sEntry );
-                aBmk.CopyDragServer();
+                INetBookmark aBkmk( sUrl, sEntry );
+                rTransfer.CopyINetBookmark( aBkmk );
             }
         }
     }
@@ -2208,19 +2207,22 @@ IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
 ***************************************************************************/
 
 
-DragDropMode  SwContentTree::NotifyBeginDrag( SvLBoxEntry* pEntry )
+DragDropMode SwContentTree::NotifyStartDrag(
+                TransferDataContainer& rContainer,
+                SvLBoxEntry* pEntry )
 {
     DragDropMode eMode = (DragDropMode)0;
-    if(bIsActive && nRootType == CONTENT_TYPE_OUTLINE &&
+    if( bIsActive && nRootType == CONTENT_TYPE_OUTLINE &&
         GetModel()->GetAbsPos( pEntry ) > 0
         && !GetWrtShell()->GetView().GetDocShell()->IsReadOnly())
-        eMode =  GetDragDropMode();
+        eMode = GetDragDropMode();
     else if(!bIsActive && GetWrtShell()->GetView().GetDocShell()->HasName())
         eMode = SV_DRAGDROP_APP_COPY;
 
-    sal_uInt16 nDrgMode;
-    FillDragServer(nDrgMode);
+    sal_Int8 nDragMode;
+    FillTransferData( rContainer, nDragMode );
     bDocChgdInDragging = sal_False;
+    bIsInternalDrag = sal_True;
     return eMode;
 }
 
@@ -2305,36 +2307,17 @@ sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
     }
     return sal_False;
 }
+
 /***************************************************************************
     Beschreibung:   Kein Drop vor den ersten Eintrag - es ist ein SwContentType
 ***************************************************************************/
 
-
-sal_Bool  SwContentTree::NotifyQueryDrop( SvLBoxEntry* pEntry)
+sal_Bool  SwContentTree::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 {
     return pEntry != 0;
 }
 
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
 
-
-void  SwContentTree::BeginDrag( const Point& rPt)
-{
-    bIsInternalDrag = sal_True;
-    SvTreeListBox::BeginDrag(rPt);
-}
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
-
-void  SwContentTree::EndDrag()
-{
-    bIsInternalDrag = sal_False;
-    SvTreeListBox::EndDrag();
-}
 /***************************************************************************
     Beschreibung:   Wird ein Ctrl+DoubleClick in einen freien Bereich ausgefuehrt,
  *                  dann soll die Basisfunktion des Controls gerufen werden
@@ -3006,7 +2989,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
 --------------------------------------------------*/
 
 NaviContentBookmark::NaviContentBookmark()
-        :   nDefDrag( REGION_MODE_NONE ), nDocSh(0)
+    : nDefDrag( REGION_MODE_NONE ), nDocSh(0)
 {
 }
 
@@ -3030,120 +3013,60 @@ NaviContentBookmark::NaviContentBookmark( const String &rUrl,
 --------------------------------------------------*/
 
 
-sal_Bool    NaviContentBookmark::DragServerHasFormat( sal_uInt16 nItem,
-                                                    const SwDocShell* pDocSh )
+sal_Bool NaviContentBookmark::HasFormat( TransferableDataHelper& rData,
+                                                const SwDocShell* pDocSh )
 {
     sal_Bool bRet = sal_False;
-    if(DragServer::HasFormat( nItem, SOT_FORMATSTR_ID_SONLK ))
+    if( rData.HasFormat( SOT_FORMATSTR_ID_SONLK ) )
     {
-        long nDocSh = (long) pDocSh;
-        NaviContentBookmark aTemp;
-        aTemp.PasteDragServer(nItem);
-        // steht vor dem # ein Dateiname?
-        sal_uInt16 nFound = aTemp.GetURL().Search('#');
-        // entweder die Quelle hatte einen Namen oder Quelle und Ziel sind gleich
-        if(nFound != STRING_NOTFOUND &&
-            (nFound > 0  ||
-                nDocSh == aTemp.GetDocShell() ))
-                bRet = sal_True;
-    }
-    return bRet;
-}
-
-/*-----------------06.02.97 19.17-------------------
-
---------------------------------------------------*/
-
-sal_Bool NaviContentBookmark::CopyDragServer() const
-{
-     String aString( aUrl );
-     aString += NAVI_BOOKMARK_DELIM;
-     aString += aDescr;
-     aString += NAVI_BOOKMARK_DELIM;
-     aString += String::CreateFromInt32( nDefDrag );
-     aString += NAVI_BOOKMARK_DELIM;
-     aString += String::CreateFromInt32( nDocSh );
-
-     return DragServer::CopyData( aString.GetBuffer(), (aString.Len() + 1) *2,
-                                  SOT_FORMATSTR_ID_SONLK );
-}
-/*-----------------06.02.97 19.16-------------------
-
---------------------------------------------------*/
-
-sal_Bool NaviContentBookmark::PasteDragServer( sal_uInt16 nItem )
-{
-    sal_Bool bRet = sal_False;
-    if( DragServer::HasFormat( nItem, SOT_FORMATSTR_ID_SONLK ) )
-    {
-        sal_uInt32 nLen = DragServer::GetDataLen( nItem, SOT_FORMATSTR_ID_SONLK );
-        String aString;
-        DragServer::PasteData( nItem, aString.AllocBuffer(
-                            nLen / 2 ), nLen, SOT_FORMATSTR_ID_SONLK );
-
-        xub_StrLen nStrFndPos = 0;
-        aUrl        = aString.GetToken(0, NAVI_BOOKMARK_DELIM, nStrFndPos );
-        aDescr      = aString.GetToken(0, NAVI_BOOKMARK_DELIM, nStrFndPos );
-        nDefDrag    = aString.GetToken(0, NAVI_BOOKMARK_DELIM,
-                                        nStrFndPos ).ToInt32();
-        nDocSh      = aString.GetToken(0, NAVI_BOOKMARK_DELIM,
-                                        nStrFndPos ).ToInt32();
-        bRet = sal_True;
-    }
-    return bRet;
-}
-
-/*-----------------06.02.97 20.43-------------------
-
---------------------------------------------------*/
-
-sal_Bool NaviContentBookmark::Paste( SotDataObject& rObj, sal_uInt32 nFormat )
-{
-    sal_Bool bRet = sal_False;
-
-    SvData aData( nFormat, MEDIUM_ALL );
-    if( rObj.GetData( &aData ) )
-    {
-        void *pData;
-        aData.GetData( &pData, TRANSFER_REFERENCE );
-
-        if( nFormat == SOT_FORMATSTR_ID_SONLK )
-        {
-            String aString((sal_Unicode*)pData);
-            xub_StrLen nStrFndPos = 0;
-            aUrl        = aString.GetToken(0, NAVI_BOOKMARK_DELIM, nStrFndPos );
-            aDescr      = aString.GetToken(0, NAVI_BOOKMARK_DELIM, nStrFndPos );
-            nDefDrag    = aString.GetToken(0, NAVI_BOOKMARK_DELIM,
-                                            nStrFndPos ).ToInt32();
-            nDocSh      = aString.GetToken(0, NAVI_BOOKMARK_DELIM,
-                                            nStrFndPos ).ToInt32();
+        if( !pDocSh )
             bRet = sal_True;
+        else
+        {
+            long nDocSh = (long) pDocSh;
+            NaviContentBookmark aTemp;
+            aTemp.Paste( rData );
+            // steht vor dem # ein Dateiname?
+            sal_uInt16 nFound = aTemp.GetURL().Search( '#' );
+            // entweder die Quelle hatte einen Namen oder Quelle und Ziel sind gleich
+               if( STRING_NOTFOUND != nFound &&
+                ( nFound > 0  || nDocSh == aTemp.GetDocShell() ))
+                    bRet = sal_True;
         }
     }
     return bRet;
-
 }
 
-/*-----------------07.02.97 08.23-------------------
-
---------------------------------------------------*/
-
-sal_uInt32  NaviContentBookmark::HasFormat( SotDataObject& rObj )
+void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 {
-    return rObj.GetTypeList().Get( SOT_FORMATSTR_ID_SONLK )
-                ? SOT_FORMATSTR_ID_SONLK : 0;
+    rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
+
+    ByteString sStr( aUrl, eSysCSet );
+    sStr += NAVI_BOOKMARK_DELIM;
+    sStr += ByteString( aDescr, eSysCSet );
+    sStr += NAVI_BOOKMARK_DELIM;
+    sStr += ByteString::CreateFromInt32( nDefDrag );
+    sStr += NAVI_BOOKMARK_DELIM;
+    sStr += ByteString::CreateFromInt32( nDocSh );
+    rData.CopyByteString( SOT_FORMATSTR_ID_SONLK, sStr );
 }
 
-/*-----------------20.02.97 15.37-------------------
-
---------------------------------------------------*/
-IMPL_STATIC_LINK(SwContentTree, ExecDragHdl, SwContentTree*, EMPTYARG)
+sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
 {
-    SwContentTree::SetInDrag(sal_True);
-    DropAction eDropAction = pThis->ExecuteDrag(Pointer(POINTER_MOVEDATA), Pointer(POINTER_COPYDATA), POINTER_LINKDATA, pThis->nDragMode );
-    SwContentTree::SetInDrag(sal_False);
-    return 0;
+    String sStr;
+    sal_Bool bRet = rData.GetString( SOT_FORMATSTR_ID_SONLK, sStr );
+    if( bRet )
+    {
+        xub_StrLen nPos = 0;
+        aUrl    = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
+        aDescr  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
+        nDefDrag= sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
+        nDocSh  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
+    }
+    return bRet;
 }
+
+
 /* -----------------------------09.12.99 13:50--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -3194,6 +3117,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/23 12:45:30  os
+    Complete use of DefaultNumbering component
+
     Revision 1.4  2001/01/29 12:43:43  os
     #339# fixed: update/rename of indexes
 
