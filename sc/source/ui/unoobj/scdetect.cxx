@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:56:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,11 +733,13 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         // file extension) it takes precedence over HTML and RTF and dBase
                         // detection. Otherwise something like, for example, "lala <SUP> gugu"
                         // would trigger HTML to be recognized.
-                        if ( !pFilter && pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
+
+                        if ( !pFilter &&
+                                pPreselectedFilter && pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
                         {
                             pFilter = pPreselectedFilter;
                         }
-                        else if ( !pFilter )
+                        else if ( !pFilter && pPreselectedFilter)
                         {
                             // get file header
                             rStr.Seek( 0 );
