@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+ *  last change: $Author: hjs $ $Date: 2000-11-03 18:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
+#include <algorithm>
 
 #if SUPD<558
 BOOL            BrowseBox::m_bFocusOnlyCursor;
@@ -975,7 +976,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             if (nY <= aOverallAreaBRPos.Y())
                 _rOut.DrawLine( Point( nHLineX, nY ),
                                 Point( bVLines
-                                        ? min(long(long(aPos.X()) - 1), aOverallAreaBRPos.X())
+                                        ? std::min(long(long(aPos.X()) - 1), aOverallAreaBRPos.X())
                                         : aOverallAreaBRPos.X(),
                                       nY ) );
             _rOut.SetLineColor( aOldColor );
@@ -1149,12 +1150,12 @@ void BrowseBox::UpdateScrollbars()
 
     // Scrollable Columns insgesamt
     short nScrollCols = short(pCols->Count()) - (short)nFrozenCols;
-    /*short nVisibleHSize= max(nLastCol == BROWSER_INVALIDID
+    /*short nVisibleHSize= std::max(nLastCol == BROWSER_INVALIDID
                                 ? pCols->Count() - nFirstCol -1
                                 : nLastCol - nFirstCol - 1, 0);
 
     aHScroll.SetVisibleSize( nVisibleHSize );
-    aHScroll.SetRange( Range( 0, Max( min(nScrollCols, nVisibleHSize), (short)0 ) ) );
+    aHScroll.SetRange( Range( 0, Max( std::min(nScrollCols, nVisibleHSize), (short)0 ) ) );
     if ( bNeedsHScroll && !aHScroll.IsVisible() )
         aHScroll.Show();*/
 

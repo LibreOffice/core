@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+ *  last change: $Author: hjs $ $Date: 2000-11-03 18:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <vcl/sound.hxx>
 #include "brwhead.hxx"
 #include "datwin.hxx"
+#include <algorithm>
 
 #pragma hdrstop
 
@@ -676,13 +677,13 @@ void BrowseBox::SetColumnWidth( USHORT nItemId, ULONG nWidth )
             if( GetBackground().IsScrollable() )
             {
 
-                Rectangle aScrRect( nX + min( (ULONG)nOldWidth, nWidth ), 0,
+                Rectangle aScrRect( nX + std::min( (ULONG)nOldWidth, nWidth ), 0,
                                     GetSizePixel().Width() , // the header is longer than the datawin
                                     pDataWin->GetPosPixel().Y() - 1 );
                 Control::Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
                 aScrRect.Bottom() = pDataWin->GetSizePixel().Height();
                 ((BrowserDataWin*)pDataWin)->Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
-                Rectangle aInvRect( nX, 0, nX + max( nWidth, (ULONG)nOldWidth ), USHRT_MAX );
+                Rectangle aInvRect( nX, 0, nX + std::max( nWidth, (ULONG)nOldWidth ), USHRT_MAX );
                 Control::Invalidate( aInvRect );
                 ( (BrowserDataWin*)pDataWin )->Invalidate( aInvRect );
             }
