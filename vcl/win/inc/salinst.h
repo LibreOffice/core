@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:35:32 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,34 +66,69 @@
 #include <sv.h>
 #endif
 
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
+#endif
+
 namespace vos { class OMutex; }
-class SalYieldMutex;
-class SalInstance;
-class SalFrame;
-class SalObject;
 
 // -------------------
 // - SalInstanceData -
 // -------------------
 
-class SalInstanceData
+class SalYieldMutex;
+
+class WinSalInstance : public SalInstance
 {
 public:
     HINSTANCE           mhInst;                 // Instance Handle
     HWND                mhComWnd;               // window, for communication (between threads and the main thread)
-    void*               mpFilterInst;
-    void*               mpFilterCallback;
     SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
     vos::OMutex*        mpSalWaitMutex;         // Sal-Wait-Mutex
     USHORT              mnYieldWaitCount;       // Wait-Count
+public:
+    WinSalInstance();
+    virtual ~WinSalInstance();
+
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual void            DestroyFrame( SalFrame* pFrame );
+    virtual SalObject*      CreateObject( SalFrame* pParent );
+    virtual void            DestroyObject( SalObject* pObject );
+    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
+                                                     long nDX, long nDY,
+                                                     USHORT nBitCount );
+    virtual void            DestroyVirtualDevice( SalVirtualDevice* pDevice );
+
+    virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+                                               ImplJobSetup* pSetupData );
+    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );
+    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
+    virtual void            DestroyPrinter( SalPrinter* pPrinter );
+    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
+    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
+    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
+    virtual String             GetDefaultPrinter();
+    virtual SalSound*           CreateSalSound();
+    virtual SalTimer*           CreateSalTimer();
+    virtual SalOpenGL*          CreateSalOpenGL( SalGraphics* pGraphics );
+    virtual SalI18NImeStatus*   CreateI18NImeStatus();
+    virtual SalSystem*          CreateSalSystem();
+    virtual SalBitmap*          CreateSalBitmap();
+    virtual vos::IMutex*        GetYieldMutex();
+    virtual ULONG               ReleaseYieldMutex();
+    virtual void                AcquireYieldMutex( ULONG nCount );
+    virtual void                Yield( BOOL bWait );
+    virtual bool                AnyInput( USHORT nType );
+    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
 };
 
 // --------------
 // - Prototypen -
 // --------------
 
-SalFrame* ImplSalCreateFrame( SalInstance* pInst, HWND hWndParent, ULONG nSalFrameStyle );
-SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent );
+SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, ULONG nSalFrameStyle );
+SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent );
 HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, BOOL bAsChild );
 void ImplSalStartTimer( ULONG nMS, BOOL bMutex = FALSE );
 void ImplSalPrinterAbortJobAsync( HDC hPrnDC );
