@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:21:16 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ czech ] = "Poznámky pod čarou";
                 Text[ hebrew ] = "‮הערות שוליים‬";
                 Text[ hindi ] = "पृष्ठ के नीचे की टीका";
+                Text[ slovak ] = "Poznámky pod čiarou";
             };
             PageItem
             {
@@ -150,6 +151,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ czech ] = "Vysvětlivky";
                 Text[ hebrew ] = "Endnoten";
                 Text[ hindi ] = "अंतिम टीका";
+                Text[ slovak ] = "Vysvetlivky";
             };
         };
     };
@@ -168,6 +170,7 @@ TabDialog DLG_DOC_FOOTNOTE
     Text[ czech ] = "Nastavení poznámek pod čarou";
     Text[ hebrew ] = "Fußnoteneinstellung";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका निर्धारण";
+    Text[ slovak ] = "Nastavenie poznámok pod čiarou";
 };
 TabPage TP_FOOTNOTEOPTION
 {
@@ -209,6 +212,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Automatické číslování";
         Text[ hebrew ] = "Automatische Nummerierung";
         Text[ hindi ] = "स्वचालित ढंग से संख्या देना";
+        Text[ slovak ] = "Automatické číslovanie";
     };
     FixedText FT_NUMTYPE
     {
@@ -240,6 +244,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "Nu~mmerierung";
         Text[ hindi ] = "~संख्या देना";
+        Text[ slovak ] = "Čís~lovanie";
     };
     ListBox LB_NUMVIEW
     {
@@ -282,6 +287,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Začít od";
         Text[ hebrew ] = "Be~ginn bei";
         Text[ hindi ] = "में प्रारं~भ";
+        Text[ slovak ] = "~Začať od";
     };
     NumericField FLD_OFFSET
     {
@@ -325,6 +331,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Počítání";
         Text[ hebrew ] = "~Zählung";
         Text[ hindi ] = "~गिनना";
+        Text[ slovak ] = "~Počítanie";
     };
     ListBox LB_NUMCOUNT
     {
@@ -503,6 +510,12 @@ TabPage TP_FOOTNOTEOPTION
         < "एक अध्याय में" ; > ;
         < "एक लेखपत्र में" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Na stránke" ; > ;
+        < "V kapitole" ; > ;
+        < "V dokumente" ; > ;
+    };
     };
     FixedText FT_PREFIX
     {
@@ -537,6 +550,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Před";
         Text[ hebrew ] = "לפני";
         Text[ hindi ] = "~प~हिले";
+        Text[ slovak ] = "P~red";
     };
     Edit ED_PREFIX
     {
@@ -580,6 +594,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Za";
         Text[ hebrew ] = "אחרי";
         Text[ hindi ] = "प~श्चात्";
+        Text[ slovak ] = "~Za";
     };
     Edit ED_SUFFIX
     {
@@ -621,6 +636,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     RadioButton RB_POS_PAGE
     {
@@ -656,6 +672,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Konec strany";
         Text[ hebrew ] = "Seiten~ende";
         Text[ hindi ] = "पृष्ठ ~का अंत";
+        Text[ slovak ] = "~Koniec strany";
     };
     RadioButton RB_POS_CHAPTER
     {
@@ -689,6 +706,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Konec dokumentu";
         Text[ hebrew ] = "Do~kumentende";
         Text[ hindi ] = "ले~खपत्र का अंत";
+        Text[ slovak ] = "Koniec ~dokumentu";
     };
     FixedLine FL_TEMPL
     {
@@ -722,6 +740,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Styly";
         Text[ hebrew ] = "‮סגנונות‬";
         Text[ hindi ] = "शैलियाँ";
+        Text[ slovak ] = "Štýly";
     };
     FixedText FT_PARA_TEMPL
     {
@@ -756,6 +775,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Odstavec";
         Text[ hebrew ] = "~Absatz";
         Text[ hindi ] = "परिच्छे~द";
+        Text[ slovak ] = "O~dstavec";
     };
     ListBox LB_PARA_TEMPL
     {
@@ -800,6 +820,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Stránka";
         Text[ hebrew ] = "‮דף‬";
         Text[ hindi ] = "~पृष्ठ";
+        Text[ slovak ] = "~Stránka";
     };
     ListBox LB_PAGE_TEMPL
     {
@@ -841,6 +862,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Znakové styly";
         Text[ hebrew ] = "Zeichenvorlagen";
         Text[ hindi ] = "अक्षर शैलियाँ";
+        Text[ slovak ] = "Znakové štýly";
     };
     FixedText FT_ANCHR_CHARFMT
     {
@@ -874,6 +896,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Oblast textu";
         Text[ hebrew ] = "Te~xtbereich";
         Text[ hindi ] = "~टेक्स्ट् विस्तीर्ण";
+        Text[ slovak ] = "Oblasť te~xtu";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -916,6 +939,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Oblast poznámek pod čarou";
         Text[ hebrew ] = "~Fußnotenbereich";
         Text[ hindi ] = "पृष्ठ के नी~चे की टीका का विस्तीर्ण";
+        Text[ slovak ] = "Oblasť po~známok pod čiarou";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -958,6 +982,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Pokračující komentář";
         Text[ hebrew ] = "Hinweistext mehrseitige Fußnoten";
         Text[ hindi ] = "जारी रखने का सूचना";
+        Text[ slovak ] = "Pokračujúci komentár";
     };
     FixedText FT_CONT
     {
@@ -992,6 +1017,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Konec poznámky pod čarou";
         Text[ hebrew ] = "Am Fußn~otenende";
         Text[ hindi ] = "पृष्ठ के ~नीचे की टीका का अंत";
+        Text[ slovak ] = "K~oniec poznámky pod čiarou";
     };
     Edit ED_CONT
     {
@@ -1035,6 +1061,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ czech ] = "Počátek následující prezentace";
         Text[ hebrew ] = "A~uf Folgeseite";
         Text[ hindi ] = "अ~गला पृष्ठ का प्रारंभ में";
+        Text[ slovak ] = "Začia~tok nasledujúcej prezentácie";
     };
     Edit ED_CONT_FROM
     {
@@ -1086,6 +1113,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Automatické číslování";
         Text[ hebrew ] = "Automatische Nummerierung";
         Text[ hindi ] = "स्वचालित ढंग से संख्या देना";
+        Text[ slovak ] = "Automatické číslovanie";
     };
     FixedText FT_NUMTYPE
     {
@@ -1117,6 +1145,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "~संख्या देना";
+        Text[ slovak ] = "Čí~slovanie";
     };
     ListBox LB_NUMVIEW
     {
@@ -1170,6 +1199,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Začít od";
         Text[ hebrew ] = "Be~ginn bei";
         Text[ hindi ] = "में प्रारं~भ";
+        Text[ slovak ] = "~Začať od";
     };
     NumericField FLD_OFFSET
     {
@@ -1230,6 +1260,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Před";
         Text[ hebrew ] = "לפני";
         Text[ hindi ] = "प~हिले";
+        Text[ slovak ] = "P~red";
     };
     Edit ED_PREFIX
     {
@@ -1273,6 +1304,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Za";
         Text[ hebrew ] = "אחרי";
         Text[ hindi ] = "प~श्चात्";
+        Text[ slovak ] = "~Za";
     };
     Edit ED_SUFFIX
     {
@@ -1323,6 +1355,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Konec strany";
         Text[ hebrew ] = "Seiten~ende";
         Text[ hindi ] = "पृष्ठ ~का अंत";
+        Text[ slovak ] = "K~oniec strany";
     };
     RadioButton RB_POS_CHAPTER
     {
@@ -1356,6 +1389,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Konec dokumentu";
         Text[ hebrew ] = "~Dokumentende";
         Text[ hindi ] = "ले~खपत्र का अंत";
+        Text[ slovak ] = "Koniec ~dokumentu";
     };
     FixedLine FL_TEMPL
     {
@@ -1389,6 +1423,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Styly";
         Text[ hebrew ] = "‮סגנונות‬";
         Text[ hindi ] = "शैलियाँ";
+        Text[ slovak ] = "Štýly";
     };
     FixedText FT_PARA_TEMPL
     {
@@ -1423,6 +1458,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Odstavec";
         Text[ hebrew ] = "~Absatz";
         Text[ hindi ] = "परिच्छे~द";
+        Text[ slovak ] = "~Odstavec";
     };
     ListBox LB_PARA_TEMPL
     {
@@ -1467,6 +1503,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Stránka";
         Text[ hebrew ] = "‮דף‬";
         Text[ hindi ] = "~पृष्ठ";
+        Text[ slovak ] = "St~ránka";
     };
     ListBox LB_PAGE_TEMPL
     {
@@ -1507,6 +1544,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Znakové styly";
         Text[ hebrew ] = "Zeichenvorlagen";
         Text[ hindi ] = "अक्षर शैलियाँ";
+        Text[ slovak ] = "Znakové štýly";
     };
     FixedText FT_ANCHR_CHARFMT
     {
@@ -1539,6 +1577,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Oblast textu";
         Text[ hebrew ] = "Te~xtbereich";
         Text[ hindi ] = "~टेक्स्ट् विस्तीर्ण";
+        Text[ slovak ] = "Oblasť te~xtu";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -1580,6 +1619,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Oblast pro vysvětlivky";
         Text[ hebrew ] = "E~ndnotenbereich";
         Text[ hindi ] = "~अंतिम टीका विस्तीर्ण";
+        Text[ slovak ] = "Oblasť pr~e vysvetlivky";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -1623,6 +1663,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Pokračující komentář";
         Text[ hebrew ] = "Hinweistext mehrseitige Fußnoten";
         Text[ hindi ] = "जारी रखने का सूचना";
+        Text[ slovak ] = "Pokračujúci komentár";
     };
     FixedText FT_CONT
     {
@@ -1657,6 +1698,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Následující strana";
         Text[ hebrew ] = "~Folgeseite";
         Text[ hindi ] = "~निम्नलिखित पृष्ठ";
+        Text[ slovak ] = "~Nasledujúca strana";
     };
     Edit ED_CONT
     {
@@ -1700,6 +1742,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ czech ] = "Začátek";
         Text[ hebrew ] = "~Beginn";
         Text[ hindi ] = "प्रा~रंभ";
+        Text[ slovak ] = "~Začiatok";
     };
     Edit ED_CONT_FROM
     {
@@ -1711,6 +1754,8 @@ TabPage TP_ENDNOTEOPTION
         MaxTextLength = 30 ;
     };
 };
+
+
 
 
 
