@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 11:28:26 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,6 +1449,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                 {
                     xProp->setPropertyValue(PROPERTY_USEBOOKMARKS,makeAny(sal_True));
                     xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(ResultSetType::SCROLL_SENSITIVE));
+                    xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(ResultSetConcurrency::UPDATABLE));
 
                 }
                 catch(Exception&)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,8 @@ namespace dbaccess
                             const ::rtl::OUString& _sUpdateTableName);
 
         // clears the insert row
-        void clearInsertRow();
+        void                    clearInsertRow();
+        ORowSetMatrix::iterator calcPosition() const;
     protected:
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
@@ -331,6 +332,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.15  2001/08/24 06:25:57  oj
+    #90015# code corrcetions for some speedup's
+
     Revision 1.14  2001/08/09 13:12:51  oj
     #90801# clear insertrow after insert
 

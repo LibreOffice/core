@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:42:42 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,11 +262,11 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
     checkCache();
     OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"Illegal call here!");
 
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd() && !m_aCurrentRow.isNull())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     else
     {   // currentrow is null when the clone move the window
-        if(!m_aCurrentRow)
+        if(!m_aCurrentRow || m_aCurrentRow.isNull())
         {
             positionCache();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
@@ -930,7 +930,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& 
         m_aCurrentRow.setBookmark(m_aBookmark);
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
         OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
-        OSL_ENSURE((*(*m_aCurrentRow))[0].makeAny().hasValue(),"Bookmark has no value!");
+        OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,15 +547,18 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     }
 
     m_bInserted = xPrep->executeUpdate() > 0;
+    ::comphelper::disposeComponent(xPrep);
 
     //  OCacheSet::insertRow( _rInsertRow,_xTable);
     if(m_bInserted)
     {
+        // first check if all key column values were set
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
         connectivity::ORowVector< ORowSetValue >::iterator aIter = aKeyRow->begin();
         OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
         for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter)
             *aIter = (*_rInsertRow)[aPosIter->second];
+
 
         OKeySetMatrix::iterator aKeyIter = m_aKeyMap.end();
         --aKeyIter;
@@ -962,8 +965,8 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
             xParameter->setBoolean(nPos,*aIter);
             break;
         case DataType::TINYINT:
-            xParameter->setByte(nPos,*aIter);
-            break;
+//          xParameter->setByte(nPos,*aIter); //SQLSERVER doesn't run with this
+//          break;
         case DataType::SMALLINT:
             xParameter->setShort(nPos,*aIter);
             break;
@@ -998,7 +1001,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 sal_Bool OKeySet::fetchRow()
 {
     // fetch the next row and append on the keyset
-    sal_Bool bRet;
+    sal_Bool bRet = sal_False;
     if(!m_bRowCountFinal && (bRet = m_xDriverSet->next()))
     {
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
@@ -1269,6 +1272,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.27  2001/10/30 14:22:10  oj
+    #93939# add late ctor
+
     Revision 1.26  2001/09/20 12:56:18  oj
     #92232# fixes for BIGINT type and new property HELPTEXT
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,6 @@ void SAL_CALL OBookmarkSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExce
 void OBookmarkSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
     OCacheSet::fillValueRow(_rRow,_nPosition);
-
-    (*_rRow->begin()) = m_xRowLocate->getBookmark();
 }
 // -------------------------------------------------------------------------
 void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParameter,const ORowSetValue& _rValue)
@@ -258,6 +256,9 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/10/30 14:22:10  oj
+    #93939# add late ctor
+
     Revision 1.7  2001/09/20 12:59:25  oj
     #92232# fixes for BIGINT type and new property HELPTEXT
 

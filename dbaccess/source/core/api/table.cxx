@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,22 +680,29 @@ void ODBTable::refreshIndexes()
         if(m_CatalogName.getLength())
             aVal <<= m_CatalogName;
 
-        // fill indexes
-        Reference< XResultSet > xResult = m_xMetaData->getIndexInfo(aVal,m_SchemaName,m_Name,sal_False,sal_False);
-
-        if(xResult.is())
+        try
         {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
-            while(xResult->next())
+            // fill indexes
+            Reference< XResultSet > xResult = m_xMetaData->getIndexInfo(aVal,m_SchemaName,m_Name,sal_False,sal_False);
+
+            if(xResult.is())
             {
-                aName = xRow->getString(5);
-                if(aName.getLength())
-                    aName += aDot;
-                aName += xRow->getString(6);
-                if(aName.getLength())
-                    aVector.push_back(aName);
+                Reference< XRow > xRow(xResult,UNO_QUERY);
+                ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+                while(xResult->next())
+                {
+                    aName = xRow->getString(5);
+                    if(aName.getLength())
+                        aName += aDot;
+                    aName += xRow->getString(6);
+                    if(aName.getLength())
+                        aVector.push_back(aName);
+                }
             }
+        }
+        catch(SQLException&)
+        {
+            // it could happen that a driver doesn't support this and throws an exception
         }
 
         if(!m_pIndexes)

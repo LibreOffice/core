@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,92 +174,111 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     Reference< XConnection> xConnection;
     if(_xComposer.is())
     {
-        Reference<XTablesSupplier> xTabSup(_xComposer,UNO_QUERY);
-        OSL_ENSURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
-        Reference<XNameAccess> xTables = xTabSup->getTables();
-
-
-        if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
-            xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
-        else if(xTables->getElementNames().getLength())
+        try
         {
-            aUpdateTableName = xTables->getElementNames()[0];
-            xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
-        }
-        Reference<XIndexAccess> xIndexAccess(xTables,UNO_QUERY);
-        if(xIndexAccess.is())
-            nTablesCount = xIndexAccess->getCount();
-        else
-            nTablesCount = xTables->getElementNames().getLength();
+            Reference<XTablesSupplier> xTabSup(_xComposer,UNO_QUERY);
+            OSL_ENSURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
+            Reference<XNameAccess> xTables = xTabSup->getTables();
 
-        if(m_aUpdateTable.is() && nTablesCount < 3) // for we can't handle more than 2 tables in our keyset
-        {
-            Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
-            if(xKeys.is())
+
+            if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
+                xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
+            else if(xTables->getElementNames().getLength())
             {
-                Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
-                Reference<XColumnsSupplier> xColumnsSupplier;
-                // search the one and only primary key
-                for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+                aUpdateTableName = xTables->getElementNames()[0];
+                xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
+            }
+            Reference<XIndexAccess> xIndexAccess(xTables,UNO_QUERY);
+            if(xIndexAccess.is())
+                nTablesCount = xIndexAccess->getCount();
+            else
+                nTablesCount = xTables->getElementNames().getLength();
+
+            if(m_aUpdateTable.is() && nTablesCount < 3) // for we can't handle more than 2 tables in our keyset
+            {
+                Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
+                if(xKeys.is())
                 {
-                    Reference<XPropertySet> xProp;
-                    ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
-                    sal_Int32 nKeyType = 0;
-                    xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                    if(KeyType::PRIMARY == nKeyType)
+                    Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
+                    Reference<XColumnsSupplier> xColumnsSupplier;
+                    // search the one and only primary key
+                    for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
                     {
-                        xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                        break;
+                        Reference<XPropertySet> xProp;
+                        ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
+                        sal_Int32 nKeyType = 0;
+                        xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                        if(KeyType::PRIMARY == nKeyType)
+                        {
+                            xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                            break;
+                        }
                     }
-                }
 
-                if(xColumnsSupplier.is())
-                {
-                    // first we need a connection
-                    Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
-                    if(xStmt.is())
-                        xConnection = xStmt->getConnection();
-                    else
+                    if(xColumnsSupplier.is())
                     {
-                        Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
-                        xConnection = xPrepStmt->getConnection();
+                        // first we need a connection
+                        Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
+                        if(xStmt.is())
+                            xConnection = xStmt->getConnection();
+                        else
+                        {
+                            Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
+                            xConnection = xPrepStmt->getConnection();
+                        }
+                        OSL_ENSURE(xConnection.is(),"No connection!");
+
+                        Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
+                        Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
+                        Reference<XNameAccess> xSelColumns = xColSup->getColumns();
+
+                        OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false);
+                        ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
+                        bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                     }
-                    OSL_ENSURE(xConnection.is(),"No connection!");
-
-                    Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-                    Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
-                    Reference<XNameAccess> xSelColumns = xColSup->getColumns();
-
-                    OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false);
-                    ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
-                    bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                 }
             }
+        }
+        catch(Exception&)
+        {
         }
     }
     Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
 
-    // first check if resultset is bookmarkable
-    if(xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) && any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)))
-    {
-        m_pCacheSet = new OBookmarkSet();
-        m_pCacheSet->construct(_xRs);
+    sal_Bool bNeedKeySet = !(xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
+                             any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)));
+    bNeedKeySet = bNeedKeySet || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETCONCURRENCY) &&
+                            ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY);
 
-        // check privileges
-        m_nPrivileges = Privilege::SELECT;
-        if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
+    // first check if resultset is bookmarkable
+    if(!bNeedKeySet)
+    {
+        try
         {
-            Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
-            if(xTable.is() && xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+            m_pCacheSet = new OBookmarkSet();
+            m_pCacheSet->construct(_xRs);
+
+            // check privileges
+            m_nPrivileges = Privilege::SELECT;
+            if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
             {
-                m_nPrivileges = 0;
-                xTable->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
-                if(!m_nPrivileges)
-                    m_nPrivileges = Privilege::SELECT;
+                Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
+                if(xTable.is() && xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+                {
+                    m_nPrivileges = 0;
+                    xTable->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
+                    if(!m_nPrivileges)
+                        m_nPrivileges = Privilege::SELECT;
+                }
             }
         }
+        catch(const SQLException&)
+        {
+            bNeedKeySet = sal_True;
+        }
+
     }
-    else
+    if(bNeedKeySet)
     {
         // need to check if we could handle this select clause
         bAllKeysFound = bAllKeysFound && (nTablesCount == 1 || checkJoin(xConnection,_xComposer,aUpdateTableName));
@@ -645,7 +664,7 @@ sal_Bool SAL_CALL ORowSetCache::moveToBookmark( const Any& bookmark ) throw(SQLE
             moveWindow();
             checkPositionFlags();
             if(!m_bAfterLast)
-                m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // must be -1
+                m_aMatrixIter = calcPosition();
             else
                 m_aMatrixIter = m_pMatrix->end();
         }
@@ -767,7 +786,7 @@ sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
             moveWindow();
 
             OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-            m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // -1 because rows start at zero
+            m_aMatrixIter = calcPosition();
             checkPositionFlags();
         }
     }
@@ -1023,7 +1042,7 @@ sal_Bool ORowSetCache::moveWindow()
         if(m_nPosition <= (m_nStartPos+m_nFetchSize))
         {   // position in window
             OSL_ENSURE((m_nPosition - m_nStartPos -1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-            m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1;
+            m_aMatrixIter = calcPosition();
             if(!m_aMatrixIter->isValid())
             {
                 sal_Bool bOk;
@@ -1188,7 +1207,7 @@ sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
 //      else
 //          m_aMatrixIter = m_pMatrix->begin() + m_nPosition - 1;
         OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-        m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // if row == -1 that means it stands on the last
+        m_aMatrixIter = calcPosition();
     }
     else
     {
@@ -1238,7 +1257,7 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
                 m_bAfterLast    = m_nPosition > m_nRowCount;
                 moveWindow();
                 OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-                m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // if row == -1 that means it stands on the last
+                m_aMatrixIter = calcPosition();
             }
         }
         else
@@ -1256,7 +1275,7 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
             moveWindow();
             checkPositionFlags();
             if(!m_bAfterLast)
-                m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // must be -1
+                m_aMatrixIter = calcPosition();
             else
                 m_aMatrixIter = m_pMatrix->end();
         }
@@ -1304,7 +1323,7 @@ sal_Bool SAL_CALL ORowSetCache::previous(  ) throw(SQLException, RuntimeExceptio
             --m_nPosition;
             moveWindow();
             OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-            m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // must be -1
+            m_aMatrixIter = calcPosition();
 
             checkPositionFlags();
 
@@ -1454,7 +1473,7 @@ void SAL_CALL ORowSetCache::deleteRow(  ) throw(SQLException, RuntimeException)
     {
         --m_nRowCount;
         OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-        ORowSetMatrix::iterator aPos = m_pMatrix->begin() + m_nPosition - m_nStartPos - 1;
+        ORowSetMatrix::iterator aPos = calcPosition();
         (*aPos)   = NULL;
         //  (*m_pMatrix)[(m_nPosition - m_nStartPos)] = NULL; // set the deleted row to NULL
 
@@ -1700,5 +1719,12 @@ void ORowSetCache::clearInsertRow()
         aIter->setModified(sal_False);
         aIter->setNull();
     }
+}
+// -----------------------------------------------------------------------------
+ORowSetMatrix::iterator ORowSetCache::calcPosition() const
+{
+    sal_Int32 nValue = (m_nPosition - m_nStartPos) - 1;
+    OSL_ENSURE(nValue >= 0,"Position is invalid!");
+    return (nValue < 0) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
 }
 // -----------------------------------------------------------------------------
