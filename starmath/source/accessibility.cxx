@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-15 13:49:22 $
+ *  last change: $Author: vg $ $Date: 2002-05-23 13:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,9 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-#ifndef _SVX_UNOEDACC_HXX_
-#include <svx/unoedacc.hxx>
-#endif
+/*#ifndef _SVX_UNOEDACC_HXX_
+#include <svx/inc/unoedacc.hxx>
+#endif*/
 
 #ifndef _ACCESSIBILITY_HXX_
 #include "accessibility.hxx"
@@ -348,7 +348,7 @@ Reference< XAccessible > SAL_CALL SmAccessibility::getAccessibleParent()
 
     Window *pAccParent = pWin->GetAccessibleParentWindow();
     DBG_ASSERT( pAccParent, "accessible parent missing" );
-    return pAccParent ? pAccParent->GetAccessible() : 0;
+    return pAccParent ? pAccParent->GetAccessible() : Reference< XAccessible >();
 }
 
 sal_Int32 SAL_CALL SmAccessibility::getAccessibleIndexInParent()
@@ -379,7 +379,7 @@ OUString SAL_CALL SmAccessibility::getAccessibleDescription()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     SmDocShell *pDoc = GetDoc_Impl();
-    return pDoc ? pDoc->GetText() : OUString();
+    return pDoc ? OUString(pDoc->GetText()) : OUString();
 }
 
 OUString SAL_CALL SmAccessibility::getAccessibleName()
