@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:08:02 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ CollatorImpl::compareString( const OUString& in_str1, const OUString& in_str2) t
 sal_Int32 SAL_CALL
 CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collatorOptions) throw(RuntimeException)
 {
-    Sequence< Implementation > &imp = localedata->getCollatorImplementations(rLocale);
+    const Sequence< Implementation > &imp = localedata->getCollatorImplementations(rLocale);
     for (sal_Int16 i = 0; i < imp.getLength(); i++)
         if (imp[i].isDefault)
             return loadCollatorAlgorithm(imp[i].unoID, rLocale, collatorOptions);
@@ -156,7 +156,7 @@ Sequence< OUString > SAL_CALL
 CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale ) throw(RuntimeException)
 {
     nLocale = rLocale;
-    Sequence< Implementation > &imp = localedata->getCollatorImplementations(rLocale);
+    const Sequence< Implementation > &imp = localedata->getCollatorImplementations(rLocale);
     Sequence< OUString > list(imp.getLength());
 
     for (sal_Int32 i = 0; i < imp.getLength(); i++) {
