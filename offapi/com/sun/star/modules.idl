@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modules.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:34:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@ module ldap {};
 
 /// Spell checker, hyphenation and thesaurus interfaces.
 module linguistic2 {};
+
+/// Interfaces for Email connectivity
+module mail {};
 
 /// Interfaces for Mozilla integration.
 module mozilla {};
