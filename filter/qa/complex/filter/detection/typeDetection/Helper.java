@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-01-28 14:58:22 $
+ *  last change: $Date: 2004-11-26 14:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ public class Helper  {
         m_param = param;
         m_log = log;
 
+
         // get all files from the given directory
         m_sTestDocPath = (String)param.get("TestDocumentPath");
 
@@ -226,11 +227,8 @@ public class Helper  {
             if ( m_param.DebugIsActive ) {
                 System.out.println("Looking for "+csvFileName);
             }
-            String PackagePath = this.getClass().getPackage().
-                                                  getName().replace('.','/');
 
-            URL url = this.getClass().getResource("/" + PackagePath +
-                                                                "/" +csvFileName);
+            URL url = getClassURL(csvFileName);
 
             if (url != null) {
                 URLConnection connection = url.openConnection();
@@ -454,6 +452,15 @@ public class Helper  {
         PropertyValue[][] dummy = new PropertyValue[1][];
         dummy[0] = PropVal;
         return dummy;
+    }
+
+    public URL getClassURL(String fileName){
+        String PackagePath = this.getClass().getPackage().getName().replace('.','/');
+        return this.getClass().getResource("/" + PackagePath +"/" + fileName);
+    }
+
+    public String getClassURLString(String fileName){
+        return getClassURL(fileName).toString().replaceAll("file:","");
     }
 
 
