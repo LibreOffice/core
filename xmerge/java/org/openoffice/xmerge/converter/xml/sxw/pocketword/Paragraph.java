@@ -688,11 +688,7 @@ class Paragraph implements PocketWordConstants {
 
         // In courier, can have no more than 29 chars per line
 
-        int last_space = 0;
-        int chunk_start = 0;
-        int x = 0;
-
-        String text;
+        int chunkStart = 0;
         StringBuffer sb = new StringBuffer("");
 
         // Line Descriptor info should be eliminated each time
@@ -703,45 +699,47 @@ class Paragraph implements PocketWordConstants {
             ParagraphTextSegment pts = (ParagraphTextSegment)textSegments.elementAt(i);
             sb.append(pts.getText());
         }
-        text = sb.toString();
 
-        if (text.length() == 0) {
+        if (sb.length() == 0) {
             lines = 1;
             lineDescriptors.add(new LineDescriptor((short)1, (short)0));
             return;
         }
 
-        while (chunk_start < text.length()) {
-            int i;
-            char limit = '\0';
+        while (chunkStart < sb.length()) {
+            String text = "";
 
             try {
-                for (i = 0; i < 30; i++) {
-                    limit = text.charAt(chunk_start + i);
+                text = sb.substring(chunkStart, chunkStart + 30);
+            }
+            catch (StringIndexOutOfBoundsException sioobe) {
+                // We have less than one line left so just add it
+                text = sb.substring(chunkStart);
+                lineDescriptors.add(new LineDescriptor((short)(text.length() + 1), (short)(text.length() * 36)));
+                chunkStart += text.length();
+                lines++;
+                continue;
+            }
 
-                    if (Character.isWhitespace(limit)) {
-                        last_space = chunk_start + i;
-                    }
+            int lastWhitespace = -1;
+
+            for (int i = 29; i >= 0; i--) {
+                if (Character.isWhitespace(text.charAt(i))) {
+                    lastWhitespace = i;
+                    break;
                 }
             }
-            catch (IndexOutOfBoundsException ioobe) {
-                /*
-                 * We may go past the end without an update to last_space
-                 * leaving the length at 0.  This causes an infinite loop.
-                 */
-                last_space = text.length();
-            }
 
-            // Now check the limit character to see what we have
-            if (Character.isWhitespace(limit)) {
-                lineDescriptors.add(new LineDescriptor((short)30, (short)((30 - 1) * 36)));
-                chunk_start += 30;
+            if (lastWhitespace != -1) {
+                // The line can be split
+                lineDescriptors.add(new LineDescriptor((short)(lastWhitespace + 1), (short)(lastWhitespace  * 36)));
+                chunkStart += lastWhitespace + 1;
                 lines++;
             }
             else {
-                int length = last_space - chunk_start + 1;
-                lineDescriptors.add(new LineDescriptor((short)length, (short)((length - 1) * 36)));
-                chunk_start = last_space + 1;
+                // The line is completely occupied by a single word
+                lineDescriptors.add(new LineDescriptor((short)29, (short)(29 * 36)));
+                chunkStart += 29;
                 lines++;
             }
         }
