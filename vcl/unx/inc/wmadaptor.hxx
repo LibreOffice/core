@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-12 09:20:59 $
+ *  last change: $Author: pl $ $Date: 2001-10-17 18:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ protected:
     ::std::vector< Rectangle >
                             m_aWMWorkAreas;
     bool                    m_bTransientBehaviour;
+    bool                    m_bEnableAlwaysOnTopWorks;
 
     WMAdaptor( SalDisplay * )
 ;
@@ -236,6 +237,11 @@ public:
      *  enables always on top or equivalent if possible
      */
     virtual void enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const;
+
+    /*
+     *  tells whether enableAlwaysOnTop actually works with this WM
+     */
+    bool isAlwaysOnTopOK() const { return m_bEnableAlwaysOnTopWorks; }
 
     /*
      *  gets a WM atom

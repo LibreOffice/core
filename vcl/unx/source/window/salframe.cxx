@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-17 14:35:54 $
+ *  last change: $Author: pl $ $Date: 2001-10-17 18:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3021,6 +3021,11 @@ long SalFrameData::Dispatch( XEvent *pEvent )
             case VisibilityNotify:
                 nVisibility_ = pEvent->xvisibility.state;
                 nRet = TRUE;
+                if( bAlwaysOnTop_
+                    && bMapped_
+                    && ! GetDisplay()->getWMAdaptor()->isAlwaysOnTopOK()
+                    && nVisibility_ != VisibilityUnobscured )
+                    pFrame_->ToTop( 0 );
             break;
 
             case ReparentNotify:

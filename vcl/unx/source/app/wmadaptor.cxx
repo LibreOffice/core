@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-12 09:21:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-17 18:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,8 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 
 WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         m_pSalDisplay( pDisplay ),
-        m_bTransientBehaviour( false )
+        m_bTransientBehaviour( false ),
+        m_bEnableAlwaysOnTopWorks( false )
 {
     Atom                aRealType   = None;
     int                 nFormat     = 8;
@@ -380,6 +381,8 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     {
                         nProtocol = pMatch->nProtocol;
                         m_aWMAtoms[ nProtocol ] = pAtoms[ i ];
+                        if( pMatch->nProtocol == NET_WM_STATE_STAYS_ON_TOP )
+                            m_bEnableAlwaysOnTopWorks = true;
                     }
 #ifdef DEBUG
                     fprintf( stderr, "  %s%s\n", pAtomNames[i], nProtocol != -1 ? "" : " (unsupported)" );
@@ -607,6 +610,8 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     {
                         nProtocol = pMatch->nProtocol;
                         m_aWMAtoms[ nProtocol ] = pAtoms[ i ];
+                        if( pMatch->nProtocol == WIN_LAYER )
+                            m_bEnableAlwaysOnTopWorks = true;
                     }
 #ifdef DEBUG
                     fprintf( stderr, "  %s%s\n", pAtomNames[i], nProtocol != -1 ? "" : " (unsupported)" );
