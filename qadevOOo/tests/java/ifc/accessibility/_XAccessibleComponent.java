@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleComponent.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:25 $
+ *  last change:$Date: 2003-02-07 12:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
     public XAccessibleComponent oObj = null;
 
     private Rectangle bounds = null ;
+    private Vector KnownBounds = new Vector() ;
 
     private static final String className =
         "drafts.com.sun.star.accessibility.XAccessibleComponent" ;
@@ -101,7 +102,6 @@ public class _XAccessibleComponent extends MultiMethodTest {
      * @return The class name to load
      */
     protected String getTestedClassName() {
-        System.out.println("########### YEAH");
         return className;
     }
 
@@ -245,13 +245,21 @@ public class _XAccessibleComponent extends MultiMethodTest {
                     + chBnd.Width + "," + chBnd.Height + "): "
                     +  util.AccessibilityTools.accessibleToString(children[i]));
 
+                String pos = "(" + chBnd.X + "," + chBnd.Y + ")";
+                if (KnownBounds.contains(pos)) {
+                    log.println("Child is covered by another and can't be reached");
+                    continue;
+                }
+
+                KnownBounds.add(pos);
+
                 log.println("finding the point which lies on the component");
-                int curX = 0;
-                int curY = 0;
+                int curX = chBnd.Width;
+                int curY = chBnd.Height/2;
                 while (!children[i].contains(new Point(curX, curY))
-                       && curX < chBnd.Width) {
-                    curX++;
-                    curY++;
+                       && curX > 0 && curY > 0) {
+                    curX--;
+                    curY--;
                 };
 
                 if (curX==chBnd.Width) {
@@ -261,16 +269,16 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
                 // trying the point laying on child
                 XAccessible xAcc = oObj.getAccessibleAt
-                    (new Point(chBnd.X , chBnd.Y));
+                    (new Point(chBnd.X +curX, chBnd.Y+curY));
                 if (xAcc == null) {
                     log.println("The child not found at point ("
-                        + (chBnd.X ) + "," + chBnd.Y + ") - FAILED");
+                        + (chBnd.X +curX ) + "," + (chBnd.Y+curY) + ") - FAILED");
                     result = false;
                 } else {
                     XAccessible xAccCh = (XAccessible) UnoRuntime.queryInterface
                         (XAccessible.class, children[i]);
                     log.println("Child found at point ("
-                        + (chBnd.X ) + "," + chBnd.Y + ") - OK");
+                        + (chBnd.X +curX) + "," + (chBnd.Y+curY) + ") - OK");
                     boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
                     if (!res) {
                         int expIndex = xAccCh.getAccessibleContext().getAccessibleIndexInParent();
