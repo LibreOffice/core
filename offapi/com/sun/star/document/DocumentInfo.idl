@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentInfo.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 18:40:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <com/sun/star/beans/XFastPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XPropertyContainer_idl__
+#include <com/sun/star/beans/XPropertyContainer.idl>
+#endif
+
 #ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
 #endif
@@ -125,6 +129,17 @@ published service DocumentInfo
     /** supports faster access on well known properties by using index
      */
     interface com::sun::star::beans::XFastPropertySet;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the user fields, which (instead to the user fields set
+        by the interface XDocumentInfo) will be typesafe.
+
+        <p>
+        These fields are additional to normal properties (see below) and
+        additional to the user fields set by the interface XDocumentInfo (see before).
+        </p>
+     */
+    [optional] interface com::sun::star::beans::XPropertyContainer;
 
     //-------------------------------------------------------------------------
     /** contains the intial author of the document
