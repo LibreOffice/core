@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2001-06-29 02:03:58 $
+ *  last change: $Author: pb $ $Date: 2001-07-03 09:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,58 +681,54 @@ TabPage TP_DOCINFOUSER
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_INFO1
     {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "Info ~0" ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Left = TRUE ;
     };
     Edit ED_INFO1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 6 ) ;
-        Size = MAP_APPFONT ( 182 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
         Left = TRUE ;
     };
     FixedText FT_INFO2
     {
-        Pos = MAP_APPFONT ( 6 , 22 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "Info ~1" ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Left = TRUE ;
     };
     Edit ED_INFO2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 21 ) ;
-        Size = MAP_APPFONT ( 182 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
         Left = TRUE ;
     };
     FixedText FT_INFO3
     {
-        Pos = MAP_APPFONT ( 6 , 37 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "Info ~2" ;
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Left = TRUE ;
     };
     Edit ED_INFO3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 36 ) ;
-        Size = MAP_APPFONT ( 182 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 69 ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
         Left = TRUE ;
     };
     FixedText FT_INFO4
     {
-        Pos = MAP_APPFONT ( 6 , 52 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "Info ~3" ;
+        Pos = MAP_APPFONT ( 6 , 84 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Left = TRUE ;
     };
     Edit ED_INFO4
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 51 ) ;
-        Size = MAP_APPFONT ( 182 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
         Left = TRUE ;
     };
     PushButton BTN_EDITLABEL
@@ -752,7 +748,6 @@ TabPage TP_DOCINFOUSER
         Text [ dutch ] = "~Infovelden..." ;
         Text [ spanish ] = "Ca~mpo información..." ;
         Text [ english_us ] = "~Info fields..." ;
-        TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÐÅÏ¢×Ö¶Î(~I)...";
         Text[ russian ] = "Ïîëÿ èíôîðìàöèè...";
         Text[ polish ] = "Pola infor~macyjne...";
