@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:19 $
+ *  last change: $Author: mba $ $Date: 2000-11-07 17:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void BindDispatch_Impl::Release()
 {
     if ( xDisp.is() )
     {
-        xDisp->removeStatusListener( (::com::sun::star::frame::XStatusListener*) this, ::com::sun::star::util::URL() );
+        xDisp->removeStatusListener( (::com::sun::star::frame::XStatusListener*) this, aURL );
         xDisp = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
     }
 
