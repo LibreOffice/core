@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:34:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,9 +149,6 @@
 #include "fusldlg.hxx"
 #endif
 #include "zoomlist.hxx"
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef SD_FU_EXPAND_PAGE_HXX
 #include "fuexpand.hxx"
 #endif
@@ -167,9 +164,6 @@
 #include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
 #endif
 #ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
@@ -429,29 +423,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             Invalidate( SID_COLORVIEW );
             Cancel();
             rReq.Done();
-        }
-        break;
-
-        case SID_PREVIEW_WIN:
-        {
-            bool bPreview = FALSE;
-
-            if ( rReq.GetArgs() )
-            {
-                bPreview = ((const SfxBoolItem&) (rReq.GetArgs()->Get(SID_PREVIEW_WIN))).GetValue();
-            }
-            else
-            {
-                USHORT nId = PreviewChildWindow::GetChildWindowId();
-                bPreview = !SfxBoolItem(SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow(nId)).GetValue();
-            }
-
-            SetPreview( bPreview );
-
-            pFrameView->SetShowPreviewInOutlineMode(bPreview);
-
-            Cancel();
-            rReq.Ignore ();
         }
         break;
 
