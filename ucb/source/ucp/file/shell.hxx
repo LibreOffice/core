@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:26:44 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,10 +482,10 @@ namespace fileaccess {
         /**
          *  writes to the file with given URL.
          *  The content of aInputStream becomes the content of the file
-         *  Return::
+         *  Return:: success of operation
          */
 
-        void SAL_CALL
+        sal_Bool SAL_CALL
         write( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath,
                sal_Bool OverWrite,
