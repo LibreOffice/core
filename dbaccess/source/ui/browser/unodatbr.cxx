@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-22 12:47:05 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 11:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,12 +1189,15 @@ void SbaTableQueryBrowser::connectExternalDispatches()
 void SbaTableQueryBrowser::implCheckExternalSlot(sal_Int32 _nId)
 {
     // check if we have to hide this item from the toolbox
-    ToolBox* pTB = getBrowserView()->getToolBox();
-    if (pTB)
+    if ( getBrowserView() )
     {
-        sal_Bool bHaveDispatcher = m_aDispatchers[_nId].is();
-        if (bHaveDispatcher != pTB->IsItemVisible((sal_uInt16)_nId))
-            bHaveDispatcher ? pTB->ShowItem((sal_uInt16)_nId) : pTB->HideItem((sal_uInt16)_nId);
+        ToolBox* pTB = getBrowserView()->getToolBox();
+        if (pTB)
+        {
+            sal_Bool bHaveDispatcher = m_aDispatchers[_nId].is();
+            if (bHaveDispatcher != pTB->IsItemVisible((sal_uInt16)_nId))
+                bHaveDispatcher ? pTB->ShowItem((sal_uInt16)_nId) : pTB->HideItem((sal_uInt16)_nId);
+        }
     }
 
     // and invalidate this feature in general
@@ -2583,6 +2586,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
 void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aEntryMutex);
+    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     // get the top-level representing the removed data source
