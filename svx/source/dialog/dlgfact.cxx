@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:55:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1262,7 +1262,6 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
 VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window* pParent,  //add for SvxScriptOrgDialog
                                             const String& rLanguage)
 {
-    OSL_TRACE("in ADF_Impl::CreateSvxScriptOrgDialog");
     Dialog* pDlg=NULL;
 
     pDlg = new SvxScriptOrgDialog( pParent, rLanguage);
@@ -1918,7 +1917,6 @@ AbstractSvxPostItDialog* AbstractDialogFactory_Impl::CreateSvxPostItDialog( Wind
 
 VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg( Window* pParent,  SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
 {
-    OSL_TRACE("in ADF_Impl::CreateSvxMacroAssignDlg");
     Dialog* pDlg=NULL;
 
     pDlg = new SvxMacroAssignDlg( pParent, rSet, xNameReplace, nSelectedIndex );
