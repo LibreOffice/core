@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-14 08:54:44 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,8 @@ public:
     static USHORT ThaiJustify( const XubString& rTxt, long* pKernArray,
                                long* pScrArray, xub_StrLen nIdx,
                                xub_StrLen nLen, USHORT nSpace = 0 );
+
+    static const SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode );
 };
 
 inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )

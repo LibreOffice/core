@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-18 12:16:38 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,8 @@ public:
                             sal_Bool bSetInReadOnly = sal_False ) const;
     sal_Bool _UnitDown(SwPaM *, const SwTwips nOffset = 0,
                             sal_Bool bSetInReadOnly = sal_False ) const;
+
+    void PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel, sal_Bool& bRight );
 
     // Methoden zur Verwaltung von FolgeFrames
            SwCntntFrm *SplitFrm( const xub_StrLen nTxtPos );

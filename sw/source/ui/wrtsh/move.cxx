@@ -2,9 +2,9 @@
  *
  *  $RCSfile: move.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 14:13:38 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ FASTBOOL SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, FASTBOOL bSelect )
 
 
 FASTBOOL SwWrtShell::Left( USHORT nMode, FASTBOOL bSelect,
-                            USHORT nCount, BOOL bBasicCall )
+                            USHORT nCount, BOOL bBasicCall, BOOL bVisual )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
@@ -168,14 +168,14 @@ FASTBOOL SwWrtShell::Left( USHORT nMode, FASTBOOL bSelect,
     else
     {
         ShellMoveCrsr aTmp( this, bSelect );
-        return SwCrsrShell::Left( nCount, nMode );
+        return SwCrsrShell::Left( nCount, nMode, bVisual );
     }
 }
 
 
 
 FASTBOOL SwWrtShell::Right( USHORT nMode, FASTBOOL bSelect,
-                            USHORT nCount, BOOL bBasicCall )
+                            USHORT nCount, BOOL bBasicCall, BOOL bVisual )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() && !GetViewOptions()->IsSelectionInReadonly() )
     {
@@ -188,7 +188,7 @@ FASTBOOL SwWrtShell::Right( USHORT nMode, FASTBOOL bSelect,
     else
     {
         ShellMoveCrsr aTmp( this, bSelect );
-        return SwCrsrShell::Right( nCount, nMode );
+        return SwCrsrShell::Right( nCount, nMode, bVisual );
     }
 }
 
@@ -726,6 +726,9 @@ FASTBOOL SwWrtShell::SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2002/08/01 14:13:38  os
+      #99985# text selection in readonly documents
+
       Revision 1.2  2002/02/01 12:51:13  jp
       Task #92291#: add new character skip modifier
 

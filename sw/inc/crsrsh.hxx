@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:01:10 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ private:
 
     void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
 
-    FASTBOOL LeftRight( BOOL, USHORT, USHORT );
+    FASTBOOL LeftRight( BOOL, USHORT, USHORT, BOOL );
     FASTBOOL UpDown( BOOL, USHORT );
     FASTBOOL LRMargin( BOOL, BOOL bAPI = FALSE );
     FASTBOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
@@ -387,10 +387,10 @@ public:
     // Basiscursortravelling
     long GetUpDownX() const             { return nUpDownX; }
 
-    FASTBOOL Left( USHORT nCnt, USHORT nMode )
-                                { return LeftRight( TRUE, nCnt, nMode ); }
-    FASTBOOL Right( USHORT nCnt, USHORT nMode )
-                                { return LeftRight( FALSE, nCnt, nMode ); }
+    FASTBOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
+                                { return LeftRight( TRUE, nCnt, nMode, bAllowVisual ); }
+    FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
+                                { return LeftRight( FALSE, nCnt, nMode, bAllowVisual ); }
     FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
     FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
     FASTBOOL LeftMargin()               { return LRMargin( TRUE ); }

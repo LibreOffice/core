@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-07 10:10:03 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,13 +431,14 @@ void SwCrsrShell::EndCrsrMove( const BOOL bIdleEnd )
 #endif
 
 
-FASTBOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode )
+FASTBOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
+                                 BOOL bVisualAllowed )
 {
     if( IsTableMode() )
         return bLeft ? GoPrevCell() : GoNextCell();
 
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    FASTBOOL bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode );
+    FASTBOOL bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed );
     if( bRet )
         UpdateCrsr();
     return bRet;
@@ -597,6 +598,8 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
     int bRet = CRSR_POSOLD |
                 ( GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState )
                     ? 0 : CRSR_POSCHG );
+
+    pCrsr->SetCrsrBidiLevel( aTmpState.nCursorBidiLevel );
 
     if( MV_RIGHTMARGIN == aTmpState.eState )
         eMvState = MV_RIGHTMARGIN;
@@ -1443,6 +1446,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
             aTmpState.bRealHeight = TRUE;
             aTmpState.bRealWidth = IsOverwriteCrsr();
+            aTmpState.nCursorBidiLevel = pCurCrsr->GetCrsrBidiLevel();
             if( !pFrm->GetCharRect( aCharRect, *pCurCrsr->GetPoint(), &aTmpState ) )
             {
                 Point& rPt = pCurCrsr->GetPtPos();

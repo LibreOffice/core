@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-27 17:06:16 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ struct SwCrsrMoveState
     SwSpecialPos*   pSpecialPos; // for positions inside fields
     Point aRealHeight;          // enthaelt dann die Position/Hoehe des Cursors
     CrsrMoveState eState;
+    BYTE            nCursorBidiLevel;
     BOOL bStop          :1;
     BOOL bRealHeight    :1;     // Soll die reale Hoehe berechnet werden?
     BOOL bFieldInfo     :1;     // Sollen Felder erkannt werden?
@@ -190,6 +191,7 @@ struct SwCrsrMoveState
         p2Lines( NULL ),
         pSpecialPos( NULL ),
         eState( eSt ),
+        nCursorBidiLevel( 0 ),
         bStop( FALSE ),
         bRealHeight( FALSE ),
         bFieldInfo( FALSE ),
@@ -205,6 +207,7 @@ struct SwCrsrMoveState
         pFill( pInitFill ),
         pSpecialPos( NULL ),
         eState( MV_SETONLYTEXT ),
+        nCursorBidiLevel( 0 ),
         bStop( FALSE ),
         bRealHeight( FALSE ),
         bFieldInfo( FALSE ),

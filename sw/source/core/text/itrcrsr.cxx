@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-21 10:28:21 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,9 +853,29 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             pOrig->Pos().Y() += aOldPos.Y();
 #ifdef BIDI
                             if ( ((SwMultiPortion*)pPor)->IsBidi() )
-                                pOrig->Pos().X() = nX + pPor->Width() +
-                                                   pPor->CalcSpacing( nSpaceAdd, aInf ) -
-                                                   pOrig->Pos().X() - pOrig->Width();
+                            {
+                                const SwTwips nPorWidth = pPor->Width() +
+                                                         pPor->CalcSpacing( nSpaceAdd, aInf );
+                                const SwTwips nInsideOfst = pOrig->Pos().X();
+                                pOrig->Pos().X() = nX + nPorWidth -
+                                                   nInsideOfst - pOrig->Width();
+                                if ( nInsideOfst == nPorWidth )
+                                {
+                                    // logical position is behind multi portion
+                                    USHORT nDefaultDir = GetTxtFrm()->IsRightToLeft() ?
+                                                         1 : 0;
+                                    if ( pCMS &&
+                                         pCMS->nCursorBidiLevel == nDefaultDir )
+                                        pOrig->Pos().X() += nPorWidth;
+
+                                    // actually we are not in a bidi portion
+                                    if ( pCMS && pCMS->p2Lines )
+                                    {
+                                        delete pCMS->p2Lines;
+                                        pCMS->p2Lines = 0;
+                                    }
+                                }
+                            }
                             else
                                 pOrig->Pos().X() += nX;
 #else
@@ -1058,6 +1078,19 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         pPor->SetLen( nOldLen );
                     }
                     pOrig->Width( nTmp );
+                }
+
+                if ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() )
+                {
+                    // logical position is at beginning of bidi portion
+                    // we determine if the cursor has to blink before or behind
+                    // the bidi portion
+                    USHORT nDefaultDir = GetTxtFrm()->IsRightToLeft() ? 1 : 0;
+                    if ( pCMS->nCursorBidiLevel != nDefaultDir )
+                    {
+                        pOrig->Pos().X() += pPor->Width() +
+                                            pPor->CalcSpacing( nSpaceAdd, aInf );
+                    }
                 }
 
                 // travel inside field portion?
@@ -1470,9 +1503,14 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
             if ( ((SwMultiPortion*)pPor)->IsBidi() )
             {
-                aLayoutModeModifier.Modify(
-                    ((SwBidiPortion*)pPor)->GetLevel() % 2 );
+                const BYTE nBidiLevel = ((SwBidiPortion*)pPor)->GetLevel();
+                aLayoutModeModifier.Modify( nBidiLevel % 2 );
+                if ( pCMS )
+                    ((SwCrsrMoveState*)pCMS)->nCursorBidiLevel = nBidiLevel;
             }
+            else if ( pCMS )
+                ((SwCrsrMoveState*)pCMS)->nCursorBidiLevel =
+                        GetTxtFrm()->IsRightToLeft() ? 1 : 0;
 #else
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 nTmpY,  nCurrStart, nSpaceAdd );

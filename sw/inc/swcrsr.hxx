@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:01:10 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ class SwCursor : public SwPaM
     friend class SwCrsrSaveState;
 
     _SwCursor_SavePos* pSavePos;
+    BYTE nCursorBidiLevel;
 
     ULONG FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, BOOL& bCancel );
 
@@ -185,7 +186,7 @@ public:
     FASTBOOL GoNextSentence(){return GoSentence(NEXT_SENT);}
     FASTBOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
 
-    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode );
+    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual );
     FASTBOOL UpDown( BOOL bUp, USHORT nCnt = 1,
                     Point* pPt = 0, long nUpDownX = 0 );
     FASTBOOL LeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE );
@@ -193,10 +194,10 @@ public:
     FASTBOOL SttEndDoc( BOOL bSttDoc );
     FASTBOOL GoPrevNextCell( BOOL bNext, USHORT nCnt );
 
-    FASTBOOL Left( USHORT nCnt, USHORT nMode )
-                                    { return LeftRight( TRUE, nCnt, nMode ); }
-    FASTBOOL Right( USHORT nCnt, USHORT nMode )
-                                    { return LeftRight( FALSE, nCnt, nMode ); }
+    FASTBOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
+                                    { return LeftRight( TRUE, nCnt, nMode, bAllowVisual ); }
+    FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
+                                    { return LeftRight( FALSE, nCnt, nMode, bAllowVisual ); }
     FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
     FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
     FASTBOOL LeftMargin()               { return LeftRightMargin( TRUE ); }
@@ -237,6 +238,9 @@ public:
 
     // darf der Cursor in ReadOnlyBereiche?
     FASTBOOL IsReadOnlyAvailable() const;
+
+    BYTE GetCrsrBidiLevel() const { return nCursorBidiLevel; }
+    void SetCrsrBidiLevel( BYTE nNewLevel ) { nCursorBidiLevel = nNewLevel; }
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor )
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-22 13:01:50 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,32 +516,6 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 }
 
 
-const SwScriptInfo* lcl_GetScriptInfo( const SwTxtNode& rTNd )
-{
-    SwClientIter aClientIter( (SwTxtNode&)rTNd );
-    SwClient* pLast = aClientIter.GoStart();
-    const SwScriptInfo* pScriptInfo = 0;
-
-    while( pLast )
-    {
-        if ( pLast->ISA( SwTxtFrm ) )
-        {
-            pScriptInfo = ((SwTxtFrm*)pLast)->GetScriptInfo();
-            if ( pScriptInfo )
-            {
-                if ( STRING_LEN != pScriptInfo->GetInvalidity() )
-
-                    pScriptInfo = 0;
-                else break;
-            }
-        }
-        pLast = ++aClientIter;
-    }
-
-    return pScriptInfo;
-}
-
-
 // returns the scripttpye of the selection
 USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
 {
@@ -560,7 +534,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                 if( pTNd )
                 {
                     // try to get SwScriptInfo
-                    const SwScriptInfo* pScriptInfo = lcl_GetScriptInfo( *pTNd );
+                    const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTNd );
 
                     xub_StrLen nPos = pStt->nContent.GetIndex();
                     //Task 90448: we need the scripttype of the previous
@@ -598,7 +572,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                         const String& rTxt = pTNd->GetTxt();
 
                         // try to get SwScriptInfo
-                        const SwScriptInfo* pScriptInfo = lcl_GetScriptInfo( *pTNd );
+                        const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTNd );
 
                         xub_StrLen nChg = aIdx == pStt->nNode
                                                 ? pStt->nContent.GetIndex()

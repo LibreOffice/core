@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-07 09:44:06 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1437,6 +1437,36 @@ USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, long* pKernArray,
 
     return nCnt;
 }
+
+/*************************************************************************
+ *                      SwScriptInfo::GetScriptInfo()
+ *************************************************************************/
+
+const SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd )
+{
+    SwClientIter aClientIter( (SwTxtNode&)rTNd );
+    SwClient* pLast = aClientIter.GoStart();
+    const SwScriptInfo* pScriptInfo = 0;
+
+    while( pLast )
+    {
+        if ( pLast->ISA( SwTxtFrm ) )
+        {
+            pScriptInfo = ((SwTxtFrm*)pLast)->GetScriptInfo();
+            if ( pScriptInfo )
+            {
+                if ( STRING_LEN != pScriptInfo->GetInvalidity() )
+                    pScriptInfo = 0;
+                else break;
+            }
+        }
+        pLast = ++aClientIter;
+    }
+
+    return pScriptInfo;
+}
+
+
 
 /*************************************************************************
  *                      class SwParaPortion

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-25 11:48:02 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,8 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     {
         switch(nSlot)
         {
-        case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS,  bSelect, 1, FALSE ); break;
-        case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, FALSE ); break;
+        case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS,  bSelect, 1, FALSE, TRUE ); break;
+        case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, FALSE, TRUE ); break;
         case FN_LINE_UP:    rSh.Up   ( bSelect, 1 ); break;
         case FN_LINE_DOWN:  rSh.Down ( bSelect, 1 ); break;
         default:            ASSERT(FALSE, falscher Dispatcher); return;

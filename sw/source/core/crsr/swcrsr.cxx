@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-01 13:35:28 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 10:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
 #ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
 #endif
@@ -119,6 +122,12 @@
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>
 #endif
 #ifndef _CRSTATE_HXX
 #include <crstate.hxx>
@@ -206,12 +215,12 @@ struct _PercentHdl
 };
 
 SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing )
-    : SwPaM( rPos, pRing ), pSavePos( 0 )
+    : SwPaM( rPos, pRing ), pSavePos( 0 ), nCursorBidiLevel( 0 )
 {
 }
 
 SwCursor::SwCursor( SwCursor& rCpy )
-    : SwPaM( rCpy ), pSavePos( 0 )
+    : SwPaM( rCpy ), pSavePos( 0 ), nCursorBidiLevel( rCpy.nCursorBidiLevel )
 {
 }
 
@@ -1380,12 +1389,58 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
     return bRet;
 }
 
-FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode )
+
+FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
+                              BOOL bVisualAllowed )
 {
     SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
     if( pTblCrsr )
         return bLeft ? pTblCrsr->GoPrevCell( nCnt )
                      : pTblCrsr->GoNextCell( nCnt );
+
+
+    SwNode& rNode = GetPoint()->nNode.GetNode();
+    const BOOL bIsUnoCrsr = 0 != (SwUnoCrsr*)*this;
+
+    // The visual cursor travelling requires a layout. Therefore we do not
+    // want this for an UnoCursor.
+    if ( ! bIsUnoCrsr && rNode.IsTxtNode() )
+    {
+        const SwTxtNode& rTNd = *rNode.GetTxtNode();
+        SwIndex& rIdx = GetPoint()->nContent;
+        xub_StrLen nPos = rIdx.GetIndex();
+
+        SvtCTLOptions aCTLOptions;
+        if ( bVisualAllowed && aCTLOptions.IsCTLFontEnabled() &&
+             SvtCTLOptions::CursorMovement::MOVEMENT_VISUAL ==
+             aCTLOptions.GetCTLCursorMovement() )
+        {
+            // for visual cursor travelling (used in bidi layout)
+            // we first have to convert the logic to a visual position
+            Point aPt;
+            SwCntntFrm* pFrm = rTNd.GetFrm( &aPt, GetPoint() );
+            if( pFrm )
+            {
+                BYTE nCrsrLevel = GetCrsrBidiLevel();
+                sal_Bool bForward = ! bLeft;
+                ((SwTxtFrm*)pFrm)->PrepareVisualMove( nPos, nCrsrLevel, bForward );
+                rIdx = nPos;
+                SetCrsrBidiLevel( nCrsrLevel );
+                bLeft = ! bForward;
+            }
+        }
+        else
+        {
+            const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( rTNd );
+            if ( pScriptInfo )
+            {
+                const xub_StrLen nMoveOverPos = bLeft ?
+                                               ( nPos ? nPos - 1 : 0 ) :
+                                                nPos;
+                SetCrsrBidiLevel( pScriptInfo->DirType( nMoveOverPos ) );
+            }
+        }
+    }
 
     // kann der Cursor n-mal weiterverschoben werden ?
     SwCrsrSaveState aSave( *this );
@@ -1393,6 +1448,7 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode )
     SwGoInDoc fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
     while( nCnt && Move( fnMove, fnGo ) )
         --nCnt;
+
     return 0 == nCnt && !IsInProtectTable( TRUE ) &&
             !IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS );
 }
@@ -1487,7 +1543,6 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
     }
     return bRet;
 }
-
 
 FASTBOOL SwCursor::LeftRightMargin( BOOL bLeft, BOOL bAPI )
 {
