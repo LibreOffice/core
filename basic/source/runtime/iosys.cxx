@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: patrick.luby $ $Date: 2000-09-25 02:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@
 
 // <-- encoding
 #ifdef UNX
+#ifndef MACOSX
 #include <alloca.h>
+#endif
 #endif
 #ifdef WNT
 #include <malloc.h>

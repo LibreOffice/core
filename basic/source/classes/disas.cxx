@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: patrick.luby $ $Date: 2000-09-25 02:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,11 @@
 #include "segmentc.hxx"
 #pragma SW_SEGMENT_CLASS( SBDISAS, SBDISAS_CODE )
 
+#ifdef MACOSX
+static char* pOp1[] = {
+#else
 static const char* pOp1[] = {
+#endif
     "NOP",
 
     // Operatoren
@@ -126,7 +130,11 @@ static const char* pOp1[] = {
     "RSET"              // Speichern Objekt TOS ==> TOS-1
 };
 
+#ifdef MACOSX
+static char* pOp2[] = {
+#else
 static const char* pOp2[] = {
+#endif
     "NUMBER",           // Laden einer numerischen Konstanten (+ID)
     "STRING",           // Laden einer Stringkonstanten (+ID)
     "CONST",            // Immediate Load (+Wert)
@@ -154,7 +162,11 @@ static const char* pOp2[] = {
     "ARGTYP",           // Letzten Parameter in Argv konvertieren (+Typ)
 };
 
+#ifdef MACOSX
+static char* pOp3[] = {
+#else
 static const char* pOp3[] = {
+#endif
     // Alle Opcodes mit zwei Operanden
     "RTL",              // Laden aus RTL (+StringID+Typ)
     "FIND",             // Laden (+StringID+Typ)
@@ -177,11 +189,19 @@ static const char* pOp3[] = {
     "DCREATE",          // User defined Objekt-Array kreieren (+StringId+StringId)
 };
 
+#ifdef MACOSX
+static char** pOps[3] = { pOp1, pOp2, pOp3 };
+#else
 static const char** pOps[3] = { pOp1, pOp2, pOp3 };
+#endif
 
 typedef void( SbiDisas::*Func )( String& );     // Verarbeitungsroutine
 
+#ifdef MACOSX
+static Func pOperand2[] = {
+#else
 static const Func pOperand2[] = {
+#endif
     MEMBER(SbiDisas::StrOp),    // Laden einer numerischen Konstanten (+ID)
     MEMBER(SbiDisas::StrOp),    // Laden einer Stringkonstanten (+ID)
     MEMBER(SbiDisas::ImmOp),    // Immediate Load (+Wert)
@@ -208,7 +228,11 @@ static const Func pOperand2[] = {
     MEMBER(SbiDisas::TypeOp),   // Letzten Parameter in Argv konvertieren (+Typ)
 };
 
+#ifdef MACOSX
+static Func pOperand3[] = {
+#else
 static const Func pOperand3[] = {
+#endif
     // Alle Opcodes mit zwei Operanden
     MEMBER(SbiDisas::VarOp),    // Laden aus RTL (+StringID+Typ)
     MEMBER(SbiDisas::VarOp),    // Laden (+StringID+Typ)
