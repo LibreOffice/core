@@ -7,8 +7,8 @@ mkdir: %_DEST%\inc%_EXT%\bridges\java
 ..\inc\bridges\remote\remote.h %_DEST%\inc%_EXT%\bridges\remote\remote.h
 
 ..\%__SRC%\lib\irmcxt* %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\librmcxt* %_DEST%\lib%_EXT%\*
-..\%__SRC%\bin\rmcxt* %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\librmcxt.*.* %_DEST%\lib%_EXT%\*
+..\%__SRC%\bin\rmcxt*.dll %_DEST%\bin%_EXT%\*
 
 ..\%__SRC%\lib\libiiop_uno* %_DEST%\lib%_EXT%\libiiop_uno*
 ..\%__SRC%\bin\iiop_uno* %_DEST%\bin%_EXT%\iiop_uno*
@@ -28,4 +28,4 @@ mkdir: %_DEST%\inc%_EXT%\bridges\java
 
 
 
-linklib: librmcxt.so.*.*.*
+linklib: librmcxt.*.*
