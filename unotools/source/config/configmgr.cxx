@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 08:19:03 $
+ *  last change: $Author: pb $ $Date: 2001-01-23 11:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ const char* cAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess"
 
 static ::rtl::OUString aBrandName;
 static ::rtl::OUString aProductVersion;
+static ::rtl::OUString aProductExtension;
 
 //-----------------------------------------------------------------------------
 struct ConfigItemListEntry_Impl
@@ -377,18 +378,23 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         return aRet;
     }
 
+    if ( eProp == PRODUCTEXTENSION && aProductExtension.getLength() )
+    {
+        aRet <<= aProductExtension;
+        return aRet;
+    }
+
     OUString sPath = C2U(cConfigBaseURL);
     switch(eProp)
     {
         case INSTALLPATH:
-        case USERINSTALLURL:
-            sPath += C2U("UserProfile/Office"); break;
+        case USERINSTALLURL:    sPath += C2U("UserProfile/Office"); break;
         case LOCALE:            sPath += C2U("UserProfile/International"); break;
         case PRODUCTNAME:
-        case PRODUCTVERSION:            sPath += C2U("Setup/Product"); break;
+        case PRODUCTVERSION:
+        case PRODUCTEXTENSION:  sPath += C2U("Setup/Product"); break;
         case OFFICEINSTALL:
-        case OFFICEINSTALLURL:
-            sPath += C2U("Office.Common/Path/Current"); break;
+        case OFFICEINSTALLURL:  sPath += C2U("Office.Common/Path/Current"); break;
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
@@ -410,13 +416,14 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         OUString sProperty;
         switch(eProp)
         {
-            case INSTALLPATH:   sProperty = C2U("InstallPath"); break;
-            case LOCALE:        sProperty = C2U("Locale"); break;
-            case PRODUCTNAME:        sProperty = C2U("Name"); break;
-            case PRODUCTVERSION:        sProperty = C2U("Version"); break;
-            case OFFICEINSTALL: sProperty = C2U("OfficeInstall"); break;
-            case USERINSTALLURL:   sProperty = C2U("InstallURL"); break;
-            case OFFICEINSTALLURL: sProperty = C2U("OfficeInstallURL"); break;
+            case INSTALLPATH:       sProperty = C2U("InstallPath"); break;
+            case LOCALE:            sProperty = C2U("Locale"); break;
+            case PRODUCTNAME:       sProperty = C2U("Name"); break;
+            case PRODUCTVERSION:    sProperty = C2U("Version"); break;
+            case PRODUCTEXTENSION:  sProperty = C2U("Extension"); break;
+            case OFFICEINSTALL:     sProperty = C2U("OfficeInstall"); break;
+            case USERINSTALLURL:    sProperty = C2U("InstallURL"); break;
+            case OFFICEINSTALLURL:  sProperty = C2U("OfficeInstallURL"); break;
         }
         try
         {
@@ -432,6 +439,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if ( eProp == PRODUCTVERSION )
         aRet >>= aProductVersion;
+
+    if ( eProp == PRODUCTEXTENSION )
+        aRet >>= aProductExtension;
 
     return aRet;
 }
