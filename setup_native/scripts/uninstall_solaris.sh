@@ -20,7 +20,7 @@ DIRECTORY=`pwd`
 ADMINFILE=$DIRECTORY/admin
 GETUID_SO=/tmp/getuid.so.$$
 linenum=???
-tail +$linenum $0 > $GETUID_SO
+tail +$linenum `basename $0` > $GETUID_SO
 
 PKGLIST=`pkginfo -R $MY_ROOT | cut -f 2 -d ' ' | grep -v core`
 COREPKG=`pkginfo -R $MY_ROOT | cut -f 2 -d ' ' | grep core`
@@ -36,12 +36,17 @@ for i in $PKGLIST $COREPKG; do
   echo $i
 done
 
+INSTALL_DIR=$MY_ROOT`pkginfo -R $MY_ROOT -r $COREPKG`
+
+# Restore original bootstraprc
+mv -f $INSTALL_DIR/program/bootstraprc.orig $INSTALL_DIR/program/bootstraprc
+
 LD_PRELOAD=$GETUID_SO
 export LD_PRELOAD
 
 for i in $PKGLIST $COREPKG; do
   echo /usr/sbin/pkgrm -a $ADMINFILE -R $MY_ROOT $i
-  /usr/sbin/pkgrm -a $ADMINFILE -R $MY_ROOT $i
+  /usr/sbin/pkgrm -n -a $ADMINFILE -R $MY_ROOT $i
 done
 
 # Removing old root directory, very dangerous!
