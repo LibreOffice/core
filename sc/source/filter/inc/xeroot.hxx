@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:10:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ typedef ScfRef< XclExpTokenArray > XclExpTokenArrayRef;
 // Global data ================================================================
 
 class XclExpTabInfo;
+class XclExpAddressConverter;
 class XclExpFormulaCompiler;
 class XclExpProgressBar;
 class XclExpSst;
@@ -97,6 +98,7 @@ class XclExpPivotTableManager;
 struct XclExpRootData : public XclRootData
 {
     typedef ScfRef< XclExpTabInfo >             XclExpTabInfoRef;
+    typedef ScfRef< XclExpAddressConverter >    XclExpAddrConvRef;
     typedef ScfRef< XclExpFormulaCompiler >     XclExpFmlaCompRef;
     typedef ScfRef< XclExpProgressBar >         XclExpProgressRef;
 
@@ -111,6 +113,7 @@ struct XclExpRootData : public XclRootData
     typedef ScfRef< XclExpPivotTableManager >   XclExpPTableMgrRef;
 
     XclExpTabInfoRef    mxTabInfo;          /// Calc->Excel sheet index conversion.
+    XclExpAddrConvRef   mxAddrConv;         /// The address converter.
     XclExpFmlaCompRef   mxFmlaComp;         /// The formula compiler.
     XclExpProgressRef   mxProgress;         /// The export progress bar.
 
@@ -148,6 +151,8 @@ public:
 
     /** Returns the buffer for Calc->Excel sheet index conversion. */
     XclExpTabInfo&      GetTabInfo() const;
+    /** Returns the address converter. */
+    XclExpAddressConverter& GetAddressConverter() const;
     /** Returns the formula compiler to produce formula token arrays. */
     XclExpFormulaCompiler& GetFormulaCompiler() const;
     /** Returns the export progress bar. */
@@ -185,16 +190,6 @@ public:
     /** Returns the reference to a record (or record list) representing a root object.
         @param nRecId  Identifier that specifies which record is returned. */
     XclExpRecordRef     CreateRecord( sal_uInt16 nRecId ) const;
-
-    /** Checks if the passed cell address is a valid Excel cell position.
-        @descr  See XclRoot::CheckCellAddress for details. */
-    bool                CheckCellAddress( const ScAddress& rPos ) const;
-    /** Checks and eventually crops the cell range to valid Excel dimensions.
-        @descr  See XclRoot::CheckCellRange for details. */
-    bool                CheckCellRange( ScRange& rRange ) const;
-    /** Checks and eventually crops the cell ranges to valid Excel dimensions.
-        @descr  See XclRoot::CheckCellRangeList for details. */
-    void                CheckCellRangeList( ScRangeList& rRanges ) const;
 
 private:
     /** Returns the local or global link manager, depending on current context. */
