@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-22 09:05:42 $
+ *  last change: $Author: fs $ $Date: 2002-04-30 15:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,6 @@ namespace dbaui
         static sal_Int32* getDetailIds();
 
     private:
-        FixedLine           m_aSeparator1;
         FixedText           m_aHostname;
         Edit                m_aETHostname;
         FixedText           m_aBaseDN;
@@ -317,6 +316,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2002/03/22 09:05:42  oj
+ *  #98142# remove charset for jdbc drivers
+ *
  *  Revision 1.8  2002/03/14 15:14:36  fs
  *  #97788# Big5-HKSCS only when asian languages are enabled
  *
