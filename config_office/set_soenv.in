@@ -86,7 +86,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL, $GCC_HOME,
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
      $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $PSDK_HOME, $USE_NEW_SDK, $NO_HIDS,
      $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG );
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG, $ENABLE_STATIC_GTK );
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -134,7 +134,8 @@ $CC			= '@CC@';           # C compiler
 $CXX		= '@CXX@';          # C++ compiler
 $EXCEPTIONS	= '@EXCEPTIONS@';   # Exception handling type
 $ENABLE_DEBUG	= '@ENABLE_DEBUG@';  # Enable a debug build
-$WRAPCMD	= "";				# Wrapper (only for Winnt)
+$ENABLE_STATIC_GTK = '@ENABLE_STATIC_GTK@'; # Use static gtk libraries
+$WRAPCMD	= "";				# Wrapper (only for winnt)
 
 #
 #---------------------------------------------------------------
@@ -1378,6 +1379,7 @@ ToFile( "TF_FILTER",         "TRUE",             "e" );
 if ($ENABLE_DEBUG eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }
+ToFile( "ENABLE_STATIC_GTK", $ENABLE_STATIC_GTK, "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 # [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
 # There may be a better way to do this, like splitting unxmacxp into two, but
