@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jbu $ $Date: 2000-10-16 11:43:46 $
+#   last change: $Author: jbu $ $Date: 2000-10-16 11:51:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb 
 
 # output directory (one dir for each project)
-UNOUCROUT=$(OUT)$/inc
+UNOUCROUT=$(OUT)$/inc$/examples
 
 # adding to inludeoath
 INCPRE+=$(UNOUCROUT)
