@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:28:27 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,11 @@ inline sal_Bool _assignArray(
     case typelib_TypeClass_SEQUENCE:
         for (i=0; i < nTotalElements; i++)
         {
-            _destructSequence(
-                *((uno_Sequence **)pDest + i), pElementTypeRef, pElementTypeDescr, release );
-            ::osl_incrementInterlockedCount( &(*((uno_Sequence **)pSource + i))->nRefCount );
+            ::osl_incrementInterlockedCount(
+                &(*((uno_Sequence **)pSource + i))->nRefCount );
+            idestructSequence(
+                *((uno_Sequence **)pDest + i),
+                pElementTypeRef, pElementTypeDescr, release );
             *((uno_Sequence **)pDest + i) = *((uno_Sequence **)pSource + i);
         }
         bRet = sal_True;
@@ -251,9 +253,10 @@ inline sal_Bool _assignArray(
     case typelib_TypeClass_INTERFACE:
         for (i=0; i < nTotalElements; i++)
         {
-            _assignInterface( (void **)((sal_Char*)pDest + i * nElementSize),
-                              *(void **)((sal_Char*)pSource + i * nElementSize),
-                              acquire, release );
+            _assignInterface(
+                (void **)((sal_Char*)pDest + i * nElementSize),
+                *(void **)((sal_Char*)pSource + i * nElementSize),
+                acquire, release );
         }
         bRet = sal_True;
         break;
@@ -596,12 +599,15 @@ inline sal_Bool _assignData(
     case typelib_TypeClass_SEQUENCE:
         if (typelib_TypeClass_SEQUENCE != pSourceType->eTypeClass)
             return sal_False;
-        if (*(uno_Sequence **)pSource == *(uno_Sequence **)pDest) // self assignment
+        // self assignment:
+        if (*(uno_Sequence **)pSource == *(uno_Sequence **)pDest)
             return sal_True;
         if (_type_equals( pDestType, pSourceType ))
         {
-            _destructSequence( *(uno_Sequence **)pDest, pDestType, pDestTypeDescr, release );
-            ::osl_incrementInterlockedCount( &(*(uno_Sequence **)pSource)->nRefCount );
+            ::osl_incrementInterlockedCount(
+                &(*(uno_Sequence **)pSource)->nRefCount );
+            idestructSequence(
+                *(uno_Sequence **)pDest, pDestType, pDestTypeDescr, release );
             *(uno_Sequence **)pDest = *(uno_Sequence **)pSource;
             return sal_True;
         }
