@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-12 13:10:56 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:10:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,17 +99,7 @@ SLOFILES = \
         $(SLO)$/fuediglu.obj 	\
         $(SLO)$/fuslid.obj		\
         $(SLO)$/fuslsel.obj		\
-        $(SLO)$/fuslshow.obj 	\
-        $(SLO)$/fuslshw2.obj 	\
-        $(SLO)$/fuslshw3.obj 	\
-        $(SLO)$/fuslshw4.obj 	\
-        $(SLO)$/fuslshw5.obj 	\
-        $(SLO)$/fuslshw6.obj 	\
         $(SLO)$/fusldlg.obj 	\
-        $(SLO)$/fader.obj		\
-        $(SLO)$/fader2.obj		\
-        $(SLO)$/mover.obj		\
-        $(SLO)$/fuslprms.obj 	\
         $(SLO)$/fuscale.obj		\
         $(SLO)$/fuslhide.obj 	\
         $(SLO)$/futransf.obj 	\
@@ -118,7 +108,6 @@ SLOFILES = \
         $(SLO)$/fuline.obj		\
         $(SLO)$/sdundo.obj		\
         $(SLO)$/sdundogr.obj 	\
-        $(SLO)$/unslprms.obj 	\
         $(SLO)$/fuoaprms.obj 	\
         $(SLO)$/unoaprms.obj 	\
         $(SLO)$/fuarea.obj		\
@@ -153,11 +142,8 @@ SLOFILES = \
         $(SLO)$/fumorph.obj		\
         $(SLO)$/fuexpand.obj    \
         $(SLO)$/fusumry.obj     \
-        $(SLO)$/sdmtf.obj		\
-        $(SLO)$/sprite.obj		\
         $(SLO)$/outlinfo.obj	\
         $(SLO)$/fucushow.obj	\
-        $(SLO)$/speedctl.obj	\
         $(SLO)$/fuvect.obj		\
         $(SLO)$/bulmaper.obj    \
         $(SLO)$/undoback.obj    \
@@ -187,17 +173,7 @@ LIB1OBJFILES= \
         $(SLO)$/fuediglu.obj 	\
         $(SLO)$/fuslid.obj		\
         $(SLO)$/fuslsel.obj		\
-        $(SLO)$/fuslshow.obj 	\
-        $(SLO)$/fuslshw2.obj 	\
-        $(SLO)$/fuslshw3.obj 	\
-        $(SLO)$/fuslshw4.obj 	\
-        $(SLO)$/fuslshw5.obj 	\
-        $(SLO)$/fuslshw6.obj 	\
         $(SLO)$/fusldlg.obj 	\
-        $(SLO)$/fader.obj		\
-        $(SLO)$/fader2.obj		\
-        $(SLO)$/mover.obj		\
-        $(SLO)$/fuslprms.obj 	\
         $(SLO)$/fuscale.obj		\
         $(SLO)$/fuslhide.obj 	\
         $(SLO)$/futransf.obj 	\
@@ -206,7 +182,6 @@ LIB1OBJFILES= \
         $(SLO)$/fuline.obj		\
         $(SLO)$/sdundo.obj		\
         $(SLO)$/sdundogr.obj 	\
-        $(SLO)$/unslprms.obj 	\
         $(SLO)$/fuoaprms.obj 	\
         $(SLO)$/unoaprms.obj 	\
         $(SLO)$/fuarea.obj		\
@@ -241,12 +216,10 @@ LIB1OBJFILES= \
         $(SLO)$/fumorph.obj		\
         $(SLO)$/fuexpand.obj    \
         $(SLO)$/fusumry.obj     \
-        $(SLO)$/sdmtf.obj		\
-        $(SLO)$/sprite.obj		\
         $(SLO)$/outlinfo.obj	\
         $(SLO)$/fucushow.obj	\
-        $(SLO)$/speedctl.obj	\
         $(SLO)$/fuvect.obj		\
+        $(SLO)$/bulmaper.obj    \
         $(SLO)$/undoback.obj    \
         $(SLO)$/fuconcs.obj
 
