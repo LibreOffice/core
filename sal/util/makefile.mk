@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hro $ $Date: 2002-09-30 08:59:35 $
+#   last change: $Author: rt $ $Date: 2002-10-07 13:49:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,6 +151,9 @@ SHL1STDLIBS= -lpthread -lposix4
 SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # C50
 .ENDIF # SOLARIS
+.IF "$(OS)" == "LINUX"
+SHL1STDLIBS+= -lstdc++
+.ENDIF
 .ENDIF # UNX
 
 .IF "$(GUI)"=="OS2"
