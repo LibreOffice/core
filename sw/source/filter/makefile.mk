@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-24 14:29:41 $
+#   last change: $Author: vg $ $Date: 2003-04-17 14:48:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,10 +65,6 @@ PRJ=..$/..
 PRJNAME=sw
 TARGET=filter
 
-PROJECTPCH=filt_pch
-PDBTARGET=filt_pch
-PROJECTPCHSOURCE=.\filt_1st\filt_pch
-
 .IF "$(CALLTARGETS)"=="filter"
 RC_SUBDIRS=
 .ENDIF
@@ -81,34 +77,6 @@ RC_SUBDIRS=
 
 # --- Files --------------------------------------------------------
 
-# fuer VC++/NT andere Label als Verzeichnisnamen
-.IF "$(RC_SUBDIRS)" == ""
-SWSUBDIRS= \
-    filt_1st \
-    ascii \
-    basflt \
-    excel \
-    html \
-    lotus \
-    rtf \
-    w4w \
-    writer \
-    ww1 \
-    ww8 \
-    xml
-
-.IF "$(product)" == ""
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT" || "$(GUI)" == "UNX"
-SWSUBDIRS+= \
-    debug
-.ENDIF
-.ENDIF
-
-.IF "$(compact)" == ""
-SWSUBDIRS+= \
-    sw6
-.ENDIF
-.ENDIF
 
 SUBLIBS= \
     $(SLB)$/ascii.lib \
@@ -136,19 +104,6 @@ SUBLIBS+= \
 
 # -----------------------------------------------------------
 
-.IF "$(L10N-framework)" == ""
-.IF "$(RC_SUBDIRS)" == ""
-.IF "$(depend)" == ""
-filter: 					\
-    filt_1st				\
-    $(SWSUBDIRS)				\
-    ALLTAR
-.ELSE
-filter:
-    @+echo Doing nothing in source\filter
-.ENDIF
-.ENDIF
-.ENDIF          # "$(L10N-framework)" == ""
 
 ################################################################
 
@@ -160,99 +115,4 @@ LIB1FILES= \
 
 ################################################################
 
-.IF "$(dbutil)" != ""
-dbutilx += "dbutil=true"
-.ENDIF
-.IF "$(debug)" != ""
-.IF "$(debug)" != "D_FORCE_OPT"
-dbutilx += "debug=true"
-.ENDIF
-.ENDIF
-
-
-.IF "$(CALLTARGETS)"!="filter"
-.IF "$(DOPLD)$(dopld)" == ""
-
-.IF "$(RC_SUBDIRS)" == ""
-#rule lib / subdir
-$(SLB)$/%.lib : %
-    @echo @
-
-filt_1st .SETDIR=filt_1st:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-ascii .SETDIR=ascii:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-basflt .SETDIR=basflt:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-debug .SETDIR=debug:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-excel .SETDIR=excel:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-html .SETDIR=html:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-lotus .SETDIR=lotus:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-rtf .SETDIR=rtf:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-sw6 .SETDIR=sw6:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-w4w .SETDIR=w4w:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-writer .SETDIR=writer:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-ww1 .SETDIR=ww1:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-ww8 .SETDIR=ww8:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-xml .SETDIR=xml:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-.ENDIF
-.ELSE
-filt_1st:
-    @echo nix
-.ENDIF
-.ENDIF
-
-kill:
-    del $(SLB)$/filter.lib
-
-ascii : filt_1st
-basflt : filt_1st
-excel : filt_1st
-html : filt_1st
-lotus : filt_1st
-rtf : filt_1st
-w4w : filt_1st
-writer : filt_1st
-ww1 : filt_1st
-ww8 : filt_1st
-xml : filt_1st
 
