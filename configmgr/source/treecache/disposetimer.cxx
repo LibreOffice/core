@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-18 13:01:20 $
+ *  last change: $Author: dg $ $Date: 2000-12-20 10:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,9 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
             TimeStamp aNextTaskTime = pInfo->runDisposer(aDisposeList, _aActualTime);
 
+            // remove unnecessry notification entires
+            uno::Sequence< OUString > aNodeList = pInfo->removeNotificationEntries(aDisposeList);
+
             CFG_TRACE_INFO_NI("- Found %d module trees to dispose", int(aDisposeList.size()) );
 
             if (!aNextTaskTime.isNever())
@@ -275,6 +278,8 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
                 OSL_ENSURE(pInfo->m_aNotificationList.empty(),
                             "WARNING: Empty TreeInfo still has notifications registered - will be leaked");
+
+                pInfo = NULL;
             }
             else
                 CFG_TRACE_INFO_NI("- Currently no more cleanup tasks for this options set" );
@@ -284,11 +289,20 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
             if (!aDisposeList.empty())
             {
-                uno::Sequence< OUString > aCloseList = TreeInfo::collectNodeIds(aDisposeList);
-                if (m_rTreeManager.m_pSession && aCloseList.getLength() > 0)
+                if (m_rTreeManager.m_pSession)
                 {
-                    CFG_TRACE_INFO_NI("- Closing %d NodeIds", int(aCloseList.getLength()) );
-                    m_rTreeManager.closeNodes(aCloseList,xTask);
+                    if (aNodeList.getLength() > 0)
+                    {
+                        CFG_TRACE_INFO_NI("- Stoping notifications for  %d Nodes", int(aNodeList.getLength()) );
+                        m_rTreeManager.cancelNotify(aNodeList, xTask);
+                    }
+
+                    uno::Sequence< OUString > aCloseList = TreeInfo::collectNodeIds(aDisposeList);
+                    if (aCloseList.getLength() > 0)
+                    {
+                        CFG_TRACE_INFO_NI("- Closing %d NodeIds", int(aCloseList.getLength()) );
+                        m_rTreeManager.closeNodes(aCloseList,xTask);
+                    }
                 }
                 CFG_TRACE_INFO_NI("- Now disposing %d module trees", int(aDisposeList.size()) );
             }
