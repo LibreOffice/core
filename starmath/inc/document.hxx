@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,13 @@ class EditEngineItemPool;
 
 class SmPrinterAccess
 {
-    Printer *pPrinter;
+    Printer* pPrinter;
+    OutputDevice* pRefDev;
 public:
     SmPrinterAccess( SmDocShell &rDocShell );
     ~SmPrinterAccess();
-    Printer *GetPrinter()   { return pPrinter; }
+    Printer* GetPrinter()  { return pPrinter; }
+    OutputDevice* GetRefDev()  { return pRefDev; }
 };
 
 
@@ -211,7 +213,8 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
     virtual BOOL        SaveCompleted( SvStorage *pNewStor );
     virtual void        HandsOff();
 
-    Printer            *GetPrt();
+    Printer             *GetPrt();
+    OutputDevice*       GetRefDev();
 
     // used to convert the formula text between different office versions
     void                ConvertText( String &rText, SmConvert eConv );
