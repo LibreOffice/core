@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:53:10 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: kz $ $Date: 2002-09-05 13:53:10 $ $Revision: 1.20 $
+ // $Author: kz $ $Date: 2002-11-27 17:08:09 $ $Revision: 1.21 $
  //
  //---------------------------------------------------------------------------
 
@@ -310,7 +310,7 @@ ModalDialog DLG_COLWIDTH
     Text [ portuguese_brazilian ] = "Spaltenbreite" ;
     Text [ portuguese ] = "Largura da coluna" ;
     Text[ chinese_simplified ] = "е€—е®Ѕ";
-    Text[ russian ] = "Ширина колонок";
+    Text[ russian ] = "Ширина столбца";
     Text[ polish ] = "Szeokoњж kolumn";
     Text[ japanese ] = "е€—е№…";
     Text[ chinese_traditional ] = "ж¬„еЇ¬";
