@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 10:32:21 $
+ *  last change: $Author: hr $ $Date: 2002-05-29 11:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,7 +733,7 @@ namespace dbaui
                                     ::rtl::OUString sDestName;
                                     ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
 
-                                    :ODatabaseExport::TPositions aColumnMapping = aWizard.GetColumnPositions();
+                                    ODatabaseExport::TPositions aColumnMapping = aWizard.GetColumnPositions();
                                     // create the sql stmt
                                     if ( !xSrcRs.is() ) // if not already exists
                                         xSrcRs = createResultSet(this,
@@ -1345,6 +1345,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.44  2002/05/29 10:32:21  oj
+ *  #96792# new methods for pasting tables
+ *
  *  Revision 1.43  2002/05/28 08:30:06  oj
  *  #96792# new methods for pasting tables
  *

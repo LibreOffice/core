@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 10:36:39 $
+ *  last change: $Author: hr $ $Date: 2002-05-29 11:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,6 @@ namespace dbaui
             @param  _rTransData the data to transfer
         */
         void    implPasteTable( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rTransData );
-        void    implPasteTable( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData);
         void    implPasteTable( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData );
         void    implPasteQuery( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData );
 
