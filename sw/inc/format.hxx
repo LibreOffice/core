@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:07:42 $
+ *  last change: $Author: fme $ $Date: 2002-08-05 10:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ public:
     inline const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
     inline const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
     inline const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
+    inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
     inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;

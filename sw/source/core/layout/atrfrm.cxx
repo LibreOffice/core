@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-10 17:06:25 $
+ *  last change: $Author: fme $ $Date: 2002-08-05 10:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
+#endif
+#ifndef _SW_HF_EAT_SPACINGITEM_HXX
+#include <hfspacingitem.hxx>
 #endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -2530,6 +2533,14 @@ BOOL SwTextGridItem::PutValue( const com::sun::star::uno::Any& rVal,
 
     return bRet;
 }
+
+// class SwHeaderAndFooterEatSpacingItem
+
+SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* pPool ) const
+{
+    return new SwHeaderAndFooterEatSpacingItem( Which(), GetValue() );
+}
+
 
 //  class SwFrmFmt
 //  Implementierung teilweise inline im hxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 16:04:40 $
+ *  last change: $Author: fme $ $Date: 2002-08-05 10:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ class SwFmtEndAtTxtEnd;
 class SwFmtNoBalancedColumns;
 class SvxFrameDirectionItem;
 class SwTextGridItem;
+class SwHeaderAndFooterEatSpacingItem;
 
 // Grafik-Attribute
 class SwMirrorGrf;
@@ -322,6 +323,7 @@ public:
     inline const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
     inline const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
     inline const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
+    inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
     inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;

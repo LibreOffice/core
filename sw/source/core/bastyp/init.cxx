@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-06-17 11:04:30 $
+ *  last change: $Author: fme $ $Date: 2002-08-05 10:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,9 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
+#ifndef _SW_HF_EAT_SPACINGITEM_HXX
+#include <hfspacingitem.hxx>
+#endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
@@ -591,7 +594,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRAMEDIR
 #endif
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY8
+    { 0, SFX_ITEM_POOLABLE },                           // RES_HEADER_FOOTER_EAT_SPACING
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY9
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF
@@ -838,6 +841,7 @@ void _InitCore()
     aAttrTab[ RES_LAYOUT_SPLIT - POOLATTR_BEGIN ] = new SwFmtLayoutSplit;
     aAttrTab[ RES_CHAIN - POOLATTR_BEGIN ] = new SwFmtChain;
     aAttrTab[ RES_TEXTGRID - POOLATTR_BEGIN ] = new SwTextGridItem;
+    aAttrTab[ RES_HEADER_FOOTER_EAT_SPACING - POOLATTR_BEGIN ] = new SwHeaderAndFooterEatSpacingItem;
     aAttrTab[ RES_LINENUMBER - POOLATTR_BEGIN ] = new SwFmtLineNumber;
     aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtFtnAtTxtEnd;
     aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtEndAtTxtEnd;
@@ -845,7 +849,6 @@ void _InitCore()
     aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem(FRMDIR_ENVIRONMENT);
 
 // FrameAttr - Dummies
-    aAttrTab[ RES_FRMATR_DUMMY8 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY8 );
     aAttrTab[ RES_FRMATR_DUMMY9 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY9 );
 // FrameAttr - Dummies
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 10:18:04 $
+ *  last change: $Author: fme $ $Date: 2002-08-05 10:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
+#endif
+#ifndef _SW_HF_EAT_SPACINGITEM_HXX
+#include <hfspacingitem.hxx>
 #endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
@@ -1058,6 +1061,37 @@ SfxItemPresentation SwTextGridItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
+
+//SwHeaderAndFooterEatSpacingItem
+
+
+SfxItemPresentation SwHeaderAndFooterEatSpacingItem::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
+    String&             rText,
+    const IntlWrapper*        pIntl
+)   const
+{
+//    rText.Erase();
+//    switch ( ePres )
+//    {
+//        case SFX_ITEM_PRESENTATION_NONE:
+//            rText.Erase();
+//            break;
+//        case SFX_ITEM_PRESENTATION_NAMELESS:
+//        case SFX_ITEM_PRESENTATION_COMPLETE:
+//        {
+//            if ( GetValue() )
+//                rText = SW_RESSTR(STR_EDIT_IN_READONLY);
+//            return ePres;
+//        }
+//    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+
 // ---------------------- Grafik-Attribute --------------------------
 
 SfxItemPresentation SwMirrorGrf::GetPresentation(
@@ -1303,6 +1337,9 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2002/01/31 10:18:04  fme
+      #96678# Vertical Formatting - New grid attribute
+
       Revision 1.6  2001/07/06 12:21:03  jp
       remove GetAppInternational
 
