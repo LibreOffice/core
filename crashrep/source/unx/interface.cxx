@@ -159,6 +159,24 @@ void WizardDialog::hide_sendingstatus()
     if( m_pStatusDialog )
     {
         gtk_dialog_response( GTK_DIALOG(m_pStatusDialog), GTK_RESPONSE_OK );
+
+        XEvent  event;
+
+        memset( &event, 0, sizeof(event) );
+
+        event.xexpose.type = Expose;
+        event.xexpose.display = GDK_DISPLAY();
+        event.xexpose.window = GDK_WINDOW_XWINDOW( m_pStatusDialog->window );
+        event.xexpose.width = event.xexpose.height = 10;
+
+        XSendEvent(
+            GDK_DISPLAY(),
+            GDK_WINDOW_XWINDOW( m_pStatusDialog->window ),
+            True,
+            ExposureMask,
+            &event );
+
+        XFlush( GDK_DISPLAY() );
     }
 }
 
