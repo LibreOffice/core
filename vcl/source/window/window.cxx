@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-14 13:57:53 $
+ *  last change: $Author: ssa $ $Date: 2002-01-15 11:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6060,6 +6060,13 @@ void Window::SetPosSizePixel( long nX, long nY,
         if ( IsReallyVisible() )
             ImplGenerateMouseMove();
     }
+}
+
+// -----------------------------------------------------------------------
+
+Point Window::GetPosPixel() const
+{
+    return maPos;
 }
 
 // -----------------------------------------------------------------------
