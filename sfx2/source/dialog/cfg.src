@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 18:01:34 $
+ *  last change: $Author: vg $ $Date: 2002-01-24 21:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1343,7 +1343,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message [ finnish ] = "Osa toiminnoista on vielä määrittämättä (???).\n\nHyväksytäänkö kokoonpano?" ;
     Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage denne konfiguration alligevel?" ;
     Message [ french ] = "Certaines fonctions n'ont pas été définies (???).\n\nPoursuivre malgré tout ?" ;
-    Message [ swedish ] = "Det finns fortfarande odefinierade funktioner (???). \n\nVill Du ändå överta den här konfigurationen?" ;
+    Message [ swedish ] = "Det finns fortfarande odefinierade funktioner (???). \n\nVill du ändå använda den här konfigurationen?" ;
     Message [ dutch ] = "Er zijn nog ongedefinieerde functies (???).\n\nWilt u deze configuratie toch overnemen?" ;
     Message [ spanish ] = "Todavía hay funciones no definidas (???).\n\n¿Desea de todas formas aceptar esta configuración?" ;
     Message [ english_us ] = "There are still undefined functions (???).\n\nDo you want to accept the configuration anyway?" ;
@@ -1374,7 +1374,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message [ finnish ] = "Osa merkintöjen toiminnoista voidaan yhä liittää vain ponnahdusobjekteihin.\n\nJatketaanko?" ;
     Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage denne konfiguration alligevel?" ;
     Message [ french ] = "Certaines entrées sont encore associées à des fonctions réservées à des menus déroulants\n\nPoursuivre malgré tout ?" ;
-    Message [ swedish ] = "Det finns fortfarande poster med funktioner som bara kan tilldelas popups.\n\nVill Du ändå överta den här konfigurationen?" ;
+    Message [ swedish ] = "Det finns fortfarande poster med funktioner som bara kan tilldelas popups.\n\nVill du ändå använda den här konfigurationen?" ;
     Message [ dutch ] = "Er zijn nog items met functies die alleen aan popups kunnen worden toegewezen.\n\nWilt u deze configuratie toch overnemen?" ;
     Message [ spanish ] = "Todavía hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\n¿Desea continuar de todos modos?" ;
     Message [ english_us ] = "There are still entries with functions that can only be assigned to pop-ups.\n\nContinue anyway?" ;
