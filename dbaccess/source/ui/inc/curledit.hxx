@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:08:07 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 12:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,11 @@ public:
     virtual void    SetText(const String& _rStr);
     virtual void    SetText(const String& _rStr, const Selection& _rNewSelection);
     virtual String  GetText() const;
+
+    /// get the currently set text, excluding the prefix indicating the type
+    virtual String  GetTextNoPrefix() const;
+    /// set a new text, leave the current prefix unchanged
+    virtual void    SetTextNoPrefix(const String& _rText);
 };
 
 //.........................................................................
@@ -110,6 +115,9 @@ public:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:08:07  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 28.09.00 13:11:23  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:00:47 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 12:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,22 @@ OConnectionURLEdit::~OConnectionURLEdit()
 }
 
 //-------------------------------------------------------------------------
+void OConnectionURLEdit::SetTextNoPrefix(const String& _rText)
+{
+    DBG_ASSERT(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
+    if (GetSubEdit())
+        GetSubEdit()->SetText(_rText);
+}
+
+//-------------------------------------------------------------------------
+String OConnectionURLEdit::GetTextNoPrefix() const
+{
+    if (GetSubEdit())
+        return GetSubEdit()->GetText();
+    return GetText();
+}
+
+//-------------------------------------------------------------------------
 void OConnectionURLEdit::SetText(const String& _rStr)
 {
     Selection aNoSelection(0,0);
@@ -167,6 +183,9 @@ String OConnectionURLEdit::GetText() const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/18 16:00:47  fs
+ *  use the system's DialogColor as background for the fixed text - looks much better
+ *
  *  Revision 1.1  2000/10/05 09:59:38  fs
  *  edit control for connection urls
  *
