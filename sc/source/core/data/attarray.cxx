@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1489,11 +1489,11 @@ void ScAttrArray::SetPatternAreaSafe( USHORT nStartRow, USHORT nEndRow,
 
             if (pItem->IsOverlapped() || pItem->HasAutoFilter())
             {
-                ScPatternAttr*  pNewPattern;
-                if (bDefault)
-                    pNewPattern = new ScPatternAttr( pDocument->GetPool() );
-                else
-                    pNewPattern = new ScPatternAttr( *pWantedPattern );
+                //  #108045# default-constructing a ScPatternAttr for DeleteArea doesn't work
+                //  because it would have no cell style information.
+                //  Instead, the document's GetDefPattern is copied. Since it is passed as
+                //  pWantedPattern, no special treatment of default is needed here anymore.
+                ScPatternAttr*  pNewPattern = new ScPatternAttr( *pWantedPattern );
                 SfxItemSet*     pSet = &pNewPattern->GetItemSet();
                 pSet->Put( *pItem );
                 SetPatternArea( nThisRow, nAttrRow, pNewPattern, TRUE );
