@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:34:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2305,20 +2305,6 @@ void SwTxtNode::ClearSwpHintsArr( int bDelAll, int bDelFields )
                 ++nPos;
         }
     }
-}
-
-FASTBOOL SwTxtNode::IsInSymbolFont( xub_StrLen nPos ) const
-{
-    SfxItemSet aSet( (SfxItemPool&)GetDoc()->GetAttrPool(),
-                    RES_CHRATR_FONT, RES_CHRATR_FONT );
-    if( GetAttr( aSet, nPos, nPos ))
-        return RTL_TEXTENCODING_SYMBOL == ((SvxFontItem&)aSet.Get( RES_CHRATR_FONT ))
-                                    .GetCharSet();
-    return FALSE;
-
-//JP 07.10.95: waere so auch nicht schlecht!
-//  SwTxtFrmInfo aFInfo( GetFrm() );
-//  return aFInfo.IsBullet( nPos );
 }
 
 #ifdef VERTICAL_LAYOUT
