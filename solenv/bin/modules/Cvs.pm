@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2002-10-09 17:08:08 $
+#   last change: $Author: hr $ $Date: 2002-10-14 12:38:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,7 +133,7 @@ sub get_sorted_revs
     my $self = shift;
 
     if ( $self->{"_SORTED"} ) {
-        return $self->{REV_TAGS};
+        return $self->{REV_SORTED};
     }
 
     $self->parse_log();
@@ -219,9 +219,9 @@ sub is_tag
     return exists($$tags_ref{$tag}) ? 1 : 0;
 }
 
+# Check if $label is branch label and returns revision.
 sub get_branch_rev
 {
-    # check if $label is branch label and returns revision
     my $self  = shift;
     my $label = shift;
 
@@ -243,7 +243,7 @@ sub delete_rev
 {
     my $self = shift;
     my $rev = shift;
-    my $file = $self->name;
+    my $file = $self->name();
 
     if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
         open (CVSDELETE, "$self->{CVS_BINARY} admin -o$rev $file 2>nul |");
@@ -258,22 +258,17 @@ sub delete_rev
     return 0;
 }
 
+# Update archive with options $options.Returns 'success' and new revision
+# on success or reason of failure.
+# If no update happens because file was up-to-date consider operation
+# a success.
 sub update
 {
-    # Update archive with options $options.
-    # Returns 'success' on success or reason of failure.
-    # If no update happens because file was up-to-date
-    # consider operation a success.
     my $self = shift;
     my $options = shift;
 
-    my $file = $self->name;
-    if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
-        open (CVSUPDATE, "$self->{CVS_BINARY} update $options $file 2>&1 |");
-    }
-    else {
-        open (CVSUPDATE, "$self->{CVS_BINARY} update $options $file 2>&1 |");
-    }
+    my $file = $self->name();
+    open (CVSUPDATE, "$self->{CVS_BINARY} update $options $file 2>&1 |");
     my $conflict = 0;
     my $notknown = 0;
     while(<CVSUPDATE>) {
@@ -290,20 +285,14 @@ sub update
     return 'success'
 }
 
+# Commit $file with option $option; return 'success' or reason for failure.
 sub commit
 {
-    # commit $file with option $option
-    # return 'success' or reason for failure
     my $self = shift;
     my $options = shift;
 
-    my $file = $self->name;
-    if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
-        open (CVSCOMMIT, "$self->{CVS_BINARY} commit $options $file 2>&1 |");
-    }
-    else {
-        open (CVSCOMMIT, "$self->{CVS_BINARY} commit $options $file 2>&1 |");
-    }
+    my $file = $self->name();
+    open (CVSCOMMIT, "$self->{CVS_BINARY} commit $options $file 2>&1 |");
     my $conflict = 0;
     my $uptodate = 0;
     my $notknown = 0;
@@ -312,8 +301,10 @@ sub commit
         /Up-to-date check failed/ && ++$uptodate;
         /nothing known about/ && ++$notknown;
         /had a conflict and has not been modified/ && ++$conflict;
-        /new revision:/ && ++$success;
+        /new revision: ((?:\d|\.)+|delete);/ && ++$success;
     }
+    # might be either 'delete' or numeric rev.
+    my $new_revision = $success ? $1 : undef;
     close(CVSCOMMIT);
     if ( !$success ) {
         my $failure = 'unkownfailure';
@@ -322,7 +313,7 @@ sub commit
         $failure = 'notknown' if $notknown;
         return $failure
     }
-    return 'success'
+    return wantarray ? 'success' : ('success', $new_revision);
 }
 
 
@@ -333,7 +324,7 @@ sub parse_log
     if ( $self->{"_PARSED"} ) {
         return;
     }
-    my $file = $self->name;
+    my $file = $self->name();
     my $in_revisions = 0;
     my $in_tags = 0;
     my $rev_data = {};
