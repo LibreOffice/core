@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-13 10:35:33 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,7 @@
 #ifndef _SVDOOLE2_HXX //autogen wg. SdrOle2Obj
 #include <svx/svdoole2.hxx>
 #endif
-#ifndef _IPOBJ_HXX //autogen wg. SvInPlaceObject
-#include <so3/ipobj.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen wg. SvStorage
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
 #endif
@@ -166,6 +161,7 @@
 #include "patattr.hxx"
 
 using ::rtl::OUString;
+using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
@@ -831,12 +827,12 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     UINT32          nPictureId = UINT32(this);
     sprintf( aBuf, "%08X", nPictureId );        // #100211# - checked
     aStorageName.AppendAscii( aBuf );
-    SvStorageRef    xOleStg = pRootStorage->OpenStorage( aStorageName,
+    SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
                             STREAM_READWRITE| STREAM_SHARE_DENYALL );
     if( xOleStg.Is() )
     {
-        SvInPlaceObjectRef xObj( ((SdrOle2Obj&)rOleObj).GetObjRef() );
-        if ( xObj.Is() )
+        uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj&)rOleObj).GetObjRef() );
+        if ( xObj.is() )
         {
             // set version to "old" version, because it must be
             // saved in MS notation.
@@ -858,7 +854,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
             }
 
             SvxMSExportOLEObjects   aOLEExpFilt( nFl );
-            aOLEExpFilt.ExportOLEObject( *xObj, *xOleStg );
+            aOLEExpFilt.ExportOLEObject( xObj, *xOleStg );
 
             // ftCf subrecord, undocumented as usual
             rStrm.StartRecord( EXC_ID_OBJ_FTCF, 2 );
