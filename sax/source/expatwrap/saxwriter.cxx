@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:14:30 $
+ *  last change: $Author: sab $ $Date: 2001-11-01 13:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,9 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/byteseq.hxx>
-
-#include <assert.h>
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::std;
@@ -93,6 +94,8 @@ using namespace ::com::sun::star::io;
 
 #define LINEFEED 10
 #define SAXWRITER_CHECK_FOR_INVALID_CHARS
+#define SEQUENCESIZE 1024
+#define MAXCOLUMNCOUNT 72
 
 /******
 *
@@ -152,6 +155,68 @@ namespace sax_expatwrap {
 //      return nLen;
 //  }
 
+class SaxWriterHelper
+{
+    Reference< XOutputStream >  m_out;
+    Sequence < sal_Int8 >       m_Sequence;
+    sal_Int8*                   mp_Sequence;
+
+    sal_Int32                   nLastLineFeedPos; // is negative after writing a sequence
+    sal_uInt32                  nCurrentPos;
+    sal_Bool                    m_bStartElementFinished;
+
+
+    inline sal_uInt32 writeSequence() throw( SAXException );
+
+    // use only if to insert the bytes more space in the sequence is needed and
+    // so the sequence has to write out and reset rPos to 0
+    // writes sequence only on overflow, sequence could be full on the end (rPos == SEQUENCESIZE)
+    inline void AddBytes(sal_Int8* pTarget, sal_uInt32& rPos,
+                const sal_Int8* pBytes, sal_uInt32 nBytesCount) throw( SAXException );
+    inline sal_Bool convertToXML(const sal_Unicode * pStr,
+                        sal_Int32 nStrLen,
+                        sal_Bool bDoNormalization,
+                        sal_Bool bNormalizeWhitespace,
+                        sal_Int8 *pTarget,
+                        sal_uInt32& rPos) throw( SAXException );
+    inline void FinishStartElement() throw( SAXException );
+public:
+    SaxWriterHelper(Reference< XOutputStream > m_TempOut) :
+        m_Sequence(SEQUENCESIZE),
+        m_out(m_TempOut),
+        nCurrentPos(0),
+        nLastLineFeedPos(0),
+        mp_Sequence(NULL),
+        m_bStartElementFinished(sal_True)
+    {
+        OSL_ENSURE(SEQUENCESIZE > 50, "Sequence cache size to small");
+        mp_Sequence = m_Sequence.getArray();
+    }
+    ~SaxWriterHelper()
+    {
+        OSL_ENSURE(!nCurrentPos, "cached Sequence not written");
+        OSL_ENSURE(m_bStartElementFinished, "StartElement not complettly written");
+    }
+
+    inline void insertIndentation(sal_uInt32 m_nLevel)  throw( SAXException );
+    inline void writeString(const rtl::OUString& rWriteOutString,
+                        sal_Bool bDoNormalization,
+                        sal_Bool bNormalizeWhitespace) throw( SAXException );
+
+    sal_uInt32 GetLastColumnCount() { return (sal_uInt32)(nCurrentPos - nLastLineFeedPos); }
+
+    inline void startDocument() throw( SAXException );
+    inline void startElement(const rtl::OUString& rName, const Reference< XAttributeList >& xAttribs) throw( SAXException );
+    inline sal_Bool FinishEmptyElement() throw( SAXException );
+    inline void endElement(const rtl::OUString& rName) throw( SAXException );
+    inline void endDocument() throw( SAXException );
+
+    inline void processingInstruction(const rtl::OUString& rTarget, const rtl::OUString& rData) throw( SAXException );
+    inline void startCDATA() throw( SAXException );
+    inline void endCDATA() throw( SAXException );
+    inline void comment(const rtl::OUString& rComment) throw( SAXException );
+};
+
 const sal_Bool g_bValidCharsBelow32[31] =
 {
 //  0 1 2 3 4 5 6 7
@@ -160,6 +225,521 @@ const sal_Bool g_bValidCharsBelow32[31] =
     0,0,0,0,0,0,0,0,  //16
     0,0,0,0,0,0,0
 };
+
+/********
+* write through to the output stream
+*
+*****/
+inline sal_uInt32 SaxWriterHelper::writeSequence() throw( SAXException )
+{
+    try
+    {
+        m_out->writeBytes( m_Sequence );
+    }
+    catch( IOException & e )
+    {
+        Any a;
+        a <<= e;
+        throw SAXException(
+            OUString::createFromAscii( "io exception during writing" ),
+            Reference< XInterface > (),
+            a );
+    }
+    nLastLineFeedPos -= SEQUENCESIZE;
+    return 0;
+}
+
+inline void SaxWriterHelper::AddBytes(sal_Int8* pTarget, sal_uInt32& rPos,
+                const sal_Int8* pBytes, sal_uInt32 nBytesCount) throw( SAXException )
+{
+    OSL_ENSURE((rPos + nBytesCount) > SEQUENCESIZE, "wrong use of AddBytesMethod");
+    sal_uInt32 nCount(SEQUENCESIZE - rPos);
+    memcpy( &(pTarget[rPos]) , pBytes,  nCount);
+
+    OSL_ENSURE(rPos + nCount == SEQUENCESIZE, "the position should be the at the end");
+
+    rPos = writeSequence();
+    sal_uInt32 nRestCount(nBytesCount - nCount);
+    if ((rPos + nRestCount) <= SEQUENCESIZE)
+    {
+        memcpy( &(pTarget[rPos]), &pBytes[nCount], nRestCount);
+        rPos += nRestCount;
+    }
+    else
+        AddBytes(pTarget, rPos, &pBytes[nCount], nRestCount);
+}
+
+/** Converts an UTF16 string to UTF8 and does XML normalization
+
+    @param pTarget
+           Pointer to a piece of memory, to where the output should be written. The caller
+           must call calcXMLByteLength on the same string, to ensure,
+           that there is enough memory for converting.
+ */
+inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
+                        sal_Int32 nStrLen,
+                        sal_Bool bDoNormalization,
+                        sal_Bool bNormalizeWhitespace,
+                        sal_Int8 *pTarget,
+                        sal_uInt32& rPos ) throw( SAXException )
+{
+    sal_Int32 nOutputLength(0);
+    sal_Bool bRet(sal_True);
+
+    for( sal_Int32 i = 0 ; i < nStrLen ; i ++ )
+    {
+        sal_uInt16 c = pStr[i];
+        if( (c >= 0x0001) && (c <= 0x007F) )
+        {
+            if( bDoNormalization )
+            {
+                switch( c )
+                {
+                    case '&':  // resemble to &amp;
+                    {
+                        if ((rPos + 5) > SEQUENCESIZE)
+                            AddBytes(pTarget, rPos, (sal_Int8*)"&amp;", 5);
+                        else
+                        {
+                            memcpy( &(pTarget[rPos]) , "&amp;", 5 );
+                            rPos += 5;
+                        }
+                    }
+                    break;
+                    case '<':
+                    {
+                        if ((rPos + 4) > SEQUENCESIZE)
+                            AddBytes(pTarget, rPos, (sal_Int8*)"&lt;", 4);
+                        else
+                        {
+                            memcpy( &(pTarget[rPos]) , "&lt;" , 4 );
+                            rPos += 4;        // &lt;
+                        }
+                    }
+                    break;
+                    case '>':
+                    {
+                        if ((rPos + 4) > SEQUENCESIZE)
+                            AddBytes(pTarget, rPos, (sal_Int8*)"&gt;", 4);
+                        else
+                        {
+                            memcpy( &(pTarget[rPos]) , "&gt;" , 4 );
+                            rPos += 4;        // &gt;
+                        }
+                    }
+                    break;
+                    case 39:                 // 39 == '''
+                    {
+                        if ((rPos + 6) > SEQUENCESIZE)
+                            AddBytes(pTarget, rPos, (sal_Int8*)"&apos;", 6);
+                        else
+                        {
+                            memcpy( &(pTarget[rPos]) , "&apos;" , 6 );
+                            rPos += 6;        // &apos;
+                        }
+                    }
+                    break;
+                    case '"':
+                    {
+                        if ((rPos + 6) > SEQUENCESIZE)
+                            AddBytes(pTarget, rPos, (sal_Int8*)"&quot;", 6);
+                        else
+                        {
+                            memcpy( &(pTarget[rPos]) , "&quot;" , 6 );
+                            rPos += 6;        // &quot;
+                        }
+                    }
+                    break;
+                    case 13:
+                    {
+                        if ((rPos + 6) > SEQUENCESIZE)
+                            AddBytes(pTarget, rPos, (sal_Int8*)"&#x0d;", 6);
+                        else
+                        {
+                            memcpy( &(pTarget[rPos]) , "&#x0d;" , 6 );
+                            rPos += 6;
+                        }
+                    }
+                    break;
+                    case LINEFEED:
+                    {
+                        if( bNormalizeWhitespace )
+                        {
+                            if ((rPos + 6) > SEQUENCESIZE)
+                                AddBytes(pTarget, rPos, (sal_Int8*)"&#x0a;" , 6);
+                            else
+                            {
+                                memcpy( &(pTarget[rPos]) , "&#x0a;" , 6 );
+                                rPos += 6;
+                            }
+                        }
+                        else
+                        {
+                            pTarget[rPos] = LINEFEED;
+                            nLastLineFeedPos = rPos;
+                            rPos ++;
+                        }
+                    }
+                    break;
+                    case 9:
+                    {
+                        if( bNormalizeWhitespace )
+                        {
+                            if ((rPos + 6) > SEQUENCESIZE)
+                                AddBytes(pTarget, rPos, (sal_Int8*)"&#x09;" , 6);
+                            else
+                            {
+                                memcpy( &(pTarget[rPos]) , "&#x09;" , 6 );
+                                rPos += 6;
+                            }
+                        }
+                        else
+                        {
+                            pTarget[rPos] = 9;
+                            rPos ++;
+                        }
+                    }
+                    break;
+                    default:
+                    {
+                        pTarget[rPos] = (sal_Int8)c;
+                        rPos ++;
+                    }
+                    break;
+                }
+            }
+            else
+            {
+                pTarget[rPos] = (sal_Int8)c;
+                if ((sal_Int8)c == LINEFEED)
+                    nLastLineFeedPos = rPos;
+                rPos ++;
+            }
+        }
+        else if( c > 0x07FF )
+        {
+            sal_Int8 aBytes[] = { sal_Int8(0xE0 | ((c >> 12) & 0x0F)),
+                                  sal_Int8(0x80 | ((c >>  6) & 0x3F)),
+                                  sal_Int8(0x80 | ((c >>  0) & 0x3F)) };
+            if ((rPos + 3) > SEQUENCESIZE)
+                AddBytes(pTarget, rPos, aBytes, 3);
+            else
+            {
+                pTarget[rPos] = aBytes[0];
+                rPos ++;
+                pTarget[rPos] = aBytes[1];
+                rPos ++;
+                pTarget[rPos] = aBytes[2];
+                rPos ++;
+            }
+        }
+        else
+        {
+            sal_Int8 aBytes[] = { sal_Int8(0xC0 | ((c >>  6) & 0x1F)),
+                                sal_Int8(0x80 | ((c >>  0) & 0x3F)) };
+            if ((rPos + 2) > SEQUENCESIZE)
+                AddBytes(pTarget, rPos, aBytes, 2);
+            else
+            {
+                pTarget[rPos] = aBytes[0];
+                rPos ++;
+                pTarget[rPos] = aBytes[1];
+                rPos ++;
+            }
+        }
+        OSL_ENSURE(rPos <= SEQUENCESIZE, "not reset current position");
+        if (rPos == SEQUENCESIZE)
+            rPos = writeSequence();
+
+#ifdef SAXWRITER_CHECK_FOR_INVALID_CHARS
+        // check first for the most common characters
+        if( c < 32 || c >= 0xd800 )
+            bRet = ( (c < 32 && ! g_bValidCharsBelow32[c]) ||
+                    (c >= 0xd800 && c <= 0xdfff) ||
+                    c == 0xffff ||
+                    c == 0xfffe );
+#endif
+    }
+    return bRet;
+}
+
+inline void SaxWriterHelper::FinishStartElement() throw( SAXException )
+{
+    if (!m_bStartElementFinished)
+    {
+        mp_Sequence[nCurrentPos] = '>';
+        nCurrentPos++;
+        if (nCurrentPos == SEQUENCESIZE)
+            nCurrentPos = writeSequence();
+        m_bStartElementFinished = sal_True;
+    }
+}
+
+inline void SaxWriterHelper::insertIndentation(sal_uInt32 m_nLevel) throw( SAXException )
+{
+    FinishStartElement();
+    if (m_nLevel > 0)
+    {
+        if ((nCurrentPos + m_nLevel + 1) <= SEQUENCESIZE)
+        {
+            mp_Sequence[nCurrentPos] = LINEFEED;
+            nLastLineFeedPos = nCurrentPos;
+            nCurrentPos++;
+            memset( &(mp_Sequence[nCurrentPos]) , 32 , m_nLevel );
+            nCurrentPos += m_nLevel;
+            if (nCurrentPos == SEQUENCESIZE)
+                nCurrentPos = writeSequence();
+        }
+        else
+        {
+            sal_uInt32 nCount(m_nLevel + 1);
+            sal_Int8* pBytes = new sal_Int8[nCount];
+            pBytes[0] = LINEFEED;
+            memset( &(pBytes[1]), 32, m_nLevel );
+            AddBytes(mp_Sequence, nCurrentPos, pBytes, nCount);
+            delete pBytes;
+            nLastLineFeedPos = nCurrentPos - nCount;
+            if (nCurrentPos == SEQUENCESIZE)
+                nCurrentPos = writeSequence();
+        }
+    }
+    else
+    {
+        mp_Sequence[nCurrentPos] = LINEFEED;
+        nLastLineFeedPos = nCurrentPos;
+        nCurrentPos++;
+        if (nCurrentPos == SEQUENCESIZE)
+            nCurrentPos = writeSequence();
+    }
+}
+
+inline void SaxWriterHelper::writeString( const rtl::OUString& rWriteOutString,
+                        sal_Bool bDoNormalization,
+                        sal_Bool bNormalizeWhitespace ) throw( SAXException )
+{
+    FinishStartElement();
+    if (!convertToXML(rWriteOutString.getStr(),
+                    rWriteOutString.getLength(),
+                    bDoNormalization,
+                    bNormalizeWhitespace,
+                    mp_Sequence,
+                    nCurrentPos))
+    {
+        SAXException except;
+        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export" ) );
+        throw except;
+    }
+}
+
+inline void SaxWriterHelper::startDocument() throw( SAXException )
+{
+    const char pc[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    const int nLen = strlen( pc );
+    if ((nCurrentPos + nLen + 1) <= SEQUENCESIZE)
+    {
+        memcpy( mp_Sequence, pc , nLen );
+        nCurrentPos += nLen;
+        mp_Sequence[nCurrentPos] = LINEFEED;
+        nCurrentPos++;
+    }
+    else
+    {
+        AddBytes(mp_Sequence, nCurrentPos, (sal_Int8*)pc, nLen);
+        OSL_ENSURE(nCurrentPos <= SEQUENCESIZE, "not reset current position");
+        if (nCurrentPos == SEQUENCESIZE)
+            nCurrentPos = writeSequence();
+        mp_Sequence[nCurrentPos] = LINEFEED;
+        nCurrentPos++;
+    }
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+}
+
+inline void SaxWriterHelper::startElement(const rtl::OUString& rName, const Reference< XAttributeList >& xAttribs) throw( SAXException )
+{
+    FinishStartElement();
+    mp_Sequence[nCurrentPos] = '<';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+
+    writeString(rName, sal_False, sal_False);
+
+    sal_Int8 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
+    for(sal_Int8 i = 0 ; i < nAttribCount ; i++ )
+    {
+        mp_Sequence[nCurrentPos] = ' ';
+        nCurrentPos++;
+        if (nCurrentPos == SEQUENCESIZE)
+            nCurrentPos = writeSequence();
+
+        writeString(xAttribs->getNameByIndex( i ), sal_False, sal_False);
+
+        mp_Sequence[nCurrentPos] = '=';
+        nCurrentPos++;
+        if (nCurrentPos == SEQUENCESIZE)
+            nCurrentPos = writeSequence();
+        mp_Sequence[nCurrentPos] = '"';
+        nCurrentPos++;
+        if (nCurrentPos == SEQUENCESIZE)
+            nCurrentPos = writeSequence();
+
+        writeString(xAttribs->getValueByIndex( i ), sal_True, sal_True);
+
+        mp_Sequence[nCurrentPos] = '"';
+        nCurrentPos++;
+        if (nCurrentPos == SEQUENCESIZE)
+            nCurrentPos = writeSequence();
+    }
+
+    m_bStartElementFinished = sal_False;    // because the '>' character is not added,
+                                            // because it is possible, that the "/>"
+                                            // characters have to add
+}
+
+inline sal_Bool SaxWriterHelper::FinishEmptyElement() throw( SAXException )
+{
+    if (m_bStartElementFinished)
+        return sal_False;
+
+    mp_Sequence[nCurrentPos] = '/';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '>';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+
+    m_bStartElementFinished = sal_True;
+
+    return sal_True;
+}
+
+inline void SaxWriterHelper::endElement(const rtl::OUString& rName) throw( SAXException )
+{
+    FinishStartElement();
+    mp_Sequence[nCurrentPos] = '<';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '/';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+
+    writeString( rName, sal_False, sal_False);
+
+    mp_Sequence[nCurrentPos] = '>';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+}
+
+inline void SaxWriterHelper::endDocument() throw( SAXException )
+{
+    if (nCurrentPos > 0)
+    {
+        m_Sequence.realloc(nCurrentPos);
+        nCurrentPos = writeSequence();
+        //m_Sequence.realloc(SEQUENCESIZE);
+    }
+}
+
+inline void SaxWriterHelper::processingInstruction(const rtl::OUString& rTarget, const rtl::OUString& rData) throw( SAXException )
+{
+    FinishStartElement();
+    mp_Sequence[nCurrentPos] = '<';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '?';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+
+    writeString( rTarget, sal_False, sal_False );
+
+    mp_Sequence[nCurrentPos] = ' ';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+
+    writeString( rData, sal_False, sal_False );
+
+    mp_Sequence[nCurrentPos] = '?';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '>';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+}
+
+inline void SaxWriterHelper::startCDATA() throw( SAXException )
+{
+    FinishStartElement();
+    if ((nCurrentPos + 9) <= SEQUENCESIZE)
+    {
+        memcpy( &(mp_Sequence[nCurrentPos]), "<![CDATA[" , 9 );
+        nCurrentPos += 9;
+    }
+    else
+        AddBytes(mp_Sequence, nCurrentPos, (sal_Int8*)"<![CDATA[" , 9);
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+}
+
+inline void SaxWriterHelper::endCDATA() throw( SAXException )
+{
+    FinishStartElement();
+    if ((nCurrentPos + 3) <= SEQUENCESIZE)
+    {
+        memcpy( &(mp_Sequence[nCurrentPos]), "]]>" , 3 );
+        nCurrentPos += 3;
+    }
+    else
+        AddBytes(mp_Sequence, nCurrentPos, (sal_Int8*)"]]>" , 3);
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+}
+
+inline void SaxWriterHelper::comment(const rtl::OUString& rComment) throw( SAXException )
+{
+    FinishStartElement();
+    mp_Sequence[nCurrentPos] = '<';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '!';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '-';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '-';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+
+    writeString( rComment, sal_False, sal_False);
+
+    mp_Sequence[nCurrentPos] = '-';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '-';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = '>';
+    nCurrentPos++;
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+}
 
 inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
                                     sal_Bool bDoNormalization,
@@ -238,110 +818,6 @@ inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
     return nOutputLength;
 }
 
-/** Converts an UTF16 string to UTF8 and does XML normalization
-
-    @param pTarget
-           Pointer to a piece of memory, to where the output should be written. The caller
-           must call calcXMLByteLength on the same string, to ensure,
-           that there is enough memory for converting.
- */
-sal_Int32 convertToXML( const sal_Unicode * pStr, sal_Int32 nStrLen,
-                        sal_Bool bDoNormalization,
-                        sal_Bool bNormalizeWhitespace,
-                        sal_Int8 *pTarget )
-{
-    sal_Int32 nOutputLength = 0;
-    sal_Int32 nPos = 0;
-
-    for( sal_Int32 i = 0 ; i < nStrLen ; i ++ )
-    {
-        sal_uInt16 c = pStr[i];
-        if( (c >= 0x0001) && (c <= 0x007F) )
-        {
-            if( bDoNormalization )
-            {
-                switch( c )
-                {
-                case '&':  // resemble to &amp;
-                    memcpy( &(pTarget[nPos]) , "&amp;" , 5 );
-                    nPos += 5;
-                    break;
-                case '<':
-                    memcpy( &(pTarget[nPos]) , "&lt;" , 4 );
-                    nPos += 4;        // &lt;
-                    break;
-                case '>':
-                    memcpy( &(pTarget[nPos]) , "&gt;" , 4 );
-                    nPos += 4;        // &gt;
-                    break;
-                case 39:                 // 39 == '''
-                    memcpy( &(pTarget[nPos]) , "&apos;" , 6 );
-                    nPos += 6;        // &apos;
-                    break;
-                case '"':
-                    memcpy( &(pTarget[nPos]) , "&quot;" , 6 );
-                    nPos += 6;        // &quot;
-                    break;
-                case 13:
-                    memcpy( &(pTarget[nPos]) , "&#x0d;" , 6 );
-                    nPos += 6;
-                    break;
-                case LINEFEED:
-                    if( bNormalizeWhitespace )
-                    {
-                        memcpy( &(pTarget[nPos]) , "&#x0a;" , 6 );
-                        nPos += 6;
-                    }
-                    else
-                    {
-                        pTarget[nPos] = LINEFEED;
-                        nPos ++;
-                    }
-                    break;
-                case 9:
-                    if( bNormalizeWhitespace )
-                    {
-                        memcpy( &(pTarget[nPos]) , "&#x09;" , 6 );
-                        nPos += 6;
-                    }
-                    else
-                    {
-                        pTarget[nPos] = 9;
-                        nPos ++;
-                    }
-                    break;
-                default:
-                    pTarget[nPos] = (sal_Int8)c;
-                    nPos ++;
-                }
-            }
-            else
-            {
-                pTarget[nPos] = (sal_Int8)c;
-                nPos ++;
-            }
-        }
-        else if( c > 0x07FF )
-        {
-            pTarget[nPos] = sal_Int8(0xE0 | ((c >> 12) & 0x0F));
-            nPos ++;
-            pTarget[nPos] = sal_Int8(0x80 | ((c >>  6) & 0x3F));
-            nPos ++;
-            pTarget[nPos] = sal_Int8(0x80 | ((c >>  0) & 0x3F));
-            nPos ++;
-        }
-        else
-        {
-            pTarget[nPos] = sal_Int8(0xC0 | ((c >>  6) & 0x1F));
-            nPos ++;
-            pTarget[nPos] = sal_Int8(0x80 | ((c >>  0) & 0x3F));
-            nPos ++;
-        }
-    }
-    return nPos;
-}
-
-
 /** returns position of first ascii 10 within the string, -1 when no 10 in string.
  */
 static inline sal_Int32 getFirstLineBreak( const OUString & str ) throw ()
@@ -383,22 +859,26 @@ class SAXWriter :
 {
 public:
     SAXWriter( ) :
-        m_nMaxColumn(72),
         m_bForceLineBreak(sal_False),
         m_bAllowLineBreak(sal_False),
         m_seqStartElement(),
-        m_bIsSeqFilled(sal_False)
+        mp_SaxWriterHelper( NULL )
         {}
+    ~SAXWriter()
+    {
+        delete mp_SaxWriterHelper;
+    }
 
 public: // XActiveDataSource
     virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream)
         throw (RuntimeException)
             {
                 m_out = aStream;
+                delete mp_SaxWriterHelper;
+                mp_SaxWriterHelper = new SaxWriterHelper(m_out);
                 m_bDocStarted = sal_False;
                 m_nLevel = 0;
                 m_bIsCDATA = sal_False;
-                m_nColumn = 0;
             }
     virtual Reference< XOutputStream >  SAL_CALL getOutputStream(void)
         throw(RuntimeException)
@@ -447,32 +927,18 @@ public: // XServiceInfo
 private:
 
     void writeSequence( const Sequence<sal_Int8> & seq );
-    void insertIndentation( sal_Int8 *pTarget ) throw();
     sal_Int32 getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence ) throw();
 
-    inline void pushStartElement()
-        {
-            if( m_bIsSeqFilled && m_seqStartElement.getLength() )
-            {
-                writeSequence( m_seqStartElement );
-                m_bIsSeqFilled = sal_False;
-            }
-        }
-
-
-
-    Reference< XOutputStream > m_out;
-    Sequence < sal_Int8 > m_seqStartElement;
+    Reference< XOutputStream >  m_out;
+    Sequence < sal_Int8 >       m_seqStartElement;
+    SaxWriterHelper*            mp_SaxWriterHelper;
 
     // Status information
-    sal_Bool m_bIsSeqFilled;
-    sal_Bool m_bDocStarted;
-    sal_Bool m_bIsCDATA;
-    sal_Bool m_bForceLineBreak;
-    sal_Bool m_bAllowLineBreak;
+    sal_Bool m_bDocStarted : 1;
+    sal_Bool m_bIsCDATA : 1;
+    sal_Bool m_bForceLineBreak : 1;
+    sal_Bool m_bAllowLineBreak : 1;
     sal_Int32 m_nLevel;
-    sal_Int32 m_nColumn;
-    sal_Int32 m_nMaxColumn;
 };
 
 
@@ -509,59 +975,22 @@ Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw()
 sal_Int32 SAXWriter::getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence ) throw()
 {
     sal_Int32 nLength =-1;
-    if( m_bForceLineBreak ||
-        m_bAllowLineBreak && nFirstLineBreakOccurence + m_nColumn > m_nMaxColumn )
+    if (mp_SaxWriterHelper)
     {
-        nLength = m_nLevel +1;
+        if( m_bForceLineBreak ||
+            m_bAllowLineBreak &&
+            ((nFirstLineBreakOccurence + mp_SaxWriterHelper->GetLastColumnCount()) > MAXCOLUMNCOUNT) )
+            nLength = m_nLevel +1;
     }
     m_bForceLineBreak = sal_False;
     m_bAllowLineBreak = sal_False;
     return nLength;
 }
 
-void SAXWriter::insertIndentation( sal_Int8 *pTarget ) throw()
-{
-    pTarget[0] = 10;
-    memset( &(pTarget[1]) , 32 , m_nLevel );
-}
-
 static inline sal_Bool isFirstCharWhitespace( const sal_Unicode *p ) throw()
 {
     return *p == ' ';
 }
-
-
-
-/********
-* write through to the output stream and counts columns
-*
-*****/
-void SAXWriter::writeSequence( const Sequence<sal_Int8> & seq )
-{
-    sal_Int32 nPos = getLastLineBreak( seq );
-    try
-    {
-        m_out->writeBytes( seq );
-    }
-    catch( IOException & e )
-    {
-        Any a;
-        a <<= e;
-        throw SAXException(
-            OUString::createFromAscii( "io exception during writing" ),
-            Reference< XInterface > (),
-            a );
-    }
-
-    if( nPos >= 0 ) {
-        m_nColumn = seq.getLength() - (nPos+1);
-    }
-    else {
-        m_nColumn += seq.getLength();
-    }
-}
-
-
 
 
 // XServiceInfo
@@ -595,16 +1024,11 @@ Sequence< OUString > SAXWriter::getSupportedServiceNames(void) throw ()
 
 void SAXWriter::startDocument()                     throw(SAXException, RuntimeException )
 {
-    if( m_bDocStarted || ! m_out.is() ) {
+    if( m_bDocStarted || ! m_out.is() || !mp_SaxWriterHelper ) {
         throw SAXException();
     }
     m_bDocStarted = sal_True;
-    const char pc[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    const int nLen = strlen( pc );
-    Sequence<sal_Int8> seqWrite( nLen+1 );
-    memcpy( seqWrite.getArray() , pc , nLen );
-    seqWrite.getArray()[nLen] = LINEFEED;
-    writeSequence( seqWrite );
+    mp_SaxWriterHelper->startDocument();
 }
 
 
@@ -621,6 +1045,7 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
             OUString::createFromAscii( "unexpected end of document" ),
             Reference< XInterface >() , Any() );
     }
+    mp_SaxWriterHelper->endDocument();
     try
     {
         m_out->closeOutput();
@@ -652,82 +1077,45 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
         except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "startElement call not allowed with CDATA sections" ));
         throw except;
     }
-    pushStartElement();
 
-    // first calculate the sequence length
-    sal_Int32 nLength = 0;
-    sal_Int32 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
+    sal_Int32 nLength(0);
+    if (m_bAllowLineBreak)
+    {
+        sal_Int32 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
 
-    nLength ++; // "<"
-    nLength += calcXMLByteLength( aName.getStr() , aName.getLength(),
+        nLength ++; // "<"
+        nLength += calcXMLByteLength( aName.getStr() , aName.getLength(),
                                   sal_False, sal_False ); // the tag name
 
-    int n;
-    for( n = 0 ; n < nAttribCount ; n ++ ) {
-        nLength ++; // " "
-        OUString tmp =  xAttribs->getNameByIndex( n );
+        int n;
+        for( n = 0 ; n < nAttribCount ; n ++ ) {
+            nLength ++; // " "
+            OUString tmp =  xAttribs->getNameByIndex( n );
 
-        nLength += calcXMLByteLength( tmp.getStr() , tmp.getLength() , sal_False, sal_False );
+            nLength += calcXMLByteLength( tmp.getStr() , tmp.getLength() , sal_False, sal_False );
 
-        nLength += 2; // ="
+            nLength += 2; // ="
 
-        tmp = xAttribs->getValueByIndex( n );
+            tmp = xAttribs->getValueByIndex( n );
 
-        nLength += calcXMLByteLength( tmp.getStr(), tmp.getLength(), sal_True, sal_True );
+            nLength += calcXMLByteLength( tmp.getStr(), tmp.getLength(), sal_True, sal_True );
 
-        nLength += 1; // "
+            nLength += 1; // "
+        }
+
+        nLength ++;  // '>'
     }
 
-    nLength ++;  // '>'
-
     // Is there a new indentation necesarry ?
-    sal_Int32 nPrefix = getIndentPrefixLength( nLength  );
-    if( nPrefix >= 0 )
-        nLength += nPrefix;
-
-    // now create the sequence, store it ( maybe later an empty tag ? )
-    m_seqStartElement.realloc( nLength );
-    m_bIsSeqFilled = sal_True;
-
-    sal_Int8 *pTarget = (sal_Int8*) m_seqStartElement.getConstArray();  // we OWN the sequence
-    sal_Int32 nPos =0;
+    sal_Int32 nPrefix(getIndentPrefixLength( nLength ));
 
     // write into sequence
     if( nPrefix >= 0 )
-    {
-        insertIndentation( pTarget );
-        nPos += nPrefix;
-    }
-    pTarget[nPos] = '<';
-    nPos ++;
+        mp_SaxWriterHelper->insertIndentation( nPrefix );
 
-    nPos += convertToXML( aName.getStr(), aName.getLength(), sal_False, sal_False, &(pTarget[nPos]) );
+    mp_SaxWriterHelper->startElement(aName, xAttribs);
 
-    for( n = 0 ; n < nAttribCount ; n ++ )
-    {
-        pTarget[nPos] = ' ';
-        nPos ++;
-
-        OUString tmp = xAttribs->getNameByIndex( n );
-        nPos += convertToXML( tmp.getStr(), tmp.getLength(), sal_False, sal_False, &(pTarget[nPos]) );
-
-        pTarget[nPos] = '=';
-        nPos ++;
-        pTarget[nPos] = '"';
-        nPos ++;
-
-        tmp = xAttribs->getValueByIndex( n );
-        nPos += convertToXML( tmp.getStr(), tmp.getLength(), sal_True, sal_True , &(pTarget[nPos] ) );
-
-        pTarget[nPos] = '"';
-        nPos ++;
-    }
-
-    pTarget[nPos] = '>';
-    nPos ++;
-    OSL_ASSERT( nPos == nLength );
-
-    m_nLevel ++;
+    m_nLevel++;
 }
 
 void SAXWriter::endElement(const OUString& aName)   throw (SAXException, RuntimeException)
@@ -741,48 +1129,20 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
         throw SAXException();
     }
 
-    if( m_bIsSeqFilled && m_seqStartElement.getLength() )
-    {
-        m_seqStartElement.realloc( m_seqStartElement.getLength() + 1 );
-
-        sal_Int8 *p = m_seqStartElement.getArray();
-        p[m_seqStartElement.getLength()-2] = '/';
-        p[m_seqStartElement.getLength()-1] = '>';
-        writeSequence( m_seqStartElement );
-        m_bIsSeqFilled = sal_False;
+    if( mp_SaxWriterHelper->FinishEmptyElement() )
         m_bForceLineBreak = sal_False;
-    }
-    else {
+    else
+    {
         // only ascii chars allowed
-        sal_Int32 nLength = 3 + calcXMLByteLength( aName.getStr(), aName.getLength(), sal_False, sal_False );
+        sal_Int32 nLength(0);
+        if (m_bAllowLineBreak)
+            nLength = 3 + calcXMLByteLength( aName.getStr(), aName.getLength(), sal_False, sal_False );
         sal_Int32 nPrefix = getIndentPrefixLength( nLength );
 
         if( nPrefix >= 0 )
-        {
-            nLength += nPrefix;
-        }
-        Sequence< sal_Int8 > seqWrite( nLength );
+            mp_SaxWriterHelper->insertIndentation( nPrefix );
 
-        sal_Int8 *pTarget = ( sal_Int8 * ) seqWrite.getConstArray(); // we OWN it
-
-        sal_Int32 nPos = 0;
-        if( nPrefix >= 0 )
-        {
-            nPos += nPrefix;
-            insertIndentation( pTarget );
-        }
-        pTarget[nPos] = '<';
-        nPos ++;
-        pTarget[nPos] = '/';
-        nPos ++;
-
-        nPos += convertToXML( aName.getStr(), aName.getLength(), sal_False, sal_False, &(pTarget[nPos] ) );
-
-        pTarget[nPos] = '>';
-        nPos ++;
-
-        OSL_ASSERT( nPos == nLength );
-        writeSequence( seqWrite );
+        mp_SaxWriterHelper->endElement(aName);
     }
 }
 
@@ -797,68 +1157,37 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
 
     if( aChars.getLength() )
     {
-        pushStartElement();
-
-        sal_Int32 nLength = calcXMLByteLength( aChars.getStr(), aChars.getLength(),
-                                               ! m_bIsCDATA , sal_False );
         if( m_bIsCDATA )
-        {
-            // no indentation, no normalization
-            Sequence<sal_Int8> seqWrite( nLength );
-            convertToXML( aChars.getStr(), aChars.getLength() , sal_False, sal_False ,
-                          (sal_Int8*)seqWrite.getConstArray() );
-            writeSequence( seqWrite );
-        }
+            mp_SaxWriterHelper->writeString( aChars, sal_False, sal_False );
         else
         {
             // Note : nFirstLineBreakOccurence is not exact, because we don't know, how
             //        many 2 and 3 byte chars are inbetween. However this whole stuff
             //        is eitherway for pretty printing only, so it does not need to be exact.
-            sal_Int32 nFirstLineBreakOccurence = getFirstLineBreak( aChars );
-
-            sal_Int32 nIdentPrefix = getIndentPrefixLength(
-                nFirstLineBreakOccurence >= 0 ? nFirstLineBreakOccurence : nLength );
-
-            if( nIdentPrefix >= 0 )
+            sal_Int32 nLength(0);
+            sal_Int32 nIndentPrefix(-1);
+            if (m_bAllowLineBreak)
             {
-                nLength += nIdentPrefix;
-                if( isFirstCharWhitespace( aChars.getStr() ) )
-                {
-                    nLength --;
-                }
-            }
+                sal_Int32 nFirstLineBreakOccurence = getFirstLineBreak( aChars );
 
-            // create the sequence
-            Sequence< sal_Int8 > seqWrite( nLength );
-            sal_Int8 *pTarget = (sal_Int8 * ) seqWrite.getConstArray();
+                nLength = calcXMLByteLength( aChars.getStr(), aChars.getLength(),
+                                               ! m_bIsCDATA , sal_False );
+                nIndentPrefix = getIndentPrefixLength(
+                    nFirstLineBreakOccurence >= 0 ? nFirstLineBreakOccurence : nLength );
+            }
+            else
+                nIndentPrefix = getIndentPrefixLength(nLength);
 
             // insert indentation
             sal_Int32 nPos = 0;
-            if( nIdentPrefix >= 0 )
+            if( nIndentPrefix >= 0 )
             {
-                insertIndentation( pTarget );
-                nPos += nIdentPrefix;
                 if( isFirstCharWhitespace( aChars.getStr() ) )
-                {
-                    nPos += convertToXML(
-                        &(aChars.getStr()[1]) , aChars.getLength() -1 ,
-                        sal_True , sal_False , &(pTarget[nPos]) );
-                }
+                    mp_SaxWriterHelper->insertIndentation( nIndentPrefix - 1 );
                 else
-                {
-                    nPos += convertToXML(
-                        aChars.getStr() , aChars.getLength() , sal_True, sal_False,
-                        &(pTarget[nPos]));
-                }
+                    mp_SaxWriterHelper->insertIndentation( nIndentPrefix );
             }
-            else
-            {
-                nPos += convertToXML(
-                    aChars.getStr() , aChars.getLength() , sal_True, sal_False, &(pTarget[nPos]) );
-            }
-
-            OSL_ASSERT( nPos == nLength );
-            writeSequence( seqWrite );
+            mp_SaxWriterHelper->writeString(aChars, sal_True , sal_False);
         }
     }
 }
@@ -882,53 +1211,25 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
         throw SAXException();
     }
 
-    sal_Int32 nLength = 2;  // "<?"
-    nLength += calcXMLByteLength( aTarget.getStr(), aTarget.getLength(), sal_False, sal_False );
+    sal_Int32 nLength(0);
+    if (m_bAllowLineBreak)
+    {
+        nLength = 2;  // "<?"
+        nLength += calcXMLByteLength( aTarget.getStr(), aTarget.getLength(), sal_False, sal_False );
 
-    nLength += 1;  // " "
+        nLength += 1;  // " "
 
-    nLength += calcXMLByteLength( aData.getStr(), aData.getLength(), sal_False, sal_False );
+        nLength += calcXMLByteLength( aData.getStr(), aData.getLength(), sal_False, sal_False );
 
-    nLength += 2; // "?>"
-
-    pushStartElement();
+        nLength += 2; // "?>"
+    }
 
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
-    if( nPrefix > 0 )
-    {
-        nLength += nPrefix;
-    }
-
-    Sequence< sal_Int8 > seqWrite( nLength );
-
-    sal_Int32 nPos = 0;
-    sal_Int8 * pTarget = ( sal_Int8 * ) seqWrite.getConstArray();
 
     if( nPrefix >= 0 )
-    {
-        insertIndentation( pTarget );
-        nPos += nPos;
-    }
+        mp_SaxWriterHelper->insertIndentation( nPrefix );
 
-    pTarget[nPos] = '<';
-    nPos ++;
-    pTarget[nPos] = '?';
-    nPos ++;
-
-    nPos += convertToXML( aTarget.getStr(), aTarget.getLength(), sal_False, sal_False, &(pTarget[nPos] ) );
-
-    pTarget[nPos] = ' ';
-    nPos ++;
-
-    nPos += convertToXML( aData.getStr(), aData.getLength(), sal_False, sal_False, &(pTarget[nPos]) );
-    pTarget[nPos] = '?';
-    nPos ++;
-    pTarget[nPos] = '>';
-    nPos ++;
-
-    OSL_ASSERT( nPos == nLength );
-
-    writeSequence( seqWrite );
+    mp_SaxWriterHelper->processingInstruction(aTarget, aData);
 }
 
 
@@ -944,29 +1245,13 @@ void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException)
     {
         throw SAXException ();
     }
-    pushStartElement();
-
 
     sal_Int32 nLength = 9;
-    sal_Int32 nPrefix = getIndentPrefixLength( 9 );
-    if( nPrefix >= 0)
-    {
-        nLength += nPrefix;
-    }
-
-    Sequence< sal_Int8 > seq( nLength );
-    sal_Int8 *pTarget = ( sal_Int8* )seq.getConstArray();
-    sal_Int32 nPos = 0;
-
+    sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )
-    {
-        insertIndentation( pTarget );
-        nPos += nPrefix;
-    }
+        mp_SaxWriterHelper->insertIndentation( nPrefix );
 
-    memcpy( &(pTarget[nPos]), "<![CDATA[" , 9 );
-
-    writeSequence( seq );
+    mp_SaxWriterHelper->startCDATA();
 
     m_bIsCDATA = sal_True;
 }
@@ -981,25 +1266,12 @@ void SAXWriter::endCDATA(void) throw (RuntimeException)
     }
 
     sal_Int32 nLength = 3;
-    sal_Int32 nPrefix = getIndentPrefixLength( 3 );
-    if( nPrefix >= 0)
-    {
-        nLength += nPrefix;
-    }
-
-    Sequence< sal_Int8 > seq( nLength );
-    sal_Int8 *pTarget = ( sal_Int8* )seq.getConstArray();
-    sal_Int32 nPos = 0;
-
+    sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )
-    {
-        insertIndentation( pTarget );
-        nPos += nPrefix;
-    }
+        mp_SaxWriterHelper->insertIndentation( nPrefix );
 
-    memcpy( &(pTarget[nPos]), "]]>" , 3 );
+    mp_SaxWriterHelper->endCDATA();
 
-    writeSequence( seq );
     m_bIsCDATA = sal_False;
 }
 
@@ -1011,46 +1283,20 @@ void SAXWriter::comment(const OUString& sComment) throw(SAXException, RuntimeExc
         throw SAXException();
     }
 
-    pushStartElement();
+    sal_Int32 nLength(0);
+    if (m_bAllowLineBreak)
+    {
+        nLength = 4; // "<!--"
+        nLength += calcXMLByteLength( sComment.getStr(), sComment.getLength(), sal_False, sal_False);
 
-    sal_Int32 nLength = 4; // "<!--"
-    nLength += calcXMLByteLength( sComment.getStr(), sComment.getLength(), sal_False, sal_False);
-
-    nLength += 3;
+        nLength += 3;
+    }
 
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )
-    {
-        nLength += nPrefix;
-    }
+        mp_SaxWriterHelper->insertIndentation( nPrefix );
 
-    Sequence<sal_Int8> seq( nLength );
-
-    sal_Int8 *pTarget = (sal_Int8*) seq.getConstArray();
-    sal_Int32 nPos = 0;
-
-    if( nPrefix >= 0 )
-    {
-        insertIndentation( pTarget );
-        nPos += nPrefix;
-    }
-    pTarget[nPos] = '<';
-    pTarget[nPos+1] = '!';
-    pTarget[nPos+2] = '-';
-    pTarget[nPos+3] = '-';
-    nPos += 4;
-
-    nPos += convertToXML( sComment.getStr(), sComment.getLength(), sal_False, sal_False,
-                          &(pTarget[nPos]));
-
-    pTarget[nPos] = '-';
-    pTarget[nPos+1] = '-';
-    pTarget[nPos+2] = '>';
-    nPos += 3;
-
-    OSL_ASSERT( nPos == nLength );
-
-    writeSequence( seq );
+    mp_SaxWriterHelper->comment(sComment);
 }
 
 
@@ -1075,31 +1321,15 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
         throw SAXException();
     }
 
-    pushStartElement();
-
-    sal_Int32 nLength = calcXMLByteLength( sString.getStr(), sString.getLength(), sal_False, sal_False );
+    sal_Int32 nLength(0);
+    if (m_bAllowLineBreak)
+        nLength = calcXMLByteLength( sString.getStr(), sString.getLength(), sal_False, sal_False );
 
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )
-    {
-        nLength += nPrefix;
-    }
-    Sequence< sal_Int8 > seq( nLength );
+        mp_SaxWriterHelper->insertIndentation( nPrefix );
 
-    sal_Int8 *pTarget = (sal_Int8*) seq.getConstArray();
-    sal_Int32 nPos = 0;
-
-    if( nPrefix >= 0 )
-    {
-        insertIndentation( pTarget );
-        nPos += nPrefix;
-    }
-
-    nPos += convertToXML( sString.getStr(), sString.getLength(), sal_False, sal_False,
-                          &(pTarget[nPos]));
-
-    OSL_ASSERT( nPos == nLength );
-    writeSequence( seq );
+    mp_SaxWriterHelper->writeString( sString, sal_False, sal_False);
 }
 
 }
