@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-19 08:11:49 $
+ *  last change: $Author: hdu $ $Date: 2002-08-22 07:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ private:
     int             mnGlyphCount;
     WCHAR*          mpOutGlyphs;
     int*            mpGlyphAdvances;
+    int*            mpGlyphOrigAdvs;
     UINT*           mpChars2Glyphs;
     UINT*           mpGlyphs2Chars;
     int             mnNotdefWidth;
@@ -139,6 +140,7 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
     mnGlyphCount( 0 ),
     mpOutGlyphs( NULL ),
     mpGlyphAdvances( NULL ),
+    mpGlyphOrigAdvs( NULL ),
     mpChars2Glyphs( NULL ),
     mpGlyphs2Chars( NULL ),
     mnNotdefWidth( -1 ),
@@ -155,6 +157,7 @@ SimpleWinLayout::~SimpleWinLayout()
 {
     delete[] mpGlyphs2Chars;
     delete[] mpChars2Glyphs;
+    delete[] mpGlyphOrigAdvs;
     delete[] mpGlyphAdvances;
     delete[] mpOutGlyphs;
 }
@@ -170,6 +173,9 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     mpOutGlyphs     = new WCHAR[ nMaxGlyphCount ];
     mpGlyphAdvances = new int[ nMaxGlyphCount ];
     mnGlyphCount    = 0;
+
+    if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_PAIRS | SAL_LAYOUT_KERNING_ASIAN) )
+        mpGlyphOrigAdvs = new int[ nMaxGlyphCount ];
 
     GCP_RESULTSW aGCP;
     aGCP.lStructSize    = sizeof(aGCP);
@@ -215,6 +221,13 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     DWORD nRC;
     if( aSalShlData.mbWNT )
     {
+        if( mpGlyphOrigAdvs )
+        {
+            aGCP.lpDx = mpGlyphOrigAdvs;
+            nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
+                        nMaxGlyphCount, 0, &aGCP, (nGcpOption & ~GCP_USEKERNING) );
+           aGCP.lpDx = mpGlyphAdvances;
+        }
         nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
                     nMaxGlyphCount, 0, &aGCP, nGcpOption );
     }
@@ -235,9 +248,14 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             pMBStr, nMBLen, NULL, NULL );
         if( !mbEnableGlyphs )
             aGCP.nGlyphs *= 2;  // ascii length = 2 * unicode length
-        // note: GCP_RESULTSA is compatible with GCP_RESULTSW except for
-        // the aGCP.lpOutString pointer, for <=WME it is consistently treated
-        // as byte pointer, so this doesn't hurt us
+        // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
+        if( mpGlyphOrigAdvs )
+        {
+            aGCP.lpDx = mpGlyphOrigAdvs;
+            nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
+                        0, (GCP_RESULTSA*)&aGCP, (nGcpOption & ~GCP_USEKERNING) );
+           aGCP.lpDx = mpGlyphAdvances;
+        }
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
     }
@@ -259,18 +277,20 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             if( mnNotdefWidth < 0 )
             {
                 SIZE aExtent;
-                WCHAR c = 0xFFFF;
-                mnNotdefWidth = GetTextExtentPoint32W(mhDC,&c,1,&aExtent) ? aExtent.cx : 0;
+                WCHAR cNotDef = 0xFFFF;
+                mnNotdefWidth = GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
             }
             mpOutGlyphs[i] = 0;
             mpGlyphAdvances[i] = mnNotdefWidth;
+            if( mpGlyphOrigAdvs )
+                mpGlyphOrigAdvs[i] = mnNotdefWidth;
             mnWidth += mnNotdefWidth;
         }
     }
 
     // fixup strong RTL layout by reversing glyph order
     // TODO: mirror glyphs
-    if( 0 == (~rArgs.mnFlags & (SAL_LAYOUT_BIDI_RTL|SAL_LAYOUT_BIDI_RTL))
+    if( 0 == (~rArgs.mnFlags & (SAL_LAYOUT_BIDI_STRONG|SAL_LAYOUT_BIDI_RTL))
     && (1 < mnGlyphCount) )
     {
         mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
@@ -286,7 +306,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             mpGlyphAdvances[ j ]    = nTempAdvance;
             mpGlyphs2Chars[ j ]     = i + (nMaxGlyphCount - mnGlyphCount);
         }
-       for( i = mnGlyphCount; i < nMaxGlyphCount; ++i )
+        for( i = mnGlyphCount; i < nMaxGlyphCount; ++i )
             mpGlyphs2Chars[ i ] = -1;
     }
 
@@ -379,8 +399,9 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
             break;
 
         // stop when next x-position is unexpected
-        if( !pGlyphAdvances )
-            break; // TODO for performance!!!
+        if( !pGlyphAdvances && mpGlyphOrigAdvs )
+            if( mpGlyphAdvances[nStart] != mpGlyphOrigAdvs[nStart] )
+                break;
     }
 
     return nCount;
@@ -769,8 +790,8 @@ UniscribeLayout::~UniscribeLayout()
 bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
 {
     // determine script items from string
-    // TODO: avoid itemization since it cost us a lot performance
-    static SCRIPT_STATE aScriptState = {0,false,false,false,false,true,false,false,0,0};
+    // TODO: try to avoid itemization since it costs a lot of performance
+    SCRIPT_STATE aScriptState = {0,false,false,false,false,false,true,false,false,0,0};
     aScriptState.uBidiLevel = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
     aScriptState.fOverrideDirection = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG));
     for( int nItemCapacity = 8; /*FOREVER*/; nItemCapacity *= 2 )
