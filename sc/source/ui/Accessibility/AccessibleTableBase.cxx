@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-30 15:49:25 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,15 @@
 
 
 #include "AccessibleTableBase.hxx"
-#ifndef _SC_ACCESSIBLECELL_HXX
-#include "AccessibleCell.hxx"
-#endif
 #ifndef SC_MISCUNO_HXX
 #include "miscuno.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
-#include <com/sun/star/container/XNamed.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -96,18 +87,24 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 ScAccessibleTableBase::ScAccessibleTableBase (
         const uno::Reference<XAccessible>& rxParent,
-        const uno::Reference<sheet::XSpreadsheetView >& rxSheetView,
-        const table::CellRangeAddress& rRange)
+        ScDocument* pDoc,
+        const ScRange& rRange)
     :
     ScAccessibleContextBase (rxParent, AccessibleRole::TABLE),
-    mxSheetView(rxSheetView),
     maRange(rRange),
-    mxSheet(rxSheetView->getActiveSheet())
+    mpDoc(pDoc)
 {
 }
 
 ScAccessibleTableBase::~ScAccessibleTableBase ()
 {
+}
+
+void ScAccessibleTableBase::SetDefunc()
+{
+    mpDoc = NULL;
+
+    ScAccessibleContextBase::SetDefunc();
 }
 
     //=====  XInterface  ======================================================
@@ -145,13 +142,13 @@ void SAL_CALL
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
                     throw (uno::RuntimeException)
 {
-    return maRange.EndRow - maRange.StartRow + 1;
+    return maRange.aEnd.Row() - maRange.aStart.Row() + 1;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
                     throw (uno::RuntimeException)
 {
-    return maRange.EndColumn - maRange.StartColumn + 1;
+    return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
 }
 
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
@@ -173,57 +170,39 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    uno::Reference<table::XCellRange> xFullCellRange = mxSheetView->getActiveSheet()->getCellRangeByPosition(
-        maRange.StartColumn, maRange.StartRow, maRange.EndColumn, maRange.EndRow);
-    if (xFullCellRange.is())
+    sal_Int32 nCount(1); // the same cell
+    nRow += maRange.aStart.Row();
+    nColumn += maRange.aStart.Col();
+
+    if (mpDoc)
     {
-        uno::Reference<table::XCellRange> xCellRange = xFullCellRange->getCellRangeByPosition(
-            nColumn, nRow, nColumn, nRow);
-        if (xCellRange.is())
-        {
-            uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, uno::UNO_QUERY);
-            if (xSheetCellRange.is())
-            {
-                uno::Reference<sheet::XSheetCellCursor> xCursor = mxSheetView->getActiveSheet()->createCursorByRange(xSheetCellRange);
-                if(xCursor.is())
-                {
-                    uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
-                    xCursor->collapseToMergedArea();
-                    table::CellRangeAddress aCellAddress = xCellAddress->getRangeAddress();
-                    return aCellAddress.EndRow - aCellAddress.StartRow + 1;
-                }
-            }
-        }
+        sal_uInt16 nEndRow, nEndCol;
+        mpDoc->ExtendMerge(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow),
+            nEndCol, nEndRow, maRange.aStart.Tab());
+        if (nEndRow > nRow)
+            nCount = nEndRow - nRow + 1;
     }
-    return 1; // the same cell
+
+    return nCount;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    uno::Reference<table::XCellRange> xFullCellRange = mxSheetView->getActiveSheet()->getCellRangeByPosition(
-        maRange.StartColumn, maRange.StartRow, maRange.EndColumn, maRange.EndRow);
-    if (xFullCellRange.is())
+    sal_Int32 nCount(1); // the same cell
+    nRow += maRange.aStart.Row();
+    nColumn += maRange.aStart.Col();
+
+    if (mpDoc)
     {
-        uno::Reference<table::XCellRange> xCellRange = xFullCellRange->getCellRangeByPosition(
-            nColumn, nRow, nColumn, nRow);
-        if (xCellRange.is())
-        {
-            uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, uno::UNO_QUERY);
-            if (xSheetCellRange.is())
-            {
-                uno::Reference<sheet::XSheetCellCursor> xCursor = mxSheetView->getActiveSheet()->createCursorByRange(xSheetCellRange);
-                if(xCursor.is())
-                {
-                    uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
-                    xCursor->collapseToMergedArea();
-                    table::CellRangeAddress aCellAddress = xCellAddress->getRangeAddress();
-                    return aCellAddress.EndColumn - aCellAddress.StartColumn + 1;
-                }
-            }
-        }
+        sal_uInt16 nEndRow, nEndCol;
+        mpDoc->ExtendMerge(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow),
+            nEndCol, nEndRow, maRange.aStart.Tab());
+        if (nEndCol > nColumn)
+            nCount = nEndCol - nColumn + 1;
     }
-    return 1; // the same cell
+
+    return nCount;
 }
 
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleRowHeaders(  )
@@ -310,46 +289,54 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 nRow, s
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
-    return -1;
+    nRow -= maRange.aStart.Row();
+    nColumn -= maRange.aStart.Col();
+    return (nRow * maRange.aEnd.Col() + 1) + nColumn;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
-    return -1;
+    sal_Int32 nRow(-1);
+    if (maRange.aEnd.Col() > 0)
+        nRow = nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+    return nRow;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
-    return -1;
+    sal_Int32 nColumn(-1);
+    if (maRange.aEnd.Col() > 0)
+        nColumn = nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+    return nColumn;
 }
 
     //=====  XAccessibleContext  ==============================================
 
-long SAL_CALL
+sal_Int32 SAL_CALL
     ScAccessibleTableBase::getAccessibleChildCount (void)
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
+/*  return (maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
+            (maRange.aEnd.Col() - maRange.aStart.Col() + 1);*/
     return 1;
 }
 
 uno::Reference< XAccessible > SAL_CALL
-    ScAccessibleTableBase::getAccessibleChild (long nIndex)
-        throw (uno::RuntimeException/*,
-        lang::IndexOutOfBoundsException*/)
+    ScAccessibleTableBase::getAccessibleChild (sal_Int32 nIndex)
+        throw (uno::RuntimeException,
+        lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("not implemented yet");
-    uno::Reference<table::XCellRange> xCellRange(mxSheet, uno::UNO_QUERY);
-    if (xCellRange.is())
+    sal_Int32 nRow(0);
+    sal_Int32 nColumn(0);
+    if (maRange.aEnd.Col() > 0)
     {
-        return new ScAccessibleCell(this, xCellRange->getCellByPosition(5, 5));
+        sal_Int32 nTemp(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+        nRow = nIndex / nTemp;
+        nColumn = nIndex % nTemp;
     }
-    return uno::Reference< XAccessible >();
+    return getAccessibleCellAt(nRow, nColumn);
 }
 
 ::rtl::OUString SAL_CALL
@@ -364,12 +351,9 @@ uno::Reference< XAccessible > SAL_CALL
     throw (uno::RuntimeException)
 {
     rtl::OUString sName;
-    if (mxSheet.is())
-    {
-        uno::Reference<container::XNamed> xName (mxSheet, uno::UNO_QUERY );
-        if ( xName.is() )
-            sName = xName->getName();
-    }
+    String sCoreName;
+    if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
+        sName = rtl::OUString(sCoreName);
     return sName;
 }
 
@@ -377,7 +361,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleRelationSet (void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
+    DBG_ERROR("should be implemented in the abrevated class");
     return uno::Reference<XAccessibleRelationSet>();
 }
 
@@ -385,7 +369,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleStateSet (void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
+    DBG_ERROR("should be implemented in the abrevated class");
     uno::Reference< XAccessibleStateSet > xAccessibleStateSet;
     return xAccessibleStateSet;
 }
@@ -448,4 +432,3 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleTableBase::getImplementationId (voi
 {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleTable"));
 }
-

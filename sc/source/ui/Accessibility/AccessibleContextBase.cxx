@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-31 10:39:09 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
@@ -75,6 +81,12 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
+#include <unotools/accessiblestatesethelper.hxx>
 #endif
 
 using namespace ::rtl;
@@ -89,20 +101,57 @@ ScAccessibleContextBase::ScAccessibleContextBase (
     :
     maRole(aRole),
     mxParent(rxParent),
-    mpPropertyChangeListeners(NULL)
+    mpEventListeners(NULL),
+    mpFocusListeners(NULL)
 {
 }
 
 
 ScAccessibleContextBase::~ScAccessibleContextBase(void)
 {
-    if (mpPropertyChangeListeners)
+    if (mpEventListeners || mpFocusListeners)
     {
         lang::EventObject aEvent;
         aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-        mpPropertyChangeListeners->disposeAndClear(aEvent);
-        delete mpPropertyChangeListeners;
+        if (mpEventListeners)
+        {
+            mpEventListeners->disposeAndClear(aEvent);
+            delete mpEventListeners;
+        }
+        if (mpFocusListeners)
+        {
+            mpFocusListeners->disposeAndClear(aEvent);
+            delete mpFocusListeners;
+        }
     }
+}
+
+void ScAccessibleContextBase::SetDefunc()
+{
+    if (mpEventListeners || mpFocusListeners)
+    {
+        lang::EventObject aEvent;
+        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        if (mpEventListeners)
+        {
+            mpEventListeners->disposeAndClear(aEvent);
+            delete mpEventListeners;
+            mpEventListeners = NULL;
+        }
+        if (mpFocusListeners)
+        {
+            mpFocusListeners->disposeAndClear(aEvent);
+            delete mpFocusListeners;
+            mpFocusListeners = NULL;
+        }
+    }
+    CommitDefunc();
+}
+
+//=====  SfxListener  =====================================================
+
+void ScAccessibleContextBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
 }
 
 //=====  XAccessible  =========================================================
@@ -114,13 +163,136 @@ uno::Reference< XAccessibleContext> SAL_CALL
     return this;
 }
 
+//=====  XAccessibleComponent  ================================================
+
+sal_Bool SAL_CALL ScAccessibleContextBase::contains(const awt::Point& rPoint )
+        throw (uno::RuntimeException)
+{
+    awt::Rectangle aBounds(getBounds());
+    return !((rPoint.X < aBounds.X) || (rPoint.X > (aBounds.X + aBounds.Width)) ||
+            (rPoint.Y < aBounds.Y) || (rPoint.Y > (aBounds.Y + aBounds.Height)));
+}
+
+uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAt(
+        const awt::Point& rPoint )
+        throw (uno::RuntimeException)
+{
+    DBG_ERROR("not implemented");
+    return uno::Reference<XAccessible>();
+}
+
+awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
+        throw (uno::RuntimeException)
+{
+    Rectangle aCoreBounds(GetBoundingBox());
+    awt::Rectangle aBounds;
+    aBounds.X = aCoreBounds.getX();
+    aBounds.Y = aCoreBounds.getY();
+    aBounds.Width = aCoreBounds.getWidth();
+    aBounds.Height = aCoreBounds.getHeight();
+    return aBounds;
+}
+
+awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
+        throw (uno::RuntimeException)
+{
+    awt::Point aLocation;
+    Rectangle aRect(GetBoundingBox());
+    aLocation.X = aRect.getX();
+    aLocation.Y = aRect.getY();
+    return aLocation;
+}
+
+awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
+        throw (uno::RuntimeException)
+{
+    awt::Point aPoint;
+    Rectangle aRect(GetBoundingBoxOnScreen());
+    aPoint.X = aRect.getX();
+    aPoint.Y = aRect.getY();
+    return aPoint;
+}
+
+awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
+        throw (uno::RuntimeException)
+{
+    awt::Size aSize;
+    Rectangle aRect(GetBoundingBox());
+    aSize.Width = aRect.getWidth();
+    aSize.Height = aRect.getHeight();
+    return aSize;
+}
+
+sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
+        throw (uno::RuntimeException)
+{
+    sal_Bool bShowing(sal_False);
+    uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
+    if (xParentComponent.is())
+    {
+        awt::Rectangle aParentBounds(xParentComponent->getBounds());
+        awt::Rectangle aBounds(getBounds());
+        Rectangle aCoreParentBounds(aParentBounds.X, aParentBounds.Y,
+            aParentBounds.X + aParentBounds.Width, aParentBounds.Y + aParentBounds.Height);
+        Rectangle aCoreBounds(aBounds.X, aBounds.Y,
+            aBounds.X + aBounds.Width, aBounds.Y + aBounds.Height);
+        bShowing = aCoreBounds.IsOver(aCoreParentBounds);
+    }
+    return bShowing;
+}
+
+sal_Bool SAL_CALL ScAccessibleContextBase::isVisible(  )
+        throw (uno::RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ScAccessibleContextBase::isFocusTraversable(  )
+        throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL ScAccessibleContextBase::addFocusListener(
+    const uno::Reference< awt::XFocusListener >& xListener )
+        throw (uno::RuntimeException)
+{
+    if (xListener.is())
+    {
+        if (!mpFocusListeners)
+            mpFocusListeners = new cppu::OInterfaceContainerHelper(maMutex);
+        mpFocusListeners->addInterface(xListener);
+    }
+}
+
+void SAL_CALL ScAccessibleContextBase::removeFocusListener(
+    const uno::Reference< awt::XFocusListener >& xListener )
+        throw (uno::RuntimeException)
+{
+    if (xListener.is() && mpFocusListeners)
+        mpFocusListeners->removeInterface(xListener);
+}
+
+void SAL_CALL ScAccessibleContextBase::grabFocus(  )
+        throw (uno::RuntimeException)
+{
+    DBG_ERROR("not implemented");
+}
+
+uno::Any SAL_CALL ScAccessibleContextBase::getAccessibleKeyBinding(  )
+        throw (uno::RuntimeException)
+{
+    // here is no implementation, because here are no KeyBindings for every object
+    return uno::Any();
+}
+
 //=====  XAccessibleContext  ==================================================
 
 sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    DBG_ERROR("should be implemented in the abrevated class");
     return 0;
 }
 
@@ -128,11 +300,11 @@ sal_Int32 SAL_CALL
 
 
 uno::Reference<XAccessible> SAL_CALL
-    ScAccessibleContextBase::getAccessibleChild (long nIndex)
+    ScAccessibleContextBase::getAccessibleChild (sal_Int32 nIndex)
     throw (uno::RuntimeException/*,
         lang::IndexOutOfBoundsException*/)
 {
-    DBG_ERROR("not implemented");
+    DBG_ERROR("should be implemented in the abrevated class");
     return uno::Reference<XAccessible>();
 }
 
@@ -198,20 +370,20 @@ sal_Int16 SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
-    /*if (!msDescription.getLength())
+    if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
         DBG_ASSERT(sDescription.getLength(), "We should give always a descripition.");
 
-        uno::Any aOldValue, aNewValue;
-        aOldValue <<= msDescription;
-        aNewValue <<= sDescription;
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+        aEvent.OldValue <<= msDescription;
+        aEvent.NewValue <<= sDescription;
 
         msDescription = sDescription;
 
-        CommitChange(OUString::createFromAscii ("AccessibleDescription"), aNewValue, aOldValue);
-    }*/
+        CommitChange(aEvent);
+    }
     return msDescription;
 }
 
@@ -222,20 +394,20 @@ OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
-    /*if (!msName.getLength())
+    if (!msName.getLength())
     {
         OUString sName(createAccessibleName());
         DBG_ASSERT(sName.getLength(), "We should give always a name.");
 
-        uno::Any aOldValue, aNewValue;
-        aOldValue <<= msName;
-        aNewValue <<= sName;
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+        aEvent.OldValue <<= msName;
+        aEvent.NewValue <<= sName;
 
         msName = sName;
 
-        CommitChange(OUString::createFromAscii ("AccessibleName"), aNewValue, aOldValue);
-    }*/
+        CommitChange(aEvent);
+    }
     return msName;
 }
 
@@ -291,19 +463,16 @@ lang::Locale SAL_CALL
     throw IllegalAccessibleComponentStateException ();
 }
 
-
-
-
 void SAL_CALL
-       ScAccessibleContextBase::addPropertyChangeListener (
-           const uno::Reference<beans::XPropertyChangeListener>& xListener)
+       ScAccessibleContextBase::addEventListener (
+           const uno::Reference<XAccessibleEventListener>& xListener)
     throw (::com::sun::star::uno::RuntimeException)
 {
     if (xListener.is())
     {
-        if (!mpPropertyChangeListeners)
-            mpPropertyChangeListeners = new cppu::OInterfaceContainerHelper(maMutex);
-        mpPropertyChangeListeners->addInterface(xListener);
+        if (!mpEventListeners)
+            mpEventListeners = new cppu::OInterfaceContainerHelper(maMutex);
+        mpEventListeners->addInterface(xListener);
     }
 }
 
@@ -311,12 +480,12 @@ void SAL_CALL
 
 
 void SAL_CALL
-       ScAccessibleContextBase::removePropertyChangeListener (
-        const uno::Reference<beans::XPropertyChangeListener>& xListener)
+       ScAccessibleContextBase::removeEventListener (
+        const uno::Reference<XAccessibleEventListener>& xListener)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    if (xListener.is())
-        mpPropertyChangeListeners->removeInterface(xListener);
+    if (xListener.is() && mpEventListeners)
+        mpEventListeners->removeInterface(xListener);
 }
 
 //=====  XServiceInfo  ========================================================
@@ -398,31 +567,115 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //=====  internal  ============================================================
 
-void ScAccessibleContextBase::CommitChange(const rtl::OUString& rPropertyName,
-                    const uno::Any& rNewValue,
-                    const uno::Any& rOldValue)
+::rtl::OUString SAL_CALL
+    ScAccessibleContextBase::createAccessibleDescription (void)
+    throw (uno::RuntimeException)
 {
-    beans::PropertyChangeEvent  aEvent;
-    aEvent.PropertyName = rPropertyName;
-    aEvent.Further = sal_False;
-    aEvent.PropertyHandle = -1;
-    aEvent.OldValue = rOldValue;
-    aEvent.NewValue = rNewValue;
+    DBG_ERROR("should be implemented in the abrevated class");
+    return rtl::OUString();
+}
 
-    //  Call all listeners.
-    uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpPropertyChangeListeners->getElements();
-    sal_uInt32 nLength(aListeners.getLength());
-    if (nLength)
+::rtl::OUString SAL_CALL
+    ScAccessibleContextBase::createAccessibleName (void)
+    throw (uno::RuntimeException)
+{
+    DBG_ERROR("should be implemented in the abrevated class");
+    return rtl::OUString();
+}
+
+void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent)
+{
+    if (mpEventListeners)
     {
-        const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
-        if (pInterfaces)
+        //  Call all listeners.
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpEventListeners->getElements();
+        sal_uInt32 nLength(aListeners.getLength());
+        if (nLength)
         {
-            for (sal_uInt32 i = 0; i < nLength; i++)
+            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
+            if (pInterfaces)
             {
-                uno::Reference<beans::XPropertyChangeListener> xListener(pInterfaces[i], uno::UNO_QUERY);
-                if (xListener.is())
-                    xListener->propertyChange(aEvent);
+                for (sal_uInt32 i = 0; i < nLength; i++)
+                {
+                    uno::Reference<XAccessibleEventListener> xListener(pInterfaces[i], uno::UNO_QUERY);
+                    if (xListener.is())
+                        xListener->notifyEvent(rEvent);
+                }
             }
         }
     }
 }
+
+void ScAccessibleContextBase::CommitDefunc()
+{
+    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
+    pStateSet->AddState(AccessibleStateType::DEFUNC);
+    uno::Reference<XAccessibleStateSet> xStateSet (pStateSet);
+
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    aEvent.NewValue <<= xStateSet;
+
+    CommitChange(aEvent);
+}
+
+void ScAccessibleContextBase::CommitFocusGained(const com::sun::star::awt::FocusEvent& rFocusEvent)
+{
+    if (mpFocusListeners)
+    {
+        //  Call all listeners.
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpFocusListeners->getElements();
+        sal_uInt32 nLength(aListeners.getLength());
+        if (nLength)
+        {
+            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
+            if (pInterfaces)
+            {
+                for (sal_uInt32 i = 0; i < nLength; i++)
+                {
+                    uno::Reference<awt::XFocusListener> xListener(pInterfaces[i], uno::UNO_QUERY);
+                    if (xListener.is())
+                        xListener->focusGained(rFocusEvent);
+                }
+            }
+        }
+    }
+}
+
+void ScAccessibleContextBase::CommitFocusLost(const com::sun::star::awt::FocusEvent& rFocusEvent)
+{
+    if (mpFocusListeners)
+    {
+        //  Call all listeners.
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpFocusListeners->getElements();
+        sal_uInt32 nLength(aListeners.getLength());
+        if (nLength)
+        {
+            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
+            if (pInterfaces)
+            {
+                for (sal_uInt32 i = 0; i < nLength; i++)
+                {
+                    uno::Reference<awt::XFocusListener> xListener(pInterfaces[i], uno::UNO_QUERY);
+                    if (xListener.is())
+                        xListener->focusLost(rFocusEvent);
+                }
+            }
+        }
+    }
+}
+
+Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void)
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    DBG_ERROR("not implemented");
+    return Rectangle();
+}
+
+Rectangle ScAccessibleContextBase::GetBoundingBox(void)
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    DBG_ERROR("not implemented");
+    return Rectangle();
+}
+

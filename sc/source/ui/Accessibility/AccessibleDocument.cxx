@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-30 15:49:25 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,31 +69,46 @@
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
 #endif
+#ifndef SC_TABVWSH_HXX
+#include "tabvwsh.hxx"
+#endif
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
+#ifndef SC_DRWLAYER_HXX
+#include "drwlayer.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
-#include <unotools/accessiblestatesethelper.hxx>
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
-#include <com/sun/star/util/XProtectable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
+#ifndef _SVDOBJ_HXX
+#include <svx/svdobj.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -103,17 +118,117 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 ScAccessibleDocument::ScAccessibleDocument(
         const uno::Reference<XAccessible>& rxParent,
-        const uno::Reference<sheet::XSpreadsheetView >& rxSheetView )
+        ScTabViewShell* pViewShell,
+        ScSplitPos eSplitPos)
     : ScAccessibleContextBase(rxParent, AccessibleRole::DOCUMENT),
-    mxSheetView(rxSheetView),
-    mxModel(getModel(rxSheetView))
+    mpViewShell(pViewShell),
+    meSplitPos(eSplitPos),
+    mpAccessibleSpreadsheet(NULL)
 {
+    if (pViewShell)
+        pViewShell->AddAccessibilityObject(*this);
 }
 
 ScAccessibleDocument::~ScAccessibleDocument(void)
 {
+    FreeAccessibleSpreadsheet();
+    if (mpViewShell)
+    {
+        mpViewShell->RemoveAccessibilityObject(*this);
+    }
 }
 
+void ScAccessibleDocument::SetDefunc()
+{
+    FreeAccessibleSpreadsheet();
+    if (mpViewShell)
+    {
+        mpViewShell->RemoveAccessibilityObject(*this);
+        mpViewShell = NULL;
+    }
+
+    ScAccessibleContextBase::SetDefunc();
+}
+
+    //=====  SfxListener  =====================================================
+
+void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if (rHint.ISA( ScAccGridViewChangeHint ) )
+    {
+        const ScAccGridViewChangeHint& rRef = (const ScAccGridViewChangeHint&)rHint;
+        if ((rRef.GetOldGridWin() == meSplitPos) ||
+            (rRef.GetNewGridWin() == meSplitPos))
+        {
+            awt::FocusEvent aFocusEvent;
+            aFocusEvent.Temporary = sal_False;
+            if (rRef.GetOldGridWin() == meSplitPos)
+            {
+                aFocusEvent.NextFocus = rRef.GetNewAccessible();
+                CommitFocusLost(aFocusEvent);
+            }
+            else
+            {
+                aFocusEvent.NextFocus = rRef.GetOldAccessible();
+                CommitFocusGained(aFocusEvent);
+            }
+        }
+    }
+    else if (rHint.ISA( SfxSimpleHint ))
+    {
+        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        // only notify if child exist, otherwise it is not necessary
+        if ((rRef.GetId() == SC_HINT_ACC_TABLECHANGED) &&
+            mpAccessibleSpreadsheet)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.OldValue <<= GetAccessibleSpreadsheet();
+
+            CommitChange(aEvent); // child is gone - event
+
+            aEvent.OldValue = uno::Any();
+            FreeAccessibleSpreadsheet(); // free the spreadsheet after free the reference on this object
+            aEvent.NewValue <<= GetAccessibleSpreadsheet();
+
+            CommitChange(aEvent); // there is a new child - event
+        }
+        else if (rRef.GetId() == SFX_HINT_DYING)
+        {
+            // it seems the Broadcaster is dying, since the view is dying
+            SetDefunc();
+        }
+    }
+}
+
+    //=====  XAccessibleComponent  ============================================
+
+uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
+        const awt::Point& rPoint )
+        throw (uno::RuntimeException)
+{
+    uno::Reference<XAccessible> xAccessible = NULL;
+    SdrPage* pDrawPage = GetDrawPage();
+    if (pDrawPage)
+    {
+        DBG_ERROR("not implemented");
+    }
+    else
+        xAccessible = GetAccessibleSpreadsheet();
+    return xAccessible;
+}
+
+void SAL_CALL ScAccessibleDocument::grabFocus(  )
+        throw (uno::RuntimeException)
+{
+    // grab only focus if it does not have the focus and it is not hidden
+    if (mpViewShell &&
+        (mpViewShell->GetViewData()->GetActivePart() != meSplitPos) &&
+        mpViewShell->GetWindowByPos(meSplitPos)->IsVisible())
+    {
+        mpViewShell->ActivatePart(meSplitPos);
+    }
+}
 
     //=====  XAccessibleContext  ==============================================
 
@@ -122,42 +237,16 @@ long SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
-    sal_Int32 nTab(getVisibleTable());
     sal_Int32 nShapes (0);
-    if (mxModel.is())
+    SdrPage* pDrawPage = GetDrawPage();
+    if (pDrawPage)
     {
-        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc
-            ( mxModel, uno::UNO_QUERY );
-        if ( xSpreadDoc.is())
+        sal_uInt32 nObjCount(pDrawPage->GetObjCount());
+        for (sal_uInt32 i = 0; i < nObjCount; i++)
         {
-            uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-            uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
-            if ( xIndex.is() )
-            {
-                if (HasDrawPages(xSpreadDoc))
-                {
-                    sal_Int32 nTableCount = xIndex->getCount();
-                    for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
-                    {
-                        uno::Any aTable = xIndex->getByIndex(nTable);
-                        uno::Reference<sheet::XSpreadsheet> xTable;
-                        if (aTable>>=xTable)
-                        {
-                            uno::Reference<drawing::XDrawPageSupplier>
-                                xDrawPageSupplier(xTable, uno::UNO_QUERY);
-                            if (xDrawPageSupplier.is())
-                            {
-                                uno::Reference<drawing::XDrawPage> xDrawPage =
-                                    xDrawPageSupplier->getDrawPage();
-                                uno::Reference<container::XIndexAccess> xShapesIndex
-                                    (xDrawPage, uno::UNO_QUERY);
-                                if (xShapesIndex.is())
-                                    nShapes = xShapesIndex->getCount();
-                            }
-                        }
-                    }
-                }
-            }
+            SdrObject* pObj = pDrawPage->GetObj(i);
+            if (pObj && (pObj->GetLayer != SC_LAYER_INTERN))
+                nShapes++;
         }
     }
     return nShapes + 1;
@@ -173,10 +262,10 @@ uno::Reference<XAccessible> SAL_CALL
     if (!xAccessible.is())
     {
         if (nIndex == 0)
-            xAccessible = new ScAccessibleSpreadsheet(this, mxSheetView);
+            xAccessible = GetAccessibleSpreadsheet();
         else
         {
-            //DBG_ERROR("should return other childs here");
+            DBG_ERROR("should return other childs here");
             // there is no child with this index at the moment
             throw lang::IndexOutOfBoundsException();
         }
@@ -221,39 +310,100 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     //=====  internal  ========================================================
 
-uno::Reference < frame::XModel >
-    ScAccessibleDocument::getModel(const uno::Reference<sheet::XSpreadsheetView>& rxSheetView)
+::rtl::OUString SAL_CALL
+    ScAccessibleDocument::createAccessibleDescription (void)
+    throw (uno::RuntimeException)
 {
-    uno::Reference<frame::XModel> xModel;
-    uno::Reference<frame::XController> xController(rxSheetView, uno::UNO_QUERY);
-    if (xController.is())
-        xModel = xController->getModel();
-    return xModel;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("This is a view of a Spreadsheet Document."));
 }
 
-sal_Int32 ScAccessibleDocument::getVisibleTable()
+::rtl::OUString SAL_CALL
+    ScAccessibleDocument::createAccessibleName (void)
+    throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
-    return 0;
+    rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM ("Spreadsheet Document View "));
+    sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
+    sName += rtl::OUString::valueOf(nNumber);
+    return sName;
 }
 
-sal_Bool ScAccessibleDocument::HasDrawPages(
-    uno::Reference <sheet::XSpreadsheetDocument>& rxDoc)
+Rectangle ScAccessibleDocument::GetBoundingBoxOnScreen()
+    throw (uno::RuntimeException)
 {
-    sal_Bool bRet(sal_False);
-    uno::Reference <beans::XPropertySet> xDocProps( rxDoc, uno::UNO_QUERY );
-    if (xDocProps.is())
+    Rectangle aRect;
+    if (mpViewShell)
     {
-        uno::Any aAny(xDocProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_HASDRAWPAGES))));
-        bRet = ::cppu::any2bool( aAny );
+        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWindow)
+            aRect = pWindow->GetWindowExtentsRelative(NULL);
     }
-    return bRet;
+    return aRect;
+}
+
+Rectangle ScAccessibleDocument::GetBoundingBox()
+    throw (uno::RuntimeException)
+{
+    Rectangle aRect;
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWindow)
+            aRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
+    }
+    return aRect;
+}
+
+sal_uInt16 ScAccessibleDocument::getVisibleTable()
+{
+    sal_uInt16 nVisibleTable(0);
+    if (mpViewShell && mpViewShell->GetViewData())
+        nVisibleTable = mpViewShell->GetViewData()->GetTabNo();
+    return nVisibleTable;
+}
+
+uno::Reference < XAccessible >
+    ScAccessibleDocument::GetAccessibleSpreadsheet()
+{
+    if (!mpAccessibleSpreadsheet && mpViewShell)
+    {
+        mpAccessibleSpreadsheet = new ScAccessibleSpreadsheet(this, mpViewShell, getVisibleTable(), meSplitPos);
+        mpAccessibleSpreadsheet->acquire();
+    }
+    return mpAccessibleSpreadsheet;
+}
+
+void ScAccessibleDocument::FreeAccessibleSpreadsheet()
+{
+    if (mpAccessibleSpreadsheet)
+    {
+        mpAccessibleSpreadsheet->SetDefunc();
+        mpAccessibleSpreadsheet->release();
+        mpAccessibleSpreadsheet = NULL;
+    }
+}
+
+SdrPage* ScAccessibleDocument::GetDrawPage()
+{
+    sal_uInt16 nTab(getVisibleTable());
+    SdrPage* pDrawPage = NULL;
+    if (mpViewShell && mpViewShell->GetViewData())
+    {
+        ScDocument* pDoc = mpViewShell->GetViewData()->GetDocument();
+        if (pDoc && pDoc->GetDrawLayer())
+        {
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
+                pDrawPage = pDrawLayer->GetPage(nTab);
+        }
+    }
+    return pDrawPage;
 }
 
 sal_Bool ScAccessibleDocument::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return !mxModel.is() || (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+    return (mpViewShell == NULL) ||
+        (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
 sal_Bool ScAccessibleDocument::IsEditable(
@@ -274,4 +424,3 @@ sal_Bool ScAccessibleDocument::IsVisible(
 {
     return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::VISIBLE));
 }
-

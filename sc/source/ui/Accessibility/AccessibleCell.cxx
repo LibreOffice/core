@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-30 15:49:25 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,18 @@
 
 
 #include "AccessibleCell.hxx"
+#ifndef SC_TABVWSH_HXX
+#include "tabvwsh.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
+#ifndef SC_SCATTR_HXX
+#include "attrib.hxx"
+#endif
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
@@ -72,29 +84,15 @@
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATIONANCHOR_HPP_
-#include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
-#include <com/sun/star/text/XTextRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLADDRESSABLE_HPP_
-#include <com/sun/star/sheet/XCellAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"
-#endif
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
+#ifndef _SVX_BRSHITEM_HXX
+#include <svx/brshitem.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -103,10 +101,15 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 ScAccessibleCell::ScAccessibleCell (
         const uno::Reference<XAccessible>& rxParent,
-        const uno::Reference<table::XCell >& rxCell)
+        ScTabViewShell* pViewShell,
+        ScAddress& rCellAddress,
+        sal_Int32 nIndex)
     :
     ScAccessibleContextBase (rxParent, AccessibleRole::TABLE_CELL),
-    mxCell(rxCell)
+    mpViewShell(pViewShell),
+    mpDoc(GetDocument(pViewShell)),
+    maCellAddress(rCellAddress),
+    mnIndex(nIndex)
 {
 }
 
@@ -116,35 +119,29 @@ ScAccessibleCell::~ScAccessibleCell ()
 
     //=====  XAccessibleContext  ==============================================
 
-long SAL_CALL
+sal_Int32 SAL_CALL
     ScAccessibleCell::getAccessibleChildCount (void)
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
     sal_Int32 nCount(0);
-    uno::Reference<container::XEnumerationAccess> xParagraphAccess(mxCell, uno::UNO_QUERY);
-    if (xParagraphAccess.is())
-    {
-        uno::Reference<container::XEnumeration> xParagraphEnumeration(xParagraphAccess->createEnumeration());
-        if (xParagraphEnumeration.is())
-        {
-            while(xParagraphEnumeration->hasMoreElements())
-            {
-                xParagraphEnumeration->nextElement();
-                nCount++;
-            }
-        }
-    }
+    // should call the Helper class of Thorsten Behrens to get the child count
     return nCount;
 }
 
 uno::Reference< XAccessible > SAL_CALL
-    ScAccessibleCell::getAccessibleChild (long nIndex)
-        throw (uno::RuntimeException/*,
-        lang::IndexOutOfBoundsException*/)
+    ScAccessibleCell::getAccessibleChild (sal_Int32 nIndex)
+        throw (uno::RuntimeException,
+        lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
     return uno::Reference< XAccessible >();
+}
+
+sal_Int32
+    ScAccessibleCell::getAccessibleIndexInParent (void)
+        throw (uno::RuntimeException)
+{
+    return mnIndex;
 }
 
 ::rtl::OUString SAL_CALL
@@ -152,16 +149,18 @@ uno::Reference< XAccessible > SAL_CALL
     throw (uno::RuntimeException)
 {
     rtl::OUString sDescription;
-    uno::Reference<sheet::XSheetAnnotationAnchor> xAnnotationAnchor(mxCell, uno::UNO_QUERY);
-    if (xAnnotationAnchor.is())
+
+    if (mpDoc)
     {
-        uno::Reference< text::XTextRange > xAnnotationText (xAnnotationAnchor->getAnnotation(), uno::UNO_QUERY);
-        if (xAnnotationText.is())
-            sDescription = xAnnotationText->getString();
+        ScPostIt aNote;
+        mpDoc->GetNote(maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), aNote);
+        sDescription = rtl::OUString (aNote.GetText());
     }
-    if (sDescription.getLength())
-        return sDescription;
-    return getAccessibleName();
+
+    if (!sDescription.getLength())
+        sDescription = getAccessibleName();
+
+    return sDescription;
 }
 
 ::rtl::OUString SAL_CALL
@@ -169,17 +168,10 @@ uno::Reference< XAccessible > SAL_CALL
     throw (uno::RuntimeException)
 {
     rtl::OUString sName;
-    uno::Reference<sheet::XCellAddressable> xCellAddressable(mxCell, uno::UNO_QUERY);
-    if (xCellAddressable.is())
-    {
-        table::CellAddress aCellAddress = xCellAddressable->getCellAddress();
-        ScAddress aScAddress( static_cast<USHORT>(aCellAddress.Column),
-            static_cast<USHORT>(aCellAddress.Row), aCellAddress.Sheet );
-        String sAddress;
-        // Document not needed, because only the cell address, but not the tablename is needed
-        aScAddress.Format( sAddress, SCA_VALID, NULL );
-        sName = rtl::OUString(sAddress);
-    }
+    String sAddress;
+    // Document not needed, because only the cell address, but not the tablename is needed
+    maCellAddress.Format( sAddress, SCA_VALID, NULL );
+    sName = rtl::OUString(sAddress);
     return sName;
 }
 
@@ -193,19 +185,21 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     if (IsEditable(xParentStates))
+    {
         pStateSet->AddState(AccessibleStateType::EDITABLE);
+        pStateSet->AddState(AccessibleStateType::RESIZABLE);
+    }
     pStateSet->AddState(AccessibleStateType::ENABLED);
     pStateSet->AddState(AccessibleStateType::MULTILINE);
     pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
     if (IsOpaque(xParentStates))
         pStateSet->AddState(AccessibleStateType::OPAQUE);
-    if (IsEditable(xParentStates))
-        pStateSet->AddState(AccessibleStateType::RESIZABLE);
     pStateSet->AddState(AccessibleStateType::SELECTABLE);
     if (IsSelected(xParentStates))
         pStateSet->AddState(AccessibleStateType::SELECTED);
     if (IsShowing(xParentStates))
         pStateSet->AddState(AccessibleStateType::SHOWING);
+    pStateSet->AddState(AccessibleStateType::TRANSIENT);
     if (IsVisible(xParentStates))
         pStateSet->AddState(AccessibleStateType::VISIBLE);
     return pStateSet;
@@ -224,20 +218,41 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 sal_Bool ScAccessibleCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return  (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+    return (mpDoc == NULL) || (mpViewShell == NULL) ||
+         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
 sal_Bool ScAccessibleCell::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    // here I have to test whether the protection should influence this cell.
-    return  (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::EDITABLE));
+    sal_Bool bEditable(sal_True);
+    if (rxParentStates.is() && !rxParentStates->contains(AccessibleStateType::EDITABLE) &&
+        mpDoc)
+    {
+        // here I have to test whether the protection of the table should influence this cell.
+        const ScProtectionAttr* pItem = (const ScProtectionAttr*)mpDoc->GetAttr(
+            maCellAddress.Col(), maCellAddress.Row(),
+            maCellAddress.Tab(), ATTR_PROTECTION);
+        if (pItem)
+            bEditable = !pItem->GetProtection();
+    }
+    return bEditable;
 }
 
-sal_Bool ScAccessibleCell::IsOpaque(const uno::Reference<XAccessibleStateSet>& rxParentStates)
+sal_Bool ScAccessibleCell::IsOpaque(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     // test whether there is a background color
-    return sal_True;
+    sal_Bool bOpaque(sal_True);
+    if (mpDoc)
+    {
+        const SvxBrushItem* pItem = (const SvxBrushItem*)mpDoc->GetAttr(
+            maCellAddress.Col(), maCellAddress.Row(),
+            maCellAddress.Tab(), ATTR_PROTECTION);
+        if (pItem)
+            bOpaque = pItem->GetColor() != COL_TRANSPARENT;
+    }
+    return bOpaque;
 }
 
 sal_Bool ScAccessibleCell::IsSelected(const uno::Reference<XAccessibleStateSet>& rxParentStates)
@@ -255,5 +270,13 @@ sal_Bool ScAccessibleCell::IsVisible(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::VISIBLE));
+}
+
+ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
+{
+    ScDocument* pDoc = NULL;
+    if (pViewShell && pViewShell->GetViewData())
+        pDoc = pViewShell->GetViewData()->GetDocument();
+    return pDoc;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-23 13:35:16 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,18 @@
 
 
 #include "AccessibleSpreadsheet.hxx"
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
+#endif
+#ifndef _SC_ACCESSIBLECELL_HXX
+#include "AccessibleCell.hxx"
+#endif
+#ifndef SC_TABVWSH_HXX
+#include "tabvwsh.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
@@ -71,14 +83,8 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
-#include <com/sun/star/util/XProtectable.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -87,7 +93,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -96,14 +104,86 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 ScAccessibleSpreadsheet::ScAccessibleSpreadsheet (
         const uno::Reference<XAccessible>& rxParent,
-        const uno::Reference<sheet::XSpreadsheetView >& rxSheetView)
+        ScTabViewShell* pViewShell,
+        sal_uInt16 nTab,
+        ScSplitPos eSplitPos)
     :
-    ScAccessibleTableBase (rxParent, rxSheetView, getRange(rxSheetView))
+    ScAccessibleTableBase (rxParent, GetDocument(pViewShell),
+        ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL + 1, MAXROW + 1, nTab))),
+    mpViewShell(pViewShell),
+    meSplitPos(eSplitPos)
 {
+    if (pViewShell)
+    {
+        maActiveCell = pViewShell->GetViewData()->GetCurPos();
+        mpViewShell->AddAccessibilityObject(*this);
+    }
 }
 
 ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet ()
 {
+    if (mpViewShell)
+        mpViewShell->RemoveAccessibilityObject(*this);
+}
+
+void ScAccessibleSpreadsheet::SetDefunc()
+{
+    if (mpViewShell)
+    {
+        mpViewShell->RemoveAccessibilityObject(*this);
+        mpViewShell = NULL;
+    }
+
+    ScAccessibleTableBase::SetDefunc();
+}
+
+    //=====  SfxListener  =====================================================
+
+void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if (rHint.ISA( ScAccActiveCellChangeHint ) )
+    {
+        const ScAccActiveCellChangeHint& rRef = (const ScAccActiveCellChangeHint&)rHint;
+        ScAddress aNewCell(rRef.GetNewCellAddress());
+        if (aNewCell != maActiveCell)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+            aEvent.OldValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
+            aEvent.NewValue <<= getAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
+
+            maActiveCell = aNewCell;
+
+            CommitChange(aEvent);
+        }
+    }
+}
+
+    //=====  XAccessibleTable  ================================================
+
+uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
+                    throw (uno::RuntimeException)
+{
+    ScAddress aCellAddress(static_cast<sal_uInt16>(maRange.aStart.Col() + nColumn),
+        static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
+    ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn));
+    return pAccessibleCell;
+}
+
+    //=====  XAccessibleComponent  ============================================
+
+uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
+    const awt::Point& rPoint )
+        throw (uno::RuntimeException)
+{
+    uno::Reference< XAccessible > xAccessible;
+    if (mpViewShell)
+    {
+        sal_Int16 nX, nY;
+        if (mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY))
+            xAccessible = getAccessibleCellAt(nY, nX);
+    }
+    return xAccessible;
 }
 
     //=====  XAccessibleContext  ==============================================
@@ -142,51 +222,45 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     //====  internal  =========================================================
 
-table::CellRangeAddress
-    ScAccessibleSpreadsheet::getRange(
-    const uno::Reference<sheet::XSpreadsheetView>& rxSheetView)
+Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen()
+    throw (uno::RuntimeException)
 {
-    table::CellRangeAddress aRangeAddress;
-    if (rxSheetView.is())
+    Rectangle aRect;
+    if (mpViewShell)
     {
-        uno::Reference<sheet::XCellRangeAddressable> xCellRangeAddressable(
-            rxSheetView->getActiveSheet(), uno::UNO_QUERY);
-        if (xCellRangeAddressable.is())
-            aRangeAddress = xCellRangeAddressable->getRangeAddress();
+        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWindow)
+            aRect = pWindow->GetWindowExtentsRelative(NULL);
     }
-
-    return aRangeAddress;
+    return aRect;
 }
 
-table::CellRangeAddress
-    ScAccessibleSpreadsheet::getRange(
-    const uno::Reference<sheet::XSpreadsheet>& rxSheet)
+Rectangle ScAccessibleSpreadsheet::GetBoundingBox()
+    throw (uno::RuntimeException)
 {
-    table::CellRangeAddress aRangeAddress;
-    if (rxSheet.is())
+    Rectangle aRect;
+    if (mpViewShell)
     {
-        uno::Reference<sheet::XCellRangeAddressable> xCellRangeAddressable(
-            rxSheet, uno::UNO_QUERY);
-        if (xCellRangeAddressable.is())
-            aRangeAddress = xCellRangeAddressable->getRangeAddress();
+        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWindow)
+            aRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
     }
-
-    return aRangeAddress;
+    return aRect;
 }
 
 sal_Bool ScAccessibleSpreadsheet::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return !mxSheet.is() || (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+    return (mpViewShell == NULL) ||
+        (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
 sal_Bool ScAccessibleSpreadsheet::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     sal_Bool bProtected(sal_False);
-    uno::Reference<util::XProtectable> xProtectable (mxSheet, uno::UNO_QUERY);
-    if (xProtectable.is())
-        bProtected = xProtectable->isProtected();
+    if (mpDoc && mpDoc->IsTabProtected(maRange.aStart.Tab()))
+        bProtected = sal_True;
     return !bProtected;
 }
 
@@ -205,10 +279,14 @@ sal_Bool ScAccessibleSpreadsheet::IsShowing(
 sal_Bool ScAccessibleSpreadsheet::IsVisible(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    table::CellRangeAddress aViewCellRange = getRange(mxSheetView);
-    table::CellRangeAddress aSheetCellRange = getRange(mxSheet);
+    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::VISIBLE));
+}
 
-    return (aViewCellRange.Sheet == aSheetCellRange.Sheet) &&
-        (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::VISIBLE));
+ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
+{
+    ScDocument* pDoc = NULL;
+    if (pViewShell && pViewShell->GetViewData())
+        pDoc = pViewShell->GetViewData()->GetDocument();
+    return pDoc;
 }
 
