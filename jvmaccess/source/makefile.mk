@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 13:38:51 $
+#   last change: $Author: hr $ $Date: 2004-07-23 12:03:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,11 +79,8 @@ UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT = $(OUT)$/inc
 
 SLOFILES = \
-    $(SLO)$/javainfo.obj \
-    $(SLO)$/javainfoimpl.obj \
-    $(SLO)$/sunversion.obj \
-    $(SLO)$/virtualmachine.obj \
-    $(SLO)$/windows.obj
+    $(SLO)$/virtualmachine.obj
+
 
 .INCLUDE: target.mk
 
