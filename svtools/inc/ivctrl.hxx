@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-04 08:34:31 $
+ *  last change: $Author: tl $ $Date: 2001-07-30 10:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ public:
     String                  GetText () const { return aText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
     void*                   GetUserData () { return pUserData; }
+
+    const Rectangle &       GetBoundRect() const { return aRect; }
 
     void                    SetFocus ( BOOL bSet )
                                      { nFlags = ( bSet ? nFlags | ICNVIEW_FLAG_FOCUSED : nFlags & ~ICNVIEW_FLAG_FOCUSED ); }
