@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.37 $
-# Date:        $Date: 2005-01-18 16:13:37 $
+# Version:     $Revision: 1.38 $
+# Date:        $Date: 2005-01-25 12:43:16 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -400,7 +400,7 @@ elsif ( $platform eq "$Linux" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
    }
-   elsif ($machine_type eq "s390")
+   elsif (($machine_type eq "s390") or ($machine_type eq "s390x"))
    {  print "Setting Linux S/390 specific values... ";
       $outfile        = "LinuxS390Env.Set";
       $CPU            = "3";
@@ -1655,6 +1655,7 @@ if ( $platform eq "$Winnt" )
    ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
+ToFile( "RPM",               "@RPM@",            "e" );
 ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
 ToFile( "UPD",               $UPD,               "e" );
 ToFile( "SOLARUPD",          $SOLARUPD,          "e" );
@@ -1702,6 +1703,8 @@ ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
+ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
+		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
 ToFile( "CXX",               $CXX,               "e" );
 ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
@@ -1725,13 +1728,14 @@ ToFile( "SYSTEM_MSPACK",     "@SYSTEM_MSPACK@",    "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
+ToFile( "EPM",               "@EPM@",              "e" );
 ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
 ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
 ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );
 ToFile( "PYTHON_LIBS",       "@PYTHON_LIBS@",      "e" );
-ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
-ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
-ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
+#ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
+#ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
+#ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
 ToFile( "SYSTEM_JPEG",       "@SYSTEM_JPEG@",      "e" );
 ToFile( "SYSTEM_FREETYPE",   "@SYSTEM_FREETYPE@",  "e" );
 ToFile( "FREETYPE_CFLAGS",   "@FREETYPE_CFLAGS@",  "e" );
@@ -1740,7 +1744,7 @@ ToFile( "SYSTEM_LIBXML",     "@SYSTEM_LIBXML@",    "e" );
 ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );
 ToFile( "LIBXML_LIBS",       "@LIBXML_LIBS@",      "e" );
 ToFile( "SYSTEM_EXPAT",      "@SYSTEM_EXPAT@",     "e" );
-ToFile( "SYSTEM_DB3",        "@SYSTEM_DB3@",       "e" );
+#ToFile( "SYSTEM_DB3",        "@SYSTEM_DB3@",       "e" );
 ToFile( "SYSTEM_SABLOT",     "@SYSTEM_SABLOT@",    "e" );
 ToFile( "SABLOT_LIBS",       "@SABLOT_LIBS@",      "e" );
 ToFile( "SYSTEM_ODBC_HEADERS","@SYSTEM_ODBC_HEADERS@","e" );
@@ -1935,15 +1939,14 @@ for ( $tmp = 0; $tmp < 2; $tmp++ )
 print "* Configuration part of OpenOffice.org $UPD build is finished. $newline* $newline";
 print "* NB! Be aware that you might not be able to build OpenOffice.org if you $newline".
       "* ignore any warning message that were generated during this configuration $newline".
-      "* process. $newline* $newline" .
-      "* Any interactive values you have given have not been version checked. $newline* $newline"; 
+      "* process. $newline* $newline";
 
 if ( $Warning ne "" ) 
 {  print "$Warning*"; 
    print "$newline";
 }
 
-print "$newline* USAGE: $newline";
+print "*$newline* USAGE: $newline";
 print "* Source $outfile (in tcsh)";
 print " or $outfile.sh (in sh)" if defined($outfile_sh);
 print "$newline";
