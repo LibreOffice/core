@@ -23365,3 +23365,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?removeEventListener@AccessibleImageBullet@accessibility@@UAAXABV?$Reference@VXAccessibleEventListener@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@Z
 ?removeFocusListener@AccessibleImageBullet@accessibility@@UAAXABV?$Reference@VXFocusListener@awt@star@sun@com@@@uno@star@sun@com@@@Z
 ?supportsService@AccessibleImageBullet@accessibility@@UAAEABVOUString@rtl@@@Z
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx3242827148@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx2691825481@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx109227445@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
