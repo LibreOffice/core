@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 12:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,17 +72,17 @@
 #endif
 
 #ifndef _XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <nmspmap.hxx>
 #endif
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::xmloff::token::GetXMLToken;
 using ::xmloff::token::XML_XMLNS;
-
 
 /* The basic idea of this class is that we have two two ways to search our
  * data...by prefix and by key. We use an STL hash_map for fast prefix
@@ -93,16 +93,19 @@ using ::xmloff::token::XML_XMLNS;
  *
  * In this implementation, key and index should always be the same number.
  *
+ * All references to Indices are now deprecated and the corresponding
+ * 'Key' methods should be used instead
+ *
  * Martin 13/06/01
  */
 
-SvXMLNamespaceMap::SvXMLNamespaceMap() :
-    sXMLNS( GetXMLToken(XML_XMLNS) )
+SvXMLNamespaceMap::SvXMLNamespaceMap()
+: sXMLNS( GetXMLToken ( XML_XMLNS ) )
 {
 }
 
-SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap ) :
-    sXMLNS( GetXMLToken(XML_XMLNS) )
+SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap )
+: sXMLNS( GetXMLToken ( XML_XMLNS ) )
 {
     aNameHash = rMap.aNameHash;
     aNameMap  = rMap.aNameMap;
@@ -117,78 +120,57 @@ int SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
     return static_cast < int > (aNameHash == rCmp.aNameHash);
 }
 
-void SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rName, USHORT nKey )
+sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rName, sal_uInt16 nKey )
 {
+    if( XML_NAMESPACE_UNKNOWN == nKey )
+    {
+        // create a new unique key with UNKNOWN flag set
+        nKey = XML_NAMESPACE_UNKNOWN_FLAG;
+        do
+        {
+            NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
+            if( aIter == aNameMap.end() )
+                break;
+            nKey++;
+        }
+        while ( sal_True );
+    }
     NameSpaceEntry *pEntry = new NameSpaceEntry;
     pEntry->sName   = rName;
     pEntry->nKey    = nKey;
     pEntry->sPrefix = rPrefix;
     aNameHash[rPrefix] = pEntry;
     aNameMap[nKey]     = pEntry;
+    return nKey;
 }
 
-USHORT SvXMLNamespaceMap::Add( const OUString& rPrefix, const OUString& rName,
-                               USHORT nKey )
+sal_uInt16 SvXMLNamespaceMap::Add( const OUString& rPrefix, const OUString& rName,
+                               sal_uInt16 nKey )
 {
-    sal_Bool bRet = sal_False;
-
     if( XML_NAMESPACE_UNKNOWN == nKey )
         nKey = GetKeyByName( rName );
 
     DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
                 "SvXMLNamespaceMap::Add: invalid namespace key" );
-    if( XML_NAMESPACE_NONE==nKey )
+
+    if( XML_NAMESPACE_NONE == nKey )
         return USHRT_MAX;
 
-    if (!(aNameHash.count ( rPrefix ) ) )
-    {
-        _Add( rPrefix, rName, nKey );
-        bRet = sal_True;
-    }
-    return bRet;
-}
+    if ( aNameHash.find ( rPrefix ) == aNameHash.end() )
+        nKey = _Add( rPrefix, rName, nKey );
 
-BOOL SvXMLNamespaceMap::AddAtIndex( USHORT nIdx, const OUString& rPrefix,
-                                    const OUString& rName, USHORT nKey )
-{
-    sal_Bool bRet = sal_False;
-
-    if( XML_NAMESPACE_UNKNOWN == nKey )
-        nKey = GetKeyByName( rName );
-
-    DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
-                "SvXMLNamespaceMap::AddAtIndex: invalid namespace key" );
-    if( XML_NAMESPACE_NONE != nKey && ! ( aNameHash.count ( rPrefix ) ) )
-    {
-        _Add( rPrefix, rName, nKey );
-        bRet = sal_True;
-    }
-    return bRet;
-}
-
-BOOL SvXMLNamespaceMap::AddAtIndex( USHORT nIdx, const sal_Char *pPrefix,
-                                     const sal_Char *pName, USHORT nKey )
-{
-    OUString sPrefix( OUString::createFromAscii(pPrefix) );
-    OUString sName( OUString::createFromAscii(pName) );
-
-    return AddAtIndex( nIdx, sPrefix, sName, nKey );
-}
-
-USHORT SvXMLNamespaceMap::GetIndexByKey( USHORT nKey ) const
-{
     return nKey;
 }
 
-USHORT SvXMLNamespaceMap::GetIndexByPrefix( const OUString& rPrefix ) const
+sal_uInt16 SvXMLNamespaceMap::GetKeyByPrefix( const OUString& rPrefix ) const
 {
     NameSpaceHash::const_iterator aIter = aNameHash.find(rPrefix);
     return (aIter != aNameHash.end()) ? (*aIter).second->nKey : USHRT_MAX;
 }
 
-USHORT SvXMLNamespaceMap::GetKeyByName( const OUString& rName ) const
+sal_uInt16 SvXMLNamespaceMap::GetKeyByName( const OUString& rName ) const
 {
-    USHORT nKey = XML_NAMESPACE_UNKNOWN;
+    sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN;
     NameSpaceHash::const_iterator aIter = aNameHash.begin(), aEnd = aNameHash.end();
     while (aIter != aEnd )
     {
@@ -202,27 +184,22 @@ USHORT SvXMLNamespaceMap::GetKeyByName( const OUString& rName ) const
     return nKey;
 }
 
-const OUString& SvXMLNamespaceMap::GetPrefixByIndex( USHORT nIdx ) const
+const OUString& SvXMLNamespaceMap::GetPrefixByKey( sal_uInt16 nKey ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);
+    NameSpaceMap::const_iterator aIter = aNameMap.find (nKey);
     return (aIter != aNameMap.end()) ? (*aIter).second->sPrefix : sEmpty;
 }
 
-const OUString& SvXMLNamespaceMap::GetNameByIndex( USHORT nIdx ) const
+const OUString& SvXMLNamespaceMap::GetNameByKey( sal_uInt16 nKey ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);
+    NameSpaceMap::const_iterator aIter = aNameMap.find (nKey);
     return (aIter != aNameMap.end()) ? (*aIter).second->sName : sEmpty;
 }
 
-USHORT SvXMLNamespaceMap::GetKeyByIndex( USHORT nIdx ) const
-{
-    return nIdx;
-}
-
-OUString SvXMLNamespaceMap::GetAttrNameByIndex( USHORT nIdx ) const
+OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
 {
     OUStringBuffer sAttrName;
-    NameSpaceMap::const_iterator aIter = aNameMap.find ( nIdx );
+    NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
     if (aIter != aNameMap.end())
     {
         sAttrName.append( sXMLNS  );
@@ -232,20 +209,20 @@ OUString SvXMLNamespaceMap::GetAttrNameByIndex( USHORT nIdx ) const
     return sAttrName.makeStringAndClear();
 }
 
-OUString SvXMLNamespaceMap::GetQNameByIndex( USHORT nIdx,
-                                           const OUString& rLocalName ) const
+OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
+                            const OUString& rLocalName ) const
 {
     // We always want to return at least the rLocalName...
     OUStringBuffer sQName;
 
-    switch ( nIdx )
+    switch ( nKey )
     {
         case XML_NAMESPACE_UNKNOWN:
             // ...if it's a completely unknown namespace, assert and return the local name
-            DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByIndex: invalid namespace key" );
+            DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
         case XML_NAMESPACE_NONE:
             // ...if there isn't one, return the local name
-            sQName.append ( rLocalName );
+            return rLocalName;
         break;
         case XML_NAMESPACE_XMLNS:
         {
@@ -257,7 +234,7 @@ OUString SvXMLNamespaceMap::GetQNameByIndex( USHORT nIdx,
         break;
         default:
         {
-            NameSpaceMap::const_iterator aIter = aNameMap.find ( nIdx );
+            NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
             if ( aIter != aNameMap.end() )
             {
                 // ...if it's in our map, make the prefix
@@ -267,22 +244,28 @@ OUString SvXMLNamespaceMap::GetQNameByIndex( USHORT nIdx,
             }
             else
             {
-                // ... if isn't, this is a Bad Thing, assert and return the local name
-                DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByIndex: invalid namespace key" );
-                sQName.append ( rLocalName );
+                // ... if it isn't, this is a Bad Thing, assert and return the local name
+                DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
+                return rLocalName;
             }
         }
     }
     return sQName.makeStringAndClear();;
 }
 
-USHORT SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
+sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName(
+                            const OUString& rAttrName,
+                            OUString *pLocalName ) const
+{
+    return GetKeyByAttrName( rAttrName, 0, pLocalName, 0 );
+}
+
+sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
                                             OUString *pPrefix,
                                             OUString *pLocalName,
-                                            OUString *pNamespace,
-                                            USHORT nIdxGuess ) const
+                                            OUString *pNamespace ) const
 {
-    USHORT nKey = XML_NAMESPACE_UNKNOWN;
+    sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN;
 
     sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
     if( -1L != nColonPos )
@@ -317,13 +300,108 @@ USHORT SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
     return nKey;
 }
 
-USHORT SvXMLNamespaceMap::GetFirstIndex() const
+sal_uInt16 SvXMLNamespaceMap::GetFirstKey() const
 {
     return aNameMap.empty() ? USHRT_MAX : (*aNameMap.begin()).second->nKey;
 }
 
-USHORT SvXMLNamespaceMap::GetNextIndex( USHORT nOldIdx ) const
+sal_uInt16 SvXMLNamespaceMap::GetNextKey( sal_uInt16 nLastKey ) const
+{
+    NameSpaceMap::const_iterator aIter = aNameMap.find ( nLastKey );
+    return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second->nKey;
+}
+
+
+// All methods after this are deprecated...
+
+sal_uInt16 SvXMLNamespaceMap::GetKeyByIndex( sal_uInt16 nIdx ) const
+{
+    return nIdx;
+}
+
+sal_uInt16 SvXMLNamespaceMap::GetIndexByKey( sal_uInt16 nKey ) const
+{
+    return nKey;
+}
+sal_uInt16 SvXMLNamespaceMap::GetFirstIndex() const
+{
+    return aNameMap.empty() ? USHRT_MAX : (*aNameMap.begin()).second->nKey;
+}
+
+sal_uInt16 SvXMLNamespaceMap::GetNextIndex( sal_uInt16 nOldIdx ) const
 {
     NameSpaceMap::const_iterator aIter = aNameMap.find ( nOldIdx );
     return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second->nKey;
+}
+
+sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 nIdx, const OUString& rPrefix,
+                                    const OUString& rName, sal_uInt16 nKey )
+{
+    sal_Bool bRet = sal_False;
+
+    if( XML_NAMESPACE_UNKNOWN == nKey )
+        nKey = GetKeyByName( rName );
+
+    DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
+                "SvXMLNamespaceMap::AddAtIndex: invalid namespace key" );
+    if( XML_NAMESPACE_NONE != nKey && ! ( aNameHash.count ( rPrefix ) ) )
+    {
+        _Add( rPrefix, rName, nKey );
+        bRet = sal_True;
+    }
+    return bRet;
+}
+
+sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 nIdx, const sal_Char *pPrefix,
+                                     const sal_Char *pName, sal_uInt16 nKey )
+{
+    OUString sPrefix( OUString::createFromAscii(pPrefix) );
+    OUString sName( OUString::createFromAscii(pName) );
+
+    return AddAtIndex( nIdx, sPrefix, sName, nKey );
+}
+
+OUString SvXMLNamespaceMap::GetAttrNameByIndex( sal_uInt16 nIdx ) const
+{
+    return GetAttrNameByKey( nIdx );
+}
+
+OUString SvXMLNamespaceMap::GetQNameByIndex( sal_uInt16 nIdx,
+                                           const OUString& rLocalName ) const
+{
+    return GetQNameByKey( nIdx, rLocalName );
+}
+
+const OUString& SvXMLNamespaceMap::GetPrefixByIndex( sal_uInt16 nIdx ) const
+{
+    NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);
+    return (aIter != aNameMap.end()) ? (*aIter).second->sPrefix : sEmpty;
+}
+
+const OUString& SvXMLNamespaceMap::GetNameByIndex( sal_uInt16 nIdx ) const
+{
+    NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);
+    return (aIter != aNameMap.end()) ? (*aIter).second->sName : sEmpty;
+}
+
+sal_uInt16 SvXMLNamespaceMap::GetIndexByPrefix( const OUString& rPrefix ) const
+{
+    NameSpaceHash::const_iterator aIter = aNameHash.find(rPrefix);
+    return (aIter != aNameHash.end()) ? (*aIter).second->nKey : USHRT_MAX;
+}
+sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName(
+                            const OUString& rAttrName,
+                            OUString *pLocalName,
+                            sal_uInt16 nIdxGuess) const
+{
+    return _GetKeyByAttrName( rAttrName, 0, pLocalName, 0 );
+}
+
+sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
+                                            OUString *pPrefix,
+                                            OUString *pLocalName,
+                                            OUString *pNamespace,
+                                            USHORT nIdxGuess ) const
+{
+    return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
 }
