@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 15:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
         String aOrder = _rOrderList.GetToken(i,',');
         aOrder.EraseTrailingChars();
         arrLbFields[i]->SelectEntry( aOrder.GetToken(0,' ') );
-        xub_StrLen nAsc = (aOrder.GetTokenCount(' ') == 2) ? (aOrder.GetToken(1,' ').EqualsAscii("ASC") ? 1 : 0) : 1;
+        xub_StrLen nAsc = (aOrder.GetTokenCount(' ') == 2) ? (aOrder.GetToken(1,' ').EqualsAscii("ASC") ? 0 : 1) : 1;
         arrLbValues[i]->SelectEntryPos( nAsc );
     }
 
