@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 08:18:42 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 12:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ void SAL_CALL
     LayerUpdateHandler::startUpdate( const OUString& aContext )
         throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+    this->checkSourceLayer();
     if (!m_aBuilder.setContext(aContext))
         raiseMalformedDataException("LayerUpdateHandler: Cannot start update - update is already in progress");
 }

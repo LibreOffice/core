@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:19:11 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 12:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,19 +208,39 @@ sal_Bool UpdateService::setImplementationProperty(OUString const & aName, uno::A
 }
 // -----------------------------------------------------------------------------
 
-UpdateService::Layer UpdateService::getSourceLayer() const
+bool UpdateService::validateSourceLayerAndCheckNotEmpty() SAL_THROW( (lang::IllegalAccessException) )
 {
     switch (m_aSourceMode)
     {
-    case merge:     return m_xSourceLayer;
+    case merge:     // TODO: check for readonly layer
+                    return true;
 
-    case protect:   if (!checkEmptyLayer(m_xSourceLayer)) break;;
+    case protect:   if (!checkEmptyLayer(m_xSourceLayer))
+                        raiseIllegalAccessException("UpdateService: Layer already exists");
                     // else fall through
-    case truncate:  return createEmptyLayer();
 
-    default:        OSL_ASSERT(false); break;
+    case truncate:  return false;
+
+    default:        OSL_ASSERT(!"not reached");
+                    return true;
     }
-    return Layer();
+}
+// -----------------------------------------------------------------------------
+
+UpdateService::Layer UpdateService::getSourceLayer() SAL_THROW( (lang::IllegalAccessException) )
+{
+    if ( validateSourceLayerAndCheckNotEmpty() )
+        return m_xSourceLayer;
+    else
+        return createEmptyLayer();
+}
+// -----------------------------------------------------------------------------
+
+void UpdateService::raiseIllegalAccessException(sal_Char const * pMsg)
+    SAL_THROW( (lang::IllegalAccessException) )
+{
+    OUString sMsg = OUString::createFromAscii(pMsg);
+    throw lang::IllegalAccessException(sMsg,*this);
 }
 // -----------------------------------------------------------------------------
 

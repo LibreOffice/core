@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:13 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 12:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,11 +137,21 @@ namespace configmgr
             ServiceFactory getServiceFactory() const
             { return m_xServiceFactory; }
 
-            Layer getSourceLayer() const;
+            void  checkSourceLayer() SAL_THROW( (lang::IllegalAccessException) )
+            { validateSourceLayerAndCheckNotEmpty(); }
+
+            Layer getSourceLayer()   SAL_THROW( (lang::IllegalAccessException) );
 
             void writeUpdatedLayer(Layer const & _xLayer);
 
             virtual sal_Bool setImplementationProperty(OUString const & aName, uno::Any const & aValue);
+
+            void raiseIllegalAccessException(sal_Char const * pMsg)
+                SAL_THROW( (lang::IllegalAccessException) );
+
+        private:
+            bool validateSourceLayerAndCheckNotEmpty() SAL_THROW( (lang::IllegalAccessException) );
+
         private:
             typedef uno::Reference< backenduno::XLayerHandler >     LayerWriter;
 
