@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:49:51 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,7 +1334,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
     FmFormModel* pModel = new FmFormModel( aPathOpt.GetPalettePath(),
                                             0, GetDoc()->GetDocShell() );
     pModel->GetItemPool().FreezeIdRanges();
-    pModel->SetStreamingSdrModel(TRUE);
+//BFS04 pModel->SetStreamingSdrModel(TRUE);
 
     rStrm.Seek(0);
 
