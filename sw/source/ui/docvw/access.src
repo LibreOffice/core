@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:54:14 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 00:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,94 +65,493 @@ String STR_ACCESS_DOC_NAME
 {
     Text = "Dokument-Ansicht" ;
     Text [ English ] = "Document View";
+    Text[ english_us ] = "Document View";
+    Text[ portuguese ] = "Document View";
+    Text[ russian ] = "Document View";
+    Text[ greek ] = "Document View";
+    Text[ dutch ] = "Document View";
+    Text[ french ] = "Document View";
+    Text[ spanish ] = "Document View";
+    Text[ finnish ] = "Document View";
+    Text[ italian ] = "Document View";
+    Text[ danish ] = "Document View";
+    Text[ swedish ] = "Document View";
+    Text[ polish ] = "Document View";
+    Text[ portuguese_brazilian ] = "Document View";
+    Text[ japanese ] = "Document View";
+    Text[ korean ] = "Document View";
+    Text[ chinese_simplified ] = "Document View";
+    Text[ chinese_traditional ] = "Document View";
+    Text[ turkish ] = "Document View";
+    Text[ arabic ] = "Document View";
+    Text[ catalan ] = "Document View";
+    Text[ thai ] = "Document View";
 };
 String STR_ACCESS_DOC_DESC
 {
     Text = "Dokument-Ansicht" ;
     Text [ English ] = "Document View";
+    Text[ english_us ] = "Document View";
+    Text[ portuguese ] = "Document View";
+    Text[ russian ] = "Document View";
+    Text[ greek ] = "Document View";
+    Text[ dutch ] = "Document View";
+    Text[ french ] = "Document View";
+    Text[ spanish ] = "Document View";
+    Text[ finnish ] = "Document View";
+    Text[ italian ] = "Document View";
+    Text[ danish ] = "Document View";
+    Text[ swedish ] = "Document View";
+    Text[ polish ] = "Document View";
+    Text[ portuguese_brazilian ] = "Document View";
+    Text[ japanese ] = "Document View";
+    Text[ korean ] = "Document View";
+    Text[ chinese_simplified ] = "Document View";
+    Text[ chinese_traditional ] = "Document View";
+    Text[ turkish ] = "Document View";
+    Text[ arabic ] = "Document View";
+    Text[ catalan ] = "Document View";
+    Text[ thai ] = "Document View";
 };
 String STR_ACCESS_PARAGRAPH_NAME
 {
     Text = "Absatz $(ARG1)" ;
     Text [ english ] = "Paragraph $(ARG1)" ;
+    Text[ english_us ] = "Paragraph $(ARG1)";
+    Text[ portuguese ] = "Paragraph $(ARG1)";
+    Text[ russian ] = "Paragraph $(ARG1)";
+    Text[ greek ] = "Paragraph $(ARG1)";
+    Text[ dutch ] = "Paragraph $(ARG1)";
+    Text[ french ] = "Paragraph $(ARG1)";
+    Text[ spanish ] = "Paragraph $(ARG1)";
+    Text[ finnish ] = "Paragraph $(ARG1)";
+    Text[ italian ] = "Paragraph $(ARG1)";
+    Text[ danish ] = "Paragraph $(ARG1)";
+    Text[ swedish ] = "Paragraph $(ARG1)";
+    Text[ polish ] = "Paragraph $(ARG1)";
+    Text[ portuguese_brazilian ] = "Paragraph $(ARG1)";
+    Text[ japanese ] = "Paragraph $(ARG1)";
+    Text[ korean ] = "Paragraph $(ARG1)";
+    Text[ chinese_simplified ] = "Paragraph $(ARG1)";
+    Text[ chinese_traditional ] = "Paragraph $(ARG1)";
+    Text[ turkish ] = "Paragraph $(ARG1)";
+    Text[ arabic ] = "Paragraph $(ARG1)";
+    Text[ catalan ] = "Paragraph $(ARG1)";
+    Text[ thai ] = "Paragraph $(ARG1)";
 };
 String STR_ACCESS_PARAGRAPH_DESC
 {
     Text = "Absatz: $(ARG1) " ;
     Text [ english ] = "Paragraph: $(ARG1)" ;
+    Text[ english_us ] = "Paragraph: $(ARG1)";
+    Text[ portuguese ] = "Paragraph: $(ARG1)";
+    Text[ russian ] = "Paragraph: $(ARG1)";
+    Text[ greek ] = "Paragraph: $(ARG1)";
+    Text[ dutch ] = "Paragraph: $(ARG1)";
+    Text[ french ] = "Paragraph: $(ARG1)";
+    Text[ spanish ] = "Paragraph: $(ARG1)";
+    Text[ finnish ] = "Paragraph: $(ARG1)";
+    Text[ italian ] = "Paragraph: $(ARG1)";
+    Text[ danish ] = "Paragraph: $(ARG1)";
+    Text[ swedish ] = "Paragraph: $(ARG1)";
+    Text[ polish ] = "Paragraph: $(ARG1)";
+    Text[ portuguese_brazilian ] = "Paragraph: $(ARG1)";
+    Text[ japanese ] = "Paragraph: $(ARG1)";
+    Text[ korean ] = "Paragraph: $(ARG1)";
+    Text[ chinese_simplified ] = "Paragraph: $(ARG1)";
+    Text[ chinese_traditional ] = "Paragraph: $(ARG1)";
+    Text[ turkish ] = "Paragraph: $(ARG1)";
+    Text[ arabic ] = "Paragraph: $(ARG1)";
+    Text[ catalan ] = "Paragraph: $(ARG1)";
+    Text[ thai ] = "Paragraph: $(ARG1)";
 };
 String STR_ACCESS_HEADING_NAME
 {
     Text = "‹berschrift $(ARG1)" ;
     Text [ english ] = "Heading $(ARG1)" ;
+    Text[ english_us ] = "Heading $(ARG1)";
+    Text[ portuguese ] = "Heading $(ARG1)";
+    Text[ russian ] = "Heading $(ARG1)";
+    Text[ greek ] = "Heading $(ARG1)";
+    Text[ dutch ] = "Heading $(ARG1)";
+    Text[ french ] = "Heading $(ARG1)";
+    Text[ spanish ] = "Heading $(ARG1)";
+    Text[ finnish ] = "Heading $(ARG1)";
+    Text[ italian ] = "Heading $(ARG1)";
+    Text[ danish ] = "Heading $(ARG1)";
+    Text[ swedish ] = "Heading $(ARG1)";
+    Text[ polish ] = "Heading $(ARG1)";
+    Text[ portuguese_brazilian ] = "Heading $(ARG1)";
+    Text[ japanese ] = "Heading $(ARG1)";
+    Text[ korean ] = "Heading $(ARG1)";
+    Text[ chinese_simplified ] = "Heading $(ARG1)";
+    Text[ chinese_traditional ] = "Heading $(ARG1)";
+    Text[ turkish ] = "Heading $(ARG1)";
+    Text[ arabic ] = "Heading $(ARG1)";
+    Text[ catalan ] = "Heading $(ARG1)";
+    Text[ thai ] = "Heading $(ARG1)";
 };
 String STR_ACCESS_HEADING_DESC
 {
     Text = "‹berschrift: $(ARG1)" ;
     Text [ english ] = "Heading: $(ARG1)" ;
+    Text[ english_us ] = "Heading: $(ARG1)";
+    Text[ portuguese ] = "Heading: $(ARG1)";
+    Text[ russian ] = "Heading: $(ARG1)";
+    Text[ greek ] = "Heading: $(ARG1)";
+    Text[ dutch ] = "Heading: $(ARG1)";
+    Text[ french ] = "Heading: $(ARG1)";
+    Text[ spanish ] = "Heading: $(ARG1)";
+    Text[ finnish ] = "Heading: $(ARG1)";
+    Text[ italian ] = "Heading: $(ARG1)";
+    Text[ danish ] = "Heading: $(ARG1)";
+    Text[ swedish ] = "Heading: $(ARG1)";
+    Text[ polish ] = "Heading: $(ARG1)";
+    Text[ portuguese_brazilian ] = "Heading: $(ARG1)";
+    Text[ japanese ] = "Heading: $(ARG1)";
+    Text[ korean ] = "Heading: $(ARG1)";
+    Text[ chinese_simplified ] = "Heading: $(ARG1)";
+    Text[ chinese_traditional ] = "Heading: $(ARG1)";
+    Text[ turkish ] = "Heading: $(ARG1)";
+    Text[ arabic ] = "Heading: $(ARG1)";
+    Text[ catalan ] = "Heading: $(ARG1)";
+    Text[ thai ] = "Heading: $(ARG1)";
 };
 String STR_ACCESS_HEADING_WITH_NUM_DESC
 {
     Text = "‹berschrift Nummer $(ARG2): $(ARG1)" ;
     Text [ english ] = "Heading number $(ARG2): $(ARG1)" ;
+    Text[ english_us ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ portuguese ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ russian ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ greek ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ dutch ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ french ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ spanish ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ finnish ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ italian ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ danish ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ swedish ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ polish ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ portuguese_brazilian ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ japanese ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ korean ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ chinese_simplified ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ chinese_traditional ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ turkish ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ arabic ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ catalan ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ thai ] = "Heading number $(ARG2): $(ARG1)";
 };
 String STR_ACCESS_HEADER_NAME
 {
     Text = "Kopfzeile $(ARG1)" ;
     Text [ english ] = "Header $(ARG1)" ;
+    Text[ english_us ] = "Header $(ARG1)";
+    Text[ portuguese ] = "Header $(ARG1)";
+    Text[ russian ] = "Header $(ARG1)";
+    Text[ greek ] = "Header $(ARG1)";
+    Text[ dutch ] = "Header $(ARG1)";
+    Text[ french ] = "Header $(ARG1)";
+    Text[ spanish ] = "Header $(ARG1)";
+    Text[ finnish ] = "Header $(ARG1)";
+    Text[ italian ] = "Header $(ARG1)";
+    Text[ danish ] = "Header $(ARG1)";
+    Text[ swedish ] = "Header $(ARG1)";
+    Text[ polish ] = "Header $(ARG1)";
+    Text[ portuguese_brazilian ] = "Header $(ARG1)";
+    Text[ japanese ] = "Header $(ARG1)";
+    Text[ korean ] = "Header $(ARG1)";
+    Text[ chinese_simplified ] = "Header $(ARG1)";
+    Text[ chinese_traditional ] = "Header $(ARG1)";
+    Text[ turkish ] = "Header $(ARG1)";
+    Text[ arabic ] = "Header $(ARG1)";
+    Text[ catalan ] = "Header $(ARG1)";
+    Text[ thai ] = "Header $(ARG1)";
 };
 String STR_ACCESS_HEADER_DESC
 {
     Text = "Kopfzeile Seite $(ARG1)" ;
     Text [ english ] = "Header page $(ARG1)" ;
+    Text[ english_us ] = "Header page $(ARG1)";
+    Text[ portuguese ] = "Header page $(ARG1)";
+    Text[ russian ] = "Header page $(ARG1)";
+    Text[ greek ] = "Header page $(ARG1)";
+    Text[ dutch ] = "Header page $(ARG1)";
+    Text[ french ] = "Header page $(ARG1)";
+    Text[ spanish ] = "Header page $(ARG1)";
+    Text[ finnish ] = "Header page $(ARG1)";
+    Text[ italian ] = "Header page $(ARG1)";
+    Text[ danish ] = "Header page $(ARG1)";
+    Text[ swedish ] = "Header page $(ARG1)";
+    Text[ polish ] = "Header page $(ARG1)";
+    Text[ portuguese_brazilian ] = "Header page $(ARG1)";
+    Text[ japanese ] = "Header page $(ARG1)";
+    Text[ korean ] = "Header page $(ARG1)";
+    Text[ chinese_simplified ] = "Header page $(ARG1)";
+    Text[ chinese_traditional ] = "Header page $(ARG1)";
+    Text[ turkish ] = "Header page $(ARG1)";
+    Text[ arabic ] = "Header page $(ARG1)";
+    Text[ catalan ] = "Header page $(ARG1)";
+    Text[ thai ] = "Header page $(ARG1)";
 };
 String STR_ACCESS_FOOTER_NAME
 {
     Text = "Fuﬂzeile $(ARG1)" ;
     Text [ english ] = "Footer $(ARG1)" ;
+    Text[ english_us ] = "Footer $(ARG1)";
+    Text[ portuguese ] = "Footer $(ARG1)";
+    Text[ russian ] = "Footer $(ARG1)";
+    Text[ greek ] = "Footer $(ARG1)";
+    Text[ dutch ] = "Footer $(ARG1)";
+    Text[ french ] = "Footer $(ARG1)";
+    Text[ spanish ] = "Footer $(ARG1)";
+    Text[ finnish ] = "Footer $(ARG1)";
+    Text[ italian ] = "Footer $(ARG1)";
+    Text[ danish ] = "Footer $(ARG1)";
+    Text[ swedish ] = "Footer $(ARG1)";
+    Text[ polish ] = "Footer $(ARG1)";
+    Text[ portuguese_brazilian ] = "Footer $(ARG1)";
+    Text[ japanese ] = "Footer $(ARG1)";
+    Text[ korean ] = "Footer $(ARG1)";
+    Text[ chinese_simplified ] = "Footer $(ARG1)";
+    Text[ chinese_traditional ] = "Footer $(ARG1)";
+    Text[ turkish ] = "Footer $(ARG1)";
+    Text[ arabic ] = "Footer $(ARG1)";
+    Text[ catalan ] = "Footer $(ARG1)";
+    Text[ thai ] = "Footer $(ARG1)";
 };
 String STR_ACCESS_FOOTER_DESC
 {
     Text = "Fuﬂzeile Seite $(ARG1)" ;
     Text [ english ] = "Footer page $(ARG1)" ;
+    Text[ english_us ] = "Footer page $(ARG1)";
+    Text[ portuguese ] = "Footer page $(ARG1)";
+    Text[ russian ] = "Footer page $(ARG1)";
+    Text[ greek ] = "Footer page $(ARG1)";
+    Text[ dutch ] = "Footer page $(ARG1)";
+    Text[ french ] = "Footer page $(ARG1)";
+    Text[ spanish ] = "Footer page $(ARG1)";
+    Text[ finnish ] = "Footer page $(ARG1)";
+    Text[ italian ] = "Footer page $(ARG1)";
+    Text[ danish ] = "Footer page $(ARG1)";
+    Text[ swedish ] = "Footer page $(ARG1)";
+    Text[ polish ] = "Footer page $(ARG1)";
+    Text[ portuguese_brazilian ] = "Footer page $(ARG1)";
+    Text[ japanese ] = "Footer page $(ARG1)";
+    Text[ korean ] = "Footer page $(ARG1)";
+    Text[ chinese_simplified ] = "Footer page $(ARG1)";
+    Text[ chinese_traditional ] = "Footer page $(ARG1)";
+    Text[ turkish ] = "Footer page $(ARG1)";
+    Text[ arabic ] = "Footer page $(ARG1)";
+    Text[ catalan ] = "Footer page $(ARG1)";
+    Text[ thai ] = "Footer page $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_NAME
 {
     Text = "Fuﬂnote $(ARG1)" ;
     Text [ english ] = "Footnote $(ARG1)" ;
+    Text[ english_us ] = "Footnote $(ARG1)";
+    Text[ portuguese ] = "Footnote $(ARG1)";
+    Text[ russian ] = "Footnote $(ARG1)";
+    Text[ greek ] = "Footnote $(ARG1)";
+    Text[ dutch ] = "Footnote $(ARG1)";
+    Text[ french ] = "Footnote $(ARG1)";
+    Text[ spanish ] = "Footnote $(ARG1)";
+    Text[ finnish ] = "Footnote $(ARG1)";
+    Text[ italian ] = "Footnote $(ARG1)";
+    Text[ danish ] = "Footnote $(ARG1)";
+    Text[ swedish ] = "Footnote $(ARG1)";
+    Text[ polish ] = "Footnote $(ARG1)";
+    Text[ portuguese_brazilian ] = "Footnote $(ARG1)";
+    Text[ japanese ] = "Footnote $(ARG1)";
+    Text[ korean ] = "Footnote $(ARG1)";
+    Text[ chinese_simplified ] = "Footnote $(ARG1)";
+    Text[ chinese_traditional ] = "Footnote $(ARG1)";
+    Text[ turkish ] = "Footnote $(ARG1)";
+    Text[ arabic ] = "Footnote $(ARG1)";
+    Text[ catalan ] = "Footnote $(ARG1)";
+    Text[ thai ] = "Footnote $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_DESC
 {
     Text = "Fuﬂnote $(ARG1)" ;
     Text [ english ] = "Footnote $(ARG1)" ;
+    Text[ english_us ] = "Footnote $(ARG1)";
+    Text[ portuguese ] = "Footnote $(ARG1)";
+    Text[ russian ] = "Footnote $(ARG1)";
+    Text[ greek ] = "Footnote $(ARG1)";
+    Text[ dutch ] = "Footnote $(ARG1)";
+    Text[ french ] = "Footnote $(ARG1)";
+    Text[ spanish ] = "Footnote $(ARG1)";
+    Text[ finnish ] = "Footnote $(ARG1)";
+    Text[ italian ] = "Footnote $(ARG1)";
+    Text[ danish ] = "Footnote $(ARG1)";
+    Text[ swedish ] = "Footnote $(ARG1)";
+    Text[ polish ] = "Footnote $(ARG1)";
+    Text[ portuguese_brazilian ] = "Footnote $(ARG1)";
+    Text[ japanese ] = "Footnote $(ARG1)";
+    Text[ korean ] = "Footnote $(ARG1)";
+    Text[ chinese_simplified ] = "Footnote $(ARG1)";
+    Text[ chinese_traditional ] = "Footnote $(ARG1)";
+    Text[ turkish ] = "Footnote $(ARG1)";
+    Text[ arabic ] = "Footnote $(ARG1)";
+    Text[ catalan ] = "Footnote $(ARG1)";
+    Text[ thai ] = "Footnote $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_NAME
 {
     Text = "Endnote $(ARG1)" ;
     Text [ english ] = "Endnote $(ARG1)" ;
+    Text[ english_us ] = "Endnote $(ARG1)";
+    Text[ portuguese ] = "Endnote $(ARG1)";
+    Text[ russian ] = "Endnote $(ARG1)";
+    Text[ greek ] = "Endnote $(ARG1)";
+    Text[ dutch ] = "Endnote $(ARG1)";
+    Text[ french ] = "Endnote $(ARG1)";
+    Text[ spanish ] = "Endnote $(ARG1)";
+    Text[ finnish ] = "Endnote $(ARG1)";
+    Text[ italian ] = "Endnote $(ARG1)";
+    Text[ danish ] = "Endnote $(ARG1)";
+    Text[ swedish ] = "Endnote $(ARG1)";
+    Text[ polish ] = "Endnote $(ARG1)";
+    Text[ portuguese_brazilian ] = "Endnote $(ARG1)";
+    Text[ japanese ] = "Endnote $(ARG1)";
+    Text[ korean ] = "Endnote $(ARG1)";
+    Text[ chinese_simplified ] = "Endnote $(ARG1)";
+    Text[ chinese_traditional ] = "Endnote $(ARG1)";
+    Text[ turkish ] = "Endnote $(ARG1)";
+    Text[ arabic ] = "Endnote $(ARG1)";
+    Text[ catalan ] = "Endnote $(ARG1)";
+    Text[ thai ] = "Endnote $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_DESC
 {
     Text = "Endnote $(ARG1)" ;
     Text [ english ] = "Endnote $(ARG1)" ;
+    Text[ english_us ] = "Endnote $(ARG1)";
+    Text[ portuguese ] = "Endnote $(ARG1)";
+    Text[ russian ] = "Endnote $(ARG1)";
+    Text[ greek ] = "Endnote $(ARG1)";
+    Text[ dutch ] = "Endnote $(ARG1)";
+    Text[ french ] = "Endnote $(ARG1)";
+    Text[ spanish ] = "Endnote $(ARG1)";
+    Text[ finnish ] = "Endnote $(ARG1)";
+    Text[ italian ] = "Endnote $(ARG1)";
+    Text[ danish ] = "Endnote $(ARG1)";
+    Text[ swedish ] = "Endnote $(ARG1)";
+    Text[ polish ] = "Endnote $(ARG1)";
+    Text[ portuguese_brazilian ] = "Endnote $(ARG1)";
+    Text[ japanese ] = "Endnote $(ARG1)";
+    Text[ korean ] = "Endnote $(ARG1)";
+    Text[ chinese_simplified ] = "Endnote $(ARG1)";
+    Text[ chinese_traditional ] = "Endnote $(ARG1)";
+    Text[ turkish ] = "Endnote $(ARG1)";
+    Text[ arabic ] = "Endnote $(ARG1)";
+    Text[ catalan ] = "Endnote $(ARG1)";
+    Text[ thai ] = "Endnote $(ARG1)";
 };
 String STR_ACCESS_REPLACEMENT_POSTIT
 {
     Text = "[Post-It: $(ARG1)]" ;
     Text [ english ] = "[Annotation: $(ARG1)]" ;
+    Text[ english_us ] = "[Annotation]";
+    Text[ portuguese ] = "[Annotation]";
+    Text[ russian ] = "[Annotation]";
+    Text[ greek ] = "[Annotation]";
+    Text[ dutch ] = "[Annotation]";
+    Text[ french ] = "[Annotation]";
+    Text[ spanish ] = "[Annotation]";
+    Text[ finnish ] = "[Annotation]";
+    Text[ italian ] = "[Annotation]";
+    Text[ danish ] = "[Annotation]";
+    Text[ swedish ] = "[Annotation]";
+    Text[ polish ] = "[Annotation]";
+    Text[ portuguese_brazilian ] = "[Annotation]";
+    Text[ japanese ] = "[Annotation]";
+    Text[ korean ] = "[Annotation]";
+    Text[ chinese_simplified ] = "[Annotation]";
+    Text[ chinese_traditional ] = "[Annotation]";
+    Text[ turkish ] = "[Annotation]";
+    Text[ arabic ] = "[Annotation]";
+    Text[ catalan ] = "[Annotation]";
+    Text[ thai ] = "[Annotation]";
 };
 String STR_ACCESS_REPLACEMENT_FRAME
 {
     Text = "[Frame: $(ARG1)]" ;
     Text [ english ] = "[Frame: $(ARG1)]" ;
+    Text[ english_us ] = "[Frame: $(ARG1)]";
+    Text[ portuguese ] = "[Frame: $(ARG1)]";
+    Text[ russian ] = "[Frame: $(ARG1)]";
+    Text[ greek ] = "[Frame: $(ARG1)]";
+    Text[ dutch ] = "[Frame: $(ARG1)]";
+    Text[ french ] = "[Frame: $(ARG1)]";
+    Text[ spanish ] = "[Frame: $(ARG1)]";
+    Text[ finnish ] = "[Frame: $(ARG1)]";
+    Text[ italian ] = "[Frame: $(ARG1)]";
+    Text[ danish ] = "[Frame: $(ARG1)]";
+    Text[ swedish ] = "[Frame: $(ARG1)]";
+    Text[ polish ] = "[Frame: $(ARG1)]";
+    Text[ portuguese_brazilian ] = "[Frame: $(ARG1)]";
+    Text[ japanese ] = "[Frame: $(ARG1)]";
+    Text[ korean ] = "[Frame: $(ARG1)]";
+    Text[ chinese_simplified ] = "[Frame: $(ARG1)]";
+    Text[ chinese_traditional ] = "[Frame: $(ARG1)]";
+    Text[ turkish ] = "[Frame: $(ARG1)]";
+    Text[ arabic ] = "[Frame: $(ARG1)]";
+    Text[ catalan ] = "[Frame: $(ARG1)]";
+    Text[ thai ] = "[Frame]";
 };
 String STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS
 {
     Text = "[Bullet]" ;
     Text [ english ] = "[Bullet]" ;
+    Text[ english_us ] = "[Bullet]";
+    Text[ portuguese ] = "[Bullet]";
+    Text[ russian ] = "[Bullet]";
+    Text[ greek ] = "[Bullet]";
+    Text[ dutch ] = "[Bullet]";
+    Text[ french ] = "[Bullet]";
+    Text[ spanish ] = "[Bullet]";
+    Text[ finnish ] = "[Bullet]";
+    Text[ italian ] = "[Bullet]";
+    Text[ danish ] = "[Bullet]";
+    Text[ swedish ] = "[Bullet]";
+    Text[ polish ] = "[Bullet]";
+    Text[ portuguese_brazilian ] = "[Bullet]";
+    Text[ japanese ] = "[Bullet]";
+    Text[ korean ] = "[Bullet]";
+    Text[ chinese_simplified ] = "[Bullet]";
+    Text[ chinese_traditional ] = "[Bullet]";
+    Text[ turkish ] = "[Bullet]";
+    Text[ arabic ] = "[Bullet]";
+    Text[ catalan ] = "[Bullet]";
+    Text[ thai ] = "[Bullet]";
 };
 String STR_ACCESS_TABLE_DESC
 {
     Text = "$(ARG1) auf Seite $(ARG2)" ;
     Text [ english ] = "$(ARG1) on page $(ARG2)" ;
+    Text[ english_us ] = "$(ARG1) on page $(ARG2)";
+    Text[ portuguese ] = "$(ARG1) on page $(ARG2)";
+    Text[ russian ] = "$(ARG1) on page $(ARG2)";
+    Text[ greek ] = "$(ARG1) on page $(ARG2)";
+    Text[ dutch ] = "$(ARG1) on page $(ARG2)";
+    Text[ french ] = "$(ARG1) on page $(ARG2)";
+    Text[ spanish ] = "$(ARG1) on page $(ARG2)";
+    Text[ finnish ] = "$(ARG1) on page $(ARG2)";
+    Text[ italian ] = "$(ARG1) on page $(ARG2)";
+    Text[ danish ] = "$(ARG1) on page $(ARG2)";
+    Text[ swedish ] = "$(ARG1) on page $(ARG2)";
+    Text[ polish ] = "$(ARG1) on page $(ARG2)";
+    Text[ portuguese_brazilian ] = "$(ARG1) on page $(ARG2)";
+    Text[ japanese ] = "$(ARG1) on page $(ARG2)";
+    Text[ korean ] = "$(ARG1) on page $(ARG2)";
+    Text[ chinese_simplified ] = "$(ARG1) on page $(ARG2)";
+    Text[ chinese_traditional ] = "$(ARG1) on page $(ARG2)";
+    Text[ turkish ] = "$(ARG1) on page $(ARG2)";
+    Text[ arabic ] = "$(ARG1) on page $(ARG2)";
+    Text[ catalan ] = "$(ARG1) on page $(ARG2)";
+    Text[ thai ] = "$(ARG1) on page $(ARG2)";
 };
