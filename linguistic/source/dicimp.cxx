@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-25 10:07:44 $
+ *  last change: $Author: tl $ $Date: 2001-11-21 13:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
         }
         while (nIdx2 < nLen2 )
         {
-            if (aWord1[ nIdx2++ ] == cIgnChar)
+            if (aWord2[ nIdx2++ ] == cIgnChar)
                 nNumIgnChar2++;
         }
 
