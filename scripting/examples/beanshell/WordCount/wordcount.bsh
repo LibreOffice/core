@@ -1,11 +1,13 @@
+//Provides a word count of the selected text in A Writer document.
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XModel;
 import com.sun.star.view.XSelectionSupplier;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextRange;
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 
+// display the count in a Swing dialog
 void doDisplay(numWords) {
     wordsLabel = new JLabel("Word count = " + numWords);
     closeButton = new JButton("Close");
@@ -45,10 +47,10 @@ int wordcount() {
     return result;
 }
 
-// The context variable is of type XScriptContext and is available to
+// The XSCRIPTCONTEXT variable is of type XScriptContext and is available to
 // all BeanShell scripts executed by the Script Framework
 xModel = (XModel)
-    UnoRuntime.queryInterface(XModel.class, context.getDocument());
+    UnoRuntime.queryInterface(XModel.class, XSCRIPTCONTEXT.getDocument());
 //the writer controller impl supports the css.view.XSelectionSupplier interface
 xSelectionSupplier = (XSelectionSupplier)
     UnoRuntime.queryInterface(XSelectionSupplier.class, xModel.getCurrentController());
