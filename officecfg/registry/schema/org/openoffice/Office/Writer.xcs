@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $: vg $ $Date: 2004-11-15 13:27:14 $
+ *  last change: $: vg $ $Date: 2005-02-16 16:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,7 +1446,7 @@
 						<desc>Specifies if the vertical ruler is displayed.</desc>
 						<label>Vertical Ruler</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="IsVerticalRulerRight" oor:type="xs:boolean">
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
