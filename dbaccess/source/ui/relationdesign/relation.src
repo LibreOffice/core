@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:40:36 $
+ *  last change: $Author: oj $ $Date: 2001-03-21 13:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,27 +346,22 @@ String STR_RELATIONDESIGN
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
-    Text = "Die Datenbank unterstützt keine Relationen. Der Relationenenwurf wird wieder geschlossen!" ;
-    Text [ English ] = "The database doesn't support any relations. The relation design will be closed!" ;
-    Text [ english_us ] = "The database doesn't support any relations. The relation design will be closed!" ;
-    Text[ portuguese ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ russian ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ greek ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ dutch ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ french ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ spanish ] = "La base de datos no apoya ninguna relación. ¡El diseño de relación se cerrará!";
-    Text[ italian ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ danish ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ swedish ] = "Databasen understöder inte några relationer. Relationsutkastet stängs igen!";
-    Text[ polish ] = "Baza danych nie obs³uguje relacji. Projekt relacji zostanie zamkniêty!";
-    Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ japanese ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ korean ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ chinese_simplified ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ chinese_traditional ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ arabic ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text = "Die Datenbank unterstützt keine Relationen!" ;
+    Text [ English ] = "The database doesn't support any relations!" ;
+    Text [ english_us ] = "The database doesn't support any relations!" ;
+    Text[ portuguese ] = "The database doesn't support any relations!";
+    Text[ russian ] = "The database doesn't support any relations!";
+    Text[ greek ] = "The database doesn't support any relations!";
 };
+QueryBox RELATION_DESIGN_SAVEMODIFIED
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message = "Der Relationeneentwurf wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Message [ English ] = "The relation design has been modified.\nDo you want to save your changes?" ;
+    Message [ english_us ] = "The relation design has been changed.\nDo you want to save the changes?" ;
+};
+
 
 
 

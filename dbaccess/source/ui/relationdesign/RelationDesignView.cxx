@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDesignView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:46:50 $
+ *  last change: $Author: oj $ $Date: 2001-03-21 13:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,11 @@ long ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0L;
     if(rNEvt.GetType() == EVENT_GETFOCUS)
     {
-        m_pTableView->GrabTabWinFocus();
-        nDone = 1L;
+        if(!m_pTableView->HasChildPathFocus())
+        {
+            m_pTableView->GrabTabWinFocus();
+            nDone = 1L;
+        }
     }
     return nDone ? nDone : OJoinDesignView::PreNotify(rNEvt);
 }

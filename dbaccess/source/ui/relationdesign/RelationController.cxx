@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:07 $
+ *  last change: $Author: oj $ $Date: 2001-03-21 13:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,22 @@ ORelationController::~ORelationController()
 {
 }
 // -----------------------------------------------------------------------------
+FeatureState ORelationController::GetState(sal_uInt16 _nId)
+{
+    FeatureState aReturn;
+    switch (_nId)
+    {
+        case ID_REALTION_ADD_RELATION:
+            aReturn.bEnabled = m_bEditable;
+            aReturn.aState = ::cppu::bool2any(sal_False);
+            break;
+        default:
+            aReturn = OJoinController::GetState(_nId);
+            break;
+    }
+    return aReturn;
+}
+// -----------------------------------------------------------------------------
 void ORelationController::Execute(sal_uInt16 _nId)
 {
     switch(_nId)
@@ -334,18 +350,29 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
                 ODataView* pWindow = getView();
                 InfoBox(pWindow, aMessage).Execute();
             }
-            dispose(); // we are helpless without a connection
-            throw Exception(::rtl::OUString::createFromAscii("The data source does not support relations."), static_cast< XController* >(this));
+            m_bEditable = sal_False;
         }
-        // check if this database supports relations
-        if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
-        {
+        else if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
+        {// check if this database supports relations
             {
                 OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
                 aDlg.Execute();
             }
-            dispose();
-            throw Exception(::rtl::OUString::createFromAscii("The data source does not support relations."), static_cast< XController* >(this));
+            m_bEditable = sal_False;
+        }
+
+        // we need a datasource
+        if(m_xConnection.is())
+        {
+            Reference<XChild> xChild(m_xConnection,UNO_QUERY);
+            if(xChild.is())
+                m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
+        }
+        else
+        {
+            Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+            xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
+            OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
         }
 
         Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
@@ -355,10 +382,6 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         // load the layoutInformation
         try
         {
-            Reference<XChild> xChild(m_xConnection,UNO_QUERY);
-            if(xChild.is())
-                m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
-
             OSL_ENSURE(m_xDataSource.is(),"We need a datasource from our connection!");
             if(m_xDataSource.is())
             {
@@ -422,6 +445,20 @@ void SAL_CALL ORelationController::elementReplaced(const ::com::sun::star::conta
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ORelationController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
+    if(m_xConnection.is() && m_bModified)
+    {
+        QueryBox aQry(getView(), ModuleRes(RELATION_DESIGN_SAVEMODIFIED));
+        switch (aQry.Execute())
+        {
+            case RET_YES:
+                Execute(ID_BROWSER_SAVEDOC);
+                break;
+            case RET_CANCEL:
+                return sal_False;
+            default:
+                break;
+        }
+    }
     return sal_True;
 }
 // -----------------------------------------------------------------------------
