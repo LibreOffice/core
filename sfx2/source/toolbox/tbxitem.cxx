@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-24 15:13:54 $
+ *  last change: $Author: cd $ $Date: 2002-10-11 15:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <framework/menuconfiguration.hxx>
+#include <framework/addonsoptions.hxx>
 #include <vcl/taskpanelist.hxx>
 
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
@@ -134,6 +135,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SfxAppToolBoxControl_Impl, SfxStringItem);
 SFX_IMPL_TOOLBOX_CONTROL(SfxDragToolBoxControl_Impl, SfxStringItem);
 SFX_IMPL_TOOLBOX_CONTROL(SfxHistoryToolBoxControl_Impl, SfxStringItem);
 SFX_IMPL_TOOLBOX_CONTROL(SfxReloadToolBoxControl_Impl, SfxBoolItem);
+SFX_IMPL_TOOLBOX_CONTROL(SfxAddonsToolBoxControl_Impl, SfxVoidItem);
 
 //--------------------------------------------------------------------
 
@@ -703,6 +705,7 @@ void SfxAppToolBoxControl_Impl::StateChanged
 void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
 {
     aTimer.Stop();
+
     if( aLastURL.Len() )
     {
         if ( aLastURL.CompareToAscii( "slot:", 5 ) == COMPARE_EQUAL )
@@ -819,7 +822,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
         pMenu->SetSelectHdl( Link( &(this->GetBindings()), Select_Impl ) );
         pMenu->SetActivateHdl( LINK( this, SfxAppToolBoxControl_Impl, Activate ));
         rBox.SetItemDown( GetId(), TRUE );
-        USHORT nSelected = pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_UP );
+        USHORT nSelected = pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_DOWN );
         if ( nSelected )
         {
             aLastURL = pMenu->GetItemCommand( nSelected );
@@ -843,6 +846,152 @@ void SfxAppToolBoxControl_Impl::Click( )
 }
 
 //--------------------------------------------------------------------
+
+SfxAddonsToolBoxControl_Impl::SfxAddonsToolBoxControl_Impl
+(
+    USHORT nId, ToolBox& rBox, SfxBindings &rBindings
+)
+    : SfxToolBoxControl( nId, rBox, rBindings )
+    , bBigImages( FALSE )
+    , pMenu( 0 )
+{
+    rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );
+    rBox.SetItemBits( nId,  rBox.GetItemBits( nId ) | TIB_DROPDOWN);
+
+    // Determine the current background color of the menus
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    m_bWasHiContrastMode    = rSettings.GetMenuColor().IsDark();
+    m_bShowMenuImages       = SvtMenuOptions().IsMenuIconsEnabled();
+}
+
+SfxAddonsToolBoxControl_Impl::~SfxAddonsToolBoxControl_Impl()
+{
+    delete pMenu;
+}
+
+void SfxAddonsToolBoxControl_Impl::RefreshMenuImages( Menu* pMenu )
+{
+    framework::AddonsOptions    aAddonOptions;
+
+    Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
+    USHORT nCount = pMenu->GetItemCount();
+    for ( USHORT nPos = 0; nPos < nCount; nPos++ )
+    {
+        USHORT nId = pMenu->GetItemId( nPos );
+        if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
+        {
+            if ( m_bShowMenuImages )
+            {
+                sal_Bool        bImageSet = sal_False;
+                ::rtl::OUString aImageId;
+
+                ::framework::MenuConfiguration::Attributes* pMenuAttributes =
+                    (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );
+
+                if ( pMenuAttributes )
+                    aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
+
+                if ( aImageId.getLength() > 0 )
+                {
+                    Image aImage = GetImage( aXFrame, aImageId, FALSE, m_bWasHiContrastMode );
+                    if ( !!aImage )
+                    {
+                        bImageSet = sal_True;
+                        pMenu->SetItemImage( nId, aImage );
+                    }
+                }
+
+                if ( !bImageSet )
+                {
+                    rtl::OUString aMenuItemCommand = pMenu->GetItemCommand( nId );
+                    Image aImage = GetImage( aXFrame, aMenuItemCommand, FALSE, m_bWasHiContrastMode );
+                    if ( !aImage )
+                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, FALSE, m_bWasHiContrastMode );
+
+                    pMenu->SetItemImage( nId, aImage );
+                }
+            }
+            else
+                pMenu->SetItemImage( nId, Image() );
+
+            // Go recursive through the sub-menus
+            PopupMenu* pPopup = pMenu->GetPopupMenu( nId );
+            if ( pPopup )
+                RefreshMenuImages( pPopup );
+        }
+    }
+}
+
+void SfxAddonsToolBoxControl_Impl::StateChanged
+(
+    USHORT              nId,
+    SfxItemState        eState,
+    const SfxPoolItem*  pState
+)
+{
+    SfxToolBoxControl::StateChanged( nId, eState, pState );
+}
+
+//--------------------------------------------------------------------
+
+void SfxAddonsToolBoxControl_Impl::Select( BOOL bMod1 )
+{
+    SfxApplication* pApp = SFX_APP();
+    ToolBox& rBox = GetToolBox();
+    Rectangle aRect(  rBox.GetItemRect( GetId() ) );
+
+    USHORT nId = GetId();
+    BOOL bNew = FALSE;
+
+    if ( !pMenu )
+    {
+        Reference <com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
+        ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
+        Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
+        pMenu = aConf.CreateAddonMenu( aXFrame );
+    }
+
+    if( pMenu )
+    {
+        pMenu->SetSelectHdl( Link( &(this->GetBindings()), Select_Impl ) );
+        pMenu->SetActivateHdl( LINK( this, SfxAddonsToolBoxControl_Impl, Activate ));
+        rBox.SetItemDown( GetId(), TRUE );
+        pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_DOWN );
+        rBox.SetItemDown( GetId(), FALSE );
+    }
+}
+
+//--------------------------------------------------------------------
+
+IMPL_LINK( SfxAddonsToolBoxControl_Impl, Activate, Menu *, pMenu )
+{
+    if ( pMenu )
+    {
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
+        BOOL bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
+
+        if (( bIsHiContrastMode != m_bWasHiContrastMode ) ||
+            ( bShowMenuImages   != m_bShowMenuImages    )    )
+        {
+            m_bWasHiContrastMode = bIsHiContrastMode;
+            m_bShowMenuImages    = bShowMenuImages;
+            RefreshMenuImages( pMenu );
+        }
+    }
+
+    return TRUE;
+}
+
+//--------------------------------------------------------------------
+
+void SfxAddonsToolBoxControl_Impl::Click( )
+{
+    SfxToolBoxControl::Click();
+}
+
+//--------------------------------------------------------------------
+
 
 SfxDragToolBoxControl_Impl::SfxDragToolBoxControl_Impl
 (
