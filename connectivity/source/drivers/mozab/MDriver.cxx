@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:28:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,13 +193,34 @@ sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
     // here we have to look if we support this url format
-    return acceptsURL_Stat(url);
+    return acceptsURL_Stat(url) != Unknown;
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    if ( acceptsURL(url) )
+    {
+        ::std::vector< DriverPropertyInfo > aDriverInfo;
+        if ( acceptsURL_Stat(url) == LDAP )
+        {
+            aDriverInfo.push_back(DriverPropertyInfo(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN"))
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Base DN."))
+                    ,sal_False
+                    ,::rtl::OUString()
+                    ,Sequence< ::rtl::OUString >())
+                    );
+            aDriverInfo.push_back(DriverPropertyInfo(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxRowCount"))
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Records (max.)"))
+                    ,sal_False
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("100"))
+                    ,Sequence< ::rtl::OUString >())
+                    );
+        }
+        return Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size());
+    }
+    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     // if you have somthing special to say return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
@@ -214,7 +235,7 @@ sal_Int32 SAL_CALL MozabDriver::getMinorVersion(  ) throw(RuntimeException)
     return 0; // depends on you
 }
 // --------------------------------------------------------------------------------
-sal_Bool MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
+EDriverType MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
 {
     // Skip 'sdbc:mozab: part of URL
     //
@@ -229,24 +250,28 @@ sal_Bool MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
         // There isn't any subschema: - but could be just subschema
         if ( aAddrbookURI.getLength() > 0 )
             aAddrbookScheme= aAddrbookURI;
-        else if(url == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("sdbc:address:") ))
-            return sal_True; // special case here
+        else if(url == ::rtl::OUString::createFromAscii("sdbc:address:") )
+            return Unknown; // TODO check
         else
-            return sal_False;
+            return Unknown;
     }
     else
         aAddrbookScheme = aAddrbookURI.copy(0, nLen);
 
+    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_MOZILLA() ) == 0 )
+        return Mozilla;
+    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_LDAP() ) == 0 )
+        return LDAP;
 
-
-    return  ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_MOZILLA() ) == 0 )        ||
-            ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_LDAP() ) == 0 )
 #if defined(WNT) || defined(WIN)
-                                                                                ||
-            ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 )   ||
-            ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 )
+    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 )
+        return Outlook;
+    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 )
+        return OutlookExpress;
+
 #endif
-            ;
+
+    return Unknown;
 }
 // -----------------------------------------------------------------------------
 const sal_Char* MozabDriver::getSDBC_SCHEME_MOZILLA()
