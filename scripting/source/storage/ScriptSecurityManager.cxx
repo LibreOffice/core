@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-05 11:36:08 $
+ *  last change: $Author: jmrice $ $Date: 2003-03-07 11:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@ static const int PERMISSION_NEVER = 0;
 static const int PERMISSION_PATHLIST = 1;
 static const int PERMISSION_ALWAYS = 2;
 
+static const int ALLOW_RUN = 1;
+static const int ADD_TO_PATH = 2;
+
 //*************************************************************************
 // ScriptSecurityManager Constructor
 ScriptSecurityManager::ScriptSecurityManager(
@@ -182,11 +185,11 @@ throw ( RuntimeException )
         Sequence< ::rtl::OUString > logicalNames = xScriptInfoAccess->getScriptLogicalNames();
         if( !logicalNames.getLength() ) // we have no logical names
         {
-            m_permissionSettings[ scriptStorageURL ] = newPerm;
             return;
         }
 
         // we have some scripts so read config & decide on that basis
+        // Setup flags: m_runMacroSetting, m_warning, m_confirmationRequired,
         readConfiguration();
     }
     catch ( RuntimeException & rte )
@@ -216,11 +219,10 @@ throw ( RuntimeException )
             bool match = isSecureURL( path );
             if( match &&  ( m_warning == sal_True ) )
             {
-                OUString dummyStr;
                 OSL_TRACE("path match & warning dialog");
-                int result = (int)executeDialog( dummyStr );
+                int result = (int)executeStandardDialog();
                 OSL_TRACE("result = %d", (int)result);
-                if ( (result&1) == 1 )
+                if ( (result&ALLOW_RUN) == ALLOW_RUN )
                 {
                     newPerm.execPermission=sal_True;
                 }
@@ -235,13 +237,13 @@ throw ( RuntimeException )
             else if( m_confirmationRequired == sal_True )
             {
                 OSL_TRACE("no path match & confirmation dialog");
-                int result = (int)executeDialog( path );
+                int result = (int)executePathDialog( path );
                 OSL_TRACE("result = %d", (int)result);
-                if ( (result&1) == 1 )
+                if ( (result&ALLOW_RUN) == ALLOW_RUN )
                 {
                     newPerm.execPermission=sal_True;
                 }
-                if ( (result&2) == 2 )
+                if ( (result&ADD_TO_PATH) == ADD_TO_PATH )
                 {
                     /* if checkbox clicked then need to add path to registry*/
                     addToSecurePaths(path);
@@ -253,9 +255,8 @@ throw ( RuntimeException )
             if( m_warning == sal_True )
             {
                 OSL_TRACE("always & warning dialog");
-                OUString dummyStr;
-                short result = executeDialog(  dummyStr );
-                if ( result&1 == 1 )
+                short result = executeStandardDialog();
+                if ( (result&ALLOW_RUN) == ALLOW_RUN )
                 {
                     newPerm.execPermission=sal_True;
                 }
@@ -316,6 +317,19 @@ bool ScriptSecurityManager::isSecureURL( const OUString & path )
         }
     }
     return match;
+}
+
+short ScriptSecurityManager::executeStandardDialog()
+throw ( RuntimeException )
+{
+    OUString dummyString;
+    return executeDialog( dummyString );
+}
+
+short ScriptSecurityManager::executePathDialog( const OUString & path )
+throw ( RuntimeException )
+{
+    return executeDialog( path );
 }
 
 short ScriptSecurityManager::executeDialog( const OUString & path )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:34 $
+ *  last change: $Author: jmrice $ $Date: 2003-03-07 11:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,13 +493,15 @@ XInitialization {
         _xDialog.execute();
         ScriptRuntimeForJava.DEBUG("*DF* After execute " );
 
-        if ( _pushed.equals( _runButtonName ) )
+       // 12119: Checking Add to path applied even if user selects not to run
+       if ( _pushed.equals( _runButtonName ) )
         {
             result += 1;
-        }
-        if ( _checkBoxState == 1 )
-        {
-            result +=2;
+
+            if ( _checkBoxState == 1 )
+            {
+                result +=2;
+            }
         }
         return result;
     }

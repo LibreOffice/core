@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-03-05 11:36:08 $
+*  last change: $Author: jmrice $ $Date: 2003-03-07 11:02:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -108,9 +108,15 @@ public:
     void removePermissionSettings ( ::rtl::OUString & scriptStorageURL );
 private:
     void readConfiguration() throw (css::uno::RuntimeException);
+
     short executeDialog ( const rtl::OUString & path )
         throw (css::uno::RuntimeException);
-    void addToSecurePaths ( const rtl::OUString & path )
+    short executeStandardDialog()
+        throw ( css::uno::RuntimeException );
+    short executePathDialog(const rtl::OUString & path)
+        throw ( css::uno::RuntimeException );
+
+        void addToSecurePaths ( const rtl::OUString & path )
         throw (css::uno::RuntimeException);
     bool isSecureURL( const rtl::OUString & path );
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
