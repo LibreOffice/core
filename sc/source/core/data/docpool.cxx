@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-12 10:40:43 $
+ *  last change: $Author: nn $ $Date: 2001-08-08 10:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,8 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
         pSecondary  ( pSecPool )
 {
     //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
-    Font aStdFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, 0 );
+    Font aStdFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
+                                                    DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem* pStdFont = new SvxFontItem( aStdFont.GetFamily(),
                                             aStdFont.GetName(), aStdFont.GetStyleName(),
                                             aStdFont.GetPitch(), aStdFont.GetCharSet(),

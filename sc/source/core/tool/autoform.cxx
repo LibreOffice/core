@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
+ *  last change: $Author: nn $ $Date: 2001-08-08 10:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,7 +943,8 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
     pData->SetName(aName);
 
     //  Default-Font und Groesse
-    Font aStdFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, 0 );
+    Font aStdFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
+                                                    DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aFontItem( aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
                             aStdFont.GetPitch(), aStdFont.GetCharSet() );
     SvxFontHeightItem aHeight( 200 );       // 10 pt;
