@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.37 2004-03-19 12:11:16 obo Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.38 2004-06-26 17:28:38 hjs Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: obo $ $Date: 2004-03-19 12:11:16 $ $Revision: 1.37 $
+ //  $Author: hjs $ $Date: 2004-06-26 17:28:38 $ $Revision: 1.38 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -25,9 +25,8 @@ ModalDialog DLG_REL_PROPERTIES
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 186 , 205 ) ;
-    Text = "Relationen" ;
-    Text [ english ] = "Relations" ;
-    Text [ english_us ] = "Relations" ;
+    Text [ de ] = "Relationen" ;
+    Text [ en-US ] = "Relations" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
@@ -43,35 +42,8 @@ ModalDialog DLG_REL_PROPERTIES
         {
             Pos = MAP_APPFONT ( 6 , 3 ) ;
             Size = MAP_APPFONT ( 174 , 8 ) ;
-            Text = "beteiligte Tabellen" ;
-            Text [ English ] = "involved tables" ;
-            Text[ english_us ] = "Tables involved";
-            Text[ portuguese ] = "Tabelas consideradas";
-            Text[ russian ] = "âêëş÷åííûå òàáëèöû";
-            Text[ greek ] = "åìğëåêüìåíïé ğßíáêåò";
-            Text[ dutch ] = "betrokken tabellen";
-            Text[ french ] = "Tables impliquées";
-            Text[ spanish ] = "Tablas implicadas";
-            Text[ italian ] = "Tabelle considerate";
-            Text[ danish ] = "involverede tabeller";
-            Text[ swedish ] = "inkluderade tabeller";
-            Text[ polish ] = "implikowane tabele";
-            Text[ portuguese_brazilian ] = "tabelas consideradas";
-            Text[ japanese ] = "é–¢é€£ãƒ†ãƒ¼ãƒ–ãƒ«";
-            Text[ korean ] = "ê´€ë ¨ í…Œì´ë¸”";
-            Text[ chinese_simplified ] = "æœ‰å…³è”çš„è¡¨æ ¼";
-            Text[ chinese_traditional ] = "ç›¸é—œçš„è¡¨æ ¼";
-            Text[ arabic ] = "ÇáÌÏÇæá ÇáãÚäíÉ";
-            Text[ turkish ] = "İlgili tablolar";
-            Text[ catalan ] = "taules implicades";
-            Text[ finnish ] = "Tables involved";
-            Text[ thai ] = "Tables involved";
-            Text[ czech ] = "PouÅ¾itÃ© tabulky";
-            Text[ hebrew ] = "beteiligte Tabellen";
-            Text[ hindi ] = "Tables involved";
-            Text[ slovak ] = "ZahrnutÃ© tabuÄ¾ky";
-            Text[ hungarian ] = "Ã‰rintett tÃ¡blÃ¡k";
-            Text[ slovenian ] = "VkljuÄene so tabele";
+            Text [ de ] = "beteiligte Tabellen" ;
+            Text [ en-US ] = "Tables involved";
         };
 
         ListBox LB_LEFT_TABLE
@@ -98,35 +70,8 @@ ModalDialog DLG_REL_PROPERTIES
         {
             Pos = MAP_APPFONT ( 6 , 29 ) ;
             Size = MAP_APPFONT ( 174 , 8 ) ;
-            Text = "beteiligte Felder" ;
-            Text [ English ] = "involved fields" ;
-            Text[ english_us ] = "Fields involved";
-            Text[ portuguese ] = "Campos considerados";
-            Text[ russian ] = "âêëş÷åííûå ïîëÿ";
-            Text[ greek ] = "åìğëåêüìåíá ğåäßá";
-            Text[ dutch ] = "betrokken velden";
-            Text[ french ] = "Champs impliqués";
-            Text[ spanish ] = "Campos implicados";
-            Text[ italian ] = "Campi considerati";
-            Text[ danish ] = "involverede felter";
-            Text[ swedish ] = "inkluderade fält";
-            Text[ polish ] = "implikowane pola";
-            Text[ portuguese_brazilian ] = "campos considerados";
-            Text[ japanese ] = "é–¢é€£ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
-            Text[ korean ] = "ê´€ë ¨ í•„ë“œ";
-            Text[ chinese_simplified ] = "æœ‰å…³è”çš„å­—æ®µ";
-            Text[ chinese_traditional ] = "ç›¸é—œçš„æ¬„ä½";
-            Text[ arabic ] = "ÇáÍŞæá ÇáãÚäíÉ";
-            Text[ turkish ] = "İlgili alanlar";
-            Text[ catalan ] = "camps implicats";
-            Text[ finnish ] = "Fields involved";
-            Text[ thai ] = "Fields involved";
-            Text[ czech ] = "PouÅ¾itÃ¡ pole";
-            Text[ hebrew ] = "beteiligte Felder";
-            Text[ hindi ] = "Fields involved";
-            Text[ slovak ] = "ZahrnutÃ© polia";
-            Text[ hungarian ] = "Ã‰rintett mezÅ‘k";
-            Text[ slovenian ] = "VkljuÄena so polja";
+            Text [ de ] = "beteiligte Felder" ;
+            Text [ en-US ] = "Fields involved";
         };
     };
 
@@ -137,36 +82,9 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text = "Update Optionen" ;
-        Text [ English ] = "Update options" ;
-        Text [ english_us ] = "Update options" ;
-        Text [ portuguese_brazilian ] = "Atualizar opções" ;
-        Text [ swedish ] = "Uppdateringsalternativ" ;
-        Text [ danish ] = "Opdateringsindstillinger" ;
-        Text [ italian ] = "Opzioni di aggiornamento" ;
-        Text [ spanish ] = "Opciones de actualización" ;
-        Text [ french ] = "Options de mise à jour" ;
-        Text [ dutch ] = "Bijwerkopties" ;
-        Text [ portuguese ] = "Actualizar opções" ;
-        Text[ chinese_simplified ] = "æ›´æ–°é€‰é¡¹";
-        Text[ russian ] = "Ïàğàìåòğû îáíîâëåíèÿ";
-        Text[ polish ] = "Opcje aktualizacji";
-        Text[ japanese ] = "æ›´æ–°ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-        Text[ chinese_traditional ] = "æ›´æ–°çš„é¸é …";
-        Text[ arabic ] = "ÎíÇÑÇÊ ÇáÊÍÏíË";
-        Text[ greek ] = "Åğéëïãİò åíçìİñùóçò";
-        Text[ korean ] = "ì—…ë°ì´íŠ¸ ì˜µì…˜";
-        Text[ turkish ] = "Seçenekleri güncelle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opcions d'actualització";
-        Text[ finnish ] = "Päivitä asetukset";
-        Text[ thai ] = "à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "Aktualizovat volby";
-        Text[ hebrew ] = "Update Optionen";
-        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ªà¥‹à¤‚ à¤•à¥‹ à¤…à¤ªà¤¡à¥‡à¤Ÿà¥ à¤•à¤°à¥‹";
-        Text[ slovak ] = "AktualizovaÅ¥ voÄ¾by";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok frissÃ­tÃ©se";
-        Text[ slovenian ] = "MoÅ¾nosti posodobitve";
+        Text [ de ] = "Update Optionen" ;
+        Text [ en-US ] = "Update options" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_NO_CASC_UPD
     {
@@ -174,180 +92,45 @@ ModalDialog DLG_REL_PROPERTIES
         Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;
         HelpId  = HID_DLG_REL_NO_CASC_UPD;
-        Text = "~Keine Aktion" ;
-        Text [ English ] = "No action" ;
-        Text [ portuguese ] = "~Nenhuma acção" ;
-        Text [ english_us ] = "~No action" ;
-        Text [ portuguese_brazilian ] = "~Nenhuma ação" ;
-        Text [ swedish ] = "~Ingen åtgärd" ;
-        Text [ danish ] = "~Ingen handling" ;
-        Text [ italian ] = "~Nessuna operazione" ;
-        Text [ spanish ] = "~Ninguna acción" ;
-        Text [ french ] = "~Aucune action" ;
-        Text [ dutch ] = "~Geen handeling" ;
-        Text[ chinese_simplified ] = "æ— æ“ä½œ(~N)";
-        Text[ russian ] = "Áåç äåéñòâèÿ";
-        Text[ polish ] = "Bez akcji";
-        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãªã—(~N)";
-        Text[ chinese_traditional ] = "ç„¡å‹•ä½œ(~N)";
-        Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
-        Text[ greek ] = "~ÊáìéÜ åíİñãåéá";
-        Text[ korean ] = "ì‘ë™ ì—†ìŒ(~N)";
-        Text[ turkish ] = "~İşlem yok";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cap acció";
-        Text[ finnish ] = "~Ei toimintoa";
-        Text[ thai ] = "~No action";
-        Text[ czech ] = "Å½Ã¡dnÃ¡ akce";
-        Text[ hebrew ] = "~Keine Aktion";
-        Text[ hindi ] = "~No action";
-        Text[ slovak ] = "~NekonaÅ¥";
-        Text[ hungarian ] = "~Nincs teendÅ‘";
-        Text[ slovenian ] = "Brez deja~nja";
+        Text [ de ] = "~Keine Aktion" ;
+        Text [ en-US ] = "~No action" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_UPD
     {
         Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_UPD ;
-        Text = "K~ask. Update" ;
-        Text [ English ] = "Cascading update" ;
-        Text [ portuguese ] = "Actualizar ~cascata" ;
-        Text [ english_us ] = "~Update cascade" ;
-        Text [ portuguese_brazilian ] = "Atualizar ~cascata" ;
-        Text [ swedish ] = "Uppdatera k~askad" ;
-        Text [ danish ] = "~Opdater kaskade" ;
-        Text [ italian ] = "~Aggiorna cascata" ;
-        Text [ spanish ] = "Actualizar ~cascada" ;
-        Text [ french ] = "Mise à jour ~cascade" ;
-        Text [ dutch ] = "~Casc. update" ;
-        Text[ chinese_simplified ] = "æ›´æ–°å±‚å (~U)";
-        Text[ russian ] = "Îáíîâëåíèå êàñêàäà";
-        Text[ polish ] = "Aktualizuj kaskadê";
-        Text[ japanese ] = "ã‚«ã‚¹ã‚±ãƒ¼ãƒ‰ã®æ›´æ–°(~U)";
-        Text[ chinese_traditional ] = "æ›´æ–°å±¤ç–Š(~U)";
-        Text[ arabic ] = "ÊÍÏíË ÇáÊÊÇáí";
-        Text[ greek ] = "Åíçìİñùóç åğéêÜëõøçò";
-        Text[ korean ] = "ê³„ë‹¨ì‹ ì—…ë°ì´íŠ¸(~U)";
-        Text[ turkish ] = "~Güncelleme basamağı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Actualitza en cascada";
-        Text[ finnish ] = "~Päivitä lomitus";
-        Text[ thai ] = "~Update cascade";
-        Text[ czech ] = "KaskÃ¡dovÃ¡ aktualizace";
-        Text[ hebrew ] = "K~ask. Update";
-        Text[ hindi ] = "~Update cascade";
-        Text[ slovak ] = "Akt~ualizovaÅ¥ kaskÃ¡du";
-        Text[ hungarian ] = "KaszkÃ¡d ~frissÃ­tÃ©se";
-        Text[ slovenian ] = "~Posodobi kaskadno";
+        Text [ de ] = "K~ask. Update" ;
+        Text [ en-US ] = "~Update cascade" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_UPD_NULL
     {
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_UPD_NULL ;
-        Text = "~Null setzen" ;
-        Text [ English ] = "Set null" ;
-        Text [ portuguese ] = "Definir ~Null" ;
-        Text [ english_us ] = "~Set null" ;
-        Text [ portuguese_brazilian ] = "Definir ~vazio" ;
-        Text [ swedish ] = "Sätt ~null" ;
-        Text [ danish ] = "Angiv ~null (ingen værdi)" ;
-        Text [ italian ] = "Imposta ~zero" ;
-        Text [ spanish ] = "Definir ~null" ;
-        Text [ french ] = "Définir ~Null" ;
-        Text [ dutch ] = "~Op nul zetten" ;
-        Text[ chinese_simplified ] = "è®¾å®šé›¶(~S)";
-        Text[ russian ] = "Óñòàíîâèòü íóëü";
-        Text[ polish ] = "OsadŸ zero";
-        Text[ japanese ] = "ã‚¼ãƒ­ã«è¨­å®š(~S)";
-        Text[ chinese_traditional ] = "è¨­å®šé›¶(~S)";
-        Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
-        Text[ greek ] = "Ïñéóìüò ìçäİ~í";
-        Text[ korean ] = "0 ê°’ ì„¤ì •(~S)";
-        Text[ turkish ] = "~Sıfıra eşitle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Defineix com a nul";
-        Text[ finnish ] = "~Määritä tyhjäksi";
-        Text[ thai ] = "~Set null";
-        Text[ czech ] = "Nastavit prÃ¡zdnÃ½";
-        Text[ hebrew ] = "~Null setzen";
-        Text[ hindi ] = "~Set null";
-        Text[ slovak ] = "Na~staviÅ¥ null";
-        Text[ hungarian ] = "~Null Ã©rtÃ©k hasznÃ¡lata";
-        Text[ slovenian ] = "~Nastavi null";
+        Text [ de ] = "~Null setzen" ;
+        Text [ en-US ] = "~Set null" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_UPD_DEFAULT
     {
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_UPD_DEFAULT ;
-        Text = "~Default setzen" ;
-        Text [ English ] = "Set default" ;
-        Text [ portuguese ] = "Definir ~padrão" ;
-        Text [ english_us ] = "Set ~default" ;
-        Text [ portuguese_brazilian ] = "Definir ~padrão" ;
-        Text [ swedish ] = "Sätt stan~dard" ;
-        Text [ danish ] = "Angiv ~standard" ;
-        Text [ italian ] = "~Preimpostazione" ;
-        Text [ spanish ] = "~Predeterminar" ;
-        Text [ french ] = "~Définir par défaut" ;
-        Text [ dutch ] = "Op ~standaard zetten" ;
-        Text[ chinese_simplified ] = "è®¾å®šé»˜è®¤(~D)";
-        Text[ russian ] = "Óñòàíîâèòü ïî óìîë÷àíèş";
-        Text[ polish ] = "OsadŸ domyœlne";
-        Text[ japanese ] = "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è¨­å®š(~D)";
-        Text[ chinese_traditional ] = "è¨­å®šé»˜èª(~D)";
-        Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
-        Text[ greek ] = "Ïñéóìüò ğñïåğéëïãŞò";
-        Text[ korean ] = "ê¸°ë³¸ ì„¤ì •(~D)";
-        Text[ turkish ] = "~Varsayılan olarak ata";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Defineix el valor per ~defecte";
-        Text[ finnish ] = "Määritä ~oletusarvo";
-        Text[ thai ] = "Set ~default";
-        Text[ czech ] = "Nastavit vÃ½chozÃ­";
-        Text[ hebrew ] = "~Default setzen";
-        Text[ hindi ] = "Set ~default";
-        Text[ slovak ] = "NastaviÅ¥ ako vÃ½cho~dzie";
-        Text[ hungarian ] = "~AlapÃ©rtÃ©k hasznÃ¡lata";
-        Text[ slovenian ] = "Nastavi ~privzeto";
+        Text [ de ] = "~Default setzen" ;
+        Text [ en-US ] = "Set ~default" ;
+        Text [ x-comment ] = " ";
     };
 // zweite FixedLine
     FixedLine FL_CASC_DEL
     {
         Pos = MAP_APPFONT ( 96 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text = "Löschoptionen" ;
-        Text [ English ] = "Delete options" ;
-        Text [ english_us ] = "Delete options" ;
-        Text [ portuguese_brazilian ] = "Opções de exclusão" ;
-        Text [ swedish ] = "Raderingsalternativ" ;
-        Text [ danish ] = "Sletningsindstillinger" ;
-        Text [ italian ] = "Opzioni di eliminazione" ;
-        Text [ spanish ] = "Opciones para borrar" ;
-        Text [ french ] = "Options de suppression" ;
-        Text [ dutch ] = "Wisopties" ;
-        Text [ portuguese ] = "Opções de eliminação" ;
-        Text[ chinese_simplified ] = "åˆ é™¤çš„é€‰é¡¹";
-        Text[ russian ] = "Ïàğàìåòğû óäàëåíèÿ";
-        Text[ polish ] = "Opcje usuwania";
-        Text[ japanese ] = "å‰Šé™¤ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-        Text[ chinese_traditional ] = "åˆªé™¤çš„é¸é …";
-        Text[ arabic ] = "ÎíÇÑÇÊ ÇáÍĞİ";
-        Text[ greek ] = "Åğéëïãİò äéáãñáöŞò";
-        Text[ korean ] = "ì˜µì…˜ ì‚­ì œ";
-        Text[ turkish ] = "Seçenekleri sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opcions d'eliminació";
-        Text[ finnish ] = "Poista asetukset";
-        Text[ thai ] = "à¸¥à¸šà¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "ZruÅ¡it volby";
-        Text[ hebrew ] = "LÃ¶schoptionen";
-        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "ZruÅ¡iÅ¥ voÄ¾by";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok tÃ¶rlÃ©se";
-        Text[ slovenian ] = "MoÅ¾nosti brisanja";
+        Text [ de ] = "Löschoptionen" ;
+        Text [ en-US ] = "Delete options" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_NO_CASC_DEL
     {
@@ -355,144 +138,36 @@ ModalDialog DLG_REL_PROPERTIES
         Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;
         HelpId  = HID_DLG_REL_NO_CASC_DEL ;
-        Text = "K~eine Aktion" ;
-        Text [ English ] = "No action" ;
-        Text [ portuguese ] = "N~enhuma acção" ;
-        Text [ english_us ] = "~No action" ;
-        Text [ portuguese_brazilian ] = "N~enhuma ação" ;
-        Text [ swedish ] = "Ing~en åtgärd" ;
-        Text [ danish ] = "~Ingen handling" ;
-        Text [ italian ] = "~Nessua operazione" ;
-        Text [ spanish ] = "Ninguna a~cción" ;
-        Text [ french ] = "A~ucune action" ;
-        Text [ dutch ] = "G~een handeling" ;
-        Text[ chinese_simplified ] = "æ— æ“ä½œ(~N)";
-        Text[ russian ] = "Áåç äåéñòâèÿ";
-        Text[ polish ] = "Bez akcji";
-        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãªã—(~N)";
-        Text[ chinese_traditional ] = "ç„¡å‹•ä½œ(~N)";
-        Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
-        Text[ greek ] = "ÊáìéÜ ~åíİñãåéá";
-        Text[ korean ] = "ì‘ë™ ì—†ìŒ(~N)";
-        Text[ turkish ] = "~Eylem yok";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cap acció";
-        Text[ finnish ] = "~Ei toimintoa";
-        Text[ thai ] = "~No action";
-        Text[ czech ] = "Å½Ã¡dnÃ¡ akce";
-        Text[ hebrew ] = "K~eine Aktion";
-        Text[ hindi ] = "~No action";
-        Text[ slovak ] = "~NekonaÅ¥";
-        Text[ hungarian ] = "~Nincs teendÅ‘";
-        Text[ slovenian ] = "Brez deja~nja";
+        Text [ de ] = "K~eine Aktion" ;
+        Text [ en-US ] = "~No action" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_DEL
     {
         Pos = MAP_APPFONT ( 102 , 139 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_DEL ;
-        Text = "Ka~sk. Löschen" ;
-        Text [ English ] = "Cascading delete" ;
-        Text [ portuguese ] = "Eli~minar cascata" ;
-        Text [ english_us ] = "Delete ~cascade" ;
-        Text [ portuguese_brazilian ] = "Excluir ~cascata" ;
-        Text [ swedish ] = "Radera ka~skad" ;
-        Text [ danish ] = "Slet ~kaskade" ;
-        Text [ italian ] = "Elimina ca~scata" ;
-        Text [ spanish ] = "Borrar c~ascada" ;
-        Text [ french ] = "~Supprimer la cascade" ;
-        Text [ dutch ] = "~Casc. wissen" ;
-        Text[ chinese_simplified ] = "åˆ é™¤å±‚å (~C)";
-        Text[ russian ] = "Óäàëèòü êàñêàä";
-        Text[ polish ] = "Usuñ kaskadê";
-        Text[ japanese ] = "ã‚«ã‚¹ã‚±ãƒ¼ãƒ‰ã®å‰Šé™¤(~C)";
-        Text[ chinese_traditional ] = "åˆªé™¤å±¤ç–Š(~C)";
-        Text[ arabic ] = "ÍĞİ ÇáÊÊÇáí";
-        Text[ greek ] = "ÄéáãñáöŞ åğéêÜëõøçò";
-        Text[ korean ] = "ê³„ë‹¨ì‹ ì‚­ì œ(~C)";
-        Text[ turkish ] = "Basamağı Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Suprimeix en ~cascada";
-        Text[ finnish ] = "Poista ~lomitus";
-        Text[ thai ] = "Delete ~cascade";
-        Text[ czech ] = "KaskÃ¡dovÃ© ruÅ¡enÃ­";
-        Text[ hebrew ] = "Ka~sk. LÃ¶schen";
-        Text[ hindi ] = "Delete ~cascade";
-        Text[ slovak ] = "ZmazaÅ¥ k~askÃ¡dy";
-        Text[ hungarian ] = "~KaszkÃ¡d tÃ¶rlÃ©se";
-        Text[ slovenian ] = "IzbriÅ¡i ~kaskadno";
+        Text [ de ] = "Ka~sk. Löschen" ;
+        Text [ en-US ] = "Delete ~cascade" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_DEL_NULL
     {
         Pos = MAP_APPFONT ( 102 , 153 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_DEL_NULL ;
-        Text = "Nu~ll setzen" ;
-        Text [ English ] = "Set null" ;
-        Text [ portuguese ] = "Definir ~Null" ;
-        Text [ english_us ] = "~Set null" ;
-        Text [ portuguese_brazilian ] = "Definir ~vazio" ;
-        Text [ swedish ] = "Sätt nu~ll" ;
-        Text [ danish ] = "Angiv ~null (ingen værdi)" ;
-        Text [ italian ] = "~Imposta zero" ;
-        Text [ spanish ] = "Definir ~null" ;
-        Text [ french ] = "Définir N~ull" ;
-        Text [ dutch ] = "Op n~ul zetten" ;
-        Text[ chinese_simplified ] = "è®¾å®šé›¶(~S)";
-        Text[ russian ] = "Óñòàíîâèòü íóëü";
-        Text[ polish ] = "OsadŸ zero";
-        Text[ japanese ] = "ã‚¼ãƒ­ã«è¨­å®š(~S)";
-        Text[ chinese_traditional ] = "è¨­å®šé›¶(~S)";
-        Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
-        Text[ greek ] = "Ïñéóìüò ìçäİí";
-        Text[ korean ] = "0 ê°’ ì„¤ì •(~S)";
-        Text[ turkish ] = "~Sıfıra eşitle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Defineix com a nul";
-        Text[ finnish ] = "~Määritä tyhjäksi";
-        Text[ thai ] = "~Set null";
-        Text[ czech ] = "Nastavit prÃ¡zdnÃ½";
-        Text[ hebrew ] = "Nu~ll setzen";
-        Text[ hindi ] = "~Set null";
-        Text[ slovak ] = "Na~staviÅ¥ null";
-        Text[ hungarian ] = "~Null Ã©rtÃ©k hasznÃ¡lata";
-        Text[ slovenian ] = "~Nastavi null";
+        Text [ de ] = "Nu~ll setzen" ;
+        Text [ en-US ] = "~Set null" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_DEL_DEFAULT
     {
         Pos = MAP_APPFONT ( 102 , 167 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_DEL_DEFAULT ;
-        Text = "De~fault setzen" ;
-        Text [ English ] = "Set default" ;
-        Text [ portuguese ] = "Definir ~padrão" ;
-        Text [ english_us ] = "Set ~default" ;
-        Text [ portuguese_brazilian ] = "Definir ~padrão" ;
-        Text [ swedish ] = "Sätt standa~rd" ;
-        Text [ danish ] = "Angiv ~standard" ;
-        Text [ italian ] = "~Preimpostazione" ;
-        Text [ spanish ] = "Pre~determinar" ;
-        Text [ french ] = "Définir par dé~faut" ;
-        Text [ dutch ] = "Op standaard ~zetten" ;
-        Text[ chinese_simplified ] = "è®¾å®šé»˜è®¤(~D)";
-        Text[ russian ] = "Óñòàíîâèòü ïî óìîë÷àíèş";
-        Text[ polish ] = "Ustaw domyœlne";
-        Text[ japanese ] = "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è¨­å®š(~D)";
-        Text[ chinese_traditional ] = "è¨­å®šé»˜èª(~D)";
-        Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
-        Text[ greek ] = "Ïñéóìüò ğñïåğéëïãŞò";
-        Text[ korean ] = "ê¸°ë³¸ ì„¤ì •(~D)";
-        Text[ turkish ] = "Öntanımlı Ayarla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Defineix el valor per ~defecte";
-        Text[ finnish ] = "Määritä ~oletusarvo";
-        Text[ thai ] = "Set ~default";
-        Text[ czech ] = "Nastavit vÃ½chozÃ­";
-        Text[ hebrew ] = "De~fault setzen";
-        Text[ hindi ] = "Set ~default";
-        Text[ slovak ] = "NastaviÅ¥ ako vÃ½cho~dzie";
-        Text[ hungarian ] = "~AlapÃ©rtÃ©k hasznÃ¡lata";
-        Text[ slovenian ] = "Nastavi ~privzeto";
+        Text [ de ] = "De~fault setzen" ;
+        Text [ en-US ] = "Set ~default" ;
+        Text [ x-comment ] = " ";
     };
 
     OKButton PB_OK
@@ -515,65 +190,6 @@ ModalDialog DLG_REL_PROPERTIES
         TabStop = TRUE ;
     };
 
-    Text [ english_us ] = "Relations" ;
-    Text [ portuguese_brazilian ] = "Relações" ;
-    Text [ swedish ] = "Relationer" ;
-    Text [ danish ] = "Relationer" ;
-    Text [ italian ] = "Relazioni" ;
-    Text [ spanish ] = "Relaciones" ;
-    Text [ french ] = "Relations" ;
-    Text [ dutch ] = "Relaties" ;
-    Text [ portuguese ] = "Relações" ;
-    Text[ chinese_simplified ] = "å…³ç³»";
-    Text[ russian ] = "Ñâÿçè";
-    Text[ polish ] = "Relacje";
-    Text[ japanese ] = "ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "é—œä¿‚";
-    Text[ arabic ] = "ÇáÚáÇŞÇÊ";
-    Text[ greek ] = "Ó÷İóåéò";
-    Text[ korean ] = "ê´€ê³„";
-    Text[ turkish ] = "Bağlantılar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Relacions";
-    Text[ finnish ] = "Yhteydet";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œ";
-    Text[ czech ] = "Relace";
-    Text[ hebrew ] = "Relationen";
-    Text[ hindi ] = "à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¥‡à¤‚";
-    Text[ slovak ] = "RelÃ¡cie";
-    Text[ hungarian ] = "RelÃ¡ciÃ³k";
-    Text[ slovenian ] = "Relacije";
+    Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
