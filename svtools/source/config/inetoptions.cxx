@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:21:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 12:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,77 +477,6 @@ SvtInetOptions::SvtInetOptions()
     if (!m_pImpl)
         m_pImpl = new Impl;
     m_pImpl->acquire();
-
-    // HACK to read system proxy settings on first office start (this should
-    // go into setup once it is easy to start SystemProxySettings service from
-    // setup; the "Automatic" value for the proxy type can be removed then):
-    sal_Int32 nProxyType;
-    if ((m_pImpl->getProperty(Impl::INDEX_PROXY_TYPE) >>= nProxyType)
-        && nProxyType == 1) // 1 means "Automatic"
-    {
-        star::uno::Reference< star::system::XProxySettings > xProxySettings;
-        star::uno::Reference< star::lang::XMultiServiceFactory >
-            xServiceFactory(utl::getProcessServiceFactory());
-        if (xServiceFactory.is())
-            try
-            {
-                xProxySettings
-                    = star::uno::Reference< star::system::XProxySettings >(
-                          xServiceFactory->
-                              createInstance(
-                                  rtl::OUString(
-                                      RTL_CONSTASCII_USTRINGPARAM(
-                                 "com.sun.star.system.SystemProxySettings"))),
-                          star::uno::UNO_QUERY);
-            }
-            catch (star::uno::Exception &)
-            {}
-        try
-        {
-            if (xProxySettings.is() && xProxySettings->isProxyEnabled())
-            {
-                m_pImpl->
-                    setProperty(Impl::INDEX_HTTP_PROXY_NAME,
-                                star::uno::makeAny(xProxySettings->
-                                                       getHttpProxyAddress()),
-                                false);
-                m_pImpl->
-                    setProperty(Impl::INDEX_HTTP_PROXY_PORT,
-                                star::uno::makeAny(xProxySettings->
-                                                       getHttpProxyPort().
-                                                           toInt32()),
-                                false);
-                m_pImpl->
-                    setProperty(Impl::INDEX_FTP_PROXY_NAME,
-                                star::uno::makeAny(xProxySettings->
-                                                       getFtpProxyAddress()),
-                                false);
-                m_pImpl->
-                    setProperty(Impl::INDEX_FTP_PROXY_PORT,
-                                star::uno::makeAny(xProxySettings->
-                                                       getFtpProxyPort().
-                                                           toInt32()),
-                                false);
-                m_pImpl->
-                    setProperty(Impl::INDEX_NO_PROXY,
-                                star::uno::makeAny(
-                                    xProxySettings->getProxyBypassAddress()),
-                                false);
-                m_pImpl->
-                    setProperty(Impl::INDEX_PROXY_TYPE,
-                                star::uno::makeAny(static_cast< sal_Int32 >(
-                                                       2)),
-                                false); // 2 means "Manual"
-                m_pImpl->flush();
-                return;
-            }
-        }
-        catch (star::uno::RuntimeException &)
-        {}
-        m_pImpl->setProperty(Impl::INDEX_PROXY_TYPE,
-                             star::uno::makeAny(static_cast< sal_Int32 >(0)),
-                             true); // 0 means "None"
-    }
 }
 
 //============================================================================
