@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 14:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,8 +377,11 @@ public:
  *  Implementierung der GrafikAttribut Methoden vom SwAttrSet
  ******************************************************************************/
 
+#ifndef MACOSX
+// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(BOOL bInP) const
     { return (const SwMirrorGrf&)Get( RES_GRFATR_MIRRORGRF,bInP); }
+#endif
 inline const SwCropGrf   &SwAttrSet::GetCropGrf(BOOL bInP) const
     { return (const SwCropGrf&)Get( RES_GRFATR_CROPGRF,bInP); }
 inline const SwRotationGrf &SwAttrSet::GetRotationGrf(BOOL bInP) const
@@ -406,8 +409,11 @@ inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(BOOL bInP) const
  *  Implementierung der GrafikAttribut Methoden vom SwFmt
  ******************************************************************************/
 
+#ifndef MACOSX
+// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwMirrorGrf &SwFmt::GetMirrorGrf(BOOL bInP) const
     { return aSet.GetMirrorGrf(bInP); }
+#endif
 inline const SwCropGrf   &SwFmt::GetCropGrf(BOOL bInP) const
     { return aSet.GetCropGrf(bInP); }
 inline const SwRotationGrf &SwFmt::GetRotationGrf(BOOL bInP) const
