@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef __com_sun_star_setup_OSType_idl__
 #define __com_sun_star_setup_OSType_idl__
+
+// dear porters: please do not apply any patches for new platforms here
+//               it depricated anyway and any patches will cause API
+//       incompatibity errors  mh
 
 module com {  module sun {  module star {  module setup {
 
