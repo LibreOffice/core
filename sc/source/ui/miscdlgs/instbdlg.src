@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-06 16:41:42 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ SWEDISH ] = "Skapa ~ny" ;
         Text [ PORTUGUESE ] = "~Nova folha" ;
         Text[ chinese_simplified ] = "–¬љ®є§„ч±н(~N)";
-        Text[ russian ] = "—оздать новый лист";
+        Text[ russian ] = "Ќовый лист";
         Text[ polish ] = "Utwуrz ponownie";
         Text[ japanese ] = "РVВµВ≠НмРђ(~N)";
         Text[ chinese_traditional ] = "ЈsЂЎ§uІ@™н(~N)";
@@ -261,7 +261,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ french ] = "~Aprиs la feuille courante" ;
         Text [ dutch ] = "~Na actuele tabel" ;
         Text[ chinese_simplified ] = "‘Џµ±«∞µƒє§„ч±н÷ЃЇу(~A)";
-        Text[ russian ] = "ѕосле текущей таблицы";
+        Text[ russian ] = "ѕосле текущего листа";
         Text[ polish ] = "Za ~zaznaczonym arkuszem";
         Text[ japanese ] = "Х\\О¶ТЖВћХ\\ВћМгВ…(~A)";
         Text[ chinese_traditional ] = "¶bЈнЂe™Ї§uІ@™н§ІЂб(~A)";
@@ -288,10 +288,10 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ french ] = "A~vant la feuille courante" ;
         Text [ dutch ] = "~Voor actuele tabel" ;
         Text[ chinese_simplified ] = "‘Џµ±«∞µƒє§„ч±н÷Ѓ«∞(~S)";
-        Text[ russian ] = "ѕеред текущей таблицей";
+        Text[ russian ] = "ѕеред текущим листом";
         Text[ polish ] = "Przed zaz~naczonym arkuszem";
         Text[ japanese ] = "Х\\О¶ТЖВћХ\\ВћСOВ…(~S)";
-        Text[ chinese_traditional ] = "¶bЈнЂe™Ї§uІ@™н§ІЂe(~S)";
+        Text[ chinese_traditional ] = "¶bЈнЂe™Ї§uІ@™н§ІЂe(~E)";
         Text[ arabic ] = "ё»б «бћѕжб «бЌ«бн";
         Text[ greek ] = "–сйн брь фпн енесгь рянбкб";
         Text[ korean ] = "«цјз љ√∆Ѓ Њ’њ°";
@@ -314,7 +314,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ dutch ] = "Tabel" ;
         Text [ portuguese ] = "Folha" ;
         Text[ chinese_simplified ] = "є§„ч±н";
-        Text[ russian ] = "“аблица";
+        Text[ russian ] = "Ћист";
         Text[ polish ] = "Arkusz";
         Text[ japanese ] = "Х\\ВћНмРђ";
         Text[ chinese_traditional ] = "§uІ@™н";
@@ -386,7 +386,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ arabic ] = "«б«”г";
     };
     Text[ chinese_simplified ] = "≤е»лє§„ч±н";
-    Text[ russian ] = "¬ставить таблицу";
+    Text[ russian ] = "¬ставить лист";
     Text[ polish ] = "Wstaw arkusz";
     Text[ japanese ] = "Х\\ВћС}Уь";
     Text[ chinese_traditional ] = "і°§J§uІ@™н";
