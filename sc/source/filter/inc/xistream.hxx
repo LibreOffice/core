@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:47:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,8 @@ public:
     sal_uInt32          GetRecSize();
     /** Returns remaining data size of the whole record without record headers. */
     sal_uInt32          GetRecLeft();
+    /** Returns the record ID of the following record. */
+    sal_uInt16          GetNextRecId();
 
     XclImpStream&       operator>>( sal_Int8& rnValue );
     XclImpStream&       operator>>( sal_uInt8& rnValue );
