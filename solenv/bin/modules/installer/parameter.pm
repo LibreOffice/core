@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-17 11:38:04 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:58:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -210,7 +210,7 @@ sub control_fundamental_parameter
     if ($installer::globals::product eq "")
     {
         print "\n******************************************\n";
-        print "Error: Product name not set!";
+        print "ERROR: Product name not set!";
         print "\n******************************************\n";
         usage();
         exit(-1);
@@ -273,6 +273,10 @@ sub setglobalvariables
         $installer::globals::issolarisbuild = 1;
         $installer::globals::packageformat = "pkg";
     }
+
+    if ( $installer::globals::compiler =~ /unxsols/ ) { $installer::globals::issolarissparcbuild = 1; }
+
+    if ( $installer::globals::compiler =~ /unxsoli/ ) { $installer::globals::issolarisx86build = 1; }
 
     # ToDo: Needs to be expanded for additional compiler
 
@@ -365,7 +369,7 @@ sub control_required_parameter
         if (($installer::globals::packagelist eq "") && (!($installer::globals::iswindowsbuild)))
         {
             print "\n*********************************************************\n";
-            print "Error: Package list file not set (-packagelist)!\n";
+            print "ERROR: Package list file not set (-packagelist)!\n";
             print "This package list is required for non-Windows builds!\n";
             print "*********************************************************\n";
             usage();
@@ -387,7 +391,7 @@ sub control_required_parameter
         if (($installer::globals::idttemplatepath eq "") && ($installer::globals::iswindowsbuild))
         {
             print "\n**************************************************\n";
-            print "Error: idt template path not set (-msitemplate)!";
+            print "ERROR: idt template path not set (-msitemplate)!";
             print "\n**************************************************\n";
             usage();
             exit(-1);
@@ -401,7 +405,7 @@ sub control_required_parameter
         if (($installer::globals::idtlanguagepath eq "") && ($installer::globals::iswindowsbuild))
         {
             print "\n**************************************************\n";
-            print "Error: idt language path not set (-msilanguage)!";
+            print "ERROR: idt language path not set (-msilanguage)!";
             print "\n**************************************************\n";
             usage();
             exit(-1);
@@ -415,7 +419,7 @@ sub control_required_parameter
         if (($installer::globals::msifilespath eq "") && ($installer::globals::iswindowsbuild))
         {
             print "\n**************************************************\n";
-            print "Error: msi files path not set (-msifiles)!";
+            print "ERROR: msi files path not set (-msifiles)!";
             print "\n**************************************************\n";
             usage();
             exit(-1);
