@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:12:12 $
+#   last change: $Author: hjs $ $Date: 2001-09-18 16:13:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,32 +63,64 @@
 PRJ=..
 
 PRJNAME=basic
-TARGET=sb
-#basic.hid generieren
-GEN_HID=TRUE
+TARGET=miniapp
+TARGETTYPE=GUI
 
 # --- Settings ---------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
-.IF "$(GUI)"=="WIN"
-.IF "$(product)" != ""
-LINKFLAGS=$(LINKFLAGS) /NOPACKC
+# --- SBASIC IDE --------------------------------------------------------
+
+APP1TARGET=$(PRJNAME)
+APP1STDLIBS= \
+            $(SALLIB) \
+            $(TOOLSLIB) \
+            $(UNOTOOLSLIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB) \
+            $(SVLIB) \
+            $(SO2LIB) \
+            $(COMPHELPERLIB) \
+            $(UCBHELPERLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(SJLIB) \
+            $(SOTLIB) \
+            $(VOSLIB) \
+            $(SVMEMLIB)
+
+.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
+APP1STDLIBS+=$(CPPULIB)
 .ENDIF
+.IF "$(GUI)"=="UNX"
+APP1STDLIBS+= \
+            $(VOSLIB) \
+            $(SALLIB)
 .ENDIF
 
-.IF "$(depend)" == ""
+APP1LIBS= \
+            $(LIBPRE) $(LB)$/basic.lib \
+            $(LIBPRE) $(LB)$/app.lib \
+            $(LIBPRE) $(LB)$/sample.lib
+.IF "$(GUI)"=="UNX"
+APP1STDLIBS+=	\
+            $(BASICLIB)
+.ENDIF
 
-# --- Allgemein ---------------------------------------------------
 
-.IF "$(header)" == ""
+APP1DEPN=	$(L)$/itools.lib $(SVLIBDEPEND) $(LB)$/basic.lib $(LB)$/app.lib $(LB)$/sample.lib
 
+APP1OBJS = $(OBJ)$/ttbasic.obj 
+
+.IF "$(GUI)" != "UNX"
+APP1OBJS+=	\
+            $(OBJ)$/app.obj \
+            $(SLO)$/sbintern.obj
+.ENDIF
 
 # --- TESTTOOL MINIAPP ------------------------------------------------------
 
-.IF "$(GUI)" != "MAC"
 SRS3FILES= $(SRS)$/miniapp.srs
 RES3TARGET=miniapp
 
@@ -121,101 +153,7 @@ APP3DEPN=\
 APP3OBJS=               $(OBJ)$/testapp.obj
 .ENDIF
 
-#APP3DEF=        $(MISC)$/$(PRJNAME).def
 APP3RES=        $(RES)$/miniapp.res
 
-.ENDIF
-
-# --- Targets -----------------------------------------------------------
-
-ALL: ALLTAR
-
-
-#-------------------------------------------------------------------------
-#                                                               Windows 3.x
-#-------------------------------------------------------------------------
-
-
-.IF "$(GUI)" == "WIN"
-
-LINKFLAGS+=/NOCV /IG
-LINK=$(DEVROOT)$/bin\optlinks\optlinks
-
-$(MISC)$/$(PRJNAME).def: makefile
-    echo NAME                BASIC                                                                                   >$@
-    echo DESCRIPTION 'StarBASIC DevSystem (C)1994 STAR DIVISION GmbH'>>$@
-    echo EXETYPE     WINDOWS                                                                                 >>$@
-    echo PROTMODE                                                                                                    >>$@
-    echo STUB                'winSTUB.EXE'                                   >>$@
-    echo CODE                LOADONCALL MOVEABLE                                                     >>$@
-    echo DATA                PRELOAD MULTIPLE MOVEABLE                                               >>$@
-    echo HEAPSIZE    4096                                                                                    >>$@
-    echo STACKSIZE   30000                                                                                   >>$@
-.ENDIF # GUI == WIN
-
-#-------------------------------------------------------------------------
-#                                                               MAC
-#-------------------------------------------------------------------------
-
-.IF "$(GUI)" == "MAC"
-
-$(MISC)$/$(PRJNAME).def: makefile
-    echo Kein def-File fuer Applikationen auf Mac
-.ENDIF # GUI == MAC
-
-#-------------------------------------------------------------------------
-#                                                                               OS/2
-#-------------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(PRJNAME).def: makefile
-.IF "$(COM)"!="WTC"
-    echo NAME                BASIC WINDOWAPI                                                                  >$@
-    echo DESCRIPTION 'StarBASIC DevSystem (C)1993 STAR DIVISION GmbH' >>$@
-    echo EXETYPE     OS2                                                                                      >>$@
-    echo PROTMODE                                                                                                     >>$@
-    echo STUB                'OS2STUB.EXE'                                    >>$@
-    echo CODE                LOADONCALL                                                                       >>$@
-    echo DATA                PRELOAD MULTIPLE                                                                 >>$@
-    echo HEAPSIZE    4096                                                                                     >>$@
-    echo STACKSIZE   30000                                                                                    >>$@
-.ELSE
-    @echo option DESCRIPTION 'StarBasic DLL'                           >$@
-    @echo name $(BIN)$/$(SHL1TARGET).dll                             >>$@
-#    @ldump -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(SLB)$/sb.lib    >>temp.def
-    @ldump -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET)    >>temp.def
-    @awk -f s:\util\exp.awk temp.def
-    del temp.def
-.ENDIF
-
-.ENDIF # GUI == OS2
-
-#-------------------------------------------------------------------------
-#                                                               Windows NT
-#-------------------------------------------------------------------------
-#
-#                                       default targets aus target.mk
-#
-
-# --- Basic-Filter-Datei ---
-
-$(MISC)$/$(SHL1TARGET).flt: makefile
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP > $@
-    @echo LIBMAIN >> $@
-    @echo LibMain >> $@
-    @echo Sbi >> $@
-    @echo SvRTL >> $@
-    @echo SbRtl_ >> $@
-
-.ENDIF
-
-# ------------------------------------------------------------------------
-.ENDIF
-
 .INCLUDE :  target.mk
-
-
 
