@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:40:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,10 +642,10 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
                          RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
-    SfxFrameDescriptor *pFrameDesc = new SfxFrameDescriptor( 0 );
+    SfxFrameDescriptor aFrameDesc( 0 );
 
-    pFrameDesc->SetURL( INetURLObject::RelToAbs( rHRef ) );
-    pFrameDesc->SetName( rName );
+    aFrameDesc.SetURL( INetURLObject::RelToAbs( rHRef ) );
+    aFrameDesc.SetName( rName );
 
     ScrollingMode eScrollMode = ScrollingAuto;
     sal_Bool bHasBorder = sal_False;
@@ -707,19 +707,19 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
             }
         }
     }
-    pFrameDesc->SetScrollingMode( eScrollMode );
+    aFrameDesc.SetScrollingMode( eScrollMode );
     if( bIsBorderSet )
-        pFrameDesc->SetFrameBorder( bHasBorder );
+        aFrameDesc.SetFrameBorder( bHasBorder );
     else
-        pFrameDesc->ResetBorder();
-    pFrameDesc->SetMargin( aMargin );
+        aFrameDesc.ResetBorder();
+    aFrameDesc.SetMargin( aMargin );
 
     SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
     SfxFrameObjectRef pFrame = new SfxFrameObject();
     pFrame->DoInitNew( pStor );
 
     pFrame->EnableSetModified( FALSE );
-    pFrame->SetFrameDescriptor( pFrameDesc );
+    pFrame->SetFrameDescriptor( &aFrameDesc );
     pFrame->EnableSetModified( TRUE );
 
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
