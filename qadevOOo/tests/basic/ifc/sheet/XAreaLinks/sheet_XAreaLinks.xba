@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sheet_XAreaLinks.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:52:32 $ 
+'*  last change:$Date: 2003-11-18 16:19:11 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -81,6 +81,7 @@ On Error Goto ErrHndl
     Test.StartMethod("insertAtPosition()")
     bOK = true
     'remembering amount of elements
+    Dim m_startAmount as Integer
     m_startAmount = oObj.Count()
 
     Dim addr As New com.sun.star.table.CellAddress
@@ -88,11 +89,14 @@ On Error Goto ErrHndl
     addr.Row = 0
     addr.Column = 2
 
-    mSrcFileName = ""
+    Dim mSrcFileName as String
+    mSrcFileName = utils.Path2URL(cTestDocsDir + "/" + "calcshapes.sxc")
+    Dim amdstAddresss as String
     mdstAddress = "a2:b4"
+    Dim asmFilter  as String
     mFilter = ""
+    Dim mFilterOpts as String
     mFilterOpts = ""
-
     oObj.insertAtPosition(addr, mSrcFileName, mdstAddress, mFilter, mFilterOpts)
 
     bOK = bOK AND (m_startAmount + 1 = oObj.Count)
