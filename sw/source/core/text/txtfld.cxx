@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 12:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #include "expfld.hxx"
 #include "docufld.hxx"
 #include "pagedesc.hxx"  // NewFldPortion, GetNum()
+#ifndef _PORMULTI_HXX
+#include <pormulti.hxx>     // SwMultiPortion
+#endif
 
 
 /*************************************************************************
@@ -509,6 +512,14 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     return pRet;
 }
 
+/*-----------------16.10.00 09:55-------------------
+ * SwTxtFrm::GetRestPortion() returns a field portion,
+ * if the last portion in the last line is a field portion,
+ * which is not complete. So the following part of the text frame
+ * has to start with the rest of the field.
+ * If the field portion is inside a multi-portion, the next text frame
+ * starts with a multi-portion, too.
+ * --------------------------------------------------*/
 
 const SwFldPortion* SwTxtFrm::GetRestPortion()
 {
@@ -523,6 +534,12 @@ const SwFldPortion* SwTxtFrm::GetRestPortion()
     {
         if( pLine->InFldGrp() )
             pRet = (SwFldPortion*)pLine;
+        else if( pLine->IsMultiPortion() && !pLine->GetPortion() )
+        {   // If the last portion is a multi-portion, we enter it
+            // and look for a field portion inside.
+            pLine = ((SwMultiPortion*)pLine)->GetRoot().GetNext();
+            continue;
+        }
         pLine = pLine->GetPortion();
     }
     if( pRet && !pRet->HasFollow() )
