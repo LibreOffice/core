@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:56:04 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ SbModule* StarBASIC::FindModule( const String& rName )
 }
 
 // Init-Code aller Module ausfuehren (auch in inserteten Bibliotheken)
-void StarBASIC::InitAllModules( void )
+void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
     // Eigene Module initialisieren
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
@@ -473,7 +473,7 @@ void StarBASIC::InitAllModules( void )
     {
         SbxVariable* pVar = pObjs->Get( nObj );
         StarBASIC* pBasic = PTR_CAST(StarBASIC,pVar);
-        if( pBasic )
+        if( pBasic && pBasic != pBasicNotToInit )
             pBasic->InitAllModules();
     }
 }
@@ -876,7 +876,14 @@ BOOL StarBASIC::CError
 {
     // Compiler-Fehler waehrend der Laufzeit -> Programm anhalten
     if( IsRunning() )
+    {
+        // #109018 Check if running Basic is affected
+        StarBASIC* pStartedBasic = pINST->GetBasic();
+        if( pStartedBasic != this )
+            return FALSE;
+
         Stop();
+    }
 
     // #45741# Falls der Wait-Cursor gesetzt ist, jetzt zuruecksetzen
     if( GetSbData()->bCompWait )
