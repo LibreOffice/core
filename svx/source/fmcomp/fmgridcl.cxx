@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 08:10:29 $
+ *  last change: $Author: fs $ $Date: 2001-03-26 15:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,23 +234,26 @@
 #include <tools/isolang.hxx>
 #endif
 
-#ifdef ENABLEUNICODE
-#define XUB2ANY(c)      makeAny(::rtl::OUString(c))
-#endif
 #ifndef _TRACE_HXX_
 #include "trace.hxx"
+#endif
+
+#ifndef _SVX_DBAEXCHANGE_HXX_
+#include "dbaexchange.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::svxform;
-
-static sal_uInt32 nFormat = 0;
+using namespace ::svx;
 
 //==============================================================================
 //------------------------------------------------------------------------------
@@ -287,7 +290,8 @@ void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNew
 
 //------------------------------------------------------------------------------
 FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
-                      :DbBrowseHeader(pParent, nWinBits)
+        :DbBrowseHeader(pParent, nWinBits)
+        ,DropTargetHelper(this)
 {
     EnableDrop(sal_True);
 }
@@ -348,7 +352,7 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
                     return;
                 }
             }
-            catch(...)
+            catch(Exception&)
             {
                 return;
             }
@@ -358,115 +362,106 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmGridHeader::QueryDrop(DropEvent& rEvt)
+sal_Int8 FmGridHeader::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    if (!nFormat)
-        nFormat = Exchange::RegisterFormatName(String::CreateFromAscii(SBA_FIELDEXCHANGE_FORMAT));
-
+    // drop allowed in design mode only
     if (!static_cast<FmGridControl*>(GetParent())->IsDesignMode())
-        return sal_False;
+        return DND_ACTION_NONE;
 
-    SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rEvt );
-    return xDataObj.Is() && xDataObj->GetTypeList().Get(nFormat) != NULL;
+    // search for recognized formats
+    const DataFlavorExVector& rFlavors = GetDataFlavorExVector();
+    if (OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR))
+        return DND_ACTION_COPY;
+
+    return DND_ACTION_NONE;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
+sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
-    if (!nFormat)
-         nFormat = Exchange::RegisterFormatName(String::CreateFromAscii(SBA_FIELDEXCHANGE_FORMAT));
-
     if (!static_cast<FmGridControl*>(GetParent())->IsDesignMode())
-        return sal_False;
+        return DND_ACTION_NONE;
 
-    SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rEvt );
-    SvData aData(nFormat);
-    xDataObj->GetData( &aData );
-    XubString aDataExchStr;
-    if (!aData.GetData(aDataExchStr))
-        return sal_False;
+    TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
 
-    // SBA_FIELDEXCHANGE_FORMAT
-    // "Datenbankname";"Tabellen/QueryName";1/0(fuer Tabelle/Abfrage);"Feldname"
-    String aDatabaseName    = aDataExchStr.GetToken(0,sal_Unicode(11));
-    String aObjectName      = aDataExchStr.GetToken(1,sal_Unicode(11));
-    sal_uInt16 nObjectType  = aDataExchStr.GetToken(2,sal_Unicode(11)).ToInt32();
-    String aFieldName       = aDataExchStr.GetToken(3,sal_Unicode(11));
+    ::rtl::OUString sDatasouce, sCommand, sFieldName;
+    sal_Int32       nCommandType = CommandType::COMMAND;
+    if (!OColumnTransferable::extractColumnDescriptor(aDroppedData, sDatasouce, nCommandType, sCommand, sFieldName))
+    {
+        DBG_ERROR("FmGridHeader::ExecuteDrop: should never have reached this (no extractable format)!");
+        return DND_ACTION_NONE;
+    }
 
-    if (!aFieldName.Len() || !aObjectName.Len() || !aDatabaseName.Len())
-        return sal_False;
+    if (!sFieldName.getLength() || !sCommand.getLength() || !sDatasouce.getLength())
+        return DND_ACTION_NONE;
 
-    // database, table/query and field
 
     Reference< XConnection >            xConnection;
-    //  Reference< XDataSource >            xDataSource;
     Reference< XPreparedStatement >     xStatement;
 
-
-    ::rtl::OUString sDatabaseName = aDatabaseName;
     try
     {
-        //  xDataSource = dbtools::getDataSource(sDatabaseName,static_cast<FmGridControl*>(GetParent())->getServiceManager());
-        xConnection = dbtools::getConnection(sDatabaseName,::rtl::OUString(),::rtl::OUString(),static_cast<FmGridControl*>(GetParent())->getServiceManager());
+        xConnection = dbtools::getConnection(sDatasouce, ::rtl::OUString(), ::rtl::OUString(), static_cast<FmGridControl*>(GetParent())->getServiceManager());
     }
-    catch(::com::sun::star::container::NoSuchElementException&)
-    {   // allowed, means aDatabaseName isn't a valid favorite name ....
+    catch(NoSuchElementException&)
+    {   // allowed, means sDatasouce isn't a valid data source name ....
     }
-    catch(SQLException&)
-    {   // allowed ... the env may throw an exception if it didn't find the object
+    catch(Exception&)
+    {
+        DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
     }
     if (!xConnection.is())
     {
-        DBG_ERROR("FmGridHeader::Drop : could not retrieve the database access object !");
+        DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
         return sal_False;
     }
     try
     {
 
 #if DBG_UTIL
-        Reference< ::com::sun::star::lang::XServiceInfo >  xServiceInfo(xConnection, UNO_QUERY);
-        DBG_ASSERT(xServiceInfo.is() && xServiceInfo->supportsService(SRV_SDB_CONNECTION), "FmGridHeader::Drop : invalid connection (no database access connection !)");
+        Reference< XServiceInfo >  xServiceInfo(xConnection, UNO_QUERY);
+        DBG_ASSERT(xServiceInfo.is() && xServiceInfo->supportsService(SRV_SDB_CONNECTION), "FmGridHeader::ExecuteDrop: invalid connection (no database access connection !)");
 #endif
 
         // Festellen des Feldes
-        Reference< ::com::sun::star::container::XNameAccess >   xFields;
-        Reference< ::com::sun::star::beans::XPropertySet >      xField;
-        switch (nObjectType)
+        Reference< XNameAccess >    xFields;
+        Reference< XPropertySet >       xField;
+        switch (nCommandType)
         {
-            case 0: // old : DataSelectionType_TABLE:
+            case CommandType::TABLE:
             {
-                Reference< ::com::sun::star::sdbcx::XTablesSupplier > xSupplyTables(xConnection, UNO_QUERY);
-                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
-                xSupplyTables->getTables()->getByName(aObjectName) >>= xSupplyColumns;
+                Reference< XTablesSupplier > xSupplyTables(xConnection, UNO_QUERY);
+                Reference< XColumnsSupplier >  xSupplyColumns;
+                xSupplyTables->getTables()->getByName(sCommand) >>= xSupplyColumns;
                 xFields = xSupplyColumns->getColumns();
             }
             break;
-            case 1: // old : DataSelectionType_QUERY:
+            case CommandType::QUERY:
             {
-                Reference< ::com::sun::star::sdb::XQueriesSupplier > xSupplyQueries(xConnection, UNO_QUERY);
-                Reference< ::com::sun::star::sdbcx::XColumnsSupplier > xSupplyColumns;
-                xSupplyQueries->getQueries()->getByName(aObjectName) >>= xSupplyColumns;
+                Reference< XQueriesSupplier > xSupplyQueries(xConnection, UNO_QUERY);
+                Reference< XColumnsSupplier > xSupplyColumns;
+                xSupplyQueries->getQueries()->getByName(sCommand) >>= xSupplyColumns;
                 xFields  = xSupplyColumns->getColumns();
             }
             break;
             default:
             {
-                xStatement = xConnection->prepareStatement(aObjectName);
+                xStatement = xConnection->prepareStatement(sCommand);
                 // not interested in any results
 
-                Reference< ::com::sun::star::beans::XPropertySet > xStatProps(xStatement,UNO_QUERY);
+                Reference< XPropertySet > xStatProps(xStatement,UNO_QUERY);
                 xStatProps->setPropertyValue(rtl::OUString::createFromAscii("MaxRows"), makeAny(sal_Int32(0)));
 
-                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
+                Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
                 if (xSupplyCols.is())
                     xFields = xSupplyCols->getColumns();
             }
         }
 
-        if (xFields.is() && xFields->hasByName(aFieldName))
-            xFields->getByName(aFieldName) >>= xField;
+        if (xFields.is() && xFields->hasByName(sFieldName))
+            xFields->getByName(sFieldName) >>= xField;
 
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
+        Reference< XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
 
         if (!xSupplier.is() || !xField.is())
         {
@@ -474,7 +469,7 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
             return sal_False;
         }
 
-        Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
+        Reference< XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
         if (!xNumberFormats.is())
         {
             ::comphelper::disposeComponent(xStatement);
@@ -501,14 +496,14 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
         xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
 
         // Erstellen der Column
-        Reference< ::com::sun::star::container::XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
-        Reference< ::com::sun::star::form::XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
+        Reference< XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
+        Reference< XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
 
-        Point aPos  = OutputToScreenPixel(rEvt.GetPosPixel());
-        sal_uInt16 nColId = GetItemId(rEvt.GetPosPixel());
+        Point aPos  = OutputToScreenPixel(_rEvt.maPosPixel);
+        sal_uInt16 nColId = GetItemId(_rEvt.maPosPixel);
         // EinfuegePosition, immer vor der aktuellen Spalte
         sal_uInt16 nPos = GetModelColumnPos(nColId);
-        Reference< ::com::sun::star::beans::XPropertySet >  xCol, xSecondCol;
+        Reference< XPropertySet >  xCol, xSecondCol;
 
         // erzeugen der Column in abhaengigkeit vom type, default textfeld
         SvULongs aPossibleTypes;
@@ -561,7 +556,7 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
         }
         catch(Exception&)
         {
-            DBG_ERROR("FmGridHeader::Drop Exception occured!");
+            DBG_ERROR("FmGridHeader::ExecuteDrop: Exception occured!");
         }
 
         sal_Int32 nPreferedType = -1;
@@ -569,16 +564,16 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
         if (aPossibleTypes.Count() != 0)
         {
             nPreferedType = aPossibleTypes[0];
-            if ((rEvt.GetAction() == DROP_LINK) && (aPossibleTypes.Count() > 1))
+            if ((_rEvt.mnAction == DND_ACTION_LINK) && (aPossibleTypes.Count() > 1))
             {
                 ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
 
                 PopupMenu aInsertMenu(SVX_RES(RID_SVXMNU_COLS));
                 PopupMenu aTypeMenu;
                 PopupMenu* pMenu = aInsertMenu.GetPopupMenu(SID_FM_INSERTCOL);
-                for (sal_Int32 i=0; i<aPossibleTypes.Count(); ++i)
-                    SetMenuItem(aImageList, aPossibleTypes[i], pMenu, aTypeMenu, sal_True, 0);
-                nPreferedType = aTypeMenu.Execute(this, rEvt.GetPosPixel());
+                for (sal_uInt32 i=0; i<aPossibleTypes.Count(); ++i)
+                    SetMenuItem(aImageList, sal_uInt16(aPossibleTypes[(sal_uInt16)i]), pMenu, aTypeMenu, sal_True, 0);
+                nPreferedType = aTypeMenu.Execute(this, _rEvt.maPosPixel);
             }
 
             bDateNTimeCol = nPreferedType == SID_FM_TWOFIELDS_DATE_N_TIME;
@@ -590,7 +585,7 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
                     nPreferedType = nColCount ? SID_FM_DATEFIELD : SID_FM_TIMEFIELD;
 
                 sFieldService = FieldServiceFromId(nPreferedType);
-                Reference< ::com::sun::star::beans::XPropertySet >  xThisRoundCol;
+                Reference< XPropertySet >  xThisRoundCol;
                 if (sFieldService.len())
                 {
                     xThisRoundCol = xFactory->createColumn(sFieldService);
@@ -606,19 +601,19 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
 
         if (!xCol.is() || (bDateNTimeCol && !xSecondCol.is()))
         {
-            ::comphelper::disposeComponent(xCol);   // in case only teh creation of the second column failed
+            ::comphelper::disposeComponent(xCol);   // in case only the creation of the second column failed
             ::comphelper::disposeComponent(xStatement);
             return sal_False;
         }
 
         if (bDateNTimeCol)
         {
-            XubString sPostfix(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX));
-            xCol->setPropertyValue(FM_PROP_LABEL, XUB2ANY(aFieldName + ::rtl::OUString(sPostfix.GetToken(1, ';'))));
-            xSecondCol->setPropertyValue(FM_PROP_LABEL, XUB2ANY(aFieldName + ::rtl::OUString(sPostfix.GetToken(0, ';'))));
+            String sPostfix(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX));
+            xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + ::rtl::OUString(sPostfix.GetToken(1, ';'))));
+            xSecondCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + ::rtl::OUString(sPostfix.GetToken(0, ';'))));
         }
         else
-            xCol->setPropertyValue(FM_PROP_LABEL, XUB2ANY(aFieldName));
+            xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName));
 
         if (nPreferedType == SID_FM_NUMERICFIELD)
         {
@@ -645,14 +640,14 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
             xCol->setPropertyValue(FM_PROP_STRICTFORMAT, bool2any(sal_True));
         }
 
-        xCol->setPropertyValue(FM_PROP_CONTROLSOURCE, XUB2ANY(aFieldName));
+        xCol->setPropertyValue(FM_PROP_CONTROLSOURCE, makeAny(sFieldName));
         if (bDateNTimeCol)
-            xSecondCol->setPropertyValue(FM_PROP_CONTROLSOURCE, XUB2ANY(aFieldName));
+            xSecondCol->setPropertyValue(FM_PROP_CONTROLSOURCE, makeAny(sFieldName));
 
         if (bDateNTimeCol)
         {
-            XubString sRealName,sPurePostfix;
-            XubString sPostfix(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX));
+            String sRealName,sPurePostfix;
+            String sPostfix(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX));
 
             for (xub_StrLen i=0; i<2; ++i)
             {
@@ -660,17 +655,17 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
                 sPurePostfix.EraseLeadingChars(' ');
                 sPurePostfix.EraseLeadingChars('(');
                 sPurePostfix.EraseTrailingChars(')');
-                sRealName = aFieldName;
+                sRealName = sFieldName;
                 sRealName += '_';
                 sRealName += sPurePostfix;
                 if (i)
-                    xSecondCol->setPropertyValue(FM_PROP_NAME, XUB2ANY(sRealName));
+                    xSecondCol->setPropertyValue(FM_PROP_NAME, makeAny(::rtl::OUString(sRealName)));
                 else
-                    xCol->setPropertyValue(FM_PROP_NAME, XUB2ANY(sRealName));
+                    xCol->setPropertyValue(FM_PROP_NAME, makeAny(::rtl::OUString(sRealName)));
             }
         }
         else
-            xCol->setPropertyValue(FM_PROP_NAME, XUB2ANY(aFieldName));
+            xCol->setPropertyValue(FM_PROP_NAME, makeAny(sFieldName));
 
         // jetzt einfuegen
         Any aElement;
@@ -683,43 +678,43 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
             xCols->insertByIndex(nPos == (sal_uInt16)-1 ? nPos : ++nPos, aElement);
         }
 
-        // ist die ::com::sun::star::form::component::Form an die Datenbankangebunden?
-        Reference< ::com::sun::star::form::XFormComponent >  xFormCp(xCols, UNO_QUERY);
-        Reference< ::com::sun::star::beans::XPropertySet >  xForm(xFormCp->getParent(), UNO_QUERY);
+        // ist die component::Form an die Datenbankangebunden?
+        Reference< XFormComponent >  xFormCp(xCols, UNO_QUERY);
+        Reference< XPropertySet >  xForm(xFormCp->getParent(), UNO_QUERY);
         if (xForm.is())
         {
             if (!::comphelper::getString(xForm->getPropertyValue(FM_PROP_DATASOURCE)).getLength())
-                xForm->setPropertyValue(FM_PROP_DATASOURCE, XUB2ANY(aDatabaseName));
+                xForm->setPropertyValue(FM_PROP_DATASOURCE, makeAny(sDatasouce));
 
             if (!::comphelper::getString(xForm->getPropertyValue(FM_PROP_COMMAND)).getLength())
             {
-                xForm->setPropertyValue(FM_PROP_COMMAND, XUB2ANY(aObjectName));
+                xForm->setPropertyValue(FM_PROP_COMMAND, makeAny(sCommand));
                 Any aCommandType;
-                switch (nObjectType)
+                switch (nCommandType)
                 {
-                    case 0: // old : DataSelectionType_TABLE
-                        aCommandType <<= (sal_Int32)::com::sun::star::sdb::CommandType::TABLE;
+                    case CommandType::TABLE:
+                        aCommandType <<= (sal_Int32)CommandType::TABLE;
                         break;
-                    case 1: // old : DataSelectionType_QUERY
-                        aCommandType <<= (sal_Int32)::com::sun::star::sdb::CommandType::QUERY;
+                    case CommandType::QUERY:
+                        aCommandType <<= (sal_Int32)CommandType::QUERY;
                         break;
                     default:
-                        aCommandType <<= (sal_Int32)::com::sun::star::sdb::CommandType::COMMAND;
-                        xForm->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, bool2any((sal_Bool)(2 == nObjectType)));
-                            // 2 -> old: DataSelectionType_SQL
+                        aCommandType <<= (sal_Int32)CommandType::COMMAND;
+                        xForm->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, bool2any((sal_Bool)(2 == nCommandType)));
                         break;
                 }
                 xForm->setPropertyValue(FM_PROP_COMMANDTYPE, aCommandType);
             }
         }
     }
-    catch(...)
+    catch (Exception&)
     {
-        DBG_ERROR("FmGridHeader::Drop : catched an exception while creatin' the column !");
+        DBG_ERROR("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(xStatement);
         return sal_False;
     }
-    return sal_True;
+
+    return DND_ACTION_COPY;
 }
 
 //------------------------------------------------------------------------------
@@ -1017,7 +1012,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
                 ::cppu::extractInterface(xReplaced, xCols->getByIndex(nPos));
 
                 // the application locale
-                XubString sLanguage, sCountry;
+                String sLanguage, sCountry;
                 ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
                 ::com::sun::star::lang::Locale aAppLocale(sLanguage, sCountry, ::rtl::OUString());
 
@@ -1529,7 +1524,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
         Reference< ::com::sun::star::beans::XPropertySet >  xCol;
 
         // Einfuegen muﬂ sich an den Column Positionen orientieren
-        sal_uInt32 i;
+        sal_Int32 i;
         Reference< XInterface > xCurrent;
         for (i = 0; !xCol.is() && i < xColumns->getCount(); i++)
         {
@@ -1569,8 +1564,8 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
     SetUpdateMode(sal_False);
 
     // Einfuegen muﬂ sich an den Column Positionen orientieren
-    sal_uInt32 i;
-    XubString aName;
+    sal_Int32 i;
+    String aName;
     Any aWidth;
     for (i = 0; i < xColumns->getCount(); ++i)
     {
@@ -1587,7 +1582,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
         if (aWidth >>= nWidth)
             nWidth = LogicToPixel(Point(nWidth,0),MAP_10TH_MM).X();
 
-        AppendColumn(aName, nWidth);
+        AppendColumn(aName, (sal_uInt16)nWidth);
         DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(i);
         pCol->setModel(xCol);
     }
@@ -1603,7 +1598,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
         aHidden = xCol->getPropertyValue(FM_PROP_HIDDEN);
         if (::comphelper::getBOOL(aHidden))
-            HideColumn(GetColumnIdFromModelPos(i));
+            HideColumn(GetColumnIdFromModelPos((sal_uInt16)i));
     }
 
     SetUpdateMode(sal_True);
@@ -1671,7 +1666,7 @@ void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::conta
 
             if (bIllegalType)
             {
-                pCol->SetObject(nFieldPos);
+                pCol->SetObject((sal_Int16)nFieldPos);
                 continue;
             }
             else
