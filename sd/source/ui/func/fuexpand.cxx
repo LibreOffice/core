@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-23 13:49:54 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 14:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,13 @@
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
+#endif
+
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
+#endif
+#ifndef _SVDETC_HXX
+#include <svx/svdetc.hxx>
 #endif
 
 #include "app.hrc"
@@ -213,7 +220,28 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                     // Title-Textobjekt erstellen
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
-                    pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( (USHORT) nParaPos, 1));
+
+//
+                    OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (USHORT) nParaPos, 1);
+                    pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
+
+                    if( pOutlinerParaObject->GetDepth(0) != 0 )
+                    {
+                        SdrOutliner* pTempOutl = SdrMakeOutliner( OUTLINERMODE_TITLEOBJECT, pDoc );
+
+                        pTempOutl->SetText( *pOutlinerParaObject );
+                        pTempOutl->SetMinDepth(0);
+
+                        delete pOutlinerParaObject;
+
+                        pTempOutl->SetDepth( pTempOutl->GetParagraph( 0 ), 0 );
+
+                        pOutlinerParaObject = pTempOutl->CreateParaObject();
+                        delete pTempOutl;
+                    }
+
+                    pTextObj->SetOutlinerParaObject(pOutlinerParaObject);
+
                     pTextObj->SetEmptyPresObj(FALSE);
 
                     SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
@@ -227,7 +255,25 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
-                        pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( (USHORT) nParaPos, (USHORT) nChildCount) );
+                        OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (USHORT) nParaPos, (USHORT) nChildCount);
+
+// --
+                        SdrOutliner* pTempOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pDoc );
+                        pTempOutl->SetText( *pOutlinerParaObject );
+
+                        ULONG nParaCount = pTempOutl->GetParagraphCount();
+                        ULONG nPara;
+                        for( nPara = 0; nPara < nParaCount; nPara++ )
+                        {
+                            pTempOutl->SetDepth( pTempOutl->GetParagraph( nPara ), pTempOutl->GetDepth( nPara ) - 1 );
+                        }
+
+                        delete pOutlinerParaObject;
+                        pOutlinerParaObject = pTempOutl->CreateParaObject();
+                        delete pTempOutl;
+
+// --
+                        pTextObj->SetOutlinerParaObject( pOutlinerParaObject );
                         pTextObj->SetEmptyPresObj(FALSE);
 
                         // Harte Attribute entfernen (Flag auf TRUE)
