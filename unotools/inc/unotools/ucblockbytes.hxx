@@ -112,19 +112,19 @@ protected:
 
 public:
                             // properties: Referer, PostMimeType
-    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
+    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent >& xContent,
                                             const NS_UNO::Sequence < NS_BEANS::PropertyValue >& rProps,
-                                            NS_UNO::Reference < NS_IO::XInputStream > xPostData,
+                                            const NS_UNO::Reference < NS_IO::XInputStream >& xPostData,
                                             const NS_UNO::Reference < NS_TASK::XInteractionHandler >& xInter,
                                             UcbLockBytesHandler* pHandler=0 );
 
-    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
+    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent >& xContent,
                                             const NS_UNO::Sequence < NS_BEANS::PropertyValue >& rProps,
                                             StreamMode eMode,
-                                            const NS_UNO::Reference < NS_TASK::XInteractionHandler > xInter,
+                                            const NS_UNO::Reference < NS_TASK::XInteractionHandler >& xInter,
                                             UcbLockBytesHandler* pHandler=0 );
 
-    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent );
+    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream >& xContent );
 
     // SvLockBytes
     virtual void            SetSynchronMode (BOOL bSynchron);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-18 09:07:28 $
+ *  last change: $Author: mba $ $Date: 2001-07-18 09:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,7 +815,7 @@ IMPL_LINK( UcbLockBytes, DataAvailHdl, void*, EMPTYARG )
     return 0;
 }
 
-UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream > xInputStream )
+UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream >& xInputStream )
 {
     if( !xInputStream.is() )
         return NULL;;
@@ -827,8 +827,8 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     return xLockBytes;
 }
 
-UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, const Sequence < PropertyValue >& rProps,
-        Reference < XInputStream > xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
+UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const Sequence < PropertyValue >& rProps,
+        const Reference < XInputStream >& xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
         return NULL;;
@@ -877,8 +877,8 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
     return xLockBytes;
 }
 
-UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, const Sequence < PropertyValue >& rProps,
-        StreamMode eOpenMode, Reference < XInteractionHandler > xInteractionHandler, UcbLockBytesHandler* pHandler )
+UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const Sequence < PropertyValue >& rProps,
+        StreamMode eOpenMode, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
         return NULL;;
