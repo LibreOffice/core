@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importmergehandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:19:35 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -80,10 +82,12 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
         namespace beans = ::com::sun::star::beans;
+
 // -----------------------------------------------------------------------------
 
-ImportMergeHandler::ImportMergeHandler( Backend const & xTargetBackend, Mode mode, OUString const & aEntity )
-: BasicImportHandler(xTargetBackend,aEntity)
+ImportMergeHandler::ImportMergeHandler(
+    Backend const & xTargetBackend, Mode mode, OUString const & aEntity, sal_Bool const & bNotify )
+: BasicImportHandler(xTargetBackend,aEntity, bNotify)
 , m_xOutputHandler()
 , m_mode(mode)
 {
@@ -227,7 +231,6 @@ void SAL_CALL ImportMergeHandler::endLayer(  )
     }
 
     BasicImportHandler::endLayer();
-
     m_xOutputHandler.clear();
 }
 // -----------------------------------------------------------------------------
