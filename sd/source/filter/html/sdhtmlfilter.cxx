@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdhtmlfilter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:42:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/frame.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
