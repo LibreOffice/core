@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvspln.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 15:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,8 +201,6 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 /* Definition von Funktionsmakros:
    */
 
-// #define min(X, Y) ((X) < (Y)  ?  (X) : (Y))    /* Minimum von X,Y     */
-// #define max(X, Y) ((X) > (Y)  ?  (X) : (Y))    /* Maximum von X,Y     */
 #define abs(X) ((X) >= 0  ?  (X) : -(X))       /* Absolutbetrag von X */
 #define sign(X, Y) (Y < 0 ? -abs(X) : abs(X))  /* Vorzeichen von      */
                                                /* Y mal abs(X)        */
