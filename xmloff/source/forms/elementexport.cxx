@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:08:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -466,37 +469,34 @@ namespace xmloff
         // *If* we would export them this way, they would be completely superfluous, and sometimes even
         // disastrous, since they may, at import time, override paragraph properties which already have
         // been set before
-        if ( m_eType == TEXT_AREA )
+        Reference< XText > xControlText( m_xProps, UNO_QUERY );
+        if ( xControlText.is() )
         {
-            Reference< XText > xControlText( m_xProps, UNO_QUERY );
-            if ( xControlText.is() )
+            const XMLPropertyMapEntry* pCharAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_TEXT );
+            while ( pCharAttributeProperties->msApiName )
             {
-                const XMLPropertyMapEntry* pCharAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_TEXT );
-                while ( pCharAttributeProperties->msApiName )
-                {
-                    exportedProperty( ::rtl::OUString::createFromAscii( pCharAttributeProperties->msApiName ) );
-                    ++pCharAttributeProperties;
-                }
-
-                const XMLPropertyMapEntry* pParaAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_SHAPE_PARA );
-                while ( pParaAttributeProperties->msApiName )
-                {
-                    exportedProperty( ::rtl::OUString::createFromAscii( pParaAttributeProperties->msApiName ) );
-                    ++pParaAttributeProperties;
-                }
-
-                // the RichText property is not exported. The presence of the text:p element
-                // will be used - upon reading - as indicator for the value of the RichText property
-                exportedProperty( PROPERTY_RICH_TEXT );
-
-                // strange thing: paragraphs support both a CharStrikeout and a CharCrossedOut property
-                // The former is a short/enum value, the latter a boolean. The former has a real meaning
-                // (the strikeout type), the latter hasn't. But, when the CharCrossedOut is exported and
-                // later on imported, it overwrites anything which has previously been imported for
-                // CharStrikeout.
-                // 2004-04-14 - #i27729# - fs@openoffice.org
-                exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
+                exportedProperty( ::rtl::OUString::createFromAscii( pCharAttributeProperties->msApiName ) );
+                ++pCharAttributeProperties;
             }
+
+            const XMLPropertyMapEntry* pParaAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_SHAPE_PARA );
+            while ( pParaAttributeProperties->msApiName )
+            {
+                exportedProperty( ::rtl::OUString::createFromAscii( pParaAttributeProperties->msApiName ) );
+                ++pParaAttributeProperties;
+            }
+
+            // the RichText property is not exported. The presence of the text:p element
+            // will be used - upon reading - as indicator for the value of the RichText property
+            exportedProperty( PROPERTY_RICH_TEXT );
+
+            // strange thing: paragraphs support both a CharStrikeout and a CharCrossedOut property
+            // The former is a short/enum value, the latter a boolean. The former has a real meaning
+            // (the strikeout type), the latter hasn't. But, when the CharCrossedOut is exported and
+            // later on imported, it overwrites anything which has previously been imported for
+            // CharStrikeout.
+            // 2004-04-14 - #i27729# - fs@openoffice.org
+            exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
         }
 
         // let the base class export the remaining properties and the events
@@ -1060,15 +1060,15 @@ namespace xmloff
         {
             static sal_Int32 nIntegerPropertyAttributeIds[] =
             {   // attribute flags
-                SCA_PAGE_STEP_SIZE, SCA_REPEAT_DELAY
+                SCA_PAGE_STEP_SIZE
             };
             static const ::rtl::OUString* pIntegerPropertyNames[] =
             {   // property names
-                &PROPERTY_BLOCK_INCREMENT, &PROPERTY_REPEAT_DELAY
+                &PROPERTY_BLOCK_INCREMENT
             };
             static const sal_Int32 nIntegerPropertyAttrDefaults[] =
             {   // attribute defaults (XML defaults, not runtime defaults!)
-                10, 50
+                10
             };
 
             sal_Int32 nIdCount = sizeof( nIntegerPropertyAttributeIds ) / sizeof( nIntegerPropertyAttributeIds[0] );
@@ -1149,6 +1149,32 @@ namespace xmloff
             #ifdef DBG_UTIL
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_CURRENT_STATE;
+            #endif
+            }
+        }
+
+        // --------------------------------------------------------------------
+        // some properties which require a special handling
+        // the repeat delay
+        {
+            if ( m_nIncludeSpecial & SCA_REPEAT_DELAY )
+            {
+                DBG_CHECK_PROPERTY( PROPERTY_REPEAT_DELAY, sal_Int32 );
+
+                sal_Int32 nRepeatDelay = 0;
+                m_xProps->getPropertyValue( PROPERTY_REPEAT_DELAY ) >>= nRepeatDelay;
+                Time aTime;
+                aTime.MakeTimeFromMS( nRepeatDelay );
+
+                AddAttribute(OAttributeMetaData::getSpecialAttributeNamespace( SCA_REPEAT_DELAY )
+                            ,OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY )
+                            ,SvXMLUnitConverter::convertTimeDuration( aTime, nRepeatDelay % 1000 ) );
+
+                exportedProperty( PROPERTY_REPEAT_DELAY );
+
+            #ifdef DBG_UTIL
+                //  reset the bit for later checking
+                m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_REPEAT_DELAY;
             #endif
             }
         }
@@ -1607,7 +1633,7 @@ namespace xmloff
             case FormComponentType::COMMANDBUTTON:
                 m_eType = BUTTON;
                 m_nIncludeCommon |= CCA_TAB_STOP | CCA_LABEL;
-                m_nIncludeSpecial = SCA_DEFAULT_BUTTON | SCA_TOGGLE | SCA_FOCUS_ON_CLICK | SCA_IMAGE_POSITION;
+                m_nIncludeSpecial = SCA_DEFAULT_BUTTON | SCA_TOGGLE | SCA_FOCUS_ON_CLICK | SCA_IMAGE_POSITION | SCA_REPEAT_DELAY;
                 // NO BREAK !
             case FormComponentType::IMAGEBUTTON:
                 if (BUTTON != m_eType)
