@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-29 10:36:09 $
+ *  last change: $Author: pb $ $Date: 2000-11-30 11:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,7 +1386,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             }
 
             if ( bRet )
-                rIniFile = aObj.PathToFileName();
+                rIniFile = aObj.GetMainURL();
 
             break;
         }
@@ -1433,7 +1433,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 
                 if ( bRet )
                 {
-                    rIniFile = aObj.PathToFileName();
+                    rIniFile = aObj.GetMainURL();
                     break;
                 }
             }
