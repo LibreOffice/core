@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:47:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XEHELPER_HXX
 #define SC_XEHELPER_HXX
 
@@ -71,13 +69,100 @@
 #include "xestring.hxx"
 #endif
 
+// Export progress bar ========================================================
+
+class ScfProgressBar;
+
+/** The main progress bar for the export filter.
+
+    This class encapsulates creation and initialization of sub progress
+    segments. The Activate***Segment() functions activate a specific segement
+    of the main progress bar. The implementation of these functions contain the
+    calculation of the needed size of the segment. Following calls of the
+    Progress() function increase the currently activated sub segment.
+ */
+class XclExpProgressBar : protected XclExpRoot
+{
+public:
+    explicit            XclExpProgressBar( const XclExpRoot& rRoot );
+    virtual             ~XclExpProgressBar();
+
+    /** Initializes all segments and sub progress bars. */
+    void                Initialize();
+
+    /** Increases the number of existing ROW records by 1. */
+    void                IncRowRecordCount();
+
+    /** Activates the progress segment to create ROW records. */
+    void                ActivateCreateRowsSegment();
+    /** Activates the progress segment to finalize ROW records. */
+    void                ActivateFinalRowsSegment();
+
+    /** Increases the currently activated (sub) progress bar by 1 step. */
+    void                Progress();
+
+private:
+    typedef ::std::auto_ptr< ScfProgressBar > ScfProgressBarPtr;
+
+    ScfProgressBarPtr   mxProgress;         /// Progress bar implementation.
+    ScfProgressBar*     mpSubProgress;      /// Current sub progress bar.
+
+    ScfProgressBar*     mpSubRowCreate;     /// Sub progress bar for creating table rows.
+    ScfInt32Vec         maSubSegRowCreate;  /// Segment ID's for all sheets in sub progress bar.
+
+    ScfProgressBar*     mpSubRowFinal;      /// Sub progress bar for finalizing ROW records.
+    sal_Int32           mnSegRowFinal;      /// Progress segment for finalizing ROW records.
+
+    sal_uInt32          mnRowCount;         /// Number of created ROW records.
+};
 
 // EditEngine->String conversion ==============================================
 
+class SvxURLField;
+class XclExpHyperlink;
+
+/** Helper to create HLINK records during creation of formatted cell strings.
+
+    In Excel it is not possible to have more than one hyperlink in a cell. This
+    helper detects multiple occurences of hyperlinks and fills a string which
+    is used to create a cell note containing all URLs. Only cells containing
+    one hyperlink are exported as hyperlink cells.
+ */
+class XclExpHyperlinkHelper : protected XclExpRoot
+{
+public:
+    typedef ScfRef< XclExpHyperlink > XclExpHyperlinkRef;
+
+    explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
+                        ~XclExpHyperlinkHelper();
+
+    /** Processes the passed URL field (tries to create a HLINK record).
+        @return  The representation string of the URL field. */
+    String              ProcessUrlField( const SvxURLField& rUrlField );
+
+    /** Returns true, if a single HLINK record has been created. */
+    bool                HasLinkRecord() const;
+    /** Returns the craeted single HLINk record, or an empty reference. */
+    XclExpHyperlinkRef  GetLinkRecord();
+
+    /** Returns true, if multiple URLs have been processed. */
+    inline bool         HasMultipleUrls() const { return mbMultipleUrls; }
+    /** Returns a string containing all processed URLs. */
+    inline const String& GetUrlList() { return maUrlList; }
+
+private:
+    XclExpHyperlinkRef  mxLinkRec;          /// Created HLINK record.
+    ScAddress           maScPos;            /// Cell position to set at the HLINK record.
+    String              maUrlList;          /// List with all processed URLs.
+    bool                mbMultipleUrls;     /// true = Multiple URL fields processed.
+};
+
+// ----------------------------------------------------------------------------
+
 class EditEngine;
+class SdrTextObj;
 class ScEditCell;
 class ScPatternAttr;
-class SdrTextObj;
 
 /** This class provides methods to create an XclExpString.
     @descr  The string can be created from an edit engine text object or
@@ -85,42 +170,80 @@ class SdrTextObj;
 class XclExpStringHelper : ScfNoInstance
 {
 public:
-    /** Creates a new formatted string from a Calc edit cell.
-        @param rEditCell  The Calc edit cell object.
-        @param pCellAttr  The set item containing the cell formatting.
+    /** Creates a new unformatted string from the passed string.
+        @descr  Creates a Unicode string or a byte string, depending on the
+                current BIFF version contained in the passed XclExpRoot object.
+        @param rString  The source string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string.
         @return  The new string object (shared pointer). */
-    static XclExpStringPtr      CreateString(
-                                    const XclExpRoot& rRoot,
-                                    const ScEditCell& rEditCell,
-                                    const ScPatternAttr* pCellAttr,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    static XclExpStringRef CreateString(
+                            const XclExpRoot& rRoot,
+                            const String& rString,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+
+    /** Appends an unformatted string to an Excel string object.
+        @descr  Selects the correct Append() function depending on the current
+                BIFF version contained in the passed XclExpRoot object.
+        @param rXclString  The Excel string object.
+        @param rString  The source string. */
+    static void         AppendString(
+                            XclExpString& rXclString,
+                            const XclExpRoot& rRoot,
+                            const String& rString );
+
+    /** Appends a character to an Excel string object.
+        @descr  Selects the correct Append() function depending on the current
+                BIFF version contained in the passed XclExpRoot object.
+        @param rXclString  The Excel string object.
+        @param rString  The source string. */
+    static void         AppendChar(
+                            XclExpString& rXclString,
+                            const XclExpRoot& rRoot,
+                            sal_Unicode cChar );
+
+    /** Creates a new formatted string from a Calc edit cell.
+        @descr  Creates a Unicode string or a byte string, depending on the
+                current BIFF version contained in the passed XclExpRoot object.
+        @param rEditCell  The Calc edit cell object.
+        @param pCellAttr  The set item containing the cell formatting.
+        @param rLinkHelper  Helper object for hyperlink conversion.
+        @param nFlags  Modifiers for string export.
+        @param nMaxLen  The maximum number of characters to store in this string.
+        @return  The new string object (shared pointer). */
+    static XclExpStringRef CreateString(
+                            const XclExpRoot& rRoot,
+                            const ScEditCell& rEditCell,
+                            const ScPatternAttr* pCellAttr,
+                            XclExpHyperlinkHelper& rLinkHelper,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Creates a new formatted string from a drawing text box.
+        @descr  Creates a Unicode string or a byte string, depending on the
+                current BIFF version contained in the passed XclExpRoot object.
         @param rTextObj  The text box object.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string.
         @return  The new string object (shared pointer). */
-    static XclExpStringPtr      CreateString(
-                                    const XclExpRoot& rRoot,
-                                    const SdrTextObj& rTextObj,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    static XclExpStringRef CreateString(
+                            const XclExpRoot& rRoot,
+                            const SdrTextObj& rTextObj,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Creates a new formatted string from a edit text string.
         @param rEditObj  The edittext object.
         @param nFlags  Modifiers for string export.
         @param nMaxLen The maximum number of characters to store in this string.
         @return  The new string object. */
-    static XclExpStringPtr        CreateString(
-                                    const XclExpRoot& rRoot,
-                                    const EditTextObject& rEditObj,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    static XclExpStringRef CreateString(
+                            const XclExpRoot& rRoot,
+                            const EditTextObject& rEditObj,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 };
-
 
 // Header/footer conversion ===================================================
 
@@ -158,7 +281,7 @@ class EditEngine;
 class XclExpHFConverter : protected XclExpRoot, ScfNoCopy
 {
 public:
-    explicit                    XclExpHFConverter( const XclExpRoot& rRoot );
+    explicit            XclExpHFConverter( const XclExpRoot& rRoot );
 
     /** Generates the header/footer string from the passed edit engine text objects. */
     void                GenerateString(
@@ -173,16 +296,15 @@ public:
 
 private:
     /** Converts the text object contents and stores it in the passed string. */
-    void                        AppendPortion(
-                                    const EditTextObject* pTextObj,
-                                    sal_Unicode cPortionCode );
+    void                AppendPortion(
+                            const EditTextObject* pTextObj,
+                            sal_Unicode cPortionCode );
 
 private:
-    EditEngine&                 mrEE;           /// The header/footer edit engine.
+    EditEngine&         mrEE;           /// The header/footer edit engine.
     String              maHFString;     /// The last generated header/footer string.
     sal_Int32           mnTotalHeight;  /// Total height of the last header/footer (twips).
 };
-
 
 // URL conversion =============================================================
 
@@ -194,11 +316,10 @@ class XclExpUrlHelper : ScfNoInstance
 public:
     /** Encodes and returns the URL passed in rAbsUrl to an Excel like URL.
         @param pTableName  Optional pointer to a table name to be encoded in this URL. */
-    static String               EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const String* pTableName = NULL );
+    static String       EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const String* pTableName = 0 );
     /** Encodes and returns the passed DDE link to an Excel like DDE link. */
-    static String               EncodeDde( const String& rApplic, const String rTopic );
+    static String       EncodeDde( const String& rApplic, const String rTopic );
 };
-
 
 // Cached Value Lists =========================================================
 
@@ -211,10 +332,9 @@ class XclExpStream;
 class XclExpCachedValue
 {
 public:
-    virtual                     ~XclExpCachedValue();
-    virtual void                Save( XclExpStream& rStrm ) const = 0;
+    virtual             ~XclExpCachedValue();
+    virtual void        Save( XclExpStream& rStrm ) const = 0;
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -222,14 +342,13 @@ public:
 class XclExpCachedDouble : public XclExpCachedValue
 {
 public:
-    explicit inline             XclExpCachedDouble( double fVal ) : mfVal( fVal ) {}
+    explicit inline     XclExpCachedDouble( double fVal ) : mfVal( fVal ) {}
     /** Writes the double value to stream. */
-    virtual void                Save( XclExpStream& rStrm ) const;
+    virtual void        Save( XclExpStream& rStrm ) const;
 
 private:
-    double                      mfVal;          /// The double value.
+    double              mfVal;          /// The double value.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -237,14 +356,13 @@ private:
 class XclExpCachedString : public XclExpCachedValue
 {
 public:
-    explicit                    XclExpCachedString( const String& rStr, XclStrFlags nFlags = EXC_STR_DEFAULT );
+    explicit            XclExpCachedString( const String& rStr, XclStrFlags nFlags = EXC_STR_DEFAULT );
     /** Writes the string to stream. */
-    virtual void                Save( XclExpStream& rStrm ) const;
+    virtual void        Save( XclExpStream& rStrm ) const;
 
 private:
-    XclExpString                maStr;
+    XclExpString        maStr;
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -252,14 +370,13 @@ private:
 class XclExpCachedError : public XclExpCachedValue
 {
 public:
-    explicit                    XclExpCachedError( USHORT nScError );
+    explicit            XclExpCachedError( USHORT nScError );
     /** Writes the error code to stream. */
-    virtual void                Save( XclExpStream& rStrm ) const;
+    virtual void        Save( XclExpStream& rStrm ) const;
 
 private:
-    sal_uInt8                   mnError;
+    sal_uInt8           mnError;
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -273,23 +390,22 @@ public:
     /** Constructs and fills a new matrix.
         @param rMatrix  The Calc value matrix.
         @param nFlags  Flags for writing strings. */
-    explicit                    XclExpCachedMatrix(
-                                    const ScMatrix& rMatrix,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT );
+    explicit            XclExpCachedMatrix(
+                            const ScMatrix& rMatrix,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Returns the byte count of all contained data. */
-    sal_uInt32                  GetSize() const;
+    sal_uInt32          GetSize() const;
     /** Writes the complete matrix to stream. */
-    void                        Save( XclExpStream& rStrm ) const;
+    void                Save( XclExpStream& rStrm ) const;
 
 private:
     typedef ScfDelList< XclExpCachedValue > XclExpCachedValueList;
 
-    XclExpCachedValueList       maValueList;    /// The list containing the cached values.
-    SCSIZE                      mnScCols;       /// Calc column count of the value matrix.
-    SCSIZE                      mnScRows;       /// Calc row count of the value matrix.
+    XclExpCachedValueList maValueList;  /// The list containing the cached values.
+    SCSIZE              mnScCols;       /// Calc column count of the value matrix.
+    SCSIZE              mnScRows;       /// Calc row count of the value matrix.
 };
-
 
 // ============================================================================
 
