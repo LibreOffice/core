@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.17 $
+#*  $Revision: 1.18 $
 #*
-#*  last change: $Author: vg $ $Date: 2003-04-24 12:12:36 $
+#*  last change: $Author: rt $ $Date: 2004-01-20 13:43:56 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -62,17 +62,17 @@
 PRJ=..
 
 PRJNAME=i18npool
-TARGET=i18npool
-VERSION=$(UPD)
+TARGET=i18npool.uno
 
 # Make symbol renaming match library name for Mac OS X
 .IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=i18n$(UPD)$(DLLPOSTFIX)
+SYMBOLPREFIX=$(TARGET)
 .ENDIF
 
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
+DLLPRE =
 
 # --- Allgemein ----------------------------------------------------------
 
@@ -91,17 +91,17 @@ LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/inputchecker.lib \
         $(SLB)$/textconversion.lib
 
-SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
-SHL1IMPLIB= i$(TARGET)
+SHL1TARGET= $(TARGET)
+# WNT needs implib name even if there is none
+SHL1IMPLIB= i$(SHL1TARGET)
 
 SHL1DEPN=	makefile.mk
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=$(PRJNAME).map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1LIBS=$(LIB1TARGET)
 SHL1STDLIBS= \
-        $(TOOLSLIB) \
         $(I18NUTILLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
