@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:09:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <wrt_fn.hxx>
 #endif
 
+#ifndef SW_MS_MSFILTER_HXX
+#include "../inc/msfilter.hxx"
+#endif
+
 // einige Forward Deklarationen
 class Color;
 class Font;
@@ -86,7 +90,6 @@ class SwNumRuleTbl;
 class SwNodeNum;
 class DateTime;
 class RTFEndPosLst;
-class SwNumRuleTbl;
 
 extern SwAttrFnTab aRTFAttrFnTab;
 extern SwNodeFnTab aRTFNodeFnTab;
@@ -95,6 +98,12 @@ extern SwNodeFnTab aRTFNodeFnTab;
 // be used
 #define DEF_ENCODING        RTL_TEXTENCODING_ASCII_US
 
+
+class RTF_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
+{
+    public:
+    virtual void Write(Writer &rWrt);
+};
 
 // der RTF-Writer
 
@@ -110,12 +119,14 @@ class SwRTFWriter : public Writer
                                     // fuer den Zugriff auf einige Attribute
                                     // z.B. Font-Size, LR-Space,..
     SwNumRuleTbl* pNumRuleTbl;      // list of all exported numrules
+    RTF_WrtRedlineAuthor *pRedlAuthors;
 
     USHORT nAktFlyPos;              // Index auf das naechste "FlyFrmFmt"
     void OutRTFColorTab();
     void OutRTFFontTab();
     void OutRTFStyleTab();
     void OutRTFListTab();
+    bool OutRTFRevTab();
 
     void MakeHeader();
     void OutUnicodeSafeRecord(const sal_Char *pToken,
@@ -126,8 +137,13 @@ class SwRTFWriter : public Writer
 
     void BuildNumRuleTbl();
 
+
+
 public:
     // --- public Member --------------------------------------------------
+
+    USHORT nCurRedline;
+
 
     const SwFlyFrmFmt* pFlyFmt; // liegt der Node in einem FlyFrame,
                                         // ist das Format gesetzt, sonst 0
@@ -182,6 +198,7 @@ public:
     void OutRTFBorders( SvxBoxItem aBox );
     void OutRTFBorder( const SvxBorderLine* aLine, const USHORT nSpace );
     BOOL OutBreaks( const SfxItemSet& rSet );
+    void OutRedline( xub_StrLen nCntntPos );
 
         // gebe die PageDescriptoren aus
     USHORT GetId( const Color& ) const;
