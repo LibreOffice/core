@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-28 11:41:42 $
+ *  last change: $Author: fs $ $Date: 2000-11-28 13:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
     ,m_aSpecialMessage      (this, ResId(FT_SPECIAL_MESSAGE))
     ,m_pCollection(NULL)
     ,m_eCurrentSelection(DST_UNKNOWN)
-    ,m_bDisplayingDeleted(sal_False)
+    ,m_bDisplayingInvalid(sal_False)
 {
     // fill the listbox with the UI descriptions for the possible types
     // and remember the respective DSN prefixes
@@ -322,7 +322,7 @@ void OGeneralPage::onTypeSelected(DATASOURCE_TYPE _eType)
 //-------------------------------------------------------------------------
 sal_Bool OGeneralPage::checkItems()
 {
-    if ((0 == m_aName.GetText().Len()) && !m_bDisplayingDeleted)
+    if ((0 == m_aName.GetText().Len()) && !m_bDisplayingInvalid)
     {
         String sErrorMsg(ModuleRes(STR_ERR_EMPTY_DSN_NAME));
         ErrorBox aErrorBox(GetParent(), WB_OK, sErrorMsg);
@@ -354,7 +354,7 @@ void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValu
 
     String sConnectURL, sName;
     String sMessage;
-    m_bDisplayingDeleted = sal_False;
+    m_bDisplayingInvalid = !bValid;
     if (bValid)
     {
         // collect some items and some values
@@ -372,7 +372,6 @@ void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValu
         {
             OLocalResourceAccess aStringResAccess(PAGE_GENERAL, RSC_TABPAGE);
             sMessage = String(ResId(STR_DATASOURCEDELETED));
-            m_bDisplayingDeleted = sal_True;
         }
     }
     m_aSpecialMessage.SetText(sMessage);
@@ -1764,6 +1763,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2000/11/28 11:41:42  oj
+ *  #80827# check dbroot if dbconfig failed
+ *
  *  Revision 1.14  2000/11/22 15:44:05  oj
  *  #80269# remove property long names
  *
