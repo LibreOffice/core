@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-07 10:42:07 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,8 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /* 48 SOT_FORMATSTR_ID_STARMATH_50*/            { "application/x-openoffice;windows_formatname=\"StarMath 5.0\"", "StarMath 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 49 SOT_FORMATSTR_ID_STAROBJECT_PAINTDOC*/    { "application/x-openoffice;windows_formatname=\"StarObjectPaintDocument\"", "StarObjectPaintDocument", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 50 SOT_FORMATSTR_ID_FILLED_AREA*/            { "application/x-openoffice;windows_formatname=\"FilledArea\"", "FilledArea", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/* 51 SOT_FORMATSTR_ID_HTML*/                   { "application/x-openoffice;windows_formatname=\"HTML (HyperText Markup Language)\"", "HTML (HyperText Markup Language)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/* 52 SOT_FORMATSTR_ID_HTML_SIMPLE*/            { "text/html", "HTML Format", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 51 SOT_FORMATSTR_ID_HTML*/                   { "text/html", "HTML (HyperText Markup Language)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 52 SOT_FORMATSTR_ID_HTML_SIMPLE*/            { "application/x-openoffice;windows_formatname=\"HTML Format\"", "HTML Format", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 53 SOT_FORMATSTR_ID_CHAOS*/                  { "application/x-openoffice;windows_formatname=\"FORMAT_CHAOS\"", "FORMAT_CHAOS", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 54 SOT_FORMATSTR_ID_CNT_MSGATTACHFILE*/      { "application/x-openoffice;windows_formatname=\"CNT_MSGATTACHFILE_FORMAT\"", "CNT_MSGATTACHFILE_FORMAT", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 55 SOT_FORMATSTR_ID_BIFF_5*/                 { "application/x-openoffice;windows_formatname=\"Biff5\"", "Biff5", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
