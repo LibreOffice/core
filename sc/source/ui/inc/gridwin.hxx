@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:37:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ private:
     USHORT                  nButtonDown;
     BOOL                    bEEMouse;               // Edit-Engine hat Maus
     BYTE                    nMouseStatus;
+    BYTE                    nNestedButtonState;     // track nested button up/down calls
 
     BOOL                    bPivotMouse;            // Pivot-D&D (alte Pivottabellen)
     ScPivot*                pDragPivot;
@@ -264,6 +265,8 @@ private:
     sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt );
     sal_Int8        DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPosX, SCROW nDestPosY,
                                     const Point& rLogicPos, sal_Int8 nDndAction );
+
+    void            HandleMouseButtonDown( const MouseEvent& rMEvt );
 
     BOOL            DrawMouseButtonDown(const MouseEvent& rMEvt);
     BOOL            DrawMouseButtonUp(const MouseEvent& rMEvt);
