@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 15:27:25 $
+#   last change: $Author: rt $ $Date: 2004-10-22 09:03:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,18 +101,15 @@ LIB1OBJFILES=	\
         
 LIB2OBJFILES=	\
         $(SLO)$/dbu_reghelper.obj	\
-        $(SLO)$/dbustrings.obj	\
-        $(SLO)$/apitools.obj
+        $(SLO)$/dbustrings.obj
         
 LIB3OBJFILES=	\
         $(SLO)$/flt_reghelper.obj	\
-        $(SLO)$/xmlstrings.obj	\
-        $(SLO)$/apitools.obj
+        $(SLO)$/xmlstrings.obj
         
 LIB4OBJFILES=	\
         $(SLO)$/cfg_reghelper.obj	\
-        $(SLO)$/cfgstrings.obj	\
-        $(SLO)$/apitools.obj
+        $(SLO)$/cfgstrings.obj
 
 # --- Targets ----------------------------------
 
