@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-12 08:39:56 $
+ *  last change: $Author: dl $ $Date: 2000-10-18 12:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,6 +1349,19 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         for (USHORT nPage = 0; nPage < GetPageCount(); nPage++)
         {
             SdPage* pPage = (SdPage*)GetPage(nPage);
+            SdrObjListIter aIter( *pPage );
+            while( aIter.IsMore() )
+            {
+                OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
+                if( pOPO )
+                {
+                    if( pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
+                        pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+
+                    pOPO->FinishLoad( pSPool );
+                }
+            }
+
             List* pPresObjList = pPage->GetPresObjList();
             ULONG nObjCount = pPresObjList->Count();
             if (nObjCount)
@@ -1422,7 +1435,12 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
                 delete pOutlineList;
             }
+        }
 
+        // Masterpages:
+        for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
+        {
+            SdPage* pPage = (SdPage*)GetMasterPage(nPage);
             SdrObjListIter aIter( *pPage );
             while( aIter.IsMore() )
             {
@@ -1435,12 +1453,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                     pOPO->FinishLoad( pSPool );
                 }
             }
-        }
-
-        // Masterpages:
-        for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
-        {
-            SdPage* pPage = (SdPage*)GetMasterPage(nPage);
 
             // BackgroundObjekt vor Selektion schuetzen #62144#
             SdrObject* pBackObj = pPage->GetPresObj(PRESOBJ_BACKGROUND);
@@ -1520,19 +1532,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                 }
 
                 delete pOutlineList;
-            }
-
-            SdrObjListIter aIter( *pPage );
-            while( aIter.IsMore() )
-            {
-                OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
-                if( pOPO )
-                {
-                    if( pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                        pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-
-                    pOPO->FinishLoad( pSPool );
-                }
             }
         }
     }
