@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-03 14:40:28 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 14:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     uno::Reference<frame::XModel>& xModel, uno::Reference<uno::XInterface>& xWriter,
     uno::Sequence<beans::PropertyValue>& aDescriptor, const rtl::OUString& sName,
     const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
-    const sal_Bool bCompress, uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
+    const sal_Bool bPlainText, uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
 {
     sal_Bool bRet(sal_False);
     uno::Reference<io::XOutputStream> xOut;
@@ -394,8 +394,16 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
                                 STREAM_WRITE | STREAM_SHARE_DENYWRITE );
         uno::Any aAny; aAny <<= sMediaType;
         xStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
-        aAny = ::cppu::bool2any(bCompress);
-        xStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), aAny);
+        if (bPlainText)
+        {
+            aAny = ::cppu::bool2any(sal_False);
+            xStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), aAny);
+        }
+        else
+        {
+            aAny = ::cppu::bool2any(sal_True);
+            xStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")), aAny);
+        }
         xStream->SetBufferSize( 16*1024 );
         xOut = new utl::OOutputStreamWrapper( *xStream );
     }
@@ -501,7 +509,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             bMetaRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaExporter")),
-                sal_False, aMetaArgs, pSharedData);
+                sal_True, aMetaArgs, pSharedData);
         }
 
         uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
@@ -536,7 +544,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             bStylesRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesExporter")),
-                sal_True, aStylesArgs, pSharedData);
+                sal_False, aStylesArgs, pSharedData);
         }
 
         // content export
@@ -554,7 +562,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             bDocRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("content.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentExporter")),
-                sal_True, aDocArgs, pSharedData);
+                sal_False, aDocArgs, pSharedData);
 
         }
 
@@ -576,7 +584,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             bSettingsRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsExporter")),
-                sal_True, aSettingsArgs, pSharedData);
+                sal_False, aSettingsArgs, pSharedData);
         }
 
         if (xStatusIndicator.is())

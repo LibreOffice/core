@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 10:48:28 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 14:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ class ScXMLImportWrapper
         com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xWriter,
         com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
         const rtl::OUString& sName, const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
-        const sal_Bool bCompress, com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
+        const sal_Bool bPlainText, com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
         ScMySharedData*& pSharedData);
 
 public:
