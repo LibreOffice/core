@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-20 14:04:42 $
+ *  last change: $Author: sj $ $Date: 2000-10-24 08:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5235,7 +5235,8 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
     {
         const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ];
         PPTCharLevel* pCharLevel = NULL;
-        if ( nInstanceInSheet == 0xffffffff )
+        if ( ( nInstanceInSheet == 0xffffffff )
+                || ( mnDepth && ( ( mnInstance == TSS_TYPE_SUBTITLE ) || ( mnInstance == TSS_TYPE_TEXT_IN_SHAPE ) ) ) )
             bIsHardAttribute = 1;
         else if ( nInstanceInSheet != mnInstance )
             pCharLevel = &mrStyleSheet.mpCharSheet[ nInstanceInSheet ]->maCharLevel[ mnDepth ];
@@ -5487,7 +5488,8 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
         const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ];
 
         PPTParaLevel* pParaLevel = NULL;
-        if ( nInstanceInSheet == 0xffffffff )
+        if ( ( nInstanceInSheet == 0xffffffff )
+            || ( pParaSet->mnDepth && ( ( mnInstance == TSS_TYPE_SUBTITLE ) || ( mnInstance == TSS_TYPE_TEXT_IN_SHAPE ) ) ) )
             bIsHardAttribute = 1;
         else if ( nInstanceInSheet != mnInstance )
             pParaLevel = &mrStyleSheet.mpParaSheet[ nInstanceInSheet ]->maParaLevel[ pParaSet->mnDepth ];
