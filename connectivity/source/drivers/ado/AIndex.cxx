@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,7 @@ void WpADOIndex::Create()
 
 
     if( !FAILED( hr ) )
-    {
-        pInterface = pCommand;
-        pInterface->AddRef();
-    }
+        operator=(pCommand);
 }
 // -------------------------------------------------------------------------
 OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection,ADOIndex* _pIndex)

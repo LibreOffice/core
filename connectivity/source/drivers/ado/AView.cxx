@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,7 @@ void WpADOView::Create()
 
 
     if( !FAILED( hr ) )
-    {
-        pInterface = pCommand;
-        pInterface->AddRef();
-    }
+        operator=(pCommand);
 }
 
 // -------------------------------------------------------------------------
