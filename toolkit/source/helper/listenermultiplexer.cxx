@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenermultiplexer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include <toolkit/helper/listenermultiplexer.hxx>
+
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 
 //  ----------------------------------------------------
 //  class ListenerMultiplexerBase
