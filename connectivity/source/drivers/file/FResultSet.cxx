@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 09:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,8 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
+    OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"getRow called for deleted row");
+
     sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
     ::std::map<sal_Int32,sal_Int32>::const_iterator aFind = m_aBookmarks.find(nPos);
     OSL_ENSURE(aFind != m_aBookmarks.end(),"OResultSet::getRow() invalid bookmark!");
@@ -664,6 +666,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     {
         sal_Int32 nPos = (*m_aInsertRow)[0];
         m_pFileSet->push_back(nPos);
+        (*m_aInsertRow)[0] = sal_Int32(m_pFileSet->size());
         clearInsertRow();
 
         m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
@@ -1065,11 +1068,11 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
             switch(eCursorPosition)
             {
                 case OFileTable::FILE_NEXT:
-                    m_nRowPos++;
+                    ++m_nRowPos;
                     break;
                 case OFileTable::FILE_PRIOR:
                     if (m_nRowPos >= 0)
-                        m_nRowPos--;
+                        --m_nRowPos;
                     break;
                 case OFileTable::FILE_FIRST:
                     m_nRowPos = 0;
@@ -1082,10 +1085,8 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                     m_nRowPos += nOffset;
                     break;
                 case OFileTable::FILE_ABSOLUTE:
-                    m_nRowPos = nOffset - 1;
-                    break;
                 case OFileTable::FILE_BOOKMARK:
-                    m_nRowPos = nOffset - 1;
+                    m_nRowPos = nOffset -1;
                     break;
             }
 
@@ -1111,7 +1112,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                 else // Index muß weiter aufgebaut werden
                 {
                     // Zunaechst auf die letzte bekannte Zeile setzen
-                    if (m_pFileSet->size())
+                    if (!m_pFileSet->empty())
                     {
                         m_aFileSetIter = m_pFileSet->end()-1;
                         //  m_pFileSet->SeekPos(m_pFileSet->size()-1);
@@ -1169,10 +1170,10 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
         switch (eCursorPosition)
         {
             case OFileTable::FILE_NEXT:
-                m_nRowPos++;
+                ++m_nRowPos;
                 break;
             case OFileTable::FILE_PRIOR:
-                m_nRowPos--;
+                --m_nRowPos;
                 break;
             case OFileTable::FILE_FIRST:
                 m_nRowPos = 0;
@@ -1183,8 +1184,8 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
             case OFileTable::FILE_RELATIVE:
                 m_nRowPos += nOffset;
                 break;
-            case OFileTable::FILE_BOOKMARK:
             case OFileTable::FILE_ABSOLUTE:
+            case OFileTable::FILE_BOOKMARK:
                 m_nRowPos = nOffset - 1;
                 break;
         }
