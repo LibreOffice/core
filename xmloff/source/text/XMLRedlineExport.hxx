@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: dvo $ $Date: 2001-01-12 14:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ class XMLRedlineExport
     const ::rtl::OUString sInsertion;
     const ::rtl::OUString sIsCollapsed;
     const ::rtl::OUString sIsStart;
-    const ::rtl::OUString sRL;
     const ::rtl::OUString sRedlineAuthor;
     const ::rtl::OUString sRedlineComment;
     const ::rtl::OUString sRedlineDateTime;
@@ -111,6 +110,8 @@ class XMLRedlineExport
     const ::rtl::OUString sStyle;
     const ::rtl::OUString sTextTable;
     const ::rtl::OUString sUnknownChange;
+
+    const ::rtl::OUString sChangePrefix;
 
     SvXMLExport& rExport;
 

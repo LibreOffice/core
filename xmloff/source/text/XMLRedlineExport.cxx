@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: dvo $ $Date: 2001-01-12 14:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp) :
     sInsertion(RTL_CONSTASCII_USTRINGPARAM(sXML_insertion)),
     sIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed")),
     sIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart")),
-    sRL(RTL_CONSTASCII_USTRINGPARAM("RL")),
     sRedlineAuthor(RTL_CONSTASCII_USTRINGPARAM("RedlineAuthor")),
     sRedlineComment(RTL_CONSTASCII_USTRINGPARAM("RedlineComment")),
     sRedlineDateTime(RTL_CONSTASCII_USTRINGPARAM("RedlineDateTime")),
@@ -136,6 +135,7 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp) :
     sStyle(RTL_CONSTASCII_USTRINGPARAM("Style")),
     sTextTable(RTL_CONSTASCII_USTRINGPARAM("TextTable")),
     sUnknownChange(RTL_CONSTASCII_USTRINGPARAM("UnknownChange")),
+    sChangePrefix(RTL_CONSTASCII_USTRINGPARAM("ct")),
     rExport(rExp),
     aChangesList()
 {
@@ -329,7 +329,7 @@ const OUString XMLRedlineExport::GetRedlineID(
     OUString sTmp;
     aAny >>= sTmp;
 
-    OUStringBuffer sBuf(sRL);
+    OUStringBuffer sBuf(sChangePrefix);
     sBuf.append(sTmp);
     return sBuf.makeStringAndClear();
 }
