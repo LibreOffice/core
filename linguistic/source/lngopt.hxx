@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 11:18:44 $
+ *  last change: $Author: tl $ $Date: 2001-02-02 15:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,7 @@ public:
     BOOL    IsSpellInAllLanguages() const   { return pData->bIsSpellInAllLanguages; }
 
     const ::com::sun::star::uno::Sequence< rtl::OUString >
-            GetCfgActiveDictionaries() const    { return pData->aActiveDics; }
-    void    SetCfgActiveDictionaries(
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XDictionaryList > &rDicList );
+            GetActiveDics() const   { return pData->aActiveDics; }
 
     // OtherLingu functions
     INT16   GetOtherIndex() const           { return pData->nOtherIndex; }

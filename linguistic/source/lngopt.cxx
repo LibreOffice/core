@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 11:13:22 $
+ *  last change: $Author: tl $ $Date: 2001-02-02 15:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,33 +369,6 @@ OUString LinguOptions::GetName( INT32 nWID ) const
     }
 
     return aRes;
-}
-
-
-void LinguOptions::SetCfgActiveDictionaries(
-            Reference< XDictionaryList > &rDicList )
-{
-    if (rDicList.is())
-    {
-        Sequence< Reference< XDictionary > > aDics( rDicList->getDictionaries() );
-        const Reference< XDictionary > *pDic = aDics.getConstArray();
-        INT32 nCount = aDics.getLength();
-
-        pData->aActiveDics.realloc( nCount );
-        OUString *pActiveDic = pData->aActiveDics.getArray();
-        INT32 nLen = 0;
-        for (INT32 i = 0;  i < nCount;  ++i)
-        {
-            const Reference< XDictionary > &rDic = pDic[i];
-            if (rDic.is()  &&  rDic->isActive())
-            {
-                pActiveDic[ nLen++ ] = rDic->getName();
-            }
-        }
-        pData->aActiveDics.realloc( nLen );
-
-//      pData->SetModified();
-    }
 }
 
 
