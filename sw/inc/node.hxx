@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:37:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,11 @@ struct SwPosition;
 class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 {
     friend class SwNodes;
+
+#ifndef PRODUCT
+    static long nSerial;
+    long nMySerial;
+#endif
 
     BYTE nNodeType;
     BOOL bWrongDirty : 1;       // Ist das Wrong-Feld auf invalid? (nur TxtNodes)
