@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 10:54:00 $
+ *  last change: $Author: ama $ $Date: 2002-01-21 09:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,9 +308,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                     SwRect aRect( (*pRegion)[ pRegion->Count() - 1 ] );
                     pRegion->Remove( pRegion->Count() - 1 );
 
-                    if ( bPaintsFromSystem )
-                        PaintDesktop( aRect );
-
                     BOOL bPaint = TRUE;
                     if ( IsEndActionByVirDev() )
                     {
@@ -351,6 +348,8 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                             aMapMode.SetOrigin( aOrigin );
                             pVout->SetMapMode( aMapMode );
                             pOut = pVout;
+                            if ( bPaintsFromSystem )
+                                PaintDesktop( aRect );
                             pLayout->Paint( aRect );
                             pOld->DrawOutDev( aRect.Pos(), aRect.SSize(),
                                               aRect.Pos(), aRect.SSize(), *pVout );
@@ -364,7 +363,11 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         }
                     }
                     if ( bPaint )
+                    {
+                        if ( bPaintsFromSystem )
+                            PaintDesktop( aRect );
                         pLayout->Paint( aRect );
+                    }
                 }
                 delete pVout;
                 delete pRegion;
