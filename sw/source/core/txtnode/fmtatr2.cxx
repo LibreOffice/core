@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:23 $
+ *  last change: $Author: mib $ $Date: 2001-01-19 08:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,11 +350,19 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             sVal = aName;
         break;
         case MID_URL_VISITED_FMT:
-            sVal = SwXStyleFamilies::GetProgrammaticName( aVisitedFmt,
+            sVal = aVisitedFmt;
+            if( !sVal.Len() && nVisitedId != 0 )
+                SwDoc::GetPoolNm( nVisitedId, sVal );
+            if( sVal.Len() )
+                sVal = SwXStyleFamilies::GetProgrammaticName( sVal,
                                                     SFX_STYLE_FAMILY_CHAR );
         break;
         case MID_URL_UNVISITED_FMT:
-            sVal = SwXStyleFamilies::GetProgrammaticName( aINetFmt,
+            sVal = aINetFmt;
+            if( !sVal.Len() && nINetId != 0 )
+                SwDoc::GetPoolNm( nINetId, sVal );
+            if( sVal.Len() )
+                SwXStyleFamilies::GetProgrammaticName( sVal,
                                                     SFX_STYLE_FAMILY_CHAR );
         break;
         case MID_URL_HYPERLINKEVENTS:
