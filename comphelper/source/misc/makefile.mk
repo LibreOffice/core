@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 21:06:52 $
+#   last change: $Author: obo $ $Date: 2004-11-17 13:40:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,8 @@ SLOFILES=	\
             $(SLO)$/storagehelper.obj \
             $(SLO)$/anytostring.obj		\
             $(SLO)$/mediadescriptor.obj \
-            $(SLO)$/locale.obj
+            $(SLO)$/locale.obj \
+            $(SLO)$/configurationhelper.obj
 
 # --- Targets ----------------------------------
 
