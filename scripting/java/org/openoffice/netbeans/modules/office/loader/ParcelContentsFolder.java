@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContentsFolder.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-06-12 11:31:26 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-17 12:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import org.openide.NotifyDescriptor;
 import org.openide.ErrorManager;
 
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileLock;
 import org.openide.filesystems.FileUtil;
 import org.openide.filesystems.FileSystem;
 import org.openide.filesystems.Repository;
@@ -141,12 +142,16 @@ public class ParcelContentsFolder extends DataFolder {
 
         FileObject fo = result.getPrimaryFile();
         if (fo.getExt().equals("java")) {
+            FileLock lock = null;
             try {
                 PackageRemover.removeDeclaration(FileUtil.toFile(fo));
 
                 // IssueZilla 11986 - rename the FileObject
                 // so the JavaNode is resynchronized
-                fo.rename(fo.lock(), fo.getName(), fo.getExt());
+                lock = fo.lock();
+                if (lock != null) {
+                    fo.rename(lock, fo.getName(), fo.getExt());
+                }
             }
             catch (IOException ioe) {
                 NotifyDescriptor d = new NotifyDescriptor.Message(
@@ -155,6 +160,11 @@ public class ParcelContentsFolder extends DataFolder {
                  ". You should manually remove this declaration " +
                  "before building the Parcel Recipe");
                 TopManager.getDefault().notify(d);
+            }
+            finally {
+                if (lock != null) {
+                    lock.releaseLock();
+                }
             }
         }
     }
