@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:07:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef SC_XESTRING_HXX
 #include "xestring.hxx"
+#endif
+#ifndef SC_XEFORMULA_HXX
+#include "xeformula.hxx"
 #endif
 
 /* ============================================================================
@@ -260,7 +263,7 @@ private:
 // ----------------------------------------------------------------------------
 
 /** Contains all conditional formats of a specific sheet. */
-class XclExpCondFormatBuffer : public XclExpRecordBase
+class XclExpCondFormatBuffer : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     /** Constructs CONDFMT and CF records containing the conditional formats of the current sheet. */
@@ -287,6 +290,7 @@ class XclExpDV : public XclExpRecord, protected XclExpRoot
 {
 public:
     explicit            XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle );
+    virtual             ~XclExpDV();
 
     /** Returns the core handle of the validation data. */
     inline ULONG        GetScHandle() const { return mnScHandle; }
@@ -302,16 +306,14 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpTokenArray > XclExpTokArrRef;
-
     ScRangeList         maRanges;       /// A list with all affected cells.
     XclExpString        maPromptTitle;  /// The prompt title.
     XclExpString        maPromptText;   /// The prompt text.
     XclExpString        maErrorTitle;   /// The error title.
     XclExpString        maErrorText;    /// The error text.
     XclExpStringRef     mxString1;      /// String for first condition formula.
-    XclExpTokArrRef     mxTokArr1;      /// Formula for first condition.
-    XclExpTokArrRef     mxTokArr2;      /// Formula for second condition.
+    XclExpTokenArrayRef mxTokArr1;      /// Formula for first condition.
+    XclExpTokenArrayRef mxTokArr2;      /// Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
     ULONG               mnScHandle;     /// The core handle for quick list search.
 };
@@ -323,6 +325,7 @@ class XclExpDval : public XclExpRecord, protected XclExpRoot
 {
 public:
     explicit            XclExpDval( const XclExpRoot& rRoot );
+    virtual             ~XclExpDval();
 
     /** Inserts the cell range into the range list of the DV record with the specified handle. */
     void                InsertCellRange( const ScRange& rRange, ULONG nScHandle );
