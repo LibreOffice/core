@@ -49,7 +49,6 @@ UDK_3_0_0 {
         osl_flushProfile;
         osl_freeProcessHandle;
         osl_freeSecurityHandle;
-        osl_freeThreadHandle;
         osl_getAddrOfSocketAddr;
         osl_getCommandArg;
         osl_getCommandArgCount;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 16:33:41 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 16:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,22 +584,6 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
         /* free memory */
         free(pThreadImpl);
     }
-}
-
-/*****************************************************************************/
-/* osl_freeThreadHandle */
-/*****************************************************************************/
-void SAL_CALL osl_freeThreadHandle(oslThread Thread)
-{
-    sal_Bool attached;
-    osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
-
-    if (Thread == 0)        /* valid ptr? */
-    {
-        /* thread already destroyed or not created */
-        return;
-    }
-    OSL_ENSURE( 0 , "osl_freeThreadHandle: deprecated, should not be called !" );
 }
 
 /*****************************************************************************/

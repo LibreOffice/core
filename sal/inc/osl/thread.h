@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 15:51:01 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 16:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,12 +135,6 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread);
     the thread, we just free up the memory needed by the handle.
 */
 void SAL_CALL osl_destroyThread(oslThread Thread);
-
-/** This method is non-functional.
-
-    @deprecated
-*/
-void SAL_CALL osl_freeThreadHandle(oslThread Thread);
 
 /** Wake-up a thread that was suspended with suspend() or
     createSuspended(). The oslThread must be valid!
