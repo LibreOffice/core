@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-12-12 16:14:44 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 13:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,7 +858,7 @@ void SvxGrfCropPage::SvxCropExample::Paint( const Rectangle& rRect )
 {
     Size aWinSize( PixelToLogic(GetOutputSizePixel() ));
     SetLineColor();
-    SetFillColor( Color( COL_WHITE ) );
+    SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
     SetRasterOp( ROP_OVERPAINT );
     DrawRect( Rectangle( Point(), aWinSize ) );
 
