@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-22 11:16:56 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabDialog RID_SCDLG_ATTR
     Text [ swedish ] = "Cellattribut" ;
     Text [ dutch ] = "Celattributen" ;
     Text [ spanish ] = "Atributos de celda" ;
-    Text [ english_us ] = "Cell Attributes" ;
+    Text [ english_us ] = "Format Cells" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     TabControl 1
