@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:01:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@
 #define EXC_WIN2_FROZEN             0x0008
 #define EXC_WIN2_SHOWZEROS          0x0010
 #define EXC_WIN2_DEFAULTCOLOR       0x0020
+const sal_uInt16 EXC_WIN2_MIRRORED          = 0x0040;
 #define EXC_WIN2_OUTLINE            0x0080
 #define EXC_WIN2_FROZENNOSPLIT      0x0100
 #define EXC_WIN2_SELECTED           0x0200
