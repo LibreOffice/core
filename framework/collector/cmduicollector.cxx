@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2003-12-11 15:59:58 $
+ *  last change: $Author: cd $ $Date: 2004-01-20 08:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ bool ReadCSVFile( const OUString& aCVSFileURL, MODULES eModule, const OUString& 
                 aCmdLabel.nID = nID;
                 aCmdLabel.aCommand = aUnoCmd;
                 aCmdLabel.aCommand += OStringToOUString( aCmdName, RTL_TEXTENCODING_ASCII_US );
-                aCmdLabel.nModules |= ( 1 << unsigned long( eModule ));
+                aCmdLabel.nModules |= ( 1 << (unsigned long)( eModule ));
                 moduleMapFiles[int(eModule)].insert( CommandIDToLabelsMap::value_type( nID, aCmdLabel ));
                 modulePopupMenusCmd[int(eModule)].insert( CommandToLabelsMap::value_type( aCmdLabel.aCommand, aCmdLabel ));
             }
