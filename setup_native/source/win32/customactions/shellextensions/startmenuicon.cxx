@@ -2,9 +2,9 @@
  *
  *  $RCSfile: startmenuicon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 10:40:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
     WritePrivateProfileString(
         TEXT(".ShellClassInfo"),
         TEXT("IconIndex"),
-        TEXT("0"),
+        TEXT("18"),
         sDesktopFile.c_str() );
 
     WritePrivateProfileString(
