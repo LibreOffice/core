@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIConfigurationManager.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2004-11-02 11:58:16 $
+ *  last change: $Date: 2005-02-24 17:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package ifc.ui;
 
 import com.sun.star.beans.PropertyValue;
@@ -152,10 +151,10 @@ public class _XUIConfigurationManager extends MultiMethodTest {
             result = mxMenuBarSettings != null;
             for (int i=0; i<mxMenuBarSettings.getCount(); i++) {
                 Object[] o = (Object[])mxMenuBarSettings.getByIndex(i);
-                System.out.println("+++++++++ i = " + i);
+                log.println("+++++++++ i = " + i);
                 for (int j=0; j<o.length; j++) {
                     PropertyValue prop = (PropertyValue)o[j];
-                    System.out.println("Property" + j + ": " + prop.Name + "   " + prop.Value.toString());
+                    log.println("Property" + j + ": " + prop.Name + "   " + prop.Value.toString());
                 }
             }
         }
@@ -304,7 +303,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
      */
     public void _getImageManager() {
         Object o = oObj.getImageManager();
-        System.out.println("###### ImageManager ");
+        log.println("###### ImageManager ");
         XImageManager xImageManager = (XImageManager)UnoRuntime.queryInterface(XImageManager.class, o);
         tRes.tested("getImageManager()", xImageManager != null);
     }
@@ -319,7 +318,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
         String[] serviceNames = xSI.getSupportedServiceNames();
         boolean bSupportedServiceFound = false;
         for (int i=0; i<serviceNames.length; i++) {
-            System.out.println("SuppService: " + serviceNames[i]);
+            log.println("SuppService: " + serviceNames[i]);
             if (serviceNames[i].equals(sShortCutManagerServiceName)) {
                 bSupportedServiceFound = true;
             }
