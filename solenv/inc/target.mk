@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: mh $ $Date: 2001-03-01 17:09:57 $
+#   last change: $Author: hjs $ $Date: 2001-03-16 18:06:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2198,7 +2198,10 @@ make_uno_doc:
 .ENDIF
 
 makedoc:
-        +-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(DOCIDLFILES) $(IDLFILES)
+        @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
+        +echo REGEL5 !!!
+        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
+#		+-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(DOCIDLFILES) $(IDLFILES)
 
 .IF "$(LOCALDBTARGET)"!=""
 $(LOCALDBTARGET) : $(URDFILES)
@@ -2447,7 +2450,9 @@ $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
 
 $(URDTARGET) : $(DEPIDLFILES)
 .IF "$(MAXPROCESS)"<="1"
-        +$(UNOIDL) @$(mktmp -Wb,c $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+        +echo REGEL4 !!!!
+        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+#		+$(UNOIDL) @$(mktmp -Wb,c $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
         @+echo > $@
 
@@ -2456,7 +2461,9 @@ $(URDTARGET) : $(DEPIDLFILES)
 $(URDDOCTARGET) : $(DEPIDLFILES)
         @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
 .IF "$(MAXPROCESS)"<="1"
-        +$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+        +echo REGEL5 !!!!
+        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
+#		+$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
         @+echo > $@
 .ENDIF			# "$(URDDOC)"!=""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hjs $ $Date: 2001-03-14 17:50:31 $
+#   last change: $Author: hjs $ $Date: 2001-03-16 18:06:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -798,10 +798,12 @@ $(INCCOM)$(SMARTPRE)$/$(IDLPACKAGE)$/%.hxx $(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/
 .ENDIF
 
 $(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
-        +$(UNOIDL) -Wb,c $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $<
+        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $< )
+#		+$(UNOIDL) -Wb,c $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $<
 
 $(OUT)$/ucrdoc$/$(IDLPACKAGE)$/%.urd : %.idl
-        +$(UNOIDL) $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $<
+        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $< )		
+#		+$(UNOIDL) $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $<
 
 $(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/s2u_%.cxx : $(MISC)$(SMARTPRE)$/$(IDLPACKAGE)$/%.smr
     +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINC) $(TF_PACKAGES_DEF) -Bs2u -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) -OI$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE) $(<)
