@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.47 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-31 01:23:34 $
+ *  $Revision: 1.48 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-31 23:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,16 +1068,22 @@ SalGraphics::~SalGraphics()
     if ( maGraphicsData.mhClipRgn != NULL )
     {
         DisposeRgn( maGraphicsData.mhClipRgn );
+
+        maGraphicsData.mhClipRgn = NULL;
     } // if
 
     if ( maGraphicsData.mpGWorld != NULL )
     {
         DisposeGWorld( maGraphicsData.mpGWorld );
+
+        maGraphicsData.mpGWorld = NULL;
     } // if
 
     if ( maGraphicsData.mpCGrafPort != NULL )
     {
         DisposePort( maGraphicsData.mpCGrafPort );
+
+        maGraphicsData.mpCGrafPort = NULL;
     } // if
 
     // Initialize the rest of the fields to zero

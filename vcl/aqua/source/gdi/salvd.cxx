@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-25 05:27:32 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-31 23:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,21 +193,6 @@ SalVirtualDevice::~SalVirtualDevice()
     {
         // Delete exisiting clip regions, offscreen graphic world,
         // and its associated colour graph port
-
-        if ( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn != NULL )
-        {
-            DisposeRgn( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn );
-
-            maVirDevData.mpGraphics->maGraphicsData.mhClipRgn = NULL;
-        } // if
-
-        if ( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort != NULL )
-        {
-            DisposePort( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort );
-
-            maVirDevData.mpGraphics->maGraphicsData.mpGWorld    = NULL;
-            maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = NULL;
-        } // if
 
         delete maVirDevData.mpGraphics;
     } // if

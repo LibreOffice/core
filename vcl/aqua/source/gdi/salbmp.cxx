@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-31 01:22:11 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-31 23:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,13 @@
 
 // ==================================================================
 
-static inline long GetNewPixMapBitDepth( const USHORT nBits )
+static inline long GetNewPixMapBitDepth( const USHORT nPixMapBits )
 {
     long nPixMapBitDepth = 0;
 
-    if ( nBits <= kThousandsColor )
+    if ( nPixMapBits <= kThousandsColor )
     {
-        nPixMapBitDepth = (long)nBits;
+        nPixMapBitDepth = (long)nPixMapBits;
     } // if
     else
     {
@@ -98,22 +98,22 @@ static inline long GetNewPixMapBitDepth( const USHORT nBits )
 // ------------------------------------------------------------------
 
 static inline long GetNewPixMapOffset( const long   nPixMapBitDepth,
-                                       const short  nWidth
+                                       const short  nPixMapWidth
                                      )
 {
-    long  nPixMapWidth  = nPixMapBitDepth * (long)nWidth;
-    long  nPixMapOffset = ( ( nPixMapWidth + 15L ) >> 4L ) << 1L;
+    long  nPixMapImageWidth = nPixMapBitDepth * (long)nPixMapWidth;
+    long  nPixMapOffset     = ( ( nPixMapImageWidth + 15L ) >> 4L ) << 1L;
 
     return nPixMapOffset;
 } // GetNewPixMapOffset
 
 // ------------------------------------------------------------------
 
-static inline long GetNewPixMapImageSize ( const short  nHeight,
+static inline long GetNewPixMapImageSize ( const short  nPixMapHeight,
                                            const long   nPixMapRowOffset
                                          )
 {
-    long nPixMapImageSize = (long)nHeight * nPixMapRowOffset;
+    long nPixMapImageSize = (long)nPixMapHeight * nPixMapRowOffset;
 
     return nPixMapImageSize;
 } // GetNewPixMapImageSize
@@ -129,13 +129,13 @@ static inline short GetNewPixMapRowBytes( const long nPixMapRowOffset )
 
 // ------------------------------------------------------------------
 
-static inline short GetNewPixMapColorDepth( const USHORT nBits )
+static inline short GetNewPixMapColorDepth( const USHORT nPixMapBits )
 {
     short nPixMapColorDepth = 0;
 
-    if ( nBits <= 8 )
+    if ( nPixMapBits <= 8 )
     {
-        nPixMapColorDepth = 1 << ((short)nBits);
+        nPixMapColorDepth = 1 << ((short)nPixMapBits);
     }
 
     return nPixMapColorDepth;
@@ -143,15 +143,15 @@ static inline short GetNewPixMapColorDepth( const USHORT nBits )
 
 // ------------------------------------------------------------------
 
-static void GetNewPixMapBoudsRect( const short   nWidth,
-                                   const short   nHeight,
+static void GetNewPixMapBoudsRect( const short   nPixMapWidth,
+                                   const short   nPixMapHeight,
                                    Rect         *rPixMapBoundsRect
                                  )
 {
     short  nPixMapRectLeft   = 0;
     short  nPixMapRectTop    = 0;
-    short  nPixMapRectRight  = nWidth;
-    short  nPixMapRectBottom = nHeight;
+    short  nPixMapRectRight  = nPixMapWidth;
+    short  nPixMapRectBottom = nPixMapHeight;
 
     // Set the dimensions of the PixMap
 
@@ -288,11 +288,9 @@ static CTabHandle CopyGDeviceCTab( )
 
                     if ( nFlags == noErr )
                     {
-                        HLock( (Handle)hCTable );
+                        unsigned long  nCTableIndex;
 
-                        if ( nCTableSize > 0 )
-                        {
-                            unsigned long  nCTableIndex;
+                        HLock( (Handle)hCTable );
 
                             (**hCTable).ctSize  = pCTable->ctSize;
                             (**hCTable).ctFlags = pCTable->ctFlags;
@@ -306,18 +304,8 @@ static CTabHandle CopyGDeviceCTab( )
                                 (**hCTable).ctTable[nCTableIndex]
                                     = pCTable->ctTable[nCTableIndex];
                             } // for
-                          } // if
-                          else
-                          {
-                              DisposeHandle( (Handle)hCTable );
 
-                              hCTable = NULL;
-                          } // else
-
-                          if ( hCTable != NULL )
-                          {
-                              HSetState( (Handle)hCTable, nFlags );
-                          } // if
+                          HSetState( (Handle)hCTable, nFlags );
                       } // if
                   } // if
             } // if
@@ -385,7 +373,7 @@ static CTabHandle GetNewPixMapCTabBitmapPalette( const short           nPixMapCo
         {
             short  nBitmapPaletteMinCount = GetMinColorCount(nPixMapColorDepth, rBitmapPalette);
             short  nBitmapPaletteColorVal = 0;
-            short  nBitmapPaletteIndex;
+            short  nBitmapPaletteIndex    = 0;
 
             HLock( (Handle)hPixMapCTab );
 
@@ -496,30 +484,26 @@ static CTabHandle GetNewPixMapCTab( const long            nPixMapBitDepth,
 
 // ------------------------------------------------------------------
 
-PixMapHandle GetNewPixMap ( const Size           &rSize,
-                            const USHORT          nBits,
-                            const BitmapPalette  &rBitmapPalette,
-                            const SalGraphics    *rSalGraphics
-                          )
+static PixMapHandle GetNewPixMap ( const Size           &rPixMapSize,
+                                   const USHORT          nPixMapBits,
+                                   const BitmapPalette  &rBitmapPalette,
+                                   const SalGraphics    *rSalGraphics
+                                 )
 {
-    PixMapHandle  hPixMap = NULL;
-    short         nWidth  = rSize.Width();
-    short         nHeight = rSize.Height();
+    PixMapHandle  hPixMap       = NULL;
+    short         nPixMapWidth  = rPixMapSize.Width();
+    short         nPixMapHeight = rPixMapSize.Height();
 
-    if ( ( nWidth > 0 ) && ( nHeight > 0 ) )
+    if ( ( nPixMapWidth > 0 ) && ( nPixMapHeight > 0 ) )
     {
         hPixMap = NewPixMap();
 
         if ( ( hPixMap != NULL ) && ( *hPixMap != NULL ) )
         {
-            const long  nPixMapBitDepth  = GetNewPixMapBitDepth( nBits);
-            const long  nPixMapRowOffset = GetNewPixMapOffset( nPixMapBitDepth, nWidth );
-            const long  nPixMapImageSize = GetNewPixMapImageSize( nHeight, nPixMapRowOffset );
-            Rect        aPixMapBoundsRect;
-
-            GetNewPixMapBoudsRect( nWidth, nHeight, &aPixMapBoundsRect );
-
-            Ptr pPixMapData = NewPtrClear( nPixMapImageSize );
+            const long  nPixMapBitDepth  = GetNewPixMapBitDepth( nPixMapBits);
+            const long  nPixMapRowOffset = GetNewPixMapOffset( nPixMapBitDepth, nPixMapWidth );
+            const long  nPixMapImageSize = GetNewPixMapImageSize( nPixMapHeight, nPixMapRowOffset );
+            Ptr         pPixMapData      = NewPtrClear( nPixMapImageSize );
 
             if ( pPixMapData != NULL )
             {
@@ -532,11 +516,14 @@ PixMapHandle GetNewPixMap ( const Size           &rSize,
                     if ( LockPixels( hPixMap ) )
                     {
                         const short   nPixMapRowBytes    = GetNewPixMapRowBytes( nPixMapRowOffset );
-                        const short   nPixMapColorDepth  = GetNewPixMapColorDepth( nBits );
+                        const short   nPixMapColorDepth  = GetNewPixMapColorDepth( nPixMapBits );
                         const short   nPixMapCmpSize     = GetNewPixMapCmpSize( nPixMapBitDepth );
                         const short   nPixMapCmpCount    = GetNewPixMapCmpCount( nPixMapBitDepth );
                         const short   nPixMapPixelType   = GetNewPixMapPixelType( nPixMapBitDepth );
                         const OSType  aPixMapPixelFormat = GetNewPixMapPixelFormat( );
+                        Rect          aPixMapBoundsRect;
+
+                        GetNewPixMapBoudsRect( nPixMapWidth, nPixMapHeight, &aPixMapBoundsRect );
 
                         (**hPixMap).baseAddr    = pPixMapData;         // Pointer to pixels
                         (**hPixMap).rowBytes    = nPixMapRowBytes;     // Offset to next line
@@ -576,6 +563,30 @@ PixMapHandle GetNewPixMap ( const Size           &rSize,
 
     return hPixMap;
 } // GetNewPixMap
+
+// ==================================================================
+
+// ==================================================================
+
+static PixMapHandle MallocPixMap ( const Size           &rPixMapSize,
+                                   const USHORT          nPixMapBits,
+                                   const BitmapPalette  &rBitmapPalette,
+                                   const SalGraphics    *rSalGraphics
+                                 )
+{
+    PixMapHandle hNewPixMap = GetPortPixMap( rSalGraphics->maGraphicsData.mpCGrafPort );
+
+    if ( hNewPixMap == NULL )
+    {
+        hNewPixMap = GetNewPixMap( rPixMapSize,
+                                   nPixMapBits,
+                                   rBitmapPalette,
+                                   rSalGraphics
+                                 );
+    } // else
+
+    return hNewPixMap;
+} // MallocPixMap
 
 // ==================================================================
 
@@ -633,7 +644,11 @@ BOOL SalBitmap::Create( const Size&           rSize,
                      && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
                    )
                 {
-                    mhPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
+                    mhPixMap = MallocPixMap( rSize,
+                                             nBitCount,
+                                             rBitmapPalette,
+                                             pGraphics
+                                           );
 
                     if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
                     {
