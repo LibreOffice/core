@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 08:31:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XDATADEFINITIONSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
+#endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
@@ -136,6 +139,9 @@
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 #define RET_ALL     10
@@ -164,6 +170,7 @@ namespace dbaui
     //------------------------------------------------------------------------
     OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
+        ,OContainerListener( m_aNotifierMutex )
         ,m_aTables              (this, ResId(FL_SEPARATOR1))
         ,m_aActions             (this, ResId(TLB_ACTIONS))
         ,m_aTablesList          (this, ResId(CTL_TABLESUBSCRIPTION))
@@ -172,6 +179,7 @@ namespace dbaui
         ,m_aSuppressVersionColumns(this, ResId(CB_SUPPRESVERSIONCL))
         ,m_bCatalogAtStart      (sal_True)
         ,m_pAdminDialog         (NULL)
+        ,m_pNotifier            (NULL)
     {
         m_aTablesList.SetCheckHandler(getControlModifiedLink());
         m_aSuppressVersionColumns.SetClickHdl(getControlModifiedLink());
@@ -206,6 +214,13 @@ namespace dbaui
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
+
+        if ( m_pNotifier )
+        {
+            m_pNotifier->dispose();
+            m_pNotifier->release();
+            m_pNotifier = NULL;
+        }
     }
 
     //------------------------------------------------------------------------
@@ -369,6 +384,13 @@ namespace dbaui
         }
         catch (RuntimeException&) { }
 
+        if ( m_pNotifier )
+        {
+            m_pNotifier->dispose();
+            m_pNotifier->release();
+            m_pNotifier = NULL;
+        }
+
         return nResult;
     }
 
@@ -425,9 +447,29 @@ namespace dbaui
                     m_aTablesList.GetModel()->SetSortMode(SortAscending);
                     m_aTablesList.GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
 
-                    m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams);
-                    if (m_pAdminDialog && m_xCurrentConnection.is())
-                        m_pAdminDialog->successfullyConnected();
+                    Reference< XNameAccess > xTablesContainer;
+                    m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams, xTablesContainer);
+                    if ( m_xCurrentConnection.is() )
+                    {
+                        // add a listener to the tables container
+                        if ( m_pNotifier )
+                        {
+                            DBG_ERROR( "OTableSubscriptionPage::ActivatePage: already have a notifier!" );
+                            m_pNotifier->dispose();
+                            m_pNotifier->release();
+                            m_pNotifier = NULL;
+                        }
+
+                        Reference< XContainer > xTables( xTablesContainer, UNO_QUERY );
+                        if ( xTables.is() )
+                        {
+                            m_pNotifier = new OContainerListenerAdapter( this, xTables );
+                            m_pNotifier->acquire( );
+                        }
+
+                        if (m_pAdminDialog)
+                            m_pAdminDialog->successfullyConnected();
+                    }
                 }
                 catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
                 catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
@@ -1146,6 +1188,46 @@ namespace dbaui
         return sal_True;
     }
 
+    //------------------------------------------------------------------------
+    void OTableSubscriptionPage::_elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        ::rtl::OUString sName;
+        _rEvent.Accessor >>= sName;
+        DBG_ASSERT( 0 != sName.getLength(), "OTableSubscriptionPage::_elementInserted: invalid accessor!" );
+
+        m_aTablesList.addedTable( m_xCurrentConnection, sName, _rEvent.Element );
+
+        // TODO: update the check states (the newly table is probably included in the filter)
+    }
+
+    //------------------------------------------------------------------------
+    void OTableSubscriptionPage::_elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        ::rtl::OUString sName;
+        _rEvent.Accessor >>= sName;
+        DBG_ASSERT( 0 != sName.getLength(), "OTableSubscriptionPage::_elementRemoved: invalid accessor!" );
+
+        m_aTablesList.removedTable( m_xCurrentConnection, sName );
+
+        // TODO: update the check states
+    }
+
+    //------------------------------------------------------------------------
+    void OTableSubscriptionPage::_elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
+    {
+        DBG_ERROR( "OTableSubscriptionPage::_elementReplaced: not implemented!" );
+    }
+
+    //------------------------------------------------------------------------
+    void OTableSubscriptionPage::_disposing(const EventObject& _rSource) throw( RuntimeException)
+    {
+        // not interested in
+    }
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
@@ -1153,6 +1235,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/01 08:31:26  fs
+ *  #88530# collectDetailedSelection: don't change anything if not connected
+ *
  *  Revision 1.2  2001/07/31 16:01:33  fs
  *  #88530# changes to operate the dialog in a mode where no type change is possible
  *

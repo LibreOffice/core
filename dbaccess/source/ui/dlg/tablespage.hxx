@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 09:59:46 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _DBAUI_CONTAINERMULTIPLEXER_HXX_
+#include "containermultiplexer.hxx"
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -81,7 +87,9 @@ namespace dbaui
     //= OTableSubscriptionPage
     //========================================================================
     class ODbAdminDialog;
-    class OTableSubscriptionPage : public OGenericAdministrationPage
+    class OTableSubscriptionPage
+            :public OGenericAdministrationPage
+            ,public OContainerListener
     {
         friend class ODbAdminDialog;
 
@@ -98,6 +106,8 @@ namespace dbaui
         ODbAdminDialog*         m_pAdminDialog;     /** needed for translating an SfxItemSet into Sequence< PropertyValue >
                                                         (for building an XConnection)
                                                     */
+        ::osl::Mutex                    m_aNotifierMutex;
+        OContainerListenerAdapter*      m_pNotifier;
 
         ::rtl::OUString         m_sDSName;
 
@@ -192,6 +202,12 @@ namespace dbaui
         void CheckAll( BOOL bCheck = sal_True );
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+
+        // OContainerListener
+        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void _elementRemoved( const ::com::sun::star::container::ContainerEvent& _Event ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException);
     };
 
 //.........................................................................
@@ -203,6 +219,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/29 09:59:46  fs
+ *  initial checkin - outsourced the class from commonpages
+ *
  *
  *  Revision 1.0 29.05.01 11:08:49  fs
  ************************************************************************/
