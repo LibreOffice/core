@@ -1,70 +1,67 @@
-/home/al91857/scripting/clean2/scripting/unxsols3.pro/lib:/home/al91857/scripting/clean2/scripting/workben/cppunit/unxsols3/lib:/export/home/j2sdk1.4.1/jre/lib/sparc:/export/home/j2sdk1.4.1/jre/lib/sparc/client:/export/home/j2sdk1.4.1/jre/lib/sparc/native_threads:.:/usr/dt/lib:/usr/openwin/lib:/scde/webtop/re/SRX643/src.u/solenv/unxsols3.pro/lib:/usr/local/lib:/home/al91857/SRX643/unxsols3.pro/lib:../lib:/scde/webtop/re/SRX643/src.u/solenv/unxsols3.pro/lib:/scde/webtop/re/SRX643/unxsols3.pro/lib.u
-From a clean CVS
-you get 3 projects (the following order is the build order):
-	- offapi
-	- unoil
-	- scripting
-	
-You need to set your environment:
-/scde/webtop/re/bin/solarisenv.sh -s src663
-you get two files called src663_sols.set and src663_sols.set.sh
+This module provides the source code for the Scripting Framework. For
+more information on the Scripting Framework, see the project web page:
+http://framework.openoffice.org/scripting/
 
-*NOTE: The workspace number increments every fornight, as of 22/08/02, SRC663
-is current, SRC664 in prepration
+Source Code Structure
+=====================
 
-run a tcsh shell and source srx643_sols.set
-setenv OFFICE_PROGRAM_PATH to your {StarOffice/OpenOffice}/program directory 
-setenv APPLICAT to your $OFFICE_PROGRAM_PATH/applicat.rdb
-you need to set your LD_LIBRARY_PATH:
-setenv LD_LIBRARY_PATH `$OFFICE_PROGRAM_PATH/javaldx`:$LD_LIBRARY_PATH
-setenv CLASSPATH {full_path}/scripting/util/xerces.jar:{full_path}/unoil/unxsols3.pro/class/unoil.jar:
-$OFFICE_PROGRAM_PATH/classes/jut.jar:$OFFICE_PROGRAM_PATH/classes/java_uno.jar:
-$OFFICE_PROGRAM_PATH/classes/ridl.jar:$OFFICE_PROGRAM_PATH/classes/jurt.jar:$OFFICE_PROGRAM_PATH/classes/juh.jar
+The following directories contain the source code currently used
+by the Scripting Framework:
 
-then you can start to build.
-cd offapi; build
-cd unoil; build
+- source/provider
 
-Before building the scripting project, you need to merge the applicat.rdb
-cd offapi/unxsols3.pro/ucr
-regmerge $APPLICAT / offapi.db
+C++ source for the implementations of the com.sun.star.script.provider.*
+and com.sun.star.script.browse.* UNO types. These types are used for
+browsing and executing scripts.
 
-cd scripting; build
-this should build everything. If you want to build just some project just go to the directory and type
-dmake.
+- source/protocolhandler
 
-you might have to do some extra dmake as the build is not correct.
-cd java
-dmake
-cd source/scripturi
-dmake
-cd source/storage
-dmake
+C++ for a ProtocolHandler implementation that handles vnd.sun.star.script
+URIs and dispatches them for execution to the Scripting Framework.
 
-Then after everything build you need to register all component into the applicat.rdb
+- source/basprov
 
-cd scripting/unxsols3.pro/lib
-ls
-libprovider.so libscripturi.so libruntimemgr.so libstorage.so
-libprovider.lib libscripturi.lib libruntimemgr.lib libstorage.lib
+C++ implementation of the LanguageScriptProvider UNO service for Basic
 
-for each of the .so files run that command.
-regcomp -register -br $APPLICAT -c file://{full_path}/scripting/unxsols3.pro/lib/libprovider.so
-output:
-register component "file://{full_path}/scripting/unxsols3.pro/lib/libruntimemgr.so"
-in registry "/export/home/OpenOffice.org1.0/program/applicat.rdb" succesful!
+- source/dlgprov
 
-Then registering Java components
+C++ implementation of the DialogProvider UNO service used for loading
+UNO dialogs from various languages
 
-cd scripting/unxsols3/class
-ls
-ScriptRuntimeForJava.jar StorageProxy.jar
-regcomp -register -br $APPLICAT -c file://{full_path}/scripting/unxsols3.pro/class/ScriptRuntimeForJava.jar
--l com.sun.star.loader.java2
-or
-java -classpath $CLASSPATH com.sun.star.tools.uno.RegComp  $APPLICAT  register file://{full_path}/unxsols3.pro/class/ScriptRuntimeForJava.jar com.sun.star.loader.Java2
+- java/com/sun/star/script/framework/provider
 
-you can then run some test to check if everything is OK:
-cd scripting/workben/test/provider
-dmake
-before running it you need to read the README File in that directory.
+Implementation of an abstract base class ScriptProvider which provides
+core methods for implementing Java based LanguageScriptProvider implemetations
+
+- java/com/sun/star/script/framework/provider/*
+
+BeanShell, JavaScript and Java LanguageScriptProvider implementations
+
+- java/com/sun/star/script/framework/browse/*
+
+BrowseNode implementations for the Java based LanguageScriptProviders
+
+- java/com/sun/star/script/framework/io
+- java/com/sun/star/script/framework/container
+
+Classes for performing script IO
+
+- examples
+
+Example scripts in BeanShell, JavaScript, Java and Python
+
+Deprecated Code
+===============
+
+- java/org/openoffice/*
+
+Support for developing scripts in IDEs such as NetBeans.
+
+- source/pyprov
+
+LanguageScriptProvider for Python
+
+- source/storage
+- source/runtimemgr
+
+Implementations of deprecated Scripting Framework UNO types
