@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-17 13:01:57 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 14:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ String SAMPLES
     Text[ greek ] = "Για να μπορέσετε να χρησιμοποιήσετε όλες τις λειτουργίες αυτού του παραδείγματος θα πρέπει να δημιουργήσετε ένα νέο έγγραφο βασισμένο σε αυτό το πρότυπο.";
     Text[ dutch ] = "Om alle mogelijkheden van dit voorbeeld te kunnen gebruiken maakt u een nieuw document op basis van deze sjabloon.";
     Text[ french ] = "Afin de pouvoir profiter de l'entiθre fonctionnalitι de cet exemple, il vous faut crιer un nouveau document basι sur ce modθle.";
-    Text[ spanish ] = "Para que estι disponible toda la funcionalidad de este ejemplo debe crear un nuevo documento basado en esta plantilla.";
+    Text[ spanish ] = "Para aprovechar al mαximo la funcionalidad de este ejemplo deberα crear un documento nuevo basado en esta plantilla.";
     Text[ swedish ] = "Ett nytt dokument mεste skapas med den hδr mallen som grund fφr att alla funktioner i detta exempel skall vara tillgδngliga.";
     Text[ russian ] = "Δλÿχ ςξγξ, χςξαϋ τσνκφθθ ύςξγξ οπθμεπΰ ρςΰλθ δξρςσονϋμθ, νεξαυξδθμξ ρξηδΰςό δξκσμενς νΰ ξρνξβε ύςξγξ ψΰαλξνΰ.";
     Text[ italian ] = "Per poter sfruttare al meglio la funzionalitΰ di questo esempio θ necessario creare un documento in base a questo modello.";
@@ -109,7 +109,7 @@ String SAMPLES + 1
     Text[ greek ] = "Συμβουλή";
     Text[ dutch ] = "Aanwijzing";
     Text[ french ] = "Remarque";
-    Text[ spanish ] = "Indicaciσn";
+    Text[ spanish ] = "Nota";
     Text[ swedish ] = "Hδnvisning";
     Text[ russian ] = "Σκΰηΰνθε";
     Text[ italian ] = "Nota";
@@ -166,7 +166,7 @@ String STYLES + 1
     Text[ greek ] = "Σφάλμα κατά την προσωρινή αποθήκευση του τρέχοντος εγγράφου! Δεν είναι δυνατή η αναίρεση της ακόλουθης ενέργειας.";
     Text[ dutch ] = "Fout bij opslaan van actueel document in cachegeheugen. De volgende activiteit kan niet ongedaan worden gemaakt.";
     Text[ french ] = "Une erreur est survenue lors de l'enregistrement du document actif dans le presse-papiers ! Impossible d'annuler l'action suivante.";
-    Text[ spanish ] = "‘Ha ocurrido un error al guardar el documento actual en el portapapeles! No se puede deshacer la siguiente acciσn.";
+    Text[ spanish ] = "‘Ha ocurrido un error al guardar el documento actual en el portapapeles! La acciσn siguiente no se puede deshacer.";
     Text[ italian ] = "Errore mentre si cercava di salvare il documento negli appunti. L'azione seguente non puς essere annullata.";
     Text[ danish ] = "Fejl under forsψg pε at gemme dokumentet i udklipsholderen! Den fψlgende handling kan ikke fortrydes.";
     Text[ swedish ] = "Fel uppstod nδr det aktuella dokumentet skulle sparas i urklippet! Fφljande εtgδrd gεr inte att εngra.";
@@ -384,7 +384,7 @@ String CorrespondenceNoTextmark
     Text[ portuguese ] = "Falta o marcador de texto 'Recipient'.";
     Text[ dutch ] = "De tekstmarkering 'Recipient' ontbreekt.";
     Text[ french ] = "Le repθre de texte 'Recipient' n'existe pas.";
-    Text[ spanish ] = "Falta la marca de texto 'Recipient'.";
+    Text[ spanish ] = "Falta el marcador 'Recipient'.";
     Text[ italian ] = "Manca il segnalibro 'Recipient'.";
     Text[ swedish ] = "Bokmδrket 'Recipient' saknas.";
     Text[ russian ] = "Νες ςεκρςξβξι οξμεςκθ 'Recipient'.";
