@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-10 11:31:53 $
+ *  last change: $Author: cl $ $Date: 2002-11-01 15:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1527,16 +1527,18 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             FlushComeBackTimer();
             bRet=TRUE;
         }
-        if (!bAllTextSelected && !bNoEEItems) {
+        if(!bNoEEItems)
+        {
             // und nun die Attribute auch noch an die EditEngine
             if (bReplaceAll) {
                 // Am Outliner kann man leider nur alle Attribute platthauen
                 pTextEditOutlinerView->RemoveAttribs( TRUE );
             }
             pTextEditOutlinerView->SetAttribs(rSet);
-#ifndef SVX_LIGHT
-            if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
-#endif
+
+            if (pItemBrowser!=NULL)
+                pItemBrowser->SetDirty();
+
             ImpMakeTextCursorAreaVisible();
         }
         bRet=TRUE;
