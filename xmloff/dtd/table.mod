@@ -1,6 +1,6 @@
 <!-- edited with XML Spy v3.0 NT (http://www.xmlspy.com) by Jumper (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.4 2000-10-12 08:33:14 sab Exp $
+	$Id: table.mod,v 1.5 2000-10-17 15:14:57 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -349,13 +349,4 @@
 	table:display %boolean; #IMPLIED
 	table:display-details %boolean; #IMPLIED
 >
-<!ATTLIST style:properties
-	table:align (left | center | right | margins) #IMPLIED
-	table:border-model (collapsing | separating) #IMPLIED
-	fo:vertical-align (top | middle | bottom) #IMPLIED
-	fo:direction (ltr | ttb) #IMPLIED
-	style:rotation-angle %nonNegativeInteger; #IMPLIED
-	style:rotation-align (none | bottom | top | center) #IMPLIED
-	style:cell-protect CDATA #IMPLIED
-	style:print-content %boolean; #IMPLIED
->
+

@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.5 2000-10-16 13:01:46 dvo Exp $
+	$Id: style.mod,v 1.6 2000-10-17 15:14:57 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -252,9 +252,18 @@
 <!ATTLIST style:properties style:use-optimal-row-height %boolean; #IMPLIED>
 
 <!-- table cell properties -->
-<!ATTLIST style:properties fo:vertical-align (top|middle|bottom) #IMPLIED>
-<!ATTLIST style:properties fo:wrap-option (no-wrap | wrap) #IMPLIED>
-
+<!ATTLIST style:properties
+	table:align (left | center | right | margins) #IMPLIED
+	table:border-model (collapsing | separating) #IMPLIED
+	fo:vertical-align (top | middle | bottom) #IMPLIED
+	fo:direction (ltr | ttb) #IMPLIED
+	style:rotation-angle %nonNegativeInteger; #IMPLIED
+	style:rotation-align (none | bottom | top | center) #IMPLIED
+	style:cell-protect CDATA #IMPLIED
+<!--	stayes in a higher section -->
+<!--	style:print-content %boolean; #IMPLIED -->
+	fo:wrap-option (no-wrap | wrap) #IMPLIED
+>
 <!ELEMENT style:columns (style:column*)>
 <!ATTLIST style:columns fo:column-count %nonNegativeInteger; #IMPLIED>
 
