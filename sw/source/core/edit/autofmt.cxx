@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 12:00:10 $
+ *  last change: $Author: dvo $ $Date: 2002-06-03 12:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,10 @@
 #endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
+#endif
+
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 
 //-------------------------------------------------------------------
@@ -2271,6 +2275,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
         eRedlMode = SwRedlineMode( REDLINE_SHOW_INSERT | REDLINE_IGNORE );
     pDoc->SetRedlineMode( eRedlMode );
 
+    // save undo state (might be turned off)
+    sal_Bool bUndoState = pDoc->DoesUndo();
+
     // wenn mehrere Zeilen, dann erstmal nicht mit
     // dem nachfolgenden Absatz zusammenfassen.
     bMoreLines = FALSE;
@@ -2286,6 +2293,30 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     eStat = READ_NEXT_PARA;
     while( !bEnde )
     {
+        // #95884# limit redline array size to prevent overflow and to conserve
+        // memory
+        if( pDoc->HasTooManyUndos() )
+        {
+            DBG_ASSERT( bUndoState, "undo overflow without undo?" );
+
+            // TODO: ask user
+            short nResult = RET_YES;
+            DBG_ASSERT( (nResult == RET_YES) || (nResult == RET_CANCEL),
+                        "unexpected result" );
+
+            if( nResult == RET_YES )
+            {
+                // turn off undo and continue
+                pDoc->DoUndo( sal_False );
+                pDoc->DelAllUndoObj();
+            }
+            else if( nResult == RET_CANCEL )
+            {
+                // cancel autoformatting
+                eStat = IS_ENDE;
+            }
+        }
+
         switch( eStat )
         {
         case READ_NEXT_PARA:
@@ -2676,6 +2707,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     if( aFlags.bWithRedlining )
         pDoc->SetAutoFmtRedline( FALSE );
     pDoc->SetRedlineMode( eOldMode );
+
+    // restore undo (in case it has been changed)
+    pDoc->DoUndo( bUndoState );
 
     // Prozent-Anzeige wieder abschalten
     if( !aFlags.bAFmtByInput )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-13 13:51:24 $
+ *  last change: $Author: dvo $ $Date: 2002-06-03 12:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 
 USHORT SwDoc::nUndoActions = UNDO_ACTION_COUNT;     // anzahl von Undo-Action
 
+// the undo array should never grow beyond this limit:
+#define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
+
+
 SV_IMPL_PTRARR( SwUndoIds, SwUndoIdAndNamePtr )
 
 //#define _SHOW_UNDORANGE
@@ -148,6 +152,13 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     if( REDLINE_NONE == pUndo->GetRedlineMode() )
         pUndo->SetRedlineMode( GetRedlineMode() );
 
+    // Unfortunately, the silly SvPtrArr can only store a little less than
+    // USHRT_MAX elements. Of course it doesn't see any necessity for asserting
+    // or even doing error handling. pUndos should definitely be replaced by an
+    // STL container that doesn't have this problem. cf #95884#
+    DBG_ASSERT( pUndos->Count() < USHRT_MAX - 16,
+                "Writer will crash soon. I apologize for the inconvenience." );
+
     pUndos->Insert( pUndo, nUndoPos );
     ++nUndoPos;
     switch( pUndo->GetId() )
@@ -184,8 +195,9 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     //  - Undo,             Grenze: fester Wert oder USHRT_MAX - 1000
     //  - UndoNodes,        Grenze:  USHRT_MAX - 1000
     //  - AttrHistory       Grenze:  USHRT_MAX - 1000
+    // (defined in UNDO_ACTION_LIMIT at the top of this file)
 
-    USHORT nEnde = USHRT_MAX - 1000;
+    USHORT nEnde = UNDO_ACTION_LIMIT;
 
 // nur zum Testen der neuen DOC-Member
 #ifndef PRODUCT
@@ -683,6 +695,17 @@ BOOL SwDoc::DelUndoGroups( BOOL bDelUndoNds, BOOL bDelHistory )
     return TRUE;
 }
 #endif
+
+sal_Bool SwDoc::HasTooManyUndos()
+{
+    // AppendUndo checks the UNDO_ACTION_LIMIT, unless there's a nested undo.
+    // So HasTooManyUndos() may only occur when undos are nested; else
+    // AppendUndo has some sort of bug.
+    DBG_ASSERT( (nUndoSttEnd != 0) || (pUndos->Count() < UNDO_ACTION_LIMIT),
+                "non-nested undos should have been handled in AppendUndo" );
+    return (pUndos->Count() >= UNDO_ACTION_LIMIT);
+}
+
 
 /**************** REDO ******************/
 

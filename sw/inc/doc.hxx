@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:23:07 $
+ *  last change: $Author: dvo $ $Date: 2002-06-03 12:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,6 +810,11 @@ public:
         // abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions
     static sal_uInt16 GetUndoActionCount()              { return nUndoActions; }
     static void SetUndoActionCount( sal_uInt16 nNew )   { nUndoActions = nNew; }
+
+        // 2002-05-31 dvo, #95884#: To prevent an undo array overflow when
+        // doing nested undos, undo may have to be disabled. Undo-intensive
+        // actions (like auto-format) should check this manually.
+    sal_Bool HasTooManyUndos();
 
         // Redo
         // wiederholt
