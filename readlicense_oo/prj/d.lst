@@ -1,8 +1,8 @@
 dos: echo =====================================================================
 dos: echo License und Readme-Dateien werden auf S: gestellt ...
 dos: echo =====================================================================
-mkdir: %_DEST%\bin%_EXT\01
-mkdir: %_DEST%\bin%_EXT\01\osl
+mkdir: %_DEST%\bin%_EXT%\01
+mkdir: %_DEST%\bin%_EXT%\01\osl
 ..\source\license\%GUI%\* %_DEST%\bin%_EXT%\01\osl\*
 ..\source\readme\%OUTPATH%\* %_DEST%\bin%_EXT%\01\osl\*
 ..\source\cinema\* %_DEST%\pck%_EXT%\*
