@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 16:14:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 12:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
             )
         )
     {
-        OSL_ENSURE(aURL.Mark.len() == 0, "SbaExternalSourceBrowser::queryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
+        OSL_ENSURE(aURL.Mark.getLength() == 0, "SbaExternalSourceBrowser::queryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
         ::com::sun::star::util::URL aNewUrl = aURL;
 
         // split the ::com::sun::star::util::URL
