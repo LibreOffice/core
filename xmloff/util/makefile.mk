@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ab $ $Date: 2000-11-28 11:29:39 $
+#   last change: $Author: cl $ $Date: 2001-01-12 16:08:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,7 +122,7 @@ DEF1NAME    =$(SHL1TARGET)
 DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =xo
 DEF1DES     =XML Office Lib
-
+DEF1EXPORTFILE=	exports.dxp
 # --- Targets ----------------------------------------------------------
 
 .INCLUDE :  target.mk

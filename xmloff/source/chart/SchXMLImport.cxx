@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-11 16:55:25 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #endif
 
+using namespace rtl;
 using namespace com::sun::star;
 
 /* ----------------------------------------
@@ -451,8 +452,12 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
 
 // ========================================
 
+SchXMLImport::SchXMLImport()
+{
+}
+
 SchXMLImport::SchXMLImport( uno::Reference< frame::XModel > xModel,
-                            uno::Reference< com::sun::star::container::XIndexContainer >& rGrfContainer,
+                            uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
                             sal_Bool bLoadDoc, sal_Bool bShowProgress ) :
         SvXMLImport( xModel, rGrfContainer )
 {
@@ -511,5 +516,23 @@ SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const rtl::OUSt
     }
 
     return pContext;
+}
+
+// chart import
+uno::Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Chart" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLImport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLImport();
 }
 

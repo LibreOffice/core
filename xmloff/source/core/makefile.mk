@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: sab $ $Date: 2000-11-10 18:12:55 $
+#   last change: $Author: cl $ $Date: 2001-01-12 16:16:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ LIB2OBJFILES  =$(OBJFILES)
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        facreg.cxx		\
         xmlcnitm.cxx	\
         attrlist.cxx	\
         i18nmap.cxx		\
@@ -99,6 +100,7 @@ CXXFILES = \
         PropertySetMerger.cxx
 
 SLOFILES =	\
+        $(SLO)$/facreg.obj		\
         $(SLO)$/xmlcnitm.obj	\
         $(SLO)$/attrlist.obj	\
         $(SLO)$/i18nmap.obj		\

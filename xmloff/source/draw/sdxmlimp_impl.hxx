@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,6 @@ class SdXMLMasterStylesContext;
 
 class SdXMLImport: public SvXMLImport
 {
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocMasterPages;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocDrawPages;
@@ -256,14 +255,11 @@ protected:
         com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
 public:
-    SdXMLImport(
-        com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rMod,
-        com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rGrfContainer,
-        sal_Bool bLoadDoc,
-        sal_uInt16 nStyleFamMask,
-        sal_Bool bShowProgr,
-        sal_Bool bIsDraw);
+    SdXMLImport( sal_Bool bIsDraw );
     ~SdXMLImport();
+
+    // XImporter
+    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     void SetProgress(sal_Int32 nProg);
 
@@ -320,14 +316,5 @@ public:
     void setDrawPageId( sal_Int32 nId, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > );
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > getDrawPageForId( sal_Int32 nId );
 };
-
-::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler >
-    CreateSdXMLImport(
-        com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rMod,
-        com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rGrfContainer,
-        sal_Bool bLoadDoc,
-        sal_uInt16 nStyleFamMask,
-        sal_Bool bShowProgr,
-        sal_Bool bIsDraw );
 
 #endif  //  _SDXMLIMP_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-08 14:55:37 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,14 +658,8 @@ DECLARE_LIST(ImpXMLAutoLayoutInfoList, ImpXMLAutoLayoutInfo*);
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdXMLExport::SdXMLExport(
-    const uno::Reference<frame::XModel>& rMod,
-    const OUString& rFileName,
-    const uno::Reference<xml::sax::XDocumentHandler>& rHandler,
-    const uno::Reference< ::com::sun::star::container::XIndexContainer > & rEGO,
-    BOOL bShowProgr,
-    BOOL bIsDraw)
-:   SvXMLExport( rFileName, rHandler, rMod, rEGO, MAP_CM ),
+SdXMLExport::SdXMLExport( sal_Bool bIsDraw)
+:   SvXMLExport( MAP_CM, bIsDraw ? sXML_drawing : sXML_presentation ),
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpPageMaterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpShapeStyleInfoList(new ImpXMLShapeStyleInfoList(16, 64, 64)),
@@ -684,10 +678,20 @@ SdXMLExport::SdXMLExport(
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
     msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") )
 {
+
+
+}
+
+// XExporter
+void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
+    throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SvXMLExport::setSourceDocument( xDoc );
+
     const OUString aEmpty;
 
     // prepare factory parts
-    mpSdPropHdlFactory = new XMLSdPropHdlFactory( rMod );
+    mpSdPropHdlFactory = new XMLSdPropHdlFactory( GetModel() );
     if(mpSdPropHdlFactory)
     {
         // set lock to avoid deletion
@@ -762,7 +766,7 @@ SdXMLExport::SdXMLExport(
         {
             mnDocDrawPageCount = mxDocDrawPages->getCount();
             maDrawPagesStyleNames.insert( maDrawPagesStyleNames.begin(), mnDocDrawPageCount, aEmpty );
-            if( !bIsDraw )
+            if( !mbIsDraw )
             {
                 maDrawPagesAutoLayoutNames.insert( maDrawPagesAutoLayoutNames.begin(), mnDocDrawPageCount, aEmpty );
             }
@@ -772,31 +776,6 @@ SdXMLExport::SdXMLExport(
     // add namespaces
     _GetNamespaceMap().AddAtIndex(
         XML_NAMESPACE_PRESENTATION, sXML_np_presentation, sXML_n_presentation, XML_NAMESPACE_PRESENTATION);
-
-    // get status indicator (if intended)
-    if(bShowProgr)
-    {
-        uno::Reference<frame::XController> xController(rMod->getCurrentController());
-        if(xController.is())
-        {
-            uno::Reference<frame::XFrame> xFrame(xController->getFrame());
-            if(xFrame.is())
-            {
-                uno::Reference<task::XStatusIndicatorSupplier> xFactory(xFrame, uno::UNO_QUERY);
-                if(xFactory.is())
-                {
-                    mxStatusIndicator = xFactory->getStatusIndicator();
-                }
-            }
-        }
-    }
-
-    // add progress view
-    if(mxStatusIndicator.is())
-    {
-        const OUString aText(RTL_CONSTASCII_USTRINGPARAM("XML Export"));
-        mxStatusIndicator->start(aText, 100);
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -857,10 +836,10 @@ __EXPORT SdXMLExport::~SdXMLExport()
     }
 
     // stop progress view
-    if(mxStatusIndicator.is())
+    if(GetStatusIndicator().is())
     {
-        mxStatusIndicator->end();
-        mxStatusIndicator->reset();
+        GetStatusIndicator()->end();
+        GetStatusIndicator()->reset();
     }
 }
 
@@ -1697,8 +1676,8 @@ void SdXMLExport::ImpWritePresentationStyles()
 void SdXMLExport::SetProgress(sal_Int32 nProg)
 {
     // set progress view
-    if(mxStatusIndicator.is())
-        mxStatusIndicator->setValue(nProg);
+    if(GetStatusIndicator().is())
+        GetStatusIndicator()->setValue(nProg);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -4294,14 +4273,38 @@ void SdXMLExport::_ExportMasterStyles()
 }
 
 
-sal_uInt32 SdXMLExportDoc(
-        const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& rMod,
-        const rtl::OUString& rFileName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& rHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rGrfContainer,
-        com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >& rStatusIndicator,
-        BOOL bShowProgr, BOOL bIsDraw )
+//////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_getSupportedServiceNames() throw()
 {
-    SdXMLExport aExp( rMod, rFileName, rHandler, rGrfContainer, bShowProgr, bIsDraw );
-    return aExp.exportDoc( bIsDraw ? sXML_drawing : sXML_presentation );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Impress" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLExport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_False );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Draw" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLExport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_True );
 }

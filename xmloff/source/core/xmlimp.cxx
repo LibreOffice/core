@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:40 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,14 +242,14 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
 }
 
 SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rGraphicObjects ) throw () :
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rGraphicObjects ) throw () :
     pImpl( 0 ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     pContexts( new SvXMLImportContexts_Impl ),
     pNumImport( NULL ),
     xModel( rModel ),
-    xGraphicObjects( rGraphicObjects ),
+    xGraphicResolver( rGraphicObjects ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL )
@@ -493,6 +493,64 @@ void SvXMLImport::SetStatisticAttributes(const uno::Reference< xml::sax::XAttrib
 {
 }
 
+///////////////////////////////////////////////////////////////////////
+
+// XImporter
+void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
+    throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    xModel = uno::Reference< frame::XModel >::query( xDoc );
+    if( !xModel.is() )
+        throw lang::IllegalArgumentException();
+}
+
+// XInitialize
+void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
+    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    const sal_Int32 nAnyCount = aArguments.getLength();
+    const uno::Any* pAny = aArguments.getConstArray();
+
+    for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
+    {
+        if( pAny->getValueType() == ::getCppuType((const uno::Reference< task::XStatusIndicator >*)0))
+        {
+            *pAny >>= mxStatusIndicator;
+        }
+        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XGraphicObjectResolver >*)0))
+        {
+            *pAny >>= xGraphicResolver;
+        }
+        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XEmbeddedObjectResolver >*)0))
+        {
+            *pAny >>= xEmbeddedResolver;
+        }
+    }
+}
+
+// XServiceInfo
+OUString SAL_CALL SvXMLImport::getImplementationName()
+    throw(uno::RuntimeException)
+{
+    OUString aStr;
+    return aStr;
+}
+
+sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& ServiceName )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
+    throw(uno::RuntimeException)
+{
+    uno::Sequence< OUString > aSeq;
+    return aSeq;
+}
+
+///////////////////////////////////////////////////////////////////////
+
 XMLTextImportHelper* SvXMLImport::CreateTextImport()
 {
     return new XMLTextImportHelper( xModel );
@@ -666,16 +724,11 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
 
     if( 0 == rURL.compareTo( ::rtl::OUString( '#' ), 1 ) )
     {
-        if( !bLoadOnDemand && xGraphicObjects.is() )
+        if( !bLoadOnDemand && xGraphicResolver.is() )
         {
-            Any                 aAny;
-            const sal_uInt32    nCount = xGraphicObjects->getCount();
             ::rtl::OUString     aTmp( sPackageProtocol );
-
-            aAny <<= ( aTmp += rURL.copy( 1 ) );
-            xGraphicObjects->insertByIndex( nCount, aAny );
-            aAny = xGraphicObjects->getByIndex( nCount );
-            aAny >>= sRet;
+            aTmp += rURL.copy( 1 );
+            sRet = xGraphicResolver->resolveGraphicObjectURL( aTmp );
         }
 
         if( !sRet.getLength() )

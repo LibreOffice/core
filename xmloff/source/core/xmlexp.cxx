@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:04:20 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,11 +205,25 @@ void SvXMLExport::_InitCtor()
     sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
 }
 
+SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass ) :
+    pImpl( 0 ), mpClass( pClass ),
+    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
+    sWS( OUString::createFromAscii( sXML_WS ) ),
+    pNamespaceMap( new SvXMLNamespaceMap ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
+    pAttrList( new SvXMLAttributeList ),
+    bExtended( sal_False ),
+    pProgressBarHelper( NULL ),
+    pEventExport( NULL )
+{
+    _InitCtor();
+}
+
 SvXMLExport::SvXMLExport(
         const OUString &rFileName,
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
         MapUnit eDfltUnit   ) :
-    pImpl( 0 ),
+    pImpl( 0 ), mpClass( NULL ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
     sOrigFileName( rFileName ),
@@ -230,7 +244,7 @@ SvXMLExport::SvXMLExport(
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
         const Reference< XModel >& rModel,
         sal_Int16 eDfltUnit ) :
-    pImpl( 0 ),
+    pImpl( 0 ), mpClass( NULL ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
     sOrigFileName( rFileName ),
@@ -255,9 +269,9 @@ SvXMLExport::SvXMLExport(
         const OUString &rFileName,
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
         const Reference< XModel >& rModel,
-        const Reference< XIndexContainer >& rEmbeddedGraphicObjects,
+        const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
         sal_Int16 eDfltUnit ) :
-    pImpl( 0 ),
+    pImpl( 0 ), mpClass( NULL ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
     sOrigFileName( rFileName ),
@@ -267,7 +281,7 @@ SvXMLExport::SvXMLExport(
     bExtended( sal_False ),
     xHandler( rHandler ),
     xExtHandler( rHandler, uno::UNO_QUERY ),
-    xEmbeddedGraphicObjects( rEmbeddedGraphicObjects ),
+    xGraphicResolver( rEmbeddedGraphicObjects ),
     xModel( rModel ),
     pNumExport(0L),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
@@ -286,6 +300,118 @@ SvXMLExport::~SvXMLExport()
     if (pProgressBarHelper)
         delete pProgressBarHelper;
 }
+
+///////////////////////////////////////////////////////////////////////
+
+// XExporter
+void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
+    throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    xModel = uno::Reference< frame::XModel >::query( xDoc );
+    if( !xModel.is() )
+        throw lang::IllegalArgumentException();
+
+    if(!xNumberFormatsSupplier.is() )
+    {
+        xNumberFormatsSupplier = xNumberFormatsSupplier.query( xModel );
+        if(xNumberFormatsSupplier.is() && xHandler.is())
+            pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
+    }
+}
+
+// XInitialize
+void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArguments )
+    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    const sal_Int32 nAnyCount = aArguments.getLength();
+    const uno::Any* pAny = aArguments.getConstArray();
+
+    for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
+    {
+        if( pAny->getValueType() == ::getCppuType((const uno::Reference< task::XStatusIndicator >*)0) )
+        {
+            *pAny >>= xStatusIndicator;
+        }
+        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XGraphicObjectResolver >*)0) )
+        {
+            *pAny >>= xGraphicResolver;
+        }
+        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XEmbeddedObjectResolver >*)0) )
+        {
+            *pAny >>= xEmbeddedResolver;
+        }
+        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< xml::sax::XDocumentHandler >*)0))
+        {
+            *pAny >>= xHandler;
+            *pAny >>= xExtHandler;
+
+            if (xNumberFormatsSupplier.is() && pNumExport == NULL)
+                pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
+        }
+    }
+}
+
+// XFilter
+sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw(uno::RuntimeException)
+{
+    try
+    {
+        const sal_Int32 nPropCount = aDescriptor.getLength();
+        const beans::PropertyValue* pProps = aDescriptor.getConstArray();
+
+        for( sal_Int32 nIndex = 0; nIndex < nPropCount; nIndex++, pProps++ )
+        {
+            const OUString& rPropName = pProps->Name;
+            const Any& rValue = pProps->Value;
+
+            if( rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
+            {
+                if( !(rValue >>= sOrigFileName ) )
+                    return sal_False;
+            }
+        }
+
+        exportDoc( mpClass );
+
+        return sal_True;
+    }
+    catch( uno::Exception e )
+    {
+#ifdef DEBUG
+        ByteString aError( "uno Exception catched while importing:\n" );
+        aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+    }
+
+    return False;
+}
+
+void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException)
+{
+    DBG_ERROR( "not supported" );
+}
+
+// XServiceInfo
+OUString SAL_CALL SvXMLExport::getImplementationName(  ) throw(uno::RuntimeException)
+{
+    OUString aStr;
+    return aStr;
+}
+
+sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+{
+    return sal_False;
+}
+
+uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
+    throw(uno::RuntimeException)
+{
+    uno::Sequence< OUString > aSeq;
+    return aSeq;
+}
+
+///////////////////////////////////////////////////////////////////////
 
 void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
                                      const sal_Char *pName,
@@ -742,17 +868,9 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
 OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
 {
     OUString sRet( rGraphicObjectURL );
-    if( 0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol,
-                             sGraphicObjectProtocol.getLength() ) &&
-        xEmbeddedGraphicObjects.is() )
+    if( 0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol, sGraphicObjectProtocol.getLength() ) && xGraphicResolver.is() )
     {
-        Any                 aAny;
-        const sal_uInt32    nCount = xEmbeddedGraphicObjects->getCount();
-
-        aAny <<= rGraphicObjectURL;
-        xEmbeddedGraphicObjects->insertByIndex( nCount, aAny );
-        aAny = xEmbeddedGraphicObjects->getByIndex( nCount );
-        aAny >>= sRet;
+        sRet = xGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
     }
     else
         sRet = INetURLObject::AbsToRel( sRet );

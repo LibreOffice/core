@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-11 16:55:06 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
 
+using namespace rtl;
 using namespace com::sun::star;
 
 #define SCH_XML_AXIS_NAME_X     "primary-x"
@@ -1725,10 +1726,16 @@ void SchXMLExportHelper::addSize( uno::Reference< drawing::XShape > xShape )
 // class SchXMLExport
 // ========================================
 
+SchXMLExport::SchXMLExport()
+: SvXMLExport( MAP_CM ),
+  maExportHelper( *this, maAutoStylePool )
+{
+}
+
 SchXMLExport::SchXMLExport( uno::Reference< frame::XModel > xModel,
                             const rtl::OUString& rFileName,
                             const uno::Reference< xml::sax::XDocumentHandler >& rHandler,
-                            const uno::Reference< ::com::sun::star::container::XIndexContainer > & rEGO,
+                            const uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rEGO,
                             sal_Bool bShowProgress,
                             sal_Bool bIncludeTable ) :
         // MAP_CM should become the application setting
@@ -1833,3 +1840,20 @@ void SchXMLExport::SetProgress( sal_Int32 nPercentage )
         mxStatusIndicator->setValue( nPercentage );
 }
 
+// chart export
+uno::Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Chart" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SchXMLExport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SchXMLExport();
+}

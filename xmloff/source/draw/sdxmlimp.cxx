@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,17 +318,45 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
 }
 
 //////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Impress" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLImport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_False );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Draw" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLImport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_True );
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
-SdXMLImport::SdXMLImport(
-    uno::Reference< frame::XModel >& rMod,
-    uno::Reference< container::XIndexContainer >& rGrfContainer,
-    BOOL bLDoc,
-    UINT16 nStyleFamMask,
-    BOOL bShowProgr,
-    BOOL bIsDraw)
-:   SvXMLImport(rMod, rGrfContainer),
-    mpMasterStylesContext(0L),
+SdXMLImport::SdXMLImport( sal_Bool bIsDraw )
+:   mpMasterStylesContext(0L),
     mpDocElemTokenMap(0L),
     mpBodyElemTokenMap(0L),
     mpStylesElemTokenMap(0L),
@@ -339,61 +367,55 @@ SdXMLImport::SdXMLImport(
     mpDrawPageAttrTokenMap(0L),
     mpDrawPageElemTokenMap(0L),
     mpPresentationPlaceholderAttrTokenMap(0L),
-    mnStyleFamilyMask(nStyleFamMask),
+    mnStyleFamilyMask(0),
     mnNewPageCount(0L),
     mnNewMasterPageCount(0L),
-    mbLoadDoc(bLDoc),
+    mbLoadDoc(sal_True),
     mbIsDraw(bIsDraw)
 {
-    // prepare access to styles
-    uno::Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), uno::UNO_QUERY );
-    if(xFamSup.is())
-    {
-        mxDocStyleFamilies = xFamSup->getStyleFamilies();
-    }
-
-    // prepare access to master pages
-    uno::Reference < drawing::XMasterPagesSupplier > xMasterPagesSupplier(GetModel(), uno::UNO_QUERY);
-    if(xMasterPagesSupplier.is())
-    {
-        mxDocMasterPages = mxDocMasterPages.query( xMasterPagesSupplier->getMasterPages() );
-    }
-
-    // prepare access to draw pages
-    uno::Reference <drawing::XDrawPagesSupplier> xDrawPagesSupplier(GetModel(), uno::UNO_QUERY);
-    if(xDrawPagesSupplier.is())
-    {
-        mxDocDrawPages = mxDocDrawPages.query( xDrawPagesSupplier->getDrawPages() );
-    }
-
     // add namespaces
     GetNamespaceMap().AddAtIndex(
         XML_NAMESPACE_PRESENTATION, sXML_np_presentation, sXML_n_presentation, XML_NAMESPACE_PRESENTATION);
+}
 
-    // get status indicator (if intended)
-    if(bShowProgr)
-    {
-        uno::Reference<frame::XController> xController(rMod->getCurrentController());
-        if(xController.is())
-        {
-            uno::Reference<frame::XFrame> xFrame(xController->getFrame());
-            if(xFrame.is())
-            {
-                uno::Reference<task::XStatusIndicatorSupplier> xFactory(xFrame, uno::UNO_QUERY);
-                if(xFactory.is())
-                {
-                    mxStatusIndicator = xFactory->getStatusIndicator();
-                }
-            }
-        }
-    }
+// XImporter
+void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
+    throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SvXMLImport::setTargetDocument( xDoc );
 
-    // add progress view
-    if(mxStatusIndicator.is())
-    {
-        const OUString aText(RTL_CONSTASCII_USTRINGPARAM("XML Import"));
-        mxStatusIndicator->start(aText, 100);
-    }
+    uno::Reference< lang::XServiceInfo > xDocServices( GetModel(), uno::UNO_QUERY );
+    if( !xDocServices.is() )
+        throw lang::IllegalArgumentException();
+
+    mbIsDraw = !xDocServices->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
+
+    // prepare access to styles
+    uno::Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), uno::UNO_QUERY );
+    if(!xFamSup.is())
+        throw lang::IllegalArgumentException();
+
+    mxDocStyleFamilies = xFamSup->getStyleFamilies();
+    if(!mxDocStyleFamilies.is())
+        throw lang::IllegalArgumentException();
+
+    // prepare access to master pages
+    uno::Reference < drawing::XMasterPagesSupplier > xMasterPagesSupplier(GetModel(), uno::UNO_QUERY);
+    if(!xMasterPagesSupplier.is())
+        throw lang::IllegalArgumentException();
+
+    mxDocMasterPages = mxDocMasterPages.query( xMasterPagesSupplier->getMasterPages() );
+    if(!mxDocMasterPages.is())
+        throw lang::IllegalArgumentException();
+
+    // prepare access to draw pages
+    uno::Reference <drawing::XDrawPagesSupplier> xDrawPagesSupplier(GetModel(), uno::UNO_QUERY);
+    if(!xDrawPagesSupplier.is())
+        throw lang::IllegalArgumentException();
+
+    mxDocDrawPages = mxDocDrawPages.query( xDrawPagesSupplier->getDrawPages() );
+    if(!mxDocDrawPages.is())
+        throw lang::IllegalArgumentException();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -673,15 +695,3 @@ uno::Reference< drawing::XDrawPage > SdXMLImport::getDrawPageForId( sal_Int32 nI
 
 //////////////////////////////////////////////////////////////////////////////
 
-uno::Reference< xml::sax::XDocumentHandler >
-    CreateSdXMLImport(
-        uno::Reference< frame::XModel >& rMod,
-        uno::Reference< container::XIndexContainer >& rGrfContainer,
-        uno::Reference< task::XStatusIndicator >& rStatusIndicator,
-        sal_Bool bLoadDoc,
-        sal_uInt16 nStyleFamMask,
-        sal_Bool bShowProgr,
-        sal_Bool bIsDraw )
-{
-    return new SdXMLImport( rMod, rGrfContainer, bLoadDoc, nStyleFamMask, bShowProgr, bIsDraw );
-}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 18:45:57 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,13 +175,12 @@ enum XmlShapeType
 
 class SdXMLExport : public SvXMLExport
 {
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocMasterPages;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocDrawPages;
     sal_Int32                   mnDocMasterPageCount;
     sal_Int32                   mnDocDrawPageCount;
-    sal_Int32                   mnShapeStyleInfoIndex;
+    sal_uInt32                  mnShapeStyleInfoIndex;
 
     // temporary infos
     ImpXMLEXPPageMasterList*    mpPageMasterInfoList;
@@ -288,15 +287,13 @@ private:
     static void ImpExport3DLamps(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,    com::sun::star::awt::Point* pRefPoint = NULL );
 
 public:
-    SdXMLExport(
-        const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& rMod,
-        const rtl::OUString& rFileName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& rHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rGrfContainer,
-        BOOL bShowProgr, BOOL bIsDraw);
+    SdXMLExport( sal_Bool bIsDraw );
     virtual ~SdXMLExport();
 
     void SetProgress(sal_Int32 nProg);
+
+    // XExporter
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // get factories and mappers
     XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory; }
@@ -311,13 +308,6 @@ public:
     BOOL IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
     void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = TRUE; }
 };
-
-sal_uInt32 SdXMLExportDoc(
-        const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& rMod,
-        const rtl::OUString& rFileName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& rHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rGrfContainer,
-        BOOL bShowProgr, BOOL bIsDraw );
 
 #endif  //  _SDXMLEXP_HXX
 
