@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:53:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include "drwlayer.hxx"
 #include "editutil.hxx"
 #include "globstr.hrc"
-#include "namecrea.hxx"     // NAME_TOP etc.
+//CHINA001 #include "namecrea.hxx"      // NAME_TOP etc.
 #include "olinetab.hxx"
 #include "patattr.hxx"
 #include "rangenam.hxx"
@@ -125,7 +125,7 @@
 #include "inputwin.hxx"
 #include "editable.hxx"
 #include "compiler.hxx"
-
+#include "scui_def.hxx" //CHINA001
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
