@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-17 15:23:15 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,7 +789,6 @@ class DataContainer : private ThreadHelpBase
         PerformanceHash         m_aFastLoaderCache          ;     /// hold all registered loader services for a special file type
         PerformanceHash         m_aFastContentHandlerCache  ;     /// hold all registered content handler services for a special file type
         PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for it
-        Detector                m_aDefaultDetector          ;     /// informations about our default deep detection service
         Loader                  m_aGenericLoader            ;     /// informations about our default frame loader
         ::rtl::OUString         m_sLocale                   ;     /// current set locale of configuration to handle right UIName from set of all UINames!
         sal_Bool                m_bTypesModified            ;
