@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:00:10 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2240,6 +2240,64 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
     }
 }
 
+/** method to invalidate/re-calculate the position of all floating screen
+    objects (Writer fly frames and drawing objects), which are anchored
+    to paragraph/character
+
+    // OD 2004-03-17 #i11860#
+
+    @author OD
+*/
+void SwFrm::InvalidateObjPos() const
+{
+    if ( GetDrawObjs() )
+    {
+        const SwDrawObjs& rObjs = *(GetDrawObjs());
+        for ( sal_uInt8 i = 0; i < rObjs.Count(); ++i )
+        {
+            SdrObject* pObj = rObjs[i];
+            SwFrmFmt* pObjFmt = ::FindFrmFmt( pObj );
+            ASSERT( pObjFmt,
+                    "<SwFrm::InvalidateObjPos()> - no format found for connected object" );
+            const SwFmtAnchor& rAnch = pObjFmt->GetAnchor();
+            if ( rAnch.GetAnchorId() != FLY_AT_CNTNT &&
+                 rAnch.GetAnchorId() != FLY_AUTO_CNTNT )
+            {
+                // only to paragraph and to character anchored objects are considered.
+                continue;
+            }
+
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
+            {
+                // Writer fly frame
+                // frame position will be invalidated
+                SwFlyFrm* pFlyFrm =
+                        static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
+                pFlyFrm->InvalidatePos();
+            }
+            else if ( pObj->ISA(SwDrawVirtObj) )
+            {
+                // 'virtual' drawing object
+                // re-calculate its position by settings its anchor position
+                SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                pDrawVirtObj->SetAnchorPos(
+                    pDrawVirtObj->GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
+                pDrawVirtObj->AdjustRelativePosToReference();
+            }
+            else
+            {
+                // 'master' drawing object
+                // re-calculate its position by settings its anchor position
+                SwDrawContact* pDrawContact =
+                            static_cast<SwDrawContact*>(GetUserCall(pObj));
+                ASSERT( pDrawContact,
+                    "<SwRootFrm::InvalidateAllObjPos()> - no contact found for connected object" );
+                pObj->SetAnchorPos( pDrawContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
+                pDrawContact->CorrectRelativePosOfVirtObjs();
+            }
+        }
+    }
+}
 
 /*************************************************************************
 |*
