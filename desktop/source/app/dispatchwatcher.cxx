@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:36:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,44 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 // Use local vector to store dispatcher because we have to fill our request container before
                 // we can dispatch. Otherwise it would be possible that statusChanged is called before we dispatched all requests!!
                 aDispatches.push_back( DispatchHolder( aURL, xDispatcher ));
+            }
+        }
+        else if ( ( aName.CompareToAscii( "service:"  , 8 ) == COMPARE_EQUAL ) )
+        {
+            // TODO: the dispatch has to be done for loadComponentFromURL as well. Please ask AS for more details.
+            URL             aURL ;
+            aURL.Complete = aName;
+
+            Reference < XDispatch >         xDispatcher ;
+            Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
+            Reference < XURLTransformer >   xParser     ( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), ::com::sun::star::uno::UNO_QUERY );
+
+            if( xParser.is() == sal_True )
+                xParser->parseStrict( aURL );
+
+            if( xProvider.is() == sal_True )
+                xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+
+            if( xDispatcher.is() == sal_True )
+            {
+                try
+                {
+                    // We have to be listener to catch errors during dispatching URLs.
+                    // Otherwise it would be possible to have an office running without an open
+                    // window!!
+                    Sequence < PropertyValue > aNoArgs;
+                    Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
+                    if ( xDisp.is() )
+                        xDisp->dispatchWithNotification( aURL, aNoArgs, DispatchWatcher::GetDispatchWatcher() );
+                    else
+                        xDispatcher->dispatch( aURL, aNoArgs );
+                }
+                catch ( ::com::sun::star::uno::Exception& )
+                {
+                    OUString aMsg = OUString::createFromAscii(
+                        "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: ");
+                    OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                }
             }
         }
         else
