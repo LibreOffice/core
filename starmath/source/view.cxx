@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-15 09:59:16 $
+ *  last change: $Author: tl $ $Date: 2002-08-16 12:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,21 +760,9 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, USHORT nId,
 {
     pWindow = new SmCmdBoxWindow(pBindings, this, pParentWindow);
 
-    if (pInfo->aPos.X()  &&  pInfo->aPos.Y())
-        pWindow->SetPosPixel(pInfo->aPos);
+    // make window docked to the bottom initially (after first start)
+    eChildAlignment = SFX_ALIGN_BOTTOM;
     ((SfxDockingWindow *)pWindow)->Initialize(pInfo);
-/*
-    if ( !pInfo->aPos.X() || !pInfo->aPos.Y() )
-    {
-        ((SfxDockingWindow *)pWindow)->Initialize(pInfo);
-        ((SmCmdBoxWindow *)pWindow)->AdjustPosition();
-    }
-    else
-    {
-        pWindow->SetPosPixel(pInfo->aPos);
-        ((SfxDockingWindow *)pWindow)->Initialize(pInfo);
-    }
-*/
 }
 
 
