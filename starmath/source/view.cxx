@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:43:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #ifndef _SV_MENU_HXX //autogen
@@ -828,18 +832,24 @@ SFX_IMPL_VIEWFACTORY(SmViewShell, SmResId(RID_VIEWNAME))
 
 Size SmViewShell::GetOptimalSizePixel() const
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetOptimalSizePixel" );
+
     return aGraphic.LogicToPixel( ((SmViewShell*)this)->GetDoc()->GetSize() );
 }
 
 
 void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::AdjustPosSizePixel" );
+
     aGraphic.SetPosSizePixel(rPos, rSize);
 }
 
 
 void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::InnerResizePixel" );
+
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
     if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
     {
@@ -856,6 +866,8 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
 
 void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::OuterResizePixel" );
+
     SmGraphicWindow &rWin = GetGraphicWindow();
     rWin.SetPosSizePixel(rOfs, rSize);
     if (GetDoc()->IsPreview())
@@ -866,12 +878,16 @@ void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
 
 void SmViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::QueryObjAreaPixel" );
+
     rRect.SetSize( GetGraphicWindow().GetSizePixel() );
 }
 
 
 void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetZoomFactor" );
+
     const Fraction &rFrac = rX < rY ? rX : rY;
     GetGraphicWindow().SetZoom( (USHORT) long(rFrac * Fraction( 100, 1 )) );
 
@@ -883,6 +899,8 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 
 Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetTextLineSize" );
+
     String aText;
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
     USHORT nTabs = rLine.GetTokenCount('\t');
@@ -911,6 +929,8 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 
 Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long MaxWidth)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetTextSize" );
+
     Size    aSize;
     String  aLine;
     Size    TextSize;
@@ -971,6 +991,8 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
 
 void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const String& rLine)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::DrawTextLine" );
+
     String  aText;
     Point   aPoint (rPosition);
     USHORT  nTabs = rLine.GetTokenCount('\t');
@@ -998,6 +1020,8 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 
 void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const String& rText, USHORT MaxWidth)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::DrawText" );
+
     USHORT  nLines = rText.GetTokenCount('\n');
     Point   aPoint (rPosition);
     Size    aSize;
@@ -1061,6 +1085,8 @@ void SmViewShell::Impl_Print(
         OutputDevice &rOutDev, const SmPrintSize ePrintSize,
         Rectangle aOutRect, Point aZeroPoint )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Impl_Print" );
+
     SmModule *pp = SM_MOD1();
 
     rOutDev.Push();
@@ -1202,6 +1228,8 @@ void SmViewShell::Impl_Print(
 
 USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
+
     SmPrinterAccess aPrinterAccess( *GetDoc() );
     Printer *pPrinter = aPrinterAccess.GetPrinter();
     OutputDevice *pOutDev = pPrinter;
@@ -1242,6 +1270,8 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
 
 SfxPrinter* SmViewShell::GetPrinter(BOOL bCreate)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetPrinter" );
+
     SmDocShell *pDoc = GetDoc();
     if ( pDoc->HasPrinter() || bCreate )
         return pDoc->GetPrinter();
@@ -1251,6 +1281,8 @@ SfxPrinter* SmViewShell::GetPrinter(BOOL bCreate)
 
 USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetPrinter" );
+
     if ((nDiffFlags & SFX_PRINTER_PRINTER) == SFX_PRINTER_PRINTER)
         GetDoc()->SetPrinter( pNewPrinter );
 
@@ -1266,12 +1298,16 @@ USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags)
 SfxTabPage* SmViewShell::CreatePrintOptionsPage(Window *pParent,
                                                 const SfxItemSet &rOptions)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::CreatePrintOptionsPage" );
+
     return SmPrintOptionsTabPage::Create(pParent, rOptions);
 }
 
 
 SmEditWindow *SmViewShell::GetEditWindow()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetEditWindow" );
+
     SmCmdBoxWrapper *pWrapper = (SmCmdBoxWrapper *) GetViewFrame()->
             GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() );
 
@@ -1288,6 +1324,8 @@ SmEditWindow *SmViewShell::GetEditWindow()
 
 void SmViewShell::SetStatusText(const String& Text)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetStatusText" );
+
     StatusText = Text;
     GetViewFrame()->GetBindings().Invalidate(SID_TEXTSTATUS);
 }
@@ -1295,6 +1333,8 @@ void SmViewShell::SetStatusText(const String& Text)
 
 void SmViewShell::ShowError( const SmErrorDesc *pErrorDesc )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::ShowError" );
+
     DBG_ASSERT(GetDoc(), "Sm : Document missing");
     if (pErrorDesc || 0 != (pErrorDesc = GetDoc()->GetParser().GetError(0)) )
     {
@@ -1307,6 +1347,8 @@ void SmViewShell::ShowError( const SmErrorDesc *pErrorDesc )
 
 void SmViewShell::NextError()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::NextError" );
+
     DBG_ASSERT(GetDoc(), "Sm : Document missing");
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().NextError();
 
@@ -1317,6 +1359,8 @@ void SmViewShell::NextError()
 
 void SmViewShell::PrevError()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::PrevError" );
+
     DBG_ASSERT(GetDoc(), "Sm : Document missing");
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().PrevError();
 
@@ -1327,6 +1371,8 @@ void SmViewShell::PrevError()
 
 void SmViewShell::Execute(SfxRequest& rReq)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Execute" );
+
     SmEditWindow *pWin = GetEditWindow();
 
     switch (rReq.GetSlot())
@@ -1571,6 +1617,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
 void SmViewShell::GetState(SfxItemSet &rSet)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetState" );
+
     SfxWhichIter aIter(rSet);
 
     SmEditWindow *pEditWin = GetEditWindow();
@@ -1649,6 +1697,8 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame, SfxViewShell *):
     aGraphic(this),
     aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame->GetBindings())
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SmViewShell" );
+
     pViewFrame = &pFrame->GetWindow();
 
     SetStatusText(String());
@@ -1661,6 +1711,8 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame, SfxViewShell *):
 
 SmViewShell::~SmViewShell()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::~SmViewShell" );
+
     AddRemoveClipboardListener( FALSE );
 
     //!! this view shell is not active anymore !!
@@ -1673,6 +1725,8 @@ SmViewShell::~SmViewShell()
 
 void SmViewShell::Deactivate( BOOL bIsMDIActivate )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Deactivate" );
+
     SmEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
         pEdit->Flush();
@@ -1683,6 +1737,8 @@ void SmViewShell::Deactivate( BOOL bIsMDIActivate )
 
 void SmViewShell::Activate( BOOL bIsMDIActivate )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Activate" );
+
     SfxViewShell::Activate( bIsMDIActivate );
 
     SmEditWindow *pEdit = GetEditWindow();
