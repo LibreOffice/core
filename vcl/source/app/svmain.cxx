@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-06 07:41:39 $
+ *  last change: $Author: cd $ $Date: 2000-11-06 08:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@
 
 
 #include <com/sun/star/portal/client/XRmStatus.hpp>
+#include <com/sun/star/portal/client/XRmSync.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -291,8 +292,19 @@ BOOL SVMain()
     delete pSVData->mpStartUpCond;
     pSVData->mpStartUpCond = NULL;
 
+    // we have to acquire solar mutex before we do our first rvp call!
+    pSVData->maAppData.mpSolarMutex->acquire();
+
     if( pSVData->mxClientFactory.is() )
     {
+        pSVData->mpRVPNormalSync = new RVPSync(
+            Reference< ::com::sun::star::portal::client::XRmSync >(
+                pSVData->mxClientFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "RVPSync_Normal.stardiv.de" ) ) ), UNO_QUERY ));
+
+        pSVData->mpRVPSoundSync = new RVPSync(
+            Reference< ::com::sun::star::portal::client::XRmSync >(
+                pSVData->mxClientFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "RVPSync_Sound.stardiv.de" ) ) ), UNO_QUERY ));
+
         pSVData->mpAtoms = new ::utl::AtomClient(
             Reference< ::com::sun::star::util::XAtomServer >(
                 pSVData->mxClientFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "ClientAtomServer.stardiv.de" ) ) ), UNO_QUERY ) );
@@ -301,10 +313,13 @@ BOOL SVMain()
             OUString( RTL_CONSTASCII_USTRINGPARAM( "OfficeStatus.stardiv.de" ) ) );
 
         pSVData->mxStatus = Reference < ::com::sun::star::portal::client::XRmStatus > ( rX , UNO_QUERY );
+        CHECK_FOR_RVPSYNC_NORMAL()
         if( pSVData->mxStatus->GetRemoteVersion() != REMOTE_VCLVERSION )
         {
+            CHECK_FOR_RVPSYNC_NORMAL()
             pSVData->mxStatus->ShowError(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("Wrong Office-Version")), 0 );
+            CHECK_FOR_RVPSYNC_NORMAL()
             pSVData->mxStatus->Quit();
             return sal_False;
         }
@@ -316,7 +331,7 @@ BOOL SVMain()
 
     ImplInitRemotePrinterList();
 
-    pSVData->maAppData.mpSolarMutex->acquire();
+//  pSVData->maAppData.mpSolarMutex->acquire();
     }
 
 #endif
@@ -483,6 +498,7 @@ BOOL SVMain()
     {
         try
         {
+             CHECK_FOR_RVPSYNC_NORMAL()
             pSVData->mxStatus->Quit();
             pSVData->mxStatus = Reference < ::com::sun::star::portal::client::XRmStatus >();
         }
@@ -492,6 +508,13 @@ BOOL SVMain()
 
     }
 
+    // call deinit to deinitialize application class
+    // soffice/sfx implementation disposes the global service manager
+    // Warning: After this call you can't call uno services
+    pSVData->mpApp->DeInit();
+
+    delete pSVData->mpRVPNormalSync;
+    delete pSVData->mpRVPSoundSync;
     pSVData->maAppData.mpSolarMutex->release();
     delete pSVData->maAppData.mpSolarMutex;
     pSVData->maAppData.mpSolarMutex = NULL;
@@ -510,11 +533,6 @@ BOOL SVMain()
     }
     delete pSVData->mpAtoms;
 #endif
-
-    // call deinit to deinitialize application class
-    // soffice/sfx implementation disposes the global service manager
-    // Warning: After this call you can't call uno services
-    pSVData->mpApp->DeInit();
 
     if ( pSVData->maAppData.mpSettings )
     {

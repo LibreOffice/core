@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2000-10-26 06:32:57 $
+ *  last change: $Author: cd $ $Date: 2000-11-06 08:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@
 
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
+#include <com/sun/star/portal/client/XRmSync.hpp>
 #endif
 
 
@@ -450,7 +451,7 @@ void Application::Abort( const XubString& rErrorText )
 
 ImplRemoteYieldMutex::ImplRemoteYieldMutex()
 {
-    mnCount = 0;
+    mnCount         = 0;
     mnMainThreadId  = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
     mnThreadId      = 0;
 }
@@ -559,6 +560,43 @@ static void ImplRemoteDispatch( BOOL bWait )
     }
     else
         ::vos::OThread::yield();
+}
+
+// -----------------------------------------------------------------------
+
+RVPSync::RVPSync( const REF( NMSP_CLIENT::XRmSync )& xRVPSync ) :
+    mxRVPSync( xRVPSync ),
+    mnRVPCount( 0 ),
+    mnLastThreadId( 0 )
+{
+}
+
+void RVPSync::CheckForRVPSync( const char* )
+{
+
+    NAMESPACE_VOS(OThread)::TThreadIdentifier aThreadId =
+        NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+
+    if ( mnLastThreadId != aThreadId )
+    {
+        // thread has changed, we have to send a Sync to the client once!
+        mnLastThreadId = aThreadId;
+        try
+        {
+            ::vos::OGuard aGuard( maMutex );
+            {
+                if ( mxRVPSync.is() )
+                    mxRVPSync->Sync( mnRVPCount );
+
+                osl_incrementInterlockedCount( &mnRVPCount );
+            }
+        }
+        catch ( ::com::sun::star::uno::RuntimeException& )
+        {
+        }
+    }
+    else
+        osl_incrementInterlockedCount( &mnRVPCount );
 }
 
 #endif
@@ -1393,7 +1431,10 @@ SystemInfoType Application::GetClientSystem()
     {
         ImplSVData* pSVData = ImplGetSVData();
         if ( pSVData->mxStatus.is() )
+        {
+            CHECK_FOR_RVPSYNC_NORMAL()
             nImplClientSystemInfo = (SystemInfoType)pSVData->mxStatus->GetSystemType();
+        }
     }
 
     return nImplClientSystemInfo;
