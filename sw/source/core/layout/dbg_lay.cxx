@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg_lay.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-24 12:37:44 $
+ *  last change: $Author: ama $ $Date: 2001-10-01 08:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
+#define _SVSTDARR_LONGS
 #include <svtools/svstdarr.hxx>
 #endif
 
@@ -184,6 +185,7 @@ class SwImplProtocol
 {
     SvFileStream *pStream;      // Ausgabestream
     SvUShortsSort *pFrmIds;     // welche FrmIds sollen aufgezeichnet werden ( NULL == alle )
+    SvLongs *pVar;              // Variables
     ByteString aLayer;          // Einrueckung der Ausgabe ("  " pro Start/End)
     USHORT nTypes;              // welche Typen sollen aufgezeichnet werden
     USHORT nLineCount;          // Ausgegebene Zeilen
@@ -206,6 +208,8 @@ public:
     void FileInit();                    // Auslesen der INI-Datei
     void ChkStream() { if( !pStream ) NewStream(); }
     void SnapShot( const SwFrm* pFrm, ULONG nFlags );
+    void GetVar( const USHORT nNo, long& rVar )
+        { if( pVar && nNo < pVar->Count() ) rVar = (*pVar)[ nNo ]; }
 };
 
 /* -----------------11.01.99 10:43-------------------
@@ -321,9 +325,15 @@ void SwProtocol::SnapShot( const SwFrm* pFrm, ULONG nFlags )
         pImpl->SnapShot( pFrm, nFlags );
 }
 
+void SwProtocol::GetVar( const USHORT nNo, long& rVar )
+{
+    if( pImpl )
+        pImpl->GetVar( nNo, rVar );
+}
+
 SwImplProtocol::SwImplProtocol()
-    : pStream( NULL ), pFrmIds( NULL ), nTypes( 0xffff ), nTestMode( 0 ),
-    nLineCount( 0 ), nMaxLines( USHRT_MAX )
+    : pStream( NULL ), pFrmIds( NULL ), pVar( NULL ), nTypes( 0xffff ),
+    nTestMode( 0 ), nLineCount( 0 ), nMaxLines( USHRT_MAX )
 {
     NewStream();
 }
@@ -345,6 +355,7 @@ SwImplProtocol::~SwImplProtocol()
 {
     delete pStream;
     delete pFrmIds;
+    delete pVar;
 }
 
 /* -----------------11.01.99 11:03-------------------
@@ -386,6 +397,12 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
         {
             nInitFile = 5; // Default:
             nMaxLines = USHRT_MAX;
+        }
+        else if( "[var" == aTmp )// variables
+        {
+            nInitFile = 6;
+            if( !pVar )
+                pVar = new SvLongs( 5, 5 );
         }
         else
             nInitFile = 0;          // Nanu: Unbekannter Bereich?
@@ -435,6 +452,8 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
                         }
                         break;
                 case 5: nMaxLines = (USHORT)nVal;
+                        break;
+                case 6: pVar->Insert( (long)nVal, pVar->Count() );
                         break;
             }
         }

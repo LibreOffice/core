@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg_lay.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-24 12:34:42 $
+ *  last change: $Author: ama $ $Date: 2001-10-01 08:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ public:
     static void Init();
     static void Stop();
     static void SnapShot( const SwFrm* pFrm, ULONG nFlags );
+    static void GetVar( const USHORT nNo, long& rVar );
 };
 
 class SwEnterLeave
@@ -137,6 +138,7 @@ public:
 #define PROTOCOL_STOP SwProtocol::Stop();
 #define PROTOCOL_ENTER( pFrm, nFunc, nAct, pPar ) SwEnterLeave aEnter( pFrm, nFunc, nAct, pPar );
 #define PROTOCOL_SNAPSHOT( pFrm, nFlags ) SwProtocol::SnapShot( pFrm, nFlags );
+#define GET_VARIABLE( nNo, nVar ) SwProtocol::GetVar( nNo, nVar );
 
 #else
 
@@ -145,6 +147,7 @@ public:
 #define PROTOCOL_STOP
 #define PROTOCOL_ENTER( pFrm, nFunc, nAct, pPar )
 #define PROTOCOL_SNAPSHOT( pFrm, nFlags )
+#define GET_VARIABLE( nNo, nVar )
 
 #endif
 

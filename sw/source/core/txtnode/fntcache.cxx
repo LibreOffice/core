@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:22:48 $
+ *  last change: $Author: ama $ $Date: 2001-10-01 08:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #ifndef _DRAWFONT_HXX
 #include <drawfont.hxx>     // SwDrawTextInfo
 #endif
+#include "dbg_lay.hxx"
 
 #ifdef VERTICAL_LAYOUT
 #ifndef _TXTFRM_HXX
@@ -397,6 +398,12 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                 if ( bNoSymbol )
                     bScrSymbol = RTL_TEXTENCODING_SYMBOL ==
                                  pOut->GetFontMetric().GetCharSet();
+                Size aTmp( aMet.GetSize() );
+                if( aTmp.Width() && !pPrtFont->GetSize().Width() )
+                {
+                    aTmp.Width() = 0;
+                    aMet.SetSize( aTmp );
+                }
                 pOut->SetFont( aMet );  // Druckerabgleich
                 if( bNoSymbol && ( bScrSymbol != ( RTL_TEXTENCODING_SYMBOL ==
                                         pOut->GetFontMetric().GetCharSet() ) ) )
@@ -937,6 +944,11 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
             USHORT nMul = 3;
+#ifdef DEBUG
+            long nTest = nMul;
+            GET_VARIABLE( 0, nTest );
+            nMul = (USHORT)nTest;
+#endif
             long *pScrArray = NULL;
 
             if ( pPrtFont->GetKerning() )
