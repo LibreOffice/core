@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
+ *  last change: $Author: jl $ $Date: 2001-07-26 11:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,8 +298,8 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
 {
     // The structure contains all arguments for DoDragDrop and other
     DragSource *pSource= (DragSource*)pParams;
+    pSource->acquire();
     // Drag and drop only works in a thread in which OleInitialize is called.
-
     HRESULT hr= OleInitialize( NULL);
     if( SUCCEEDED( hr) )
     {
@@ -346,6 +346,7 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
         AttachThreadInput( threadId, pSource->m_threadIdWindow, FALSE);
         OleUninitialize();
     }
+    pSource->release();
     return 0;
 }
 

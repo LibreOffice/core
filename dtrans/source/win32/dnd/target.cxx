@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
+ *  last change: $Author: jl $ $Date: 2001-07-26 11:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
     m_serviceFactory( sf),
     WeakComponentImplHelper2<XInitialization,XDropTarget>(m_mutex),
     m_bActive(sal_True),
-    m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK),
+    m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK|ACTION_DEFAULT),
     m_nCurrentDropAction( ACTION_NONE),
     m_oleThreadId( 0),
     m_pDropTarget( NULL),
@@ -358,7 +358,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
         // m_nLastDropAction has to be set by a listener. If no listener calls
         //XDropTargetDragContext::acceptDrag and specifies an action then pdwEffect
         // will be DROPEFFECT_NONE throughout
-        m_nLastDropAction= ACTION_NONE;
+        m_nLastDropAction= ACTION_DEFAULT;
 
         m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
             static_cast<DropTarget*>(this) ) );

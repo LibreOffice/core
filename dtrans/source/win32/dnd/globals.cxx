@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 07:10:36 $
+ *  last change: $Author: jl $ $Date: 2001-07-26 11:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
     {
         if( nSourceActions & ACTION_MOVE )
         {
-            ret= ACTION_MOVE;
+            ret= ACTION_DEFAULT;
         }
 
         else if( nSourceActions & ACTION_COPY )
@@ -129,7 +129,7 @@ sal_Int8 dndOleDropEffectsToActions( DWORD dwEffect)
     if( dwEffect & DROPEFFECT_COPY)
         ret |= ACTION_COPY;
     if( dwEffect & DROPEFFECT_MOVE)
-        ret |= ACTION_MOVE;
+        ret |= ACTION_MOVE | ACTION_DEFAULT;
     if( dwEffect & DROPEFFECT_LINK)
         ret |= ACTION_LINK;
 
@@ -145,6 +145,8 @@ DWORD dndActionsToDropEffects( sal_Int8 actions)
         ret |= DROPEFFECT_COPY;
     if( actions & ACTION_LINK)
         ret |= DROPEFFECT_LINK;
+    if( actions & ACTION_DEFAULT)
+        ret |= DROPEFFECT_COPY;
     return ret;
 }
 
