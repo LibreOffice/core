@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:23 $
+#   last change: $Author: tl $ $Date: 2000-12-04 14:11:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,12 +75,19 @@ PACKAGE=com$/sun$/star$/linguistic2
 IDLFILES=\
     DictionaryEvent.idl\
     DictionaryEventFlags.idl\
+    DictionaryList.idl\
     DictionaryListEvent.idl\
     DictionaryListEventFlags.idl\
     DictionaryType.idl\
+    Hyphenator.idl\
+    LinguProperties.idl\
     LinguServiceEvent.idl\
     LinguServiceEventFlags.idl\
+    LinguServiceManager.idl\
+    OtherLingu.idl\
+    SpellChecker.idl\
     SpellFailure.idl\
+    Thesaurus.idl\
     XDictionary.idl\
     XDictionary1.idl\
     XDictionaryEntry.idl\
