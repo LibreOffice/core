@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:50:13 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3267,14 +3267,14 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message [ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U 'Ongedaan maken' opheffen?" ;
     Message [ spanish ] = "Para proceder con esta operaciσn deberα anular primero la funciσn de \"deshacer\".\nΏDesea desactivar la funciσn de \"deshacer\"?" ;
     Message [ english_us ] = "To proceed with this action, you must first turn off the \"undo\" function. Do you want to turn off the \"undo\" function?" ;
-    Message[ chinese_simplified ] = "ζ’¤ζ¶ε‘½δ»¤εθƒ½ι€θ¦εΎε¤η„ε†…ε­γ€‚\nθ¦εη”¨ζ’¤ζ¶ε‘½δ»¤εθƒ½οΌ";
+    Message[ chinese_simplified ] = "θ¦η»§η»­ζ­¤ζ“δ½οΌεΏ…ι€ε…³ζ‰β€ζ’¤ι”€β€εθƒ½γ€‚\nθ¦ε–ζ¶β€ζ’¤ζ¶β€εθƒ½ε—οΌ";
     Message[ russian ] = "Òπεασεςρÿ αξλόψξι ξαϊεμ οΰμÿςθ δλÿ ξςμενϋ ύςξγξ δειρςβθÿ.\nΝε ξςμενÿςό?";
     Message[ polish ] = "Cofniκcie tej akcji wymaga duΏej iloci pamiκci.\nCzy chcesz anulowaζ cofniκcie?";
     Message[ japanese ] = "γ“γ®ζ“δ½γ‚’η¶θ΅γ™γ‚‹γ«γ―γ€γΎγ \"ε…ƒγ«ζ»γ™\" ζ©θƒ½γ‚’γ‚ªγƒ•γ«γ—γΎγ™γ€‚\n\"ε…ƒγ«ζ»γ™\" ζ©θƒ½γ‚’γ‚ªγƒ•γ«γ—γΎγ™γ‹γ€‚";
     Message[ chinese_traditional ] = "ε¦‚ζθ¦ηΉΌηΊι€™ε€‹ε‹•δ½οΌζ‚¨εΏ…ι ε…ι—ι–‰γ€εΎ©εγ€εθƒ½γ€‚θ¦ι—ι–‰εΎ©εεθƒ½οΌ";
     Message[ arabic ] = "ΗαΚΡΗΜΪ Ϊδ εΠΗ ΗαΕΜΡΗΑ νΚΨαΘ ΠΗίΡΙ ίΘνΡΙ ΜΟΗπ.\nεα ΚΡνΟ ΕαΫΗΑ ΗαΚΡΗΜΪΏ";
     Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U 'Ongedaan maken' opheffen?";
-    Message[ chinese_simplified ] = "ζ’¤ζ¶ε‘½δ»¤εθƒ½ι€θ¦εΎε¤η„ε†…ε­γ€‚\nθ¦εη”¨ζ’¤ζ¶ε‘½δ»¤εθƒ½οΌ";
+    Message[ chinese_simplified ] = "θ¦η»§η»­ζ­¤ζ“δ½οΌεΏ…ι€ε…³ζ‰β€ζ’¤ι”€β€εθƒ½γ€‚\nθ¦ε–ζ¶β€ζ’¤ζ¶β€εθƒ½ε—οΌ";
     Message[ greek ] = "Η εκτέλεση αυτής της ενέργειας απαιτεί μεγάλη ποσότητα μνήμης.\nΘέλετε να ακυρώσετε την αναίρεση;";
     Message[ korean ] = "μ΄ μ‘λ™μ„ κ³„μ† μ§„ν–‰ν•κΈ° μ„ν•΄μ„λ” μ‹¤ν–‰ μ·¨μ† κΈ°λ¥μ΄ ν•΄μ λμ–΄μ•Ό ν•©λ‹λ‹¤. μ‹¤ν–‰ μ·¨μ† κΈ°λ¥μ„ ν•΄μ ν•μ‹κ² μµλ‹κΉ?";
     Message[ turkish ] = "Bu iώleme devam etmek iηin, φncelikle \"geri al\" fonksiyonunu kapatmanύz gerekiyor. ήimdi \"geri al\" fonksiyonunu kapatmak istiyor musunuz?";
@@ -3749,14 +3749,14 @@ String STR_FDLG_TEMPLATE_NAME
     Text [ french ] = "Styles : " ;
     Text [ dutch ] = "Huidige sjabloon" ;
     Text [ portuguese ] = "Modelo actual: " ;
-    Text[ chinese_simplified ] = "ζ ΌεΌζ ·εΌοΌ";
+    Text[ chinese_simplified ] = "ζ ·εΌ: ";
     Text[ russian ] = "Òεκσωθι ρςθλό:  ";
     Text[ polish ] = "BieΏΉcy styl:";
     Text[ japanese ] = "γ‚Ήγ‚Ώγ‚¤γƒ«: ";
     Text[ chinese_traditional ] = "ζ ΌεΌη―„ζ¬οΌ ";
     Text[ arabic ] = "ΗαδγΨ ΗαΝΗαν: ";
     Text[ dutch ] = "Huidige sjabloon";
-    Text[ chinese_simplified ] = "ζ ΌεΌζ ·εΌοΌ";
+    Text[ chinese_simplified ] = "ζ ·εΌ: ";
     Text[ greek ] = "Τρέχων πρότυπο:  ";
     Text[ korean ] = "μ¤νƒ€μΌ: ";
     Text[ turkish ] = "Biηemler:";
