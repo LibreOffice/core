@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 17:47:50 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 13:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,15 @@
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _REGION_HXX //autogen
+#include <vcl/region.hxx>
+#endif
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
+#ifndef _WINDOW_HXX //autogen
+#include <vcl/window.hxx>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -623,6 +632,9 @@ USHORT      GetHtmlMode(const SwDocShell* pShell)
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/04/27 17:47:50  jp
+      remove unused line
+
       Revision 1.2  2000/11/20 09:07:00  jp
       should change: use LocaleDataWrapper
 
