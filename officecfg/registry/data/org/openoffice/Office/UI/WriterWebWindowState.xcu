@@ -300,12 +300,6 @@
      <value xml:lang="de">Grafik Filter</value>
     </prop>
    </node>
-   <node oor:name="private:resource/toolbar/graphicobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Picture</value>
-     <value xml:lang="de">Bild</value>
-    </prop>
-   </node>
    <node oor:name="private:resource/toolbar/numobjectbar" oor:op="replace">
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>false</value>
@@ -357,6 +351,15 @@
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
         <value>true</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/colorbar" oor:op="replace">
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>false</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Color</value>
+     <value xml:lang="de">Farbe</value>
     </prop>
    </node>
   </node>
