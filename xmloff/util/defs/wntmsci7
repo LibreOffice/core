@@ -10518,3 +10518,4 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?handleElementItem@XMLShapeExportPropertyMapper@@UBEXAAVSvXMLExport@@ABUXMLPropertyState@@GPBV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@K@Z
 ?exportText@SchXMLExportHelper@@AAEXABVOUString@rtl@@_N@Z
 ?handleElementItem@XMLChartExportPropertyMapper@@EBEXAAVSvXMLExport@@ABUXMLPropertyState@@GPBV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@K@Z
+?begin@?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@QAEPAUXMLPropertyState@@XZ
