@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 
 #include <svtools/svtools.hrc>
+#include <svtools/saveopt.hxx>
 
 #ifndef _SV_CONFIG_HXX
 #include <vcl/config.hxx>
@@ -647,8 +648,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     Application::EnableAutoHelpId();
 
-    InsertLateInitHdl( STATIC_LINK( pAppData_Impl, SfxAppData_Impl, CreateDataLockBytesFactory ) );
-
     pAppData_Impl->pAppDispatch = new SfxStatusDispatcher;
     pAppData_Impl->pAppDispatch->acquire();
 
@@ -721,10 +720,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     pImageMgr = new SfxImageManager;
     pOptions = new SfxOptions;
-
     SfxNewHdl* pNewHdl = SfxNewHdl::GetOrCreate();
-    InsertLateInitHdl( LINK(pNewHdl, SfxNewHdl, InitMem_Impl) );
-    InsertLateInitHdl( LINK(this, SfxApplication,SpecialService_Impl) );
 
     // Die Strings muessen leider zur Laufzeit gehalten werden, da wir bei
     // einer ::com::sun::star::uno::Exception keine Resourcen mehr laden duerfen.
@@ -792,19 +788,11 @@ FASTBOOL SfxApplication::Initialize_Impl()
         return FALSE;
     }
 
-//    SfxFrameSetObjectShell::RegisterFactory(0);
-//    SfxFrameSetView_Impl::RegisterFactory(0);
-//    SfxFrameSetSourceView_Impl::RegisterFactory(1);
-
-//    rMatcher.AddContainer( new SfxExecutableFilterContainer() );
-//    rMatcher.AddContainer( new SfxExternalAppFilterContainer() );
-//    rMatcher.AddContainer( new SfxPluginFilterContainer() );
-
-    InsertLateInitHdl( LINK(this, SfxApplication,LateInitOLEReg_Impl) );
-    InsertLateInitHdl( LINK(this, SfxApplication,LateInitCHAOSReg_Impl) );
     InsertLateInitHdl( LINK(this, SfxApplication,LateInitNewMenu_Impl) );
     InsertLateInitHdl( LINK(this, SfxApplication,LateInitWizMenu_Impl) );
-    InsertLateInitHdl( LINK(this, SfxApplication,AutoStart_Impl) );
+    InsertLateInitHdl( LINK(pNewHdl, SfxNewHdl, InitMem_Impl) );
+    InsertLateInitHdl( LINK(this, SfxApplication,SpecialService_Impl) );
+    InsertLateInitHdl( STATIC_LINK( pAppData_Impl, SfxAppData_Impl, CreateDocumentTemplates ) );
 
     bInInit = sal_False;
     if ( bDowning )
@@ -817,7 +805,8 @@ FASTBOOL SfxApplication::Initialize_Impl()
     //  if not done in Init(), load the configuration
     if ( !pImp->bConfigLoaded )
         LoadConfig();
-    pImp->pAutoSaveTimer->SetTimeout( pOptions->GetAutoSaveTime() * 60000 );
+    SvtSaveOptions aSaveOptions;
+    pImp->pAutoSaveTimer->SetTimeout( aSaveOptions.GetAutoSaveTime() * 60000 );
     pImp->pAutoSaveTimer->SetTimeoutHdl( LINK( pApp, SfxApplication, AutoSaveHdl_Impl ) );
 
     // App-StartEvent
@@ -876,30 +865,4 @@ IMPL_LINK( SfxApplication, SpecialService_Impl, void*, pVoid )
 
     return 0;
 }
-
-IMPL_LINK( SfxApplication, AutoStart_Impl, void*, pVoid )
-{
-    // Autostart-Code
-    SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
-    String aName = SFX_INIMANAGER()->Get( SFX_KEY_AUTOSTART_DIR );
-    if ( aName.Len() )
-    {
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aFiles =
-            SfxContentHelper::GetFolderContents( aName, sal_False );
-        const ::rtl::OUString* pFiles  = aFiles.getConstArray();
-        UINT32 nCount = aFiles.getLength();
-        for ( UINT32 i = 0; i < nCount; i++ )
-        {
-            String aURL( pFiles[i] );
-            if ( aURL.Len() )
-            {
-                SfxStringItem aItem( SID_FILE_NAME, aURL );
-                GetAppDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aItem, &aReferer, 0L );
-            }
-        }
-    }
-
-    return 0L;
-}
-
 
