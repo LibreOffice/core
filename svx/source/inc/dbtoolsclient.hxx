@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:34:28 $
+ *  last change: $Author: fs $ $Date: 2002-09-12 14:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #ifndef _OSL_MODULE_H_
 #include <osl/module.h>
 #endif
-
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
 //........................................................................
 namespace svxform
 {
@@ -91,9 +93,11 @@ namespace svxform
         static oslModule        s_hDbtoolsModule;
         static ::connectivity::simple::createDataAccessToolsFactoryFunction
                                 s_pFactoryCreationFunc;
+        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+        mutable BOOL            m_bCreateAlready;
 
     private:
-        ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory > m_xDataAccessFactory;
+        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory > m_xDataAccessFactory;
 
     protected:
         const ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >&
@@ -102,6 +106,8 @@ namespace svxform
     protected:
         ODbtoolsClient();
         ~ODbtoolsClient();
+        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+        void create() const;
 
     private:
         static void registerClient();
@@ -114,7 +120,9 @@ namespace svxform
     class OStaticDataAccessTools : public ODbtoolsClient
     {
     protected:
-        ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    m_xDataAccessTools;
+        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    m_xDataAccessTools;
+        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+        void create() const;
 
     public:
         OStaticDataAccessTools();
@@ -177,6 +185,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:34:28  fs
+ *  initial checkin - base class for accessing DBTOOLS with load-on-demand
+ *
  *
  *  Revision 1.0 24.07.01 16:53:06  fs
  ************************************************************************/

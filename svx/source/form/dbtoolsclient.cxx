@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-01 12:46:41 $
+ *  last change: $Author: fs $ $Date: 2002-09-12 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,16 @@ namespace svxform
     //--------------------------------------------------------------------
     ODbtoolsClient::ODbtoolsClient()
     {
+        m_bCreateAlready = FALSE;
+    }
+
+    //--------------------------------------------------------------------
+    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+    void ODbtoolsClient::create() const
+    {
+        if(m_bCreateAlready)
+            return;
+        m_bCreateAlready = TRUE;
         registerClient();
         if (s_pFactoryCreationFunc)
         {   // loading the lib succeeded
@@ -178,14 +188,24 @@ namespace svxform
     //--------------------------------------------------------------------
     OStaticDataAccessTools::OStaticDataAccessTools()
     {
+    }
+
+    //--------------------------------------------------------------------
+    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+    void OStaticDataAccessTools::create() const
+    {
+        if (!getFactory().is())
+            ODbtoolsClient::create();
         if (getFactory().is())
-            m_xDataAccessTools = getFactory()->getDataAccessTools();
+             m_xDataAccessTools = getFactory()->getDataAccessTools();
     }
 
     //--------------------------------------------------------------------
     Reference< XNumberFormatsSupplier > OStaticDataAccessTools::getNumberFormats(const Reference< XConnection>& _rxConn, sal_Bool _bAllowDefault) const
     {
         Reference< XNumberFormatsSupplier > xReturn;
+        if (!m_xDataAccessTools.is())
+            create();
         if (m_xDataAccessTools.is())
             xReturn = m_xDataAccessTools->getNumberFormats(_rxConn, _bAllowDefault);
         return xReturn;
@@ -197,6 +217,8 @@ namespace svxform
             SAL_THROW ( (SQLException) )
     {
         Reference< XConnection > xReturn;
+        if (!m_xDataAccessTools.is())
+            create();
         if (m_xDataAccessTools.is())
             xReturn = m_xDataAccessTools->getConnection_withFeedback(_rDataSourceName, _rUser, _rPwd, _rxFactory);
         return xReturn;
@@ -206,6 +228,8 @@ namespace svxform
     Reference< XConnection > OStaticDataAccessTools::calcConnection(const Reference< XRowSet >& _rxRowSet, const Reference< XMultiServiceFactory >& _rxFactory) const SAL_THROW ( (SQLException, RuntimeException) )
     {
         Reference< XConnection > xReturn;
+        if (!m_xDataAccessTools.is())
+            create();
         if (m_xDataAccessTools.is())
             xReturn = m_xDataAccessTools->calcConnection(_rxRowSet, _rxFactory);
         return xReturn;
@@ -215,6 +239,8 @@ namespace svxform
     void OStaticDataAccessTools::TransferFormComponentProperties(const Reference< XPropertySet>& _rxOld,
         const Reference< XPropertySet>& _rxNew, const Locale& _rLocale) const
     {
+        if (!m_xDataAccessTools.is())
+            create();
         if (m_xDataAccessTools.is())
             m_xDataAccessTools->TransferFormComponentProperties(_rxOld, _rxNew, _rLocale);
     }
@@ -223,6 +249,8 @@ namespace svxform
     ::rtl::OUString OStaticDataAccessTools::quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName) const
     {
         ::rtl::OUString sReturn;
+        if (!m_xDataAccessTools.is())
+            create();
         if (m_xDataAccessTools.is())
             sReturn = m_xDataAccessTools->quoteName(_rQuote, _rName);
         return sReturn;
@@ -232,6 +260,8 @@ namespace svxform
     ::rtl::OUString OStaticDataAccessTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName) const
     {
         ::rtl::OUString sReturn;
+        if (!m_xDataAccessTools.is())
+            create();
         if (m_xDataAccessTools.is())
             sReturn = m_xDataAccessTools->quoteTableName(_rxMeta, _rName);
         return sReturn;
@@ -242,6 +272,8 @@ namespace svxform
         const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails) const
     {
         SQLContext aReturn;
+        if (!m_xDataAccessTools.is())
+            create();
         if (m_xDataAccessTools.is())
             aReturn = m_xDataAccessTools->prependContextInfo(_rException, _rxContext, _rContextDescription, _rContextDetails);
         return aReturn;
@@ -254,6 +286,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/01 12:46:41  oj
+ *  #90462# use of MODULE_NAME corrected
+ *
  *  Revision 1.2  2001/07/27 08:06:47  rt
  *  #87576# sparc compiler comlains about static_cast here
  *

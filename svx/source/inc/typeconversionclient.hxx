@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconversionclient.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:36:11 $
+ *  last change: $Author: fs $ $Date: 2002-09-12 14:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,10 @@ namespace svxform
     class OTypeConversionClient : public ODbtoolsClient
     {
     protected:
-        ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >
+        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >
                 m_xTypeConversion;
+        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+        void create() const;
 
     public:
         OTypeConversionClient();
@@ -87,6 +89,8 @@ namespace svxform
         inline ::com::sun::star::util::Date getStandardDate() const
         {
             ::com::sun::star::util::Date aReturn;
+            if (!m_xTypeConversion.is())
+                create();
             if (m_xTypeConversion.is())
                 aReturn = m_xTypeConversion->getStandardDate();
             return aReturn;
@@ -99,6 +103,8 @@ namespace svxform
             sal_Int16 _nKeyType) const
         {
             double nReturn(0);
+            if (!m_xTypeConversion.is())
+                create();
             if (m_xTypeConversion.is())
                 nReturn = m_xTypeConversion->getValue(_rxVariant, _rNullDate, _nKeyType);
             return nReturn;
@@ -113,6 +119,8 @@ namespace svxform
             sal_Int16 _nKeyType) const
         {
             ::rtl::OUString sReturn;
+            if (!m_xTypeConversion.is())
+                create();
             if (m_xTypeConversion.is())
                 sReturn = m_xTypeConversion->getValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
             return sReturn;
@@ -128,6 +136,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:36:11  fs
+ *  initial checkin - base class for load-on-demand usage of the type conversion capabilities of DBTOOLS
+ *
  *
  *  Revision 1.0 25.07.01 13:52:37  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharsethelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-13 15:05:55 $
+ *  last change: $Author: fs $ $Date: 2002-09-12 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,17 @@ namespace svxform
     //--------------------------------------------------------------------
     ODataAccessCharsetHelper::ODataAccessCharsetHelper( )
     {
-        if (getFactory().is())
-            m_xCharsetHelper = getFactory()->createCharsetHelper( );
     }
 
+    //--------------------------------------------------------------------
+    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+    void ODataAccessCharsetHelper::create() const
+    {
+        if (!getFactory().is())
+            ODbtoolsClient::create();
+        if (getFactory().is())
+             m_xCharsetHelper = getFactory()->createCharsetHelper( );
+    }
 //........................................................................
 }   // namespace svxform
 //........................................................................
@@ -86,6 +93,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/13 15:05:55  fs
+ *  initial checkin - wrapper for accessing the dbcharset functionality without linking against dbtools
+ *
  *
  *  Revision 1.0 13.08.01 17:03:08  fs
  ************************************************************************/

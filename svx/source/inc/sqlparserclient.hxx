@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparserclient.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:35:23 $
+ *  last change: $Author: fs $ $Date: 2002-09-12 14:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,18 @@ namespace svxform
     //====================================================================
     class OSQLParserClient : public ODbtoolsClient
     {
+    private:
+        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+
     protected:
-        ::rtl::Reference< ::connectivity::simple::ISQLParser >  m_xParser;
+        mutable ::rtl::Reference< ::connectivity::simple::ISQLParser >  m_xParser;
 
     protected:
         OSQLParserClient(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+        void create() const;
 
     protected:
             inline ::rtl::Reference< ::connectivity::simple::ISQLParseNode > predicateTree(
@@ -95,6 +101,8 @@ namespace svxform
                 ) const
             {
                 ::rtl::Reference< ::connectivity::simple::ISQLParseNode > xReturn;
+                if (!m_xParser.is())
+                    create();
                 if (m_xParser.is())
                     xReturn = m_xParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);
                 return xReturn;
@@ -110,6 +118,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:35:23  fs
+ *  initial checkin - base class for load-on-demand usage of the OSQLParser
+ *
  *
  *  Revision 1.0 24.07.01 17:43:18  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconversionclient.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:36:16 $
+ *  last change: $Author: fs $ $Date: 2002-09-12 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,16 @@ namespace svxform
     //--------------------------------------------------------------------
     OTypeConversionClient::OTypeConversionClient()
     {
+    }
+
+    //--------------------------------------------------------------------
+    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+    void OTypeConversionClient::create() const
+    {
+        if (!getFactory().is())
+            ODbtoolsClient::create();
         if (getFactory().is())
-            m_xTypeConversion = getFactory()->getTypeConversionHelper();
+             m_xTypeConversion = getFactory()->getTypeConversionHelper();
     }
 
 //........................................................................
@@ -85,6 +93,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:36:16  fs
+ *  initial checkin - base class for load-on-demand usage of the type conversion capabilities of DBTOOLS
+ *
  *
  *  Revision 1.0 25.07.01 13:57:04  fs
  ************************************************************************/
