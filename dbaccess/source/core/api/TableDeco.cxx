@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:55:19 $
+ *  last change: $Author: oj $ $Date: 2002-11-28 10:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,8 +310,18 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
     switch(_nHandle)
     {
         case PROPERTY_ID_PRIVILEGES:
-            if(-1 == m_nPrivileges)
-                fillPrivileges();
+            {
+                if ( -1 == m_nPrivileges )
+                    fillPrivileges();
+                Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
+                Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
+                if ( xInfo->hasPropertyByName(PROPERTY_PRIVILEGES) )
+                {
+                    _rValue <<= m_nPrivileges;
+                    break;
+                }
+            }
+            // run through
 
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
@@ -361,8 +371,16 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
 // -------------------------------------------------------------------------
 void ODBTableDecorator::construct()
 {
-    registerProperty(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, PropertyAttribute::BOUND  | PropertyAttribute::READONLY,
-                    &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+    sal_Bool bNotFound = sal_True;
+    Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
+    if ( xProp.is() )
+    {
+        Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
+        bNotFound = !xInfo->hasPropertyByName(PROPERTY_PRIVILEGES);
+    }
+    if ( bNotFound )
+        registerProperty(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, PropertyAttribute::BOUND  | PropertyAttribute::READONLY,
+                        &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODBTableDecorator::createArrayHelper(sal_Int32 _nId) const
@@ -385,6 +403,8 @@ void ODBTableDecorator::construct()
             pBegin->Handle = PROPERTY_ID_DESCRIPTION;
         else if (0 ==pBegin->Name.compareToAscii(PROPERTY_TYPE))
             pBegin->Handle = PROPERTY_ID_TYPE;
+        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_PRIVILEGES))
+            pBegin->Handle = PROPERTY_ID_PRIVILEGES;
     }
 
     describeProperties(aTableProps);
@@ -567,16 +587,25 @@ Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 void ODBTableDecorator::fillPrivileges() const
 {
     // somebody is asking for the privileges an we do not know them, yet
-    const_cast<ODBTableDecorator*>(this)->m_nPrivileges = 0;
+    m_nPrivileges = 0;
     try
     {
         Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
-
-        ::rtl::OUString sCatalog,sSchema,sName;
-        xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
-        xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
-        xProp->getPropertyValue(PROPERTY_NAME)          >>= sName;
-        const_cast<ODBTableDecorator*>(this)->m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),sCatalog,sSchema, sName);
+        if ( xProp.is() )
+        {
+            if ( xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES) )
+            {
+                xProp->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
+            }
+            if ( m_nPrivileges == 0 ) // second chance
+            {
+                ::rtl::OUString sCatalog,sSchema,sName;
+                xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
+                xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
+                xProp->getPropertyValue(PROPERTY_NAME)          >>= sName;
+                m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),sCatalog,sSchema, sName);
+            }
+        }
     }
     catch(const SQLException& e)
     {
