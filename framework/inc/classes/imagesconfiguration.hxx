@@ -30,10 +30,10 @@ struct ExternalImageItemDescriptor
 };
 
 typedef ImageItemDescriptor* ImageItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( ImageItemListDescriptor, ImageItemDescriptorPtr, 10, 2);
+SV_DECL_PTRARR_DEL( ImageItemListDescriptor, ImageItemDescriptorPtr, 10, 2)
 
 typedef ExternalImageItemDescriptor* ExternalImageItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr, 10, 2);
+SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr, 10, 2)
 
 struct ImageListItemDescriptor
 {
@@ -43,7 +43,7 @@ struct ImageListItemDescriptor
 };
 
 typedef ImageListItemDescriptor* ImageListItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( ImageListDescriptor, ImageListItemDescriptorPtr, 10, 2);
+SV_DECL_PTRARR_DEL( ImageListDescriptor, ImageListItemDescriptorPtr, 10, 2)
 
 struct ImageListsDescriptor
 {
