@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:16:44 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text [ english_us ] = "Form" ;
                         Text [ portuguese_brazilian ] = "Formul�rio" ;
                         Text [ swedish ] = "~Formul�r" ;
-                        Text [ danish ] = "~Formular" ;
+                        Text [ danish ] = "Formular" ;
                         Text [ italian ] = "Formulario" ;
                         Text [ spanish ] = "~Formulario" ;
                         Text [ french ] = "~Formulaire" ;
@@ -118,6 +118,8 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ hebrew ] = "‮טופס‬";
                         Text[ hindi ] = "फ़ॉर्म";
                         Text[ slovak ] = "Formulár";
+                        Text[ hungarian ] = "Űrlap";
+                        Text[ slovenian ] = "Obrazec";
                     };
                     MenuItem
                     {
@@ -128,7 +130,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text [ english_us ] = "Hidden Control" ;
                         Text [ portuguese_brazilian ] = "Controle oculto" ;
                         Text [ swedish ] = "~Dold kontroll" ;
-                        Text [ danish ] = "Skjult kontrol" ;
+                        Text [ danish ] = "Skjult kontrolelement" ;
                         Text [ italian ] = "Controllo nascosto" ;
                         Text [ spanish ] = "~Control oculto" ;
                         Text [ french ] = "C~ontr�le masqu�" ;
@@ -151,6 +153,8 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ hebrew ] = "‮פקד מוסתר‬";
                         Text[ hindi ] = "छिपा हुआ नियंत्रण";
                         Text[ slovak ] = "Skrytý ovládací prvok";
+                        Text[ hungarian ] = "Rejtett vezérlőelem";
+                        Text[ slovenian ] = "Skriti kontrolnik";
                     };
                 };
             };
@@ -171,6 +175,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ hebrew ] = "‮חדש‬";
             Text[ hindi ] = "~नया";
             Text[ slovak ] = "~Nový";
+            Text[ hungarian ] = "Ú~j";
+            Text[ slovenian ] = "~Nov";
         };
         MenuItem
         {
@@ -203,6 +209,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ hebrew ] = "‮להחליף ב‬";
             Text[ hindi ] = "से प्रतिस्थापित करो";
             Text[ slovak ] = "Nahradiť za";
+            Text[ hungarian ] = "~Csere erre";
+            Text[ slovenian ] = "Zamenjaj z";
         };
         MenuItem { ITEM_EDIT_CUT };
         MenuItem { ITEM_EDIT_COPY };
@@ -239,6 +247,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
             Text[ slovak ] = "~Zmazať";
+            Text[ hungarian ] = "~Törlés";
+            Text[ slovenian ] = "~Izbriši";
         };
         MenuItem
         {
@@ -250,7 +260,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ english_us ] = "Tab Order..." ;
             Text [ portuguese_brazilian ] = "Ordem da Tabula��o..." ;
             Text [ swedish ] = "~Ordningsf�ljd f�r aktivering..." ;
-            Text [ danish ] = "Aktiveringsr�kkef�lge..." ;
+            Text [ danish ] = "Tabuleringsr�kkef�lge..." ;
             Text [ italian ] = "Sequenza di attivazione..." ;
             Text [ spanish ] = "~Secuencia de activaci�n..." ;
             Text [ french ] = "S�quence d'activation ..." ;
@@ -272,6 +282,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ hebrew ] = "‮סדר הטאבים‬";
             Text[ hindi ] = "टॉब क्रम...";
             Text[ slovak ] = "Poradie aktivácie...";
+            Text[ hungarian ] = "Bejárási sorrend...";
+            Text[ slovenian ] = "Zaporedje premikanja...";
         };
         MenuItem
         {
@@ -283,7 +295,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ english_us ] = "~Rename" ;
             Text [ portuguese_brazilian ] = "~Renomear" ;
             Text [ swedish ] = "~Byt namn" ;
-            Text [ danish ] = "Omd�b" ;
+            Text [ danish ] = "~Omd�b" ;
             Text [ italian ] = "Rinomina" ;
             Text [ spanish ] = "~Cambiar nombre" ;
             Text [ french ] = "~Renommer" ;
@@ -305,6 +317,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ hebrew ] = "‮שינוי שם‬";
             Text[ hindi ] = "~पुनः नाम दो";
             Text[ slovak ] = "P~remenovať";
+            Text[ hungarian ] = "~Átnevezés";
+            Text[ slovenian ] = "P~reimenuj";
         };
         MenuItem
         {
@@ -316,7 +330,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ english_us ] = "Propert~ies" ;
             Text [ portuguese_brazilian ] = "~Propriedades" ;
             Text [ swedish ] = "~Egenskaper" ;
-            Text [ danish ] = "Egenskaber" ;
+            Text [ danish ] = "~Egenskaber" ;
             Text [ italian ] = "Propriet�" ;
             Text [ spanish ] = "~Propiedades" ;
             Text [ french ] = "~Propri�t�s" ;
@@ -338,6 +352,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ hebrew ] = "‮מאפיינים‬";
             Text[ hindi ] = "वि~शेषतायें";
             Text[ slovak ] = "Vlastnost~i";
+            Text[ hungarian ] = "~Tulajdonságok";
+            Text[ slovenian ] = "La~stnosti";
         };
         MenuItem
         {
@@ -371,6 +387,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ hebrew ] = "‮פתיחה במצב עיצוב‬";
             Text[ hindi ] = "डिसैन् प्रकार में खोलो";
             Text[ slovak ] = "Otvoriť v režime návrhu";
+            Text[ hungarian ] = "Megnyitás tervező módban";
+            Text[ slovenian ] = "Odpri v oblikovalnem načinu";
         };
         MenuItem
         {
@@ -382,7 +400,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ portuguese ] = "Foco autom�tico de controlo";
             Text[ russian ] = "��������� ��� �������� ����������";
             Text[ greek ] = "�������� ������� ��������� �������";
-            Text[ dutch ] = "Automatische controle focus";
+            Text[ dutch ] = "Automatische besturingsfocus";
             Text[ french ] = "Focalisation automatique sur l'�l�ment de contr�le";
             Text[ spanish ] = "Foco autom�tico de control";
             Text[ italian ] = "Punto focale automatico di controllo";
@@ -403,6 +421,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ hebrew ] = "‮בקרת מיקוד אוטומטית‬";
             Text[ hindi ] = "स्वचालित नियंत्रण केन्द्रिभूत";
             Text[ slovak ] = "Automaticky zamerať ovládací prvok";
+            Text[ hungarian ] = "Automatikus fókuszvezérlés";
+            Text[ slovenian ] = "Samodejni fokus kontrolnika";
         };
     };
 };
@@ -425,7 +445,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "Zone de ~texte";
             Text[ spanish ] = "~Campo de texto";
             Text[ italian ] = "Campo di ~testo";
-            Text[ danish ] = "Tekstfelt";
+            Text[ danish ] = "~Tekstfelt";
             Text[ swedish ] = "~Textf�lt";
             Text[ polish ] = "Pole ~tekstowe";
             Text[ portuguese_brazilian ] = "~Caixa de Texto";
@@ -443,6 +463,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮תיבת טקסט‬";
             Text[ hindi ] = "~टेक्स्ट् बॉक्स्";
             Text[ slovak ] = "~Textové pole";
+            Text[ hungarian ] = "~Szövegdoboz";
+            Text[ slovenian ] = "Polje z ~besedilom";
         };
         MenuItem
         {
@@ -458,7 +480,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "~Bouton";
             Text[ spanish ] = "~Bot�n";
             Text[ italian ] = "~Pulsante";
-            Text[ danish ] = "Knap";
+            Text[ danish ] = "~Knap";
             Text[ swedish ] = "~Kommandoknapp";
             Text[ polish ] = "~Przycisk";
             Text[ portuguese_brazilian ] = "~Bot�o";
@@ -475,6 +497,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮כפתור‬";
             Text[ hindi ] = "~बटन";
             Text[ slovak ] = "~Tlačidlo";
+            Text[ hungarian ] = "~Gomb";
+            Text[ slovenian ] = "~Gumb";
         };
         MenuItem
         {
@@ -490,7 +514,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "~Champ d'�tiquette";
             Text[ spanish ] = "~Campo de etiqueta";
             Text[ italian ] = "Testo ~fisso";
-            Text[ danish ] = "Etiketfelt";
+            Text[ danish ] = "~Etiketfelt";
             Text[ swedish ] = "~Etikettf�lt";
             Text[ polish ] = "Pole ~etykiety";
             Text[ portuguese_brazilian ] = "~Campo de r�tulo";
@@ -508,6 +532,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮שדה תוית‬";
             Text[ hindi ] = "लेबि~ल क्षेत्र";
             Text[ slovak ] = "~Popisné pole";
+            Text[ hungarian ] = "~Címkemező";
+            Text[ slovenian ] = "Na~lepka";
         };
         MenuItem
         {
@@ -540,6 +566,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮תיבת קבוצה‬";
             Text[ hindi ] = "~समूह बॉक्स्";
             Text[ slovak ] = "Zo~skupenie";
+            Text[ hungarian ] = "~Csoportpanel";
+            Text[ slovenian ] = "S~kupinsko okno";
         };
         MenuItem
         {
@@ -573,6 +601,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮תיבת רשימה‬";
             Text[ hindi ] = "सू~ची बॉक्स्";
             Text[ slovak ] = "Pole ~zoznamu";
+            Text[ hungarian ] = "L~istapanel";
+            Text[ slovenian ] = "S~eznamsko polje";
         };
         MenuItem
         {
@@ -588,7 +618,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "~Case � cocher";
             Text[ spanish ] = "~Casilla de verificaci�n";
             Text[ italian ] = "Casella di controllo";
-            Text[ danish ] = "Afkrydsningsfelt";
+            Text[ danish ] = "~Afkrydsningsfelt";
             Text[ swedish ] = "Kr~yssruta";
             Text[ polish ] = "~Pole wyboru";
             Text[ portuguese_brazilian ] = "~Caixa de verifica��o";
@@ -605,6 +635,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮תיבת סימון‬";
             Text[ hindi ] = "चे~क् बॉक्स्";
             Text[ slovak ] = "~Zaškrtávacie políčko";
+            Text[ hungarian ] = "~Jelölőnégyzet";
+            Text[ slovenian ] = "~Potrditveno polje";
         };
         MenuItem
         {
@@ -620,7 +652,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "Bouton ~radio";
             Text[ spanish ] = "~Campo de opci�n";
             Text[ italian ] = "Pulsante di scelta";
-            Text[ danish ] = "Alternativfelt";
+            Text[ danish ] = "~Indstillingsknap";
             Text[ swedish ] = "~Alternativf�lt";
             Text[ polish ] = "~Pole opcji";
             Text[ portuguese_brazilian ] = "~Bot�o de Sele��o";
@@ -638,6 +670,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮כפתור רדיו‬";
             Text[ hindi ] = "~रेडियो बटन";
             Text[ slovak ] = "P~repínač";
+            Text[ hungarian ] = "~Rádiógomb";
+            Text[ slovenian ] = "~Izbirni gumb";
         };
         MenuItem
         {
@@ -670,6 +704,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮תיבה משולבת‬";
             Text[ hindi ] = "कॉम्बो ~बॉक्स्";
             Text[ slovak ] = "~Kombinované pole";
+            Text[ hungarian ] = "~Kombinált lista";
+            Text[ slovenian ] = "Kombinirano po~lje";
         };
         MenuItem
         {
@@ -702,6 +738,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮כפתור צלם‬";
             Text[ hindi ] = "चित्र ब~टन";
             Text[ slovak ] = "~Obrázkové tlačidlo";
+            Text[ hungarian ] = "Képgo~mb";
+            Text[ slovenian ] = "Gumb z g~rafiko";
         };
         MenuItem
         {
@@ -717,7 +755,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "~S�lection de fichier";
             Text[ spanish ] = "Selec~ci�n de archivo";
             Text[ italian ] = "Scelta file";
-            Text[ danish ] = "Filudvalg";
+            Text[ danish ] = "~Filudvalg";
             Text[ swedish ] = "~Filurval";
             Text[ polish ] = "Wyb�r ~plik�w";
             Text[ portuguese_brazilian ] = "~Sele��o de arquivo";
@@ -735,6 +773,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮בחירת קובץ‬";
             Text[ hindi ] = "~फाइल का चुनाव";
             Text[ slovak ] = "Výber ~súboru";
+            Text[ hungarian ] = "~Fájlválasztás";
+            Text[ slovenian ] = "Izbor ~datoteke";
         };
         MenuItem
         {
@@ -750,7 +790,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "Champ de ~date";
             Text[ spanish ] = "Campo de ~fecha";
             Text[ italian ] = "Campo ~data";
-            Text[ danish ] = "Datofelt";
+            Text[ danish ] = "~Datofelt";
             Text[ swedish ] = "~Datumf�lt";
             Text[ polish ] = "Pole ~daty";
             Text[ portuguese_brazilian ] = "~Campo de Data";
@@ -768,6 +808,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮שדה תאריך‬";
             Text[ hindi ] = "~दिनांक क्षेत्र";
             Text[ slovak ] = "~Dátumové pole";
+            Text[ hungarian ] = "~Dátummező";
+            Text[ slovenian ] = "~Datumsko polje";
         };
         MenuItem
         {
@@ -801,6 +843,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮שדה זמן‬";
             Text[ hindi ] = "सम~य क्षेत्र";
             Text[ slovak ] = "Č~asové pole";
+            Text[ hungarian ] = "~Időmező";
+            Text[ slovenian ] = "Ča~sovno polje";
         };
         MenuItem
         {
@@ -816,7 +860,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "Champ ~num�rique";
             Text[ spanish ] = "C~ampo num�rico";
             Text[ italian ] = "Campo ~numerico";
-            Text[ danish ] = "Numerisk felt";
+            Text[ danish ] = "~Numerisk felt";
             Text[ swedish ] = "~Numeriskt f�lt";
             Text[ polish ] = "~Pole liczbowe";
             Text[ portuguese_brazilian ] = "~Campo num�rico";
@@ -834,6 +878,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮שדה מספרי‬";
             Text[ hindi ] = "~संख्या क्षेत्र";
             Text[ slovak ] = "Čísel~né pole";
+            Text[ hungarian ] = "~Számmező";
+            Text[ slovenian ] = "~Številsko polje";
         };
         MenuItem
         {
@@ -849,7 +895,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "Champ ~mon�taire";
             Text[ spanish ] = "Cam~po de moneda";
             Text[ italian ] = "Campo di ~valuta";
-            Text[ danish ] = "Valutafelt";
+            Text[ danish ] = "Val~utafelt";
             Text[ swedish ] = "V~alutaf�lt";
             Text[ polish ] = "Pole ~walutowe";
             Text[ portuguese_brazilian ] = "~Campo Monet�rio";
@@ -866,6 +912,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮שדה מטבע‬";
             Text[ hindi ] = "~मुद्रा क्षेत्र";
             Text[ slovak ] = "~Menové pole";
+            Text[ hungarian ] = "~Pénznemmező";
+            Text[ slovenian ] = "V~alutno polje";
         };
         MenuItem
         {
@@ -881,7 +929,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "Champ ~masqu�";
             Text[ spanish ] = "Campo enmascarado";
             Text[ italian ] = "Campo a ~maschera";
-            Text[ danish ] = "Maskeret felt";
+            Text[ danish ] = "~Felt med m�nster";
             Text[ swedish ] = "~Maskerat f�lt";
             Text[ polish ] = "~Pole wzorca";
             Text[ portuguese_brazilian ] = "~Campo Padr�o";
@@ -898,6 +946,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮שדה תבנית‬";
             Text[ hindi ] = "~नमूना क्षेत्र";
             Text[ slovak ] = "Pole ~vzorky";
+            Text[ hungarian ] = "~Maszkolt mező";
+            Text[ slovenian ] = "~Vzorčno polje";
         };
         MenuItem
         {
@@ -913,7 +963,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "Contr�le ~picto";
             Text[ spanish ] = "Control de ima~gen";
             Text[ italian ] = "Campo di controllo ~immagine";
-            Text[ danish ] = "Grafisk kontrolelement";
+            Text[ danish ] = "~Grafisk kontrolelement";
             Text[ swedish ] = "Gra~fiskt kontrollf�lt";
             Text[ polish ] = "~Formant obrazkowy";
             Text[ portuguese_brazilian ] = "Controle de ~imagem";
@@ -930,6 +980,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮בקרת צלם‬";
             Text[ hindi ] = "चित्र नियंत्र~ण";
             Text[ slovak ] = "Ovl~ádacie pole obrázku";
+            Text[ hungarian ] = "~Kép vezérlőelem";
+            Text[ slovenian ] = "~Grafični kontrolnik";
         };
         MenuItem
         {
@@ -945,7 +997,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ french ] = "~Champ format�";
             Text[ spanish ] = "Campo for~mateado";
             Text[ italian ] = "Campo fo~rmattato";
-            Text[ danish ] = "Formateret felt";
+            Text[ danish ] = "Fo~rmateret felt";
             Text[ swedish ] = "Fo~rmaterat f�lt";
             Text[ polish ] = "Pole fo~rmatowane";
             Text[ portuguese_brazilian ] = "Campo ~formatado";
@@ -963,6 +1015,8 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ hebrew ] = "‮שדה מעוצב‬";
             Text[ hindi ] = "रचना किया हु~आ क्षेत्र";
             Text[ slovak ] = "Fo~rmátované pole";
+            Text[ hungarian ] = "Fo~rmázott mező";
+            Text[ slovenian ] = "Ob~likovano polje";
         };
         MenuItem
         {
@@ -1074,6 +1128,8 @@ ModalDialog RID_SVXDLG_SETFORM
         Text[ hebrew ] = "‮מסלול‬";
         Text[ hindi ] = "मार्ग";
         Text[ slovak ] = "Cesta";
+        Text[ hungarian ] = "Útvonal";
+        Text[ slovenian ] = "Pot";
     };
     FixedText FT_PATH
     {
@@ -1102,7 +1158,7 @@ ModalDialog RID_SVXDLG_SETFORM
     Text [ english_us ] = "Select form" ;
     Text [ portuguese_brazilian ] = "Selecionar formul�rio" ;
     Text [ swedish ] = "Formul�rurval" ;
-    Text [ danish ] = "Formularudvalg" ;
+    Text [ danish ] = "V�lg formular" ;
     Text [ italian ] = "Scelta formulario" ;
     Text [ spanish ] = "Selecci�n de formulario" ;
     Text [ french ] = "S�lection de formulaire" ;
@@ -1124,6 +1180,8 @@ ModalDialog RID_SVXDLG_SETFORM
     Text[ hebrew ] = "‮בחירת טופס‬";
     Text[ hindi ] = "फ़ॉर्म चुनो";
     Text[ slovak ] = "Vybrať formu";
+    Text[ hungarian ] = "Válaszd ki az űrlapot";
+    Text[ slovenian ] = "Izberi obrazec";
 };
 DockingWindow RID_SVX_FMEXPLORER
 {
@@ -1137,7 +1195,7 @@ DockingWindow RID_SVX_FMEXPLORER
     Text [ english_us ] = "Form Navigator" ;
     Text [ portuguese_brazilian ] = "Navegador de Formul�rio" ;
     Text [ swedish ] = "Formul�r-Navigator" ;
-    Text [ danish ] = "Formular Navigator" ;
+    Text [ danish ] = "Formularnavigator" ;
     Text [ italian ] = "Navigatore formulario" ;
     Text [ spanish ] = "Navegador de formulario" ;
     Text [ french ] = "Navigateur de formulaires" ;
@@ -1160,7 +1218,10 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ hebrew ] = "‮נווט טפסים‬";
     Text[ hindi ] = "फ़ॉर्म नॉविगेटर";
     Text[ slovak ] = "Navigátor formulárom";
+    Text[ hungarian ] = "Űrlapnavigátor";
+    Text[ slovenian ] = "Krmar po obrazcih";
 };
+
 
 
 
