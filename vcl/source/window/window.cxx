@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-27 08:25:19 $
+ *  last change: $Author: ssa $ $Date: 2001-07-04 16:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                 mpFrameData->mxClipboard = Reference< XClipboard >( pSVData->mxClientFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
             }
 
-            // FIXME: drag and drop for remote case
+               if ( mpFrame->IsValid() )
+                mpFrame->GetFrameInterface()->GetDragSourceDropTarget( mpFrameData->mxDragSource, mpFrameData->mxDropTarget );
 
 #else
             Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
@@ -657,8 +658,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             }
 #endif
 
-            if( mpFrameData->mxDropTarget.is() )
-                mpFrameData->mxDropTarget->addDropTargetListener( new DNDEventDispatcher( this ) );
         }
 
         // createInstance can throw any exception
@@ -3933,13 +3932,40 @@ Window::~Window()
 {
     DBG_DTOR( Window, ImplDbgCheckWindow );
 
+    mbInDtor = TRUE;
+
     // shutdown drag and drop
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xComponent( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
 
     if( xComponent.is() )
         xComponent->dispose();
 
-    mbInDtor = TRUE;
+    if ( mbFrame && mpFrameData )
+    {
+        try
+        {
+            // deregister drop target listener
+            if( mpFrameData->mxDropTargetListener.is() )
+            {
+                OSL_TRACE( "removing drop target listener" );
+                mpFrameData->mxDropTarget->removeDropTargetListener( mpFrameData->mxDropTargetListener );
+                mpFrameData->mxDropTargetListener.clear();
+            }
+
+            // shutdown drag and drop for this frame window
+            Reference< XComponent > xComponent( mpFrameData->mxDropTarget, UNO_QUERY );
+
+            // DNDEventDispatcher does not hold a reference of the DropTarget,
+            // so it's ok if it does not support XComponent
+            if( xComponent.is() )
+                xComponent->dispose();
+        }
+
+        catch ( Exception exc )
+        {
+            // can be safely ignored here.
+        }
+    }
 
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper( FALSE );
     if ( pWrapper )
@@ -6749,7 +6775,16 @@ Reference< XDropTarget > Window::GetDropTarget()
         sal_Int8 nDefaultActions = 0;
 
         if( mpFrameData && mpFrameData->mxDropTarget.is() )
+        {
             nDefaultActions = mpFrameData->mxDropTarget->getDefaultActions();
+
+            if( ! mpFrameData->mxDropTargetListener.is() )
+            {
+                OSL_TRACE( "adding droptarget listener" );
+                mpFrameData->mxDropTargetListener = new DNDEventDispatcher( this );
+                mpFrameData->mxDropTarget->addDropTargetListener( mpFrameData->mxDropTargetListener );
+            }
+        }
 
         mxDNDListenerContainer = static_cast < XDropTarget * > ( new DNDListenerContainer( nDefaultActions ) );
     }
@@ -6769,22 +6804,32 @@ Reference< XDragSource > Window::GetDragSource()
 
 // -----------------------------------------------------------------------
 
+void Window::GetDragSourceDropTarget(Reference< XDragSource >& xDragSource, Reference< XDropTarget > &xDropTarget )
+// only for RVP transmission
+{
+#ifdef WNT
+    // as long as d&d does not work on win32
+        xDragSource = Reference< XDragSource > ();
+        xDropTarget = Reference< XDropTarget > ();
+#else
+    if( mpFrameData )
+    {
+        xDragSource = mpFrameData->mxDragSource;
+        xDropTarget = mpFrameData->mxDropTarget;
+    }
+    else
+    {
+        xDragSource = Reference< XDragSource > ();
+        xDropTarget = Reference< XDropTarget > ();
+    }
+#endif
+}
+
+// -----------------------------------------------------------------------
+
 Reference< XDragGestureRecognizer > Window::GetDragGestureRecognizer()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    if( ! mxDNDListenerContainer.is() )
-    {
-        sal_Int8 nDefaultActions = 0;
-
-        if( mpFrameData && mpFrameData->mxDropTarget.is() )
-            nDefaultActions = mpFrameData->mxDropTarget->getDefaultActions();
-
-        mxDNDListenerContainer = static_cast < XDropTarget * > ( new DNDListenerContainer( nDefaultActions ) );
-    }
-
-    // this object is located in the same process, so there will be no runtime exception
-    return Reference< XDragGestureRecognizer > ( mxDNDListenerContainer, UNO_QUERY );
+    return Reference< XDragGestureRecognizer > ( GetDropTarget(), UNO_QUERY );
 }
 
 // -----------------------------------------------------------------------
