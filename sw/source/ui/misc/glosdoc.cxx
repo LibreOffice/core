@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-13 11:05:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,6 @@
 #include <globals.hrc>
 #endif
 
-
-SV_IMPL_PTRARR(XAutoTextGroupPtrArr, XAutoTextGroupPtr)
-SV_IMPL_PTRARR(XAutoTextEntryPtrArr, XInterfacePtr)
 
 // PUBLIC METHODES -------------------------------------------------------
 /* -----------------------------08.02.00 15:54--------------------------------
