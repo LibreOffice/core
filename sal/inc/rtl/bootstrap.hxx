@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-09-18 08:33:41 $
+ *  last change: $Author: dbo $ $Date: 2002-10-21 15:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,20 @@ namespace rtl
             ::rtl::OUString &outValue,
             const ::rtl::OUString &aDefault );
 
+        /** Sets a bootstrap parameter.
 
+            @param pName
+                   name of bootstrap parameter
+            @param pValue
+                   value of bootstrap parameter
+
+            @see rtl_bootstrap_set()
+        */
+        static inline void set( ::rtl::OUString const & name, ::rtl::OUString const & value )
+            SAL_THROW( () );
+
+        /** default ctor.
+         */
         inline Bootstrap();
 
         /** Opens a bootstrap argment container
@@ -184,6 +197,12 @@ namespace rtl
                                 const ::rtl::OUString & sDefault )
     {
         rtl_bootstrap_get( sName.pData , &(outValue.pData) , sDefault.pData );
+    }
+
+    inline void Bootstrap::set( ::rtl::OUString const & name, ::rtl::OUString const & value )
+        SAL_THROW( () )
+    {
+        rtl_bootstrap_set( name.pData, value.pData );
     }
 
     inline Bootstrap::Bootstrap()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-26 15:47:23 $
+ *  last change: $Author: dbo $ $Date: 2002-10-21 15:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,22 +81,24 @@ extern "C" {
    the next level is tried. Every query starts at the first level again, so
    that one setting may be taken from the 3rd and one from the 1st level.<p>
 
-   1st level: command line arguments. A "-env:SETTINGNAME=value" is given on
+   1st level: explicitly set variables via rtl_bootstrap_set()
+
+   2nd level: command line arguments. A "-env:SETTINGNAME=value" is given on
    command line. This allows to give an application a certain setting, even
    if an ini-file exists (espicially useful for e.g. daemons that want to
    start an executable with dynamical changing settings).<p>
 
-   2nd level: ini-files. Every application looks for an ini-file.
+   3rd level: ini-files. Every application looks for an ini-file.
    The filename defaults to /absoulte/path/to/executable[rc|.ini]
    (without .bin or .exe suffix). The ini-filename can be
    set by the special command line parameter
    '-env:INIFILENAME=/absolute/path/to/inifile' at runtime or it may
    be set at compiletime by an API-call.<p>
 
-   3rd level: environment variables. The application tries to get the
+   4th level: environment variables. The application tries to get the
    setting from the environment.<p>
 
-   4th level: default. An application can have some default settings decided
+   5th level: default. An application can have some default settings decided
    at compile time, which allow the application to run even with no
    deployment settings. <p>
 
@@ -173,6 +175,16 @@ void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName );
            <code>sal_True</code>.
 */
 sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault );
+
+/** Sets a bootstrap parameter.
+
+   @param pName
+          name of bootstrap parameter
+   @param pValue
+          value of bootstrap parameter
+*/
+void SAL_CALL rtl_bootstrap_set( rtl_uString * pName, rtl_uString * pValue )
+    SAL_THROW_EXTERN_C();
 
 
 typedef void * rtlBootstrapHandle;
