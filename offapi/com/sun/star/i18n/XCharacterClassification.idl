@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCharacterClassification.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: bustamam $ $Date: 2001-04-27 01:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,16 +95,16 @@ constants UnicodeType
     const short PRIVATE_USE           = 17;
     const short SURROGATE             = 18;
     const short DASH_PUNCTUATION          = 19;
-    const short START_PUNCTUATION     = 20;
-    const short END_PUNCTUATION       = 21;
+    const short INITIAL_PUNCTUATION       = 20;
+    const short FINAL_PUNCTUATION         = 21;
     const short CONNECTOR_PUNCTUATION   = 22;
     const short OTHER_PUNCTUATION     = 23;
     const short MATH_SYMBOL           = 24;
     const short CURRENCY_SYMBOL       = 25;
     const short MODIFIER_SYMBOL       = 26;
     const short OTHER_SYMBOL              = 27;
-    const short INITIAL_PUNCTUATION   = 28;
-    const short FINAL_PUNCTUATION     = 29;
+    const short START_PUNCTUATION     = 28;
+    const short END_PUNCTUATION       = 29;
     const short GENERAL_TYPES_COUNT   = 30;
 };
 
@@ -122,6 +122,8 @@ enum UnicodeScript     {
         kArmenian,
         kHebrew,
         kArabic,
+    kSyriac,
+    kThaana,
         kDevanagari,
         kBengali,
         kGurmukhi,
@@ -131,11 +133,20 @@ enum UnicodeScript     {
         kTelugu,
         kKannada,
         kMalayalam,
+    kSinhala,
         kThai,
         kLao,
         kTibetan,
+    kMyanmar,
         kGeorgian,
         kHangulJamo,
+    kEthiopic,
+    kCherokee,
+    kUnifiedCanadianAboriginalSyllabics,
+    kOgham,
+    kRunic,
+    kKhmer,
+    kMongolian,
         kLatinExtendedAdditional,
         kGreekExtended,
         kGeneralPunctuation,
@@ -155,15 +166,23 @@ enum UnicodeScript     {
         kGeometricShape,
         kMiscSymbol,
         kDingbat,
+    kBraillePatterns,
+    kCJKRadicalsSupplement,
+    kKangxiRadicals,
+    kIdeographicDescriptionCharacters,
         kCJKSymbolPunctuation,
         kHiragana,
         kKatakana,
         kBopomofo,
         kHangulCompatibilityJamo,
         kKanbun,
+    kBopomofoExtended,
         kEnclosedCJKLetterMonth,
         kCJKCompatibility,
+    k_CJKUnifiedIdeographsExtensionA,
         kCJKUnifiedIdeograph,
+    kYiSyllables,
+    kYiRadicals,
         kHangulSyllable,
         kHighSurrogate,
         kHighPrivateUseSurrogate,
