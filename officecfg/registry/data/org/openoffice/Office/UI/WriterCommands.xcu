@@ -12,15 +12,6 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:Spelling" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Prüfen...</value>
-                    <value xml:lang="en-US">~Check...</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
             <node oor:name=".uno:PrintLayout" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Drucklayout</value>
@@ -1109,33 +1100,8 @@
             </node>
             <node oor:name=".uno:FormatColumns" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Spalten</value>
-                    <value xml:lang="en-US">Co~lumns</value>
-                    <value xml:lang="ar">أعمدة</value>
-                    <value xml:lang="no">Columns</value>
-                    <value xml:lang="ca">Columnes</value>
-                    <value xml:lang="zh-TW">欄</value>
-                    <value xml:lang="cs">Sloupce</value>
-                    <value xml:lang="da">Kolonner</value>
-                    <value xml:lang="el">Στήλες</value>
-                    <value xml:lang="es">Columnas</value>
-                    <value xml:lang="fi">Palstat</value>
-                    <value xml:lang="fr">Colonnes</value>
-                    <value xml:lang="he">‮טורים‬</value>
-                    <value xml:lang="it">Colonne</value>
-                    <value xml:lang="ja">段組み</value>
-                    <value xml:lang="ko">단</value>
-                    <value xml:lang="nl">Kolommen</value>
-                    <value xml:lang="pl">Kolumny</value>
-                    <value xml:lang="pt-BR">Colunas</value>
-                    <value xml:lang="ru">Столбцы</value>
-                    <value xml:lang="sk">Stĺpce</value>
-                    <value xml:lang="sv">Kolumner</value>
-                    <value xml:lang="th">คอลัมน์</value>
-                    <value xml:lang="tr">Sütunlar</value>
-                    <value xml:lang="hi">स्तंभ</value>
-                    <value xml:lang="zh-CN">列</value>
-                    <value xml:lang="pt">Colunas</value>
+                    <value xml:lang="de">Spalten...</value>
+                    <value xml:lang="en-US">Co~lumns...</value>
                 </prop>
             </node>
             <node oor:name=".uno:FormatDropcap" oor:op="replace">
@@ -2187,33 +2153,8 @@
             </node>
             <node oor:name=".uno:EditRegion" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Bereiche</value>
-                    <value xml:lang="en-US">~Sections</value>
-                    <value xml:lang="ar">نطاقات</value>
-                    <value xml:lang="no">Sections</value>
-                    <value xml:lang="ca">Seccions</value>
-                    <value xml:lang="zh-TW">區域</value>
-                    <value xml:lang="cs">Sekce</value>
-                    <value xml:lang="da">Sektioner</value>
-                    <value xml:lang="el">Ενότητες</value>
-                    <value xml:lang="es">Secciones</value>
-                    <value xml:lang="fi">Osat</value>
-                    <value xml:lang="fr">Sections</value>
-                    <value xml:lang="he">‮חלקי מסמך‬</value>
-                    <value xml:lang="it">Sezioni</value>
-                    <value xml:lang="ja">範囲</value>
-                    <value xml:lang="ko">구역</value>
-                    <value xml:lang="nl">Bereiken</value>
-                    <value xml:lang="pl">Sekcje</value>
-                    <value xml:lang="pt-BR">Seções</value>
-                    <value xml:lang="ru">Разделы</value>
-                    <value xml:lang="sk">Sekcie</value>
-                    <value xml:lang="sv">Områden</value>
-                    <value xml:lang="th">ส่วน</value>
-                    <value xml:lang="tr">Bölüm</value>
-                    <value xml:lang="hi">विभाग</value>
-                    <value xml:lang="zh-CN">区域</value>
-                    <value xml:lang="pt">Categorias</value>
+                    <value xml:lang="de">Bereiche...</value>
+                    <value xml:lang="en-US">~Sections...</value>
                 </prop>
             </node>
             <node oor:name=".uno:JumpToReference" oor:op="replace">
