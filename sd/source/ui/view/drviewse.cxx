@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-17 14:05:39 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 14:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1209,7 +1209,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ( pReqArgs )
             {
-                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, ID_VAL_ISACTIVE, FALSE);
+                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, SID_RULER, FALSE);
                 SetRuler (pIsActive->GetValue ());
             }
             else SetRuler (!HasRuler());
