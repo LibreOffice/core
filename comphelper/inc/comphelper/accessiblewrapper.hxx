@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,17 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -236,11 +242,15 @@ namespace comphelper
     //=========================================================================
     template < class INNER >
     class OComponentProxyAggregation    :public ::comphelper::OBaseMutex
-                                        ,public ::cppu::WeakComponentImplHelper1< INNER >
+                                        ,public ::cppu::WeakComponentImplHelper2    <   INNER
+                                                                                    ,   com::sun::star::lang::XEventListener
+                                                                                    >
                                         ,protected OProxyAggregation
     {
     private:
-        typedef ::cppu::WeakComponentImplHelper1< INNER >   BASE;   // prevents some MSVC problems
+        typedef ::cppu::WeakComponentImplHelper2    <   INNER
+                                                    ,   com::sun::star::lang::XEventListener
+                                                    >   BASE;   // prevents some MSVC problems
 
     protected:
         ::com::sun::star::uno::Reference< INNER >   m_xInner;
@@ -256,7 +266,29 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< INNER >& _rxInner
         );
+        ~OComponentProxyAggregation( );
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+        // OComponentHelper
+        virtual void SAL_CALL disposing()  throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+        // be called from within the dtor of derived classes
+        void implEnsureDisposeInDtor( );
     };
+
+    //-------------------------------------------------------------------------
+    template < class INNER >
+    void OComponentProxyAggregation< INNER >::implEnsureDisposeInDtor( )
+    {
+        if ( !rBHelper.bDisposed )
+        {
+            acquire();  // to prevent duplicate dtor calls
+            dispose();
+        }
+    }
 
     //-------------------------------------------------------------------------
     template < class INNER >
@@ -294,11 +326,63 @@ namespace comphelper
 
         // aggregate a proxy for the object
         aggregateProxyFor( m_xInner.get(), m_refCount, *this );
+
+        // add as event listener to the inner context, because we want to be notified of disposals
+        osl_incrementInterlockedCount( &m_refCount );
+        {
+            Reference< XComponent > xComp( m_xInner, UNO_QUERY );
+            if ( xComp.is() )
+                xComp->addEventListener( this );
+        }
+        osl_decrementInterlockedCount( &m_refCount );
+    }
+
+    //-------------------------------------------------------------------------
+    template < class INNER >
+    OComponentProxyAggregation< INNER >::~OComponentProxyAggregation( )
+    {
+        implEnsureDisposeInDtor();
+        m_xInner.clear();
+    }
+
+    //-------------------------------------------------------------------------
+    template < class INNER >
+    void SAL_CALL OComponentProxyAggregation< INNER >::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        if ( _rSource.Source == m_xInner )
+        {   // it's our inner context which is dying -> dispose ourself
+            if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
+            {   // (if necessary only, of course)
+                dispose();
+            }
+        }
+        else
+            OSL_ENSURE( sal_False, "OComponentProxyAggregation::disposing(EventObject): where did this come from?" );
+    }
+
+    //-------------------------------------------------------------------------
+    template < class INNER >
+    void SAL_CALL OComponentProxyAggregation< INNER >::disposing()  throw (::com::sun::star::uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        // dispose our inner context
+        // before we do this, remove ourself as listener - else in disposing( EventObject ), we
+        // would dispose ourself a second time
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( m_xInner, ::com::sun::star::uno::UNO_QUERY );
+        if ( xComp.is() )
+        {
+            xComp->removeEventListener( this );
+            xComp->dispose();
+            xComp.clear();
+        }
     }
 
     //=========================================================================
     //= OAccessibleWrapper
     //=========================================================================
+
+    class OAccessibleContextWrapper;
 
     typedef OComponentProxyAggregation  <   ::drafts::com::sun::star::accessibility::XAccessible
                                         >   OAccessibleWrapper_Base;
@@ -311,6 +395,8 @@ namespace comphelper
     private:
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
                 m_xParentAccessible;
+        ::com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+                m_aContext;
 
     public:
         /** ctor
@@ -330,11 +416,22 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& _rxParentAccessible
         );
 
+        // returns the context without creating it
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+                    getContextNoCreate( ) const;
+
     protected:
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
+                    getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
-            getParent() const { return m_xParentAccessible; }
+                    getParent() const { return m_xParentAccessible; }
+
+        // overridables
+        virtual OAccessibleContextWrapper* createAccessibleContext(
+                const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >& _rxInnerContext
+            );
+
     protected:
         ~OAccessibleWrapper( );
 
@@ -427,7 +524,7 @@ namespace comphelper
         virtual void SAL_CALL notifyEvent( const ::drafts::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
         // OComponentHelper
         virtual void SAL_CALL disposing()  throw (::com::sun::star::uno::RuntimeException);
