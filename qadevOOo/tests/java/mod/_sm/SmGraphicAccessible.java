@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmGraphicAccessible.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-26 14:55:00 $
+ *  last change:$Date: 2003-03-31 09:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,7 @@ public class SmGraphicAccessible extends TestCase {
      * Creates a <code>StarMath</code> document and obtains an accessibility
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
-    public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         try {
@@ -129,7 +127,7 @@ public class SmGraphicAccessible extends TestCase {
         }
 
         // setting a formula in document
-        final String expFormula = "sum hat a";
+        final String expFormula = "sum a cdot b";
         final XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface
             (XPropertySet.class, xMathDoc);
         try {
@@ -166,6 +164,9 @@ public class SmGraphicAccessible extends TestCase {
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("EditOnly",
+                    "This method isn't supported in this component");
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
