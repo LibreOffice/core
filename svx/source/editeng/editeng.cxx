@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-28 17:58:53 $
+ *  last change: $Author: mt $ $Date: 2002-04-25 16:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2591,3 +2591,21 @@ BOOL EditEngine::HasValidData( ::com::sun::star::uno::Reference< ::com::sun::sta
 }
 
 
+// ---------------------------------------------------
+
+
+EFieldInfo::EFieldInfo()
+{
+    pFieldItem = NULL;
+}
+
+
+EFieldInfo::EFieldInfo( const SvxFieldItem& rFieldItem, USHORT nPara, USHORT nPos ) : aPosition( nPara, nPos )
+{
+    pFieldItem = new SvxFieldItem( rFieldItem );
+}
+
+EFieldInfo::~EFieldInfo()
+{
+    delete pFieldItem;
+}
