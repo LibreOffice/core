@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-25 11:28:15 $
+ *  last change: $Author: tl $ $Date: 2001-04-25 12:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,7 +795,13 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 if ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectEntryPos( 0 ) ) )
                 {
                     mbTrackingSelect = TRUE;
-                    SelectEntries( nSelect, LET_TRACKING, FALSE, FALSE );
+                    if ( SelectEntries( nSelect, LET_TRACKING, FALSE, FALSE ) )
+                    {
+                        mbTravelSelect = TRUE;
+                        mnSelectModifier = rMEvt.GetModifier();
+                        ImplCallSelect();
+                        mbTravelSelect = FALSE;
+                    }
                     mbTrackingSelect = FALSE;
                 }
             }
@@ -1098,7 +1104,13 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                 if ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() )
                 {
                     mbTrackingSelect = TRUE;
-                    SelectEntries( nSelect, LET_TRACKING, bShift, bCtrl );
+                    if ( SelectEntries( nSelect, LET_TRACKING, bShift, bCtrl ) )
+                    {
+                        mbTravelSelect = TRUE;
+                        mnSelectModifier = rTEvt.GetMouseEvent().GetModifier();
+                        ImplCallSelect();
+                        mbTravelSelect = FALSE;
+                    }
                     mbTrackingSelect = FALSE;
                 }
             }
