@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:17:39 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kohei Yoshida__________________________
  *
  *
  ************************************************************************/
@@ -592,7 +592,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                 }
             }
             if (bStarted)
-                pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
+                pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab, FALSE, FALSE, TRUE );
         }
         else
         {
@@ -604,6 +604,28 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                 pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
 
                 aAnchorPos.Set( nPosX, nPosY, nTab );
+                bStarted = TRUE;
+            }
+            // #i3875# *Hack* When a new cell is Ctrl-clicked with no pre-selected cells,
+            // it highlights that new cell as well as the old cell where the cursor is
+            // positioned prior to the click.  A selection mode via Shift-F8 should also
+            // follow the same behavior.
+            else if ( pViewData->IsSelCtrlMouseClick() )
+            {
+                SCCOL nOldX = pViewData->GetCurX();
+                SCROW nOldY = pViewData->GetCurY();
+
+                pView->InitBlockMode( nOldX, nOldY, nTab, TRUE );
+                pView->MarkCursor( (SCCOL) nOldX, (SCROW) nOldY, nTab );
+
+                if ( nOldX != nPosX || nOldY != nPosY )
+                {
+                    pView->DoneBlockMode( TRUE );
+                    pView->InitBlockMode( nPosX, nPosY, nTab, TRUE );
+                    pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
+                    aAnchorPos.Set( nPosX, nPosY, nTab );
+                }
+
                 bStarted = TRUE;
             }
         }
