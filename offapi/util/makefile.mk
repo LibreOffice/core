@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 14:57:13 $
+#   last change: $Author: mi $ $Date: 2000-11-08 16:11:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..
 PRJPCH=
 
-PRJNAME=api
+PRJNAME=offapi
 TARGET=applicat
 
 #use_starjar=true
@@ -76,6 +76,7 @@ TARGET=applicat
 # ------------------------------------------------------------------
 
 UNOIDLDBFILES= \
+    $(SOLARBINDIR)$/udkapi.rdb \
     $(UCR)$/cssawt.db \
     $(UCR)$/csschart.db \
     $(UCR)$/cssconfiguration.db \
@@ -117,5 +118,13 @@ UNOIDLDBFILES= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+# --- Targets ------------------------------------------------------
+
+$(UCR)$/applicat.rdb:: $(UNOIDLDBFILES)
+    +regmerge $@ / $(UNOIDLDBFILES)
+    touch $@
+
+
 
 
