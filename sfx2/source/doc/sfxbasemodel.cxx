@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: as $ $Date: 2002-04-08 11:28:17 $
+ *  last change: $Author: mav $ $Date: 2002-04-12 08:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1617,10 +1617,6 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
                     rProp.Name, *this );
         }
     }
-
-    if( !aFilterName.getLength() )
-        throw ILLEGALARGUMENTIOEXCEPTION();
-
 
     sal_Bool aRet = pObjectShell->APISaveAs_Impl( sURL, aFilterName, aParams );
 
