@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:28:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,9 +656,9 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             //  Summe etc. mit Datum/Zeit/Fehler/Pos&Groesse zusammengefasst
 
+            // #i34458# The SfxStringItem belongs only into SID_TABLE_CELL. It no longer has to be
+            // duplicated in SID_ATTR_POSITION or SID_ATTR_SIZE for SvxPosSizeStatusBarControl.
             case SID_TABLE_CELL:
-            case SID_ATTR_POSITION:
-            case SID_ATTR_SIZE:
                 {
                     //  Testen, ob Fehler unter Cursor
                     //  (nicht pDoc->GetErrCode, um keine zirkulaeren Referenzen auszuloesen)
