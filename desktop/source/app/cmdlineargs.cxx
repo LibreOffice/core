@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-20 09:37:43 $
+ *  last change: $Author: cd $ $Date: 2001-07-30 15:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-terminate_after_init" )) == sal_True )
     {
-        m_bTerminateAfterInit;
+        m_bTerminateAfterInit = sal_True;
         return sal_True;
     }
     else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))

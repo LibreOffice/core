@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-27 11:10:42 $
+ *  last change: $Author: cd $ $Date: 2001-07-30 15:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 #ifndef AUTOMATION_HXX
 #include <automation/automation.hxx>
 #endif
+#ifndef _Installer_hxx
+#include <setup2/installer.hxx>
+#endif
 
 #include <svtools/pathoptions.hxx>
 #include <svtools/cjkoptions.hxx>
@@ -157,7 +160,6 @@
 #include <unotools/tempfile.hxx>
 
 #include <rtl/logfile.hxx>
-#include <setup2/installer.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/bitmap.hxx>
@@ -182,11 +184,15 @@ using namespace ::com::sun::star::system;
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
 
-OOfficeAcceptorThread*  pOfficeAcceptThread = 0;
-ResMgr*                 Desktop::pResMgr    = 0;
-static PluginAcceptThread* pPluginAcceptThread = 0;
+OOfficeAcceptorThread*      pOfficeAcceptThread = 0;
+ResMgr*                     Desktop::pResMgr    = 0;
+static PluginAcceptThread*  pPluginAcceptThread = 0;
+static oslModule            aTestToolModule     = 0;
 
-static oslModule        aTestToolModule     = 0;
+// ----------------------------------------------------------------------------
+
+char const INSTALLER_INITFILENAME[] = "initialize.ini";
+
 
 // ----------------------------------------------------------------------------
 
@@ -260,6 +266,48 @@ CommandLineArgs* GetCommandLineArgs()
     }
 
     return pArgs;
+}
+
+
+BOOL InitializeInstallation( const UniString& rAppFilename )
+{
+    UniString aAppPath( rAppFilename );
+    rtl::OUString aFinishInstallation;
+#ifdef TF_FILEURL
+    osl::FileBase::getFileURLFromSystemPath( aAppPath, aFinishInstallation );
+#else
+    osl::FileBase::normalizePath( aAppPath, aFinishInstallation );
+#endif
+    aAppPath = UniString( aFinishInstallation );
+
+    xub_StrLen nPos = aAppPath.SearchBackward( '/' );
+    aAppPath.Erase( nPos );
+    aAppPath += '/';
+    aAppPath += DEFINE_CONST_UNICODE( INSTALLER_INITFILENAME );
+
+    osl::DirectoryItem aDI;
+    if( osl::DirectoryItem::get( aAppPath, aDI ) == osl_File_E_None )
+    {
+        // Load initialization code only on demand. This is done if the the 'initialize.ini'
+        // is written next to the executable. After initialization this file is removed.
+        // The implementation disposes the old service manager and creates an new one so we
+        // cannot use a service for InitializeInstallation!!
+        OUString aFuncName( RTL_CONSTASCII_USTRINGPARAM( INSTALLER_INITIALIZEINSTALLATION_CFUNCNAME ));
+        OUString aModulePath = OUString::createFromAscii( SVLIBRARY( "set" ) );
+
+        oslModule aSetupModule = osl_loadModule( aModulePath.pData, SAL_LOADMODULE_DEFAULT );
+        if ( aSetupModule )
+        {
+            void* pInitFunc = osl_getSymbol( aSetupModule, aFuncName.pData );
+            if ( pInitFunc )
+                (*(pfunc_InstallerInitializeInstallation)pInitFunc)( rAppFilename.GetBuffer() );
+            osl_unloadModule( aSetupModule );
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 void PreloadConfigTrees()
@@ -601,9 +649,12 @@ void Desktop::Main()
     //  Typically called by the plugin only
     {
         RTL_LOGFILE_CONTEXT( aLog, "setup2 (ok) ::Installer::InitializeInstallation" );
+        InitializeInstallation( Application::GetAppFileName() );
+/*
         Installer* pInstaller = new Installer;
         pInstaller->InitializeInstallation( Application::GetAppFileName() );
         delete pInstaller;
+*/
     }
 
     if( !bTerminate )
@@ -1117,6 +1168,7 @@ void Desktop::OpenStartupScreen()
          !pCmdLine->IsQuickstart() &&
          !pCmdLine->IsMinimized() &&
          !pCmdLine->IsEmbedding() &&
+         !pCmdLine->IsTerminateAfterInit() &&
          !pCmdLine->GetPrintList( aTmpString ) )
     {
         String          aBmpFileName;
