@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:23:01 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,6 @@ DUMP_ERR::~DUMP_ERR()
 #define PRINT()                 Print( t )
 #define PreDump(LEN)            {UINT32 nOldPos=rIn.Tell();ContDump(LEN);rIn.Seek(nOldPos);}
 #define ADDCELLHEAD()           {UINT16 nR,nC,nX;rIn>>nR>>nC>>nX;__AddCellHead(t,nC,nR,nX);}
-#define CHECKBREAK(n)           {{nLeft-=n;if(nLeft<0)break;}}
 #define STARTFLAG()             {ADDTEXT( "flags (" ); __AddHex( t, __nFlags ); ADDTEXT( "):" );}
 #define ADDFLAG(mask,text)      {if( __nFlags & mask ) t += text;}
 
@@ -3056,116 +3055,120 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             break;
             case 0x01B8:        // HLINK
             {
+                UINT32 n1, n2;
                 PreDump( nL );
 
                 LINESTART();
                 PRINT();
-                ADDTEXT( "Row1 = " );
-                ADDDEC( 2 );
-                ADDTEXT( "  Row2 = " );
-                ADDDEC( 2 );
-                ADDTEXT( "  Col1 = " );
-                ADDDEC( 2 );
-                ADDTEXT( "  Col2 = " );
-                ADDDEC( 2 );
+                ADDTEXT( "Row1 = " );       ADDDEC( 2 );
+                ADDTEXT( "  Row2 = " );     ADDDEC( 2 );
+                ADDTEXT( "  Col1 = " );     ADDDEC( 2 );
+                ADDTEXT( "  Col2 = " );     ADDDEC( 2 );
                 PRINT();
 
                 ContDump( 20 );
 
-                rIn >> __nFlags;
-                IGNORE( 2 );
-                CHECKBREAK( 32 );       //
+                UINT32 __nFlags = Read4( rIn );
                 LINESTART();
-                ADDTEXT( "#1 " );
                 STARTFLAG();
-                ADDTEXT( " (" );
-                __AddPureBin( t, __nFlags );
-                ADDTEXT( ")" );
-                ADDFLAG( 0x02, " fAbs?" );
-                ADDFLAG( 0x08, " fMark (B3)" );
-                PRINT();
-                LINESTART();
+                ADDFLAG( 0x00000001, " fBody" );
+                ADDFLAG( 0x00000002, " fAbs" );
+                ADDFLAG( 0x00000014, " fDescr" );
+                ADDFLAG( 0x00000008, " fMark" );
+                ADDFLAG( 0x00000100, " fNetwork" );
+                ADDFLAG( 0xFFFFFEE0, " !UNKNOWN!" );
                 PRINT();
 
-                while( nLeft > 0 )
+                //description
+                if( __nFlags & 0x00000014 )
                 {
-                    UINT32      nStartPos = rIn.Tell();
-                    UINT32      n1, n2;
-
-                    rIn >> n1 >> n2;
-                    CHECKBREAK( 8 );
-
                     LINESTART();
+                    rIn >> n1;
+                    ADDTEXT( "## Description ##  len: " );
+                    __AddDec( t, n1 );
+                    PRINT();
+                    ContDump( n1 << 1 );
+                }
 
-                    if( n1 == 0x00000303 && n2 == 0x00000000 )
+                // network path
+                if( __nFlags & 0x00000100 )
+                {
+                    LINESTART();
+                    rIn >> n1;
+                    ADDTEXT( "## Network path ##  len: " );
+                    __AddDec( t, n1 );
+                    PRINT();
+                    ContDump( n1 << 1 );
+                }
+                // file link or URL
+                else if( __nFlags & 0x00000001 )
+                {
+                    LINESTART();
+                    rIn >> n1;
+                    LINESTART();
+                    ADDTEXT( "## identifier ## " );
+                    __AddHex( t, n1 );
+                    PRINT();
+                    switch( n1 )
                     {
-                        ADDTEXT( "## file name    ##" );
-                        PRINT();
-                        ContDump( 8 );
-                        LINESTART();
-                        ADDTEXT( "downlevel = " );
-                        ADDDEC( 2 );
-                        PRINT();
-                        rIn >> n1;
-                        CHECKBREAK( 14 );
-                        LINESTART();
-                        ADDTEXT( "len = " );
-                        __AddDec( t, n1 );
-                        PRINT();
-                        CHECKBREAK( n1 );
-                        ContDump( n1 );
+                        case 0x00000303:    // file
+                        {
+                            ContDump( 12 );
+                            LINESTART();
+                            ADDTEXT( "## File link ##  up level: " );
+                            ADDDEC( 2 );
+                            ADDTEXT( "   len (8-bit String): " );
+                            rIn >> n2;
+                            __AddDec( t, n2 );
+                            PRINT();
+                            ContDump( n2 );
+                            ContDump( 24 );
+                            rIn >> n2;
+                            LINESTART();
+                            ADDTEXT( "Bytes left: " );
+                            __AddDec( t, n2 );
+                            PRINT();
+                            if( !n2 ) break;
+                            rIn >> n2;
+                            LINESTART();
+                            ADDTEXT( "link byte count: " );
+                            __AddDec( t, n2 );
+                            ADDTEXT( "   unknown: " );
+                            ADDHEX( 2 );
+                            PRINT();
+                            ContDump( n2 );
+                        }
+                        break;
+                        case 0x79EAC9E0:    // URL
+                        {
+                            ContDump( 12 );
+                            rIn >> n2;
+                            LINESTART();
+                            ADDTEXT( "## URL ##  byte count: " );
+                            __AddDec( t, n2 );
+                            PRINT();
+                            ContDump( n2 );
+                        }
+                        break;
+                        default:
+                        {
+                            LINESTART();
+                            ADDTEXT( "!! UNKNOWN ID !!" );
+                            PRINT();
+                        }
+                        break;
                     }
-                    else if( n1 == 0xDEADFFFF && n2 == 0x00000000 )
-                    {
-                        ADDTEXT( "## table name   ##" );
-                        PRINT();
-                        ContDump( 16 );
-                        rIn >> n2 >> n1;
-                        IGNORE( 2 );
-                        CHECKBREAK( 26 );
-                        LINESTART();
-                        __nFlags = ( UINT16 ) n2;
-                        STARTFLAG();
-                        ADDTEXT( " (" );
-                        __AddPureBin( t, __nFlags );
-                        ADDTEXT( ")" );
-                        ADDFLAG( 0x04, " fAbs" );
-                        PRINT();
-                        LINESTART();
-                        ADDTEXT( "len = " );
-                        __AddDec( t, n1 );
-                        PRINT();
-                        CHECKBREAK( n1 );
-                        ContDump( n1 );
-                    }
-                    else if( n1 == 0x79EAC9E0 && n2 == 0x11CEBAF9 )
-                    {
-                        ADDTEXT( "## URL          ##" );
-                        PRINT();
-                        ContDump( 8 );
-                        rIn >> n1;
-                        CHECKBREAK( 12 );
-                        LINESTART();
-                        ADDTEXT( "len = " );
-                        __AddDec( t, n1 );
-                        PRINT();
-                        CHECKBREAK( n1 );
-                        ContDump( n1 );
-                    }
-                    else
-                    {
-                        nLeft += 4;
-                        rIn.Seek( nStartPos + 4 );  // n1 still valid!
-                        ADDTEXT( "## string       ##" );
-                        PRINT();
-                        LINESTART();
-                        ADDTEXT( "chars = " );
-                        __AddDec( t, n1 );
-                        PRINT();
-                        n1 *= 2;    // n1 was number of chars
-                        CHECKBREAK( n1 );
-                        ContDump( n1 );
-                    }
+                }
+
+                // text mark
+                if( __nFlags & 0x00000008 )
+                {
+                    rIn >> n1;
+                    LINESTART();
+                    ADDTEXT( "## Text mark ##  len: " );
+                    __AddDec( t, n1 );
+                    PRINT();
+                    ContDump( n1 << 1 );
                 }
             }
             break;
@@ -4830,7 +4833,6 @@ void Biff8RecDumper::ObjDump( const UINT16 nMaxLen )
 #undef  PRINT
 #undef  PreDump
 #undef  ADDCELLHEAD
-#undef  CHECKBREAK
 
 void Biff8RecDumper::ContDump( const UINT16 nL )
 {
