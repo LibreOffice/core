@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:41:00 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #include <vcl/dialog.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/moduleoptions.hxx>
+
+#include <sfxresid.hxx>
+#include <../appl/app.hrc>
 
 #include "sfx.hrc"
 #include "objsh.hxx"
@@ -1054,6 +1057,15 @@ String SfxTopViewFrame::UpdateTitle()
     }
 
     String aTitle = SfxViewFrame::UpdateTitle();
+
+    // xmlsec05, check with SFX team
+    if ( GetObjectShell()->GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
+    {
+        aTitle += String::CreateFromAscii( " " );
+        aTitle += String( SfxResId( RID_XMLSEC_DOCUMENTSIGNED ) );
+        aTitle += String::CreateFromAscii( " " );
+    }
+
     aTitle += String::CreateFromAscii( " - " );
     aTitle += Application::GetDisplayName();
 
