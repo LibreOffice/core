@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:06:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ namespace tracing
         AllocationType( ) : pName( NULL ), nAllocatedUnits( 0 ) { }
     };
 
-    // °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    // =============================================================================
     class AllocationTracer
     {
     public:
@@ -177,7 +177,7 @@ namespace tracing
         static AllocationState::iterator    getLocation( const sal_Char* _pName );
     };
 
-    // °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    // =============================================================================
     AllocationTracer::AllocationState::iterator AllocationTracer::getLocation( const sal_Char* _pName )
     {
         AllocationState::iterator aLookFor = s_aAllocated.begin();
@@ -197,11 +197,11 @@ namespace tracing
         return aLookFor;
     }
 
-    // °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    // =============================================================================
     AllocationTracer::AllocationState           AllocationTracer::s_aAllocated;
     ::osl::Mutex                                AllocationTracer::s_aMutex;
 
-    // °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    // =============================================================================
     void AllocationTracer::registerUnit( const sal_Char* _pName )
     {
         ::osl::MutexGuard aGuard( s_aMutex );
@@ -210,7 +210,7 @@ namespace tracing
         ++aPos->nAllocatedUnits;
     }
 
-    // °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    // =============================================================================
     void AllocationTracer::revokeUnit( const sal_Char* _pName )
     {
         ::osl::MutexGuard aGuard( s_aMutex );
