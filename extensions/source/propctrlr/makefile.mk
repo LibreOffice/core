@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2001-03-21 15:43:21 $
+#   last change: $Author: fs $ $Date: 2001-06-11 11:34:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,11 @@ USE_DEFFILE=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
+
+# --- defines ------------------------------------------------------
+
+CDEFS+=-DCOMPMOD_NAMESPACE=pcr
+CDEFS+=-DCOMPMOD_RESPREFIX=pcr
 
 # --- Files --------------------------------------------------------
 
@@ -146,7 +151,8 @@ UNOTYPES=\
     com.sun.star.awt.XMenuListener				\
 
 
-CXXFILES=			fontdialog.cxx	\
+CXXFILES=			controlfontdialog.cxx	\
+                    fontdialog.cxx	\
                     pcrservices.cxx	\
                     browserline.cxx	\
                     selectlabeldialog.cxx	\
@@ -166,7 +172,8 @@ CXXFILES=			fontdialog.cxx	\
                     pcrcommon.cxx	\
                     modulepcr.cxx
 
-SLOFILES=			$(SLO)$/fontdialog.obj	\
+SLOFILES=			$(SLO)$/controlfontdialog.obj	\
+                    $(SLO)$/fontdialog.obj	\
                     $(SLO)$/pcrservices.obj	\
                     $(SLO)$/browserline.obj	\
                     $(SLO)$/selectlabeldialog.obj	\
