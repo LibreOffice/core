@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:40:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,7 +679,9 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     Point aNewPos( 0, 0 );
     bool bRightToLeft;
-    for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
+    int nCharPos;
+
+    for( nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( bRightToLeft )
