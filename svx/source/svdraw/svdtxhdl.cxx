@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-27 10:49:32 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         }
 
         // y-Position der Striche zur Baseline bestimmen
-        long y=-(long)(aFontMetric.GetAscent()-aFontMetric.GetLeading()+1)/3;
+        long y=-(long)(aFontMetric.GetAscent()-aFontMetric.GetIntLeading()+1)/3;
         if (!bDouble) y-=(nDick+1)/2;
         else y-=nDick+(nDist+1)/2;
 
