@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:19:17 $
+#   last change: $Author: obo $ $Date: 2004-11-15 13:16:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,12 @@ TARGETTYPE=CUI
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE :      pyversion.mk
+
+
+SCPDEFS+=\
+    -DPYVERSION=$(PYVERSION) \
+    -DPY_FULL_DLL_NAME=$(PY_FULL_DLL_NAME)
 
 SCP_PRODUCT_TYPE=osl
 
