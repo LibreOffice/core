@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-25 14:00:52 $
+ *  last change: $Author: thb $ $Date: 2002-07-18 14:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,9 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
     delete mpViewForwarder;
     if( mpOutliner )
     {
+        // #101088# Deregister on outliner, might be reused from outliner cache
+        mpOutliner->SetNotifyHdl( Link() );
+
         if( mpModel )
         {
             mpModel->disposeOutliner( mpOutliner );
@@ -416,6 +419,9 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         if( mpOutliner )
         {
+            // #101088# Deregister on outliner, might be reused from outliner cache
+            mpOutliner->SetNotifyHdl( Link() );
+
             if( mpModel )
             {
                 mpModel->disposeOutliner( mpOutliner );
