@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:20:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,10 +626,8 @@ void SwView::SelectShell()
         //aktiviert war
         //Vorher muss ein Flush() sein, betrifft aber lt. MBA nicht das UI und ist
         //kein Performance-Problem
+        // TODO/LATER: maybe now the Flush() command is superfluous?!
         rDispatcher.Flush();
-        sal_uInt16 nId = pBarCfg->GetTopToolbar( nSelectionType );
-        if ( USHRT_MAX != nId )
-            rDispatcher.ShowObjectBar( nId );
 
         Point aPnt = GetEditWin().OutputToScreenPixel(GetEditWin().GetPointerPosPixel());
         aPnt = GetEditWin().PixelToLogic(aPnt);
