@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 15:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,7 @@ extern RTLFUNC(CreatePropertySet);
 extern RTLFUNC(CreateUnoListener);
 extern RTLFUNC(HasUnoInterfaces);
 extern RTLFUNC(EqualUnoObjects);
+extern RTLFUNC(CreateUnoDialog);
 
 extern RTLFUNC(FileExists);
 

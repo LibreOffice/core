@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-29 14:23:58 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 15:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1247,6 +1247,7 @@ RTLFUNC(CreateUnoService)
     RTL_Impl_CreateUnoService( pBasic, rPar, bWrite );
 }
 
+
 // ServiceManager liefern (keine Parameter)
 RTLFUNC(GetProcessServiceManager)
 {
@@ -1278,4 +1279,17 @@ RTLFUNC(EqualUnoObjects)
 {
     RTL_Impl_EqualUnoObjects( pBasic, rPar, bWrite );
 }
+
+// Instanciate "com.sun.star.awt.UnoControlDialog" on basis
+// of a DialogLibrary entry: Convert from XML-ByteSequence
+// and attach events. Implemented in classes\eventatt.cxx
+void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+
+RTLFUNC(CreateUnoDialog)
+{
+    RTL_Impl_CreateUnoDialog( pBasic, rPar, bWrite );
+}
+
+
+
 

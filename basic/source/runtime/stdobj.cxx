@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 15:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,9 @@ static Methods aMethods[] = {
   { "typename",  SbxSTRING },
 { "CreateUnoService",SbxOBJECT,   1 | _FUNCTION, RTLNAME( CreateUnoService ) },
   { "servicename",  SbxSTRING },
+{ "CreateUnoDialog",SbxOBJECT,    2 | _FUNCTION, RTLNAME( CreateUnoDialog ) },
+  { "dialoglibrary",SbxOBJECT },
+  { "dialogname",   SbxSTRING },
 { "CreateUnoStruct",SbxOBJECT,    1 | _FUNCTION, RTLNAME( CreateUnoStruct ) },
   { "classname",    SbxSTRING },
 { "CreatePropertySet",SbxOBJECT, 1 | _FUNCTION, RTLNAME( CreatePropertySet ) },
