@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:37:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,9 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
     AddTabPage(TP_OUTLINE_NUM    , &SwOutlineSettingsTabPage::Create, 0);
 
     String sHeadline;
-    for(USHORT i = 0; i < MAXLEVEL; ++i )
+    USHORT i;
+
+    for( i = 0; i < MAXLEVEL; ++i )
     {
         // wurde die Vorlage noch nicht angelegt, dann ist sie noch an dieserPosition
         if( !rWrtSh.GetParaStyle( sHeadline =
