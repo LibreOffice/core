@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-30 08:59:09 $
+ *  last change: $Author: tl $ $Date: 2001-09-24 11:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,17 +340,15 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
             for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
                 rListBox.InsertEntry( *((String*)pLst->GetObject( nI )) );
         rListBox.SelectEntryPos( 0 );
-        Impl_SetInfo( 1 );
+        Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
-        //Point aPt( rBox.OutputToScreenPixel( rBox.GetPointerPosPixel() ) );
+        // position window at the bottom-left of the toolbox icon
         Rectangle aItemRect( rBox.GetItemRect( nItemId ) );
+        aItemRect.Bottom() += aItemRect.GetHeight() - 2;
 
-        ULONG nFlags = FLOATWIN_POPUPMODE_DOWN;
         rBox.SetItemDown( nItemId, TRUE );
-        pPopupWin->StartPopupMode( aItemRect, nFlags );
-        pPopupWin->SetPosPixel( aItemRect.BottomLeft() );
+        pPopupWin->StartPopupMode( aItemRect );
         pPopupWin->StartSelection();
-        pPopupWin->Show();
     }
     return pPopupWin;
 }
@@ -413,17 +411,15 @@ SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
             for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
                 rListBox.InsertEntry( *((String*)pLst->GetObject( nI )) );
         rListBox.SelectEntryPos( 0 );
-        Impl_SetInfo( 1 );
+        Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
-        //Point aPt( rBox.OutputToScreenPixel( rBox.GetPointerPosPixel() ) );
+        // position window at the bottom-left of the toolbox icon
         Rectangle aItemRect( rBox.GetItemRect( nItemId ) );
-        Point aPt( rBox.OutputToScreenPixel( aItemRect.BottomLeft() ) );
-        aItemRect.TopLeft() = rBox.ScreenToOutputPixel( aPt );
+        aItemRect.Bottom() += aItemRect.GetHeight() - 2;
 
         rBox.SetItemDown( nItemId, TRUE );
         pPopupWin->StartPopupMode( aItemRect );
         pPopupWin->StartSelection();
-        pPopupWin->Show();
     }
     return pPopupWin;
 }
