@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-14 15:35:25 $
+#   last change: $Author: hro $ $Date: 2002-08-26 14:03:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ SHL1STDLIBS=$(CPPULIB)\
             $(VCLLIB)\
             $(TOOLSLIB)\
             uwinapi.lib \
-            unicows.lib \
             advapi32.lib \
             shell32.lib\
             ole32.lib\
@@ -120,7 +119,6 @@ SHL2STDLIBS=$(CPPULIB)\
             $(TOOLSLIB)\
             $(VCLLIB)\
             uwinapi.lib \
-            unicows.lib \
             advapi32.lib \
             ole32.lib\
             gdi32.lib\
