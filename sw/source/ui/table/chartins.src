@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:49:12 $
+ *  last change: $Author: obo $ $Date: 2001-03-19 11:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ ModelessDialog DLG_INSERT_CHART
     Text [ portuguese ] = "AutoFormato gráfico (1-4)" ;
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½Í¼±í(1-4)";
     Text[ russian ] = "Àâòîôîğìàò äèàãğàììû (1-4)";
-    Text[ polish ] = "Autoformatowanie wykresu (1-4)";
+    Text[ polish ] = "Autoformat wykresu (1-4)";
     Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä¸Ş×Ì(1-4)";
     Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡¹Ïªí(1-4)";
     Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí áÑÓã ÈíÇäí (1Ü4)";
