@@ -293,6 +293,7 @@ Dim a as Integer
 Dim LocMaxIndex as Integer
 Dim InfoNames()
 Dim DimCount as Integer
+Dim sExtension as String
 	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
@@ -317,7 +318,8 @@ Dim DimCount as Integer
 	a = 0
 	For i = 0 To LocMaxIndex
 		FileName = DirContent(i)
-		If Instr(1,Filename, sFileFilter) Then
+		sExtension = Ucase(GetFileNameExtension(FileName))
+		If Instr(1,Filename, sFileFilter) And sExtension = &quot;STW&quot; Then
 			bItemFound = True
 			Description = RetrieveDocTitle(oDocInfo, FileName)
 			oDocInfo.Read(FileName)
