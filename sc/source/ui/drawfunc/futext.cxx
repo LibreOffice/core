@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:58:29 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdview.hxx>
 #include <svx/unolingu.hxx>
+#include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -259,8 +260,26 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                aDragTimer.Start();
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                // disable tail & circular move for caption objects.
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                if( rMarkList.GetMarkCount() == 1 )
+                {
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    if( pObj && pObj->ISA( SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN)
+                    {
+                        if(pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC)
+                        {
+                              aDragTimer.Start();
+                            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        }
+                    }
+                    else
+                    {
+
+                        aDragTimer.Start();
+                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        }
+                }
             }
         }
         else
@@ -428,6 +447,15 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
     if ( pView->IsDragObj() )
     {
         pView->EndDragObj( rMEvt.IsShift() );
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        if (rMarkList.GetMarkCount() == 1)
+        {
+              SdrMark* pMark = rMarkList.GetMark(0);
+              SdrObject* pObj = pMark->GetObj();
+              FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+              FuText* pText = static_cast<FuText*>(pPoor);
+            pText->StopDragMode(pObj );
+        }
         pView->ForceMarkedToAnotherPage();
     }
     else if ( pView->IsCreateObj() )
@@ -851,7 +879,6 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
             }
         }
     }
-
     if (pLockLayer)
         pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
 }
