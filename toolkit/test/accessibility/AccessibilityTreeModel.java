@@ -106,7 +106,7 @@ public class AccessibilityTreeModel
         else
         {
             lock ();
-            removeNode (maRoot);
+            removeChild (maRoot);
             maRoot = aRoot;
             unlock (maRoot);
         }
