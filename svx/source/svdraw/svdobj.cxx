@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-01 14:52:04 $
+ *  last change: $Author: aw $ $Date: 2002-03-01 16:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,19 @@
 
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
+#endif
+
+// #97849#
+#ifndef _SVX_FMMODEL_HXX
+#include "fmmodel.hxx"
+#endif
+
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
+
+#ifndef _SFXOBJFACE_HXX
+#include <sfx2/objface.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -4058,19 +4071,6 @@ void SdrObject::AfterRead()
         GetUserData(i)->AfterRead();
     }
 }
-
-// #97849#
-#ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
-#endif
-
-#ifndef _SFX_OBJSH_HXX
-#include <sfx2/objsh.hxx>
-#endif
-
-#ifndef _SFXOBJFACE_HXX
-#include <sfx2/objface.hxx>
-#endif
 
 void SdrObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 {
