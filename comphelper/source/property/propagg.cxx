@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-03 15:14:10 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 09:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,23 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     sal_Int32 nHitCount = 0;
     const ::rtl::OUString* pReqProps = _rPropNames.getConstArray();
     sal_Int32 nReqLen = _rPropNames.getLength();
+
+#ifdef _DEBUG
+    // assure that the sequence is sorted
+    {
+        const ::rtl::OUString* pLookup = _rPropNames.getConstArray();
+        const ::rtl::OUString* pEnd = _rPropNames.getConstArray() + _rPropNames.getLength() - 1;
+        for (; pLookup < pEnd; ++pLookup)
+        {
+            const ::rtl::OUString* pCompare = pLookup + 1;
+            const ::rtl::OUString* pCompareEnd = pEnd + 1;
+            for (; pCompare < pCompareEnd; ++pCompare)
+            {
+                OSL_ENSURE(pLookup->compareTo(*pCompare) < 0, "OPropertyArrayAggregationHelper::fillHandles : property names are not sorted!");
+            }
+        }
+    }
+#endif
 
     const  ::com::sun::star::beans::Property* pCur = m_aProperties.getConstArray();
     const  ::com::sun::star::beans::Property* pEnd = m_aProperties.getConstArray() + m_aProperties.getLength();
