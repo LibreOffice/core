@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-09 19:15:47 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ private:
     BOOL bPagebreakMode;        // Seitenumbruch-Vorschau
     BOOL bSolidBackground;      // weiss statt transparent
 
+    BOOL bUseStyleColor;
+
     BOOL bSyntaxMode;           // Syntax-Highlighting
     Color* pValueColor;
     Color* pTextColor;
@@ -199,6 +201,7 @@ public:
     void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
 
     void    SetSolidBackground( BOOL bSet )     { bSolidBackground = bSet; }
+    void    SetUseStyleColor( BOOL bSet )       { bUseStyleColor = bSet; }
 
     void    SetEditCell( USHORT nCol, USHORT nRow );
     void    SetSyntaxMode( BOOL bNewMode );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-12 20:01:58 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,7 +715,7 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     VirtualDevice aVirtWindow( *pDefaultDev );
     aVirtWindow.SetMapMode(MAP_PIXEL);
     Font aDefFont;
-    pPattern->GetFont(aDefFont, &aVirtWindow);
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);        // font color doesn't matter here
     aVirtWindow.SetFont(aDefFont);
     nDefFontHeight = (USHORT) aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()),
                                 MAP_TWIP).Height();

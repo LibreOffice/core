@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ private:
     Point               aOffset;            //  mit Faktor aus Seitenformat skaliert
     USHORT              nManualZoom;        //  Zoom in Preview (Prozent)
     BOOL                bClearWin;          //  Ausgabe vorher loeschen
+    BOOL                bUseStyleColor;
 
     USHORT              nPrintTab;
     long                nPageStart;         //  Offset fuer erste Seite
@@ -294,6 +295,7 @@ public:
     void            SetDateTime( const Date& rDate, const Time& rTime );
 
     void            SetClearFlag( BOOL bFlag );
+    void            SetUseStyleColor( BOOL bFlag );
 
     BOOL            UpdatePages();
 

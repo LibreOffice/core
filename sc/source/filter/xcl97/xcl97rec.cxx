@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:42:22 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1667,7 +1667,8 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
         {
             Font            aFont;
             ScPatternAttr   aPattAttr( new SfxItemSet( rSet ) );
-            aPattAttr.GetFont( aFont );
+            //! #97022# change to SC_AUTOCOL_RAW and handle COL_AUTO
+            aPattAttr.GetFont( aFont, SC_AUTOCOL_BLACK );
 
             BOOL bItalic    = ( bHasItalic && aFont.GetItalic() != ITALIC_NONE );
             BOOL bStrikeOut = ( bHasStrikeOut && aFont.GetStrikeout() != STRIKEOUT_NONE );

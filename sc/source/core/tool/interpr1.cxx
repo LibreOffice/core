@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-09-06 13:36:03 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,7 +1269,8 @@ void ScInterpreter::ScCell()
                 Font        aDefFont;
 
                 pPrinter->SetMapMode( MAP_TWIP );
-                pDok->GetDefPattern()->GetFont( aDefFont, pPrinter );
+                // font color doesn't matter here
+                pDok->GetDefPattern()->GetFont( aDefFont, SC_AUTOCOL_BLACK, pPrinter );
                 pPrinter->SetFont( aDefFont );
                 long nZeroWidth = pPrinter->GetTextWidth( String( '0' ) );
                 pPrinter->SetFont( aOldFont );

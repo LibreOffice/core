@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,8 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
         {
             Fraction aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
             Font aFont;
-            pPattern->GetFont( aFont, pDev, &aFontZoom, pCondSet, nScript );
+            // font color doesn't matter here
+            pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aFontZoom, pCondSet, nScript );
             pDev->SetFont(aFont);
         }
 
@@ -1019,7 +1020,8 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
     {   // alles eins bis auf NumberFormate
         const ScPatternAttr* pPattern = GetPattern( 0 );
         Font aFont;
-        pPattern->GetFont( aFont, pDev, &rZoomX, NULL );
+        // font color doesn't matter here
+        pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX, NULL );
         pDev->SetFont( aFont );
         const SvxMarginItem* pMargin = (const SvxMarginItem*) &pPattern->GetItem(ATTR_MARGIN);
         long nMargin = (long) ( pMargin->GetLeftMargin() * nPPTX ) +

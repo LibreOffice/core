@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:33:18 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1342,7 +1342,8 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
 
         // first font is the cell font, following font changes are stored in richstring
         Font*               pFont = new Font;
-        pAttr->GetFont( *pFont );
+        //! #97022# change to SC_AUTOCOL_RAW and handle COL_AUTO
+        pAttr->GetFont( *pFont, SC_AUTOCOL_BLACK );
         USHORT              nLastFontIndex = rFontList.Add( pFont );
 
         for( nPar = 0 ; nPar < nParCnt ; )
@@ -1419,7 +1420,8 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                         aPatAttr.GetFromEditItemSet( &aItemSet );
 
                         Font* pFont = new Font;
-                        aPatAttr.GetFont( *pFont );
+                        //! #97022# change to SC_AUTOCOL_RAW and handle COL_AUTO
+                        aPatAttr.GetFont( *pFont, SC_AUTOCOL_BLACK );
                         if( bWasHLink )
                         {
                             pFont->SetColor( Color( COL_LIGHTBLUE ) );
@@ -3664,7 +3666,8 @@ void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, cons
     if( pAttr )
     {
         Font*       pFont = new Font;
-        pAttr->GetFont( *pFont );
+        //! #97022# change to SC_AUTOCOL_RAW and handle COL_AUTO
+        pAttr->GetFont( *pFont, SC_AUTOCOL_BLACK );
         nFontIndex = rFntLst.Add( pFont );
 
         if ( bForceAltNumForm )

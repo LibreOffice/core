@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-01-30 08:53:52 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 #include "patattr.hxx"
 #include "docpool.hxx"
@@ -112,6 +113,11 @@ ScDocument* ScPatternAttr::pDoc = NULL;
 //! move to some header file
 inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
 inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
+
+// -----------------------------------------------------------------------
+
+// threshold for automatic text color
+#define DARK_COLOR 154
 
 // -----------------------------------------------------------------------
 
@@ -221,7 +227,8 @@ SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT nItemVersion) 
     return rStream;
 }
 
-void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction* pScale,
+void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
+                                OutputDevice* pOutDev, const Fraction* pScale,
                                 const SfxItemSet* pCondSet, BYTE nScript ) const
 {
     //  Items auslesen
@@ -387,13 +394,41 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
 
     //  Auszeichnungen
 
-    if ( aColor.GetColor() == COL_AUTO )
+    if ( aColor.GetColor() == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW )
     {
-        //  WindowTextColor from StyleSettings should be used only when painting!
-        //  As long as GetFont is used for many different cases, always use black, so
-        //  there is no disappearing text with default style settings, and printing works.
+        if ( eAutoMode == SC_AUTOCOL_BLACK )
+            aColor.SetColor( COL_BLACK );
+        else
+        {
+            //  get background color from conditional or own set
+            Color aBackColor;
+            if ( pCondSet )
+            {
+                const SfxPoolItem* pItem;
+                if ( pCondSet->GetItemState( ATTR_BACKGROUND, TRUE, &pItem ) != SFX_ITEM_SET )
+                    pItem = &rMySet.Get( ATTR_BACKGROUND );
+                aBackColor = ((const SvxBrushItem*)pItem)->GetColor();
+            }
+            else
+                aBackColor = ((const SvxBrushItem&)rMySet.Get( ATTR_BACKGROUND )).GetColor();
 
-        aColor.SetColor( COL_BLACK );
+            if ( aBackColor != COL_TRANSPARENT &&
+                aBackColor.GetRed() + aBackColor.GetGreen() + aBackColor.GetBlue() < DARK_COLOR )
+            {
+                //  use white if on dark background
+                aColor.SetColor( COL_WHITE );
+            }
+            else if ( eAutoMode == SC_AUTOCOL_DISPLAY )
+            {
+                //  use color from style settings for display
+                aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+            }
+            else
+            {
+                //  use black instead of settings color for printing
+                aColor.SetColor( COL_BLACK );
+            }
+        }
     }
 
     if (rFont.GetWeight() != eWeight)

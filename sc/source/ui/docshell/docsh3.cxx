@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2002-01-21 16:27:48 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ void ScDocShell::CalcOutputFactor()
         Font    aOldFont = pPrinter->GetFont();
 
         pPrinter->SetMapMode(MAP_PIXEL);
-        pPattern->GetFont(aDefFont, pPrinter);
+        pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pPrinter);    // font color doesn't matter here
         pPrinter->SetFont(aDefFont);
         nPrinterWidth = pPrinter->PixelToLogic( Size( pPrinter->GetTextWidth(aTestString), 0 ),
                                                     MAP_100TH_MM ).Width();
@@ -385,7 +385,7 @@ void ScDocShell::CalcOutputFactor()
 
     VirtualDevice aVirtWindow( *Application::GetDefaultDevice() );
     aVirtWindow.SetMapMode(MAP_PIXEL);
-    pPattern->GetFont(aDefFont, &aVirtWindow);
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);    // font color doesn't matter here
     aVirtWindow.SetFont(aDefFont);
     nWindowWidth = aVirtWindow.GetTextWidth(aTestString);
     nWindowWidth = (long) ( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );

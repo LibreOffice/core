@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:01:16 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 13:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,18 @@ class ScStyleSheet;
 class SvNumberFormatter;
 class ScDocument;
 
+
+//  how to treat COL_AUTO in GetFont:
+
+enum ScAutoFontColorMode
+{
+    SC_AUTOCOL_RAW,         // COL_AUTO is returned
+    SC_AUTOCOL_BLACK,       // always use black
+    SC_AUTOCOL_PRINT,       // black or white, depending on background
+    SC_AUTOCOL_DISPLAY      // from style settings or white
+};
+
+
 class ScPatternAttr: public SfxSetItem
 {
     String*         pName;
@@ -111,7 +123,8 @@ public:
     void                    ClearItems( const USHORT* pWhich );
 
     void                    DeleteUnchanged( const ScPatternAttr* pOldAttrs );
-    void                    GetFont( Font& rFont, OutputDevice* pOutDev = NULL,
+    void                    GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
+                                        OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
                                         BYTE nScript = 0 ) const;

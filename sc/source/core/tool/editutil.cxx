@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-12 20:02:52 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,8 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
         if (!nTextHeight)
         {                                   // leere Zelle
             Font aFont;
-            pPattern->GetFont( aFont, pDev, &aZoomY );
+            // font color doesn't matter here
+            pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
             pDev->SetFont(aFont);
             nTextHeight = pDev->GetTextHeight() + nTopMargin +
                             (long) ( pMargin->GetBottomMargin() * nPPTY );
