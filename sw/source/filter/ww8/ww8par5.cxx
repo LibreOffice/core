@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-19 21:29:17 $
+ *  last change: $Author: cmc $ $Date: 2001-04-06 13:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,7 +850,7 @@ static FNReadField aWW8FieldTab[93] = {
 &SwWW8ImplReader::Read_F_CurPage,           // 33
 0,
 0,
-0,
+&SwWW8ImplReader::Read_F_IncludeText,       // 36
 &SwWW8ImplReader::Read_F_PgRef,             // 37
 &SwWW8ImplReader::Read_F_InputVar,          // 38
 &SwWW8ImplReader::Read_F_Input,             // 39
@@ -2053,7 +2053,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
 }
 
 // "EINFUEGENTEXT"
-eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc*, String& rStr )
+eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
 {
     String aPara;
     String aBook;
@@ -2063,6 +2063,9 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc*, String& rStr )
     {
         switch( nRet )
         {
+        case '*':
+            aReadParam.SkipToNextToken();
+            break;
         case -2:
             if( !aPara.Len() )
                 aPara = aReadParam.GetResult();
@@ -2076,7 +2079,6 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc*, String& rStr )
         }
     }
     ConvertFFileName( aPara, aPara );
-    //aPara = INetURLObject::RelToAbs( aPara );
     aPara = URIHelper::SmartRelToAbs( aPara );
 
     if( aBook.Len() && aBook.GetChar( 0 ) != '\\' )
@@ -2088,14 +2090,39 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc*, String& rStr )
         aPara += aBook;
     }
     String aStr(WW8_ASCII2STR( "WW" ));
+#if 0
     SwSection* pSection = new SwSection( FILE_LINK_SECTION,
                                     rDoc.GetUniqueSectionName( &aStr ) );
     pSection->SetLinkFileName( aPara );
     pSection->SetProtect( TRUE );
     NewAttr( SwFltSection( pSection ) );
     pEndStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_SECTION );
+#else
+    /*
+    ##509##
+    What we will do is insert a section to be linked to a file, but just in
+    case the file is not available we will fill in the section with the stored
+    content of this winword field as a fallback.
+    */
+    WW8ReaderSave aSave( this );
 
-//  rDoc.AppendTxtNode( *pPaM->GetPoint() );
+    SwSection aSection( FILE_LINK_SECTION, rDoc.GetUniqueSectionName( &aStr ) );
+    aSection.SetLinkFileName( aPara );
+    aSection.SetProtect( TRUE );
+
+    pNewSection = rDoc.Insert( *pPaM, aSection, 0 ,FALSE);
+
+    const SwSectionNode* pSectionNode = pNewSection->GetFmt()->GetSectionNode();
+    pBehindSection = new SwNodeIndex( *pSectionNode->EndOfSectionNode(), 1 );
+
+    pPaM->GetPoint()->nNode = pSectionNode->GetIndex()+1;
+    pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0 );
+
+    bTxbxFlySection=TRUE;
+    ReadText(pF->nSRes, pF->nLRes, pPlcxMan->GetManType());
+
+    aSave.Restore( this );
+#endif
     return F_OK;
 }
 
@@ -3131,12 +3158,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.16 2001-03-19 21:29:17 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.17 2001-04-06 13:51:33 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/03/19 21:29:17  jp
+      Bugfixes/Optimization for task #83168#
+
       Revision 1.15  2001/03/16 13:16:48  cmc
       ##443## Optimize bookmark quoting
 
