@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: as $ $Date: 2001-08-30 13:45:02 $
+ *  last change: $Author: pb $ $Date: 2001-09-06 10:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3366,9 +3366,6 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     GetBindings().Invalidate( nSID );
     GetDispatcher()->Update_Impl( TRUE );
 
-    if ( bShow && ( nSID == SID_HELP_PI ) )
-        GetpApp()->FocusChanged();  // Hilfe passend zum FocusWindow...
-
     // ggf. recorden
     if ( !rReq.IsAPI() )
         rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
@@ -3419,8 +3416,6 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
             else if ( KnowsChildWindow(nSID) )
                 rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
         }
-        else if ( nSID == SID_HELP_PI )
-            rState.DisableItem(nSID);
         else if ( KnowsChildWindow(nSID) )
             rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
         else
