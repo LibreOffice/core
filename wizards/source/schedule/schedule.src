@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:24:53 $
+ *  last change: $Author: vg $ $Date: 2002-01-24 21:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ Text[ swedish ] = "~�rs�versikt";
     Text[ danish ] = "~�rsoversigt";
     Text[ polish ] = "~Przegl�d roku";
     Text[ portuguese_brazilian ] = "~Year Overview";
-    Text[ japanese ] = "年間表(~Y)";
+    Text[ japanese ] = "年間(~Y)";
     Text[ korean ] = "년간 일정 개요(~Y)";
     Text[ chinese_simplified ] = "年检视图(~Y)";
     Text[ chinese_traditional ] = "年檢視圖(~Y)";
@@ -336,7 +336,7 @@ Text[ swedish ] = "~M�nad";
     Text[ danish ] = "~M�ned";
     Text[ polish ] = "~Miesi�c";
     Text[ portuguese_brazilian ] = "~Month";
-    Text[ japanese ] = "月(~M)";
+    Text[ japanese ] = "月間(~M)";
     Text[ korean ] = "월(~M)";
     Text[ chinese_simplified ] = "月(~M)";
     Text[ chinese_traditional ] = "月(~M)";
@@ -442,7 +442,7 @@ Text[ swedish ] = "�r";
     Text[ danish ] = "�r";
     Text[ polish ] = "Rok";
     Text[ portuguese_brazilian ] = "Year";
-    Text[ japanese ] = "西暦";
+    Text[ japanese ] = "西暦年";
     Text[ korean ] = "년";
     Text[ chinese_simplified ] = "年";
     Text[ chinese_traditional ] = "年";
