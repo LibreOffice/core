@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:48:49 $
+ *  last change: $Author: kso $ $Date: 2001-05-08 12:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,14 @@ Reference< XContent > SAL_CALL HierarchyContentProvider::queryContent(
     if ( aId.compareToAscii( HIERARCHY_ROOT_FOLDER_URL,
                              HIERARCHY_ROOT_FOLDER_URL_LENGTH ) != 0 )
         throw IllegalIdentifierException();
+
+    // Remove trailing slash, except from Root folder URL.
+    if ( aId.getLength() > HIERARCHY_ROOT_FOLDER_URL_LENGTH )
+    {
+        sal_Int32 nPos = aId.lastIndexOf( '/' );
+        if ( nPos == aId.getLength() - 1 )
+            aId = aId.copy( 0, aId.getLength() - 1 );
+    }
 
     // Encode URL and create new Id. This may "correct" user-typed-in URL's.
     Reference< XContentIdentifier > xCanonicId =
