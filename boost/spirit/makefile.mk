@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 16:19:41 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:10:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,14 @@
 #
 #*************************************************************************
 
+# Hopefully we can move to a newer boost version soon, coming with spirit 1.8.*,
+# so there won't be the need handle a separate spirit 1.6.* anymore.
+# Depends on the compilers... :(
+
+# dmake create_clean -- just unpacks
+# dmake patch -- unpacks and applies patch file
+# dmake create_patch -- creates a patch file
+
 PRJ=..
 
 PRJNAME=ooo_boost
@@ -69,7 +77,9 @@ TARGET=ooo_spirit
 
 .INCLUDE :	settings.mk
 
-.IF "$(SYSTEM_BOOST)" == "YES"
+# force patched boost for sunpro CC
+# to workaround opt bug when compiling with -xO3
+.IF "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
 all:
         @echo "An already available installation of boost should exist on your system."
         @echo "Therefore the version provided here does not need to be built in addition."
