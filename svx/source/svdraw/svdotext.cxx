@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:49:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,12 +935,24 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
     {
         if(aAnkRect.GetWidth() < aTextSiz.Width() && !IsVerticalWriting())
         {
-            eHAdj = SDRTEXTHORZADJUST_CENTER;
+            // #110129#
+            // Horizontal case here. Correct only if eHAdj == SDRTEXTHORZADJUST_BLOCK,
+            // else the alignment is wanted.
+            if(SDRTEXTHORZADJUST_BLOCK == eHAdj)
+            {
+                eHAdj = SDRTEXTHORZADJUST_CENTER;
+            }
         }
 
         if(aAnkRect.GetHeight() < aTextSiz.Height() && IsVerticalWriting())
         {
-            eVAdj = SDRTEXTVERTADJUST_CENTER;
+            // #110129#
+            // Vertical case here. Correct only if eHAdj == SDRTEXTVERTADJUST_BLOCK,
+            // else the alignment is wanted.
+            if(SDRTEXTVERTADJUST_BLOCK == eVAdj)
+            {
+                eVAdj = SDRTEXTVERTADJUST_CENTER;
+            }
         }
     }
 
