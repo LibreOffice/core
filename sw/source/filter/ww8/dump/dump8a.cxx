@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dump8a.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-02 13:58:01 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3080,66 +3080,4 @@ void DeInit()
     DELETEZ( pOut );
 }
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/dump8a.cxx,v 1.3 2000-11-02 13:58:01 khz Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2000/10/24 14:01:34  jp
-      changes for unicode
-
-      Revision 1.1.1.1  2000/09/18 17:14:59  hr
-      initial import
-
-      Revision 1.15  2000/09/18 16:05:02  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.14  2000/02/14 14:39:35  jp
-      #70473# changes for unicode
-
-      Revision 1.13  2000/02/14 14:12:01  jp
-      piece table is in the table stream
-
-      Revision 1.12  2000/01/25 10:44:58  khz
-      change: update the dumper according to import improvements
-
-      Revision 1.11  1999/11/18 22:15:11  jp
-      dump fields
-
-      Revision 1.10  1999/11/18 22:09:53  jp
-      dump fields
-
-      Revision 1.9  1999/10/27 17:57:35  jp
-      changes for tables
-
-      Revision 1.8  1999/09/08 11:58:46  jp
-      den neuen WW8Scanner benutzen
-
-      Revision 1.7  1999/09/08 11:14:15  jp
-      Escher dump verbessert
-
-
-      Rev 1.5   16 Aug 1999 12:22:38   JP
-   neu: Dump EscherObjects
-
-      Rev 1.4   15 Jun 1999 14:19:18   JP
-   new: ListTable and other Contents
-
-      Rev 1.3   25 Jun 1998 16:29:52   KHZ
-   doppelte Deklaration von FkpSizeTab in Define umgewandelt
-
-      Rev 1.2   25 Jun 1998 15:43:46   KHZ
-   Strukturaenderung fuer PAPX FKPs
-
-      Rev 1.1   10 Jun 1998 17:22:38   KHZ
-   Zwischenstand-Sicherung Dumper
-
-      Rev 1.0   27 May 1998 15:29:26   KHZ
-   Initial revision.
-
-*************************************************************************/
 

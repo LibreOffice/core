@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,37 +390,3 @@ UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream &rTableStrm,
     return nEndLastPage;
 }
 
-/*************************************************************************
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8glsy.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.8  2000/09/18 16:04:59  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.7  2000/06/26 12:59:10  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.6  2000/05/18 10:58:34  jp
-      Changes for Unicode
-
-      Revision 1.5  2000/05/16 11:08:03  khz
-      Unicode code-conversion
-
-      Revision 1.4  2000/03/13 10:22:14  jp
-      Bug #72579#: little/big endian problem
-
-      Revision 1.3  2000/03/03 14:03:39  os
-      precompiled header
-
-      Revision 1.2  2000/02/28 08:33:46  cmc
-      #72579# Enable Glossary Import
-
-      Revision 1.1  2000/02/14 09:05:56  cmc
-      #72579# added ww8glsy.cxx
-
-
-*************************************************************************/

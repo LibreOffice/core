@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-01 16:56:06 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1928,121 +1928,4 @@ const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
 {
     return 0;
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.7 2001-08-01 16:56:06 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.6  2001/07/03 17:33:34  jp
-      Bug #89130#: export one font instead of the complete fontlist
-
-      Revision 1.5  2001/04/23 11:16:22  cmc
-      Enable automatic text foreground color {im|ex}port
-
-      Revision 1.4  2001/02/23 12:45:26  os
-      Complete use of DefaultNumbering component
-
-      Revision 1.3  2000/11/21 12:55:21  jp
-      Bug #80385#: Set1StyleDefaults - write also all dynamic attributes
-
-      Revision 1.2  2000/10/10 16:54:06  cmc
-      MSOffice 97/2000 Controls {Im|Ex}port
-
-      Revision 1.1.1.1  2000/09/18 17:14:58  hr
-      initial import
-
-      Revision 1.28  2000/09/18 16:04:58  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.27  2000/08/21 10:14:03  khz
-      Export Line Numbering (restart on new section)
-
-      Revision 1.26  2000/07/04 08:58:09  jp
-      _OutFont: write zero terminated FontNames
-
-      Revision 1.25  2000/05/12 16:14:02  jp
-      Changes for Unicode
-
-      Revision 1.24  2000/05/04 11:41:34  jp
-      Bug #75550#: standard para.style must have a language sprm
-
-      Revision 1.23  2000/01/25 20:09:30  jp
-      Bug #72146#: convert stylenames only for W95 to ANSI
-
-      Revision 1.22  1999/12/15 17:06:14  jp
-      Bug #70913#: write Ftn-/EndNoteInfo - at end of section or page/doc
-
-      Revision 1.21  1999/11/25 21:19:37  jp
-      Bug #70134#: dont set def values by charstyles
-
-      Revision 1.20  1999/11/22 18:26:11  jp
-      export of TOX and TOX entries
-
-      Revision 1.19  1999/11/12 16:07:16  jp
-      write foot-/endnote attributes with correct charfmts
-
-      Revision 1.18  1999/11/10 16:09:50  jp
-      Bug #67922#: write header/footer for w95
-
-      Revision 1.17  1999/10/22 14:11:01  jp
-      Bug #69408#: if write SfxItemSet set the pointer at writerclass
-
-      Revision 1.16  1999/10/14 21:06:05  jp
-      Bug #68617#,#68705# and other little things
-
-      Revision 1.15  1999/10/13 09:08:46  jp
-      write character attributs of SdrObjects
-
-      Revision 1.14  1999/10/11 10:58:59  jp
-      Bug #69083#: set mirrormargin flag in dop
-
-      Revision 1.13  1999/09/09 17:40:49  jp
-      Bug #68628#: write startvalue of SwFtnInfo and SwEndNoteInfo
-
-      Revision 1.12  1999/09/01 17:32:38  JP
-      new: write the text of SdrTextObjects
-
-
-      Rev 1.11   01 Sep 1999 19:32:38   JP
-   new: write the text of SdrTextObjects
-
-      Rev 1.10   30 Aug 1999 18:55:02   JP
-   write cp's of foot-/endnotes
-
-      Rev 1.9   24 Aug 1999 20:15:48   JP
-   Escher Export
-
-      Rev 1.8   16 Aug 1999 17:16:30   JP
-   W97 Export: experimental escher export (1)
-
-      Rev 1.7   21 Jul 1999 18:28:22   JP
-   W97 Export: experimental escher export
-
-      Rev 1.6   06 Jul 1999 14:54:04   JP
-   W97-Export corrections
-
-      Rev 1.5   30 Jun 1999 19:56:42   JP
-   W97-Export: Fields/PostIts/References
-
-      Rev 1.4   23 Jun 1999 12:46:16   JP
-   Export of numbers und outlinenumbers
-
-      Rev 1.3   16 Jun 1999 19:53:58   JP
-   Change interface of base class Writer
-
-      Rev 1.2   04 Jun 1999 17:47:56   JP
-   WW97-Export: Code aufgeteilt
-
-      Rev 1.1   21 May 1999 01:59:10   JP
-   Export von WW97 Format: StyleSheets
-
-      Rev 1.0   19 May 1999 19:35:16   JP
-   WinWord97-ExportFilter
-
-*************************************************************************/
 

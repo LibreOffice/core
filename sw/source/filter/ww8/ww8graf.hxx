@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,52 +143,5 @@ struct WW8_TXBXS
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW* pFSPAS, WW8_FSPA* pPic );
 
-
-/*************************************************************************
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.hxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.11  2000/09/18 16:04:59  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.10  2000/05/16 11:35:11  khz
-      Unicode code-conversion
-
-      Revision 1.9  1998/11/25 17:50:46  JP
-      Compilerfehler unter UNX
-
-
-      Rev 1.8   25 Nov 1998 18:50:46   JP
-   Compilerfehler unter UNX
-
-      Rev 1.7   20 Nov 1998 17:56:00   KHZ
-   Task #59640# Hilfsattribute SwFmtVertOrient und SwFmtHoriOrient (2)
-
-      Rev 1.6   29 Oct 1998 15:27:26   KHZ
-   Task #58199# defines fuer rel. Abstand-Orientierung von Shapes geaendert
-
-      Rev 1.5   03 Sep 1998 22:14:22   KHZ
-   Task #55189# Textboxen
-
-      Rev 1.4   27 Aug 1998 10:12:30   KHZ
-   Task #55189# Escher-Import fuer Draw, Calc und Writer
-
-      Rev 1.3   22 Jul 1998 16:14:16   HR
-   ww8graf fuer UNX
-
-      Rev 1.2   21 Jul 1998 14:51:48   KHZ
-   Task #52607# (WW 97 Import)
-
-      Rev 1.1   21 Jul 1998 12:33:28   KHZ
-   als MSDrawingObject eingebettete Grafik (Teil 1)
-
-      Rev 1.0   16 Jun 1998 10:56:50   KHZ
-   Initial revision.
-
-*************************************************************************/
 #endif
 

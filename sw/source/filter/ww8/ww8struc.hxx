@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:20 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,97 +855,5 @@ struct WW67_ATRD                // fuer die 6/7-Version
 #ifdef __WW8_NEEDS_PACK
 #pragma pack()
 #endif
-
-/*************************************************************************
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.5 2001-09-05 10:16:20 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.4  2001/04/20 14:53:15  cmc
-      clean type conversion warning
-
-      Revision 1.3  2001/02/16 10:08:12  cmc
-      Normalize japanese doptypography variable names
-
-      Revision 1.2  2001/01/30 20:11:06  cmc
-      #83362# CJK Forbidden Character {Im|Ex}port
-
-      Revision 1.1.1.1  2000/09/18 17:14:59  hr
-      initial import
-
-      Revision 1.20  2000/09/18 16:05:02  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.19  2000/05/12 07:54:23  khz
-      Changes for Unicode
-
-      Revision 1.18  2000/02/11 14:40:36  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.17  1999/11/19 14:48:49  mib
-      #70009#: export Solaris
-
-      Revision 1.16  1999/06/16 17:54:56  JP
-      Change interface of base class Writer, Export of W97 NumRules
-
-
-      Rev 1.15   16 Jun 1999 19:54:56   JP
-   Change interface of base class Writer, Export of W97 NumRules
-
-      Rev 1.14   19 May 1999 11:12:56   JP
-   WinWord97-ExportFilter
-
-      Rev 1.13   11 May 1999 17:15:24   KHZ
-   Task #66019# FontFamily: andere Bitreihenfolge auf Solaris beachten
-
-      Rev 1.12   15 Feb 1999 21:36:50   KHZ
-   Task #61381# Korrektur der Korrektur: jetzt include boxitem.hxx in ww8graf.cxx
-
-      Rev 1.11   15 Feb 1999 20:54:44   KHZ
-   Task #61381# Korrektur zur -r1.10: UEbernahme der defines statt der includes
-
-      Rev 1.10   15 Feb 1999 18:19:44   HR
-   <svx/eeitem.hxx> und <svx/boxitem.hxx> includen
-
-      Rev 1.9   12 Feb 1999 16:51:38   KHZ
-   Task #61381# Ersetzen von Sdr-Text-Objekten im Writer durch Rahmen (3)
-
-      Rev 1.8   03 Dec 1998 10:39:52   JP
-   Task #60063#: Kommentare als PostIts einlesen
-
-      Rev 1.7   02 Dec 1998 15:34:28   JP
-   Task #60063#: Kommentare als PostIts einlesen
-
-      Rev 1.6   23 Oct 1998 15:37:02   KHZ
-   Task #58199# jetzt kein GPF mehr bei nicht existenten Tabellenzellen :-)
-
-      Rev 1.5   30 Jul 1998 14:28:34   KHZ
-   Task #52607# Einrueckungen der Defines beseitigt
-
-      Rev 1.4   09 Jul 1998 20:14:58   KHZ
-   Tabellen: verbundene Zellen und Zellen-Hintergrundfarbe jetzt Ok.
-
-      Rev 1.3   03 Jul 1998 16:14:54   KHZ
-   ( Zwischenstand zur DaSi )
-
-      Rev 1.2   30 Jun 1998 21:33:18   KHZ
-   Header/Footer/Footnotes weitgehend ok
-
-      Rev 1.1   26 Jun 1998 20:50:10   KHZ
-   Absatz-Attribute jetzt weitestgehend ok
-
-      Rev 1.0   16 Jun 1998 10:57:08   KHZ
-   Initial revision.
-
-      Rev 1.1   10 Jun 1998 17:22:38   KHZ
-   Zwischenstand-Sicherung Dumper
-
-      Rev 1.0   27 May 1998 15:29:34   KHZ
-   Initial revision.
-
-*************************************************************************/
 
 #endif

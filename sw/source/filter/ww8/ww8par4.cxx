@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,155 +696,6 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, const BYTE* pData,
     // 4 bytes - chp.dttmPropRMark;
     Read_CRevisionMark( REDLINE_FORMAT, nId, pData, nLen );
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.14 2001-09-10 15:51:44 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.13  2001/07/09 15:05:40  cmc
-      #89004# Use newer ole2 import fallback
-
-      Revision 1.12  2001/06/06 12:46:32  cmc
-      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
-
-      Revision 1.11  2001/05/23 13:07:06  cmc
-      #75277# ##897## Object Offset incorrectly saved
-
-      Revision 1.10  2001/05/22 09:45:13  cmc
-      #87317# ##928## Redlining: Allow deletions after property changes to occur
-
-      Revision 1.9  2001/05/21 15:45:50  cmc
-      ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
-
-      Revision 1.8  2001/05/03 15:38:21  jp
-      don't insert empty graphics
-
-      Revision 1.7  2001/04/27 13:22:26  jp
-      correct asking of NO_OLE flag
-
-      Revision 1.6  2001/04/25 18:27:07  jp
-      Bug #83181#: don't insert in GroupObjects SW-OLE-Objects
-
-      Revision 1.5  2001/04/11 15:08:01  jp
-      Bug #85614#: SdrOleObject - set InPlaceObject pointer to zero if the object is insert as SW-OleObject
-
-      Revision 1.4  2000/11/06 09:42:28  jp
-      must changes: tempfile
-
-      Revision 1.3  2000/11/01 12:12:16  jp
-      optimize: use the same code to read MAC-Pict
-
-      Revision 1.2  2000/10/10 16:54:06  cmc
-      MSOffice 97/2000 Controls {Im|Ex}port
-
-      Revision 1.1.1.1  2000/09/18 17:14:58  hr
-      initial import
-
-      Revision 1.31  2000/09/18 16:05:01  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.30  2000/08/22 17:09:02  cmc
-      #77743# OLE Import, bad seek & bad FilterOptions
-
-      Revision 1.29  2000/06/29 20:59:11  jp
-      new MS Filteroptions - change OLE-Objects to StarOffice Objects
-
-      Revision 1.28  2000/06/13 08:24:46  os
-      using UCB
-
-      Revision 1.27  2000/05/18 11:01:01  jp
-      Changes for Unicode
-
-      Revision 1.26  2000/05/16 11:06:24  khz
-      Unicode code-conversion
-
-      Revision 1.25  2000/05/05 14:06:55  cmc
-      #75358# WW8 97Controls Import Fix
-
-      Revision 1.24  2000/04/03 15:29:02  cmc
-      #74329# Floating Form Controls
-
-      Revision 1.23  2000/03/27 11:45:31  cmc
-      #74329# Added OCX Reader to ImportOle
-
-      Revision 1.22  2000/03/22 14:35:32  khz
-      Task #74390# release pAutorInfo in case Insert() was not sucessful
-
-      Revision 1.21  2000/02/28 12:04:32  khz
-      Task #73544#: Use size and cropping from \3PIC stream rather than \3META
-
-      Revision 1.20  2000/02/21 13:08:27  jp
-      #70473# changes for unicode
-
-      Revision 1.19  2000/02/11 14:40:23  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.18  1999/10/21 15:36:41  khz
-      Import Redlining (4)
-
-      Revision 1.17  1999/10/13 21:04:34  khz
-      Import Redlining (3)
-
-      Revision 1.16  1999/10/13 13:27:45  khz
-      Import Redlining (2)
-
-      Revision 1.15  1999/10/08 09:26:19  khz
-      Import Redlining
-
-      Revision 1.14  1999/09/08 13:26:09  khz
-      Better performance by reducing use of SWAP..() and SVBT..To..() methods
-
-      Revision 1.13  1999/08/30 19:53:06  JP
-      Bug #68219#: no static members - be reentrant
-
-
-      Rev 1.12   30 Aug 1999 21:53:06   JP
-   Bug #68219#: no static members - be reentrant
-
-      Rev 1.11   09 Aug 1999 14:16:10   JP
-   read W95 format from stream
-
-      Rev 1.10   30 Jul 1999 13:59:28   JP
-   Bug #60140#: CreateSdrOLEFromStorage - read OLE1-Objects
-
-      Rev 1.9   23 Jun 1999 12:46:58   JP
-   delete unused variables
-
-      Rev 1.8   26 Apr 1999 19:22:54   JP
-   Bug #65298#: Grf/Ole bei Zeichenbindung immer Oben zu Grundline anordnen
-
-      Rev 1.7   12 Jan 1999 12:29:54   MH
-   chg: Syntax GCC
-
-      Rev 1.6   30 Nov 1998 18:18:20   JP
-   Task #59822#: OLE-Objecte importieren
-
-      Rev 1.5   30 Nov 1998 17:46:54   JP
-   Task #59822#: OLE-Objecte importieren
-
-      Rev 1.4   27 Nov 1998 09:45:22   JP
-   Task #59822#: OLE-Objecte importieren - Namen korrekt ermitteln
-
-      Rev 1.3   25 Nov 1998 11:29:14   JP
-   Task #59822#: OLE-Objecte einlesen - SetVisArea soll kein modified setzen
-
-      Rev 1.2   24 Nov 1998 20:47:50   JP
-   Task #59822#: OLE-Objecte einlesen
-
-      Rev 1.1   18 Sep 1998 13:10:10   JP
-   Bug #56310#: ImportOLE - die Zeichenbindung nicht doppelt machen
-
-      Rev 1.0   16 Jun 1998 11:08:16   KHZ
-   Initial revision.
-
-*************************************************************************/
-
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,49 +581,4 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
     return bRet;
 }
 
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8num.cxx,v 1.2 2001-02-23 12:45:26 os Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:58  hr
-      initial import
-
-      Revision 1.9  2000/09/18 16:04:58  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.8  2000/07/24 13:03:36  jp
-      Bug #76561#: convert Bulletchar to unicode
-
-      Revision 1.7  2000/05/12 16:13:58  jp
-      Changes for Unicode
-
-      Revision 1.6  2000/02/25 09:55:10  jp
-      Bug #73098#: read & write list entries without number
-
-      Revision 1.5  1999/12/09 15:42:43  jp
-      Bug #70669#: GetId without ASSERT
-
-      Revision 1.4  1999/10/13 18:09:41  jp
-      write redlines
-
-      Revision 1.3  1999/06/23 10:46:16  JP
-      Export of numbers und outlinenumbers
-
-
-      Rev 1.2   23 Jun 1999 12:46:16   JP
-   Export of numbers und outlinenumbers
-
-      Rev 1.1   21 Jun 1999 10:06:58   JP
-   write ListOverride table in correct format
-
-      Rev 1.0   16 Jun 1999 19:56:20   JP
-   Change interface of base class Writer, Export of W97 NumRules
-
-*************************************************************************/
 

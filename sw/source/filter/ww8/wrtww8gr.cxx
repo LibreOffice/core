@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,86 +692,5 @@ void SwWW8WrGrf::Write()
                                 aWid[i], aHei[i] );
     }
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.7 2001-09-05 10:16:19 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.6  2001/08/16 09:27:07  fme
-      Fix #90760#: Removed VCL defines
-
-      Revision 1.5  2001/05/21 15:45:50  cmc
-      ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
-
-      Revision 1.4  2001/03/14 10:22:09  jp
-      Bug #75804#: W95 export - set graphics/ole-objects in tables always as character
-
-      Revision 1.3  2001/03/09 13:50:44  jp
-      use instead of SvData the GetGDIMetaFile from the SvInPlaceObject
-
-      Revision 1.2  2000/10/20 13:43:47  jp
-      use correct INetURL-Decode enum
-
-      Revision 1.1.1.1  2000/09/18 17:14:58  hr
-      initial import
-
-      Revision 1.16  2000/09/18 16:04:58  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.15  2000/08/25 12:27:35  jp
-      Graphic Crop-Attribut exported to SVX
-
-      Revision 1.14  2000/08/18 13:02:29  jp
-      don't export escaped URLs
-
-      Revision 1.13  2000/07/05 16:07:38  jp
-      new MS Filteroptions - change StarOffice Objects to OLE-Objects
-
-      Revision 1.12  2000/06/26 09:58:38  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.11  2000/05/25 09:19:59  khz
-      Changes for Unicode (for debug mode)
-
-      Revision 1.10  2000/05/12 16:14:14  jp
-      Changes for Unicode
-
-      Revision 1.9  2000/02/11 14:39:59  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.8  1999/12/02 10:41:05  jp
-      Bug #70093#: OutWW8_SwOleNode - write field with storage-username, W97 need it
-
-      Revision 1.7  1999/10/29 17:40:22  jp
-      export of 'complex'(vert. merged) tables
-
-      Revision 1.6  1999/08/24 18:15:52  JP
-      Escher Export
-
-
-      Rev 1.5   24 Aug 1999 20:15:52   JP
-   Escher Export
-
-      Rev 1.4   06 Jul 1999 14:54:06   JP
-   W97-Export corrections
-
-      Rev 1.3   30 Jun 1999 19:56:46   JP
-   W97-Export: Fields/PostIts/References
-
-      Rev 1.2   04 Jun 1999 17:47:56   JP
-   WW97-Export: Code aufgeteilt
-
-      Rev 1.1   27 May 1999 23:42:28   JP
-   Schnittstellen angepasst
-
-      Rev 1.0   19 May 1999 11:20:20   JP
-   WinWord97-ExportFilter
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-21 15:40:50 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,103 +310,6 @@ inline WW8LvlType GetNumType( BYTE nWwLevelNo )
 
 #define STI_USER 0xffe
 
-/*************************************************************************
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.7 2001-09-21 15:40:50 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.6  2001/08/28 15:24:29  cmc
-      #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
-
-      Revision 1.5  2001/07/10 09:31:26  cmc
-      #89439# calculate style's even-byte offset relative to style start, not absolute
-
-      Revision 1.4  2001/06/06 12:46:32  cmc
-      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
-
-      Revision 1.3  2001/04/23 11:16:23  cmc
-      Enable automatic text foreground color {im|ex}port
-
-      Revision 1.2  2000/12/01 11:22:52  jp
-      Task #81077#: im-/export of CJK documents
-
-      Revision 1.1.1.1  2000/09/18 17:14:58  hr
-      initial import
-
-      Revision 1.22  2000/09/18 16:05:00  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.21  2000/05/16 12:03:56  jp
-      Changes for unicode
-
-      Revision 1.20  2000/05/16 11:14:53  khz
-      Unicode code-conversion
-
-      Revision 1.19  2000/04/12 11:06:17  khz
-      Task #74260# import FLY_PAGE-frames in Header/Footer as FLY_AT_CNTNT
-
-      Revision 1.18  1999/12/09 16:46:32  khz
-      Task #69180# allow Tabs if right of 1st-line-start OR right of paragraph margin
-
-      Revision 1.17  1999/12/09 14:52:30  khz
-      Task #67145# Don't set NumRule if OutlineNumrule is set on Style
-
-      Revision 1.16  1999/12/01 14:35:48  khz
-      Task #68488# Graphics in Sections with more than one Column
-
-      Revision 1.15  1999/11/05 17:04:13  khz
-      import new TOX_CONTENT and TOX_INDEX features (4)
-
-      Revision 1.14  1999/11/05 10:22:15  khz
-      import new TOX_CONTENT and TOX_INDEX features (3)
-
-      Revision 1.13  1999/11/02 15:59:42  khz
-      import new TOX_CONTENT and TOX_INDEX features (2)
-
-      Revision 1.12  1999/04/28 21:03:30  KHZ
-      Task #65245# Breite eines Rahmens bei WW \'automatisch\' muss PRTAREA sein
-
-
-      Rev 1.11   28 Apr 1999 23:03:30   KHZ
-   Task #65245# Breite eines Rahmens bei WW 'automatisch' muss PRTAREA sein
-
-      Rev 1.10   28 Jan 1999 17:10:42   KHZ
-   Task #60715# in SdrTextObj verankerte Grafiken und OLEs (4)
-
-      Rev 1.9   25 Jan 1999 10:24:58   KHZ
-   Task #60715# in Textobjekt verankerte Grafik als Grafik importieren
-
-      Rev 1.8   08 Dec 1998 18:26:52   KHZ
-   Task #59580# TOC-Import
-
-      Rev 1.7   04 Dec 1998 17:56:40   JP
-   Bug #59619#: falls ein Rahmen eine Umrandung hat, darf der Absatz keine bekommen
-
-      Rev 1.6   19 Nov 1998 22:34:46   JP
-   Task #59476#: Umstellungen fuers korrekte lesen von Umrandungen/Schatten
-
-      Rev 1.5   15 Sep 1998 12:58:24   HJS
-   '#56161#
-
-      Rev 1.4   28 Jul 1998 11:02:06   KHZ
-   Task #52607# nummerierte Listen (Teil 1)
-
-      Rev 1.3   14 Jul 1998 16:33:04   KHZ
-   Task #52607# Absatz- und Zeichen-Styles
-
-      Rev 1.2   30 Jun 1998 21:33:24   KHZ
-   Header/Footer/Footnotes weitgehend ok
-
-      Rev 1.1   16 Jun 1998 18:34:56   KHZ
-   DaSi-Stand
-
-      Rev 1.0   16 Jun 1998 10:57:16   KHZ
-   Initial revision.
-
-*************************************************************************/
 #endif
 
 

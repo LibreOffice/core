@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8darr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 14:56:06 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,50 +573,5 @@ SprmDumpInfo& WW8GetSprmDumpInfo( USHORT nId )
 }
 
 
-
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8darr.cxx,v 1.2 2000-10-24 14:56:06 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:59  hr
-      initial import
-
-      Revision 1.8  2000/09/18 16:05:03  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.7  1999/10/28 20:35:11  jp
-      write table shading vakues
-
-      Revision 1.6  1999/10/28 18:13:47  jp
-      write table height as short
-
-      Revision 1.5  1999/10/27 17:57:53  jp
-      changes for tables
-
-      Revision 1.4  1999/08/16 10:22:38  JP
-      neu: Dump EscherObjects
-
-
-      Rev 1.3   16 Aug 1999 12:22:38   JP
-   neu: Dump EscherObjects
-
-      Rev 1.2   15 Jun 1999 14:12:36   JP
-   new: ListTable and other Contents
-
-      Rev 1.1   10 Jun 1998 17:22:32   KHZ
-   Zwischenstand-Sicherung Dumper
-
-      Rev 1.0   27 May 1998 15:30:10   KHZ
-   Initial revision.
-
-
-*************************************************************************/
 
 

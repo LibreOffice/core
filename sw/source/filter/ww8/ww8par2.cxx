@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3409,132 +3409,6 @@ void SwWW8ImplReader::ReadDocInfo()
         delete( pNeu );
     }
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.23 2001-08-28 15:24:29 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.22  2001/08/23 12:50:09  cmc
-      #91211# Workarounds for ridiculous word zero width merged virtual table cells
-
-      Revision 1.21  2001/08/08 11:05:29  cmc
-      #90420# support for extended word 6 unicode documents
-
-      Revision 1.20  2001/07/30 09:18:10  cmc
-      #i1353# Import Vertical Cell Alignment
-
-      Revision 1.19  2001/07/26 19:23:34  jp
-      Bug #88107#: use correct StarSymbol characters
-
-      Revision 1.18  2001/07/26 15:56:47  cmc
-      #i1154# Merge Cells after table is complete
-
-      Revision 1.17  2001/07/20 10:11:34  mtg
-      #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
-
-      Revision 1.16  2001/07/17 13:00:33  cmc
-      #89801# ##1140## Frame attributes in cells past the first cell in a table are to be ignored
-
-      Revision 1.15  2001/07/16 09:28:11  cmc
-      #89590# If an end of table row does not line up and theres space for a table cell to balance it then insert one. Duplicates words behaviour
-
-      Revision 1.14  2001/07/10 13:05:39  cmc
-      #88976# Western defaults after Eastern to make western charset conversion the default
-
-      Revision 1.13  2001/07/10 09:31:26  cmc
-      #89439# calculate style's even-byte offset relative to style start, not absolute
-
-      Revision 1.12  2001/06/06 12:46:32  cmc
-      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
-
-      Revision 1.11  2001/05/24 09:43:17  cmc
-      #74387# ##949## Avoid too narrow table cells (consider distance from text in calculation)
-
-      Revision 1.10  2001/04/26 12:01:42  cmc
-      ##777## table next row begin cp position not updated after row end properties fetched
-
-      Revision 1.9  2001/04/23 11:16:23  cmc
-      Enable automatic text foreground color {im|ex}port
-
-      Revision 1.8  2001/04/20 14:54:47  cmc
-      base table handling on logical character positions and by using new property finding algorithm
-
-      Revision 1.7  2001/03/16 14:23:21  cmc
-      ##561## Styles should inherit the toggleable attributes from eachother
-
-      Revision 1.6  2001/03/12 12:58:56  cmc
-      ##510##, #81434# Set default asian fontsize to winword default as well as western fontsize
-
-      Revision 1.5  2001/03/12 12:07:19  cmc
-      ##513##, #79474# a set of floating table rows following inline table rows are not to be counted as rows in first table
-
-      Revision 1.4  2001/02/23 12:45:26  os
-      Complete use of DefaultNumbering component
-
-      Revision 1.3  2000/12/01 11:22:52  jp
-      Task #81077#: im-/export of CJK documents
-
-      Revision 1.2  2000/10/25 14:10:36  khz
-      Now supporting negative horizontal indentation of paragrahps and tables
-
-      Revision 1.1.1.1  2000/09/18 17:14:58  hr
-      initial import
-
-      Revision 1.80  2000/09/18 16:05:00  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.79  2000/08/17 13:49:28  khz
-      #77316# set Default Char Format if no Base Format known
-
-      Revision 1.78  2000/07/28 15:37:27  khz
-      #73796# don't delete NumRule from Attr but set it into pDoc
-
-      Revision 1.77  2000/07/27 10:21:36  khz
-      #73796# stop ANList when opening next cell in a row and !bAktAND_fNumberAcross
-
-      Revision 1.76  2000/07/25 15:17:45  khz
-      #76811# read/write AutoHyphenation flag from/into Document Properties
-
-      Revision 1.75  2000/07/24 12:56:38  jp
-      Bug #76561#: convert Bulletchar to unicode
-
-      Revision 1.74  2000/07/11 11:39:06  khz
-      #76673# prepare implementation of sprmTDelete and sprmTInsert
-
-      Revision 1.73  2000/07/11 11:30:55  khz
-      #76673# prepare implementation of sprmTDelete and sprmTInsert
-
-      Revision 1.72  2000/06/08 16:12:55  khz
-      Piece table optimization only when piece table exists ;-)
-
-      Revision 1.71  2000/05/31 12:23:09  khz
-      Changes for Unicode
-
-      Revision 1.70  2000/05/25 08:06:48  khz
-      Piece Table optimization, Unicode changes, Bugfixes
-
-      Revision 1.69  2000/05/18 10:58:59  jp
-      Changes for Unicode
-
-      Revision 1.68  2000/05/16 12:13:04  jp
-      ASS_FALSE define removed
-
-      Revision 1.67  2000/05/16 11:06:21  khz
-      Unicode code-conversion
-
-      Revision 1.66  2000/05/04 07:40:47  khz
-      Task #75379# use new Save() and Restore()
-
-      Revision 1.65  2000/04/17 12:01:32  khz
-      Task #74837# prevent from breaking table (in Apo) when Apo-flag is missing
-
-*************************************************************************/
-
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8dout.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,49 +451,5 @@ void OutTabD609( SvStream& rSt, short nLen )
             *pOut << ", ";
     }
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8dout.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.9  2000/09/18 16:05:03  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.8  2000/02/11 14:39:38  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.7  1999/11/02 18:06:52  jp
-      Dump of hugepapx
-
-      Revision 1.6  1999/10/28 20:35:15  jp
-      write table shading vakues
-
-      Revision 1.5  1999/10/27 17:58:09  jp
-      changes for tables
-
-      Revision 1.4  1999/06/15 12:14:44  JP
-      new: ListTable and other Contents
-
-
-      Rev 1.3   15 Jun 1999 14:14:44   JP
-   new: ListTable and other Contents
-
-      Rev 1.2   25 Jun 1998 15:44:42   KHZ
-   Strukturaenderung fuer PAPX FKPs
-
-      Rev 1.1   10 Jun 1998 17:22:34   KHZ
-   Zwischenstand-Sicherung Dumper
-
-      Rev 1.0   27 May 1998 15:30:18   KHZ
-   Initial revision.
-
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 14:01:34 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,35 +568,3 @@ int VBA_Impl::DecompressVBA( int nIndex, SvStorageStreamRef &xVBAStream )
     return(pos);
 }
 
-/*************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/msvbasic.cxx,v 1.2 2000-10-24 14:01:34 jp Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:59  hr
-    initial import
-
-    Revision 1.5  2000/09/18 16:05:03  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.4  2000/02/03 09:31:52  cmc
-    #72268# Office 2000 compatibility bug fixed
-
-    Revision 1.2  2000/01/26 16:40:15  cmc
-    Made VBA Project stream reader more robust
-
-    Revision 1.1  2000/01/26 12:34:58  jp
-    #72268#: move form svdraw to here
-
-    Revision 1.4  2000/01/25 16:12:21  rt
-    #65293# includes unnecessary
-
-    Revision 1.3  2000/01/25 11:17:42  cmc
-    #72268# Visual Basic Decompression
-
-
-*************************************************************************/

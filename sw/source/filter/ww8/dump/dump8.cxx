@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dump8.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 14:01:34 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,47 +211,4 @@ void MyWin::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/dump8.cxx,v 1.2 2000-10-24 14:01:34 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:59  hr
-      initial import
-
-      Revision 1.8  2000/09/18 16:05:02  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.7  2000/02/14 14:40:00  jp
-      #70473# changes for unicode
-
-      Revision 1.6  2000/01/25 10:44:55  khz
-      change: update the dumper according to import improvements
-
-      Revision 1.5  1999/08/16 10:22:38  JP
-      neu: Dump EscherObjects
-
-
-      Rev 1.4   16 Aug 1999 12:22:38   JP
-   neu: Dump EscherObjects
-
-      Rev 1.3   15 Jun 1999 14:19:16   JP
-   new: ListTable and other Contents
-
-      Rev 1.2   25 Jun 1998 15:43:46   KHZ
-   Strukturaenderung fuer PAPX FKPs
-
-      Rev 1.1   10 Jun 1998 17:22:32   KHZ
-   Zwischenstand-Sicherung Dumper
-
-      Rev 1.0   27 May 1998 15:29:52   KHZ
-   Initial revision.
-
-*************************************************************************/
 

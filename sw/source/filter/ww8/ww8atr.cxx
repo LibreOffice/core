@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3797,139 +3797,6 @@ SwAttrFnTab aWW8AttrFnTab = {
 
 /* RES_UNKNOWNATR_CONTAINER */      0
 };
-
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.17  2001/09/05 10:16:19  cmc
-      #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
-
-      Revision 1.16  2001/08/24 08:20:29  cmc
-      #90804# Improve fly in fly export for ww6
-
-      Revision 1.15  2001/06/02 16:06:14  cmc
-      #68662# ##989## parent frame of a fly in fly exported as a table
-
-      Revision 1.14  2001/04/24 10:26:11  cmc
-      CJK Vertical Text Alignment {im|ex}port
-
-      Revision 1.13  2001/04/23 11:16:23  cmc
-      Enable automatic text foreground color {im|ex}port
-
-      Revision 1.12  2001/03/16 17:15:59  jp
-      new: im-/export emboss / engrave attribute
-
-      Revision 1.11  2001/02/23 09:57:21  cmc
-      Test if CJK combined characters are western or asian
-
-      Revision 1.10  2001/02/21 12:45:24  os
-      use database struct instead of a combined string
-
-      Revision 1.9  2001/02/20 19:38:38  cmc
-      CJK Combined Characters Word Export
-
-      Revision 1.8  2001/02/15 20:08:10  jp
-      im-/export the Rotate-/ScaleWidth-Character attribut
-
-      Revision 1.7  2001/02/06 17:28:21  cmc
-      #83581# CJK Two Lines in One {Im|Ex}port for Word
-
-      Revision 1.6  2001/01/16 17:18:46  jp
-      Bug #80650#: Out_SfxItemSet: if switch off the numrule then write the LR_Space direct
-
-      Revision 1.5  2000/12/01 11:22:52  jp
-      Task #81077#: im-/export of CJK documents
-
-      Revision 1.4  2000/11/24 19:47:04  er
-      #80660# GetNumberFmt: new date keys
-
-      Revision 1.3  2000/11/20 09:38:45  jp
-      new para attributes - expand para range
-
-      Revision 1.2  2000/11/04 21:49:59  er
-      GetMappedFormatstring with LocaleDataWrapper instead of International
-
-      Revision 1.1.1.1  2000/09/18 17:14:58  hr
-      initial import
-
-      Revision 1.51  2000/09/18 16:04:58  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.50  2000/08/21 10:14:14  khz
-      Export Line Numbering (restart on new section)
-
-      Revision 1.49  2000/08/04 10:56:44  jp
-      Soft-/HardHyphens & HardBlanks changed from attribute to unicode character
-
-      Revision 1.48  2000/07/31 19:24:54  jp
-      new attributes for CJK/CTL and graphic
-
-      Revision 1.47  2000/07/25 14:46:38  khz
-      #76811# save AutoHyphenation flag in Document Properties
-
-      Revision 1.46  2000/07/06 11:05:03  khz
-      Export *result* of field nonexisting in WW as either Unicode or 8bit text
-
-      Revision 1.45  2000/06/19 09:30:59  khz
-      Export the new WW2000 _underlining_ features
-
-      Revision 1.44  2000/06/09 16:30:26  jp
-      Write correct edit-/create-/print-/change - datetime fields
-
-      Revision 1.43  2000/05/12 16:14:18  jp
-      Changes for Unicode
-
-      Revision 1.42  2000/04/18 12:58:03  khz
-      Task #75183# to set char language use sprmCRgLid0 rather than sprmCLid
-
-      Revision 1.41  2000/03/03 15:20:01  os
-      StarView remainders removed
-
-      Revision 1.40  2000/02/21 13:05:36  jp
-      #70473# changes for unicode
-
-      Revision 1.39  2000/02/11 14:40:03  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.38  1999/12/20 17:41:37  jp
-      Bug #70749#: Date/Time-Numberformats in german format from the formatter
-
-      Revision 1.37  1999/12/15 17:06:22  jp
-      Bug #70913#: write Ftn-/EndNoteInfo - at end of section or page/doc
-
-      Revision 1.36  1999/12/08 13:53:01  jp
-      Task #70258#: textattr for XMLAttrContainer
-
-      Revision 1.35  1999/11/29 09:09:49  jp
-      InsertSpecialChar: ask for ChpIter
-
-      Revision 1.34  1999/11/25 21:22:33  jp
-      Bug #70131#: OutFields: append the charattributes of the node to the sprms
-
-      Revision 1.33  1999/11/24 13:14:25  jp
-      remove GetTimePara/GetDatePara, ReplaceCr: insert char at row end
-
-      Revision 1.32  1999/11/22 18:26:04  jp
-      export of TOX and TOX entries
-
-      Revision 1.31  1999/11/12 16:07:12  jp
-      write foot-/endnote attributes with correct charfmts
-
-      Revision 1.30  1999/11/12 13:23:25  jp
-      Escapement: write AUTO-Escapment correct
-
-      Revision 1.29  1999/11/10 16:09:54  jp
-      Bug #67922#: write header/footer for w95
-
-      Revision 1.28  1999/10/29 17:45:57  jp
-      export of 'complex'(vert. merged) tables
-
-      Revision 1.26  1999/10/14 21:06:13  jp
-      Bug #68617#,#68705# and other little things
-
-*************************************************************************/
-
 
 
 
