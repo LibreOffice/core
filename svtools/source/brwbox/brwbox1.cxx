@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-08 11:43:35 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,30 @@ void BrowseBox::InsertDataColumn( USHORT nItemId,
     ColumnInserted( nPos );
 }
 //-------------------------------------------------------------------
-
+USHORT BrowseBox::ToggleSelectedColumn()
+{
+    USHORT nSelectedColId = USHRT_MAX;
+    if ( pColSel && pColSel->GetSelectCount() )
+    {
+        DoHideCursor( "ToggleSelectedColumn" );
+        ToggleSelection();
+        nSelectedColId = pCols->GetObject(pColSel->FirstSelected())->GetId();
+        pColSel->SelectAll(FALSE);
+    }
+    return nSelectedColId;
+}
+// -----------------------------------------------------------------------------
+void BrowseBox::SetToggledSelectedColumn(USHORT _nSelectedColumnId)
+{
+    if ( pColSel && _nSelectedColumnId != USHRT_MAX )
+    {
+        pColSel->Select( GetColumnPos( _nSelectedColumnId ) );
+        ToggleSelection();
+        DBG_TRACE1( "BrowseBox: %p->SetToggledSelectedColumn", this );
+        DoShowCursor( "SetToggledSelectedColumn" );
+    }
+}
+// -----------------------------------------------------------------------------
 void BrowseBox::FreezeColumn( USHORT nItemId, BOOL bFreeze )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -447,14 +470,7 @@ void BrowseBox::FreezeColumn( USHORT nItemId, BOOL bFreeze )
         return;
 
     // remark the column selection
-    USHORT nSelectedColId = USHRT_MAX;
-    if ( pColSel && pColSel->GetSelectCount() )
-    {
-        DoHideCursor( "FreezeColumn" );
-        ToggleSelection();
-        nSelectedColId = pCols->GetObject(pColSel->FirstSelected())->GetId();
-        pColSel->SelectAll(FALSE);
-    }
+    USHORT nSelectedColId = ToggleSelectedColumn();
 
     // freeze or unfreeze?
     if ( bFreeze )
@@ -502,13 +518,7 @@ void BrowseBox::FreezeColumn( USHORT nItemId, BOOL bFreeze )
     ((BrowserDataWin*)pDataWin)->Invalidate();
 
     // remember the column selection
-    if ( pColSel && nSelectedColId != USHRT_MAX )
-    {
-        pColSel->Select( GetColumnPos( nSelectedColId ) );
-        ToggleSelection();
-        DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
-        DoShowCursor( "FreezeColumn" );
-    }
+    SetToggledSelectedColumn(nSelectedColId);
 }
 
 //-------------------------------------------------------------------
@@ -533,34 +543,56 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
     BrowserColumn *pCol = pCols->GetObject(nOldPos);
     if (nOldPos != nPos)
     {
+        // remark the column selection
+        USHORT nSelectedColId = ToggleSelectedColumn();
+
         // determine old column area
         Size aDataWinSize( pDataWin->GetSizePixel() );
+        if ( ((BrowserDataWin*)pDataWin)->pHeaderBar )
+            aDataWinSize.Height() += ((BrowserDataWin*)pDataWin)->pHeaderBar->GetSizePixel().Height();
+
         Rectangle aFromRect( GetFieldRect( nColumnId) );
+        aFromRect.Right() += 2*MIN_COLUMNWIDTH;
+
+        USHORT nNextPos = nOldPos + 1;
+        if ( nOldPos > nPos )
+            nNextPos = nOldPos - 1;
+
+        BrowserColumn *pNextCol = pCols->GetObject(nNextPos);
+        Rectangle aNextRect(GetFieldRect( pNextCol->GetId() ));
 
         // move column internally
         pCols->Insert( pCols->Remove( nOldPos ), nPos );
 
         // determine new column area
         Rectangle aToRect( GetFieldRect( nColumnId ) );
+        aToRect.Right() += 2*MIN_COLUMNWIDTH;
 
         // do scroll, let redraw
-        Rectangle aForNewArea( Point( aToRect.Left(), 0 ),
-                    Size( aDataWinSize.Width() - aToRect.Left(),
-                          aDataWinSize.Height() ) );
-        Rectangle aForOldArea( Point( aFromRect.Right(), 0 ),
-                    Size( aDataWinSize.Width() - aFromRect.Right(),
-                          aDataWinSize.Height() ) );
-
         if( pDataWin->GetBackground().IsScrollable() )
         {
+            long nScroll = -aFromRect.GetWidth();
+            Rectangle aScrollArea;
             if ( nOldPos > nPos )
-                pDataWin->Scroll( -aFromRect.GetWidth()-4, 0, aForOldArea );
-            pDataWin->Scroll( aToRect.GetWidth()+4, 0, aForNewArea );
-            if ( nOldPos < nPos )
-                pDataWin->Scroll( -aFromRect.GetWidth()-4, 0, aForOldArea );
+            {
+                aScrollArea = Rectangle(Point(aToRect.Left(),0),
+                                        Point(aNextRect.Right(),aDataWinSize.Height()));
+                nScroll *= -1; // reverse direction
+            }
+            else
+                aScrollArea = Rectangle(Point(aNextRect.Left(),0),
+                                        Point(aToRect.Right(),aDataWinSize.Height()));
+
+            pDataWin->Scroll(nScroll,0,aScrollArea);
+            aToRect.Top() = 0;
+            aToRect.Bottom() = aScrollArea.Bottom();
+            Invalidate( aToRect );
         }
         else
             pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
+
+        // remember the column selection
+        SetToggledSelectedColumn(nSelectedColId);
 
         if ( m_pImpl->m_pAccessible )
         {
