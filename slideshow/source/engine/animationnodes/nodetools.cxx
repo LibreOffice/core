@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodetools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:06:19 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,84 +102,6 @@ namespace presentation
         }
 #endif
 
-        namespace
-        {
-            /// helper for generateSubsets
-            void recursiveDocTreeTraversal( DocTreeNode::VectorOfDocTreeNodes&  o_rOutput,
-                                            const DocTreeNode&                  rNode,
-                                            DocTreeNode::NodeType               eWantedType )
-            {
-                if( rNode.getType() == eWantedType )
-                {
-                    // don't copy whole node (which might contain children
-                    // and subchildren)
-                    o_rOutput.push_back( DocTreeNode( rNode.getStartIndex(),
-                                                      rNode.getEndIndex(),
-                                                      rNode.getType() ) );
-
-                    return;
-                }
-
-                const int nNumNodes( rNode.getNumberOfChildren() );
-                int nCurrNode;
-                for( nCurrNode=0; nCurrNode<nNumNodes; ++nCurrNode )
-                {
-                    recursiveDocTreeTraversal( o_rOutput,
-                                               rNode.getChild( nCurrNode ),
-                                               eWantedType );
-                }
-            }
-
-            /** helper for generateSubsets
-
-                This method only extracts children of the given
-                paragraph node index (nPara). This is for iterations
-                with a ParagraphTarget target attribute, where the
-                iteration is to be applied only to the selected
-                paragraph number.
-            */
-            void recursiveDocTreeTraversal( DocTreeNode::VectorOfDocTreeNodes&  o_rOutput,
-                                            const DocTreeNode&                  rNode,
-                                            DocTreeNode::NodeType               eWantedType,
-                                            sal_Int32                           nPara )
-            {
-                if( rNode.getType() == eWantedType )
-                {
-                    // don't copy whole node (which might contain children
-                    // and subchildren)
-                    o_rOutput.push_back( DocTreeNode( rNode.getStartIndex(),
-                                                      rNode.getEndIndex(),
-                                                      rNode.getType() ) );
-
-                    return;
-                }
-
-                const int nNumNodes( rNode.getNumberOfChildren() );
-                int nCurrNode;
-                for( nCurrNode=0; nCurrNode<nNumNodes; ++nCurrNode )
-                {
-                    const DocTreeNode& rCurrNode( rNode.getChild( nCurrNode ) );
-
-                    if( rCurrNode.getType() != DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH )
-                    {
-                        // skip all paragraph _not_ equal to given index
-                        recursiveDocTreeTraversal( o_rOutput,
-                                                   rCurrNode,
-                                                   eWantedType,
-                                                   nPara );
-                    }
-                    else if( nCurrNode == nPara )
-                    {
-                        recursiveDocTreeTraversal( o_rOutput,
-                                                   rCurrNode,
-                                                   eWantedType,
-                                                   nPara );
-                        return; // done
-                    }
-                }
-            }
-        }
-
         AttributableShapeSharedPtr lookupAttributableShape( const LayerManagerSharedPtr&                rLayerManager,
                                                             const uno::Reference< drawing::XShape >&    xShape          )
         {
@@ -198,44 +120,6 @@ namespace presentation
                               "lookupAttributableShape(): shape found does not implement AttributableShape interface" );
 
             return pRes;
-        }
-
-        void generateSubsets( DocTreeNode::VectorOfDocTreeNodes&    o_rOutput,
-                              const AttributableShapeSharedPtr&     pShape,
-                              DocTreeNode::NodeType                 eNodeType )
-        {
-            ENSURE_AND_THROW( pShape.get(),
-                              "generateSubsets(): Invalid Shape");
-
-            const int nNumNodes( pShape->getNumberOfTreeNodes() );
-            for( int nCurrNode=0; nCurrNode<nNumNodes; ++nCurrNode )
-            {
-                recursiveDocTreeTraversal( o_rOutput,
-                                           DocTreeNode::isLogicalNodeType( eNodeType ) ?
-                                           pShape->getLogicalDocTreeNode( nCurrNode ) :
-                                           pShape->getFormattingDocTreeNode( nCurrNode ),
-                                           eNodeType );
-            }
-        }
-
-        void generateSubsets( DocTreeNode::VectorOfDocTreeNodes&    o_rOutput,
-                              const AttributableShapeSharedPtr&     pShape,
-                              DocTreeNode::NodeType                 eNodeType,
-                              sal_Int32                             nPara )
-        {
-            ENSURE_AND_THROW( pShape.get(),
-                              "generateSubsets(): Invalid Shape");
-
-            const int nNumNodes( pShape->getNumberOfTreeNodes() );
-            for( int nCurrNode=0; nCurrNode<nNumNodes; ++nCurrNode )
-            {
-                recursiveDocTreeTraversal( o_rOutput,
-                                           DocTreeNode::isLogicalNodeType( eNodeType ) ?
-                                           pShape->getLogicalDocTreeNode( nCurrNode ) :
-                                           pShape->getFormattingDocTreeNode( nCurrNode ),
-                                           eNodeType,
-                                           nPara );
-            }
         }
 
         bool isIndefiniteTiming( const uno::Any& rAny )
