@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: container_XContainer.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:53:57 $ 
+'*  last change:$Date: 2003-08-07 15:05:14 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -72,7 +72,8 @@
 ' which must be specified in the object creation:
 
 '      Global oElementToInsert As Object
-'       Global oContainer As Object in case if the component tested doesnt support XNameContainer
+'      Global oContainer As Object in case if the component tested does 
+'                                  not support XNameContainer
 
 '*************************************************************************
 
@@ -114,41 +115,56 @@ On Error Goto ErrHndl
     Out.Log("Inserting element ... ")
     if hasUnoInterfaces(oObj, "com.sun.star.container.XNameContainer") then
         oObj.InsertByName(cIfcShortName, oElementToInsert)
-    else
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.container.XNameContainer") then
         oContainer.InsertByName(cIfcShortName, oElementToInsert)
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.awt.XControlContainer") then
+        oContainer.addControl("NewControl", oElementToInsert)
+    else
+        Out.LOG("There is nothig to trigger the Listener!")
     end if
         
     Dim bInsOK As Boolean
-    bInsOK = ElIns1 = 1 AND ElIns2 = 1
+    bInsOK = ElIns1 >= 1 AND ElIns2 >= 1
     Out.Log("... " + bInsOK)
     bOK = bOK AND bInsOK
 
     Out.Log("Removing element ... ")
+    ResetCounters()
     Dim bRemOK As Boolean
     if hasUnoInterfaces(oObj, "com.sun.star.container.XNameContainer") then
         oObj.RemoveByName(cIfcShortName)
-    else
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.container.XNameContainer") then
         oContainer.RemoveByName(cIfcShortName)
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.awt.XControlContainer") then
+        oContainer.removeControl(oElementToInsert)
     end if
         
-    bRemOK = ElRem1 = 1 AND ElRem2 = 1
+    bRemOK = ElRem1 >= 1 AND ElRem2 >= 1
     Out.Log("... " + bRemOK)
     bOK = bOK AND bRemOK
 
     Out.Log("Replacing element ... ")
+    ResetCounters()
     Dim bRepOK As Boolean
+    Dim bNothingToReplace as Boolean
+    
+    bNothingToReplace = FALSE
     
     if hasUnoInterfaces(oObj, "com.sun.star.container.XIndexReplace") then
         old = oObj.getByIndex(0)
         oObj.ReplaceByIndex(0, oElementToInsert)
         oObj.ReplaceByIndex(0, old)
-    else
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.container.XIndexReplace") then
         old = oContainer.getByIndex(0)
         oContainer.ReplaceByIndex(0, oElementToInsert)
         oContainer.ReplaceByIndex(0, old)
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.awt.XControlContainer") then
+        bNothingToReplace = TRUE
+    else
+        Out.LOG("There is nothig to trigger the Listener!")
     end if
     
-    bRepOK = ElRep1 = 2 AND ElRep2 = 2
+    bRepOK = (ElRep1 >= 1 AND ElRep2 >= 1) OR bNothingToReplace
     Out.Log("... " + bRepOK)
     bOK = bOK AND bRepOK
 
@@ -164,33 +180,48 @@ On Error Goto ErrHndl
     Out.Log("Inserting element ... ")
     if hasUnoInterfaces(oObj, "com.sun.star.container.XNameContainer") then
         oObj.InsertByName(cIfcShortName, oElementToInsert)
-    else
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.container.XNameContainer") then
         oContainer.InsertByName(cIfcShortName, oElementToInsert)
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.awt.XControlContainer") then
+        oContainer.addControl("NewControl", oElementToInsert)
+    else
+        Out.LOG("There is nothig to trigger the Listener!")
     end if
-        
-    bInsOK = ElIns1 = 0 AND ElIns2 = 1
+    bInsOK = ElIns1 = 0 AND ElIns2 >= 1
     Out.Log("... " + bInsOK)
     bOK = bOK AND bInsOK
 
     Out.Log("Removing element ... ")
     if hasUnoInterfaces(oObj, "com.sun.star.container.XNameContainer") then
         oObj.RemoveByName(cIfcShortName)
-    else
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.container.XNameContainer") then
         oContainer.RemoveByName(cIfcShortName)
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.awt.XControlContainer") then
+        oContainer.removeControl(oElementToInsert)
     end if
     
-    bRemOK = ElRem1 = 0 AND ElRem2 = 1
+    bRemOK = ElRem1 = 0 AND ElRem2 >= 1
     Out.Log("... " + bRemOK)
     bOK = bOK AND bRemOK
 
     Out.Log("Replacing element ... ")
+    bNothingToReplace = FALSE
+    
     if hasUnoInterfaces(oObj, "com.sun.star.container.XIndexReplace") then
+        old = oObj.getByIndex(0)
         oObj.ReplaceByIndex(0, oElementToInsert)
-    else
+        oObj.ReplaceByIndex(0, old)
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.container.XIndexReplace") then
+        old = oContainer.getByIndex(0)
         oContainer.ReplaceByIndex(0, oElementToInsert)
+        oContainer.ReplaceByIndex(0, old)
+    elseif hasUnoInterfaces(oContainer, "com.sun.star.awt.XControlContainer") then
+        bNothingToReplace = TRUE
+    else
+        Out.LOG("There is nothig to trigger the Listener!")
     end if
         
-    bRepOK = ElRep1 = 0 AND ElRep2 = 1
+    bRepOK = (ElRep1 = 0 AND ElRep2 >= 1) or bNothingToReplace 
     Out.Log("... " + bRepOK)
     bOK = bOK AND bRepOK
     Test.MethodTested("removeContainerListener()", bOK)
