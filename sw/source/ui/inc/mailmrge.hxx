@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:32 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     const String&   rTableName;
 
     USHORT          nMergeType;
-    ::com::sun::star::uno::Sequence< sal_Int32 >  aSelection;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
 
 
@@ -179,13 +179,13 @@ public:
          const String& rSourceName,
         const String& rTblName,
         sal_Int32 nCommandType,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      xConnection,
-        ::com::sun::star::uno::Sequence< sal_Int32 >* pSelection = 0);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);
     ~SwMailMergeDlg();
 
     inline USHORT   GetMergeType() { return nMergeType; }
-    const ::com::sun::star::uno::Sequence< sal_Int32 > GetSelection() const{return aSelection;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet();
+    inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
 
 };
 

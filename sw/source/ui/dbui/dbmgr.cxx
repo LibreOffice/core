@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 14:29:19 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDEXECUTION_HPP_
+#include <com/sun/star/sdb/XCompletedExecution.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -220,7 +223,9 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -229,6 +234,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
+#include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -281,7 +289,11 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
 
+using namespace svx;
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -295,7 +307,7 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::task;
 
 #define C2S(cChar) String::CreateFromAscii(cChar)
-#define C2U(char) rtl::OUString::createFromAscii(char)
+#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 #define DB_SEP_SPACE    0
 #define DB_SEP_TAB      1
@@ -309,6 +321,15 @@ const sal_Char cCommandType[] = "CommandType";
 const sal_Char cDataSourceName[] = "DataSourceName";
 const sal_Char cSelection[] = "Selection";
 const sal_Char cActiveConnection[] = "ActiveConnection";
+
+// -----------------------------------------------------------------------------
+// Use nameless namespace to avoid to rubbish the global namespace
+// -----------------------------------------------------------------------------
+namespace
+{
+
+}
+// -----------------------------------------------------------------------------
 
 /* -----------------------------17.07.00 17:04--------------------------------
 
@@ -362,7 +383,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     Beschreibung: Daten importieren
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
-                        const Sequence<PropertyValue>& rProperties,
+                        const ODataAccessDescriptor& _rDescriptor,
                         const String *pPrinter)
 {
 
@@ -372,41 +393,25 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     aData.nCommandType = CommandType::TABLE;
     Reference<XResultSet>  xResSet;
     Sequence<Any> aSelection;
-    Sequence<sal_Int32> aDlgSelection;
     Reference< XConnection> xConnection;
-    const PropertyValue* pValues = rProperties.getConstArray();
-    for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
-    {
-        if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
-            pValues[nPos].Value >>= aData.sDataSource;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommand)))
-            pValues[nPos].Value >>= aData.sCommand;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
-            pValues[nPos].Value >>= xResSet;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
-        {
-            //both types are possible here
-            pValues[nPos].Value >>= aSelection;
-            pValues[nPos].Value >>= aDlgSelection;
-        }
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
-            pValues[nPos].Value >>= aData.nCommandType;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
-            pValues[nPos].Value >>= xConnection;
-    }
+
+    _rDescriptor[daDataSource]  >>= aData.sDataSource;
+    _rDescriptor[daCommand]     >>= aData.sCommand;
+    _rDescriptor[daCommandType] >>= aData.nCommandType;
+
+    if ( _rDescriptor.has(daCursor) )
+        _rDescriptor[daCursor] >>= xResSet;
+    if ( _rDescriptor.has(daSelection) )
+        _rDescriptor[daSelection] >>= aSelection;
+    if ( _rDescriptor.has(daConnection) )
+        _rDescriptor[daConnection] >>= xConnection;
+
     if(!aData.sDataSource.getLength() || !aData.sCommand.getLength() || !xResSet.is())
     {
         return FALSE;
     }
-    if(aSelection.getLength())
-    {
-        aDlgSelection.realloc(aSelection.getLength());
-        sal_Int32* pDlgSelection = aDlgSelection.getArray();
-        const Any* pGridSelection = aSelection.getConstArray();
-        for(sal_Int32 nSel = 0; nSel < aSelection.getLength(); nSel++)
-            pGridSelection[nSel] >>= pDlgSelection[nSel];
-    }
-    pImpl->pMergeData = new SwDSParam(aData, xResSet, aDlgSelection);
+
+    pImpl->pMergeData = new SwDSParam(aData, xResSet, aSelection);
     SwDSParam*  pTemp = FindDSData(aData, FALSE);
     if(pTemp)
         *pTemp = *pImpl->pMergeData;
@@ -430,8 +435,9 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         //set to start position
         if(pImpl->pMergeData->aSelection.getLength())
         {
-            pImpl->pMergeData->bEndOfDB = !pImpl->pMergeData->xResultSet->absolute(
-                    (ULONG)pImpl->pMergeData->aSelection.getConstArray()[ pImpl->pMergeData->nSelectionIndex++ ] );
+            sal_Int32 nPos = 0;
+            pImpl->pMergeData->aSelection.getConstArray()[ pImpl->pMergeData->nSelectionIndex++ ] >>= nPos;
+            pImpl->pMergeData->bEndOfDB = !pImpl->pMergeData->xResultSet->absolute( nPos );
             pImpl->pMergeData->CheckEndOfDB();
             if(pImpl->pMergeData->nSelectionIndex >= pImpl->pMergeData->aSelection.getLength())
                 pImpl->pMergeData->bEndOfDB = TRUE;
@@ -449,8 +455,9 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         DBG_ERROR("exception in MergeNew()")
     }
 
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference<XDataSource> xSource = GetDbtoolsClient().getDataSource(aData.sDataSource, xMgr);
+    Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,aData.sDataSource);
+
+    Reference<XMultiServiceFactory> xMgr = ::comphelper::getProcessServiceFactory();
     if( xMgr.is() )
     {
         Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
@@ -839,13 +846,12 @@ SwNewDBMgr::~SwNewDBMgr()
                 if(xComp.is())
                     xComp->dispose();
             }
-            catch(RuntimeException& rEx)
+            catch(const RuntimeException& )
             {
                 //may be disposed already since multiple entries may have used the same connection
             }
         }
     }
-    delete pImpl->pDbtoolsClient;
     delete pImpl;
 }
 /*--------------------------------------------------------------------
@@ -1264,9 +1270,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             pImpl->pMergeData->sDataSource.equals(rDBName) && pImpl->pMergeData->sCommand.equals(rTableName))
         {
             xConnection = pImpl->pMergeData->xConnection;
-            Reference<XChild> xChild(xConnection, UNO_QUERY);
-            if(xChild.is())
-                xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+            Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,rDBName);
             bUseMergeData = sal_True;
         }
         if(!xConnection.is() || !xSource.is())
@@ -1377,7 +1381,7 @@ ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
             }
         }
         else
-            nRet = GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
+            nRet = SwNewDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
     }
     return nRet;
 }
@@ -1478,15 +1482,14 @@ Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(Reference<sdbc
         if(xQSupplier.is())
         {
             Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-            if(xQueries->hasByName(rTableOrQuery))
+            if ( xQueries->hasByName(rTableOrQuery) )
                 try
                 {
-                    Any aQuery = xQueries->getByName(rTableOrQuery);
-                    Reference<XPropertySet> xPropSet;
-                    aQuery >>= xPropSet;
-                    xRet = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                    xQueries->getByName(rTableOrQuery) >>= xRet;
                 }
-                catch(Exception&){}
+                catch(Exception&)
+                {
+                }
         }
     }
     return xRet;
@@ -1533,7 +1536,7 @@ String SwNewDBMgr::GetDBField(Reference<XPropertySet> xColumnProps,
 
             try
             {
-                SwDbtoolsClient aClient;
+                SwDbtoolsClient& aClient = SwNewDBMgr::GetDbtoolsClient();
                 sRet = aClient.getValue(
                     xColumnProps,
                     rDBFormatData.xFormatter,
@@ -1638,19 +1641,19 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
         {
             nOldRow = pFound->xResultSet->getRow();
         }
-        catch(Exception& rEx)
+        catch(const Exception& )
         {
             return FALSE;
         }
         //position to the desired index
         BOOL bMove = TRUE;
-        if(nOldRow != nAbsRecordId)
+        if ( nOldRow != static_cast<sal_Int32>(nAbsRecordId) )
             bMove = lcl_MoveAbsolute(pFound, nAbsRecordId);
         if(bMove)
         {
             bRet = lcl_GetColumnCnt(pFound, rColumnName, nLanguage, rResult, pNumber);
         }
-        if(nOldRow != nAbsRecordId)
+        if ( nOldRow != static_cast<sal_Int32>(nAbsRecordId) )
             bMove = lcl_MoveAbsolute(pFound, nOldRow);
     }
     return bRet;
@@ -1717,8 +1720,9 @@ BOOL SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
     {
         if(pParam->aSelection.getLength())
         {
-            pParam->bEndOfDB = !pParam->xResultSet->absolute(
-                    (ULONG)pParam->aSelection.getConstArray()[ pParam->nSelectionIndex++ ] );
+            sal_Int32 nPos = 0;
+            pParam->aSelection.getConstArray()[ pParam->nSelectionIndex++ ] >>= nPos;
+            pParam->bEndOfDB = !pParam->xResultSet->absolute( nPos );
             pParam->CheckEndOfDB();
             bRet = !pParam->bEndOfDB;
             if(pParam->nSelectionIndex >= pParam->aSelection.getLength())
@@ -1981,10 +1985,9 @@ void    SwNewDBMgr::AddDSData(const SwDBData& rData, long nSelStart, long nSelEn
         }
 
         pFound->aSelection.realloc(nSelEnd - nSelStart + 1);
-        sal_Int32* pSelection = pFound->aSelection.getArray();
-        sal_Int32 nIdx = 0;
-        for (long i = nSelStart; i <= nSelEnd; i++, nIdx++)
-            pSelection[nIdx] = i;
+        Any* pSelection = pFound->aSelection.getArray();
+        for (long i = nSelStart; i <= nSelEnd; i++, ++pSelection)
+            *pSelection <<= i;
     }
     else
         pFound->aSelection.realloc(0);
@@ -1999,8 +2002,8 @@ void    SwNewDBMgr::GetDSSelection(const SwDBData& rData, long& rSelStart, long&
         rSelStart = -1L;
     else
     {
-        rSelStart = pFound->aSelection.getConstArray()[0];
-        rSelEnd = pFound->aSelection.getConstArray()[pFound->aSelection.getLength() - 1];
+        pFound->aSelection.getConstArray()[0] >>= rSelStart;
+        pFound->aSelection.getConstArray()[pFound->aSelection.getLength() - 1] >>= rSelEnd;
     }
 }
 /* -----------------------------17.07.00 14:34--------------------------------
@@ -2039,81 +2042,52 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         return ;
     rtl::OUString sDataSource, sDataTableOrQuery;
     Sequence<Any> aSelection;
-    BOOL bHasSelectionProperty = FALSE;
+
     sal_Int32 nSelectionPos = 0;
     sal_Int32 nResultSetIdx = -1;
     sal_Int16 nCmdType = CommandType::TABLE;
-    const PropertyValue* pValues = rProperties.getConstArray();
     Reference< XConnection> xConnection;
-    for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
-    {
-        if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
-            pValues[nPos].Value >>= sDataSource;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommand)))
-            pValues[nPos].Value >>= sDataTableOrQuery;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
-        {
-            bHasSelectionProperty = TRUE;
-            nSelectionPos = nPos;
-            pValues[nPos].Value >>= aSelection;
-        }
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
-            pValues[nPos].Value >>= nCmdType;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
-            nResultSetIdx = nPos;
-        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
-            pValues[nPos].Value >>= xConnection;
-    }
+
+    ODataAccessDescriptor aDescriptor(rProperties);
+    aDescriptor[daDataSource]   >>= sDataSource;
+    aDescriptor[daCommand]      >>= sDataTableOrQuery;
+    aDescriptor[daCommandType]  >>= nCmdType;
+
+    if ( aDescriptor.has(daSelection) )
+        aDescriptor[daSelection] >>= aSelection;
+    if ( aDescriptor.has(daConnection) )
+        aDescriptor[daConnection] >>= xConnection;
+
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength())
     {
         DBG_ERROR("PropertyValues missing or unset")
         return;
     }
-    Sequence<sal_Int32> aDlgSelection(aSelection.getLength());
-    if(aSelection.getLength())
-    {
-        sal_Int32* pDlgSelection = aDlgSelection.getArray();
-        const Any* pGridSelection = aSelection.getConstArray();
-        for(sal_Int32 nSel = 0; nSel < aSelection.getLength(); nSel++)
-            pGridSelection[nSel] >>= pDlgSelection[nSel];
 
-    }
     pImpl->pMergeDialog = new SwMailMergeDlg(
                     &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                     sDataSource,
                     sDataTableOrQuery,
                     nCmdType,
                     xConnection,
-                    bHasSelectionProperty ? &aDlgSelection : 0 );
+                    aDescriptor.has(daSelection) ? &aSelection : 0 );
 
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
         SetMergeType(  pImpl->pMergeDialog->GetMergeType() );
-
-        Sequence<PropertyValue> aNewProperties = rProperties;
-        if(!bHasSelectionProperty)
-        {
-            nSelectionPos = rProperties.getLength();
-            aNewProperties.realloc(rProperties.getLength() + 1);
-            aNewProperties[nSelectionPos].Name = C2U("Selection");
-        }
-        aNewProperties[nSelectionPos].Value <<= pImpl->pMergeDialog->GetSelection();
+        aDescriptor[daSelection] <<= pImpl->pMergeDialog->GetSelection();
 
         Reference<XResultSet> xResSet = pImpl->pMergeDialog->GetResultSet();
         if(xResSet.is())
-        {
-            if(nResultSetIdx < 0)
-            {
-                nResultSetIdx = aNewProperties.getLength();
-                aNewProperties.realloc(nResultSetIdx + 1);
-                aNewProperties[nResultSetIdx].Name = C2U("Cursor");
-            }
-            aNewProperties[nResultSetIdx].Value <<= xResSet;
-        }
+            aDescriptor[daCursor] <<= xResSet;
+
         OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
         MergeNew(GetMergeType(),
                             rSh,
-                            aNewProperties);
+                            aDescriptor);
+        // reset the cursor inside
+        xResSet = NULL;
+        aDescriptor[daCursor] <<= xResSet;
     }
     DELETEZ(pImpl->pMergeDialog);
 }
@@ -2161,7 +2135,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     if(xChild.is())
         xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     if(!xSource.is())
-        xSource = GetDbtoolsClient().getDataSource(sDataSource, xMgr);
+        xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(sDataSource, xMgr);
     Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
     SwDBData aDBData;
     aDBData.sDataSource = sDataSource;
@@ -2195,7 +2169,68 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
  ---------------------------------------------------------------------------*/
 SwDbtoolsClient& SwNewDBMgr::GetDbtoolsClient()
 {
-    if(!pImpl->pDbtoolsClient)
-        pImpl->pDbtoolsClient = new SwDbtoolsClient;
-    return *pImpl->pDbtoolsClient;
+    static SwDbtoolsClient* pDbtoolsClient = NULL;
+    if ( !pDbtoolsClient )
+    {
+        static SwDbtoolsClient aDbToolsClient;
+        pDbtoolsClient = &aDbToolsClient;
+    }
+    return *pDbtoolsClient;
 }
+/* -----------------------------20.08.2002 12:00------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName)
+{
+    Reference<XDataSource> xSource;
+    Reference<XChild> xChild(_xConnection, UNO_QUERY);
+    if ( xChild.is() )
+        xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+    if ( !xSource.is() )
+        xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessServiceFactory());
+
+    return xSource;
+}
+/* -----------------------------20.08.2002 12:00------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDataSourceName,
+                                       const ::rtl::OUString& _sCommand,
+                                       sal_Int32 _nCommandType,
+                                       const Reference<XConnection>& _xConnection
+                                      )
+{
+    Reference<XResultSet> xResultSet;
+    try
+    {
+        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+        if( xMgr.is() )
+        {
+            Reference<XInterface> xInstance = xMgr->createInstance(
+                C2U( "com.sun.star.sdb.RowSet" ));
+            Reference <XPropertySet> xRowSetPropSet(xInstance, UNO_QUERY);
+            if(xRowSetPropSet.is())
+            {
+                xRowSetPropSet->setPropertyValue(C2U("DataSourceName"), makeAny(_sDataSourceName));
+                xRowSetPropSet->setPropertyValue(C2U("ActiveConnection"), makeAny(_xConnection));
+                xRowSetPropSet->setPropertyValue(C2U("Command"), makeAny(_sCommand));
+                xRowSetPropSet->setPropertyValue(C2U("CommandType"), makeAny(_nCommandType));
+
+                Reference< XCompletedExecution > xRowSet(xInstance, UNO_QUERY);
+
+                if ( xRowSet.is() )
+                {
+                    Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
+                    xRowSet->executeWithCompletion(xHandler);
+                }
+                xResultSet = Reference<XResultSet>(xRowSet, UNO_QUERY);
+            }
+        }
+    }
+    catch(const Exception&)
+    {
+        DBG_ASSERT(0,"Catched exception while creating a new RowSet!");
+    }
+    return xResultSet;
+}
+

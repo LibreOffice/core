@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 13:04:13 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2446,13 +2446,14 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         sal_Bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE);
         if( nWh )
         {
-            SfxUsrAnyItem* pConnectionItem = 0;
-            SfxUsrAnyItem* pColumnItem = 0;
-            SfxUsrAnyItem* pSourceItem = 0;
-            SfxUsrAnyItem* pCommandItem = 0;
+            SfxUsrAnyItem* pConnectionItem  = 0;
+            SfxUsrAnyItem* pCursorItem      = 0;
+            SfxUsrAnyItem* pColumnItem      = 0;
+            SfxUsrAnyItem* pSourceItem      = 0;
+            SfxUsrAnyItem* pCommandItem     = 0;
             SfxUsrAnyItem* pCommandTypeItem = 0;
-            SfxUsrAnyItem* pColumnNameItem = 0;
-            SfxUsrAnyItem* pSelectionItem = 0;
+            SfxUsrAnyItem* pColumnNameItem  = 0;
+            SfxUsrAnyItem* pSelectionItem   = 0;
 
             BOOL bDataAvailable = TRUE;
             ODataAccessDescriptor aDesc;
@@ -2462,7 +2463,8 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                 aDesc = ODataAccessObjectTransferable::extractObjectDescriptor(rData);
             else
                 bDataAvailable = FALSE;
-            if(bDataAvailable)
+
+            if ( bDataAvailable )
             {
                 pConnectionItem = new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aDesc[daConnection]);
                 pColumnItem = new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aDesc[daColumnObject]);
@@ -2471,6 +2473,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                 pCommandTypeItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aDesc[daCommandType]);
                 pColumnNameItem = new SfxUsrAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aDesc[daColumnName]);
                 pSelectionItem = new SfxUsrAnyItem(FN_DB_DATA_SELECTION_ANY, aDesc[daSelection]);
+                pCursorItem = new SfxUsrAnyItem(FN_DB_DATA_CURSOR_ANY, aDesc[daCursor]);
             }
 
             SwView& rView = rSh.GetView();
@@ -2482,13 +2485,14 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                 nWh, SFX_CALLMODE_ASYNCHRON, &aDataDesc,
                                 pConnectionItem, pColumnItem,
                                 pSourceItem, pCommandItem, pCommandTypeItem,
-                                pColumnNameItem, pSelectionItem, 0L);
+                                pColumnNameItem, pSelectionItem, pCursorItem,0L);
             delete pConnectionItem;
             delete pColumnItem;
             delete pSourceItem;
             delete pCommandItem;
             delete pCommandTypeItem;
             delete pColumnNameItem;
+            delete pCursorItem;
         }
         else
         {

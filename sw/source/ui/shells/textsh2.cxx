@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-10-16 11:11:34 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -146,7 +149,13 @@
 #include <fldbas.hxx>
 #endif
 #include "dbmgr.hxx"
-
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
+#include <memory>
 
 #include "view.hxx"
 #include "wrtsh.hxx"
@@ -158,6 +167,7 @@
 #include "dbinsdlg.hxx"
 
 using namespace rtl;
+using namespace svx;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -167,7 +177,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 #define DB_DD_DELIM 0x0b
 
@@ -175,6 +185,8 @@ struct DBTextStruct_Impl
 {
     SwDBData aDBData;
     Sequence<Any> aSelection;
+    Reference<XResultSet>   xCursor;
+    Reference<XConnection>  xConnection;
 };
 inline void AddSelList( List& rLst, long nRow )
 {
@@ -189,24 +201,52 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     sal_Int32 nCommandTypeArg = 0;
 
     const SfxPoolItem* pSourceItem = 0;
+    const SfxPoolItem* pCursorItem = 0;
+    const SfxPoolItem* pConnectionItem = 0;
     const SfxPoolItem* pCommandItem = 0;
     const SfxPoolItem* pCommandTypeItem = 0;
     const SfxPoolItem* pSelectionItem = 0;
+
+    // first get the selection of rows to be inserted
     pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, FALSE, &pSelectionItem);
+
     Sequence<Any> aSelection;
     if(pSelectionItem)
-    {
         ((SfxUsrAnyItem*)pSelectionItem)->GetValue() >>= aSelection;
-    }
+
+    // get the data source name
     pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, FALSE, &pSourceItem);
     if(pSourceItem)
         ((const SfxUsrAnyItem*)pSourceItem)->GetValue() >>= sSourceArg;
+
+    // get the command
     pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, FALSE, &pCommandItem);
     if(pCommandItem)
         ((const SfxUsrAnyItem*)pCommandItem)->GetValue() >>= sCommandArg;
+
+    // get the command type
     pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, FALSE, &pCommandTypeItem);
     if(pCommandTypeItem)
         ((const SfxUsrAnyItem*)pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
+
+    Reference<XConnection> xConnection;
+    pArgs->GetItemState(FN_DB_CONNECTION_ANY, FALSE, &pConnectionItem);
+    if ( pConnectionItem )
+        ((const SfxUsrAnyItem*)pConnectionItem)->GetValue() >>= xConnection;
+    // may be we even get no connection
+    if ( !xConnection.is() )
+    {
+        Reference<XDataSource> xSource;
+        xConnection = pNewDBMgr->GetConnection(sSourceArg, xSource);
+    }
+    if(!xConnection.is())
+        return ;
+
+    // get the cursor, we use to travel, may be NULL
+    Reference<XResultSet> xCursor;
+    pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, FALSE, &pCursorItem);
+    if ( pCursorItem )
+        ((const SfxUsrAnyItem*)pCursorItem)->GetValue() >>= xCursor;
 
     switch (nSlot)
     {
@@ -214,11 +254,16 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
             {
                 if(pSourceItem && pCommandItem && pCommandTypeItem)
                 {
-                    DBTextStruct_Impl* pNew = new DBTextStruct_Impl;
-                    pNew->aDBData.sDataSource = sSourceArg;
-                    pNew->aDBData.sCommand = sCommandArg;
-                    pNew->aDBData.nCommandType = nCommandTypeArg;
-                    pNew->aSelection = aSelection;
+                    DBTextStruct_Impl* pNew     = new DBTextStruct_Impl;
+                    pNew->aDBData.sDataSource   = sSourceArg;
+                    pNew->aDBData.sCommand      = sCommandArg;
+                    pNew->aDBData.nCommandType  = nCommandTypeArg;
+                    pNew->aSelection            = aSelection;
+                    //if the cursor is NULL, it must be created inside InsertDBTextHdl
+                    // because it called via a PostUserEvent
+                    pNew->xCursor               = xCursor;
+                    pNew->xConnection           = xConnection;
+
                     Application::PostUserEvent( STATIC_LINK( this, SwBaseShell,
                                             InsertDBTextHdl ), pNew );
                     // the pNew will be removed in InsertDBTextHdl !!
@@ -228,114 +273,44 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
         case FN_QRY_MERGE_FIELD:
             {
-                Sequence<sal_Int32> aIntSelection(aSelection.getLength());
-                sal_Int32 * pIntSelection = aIntSelection.getArray();
-                const Any* pSelection = aSelection.getConstArray();
-                sal_Int32 nIdx = 0;
-                for( sal_Int32 i = 0; i < aSelection.getLength(); i++ , nIdx++)
-                    pSelection[nIdx] >>= pIntSelection[nIdx];
-
-                Reference<XResultSet>  xResultSet;
-                Reference<XDataSource> xSource;
-                SwDBData aData;
-                aData.sDataSource = sSourceArg;
-                aData.sCommand = sCommandArg;
-                aData.nCommandType = nCommandTypeArg;
-                Reference< XConnection> xConnection = pNewDBMgr->GetConnection(aData.sDataSource, xSource);
-                if(!xConnection.is())
-                    return ;
-                String sStatement;
-                if(nCommandTypeArg == CommandType::COMMAND)
-                    sStatement = sCommandArg;
+                // we don't get any cursor, so we must create our own
                 BOOL bDisposeResultSet = FALSE;
-                if(!sStatement.Len())
+                if ( !xCursor.is() )
                 {
-                    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-                    if( xMgr.is() )
-                    {
-                        Reference<XInterface> xInstance = xMgr->createInstance(
-                            C2U( "com.sun.star.sdb.RowSet" ));
-                        Reference <XPropertySet> xRowSetPropSet(xInstance, UNO_QUERY);
-                        if(xRowSetPropSet.is())
-                        {
-                            Any aConnection;
-                            aConnection <<= xConnection;
-                            xRowSetPropSet->setPropertyValue(C2U("ActiveConnection"), aConnection);
-                            Any aString;
-                            aString <<= aData.sDataSource;
-                            xRowSetPropSet->setPropertyValue(C2U("DataSourceName"), aString);
-                            aString <<= aData.sCommand;
-                            xRowSetPropSet->setPropertyValue(C2U("Command"), aString);
-                            Any aInt;
-                            aInt <<= aData.nCommandType;
-                            xRowSetPropSet->setPropertyValue(C2U("CommandType"), aInt);
-                            Reference< XRowSet > xRowSet(xInstance, UNO_QUERY);
-                            xRowSet->execute();
-                            xResultSet = Reference<XResultSet>(xRowSet, UNO_QUERY);
-                            bDisposeResultSet = TRUE;
-                        }
-                    }
+                    xCursor = SwNewDBMgr::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection);
+                    bDisposeResultSet = xCursor.is();
                 }
-                else
-                {
-                    try
-                    {
-                        Reference<XStatement> xStatement = xConnection->createStatement();
-                        xResultSet = xStatement->executeQuery( sStatement );
-                    }
-                    catch(Exception& rExcept)
-                    {
-                    }
-                }
-                Sequence<PropertyValue> aProperties(5);
-                PropertyValue* pProperties = aProperties.getArray();
-                pProperties[0].Name = C2U("DataSourceName");
-                pProperties[0].Value <<= (OUString)aData.sDataSource;
-                pProperties[1].Name = C2U("Command");
-                pProperties[1].Value <<= (OUString)aData.sCommand;
-                pProperties[2].Name = C2U("Cursor");
-                pProperties[2].Value <<= xResultSet;
-                pProperties[3].Name = C2U("Selection");
-                pProperties[3].Value <<= aIntSelection;
-                pProperties[4].Name = C2U("CommandType");
-                pProperties[4].Value <<= aData.nCommandType;
 
-                pNewDBMgr->MergeNew(DBMGR_MERGE, *GetShellPtr(), aProperties);
-                if(bDisposeResultSet)
-                {
-                    Reference<XComponent> xComp(xResultSet, UNO_QUERY);
-                    if(xComp.is())
-                        xComp->dispose();
-                }
+                ODataAccessDescriptor aDescriptor;
+                aDescriptor[daDataSource]   <<= sSourceArg;
+                aDescriptor[daCommand]      <<= sCommandArg;
+                aDescriptor[daCursor]       <<= xCursor;
+                aDescriptor[daSelection]    <<= aSelection;
+                aDescriptor[daCommandType]  <<= nCommandTypeArg;
+
+                pNewDBMgr->MergeNew(DBMGR_MERGE, *GetShellPtr(), aDescriptor);
+
+                if ( bDisposeResultSet )
+                    ::comphelper::disposeComponent(xCursor);
             }
             break;
 
         case FN_QRY_INSERT_FIELD:
             {
-                const SfxPoolItem* pConnectionItem = 0;
                 const SfxPoolItem* pColumnItem = 0;
                 const SfxPoolItem* pColumnNameItem = 0;
 
-                pArgs->GetItemState(FN_DB_CONNECTION_ANY, FALSE, &pConnectionItem);
                 pArgs->GetItemState(FN_DB_COLUMN_ANY, FALSE, &pColumnItem);
                 pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, FALSE, &pColumnNameItem);
 
-                OUString sSource, sCommand;
-                sal_Int32 nCommandType = 0;
-                if(pSourceItem)
-                    ((SfxUsrAnyItem*)pSourceItem)->GetValue() >>= sSource;
-                if(pCommandItem)
-                    ((SfxUsrAnyItem*)pCommandItem)->GetValue() >>= sCommand;
-                if(pCommandTypeItem)
-                    ((SfxUsrAnyItem*)pCommandTypeItem)->GetValue() >>= nCommandType;
                 OUString sColumnName;
                 if(pColumnNameItem)
                     ((SfxUsrAnyItem*)pColumnNameItem)->GetValue() >>= sColumnName;
-                String sDBName = sSource;
+                String sDBName = sSourceArg;
                 sDBName += DB_DELIM;
-                sDBName += (String)sCommand;
+                sDBName += (String)sCommandArg;
                 sDBName += DB_DELIM;
-                sDBName += String::CreateFromInt32(nCommandType);
+                sDBName += String::CreateFromInt32(nCommandTypeArg);
                 sDBName += DB_DELIM;
                 sDBName += (String)sColumnName;
 
@@ -363,9 +338,16 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
 {
     if( pDBStruct )
     {
-        Reference<XDataSource> xSource;
-        Reference< sdbc::XConnection> xConnection =
-            SwNewDBMgr::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
+        sal_Bool bDispose = sal_False;
+        Reference< sdbc::XConnection> xConnection = pDBStruct->xConnection;
+        Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
+
+        if ( !xConnection.is() )
+        {
+            xConnection = SwNewDBMgr::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
+            bDispose = sal_True;
+        }
+
         Reference< XColumnsSupplier> xColSupp;
         if(xConnection.is())
             xColSupp = SwNewDBMgr::GetColumnSupplier(xConnection,
@@ -376,21 +358,19 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         if( xColSupp.is() )
         {
             SwDBData aDBData = pDBStruct->aDBData;
-            SwInsertDBColAutoPilot *pDlg = new SwInsertDBColAutoPilot(
+            ::std::auto_ptr<SwInsertDBColAutoPilot> pDlg( new SwInsertDBColAutoPilot(
                     pThis->GetView(),
                     xSource,
                     xColSupp,
-                    aDBData );
+                    aDBData ) );
             if( RET_OK == pDlg->Execute() )
             {
-                Reference <XResultSet> xResSet;
+                Reference <XResultSet> xResSet = pDBStruct->xCursor;
                 pDlg->DataToDoc( pDBStruct->aSelection, xSource, xConnection, xResSet);
             }
-            delete pDlg;
         }
-        Reference <XComponent> xComp(xConnection, UNO_QUERY);
-        if(xComp.is())
-            xComp->dispose();
+        if ( bDispose )
+            ::comphelper::disposeComponent(xConnection);
     }
 
     delete pDBStruct;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdbtoolsclient.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-08-30 13:47:00 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,19 +77,14 @@
 class SwDbtoolsClient
 {
 private:
-    static  ::osl::Mutex    m_aMutex;
-    static  sal_Int32       m_nClients;
-    static oslModule        m_hDbtoolsModule;
-    static ::connectivity::simple::createDataAccessToolsFactoryFunction
-                            m_pFactoryCreationFunc;
-
-    ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    m_xDataAccessTools;
-    ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion > m_xAccessTypeConversion;
+    ::rtl::Reference< ::connectivity::simple::IDataAccessTools >            m_xDataAccessTools;
+    ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >   m_xAccessTypeConversion;
+    ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >     m_xDataAccessFactory;
 
     static void registerClient();
     static void revokeClient();
     void getFactory();
-    ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory > m_xDataAccessFactory;
+
     ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    getDataAccessTools();
     ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion > getAccessTypeConversion();
 

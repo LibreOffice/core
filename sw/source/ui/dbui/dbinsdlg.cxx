@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 14:29:06 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #endif
 
 #pragma hdrstop
+
+#include <memory>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -277,6 +279,9 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -290,7 +295,7 @@ using namespace com::sun::star::util;
 
 const char cDBFldStart  = '<';
 const char cDBFldEnd    = '>';
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
 // Hilfsstruktur fuers einfuegen von Datenbankspalten als Felder oder Text
@@ -524,7 +529,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                                 }
                                 pNew->nDBNumFmt = nFmt;
                             }
-                            catch(Exception& rExcept)
+                            catch(const Exception& )
                             {
                                 DBG_ERROR("illegal number format key")
                             }
@@ -532,8 +537,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                     }
                     else
                     {
-                        pNew->nDBNumFmt = rView.GetWrtShell().GetNewDBMgr()->
-                                            GetDbtoolsClient().getDefaultNumberFormat(xCol,
+                        pNew->nDBNumFmt = SwNewDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xCol,
                                                     xDocNumberFormatTypes, aDocLocale);
                     }
 
@@ -1177,67 +1181,18 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     const Any* pSelection = rSelection.getLength() ? rSelection.getConstArray() : 0;
     SwWrtShell& rSh = pView->GetWrtShell();
 
-    Reference< sdbc::XRow > xRow(xResultSet, UNO_QUERY);
-
     BOOL bScrollable = TRUE;
     //with the drag and drop interface no result set is initially available
-    Reference< sdbc::XStatement > xStatement;
     BOOL bDisposeResultSet = FALSE;
-    if(!xRow.is())
+    // we don't have a cursor, so we have to create our own RowSet
+    if ( !xResultSet.is() )
     {
-        try
-        {
-            bScrollable = xConnection->getMetaData()->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
-
-            xStatement = xConnection->createStatement();
-            Reference< XPropertySet > xStatProp(xStatement, UNO_QUERY);
-            if(bScrollable)
-            {
-                Any aResType;
-                aResType <<= (sal_Int32)ResultSetType::SCROLL_INSENSITIVE;
-                xStatProp->setPropertyValue(C2U("ResultSetType"), aResType);
-            }
-            if(xStatement.is() && sdb::CommandType::COMMAND == aDBData.nCommandType)
-                xResultSet = xStatement->executeQuery(aDBData.sCommand);
-            else
-            {
-                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-                if( xMgr.is() )
-                {
-                    Reference<XInterface> xInstance = xMgr->createInstance(
-                        C2U( "com.sun.star.sdb.RowSet" ));
-                    Reference <XPropertySet> xRowSetPropSet(xInstance, UNO_QUERY);
-                    if(xRowSetPropSet.is())
-                    {
-                        Any aConnection;
-                        aConnection <<= xConnection;
-                        xRowSetPropSet->setPropertyValue(C2U("ActiveConnection"), aConnection);
-                        Any aString;
-                        aString <<= aDBData.sDataSource;
-                        xRowSetPropSet->setPropertyValue(C2U("DataSourceName"), aString);
-                        aString <<= aDBData.sCommand;
-                        xRowSetPropSet->setPropertyValue(C2U("Command"), aString);
-                        Any aInt;
-                        aInt <<= aDBData.nCommandType;
-                        xRowSetPropSet->setPropertyValue(C2U("CommandType"), aInt);
-
-
-                        Reference< XRowSet > xRowSet(xInstance, UNO_QUERY);
-                        xRowSet->execute();
-                        xResultSet = Reference<XResultSet>(xRowSet, UNO_QUERY);
-                        bDisposeResultSet = TRUE;
-                    }
-                }
-            }
-
-            xRow = Reference< sdbc::XRow >(xResultSet, UNO_QUERY);
-        }
-        catch(Exception& aExcept)
-        {
-            DBG_ERROR("exception caught")
-        }
+        xResultSet = SwNewDBMgr::createCursor(aDBData.sDataSource,aDBData.sCommand,aDBData.nCommandType,xConnection);
+        bDisposeResultSet = xResultSet.is();
     }
-    if(!xResultSet.is() || !xRow.is())
+
+    Reference< sdbc::XRow > xRow(xResultSet, UNO_QUERY);
+    if ( !xRow.is() )
         return;
 
     rSh.StartAllAction();
@@ -1251,7 +1206,10 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     if( rSh.HasSelection() )
         rSh.DelRight();
 
-    SwWait *pWait = 0;
+    ::std::auto_ptr<SwWait> pWait;
+
+    Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
+    Reference <XNameAccess> xCols = xColsSupp->getColumns();
 
     do{                                 // middle checked loop!!
     if( bAsTable )          // Daten als Tabelle einfuegen
@@ -1325,39 +1283,21 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             BOOL bBreak = FALSE;
             try
             {
-                if(bScrollable)
-                {
-                    if(pSelection)
-                    {
-                        sal_Int32 nPos; pSelection[i] >>= nPos;
-                        bBreak = !xResultSet->absolute(nPos);
-                    }
-                    else if(!i)
-                        bBreak = !xResultSet->first();
-                }
-                else if(pSelection)
+                if(pSelection)
                 {
                     sal_Int32 nPos; pSelection[i] >>= nPos;
-                    sal_Int32 nPrePos = 0;
-                    if(i)
-                        pSelection[i - 1] >>= nPrePos;
-                    long nDiff = nPos - nPrePos;
-                    while(nDiff > 0 && !bBreak)
-                    {
-                        bBreak = !xResultSet->next();
-                        nDiff--;
-                    }
+                    bBreak = !xResultSet->absolute(nPos);
                 }
                 else if(!i)
-                    bBreak = !xResultSet->next();
-
+                    bBreak = !xResultSet->first();
             }
-            catch(Exception& aExcept)
+            catch(const Exception& )
             {
                 bBreak = TRUE;
             }
             if(bBreak)
                 break;
+
             for( n = 0; n < nCols; ++n )
             {
                 // beim aller erstenmal KEIN GoNextCell, weil wir schon
@@ -1367,12 +1307,10 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     rSh.GoNextCell();
 
                 const SwInsDBColumn* pEntry = aColFlds[ n ];
-                Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
-                Reference <XNameAccess> xCols = xColsSupp->getColumns();
-                Any aCol = xCols->getByName(pEntry->sColumn);
-                Reference< XPropertySet > xColumnProps;
-                aCol >>= xColumnProps;
-                Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
+
+                Reference< XColumn > xColumn;
+                xCols->getByName(pEntry->sColumn) >>= xColumn;
+
                 try
                 {
                     if( pEntry->bHasFmt )
@@ -1416,15 +1354,14 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
             if( !pSelection )
             {
-                BOOL bNext = xResultSet->next();
-                if(!bNext)
+                if ( !xResultSet->next() )
                     break;
             }
             else if( i+1 >= rSelection.getLength() )
                 break;
 
             if( 10 == i )
-                pWait = new SwWait( *pView->GetDocShell(), TRUE );
+                pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), TRUE ));
         }
 
         rSh.MoveTable( fnTableCurr, fnTableStart );
@@ -1528,39 +1465,23 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 BOOL bBreak = FALSE;
                 try
                 {
-                    if(bScrollable)
+                    if(pSelection)
                     {
-                        if(pSelection)
-                        {
-                            sal_Int32 nPos; pSelection[i] >>= nPos;
-                            bBreak = !xResultSet->absolute(nPos);
-                        }
-                        else if(!i)
-                            bBreak = !xResultSet->first();
-                    }
-                    else if(pSelection)
-                    {
-                        sal_Int32 nPos, nOldPos;
-                        pSelection[i] >>= nPos;
-                        if( i )
-                            pSelection[i-1] >>= nOldPos;
-                        else
-                            nOldPos = 0;
-
-                        long nDiff = nPos - nOldPos;
-                        while(nDiff > 0 && !bBreak)
-                        {
-                            bBreak = !xResultSet->next();
-                            nDiff--;
-                        }
+                        sal_Int32 nPos; pSelection[i] >>= nPos;
+                        bBreak = !xResultSet->absolute(nPos);
                     }
                     else if(!i)
-                        bBreak = !xResultSet->next();
+                        bBreak = !xResultSet->first();
                 }
                 catch(Exception&)
-                { bBreak = TRUE; }
+                {
+                    bBreak = TRUE;
+                }
+
                 if(bBreak)
                     break;
+
+
                 for( n = 0; n < nCols; ++n )
                 {
                     _DB_Column* pDBCol = aColArr[ n ];
@@ -1584,11 +1505,10 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             SwDBField* pFld = (SwDBField*)pDBCol->DB_ColumnData.
                                                 pField->Copy();
                             double nValue = DBL_MAX;
-                            Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
-                            Reference <XNameAccess> xCols = xColsSupp->getColumns();
-                            Any aCol = xCols->getByName(pDBCol->pColInfo->sColumn);
+
                             Reference< XPropertySet > xColumnProps;
-                            aCol >>= xColumnProps;
+                            xCols->getByName(pDBCol->pColInfo->sColumn) >>= xColumnProps;
+
                             pFld->SetExpansion( SwNewDBMgr::GetDBField(
                                                 xColumnProps,
                                                 aDBFormatData,
@@ -1605,11 +1525,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     case _DB_Column::DB_COL_TEXT:
                         {
                             double nValue = DBL_MAX;
-                            Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
-                            Reference <XNameAccess> xCols = xColsSupp->getColumns();
-                            Any aCol = xCols->getByName(pDBCol->pColInfo->sColumn);
                             Reference< XPropertySet > xColumnProps;
-                            aCol >>= xColumnProps;
+                            xCols->getByName(pDBCol->pColInfo->sColumn) >>= xColumnProps;
                             sIns = SwNewDBMgr::GetDBField(
                                                 xColumnProps,
                                                 aDBFormatData,
@@ -1659,7 +1576,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     rSh.SwEditShell::SplitNode();
 
                 if( 10 == i )
-                    pWait = new SwWait( *pView->GetDocShell(), TRUE );
+                    pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), TRUE ));
             }
 
             if( !bSetCrsr && USHRT_MAX != (n = rSh.FindBookmark( C2S("DB_Mark" ))) )
@@ -1682,14 +1599,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     }
     rSh.ClearMark();
     rSh.EndAllAction();
-    delete pWait;
-    if(bDisposeResultSet)
-    {
-        Reference<XComponent> xComp(xResultSet, UNO_QUERY);
-        if(xComp.is())
-            xComp->dispose();
-    }
 
+    if ( bDisposeResultSet )
+        ::comphelper::disposeComponent(xResultSet);
 }
 void SwInsertDBColAutoPilot::SetTabSet()
 {

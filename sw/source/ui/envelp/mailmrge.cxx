@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 14:58:00 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,12 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
+#include <com/sun/star/sdb/XResultSetAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
@@ -165,6 +171,7 @@
 using namespace rtl;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
@@ -177,7 +184,7 @@ using namespace com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 /* -----------------------------05.06.01 13:54--------------------------------
 
@@ -223,10 +230,8 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject& aEvent ) throw (R
     //call the parent to enable selection mode
     Sequence <Any> aSelection;
     if(rParent.pImpl->xSelSupp.is())
-    {
-        Any aSel = rParent.pImpl->xSelSupp->getSelection();
-        aSel >>= aSelection;
-    }
+        rParent.pImpl->xSelSupp->getSelection() >>= aSelection;
+
     sal_Bool bEnable = aSelection.getLength() > 0;
     rParent.aMarkedRB.Enable(bEnable);
     if(bEnable)
@@ -234,7 +239,7 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject& aEvent ) throw (R
     else if(rParent.aMarkedRB.IsChecked())
     {
         rParent.aAllRB.Check();
-        rParent.aSelection.realloc(0);
+        rParent.m_aSelection.realloc(0);
     }
 }
 /* -----------------------------05.06.01 14:06--------------------------------
@@ -251,8 +256,8 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
          const String& rSourceName,
         const String& rTblName,
         sal_Int32 nCommandType,
-        Reference< XConnection> xConnection,
-        Sequence< sal_Int32 >* pSelection) :
+        const Reference< XConnection>& _xConnection,
+        Sequence< Any >* pSelection) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_MAILMERGE)),
     pBeamerWin      (new Window(this, ResId(WIN_BEAMER))),
@@ -307,7 +312,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     FreeResource();
     if(pSelection)
     {
-        aSelection = *pSelection;
+        m_aSelection = *pSelection;
         //move all controls
         long nDiff = aRecordFL.GetPosPixel().Y() - pBeamerWin->GetPosPixel().Y();
         pBeamerWin->Show(FALSE);
@@ -448,12 +453,13 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aToNF.SetModifyHdl(aLk);
 
     SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
-    if(xConnection.is())
-        pNewDBMgr->GetColumnNames(&aAddressFldLB, xConnection, rTableName);
+    if(_xConnection.is())
+        pNewDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTableName);
     else
         pNewDBMgr->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
     for(USHORT nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
+
     aAddressFldLB.SelectEntry(C2S("EMAIL"));
 
     aPathED.SetText(pModOpt->GetMailingPath());
@@ -477,7 +483,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     if (aColumnLB.GetSelectEntryCount() == 0)
         aColumnLB.SelectEntryPos(0);
 
-    const BOOL bEnable = aSelection.getLength() != 0;
+    const BOOL bEnable = m_aSelection.getLength() != 0;
     aMarkedRB.Enable(bEnable);
     if (bEnable)
         aMarkedRB.Check();
@@ -688,27 +694,31 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
             nStart = nZw;
         }
 
-        aSelection.realloc(nEnd - nStart + 1);
-        sal_Int32* pSelection = aSelection.getArray();
-        sal_Int32 nPos = 0;
-        for (ULONG i = nStart; i <= nEnd; i++, nPos++)
-            pSelection[nPos] = i;
+        m_aSelection.realloc(nEnd - nStart + 1);
+        Any* pSelection = m_aSelection.getArray();
+        for (ULONG i = nStart; i <= nEnd; ++i, ++pSelection)
+            *pSelection <<= i;
     }
     else if (aAllRB.IsChecked() )
-        aSelection.realloc(0);  // Leere Selektion = Alles einfuegen
+        m_aSelection.realloc(0);    // Leere Selektion = Alles einfuegen
     else
     {
         if(pImpl->xSelSupp.is())
         {
             //update selection
-            Any aSel = pImpl->xSelSupp->getSelection();
-            Sequence <Any> aGridSelection;
-            aSel >>= aGridSelection;
-            aSelection.realloc(aGridSelection.getLength());
-            sal_Int32* pDlgSelection = aSelection.getArray();
-            const Any* pGridSelection = aGridSelection.getConstArray();
-            for(sal_Int32 nSel = 0; nSel < aGridSelection.getLength(); nSel++)
-                pGridSelection[nSel] >>= pDlgSelection[nSel];
+            Reference< XRowLocate > xRowLocate(pImpl->xFController->getModel(),UNO_QUERY);
+            Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
+            pImpl->xSelSupp->getSelection() >>= m_aSelection;
+            if ( xRowLocate.is() )
+            {
+                Any* pBegin = m_aSelection.getArray();
+                Any* pEnd   = pBegin + m_aSelection.getLength();
+                for (;pBegin != pEnd ; ++pBegin)
+                {
+                    if ( xRowLocate->moveToBookmark(*pBegin) )
+                        *pBegin <<= xRes->getRow();
+                }
+            }
         }
     }
     SwPrintData aPrtData = *SW_MOD()->GetPrtOptions(FALSE);
@@ -782,14 +792,17 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, pBtn )
 /* -----------------------------05.06.01 14:56--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference<XResultSet> SwMailMergeDlg::GetResultSet()
+Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
 {
-    Reference< XResultSet >  xResSet;
-    if(pImpl->xFController.is())
+    Reference< XResultSet >  xResSetClone;
+    if ( pImpl->xFController.is() )
     {
-        Reference< awt::XTabControllerModel > xTModel = pImpl->xFController->getModel();
-        xResSet = Reference< XResultSet >(xTModel, UNO_QUERY);
+        // we create a clone to do the task
+        Reference< XResultSetAccess > xResultSetAccess( pImpl->xFController->getModel(),UNO_QUERY);
+        if ( xResultSetAccess.is() )
+            xResSetClone = xResultSetAccess->createResultSet();
     }
-    return xResSet;
+    return xResSetClone;
 }
+// -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-08-30 13:54:42 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
@@ -108,6 +109,9 @@ namespace com{namespace sun{namespace star{
         class XNumberFormatter;
     }
 }}}
+namespace svx {
+    class ODataAccessDescriptor;
+}
 
 struct SwDBFormatData
 {
@@ -154,7 +158,7 @@ struct SwDSParam : public SwDBData
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       xStatement;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResultSet;
-    ::com::sun::star::uno::Sequence< sal_Int32 >                                aSelection;
+    ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any >              aSelection;
     BOOL bScrollable;
     BOOL bEndOfDB;
     BOOL bAfterSelection;
@@ -169,8 +173,8 @@ struct SwDSParam : public SwDBData
         {}
 
     SwDSParam(const SwDBData& rData,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResSet,
-        ::com::sun::star::uno::Sequence< sal_Int32 >    rSelection) :
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>&    xResSet,
+        const ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any >&   rSelection) :
         SwDBData(rData),
         bScrollable(TRUE),
         bEndOfDB(FALSE),
@@ -193,12 +197,11 @@ struct SwNewDBMgr_Impl
 {
     SwDSParam*          pMergeData;
     SwMailMergeDlg*     pMergeDialog;
-    SwDbtoolsClient*    pDbtoolsClient;
 
-    SwNewDBMgr_Impl() :
-        pMergeData(0),
-        pMergeDialog(0),
-        pDbtoolsClient(0){}
+    SwNewDBMgr_Impl()
+       :pMergeData(0)
+       ,pMergeDialog(0)
+        {}
 };
 class SwNewDBMgr
 {
@@ -216,8 +219,6 @@ class SwNewDBMgr
 
     SwDSParam*          pMergeData;
     SwMailMergeDlg*     pMergeDialog;
-
-    SwDbtoolsClient*    pDbtoolsClient;
 
     SwDSParam*          FindDSData(const SwDBData& rData, BOOL bCreate);
     SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, BOOL bCreate);
@@ -247,8 +248,8 @@ public:
 
     // Mischen von Datensaetzen in Felder
     BOOL            MergeNew(USHORT nOpt, SwWrtShell& rSh,
-                        const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties,
-                        const String *pPrinter = NULL);
+                             const ::svx::ODataAccessDescriptor& _rDescriptor,
+                             const String *pPrinter = NULL);
     BOOL            Merge(SwWrtShell* pSh);
     // Mischen von Datensaetzen in Felder, dann drucken
     BOOL            MergePrint( SwView& rView,
@@ -356,7 +357,39 @@ public:
 
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetExistingDatabaseNames();
 
-    SwDbtoolsClient&    GetDbtoolsClient();
+    static SwDbtoolsClient&    GetDbtoolsClient();
+
+    /** try to get the data source from the given connection through the XChild interface.
+        If this is not possible, the data source will be created through its name.
+        @param _xConnection
+            The connection which should support the XChild interface. (not a must)
+        @param _sDataSourceName
+            The data source name will be used to create the data source when the connection can not be used for it.
+        @return
+            The data source.
+    */
+    static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>
+            getDataSourceAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName);
+
+    /** creates a RowSet, which must be disposed after use.
+        @param  _sDataSourceName
+            The data source name
+        @param  _sCommand
+            The command.
+        @param  _nCommandType
+            The type of the command.
+        @param  _xConnection
+            The active connection which may be <NULL/>.
+        @return
+            The new created RowSet.
+
+    */
+    static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>
+            createCursor(   const ::rtl::OUString& _sDataSourceName,
+                            const ::rtl::OUString& _sCommand,
+                            sal_Int32 _nCommandType,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                            );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdbtoolsclient.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-08-30 13:47:52 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 12:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,13 +91,38 @@ using namespace ::com::sun::star::sdb;
 //====================================================================
 //= SwDbtoolsClient
 //====================================================================
-::osl::Mutex    SwDbtoolsClient::m_aMutex;
-sal_Int32       SwDbtoolsClient::m_nClients = 0;
-oslModule       SwDbtoolsClient::m_hDbtoolsModule = NULL;
-createDataAccessToolsFactoryFunction
-                SwDbtoolsClient::m_pFactoryCreationFunc = NULL;
-
-//--------------------------------------------------------------------
+namespace
+{
+    // -----------------------------------------------------------------------------
+    // this namespace contains access to all static members of the class SwDbtoolsClient
+    // to make the initialize of the dll a little bit faster
+    // -----------------------------------------------------------------------------
+    ::osl::Mutex& getDbtoolsClientMutex()
+    {
+        static  ::osl::Mutex aMutex;
+        return aMutex;
+    }
+    // -----------------------------------------------------------------------------
+    sal_Int32& getDbToolsClientClients()
+    {
+        static  sal_Int32 nClients = 0;
+        return nClients;
+    }
+    // -----------------------------------------------------------------------------
+    oslModule& getDbToolsClientModule()
+    {
+        static oslModule hDbtoolsModule = NULL;
+        return hDbtoolsModule;
+    }
+    // -----------------------------------------------------------------------------
+    createDataAccessToolsFactoryFunction& getDbToolsClientFactoryFunction()
+    {
+        static createDataAccessToolsFactoryFunction pFactoryCreationFunc = NULL;
+        return pFactoryCreationFunc;
+    }
+    // -----------------------------------------------------------------------------
+}
+// -----------------------------------------------------------------------------
 SwDbtoolsClient::SwDbtoolsClient()
 {
 }
@@ -118,31 +143,31 @@ SwDbtoolsClient::~SwDbtoolsClient()
 //--------------------------------------------------------------------
 void SwDbtoolsClient::registerClient()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if (1 == ++m_nClients)
+    ::osl::MutexGuard aGuard(getDbtoolsClientMutex());
+    if (1 == ++getDbToolsClientClients())
     {
-        OSL_ENSURE(NULL == m_hDbtoolsModule, "SwDbtoolsClient::registerClient: inconsistence: already have a module!");
-        OSL_ENSURE(NULL == m_pFactoryCreationFunc, "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
+        OSL_ENSURE(NULL == getDbToolsClientModule(), "SwDbtoolsClient::registerClient: inconsistence: already have a module!");
+        OSL_ENSURE(NULL == getDbToolsClientFactoryFunction(), "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
         const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
             SAL_MODULENAME( "dbtools2" )
         );
 
         // load the dbtools library
-        m_hDbtoolsModule = osl_loadModule(sModuleName.pData, 0);
-        OSL_ENSURE(NULL != m_hDbtoolsModule, "SwDbtoolsClient::registerClient: could not load the dbtools library!");
-        if (NULL != m_hDbtoolsModule)
+        getDbToolsClientModule() = osl_loadModule(sModuleName.pData, 0);
+        OSL_ENSURE(NULL != getDbToolsClientModule(), "SwDbtoolsClient::registerClient: could not load the dbtools library!");
+        if (NULL != getDbToolsClientModule())
         {
             // get the symbol for the method creating the factory
             const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
-            m_pFactoryCreationFunc = reinterpret_cast<createDataAccessToolsFactoryFunction>(
-                osl_getSymbol(m_hDbtoolsModule, sFactoryCreationFunc.pData));
+            getDbToolsClientFactoryFunction() = reinterpret_cast<createDataAccessToolsFactoryFunction>(
+                osl_getSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));
 
-            if (NULL == m_pFactoryCreationFunc)
+            if (NULL == getDbToolsClientFactoryFunction())
             {   // did not find the symbol
                 OSL_ENSURE(sal_False, "SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
-                osl_unloadModule(m_hDbtoolsModule);
-                m_hDbtoolsModule = NULL;
+                osl_unloadModule(getDbToolsClientModule());
+                getDbToolsClientModule() = NULL;
             }
         }
     }
@@ -151,13 +176,13 @@ void SwDbtoolsClient::registerClient()
 //--------------------------------------------------------------------
 void SwDbtoolsClient::revokeClient()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if (0 == --m_nClients)
+    ::osl::MutexGuard aGuard(getDbtoolsClientMutex());
+    if (0 == --getDbToolsClientClients())
     {
-        m_pFactoryCreationFunc = NULL;
-        if (m_hDbtoolsModule)
-            osl_unloadModule(m_hDbtoolsModule);
-        m_hDbtoolsModule = NULL;
+        getDbToolsClientFactoryFunction() = NULL;
+        if (getDbToolsClientModule())
+            osl_unloadModule(getDbToolsClientModule());
+        getDbToolsClientModule() = NULL;
     }
 }
 /* -----------------------------30.08.2001 14:58------------------------------
@@ -168,9 +193,9 @@ void SwDbtoolsClient::getFactory()
     if(!m_xDataAccessFactory.is())
     {
         registerClient();
-        if(m_pFactoryCreationFunc)
+        if(getDbToolsClientFactoryFunction())
         {   // loading the lib succeeded
-            void* pUntypedFactory = (*m_pFactoryCreationFunc)();
+            void* pUntypedFactory = (*getDbToolsClientFactoryFunction())();
             IDataAccessToolsFactory* pDBTFactory = static_cast<IDataAccessToolsFactory*>(pUntypedFactory);
             OSL_ENSURE(pDBTFactory, "SwDbtoolsClient::SwDbtoolsClient: no factory returned!");
             if (pDBTFactory)
