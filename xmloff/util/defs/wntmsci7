@@ -10519,3 +10519,7 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?exportText@SchXMLExportHelper@@AAEXABVOUString@rtl@@_N@Z
 ?handleElementItem@XMLChartExportPropertyMapper@@EBEXAAVSvXMLExport@@ABUXMLPropertyState@@GPBV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@K@Z
 ?begin@?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@QAEPAUXMLPropertyState@@XZ
+?clearUndefinedChars@SvXMLUnitConverter@@SAXAAVOUString@rtl@@ABV23@@Z
+??1XMLTextOrientationHdl@@UAE@XZ
+?exportXML@XMLTextOrientationHdl@@UBEEAAVOUString@rtl@@ABVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
+?importXML@XMLTextOrientationHdl@@UBEEABVOUString@rtl@@AAVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
