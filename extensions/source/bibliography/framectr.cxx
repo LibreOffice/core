@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:47:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-29 16:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,7 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< std::list< ::com::sun::star::frame::DispatchInformation >, ::com::sun::star::frame::DispatchInformation >( aDispatchInfoList );
+        comphelper::containerToSequence< ::com::sun::star::frame::DispatchInformation, std::list< ::com::sun::star::frame::DispatchInformation > >( aDispatchInfoList );
 
     return aSeq;
 }
