@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-17 13:16:28 $
+ *  last change: $Author: pl $ $Date: 2002-09-19 10:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision 
     {
         int i;
         rBuffer.append( '.' );
-        sal_Int64 nBound = (sal_Int16)pow( 10, nPrecision - 1 );
+        sal_Int64 nBound = (sal_Int64)pow( 10, nPrecision - 1 );
         for ( i = 0; ( i < nPrecision ) && nFrac; i++ )
         {
             sal_Int64 nNumb = nFrac / nBound;
@@ -966,8 +966,6 @@ bool PDFWriterImpl::emitHatches()
         nMax = (nMax > nHeight ? nMax : nHeight);
     }
 
-    nMax /= 2;
-
     sal_Int32 nSingleHatch = 0, nDoubleHatch = 0, nTripleHatch = 0;
 
     for( std::list<HatchEmit>::iterator it = m_aHatches.begin(); it != m_aHatches.end(); ++it )
@@ -1040,8 +1038,9 @@ bool PDFWriterImpl::emitHatches()
                           "   /Matrix [ " );
         // prepare matrix
         const double theta = (double)rHatch.GetAngle() * M_PI / 1800.0;
-        /* the constant factor in scale is arbitrary */
-        const double scale = 2.0*(double)rHatch.GetDistance();
+        Size aSize( rHatch.GetDistance(), 0 );
+        aSize = OutputDevice::LogicToLogic( aSize, it->m_aMapMode, MapMode( MAP_POINT ) );
+        const double scale = (double)aSize.Width();
         appendDouble( scale*cos( theta ), aHatchObj );
         aHatchObj.append( ' ' );
         appendDouble( scale*sin( theta ), aHatchObj );
@@ -1085,17 +1084,17 @@ bool PDFWriterImpl::emitHatches()
             {
                 case 0:
                     nObject = nSingleHatch;
-                    aHatchStream.append( "0 0 m 1 0 l S\r\n" );
+                    aHatchStream.append( "0 0.5 m 1 0.5 l S\r\n" );
                     break;
                 case 1:
                     nObject = nDoubleHatch;
-                    aHatchStream.append( "0 0 m 1 0 l S\r\n" );
-                    aHatchStream.append( "0 0 m 0 1 l S\r\n" );
+                    aHatchStream.append( "0 0.5 m 1 0.5 l S\r\n" );
+                    aHatchStream.append( "0.5 0 m 0.5 1 l S\r\n" );
                     break;
                 case 2:
                     nObject = nTripleHatch;
-                    aHatchStream.append( "0 0 m 1 0 l S\r\n" );
-                    aHatchStream.append( "0 0 m 0 1 l S\r\n" );
+                    aHatchStream.append( "0 0.5 m 1 0.5 l S\r\n" );
+                    aHatchStream.append( "0.5 0 m 0.5 1 l S\r\n" );
                     aHatchStream.append( "0 1 m 1 0 l S\r\n" );
                     break;
             }
@@ -4211,13 +4210,14 @@ sal_Int32 PDFWriterImpl::createHatch( const Hatch& rHatch )
     // check if we already have this gradient
     for( std::list<HatchEmit>::iterator it = m_aHatches.begin(); it != m_aHatches.end(); ++it )
     {
-        if( it->m_aHatch == rHatch )
+        if( it->m_aHatch == rHatch && it->m_aMapMode == m_aCurrentPDFState.m_aMapMode )
             return it->m_nObject;
     }
 
     m_aHatches.push_back( HatchEmit() );
     m_aHatches.back().m_aHatch  = rHatch;
     m_aHatches.back().m_nObject = createObject();
+    m_aHatches.back().m_aMapMode = m_aCurrentPDFState.m_aMapMode;
     return m_aHatches.back().m_nObject;
 }
 
